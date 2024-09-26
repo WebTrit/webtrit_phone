@@ -34,6 +34,7 @@ class _MessagingShellState extends State<MessagingShell> {
       context.read<RemoteNotificationRepository>(),
       context.read<LocalNotificationRepository>(),
       context.read<MainScreenRouteStateRepository>(),
+      context.read<MainShellRouteStateRepository>(),
       openChatList: onOpenChatList,
       openChat: onOpenChat,
       openConversation: onOpenConversation,
@@ -50,30 +51,15 @@ class _MessagingShellState extends State<MessagingShell> {
   }
 
   onOpenConversation(participantId) {
-    context.router.root.navigate(
-      MessagingRouterPageRoute(
-        children: [const ConversationsScreenPageRoute(), ConversationScreenPageRoute(participantId: participantId)],
-      ),
-    );
+    context.router.root.navigate(ConversationScreenPageRoute(participantId: participantId));
   }
 
   onOpenChat(chatId) {
-    context.router.root.navigate(
-      MessagingRouterPageRoute(
-        children: [const ConversationsScreenPageRoute(), GroupScreenPageRoute(chatId: chatId)],
-      ),
-    );
+    context.router.root.navigate(GroupScreenPageRoute(chatId: chatId));
   }
 
   onOpenSmsConversation(firstNumber, secondNumber) {
-    context.router.root.navigate(
-      MessagingRouterPageRoute(
-        children: [
-          const ConversationsScreenPageRoute(),
-          SmsConversationScreenPageRoute(firstNumber: firstNumber, secondNumber: secondNumber)
-        ],
-      ),
-    );
+    context.router.root.navigate(SmsConversationScreenPageRoute(firstNumber: firstNumber, secondNumber: secondNumber));
   }
 
   onOpenChatList() {

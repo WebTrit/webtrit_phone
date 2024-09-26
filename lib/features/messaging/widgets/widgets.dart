@@ -9,3 +9,5 @@ export 'shell.dart';
 export 'typing_icon_driver.dart';
 export 'confirm_dialog.dart';
 export 'choose_contact.dart';
+export 'state_bar.dart';
+export 'messaging_state_wrapper.dart';

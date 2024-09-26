@@ -27,15 +27,12 @@ class SmsConversationsTile extends StatefulWidget {
 
 class _SmsConversationsTileState extends State<SmsConversationsTile> {
   onTap() {
-    context.router.navigate(MessagingRouterPageRoute(
-      children: [
-        const ConversationsScreenPageRoute(),
-        SmsConversationScreenPageRoute(
-          firstNumber: widget.conversation.firstPhoneNumber,
-          secondNumber: widget.conversation.secondPhoneNumber,
-        ),
-      ],
-    ));
+    context.router.navigate(
+      SmsConversationScreenPageRoute(
+        firstNumber: widget.conversation.firstPhoneNumber,
+        secondNumber: widget.conversation.secondPhoneNumber,
+      ),
+    );
   }
 
   @override

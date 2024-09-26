@@ -148,6 +148,9 @@ class _MainShellState extends State<MainShell> {
         RepositoryProvider<MainScreenRouteStateRepository>(
           create: (context) => MainScreenRouteStateRepositoryAutoRouteImpl(),
         ),
+        RepositoryProvider<MainShellRouteStateRepository>(
+          create: (context) => MainShellRouteStateRepositoryAutoRouteImpl(),
+        ),
         RepositoryProvider<RemoteNotificationRepository>(
           create: (context) => RemoteNotificationRepositoryFirebaseImpl(),
         ),
@@ -212,7 +215,7 @@ class _MainShellState extends State<MainShell> {
               )..add(const CallStarted());
             },
           ),
-          if (EnvironmentConfig.CHAT_FEATURE_ENABLE || EnvironmentConfig.SMS_FEATURE_ENABLE)
+          if (_kMessagingEnabled)
             BlocProvider<MessagingBloc>(
               lazy: false,
               create: (context) {
@@ -243,7 +246,7 @@ class _MainShellState extends State<MainShell> {
                 )..add(const Connect());
               },
             ),
-          if (EnvironmentConfig.CHAT_FEATURE_ENABLE || EnvironmentConfig.SMS_FEATURE_ENABLE)
+          if (_kMessagingEnabled)
             BlocProvider<UnreadCountCubit>(
               create: (context) {
                 return UnreadCountCubit(
@@ -253,9 +256,24 @@ class _MainShellState extends State<MainShell> {
                 )..init();
               },
             ),
+          if (_kMessagingEnabled)
+            BlocProvider(
+              create: (_) => MessageForwardCubit(),
+            )
         ],
-        child: Builder(builder: (_) => const CallShell(child: MessagingShell(child: AutoRouter()))),
+        child: Builder(
+          builder: (context) {
+            var mainShellRepo = context.read<MainShellRouteStateRepository>();
+            return CallShell(
+              child: MessagingShell(
+                child: AutoRouter(navigatorObservers: () => [MainShellNavigatorObserver(mainShellRepo)]),
+              ),
+            );
+          },
+        ),
       ),
     );
   }
 }
+
+const _kMessagingEnabled = EnvironmentConfig.CHAT_FEATURE_ENABLE || EnvironmentConfig.SMS_FEATURE_ENABLE;

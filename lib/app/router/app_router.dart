@@ -224,21 +224,21 @@ class AppRouter extends _$AppRouter {
                           page: ConversationsScreenPageRoute.page,
                           path: '',
                         ),
-                        AutoRoute(
-                          page: ConversationScreenPageRoute.page,
-                          path: 'dialog_conversation',
-                        ),
-                        AutoRoute(
-                          page: SmsConversationScreenPageRoute.page,
-                          path: 'sms_conversation',
-                        ),
-                        AutoRoute(
-                          page: GroupScreenPageRoute.page,
-                          path: 'group_conversation',
-                        ),
                       ],
                     ),
                   ],
+                ),
+                AutoRoute(
+                  page: ConversationScreenPageRoute.page,
+                  path: 'dialog_conversation',
+                ),
+                AutoRoute(
+                  page: SmsConversationScreenPageRoute.page,
+                  path: 'sms_conversation',
+                ),
+                AutoRoute(
+                  page: GroupScreenPageRoute.page,
+                  path: 'group_conversation',
                 ),
                 AutoRoute(
                   page: DemoWebPageRoute.page,

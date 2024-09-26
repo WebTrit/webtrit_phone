@@ -19,7 +19,7 @@ class GroupScreenPage extends StatelessWidget {
     final chatsRepository = context.read<ChatsRepository>();
     final chatsOutboxRepository = context.read<ChatsOutboxRepository>();
 
-    final widget = BlocProvider(
+    final screen = BlocProvider(
       key: ValueKey(chatId),
       create: (context) => GroupCubit(
         chatId,
@@ -30,6 +30,6 @@ class GroupScreenPage extends StatelessWidget {
       child: const GroupScreen(),
     );
 
-    return widget;
+    return MessagingStateWrapper(child: screen);
   }
 }

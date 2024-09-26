@@ -15,7 +15,8 @@ class MessagingNotificationsService {
     this.contactsRepository,
     this.remoteNotificationRepository,
     this.localNotificationRepository,
-    this.mainScreenRouteStateRepository, {
+    this.mainScreenRouteStateRepository,
+    this.mainShellRouteStateRepository, {
     required this.openChatList,
     required this.openChat,
     required this.openConversation,
@@ -28,6 +29,7 @@ class MessagingNotificationsService {
   final RemoteNotificationRepository remoteNotificationRepository;
   final LocalNotificationRepository localNotificationRepository;
   final MainScreenRouteStateRepository mainScreenRouteStateRepository;
+  final MainShellRouteStateRepository mainShellRouteStateRepository;
 
   final Function openChatList;
   final Function(int chatId) openChat;
@@ -166,25 +168,17 @@ class MessagingNotificationsService {
     final chatId = chat.id;
     _logger.info('_shouldSkipChatNotification chat: $chatId type: $chatType');
 
-    final messagingTabActive = mainScreenRouteStateRepository.isMessagingTabActive();
-    _logger.info('messagingTabActive: $messagingTabActive');
-
     if (chatType == ChatType.group) {
-      final groupScreenActive = mainScreenRouteStateRepository.isGroupScreenActive(chat.id);
+      final groupScreenActive = mainShellRouteStateRepository.isGroupScreenActive(chat.id);
       _logger.info('groupScreenActive: $groupScreenActive');
-
-      // Skip if chats tab is active and group chat screen inside
-      return messagingTabActive && groupScreenActive;
+      if (groupScreenActive) return true;
     }
 
     if (chatType == ChatType.dialog) {
-      if (_userId == null) return false;
       final participantId = chat.members.firstWhere((m) => m.userId != _userId).userId;
-      final conversationScreenActive = mainScreenRouteStateRepository.isConversationScreenActive(participantId);
-      _logger.info('conversationScreen: $conversationScreenActive');
-
-      // Skip if chats tab is active and conversation screen inside
-      if (messagingTabActive && conversationScreenActive) return true;
+      final conversationScreenActive = mainShellRouteStateRepository.isConversationScreenActive(participantId);
+      _logger.info('conversationScreenActive: $conversationScreenActive');
+      if (conversationScreenActive) return true;
     }
 
     return false;
@@ -195,14 +189,10 @@ class MessagingNotificationsService {
     final secondNumber = conversation.secondPhoneNumber;
     _logger.info('_shouldSkipSmsNotification firstNumber: $firstNumber second: $secondNumber');
 
-    final messagingTabActive = mainScreenRouteStateRepository.isMessagingTabActive();
-    _logger.info('messagingTabActive: $messagingTabActive');
     final smsConversationScreenActive =
-        mainScreenRouteStateRepository.isSmsConversationScreenActive(firstNumber, secondNumber);
+        mainShellRouteStateRepository.isSmsConversationScreenActive(firstNumber, secondNumber);
     _logger.info('smsConversationScreen: $smsConversationScreenActive');
-
-    // Skip if chats tab is active and sms conversation screen inside
-    if (messagingTabActive && smsConversationScreenActive) return true;
+    if (smsConversationScreenActive) return true;
 
     return false;
   }

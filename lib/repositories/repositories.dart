@@ -11,6 +11,6 @@ export 'push_tokens/push_tokens_repository.dart';
 export 'recents/recents_repository.dart';
 export 'chats/chats.dart';
 export 'sms/sms.dart';
-export 'main_screen_route_state/main_screen_route_state_repository.dart';
 export 'notifications/local_notifications_repository.dart';
 export 'notifications/remote_notifications_repository.dart';
+export 'route_state/route_state.dart';

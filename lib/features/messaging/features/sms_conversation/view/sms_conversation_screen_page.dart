@@ -21,7 +21,7 @@ class SmsConversationScreenPage extends StatelessWidget {
     final smsRepository = context.read<SmsRepository>();
     final smsOutboxRepository = context.read<SmsOutboxRepository>();
 
-    final widget = BlocProvider(
+    final screen = BlocProvider(
       key: ValueKey(firstNumber + secondNumber),
       create: (context) => SmsConversationCubit(
         (firstNumber: firstNumber, secondNumber: secondNumber, recipientId: recipientId),
@@ -32,6 +32,6 @@ class SmsConversationScreenPage extends StatelessWidget {
       child: const SmsConversationScreen(),
     );
 
-    return widget;
+    return MessagingStateWrapper(child: screen);
   }
 }

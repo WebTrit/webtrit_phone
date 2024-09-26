@@ -60,12 +60,9 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
 
     // If the user selected a contact, navigate to the new conversation screen
     if (result is Contact) {
-      context.router.navigate(MessagingRouterPageRoute(
-        children: [
-          const ConversationsScreenPageRoute(),
-          ConversationScreenPageRoute(participantId: result.sourceId),
-        ],
-      ));
+      context.router.navigate(
+        ConversationScreenPageRoute(participantId: result.sourceId),
+      );
     }
 
     // If the user selected the group option, navigate to the group builder screen
@@ -151,12 +148,9 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
 
       if (!mounted) return;
 
-      context.router.navigate(MessagingRouterPageRoute(
-        children: [
-          const ConversationsScreenPageRoute(),
-          SmsConversationScreenPageRoute(firstNumber: userNumber, secondNumber: number, recipientId: recipientId),
-        ],
-      ));
+      context.router.navigate(
+        SmsConversationScreenPageRoute(firstNumber: userNumber, secondNumber: number, recipientId: recipientId),
+      );
     }
   }
 

@@ -26,15 +26,9 @@ class _ChatConversationsTileState extends State<ChatConversationsTile> {
     if (widget.conversation.type == ChatType.dialog) {
       final userId = widget.userId;
       final participant = widget.conversation.members.firstWhere((m) => m.userId != userId);
-      context.router.navigate(MessagingRouterPageRoute(children: [
-        const ConversationsScreenPageRoute(),
-        ConversationScreenPageRoute(participantId: participant.userId),
-      ]));
+      context.router.navigate(ConversationScreenPageRoute(participantId: participant.userId));
     } else {
-      context.router.navigate(MessagingRouterPageRoute(children: [
-        const ConversationsScreenPageRoute(),
-        GroupScreenPageRoute(chatId: widget.conversation.id),
-      ]));
+      context.router.navigate(GroupScreenPageRoute(chatId: widget.conversation.id));
     }
   }
 
