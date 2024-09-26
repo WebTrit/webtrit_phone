@@ -11,14 +11,10 @@ export 'widgets/widgets.dart';
 
 
 // TODO: 
-// - chat info screens 
 // - routing remake
 // - finish resolve naming issues
-// - typing animation
-// - notifications autodismiss on read
+// - notifications autodismiss on read and showed message tracking
 // - expiration time setting for message storage (like week, month, year etc)
-// - integration with Dima's optional pages
-// - merge messaging to dev or dev to messaging?
 // - move userId retrieving to main auth flow
-// - random refacfotring, maybe tests?
-// (like ephemeral logic to blocs, structs for ws events, constants for keys, etc)
+// - random refacfotring (like ephemeral logic to blocs, structs for ws events, constants for keys, etc)
+// - maybe tests?

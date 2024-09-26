@@ -68,6 +68,7 @@ class ChatsRepository with ChatsDriftMapper {
     if (!silent) _addEvent(ChatMessageUpdate(message));
   }
 
+  // TODO: batch insert + updates page
   Future<void> insertHistoryPage(List<ChatMessage> messages) async {
     for (final message in messages) {
       await upsertMessage(message, silent: true);
