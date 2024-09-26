@@ -1,4 +1,5 @@
 enum SignalingRegistrationFailedCode {
+  unmappedCode(-1),
   sipServerUnavailable(503);
 
   const SignalingRegistrationFailedCode(this.code);
@@ -11,6 +12,6 @@ extension SignalingRegistrationFailedCodeByCode on Iterable<SignalingRegistratio
     for (var value in this) {
       if (value.code == code) return value;
     }
-    return SignalingRegistrationFailedCode.sipServerUnavailable;
+    return SignalingRegistrationFailedCode.unmappedCode;
   }
 }
