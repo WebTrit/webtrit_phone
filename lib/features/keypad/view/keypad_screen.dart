@@ -8,9 +8,11 @@ class KeypadScreen extends StatelessWidget {
   const KeypadScreen({
     super.key,
     this.title,
+    required this.videoVisible,
   });
 
   final Widget? title;
+  final bool videoVisible;
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +20,9 @@ class KeypadScreen extends StatelessWidget {
       appBar: MainAppBar(
         title: title,
       ),
-      body: const KeypadView(),
+      body: KeypadView(
+        videoVisible: videoVisible,
+      ),
     );
   }
 }

@@ -14,6 +14,7 @@ class Actionpad extends StatelessWidget {
   const Actionpad({
     super.key,
     this.transfer = false,
+    this.videoVisible = true,
     this.onAudioCallPressed,
     this.onVideoCallPressed,
     this.onTransferPressed,
@@ -23,6 +24,7 @@ class Actionpad extends StatelessWidget {
   });
 
   final bool transfer;
+  final bool videoVisible;
   final VoidCallback? onAudioCallPressed;
   final VoidCallback? onVideoCallPressed;
   final VoidCallback? onTransferPressed;
@@ -43,7 +45,7 @@ class Actionpad extends StatelessWidget {
       minimumSize: Size.square(minimumDimension),
       children: [
         Visibility(
-          visible: !transfer,
+          visible: !transfer && videoVisible,
           child: Transform.scale(
             scale: .75,
             child: TextButton(
