@@ -1631,11 +1631,11 @@ abstract class AppLocalizations {
   /// **'You'**
   String get messaging_Conversations_tile_you;
 
-  /// No description provided for @messaging_MessageListView_field_hint.
+  /// No description provided for @messaging_MessageField_hint.
   ///
   /// In en, this message translates to:
   /// **'Type a message'**
-  String get messaging_MessageListView_field_hint;
+  String get messaging_MessageField_hint;
 
   /// No description provided for @messaging_ConversationScreen_titlePrefix.
   ///

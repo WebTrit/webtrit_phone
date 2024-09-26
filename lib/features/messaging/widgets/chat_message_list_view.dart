@@ -7,7 +7,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/messaging/messaging.dart';
-import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 
 import 'chat_message_view.dart';
@@ -225,7 +224,7 @@ class _ChatMessageListViewState extends State<ChatMessageListView> {
   Widget build(BuildContext context) {
     return Column(children: [
       Expanded(child: list()),
-      field(),
+      MessageTextField(controller: inputController, onSend: handleSend),
     ]);
   }
 
@@ -300,81 +299,6 @@ class _ChatMessageListViewState extends State<ChatMessageListView> {
         }
 
         return const SizedBox();
-      },
-    );
-  }
-
-  Widget field() {
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
-
-    return BlocBuilder<MessageForwardCubit, ChatMessage?>(
-      builder: (context, state) {
-        final messageForForward = state;
-
-        return Column(
-          children: [
-            if (messageForForward != null)
-              ExchangeBar(
-                text: messageForForward.content,
-                icon: Icons.forward,
-                onCancel: messageForwardCubit.clear,
-                onConfirm: () {
-                  widget.onSendForward(messageForForward.content, messageForForward);
-                  messageForwardCubit.clear();
-                },
-              ),
-            if (replyingMessage != null)
-              ExchangeBar(
-                text: replyingMessage!.content,
-                icon: Icons.reply,
-                onCancel: () => setState(() => replyingMessage = null),
-              ),
-            if (editingMessage != null)
-              ExchangeBar(
-                text: editingMessage!.content,
-                icon: Icons.edit_note,
-                onCancel: () {
-                  setState(() => editingMessage = null);
-                  inputController.text = '';
-                  FocusScope.of(context).unfocus();
-                },
-              ),
-            if (messageForForward == null)
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  boxShadow: [
-                    BoxShadow(
-                        color: colorScheme.onSurface.withOpacity(0.1),
-                        spreadRadius: 4,
-                        blurRadius: 8,
-                        offset: const Offset(2, 4))
-                  ],
-                ),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: TextFormField(
-                        controller: inputController,
-                        onFieldSubmitted: (_) => handleSend(),
-                        onChanged: (value) => context.read<ChatTypingCubit>().sendTyping(),
-                        decoration: InputDecoration(
-                          hintText: context.l10n.messaging_MessageListView_field_hint,
-                          border: InputBorder.none,
-                        ),
-                      ),
-                    ),
-                    GestureDetector(
-                      child: Icon(Icons.send, size: 24, color: colorScheme.secondary),
-                      onTap: () => handleSend(),
-                    ),
-                  ],
-                ),
-              ),
-          ],
-        );
       },
     );
   }

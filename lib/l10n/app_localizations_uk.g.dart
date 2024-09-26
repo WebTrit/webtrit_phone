@@ -815,7 +815,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get messaging_Conversations_tile_you => 'Ви';
 
   @override
-  String get messaging_MessageListView_field_hint => 'Введіть повідомлення';
+  String get messaging_MessageField_hint => 'Введіть повідомлення';
 
   @override
   String get messaging_ConversationScreen_titlePrefix => 'Діалог:';

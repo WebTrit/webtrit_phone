@@ -815,7 +815,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get messaging_Conversations_tile_you => 'Voi';
 
   @override
-  String get messaging_MessageListView_field_hint => 'Scrivi un messaggio';
+  String get messaging_MessageField_hint => 'Scrivi un messaggio';
 
   @override
   String get messaging_ConversationScreen_titlePrefix => 'Dialogo:';

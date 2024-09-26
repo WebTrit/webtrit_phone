@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:webtrit_phone/extensions/extensions.dart';
-import 'package:webtrit_phone/l10n/l10n.dart';
+import 'package:webtrit_phone/features/messaging/messaging.dart';
 import 'package:webtrit_phone/models/models.dart';
 
 import 'sms_message_view.dart';
@@ -165,7 +165,7 @@ class _SmsMessageListViewState extends State<SmsMessageListView> {
   Widget build(BuildContext context) {
     return Column(children: [
       Expanded(child: list()),
-      field(),
+      MessageTextField(controller: inputController, onSend: handleSend),
     ]);
   }
 
@@ -213,44 +213,5 @@ class _SmsMessageListViewState extends State<SmsMessageListView> {
     }
 
     return const SizedBox();
-  }
-
-  Widget field() {
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
-
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: colorScheme.onSurface.withOpacity(0.1),
-            spreadRadius: 4,
-            blurRadius: 8,
-            offset: const Offset(2, 4),
-          )
-        ],
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: TextFormField(
-              controller: inputController,
-              onFieldSubmitted: (_) => handleSend(),
-              onChanged: (_) {},
-              decoration: InputDecoration(
-                hintText: context.l10n.messaging_MessageListView_field_hint,
-                border: InputBorder.none,
-              ),
-            ),
-          ),
-          GestureDetector(
-            child: Icon(Icons.send, size: 24, color: colorScheme.secondary),
-            onTap: () => handleSend(),
-          ),
-        ],
-      ),
-    );
   }
 }

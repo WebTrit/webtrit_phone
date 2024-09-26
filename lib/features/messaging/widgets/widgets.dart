@@ -11,3 +11,4 @@ export 'confirm_dialog.dart';
 export 'choose_contact.dart';
 export 'state_bar.dart';
 export 'messaging_state_wrapper.dart';
+export 'message_text_field.dart';
