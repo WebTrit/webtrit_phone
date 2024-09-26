@@ -1920,6 +1920,7 @@ AppConfigCall _$AppConfigCallFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$AppConfigCall {
+  bool get enableVideo => throw _privateConstructorUsedError;
   AppConfigTransfer get transfer => throw _privateConstructorUsedError;
 
   /// Serializes this AppConfigCall to a JSON map.
@@ -1938,7 +1939,7 @@ abstract class $AppConfigCallCopyWith<$Res> {
           AppConfigCall value, $Res Function(AppConfigCall) then) =
       _$AppConfigCallCopyWithImpl<$Res, AppConfigCall>;
   @useResult
-  $Res call({AppConfigTransfer transfer});
+  $Res call({bool enableVideo, AppConfigTransfer transfer});
 
   $AppConfigTransferCopyWith<$Res> get transfer;
 }
@@ -1958,9 +1959,14 @@ class _$AppConfigCallCopyWithImpl<$Res, $Val extends AppConfigCall>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? enableVideo = null,
     Object? transfer = null,
   }) {
     return _then(_value.copyWith(
+      enableVideo: null == enableVideo
+          ? _value.enableVideo
+          : enableVideo // ignore: cast_nullable_to_non_nullable
+              as bool,
       transfer: null == transfer
           ? _value.transfer
           : transfer // ignore: cast_nullable_to_non_nullable
@@ -1987,7 +1993,7 @@ abstract class _$$AppConfigCallImplCopyWith<$Res>
       __$$AppConfigCallImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({AppConfigTransfer transfer});
+  $Res call({bool enableVideo, AppConfigTransfer transfer});
 
   @override
   $AppConfigTransferCopyWith<$Res> get transfer;
@@ -2006,9 +2012,14 @@ class __$$AppConfigCallImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? enableVideo = null,
     Object? transfer = null,
   }) {
     return _then(_$AppConfigCallImpl(
+      enableVideo: null == enableVideo
+          ? _value.enableVideo
+          : enableVideo // ignore: cast_nullable_to_non_nullable
+              as bool,
       transfer: null == transfer
           ? _value.transfer
           : transfer // ignore: cast_nullable_to_non_nullable
@@ -2021,7 +2032,8 @@ class __$$AppConfigCallImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$AppConfigCallImpl extends _AppConfigCall {
   const _$AppConfigCallImpl(
-      {this.transfer = const AppConfigTransfer(
+      {this.enableVideo = true,
+      this.transfer = const AppConfigTransfer(
           enableBlindTransfer: true, enableAttendedTransfer: true)})
       : super._();
 
@@ -2030,11 +2042,14 @@ class _$AppConfigCallImpl extends _AppConfigCall {
 
   @override
   @JsonKey()
+  final bool enableVideo;
+  @override
+  @JsonKey()
   final AppConfigTransfer transfer;
 
   @override
   String toString() {
-    return 'AppConfigCall(transfer: $transfer)';
+    return 'AppConfigCall(enableVideo: $enableVideo, transfer: $transfer)';
   }
 
   @override
@@ -2042,13 +2057,15 @@ class _$AppConfigCallImpl extends _AppConfigCall {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$AppConfigCallImpl &&
+            (identical(other.enableVideo, enableVideo) ||
+                other.enableVideo == enableVideo) &&
             (identical(other.transfer, transfer) ||
                 other.transfer == transfer));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, transfer);
+  int get hashCode => Object.hash(runtimeType, enableVideo, transfer);
 
   /// Create a copy of AppConfigCall
   /// with the given fields replaced by the non-null parameter values.
@@ -2067,13 +2084,16 @@ class _$AppConfigCallImpl extends _AppConfigCall {
 }
 
 abstract class _AppConfigCall extends AppConfigCall {
-  const factory _AppConfigCall({final AppConfigTransfer transfer}) =
-      _$AppConfigCallImpl;
+  const factory _AppConfigCall(
+      {final bool enableVideo,
+      final AppConfigTransfer transfer}) = _$AppConfigCallImpl;
   const _AppConfigCall._() : super._();
 
   factory _AppConfigCall.fromJson(Map<String, dynamic> json) =
       _$AppConfigCallImpl.fromJson;
 
+  @override
+  bool get enableVideo;
   @override
   AppConfigTransfer get transfer;
 

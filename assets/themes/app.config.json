@@ -172,6 +172,7 @@
     ]
   },
   "callConfig": {
+    "enableVideo": true,
     "transfer": {
       "enableBlindTransfer": true,
       "enableAttendedTransfer": true

@@ -134,6 +134,7 @@ class AppConfigCall with _$AppConfigCall {
   const AppConfigCall._();
 
   const factory AppConfigCall({
+    @Default(true) bool enableVideo,
     @Default(AppConfigTransfer(
       enableBlindTransfer: true,
       enableAttendedTransfer: true,
