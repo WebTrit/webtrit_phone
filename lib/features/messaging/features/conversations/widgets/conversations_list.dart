@@ -5,6 +5,7 @@ import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/widgets/widgets.dart';
 
 class ConversationsList extends StatefulWidget {
   const ConversationsList({required this.tabType, super.key});
@@ -75,15 +76,26 @@ class _ConversationsListState extends State<ConversationsList> {
                       onChanged: (value) => setState(() {}),
                     ),
                   ),
-                  if (chatsSearchController.text.isNotEmpty)
-                    IconButton(
-                      icon: const Icon(Icons.clear),
-                      onPressed: () {
-                        chatsSearchController.clear();
-                        FocusScope.of(context).unfocus();
-                        setState(() {});
-                      },
+                  SizedBox(
+                    height: 40,
+                    child: AnimatedCrossFade(
+                      duration: const Duration(milliseconds: 600),
+                      firstCurve: Curves.easeIn,
+                      secondCurve: Curves.easeIn,
+                      sizeCurve: Curves.elasticOut,
+                      firstChild: IconButton(
+                        icon: const Icon(Icons.clear),
+                        onPressed: () {
+                          chatsSearchController.clear();
+                          FocusScope.of(context).unfocus();
+                          setState(() {});
+                        },
+                      ),
+                      secondChild: const SizedBox(),
+                      crossFadeState:
+                          chatsSearchController.text.isNotEmpty ? CrossFadeState.showFirst : CrossFadeState.showSecond,
                     ),
+                  ),
                 ],
               ),
             ),
@@ -92,10 +104,13 @@ class _ConversationsListState extends State<ConversationsList> {
               child: ListView(
                 children: conversationsToShow.map((e) {
                   final (:chat, :message, contacts: _) = e;
-                  return ChatConversationsTile(
-                    conversation: chat,
-                    lastMessage: message,
-                    userId: userId,
+                  return FadeIn(
+                    key: ObjectKey(chat),
+                    child: ChatConversationsTile(
+                      conversation: chat,
+                      lastMessage: message,
+                      userId: userId,
+                    ),
                   );
                 }).toList(),
               ),
@@ -149,15 +164,26 @@ class _ConversationsListState extends State<ConversationsList> {
                       onChanged: (value) => setState(() {}),
                     ),
                   ),
-                  if (smsSearchController.text.isNotEmpty)
-                    IconButton(
-                      icon: const Icon(Icons.clear),
-                      onPressed: () {
-                        smsSearchController.clear();
-                        FocusScope.of(context).unfocus();
-                        setState(() {});
-                      },
+                  SizedBox(
+                    height: 40,
+                    child: AnimatedCrossFade(
+                      duration: const Duration(milliseconds: 600),
+                      firstCurve: Curves.easeIn,
+                      secondCurve: Curves.easeIn,
+                      sizeCurve: Curves.elasticOut,
+                      firstChild: IconButton(
+                        icon: const Icon(Icons.clear),
+                        onPressed: () {
+                          smsSearchController.clear();
+                          FocusScope.of(context).unfocus();
+                          setState(() {});
+                        },
+                      ),
+                      secondChild: const SizedBox(),
+                      crossFadeState:
+                          smsSearchController.text.isNotEmpty ? CrossFadeState.showFirst : CrossFadeState.showSecond,
                     ),
+                  ),
                 ],
               ),
             ),
@@ -167,7 +193,14 @@ class _ConversationsListState extends State<ConversationsList> {
                 children: conversationsToShow.map((e) {
                   final conversation = e.$1;
                   final lastMessage = e.$2;
-                  return SmsConversationsTile(conversation: conversation, lastMessage: lastMessage, userId: userId);
+                  return FadeIn(
+                    key: ObjectKey(conversation),
+                    child: SmsConversationsTile(
+                      conversation: conversation,
+                      lastMessage: lastMessage,
+                      userId: userId,
+                    ),
+                  );
                 }).toList(),
               ),
             ),
