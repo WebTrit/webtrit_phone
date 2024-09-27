@@ -36,8 +36,8 @@ class _GroupInfoState extends State<GroupInfo> {
     final result = await groupCubit.leaveGroup();
 
     if (!mounted) return;
-    const route = MessagingRouterPageRoute(children: [ConversationsScreenPageRoute()]);
-    if (result) context.router.navigate(route);
+    if (result != true) return;
+    context.router.navigate(const MainScreenPageRoute(children: [MessagingRouterPageRoute()]));
   }
 
   onDeleteGroup() async {
@@ -52,8 +52,8 @@ class _GroupInfoState extends State<GroupInfo> {
     final result = await groupCubit.deleteGroup();
 
     if (!mounted) return;
-    const route = MessagingRouterPageRoute(children: [ConversationsScreenPageRoute()]);
-    if (result) context.router.navigate(route);
+    if (result != true) return;
+    context.router.navigate(const MainScreenPageRoute(children: [MessagingRouterPageRoute()]));
   }
 
   onAddUser() async {

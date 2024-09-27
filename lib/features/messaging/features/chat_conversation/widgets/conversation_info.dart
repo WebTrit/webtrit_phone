@@ -35,9 +35,7 @@ class _ConversationInfoState extends State<ConversationInfo> {
 
     if (!mounted) return;
     if (result != true) return;
-
-    const route = MessagingRouterPageRoute(children: [ConversationsScreenPageRoute()]);
-    context.router.navigate(route);
+    context.router.navigate(const MainScreenPageRoute(children: [MessagingRouterPageRoute()]));
   }
 
   @override

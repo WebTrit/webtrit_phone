@@ -50,8 +50,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
             context.read<ChatTypingCubit>().init(state.chat!.id);
           }
           if (state is CVSLeft) {
-            const route = MessagingRouterPageRoute(children: [ConversationsScreenPageRoute()]);
-            context.router.navigate(route);
+            context.router.navigate(const MainScreenPageRoute(children: [MessagingRouterPageRoute()]));
           }
         },
         builder: (context, state) {
