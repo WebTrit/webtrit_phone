@@ -201,12 +201,13 @@ class _ChatMessageListViewState extends State<ChatMessageListView> {
     setState(() => replyingMessage = message);
   }
 
-  void handleSetForForward(ChatMessage message) {
+  void handleSetForForward(ChatMessage message) async {
     setState(() => editingMessage = null);
     setState(() => replyingMessage = null);
-    context.router.navigate(const MessagingRouterPageRoute(children: [ConversationsScreenPageRoute()])).then((_) {
-      messageForwardCubit.setForForward(message);
-    });
+    final cubitRef = messageForwardCubit;
+    context.router.navigate(const MainScreenPageRoute(children: [MessagingRouterPageRoute()]));
+    await Future.delayed(const Duration(milliseconds: 300));
+    cubitRef.setForForward(message);
   }
 
   void handleSetForEdit(ChatMessage message) {
@@ -224,7 +225,7 @@ class _ChatMessageListViewState extends State<ChatMessageListView> {
   Widget build(BuildContext context) {
     return Column(children: [
       Expanded(child: list()),
-      MessageTextField(controller: inputController, onSend: handleSend),
+      field(),
     ]);
   }
 
@@ -281,12 +282,17 @@ class _ChatMessageListViewState extends State<ChatMessageListView> {
         final typing = state.isNotEmpty;
         final typingUsers = state.map((e) => e.name).join(', ');
 
-        if (typing) {
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
+        return AnimatedCrossFade(
+          duration: const Duration(milliseconds: 600),
+          sizeCurve: Curves.elasticOut,
+          firstChild: const SizedBox(),
+          secondChild: Container(
+            margin: const EdgeInsets.only(top: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Row(
               children: [
                 const TypingIconDriver(),
+                const SizedBox(width: 8),
                 Flexible(
                   child: Text(
                     '$typingUsers is typing...',
@@ -295,10 +301,76 @@ class _ChatMessageListViewState extends State<ChatMessageListView> {
                 ),
               ],
             ),
+          ),
+          crossFadeState: typing ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+        );
+      },
+    );
+  }
+
+  Widget field() {
+    return BlocBuilder<MessageForwardCubit, ChatMessage?>(
+      builder: (context, state) {
+        final messageForForward = state;
+
+        Widget? exchangeWidget;
+        if (messageForForward != null) {
+          exchangeWidget = ExchangeBar(
+            text: messageForForward.content,
+            icon: Icons.forward,
+            onCancel: messageForwardCubit.clear,
+            onConfirm: () {
+              widget.onSendForward(messageForForward.content, messageForForward);
+              messageForwardCubit.clear();
+            },
           );
         }
 
-        return const SizedBox();
+        if (replyingMessage != null) {
+          exchangeWidget = ExchangeBar(
+            text: replyingMessage!.content,
+            icon: Icons.reply,
+            onCancel: () {
+              setState(() => replyingMessage = null);
+              FocusScope.of(context).unfocus();
+            },
+          );
+        }
+
+        if (editingMessage != null) {
+          exchangeWidget = ExchangeBar(
+            text: editingMessage!.content,
+            icon: Icons.edit_note,
+            onCancel: () {
+              setState(() => editingMessage = null);
+              inputController.text = '';
+              FocusScope.of(context).unfocus();
+            },
+          );
+        }
+
+        return Column(
+          children: [
+            AnimatedSwitcher(
+              duration: const Duration(milliseconds: 300),
+              transitionBuilder: (child, animation) {
+                return FadeTransition(
+                  opacity: animation.drive(CurveTween(curve: Curves.linear)),
+                  child: SizeTransition(sizeFactor: animation, child: child),
+                );
+              },
+              switchInCurve: Curves.easeOut,
+              switchOutCurve: Curves.easeOut,
+              child: exchangeWidget ?? const SizedBox(),
+            ),
+            if (messageForForward == null)
+              MessageTextField(
+                controller: inputController,
+                onSend: handleSend,
+                onChanged: (value) => context.read<ChatTypingCubit>().sendTyping(),
+              )
+          ],
+        );
       },
     );
   }
