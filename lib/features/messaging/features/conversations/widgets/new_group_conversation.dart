@@ -257,19 +257,21 @@ class _NewGroupConversationState extends State<NewGroupConversation> {
                         }),
                         child: Row(
                           children: [
-                            Checkbox(
-                              value: state.selectedContacts.contains(contact),
-                              shape: const CircleBorder(),
-                              onChanged: (_) {},
+                            AbsorbPointer(
+                              child: Checkbox(
+                                value: state.selectedContacts.contains(contact),
+                                shape: const CircleBorder(),
+                                onChanged: (_) {},
+                              ),
                             ),
                             Expanded(
                               child: ListTile(
+                                contentPadding: const EdgeInsets.symmetric(horizontal: 0),
                                 leading: LeadingAvatar(
                                   username: contact.name,
                                   thumbnail: contact.thumbnail,
                                   thumbnailUrl: contact.thumbnailUrl,
                                   registered: contact.registered,
-                                  radius: 24,
                                 ),
                                 title: Text(contact.name),
                               ),
