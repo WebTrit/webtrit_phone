@@ -30,7 +30,7 @@ class LoginCustomSigninCubit extends Cubit<LoginCustomSigninState> {
       final sessionToken = _parseSessionToken(data);
 
       final url = loginCubit.state.coreUrl!;
-      final tenantId = sessionToken.tenantId ?? loginCubit.defaultTenantId!;
+      final tenantId = sessionToken.tenantId ?? loginCubit.defaultTenantId;
 
       await createWebtritApiClient(url, tenantId).getUserInfo(sessionToken.token);
 
