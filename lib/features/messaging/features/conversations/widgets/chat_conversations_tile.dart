@@ -67,12 +67,8 @@ class _ChatConversationsTileState extends State<ChatConversationsTile> {
         },
       );
     } else {
-      var text = widget.conversation.name?.split(' ').first ?? widget.conversation.id.toString();
-      if (text.length > 16) text = text.substring(0, 16);
-      return LeadingAvatar(
-        username: widget.conversation.name ?? 'Chat ${widget.conversation.id}',
-        radius: 24,
-      );
+      var text = widget.conversation.name ?? widget.conversation.id.toString();
+      return GroupAvatar(name: text);
     }
   }
 

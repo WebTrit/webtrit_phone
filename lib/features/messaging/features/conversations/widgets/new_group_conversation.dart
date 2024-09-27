@@ -377,29 +377,7 @@ class _NewGroupConversationState extends State<NewGroupConversation> {
   }
 
   Widget avatar() {
-    String text = nameController.text;
-    text = text.split(' ').first;
-
-    final colorScheme = Theme.of(context).colorScheme;
-
-    if (text.length > 8) text = text.substring(text.length - 8);
-    return CircleAvatar(
-      radius: 50,
-      backgroundColor: colorScheme.secondaryContainer,
-      child: FittedBox(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(
-            text.toUpperCase(),
-            softWrap: true,
-            style: TextStyle(
-              color: colorScheme.onSecondaryContainer,
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-      ),
-    );
+    String name = nameController.text;
+    return GroupAvatar(name: name, size: 50);
   }
 }
