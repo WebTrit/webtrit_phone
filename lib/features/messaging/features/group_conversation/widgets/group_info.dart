@@ -171,7 +171,7 @@ class _GroupInfoState extends State<GroupInfo> {
                   child: Column(
                     children: [
                       const SizedBox(height: 32),
-                      avatar(name),
+                      GroupAvatar(name: name, size: 50),
                       SizedBox(
                         width: double.infinity,
                         child: Text(
@@ -346,31 +346,5 @@ class _GroupInfoState extends State<GroupInfo> {
             );
           });
     }).toList();
-  }
-
-  Widget avatar(String name) {
-    var text = name.split(' ').first;
-
-    final colorScheme = Theme.of(context).colorScheme;
-
-    if (text.length > 8) text = text.substring(text.length - 8);
-    return CircleAvatar(
-      radius: 50,
-      backgroundColor: colorScheme.secondaryContainer,
-      child: FittedBox(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(
-            text.toUpperCase(),
-            softWrap: true,
-            style: TextStyle(
-              color: colorScheme.onSecondaryContainer,
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-      ),
-    );
   }
 }
