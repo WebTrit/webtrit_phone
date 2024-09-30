@@ -1020,7 +1020,13 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _CallSignalingEventRegisterationFailed event,
     Emitter<CallState> emit,
   ) async {
-    add(const _RegistrationChange(registration: Registration(status: RegistrationStatus.registration_failed)));
+    add(_RegistrationChange(
+      registration: Registration(
+        status: RegistrationStatus.registration_failed,
+        code: event.code,
+        reason: event.reason,
+      ),
+    ));
   }
 
   Future<void> __onCallSignalingEventUnregistering(
@@ -2011,7 +2017,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     } else if (event is RegisteredEvent) {
       add(const _CallSignalingEvent.registered());
     } else if (event is RegistrationFailedEvent) {
-      add(const _CallSignalingEvent.registrationFailed());
+      add(_CallSignalingEvent.registrationFailed(event.code, event.reason));
     } else if (event is UnregisteringEvent) {
       add(const _CallSignalingEvent.unregistering());
     } else if (event is UnregisteredEvent) {

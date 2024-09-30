@@ -148,7 +148,10 @@ class _CallSignalingEvent with _$CallSignalingEvent implements CallEvent {
 
   const factory _CallSignalingEvent.registered() = _CallSignalingEventRegistered;
 
-  const factory _CallSignalingEvent.registrationFailed() = _CallSignalingEventRegisterationFailed;
+  const factory _CallSignalingEvent.registrationFailed(
+    int code,
+    String reason,
+  ) = _CallSignalingEventRegisterationFailed;
 
   const factory _CallSignalingEvent.unregistering() = _CallSignalingEventUnregistering;
 
