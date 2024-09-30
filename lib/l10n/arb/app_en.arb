@@ -543,5 +543,13 @@
   "webRegistration_ErrorAcknowledgeDialog_title": "Web resource error",
   "@webRegistration_ErrorAcknowledgeDialog_title": {},
   "account_selfCarePasswordExpired_message": "Your self-care password has expired. Please update it using your self-care.\nUntil the password is changed, access to the service will be limited.",
-  "@account_selfCarePasswordExpired_message": {}
+  "@account_selfCarePasswordExpired_message": {},
+  "common_noInternetConnection_title": "No Internet Connection",
+  "@common_noInternetConnection_title": {},
+  "common_noInternetConnection_message": "It seems you are not connected to the internet. Please check your connection and try again.",
+  "@common_noInternetConnection_message": {},
+  "common_noInternetConnection_retryButton": "Try Again",
+  "@common_noInternetConnection_retryButton": {},
+  "common_problemWithLoadingPage": "There was an issue loading the page.",
+  "@common_problemWithLoadingPage": {}
 }

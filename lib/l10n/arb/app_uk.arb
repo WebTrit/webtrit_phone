@@ -543,5 +543,13 @@
   "webRegistration_ErrorAcknowledgeDialog_title": "Web resource error",
   "@webRegistration_ErrorAcknowledgeDialog_title": {},
   "account_selfCarePasswordExpired_message": "Термін дії вашого пароля самообслуговування минув. Оновіть його за допомогою самообслуговування.\nДоки пароль не буде змінено, доступ до служби буде обмежено.",
-  "@account_selfCarePasswordExpired_message": {}
+  "@account_selfCarePasswordExpired_message": {},
+  "common_noInternetConnection_title": "Немає підключення до Інтернету",
+  "@common_noInternetConnection_title": {},
+  "common_noInternetConnection_message": "Схоже, ви не підключені до Інтернету. Перевірте своє підключення і спробуйте ще раз.",
+  "@common_noInternetConnection_message": {},
+  "common_noInternetConnection_retryButton": "Спробуйте ще раз",
+  "@common_noInternetConnection_retryButton": {},
+  "common_problemWithLoadingPage": "Виникла проблема з завантаженням сторінки.",
+  "@common_problemWithLoadingPage": {}
 }
