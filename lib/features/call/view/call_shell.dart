@@ -75,7 +75,7 @@ class _CallShellState extends State<CallShell> {
 
         if (state.display == CallDisplay.screen) {
           if (!router.isRouteActive(CallScreenPageRoute.name)) {
-            _openCallScreen(router);
+            _openCallScreen(router, state);
           }
         } else {
           if (router.isRouteActive(CallScreenPageRoute.name)) {
@@ -96,7 +96,7 @@ class _CallShellState extends State<CallShell> {
           } else {
             final avatar = ThumbnailAvatar(
               stickyPadding: widget.stickyPadding,
-              onTap: () => _openCallScreen(router),
+              onTap: () => _openCallScreen(router, state),
             );
             _avatar = avatar;
             avatar.insert(context, state);
@@ -128,10 +128,22 @@ class _CallShellState extends State<CallShell> {
     super.dispose();
   }
 
-  void _openCallScreen(StackRouter router) {
-    // Use navigate to prevent duplicating CallScreenPageRoute in the stack.
-    // For example, if the user is on a different route branch like LogRecordsConsoleScreenPageRoute, navigate ensures CallScreenPageRoute is not added again.
-    router.navigate(const CallScreenPageRoute());
+  void _openCallScreen(StackRouter router, CallState state) {
+    if (state.activeCalls.isNotEmpty) {
+      // Use navigate to prevent duplicating CallScreenPageRoute in the stack.
+      // For example, if the user is on a different route branch like LogRecordsConsoleScreenPageRoute, navigate ensures CallScreenPageRoute is not added again.
+      router.navigate(const CallScreenPageRoute());
+    } else {
+      // Handle scenario where no active call exists, ensuring the listener is properly removed and the thumbnail is correctly managed.
+      _removeThumbnailAvatar();
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(context.l10n.call_ThumbnailAvatar_currentlyNoActiveCall),
+          backgroundColor: Colors.grey,
+        ),
+      );
+    }
   }
 }
 
