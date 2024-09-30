@@ -151,10 +151,7 @@ abstract class __NavigatorMediaDevicesChange
 
 /// @nodoc
 mixin _$RegistrationChange {
-  RegistrationStatus get registrationStatus =>
-      throw _privateConstructorUsedError;
-  String? get reason => throw _privateConstructorUsedError;
-  int? get code => throw _privateConstructorUsedError;
+  Registration get registration => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -162,19 +159,14 @@ mixin _$RegistrationChange {
 class _$_RegistrationChangeImpl
     with DiagnosticableTreeMixin
     implements __RegistrationChange {
-  const _$_RegistrationChangeImpl(
-      {required this.registrationStatus, this.reason, this.code});
+  const _$_RegistrationChangeImpl({required this.registration});
 
   @override
-  final RegistrationStatus registrationStatus;
-  @override
-  final String? reason;
-  @override
-  final int? code;
+  final Registration registration;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return '_RegistrationChange(registrationStatus: $registrationStatus, reason: $reason, code: $code)';
+    return '_RegistrationChange(registration: $registration)';
   }
 
   @override
@@ -182,9 +174,7 @@ class _$_RegistrationChangeImpl
     super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', '_RegistrationChange'))
-      ..add(DiagnosticsProperty('registrationStatus', registrationStatus))
-      ..add(DiagnosticsProperty('reason', reason))
-      ..add(DiagnosticsProperty('code', code));
+      ..add(DiagnosticsProperty('registration', registration));
   }
 
   @override
@@ -192,29 +182,20 @@ class _$_RegistrationChangeImpl
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_RegistrationChangeImpl &&
-            (identical(other.registrationStatus, registrationStatus) ||
-                other.registrationStatus == registrationStatus) &&
-            (identical(other.reason, reason) || other.reason == reason) &&
-            (identical(other.code, code) || other.code == code));
+            (identical(other.registration, registration) ||
+                other.registration == registration));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, registrationStatus, reason, code);
+  int get hashCode => Object.hash(runtimeType, registration);
 }
 
 abstract class __RegistrationChange implements _RegistrationChange {
   const factory __RegistrationChange(
-      {required final RegistrationStatus registrationStatus,
-      final String? reason,
-      final int? code}) = _$_RegistrationChangeImpl;
+      {required final Registration registration}) = _$_RegistrationChangeImpl;
 
   @override
-  RegistrationStatus get registrationStatus;
-  @override
-  String? get reason;
-  @override
-  int? get code;
+  Registration get registration;
 }
 
 /// @nodoc
@@ -1061,7 +1042,7 @@ mixin _$CallSignalingEvent {
         notify,
     required TResult Function() registering,
     required TResult Function() registered,
-    required TResult Function() registrationFailed,
+    required TResult Function(int code, String reason) registrationFailed,
     required TResult Function() unregistering,
     required TResult Function() unregistered,
   }) =>
@@ -1110,7 +1091,7 @@ mixin _$CallSignalingEvent {
         notify,
     TResult? Function()? registering,
     TResult? Function()? registered,
-    TResult? Function()? registrationFailed,
+    TResult? Function(int code, String reason)? registrationFailed,
     TResult? Function()? unregistering,
     TResult? Function()? unregistered,
   }) =>
@@ -1159,7 +1140,7 @@ mixin _$CallSignalingEvent {
         notify,
     TResult Function()? registering,
     TResult Function()? registered,
-    TResult Function()? registrationFailed,
+    TResult Function(int code, String reason)? registrationFailed,
     TResult Function()? unregistering,
     TResult Function()? unregistered,
     required TResult orElse(),
@@ -1354,7 +1335,7 @@ class _$CallSignalingEventIncomingImpl
         notify,
     required TResult Function() registering,
     required TResult Function() registered,
-    required TResult Function() registrationFailed,
+    required TResult Function(int code, String reason) registrationFailed,
     required TResult Function() unregistering,
     required TResult Function() unregistered,
   }) {
@@ -1407,7 +1388,7 @@ class _$CallSignalingEventIncomingImpl
         notify,
     TResult? Function()? registering,
     TResult? Function()? registered,
-    TResult? Function()? registrationFailed,
+    TResult? Function(int code, String reason)? registrationFailed,
     TResult? Function()? unregistering,
     TResult? Function()? unregistered,
   }) {
@@ -1460,7 +1441,7 @@ class _$CallSignalingEventIncomingImpl
         notify,
     TResult Function()? registering,
     TResult Function()? registered,
-    TResult Function()? registrationFailed,
+    TResult Function(int code, String reason)? registrationFailed,
     TResult Function()? unregistering,
     TResult Function()? unregistered,
     required TResult orElse(),
@@ -1655,7 +1636,7 @@ class _$CallSignalingEventRingingImpl
         notify,
     required TResult Function() registering,
     required TResult Function() registered,
-    required TResult Function() registrationFailed,
+    required TResult Function(int code, String reason) registrationFailed,
     required TResult Function() unregistering,
     required TResult Function() unregistered,
   }) {
@@ -1707,7 +1688,7 @@ class _$CallSignalingEventRingingImpl
         notify,
     TResult? Function()? registering,
     TResult? Function()? registered,
-    TResult? Function()? registrationFailed,
+    TResult? Function(int code, String reason)? registrationFailed,
     TResult? Function()? unregistering,
     TResult? Function()? unregistered,
   }) {
@@ -1759,7 +1740,7 @@ class _$CallSignalingEventRingingImpl
         notify,
     TResult Function()? registering,
     TResult Function()? registered,
-    TResult Function()? registrationFailed,
+    TResult Function(int code, String reason)? registrationFailed,
     TResult Function()? unregistering,
     TResult Function()? unregistered,
     required TResult orElse(),
@@ -1950,7 +1931,7 @@ class _$CallSignalingEventProgressImpl
         notify,
     required TResult Function() registering,
     required TResult Function() registered,
-    required TResult Function() registrationFailed,
+    required TResult Function(int code, String reason) registrationFailed,
     required TResult Function() unregistering,
     required TResult Function() unregistered,
   }) {
@@ -2002,7 +1983,7 @@ class _$CallSignalingEventProgressImpl
         notify,
     TResult? Function()? registering,
     TResult? Function()? registered,
-    TResult? Function()? registrationFailed,
+    TResult? Function(int code, String reason)? registrationFailed,
     TResult? Function()? unregistering,
     TResult? Function()? unregistered,
   }) {
@@ -2054,7 +2035,7 @@ class _$CallSignalingEventProgressImpl
         notify,
     TResult Function()? registering,
     TResult Function()? registered,
-    TResult Function()? registrationFailed,
+    TResult Function(int code, String reason)? registrationFailed,
     TResult Function()? unregistering,
     TResult Function()? unregistered,
     required TResult orElse(),
@@ -2246,7 +2227,7 @@ class _$CallSignalingEventAcceptedImpl
         notify,
     required TResult Function() registering,
     required TResult Function() registered,
-    required TResult Function() registrationFailed,
+    required TResult Function(int code, String reason) registrationFailed,
     required TResult Function() unregistering,
     required TResult Function() unregistered,
   }) {
@@ -2298,7 +2279,7 @@ class _$CallSignalingEventAcceptedImpl
         notify,
     TResult? Function()? registering,
     TResult? Function()? registered,
-    TResult? Function()? registrationFailed,
+    TResult? Function(int code, String reason)? registrationFailed,
     TResult? Function()? unregistering,
     TResult? Function()? unregistered,
   }) {
@@ -2350,7 +2331,7 @@ class _$CallSignalingEventAcceptedImpl
         notify,
     TResult Function()? registering,
     TResult Function()? registered,
-    TResult Function()? registrationFailed,
+    TResult Function(int code, String reason)? registrationFailed,
     TResult Function()? unregistering,
     TResult Function()? unregistered,
     required TResult orElse(),
@@ -2545,7 +2526,7 @@ class _$CallSignalingEventHangupImpl
         notify,
     required TResult Function() registering,
     required TResult Function() registered,
-    required TResult Function() registrationFailed,
+    required TResult Function(int code, String reason) registrationFailed,
     required TResult Function() unregistering,
     required TResult Function() unregistered,
   }) {
@@ -2597,7 +2578,7 @@ class _$CallSignalingEventHangupImpl
         notify,
     TResult? Function()? registering,
     TResult? Function()? registered,
-    TResult? Function()? registrationFailed,
+    TResult? Function(int code, String reason)? registrationFailed,
     TResult? Function()? unregistering,
     TResult? Function()? unregistered,
   }) {
@@ -2649,7 +2630,7 @@ class _$CallSignalingEventHangupImpl
         notify,
     TResult Function()? registering,
     TResult Function()? registered,
-    TResult Function()? registrationFailed,
+    TResult Function(int code, String reason)? registrationFailed,
     TResult Function()? unregistering,
     TResult Function()? unregistered,
     required TResult orElse(),
@@ -2873,7 +2854,7 @@ class _$CallSignalingEventUpdatingImpl
         notify,
     required TResult Function() registering,
     required TResult Function() registered,
-    required TResult Function() registrationFailed,
+    required TResult Function(int code, String reason) registrationFailed,
     required TResult Function() unregistering,
     required TResult Function() unregistered,
   }) {
@@ -2926,7 +2907,7 @@ class _$CallSignalingEventUpdatingImpl
         notify,
     TResult? Function()? registering,
     TResult? Function()? registered,
-    TResult? Function()? registrationFailed,
+    TResult? Function(int code, String reason)? registrationFailed,
     TResult? Function()? unregistering,
     TResult? Function()? unregistered,
   }) {
@@ -2979,7 +2960,7 @@ class _$CallSignalingEventUpdatingImpl
         notify,
     TResult Function()? registering,
     TResult Function()? registered,
-    TResult Function()? registrationFailed,
+    TResult Function(int code, String reason)? registrationFailed,
     TResult Function()? unregistering,
     TResult Function()? unregistered,
     required TResult orElse(),
@@ -3174,7 +3155,7 @@ class _$CallSignalingEventUpdatedImpl
         notify,
     required TResult Function() registering,
     required TResult Function() registered,
-    required TResult Function() registrationFailed,
+    required TResult Function(int code, String reason) registrationFailed,
     required TResult Function() unregistering,
     required TResult Function() unregistered,
   }) {
@@ -3226,7 +3207,7 @@ class _$CallSignalingEventUpdatedImpl
         notify,
     TResult? Function()? registering,
     TResult? Function()? registered,
-    TResult? Function()? registrationFailed,
+    TResult? Function(int code, String reason)? registrationFailed,
     TResult? Function()? unregistering,
     TResult? Function()? unregistered,
   }) {
@@ -3278,7 +3259,7 @@ class _$CallSignalingEventUpdatedImpl
         notify,
     TResult Function()? registering,
     TResult Function()? registered,
-    TResult Function()? registrationFailed,
+    TResult Function(int code, String reason)? registrationFailed,
     TResult Function()? unregistering,
     TResult Function()? unregistered,
     required TResult orElse(),
@@ -3477,7 +3458,7 @@ class _$CallSignalingEventTransferImpl
         notify,
     required TResult Function() registering,
     required TResult Function() registered,
-    required TResult Function() registrationFailed,
+    required TResult Function(int code, String reason) registrationFailed,
     required TResult Function() unregistering,
     required TResult Function() unregistered,
   }) {
@@ -3529,7 +3510,7 @@ class _$CallSignalingEventTransferImpl
         notify,
     TResult? Function()? registering,
     TResult? Function()? registered,
-    TResult? Function()? registrationFailed,
+    TResult? Function(int code, String reason)? registrationFailed,
     TResult? Function()? unregistering,
     TResult? Function()? unregistered,
   }) {
@@ -3581,7 +3562,7 @@ class _$CallSignalingEventTransferImpl
         notify,
     TResult Function()? registering,
     TResult Function()? registered,
-    TResult Function()? registrationFailed,
+    TResult Function(int code, String reason)? registrationFailed,
     TResult Function()? unregistering,
     TResult Function()? unregistered,
     required TResult orElse(),
@@ -3791,7 +3772,7 @@ class _$CallSignalingEventNotifyImpl
         notify,
     required TResult Function() registering,
     required TResult Function() registered,
-    required TResult Function() registrationFailed,
+    required TResult Function(int code, String reason) registrationFailed,
     required TResult Function() unregistering,
     required TResult Function() unregistered,
   }) {
@@ -3844,7 +3825,7 @@ class _$CallSignalingEventNotifyImpl
         notify,
     TResult? Function()? registering,
     TResult? Function()? registered,
-    TResult? Function()? registrationFailed,
+    TResult? Function(int code, String reason)? registrationFailed,
     TResult? Function()? unregistering,
     TResult? Function()? unregistered,
   }) {
@@ -3897,7 +3878,7 @@ class _$CallSignalingEventNotifyImpl
         notify,
     TResult Function()? registering,
     TResult Function()? registered,
-    TResult Function()? registrationFailed,
+    TResult Function(int code, String reason)? registrationFailed,
     TResult Function()? unregistering,
     TResult Function()? unregistered,
     required TResult orElse(),
@@ -4076,7 +4057,7 @@ class _$CallSignalingEventRegisteringImpl
         notify,
     required TResult Function() registering,
     required TResult Function() registered,
-    required TResult Function() registrationFailed,
+    required TResult Function(int code, String reason) registrationFailed,
     required TResult Function() unregistering,
     required TResult Function() unregistered,
   }) {
@@ -4128,7 +4109,7 @@ class _$CallSignalingEventRegisteringImpl
         notify,
     TResult? Function()? registering,
     TResult? Function()? registered,
-    TResult? Function()? registrationFailed,
+    TResult? Function(int code, String reason)? registrationFailed,
     TResult? Function()? unregistering,
     TResult? Function()? unregistered,
   }) {
@@ -4180,7 +4161,7 @@ class _$CallSignalingEventRegisteringImpl
         notify,
     TResult Function()? registering,
     TResult Function()? registered,
-    TResult Function()? registrationFailed,
+    TResult Function(int code, String reason)? registrationFailed,
     TResult Function()? unregistering,
     TResult Function()? unregistered,
     required TResult orElse(),
@@ -4346,7 +4327,7 @@ class _$CallSignalingEventRegisteredImpl
         notify,
     required TResult Function() registering,
     required TResult Function() registered,
-    required TResult Function() registrationFailed,
+    required TResult Function(int code, String reason) registrationFailed,
     required TResult Function() unregistering,
     required TResult Function() unregistered,
   }) {
@@ -4398,7 +4379,7 @@ class _$CallSignalingEventRegisteredImpl
         notify,
     TResult? Function()? registering,
     TResult? Function()? registered,
-    TResult? Function()? registrationFailed,
+    TResult? Function(int code, String reason)? registrationFailed,
     TResult? Function()? unregistering,
     TResult? Function()? unregistered,
   }) {
@@ -4450,7 +4431,7 @@ class _$CallSignalingEventRegisteredImpl
         notify,
     TResult Function()? registering,
     TResult Function()? registered,
-    TResult Function()? registrationFailed,
+    TResult Function(int code, String reason)? registrationFailed,
     TResult Function()? unregistering,
     TResult Function()? unregistered,
     required TResult orElse(),
@@ -4544,29 +4525,39 @@ abstract class _CallSignalingEventRegistered implements _CallSignalingEvent {
 class _$CallSignalingEventRegisterationFailedImpl
     with DiagnosticableTreeMixin
     implements _CallSignalingEventRegisterationFailed {
-  const _$CallSignalingEventRegisterationFailedImpl();
+  const _$CallSignalingEventRegisterationFailedImpl(this.code, this.reason);
+
+  @override
+  final int code;
+  @override
+  final String reason;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return '_CallSignalingEvent.registrationFailed()';
+    return '_CallSignalingEvent.registrationFailed(code: $code, reason: $reason)';
   }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties.add(
-        DiagnosticsProperty('type', '_CallSignalingEvent.registrationFailed'));
+    properties
+      ..add(
+          DiagnosticsProperty('type', '_CallSignalingEvent.registrationFailed'))
+      ..add(DiagnosticsProperty('code', code))
+      ..add(DiagnosticsProperty('reason', reason));
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$CallSignalingEventRegisterationFailedImpl);
+            other is _$CallSignalingEventRegisterationFailedImpl &&
+            (identical(other.code, code) || other.code == code) &&
+            (identical(other.reason, reason) || other.reason == reason));
   }
 
   @override
-  int get hashCode => runtimeType.hashCode;
+  int get hashCode => Object.hash(runtimeType, code, reason);
 
   @override
   @optionalTypeArgs
@@ -4616,11 +4607,11 @@ class _$CallSignalingEventRegisterationFailedImpl
         notify,
     required TResult Function() registering,
     required TResult Function() registered,
-    required TResult Function() registrationFailed,
+    required TResult Function(int code, String reason) registrationFailed,
     required TResult Function() unregistering,
     required TResult Function() unregistered,
   }) {
-    return registrationFailed();
+    return registrationFailed(code, reason);
   }
 
   @override
@@ -4668,11 +4659,11 @@ class _$CallSignalingEventRegisterationFailedImpl
         notify,
     TResult? Function()? registering,
     TResult? Function()? registered,
-    TResult? Function()? registrationFailed,
+    TResult? Function(int code, String reason)? registrationFailed,
     TResult? Function()? unregistering,
     TResult? Function()? unregistered,
   }) {
-    return registrationFailed?.call();
+    return registrationFailed?.call(code, reason);
   }
 
   @override
@@ -4720,13 +4711,13 @@ class _$CallSignalingEventRegisterationFailedImpl
         notify,
     TResult Function()? registering,
     TResult Function()? registered,
-    TResult Function()? registrationFailed,
+    TResult Function(int code, String reason)? registrationFailed,
     TResult Function()? unregistering,
     TResult Function()? unregistered,
     required TResult orElse(),
   }) {
     if (registrationFailed != null) {
-      return registrationFailed();
+      return registrationFailed(code, reason);
     }
     return orElse();
   }
@@ -4806,8 +4797,12 @@ class _$CallSignalingEventRegisterationFailedImpl
 
 abstract class _CallSignalingEventRegisterationFailed
     implements _CallSignalingEvent {
-  const factory _CallSignalingEventRegisterationFailed() =
+  const factory _CallSignalingEventRegisterationFailed(
+          final int code, final String reason) =
       _$CallSignalingEventRegisterationFailedImpl;
+
+  int get code;
+  String get reason;
 }
 
 /// @nodoc
@@ -4887,7 +4882,7 @@ class _$CallSignalingEventUnregisteringImpl
         notify,
     required TResult Function() registering,
     required TResult Function() registered,
-    required TResult Function() registrationFailed,
+    required TResult Function(int code, String reason) registrationFailed,
     required TResult Function() unregistering,
     required TResult Function() unregistered,
   }) {
@@ -4939,7 +4934,7 @@ class _$CallSignalingEventUnregisteringImpl
         notify,
     TResult? Function()? registering,
     TResult? Function()? registered,
-    TResult? Function()? registrationFailed,
+    TResult? Function(int code, String reason)? registrationFailed,
     TResult? Function()? unregistering,
     TResult? Function()? unregistered,
   }) {
@@ -4991,7 +4986,7 @@ class _$CallSignalingEventUnregisteringImpl
         notify,
     TResult Function()? registering,
     TResult Function()? registered,
-    TResult Function()? registrationFailed,
+    TResult Function(int code, String reason)? registrationFailed,
     TResult Function()? unregistering,
     TResult Function()? unregistered,
     required TResult orElse(),
@@ -5157,7 +5152,7 @@ class _$CallSignalingEventUnregisteredImpl
         notify,
     required TResult Function() registering,
     required TResult Function() registered,
-    required TResult Function() registrationFailed,
+    required TResult Function(int code, String reason) registrationFailed,
     required TResult Function() unregistering,
     required TResult Function() unregistered,
   }) {
@@ -5209,7 +5204,7 @@ class _$CallSignalingEventUnregisteredImpl
         notify,
     TResult? Function()? registering,
     TResult? Function()? registered,
-    TResult? Function()? registrationFailed,
+    TResult? Function(int code, String reason)? registrationFailed,
     TResult? Function()? unregistering,
     TResult? Function()? unregistered,
   }) {
@@ -5261,7 +5256,7 @@ class _$CallSignalingEventUnregisteredImpl
         notify,
     TResult Function()? registering,
     TResult Function()? registered,
-    TResult Function()? registrationFailed,
+    TResult Function(int code, String reason)? registrationFailed,
     TResult Function()? unregistering,
     TResult Function()? unregistered,
     required TResult orElse(),

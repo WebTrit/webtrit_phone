@@ -58,6 +58,13 @@ final class CallUserMediaErrorNotification extends ErrorNotification {
   }
 }
 
+final class SipServerUnavailable extends ErrorNotification {
+  @override
+  String l10n(BuildContext context) {
+    return context.l10n.notifications_errorSnackBar_sipServiceUnavailable;
+  }
+}
+
 final class AppUnregisteredNotification extends MessageNotification {
   @override
   String l10n(BuildContext context) {
