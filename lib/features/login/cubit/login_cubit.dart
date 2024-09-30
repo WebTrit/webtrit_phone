@@ -96,7 +96,7 @@ class LoginCubit extends Cubit<LoginState> {
     final demo = mode == LoginMode.demoCore;
     final coreUrl = demo ? demoCoreUrlFromEnvironment : coreUrlFromEnvironment;
 
-    if (coreUrl != null && mode != LoginMode.credentialsRequest) {
+    if (coreUrl != null) {
       await _verifyCoreVersionAndRetrieveSupportedLoginTypesSubmitted(coreUrl, defaultTenantId, demo);
     }
   }

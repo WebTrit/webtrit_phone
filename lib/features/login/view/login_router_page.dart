@@ -16,10 +16,6 @@ bool whenLoginRouterPageChange(LoginState previous, LoginState current) {
       previous.embeddedLogin != current.embeddedLogin;
 }
 
-bool whenCredentialsRequestScreenPageActive(LoginState state) {
-  return state.mode == LoginMode.credentialsRequest;
-}
-
 bool whenCustomLoginScreenPageActive(LoginState state) {
   return state.embeddedLogin != null;
 }
@@ -63,7 +59,6 @@ class LoginRouterPage extends StatelessWidget {
             return [
               if (!isLaunchEmbeddedLogin) const LoginModeSelectScreenPageRoute(),
               if (whenLoginCoreUrlAssignScreenPageActive(state)) const LoginCoreUrlAssignScreenPageRoute(),
-              if (whenCredentialsRequestScreenPageActive(state)) const LoginCredentialsRequestScreenPageRoute(),
               if (whenCustomLoginScreenPageActive(state))
                 LoginCustomSigninScreenPageRoute(
                   url: state.embeddedLogin!.uri!,
@@ -76,9 +71,6 @@ class LoginRouterPage extends StatelessWidget {
             switch (route.name) {
               case LoginCoreUrlAssignScreenPageRoute.name:
                 _onCoreUrlAssignBack(context);
-                break;
-              case LoginCredentialsRequestScreenPageRoute.name:
-                _onCredentialsRequestUrlAssignBack(context);
                 break;
               case LoginCustomSigninScreenPageRoute.name:
                 _onEmbeddedPageAssignBackAssignBack(context);
@@ -94,7 +86,7 @@ class LoginRouterPage extends StatelessWidget {
 
     final login = LoginCubit(notificationsBloc: context.read<NotificationsBloc>());
     if (_launchEmbeddedLogin != null) {
-      login.setCustomLogin(_launchEmbeddedLogin!);
+      login.setCustomLogin(_launchEmbeddedLogin);
     }
     final provider = BlocProvider(
       create: (context) => login,
@@ -105,10 +97,6 @@ class LoginRouterPage extends StatelessWidget {
 
   void _onCoreUrlAssignBack(BuildContext context) {
     context.read<LoginCubit>().loginCoreUrlAssignBack();
-  }
-
-  void _onCredentialsRequestUrlAssignBack(BuildContext context) {
-    context.read<LoginCubit>().credentialsRequestUrlAssignBack();
   }
 
   void _onEmbeddedPageAssignBackAssignBack(BuildContext context) {
