@@ -13,12 +13,12 @@ final _logger = Logger('UserRepository');
 
 class UserRepository {
   UserRepository({
+    SessionCleanupWorker? sessionCleanupWorker,
     required WebtritApiClient webtritApiClient,
-    required SessionCleanupWorker queueRequestWorker,
     required String token,
     bool periodicPolling = true,
-  })  : _webtritApiClient = webtritApiClient,
-        _sessionCleanupWorker = queueRequestWorker,
+  })  : _sessionCleanupWorker = sessionCleanupWorker,
+        _webtritApiClient = webtritApiClient,
         _token = token,
         _periodicPolling = periodicPolling {
     _controller = StreamController<UserInfo>.broadcast(
@@ -32,7 +32,7 @@ class UserRepository {
   final String _token;
   final bool _periodicPolling;
 
-  final SessionCleanupWorker _sessionCleanupWorker;
+  final SessionCleanupWorker? _sessionCleanupWorker;
 
   late StreamController<UserInfo> _controller;
   late int _listenedCounter;
@@ -83,7 +83,7 @@ class UserRepository {
       );
     } catch (e) {
       if (e is RequestFailure && e.statusCode == null) {
-        _sessionCleanupWorker.saveFailedSession(e.tenantUrl, token: _token);
+        _sessionCleanupWorker?.saveFailedSession(e.tenantUrl, token: _token);
       }
       rethrow;
     }
