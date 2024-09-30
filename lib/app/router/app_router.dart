@@ -27,12 +27,14 @@ class AppRouter extends _$AppRouter {
   AppRouter(
     this._appBloc,
     this._appPermissions,
+    this._launchEmbeddedLogin,
     this._initialBottomMenuTab,
   );
 
   final AppBloc _appBloc;
   final AppPermissions _appPermissions;
 
+  final EmbeddedLogin? _launchEmbeddedLogin;
   final BottomMenuTab _initialBottomMenuTab;
 
   String? get coreUrl => _appBloc.state.coreUrl;
@@ -345,7 +347,11 @@ class AppRouter extends _$AppRouter {
     } else {
       resolver.next(false);
       router.replaceAll(
-        [const LoginRouterPageRoute()],
+        [
+          LoginRouterPageRoute(
+            launchEmbeddedLogin: _launchEmbeddedLogin,
+          )
+        ],
       );
     }
   }

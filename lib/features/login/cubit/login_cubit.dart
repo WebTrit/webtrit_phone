@@ -11,6 +11,7 @@ import 'package:webtrit_phone/app/core_version.dart';
 import 'package:webtrit_phone/app/notifications/notifications.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';
+import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 
 import '../login.dart';
@@ -95,11 +96,16 @@ class LoginCubit extends Cubit<LoginState> {
     final demo = mode == LoginMode.demoCore;
     final coreUrl = demo ? demoCoreUrlFromEnvironment : coreUrlFromEnvironment;
 
-    if (mode == LoginMode.customSignIn) {
-      emit(state.copyWith(coreUrl: coreUrl));
-    } else if (coreUrl != null && mode != LoginMode.credentialsRequest) {
+    if (coreUrl != null && mode != LoginMode.credentialsRequest) {
       await _verifyCoreVersionAndRetrieveSupportedLoginTypesSubmitted(coreUrl, defaultTenantId, demo);
     }
+  }
+
+  void setCustomLogin(EmbeddedLogin login) {
+    emit(state.copyWith(
+      embeddedLogin: login,
+      coreUrl: isDemoModeEnabled ? demoCoreUrlFromEnvironment : coreUrlFromEnvironment,
+    ));
   }
 
   // LoginCoreUrlAssign
@@ -136,9 +142,9 @@ class LoginCubit extends Cubit<LoginState> {
     ));
   }
 
-  void customSigninAssignBack() async {
+  void embeddedPageAssignBack() async {
     emit(state.copyWith(
-      mode: null,
+      embeddedLogin: null,
     ));
   }
 

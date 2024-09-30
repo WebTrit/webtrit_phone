@@ -162,9 +162,13 @@ abstract class _$AppRouter extends RootStackRouter {
       );
     },
     LoginCustomSigninScreenPageRoute.name: (routeData) {
+      final args = routeData.argsAs<LoginCustomSigninScreenPageRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: LoginCustomSigninScreenPage(),
+        child: LoginCustomSigninScreenPage(
+          args.url,
+          args.title10n,
+        ),
       );
     },
     LoginModeSelectScreenPageRoute.name: (routeData) {
@@ -198,9 +202,11 @@ abstract class _$AppRouter extends RootStackRouter {
       );
     },
     LoginRouterPageRoute.name: (routeData) {
+      final args = routeData.argsAs<LoginRouterPageRouteArgs>(
+          orElse: () => const LoginRouterPageRouteArgs());
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: LoginRouterPage(),
+        child: LoginRouterPage(launchEmbeddedLogin: args.launchEmbeddedLogin),
       );
     },
     LoginSignupRequestScreenPageRoute.name: (routeData) {
@@ -766,16 +772,41 @@ class LoginCredentialsRequestScreenPageRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [LoginCustomSigninScreenPage]
-class LoginCustomSigninScreenPageRoute extends PageRouteInfo<void> {
-  const LoginCustomSigninScreenPageRoute({List<PageRouteInfo>? children})
-      : super(
+class LoginCustomSigninScreenPageRoute
+    extends PageRouteInfo<LoginCustomSigninScreenPageRouteArgs> {
+  LoginCustomSigninScreenPageRoute({
+    required Uri url,
+    required String title10n,
+    List<PageRouteInfo>? children,
+  }) : super(
           LoginCustomSigninScreenPageRoute.name,
+          args: LoginCustomSigninScreenPageRouteArgs(
+            url: url,
+            title10n: title10n,
+          ),
           initialChildren: children,
         );
 
   static const String name = 'LoginCustomSigninScreenPageRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static const PageInfo<LoginCustomSigninScreenPageRouteArgs> page =
+      PageInfo<LoginCustomSigninScreenPageRouteArgs>(name);
+}
+
+class LoginCustomSigninScreenPageRouteArgs {
+  const LoginCustomSigninScreenPageRouteArgs({
+    required this.url,
+    required this.title10n,
+  });
+
+  final Uri url;
+
+  final String title10n;
+
+  @override
+  String toString() {
+    return 'LoginCustomSigninScreenPageRouteArgs{url: $url, title10n: $title10n}';
+  }
 }
 
 /// generated route for
@@ -850,16 +881,32 @@ class LoginPasswordSigninScreenPageRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [LoginRouterPage]
-class LoginRouterPageRoute extends PageRouteInfo<void> {
-  const LoginRouterPageRoute({List<PageRouteInfo>? children})
-      : super(
+class LoginRouterPageRoute extends PageRouteInfo<LoginRouterPageRouteArgs> {
+  LoginRouterPageRoute({
+    EmbeddedLogin? launchEmbeddedLogin,
+    List<PageRouteInfo>? children,
+  }) : super(
           LoginRouterPageRoute.name,
+          args: LoginRouterPageRouteArgs(
+              launchEmbeddedLogin: launchEmbeddedLogin),
           initialChildren: children,
         );
 
   static const String name = 'LoginRouterPageRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static const PageInfo<LoginRouterPageRouteArgs> page =
+      PageInfo<LoginRouterPageRouteArgs>(name);
+}
+
+class LoginRouterPageRouteArgs {
+  const LoginRouterPageRouteArgs({this.launchEmbeddedLogin});
+
+  final EmbeddedLogin? launchEmbeddedLogin;
+
+  @override
+  String toString() {
+    return 'LoginRouterPageRouteArgs{launchEmbeddedLogin: $launchEmbeddedLogin}';
+  }
 }
 
 /// generated route for
