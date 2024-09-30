@@ -92,16 +92,18 @@ class RequestStorage {
 
   Future<SharedPreferences> get _prefs async => await SharedPreferences.getInstance();
 
-  Future<void> storeFailedSession(Uri uri,
-      {String? token,
-      Duration? expiration,
-      int? maxAttempts,
-      Duration defaultExpiration = const Duration(days: 7),
-      int defaultMaxAttempts = 100}) async {
+  Future<void> storeFailedSession(
+    Uri url, {
+    String? token,
+    Duration? expiration,
+    int? maxAttempts,
+    Duration defaultExpiration = const Duration(days: 7),
+    int defaultMaxAttempts = 100,
+  }) async {
     final prefs = await _prefs;
     final requestKey = '$requestKeyPrefix${DateTime.now().millisecondsSinceEpoch}';
     final sessionData = {
-      uriKey: uri.toString(),
+      uriKey: url.toString(),
       tokenKey: token,
       timestampKey: DateTime.now().toIso8601String(),
       attemptsKey: 0,

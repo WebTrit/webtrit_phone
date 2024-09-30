@@ -83,7 +83,7 @@ class UserRepository {
       );
     } catch (e) {
       if (e is RequestFailure && e.statusCode == null) {
-        _sessionCleanupWorker?.saveFailedSession(e.tenantUrl, token: _token);
+        _sessionCleanupWorker?.saveFailedSession(e.url, token: _token);
       }
       rethrow;
     }

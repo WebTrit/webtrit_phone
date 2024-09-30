@@ -2,14 +2,14 @@ import 'models/error.dart';
 
 class RequestFailure implements Exception {
   RequestFailure({
-    required this.tenantUrl,
+    required this.url,
     this.statusCode,
     required this.requestId,
     this.token,
     this.error,
   });
 
-  final Uri tenantUrl;
+  final Uri url;
   final int? statusCode;
   final String requestId;
   final String? token;
