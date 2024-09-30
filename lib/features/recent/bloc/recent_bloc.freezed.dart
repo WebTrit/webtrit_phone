@@ -56,7 +56,9 @@ mixin _$RecentState {
   Recent? get recent => throw _privateConstructorUsedError;
   List<Recent>? get recents => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of RecentState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $RecentStateCopyWith<RecentState> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -80,6 +82,8 @@ class _$RecentStateCopyWithImpl<$Res, $Val extends RecentState>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of RecentState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -118,6 +122,8 @@ class __$$RecentStateImplCopyWithImpl<$Res>
       _$RecentStateImpl _value, $Res Function(_$RecentStateImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of RecentState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -173,7 +179,9 @@ class _$RecentStateImpl implements _RecentState {
   int get hashCode => Object.hash(
       runtimeType, recent, const DeepCollectionEquality().hash(_recents));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of RecentState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$RecentStateImplCopyWith<_$RecentStateImpl> get copyWith =>
@@ -188,8 +196,11 @@ abstract class _RecentState implements RecentState {
   Recent? get recent;
   @override
   List<Recent>? get recents;
+
+  /// Create a copy of RecentState
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$RecentStateImplCopyWith<_$RecentStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

@@ -18,9 +18,11 @@ class RecentsScreen extends StatefulWidget {
     super.key,
     this.recentsFilters = const [RecentsVisibilityFilter.all, RecentsVisibilityFilter.missed],
     this.title,
+    required this.videoCallEnable,
   });
 
   final List<RecentsVisibilityFilter> recentsFilters;
+  final bool videoCallEnable;
 
   final Widget? title;
 
@@ -132,7 +134,7 @@ class _RecentsScreenState extends State<RecentsScreen> with SingleTickerProvider
                                 callBloc.add(CallControlEvent.started(
                                   number: recent.number,
                                   displayName: recent.name,
-                                  video: recent.video,
+                                  video: recent.video && widget.videoCallEnable,
                                 ));
                               },
                         onLongPress: transfer
@@ -142,7 +144,7 @@ class _RecentsScreenState extends State<RecentsScreen> with SingleTickerProvider
                                 callBloc.add(CallControlEvent.started(
                                   number: recent.number,
                                   displayName: recent.name,
-                                  video: !recent.video,
+                                  video: !recent.video && widget.videoCallEnable,
                                 ));
                               },
                         onDeleted: (recent) {

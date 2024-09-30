@@ -12411,7 +12411,6 @@ mixin _$ActiveCall {
   String get callId => throw _privateConstructorUsedError;
   CallkeepHandle get handle => throw _privateConstructorUsedError;
   String? get displayName => throw _privateConstructorUsedError;
-  CallProcessingStatus? get status => throw _privateConstructorUsedError;
 
   /// If the call is result of a refer request, the id should be provided.
   String? get fromReferId => throw _privateConstructorUsedError;
@@ -12447,7 +12446,6 @@ abstract class $ActiveCallCopyWith<$Res> {
       String callId,
       CallkeepHandle handle,
       String? displayName,
-      CallProcessingStatus? status,
       String? fromReferId,
       bool video,
       bool? frontCamera,
@@ -12485,7 +12483,6 @@ class _$ActiveCallCopyWithImpl<$Res, $Val extends ActiveCall>
     Object? callId = null,
     Object? handle = null,
     Object? displayName = freezed,
-    Object? status = freezed,
     Object? fromReferId = freezed,
     Object? video = null,
     Object? frontCamera = freezed,
@@ -12521,10 +12518,6 @@ class _$ActiveCallCopyWithImpl<$Res, $Val extends ActiveCall>
           ? _value.displayName
           : displayName // ignore: cast_nullable_to_non_nullable
               as String?,
-      status: freezed == status
-          ? _value.status
-          : status // ignore: cast_nullable_to_non_nullable
-              as CallProcessingStatus?,
       fromReferId: freezed == fromReferId
           ? _value.fromReferId
           : fromReferId // ignore: cast_nullable_to_non_nullable
@@ -12606,7 +12599,6 @@ abstract class _$$ActiveCallImplCopyWith<$Res>
       String callId,
       CallkeepHandle handle,
       String? displayName,
-      CallProcessingStatus? status,
       String? fromReferId,
       bool video,
       bool? frontCamera,
@@ -12643,7 +12635,6 @@ class __$$ActiveCallImplCopyWithImpl<$Res>
     Object? callId = null,
     Object? handle = null,
     Object? displayName = freezed,
-    Object? status = freezed,
     Object? fromReferId = freezed,
     Object? video = null,
     Object? frontCamera = freezed,
@@ -12679,10 +12670,6 @@ class __$$ActiveCallImplCopyWithImpl<$Res>
           ? _value.displayName
           : displayName // ignore: cast_nullable_to_non_nullable
               as String?,
-      status: freezed == status
-          ? _value.status
-          : status // ignore: cast_nullable_to_non_nullable
-              as CallProcessingStatus?,
       fromReferId: freezed == fromReferId
           ? _value.fromReferId
           : fromReferId // ignore: cast_nullable_to_non_nullable
@@ -12745,7 +12732,6 @@ class _$ActiveCallImpl extends _ActiveCall with DiagnosticableTreeMixin {
       required this.callId,
       required this.handle,
       this.displayName,
-      this.status,
       this.fromReferId,
       required this.video,
       this.frontCamera = true,
@@ -12771,8 +12757,6 @@ class _$ActiveCallImpl extends _ActiveCall with DiagnosticableTreeMixin {
   final CallkeepHandle handle;
   @override
   final String? displayName;
-  @override
-  final CallProcessingStatus? status;
 
   /// If the call is result of a refer request, the id should be provided.
   @override
@@ -12808,7 +12792,7 @@ class _$ActiveCallImpl extends _ActiveCall with DiagnosticableTreeMixin {
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'ActiveCall(direction: $direction, line: $line, callId: $callId, handle: $handle, displayName: $displayName, status: $status, fromReferId: $fromReferId, video: $video, frontCamera: $frontCamera, held: $held, muted: $muted, updating: $updating, createdTime: $createdTime, acceptedTime: $acceptedTime, hungUpTime: $hungUpTime, transfer: $transfer, failure: $failure, localStream: $localStream, remoteStream: $remoteStream)';
+    return 'ActiveCall(direction: $direction, line: $line, callId: $callId, handle: $handle, displayName: $displayName, fromReferId: $fromReferId, video: $video, frontCamera: $frontCamera, held: $held, muted: $muted, updating: $updating, createdTime: $createdTime, acceptedTime: $acceptedTime, hungUpTime: $hungUpTime, transfer: $transfer, failure: $failure, localStream: $localStream, remoteStream: $remoteStream)';
   }
 
   @override
@@ -12821,7 +12805,6 @@ class _$ActiveCallImpl extends _ActiveCall with DiagnosticableTreeMixin {
       ..add(DiagnosticsProperty('callId', callId))
       ..add(DiagnosticsProperty('handle', handle))
       ..add(DiagnosticsProperty('displayName', displayName))
-      ..add(DiagnosticsProperty('status', status))
       ..add(DiagnosticsProperty('fromReferId', fromReferId))
       ..add(DiagnosticsProperty('video', video))
       ..add(DiagnosticsProperty('frontCamera', frontCamera))
@@ -12849,7 +12832,6 @@ class _$ActiveCallImpl extends _ActiveCall with DiagnosticableTreeMixin {
             (identical(other.handle, handle) || other.handle == handle) &&
             (identical(other.displayName, displayName) ||
                 other.displayName == displayName) &&
-            (identical(other.status, status) || other.status == status) &&
             (identical(other.fromReferId, fromReferId) ||
                 other.fromReferId == fromReferId) &&
             (identical(other.video, video) || other.video == video) &&
@@ -12875,28 +12857,26 @@ class _$ActiveCallImpl extends _ActiveCall with DiagnosticableTreeMixin {
   }
 
   @override
-  int get hashCode => Object.hashAll([
-        runtimeType,
-        direction,
-        line,
-        callId,
-        handle,
-        displayName,
-        status,
-        fromReferId,
-        video,
-        frontCamera,
-        held,
-        muted,
-        updating,
-        createdTime,
-        acceptedTime,
-        hungUpTime,
-        transfer,
-        const DeepCollectionEquality().hash(failure),
-        localStream,
-        remoteStream
-      ]);
+  int get hashCode => Object.hash(
+      runtimeType,
+      direction,
+      line,
+      callId,
+      handle,
+      displayName,
+      fromReferId,
+      video,
+      frontCamera,
+      held,
+      muted,
+      updating,
+      createdTime,
+      acceptedTime,
+      hungUpTime,
+      transfer,
+      const DeepCollectionEquality().hash(failure),
+      localStream,
+      remoteStream);
 
   /// Create a copy of ActiveCall
   /// with the given fields replaced by the non-null parameter values.
@@ -12914,7 +12894,6 @@ abstract class _ActiveCall extends ActiveCall {
       required final String callId,
       required final CallkeepHandle handle,
       final String? displayName,
-      final CallProcessingStatus? status,
       final String? fromReferId,
       required final bool video,
       final bool? frontCamera,
@@ -12940,8 +12919,6 @@ abstract class _ActiveCall extends ActiveCall {
   CallkeepHandle get handle;
   @override
   String? get displayName;
-  @override
-  CallProcessingStatus? get status;
 
   /// If the call is result of a refer request, the id should be provided.
   @override

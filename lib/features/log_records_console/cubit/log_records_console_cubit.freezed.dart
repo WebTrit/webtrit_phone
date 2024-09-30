@@ -85,6 +85,9 @@ class _$LogRecordsConsoleStateCopyWithImpl<$Res,
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
+
+  /// Create a copy of LogRecordsConsoleState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -104,6 +107,9 @@ class __$$LogRecordsConsoleStateInitialImplCopyWithImpl<$Res>
       _$LogRecordsConsoleStateInitialImpl _value,
       $Res Function(_$LogRecordsConsoleStateInitialImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of LogRecordsConsoleState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -224,6 +230,9 @@ class __$$LogRecordsConsoleStateLoadingImplCopyWithImpl<$Res>
       _$LogRecordsConsoleStateLoadingImpl _value,
       $Res Function(_$LogRecordsConsoleStateLoadingImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of LogRecordsConsoleState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -347,6 +356,8 @@ class __$$LogRecordsConsoleStateSuccessImplCopyWithImpl<$Res>
       $Res Function(_$LogRecordsConsoleStateSuccessImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of LogRecordsConsoleState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -394,7 +405,9 @@ class _$LogRecordsConsoleStateSuccessImpl
   int get hashCode => Object.hash(
       runtimeType, const DeepCollectionEquality().hash(_logRecords));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of LogRecordsConsoleState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$LogRecordsConsoleStateSuccessImplCopyWith<
@@ -482,7 +495,10 @@ abstract class LogRecordsConsoleStateSuccess implements LogRecordsConsoleState {
       final List<LogRecord> logRecords) = _$LogRecordsConsoleStateSuccessImpl;
 
   List<LogRecord> get logRecords;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of LogRecordsConsoleState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$LogRecordsConsoleStateSuccessImplCopyWith<
           _$LogRecordsConsoleStateSuccessImpl>
       get copyWith => throw _privateConstructorUsedError;
@@ -508,6 +524,8 @@ class __$$LogRecordsConsoleStateFailureImplCopyWithImpl<$Res>
       $Res Function(_$LogRecordsConsoleStateFailureImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of LogRecordsConsoleState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -545,7 +563,9 @@ class _$LogRecordsConsoleStateFailureImpl
   int get hashCode =>
       Object.hash(runtimeType, const DeepCollectionEquality().hash(error));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of LogRecordsConsoleState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$LogRecordsConsoleStateFailureImplCopyWith<
@@ -633,7 +653,10 @@ abstract class LogRecordsConsoleStateFailure implements LogRecordsConsoleState {
       _$LogRecordsConsoleStateFailureImpl;
 
   Object get error;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of LogRecordsConsoleState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$LogRecordsConsoleStateFailureImplCopyWith<
           _$LogRecordsConsoleStateFailureImpl>
       get copyWith => throw _privateConstructorUsedError;

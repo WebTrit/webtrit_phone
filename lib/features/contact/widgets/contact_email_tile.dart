@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:webtrit_phone/widgets/widgets.dart';
+
 class ContactEmailTile extends StatelessWidget {
   const ContactEmailTile({
     super.key,
@@ -30,7 +32,10 @@ class ContactEmailTile extends StatelessWidget {
           ),
         ],
       ),
-      title: Text(address),
+      title: CopyToClipboard(
+        data: address,
+        child: Text(address),
+      ),
       subtitle: label.isEmpty ? null : Text(label),
       onTap: onTap,
       onLongPress: onLongPress,

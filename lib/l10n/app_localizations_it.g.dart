@@ -529,6 +529,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get notifications_errorSnackBar_callUserMedia => 'Nessun accesso al server multimediale, controlla le autorizzazioni dell\'app';
 
   @override
+  String get notifications_errorSnackBar_activeLineBlindTransferWarning => 'Sei già in linea con il destinatario a cui stai cercando di trasferire alla cieca';
+
+  @override
   String get notImplemented => 'Spiacente, non ancora implementato';
 
   @override

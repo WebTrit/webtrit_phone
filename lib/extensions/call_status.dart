@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:webtrit_phone/features/call/call.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
+import 'package:webtrit_phone/theme/styles/styles.dart';
 
 extension CallStatusL10n on CallStatus {
   String l10n(BuildContext context) {
@@ -26,19 +27,21 @@ extension CallStatusColor on CallStatus {
   Color color(BuildContext context) {
     final themeData = Theme.of(context);
     final colorScheme = themeData.colorScheme;
+    final callStatusStyles = themeData.extension<CallStatusStyles>()?.primary;
+
     switch (this) {
       case CallStatus.connectivityNone:
-        return colorScheme.error;
+        return callStatusStyles?.connectivityNone ?? colorScheme.error;
       case CallStatus.connectError:
-        return colorScheme.error;
+        return callStatusStyles?.connectError ?? colorScheme.error;
       case CallStatus.appUnregistered:
-        return colorScheme.onSurfaceVariant;
+        return callStatusStyles?.appUnregistered ?? colorScheme.onSurfaceVariant;
       case CallStatus.connectIssue:
-        return colorScheme.error;
+        return callStatusStyles?.connectIssue ?? colorScheme.error;
       case CallStatus.inProgress:
-        return colorScheme.secondary;
+        return callStatusStyles?.ready ?? colorScheme.secondary;
       case CallStatus.ready:
-        return colorScheme.tertiary;
+        return callStatusStyles?.ready ?? colorScheme.tertiary;
     }
   }
 }

@@ -9,6 +9,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:logging/logging.dart';
+import 'package:logging_appenders/logging_appenders.dart';
 
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 
@@ -24,6 +25,8 @@ import 'environment_config.dart';
 import 'firebase_options.dart';
 
 Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
+  _initLogs();
+
   final logger = Logger('bootstrap');
 
   await runZonedGuarded(
@@ -44,13 +47,15 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
         }
       };
 
+      // Initialization order is crucial for proper app setup
       await AppInfo.init();
-      await AppPermissions.init();
+      await AppThemes.init();
       await AppPreferences.init();
+      await FeatureAccess.init();
+      await AppPermissions.init();
       await DeviceInfo.init();
       await PackageInfo.init();
       await SecureStorage.init();
-      await AppThemes.init();
       await AppSound.init(outgoingCallRingAsset: Assets.ringtones.outgoingCall1);
       await AppCertificates.init();
       await AppTime.init();
@@ -70,6 +75,11 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
       }
     },
   );
+}
+
+_initLogs() {
+  hierarchicalLoggingEnabled = true;
+  PrintAppender.setupLogging(level: Level.LEVELS.firstWhere((level) => level.name == EnvironmentConfig.DEBUG_LEVEL));
 }
 
 @pragma('vm:entry-point')
@@ -100,6 +110,8 @@ Future<void> _initFirebaseMessaging() async {
 
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  _initLogs();
+
   final logger = Logger('FCM')..info('_firebaseMessagingBackgroundHandler: ${message.toMap()}');
 
   final fcmHandler = FCMHandler(message);

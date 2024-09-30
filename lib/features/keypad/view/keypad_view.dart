@@ -6,7 +6,12 @@ import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 
 class KeypadView extends StatefulWidget {
-  const KeypadView({super.key});
+  const KeypadView({
+    super.key,
+    required this.videoVisible,
+  });
+
+  final bool videoVisible;
 
   @override
   KeypadViewState createState() => KeypadViewState();
@@ -24,7 +29,10 @@ class KeypadViewState extends State<KeypadView> {
   @override
   void initState() {
     super.initState();
-    _controller = TextEditingController();
+    _controller = TextEditingController()
+      ..addListener(() {
+        context.read<KeypadCubit>().getContactByPhoneNumber(_controller.text);
+      });
     _focusNode = FocusNode();
   }
 
@@ -46,15 +54,26 @@ class KeypadViewState extends State<KeypadView> {
           child: Center(
             child: Container(
               margin: EdgeInsets.symmetric(horizontal: scaledInset),
-              child: TextField(
-                key: _keypadTextFieldKey,
-                controller: _controller,
-                focusNode: _focusNode,
-                decoration: inputDecorations?.keypad,
-                keyboardType: TextInputType.none,
-                style: themeData.textTheme.headlineLarge,
-                textAlign: TextAlign.center,
-                showCursor: true,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TextField(
+                    key: _keypadTextFieldKey,
+                    controller: _controller,
+                    focusNode: _focusNode,
+                    decoration: inputDecorations?.keypad,
+                    keyboardType: TextInputType.none,
+                    style: themeData.textTheme.headlineLarge,
+                    textAlign: TextAlign.center,
+                    showCursor: true,
+                  ),
+                  BlocBuilder<KeypadCubit, KeypadState>(
+                    builder: (context, state) => Text(
+                      state.contact?.name ?? '',
+                      style: themeData.textTheme.bodyMedium,
+                    ),
+                  )
+                ],
               ),
             ),
           ),
@@ -76,6 +95,7 @@ class KeypadViewState extends State<KeypadView> {
                   builder: (context, callState) {
                     return Actionpad(
                       transfer: callState.isBlingTransferInitiated,
+                      videoVisible: widget.videoVisible,
                       onAudioCallPressed: value.text.isEmpty ? null : () => _onCallPressed(false),
                       onVideoCallPressed: value.text.isEmpty ? null : () => _onCallPressed(true),
                       onTransferPressed: _onTransferPressed,
@@ -104,10 +124,13 @@ class KeypadViewState extends State<KeypadView> {
   void _onCallPressed(bool video) {
     _focusNode.unfocus();
 
+    final displayName = context.read<KeypadCubit>().state.contact?.name;
+
     final callBloc = context.read<CallBloc>();
     callBloc.add(CallControlEvent.started(
       number: _popNumber(),
       video: video,
+      displayName: displayName,
     ));
   }
 

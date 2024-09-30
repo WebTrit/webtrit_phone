@@ -75,11 +75,15 @@ class _CallShellState extends State<CallShell> {
 
         if (state.display == CallDisplay.screen) {
           if (!router.isRouteActive(CallScreenPageRoute.name)) {
-            router.push(const CallScreenPageRoute());
+            _openCallScreen(router);
           }
         } else {
           if (router.isRouteActive(CallScreenPageRoute.name)) {
-            router.back();
+            if (state.isBlingTransferInitiated) {
+              router.navigate(const MainScreenPageRoute());
+            } else {
+              router.back();
+            }
           }
         }
 
@@ -92,21 +96,7 @@ class _CallShellState extends State<CallShell> {
           } else {
             final avatar = ThumbnailAvatar(
               stickyPadding: widget.stickyPadding,
-              onTap: () {
-                if (state.activeCalls.isNotEmpty) {
-                  router.push(const CallScreenPageRoute());
-                } else {
-                  // Handle scenario where no active call exists, ensuring the listener is properly removed and the thumbnail is correctly managed.
-                  _removeThumbnailAvatar();
-
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(context.l10n.call_ThumbnailAvatar_currentlyNoActiveCall),
-                      backgroundColor: Colors.grey,
-                    ),
-                  );
-                }
-              },
+              onTap: () => _openCallScreen(router),
             );
             _avatar = avatar;
             avatar.insert(context, state);
@@ -136,6 +126,12 @@ class _CallShellState extends State<CallShell> {
   void dispose() {
     _removeThumbnailAvatar();
     super.dispose();
+  }
+
+  void _openCallScreen(StackRouter router) {
+    // Use navigate to prevent duplicating CallScreenPageRoute in the stack.
+    // For example, if the user is on a different route branch like LogRecordsConsoleScreenPageRoute, navigate ensures CallScreenPageRoute is not added again.
+    router.navigate(const CallScreenPageRoute());
   }
 }
 

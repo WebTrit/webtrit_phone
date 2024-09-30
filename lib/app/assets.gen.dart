@@ -60,6 +60,9 @@ class $AssetsRingtonesGen {
 class $AssetsThemesGen {
   const $AssetsThemesGen();
 
+  /// File path: assets/themes/app.config.json
+  String get appConfig => 'assets/themes/app.config.json';
+
   /// File path: assets/themes/original.json
   String get original => 'assets/themes/original.json';
 
@@ -81,6 +84,7 @@ class $AssetsThemesGen {
 
   /// List of all assets
   List<String> get values => [
+        appConfig,
         original,
         originalPageDarkConfig,
         originalPageLightConfig,

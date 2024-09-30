@@ -53,6 +53,11 @@ class ContactsRepository {
     return _appDatabase.favoritesDao.deleteByContactPhoneId(contactPhone.id);
   }
 
+  Future<List<Contact>> getContactByPhoneNumber(String number) async {
+    final contactDataList = await _appDatabase.contactsDao.getContactsByPhoneNumber(number);
+    return contactDataList.map(_toContact).toList();
+  }
+
   Contact _toContactWithPhonesAndEmails(ContactWithPhonesAndEmailsData data) {
     final email = data.emails.firstOrNull?.address;
     final gravatarUrl = gravatarThumbnailUrl(email);

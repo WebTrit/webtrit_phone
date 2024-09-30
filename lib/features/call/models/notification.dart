@@ -78,3 +78,10 @@ final class AppOnlineNotification extends SuccessNotification {
     return context.l10n.notifications_errorSnackBar_appOnline;
   }
 }
+
+final class ActiveLineBlindTransferWarningNotification extends MessageNotification {
+  @override
+  String l10n(BuildContext context) {
+    return context.l10n.notifications_errorSnackBar_activeLineBlindTransferWarning;
+  }
+}

@@ -1,3 +1,4 @@
+export 'mock_embedded_cubit.dart';
 export 'mock_app_bloc.dart';
 export 'mock_call_bloc.dart';
 export 'mock_contacts_external_tab_bloc.dart';

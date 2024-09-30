@@ -1,29 +1,38 @@
 import 'package:permission_handler/permission_handler.dart';
 
+import 'package:webtrit_phone/models/main_flavor.dart';
+
+import 'feature_access.dart';
+
 export 'package:permission_handler/permission_handler.dart' show Permission, PermissionStatus;
 
 class AppPermissions {
-  static const _permissions = [
-    Permission.microphone,
-    Permission.camera,
-    Permission.contacts,
-  ];
-
   static late AppPermissions _instance;
 
   static Future<void> init() async {
-    final statuses = await Future.wait(_permissions.map((permission) => permission.status));
+    final featureAccess = FeatureAccess();
+
+    // Update initialization logic for better clarity and maintainability
+    final permissions = [
+      Permission.microphone,
+      Permission.camera,
+      if (featureAccess.bottomMenuFeature.isTabEnabled(MainFlavor.contacts)) Permission.contacts,
+    ];
+
+    final statuses = await Future.wait(permissions.map((permission) => permission.status));
     final isDenied = statuses.every((status) => status.isDenied);
-    _instance = AppPermissions._(isDenied);
+    _instance = AppPermissions._(isDenied, permissions);
   }
 
   factory AppPermissions() {
     return _instance;
   }
 
-  AppPermissions._(this._isDenied);
+  AppPermissions._(this._isDenied, this._permissions);
 
   bool _isDenied;
+
+  List<Permission> _permissions;
 
   bool get isDenied => _isDenied;
 

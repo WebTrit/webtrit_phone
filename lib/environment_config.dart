@@ -50,10 +50,11 @@ class EnvironmentConfig {
   );
 
   static const APP_GREETING__NAME = 'WEBTRIT_APP_GREETING';
-  static const APP_GREETING = String.fromEnvironment(
-    APP_GREETING__NAME,
-    defaultValue: 'WebTrit',
-  );
+  static const APP_GREETING = bool.hasEnvironment(APP_GREETING__NAME)
+      ? String.fromEnvironment(
+          APP_GREETING__NAME,
+        )
+      : null;
 
   static const APP_DESCRIPTION__NAME = 'WEBTRIT_APP_DESCRIPTION';
   static const APP_DESCRIPTION = bool.hasEnvironment(APP_HELP_URL__NAME)
@@ -73,13 +74,6 @@ class EnvironmentConfig {
   static const APP_ABOUT_URL = bool.hasEnvironment(APP_ABOUT_URL__NAME)
       ? String.fromEnvironment(
           APP_ABOUT_URL__NAME,
-        )
-      : null;
-
-  static const APP_TERMS_AND_CONDITIONS_URL__NAME = 'WEBTRIT_APP_TERMS_AND_CONDITIONS_URL';
-  static const APP_TERMS_AND_CONDITIONS_URL = bool.hasEnvironment(APP_TERMS_AND_CONDITIONS_URL__NAME)
-      ? String.fromEnvironment(
-          APP_TERMS_AND_CONDITIONS_URL__NAME,
         )
       : null;
 

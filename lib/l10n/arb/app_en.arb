@@ -398,6 +398,8 @@
   "@notifications_errorSnackBar_callUndefinedLine": {},
   "notifications_errorSnackBar_callUserMedia": "No access to media input, please check app permissions",
   "@notifications_errorSnackBar_callUserMedia": {},
+  "notifications_errorSnackBar_activeLineBlindTransferWarning": "You are already on the line with the recipient you are trying to blind transfer to",
+  "@notifications_errorSnackBar_activeLineBlindTransferWarning": {},
   "notImplemented": "Sorry, not implemented yet",
   "@notImplemented": {},
   "permission_Button_request": "Continue",

@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/widgets/widgets.dart';
 
 import 'package:screenshots/mocks/mocks.dart';
 
@@ -20,6 +21,37 @@ class MainScreenScreenshot extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<BottomMenuTab> tabs = [
+      const BottomMenuTab(
+        enabled: true,
+        initial: true,
+        flavor: MainFlavor.favorites,
+        titleL10n: 'main_BottomNavigationBarItemLabel_favorites',
+        icon: Icons.star,
+      ),
+      const BottomMenuTab(
+        enabled: true,
+        initial: false,
+        flavor: MainFlavor.recents,
+        titleL10n: ' main_BottomNavigationBarItemLabel_recents ',
+        icon: Icons.history,
+      ),
+      const BottomMenuTab(
+        enabled: true,
+        initial: false,
+        flavor: MainFlavor.contacts,
+        titleL10n: 'main_BottomNavigationBarItemLabel_contacts',
+        icon: Icons.people,
+      ),
+      const BottomMenuTab(
+        enabled: true,
+        initial: false,
+        flavor: MainFlavor.keypad,
+        titleL10n: 'main_BottomNavigationBarItemLabel_keypad',
+        icon: Icons.dialpad,
+      )
+    ];
+
     return MultiBlocProvider(
       providers: [
         BlocProvider<CallBloc>(
@@ -31,7 +63,8 @@ class MainScreenScreenshot extends StatelessWidget {
       ],
       child: MainScreen(
         body: _flavorWidgetBuilder(context, flavor),
-        navigationBarFlavor: flavor,
+        tabs: tabs,
+        currentTab: tabs.firstWhere((tab) => tab.flavor == flavor),
       ),
     );
   }
@@ -41,6 +74,7 @@ class MainScreenScreenshot extends StatelessWidget {
       case MainFlavor.favorites:
         final widget = FavoritesScreen(
           title: title,
+          videoCallEnable: true,
         );
         final provider = BlocProvider<FavoritesBloc>(
           create: (context) => MockFavoritesBloc.mainScreen(),
@@ -50,6 +84,7 @@ class MainScreenScreenshot extends StatelessWidget {
       case MainFlavor.recents:
         final widget = RecentsScreen(
           title: title,
+          videoCallEnable: true,
         );
         final provider = BlocProvider<RecentsBloc>(
           create: (context) => MockRecentsBloc.mainScreen(),
@@ -73,10 +108,24 @@ class MainScreenScreenshot extends StatelessWidget {
       case MainFlavor.keypad:
         final widget = KeypadScreen(
           title: title,
+          videoVisible: true,
         );
         final provider = BlocProvider<KeypadCubit>(
           create: (context) => MockKeypadCubit.mainScreen(),
           child: widget,
+        );
+        return provider;
+      case MainFlavor.embedded1:
+      case MainFlavor.embedded2:
+      case MainFlavor.embedded3:
+        final provider = BlocProvider<EmbeddedCubit>(
+          create: (context) => MockEmbeddedCubit.mainScreen(),
+          child: EmbeddedScreen(
+            initialUri: Uri.parse('https://example.com'),
+            appBar: MainAppBar(
+              title: const Text('Embedded'),
+            ),
+          ),
         );
         return provider;
     }

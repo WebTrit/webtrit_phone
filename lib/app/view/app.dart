@@ -51,8 +51,8 @@ class _AppState extends State<App> {
     );
     _appRouter = AppRouter(
       appBloc,
-      widget.appPreferences,
       widget.appPermissions,
+      context.read<FeatureAccess>().bottomMenuFeature.activeTab,
     );
   }
 

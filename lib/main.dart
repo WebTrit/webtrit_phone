@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logging/logging.dart';
-import 'package:logging_appenders/logging_appenders.dart';
 import 'package:provider/provider.dart';
 
 import 'package:webtrit_phone/app/app.dart';
@@ -15,9 +14,6 @@ import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 
 void main() {
-  hierarchicalLoggingEnabled = true;
-  PrintAppender.setupLogging(level: Level.LEVELS.firstWhere((level) => level.name == EnvironmentConfig.DEBUG_LEVEL));
-
   preBootstrap();
 
   bootstrap(() async {
@@ -31,6 +27,11 @@ void main() {
         Provider<AppPreferences>(
           create: (context) {
             return AppPreferences();
+          },
+        ),
+        Provider<FeatureAccess>(
+          create: (context) {
+            return FeatureAccess();
           },
         ),
         Provider<SecureStorage>(

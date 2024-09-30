@@ -5,6 +5,7 @@ import 'package:auto_route/auto_route.dart';
 
 import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/features/call/call.dart';
+import 'package:webtrit_phone/utils/utils.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../contact.dart';
@@ -12,7 +13,14 @@ import '../contact.dart';
 class ContactScreen extends StatelessWidget {
   const ContactScreen({
     super.key,
+    required this.favoriteVisible,
+    required this.transferVisible,
+    required this.videoVisible,
   });
+
+  final bool favoriteVisible;
+  final bool transferVisible;
+  final bool videoVisible;
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +40,7 @@ class ContactScreen extends StatelessWidget {
             return BlocBuilder<CallBloc, CallState>(
               buildWhen: (previous, current) => previous.isBlingTransferInitiated != current.isBlingTransferInitiated,
               builder: (context, callState) {
+                final email = state.contactEmails?.firstOrNull?.address;
                 return ListView(
                   children: [
                     Padding(
@@ -39,7 +48,7 @@ class ContactScreen extends StatelessWidget {
                       child: LeadingAvatar(
                         username: contact.name,
                         thumbnail: contact.thumbnail,
-                        thumbnailUrl: contact.thumbnailUrl,
+                        thumbnailUrl: contact.thumbnailUrl ?? gravatarThumbnailUrl(email),
                         registered: contact.registered,
                         radius: 50,
                       ),
@@ -56,6 +65,9 @@ class ContactScreen extends StatelessWidget {
                       ContactPhoneTile(
                         number: contactPhone.number,
                         label: contactPhone.label,
+                        favoriteVisible: favoriteVisible,
+                        transferVisible: transferVisible,
+                        videoVisible: videoVisible,
                         favorite: contactPhone.favorite,
                         transfer: callState.isBlingTransferInitiated,
                         onFavoriteChanged: (favorite) {

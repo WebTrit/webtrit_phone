@@ -13,17 +13,23 @@ import 'package:webtrit_phone/widgets/widgets.dart';
 
 import 'webview_progress_indicator.dart';
 
+export 'package:webview_flutter/webview_flutter.dart' show JavaScriptMessage;
+
 class WebViewScaffold extends StatefulWidget {
   const WebViewScaffold({
     super.key,
     this.title,
     required this.initialUri,
     this.addLocaleNameToQueryParameters = true,
+    this.javaScriptChannels = const {},
+    this.showToolbar = true,
   });
 
   final Widget? title;
   final Uri initialUri;
   final bool addLocaleNameToQueryParameters;
+  final Map<String, void Function(JavaScriptMessage)> javaScriptChannels;
+  final bool showToolbar;
 
   @override
   State<WebViewScaffold> createState() => _WebViewScaffoldState();
@@ -62,6 +68,8 @@ class _WebViewScaffoldState extends State<WebViewScaffold> {
           _webViewController.setUserAgent(userAgent),
           _webViewController.enableZoom(false),
           _webViewController.setJavaScriptMode(JavaScriptMode.unrestricted),
+          for (var MapEntry(key: name, value: onMessageReceived) in widget.javaScriptChannels.entries)
+            _webViewController.addJavaScriptChannel(name, onMessageReceived: onMessageReceived),
           _webViewController.setNavigationDelegate(
             NavigationDelegate(
               onProgress: (progress) {
@@ -118,20 +126,18 @@ class _WebViewScaffoldState extends State<WebViewScaffold> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: widget.title,
-        leading: const ExtBackButton(),
-        actions: [
-          IconButton(
-            icon: const Icon(
-              Icons.refresh,
-            ),
-            onPressed: () {
-              _webViewController.reload();
-            },
-          ),
-        ],
-      ),
+      appBar: widget.showToolbar
+          ? AppBar(
+              title: widget.title,
+              leading: const ExtBackButton(),
+              actions: [
+                IconButton(
+                  icon: const Icon(Icons.refresh),
+                  onPressed: _webViewController.reload,
+                ),
+              ],
+            )
+          : null,
       body: Stack(
         alignment: AlignmentDirectional.topCenter,
         children: [

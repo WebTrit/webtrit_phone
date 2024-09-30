@@ -13,6 +13,7 @@ import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/features.dart';
+import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
 @RoutePage()
@@ -22,16 +23,12 @@ class MainScreenPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final appPreferences = context.read<AppPreferences>();
     const appDemoFlow = EnvironmentConfig.CORE_URL == null;
 
+    final bottomMenuManager = context.read<FeatureAccess>().bottomMenuFeature;
+
     final autoTabsRouter = AutoTabsRouter(
-      routes: const [
-        FavoritesRouterPageRoute(),
-        RecentsRouterPageRoute(),
-        ContactsRouterPageRoute(),
-        KeypadScreenPageRoute(),
-      ],
+      routes: _buildRoutePages(bottomMenuManager.tabs),
       duration: Duration.zero,
       builder: (context, child) {
         final tabsRouter = AutoTabsRouter.of(context);
@@ -45,15 +42,19 @@ class MainScreenPage extends StatelessWidget {
           context.read<DemoCubit>().getActions();
         }
 
-        return MainScreen(
-          body: child,
-          navigationBarFlavor: flavor,
-          onNavigationBarTap: (flavor) {
-            tabsRouter.setActiveIndex(flavor.index);
-
-            appPreferences.setActiveMainFlavor(flavor);
-          },
-        );
+        // Tabs are guaranteed to be non-empty due to validation during the bootstrap phase.
+        // Therefore, we only check if there's more than one tab to determine the layout.
+        return bottomMenuManager.tabs.length > 1
+            ? MainScreen(
+                body: child,
+                currentTab: bottomMenuManager.activeTab,
+                tabs: bottomMenuManager.tabs,
+                onNavigationBarTap: (flavor) {
+                  bottomMenuManager.activeFlavor = flavor;
+                  tabsRouter.setActiveIndex(bottomMenuManager.activeIndex);
+                },
+              )
+            : child;
       },
     );
     final provider = BlocProvider(
@@ -87,5 +88,32 @@ class MainScreenPage extends StatelessWidget {
     );
 
     return blocListener;
+  }
+
+  List<PageRouteInfo> _buildRoutePages(List<BottomMenuTab> tabs) {
+    return tabs.map<PageRouteInfo<dynamic>>((tab) {
+      switch (tab.flavor) {
+        case MainFlavor.favorites:
+          return const FavoritesRouterPageRoute();
+        case MainFlavor.recents:
+          return const RecentsRouterPageRoute();
+        case MainFlavor.contacts:
+          return ContactsRouterPageRoute(
+            children: [
+              ContactsScreenPageRoute(
+                sourceTypes: tab.toContacts.contactSourceTypes,
+              )
+            ],
+          );
+        case MainFlavor.keypad:
+          return const KeypadScreenPageRoute();
+        default:
+          final embedded = EmbeddedScreenPage.getPageRoute(tab.flavor, tab.data!);
+          if (embedded != null) {
+            return embedded;
+          }
+          throw Exception('Unknown flavor type: ${tab.flavor}');
+      }
+    }).toList();
   }
 }

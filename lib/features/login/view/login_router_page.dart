@@ -18,6 +18,10 @@ bool whenCredentialsRequestScreenPageActive(LoginState state) {
   return state.mode == LoginMode.credentialsRequest;
 }
 
+bool whenCustomLoginScreenPageActive(LoginState state) {
+  return state.mode == LoginMode.customSignIn;
+}
+
 bool whenLoginCoreUrlAssignScreenPageActive(LoginState state) {
   return state.mode == LoginMode.customCore;
 }
@@ -52,6 +56,7 @@ class LoginRouterPage extends StatelessWidget {
               const LoginModeSelectScreenPageRoute(),
               if (whenLoginCoreUrlAssignScreenPageActive(state)) const LoginCoreUrlAssignScreenPageRoute(),
               if (whenCredentialsRequestScreenPageActive(state)) const LoginCredentialsRequestScreenPageRoute(),
+              if (whenCustomLoginScreenPageActive(state)) const LoginCustomSigninScreenPageRoute(),
               if (whenLoginSwitchScreenPageActive(state)) const LoginSwitchScreenPageRoute(),
             ];
           },
@@ -62,6 +67,9 @@ class LoginRouterPage extends StatelessWidget {
                 break;
               case LoginCredentialsRequestScreenPageRoute.name:
                 _onCredentialsRequestUrlAssignBack(context);
+                break;
+              case LoginCustomSigninScreenPageRoute.name:
+                _onCustomSigninAssignBack(context);
                 break;
               case LoginSwitchScreenPageRoute.name:
                 _onSwitchBack(context);
@@ -87,6 +95,10 @@ class LoginRouterPage extends StatelessWidget {
 
   void _onCredentialsRequestUrlAssignBack(BuildContext context) {
     context.read<LoginCubit>().credentialsRequestUrlAssignBack();
+  }
+
+  void _onCustomSigninAssignBack(BuildContext context) {
+    context.read<LoginCubit>().customSigninAssignBack();
   }
 
   void _onSwitchBack(BuildContext context) {
