@@ -60,6 +60,18 @@ class Contact extends Equatable {
     }
   }
 
+  String? get extension {
+    return phones.firstWhereOrNull((element) => element.label == 'ext')?.number;
+  }
+
+  List<String> get smsNumbers {
+    if (sourceType == ContactSourceType.external) {
+      return phones.where((phone) => phone.label == 'sms').map((phone) => phone.number).toList();
+    } else {
+      return phones.map((phone) => phone.number).toList();
+    }
+  }
+
   @override
   List<Object?> get props => [
         id,

@@ -851,10 +851,10 @@ class AppLocalizationsUk extends AppLocalizations {
   String get messaging_NewConversation_contactSearch_hint => 'Пошук контактів';
 
   @override
-  String get messaging_NewConversation_contactOrNumberSearch_hint => 'Знайдіть або введіть номер телефону';
+  String get messaging_NewConversation_contactOrNumberSearch_hint => 'Введіть ім\'я або номер телефону';
 
   @override
-  String get messaging_NewConversation_numberSearch_invalidFormat => 'Нерозпізнаний формат телефону, введіть номер телефону в міжнародному форматі (наприклад, +1234567890)';
+  String get messaging_NewConversation_numberSearch_invalidFormat => 'Формат номера телефону: + [код країни][код регіону/оператора][номер абонента]';
 
   @override
   String get messaging_NewConversation_invite_heading => 'Запросити користувачів:';
@@ -864,6 +864,18 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get messaging_NewConversation_back_action => 'Назад';
+
+  @override
+  String get messaging_NewConversation_noContacts => 'Немає контактів, що відповідають результату пошуку';
+
+  @override
+  String get messaging_NewConversation_invalidNumber_title => 'Невірний номер телефону';
+
+  @override
+  String get messaging_NewConversation_invalidNumber_message => 'Контакт має недійсний номер телефону. Він має бути у форматі + [код країни][код регіону/оператора][номер абонента]. Будь ласка, виправте це у своїй телефонній книзі.';
+
+  @override
+  String get messaging_NewConversation_invalidNumber_ok => 'Закрити';
 
   @override
   String get messaging_GroupScreen_titlePrefix => 'Група:';

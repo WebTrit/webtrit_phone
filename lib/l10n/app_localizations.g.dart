@@ -1706,13 +1706,13 @@ abstract class AppLocalizations {
   /// No description provided for @messaging_NewConversation_contactOrNumberSearch_hint.
   ///
   /// In en, this message translates to:
-  /// **'Search or enter phone number'**
+  /// **'Enter name or phone number'**
   String get messaging_NewConversation_contactOrNumberSearch_hint;
 
   /// No description provided for @messaging_NewConversation_numberSearch_invalidFormat.
   ///
   /// In en, this message translates to:
-  /// **'Unrecognized phone format, please enter a phone number in international format (e.g. +1234567890)'**
+  /// **'Phone number format: + [country code][area/operator code][subscriber number]'**
   String get messaging_NewConversation_numberSearch_invalidFormat;
 
   /// No description provided for @messaging_NewConversation_invite_heading.
@@ -1732,6 +1732,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Back'**
   String get messaging_NewConversation_back_action;
+
+  /// No description provided for @messaging_NewConversation_noContacts.
+  ///
+  /// In en, this message translates to:
+  /// **'There are no contacts matching the search result'**
+  String get messaging_NewConversation_noContacts;
+
+  /// No description provided for @messaging_NewConversation_invalidNumber_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid phone number'**
+  String get messaging_NewConversation_invalidNumber_title;
+
+  /// No description provided for @messaging_NewConversation_invalidNumber_message.
+  ///
+  /// In en, this message translates to:
+  /// **'The contact has an invalid phone number. It should be in the format + [country code][area/operator code][subscriber number]. Please fix it in your phone book.'**
+  String get messaging_NewConversation_invalidNumber_message;
+
+  /// No description provided for @messaging_NewConversation_invalidNumber_ok.
+  ///
+  /// In en, this message translates to:
+  /// **'Close'**
+  String get messaging_NewConversation_invalidNumber_ok;
 
   /// No description provided for @messaging_GroupScreen_titlePrefix.
   ///

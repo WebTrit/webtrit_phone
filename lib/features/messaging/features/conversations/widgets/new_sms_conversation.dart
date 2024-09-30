@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -19,11 +20,13 @@ class NewSmsConversation extends StatefulWidget {
   const NewSmsConversation({
     required this.contactsRepository,
     this.filter = _defaultFilter,
+    this.showInvalidNumbers = true,
     super.key,
   });
 
   final ContactsRepository contactsRepository;
   final bool Function(Contact) filter;
+  final bool showInvalidNumbers;
 
   @override
   State<NewSmsConversation> createState() => _NewSmsConversationState();
@@ -46,6 +49,7 @@ class _NewSmsConversationState extends State<NewSmsConversation> {
 
     contactsSub = widget.contactsRepository.watchContacts('').asyncMap(
       (contacts) async {
+        if (widget.showInvalidNumbers) return contacts;
         return compute((contacts) {
           return contacts.where((contact) {
             contact.phones.removeWhere((number) => !number.number.isValidPhone);
@@ -81,7 +85,30 @@ class _NewSmsConversationState extends State<NewSmsConversation> {
   }
 
   onConfirm(String selectedNumber, String? participantId) {
-    Navigator.of(context).pop((selectedNumber.e164Phone!, participantId));
+    final isValid = selectedNumber.isValidPhone;
+
+    if (isValid) {
+      Navigator.of(context).pop((selectedNumber.e164Phone!, participantId));
+    } else {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 1, sigmaY: 1),
+            child: AlertDialog(
+              title: Text(context.l10n.messaging_NewConversation_invalidNumber_title),
+              content: Text(context.l10n.messaging_NewConversation_invalidNumber_message),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: Text(context.l10n.messaging_NewConversation_invalidNumber_ok),
+                ),
+              ],
+            ),
+          );
+        },
+      );
+    }
   }
 
   onCreateByNumber() {
@@ -93,10 +120,8 @@ class _NewSmsConversationState extends State<NewSmsConversation> {
     Navigator.of(context).pop();
   }
 
-  List<Contact> searchFilter(List<Contact> contacts) {
-    return searchFilterValue.isEmpty
-        ? contacts
-        : contacts.where((contact) => contact.name.toLowerCase().contains(searchFilterValue)).toList();
+  List<Contact> searchFiltered(List<Contact> contacts) {
+    return contacts.where((contact) => _searchFilter(contact, searchFilterValue)).toList();
   }
 
   bool get isValidNumberInField {
@@ -113,104 +138,133 @@ class _NewSmsConversationState extends State<NewSmsConversation> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
-
-    final localContactsToShow = searchFilter(localContacts);
-    final externalContactsToShow = searchFilter(externalContacts);
+    final localContactsToShow = searchFiltered(localContacts);
+    final externalContactsToShow = searchFiltered(externalContacts);
 
     return ClipRRect(
       borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
       child: Scaffold(
-        appBar: AppBar(
-          title: Text(context.l10n.messaging_NewConversation_title),
-          automaticallyImplyLeading: false,
-          leading: TextButton(
-            onPressed: onCancel,
-            child: Text(
-              context.l10n.messaging_NewConversation_cancel,
-              style: TextStyle(color: colorScheme.primary),
-            ),
-          ),
-          leadingWidth: 100,
-          actions: [
-            if (isValidNumberInField)
-              TextButton(
-                onPressed: onCreateByNumber,
-                child: Text(
-                  context.l10n.messaging_NewConversation_create,
-                  style: TextStyle(color: colorScheme.primary),
-                ),
-              ),
-          ],
-        ),
+        appBar: appBar(),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 8),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: TextFormField(
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-                validator: (value) {
-                  if (value == null || value.isEmpty) return null;
-                  final hanOnlyNumbers = value.length > 6 && RegExp(r'^[0-9]*$').hasMatch(value);
-
-                  if (hanOnlyNumbers && !isValidNumberInField) {
-                    return context.l10n.messaging_NewConversation_numberSearch_invalidFormat;
-                  }
-                  return null;
-                },
-                decoration: InputDecoration(
-                  hintText: context.l10n.messaging_NewConversation_contactOrNumberSearch_hint,
-                  fillColor: colorScheme.surface,
-                  border: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(12)),
-                  prefixIcon: const Icon(Icons.search),
-                  errorMaxLines: 3,
-                ),
-                onChanged: (value) => setState(() => searchFilterValue = value.toLowerCase()),
-              ),
-            ),
+            Padding(padding: const EdgeInsets.symmetric(horizontal: 16), child: field()),
             const SizedBox(height: 8),
             if (initializing)
               const Expanded(child: Center(child: CircularProgressIndicator()))
+            else if (localContactsToShow.isEmpty && externalContactsToShow.isEmpty)
+              Expanded(child: noContactsFound())
             else
-              Flexible(
-                child: ListView(
-                  children: [
-                    if (externalContactsToShow.isNotEmpty) ...[
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: Text(
-                          context.l10n.messaging_NewConversation_externalContacts_heading,
-                          style: Theme.of(context).textTheme.headlineSmall,
-                        ),
-                      ),
-                      const SizedBox(height: 8)
-                    ],
-                    ...externalContactsToShow.map((Contact contact) {
-                      return tileBuilder(contact);
-                    }),
-                    const SizedBox(height: 8),
-                    if (localContactsToShow.isNotEmpty) ...[
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: Text(
-                          context.l10n.messaging_NewConversation_localContacts_heading,
-                          style: Theme.of(context).textTheme.headlineSmall,
-                        ),
-                      ),
-                      const SizedBox(height: 8)
-                    ],
-                    ...localContactsToShow.map((Contact contact) {
-                      return tileBuilder(contact);
-                    }),
-                  ],
-                ),
-              ),
+              Flexible(child: contactsList(externalContactsToShow, localContactsToShow)),
           ],
         ),
       ),
+    );
+  }
+
+  AppBar appBar() {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return AppBar(
+      title: Text(context.l10n.messaging_NewConversation_title),
+      automaticallyImplyLeading: false,
+      leading: TextButton(
+        onPressed: onCancel,
+        child: Text(
+          context.l10n.messaging_NewConversation_cancel,
+          style: TextStyle(color: colorScheme.primary),
+        ),
+      ),
+      leadingWidth: 100,
+      actions: [
+        if (isValidNumberInField)
+          TextButton(
+            onPressed: onCreateByNumber,
+            child: Text(
+              context.l10n.messaging_NewConversation_create,
+              style: TextStyle(color: colorScheme.primary),
+            ),
+          ),
+      ],
+    );
+  }
+
+  Widget contactsList(List<Contact> externalContactsToShow, List<Contact> localContactsToShow) {
+    return ListView(
+      children: [
+        if (externalContactsToShow.isNotEmpty) ...[
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Text(
+              context.l10n.messaging_NewConversation_externalContacts_heading,
+              style: Theme.of(context).textTheme.headlineSmall,
+            ),
+          ),
+          const SizedBox(height: 8)
+        ],
+        ...externalContactsToShow.map((Contact contact) => tileBuilder(contact)),
+        const SizedBox(height: 8),
+        if (localContactsToShow.isNotEmpty) ...[
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Text(
+              context.l10n.messaging_NewConversation_localContacts_heading,
+              style: Theme.of(context).textTheme.headlineSmall,
+            ),
+          ),
+          const SizedBox(height: 8)
+        ],
+        ...localContactsToShow.map((Contact contact) => tileBuilder(contact)),
+      ],
+    );
+  }
+
+  Widget noContactsFound() {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
+    return Center(
+      child: FadeIn(
+        child: Container(
+          padding: const EdgeInsets.all(16),
+          margin: const EdgeInsets.symmetric(horizontal: 64),
+          decoration: BoxDecoration(
+            color: colorScheme.surface,
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Text(
+            context.l10n.messaging_NewConversation_noContacts,
+            style: theme.textTheme.bodySmall,
+            textAlign: TextAlign.center,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget field() {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return TextFormField(
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+      validator: (value) {
+        if (value == null || value.isEmpty) return null;
+        final hanOnlyNumbers = value.length > 6 && RegExp(r'^[0-9]*$').hasMatch(value);
+
+        if (hanOnlyNumbers && !isValidNumberInField) {
+          return context.l10n.messaging_NewConversation_numberSearch_invalidFormat;
+        }
+        return null;
+      },
+      decoration: InputDecoration(
+        hintText: context.l10n.messaging_NewConversation_contactOrNumberSearch_hint,
+        fillColor: colorScheme.surface,
+        border: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(12)),
+        prefixIcon: const Icon(Icons.search),
+        errorMaxLines: 3,
+      ),
+      onChanged: (value) => setState(() => searchFilterValue = value.toLowerCase()),
     );
   }
 
@@ -220,7 +274,9 @@ class _NewSmsConversationState extends State<NewSmsConversation> {
 
     final userId = contact.sourceType == ContactSourceType.external ? contact.sourceId : null;
 
-    if (contact.phones.length > 1) {
+    var phones = contact.smsNumbers;
+
+    if (phones.length > 1) {
       return Theme(
         data: theme.copyWith(
           dividerColor: Colors.transparent,
@@ -235,10 +291,11 @@ class _NewSmsConversationState extends State<NewSmsConversation> {
             radius: 24,
           ),
           title: Text(contact.name),
-          children: contact.phones.map((number) {
+          subtitle: Text(phones.first, style: theme.textTheme.bodySmall),
+          children: phones.map((number) {
             return ListTile(
-              title: Text(number.number),
-              onTap: () => onConfirm(number.number, userId),
+              title: Text(number),
+              onTap: () => onConfirm(number, userId),
             );
           }).toList(),
         ),
@@ -254,10 +311,16 @@ class _NewSmsConversationState extends State<NewSmsConversation> {
         radius: 24,
       ),
       title: Text(contact.name),
-      subtitle: Text(contact.phones.first.number, style: theme.textTheme.bodySmall),
-      onTap: () => onConfirm(contact.phones.first.number, userId),
+      subtitle: Text(phones.first, style: theme.textTheme.bodySmall),
+      onTap: () => onConfirm(phones.first, userId),
     );
   }
 }
 
 bool _defaultFilter(Contact contact) => contact.canSendSms;
+bool _searchFilter(Contact contact, String searchFilterValue) {
+  if (searchFilterValue.isEmpty) return true;
+  final matchName = contact.name.toLowerCase().contains(searchFilterValue.toLowerCase());
+  final matchPhone = contact.phones.any((phone) => phone.number.contains(searchFilterValue));
+  return matchName || matchPhone;
+}

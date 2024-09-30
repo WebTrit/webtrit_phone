@@ -11,6 +11,6 @@ extension ContactMessagingExt on Contact {
   }
 
   bool get canSendSms {
-    return phones.isNotEmpty && isCurrentUser != true;
+    return smsNumbers.isNotEmpty && isCurrentUser != true;
   }
 }

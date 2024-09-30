@@ -851,10 +851,10 @@ class AppLocalizationsIt extends AppLocalizations {
   String get messaging_NewConversation_contactSearch_hint => 'Cerca contatti';
 
   @override
-  String get messaging_NewConversation_contactOrNumberSearch_hint => 'Cerca o inserisci il numero di telefono';
+  String get messaging_NewConversation_contactOrNumberSearch_hint => 'Inserisci nome o numero di telefono';
 
   @override
-  String get messaging_NewConversation_numberSearch_invalidFormat => 'Formato di telefono non riconosciuto, inserisci un numero di telefono in formato internazionale (ad esempio +1234567890)';
+  String get messaging_NewConversation_numberSearch_invalidFormat => 'Formato numero di telefono: + numero abbonato/numero abbonato operatore';
 
   @override
   String get messaging_NewConversation_invite_heading => 'Invita utenti:';
@@ -864,6 +864,18 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get messaging_NewConversation_back_action => 'Dopo';
+
+  @override
+  String get messaging_NewConversation_noContacts => 'Non ci sono contatti che corrispondono al risultato della ricerca';
+
+  @override
+  String get messaging_NewConversation_invalidNumber_title => 'Numero di telefono disabilitato';
+
+  @override
+  String get messaging_NewConversation_invalidNumber_message => 'Il tsontact ha un numero di telefono non valido. Dovrebbe essere nel formato + numero di abbonamento del cliente/operatore. Per favore, lo trovi nella nostra rubrica.';
+
+  @override
+  String get messaging_NewConversation_invalidNumber_ok => 'Tslose';
 
   @override
   String get messaging_GroupScreen_titlePrefix => 'Gruppo:';

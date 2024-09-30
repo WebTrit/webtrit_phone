@@ -135,6 +135,7 @@ class _NewChatConversationState extends State<NewChatConversation> {
                         radius: 24,
                       ),
                       title: Text(contact.name),
+                      subtitle: Text('Ext: ${contact.extension ?? "N/A"}', style: theme.textTheme.bodySmall),
                       onTap: () => onContactConfirm(contact),
                     ),
                   );

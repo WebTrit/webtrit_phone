@@ -851,10 +851,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get messaging_NewConversation_contactSearch_hint => 'Search contacts';
 
   @override
-  String get messaging_NewConversation_contactOrNumberSearch_hint => 'Search or enter phone number';
+  String get messaging_NewConversation_contactOrNumberSearch_hint => 'Enter name or phone number';
 
   @override
-  String get messaging_NewConversation_numberSearch_invalidFormat => 'Unrecognized phone format, please enter a phone number in international format (e.g. +1234567890)';
+  String get messaging_NewConversation_numberSearch_invalidFormat => 'Phone number format: + [country code][area/operator code][subscriber number]';
 
   @override
   String get messaging_NewConversation_invite_heading => 'Invite users:';
@@ -864,6 +864,18 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get messaging_NewConversation_back_action => 'Back';
+
+  @override
+  String get messaging_NewConversation_noContacts => 'There are no contacts matching the search result';
+
+  @override
+  String get messaging_NewConversation_invalidNumber_title => 'Invalid phone number';
+
+  @override
+  String get messaging_NewConversation_invalidNumber_message => 'The contact has an invalid phone number. It should be in the format + [country code][area/operator code][subscriber number]. Please fix it in your phone book.';
+
+  @override
+  String get messaging_NewConversation_invalidNumber_ok => 'Close';
 
   @override
   String get messaging_GroupScreen_titlePrefix => 'Group:';
