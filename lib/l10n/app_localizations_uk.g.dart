@@ -794,6 +794,12 @@ class AppLocalizationsUk extends AppLocalizations {
   String get messaging_ConversationsScreen_empty => 'Немає переписок';
 
   @override
+  String get messaging_ConversationsScreen_chatsSearch_hint => 'Введіть ім\'я чату або користувача';
+
+  @override
+  String get messaging_ConversationsScreen_smssSearch_hint => 'Введіть номер телефону';
+
+  @override
   String get messaging_ConversationsScreen_messages_title => 'Повідомлення';
 
   @override

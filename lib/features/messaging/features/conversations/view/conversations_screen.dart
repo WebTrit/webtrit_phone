@@ -182,6 +182,7 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
 
   Widget tabButtons(ColorScheme colorScheme) {
     final theme = Theme.of(context);
+    final tabTitleWidth = _computeTabTittleWidth(context) + 60;
 
     return Container(
       decoration: BoxDecoration(
@@ -206,7 +207,7 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
                   child: InkWell(
                     onTap: () => setState(() => tabType = TabType.chat),
                     child: SizedBox(
-                      width: _computeTabTittleWidth(context) + 40,
+                      width: tabTitleWidth,
                       height: 30,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -255,7 +256,7 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
                   child: InkWell(
                     onTap: () => setState(() => tabType = TabType.sms),
                     child: SizedBox(
-                      width: _computeTabTittleWidth(context) + 40,
+                      width: tabTitleWidth,
                       height: 30,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,

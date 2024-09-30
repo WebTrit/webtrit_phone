@@ -794,6 +794,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get messaging_ConversationsScreen_empty => 'No conversations started yet';
 
   @override
+  String get messaging_ConversationsScreen_chatsSearch_hint => 'Enter chat or user name';
+
+  @override
+  String get messaging_ConversationsScreen_smssSearch_hint => 'Enter phone number';
+
+  @override
   String get messaging_ConversationsScreen_messages_title => 'Messages';
 
   @override

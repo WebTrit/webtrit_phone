@@ -42,8 +42,10 @@ class _ConversationsListState extends State<ConversationsList> {
             var (:chat, :message, :contacts) = e;
 
             final groupName = chat.name?.toLowerCase();
-            final contactNames =
-                contacts.map((e) => '${e.aliasName} + ${e.firstName} + ${e.lastName}'.toLowerCase()).join(' ');
+            final contactNames = contacts
+                .where((e) => e.isCurrentUser == false)
+                .map((e) => '${e.aliasName} + ${e.firstName} + ${e.lastName}'.toLowerCase())
+                .join(' ');
             final contactPhones = contacts.expand((e) => e.phones).map((e) => e.number).join(' ');
             final lastMessageText = message?.content ?? '';
 
@@ -65,7 +67,7 @@ class _ConversationsListState extends State<ConversationsList> {
                     child: TextField(
                       controller: chatsSearchController,
                       decoration: InputDecoration(
-                        hintText: context.l10n.messaging_NewConversation_contactOrNumberSearch_hint,
+                        hintText: context.l10n.messaging_ConversationsScreen_chatsSearch_hint,
                         fillColor: colorScheme.surface,
                         border: OutlineInputBorder(
                           borderSide: BorderSide.none,
@@ -153,7 +155,7 @@ class _ConversationsListState extends State<ConversationsList> {
                     child: TextField(
                       controller: smsSearchController,
                       decoration: InputDecoration(
-                        hintText: context.l10n.messaging_NewConversation_contactOrNumberSearch_hint,
+                        hintText: context.l10n.messaging_ConversationsScreen_smssSearch_hint,
                         fillColor: colorScheme.surface,
                         border: OutlineInputBorder(
                           borderSide: BorderSide.none,

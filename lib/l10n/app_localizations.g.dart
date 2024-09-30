@@ -1589,6 +1589,18 @@ abstract class AppLocalizations {
   /// **'No conversations started yet'**
   String get messaging_ConversationsScreen_empty;
 
+  /// No description provided for @messaging_ConversationsScreen_chatsSearch_hint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter chat or user name'**
+  String get messaging_ConversationsScreen_chatsSearch_hint;
+
+  /// No description provided for @messaging_ConversationsScreen_smssSearch_hint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter phone number'**
+  String get messaging_ConversationsScreen_smssSearch_hint;
+
   /// No description provided for @messaging_ConversationsScreen_messages_title.
   ///
   /// In en, this message translates to:
