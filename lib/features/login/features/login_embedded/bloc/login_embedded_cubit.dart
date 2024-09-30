@@ -9,16 +9,16 @@ import 'package:webtrit_phone/app/notifications/notifications.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 
-part 'login_custom_signin_state.dart';
+part 'login_embedded_state.dart';
 
-part 'login_custom_signin_cubit.freezed.dart';
+part 'login_embedded_cubit.freezed.dart';
 
-class LoginCustomSigninCubit extends Cubit<LoginCustomSigninState> {
-  LoginCustomSigninCubit(
+class LoginEmbeddedCubit extends Cubit<LoginEmbeddedState> {
+  LoginEmbeddedCubit(
     this.notificationsBloc,
     this.loginCubit, {
     @visibleForTesting this.createWebtritApiClient = defaultCreateWebtritApiClient,
-  }) : super(const LoginCustomSigninState());
+  }) : super(const LoginEmbeddedState());
 
   final NotificationsBloc notificationsBloc;
   final LoginCubit loginCubit;

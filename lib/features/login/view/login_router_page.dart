@@ -60,7 +60,7 @@ class LoginRouterPage extends StatelessWidget {
               if (!isLaunchEmbeddedLogin) const LoginModeSelectScreenPageRoute(),
               if (whenLoginCoreUrlAssignScreenPageActive(state)) const LoginCoreUrlAssignScreenPageRoute(),
               if (whenCustomLoginScreenPageActive(state))
-                LoginCustomSigninScreenPageRoute(
+                LoginEmbeddedScreenPageRoute(
                   url: state.embeddedLogin!.uri!,
                   title10n: state.embeddedLogin!.titleL10n!,
                 ),
@@ -72,7 +72,7 @@ class LoginRouterPage extends StatelessWidget {
               case LoginCoreUrlAssignScreenPageRoute.name:
                 _onCoreUrlAssignBack(context);
                 break;
-              case LoginCustomSigninScreenPageRoute.name:
+              case LoginEmbeddedScreenPageRoute.name:
                 _onEmbeddedPageAssignBackAssignBack(context);
                 break;
               case LoginSwitchScreenPageRoute.name:

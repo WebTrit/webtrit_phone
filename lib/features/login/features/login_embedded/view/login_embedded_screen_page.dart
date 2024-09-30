@@ -7,12 +7,12 @@ import 'package:webtrit_phone/app/notifications/notifications.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 
-import 'login_custom_signin_screen.dart';
+import 'login_embedded_screen.dart';
 
 @RoutePage()
-class LoginCustomSigninScreenPage extends StatelessWidget {
+class LoginEmbeddedScreenPage extends StatelessWidget {
   // ignore: use_key_in_widget_constructors
-  const LoginCustomSigninScreenPage(this.url, this.title10n);
+  const LoginEmbeddedScreenPage(this.url, this.title10n);
 
   final Uri url;
   final String title10n;
@@ -20,11 +20,11 @@ class LoginCustomSigninScreenPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => LoginCustomSigninCubit(
+      create: (context) => LoginEmbeddedCubit(
         context.read<NotificationsBloc>(),
         context.read<LoginCubit>(),
       ),
-      child: LoginCustomSigninScreen(
+      child: LoginEmbeddedScreen(
         title: context.parseL10n(title10n),
         initialUri: url,
       ),

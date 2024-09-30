@@ -38,8 +38,11 @@ class AppRouter extends _$AppRouter {
   final BottomMenuTab _initialBottomMenuTab;
 
   String? get coreUrl => _appBloc.state.coreUrl;
+
   String? get token => _appBloc.state.token;
+
   bool get appPermissionsDenied => _appPermissions.isDenied;
+
   bool get appUserAgreementUnaccepted => _appBloc.state.userAgreementAccepted != true;
 
   @override
@@ -62,7 +65,7 @@ class AppRouter extends _$AppRouter {
                   page: LoginModeSelectScreenPageRoute.page,
                 ),
                 AutoRoute(
-                  page: LoginCustomSigninScreenPageRoute.page,
+                  page: LoginEmbeddedScreenPageRoute.page,
                   maintainState: false,
                 ),
                 AutoRoute(

@@ -12,8 +12,8 @@ import '../extensions/extensions.dart';
 
 const _loginJavascriptChannelName = 'WebtritLoginChannel';
 
-class LoginCustomSigninScreen extends StatelessWidget {
-  const LoginCustomSigninScreen({
+class LoginEmbeddedScreen extends StatelessWidget {
+  const LoginEmbeddedScreen({
     super.key,
     required this.title,
     required this.initialUri,
@@ -25,7 +25,7 @@ class LoginCustomSigninScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocBuilder<LoginCustomSigninCubit, LoginCustomSigninState>(
+      body: BlocBuilder<LoginEmbeddedCubit, LoginEmbeddedState>(
         builder: (context, state) {
           final themeData = Theme.of(context);
 
@@ -36,7 +36,7 @@ class LoginCustomSigninScreen extends StatelessWidget {
             initialUri: initialUri,
             javaScriptChannels: {
               _loginJavascriptChannelName: (JavaScriptMessage message) =>
-                  context.read<LoginCustomSigninCubit>().login(message.message),
+                  context.read<LoginEmbeddedCubit>().login(message.message),
             },
             errorPlaceholder: (context, error, controller) => Column(
               mainAxisAlignment: MainAxisAlignment.center,

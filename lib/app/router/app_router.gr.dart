@@ -155,11 +155,11 @@ abstract class _$AppRouter extends RootStackRouter {
         child: LoginCoreUrlAssignScreenPage(),
       );
     },
-    LoginCustomSigninScreenPageRoute.name: (routeData) {
-      final args = routeData.argsAs<LoginCustomSigninScreenPageRouteArgs>();
+    LoginEmbeddedScreenPageRoute.name: (routeData) {
+      final args = routeData.argsAs<LoginEmbeddedScreenPageRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: LoginCustomSigninScreenPage(
+        child: LoginEmbeddedScreenPage(
           args.url,
           args.title10n,
         ),
@@ -751,30 +751,30 @@ class LoginCoreUrlAssignScreenPageRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [LoginCustomSigninScreenPage]
-class LoginCustomSigninScreenPageRoute
-    extends PageRouteInfo<LoginCustomSigninScreenPageRouteArgs> {
-  LoginCustomSigninScreenPageRoute({
+/// [LoginEmbeddedScreenPage]
+class LoginEmbeddedScreenPageRoute
+    extends PageRouteInfo<LoginEmbeddedScreenPageRouteArgs> {
+  LoginEmbeddedScreenPageRoute({
     required Uri url,
     required String title10n,
     List<PageRouteInfo>? children,
   }) : super(
-          LoginCustomSigninScreenPageRoute.name,
-          args: LoginCustomSigninScreenPageRouteArgs(
+          LoginEmbeddedScreenPageRoute.name,
+          args: LoginEmbeddedScreenPageRouteArgs(
             url: url,
             title10n: title10n,
           ),
           initialChildren: children,
         );
 
-  static const String name = 'LoginCustomSigninScreenPageRoute';
+  static const String name = 'LoginEmbeddedScreenPageRoute';
 
-  static const PageInfo<LoginCustomSigninScreenPageRouteArgs> page =
-      PageInfo<LoginCustomSigninScreenPageRouteArgs>(name);
+  static const PageInfo<LoginEmbeddedScreenPageRouteArgs> page =
+      PageInfo<LoginEmbeddedScreenPageRouteArgs>(name);
 }
 
-class LoginCustomSigninScreenPageRouteArgs {
-  const LoginCustomSigninScreenPageRouteArgs({
+class LoginEmbeddedScreenPageRouteArgs {
+  const LoginEmbeddedScreenPageRouteArgs({
     required this.url,
     required this.title10n,
   });
@@ -785,7 +785,7 @@ class LoginCustomSigninScreenPageRouteArgs {
 
   @override
   String toString() {
-    return 'LoginCustomSigninScreenPageRouteArgs{url: $url, title10n: $title10n}';
+    return 'LoginEmbeddedScreenPageRouteArgs{url: $url, title10n: $title10n}';
   }
 }
 
