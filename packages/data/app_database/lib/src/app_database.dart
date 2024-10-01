@@ -1135,7 +1135,7 @@ class ChatsDao extends DatabaseAccessor<AppDatabase> with _$ChatsDaoMixin {
     final result = <(ChatDataWithMembers chatdata, ChatMessageData? lastMsg)>[];
 
     for (final chatData in chatsData) {
-      final lastMsgs = await getMessageHistory(chatData.chatData.id, limit: 1);
+      final lastMsgs = await getMessageHistory(chatData.chatData.id, limit: 1, skipDeleted: true);
       result.add((chatData, lastMsgs.firstOrNull));
     }
 
@@ -1190,9 +1190,11 @@ class ChatsDao extends DatabaseAccessor<AppDatabase> with _$ChatsDaoMixin {
     DateTime? from,
     DateTime? to,
     required int limit,
+    skipDeleted = false,
   }) async {
     final q = select(chatMessagesTable);
     q.where((t) => t.chatId.equals(chatId));
+    if (skipDeleted) q.where((t) => t.deletedAtRemoteUsec.isNull());
     if (from != null) q.where((t) => t.createdAtRemoteUsec.isSmallerThanValue(from.microsecondsSinceEpoch));
     if (to != null) q.where((t) => t.createdAtRemoteUsec.isBiggerOrEqualValue(to.microsecondsSinceEpoch));
     q.orderBy([(t) => OrderingTerm.desc(t.createdAtRemoteUsec), (t) => OrderingTerm.desc(t.id)]);
@@ -1409,7 +1411,7 @@ class SmsDao extends DatabaseAccessor<AppDatabase> with _$SmsDaoMixin {
     final result = <ConversationDataWithLastMessage>[];
 
     for (final conversation in conversations) {
-      final lastMsgs = await getMessageHistory(conversation.id, limit: 1);
+      final lastMsgs = await getMessageHistory(conversation.id, limit: 1, skipDeleted: true);
       result.add((conversation, lastMsgs.firstOrNull));
     }
 
@@ -1449,9 +1451,11 @@ class SmsDao extends DatabaseAccessor<AppDatabase> with _$SmsDaoMixin {
     DateTime? from,
     DateTime? to,
     required int limit,
+    skipDeleted = false,
   }) async {
     final q = select(smsMessagesTable);
     q.where((t) => t.conversationId.equals(conversationId));
+    if (skipDeleted) q.where((t) => t.deletedAtRemoteUsec.isNull());
     if (from != null) q.where((t) => t.createdAtRemoteUsec.isSmallerThanValue(from.microsecondsSinceEpoch));
     if (to != null) q.where((t) => t.createdAtRemoteUsec.isBiggerOrEqualValue(to.microsecondsSinceEpoch));
     q.orderBy([(t) => OrderingTerm.desc(t.createdAtRemoteUsec), (t) => OrderingTerm.desc(t.id)]);
