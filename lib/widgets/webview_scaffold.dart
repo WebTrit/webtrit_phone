@@ -43,7 +43,9 @@ class _WebViewScaffoldState extends State<WebViewScaffold> {
 
   Color? _backgroundColorCache;
   Uri? _effectiveInitialUrlCache;
-  WebResourceError? _error;
+
+  WebResourceError? _latestError;
+  WebResourceError? _currentError;
 
   Uri _composeEffectiveInitialUrl() {
     if (!widget.addLocaleNameToQueryParameters) {
@@ -76,15 +78,21 @@ class _WebViewScaffoldState extends State<WebViewScaffold> {
           _webViewController.setNavigationDelegate(
             NavigationDelegate(
               onPageFinished: (url) {
-                _error = null;
-                setState(() {});
+                if (_currentError == null) {
+                  _latestError = null; // Reset the error only if the page loaded successfully
+                }
+                setState(() {
+                  _currentError = null; // Always reset the current error after page finishes loading
+                });
               },
               onProgress: (progress) {
                 _progressStreamController.add(progress);
               },
               onWebResourceError: (error) {
-                _error = error;
-                setState(() {});
+                setState(() {
+                  _currentError = error; // Capture the current error
+                  _latestError = error; // Store the error for future reference or display
+                });
               },
             ),
           ),
@@ -154,8 +162,8 @@ class _WebViewScaffoldState extends State<WebViewScaffold> {
           return Stack(
             alignment: AlignmentDirectional.topCenter,
             children: [
-              (widget.errorPlaceholder != null && _error != null)
-                  ? widget.errorPlaceholder!(context, _error!, _webViewController) ?? const SizedBox.shrink()
+              (widget.errorPlaceholder != null && _latestError != null)
+                  ? widget.errorPlaceholder!(context, _latestError!, _webViewController) ?? const SizedBox.shrink()
                   : WebViewWidget(controller: _webViewController),
               WebViewProgressIndicator(stream: _progressStreamController.stream),
             ],
