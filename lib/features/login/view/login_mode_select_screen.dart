@@ -75,7 +75,7 @@ class LoginModeSelectScreen extends StatelessWidget {
                   return ElevatedButton(
                     onPressed: state.processing ? null : () => _onActionItemTap(context, isDemoModeEnabled, button),
                     style: elevatedButtonStyles?.getStyle(localStyle?.signUpTypeButton),
-                    child: !state.processing
+                    child: !state.processing || button.flavor != LoginFlavor.login
                         ? Text(context.parseL10n(button.titleL10n))
                         : SizedCircularProgressIndicator(
                             size: 16,
