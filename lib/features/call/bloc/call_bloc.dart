@@ -256,7 +256,13 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     } else {
       try {
         _logger.finer(() => 'Retrieve peerConnection completer with callId: $callId - await');
-        final peerConnection = await peerConnectionCompleter.future;
+        // Timeout to handle scenarios where `complete` is never called.
+        // This can occur, for example, when a push is received for an incorrect account
+        // after a forced logout.
+        final peerConnection = await peerConnectionCompleter.future.timeout(
+          kPeerConnectionRetrieveTimeout,
+          onTimeout: () => throw TimeoutException('Timeout while retrieving peer connection for callId: $callId'),
+        );
         _logger.finer(() => 'Retrieve peerConnection completer with callId: $callId - value');
         return peerConnection;
       } catch (e, stackTrace) {
@@ -449,6 +455,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _logger.warning('__onResetStateEventCompleteCall: ${event.callId}');
 
     try {
+      emit(state.copyWithMappedActiveCall(event.callId, (activeCall) {
+        return activeCall.copyWith(status: ActiveCallStatus.disconnecting);
+      }));
+
       await state.performOnActiveCall(event.callId, (activeCall) async {
         await (await _peerConnectionRetrieve(activeCall.callId))?.close();
         await activeCall.localStream?.dispose();
@@ -1564,7 +1574,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   ) async {
     // Condition occur when the user interacts with a push notification before signaling is properly initialized.
     // In this case, the CallKeep method "reportNewIncomingCall" may return callIdAlreadyTerminated.
-    if (state.retrieveActiveCall(event.callId)?.line == _kUndefinedLine) return;
+    if (state.retrieveActiveCall(event.callId)?.line == _kUndefinedLine) {
+      add(_ResetStateEvent.completeCall(event.callId));
+      return;
+    }
 
     if (state.retrieveActiveCall(event.callId)?.wasHungUp == true) {
       // TODO: There's an issue where the user might have already ended the call, but the active call screen remains visible.
@@ -1852,38 +1865,46 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _CallScreenEventDidPush event,
     Emitter<CallState> emit,
   ) async {
+    final hasActiveCalls = state.activeCalls.isNotEmpty;
     var newState = state.copyWith(minimized: false);
 
-    newState = newState.copyWithMappedActiveCalls((activeCall) {
-      final transfer = activeCall.transfer;
-      if (transfer != null && transfer is BlindTransferInitiated) {
-        return activeCall.copyWith(
-          transfer: null,
-        );
-      } else {
-        return activeCall;
-      }
-    });
+    if (hasActiveCalls) {
+      newState = newState.copyWithMappedActiveCalls((activeCall) {
+        final transfer = activeCall.transfer;
+        if (transfer != null && transfer is BlindTransferInitiated) {
+          return activeCall.copyWith(
+            transfer: null,
+          );
+        } else {
+          return activeCall;
+        }
+      });
 
-    emit(newState);
+      emit(newState);
 
-    await callkeep.reportUpdateCall(
-      state.activeCalls.current.callId,
-      proximityEnabled: state.shouldListenToProximity,
-    );
+      await callkeep.reportUpdateCall(
+        state.activeCalls.current.callId,
+        proximityEnabled: state.shouldListenToProximity,
+      );
+    } else {
+      _logger.warning('__onCallScreenEventDidPush: activeCalls is empty');
+    }
   }
 
   Future<void> __onCallScreenEventDidPop(
     _CallScreenEventDidPop event,
     Emitter<CallState> emit,
   ) async {
-    emit(state.copyWith(minimized: state.activeCalls.isEmpty ? null : true));
+    final hasActiveCalls = state.activeCalls.isNotEmpty;
+    emit(state.copyWith(minimized: hasActiveCalls ? true : null));
 
-    if (state.activeCalls.isNotEmpty) {
+    if (hasActiveCalls) {
       await callkeep.reportUpdateCall(
         state.activeCalls.current.callId,
         proximityEnabled: state.shouldListenToProximity,
       );
+    } else {
+      _logger.warning('__onCallScreenEventDidPop: activeCalls is empty');
     }
   }
 

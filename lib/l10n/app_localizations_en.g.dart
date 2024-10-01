@@ -141,6 +141,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get callStatus_ready => 'Connection established';
 
   @override
+  String get callProcessingStatus_disconnecting => 'Disconnecting the call, please hold on…';
+
+  @override
+  String get call_ThumbnailAvatar_currentlyNoActiveCall => 'Currently, there is no active call';
+
+  @override
   String get connectToYourOwnVoIPSystem_Button_Action => 'Connect to your own VoIP system';
 
   @override

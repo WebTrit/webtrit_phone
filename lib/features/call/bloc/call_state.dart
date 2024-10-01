@@ -127,6 +127,7 @@ class ActiveCall with _$ActiveCall {
     required String callId,
     required CallkeepHandle handle,
     String? displayName,
+    ActiveCallStatus? status,
 
     /// If the call is result of a refer request, the id should be provided.
     String? fromReferId,
@@ -155,6 +156,8 @@ class ActiveCall with _$ActiveCall {
 
 extension ActiveCallIterableExtension<T extends ActiveCall> on Iterable<T> {
   T get current => lastWhere((activeCall) => !activeCall.held, orElse: () => last);
+
   List<T> get nonCurrent => where((activeCall) => activeCall != current).toList();
+
   T? get blindTransferInitiated => firstWhereOrNull((activeCall) => activeCall.transfer is BlindTransferInitiated);
 }
