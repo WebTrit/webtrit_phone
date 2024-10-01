@@ -56,14 +56,14 @@ class _ChatMessageListViewState extends State<ChatMessageListView> {
   late final inputController = TextEditingController();
   late final scrollController = ScrollController();
 
-  List<Widget> elements = [];
+  List<_ChatMessageListViewEntry> viewEntries = [];
+  DateTime? computeTime;
   ChatMessage? editingMessage;
   ChatMessage? replyingMessage;
 
   @override
   void initState() {
     super.initState();
-    mapElements();
     scrollController.addListener(() {
       final maxScroll = scrollController.position.maxScrollExtent;
       final position = scrollController.position.pixels;
@@ -76,101 +76,33 @@ class _ChatMessageListViewState extends State<ChatMessageListView> {
 
       if (shouldFetch && canFetch) widget.onFetchHistory();
     });
+    computeViewEntries();
   }
 
   @override
   void didUpdateWidget(ChatMessageListView oldWidget) {
     super.didUpdateWidget(oldWidget);
-    bool messagesChanged() => !listEquals(oldWidget.messages, widget.messages);
-    bool outboxMessagesChanged() => !listEquals(oldWidget.outboxMessages, widget.outboxMessages);
-    bool outboxMessageEditsChanged() => !listEquals(oldWidget.outboxMessageEdits, widget.outboxMessageEdits);
-    bool outboxMessageDeletesChanged() => !listEquals(oldWidget.outboxMessageDeletes, widget.outboxMessageDeletes);
-    bool readCursorsChanged() => !listEquals(oldWidget.readCursors, widget.readCursors);
-
-    final shouldRemap = outboxMessagesChanged() ||
-        outboxMessageEditsChanged() ||
-        outboxMessageDeletesChanged() ||
-        readCursorsChanged() ||
-        messagesChanged();
-    if (shouldRemap) mapElements();
+    computeViewEntries();
   }
 
-  mapElements() {
-    final userReadedUntil = widget.readCursors.userReadedUntil(widget.userId);
-    final membersReadedUntil = widget.readCursors.participantsReadedUntil(widget.userId);
+  computeViewEntries() async {
+    _ComputeParams params = (
+      userId: widget.userId,
+      messages: widget.messages,
+      outboxMessages: widget.outboxMessages,
+      outboxMessageEdits: widget.outboxMessageEdits,
+      outboxMessageDeletes: widget.outboxMessageDeletes,
+      readCursors: widget.readCursors,
+      dueTime: DateTime.now(),
+    );
 
-    elements = [];
-
-    for (final entry in widget.outboxMessages.reversed) {
-      elements.add(
-        ChatMessageView(
-          userId: widget.userId,
-          outboxMessage: entry,
-          handleSetForReply: handleSetForReply,
-          handleSetForForward: handleSetForForward,
-          handleSetForEdit: handleSetForEdit,
-          handleDelete: handleDelete,
-        ),
-      );
-    }
-
-    for (var i = 0; i <= widget.messages.length - 1; i++) {
-      final message = widget.messages[i];
-      final newEntry = widget.outboxMessages.firstWhereOrNull((element) => element.idKey == message.idKey);
-      final editEntry = widget.outboxMessageEdits.firstWhereOrNull((element) => element.idKey == message.idKey);
-      final deleteEntry = widget.outboxMessageDeletes.firstWhereOrNull((element) => element.idKey == message.idKey);
-
-      if (newEntry != null) continue;
-
-      final isLast = i == 0;
-      final nextMessage = isLast ? null : widget.messages[i - 1];
-
-      var lastMsgOfTheDay = false;
-
-      if (nextMessage != null) {
-        final nextMsgDate = nextMessage.createdAt;
-        final msgDate = message.createdAt;
-        lastMsgOfTheDay = nextMsgDate.day != msgDate.day;
-      }
-
-      if (lastMsgOfTheDay) {
-        elements.add(
-          Padding(
-            padding: const EdgeInsets.only(top: 8),
-            child: Center(
-              child: Text(
-                message.createdAt.toDayOfMonth,
-                style: const TextStyle(fontSize: 12, color: Colors.grey),
-              ),
-            ),
-          ),
-        );
-      }
-
-      elements.add(
-        ChatMessageView(
-          userId: widget.userId,
-          message: message,
-          outboxEditEntry: editEntry,
-          outboxDeleteEntry: deleteEntry,
-          userReadedUntil: userReadedUntil,
-          membersReadedUntil: membersReadedUntil,
-          handleSetForReply: handleSetForReply,
-          handleSetForForward: handleSetForForward,
-          handleSetForEdit: handleSetForEdit,
-          handleDelete: handleDelete,
-          onRendered: () {
-            final mine = message.senderId == widget.userId;
-            if (mine) return;
-
-            final userReadedUntil = widget.readCursors.userReadedUntil(widget.userId);
-            final reachedUnreaded = userReadedUntil == null || message.createdAt.isAfter(userReadedUntil);
-            if (reachedUnreaded) widget.userReadedUntilUpdate(message.createdAt);
-          },
-          key: ObjectKey(message),
-        ),
-      );
-    }
+    final result = await compute(_computeList, params);
+    if (!mounted) return;
+    if (computeTime != null && result.dueTime.isBefore(computeTime!)) return;
+    setState(() {
+      viewEntries = result.entries;
+      computeTime = result.dueTime;
+    });
   }
 
   void handleSend() {
@@ -232,29 +164,72 @@ class _ChatMessageListViewState extends State<ChatMessageListView> {
   Widget list() {
     return ShaderMask(
       shaderCallback: (Rect rect) {
-        return LinearGradient(
+        return const LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
           colors: [
-            Colors.black.withOpacity(0.75),
+            Colors.black,
             Colors.transparent,
             Colors.transparent,
-            Colors.black.withOpacity(0.75),
+            Colors.black,
           ],
-          stops: const [0.0, 0.025, 0.975, 1.0],
+          stops: [0.0, 0.025, 0.975, 1.0],
         ).createShader(rect);
       },
       blendMode: BlendMode.dstOut,
-      child: ListView(
+      child: ListView.builder(
         controller: scrollController,
         reverse: true,
         cacheExtent: 500,
         padding: const EdgeInsets.symmetric(vertical: 16),
-        children: [
-          typingIndicator(),
-          ...elements,
-          historyFetchIndicator(),
-        ],
+        itemCount: viewEntries.length + 2,
+        itemBuilder: (context, index) {
+          if (index == 0) return typingIndicator();
+          if (index == viewEntries.length + 1) return historyFetchIndicator();
+
+          final entry = viewEntries[index - 1];
+
+          if (entry is _MessageViewEntry) {
+            return ChatMessageView(
+              userId: widget.userId,
+              message: entry.message,
+              outboxMessage: entry.outboxMessage,
+              outboxEditEntry: entry.outboxEditEntry,
+              outboxDeleteEntry: entry.outboxDeleteEntry,
+              userReadedUntil: entry.userReadedUntil,
+              membersReadedUntil: entry.membersReadedUntil,
+              handleSetForReply: handleSetForReply,
+              handleSetForForward: handleSetForForward,
+              handleSetForEdit: handleSetForEdit,
+              handleDelete: handleDelete,
+              onRendered: () {
+                final message = entry.message;
+                if (message == null) return;
+
+                final mine = message.senderId == widget.userId;
+                if (mine) return;
+
+                final userReadedUntil = widget.readCursors.userReadedUntil(widget.userId);
+                final reachedUnreaded = userReadedUntil == null || message.createdAt.isAfter(userReadedUntil);
+                if (reachedUnreaded) widget.userReadedUntilUpdate(message.createdAt);
+              },
+            );
+          }
+
+          if (entry is _DateViewEntry) {
+            return Padding(
+              padding: const EdgeInsets.only(top: 8),
+              child: Center(
+                child: Text(
+                  entry.date.toDayOfMonth,
+                  style: const TextStyle(fontSize: 12, color: Colors.grey),
+                ),
+              ),
+            );
+          }
+
+          return const SizedBox();
+        },
       ),
     );
   }
@@ -374,4 +349,98 @@ class _ChatMessageListViewState extends State<ChatMessageListView> {
       },
     );
   }
+}
+
+sealed class _ChatMessageListViewEntry {}
+
+final class _MessageViewEntry extends _ChatMessageListViewEntry {
+  final ChatMessage? message;
+  final ChatOutboxMessageEntry? outboxMessage;
+  final ChatOutboxMessageEditEntry? outboxEditEntry;
+  final ChatOutboxMessageDeleteEntry? outboxDeleteEntry;
+  final DateTime? userReadedUntil;
+  final DateTime? membersReadedUntil;
+
+  _MessageViewEntry({
+    this.message,
+    this.outboxMessage,
+    this.outboxEditEntry,
+    this.outboxDeleteEntry,
+    this.userReadedUntil,
+    this.membersReadedUntil,
+  });
+}
+
+final class _DateViewEntry extends _ChatMessageListViewEntry {
+  final DateTime date;
+
+  _DateViewEntry(this.date);
+}
+
+typedef _ComputeParams = ({
+  String userId,
+  List<ChatMessage> messages,
+  List<ChatOutboxMessageEntry> outboxMessages,
+  List<ChatOutboxMessageEditEntry> outboxMessageEdits,
+  List<ChatOutboxMessageDeleteEntry> outboxMessageDeletes,
+  List<ChatMessageReadCursor> readCursors,
+  DateTime dueTime,
+});
+
+typedef _ComputeResult = ({
+  List<_ChatMessageListViewEntry> entries,
+  DateTime dueTime,
+});
+
+_ComputeResult _computeList(_ComputeParams params) {
+  final userId = params.userId;
+  final messages = params.messages;
+  final outboxMessages = params.outboxMessages;
+  final outboxMessageEdits = params.outboxMessageEdits;
+  final outboxMessageDeletes = params.outboxMessageDeletes;
+  final readCursors = params.readCursors;
+  final dueTime = params.dueTime;
+
+  final userReadedUntil = readCursors.userReadedUntil(userId);
+  final membersReadedUntil = readCursors.participantsReadedUntil(userId);
+
+  final entries = <_ChatMessageListViewEntry>[];
+
+  for (final entry in outboxMessages.reversed) {
+    entries.add(_MessageViewEntry(outboxMessage: entry));
+  }
+
+  for (var i = 0; i <= messages.length - 1; i++) {
+    final message = messages[i];
+    final newEntry = outboxMessages.firstWhereOrNull((element) => element.idKey == message.idKey);
+    final editEntry = outboxMessageEdits.firstWhereOrNull((element) => element.idKey == message.idKey);
+    final deleteEntry = outboxMessageDeletes.firstWhereOrNull((element) => element.idKey == message.idKey);
+
+    if (newEntry != null) continue;
+
+    final isLast = i == 0;
+    final nextMessage = isLast ? null : messages[i - 1];
+
+    var lastMsgOfTheDay = false;
+
+    if (nextMessage != null) {
+      final nextMsgDate = nextMessage.createdAt;
+      final msgDate = message.createdAt;
+      lastMsgOfTheDay = nextMsgDate.day != msgDate.day;
+    }
+
+    if (lastMsgOfTheDay) {
+      entries.add(_DateViewEntry(message.createdAt));
+    }
+
+    entries.add(_MessageViewEntry(
+      message: message,
+      outboxEditEntry: editEntry,
+      outboxDeleteEntry: deleteEntry,
+      userReadedUntil: userReadedUntil,
+      membersReadedUntil: membersReadedUntil,
+    ));
+  }
+
+  return (entries: entries, dueTime: dueTime);
 }
