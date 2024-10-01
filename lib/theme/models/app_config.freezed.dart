@@ -715,6 +715,7 @@ mixin _$AppConfigLoginEmbedded {
   int get id => throw _privateConstructorUsedError;
   bool get launch => throw _privateConstructorUsedError;
   String get titleL10n => throw _privateConstructorUsedError;
+  bool get showToolbar => throw _privateConstructorUsedError;
   String get url => throw _privateConstructorUsedError;
 
   /// Serializes this AppConfigLoginEmbedded to a JSON map.
@@ -733,7 +734,8 @@ abstract class $AppConfigLoginEmbeddedCopyWith<$Res> {
           $Res Function(AppConfigLoginEmbedded) then) =
       _$AppConfigLoginEmbeddedCopyWithImpl<$Res, AppConfigLoginEmbedded>;
   @useResult
-  $Res call({int id, bool launch, String titleL10n, String url});
+  $Res call(
+      {int id, bool launch, String titleL10n, bool showToolbar, String url});
 }
 
 /// @nodoc
@@ -755,6 +757,7 @@ class _$AppConfigLoginEmbeddedCopyWithImpl<$Res,
     Object? id = null,
     Object? launch = null,
     Object? titleL10n = null,
+    Object? showToolbar = null,
     Object? url = null,
   }) {
     return _then(_value.copyWith(
@@ -770,6 +773,10 @@ class _$AppConfigLoginEmbeddedCopyWithImpl<$Res,
           ? _value.titleL10n
           : titleL10n // ignore: cast_nullable_to_non_nullable
               as String,
+      showToolbar: null == showToolbar
+          ? _value.showToolbar
+          : showToolbar // ignore: cast_nullable_to_non_nullable
+              as bool,
       url: null == url
           ? _value.url
           : url // ignore: cast_nullable_to_non_nullable
@@ -787,7 +794,8 @@ abstract class _$$AppConfigLoginEmbeddedImplCopyWith<$Res>
       __$$AppConfigLoginEmbeddedImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int id, bool launch, String titleL10n, String url});
+  $Res call(
+      {int id, bool launch, String titleL10n, bool showToolbar, String url});
 }
 
 /// @nodoc
@@ -808,6 +816,7 @@ class __$$AppConfigLoginEmbeddedImplCopyWithImpl<$Res>
     Object? id = null,
     Object? launch = null,
     Object? titleL10n = null,
+    Object? showToolbar = null,
     Object? url = null,
   }) {
     return _then(_$AppConfigLoginEmbeddedImpl(
@@ -823,6 +832,10 @@ class __$$AppConfigLoginEmbeddedImplCopyWithImpl<$Res>
           ? _value.titleL10n
           : titleL10n // ignore: cast_nullable_to_non_nullable
               as String,
+      showToolbar: null == showToolbar
+          ? _value.showToolbar
+          : showToolbar // ignore: cast_nullable_to_non_nullable
+              as bool,
       url: null == url
           ? _value.url
           : url // ignore: cast_nullable_to_non_nullable
@@ -836,8 +849,9 @@ class __$$AppConfigLoginEmbeddedImplCopyWithImpl<$Res>
 class _$AppConfigLoginEmbeddedImpl extends _AppConfigLoginEmbedded {
   const _$AppConfigLoginEmbeddedImpl(
       {required this.id,
-      required this.launch,
-      required this.titleL10n,
+      this.launch = false,
+      this.titleL10n = '',
+      this.showToolbar = true,
       required this.url})
       : super._();
 
@@ -847,15 +861,20 @@ class _$AppConfigLoginEmbeddedImpl extends _AppConfigLoginEmbedded {
   @override
   final int id;
   @override
+  @JsonKey()
   final bool launch;
   @override
+  @JsonKey()
   final String titleL10n;
+  @override
+  @JsonKey()
+  final bool showToolbar;
   @override
   final String url;
 
   @override
   String toString() {
-    return 'AppConfigLoginEmbedded(id: $id, launch: $launch, titleL10n: $titleL10n, url: $url)';
+    return 'AppConfigLoginEmbedded(id: $id, launch: $launch, titleL10n: $titleL10n, showToolbar: $showToolbar, url: $url)';
   }
 
   @override
@@ -867,12 +886,15 @@ class _$AppConfigLoginEmbeddedImpl extends _AppConfigLoginEmbedded {
             (identical(other.launch, launch) || other.launch == launch) &&
             (identical(other.titleL10n, titleL10n) ||
                 other.titleL10n == titleL10n) &&
+            (identical(other.showToolbar, showToolbar) ||
+                other.showToolbar == showToolbar) &&
             (identical(other.url, url) || other.url == url));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, launch, titleL10n, url);
+  int get hashCode =>
+      Object.hash(runtimeType, id, launch, titleL10n, showToolbar, url);
 
   /// Create a copy of AppConfigLoginEmbedded
   /// with the given fields replaced by the non-null parameter values.
@@ -894,8 +916,9 @@ class _$AppConfigLoginEmbeddedImpl extends _AppConfigLoginEmbedded {
 abstract class _AppConfigLoginEmbedded extends AppConfigLoginEmbedded {
   const factory _AppConfigLoginEmbedded(
       {required final int id,
-      required final bool launch,
-      required final String titleL10n,
+      final bool launch,
+      final String titleL10n,
+      final bool showToolbar,
       required final String url}) = _$AppConfigLoginEmbeddedImpl;
   const _AppConfigLoginEmbedded._() : super._();
 
@@ -908,6 +931,8 @@ abstract class _AppConfigLoginEmbedded extends AppConfigLoginEmbedded {
   bool get launch;
   @override
   String get titleL10n;
+  @override
+  bool get showToolbar;
   @override
   String get url;
 

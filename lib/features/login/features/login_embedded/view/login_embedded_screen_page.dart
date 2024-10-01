@@ -12,10 +12,15 @@ import 'login_embedded_screen.dart';
 @RoutePage()
 class LoginEmbeddedScreenPage extends StatelessWidget {
   // ignore: use_key_in_widget_constructors
-  const LoginEmbeddedScreenPage(this.url, this.title10n);
+  const LoginEmbeddedScreenPage({
+    required this.url,
+    required this.title10n,
+    required this.showToolbar,
+  });
 
   final Uri url;
   final String title10n;
+  final bool showToolbar;
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +32,7 @@ class LoginEmbeddedScreenPage extends StatelessWidget {
       child: LoginEmbeddedScreen(
         title: context.parseL10n(title10n),
         initialUri: url,
+        showToolbar: showToolbar,
       ),
     );
   }

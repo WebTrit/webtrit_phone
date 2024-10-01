@@ -17,10 +17,12 @@ class LoginEmbeddedScreen extends StatelessWidget {
     super.key,
     required this.title,
     required this.initialUri,
+    required this.showToolbar,
   });
 
   final String title;
   final Uri initialUri;
+  final bool showToolbar;
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +36,7 @@ class LoginEmbeddedScreen extends StatelessWidget {
           return WebViewScaffold(
             title: Text(title),
             initialUri: initialUri,
+            showToolbar: showToolbar,
             javaScriptChannels: {
               _loginJavascriptChannelName: (JavaScriptMessage message) =>
                   context.read<LoginEmbeddedCubit>().login(message.message),

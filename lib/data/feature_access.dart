@@ -180,6 +180,7 @@ class FeatureAccess {
         ? EmbeddedLogin(
             titleL10n: embeddedDTO.titleL10n,
             uri: Uri.tryParse(embeddedDTO.url),
+            showToolbar: embeddedDTO.showToolbar,
           )
         : null;
   }

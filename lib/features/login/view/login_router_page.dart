@@ -63,6 +63,7 @@ class LoginRouterPage extends StatelessWidget {
                 LoginEmbeddedScreenPageRoute(
                   url: state.embeddedLogin!.uri!,
                   title10n: state.embeddedLogin!.titleL10n!,
+                  showToolbar: state.embeddedLogin!.showToolbar,
                 ),
               if (whenLoginSwitchScreenPageActive(state)) const LoginSwitchScreenPageRoute(),
             ];

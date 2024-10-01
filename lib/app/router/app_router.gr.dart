@@ -160,8 +160,9 @@ abstract class _$AppRouter extends RootStackRouter {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
         child: LoginEmbeddedScreenPage(
-          args.url,
-          args.title10n,
+          url: args.url,
+          title10n: args.title10n,
+          showToolbar: args.showToolbar,
         ),
       );
     },
@@ -757,12 +758,14 @@ class LoginEmbeddedScreenPageRoute
   LoginEmbeddedScreenPageRoute({
     required Uri url,
     required String title10n,
+    required bool showToolbar,
     List<PageRouteInfo>? children,
   }) : super(
           LoginEmbeddedScreenPageRoute.name,
           args: LoginEmbeddedScreenPageRouteArgs(
             url: url,
             title10n: title10n,
+            showToolbar: showToolbar,
           ),
           initialChildren: children,
         );
@@ -777,15 +780,18 @@ class LoginEmbeddedScreenPageRouteArgs {
   const LoginEmbeddedScreenPageRouteArgs({
     required this.url,
     required this.title10n,
+    required this.showToolbar,
   });
 
   final Uri url;
 
   final String title10n;
 
+  final bool showToolbar;
+
   @override
   String toString() {
-    return 'LoginEmbeddedScreenPageRouteArgs{url: $url, title10n: $title10n}';
+    return 'LoginEmbeddedScreenPageRouteArgs{url: $url, title10n: $title10n, showToolbar: $showToolbar}';
   }
 }
 
