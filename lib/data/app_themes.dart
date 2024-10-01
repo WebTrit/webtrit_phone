@@ -4,9 +4,12 @@ import 'package:flutter/services.dart';
 
 import 'package:equatable/equatable.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:logging/logging.dart';
 
 import 'package:webtrit_phone/app/assets.gen.dart';
 import 'package:webtrit_phone/theme/theme.dart';
+
+final Logger _logger = Logger('AppThemes');
 
 class AppThemes {
   static late AppThemes _instance;
@@ -38,11 +41,15 @@ class AppThemes {
     );
     final themes = [AppTheme(settings: settings)];
 
-    /// Preload Google Fonts for preventing flickering during the first render
-    if (settings.fontFamily != null) {
-      await GoogleFonts.pendingFonts([
-        GoogleFonts.getFont(settings.fontFamily!),
-      ]);
+    try {
+      // Preload Google Fonts for preventing flickering during the first render
+      if (settings.fontFamily != null) {
+        await GoogleFonts.pendingFonts([
+          GoogleFonts.getFont(settings.fontFamily!),
+        ]);
+      }
+    } catch (e) {
+      _logger.warning('Failed to preload Google Fonts: $e');
     }
 
     _instance = AppThemes._(themes, appConfig);
