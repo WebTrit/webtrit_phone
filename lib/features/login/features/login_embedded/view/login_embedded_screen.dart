@@ -16,12 +16,12 @@ class LoginEmbeddedScreen extends StatelessWidget {
   const LoginEmbeddedScreen({
     super.key,
     required this.title,
-    required this.initialUri,
+    required this.initialUrl,
     required this.showToolbar,
   });
 
   final String title;
-  final Uri initialUri;
+  final Uri initialUrl;
   final bool showToolbar;
 
   @override
@@ -35,7 +35,7 @@ class LoginEmbeddedScreen extends StatelessWidget {
 
           return WebViewScaffold(
             title: Text(title),
-            initialUri: initialUri,
+            initialUri: initialUrl,
             showToolbar: showToolbar,
             javaScriptChannels: {
               _loginJavascriptChannelName: (JavaScriptMessage message) =>
