@@ -4,7 +4,7 @@ import '../extensions/extensions.dart';
 import '../models/models.dart';
 
 class CallProcessingStatusView extends StatelessWidget {
-  final CallProcessingStatus? status;
+  final ActiveCallStatus? status;
   final Color? color;
 
   const CallProcessingStatusView({super.key, required this.status, this.color});

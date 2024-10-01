@@ -12411,7 +12411,7 @@ mixin _$ActiveCall {
   String get callId => throw _privateConstructorUsedError;
   CallkeepHandle get handle => throw _privateConstructorUsedError;
   String? get displayName => throw _privateConstructorUsedError;
-  CallProcessingStatus? get status => throw _privateConstructorUsedError;
+  ActiveCallStatus? get status => throw _privateConstructorUsedError;
 
   /// If the call is result of a refer request, the id should be provided.
   String? get fromReferId => throw _privateConstructorUsedError;
@@ -12447,7 +12447,7 @@ abstract class $ActiveCallCopyWith<$Res> {
       String callId,
       CallkeepHandle handle,
       String? displayName,
-      CallProcessingStatus? status,
+      ActiveCallStatus? status,
       String? fromReferId,
       bool video,
       bool? frontCamera,
@@ -12524,7 +12524,7 @@ class _$ActiveCallCopyWithImpl<$Res, $Val extends ActiveCall>
       status: freezed == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
-              as CallProcessingStatus?,
+              as ActiveCallStatus?,
       fromReferId: freezed == fromReferId
           ? _value.fromReferId
           : fromReferId // ignore: cast_nullable_to_non_nullable
@@ -12606,7 +12606,7 @@ abstract class _$$ActiveCallImplCopyWith<$Res>
       String callId,
       CallkeepHandle handle,
       String? displayName,
-      CallProcessingStatus? status,
+      ActiveCallStatus? status,
       String? fromReferId,
       bool video,
       bool? frontCamera,
@@ -12682,7 +12682,7 @@ class __$$ActiveCallImplCopyWithImpl<$Res>
       status: freezed == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
-              as CallProcessingStatus?,
+              as ActiveCallStatus?,
       fromReferId: freezed == fromReferId
           ? _value.fromReferId
           : fromReferId // ignore: cast_nullable_to_non_nullable
@@ -12772,7 +12772,7 @@ class _$ActiveCallImpl extends _ActiveCall with DiagnosticableTreeMixin {
   @override
   final String? displayName;
   @override
-  final CallProcessingStatus? status;
+  final ActiveCallStatus? status;
 
   /// If the call is result of a refer request, the id should be provided.
   @override
@@ -12914,7 +12914,7 @@ abstract class _ActiveCall extends ActiveCall {
       required final String callId,
       required final CallkeepHandle handle,
       final String? displayName,
-      final CallProcessingStatus? status,
+      final ActiveCallStatus? status,
       final String? fromReferId,
       required final bool video,
       final bool? frontCamera,
@@ -12941,7 +12941,7 @@ abstract class _ActiveCall extends ActiveCall {
   @override
   String? get displayName;
   @override
-  CallProcessingStatus? get status;
+  ActiveCallStatus? get status;
 
   /// If the call is result of a refer request, the id should be provided.
   @override

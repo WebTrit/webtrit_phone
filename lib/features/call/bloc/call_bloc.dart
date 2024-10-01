@@ -442,7 +442,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     try {
       emit(state.copyWithMappedActiveCall(event.callId, (activeCall) {
-        return activeCall.copyWith(status: CallProcessingStatus.disconnecting);
+        return activeCall.copyWith(status: ActiveCallStatus.disconnecting);
       }));
 
       await state.performOnActiveCall(event.callId, (activeCall) async {
