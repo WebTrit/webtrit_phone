@@ -405,6 +405,14 @@ class AppLocalizationsMapper {
           localizations.webRegistration_ErrorAcknowledgeDialog_title,
       'account_selfCarePasswordExpired_message':
           localizations.account_selfCarePasswordExpired_message,
+      'common_noInternetConnection_title':
+          localizations.common_noInternetConnection_title,
+      'common_noInternetConnection_message':
+          localizations.common_noInternetConnection_message,
+      'common_noInternetConnection_retryButton':
+          localizations.common_noInternetConnection_retryButton,
+      'common_problemWithLoadingPage':
+          localizations.common_problemWithLoadingPage,
       'favorites_SnackBar_deleted': (name) =>
           localizations.favorites_SnackBar_deleted(name),
       'login_Button_otpSigninVerifyRepeatInterval': (seconds) =>

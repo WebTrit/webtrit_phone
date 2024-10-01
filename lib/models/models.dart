@@ -13,3 +13,4 @@ export 'main_flavor.dart';
 export 'recent.dart';
 export 'recents_visibility_filter.dart';
 export 'settings_flavor.dart';
+export 'login_flavor.dart';

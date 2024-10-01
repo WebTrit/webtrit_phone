@@ -1476,6 +1476,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Your self-care password has expired. Please update it using your self-care.\nUntil the password is changed, access to the service will be limited.'**
   String get account_selfCarePasswordExpired_message;
+
+  /// No description provided for @common_noInternetConnection_title.
+  ///
+  /// In en, this message translates to:
+  /// **'No Internet Connection'**
+  String get common_noInternetConnection_title;
+
+  /// No description provided for @common_noInternetConnection_message.
+  ///
+  /// In en, this message translates to:
+  /// **'It seems you are not connected to the internet. Please check your connection and try again.'**
+  String get common_noInternetConnection_message;
+
+  /// No description provided for @common_noInternetConnection_retryButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Try Again'**
+  String get common_noInternetConnection_retryButton;
+
+  /// No description provided for @common_problemWithLoadingPage.
+  ///
+  /// In en, this message translates to:
+  /// **'There was an issue loading the page.'**
+  String get common_problemWithLoadingPage;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

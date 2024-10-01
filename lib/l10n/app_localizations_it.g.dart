@@ -737,4 +737,16 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get account_selfCarePasswordExpired_message => 'La tua password di self-care è scaduta. Ti preghiamo di aggiornarla utilizzando il self-care.\nFino a quando la password non sarà cambiata, l\'accesso al servizio sarà limitato.';
+
+  @override
+  String get common_noInternetConnection_title => 'Nessuna connessione Internet';
+
+  @override
+  String get common_noInternetConnection_message => 'Sembra che tu non sia connesso a Internet. Controlla la tua connessione e riprova.';
+
+  @override
+  String get common_noInternetConnection_retryButton => 'Riprova';
+
+  @override
+  String get common_problemWithLoadingPage => 'Si è verificato un problema durante il caricamento della pagina.';
 }

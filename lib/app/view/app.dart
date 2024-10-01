@@ -42,6 +42,8 @@ class _AppState extends State<App> {
   @override
   void initState() {
     super.initState();
+    final featureAccess = FeatureAccess();
+
     appBloc = AppBloc(
       appPreferences: widget.appPreferences,
       secureStorage: widget.secureStorage,
@@ -52,7 +54,8 @@ class _AppState extends State<App> {
     _appRouter = AppRouter(
       appBloc,
       widget.appPermissions,
-      context.read<FeatureAccess>().bottomMenuFeature.activeTab,
+      featureAccess.loginFeature.launchLoginPage,
+      featureAccess.bottomMenuFeature.activeTab,
     );
   }
 

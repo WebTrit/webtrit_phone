@@ -16,13 +16,13 @@ class FeatureAccess {
   static late FeatureAccess _instance;
 
   FeatureAccess._(
-    this.customLoginFeature,
+    this.loginFeature,
     this.bottomMenuFeature,
     this.settingsFeature,
     this.callFeature,
   );
 
-  final CustomLoginFeature? customLoginFeature;
+  final LoginFeature loginFeature;
   final BottomMenuFeature bottomMenuFeature;
   final SettingsFeature settingsFeature;
   final CallFeature callFeature;
@@ -34,7 +34,7 @@ class FeatureAccess {
     final appConfig = theme.appConfig;
 
     try {
-      final customLoginFeature = _tryEnableCustomLoginFeature(appConfig);
+      final customLoginFeature = _tryEnableCustomLoginFeature(appConfig.loginConfig);
       final bottomMenuManager = _tryConfigureBottomMenuFeature(appConfig, preferences);
       final settingsFeature = _tryConfigureSettingsFeature(appConfig, preferences);
       final callFeature = _tryConfigureCallFeature(appConfig);
@@ -144,20 +144,44 @@ class FeatureAccess {
     return SettingsFeature(settingSections, termsAndConditions);
   }
 
-  static CustomLoginFeature? _tryEnableCustomLoginFeature(AppConfig appConfig) {
-    final customLogin = appConfig.loginConfig.customSignIn;
+  static LoginFeature _tryEnableCustomLoginFeature(AppConfigLogin loginConfig) {
+    final buttons = <LoginModeAction>[];
 
-    if (appConfig.isCustomSignInEnabled) {
-      _logger.info('Custom sign-in is enabled');
+    final launchEmbeddedScreen = _toEmbeddedLoginModel(
+      loginConfig.embedded.firstWhereOrNull((embeddedScreen) => embeddedScreen.launch),
+    );
 
-      return CustomLoginFeature(
-        titleL10n: customLogin!.titleL10n,
-        uri: Uri.parse(customLogin.url),
-      );
-    } else {
-      _logger.info('Custom sign-in is disabled');
-      return null;
+    for (var actions in loginConfig.modeSelectActions.where((button) => button.enabled)) {
+      final flavor = LoginFlavor.values.byName(actions.type);
+      final loginEmbeddedScreen = loginConfig.embedded.firstWhereOrNull((dto) => dto.id == actions.embeddedId);
+
+      if (flavor == LoginFlavor.embedded && loginEmbeddedScreen != null) {
+        buttons.add(EmbeddedLoginModeButton(
+          titleL10n: actions.titleL10n,
+          flavor: flavor,
+          customLoginFeature: _toEmbeddedLoginModel(loginEmbeddedScreen)!,
+        ));
+      } else if (flavor == LoginFlavor.login) {
+        buttons.add(LoginModeAction(
+          titleL10n: actions.titleL10n,
+          flavor: flavor,
+        ));
+      }
     }
+
+    return LoginFeature(
+      actions: buttons,
+      launchLoginPage: launchEmbeddedScreen,
+    );
+  }
+
+  static EmbeddedLogin? _toEmbeddedLoginModel(AppConfigLoginEmbedded? embeddedDTO) {
+    return embeddedDTO != null
+        ? EmbeddedLogin(
+            titleL10n: embeddedDTO.titleL10n,
+            uri: Uri.tryParse(embeddedDTO.url),
+          )
+        : null;
   }
 
   static CallFeature _tryConfigureCallFeature(AppConfig appConfig) {
@@ -171,6 +195,16 @@ class FeatureAccess {
       ),
     );
   }
+}
+
+class LoginFeature {
+  final List<LoginModeAction> actions;
+  final EmbeddedLogin? launchLoginPage;
+
+  LoginFeature({
+    required this.actions,
+    required this.launchLoginPage,
+  });
 }
 
 class BottomMenuFeature {

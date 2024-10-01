@@ -27,17 +27,22 @@ class AppRouter extends _$AppRouter {
   AppRouter(
     this._appBloc,
     this._appPermissions,
+    this._launchEmbeddedLogin,
     this._initialBottomMenuTab,
   );
 
   final AppBloc _appBloc;
   final AppPermissions _appPermissions;
 
+  final EmbeddedLogin? _launchEmbeddedLogin;
   final BottomMenuTab _initialBottomMenuTab;
 
   String? get coreUrl => _appBloc.state.coreUrl;
+
   String? get token => _appBloc.state.token;
+
   bool get appPermissionsDenied => _appPermissions.isDenied;
+
   bool get appUserAgreementUnaccepted => _appBloc.state.userAgreementAccepted != true;
 
   @override
@@ -60,11 +65,7 @@ class AppRouter extends _$AppRouter {
                   page: LoginModeSelectScreenPageRoute.page,
                 ),
                 AutoRoute(
-                  page: LoginCredentialsRequestScreenPageRoute.page,
-                  maintainState: false,
-                ),
-                AutoRoute(
-                  page: LoginCustomSigninScreenPageRoute.page,
+                  page: LoginEmbeddedScreenPageRoute.page,
                   maintainState: false,
                 ),
                 AutoRoute(
@@ -345,7 +346,11 @@ class AppRouter extends _$AppRouter {
     } else {
       resolver.next(false);
       router.replaceAll(
-        [const LoginRouterPageRoute()],
+        [
+          LoginRouterPageRoute(
+            launchEmbeddedLogin: _launchEmbeddedLogin,
+          )
+        ],
       );
     }
   }

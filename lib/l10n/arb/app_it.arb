@@ -545,5 +545,13 @@
   "webRegistration_ErrorAcknowledgeDialog_title": "Web resource error",
   "@webRegistration_ErrorAcknowledgeDialog_title": {},
   "account_selfCarePasswordExpired_message": "La tua password di self-care è scaduta. Ti preghiamo di aggiornarla utilizzando il self-care.\nFino a quando la password non sarà cambiata, l'accesso al servizio sarà limitato.",
-  "@account_selfCarePasswordExpired_message": {}
+  "@account_selfCarePasswordExpired_message": {},
+  "common_noInternetConnection_title": "Nessuna connessione Internet",
+  "@common_noInternetConnection_title": {},
+  "common_noInternetConnection_message": "Sembra che tu non sia connesso a Internet. Controlla la tua connessione e riprova.",
+  "@common_noInternetConnection_message": {},
+  "common_noInternetConnection_retryButton": "Riprova",
+  "@common_noInternetConnection_retryButton": {},
+  "common_problemWithLoadingPage": "Si è verificato un problema durante il caricamento della pagina.",
+  "@common_problemWithLoadingPage": {}
 }

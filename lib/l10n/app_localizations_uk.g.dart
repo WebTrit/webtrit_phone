@@ -737,4 +737,16 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get account_selfCarePasswordExpired_message => 'Термін дії вашого пароля самообслуговування минув. Оновіть його за допомогою самообслуговування.\nДоки пароль не буде змінено, доступ до служби буде обмежено.';
+
+  @override
+  String get common_noInternetConnection_title => 'Немає підключення до Інтернету';
+
+  @override
+  String get common_noInternetConnection_message => 'Схоже, ви не підключені до Інтернету. Перевірте своє підключення і спробуйте ще раз.';
+
+  @override
+  String get common_noInternetConnection_retryButton => 'Спробуйте ще раз';
+
+  @override
+  String get common_problemWithLoadingPage => 'Виникла проблема з завантаженням сторінки.';
 }
