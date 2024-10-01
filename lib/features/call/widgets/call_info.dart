@@ -7,6 +7,9 @@ import 'package:clock/clock.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 
+import '../extensions/extensions.dart';
+import '../models/models.dart';
+
 class CallInfo extends StatefulWidget {
   const CallInfo({
     super.key,
@@ -18,7 +21,7 @@ class CallInfo extends StatefulWidget {
     required this.username,
     this.acceptedTime,
     this.color,
-    this.callProcessingStatus,
+    this.activeCallStatus,
   });
 
   final bool transferProcessing;
@@ -29,8 +32,7 @@ class CallInfo extends StatefulWidget {
   final String username;
   final DateTime? acceptedTime;
   final Color? color;
-
-  final Widget? callProcessingStatus;
+  final ActiveCallStatus? activeCallStatus;
 
   @override
   State<CallInfo> createState() => _CallInfoState();
@@ -92,6 +94,8 @@ class _CallInfoState extends State<CallInfo> {
     final themeData = Theme.of(context);
     final textTheme = themeData.textTheme;
 
+    final statusStyle = textTheme.labelLarge!.copyWith(color: themeData.colorScheme.surface);
+
     final String statusMessage;
     if (duration == null) {
       if (widget.inviteToAttendedTransfer) {
@@ -128,7 +132,15 @@ class _CallInfoState extends State<CallInfo> {
           ),
         ),
         const SizedBox(height: 10),
-        if (widget.callProcessingStatus != null) widget.callProcessingStatus!,
+        if (widget.activeCallStatus != null)
+          Padding(
+            padding: const EdgeInsets.only(top: 8),
+            child: Text(
+              widget.activeCallStatus!.l10n(context),
+              style: statusStyle,
+              textAlign: TextAlign.center,
+            ),
+          ),
       ],
     );
   }

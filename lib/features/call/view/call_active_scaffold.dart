@@ -153,10 +153,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                             username: activeCall.displayName ?? activeCall.handle.value,
                             acceptedTime: activeCall.acceptedTime,
                             color: onTabGradient,
-                            callProcessingStatus: CallProcessingStatusView(
-                              status: activeCall.status,
-                              color: onTabGradient,
-                            ),
+                            activeCallStatus: activeCall.status,
                           ),
                         if (maybeTransferRequest != null)
                           CallInfo(
