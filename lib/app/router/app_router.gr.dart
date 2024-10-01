@@ -159,11 +159,7 @@ abstract class _$AppRouter extends RootStackRouter {
       final args = routeData.argsAs<LoginEmbeddedScreenPageRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: LoginEmbeddedScreenPage(
-          url: args.url,
-          title10n: args.title10n,
-          showToolbar: args.showToolbar,
-        ),
+        child: LoginEmbeddedScreenPage(embeddedLogin: args.embeddedLogin),
       );
     },
     LoginModeSelectScreenPageRoute.name: (routeData) {
@@ -756,17 +752,11 @@ class LoginCoreUrlAssignScreenPageRoute extends PageRouteInfo<void> {
 class LoginEmbeddedScreenPageRoute
     extends PageRouteInfo<LoginEmbeddedScreenPageRouteArgs> {
   LoginEmbeddedScreenPageRoute({
-    required Uri url,
-    required String title10n,
-    required bool showToolbar,
+    required EmbeddedLogin embeddedLogin,
     List<PageRouteInfo>? children,
   }) : super(
           LoginEmbeddedScreenPageRoute.name,
-          args: LoginEmbeddedScreenPageRouteArgs(
-            url: url,
-            title10n: title10n,
-            showToolbar: showToolbar,
-          ),
+          args: LoginEmbeddedScreenPageRouteArgs(embeddedLogin: embeddedLogin),
           initialChildren: children,
         );
 
@@ -777,21 +767,13 @@ class LoginEmbeddedScreenPageRoute
 }
 
 class LoginEmbeddedScreenPageRouteArgs {
-  const LoginEmbeddedScreenPageRouteArgs({
-    required this.url,
-    required this.title10n,
-    required this.showToolbar,
-  });
+  const LoginEmbeddedScreenPageRouteArgs({required this.embeddedLogin});
 
-  final Uri url;
-
-  final String title10n;
-
-  final bool showToolbar;
+  final EmbeddedLogin embeddedLogin;
 
   @override
   String toString() {
-    return 'LoginEmbeddedScreenPageRouteArgs{url: $url, title10n: $title10n, showToolbar: $showToolbar}';
+    return 'LoginEmbeddedScreenPageRouteArgs{embeddedLogin: $embeddedLogin}';
   }
 }
 

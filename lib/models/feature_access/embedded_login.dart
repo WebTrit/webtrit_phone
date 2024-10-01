@@ -1,6 +1,6 @@
 class EmbeddedLogin {
-  final String? titleL10n;
-  final Uri? uri;
+  final String titleL10n;
+  final Uri uri;
   final bool showToolbar;
 
   EmbeddedLogin({

@@ -16,7 +16,7 @@ bool whenLoginRouterPageChange(LoginState previous, LoginState current) {
       previous.embeddedLogin != current.embeddedLogin;
 }
 
-bool whenCustomLoginScreenPageActive(LoginState state) {
+bool whenLoginEmbeddedScreenPageActive(LoginState state) {
   return state.embeddedLogin != null;
 }
 
@@ -59,12 +59,8 @@ class LoginRouterPage extends StatelessWidget {
             return [
               if (!isLaunchEmbeddedLogin) const LoginModeSelectScreenPageRoute(),
               if (whenLoginCoreUrlAssignScreenPageActive(state)) const LoginCoreUrlAssignScreenPageRoute(),
-              if (whenCustomLoginScreenPageActive(state))
-                LoginEmbeddedScreenPageRoute(
-                  url: state.embeddedLogin!.uri!,
-                  title10n: state.embeddedLogin!.titleL10n!,
-                  showToolbar: state.embeddedLogin!.showToolbar,
-                ),
+              if (whenLoginEmbeddedScreenPageActive(state))
+                LoginEmbeddedScreenPageRoute(embeddedLogin: state.embeddedLogin!),
               if (whenLoginSwitchScreenPageActive(state)) const LoginSwitchScreenPageRoute(),
             ];
           },

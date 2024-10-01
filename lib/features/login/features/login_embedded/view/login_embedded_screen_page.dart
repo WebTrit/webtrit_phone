@@ -6,6 +6,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:webtrit_phone/app/notifications/notifications.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
+import 'package:webtrit_phone/models/models.dart';
 
 import 'login_embedded_screen.dart';
 
@@ -13,14 +14,10 @@ import 'login_embedded_screen.dart';
 class LoginEmbeddedScreenPage extends StatelessWidget {
   // ignore: use_key_in_widget_constructors
   const LoginEmbeddedScreenPage({
-    required this.url,
-    required this.title10n,
-    required this.showToolbar,
+    required this.embeddedLogin,
   });
 
-  final Uri url;
-  final String title10n;
-  final bool showToolbar;
+  final EmbeddedLogin embeddedLogin;
 
   @override
   Widget build(BuildContext context) {
@@ -30,9 +27,9 @@ class LoginEmbeddedScreenPage extends StatelessWidget {
         context.read<LoginCubit>(),
       ),
       child: LoginEmbeddedScreen(
-        title: context.parseL10n(title10n),
-        initialUri: url,
-        showToolbar: showToolbar,
+        title: context.parseL10n(embeddedLogin.titleL10n),
+        initialUri: embeddedLogin.uri,
+        showToolbar: embeddedLogin.showToolbar,
       ),
     );
   }

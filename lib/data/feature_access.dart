@@ -179,7 +179,7 @@ class FeatureAccess {
     return embeddedDTO != null
         ? EmbeddedLogin(
             titleL10n: embeddedDTO.titleL10n,
-            uri: Uri.tryParse(embeddedDTO.url),
+            uri: Uri.parse(embeddedDTO.url),
             showToolbar: embeddedDTO.showToolbar,
           )
         : null;
