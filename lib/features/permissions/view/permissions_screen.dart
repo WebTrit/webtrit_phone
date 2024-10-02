@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:webtrit_callkeep/webtrit_callkeep.dart';
+
 import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
@@ -10,6 +12,7 @@ import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
+import '../models/models.dart';
 import '../permissions.dart';
 import '../widgets/widgets.dart';
 
@@ -29,6 +32,9 @@ class PermissionsScreen extends StatelessWidget {
             // Shows additional screen for specific sub-platform if needed
             case PermissionsManufacturerTipNeeded(:final manufacturer):
               _showManufacturerTips(context, manufacturer);
+            // Shows additional screen for specific sub-platform if needed
+            case PermissionFullScreenIntentNeeded(:final permission):
+              _showSpecialPermissionTips(context, permission);
             case PermissionsStateSuccess():
               context.router.replaceAll([const MainShellRoute()]);
             case PermissionsStateFailure(:final error):
@@ -101,6 +107,18 @@ class PermissionsScreen extends StatelessWidget {
       manufacturer: manufacturer,
     ));
 
-    permissionCubit.dismissManufacturerTip();
+    permissionCubit.dismissTip();
+  }
+
+  Future _showSpecialPermissionTips(BuildContext context, CallkeepSpecialPermissions permission) async {
+    final permissionCubit = context.read<PermissionsCubit>();
+
+    await context.router.pushWidget(SpecialPermission(
+      onGoToAppSettings: () => permissionCubit.openAppSpecialPermissionSettings(permission),
+      specialPermissions: permission,
+    ));
+
+    permissionCubit.dismissTip();
+    permissionCubit.requestPermissions();
   }
 }

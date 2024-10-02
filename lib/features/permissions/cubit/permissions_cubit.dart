@@ -3,7 +3,11 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:logging/logging.dart';
 
+import 'package:webtrit_callkeep/webtrit_callkeep.dart';
+
 import 'package:webtrit_phone/data/data.dart';
+
+import '../models/models.dart';
 
 part 'permissions_cubit.freezed.dart';
 
@@ -24,11 +28,15 @@ class PermissionsCubit extends Cubit<PermissionsState> {
       await appPermissions.request();
       await requestFirebaseMessagingPermission();
 
+      final specialPermissions = await appPermissions.deniedSpecialPermissions();
       final manufacturer = _checkManufacturer();
-      if (manufacturer == null) {
+
+      if (manufacturer == null && specialPermissions.isEmpty) {
         emit(const PermissionsState.success());
-      } else {
+      } else if (manufacturer != null) {
         emit(PermissionsState.manufacturerTipNeeded(manufacturer));
+      } else if (specialPermissions.isNotEmpty) {
+        emit(PermissionsState.permissionFullScreenIntentNeeded(specialPermissions.first));
       }
     } catch (e) {
       emit(PermissionsState.failure(e));
@@ -39,12 +47,16 @@ class PermissionsCubit extends Cubit<PermissionsState> {
     emit(const PermissionsState.initial());
   }
 
-  void dismissManufacturerTip() {
+  void dismissTip() {
     emit(const PermissionsState.success());
   }
 
   void openAppSettings() {
     appPermissions.toAppSettings();
+  }
+
+  void openAppSpecialPermissionSettings(CallkeepSpecialPermissions permission) {
+    appPermissions.toSpecialPermissionAppSettings(permission);
   }
 
   Future<void> requestFirebaseMessagingPermission() async {

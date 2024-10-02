@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:webtrit_phone/l10n/l10n.dart';
 
-import '../cubit/permissions_cubit.dart';
+import '../models/models.dart';
 
 extension ManufacturerTips on Manufacturer {
   List<String> tips(BuildContext context) {
