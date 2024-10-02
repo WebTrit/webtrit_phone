@@ -159,7 +159,7 @@ abstract class _$AppRouter extends RootStackRouter {
       final args = routeData.argsAs<LoginEmbeddedScreenPageRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: LoginEmbeddedScreenPage(embeddedLogin: args.embeddedLogin),
+        child: LoginEmbeddedScreenPage(loginEmbedded: args.loginEmbedded),
       );
     },
     LoginModeSelectScreenPageRoute.name: (routeData) {
@@ -197,7 +197,7 @@ abstract class _$AppRouter extends RootStackRouter {
           orElse: () => const LoginRouterPageRouteArgs());
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: LoginRouterPage(launchEmbeddedLogin: args.launchEmbeddedLogin),
+        child: LoginRouterPage(launchLoginEmbedded: args.launchLoginEmbedded),
       );
     },
     LoginSignupRequestScreenPageRoute.name: (routeData) {
@@ -752,11 +752,11 @@ class LoginCoreUrlAssignScreenPageRoute extends PageRouteInfo<void> {
 class LoginEmbeddedScreenPageRoute
     extends PageRouteInfo<LoginEmbeddedScreenPageRouteArgs> {
   LoginEmbeddedScreenPageRoute({
-    required EmbeddedLogin embeddedLogin,
+    required LoginEmbedded loginEmbedded,
     List<PageRouteInfo>? children,
   }) : super(
           LoginEmbeddedScreenPageRoute.name,
-          args: LoginEmbeddedScreenPageRouteArgs(embeddedLogin: embeddedLogin),
+          args: LoginEmbeddedScreenPageRouteArgs(loginEmbedded: loginEmbedded),
           initialChildren: children,
         );
 
@@ -767,13 +767,13 @@ class LoginEmbeddedScreenPageRoute
 }
 
 class LoginEmbeddedScreenPageRouteArgs {
-  const LoginEmbeddedScreenPageRouteArgs({required this.embeddedLogin});
+  const LoginEmbeddedScreenPageRouteArgs({required this.loginEmbedded});
 
-  final EmbeddedLogin embeddedLogin;
+  final LoginEmbedded loginEmbedded;
 
   @override
   String toString() {
-    return 'LoginEmbeddedScreenPageRouteArgs{embeddedLogin: $embeddedLogin}';
+    return 'LoginEmbeddedScreenPageRouteArgs{loginEmbedded: $loginEmbedded}';
   }
 }
 
@@ -851,12 +851,12 @@ class LoginPasswordSigninScreenPageRoute extends PageRouteInfo<void> {
 /// [LoginRouterPage]
 class LoginRouterPageRoute extends PageRouteInfo<LoginRouterPageRouteArgs> {
   LoginRouterPageRoute({
-    EmbeddedLogin? launchEmbeddedLogin,
+    LoginEmbedded? launchLoginEmbedded,
     List<PageRouteInfo>? children,
   }) : super(
           LoginRouterPageRoute.name,
           args: LoginRouterPageRouteArgs(
-              launchEmbeddedLogin: launchEmbeddedLogin),
+              launchLoginEmbedded: launchLoginEmbedded),
           initialChildren: children,
         );
 
@@ -867,13 +867,13 @@ class LoginRouterPageRoute extends PageRouteInfo<LoginRouterPageRouteArgs> {
 }
 
 class LoginRouterPageRouteArgs {
-  const LoginRouterPageRouteArgs({this.launchEmbeddedLogin});
+  const LoginRouterPageRouteArgs({this.launchLoginEmbedded});
 
-  final EmbeddedLogin? launchEmbeddedLogin;
+  final LoginEmbedded? launchLoginEmbedded;
 
   @override
   String toString() {
-    return 'LoginRouterPageRouteArgs{launchEmbeddedLogin: $launchEmbeddedLogin}';
+    return 'LoginRouterPageRouteArgs{launchLoginEmbedded: $launchLoginEmbedded}';
   }
 }
 

@@ -13,11 +13,11 @@ import 'package:webtrit_phone/models/models.dart';
 bool whenLoginRouterPageChange(LoginState previous, LoginState current) {
   return (previous.mode != current.mode) ||
       (previous.coreUrl != current.coreUrl || previous.supportedLoginTypes != current.supportedLoginTypes) ||
-      previous.embeddedLogin != current.embeddedLogin;
+      previous.embedded != current.embedded;
 }
 
 bool whenLoginEmbeddedScreenPageActive(LoginState state) {
-  return state.embeddedLogin != null;
+  return state.embedded != null;
 }
 
 bool whenLoginCoreUrlAssignScreenPageActive(LoginState state) {
@@ -32,12 +32,12 @@ bool whenLoginSwitchScreenPageActive(LoginState state) {
 class LoginRouterPage extends StatelessWidget {
   // ignore: use_key_in_widget_constructors
   const LoginRouterPage({
-    EmbeddedLogin? launchEmbeddedLogin,
-  }) : _launchEmbeddedLogin = launchEmbeddedLogin;
+    LoginEmbedded? launchLoginEmbedded,
+  }) : _launchLoginEmbedded = launchLoginEmbedded;
 
-  final EmbeddedLogin? _launchEmbeddedLogin;
+  final LoginEmbedded? _launchLoginEmbedded;
 
-  bool get isLaunchEmbeddedLogin => _launchEmbeddedLogin != null;
+  bool get isLaunchLoginEmbedded => _launchLoginEmbedded != null;
 
   @override
   Widget build(BuildContext context) {
@@ -57,10 +57,10 @@ class LoginRouterPage extends StatelessWidget {
           navigatorObservers: () => [_HideCurrentSnackBarNavigatorObserver(context)],
           routes: (handler) {
             return [
-              if (!isLaunchEmbeddedLogin) const LoginModeSelectScreenPageRoute(),
+              if (!isLaunchLoginEmbedded) const LoginModeSelectScreenPageRoute(),
               if (whenLoginCoreUrlAssignScreenPageActive(state)) const LoginCoreUrlAssignScreenPageRoute(),
               if (whenLoginEmbeddedScreenPageActive(state))
-                LoginEmbeddedScreenPageRoute(embeddedLogin: state.embeddedLogin!),
+                LoginEmbeddedScreenPageRoute(loginEmbedded: state.embedded!),
               if (whenLoginSwitchScreenPageActive(state)) const LoginSwitchScreenPageRoute(),
             ];
           },
@@ -82,8 +82,8 @@ class LoginRouterPage extends StatelessWidget {
     );
 
     final login = LoginCubit(notificationsBloc: context.read<NotificationsBloc>());
-    if (_launchEmbeddedLogin != null) {
-      login.setCustomLogin(_launchEmbeddedLogin);
+    if (_launchLoginEmbedded != null) {
+      login.setCustomLogin(_launchLoginEmbedded);
     }
     final provider = BlocProvider(
       create: (context) => login,

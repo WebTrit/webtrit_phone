@@ -147,7 +147,7 @@ class FeatureAccess {
   static LoginFeature _tryEnableCustomLoginFeature(AppConfigLogin loginConfig) {
     final buttons = <LoginModeAction>[];
 
-    final launchEmbeddedScreen = _toEmbeddedLoginModel(
+    final launchEmbeddedScreen = _toLoginEmbeddedModel(
       loginConfig.embedded.firstWhereOrNull((embeddedScreen) => embeddedScreen.launch),
     );
 
@@ -156,10 +156,10 @@ class FeatureAccess {
       final loginEmbeddedScreen = loginConfig.embedded.firstWhereOrNull((dto) => dto.id == actions.embeddedId);
 
       if (flavor == LoginFlavor.embedded && loginEmbeddedScreen != null) {
-        buttons.add(EmbeddedLoginModeButton(
+        buttons.add(LoginEmbeddedModeButton(
           titleL10n: actions.titleL10n,
           flavor: flavor,
-          customLoginFeature: _toEmbeddedLoginModel(loginEmbeddedScreen)!,
+          customLoginFeature: _toLoginEmbeddedModel(loginEmbeddedScreen)!,
         ));
       } else if (flavor == LoginFlavor.login) {
         buttons.add(LoginModeAction(
@@ -175,9 +175,9 @@ class FeatureAccess {
     );
   }
 
-  static EmbeddedLogin? _toEmbeddedLoginModel(AppConfigLoginEmbedded? embeddedDTO) {
+  static LoginEmbedded? _toLoginEmbeddedModel(AppConfigLoginEmbedded? embeddedDTO) {
     return embeddedDTO != null
-        ? EmbeddedLogin(
+        ? LoginEmbedded(
             titleL10n: embeddedDTO.titleL10n,
             url: Uri.parse(embeddedDTO.url),
             showToolbar: embeddedDTO.showToolbar,
@@ -200,7 +200,7 @@ class FeatureAccess {
 
 class LoginFeature {
   final List<LoginModeAction> actions;
-  final EmbeddedLogin? launchLoginPage;
+  final LoginEmbedded? launchLoginPage;
 
   LoginFeature({
     required this.actions,

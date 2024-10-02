@@ -98,7 +98,7 @@ class LoginModeSelectScreen extends StatelessWidget {
         context.read<LoginCubit>().loginModeSelectSubmitted(demo ? LoginMode.demoCore : LoginMode.core);
         break;
       case LoginFlavor.embedded:
-        context.read<LoginCubit>().setCustomLogin((button as EmbeddedLoginModeButton).customLoginFeature);
+        context.read<LoginCubit>().setCustomLogin((button as LoginEmbeddedModeButton).customLoginFeature);
         break;
     }
   }

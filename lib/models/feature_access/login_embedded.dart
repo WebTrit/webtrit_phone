@@ -1,9 +1,9 @@
-class EmbeddedLogin {
+class LoginEmbedded {
   final String? titleL10n;
   final Uri url;
   final bool showToolbar;
 
-  EmbeddedLogin({
+  LoginEmbedded({
     required this.titleL10n,
     required this.url,
     required this.showToolbar,

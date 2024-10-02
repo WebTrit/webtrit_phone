@@ -1,4 +1,4 @@
-import 'embedded_login.dart';
+import 'login_embedded.dart';
 
 import '../login_flavor.dart';
 
@@ -12,10 +12,10 @@ class LoginModeAction {
   });
 }
 
-class EmbeddedLoginModeButton extends LoginModeAction {
-  final EmbeddedLogin customLoginFeature;
+class LoginEmbeddedModeButton extends LoginModeAction {
+  final LoginEmbedded customLoginFeature;
 
-  EmbeddedLoginModeButton({
+  LoginEmbeddedModeButton({
     required this.customLoginFeature,
     required super.titleL10n,
     required super.flavor,

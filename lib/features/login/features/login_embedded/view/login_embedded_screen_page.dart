@@ -14,10 +14,10 @@ import 'login_embedded_screen.dart';
 class LoginEmbeddedScreenPage extends StatelessWidget {
   // ignore: use_key_in_widget_constructors
   const LoginEmbeddedScreenPage({
-    required this.embeddedLogin,
+    required this.loginEmbedded,
   });
 
-  final EmbeddedLogin embeddedLogin;
+  final LoginEmbedded loginEmbedded;
 
   @override
   Widget build(BuildContext context) {
@@ -27,9 +27,9 @@ class LoginEmbeddedScreenPage extends StatelessWidget {
         context.read<LoginCubit>(),
       ),
       child: LoginEmbeddedScreen(
-        title: embeddedLogin.titleL10n != null ? context.parseL10n(embeddedLogin.titleL10n!) : null,
-        initialUrl: embeddedLogin.url,
-        showToolbar: embeddedLogin.showToolbar,
+        title: loginEmbedded.titleL10n != null ? context.parseL10n(loginEmbedded.titleL10n!) : null,
+        initialUrl: loginEmbedded.url,
+        showToolbar: loginEmbedded.showToolbar,
       ),
     );
   }
