@@ -54,7 +54,6 @@ class ChatTypingCubit extends Cubit<TypingState> {
   Future<void> _handleEvent(e) async {
     if (e is TypingEvent) {
       final typings = state;
-      // typings.add(e.userId);
       final userId = e.userId;
       final contact = await contactsRepo.getContactBySource(ContactSourceType.external, userId);
       if (contact != null) {

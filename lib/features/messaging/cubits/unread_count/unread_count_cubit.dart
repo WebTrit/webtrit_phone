@@ -15,7 +15,7 @@ class UnreadCountCubit extends Cubit<UnreadCountState> {
     required this.appPreferences,
     required this.chatsRepository,
     required this.smsRepository,
-    this.updateDebounce = const Duration(milliseconds: 100),
+    this.updateDebounce = const Duration(seconds: 1),
   }) : super(UnreadCountState.initial());
 
   final AppPreferences appPreferences;

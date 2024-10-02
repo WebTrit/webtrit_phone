@@ -258,7 +258,7 @@ class _MainShellState extends State<MainShell> {
             ),
           if (_kMessagingEnabled)
             BlocProvider(
-              create: (_) => MessageForwardCubit(),
+              create: (_) => ChatsForwardingCubit(),
             )
         ],
         child: Builder(

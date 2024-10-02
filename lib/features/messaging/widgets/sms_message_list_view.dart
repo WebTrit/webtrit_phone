@@ -160,7 +160,6 @@ class _SmsMessageListViewState extends State<SmsMessageListView> {
                 final reachedUnreaded = userReadedUntil == null || message.createdAt.isAfter(userReadedUntil);
                 if (reachedUnreaded) widget.userReadedUntilUpdate(message.createdAt);
               },
-              key: ObjectKey(entry.message),
             );
           }
 

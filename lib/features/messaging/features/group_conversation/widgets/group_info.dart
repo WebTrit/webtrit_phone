@@ -292,7 +292,7 @@ class _GroupInfoState extends State<GroupInfo> {
             if (loading) return const SizedBox();
 
             return ListTile(
-              key: ObjectKey(member),
+              key: ValueKey(member),
               minTileHeight: 0,
               contentPadding: EdgeInsets.zero,
               leading: LeadingAvatar(

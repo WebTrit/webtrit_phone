@@ -12,8 +12,6 @@ import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
-// TODO: localizations
-
 class SmsConversationsTile extends StatefulWidget {
   const SmsConversationsTile({required this.conversation, required this.lastMessage, required this.userId, super.key});
 

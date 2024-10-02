@@ -52,7 +52,7 @@ class ChatMessageListView extends StatefulWidget {
 }
 
 class _ChatMessageListViewState extends State<ChatMessageListView> {
-  late final messageForwardCubit = context.read<MessageForwardCubit>();
+  late final chatsForwardingCubit = context.read<ChatsForwardingCubit>();
   late final inputController = TextEditingController();
   late final scrollController = ScrollController();
 
@@ -106,13 +106,13 @@ class _ChatMessageListViewState extends State<ChatMessageListView> {
   }
 
   void handleSend() {
-    final messageForForward = messageForwardCubit.state;
+    final messageForForward = chatsForwardingCubit.state;
     final content = inputController.text.trim();
     if (content.isEmpty) return;
 
     if (messageForForward != null) {
       widget.onSendForward(content, messageForForward);
-      messageForwardCubit.clear();
+      chatsForwardingCubit.clear();
     } else if (replyingMessage != null) {
       widget.onSendReply(content, replyingMessage!);
       setState(() => replyingMessage = null);
@@ -128,7 +128,7 @@ class _ChatMessageListViewState extends State<ChatMessageListView> {
   }
 
   void handleSetForReply(ChatMessage message) {
-    messageForwardCubit.clear();
+    chatsForwardingCubit.clear();
     setState(() => editingMessage = null);
     setState(() => replyingMessage = message);
   }
@@ -136,14 +136,14 @@ class _ChatMessageListViewState extends State<ChatMessageListView> {
   void handleSetForForward(ChatMessage message) async {
     setState(() => editingMessage = null);
     setState(() => replyingMessage = null);
-    final cubitRef = messageForwardCubit;
+    final cubitRef = chatsForwardingCubit;
     context.router.navigate(const MainScreenPageRoute(children: [MessagingRouterPageRoute()]));
     await Future.delayed(const Duration(milliseconds: 300));
     cubitRef.setForForward(message);
   }
 
   void handleSetForEdit(ChatMessage message) {
-    messageForwardCubit.clear();
+    chatsForwardingCubit.clear();
     setState(() => replyingMessage = null);
     setState(() => editingMessage = message);
     inputController.text = message.content;
@@ -284,7 +284,7 @@ class _ChatMessageListViewState extends State<ChatMessageListView> {
   }
 
   Widget field() {
-    return BlocBuilder<MessageForwardCubit, ChatMessage?>(
+    return BlocBuilder<ChatsForwardingCubit, ChatMessage?>(
       builder: (context, state) {
         final messageForForward = state;
 
@@ -293,10 +293,10 @@ class _ChatMessageListViewState extends State<ChatMessageListView> {
           exchangeWidget = ExchangeBar(
             text: messageForForward.content,
             icon: Icons.forward,
-            onCancel: messageForwardCubit.clear,
+            onCancel: chatsForwardingCubit.clear,
             onConfirm: () {
               widget.onSendForward(messageForForward.content, messageForForward);
-              messageForwardCubit.clear();
+              chatsForwardingCubit.clear();
             },
           );
         }

@@ -11,10 +11,12 @@ export 'widgets/widgets.dart';
 
 
 // TODO: 
-// - routing remake
-// - finish resolve naming issues
-// - notifications autodismiss on read and showed message tracking
+// - notifications autodismiss on read and background message tracking
 // - expiration time setting for message storage (like week, month, year etc)
+// - popup menu or swipe menu for chat leave/delete in conversations list 
+// - scroll to bottom on messages list
 // - move userId retrieving to main auth flow
+// - remove messaging service envs
+// - sync error codes with backend and handle them
 // - random refacfotring (like ephemeral logic to blocs, structs for ws events, constants for keys, etc)
 // - maybe tests?

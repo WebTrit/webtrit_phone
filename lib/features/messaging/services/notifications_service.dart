@@ -6,6 +6,10 @@ import 'package:webtrit_phone/data/app_preferences.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
+// TODO: handle sms events
+// TODO: add notifications tracking system for manage background notifications
+// TODO: handle read cursor above displayed notifications and dismiss them
+
 final _logger = Logger('MessagingNotificationsService');
 
 class MessagingNotificationsService {
@@ -56,8 +60,6 @@ class MessagingNotificationsService {
         _dismissNotification(message.id);
       }
     }
-    // TODO: handle sms messages events
-    // TODO: handle read cursor above displayed notifications and dismiss them
   }
 
   Future<void> _localActionHandler(LocalNotificationActionDTO action) async {

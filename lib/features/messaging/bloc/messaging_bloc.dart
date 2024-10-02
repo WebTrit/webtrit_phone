@@ -9,7 +9,11 @@ import 'package:webtrit_phone/features/messaging/extensions/phoenix_socket.dart'
 import 'package:webtrit_phone/features/messaging/services/services.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
-// TODO: add logger
+// TODO:
+// - add logger
+// - rename to "messaging connection bloc" ? and place /cubits and /bloc together
+// - move userid retrieving to auth flow when backend be ready
+// - move workers to messaging shell
 
 part 'messaging_event.dart';
 part 'messaging_state.dart';

@@ -10,6 +10,7 @@ extension ContactMessagingExt on Contact {
         isCurrentUser == false;
   }
 
+  /// Whether the user can send an SMS to this contact using the SMS messaging feature.
   bool get canSendSms {
     return smsNumbers.isNotEmpty && isCurrentUser != true;
   }

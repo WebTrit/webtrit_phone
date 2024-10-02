@@ -297,7 +297,7 @@ class _NewGroupConversationState extends State<NewGroupConversation> {
                         child: Column(
                           children: [
                             const SizedBox(height: 16),
-                            avatar(),
+                            GroupAvatar(name: nameController.text, size: 50),
                             const SizedBox(height: 32),
                             nameField(),
                             const SizedBox(height: 32),
@@ -376,10 +376,5 @@ class _NewGroupConversationState extends State<NewGroupConversation> {
       },
       onChanged: (value) => setState(() {}),
     );
-  }
-
-  Widget avatar() {
-    String name = nameController.text;
-    return GroupAvatar(name: name, size: 50);
   }
 }

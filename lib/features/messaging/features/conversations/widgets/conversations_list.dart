@@ -107,11 +107,11 @@ class _ConversationsListState extends State<ConversationsList> {
                 children: conversationsToShow.map((e) {
                   final (:chat, :message, contacts: _) = e;
                   return FadeIn(
-                    key: ObjectKey(chat),
                     child: ChatConversationsTile(
                       conversation: chat,
                       lastMessage: message,
                       userId: userId,
+                      key: ValueKey(e),
                     ),
                   );
                 }).toList(),
@@ -196,11 +196,11 @@ class _ConversationsListState extends State<ConversationsList> {
                   final conversation = e.$1;
                   final lastMessage = e.$2;
                   return FadeIn(
-                    key: ObjectKey(conversation),
                     child: SmsConversationsTile(
                       conversation: conversation,
                       lastMessage: lastMessage,
                       userId: userId,
+                      key: ValueKey(e),
                     ),
                   );
                 }).toList(),
