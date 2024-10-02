@@ -29,3 +29,4 @@ export 'sms_message_read_cursor.dart';
 export 'sms_outbox_message_entry.dart';
 export 'sms_outbox_message_delete_entry.dart';
 export 'sms_outbox_read_cursor_entry.dart';
+export 'login_flavor.dart';

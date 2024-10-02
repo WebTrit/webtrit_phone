@@ -139,6 +139,12 @@ class AppLocalizationsIt extends AppLocalizations {
   String get callStatus_ready => 'Connessione stabilita';
 
   @override
+  String get callProcessingStatus_disconnecting => 'Desconectando la llamada, por favor espere…';
+
+  @override
+  String get call_ThumbnailAvatar_currentlyNoActiveCall => 'Actualmente, no hay ninguna llamada activa';
+
+  @override
   String get connectToYourOwnVoIPSystem_Button_Action => 'Connettiti al tuo sistema VoIP';
 
   @override
@@ -507,6 +513,9 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get notifications_errorSnackBar_appUnregistered => 'Siamo spiacenti, la tua applicazione è attualmente disconnessa dai server principali WebTrit e quindi non è possibile chiamare in questo momento. Vai alla pagina delle impostazioni e fai scorrere l\'interruttore dello stato online ( a OFF e poi ancora ad ON) per ristabilire la connessione';
+
+  @override
+  String get notifications_errorSnackBar_sipServiceUnavailable => 'Errore di autenticazione con il sistema VoIP remoto';
 
   @override
   String get notifications_errorSnackBar_callConnect => 'Connessione al server non riuscita, tentativo di riconnessione in corso';
@@ -1008,4 +1017,16 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get account_selfCarePasswordExpired_message => 'La tua password di self-care è scaduta. Ti preghiamo di aggiornarla utilizzando il self-care.\nFino a quando la password non sarà cambiata, l\'accesso al servizio sarà limitato.';
+
+  @override
+  String get common_noInternetConnection_title => 'Nessuna connessione Internet';
+
+  @override
+  String get common_noInternetConnection_message => 'Sembra che tu non sia connesso a Internet. Controlla la tua connessione e riprova.';
+
+  @override
+  String get common_noInternetConnection_retryButton => 'Riprova';
+
+  @override
+  String get common_problemWithLoadingPage => 'Si è verificato un problema durante il caricamento della pagina.';
 }

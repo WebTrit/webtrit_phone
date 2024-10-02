@@ -20,8 +20,6 @@ class AppConfig with _$AppConfig {
   }) = _AppConfig;
 
   factory AppConfig.fromJson(Map<String, dynamic> json) => _$AppConfigFromJson(json);
-
-  bool get isCustomSignInEnabled => loginConfig.customSignIn?.enabled == true;
 }
 
 @freezed
@@ -29,23 +27,40 @@ class AppConfigLogin with _$AppConfigLogin {
   const AppConfigLogin._();
 
   const factory AppConfigLogin({
-    AppConfigLoginCustomSignIn? customSignIn,
+    @Default([]) List<AppConfigModeSelectAction> modeSelectActions,
+    @Default([]) List<AppConfigLoginEmbedded> embedded,
   }) = _AppConfigLogin;
 
   factory AppConfigLogin.fromJson(Map<String, dynamic> json) => _$AppConfigLoginFromJson(json);
 }
 
 @freezed
-class AppConfigLoginCustomSignIn with _$AppConfigLoginCustomSignIn {
-  const AppConfigLoginCustomSignIn._();
+class AppConfigModeSelectAction with _$AppConfigModeSelectAction {
+  const AppConfigModeSelectAction._();
 
-  const factory AppConfigLoginCustomSignIn({
+  const factory AppConfigModeSelectAction({
     required bool enabled,
+    int? embeddedId,
+    required String type,
     required String titleL10n,
-    required String url,
-  }) = _AppConfigLoginCustomSignIn;
+  }) = _AppConfigModeSelectAction;
 
-  factory AppConfigLoginCustomSignIn.fromJson(Map<String, dynamic> json) => _$AppConfigLoginCustomSignInFromJson(json);
+  factory AppConfigModeSelectAction.fromJson(Map<String, dynamic> json) => _$AppConfigModeSelectActionFromJson(json);
+}
+
+@freezed
+class AppConfigLoginEmbedded with _$AppConfigLoginEmbedded {
+  const AppConfigLoginEmbedded._();
+
+  const factory AppConfigLoginEmbedded({
+    required int id,
+    @Default(false) bool launch,
+    String? titleL10n,
+    @Default(false) bool showToolbar,
+    required String url,
+  }) = _AppConfigLoginEmbedded;
+
+  factory AppConfigLoginEmbedded.fromJson(Map<String, dynamic> json) => _$AppConfigLoginEmbeddedFromJson(json);
 }
 
 @freezed
@@ -134,6 +149,7 @@ class AppConfigCall with _$AppConfigCall {
   const AppConfigCall._();
 
   const factory AppConfigCall({
+    @Default(true) bool videoEnabled,
     @Default(AppConfigTransfer(
       enableBlindTransfer: true,
       enableAttendedTransfer: true,

@@ -139,6 +139,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get callStatus_ready => 'Connection established';
 
   @override
+  String get callProcessingStatus_disconnecting => 'Disconnecting the call, please hold on…';
+
+  @override
+  String get call_ThumbnailAvatar_currentlyNoActiveCall => 'Currently, there is no active call';
+
+  @override
   String get connectToYourOwnVoIPSystem_Button_Action => 'Connect to your own VoIP system';
 
   @override
@@ -507,6 +513,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get notifications_errorSnackBar_appUnregistered => 'Sorry, your application is currently disconnected from the WebTrit core servers and hence can\'t call right now. Please go to the settings page, and slide the online status toggle switch off and on again to reestablish the connection';
+
+  @override
+  String get notifications_errorSnackBar_sipServiceUnavailable => 'Authentication error with the remote VoIP system';
 
   @override
   String get notifications_errorSnackBar_callConnect => 'Connecting to the core failed, trying to reconnect';
@@ -1008,4 +1017,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get account_selfCarePasswordExpired_message => 'Your self-care password has expired. Please update it using your self-care.\nUntil the password is changed, access to the service will be limited.';
+
+  @override
+  String get common_noInternetConnection_title => 'No Internet Connection';
+
+  @override
+  String get common_noInternetConnection_message => 'It seems you are not connected to the internet. Please check your connection and try again.';
+
+  @override
+  String get common_noInternetConnection_retryButton => 'Try Again';
+
+  @override
+  String get common_problemWithLoadingPage => 'There was an issue loading the page.';
 }

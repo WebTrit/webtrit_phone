@@ -75,36 +75,37 @@ class WebtritApiClient {
     Map<String, String>? headers,
     RequestOptions options = const RequestOptions(),
   }) async {
+    final url = tenantUrl.replace(
+      pathSegments: [
+        ...tenantUrl.pathSegments,
+        'api',
+        'v1',
+        ...pathSegments,
+      ],
+    );
+    final httpRequest = http.Request(method, url);
+
+    final xRequestId = requestId ?? _generateRequestId();
+
+    httpRequest.headers.addAll({
+      'content-type': 'application/json; charset=utf-8',
+      'accept': 'application/json',
+      'x-request-id': xRequestId,
+      if (token != null) 'authorization': 'Bearer $token',
+    });
+
+    if (headers != null) {
+      httpRequest.headers.addAll(headers);
+    }
+
+    if (requestDataJson != null) {
+      httpRequest.body = jsonEncode(requestDataJson);
+    }
+
     int requestAttempt = 0;
+
     while (true) {
       try {
-        final url = tenantUrl.replace(
-          pathSegments: [
-            ...tenantUrl.pathSegments,
-            'api',
-            'v1',
-            ...pathSegments,
-          ],
-        );
-        final httpRequest = http.Request(method, url);
-
-        final xRequestId = requestId ?? _generateRequestId();
-
-        httpRequest.headers.addAll({
-          'content-type': 'application/json; charset=utf-8',
-          'accept': 'application/json',
-          'x-request-id': xRequestId,
-          if (token != null) 'authorization': 'Bearer $token',
-        });
-
-        if (headers != null) {
-          httpRequest.headers.addAll(headers);
-        }
-
-        if (requestDataJson != null) {
-          httpRequest.body = jsonEncode(requestDataJson);
-        }
-
         _logger.info(' ${method.toUpperCase()} request($requestAttempt) to $url with requestId: $xRequestId');
 
         final httpResponse = await http.Response.fromStream(await _httpClient.send(httpRequest));
@@ -124,6 +125,7 @@ class WebtritApiClient {
             _ => ErrorResponse.fromJson(responseDataJson),
           };
           throw RequestFailure(
+            url: tenantUrl,
             statusCode: httpResponse.statusCode,
             requestId: xRequestId,
             token: token,
@@ -133,7 +135,12 @@ class WebtritApiClient {
       } catch (e) {
         _logger.severe('${method.toUpperCase()} failed for requestId: $requestId with error: $e');
         if (requestAttempt >= options.retries) {
-          rethrow;
+          throw RequestFailure(
+            url: tenantUrl,
+            requestId: xRequestId,
+            token: token,
+            error: null,
+          );
         }
         requestAttempt++;
         await Future.delayed(options.retryDelay);

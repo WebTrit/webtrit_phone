@@ -12,6 +12,8 @@ import 'package:webtrit_phone/features/settings/features/about/view/about_screen
 import 'package:webtrit_phone/features/settings/widgets/group_title_list_tile.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
+import 'styles/styles.dart';
+
 import 'theme.dart';
 
 class ThemeProvider extends InheritedWidget {
@@ -587,6 +589,63 @@ class ThemeProvider extends InheritedWidget {
     );
   }
 
+  CallStatusStyles callStatusStyles(
+    ColorScheme colors,
+    CallStatusesWidgetConfig? callStatuses,
+  ) {
+    final connectivityNone = callStatuses?.connectivityNone ?? colors.error;
+    final connectError = callStatuses?.connectError ?? colors.error;
+    final appUnregistered = callStatuses?.appUnregistered ?? colors.onSurfaceVariant;
+    final connectIssue = callStatuses?.connectIssue ?? colors.error;
+    final inProgress = callStatuses?.inProgress ?? colors.secondary;
+    final ready = callStatuses?.ready ?? colors.tertiary;
+
+    return CallStatusStyles(
+      primary: CallStatusStyle(
+        connectivityNone: connectivityNone,
+        connectError: connectError,
+        appUnregistered: appUnregistered,
+        connectIssue: connectIssue,
+        inProgress: inProgress,
+        ready: ready,
+      ),
+    );
+  }
+
+  RegisteredStatusStyles registeredStatusStyle(
+    ColorScheme colors,
+    RegistrationStatusesWidgetConfig? registrationStatuses,
+  ) {
+    final registered = registrationStatuses?.online ?? colors.error;
+    final unregisters = registrationStatuses?.offline ?? colors.error;
+
+    return RegisteredStatusStyles(
+      primary: RegisteredStatusStyle(
+        registered: registered,
+        unregistered: unregisters,
+      ),
+    );
+  }
+
+  SnackBarStyles snackBarStyles(
+    ColorScheme colors,
+    SnackBarWidgetConfig? snackBarConfig,
+  ) {
+    final successBackgroundColor = snackBarConfig?.successBackgroundColor ?? colors.primary;
+    final errorBackgroundColor = snackBarConfig?.errorBackgroundColor ?? colors.error;
+    final infoBackgroundColor = snackBarConfig?.infoBackgroundColor ?? colors.secondary;
+    final warningBackgroundColor = snackBarConfig?.warningBackgroundColor ?? colors.tertiary;
+
+    return SnackBarStyles(
+      primary: SnackBarStyle(
+        successBackgroundColor: successBackgroundColor,
+        errorBackgroundColor: errorBackgroundColor,
+        infoBackgroundColor: infoBackgroundColor,
+        warningBackgroundColor: warningBackgroundColor,
+      ),
+    );
+  }
+
   AppBarTheme appBarTheme(
     ColorScheme colors,
     ExtTabBarWidgetConfig? extTabBar,
@@ -702,6 +761,18 @@ class ThemeProvider extends InheritedWidget {
         callActionsStyles(
           colorScheme,
           themeWidgetConfig?.group?.callActions,
+        ),
+        callStatusStyles(
+          colorScheme,
+          themeWidgetConfig?.statuses.callStatuses,
+        ),
+        registeredStatusStyle(
+          colorScheme,
+          themeWidgetConfig?.statuses.registrationStatuses,
+        ),
+        snackBarStyles(
+          colorScheme,
+          themeWidgetConfig?.dialog?.snackBar,
         ),
         actionpadStyles(
           colorScheme,

@@ -139,6 +139,12 @@ class AppLocalizationsUk extends AppLocalizations {
   String get callStatus_ready => 'Підключення встановлено';
 
   @override
+  String get callProcessingStatus_disconnecting => 'Відключення дзвінка, будь ласка, зачекайте…';
+
+  @override
+  String get call_ThumbnailAvatar_currentlyNoActiveCall => 'Зараз немає активних дзвінків';
+
+  @override
   String get connectToYourOwnVoIPSystem_Button_Action => 'Підключітись до власної VoIP-системи';
 
   @override
@@ -507,6 +513,9 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get notifications_errorSnackBar_appUnregistered => 'Вибачте, ваш додаток наразі відключений від серверів WebTrit та не може здійснювати запити. Будь ласка, перейдіть на сторінку налаштувань і перемістіть вимикач стану онлайн у вимкнути й увімкнути знову, щоб відновити з\'єднання.';
+
+  @override
+  String get notifications_errorSnackBar_sipServiceUnavailable => 'Помилка аутентифікації з віддаленою VoIP системою';
 
   @override
   String get notifications_errorSnackBar_callConnect => 'Підключення до ядра не вдалося, спроба з\'єднання';
@@ -1008,4 +1017,16 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get account_selfCarePasswordExpired_message => 'Термін дії вашого пароля самообслуговування минув. Оновіть його за допомогою самообслуговування.\nДоки пароль не буде змінено, доступ до служби буде обмежено.';
+
+  @override
+  String get common_noInternetConnection_title => 'Немає підключення до Інтернету';
+
+  @override
+  String get common_noInternetConnection_message => 'Схоже, ви не підключені до Інтернету. Перевірте своє підключення і спробуйте ще раз.';
+
+  @override
+  String get common_noInternetConnection_retryButton => 'Спробуйте ще раз';
+
+  @override
+  String get common_problemWithLoadingPage => 'Виникла проблема з завантаженням сторінки.';
 }

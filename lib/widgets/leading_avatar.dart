@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 
 import 'package:webtrit_phone/extensions/extensions.dart';
+import 'package:webtrit_phone/theme/styles/styles.dart';
 
 class LeadingAvatar extends StatefulWidget {
   const LeadingAvatar({
@@ -39,6 +40,8 @@ class _LeadingAvatarState extends State<LeadingAvatar> {
     final diameter = widget.radius * 2;
     final foregroundImage = _getImageProvider();
 
+    final registeredStatusStyle = themeData.extension<RegisteredStatusStyles>()!.primary;
+
     return SizedBox(
       width: diameter,
       height: diameter,
@@ -70,8 +73,8 @@ class _LeadingAvatarState extends State<LeadingAvatar> {
             if (widget.registered != null)
               _RegisteredIndicator(
                 diameter: diameter,
-                colorScheme: colorScheme,
                 registered: widget.registered!,
+                registeredStatusStyle: registeredStatusStyle,
               ),
           ],
         ),
@@ -148,13 +151,14 @@ class _SmartIndicator extends StatelessWidget {
 class _RegisteredIndicator extends StatelessWidget {
   const _RegisteredIndicator({
     required this.diameter,
-    required this.colorScheme,
     required this.registered,
+    required this.registeredStatusStyle,
   });
 
   final double diameter;
-  final ColorScheme colorScheme;
   final bool registered;
+
+  final RegisteredStatusStyle registeredStatusStyle;
 
   @override
   Widget build(BuildContext context) {
@@ -166,7 +170,7 @@ class _RegisteredIndicator extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          color: registered ? colorScheme.tertiary : colorScheme.surface,
+          color: registered ? registeredStatusStyle.registered : registeredStatusStyle.unregistered,
         ),
       ),
     );

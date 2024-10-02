@@ -359,6 +359,18 @@ abstract class AppLocalizations {
   /// **'Connection established'**
   String get callStatus_ready;
 
+  /// No description provided for @callProcessingStatus_disconnecting.
+  ///
+  /// In en, this message translates to:
+  /// **'Disconnecting the call, please hold on…'**
+  String get callProcessingStatus_disconnecting;
+
+  /// No description provided for @call_ThumbnailAvatar_currentlyNoActiveCall.
+  ///
+  /// In en, this message translates to:
+  /// **'Currently, there is no active call'**
+  String get call_ThumbnailAvatar_currentlyNoActiveCall;
+
   /// No description provided for @connectToYourOwnVoIPSystem_Button_Action.
   ///
   /// In en, this message translates to:
@@ -1054,6 +1066,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Sorry, your application is currently disconnected from the WebTrit core servers and hence can\'t call right now. Please go to the settings page, and slide the online status toggle switch off and on again to reestablish the connection'**
   String get notifications_errorSnackBar_appUnregistered;
+
+  /// No description provided for @notifications_errorSnackBar_sipServiceUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Authentication error with the remote VoIP system'**
+  String get notifications_errorSnackBar_sipServiceUnavailable;
 
   /// No description provided for @notifications_errorSnackBar_callConnect.
   ///
@@ -2020,6 +2038,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Your self-care password has expired. Please update it using your self-care.\nUntil the password is changed, access to the service will be limited.'**
   String get account_selfCarePasswordExpired_message;
+
+  /// No description provided for @common_noInternetConnection_title.
+  ///
+  /// In en, this message translates to:
+  /// **'No Internet Connection'**
+  String get common_noInternetConnection_title;
+
+  /// No description provided for @common_noInternetConnection_message.
+  ///
+  /// In en, this message translates to:
+  /// **'It seems you are not connected to the internet. Please check your connection and try again.'**
+  String get common_noInternetConnection_message;
+
+  /// No description provided for @common_noInternetConnection_retryButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Try Again'**
+  String get common_noInternetConnection_retryButton;
+
+  /// No description provided for @common_problemWithLoadingPage.
+  ///
+  /// In en, this message translates to:
+  /// **'There was an issue loading the page.'**
+  String get common_problemWithLoadingPage;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

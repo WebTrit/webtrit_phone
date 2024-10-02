@@ -34,31 +34,60 @@ Map<String, dynamic> _$$AppConfigImplToJson(_$AppConfigImpl instance) =>
 
 _$AppConfigLoginImpl _$$AppConfigLoginImplFromJson(Map<String, dynamic> json) =>
     _$AppConfigLoginImpl(
-      customSignIn: json['customSignIn'] == null
-          ? null
-          : AppConfigLoginCustomSignIn.fromJson(
-              json['customSignIn'] as Map<String, dynamic>),
+      modeSelectActions: (json['modeSelectActions'] as List<dynamic>?)
+              ?.map((e) =>
+                  AppConfigModeSelectAction.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          const [],
+      embedded: (json['embedded'] as List<dynamic>?)
+              ?.map((e) =>
+                  AppConfigLoginEmbedded.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          const [],
     );
 
 Map<String, dynamic> _$$AppConfigLoginImplToJson(
         _$AppConfigLoginImpl instance) =>
     <String, dynamic>{
-      'customSignIn': instance.customSignIn,
+      'modeSelectActions': instance.modeSelectActions,
+      'embedded': instance.embedded,
     };
 
-_$AppConfigLoginCustomSignInImpl _$$AppConfigLoginCustomSignInImplFromJson(
+_$AppConfigModeSelectActionImpl _$$AppConfigModeSelectActionImplFromJson(
         Map<String, dynamic> json) =>
-    _$AppConfigLoginCustomSignInImpl(
+    _$AppConfigModeSelectActionImpl(
       enabled: json['enabled'] as bool,
+      embeddedId: (json['embeddedId'] as num?)?.toInt(),
+      type: json['type'] as String,
       titleL10n: json['titleL10n'] as String,
+    );
+
+Map<String, dynamic> _$$AppConfigModeSelectActionImplToJson(
+        _$AppConfigModeSelectActionImpl instance) =>
+    <String, dynamic>{
+      'enabled': instance.enabled,
+      'embeddedId': instance.embeddedId,
+      'type': instance.type,
+      'titleL10n': instance.titleL10n,
+    };
+
+_$AppConfigLoginEmbeddedImpl _$$AppConfigLoginEmbeddedImplFromJson(
+        Map<String, dynamic> json) =>
+    _$AppConfigLoginEmbeddedImpl(
+      id: (json['id'] as num).toInt(),
+      launch: json['launch'] as bool? ?? false,
+      titleL10n: json['titleL10n'] as String?,
+      showToolbar: json['showToolbar'] as bool? ?? false,
       url: json['url'] as String,
     );
 
-Map<String, dynamic> _$$AppConfigLoginCustomSignInImplToJson(
-        _$AppConfigLoginCustomSignInImpl instance) =>
+Map<String, dynamic> _$$AppConfigLoginEmbeddedImplToJson(
+        _$AppConfigLoginEmbeddedImpl instance) =>
     <String, dynamic>{
-      'enabled': instance.enabled,
+      'id': instance.id,
+      'launch': instance.launch,
       'titleL10n': instance.titleL10n,
+      'showToolbar': instance.showToolbar,
       'url': instance.url,
     };
 
@@ -173,6 +202,7 @@ Map<String, dynamic> _$$AppConfigSettingsItemImplToJson(
 
 _$AppConfigCallImpl _$$AppConfigCallImplFromJson(Map<String, dynamic> json) =>
     _$AppConfigCallImpl(
+      videoEnabled: json['videoEnabled'] as bool? ?? true,
       transfer: json['transfer'] == null
           ? const AppConfigTransfer(
               enableBlindTransfer: true, enableAttendedTransfer: true)
@@ -182,6 +212,7 @@ _$AppConfigCallImpl _$$AppConfigCallImplFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$$AppConfigCallImplToJson(_$AppConfigCallImpl instance) =>
     <String, dynamic>{
+      'videoEnabled': instance.videoEnabled,
       'transfer': instance.transfer,
     };
 

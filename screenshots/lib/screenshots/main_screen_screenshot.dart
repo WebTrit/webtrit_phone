@@ -74,6 +74,7 @@ class MainScreenScreenshot extends StatelessWidget {
       case MainFlavor.favorites:
         final widget = FavoritesScreen(
           title: title,
+          videoCallEnable: true,
         );
         final provider = BlocProvider<FavoritesBloc>(
           create: (context) => MockFavoritesBloc.mainScreen(),
@@ -83,6 +84,7 @@ class MainScreenScreenshot extends StatelessWidget {
       case MainFlavor.recents:
         final widget = RecentsScreen(
           title: title,
+          videoCallEnable: true,
         );
         final provider = BlocProvider<RecentsBloc>(
           create: (context) => MockRecentsBloc.mainScreen(),
@@ -106,6 +108,7 @@ class MainScreenScreenshot extends StatelessWidget {
       case MainFlavor.keypad:
         final widget = KeypadScreen(
           title: title,
+          videoVisible: true,
         );
         final provider = BlocProvider<KeypadCubit>(
           create: (context) => MockKeypadCubit.mainScreen(),

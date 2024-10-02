@@ -1,1 +1,24 @@
-{}
+{
+  "dialog": {
+    "snackBar": {
+      "successBackgroundColor": "#75B943",
+      "errorBackgroundColor": "#E74C3C",
+      "infoBackgroundColor": "#494949",
+      "warningBackgroundColor": "#F95A14"
+    }
+  },
+  "statuses": {
+    "registrationStatuses": {
+      "online": "#75B943",
+      "offline": "#EEF3F6"
+    },
+    "calStatuses": {
+      "connectivityNone": "#E74C3C",
+      "connectError": "#E74C3C",
+      "appUnregistered": "#494949",
+      "connectIssue": "#E74C3C",
+      "inProgress": "#123752",
+      "ready": "#75B943"
+    }
+  }
+}

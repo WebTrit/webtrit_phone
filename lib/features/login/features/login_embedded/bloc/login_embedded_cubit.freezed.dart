@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'login_custom_signin_cubit.dart';
+part of 'login_embedded_cubit.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -15,20 +15,19 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
-mixin _$LoginCustomSigninState {}
+mixin _$LoginEmbeddedState {}
 
 /// @nodoc
-abstract class $LoginCustomSigninStateCopyWith<$Res> {
-  factory $LoginCustomSigninStateCopyWith(LoginCustomSigninState value,
-          $Res Function(LoginCustomSigninState) then) =
-      _$LoginCustomSigninStateCopyWithImpl<$Res, LoginCustomSigninState>;
+abstract class $LoginEmbeddedStateCopyWith<$Res> {
+  factory $LoginEmbeddedStateCopyWith(
+          LoginEmbeddedState value, $Res Function(LoginEmbeddedState) then) =
+      _$LoginEmbeddedStateCopyWithImpl<$Res, LoginEmbeddedState>;
 }
 
 /// @nodoc
-class _$LoginCustomSigninStateCopyWithImpl<$Res,
-        $Val extends LoginCustomSigninState>
-    implements $LoginCustomSigninStateCopyWith<$Res> {
-  _$LoginCustomSigninStateCopyWithImpl(this._value, this._then);
+class _$LoginEmbeddedStateCopyWithImpl<$Res, $Val extends LoginEmbeddedState>
+    implements $LoginEmbeddedStateCopyWith<$Res> {
+  _$LoginEmbeddedStateCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -46,8 +45,7 @@ abstract class _$$LoginCustomSigninStateImplCopyWith<$Res> {
 
 /// @nodoc
 class __$$LoginCustomSigninStateImplCopyWithImpl<$Res>
-    extends _$LoginCustomSigninStateCopyWithImpl<$Res,
-        _$LoginCustomSigninStateImpl>
+    extends _$LoginEmbeddedStateCopyWithImpl<$Res, _$LoginCustomSigninStateImpl>
     implements _$$LoginCustomSigninStateImplCopyWith<$Res> {
   __$$LoginCustomSigninStateImplCopyWithImpl(
       _$LoginCustomSigninStateImpl _value,
@@ -62,7 +60,7 @@ class _$LoginCustomSigninStateImpl implements _LoginCustomSigninState {
 
   @override
   String toString() {
-    return 'LoginCustomSigninState()';
+    return 'LoginEmbeddedState()';
   }
 
   @override
@@ -76,6 +74,6 @@ class _$LoginCustomSigninStateImpl implements _LoginCustomSigninState {
   int get hashCode => runtimeType.hashCode;
 }
 
-abstract class _LoginCustomSigninState implements LoginCustomSigninState {
+abstract class _LoginCustomSigninState implements LoginEmbeddedState {
   const factory _LoginCustomSigninState() = _$LoginCustomSigninStateImpl;
 }

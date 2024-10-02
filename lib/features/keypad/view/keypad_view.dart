@@ -6,7 +6,12 @@ import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 
 class KeypadView extends StatefulWidget {
-  const KeypadView({super.key});
+  const KeypadView({
+    super.key,
+    required this.videoVisible,
+  });
+
+  final bool videoVisible;
 
   @override
   KeypadViewState createState() => KeypadViewState();
@@ -90,6 +95,7 @@ class KeypadViewState extends State<KeypadView> {
                   builder: (context, callState) {
                     return Actionpad(
                       transfer: callState.isBlingTransferInitiated,
+                      videoVisible: widget.videoVisible,
                       onAudioCallPressed: value.text.isEmpty ? null : () => _onCallPressed(false),
                       onVideoCallPressed: value.text.isEmpty ? null : () => _onCallPressed(true),
                       onTransferPressed: _onTransferPressed,

@@ -22,6 +22,7 @@ class WebViewScaffold extends StatefulWidget {
     required this.initialUri,
     this.addLocaleNameToQueryParameters = true,
     this.javaScriptChannels = const {},
+    this.errorPlaceholder,
     this.showToolbar = true,
   });
 
@@ -29,6 +30,7 @@ class WebViewScaffold extends StatefulWidget {
   final Uri initialUri;
   final bool addLocaleNameToQueryParameters;
   final Map<String, void Function(JavaScriptMessage)> javaScriptChannels;
+  final Widget? Function(BuildContext context, WebResourceError error, WebViewController controller)? errorPlaceholder;
   final bool showToolbar;
 
   @override
@@ -41,6 +43,9 @@ class _WebViewScaffoldState extends State<WebViewScaffold> {
 
   Color? _backgroundColorCache;
   Uri? _effectiveInitialUrlCache;
+
+  WebResourceError? _latestError;
+  WebResourceError? _currentError;
 
   Uri _composeEffectiveInitialUrl() {
     if (!widget.addLocaleNameToQueryParameters) {
@@ -72,8 +77,22 @@ class _WebViewScaffoldState extends State<WebViewScaffold> {
             _webViewController.addJavaScriptChannel(name, onMessageReceived: onMessageReceived),
           _webViewController.setNavigationDelegate(
             NavigationDelegate(
+              onPageFinished: (url) {
+                if (_currentError == null) {
+                  _latestError = null; // Reset the error only if the page loaded successfully
+                }
+                setState(() {
+                  _currentError = null; // Always reset the current error after page finishes loading
+                });
+              },
               onProgress: (progress) {
                 _progressStreamController.add(progress);
+              },
+              onWebResourceError: (error) {
+                setState(() {
+                  _currentError = error; // Capture the current error
+                  _latestError = error; // Store the error for future reference or display
+                });
               },
             ),
           ),
@@ -138,16 +157,18 @@ class _WebViewScaffoldState extends State<WebViewScaffold> {
               ],
             )
           : null,
-      body: Stack(
-        alignment: AlignmentDirectional.topCenter,
-        children: [
-          WebViewWidget(
-            controller: _webViewController,
-          ),
-          WebViewProgressIndicator(
-            stream: _progressStreamController.stream,
-          ),
-        ],
+      body: Builder(
+        builder: (context) {
+          return Stack(
+            alignment: AlignmentDirectional.topCenter,
+            children: [
+              (widget.errorPlaceholder != null && _latestError != null)
+                  ? widget.errorPlaceholder!(context, _latestError!, _webViewController) ?? const SizedBox.shrink()
+                  : WebViewWidget(controller: _webViewController),
+              WebViewProgressIndicator(stream: _progressStreamController.stream),
+            ],
+          );
+        },
       ),
     );
   }

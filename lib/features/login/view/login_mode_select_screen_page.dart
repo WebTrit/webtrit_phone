@@ -18,7 +18,7 @@ class LoginModeSelectScreenPage extends StatelessWidget {
 
     final widget = LoginModeSelectScreen(
       appGreeting: EnvironmentConfig.APP_GREETING,
-      enableCustomLogin: featureAccess.customLoginFeature != null,
+      actions: featureAccess.loginFeature.actions,
     );
     return widget;
   }

@@ -276,7 +276,9 @@ AppConfigLogin _$AppConfigLoginFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$AppConfigLogin {
-  AppConfigLoginCustomSignIn? get customSignIn =>
+  List<AppConfigModeSelectAction> get modeSelectActions =>
+      throw _privateConstructorUsedError;
+  List<AppConfigLoginEmbedded> get embedded =>
       throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -291,9 +293,9 @@ abstract class $AppConfigLoginCopyWith<$Res> {
           AppConfigLogin value, $Res Function(AppConfigLogin) then) =
       _$AppConfigLoginCopyWithImpl<$Res, AppConfigLogin>;
   @useResult
-  $Res call({AppConfigLoginCustomSignIn? customSignIn});
-
-  $AppConfigLoginCustomSignInCopyWith<$Res>? get customSignIn;
+  $Res call(
+      {List<AppConfigModeSelectAction> modeSelectActions,
+      List<AppConfigLoginEmbedded> embedded});
 }
 
 /// @nodoc
@@ -309,27 +311,19 @@ class _$AppConfigLoginCopyWithImpl<$Res, $Val extends AppConfigLogin>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? customSignIn = freezed,
+    Object? modeSelectActions = null,
+    Object? embedded = null,
   }) {
     return _then(_value.copyWith(
-      customSignIn: freezed == customSignIn
-          ? _value.customSignIn
-          : customSignIn // ignore: cast_nullable_to_non_nullable
-              as AppConfigLoginCustomSignIn?,
+      modeSelectActions: null == modeSelectActions
+          ? _value.modeSelectActions
+          : modeSelectActions // ignore: cast_nullable_to_non_nullable
+              as List<AppConfigModeSelectAction>,
+      embedded: null == embedded
+          ? _value.embedded
+          : embedded // ignore: cast_nullable_to_non_nullable
+              as List<AppConfigLoginEmbedded>,
     ) as $Val);
-  }
-
-  @override
-  @pragma('vm:prefer-inline')
-  $AppConfigLoginCustomSignInCopyWith<$Res>? get customSignIn {
-    if (_value.customSignIn == null) {
-      return null;
-    }
-
-    return $AppConfigLoginCustomSignInCopyWith<$Res>(_value.customSignIn!,
-        (value) {
-      return _then(_value.copyWith(customSignIn: value) as $Val);
-    });
   }
 }
 
@@ -341,10 +335,9 @@ abstract class _$$AppConfigLoginImplCopyWith<$Res>
       __$$AppConfigLoginImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({AppConfigLoginCustomSignIn? customSignIn});
-
-  @override
-  $AppConfigLoginCustomSignInCopyWith<$Res>? get customSignIn;
+  $Res call(
+      {List<AppConfigModeSelectAction> modeSelectActions,
+      List<AppConfigLoginEmbedded> embedded});
 }
 
 /// @nodoc
@@ -358,13 +351,18 @@ class __$$AppConfigLoginImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? customSignIn = freezed,
+    Object? modeSelectActions = null,
+    Object? embedded = null,
   }) {
     return _then(_$AppConfigLoginImpl(
-      customSignIn: freezed == customSignIn
-          ? _value.customSignIn
-          : customSignIn // ignore: cast_nullable_to_non_nullable
-              as AppConfigLoginCustomSignIn?,
+      modeSelectActions: null == modeSelectActions
+          ? _value._modeSelectActions
+          : modeSelectActions // ignore: cast_nullable_to_non_nullable
+              as List<AppConfigModeSelectAction>,
+      embedded: null == embedded
+          ? _value._embedded
+          : embedded // ignore: cast_nullable_to_non_nullable
+              as List<AppConfigLoginEmbedded>,
     ));
   }
 }
@@ -372,17 +370,38 @@ class __$$AppConfigLoginImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$AppConfigLoginImpl extends _AppConfigLogin {
-  const _$AppConfigLoginImpl({this.customSignIn}) : super._();
+  const _$AppConfigLoginImpl(
+      {final List<AppConfigModeSelectAction> modeSelectActions = const [],
+      final List<AppConfigLoginEmbedded> embedded = const []})
+      : _modeSelectActions = modeSelectActions,
+        _embedded = embedded,
+        super._();
 
   factory _$AppConfigLoginImpl.fromJson(Map<String, dynamic> json) =>
       _$$AppConfigLoginImplFromJson(json);
 
+  final List<AppConfigModeSelectAction> _modeSelectActions;
   @override
-  final AppConfigLoginCustomSignIn? customSignIn;
+  @JsonKey()
+  List<AppConfigModeSelectAction> get modeSelectActions {
+    if (_modeSelectActions is EqualUnmodifiableListView)
+      return _modeSelectActions;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_modeSelectActions);
+  }
+
+  final List<AppConfigLoginEmbedded> _embedded;
+  @override
+  @JsonKey()
+  List<AppConfigLoginEmbedded> get embedded {
+    if (_embedded is EqualUnmodifiableListView) return _embedded;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_embedded);
+  }
 
   @override
   String toString() {
-    return 'AppConfigLogin(customSignIn: $customSignIn)';
+    return 'AppConfigLogin(modeSelectActions: $modeSelectActions, embedded: $embedded)';
   }
 
   @override
@@ -390,13 +409,17 @@ class _$AppConfigLoginImpl extends _AppConfigLogin {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$AppConfigLoginImpl &&
-            (identical(other.customSignIn, customSignIn) ||
-                other.customSignIn == customSignIn));
+            const DeepCollectionEquality()
+                .equals(other._modeSelectActions, _modeSelectActions) &&
+            const DeepCollectionEquality().equals(other._embedded, _embedded));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, customSignIn);
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(_modeSelectActions),
+      const DeepCollectionEquality().hash(_embedded));
 
   @JsonKey(ignore: true)
   @override
@@ -415,52 +438,55 @@ class _$AppConfigLoginImpl extends _AppConfigLogin {
 
 abstract class _AppConfigLogin extends AppConfigLogin {
   const factory _AppConfigLogin(
-      {final AppConfigLoginCustomSignIn? customSignIn}) = _$AppConfigLoginImpl;
+      {final List<AppConfigModeSelectAction> modeSelectActions,
+      final List<AppConfigLoginEmbedded> embedded}) = _$AppConfigLoginImpl;
   const _AppConfigLogin._() : super._();
 
   factory _AppConfigLogin.fromJson(Map<String, dynamic> json) =
       _$AppConfigLoginImpl.fromJson;
 
   @override
-  AppConfigLoginCustomSignIn? get customSignIn;
+  List<AppConfigModeSelectAction> get modeSelectActions;
+  @override
+  List<AppConfigLoginEmbedded> get embedded;
   @override
   @JsonKey(ignore: true)
   _$$AppConfigLoginImplCopyWith<_$AppConfigLoginImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
-AppConfigLoginCustomSignIn _$AppConfigLoginCustomSignInFromJson(
+AppConfigModeSelectAction _$AppConfigModeSelectActionFromJson(
     Map<String, dynamic> json) {
-  return _AppConfigLoginCustomSignIn.fromJson(json);
+  return _AppConfigModeSelectAction.fromJson(json);
 }
 
 /// @nodoc
-mixin _$AppConfigLoginCustomSignIn {
+mixin _$AppConfigModeSelectAction {
   bool get enabled => throw _privateConstructorUsedError;
+  int? get embeddedId => throw _privateConstructorUsedError;
+  String get type => throw _privateConstructorUsedError;
   String get titleL10n => throw _privateConstructorUsedError;
-  String get url => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $AppConfigLoginCustomSignInCopyWith<AppConfigLoginCustomSignIn>
-      get copyWith => throw _privateConstructorUsedError;
+  $AppConfigModeSelectActionCopyWith<AppConfigModeSelectAction> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $AppConfigLoginCustomSignInCopyWith<$Res> {
-  factory $AppConfigLoginCustomSignInCopyWith(AppConfigLoginCustomSignIn value,
-          $Res Function(AppConfigLoginCustomSignIn) then) =
-      _$AppConfigLoginCustomSignInCopyWithImpl<$Res,
-          AppConfigLoginCustomSignIn>;
+abstract class $AppConfigModeSelectActionCopyWith<$Res> {
+  factory $AppConfigModeSelectActionCopyWith(AppConfigModeSelectAction value,
+          $Res Function(AppConfigModeSelectAction) then) =
+      _$AppConfigModeSelectActionCopyWithImpl<$Res, AppConfigModeSelectAction>;
   @useResult
-  $Res call({bool enabled, String titleL10n, String url});
+  $Res call({bool enabled, int? embeddedId, String type, String titleL10n});
 }
 
 /// @nodoc
-class _$AppConfigLoginCustomSignInCopyWithImpl<$Res,
-        $Val extends AppConfigLoginCustomSignIn>
-    implements $AppConfigLoginCustomSignInCopyWith<$Res> {
-  _$AppConfigLoginCustomSignInCopyWithImpl(this._value, this._then);
+class _$AppConfigModeSelectActionCopyWithImpl<$Res,
+        $Val extends AppConfigModeSelectAction>
+    implements $AppConfigModeSelectActionCopyWith<$Res> {
+  _$AppConfigModeSelectActionCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -471,18 +497,233 @@ class _$AppConfigLoginCustomSignInCopyWithImpl<$Res,
   @override
   $Res call({
     Object? enabled = null,
+    Object? embeddedId = freezed,
+    Object? type = null,
     Object? titleL10n = null,
-    Object? url = null,
   }) {
     return _then(_value.copyWith(
       enabled: null == enabled
           ? _value.enabled
           : enabled // ignore: cast_nullable_to_non_nullable
               as bool,
+      embeddedId: freezed == embeddedId
+          ? _value.embeddedId
+          : embeddedId // ignore: cast_nullable_to_non_nullable
+              as int?,
+      type: null == type
+          ? _value.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as String,
       titleL10n: null == titleL10n
           ? _value.titleL10n
           : titleL10n // ignore: cast_nullable_to_non_nullable
               as String,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$AppConfigModeSelectActionImplCopyWith<$Res>
+    implements $AppConfigModeSelectActionCopyWith<$Res> {
+  factory _$$AppConfigModeSelectActionImplCopyWith(
+          _$AppConfigModeSelectActionImpl value,
+          $Res Function(_$AppConfigModeSelectActionImpl) then) =
+      __$$AppConfigModeSelectActionImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({bool enabled, int? embeddedId, String type, String titleL10n});
+}
+
+/// @nodoc
+class __$$AppConfigModeSelectActionImplCopyWithImpl<$Res>
+    extends _$AppConfigModeSelectActionCopyWithImpl<$Res,
+        _$AppConfigModeSelectActionImpl>
+    implements _$$AppConfigModeSelectActionImplCopyWith<$Res> {
+  __$$AppConfigModeSelectActionImplCopyWithImpl(
+      _$AppConfigModeSelectActionImpl _value,
+      $Res Function(_$AppConfigModeSelectActionImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? enabled = null,
+    Object? embeddedId = freezed,
+    Object? type = null,
+    Object? titleL10n = null,
+  }) {
+    return _then(_$AppConfigModeSelectActionImpl(
+      enabled: null == enabled
+          ? _value.enabled
+          : enabled // ignore: cast_nullable_to_non_nullable
+              as bool,
+      embeddedId: freezed == embeddedId
+          ? _value.embeddedId
+          : embeddedId // ignore: cast_nullable_to_non_nullable
+              as int?,
+      type: null == type
+          ? _value.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as String,
+      titleL10n: null == titleL10n
+          ? _value.titleL10n
+          : titleL10n // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$AppConfigModeSelectActionImpl extends _AppConfigModeSelectAction {
+  const _$AppConfigModeSelectActionImpl(
+      {required this.enabled,
+      this.embeddedId,
+      required this.type,
+      required this.titleL10n})
+      : super._();
+
+  factory _$AppConfigModeSelectActionImpl.fromJson(Map<String, dynamic> json) =>
+      _$$AppConfigModeSelectActionImplFromJson(json);
+
+  @override
+  final bool enabled;
+  @override
+  final int? embeddedId;
+  @override
+  final String type;
+  @override
+  final String titleL10n;
+
+  @override
+  String toString() {
+    return 'AppConfigModeSelectAction(enabled: $enabled, embeddedId: $embeddedId, type: $type, titleL10n: $titleL10n)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$AppConfigModeSelectActionImpl &&
+            (identical(other.enabled, enabled) || other.enabled == enabled) &&
+            (identical(other.embeddedId, embeddedId) ||
+                other.embeddedId == embeddedId) &&
+            (identical(other.type, type) || other.type == type) &&
+            (identical(other.titleL10n, titleL10n) ||
+                other.titleL10n == titleL10n));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, enabled, embeddedId, type, titleL10n);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$AppConfigModeSelectActionImplCopyWith<_$AppConfigModeSelectActionImpl>
+      get copyWith => __$$AppConfigModeSelectActionImplCopyWithImpl<
+          _$AppConfigModeSelectActionImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$AppConfigModeSelectActionImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _AppConfigModeSelectAction extends AppConfigModeSelectAction {
+  const factory _AppConfigModeSelectAction(
+      {required final bool enabled,
+      final int? embeddedId,
+      required final String type,
+      required final String titleL10n}) = _$AppConfigModeSelectActionImpl;
+  const _AppConfigModeSelectAction._() : super._();
+
+  factory _AppConfigModeSelectAction.fromJson(Map<String, dynamic> json) =
+      _$AppConfigModeSelectActionImpl.fromJson;
+
+  @override
+  bool get enabled;
+  @override
+  int? get embeddedId;
+  @override
+  String get type;
+  @override
+  String get titleL10n;
+  @override
+  @JsonKey(ignore: true)
+  _$$AppConfigModeSelectActionImplCopyWith<_$AppConfigModeSelectActionImpl>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+AppConfigLoginEmbedded _$AppConfigLoginEmbeddedFromJson(
+    Map<String, dynamic> json) {
+  return _AppConfigLoginEmbedded.fromJson(json);
+}
+
+/// @nodoc
+mixin _$AppConfigLoginEmbedded {
+  int get id => throw _privateConstructorUsedError;
+  bool get launch => throw _privateConstructorUsedError;
+  String? get titleL10n => throw _privateConstructorUsedError;
+  bool get showToolbar => throw _privateConstructorUsedError;
+  String get url => throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $AppConfigLoginEmbeddedCopyWith<AppConfigLoginEmbedded> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $AppConfigLoginEmbeddedCopyWith<$Res> {
+  factory $AppConfigLoginEmbeddedCopyWith(AppConfigLoginEmbedded value,
+          $Res Function(AppConfigLoginEmbedded) then) =
+      _$AppConfigLoginEmbeddedCopyWithImpl<$Res, AppConfigLoginEmbedded>;
+  @useResult
+  $Res call(
+      {int id, bool launch, String? titleL10n, bool showToolbar, String url});
+}
+
+/// @nodoc
+class _$AppConfigLoginEmbeddedCopyWithImpl<$Res,
+        $Val extends AppConfigLoginEmbedded>
+    implements $AppConfigLoginEmbeddedCopyWith<$Res> {
+  _$AppConfigLoginEmbeddedCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = null,
+    Object? launch = null,
+    Object? titleL10n = freezed,
+    Object? showToolbar = null,
+    Object? url = null,
+  }) {
+    return _then(_value.copyWith(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int,
+      launch: null == launch
+          ? _value.launch
+          : launch // ignore: cast_nullable_to_non_nullable
+              as bool,
+      titleL10n: freezed == titleL10n
+          ? _value.titleL10n
+          : titleL10n // ignore: cast_nullable_to_non_nullable
+              as String?,
+      showToolbar: null == showToolbar
+          ? _value.showToolbar
+          : showToolbar // ignore: cast_nullable_to_non_nullable
+              as bool,
       url: null == url
           ? _value.url
           : url // ignore: cast_nullable_to_non_nullable
@@ -492,43 +733,54 @@ class _$AppConfigLoginCustomSignInCopyWithImpl<$Res,
 }
 
 /// @nodoc
-abstract class _$$AppConfigLoginCustomSignInImplCopyWith<$Res>
-    implements $AppConfigLoginCustomSignInCopyWith<$Res> {
-  factory _$$AppConfigLoginCustomSignInImplCopyWith(
-          _$AppConfigLoginCustomSignInImpl value,
-          $Res Function(_$AppConfigLoginCustomSignInImpl) then) =
-      __$$AppConfigLoginCustomSignInImplCopyWithImpl<$Res>;
+abstract class _$$AppConfigLoginEmbeddedImplCopyWith<$Res>
+    implements $AppConfigLoginEmbeddedCopyWith<$Res> {
+  factory _$$AppConfigLoginEmbeddedImplCopyWith(
+          _$AppConfigLoginEmbeddedImpl value,
+          $Res Function(_$AppConfigLoginEmbeddedImpl) then) =
+      __$$AppConfigLoginEmbeddedImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({bool enabled, String titleL10n, String url});
+  $Res call(
+      {int id, bool launch, String? titleL10n, bool showToolbar, String url});
 }
 
 /// @nodoc
-class __$$AppConfigLoginCustomSignInImplCopyWithImpl<$Res>
-    extends _$AppConfigLoginCustomSignInCopyWithImpl<$Res,
-        _$AppConfigLoginCustomSignInImpl>
-    implements _$$AppConfigLoginCustomSignInImplCopyWith<$Res> {
-  __$$AppConfigLoginCustomSignInImplCopyWithImpl(
-      _$AppConfigLoginCustomSignInImpl _value,
-      $Res Function(_$AppConfigLoginCustomSignInImpl) _then)
+class __$$AppConfigLoginEmbeddedImplCopyWithImpl<$Res>
+    extends _$AppConfigLoginEmbeddedCopyWithImpl<$Res,
+        _$AppConfigLoginEmbeddedImpl>
+    implements _$$AppConfigLoginEmbeddedImplCopyWith<$Res> {
+  __$$AppConfigLoginEmbeddedImplCopyWithImpl(
+      _$AppConfigLoginEmbeddedImpl _value,
+      $Res Function(_$AppConfigLoginEmbeddedImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? enabled = null,
-    Object? titleL10n = null,
+    Object? id = null,
+    Object? launch = null,
+    Object? titleL10n = freezed,
+    Object? showToolbar = null,
     Object? url = null,
   }) {
-    return _then(_$AppConfigLoginCustomSignInImpl(
-      enabled: null == enabled
-          ? _value.enabled
-          : enabled // ignore: cast_nullable_to_non_nullable
+    return _then(_$AppConfigLoginEmbeddedImpl(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int,
+      launch: null == launch
+          ? _value.launch
+          : launch // ignore: cast_nullable_to_non_nullable
               as bool,
-      titleL10n: null == titleL10n
+      titleL10n: freezed == titleL10n
           ? _value.titleL10n
           : titleL10n // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
+      showToolbar: null == showToolbar
+          ? _value.showToolbar
+          : showToolbar // ignore: cast_nullable_to_non_nullable
+              as bool,
       url: null == url
           ? _value.url
           : url // ignore: cast_nullable_to_non_nullable
@@ -539,76 +791,95 @@ class __$$AppConfigLoginCustomSignInImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$AppConfigLoginCustomSignInImpl extends _AppConfigLoginCustomSignIn {
-  const _$AppConfigLoginCustomSignInImpl(
-      {required this.enabled, required this.titleL10n, required this.url})
+class _$AppConfigLoginEmbeddedImpl extends _AppConfigLoginEmbedded {
+  const _$AppConfigLoginEmbeddedImpl(
+      {required this.id,
+      this.launch = false,
+      this.titleL10n,
+      this.showToolbar = false,
+      required this.url})
       : super._();
 
-  factory _$AppConfigLoginCustomSignInImpl.fromJson(
-          Map<String, dynamic> json) =>
-      _$$AppConfigLoginCustomSignInImplFromJson(json);
+  factory _$AppConfigLoginEmbeddedImpl.fromJson(Map<String, dynamic> json) =>
+      _$$AppConfigLoginEmbeddedImplFromJson(json);
 
   @override
-  final bool enabled;
+  final int id;
   @override
-  final String titleL10n;
+  @JsonKey()
+  final bool launch;
+  @override
+  final String? titleL10n;
+  @override
+  @JsonKey()
+  final bool showToolbar;
   @override
   final String url;
 
   @override
   String toString() {
-    return 'AppConfigLoginCustomSignIn(enabled: $enabled, titleL10n: $titleL10n, url: $url)';
+    return 'AppConfigLoginEmbedded(id: $id, launch: $launch, titleL10n: $titleL10n, showToolbar: $showToolbar, url: $url)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$AppConfigLoginCustomSignInImpl &&
-            (identical(other.enabled, enabled) || other.enabled == enabled) &&
+            other is _$AppConfigLoginEmbeddedImpl &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.launch, launch) || other.launch == launch) &&
             (identical(other.titleL10n, titleL10n) ||
                 other.titleL10n == titleL10n) &&
+            (identical(other.showToolbar, showToolbar) ||
+                other.showToolbar == showToolbar) &&
             (identical(other.url, url) || other.url == url));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, enabled, titleL10n, url);
+  int get hashCode =>
+      Object.hash(runtimeType, id, launch, titleL10n, showToolbar, url);
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$AppConfigLoginCustomSignInImplCopyWith<_$AppConfigLoginCustomSignInImpl>
-      get copyWith => __$$AppConfigLoginCustomSignInImplCopyWithImpl<
-          _$AppConfigLoginCustomSignInImpl>(this, _$identity);
+  _$$AppConfigLoginEmbeddedImplCopyWith<_$AppConfigLoginEmbeddedImpl>
+      get copyWith => __$$AppConfigLoginEmbeddedImplCopyWithImpl<
+          _$AppConfigLoginEmbeddedImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$AppConfigLoginCustomSignInImplToJson(
+    return _$$AppConfigLoginEmbeddedImplToJson(
       this,
     );
   }
 }
 
-abstract class _AppConfigLoginCustomSignIn extends AppConfigLoginCustomSignIn {
-  const factory _AppConfigLoginCustomSignIn(
-      {required final bool enabled,
-      required final String titleL10n,
-      required final String url}) = _$AppConfigLoginCustomSignInImpl;
-  const _AppConfigLoginCustomSignIn._() : super._();
+abstract class _AppConfigLoginEmbedded extends AppConfigLoginEmbedded {
+  const factory _AppConfigLoginEmbedded(
+      {required final int id,
+      final bool launch,
+      final String? titleL10n,
+      final bool showToolbar,
+      required final String url}) = _$AppConfigLoginEmbeddedImpl;
+  const _AppConfigLoginEmbedded._() : super._();
 
-  factory _AppConfigLoginCustomSignIn.fromJson(Map<String, dynamic> json) =
-      _$AppConfigLoginCustomSignInImpl.fromJson;
+  factory _AppConfigLoginEmbedded.fromJson(Map<String, dynamic> json) =
+      _$AppConfigLoginEmbeddedImpl.fromJson;
 
   @override
-  bool get enabled;
+  int get id;
   @override
-  String get titleL10n;
+  bool get launch;
+  @override
+  String? get titleL10n;
+  @override
+  bool get showToolbar;
   @override
   String get url;
   @override
   @JsonKey(ignore: true)
-  _$$AppConfigLoginCustomSignInImplCopyWith<_$AppConfigLoginCustomSignInImpl>
+  _$$AppConfigLoginEmbeddedImplCopyWith<_$AppConfigLoginEmbeddedImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
 
@@ -1791,6 +2062,7 @@ AppConfigCall _$AppConfigCallFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$AppConfigCall {
+  bool get videoEnabled => throw _privateConstructorUsedError;
   AppConfigTransfer get transfer => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -1805,7 +2077,7 @@ abstract class $AppConfigCallCopyWith<$Res> {
           AppConfigCall value, $Res Function(AppConfigCall) then) =
       _$AppConfigCallCopyWithImpl<$Res, AppConfigCall>;
   @useResult
-  $Res call({AppConfigTransfer transfer});
+  $Res call({bool videoEnabled, AppConfigTransfer transfer});
 
   $AppConfigTransferCopyWith<$Res> get transfer;
 }
@@ -1823,9 +2095,14 @@ class _$AppConfigCallCopyWithImpl<$Res, $Val extends AppConfigCall>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? videoEnabled = null,
     Object? transfer = null,
   }) {
     return _then(_value.copyWith(
+      videoEnabled: null == videoEnabled
+          ? _value.videoEnabled
+          : videoEnabled // ignore: cast_nullable_to_non_nullable
+              as bool,
       transfer: null == transfer
           ? _value.transfer
           : transfer // ignore: cast_nullable_to_non_nullable
@@ -1850,7 +2127,7 @@ abstract class _$$AppConfigCallImplCopyWith<$Res>
       __$$AppConfigCallImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({AppConfigTransfer transfer});
+  $Res call({bool videoEnabled, AppConfigTransfer transfer});
 
   @override
   $AppConfigTransferCopyWith<$Res> get transfer;
@@ -1867,9 +2144,14 @@ class __$$AppConfigCallImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? videoEnabled = null,
     Object? transfer = null,
   }) {
     return _then(_$AppConfigCallImpl(
+      videoEnabled: null == videoEnabled
+          ? _value.videoEnabled
+          : videoEnabled // ignore: cast_nullable_to_non_nullable
+              as bool,
       transfer: null == transfer
           ? _value.transfer
           : transfer // ignore: cast_nullable_to_non_nullable
@@ -1882,7 +2164,8 @@ class __$$AppConfigCallImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$AppConfigCallImpl extends _AppConfigCall {
   const _$AppConfigCallImpl(
-      {this.transfer = const AppConfigTransfer(
+      {this.videoEnabled = true,
+      this.transfer = const AppConfigTransfer(
           enableBlindTransfer: true, enableAttendedTransfer: true)})
       : super._();
 
@@ -1891,11 +2174,14 @@ class _$AppConfigCallImpl extends _AppConfigCall {
 
   @override
   @JsonKey()
+  final bool videoEnabled;
+  @override
+  @JsonKey()
   final AppConfigTransfer transfer;
 
   @override
   String toString() {
-    return 'AppConfigCall(transfer: $transfer)';
+    return 'AppConfigCall(videoEnabled: $videoEnabled, transfer: $transfer)';
   }
 
   @override
@@ -1903,13 +2189,15 @@ class _$AppConfigCallImpl extends _AppConfigCall {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$AppConfigCallImpl &&
+            (identical(other.videoEnabled, videoEnabled) ||
+                other.videoEnabled == videoEnabled) &&
             (identical(other.transfer, transfer) ||
                 other.transfer == transfer));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, transfer);
+  int get hashCode => Object.hash(runtimeType, videoEnabled, transfer);
 
   @JsonKey(ignore: true)
   @override
@@ -1926,13 +2214,16 @@ class _$AppConfigCallImpl extends _AppConfigCall {
 }
 
 abstract class _AppConfigCall extends AppConfigCall {
-  const factory _AppConfigCall({final AppConfigTransfer transfer}) =
-      _$AppConfigCallImpl;
+  const factory _AppConfigCall(
+      {final bool videoEnabled,
+      final AppConfigTransfer transfer}) = _$AppConfigCallImpl;
   const _AppConfigCall._() : super._();
 
   factory _AppConfigCall.fromJson(Map<String, dynamic> json) =
       _$AppConfigCallImpl.fromJson;
 
+  @override
+  bool get videoEnabled;
   @override
   AppConfigTransfer get transfer;
   @override

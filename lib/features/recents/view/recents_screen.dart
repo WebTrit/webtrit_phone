@@ -20,9 +20,11 @@ class RecentsScreen extends StatefulWidget {
     super.key,
     this.recentsFilters = const [RecentsVisibilityFilter.all, RecentsVisibilityFilter.missed],
     this.title,
+    required this.videoCallEnable,
   });
 
   final List<RecentsVisibilityFilter> recentsFilters;
+  final bool videoCallEnable;
 
   final Widget? title;
 
@@ -117,47 +119,48 @@ class _RecentsScreenState extends State<RecentsScreen> with SingleTickerProvider
                       final recent = recentsFiltered[index];
                       final contactSourceId = recent.contactSourceId;
                       return RecentTile(
-                          recent: recent,
-                          dateFormat: context.read<RecentsBloc>().dateFormat,
-                          onInfoPressed: () {
-                            context.router.navigate(RecentScreenPageRoute(
-                              recentId: recent.id!,
-                            ));
-                          },
-                          onTap: transfer
-                              ? () {
-                                  final callBloc = context.read<CallBloc>();
-                                  callBloc.add(CallControlEvent.blindTransferSubmitted(
-                                    number: recent.number,
-                                  ));
-                                }
-                              : () {
-                                  final callBloc = context.read<CallBloc>();
-                                  callBloc.add(CallControlEvent.started(
-                                    number: recent.number,
-                                    displayName: recent.name,
-                                    video: recent.video,
-                                  ));
-                                },
-                          onLongPress: transfer
-                              ? null
-                              : () {
-                                  final callBloc = context.read<CallBloc>();
-                                  callBloc.add(CallControlEvent.started(
-                                    number: recent.number,
-                                    displayName: recent.name,
-                                    video: !recent.video,
-                                  ));
-                                },
-                          onDeleted: (recent) {
-                            context.showSnackBar(context.l10n.recents_snackBar_deleted(recent.name));
-                            context.read<RecentsBloc>().add(RecentsDeleted(recent));
-                          },
-                          onMessagePressed: chatsEnabled && recent.canMessage
-                              ? () {
-                                  context.router.navigate(ConversationScreenPageRoute(participantId: contactSourceId!));
-                                }
-                              : null);
+                        recent: recent,
+                        dateFormat: context.read<RecentsBloc>().dateFormat,
+                        onInfoPressed: () {
+                          context.router.navigate(RecentScreenPageRoute(
+                            recentId: recent.id!,
+                          ));
+                        },
+                        onTap: transfer
+                            ? () {
+                                final callBloc = context.read<CallBloc>();
+                                callBloc.add(CallControlEvent.blindTransferSubmitted(
+                                  number: recent.number,
+                                ));
+                              }
+                            : () {
+                                final callBloc = context.read<CallBloc>();
+                                callBloc.add(CallControlEvent.started(
+                                  number: recent.number,
+                                  displayName: recent.name,
+                                  video: recent.video && widget.videoCallEnable,
+                                ));
+                              },
+                        onLongPress: transfer
+                            ? null
+                            : () {
+                                final callBloc = context.read<CallBloc>();
+                                callBloc.add(CallControlEvent.started(
+                                  number: recent.number,
+                                  displayName: recent.name,
+                                  video: !recent.video && widget.videoCallEnable,
+                                ));
+                              },
+                        onDeleted: (recent) {
+                          context.showSnackBar(context.l10n.recents_snackBar_deleted(recent.name));
+                          context.read<RecentsBloc>().add(RecentsDeleted(recent));
+                        },
+                        onMessagePressed: chatsEnabled && recent.canMessage
+                            ? () {
+                                context.router.navigate(ConversationScreenPageRoute(participantId: contactSourceId!));
+                              }
+                            : null,
+                      );
                     },
                   );
                 },

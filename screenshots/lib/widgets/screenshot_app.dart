@@ -87,9 +87,6 @@ class ScreenshotRouterDelegate extends RouterDelegate<Object> with ChangeNotifie
           child: child,
         ),
       ],
-      onPopPage: (route, result) {
-        return false;
-      },
     );
   }
 
