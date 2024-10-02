@@ -140,7 +140,7 @@ class WebtritApiClient {
             url: tenantUrl,
             requestId: xRequestId,
             token: token,
-            error: null,
+            error: ErrorResponse(message: e.toString()),
           );
         }
         requestAttempt++;
