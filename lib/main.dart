@@ -17,7 +17,12 @@ void main() {
   preBootstrap();
 
   bootstrap(() async {
-    final logRecordsRepository = LogRecordsRepository()..attachToLogger(Logger.root);
+    final logRecordsRepository = LogRecordsRepository([
+      LocalLogDataSource(),
+      RemoteLogDataSource(),
+    ])
+      ..attachToLogger(Logger.root);
+
     final appAnalyticsRepository = AppAnalyticsRepository(instance: FirebaseAnalytics.instance);
 
     final applicationDocumentsPath = await getApplicationDocumentsPath();

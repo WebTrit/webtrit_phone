@@ -1,38 +1,42 @@
 import 'dart:async';
-import 'dart:collection';
 
 import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
 
+import 'data_sources/log_data_source.dart';
+
 class LogRecordsRepository {
-  LogRecordsRepository([this.capacity = 1000]) : _logRecords = ListQueue<LogRecord>(capacity);
+  LogRecordsRepository(this.logDataSources);
 
-  final int capacity;
-
+  final List<LogDataSource> logDataSources;
   final _subscriptions = <StreamSubscription<dynamic>>[];
 
-  final ListQueue<LogRecord> _logRecords;
-
-  Future<List<LogRecord>> getLogRecords() async => UnmodifiableListView(_logRecords);
+  Future<List<LogRecord>> getLogRecords() async {
+    final allRecords = <LogRecord>[];
+    for (final dataSource in logDataSources) {
+      allRecords.addAll(await dataSource.getLogRecords());
+    }
+    return allRecords;
+  }
 
   void attachToLogger(Logger logger) {
-    _subscriptions.add(logger.onRecord.listen(_log));
+    for (final dataSource in logDataSources) {
+      _subscriptions.add(logger.onRecord.listen(dataSource.addLogRecord));
+    }
   }
 
   void clear() {
-    _logRecords.clear();
-  }
-
-  void _log(LogRecord record) {
-    if (_logRecords.length >= capacity) {
-      _logRecords.removeLast();
+    for (final dataSource in logDataSources) {
+      dataSource.clear();
     }
-    _logRecords.addFirst(record);
   }
 
   @mustCallSuper
   Future<void> dispose() async {
     await _cancelSubscriptions();
+    for (final dataSource in logDataSources) {
+      await dataSource.dispose();
+    }
   }
 
   Future<void> _cancelSubscriptions() async {
