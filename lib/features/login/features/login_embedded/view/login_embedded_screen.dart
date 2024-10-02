@@ -16,11 +16,13 @@ class LoginEmbeddedScreen extends StatelessWidget {
   const LoginEmbeddedScreen({
     super.key,
     required this.title,
-    required this.initialUri,
+    required this.initialUrl,
+    required this.showToolbar,
   });
 
-  final String title;
-  final Uri initialUri;
+  final String? title;
+  final Uri initialUrl;
+  final bool showToolbar;
 
   @override
   Widget build(BuildContext context) {
@@ -32,8 +34,9 @@ class LoginEmbeddedScreen extends StatelessWidget {
           final ElevatedButtonStyles? elevatedButtonStyles = themeData.extension<ElevatedButtonStyles>();
 
           return WebViewScaffold(
-            title: Text(title),
-            initialUri: initialUri,
+            title: title != null ? Text(title!) : null,
+            initialUri: initialUrl,
+            showToolbar: showToolbar,
             javaScriptChannels: {
               _loginJavascriptChannelName: (JavaScriptMessage message) =>
                   context.read<LoginEmbeddedCubit>().login(message.message),

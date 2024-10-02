@@ -101,9 +101,9 @@ class LoginCubit extends Cubit<LoginState> {
     }
   }
 
-  void setCustomLogin(EmbeddedLogin login) {
+  void setCustomLogin(LoginEmbedded login) {
     emit(state.copyWith(
-      embeddedLogin: login,
+      embedded: login,
       coreUrl: isDemoModeEnabled ? demoCoreUrlFromEnvironment : coreUrlFromEnvironment,
     ));
   }
@@ -144,7 +144,7 @@ class LoginCubit extends Cubit<LoginState> {
 
   void embeddedPageAssignBack() async {
     emit(state.copyWith(
-      embeddedLogin: null,
+      embedded: null,
     ));
   }
 

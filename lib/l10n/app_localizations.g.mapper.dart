@@ -287,6 +287,8 @@ class AppLocalizationsMapper {
           localizations.notifications_errorSnackBar_appOnline,
       'notifications_errorSnackBar_appUnregistered':
           localizations.notifications_errorSnackBar_appUnregistered,
+      'notifications_errorSnackBar_sipServiceUnavailable':
+          localizations.notifications_errorSnackBar_sipServiceUnavailable,
       'notifications_errorSnackBar_callConnect':
           localizations.notifications_errorSnackBar_callConnect,
       'notifications_errorSnackBar_callSignalingClientNotConnect': localizations
