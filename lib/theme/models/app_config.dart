@@ -55,8 +55,8 @@ class AppConfigLoginEmbedded with _$AppConfigLoginEmbedded {
   const factory AppConfigLoginEmbedded({
     required int id,
     @Default(false) bool launch,
-    @Default('') String titleL10n,
-    @Default(true) bool showToolbar,
+    String? titleL10n,
+    @Default(false) bool showToolbar,
     required String url,
   }) = _AppConfigLoginEmbedded;
 

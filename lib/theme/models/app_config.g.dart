@@ -76,8 +76,8 @@ _$AppConfigLoginEmbeddedImpl _$$AppConfigLoginEmbeddedImplFromJson(
     _$AppConfigLoginEmbeddedImpl(
       id: (json['id'] as num).toInt(),
       launch: json['launch'] as bool? ?? false,
-      titleL10n: json['titleL10n'] as String? ?? '',
-      showToolbar: json['showToolbar'] as bool? ?? true,
+      titleL10n: json['titleL10n'] as String?,
+      showToolbar: json['showToolbar'] as bool? ?? false,
       url: json['url'] as String,
     );
 

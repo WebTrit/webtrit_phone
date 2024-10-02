@@ -20,7 +20,7 @@ class LoginEmbeddedScreen extends StatelessWidget {
     required this.showToolbar,
   });
 
-  final String title;
+  final String? title;
   final Uri initialUrl;
   final bool showToolbar;
 
@@ -34,7 +34,7 @@ class LoginEmbeddedScreen extends StatelessWidget {
           final ElevatedButtonStyles? elevatedButtonStyles = themeData.extension<ElevatedButtonStyles>();
 
           return WebViewScaffold(
-            title: Text(title),
+            title: title != null ? Text(title!) : null,
             initialUri: initialUrl,
             showToolbar: showToolbar,
             javaScriptChannels: {

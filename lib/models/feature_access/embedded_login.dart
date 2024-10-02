@@ -1,5 +1,5 @@
 class EmbeddedLogin {
-  final String titleL10n;
+  final String? titleL10n;
   final Uri url;
   final bool showToolbar;
 
