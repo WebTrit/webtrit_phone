@@ -153,7 +153,7 @@ class _MainShellState extends State<MainShell> {
           create: (context) => MainShellRouteStateRepositoryAutoRouteImpl(),
         ),
         RepositoryProvider<RemoteNotificationRepository>(
-          create: (context) => RemoteNotificationRepositoryFirebaseImpl(),
+          create: (context) => RemoteNotificationRepositoryBrokerImpl(),
         ),
         RepositoryProvider<LocalNotificationRepository>(
           create: (context) => LocalNotificationRepositoryFLNImpl(),

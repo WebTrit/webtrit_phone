@@ -99,16 +99,19 @@ Future<void> _initFirebaseMessaging() async {
 
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
     logger.info('onMessage: ${message.toMap()}');
-    FirebaseNotificationsBroker.handleForegroundNotification(message);
+    final appNotification = AppRemoteNotification.fromFCM(message);
+    RemoteNotificationsBroker.handleForegroundNotification(appNotification);
   });
   FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
     logger.info('onMessageOpenedApp: ${message.toMap()}');
-    FirebaseNotificationsBroker.handleOpenedNotification(message);
+    final appNotification = AppRemoteNotification.fromFCM(message);
+    RemoteNotificationsBroker.handleOpenedNotification(appNotification);
   });
   final initialMessage = await FirebaseMessaging.instance.getInitialMessage();
   if (initialMessage != null) {
     logger.info('initialMessage: ${initialMessage.toMap()}');
-    FirebaseNotificationsBroker.handleOpenedNotification(initialMessage);
+    final appNotification = AppRemoteNotification.fromFCM(initialMessage);
+    RemoteNotificationsBroker.handleOpenedNotification(appNotification);
   }
 
   // actual FirebaseMessaging permission request executed in [PermissionsCubit]
@@ -117,35 +120,27 @@ Future<void> _initFirebaseMessaging() async {
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   _initLogs();
+  final appNotification = AppRemoteNotification.fromFCM(message);
+  final logger = Logger('_firebaseMessagingBackgroundHandler')..info('RemoteNotification: $appNotification');
 
-  final logger = Logger('FCM')..info('_firebaseMessagingBackgroundHandler: ${message.toMap()}');
-
-  final fcmHandler = FCMHandler(message);
-  final fcmType = fcmHandler.getMessageType();
-
-  logger.info('Push notification type: $fcmType');
-
-  if (fcmType == FCMType.call && Platform.isAndroid) {
-    final call = fcmHandler.getPendingCall()!;
-    final logger = Logger('_backgroundAndroidCall')..info('Initial call: $call');
+  if (appNotification is PendingCallNotification && Platform.isAndroid) {
+    final call = appNotification.call;
 
     WebtritCallkeepLogs().setLogsDelegate(CallkeepLogs());
-
-    final appDatabase = FCMIsolateDatabase.instance(
-      createAppDatabaseConnection(
-        await getApplicationDocumentsPath(),
-        'db.sqlite',
-        logStatements: EnvironmentConfig.DATABASE_LOG_STATEMENTS,
-      ),
+    final dbConnection = createAppDatabaseConnection(
+      await getApplicationDocumentsPath(),
+      'db.sqlite',
+      logStatements: EnvironmentConfig.DATABASE_LOG_STATEMENTS,
     );
-    final repository = RecentsRepository(
-      appDatabase: appDatabase,
-    );
+    final appDatabase = FCMIsolateDatabase.instance(dbConnection);
+    final repository = RecentsRepository(appDatabase: appDatabase);
 
     logger.info('Initial incoming call');
 
     BackgroundCallHandler(call, repository).init();
   }
+
+  // TODO: messaging notifications tracking
 }
 
 class CallkeepLogs implements CallkeepLogsDelegate {

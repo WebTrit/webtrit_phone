@@ -4,6 +4,7 @@ import 'package:logging/logging.dart';
 
 import 'package:webtrit_phone/data/app_preferences.dart';
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/push_notification/push_notifications.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
 // TODO: handle sms events
@@ -62,7 +63,7 @@ class MessagingNotificationsService {
     }
   }
 
-  Future<void> _localActionHandler(LocalNotificationActionDTO action) async {
+  Future<void> _localActionHandler(AppLocalNotificationAction action) async {
     _logger.info('onActionReceivedMethod');
     try {
       final chatId = int.tryParse(action.payload['chatId'] ?? '');
@@ -77,36 +78,46 @@ class MessagingNotificationsService {
     }
   }
 
-  Future<void> _handleForegroundNotification(RemoteNotificationDTO message) async {
+  Future<void> _handleForegroundNotification(AppRemoteNotification notification) async {
     _logger.info('onMessageReceivedMethod');
     try {
-      final title = message.title;
-      final body = message.body;
-      final messageId = int.tryParse(message.data['chat_message_id'] ?? '');
-      if (title == null || body == null || messageId == null) return;
+      if (notification.title == null || notification.body == null) return;
 
-      final chatId = int.tryParse(message.data['chat_id'] ?? '');
-      if (chatId != null) _displayChatNotification(messageId, chatId, title, body);
+      if (notification is ChatsNotification) {
+        final chat = await _tryGetChat(notification.chatId);
+        if (chat != null && _shouldSkipChatNotification(chat)) return;
 
-      final conversationId = int.tryParse(message.data['sms_conversation_id'] ?? '');
-      if (conversationId != null) _displaySmsNotification(messageId, conversationId, title, body);
+        final localNotification = AppLocalNotification(
+          notification.messageId,
+          notification.title!,
+          notification.body!,
+          payload: {'chatId': notification.chatId.toString()},
+        );
+        localNotificationRepository.displayNotification(localNotification);
+      }
 
-      _logger.info('Foreground message handle result: chatId - $chatId, smsConversationId- $conversationId');
+      if (notification is SmsNotification) {
+        final conversation = await _tryGetSmsConversation(notification.conversationId);
+        if (conversation != null && _shouldSkipSmsNotification(conversation)) return;
+
+        final localNotification = AppLocalNotification(
+          notification.messageId,
+          notification.title!,
+          notification.body!,
+          payload: {'smsConversationId': notification.conversationId.toString()},
+        );
+        localNotificationRepository.displayNotification(localNotification);
+      }
     } on Exception catch (e) {
       _logger.severe('Error handling foreground remote message: $e');
     }
   }
 
-  Future<void> _handleOpenedNotification(RemoteNotificationDTO message) async {
+  Future<void> _handleOpenedNotification(AppRemoteNotification notification) async {
     _logger.info('onMessageReceivedMethod');
     try {
-      final chatId = int.tryParse(message.data['chat_id'] ?? '');
-      if (chatId != null) await _routeToChat(chatId);
-
-      final smsConversationId = int.tryParse(message.data['sms_conversation_id'] ?? '');
-      if (smsConversationId != null) await _routeToSmsConversation(smsConversationId);
-
-      _logger.info('Opened message handle result: chatId - $chatId, smsConversationId- $smsConversationId');
+      if (notification is ChatsNotification) await _routeToChat(notification.chatId);
+      if (notification is SmsNotification) await _routeToSmsConversation(notification.conversationId);
     } on Exception catch (e) {
       _logger.severe('Error handling foreground remote message: $e');
     }
@@ -141,28 +152,6 @@ class MessagingNotificationsService {
 
     _logger.info('Opening sms conversation with $firstNumber and $secondNumber');
     openSmsConversation(firstNumber, secondNumber);
-  }
-
-  Future _displayChatNotification(int messageId, int chatId, String title, String body) async {
-    _logger.info('_displayChatNotification $messageId, $chatId,$title, $body');
-
-    final chat = await _tryGetChat(chatId);
-    if (chat != null && _shouldSkipChatNotification(chat)) return;
-
-    localNotificationRepository.pusNotification(messageId, title, body, {
-      'chatId': chatId.toString(),
-    });
-  }
-
-  Future _displaySmsNotification(int messageId, int conversationId, String title, String body) async {
-    _logger.info('_displaySmsNotification $messageId, $conversationId, $title, $body');
-
-    final conversation = await _tryGetSmsConversation(conversationId);
-    if (conversation != null && _shouldSkipSmsNotification(conversation)) return;
-
-    localNotificationRepository.pusNotification(messageId, title, body, {
-      'smsConversationId': conversationId.toString(),
-    });
   }
 
   bool _shouldSkipChatNotification(Chat chat) {

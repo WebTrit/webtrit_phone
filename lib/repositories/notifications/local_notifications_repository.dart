@@ -1,23 +1,23 @@
 import 'dart:convert';
 
-import 'package:equatable/equatable.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import 'package:webtrit_phone/push_notification/push_notifications.dart';
 
 abstract class LocalNotificationRepository {
   /// Stream of messaging notification actions that were tapped or dismissed
-  Stream<LocalNotificationActionDTO> get messagingActions;
-  Future<void> pusNotification(int id, String title, String body, Map<String, String> payload);
+  Stream<AppLocalNotificationAction> get messagingActions;
+  Future<void> displayNotification(AppLocalNotification notification);
   Future<void> dissmissNotification(int id);
 }
 
+/// This class is used to handle local notifications user Flutter Local Notifications plugin
 class LocalNotificationRepositoryFLNImpl implements LocalNotificationRepository {
   @override
-  Stream<LocalNotificationActionDTO> get messagingActions {
+  Stream<AppLocalNotificationAction> get messagingActions {
     return LocalNotificationsBroker.messagingActions.map((action) {
       final payload = action.payload;
-      return LocalNotificationActionDTO(
+      return AppLocalNotificationAction(
         id: action.id ?? -1,
         payload: payload != null ? json.decode(payload) : {},
         type: LocalNotificationActionType.tap,
@@ -26,26 +26,29 @@ class LocalNotificationRepositoryFLNImpl implements LocalNotificationRepository 
   }
 
   @override
-  Future<void> pusNotification(int id, String title, String body, Map<String, String> payload) async {
+  Future<void> displayNotification(AppLocalNotification notification) async {
+    const androidNotificationDetails = AndroidNotificationDetails(
+      'local_channel',
+      'local channel',
+      importance: Importance.defaultImportance,
+      priority: Priority.defaultPriority,
+    );
+    const darwinNotificationDetails = DarwinNotificationDetails(
+      presentAlert: true,
+      presentBadge: true,
+      presentSound: true,
+      interruptionLevel: InterruptionLevel.active,
+    );
+    const notificationDetails = NotificationDetails(
+      android: androidNotificationDetails,
+      iOS: darwinNotificationDetails,
+    );
     FlutterLocalNotificationsPlugin().show(
-      id,
-      title,
-      body,
-      const NotificationDetails(
-        android: AndroidNotificationDetails(
-          'local_channel',
-          'local channel',
-          importance: Importance.defaultImportance,
-          priority: Priority.defaultPriority,
-        ),
-        iOS: DarwinNotificationDetails(
-          presentAlert: true,
-          presentBadge: true,
-          presentSound: true,
-          interruptionLevel: InterruptionLevel.active,
-        ),
-      ),
-      payload: const JsonEncoder().convert(payload),
+      notification.id,
+      notification.title,
+      notification.body,
+      notificationDetails,
+      payload: const JsonEncoder().convert(notification.payload ?? {}),
     );
   }
 
@@ -53,24 +56,4 @@ class LocalNotificationRepositoryFLNImpl implements LocalNotificationRepository 
   Future<void> dissmissNotification(int id) async {
     FlutterLocalNotificationsPlugin().cancel(id);
   }
-}
-
-enum LocalNotificationActionType { tap, dismiss, other }
-
-class LocalNotificationActionDTO with EquatableMixin {
-  final int id;
-  final LocalNotificationActionType type;
-  final Map<String, dynamic> payload;
-
-  LocalNotificationActionDTO({
-    required this.id,
-    required this.type,
-    required this.payload,
-  });
-
-  @override
-  List<Object> get props => [id, type, payload];
-
-  @override
-  bool get stringify => true;
 }
