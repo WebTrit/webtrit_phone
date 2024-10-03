@@ -6,6 +6,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/app/router/app_router.dart';
+import 'package:webtrit_phone/blocs/app/app_bloc.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
@@ -21,6 +22,7 @@ class ConversationScreen extends StatefulWidget {
 }
 
 class _ConversationScreenState extends State<ConversationScreen> {
+  late final userId = context.read<AppBloc>().state.userId!;
   late final messagingBloc = context.read<MessagingBloc>();
   late final conversationCubit = context.read<ConversationCubit>();
   late final contactsRepo = context.read<ContactsRepository>();
@@ -34,7 +36,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
         value: conversationCubit,
         child: ClipRRect(
           borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-          child: ConversationInfo(userId: messagingBloc.state.userId!),
+          child: ConversationInfo(userId: userId),
         ),
       ),
     );
@@ -103,7 +105,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
                   builder: (context) {
                     if (state is CVSReady) {
                       return ChatMessageListView(
-                        userId: messagingBloc.state.userId!,
+                        userId: userId,
                         messages: state.messages,
                         outboxMessages: state.outboxMessages,
                         outboxMessageEdits: state.outboxMessageEdits,

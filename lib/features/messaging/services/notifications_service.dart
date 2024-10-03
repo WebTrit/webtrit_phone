@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:logging/logging.dart';
 
-import 'package:webtrit_phone/data/app_preferences.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
@@ -14,19 +13,21 @@ final _logger = Logger('MessagingNotificationsService');
 
 class MessagingNotificationsService {
   MessagingNotificationsService(
+    this.userId,
     this.chatsRepository,
     this.smsRepository,
     this.contactsRepository,
     this.remoteNotificationRepository,
     this.localNotificationRepository,
     this.mainScreenRouteStateRepository,
-    this.mainShellRouteStateRepository, {
-    required this.openChatList,
-    required this.openChat,
-    required this.openConversation,
-    required this.openSmsConversation,
-  });
+    this.mainShellRouteStateRepository,
+    this.openChatList,
+    this.openChat,
+    this.openConversation,
+    this.openSmsConversation,
+  );
 
+  final String userId;
   final ChatsRepository chatsRepository;
   final SmsRepository smsRepository;
   final ContactsRepository contactsRepository;
@@ -53,8 +54,7 @@ class MessagingNotificationsService {
   Future<void> _handleMessagingChatsEvents(ChatsEvent e) async {
     if (e is ChatMessageUpdate) {
       final message = e.message;
-      if (_userId == null) return;
-      if (message.senderId == _userId) return;
+      if (message.senderId == userId) return;
 
       if (message.deletedAt != null) {
         _dismissNotification(message.id);
@@ -124,8 +124,7 @@ class MessagingNotificationsService {
     }
 
     if (chat.type == ChatType.dialog) {
-      if (_userId == null) return openChatList();
-      final participant = chat.members.firstWhere((m) => m.userId != _userId);
+      final participant = chat.members.firstWhere((m) => m.userId != userId);
       _logger.info('Opening conversation with $participant');
       return openConversation(participant.userId);
     }
@@ -177,7 +176,7 @@ class MessagingNotificationsService {
     }
 
     if (chatType == ChatType.dialog) {
-      final participantId = chat.members.firstWhere((m) => m.userId != _userId).userId;
+      final participantId = chat.members.firstWhere((m) => m.userId != userId).userId;
       final conversationScreenActive = mainShellRouteStateRepository.isConversationScreenActive(participantId);
       _logger.info('conversationScreenActive: $conversationScreenActive');
       if (conversationScreenActive) return true;
@@ -220,8 +219,6 @@ class MessagingNotificationsService {
     }
     return null;
   }
-
-  String? get _userId => AppPreferences().getChatUserId();
 
   Future<void> dispose() async {
     _logger.info('Disposing...');

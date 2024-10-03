@@ -4,6 +4,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/app/router/app_router.dart';
+import 'package:webtrit_phone/blocs/app/app_bloc.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
@@ -28,6 +29,7 @@ class _MessagingShellState extends State<MessagingShell> {
     if (!chatsEnabled && !smsEnabled) return;
 
     notificationsService = MessagingNotificationsService(
+      context.read<AppBloc>().state.userId!,
       context.read<ChatsRepository>(),
       context.read<SmsRepository>(),
       context.read<ContactsRepository>(),
@@ -35,10 +37,10 @@ class _MessagingShellState extends State<MessagingShell> {
       context.read<LocalNotificationRepository>(),
       context.read<MainScreenRouteStateRepository>(),
       context.read<MainShellRouteStateRepository>(),
-      openChatList: onOpenChatList,
-      openChat: onOpenChat,
-      openConversation: onOpenConversation,
-      openSmsConversation: onOpenSmsConversation,
+      onOpenChatList,
+      onOpenChat,
+      onOpenConversation,
+      onOpenSmsConversation,
     );
 
     notificationsService.init();

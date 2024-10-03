@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:webtrit_phone/blocs/app/app_bloc.dart';
 
-import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
@@ -17,13 +17,14 @@ class ConversationsList extends StatefulWidget {
 }
 
 class _ConversationsListState extends State<ConversationsList> {
+  late final userId = context.read<AppBloc>().state.userId!;
+
   final chatsSearchController = TextEditingController();
   final smsSearchController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final userId = AppPreferences().getChatUserId()!;
 
     final chats = BlocBuilder<ChatConversationsCubit, ChatConversationsState>(
       builder: (context, state) {

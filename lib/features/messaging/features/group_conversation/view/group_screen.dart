@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:auto_route/auto_route.dart';
 
 import 'package:webtrit_phone/app/router/app_router.dart';
+import 'package:webtrit_phone/blocs/app/app_bloc.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
@@ -18,6 +19,7 @@ class GroupScreen extends StatefulWidget {
 }
 
 class _GroupScreenState extends State<GroupScreen> {
+  late final userId = context.read<AppBloc>().state.userId!;
   late final messagingBloc = context.read<MessagingBloc>();
   late final groupCubit = context.read<GroupCubit>();
   late final contactsRepo = context.read<ContactsRepository>();
@@ -31,7 +33,7 @@ class _GroupScreenState extends State<GroupScreen> {
         value: groupCubit,
         child: ClipRRect(
           borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-          child: GroupInfo(userId: messagingBloc.state.userId!),
+          child: GroupInfo(userId: userId),
         ),
       ),
     );
@@ -84,7 +86,7 @@ class _GroupScreenState extends State<GroupScreen> {
                   builder: (context) {
                     if (state is GroupStateReady) {
                       return ChatMessageListView(
-                        userId: messagingBloc.state.userId!,
+                        userId: userId,
                         messages: state.messages,
                         outboxMessages: state.outboxMessages,
                         outboxMessageEdits: state.outboxMessageEdits,
