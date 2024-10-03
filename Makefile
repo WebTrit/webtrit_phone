@@ -8,9 +8,9 @@ KEYSTORES_PATH = --keystores-path=../webtrit_phone_keystores
 
 # Determine Flutter flags based on build type
 ifeq ($(BUILD_TYPE), release)
-    FLUTTER_FLAGS = $(DART_DEFINE_FILE) --release
+    FLUTTER_FLAGS = $(DART_DEFINE_FILE) --release  --no-tree-shake-icons
 else
-    FLUTTER_FLAGS = $(DART_DEFINE_FILE)
+    FLUTTER_FLAGS = $(DART_DEFINE_FILE)  --no-tree-shake-icons
 endif
 
 # Rules
