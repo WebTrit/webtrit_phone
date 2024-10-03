@@ -70,7 +70,7 @@ class RecentScreen extends StatelessWidget {
                   children: [
                     OutlinedButton(
                       style: buttonStyle,
-                      child: const Icon(Icons.call),
+                      child: const AppIcon(Icons.call),
                       onPressed: () => _initiateCall(context, recent, false),
                     ),
                     if (videoVisible) ...[
@@ -79,7 +79,7 @@ class RecentScreen extends StatelessWidget {
                       ),
                       OutlinedButton(
                         style: buttonStyle,
-                        child: const Icon(Icons.videocam),
+                        child: const AppIcon(Icons.videocam),
                         onPressed: () => _initiateCall(context, recent, true),
                       ),
                     ]
