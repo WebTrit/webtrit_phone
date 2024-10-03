@@ -41,9 +41,13 @@ class AppRouter extends _$AppRouter {
 
   String? get token => _appBloc.state.token;
 
+  String? get userId => _appBloc.state.userId;
+
   bool get appPermissionsDenied => _appPermissions.isDenied;
 
   bool get appUserAgreementUnaccepted => _appBloc.state.userAgreementAccepted != true;
+
+  bool get appLoggedIn => coreUrl != null && token != null && userId != null;
 
   @override
   List<AutoRoute> get routes => [
@@ -312,7 +316,7 @@ class AppRouter extends _$AppRouter {
   void onLoginScreenPageRouteGuardNavigation(NavigationResolver resolver, StackRouter router) {
     _logger.fine(_onNavigationLoggerMessage('onLoginScreenPageRouteGuardNavigation', resolver));
 
-    if (coreUrl != null && token != null) {
+    if (appLoggedIn) {
       resolver.next(false);
       router.replaceAll(
         [const MainShellRoute()],
@@ -351,7 +355,7 @@ class AppRouter extends _$AppRouter {
   void onMainShellRouteGuardNavigation(NavigationResolver resolver, StackRouter router) {
     _logger.fine(_onNavigationLoggerMessage('onMainShellRouteGuardNavigation', resolver));
 
-    if (coreUrl != null && token != null) {
+    if (appLoggedIn) {
       if (appUserAgreementUnaccepted) {
         resolver.next(false);
         router.replaceAll(

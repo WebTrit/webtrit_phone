@@ -35,6 +35,7 @@ mixin _$LoginState {
   )? get signupSessionOtpProvisionalWithDateTime =>
       throw _privateConstructorUsedError;
   String? get token => throw _privateConstructorUsedError;
+  String? get userId => throw _privateConstructorUsedError;
   LoginEmbedded? get embedded => throw _privateConstructorUsedError;
   UrlInput get coreUrlInput => throw _privateConstructorUsedError;
   UserRefInput get otpSigninUserRefInput => throw _privateConstructorUsedError;
@@ -73,6 +74,7 @@ abstract class $LoginStateCopyWith<$Res> {
         DateTime
       )? signupSessionOtpProvisionalWithDateTime,
       String? token,
+      String? userId,
       LoginEmbedded? embedded,
       UrlInput coreUrlInput,
       UserRefInput otpSigninUserRefInput,
@@ -105,6 +107,7 @@ class _$LoginStateCopyWithImpl<$Res, $Val extends LoginState>
     Object? passwordSigninPasswordInputObscureText = null,
     Object? signupSessionOtpProvisionalWithDateTime = freezed,
     Object? token = freezed,
+    Object? userId = freezed,
     Object? embedded = freezed,
     Object? coreUrlInput = null,
     Object? otpSigninUserRefInput = null,
@@ -153,6 +156,10 @@ class _$LoginStateCopyWithImpl<$Res, $Val extends LoginState>
       token: freezed == token
           ? _value.token
           : token // ignore: cast_nullable_to_non_nullable
+              as String?,
+      userId: freezed == userId
+          ? _value.userId
+          : userId // ignore: cast_nullable_to_non_nullable
               as String?,
       embedded: freezed == embedded
           ? _value.embedded
@@ -214,6 +221,7 @@ abstract class _$$LoginStateImplCopyWith<$Res>
         DateTime
       )? signupSessionOtpProvisionalWithDateTime,
       String? token,
+      String? userId,
       LoginEmbedded? embedded,
       UrlInput coreUrlInput,
       UserRefInput otpSigninUserRefInput,
@@ -244,6 +252,7 @@ class __$$LoginStateImplCopyWithImpl<$Res>
     Object? passwordSigninPasswordInputObscureText = null,
     Object? signupSessionOtpProvisionalWithDateTime = freezed,
     Object? token = freezed,
+    Object? userId = freezed,
     Object? embedded = freezed,
     Object? coreUrlInput = null,
     Object? otpSigninUserRefInput = null,
@@ -292,6 +301,10 @@ class __$$LoginStateImplCopyWithImpl<$Res>
       token: freezed == token
           ? _value.token
           : token // ignore: cast_nullable_to_non_nullable
+              as String?,
+      userId: freezed == userId
+          ? _value.userId
+          : userId // ignore: cast_nullable_to_non_nullable
               as String?,
       embedded: freezed == embedded
           ? _value.embedded
@@ -342,6 +355,7 @@ class _$LoginStateImpl implements _LoginState {
       this.passwordSigninPasswordInputObscureText = true,
       this.signupSessionOtpProvisionalWithDateTime,
       this.token,
+      this.userId,
       this.embedded,
       this.coreUrlInput = const UrlInput.pure(),
       this.otpSigninUserRefInput = const UserRefInput.pure(),
@@ -388,6 +402,8 @@ class _$LoginStateImpl implements _LoginState {
   @override
   final String? token;
   @override
+  final String? userId;
+  @override
   final LoginEmbedded? embedded;
   @override
   @JsonKey()
@@ -413,7 +429,7 @@ class _$LoginStateImpl implements _LoginState {
 
   @override
   String toString() {
-    return 'LoginState(processing: $processing, mode: $mode, coreUrl: $coreUrl, tenantId: $tenantId, supportedLoginTypes: $supportedLoginTypes, otpSigninSessionOtpProvisionalWithDateTime: $otpSigninSessionOtpProvisionalWithDateTime, passwordSigninPasswordInputObscureText: $passwordSigninPasswordInputObscureText, signupSessionOtpProvisionalWithDateTime: $signupSessionOtpProvisionalWithDateTime, token: $token, embedded: $embedded, coreUrlInput: $coreUrlInput, otpSigninUserRefInput: $otpSigninUserRefInput, otpSigninCodeInput: $otpSigninCodeInput, passwordSigninUserRefInput: $passwordSigninUserRefInput, passwordSigninPasswordInput: $passwordSigninPasswordInput, signupEmailInput: $signupEmailInput, signupCodeInput: $signupCodeInput)';
+    return 'LoginState(processing: $processing, mode: $mode, coreUrl: $coreUrl, tenantId: $tenantId, supportedLoginTypes: $supportedLoginTypes, otpSigninSessionOtpProvisionalWithDateTime: $otpSigninSessionOtpProvisionalWithDateTime, passwordSigninPasswordInputObscureText: $passwordSigninPasswordInputObscureText, signupSessionOtpProvisionalWithDateTime: $signupSessionOtpProvisionalWithDateTime, token: $token, userId: $userId, embedded: $embedded, coreUrlInput: $coreUrlInput, otpSigninUserRefInput: $otpSigninUserRefInput, otpSigninCodeInput: $otpSigninCodeInput, passwordSigninUserRefInput: $passwordSigninUserRefInput, passwordSigninPasswordInput: $passwordSigninPasswordInput, signupEmailInput: $signupEmailInput, signupCodeInput: $signupCodeInput)';
   }
 
   @override
@@ -442,6 +458,7 @@ class _$LoginStateImpl implements _LoginState {
                 other.signupSessionOtpProvisionalWithDateTime ==
                     signupSessionOtpProvisionalWithDateTime) &&
             (identical(other.token, token) || other.token == token) &&
+            (identical(other.userId, userId) || other.userId == userId) &&
             (identical(other.embedded, embedded) ||
                 other.embedded == embedded) &&
             (identical(other.coreUrlInput, coreUrlInput) ||
@@ -473,6 +490,7 @@ class _$LoginStateImpl implements _LoginState {
       passwordSigninPasswordInputObscureText,
       signupSessionOtpProvisionalWithDateTime,
       token,
+      userId,
       embedded,
       coreUrlInput,
       otpSigninUserRefInput,
@@ -506,6 +524,7 @@ abstract class _LoginState implements LoginState {
         DateTime
       )? signupSessionOtpProvisionalWithDateTime,
       final String? token,
+      final String? userId,
       final LoginEmbedded? embedded,
       final UrlInput coreUrlInput,
       final UserRefInput otpSigninUserRefInput,
@@ -535,6 +554,8 @@ abstract class _LoginState implements LoginState {
       get signupSessionOtpProvisionalWithDateTime;
   @override
   String? get token;
+  @override
+  String? get userId;
   @override
   LoginEmbedded? get embedded;
   @override
