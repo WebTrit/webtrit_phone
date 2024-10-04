@@ -6,10 +6,7 @@ import 'package:webtrit_phone/features/messaging/extensions/phoenix_socket.dart'
 import 'package:webtrit_phone/features/messaging/services/services.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
-// TODO:
-// - add logger
-// - rename to "messaging connection bloc" ? and place /cubits and /bloc together
-// - move workers to messaging shell
+// TODO: maybe rename to "messaging connection bloc" and place /cubits and /bloc together
 
 part 'messaging_event.dart';
 part 'messaging_state.dart';
@@ -52,6 +49,9 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
 
   void _connect(Connect event, Emitter<MessagingState> emit) async {
     emit(state.copyWith(status: ConnectionStatus.connecting));
+    // -
+    // Uncomment section below to wipe messaging related data
+    // -
     // _chatsRepository.wipeChatsData();
     // _chatsOutboxRepository.wipeOutboxData();
     // _smsRepository.wipeData();
