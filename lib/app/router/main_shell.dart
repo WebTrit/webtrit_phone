@@ -226,24 +226,21 @@ class _MainShellState extends State<MainShell> {
               lazy: false,
               create: (context) {
                 final appBloc = context.read<AppBloc>();
-                final appPreferences = context.read<AppPreferences>();
                 final chatsRepository = context.read<ChatsRepository>();
                 final chatsOutboxRepository = context.read<ChatsOutboxRepository>();
                 final smsRepository = context.read<SmsRepository>();
                 final smsOutboxRepository = context.read<SmsOutboxRepository>();
                 final token = appBloc.state.token!;
                 final tenantId = appBloc.state.tenantId!;
+                final userId = appBloc.state.userId!;
 
                 final client = PhoenixSocket(
                   EnvironmentConfig.CHAT_SERVICE_URL,
-                  socketOptions: PhoenixSocketOptions(params: {
-                    'token': token,
-                    'tenant_id': tenantId,
-                  }),
+                  socketOptions: PhoenixSocketOptions(params: {'token': token, 'tenant_id': tenantId}),
                 );
 
                 return MessagingBloc(
-                  appPreferences,
+                  userId,
                   client,
                   chatsRepository,
                   chatsOutboxRepository,
@@ -256,7 +253,7 @@ class _MainShellState extends State<MainShell> {
             BlocProvider<UnreadCountCubit>(
               create: (context) {
                 return UnreadCountCubit(
-                  appPreferences: context.read<AppPreferences>(),
+                  userId: context.read<AppBloc>().state.userId!,
                   chatsRepository: context.read<ChatsRepository>(),
                   smsRepository: context.read<SmsRepository>(),
                 )..init();

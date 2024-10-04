@@ -52,6 +52,7 @@ class AutoprovisionCubit extends Cubit<AutoprovisionState> {
     try {
       final result = await _apiClient(_tenantId).createSessionAutoProvision(credentials);
       final token = result.token;
+      final userId = result.userId;
       final tenantId = result.tenantId ?? _tenantId;
 
       if (_oldToken != null) {
@@ -61,7 +62,7 @@ class AutoprovisionCubit extends Cubit<AutoprovisionState> {
       }
 
       _logger.info('processToken success: $token, $tenantId');
-      emit(AutoprovisionState.sessionCreated(token, _coreUrl, tenantId));
+      emit(AutoprovisionState.sessionCreated(token, userId, _coreUrl, tenantId));
     } catch (e) {
       _logger.warning('processToken error: $e');
       emit(AutoprovisionState.error(e));

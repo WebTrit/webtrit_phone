@@ -3,7 +3,6 @@ import 'dart:async';
 
 import 'package:logging/logging.dart';
 
-import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/push_notification/push_notifications.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
@@ -12,6 +11,7 @@ final _logger = Logger('MessagingNotificationsService');
 
 class MessagingNotificationsService {
   MessagingNotificationsService(
+    this.userId,
     this.chatsRepository,
     this.smsRepository,
     this.contactsRepository,
@@ -19,12 +19,14 @@ class MessagingNotificationsService {
     this.localNotificationRepository,
     this.activeMessageNotificationsRepository,
     this.mainScreenRouteStateRepository,
-    this.mainShellRouteStateRepository, {
-    required this.openChatList,
-    required this.openChat,
-    required this.openConversation,
-    required this.openSmsConversation,
-  });
+    this.mainShellRouteStateRepository,
+    this.openChatList,
+    this.openChat,
+    this.openConversation,
+    this.openSmsConversation,
+  );
+
+  final String userId;
   final ChatsRepository chatsRepository;
   final SmsRepository smsRepository;
   final ContactsRepository contactsRepository;
@@ -76,7 +78,7 @@ class MessagingNotificationsService {
 
     // Dismiss notifications if user readed messages from given chat
     // independant of from what device he did it
-    if (e is ChatReadCursorUpdate && e.cursor.userId == _userId) {
+    if (e is ChatReadCursorUpdate && e.cursor.userId == userId) {
       for (final notification in notifications) {
         await _dismissByContent(notification.title, notification.body);
         await activeMessageNotificationsRepository.deleteByNotification(notification.notificationId);
@@ -110,7 +112,7 @@ class MessagingNotificationsService {
 
     // Dismiss notifications if user readed messages from given chat
     // independant of from what device he did it
-    if (e is SmsReadCursorUpdate && e.cursor.userId == _userId) {
+    if (e is SmsReadCursorUpdate && e.cursor.userId == userId) {
       for (final notification in notifications) {
         await _dismissByContent(notification.title, notification.body);
         await activeMessageNotificationsRepository.deleteByNotification(notification.notificationId);
@@ -211,8 +213,7 @@ class MessagingNotificationsService {
     }
 
     if (chat.type == ChatType.dialog) {
-      if (_userId == null) return openChatList();
-      final participant = chat.members.firstWhere((m) => m.userId != _userId);
+      final participant = chat.members.firstWhere((m) => m.userId != userId);
       _logger.info('Opening conversation with $participant');
       return openConversation(participant.userId);
     }
@@ -242,7 +243,7 @@ class MessagingNotificationsService {
     }
 
     if (chatType == ChatType.dialog) {
-      final participantId = chat.members.firstWhere((m) => m.userId != _userId).userId;
+      final participantId = chat.members.firstWhere((m) => m.userId != userId).userId;
       final conversationScreenActive = mainShellRouteStateRepository.isConversationScreenActive(participantId);
       _logger.info('conversationScreenActive: $conversationScreenActive');
       if (conversationScreenActive) return true;
@@ -289,8 +290,6 @@ class MessagingNotificationsService {
     }
     return null;
   }
-
-  String? get _userId => AppPreferences().getChatUserId();
 
   Future<void> dispose() async {
     _logger.info('Disposing...');

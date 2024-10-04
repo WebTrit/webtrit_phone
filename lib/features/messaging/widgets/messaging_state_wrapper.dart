@@ -11,15 +11,7 @@ class MessagingStateWrapper extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Expanded(
-          child: BlocBuilder<MessagingBloc, MessagingState>(
-            buildWhen: (previous, current) => previous.userId != current.userId,
-            builder: (context, state) {
-              if (state.userId != null) return child;
-              return const Center(child: CircularProgressIndicator());
-            },
-          ),
-        ),
+        Expanded(child: child),
         BlocBuilder<MessagingBloc, MessagingState>(
           buildWhen: (previous, current) => previous.status != current.status,
           builder: (context, state) {

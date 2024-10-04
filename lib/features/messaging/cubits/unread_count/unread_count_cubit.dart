@@ -5,24 +5,22 @@ import 'package:equatable/equatable.dart';
 import 'package:logging/logging.dart';
 import 'package:stream_transform/stream_transform.dart';
 
-import 'package:webtrit_phone/data/app_preferences.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
 final _logger = Logger('UnreadCountCubit');
 
 class UnreadCountCubit extends Cubit<UnreadCountState> {
   UnreadCountCubit({
-    required this.appPreferences,
+    required this.userId,
     required this.chatsRepository,
     required this.smsRepository,
     this.updateDebounce = const Duration(seconds: 1),
   }) : super(UnreadCountState.initial());
 
-  final AppPreferences appPreferences;
+  final String userId;
   final ChatsRepository chatsRepository;
   final SmsRepository smsRepository;
   final Duration updateDebounce;
-  String? userId;
   StreamSubscription? _chatsUpdatesSub;
   StreamSubscription? _smsUpdatesSub;
 
@@ -34,11 +32,8 @@ class UnreadCountCubit extends Cubit<UnreadCountState> {
   }
 
   void _updateUnreadCount() async {
-    userId ??= appPreferences.getChatUserId();
-
-    if (userId == null) return;
-    final chatCounts = await chatsRepository.unreadedCountPerChat(userId!);
-    final smsCounts = await smsRepository.unreadedCountPerConversation(userId!);
+    final chatCounts = await chatsRepository.unreadedCountPerChat(userId);
+    final smsCounts = await smsRepository.unreadedCountPerConversation(userId);
 
     final newState = UnreadCountState.fromCountPerChat(chatCounts, smsCounts);
     emit(newState);

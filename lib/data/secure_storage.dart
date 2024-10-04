@@ -4,6 +4,7 @@ class SecureStorage {
   static const _kCoreUrlKey = 'core-url';
   static const _kTenantIdKey = 'tenant-id';
   static const _kTokenKey = 'token';
+  static const _kUserIdKey = 'user-id';
 
   static late SecureStorage _instance;
 
@@ -90,5 +91,17 @@ class SecureStorage {
 
   Future<void> deleteToken() {
     return _delete(_kTokenKey);
+  }
+
+  String? readUserId() {
+    return _read(_kUserIdKey);
+  }
+
+  Future<void> writeUserId(String userId) {
+    return _write(_kUserIdKey, userId);
+  }
+
+  Future<void> deleteUserId() {
+    return _delete(_kUserIdKey);
   }
 }

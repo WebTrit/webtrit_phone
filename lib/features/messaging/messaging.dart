@@ -14,7 +14,6 @@ export 'widgets/widgets.dart';
 // - expiration time setting for message storage (like week, month, year etc)
 // - popup menu or swipe menu for chat leave/delete in conversations list 
 // - scroll to bottom on messages list
-// - move userId retrieving to main auth flow
 // - remove messaging service envs
 // - sync error codes with backend and handle them
 // - random refacfotring (like ephemeral logic to blocs, structs for ws events, constants for keys, etc)
