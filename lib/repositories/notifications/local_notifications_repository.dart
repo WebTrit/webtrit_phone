@@ -8,7 +8,8 @@ abstract class LocalNotificationRepository {
   /// Stream of messaging notification actions that were tapped or dismissed
   Stream<AppLocalNotificationAction> get messagingActions;
   Future<void> displayNotification(AppLocalNotification notification);
-  Future<void> dissmissNotification(int id);
+  Future<void> dissmissById(int id);
+  Future<void> dismissByContent(String title, String body);
 }
 
 /// This class is used to handle local notifications user Flutter Local Notifications plugin
@@ -53,7 +54,17 @@ class LocalNotificationRepositoryFLNImpl implements LocalNotificationRepository 
   }
 
   @override
-  Future<void> dissmissNotification(int id) async {
+  Future<void> dissmissById(int id) async {
     FlutterLocalNotificationsPlugin().cancel(id);
+  }
+
+  @override
+  Future<void> dismissByContent(String title, String body) async {
+    final d = await FlutterLocalNotificationsPlugin().getActiveNotifications();
+    for (final n in d) {
+      if (n.title == title && n.body == body) {
+        await FlutterLocalNotificationsPlugin().cancel(n.id ?? 0, tag: n.tag);
+      }
+    }
   }
 }

@@ -158,6 +158,11 @@ class _MainShellState extends State<MainShell> {
         RepositoryProvider<LocalNotificationRepository>(
           create: (context) => LocalNotificationRepositoryFLNImpl(),
         ),
+        RepositoryProvider<ActiveMessageNotificationsRepository>(
+          create: (context) => ActiveMessageNotificationsRepositoryDriftImpl(
+            appDatabase: context.read<AppDatabase>(),
+          ),
+        ),
       ],
       child: MultiBlocProvider(
         providers: [

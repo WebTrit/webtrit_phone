@@ -11,7 +11,6 @@ export 'widgets/widgets.dart';
 
 
 // TODO: 
-// - notifications autodismiss on read and background message tracking
 // - expiration time setting for message storage (like week, month, year etc)
 // - popup menu or swipe menu for chat leave/delete in conversations list 
 // - scroll to bottom on messages list

@@ -17,6 +17,7 @@ import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 import 'package:webtrit_phone/app/app_bloc_observer.dart';
 import 'package:webtrit_phone/app/assets.gen.dart';
 import 'package:webtrit_phone/data/data.dart';
+import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/push_notification/push_notifications.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/utils/path_provider/_native.dart';
@@ -139,8 +140,25 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
     BackgroundCallHandler(call, repository).init();
   }
+  if (appNotification is MessageNotification) {
+    final dbConnection = createAppDatabaseConnection(
+      await getApplicationDocumentsPath(),
+      'db.sqlite',
+      logStatements: EnvironmentConfig.DATABASE_LOG_STATEMENTS,
+    );
+    final appDatabase = FCMIsolateDatabase.instance(dbConnection);
+    final repo = ActiveMessageNotificationsRepositoryDriftImpl(appDatabase: appDatabase);
 
-  // TODO: messaging notifications tracking
+    final activeMessageNotification = ActiveMessageNotification(
+      notificationId: appNotification.id,
+      messageId: appNotification.messageId,
+      conversationId: appNotification.conversationId,
+      title: appNotification.title ?? '',
+      body: appNotification.body ?? '',
+      time: DateTime.now(),
+    );
+    await repo.set(activeMessageNotification);
+  }
 }
 
 class CallkeepLogs implements CallkeepLogsDelegate {
@@ -157,7 +175,7 @@ class FCMIsolateDatabase extends AppDatabase {
 
   static FCMIsolateDatabase? _instance;
 
-  static instance(executor) {
+  static FCMIsolateDatabase instance(executor) {
     _instance ??= FCMIsolateDatabase(executor);
 
     return _instance!;

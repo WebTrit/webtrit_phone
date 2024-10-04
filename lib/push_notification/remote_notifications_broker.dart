@@ -6,10 +6,6 @@ import 'push_notifications.dart';
 class RemoteNotificationsBroker {
   static final _messagingOpenedNotifications = StreamController<AppRemoteNotification>();
   static final _messagingForegroundNotifications = StreamController<AppRemoteNotification>();
-  static bool _isMessagingNotification(AppRemoteNotification notification) {
-    if (notification is ChatsNotification || notification is SmsNotification) return true;
-    return false;
-  }
 
   /// Stream of chat remote notifications that tapped by user and opened the app
   static Stream<AppRemoteNotification> get messagingOpenedNotifications => _messagingOpenedNotifications.stream;
@@ -18,10 +14,10 @@ class RemoteNotificationsBroker {
   static Stream<AppRemoteNotification> get messagingForegroundNotifications => _messagingForegroundNotifications.stream;
 
   static void handleOpenedNotification(AppRemoteNotification notification) {
-    if (_isMessagingNotification(notification)) _messagingOpenedNotifications.add(notification);
+    if (notification is MessageNotification) _messagingOpenedNotifications.add(notification);
   }
 
   static void handleForegroundNotification(AppRemoteNotification notification) {
-    if (_isMessagingNotification(notification)) _messagingForegroundNotifications.add(notification);
+    if (notification is MessageNotification) _messagingForegroundNotifications.add(notification);
   }
 }

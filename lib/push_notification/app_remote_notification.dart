@@ -15,10 +15,10 @@ sealed class AppRemoteNotification {
       return PendingCallNotification.fromFCM(message);
     }
     if (data.containsKey('chat_id')) {
-      return ChatsNotification.fromFCM(message);
+      return ChatsMessageNotification.fromFCM(message);
     }
     if (data.containsKey('sms_conversation_id')) {
-      return SmsNotification.fromFCM(message);
+      return SmsMessageNotification.fromFCM(message);
     }
     return UnknownNotification.fromFCM(message);
   }
@@ -42,13 +42,17 @@ final class PendingCallNotification extends AppRemoteNotification {
   }
 }
 
-final class ChatsNotification extends AppRemoteNotification {
-  ChatsNotification(super.id, this.messageId, this.chatId, {super.title, super.body});
+abstract class MessageNotification extends AppRemoteNotification {
+  MessageNotification(super.id, this.messageId, this.conversationId, {super.title, super.body});
   final int messageId;
-  final int chatId;
+  final int conversationId;
+}
 
-  factory ChatsNotification.fromFCM(RemoteMessage message) {
-    return ChatsNotification(
+final class ChatsMessageNotification extends MessageNotification {
+  ChatsMessageNotification(super.id, super.messageId, super.conversationId, {super.title, super.body});
+
+  factory ChatsMessageNotification.fromFCM(RemoteMessage message) {
+    return ChatsMessageNotification(
       message.messageId!,
       int.parse(message.data['chat_message_id']),
       int.parse(message.data['chat_id']),
@@ -63,13 +67,11 @@ final class ChatsNotification extends AppRemoteNotification {
   }
 }
 
-final class SmsNotification extends AppRemoteNotification {
-  SmsNotification(super.id, this.messageId, this.conversationId, {super.title, super.body});
-  final int messageId;
-  final int conversationId;
+final class SmsMessageNotification extends MessageNotification {
+  SmsMessageNotification(super.id, super.messageId, super.conversationId, {super.title, super.body});
 
-  factory SmsNotification.fromFCM(RemoteMessage message) {
-    return SmsNotification(
+  factory SmsMessageNotification.fromFCM(RemoteMessage message) {
+    return SmsMessageNotification(
       message.messageId!,
       int.parse(message.data['chat_message_id']),
       int.parse(message.data['sms_conversation_id']),

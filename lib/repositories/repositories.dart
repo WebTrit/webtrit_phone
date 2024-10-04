@@ -13,4 +13,5 @@ export 'chats/chats.dart';
 export 'sms/sms.dart';
 export 'notifications/local_notifications_repository.dart';
 export 'notifications/remote_notifications_repository.dart';
+export 'notifications/active_message_notifications_repository.dart';
 export 'route_state/route_state.dart';

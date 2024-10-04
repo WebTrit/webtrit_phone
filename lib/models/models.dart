@@ -11,6 +11,7 @@ export 'chat_outbox_message_entry.dart';
 export 'chat_outbox_message_edit_entry.dart';
 export 'chat_outbox_message_delete_entry.dart';
 export 'chat_outbox_read_cursor_entry.dart';
+export 'active_message_notification.dart';
 export 'external_contact.dart';
 export 'favorite.dart';
 export 'feature_access/exports.dart';

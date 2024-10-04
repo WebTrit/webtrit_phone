@@ -7415,6 +7415,368 @@ class UserSmsNumberDataCompanion extends UpdateCompanion<UserSmsNumberData> {
   }
 }
 
+class $ActiveMessageNotificationsTableTable
+    extends ActiveMessageNotificationsTable
+    with
+        TableInfo<$ActiveMessageNotificationsTableTable,
+            ActiveMessageNotificationData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $ActiveMessageNotificationsTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _notificationIdMeta =
+      const VerificationMeta('notificationId');
+  @override
+  late final GeneratedColumn<String> notificationId = GeneratedColumn<String>(
+      'notification_id', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _messageIdMeta =
+      const VerificationMeta('messageId');
+  @override
+  late final GeneratedColumn<int> messageId = GeneratedColumn<int>(
+      'message_id', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _conversationIdMeta =
+      const VerificationMeta('conversationId');
+  @override
+  late final GeneratedColumn<int> conversationId = GeneratedColumn<int>(
+      'conversation_id', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _titleMeta = const VerificationMeta('title');
+  @override
+  late final GeneratedColumn<String> title = GeneratedColumn<String>(
+      'title', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _bodyMeta = const VerificationMeta('body');
+  @override
+  late final GeneratedColumn<String> body = GeneratedColumn<String>(
+      'body', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _timeMeta = const VerificationMeta('time');
+  @override
+  late final GeneratedColumn<DateTime> time = GeneratedColumn<DateTime>(
+      'time', aliasedName, false,
+      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns =>
+      [notificationId, messageId, conversationId, title, body, time];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'active_messaging_notifications';
+  @override
+  VerificationContext validateIntegrity(
+      Insertable<ActiveMessageNotificationData> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('notification_id')) {
+      context.handle(
+          _notificationIdMeta,
+          notificationId.isAcceptableOrUnknown(
+              data['notification_id']!, _notificationIdMeta));
+    } else if (isInserting) {
+      context.missing(_notificationIdMeta);
+    }
+    if (data.containsKey('message_id')) {
+      context.handle(_messageIdMeta,
+          messageId.isAcceptableOrUnknown(data['message_id']!, _messageIdMeta));
+    } else if (isInserting) {
+      context.missing(_messageIdMeta);
+    }
+    if (data.containsKey('conversation_id')) {
+      context.handle(
+          _conversationIdMeta,
+          conversationId.isAcceptableOrUnknown(
+              data['conversation_id']!, _conversationIdMeta));
+    } else if (isInserting) {
+      context.missing(_conversationIdMeta);
+    }
+    if (data.containsKey('title')) {
+      context.handle(
+          _titleMeta, title.isAcceptableOrUnknown(data['title']!, _titleMeta));
+    } else if (isInserting) {
+      context.missing(_titleMeta);
+    }
+    if (data.containsKey('body')) {
+      context.handle(
+          _bodyMeta, body.isAcceptableOrUnknown(data['body']!, _bodyMeta));
+    } else if (isInserting) {
+      context.missing(_bodyMeta);
+    }
+    if (data.containsKey('time')) {
+      context.handle(
+          _timeMeta, time.isAcceptableOrUnknown(data['time']!, _timeMeta));
+    } else if (isInserting) {
+      context.missing(_timeMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {notificationId};
+  @override
+  ActiveMessageNotificationData map(Map<String, dynamic> data,
+      {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return ActiveMessageNotificationData(
+      notificationId: attachedDatabase.typeMapping.read(
+          DriftSqlType.string, data['${effectivePrefix}notification_id'])!,
+      messageId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}message_id'])!,
+      conversationId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}conversation_id'])!,
+      title: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}title'])!,
+      body: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}body'])!,
+      time: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}time'])!,
+    );
+  }
+
+  @override
+  $ActiveMessageNotificationsTableTable createAlias(String alias) {
+    return $ActiveMessageNotificationsTableTable(attachedDatabase, alias);
+  }
+}
+
+class ActiveMessageNotificationData extends DataClass
+    implements Insertable<ActiveMessageNotificationData> {
+  final String notificationId;
+  final int messageId;
+  final int conversationId;
+  final String title;
+  final String body;
+  final DateTime time;
+  const ActiveMessageNotificationData(
+      {required this.notificationId,
+      required this.messageId,
+      required this.conversationId,
+      required this.title,
+      required this.body,
+      required this.time});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['notification_id'] = Variable<String>(notificationId);
+    map['message_id'] = Variable<int>(messageId);
+    map['conversation_id'] = Variable<int>(conversationId);
+    map['title'] = Variable<String>(title);
+    map['body'] = Variable<String>(body);
+    map['time'] = Variable<DateTime>(time);
+    return map;
+  }
+
+  ActiveMessageNotificationDataCompanion toCompanion(bool nullToAbsent) {
+    return ActiveMessageNotificationDataCompanion(
+      notificationId: Value(notificationId),
+      messageId: Value(messageId),
+      conversationId: Value(conversationId),
+      title: Value(title),
+      body: Value(body),
+      time: Value(time),
+    );
+  }
+
+  factory ActiveMessageNotificationData.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return ActiveMessageNotificationData(
+      notificationId: serializer.fromJson<String>(json['notificationId']),
+      messageId: serializer.fromJson<int>(json['messageId']),
+      conversationId: serializer.fromJson<int>(json['conversationId']),
+      title: serializer.fromJson<String>(json['title']),
+      body: serializer.fromJson<String>(json['body']),
+      time: serializer.fromJson<DateTime>(json['time']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'notificationId': serializer.toJson<String>(notificationId),
+      'messageId': serializer.toJson<int>(messageId),
+      'conversationId': serializer.toJson<int>(conversationId),
+      'title': serializer.toJson<String>(title),
+      'body': serializer.toJson<String>(body),
+      'time': serializer.toJson<DateTime>(time),
+    };
+  }
+
+  ActiveMessageNotificationData copyWith(
+          {String? notificationId,
+          int? messageId,
+          int? conversationId,
+          String? title,
+          String? body,
+          DateTime? time}) =>
+      ActiveMessageNotificationData(
+        notificationId: notificationId ?? this.notificationId,
+        messageId: messageId ?? this.messageId,
+        conversationId: conversationId ?? this.conversationId,
+        title: title ?? this.title,
+        body: body ?? this.body,
+        time: time ?? this.time,
+      );
+  ActiveMessageNotificationData copyWithCompanion(
+      ActiveMessageNotificationDataCompanion data) {
+    return ActiveMessageNotificationData(
+      notificationId: data.notificationId.present
+          ? data.notificationId.value
+          : this.notificationId,
+      messageId: data.messageId.present ? data.messageId.value : this.messageId,
+      conversationId: data.conversationId.present
+          ? data.conversationId.value
+          : this.conversationId,
+      title: data.title.present ? data.title.value : this.title,
+      body: data.body.present ? data.body.value : this.body,
+      time: data.time.present ? data.time.value : this.time,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ActiveMessageNotificationData(')
+          ..write('notificationId: $notificationId, ')
+          ..write('messageId: $messageId, ')
+          ..write('conversationId: $conversationId, ')
+          ..write('title: $title, ')
+          ..write('body: $body, ')
+          ..write('time: $time')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(notificationId, messageId, conversationId, title, body, time);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is ActiveMessageNotificationData &&
+          other.notificationId == this.notificationId &&
+          other.messageId == this.messageId &&
+          other.conversationId == this.conversationId &&
+          other.title == this.title &&
+          other.body == this.body &&
+          other.time == this.time);
+}
+
+class ActiveMessageNotificationDataCompanion
+    extends UpdateCompanion<ActiveMessageNotificationData> {
+  final Value<String> notificationId;
+  final Value<int> messageId;
+  final Value<int> conversationId;
+  final Value<String> title;
+  final Value<String> body;
+  final Value<DateTime> time;
+  final Value<int> rowid;
+  const ActiveMessageNotificationDataCompanion({
+    this.notificationId = const Value.absent(),
+    this.messageId = const Value.absent(),
+    this.conversationId = const Value.absent(),
+    this.title = const Value.absent(),
+    this.body = const Value.absent(),
+    this.time = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  ActiveMessageNotificationDataCompanion.insert({
+    required String notificationId,
+    required int messageId,
+    required int conversationId,
+    required String title,
+    required String body,
+    required DateTime time,
+    this.rowid = const Value.absent(),
+  })  : notificationId = Value(notificationId),
+        messageId = Value(messageId),
+        conversationId = Value(conversationId),
+        title = Value(title),
+        body = Value(body),
+        time = Value(time);
+  static Insertable<ActiveMessageNotificationData> custom({
+    Expression<String>? notificationId,
+    Expression<int>? messageId,
+    Expression<int>? conversationId,
+    Expression<String>? title,
+    Expression<String>? body,
+    Expression<DateTime>? time,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (notificationId != null) 'notification_id': notificationId,
+      if (messageId != null) 'message_id': messageId,
+      if (conversationId != null) 'conversation_id': conversationId,
+      if (title != null) 'title': title,
+      if (body != null) 'body': body,
+      if (time != null) 'time': time,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  ActiveMessageNotificationDataCompanion copyWith(
+      {Value<String>? notificationId,
+      Value<int>? messageId,
+      Value<int>? conversationId,
+      Value<String>? title,
+      Value<String>? body,
+      Value<DateTime>? time,
+      Value<int>? rowid}) {
+    return ActiveMessageNotificationDataCompanion(
+      notificationId: notificationId ?? this.notificationId,
+      messageId: messageId ?? this.messageId,
+      conversationId: conversationId ?? this.conversationId,
+      title: title ?? this.title,
+      body: body ?? this.body,
+      time: time ?? this.time,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (notificationId.present) {
+      map['notification_id'] = Variable<String>(notificationId.value);
+    }
+    if (messageId.present) {
+      map['message_id'] = Variable<int>(messageId.value);
+    }
+    if (conversationId.present) {
+      map['conversation_id'] = Variable<int>(conversationId.value);
+    }
+    if (title.present) {
+      map['title'] = Variable<String>(title.value);
+    }
+    if (body.present) {
+      map['body'] = Variable<String>(body.value);
+    }
+    if (time.present) {
+      map['time'] = Variable<DateTime>(time.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ActiveMessageNotificationDataCompanion(')
+          ..write('notificationId: $notificationId, ')
+          ..write('messageId: $messageId, ')
+          ..write('conversationId: $conversationId, ')
+          ..write('title: $title, ')
+          ..write('body: $body, ')
+          ..write('time: $time, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -7458,6 +7820,9 @@ abstract class _$AppDatabase extends GeneratedDatabase {
       $SmsOutboxReadCursorsTableTable(this);
   late final $UserSmsNumbersTableTable userSmsNumbersTable =
       $UserSmsNumbersTableTable(this);
+  late final $ActiveMessageNotificationsTableTable
+      activeMessageNotificationsTable =
+      $ActiveMessageNotificationsTableTable(this);
   late final ContactsDao contactsDao = ContactsDao(this as AppDatabase);
   late final ContactPhonesDao contactPhonesDao =
       ContactPhonesDao(this as AppDatabase);
@@ -7467,6 +7832,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final FavoritesDao favoritesDao = FavoritesDao(this as AppDatabase);
   late final ChatsDao chatsDao = ChatsDao(this as AppDatabase);
   late final SmsDao smsDao = SmsDao(this as AppDatabase);
+  late final ActiveMessageNotificationsDao activeMessageNotificationsDao =
+      ActiveMessageNotificationsDao(this as AppDatabase);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -7493,7 +7860,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
         smsOutboxMessagesTable,
         smsOutboxMessageDeleteTable,
         smsOutboxReadCursorsTable,
-        userSmsNumbersTable
+        userSmsNumbersTable,
+        activeMessageNotificationsTable
       ];
   @override
   StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules(
@@ -11112,6 +11480,156 @@ class $$UserSmsNumbersTableTableOrderingComposer
           ColumnOrderings(column, joinBuilders: joinBuilders));
 }
 
+typedef $$ActiveMessageNotificationsTableTableCreateCompanionBuilder
+    = ActiveMessageNotificationDataCompanion Function({
+  required String notificationId,
+  required int messageId,
+  required int conversationId,
+  required String title,
+  required String body,
+  required DateTime time,
+  Value<int> rowid,
+});
+typedef $$ActiveMessageNotificationsTableTableUpdateCompanionBuilder
+    = ActiveMessageNotificationDataCompanion Function({
+  Value<String> notificationId,
+  Value<int> messageId,
+  Value<int> conversationId,
+  Value<String> title,
+  Value<String> body,
+  Value<DateTime> time,
+  Value<int> rowid,
+});
+
+class $$ActiveMessageNotificationsTableTableTableManager
+    extends RootTableManager<
+        _$AppDatabase,
+        $ActiveMessageNotificationsTableTable,
+        ActiveMessageNotificationData,
+        $$ActiveMessageNotificationsTableTableFilterComposer,
+        $$ActiveMessageNotificationsTableTableOrderingComposer,
+        $$ActiveMessageNotificationsTableTableCreateCompanionBuilder,
+        $$ActiveMessageNotificationsTableTableUpdateCompanionBuilder> {
+  $$ActiveMessageNotificationsTableTableTableManager(
+      _$AppDatabase db, $ActiveMessageNotificationsTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer:
+              $$ActiveMessageNotificationsTableTableFilterComposer(
+                  ComposerState(db, table)),
+          orderingComposer:
+              $$ActiveMessageNotificationsTableTableOrderingComposer(
+                  ComposerState(db, table)),
+          updateCompanionCallback: ({
+            Value<String> notificationId = const Value.absent(),
+            Value<int> messageId = const Value.absent(),
+            Value<int> conversationId = const Value.absent(),
+            Value<String> title = const Value.absent(),
+            Value<String> body = const Value.absent(),
+            Value<DateTime> time = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              ActiveMessageNotificationDataCompanion(
+            notificationId: notificationId,
+            messageId: messageId,
+            conversationId: conversationId,
+            title: title,
+            body: body,
+            time: time,
+            rowid: rowid,
+          ),
+          createCompanionCallback: ({
+            required String notificationId,
+            required int messageId,
+            required int conversationId,
+            required String title,
+            required String body,
+            required DateTime time,
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              ActiveMessageNotificationDataCompanion.insert(
+            notificationId: notificationId,
+            messageId: messageId,
+            conversationId: conversationId,
+            title: title,
+            body: body,
+            time: time,
+            rowid: rowid,
+          ),
+        ));
+}
+
+class $$ActiveMessageNotificationsTableTableFilterComposer
+    extends FilterComposer<_$AppDatabase,
+        $ActiveMessageNotificationsTableTable> {
+  $$ActiveMessageNotificationsTableTableFilterComposer(super.$state);
+  ColumnFilters<String> get notificationId => $state.composableBuilder(
+      column: $state.table.notificationId,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<int> get messageId => $state.composableBuilder(
+      column: $state.table.messageId,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<int> get conversationId => $state.composableBuilder(
+      column: $state.table.conversationId,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get title => $state.composableBuilder(
+      column: $state.table.title,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get body => $state.composableBuilder(
+      column: $state.table.body,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<DateTime> get time => $state.composableBuilder(
+      column: $state.table.time,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+}
+
+class $$ActiveMessageNotificationsTableTableOrderingComposer
+    extends OrderingComposer<_$AppDatabase,
+        $ActiveMessageNotificationsTableTable> {
+  $$ActiveMessageNotificationsTableTableOrderingComposer(super.$state);
+  ColumnOrderings<String> get notificationId => $state.composableBuilder(
+      column: $state.table.notificationId,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<int> get messageId => $state.composableBuilder(
+      column: $state.table.messageId,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<int> get conversationId => $state.composableBuilder(
+      column: $state.table.conversationId,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get title => $state.composableBuilder(
+      column: $state.table.title,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get body => $state.composableBuilder(
+      column: $state.table.body,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<DateTime> get time => $state.composableBuilder(
+      column: $state.table.time,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+}
+
 class $AppDatabaseManager {
   final _$AppDatabase _db;
   $AppDatabaseManager(this._db);
@@ -11176,6 +11694,10 @@ class $AppDatabaseManager {
           _db, _db.smsOutboxReadCursorsTable);
   $$UserSmsNumbersTableTableTableManager get userSmsNumbersTable =>
       $$UserSmsNumbersTableTableTableManager(_db, _db.userSmsNumbersTable);
+  $$ActiveMessageNotificationsTableTableTableManager
+      get activeMessageNotificationsTable =>
+          $$ActiveMessageNotificationsTableTableTableManager(
+              _db, _db.activeMessageNotificationsTable);
 }
 
 mixin _$ContactsDaoMixin on DatabaseAccessor<AppDatabase> {
@@ -11244,4 +11766,8 @@ mixin _$SmsDaoMixin on DatabaseAccessor<AppDatabase> {
       attachedDatabase.smsOutboxReadCursorsTable;
   $UserSmsNumbersTableTable get userSmsNumbersTable =>
       attachedDatabase.userSmsNumbersTable;
+}
+mixin _$ActiveMessageNotificationsDaoMixin on DatabaseAccessor<AppDatabase> {
+  $ActiveMessageNotificationsTableTable get activeMessageNotificationsTable =>
+      attachedDatabase.activeMessageNotificationsTable;
 }

@@ -33,6 +33,7 @@ class _MessagingShellState extends State<MessagingShell> {
       context.read<ContactsRepository>(),
       context.read<RemoteNotificationRepository>(),
       context.read<LocalNotificationRepository>(),
+      context.read<ActiveMessageNotificationsRepository>(),
       context.read<MainScreenRouteStateRepository>(),
       context.read<MainShellRouteStateRepository>(),
       openChatList: onOpenChatList,

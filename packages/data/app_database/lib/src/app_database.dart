@@ -31,6 +31,7 @@ part 'app_database.g.dart';
     SmsOutboxMessageDeleteTable,
     SmsOutboxReadCursorsTable,
     UserSmsNumbersTable,
+    ActiveMessageNotificationsTable,
   ],
   daos: [
     ContactsDao,
@@ -40,6 +41,7 @@ part 'app_database.g.dart';
     FavoritesDao,
     ChatsDao,
     SmsDao,
+    ActiveMessageNotificationsDao,
   ],
 )
 class AppDatabase extends _$AppDatabase {
@@ -619,6 +621,27 @@ class UserSmsNumbersTable extends Table {
   Set<Column> get primaryKey => {phoneNumber};
 
   TextColumn get phoneNumber => text()();
+}
+
+@DataClassName('ActiveMessageNotificationData')
+class ActiveMessageNotificationsTable extends Table {
+  @override
+  String get tableName => 'active_messaging_notifications';
+
+  @override
+  Set<Column> get primaryKey => {notificationId};
+
+  TextColumn get notificationId => text()();
+
+  IntColumn get messageId => integer()();
+
+  IntColumn get conversationId => integer()();
+
+  TextColumn get title => text()();
+
+  TextColumn get body => text()();
+
+  DateTimeColumn get time => dateTime()();
 }
 
 @DriftAccessor(tables: [
@@ -1637,4 +1660,33 @@ class ChatDataWithMembers {
 
   final ChatData chatData;
   final List<ChatMemberData> members;
+}
+
+@DriftAccessor(tables: [ActiveMessageNotificationsTable])
+class ActiveMessageNotificationsDao extends DatabaseAccessor<AppDatabase> with _$ActiveMessageNotificationsDaoMixin {
+  ActiveMessageNotificationsDao(super.db);
+
+  Future<List<ActiveMessageNotificationData>> getAllByConversation(int conversationId) {
+    return (select(activeMessageNotificationsTable)..where((t) => t.conversationId.equals(conversationId))).get();
+  }
+
+  Future<int> set(ActiveMessageNotificationData notification) {
+    return into(activeMessageNotificationsTable).insertOnConflictUpdate(notification);
+  }
+
+  Future<int> deleteByNotification(String notificationId) {
+    return (delete(activeMessageNotificationsTable)..where((t) => t.notificationId.equals(notificationId))).go();
+  }
+
+  Future<int> deleteByConversation(int conversationId) {
+    return (delete(activeMessageNotificationsTable)..where((t) => t.conversationId.equals(conversationId))).go();
+  }
+
+  Future<int> deleteByMessage(int messageId) {
+    return (delete(activeMessageNotificationsTable)..where((t) => t.messageId.equals(messageId))).go();
+  }
+
+  Future wipeData() async {
+    await delete(activeMessageNotificationsTable).go();
+  }
 }
