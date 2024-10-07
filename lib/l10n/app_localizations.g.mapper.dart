@@ -490,8 +490,12 @@ class AppLocalizationsMapper {
           localizations.messaging_NewConversation_contactSearch_hint,
       'messaging_NewConversation_contactOrNumberSearch_hint':
           localizations.messaging_NewConversation_contactOrNumberSearch_hint,
-      'messaging_NewConversation_numberSearch_invalidFormat':
-          localizations.messaging_NewConversation_numberSearch_invalidFormat,
+      'messaging_NewConversation_numberFormatExample':
+          localizations.messaging_NewConversation_numberFormatExample,
+      'messaging_NewConversation_numberSearch_errorHint':
+          localizations.messaging_NewConversation_numberSearch_errorHint,
+      'messaging_NewConversation_numberSearch_errorError':
+          localizations.messaging_NewConversation_numberSearch_errorError,
       'messaging_NewConversation_invite_heading':
           localizations.messaging_NewConversation_invite_heading,
       'messaging_NewConversation_next_action':
@@ -502,8 +506,10 @@ class AppLocalizationsMapper {
           localizations.messaging_NewConversation_noContacts,
       'messaging_NewConversation_invalidNumber_title':
           localizations.messaging_NewConversation_invalidNumber_title,
-      'messaging_NewConversation_invalidNumber_message':
-          localizations.messaging_NewConversation_invalidNumber_message,
+      'messaging_NewConversation_invalidNumber_message1':
+          localizations.messaging_NewConversation_invalidNumber_message1,
+      'messaging_NewConversation_invalidNumber_message2':
+          localizations.messaging_NewConversation_invalidNumber_message2,
       'messaging_NewConversation_invalidNumber_ok':
           localizations.messaging_NewConversation_invalidNumber_ok,
       'messaging_GroupScreen_titlePrefix':

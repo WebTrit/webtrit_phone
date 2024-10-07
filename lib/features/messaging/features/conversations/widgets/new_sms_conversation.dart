@@ -96,8 +96,26 @@ class _NewSmsConversationState extends State<NewSmsConversation> {
           return BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 1, sigmaY: 1),
             child: AlertDialog(
-              title: Text(context.l10n.messaging_NewConversation_invalidNumber_title),
-              content: Text(context.l10n.messaging_NewConversation_invalidNumber_message),
+              title: Text(
+                context.l10n.messaging_NewConversation_invalidNumber_title,
+                style: Theme.of(context).textTheme.headlineSmall,
+              ),
+              content: RichText(
+                text: TextSpan(
+                  children: [
+                    TextSpan(
+                        text: context.l10n.messaging_NewConversation_invalidNumber_message1,
+                        style: const TextStyle(fontWeight: FontWeight.normal)),
+                    TextSpan(
+                        text: context.l10n.messaging_NewConversation_numberFormatExample,
+                        style: const TextStyle(fontWeight: FontWeight.bold)),
+                    TextSpan(
+                        text: context.l10n.messaging_NewConversation_invalidNumber_message2,
+                        style: const TextStyle(fontWeight: FontWeight.normal)),
+                  ],
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
+              ),
               actions: [
                 TextButton(
                   onPressed: () => Navigator.of(context).pop(),
@@ -244,20 +262,44 @@ class _NewSmsConversationState extends State<NewSmsConversation> {
   }
 
   Widget field() {
-    final colorScheme = Theme.of(context).colorScheme;
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
 
     return TextFormField(
-      autovalidateMode: AutovalidateMode.onUserInteraction,
-      validator: (value) {
-        if (value == null || value.isEmpty) return null;
-        final hanOnlyNumbers = value.length > 6 && RegExp(r'^[0-9]*$').hasMatch(value);
-
-        if (hanOnlyNumbers && !isValidNumberInField) {
-          return context.l10n.messaging_NewConversation_numberSearch_invalidFormat;
-        }
-        return null;
-      },
       decoration: InputDecoration(
+        error: Builder(builder: (context) {
+          final hanOnlyNumbers = searchFilterValue.length > 3 && RegExp(r'^[0-9]*$').hasMatch(searchFilterValue);
+
+          if (hanOnlyNumbers && !isValidNumberInField) {
+            return RichText(
+              text: TextSpan(
+                children: [
+                  TextSpan(
+                      text: context.l10n.messaging_NewConversation_numberSearch_errorError,
+                      style: const TextStyle(fontWeight: FontWeight.normal)),
+                  TextSpan(
+                      text: context.l10n.messaging_NewConversation_numberFormatExample,
+                      style: const TextStyle(fontWeight: FontWeight.bold)),
+                ],
+                style: theme.textTheme.bodySmall!.copyWith(color: Colors.red, fontSize: 13),
+              ),
+            );
+          }
+
+          return RichText(
+            text: TextSpan(
+              children: [
+                TextSpan(
+                    text: context.l10n.messaging_NewConversation_numberSearch_errorHint,
+                    style: const TextStyle(fontWeight: FontWeight.normal)),
+                TextSpan(
+                    text: context.l10n.messaging_NewConversation_numberFormatExample,
+                    style: const TextStyle(fontWeight: FontWeight.bold)),
+              ],
+              style: theme.textTheme.bodySmall!.copyWith(color: Colors.grey, fontSize: 13),
+            ),
+          );
+        }),
         hintText: context.l10n.messaging_NewConversation_contactOrNumberSearch_hint,
         fillColor: colorScheme.surface,
         border: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(12)),

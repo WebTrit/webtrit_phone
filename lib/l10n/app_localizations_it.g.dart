@@ -869,7 +869,13 @@ class AppLocalizationsIt extends AppLocalizations {
   String get messaging_NewConversation_contactOrNumberSearch_hint => 'Inserisci nome o numero di telefono';
 
   @override
-  String get messaging_NewConversation_numberSearch_invalidFormat => 'Formato numero di telefono: + numero abbonato/numero abbonato operatore';
+  String get messaging_NewConversation_numberFormatExample => '+ [prefisso nazionale] [prefisso operatore] [numero abbonato]';
+
+  @override
+  String get messaging_NewConversation_numberSearch_errorHint => 'Formato del numero di telefono: ';
+
+  @override
+  String get messaging_NewConversation_numberSearch_errorError => 'Il numero di telefono inserito non è valido. Deve essere inserito nel formato: ';
 
   @override
   String get messaging_NewConversation_invite_heading => 'Invita utenti:';
@@ -887,7 +893,10 @@ class AppLocalizationsIt extends AppLocalizations {
   String get messaging_NewConversation_invalidNumber_title => 'Numero di telefono disabilitato';
 
   @override
-  String get messaging_NewConversation_invalidNumber_message => 'Il tsontact ha un numero di telefono non valido. Dovrebbe essere nel formato + numero di abbonamento del cliente/operatore. Per favore, lo trovi nella nostra rubrica.';
+  String get messaging_NewConversation_invalidNumber_message1 => 'Il tsontact ha un numero di telefono non valido. Dovrebbe essere nel formato ';
+
+  @override
+  String get messaging_NewConversation_invalidNumber_message2 => '. Per favore, lo trovi nella nostra rubrica.';
 
   @override
   String get messaging_NewConversation_invalidNumber_ok => 'Tslose';

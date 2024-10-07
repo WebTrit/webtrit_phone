@@ -1739,11 +1739,23 @@ abstract class AppLocalizations {
   /// **'Enter name or phone number'**
   String get messaging_NewConversation_contactOrNumberSearch_hint;
 
-  /// No description provided for @messaging_NewConversation_numberSearch_invalidFormat.
+  /// No description provided for @messaging_NewConversation_numberFormatExample.
   ///
   /// In en, this message translates to:
-  /// **'Phone number format: + [country code][area/operator code][subscriber number]'**
-  String get messaging_NewConversation_numberSearch_invalidFormat;
+  /// **'+ [country code] [area/operator code] [subscriber number]'**
+  String get messaging_NewConversation_numberFormatExample;
+
+  /// No description provided for @messaging_NewConversation_numberSearch_errorHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone number format: '**
+  String get messaging_NewConversation_numberSearch_errorHint;
+
+  /// No description provided for @messaging_NewConversation_numberSearch_errorError.
+  ///
+  /// In en, this message translates to:
+  /// **'The entered phone number is invalid. It should be entered in the format: '**
+  String get messaging_NewConversation_numberSearch_errorError;
 
   /// No description provided for @messaging_NewConversation_invite_heading.
   ///
@@ -1775,11 +1787,17 @@ abstract class AppLocalizations {
   /// **'Invalid phone number'**
   String get messaging_NewConversation_invalidNumber_title;
 
-  /// No description provided for @messaging_NewConversation_invalidNumber_message.
+  /// No description provided for @messaging_NewConversation_invalidNumber_message1.
   ///
   /// In en, this message translates to:
-  /// **'The contact has an invalid phone number. It should be in the format + [country code][area/operator code][subscriber number]. Please fix it in your phone book.'**
-  String get messaging_NewConversation_invalidNumber_message;
+  /// **'The contact has an invalid phone number. It should be in the format '**
+  String get messaging_NewConversation_invalidNumber_message1;
+
+  /// No description provided for @messaging_NewConversation_invalidNumber_message2.
+  ///
+  /// In en, this message translates to:
+  /// **'. Please fix it in your phone book.'**
+  String get messaging_NewConversation_invalidNumber_message2;
 
   /// No description provided for @messaging_NewConversation_invalidNumber_ok.
   ///

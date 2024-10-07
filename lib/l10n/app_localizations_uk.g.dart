@@ -869,7 +869,13 @@ class AppLocalizationsUk extends AppLocalizations {
   String get messaging_NewConversation_contactOrNumberSearch_hint => 'Введіть ім\'я або номер телефону';
 
   @override
-  String get messaging_NewConversation_numberSearch_invalidFormat => 'Формат номера телефону: + [код країни][код регіону/оператора][номер абонента]';
+  String get messaging_NewConversation_numberFormatExample => '+ [код країни] [код регіону/оператора] [номер абонента]';
+
+  @override
+  String get messaging_NewConversation_numberSearch_errorHint => 'Формат номера телефону: ';
+
+  @override
+  String get messaging_NewConversation_numberSearch_errorError => 'Введений номер телефону недійсний. Його слід ввести у форматі: ';
 
   @override
   String get messaging_NewConversation_invite_heading => 'Запросити користувачів:';
@@ -887,7 +893,10 @@ class AppLocalizationsUk extends AppLocalizations {
   String get messaging_NewConversation_invalidNumber_title => 'Невірний номер телефону';
 
   @override
-  String get messaging_NewConversation_invalidNumber_message => 'Контакт має недійсний номер телефону. Він має бути у форматі + [код країни][код регіону/оператора][номер абонента]. Будь ласка, виправте це у своїй телефонній книзі.';
+  String get messaging_NewConversation_invalidNumber_message1 => 'The contact has an invalid phone number. It should be in the format ';
+
+  @override
+  String get messaging_NewConversation_invalidNumber_message2 => '. Please fix it in your phone book.';
 
   @override
   String get messaging_NewConversation_invalidNumber_ok => 'Закрити';
