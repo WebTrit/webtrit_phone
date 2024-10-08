@@ -163,12 +163,12 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
       appBar: MainAppBar(title: widget.title),
       body: Column(
         children: [
+          const SizedBox(height: 10),
           if (chatsEnabled && smsEnabled) ...[
-            const SizedBox(height: 10),
             tabButtons(colorScheme),
             const SizedBox(height: 10),
-            Expanded(child: ConversationsList(tabType: tabType)),
           ],
+          Expanded(child: ConversationsList(tabType: tabType)),
         ],
       ),
       floatingActionButton: FloatingActionButton(
