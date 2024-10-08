@@ -16,6 +16,12 @@ class SecureStorage {
     );
     final cache = await storage.readAll();
 
+    // Migration from old version of the app where the user ID wasnt provided to the app
+    // to avoid data inconsistency in the cache, we should clear it if the user ID is not present
+    if (!cache.containsKey(_kUserIdKey)) {
+      cache.clear();
+    }
+
     _instance = SecureStorage._(storage, cache);
   }
 
