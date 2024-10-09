@@ -4,19 +4,26 @@ import 'package:collection/collection.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logging/logging.dart';
+import 'package:phoenix_socket/phoenix_socket.dart';
 
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
+import 'package:webtrit_phone/features/messaging/extensions/phoenix_socket.dart';
 
 part 'chat_conversations_state.dart';
 
 final _logger = Logger('ChatConversationsCubit');
 
 class ChatConversationsCubit extends Cubit<ChatConversationsState> {
-  ChatConversationsCubit(this._repository, this._contactsRepo) : super(ChatConversationsState.initial()) {
+  ChatConversationsCubit(
+    this._client,
+    this._repository,
+    this._contactsRepo,
+  ) : super(ChatConversationsState.initial()) {
     init();
   }
 
+  final PhoenixSocket _client;
   final ChatsRepository _repository;
   final ContactsRepository _contactsRepo;
 
@@ -49,6 +56,20 @@ class ChatConversationsCubit extends Cubit<ChatConversationsState> {
         emit(state.copyWith(conversations: newList));
       }
     });
+  }
+
+  Future<bool> deleteConversation(int id) async {
+    final channel = _client.getChatChannel(id);
+    if (channel == null || channel.state != PhoenixChannelState.joined) return false;
+    final result = await channel.push('chat:delete', {}).future;
+    return result.isOk;
+  }
+
+  Future<bool> leaveConversation(int id) async {
+    final channel = _client.getChatChannel(id);
+    if (channel == null || channel.state != PhoenixChannelState.joined) return false;
+    final result = await channel.push('chat:member:leave', {}).future;
+    return result.isOk;
   }
 
   /// Sort chat list by last message if available, otherwise by chat update time

@@ -3,19 +3,24 @@ import 'dart:async';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logging/logging.dart';
+import 'package:phoenix_socket/phoenix_socket.dart';
 
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
+import 'package:webtrit_phone/features/messaging/extensions/phoenix_socket.dart';
 
 part 'sms_conversations_state.dart';
 
 final _logger = Logger('SmsConversationsCubit');
 
 class SmsConversationsCubit extends Cubit<SmsConversationsState> {
-  SmsConversationsCubit(this._repository) : super(SmsConversationsState.initial()) {
+  SmsConversationsCubit(
+    this._client,
+    this._repository,
+  ) : super(SmsConversationsState.initial()) {
     init();
   }
-
+  final PhoenixSocket _client;
   final SmsRepository _repository;
   late final StreamSubscription _conversationsSub;
 
@@ -41,6 +46,13 @@ class SmsConversationsCubit extends Cubit<SmsConversationsState> {
         emit(state.copyWith(conversations: _mergeWithMessageUpdate(event.message)));
       }
     });
+  }
+
+  Future<bool> deleteConversation(int id) async {
+    final channel = _client.getSmsConversationChannel(id);
+    if (channel == null || channel.state != PhoenixChannelState.joined) return false;
+    final result = await channel.push('sms:conversation:delete', {}).future;
+    return result.isOk;
   }
 
   /// Sort conversations list by last message if available, otherwise by conversations update time

@@ -8,7 +8,7 @@ import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/messaging/messaging.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
-import 'package:webtrit_phone/widgets/widgets.dart';
+import 'package:webtrit_phone/widgets/leading_avatar.dart';
 
 class ChatConversationsTile extends StatefulWidget {
   const ChatConversationsTile({required this.conversation, required this.lastMessage, required this.userId, super.key});
@@ -32,19 +32,49 @@ class _ChatConversationsTileState extends State<ChatConversationsTile> {
     }
   }
 
+  Future<bool> onDismiss(_) async {
+    final conformation = await showDialog(context: context, builder: (_) => const ConfirmDialog());
+    if (conformation != true) return false;
+    if (!mounted) return false;
+
+    final conversation = widget.conversation;
+    if (conversation.type == ChatType.dialog) {
+      return context.read<ChatConversationsCubit>().deleteConversation(conversation.id);
+    } else {
+      if (conversation.members.isGroupOwner(widget.userId)) {
+        return context.read<ChatConversationsCubit>().deleteConversation(conversation.id);
+      } else {
+        return context.read<ChatConversationsCubit>().leaveConversation(conversation.id);
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      decoration: BoxDecoration(
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      child: Material(
         color: Theme.of(context).cardColor.withOpacity(0.1),
         borderRadius: BorderRadius.circular(16),
-      ),
-      child: ListTile(
-        leading: leading(),
-        title: title(),
-        subtitle: subtitle(),
-        onTap: onTap,
+        clipBehavior: Clip.antiAlias,
+        child: Dismissible(
+          key: ValueKey(widget.conversation),
+          direction: DismissDirection.endToStart,
+          crossAxisEndOffset: 0.5,
+          dismissThresholds: const {DismissDirection.endToStart: 0.6},
+          background: Container(
+            color: Colors.red,
+            transform: Matrix4.translationValues(MediaQuery.of(context).size.width * 0.4, 0, 0),
+            child: const Icon(Icons.delete_forever, color: Colors.white),
+          ),
+          confirmDismiss: onDismiss,
+          child: ListTile(
+            leading: leading(),
+            title: title(),
+            subtitle: subtitle(),
+            onTap: onTap,
+          ),
+        ),
       ),
     );
   }

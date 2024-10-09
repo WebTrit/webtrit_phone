@@ -48,6 +48,14 @@ extension ChatMembersIterableExtension<T extends ChatMember> on Iterable<T> {
   bool isActiveMember(String memberId) => any((member) => member.userId == memberId);
 
   List<ChatMember> participants(String userId) => where((member) => member.userId != userId).toList();
+
+  bool isGroupModerator(String userId) {
+    return any((m) => m.userId == userId && m.groupAuthorities == GroupAuthorities.moderator);
+  }
+
+  bool isGroupOwner(String userId) {
+    return any((m) => m.userId == userId && m.groupAuthorities == GroupAuthorities.owner);
+  }
 }
 
 enum GroupAuthorities { moderator, owner }
