@@ -9,7 +9,6 @@ import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/blocs/app/app_bloc.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/models/models.dart';
-import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/widgets/fade_id.dart';
 import 'package:webtrit_phone/widgets/no_data_placeholder.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
@@ -25,7 +24,6 @@ class _ConversationScreenState extends State<ConversationScreen> {
   late final userId = context.read<AppBloc>().state.userId!;
   late final messagingBloc = context.read<MessagingBloc>();
   late final conversationCubit = context.read<ConversationCubit>();
-  late final contactsRepo = context.read<ContactsRepository>();
 
   onMenuTap() {
     showModalBottomSheet(
@@ -45,7 +43,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => ChatTypingCubit(messagingBloc.state.client, contactsRepo),
+      create: (context) => ChatTypingCubit(messagingBloc.state.client),
       child: BlocConsumer<ConversationCubit, ConversationState>(
         listener: (context, state) {
           if (state is CVSReady && state.chat != null) {

@@ -738,6 +738,8 @@
   "@messaging_GroupBuilderScreen_connectionError": {},
   "messaging_GroupBuilderScreen_submitError": "Під час створення групи сталася помилка, повторіть спробу",
   "@messaging_GroupBuilderScreen_submitError": {},
+  "messaging_MessageListView_typingTrail": "надруковує...",
+  "@messaging_MessageListView_typingTrail": {},
   "account_selfCarePasswordExpired_message": "Термін дії вашого пароля самообслуговування минув. Оновіть його за допомогою самообслуговування.\nДоки пароль не буде змінено, доступ до служби буде обмежено.",
   "@account_selfCarePasswordExpired_message": {},
   "common_noInternetConnection_title": "Немає підключення до Інтернету",

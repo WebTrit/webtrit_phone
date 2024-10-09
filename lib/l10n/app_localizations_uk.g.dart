@@ -1025,6 +1025,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get messaging_GroupBuilderScreen_submitError => 'Під час створення групи сталася помилка, повторіть спробу';
 
   @override
+  String get messaging_MessageListView_typingTrail => 'надруковує...';
+
+  @override
   String get account_selfCarePasswordExpired_message => 'Термін дії вашого пароля самообслуговування минув. Оновіть його за допомогою самообслуговування.\nДоки пароль не буде змінено, доступ до служби буде обмежено.';
 
   @override

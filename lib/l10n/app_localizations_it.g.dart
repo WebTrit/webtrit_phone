@@ -1025,6 +1025,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get messaging_GroupBuilderScreen_submitError => 'Si è verificato un errore durante la creazione del gruppo, riprovare.';
 
   @override
+  String get messaging_MessageListView_typingTrail => 'stampe...';
+
+  @override
   String get account_selfCarePasswordExpired_message => 'La tua password di self-care è scaduta. Ti preghiamo di aggiornarla utilizzando il self-care.\nFino a quando la password non sarà cambiata, l\'accesso al servizio sarà limitato.';
 
   @override

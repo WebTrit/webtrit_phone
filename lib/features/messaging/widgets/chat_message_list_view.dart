@@ -7,6 +7,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/messaging/messaging.dart';
+import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 
 import 'chat_message_view.dart';
@@ -254,8 +255,10 @@ class _ChatMessageListViewState extends State<ChatMessageListView> {
   Widget typingIndicator() {
     return BlocBuilder<ChatTypingCubit, TypingState>(
       builder: (context, state) {
-        final typing = state.isNotEmpty;
-        final typingUsers = state.map((e) => e.name).join(', ');
+        final typingUsers = state;
+        final anybodyTyping = typingUsers.isNotEmpty;
+
+        const textStyle = TextStyle(fontSize: 12, color: Colors.grey);
 
         return AnimatedCrossFade(
           duration: const Duration(milliseconds: 600),
@@ -264,20 +267,25 @@ class _ChatMessageListViewState extends State<ChatMessageListView> {
           secondChild: Container(
             margin: const EdgeInsets.only(top: 8),
             padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Row(
+            child: Wrap(
+              crossAxisAlignment: WrapCrossAlignment.center,
+              spacing: 4,
               children: [
                 const TypingIconDriver(),
-                const SizedBox(width: 8),
-                Flexible(
-                  child: Text(
-                    '$typingUsers is typing...',
-                    style: const TextStyle(fontSize: 12, color: Colors.grey),
-                  ),
-                ),
+                for (final id in typingUsers) ...[
+                  ContactInfoBuilder(
+                      sourceType: ContactSourceType.external,
+                      sourceId: id,
+                      builder: (context, contact, {required bool loading}) {
+                        if (contact == null) return const SizedBox();
+                        return Text(contact.name, style: textStyle);
+                      }),
+                ],
+                Text(context.l10n.messaging_MessageListView_typingTrail, style: textStyle),
               ],
             ),
           ),
-          crossFadeState: typing ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+          crossFadeState: anybodyTyping ? CrossFadeState.showSecond : CrossFadeState.showFirst,
         );
       },
     );

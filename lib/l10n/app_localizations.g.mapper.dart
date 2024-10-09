@@ -592,6 +592,8 @@ class AppLocalizationsMapper {
           localizations.messaging_GroupBuilderScreen_connectionError,
       'messaging_GroupBuilderScreen_submitError':
           localizations.messaging_GroupBuilderScreen_submitError,
+      'messaging_MessageListView_typingTrail':
+          localizations.messaging_MessageListView_typingTrail,
       'account_selfCarePasswordExpired_message':
           localizations.account_selfCarePasswordExpired_message,
       'common_noInternetConnection_title':

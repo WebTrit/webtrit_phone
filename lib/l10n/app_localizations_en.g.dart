@@ -1025,6 +1025,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get messaging_GroupBuilderScreen_submitError => 'Error happened while creating group, please try again';
 
   @override
+  String get messaging_MessageListView_typingTrail => 'is typing...';
+
+  @override
   String get account_selfCarePasswordExpired_message => 'Your self-care password has expired. Please update it using your self-care.\nUntil the password is changed, access to the service will be limited.';
 
   @override

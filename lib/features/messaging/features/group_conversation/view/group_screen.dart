@@ -8,7 +8,6 @@ import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/blocs/app/app_bloc.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
-import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 class GroupScreen extends StatefulWidget {
@@ -22,7 +21,6 @@ class _GroupScreenState extends State<GroupScreen> {
   late final userId = context.read<AppBloc>().state.userId!;
   late final messagingBloc = context.read<MessagingBloc>();
   late final groupCubit = context.read<GroupCubit>();
-  late final contactsRepo = context.read<ContactsRepository>();
 
   onMenuTap() {
     showModalBottomSheet(
@@ -42,7 +40,7 @@ class _GroupScreenState extends State<GroupScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => ChatTypingCubit(messagingBloc.state.client, contactsRepo),
+      create: (context) => ChatTypingCubit(messagingBloc.state.client),
       child: BlocConsumer<GroupCubit, GroupState>(
         listener: (context, state) {
           if (state is GroupStateReady) {

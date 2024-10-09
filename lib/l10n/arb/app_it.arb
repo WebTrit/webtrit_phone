@@ -738,6 +738,8 @@
   "@messaging_GroupBuilderScreen_connectionError": {},
   "messaging_GroupBuilderScreen_submitError": "Si è verificato un errore durante la creazione del gruppo, riprovare.",
   "@messaging_GroupBuilderScreen_submitError": {},
+  "messaging_MessageListView_typingTrail": "stampe...",
+  "@messaging_MessageListView_typingTrail": {},
   "account_selfCarePasswordExpired_message": "La tua password di self-care è scaduta. Ti preghiamo di aggiornarla utilizzando il self-care.\nFino a quando la password non sarà cambiata, l'accesso al servizio sarà limitato.",
   "@account_selfCarePasswordExpired_message": {},
   "common_noInternetConnection_title": "Nessuna connessione Internet",

@@ -5,21 +5,17 @@ import 'package:logging/logging.dart';
 import 'package:phoenix_socket/phoenix_socket.dart';
 
 import 'package:webtrit_phone/features/features.dart';
-import 'package:webtrit_phone/models/models.dart';
-import 'package:webtrit_phone/repositories/repositories.dart';
 
 final _logger = Logger('ChatTypingCubit');
 
 class ChatTypingCubit extends Cubit<TypingState> {
   ChatTypingCubit(
-    this.client,
-    this.contactsRepo, {
+    this.client, {
     this.typeThrottle = const Duration(seconds: 3),
     this.typeTimeout = const Duration(seconds: 5),
   }) : super({});
 
   final PhoenixSocket client;
-  final ContactsRepository contactsRepo;
   final Duration typeThrottle;
   final Duration typeTimeout;
 
@@ -53,29 +49,29 @@ class ChatTypingCubit extends Cubit<TypingState> {
 
   Future<void> _handleEvent(e) async {
     if (e is TypingEvent) {
-      final typings = state;
+      // Set typing user
       final userId = e.userId;
-      final contact = await contactsRepo.getContactBySource(ContactSourceType.external, userId);
-      if (contact != null) {
-        typings.add((userId: userId, name: contact.name));
-      } else {
-        typings.add((userId: userId, name: 'unknown'));
-      }
-      emit(Set.from(typings));
-      _typingTimers[e.userId]?.cancel();
-      _typingTimers[e.userId] = Timer(typeTimeout, () {
-        if (isClosed) return;
-        final typings = state;
-        typings.removeWhere((typing) => typing.userId == e.userId);
-        emit(Set.from(typings));
+      emit({...state, userId});
+
+      // Start auto-remove timer
+      _typingTimers[userId]?.cancel();
+      _typingTimers[userId] = Timer(typeTimeout, () {
+        _removeTypingUser(userId);
       });
     }
 
     if (e is SentEvent) {
-      final typings = state;
-      typings.removeWhere((typing) => typing.userId == e.senderId);
-      emit(Set.from(typings));
+      // Remove typing user on sent message from user
+      _removeTypingUser(e.senderId);
     }
+  }
+
+  _removeTypingUser(String userId) {
+    if (isClosed) return;
+
+    final typings = state;
+    typings.remove(userId);
+    emit(Set.from(typings));
   }
 
   Stream<dynamic> _typingStream(int chatId) async* {
@@ -117,4 +113,4 @@ class ChatTypingCubit extends Cubit<TypingState> {
 
 typedef TypingEvent = ({String userId});
 typedef SentEvent = ({String senderId});
-typedef TypingState = Set<({String userId, String name})>;
+typedef TypingState = Set<String>;

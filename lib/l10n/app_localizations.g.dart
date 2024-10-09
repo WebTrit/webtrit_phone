@@ -2051,6 +2051,12 @@ abstract class AppLocalizations {
   /// **'Error happened while creating group, please try again'**
   String get messaging_GroupBuilderScreen_submitError;
 
+  /// No description provided for @messaging_MessageListView_typingTrail.
+  ///
+  /// In en, this message translates to:
+  /// **'is typing...'**
+  String get messaging_MessageListView_typingTrail;
+
   /// No description provided for @account_selfCarePasswordExpired_message.
   ///
   /// In en, this message translates to:
