@@ -153,13 +153,13 @@ class ChatsSyncWorker {
         final cursors = (cursorsReq.response as List).map((e) => ChatMessageReadCursor.fromMap(e)).toList();
         for (final cursor in cursors) {
           await chatsRepository.upsertChatMessageReadCursor(cursor);
-          yield cursor;
         }
+        yield cursors;
 
         // Get last update time for sync messages from
         final newestCursor = await chatsRepository.getChatMessageSyncCursor(chatId, MessageSyncCursorType.newest);
 
-        // If no last update, fetch history of last 100 messages for initial state
+        /// If no last update, fetch history of last [pageSize] messages for initial state
         if (newestCursor == null) {
           final payload = {'limit': pageSize};
           final req = await channel.push('message:history', payload, pushTimeout).future;
@@ -167,10 +167,8 @@ class ChatsSyncWorker {
 
           if (messages.isNotEmpty) {
             // Process fetched messages
-            for (final msg in messages.reversed) {
-              await chatsRepository.upsertMessage(msg);
-              yield msg;
-            }
+            await chatsRepository.upsertMessages(messages.reversed);
+            yield {'event': 'upsert history page', 'conversation': chatId, 'count': messages.length};
 
             // set initial cursors
             // Pay attention, the history is fetched in reverse order
@@ -199,10 +197,8 @@ class ChatsSyncWorker {
             // If no more messages, break the pagination loop
             if (messages.isNotEmpty) {
               // Process fetched messages
-              for (final msg in messages) {
-                await chatsRepository.upsertMessage(msg);
-                yield msg;
-              }
+              await chatsRepository.upsertMessages(messages);
+              yield {'event': 'upsert updates page', 'conversation': chatId, 'count': messages.length};
 
               // Update local newest cursor to continue pagination
               pagingCursor = ChatMessageSyncCursor(

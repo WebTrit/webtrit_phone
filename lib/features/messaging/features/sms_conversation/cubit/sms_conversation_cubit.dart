@@ -148,7 +148,7 @@ class SmsConversationCubit extends Cubit<SmsConversationState> {
         messages = (req.response['data'] as List).map((e) => SmsMessage.fromMap(e)).toList();
         _logger.info('fetchHistory: remote messages ${messages.length}');
         if (messages.isNotEmpty) {
-          await _repository.insertHistoryPage(messages);
+          await _repository.upsertMessages(messages, silent: true);
           await _repository.upsertSmsMessageSyncCursor(SmsMessageSyncCursor(
             conversationId: conversationId,
             cursorType: SmsSyncCursorType.oldest,

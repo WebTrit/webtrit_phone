@@ -73,9 +73,12 @@ class SmsRepository with SmsDriftMapper {
     if (!silent) _addEvent(SmsMessageUpdate(message));
   }
 
-  Future<void> insertHistoryPage(List<SmsMessage> messages) async {
-    for (final message in messages) {
-      await upsertMessage(message, silent: true);
+  Future<void> upsertMessages(Iterable<SmsMessage> messages, {bool silent = false}) async {
+    await _smsDao.upsertMessages(messages.map(messageToDrift));
+    if (!silent) {
+      for (final message in messages) {
+        _addEvent(SmsMessageUpdate(message));
+      }
     }
   }
 

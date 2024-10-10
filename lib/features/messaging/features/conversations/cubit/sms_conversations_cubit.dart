@@ -34,8 +34,6 @@ class SmsConversationsCubit extends Cubit<SmsConversationsState> {
     _logger.info('Initialised: ${conversations.length} conversations');
 
     _conversationsSub = _repository.eventBus.listen((event) {
-      _logger.info('Event: $event');
-
       if (event is SmsConversationUpdate) {
         emit(state.copyWith(conversations: _mergeWithChatUpdate(event.conversation)));
       }

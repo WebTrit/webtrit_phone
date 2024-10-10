@@ -41,8 +41,6 @@ class ChatConversationsCubit extends Cubit<ChatConversationsState> {
     _logger.info('Initialised: ${conversations.length} chats');
 
     _conversationsSub = _repository.eventBus.listen((event) async {
-      _logger.info('Event: $event');
-
       if (event is ChatUpdate) {
         final newList = _mergeWithChatUpdate(event.chat, await _evaluateContacts([event.chat]));
         emit(state.copyWith(conversations: newList));

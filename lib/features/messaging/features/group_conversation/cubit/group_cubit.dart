@@ -227,7 +227,7 @@ class GroupCubit extends Cubit<GroupState> {
         messages = (req.response['data'] as List).map((e) => ChatMessage.fromMap(e)).toList();
         _logger.info('fetchHistory: remote messages ${messages.length}');
         if (messages.isNotEmpty) {
-          await _chatsRepository.insertHistoryPage(messages);
+          await _chatsRepository.upsertMessages(messages, silent: true);
           await _chatsRepository.upsertChatMessageSyncCursor(ChatMessageSyncCursor(
             chatId: _chatId,
             cursorType: MessageSyncCursorType.oldest,

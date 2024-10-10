@@ -1229,6 +1229,10 @@ class ChatsDao extends DatabaseAccessor<AppDatabase> with _$ChatsDaoMixin {
     return into(chatMessagesTable).insertOnConflictUpdate(chatMessage);
   }
 
+  Future upsertChatMessages(Iterable<ChatMessageData> chatMessages) async {
+    await batch((batch) => batch.insertAllOnConflictUpdate(chatMessagesTable, chatMessages));
+  }
+
   // Message read cursors
 
   Future<ChatMessageReadCursorData?> upsertChatMessageReadCursor(ChatMessageReadCursorData chatMessageReadCursor) {
@@ -1488,6 +1492,10 @@ class SmsDao extends DatabaseAccessor<AppDatabase> with _$SmsDaoMixin {
 
   Future<int?> upsertMessage(SmsMessageData smsMessage) async {
     return into(smsMessagesTable).insertOnConflictUpdate(smsMessage);
+  }
+
+  Future upsertMessages(Iterable<SmsMessageData> smsMessages) async {
+    await batch((batch) => batch.insertAllOnConflictUpdate(smsMessagesTable, smsMessages));
   }
 
   // Message read cursors

@@ -159,13 +159,13 @@ class SmsSyncWorker {
         final cursors = (cursorsReq.response as List).map((e) => SmsMessageReadCursor.fromMap(e)).toList();
         for (final cursor in cursors) {
           await smsRepository.upsertMessageReadCursor(cursor);
-          yield cursor;
         }
+        yield cursors;
 
         // Get last update time for sync messages from
         final newestCursor = await smsRepository.getMessageSyncCursor(conversationId, SmsSyncCursorType.newest);
 
-        // If no last update, fetch history of last 100 messages for initial state
+        // If no last update, fetch history of last [pageSize] messages for initial state
         if (newestCursor == null) {
           final payload = {'limit': pageSize};
           final req = await channel.push('sms:message:history', payload, pushTimeout).future;
@@ -173,10 +173,8 @@ class SmsSyncWorker {
 
           if (messages.isNotEmpty) {
             // Process fetched messages
-            for (final msg in messages.reversed) {
-              await smsRepository.upsertMessage(msg);
-              yield msg;
-            }
+            await smsRepository.upsertMessages(messages.reversed);
+            yield {'event': 'upsert history page', 'conversation': conversationId, 'count': messages.length};
 
             // set initial cursors
             // Pay attention, the history is fetched in reverse order
@@ -205,10 +203,8 @@ class SmsSyncWorker {
             // If no more messages, break the pagination loop
             if (messages.isNotEmpty) {
               // Process fetched messages
-              for (final msg in messages) {
-                await smsRepository.upsertMessage(msg);
-                yield msg;
-              }
+              await smsRepository.upsertMessages(messages);
+              yield {'event': 'upsert updates page', 'conversation': conversationId, 'count': messages.length};
 
               // Update local newest cursor to continue pagination
               pagingCursor = SmsMessageSyncCursor(

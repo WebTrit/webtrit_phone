@@ -1,6 +1,7 @@
 // ignore_for_file: unused_element
 import 'dart:async';
 
+import 'package:collection/collection.dart';
 import 'package:logging/logging.dart';
 
 import 'package:webtrit_phone/models/models.dart';
@@ -54,68 +55,60 @@ class MessagingNotificationsService {
 
   Future<void> _handleMessagingChatsEvents(ChatsEvent e) async {
     final notifications = await activeMessageNotificationsRepository.getAllByConversation(e.chatId);
-    _logger.info('Active push notifications: $notifications');
 
     // Dismiss notifications if message was deleted
     if (e is ChatMessageUpdate && e.message.deletedAt != null) {
-      for (final notification in notifications) {
-        if (notification.messageId == e.message.id) {
-          await _dismissByContent(notification.title, notification.body);
-        }
+      final notification = notifications.firstWhereOrNull((n) => n.messageId == e.message.id);
+      if (notification != null) {
         await activeMessageNotificationsRepository.deleteByMessage(e.message.id);
+        await _dismissByContent(notification.title, notification.body);
       }
     }
 
-    // Dismiss notifications if chat was removed
+    // Dismiss all notifications if chat was removed
     if (e is ChatRemove) {
-      for (final notification in notifications) {
-        if (notification.conversationId == e.chatId) {
-          await _dismissByContent(notification.title, notification.body);
-        }
-        await activeMessageNotificationsRepository.deleteByConversation(e.chatId);
-      }
-    }
-
-    // Dismiss notifications if user readed messages from given chat
-    // independant of from what device he did it
-    if (e is ChatReadCursorUpdate && e.cursor.userId == userId) {
+      await activeMessageNotificationsRepository.deleteByConversation(e.chatId);
       for (final notification in notifications) {
         await _dismissByContent(notification.title, notification.body);
-        await activeMessageNotificationsRepository.deleteByNotification(notification.notificationId);
+      }
+    }
+
+    // Dismiss notifications if user readed all messages in given chat
+    // independant of from what device he did it
+    if (e is ChatReadCursorUpdate && e.cursor.userId == userId) {
+      await activeMessageNotificationsRepository.deleteByConversation(e.chatId);
+      for (final notification in notifications) {
+        await _dismissByContent(notification.title, notification.body);
       }
     }
   }
 
   Future<void> _handleMessagingSmsEvents(SmsEvent e) async {
     final notifications = await activeMessageNotificationsRepository.getAllByConversation(e.conversationId);
-    _logger.info('Active push notifications: $notifications');
 
     // Dismiss notifications if message was deleted
     if (e is SmsMessageUpdate && e.message.deletedAt != null) {
-      for (final notification in notifications) {
-        if (notification.messageId == e.message.id) {
-          await _dismissByContent(notification.title, notification.body);
-        }
+      final notification = notifications.firstWhereOrNull((n) => n.messageId == e.message.id);
+      if (notification != null) {
         await activeMessageNotificationsRepository.deleteByMessage(e.message.id);
+        await _dismissByContent(notification.title, notification.body);
       }
     }
 
-    // Dismiss notifications if chat was removed
+    // Dismiss all notifications if conversation was removed
     if (e is SmsConversationRemove) {
-      for (final notification in notifications) {
-        if (notification.conversationId == e.conversationId) {
-          await _dismissByContent(notification.title, notification.body);
-        }
-        await activeMessageNotificationsRepository.deleteByConversation(e.conversationId);
-      }
-    }
-
-    // Dismiss notifications if user readed messages from given chat
-    // independant of from what device he did it
-    if (e is SmsReadCursorUpdate && e.cursor.userId == userId) {
+      await activeMessageNotificationsRepository.deleteByConversation(e.conversationId);
       for (final notification in notifications) {
         await _dismissByContent(notification.title, notification.body);
-        await activeMessageNotificationsRepository.deleteByNotification(notification.notificationId);
+      }
+    }
+
+    // Dismiss notifications if user readed all messages in given conversation
+    // independant of from what device he did it
+    if (e is SmsReadCursorUpdate && e.cursor.userId == userId) {
+      await activeMessageNotificationsRepository.deleteByConversation(e.conversationId);
+      for (final notification in notifications) {
+        await _dismissByContent(notification.title, notification.body);
       }
     }
   }
