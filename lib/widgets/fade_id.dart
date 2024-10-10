@@ -13,18 +13,16 @@ class FadeIn extends StatefulWidget {
 }
 
 class FadeInState extends State<FadeIn> with TickerProviderStateMixin {
-  late AnimationController _controller;
+  late final _controller = AnimationController(vsync: this, duration: widget.duration);
 
   @override
   void initState() {
     super.initState();
 
-    _controller = AnimationController(vsync: this, duration: widget.duration);
-
-    /// Important part is use addPostFrameCallback instead of regular call
-    /// to avoid glich on multiple widgets in a list
-    /// eg messages in a chat
-    WidgetsBinding.instance.addPostFrameCallback((_) => _controller.forward());
+    // Used addPostFrameCallback instead of regular call to avoid glich on multiple widgets in a list
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) _controller.forward();
+    });
   }
 
   @override
