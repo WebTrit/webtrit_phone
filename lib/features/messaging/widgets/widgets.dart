@@ -13,3 +13,4 @@ export 'state_bar.dart';
 export 'messaging_state_wrapper.dart';
 export 'message_text_field.dart';
 export 'group_avatar.dart';
+export 'scroll_to_bottom.dart';

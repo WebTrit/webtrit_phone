@@ -62,20 +62,24 @@ class _ChatMessageListViewState extends State<ChatMessageListView> {
   ChatMessage? editingMessage;
   ChatMessage? replyingMessage;
 
+  bool scrolledAway = false;
+
   @override
   void initState() {
     super.initState();
     scrollController.addListener(() {
       final maxScroll = scrollController.position.maxScrollExtent;
       final position = scrollController.position.pixels;
-
       final scrollRemaining = maxScroll - position;
-      const hystoryFetchScrollThreshold = 500.0;
 
+      const hystoryFetchScrollThreshold = 500.0;
       final shouldFetch = scrollRemaining < hystoryFetchScrollThreshold;
       final canFetch = !widget.historyEndReached && !widget.fetchingHistory;
-
       if (shouldFetch && canFetch) widget.onFetchHistory();
+
+      const scrolledThreshold = 1000;
+      final scrolledAway = position > scrolledThreshold;
+      if (this.scrolledAway != scrolledAway) setState(() => this.scrolledAway = scrolledAway);
     });
     computeViewEntries();
   }
@@ -104,6 +108,10 @@ class _ChatMessageListViewState extends State<ChatMessageListView> {
       viewEntries = result.entries;
       computeTime = result.dueTime;
     });
+  }
+
+  void scrollToBottom() {
+    scrollController.animateTo(0, duration: const Duration(milliseconds: 300), curve: Curves.easeOut);
   }
 
   void handleSend() {
@@ -178,59 +186,63 @@ class _ChatMessageListViewState extends State<ChatMessageListView> {
         ).createShader(rect);
       },
       blendMode: BlendMode.dstOut,
-      child: ListView.builder(
-        controller: scrollController,
-        reverse: true,
-        cacheExtent: 500,
-        padding: const EdgeInsets.symmetric(vertical: 16),
-        itemCount: viewEntries.length + 2,
-        itemBuilder: (context, index) {
-          if (index == 0) return typingIndicator();
-          if (index == viewEntries.length + 1) return historyFetchIndicator();
+      child: ScrollToBottomOverlay(
+        scrolledAway: scrolledAway,
+        onScrollToBottom: scrollToBottom,
+        child: ListView.builder(
+          controller: scrollController,
+          reverse: true,
+          cacheExtent: 500,
+          padding: const EdgeInsets.symmetric(vertical: 16),
+          itemCount: viewEntries.length + 2,
+          itemBuilder: (context, index) {
+            if (index == 0) return typingIndicator();
+            if (index == viewEntries.length + 1) return historyFetchIndicator();
 
-          final entry = viewEntries[index - 1];
+            final entry = viewEntries[index - 1];
 
-          if (entry is _MessageViewEntry) {
-            return ChatMessageView(
-              userId: widget.userId,
-              message: entry.message,
-              outboxMessage: entry.outboxMessage,
-              outboxEditEntry: entry.outboxEditEntry,
-              outboxDeleteEntry: entry.outboxDeleteEntry,
-              userReadedUntil: entry.userReadedUntil,
-              membersReadedUntil: entry.membersReadedUntil,
-              handleSetForReply: handleSetForReply,
-              handleSetForForward: handleSetForForward,
-              handleSetForEdit: handleSetForEdit,
-              handleDelete: handleDelete,
-              onRendered: () {
-                final message = entry.message;
-                if (message == null) return;
+            if (entry is _MessageViewEntry) {
+              return ChatMessageView(
+                userId: widget.userId,
+                message: entry.message,
+                outboxMessage: entry.outboxMessage,
+                outboxEditEntry: entry.outboxEditEntry,
+                outboxDeleteEntry: entry.outboxDeleteEntry,
+                userReadedUntil: entry.userReadedUntil,
+                membersReadedUntil: entry.membersReadedUntil,
+                handleSetForReply: handleSetForReply,
+                handleSetForForward: handleSetForForward,
+                handleSetForEdit: handleSetForEdit,
+                handleDelete: handleDelete,
+                onRendered: () {
+                  final message = entry.message;
+                  if (message == null) return;
 
-                final mine = message.senderId == widget.userId;
-                if (mine) return;
+                  final mine = message.senderId == widget.userId;
+                  if (mine) return;
 
-                final userReadedUntil = widget.readCursors.userReadedUntil(widget.userId);
-                final reachedUnreaded = userReadedUntil == null || message.createdAt.isAfter(userReadedUntil);
-                if (reachedUnreaded) widget.userReadedUntilUpdate(message.createdAt);
-              },
-            );
-          }
+                  final userReadedUntil = widget.readCursors.userReadedUntil(widget.userId);
+                  final reachedUnreaded = userReadedUntil == null || message.createdAt.isAfter(userReadedUntil);
+                  if (reachedUnreaded) widget.userReadedUntilUpdate(message.createdAt);
+                },
+              );
+            }
 
-          if (entry is _DateViewEntry) {
-            return Padding(
-              padding: const EdgeInsets.only(top: 8),
-              child: Center(
-                child: Text(
-                  entry.date.toDayOfMonth,
-                  style: const TextStyle(fontSize: 12, color: Colors.grey),
+            if (entry is _DateViewEntry) {
+              return Padding(
+                padding: const EdgeInsets.only(top: 8),
+                child: Center(
+                  child: Text(
+                    entry.date.toDayOfMonth,
+                    style: const TextStyle(fontSize: 12, color: Colors.grey),
+                  ),
                 ),
-              ),
-            );
-          }
+              );
+            }
 
-          return const SizedBox();
-        },
+            return const SizedBox();
+          },
+        ),
       ),
     );
   }
