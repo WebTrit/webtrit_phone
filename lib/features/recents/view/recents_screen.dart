@@ -157,7 +157,8 @@ class _RecentsScreenState extends State<RecentsScreen> with SingleTickerProvider
                         },
                         onMessagePressed: chatsEnabled && recent.canMessage
                             ? () {
-                                context.router.navigate(ConversationScreenPageRoute(participantId: contactSourceId!));
+                                context.router
+                                    .navigate(ChatConversationScreenPageRoute(participantId: contactSourceId!));
                               }
                             : null,
                       );

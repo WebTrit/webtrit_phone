@@ -7,27 +7,26 @@ import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
 @RoutePage()
-class ConversationScreenPage extends StatelessWidget {
+class ChatConversationScreenPage extends StatelessWidget {
   // ignore: use_key_in_widget_constructors
-  const ConversationScreenPage({required this.participantId});
+  const ChatConversationScreenPage({this.participantId, this.chatId});
 
-  final String participantId;
+  final String? participantId;
+  final int? chatId;
 
   @override
   Widget build(BuildContext context) {
-    final messagingBloc = context.read<MessagingBloc>();
-    final chatsRepository = context.read<ChatsRepository>();
-    final chatsOutboxRepository = context.read<ChatsOutboxRepository>();
+    final creds = (chatId: chatId, participantId: participantId);
 
     final screen = BlocProvider(
-      key: ValueKey(participantId),
+      key: ValueKey(creds),
       create: (context) => ConversationCubit(
-        participantId,
-        messagingBloc.state.client,
-        chatsRepository,
-        chatsOutboxRepository,
-      ),
-      child: const ConversationScreen(),
+        creds,
+        context.read<MessagingBloc>().state.client,
+        context.read<ChatsRepository>(),
+        context.read<ChatsOutboxRepository>(),
+      )..init(),
+      child: const ChatConversationScreen(),
     );
 
     return MessagingStateWrapper(child: screen);

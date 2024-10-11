@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 
@@ -29,7 +27,7 @@ class _SmsConversationScreenState extends State<SmsConversationScreen> {
   onDeleteDialog() async {
     final askResult = await showDialog<bool>(
       context: context,
-      builder: (context) => ConfirmDialog(askText: context.l10n.messaging_ConversationInfo_deleteAsk),
+      builder: (context) => ConfirmDialog(askText: context.l10n.messaging_DialogInfo_deleteAsk),
     );
 
     if (!mounted) return;
@@ -61,105 +59,93 @@ class _SmsConversationScreenState extends State<SmsConversationScreen> {
 
           if (loading) return const SizedBox();
 
-          return Stack(
-            children: [
-              Scaffold(
-                appBar: AppBar(
-                  title: Builder(
-                    builder: (context) {
-                      if (recipientNumber != null) {
-                        return FadeIn(
-                          child: Text(
-                            recipientNumber,
+          return Scaffold(
+            appBar: AppBar(
+              title: Builder(
+                builder: (context) {
+                  if (recipientNumber != null) {
+                    return FadeIn(
+                      child: Text(
+                        recipientNumber,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(fontSize: 20),
+                      ),
+                    );
+                  } else {
+                    return FadeIn(
+                      child: Column(
+                        children: [
+                          Text(
+                            firstNumber,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: const TextStyle(fontSize: 20),
                           ),
-                        );
-                      } else {
-                        return FadeIn(
-                          child: Column(
-                            children: [
-                              Text(
-                                firstNumber,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(fontSize: 20),
-                              ),
-                              Text(
-                                secondNumber,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(fontSize: 20),
-                              ),
-                            ],
+                          Text(
+                            secondNumber,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(fontSize: 20),
                           ),
-                        );
-                      }
-                    },
-                  ),
-                  actions: [
-                    PopupMenuButton(
-                      itemBuilder: (context) {
-                        return [
-                          PopupMenuItem(
-                            onTap: onDeleteDialog,
-                            child: ListTile(
-                              title: Text(context.l10n.messaging_ConversationInfo_deleteBtn),
-                              leading: const Icon(Icons.playlist_remove_rounded),
-                              dense: true,
-                            ),
-                          )
-                        ];
-                      },
-                      icon: const Icon(Icons.menu),
-                    ),
-                  ],
-                ),
-                body: Builder(
-                  builder: (context) {
-                    if (state is SCSReady) {
-                      return SmsMessageListView(
-                        userId: userId,
-                        userNumber: userNumber,
-                        messages: state.messages,
-                        outboxMessages: state.outboxMessages,
-                        outboxMessageDeletes: state.outboxMessageDeletes,
-                        readCursors: state.readCursors,
-                        fetchingHistory: state.fetchingHistory,
-                        historyEndReached: state.historyEndReached,
-                        onSendMessage: (content) => conversationCubit.sendMessage(content),
-                        onDelete: (refMessage) => conversationCubit.deleteMessage(refMessage),
-                        userReadedUntilUpdate: (date) => conversationCubit.userReadedUntilUpdate(date),
-                        onFetchHistory: conversationCubit.fetchHistory,
-                      );
-                    }
-
-                    if (state is SCSError) {
-                      return NoDataPlaceholder(
-                        content: Text(context.l10n.messaging_Conversation_failure),
-                        actions: [
-                          TextButton(
-                              onPressed: conversationCubit.restart, child: Text(context.l10n.messaging_ActionBtn_retry))
                         ],
-                      );
-                    }
-
-                    return const Center(
-                      child: CircularProgressIndicator(),
+                      ),
                     );
-                  },
-                ),
+                  }
+                },
               ),
-              if (state is SCSReady && state.busy)
-                Container(
-                  color: Colors.black.withOpacity(0.1),
-                  child: BackdropFilter(
-                    filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
-                    child: const Center(child: CircularProgressIndicator()),
-                  ),
+              actions: [
+                PopupMenuButton(
+                  itemBuilder: (context) {
+                    return [
+                      PopupMenuItem(
+                        onTap: onDeleteDialog,
+                        child: ListTile(
+                          title: Text(context.l10n.messaging_DialogInfo_deleteBtn),
+                          leading: const Icon(Icons.playlist_remove_rounded),
+                          dense: true,
+                        ),
+                      )
+                    ];
+                  },
+                  icon: const Icon(Icons.menu),
                 ),
-            ],
+              ],
+            ),
+            body: Builder(
+              builder: (context) {
+                if (state is SCSReady) {
+                  return SmsMessageListView(
+                    userId: userId,
+                    userNumber: userNumber,
+                    messages: state.messages,
+                    outboxMessages: state.outboxMessages,
+                    outboxMessageDeletes: state.outboxMessageDeletes,
+                    readCursors: state.readCursors,
+                    fetchingHistory: state.fetchingHistory,
+                    historyEndReached: state.historyEndReached,
+                    onSendMessage: (content) => conversationCubit.sendMessage(content),
+                    onDelete: (refMessage) => conversationCubit.deleteMessage(refMessage),
+                    userReadedUntilUpdate: (date) => conversationCubit.userReadedUntilUpdate(date),
+                    onFetchHistory: conversationCubit.fetchHistory,
+                  );
+                }
+
+                if (state is SCSError) {
+                  return NoDataPlaceholder(
+                    content: Text(context.l10n.messaging_Conversation_failure),
+                    actions: [
+                      TextButton(
+                          onPressed: conversationCubit.restart, child: Text(context.l10n.messaging_ActionBtn_retry))
+                    ],
+                  );
+                }
+
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              },
+            ),
           );
         });
       },

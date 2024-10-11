@@ -468,12 +468,11 @@ class AppLocalizationsMapper {
       'messaging_MessageField_hint': localizations.messaging_MessageField_hint,
       'messaging_ConversationScreen_titlePrefix':
           localizations.messaging_ConversationScreen_titlePrefix,
-      'messaging_ConversationInfo_deleteAsk':
-          localizations.messaging_ConversationInfo_deleteAsk,
-      'messaging_ConversationInfo_title':
-          localizations.messaging_ConversationInfo_title,
-      'messaging_ConversationInfo_deleteBtn':
-          localizations.messaging_ConversationInfo_deleteBtn,
+      'messaging_DialogInfo_deleteAsk':
+          localizations.messaging_DialogInfo_deleteAsk,
+      'messaging_DialogInfo_title': localizations.messaging_DialogInfo_title,
+      'messaging_DialogInfo_deleteBtn':
+          localizations.messaging_DialogInfo_deleteBtn,
       'messaging_NewConversation_createGroup':
           localizations.messaging_NewConversation_createGroup,
       'messaging_NewConversation_title':

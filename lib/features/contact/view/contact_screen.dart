@@ -49,7 +49,7 @@ class ContactScreen extends StatelessWidget {
                       IconButton(
                         icon: const Icon(Icons.message),
                         onPressed: () {
-                          context.router.navigate(ConversationScreenPageRoute(participantId: contact.sourceId));
+                          context.router.navigate(ChatConversationScreenPageRoute(participantId: contact.sourceId));
                         },
                       ),
                   ],

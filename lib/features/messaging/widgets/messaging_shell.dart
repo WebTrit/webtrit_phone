@@ -54,11 +54,11 @@ class _MessagingShellState extends State<MessagingShell> {
   }
 
   onOpenConversation(participantId) {
-    context.router.root.navigate(ConversationScreenPageRoute(participantId: participantId));
+    context.router.root.navigate(ChatConversationScreenPageRoute(participantId: participantId));
   }
 
   onOpenChat(chatId) {
-    context.router.root.navigate(GroupScreenPageRoute(chatId: chatId));
+    context.router.root.navigate(ChatConversationScreenPageRoute(chatId: chatId));
   }
 
   onOpenSmsConversation(firstNumber, secondNumber) {

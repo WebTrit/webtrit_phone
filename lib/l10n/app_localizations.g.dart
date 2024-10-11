@@ -89,11 +89,7 @@ abstract class AppLocalizations {
   ];
 
   /// A list of this localizations delegate's supported locales.
-  static const List<Locale> supportedLocales = <Locale>[
-    Locale('en'),
-    Locale('it'),
-    Locale('uk')
-  ];
+  static const List<Locale> supportedLocales = <Locale>[Locale('en'), Locale('it'), Locale('uk')];
 
   /// No description provided for @alertDialogActions_no.
   ///
@@ -1035,7 +1031,8 @@ abstract class AppLocalizations {
   ///
   /// In en, this message translates to:
   /// **'Incompatible WebTrit Cloud Backend version, please contact the administrator of your system.\n\nInstance version:\n{actual}\n\nSupported version:\n{supportedConstraint}'**
-  String main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError(String actual, String supportedConstraint);
+  String main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError(
+      String actual, String supportedConstraint);
 
   /// No description provided for @main_CompatibilityIssueDialog_title.
   ///
@@ -1673,23 +1670,23 @@ abstract class AppLocalizations {
   /// **'Dialog:'**
   String get messaging_ConversationScreen_titlePrefix;
 
-  /// No description provided for @messaging_ConversationInfo_deleteAsk.
+  /// No description provided for @messaging_DialogInfo_deleteAsk.
   ///
   /// In en, this message translates to:
   /// **'Are you sure you want to delete this dialog?'**
-  String get messaging_ConversationInfo_deleteAsk;
+  String get messaging_DialogInfo_deleteAsk;
 
-  /// No description provided for @messaging_ConversationInfo_title.
+  /// No description provided for @messaging_DialogInfo_title.
   ///
   /// In en, this message translates to:
   /// **'Contact info'**
-  String get messaging_ConversationInfo_title;
+  String get messaging_DialogInfo_title;
 
-  /// No description provided for @messaging_ConversationInfo_deleteBtn.
+  /// No description provided for @messaging_DialogInfo_deleteBtn.
   ///
   /// In en, this message translates to:
   /// **'Delete dialog'**
-  String get messaging_ConversationInfo_deleteBtn;
+  String get messaging_DialogInfo_deleteBtn;
 
   /// No description provided for @messaging_NewConversation_createGroup.
   ///
@@ -2104,19 +2101,18 @@ class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> 
 }
 
 AppLocalizations lookupAppLocalizations(Locale locale) {
-
-
   // Lookup logic when only language code is specified.
   switch (locale.languageCode) {
-    case 'en': return AppLocalizationsEn();
-    case 'it': return AppLocalizationsIt();
-    case 'uk': return AppLocalizationsUk();
+    case 'en':
+      return AppLocalizationsEn();
+    case 'it':
+      return AppLocalizationsIt();
+    case 'uk':
+      return AppLocalizationsUk();
   }
 
-  throw FlutterError(
-    'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
-    'an issue with the localizations generation tool. Please file an issue '
-    'on GitHub with a reproducible sample app and the gen-l10n configuration '
-    'that was used.'
-  );
+  throw FlutterError('AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
+      'an issue with the localizations generation tool. Please file an issue '
+      'on GitHub with a reproducible sample app and the gen-l10n configuration '
+      'that was used.');
 }

@@ -63,7 +63,7 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
     // If the user selected a contact, navigate to the new conversation screen
     if (result is Contact) {
       context.router.navigate(
-        ConversationScreenPageRoute(participantId: result.sourceId),
+        ChatConversationScreenPageRoute(participantId: result.sourceId),
       );
     }
 

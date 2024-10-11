@@ -1,60 +1,57 @@
 part of 'conversation_cubit.dart';
 
+typedef ChatCredentials = ({
+  /// ID of known chat conversationn, can be null for virtual dialog conversation
+  /// e.g. chat is not created explicitly, but will created by sending first message
+  int? chatId,
+
+  /// ID of user, if its dialog conversation with
+  String? participantId,
+});
+
 /// Base class for the states of the conversation cubit.
-abstract base class ConversationState {
-  const ConversationState();
+sealed class ConversationState with EquatableMixin {
+  const ConversationState(this.credentials);
+  final ChatCredentials credentials;
 
-  /// The id of the participant in the conversation
-  String get participantId;
-
-  factory ConversationState.init(String participantId) => CVSInit(participantId);
-  factory ConversationState.error(String participantId, Object error) => CVSError(participantId, error);
-  factory ConversationState.left(String participantId) => CVSLeft(participantId);
-  factory ConversationState.ready(String participantId, {Chat? chat}) {
-    return CVSReady(participantId, chat: chat);
+  factory ConversationState.init(ChatCredentials credentials) => CVSInit(credentials);
+  factory ConversationState.left(ChatCredentials credentials) => CVSLeft(credentials);
+  factory ConversationState.error(ChatCredentials credentials, Object error) {
+    return CVSError(credentials, error);
   }
+  factory ConversationState.ready(ChatCredentials credentials, {Chat? chat}) {
+    return CVSReady(credentials, chat: chat);
+  }
+
+  @override
+  List<Object> get props => [credentials];
 }
 
 /// Represents the state of the conversation cubit when preparing the conversation.
 /// E.g fetching the chat id, messages, etc.
-final class CVSInit extends ConversationState with EquatableMixin {
-  const CVSInit(this.participantId);
+final class CVSInit extends ConversationState {
+  const CVSInit(super.credentials);
+}
 
-  @override
-  final String participantId;
-
-  @override
-  List<Object> get props => [participantId];
+/// Represents the state of the conversation after user leaved/removed.
+final class CVSLeft extends ConversationState {
+  const CVSLeft(super.credentials);
 }
 
 /// Represents the error state of the conversation during the initialization.
-final class CVSError extends ConversationState with EquatableMixin {
-  const CVSError(this.participantId, this.error);
-
-  @override
-  final String participantId;
+final class CVSError extends ConversationState {
+  const CVSError(super.credentials, this.error);
 
   final Object error;
 
   @override
-  List<Object> get props => [participantId, error];
-}
-
-/// Represents the state of the conversation after user leaved/removed.
-final class CVSLeft extends ConversationState with EquatableMixin {
-  const CVSLeft(this.participantId);
-
-  @override
-  final String participantId;
-
-  @override
-  List<Object> get props => [participantId];
+  List<Object> get props => [credentials, error];
 }
 
 /// Represents the state of the conversation cubit when the conversation is ready.
-final class CVSReady extends ConversationState with EquatableMixin {
+final class CVSReady extends ConversationState {
   const CVSReady(
-    this.participantId, {
+    super.credentials, {
     this.chat,
     this.messages = const [],
     this.outboxMessages = const [],
@@ -66,8 +63,6 @@ final class CVSReady extends ConversationState with EquatableMixin {
     this.busy = false,
   });
 
-  @override
-  final String participantId;
   final Chat? chat;
   final List<ChatMessage> messages;
   final List<ChatOutboxMessageEntry> outboxMessages;
@@ -81,7 +76,7 @@ final class CVSReady extends ConversationState with EquatableMixin {
 
   @override
   List<Object> get props => [
-        participantId,
+        credentials,
         chat ?? 0,
         messages,
         outboxMessages,
@@ -94,7 +89,7 @@ final class CVSReady extends ConversationState with EquatableMixin {
       ];
 
   copyWith({
-    String? participantId,
+    ChatCredentials? credentials,
     Chat? chat,
     List<ChatMessage>? messages,
     List<ChatOutboxMessageEntry>? outboxMessages,
@@ -106,7 +101,7 @@ final class CVSReady extends ConversationState with EquatableMixin {
     bool? busy,
   }) {
     return CVSReady(
-      participantId ?? this.participantId,
+      credentials ?? this.credentials,
       chat: chat ?? this.chat,
       messages: messages ?? this.messages,
       outboxMessages: outboxMessages ?? this.outboxMessages,

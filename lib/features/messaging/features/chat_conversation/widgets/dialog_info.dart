@@ -11,27 +11,29 @@ import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/widgets/widgets.dart' hide ConfirmDialog;
 
-class ConversationInfo extends StatefulWidget {
-  const ConversationInfo({required this.userId, super.key});
+class DialogInfo extends StatefulWidget {
+  const DialogInfo(this.userId, this.participantId, {super.key});
 
   final String userId;
+  final String participantId;
+
   @override
-  State<ConversationInfo> createState() => _ConversationInfoState();
+  State<DialogInfo> createState() => _DialogInfoState();
 }
 
-class _ConversationInfoState extends State<ConversationInfo> {
+class _DialogInfoState extends State<DialogInfo> {
   late final conversationCubit = context.read<ConversationCubit>();
 
   onDeleteDialog() async {
     final askResult = await showDialog<bool>(
       context: context,
-      builder: (context) => ConfirmDialog(askText: context.l10n.messaging_ConversationInfo_deleteAsk),
+      builder: (context) => ConfirmDialog(askText: context.l10n.messaging_DialogInfo_deleteAsk),
     );
 
     if (!mounted) return;
     if (askResult != true) return;
 
-    final result = await conversationCubit.deleteDialog();
+    final result = await conversationCubit.deleteChat();
 
     if (!mounted) return;
     if (result != true) return;
@@ -42,24 +44,23 @@ class _ConversationInfoState extends State<ConversationInfo> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
+    final participant = widget.participantId;
+
     return BlocBuilder<ConversationCubit, ConversationState>(
       builder: (context, state) {
         if (state is CVSReady) {
-          final chat = state.chat;
-          final participant = state.participantId;
-
           return Stack(
             children: [
               Scaffold(
                 appBar: AppBar(
-                  title: Text(context.l10n.messaging_ConversationInfo_title),
+                  title: Text(context.l10n.messaging_DialogInfo_title),
                   actions: [
                     PopupMenuButton(
                       itemBuilder: (_) => [
                         PopupMenuItem(
                           onTap: () => onDeleteDialog(),
                           child: ListTile(
-                            title: Text(context.l10n.messaging_ConversationInfo_deleteBtn),
+                            title: Text(context.l10n.messaging_DialogInfo_deleteBtn),
                             leading: const Icon(Icons.output_sharp),
                             dense: true,
                           ),
@@ -98,7 +99,7 @@ class _ConversationInfoState extends State<ConversationInfo> {
                             SizedBox(
                               width: double.infinity,
                               child: Text(
-                                'id: ${chat?.id ?? "n/a"}',
+                                'id: ${state.credentials.chatId ?? "n/a"}',
                                 style: const TextStyle(fontSize: 12),
                                 textAlign: TextAlign.right,
                               ),

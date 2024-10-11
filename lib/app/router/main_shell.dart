@@ -234,9 +234,17 @@ class _MainShellState extends State<MainShell> {
                 final tenantId = appBloc.state.tenantId!;
                 final userId = appBloc.state.userId!;
 
+                var url = appBloc.state.coreUrl!;
+                if (url.startsWith('http://')) url = url.replaceFirst('http://', 'ws://');
+                if (url.startsWith('https://')) url = url.replaceFirst('https://', 'wss://');
+                if (url.endsWith('/')) url = url.substring(0, url.length - 1);
+                url = '$url/messaging/v1/websocket';
+
                 final client = PhoenixSocket(
-                  EnvironmentConfig.CHAT_SERVICE_URL,
-                  socketOptions: PhoenixSocketOptions(params: {'token': token, 'tenant_id': tenantId}),
+                  url,
+                  socketOptions: PhoenixSocketOptions(
+                    params: {'token': token, 'tenant_id': tenantId},
+                  ),
                 );
 
                 return MessagingBloc(

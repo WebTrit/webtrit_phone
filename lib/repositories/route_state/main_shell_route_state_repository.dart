@@ -8,8 +8,7 @@ abstract class MainShellRouteStateRepository {
   void setActiveRouteArgs(dynamic args);
 
   bool isMainScreenActive();
-  bool isGroupScreenActive(int chatId);
-  bool isConversationScreenActive(String participantId);
+  bool isChatConversationScreenActive(int? chatId, String? participantId);
   bool isSmsConversationScreenActive(String firstNumber, String secondNumber);
 }
 
@@ -35,18 +34,11 @@ class MainShellRouteStateRepositoryAutoRouteImpl implements MainShellRouteStateR
   }
 
   @override
-  bool isGroupScreenActive(int chatId) {
+  bool isChatConversationScreenActive(int? chatId, String? participantId) {
     final args = _activeRouteArgs;
-    final routeMatch = activeRouteName == GroupScreenPageRoute.name;
-    final argsMatch = args is GroupScreenPageRouteArgs && args.chatId == chatId;
-    return routeMatch && argsMatch;
-  }
-
-  @override
-  bool isConversationScreenActive(String participantId) {
-    final args = _activeRouteArgs;
-    final routeMatch = activeRouteName == ConversationScreenPageRoute.name;
-    final argsMatch = args is ConversationScreenPageRouteArgs && args.participantId == participantId;
+    final routeMatch = activeRouteName == ChatConversationScreenPageRoute.name;
+    final argsMatch =
+        args is ChatConversationScreenPageRouteArgs && (args.chatId == chatId || args.participantId == participantId);
     return routeMatch && argsMatch;
   }
 

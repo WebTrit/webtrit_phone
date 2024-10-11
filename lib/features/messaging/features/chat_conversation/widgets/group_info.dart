@@ -13,7 +13,7 @@ import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/widgets/widgets.dart' hide ConfirmDialog;
 
 class GroupInfo extends StatefulWidget {
-  const GroupInfo({required this.userId, super.key});
+  const GroupInfo(this.userId, {super.key});
 
   final String userId;
   @override
@@ -21,7 +21,7 @@ class GroupInfo extends StatefulWidget {
 }
 
 class _GroupInfoState extends State<GroupInfo> {
-  late final groupCubit = context.read<GroupCubit>();
+  late final conversationCubit = context.read<ConversationCubit>();
   late final contactsRepository = context.read<ContactsRepository>();
 
   onLeaveGroup() async {
@@ -33,10 +33,9 @@ class _GroupInfoState extends State<GroupInfo> {
     if (!mounted) return;
     if (askResult != true) return;
 
-    final result = await groupCubit.leaveGroup();
+    await conversationCubit.leaveGroup();
 
     if (!mounted) return;
-    if (result != true) return;
     context.router.navigate(const MainScreenPageRoute(children: [MessagingRouterPageRoute()]));
   }
 
@@ -49,10 +48,9 @@ class _GroupInfoState extends State<GroupInfo> {
     if (!mounted) return;
     if (askResult != true) return;
 
-    final result = await groupCubit.deleteGroup();
+    await conversationCubit.deleteChat();
 
     if (!mounted) return;
-    if (result != true) return;
     context.router.navigate(const MainScreenPageRoute(children: [MessagingRouterPageRoute()]));
   }
 
@@ -68,10 +66,10 @@ class _GroupInfoState extends State<GroupInfo> {
             child: ChooseContact(
               contactsRepository: contactsRepository,
               filter: (contact) {
-                final state = groupCubit.state;
-                if (state is GroupStateReady) {
+                final state = conversationCubit.state;
+                if (state is CVSReady) {
                   final chat = state.chat;
-                  final members = chat.members.map((m) => m.userId).toSet();
+                  final members = chat?.members.map((m) => m.userId).toSet() ?? {};
                   final isMe = contact.sourceId == widget.userId;
                   final isMember = members.contains(contact.sourceId);
                   final canMessage = contact.canMessage;
@@ -85,7 +83,7 @@ class _GroupInfoState extends State<GroupInfo> {
       ),
     );
     if (!mounted) return;
-    if (result != null) await groupCubit.addUser(result.sourceId);
+    if (result != null) await conversationCubit.addUser(result.sourceId);
   }
 
   onRemoveUser(String userId) async {
@@ -96,7 +94,7 @@ class _GroupInfoState extends State<GroupInfo> {
       builder: (context) => ConfirmDialog(askText: askText),
     );
     if (!mounted) return;
-    if (result == true) await groupCubit.removeUser(userId);
+    if (result == true) await conversationCubit.removeUser(userId);
   }
 
   onSetModerator(String userId, bool isModerator) async {
@@ -113,22 +111,22 @@ class _GroupInfoState extends State<GroupInfo> {
     );
 
     if (!mounted) return;
-    if (result == true) await groupCubit.setModerator(userId, isModerator);
+    if (result == true) await conversationCubit.setModerator(userId, isModerator);
   }
 
   onNameSubmit(String value) {
-    if (value.length > 3) groupCubit.setName(value);
+    if (value.length > 3) conversationCubit.setName(value);
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return BlocBuilder<GroupCubit, GroupState>(
+    return BlocBuilder<ConversationCubit, ConversationState>(
       builder: (context, state) {
-        if (state is GroupStateReady) {
-          final chat = state.chat;
-          final name = chat.name ?? '${context.l10n.messaging_GroupInfo_titlePrefix}: ${groupCubit.state.chatId}';
+        if (state is CVSReady && state.chat != null) {
+          final chat = state.chat!;
+          final name = chat.name ?? '${context.l10n.messaging_GroupInfo_titlePrefix}: ${chat.id}';
 
           final groupAuthorities = chat.members.firstWhere((m) => m.userId == widget.userId).groupAuthorities;
           final amIOwner = groupAuthorities == GroupAuthorities.owner;

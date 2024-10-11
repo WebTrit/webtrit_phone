@@ -52,7 +52,9 @@ mixin _$AboutState {
   Uri get coreUrl => throw _privateConstructorUsedError;
   Version? get coreVersion => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of AboutState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $AboutStateCopyWith<AboutState> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -84,6 +86,8 @@ class _$AboutStateCopyWithImpl<$Res, $Val extends AboutState>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of AboutState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -160,6 +164,8 @@ class __$$AboutStateImplCopyWithImpl<$Res>
       _$AboutStateImpl _value, $Res Function(_$AboutStateImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of AboutState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -271,7 +277,9 @@ class _$AboutStateImpl extends _AboutState {
   int get hashCode => Object.hash(runtimeType, progress, appName, packageName,
       storeBuildVersion, storeBuildNumber, appVersion, coreUrl, coreVersion);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of AboutState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$AboutStateImplCopyWith<_$AboutStateImpl> get copyWith =>
@@ -306,8 +314,11 @@ abstract class _AboutState extends AboutState {
   Uri get coreUrl;
   @override
   Version? get coreVersion;
+
+  /// Create a copy of AboutState
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$AboutStateImplCopyWith<_$AboutStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

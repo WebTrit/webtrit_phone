@@ -17,20 +17,16 @@ final _logger = Logger('ConversationCubit');
 
 class ConversationCubit extends Cubit<ConversationState> {
   ConversationCubit(
-    this._participantId,
+    ChatCredentials credentials,
     this._client,
     this._chatsRepository,
     this._outboxRepository,
-  ) : super(ConversationState.init(_participantId)) {
-    _init();
-  }
+  ) : super(ConversationState.init(credentials));
 
-  final String _participantId;
   final PhoenixSocket _client;
   final ChatsRepository _chatsRepository;
   final ChatsOutboxRepository _outboxRepository;
 
-  Chat? _chat;
   StreamSubscription? _chatUpdateSub;
   StreamSubscription? _chatRemoveSub;
   StreamSubscription? _messagesSub;
@@ -39,29 +35,25 @@ class ConversationCubit extends Cubit<ConversationState> {
   StreamSubscription? _outboxMessageDeletesSub;
   StreamSubscription? _readCursorsSub;
 
-  void restart() {
-    _logger.info('Restarting conversation with $_participantId');
-    _cancelSubs();
-    _chat = null;
-    emit(ConversationState.init(_participantId));
-    _init();
-  }
-
   Future sendMessage(String content) async {
+    final (:chatId, :participantId) = state.credentials;
+
     final outboxEntry = ChatOutboxMessageEntry(
       idKey: (const Uuid()).v4(),
-      chatId: _chat?.id,
-      participantId: _participantId,
+      chatId: chatId,
+      participantId: participantId,
       content: content,
     );
     _outboxRepository.upsertOutboxMessage(outboxEntry);
   }
 
   Future sendReply(String content, ChatMessage refMessage) async {
+    final (:chatId, :participantId) = state.credentials;
+
     final outboxEntry = ChatOutboxMessageEntry(
       idKey: (const Uuid()).v4(),
-      chatId: _chat?.id,
-      participantId: _participantId,
+      chatId: chatId,
+      participantId: participantId,
       replyToId: refMessage.id,
       content: content,
     );
@@ -69,10 +61,12 @@ class ConversationCubit extends Cubit<ConversationState> {
   }
 
   Future sendForward(ChatMessage refMessage) async {
+    final (:chatId, :participantId) = state.credentials;
+
     final outboxEntry = ChatOutboxMessageEntry(
       idKey: (const Uuid()).v4(),
-      chatId: _chat?.id,
-      participantId: _participantId,
+      chatId: chatId,
+      participantId: participantId,
       forwardFromId: refMessage.chatId,
       authorId: refMessage.senderId,
       content: refMessage.content,
@@ -81,60 +75,126 @@ class ConversationCubit extends Cubit<ConversationState> {
   }
 
   Future sendEdit(String content, ChatMessage refMessage) async {
-    if (_chat == null) return;
+    final (:chatId, :participantId) = state.credentials;
+    if (chatId == null) return;
+
     final outboxEntry = ChatOutboxMessageEditEntry(
       id: refMessage.id,
       idKey: refMessage.idKey,
-      chatId: _chat!.id,
+      chatId: chatId,
       newContent: content,
     );
     _outboxRepository.upsertOutboxMessageEdit(outboxEntry);
   }
 
   Future deleteMessage(ChatMessage message) async {
-    if (_chat == null) return;
+    final (:chatId, :participantId) = state.credentials;
+    if (chatId == null) return;
+
     final outboxEntry = ChatOutboxMessageDeleteEntry(
       id: message.id,
       idKey: message.idKey,
-      chatId: _chat!.id,
+      chatId: chatId,
     );
     _outboxRepository.upsertOutboxMessageDelete(outboxEntry);
   }
 
   Future userReadedUntilUpdate(DateTime time) async {
-    if (_chat == null) return;
+    final (:chatId, :participantId) = state.credentials;
+    if (chatId == null) return;
+
     final outboxEntry = ChatOutboxReadCursorEntry(
-      chatId: _chat!.id,
+      chatId: chatId,
       time: time,
     );
     _outboxRepository.upsertOutboxReadCursor(outboxEntry);
   }
 
-  Future<bool> deleteDialog() async {
+  Future deleteChat() async {
     final state = this.state;
+    if (state is! CVSReady) return;
+    if (state.busy) return;
 
-    if (_chat == null) return false;
+    final channel = _channel;
+    if (channel == null) return;
 
-    if (state is! CVSReady) return false;
-    if (state.busy) return false;
     emit(state.copyWith(busy: true));
-
-    final channel = _client.getChatChannel(_chat!.id);
-    if (channel == null || channel.state != PhoenixChannelState.joined) return false;
-    final r = await channel.push('chat:delete', {}).future;
-
+    await channel.push('chat:delete', {}).future;
     emit(state.copyWith(busy: false));
-    if (r.isOk) return true;
-    return false;
+  }
+
+  Future leaveGroup() async {
+    final state = this.state;
+    if (state is! CVSReady) return;
+    if (state.busy) return;
+
+    final channel = _channel;
+    if (channel == null) return;
+
+    emit(state.copyWith(busy: true));
+    await channel.push('chat:member:leave', {}).future;
+    emit(state.copyWith(busy: false));
+  }
+
+  Future addUser(String participantId) async {
+    final state = this.state;
+    if (state is! CVSReady) return;
+    if (state.busy) return;
+
+    final channel = _channel;
+    if (channel == null) return;
+
+    emit(state.copyWith(busy: true));
+    await channel.push('chat:member:add:$participantId', {}).future;
+    emit(state.copyWith(busy: false));
+  }
+
+  Future removeUser(String participantId) async {
+    final state = this.state;
+    if (state is! CVSReady) return;
+    if (state.busy) return;
+
+    final channel = _channel;
+    if (channel == null) return;
+
+    emit(state.copyWith(busy: true));
+    await channel.push('chat:member:remove:$participantId', {}).future;
+    emit(state.copyWith(busy: false));
+  }
+
+  Future setModerator(String participantId, bool isModerator) async {
+    final state = this.state;
+    if (state is! CVSReady) return;
+    if (state.busy) return;
+
+    final channel = _channel;
+    if (channel == null) return;
+
+    emit(state.copyWith(busy: true));
+    await channel.push('chat:member:set_authorities:$participantId', {'is_moderator': isModerator}).future;
+    emit(state.copyWith(busy: false));
+  }
+
+  Future setName(String name) async {
+    final state = this.state;
+    if (state is! CVSReady) return;
+    if (state.busy) return;
+
+    final channel = _channel;
+    if (channel == null) return;
+
+    emit(state.copyWith(busy: true));
+    await channel.push('chat:patch', {'name': name}).future;
+    emit(state.copyWith(busy: false));
   }
 
   Future fetchHistory() async {
     final state = this.state;
-    if (state is! CVSReady) return;
-    if (state.fetchingHistory || state.historyEndReached) return;
+    final chatId = state.credentials.chatId;
 
-    final chatId = _chat?.id;
+    if (state is! CVSReady) return;
     if (chatId == null) return;
+    if (state.fetchingHistory || state.historyEndReached) return;
 
     final topMessage = state.messages.lastOrNull;
     if (topMessage == null) return;
@@ -155,7 +215,7 @@ class ConversationCubit extends Cubit<ConversationState> {
       _logger.info('fetchHistory: local messages ${messages.length}');
 
       // If no messages found in local storage, fetch from the remote server
-      final channel = _client.getChatChannel(chatId);
+      final channel = _channel;
       if (messages.isEmpty && channel != null) {
         final payload = {'created_before': topDate.toUtc().toIso8601String(), 'limit': 50};
         final req = await channel.push('message:history', payload).future;
@@ -185,31 +245,42 @@ class ConversationCubit extends Cubit<ConversationState> {
     }
   }
 
-  Future<void> _init() async {
-    _logger.info('Preparing conversation with $_participantId');
+  Future<void> restart() async {
+    _cancelSubs();
+    emit(ConversationState.init(state.credentials));
+    await init();
+  }
+
+  Future<void> init() async {
+    _logger.info('Preparing conversation for $state.credentials');
 
     try {
-      // TODO: use full chat object instead of just id
-      final chatId = await _chatsRepository.findDialogId(_participantId);
-      if (chatId != null) _chat = await _chatsRepository.getChat(chatId);
-      _logger.info('local chat find result: $_chat');
+      var (:chatId, :participantId) = state.credentials;
+      // If provided only participantId, find the dialog with user credentials
+      if (participantId != null && chatId == null) chatId ??= await _chatsRepository.findDialogId(participantId);
+
+      // Find local chat data if it exists
+      final chat = chatId != null ? await _chatsRepository.getChat(chatId) : null;
+      _logger.info('local chat find result: $chat');
 
       if (isClosed) return;
-      emit(ConversationState.ready(_participantId, chat: _chat));
+      emit(ConversationState.ready((chatId: chatId, participantId: participantId), chat: chat));
 
-      // If local chat is not found, subscribtion will find the chat when it will created
+      // If chat is not exist, subscribtion will find the chat when it will created
       // e.g when you send the first message or another user sends to you
       _chatUpdateSub = _chatUpdateSubFactory(_handleChatUpdate);
-      _chatRemoveSub = _chatRemoveSubFactory(_handleChatRemove);
       _outboxMessagesSub = _outboxMessagesSubFactory(_handleOutboxMessagesUpdate);
 
-      if (_chat != null) await _initMessages(_chat!.id);
+      // Init chat if it exists
+      if (chat != null) await _initChat(chat.id);
     } catch (e) {
-      emit(ConversationState.error(_participantId, e));
+      emit(ConversationState.error(state.credentials, e));
     }
   }
 
-  Future<void> _initMessages(int chatId) async {
+  /// Second stage of the chat initialization. When chat is exist and ready to use.
+  /// Fetches the chat messages, read cursors, binds to all updates, etc.
+  Future<void> _initChat(int chatId) async {
     // Fetch last 100 messages from the chat history
     final oldestCursor = await _chatsRepository.getChatMessageSyncCursor(chatId, MessageSyncCursorType.oldest);
     final messages = await _chatsRepository.getMessageHistory(chatId, to: oldestCursor?.time);
@@ -220,47 +291,51 @@ class ConversationCubit extends Cubit<ConversationState> {
     if (state is CVSReady) emit(state.copyWith(messages: messages));
 
     // Subscribe to chat messages updates eg new messages, edited, deleted, etc. and merge them with the current list
-    _messagesSub?.cancel();
     _messagesSub = _messagesSubFactory(chatId, _handleMessageUpdate);
 
     // Subscribe to read cursors updates
-    _readCursorsSub?.cancel();
     _readCursorsSub = _readCursorsSubFactory(chatId, _handleReadCursorsUpdate);
 
     // Subscribe to outbox message edits and deletes
     _outboxMessageEditsSub = _outboxMessageEditsSubFactory(chatId, _handleOutboxMessageEditsUpdate);
     _outboxMessageDeletesSub = _outboxMessageDeletesSubFactory(chatId, _handleOutboxMessageDeletesUpdate);
+
+    // Subscribe to chat remove event
+    _chatRemoveSub = _chatRemoveSubFactory(chatId, _handleChatRemove);
   }
 
   StreamSubscription _chatUpdateSubFactory(void Function(Chat) onArrive) {
+    final (:chatId, :participantId) = state.credentials;
+
     return _chatsRepository.eventBus.whereType<ChatUpdate>().listen((event) {
       final chat = event.chat;
-      final desiredChat = chat.isDialogWith(_participantId);
-      if (desiredChat) onArrive(chat);
+
+      final sameChat = chatId != null && chat.id == chatId;
+      final desiredDialog = participantId != null && chat.isDialogWith(participantId);
+      if (sameChat || desiredDialog) onArrive(chat);
     });
   }
 
   void _handleChatUpdate(Chat chat) {
     _logger.info('_handleChatUpdate: $chat');
-    final chatWasntExistBefore = _chat == null;
 
-    _chat = chat;
     final state = this.state;
-    if (state is CVSReady) emit(state.copyWith(chat: chat));
+    if (state is! CVSReady) return;
 
-    // Init messages after chat is created for conversation with the participant
-    if (chatWasntExistBefore) _initMessages(chat.id);
+    final (:chatId, :participantId) = state.credentials;
+
+    final chatWasntExistBefore = state.chat == null;
+    emit(state.copyWith(credentials: (chatId: chat.id, participantId: participantId), chat: chat));
+    if (chatWasntExistBefore) _initChat(chat.id);
   }
 
-  StreamSubscription _chatRemoveSubFactory(void Function(int) onArrive) {
-    return _chatsRepository.eventBus.whereType<ChatRemove>().listen((event) {
-      onArrive(event.chatId);
-    });
+  StreamSubscription _chatRemoveSubFactory(int chatId, void Function(int, ChatRemove) onArrive) {
+    return _chatsRepository.eventBus.whereType<ChatRemove>().listen((event) => onArrive(chatId, event));
   }
 
-  void _handleChatRemove(int chatId) {
+  void _handleChatRemove(int chatId, ChatRemove event) {
     _logger.info('_handleChatRemove: $chatId');
-    if (_chat?.id == chatId) emit(ConversationState.left(_participantId));
+    if (event.chatId == chatId) emit(ConversationState.left(state.credentials));
   }
 
   StreamSubscription _messagesSubFactory(int chatId, void Function(ChatMessage) onArrive) {
@@ -280,9 +355,12 @@ class ConversationCubit extends Cubit<ConversationState> {
   }
 
   StreamSubscription _outboxMessagesSubFactory(void Function(List<ChatOutboxMessageEntry>) onArrive) {
+    final (:chatId, :participantId) = state.credentials;
     return _outboxRepository.watchChatOutboxMessages().listen((entries) {
       final chatQueueEntries = entries.where((e) {
-        return e.participantId == _participantId || (_chat?.id != null && e.chatId == _chat?.id);
+        final sameChat = chatId != null && chatId == e.chatId;
+        final desiredParticipant = participantId != null && e.participantId == participantId;
+        return (sameChat || desiredParticipant);
       }).toList();
       onArrive(chatQueueEntries);
     });
@@ -336,14 +414,25 @@ class ConversationCubit extends Cubit<ConversationState> {
     if (state is CVSReady) emit(state.copyWith(readCursors: cursors));
   }
 
+  PhoenixChannel? get _channel {
+    final state = this.state;
+    final chatId = state.credentials.chatId;
+    if (chatId != null) {
+      final channel = _client.getChatChannel(chatId);
+      if (channel != null && channel.state == PhoenixChannelState.joined) return channel;
+    }
+
+    return null;
+  }
+
   @override
   Future<void> close() {
-    _logger.info('Closing conversation with $_participantId');
+    _logger.info('Closing conversation ${state.credentials}');
     _cancelSubs();
     return super.close();
   }
 
-  _cancelSubs() {
+  void _cancelSubs() {
     _chatUpdateSub?.cancel();
     _chatRemoveSub?.cancel();
     _messagesSub?.cancel();

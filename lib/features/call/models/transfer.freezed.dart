@@ -107,6 +107,9 @@ class _$TransferCopyWithImpl<$Res, $Val extends Transfer>
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
+
+  /// Create a copy of Transfer
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -125,6 +128,9 @@ class __$$BlindTransferInitiatedImplCopyWithImpl<$Res>
       _$BlindTransferInitiatedImpl _value,
       $Res Function(_$BlindTransferInitiatedImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of Transfer
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -270,6 +276,8 @@ class __$$BlindTransferTransferSubmittedImplCopyWithImpl<$Res>
       $Res Function(_$BlindTransferTransferSubmittedImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of Transfer
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -311,7 +319,9 @@ class _$BlindTransferTransferSubmittedImpl
   @override
   int get hashCode => Object.hash(runtimeType, toNumber);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Transfer
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$BlindTransferTransferSubmittedImplCopyWith<
@@ -424,7 +434,10 @@ abstract class BlindTransferTransferSubmitted extends Transfer {
   const BlindTransferTransferSubmitted._() : super._();
 
   String get toNumber;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of Transfer
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$BlindTransferTransferSubmittedImplCopyWith<
           _$BlindTransferTransferSubmittedImpl>
       get copyWith => throw _privateConstructorUsedError;
@@ -450,6 +463,8 @@ class __$$AttendedTransferTransferSubmittedImplCopyWithImpl<$Res>
       $Res Function(_$AttendedTransferTransferSubmittedImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of Transfer
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -491,7 +506,9 @@ class _$AttendedTransferTransferSubmittedImpl
   @override
   int get hashCode => Object.hash(runtimeType, replaceCallId);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Transfer
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$AttendedTransferTransferSubmittedImplCopyWith<
@@ -605,7 +622,10 @@ abstract class AttendedTransferTransferSubmitted extends Transfer {
   const AttendedTransferTransferSubmitted._() : super._();
 
   String get replaceCallId;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of Transfer
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$AttendedTransferTransferSubmittedImplCopyWith<
           _$AttendedTransferTransferSubmittedImpl>
       get copyWith => throw _privateConstructorUsedError;
@@ -631,6 +651,8 @@ class __$$AttendedTransferConfirmationRequestedImplCopyWithImpl<$Res>
       $Res Function(_$AttendedTransferConfirmationRequestedImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of Transfer
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -689,7 +711,9 @@ class _$AttendedTransferConfirmationRequestedImpl
   @override
   int get hashCode => Object.hash(runtimeType, referId, referTo, referredBy);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Transfer
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$AttendedTransferConfirmationRequestedImplCopyWith<
@@ -809,7 +833,10 @@ abstract class AttendedTransferConfirmationRequested extends Transfer {
   String get referId;
   String get referTo;
   String get referredBy;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of Transfer
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$AttendedTransferConfirmationRequestedImplCopyWith<
           _$AttendedTransferConfirmationRequestedImpl>
       get copyWith => throw _privateConstructorUsedError;
@@ -834,6 +861,8 @@ class __$$InviteToAttendedTransferImplCopyWithImpl<$Res>
       $Res Function(_$InviteToAttendedTransferImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of Transfer
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -884,7 +913,9 @@ class _$InviteToAttendedTransferImpl extends InviteToAttendedTransfer {
   @override
   int get hashCode => Object.hash(runtimeType, replaceCallId, referredBy);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Transfer
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$InviteToAttendedTransferImplCopyWith<_$InviteToAttendedTransferImpl>
@@ -998,7 +1029,10 @@ abstract class InviteToAttendedTransfer extends Transfer {
 
   String get replaceCallId;
   String get referredBy;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of Transfer
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$InviteToAttendedTransferImplCopyWith<_$InviteToAttendedTransferImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
