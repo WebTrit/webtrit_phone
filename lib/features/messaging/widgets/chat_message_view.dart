@@ -168,121 +168,117 @@ class _ChatMessageViewState extends State<ChatMessageView> {
         ),
     ];
 
-    return FadeIn(
-      child: GestureDetector(
-        onLongPress: () async {
-          // Dismiss keyboard if it's open and wait for it to close before showing the popup
-          // to keep the popup in the right position
-          if (FocusScope.of(context).hasFocus) {
-            FocusScope.of(context).unfocus();
-            await Future.delayed(const Duration(milliseconds: 400));
-            if (!mounted) return;
-          }
+    return GestureDetector(
+      onLongPress: () async {
+        // Dismiss keyboard if it's open and wait for it to close before showing the popup
+        // to keep the popup in the right position
+        if (FocusScope.of(context).hasFocus) {
+          FocusScope.of(context).unfocus();
+          await Future.delayed(const Duration(milliseconds: 400));
+          if (!mounted) return;
+        }
 
-          // Check if has any items to show
-          if (popupItems.isEmpty) return;
+        // Check if has any items to show
+        if (popupItems.isEmpty) return;
 
-          final position = getPosition(isMine);
-          showMenu(context: this.context, position: position, items: popupItems);
-        },
-        child: Padding(
-          padding: isMine
-              ? const EdgeInsets.only(left: 48, right: 8, top: 4, bottom: 4)
-              : const EdgeInsets.only(left: 8, right: 48, top: 4, bottom: 4),
-          child: Row(
-            mainAxisAlignment: isMine ? MainAxisAlignment.end : MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              if (!isMine) ...[
-                ContactInfoBuilder(
-                  sourceType: ContactSourceType.external,
-                  sourceId: senderId,
-                  builder: (context, contact, {required bool loading}) {
-                    return LeadingAvatar(
-                      username: contact?.name,
-                      thumbnail: contact?.thumbnail,
-                      thumbnailUrl: contact?.thumbnailUrl,
-                      registered: contact?.registered,
-                      radius: 20,
-                    );
-                  },
-                ),
-                const SizedBox(width: 8),
-              ],
-              Flexible(
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: isMine
-                        ? colorScheme.secondaryFixed.withOpacity(0.3)
-                        : colorScheme.surfaceContainer.withOpacity(isViewedByUser ? 1 : 0.85),
-                    borderRadius: isMine
-                        ? const BorderRadius.only(
-                            topLeft: Radius.circular(12),
-                            topRight: Radius.circular(12),
-                            bottomLeft: Radius.circular(12),
-                          )
-                        : const BorderRadius.only(
-                            topLeft: Radius.circular(12),
-                            topRight: Radius.circular(12),
-                            bottomRight: Radius.circular(12),
-                          ),
-                  ),
-                  padding: const EdgeInsets.all(12),
-                  child: IntrinsicWidth(
-                    child: Column(
-                      key: bodyKey,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        ParticipantName(
-                          senderId: senderId,
-                          userId: widget.userId,
-                          key: Key(senderId),
-                          style: theme.userNameStyle,
+        final position = getPosition(isMine);
+        showMenu(context: this.context, position: position, items: popupItems);
+      },
+      child: Padding(
+        padding: isMine
+            ? const EdgeInsets.only(left: 48, right: 8, top: 4, bottom: 4)
+            : const EdgeInsets.only(left: 8, right: 48, top: 4, bottom: 4),
+        child: Row(
+          mainAxisAlignment: isMine ? MainAxisAlignment.end : MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            if (!isMine) ...[
+              ContactInfoBuilder(
+                sourceType: ContactSourceType.external,
+                sourceId: senderId,
+                builder: (context, contact, {required bool loading}) {
+                  return LeadingAvatar(
+                    username: contact?.name,
+                    thumbnail: contact?.thumbnail,
+                    thumbnailUrl: contact?.thumbnailUrl,
+                    registered: contact?.registered,
+                    radius: 20,
+                  );
+                },
+              ),
+              const SizedBox(width: 8),
+            ],
+            Flexible(
+              child: Container(
+                decoration: BoxDecoration(
+                  color: isMine
+                      ? colorScheme.secondaryFixed.withOpacity(0.3)
+                      : colorScheme.surfaceContainer.withOpacity(isViewedByUser ? 1 : 0.85),
+                  borderRadius: isMine
+                      ? const BorderRadius.only(
+                          topLeft: Radius.circular(12),
+                          topRight: Radius.circular(12),
+                          bottomLeft: Radius.circular(12),
+                        )
+                      : const BorderRadius.only(
+                          topLeft: Radius.circular(12),
+                          topRight: Radius.circular(12),
+                          bottomRight: Radius.circular(12),
                         ),
+                ),
+                padding: const EdgeInsets.all(12),
+                child: IntrinsicWidth(
+                  child: Column(
+                    key: bodyKey,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ParticipantName(
+                        senderId: senderId,
+                        userId: widget.userId,
+                        key: Key(senderId),
+                        style: theme.userNameStyle,
+                      ),
+                      const SizedBox(height: 4),
+                      if (isReply) ...[
+                        ReplyQuote(userId: widget.userId, message: message!),
                         const SizedBox(height: 4),
-                        if (isReply) ...[
-                          ReplyQuote(userId: widget.userId, message: message!),
-                          const SizedBox(height: 4),
-                        ],
-                        if (isForward) ...[
-                          ForwartQuote(context: context, userId: widget.userId, msg: message!),
-                        ],
-                        if (!isForward && !isDeleted) ...[
-                          MessageBody(text: content, style: theme.contentStyle),
-                        ],
-                        if (isEdited && !isDeleted) ...[
-                          const SizedBox(height: 4),
-                          Align(
-                            alignment: Alignment.centerRight,
-                            child: Text(context.l10n.messaging_MessageView_edited, style: theme.subContentStyle),
-                          ),
-                        ],
-                        if (isDeleted) ...[
-                          Text(context.l10n.messaging_MessageView_deleted, style: theme.subContentStyle),
-                        ],
+                      ],
+                      if (isForward) ...[
+                        ForwartQuote(context: context, userId: widget.userId, msg: message!),
+                      ],
+                      if (!isForward && !isDeleted) ...[
+                        MessageBody(text: content, style: theme.contentStyle),
+                      ],
+                      if (isEdited && !isDeleted) ...[
                         const SizedBox(height: 4),
-                        Row(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            if (isMine && isSended == false)
-                              CircularProgressTemplate(color: colorScheme.onSurface, size: 12, width: 1),
-                            if (isMine && isSended && !isViewedByMembers)
-                              Icon(Icons.done, color: colorScheme.tertiary, size: 12),
-                            if (isMine && isViewedByMembers)
-                              Icon(Icons.done_all, color: colorScheme.tertiary, size: 12),
-                            const SizedBox(width: 2),
-                            if (message?.createdAt != null)
-                              Text(message!.createdAt.toHHmm, style: theme.subContentStyle)
-                          ],
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: Text(context.l10n.messaging_MessageView_edited, style: theme.subContentStyle),
                         ),
                       ],
-                    ),
+                      if (isDeleted) ...[
+                        Text(context.l10n.messaging_MessageView_deleted, style: theme.subContentStyle),
+                      ],
+                      const SizedBox(height: 4),
+                      Row(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          if (isMine && isSended == false)
+                            CircularProgressTemplate(color: colorScheme.onSurface, size: 12, width: 1),
+                          if (isMine && isSended && !isViewedByMembers)
+                            Icon(Icons.done, color: colorScheme.tertiary, size: 12),
+                          if (isMine && isViewedByMembers) Icon(Icons.done_all, color: colorScheme.tertiary, size: 12),
+                          const SizedBox(width: 2),
+                          if (message?.createdAt != null) Text(message!.createdAt.toHHmm, style: theme.subContentStyle)
+                        ],
+                      ),
+                    ],
                   ),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

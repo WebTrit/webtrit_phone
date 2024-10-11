@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/messaging/messaging.dart';
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/widgets/widgets.dart';
 
 import 'sms_message_view.dart';
 
@@ -97,7 +98,7 @@ class _SmsMessageListViewState extends State<SmsMessageListView> {
   }
 
   void scrollToBottom() {
-    scrollController.animateTo(0, duration: const Duration(milliseconds: 300), curve: Curves.easeOut);
+    scrollController.animateTo(0, duration: const Duration(milliseconds: 600), curve: Curves.easeInOutExpo);
   }
 
   void handleSend() {
@@ -108,6 +109,7 @@ class _SmsMessageListViewState extends State<SmsMessageListView> {
 
     inputController.text = '';
     FocusScope.of(context).unfocus();
+    scrollToBottom();
   }
 
   void handleDelete(SmsMessage message) {
@@ -152,25 +154,28 @@ class _SmsMessageListViewState extends State<SmsMessageListView> {
 
             final entry = viewEntries[index];
             if (entry is _MessageViewEntry) {
-              return SmsMessageView(
-                userNumber: widget.userNumber,
-                message: entry.message,
-                outboxMessage: entry.outboxEntry,
-                outboxDeleteEntry: entry.outboxDeleteEntry,
-                userReadedUntil: entry.userReadedUntil,
-                membersReadedUntil: entry.membersReadedUntil,
-                handleDelete: handleDelete,
-                onRendered: () {
-                  final message = entry.message;
-                  if (message == null) return;
+              return FadeIn(
+                child: SmsMessageView(
+                  key: Key(entry.message?.idKey ?? entry.outboxEntry!.idKey),
+                  userNumber: widget.userNumber,
+                  message: entry.message,
+                  outboxMessage: entry.outboxEntry,
+                  outboxDeleteEntry: entry.outboxDeleteEntry,
+                  userReadedUntil: entry.userReadedUntil,
+                  membersReadedUntil: entry.membersReadedUntil,
+                  handleDelete: handleDelete,
+                  onRendered: () {
+                    final message = entry.message;
+                    if (message == null) return;
 
-                  final mine = message.fromPhoneNumber == widget.userNumber;
-                  if (mine) return;
+                    final mine = message.fromPhoneNumber == widget.userNumber;
+                    if (mine) return;
 
-                  final userReadedUntil = widget.readCursors.userReadedUntil(widget.userId);
-                  final reachedUnreaded = userReadedUntil == null || message.createdAt.isAfter(userReadedUntil);
-                  if (reachedUnreaded) widget.userReadedUntilUpdate(message.createdAt);
-                },
+                    final userReadedUntil = widget.readCursors.userReadedUntil(widget.userId);
+                    final reachedUnreaded = userReadedUntil == null || message.createdAt.isAfter(userReadedUntil);
+                    if (reachedUnreaded) widget.userReadedUntilUpdate(message.createdAt);
+                  },
+                ),
               );
             }
 

@@ -9,6 +9,7 @@ import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/messaging/messaging.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/widgets/widgets.dart';
 
 import 'chat_message_view.dart';
 
@@ -111,7 +112,7 @@ class _ChatMessageListViewState extends State<ChatMessageListView> {
   }
 
   void scrollToBottom() {
-    scrollController.animateTo(0, duration: const Duration(milliseconds: 300), curve: Curves.easeOut);
+    scrollController.animateTo(0, duration: const Duration(milliseconds: 600), curve: Curves.easeInOutExpo);
   }
 
   void handleSend() {
@@ -134,6 +135,7 @@ class _ChatMessageListViewState extends State<ChatMessageListView> {
 
     inputController.text = '';
     FocusScope.of(context).unfocus();
+    scrollToBottom();
   }
 
   void handleSetForReply(ChatMessage message) {
@@ -202,29 +204,32 @@ class _ChatMessageListViewState extends State<ChatMessageListView> {
             final entry = viewEntries[index - 1];
 
             if (entry is _MessageViewEntry) {
-              return ChatMessageView(
-                userId: widget.userId,
-                message: entry.message,
-                outboxMessage: entry.outboxMessage,
-                outboxEditEntry: entry.outboxEditEntry,
-                outboxDeleteEntry: entry.outboxDeleteEntry,
-                userReadedUntil: entry.userReadedUntil,
-                membersReadedUntil: entry.membersReadedUntil,
-                handleSetForReply: handleSetForReply,
-                handleSetForForward: handleSetForForward,
-                handleSetForEdit: handleSetForEdit,
-                handleDelete: handleDelete,
-                onRendered: () {
-                  final message = entry.message;
-                  if (message == null) return;
+              return FadeIn(
+                child: ChatMessageView(
+                  key: Key(entry.message?.idKey ?? entry.outboxMessage!.idKey),
+                  userId: widget.userId,
+                  message: entry.message,
+                  outboxMessage: entry.outboxMessage,
+                  outboxEditEntry: entry.outboxEditEntry,
+                  outboxDeleteEntry: entry.outboxDeleteEntry,
+                  userReadedUntil: entry.userReadedUntil,
+                  membersReadedUntil: entry.membersReadedUntil,
+                  handleSetForReply: handleSetForReply,
+                  handleSetForForward: handleSetForForward,
+                  handleSetForEdit: handleSetForEdit,
+                  handleDelete: handleDelete,
+                  onRendered: () {
+                    final message = entry.message;
+                    if (message == null) return;
 
-                  final mine = message.senderId == widget.userId;
-                  if (mine) return;
+                    final mine = message.senderId == widget.userId;
+                    if (mine) return;
 
-                  final userReadedUntil = widget.readCursors.userReadedUntil(widget.userId);
-                  final reachedUnreaded = userReadedUntil == null || message.createdAt.isAfter(userReadedUntil);
-                  if (reachedUnreaded) widget.userReadedUntilUpdate(message.createdAt);
-                },
+                    final userReadedUntil = widget.readCursors.userReadedUntil(widget.userId);
+                    final reachedUnreaded = userReadedUntil == null || message.createdAt.isAfter(userReadedUntil);
+                    if (reachedUnreaded) widget.userReadedUntilUpdate(message.createdAt);
+                  },
+                ),
               );
             }
 

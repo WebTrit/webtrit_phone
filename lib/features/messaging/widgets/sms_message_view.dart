@@ -121,98 +121,94 @@ class _SmsMessageViewState extends State<SmsMessageView> {
         ),
     ];
 
-    return FadeIn(
-      child: GestureDetector(
-        onLongPress: () async {
-          // Dismiss keyboard if it's open and wait for it to close before showing the popup
-          // to keep the popup in the right position
-          if (FocusScope.of(context).hasFocus) {
-            FocusScope.of(context).unfocus();
-            await Future.delayed(const Duration(milliseconds: 400));
-            if (!mounted) return;
-          }
+    return GestureDetector(
+      onLongPress: () async {
+        // Dismiss keyboard if it's open and wait for it to close before showing the popup
+        // to keep the popup in the right position
+        if (FocusScope.of(context).hasFocus) {
+          FocusScope.of(context).unfocus();
+          await Future.delayed(const Duration(milliseconds: 400));
+          if (!mounted) return;
+        }
 
-          // Check if has any items to show
-          if (popupItems.isEmpty) return;
+        // Check if has any items to show
+        if (popupItems.isEmpty) return;
 
-          final position = getPosition(isMine);
-          showMenu(context: this.context, position: position, items: popupItems);
-        },
-        child: Padding(
-          padding: isMine
-              ? const EdgeInsets.only(left: 48, right: 8, top: 4, bottom: 4)
-              : const EdgeInsets.only(left: 8, right: 48, top: 4, bottom: 4),
-          child: Row(
-            mainAxisAlignment: isMine ? MainAxisAlignment.end : MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              if (!isMine) ...[
-                LeadingAvatar(
-                  username: senderNumber?.substring(senderNumber.length - 2) ?? '',
-                  radius: 20,
-                ),
-                const SizedBox(width: 8),
-              ],
-              Flexible(
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: isMine ? colorScheme.secondaryFixed.withOpacity(0.3) : colorScheme.surfaceContainer,
-                    // color: isMine
-                    //     ? colorScheme.secondaryFixed.withOpacity(0.3)
-                    //     : colorScheme.surfaceContainer.withOpacity(isViewedByUser ? 1 : 0.85),
-                    borderRadius: isMine
-                        ? const BorderRadius.only(
-                            topLeft: Radius.circular(12),
-                            topRight: Radius.circular(12),
-                            bottomLeft: Radius.circular(12),
-                          )
-                        : const BorderRadius.only(
-                            topLeft: Radius.circular(12),
-                            topRight: Radius.circular(12),
-                            bottomRight: Radius.circular(12),
-                          ),
-                  ),
-                  padding: const EdgeInsets.all(12),
-                  child: IntrinsicWidth(
-                    child: Column(
-                      key: bodyKey,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(senderNumber ?? '', style: theme.userNameStyle),
-                        const SizedBox(height: 4),
-                        if (!isDeleted) ...[
-                          MessageBody(text: content, style: theme.contentStyle),
-                        ],
-                        if (isDeleted) ...[
-                          Text(context.l10n.messaging_MessageView_deleted, style: theme.subContentStyle),
-                        ],
-                        const SizedBox(height: 4),
-                        Row(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            if (isMine && isSended) ...[
-                              Text(message.sendingStatus.nameL10n(context), style: theme.subContentStyle),
-                              const SizedBox(width: 2),
-                            ],
-                            if (isMine && !isSended)
-                              CircularProgressTemplate(color: colorScheme.onSurface, size: 12, width: 1),
-                            if (isMine && isSended && !isViewedByMembers)
-                              Icon(Icons.done, color: colorScheme.tertiary, size: 12),
-                            if (isMine && isViewedByMembers)
-                              Icon(Icons.done_all, color: colorScheme.tertiary, size: 12),
-                            const SizedBox(width: 2),
-                            if (message?.createdAt != null)
-                              Text(message!.createdAt.toHHmm, style: theme.subContentStyle),
-                          ],
+        final position = getPosition(isMine);
+        showMenu(context: this.context, position: position, items: popupItems);
+      },
+      child: Padding(
+        padding: isMine
+            ? const EdgeInsets.only(left: 48, right: 8, top: 4, bottom: 4)
+            : const EdgeInsets.only(left: 8, right: 48, top: 4, bottom: 4),
+        child: Row(
+          mainAxisAlignment: isMine ? MainAxisAlignment.end : MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            if (!isMine) ...[
+              LeadingAvatar(
+                username: senderNumber?.substring(senderNumber.length - 2) ?? '',
+                radius: 20,
+              ),
+              const SizedBox(width: 8),
+            ],
+            Flexible(
+              child: Container(
+                decoration: BoxDecoration(
+                  color: isMine ? colorScheme.secondaryFixed.withOpacity(0.3) : colorScheme.surfaceContainer,
+                  // color: isMine
+                  //     ? colorScheme.secondaryFixed.withOpacity(0.3)
+                  //     : colorScheme.surfaceContainer.withOpacity(isViewedByUser ? 1 : 0.85),
+                  borderRadius: isMine
+                      ? const BorderRadius.only(
+                          topLeft: Radius.circular(12),
+                          topRight: Radius.circular(12),
+                          bottomLeft: Radius.circular(12),
+                        )
+                      : const BorderRadius.only(
+                          topLeft: Radius.circular(12),
+                          topRight: Radius.circular(12),
+                          bottomRight: Radius.circular(12),
                         ),
+                ),
+                padding: const EdgeInsets.all(12),
+                child: IntrinsicWidth(
+                  child: Column(
+                    key: bodyKey,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(senderNumber ?? '', style: theme.userNameStyle),
+                      const SizedBox(height: 4),
+                      if (!isDeleted) ...[
+                        MessageBody(text: content, style: theme.contentStyle),
                       ],
-                    ),
+                      if (isDeleted) ...[
+                        Text(context.l10n.messaging_MessageView_deleted, style: theme.subContentStyle),
+                      ],
+                      const SizedBox(height: 4),
+                      Row(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          if (isMine && isSended) ...[
+                            Text(message.sendingStatus.nameL10n(context), style: theme.subContentStyle),
+                            const SizedBox(width: 2),
+                          ],
+                          if (isMine && !isSended)
+                            CircularProgressTemplate(color: colorScheme.onSurface, size: 12, width: 1),
+                          if (isMine && isSended && !isViewedByMembers)
+                            Icon(Icons.done, color: colorScheme.tertiary, size: 12),
+                          if (isMine && isViewedByMembers) Icon(Icons.done_all, color: colorScheme.tertiary, size: 12),
+                          const SizedBox(width: 2),
+                          if (message?.createdAt != null) Text(message!.createdAt.toHHmm, style: theme.subContentStyle),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
