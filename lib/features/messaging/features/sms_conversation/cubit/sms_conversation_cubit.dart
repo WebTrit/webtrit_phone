@@ -24,10 +24,6 @@ class SmsConversationCubit extends Cubit<SmsConversationState> {
     this._outboxRepository,
   ) : super(SmsConversationState.init(_creds)) {
     _init();
-    // _logger.onRecord.listen((record) {
-    //   // ignore: avoid_print
-    //   print('\x1B[33mcht: ${record.message}\x1B[0m');
-    // });
   }
 
   final UsersCreds _creds;

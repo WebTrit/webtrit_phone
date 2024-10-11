@@ -66,6 +66,7 @@ class _MessageBodyState extends State<MessageBody> {
           Container(
             decoration: previewDecoration,
             padding: const EdgeInsets.all(8),
+            // TODO: impl custom LinkPreview to remove flicker on scrollback and add preview for image links
             child: LinkPreview(
               textStyle: widget.style,
               linkStyle: widget.style,

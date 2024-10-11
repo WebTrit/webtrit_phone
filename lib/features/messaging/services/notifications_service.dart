@@ -259,11 +259,11 @@ class MessagingNotificationsService {
   }
 
   Future _dismissById(int messageId) async {
-    localNotificationRepository.dissmissById(messageId);
+    await localNotificationRepository.dissmissById(messageId);
   }
 
   Future _dismissByContent(String title, String body) async {
-    localNotificationRepository.dismissByContent(title, body);
+    await localNotificationRepository.dismissByContent(title, body);
   }
 
   Future<Chat?> _tryGetChat(int chatId) async {

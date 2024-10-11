@@ -23,10 +23,6 @@ class ConversationCubit extends Cubit<ConversationState> {
     this._outboxRepository,
   ) : super(ConversationState.init(_participantId)) {
     _init();
-    // _logger.onRecord.listen((record) {
-    //   // ignore: avoid_print
-    //   print('\x1B[33mcht: ${record.message}\x1B[0m');
-    // });
   }
 
   final String _participantId;

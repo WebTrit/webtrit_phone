@@ -13,6 +13,8 @@ import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
+// TODO: maybe use TabBarView
+
 enum TabType { chat, sms }
 
 class ConversationsScreen extends StatefulWidget {

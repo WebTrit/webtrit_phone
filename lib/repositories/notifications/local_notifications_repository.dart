@@ -7,8 +7,15 @@ import 'package:webtrit_phone/push_notification/push_notifications.dart';
 abstract class LocalNotificationRepository {
   /// Stream of messaging notification actions that were tapped or dismissed
   Stream<AppLocalNotificationAction> get messagingActions;
+
+  /// Display a local push notification
   Future<void> displayNotification(AppLocalNotification notification);
+
+  /// Dismiss a local push notification by its id (if it exists)
   Future<void> dissmissById(int id);
+
+  /// Dismiss a local push notification by matching its title and body
+  /// useful for dismissing notifications showen by other services like FCM or OneSignal etc.
   Future<void> dismissByContent(String title, String body);
 }
 
@@ -28,43 +35,43 @@ class LocalNotificationRepositoryFLNImpl implements LocalNotificationRepository 
 
   @override
   Future<void> displayNotification(AppLocalNotification notification) async {
-    const androidNotificationDetails = AndroidNotificationDetails(
-      'local_channel',
-      'local channel',
-      importance: Importance.defaultImportance,
-      priority: Priority.defaultPriority,
-    );
-    const darwinNotificationDetails = DarwinNotificationDetails(
-      presentAlert: true,
-      presentBadge: true,
-      presentSound: true,
-      interruptionLevel: InterruptionLevel.active,
-    );
-    const notificationDetails = NotificationDetails(
-      android: androidNotificationDetails,
-      iOS: darwinNotificationDetails,
-    );
     FlutterLocalNotificationsPlugin().show(
       notification.id,
       notification.title,
       notification.body,
-      notificationDetails,
-      payload: const JsonEncoder().convert(notification.payload ?? {}),
+      kNotificationDetails,
+      payload: jsonEncode(notification.payload ?? {}),
     );
   }
 
   @override
   Future<void> dissmissById(int id) async {
-    FlutterLocalNotificationsPlugin().cancel(id);
+    await FlutterLocalNotificationsPlugin().cancel(id);
   }
 
   @override
   Future<void> dismissByContent(String title, String body) async {
-    final d = await FlutterLocalNotificationsPlugin().getActiveNotifications();
-    for (final n in d) {
-      if (n.title == title && n.body == body) {
-        await FlutterLocalNotificationsPlugin().cancel(n.id ?? 0, tag: n.tag);
-      }
+    final active = await FlutterLocalNotificationsPlugin().getActiveNotifications();
+    final matched = active.where((n) => n.title == title && n.body == body).toList();
+    for (final n in matched) {
+      await FlutterLocalNotificationsPlugin().cancel(n.id ?? 0, tag: n.tag);
     }
   }
 }
+
+const kAndroidNotificationDetails = AndroidNotificationDetails(
+  'local_channel',
+  'local channel',
+  importance: Importance.defaultImportance,
+  priority: Priority.defaultPriority,
+);
+const kDarwinNotificationDetails = DarwinNotificationDetails(
+  presentAlert: true,
+  presentBadge: true,
+  presentSound: true,
+  interruptionLevel: InterruptionLevel.active,
+);
+const kNotificationDetails = NotificationDetails(
+  android: kAndroidNotificationDetails,
+  iOS: kDarwinNotificationDetails,
+);

@@ -32,7 +32,7 @@ class ScrollToBottomButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnimatedSwitcher(
-      duration: const Duration(milliseconds: 600),
+      duration: const Duration(milliseconds: 500),
       transitionBuilder: (child, animation) {
         return FadeTransition(
           opacity: animation.drive(CurveTween(curve: Curves.linear)),

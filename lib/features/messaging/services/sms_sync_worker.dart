@@ -10,28 +10,15 @@ import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 
 // TODO: extract events and commands to separate classes
-// TODO: remove push timeout, it uses parrent value
 
 final _logger = Logger('SmsSyncWorker');
 
 class SmsSyncWorker {
-  SmsSyncWorker(
-    this.client,
-    this.smsRepository, {
-    this.pageSize = 50,
-    this.pushTimeout = const Duration(seconds: 10),
-  }) {
-    // TODO: Remove this before pr
-    // _logger.onRecord.listen((record) {
-    //   // ignore: avoid_print
-    //   print('\x1B[33mcht: ${record.message}\x1B[0m');
-    // });
-  }
+  SmsSyncWorker(this.client, this.smsRepository, {this.pageSize = 50});
 
   final PhoenixSocket client;
   final SmsRepository smsRepository;
   final int pageSize;
-  final Duration pushTimeout;
 
   StreamSubscription? _conversationlistSyncSub;
   final Map<int, StreamSubscription> _conversationSyncSubs = {};
@@ -76,20 +63,20 @@ class SmsSyncWorker {
         if (userChannel == null) throw Exception('No user channel yet');
         if (userChannel.state != PhoenixChannelState.joined) throw Exception('User channel not ready yet');
 
-        // Get current ids
-        final currentIds = await smsRepository.getConversationIds();
-
-        // Buffer updates that may come in a gap between fetching the actual list
-        final eventsStream = userChannel.messages.transform(BufferTransformer());
-
         // Fetch user phone numbers
         final result = await userChannel.push('user:get_info', {}).future;
         List<String> smsNumbers = result.response['sms_phone_numbers'].cast<String>();
         final e164Numbers = smsNumbers.map((e) => e.e164Phone).whereNotNull().toList();
         smsRepository.upsertUserSmsNumbers(e164Numbers);
 
+        // Get current ids
+        final currentIds = await smsRepository.getConversationIds();
+
+        // Buffer updates that may come in a gap between fetching the actual list
+        final eventsStream = userChannel.messages.transform(BufferTransformer());
+
         // Fetch actual user chat ids
-        final req = await userChannel.push('sms:conversation:get_ids', {}, pushTimeout).future;
+        final req = await userChannel.push('sms:conversation:get_ids', {}).future;
         final actualChatIds = req.response.cast<int>();
 
         // Process removed chats
@@ -149,13 +136,13 @@ class SmsSyncWorker {
         final eventsStream = channel.messages.transform(BufferTransformer());
 
         // Fetch chat info
-        final infoReq = await channel.push('sms:conversation:get', {}, pushTimeout).future;
+        final infoReq = await channel.push('sms:conversation:get', {}).future;
         final conversation = SmsConversation.fromMap(infoReq.response as Map<String, dynamic>);
         await smsRepository.upsertConversation(conversation);
         yield conversation;
 
         // Fetch read cursors
-        final cursorsReq = await channel.push('sms:conversation:cursor:get', {}, pushTimeout).future;
+        final cursorsReq = await channel.push('sms:conversation:cursor:get', {}).future;
         final cursors = (cursorsReq.response as List).map((e) => SmsMessageReadCursor.fromMap(e)).toList();
         for (final cursor in cursors) {
           await smsRepository.upsertMessageReadCursor(cursor);
@@ -168,7 +155,7 @@ class SmsSyncWorker {
         // If no last update, fetch history of last [pageSize] messages for initial state
         if (newestCursor == null) {
           final payload = {'limit': pageSize};
-          final req = await channel.push('sms:message:history', payload, pushTimeout).future;
+          final req = await channel.push('sms:message:history', payload).future;
           final messages = (req.response['data'] as List).map((e) => SmsMessage.fromMap(e)).toList();
 
           if (messages.isNotEmpty) {
@@ -197,7 +184,7 @@ class SmsSyncWorker {
           var pagingCursor = newestCursor;
           while (true) {
             final payload = {'updated_after': pagingCursor.time.toUtc().toIso8601String(), 'limit': pageSize};
-            final req = await channel.push('sms:message:updates', payload, pushTimeout).future;
+            final req = await channel.push('sms:message:updates', payload).future;
             final messages = (req.response['data'] as List).map((e) => SmsMessage.fromMap(e)).toList();
 
             // If no more messages, break the pagination loop

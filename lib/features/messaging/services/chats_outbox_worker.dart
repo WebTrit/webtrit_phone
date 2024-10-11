@@ -12,13 +12,7 @@ import 'package:webtrit_phone/repositories/repositories.dart';
 final _logger = Logger('ChatsOutboxWorker');
 
 class ChatsOutboxWorker {
-  ChatsOutboxWorker(this._client, this._chatsRepository, this._outboxRepository) {
-    // TODO: Remove this before pr
-    // _logger.onRecord.listen((record) {
-    //   // ignore: avoid_print
-    //   print('\x1B[33mcht: ${record.message}\x1B[0m');
-    // });
-  }
+  ChatsOutboxWorker(this._client, this._chatsRepository, this._outboxRepository);
 
   final PhoenixSocket _client;
   final ChatsRepository _chatsRepository;

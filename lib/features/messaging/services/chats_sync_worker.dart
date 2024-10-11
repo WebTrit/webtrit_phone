@@ -9,29 +9,16 @@ import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 
-// TODO: implelemnt skip since for chat info
 // TODO: extract events and commands to separate classes
 
 final _logger = Logger('ChatsSyncWorker');
 
 class ChatsSyncWorker {
-  ChatsSyncWorker(
-    this.client,
-    this.chatsRepository, {
-    this.pageSize = 50,
-    this.pushTimeout = const Duration(seconds: 10),
-  }) {
-    // TODO: Remove this before pr
-    // _logger.onRecord.listen((record) {
-    //   // ignore: avoid_print
-    //   print('\x1B[33mcht: ${record.message}\x1B[0m');
-    // });
-  }
+  ChatsSyncWorker(this.client, this.chatsRepository, {this.pageSize = 50});
 
   final PhoenixSocket client;
   final ChatsRepository chatsRepository;
   final int pageSize;
-  final Duration pushTimeout;
 
   StreamSubscription? _chatlistSyncSub;
   final Map<int, StreamSubscription> _chatRoomSyncSubs = {};
@@ -83,7 +70,7 @@ class ChatsSyncWorker {
         final eventsStream = userChannel.messages.transform(BufferTransformer());
 
         // Fetch actual user chat ids
-        final req = await userChannel.push('chat:get_ids', {}, pushTimeout).future;
+        final req = await userChannel.push('chat:get_ids', {}).future;
         final actualChatIds = req.response.cast<int>();
 
         // Process removed chats
@@ -143,13 +130,13 @@ class ChatsSyncWorker {
         final eventsStream = channel.messages.transform(BufferTransformer());
 
         // Fetch chat info
-        final infoReq = await channel.push('chat:get', {}, pushTimeout).future;
+        final infoReq = await channel.push('chat:get', {}).future;
         final chat = Chat.fromMap(infoReq.response as Map<String, dynamic>);
         await chatsRepository.upsertChat(chat);
         yield chat;
 
         // Fetch read cursors
-        final cursorsReq = await channel.push('chat:cursor:get', {}, pushTimeout).future;
+        final cursorsReq = await channel.push('chat:cursor:get', {}).future;
         final cursors = (cursorsReq.response as List).map((e) => ChatMessageReadCursor.fromMap(e)).toList();
         for (final cursor in cursors) {
           await chatsRepository.upsertChatMessageReadCursor(cursor);
@@ -162,7 +149,7 @@ class ChatsSyncWorker {
         /// If no last update, fetch history of last [pageSize] messages for initial state
         if (newestCursor == null) {
           final payload = {'limit': pageSize};
-          final req = await channel.push('message:history', payload, pushTimeout).future;
+          final req = await channel.push('message:history', payload).future;
           final messages = (req.response['data'] as List).map((e) => ChatMessage.fromMap(e)).toList();
 
           if (messages.isNotEmpty) {
@@ -191,7 +178,7 @@ class ChatsSyncWorker {
           var pagingCursor = newestCursor;
           while (true) {
             final payload = {'updated_after': pagingCursor.time.toUtc().toIso8601String(), 'limit': pageSize};
-            final req = await channel.push('message:updates', payload, pushTimeout).future;
+            final req = await channel.push('message:updates', payload).future;
             final messages = (req.response['data'] as List).map((e) => ChatMessage.fromMap(e)).toList();
 
             // If no more messages, break the pagination loop

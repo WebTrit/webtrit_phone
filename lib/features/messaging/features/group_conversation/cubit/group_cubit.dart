@@ -23,10 +23,6 @@ class GroupCubit extends Cubit<GroupState> {
     this._outboxRepository,
   ) : super(GroupState.init(_chatId)) {
     _init();
-    // _logger.onRecord.listen((record) {
-    //   // ignore: avoid_print
-    //   print('\x1B[33mcht: ${record.message}\x1B[0m');
-    // });
   }
 
   final int _chatId;
