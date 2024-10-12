@@ -28,48 +28,46 @@ class _MessageTextFieldState extends State<MessageTextField> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
       color: colorScheme.surface,
-      child: SafeArea(
-        child: Row(
-          children: [
-            Expanded(
-              child: TextFormField(
-                controller: widget.controller,
-                onFieldSubmitted: (_) {
-                  if (value.isNotEmpty) widget.onSend();
-                },
-                onChanged: (v) {
-                  setState(() => value = v);
-                  widget.onChanged?.call(v);
-                },
-                decoration: InputDecoration(
-                  hintText: context.l10n.messaging_MessageField_hint,
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  isDense: true,
-                  isCollapsed: true,
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide.none,
-                    borderRadius: BorderRadius.circular(16),
-                  ),
+      child: Row(
+        children: [
+          Expanded(
+            child: TextFormField(
+              controller: widget.controller,
+              onFieldSubmitted: (_) {
+                if (value.isNotEmpty) widget.onSend();
+              },
+              onChanged: (v) {
+                setState(() => value = v);
+                widget.onChanged?.call(v);
+              },
+              decoration: InputDecoration(
+                hintText: context.l10n.messaging_MessageField_hint,
+                contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                isDense: true,
+                isCollapsed: true,
+                border: OutlineInputBorder(
+                  borderSide: BorderSide.none,
+                  borderRadius: BorderRadius.circular(16),
                 ),
               ),
             ),
-            AnimatedCrossFade(
-              duration: const Duration(milliseconds: 600),
-              sizeCurve: Curves.elasticOut,
-              firstChild: const SizedBox(width: 8, height: 8),
-              secondChild: GestureDetector(
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 8),
-                  child: Icon(Icons.send, size: 24, color: colorScheme.primary),
-                ),
-                onTap: () {
-                  if (value.isNotEmpty) widget.onSend();
-                },
+          ),
+          AnimatedCrossFade(
+            duration: const Duration(milliseconds: 600),
+            sizeCurve: Curves.elasticOut,
+            firstChild: const SizedBox(width: 8, height: 8),
+            secondChild: GestureDetector(
+              child: Padding(
+                padding: const EdgeInsets.only(left: 8),
+                child: Icon(Icons.send, size: 24, color: colorScheme.primary),
               ),
-              crossFadeState: value.isNotEmpty ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+              onTap: () {
+                if (value.isNotEmpty) widget.onSend();
+              },
             ),
-          ],
-        ),
+            crossFadeState: value.isNotEmpty ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+          ),
+        ],
       ),
     );
   }
