@@ -54,19 +54,19 @@ class _MessagingShellState extends State<MessagingShell> {
   }
 
   onOpenConversation(participantId) {
-    context.router.root.navigate(ChatConversationScreenPageRoute(participantId: participantId));
+    context.router.navigate(ChatConversationScreenPageRoute(participantId: participantId));
   }
 
   onOpenChat(chatId) {
-    context.router.root.navigate(ChatConversationScreenPageRoute(chatId: chatId));
+    context.router.navigate(ChatConversationScreenPageRoute(chatId: chatId));
   }
 
   onOpenSmsConversation(firstNumber, secondNumber) {
-    context.router.root.navigate(SmsConversationScreenPageRoute(firstNumber: firstNumber, secondNumber: secondNumber));
+    context.router.navigate(SmsConversationScreenPageRoute(firstNumber: firstNumber, secondNumber: secondNumber));
   }
 
   onOpenChatList() {
-    context.router.root.navigate(const MessagingRouterPageRoute());
+    context.router.navigate(const MainScreenPageRoute(children: [MessagingRouterPageRoute()]));
   }
 
   @override
