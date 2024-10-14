@@ -25,12 +25,8 @@ mixin _$AppConfig {
   AppConfigSettings get settingsConfig => throw _privateConstructorUsedError;
   AppConfigCall get callConfig => throw _privateConstructorUsedError;
 
-  /// Serializes this AppConfig to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
-  /// Create a copy of AppConfig
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   $AppConfigCopyWith<AppConfig> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -62,8 +58,6 @@ class _$AppConfigCopyWithImpl<$Res, $Val extends AppConfig>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of AppConfig
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -92,8 +86,6 @@ class _$AppConfigCopyWithImpl<$Res, $Val extends AppConfig>
     ) as $Val);
   }
 
-  /// Create a copy of AppConfig
-  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $AppConfigLoginCopyWith<$Res> get loginConfig {
@@ -102,8 +94,6 @@ class _$AppConfigCopyWithImpl<$Res, $Val extends AppConfig>
     });
   }
 
-  /// Create a copy of AppConfig
-  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $AppConfigMainCopyWith<$Res> get mainConfig {
@@ -112,8 +102,6 @@ class _$AppConfigCopyWithImpl<$Res, $Val extends AppConfig>
     });
   }
 
-  /// Create a copy of AppConfig
-  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $AppConfigSettingsCopyWith<$Res> get settingsConfig {
@@ -122,8 +110,6 @@ class _$AppConfigCopyWithImpl<$Res, $Val extends AppConfig>
     });
   }
 
-  /// Create a copy of AppConfig
-  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $AppConfigCallCopyWith<$Res> get callConfig {
@@ -165,8 +151,6 @@ class __$$AppConfigImplCopyWithImpl<$Res>
       _$AppConfigImpl _value, $Res Function(_$AppConfigImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of AppConfig
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -242,14 +226,12 @@ class _$AppConfigImpl extends _AppConfig {
                 other.callConfig == callConfig));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
       runtimeType, loginConfig, mainConfig, settingsConfig, callConfig);
 
-  /// Create a copy of AppConfig
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$AppConfigImplCopyWith<_$AppConfigImpl> get copyWith =>
@@ -282,11 +264,8 @@ abstract class _AppConfig extends AppConfig {
   AppConfigSettings get settingsConfig;
   @override
   AppConfigCall get callConfig;
-
-  /// Create a copy of AppConfig
-  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$AppConfigImplCopyWith<_$AppConfigImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -302,12 +281,8 @@ mixin _$AppConfigLogin {
   List<AppConfigLoginEmbedded> get embedded =>
       throw _privateConstructorUsedError;
 
-  /// Serializes this AppConfigLogin to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
-  /// Create a copy of AppConfigLogin
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   $AppConfigLoginCopyWith<AppConfigLogin> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -333,8 +308,6 @@ class _$AppConfigLoginCopyWithImpl<$Res, $Val extends AppConfigLogin>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of AppConfigLogin
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -375,8 +348,6 @@ class __$$AppConfigLoginImplCopyWithImpl<$Res>
       _$AppConfigLoginImpl _value, $Res Function(_$AppConfigLoginImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of AppConfigLogin
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -443,16 +414,14 @@ class _$AppConfigLoginImpl extends _AppConfigLogin {
             const DeepCollectionEquality().equals(other._embedded, _embedded));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(_modeSelectActions),
       const DeepCollectionEquality().hash(_embedded));
 
-  /// Create a copy of AppConfigLogin
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$AppConfigLoginImplCopyWith<_$AppConfigLoginImpl> get copyWith =>
@@ -480,11 +449,8 @@ abstract class _AppConfigLogin extends AppConfigLogin {
   List<AppConfigModeSelectAction> get modeSelectActions;
   @override
   List<AppConfigLoginEmbedded> get embedded;
-
-  /// Create a copy of AppConfigLogin
-  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$AppConfigLoginImplCopyWith<_$AppConfigLoginImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -501,12 +467,8 @@ mixin _$AppConfigModeSelectAction {
   String get type => throw _privateConstructorUsedError;
   String get titleL10n => throw _privateConstructorUsedError;
 
-  /// Serializes this AppConfigModeSelectAction to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
-  /// Create a copy of AppConfigModeSelectAction
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   $AppConfigModeSelectActionCopyWith<AppConfigModeSelectAction> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -531,8 +493,6 @@ class _$AppConfigModeSelectActionCopyWithImpl<$Res,
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of AppConfigModeSelectAction
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -584,8 +544,6 @@ class __$$AppConfigModeSelectActionImplCopyWithImpl<$Res>
       $Res Function(_$AppConfigModeSelectActionImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of AppConfigModeSelectAction
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -655,14 +613,12 @@ class _$AppConfigModeSelectActionImpl extends _AppConfigModeSelectAction {
                 other.titleL10n == titleL10n));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   int get hashCode =>
       Object.hash(runtimeType, enabled, embeddedId, type, titleL10n);
 
-  /// Create a copy of AppConfigModeSelectAction
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$AppConfigModeSelectActionImplCopyWith<_$AppConfigModeSelectActionImpl>
@@ -696,11 +652,8 @@ abstract class _AppConfigModeSelectAction extends AppConfigModeSelectAction {
   String get type;
   @override
   String get titleL10n;
-
-  /// Create a copy of AppConfigModeSelectAction
-  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$AppConfigModeSelectActionImplCopyWith<_$AppConfigModeSelectActionImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
@@ -718,12 +671,8 @@ mixin _$AppConfigLoginEmbedded {
   bool get showToolbar => throw _privateConstructorUsedError;
   String get url => throw _privateConstructorUsedError;
 
-  /// Serializes this AppConfigLoginEmbedded to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
-  /// Create a copy of AppConfigLoginEmbedded
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   $AppConfigLoginEmbeddedCopyWith<AppConfigLoginEmbedded> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -749,8 +698,6 @@ class _$AppConfigLoginEmbeddedCopyWithImpl<$Res,
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of AppConfigLoginEmbedded
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -808,8 +755,6 @@ class __$$AppConfigLoginEmbeddedImplCopyWithImpl<$Res>
       $Res Function(_$AppConfigLoginEmbeddedImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of AppConfigLoginEmbedded
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -890,14 +835,12 @@ class _$AppConfigLoginEmbeddedImpl extends _AppConfigLoginEmbedded {
             (identical(other.url, url) || other.url == url));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   int get hashCode =>
       Object.hash(runtimeType, id, launch, titleL10n, showToolbar, url);
 
-  /// Create a copy of AppConfigLoginEmbedded
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$AppConfigLoginEmbeddedImplCopyWith<_$AppConfigLoginEmbeddedImpl>
@@ -934,11 +877,8 @@ abstract class _AppConfigLoginEmbedded extends AppConfigLoginEmbedded {
   bool get showToolbar;
   @override
   String get url;
-
-  /// Create a copy of AppConfigLoginEmbedded
-  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$AppConfigLoginEmbeddedImplCopyWith<_$AppConfigLoginEmbeddedImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
@@ -951,12 +891,8 @@ AppConfigMain _$AppConfigMainFromJson(Map<String, dynamic> json) {
 mixin _$AppConfigMain {
   AppConfigBottomMenu get bottomMenu => throw _privateConstructorUsedError;
 
-  /// Serializes this AppConfigMain to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
-  /// Create a copy of AppConfigMain
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   $AppConfigMainCopyWith<AppConfigMain> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -982,8 +918,6 @@ class _$AppConfigMainCopyWithImpl<$Res, $Val extends AppConfigMain>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of AppConfigMain
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -997,8 +931,6 @@ class _$AppConfigMainCopyWithImpl<$Res, $Val extends AppConfigMain>
     ) as $Val);
   }
 
-  /// Create a copy of AppConfigMain
-  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $AppConfigBottomMenuCopyWith<$Res> get bottomMenu {
@@ -1030,8 +962,6 @@ class __$$AppConfigMainImplCopyWithImpl<$Res>
       _$AppConfigMainImpl _value, $Res Function(_$AppConfigMainImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of AppConfigMain
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1075,13 +1005,11 @@ class _$AppConfigMainImpl extends _AppConfigMain {
                 other.bottomMenu == bottomMenu));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, bottomMenu);
 
-  /// Create a copy of AppConfigMain
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$AppConfigMainImplCopyWith<_$AppConfigMainImpl> get copyWith =>
@@ -1105,11 +1033,8 @@ abstract class _AppConfigMain extends AppConfigMain {
 
   @override
   AppConfigBottomMenu get bottomMenu;
-
-  /// Create a copy of AppConfigMain
-  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$AppConfigMainImplCopyWith<_$AppConfigMainImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -1123,12 +1048,8 @@ mixin _$AppConfigBottomMenu {
   bool get cacheSelectedTab => throw _privateConstructorUsedError;
   List<AppConfigBottomMenuTab> get tabs => throw _privateConstructorUsedError;
 
-  /// Serializes this AppConfigBottomMenu to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
-  /// Create a copy of AppConfigBottomMenu
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   $AppConfigBottomMenuCopyWith<AppConfigBottomMenu> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -1152,8 +1073,6 @@ class _$AppConfigBottomMenuCopyWithImpl<$Res, $Val extends AppConfigBottomMenu>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of AppConfigBottomMenu
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1192,8 +1111,6 @@ class __$$AppConfigBottomMenuImplCopyWithImpl<$Res>
       $Res Function(_$AppConfigBottomMenuImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of AppConfigBottomMenu
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1252,14 +1169,12 @@ class _$AppConfigBottomMenuImpl extends _AppConfigBottomMenu {
             const DeepCollectionEquality().equals(other._tabs, _tabs));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, cacheSelectedTab,
       const DeepCollectionEquality().hash(_tabs));
 
-  /// Create a copy of AppConfigBottomMenu
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$AppConfigBottomMenuImplCopyWith<_$AppConfigBottomMenuImpl> get copyWith =>
@@ -1287,11 +1202,8 @@ abstract class _AppConfigBottomMenu extends AppConfigBottomMenu {
   bool get cacheSelectedTab;
   @override
   List<AppConfigBottomMenuTab> get tabs;
-
-  /// Create a copy of AppConfigBottomMenu
-  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$AppConfigBottomMenuImplCopyWith<_$AppConfigBottomMenuImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -1311,12 +1223,8 @@ mixin _$AppConfigBottomMenuTab {
   IconData get icon => throw _privateConstructorUsedError;
   Map<String, dynamic> get data => throw _privateConstructorUsedError;
 
-  /// Serializes this AppConfigBottomMenuTab to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
-  /// Create a copy of AppConfigBottomMenuTab
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   $AppConfigBottomMenuTabCopyWith<AppConfigBottomMenuTab> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -1347,8 +1255,6 @@ class _$AppConfigBottomMenuTabCopyWithImpl<$Res,
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of AppConfigBottomMenuTab
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1416,8 +1322,6 @@ class __$$AppConfigBottomMenuTabImplCopyWithImpl<$Res>
       $Res Function(_$AppConfigBottomMenuTabImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of AppConfigBottomMenuTab
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1514,14 +1418,12 @@ class _$AppConfigBottomMenuTabImpl extends _AppConfigBottomMenuTab {
             const DeepCollectionEquality().equals(other._data, _data));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, enabled, initial, type,
       titleL10n, icon, const DeepCollectionEquality().hash(_data));
 
-  /// Create a copy of AppConfigBottomMenuTab
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$AppConfigBottomMenuTabImplCopyWith<_$AppConfigBottomMenuTabImpl>
@@ -1562,11 +1464,8 @@ abstract class _AppConfigBottomMenuTab extends AppConfigBottomMenuTab {
   IconData get icon;
   @override
   Map<String, dynamic> get data;
-
-  /// Create a copy of AppConfigBottomMenuTab
-  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$AppConfigBottomMenuTabImplCopyWith<_$AppConfigBottomMenuTabImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
@@ -1580,12 +1479,8 @@ mixin _$AppConfigSettings {
   List<AppConfigSettingsSection> get sections =>
       throw _privateConstructorUsedError;
 
-  /// Serializes this AppConfigSettings to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
-  /// Create a copy of AppConfigSettings
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   $AppConfigSettingsCopyWith<AppConfigSettings> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -1609,8 +1504,6 @@ class _$AppConfigSettingsCopyWithImpl<$Res, $Val extends AppConfigSettings>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of AppConfigSettings
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1644,8 +1537,6 @@ class __$$AppConfigSettingsImplCopyWithImpl<$Res>
       $Res Function(_$AppConfigSettingsImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of AppConfigSettings
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1693,14 +1584,12 @@ class _$AppConfigSettingsImpl extends _AppConfigSettings {
             const DeepCollectionEquality().equals(other._sections, _sections));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   int get hashCode =>
       Object.hash(runtimeType, const DeepCollectionEquality().hash(_sections));
 
-  /// Create a copy of AppConfigSettings
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$AppConfigSettingsImplCopyWith<_$AppConfigSettingsImpl> get copyWith =>
@@ -1726,11 +1615,8 @@ abstract class _AppConfigSettings extends AppConfigSettings {
 
   @override
   List<AppConfigSettingsSection> get sections;
-
-  /// Create a copy of AppConfigSettings
-  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$AppConfigSettingsImplCopyWith<_$AppConfigSettingsImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -1746,12 +1632,8 @@ mixin _$AppConfigSettingsSection {
   bool get enabled => throw _privateConstructorUsedError;
   List<AppConfigSettingsItem> get items => throw _privateConstructorUsedError;
 
-  /// Serializes this AppConfigSettingsSection to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
-  /// Create a copy of AppConfigSettingsSection
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   $AppConfigSettingsSectionCopyWith<AppConfigSettingsSection> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -1777,8 +1659,6 @@ class _$AppConfigSettingsSectionCopyWithImpl<$Res,
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of AppConfigSettingsSection
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1826,8 +1706,6 @@ class __$$AppConfigSettingsSectionImplCopyWithImpl<$Res>
       $Res Function(_$AppConfigSettingsSectionImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of AppConfigSettingsSection
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1895,14 +1773,12 @@ class _$AppConfigSettingsSectionImpl extends _AppConfigSettingsSection {
             const DeepCollectionEquality().equals(other._items, _items));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, titleL10n, enabled,
       const DeepCollectionEquality().hash(_items));
 
-  /// Create a copy of AppConfigSettingsSection
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$AppConfigSettingsSectionImplCopyWith<_$AppConfigSettingsSectionImpl>
@@ -1934,11 +1810,8 @@ abstract class _AppConfigSettingsSection extends AppConfigSettingsSection {
   bool get enabled;
   @override
   List<AppConfigSettingsItem> get items;
-
-  /// Create a copy of AppConfigSettingsSection
-  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$AppConfigSettingsSectionImplCopyWith<_$AppConfigSettingsSectionImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
@@ -1957,12 +1830,8 @@ mixin _$AppConfigSettingsItem {
   IconData get icon => throw _privateConstructorUsedError;
   Map<String, dynamic> get data => throw _privateConstructorUsedError;
 
-  /// Serializes this AppConfigSettingsItem to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
-  /// Create a copy of AppConfigSettingsItem
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   $AppConfigSettingsItemCopyWith<AppConfigSettingsItem> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -1992,8 +1861,6 @@ class _$AppConfigSettingsItemCopyWithImpl<$Res,
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of AppConfigSettingsItem
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -2054,8 +1921,6 @@ class __$$AppConfigSettingsItemImplCopyWithImpl<$Res>
       $Res Function(_$AppConfigSettingsItemImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of AppConfigSettingsItem
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -2142,14 +2007,12 @@ class _$AppConfigSettingsItemImpl extends _AppConfigSettingsItem {
             const DeepCollectionEquality().equals(other._data, _data));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, enabled, titleL10n, type, icon,
       const DeepCollectionEquality().hash(_data));
 
-  /// Create a copy of AppConfigSettingsItem
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$AppConfigSettingsItemImplCopyWith<_$AppConfigSettingsItemImpl>
@@ -2187,11 +2050,8 @@ abstract class _AppConfigSettingsItem extends AppConfigSettingsItem {
   IconData get icon;
   @override
   Map<String, dynamic> get data;
-
-  /// Create a copy of AppConfigSettingsItem
-  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$AppConfigSettingsItemImplCopyWith<_$AppConfigSettingsItemImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
@@ -2205,12 +2065,8 @@ mixin _$AppConfigCall {
   bool get videoEnabled => throw _privateConstructorUsedError;
   AppConfigTransfer get transfer => throw _privateConstructorUsedError;
 
-  /// Serializes this AppConfigCall to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
-  /// Create a copy of AppConfigCall
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   $AppConfigCallCopyWith<AppConfigCall> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -2236,8 +2092,6 @@ class _$AppConfigCallCopyWithImpl<$Res, $Val extends AppConfigCall>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of AppConfigCall
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -2256,8 +2110,6 @@ class _$AppConfigCallCopyWithImpl<$Res, $Val extends AppConfigCall>
     ) as $Val);
   }
 
-  /// Create a copy of AppConfigCall
-  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $AppConfigTransferCopyWith<$Res> get transfer {
@@ -2289,8 +2141,6 @@ class __$$AppConfigCallImplCopyWithImpl<$Res>
       _$AppConfigCallImpl _value, $Res Function(_$AppConfigCallImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of AppConfigCall
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -2345,13 +2195,11 @@ class _$AppConfigCallImpl extends _AppConfigCall {
                 other.transfer == transfer));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, videoEnabled, transfer);
 
-  /// Create a copy of AppConfigCall
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$AppConfigCallImplCopyWith<_$AppConfigCallImpl> get copyWith =>
@@ -2378,11 +2226,8 @@ abstract class _AppConfigCall extends AppConfigCall {
   bool get videoEnabled;
   @override
   AppConfigTransfer get transfer;
-
-  /// Create a copy of AppConfigCall
-  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$AppConfigCallImplCopyWith<_$AppConfigCallImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -2396,12 +2241,8 @@ mixin _$AppConfigTransfer {
   bool get enableBlindTransfer => throw _privateConstructorUsedError;
   bool get enableAttendedTransfer => throw _privateConstructorUsedError;
 
-  /// Serializes this AppConfigTransfer to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
-  /// Create a copy of AppConfigTransfer
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   $AppConfigTransferCopyWith<AppConfigTransfer> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -2425,8 +2266,6 @@ class _$AppConfigTransferCopyWithImpl<$Res, $Val extends AppConfigTransfer>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of AppConfigTransfer
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -2465,8 +2304,6 @@ class __$$AppConfigTransferImplCopyWithImpl<$Res>
       $Res Function(_$AppConfigTransferImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of AppConfigTransfer
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -2519,14 +2356,12 @@ class _$AppConfigTransferImpl extends _AppConfigTransfer {
                 other.enableAttendedTransfer == enableAttendedTransfer));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   int get hashCode =>
       Object.hash(runtimeType, enableBlindTransfer, enableAttendedTransfer);
 
-  /// Create a copy of AppConfigTransfer
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$AppConfigTransferImplCopyWith<_$AppConfigTransferImpl> get copyWith =>
@@ -2554,11 +2389,8 @@ abstract class _AppConfigTransfer extends AppConfigTransfer {
   bool get enableBlindTransfer;
   @override
   bool get enableAttendedTransfer;
-
-  /// Create a copy of AppConfigTransfer
-  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$AppConfigTransferImplCopyWith<_$AppConfigTransferImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

@@ -2,6 +2,8 @@ import 'package:intl/intl.dart' as intl;
 
 import 'app_localizations.g.dart';
 
+// ignore_for_file: type=lint
+
 /// The translations for English (`en`).
 class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
@@ -16,8 +18,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get alertDialogActions_yes => 'Yes';
 
   @override
-  String get autoprovision_errorSnackBar_invalidToken =>
-      'The autoconfiguration credentials were rejected by the server. Please request a new configuration link';
+  String get autoprovision_errorSnackBar_invalidToken => 'The autoconfiguration credentials were rejected by the server. Please request a new configuration link';
 
   @override
   String get autoprovision_ReloginDialog_confirm => 'Confirm';
@@ -26,8 +27,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get autoprovision_ReloginDialog_decline => 'Decline';
 
   @override
-  String get autoprovision_ReloginDialog_text =>
-      'Do you want to use the new authentication credentials provided in the link? You will be logged out from the current session.';
+  String get autoprovision_ReloginDialog_text => 'Do you want to use the new authentication credentials provided in the link? You will be logged out from the current session.';
 
   @override
   String get autoprovision_ReloginDialog_title => 'Relogin Confirmation';
@@ -228,8 +228,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get default_UnauthorizedRequestFailureError => 'An unauthorized request failure occurred';
 
   @override
-  String get favorites_BodyCenter_empty =>
-      'Currently, you have no favorite numbers.\nAdd favorites from Contacts using the star icon';
+  String get favorites_BodyCenter_empty => 'Currently, you have no favorite numbers.\nAdd favorites from Contacts using the star icon';
 
   @override
   String get favorites_DeleteConfirmDialog_content => 'Are you sure you want to delete the current favorite number?';
@@ -318,8 +317,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get login_requestCredentials_button => 'Sign up';
 
   @override
-  String get login_requestCredentials_DialogContent =>
-      'Please provide basic information and specify in the message that you would like to receive an account. Our administrators will verify the information and send the account details to your email.';
+  String get login_requestCredentials_DialogContent => 'Please provide basic information and specify in the message that you would like to receive an account. Our administrators will verify the information and send the account details to your email.';
 
   @override
   String get login_requestCredentials_DialogTitle => 'Account Request';
@@ -358,8 +356,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get login_RequestFailureUnconfiguredBundleIdError => 'The app is not supported by your WebTrit Cloud Backend';
 
   @override
-  String get login_SupportedLoginTypeMissedExceptionError =>
-      'The current WebTrit Cloud Backend does not support any login types compatible with this app';
+  String get login_SupportedLoginTypeMissedExceptionError => 'The current WebTrit Cloud Backend does not support any login types compatible with this app';
 
   @override
   String login_Text_coreUrlAssignPostDescription(Object email) {
@@ -367,8 +364,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get login_Text_coreUrlAssignPreDescription =>
-      'In order to make calls via your own VoIP system please enter the URL of WebTrit Cloud Backend (as it was provided to you by your account manager) below.';
+  String get login_Text_coreUrlAssignPreDescription => 'In order to make calls via your own VoIP system please enter the URL of WebTrit Cloud Backend (as it was provided to you by your account manager) below.';
 
   @override
   String get login_TextFieldLabelText_coreUrlAssign => 'Enter your WebTrit Cloud Backend URL';
@@ -403,8 +399,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get login_Text_otpSigninVerifyPostDescriptionGeneral =>
-      'If you do not see an email with the verification code in your inbox, please check your spam folder.';
+  String get login_Text_otpSigninVerifyPostDescriptionGeneral => 'If you do not see an email with the verification code in your inbox, please check your spam folder.';
 
   @override
   String login_Text_otpSigninVerifyPreDescriptionUserRef(String userRef) {
@@ -426,8 +421,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get login_Text_signupRequestPostDescription => '';
 
   @override
-  String get login_Text_signupRequestPostDescriptionDemo =>
-      'If you do not have an account yet, it will be automatically created for you';
+  String get login_Text_signupRequestPostDescriptionDemo => 'If you do not have an account yet, it will be automatically created for you';
 
   @override
   String get login_Text_signupRequestPreDescription => '';
@@ -441,8 +435,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get login_Text_signupVerifyPostDescriptionGeneral =>
-      'If you do not see an email with the verification code in your inbox, please check your spam folder.';
+  String get login_Text_signupVerifyPostDescriptionGeneral => 'If you do not see an email with the verification code in your inbox, please check your spam folder.';
 
   @override
   String login_Text_signupVerifyPreDescriptionEmail(String email) {
@@ -504,8 +497,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get main_CompatibilityIssueDialogActions_verify => 'Check again';
 
   @override
-  String main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError(
-      String actual, String supportedConstraint) {
+  String main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError(String actual, String supportedConstraint) {
     return 'Incompatible WebTrit Cloud Backend version, please contact the administrator of your system.\n\nInstance version:\n$actual\n\nSupported version:\n$supportedConstraint';
   }
 
@@ -522,8 +514,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get notifications_errorSnackBar_appOnline => 'Your application is online';
 
   @override
-  String get notifications_errorSnackBar_appUnregistered =>
-      'Sorry, your application is currently disconnected from the WebTrit core servers and hence can\'t call right now. Please go to the settings page, and slide the online status toggle switch off and on again to reestablish the connection';
+  String get notifications_errorSnackBar_appUnregistered => 'Sorry, your application is currently disconnected from the WebTrit core servers and hence can\'t call right now. Please go to the settings page, and slide the online status toggle switch off and on again to reestablish the connection';
 
   @override
   String get notifications_errorSnackBar_sipServiceUnavailable => 'Authentication error with the remote VoIP system';
@@ -532,12 +523,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get notifications_errorSnackBar_callConnect => 'Connecting to the core failed, trying to reconnect';
 
   @override
-  String get notifications_errorSnackBar_callSignalingClientNotConnect =>
-      'Cannot initiate the call, please check the connection status';
+  String get notifications_errorSnackBar_callSignalingClientNotConnect => 'Cannot initiate the call, please check the connection status';
 
   @override
-  String get notifications_errorSnackBar_callSignalingClientSessionMissed =>
-      'The current connection session is invalid, please sign in again';
+  String get notifications_errorSnackBar_callSignalingClientSessionMissed => 'The current connection session is invalid, please sign in again';
 
   @override
   String get notifications_errorSnackBar_callUndefinedLine => 'No idle lines to initiate the call';
@@ -546,8 +535,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get notifications_errorSnackBar_callUserMedia => 'No access to media input, please check app permissions';
 
   @override
-  String get notifications_errorSnackBar_activeLineBlindTransferWarning =>
-      'You are already on the line with the recipient you are trying to blind transfer to';
+  String get notifications_errorSnackBar_activeLineBlindTransferWarning => 'You are already on the line with the recipient you are trying to blind transfer to';
 
   @override
   String get notImplemented => 'Sorry, not implemented yet';
@@ -562,8 +550,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get permission_manufacturer_Button_toSettings => 'Open app Settings';
 
   @override
-  String get permission_manufacturer_Text_heading =>
-      'To ensure the best user experience, the app needs to be granted the following permissions manually:';
+  String get permission_manufacturer_Text_heading => 'To ensure the best user experience, the app needs to be granted the following permissions manually:';
 
   @override
   String get permission_manufacturer_Text_trailing => 'Permissions could be changed at any time in the future.';
@@ -575,8 +562,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get permission_manufacturer_Text_xiaomi_tip2 => '2. Find and turn on \"Lockscreen notifications\".';
 
   @override
-  String get permission_Text_description =>
-      'To ensure the best user experience, the app needs to be granted the following permissions: microphone for audio calls, camera for video calls, and contacts to simplify reaching them from the app.\n\nPermissions could be changed at any time in the future.';
+  String get permission_Text_description => 'To ensure the best user experience, the app needs to be granted the following permissions: microphone for audio calls, camera for video calls, and contacts to simplify reaching them from the app.\n\nPermissions could be changed at any time in the future.';
 
   @override
   String recents_BodyCenter_empty(Object filter) {
@@ -722,8 +708,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get themeMode_system => 'System';
 
   @override
-  String get undefine_DeeplinkConfigurationInvalid_text =>
-      'The autoconfiguration credentials are invalid, please log in';
+  String get undefine_DeeplinkConfigurationInvalid_text => 'The autoconfiguration credentials are invalid, please log in';
 
   @override
   String get underDevelopment => 'This page is under development.';
@@ -838,8 +823,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get messaging_ConversationsScreen_noNumberAlert_title => 'No phone number';
 
   @override
-  String get messaging_ConversationsScreen_noNumberAlert_text =>
-      'You need to have a phone number linked to you account to send SMS messages';
+  String get messaging_ConversationsScreen_noNumberAlert_text => 'You need to have a phone number linked to you account to send SMS messages';
 
   @override
   String get messaging_Conversations_tile_empty => 'No messages yet';
@@ -887,15 +871,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get messaging_NewConversation_contactOrNumberSearch_hint => 'Enter name or phone number';
 
   @override
-  String get messaging_NewConversation_numberFormatExample =>
-      '+ [country code] [area/operator code] [subscriber number]';
+  String get messaging_NewConversation_numberFormatExample => '+ [country code] [area/operator code] [subscriber number]';
 
   @override
   String get messaging_NewConversation_numberSearch_errorHint => 'Phone number format: ';
 
   @override
-  String get messaging_NewConversation_numberSearch_errorError =>
-      'The entered phone number is invalid. It should be entered in the format: ';
+  String get messaging_NewConversation_numberSearch_errorError => 'The entered phone number is invalid. It should be entered in the format: ';
 
   @override
   String get messaging_NewConversation_invite_heading => 'Invite users:';
@@ -913,8 +895,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get messaging_NewConversation_invalidNumber_title => 'Invalid phone number';
 
   @override
-  String get messaging_NewConversation_invalidNumber_message1 =>
-      'The contact has an invalid phone number. It should be in the format ';
+  String get messaging_NewConversation_invalidNumber_message1 => 'The contact has an invalid phone number. It should be in the format ';
 
   @override
   String get messaging_NewConversation_invalidNumber_message2 => '. Please fix it in your phone book.';
@@ -1049,15 +1030,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get messaging_MessageListView_typingTrail => 'is typing...';
 
   @override
-  String get account_selfCarePasswordExpired_message =>
-      'Your self-care password has expired. Please update it using your self-care.\nUntil the password is changed, access to the service will be limited.';
+  String get account_selfCarePasswordExpired_message => 'Your self-care password has expired. Please update it using your self-care.\nUntil the password is changed, access to the service will be limited.';
 
   @override
   String get common_noInternetConnection_title => 'No Internet Connection';
 
   @override
-  String get common_noInternetConnection_message =>
-      'It seems you are not connected to the internet. Please check your connection and try again.';
+  String get common_noInternetConnection_message => 'It seems you are not connected to the internet. Please check your connection and try again.';
 
   @override
   String get common_noInternetConnection_retryButton => 'Try Again';
