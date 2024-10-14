@@ -16,10 +16,7 @@ class MessagingStateWrapper extends StatelessWidget {
           buildWhen: (previous, current) => previous.status != current.status,
           builder: (context, state) {
             if (state.status != ConnectionStatus.connected) {
-              return Material(
-                color: Colors.white,
-                child: StateBar(status: state.status),
-              );
+              return StateBar(status: state.status);
             } else {
               return const SizedBox();
             }

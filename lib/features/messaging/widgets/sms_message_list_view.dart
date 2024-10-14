@@ -119,7 +119,7 @@ class _SmsMessageListViewState extends State<SmsMessageListView> {
   @override
   Widget build(BuildContext context) {
     return Column(children: [
-      Expanded(child: list()),
+      Expanded(child: MessagingStateWrapper(child: list())),
       MessageTextField(controller: inputController, onSend: handleSend),
     ]);
   }

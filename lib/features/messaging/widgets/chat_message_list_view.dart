@@ -167,7 +167,7 @@ class _ChatMessageListViewState extends State<ChatMessageListView> {
   @override
   Widget build(BuildContext context) {
     return Column(children: [
-      Expanded(child: list()),
+      Expanded(child: MessagingStateWrapper(child: list())),
       field(),
     ]);
   }

@@ -29,6 +29,6 @@ class ChatConversationScreenPage extends StatelessWidget {
       child: const ChatConversationScreen(),
     );
 
-    return SafeArea(top: false, child: MessagingStateWrapper(child: screen));
+    return screen;
   }
 }

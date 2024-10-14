@@ -32,6 +32,6 @@ class SmsConversationScreenPage extends StatelessWidget {
       child: const SmsConversationScreen(),
     );
 
-    return SafeArea(top: false, child: MessagingStateWrapper(child: screen));
+    return screen;
   }
 }
