@@ -336,7 +336,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       add(_ConnectivityResultChanged(currentConnectivityResult));
     }
 
-    // AppleNativeAudioManagement.setUseManualAudio(true);
+    AppleNativeAudioManagement.setUseManualAudio(true);
   }
 
   Future<void> _onAppLifecycleStateChanged(
@@ -2163,8 +2163,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   void didActivateAudioSession() {
     _logger.fine('didActivateAudioSession');
     () async {
-      // await AppleNativeAudioManagement.audioSessionDidActivate();
-      // await AppleNativeAudioManagement.setIsAudioEnabled(true);
+      await AppleNativeAudioManagement.audioSessionDidActivate();
+      await AppleNativeAudioManagement.setIsAudioEnabled(true);
     }();
   }
 
@@ -2172,8 +2172,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   void didDeactivateAudioSession() {
     _logger.fine('didDeactivateAudioSession');
     () async {
-      // await AppleNativeAudioManagement.setIsAudioEnabled(false);
-      // await AppleNativeAudioManagement.audioSessionDidDeactivate();
+      await AppleNativeAudioManagement.setIsAudioEnabled(false);
+      await AppleNativeAudioManagement.audioSessionDidDeactivate();
     }();
   }
 

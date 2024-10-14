@@ -768,10 +768,11 @@ packages:
   flutter_webrtc:
     dependency: "direct main"
     description:
-      name: flutter_webrtc
-      sha256: f6800cc2af79018c12e955ddf8ad007891fdfbb8199b0ce3dccd0977ed2add9c
-      url: "https://pub.dev"
-    source: hosted
+      path: "."
+      ref: "main_ext_rebase14.10.24"
+      resolved-ref: "367a097a54c4aebf35ef63247f3156da6409ec91"
+      url: "https://github.com/WebTrit/flutter-webrtc.git"
+    source: git
     version: "0.11.7"
   formz:
     dependency: "direct main"

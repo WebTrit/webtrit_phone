@@ -44,11 +44,10 @@ dependencies:
   flutter_contacts: ^1.1.7
   flutter_secure_storage: ^9.2.2
   flutter_svg: ^2.0.10+1
-  # flutter_webrtc:
-  #   git:
-  #     url: https://github.com/WebTrit/flutter-webrtc.git
-  #     ref: main_ext
-  flutter_webrtc: ^0.11.7
+  flutter_webrtc:
+    git:
+      url: https://github.com/WebTrit/flutter-webrtc.git
+      ref: main_ext_rebase14.10.24
   formz: ^0.7.0
   freezed_annotation: ^2.4.1
   google_fonts: ^6.2.1
