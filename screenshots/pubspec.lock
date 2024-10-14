@@ -318,6 +318,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "7.0.0"
+  device_region:
+    dependency: transitive
+    description:
+      name: device_region
+      sha256: d04cc40a445f8c8405e557ec0732e43e18e1a0d2109ddfb191911b15846780c2
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.4.0"
   diff_match_patch:
     dependency: transitive
     description:
@@ -326,14 +334,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.4.1"
-  diffutil_dart:
-    dependency: transitive
-    description:
-      name: diffutil_dart
-      sha256: "5e74883aedf87f3b703cb85e815bdc1ed9208b33501556e4a8a5572af9845c81"
-      url: "https://pub.dev"
-    source: hosted
-    version: "4.0.1"
   dio:
     dependency: transitive
     description:
@@ -342,6 +342,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.4.3+1"
+  dlibphonenumber:
+    dependency: transitive
+    description:
+      name: dlibphonenumber
+      sha256: "866507f11980a5c31a5ee38727ee37d232a611fc9ccab112097e62caab127d1d"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.24"
   drift:
     dependency: transitive
     description:
@@ -523,15 +531,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.6.2"
-  flutter_chat_ui:
-    dependency: transitive
-    description:
-      path: "."
-      ref: main
-      resolved-ref: "76da91a85b5c70abe66d7aec801a4c75d468c56c"
-      url: "https://github.com/WebTrit/flutter_chat_ui.git"
-    source: git
-    version: "1.6.13"
   flutter_contacts:
     dependency: transitive
     description:
@@ -545,14 +544,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_dtmf:
-    dependency: transitive
-    description:
-      name: flutter_dtmf
-      sha256: "355f0d476c204757f759caeaa65d50df91337924c0b14548f7b731a5c562f73e"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.0.2"
   flutter_link_previewer:
     dependency: transitive
     description:
@@ -577,6 +568,30 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.0.0"
+  flutter_local_notifications:
+    dependency: transitive
+    description:
+      name: flutter_local_notifications
+      sha256: "49eeef364fddb71515bc78d5a8c51435a68bccd6e4d68e25a942c5e47761ae71"
+      url: "https://pub.dev"
+    source: hosted
+    version: "17.2.3"
+  flutter_local_notifications_linux:
+    dependency: transitive
+    description:
+      name: flutter_local_notifications_linux
+      sha256: c49bd06165cad9beeb79090b18cd1eb0296f4bf4b23b84426e37dd7c027fc3af
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.0.1"
+  flutter_local_notifications_platform_interface:
+    dependency: transitive
+    description:
+      name: flutter_local_notifications_platform_interface
+      sha256: "85f8d07fe708c1bdcf45037f2c0109753b26ae077e9d9e899d55971711a4ea66"
+      url: "https://pub.dev"
+    source: hosted
+    version: "7.2.0"
   flutter_localizations:
     dependency: transitive
     description: flutter
@@ -1099,14 +1114,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.7.4"
-  photo_view:
-    dependency: transitive
-    description:
-      name: photo_view
-      sha256: "1fc3d970a91295fbd1364296575f854c9863f225505c28c46e0a03e48960c75e"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.15.0"
   platform:
     dependency: transitive
     description:
@@ -1147,6 +1154,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.0.2"
+  protobuf:
+    dependency: transitive
+    description:
+      name: protobuf
+      sha256: "68645b24e0716782e58948f8467fd42a880f255096a821f9e7d0ec625b00c84d"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.1.0"
   provider:
     dependency: transitive
     description:
@@ -1187,14 +1202,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.27.7"
-  scroll_to_index:
-    dependency: transitive
-    description:
-      name: scroll_to_index
-      sha256: b707546e7500d9f070d63e5acf74fd437ec7eeeb68d3412ef7b0afada0b4f176
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.0.1"
   share_plus:
     dependency: transitive
     description:
@@ -1486,6 +1493,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.6.4"
+  timezone:
+    dependency: transitive
+    description:
+      name: timezone
+      sha256: "2236ec079a174ce07434e89fcd3fcda430025eb7692244139a9cf54fdcf1fc7d"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.9.4"
   timing:
     dependency: transitive
     description:
@@ -1614,14 +1629,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.4"
-  visibility_detector:
-    dependency: transitive
-    description:
-      name: visibility_detector
-      sha256: dd5cc11e13494f432d15939c3aa8ae76844c42b723398643ce9addb88a5ed420
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.4.0+2"
   vm_service:
     dependency: transitive
     description:
@@ -1747,7 +1754,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "0.0.0+0000000"
+    version: "1.3.8+13800003"
   webtrit_phone_number:
     dependency: transitive
     description:

@@ -8022,79 +8022,44 @@ typedef $$ContactsTableTableUpdateCompanionBuilder = ContactDataCompanion
   Value<DateTime?> updatedAt,
 });
 
-class $$ContactsTableTableTableManager extends RootTableManager<
-    _$AppDatabase,
-    $ContactsTableTable,
-    ContactData,
-    $$ContactsTableTableFilterComposer,
-    $$ContactsTableTableOrderingComposer,
-    $$ContactsTableTableCreateCompanionBuilder,
-    $$ContactsTableTableUpdateCompanionBuilder> {
-  $$ContactsTableTableTableManager(_$AppDatabase db, $ContactsTableTable table)
-      : super(TableManagerState(
-          db: db,
-          table: table,
-          filteringComposer:
-              $$ContactsTableTableFilterComposer(ComposerState(db, table)),
-          orderingComposer:
-              $$ContactsTableTableOrderingComposer(ComposerState(db, table)),
-          updateCompanionCallback: ({
-            Value<int> id = const Value.absent(),
-            Value<ContactSourceTypeEnum> sourceType = const Value.absent(),
-            Value<String> sourceId = const Value.absent(),
-            Value<String?> firstName = const Value.absent(),
-            Value<String?> lastName = const Value.absent(),
-            Value<String?> aliasName = const Value.absent(),
-            Value<Uint8List?> thumbnail = const Value.absent(),
-            Value<bool?> registered = const Value.absent(),
-            Value<bool?> userRegistered = const Value.absent(),
-            Value<bool?> isCurrentUser = const Value.absent(),
-            Value<DateTime?> insertedAt = const Value.absent(),
-            Value<DateTime?> updatedAt = const Value.absent(),
-          }) =>
-              ContactDataCompanion(
-            id: id,
-            sourceType: sourceType,
-            sourceId: sourceId,
-            firstName: firstName,
-            lastName: lastName,
-            aliasName: aliasName,
-            thumbnail: thumbnail,
-            registered: registered,
-            userRegistered: userRegistered,
-            isCurrentUser: isCurrentUser,
-            insertedAt: insertedAt,
-            updatedAt: updatedAt,
-          ),
-          createCompanionCallback: ({
-            Value<int> id = const Value.absent(),
-            required ContactSourceTypeEnum sourceType,
-            required String sourceId,
-            Value<String?> firstName = const Value.absent(),
-            Value<String?> lastName = const Value.absent(),
-            Value<String?> aliasName = const Value.absent(),
-            Value<Uint8List?> thumbnail = const Value.absent(),
-            Value<bool?> registered = const Value.absent(),
-            Value<bool?> userRegistered = const Value.absent(),
-            Value<bool?> isCurrentUser = const Value.absent(),
-            Value<DateTime?> insertedAt = const Value.absent(),
-            Value<DateTime?> updatedAt = const Value.absent(),
-          }) =>
-              ContactDataCompanion.insert(
-            id: id,
-            sourceType: sourceType,
-            sourceId: sourceId,
-            firstName: firstName,
-            lastName: lastName,
-            aliasName: aliasName,
-            thumbnail: thumbnail,
-            registered: registered,
-            userRegistered: userRegistered,
-            isCurrentUser: isCurrentUser,
-            insertedAt: insertedAt,
-            updatedAt: updatedAt,
-          ),
-        ));
+final class $$ContactsTableTableReferences
+    extends BaseReferences<_$AppDatabase, $ContactsTableTable, ContactData> {
+  $$ContactsTableTableReferences(
+      super.$_db, super.$_table, super.$_typedResult);
+
+  static MultiTypedResultKey<$ContactPhonesTableTable, List<ContactPhoneData>>
+      _contactPhonesTableRefsTable(_$AppDatabase db) =>
+          MultiTypedResultKey.fromTable(db.contactPhonesTable,
+              aliasName: $_aliasNameGenerator(
+                  db.contactsTable.id, db.contactPhonesTable.contactId));
+
+  $$ContactPhonesTableTableProcessedTableManager get contactPhonesTableRefs {
+    final manager =
+        $$ContactPhonesTableTableTableManager($_db, $_db.contactPhonesTable)
+            .filter((f) => f.contactId.id($_item.id));
+
+    final cache =
+        $_typedResult.readTableOrNull(_contactPhonesTableRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+
+  static MultiTypedResultKey<$ContactEmailsTableTable, List<ContactEmailData>>
+      _contactEmailsTableRefsTable(_$AppDatabase db) =>
+          MultiTypedResultKey.fromTable(db.contactEmailsTable,
+              aliasName: $_aliasNameGenerator(
+                  db.contactsTable.id, db.contactEmailsTable.contactId));
+
+  $$ContactEmailsTableTableProcessedTableManager get contactEmailsTableRefs {
+    final manager =
+        $$ContactEmailsTableTableTableManager($_db, $_db.contactEmailsTable)
+            .filter((f) => f.contactId.id($_item.id));
+
+    final cache =
+        $_typedResult.readTableOrNull(_contactEmailsTableRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
 }
 
 class $$ContactsTableTableFilterComposer
@@ -8262,6 +8227,143 @@ class $$ContactsTableTableOrderingComposer
           ColumnOrderings(column, joinBuilders: joinBuilders));
 }
 
+class $$ContactsTableTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $ContactsTableTable,
+    ContactData,
+    $$ContactsTableTableFilterComposer,
+    $$ContactsTableTableOrderingComposer,
+    $$ContactsTableTableCreateCompanionBuilder,
+    $$ContactsTableTableUpdateCompanionBuilder,
+    (ContactData, $$ContactsTableTableReferences),
+    ContactData,
+    PrefetchHooks Function(
+        {bool contactPhonesTableRefs, bool contactEmailsTableRefs})> {
+  $$ContactsTableTableTableManager(_$AppDatabase db, $ContactsTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer:
+              $$ContactsTableTableFilterComposer(ComposerState(db, table)),
+          orderingComposer:
+              $$ContactsTableTableOrderingComposer(ComposerState(db, table)),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<ContactSourceTypeEnum> sourceType = const Value.absent(),
+            Value<String> sourceId = const Value.absent(),
+            Value<String?> firstName = const Value.absent(),
+            Value<String?> lastName = const Value.absent(),
+            Value<String?> aliasName = const Value.absent(),
+            Value<Uint8List?> thumbnail = const Value.absent(),
+            Value<bool?> registered = const Value.absent(),
+            Value<bool?> userRegistered = const Value.absent(),
+            Value<bool?> isCurrentUser = const Value.absent(),
+            Value<DateTime?> insertedAt = const Value.absent(),
+            Value<DateTime?> updatedAt = const Value.absent(),
+          }) =>
+              ContactDataCompanion(
+            id: id,
+            sourceType: sourceType,
+            sourceId: sourceId,
+            firstName: firstName,
+            lastName: lastName,
+            aliasName: aliasName,
+            thumbnail: thumbnail,
+            registered: registered,
+            userRegistered: userRegistered,
+            isCurrentUser: isCurrentUser,
+            insertedAt: insertedAt,
+            updatedAt: updatedAt,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            required ContactSourceTypeEnum sourceType,
+            required String sourceId,
+            Value<String?> firstName = const Value.absent(),
+            Value<String?> lastName = const Value.absent(),
+            Value<String?> aliasName = const Value.absent(),
+            Value<Uint8List?> thumbnail = const Value.absent(),
+            Value<bool?> registered = const Value.absent(),
+            Value<bool?> userRegistered = const Value.absent(),
+            Value<bool?> isCurrentUser = const Value.absent(),
+            Value<DateTime?> insertedAt = const Value.absent(),
+            Value<DateTime?> updatedAt = const Value.absent(),
+          }) =>
+              ContactDataCompanion.insert(
+            id: id,
+            sourceType: sourceType,
+            sourceId: sourceId,
+            firstName: firstName,
+            lastName: lastName,
+            aliasName: aliasName,
+            thumbnail: thumbnail,
+            registered: registered,
+            userRegistered: userRegistered,
+            isCurrentUser: isCurrentUser,
+            insertedAt: insertedAt,
+            updatedAt: updatedAt,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (
+                    e.readTable(table),
+                    $$ContactsTableTableReferences(db, table, e)
+                  ))
+              .toList(),
+          prefetchHooksCallback: (
+              {contactPhonesTableRefs = false,
+              contactEmailsTableRefs = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [
+                if (contactPhonesTableRefs) db.contactPhonesTable,
+                if (contactEmailsTableRefs) db.contactEmailsTable
+              ],
+              addJoins: null,
+              getPrefetchedDataCallback: (items) async {
+                return [
+                  if (contactPhonesTableRefs)
+                    await $_getPrefetchedData(
+                        currentTable: table,
+                        referencedTable: $$ContactsTableTableReferences
+                            ._contactPhonesTableRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$ContactsTableTableReferences(db, table, p0)
+                                .contactPhonesTableRefs,
+                        referencedItemsForCurrentItem:
+                            (item, referencedItems) => referencedItems
+                                .where((e) => e.contactId == item.id),
+                        typedResults: items),
+                  if (contactEmailsTableRefs)
+                    await $_getPrefetchedData(
+                        currentTable: table,
+                        referencedTable: $$ContactsTableTableReferences
+                            ._contactEmailsTableRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$ContactsTableTableReferences(db, table, p0)
+                                .contactEmailsTableRefs,
+                        referencedItemsForCurrentItem:
+                            (item, referencedItems) => referencedItems
+                                .where((e) => e.contactId == item.id),
+                        typedResults: items)
+                ];
+              },
+            );
+          },
+        ));
+}
+
+typedef $$ContactsTableTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $ContactsTableTable,
+    ContactData,
+    $$ContactsTableTableFilterComposer,
+    $$ContactsTableTableOrderingComposer,
+    $$ContactsTableTableCreateCompanionBuilder,
+    $$ContactsTableTableUpdateCompanionBuilder,
+    (ContactData, $$ContactsTableTableReferences),
+    ContactData,
+    PrefetchHooks Function(
+        {bool contactPhonesTableRefs, bool contactEmailsTableRefs})>;
 typedef $$ContactPhonesTableTableCreateCompanionBuilder
     = ContactPhoneDataCompanion Function({
   Value<int> id,
@@ -8281,56 +8383,39 @@ typedef $$ContactPhonesTableTableUpdateCompanionBuilder
   Value<DateTime?> updatedAt,
 });
 
-class $$ContactPhonesTableTableTableManager extends RootTableManager<
-    _$AppDatabase,
-    $ContactPhonesTableTable,
-    ContactPhoneData,
-    $$ContactPhonesTableTableFilterComposer,
-    $$ContactPhonesTableTableOrderingComposer,
-    $$ContactPhonesTableTableCreateCompanionBuilder,
-    $$ContactPhonesTableTableUpdateCompanionBuilder> {
-  $$ContactPhonesTableTableTableManager(
-      _$AppDatabase db, $ContactPhonesTableTable table)
-      : super(TableManagerState(
-          db: db,
-          table: table,
-          filteringComposer:
-              $$ContactPhonesTableTableFilterComposer(ComposerState(db, table)),
-          orderingComposer: $$ContactPhonesTableTableOrderingComposer(
-              ComposerState(db, table)),
-          updateCompanionCallback: ({
-            Value<int> id = const Value.absent(),
-            Value<String> number = const Value.absent(),
-            Value<String> label = const Value.absent(),
-            Value<int> contactId = const Value.absent(),
-            Value<DateTime?> insertedAt = const Value.absent(),
-            Value<DateTime?> updatedAt = const Value.absent(),
-          }) =>
-              ContactPhoneDataCompanion(
-            id: id,
-            number: number,
-            label: label,
-            contactId: contactId,
-            insertedAt: insertedAt,
-            updatedAt: updatedAt,
-          ),
-          createCompanionCallback: ({
-            Value<int> id = const Value.absent(),
-            required String number,
-            required String label,
-            required int contactId,
-            Value<DateTime?> insertedAt = const Value.absent(),
-            Value<DateTime?> updatedAt = const Value.absent(),
-          }) =>
-              ContactPhoneDataCompanion.insert(
-            id: id,
-            number: number,
-            label: label,
-            contactId: contactId,
-            insertedAt: insertedAt,
-            updatedAt: updatedAt,
-          ),
-        ));
+final class $$ContactPhonesTableTableReferences extends BaseReferences<
+    _$AppDatabase, $ContactPhonesTableTable, ContactPhoneData> {
+  $$ContactPhonesTableTableReferences(
+      super.$_db, super.$_table, super.$_typedResult);
+
+  static $ContactsTableTable _contactIdTable(_$AppDatabase db) =>
+      db.contactsTable.createAlias($_aliasNameGenerator(
+          db.contactPhonesTable.contactId, db.contactsTable.id));
+
+  $$ContactsTableTableProcessedTableManager? get contactId {
+    if ($_item.contactId == null) return null;
+    final manager = $$ContactsTableTableTableManager($_db, $_db.contactsTable)
+        .filter((f) => f.id($_item.contactId!));
+    final item = $_typedResult.readTableOrNull(_contactIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+
+  static MultiTypedResultKey<$FavoritesTableTable, List<FavoriteData>>
+      _favoritesTableRefsTable(_$AppDatabase db) =>
+          MultiTypedResultKey.fromTable(db.favoritesTable,
+              aliasName: $_aliasNameGenerator(
+                  db.contactPhonesTable.id, db.favoritesTable.contactPhoneId));
+
+  $$FavoritesTableTableProcessedTableManager get favoritesTableRefs {
+    final manager = $$FavoritesTableTableTableManager($_db, $_db.favoritesTable)
+        .filter((f) => f.contactPhoneId.id($_item.id));
+
+    final cache = $_typedResult.readTableOrNull(_favoritesTableRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
 }
 
 class $$ContactPhonesTableTableFilterComposer
@@ -8429,6 +8514,129 @@ class $$ContactPhonesTableTableOrderingComposer
   }
 }
 
+class $$ContactPhonesTableTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $ContactPhonesTableTable,
+    ContactPhoneData,
+    $$ContactPhonesTableTableFilterComposer,
+    $$ContactPhonesTableTableOrderingComposer,
+    $$ContactPhonesTableTableCreateCompanionBuilder,
+    $$ContactPhonesTableTableUpdateCompanionBuilder,
+    (ContactPhoneData, $$ContactPhonesTableTableReferences),
+    ContactPhoneData,
+    PrefetchHooks Function({bool contactId, bool favoritesTableRefs})> {
+  $$ContactPhonesTableTableTableManager(
+      _$AppDatabase db, $ContactPhonesTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer:
+              $$ContactPhonesTableTableFilterComposer(ComposerState(db, table)),
+          orderingComposer: $$ContactPhonesTableTableOrderingComposer(
+              ComposerState(db, table)),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<String> number = const Value.absent(),
+            Value<String> label = const Value.absent(),
+            Value<int> contactId = const Value.absent(),
+            Value<DateTime?> insertedAt = const Value.absent(),
+            Value<DateTime?> updatedAt = const Value.absent(),
+          }) =>
+              ContactPhoneDataCompanion(
+            id: id,
+            number: number,
+            label: label,
+            contactId: contactId,
+            insertedAt: insertedAt,
+            updatedAt: updatedAt,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            required String number,
+            required String label,
+            required int contactId,
+            Value<DateTime?> insertedAt = const Value.absent(),
+            Value<DateTime?> updatedAt = const Value.absent(),
+          }) =>
+              ContactPhoneDataCompanion.insert(
+            id: id,
+            number: number,
+            label: label,
+            contactId: contactId,
+            insertedAt: insertedAt,
+            updatedAt: updatedAt,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (
+                    e.readTable(table),
+                    $$ContactPhonesTableTableReferences(db, table, e)
+                  ))
+              .toList(),
+          prefetchHooksCallback: (
+              {contactId = false, favoritesTableRefs = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [
+                if (favoritesTableRefs) db.favoritesTable
+              ],
+              addJoins: <
+                  T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic>>(state) {
+                if (contactId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.contactId,
+                    referencedTable:
+                        $$ContactPhonesTableTableReferences._contactIdTable(db),
+                    referencedColumn: $$ContactPhonesTableTableReferences
+                        ._contactIdTable(db)
+                        .id,
+                  ) as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [
+                  if (favoritesTableRefs)
+                    await $_getPrefetchedData(
+                        currentTable: table,
+                        referencedTable: $$ContactPhonesTableTableReferences
+                            ._favoritesTableRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$ContactPhonesTableTableReferences(db, table, p0)
+                                .favoritesTableRefs,
+                        referencedItemsForCurrentItem:
+                            (item, referencedItems) => referencedItems
+                                .where((e) => e.contactPhoneId == item.id),
+                        typedResults: items)
+                ];
+              },
+            );
+          },
+        ));
+}
+
+typedef $$ContactPhonesTableTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $ContactPhonesTableTable,
+    ContactPhoneData,
+    $$ContactPhonesTableTableFilterComposer,
+    $$ContactPhonesTableTableOrderingComposer,
+    $$ContactPhonesTableTableCreateCompanionBuilder,
+    $$ContactPhonesTableTableUpdateCompanionBuilder,
+    (ContactPhoneData, $$ContactPhonesTableTableReferences),
+    ContactPhoneData,
+    PrefetchHooks Function({bool contactId, bool favoritesTableRefs})>;
 typedef $$ContactEmailsTableTableCreateCompanionBuilder
     = ContactEmailDataCompanion Function({
   Value<int> id,
@@ -8448,56 +8656,24 @@ typedef $$ContactEmailsTableTableUpdateCompanionBuilder
   Value<DateTime?> updatedAt,
 });
 
-class $$ContactEmailsTableTableTableManager extends RootTableManager<
-    _$AppDatabase,
-    $ContactEmailsTableTable,
-    ContactEmailData,
-    $$ContactEmailsTableTableFilterComposer,
-    $$ContactEmailsTableTableOrderingComposer,
-    $$ContactEmailsTableTableCreateCompanionBuilder,
-    $$ContactEmailsTableTableUpdateCompanionBuilder> {
-  $$ContactEmailsTableTableTableManager(
-      _$AppDatabase db, $ContactEmailsTableTable table)
-      : super(TableManagerState(
-          db: db,
-          table: table,
-          filteringComposer:
-              $$ContactEmailsTableTableFilterComposer(ComposerState(db, table)),
-          orderingComposer: $$ContactEmailsTableTableOrderingComposer(
-              ComposerState(db, table)),
-          updateCompanionCallback: ({
-            Value<int> id = const Value.absent(),
-            Value<String> address = const Value.absent(),
-            Value<String> label = const Value.absent(),
-            Value<int> contactId = const Value.absent(),
-            Value<DateTime?> insertedAt = const Value.absent(),
-            Value<DateTime?> updatedAt = const Value.absent(),
-          }) =>
-              ContactEmailDataCompanion(
-            id: id,
-            address: address,
-            label: label,
-            contactId: contactId,
-            insertedAt: insertedAt,
-            updatedAt: updatedAt,
-          ),
-          createCompanionCallback: ({
-            Value<int> id = const Value.absent(),
-            required String address,
-            required String label,
-            required int contactId,
-            Value<DateTime?> insertedAt = const Value.absent(),
-            Value<DateTime?> updatedAt = const Value.absent(),
-          }) =>
-              ContactEmailDataCompanion.insert(
-            id: id,
-            address: address,
-            label: label,
-            contactId: contactId,
-            insertedAt: insertedAt,
-            updatedAt: updatedAt,
-          ),
-        ));
+final class $$ContactEmailsTableTableReferences extends BaseReferences<
+    _$AppDatabase, $ContactEmailsTableTable, ContactEmailData> {
+  $$ContactEmailsTableTableReferences(
+      super.$_db, super.$_table, super.$_typedResult);
+
+  static $ContactsTableTable _contactIdTable(_$AppDatabase db) =>
+      db.contactsTable.createAlias($_aliasNameGenerator(
+          db.contactEmailsTable.contactId, db.contactsTable.id));
+
+  $$ContactsTableTableProcessedTableManager? get contactId {
+    if ($_item.contactId == null) return null;
+    final manager = $$ContactsTableTableTableManager($_db, $_db.contactsTable)
+        .filter((f) => f.id($_item.contactId!));
+    final item = $_typedResult.readTableOrNull(_contactIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
 }
 
 class $$ContactEmailsTableTableFilterComposer
@@ -8583,6 +8759,113 @@ class $$ContactEmailsTableTableOrderingComposer
   }
 }
 
+class $$ContactEmailsTableTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $ContactEmailsTableTable,
+    ContactEmailData,
+    $$ContactEmailsTableTableFilterComposer,
+    $$ContactEmailsTableTableOrderingComposer,
+    $$ContactEmailsTableTableCreateCompanionBuilder,
+    $$ContactEmailsTableTableUpdateCompanionBuilder,
+    (ContactEmailData, $$ContactEmailsTableTableReferences),
+    ContactEmailData,
+    PrefetchHooks Function({bool contactId})> {
+  $$ContactEmailsTableTableTableManager(
+      _$AppDatabase db, $ContactEmailsTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer:
+              $$ContactEmailsTableTableFilterComposer(ComposerState(db, table)),
+          orderingComposer: $$ContactEmailsTableTableOrderingComposer(
+              ComposerState(db, table)),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<String> address = const Value.absent(),
+            Value<String> label = const Value.absent(),
+            Value<int> contactId = const Value.absent(),
+            Value<DateTime?> insertedAt = const Value.absent(),
+            Value<DateTime?> updatedAt = const Value.absent(),
+          }) =>
+              ContactEmailDataCompanion(
+            id: id,
+            address: address,
+            label: label,
+            contactId: contactId,
+            insertedAt: insertedAt,
+            updatedAt: updatedAt,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            required String address,
+            required String label,
+            required int contactId,
+            Value<DateTime?> insertedAt = const Value.absent(),
+            Value<DateTime?> updatedAt = const Value.absent(),
+          }) =>
+              ContactEmailDataCompanion.insert(
+            id: id,
+            address: address,
+            label: label,
+            contactId: contactId,
+            insertedAt: insertedAt,
+            updatedAt: updatedAt,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (
+                    e.readTable(table),
+                    $$ContactEmailsTableTableReferences(db, table, e)
+                  ))
+              .toList(),
+          prefetchHooksCallback: ({contactId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins: <
+                  T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic>>(state) {
+                if (contactId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.contactId,
+                    referencedTable:
+                        $$ContactEmailsTableTableReferences._contactIdTable(db),
+                    referencedColumn: $$ContactEmailsTableTableReferences
+                        ._contactIdTable(db)
+                        .id,
+                  ) as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ));
+}
+
+typedef $$ContactEmailsTableTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $ContactEmailsTableTable,
+    ContactEmailData,
+    $$ContactEmailsTableTableFilterComposer,
+    $$ContactEmailsTableTableOrderingComposer,
+    $$ContactEmailsTableTableCreateCompanionBuilder,
+    $$ContactEmailsTableTableUpdateCompanionBuilder,
+    (ContactEmailData, $$ContactEmailsTableTableReferences),
+    ContactEmailData,
+    PrefetchHooks Function({bool contactId})>;
 typedef $$CallLogsTableTableCreateCompanionBuilder = CallLogDataCompanion
     Function({
   Value<int> id,
@@ -8603,61 +8886,6 @@ typedef $$CallLogsTableTableUpdateCompanionBuilder = CallLogDataCompanion
   Value<DateTime?> acceptedAt,
   Value<DateTime?> hungUpAt,
 });
-
-class $$CallLogsTableTableTableManager extends RootTableManager<
-    _$AppDatabase,
-    $CallLogsTableTable,
-    CallLogData,
-    $$CallLogsTableTableFilterComposer,
-    $$CallLogsTableTableOrderingComposer,
-    $$CallLogsTableTableCreateCompanionBuilder,
-    $$CallLogsTableTableUpdateCompanionBuilder> {
-  $$CallLogsTableTableTableManager(_$AppDatabase db, $CallLogsTableTable table)
-      : super(TableManagerState(
-          db: db,
-          table: table,
-          filteringComposer:
-              $$CallLogsTableTableFilterComposer(ComposerState(db, table)),
-          orderingComposer:
-              $$CallLogsTableTableOrderingComposer(ComposerState(db, table)),
-          updateCompanionCallback: ({
-            Value<int> id = const Value.absent(),
-            Value<CallLogDirectionEnum> direction = const Value.absent(),
-            Value<String> number = const Value.absent(),
-            Value<bool> video = const Value.absent(),
-            Value<DateTime> createdAt = const Value.absent(),
-            Value<DateTime?> acceptedAt = const Value.absent(),
-            Value<DateTime?> hungUpAt = const Value.absent(),
-          }) =>
-              CallLogDataCompanion(
-            id: id,
-            direction: direction,
-            number: number,
-            video: video,
-            createdAt: createdAt,
-            acceptedAt: acceptedAt,
-            hungUpAt: hungUpAt,
-          ),
-          createCompanionCallback: ({
-            Value<int> id = const Value.absent(),
-            required CallLogDirectionEnum direction,
-            required String number,
-            required bool video,
-            required DateTime createdAt,
-            Value<DateTime?> acceptedAt = const Value.absent(),
-            Value<DateTime?> hungUpAt = const Value.absent(),
-          }) =>
-              CallLogDataCompanion.insert(
-            id: id,
-            direction: direction,
-            number: number,
-            video: video,
-            createdAt: createdAt,
-            acceptedAt: acceptedAt,
-            hungUpAt: hungUpAt,
-          ),
-        ));
-}
 
 class $$CallLogsTableTableFilterComposer
     extends FilterComposer<_$AppDatabase, $CallLogsTableTable> {
@@ -8740,6 +8968,85 @@ class $$CallLogsTableTableOrderingComposer
           ColumnOrderings(column, joinBuilders: joinBuilders));
 }
 
+class $$CallLogsTableTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $CallLogsTableTable,
+    CallLogData,
+    $$CallLogsTableTableFilterComposer,
+    $$CallLogsTableTableOrderingComposer,
+    $$CallLogsTableTableCreateCompanionBuilder,
+    $$CallLogsTableTableUpdateCompanionBuilder,
+    (
+      CallLogData,
+      BaseReferences<_$AppDatabase, $CallLogsTableTable, CallLogData>
+    ),
+    CallLogData,
+    PrefetchHooks Function()> {
+  $$CallLogsTableTableTableManager(_$AppDatabase db, $CallLogsTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer:
+              $$CallLogsTableTableFilterComposer(ComposerState(db, table)),
+          orderingComposer:
+              $$CallLogsTableTableOrderingComposer(ComposerState(db, table)),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<CallLogDirectionEnum> direction = const Value.absent(),
+            Value<String> number = const Value.absent(),
+            Value<bool> video = const Value.absent(),
+            Value<DateTime> createdAt = const Value.absent(),
+            Value<DateTime?> acceptedAt = const Value.absent(),
+            Value<DateTime?> hungUpAt = const Value.absent(),
+          }) =>
+              CallLogDataCompanion(
+            id: id,
+            direction: direction,
+            number: number,
+            video: video,
+            createdAt: createdAt,
+            acceptedAt: acceptedAt,
+            hungUpAt: hungUpAt,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            required CallLogDirectionEnum direction,
+            required String number,
+            required bool video,
+            required DateTime createdAt,
+            Value<DateTime?> acceptedAt = const Value.absent(),
+            Value<DateTime?> hungUpAt = const Value.absent(),
+          }) =>
+              CallLogDataCompanion.insert(
+            id: id,
+            direction: direction,
+            number: number,
+            video: video,
+            createdAt: createdAt,
+            acceptedAt: acceptedAt,
+            hungUpAt: hungUpAt,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$CallLogsTableTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $CallLogsTableTable,
+    CallLogData,
+    $$CallLogsTableTableFilterComposer,
+    $$CallLogsTableTableOrderingComposer,
+    $$CallLogsTableTableCreateCompanionBuilder,
+    $$CallLogsTableTableUpdateCompanionBuilder,
+    (
+      CallLogData,
+      BaseReferences<_$AppDatabase, $CallLogsTableTable, CallLogData>
+    ),
+    CallLogData,
+    PrefetchHooks Function()>;
 typedef $$FavoritesTableTableCreateCompanionBuilder = FavoriteDataCompanion
     Function({
   Value<int> id,
@@ -8753,44 +9060,25 @@ typedef $$FavoritesTableTableUpdateCompanionBuilder = FavoriteDataCompanion
   Value<int> position,
 });
 
-class $$FavoritesTableTableTableManager extends RootTableManager<
-    _$AppDatabase,
-    $FavoritesTableTable,
-    FavoriteData,
-    $$FavoritesTableTableFilterComposer,
-    $$FavoritesTableTableOrderingComposer,
-    $$FavoritesTableTableCreateCompanionBuilder,
-    $$FavoritesTableTableUpdateCompanionBuilder> {
-  $$FavoritesTableTableTableManager(
-      _$AppDatabase db, $FavoritesTableTable table)
-      : super(TableManagerState(
-          db: db,
-          table: table,
-          filteringComposer:
-              $$FavoritesTableTableFilterComposer(ComposerState(db, table)),
-          orderingComposer:
-              $$FavoritesTableTableOrderingComposer(ComposerState(db, table)),
-          updateCompanionCallback: ({
-            Value<int> id = const Value.absent(),
-            Value<int> contactPhoneId = const Value.absent(),
-            Value<int> position = const Value.absent(),
-          }) =>
-              FavoriteDataCompanion(
-            id: id,
-            contactPhoneId: contactPhoneId,
-            position: position,
-          ),
-          createCompanionCallback: ({
-            Value<int> id = const Value.absent(),
-            required int contactPhoneId,
-            required int position,
-          }) =>
-              FavoriteDataCompanion.insert(
-            id: id,
-            contactPhoneId: contactPhoneId,
-            position: position,
-          ),
-        ));
+final class $$FavoritesTableTableReferences
+    extends BaseReferences<_$AppDatabase, $FavoritesTableTable, FavoriteData> {
+  $$FavoritesTableTableReferences(
+      super.$_db, super.$_table, super.$_typedResult);
+
+  static $ContactPhonesTableTable _contactPhoneIdTable(_$AppDatabase db) =>
+      db.contactPhonesTable.createAlias($_aliasNameGenerator(
+          db.favoritesTable.contactPhoneId, db.contactPhonesTable.id));
+
+  $$ContactPhonesTableTableProcessedTableManager? get contactPhoneId {
+    if ($_item.contactPhoneId == null) return null;
+    final manager =
+        $$ContactPhonesTableTableTableManager($_db, $_db.contactPhonesTable)
+            .filter((f) => f.id($_item.contactPhoneId!));
+    final item = $_typedResult.readTableOrNull(_contactPhoneIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
 }
 
 class $$FavoritesTableTableFilterComposer
@@ -8853,6 +9141,101 @@ class $$FavoritesTableTableOrderingComposer
   }
 }
 
+class $$FavoritesTableTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $FavoritesTableTable,
+    FavoriteData,
+    $$FavoritesTableTableFilterComposer,
+    $$FavoritesTableTableOrderingComposer,
+    $$FavoritesTableTableCreateCompanionBuilder,
+    $$FavoritesTableTableUpdateCompanionBuilder,
+    (FavoriteData, $$FavoritesTableTableReferences),
+    FavoriteData,
+    PrefetchHooks Function({bool contactPhoneId})> {
+  $$FavoritesTableTableTableManager(
+      _$AppDatabase db, $FavoritesTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer:
+              $$FavoritesTableTableFilterComposer(ComposerState(db, table)),
+          orderingComposer:
+              $$FavoritesTableTableOrderingComposer(ComposerState(db, table)),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<int> contactPhoneId = const Value.absent(),
+            Value<int> position = const Value.absent(),
+          }) =>
+              FavoriteDataCompanion(
+            id: id,
+            contactPhoneId: contactPhoneId,
+            position: position,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            required int contactPhoneId,
+            required int position,
+          }) =>
+              FavoriteDataCompanion.insert(
+            id: id,
+            contactPhoneId: contactPhoneId,
+            position: position,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (
+                    e.readTable(table),
+                    $$FavoritesTableTableReferences(db, table, e)
+                  ))
+              .toList(),
+          prefetchHooksCallback: ({contactPhoneId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins: <
+                  T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic>>(state) {
+                if (contactPhoneId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.contactPhoneId,
+                    referencedTable: $$FavoritesTableTableReferences
+                        ._contactPhoneIdTable(db),
+                    referencedColumn: $$FavoritesTableTableReferences
+                        ._contactPhoneIdTable(db)
+                        .id,
+                  ) as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ));
+}
+
+typedef $$FavoritesTableTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $FavoritesTableTable,
+    FavoriteData,
+    $$FavoritesTableTableFilterComposer,
+    $$FavoritesTableTableOrderingComposer,
+    $$FavoritesTableTableCreateCompanionBuilder,
+    $$FavoritesTableTableUpdateCompanionBuilder,
+    (FavoriteData, $$FavoritesTableTableReferences),
+    FavoriteData,
+    PrefetchHooks Function({bool contactPhoneId})>;
 typedef $$ChatsTableTableCreateCompanionBuilder = ChatDataCompanion Function({
   Value<int> id,
   required ChatTypeEnum type,
@@ -8868,51 +9251,157 @@ typedef $$ChatsTableTableUpdateCompanionBuilder = ChatDataCompanion Function({
   Value<DateTime> updatedAtRemote,
 });
 
-class $$ChatsTableTableTableManager extends RootTableManager<
-    _$AppDatabase,
-    $ChatsTableTable,
-    ChatData,
-    $$ChatsTableTableFilterComposer,
-    $$ChatsTableTableOrderingComposer,
-    $$ChatsTableTableCreateCompanionBuilder,
-    $$ChatsTableTableUpdateCompanionBuilder> {
-  $$ChatsTableTableTableManager(_$AppDatabase db, $ChatsTableTable table)
-      : super(TableManagerState(
-          db: db,
-          table: table,
-          filteringComposer:
-              $$ChatsTableTableFilterComposer(ComposerState(db, table)),
-          orderingComposer:
-              $$ChatsTableTableOrderingComposer(ComposerState(db, table)),
-          updateCompanionCallback: ({
-            Value<int> id = const Value.absent(),
-            Value<ChatTypeEnum> type = const Value.absent(),
-            Value<String?> name = const Value.absent(),
-            Value<DateTime> createdAtRemote = const Value.absent(),
-            Value<DateTime> updatedAtRemote = const Value.absent(),
-          }) =>
-              ChatDataCompanion(
-            id: id,
-            type: type,
-            name: name,
-            createdAtRemote: createdAtRemote,
-            updatedAtRemote: updatedAtRemote,
-          ),
-          createCompanionCallback: ({
-            Value<int> id = const Value.absent(),
-            required ChatTypeEnum type,
-            Value<String?> name = const Value.absent(),
-            required DateTime createdAtRemote,
-            required DateTime updatedAtRemote,
-          }) =>
-              ChatDataCompanion.insert(
-            id: id,
-            type: type,
-            name: name,
-            createdAtRemote: createdAtRemote,
-            updatedAtRemote: updatedAtRemote,
-          ),
-        ));
+final class $$ChatsTableTableReferences
+    extends BaseReferences<_$AppDatabase, $ChatsTableTable, ChatData> {
+  $$ChatsTableTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static MultiTypedResultKey<$ChatMembersTableTable, List<ChatMemberData>>
+      _chatMembersTableRefsTable(_$AppDatabase db) =>
+          MultiTypedResultKey.fromTable(db.chatMembersTable,
+              aliasName: $_aliasNameGenerator(
+                  db.chatsTable.id, db.chatMembersTable.chatId));
+
+  $$ChatMembersTableTableProcessedTableManager get chatMembersTableRefs {
+    final manager =
+        $$ChatMembersTableTableTableManager($_db, $_db.chatMembersTable)
+            .filter((f) => f.chatId.id($_item.id));
+
+    final cache =
+        $_typedResult.readTableOrNull(_chatMembersTableRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+
+  static MultiTypedResultKey<$ChatMessagesTableTable, List<ChatMessageData>>
+      _chatMessagesTableRefsTable(_$AppDatabase db) =>
+          MultiTypedResultKey.fromTable(db.chatMessagesTable,
+              aliasName: $_aliasNameGenerator(
+                  db.chatsTable.id, db.chatMessagesTable.chatId));
+
+  $$ChatMessagesTableTableProcessedTableManager get chatMessagesTableRefs {
+    final manager =
+        $$ChatMessagesTableTableTableManager($_db, $_db.chatMessagesTable)
+            .filter((f) => f.chatId.id($_item.id));
+
+    final cache =
+        $_typedResult.readTableOrNull(_chatMessagesTableRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+
+  static MultiTypedResultKey<$ChatMessageSyncCursorTableTable,
+      List<ChatMessageSyncCursorData>> _chatMessageSyncCursorTableRefsTable(
+          _$AppDatabase db) =>
+      MultiTypedResultKey.fromTable(db.chatMessageSyncCursorTable,
+          aliasName: $_aliasNameGenerator(
+              db.chatsTable.id, db.chatMessageSyncCursorTable.chatId));
+
+  $$ChatMessageSyncCursorTableTableProcessedTableManager
+      get chatMessageSyncCursorTableRefs {
+    final manager = $$ChatMessageSyncCursorTableTableTableManager(
+            $_db, $_db.chatMessageSyncCursorTable)
+        .filter((f) => f.chatId.id($_item.id));
+
+    final cache = $_typedResult
+        .readTableOrNull(_chatMessageSyncCursorTableRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+
+  static MultiTypedResultKey<$ChatMessageReadCursorTableTable,
+      List<ChatMessageReadCursorData>> _chatMessageReadCursorTableRefsTable(
+          _$AppDatabase db) =>
+      MultiTypedResultKey.fromTable(db.chatMessageReadCursorTable,
+          aliasName: $_aliasNameGenerator(
+              db.chatsTable.id, db.chatMessageReadCursorTable.chatId));
+
+  $$ChatMessageReadCursorTableTableProcessedTableManager
+      get chatMessageReadCursorTableRefs {
+    final manager = $$ChatMessageReadCursorTableTableTableManager(
+            $_db, $_db.chatMessageReadCursorTable)
+        .filter((f) => f.chatId.id($_item.id));
+
+    final cache = $_typedResult
+        .readTableOrNull(_chatMessageReadCursorTableRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+
+  static MultiTypedResultKey<$ChatOutboxMessageTableTable,
+      List<ChatOutboxMessageData>> _chatOutboxMessageTableRefsTable(
+          _$AppDatabase db) =>
+      MultiTypedResultKey.fromTable(db.chatOutboxMessageTable,
+          aliasName: $_aliasNameGenerator(
+              db.chatsTable.id, db.chatOutboxMessageTable.chatId));
+
+  $$ChatOutboxMessageTableTableProcessedTableManager
+      get chatOutboxMessageTableRefs {
+    final manager = $$ChatOutboxMessageTableTableTableManager(
+            $_db, $_db.chatOutboxMessageTable)
+        .filter((f) => f.chatId.id($_item.id));
+
+    final cache =
+        $_typedResult.readTableOrNull(_chatOutboxMessageTableRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+
+  static MultiTypedResultKey<$ChatOutboxMessageEditTableTable,
+      List<ChatOutboxMessageEditData>> _chatOutboxMessageEditTableRefsTable(
+          _$AppDatabase db) =>
+      MultiTypedResultKey.fromTable(db.chatOutboxMessageEditTable,
+          aliasName: $_aliasNameGenerator(
+              db.chatsTable.id, db.chatOutboxMessageEditTable.chatId));
+
+  $$ChatOutboxMessageEditTableTableProcessedTableManager
+      get chatOutboxMessageEditTableRefs {
+    final manager = $$ChatOutboxMessageEditTableTableTableManager(
+            $_db, $_db.chatOutboxMessageEditTable)
+        .filter((f) => f.chatId.id($_item.id));
+
+    final cache = $_typedResult
+        .readTableOrNull(_chatOutboxMessageEditTableRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+
+  static MultiTypedResultKey<$ChatOutboxMessageDeleteTableTable,
+      List<ChatOutboxMessageDeleteData>> _chatOutboxMessageDeleteTableRefsTable(
+          _$AppDatabase db) =>
+      MultiTypedResultKey.fromTable(db.chatOutboxMessageDeleteTable,
+          aliasName: $_aliasNameGenerator(
+              db.chatsTable.id, db.chatOutboxMessageDeleteTable.chatId));
+
+  $$ChatOutboxMessageDeleteTableTableProcessedTableManager
+      get chatOutboxMessageDeleteTableRefs {
+    final manager = $$ChatOutboxMessageDeleteTableTableTableManager(
+            $_db, $_db.chatOutboxMessageDeleteTable)
+        .filter((f) => f.chatId.id($_item.id));
+
+    final cache = $_typedResult
+        .readTableOrNull(_chatOutboxMessageDeleteTableRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+
+  static MultiTypedResultKey<$ChatOutboxReadCursorsTableTable,
+      List<ChatOutboxReadCursorData>> _chatOutboxReadCursorsTableRefsTable(
+          _$AppDatabase db) =>
+      MultiTypedResultKey.fromTable(db.chatOutboxReadCursorsTable,
+          aliasName: $_aliasNameGenerator(
+              db.chatsTable.id, db.chatOutboxReadCursorsTable.chatId));
+
+  $$ChatOutboxReadCursorsTableTableProcessedTableManager
+      get chatOutboxReadCursorsTableRefs {
+    final manager = $$ChatOutboxReadCursorsTableTableTableManager(
+            $_db, $_db.chatOutboxReadCursorsTable)
+        .filter((f) => f.chatId.id($_item.id));
+
+    final cache = $_typedResult
+        .readTableOrNull(_chatOutboxReadCursorsTableRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
 }
 
 class $$ChatsTableTableFilterComposer
@@ -9119,6 +9608,218 @@ class $$ChatsTableTableOrderingComposer
           ColumnOrderings(column, joinBuilders: joinBuilders));
 }
 
+class $$ChatsTableTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $ChatsTableTable,
+    ChatData,
+    $$ChatsTableTableFilterComposer,
+    $$ChatsTableTableOrderingComposer,
+    $$ChatsTableTableCreateCompanionBuilder,
+    $$ChatsTableTableUpdateCompanionBuilder,
+    (ChatData, $$ChatsTableTableReferences),
+    ChatData,
+    PrefetchHooks Function(
+        {bool chatMembersTableRefs,
+        bool chatMessagesTableRefs,
+        bool chatMessageSyncCursorTableRefs,
+        bool chatMessageReadCursorTableRefs,
+        bool chatOutboxMessageTableRefs,
+        bool chatOutboxMessageEditTableRefs,
+        bool chatOutboxMessageDeleteTableRefs,
+        bool chatOutboxReadCursorsTableRefs})> {
+  $$ChatsTableTableTableManager(_$AppDatabase db, $ChatsTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer:
+              $$ChatsTableTableFilterComposer(ComposerState(db, table)),
+          orderingComposer:
+              $$ChatsTableTableOrderingComposer(ComposerState(db, table)),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<ChatTypeEnum> type = const Value.absent(),
+            Value<String?> name = const Value.absent(),
+            Value<DateTime> createdAtRemote = const Value.absent(),
+            Value<DateTime> updatedAtRemote = const Value.absent(),
+          }) =>
+              ChatDataCompanion(
+            id: id,
+            type: type,
+            name: name,
+            createdAtRemote: createdAtRemote,
+            updatedAtRemote: updatedAtRemote,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            required ChatTypeEnum type,
+            Value<String?> name = const Value.absent(),
+            required DateTime createdAtRemote,
+            required DateTime updatedAtRemote,
+          }) =>
+              ChatDataCompanion.insert(
+            id: id,
+            type: type,
+            name: name,
+            createdAtRemote: createdAtRemote,
+            updatedAtRemote: updatedAtRemote,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (
+                    e.readTable(table),
+                    $$ChatsTableTableReferences(db, table, e)
+                  ))
+              .toList(),
+          prefetchHooksCallback: (
+              {chatMembersTableRefs = false,
+              chatMessagesTableRefs = false,
+              chatMessageSyncCursorTableRefs = false,
+              chatMessageReadCursorTableRefs = false,
+              chatOutboxMessageTableRefs = false,
+              chatOutboxMessageEditTableRefs = false,
+              chatOutboxMessageDeleteTableRefs = false,
+              chatOutboxReadCursorsTableRefs = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [
+                if (chatMembersTableRefs) db.chatMembersTable,
+                if (chatMessagesTableRefs) db.chatMessagesTable,
+                if (chatMessageSyncCursorTableRefs)
+                  db.chatMessageSyncCursorTable,
+                if (chatMessageReadCursorTableRefs)
+                  db.chatMessageReadCursorTable,
+                if (chatOutboxMessageTableRefs) db.chatOutboxMessageTable,
+                if (chatOutboxMessageEditTableRefs)
+                  db.chatOutboxMessageEditTable,
+                if (chatOutboxMessageDeleteTableRefs)
+                  db.chatOutboxMessageDeleteTable,
+                if (chatOutboxReadCursorsTableRefs)
+                  db.chatOutboxReadCursorsTable
+              ],
+              addJoins: null,
+              getPrefetchedDataCallback: (items) async {
+                return [
+                  if (chatMembersTableRefs)
+                    await $_getPrefetchedData(
+                        currentTable: table,
+                        referencedTable: $$ChatsTableTableReferences
+                            ._chatMembersTableRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$ChatsTableTableReferences(db, table, p0)
+                                .chatMembersTableRefs,
+                        referencedItemsForCurrentItem: (item,
+                                referencedItems) =>
+                            referencedItems.where((e) => e.chatId == item.id),
+                        typedResults: items),
+                  if (chatMessagesTableRefs)
+                    await $_getPrefetchedData(
+                        currentTable: table,
+                        referencedTable: $$ChatsTableTableReferences
+                            ._chatMessagesTableRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$ChatsTableTableReferences(db, table, p0)
+                                .chatMessagesTableRefs,
+                        referencedItemsForCurrentItem: (item,
+                                referencedItems) =>
+                            referencedItems.where((e) => e.chatId == item.id),
+                        typedResults: items),
+                  if (chatMessageSyncCursorTableRefs)
+                    await $_getPrefetchedData(
+                        currentTable: table,
+                        referencedTable: $$ChatsTableTableReferences
+                            ._chatMessageSyncCursorTableRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$ChatsTableTableReferences(db, table, p0)
+                                .chatMessageSyncCursorTableRefs,
+                        referencedItemsForCurrentItem: (item,
+                                referencedItems) =>
+                            referencedItems.where((e) => e.chatId == item.id),
+                        typedResults: items),
+                  if (chatMessageReadCursorTableRefs)
+                    await $_getPrefetchedData(
+                        currentTable: table,
+                        referencedTable: $$ChatsTableTableReferences
+                            ._chatMessageReadCursorTableRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$ChatsTableTableReferences(db, table, p0)
+                                .chatMessageReadCursorTableRefs,
+                        referencedItemsForCurrentItem: (item,
+                                referencedItems) =>
+                            referencedItems.where((e) => e.chatId == item.id),
+                        typedResults: items),
+                  if (chatOutboxMessageTableRefs)
+                    await $_getPrefetchedData(
+                        currentTable: table,
+                        referencedTable: $$ChatsTableTableReferences
+                            ._chatOutboxMessageTableRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$ChatsTableTableReferences(db, table, p0)
+                                .chatOutboxMessageTableRefs,
+                        referencedItemsForCurrentItem: (item,
+                                referencedItems) =>
+                            referencedItems.where((e) => e.chatId == item.id),
+                        typedResults: items),
+                  if (chatOutboxMessageEditTableRefs)
+                    await $_getPrefetchedData(
+                        currentTable: table,
+                        referencedTable: $$ChatsTableTableReferences
+                            ._chatOutboxMessageEditTableRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$ChatsTableTableReferences(db, table, p0)
+                                .chatOutboxMessageEditTableRefs,
+                        referencedItemsForCurrentItem: (item,
+                                referencedItems) =>
+                            referencedItems.where((e) => e.chatId == item.id),
+                        typedResults: items),
+                  if (chatOutboxMessageDeleteTableRefs)
+                    await $_getPrefetchedData(
+                        currentTable: table,
+                        referencedTable: $$ChatsTableTableReferences
+                            ._chatOutboxMessageDeleteTableRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$ChatsTableTableReferences(db, table, p0)
+                                .chatOutboxMessageDeleteTableRefs,
+                        referencedItemsForCurrentItem: (item,
+                                referencedItems) =>
+                            referencedItems.where((e) => e.chatId == item.id),
+                        typedResults: items),
+                  if (chatOutboxReadCursorsTableRefs)
+                    await $_getPrefetchedData(
+                        currentTable: table,
+                        referencedTable: $$ChatsTableTableReferences
+                            ._chatOutboxReadCursorsTableRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$ChatsTableTableReferences(db, table, p0)
+                                .chatOutboxReadCursorsTableRefs,
+                        referencedItemsForCurrentItem: (item,
+                                referencedItems) =>
+                            referencedItems.where((e) => e.chatId == item.id),
+                        typedResults: items)
+                ];
+              },
+            );
+          },
+        ));
+}
+
+typedef $$ChatsTableTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $ChatsTableTable,
+    ChatData,
+    $$ChatsTableTableFilterComposer,
+    $$ChatsTableTableOrderingComposer,
+    $$ChatsTableTableCreateCompanionBuilder,
+    $$ChatsTableTableUpdateCompanionBuilder,
+    (ChatData, $$ChatsTableTableReferences),
+    ChatData,
+    PrefetchHooks Function(
+        {bool chatMembersTableRefs,
+        bool chatMessagesTableRefs,
+        bool chatMessageSyncCursorTableRefs,
+        bool chatMessageReadCursorTableRefs,
+        bool chatOutboxMessageTableRefs,
+        bool chatOutboxMessageEditTableRefs,
+        bool chatOutboxMessageDeleteTableRefs,
+        bool chatOutboxReadCursorsTableRefs})>;
 typedef $$ChatMembersTableTableCreateCompanionBuilder = ChatMemberDataCompanion
     Function({
   Value<int> id,
@@ -9134,50 +9835,24 @@ typedef $$ChatMembersTableTableUpdateCompanionBuilder = ChatMemberDataCompanion
   Value<GroupAuthoritiesEnum?> groupAuthorities,
 });
 
-class $$ChatMembersTableTableTableManager extends RootTableManager<
-    _$AppDatabase,
-    $ChatMembersTableTable,
-    ChatMemberData,
-    $$ChatMembersTableTableFilterComposer,
-    $$ChatMembersTableTableOrderingComposer,
-    $$ChatMembersTableTableCreateCompanionBuilder,
-    $$ChatMembersTableTableUpdateCompanionBuilder> {
-  $$ChatMembersTableTableTableManager(
-      _$AppDatabase db, $ChatMembersTableTable table)
-      : super(TableManagerState(
-          db: db,
-          table: table,
-          filteringComposer:
-              $$ChatMembersTableTableFilterComposer(ComposerState(db, table)),
-          orderingComposer:
-              $$ChatMembersTableTableOrderingComposer(ComposerState(db, table)),
-          updateCompanionCallback: ({
-            Value<int> id = const Value.absent(),
-            Value<int> chatId = const Value.absent(),
-            Value<String> userId = const Value.absent(),
-            Value<GroupAuthoritiesEnum?> groupAuthorities =
-                const Value.absent(),
-          }) =>
-              ChatMemberDataCompanion(
-            id: id,
-            chatId: chatId,
-            userId: userId,
-            groupAuthorities: groupAuthorities,
-          ),
-          createCompanionCallback: ({
-            Value<int> id = const Value.absent(),
-            required int chatId,
-            required String userId,
-            Value<GroupAuthoritiesEnum?> groupAuthorities =
-                const Value.absent(),
-          }) =>
-              ChatMemberDataCompanion.insert(
-            id: id,
-            chatId: chatId,
-            userId: userId,
-            groupAuthorities: groupAuthorities,
-          ),
-        ));
+final class $$ChatMembersTableTableReferences extends BaseReferences<
+    _$AppDatabase, $ChatMembersTableTable, ChatMemberData> {
+  $$ChatMembersTableTableReferences(
+      super.$_db, super.$_table, super.$_typedResult);
+
+  static $ChatsTableTable _chatIdTable(_$AppDatabase db) =>
+      db.chatsTable.createAlias(
+          $_aliasNameGenerator(db.chatMembersTable.chatId, db.chatsTable.id));
+
+  $$ChatsTableTableProcessedTableManager? get chatId {
+    if ($_item.chatId == null) return null;
+    final manager = $$ChatsTableTableTableManager($_db, $_db.chatsTable)
+        .filter((f) => f.id($_item.chatId!));
+    final item = $_typedResult.readTableOrNull(_chatIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
 }
 
 class $$ChatMembersTableTableFilterComposer
@@ -9245,6 +9920,106 @@ class $$ChatMembersTableTableOrderingComposer
   }
 }
 
+class $$ChatMembersTableTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $ChatMembersTableTable,
+    ChatMemberData,
+    $$ChatMembersTableTableFilterComposer,
+    $$ChatMembersTableTableOrderingComposer,
+    $$ChatMembersTableTableCreateCompanionBuilder,
+    $$ChatMembersTableTableUpdateCompanionBuilder,
+    (ChatMemberData, $$ChatMembersTableTableReferences),
+    ChatMemberData,
+    PrefetchHooks Function({bool chatId})> {
+  $$ChatMembersTableTableTableManager(
+      _$AppDatabase db, $ChatMembersTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer:
+              $$ChatMembersTableTableFilterComposer(ComposerState(db, table)),
+          orderingComposer:
+              $$ChatMembersTableTableOrderingComposer(ComposerState(db, table)),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<int> chatId = const Value.absent(),
+            Value<String> userId = const Value.absent(),
+            Value<GroupAuthoritiesEnum?> groupAuthorities =
+                const Value.absent(),
+          }) =>
+              ChatMemberDataCompanion(
+            id: id,
+            chatId: chatId,
+            userId: userId,
+            groupAuthorities: groupAuthorities,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            required int chatId,
+            required String userId,
+            Value<GroupAuthoritiesEnum?> groupAuthorities =
+                const Value.absent(),
+          }) =>
+              ChatMemberDataCompanion.insert(
+            id: id,
+            chatId: chatId,
+            userId: userId,
+            groupAuthorities: groupAuthorities,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (
+                    e.readTable(table),
+                    $$ChatMembersTableTableReferences(db, table, e)
+                  ))
+              .toList(),
+          prefetchHooksCallback: ({chatId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins: <
+                  T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic>>(state) {
+                if (chatId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.chatId,
+                    referencedTable:
+                        $$ChatMembersTableTableReferences._chatIdTable(db),
+                    referencedColumn:
+                        $$ChatMembersTableTableReferences._chatIdTable(db).id,
+                  ) as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ));
+}
+
+typedef $$ChatMembersTableTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $ChatMembersTableTable,
+    ChatMemberData,
+    $$ChatMembersTableTableFilterComposer,
+    $$ChatMembersTableTableOrderingComposer,
+    $$ChatMembersTableTableCreateCompanionBuilder,
+    $$ChatMembersTableTableUpdateCompanionBuilder,
+    (ChatMemberData, $$ChatMembersTableTableReferences),
+    ChatMemberData,
+    PrefetchHooks Function({bool chatId})>;
 typedef $$ChatMessagesTableTableCreateCompanionBuilder
     = ChatMessageDataCompanion Function({
   Value<int> id,
@@ -9276,80 +10051,24 @@ typedef $$ChatMessagesTableTableUpdateCompanionBuilder
   Value<int?> deletedAtRemoteUsec,
 });
 
-class $$ChatMessagesTableTableTableManager extends RootTableManager<
-    _$AppDatabase,
-    $ChatMessagesTableTable,
-    ChatMessageData,
-    $$ChatMessagesTableTableFilterComposer,
-    $$ChatMessagesTableTableOrderingComposer,
-    $$ChatMessagesTableTableCreateCompanionBuilder,
-    $$ChatMessagesTableTableUpdateCompanionBuilder> {
-  $$ChatMessagesTableTableTableManager(
-      _$AppDatabase db, $ChatMessagesTableTable table)
-      : super(TableManagerState(
-          db: db,
-          table: table,
-          filteringComposer:
-              $$ChatMessagesTableTableFilterComposer(ComposerState(db, table)),
-          orderingComposer: $$ChatMessagesTableTableOrderingComposer(
-              ComposerState(db, table)),
-          updateCompanionCallback: ({
-            Value<int> id = const Value.absent(),
-            Value<String> idKey = const Value.absent(),
-            Value<String> senderId = const Value.absent(),
-            Value<int> chatId = const Value.absent(),
-            Value<int?> replyToId = const Value.absent(),
-            Value<int?> forwardFromId = const Value.absent(),
-            Value<String?> authorId = const Value.absent(),
-            Value<String> content = const Value.absent(),
-            Value<int> createdAtRemoteUsec = const Value.absent(),
-            Value<int> updatedAtRemoteUsec = const Value.absent(),
-            Value<int?> editedAtRemoteUsec = const Value.absent(),
-            Value<int?> deletedAtRemoteUsec = const Value.absent(),
-          }) =>
-              ChatMessageDataCompanion(
-            id: id,
-            idKey: idKey,
-            senderId: senderId,
-            chatId: chatId,
-            replyToId: replyToId,
-            forwardFromId: forwardFromId,
-            authorId: authorId,
-            content: content,
-            createdAtRemoteUsec: createdAtRemoteUsec,
-            updatedAtRemoteUsec: updatedAtRemoteUsec,
-            editedAtRemoteUsec: editedAtRemoteUsec,
-            deletedAtRemoteUsec: deletedAtRemoteUsec,
-          ),
-          createCompanionCallback: ({
-            Value<int> id = const Value.absent(),
-            required String idKey,
-            required String senderId,
-            required int chatId,
-            Value<int?> replyToId = const Value.absent(),
-            Value<int?> forwardFromId = const Value.absent(),
-            Value<String?> authorId = const Value.absent(),
-            required String content,
-            required int createdAtRemoteUsec,
-            required int updatedAtRemoteUsec,
-            Value<int?> editedAtRemoteUsec = const Value.absent(),
-            Value<int?> deletedAtRemoteUsec = const Value.absent(),
-          }) =>
-              ChatMessageDataCompanion.insert(
-            id: id,
-            idKey: idKey,
-            senderId: senderId,
-            chatId: chatId,
-            replyToId: replyToId,
-            forwardFromId: forwardFromId,
-            authorId: authorId,
-            content: content,
-            createdAtRemoteUsec: createdAtRemoteUsec,
-            updatedAtRemoteUsec: updatedAtRemoteUsec,
-            editedAtRemoteUsec: editedAtRemoteUsec,
-            deletedAtRemoteUsec: deletedAtRemoteUsec,
-          ),
-        ));
+final class $$ChatMessagesTableTableReferences extends BaseReferences<
+    _$AppDatabase, $ChatMessagesTableTable, ChatMessageData> {
+  $$ChatMessagesTableTableReferences(
+      super.$_db, super.$_table, super.$_typedResult);
+
+  static $ChatsTableTable _chatIdTable(_$AppDatabase db) =>
+      db.chatsTable.createAlias(
+          $_aliasNameGenerator(db.chatMessagesTable.chatId, db.chatsTable.id));
+
+  $$ChatsTableTableProcessedTableManager? get chatId {
+    if ($_item.chatId == null) return null;
+    final manager = $$ChatsTableTableTableManager($_db, $_db.chatsTable)
+        .filter((f) => f.id($_item.chatId!));
+    final item = $_typedResult.readTableOrNull(_chatIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
 }
 
 class $$ChatMessagesTableTableFilterComposer
@@ -9494,6 +10213,136 @@ class $$ChatMessagesTableTableOrderingComposer
   }
 }
 
+class $$ChatMessagesTableTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $ChatMessagesTableTable,
+    ChatMessageData,
+    $$ChatMessagesTableTableFilterComposer,
+    $$ChatMessagesTableTableOrderingComposer,
+    $$ChatMessagesTableTableCreateCompanionBuilder,
+    $$ChatMessagesTableTableUpdateCompanionBuilder,
+    (ChatMessageData, $$ChatMessagesTableTableReferences),
+    ChatMessageData,
+    PrefetchHooks Function({bool chatId})> {
+  $$ChatMessagesTableTableTableManager(
+      _$AppDatabase db, $ChatMessagesTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer:
+              $$ChatMessagesTableTableFilterComposer(ComposerState(db, table)),
+          orderingComposer: $$ChatMessagesTableTableOrderingComposer(
+              ComposerState(db, table)),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<String> idKey = const Value.absent(),
+            Value<String> senderId = const Value.absent(),
+            Value<int> chatId = const Value.absent(),
+            Value<int?> replyToId = const Value.absent(),
+            Value<int?> forwardFromId = const Value.absent(),
+            Value<String?> authorId = const Value.absent(),
+            Value<String> content = const Value.absent(),
+            Value<int> createdAtRemoteUsec = const Value.absent(),
+            Value<int> updatedAtRemoteUsec = const Value.absent(),
+            Value<int?> editedAtRemoteUsec = const Value.absent(),
+            Value<int?> deletedAtRemoteUsec = const Value.absent(),
+          }) =>
+              ChatMessageDataCompanion(
+            id: id,
+            idKey: idKey,
+            senderId: senderId,
+            chatId: chatId,
+            replyToId: replyToId,
+            forwardFromId: forwardFromId,
+            authorId: authorId,
+            content: content,
+            createdAtRemoteUsec: createdAtRemoteUsec,
+            updatedAtRemoteUsec: updatedAtRemoteUsec,
+            editedAtRemoteUsec: editedAtRemoteUsec,
+            deletedAtRemoteUsec: deletedAtRemoteUsec,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            required String idKey,
+            required String senderId,
+            required int chatId,
+            Value<int?> replyToId = const Value.absent(),
+            Value<int?> forwardFromId = const Value.absent(),
+            Value<String?> authorId = const Value.absent(),
+            required String content,
+            required int createdAtRemoteUsec,
+            required int updatedAtRemoteUsec,
+            Value<int?> editedAtRemoteUsec = const Value.absent(),
+            Value<int?> deletedAtRemoteUsec = const Value.absent(),
+          }) =>
+              ChatMessageDataCompanion.insert(
+            id: id,
+            idKey: idKey,
+            senderId: senderId,
+            chatId: chatId,
+            replyToId: replyToId,
+            forwardFromId: forwardFromId,
+            authorId: authorId,
+            content: content,
+            createdAtRemoteUsec: createdAtRemoteUsec,
+            updatedAtRemoteUsec: updatedAtRemoteUsec,
+            editedAtRemoteUsec: editedAtRemoteUsec,
+            deletedAtRemoteUsec: deletedAtRemoteUsec,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (
+                    e.readTable(table),
+                    $$ChatMessagesTableTableReferences(db, table, e)
+                  ))
+              .toList(),
+          prefetchHooksCallback: ({chatId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins: <
+                  T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic>>(state) {
+                if (chatId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.chatId,
+                    referencedTable:
+                        $$ChatMessagesTableTableReferences._chatIdTable(db),
+                    referencedColumn:
+                        $$ChatMessagesTableTableReferences._chatIdTable(db).id,
+                  ) as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ));
+}
+
+typedef $$ChatMessagesTableTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $ChatMessagesTableTable,
+    ChatMessageData,
+    $$ChatMessagesTableTableFilterComposer,
+    $$ChatMessagesTableTableOrderingComposer,
+    $$ChatMessagesTableTableCreateCompanionBuilder,
+    $$ChatMessagesTableTableUpdateCompanionBuilder,
+    (ChatMessageData, $$ChatMessagesTableTableReferences),
+    ChatMessageData,
+    PrefetchHooks Function({bool chatId})>;
 typedef $$ChatMessageSyncCursorTableTableCreateCompanionBuilder
     = ChatMessageSyncCursorDataCompanion Function({
   required int chatId,
@@ -9509,48 +10358,26 @@ typedef $$ChatMessageSyncCursorTableTableUpdateCompanionBuilder
   Value<int> rowid,
 });
 
-class $$ChatMessageSyncCursorTableTableTableManager extends RootTableManager<
+final class $$ChatMessageSyncCursorTableTableReferences extends BaseReferences<
     _$AppDatabase,
     $ChatMessageSyncCursorTableTable,
-    ChatMessageSyncCursorData,
-    $$ChatMessageSyncCursorTableTableFilterComposer,
-    $$ChatMessageSyncCursorTableTableOrderingComposer,
-    $$ChatMessageSyncCursorTableTableCreateCompanionBuilder,
-    $$ChatMessageSyncCursorTableTableUpdateCompanionBuilder> {
-  $$ChatMessageSyncCursorTableTableTableManager(
-      _$AppDatabase db, $ChatMessageSyncCursorTableTable table)
-      : super(TableManagerState(
-          db: db,
-          table: table,
-          filteringComposer: $$ChatMessageSyncCursorTableTableFilterComposer(
-              ComposerState(db, table)),
-          orderingComposer: $$ChatMessageSyncCursorTableTableOrderingComposer(
-              ComposerState(db, table)),
-          updateCompanionCallback: ({
-            Value<int> chatId = const Value.absent(),
-            Value<MessageSyncCursorTypeEnum> cursorType = const Value.absent(),
-            Value<int> timestampUsec = const Value.absent(),
-            Value<int> rowid = const Value.absent(),
-          }) =>
-              ChatMessageSyncCursorDataCompanion(
-            chatId: chatId,
-            cursorType: cursorType,
-            timestampUsec: timestampUsec,
-            rowid: rowid,
-          ),
-          createCompanionCallback: ({
-            required int chatId,
-            required MessageSyncCursorTypeEnum cursorType,
-            required int timestampUsec,
-            Value<int> rowid = const Value.absent(),
-          }) =>
-              ChatMessageSyncCursorDataCompanion.insert(
-            chatId: chatId,
-            cursorType: cursorType,
-            timestampUsec: timestampUsec,
-            rowid: rowid,
-          ),
-        ));
+    ChatMessageSyncCursorData> {
+  $$ChatMessageSyncCursorTableTableReferences(
+      super.$_db, super.$_table, super.$_typedResult);
+
+  static $ChatsTableTable _chatIdTable(_$AppDatabase db) =>
+      db.chatsTable.createAlias($_aliasNameGenerator(
+          db.chatMessageSyncCursorTable.chatId, db.chatsTable.id));
+
+  $$ChatsTableTableProcessedTableManager? get chatId {
+    if ($_item.chatId == null) return null;
+    final manager = $$ChatsTableTableTableManager($_db, $_db.chatsTable)
+        .filter((f) => f.id($_item.chatId!));
+    final item = $_typedResult.readTableOrNull(_chatIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
 }
 
 class $$ChatMessageSyncCursorTableTableFilterComposer
@@ -9608,6 +10435,110 @@ class $$ChatMessageSyncCursorTableTableOrderingComposer
   }
 }
 
+class $$ChatMessageSyncCursorTableTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $ChatMessageSyncCursorTableTable,
+    ChatMessageSyncCursorData,
+    $$ChatMessageSyncCursorTableTableFilterComposer,
+    $$ChatMessageSyncCursorTableTableOrderingComposer,
+    $$ChatMessageSyncCursorTableTableCreateCompanionBuilder,
+    $$ChatMessageSyncCursorTableTableUpdateCompanionBuilder,
+    (ChatMessageSyncCursorData, $$ChatMessageSyncCursorTableTableReferences),
+    ChatMessageSyncCursorData,
+    PrefetchHooks Function({bool chatId})> {
+  $$ChatMessageSyncCursorTableTableTableManager(
+      _$AppDatabase db, $ChatMessageSyncCursorTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer: $$ChatMessageSyncCursorTableTableFilterComposer(
+              ComposerState(db, table)),
+          orderingComposer: $$ChatMessageSyncCursorTableTableOrderingComposer(
+              ComposerState(db, table)),
+          updateCompanionCallback: ({
+            Value<int> chatId = const Value.absent(),
+            Value<MessageSyncCursorTypeEnum> cursorType = const Value.absent(),
+            Value<int> timestampUsec = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              ChatMessageSyncCursorDataCompanion(
+            chatId: chatId,
+            cursorType: cursorType,
+            timestampUsec: timestampUsec,
+            rowid: rowid,
+          ),
+          createCompanionCallback: ({
+            required int chatId,
+            required MessageSyncCursorTypeEnum cursorType,
+            required int timestampUsec,
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              ChatMessageSyncCursorDataCompanion.insert(
+            chatId: chatId,
+            cursorType: cursorType,
+            timestampUsec: timestampUsec,
+            rowid: rowid,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (
+                    e.readTable(table),
+                    $$ChatMessageSyncCursorTableTableReferences(db, table, e)
+                  ))
+              .toList(),
+          prefetchHooksCallback: ({chatId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins: <
+                  T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic>>(state) {
+                if (chatId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.chatId,
+                    referencedTable: $$ChatMessageSyncCursorTableTableReferences
+                        ._chatIdTable(db),
+                    referencedColumn:
+                        $$ChatMessageSyncCursorTableTableReferences
+                            ._chatIdTable(db)
+                            .id,
+                  ) as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ));
+}
+
+typedef $$ChatMessageSyncCursorTableTableProcessedTableManager
+    = ProcessedTableManager<
+        _$AppDatabase,
+        $ChatMessageSyncCursorTableTable,
+        ChatMessageSyncCursorData,
+        $$ChatMessageSyncCursorTableTableFilterComposer,
+        $$ChatMessageSyncCursorTableTableOrderingComposer,
+        $$ChatMessageSyncCursorTableTableCreateCompanionBuilder,
+        $$ChatMessageSyncCursorTableTableUpdateCompanionBuilder,
+        (
+          ChatMessageSyncCursorData,
+          $$ChatMessageSyncCursorTableTableReferences
+        ),
+        ChatMessageSyncCursorData,
+        PrefetchHooks Function({bool chatId})>;
 typedef $$ChatMessageReadCursorTableTableCreateCompanionBuilder
     = ChatMessageReadCursorDataCompanion Function({
   required int chatId,
@@ -9623,48 +10554,26 @@ typedef $$ChatMessageReadCursorTableTableUpdateCompanionBuilder
   Value<int> rowid,
 });
 
-class $$ChatMessageReadCursorTableTableTableManager extends RootTableManager<
+final class $$ChatMessageReadCursorTableTableReferences extends BaseReferences<
     _$AppDatabase,
     $ChatMessageReadCursorTableTable,
-    ChatMessageReadCursorData,
-    $$ChatMessageReadCursorTableTableFilterComposer,
-    $$ChatMessageReadCursorTableTableOrderingComposer,
-    $$ChatMessageReadCursorTableTableCreateCompanionBuilder,
-    $$ChatMessageReadCursorTableTableUpdateCompanionBuilder> {
-  $$ChatMessageReadCursorTableTableTableManager(
-      _$AppDatabase db, $ChatMessageReadCursorTableTable table)
-      : super(TableManagerState(
-          db: db,
-          table: table,
-          filteringComposer: $$ChatMessageReadCursorTableTableFilterComposer(
-              ComposerState(db, table)),
-          orderingComposer: $$ChatMessageReadCursorTableTableOrderingComposer(
-              ComposerState(db, table)),
-          updateCompanionCallback: ({
-            Value<int> chatId = const Value.absent(),
-            Value<String> userId = const Value.absent(),
-            Value<int> timestampUsec = const Value.absent(),
-            Value<int> rowid = const Value.absent(),
-          }) =>
-              ChatMessageReadCursorDataCompanion(
-            chatId: chatId,
-            userId: userId,
-            timestampUsec: timestampUsec,
-            rowid: rowid,
-          ),
-          createCompanionCallback: ({
-            required int chatId,
-            required String userId,
-            required int timestampUsec,
-            Value<int> rowid = const Value.absent(),
-          }) =>
-              ChatMessageReadCursorDataCompanion.insert(
-            chatId: chatId,
-            userId: userId,
-            timestampUsec: timestampUsec,
-            rowid: rowid,
-          ),
-        ));
+    ChatMessageReadCursorData> {
+  $$ChatMessageReadCursorTableTableReferences(
+      super.$_db, super.$_table, super.$_typedResult);
+
+  static $ChatsTableTable _chatIdTable(_$AppDatabase db) =>
+      db.chatsTable.createAlias($_aliasNameGenerator(
+          db.chatMessageReadCursorTable.chatId, db.chatsTable.id));
+
+  $$ChatsTableTableProcessedTableManager? get chatId {
+    if ($_item.chatId == null) return null;
+    final manager = $$ChatsTableTableTableManager($_db, $_db.chatsTable)
+        .filter((f) => f.id($_item.chatId!));
+    final item = $_typedResult.readTableOrNull(_chatIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
 }
 
 class $$ChatMessageReadCursorTableTableFilterComposer
@@ -9719,6 +10628,110 @@ class $$ChatMessageReadCursorTableTableOrderingComposer
   }
 }
 
+class $$ChatMessageReadCursorTableTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $ChatMessageReadCursorTableTable,
+    ChatMessageReadCursorData,
+    $$ChatMessageReadCursorTableTableFilterComposer,
+    $$ChatMessageReadCursorTableTableOrderingComposer,
+    $$ChatMessageReadCursorTableTableCreateCompanionBuilder,
+    $$ChatMessageReadCursorTableTableUpdateCompanionBuilder,
+    (ChatMessageReadCursorData, $$ChatMessageReadCursorTableTableReferences),
+    ChatMessageReadCursorData,
+    PrefetchHooks Function({bool chatId})> {
+  $$ChatMessageReadCursorTableTableTableManager(
+      _$AppDatabase db, $ChatMessageReadCursorTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer: $$ChatMessageReadCursorTableTableFilterComposer(
+              ComposerState(db, table)),
+          orderingComposer: $$ChatMessageReadCursorTableTableOrderingComposer(
+              ComposerState(db, table)),
+          updateCompanionCallback: ({
+            Value<int> chatId = const Value.absent(),
+            Value<String> userId = const Value.absent(),
+            Value<int> timestampUsec = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              ChatMessageReadCursorDataCompanion(
+            chatId: chatId,
+            userId: userId,
+            timestampUsec: timestampUsec,
+            rowid: rowid,
+          ),
+          createCompanionCallback: ({
+            required int chatId,
+            required String userId,
+            required int timestampUsec,
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              ChatMessageReadCursorDataCompanion.insert(
+            chatId: chatId,
+            userId: userId,
+            timestampUsec: timestampUsec,
+            rowid: rowid,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (
+                    e.readTable(table),
+                    $$ChatMessageReadCursorTableTableReferences(db, table, e)
+                  ))
+              .toList(),
+          prefetchHooksCallback: ({chatId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins: <
+                  T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic>>(state) {
+                if (chatId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.chatId,
+                    referencedTable: $$ChatMessageReadCursorTableTableReferences
+                        ._chatIdTable(db),
+                    referencedColumn:
+                        $$ChatMessageReadCursorTableTableReferences
+                            ._chatIdTable(db)
+                            .id,
+                  ) as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ));
+}
+
+typedef $$ChatMessageReadCursorTableTableProcessedTableManager
+    = ProcessedTableManager<
+        _$AppDatabase,
+        $ChatMessageReadCursorTableTable,
+        ChatMessageReadCursorData,
+        $$ChatMessageReadCursorTableTableFilterComposer,
+        $$ChatMessageReadCursorTableTableOrderingComposer,
+        $$ChatMessageReadCursorTableTableCreateCompanionBuilder,
+        $$ChatMessageReadCursorTableTableUpdateCompanionBuilder,
+        (
+          ChatMessageReadCursorData,
+          $$ChatMessageReadCursorTableTableReferences
+        ),
+        ChatMessageReadCursorData,
+        PrefetchHooks Function({bool chatId})>;
 typedef $$ChatOutboxMessageTableTableCreateCompanionBuilder
     = ChatOutboxMessageDataCompanion Function({
   required String idKey,
@@ -9744,68 +10757,24 @@ typedef $$ChatOutboxMessageTableTableUpdateCompanionBuilder
   Value<int> rowid,
 });
 
-class $$ChatOutboxMessageTableTableTableManager extends RootTableManager<
-    _$AppDatabase,
-    $ChatOutboxMessageTableTable,
-    ChatOutboxMessageData,
-    $$ChatOutboxMessageTableTableFilterComposer,
-    $$ChatOutboxMessageTableTableOrderingComposer,
-    $$ChatOutboxMessageTableTableCreateCompanionBuilder,
-    $$ChatOutboxMessageTableTableUpdateCompanionBuilder> {
-  $$ChatOutboxMessageTableTableTableManager(
-      _$AppDatabase db, $ChatOutboxMessageTableTable table)
-      : super(TableManagerState(
-          db: db,
-          table: table,
-          filteringComposer: $$ChatOutboxMessageTableTableFilterComposer(
-              ComposerState(db, table)),
-          orderingComposer: $$ChatOutboxMessageTableTableOrderingComposer(
-              ComposerState(db, table)),
-          updateCompanionCallback: ({
-            Value<String> idKey = const Value.absent(),
-            Value<int?> chatId = const Value.absent(),
-            Value<String?> participantId = const Value.absent(),
-            Value<int?> replyToId = const Value.absent(),
-            Value<int?> forwardFromId = const Value.absent(),
-            Value<String?> authorId = const Value.absent(),
-            Value<String> content = const Value.absent(),
-            Value<int> sendAttempts = const Value.absent(),
-            Value<int> rowid = const Value.absent(),
-          }) =>
-              ChatOutboxMessageDataCompanion(
-            idKey: idKey,
-            chatId: chatId,
-            participantId: participantId,
-            replyToId: replyToId,
-            forwardFromId: forwardFromId,
-            authorId: authorId,
-            content: content,
-            sendAttempts: sendAttempts,
-            rowid: rowid,
-          ),
-          createCompanionCallback: ({
-            required String idKey,
-            Value<int?> chatId = const Value.absent(),
-            Value<String?> participantId = const Value.absent(),
-            Value<int?> replyToId = const Value.absent(),
-            Value<int?> forwardFromId = const Value.absent(),
-            Value<String?> authorId = const Value.absent(),
-            required String content,
-            Value<int> sendAttempts = const Value.absent(),
-            Value<int> rowid = const Value.absent(),
-          }) =>
-              ChatOutboxMessageDataCompanion.insert(
-            idKey: idKey,
-            chatId: chatId,
-            participantId: participantId,
-            replyToId: replyToId,
-            forwardFromId: forwardFromId,
-            authorId: authorId,
-            content: content,
-            sendAttempts: sendAttempts,
-            rowid: rowid,
-          ),
-        ));
+final class $$ChatOutboxMessageTableTableReferences extends BaseReferences<
+    _$AppDatabase, $ChatOutboxMessageTableTable, ChatOutboxMessageData> {
+  $$ChatOutboxMessageTableTableReferences(
+      super.$_db, super.$_table, super.$_typedResult);
+
+  static $ChatsTableTable _chatIdTable(_$AppDatabase db) =>
+      db.chatsTable.createAlias($_aliasNameGenerator(
+          db.chatOutboxMessageTable.chatId, db.chatsTable.id));
+
+  $$ChatsTableTableProcessedTableManager? get chatId {
+    if ($_item.chatId == null) return null;
+    final manager = $$ChatsTableTableTableManager($_db, $_db.chatsTable)
+        .filter((f) => f.id($_item.chatId!));
+    final item = $_typedResult.readTableOrNull(_chatIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
 }
 
 class $$ChatOutboxMessageTableTableFilterComposer
@@ -9910,6 +10879,126 @@ class $$ChatOutboxMessageTableTableOrderingComposer
   }
 }
 
+class $$ChatOutboxMessageTableTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $ChatOutboxMessageTableTable,
+    ChatOutboxMessageData,
+    $$ChatOutboxMessageTableTableFilterComposer,
+    $$ChatOutboxMessageTableTableOrderingComposer,
+    $$ChatOutboxMessageTableTableCreateCompanionBuilder,
+    $$ChatOutboxMessageTableTableUpdateCompanionBuilder,
+    (ChatOutboxMessageData, $$ChatOutboxMessageTableTableReferences),
+    ChatOutboxMessageData,
+    PrefetchHooks Function({bool chatId})> {
+  $$ChatOutboxMessageTableTableTableManager(
+      _$AppDatabase db, $ChatOutboxMessageTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer: $$ChatOutboxMessageTableTableFilterComposer(
+              ComposerState(db, table)),
+          orderingComposer: $$ChatOutboxMessageTableTableOrderingComposer(
+              ComposerState(db, table)),
+          updateCompanionCallback: ({
+            Value<String> idKey = const Value.absent(),
+            Value<int?> chatId = const Value.absent(),
+            Value<String?> participantId = const Value.absent(),
+            Value<int?> replyToId = const Value.absent(),
+            Value<int?> forwardFromId = const Value.absent(),
+            Value<String?> authorId = const Value.absent(),
+            Value<String> content = const Value.absent(),
+            Value<int> sendAttempts = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              ChatOutboxMessageDataCompanion(
+            idKey: idKey,
+            chatId: chatId,
+            participantId: participantId,
+            replyToId: replyToId,
+            forwardFromId: forwardFromId,
+            authorId: authorId,
+            content: content,
+            sendAttempts: sendAttempts,
+            rowid: rowid,
+          ),
+          createCompanionCallback: ({
+            required String idKey,
+            Value<int?> chatId = const Value.absent(),
+            Value<String?> participantId = const Value.absent(),
+            Value<int?> replyToId = const Value.absent(),
+            Value<int?> forwardFromId = const Value.absent(),
+            Value<String?> authorId = const Value.absent(),
+            required String content,
+            Value<int> sendAttempts = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              ChatOutboxMessageDataCompanion.insert(
+            idKey: idKey,
+            chatId: chatId,
+            participantId: participantId,
+            replyToId: replyToId,
+            forwardFromId: forwardFromId,
+            authorId: authorId,
+            content: content,
+            sendAttempts: sendAttempts,
+            rowid: rowid,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (
+                    e.readTable(table),
+                    $$ChatOutboxMessageTableTableReferences(db, table, e)
+                  ))
+              .toList(),
+          prefetchHooksCallback: ({chatId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins: <
+                  T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic>>(state) {
+                if (chatId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.chatId,
+                    referencedTable: $$ChatOutboxMessageTableTableReferences
+                        ._chatIdTable(db),
+                    referencedColumn: $$ChatOutboxMessageTableTableReferences
+                        ._chatIdTable(db)
+                        .id,
+                  ) as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ));
+}
+
+typedef $$ChatOutboxMessageTableTableProcessedTableManager
+    = ProcessedTableManager<
+        _$AppDatabase,
+        $ChatOutboxMessageTableTable,
+        ChatOutboxMessageData,
+        $$ChatOutboxMessageTableTableFilterComposer,
+        $$ChatOutboxMessageTableTableOrderingComposer,
+        $$ChatOutboxMessageTableTableCreateCompanionBuilder,
+        $$ChatOutboxMessageTableTableUpdateCompanionBuilder,
+        (ChatOutboxMessageData, $$ChatOutboxMessageTableTableReferences),
+        ChatOutboxMessageData,
+        PrefetchHooks Function({bool chatId})>;
 typedef $$ChatOutboxMessageEditTableTableCreateCompanionBuilder
     = ChatOutboxMessageEditDataCompanion Function({
   Value<int> id,
@@ -9927,52 +11016,26 @@ typedef $$ChatOutboxMessageEditTableTableUpdateCompanionBuilder
   Value<int> sendAttempts,
 });
 
-class $$ChatOutboxMessageEditTableTableTableManager extends RootTableManager<
+final class $$ChatOutboxMessageEditTableTableReferences extends BaseReferences<
     _$AppDatabase,
     $ChatOutboxMessageEditTableTable,
-    ChatOutboxMessageEditData,
-    $$ChatOutboxMessageEditTableTableFilterComposer,
-    $$ChatOutboxMessageEditTableTableOrderingComposer,
-    $$ChatOutboxMessageEditTableTableCreateCompanionBuilder,
-    $$ChatOutboxMessageEditTableTableUpdateCompanionBuilder> {
-  $$ChatOutboxMessageEditTableTableTableManager(
-      _$AppDatabase db, $ChatOutboxMessageEditTableTable table)
-      : super(TableManagerState(
-          db: db,
-          table: table,
-          filteringComposer: $$ChatOutboxMessageEditTableTableFilterComposer(
-              ComposerState(db, table)),
-          orderingComposer: $$ChatOutboxMessageEditTableTableOrderingComposer(
-              ComposerState(db, table)),
-          updateCompanionCallback: ({
-            Value<int> id = const Value.absent(),
-            Value<String> idKey = const Value.absent(),
-            Value<int> chatId = const Value.absent(),
-            Value<String> newContent = const Value.absent(),
-            Value<int> sendAttempts = const Value.absent(),
-          }) =>
-              ChatOutboxMessageEditDataCompanion(
-            id: id,
-            idKey: idKey,
-            chatId: chatId,
-            newContent: newContent,
-            sendAttempts: sendAttempts,
-          ),
-          createCompanionCallback: ({
-            Value<int> id = const Value.absent(),
-            required String idKey,
-            required int chatId,
-            required String newContent,
-            Value<int> sendAttempts = const Value.absent(),
-          }) =>
-              ChatOutboxMessageEditDataCompanion.insert(
-            id: id,
-            idKey: idKey,
-            chatId: chatId,
-            newContent: newContent,
-            sendAttempts: sendAttempts,
-          ),
-        ));
+    ChatOutboxMessageEditData> {
+  $$ChatOutboxMessageEditTableTableReferences(
+      super.$_db, super.$_table, super.$_typedResult);
+
+  static $ChatsTableTable _chatIdTable(_$AppDatabase db) =>
+      db.chatsTable.createAlias($_aliasNameGenerator(
+          db.chatOutboxMessageEditTable.chatId, db.chatsTable.id));
+
+  $$ChatsTableTableProcessedTableManager? get chatId {
+    if ($_item.chatId == null) return null;
+    final manager = $$ChatsTableTableTableManager($_db, $_db.chatsTable)
+        .filter((f) => f.id($_item.chatId!));
+    final item = $_typedResult.readTableOrNull(_chatIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
 }
 
 class $$ChatOutboxMessageEditTableTableFilterComposer
@@ -10047,6 +11110,114 @@ class $$ChatOutboxMessageEditTableTableOrderingComposer
   }
 }
 
+class $$ChatOutboxMessageEditTableTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $ChatOutboxMessageEditTableTable,
+    ChatOutboxMessageEditData,
+    $$ChatOutboxMessageEditTableTableFilterComposer,
+    $$ChatOutboxMessageEditTableTableOrderingComposer,
+    $$ChatOutboxMessageEditTableTableCreateCompanionBuilder,
+    $$ChatOutboxMessageEditTableTableUpdateCompanionBuilder,
+    (ChatOutboxMessageEditData, $$ChatOutboxMessageEditTableTableReferences),
+    ChatOutboxMessageEditData,
+    PrefetchHooks Function({bool chatId})> {
+  $$ChatOutboxMessageEditTableTableTableManager(
+      _$AppDatabase db, $ChatOutboxMessageEditTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer: $$ChatOutboxMessageEditTableTableFilterComposer(
+              ComposerState(db, table)),
+          orderingComposer: $$ChatOutboxMessageEditTableTableOrderingComposer(
+              ComposerState(db, table)),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<String> idKey = const Value.absent(),
+            Value<int> chatId = const Value.absent(),
+            Value<String> newContent = const Value.absent(),
+            Value<int> sendAttempts = const Value.absent(),
+          }) =>
+              ChatOutboxMessageEditDataCompanion(
+            id: id,
+            idKey: idKey,
+            chatId: chatId,
+            newContent: newContent,
+            sendAttempts: sendAttempts,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            required String idKey,
+            required int chatId,
+            required String newContent,
+            Value<int> sendAttempts = const Value.absent(),
+          }) =>
+              ChatOutboxMessageEditDataCompanion.insert(
+            id: id,
+            idKey: idKey,
+            chatId: chatId,
+            newContent: newContent,
+            sendAttempts: sendAttempts,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (
+                    e.readTable(table),
+                    $$ChatOutboxMessageEditTableTableReferences(db, table, e)
+                  ))
+              .toList(),
+          prefetchHooksCallback: ({chatId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins: <
+                  T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic>>(state) {
+                if (chatId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.chatId,
+                    referencedTable: $$ChatOutboxMessageEditTableTableReferences
+                        ._chatIdTable(db),
+                    referencedColumn:
+                        $$ChatOutboxMessageEditTableTableReferences
+                            ._chatIdTable(db)
+                            .id,
+                  ) as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ));
+}
+
+typedef $$ChatOutboxMessageEditTableTableProcessedTableManager
+    = ProcessedTableManager<
+        _$AppDatabase,
+        $ChatOutboxMessageEditTableTable,
+        ChatOutboxMessageEditData,
+        $$ChatOutboxMessageEditTableTableFilterComposer,
+        $$ChatOutboxMessageEditTableTableOrderingComposer,
+        $$ChatOutboxMessageEditTableTableCreateCompanionBuilder,
+        $$ChatOutboxMessageEditTableTableUpdateCompanionBuilder,
+        (
+          ChatOutboxMessageEditData,
+          $$ChatOutboxMessageEditTableTableReferences
+        ),
+        ChatOutboxMessageEditData,
+        PrefetchHooks Function({bool chatId})>;
 typedef $$ChatOutboxMessageDeleteTableTableCreateCompanionBuilder
     = ChatOutboxMessageDeleteDataCompanion Function({
   Value<int> id,
@@ -10062,48 +11233,25 @@ typedef $$ChatOutboxMessageDeleteTableTableUpdateCompanionBuilder
   Value<int> sendAttempts,
 });
 
-class $$ChatOutboxMessageDeleteTableTableTableManager extends RootTableManager<
-    _$AppDatabase,
-    $ChatOutboxMessageDeleteTableTable,
-    ChatOutboxMessageDeleteData,
-    $$ChatOutboxMessageDeleteTableTableFilterComposer,
-    $$ChatOutboxMessageDeleteTableTableOrderingComposer,
-    $$ChatOutboxMessageDeleteTableTableCreateCompanionBuilder,
-    $$ChatOutboxMessageDeleteTableTableUpdateCompanionBuilder> {
-  $$ChatOutboxMessageDeleteTableTableTableManager(
-      _$AppDatabase db, $ChatOutboxMessageDeleteTableTable table)
-      : super(TableManagerState(
-          db: db,
-          table: table,
-          filteringComposer: $$ChatOutboxMessageDeleteTableTableFilterComposer(
-              ComposerState(db, table)),
-          orderingComposer: $$ChatOutboxMessageDeleteTableTableOrderingComposer(
-              ComposerState(db, table)),
-          updateCompanionCallback: ({
-            Value<int> id = const Value.absent(),
-            Value<String> idKey = const Value.absent(),
-            Value<int> chatId = const Value.absent(),
-            Value<int> sendAttempts = const Value.absent(),
-          }) =>
-              ChatOutboxMessageDeleteDataCompanion(
-            id: id,
-            idKey: idKey,
-            chatId: chatId,
-            sendAttempts: sendAttempts,
-          ),
-          createCompanionCallback: ({
-            Value<int> id = const Value.absent(),
-            required String idKey,
-            required int chatId,
-            Value<int> sendAttempts = const Value.absent(),
-          }) =>
-              ChatOutboxMessageDeleteDataCompanion.insert(
-            id: id,
-            idKey: idKey,
-            chatId: chatId,
-            sendAttempts: sendAttempts,
-          ),
-        ));
+final class $$ChatOutboxMessageDeleteTableTableReferences
+    extends BaseReferences<_$AppDatabase, $ChatOutboxMessageDeleteTableTable,
+        ChatOutboxMessageDeleteData> {
+  $$ChatOutboxMessageDeleteTableTableReferences(
+      super.$_db, super.$_table, super.$_typedResult);
+
+  static $ChatsTableTable _chatIdTable(_$AppDatabase db) =>
+      db.chatsTable.createAlias($_aliasNameGenerator(
+          db.chatOutboxMessageDeleteTable.chatId, db.chatsTable.id));
+
+  $$ChatsTableTableProcessedTableManager? get chatId {
+    if ($_item.chatId == null) return null;
+    final manager = $$ChatsTableTableTableManager($_db, $_db.chatsTable)
+        .filter((f) => f.id($_item.chatId!));
+    final item = $_typedResult.readTableOrNull(_chatIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
 }
 
 class $$ChatOutboxMessageDeleteTableTableFilterComposer
@@ -10169,6 +11317,114 @@ class $$ChatOutboxMessageDeleteTableTableOrderingComposer
   }
 }
 
+class $$ChatOutboxMessageDeleteTableTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $ChatOutboxMessageDeleteTableTable,
+    ChatOutboxMessageDeleteData,
+    $$ChatOutboxMessageDeleteTableTableFilterComposer,
+    $$ChatOutboxMessageDeleteTableTableOrderingComposer,
+    $$ChatOutboxMessageDeleteTableTableCreateCompanionBuilder,
+    $$ChatOutboxMessageDeleteTableTableUpdateCompanionBuilder,
+    (
+      ChatOutboxMessageDeleteData,
+      $$ChatOutboxMessageDeleteTableTableReferences
+    ),
+    ChatOutboxMessageDeleteData,
+    PrefetchHooks Function({bool chatId})> {
+  $$ChatOutboxMessageDeleteTableTableTableManager(
+      _$AppDatabase db, $ChatOutboxMessageDeleteTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer: $$ChatOutboxMessageDeleteTableTableFilterComposer(
+              ComposerState(db, table)),
+          orderingComposer: $$ChatOutboxMessageDeleteTableTableOrderingComposer(
+              ComposerState(db, table)),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<String> idKey = const Value.absent(),
+            Value<int> chatId = const Value.absent(),
+            Value<int> sendAttempts = const Value.absent(),
+          }) =>
+              ChatOutboxMessageDeleteDataCompanion(
+            id: id,
+            idKey: idKey,
+            chatId: chatId,
+            sendAttempts: sendAttempts,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            required String idKey,
+            required int chatId,
+            Value<int> sendAttempts = const Value.absent(),
+          }) =>
+              ChatOutboxMessageDeleteDataCompanion.insert(
+            id: id,
+            idKey: idKey,
+            chatId: chatId,
+            sendAttempts: sendAttempts,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (
+                    e.readTable(table),
+                    $$ChatOutboxMessageDeleteTableTableReferences(db, table, e)
+                  ))
+              .toList(),
+          prefetchHooksCallback: ({chatId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins: <
+                  T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic>>(state) {
+                if (chatId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.chatId,
+                    referencedTable:
+                        $$ChatOutboxMessageDeleteTableTableReferences
+                            ._chatIdTable(db),
+                    referencedColumn:
+                        $$ChatOutboxMessageDeleteTableTableReferences
+                            ._chatIdTable(db)
+                            .id,
+                  ) as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ));
+}
+
+typedef $$ChatOutboxMessageDeleteTableTableProcessedTableManager
+    = ProcessedTableManager<
+        _$AppDatabase,
+        $ChatOutboxMessageDeleteTableTable,
+        ChatOutboxMessageDeleteData,
+        $$ChatOutboxMessageDeleteTableTableFilterComposer,
+        $$ChatOutboxMessageDeleteTableTableOrderingComposer,
+        $$ChatOutboxMessageDeleteTableTableCreateCompanionBuilder,
+        $$ChatOutboxMessageDeleteTableTableUpdateCompanionBuilder,
+        (
+          ChatOutboxMessageDeleteData,
+          $$ChatOutboxMessageDeleteTableTableReferences
+        ),
+        ChatOutboxMessageDeleteData,
+        PrefetchHooks Function({bool chatId})>;
 typedef $$ChatOutboxReadCursorsTableTableCreateCompanionBuilder
     = ChatOutboxReadCursorDataCompanion Function({
   Value<int> chatId,
@@ -10182,44 +11438,24 @@ typedef $$ChatOutboxReadCursorsTableTableUpdateCompanionBuilder
   Value<int> sendAttempts,
 });
 
-class $$ChatOutboxReadCursorsTableTableTableManager extends RootTableManager<
-    _$AppDatabase,
-    $ChatOutboxReadCursorsTableTable,
-    ChatOutboxReadCursorData,
-    $$ChatOutboxReadCursorsTableTableFilterComposer,
-    $$ChatOutboxReadCursorsTableTableOrderingComposer,
-    $$ChatOutboxReadCursorsTableTableCreateCompanionBuilder,
-    $$ChatOutboxReadCursorsTableTableUpdateCompanionBuilder> {
-  $$ChatOutboxReadCursorsTableTableTableManager(
-      _$AppDatabase db, $ChatOutboxReadCursorsTableTable table)
-      : super(TableManagerState(
-          db: db,
-          table: table,
-          filteringComposer: $$ChatOutboxReadCursorsTableTableFilterComposer(
-              ComposerState(db, table)),
-          orderingComposer: $$ChatOutboxReadCursorsTableTableOrderingComposer(
-              ComposerState(db, table)),
-          updateCompanionCallback: ({
-            Value<int> chatId = const Value.absent(),
-            Value<int> timestampUsec = const Value.absent(),
-            Value<int> sendAttempts = const Value.absent(),
-          }) =>
-              ChatOutboxReadCursorDataCompanion(
-            chatId: chatId,
-            timestampUsec: timestampUsec,
-            sendAttempts: sendAttempts,
-          ),
-          createCompanionCallback: ({
-            Value<int> chatId = const Value.absent(),
-            required int timestampUsec,
-            Value<int> sendAttempts = const Value.absent(),
-          }) =>
-              ChatOutboxReadCursorDataCompanion.insert(
-            chatId: chatId,
-            timestampUsec: timestampUsec,
-            sendAttempts: sendAttempts,
-          ),
-        ));
+final class $$ChatOutboxReadCursorsTableTableReferences extends BaseReferences<
+    _$AppDatabase, $ChatOutboxReadCursorsTableTable, ChatOutboxReadCursorData> {
+  $$ChatOutboxReadCursorsTableTableReferences(
+      super.$_db, super.$_table, super.$_typedResult);
+
+  static $ChatsTableTable _chatIdTable(_$AppDatabase db) =>
+      db.chatsTable.createAlias($_aliasNameGenerator(
+          db.chatOutboxReadCursorsTable.chatId, db.chatsTable.id));
+
+  $$ChatsTableTableProcessedTableManager? get chatId {
+    if ($_item.chatId == null) return null;
+    final manager = $$ChatsTableTableTableManager($_db, $_db.chatsTable)
+        .filter((f) => f.id($_item.chatId!));
+    final item = $_typedResult.readTableOrNull(_chatIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
 }
 
 class $$ChatOutboxReadCursorsTableTableFilterComposer
@@ -10274,6 +11510,103 @@ class $$ChatOutboxReadCursorsTableTableOrderingComposer
   }
 }
 
+class $$ChatOutboxReadCursorsTableTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $ChatOutboxReadCursorsTableTable,
+    ChatOutboxReadCursorData,
+    $$ChatOutboxReadCursorsTableTableFilterComposer,
+    $$ChatOutboxReadCursorsTableTableOrderingComposer,
+    $$ChatOutboxReadCursorsTableTableCreateCompanionBuilder,
+    $$ChatOutboxReadCursorsTableTableUpdateCompanionBuilder,
+    (ChatOutboxReadCursorData, $$ChatOutboxReadCursorsTableTableReferences),
+    ChatOutboxReadCursorData,
+    PrefetchHooks Function({bool chatId})> {
+  $$ChatOutboxReadCursorsTableTableTableManager(
+      _$AppDatabase db, $ChatOutboxReadCursorsTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer: $$ChatOutboxReadCursorsTableTableFilterComposer(
+              ComposerState(db, table)),
+          orderingComposer: $$ChatOutboxReadCursorsTableTableOrderingComposer(
+              ComposerState(db, table)),
+          updateCompanionCallback: ({
+            Value<int> chatId = const Value.absent(),
+            Value<int> timestampUsec = const Value.absent(),
+            Value<int> sendAttempts = const Value.absent(),
+          }) =>
+              ChatOutboxReadCursorDataCompanion(
+            chatId: chatId,
+            timestampUsec: timestampUsec,
+            sendAttempts: sendAttempts,
+          ),
+          createCompanionCallback: ({
+            Value<int> chatId = const Value.absent(),
+            required int timestampUsec,
+            Value<int> sendAttempts = const Value.absent(),
+          }) =>
+              ChatOutboxReadCursorDataCompanion.insert(
+            chatId: chatId,
+            timestampUsec: timestampUsec,
+            sendAttempts: sendAttempts,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (
+                    e.readTable(table),
+                    $$ChatOutboxReadCursorsTableTableReferences(db, table, e)
+                  ))
+              .toList(),
+          prefetchHooksCallback: ({chatId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins: <
+                  T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic>>(state) {
+                if (chatId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.chatId,
+                    referencedTable: $$ChatOutboxReadCursorsTableTableReferences
+                        ._chatIdTable(db),
+                    referencedColumn:
+                        $$ChatOutboxReadCursorsTableTableReferences
+                            ._chatIdTable(db)
+                            .id,
+                  ) as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ));
+}
+
+typedef $$ChatOutboxReadCursorsTableTableProcessedTableManager
+    = ProcessedTableManager<
+        _$AppDatabase,
+        $ChatOutboxReadCursorsTableTable,
+        ChatOutboxReadCursorData,
+        $$ChatOutboxReadCursorsTableTableFilterComposer,
+        $$ChatOutboxReadCursorsTableTableOrderingComposer,
+        $$ChatOutboxReadCursorsTableTableCreateCompanionBuilder,
+        $$ChatOutboxReadCursorsTableTableUpdateCompanionBuilder,
+        (ChatOutboxReadCursorData, $$ChatOutboxReadCursorsTableTableReferences),
+        ChatOutboxReadCursorData,
+        PrefetchHooks Function({bool chatId})>;
 typedef $$SmsConversationsTableTableCreateCompanionBuilder
     = SmsConversationDataCompanion Function({
   Value<int> id,
@@ -10291,52 +11624,122 @@ typedef $$SmsConversationsTableTableUpdateCompanionBuilder
   Value<DateTime> updatedAtRemote,
 });
 
-class $$SmsConversationsTableTableTableManager extends RootTableManager<
-    _$AppDatabase,
-    $SmsConversationsTableTable,
-    SmsConversationData,
-    $$SmsConversationsTableTableFilterComposer,
-    $$SmsConversationsTableTableOrderingComposer,
-    $$SmsConversationsTableTableCreateCompanionBuilder,
-    $$SmsConversationsTableTableUpdateCompanionBuilder> {
-  $$SmsConversationsTableTableTableManager(
-      _$AppDatabase db, $SmsConversationsTableTable table)
-      : super(TableManagerState(
-          db: db,
-          table: table,
-          filteringComposer: $$SmsConversationsTableTableFilterComposer(
-              ComposerState(db, table)),
-          orderingComposer: $$SmsConversationsTableTableOrderingComposer(
-              ComposerState(db, table)),
-          updateCompanionCallback: ({
-            Value<int> id = const Value.absent(),
-            Value<String> firstPhoneNumber = const Value.absent(),
-            Value<String> secondPhoneNumber = const Value.absent(),
-            Value<DateTime> createdAtRemote = const Value.absent(),
-            Value<DateTime> updatedAtRemote = const Value.absent(),
-          }) =>
-              SmsConversationDataCompanion(
-            id: id,
-            firstPhoneNumber: firstPhoneNumber,
-            secondPhoneNumber: secondPhoneNumber,
-            createdAtRemote: createdAtRemote,
-            updatedAtRemote: updatedAtRemote,
-          ),
-          createCompanionCallback: ({
-            Value<int> id = const Value.absent(),
-            required String firstPhoneNumber,
-            required String secondPhoneNumber,
-            required DateTime createdAtRemote,
-            required DateTime updatedAtRemote,
-          }) =>
-              SmsConversationDataCompanion.insert(
-            id: id,
-            firstPhoneNumber: firstPhoneNumber,
-            secondPhoneNumber: secondPhoneNumber,
-            createdAtRemote: createdAtRemote,
-            updatedAtRemote: updatedAtRemote,
-          ),
-        ));
+final class $$SmsConversationsTableTableReferences extends BaseReferences<
+    _$AppDatabase, $SmsConversationsTableTable, SmsConversationData> {
+  $$SmsConversationsTableTableReferences(
+      super.$_db, super.$_table, super.$_typedResult);
+
+  static MultiTypedResultKey<$SmsMessagesTableTable, List<SmsMessageData>>
+      _smsMessagesTableRefsTable(_$AppDatabase db) =>
+          MultiTypedResultKey.fromTable(db.smsMessagesTable,
+              aliasName: $_aliasNameGenerator(db.smsConversationsTable.id,
+                  db.smsMessagesTable.conversationId));
+
+  $$SmsMessagesTableTableProcessedTableManager get smsMessagesTableRefs {
+    final manager =
+        $$SmsMessagesTableTableTableManager($_db, $_db.smsMessagesTable)
+            .filter((f) => f.conversationId.id($_item.id));
+
+    final cache =
+        $_typedResult.readTableOrNull(_smsMessagesTableRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+
+  static MultiTypedResultKey<$SmsMessageSyncCursorTableTable,
+      List<SmsMessageSyncCursorData>> _smsMessageSyncCursorTableRefsTable(
+          _$AppDatabase db) =>
+      MultiTypedResultKey.fromTable(db.smsMessageSyncCursorTable,
+          aliasName: $_aliasNameGenerator(db.smsConversationsTable.id,
+              db.smsMessageSyncCursorTable.conversationId));
+
+  $$SmsMessageSyncCursorTableTableProcessedTableManager
+      get smsMessageSyncCursorTableRefs {
+    final manager = $$SmsMessageSyncCursorTableTableTableManager(
+            $_db, $_db.smsMessageSyncCursorTable)
+        .filter((f) => f.conversationId.id($_item.id));
+
+    final cache = $_typedResult
+        .readTableOrNull(_smsMessageSyncCursorTableRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+
+  static MultiTypedResultKey<$SmsMessageReadCursorTableTable,
+      List<SmsMessageReadCursorData>> _smsMessageReadCursorTableRefsTable(
+          _$AppDatabase db) =>
+      MultiTypedResultKey.fromTable(db.smsMessageReadCursorTable,
+          aliasName: $_aliasNameGenerator(db.smsConversationsTable.id,
+              db.smsMessageReadCursorTable.conversationId));
+
+  $$SmsMessageReadCursorTableTableProcessedTableManager
+      get smsMessageReadCursorTableRefs {
+    final manager = $$SmsMessageReadCursorTableTableTableManager(
+            $_db, $_db.smsMessageReadCursorTable)
+        .filter((f) => f.conversationId.id($_item.id));
+
+    final cache = $_typedResult
+        .readTableOrNull(_smsMessageReadCursorTableRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+
+  static MultiTypedResultKey<$SmsOutboxMessagesTableTable,
+      List<SmsOutboxMessageData>> _smsOutboxMessagesTableRefsTable(
+          _$AppDatabase db) =>
+      MultiTypedResultKey.fromTable(db.smsOutboxMessagesTable,
+          aliasName: $_aliasNameGenerator(db.smsConversationsTable.id,
+              db.smsOutboxMessagesTable.conversationId));
+
+  $$SmsOutboxMessagesTableTableProcessedTableManager
+      get smsOutboxMessagesTableRefs {
+    final manager = $$SmsOutboxMessagesTableTableTableManager(
+            $_db, $_db.smsOutboxMessagesTable)
+        .filter((f) => f.conversationId.id($_item.id));
+
+    final cache =
+        $_typedResult.readTableOrNull(_smsOutboxMessagesTableRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+
+  static MultiTypedResultKey<$SmsOutboxMessageDeleteTableTable,
+      List<SmsOutboxMessageDeleteData>> _smsOutboxMessageDeleteTableRefsTable(
+          _$AppDatabase db) =>
+      MultiTypedResultKey.fromTable(db.smsOutboxMessageDeleteTable,
+          aliasName: $_aliasNameGenerator(db.smsConversationsTable.id,
+              db.smsOutboxMessageDeleteTable.conversationId));
+
+  $$SmsOutboxMessageDeleteTableTableProcessedTableManager
+      get smsOutboxMessageDeleteTableRefs {
+    final manager = $$SmsOutboxMessageDeleteTableTableTableManager(
+            $_db, $_db.smsOutboxMessageDeleteTable)
+        .filter((f) => f.conversationId.id($_item.id));
+
+    final cache = $_typedResult
+        .readTableOrNull(_smsOutboxMessageDeleteTableRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+
+  static MultiTypedResultKey<$SmsOutboxReadCursorsTableTable,
+      List<SmsOutboxReadCursorData>> _smsOutboxReadCursorsTableRefsTable(
+          _$AppDatabase db) =>
+      MultiTypedResultKey.fromTable(db.smsOutboxReadCursorsTable,
+          aliasName: $_aliasNameGenerator(db.smsConversationsTable.id,
+              db.smsOutboxReadCursorsTable.conversationId));
+
+  $$SmsOutboxReadCursorsTableTableProcessedTableManager
+      get smsOutboxReadCursorsTableRefs {
+    final manager = $$SmsOutboxReadCursorsTableTableTableManager(
+            $_db, $_db.smsOutboxReadCursorsTable)
+        .filter((f) => f.conversationId.id($_item.id));
+
+    final cache = $_typedResult
+        .readTableOrNull(_smsOutboxReadCursorsTableRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
 }
 
 class $$SmsConversationsTableTableFilterComposer
@@ -10505,6 +11908,190 @@ class $$SmsConversationsTableTableOrderingComposer
           ColumnOrderings(column, joinBuilders: joinBuilders));
 }
 
+class $$SmsConversationsTableTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $SmsConversationsTableTable,
+    SmsConversationData,
+    $$SmsConversationsTableTableFilterComposer,
+    $$SmsConversationsTableTableOrderingComposer,
+    $$SmsConversationsTableTableCreateCompanionBuilder,
+    $$SmsConversationsTableTableUpdateCompanionBuilder,
+    (SmsConversationData, $$SmsConversationsTableTableReferences),
+    SmsConversationData,
+    PrefetchHooks Function(
+        {bool smsMessagesTableRefs,
+        bool smsMessageSyncCursorTableRefs,
+        bool smsMessageReadCursorTableRefs,
+        bool smsOutboxMessagesTableRefs,
+        bool smsOutboxMessageDeleteTableRefs,
+        bool smsOutboxReadCursorsTableRefs})> {
+  $$SmsConversationsTableTableTableManager(
+      _$AppDatabase db, $SmsConversationsTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer: $$SmsConversationsTableTableFilterComposer(
+              ComposerState(db, table)),
+          orderingComposer: $$SmsConversationsTableTableOrderingComposer(
+              ComposerState(db, table)),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<String> firstPhoneNumber = const Value.absent(),
+            Value<String> secondPhoneNumber = const Value.absent(),
+            Value<DateTime> createdAtRemote = const Value.absent(),
+            Value<DateTime> updatedAtRemote = const Value.absent(),
+          }) =>
+              SmsConversationDataCompanion(
+            id: id,
+            firstPhoneNumber: firstPhoneNumber,
+            secondPhoneNumber: secondPhoneNumber,
+            createdAtRemote: createdAtRemote,
+            updatedAtRemote: updatedAtRemote,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            required String firstPhoneNumber,
+            required String secondPhoneNumber,
+            required DateTime createdAtRemote,
+            required DateTime updatedAtRemote,
+          }) =>
+              SmsConversationDataCompanion.insert(
+            id: id,
+            firstPhoneNumber: firstPhoneNumber,
+            secondPhoneNumber: secondPhoneNumber,
+            createdAtRemote: createdAtRemote,
+            updatedAtRemote: updatedAtRemote,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (
+                    e.readTable(table),
+                    $$SmsConversationsTableTableReferences(db, table, e)
+                  ))
+              .toList(),
+          prefetchHooksCallback: (
+              {smsMessagesTableRefs = false,
+              smsMessageSyncCursorTableRefs = false,
+              smsMessageReadCursorTableRefs = false,
+              smsOutboxMessagesTableRefs = false,
+              smsOutboxMessageDeleteTableRefs = false,
+              smsOutboxReadCursorsTableRefs = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [
+                if (smsMessagesTableRefs) db.smsMessagesTable,
+                if (smsMessageSyncCursorTableRefs) db.smsMessageSyncCursorTable,
+                if (smsMessageReadCursorTableRefs) db.smsMessageReadCursorTable,
+                if (smsOutboxMessagesTableRefs) db.smsOutboxMessagesTable,
+                if (smsOutboxMessageDeleteTableRefs)
+                  db.smsOutboxMessageDeleteTable,
+                if (smsOutboxReadCursorsTableRefs) db.smsOutboxReadCursorsTable
+              ],
+              addJoins: null,
+              getPrefetchedDataCallback: (items) async {
+                return [
+                  if (smsMessagesTableRefs)
+                    await $_getPrefetchedData(
+                        currentTable: table,
+                        referencedTable: $$SmsConversationsTableTableReferences
+                            ._smsMessagesTableRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$SmsConversationsTableTableReferences(
+                                    db, table, p0)
+                                .smsMessagesTableRefs,
+                        referencedItemsForCurrentItem:
+                            (item, referencedItems) => referencedItems
+                                .where((e) => e.conversationId == item.id),
+                        typedResults: items),
+                  if (smsMessageSyncCursorTableRefs)
+                    await $_getPrefetchedData(
+                        currentTable: table,
+                        referencedTable: $$SmsConversationsTableTableReferences
+                            ._smsMessageSyncCursorTableRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$SmsConversationsTableTableReferences(
+                                    db, table, p0)
+                                .smsMessageSyncCursorTableRefs,
+                        referencedItemsForCurrentItem:
+                            (item, referencedItems) => referencedItems
+                                .where((e) => e.conversationId == item.id),
+                        typedResults: items),
+                  if (smsMessageReadCursorTableRefs)
+                    await $_getPrefetchedData(
+                        currentTable: table,
+                        referencedTable: $$SmsConversationsTableTableReferences
+                            ._smsMessageReadCursorTableRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$SmsConversationsTableTableReferences(
+                                    db, table, p0)
+                                .smsMessageReadCursorTableRefs,
+                        referencedItemsForCurrentItem:
+                            (item, referencedItems) => referencedItems
+                                .where((e) => e.conversationId == item.id),
+                        typedResults: items),
+                  if (smsOutboxMessagesTableRefs)
+                    await $_getPrefetchedData(
+                        currentTable: table,
+                        referencedTable: $$SmsConversationsTableTableReferences
+                            ._smsOutboxMessagesTableRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$SmsConversationsTableTableReferences(
+                                    db, table, p0)
+                                .smsOutboxMessagesTableRefs,
+                        referencedItemsForCurrentItem:
+                            (item, referencedItems) => referencedItems
+                                .where((e) => e.conversationId == item.id),
+                        typedResults: items),
+                  if (smsOutboxMessageDeleteTableRefs)
+                    await $_getPrefetchedData(
+                        currentTable: table,
+                        referencedTable: $$SmsConversationsTableTableReferences
+                            ._smsOutboxMessageDeleteTableRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$SmsConversationsTableTableReferences(
+                                    db, table, p0)
+                                .smsOutboxMessageDeleteTableRefs,
+                        referencedItemsForCurrentItem:
+                            (item, referencedItems) => referencedItems
+                                .where((e) => e.conversationId == item.id),
+                        typedResults: items),
+                  if (smsOutboxReadCursorsTableRefs)
+                    await $_getPrefetchedData(
+                        currentTable: table,
+                        referencedTable: $$SmsConversationsTableTableReferences
+                            ._smsOutboxReadCursorsTableRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$SmsConversationsTableTableReferences(
+                                    db, table, p0)
+                                .smsOutboxReadCursorsTableRefs,
+                        referencedItemsForCurrentItem:
+                            (item, referencedItems) => referencedItems
+                                .where((e) => e.conversationId == item.id),
+                        typedResults: items)
+                ];
+              },
+            );
+          },
+        ));
+}
+
+typedef $$SmsConversationsTableTableProcessedTableManager
+    = ProcessedTableManager<
+        _$AppDatabase,
+        $SmsConversationsTableTable,
+        SmsConversationData,
+        $$SmsConversationsTableTableFilterComposer,
+        $$SmsConversationsTableTableOrderingComposer,
+        $$SmsConversationsTableTableCreateCompanionBuilder,
+        $$SmsConversationsTableTableUpdateCompanionBuilder,
+        (SmsConversationData, $$SmsConversationsTableTableReferences),
+        SmsConversationData,
+        PrefetchHooks Function(
+            {bool smsMessagesTableRefs,
+            bool smsMessageSyncCursorTableRefs,
+            bool smsMessageReadCursorTableRefs,
+            bool smsOutboxMessagesTableRefs,
+            bool smsOutboxMessageDeleteTableRefs,
+            bool smsOutboxReadCursorsTableRefs})>;
 typedef $$SmsMessagesTableTableCreateCompanionBuilder = SmsMessageDataCompanion
     Function({
   Value<int> id,
@@ -10534,76 +12121,25 @@ typedef $$SmsMessagesTableTableUpdateCompanionBuilder = SmsMessageDataCompanion
   Value<int?> deletedAtRemoteUsec,
 });
 
-class $$SmsMessagesTableTableTableManager extends RootTableManager<
-    _$AppDatabase,
-    $SmsMessagesTableTable,
-    SmsMessageData,
-    $$SmsMessagesTableTableFilterComposer,
-    $$SmsMessagesTableTableOrderingComposer,
-    $$SmsMessagesTableTableCreateCompanionBuilder,
-    $$SmsMessagesTableTableUpdateCompanionBuilder> {
-  $$SmsMessagesTableTableTableManager(
-      _$AppDatabase db, $SmsMessagesTableTable table)
-      : super(TableManagerState(
-          db: db,
-          table: table,
-          filteringComposer:
-              $$SmsMessagesTableTableFilterComposer(ComposerState(db, table)),
-          orderingComposer:
-              $$SmsMessagesTableTableOrderingComposer(ComposerState(db, table)),
-          updateCompanionCallback: ({
-            Value<int> id = const Value.absent(),
-            Value<String> idKey = const Value.absent(),
-            Value<String?> externalId = const Value.absent(),
-            Value<int> conversationId = const Value.absent(),
-            Value<String> fromPhoneNumber = const Value.absent(),
-            Value<String> toPhoneNumber = const Value.absent(),
-            Value<SmsSendingStatusEnum> sendingStatus = const Value.absent(),
-            Value<String> content = const Value.absent(),
-            Value<int> createdAtRemoteUsec = const Value.absent(),
-            Value<int> updatedAtRemoteUsec = const Value.absent(),
-            Value<int?> deletedAtRemoteUsec = const Value.absent(),
-          }) =>
-              SmsMessageDataCompanion(
-            id: id,
-            idKey: idKey,
-            externalId: externalId,
-            conversationId: conversationId,
-            fromPhoneNumber: fromPhoneNumber,
-            toPhoneNumber: toPhoneNumber,
-            sendingStatus: sendingStatus,
-            content: content,
-            createdAtRemoteUsec: createdAtRemoteUsec,
-            updatedAtRemoteUsec: updatedAtRemoteUsec,
-            deletedAtRemoteUsec: deletedAtRemoteUsec,
-          ),
-          createCompanionCallback: ({
-            Value<int> id = const Value.absent(),
-            required String idKey,
-            Value<String?> externalId = const Value.absent(),
-            required int conversationId,
-            required String fromPhoneNumber,
-            required String toPhoneNumber,
-            required SmsSendingStatusEnum sendingStatus,
-            required String content,
-            required int createdAtRemoteUsec,
-            required int updatedAtRemoteUsec,
-            Value<int?> deletedAtRemoteUsec = const Value.absent(),
-          }) =>
-              SmsMessageDataCompanion.insert(
-            id: id,
-            idKey: idKey,
-            externalId: externalId,
-            conversationId: conversationId,
-            fromPhoneNumber: fromPhoneNumber,
-            toPhoneNumber: toPhoneNumber,
-            sendingStatus: sendingStatus,
-            content: content,
-            createdAtRemoteUsec: createdAtRemoteUsec,
-            updatedAtRemoteUsec: updatedAtRemoteUsec,
-            deletedAtRemoteUsec: deletedAtRemoteUsec,
-          ),
-        ));
+final class $$SmsMessagesTableTableReferences extends BaseReferences<
+    _$AppDatabase, $SmsMessagesTableTable, SmsMessageData> {
+  $$SmsMessagesTableTableReferences(
+      super.$_db, super.$_table, super.$_typedResult);
+
+  static $SmsConversationsTableTable _conversationIdTable(_$AppDatabase db) =>
+      db.smsConversationsTable.createAlias($_aliasNameGenerator(
+          db.smsMessagesTable.conversationId, db.smsConversationsTable.id));
+
+  $$SmsConversationsTableTableProcessedTableManager? get conversationId {
+    if ($_item.conversationId == null) return null;
+    final manager = $$SmsConversationsTableTableTableManager(
+            $_db, $_db.smsConversationsTable)
+        .filter((f) => f.id($_item.conversationId!));
+    final item = $_typedResult.readTableOrNull(_conversationIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
 }
 
 class $$SmsMessagesTableTableFilterComposer
@@ -10749,6 +12285,133 @@ class $$SmsMessagesTableTableOrderingComposer
   }
 }
 
+class $$SmsMessagesTableTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $SmsMessagesTableTable,
+    SmsMessageData,
+    $$SmsMessagesTableTableFilterComposer,
+    $$SmsMessagesTableTableOrderingComposer,
+    $$SmsMessagesTableTableCreateCompanionBuilder,
+    $$SmsMessagesTableTableUpdateCompanionBuilder,
+    (SmsMessageData, $$SmsMessagesTableTableReferences),
+    SmsMessageData,
+    PrefetchHooks Function({bool conversationId})> {
+  $$SmsMessagesTableTableTableManager(
+      _$AppDatabase db, $SmsMessagesTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer:
+              $$SmsMessagesTableTableFilterComposer(ComposerState(db, table)),
+          orderingComposer:
+              $$SmsMessagesTableTableOrderingComposer(ComposerState(db, table)),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<String> idKey = const Value.absent(),
+            Value<String?> externalId = const Value.absent(),
+            Value<int> conversationId = const Value.absent(),
+            Value<String> fromPhoneNumber = const Value.absent(),
+            Value<String> toPhoneNumber = const Value.absent(),
+            Value<SmsSendingStatusEnum> sendingStatus = const Value.absent(),
+            Value<String> content = const Value.absent(),
+            Value<int> createdAtRemoteUsec = const Value.absent(),
+            Value<int> updatedAtRemoteUsec = const Value.absent(),
+            Value<int?> deletedAtRemoteUsec = const Value.absent(),
+          }) =>
+              SmsMessageDataCompanion(
+            id: id,
+            idKey: idKey,
+            externalId: externalId,
+            conversationId: conversationId,
+            fromPhoneNumber: fromPhoneNumber,
+            toPhoneNumber: toPhoneNumber,
+            sendingStatus: sendingStatus,
+            content: content,
+            createdAtRemoteUsec: createdAtRemoteUsec,
+            updatedAtRemoteUsec: updatedAtRemoteUsec,
+            deletedAtRemoteUsec: deletedAtRemoteUsec,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            required String idKey,
+            Value<String?> externalId = const Value.absent(),
+            required int conversationId,
+            required String fromPhoneNumber,
+            required String toPhoneNumber,
+            required SmsSendingStatusEnum sendingStatus,
+            required String content,
+            required int createdAtRemoteUsec,
+            required int updatedAtRemoteUsec,
+            Value<int?> deletedAtRemoteUsec = const Value.absent(),
+          }) =>
+              SmsMessageDataCompanion.insert(
+            id: id,
+            idKey: idKey,
+            externalId: externalId,
+            conversationId: conversationId,
+            fromPhoneNumber: fromPhoneNumber,
+            toPhoneNumber: toPhoneNumber,
+            sendingStatus: sendingStatus,
+            content: content,
+            createdAtRemoteUsec: createdAtRemoteUsec,
+            updatedAtRemoteUsec: updatedAtRemoteUsec,
+            deletedAtRemoteUsec: deletedAtRemoteUsec,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (
+                    e.readTable(table),
+                    $$SmsMessagesTableTableReferences(db, table, e)
+                  ))
+              .toList(),
+          prefetchHooksCallback: ({conversationId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins: <
+                  T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic>>(state) {
+                if (conversationId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.conversationId,
+                    referencedTable: $$SmsMessagesTableTableReferences
+                        ._conversationIdTable(db),
+                    referencedColumn: $$SmsMessagesTableTableReferences
+                        ._conversationIdTable(db)
+                        .id,
+                  ) as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ));
+}
+
+typedef $$SmsMessagesTableTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $SmsMessagesTableTable,
+    SmsMessageData,
+    $$SmsMessagesTableTableFilterComposer,
+    $$SmsMessagesTableTableOrderingComposer,
+    $$SmsMessagesTableTableCreateCompanionBuilder,
+    $$SmsMessagesTableTableUpdateCompanionBuilder,
+    (SmsMessageData, $$SmsMessagesTableTableReferences),
+    SmsMessageData,
+    PrefetchHooks Function({bool conversationId})>;
 typedef $$SmsMessageSyncCursorTableTableCreateCompanionBuilder
     = SmsMessageSyncCursorDataCompanion Function({
   required int conversationId,
@@ -10764,48 +12427,26 @@ typedef $$SmsMessageSyncCursorTableTableUpdateCompanionBuilder
   Value<int> rowid,
 });
 
-class $$SmsMessageSyncCursorTableTableTableManager extends RootTableManager<
-    _$AppDatabase,
-    $SmsMessageSyncCursorTableTable,
-    SmsMessageSyncCursorData,
-    $$SmsMessageSyncCursorTableTableFilterComposer,
-    $$SmsMessageSyncCursorTableTableOrderingComposer,
-    $$SmsMessageSyncCursorTableTableCreateCompanionBuilder,
-    $$SmsMessageSyncCursorTableTableUpdateCompanionBuilder> {
-  $$SmsMessageSyncCursorTableTableTableManager(
-      _$AppDatabase db, $SmsMessageSyncCursorTableTable table)
-      : super(TableManagerState(
-          db: db,
-          table: table,
-          filteringComposer: $$SmsMessageSyncCursorTableTableFilterComposer(
-              ComposerState(db, table)),
-          orderingComposer: $$SmsMessageSyncCursorTableTableOrderingComposer(
-              ComposerState(db, table)),
-          updateCompanionCallback: ({
-            Value<int> conversationId = const Value.absent(),
-            Value<SmsSyncCursorTypeEnum> cursorType = const Value.absent(),
-            Value<int> timestampUsec = const Value.absent(),
-            Value<int> rowid = const Value.absent(),
-          }) =>
-              SmsMessageSyncCursorDataCompanion(
-            conversationId: conversationId,
-            cursorType: cursorType,
-            timestampUsec: timestampUsec,
-            rowid: rowid,
-          ),
-          createCompanionCallback: ({
-            required int conversationId,
-            required SmsSyncCursorTypeEnum cursorType,
-            required int timestampUsec,
-            Value<int> rowid = const Value.absent(),
-          }) =>
-              SmsMessageSyncCursorDataCompanion.insert(
-            conversationId: conversationId,
-            cursorType: cursorType,
-            timestampUsec: timestampUsec,
-            rowid: rowid,
-          ),
-        ));
+final class $$SmsMessageSyncCursorTableTableReferences extends BaseReferences<
+    _$AppDatabase, $SmsMessageSyncCursorTableTable, SmsMessageSyncCursorData> {
+  $$SmsMessageSyncCursorTableTableReferences(
+      super.$_db, super.$_table, super.$_typedResult);
+
+  static $SmsConversationsTableTable _conversationIdTable(_$AppDatabase db) =>
+      db.smsConversationsTable.createAlias($_aliasNameGenerator(
+          db.smsMessageSyncCursorTable.conversationId,
+          db.smsConversationsTable.id));
+
+  $$SmsConversationsTableTableProcessedTableManager? get conversationId {
+    if ($_item.conversationId == null) return null;
+    final manager = $$SmsConversationsTableTableTableManager(
+            $_db, $_db.smsConversationsTable)
+        .filter((f) => f.id($_item.conversationId!));
+    final item = $_typedResult.readTableOrNull(_conversationIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
 }
 
 class $$SmsMessageSyncCursorTableTableFilterComposer
@@ -10871,6 +12512,106 @@ class $$SmsMessageSyncCursorTableTableOrderingComposer
   }
 }
 
+class $$SmsMessageSyncCursorTableTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $SmsMessageSyncCursorTableTable,
+    SmsMessageSyncCursorData,
+    $$SmsMessageSyncCursorTableTableFilterComposer,
+    $$SmsMessageSyncCursorTableTableOrderingComposer,
+    $$SmsMessageSyncCursorTableTableCreateCompanionBuilder,
+    $$SmsMessageSyncCursorTableTableUpdateCompanionBuilder,
+    (SmsMessageSyncCursorData, $$SmsMessageSyncCursorTableTableReferences),
+    SmsMessageSyncCursorData,
+    PrefetchHooks Function({bool conversationId})> {
+  $$SmsMessageSyncCursorTableTableTableManager(
+      _$AppDatabase db, $SmsMessageSyncCursorTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer: $$SmsMessageSyncCursorTableTableFilterComposer(
+              ComposerState(db, table)),
+          orderingComposer: $$SmsMessageSyncCursorTableTableOrderingComposer(
+              ComposerState(db, table)),
+          updateCompanionCallback: ({
+            Value<int> conversationId = const Value.absent(),
+            Value<SmsSyncCursorTypeEnum> cursorType = const Value.absent(),
+            Value<int> timestampUsec = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              SmsMessageSyncCursorDataCompanion(
+            conversationId: conversationId,
+            cursorType: cursorType,
+            timestampUsec: timestampUsec,
+            rowid: rowid,
+          ),
+          createCompanionCallback: ({
+            required int conversationId,
+            required SmsSyncCursorTypeEnum cursorType,
+            required int timestampUsec,
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              SmsMessageSyncCursorDataCompanion.insert(
+            conversationId: conversationId,
+            cursorType: cursorType,
+            timestampUsec: timestampUsec,
+            rowid: rowid,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (
+                    e.readTable(table),
+                    $$SmsMessageSyncCursorTableTableReferences(db, table, e)
+                  ))
+              .toList(),
+          prefetchHooksCallback: ({conversationId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins: <
+                  T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic>>(state) {
+                if (conversationId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.conversationId,
+                    referencedTable: $$SmsMessageSyncCursorTableTableReferences
+                        ._conversationIdTable(db),
+                    referencedColumn: $$SmsMessageSyncCursorTableTableReferences
+                        ._conversationIdTable(db)
+                        .id,
+                  ) as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ));
+}
+
+typedef $$SmsMessageSyncCursorTableTableProcessedTableManager
+    = ProcessedTableManager<
+        _$AppDatabase,
+        $SmsMessageSyncCursorTableTable,
+        SmsMessageSyncCursorData,
+        $$SmsMessageSyncCursorTableTableFilterComposer,
+        $$SmsMessageSyncCursorTableTableOrderingComposer,
+        $$SmsMessageSyncCursorTableTableCreateCompanionBuilder,
+        $$SmsMessageSyncCursorTableTableUpdateCompanionBuilder,
+        (SmsMessageSyncCursorData, $$SmsMessageSyncCursorTableTableReferences),
+        SmsMessageSyncCursorData,
+        PrefetchHooks Function({bool conversationId})>;
 typedef $$SmsMessageReadCursorTableTableCreateCompanionBuilder
     = SmsMessageReadCursorDataCompanion Function({
   required int conversationId,
@@ -10886,48 +12627,26 @@ typedef $$SmsMessageReadCursorTableTableUpdateCompanionBuilder
   Value<int> rowid,
 });
 
-class $$SmsMessageReadCursorTableTableTableManager extends RootTableManager<
-    _$AppDatabase,
-    $SmsMessageReadCursorTableTable,
-    SmsMessageReadCursorData,
-    $$SmsMessageReadCursorTableTableFilterComposer,
-    $$SmsMessageReadCursorTableTableOrderingComposer,
-    $$SmsMessageReadCursorTableTableCreateCompanionBuilder,
-    $$SmsMessageReadCursorTableTableUpdateCompanionBuilder> {
-  $$SmsMessageReadCursorTableTableTableManager(
-      _$AppDatabase db, $SmsMessageReadCursorTableTable table)
-      : super(TableManagerState(
-          db: db,
-          table: table,
-          filteringComposer: $$SmsMessageReadCursorTableTableFilterComposer(
-              ComposerState(db, table)),
-          orderingComposer: $$SmsMessageReadCursorTableTableOrderingComposer(
-              ComposerState(db, table)),
-          updateCompanionCallback: ({
-            Value<int> conversationId = const Value.absent(),
-            Value<String> userId = const Value.absent(),
-            Value<int> timestampUsec = const Value.absent(),
-            Value<int> rowid = const Value.absent(),
-          }) =>
-              SmsMessageReadCursorDataCompanion(
-            conversationId: conversationId,
-            userId: userId,
-            timestampUsec: timestampUsec,
-            rowid: rowid,
-          ),
-          createCompanionCallback: ({
-            required int conversationId,
-            required String userId,
-            required int timestampUsec,
-            Value<int> rowid = const Value.absent(),
-          }) =>
-              SmsMessageReadCursorDataCompanion.insert(
-            conversationId: conversationId,
-            userId: userId,
-            timestampUsec: timestampUsec,
-            rowid: rowid,
-          ),
-        ));
+final class $$SmsMessageReadCursorTableTableReferences extends BaseReferences<
+    _$AppDatabase, $SmsMessageReadCursorTableTable, SmsMessageReadCursorData> {
+  $$SmsMessageReadCursorTableTableReferences(
+      super.$_db, super.$_table, super.$_typedResult);
+
+  static $SmsConversationsTableTable _conversationIdTable(_$AppDatabase db) =>
+      db.smsConversationsTable.createAlias($_aliasNameGenerator(
+          db.smsMessageReadCursorTable.conversationId,
+          db.smsConversationsTable.id));
+
+  $$SmsConversationsTableTableProcessedTableManager? get conversationId {
+    if ($_item.conversationId == null) return null;
+    final manager = $$SmsConversationsTableTableTableManager(
+            $_db, $_db.smsConversationsTable)
+        .filter((f) => f.id($_item.conversationId!));
+    final item = $_typedResult.readTableOrNull(_conversationIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
 }
 
 class $$SmsMessageReadCursorTableTableFilterComposer
@@ -10990,6 +12709,106 @@ class $$SmsMessageReadCursorTableTableOrderingComposer
   }
 }
 
+class $$SmsMessageReadCursorTableTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $SmsMessageReadCursorTableTable,
+    SmsMessageReadCursorData,
+    $$SmsMessageReadCursorTableTableFilterComposer,
+    $$SmsMessageReadCursorTableTableOrderingComposer,
+    $$SmsMessageReadCursorTableTableCreateCompanionBuilder,
+    $$SmsMessageReadCursorTableTableUpdateCompanionBuilder,
+    (SmsMessageReadCursorData, $$SmsMessageReadCursorTableTableReferences),
+    SmsMessageReadCursorData,
+    PrefetchHooks Function({bool conversationId})> {
+  $$SmsMessageReadCursorTableTableTableManager(
+      _$AppDatabase db, $SmsMessageReadCursorTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer: $$SmsMessageReadCursorTableTableFilterComposer(
+              ComposerState(db, table)),
+          orderingComposer: $$SmsMessageReadCursorTableTableOrderingComposer(
+              ComposerState(db, table)),
+          updateCompanionCallback: ({
+            Value<int> conversationId = const Value.absent(),
+            Value<String> userId = const Value.absent(),
+            Value<int> timestampUsec = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              SmsMessageReadCursorDataCompanion(
+            conversationId: conversationId,
+            userId: userId,
+            timestampUsec: timestampUsec,
+            rowid: rowid,
+          ),
+          createCompanionCallback: ({
+            required int conversationId,
+            required String userId,
+            required int timestampUsec,
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              SmsMessageReadCursorDataCompanion.insert(
+            conversationId: conversationId,
+            userId: userId,
+            timestampUsec: timestampUsec,
+            rowid: rowid,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (
+                    e.readTable(table),
+                    $$SmsMessageReadCursorTableTableReferences(db, table, e)
+                  ))
+              .toList(),
+          prefetchHooksCallback: ({conversationId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins: <
+                  T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic>>(state) {
+                if (conversationId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.conversationId,
+                    referencedTable: $$SmsMessageReadCursorTableTableReferences
+                        ._conversationIdTable(db),
+                    referencedColumn: $$SmsMessageReadCursorTableTableReferences
+                        ._conversationIdTable(db)
+                        .id,
+                  ) as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ));
+}
+
+typedef $$SmsMessageReadCursorTableTableProcessedTableManager
+    = ProcessedTableManager<
+        _$AppDatabase,
+        $SmsMessageReadCursorTableTable,
+        SmsMessageReadCursorData,
+        $$SmsMessageReadCursorTableTableFilterComposer,
+        $$SmsMessageReadCursorTableTableOrderingComposer,
+        $$SmsMessageReadCursorTableTableCreateCompanionBuilder,
+        $$SmsMessageReadCursorTableTableUpdateCompanionBuilder,
+        (SmsMessageReadCursorData, $$SmsMessageReadCursorTableTableReferences),
+        SmsMessageReadCursorData,
+        PrefetchHooks Function({bool conversationId})>;
 typedef $$SmsOutboxMessagesTableTableCreateCompanionBuilder
     = SmsOutboxMessageDataCompanion Function({
   required String idKey,
@@ -11013,64 +12832,26 @@ typedef $$SmsOutboxMessagesTableTableUpdateCompanionBuilder
   Value<int> rowid,
 });
 
-class $$SmsOutboxMessagesTableTableTableManager extends RootTableManager<
-    _$AppDatabase,
-    $SmsOutboxMessagesTableTable,
-    SmsOutboxMessageData,
-    $$SmsOutboxMessagesTableTableFilterComposer,
-    $$SmsOutboxMessagesTableTableOrderingComposer,
-    $$SmsOutboxMessagesTableTableCreateCompanionBuilder,
-    $$SmsOutboxMessagesTableTableUpdateCompanionBuilder> {
-  $$SmsOutboxMessagesTableTableTableManager(
-      _$AppDatabase db, $SmsOutboxMessagesTableTable table)
-      : super(TableManagerState(
-          db: db,
-          table: table,
-          filteringComposer: $$SmsOutboxMessagesTableTableFilterComposer(
-              ComposerState(db, table)),
-          orderingComposer: $$SmsOutboxMessagesTableTableOrderingComposer(
-              ComposerState(db, table)),
-          updateCompanionCallback: ({
-            Value<String> idKey = const Value.absent(),
-            Value<int?> conversationId = const Value.absent(),
-            Value<String> fromPhoneNumber = const Value.absent(),
-            Value<String> toPhoneNumber = const Value.absent(),
-            Value<String?> recepientId = const Value.absent(),
-            Value<String> content = const Value.absent(),
-            Value<int> sendAttempts = const Value.absent(),
-            Value<int> rowid = const Value.absent(),
-          }) =>
-              SmsOutboxMessageDataCompanion(
-            idKey: idKey,
-            conversationId: conversationId,
-            fromPhoneNumber: fromPhoneNumber,
-            toPhoneNumber: toPhoneNumber,
-            recepientId: recepientId,
-            content: content,
-            sendAttempts: sendAttempts,
-            rowid: rowid,
-          ),
-          createCompanionCallback: ({
-            required String idKey,
-            Value<int?> conversationId = const Value.absent(),
-            required String fromPhoneNumber,
-            required String toPhoneNumber,
-            Value<String?> recepientId = const Value.absent(),
-            required String content,
-            Value<int> sendAttempts = const Value.absent(),
-            Value<int> rowid = const Value.absent(),
-          }) =>
-              SmsOutboxMessageDataCompanion.insert(
-            idKey: idKey,
-            conversationId: conversationId,
-            fromPhoneNumber: fromPhoneNumber,
-            toPhoneNumber: toPhoneNumber,
-            recepientId: recepientId,
-            content: content,
-            sendAttempts: sendAttempts,
-            rowid: rowid,
-          ),
-        ));
+final class $$SmsOutboxMessagesTableTableReferences extends BaseReferences<
+    _$AppDatabase, $SmsOutboxMessagesTableTable, SmsOutboxMessageData> {
+  $$SmsOutboxMessagesTableTableReferences(
+      super.$_db, super.$_table, super.$_typedResult);
+
+  static $SmsConversationsTableTable _conversationIdTable(_$AppDatabase db) =>
+      db.smsConversationsTable.createAlias($_aliasNameGenerator(
+          db.smsOutboxMessagesTable.conversationId,
+          db.smsConversationsTable.id));
+
+  $$SmsConversationsTableTableProcessedTableManager? get conversationId {
+    if ($_item.conversationId == null) return null;
+    final manager = $$SmsConversationsTableTableTableManager(
+            $_db, $_db.smsConversationsTable)
+        .filter((f) => f.id($_item.conversationId!));
+    final item = $_typedResult.readTableOrNull(_conversationIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
 }
 
 class $$SmsOutboxMessagesTableTableFilterComposer
@@ -11173,6 +12954,122 @@ class $$SmsOutboxMessagesTableTableOrderingComposer
   }
 }
 
+class $$SmsOutboxMessagesTableTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $SmsOutboxMessagesTableTable,
+    SmsOutboxMessageData,
+    $$SmsOutboxMessagesTableTableFilterComposer,
+    $$SmsOutboxMessagesTableTableOrderingComposer,
+    $$SmsOutboxMessagesTableTableCreateCompanionBuilder,
+    $$SmsOutboxMessagesTableTableUpdateCompanionBuilder,
+    (SmsOutboxMessageData, $$SmsOutboxMessagesTableTableReferences),
+    SmsOutboxMessageData,
+    PrefetchHooks Function({bool conversationId})> {
+  $$SmsOutboxMessagesTableTableTableManager(
+      _$AppDatabase db, $SmsOutboxMessagesTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer: $$SmsOutboxMessagesTableTableFilterComposer(
+              ComposerState(db, table)),
+          orderingComposer: $$SmsOutboxMessagesTableTableOrderingComposer(
+              ComposerState(db, table)),
+          updateCompanionCallback: ({
+            Value<String> idKey = const Value.absent(),
+            Value<int?> conversationId = const Value.absent(),
+            Value<String> fromPhoneNumber = const Value.absent(),
+            Value<String> toPhoneNumber = const Value.absent(),
+            Value<String?> recepientId = const Value.absent(),
+            Value<String> content = const Value.absent(),
+            Value<int> sendAttempts = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              SmsOutboxMessageDataCompanion(
+            idKey: idKey,
+            conversationId: conversationId,
+            fromPhoneNumber: fromPhoneNumber,
+            toPhoneNumber: toPhoneNumber,
+            recepientId: recepientId,
+            content: content,
+            sendAttempts: sendAttempts,
+            rowid: rowid,
+          ),
+          createCompanionCallback: ({
+            required String idKey,
+            Value<int?> conversationId = const Value.absent(),
+            required String fromPhoneNumber,
+            required String toPhoneNumber,
+            Value<String?> recepientId = const Value.absent(),
+            required String content,
+            Value<int> sendAttempts = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              SmsOutboxMessageDataCompanion.insert(
+            idKey: idKey,
+            conversationId: conversationId,
+            fromPhoneNumber: fromPhoneNumber,
+            toPhoneNumber: toPhoneNumber,
+            recepientId: recepientId,
+            content: content,
+            sendAttempts: sendAttempts,
+            rowid: rowid,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (
+                    e.readTable(table),
+                    $$SmsOutboxMessagesTableTableReferences(db, table, e)
+                  ))
+              .toList(),
+          prefetchHooksCallback: ({conversationId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins: <
+                  T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic>>(state) {
+                if (conversationId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.conversationId,
+                    referencedTable: $$SmsOutboxMessagesTableTableReferences
+                        ._conversationIdTable(db),
+                    referencedColumn: $$SmsOutboxMessagesTableTableReferences
+                        ._conversationIdTable(db)
+                        .id,
+                  ) as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ));
+}
+
+typedef $$SmsOutboxMessagesTableTableProcessedTableManager
+    = ProcessedTableManager<
+        _$AppDatabase,
+        $SmsOutboxMessagesTableTable,
+        SmsOutboxMessageData,
+        $$SmsOutboxMessagesTableTableFilterComposer,
+        $$SmsOutboxMessagesTableTableOrderingComposer,
+        $$SmsOutboxMessagesTableTableCreateCompanionBuilder,
+        $$SmsOutboxMessagesTableTableUpdateCompanionBuilder,
+        (SmsOutboxMessageData, $$SmsOutboxMessagesTableTableReferences),
+        SmsOutboxMessageData,
+        PrefetchHooks Function({bool conversationId})>;
 typedef $$SmsOutboxMessageDeleteTableTableCreateCompanionBuilder
     = SmsOutboxMessageDeleteDataCompanion Function({
   Value<int> id,
@@ -11188,48 +13085,28 @@ typedef $$SmsOutboxMessageDeleteTableTableUpdateCompanionBuilder
   Value<int> sendAttempts,
 });
 
-class $$SmsOutboxMessageDeleteTableTableTableManager extends RootTableManager<
+final class $$SmsOutboxMessageDeleteTableTableReferences extends BaseReferences<
     _$AppDatabase,
     $SmsOutboxMessageDeleteTableTable,
-    SmsOutboxMessageDeleteData,
-    $$SmsOutboxMessageDeleteTableTableFilterComposer,
-    $$SmsOutboxMessageDeleteTableTableOrderingComposer,
-    $$SmsOutboxMessageDeleteTableTableCreateCompanionBuilder,
-    $$SmsOutboxMessageDeleteTableTableUpdateCompanionBuilder> {
-  $$SmsOutboxMessageDeleteTableTableTableManager(
-      _$AppDatabase db, $SmsOutboxMessageDeleteTableTable table)
-      : super(TableManagerState(
-          db: db,
-          table: table,
-          filteringComposer: $$SmsOutboxMessageDeleteTableTableFilterComposer(
-              ComposerState(db, table)),
-          orderingComposer: $$SmsOutboxMessageDeleteTableTableOrderingComposer(
-              ComposerState(db, table)),
-          updateCompanionCallback: ({
-            Value<int> id = const Value.absent(),
-            Value<String> idKey = const Value.absent(),
-            Value<int> conversationId = const Value.absent(),
-            Value<int> sendAttempts = const Value.absent(),
-          }) =>
-              SmsOutboxMessageDeleteDataCompanion(
-            id: id,
-            idKey: idKey,
-            conversationId: conversationId,
-            sendAttempts: sendAttempts,
-          ),
-          createCompanionCallback: ({
-            Value<int> id = const Value.absent(),
-            required String idKey,
-            required int conversationId,
-            Value<int> sendAttempts = const Value.absent(),
-          }) =>
-              SmsOutboxMessageDeleteDataCompanion.insert(
-            id: id,
-            idKey: idKey,
-            conversationId: conversationId,
-            sendAttempts: sendAttempts,
-          ),
-        ));
+    SmsOutboxMessageDeleteData> {
+  $$SmsOutboxMessageDeleteTableTableReferences(
+      super.$_db, super.$_table, super.$_typedResult);
+
+  static $SmsConversationsTableTable _conversationIdTable(_$AppDatabase db) =>
+      db.smsConversationsTable.createAlias($_aliasNameGenerator(
+          db.smsOutboxMessageDeleteTable.conversationId,
+          db.smsConversationsTable.id));
+
+  $$SmsConversationsTableTableProcessedTableManager? get conversationId {
+    if ($_item.conversationId == null) return null;
+    final manager = $$SmsConversationsTableTableTableManager(
+            $_db, $_db.smsConversationsTable)
+        .filter((f) => f.id($_item.conversationId!));
+    final item = $_typedResult.readTableOrNull(_conversationIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
 }
 
 class $$SmsOutboxMessageDeleteTableTableFilterComposer
@@ -11302,6 +13179,111 @@ class $$SmsOutboxMessageDeleteTableTableOrderingComposer
   }
 }
 
+class $$SmsOutboxMessageDeleteTableTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $SmsOutboxMessageDeleteTableTable,
+    SmsOutboxMessageDeleteData,
+    $$SmsOutboxMessageDeleteTableTableFilterComposer,
+    $$SmsOutboxMessageDeleteTableTableOrderingComposer,
+    $$SmsOutboxMessageDeleteTableTableCreateCompanionBuilder,
+    $$SmsOutboxMessageDeleteTableTableUpdateCompanionBuilder,
+    (SmsOutboxMessageDeleteData, $$SmsOutboxMessageDeleteTableTableReferences),
+    SmsOutboxMessageDeleteData,
+    PrefetchHooks Function({bool conversationId})> {
+  $$SmsOutboxMessageDeleteTableTableTableManager(
+      _$AppDatabase db, $SmsOutboxMessageDeleteTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer: $$SmsOutboxMessageDeleteTableTableFilterComposer(
+              ComposerState(db, table)),
+          orderingComposer: $$SmsOutboxMessageDeleteTableTableOrderingComposer(
+              ComposerState(db, table)),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<String> idKey = const Value.absent(),
+            Value<int> conversationId = const Value.absent(),
+            Value<int> sendAttempts = const Value.absent(),
+          }) =>
+              SmsOutboxMessageDeleteDataCompanion(
+            id: id,
+            idKey: idKey,
+            conversationId: conversationId,
+            sendAttempts: sendAttempts,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            required String idKey,
+            required int conversationId,
+            Value<int> sendAttempts = const Value.absent(),
+          }) =>
+              SmsOutboxMessageDeleteDataCompanion.insert(
+            id: id,
+            idKey: idKey,
+            conversationId: conversationId,
+            sendAttempts: sendAttempts,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (
+                    e.readTable(table),
+                    $$SmsOutboxMessageDeleteTableTableReferences(db, table, e)
+                  ))
+              .toList(),
+          prefetchHooksCallback: ({conversationId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins: <
+                  T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic>>(state) {
+                if (conversationId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.conversationId,
+                    referencedTable:
+                        $$SmsOutboxMessageDeleteTableTableReferences
+                            ._conversationIdTable(db),
+                    referencedColumn:
+                        $$SmsOutboxMessageDeleteTableTableReferences
+                            ._conversationIdTable(db)
+                            .id,
+                  ) as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ));
+}
+
+typedef $$SmsOutboxMessageDeleteTableTableProcessedTableManager
+    = ProcessedTableManager<
+        _$AppDatabase,
+        $SmsOutboxMessageDeleteTableTable,
+        SmsOutboxMessageDeleteData,
+        $$SmsOutboxMessageDeleteTableTableFilterComposer,
+        $$SmsOutboxMessageDeleteTableTableOrderingComposer,
+        $$SmsOutboxMessageDeleteTableTableCreateCompanionBuilder,
+        $$SmsOutboxMessageDeleteTableTableUpdateCompanionBuilder,
+        (
+          SmsOutboxMessageDeleteData,
+          $$SmsOutboxMessageDeleteTableTableReferences
+        ),
+        SmsOutboxMessageDeleteData,
+        PrefetchHooks Function({bool conversationId})>;
 typedef $$SmsOutboxReadCursorsTableTableCreateCompanionBuilder
     = SmsOutboxReadCursorDataCompanion Function({
   Value<int> conversationId,
@@ -11315,44 +13297,26 @@ typedef $$SmsOutboxReadCursorsTableTableUpdateCompanionBuilder
   Value<int> sendAttempts,
 });
 
-class $$SmsOutboxReadCursorsTableTableTableManager extends RootTableManager<
-    _$AppDatabase,
-    $SmsOutboxReadCursorsTableTable,
-    SmsOutboxReadCursorData,
-    $$SmsOutboxReadCursorsTableTableFilterComposer,
-    $$SmsOutboxReadCursorsTableTableOrderingComposer,
-    $$SmsOutboxReadCursorsTableTableCreateCompanionBuilder,
-    $$SmsOutboxReadCursorsTableTableUpdateCompanionBuilder> {
-  $$SmsOutboxReadCursorsTableTableTableManager(
-      _$AppDatabase db, $SmsOutboxReadCursorsTableTable table)
-      : super(TableManagerState(
-          db: db,
-          table: table,
-          filteringComposer: $$SmsOutboxReadCursorsTableTableFilterComposer(
-              ComposerState(db, table)),
-          orderingComposer: $$SmsOutboxReadCursorsTableTableOrderingComposer(
-              ComposerState(db, table)),
-          updateCompanionCallback: ({
-            Value<int> conversationId = const Value.absent(),
-            Value<int> timestampUsec = const Value.absent(),
-            Value<int> sendAttempts = const Value.absent(),
-          }) =>
-              SmsOutboxReadCursorDataCompanion(
-            conversationId: conversationId,
-            timestampUsec: timestampUsec,
-            sendAttempts: sendAttempts,
-          ),
-          createCompanionCallback: ({
-            Value<int> conversationId = const Value.absent(),
-            required int timestampUsec,
-            Value<int> sendAttempts = const Value.absent(),
-          }) =>
-              SmsOutboxReadCursorDataCompanion.insert(
-            conversationId: conversationId,
-            timestampUsec: timestampUsec,
-            sendAttempts: sendAttempts,
-          ),
-        ));
+final class $$SmsOutboxReadCursorsTableTableReferences extends BaseReferences<
+    _$AppDatabase, $SmsOutboxReadCursorsTableTable, SmsOutboxReadCursorData> {
+  $$SmsOutboxReadCursorsTableTableReferences(
+      super.$_db, super.$_table, super.$_typedResult);
+
+  static $SmsConversationsTableTable _conversationIdTable(_$AppDatabase db) =>
+      db.smsConversationsTable.createAlias($_aliasNameGenerator(
+          db.smsOutboxReadCursorsTable.conversationId,
+          db.smsConversationsTable.id));
+
+  $$SmsConversationsTableTableProcessedTableManager? get conversationId {
+    if ($_item.conversationId == null) return null;
+    final manager = $$SmsConversationsTableTableTableManager(
+            $_db, $_db.smsConversationsTable)
+        .filter((f) => f.id($_item.conversationId!));
+    final item = $_typedResult.readTableOrNull(_conversationIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
 }
 
 class $$SmsOutboxReadCursorsTableTableFilterComposer
@@ -11415,6 +13379,102 @@ class $$SmsOutboxReadCursorsTableTableOrderingComposer
   }
 }
 
+class $$SmsOutboxReadCursorsTableTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $SmsOutboxReadCursorsTableTable,
+    SmsOutboxReadCursorData,
+    $$SmsOutboxReadCursorsTableTableFilterComposer,
+    $$SmsOutboxReadCursorsTableTableOrderingComposer,
+    $$SmsOutboxReadCursorsTableTableCreateCompanionBuilder,
+    $$SmsOutboxReadCursorsTableTableUpdateCompanionBuilder,
+    (SmsOutboxReadCursorData, $$SmsOutboxReadCursorsTableTableReferences),
+    SmsOutboxReadCursorData,
+    PrefetchHooks Function({bool conversationId})> {
+  $$SmsOutboxReadCursorsTableTableTableManager(
+      _$AppDatabase db, $SmsOutboxReadCursorsTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer: $$SmsOutboxReadCursorsTableTableFilterComposer(
+              ComposerState(db, table)),
+          orderingComposer: $$SmsOutboxReadCursorsTableTableOrderingComposer(
+              ComposerState(db, table)),
+          updateCompanionCallback: ({
+            Value<int> conversationId = const Value.absent(),
+            Value<int> timestampUsec = const Value.absent(),
+            Value<int> sendAttempts = const Value.absent(),
+          }) =>
+              SmsOutboxReadCursorDataCompanion(
+            conversationId: conversationId,
+            timestampUsec: timestampUsec,
+            sendAttempts: sendAttempts,
+          ),
+          createCompanionCallback: ({
+            Value<int> conversationId = const Value.absent(),
+            required int timestampUsec,
+            Value<int> sendAttempts = const Value.absent(),
+          }) =>
+              SmsOutboxReadCursorDataCompanion.insert(
+            conversationId: conversationId,
+            timestampUsec: timestampUsec,
+            sendAttempts: sendAttempts,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (
+                    e.readTable(table),
+                    $$SmsOutboxReadCursorsTableTableReferences(db, table, e)
+                  ))
+              .toList(),
+          prefetchHooksCallback: ({conversationId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins: <
+                  T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic>>(state) {
+                if (conversationId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.conversationId,
+                    referencedTable: $$SmsOutboxReadCursorsTableTableReferences
+                        ._conversationIdTable(db),
+                    referencedColumn: $$SmsOutboxReadCursorsTableTableReferences
+                        ._conversationIdTable(db)
+                        .id,
+                  ) as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ));
+}
+
+typedef $$SmsOutboxReadCursorsTableTableProcessedTableManager
+    = ProcessedTableManager<
+        _$AppDatabase,
+        $SmsOutboxReadCursorsTableTable,
+        SmsOutboxReadCursorData,
+        $$SmsOutboxReadCursorsTableTableFilterComposer,
+        $$SmsOutboxReadCursorsTableTableOrderingComposer,
+        $$SmsOutboxReadCursorsTableTableCreateCompanionBuilder,
+        $$SmsOutboxReadCursorsTableTableUpdateCompanionBuilder,
+        (SmsOutboxReadCursorData, $$SmsOutboxReadCursorsTableTableReferences),
+        SmsOutboxReadCursorData,
+        PrefetchHooks Function({bool conversationId})>;
 typedef $$UserSmsNumbersTableTableCreateCompanionBuilder
     = UserSmsNumberDataCompanion Function({
   required String phoneNumber,
@@ -11426,6 +13486,24 @@ typedef $$UserSmsNumbersTableTableUpdateCompanionBuilder
   Value<int> rowid,
 });
 
+class $$UserSmsNumbersTableTableFilterComposer
+    extends FilterComposer<_$AppDatabase, $UserSmsNumbersTableTable> {
+  $$UserSmsNumbersTableTableFilterComposer(super.$state);
+  ColumnFilters<String> get phoneNumber => $state.composableBuilder(
+      column: $state.table.phoneNumber,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+}
+
+class $$UserSmsNumbersTableTableOrderingComposer
+    extends OrderingComposer<_$AppDatabase, $UserSmsNumbersTableTable> {
+  $$UserSmsNumbersTableTableOrderingComposer(super.$state);
+  ColumnOrderings<String> get phoneNumber => $state.composableBuilder(
+      column: $state.table.phoneNumber,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+}
+
 class $$UserSmsNumbersTableTableTableManager extends RootTableManager<
     _$AppDatabase,
     $UserSmsNumbersTableTable,
@@ -11433,7 +13511,14 @@ class $$UserSmsNumbersTableTableTableManager extends RootTableManager<
     $$UserSmsNumbersTableTableFilterComposer,
     $$UserSmsNumbersTableTableOrderingComposer,
     $$UserSmsNumbersTableTableCreateCompanionBuilder,
-    $$UserSmsNumbersTableTableUpdateCompanionBuilder> {
+    $$UserSmsNumbersTableTableUpdateCompanionBuilder,
+    (
+      UserSmsNumberData,
+      BaseReferences<_$AppDatabase, $UserSmsNumbersTableTable,
+          UserSmsNumberData>
+    ),
+    UserSmsNumberData,
+    PrefetchHooks Function()> {
   $$UserSmsNumbersTableTableTableManager(
       _$AppDatabase db, $UserSmsNumbersTableTable table)
       : super(TableManagerState(
@@ -11459,27 +13544,28 @@ class $$UserSmsNumbersTableTableTableManager extends RootTableManager<
             phoneNumber: phoneNumber,
             rowid: rowid,
           ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
         ));
 }
 
-class $$UserSmsNumbersTableTableFilterComposer
-    extends FilterComposer<_$AppDatabase, $UserSmsNumbersTableTable> {
-  $$UserSmsNumbersTableTableFilterComposer(super.$state);
-  ColumnFilters<String> get phoneNumber => $state.composableBuilder(
-      column: $state.table.phoneNumber,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-}
-
-class $$UserSmsNumbersTableTableOrderingComposer
-    extends OrderingComposer<_$AppDatabase, $UserSmsNumbersTableTable> {
-  $$UserSmsNumbersTableTableOrderingComposer(super.$state);
-  ColumnOrderings<String> get phoneNumber => $state.composableBuilder(
-      column: $state.table.phoneNumber,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-}
-
+typedef $$UserSmsNumbersTableTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $UserSmsNumbersTableTable,
+    UserSmsNumberData,
+    $$UserSmsNumbersTableTableFilterComposer,
+    $$UserSmsNumbersTableTableOrderingComposer,
+    $$UserSmsNumbersTableTableCreateCompanionBuilder,
+    $$UserSmsNumbersTableTableUpdateCompanionBuilder,
+    (
+      UserSmsNumberData,
+      BaseReferences<_$AppDatabase, $UserSmsNumbersTableTable,
+          UserSmsNumberData>
+    ),
+    UserSmsNumberData,
+    PrefetchHooks Function()>;
 typedef $$ActiveMessageNotificationsTableTableCreateCompanionBuilder
     = ActiveMessageNotificationDataCompanion Function({
   required String notificationId,
@@ -11500,65 +13586,6 @@ typedef $$ActiveMessageNotificationsTableTableUpdateCompanionBuilder
   Value<DateTime> time,
   Value<int> rowid,
 });
-
-class $$ActiveMessageNotificationsTableTableTableManager
-    extends RootTableManager<
-        _$AppDatabase,
-        $ActiveMessageNotificationsTableTable,
-        ActiveMessageNotificationData,
-        $$ActiveMessageNotificationsTableTableFilterComposer,
-        $$ActiveMessageNotificationsTableTableOrderingComposer,
-        $$ActiveMessageNotificationsTableTableCreateCompanionBuilder,
-        $$ActiveMessageNotificationsTableTableUpdateCompanionBuilder> {
-  $$ActiveMessageNotificationsTableTableTableManager(
-      _$AppDatabase db, $ActiveMessageNotificationsTableTable table)
-      : super(TableManagerState(
-          db: db,
-          table: table,
-          filteringComposer:
-              $$ActiveMessageNotificationsTableTableFilterComposer(
-                  ComposerState(db, table)),
-          orderingComposer:
-              $$ActiveMessageNotificationsTableTableOrderingComposer(
-                  ComposerState(db, table)),
-          updateCompanionCallback: ({
-            Value<String> notificationId = const Value.absent(),
-            Value<int> messageId = const Value.absent(),
-            Value<int> conversationId = const Value.absent(),
-            Value<String> title = const Value.absent(),
-            Value<String> body = const Value.absent(),
-            Value<DateTime> time = const Value.absent(),
-            Value<int> rowid = const Value.absent(),
-          }) =>
-              ActiveMessageNotificationDataCompanion(
-            notificationId: notificationId,
-            messageId: messageId,
-            conversationId: conversationId,
-            title: title,
-            body: body,
-            time: time,
-            rowid: rowid,
-          ),
-          createCompanionCallback: ({
-            required String notificationId,
-            required int messageId,
-            required int conversationId,
-            required String title,
-            required String body,
-            required DateTime time,
-            Value<int> rowid = const Value.absent(),
-          }) =>
-              ActiveMessageNotificationDataCompanion.insert(
-            notificationId: notificationId,
-            messageId: messageId,
-            conversationId: conversationId,
-            title: title,
-            body: body,
-            time: time,
-            rowid: rowid,
-          ),
-        ));
-}
 
 class $$ActiveMessageNotificationsTableTableFilterComposer
     extends FilterComposer<_$AppDatabase,
@@ -11629,6 +13656,93 @@ class $$ActiveMessageNotificationsTableTableOrderingComposer
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
 }
+
+class $$ActiveMessageNotificationsTableTableTableManager
+    extends RootTableManager<
+        _$AppDatabase,
+        $ActiveMessageNotificationsTableTable,
+        ActiveMessageNotificationData,
+        $$ActiveMessageNotificationsTableTableFilterComposer,
+        $$ActiveMessageNotificationsTableTableOrderingComposer,
+        $$ActiveMessageNotificationsTableTableCreateCompanionBuilder,
+        $$ActiveMessageNotificationsTableTableUpdateCompanionBuilder,
+        (
+          ActiveMessageNotificationData,
+          BaseReferences<_$AppDatabase, $ActiveMessageNotificationsTableTable,
+              ActiveMessageNotificationData>
+        ),
+        ActiveMessageNotificationData,
+        PrefetchHooks Function()> {
+  $$ActiveMessageNotificationsTableTableTableManager(
+      _$AppDatabase db, $ActiveMessageNotificationsTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer:
+              $$ActiveMessageNotificationsTableTableFilterComposer(
+                  ComposerState(db, table)),
+          orderingComposer:
+              $$ActiveMessageNotificationsTableTableOrderingComposer(
+                  ComposerState(db, table)),
+          updateCompanionCallback: ({
+            Value<String> notificationId = const Value.absent(),
+            Value<int> messageId = const Value.absent(),
+            Value<int> conversationId = const Value.absent(),
+            Value<String> title = const Value.absent(),
+            Value<String> body = const Value.absent(),
+            Value<DateTime> time = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              ActiveMessageNotificationDataCompanion(
+            notificationId: notificationId,
+            messageId: messageId,
+            conversationId: conversationId,
+            title: title,
+            body: body,
+            time: time,
+            rowid: rowid,
+          ),
+          createCompanionCallback: ({
+            required String notificationId,
+            required int messageId,
+            required int conversationId,
+            required String title,
+            required String body,
+            required DateTime time,
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              ActiveMessageNotificationDataCompanion.insert(
+            notificationId: notificationId,
+            messageId: messageId,
+            conversationId: conversationId,
+            title: title,
+            body: body,
+            time: time,
+            rowid: rowid,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$ActiveMessageNotificationsTableTableProcessedTableManager
+    = ProcessedTableManager<
+        _$AppDatabase,
+        $ActiveMessageNotificationsTableTable,
+        ActiveMessageNotificationData,
+        $$ActiveMessageNotificationsTableTableFilterComposer,
+        $$ActiveMessageNotificationsTableTableOrderingComposer,
+        $$ActiveMessageNotificationsTableTableCreateCompanionBuilder,
+        $$ActiveMessageNotificationsTableTableUpdateCompanionBuilder,
+        (
+          ActiveMessageNotificationData,
+          BaseReferences<_$AppDatabase, $ActiveMessageNotificationsTableTable,
+              ActiveMessageNotificationData>
+        ),
+        ActiveMessageNotificationData,
+        PrefetchHooks Function()>;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
