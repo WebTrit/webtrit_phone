@@ -42,9 +42,7 @@ class _MessagingShellState extends State<MessagingShell> {
       onOpenChat,
       onOpenConversation,
       onOpenSmsConversation,
-    );
-
-    notificationsService.init();
+    )..init();
   }
 
   @override
@@ -66,7 +64,7 @@ class _MessagingShellState extends State<MessagingShell> {
   }
 
   onOpenChatList() {
-    context.router.navigate(const MainScreenPageRoute(children: [MessagingRouterPageRoute()]));
+    context.router.navigate(const MainScreenPageRoute(children: [ConversationsScreenPageRoute()]));
   }
 
   @override

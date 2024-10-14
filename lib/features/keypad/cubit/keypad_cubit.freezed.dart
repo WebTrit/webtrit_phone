@@ -18,7 +18,9 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$KeypadState {
   Contact? get contact => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of KeypadState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $KeypadStateCopyWith<KeypadState> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -42,6 +44,8 @@ class _$KeypadStateCopyWithImpl<$Res, $Val extends KeypadState>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of KeypadState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -75,6 +79,8 @@ class __$$KeypadStateImplCopyWithImpl<$Res>
       _$KeypadStateImpl _value, $Res Function(_$KeypadStateImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of KeypadState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -113,7 +119,9 @@ class _$KeypadStateImpl implements _KeypadState {
   @override
   int get hashCode => Object.hash(runtimeType, contact);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of KeypadState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$KeypadStateImplCopyWith<_$KeypadStateImpl> get copyWith =>
@@ -125,8 +133,11 @@ abstract class _KeypadState implements KeypadState {
 
   @override
   Contact? get contact;
+
+  /// Create a copy of KeypadState
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$KeypadStateImplCopyWith<_$KeypadStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

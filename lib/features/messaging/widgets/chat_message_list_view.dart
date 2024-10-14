@@ -148,7 +148,7 @@ class _ChatMessageListViewState extends State<ChatMessageListView> {
     setState(() => editingMessage = null);
     setState(() => replyingMessage = null);
     final cubitRef = chatsForwardingCubit;
-    context.router.navigate(const MainScreenPageRoute(children: [MessagingRouterPageRoute()]));
+    context.router.navigate(const MainScreenPageRoute(children: [ConversationsScreenPageRoute()]));
     await Future.delayed(const Duration(milliseconds: 300));
     cubitRef.setForForward(message);
   }

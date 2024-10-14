@@ -222,14 +222,8 @@ class AppRouter extends _$AppRouter {
                       path: MainFlavor.embedded3.name,
                     ),
                     AutoRoute(
-                      page: MessagingRouterPageRoute.page,
+                      page: ConversationsScreenPageRoute.page,
                       path: MainFlavor.messaging.name,
-                      children: [
-                        AutoRoute(
-                          page: ConversationsScreenPageRoute.page,
-                          path: '',
-                        ),
-                      ],
                     ),
                   ],
                 ),

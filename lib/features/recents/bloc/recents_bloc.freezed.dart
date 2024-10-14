@@ -94,7 +94,9 @@ mixin _$RecentsState {
   List<Recent>? get recents => throw _privateConstructorUsedError;
   RecentsVisibilityFilter get filter => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of RecentsState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $RecentsStateCopyWith<RecentsState> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -118,6 +120,8 @@ class _$RecentsStateCopyWithImpl<$Res, $Val extends RecentsState>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of RecentsState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -156,6 +160,8 @@ class __$$RecentsStateImplCopyWithImpl<$Res>
       _$RecentsStateImpl _value, $Res Function(_$RecentsStateImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of RecentsState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -213,7 +219,9 @@ class _$RecentsStateImpl extends _RecentsState {
   int get hashCode => Object.hash(
       runtimeType, const DeepCollectionEquality().hash(_recents), filter);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of RecentsState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$RecentsStateImplCopyWith<_$RecentsStateImpl> get copyWith =>
@@ -230,8 +238,11 @@ abstract class _RecentsState extends RecentsState {
   List<Recent>? get recents;
   @override
   RecentsVisibilityFilter get filter;
+
+  /// Create a copy of RecentsState
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$RecentsStateImplCopyWith<_$RecentsStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

@@ -110,7 +110,7 @@ class MainScreenPage extends StatelessWidget {
         case MainFlavor.keypad:
           return const KeypadScreenPageRoute();
         case MainFlavor.messaging:
-          return const MessagingRouterPageRoute();
+          return const ConversationsScreenPageRoute();
         default:
           final embedded = EmbeddedScreenPage.getPageRoute(tab.flavor, tab.data!);
           if (embedded != null) {

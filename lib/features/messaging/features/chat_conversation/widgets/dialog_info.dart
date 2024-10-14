@@ -37,7 +37,7 @@ class _DialogInfoState extends State<DialogInfo> {
 
     if (!mounted) return;
     if (result != true) return;
-    context.router.navigate(const MainScreenPageRoute(children: [MessagingRouterPageRoute()]));
+    context.router.navigate(const MainScreenPageRoute(children: [ConversationsScreenPageRoute()]));
   }
 
   @override

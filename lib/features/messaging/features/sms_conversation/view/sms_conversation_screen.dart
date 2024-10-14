@@ -37,7 +37,7 @@ class _SmsConversationScreenState extends State<SmsConversationScreen> {
 
     if (!mounted) return;
     if (result != true) return;
-    context.router.navigate(const MainScreenPageRoute(children: [MessagingRouterPageRoute()]));
+    context.router.navigate(const MainScreenPageRoute(children: [ConversationsScreenPageRoute()]));
   }
 
   @override
@@ -45,7 +45,7 @@ class _SmsConversationScreenState extends State<SmsConversationScreen> {
     return BlocConsumer<SmsConversationCubit, SmsConversationState>(
       listener: (context, state) {
         if (state is CVSLeft) {
-          context.router.navigate(const MainScreenPageRoute(children: [MessagingRouterPageRoute()]));
+          context.router.navigate(const MainScreenPageRoute(children: [ConversationsScreenPageRoute()]));
         }
       },
       builder: (context, state) {

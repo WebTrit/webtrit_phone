@@ -253,12 +253,6 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const MainShell(),
       );
     },
-    MessagingRouterPageRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const MessagingRouterPage(),
-      );
-    },
     NetworkScreenPageRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -1044,20 +1038,6 @@ class MainShellRoute extends PageRouteInfo<void> {
         );
 
   static const String name = 'MainShellRoute';
-
-  static const PageInfo<void> page = PageInfo<void>(name);
-}
-
-/// generated route for
-/// [MessagingRouterPage]
-class MessagingRouterPageRoute extends PageRouteInfo<void> {
-  const MessagingRouterPageRoute({List<PageRouteInfo>? children})
-      : super(
-          MessagingRouterPageRoute.name,
-          initialChildren: children,
-        );
-
-  static const String name = 'MessagingRouterPageRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }
