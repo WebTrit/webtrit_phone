@@ -55,18 +55,19 @@ class _DialogInfoState extends State<DialogInfo> {
                 appBar: AppBar(
                   title: Text(context.l10n.messaging_DialogInfo_title),
                   actions: [
-                    PopupMenuButton(
-                      itemBuilder: (_) => [
-                        PopupMenuItem(
-                          onTap: () => onDeleteDialog(),
-                          child: ListTile(
-                            title: Text(context.l10n.messaging_DialogInfo_deleteBtn),
-                            leading: const Icon(Icons.output_sharp),
-                            dense: true,
+                    if (state.chat != null)
+                      PopupMenuButton(
+                        itemBuilder: (_) => [
+                          PopupMenuItem(
+                            onTap: () => onDeleteDialog(),
+                            child: ListTile(
+                              title: Text(context.l10n.messaging_DialogInfo_deleteBtn),
+                              leading: const Icon(Icons.output_sharp),
+                              dense: true,
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
+                        ],
+                      ),
                   ],
                 ),
                 body: ContactInfoBuilder(
