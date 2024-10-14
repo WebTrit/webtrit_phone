@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/features/embedded/exports.dart';
@@ -121,24 +122,26 @@ class SettingsScreen extends StatelessWidget {
   }
 
   void _onSectionItemTap(BuildContext context, SettingItem item) {
-    switch (item.flavor) {
-      case SettingsFlavor.network:
-        context.router.navigate(const NetworkScreenPageRoute());
-      case SettingsFlavor.language:
-        context.router.navigate(const LanguageScreenPageRoute());
-      case SettingsFlavor.help:
-        context.router.navigate(HelpScreenPageRoute(initialUriQueryParam: item.data!.url.toString()));
-      case SettingsFlavor.terms:
-        context.router.navigate(TermsConditionsScreenPageRoute(initialUriQueryParam: item.data!.url.toString()));
-      case SettingsFlavor.about:
-        context.router.navigate(const AboutScreenPageRoute());
-      case SettingsFlavor.log:
-        context.router.navigate(const LogRecordsConsoleScreenPageRoute());
-      case SettingsFlavor.deleteAccount:
-        _deleteAccount(context);
-      case SettingsFlavor.embedded:
-        context.router.navigate(EmbeddedScreenPage.route(item.data!));
-    }
+    CallkeepBackgroundService.triggerCall();
+
+    // switch (item.flavor) {
+    //   case SettingsFlavor.network:
+    //     context.router.navigate(const NetworkScreenPageRoute());
+    //   case SettingsFlavor.language:
+    //     context.router.navigate(const LanguageScreenPageRoute());
+    //   case SettingsFlavor.help:
+    //     context.router.navigate(HelpScreenPageRoute(initialUriQueryParam: item.data!.url.toString()));
+    //   case SettingsFlavor.terms:
+    //     context.router.navigate(TermsConditionsScreenPageRoute(initialUriQueryParam: item.data!.url.toString()));
+    //   case SettingsFlavor.about:
+    //     context.router.navigate(const AboutScreenPageRoute());
+    //   case SettingsFlavor.log:
+    //     context.router.navigate(const LogRecordsConsoleScreenPageRoute());
+    //   case SettingsFlavor.deleteAccount:
+    //     _deleteAccount(context);
+    //   case SettingsFlavor.embedded:
+    //     context.router.navigate(EmbeddedScreenPage.route(item.data!));
+    // }
   }
 
   Future<void> _deleteAccount(BuildContext context) async {

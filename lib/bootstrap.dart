@@ -24,14 +24,18 @@ import 'background_call_handler.dart';
 import 'environment_config.dart';
 import 'firebase_options.dart';
 
+int _counter = 0;
+
 Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
   _initLogs();
 
   final logger = Logger('bootstrap');
-
+  print('counter: bootstrap $_counter');
   await runZonedGuarded(
     () async {
       WidgetsFlutterBinding.ensureInitialized();
+
+      CallkeepBackgroundService.onBackgroundCall(_callkeepMessagingBackgroundHandler);
 
       await _initFirebase();
       await _initFirebaseMessaging();
@@ -94,7 +98,6 @@ Future<void> _initFirebaseMessaging() async {
   final logger = Logger('FirebaseMessaging');
 
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
     logger.info('onMessage: ${message.toMap()}');
   });
@@ -109,38 +112,34 @@ Future<void> _initFirebaseMessaging() async {
   // actual FirebaseMessaging permission request executed in [PermissionsCubit]
 }
 
-@pragma('vm:entry-point')
+// @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  _initLogs();
+  _counter = _counter - 10;
 
-  final logger = Logger('FCM')..info('_firebaseMessagingBackgroundHandler: ${message.toMap()}');
+  print('counter: messaging $_counter');
 
-  final fcmHandler = FCMHandler(message);
-  final fcmType = fcmHandler.getMessageType();
+  //CallkeepBackgroundService.emitCall();
+}
 
-  logger.info('Push notification type: $fcmType');
+Future<void> _callkeepMessagingBackgroundHandler() async {
+  _counter = _counter + 10;
 
-  if (fcmType == FCMType.call && Platform.isAndroid) {
-    final call = fcmHandler.getPendingCall()!;
-    final logger = Logger('_backgroundAndroidCall')..info('Initial call: $call');
+  print('counter: callkeep $_counter');
+// something do
+}
 
-    WebtritCallkeepLogs().setLogsDelegate(CallkeepLogs());
+Future<void> initializeService() async {
+  // Make sure Flutter is ready for platform channels
+  WidgetsFlutterBinding.ensureInitialized();
 
-    final appDatabase = FCMIsolateDatabase.instance(
-      createAppDatabaseConnection(
-        await getApplicationDocumentsPath(),
-        'db.sqlite',
-        logStatements: EnvironmentConfig.DATABASE_LOG_STATEMENTS,
-      ),
-    );
-    final repository = RecentsRepository(
-      appDatabase: appDatabase,
-    );
-
-    logger.info('Initial incoming call');
-
-    BackgroundCallHandler(call, repository).init();
-  }
+  // Initialize services or plugins, like Hive, databases, etc.
+  // // For example, if you need to interact with native code, ensure pigeon or method channels are initialized
+  // ServiceApi serviceApi = ServiceApi();
+  //
+  // // Example: Start your service
+  // final request = ServiceRequest()..action = 'start';
+  // final response = await serviceApi.startService(request);
+  // print('Service started in background: ${response.message}');
 }
 
 class CallkeepLogs implements CallkeepLogsDelegate {
