@@ -37,8 +37,8 @@ class MainShellRouteStateRepositoryAutoRouteImpl implements MainShellRouteStateR
   bool isChatConversationScreenActive(int? chatId, String? participantId) {
     final args = _activeRouteArgs;
     final routeMatch = activeRouteName == ChatConversationScreenPageRoute.name;
-    final argsMatch =
-        args is ChatConversationScreenPageRouteArgs && (args.chatId == chatId || args.participantId == participantId);
+    final argsMatch = args is ChatConversationScreenPageRouteArgs &&
+        ((chatId != null && args.chatId == chatId) || (participantId != null && args.participantId == participantId));
     return routeMatch && argsMatch;
   }
 

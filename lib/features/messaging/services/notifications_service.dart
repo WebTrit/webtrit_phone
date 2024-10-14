@@ -229,19 +229,14 @@ class MessagingNotificationsService {
     final chatId = chat.id;
     _logger.info('_shouldSkipChatNotification chat: $chatId type: $chatType');
 
-    if (chatType == ChatType.group) {
-      final groupScreenActive = mainShellRouteStateRepository.isChatConversationScreenActive(chat.id, null);
-      _logger.info('groupScreenActive: $groupScreenActive');
-      if (groupScreenActive) return true;
+    String? participantId;
+    if (chatType == ChatType.dialog) {
+      participantId = chat.members.firstWhere((m) => m.userId != userId).userId;
     }
 
-    if (chatType == ChatType.dialog) {
-      final participantId = chat.members.firstWhere((m) => m.userId != userId).userId;
-      final conversationScreenActive =
-          mainShellRouteStateRepository.isChatConversationScreenActive(null, participantId);
-      _logger.info('conversationScreenActive: $conversationScreenActive');
-      if (conversationScreenActive) return true;
-    }
+    final chatScreenActive = mainShellRouteStateRepository.isChatConversationScreenActive(chatId, participantId);
+    _logger.info('chatScreenActive: $chatScreenActive');
+    if (chatScreenActive) return true;
 
     return false;
   }
