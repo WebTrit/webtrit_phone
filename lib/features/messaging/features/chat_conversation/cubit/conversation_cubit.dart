@@ -221,13 +221,15 @@ class ConversationCubit extends Cubit<ConversationState> {
         final req = await channel.push('message:history', payload).future;
         messages = (req.response['data'] as List).map((e) => ChatMessage.fromMap(e)).toList();
         _logger.info('fetchHistory: remote messages ${messages.length}');
+
         if (messages.isNotEmpty) {
           await _chatsRepository.upsertMessages(messages, silent: true);
-          await _chatsRepository.upsertChatMessageSyncCursor(ChatMessageSyncCursor(
+          final newSyncCursor = ChatMessageSyncCursor(
             chatId: chatId,
             cursorType: MessageSyncCursorType.oldest,
             time: messages.last.createdAt,
-          ));
+          );
+          await _chatsRepository.upsertChatMessageSyncCursor(newSyncCursor);
         }
       }
 
@@ -266,9 +268,11 @@ class ConversationCubit extends Cubit<ConversationState> {
       if (isClosed) return;
       emit(ConversationState.ready((chatId: chatId, participantId: participantId), chat: chat));
 
-      // If chat is not exist, subscribtion will find the chat when it will created
+      // If chat is not exist, update subscribtion will find it when it will created
       // e.g when you send the first message or another user sends to you
       _chatUpdateSub = _chatUpdateSubFactory(_handleChatUpdate);
+      // Subscribe to outbox messages updates even if chat is not exist
+      // to see new outcoming messages in unexisted chat or in offline mode
       _outboxMessagesSub = _outboxMessagesSubFactory(_handleOutboxMessagesUpdate);
 
       // Init chat if it exists
@@ -323,9 +327,11 @@ class ConversationCubit extends Cubit<ConversationState> {
     if (state is! CVSReady) return;
 
     final (:chatId, :participantId) = state.credentials;
-
     final chatWasntExistBefore = state.chat == null;
+
     emit(state.copyWith(credentials: (chatId: chat.id, participantId: participantId), chat: chat));
+
+    // Init second stage of the chat initialization if chat was newly created
     if (chatWasntExistBefore) _initChat(chat.id);
   }
 
