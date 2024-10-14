@@ -13,5 +13,6 @@ export 'widgets/widgets.dart';
 // - expiration time setting for message storage (like week, month, year etc)
 // - remove messaging service envs
 // - sync error codes with backend and handle them
+// - remove deprecated subroute for messaging tab
 // - random refacfotring (like ephemeral logic to blocs, structs for ws events, constants for keys, etc)
 // - maybe tests?
