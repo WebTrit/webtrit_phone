@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:quiver/collection.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_parsed_text/flutter_parsed_text.dart';
-import 'package:flutter_link_previewer/flutter_link_previewer.dart';
 
 import 'package:webtrit_phone/features/messaging/messaging.dart';
+import 'package:webtrit_phone/utils/utils.dart';
 
 class MessageBody extends StatefulWidget {
   const MessageBody({
@@ -24,9 +24,8 @@ class MessageBody extends StatefulWidget {
 }
 
 class _MessageBodyState extends State<MessageBody> {
-  String? link;
-  dynamic linkPreview;
-  static final previewsCache = LruMap<String, dynamic>(maximumSize: 100);
+  static final previewsCache = LruMap<String, OgPreview>(maximumSize: 100);
+  OgPreview? preview;
 
   @override
   void initState() {
@@ -41,15 +40,21 @@ class _MessageBodyState extends State<MessageBody> {
   }
 
   findLink(String text) {
-    final regex = RegExp(regexLink, caseSensitive: false);
-    final match = regex.stringMatch(text);
-    linkPreview = previewsCache[match];
-    if (mounted) setState(() => link = match);
-  }
+    final match = RegExp(linkRegex, caseSensitive: false).stringMatch(text);
 
-  setLinkPreview(data) {
-    if (link != null) previewsCache[link!] = data;
-    if (mounted) setState(() => linkPreview = data);
+    if (match != null) {
+      if (previewsCache[match] != null) {
+        preview = previewsCache[match];
+        if (mounted) setState(() {});
+      } else {
+        OgPreview.get(match).then((value) {
+          if (value != null) previewsCache[match] = value;
+          if (mounted) setState(() => preview = value);
+        });
+      }
+    } else {
+      if (mounted) setState(() => preview = null);
+    }
   }
 
   @override
@@ -62,35 +67,37 @@ class _MessageBodyState extends State<MessageBody> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (link != null) ...[
+        if (preview != null) ...[
           Container(
             decoration: previewDecoration,
             padding: const EdgeInsets.all(8),
-            // TODO: impl custom LinkPreview to remove flicker on scrollback and add preview for image links
-            child: LinkPreview(
-              textStyle: widget.style,
-              linkStyle: widget.style,
-              headerStyle: widget.style,
-              metadataTextStyle: widget.style,
-              metadataTitleStyle: widget.style,
-              enableAnimation: true,
-              onPreviewDataFetched: setLinkPreview,
-              previewData: linkPreview,
-              text: link!,
-              width: MediaQuery.of(context).size.width,
-              padding: const EdgeInsets.all(0),
+            child: Column(
+              children: [
+                if (preview!.imageUrl != null) ...[
+                  Image.network(preview!.imageUrl!),
+                  const SizedBox(height: 8),
+                ],
+                if (preview!.title != null) ...[
+                  Text(preview?.title ?? '', style: style.copyWith(fontWeight: FontWeight.bold)),
+                  const SizedBox(height: 8),
+                ],
+                if (preview!.description != null) ...[
+                  Text(preview?.description ?? '', style: style),
+                  const SizedBox(height: 8),
+                ]
+              ],
             ),
           ),
           const SizedBox(height: 8),
         ],
         ParsedText(
           parse: [
-            mailToMatcher(style: style.copyWith(decoration: TextDecoration.underline)),
-            urlMatcher(style: style.copyWith(decoration: TextDecoration.underline)),
-            boldMatcher(style: style.copyWith(fontWeight: FontWeight.bold)),
-            italicMatcher(style: style.copyWith(fontStyle: FontStyle.italic)),
-            lineThroughMatcher(style: style.copyWith(decoration: TextDecoration.lineThrough)),
-            codeMatcher(style: style.copyWith(fontFamily: 'Courier')),
+            _mailToMatcher(style: style.copyWith(decoration: TextDecoration.underline)),
+            _urlMatcher(style: style.copyWith(decoration: TextDecoration.underline)),
+            _boldMatcher(style: style.copyWith(fontWeight: FontWeight.bold)),
+            _italicMatcher(style: style.copyWith(fontStyle: FontStyle.italic)),
+            _lineThroughMatcher(style: style.copyWith(decoration: TextDecoration.lineThrough)),
+            _codeMatcher(style: style.copyWith(fontFamily: 'Courier')),
           ],
           regexOptions: const RegexOptions(multiLine: true, dotAll: true),
           style: style.copyWith(fontFamily: theme.textTheme.bodyMedium?.fontFamily),
@@ -102,18 +109,18 @@ class _MessageBodyState extends State<MessageBody> {
   }
 }
 
-MatchText mailToMatcher({final TextStyle? style}) {
+MatchText _mailToMatcher({final TextStyle? style}) {
   return MatchText(
     onTap: (mail) async {
       final url = Uri(scheme: 'mailto', path: mail);
       if (await canLaunchUrl(url)) await launchUrl(url);
     },
-    pattern: regexEmail,
+    pattern: emailRegex,
     style: style,
   );
 }
 
-MatchText urlMatcher({final TextStyle? style, final Function(String url)? onLinkPressed}) {
+MatchText _urlMatcher({final TextStyle? style, final Function(String url)? onLinkPressed}) {
   return MatchText(
     onTap: (urlText) async {
       final protocolIdentifierRegex = RegExp(
@@ -135,12 +142,12 @@ MatchText urlMatcher({final TextStyle? style, final Function(String url)? onLink
         }
       }
     },
-    pattern: regexLink,
+    pattern: linkRegex,
     style: style,
   );
 }
 
-MatchText boldMatcher({final TextStyle? style}) {
+MatchText _boldMatcher({final TextStyle? style}) {
   return MatchText(
     pattern: r'\*[^*]+\*',
     style: style,
@@ -150,7 +157,7 @@ MatchText boldMatcher({final TextStyle? style}) {
   );
 }
 
-MatchText italicMatcher({final TextStyle? style}) {
+MatchText _italicMatcher({final TextStyle? style}) {
   return MatchText(
     pattern: r'_[^_]+_',
     style: style,
@@ -160,7 +167,7 @@ MatchText italicMatcher({final TextStyle? style}) {
   );
 }
 
-MatchText lineThroughMatcher({final TextStyle? style}) {
+MatchText _lineThroughMatcher({final TextStyle? style}) {
   return MatchText(
     pattern: r'~[^~]+~',
     style: style,
@@ -170,7 +177,7 @@ MatchText lineThroughMatcher({final TextStyle? style}) {
   );
 }
 
-MatchText codeMatcher({final TextStyle? style}) {
+MatchText _codeMatcher({final TextStyle? style}) {
   return MatchText(
     pattern: r'`[^`]+`',
     style: style,
