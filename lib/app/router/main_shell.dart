@@ -234,11 +234,14 @@ class _MainShellState extends State<MainShell> {
                 final tenantId = appBloc.state.tenantId!;
                 final userId = appBloc.state.userId!;
 
-                var url = appBloc.state.coreUrl!;
-                if (url.startsWith('http://')) url = url.replaceFirst('http://', 'ws://');
-                if (url.startsWith('https://')) url = url.replaceFirst('https://', 'wss://');
-                if (url.endsWith('/')) url = url.substring(0, url.length - 1);
-                url = '$url/messaging/v1/websocket';
+                // Draft for built-in messaging service
+                // var url = appBloc.state.coreUrl!;
+                // if (url.startsWith('http://')) url = url.replaceFirst('http://', 'ws://');
+                // if (url.startsWith('https://')) url = url.replaceFirst('https://', 'wss://');
+                // if (url.endsWith('/')) url = url.substring(0, url.length - 1);
+                // url = '$url/messaging/v1/websocket';
+
+                const url = EnvironmentConfig.CHAT_SERVICE_URL;
 
                 final client = PhoenixSocket(
                   url,
