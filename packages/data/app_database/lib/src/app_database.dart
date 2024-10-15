@@ -1634,7 +1634,7 @@ class SmsDao extends DatabaseAccessor<AppDatabase> with _$SmsDaoMixin {
     return select(userSmsNumbersTable).watch();
   }
 
-  Future upsertUserSmsNumbers(List<UserSmsNumberData> userSmsNumbers) async {
+  Future upsertUserSmsNumbers(Iterable<UserSmsNumberData> userSmsNumbers) async {
     return batch((batch) {
       batch.deleteWhere(userSmsNumbersTable, (t) => t.phoneNumber.isNotIn(userSmsNumbers.map((e) => e.phoneNumber)));
       batch.insertAllOnConflictUpdate(userSmsNumbersTable, userSmsNumbers);

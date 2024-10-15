@@ -103,7 +103,7 @@ class SmsRepository with SmsDriftMapper {
     return _smsDao.watchUserSmsNumbers().map((event) => event.map((e) => e.phoneNumber).toList());
   }
 
-  Future<void> upsertUserSmsNumbers(List<String> numbers) async {
+  Future<void> upsertUserSmsNumbers(Iterable<String> numbers) async {
     final data = numbers.map((e) => UserSmsNumberData(phoneNumber: e)).toList();
     await _smsDao.upsertUserSmsNumbers(data);
   }

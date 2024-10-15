@@ -69,7 +69,7 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
     try {
       // Join channel for user specific events
       if (_client.userChannel == null) {
-        final userChannel = _client.addChannel(topic: 'chat:user:$_userId');
+        final userChannel = _client.createUserChannel(_userId);
         await userChannel.join().future;
       }
 

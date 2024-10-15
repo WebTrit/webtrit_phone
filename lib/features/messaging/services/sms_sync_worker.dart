@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:collection/collection.dart';
 import 'package:logging/logging.dart';
 import 'package:phoenix_socket/phoenix_socket.dart';
 
@@ -8,8 +7,6 @@ import 'package:webtrit_phone/features/messaging/messaging.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/utils/utils.dart';
-
-// TODO: extract events and commands to separate classes
 
 final _logger = Logger('SmsSyncWorker');
 
@@ -64,55 +61,39 @@ class SmsSyncWorker {
         if (userChannel.state != PhoenixChannelState.joined) throw Exception('User channel not ready yet');
 
         // Fetch user phone numbers
-        final result = await userChannel.push('user:get_info', {}).future;
-        List<String> smsNumbers = result.response['sms_phone_numbers'].cast<String>();
-        final e164Numbers = smsNumbers.map((e) => e.e164Phone).whereNotNull().toList();
-        smsRepository.upsertUserSmsNumbers(e164Numbers);
+        final smsNumbers = await userChannel.smsPhoneNumbers;
+        await smsRepository.upsertUserSmsNumbers(smsNumbers);
+
+        // Buffer updates that may come in a gap between fetching the actual list
+        final eventsStream = userChannel.userEvents.transform(BufferTransformer());
 
         // Get current ids
         final currentIds = await smsRepository.getConversationIds();
 
-        // Buffer updates that may come in a gap between fetching the actual list
-        final eventsStream = userChannel.messages.transform(BufferTransformer());
+        // Fetch and process actual user sms conversations
+        final actualIds = await userChannel.smsConversationsIds;
+        await Future.forEach(actualIds, (id) => _conversationSubscribe(id));
+        final removeIds = currentIds.where((id) => !actualIds.contains(id));
+        await Future.forEach(removeIds, (id) async {
+          await _conversationUnsubscribe(id);
+          await smsRepository.deleteConversationById(id);
+        });
+        yield {'actualIds': actualIds, 'removeIds': removeIds};
 
-        // Fetch actual user chat ids
-        final req = await userChannel.push('sms:conversation:get_ids', {}).future;
-        final actualChatIds = req.response.cast<int>();
-
-        // Process removed chats
-        for (final conversationId in currentIds) {
-          if (!actualChatIds.contains(conversationId)) {
-            await _conversationUnsubscribe(conversationId);
-            await smsRepository.deleteConversationById(conversationId);
-            yield {'event': 'removed', conversationId: conversationId};
-          }
-        }
-
-        // Process actual chats
-        for (final conversationId in actualChatIds) {
-          await _conversationSubscribe(conversationId);
-          yield {'event': 'actual', conversationId: conversationId};
-        }
-
-        // Process buffered and listen for future realtime updates
-        await for (final e in eventsStream) {
-          if (e.event.value == 'sms_conversation_join') {
-            final conversationId = int.parse(e.payload!['conversation_id'].toString());
-            await _conversationSubscribe(conversationId);
-            yield {'event': 'joined', conversationId: conversationId};
+        // Process buffered and listen for future events
+        await for (final event in eventsStream) {
+          switch (event) {
+            case SmsConversationJoin smsEvent:
+              await _conversationSubscribe(smsEvent.conversationId);
+            case SmsConversationLeave smsEvent:
+              await _conversationUnsubscribe(smsEvent.conversationId);
+              await smsRepository.deleteConversationById(smsEvent.conversationId);
+            case UserChannelDisconnect _:
+              throw Exception('disconnect');
+            default:
           }
 
-          if (e.event.value == 'sms_conversation_leave') {
-            final conversationId = int.parse(e.payload!['conversation_id'].toString());
-            await _conversationUnsubscribe(conversationId);
-            await smsRepository.deleteConversationById(conversationId);
-            yield {'event': 'leaved', conversationId: conversationId};
-          }
-
-          // On disconnect break the loop to force reconnect
-          if (e.event.value == 'phx_error') {
-            throw Exception('Phoenix disconnect');
-          }
+          yield event;
         }
       } catch (e, _) {
         yield e;
@@ -133,20 +114,16 @@ class SmsSyncWorker {
         if (channel.state != PhoenixChannelState.joined) throw Exception('Chat channel not ready yet');
 
         // Buffer updates that may come in a gap between fetching and subscribing
-        final eventsStream = channel.messages.transform(BufferTransformer());
+        final eventsStream = channel.smsEvents.transform(BufferTransformer());
 
-        // Fetch chat info
-        final infoReq = await channel.push('sms:conversation:get', {}).future;
-        final conversation = SmsConversation.fromMap(infoReq.response as Map<String, dynamic>);
+        // Fetch sms conversation data
+        final conversation = await channel.smsConversation;
         await smsRepository.upsertConversation(conversation);
         yield conversation;
 
         // Fetch read cursors
-        final cursorsReq = await channel.push('sms:conversation:cursor:get', {}).future;
-        final cursors = (cursorsReq.response as List).map((e) => SmsMessageReadCursor.fromMap(e)).toList();
-        for (final cursor in cursors) {
-          await smsRepository.upsertMessageReadCursor(cursor);
-        }
+        final cursors = await channel.smsCursors;
+        await Future.forEach(cursors, (cursor) => smsRepository.upsertMessageReadCursor(cursor));
         yield cursors;
 
         // Get last update time for sync messages from
@@ -154,14 +131,12 @@ class SmsSyncWorker {
 
         // If no last update, fetch history of last [pageSize] messages for initial state
         if (newestCursor == null) {
-          final payload = {'limit': pageSize};
-          final req = await channel.push('sms:message:history', payload).future;
-          final messages = (req.response['data'] as List).map((e) => SmsMessage.fromMap(e)).toList();
+          final messages = await channel.smsMessageHistory(pageSize);
+          yield 'Initial messages: ${messages.length}';
 
           if (messages.isNotEmpty) {
             // Process fetched messages
             await smsRepository.upsertMessages(messages.reversed);
-            yield {'event': 'upsert history page', 'conversation': conversationId, 'count': messages.length};
 
             // set initial cursors
             // Pay attention, the history is fetched in reverse order
@@ -182,16 +157,15 @@ class SmsSyncWorker {
         // eg. new messages, edited, deleted, viewed, etc.
         if (newestCursor != null) {
           var pagingCursor = newestCursor;
+
           while (true) {
-            final payload = {'updated_after': pagingCursor.time.toUtc().toIso8601String(), 'limit': pageSize};
-            final req = await channel.push('sms:message:updates', payload).future;
-            final messages = (req.response['data'] as List).map((e) => SmsMessage.fromMap(e)).toList();
+            final messages = await channel.smsMessageUpdates(pagingCursor.time, pageSize);
+            yield 'New messages: ${messages.length}';
 
             // If no more messages, break the pagination loop
             if (messages.isNotEmpty) {
               // Process fetched messages
               await smsRepository.upsertMessages(messages);
-              yield {'event': 'upsert updates page', 'conversation': conversationId, 'count': messages.length};
 
               // Update local newest cursor to continue pagination
               pagingCursor = SmsMessageSyncCursor(
@@ -203,41 +177,33 @@ class SmsSyncWorker {
               // Set the newest cursor
               await smsRepository.upsertSmsMessageSyncCursor(pagingCursor);
             }
+
             // Break pagination loop if results less than limit
+            // that means no need to fetch more messages using next iteration
             if (messages.length < pageSize) break;
           }
         }
 
-        // Process buffered and listen for future realtime updates
-        await for (final e in eventsStream) {
-          if (e.event.value == 'conversation_info_update') {
-            final conversation = SmsConversation.fromMap(e.payload as Map<String, dynamic>);
-            await smsRepository.upsertConversation(conversation);
-
-            yield conversation;
+        // Process buffered and listen for future events
+        await for (final event in eventsStream) {
+          switch (event) {
+            case SmsChannelInfoUpdate e:
+              await smsRepository.upsertConversation(e.conversation);
+            case SmsChannelMessageUpdate e:
+              await smsRepository.upsertMessage(e.message);
+              await smsRepository.upsertSmsMessageSyncCursor(SmsMessageSyncCursor(
+                conversationId: conversationId,
+                cursorType: SmsSyncCursorType.newest,
+                time: e.message.updatedAt,
+              ));
+            case SmsChannelCursorSet e:
+              await smsRepository.upsertMessageReadCursor(e.cursor);
+            case SmsChannelDisconnect _:
+              throw Exception('disconnect');
+            case SmsChannelUnknown _:
           }
 
-          if (e.event.value == 'sms_message_update') {
-            final chatMsg = SmsMessage.fromMap(e.payload as Map<String, dynamic>);
-            await smsRepository.upsertMessage(chatMsg);
-            await smsRepository.upsertSmsMessageSyncCursor(SmsMessageSyncCursor(
-              conversationId: conversationId,
-              cursorType: SmsSyncCursorType.newest,
-              time: chatMsg.updatedAt,
-            ));
-            yield chatMsg;
-          }
-
-          if (e.event.value == 'sms:conversation:cursor:set') {
-            final cursor = SmsMessageReadCursor.fromMap(e.payload as Map<String, dynamic>);
-            await smsRepository.upsertMessageReadCursor(cursor);
-            yield cursor;
-          }
-
-          // On disconnect break the loop to force reconnect
-          if (e.event.value == 'phx_error') {
-            throw Exception('Phoenix disconnect');
-          }
+          yield event;
         }
       } catch (e, _) {
         yield e;

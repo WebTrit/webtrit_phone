@@ -9,8 +9,6 @@ import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 
-// TODO: extract events and commands to separate classes
-
 final _logger = Logger('ChatsSyncWorker');
 
 class ChatsSyncWorker {
@@ -63,50 +61,36 @@ class ChatsSyncWorker {
         if (userChannel == null) throw Exception('No user channel yet');
         if (userChannel.state != PhoenixChannelState.joined) throw Exception('User channel not ready yet');
 
+        // Buffer updates that may come in a gap between fetching the actual list
+        final eventsStream = userChannel.userEvents.transform(BufferTransformer());
+
         // Get current user chat ids
         final currentChatIds = await chatsRepository.getChatIds();
 
-        // Buffer updates that may come in a gap between fetching the actual list
-        final eventsStream = userChannel.messages.transform(BufferTransformer());
+        // Fetch and process actual user chat conversations
+        final actualIds = await userChannel.chatConversationsIds;
+        await Future.forEach(actualIds, (id) => _chatRoomSubscribe(id));
+        final removeIds = currentChatIds.where((id) => !actualIds.contains(id));
+        await Future.forEach(removeIds, (id) async {
+          await _chatRoomUnsubscribe(id);
+          await chatsRepository.deleteChatById(id);
+        });
+        yield {'actualIds': actualIds, 'removeIds': removeIds};
 
-        // Fetch actual user chat ids
-        final req = await userChannel.push('chat:get_ids', {}).future;
-        final actualChatIds = req.response.cast<int>();
-
-        // Process removed chats
-        for (final chatId in currentChatIds) {
-          if (!actualChatIds.contains(chatId)) {
-            await _chatRoomUnsubscribe(chatId);
-            await chatsRepository.deleteChatById(chatId);
-            yield {'event': 'removed', chatId: chatId};
-          }
-        }
-
-        // Process actual chats
-        for (final chatId in actualChatIds) {
-          await _chatRoomSubscribe(chatId);
-          yield {'event': 'actual', chatId: chatId};
-        }
-
-        // Process buffered and listen for future realtime updates
-        await for (final e in eventsStream) {
-          if (e.event.value == 'chat_membership_join') {
-            final chatId = int.parse(e.payload!['chat_id'].toString());
-            await _chatRoomSubscribe(chatId);
-            yield {'event': 'joined', chatId: chatId};
+        // Process buffered and listen for future events
+        await for (final event in eventsStream) {
+          switch (event) {
+            case ChatConversationJoin chatEvent:
+              await _chatRoomSubscribe(chatEvent.chatId);
+            case ChatConversationLeave chatEvent:
+              await _chatRoomUnsubscribe(chatEvent.chatId);
+              await chatsRepository.deleteChatById(chatEvent.chatId);
+            case UserChannelDisconnect _:
+              throw Exception('disconnect');
+            default:
           }
 
-          if (e.event.value == 'chat_membership_leave') {
-            final chatId = int.parse(e.payload!['chat_id'].toString());
-            await _chatRoomUnsubscribe(chatId);
-            await chatsRepository.deleteChatById(chatId);
-            yield {'event': 'leaved', chatId: chatId};
-          }
-
-          // On disconnect break the loop to force reconnect
-          if (e.event.value == 'phx_error') {
-            throw Exception('Phoenix disconnect');
-          }
+          yield event;
         }
       } catch (e, _) {
         yield e;
@@ -127,20 +111,16 @@ class ChatsSyncWorker {
         if (channel.state != PhoenixChannelState.joined) throw Exception('Chat channel not ready yet');
 
         // Buffer updates that may come in a gap between fetching and subscribing
-        final eventsStream = channel.messages.transform(BufferTransformer());
+        final eventsStream = channel.chatEvents.transform(BufferTransformer());
 
-        // Fetch chat info
-        final infoReq = await channel.push('chat:get', {}).future;
-        final chat = Chat.fromMap(infoReq.response as Map<String, dynamic>);
-        await chatsRepository.upsertChat(chat);
-        yield chat;
+        // Fetch chat conversation data
+        final conversation = await channel.chatConversation;
+        await chatsRepository.upsertChat(conversation);
+        yield conversation;
 
         // Fetch read cursors
-        final cursorsReq = await channel.push('chat:cursor:get', {}).future;
-        final cursors = (cursorsReq.response as List).map((e) => ChatMessageReadCursor.fromMap(e)).toList();
-        for (final cursor in cursors) {
-          await chatsRepository.upsertChatMessageReadCursor(cursor);
-        }
+        final cursors = await channel.chatCursors;
+        await Future.forEach(cursors, (cursor) => chatsRepository.upsertChatMessageReadCursor(cursor));
         yield cursors;
 
         // Get last update time for sync messages from
@@ -148,14 +128,12 @@ class ChatsSyncWorker {
 
         /// If no last update, fetch history of last [pageSize] messages for initial state
         if (newestCursor == null) {
-          final payload = {'limit': pageSize};
-          final req = await channel.push('message:history', payload).future;
-          final messages = (req.response['data'] as List).map((e) => ChatMessage.fromMap(e)).toList();
+          final messages = await channel.chatMessagHistory(pageSize);
+          yield 'Initial messages: ${messages.length}';
 
           if (messages.isNotEmpty) {
             // Process fetched messages
             await chatsRepository.upsertMessages(messages.reversed);
-            yield {'event': 'upsert history page', 'conversation': chatId, 'count': messages.length};
 
             // set initial cursors
             // Pay attention, the history is fetched in reverse order
@@ -176,16 +154,15 @@ class ChatsSyncWorker {
         // eg. new messages, edited, deleted, viewed, etc.
         if (newestCursor != null) {
           var pagingCursor = newestCursor;
+
           while (true) {
-            final payload = {'updated_after': pagingCursor.time.toUtc().toIso8601String(), 'limit': pageSize};
-            final req = await channel.push('message:updates', payload).future;
-            final messages = (req.response['data'] as List).map((e) => ChatMessage.fromMap(e)).toList();
+            final messages = await channel.chatMessageUpdates(pagingCursor.time, pageSize);
+            yield 'New messages: ${messages.length}';
 
             // If no more messages, break the pagination loop
             if (messages.isNotEmpty) {
               // Process fetched messages
               await chatsRepository.upsertMessages(messages);
-              yield {'event': 'upsert updates page', 'conversation': chatId, 'count': messages.length};
 
               // Update local newest cursor to continue pagination
               pagingCursor = ChatMessageSyncCursor(
@@ -197,46 +174,36 @@ class ChatsSyncWorker {
               // Set the newest cursor
               await chatsRepository.upsertChatMessageSyncCursor(pagingCursor);
             }
+
             // Break pagination loop if results less than limit
+            // that means no need to fetch more messages using next iteration
             if (messages.length < pageSize) break;
           }
         }
 
-        // Process buffered and listen for future realtime updates
-        await for (final e in eventsStream) {
-          if (e.event.value == 'chat_info_update') {
-            final userId = client.userId!;
-            final chat = Chat.fromMap(e.payload as Map<String, dynamic>);
-
-            // Skip upsert for event where user is leaved from chat
-            if (chat.members.firstWhereOrNull((m) => m.userId == userId) != null) {
-              await chatsRepository.upsertChat(chat);
-            }
-
-            yield chat;
+        // Process buffered and listen for future events
+        await for (final event in eventsStream) {
+          switch (event) {
+            case ChatChannelInfoUpdate e:
+              // Skip upsert for event where user is leaved from chat
+              final shouldSkip = e.chat.members.firstWhereOrNull((m) => m.userId == client.userId) == null;
+              if (!shouldSkip) await chatsRepository.upsertChat(e.chat);
+            case ChatChannelMessageUpdate e:
+              await chatsRepository.upsertMessage(e.message);
+              final cursor = ChatMessageSyncCursor(
+                chatId: chatId,
+                cursorType: MessageSyncCursorType.newest,
+                time: e.message.updatedAt,
+              );
+              await chatsRepository.upsertChatMessageSyncCursor(cursor);
+            case ChatChannelCursorSet e:
+              await chatsRepository.upsertChatMessageReadCursor(e.cursor);
+            case ChatChannelDisconnect _:
+              throw Exception('disconnect');
+            case ChatChannelUnknown _:
           }
 
-          if (e.event.value == 'message_update') {
-            final chatMsg = ChatMessage.fromMap(e.payload as Map<String, dynamic>);
-            await chatsRepository.upsertMessage(chatMsg);
-            await chatsRepository.upsertChatMessageSyncCursor(ChatMessageSyncCursor(
-              chatId: chatId,
-              cursorType: MessageSyncCursorType.newest,
-              time: chatMsg.updatedAt,
-            ));
-            yield chatMsg;
-          }
-
-          if (e.event.value == 'chat:cursor:set') {
-            final cursor = ChatMessageReadCursor.fromMap(e.payload as Map<String, dynamic>);
-            await chatsRepository.upsertChatMessageReadCursor(cursor);
-            yield cursor;
-          }
-
-          // On disconnect break the loop to force reconnect
-          if (e.event.value == 'phx_error') {
-            throw Exception('Phoenix disconnect');
-          }
+          yield event;
         }
       } catch (e, _) {
         yield e;
