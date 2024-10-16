@@ -31,53 +31,118 @@ extension PhoenixSocketExt on PhoenixSocket {
 }
 
 extension PhoenixChannelExt on PhoenixChannel {
+  /// A stream of [UserChannelEvent] objects derived from the user channel.
+  ///
+  /// Returns a [Stream] of [UserChannelEvent] objects.
   Stream<UserChannelEvent> get userEvents => messages.map((e) => UserChannelEvent.fromEvent(e));
 
+  /// A stream of [ChatChannelEvent]s derived from the chat conversation channel.
+  ///
+  /// Returns a [Stream] of [ChatChannelEvent] objects.
   Stream<ChatChannelEvent> get chatEvents => messages.map((e) => ChatChannelEvent.fromEvent(e));
 
+  /// A stream of [SmsChannelEvent]s derived from the sms conversation channel.
+  ///
+  /// Returns a [Stream] of [SmsChannelEvent] objects.
   Stream<SmsChannelEvent> get smsEvents => messages.map((e) => SmsChannelEvent.fromEvent(e));
 
+  /// Asynchronously retrieves a list of chat conversation IDs for the user.
+  ///
+  /// This method returns a [Future] that completes with an [Iterable] of integers,
+  /// representing the IDs of chat conversations.
+  ///
+  /// Example usage:
+  /// ```dart
+  /// final conversationIds = await chatConversationsIds;
+  /// ```
   Future<Iterable<int>> get chatConversationsIds async {
     final response = (await push('chat:get_ids', {}).future).response;
     return (response as Iterable).cast<int>();
   }
 
+  /// Asynchronously retrieves a list of SMS conversation IDs for the user.
+  ///
+  /// This method returns a [Future] that completes with an [Iterable] of
+  /// integers representing the IDs of SMS conversations.
   Future<Iterable<int>> get smsConversationsIds async {
     final response = (await push('sms:conversation:get_ids', {}).future).response;
     return (response as Iterable).cast<int>();
   }
 
+  /// Asynchronously retrieves a list of phone numbers associated with user.
+  ///
+  /// Returns a [Future] that completes with an [Iterable] of [String] phone numbers.
   Future<Iterable<String>> get smsPhoneNumbers async {
     final response = (await push('user:get_info', {}).future).response;
     final smsNumbers = (response['sms_phone_numbers'] as Iterable).cast<String>();
     return smsNumbers.map((e) => e.e164Phone).whereNotNull();
   }
 
+  /// Asynchronously retrieves the chat conversation.
+  ///
+  /// This getter returns a [Future] that completes with a [Chat] object
+  /// representing the chat conversation.
   Future<Chat> get chatConversation async {
     final infoReq = await push('chat:get', {}).future;
     return Chat.fromMap(infoReq.response as Map<String, dynamic>);
   }
 
+  /// A getter that asynchronously retrieves an [SmsConversation].
+  ///
+  /// This method returns a [Future] that completes with an [SmsConversation].
+  /// It can be used to fetch the conversation details for SMS messaging.
   Future<SmsConversation> get smsConversation async {
     final infoReq = await push('sms:conversation:get', {}).future;
     return SmsConversation.fromMap(infoReq.response as Map<String, dynamic>);
   }
 
+  /// Asynchronously retrieves an iterable collection of chat message read cursors.
+  ///
+  /// This getter fetches the read cursors for chat messages, which can be used
+  /// to determine the read status of messages in a chat.
+  ///
+  /// Returns a [Future] that completes with an [Iterable] of [ChatMessageReadCursor] objects.
   Future<Iterable<ChatMessageReadCursor>> get chatCursors async {
     final cursorsReq = await push('chat:cursor:get', {}).future;
     return (cursorsReq.response as List).map((e) => ChatMessageReadCursor.fromMap(e));
   }
 
+  /// A getter that asynchronously retrieves an iterable collection of
+  /// [SmsMessageReadCursor] objects.
+  ///
+  /// This getter is used to obtain the current read cursors for SMS messages.
+  /// It returns a [Future] that completes with an [Iterable] of
+  /// [SmsMessageReadCursor] instances.
   Future<Iterable<SmsMessageReadCursor>> get smsCursors async {
     final cursorsReq = await push('sms:conversation:cursor:get', {}).future;
     return (cursorsReq.response as List).map((e) => SmsMessageReadCursor.fromMap(e));
   }
 
+  /// Retrieves a chat message by its ID.
+  ///
+  /// This method fetches a chat message from the server using the provided
+  /// [messageId]. It returns a [ChatMessage] object if the message is found,
+  /// or `null` if the message does not exist.
+  ///
+  /// [messageId]: The unique identifier of the chat message to be retrieved.
+  ///
+  /// Returns a [Future] that completes with the [ChatMessage] object if found,
+  /// or `null` if the message does not exist.
   Future<ChatMessage?> getChatMessage(int messageId) async {
     final req = await push('message:get:$messageId', {}).future;
     return req.isOk ? ChatMessage.fromMap(req.response as Map<String, dynamic>) : null;
   }
 
+  /// Retrieves the chat message history.
+  ///
+  /// This method fetches a list of chat messages with a specified limit. Optionally,
+  /// messages created before a certain date can be included.
+  ///
+  /// [limit] The maximum number of chat messages to retrieve.
+  /// [createdBefore] An optional parameter to specify the date before which messages
+  /// should be retrieved. If provided, it will be converted to UTC and formatted as an ISO 8601 string.
+  ///
+  /// Returns a [Future] that resolves to a list of [ChatMessage] objects.
   Future<List<ChatMessage>> chatMessagHistory(int limit, {DateTime? createdBefore}) async {
     Map<String, dynamic> payload = {'limit': limit};
     if (createdBefore != null) payload['created_before'] = createdBefore.toUtc().toIso8601String();
@@ -85,6 +150,15 @@ extension PhoenixChannelExt on PhoenixChannel {
     return (req.response['data'] as Iterable).map((e) => ChatMessage.fromMap(e)).toList();
   }
 
+  /// Retrieves the SMS message history.
+  ///
+  /// This method fetches a list of SMS messages with a specified limit. Optionally,
+  /// messages can be filtered to include only those created before a certain date.
+  ///
+  /// [limit] The maximum number of SMS messages to retrieve.
+  /// [createdBefore] An optional parameter to filter messages created before this date.
+  ///
+  /// Returns a [Future] that resolves to a list of [SmsMessage] objects.
   Future<List<SmsMessage>> smsMessageHistory(int limit, {DateTime? createdBefore}) async {
     Map<String, dynamic> payload = {'limit': limit};
     if (createdBefore != null) payload['created_before'] = createdBefore.toUtc().toIso8601String();
@@ -92,12 +166,31 @@ extension PhoenixChannelExt on PhoenixChannel {
     return (req.response['data'] as Iterable).map((e) => SmsMessage.fromMap(e)).toList();
   }
 
+  /// Fetches a list of chat messages that have been updated after a specified date in reverse order.
+  ///
+  /// This method retrieves chat messages that have been updated after the given
+  /// [updatedAfter] date and limits the number of messages returned to the specified [limit].
+  ///
+  /// [updatedAfter]: The date after which the chat messages should have been updated.
+  /// [limit]: The maximum number of chat messages to retrieve.
+  ///
+  /// Returns a [Future] that completes with a list of [ChatMessage] objects.
   Future<List<ChatMessage>> chatMessageUpdates(DateTime updatedAfter, int limit) async {
     var payload = {'updated_after': updatedAfter.toUtc().toIso8601String(), 'limit': limit};
     final req = await push('message:updates', payload).future;
     return (req.response['data'] as Iterable).map((e) => ChatMessage.fromMap(e)).toList();
   }
 
+  /// Fetches a list of SMS messages that have been updated after a specified date in reverse order.
+  ///
+  /// This method retrieves SMS messages that have been updated after the given
+  /// [updatedAfter] date. The number of messages retrieved is limited by the
+  /// [limit] parameter.
+  ///
+  /// [updatedAfter]: The date after which the SMS messages were updated.
+  /// [limit]: The maximum number of SMS messages to retrieve.
+  ///
+  /// Returns a [Future] that completes with a list of [SmsMessage] objects.
   Future<List<SmsMessage>> smsMessageUpdates(DateTime updatedAfter, int limit) async {
     var payload = {'updated_after': updatedAfter.toUtc().toIso8601String(), 'limit': limit};
     final req = await push('sms:message:updates', payload).future;
@@ -218,8 +311,8 @@ extension PhoenixChannelExt on PhoenixChannel {
     throw Exception('Error processing $outboxEntry $response');
   }
 
-  /// This function takes a [SmsOutboxMessageEditEntry] and attempts to edit an SMS message using this channel.
-  /// [editEntry] The entry containing the details of the message to be edited.
+  /// This function takes a [SmsOutboxMessageDeleteEntry] and attempts to delete an SMS message using this channel.
+  /// [deleteEntry] The entry containing the details of the message to be deleted.
   /// It returns a [Future] that resolves to the edited [SmsMessage].
   /// Throws an exception if the edit process fails.
   Future<SmsMessage> deleteSmsMessage(SmsOutboxMessageDeleteEntry deleteEntry) async {

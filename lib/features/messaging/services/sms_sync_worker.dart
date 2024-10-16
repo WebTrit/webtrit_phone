@@ -10,6 +10,21 @@ import 'package:webtrit_phone/utils/utils.dart';
 
 final _logger = Logger('SmsSyncWorker');
 
+/// A worker class responsible for synchronizing SMS messages.
+///
+/// The `SmsSyncWorker` class handles the process of syncing SMS messages
+/// between the local storage and a remote server. It ensures that all
+/// messages are up-to-date and consistent across different platforms.
+///
+/// This class may include methods for initiating the sync process,
+/// handling conflicts, and managing the state of the synchronization.
+///
+/// Example usage:
+///
+/// ```dart
+/// final smsSyncWorker = SmsSyncWorker();
+/// smsSyncWorker.init();
+/// ```
 class SmsSyncWorker {
   SmsSyncWorker(this.client, this.smsRepository, {this.pageSize = 50});
 

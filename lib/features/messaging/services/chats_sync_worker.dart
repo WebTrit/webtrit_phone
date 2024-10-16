@@ -11,6 +11,24 @@ import 'package:webtrit_phone/utils/utils.dart';
 
 final _logger = Logger('ChatsSyncWorker');
 
+/// A worker class responsible for synchronizing chat data.
+///
+/// The `ChatsSyncWorker` class handles the synchronization of chat messages
+/// and related data between the local storage and the remote server. This
+/// ensures that the chat data is up-to-date and consistent across different
+/// devices and sessions.
+///
+/// This class may include methods for:
+/// - Fetching new messages from the server.
+/// - Sending unsent messages to the server.
+/// - Resolving conflicts between local and remote data.
+/// - Handling network errors and retries.
+///
+/// Usage:
+/// ```dart
+/// final syncWorker = ChatsSyncWorker();
+/// syncWorker.init();
+/// ```
 class ChatsSyncWorker {
   ChatsSyncWorker(this.client, this.chatsRepository, {this.pageSize = 50});
 
