@@ -73,13 +73,22 @@ extension PhoenixChannelExt on PhoenixChannel {
     return (cursorsReq.response as List).map((e) => SmsMessageReadCursor.fromMap(e));
   }
 
-  Future<List<ChatMessage>> chatMessagHistory(int limit) async {
-    final req = await push('message:history', {'limit': limit}).future;
+  Future<ChatMessage?> getChatMessage(int messageId) async {
+    final req = await push('message:get:$messageId', {}).future;
+    return req.isOk ? ChatMessage.fromMap(req.response as Map<String, dynamic>) : null;
+  }
+
+  Future<List<ChatMessage>> chatMessagHistory(int limit, {DateTime? createdBefore}) async {
+    Map<String, dynamic> payload = {'limit': limit};
+    if (createdBefore != null) payload['created_before'] = createdBefore.toUtc().toIso8601String();
+    final req = await push('message:history', payload).future;
     return (req.response['data'] as Iterable).map((e) => ChatMessage.fromMap(e)).toList();
   }
 
-  Future<List<SmsMessage>> smsMessageHistory(int limit) async {
-    final req = await push('sms:message:history', {'limit': limit}).future;
+  Future<List<SmsMessage>> smsMessageHistory(int limit, {DateTime? createdBefore}) async {
+    Map<String, dynamic> payload = {'limit': limit};
+    if (createdBefore != null) payload['created_before'] = createdBefore.toUtc().toIso8601String();
+    final req = await push('sms:message:history', payload).future;
     return (req.response['data'] as Iterable).map((e) => SmsMessage.fromMap(e)).toList();
   }
 
@@ -241,8 +250,134 @@ extension PhoenixChannelExt on PhoenixChannel {
     throw Exception('Error processing $readCursor $response');
   }
 
-  Future sendChatTyping() async {
-    await push('chat:typing', {}).future;
+  /// This function sends a typing event to the chat channel.
+  Future<bool> sendChatTyping() async {
+    final r = await push('chat:typing', {}).future;
+    if (r.isOk) return true;
+    throw Exception('Error sending typing event ${r.response}');
+  }
+
+  /// Deletes a chat conversation (group or dialog) from the server.
+  ///
+  /// This method asynchronously deletes a chat conversation and returns a
+  /// boolean indicating the success of the operation.
+  ///
+  /// Returns:
+  ///   A [Future] that completes with a [bool] indicating whether the
+  ///   chat conversation was successfully deleted.
+  Future<bool> deleteChatConversation() async {
+    final r = await push('chat:delete', {}).future;
+    if (r.isOk) return true;
+    throw Exception('Error deleting chat ${r.response}');
+  }
+
+  /// Deletes an SMS conversation.
+  ///
+  /// This method asynchronously deletes an SMS conversation.
+  ///
+  /// Returns a [Future] that completes with a boolean value indicating
+  /// whether the deletion was successful.
+  Future<bool> deleteSmsConversation() async {
+    final r = await push('sms:conversation:delete', {}).future;
+    if (r.isOk) return true;
+    throw Exception('Error deleting sms conversation ${r.response}');
+  }
+
+  /// Creates a new group with the specified name and members.
+  ///
+  /// This method sends a request to create a new group with the given [name]
+  /// and a list of member IDs [memberIds]. It returns a [Future] that resolves
+  /// to `true` if the group was successfully created, or `false` otherwise.
+  ///
+  /// [name]: The name of the new group.
+  /// [memberIds]: A list of IDs representing the members to be added to the group.
+  ///
+  /// Returns a [Future] that resolves to a boolean indicating the success of the operation.
+  Future<bool> newGroup(String name, List<String> memberIds) async {
+    final r = await push('chat:new', {'name': name, 'member_ids': memberIds}).future;
+    if (r.isOk) return true;
+    throw Exception('Error creating group $name ${r.response}');
+  }
+
+  /// Asynchronously leaves a group.
+  ///
+  /// This method attempts to leave a group and returns a [Future] that
+  /// completes with a boolean value indicating whether the operation
+  /// was successful.
+  ///
+  /// Returns:
+  /// - `true` if the group was successfully left.
+  /// - `false` if there was an error leaving the group.
+  Future<bool> leaveGroup() async {
+    final r = await push('chat:member:leave', {}).future;
+    if (r.isOk) return true;
+    throw Exception('Error leaving group ${r.response}');
+  }
+
+  /// Adds a member to a group.
+  ///
+  /// This method takes a user ID and adds the corresponding user to a group.
+  ///
+  /// Returns a [Future] that completes with a boolean value indicating
+  /// whether the operation was successful.
+  ///
+  /// [userId]: The ID of the user to be added to the group.
+  Future<bool> addGroupMember(String userId) async {
+    final r = await push('chat:member:add:$userId', {}).future;
+    if (r.isOk) return true;
+    throw Exception('Error adding group member $userId ${r.response}');
+  }
+
+  /// Removes a member from a group.
+  ///
+  /// This method takes a user ID as a parameter and attempts to remove the
+  /// corresponding user from the group. It returns a [Future] that completes
+  /// with a boolean value indicating whether the removal was successful.
+  ///
+  /// [userId]: The ID of the user to be removed from the group.
+  ///
+  /// Returns a [Future<bool>] that completes with `true` if the user was
+  /// successfully removed, or `false` otherwise.
+  Future<bool> removeGroupMember(String userId) async {
+    final r = await push('chat:member:remove:$userId', {}).future;
+    if (r.isOk) return true;
+    throw Exception('Error removing group member $userId ${r.response}');
+  }
+
+  /// Sets the moderator status for a user in a group.
+  ///
+  /// This method updates the moderator status of a user identified by [userId]
+  /// within a group. The [isModerator] parameter determines whether the user
+  /// should be set as a moderator (`true`) or not (`false`).
+  ///
+  /// Returns a [Future] that completes with `true` if the operation was
+  /// successful, or `false` otherwise.
+  ///
+  /// - Parameters:
+  ///   - userId: The unique identifier of the user whose moderator status is to be updated.
+  ///   - isModerator: A boolean value indicating whether the user should be a moderator.
+  Future<bool> setGroupModerator(String userId, bool isModerator) async {
+    final r = await push('chat:member:set_authorities:$userId', {'is_moderator': isModerator}).future;
+    if (r.isOk) return true;
+    throw Exception('Error setting group moderator $userId ${r.response}');
+  }
+
+  /// Sets the name of the group.
+  ///
+  /// This method sends a request to update the group name to the specified [name].
+  ///
+  /// Returns a [Future] that completes with a boolean value indicating whether the operation was successful.
+  ///
+  /// [name]: The new name to set for the group.
+  ///
+  /// Example:
+  /// ```dart
+  /// bool success = await setGroupName("New Group Name");
+  /// ```
+  Future<bool> setGroupName(String name) async {
+    final r = await push('chat:patch', {'name': name}).future;
+    if (r.isOk) return true;
+    throw Exception('Error setting group name $name ${r.response}');
   }
 }
 

@@ -44,7 +44,7 @@ class _ChatConversationsTileState extends State<ChatConversationsTile> {
       if (conversation.members.isGroupOwner(widget.userId)) {
         return context.read<ChatConversationsCubit>().deleteConversation(conversation.id);
       } else {
-        return context.read<ChatConversationsCubit>().leaveConversation(conversation.id);
+        return context.read<ChatConversationsCubit>().leaveGroup(conversation.id);
       }
     }
   }

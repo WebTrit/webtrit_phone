@@ -119,7 +119,7 @@ class ConversationCubit extends Cubit<ConversationState> {
     if (channel == null) return;
 
     emit(state.copyWith(busy: true));
-    await channel.push('chat:delete', {}).future;
+    await channel.deleteChatConversation();
     emit(state.copyWith(busy: false));
   }
 
@@ -132,11 +132,11 @@ class ConversationCubit extends Cubit<ConversationState> {
     if (channel == null) return;
 
     emit(state.copyWith(busy: true));
-    await channel.push('chat:member:leave', {}).future;
+    await channel.leaveGroup();
     emit(state.copyWith(busy: false));
   }
 
-  Future addUser(String participantId) async {
+  Future addGroupMember(String userId) async {
     final state = this.state;
     if (state is! CVSReady) return;
     if (state.busy) return;
@@ -145,11 +145,11 @@ class ConversationCubit extends Cubit<ConversationState> {
     if (channel == null) return;
 
     emit(state.copyWith(busy: true));
-    await channel.push('chat:member:add:$participantId', {}).future;
+    await channel.addGroupMember(userId);
     emit(state.copyWith(busy: false));
   }
 
-  Future removeUser(String participantId) async {
+  Future removeGroupMember(String userId) async {
     final state = this.state;
     if (state is! CVSReady) return;
     if (state.busy) return;
@@ -158,11 +158,11 @@ class ConversationCubit extends Cubit<ConversationState> {
     if (channel == null) return;
 
     emit(state.copyWith(busy: true));
-    await channel.push('chat:member:remove:$participantId', {}).future;
+    await channel.removeGroupMember(userId);
     emit(state.copyWith(busy: false));
   }
 
-  Future setModerator(String participantId, bool isModerator) async {
+  Future setGroupModerator(String userId, bool isModerator) async {
     final state = this.state;
     if (state is! CVSReady) return;
     if (state.busy) return;
@@ -171,11 +171,11 @@ class ConversationCubit extends Cubit<ConversationState> {
     if (channel == null) return;
 
     emit(state.copyWith(busy: true));
-    await channel.push('chat:member:set_authorities:$participantId', {'is_moderator': isModerator}).future;
+    await channel.setGroupModerator(userId, isModerator);
     emit(state.copyWith(busy: false));
   }
 
-  Future setName(String name) async {
+  Future setGroupName(String name) async {
     final state = this.state;
     if (state is! CVSReady) return;
     if (state.busy) return;
@@ -184,7 +184,7 @@ class ConversationCubit extends Cubit<ConversationState> {
     if (channel == null) return;
 
     emit(state.copyWith(busy: true));
-    await channel.push('chat:patch', {'name': name}).future;
+    await channel.setGroupName(name);
     emit(state.copyWith(busy: false));
   }
 
@@ -217,9 +217,7 @@ class ConversationCubit extends Cubit<ConversationState> {
       // If no messages found in local storage, fetch from the remote server
       final channel = _channel;
       if (messages.isEmpty && channel != null) {
-        final payload = {'created_before': topDate.toUtc().toIso8601String(), 'limit': 50};
-        final req = await channel.push('message:history', payload).future;
-        messages = (req.response['data'] as List).map((e) => ChatMessage.fromMap(e)).toList();
+        messages = await channel.chatMessagHistory(50, createdBefore: topDate);
         _logger.info('fetchHistory: remote messages ${messages.length}');
 
         if (messages.isNotEmpty) {

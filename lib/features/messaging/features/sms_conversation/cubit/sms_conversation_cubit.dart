@@ -91,7 +91,7 @@ class SmsConversationCubit extends Cubit<SmsConversationState> {
     _outboxRepository.upsertOutboxReadCursor(outboxEntry);
   }
 
-  Future<bool> deleteConversation() async {
+  Future deleteConversation() async {
     final state = this.state;
     if (state is! SCSReady || state.busy) return false;
 
@@ -102,11 +102,8 @@ class SmsConversationCubit extends Cubit<SmsConversationState> {
     if (channel == null || channel.state != PhoenixChannelState.joined) return false;
 
     emit(state.copyWith(busy: true));
-    final r = await channel.push('sms:conversation:delete', {}).future;
-
+    await channel.deleteSmsConversation();
     emit(state.copyWith(busy: false));
-    if (r.isOk) return true;
-    return false;
   }
 
   Future fetchHistory() async {
@@ -139,9 +136,7 @@ class SmsConversationCubit extends Cubit<SmsConversationState> {
       // If no messages found in local storage, fetch from the remote server
       final channel = _client.getSmsConversationChannel(conversationId);
       if (messages.isEmpty && channel != null) {
-        final payload = {'created_before': topDate.toUtc().toIso8601String(), 'limit': 50};
-        final req = await channel.push('sms:message:history', payload).future;
-        messages = (req.response['data'] as List).map((e) => SmsMessage.fromMap(e)).toList();
+        messages = await channel.smsMessageHistory(50, createdBefore: topDate);
         _logger.info('fetchHistory: remote messages ${messages.length}');
         if (messages.isNotEmpty) {
           await _repository.upsertMessages(messages, silent: true);

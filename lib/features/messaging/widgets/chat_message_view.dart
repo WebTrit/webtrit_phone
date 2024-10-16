@@ -314,11 +314,10 @@ class _ReplyQuoteState extends State<ReplyQuote> {
     final channel = client.getChatChannel(chatId);
     if (channel == null) return null;
 
-    final req = await channel.push('message:get:$msgId', {}).future;
-    if (req.isOk) {
-      final msg = ChatMessage.fromMap(req.response);
-      await chatsRepository.upsertMessage(msg, silent: true);
-      return msg;
+    final message = await channel.getChatMessage(msgId);
+    if (message != null) {
+      await chatsRepository.upsertMessage(message, silent: true);
+      return message;
     }
 
     return null;

@@ -49,8 +49,7 @@ class SmsConversationsCubit extends Cubit<SmsConversationsState> {
   Future<bool> deleteConversation(int id) async {
     final channel = _client.getSmsConversationChannel(id);
     if (channel == null || channel.state != PhoenixChannelState.joined) return false;
-    final result = await channel.push('sms:conversation:delete', {}).future;
-    return result.isOk;
+    return channel.deleteSmsConversation();
   }
 
   /// Sort conversations list by last message if available, otherwise by conversations update time

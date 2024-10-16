@@ -33,10 +33,8 @@ class _SmsConversationScreenState extends State<SmsConversationScreen> {
     if (!mounted) return;
     if (askResult != true) return;
 
-    final result = await conversationCubit.deleteConversation();
-
+    await conversationCubit.deleteConversation();
     if (!mounted) return;
-    if (result != true) return;
     context.router.navigate(const MainScreenPageRoute(children: [ConversationsScreenPageRoute()]));
   }
 

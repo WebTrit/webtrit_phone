@@ -83,7 +83,7 @@ class _GroupInfoState extends State<GroupInfo> {
       ),
     );
     if (!mounted) return;
-    if (result != null) await conversationCubit.addUser(result.sourceId);
+    if (result != null) await conversationCubit.addGroupMember(result.sourceId);
   }
 
   onRemoveUser(String userId) async {
@@ -94,7 +94,7 @@ class _GroupInfoState extends State<GroupInfo> {
       builder: (context) => ConfirmDialog(askText: askText),
     );
     if (!mounted) return;
-    if (result == true) await conversationCubit.removeUser(userId);
+    if (result == true) await conversationCubit.removeGroupMember(userId);
   }
 
   onSetModerator(String userId, bool isModerator) async {
@@ -111,11 +111,11 @@ class _GroupInfoState extends State<GroupInfo> {
     );
 
     if (!mounted) return;
-    if (result == true) await conversationCubit.setModerator(userId, isModerator);
+    if (result == true) await conversationCubit.setGroupModerator(userId, isModerator);
   }
 
   onNameSubmit(String value) {
-    if (value.length > 3) conversationCubit.setName(value);
+    if (value.length > 3) conversationCubit.setGroupName(value);
   }
 
   @override

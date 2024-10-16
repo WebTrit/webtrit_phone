@@ -59,15 +59,13 @@ class ChatConversationsCubit extends Cubit<ChatConversationsState> {
   Future<bool> deleteConversation(int id) async {
     final channel = _client.getChatChannel(id);
     if (channel == null || channel.state != PhoenixChannelState.joined) return false;
-    final result = await channel.push('chat:delete', {}).future;
-    return result.isOk;
+    return channel.deleteChatConversation();
   }
 
-  Future<bool> leaveConversation(int id) async {
+  Future<bool> leaveGroup(int id) async {
     final channel = _client.getChatChannel(id);
     if (channel == null || channel.state != PhoenixChannelState.joined) return false;
-    final result = await channel.push('chat:member:leave', {}).future;
-    return result.isOk;
+    return channel.leaveGroup();
   }
 
   /// Sort chat list by last message if available, otherwise by chat update time

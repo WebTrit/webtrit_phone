@@ -118,15 +118,9 @@ class _NewGroupConversationState extends State<NewGroupConversation> {
 
     try {
       setState(() => state.copyWith(busy: true));
-      final payload = {
-        'name': nameController.text,
-        'member_ids': state.members.map((contact) => contact.sourceId).toList(),
-      };
-      final result = await userChannel.push('chat:new', payload).future;
-
+      await userChannel.newGroup(nameController.text, state.members.map((contact) => contact.sourceId).toList());
       if (!mounted) return;
-      if (result.isOk) Navigator.of(context).pop();
-      if (result.isError) throw Exception(result.response.toString());
+      Navigator.of(context).pop();
     } catch (_) {
       context.showErrorSnackBar(context.l10n.messaging_GroupBuilderScreen_submitError);
     } finally {
