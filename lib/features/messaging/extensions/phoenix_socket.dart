@@ -31,6 +31,12 @@ extension PhoenixSocketExt on PhoenixSocket {
 }
 
 extension PhoenixChannelExt on PhoenixChannel {
+  Stream<UserChannelEvent> get userEvents => messages.map((e) => UserChannelEvent.fromEvent(e));
+
+  Stream<ChatChannelEvent> get chatEvents => messages.map((e) => ChatChannelEvent.fromEvent(e));
+
+  Stream<SmsChannelEvent> get smsEvents => messages.map((e) => SmsChannelEvent.fromEvent(e));
+
   Future<Iterable<int>> get chatConversationsIds async {
     final response = (await push('chat:get_ids', {}).future).response;
     return (response as Iterable).cast<int>();
@@ -89,11 +95,151 @@ extension PhoenixChannelExt on PhoenixChannel {
     return (req.response['data'] as Iterable).map((e) => SmsMessage.fromMap(e)).toList();
   }
 
-  Stream<UserChannelEvent> get userEvents => messages.map((e) => UserChannelEvent.fromEvent(e));
+  /// This function takes a [ChatOutboxMessageEntry] and sends a new chat message using this channel.
+  /// It returns: [Future] that completes with a tuple containing the sent [ChatMessage]
+  /// and an optional [Chat] object for case when new chat was created by first message.
+  /// Throws an exception if the message sending process fails.
+  Future<(ChatMessage, Chat?)> newChatMessage(ChatOutboxMessageEntry outboxEntry) async {
+    var payload = {
+      'recipient': outboxEntry.participantId,
+      'content': outboxEntry.content,
+      'idempotency_key': outboxEntry.idKey,
+      'reply_to_id': outboxEntry.replyToId,
+      'forwarded_from_id': outboxEntry.forwardFromId,
+      'author_id': outboxEntry.authorId,
+    };
+    final r = await push('message:new', payload).future;
+    final response = r.response;
 
-  Stream<ChatChannelEvent> get chatEvents => messages.map((e) => ChatChannelEvent.fromEvent(e));
+    ChatMessage message;
+    Chat? chat;
 
-  Stream<SmsChannelEvent> get smsEvents => messages.map((e) => SmsChannelEvent.fromEvent(e));
+    if (r.isOk && response is Map<String, dynamic>) {
+      if (response.containsKey('chat') && response.containsKey('msg')) {
+        chat = Chat.fromMap(response['chat']);
+        message = ChatMessage.fromMap(response['msg']);
+        return (message, chat);
+      }
+
+      if (response.containsKey('id')) {
+        message = ChatMessage.fromMap(response);
+        return (message, chat);
+      }
+    }
+    throw Exception('Error processing $outboxEntry $response');
+  }
+
+  /// This function takes a [ChatOutboxMessageEditEntry] and attempts to edit a chat message using this channel.
+  /// [editEntry] The entry containing the details of the message to be edited.
+  /// It returns a [Future] that resolves to the edited [ChatMessage].
+  /// Throws an exception if the edit process fails.
+  Future<ChatMessage> editChatMessage(ChatOutboxMessageEditEntry editEntry) async {
+    var payload = {'new_content': editEntry.newContent};
+    final r = await push('message:edit:${editEntry.id}', payload).future;
+    final response = r.response;
+
+    if (r.isOk && response is Map<String, dynamic>) {
+      return ChatMessage.fromMap(response);
+    }
+
+    throw Exception('Error processing $editEntry $response');
+  }
+
+  /// This function takes a [ChatOutboxMessageDeleteEntry] and attempts to delete a chat message using this channel.
+  /// [deleteEntry] The entry containing the details of the message to be deleted.
+  /// It returns a [Future] that resolves to the deleted [ChatMessage].
+  /// Throws an exception if the deletion process fails.
+  Future<ChatMessage> deleteChatMessage(ChatOutboxMessageDeleteEntry deleteEntry) async {
+    final r = await push('message:delete:${deleteEntry.id}', {}).future;
+    final response = r.response;
+
+    if (r.isOk && response is Map<String, dynamic>) {
+      return ChatMessage.fromMap(response);
+    }
+
+    throw Exception('Error processing $deleteEntry $response');
+  }
+
+  /// This function takes a [ChatOutboxReadCursorEntry] and attempts to set a chat cursor using this channel.
+  /// [readCursor] The entry containing the details of the read cursor to be set.
+  /// It returns a [Future] that resolves to the set [ChatMessageReadCursor].
+  /// Throws an exception if the cursor setting process fails.
+  Future<ChatMessageReadCursor> setChatReadCursor(ChatOutboxReadCursorEntry readCursor) async {
+    var payload = {'last_read_at': readCursor.time.toUtc().toIso8601String()};
+    final r = await push('chat:cursor:set', payload).future;
+    final response = r.response;
+
+    if (r.isOk) {
+      return ChatMessageReadCursor(chatId: readCursor.chatId, userId: socket.userId!, time: readCursor.time);
+    }
+
+    throw Exception('Error processing $readCursor $response');
+  }
+
+  /// This function takes an [SmsOutboxMessageEntry] and attempts to send it as a new SMS message using this channel.
+  /// It returns a [Future] that resolves to a tuple containing the sent [SmsMessage]
+  /// and an optional [SmsConversation] object if a new conversation was created by first message.
+  /// Throws an exception if the message sending process fails.
+  Future<(SmsMessage, SmsConversation?) /*?*/ > newSmsMessage(SmsOutboxMessageEntry outboxEntry) async {
+    var payload = {
+      'content': outboxEntry.content,
+      'idempotency_key': outboxEntry.idKey,
+      'from_phone_number': outboxEntry.fromPhoneNumber,
+      'to_phone_number': outboxEntry.toPhoneNumber,
+      'recepient_id': outboxEntry.recepientId,
+    };
+    final r = await push('sms:message:new', payload).future;
+    final response = r.response;
+
+    SmsMessage smsMessage;
+    SmsConversation? smsConversation;
+
+    if (r.isOk && response is Map<String, dynamic>) {
+      if (response.containsKey('conversation') && response.containsKey('message')) {
+        smsConversation = SmsConversation.fromMap(response['conversation']);
+        smsMessage = SmsMessage.fromMap(response['message']);
+        return (smsMessage, smsConversation);
+      }
+
+      if (response.containsKey('id')) {
+        smsMessage = SmsMessage.fromMap(response);
+        return (smsMessage, smsConversation);
+      }
+    }
+    throw Exception('Error processing $outboxEntry $response');
+  }
+
+  /// This function takes a [SmsOutboxMessageEditEntry] and attempts to edit an SMS message using this channel.
+  /// [editEntry] The entry containing the details of the message to be edited.
+  /// It returns a [Future] that resolves to the edited [SmsMessage].
+  /// Throws an exception if the edit process fails.
+  Future<SmsMessage> deleteSmsMessage(SmsOutboxMessageDeleteEntry deleteEntry) async {
+    final r = await push('sms:message:delete:${deleteEntry.id}', {}).future;
+    final response = r.response;
+
+    if (r.isOk && response is Map<String, dynamic>) {
+      return SmsMessage.fromMap(response);
+    }
+
+    throw Exception('Error processing $deleteEntry $response');
+  }
+
+  /// This function takes a [SmsOutboxReadCursorEntry] and attempts to set an SMS cursor using this channel.
+  /// [readCursor] The entry containing the details of the read cursor to be set.
+  /// It returns a [Future] that resolves to the set [SmsMessageReadCursor].
+  /// Throws an exception if the cursor setting process fails.
+  Future<SmsMessageReadCursor> setSmsReadCursor(SmsOutboxReadCursorEntry readCursor) async {
+    var payload = {'last_read_at': readCursor.time.toUtc().toIso8601String()};
+    final r = await push('sms:conversation:cursor:set', payload).future;
+    final response = r.response;
+
+    if (r.isOk) {
+      return SmsMessageReadCursor(
+          conversationId: readCursor.conversationId, userId: socket.userId!, time: readCursor.time);
+    }
+
+    throw Exception('Error processing $readCursor $response');
+  }
 }
 
 sealed class UserChannelEvent {

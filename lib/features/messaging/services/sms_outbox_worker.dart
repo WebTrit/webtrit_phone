@@ -7,10 +7,13 @@ import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
-// TODO: extract events and commands to separate classes
-
 final _logger = Logger('SmsOutboxWorker');
 
+/// A worker class responsible for handling the outbox of sms messages.
+///
+/// This class manages the sending of messages that are queued in the outbox,
+/// ensuring that they are delivered to their intended recipients. It handles
+/// retries and error management to ensure reliable message delivery.
 class SmsOutboxWorker {
   SmsOutboxWorker(this._client, this._smsRepository, this._outboxRepository);
 
@@ -22,17 +25,18 @@ class SmsOutboxWorker {
 
   init() {
     _logger.info('Initialising...');
-    Future.doWhile(() async {
-      for (final entry in await _outboxRepository.getOutboxMessages()) {
-        await _processNewMessage(entry);
-      }
-      for (final entry in await _outboxRepository.getOutboxMessageDeletes()) {
-        await _processMessageDelete(entry);
-      }
 
-      for (final entry in await _outboxRepository.getOutboxReadCursors()) {
-        await _processReadCursor(entry);
-      }
+    /// Continuously processes messages, edits, deletes, and read cursors from the outbox repository
+    /// until the worker is disposed. The loop runs every second.
+    Future.doWhile(() async {
+      final messages = await _outboxRepository.getOutboxMessages();
+      await Future.forEach(messages, (entry) => _processNewMessage(entry));
+
+      final deletes = await _outboxRepository.getOutboxMessageDeletes();
+      await Future.forEach(deletes, (entry) => _processMessageDelete(entry));
+
+      final cursors = await _outboxRepository.getOutboxReadCursors();
+      await Future.forEach(cursors, (entry) => _processReadCursor(entry));
 
       if (_disposed) return false;
       await Future.delayed(const Duration(seconds: 1));
@@ -45,66 +49,64 @@ class SmsOutboxWorker {
     _disposed = true;
   }
 
-  Future _processNewMessage(SmsOutboxMessageEntry message) async {
-    final conversationId = message.conversationId;
+  /// Processes a new SMS outbox message entry.
+  ///
+  /// This method handles the processing of a new message entry in the SMS outbox.
+  ///
+  /// [entry] The SMS outbox message entry to be processed.
+  ///
+  /// Returns a [Future] that completes when the processing is done.
+  Future _processNewMessage(SmsOutboxMessageEntry entry) async {
     try {
       final PhoenixChannel? channel;
-
-      if (conversationId != null) {
-        channel = _client.getSmsConversationChannel(conversationId);
+      // Check if it's message for existed or for virtual dialog with designated participant
+      if (entry.conversationId != null) {
+        channel = _client.getSmsConversationChannel(entry.conversationId!);
       } else {
-        channel = _client.userChannel;
+        // Check if dialog already created, if so use it
+        // Can happen when user wrote many messages to the same new participant being offline
+        // and after first message the dialog was created rest of the messages can go to the new dialog
+        final chatId = await _smsRepository.findConversationBetweenNumbers(entry.fromPhoneNumber, entry.toPhoneNumber);
+        chatId != null ? channel = _client.getSmsConversationChannel(chatId.id) : channel = _client.userChannel;
       }
-
       if (channel == null) return;
       if (channel.state != PhoenixChannelState.joined) return;
 
-      var payload = {
-        'content': message.content,
-        'idempotency_key': message.idKey,
-        'from_phone_number': message.fromPhoneNumber,
-        'to_phone_number': message.toPhoneNumber,
-        'recepient_id': message.recepientId,
-      };
-      final r = await channel.push('sms:message:new', payload).future;
-      if (r.response != null) _logger.info('Response from new_msg: ${r.response}');
-
-      if (r.isOk) {
-        final conversation = SmsConversation.fromMap(r.response['conversation']);
-        final message = SmsMessage.fromMap(r.response['message']);
-        await _smsRepository.upsertConversation(conversation);
-        await _smsRepository.upsertMessage(message);
-        await _outboxRepository.deleteOutboxMessage(message.idKey);
-      }
-      if (r.isError) throw Exception('Error processing new dialog message');
-    } catch (e) {
-      _logger.severe('Error processing new dialog message, attempt: ${message.sendAttempts}', e);
-      if (message.sendAttempts > 5) {
-        _logger.severe('Send attempts exceeded for dialog message: ${message.idKey}');
-        await _outboxRepository.deleteOutboxMessage(message.idKey);
+      final (message, conversation) = await channel.newSmsMessage(entry);
+      if (conversation != null) await _smsRepository.upsertConversation(conversation);
+      await _smsRepository.upsertMessage(message);
+      await _outboxRepository.deleteOutboxMessage(entry.idKey);
+      _logger.info('Processed new message: ${message.id}');
+    } catch (e, s) {
+      _logger.severe('Error processing new dialog message, attempt: ${entry.sendAttempts}', e, s);
+      if (entry.sendAttempts > 5) {
+        _logger.severe('Send attempts exceeded for dialog message: ${entry.idKey}');
+        await _outboxRepository.deleteOutboxMessage(entry.idKey);
       } else {
-        await _outboxRepository.upsertOutboxMessage(message.incAttempt());
+        await _outboxRepository.upsertOutboxMessage(entry.incAttempt());
       }
     }
   }
 
+  /// Processes the deletion of an SMS outbox message.
+  ///
+  /// This method handles the logic required to delete a message from the SMS outbox.
+  ///
+  /// [messageDelete] The entry containing the details of the message to be deleted.
+  ///
+  /// Returns a [Future] that completes when the message deletion process is finished.
   Future _processMessageDelete(SmsOutboxMessageDeleteEntry messageDelete) async {
     try {
       final channel = _client.getSmsConversationChannel(messageDelete.conversationId);
       if (channel == null) return;
       if (channel.state != PhoenixChannelState.joined) return;
 
-      final r = await channel.push('sms:message:delete:${messageDelete.id}', {}).future;
-
-      if (r.isOk) {
-        final message = SmsMessage.fromMap(r.response);
-        await _smsRepository.upsertMessage(message);
-        await _outboxRepository.deleteOutboxMessageDelete(messageDelete.id);
-        _logger.info('After isOk on delete_msg entry: ${message.idKey}');
-      }
-      if (r.isError) throw Exception('Error processing message delete');
-    } catch (e) {
-      _logger.severe('Error processing message delete, attempt: ${messageDelete.sendAttempts}', e);
+      final message = await channel.deleteSmsMessage(messageDelete);
+      await _smsRepository.upsertMessage(message);
+      await _outboxRepository.deleteOutboxMessageDelete(messageDelete.id);
+      _logger.info('Processed delete message: ${message.id}');
+    } catch (e, s) {
+      _logger.severe('Error processing message delete, attempt: ${messageDelete.sendAttempts}', e, s);
       if (messageDelete.sendAttempts > 5) {
         _logger.severe('Send attempts exceeded for delete message: ${messageDelete.idKey}');
         await _outboxRepository.deleteOutboxMessageDelete(messageDelete.id);
@@ -114,25 +116,27 @@ class SmsOutboxWorker {
     }
   }
 
+  /// Processes the given read cursor entry from the SMS outbox.
+  ///
+  /// This method handles the logic for processing an entry in the SMS outbox
+  /// read cursor. It performs necessary actions based on the state and content
+  /// of the read cursor entry.
+  ///
+  /// [readCursor] The entry from the SMS outbox read cursor to be processed.
+  ///
+  /// Returns a [Future] that completes when the processing is done.
   Future _processReadCursor(SmsOutboxReadCursorEntry readCursor) async {
     try {
       final channel = _client.getSmsConversationChannel(readCursor.conversationId);
       if (channel == null) return;
       if (channel.state != PhoenixChannelState.joined) return;
 
-      var payload = {'last_read_at': readCursor.time.toUtc().toIso8601String()};
-      final r = await channel.push('sms:conversation:cursor:set', payload).future;
-
-      if (r.isOk) {
-        await _outboxRepository.deleteOutboxReadCursor(readCursor.conversationId);
-        final c = SmsMessageReadCursor(
-            conversationId: readCursor.conversationId, userId: _client.userId!, time: readCursor.time);
-        await _smsRepository.upsertMessageReadCursor(c);
-        _logger.info('After isOk on read cursor: ${readCursor.conversationId}');
-      }
-      if (r.isError) throw Exception('Error processing read cursor');
-    } catch (e) {
-      _logger.severe('Error processing read cursor, attempt: ${readCursor.sendAttempts}', e);
+      final cursor = await channel.setSmsReadCursor(readCursor);
+      await _smsRepository.upsertMessageReadCursor(cursor);
+      await _outboxRepository.deleteOutboxReadCursor(readCursor.conversationId);
+      _logger.info('Processed read cursor: ${cursor.conversationId}');
+    } catch (e, s) {
+      _logger.severe('Error processing read cursor, attempt: ${readCursor.sendAttempts}', e, s);
       if (readCursor.sendAttempts > 5) {
         _logger.severe('Send attempts exceeded for read cursor: ${readCursor.conversationId}');
         await _outboxRepository.deleteOutboxReadCursor(readCursor.conversationId);
