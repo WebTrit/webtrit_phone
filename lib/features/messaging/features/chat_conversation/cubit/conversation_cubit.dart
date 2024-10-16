@@ -118,9 +118,14 @@ class ConversationCubit extends Cubit<ConversationState> {
     final channel = _channel;
     if (channel == null) return;
 
-    emit(state.copyWith(busy: true));
-    await channel.deleteChatConversation();
-    emit(state.copyWith(busy: false));
+    try {
+      emit(state.copyWith(busy: true));
+      await channel.deleteChatConversation();
+      emit(ConversationState.left(state.credentials));
+    } catch (e, s) {
+      _logger.warning('deleteChat failed', e, s);
+      emit(state.copyWith(busy: false));
+    }
   }
 
   Future leaveGroup() async {
@@ -131,9 +136,14 @@ class ConversationCubit extends Cubit<ConversationState> {
     final channel = _channel;
     if (channel == null) return;
 
-    emit(state.copyWith(busy: true));
-    await channel.leaveGroup();
-    emit(state.copyWith(busy: false));
+    try {
+      emit(state.copyWith(busy: true));
+      await channel.leaveGroup();
+      emit(ConversationState.left(state.credentials));
+    } catch (e, s) {
+      _logger.warning('leaveGroup failed', e, s);
+      emit(state.copyWith(busy: false));
+    }
   }
 
   Future addGroupMember(String userId) async {
@@ -144,9 +154,14 @@ class ConversationCubit extends Cubit<ConversationState> {
     final channel = _channel;
     if (channel == null) return;
 
-    emit(state.copyWith(busy: true));
-    await channel.addGroupMember(userId);
-    emit(state.copyWith(busy: false));
+    try {
+      emit(state.copyWith(busy: true));
+      await channel.addGroupMember(userId);
+    } catch (e, s) {
+      _logger.warning('addGroupMember failed', e, s);
+    } finally {
+      emit(state.copyWith(busy: false));
+    }
   }
 
   Future removeGroupMember(String userId) async {
@@ -157,9 +172,14 @@ class ConversationCubit extends Cubit<ConversationState> {
     final channel = _channel;
     if (channel == null) return;
 
-    emit(state.copyWith(busy: true));
-    await channel.removeGroupMember(userId);
-    emit(state.copyWith(busy: false));
+    try {
+      emit(state.copyWith(busy: true));
+      await channel.removeGroupMember(userId);
+    } catch (e, s) {
+      _logger.warning('removeGroupMember failed', e, s);
+    } finally {
+      emit(state.copyWith(busy: false));
+    }
   }
 
   Future setGroupModerator(String userId, bool isModerator) async {
@@ -170,9 +190,14 @@ class ConversationCubit extends Cubit<ConversationState> {
     final channel = _channel;
     if (channel == null) return;
 
-    emit(state.copyWith(busy: true));
-    await channel.setGroupModerator(userId, isModerator);
-    emit(state.copyWith(busy: false));
+    try {
+      emit(state.copyWith(busy: true));
+      await channel.setGroupModerator(userId, isModerator);
+    } catch (e, s) {
+      _logger.warning('setGroupModerator failed', e, s);
+    } finally {
+      emit(state.copyWith(busy: false));
+    }
   }
 
   Future setGroupName(String name) async {
@@ -183,9 +208,14 @@ class ConversationCubit extends Cubit<ConversationState> {
     final channel = _channel;
     if (channel == null) return;
 
-    emit(state.copyWith(busy: true));
-    await channel.setGroupName(name);
-    emit(state.copyWith(busy: false));
+    try {
+      emit(state.copyWith(busy: true));
+      await channel.setGroupName(name);
+    } catch (e, s) {
+      _logger.warning('setGroupName failed', e, s);
+    } finally {
+      emit(state.copyWith(busy: false));
+    }
   }
 
   Future fetchHistory() async {

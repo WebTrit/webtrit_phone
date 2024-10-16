@@ -101,9 +101,14 @@ class SmsConversationCubit extends Cubit<SmsConversationState> {
     final channel = _client.getSmsConversationChannel(conversationId);
     if (channel == null || channel.state != PhoenixChannelState.joined) return false;
 
-    emit(state.copyWith(busy: true));
-    await channel.deleteSmsConversation();
-    emit(state.copyWith(busy: false));
+    try {
+      emit(state.copyWith(busy: true));
+      await channel.deleteSmsConversation();
+      emit(SmsConversationState.left(_creds));
+    } catch (e, s) {
+      _logger.warning('deleteConversation failed', e, s);
+      emit(state.copyWith(busy: false));
+    }
   }
 
   Future fetchHistory() async {
