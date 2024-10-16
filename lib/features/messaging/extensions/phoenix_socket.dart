@@ -240,6 +240,10 @@ extension PhoenixChannelExt on PhoenixChannel {
 
     throw Exception('Error processing $readCursor $response');
   }
+
+  Future sendChatTyping() async {
+    await push('chat:typing', {}).future;
+  }
 }
 
 sealed class UserChannelEvent {
@@ -322,6 +326,8 @@ sealed class ChatChannelEvent {
         return ChatChannelMessageUpdate(ChatMessage.fromMap(e.payload as Map<String, dynamic>));
       case 'chat:cursor:set':
         return ChatChannelCursorSet(ChatMessageReadCursor.fromMap(e.payload as Map<String, dynamic>));
+      case 'typing':
+        return ChatChannelTyping(e.payload!['user_id'].toString());
       case 'phx_error':
         return ChatChannelDisconnect();
       default:
@@ -358,6 +364,17 @@ class ChatChannelCursorSet extends ChatChannelEvent with EquatableMixin {
 
   @override
   List<Object> get props => [cursor];
+
+  @override
+  bool get stringify => true;
+}
+
+class ChatChannelTyping extends ChatChannelEvent with EquatableMixin {
+  ChatChannelTyping(this.userId);
+  final String userId;
+
+  @override
+  List<Object> get props => [userId];
 
   @override
   bool get stringify => true;

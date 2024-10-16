@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_function_literals_in_foreach_calls
+
 import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,6 +9,8 @@ import 'package:phoenix_socket/phoenix_socket.dart';
 import 'package:webtrit_phone/features/features.dart';
 
 final _logger = Logger('ChatTypingCubit');
+
+typedef TypingState = Set<String>;
 
 class ChatTypingCubit extends Cubit<TypingState> {
   ChatTypingCubit(
@@ -28,7 +32,7 @@ class ChatTypingCubit extends Cubit<TypingState> {
     if (_chatId != chatId) {
       _chatId = chatId;
       _typingSub?.cancel();
-      _typingSub = _typingStream(chatId).listen(_handleEvent);
+      _typingSub = _typingStream(chatId).listen((_) {});
     }
   }
 
@@ -38,32 +42,26 @@ class ChatTypingCubit extends Cubit<TypingState> {
 
     try {
       final channel = client.getChatChannel(_chatId!);
-      if (channel == null) throw Exception('No channel yet');
-      if (channel.state != PhoenixChannelState.joined) throw Exception('Channel not ready yet');
-      channel.push('chat:typing', {});
+      if (channel == null || channel.state != PhoenixChannelState.joined) throw Exception('Channel not ready yet');
+      await channel.sendChatTyping();
       _lastTypingSent = DateTime.now();
     } catch (e) {
       _logger.warning('Failed to send typing event: $e');
     }
   }
 
-  Future<void> _handleEvent(e) async {
-    if (e is TypingEvent) {
-      // Set typing user
-      final userId = e.userId;
-      emit({...state, userId});
+  _addTypingUser(String userId) {
+    if (isClosed) return;
 
-      // Start auto-remove timer
-      _typingTimers[userId]?.cancel();
-      _typingTimers[userId] = Timer(typeTimeout, () {
-        _removeTypingUser(userId);
-      });
-    }
+    final typings = state;
+    typings.add(userId);
+    emit(Set.from(typings));
 
-    if (e is SentEvent) {
-      // Remove typing user on sent message from user
-      _removeTypingUser(e.senderId);
-    }
+    // Start auto-remove timer
+    _typingTimers[userId]?.cancel();
+    _typingTimers[userId] = Timer(typeTimeout, () {
+      _removeTypingUser(userId);
+    });
   }
 
   _removeTypingUser(String userId) {
@@ -78,21 +76,21 @@ class ChatTypingCubit extends Cubit<TypingState> {
     while (true) {
       try {
         final channel = client.getChatChannel(chatId);
-        if (channel == null) throw Exception('No channel yet');
-        if (channel.state != PhoenixChannelState.joined) throw Exception('Channel not ready yet');
+        if (channel == null || channel.state != PhoenixChannelState.joined) throw Exception('Channel not ready yet');
 
-        await for (final e in channel.messages) {
-          if (e.event.value == 'typing') {
-            TypingEvent event = (userId: e.payload!['user_id'] as String);
-            yield event;
+        await for (var event in channel.chatEvents) {
+          switch (event.runtimeType) {
+            case ChatChannelTyping event:
+              _addTypingUser((event).userId);
+            case ChatChannelMessageUpdate event:
+              _removeTypingUser((event).message.senderId);
+            default:
           }
-          if (e.event.value == 'message_update') {
-            SentEvent event = (senderId: e.payload!['sender_id'] as String);
-            yield event;
-          }
+
+          yield event;
         }
-      } catch (e) {
-        yield e;
+      } catch (e, s) {
+        _logger.info('_typingStream error', e, s);
       } finally {
         yield null;
         await Future.delayed(const Duration(seconds: 1));
@@ -102,15 +100,8 @@ class ChatTypingCubit extends Cubit<TypingState> {
 
   @override
   Future<void> close() {
-    if (_chatId != null) _chatId = null;
     _typingSub?.cancel();
-    for (var t in _typingTimers.values) {
-      t.cancel();
-    }
+    _typingTimers.values.forEach((t) => t.cancel());
     return super.close();
   }
 }
-
-typedef TypingEvent = ({String userId});
-typedef SentEvent = ({String senderId});
-typedef TypingState = Set<String>;

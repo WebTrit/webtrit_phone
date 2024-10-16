@@ -200,7 +200,7 @@ class ChatsSyncWorker {
               await chatsRepository.upsertChatMessageReadCursor(e.cursor);
             case ChatChannelDisconnect _:
               throw Exception('disconnect');
-            case ChatChannelUnknown _:
+            default:
           }
 
           yield event;

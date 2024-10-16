@@ -200,7 +200,7 @@ class SmsSyncWorker {
               await smsRepository.upsertMessageReadCursor(e.cursor);
             case SmsChannelDisconnect _:
               throw Exception('disconnect');
-            case SmsChannelUnknown _:
+            default:
           }
 
           yield event;
