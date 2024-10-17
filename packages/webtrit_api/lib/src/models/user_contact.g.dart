@@ -8,6 +8,7 @@ part of 'user_contact.dart';
 
 _$UserContactImpl _$$UserContactImplFromJson(Map<String, dynamic> json) =>
     _$UserContactImpl(
+      userId: json['user_id'] as String,
       sipStatus: $enumDecodeNullable(_$SipStatusEnumMap, json['sip_status']),
       numbers: Numbers.fromJson(json['numbers'] as Map<String, dynamic>),
       email: json['email'] as String?,
@@ -15,10 +16,13 @@ _$UserContactImpl _$$UserContactImplFromJson(Map<String, dynamic> json) =>
       lastName: json['last_name'] as String?,
       aliasName: json['alias_name'] as String?,
       companyName: json['company_name'] as String?,
+      isCurrentUser: json['is_current_user'] as bool?,
+      isRegisteredUser: json['is_registered_user'] as bool?,
     );
 
 Map<String, dynamic> _$$UserContactImplToJson(_$UserContactImpl instance) =>
     <String, dynamic>{
+      'user_id': instance.userId,
       'sip_status': _$SipStatusEnumMap[instance.sipStatus],
       'numbers': instance.numbers,
       'email': instance.email,
@@ -26,6 +30,8 @@ Map<String, dynamic> _$$UserContactImplToJson(_$UserContactImpl instance) =>
       'last_name': instance.lastName,
       'alias_name': instance.aliasName,
       'company_name': instance.companyName,
+      'is_current_user': instance.isCurrentUser,
+      'is_registered_user': instance.isRegisteredUser,
     };
 
 const _$SipStatusEnumMap = {

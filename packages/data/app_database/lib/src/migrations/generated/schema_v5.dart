@@ -39,16 +39,16 @@ class Contacts extends Table with TableInfo {
       type: DriftSqlType.string,
       requiredDuringInsert: false,
       $customConstraints: 'NULL');
-  late final GeneratedColumn<int> registered = GeneratedColumn<int>(
-      'registered', aliasedName, true,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      $customConstraints: 'NULL CHECK (registered IN (0, 1))');
   late final GeneratedColumn<Uint8List> thumbnail = GeneratedColumn<Uint8List>(
       'thumbnail', aliasedName, true,
       type: DriftSqlType.blob,
       requiredDuringInsert: false,
       $customConstraints: 'NULL');
+  late final GeneratedColumn<int> registered = GeneratedColumn<int>(
+      'registered', aliasedName, true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      $customConstraints: 'NULL CHECK (registered IN (0, 1))');
   late final GeneratedColumn<int> insertedAt = GeneratedColumn<int>(
       'inserted_at', aliasedName, true,
       type: DriftSqlType.int,
@@ -67,8 +67,8 @@ class Contacts extends Table with TableInfo {
         firstName,
         lastName,
         aliasName,
-        registered,
         thumbnail,
+        registered,
         insertedAt,
         updatedAt
       ];

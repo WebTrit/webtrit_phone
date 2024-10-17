@@ -43,12 +43,11 @@ class LoginRouterPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final declarativeAutoRouter = BlocConsumer<LoginCubit, LoginState>(
       listener: (context, state) {
-        if (state.coreUrl != null && state.tenantId != null && state.token != null) {
-          context.read<AppBloc>().add(AppLogined(
-                coreUrl: state.coreUrl!,
-                tenantId: state.tenantId!,
-                token: state.token!,
-              ));
+        final [coreUrl, tenantId, token, userId] = [state.coreUrl, state.tenantId, state.token, state.userId];
+
+        if (coreUrl != null && tenantId != null && token != null && userId != null) {
+          final event = AppLogined(coreUrl: coreUrl, tenantId: tenantId, token: token, userId: userId);
+          context.read<AppBloc>().add(event);
         }
       },
       buildWhen: whenLoginRouterPageChange,

@@ -225,6 +225,7 @@ class LoginCubit extends Cubit<LoginState> {
       emit(state.copyWith(
         tenantId: sessionToken.tenantId ?? state.tenantId!,
         token: sessionToken.token,
+        userId: sessionToken.userId,
       ));
     } catch (e) {
       emit(state.copyWith(processing: false));
@@ -291,6 +292,7 @@ class LoginCubit extends Cubit<LoginState> {
     emit(state.copyWith(
       tenantId: token.tenantId ?? state.tenantId ?? defaultTenantId,
       token: token.token,
+      userId: token.userId,
     ));
   }
 
@@ -332,6 +334,7 @@ class LoginCubit extends Cubit<LoginState> {
         emit(state.copyWith(
           tenantId: result.tenantId ?? state.tenantId!,
           token: result.token,
+          userId: result.userId,
         ));
       } else {
         throw UnimplementedError();
@@ -369,6 +372,7 @@ class LoginCubit extends Cubit<LoginState> {
       emit(state.copyWith(
         tenantId: sessionToken.tenantId ?? state.tenantId!,
         token: sessionToken.token,
+        userId: sessionToken.userId,
       ));
     } catch (e) {
       notificationsBloc.add(NotificationsSubmitted(LoginErrorNotification(e)));

@@ -11,6 +11,7 @@ class UserContact with _$UserContact {
   // ignore: invalid_annotation_target
   @JsonSerializable(fieldRename: FieldRename.snake)
   const factory UserContact({
+    required String userId,
     SipStatus? sipStatus,
     required Numbers numbers,
     String? email,
@@ -18,6 +19,8 @@ class UserContact with _$UserContact {
     String? lastName,
     String? aliasName,
     String? companyName,
+    bool? isCurrentUser,
+    bool? isRegisteredUser,
   }) = _UserContact;
 
   factory UserContact.fromJson(Map<String, Object?> json) => _$UserContactFromJson(json);

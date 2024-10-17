@@ -20,6 +20,7 @@ class SessionResult with _$SessionResult {
   @JsonSerializable(fieldRename: FieldRename.snake)
   const factory SessionResult.token({
     required String token,
+    required String userId,
     String? tenantId,
   }) = SessionToken;
   @JsonSerializable(fieldRename: FieldRename.snake)

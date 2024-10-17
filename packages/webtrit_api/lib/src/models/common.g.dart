@@ -13,6 +13,7 @@ _$NumbersImpl _$$NumbersImplFromJson(Map<String, dynamic> json) =>
       additional: (json['additional'] as List<dynamic>?)
           ?.map((e) => e as String)
           .toList(),
+      sms: (json['sms'] as List<dynamic>?)?.map((e) => e as String).toList(),
     );
 
 Map<String, dynamic> _$$NumbersImplToJson(_$NumbersImpl instance) =>
@@ -20,6 +21,7 @@ Map<String, dynamic> _$$NumbersImplToJson(_$NumbersImpl instance) =>
       'main': instance.main,
       'ext': instance.ext,
       'additional': instance.additional,
+      'sms': instance.sms,
     };
 
 _$BalanceImpl _$$BalanceImplFromJson(Map<String, dynamic> json) =>

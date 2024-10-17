@@ -5,6 +5,7 @@ export 'callkeep_handle.dart';
 export 'clock.dart';
 export 'contact_source_type.dart';
 export 'duration.dart';
+export 'datetime.dart';
 export 'iterable.dart';
 export 'locale.dart';
 export 'platform_deep_link.dart';
