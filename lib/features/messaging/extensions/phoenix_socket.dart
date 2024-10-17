@@ -56,8 +56,18 @@ extension PhoenixChannelExt on PhoenixChannel {
   /// final conversationIds = await chatConversationsIds;
   /// ```
   Future<Iterable<int>> get chatConversationsIds async {
-    final response = (await push('chat:get_ids', {}).future).response;
-    return (response as Iterable).cast<int>();
+    final req = await push('chat:get_ids', {}).future;
+    final response = req.response;
+
+    if (req.isOk && response is Iterable) {
+      return response.cast<int>();
+    }
+
+    throw MessagingSocketException(
+      'Error fetching chat conversation ids',
+      response: response,
+      topic: topic,
+    );
   }
 
   /// Asynchronously retrieves a list of SMS conversation IDs for the user.
@@ -65,17 +75,37 @@ extension PhoenixChannelExt on PhoenixChannel {
   /// This method returns a [Future] that completes with an [Iterable] of
   /// integers representing the IDs of SMS conversations.
   Future<Iterable<int>> get smsConversationsIds async {
-    final response = (await push('sms:conversation:get_ids', {}).future).response;
-    return (response as Iterable).cast<int>();
+    final req = await push('sms:conversation:get_ids', {}).future;
+    final response = req.response;
+
+    if (req.isOk && response is Iterable) {
+      return response.cast<int>();
+    }
+
+    throw MessagingSocketException(
+      'Error fetching sms conversation ids',
+      response: response,
+      topic: topic,
+    );
   }
 
   /// Asynchronously retrieves a list of phone numbers associated with user.
   ///
   /// Returns a [Future] that completes with an [Iterable] of [String] phone numbers.
   Future<Iterable<String>> get smsPhoneNumbers async {
-    final response = (await push('user:get_info', {}).future).response;
-    final smsNumbers = (response['sms_phone_numbers'] as Iterable).cast<String>();
-    return smsNumbers.map((e) => e.e164Phone).whereNotNull();
+    final req = await push('user:get_info', {}).future;
+    final response = req.response;
+
+    if (req.isOk && response is Map<String, dynamic>) {
+      final smsNumbers = (response['sms_phone_numbers'] as Iterable).cast<String>();
+      return smsNumbers.map((e) => e.e164Phone).whereNotNull();
+    }
+
+    throw MessagingSocketException(
+      'Error fetching sms phone numbers',
+      response: response,
+      topic: topic,
+    );
   }
 
   /// Asynchronously retrieves the chat conversation.
@@ -83,8 +113,18 @@ extension PhoenixChannelExt on PhoenixChannel {
   /// This getter returns a [Future] that completes with a [Chat] object
   /// representing the chat conversation.
   Future<Chat> get chatConversation async {
-    final infoReq = await push('chat:get', {}).future;
-    return Chat.fromMap(infoReq.response as Map<String, dynamic>);
+    final req = await push('chat:get', {}).future;
+    final response = req.response;
+
+    if (req.isOk && response is Map<String, dynamic>) {
+      return Chat.fromMap(response);
+    }
+
+    throw MessagingSocketException(
+      'Error fetching chat conversation',
+      response: response,
+      topic: topic,
+    );
   }
 
   /// A getter that asynchronously retrieves an [SmsConversation].
@@ -92,8 +132,18 @@ extension PhoenixChannelExt on PhoenixChannel {
   /// This method returns a [Future] that completes with an [SmsConversation].
   /// It can be used to fetch the conversation details for SMS messaging.
   Future<SmsConversation> get smsConversation async {
-    final infoReq = await push('sms:conversation:get', {}).future;
-    return SmsConversation.fromMap(infoReq.response as Map<String, dynamic>);
+    final req = await push('sms:conversation:get', {}).future;
+    final response = req.response;
+
+    if (req.isOk && response is Map<String, dynamic>) {
+      return SmsConversation.fromMap(response);
+    }
+
+    throw MessagingSocketException(
+      'Error fetching sms conversation',
+      response: response,
+      topic: topic,
+    );
   }
 
   /// Asynchronously retrieves an iterable collection of chat message read cursors.
@@ -103,8 +153,18 @@ extension PhoenixChannelExt on PhoenixChannel {
   ///
   /// Returns a [Future] that completes with an [Iterable] of [ChatMessageReadCursor] objects.
   Future<Iterable<ChatMessageReadCursor>> get chatCursors async {
-    final cursorsReq = await push('chat:cursor:get', {}).future;
-    return (cursorsReq.response as List).map((e) => ChatMessageReadCursor.fromMap(e));
+    final req = await push('chat:cursor:get', {}).future;
+    final response = req.response;
+
+    if (req.isOk && response is List) {
+      return response.map((e) => ChatMessageReadCursor.fromMap(e));
+    }
+
+    throw MessagingSocketException(
+      'Error fetching chat cursors',
+      response: response,
+      topic: topic,
+    );
   }
 
   /// A getter that asynchronously retrieves an iterable collection of
@@ -114,8 +174,18 @@ extension PhoenixChannelExt on PhoenixChannel {
   /// It returns a [Future] that completes with an [Iterable] of
   /// [SmsMessageReadCursor] instances.
   Future<Iterable<SmsMessageReadCursor>> get smsCursors async {
-    final cursorsReq = await push('sms:conversation:cursor:get', {}).future;
-    return (cursorsReq.response as List).map((e) => SmsMessageReadCursor.fromMap(e));
+    final req = await push('sms:conversation:cursor:get', {}).future;
+    final response = req.response;
+
+    if (req.isOk && response is List) {
+      response.map((e) => SmsMessageReadCursor.fromMap(e));
+    }
+
+    throw MessagingSocketException(
+      'Error fetching sms cursors',
+      response: response,
+      topic: topic,
+    );
   }
 
   /// Retrieves a chat message by its ID.
@@ -146,8 +216,19 @@ extension PhoenixChannelExt on PhoenixChannel {
   Future<List<ChatMessage>> chatMessagHistory(int limit, {DateTime? createdBefore}) async {
     Map<String, dynamic> payload = {'limit': limit};
     if (createdBefore != null) payload['created_before'] = createdBefore.toUtc().toIso8601String();
+
     final req = await push('message:history', payload).future;
-    return (req.response['data'] as Iterable).map((e) => ChatMessage.fromMap(e)).toList();
+    final response = req.response;
+
+    if (req.isOk && response is Map<String, dynamic>) {
+      (req.response['data'] as Iterable).map((e) => ChatMessage.fromMap(e)).toList();
+    }
+
+    throw MessagingSocketException(
+      'Error fetching chat message history $limit $createdBefore',
+      response: req.response,
+      topic: topic,
+    );
   }
 
   /// Retrieves the SMS message history.
@@ -162,8 +243,19 @@ extension PhoenixChannelExt on PhoenixChannel {
   Future<List<SmsMessage>> smsMessageHistory(int limit, {DateTime? createdBefore}) async {
     Map<String, dynamic> payload = {'limit': limit};
     if (createdBefore != null) payload['created_before'] = createdBefore.toUtc().toIso8601String();
+
     final req = await push('sms:message:history', payload).future;
-    return (req.response['data'] as Iterable).map((e) => SmsMessage.fromMap(e)).toList();
+    final response = req.response;
+
+    if (req.isOk && response is Map<String, dynamic>) {
+      return (req.response['data'] as Iterable).map((e) => SmsMessage.fromMap(e)).toList();
+    }
+
+    throw MessagingSocketException(
+      'Error fetching sms message history $limit $createdBefore',
+      response: req.response,
+      topic: topic,
+    );
   }
 
   /// Fetches a list of chat messages that have been updated after a specified date in reverse order.
@@ -177,8 +269,19 @@ extension PhoenixChannelExt on PhoenixChannel {
   /// Returns a [Future] that completes with a list of [ChatMessage] objects.
   Future<List<ChatMessage>> chatMessageUpdates(DateTime updatedAfter, int limit) async {
     var payload = {'updated_after': updatedAfter.toUtc().toIso8601String(), 'limit': limit};
+
     final req = await push('message:updates', payload).future;
-    return (req.response['data'] as Iterable).map((e) => ChatMessage.fromMap(e)).toList();
+    final response = req.response;
+
+    if (req.isOk && response is Map<String, dynamic>) {
+      return (req.response['data'] as Iterable).map((e) => ChatMessage.fromMap(e)).toList();
+    }
+
+    throw MessagingSocketException(
+      'Error fetching chat message updates $updatedAfter $limit',
+      response: req.response,
+      topic: topic,
+    );
   }
 
   /// Fetches a list of SMS messages that have been updated after a specified date in reverse order.
@@ -193,8 +296,19 @@ extension PhoenixChannelExt on PhoenixChannel {
   /// Returns a [Future] that completes with a list of [SmsMessage] objects.
   Future<List<SmsMessage>> smsMessageUpdates(DateTime updatedAfter, int limit) async {
     var payload = {'updated_after': updatedAfter.toUtc().toIso8601String(), 'limit': limit};
+
     final req = await push('sms:message:updates', payload).future;
-    return (req.response['data'] as Iterable).map((e) => SmsMessage.fromMap(e)).toList();
+    final response = req.response;
+
+    if (req.isOk && response is Map<String, dynamic>) {
+      return (req.response['data'] as Iterable).map((e) => SmsMessage.fromMap(e)).toList();
+    }
+
+    throw MessagingSocketException(
+      'Error fetching sms message updates $updatedAfter $limit',
+      response: req.response,
+      topic: topic,
+    );
   }
 
   /// This function takes a [ChatOutboxMessageEntry] and sends a new chat message using this channel.
@@ -210,13 +324,13 @@ extension PhoenixChannelExt on PhoenixChannel {
       'forwarded_from_id': outboxEntry.forwardFromId,
       'author_id': outboxEntry.authorId,
     };
-    final r = await push('message:new', payload).future;
-    final response = r.response;
+    final req = await push('message:new', payload).future;
+    final response = req.response;
 
     ChatMessage message;
     Chat? chat;
 
-    if (r.isOk && response is Map<String, dynamic>) {
+    if (req.isOk && response is Map<String, dynamic>) {
       if (response.containsKey('chat') && response.containsKey('msg')) {
         chat = Chat.fromMap(response['chat']);
         message = ChatMessage.fromMap(response['msg']);
@@ -228,7 +342,12 @@ extension PhoenixChannelExt on PhoenixChannel {
         return (message, chat);
       }
     }
-    throw Exception('Error processing $outboxEntry $response');
+
+    throw MessagingSocketException(
+      'Error processing $outboxEntry',
+      response: response,
+      topic: topic,
+    );
   }
 
   /// This function takes a [ChatOutboxMessageEditEntry] and attempts to edit a chat message using this channel.
@@ -237,14 +356,18 @@ extension PhoenixChannelExt on PhoenixChannel {
   /// Throws an exception if the edit process fails.
   Future<ChatMessage> editChatMessage(ChatOutboxMessageEditEntry editEntry) async {
     var payload = {'new_content': editEntry.newContent};
-    final r = await push('message:edit:${editEntry.id}', payload).future;
-    final response = r.response;
+    final req = await push('message:edit:${editEntry.id}', payload).future;
+    final response = req.response;
 
-    if (r.isOk && response is Map<String, dynamic>) {
+    if (req.isOk && response is Map<String, dynamic>) {
       return ChatMessage.fromMap(response);
     }
 
-    throw Exception('Error processing $editEntry $response');
+    throw MessagingSocketException(
+      'Error editing chat message: $editEntry',
+      response: response,
+      topic: topic,
+    );
   }
 
   /// This function takes a [ChatOutboxMessageDeleteEntry] and attempts to delete a chat message using this channel.
@@ -252,14 +375,18 @@ extension PhoenixChannelExt on PhoenixChannel {
   /// It returns a [Future] that resolves to the deleted [ChatMessage].
   /// Throws an exception if the deletion process fails.
   Future<ChatMessage> deleteChatMessage(ChatOutboxMessageDeleteEntry deleteEntry) async {
-    final r = await push('message:delete:${deleteEntry.id}', {}).future;
-    final response = r.response;
+    final req = await push('message:delete:${deleteEntry.id}', {}).future;
+    final response = req.response;
 
-    if (r.isOk && response is Map<String, dynamic>) {
+    if (req.isOk && response is Map<String, dynamic>) {
       return ChatMessage.fromMap(response);
     }
 
-    throw Exception('Error processing $deleteEntry $response');
+    throw MessagingSocketException(
+      'Error deleting chat message: $deleteEntry',
+      response: response,
+      topic: topic,
+    );
   }
 
   /// This function takes a [ChatOutboxReadCursorEntry] and attempts to set a chat cursor using this channel.
@@ -275,7 +402,11 @@ extension PhoenixChannelExt on PhoenixChannel {
       return ChatMessageReadCursor(chatId: readCursor.chatId, userId: socket.userId!, time: readCursor.time);
     }
 
-    throw Exception('Error processing $readCursor $response');
+    throw MessagingSocketException(
+      'Error setting chat read cursor: $readCursor',
+      response: response,
+      topic: topic,
+    );
   }
 
   /// This function takes an [SmsOutboxMessageEntry] and attempts to send it as a new SMS message using this channel.
@@ -290,13 +421,13 @@ extension PhoenixChannelExt on PhoenixChannel {
       'to_phone_number': outboxEntry.toPhoneNumber,
       'recepient_id': outboxEntry.recepientId,
     };
-    final r = await push('sms:message:new', payload).future;
-    final response = r.response;
+    final req = await push('sms:message:new', payload).future;
+    final response = req.response;
 
     SmsMessage smsMessage;
     SmsConversation? smsConversation;
 
-    if (r.isOk && response is Map<String, dynamic>) {
+    if (req.isOk && response is Map<String, dynamic>) {
       if (response.containsKey('conversation') && response.containsKey('message')) {
         smsConversation = SmsConversation.fromMap(response['conversation']);
         smsMessage = SmsMessage.fromMap(response['message']);
@@ -308,7 +439,12 @@ extension PhoenixChannelExt on PhoenixChannel {
         return (smsMessage, smsConversation);
       }
     }
-    throw Exception('Error processing $outboxEntry $response');
+
+    throw MessagingSocketException(
+      'Error processing $outboxEntry',
+      response: response,
+      topic: topic,
+    );
   }
 
   /// This function takes a [SmsOutboxMessageDeleteEntry] and attempts to delete an SMS message using this channel.
@@ -316,14 +452,18 @@ extension PhoenixChannelExt on PhoenixChannel {
   /// It returns a [Future] that resolves to the edited [SmsMessage].
   /// Throws an exception if the edit process fails.
   Future<SmsMessage> deleteSmsMessage(SmsOutboxMessageDeleteEntry deleteEntry) async {
-    final r = await push('sms:message:delete:${deleteEntry.id}', {}).future;
-    final response = r.response;
+    final req = await push('sms:message:delete:${deleteEntry.id}', {}).future;
+    final response = req.response;
 
-    if (r.isOk && response is Map<String, dynamic>) {
+    if (req.isOk && response is Map<String, dynamic>) {
       return SmsMessage.fromMap(response);
     }
 
-    throw Exception('Error processing $deleteEntry $response');
+    throw MessagingSocketException(
+      'Error deleting sms message: $deleteEntry',
+      response: response,
+      topic: topic,
+    );
   }
 
   /// This function takes a [SmsOutboxReadCursorEntry] and attempts to set an SMS cursor using this channel.
@@ -332,22 +472,32 @@ extension PhoenixChannelExt on PhoenixChannel {
   /// Throws an exception if the cursor setting process fails.
   Future<SmsMessageReadCursor> setSmsReadCursor(SmsOutboxReadCursorEntry readCursor) async {
     var payload = {'last_read_at': readCursor.time.toUtc().toIso8601String()};
-    final r = await push('sms:conversation:cursor:set', payload).future;
-    final response = r.response;
+    final req = await push('sms:conversation:cursor:set', payload).future;
+    final response = req.response;
 
-    if (r.isOk) {
+    if (req.isOk) {
       return SmsMessageReadCursor(
           conversationId: readCursor.conversationId, userId: socket.userId!, time: readCursor.time);
     }
 
-    throw Exception('Error processing $readCursor $response');
+    throw MessagingSocketException(
+      'Error setting sms read cursor: $readCursor',
+      response: response,
+      topic: topic,
+    );
   }
 
   /// This function sends a typing event to the chat channel.
   Future<bool> sendChatTyping() async {
-    final r = await push('chat:typing', {}).future;
-    if (r.isOk) return true;
-    throw Exception('Error sending typing event ${r.response}');
+    final req = await push('chat:typing', {}).future;
+
+    if (req.isOk) return true;
+
+    throw MessagingSocketException(
+      'Error sending chat typing',
+      response: req.response,
+      topic: topic,
+    );
   }
 
   /// Deletes a chat conversation (group or dialog) from the server.
@@ -359,9 +509,15 @@ extension PhoenixChannelExt on PhoenixChannel {
   ///   A [Future] that completes with a [bool] indicating whether the
   ///   chat conversation was successfully deleted.
   Future<bool> deleteChatConversation() async {
-    final r = await push('chat:delete', {}).future;
-    if (r.isOk) return true;
-    throw Exception('Error deleting chat ${r.response}');
+    final req = await push('chat:delete', {}).future;
+
+    if (req.isOk) return true;
+
+    throw MessagingSocketException(
+      'Error deleting chat',
+      response: req.response,
+      topic: topic,
+    );
   }
 
   /// Deletes an SMS conversation.
@@ -371,9 +527,15 @@ extension PhoenixChannelExt on PhoenixChannel {
   /// Returns a [Future] that completes with a boolean value indicating
   /// whether the deletion was successful.
   Future<bool> deleteSmsConversation() async {
-    final r = await push('sms:conversation:delete', {}).future;
-    if (r.isOk) return true;
-    throw Exception('Error deleting sms conversation ${r.response}');
+    final req = await push('sms:conversation:delete', {}).future;
+
+    if (req.isOk) return true;
+
+    throw MessagingSocketException(
+      'Error deleting sms conversation',
+      response: req.response,
+      topic: topic,
+    );
   }
 
   /// Creates a new group with the specified name and members.
@@ -387,9 +549,15 @@ extension PhoenixChannelExt on PhoenixChannel {
   ///
   /// Returns a [Future] that resolves to a boolean indicating the success of the operation.
   Future<bool> newGroup(String name, List<String> memberIds) async {
-    final r = await push('chat:new', {'name': name, 'member_ids': memberIds}).future;
-    if (r.isOk) return true;
-    throw Exception('Error creating group $name ${r.response}');
+    final req = await push('chat:new', {'name': name, 'member_ids': memberIds}).future;
+
+    if (req.isOk) return true;
+
+    throw MessagingSocketException(
+      'Error creating group: $name, members: $memberIds',
+      response: req.response,
+      topic: topic,
+    );
   }
 
   /// Asynchronously leaves a group.
@@ -402,9 +570,15 @@ extension PhoenixChannelExt on PhoenixChannel {
   /// - `true` if the group was successfully left.
   /// - `false` if there was an error leaving the group.
   Future<bool> leaveGroup() async {
-    final r = await push('chat:member:leave', {}).future;
-    if (r.isOk) return true;
-    throw Exception('Error leaving group ${r.response}');
+    final req = await push('chat:member:leave', {}).future;
+
+    if (req.isOk) return true;
+
+    throw MessagingSocketException(
+      'Error leaving group',
+      response: req.response,
+      topic: topic,
+    );
   }
 
   /// Adds a member to a group.
@@ -416,9 +590,15 @@ extension PhoenixChannelExt on PhoenixChannel {
   ///
   /// [userId]: The ID of the user to be added to the group.
   Future<bool> addGroupMember(String userId) async {
-    final r = await push('chat:member:add:$userId', {}).future;
-    if (r.isOk) return true;
-    throw Exception('Error adding group member $userId ${r.response}');
+    final req = await push('chat:member:add:$userId', {}).future;
+
+    if (req.isOk) return true;
+
+    throw MessagingSocketException(
+      'Error adding group member $userId',
+      response: req.response,
+      topic: topic,
+    );
   }
 
   /// Removes a member from a group.
@@ -432,9 +612,15 @@ extension PhoenixChannelExt on PhoenixChannel {
   /// Returns a [Future<bool>] that completes with `true` if the user was
   /// successfully removed, or `false` otherwise.
   Future<bool> removeGroupMember(String userId) async {
-    final r = await push('chat:member:remove:$userId', {}).future;
-    if (r.isOk) return true;
-    throw Exception('Error removing group member $userId ${r.response}');
+    final req = await push('chat:member:remove:$userId', {}).future;
+
+    if (req.isOk) return true;
+
+    throw MessagingSocketException(
+      'Error removing group member $userId',
+      response: req.response,
+      topic: topic,
+    );
   }
 
   /// Sets the moderator status for a user in a group.
@@ -450,9 +636,15 @@ extension PhoenixChannelExt on PhoenixChannel {
   ///   - userId: The unique identifier of the user whose moderator status is to be updated.
   ///   - isModerator: A boolean value indicating whether the user should be a moderator.
   Future<bool> setGroupModerator(String userId, bool isModerator) async {
-    final r = await push('chat:member:set_authorities:$userId', {'is_moderator': isModerator}).future;
-    if (r.isOk) return true;
-    throw Exception('Error setting group moderator $userId ${r.response}');
+    final req = await push('chat:member:set_authorities:$userId', {'is_moderator': isModerator}).future;
+
+    if (req.isOk) return true;
+
+    throw MessagingSocketException(
+      'Error setting group moderator $userId',
+      response: req.response,
+      topic: topic,
+    );
   }
 
   /// Sets the name of the group.
@@ -468,9 +660,15 @@ extension PhoenixChannelExt on PhoenixChannel {
   /// bool success = await setGroupName("New Group Name");
   /// ```
   Future<bool> setGroupName(String name) async {
-    final r = await push('chat:patch', {'name': name}).future;
-    if (r.isOk) return true;
-    throw Exception('Error setting group name $name ${r.response}');
+    final req = await push('chat:patch', {'name': name}).future;
+
+    if (req.isOk) return true;
+
+    throw MessagingSocketException(
+      'Error setting group name $name',
+      response: req.response,
+      topic: topic,
+    );
   }
 }
 
@@ -667,3 +865,28 @@ class SmsChannelCursorSet extends SmsChannelEvent with EquatableMixin {
 class SmsChannelDisconnect extends SmsChannelEvent {}
 
 class SmsChannelUnknown extends SmsChannelEvent {}
+
+class MessagingSocketException with EquatableMixin implements Exception {
+  /// This message is intended to provide a human-readable description of the error from invokation side.
+  final String message;
+
+  /// The response returned by the server.
+  final dynamic response;
+
+  /// The topic of the channel where the error occurred.
+  final String? topic;
+
+  /// The details of the response if has any.
+  late final Map<String, dynamic> details = response is Map<String, dynamic> ? response : {};
+
+  /// Server side error code
+  late final code = details['code'] ?? response is String ? response : null;
+
+  MessagingSocketException(this.message, {this.response, this.topic});
+
+  @override
+  String toString() => 'MessagingSocketException: $message $topic code:$code';
+
+  @override
+  List<Object> get props => [message, response, topic.toString()];
+}
