@@ -225,17 +225,11 @@ class _MainShellState extends State<MainShell> {
             BlocProvider<MessagingBloc>(
               lazy: false,
               create: (context) {
-                final appBloc = context.read<AppBloc>();
-                final chatsRepository = context.read<ChatsRepository>();
-                final chatsOutboxRepository = context.read<ChatsOutboxRepository>();
-                final smsRepository = context.read<SmsRepository>();
-                final smsOutboxRepository = context.read<SmsOutboxRepository>();
-                final token = appBloc.state.token!;
-                final tenantId = appBloc.state.tenantId!;
-                final userId = appBloc.state.userId!;
+                final appState = context.read<AppBloc>().state;
+                final (token, tenantId, userId) = (appState.token!, appState.tenantId!, appState.userId!);
 
-                // Draft for built-in messaging service
-                // var url = appBloc.state.coreUrl!;
+                // Draft for core built-in messaging service url
+                // var url = appState.coreUrl!;
                 // if (url.startsWith('http://')) url = url.replaceFirst('http://', 'ws://');
                 // if (url.startsWith('https://')) url = url.replaceFirst('https://', 'wss://');
                 // if (url.endsWith('/')) url = url.substring(0, url.length - 1);
@@ -243,20 +237,16 @@ class _MainShellState extends State<MainShell> {
 
                 const url = EnvironmentConfig.CHAT_SERVICE_URL;
 
-                final client = PhoenixSocket(
-                  url,
-                  socketOptions: PhoenixSocketOptions(
-                    params: {'token': token, 'tenant_id': tenantId},
-                  ),
-                );
+                final socketOpts = PhoenixSocketOptions(params: {'token': token, 'tenant_id': tenantId});
 
                 return MessagingBloc(
                   userId,
-                  client,
-                  chatsRepository,
-                  chatsOutboxRepository,
-                  smsRepository,
-                  smsOutboxRepository,
+                  PhoenixSocket(url, socketOptions: socketOpts),
+                  context.read<ChatsRepository>(),
+                  context.read<ChatsOutboxRepository>(),
+                  context.read<SmsRepository>(),
+                  context.read<SmsOutboxRepository>(),
+                  (n) => context.read<NotificationsBloc>().add(NotificationsSubmitted(n)),
                 )..add(const Connect());
               },
             ),
