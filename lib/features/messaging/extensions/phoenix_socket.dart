@@ -6,6 +6,16 @@ import 'package:phoenix_socket/phoenix_socket.dart';
 import 'package:webtrit_phone/features/messaging/messaging.dart';
 import 'package:webtrit_phone/models/models.dart';
 
+PhoenixSocket createMessagingSocket(String coreUrl, String token, String tenantId) {
+  final baseUrl = coreUrl
+    ..replaceFirst('http://', 'ws://')
+    ..replaceFirst('https://', 'wss://')
+    ..replaceFirst(RegExp(r'/$'), '');
+
+  final socketOpts = PhoenixSocketOptions(params: {'token': token, 'tenant_id': tenantId});
+  return PhoenixSocket('$baseUrl/messaging/v1/websocket', socketOptions: socketOpts);
+}
+
 extension PhoenixSocketExt on PhoenixSocket {
   /// Create user channel by [userId] and connect, if already exists returns it
   PhoenixChannel createUserChannel(String userId) => addChannel(topic: 'chat:user:$userId');
@@ -28,6 +38,12 @@ extension PhoenixSocketExt on PhoenixSocket {
   /// Get sms conversation channel by [conversationId] if exists
   PhoenixChannel? getSmsConversationChannel(int conversationId) =>
       channels.values.firstWhereOrNull((c) => c.topic == 'chat:sms:$conversationId');
+
+  static PhoenixSocket createMessagingSocket() {
+    final socket = PhoenixSocket('ws://localhost:4000/socket/websocket');
+    socket.connect();
+    return socket;
+  }
 }
 
 extension PhoenixChannelExt on PhoenixChannel {

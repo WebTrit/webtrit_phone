@@ -228,19 +228,13 @@ class _MainShellState extends State<MainShell> {
                 final appState = context.read<AppBloc>().state;
                 final (token, tenantId, userId) = (appState.token!, appState.tenantId!, appState.userId!);
 
-                // Draft for core built-in messaging service url
-                // var url = appState.coreUrl!;
-                // if (url.startsWith('http://')) url = url.replaceFirst('http://', 'ws://');
-                // if (url.startsWith('https://')) url = url.replaceFirst('https://', 'wss://');
-                // if (url.endsWith('/')) url = url.substring(0, url.length - 1);
-                // url = '$url/messaging/v1/websocket';
-
+                // TODO: replace with createMessagingSocket after messaging-core merging
                 const url = EnvironmentConfig.CHAT_SERVICE_URL;
-
                 final socketOpts = PhoenixSocketOptions(params: {'token': token, 'tenant_id': tenantId});
 
                 return MessagingBloc(
                   userId,
+                  // createMessagingSocket(appState.coreUrl!, token, tenantId),
                   PhoenixSocket(url, socketOptions: socketOpts),
                   context.read<ChatsRepository>(),
                   context.read<ChatsOutboxRepository>(),
