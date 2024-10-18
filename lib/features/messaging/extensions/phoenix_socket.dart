@@ -885,7 +885,7 @@ class MessagingSocketException with EquatableMixin implements Exception {
   MessagingSocketException(this.message, {this.response, this.topic});
 
   @override
-  String toString() => 'MessagingSocketException: $message $topic code:$code';
+  String toString() => 'MessagingSocketException:\n$message\ntopic:$topic\ncode:$code';
 
   @override
   List<Object> get props => [message, response, topic.toString()];

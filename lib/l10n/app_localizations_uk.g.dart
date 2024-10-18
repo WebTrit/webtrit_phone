@@ -1030,6 +1030,39 @@ class AppLocalizationsUk extends AppLocalizations {
   String get messaging_MessageListView_typingTrail => 'надруковує...';
 
   @override
+  String get default_MessagingSocketException => 'Помилка з\'єднання з сервером';
+
+  @override
+  String get default_UnauthorizedMessagingSocketException => 'Помилка авторизації';
+
+  @override
+  String get default_ForbiddenMessagingSocketException => 'Доступ заборонено';
+
+  @override
+  String get default_InternalErrorMessagingSocketException => 'Внутрішня помилка сервера';
+
+  @override
+  String get default_ChatNotFoundMessagingSocketException => 'Чат не знайдено';
+
+  @override
+  String get default_InvalidChatTypeMessagingSocketException => 'Недійсний тип чату';
+
+  @override
+  String get default_UserAlreadyInChatMessagingSocketException => 'Користувач вже в чаті';
+
+  @override
+  String get default_ChatMemberNotFoundMessagingSocketException => 'Учасник чату не знайдений';
+
+  @override
+  String get default_SelfRemovalForbiddenMessagingSocketException => 'Видалення самого себе заборонено';
+
+  @override
+  String get default_SelfAuthorityAssignmentForbiddenMessagingSocketException => 'Призначення власних прав заборонено';
+
+  @override
+  String get default_SmsConversationNotFoundMessagingSocketException => 'SMS-розмова не знайдена';
+
+  @override
   String get account_selfCarePasswordExpired_message => 'Термін дії вашого пароля самообслуговування минув. Оновіть його за допомогою самообслуговування.\nДоки пароль не буде змінено, доступ до служби буде обмежено.';
 
   @override

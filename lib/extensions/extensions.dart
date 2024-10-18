@@ -12,6 +12,7 @@ export 'platform_deep_link.dart';
 export 'request_failure.dart';
 export 'route_match.dart';
 export 'signaling_exception.dart';
+export 'messaging_socket_exception.dart';
 export 'soundpool.dart';
 export 'string.dart';
 export 'theme_mode.dart';

@@ -740,6 +740,28 @@
   "@messaging_GroupBuilderScreen_submitError": {},
   "messaging_MessageListView_typingTrail": "stampe...",
   "@messaging_MessageListView_typingTrail": {},
+  "default_MessagingSocketException": "Si è verificato un errore durante la comunicazione con il server",
+  "@default_MessagingSocketException": {},
+  "default_UnauthorizedMessagingSocketException": "Non autorizzato",
+  "@default_UnauthorizedMessagingSocketException": {},
+  "default_ForbiddenMessagingSocketException": "Vietato",
+  "@default_ForbiddenMessagingSocketException": {},
+  "default_InternalErrorMessagingSocketException": "Errore interno del server",
+  "@default_InternalErrorMessagingSocketException": {},
+  "default_ChatNotFoundMessagingSocketException": "Chat non trovata",
+  "@default_ChatNotFoundMessagingSocketException": {},
+  "default_InvalidChatTypeMessagingSocketException": "Tipo di chat non valido",
+  "@default_InvalidChatTypeMessagingSocketException": {},
+  "default_UserAlreadyInChatMessagingSocketException": "Utente già nella chat",
+  "@default_UserAlreadyInChatMessagingSocketException": {},
+  "default_ChatMemberNotFoundMessagingSocketException": "Membro della chat non trovato",
+  "@default_ChatMemberNotFoundMessagingSocketException": {},
+  "default_SelfRemovalForbiddenMessagingSocketException": "Rimozione di se stessi vietata",
+  "@default_SelfRemovalForbiddenMessagingSocketException": {},
+  "default_SelfAuthorityAssignmentForbiddenMessagingSocketException": "Assegnazione di autorità a se stessi vietata",
+  "@default_SelfAuthorityAssignmentForbiddenMessagingSocketException": {},
+  "default_SmsConversationNotFoundMessagingSocketException": "Conversazione SMS non trovata",
+  "@default_SmsConversationNotFoundMessagingSocketException": {},
   "account_selfCarePasswordExpired_message": "La tua password di self-care è scaduta. Ti preghiamo di aggiornarla utilizzando il self-care.\nFino a quando la password non sarà cambiata, l'accesso al servizio sarà limitato.",
   "@account_selfCarePasswordExpired_message": {},
   "common_noInternetConnection_title": "Nessuna connessione Internet",
@@ -751,3 +773,8 @@
   "common_problemWithLoadingPage": "Si è verificato un problema durante il caricamento della pagina.",
   "@common_problemWithLoadingPage": {}
 }
+
+
+
+
+

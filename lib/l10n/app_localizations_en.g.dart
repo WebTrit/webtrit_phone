@@ -1030,6 +1030,39 @@ class AppLocalizationsEn extends AppLocalizations {
   String get messaging_MessageListView_typingTrail => 'is typing...';
 
   @override
+  String get default_MessagingSocketException => 'An error occurred while processing the request';
+
+  @override
+  String get default_UnauthorizedMessagingSocketException => 'Unauthorized request';
+
+  @override
+  String get default_ForbiddenMessagingSocketException => 'Forbidden request';
+
+  @override
+  String get default_InternalErrorMessagingSocketException => 'Internal server error';
+
+  @override
+  String get default_ChatNotFoundMessagingSocketException => 'Chat not found';
+
+  @override
+  String get default_InvalidChatTypeMessagingSocketException => 'Invalid chat type';
+
+  @override
+  String get default_UserAlreadyInChatMessagingSocketException => 'User is already in chat';
+
+  @override
+  String get default_ChatMemberNotFoundMessagingSocketException => 'Chat member not found';
+
+  @override
+  String get default_SelfRemovalForbiddenMessagingSocketException => 'Self removal is forbidden';
+
+  @override
+  String get default_SelfAuthorityAssignmentForbiddenMessagingSocketException => 'Self authority assignment is forbidden';
+
+  @override
+  String get default_SmsConversationNotFoundMessagingSocketException => 'SMS conversation not found';
+
+  @override
   String get account_selfCarePasswordExpired_message => 'Your self-care password has expired. Please update it using your self-care.\nUntil the password is changed, access to the service will be limited.';
 
   @override

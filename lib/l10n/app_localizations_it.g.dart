@@ -1030,6 +1030,39 @@ class AppLocalizationsIt extends AppLocalizations {
   String get messaging_MessageListView_typingTrail => 'stampe...';
 
   @override
+  String get default_MessagingSocketException => 'Si è verificato un errore durante la comunicazione con il server';
+
+  @override
+  String get default_UnauthorizedMessagingSocketException => 'Non autorizzato';
+
+  @override
+  String get default_ForbiddenMessagingSocketException => 'Vietato';
+
+  @override
+  String get default_InternalErrorMessagingSocketException => 'Errore interno del server';
+
+  @override
+  String get default_ChatNotFoundMessagingSocketException => 'Chat non trovata';
+
+  @override
+  String get default_InvalidChatTypeMessagingSocketException => 'Tipo di chat non valido';
+
+  @override
+  String get default_UserAlreadyInChatMessagingSocketException => 'Utente già nella chat';
+
+  @override
+  String get default_ChatMemberNotFoundMessagingSocketException => 'Membro della chat non trovato';
+
+  @override
+  String get default_SelfRemovalForbiddenMessagingSocketException => 'Rimozione di se stessi vietata';
+
+  @override
+  String get default_SelfAuthorityAssignmentForbiddenMessagingSocketException => 'Assegnazione di autorità a se stessi vietata';
+
+  @override
+  String get default_SmsConversationNotFoundMessagingSocketException => 'Conversazione SMS non trovata';
+
+  @override
   String get account_selfCarePasswordExpired_message => 'La tua password di self-care è scaduta. Ti preghiamo di aggiornarla utilizzando il self-care.\nFino a quando la password non sarà cambiata, l\'accesso al servizio sarà limitato.';
 
   @override

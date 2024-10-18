@@ -2059,6 +2059,72 @@ abstract class AppLocalizations {
   /// **'is typing...'**
   String get messaging_MessageListView_typingTrail;
 
+  /// No description provided for @default_MessagingSocketException.
+  ///
+  /// In en, this message translates to:
+  /// **'An error occurred while processing the request'**
+  String get default_MessagingSocketException;
+
+  /// No description provided for @default_UnauthorizedMessagingSocketException.
+  ///
+  /// In en, this message translates to:
+  /// **'Unauthorized request'**
+  String get default_UnauthorizedMessagingSocketException;
+
+  /// No description provided for @default_ForbiddenMessagingSocketException.
+  ///
+  /// In en, this message translates to:
+  /// **'Forbidden request'**
+  String get default_ForbiddenMessagingSocketException;
+
+  /// No description provided for @default_InternalErrorMessagingSocketException.
+  ///
+  /// In en, this message translates to:
+  /// **'Internal server error'**
+  String get default_InternalErrorMessagingSocketException;
+
+  /// No description provided for @default_ChatNotFoundMessagingSocketException.
+  ///
+  /// In en, this message translates to:
+  /// **'Chat not found'**
+  String get default_ChatNotFoundMessagingSocketException;
+
+  /// No description provided for @default_InvalidChatTypeMessagingSocketException.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid chat type'**
+  String get default_InvalidChatTypeMessagingSocketException;
+
+  /// No description provided for @default_UserAlreadyInChatMessagingSocketException.
+  ///
+  /// In en, this message translates to:
+  /// **'User is already in chat'**
+  String get default_UserAlreadyInChatMessagingSocketException;
+
+  /// No description provided for @default_ChatMemberNotFoundMessagingSocketException.
+  ///
+  /// In en, this message translates to:
+  /// **'Chat member not found'**
+  String get default_ChatMemberNotFoundMessagingSocketException;
+
+  /// No description provided for @default_SelfRemovalForbiddenMessagingSocketException.
+  ///
+  /// In en, this message translates to:
+  /// **'Self removal is forbidden'**
+  String get default_SelfRemovalForbiddenMessagingSocketException;
+
+  /// No description provided for @default_SelfAuthorityAssignmentForbiddenMessagingSocketException.
+  ///
+  /// In en, this message translates to:
+  /// **'Self authority assignment is forbidden'**
+  String get default_SelfAuthorityAssignmentForbiddenMessagingSocketException;
+
+  /// No description provided for @default_SmsConversationNotFoundMessagingSocketException.
+  ///
+  /// In en, this message translates to:
+  /// **'SMS conversation not found'**
+  String get default_SmsConversationNotFoundMessagingSocketException;
+
   /// No description provided for @account_selfCarePasswordExpired_message.
   ///
   /// In en, this message translates to:
