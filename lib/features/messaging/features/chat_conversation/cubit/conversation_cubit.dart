@@ -6,8 +6,9 @@ import 'package:logging/logging.dart';
 import 'package:phoenix_socket/phoenix_socket.dart';
 import 'package:stream_transform/stream_transform.dart';
 import 'package:uuid/uuid.dart';
-import 'package:webtrit_phone/features/messaging/extensions/phoenix_socket.dart';
 
+import 'package:webtrit_phone/app/notifications/notifications.dart';
+import 'package:webtrit_phone/features/messaging/extensions/phoenix_socket.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
@@ -21,11 +22,13 @@ class ConversationCubit extends Cubit<ConversationState> {
     this._client,
     this._chatsRepository,
     this._outboxRepository,
+    this._submitNotification,
   ) : super(ConversationState.init(credentials));
 
   final PhoenixSocket _client;
   final ChatsRepository _chatsRepository;
   final ChatsOutboxRepository _outboxRepository;
+  final Function(Notification) _submitNotification;
 
   StreamSubscription? _chatUpdateSub;
   StreamSubscription? _chatRemoveSub;
@@ -124,6 +127,7 @@ class ConversationCubit extends Cubit<ConversationState> {
       emit(ConversationState.left(state.credentials));
     } catch (e, s) {
       _logger.warning('deleteChat failed', e, s);
+      _submitNotification(DefaultErrorNotification(e));
       emit(state.copyWith(busy: false));
     }
   }
@@ -142,6 +146,7 @@ class ConversationCubit extends Cubit<ConversationState> {
       emit(ConversationState.left(state.credentials));
     } catch (e, s) {
       _logger.warning('leaveGroup failed', e, s);
+      _submitNotification(DefaultErrorNotification(e));
       emit(state.copyWith(busy: false));
     }
   }
@@ -159,6 +164,7 @@ class ConversationCubit extends Cubit<ConversationState> {
       await channel.addGroupMember(userId);
     } catch (e, s) {
       _logger.warning('addGroupMember failed', e, s);
+      _submitNotification(DefaultErrorNotification(e));
     } finally {
       emit(state.copyWith(busy: false));
     }
@@ -177,6 +183,7 @@ class ConversationCubit extends Cubit<ConversationState> {
       await channel.removeGroupMember(userId);
     } catch (e, s) {
       _logger.warning('removeGroupMember failed', e, s);
+      _submitNotification(DefaultErrorNotification(e));
     } finally {
       emit(state.copyWith(busy: false));
     }
@@ -195,6 +202,7 @@ class ConversationCubit extends Cubit<ConversationState> {
       await channel.setGroupModerator(userId, isModerator);
     } catch (e, s) {
       _logger.warning('setGroupModerator failed', e, s);
+      _submitNotification(DefaultErrorNotification(e));
     } finally {
       emit(state.copyWith(busy: false));
     }
@@ -213,6 +221,7 @@ class ConversationCubit extends Cubit<ConversationState> {
       await channel.setGroupName(name);
     } catch (e, s) {
       _logger.warning('setGroupName failed', e, s);
+      _submitNotification(DefaultErrorNotification(e));
     } finally {
       emit(state.copyWith(busy: false));
     }
@@ -269,9 +278,10 @@ class ConversationCubit extends Cubit<ConversationState> {
       } else {
         emit(state.copyWith(fetchingHistory: false, historyEndReached: true));
       }
-    } on Exception catch (e) {
+    } on Exception catch (e, s) {
       emit(state.copyWith(fetchingHistory: false));
-      _logger.warning('fetchHistory failed', e);
+      _logger.warning('fetchHistory failed', e, s);
+      _submitNotification(DefaultErrorNotification(e));
     }
   }
 

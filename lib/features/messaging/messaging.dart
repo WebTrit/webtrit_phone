@@ -10,6 +10,5 @@ export 'widgets/widgets.dart';
 
 // TODO: 
 // - remove messaging service envs
-// - error messages handling with notification bloc
 // - random refacfotring (like ephemeral logic to blocs, constants for keys, etc)
 // - maybe tests?

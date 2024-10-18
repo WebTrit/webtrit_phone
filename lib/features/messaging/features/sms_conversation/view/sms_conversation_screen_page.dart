@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:webtrit_phone/app/notifications/notifications.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
@@ -17,17 +18,16 @@ class SmsConversationScreenPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final messagingBloc = context.read<MessagingBloc>();
-    final smsRepository = context.read<SmsRepository>();
-    final smsOutboxRepository = context.read<SmsOutboxRepository>();
+    final creds = (firstNumber: firstNumber, secondNumber: secondNumber, recipientId: recipientId);
 
     final screen = BlocProvider(
-      key: ValueKey(firstNumber + secondNumber),
+      key: ValueKey(creds),
       create: (context) => SmsConversationCubit(
-        (firstNumber: firstNumber, secondNumber: secondNumber, recipientId: recipientId),
-        messagingBloc.state.client,
-        smsRepository,
-        smsOutboxRepository,
+        creds,
+        context.read<MessagingBloc>().state.client,
+        context.read<SmsRepository>(),
+        context.read<SmsOutboxRepository>(),
+        (n) => context.read<NotificationsBloc>().add(NotificationsSubmitted(n)),
       ),
       child: const SmsConversationScreen(),
     );

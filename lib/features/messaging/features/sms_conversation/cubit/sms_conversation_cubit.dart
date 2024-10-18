@@ -7,8 +7,9 @@ import 'package:logging/logging.dart';
 import 'package:phoenix_socket/phoenix_socket.dart';
 import 'package:stream_transform/stream_transform.dart';
 import 'package:uuid/uuid.dart';
-import 'package:webtrit_phone/features/features.dart';
 
+import 'package:webtrit_phone/app/notifications/notifications.dart';
+import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
@@ -22,6 +23,7 @@ class SmsConversationCubit extends Cubit<SmsConversationState> {
     this._client,
     this._repository,
     this._outboxRepository,
+    this._submitNotification,
   ) : super(SmsConversationState.init(_creds)) {
     _init();
   }
@@ -31,6 +33,7 @@ class SmsConversationCubit extends Cubit<SmsConversationState> {
   final PhoenixSocket _client;
   final SmsRepository _repository;
   final SmsOutboxRepository _outboxRepository;
+  final Function(Notification) _submitNotification;
 
   StreamSubscription? _chatUpdateSub;
   StreamSubscription? _chatRemoveSub;
@@ -107,6 +110,7 @@ class SmsConversationCubit extends Cubit<SmsConversationState> {
       emit(SmsConversationState.left(_creds));
     } catch (e, s) {
       _logger.warning('deleteConversation failed', e, s);
+      _submitNotification(DefaultErrorNotification(e));
       emit(state.copyWith(busy: false));
     }
   }
@@ -161,9 +165,10 @@ class SmsConversationCubit extends Cubit<SmsConversationState> {
       } else {
         emit(state.copyWith(fetchingHistory: false, historyEndReached: true));
       }
-    } on Exception catch (e) {
+    } on Exception catch (e, s) {
       emit(state.copyWith(fetchingHistory: false));
-      _logger.warning('fetchHistory failed', e);
+      _logger.warning('fetchHistory failed', e, s);
+      _submitNotification(DefaultErrorNotification(e));
     }
   }
 
