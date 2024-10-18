@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:phoenix_socket/phoenix_socket.dart';
 
 import 'package:webtrit_api/webtrit_api.dart';
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
@@ -125,6 +126,43 @@ class _MainShellState extends State<MainShell> {
             webtritApiClient: context.read<WebtritApiClient>(),
           ),
         ),
+        RepositoryProvider<ChatsRepository>(
+          create: (context) => ChatsRepository(
+            appDatabase: context.read<AppDatabase>(),
+          ),
+        ),
+        RepositoryProvider<ChatsOutboxRepository>(
+          create: (context) => ChatsOutboxRepository(
+            appDatabase: context.read<AppDatabase>(),
+          ),
+        ),
+        RepositoryProvider<SmsRepository>(
+          create: (context) => SmsRepository(
+            appDatabase: context.read<AppDatabase>(),
+          ),
+        ),
+        RepositoryProvider<SmsOutboxRepository>(
+          create: (context) => SmsOutboxRepository(
+            appDatabase: context.read<AppDatabase>(),
+          ),
+        ),
+        RepositoryProvider<MainScreenRouteStateRepository>(
+          create: (context) => MainScreenRouteStateRepositoryAutoRouteImpl(),
+        ),
+        RepositoryProvider<MainShellRouteStateRepository>(
+          create: (context) => MainShellRouteStateRepositoryAutoRouteImpl(),
+        ),
+        RepositoryProvider<RemoteNotificationRepository>(
+          create: (context) => RemoteNotificationRepositoryBrokerImpl(),
+        ),
+        RepositoryProvider<LocalNotificationRepository>(
+          create: (context) => LocalNotificationRepositoryFLNImpl(),
+        ),
+        RepositoryProvider<ActiveMessageNotificationsRepository>(
+          create: (context) => ActiveMessageNotificationsRepositoryDriftImpl(
+            appDatabase: context.read<AppDatabase>(),
+          ),
+        ),
       ],
       child: MultiBlocProvider(
         providers: [
@@ -183,13 +221,57 @@ class _MainShellState extends State<MainShell> {
               )..add(const CallStarted());
             },
           ),
+          if (_kMessagingEnabled)
+            BlocProvider<MessagingBloc>(
+              lazy: false,
+              create: (context) {
+                final appState = context.read<AppBloc>().state;
+                final (token, tenantId, userId) = (appState.token!, appState.tenantId!, appState.userId!);
+
+                // TODO: replace with createMessagingSocket after messaging-core merging
+                const url = EnvironmentConfig.CHAT_SERVICE_URL;
+                final socketOpts = PhoenixSocketOptions(params: {'token': token, 'tenant_id': tenantId});
+
+                return MessagingBloc(
+                  userId,
+                  // createMessagingSocket(appState.coreUrl!, token, tenantId),
+                  PhoenixSocket(url, socketOptions: socketOpts),
+                  context.read<ChatsRepository>(),
+                  context.read<ChatsOutboxRepository>(),
+                  context.read<SmsRepository>(),
+                  context.read<SmsOutboxRepository>(),
+                  (n) => context.read<NotificationsBloc>().add(NotificationsSubmitted(n)),
+                )..add(const Connect());
+              },
+            ),
+          if (_kMessagingEnabled)
+            BlocProvider<UnreadCountCubit>(
+              create: (context) {
+                return UnreadCountCubit(
+                  userId: context.read<AppBloc>().state.userId!,
+                  chatsRepository: context.read<ChatsRepository>(),
+                  smsRepository: context.read<SmsRepository>(),
+                )..init();
+              },
+            ),
+          if (_kMessagingEnabled)
+            BlocProvider(
+              create: (_) => ChatsForwardingCubit(),
+            )
         ],
         child: Builder(
-          builder: (context) => const CallShell(
-            child: AutoRouter(),
-          ),
+          builder: (context) {
+            var mainShellRepo = context.read<MainShellRouteStateRepository>();
+            return CallShell(
+              child: MessagingShell(
+                child: AutoRouter(navigatorObservers: () => [MainShellNavigatorObserver(mainShellRepo)]),
+              ),
+            );
+          },
         ),
       ),
     );
   }
 }
+
+const _kMessagingEnabled = EnvironmentConfig.CHAT_FEATURE_ENABLE || EnvironmentConfig.SMS_FEATURE_ENABLE;

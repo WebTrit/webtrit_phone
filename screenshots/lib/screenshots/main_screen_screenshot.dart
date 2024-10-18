@@ -128,6 +128,9 @@ class MainScreenScreenshot extends StatelessWidget {
           ),
         );
         return provider;
+      case MainFlavor.messaging:
+        const widget = Placeholder();
+        return widget;
     }
   }
 

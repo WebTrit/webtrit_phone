@@ -6,6 +6,10 @@ upload:
   files:
     - file: lib/l10n/arb/app_en.arb
       locale_code: en
+    - file: lib/l10n/arb/app_uk.arb
+      locale_code: uk
+    - file: lib/l10n/arb/app_it.arb
+      locale_code: it
   params:
     overwrite: true
     reviewed: true

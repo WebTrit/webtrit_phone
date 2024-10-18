@@ -33,6 +33,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
           coreUrl: secureStorage.readCoreUrl(),
           tenantId: secureStorage.readTenantId(),
           token: secureStorage.readToken(),
+          userId: secureStorage.readUserId(),
           themeSettings: appThemes.values.first.settings,
           themeMode: appPreferences.getThemeMode(),
           locale: appPreferences.getLocale(),
@@ -59,6 +60,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     await secureStorage.deleteCoreUrl();
     await secureStorage.deleteTenantId();
     await secureStorage.deleteToken();
+    await secureStorage.deleteUserId();
 
     await appDatabase.deleteEverything();
   }
@@ -73,11 +75,13 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     await secureStorage.writeCoreUrl(event.coreUrl);
     await secureStorage.writeTenantId(event.tenantId);
     await secureStorage.writeToken(event.token);
+    await secureStorage.writeUserId(event.userId);
 
     emit(state.copyWith(
       coreUrl: event.coreUrl,
       tenantId: event.tenantId,
       token: event.token,
+      userId: event.userId,
     ));
   }
 
@@ -100,6 +104,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       coreUrl: null,
       tenantId: null,
       token: null,
+      userId: null,
     ));
   }
 

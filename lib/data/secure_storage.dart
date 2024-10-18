@@ -4,6 +4,7 @@ class SecureStorage {
   static const _kCoreUrlKey = 'core-url';
   static const _kTenantIdKey = 'tenant-id';
   static const _kTokenKey = 'token';
+  static const _kUserIdKey = 'user-id';
 
   static late SecureStorage _instance;
 
@@ -14,6 +15,12 @@ class SecureStorage {
       ),
     );
     final cache = await storage.readAll();
+
+    // Migration from old version of the app where the user ID wasnt provided to the app
+    // to avoid data inconsistency in the cache, we should clear it if the user ID is not present
+    if (!cache.containsKey(_kUserIdKey)) {
+      cache.clear();
+    }
 
     _instance = SecureStorage._(storage, cache);
   }
@@ -90,5 +97,17 @@ class SecureStorage {
 
   Future<void> deleteToken() {
     return _delete(_kTokenKey);
+  }
+
+  String? readUserId() {
+    return _read(_kUserIdKey);
+  }
+
+  Future<void> writeUserId(String userId) {
+    return _write(_kUserIdKey, userId);
+  }
+
+  Future<void> deleteUserId() {
+    return _delete(_kUserIdKey);
   }
 }

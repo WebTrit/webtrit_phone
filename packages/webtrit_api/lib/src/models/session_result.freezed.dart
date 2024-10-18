@@ -39,7 +39,8 @@ mixin _$SessionResult {
             String? fromEmail,
             String? tenantId)
         otpProvisional,
-    required TResult Function(String token, String? tenantId) token,
+    required TResult Function(String token, String userId, String? tenantId)
+        token,
     required TResult Function(Map<String, dynamic> data) data,
   }) =>
       throw _privateConstructorUsedError;
@@ -48,7 +49,7 @@ mixin _$SessionResult {
     TResult? Function(String otpId, OtpNotificationType? notificationType,
             String? fromEmail, String? tenantId)?
         otpProvisional,
-    TResult? Function(String token, String? tenantId)? token,
+    TResult? Function(String token, String userId, String? tenantId)? token,
     TResult? Function(Map<String, dynamic> data)? data,
   }) =>
       throw _privateConstructorUsedError;
@@ -57,7 +58,7 @@ mixin _$SessionResult {
     TResult Function(String otpId, OtpNotificationType? notificationType,
             String? fromEmail, String? tenantId)?
         otpProvisional,
-    TResult Function(String token, String? tenantId)? token,
+    TResult Function(String token, String userId, String? tenantId)? token,
     TResult Function(Map<String, dynamic> data)? data,
     required TResult orElse(),
   }) =>
@@ -222,7 +223,8 @@ class _$SessionOtpProvisionalImpl implements SessionOtpProvisional {
             String? fromEmail,
             String? tenantId)
         otpProvisional,
-    required TResult Function(String token, String? tenantId) token,
+    required TResult Function(String token, String userId, String? tenantId)
+        token,
     required TResult Function(Map<String, dynamic> data) data,
   }) {
     return otpProvisional(otpId, notificationType, fromEmail, tenantId);
@@ -234,7 +236,7 @@ class _$SessionOtpProvisionalImpl implements SessionOtpProvisional {
     TResult? Function(String otpId, OtpNotificationType? notificationType,
             String? fromEmail, String? tenantId)?
         otpProvisional,
-    TResult? Function(String token, String? tenantId)? token,
+    TResult? Function(String token, String userId, String? tenantId)? token,
     TResult? Function(Map<String, dynamic> data)? data,
   }) {
     return otpProvisional?.call(otpId, notificationType, fromEmail, tenantId);
@@ -246,7 +248,7 @@ class _$SessionOtpProvisionalImpl implements SessionOtpProvisional {
     TResult Function(String otpId, OtpNotificationType? notificationType,
             String? fromEmail, String? tenantId)?
         otpProvisional,
-    TResult Function(String token, String? tenantId)? token,
+    TResult Function(String token, String userId, String? tenantId)? token,
     TResult Function(Map<String, dynamic> data)? data,
     required TResult orElse(),
   }) {
@@ -316,7 +318,7 @@ abstract class _$$SessionTokenImplCopyWith<$Res> {
           _$SessionTokenImpl value, $Res Function(_$SessionTokenImpl) then) =
       __$$SessionTokenImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({String token, String? tenantId});
+  $Res call({String token, String userId, String? tenantId});
 }
 
 /// @nodoc
@@ -331,12 +333,17 @@ class __$$SessionTokenImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? token = null,
+    Object? userId = null,
     Object? tenantId = freezed,
   }) {
     return _then(_$SessionTokenImpl(
       token: null == token
           ? _value.token
           : token // ignore: cast_nullable_to_non_nullable
+              as String,
+      userId: null == userId
+          ? _value.userId
+          : userId // ignore: cast_nullable_to_non_nullable
               as String,
       tenantId: freezed == tenantId
           ? _value.tenantId
@@ -351,7 +358,10 @@ class __$$SessionTokenImplCopyWithImpl<$Res>
 @JsonSerializable(fieldRename: FieldRename.snake)
 class _$SessionTokenImpl implements SessionToken {
   const _$SessionTokenImpl(
-      {required this.token, this.tenantId, final String? $type})
+      {required this.token,
+      required this.userId,
+      this.tenantId,
+      final String? $type})
       : $type = $type ?? 'token';
 
   factory _$SessionTokenImpl.fromJson(Map<String, dynamic> json) =>
@@ -360,6 +370,8 @@ class _$SessionTokenImpl implements SessionToken {
   @override
   final String token;
   @override
+  final String userId;
+  @override
   final String? tenantId;
 
   @JsonKey(name: 'runtimeType')
@@ -367,7 +379,7 @@ class _$SessionTokenImpl implements SessionToken {
 
   @override
   String toString() {
-    return 'SessionResult.token(token: $token, tenantId: $tenantId)';
+    return 'SessionResult.token(token: $token, userId: $userId, tenantId: $tenantId)';
   }
 
   @override
@@ -376,13 +388,14 @@ class _$SessionTokenImpl implements SessionToken {
         (other.runtimeType == runtimeType &&
             other is _$SessionTokenImpl &&
             (identical(other.token, token) || other.token == token) &&
+            (identical(other.userId, userId) || other.userId == userId) &&
             (identical(other.tenantId, tenantId) ||
                 other.tenantId == tenantId));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, token, tenantId);
+  int get hashCode => Object.hash(runtimeType, token, userId, tenantId);
 
   @JsonKey(ignore: true)
   @override
@@ -399,10 +412,11 @@ class _$SessionTokenImpl implements SessionToken {
             String? fromEmail,
             String? tenantId)
         otpProvisional,
-    required TResult Function(String token, String? tenantId) token,
+    required TResult Function(String token, String userId, String? tenantId)
+        token,
     required TResult Function(Map<String, dynamic> data) data,
   }) {
-    return token(this.token, tenantId);
+    return token(this.token, userId, tenantId);
   }
 
   @override
@@ -411,10 +425,10 @@ class _$SessionTokenImpl implements SessionToken {
     TResult? Function(String otpId, OtpNotificationType? notificationType,
             String? fromEmail, String? tenantId)?
         otpProvisional,
-    TResult? Function(String token, String? tenantId)? token,
+    TResult? Function(String token, String userId, String? tenantId)? token,
     TResult? Function(Map<String, dynamic> data)? data,
   }) {
-    return token?.call(this.token, tenantId);
+    return token?.call(this.token, userId, tenantId);
   }
 
   @override
@@ -423,12 +437,12 @@ class _$SessionTokenImpl implements SessionToken {
     TResult Function(String otpId, OtpNotificationType? notificationType,
             String? fromEmail, String? tenantId)?
         otpProvisional,
-    TResult Function(String token, String? tenantId)? token,
+    TResult Function(String token, String userId, String? tenantId)? token,
     TResult Function(Map<String, dynamic> data)? data,
     required TResult orElse(),
   }) {
     if (token != null) {
-      return token(this.token, tenantId);
+      return token(this.token, userId, tenantId);
     }
     return orElse();
   }
@@ -471,12 +485,14 @@ class _$SessionTokenImpl implements SessionToken {
 abstract class SessionToken implements SessionResult {
   const factory SessionToken(
       {required final String token,
+      required final String userId,
       final String? tenantId}) = _$SessionTokenImpl;
 
   factory SessionToken.fromJson(Map<String, dynamic> json) =
       _$SessionTokenImpl.fromJson;
 
   String get token;
+  String get userId;
   String? get tenantId;
   @JsonKey(ignore: true)
   _$$SessionTokenImplCopyWith<_$SessionTokenImpl> get copyWith =>
@@ -570,7 +586,8 @@ class _$SessionDataImpl implements SessionData {
             String? fromEmail,
             String? tenantId)
         otpProvisional,
-    required TResult Function(String token, String? tenantId) token,
+    required TResult Function(String token, String userId, String? tenantId)
+        token,
     required TResult Function(Map<String, dynamic> data) data,
   }) {
     return data(this.data);
@@ -582,7 +599,7 @@ class _$SessionDataImpl implements SessionData {
     TResult? Function(String otpId, OtpNotificationType? notificationType,
             String? fromEmail, String? tenantId)?
         otpProvisional,
-    TResult? Function(String token, String? tenantId)? token,
+    TResult? Function(String token, String userId, String? tenantId)? token,
     TResult? Function(Map<String, dynamic> data)? data,
   }) {
     return data?.call(this.data);
@@ -594,7 +611,7 @@ class _$SessionDataImpl implements SessionData {
     TResult Function(String otpId, OtpNotificationType? notificationType,
             String? fromEmail, String? tenantId)?
         otpProvisional,
-    TResult Function(String token, String? tenantId)? token,
+    TResult Function(String token, String userId, String? tenantId)? token,
     TResult Function(Map<String, dynamic> data)? data,
     required TResult orElse(),
   }) {

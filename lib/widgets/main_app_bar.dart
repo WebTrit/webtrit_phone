@@ -34,7 +34,7 @@ class MainAppBar extends AppBar {
                       Icons.person,
                     ),
                     onPressed: () {
-                      context.router.push(const SettingsRouterPageRoute());
+                      context.router.navigate(const SettingsRouterPageRoute());
                     },
                   ),
                 );
