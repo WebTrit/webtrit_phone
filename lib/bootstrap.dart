@@ -18,27 +18,24 @@ import 'package:webtrit_phone/app/assets.gen.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/push_notification/push_notifications.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
+import 'package:webtrit_phone/services/background_call_isolate.dart';
 import 'package:webtrit_phone/utils/path_provider/_native.dart';
 
-import 'background_call_handler.dart';
+import 'services/background_call_handler.dart';
 import 'environment_config.dart';
 import 'firebase_options.dart';
-
-int _counter = 0;
+import 'models/models.dart';
 
 Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
   _initLogs();
 
   final logger = Logger('bootstrap');
-  print('counter: bootstrap $_counter');
+
   await runZonedGuarded(
     () async {
       WidgetsFlutterBinding.ensureInitialized();
 
-      CallkeepBackgroundService.onBackgroundCall(_callkeepMessagingBackgroundHandler);
-
       await _initFirebase();
-      await _initFirebaseMessaging();
 
       if (!kIsWeb && kDebugMode) {
         FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(false);
@@ -65,11 +62,10 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
       await AppTime.init();
       await SessionCleanupWorker.init();
 
-      if (Platform.isAndroid) {
-        WebtritCallkeepLogs().setLogsDelegate(CallkeepLogs());
-      }
-
       Bloc.observer = AppBlocObserver();
+
+      await _initCallkeepService();
+      await _initFirebaseMessaging();
 
       runApp(await builder());
     },
@@ -94,10 +90,32 @@ Future<void> _initFirebase() async {
   );
 }
 
+Future<void> _initCallkeepService() async {
+  CallkeepBackgroundService.initialize(
+    onStart: onStartForegroundService,
+    onChangedLifecycle: onChangedLifecycle,
+    startServiceOnInitialization: false,
+  );
+
+  final socketIncomingCall = AppPreferences().getIncomingCallType() == IncomingCallType.socket;
+  final authorized = SecureStorage().readCoreUrl() != null && SecureStorage().readToken() != '';
+
+  if (socketIncomingCall && authorized) {
+    Future.delayed(Duration.zero, () {
+      CallkeepBackgroundService().wakeUpBackgroundHandler(autoRestart: true);
+    });
+  }
+
+  if (Platform.isAndroid) {
+    WebtritCallkeepLogs().setLogsDelegate(CallkeepLogs());
+  }
+}
+
 Future<void> _initFirebaseMessaging() async {
   final logger = Logger('FirebaseMessaging');
 
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
     logger.info('onMessage: ${message.toMap()}');
   });
@@ -112,34 +130,9 @@ Future<void> _initFirebaseMessaging() async {
   // actual FirebaseMessaging permission request executed in [PermissionsCubit]
 }
 
-// @pragma('vm:entry-point')
+@pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  _counter = _counter - 10;
-
-  print('counter: messaging $_counter');
-
-  //CallkeepBackgroundService.emitCall();
-}
-
-Future<void> _callkeepMessagingBackgroundHandler() async {
-  _counter = _counter + 10;
-
-  print('counter: callkeep $_counter');
-// something do
-}
-
-Future<void> initializeService() async {
-  // Make sure Flutter is ready for platform channels
-  WidgetsFlutterBinding.ensureInitialized();
-
-  // Initialize services or plugins, like Hive, databases, etc.
-  // // For example, if you need to interact with native code, ensure pigeon or method channels are initialized
-  // ServiceApi serviceApi = ServiceApi();
-  //
-  // // Example: Start your service
-  // final request = ServiceRequest()..action = 'start';
-  // final response = await serviceApi.startService(request);
-  // print('Service started in background: ${response.message}');
+  // CallkeepBackgroundService().wakeUpBackgroundHandler(autoRestart: false);
 }
 
 class CallkeepLogs implements CallkeepLogsDelegate {
@@ -155,6 +148,16 @@ class FCMIsolateDatabase extends AppDatabase {
   FCMIsolateDatabase(super.e);
 
   static FCMIsolateDatabase? _instance;
+
+  static Future<FCMIsolateDatabase> db() async {
+    return FCMIsolateDatabase.instance(
+      createAppDatabaseConnection(
+        await getApplicationDocumentsPath(),
+        'db.sqlite',
+        logStatements: EnvironmentConfig.DATABASE_LOG_STATEMENTS,
+      ),
+    );
+  }
 
   static instance(executor) {
     _instance ??= FCMIsolateDatabase(executor);

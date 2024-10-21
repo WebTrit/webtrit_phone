@@ -14,6 +14,7 @@ import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/features/features.dart';
+import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
 @RoutePage()
@@ -50,6 +51,12 @@ class _MainShellState extends State<MainShell> {
         ),
       ),
     );
+
+    if (AppPreferences().getIncomingCallType() == IncomingCallType.socket) {
+      Future.delayed(Duration.zero, () {
+        CallkeepBackgroundService().wakeUpBackgroundHandler(autoRestart: true);
+      });
+    }
   }
 
   @override
