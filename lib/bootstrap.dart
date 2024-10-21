@@ -18,13 +18,13 @@ import 'package:webtrit_phone/app/assets.gen.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/push_notification/push_notifications.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
-import 'package:webtrit_phone/services/background_call_isolate.dart';
 import 'package:webtrit_phone/utils/path_provider/_native.dart';
 
 import 'services/background_call_handler.dart';
 import 'environment_config.dart';
 import 'firebase_options.dart';
 import 'models/models.dart';
+import 'services/background_call_isolate.dart';
 
 Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
   _initLogs();
@@ -64,8 +64,8 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
 
       Bloc.observer = AppBlocObserver();
 
-      await _initCallkeepService();
       await _initFirebaseMessaging();
+      await _initCallkeepService();
 
       runApp(await builder());
     },
@@ -95,6 +95,8 @@ Future<void> _initCallkeepService() async {
     onStart: onStartForegroundService,
     onChangedLifecycle: onChangedLifecycle,
     startServiceOnInitialization: false,
+    androidNotificationChannelName: 'Webtrit Inbound Calls Service',
+    androidNotificationChannelDescription: 'This is required to receive calls while in background',
   );
 
   final socketIncomingCall = AppPreferences().getIncomingCallType() == IncomingCallType.socket;
@@ -132,7 +134,11 @@ Future<void> _initFirebaseMessaging() async {
 
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  // CallkeepBackgroundService().wakeUpBackgroundHandler(autoRestart: false);
+  AppPreferences.init();
+
+  if (AppPreferences().getIncomingCallType() == IncomingCallType.pushNotification) {
+    CallkeepBackgroundService().wakeUpBackgroundHandler(autoRestart: false);
+  }
 }
 
 class CallkeepLogs implements CallkeepLogsDelegate {

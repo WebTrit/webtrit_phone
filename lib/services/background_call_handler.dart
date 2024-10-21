@@ -5,11 +5,11 @@ import 'package:logging/logging.dart';
 import 'package:ssl_certificates/ssl_certificates.dart';
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 import 'package:webtrit_phone/bootstrap.dart';
+import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_signaling/webtrit_signaling.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/recents/recents_repository.dart';
-import '../environment_config.dart';
-import '../data/data.dart';
+
 
 import 'package:logging_appenders/logging_appenders.dart';
 

@@ -1,55 +1,67 @@
-import 'dart:isolate';
-
 import 'package:logging/logging.dart';
 import 'package:logging_appenders/logging_appenders.dart';
-import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 
-import '../environment_config.dart';
+import 'package:webtrit_callkeep/webtrit_callkeep.dart';
+import 'package:webtrit_phone/environment_config.dart';
+
 import 'background_call_handler.dart';
 
+
 final _logger = Logger('IsolateBackgroundCallHandler');
-
 BackgroundCallHandler? _isolateBackgroundHandler;
-
 bool _launchingBackgroundSignaling = false;
 
 void _initLogs() {
   hierarchicalLoggingEnabled = true;
-  PrintAppender.setupLogging(level: Level.LEVELS.firstWhere((level) => level.name == EnvironmentConfig.DEBUG_LEVEL));
+  final logLevel = Level.LEVELS.firstWhere((level) => level.name == EnvironmentConfig.DEBUG_LEVEL);
+  PrintAppender.setupLogging(level: logLevel);
 }
 
-void _initSignaling() async {
+Future<void> _initSignaling({
+  bool terminateServiceOnActivityLaunch = false,
+}) async {
   _logger.info('Initializing background signaling');
-  _isolateBackgroundHandler = _isolateBackgroundHandler ?? (await BackgroundCallHandler.init());
+  _isolateBackgroundHandler ??= await BackgroundCallHandler.init();
   _isolateBackgroundHandler?.launch();
+
+  if (terminateServiceOnActivityLaunch) {
+    _isolateBackgroundHandler?.onCallCompletion = () {
+      _closeSignaling();
+      CallkeepBackgroundService().tearDownActivity();
+    };
+  }
 }
 
-void _closeSignaling() async {
+void _closeSignaling() {
   _logger.info('Closing background signaling');
-  if (_isolateBackgroundHandler != null) {
-    _isolateBackgroundHandler?.close();
-    _isolateBackgroundHandler = null;
-  }
+  _isolateBackgroundHandler?.close();
+  _isolateBackgroundHandler = null;
 }
 
 @pragma('vm:entry-point')
 Future<void> onStartForegroundService(CallkeepServiceStatus status) async {
   _initLogs();
-
-  // if (!status.autoRestart) {
-  //   _initSignaling();
-  // }
+  if (!status.autoRestart) {
+    await _initSignaling(terminateServiceOnActivityLaunch: true);
+  }
 }
 
 @pragma('vm:entry-point')
 Future<void> onChangedLifecycle(CallkeepServiceStatus status) async {
-  if (status.lifecycle == CallkeepAppLifecycleType.onStop) {
-    _launchingBackgroundSignaling = false;
-    _initSignaling();
-  }
-
-  if (status.lifecycle == CallkeepAppLifecycleType.onResume && !_launchingBackgroundSignaling && status.activityReady) {
-    _launchingBackgroundSignaling = true;
-    _closeSignaling();
+  switch (status.lifecycle) {
+    case CallkeepAppLifecycleType.onStop:
+      if (status.autoRestart) {
+        _launchingBackgroundSignaling = false;
+        await _initSignaling(terminateServiceOnActivityLaunch:false);
+      }
+      break;
+    case CallkeepAppLifecycleType.onResume:
+      if (!_launchingBackgroundSignaling && status.activityReady) {
+        _launchingBackgroundSignaling = true;
+        _closeSignaling();
+      }
+      break;
+    default:
+      break;
   }
 }
