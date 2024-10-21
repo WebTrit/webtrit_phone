@@ -79,7 +79,7 @@ class ChatTypingCubit extends Cubit<TypingState> {
         if (channel == null || channel.state != PhoenixChannelState.joined) throw Exception('Channel not ready yet');
 
         await for (var event in channel.chatEvents) {
-          switch (event.runtimeType) {
+          switch (event) {
             case ChatChannelTyping event:
               _addTypingUser((event).userId);
             case ChatChannelMessageUpdate event:
