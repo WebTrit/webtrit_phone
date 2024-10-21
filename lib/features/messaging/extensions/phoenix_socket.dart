@@ -172,7 +172,7 @@ extension PhoenixChannelExt on PhoenixChannel {
     final req = await push('chat:cursor:get', {}).future;
     final response = req.response;
 
-    if (req.isOk && response is List) {
+    if (req.isOk && response is Iterable) {
       return response.map((e) => ChatMessageReadCursor.fromMap(e));
     }
 
@@ -193,8 +193,8 @@ extension PhoenixChannelExt on PhoenixChannel {
     final req = await push('sms:conversation:cursor:get', {}).future;
     final response = req.response;
 
-    if (req.isOk && response is List) {
-      response.map((e) => SmsMessageReadCursor.fromMap(e));
+    if (req.isOk && response is Iterable) {
+      return response.map((e) => SmsMessageReadCursor.fromMap(e));
     }
 
     throw MessagingSocketException(
@@ -237,7 +237,7 @@ extension PhoenixChannelExt on PhoenixChannel {
     final response = req.response;
 
     if (req.isOk && response is Map<String, dynamic>) {
-      (req.response['data'] as Iterable).map((e) => ChatMessage.fromMap(e)).toList();
+      return (req.response['data'] as Iterable).map((e) => ChatMessage.fromMap(e)).toList();
     }
 
     throw MessagingSocketException(
@@ -896,7 +896,7 @@ class MessagingSocketException with EquatableMixin implements Exception {
   late final Map<String, dynamic> details = response is Map<String, dynamic> ? response : {};
 
   /// Server side error code
-  late final code = details['code'] ?? response is String ? response : null;
+  late final code = details['code'] ?? (response is String ? response : null);
 
   MessagingSocketException(this.message, {this.response, this.topic});
 
