@@ -67,29 +67,34 @@ class _MessageBodyState extends State<MessageBody> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (preview != null) ...[
-          Container(
+        AnimatedCrossFade(
+          duration: const Duration(milliseconds: 600),
+          sizeCurve: Curves.elasticOut,
+          firstCurve: Curves.easeInExpo,
+          alignment: Alignment.center,
+          firstChild: Container(
             decoration: previewDecoration,
             padding: const EdgeInsets.all(8),
             child: Column(
               children: [
-                if (preview!.imageUrl != null) ...[
+                if (preview?.imageUrl != null) ...[
                   Image.network(preview!.imageUrl!),
                   const SizedBox(height: 8),
                 ],
-                if (preview!.title != null) ...[
+                if (preview?.title != null) ...[
                   Text(preview?.title ?? '', style: style.copyWith(fontWeight: FontWeight.bold)),
                   const SizedBox(height: 8),
                 ],
-                if (preview!.description != null) ...[
+                if (preview?.description != null) ...[
                   Text(preview?.description ?? '', style: style),
                   const SizedBox(height: 8),
                 ]
               ],
             ),
           ),
-          const SizedBox(height: 8),
-        ],
+          secondChild: const SizedBox(),
+          crossFadeState: preview != null ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+        ),
         ParsedText(
           parse: [
             _mailToMatcher(style: style.copyWith(decoration: TextDecoration.underline)),
