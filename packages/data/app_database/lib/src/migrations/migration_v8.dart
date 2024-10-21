@@ -11,7 +11,9 @@ class MigrationV8 extends Migration {
   @override
   Future<void> execute(AppDatabase db, Migrator m) async {
     final chatsTable = v8.Chats(db);
+    final chatsMembersTable = v8.ChatMembers(db);
     final chatMessagesTable = v8.ChatMessages(db);
+    final chatOutboxMessagesTable = v8.ChatOutboxMessages(db);
     final syncCursorsTable = v8.ChatMessageSyncCursors(db);
     final readCursorsTable = v8.ChatMessageReadCursors(db);
     final readCursorsOutboxTable = v8.ChatOutboxReadCursors(db);
@@ -28,8 +30,12 @@ class MigrationV8 extends Migration {
     // recreate tables with breaking changes
     await m.deleteTable(chatsTable.aliasedName);
     await m.createTable(chatsTable);
+    await m.deleteTable(chatsMembersTable.aliasedName);
+    await m.createTable(chatsMembersTable);
     await m.deleteTable(chatMessagesTable.aliasedName);
     await m.createTable(chatMessagesTable);
+    await m.deleteTable(chatOutboxMessagesTable.aliasedName);
+    await m.createTable(chatOutboxMessagesTable);
     await m.deleteTable(syncCursorsTable.aliasedName);
     await m.createTable(syncCursorsTable);
 
