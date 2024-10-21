@@ -219,6 +219,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get default_SocketExceptionError => 'Виникла проблема з мережею';
 
   @override
+  String get default_TimeoutExceptionError => 'Сталася проблема з таймаутом сервера';
+
+  @override
   String get default_TlsExceptionError => 'Виникла проблема з безпековим мережевим протоколом (TLS/SSL)';
 
   @override

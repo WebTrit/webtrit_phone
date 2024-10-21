@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/widgets.dart';
@@ -12,6 +13,7 @@ String defaultErrorL10n(BuildContext context, Object error) {
     FormatException() => context.l10n.default_FormatExceptionError,
     TlsException() => context.l10n.default_TlsExceptionError,
     SocketException() => context.l10n.default_SocketExceptionError,
+    TimeoutException() => context.l10n.default_TimeoutExceptionError,
     ClientException() => context.l10n.default_ClientExceptionError,
     TypeError() => context.l10n.default_TypeErrorError,
     RequestFailure() => _defaultRequestFailureL10n(context, error),

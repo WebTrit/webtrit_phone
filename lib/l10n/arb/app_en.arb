@@ -140,6 +140,8 @@
   "@default_RequestFailureError": {},
   "default_SocketExceptionError": "A network issue occurred",
   "@default_SocketExceptionError": {},
+  "default_TimeoutExceptionError":"A server timeout occurred",
+  "@default_TimeoutExceptionError": {},
   "default_TlsExceptionError": "A secure network protocol (TLS/SSL) issue occurred",
   "@default_TlsExceptionError": {},
   "default_TypeErrorError": "A response issue occurred",

@@ -140,6 +140,8 @@
   "@default_RequestFailureError": {},
   "default_SocketExceptionError": "Si è verificato un problema di rete",
   "@default_SocketExceptionError": {},
+  "default_TimeoutExceptionError": "Si è verificato un problema di timeout del server",
+  "@default_TimeoutExceptionError": {},
   "default_TlsExceptionError": "Si è verificato un problema con il protocollo di rete sicuro (TLS/SSL)",
   "@default_TlsExceptionError": {},
   "default_TypeErrorError": "Si è verificato un problema di risposta",

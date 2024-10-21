@@ -219,6 +219,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get default_SocketExceptionError => 'A network issue occurred';
 
   @override
+  String get default_TimeoutExceptionError => 'A server timeout occurred';
+
+  @override
   String get default_TlsExceptionError => 'A secure network protocol (TLS/SSL) issue occurred';
 
   @override

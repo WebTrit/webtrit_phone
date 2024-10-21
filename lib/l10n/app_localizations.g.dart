@@ -517,6 +517,12 @@ abstract class AppLocalizations {
   /// **'A network issue occurred'**
   String get default_SocketExceptionError;
 
+  /// No description provided for @default_TimeoutExceptionError.
+  ///
+  /// In en, this message translates to:
+  /// **'A server timeout occurred'**
+  String get default_TimeoutExceptionError;
+
   /// No description provided for @default_TlsExceptionError.
   ///
   /// In en, this message translates to:

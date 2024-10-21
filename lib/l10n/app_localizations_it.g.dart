@@ -219,6 +219,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get default_SocketExceptionError => 'Si è verificato un problema di rete';
 
   @override
+  String get default_TimeoutExceptionError => 'Si è verificato un problema di timeout del server';
+
+  @override
   String get default_TlsExceptionError => 'Si è verificato un problema con il protocollo di rete sicuro (TLS/SSL)';
 
   @override
