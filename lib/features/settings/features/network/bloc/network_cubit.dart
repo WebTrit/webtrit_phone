@@ -36,12 +36,12 @@ class NetworkCubit extends Cubit<NetworkState> {
 
     switch (incomingCallTypeModel.incomingCallType) {
       case IncomingCallType.pushNotification:
-        callkeepBackgroundService.tearDownBackgroundHandler();
+        callkeepBackgroundService.setUp(autoStartOnBoot: false, autoRestartOnTerminate: false);
+        callkeepBackgroundService.stopService();
         break;
       case IncomingCallType.socket:
-        // CallkeepBackgroundService().setSocketState(CallkeepSocketState.foreground);
+        callkeepBackgroundService.setUp(autoStartOnBoot: true, autoRestartOnTerminate: true);
         callkeepBackgroundService.wakeUpBackgroundHandler(autoRestart: true);
-
         break;
     }
 

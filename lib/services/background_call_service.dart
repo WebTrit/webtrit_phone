@@ -10,9 +10,6 @@ import 'package:webtrit_signaling/webtrit_signaling.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/recents/recents_repository.dart';
 
-
-import 'package:logging_appenders/logging_appenders.dart';
-
 const int _kUndefinedLine = -1;
 
 final _logger = Logger('IsolateBackgroundCallHandler');
@@ -89,8 +86,6 @@ class BackgroundCallHandler implements CallkeepBackgroundServiceDelegate {
   }
 
   Future<void> _initializeSignalClient() async {
-    CallkeepBackgroundService().setSocketState(CallkeepSocketState.pending);
-
     _logger.info('_initializeSignalClient');
 
     if (_isConnected) {
@@ -109,8 +104,6 @@ class BackgroundCallHandler implements CallkeepBackgroundServiceDelegate {
       true,
       certs: certificates,
     );
-
-    CallkeepBackgroundService().setSocketState(CallkeepSocketState.connected);
 
     _isConnected = true;
     _isConnecting = false;

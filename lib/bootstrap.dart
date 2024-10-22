@@ -11,20 +11,15 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:logging/logging.dart';
 import 'package:logging_appenders/logging_appenders.dart';
 
-import 'package:webtrit_callkeep/webtrit_callkeep.dart';
-
 import 'package:webtrit_phone/app/app_bloc_observer.dart';
 import 'package:webtrit_phone/app/assets.gen.dart';
 import 'package:webtrit_phone/data/data.dart';
-import 'package:webtrit_phone/push_notification/push_notifications.dart';
-import 'package:webtrit_phone/repositories/repositories.dart';
+import 'package:webtrit_phone/services/services.dart' as call_fcm_isolate show initializeCall;
+
 import 'package:webtrit_phone/utils/path_provider/_native.dart';
 
-import 'services/background_call_handler.dart';
 import 'environment_config.dart';
 import 'firebase_options.dart';
-import 'models/models.dart';
-import 'services/background_call_isolate.dart';
 
 Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
   _initLogs();
@@ -65,7 +60,6 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
       Bloc.observer = AppBlocObserver();
 
       await _initFirebaseMessaging();
-      await _initCallkeepService();
 
       runApp(await builder());
     },
@@ -90,29 +84,6 @@ Future<void> _initFirebase() async {
   );
 }
 
-Future<void> _initCallkeepService() async {
-  CallkeepBackgroundService.initialize(
-    onStart: onStartForegroundService,
-    onChangedLifecycle: onChangedLifecycle,
-    startServiceOnInitialization: false,
-    androidNotificationChannelName: 'Webtrit Inbound Calls Service',
-    androidNotificationChannelDescription: 'This is required to receive calls while in background',
-  );
-
-  final socketIncomingCall = AppPreferences().getIncomingCallType() == IncomingCallType.socket;
-  final authorized = SecureStorage().readCoreUrl() != null && SecureStorage().readToken() != '';
-
-  if (socketIncomingCall && authorized) {
-    Future.delayed(Duration.zero, () {
-      CallkeepBackgroundService().wakeUpBackgroundHandler(autoRestart: true);
-    });
-  }
-
-  if (Platform.isAndroid) {
-    WebtritCallkeepLogs().setLogsDelegate(CallkeepLogs());
-  }
-}
-
 Future<void> _initFirebaseMessaging() async {
   final logger = Logger('FirebaseMessaging');
 
@@ -134,21 +105,19 @@ Future<void> _initFirebaseMessaging() async {
 
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  AppPreferences.init();
-
-  if (AppPreferences().getIncomingCallType() == IncomingCallType.pushNotification) {
-    CallkeepBackgroundService().wakeUpBackgroundHandler(autoRestart: false);
+  if (message.notification == null && !message.contentAvailable && message.data.isNotEmpty && Platform.isAndroid) {
+    await call_fcm_isolate.initializeCall(message.data);
   }
 }
 
-class CallkeepLogs implements CallkeepLogsDelegate {
-  final _logger = Logger('CallkeepLogs');
-
-  @override
-  void onLog(CallkeepLogType type, String tag, String message) {
-    _logger.info('$tag $message');
-  }
-}
+// class CallkeepLogs implements CallkeepLogsDelegate {
+//   final _logger = Logger('CallkeepLogs');
+//
+//   @override
+//   void onLog(CallkeepLogType type, String tag, String message) {
+//     _logger.info('$tag $message');
+//   }
+// }
 
 class FCMIsolateDatabase extends AppDatabase {
   FCMIsolateDatabase(super.e);

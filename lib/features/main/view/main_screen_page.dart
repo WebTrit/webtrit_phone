@@ -64,17 +64,15 @@ class MainScreenPage extends StatelessWidget {
           storeInfoExtractor: StoreInfoExtractor(),
         )..add(const MainStarted());
       },
-      child: appDemoFlow
-          ? BlocProvider<DemoCubit>(
-              create: (context) => DemoCubit(
-                webtritApiClient: context.read<WebtritApiClient>(),
-                token: context.read<AppBloc>().state.token!,
-                flavor: MainFlavor.contacts,
-                locale: context.read<AppBloc>().state.locale,
-              ),
-              child: DemoShell(child: autoTabsRouter),
-            )
-          : autoTabsRouter,
+      child: BlocProvider<DemoCubit>(
+        create: (context) => DemoCubit(
+          webtritApiClient: context.read<WebtritApiClient>(),
+          token: context.read<AppBloc>().state.token!,
+          flavor: MainFlavor.contacts,
+          locale: context.read<AppBloc>().state.locale,
+        ),
+        child: DemoShell(child: autoTabsRouter),
+      ),
     );
 
     final blocListener = BlocListener<AppBloc, AppState>(

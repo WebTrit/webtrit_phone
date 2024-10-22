@@ -17,6 +17,8 @@ import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
+import 'package:webtrit_phone/services/services.dart' as foreground_call_isolate show onStart, onChangedLifecycle;
+
 @RoutePage()
 class MainShell extends StatefulWidget {
   const MainShell({
@@ -29,6 +31,7 @@ class MainShell extends StatefulWidget {
 
 class _MainShellState extends State<MainShell> {
   late final Callkeep callkeep;
+  late final CallkeepBackgroundService androidCallkeepBackgroundService;
 
   @override
   void initState() {
@@ -52,10 +55,20 @@ class _MainShellState extends State<MainShell> {
       ),
     );
 
-    if (AppPreferences().getIncomingCallType() == IncomingCallType.socket) {
-      Future.delayed(Duration.zero, () {
-        CallkeepBackgroundService().wakeUpBackgroundHandler(autoRestart: true);
-      });
+    final incomingCallSocketType = AppPreferences().getIncomingCallType() == IncomingCallType.socket;
+
+    androidCallkeepBackgroundService = CallkeepBackgroundService();
+    androidCallkeepBackgroundService.setUp(
+      onStart: foreground_call_isolate.onStart,
+      onChangedLifecycle: foreground_call_isolate.onChangedLifecycle,
+      autoStartOnBoot: incomingCallSocketType,
+      autoRestartOnTerminate: incomingCallSocketType,
+      androidNotificationChannelName: 'Webtrit Inbound Calls Service',
+      androidNotificationChannelDescription: 'This is required to receive calls while in background',
+    );
+
+    if (incomingCallSocketType) {
+      CallkeepBackgroundService().wakeUpBackgroundHandler(autoRestart: true);
     }
   }
 
