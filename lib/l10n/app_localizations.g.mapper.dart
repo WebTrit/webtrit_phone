@@ -147,6 +147,8 @@ class AppLocalizationsMapper {
       'default_RequestFailureError': localizations.default_RequestFailureError,
       'default_SocketExceptionError':
           localizations.default_SocketExceptionError,
+      'default_TimeoutExceptionError':
+          localizations.default_TimeoutExceptionError,
       'default_TlsExceptionError': localizations.default_TlsExceptionError,
       'default_TypeErrorError': localizations.default_TypeErrorError,
       'default_UnauthorizedRequestFailureError':
@@ -593,6 +595,29 @@ class AppLocalizationsMapper {
           localizations.messaging_GroupBuilderScreen_submitError,
       'messaging_MessageListView_typingTrail':
           localizations.messaging_MessageListView_typingTrail,
+      'default_MessagingSocketException':
+          localizations.default_MessagingSocketException,
+      'default_UnauthorizedMessagingSocketException':
+          localizations.default_UnauthorizedMessagingSocketException,
+      'default_ForbiddenMessagingSocketException':
+          localizations.default_ForbiddenMessagingSocketException,
+      'default_InternalErrorMessagingSocketException':
+          localizations.default_InternalErrorMessagingSocketException,
+      'default_ChatNotFoundMessagingSocketException':
+          localizations.default_ChatNotFoundMessagingSocketException,
+      'default_InvalidChatTypeMessagingSocketException':
+          localizations.default_InvalidChatTypeMessagingSocketException,
+      'default_UserAlreadyInChatMessagingSocketException':
+          localizations.default_UserAlreadyInChatMessagingSocketException,
+      'default_ChatMemberNotFoundMessagingSocketException':
+          localizations.default_ChatMemberNotFoundMessagingSocketException,
+      'default_SelfRemovalForbiddenMessagingSocketException':
+          localizations.default_SelfRemovalForbiddenMessagingSocketException,
+      'default_SelfAuthorityAssignmentForbiddenMessagingSocketException':
+          localizations
+              .default_SelfAuthorityAssignmentForbiddenMessagingSocketException,
+      'default_SmsConversationNotFoundMessagingSocketException':
+          localizations.default_SmsConversationNotFoundMessagingSocketException,
       'account_selfCarePasswordExpired_message':
           localizations.account_selfCarePasswordExpired_message,
       'common_noInternetConnection_title':
