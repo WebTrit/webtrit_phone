@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:logging/logging.dart';
 import 'package:phoenix_socket/phoenix_socket.dart';
 
+import 'package:webtrit_phone/app/notifications/notifications.dart';
 import 'package:webtrit_phone/features/messaging/messaging.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
@@ -26,10 +27,11 @@ final _logger = Logger('SmsSyncWorker');
 /// smsSyncWorker.init();
 /// ```
 class SmsSyncWorker {
-  SmsSyncWorker(this.client, this.smsRepository, {this.pageSize = 50});
+  SmsSyncWorker(this.client, this.smsRepository, this.submitNotification, {this.pageSize = 50});
 
   final PhoenixSocket client;
   final SmsRepository smsRepository;
+  final Function(Notification) submitNotification;
   final int pageSize;
 
   StreamSubscription? _conversationlistSyncSub;
@@ -38,8 +40,9 @@ class SmsSyncWorker {
   Future init() async {
     _logger.info('Initialising...');
     await _closeSubs();
-    _conversationlistSyncSub =
-        _conversationlistSyncStream().listen((e) => _logger.info('_conversationlistSyncStream event: $e'));
+    _conversationlistSyncSub = _conversationlistSyncStream().listen(
+      (e) => _logger.info('_conversationlistSyncStream event: $e'),
+    );
   }
 
   Future dispose() async {
@@ -48,7 +51,7 @@ class SmsSyncWorker {
   }
 
   Future _conversationSubscribe(int conversationId) async {
-    _logger.info('Subscribing to chat $conversationId');
+    _logger.info('Subscribing to conversation $conversationId');
     PhoenixChannel? channel = client.getSmsConversationChannel(conversationId);
     if (channel == null) {
       channel = client.createSmsConversationChannel(conversationId);
@@ -56,8 +59,9 @@ class SmsSyncWorker {
     }
     _conversationSyncSubs.putIfAbsent(
       conversationId,
-      () => _conversationSyncStream(conversationId, channel!)
-          .listen((e) => _logger.info('_conversationSyncStream id: $conversationId event: $e')),
+      () => _conversationSyncStream(conversationId, channel!).listen(
+        (e) => _logger.info('_conversationSyncStream $conversationId event: $e'),
+      ),
     );
   }
 
@@ -72,8 +76,7 @@ class SmsSyncWorker {
       try {
         // Get and wait for user channel to be ready
         final userChannel = client.userChannel;
-        if (userChannel == null) throw Exception('No user channel yet');
-        if (userChannel.state != PhoenixChannelState.joined) throw Exception('User channel not ready yet');
+        if (userChannel == null || userChannel.state != PhoenixChannelState.joined) throw _Disconnected();
 
         // Fetch user phone numbers
         final smsNumbers = await userChannel.smsPhoneNumbers;
@@ -104,14 +107,15 @@ class SmsSyncWorker {
               await _conversationUnsubscribe(smsEvent.conversationId);
               await smsRepository.deleteConversationById(smsEvent.conversationId);
             case UserChannelDisconnect _:
-              throw Exception('disconnect');
+              throw _Disconnected();
             default:
           }
 
           yield event;
         }
-      } catch (e, _) {
-        yield e;
+      } catch (e, s) {
+        _logger.warning('_conversationlistSyncStream error:', e, s);
+        if (e is! _Disconnected) submitNotification(DefaultErrorNotification(e));
       } finally {
         _conversationSyncSubs.forEach((key, value) => value.cancel());
         _conversationSyncSubs.clear();
@@ -126,7 +130,7 @@ class SmsSyncWorker {
     while (true) {
       try {
         _logger.info('Sms channel state: $conversationId ${channel.state}');
-        if (channel.state != PhoenixChannelState.joined) throw Exception('Chat channel not ready yet');
+        if (channel.state != PhoenixChannelState.joined) throw _Disconnected();
 
         // Buffer updates that may come in a gap between fetching and subscribing
         final eventsStream = channel.smsEvents.transform(BufferTransformer());
@@ -214,14 +218,15 @@ class SmsSyncWorker {
             case SmsChannelCursorSet e:
               await smsRepository.upsertMessageReadCursor(e.cursor);
             case SmsChannelDisconnect _:
-              throw Exception('disconnect');
+              throw _Disconnected();
             default:
           }
 
           yield event;
         }
-      } catch (e, _) {
-        yield e;
+      } catch (e, s) {
+        _logger.warning('_conversationSyncStream $conversationId error:', e, s);
+        if (e is! _Disconnected) submitNotification(DefaultErrorNotification(e));
       } finally {
         // Wait a sec before retrying
         await Future.delayed(const Duration(seconds: 1));
@@ -236,3 +241,5 @@ class SmsSyncWorker {
     _conversationSyncSubs.clear();
   }
 }
+
+class _Disconnected implements Exception {}

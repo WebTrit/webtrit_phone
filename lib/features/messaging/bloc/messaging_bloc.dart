@@ -83,12 +83,12 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
 
       // Init workers
       if (EnvironmentConfig.CHAT_FEATURE_ENABLE) {
-        _chatsSyncWorker ??= ChatsSyncWorker(_client, _chatsRepository)..init();
+        _chatsSyncWorker ??= ChatsSyncWorker(_client, _chatsRepository, _submitNotification)..init();
         _chatsOutboxWorker ??= ChatsOutboxWorker(_client, _chatsRepository, _chatsOutboxRepository, _submitNotification)
           ..init();
       }
       if (EnvironmentConfig.SMS_FEATURE_ENABLE) {
-        _smsSyncWorker ??= SmsSyncWorker(_client, _smsRepository)..init();
+        _smsSyncWorker ??= SmsSyncWorker(_client, _smsRepository, _submitNotification)..init();
         _smsOutboxWorker ??= SmsOutboxWorker(_client, _smsRepository, _smsOutboxRepository, _submitNotification)
           ..init();
       }

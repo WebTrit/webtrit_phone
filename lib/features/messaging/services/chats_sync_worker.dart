@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:logging/logging.dart';
 import 'package:phoenix_socket/phoenix_socket.dart';
 
+import 'package:webtrit_phone/app/notifications/notifications.dart';
 import 'package:webtrit_phone/extensions/iterable.dart';
 import 'package:webtrit_phone/features/messaging/messaging.dart';
 import 'package:webtrit_phone/models/models.dart';
@@ -30,10 +31,11 @@ final _logger = Logger('ChatsSyncWorker');
 /// syncWorker.init();
 /// ```
 class ChatsSyncWorker {
-  ChatsSyncWorker(this.client, this.chatsRepository, {this.pageSize = 50});
+  ChatsSyncWorker(this.client, this.chatsRepository, this.submitNotification, {this.pageSize = 50});
 
   final PhoenixSocket client;
   final ChatsRepository chatsRepository;
+  final Function(Notification) submitNotification;
   final int pageSize;
 
   StreamSubscription? _chatlistSyncSub;
@@ -42,7 +44,9 @@ class ChatsSyncWorker {
   Future init() async {
     _logger.info('Initialising...');
     await _closeSubs();
-    _chatlistSyncSub = _chatlistSyncStream().listen((e) => _logger.info('_chatlistSyncStream event: $e'));
+    _chatlistSyncSub = _chatlistSyncStream().listen(
+      (e) => _logger.info('_chatlistSyncStream event: $e'),
+    );
   }
 
   Future dispose() async {
@@ -60,8 +64,9 @@ class ChatsSyncWorker {
 
     _chatRoomSyncSubs.putIfAbsent(
       chatId,
-      () => _chatRoomSyncStream(chatId, channel!)
-          .listen((e) => _logger.info('_chatRoomSyncStream chat: $chatId event: $e')),
+      () => _chatRoomSyncStream(chatId, channel!).listen(
+        (e) => _logger.info('_chatRoomSyncStream $chatId event: $e'),
+      ),
     );
   }
 
@@ -76,8 +81,7 @@ class ChatsSyncWorker {
       try {
         // Get and wait for user channel to be ready
         final userChannel = client.userChannel;
-        if (userChannel == null) throw Exception('No user channel yet');
-        if (userChannel.state != PhoenixChannelState.joined) throw Exception('User channel not ready yet');
+        if (userChannel == null || userChannel.state != PhoenixChannelState.joined) throw _Disconnected();
 
         // Buffer updates that may come in a gap between fetching the actual list
         final eventsStream = userChannel.userEvents.transform(BufferTransformer());
@@ -104,14 +108,15 @@ class ChatsSyncWorker {
               await _chatRoomUnsubscribe(chatEvent.chatId);
               await chatsRepository.deleteChatById(chatEvent.chatId);
             case UserChannelDisconnect _:
-              throw Exception('disconnect');
+              throw _Disconnected();
             default:
           }
 
           yield event;
         }
-      } catch (e, _) {
-        yield e;
+      } catch (e, s) {
+        _logger.warning('_chatlistSyncStream error:', e, s);
+        if (e is! _Disconnected) submitNotification(DefaultErrorNotification(e));
       } finally {
         _chatRoomSyncSubs.forEach((key, value) => value.cancel());
         _chatRoomSyncSubs.clear();
@@ -126,7 +131,7 @@ class ChatsSyncWorker {
     while (true) {
       try {
         _logger.info('Chat channel state: $chatId ${channel.state}');
-        if (channel.state != PhoenixChannelState.joined) throw Exception('Chat channel not ready yet');
+        if (channel.state != PhoenixChannelState.joined) throw _Disconnected();
 
         // Buffer updates that may come in a gap between fetching and subscribing
         final eventsStream = channel.chatEvents.transform(BufferTransformer());
@@ -217,14 +222,15 @@ class ChatsSyncWorker {
             case ChatChannelCursorSet e:
               await chatsRepository.upsertChatMessageReadCursor(e.cursor);
             case ChatChannelDisconnect _:
-              throw Exception('disconnect');
+              throw _Disconnected();
             default:
           }
 
           yield event;
         }
-      } catch (e, _) {
-        yield e;
+      } catch (e, s) {
+        _logger.warning('_chatRoomSyncStream $chatId error:', e, s);
+        if (e is! _Disconnected) submitNotification(DefaultErrorNotification(e));
       } finally {
         // Wait a sec before retrying
         await Future.delayed(const Duration(seconds: 1));
@@ -239,3 +245,5 @@ class ChatsSyncWorker {
     _chatRoomSyncSubs.clear();
   }
 }
+
+class _Disconnected implements Exception {}

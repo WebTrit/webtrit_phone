@@ -693,9 +693,9 @@ sealed class UserChannelEvent {
 
   factory UserChannelEvent.fromEvent(Message e) {
     switch (e.event.value) {
-      case 'chat_membership_join':
+      case 'chat_join':
         return ChatConversationJoin(int.parse(e.payload!['chat_id'].toString()));
-      case 'chat_membership_left':
+      case 'chat_left':
         return ChatConversationLeave(int.parse(e.payload!['chat_id'].toString()));
       case 'sms_conversation_join':
         return SmsConversationJoin(int.parse(e.payload!['conversation_id'].toString()));
