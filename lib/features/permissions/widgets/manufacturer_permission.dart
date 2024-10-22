@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 
-import '../extensions/extensions.dart';
-import '../cubit/permissions_cubit.dart';
+import 'package:webtrit_phone/l10n/l10n.dart';
 
-import 'manufacturer_permission_tips.dart';
+import '../models/models.dart';
+import '../extensions/extensions.dart';
+
+import 'permission_tips.dart';
 
 class ManufacturerPermission extends StatelessWidget {
   const ManufacturerPermission({
@@ -19,7 +21,8 @@ class ManufacturerPermission extends StatelessWidget {
   Widget build(BuildContext context) {
     switch (manufacturer) {
       case Manufacturer.xiaomi:
-        return ManufacturerPermissionTips(
+        return PermissionTips(
+          title: context.l10n.permission_manufacturer_Text_heading,
           instruction: manufacturer.tips(context),
           onGoToAppSettings: onGoToAppSettings,
         );
