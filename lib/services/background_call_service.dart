@@ -64,8 +64,6 @@ class BackgroundCallHandler implements CallkeepBackgroundServiceDelegate {
 
   WebtritSignalingClient? client;
 
-  // bool background = false;
-
   StreamSubscription<List<ConnectivityResult>>? _connectivitySubscription;
 
   Function? _onCallCompletion;
@@ -148,15 +146,14 @@ class BackgroundCallHandler implements CallkeepBackgroundServiceDelegate {
 
   void _onSignalingError(error, [StackTrace? stackTrace]) {
     _logger.severe('_onErrorCallback', error, stackTrace);
-    _isConnected = false; // Mark as disconnected on error
+    _isConnected = false;
     _onCallCompletion?.call();
   }
 
   void _onSignalingDisconnect(int? code, String? reason) {
-    // CallkeepBackgroundService().setSocketState(CallkeepSocketState.terminated);
     _logger.fine('_onSignalingDisconnect code: $code reason: $reason');
-    // _onCallCompletion?.call();
-    _isConnected = false; // Mark as disconnected on disconnection
+    _onCallCompletion?.call();
+    _isConnected = false;
   }
 
   void _signalingInitialize(StateHandshake stateHandshake) {
@@ -200,7 +197,6 @@ class BackgroundCallHandler implements CallkeepBackgroundServiceDelegate {
   }
 
   void _handleUnregisteredEvent(UnregisteredEvent event) {
-    // CallkeepBackgroundService().tearDownActivity();
     _callkeepBackgroundService.endAllBackgroundCalls();
   }
 
@@ -228,7 +224,7 @@ class BackgroundCallHandler implements CallkeepBackgroundServiceDelegate {
   Future<void> close() async {
     _logger.info('_close signaling client');
     _connectivitySubscription?.cancel();
-    _isConnected = false; // Mark as disconnected when closing
+    _isConnected = false;
     try {
       await client?.disconnect();
     } catch (e) {
@@ -237,9 +233,10 @@ class BackgroundCallHandler implements CallkeepBackgroundServiceDelegate {
   }
 
   @override
-  void performServiceEndCall(String callId) {
-    _declineCall(callId);
-  }
+  void performServiceEndCall(String callId) => _declineCall(callId);
+
+  @override
+  void performServiceAnswerCall(String callId) => _onCallAnswer?.call();
 
   @override
   Future<void> endCallReceived(
@@ -260,10 +257,5 @@ class BackgroundCallHandler implements CallkeepBackgroundServiceDelegate {
     );
     await _recentsRepository.add(recent);
     _logger.info('endCallReceived: $recent');
-  }
-
-  @override
-  void performServiceAnswerCall(String callId) {
-    _onCallAnswer?.call();
   }
 }
