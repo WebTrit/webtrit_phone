@@ -12,10 +12,14 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:logging/logging.dart';
 import 'package:logging_appenders/logging_appenders.dart';
 
+import 'package:webtrit_callkeep/webtrit_callkeep.dart';
+
 import 'package:webtrit_phone/app/app_bloc_observer.dart';
 import 'package:webtrit_phone/app/assets.gen.dart';
 import 'package:webtrit_phone/data/data.dart';
+
 import 'package:webtrit_phone/services/services.dart' as call_fcm_isolate show initializeCall;
+import 'package:webtrit_phone/services/services.dart' as foreground_call_isolate show onStart, onChangedLifecycle;
 
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/push_notification/push_notifications.dart';
@@ -65,6 +69,7 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
       Bloc.observer = AppBlocObserver();
 
       await _initFirebaseMessaging();
+      await _initCallkeep();
 
       runApp(await builder());
     },
@@ -119,6 +124,13 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   if (message.notification == null && !message.contentAvailable && message.data.isNotEmpty && Platform.isAndroid) {
     await call_fcm_isolate.initializeCall(message.data);
   }
+}
+
+Future<void> _initCallkeep() async {
+  CallkeepBackgroundService.setUpServiceCallback(
+    onStart: foreground_call_isolate.onStart,
+    onChangedLifecycle: foreground_call_isolate.onChangedLifecycle,
+  );
 }
 
 // class CallkeepLogs implements CallkeepLogsDelegate {

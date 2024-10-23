@@ -19,8 +19,6 @@ import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
-import 'package:webtrit_phone/services/services.dart' as foreground_call_isolate show onStart, onChangedLifecycle;
-
 @RoutePage()
 class MainShell extends StatefulWidget {
   const MainShell({
@@ -40,6 +38,7 @@ class _MainShellState extends State<MainShell> {
   void initState() {
     super.initState();
     callkeep = Callkeep();
+    androidCallkeepBackgroundService = CallkeepBackgroundService();
   }
 
   @override
@@ -66,10 +65,7 @@ class _MainShellState extends State<MainShell> {
 
     final incomingCallSocketType = AppPreferences().getIncomingCallType() == IncomingCallType.socket;
 
-    androidCallkeepBackgroundService = CallkeepBackgroundService();
     androidCallkeepBackgroundService.setUp(
-      onStart: foreground_call_isolate.onStart,
-      onChangedLifecycle: foreground_call_isolate.onChangedLifecycle,
       autoStartOnBoot: incomingCallSocketType,
       autoRestartOnTerminate: incomingCallSocketType,
       androidNotificationName: context.l10n.settings_network_androidNotificationName,
