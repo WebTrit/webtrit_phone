@@ -65,6 +65,8 @@ Future<void> _initSignaling({
   if (terminateServiceOnActivityLaunch) {
     _isolateBackgroundHandler?.onCallCompletion = () {
       _closeSignaling();
+      CallkeepBackgroundService().setUp(autoRestartOnTerminate: false, autoStartOnBoot: false);
+      CallkeepBackgroundService().stopService();
       CallkeepBackgroundService().finishActivity();
     };
   }

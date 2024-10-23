@@ -25,7 +25,6 @@ Future<void> initializeCall(Map<String, dynamic> message) async {
   final callkeepBackgroundService = CallkeepBackgroundService();
 
   if (callType == IncomingCallType.pushNotification) {
-    callkeepBackgroundService.setUp(autoRestartOnTerminate: false);
     callkeepBackgroundService.startService(data: {
       CallkeepBackgroundService.incomingCallType: callType.name,
       ...message,

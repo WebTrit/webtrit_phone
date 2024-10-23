@@ -69,9 +69,14 @@ class BackgroundCallHandler implements CallkeepBackgroundServiceDelegate {
   StreamSubscription<List<ConnectivityResult>>? _connectivitySubscription;
 
   Function? _onCallCompletion;
+  Function? _onCallAnswer;
 
   set onCallCompletion(Function? value) {
     _onCallCompletion = value;
+  }
+
+  set onCallAnswer(Function? value) {
+    _onCallAnswer = value;
   }
 
   bool _isConnected = false;
