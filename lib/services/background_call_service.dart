@@ -16,17 +16,17 @@ const int _kUndefinedLine = -1;
 
 final _logger = Logger('IsolateBackgroundCallHandler');
 
-class BackgroundCallHandler implements CallkeepBackgroundServiceDelegate {
-  static late BackgroundCallHandler _instance;
+class BackgroundCallService implements CallkeepBackgroundServiceDelegate {
+  static late BackgroundCallService _instance;
 
-  BackgroundCallHandler._(
+  BackgroundCallService._(
     this._recentsRepository,
     this._callkeepBackgroundService,
     this.storage,
     this.certificates,
   );
 
-  static Future<BackgroundCallHandler> init() async {
+  static Future<BackgroundCallService> init() async {
     await AppPreferences.init();
     await SecureStorage.init();
     await AppCertificates.init();
@@ -34,7 +34,7 @@ class BackgroundCallHandler implements CallkeepBackgroundServiceDelegate {
     final callkeepBackgroundService = CallkeepBackgroundService();
     final repository = RecentsRepository(appDatabase: await FCMIsolateDatabase.db());
 
-    _instance = BackgroundCallHandler._(
+    _instance = BackgroundCallService._(
       repository,
       callkeepBackgroundService,
       SecureStorage(),
@@ -46,7 +46,7 @@ class BackgroundCallHandler implements CallkeepBackgroundServiceDelegate {
     return _instance;
   }
 
-  factory BackgroundCallHandler() {
+  factory BackgroundCallService() {
     return _instance;
   }
 

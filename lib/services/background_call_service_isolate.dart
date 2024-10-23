@@ -10,7 +10,7 @@ import 'background_call_service.dart';
 
 final _logger = Logger('IsolateBackgroundCallHandler');
 
-BackgroundCallHandler? _isolateBackgroundHandler;
+BackgroundCallService? _isolateBackgroundHandler;
 bool _launchingBackgroundSignaling = false;
 
 Future<void> _initializeDependencies() async {
@@ -59,7 +59,7 @@ Future<void> _initSignaling({
   bool terminateServiceOnActivityLaunch = false,
 }) async {
   _logger.info('Initializing background signaling');
-  _isolateBackgroundHandler ??= await BackgroundCallHandler.init();
+  _isolateBackgroundHandler ??= await BackgroundCallService.init();
   _isolateBackgroundHandler?.launch();
 
   if (terminateServiceOnActivityLaunch) {
