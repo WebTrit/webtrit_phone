@@ -10,5 +10,7 @@ export 'widgets/widgets.dart';
 
 // TODO: 
 // - remove messaging service envs
+// - wrap messaging socket as dedicated class and inject/read using context provider
+// - extract conversations/new_chat/group/sms builder as separate features and refactor
 // - random refacfotring (like ephemeral logic to blocs, constants for keys, etc)
 // - maybe tests?
