@@ -12,17 +12,16 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:logging/logging.dart';
 import 'package:logging_appenders/logging_appenders.dart';
 
-import 'package:webtrit_callkeep/webtrit_callkeep.dart';
-
 import 'package:webtrit_phone/app/app_bloc_observer.dart';
 import 'package:webtrit_phone/app/assets.gen.dart';
 import 'package:webtrit_phone/data/data.dart';
+import 'package:webtrit_phone/services/services.dart' as call_fcm_isolate show initializeCall;
+
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/push_notification/push_notifications.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/utils/path_provider/_native.dart';
 
-import 'background_call_handler.dart';
 import 'environment_config.dart';
 import 'firebase_options.dart';
 
@@ -36,7 +35,6 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
       WidgetsFlutterBinding.ensureInitialized();
 
       await _initFirebase();
-      await _initFirebaseMessaging();
       await _initLocalNotifications();
 
       if (!kIsWeb && kDebugMode) {
@@ -64,11 +62,9 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
       await AppTime.init();
       await SessionCleanupWorker.init();
 
-      if (Platform.isAndroid) {
-        WebtritCallkeepLogs().setLogsDelegate(CallkeepLogs());
-      }
-
       Bloc.observer = AppBlocObserver();
+
+      await _initFirebaseMessaging();
 
       runApp(await builder());
     },
@@ -120,25 +116,33 @@ Future<void> _initFirebaseMessaging() async {
 
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  _initLogs();
-  final appNotification = AppRemoteNotification.fromFCM(message);
-  final logger = Logger('_firebaseMessagingBackgroundHandler')..info('RemoteNotification: $appNotification');
+  if (message.notification == null && !message.contentAvailable && message.data.isNotEmpty && Platform.isAndroid) {
+    await call_fcm_isolate.initializeCall(message.data);
+  }
+}
 
-  if (appNotification is PendingCallNotification && Platform.isAndroid) {
-    final call = appNotification.call;
+// class CallkeepLogs implements CallkeepLogsDelegate {
+//   final _logger = Logger('CallkeepLogs');
+//
+//   @override
+//   void onLog(CallkeepLogType type, String tag, String message) {
+//     _logger.info('$tag $message');
+//   }
+// }
 
-    WebtritCallkeepLogs().setLogsDelegate(CallkeepLogs());
-    final dbConnection = createAppDatabaseConnection(
-      await getApplicationDocumentsPath(),
-      'db.sqlite',
-      logStatements: EnvironmentConfig.DATABASE_LOG_STATEMENTS,
+class FCMIsolateDatabase extends AppDatabase {
+  FCMIsolateDatabase(super.e);
+
+  static FCMIsolateDatabase? _instance;
+
+  static Future<FCMIsolateDatabase> db() async {
+    return FCMIsolateDatabase.instance(
+      createAppDatabaseConnection(
+        await getApplicationDocumentsPath(),
+        'db.sqlite',
+        logStatements: EnvironmentConfig.DATABASE_LOG_STATEMENTS,
+      ),
     );
-    final appDatabase = FCMIsolateDatabase.instance(dbConnection);
-    final repository = RecentsRepository(appDatabase: appDatabase);
-
-    logger.info('Initial incoming call');
-
-    BackgroundCallHandler(call, repository).init();
   }
   if (appNotification is MessageNotification) {
     final dbConnection = createAppDatabaseConnection(
