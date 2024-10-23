@@ -9,6 +9,7 @@ import '../data/app_preferences.dart';
 import 'background_call_service.dart';
 
 final _logger = Logger('IsolateBackgroundCallHandler');
+final _callkeep = CallkeepBackgroundService();
 
 BackgroundCallService? _isolateBackgroundHandler;
 bool _launchingBackgroundSignaling = false;
@@ -63,16 +64,16 @@ Future<void> _initSignaling({
   _isolateBackgroundHandler?.launch();
 
   if (terminateServiceOnActivityLaunch) {
-    await CallkeepBackgroundService().setUp(autoRestartOnTerminate: false, autoStartOnBoot: false);
+    await _callkeep.setUp(autoRestartOnTerminate: false, autoStartOnBoot: false);
 
     _isolateBackgroundHandler?.onCallAnswer = () async {
-      await CallkeepBackgroundService().stopService();
+      await _callkeep.stopService();
       _closeSignaling();
     };
 
     _isolateBackgroundHandler?.onCallCompletion = () async {
-      await CallkeepBackgroundService().finishActivity();
-      await CallkeepBackgroundService().stopService();
+      await _callkeep.finishActivity();
+      await _callkeep.stopService();
       _closeSignaling();
     };
   }
