@@ -49,6 +49,7 @@ class _AppState extends State<App> {
       secureStorage: widget.secureStorage,
       appDatabase: widget.appDatabase,
       appThemes: widget.appThemes,
+      callkeepBackgroundService: CallkeepBackgroundService(),
       pendingCallHandler: AndroidPendingCallHandler(),
     );
     _appRouter = AppRouter(
