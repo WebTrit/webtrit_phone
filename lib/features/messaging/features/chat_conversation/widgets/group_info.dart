@@ -240,7 +240,7 @@ class _GroupInfoState extends State<GroupInfo> {
       enabled: canChangeName,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       decoration: InputDecoration(
-        labelText: context.l10n.messaging_GroupBuilderScreen_nameFieldLabel,
+        labelText: context.l10n.messaging_ConversationBuilders_nameFieldLabel,
         border: OutlineInputBorder(
           borderSide: BorderSide(color: colorScheme.secondaryFixed, width: 1),
           borderRadius: BorderRadius.circular(8),
@@ -260,10 +260,10 @@ class _GroupInfoState extends State<GroupInfo> {
       ),
       validator: (value) {
         if (value == null || value.isEmpty) {
-          return context.l10n.messaging_GroupBuilderScreen_nameFieldEmpty;
+          return context.l10n.messaging_ConversationBuilders_nameFieldEmpty;
         }
         if (value.length < 3) {
-          return context.l10n.messaging_GroupBuilderScreen_nameFieldShort;
+          return context.l10n.messaging_ConversationBuilders_nameFieldShort;
         }
         return null;
       },

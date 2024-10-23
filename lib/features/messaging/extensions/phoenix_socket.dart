@@ -564,10 +564,13 @@ extension PhoenixChannelExt on PhoenixChannel {
   /// [memberIds]: A list of IDs representing the members to be added to the group.
   ///
   /// Returns a [Future] that resolves to a boolean indicating the success of the operation.
-  Future<bool> newGroup(String name, List<String> memberIds) async {
+  Future<Chat> newGroup(String name, List<String> memberIds) async {
     final req = await push('chat:new', {'name': name, 'member_ids': memberIds}).future;
+    final response = req.response;
 
-    if (req.isOk) return true;
+    if (req.isOk && response is Map<String, dynamic>) {
+      return Chat.fromMap(response);
+    }
 
     throw MessagingSocketException(
       'Error creating group: $name, members: $memberIds',

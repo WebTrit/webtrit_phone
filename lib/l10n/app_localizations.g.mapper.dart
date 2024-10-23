@@ -475,44 +475,46 @@ class AppLocalizationsMapper {
       'messaging_DialogInfo_title': localizations.messaging_DialogInfo_title,
       'messaging_DialogInfo_deleteBtn':
           localizations.messaging_DialogInfo_deleteBtn,
-      'messaging_NewConversation_createGroup':
-          localizations.messaging_NewConversation_createGroup,
-      'messaging_NewConversation_title':
-          localizations.messaging_NewConversation_title,
-      'messaging_NewConversation_cancel':
-          localizations.messaging_NewConversation_cancel,
-      'messaging_NewConversation_create':
-          localizations.messaging_NewConversation_create,
-      'messaging_NewConversation_externalContacts_heading':
-          localizations.messaging_NewConversation_externalContacts_heading,
-      'messaging_NewConversation_localContacts_heading':
-          localizations.messaging_NewConversation_localContacts_heading,
-      'messaging_NewConversation_contactSearch_hint':
-          localizations.messaging_NewConversation_contactSearch_hint,
-      'messaging_NewConversation_contactOrNumberSearch_hint':
-          localizations.messaging_NewConversation_contactOrNumberSearch_hint,
-      'messaging_NewConversation_numberFormatExample':
-          localizations.messaging_NewConversation_numberFormatExample,
-      'messaging_NewConversation_numberSearch_errorHint':
-          localizations.messaging_NewConversation_numberSearch_errorHint,
-      'messaging_NewConversation_numberSearch_errorError':
-          localizations.messaging_NewConversation_numberSearch_errorError,
-      'messaging_NewConversation_invite_heading':
-          localizations.messaging_NewConversation_invite_heading,
-      'messaging_NewConversation_next_action':
-          localizations.messaging_NewConversation_next_action,
-      'messaging_NewConversation_back_action':
-          localizations.messaging_NewConversation_back_action,
-      'messaging_NewConversation_noContacts':
-          localizations.messaging_NewConversation_noContacts,
-      'messaging_NewConversation_invalidNumber_title':
-          localizations.messaging_NewConversation_invalidNumber_title,
-      'messaging_NewConversation_invalidNumber_message1':
-          localizations.messaging_NewConversation_invalidNumber_message1,
-      'messaging_NewConversation_invalidNumber_message2':
-          localizations.messaging_NewConversation_invalidNumber_message2,
-      'messaging_NewConversation_invalidNumber_ok':
-          localizations.messaging_NewConversation_invalidNumber_ok,
+      'messaging_ConversationBuilders_createGroup':
+          localizations.messaging_ConversationBuilders_createGroup,
+      'messaging_ConversationBuilders_title_new':
+          localizations.messaging_ConversationBuilders_title_new,
+      'messaging_ConversationBuilders_cancel':
+          localizations.messaging_ConversationBuilders_cancel,
+      'messaging_ConversationBuilders_back':
+          localizations.messaging_ConversationBuilders_back,
+      'messaging_ConversationBuilders_create':
+          localizations.messaging_ConversationBuilders_create,
+      'messaging_ConversationBuilders_externalContacts_heading':
+          localizations.messaging_ConversationBuilders_externalContacts_heading,
+      'messaging_ConversationBuilders_localContacts_heading':
+          localizations.messaging_ConversationBuilders_localContacts_heading,
+      'messaging_ConversationBuilders_contactSearch_hint':
+          localizations.messaging_ConversationBuilders_contactSearch_hint,
+      'messaging_ConversationBuilders_contactOrNumberSearch_hint': localizations
+          .messaging_ConversationBuilders_contactOrNumberSearch_hint,
+      'messaging_ConversationBuilders_numberFormatExample':
+          localizations.messaging_ConversationBuilders_numberFormatExample,
+      'messaging_ConversationBuilders_numberSearch_errorHint':
+          localizations.messaging_ConversationBuilders_numberSearch_errorHint,
+      'messaging_ConversationBuilders_numberSearch_errorError':
+          localizations.messaging_ConversationBuilders_numberSearch_errorError,
+      'messaging_ConversationBuilders_invite_heading':
+          localizations.messaging_ConversationBuilders_invite_heading,
+      'messaging_ConversationBuilders_next_action':
+          localizations.messaging_ConversationBuilders_next_action,
+      'messaging_ConversationBuilders_back_action':
+          localizations.messaging_ConversationBuilders_back_action,
+      'messaging_ConversationBuilders_noContacts':
+          localizations.messaging_ConversationBuilders_noContacts,
+      'messaging_ConversationBuilders_invalidNumber_title':
+          localizations.messaging_ConversationBuilders_invalidNumber_title,
+      'messaging_ConversationBuilders_invalidNumber_message1':
+          localizations.messaging_ConversationBuilders_invalidNumber_message1,
+      'messaging_ConversationBuilders_invalidNumber_message2':
+          localizations.messaging_ConversationBuilders_invalidNumber_message2,
+      'messaging_ConversationBuilders_invalidNumber_ok':
+          localizations.messaging_ConversationBuilders_invalidNumber_ok,
       'messaging_GroupScreen_titlePrefix':
           localizations.messaging_GroupScreen_titlePrefix,
       'messaging_ChooseContact_title':
@@ -573,26 +575,26 @@ class AppLocalizationsMapper {
           localizations.messaging_GroupNameDialog_saveBtnText,
       'messaging_GroupNameDialog_cancelBtnText':
           localizations.messaging_GroupNameDialog_cancelBtnText,
-      'messaging_GroupBuilderScreen_screenTitle':
-          localizations.messaging_GroupBuilderScreen_screenTitle,
-      'messaging_GroupBuilderScreen_groupNameHeadline':
-          localizations.messaging_GroupBuilderScreen_groupNameHeadline,
-      'messaging_GroupBuilderScreen_membersHeadline':
-          localizations.messaging_GroupBuilderScreen_membersHeadline,
-      'messaging_GroupBuilderScreen_addUserBtnText':
-          localizations.messaging_GroupBuilderScreen_addUserBtnText,
-      'messaging_GroupBuilderScreen_submitBtnText':
-          localizations.messaging_GroupBuilderScreen_submitBtnText,
-      'messaging_GroupBuilderScreen_nameFieldLabel':
-          localizations.messaging_GroupBuilderScreen_nameFieldLabel,
-      'messaging_GroupBuilderScreen_nameFieldEmpty':
-          localizations.messaging_GroupBuilderScreen_nameFieldEmpty,
-      'messaging_GroupBuilderScreen_nameFieldShort':
-          localizations.messaging_GroupBuilderScreen_nameFieldShort,
-      'messaging_GroupBuilderScreen_connectionError':
-          localizations.messaging_GroupBuilderScreen_connectionError,
-      'messaging_GroupBuilderScreen_submitError':
-          localizations.messaging_GroupBuilderScreen_submitError,
+      'messaging_ConversationBuilders_title_group':
+          localizations.messaging_ConversationBuilders_title_group,
+      'messaging_ConversationBuilders_groupNameHeadline':
+          localizations.messaging_ConversationBuilders_groupNameHeadline,
+      'messaging_ConversationBuilders_membersHeadline':
+          localizations.messaging_ConversationBuilders_membersHeadline,
+      'messaging_ConversationBuilders_addUserBtnText':
+          localizations.messaging_ConversationBuilders_addUserBtnText,
+      'messaging_ConversationBuilders_submitBtnText':
+          localizations.messaging_ConversationBuilders_submitBtnText,
+      'messaging_ConversationBuilders_nameFieldLabel':
+          localizations.messaging_ConversationBuilders_nameFieldLabel,
+      'messaging_ConversationBuilders_nameFieldEmpty':
+          localizations.messaging_ConversationBuilders_nameFieldEmpty,
+      'messaging_ConversationBuilders_nameFieldShort':
+          localizations.messaging_ConversationBuilders_nameFieldShort,
+      'messaging_ConversationBuilders_connectionError':
+          localizations.messaging_ConversationBuilders_connectionError,
+      'messaging_ConversationBuilders_submitError':
+          localizations.messaging_ConversationBuilders_submitError,
       'messaging_MessageListView_typingTrail':
           localizations.messaging_MessageListView_typingTrail,
       'default_MessagingSocketException':

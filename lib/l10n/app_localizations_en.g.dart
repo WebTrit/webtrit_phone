@@ -850,61 +850,94 @@ class AppLocalizationsEn extends AppLocalizations {
   String get messaging_DialogInfo_deleteBtn => 'Delete dialog';
 
   @override
-  String get messaging_NewConversation_createGroup => 'Create group';
+  String get messaging_ConversationBuilders_createGroup => 'Create group';
 
   @override
-  String get messaging_NewConversation_title => 'New chat';
+  String get messaging_ConversationBuilders_title_new => 'New chat';
 
   @override
-  String get messaging_NewConversation_cancel => 'Cancel';
+  String get messaging_ConversationBuilders_cancel => 'Cancel';
 
   @override
-  String get messaging_NewConversation_create => 'Create';
+  String get messaging_ConversationBuilders_back => 'Back';
 
   @override
-  String get messaging_NewConversation_externalContacts_heading => 'Cloud PBX contacts';
+  String get messaging_ConversationBuilders_create => 'Create';
 
   @override
-  String get messaging_NewConversation_localContacts_heading => 'Local contacts';
+  String get messaging_ConversationBuilders_externalContacts_heading => 'Cloud PBX contacts';
 
   @override
-  String get messaging_NewConversation_contactSearch_hint => 'Search contacts';
+  String get messaging_ConversationBuilders_localContacts_heading => 'Local contacts';
 
   @override
-  String get messaging_NewConversation_contactOrNumberSearch_hint => 'Enter name or phone number';
+  String get messaging_ConversationBuilders_contactSearch_hint => 'Search contacts';
 
   @override
-  String get messaging_NewConversation_numberFormatExample => '+ [country code] [area/operator code] [subscriber number]';
+  String get messaging_ConversationBuilders_contactOrNumberSearch_hint => 'Enter name or phone number';
 
   @override
-  String get messaging_NewConversation_numberSearch_errorHint => 'Phone number format: ';
+  String get messaging_ConversationBuilders_numberFormatExample => '+ [country code] [area/operator code] [subscriber number]';
 
   @override
-  String get messaging_NewConversation_numberSearch_errorError => 'The entered phone number is invalid. It should be entered in the format: ';
+  String get messaging_ConversationBuilders_numberSearch_errorHint => 'Phone number format: ';
 
   @override
-  String get messaging_NewConversation_invite_heading => 'Invite users:';
+  String get messaging_ConversationBuilders_numberSearch_errorError => 'The entered phone number is invalid. It should be entered in the format: ';
 
   @override
-  String get messaging_NewConversation_next_action => 'Next';
+  String get messaging_ConversationBuilders_invite_heading => 'Invite users:';
 
   @override
-  String get messaging_NewConversation_back_action => 'Back';
+  String get messaging_ConversationBuilders_next_action => 'Next';
 
   @override
-  String get messaging_NewConversation_noContacts => 'There are no contacts matching the search result';
+  String get messaging_ConversationBuilders_back_action => 'Back';
 
   @override
-  String get messaging_NewConversation_invalidNumber_title => 'Invalid phone number';
+  String get messaging_ConversationBuilders_noContacts => 'There are no contacts matching the search result';
 
   @override
-  String get messaging_NewConversation_invalidNumber_message1 => 'The contact has an invalid phone number. It should be in the format ';
+  String get messaging_ConversationBuilders_invalidNumber_title => 'Invalid phone number';
 
   @override
-  String get messaging_NewConversation_invalidNumber_message2 => '. Please fix it in your phone book.';
+  String get messaging_ConversationBuilders_invalidNumber_message1 => 'The contact has an invalid phone number. It should be in the format ';
 
   @override
-  String get messaging_NewConversation_invalidNumber_ok => 'Close';
+  String get messaging_ConversationBuilders_invalidNumber_message2 => '. Please fix it in your phone book.';
+
+  @override
+  String get messaging_ConversationBuilders_invalidNumber_ok => 'Close';
+
+  @override
+  String get messaging_ConversationBuilders_title_group => 'Create group';
+
+  @override
+  String get messaging_ConversationBuilders_groupNameHeadline => 'Group name';
+
+  @override
+  String get messaging_ConversationBuilders_membersHeadline => 'Members';
+
+  @override
+  String get messaging_ConversationBuilders_addUserBtnText => 'Add user';
+
+  @override
+  String get messaging_ConversationBuilders_submitBtnText => 'Submit';
+
+  @override
+  String get messaging_ConversationBuilders_nameFieldLabel => 'Group Name';
+
+  @override
+  String get messaging_ConversationBuilders_nameFieldEmpty => 'Please enter a group name';
+
+  @override
+  String get messaging_ConversationBuilders_nameFieldShort => 'Group name must be at least 3 characters';
+
+  @override
+  String get messaging_ConversationBuilders_connectionError => 'Connection error, please try later';
+
+  @override
+  String get messaging_ConversationBuilders_submitError => 'Error happened while creating group, please try again';
 
   @override
   String get messaging_GroupScreen_titlePrefix => 'Group:';
@@ -998,36 +1031,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get messaging_GroupNameDialog_cancelBtnText => 'Cancel';
-
-  @override
-  String get messaging_GroupBuilderScreen_screenTitle => 'Create group';
-
-  @override
-  String get messaging_GroupBuilderScreen_groupNameHeadline => 'Group name';
-
-  @override
-  String get messaging_GroupBuilderScreen_membersHeadline => 'Members';
-
-  @override
-  String get messaging_GroupBuilderScreen_addUserBtnText => 'Add user';
-
-  @override
-  String get messaging_GroupBuilderScreen_submitBtnText => 'Submit';
-
-  @override
-  String get messaging_GroupBuilderScreen_nameFieldLabel => 'Group Name';
-
-  @override
-  String get messaging_GroupBuilderScreen_nameFieldEmpty => 'Please enter a group name';
-
-  @override
-  String get messaging_GroupBuilderScreen_nameFieldShort => 'Group name must be at least 3 characters';
-
-  @override
-  String get messaging_GroupBuilderScreen_connectionError => 'Connection error, please try later';
-
-  @override
-  String get messaging_GroupBuilderScreen_submitError => 'Error happened while creating group, please try again';
 
   @override
   String get messaging_MessageListView_typingTrail => 'is typing...';

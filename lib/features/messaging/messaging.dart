@@ -2,6 +2,7 @@ export 'extensions/extensions.dart';
 export 'bloc/messaging_bloc.dart';
 export 'features/conversations/conversations.dart';
 export 'features/chat_conversation/chat_conversation.dart';
+export 'features/chat_conversation_builder/chat_conversation_builder.dart';
 export 'features/sms_conversation/sms_conversation.dart';
 export 'cubits/cubits.dart';
 export 'services/services.dart';

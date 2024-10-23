@@ -850,61 +850,94 @@ class AppLocalizationsUk extends AppLocalizations {
   String get messaging_DialogInfo_deleteBtn => 'Видалити діалог';
 
   @override
-  String get messaging_NewConversation_createGroup => 'Створити групу';
+  String get messaging_ConversationBuilders_createGroup => 'Створити групу';
 
   @override
-  String get messaging_NewConversation_title => 'Новий чат';
+  String get messaging_ConversationBuilders_title_new => 'Новий чат';
 
   @override
-  String get messaging_NewConversation_cancel => 'Скасувати';
+  String get messaging_ConversationBuilders_cancel => 'Скасувати';
 
   @override
-  String get messaging_NewConversation_create => 'Створити';
+  String get messaging_ConversationBuilders_back => 'Назад';
 
   @override
-  String get messaging_NewConversation_externalContacts_heading => 'Контакти Хмарної АТС';
+  String get messaging_ConversationBuilders_create => 'Створити';
 
   @override
-  String get messaging_NewConversation_localContacts_heading => 'Локальні контакти';
+  String get messaging_ConversationBuilders_externalContacts_heading => 'Контакти Хмарної АТС';
 
   @override
-  String get messaging_NewConversation_contactSearch_hint => 'Пошук контактів';
+  String get messaging_ConversationBuilders_localContacts_heading => 'Локальні контакти';
 
   @override
-  String get messaging_NewConversation_contactOrNumberSearch_hint => 'Введіть ім\'я або номер телефону';
+  String get messaging_ConversationBuilders_contactSearch_hint => 'Пошук контактів';
 
   @override
-  String get messaging_NewConversation_numberFormatExample => '+ [код країни] [код регіону/оператора] [номер абонента]';
+  String get messaging_ConversationBuilders_contactOrNumberSearch_hint => 'Введіть ім\'я або номер телефону';
 
   @override
-  String get messaging_NewConversation_numberSearch_errorHint => 'Формат номера телефону: ';
+  String get messaging_ConversationBuilders_numberFormatExample => '+ [код країни] [код регіону/оператора] [номер абонента]';
 
   @override
-  String get messaging_NewConversation_numberSearch_errorError => 'Введений номер телефону недійсний. Його слід ввести у форматі: ';
+  String get messaging_ConversationBuilders_numberSearch_errorHint => 'Формат номера телефону: ';
 
   @override
-  String get messaging_NewConversation_invite_heading => 'Запросити користувачів:';
+  String get messaging_ConversationBuilders_numberSearch_errorError => 'Введений номер телефону недійсний. Його слід ввести у форматі: ';
 
   @override
-  String get messaging_NewConversation_next_action => 'Далі';
+  String get messaging_ConversationBuilders_invite_heading => 'Запросити користувачів:';
 
   @override
-  String get messaging_NewConversation_back_action => 'Назад';
+  String get messaging_ConversationBuilders_next_action => 'Далі';
 
   @override
-  String get messaging_NewConversation_noContacts => 'Немає контактів, що відповідають результату пошуку';
+  String get messaging_ConversationBuilders_back_action => 'Назад';
 
   @override
-  String get messaging_NewConversation_invalidNumber_title => 'Невірний номер телефону';
+  String get messaging_ConversationBuilders_noContacts => 'Немає контактів, що відповідають результату пошуку';
 
   @override
-  String get messaging_NewConversation_invalidNumber_message1 => 'The contact has an invalid phone number. It should be in the format ';
+  String get messaging_ConversationBuilders_invalidNumber_title => 'Невірний номер телефону';
 
   @override
-  String get messaging_NewConversation_invalidNumber_message2 => '. Please fix it in your phone book.';
+  String get messaging_ConversationBuilders_invalidNumber_message1 => 'The contact has an invalid phone number. It should be in the format ';
 
   @override
-  String get messaging_NewConversation_invalidNumber_ok => 'Закрити';
+  String get messaging_ConversationBuilders_invalidNumber_message2 => '. Please fix it in your phone book.';
+
+  @override
+  String get messaging_ConversationBuilders_invalidNumber_ok => 'Закрити';
+
+  @override
+  String get messaging_ConversationBuilders_title_group => 'Створити групу';
+
+  @override
+  String get messaging_ConversationBuilders_groupNameHeadline => 'Назва групи';
+
+  @override
+  String get messaging_ConversationBuilders_membersHeadline => 'Члени групи';
+
+  @override
+  String get messaging_ConversationBuilders_addUserBtnText => 'Додати користувача';
+
+  @override
+  String get messaging_ConversationBuilders_submitBtnText => 'Надіслати';
+
+  @override
+  String get messaging_ConversationBuilders_nameFieldLabel => 'Назва групи';
+
+  @override
+  String get messaging_ConversationBuilders_nameFieldEmpty => 'Будь ласка, введіть назву групи';
+
+  @override
+  String get messaging_ConversationBuilders_nameFieldShort => 'Назва групи має містити не менше 3 символів';
+
+  @override
+  String get messaging_ConversationBuilders_connectionError => 'Помилка підключення, спробуйте пізніше';
+
+  @override
+  String get messaging_ConversationBuilders_submitError => 'Під час створення групи сталася помилка, повторіть спробу';
 
   @override
   String get messaging_GroupScreen_titlePrefix => 'Група:';
@@ -998,36 +1031,6 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get messaging_GroupNameDialog_cancelBtnText => 'Скасувати';
-
-  @override
-  String get messaging_GroupBuilderScreen_screenTitle => 'Створити групу';
-
-  @override
-  String get messaging_GroupBuilderScreen_groupNameHeadline => 'Назва групи';
-
-  @override
-  String get messaging_GroupBuilderScreen_membersHeadline => 'Члени групи';
-
-  @override
-  String get messaging_GroupBuilderScreen_addUserBtnText => 'Додати користувача';
-
-  @override
-  String get messaging_GroupBuilderScreen_submitBtnText => 'Надіслати';
-
-  @override
-  String get messaging_GroupBuilderScreen_nameFieldLabel => 'Назва групи';
-
-  @override
-  String get messaging_GroupBuilderScreen_nameFieldEmpty => 'Будь ласка, введіть назву групи';
-
-  @override
-  String get messaging_GroupBuilderScreen_nameFieldShort => 'Назва групи має містити не менше 3 символів';
-
-  @override
-  String get messaging_GroupBuilderScreen_connectionError => 'Помилка підключення, спробуйте пізніше';
-
-  @override
-  String get messaging_GroupBuilderScreen_submitError => 'Під час створення групи сталася помилка, повторіть спробу';
 
   @override
   String get messaging_MessageListView_typingTrail => 'надруковує...';

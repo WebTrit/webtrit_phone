@@ -97,20 +97,20 @@ class _NewSmsConversationState extends State<NewSmsConversation> {
             filter: ImageFilter.blur(sigmaX: 1, sigmaY: 1),
             child: AlertDialog(
               title: Text(
-                context.l10n.messaging_NewConversation_invalidNumber_title,
+                context.l10n.messaging_ConversationBuilders_invalidNumber_title,
                 style: Theme.of(context).textTheme.headlineSmall,
               ),
               content: RichText(
                 text: TextSpan(
                   children: [
                     TextSpan(
-                        text: context.l10n.messaging_NewConversation_invalidNumber_message1,
+                        text: context.l10n.messaging_ConversationBuilders_invalidNumber_message1,
                         style: const TextStyle(fontWeight: FontWeight.normal)),
                     TextSpan(
-                        text: context.l10n.messaging_NewConversation_numberFormatExample,
+                        text: context.l10n.messaging_ConversationBuilders_numberFormatExample,
                         style: const TextStyle(fontWeight: FontWeight.bold)),
                     TextSpan(
-                        text: context.l10n.messaging_NewConversation_invalidNumber_message2,
+                        text: context.l10n.messaging_ConversationBuilders_invalidNumber_message2,
                         style: const TextStyle(fontWeight: FontWeight.normal)),
                   ],
                   style: Theme.of(context).textTheme.bodySmall,
@@ -119,7 +119,7 @@ class _NewSmsConversationState extends State<NewSmsConversation> {
               actions: [
                 TextButton(
                   onPressed: () => Navigator.of(context).pop(),
-                  child: Text(context.l10n.messaging_NewConversation_invalidNumber_ok),
+                  child: Text(context.l10n.messaging_ConversationBuilders_invalidNumber_ok),
                 ),
               ],
             ),
@@ -185,12 +185,12 @@ class _NewSmsConversationState extends State<NewSmsConversation> {
     final colorScheme = Theme.of(context).colorScheme;
 
     return AppBar(
-      title: Text(context.l10n.messaging_NewConversation_title),
+      title: Text(context.l10n.messaging_ConversationBuilders_title_new),
       automaticallyImplyLeading: false,
       leading: TextButton(
         onPressed: onCancel,
         child: Text(
-          context.l10n.messaging_NewConversation_cancel,
+          context.l10n.messaging_ConversationBuilders_cancel,
           style: TextStyle(color: colorScheme.primary),
         ),
       ),
@@ -200,7 +200,7 @@ class _NewSmsConversationState extends State<NewSmsConversation> {
           TextButton(
             onPressed: onCreateByNumber,
             child: Text(
-              context.l10n.messaging_NewConversation_create,
+              context.l10n.messaging_ConversationBuilders_create,
               style: TextStyle(color: colorScheme.primary),
             ),
           ),
@@ -215,7 +215,7 @@ class _NewSmsConversationState extends State<NewSmsConversation> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Text(
-              context.l10n.messaging_NewConversation_externalContacts_heading,
+              context.l10n.messaging_ConversationBuilders_externalContacts_heading,
               style: Theme.of(context).textTheme.headlineSmall,
             ),
           ),
@@ -227,7 +227,7 @@ class _NewSmsConversationState extends State<NewSmsConversation> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Text(
-              context.l10n.messaging_NewConversation_localContacts_heading,
+              context.l10n.messaging_ConversationBuilders_localContacts_heading,
               style: Theme.of(context).textTheme.headlineSmall,
             ),
           ),
@@ -252,7 +252,7 @@ class _NewSmsConversationState extends State<NewSmsConversation> {
             borderRadius: BorderRadius.circular(12),
           ),
           child: Text(
-            context.l10n.messaging_NewConversation_noContacts,
+            context.l10n.messaging_ConversationBuilders_noContacts,
             style: theme.textTheme.bodySmall,
             textAlign: TextAlign.center,
           ),
@@ -275,10 +275,10 @@ class _NewSmsConversationState extends State<NewSmsConversation> {
               text: TextSpan(
                 children: [
                   TextSpan(
-                      text: context.l10n.messaging_NewConversation_numberSearch_errorError,
+                      text: context.l10n.messaging_ConversationBuilders_numberSearch_errorError,
                       style: const TextStyle(fontWeight: FontWeight.normal)),
                   TextSpan(
-                      text: context.l10n.messaging_NewConversation_numberFormatExample,
+                      text: context.l10n.messaging_ConversationBuilders_numberFormatExample,
                       style: const TextStyle(fontWeight: FontWeight.bold)),
                 ],
                 style: theme.textTheme.bodySmall!.copyWith(color: Colors.red, fontSize: 13),
@@ -290,17 +290,17 @@ class _NewSmsConversationState extends State<NewSmsConversation> {
             text: TextSpan(
               children: [
                 TextSpan(
-                    text: context.l10n.messaging_NewConversation_numberSearch_errorHint,
+                    text: context.l10n.messaging_ConversationBuilders_numberSearch_errorHint,
                     style: const TextStyle(fontWeight: FontWeight.normal)),
                 TextSpan(
-                    text: context.l10n.messaging_NewConversation_numberFormatExample,
+                    text: context.l10n.messaging_ConversationBuilders_numberFormatExample,
                     style: const TextStyle(fontWeight: FontWeight.bold)),
               ],
               style: theme.textTheme.bodySmall!.copyWith(color: Colors.grey, fontSize: 13),
             ),
           );
         }),
-        hintText: context.l10n.messaging_NewConversation_contactOrNumberSearch_hint,
+        hintText: context.l10n.messaging_ConversationBuilders_contactOrNumberSearch_hint,
         fillColor: colorScheme.surface,
         border: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(12)),
         prefixIcon: const Icon(Icons.search),

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:webtrit_phone/app/notifications/notifications.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/features/features.dart';
@@ -12,8 +13,6 @@ import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
-
-// TODO: maybe use TabBarView
 
 enum TabType { chat, sms }
 
@@ -27,8 +26,10 @@ class ConversationsScreen extends StatefulWidget {
 
 class _ConversationsScreenState extends State<ConversationsScreen> {
   late final messagingBloc = context.read<MessagingBloc>();
-  late final contactsRepository = context.read<ContactsRepository>();
+  late final chatsRepository = context.read<ChatsRepository>();
   late final smsRepository = context.read<SmsRepository>();
+  late final contactsRepository = context.read<ContactsRepository>();
+  late final notificationsBloc = context.read<NotificationsBloc>();
 
   final chatsEnabled = EnvironmentConfig.CHAT_FEATURE_ENABLE;
   final smsEnabled = EnvironmentConfig.SMS_FEATURE_ENABLE;
@@ -45,45 +46,43 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
   }
 
   onNewChatConversation() async {
-    final result = await showModalBottomSheet(
+    showModalBottomSheet(
       useRootNavigator: true,
       useSafeArea: true,
       isScrollControlled: true,
       context: context,
-      builder: (context) => BottomSheet(
-        enableDrag: false,
-        onClosing: () {},
-        builder: (context) => NewChatConversation(contactsRepository: contactsRepository),
+      builder: (context) => BlocProvider(
+        create: (context) => ChatConversationBuilderCubit(
+          messagingBloc.state.client,
+          chatsRepository,
+          contactsRepository,
+          openDialog: (contact) async {
+            Navigator.of(context).pop();
+            await Future.delayed(const Duration(milliseconds: 300));
+            openDialog(contact);
+          },
+          openGroup: (id) async {
+            Navigator.of(context).pop();
+            await Future.delayed(const Duration(milliseconds: 300));
+            openGroup(id);
+          },
+          submitNotification: (n) {
+            notificationsBloc.add(NotificationsSubmitted(n));
+          },
+        ),
+        child: BottomSheet(enableDrag: false, onClosing: () {}, builder: (_) => const ChatConversationBuilderView()),
       ),
     );
+  }
 
-    await Future.delayed(const Duration(milliseconds: 300));
+  openDialog(Contact contact) {
     if (!mounted) return;
+    context.router.navigate(ChatConversationScreenPageRoute(participantId: contact.sourceId));
+  }
 
-    // If the user selected a contact, navigate to the new conversation screen
-    if (result is Contact) {
-      context.router.navigate(
-        ChatConversationScreenPageRoute(participantId: result.sourceId),
-      );
-    }
-
-    // If the user selected the group option, navigate to the group builder screen
-    if (result == kGroupResult) {
-      showModalBottomSheet(
-        useRootNavigator: true,
-        useSafeArea: true,
-        isScrollControlled: true,
-        context: context,
-        builder: (context) => BottomSheet(
-          enableDrag: false,
-          onClosing: () {},
-          builder: (context) => NewGroupConversation(
-            contactsRepository: contactsRepository,
-            messagingBloc: messagingBloc,
-          ),
-        ),
-      );
-    }
+  openGroup(int id) {
+    if (!mounted) return;
+    context.router.navigate(ChatConversationScreenPageRoute(chatId: id));
   }
 
   onNewSmsConversation() async {

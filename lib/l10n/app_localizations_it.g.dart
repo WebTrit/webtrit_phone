@@ -850,61 +850,94 @@ class AppLocalizationsIt extends AppLocalizations {
   String get messaging_DialogInfo_deleteBtn => 'Elimina dialogo';
 
   @override
-  String get messaging_NewConversation_createGroup => 'Crea gruppo';
+  String get messaging_ConversationBuilders_createGroup => 'Crea gruppo';
 
   @override
-  String get messaging_NewConversation_title => 'Nuova chat';
+  String get messaging_ConversationBuilders_title_new => 'Nuova chat';
 
   @override
-  String get messaging_NewConversation_cancel => 'Cancellare';
+  String get messaging_ConversationBuilders_cancel => 'Cancellare';
 
   @override
-  String get messaging_NewConversation_create => 'Creare';
+  String get messaging_ConversationBuilders_back => 'Dopo';
 
   @override
-  String get messaging_NewConversation_externalContacts_heading => 'Contatti Cloud PBX';
+  String get messaging_ConversationBuilders_create => 'Creare';
 
   @override
-  String get messaging_NewConversation_localContacts_heading => 'Contatti locali';
+  String get messaging_ConversationBuilders_externalContacts_heading => 'Contatti Cloud PBX';
 
   @override
-  String get messaging_NewConversation_contactSearch_hint => 'Cerca contatti';
+  String get messaging_ConversationBuilders_localContacts_heading => 'Contatti locali';
 
   @override
-  String get messaging_NewConversation_contactOrNumberSearch_hint => 'Inserisci nome o numero di telefono';
+  String get messaging_ConversationBuilders_contactSearch_hint => 'Cerca contatti';
 
   @override
-  String get messaging_NewConversation_numberFormatExample => '+ [prefisso nazionale] [prefisso operatore] [numero abbonato]';
+  String get messaging_ConversationBuilders_contactOrNumberSearch_hint => 'Inserisci nome o numero di telefono';
 
   @override
-  String get messaging_NewConversation_numberSearch_errorHint => 'Formato del numero di telefono: ';
+  String get messaging_ConversationBuilders_numberFormatExample => '+ [prefisso nazionale] [prefisso operatore] [numero abbonato]';
 
   @override
-  String get messaging_NewConversation_numberSearch_errorError => 'Il numero di telefono inserito non è valido. Deve essere inserito nel formato: ';
+  String get messaging_ConversationBuilders_numberSearch_errorHint => 'Formato del numero di telefono: ';
 
   @override
-  String get messaging_NewConversation_invite_heading => 'Invita utenti:';
+  String get messaging_ConversationBuilders_numberSearch_errorError => 'Il numero di telefono inserito non è valido. Deve essere inserito nel formato: ';
 
   @override
-  String get messaging_NewConversation_next_action => 'Prossima';
+  String get messaging_ConversationBuilders_invite_heading => 'Invita utenti:';
 
   @override
-  String get messaging_NewConversation_back_action => 'Dopo';
+  String get messaging_ConversationBuilders_next_action => 'Prossima';
 
   @override
-  String get messaging_NewConversation_noContacts => 'Non ci sono contatti che corrispondono al risultato della ricerca';
+  String get messaging_ConversationBuilders_back_action => 'Dopo';
 
   @override
-  String get messaging_NewConversation_invalidNumber_title => 'Numero di telefono disabilitato';
+  String get messaging_ConversationBuilders_noContacts => 'Non ci sono contatti che corrispondono al risultato della ricerca';
 
   @override
-  String get messaging_NewConversation_invalidNumber_message1 => 'Il tsontact ha un numero di telefono non valido. Dovrebbe essere nel formato ';
+  String get messaging_ConversationBuilders_invalidNumber_title => 'Numero di telefono disabilitato';
 
   @override
-  String get messaging_NewConversation_invalidNumber_message2 => '. Per favore, lo trovi nella nostra rubrica.';
+  String get messaging_ConversationBuilders_invalidNumber_message1 => 'Il tsontact ha un numero di telefono non valido. Dovrebbe essere nel formato ';
 
   @override
-  String get messaging_NewConversation_invalidNumber_ok => 'Tslose';
+  String get messaging_ConversationBuilders_invalidNumber_message2 => '. Per favore, lo trovi nella nostra rubrica.';
+
+  @override
+  String get messaging_ConversationBuilders_invalidNumber_ok => 'Tslose';
+
+  @override
+  String get messaging_ConversationBuilders_title_group => 'Crea gruppo';
+
+  @override
+  String get messaging_ConversationBuilders_groupNameHeadline => 'Nome del gruppo';
+
+  @override
+  String get messaging_ConversationBuilders_membersHeadline => 'Membri';
+
+  @override
+  String get messaging_ConversationBuilders_addUserBtnText => 'Aggiungi utente';
+
+  @override
+  String get messaging_ConversationBuilders_submitBtnText => 'Invia';
+
+  @override
+  String get messaging_ConversationBuilders_nameFieldLabel => 'Nome del gruppo';
+
+  @override
+  String get messaging_ConversationBuilders_nameFieldEmpty => 'Inserisci un nome di gruppo';
+
+  @override
+  String get messaging_ConversationBuilders_nameFieldShort => 'Il nome del gruppo deve essere composto da almeno 3 caratteri';
+
+  @override
+  String get messaging_ConversationBuilders_connectionError => 'Errore di connessione, riprova più tardi';
+
+  @override
+  String get messaging_ConversationBuilders_submitError => 'Si è verificato un errore durante la creazione del gruppo, riprovare.';
 
   @override
   String get messaging_GroupScreen_titlePrefix => 'Gruppo:';
@@ -998,36 +1031,6 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get messaging_GroupNameDialog_cancelBtnText => 'Cancellare';
-
-  @override
-  String get messaging_GroupBuilderScreen_screenTitle => 'Crea gruppo';
-
-  @override
-  String get messaging_GroupBuilderScreen_groupNameHeadline => 'Nome del gruppo';
-
-  @override
-  String get messaging_GroupBuilderScreen_membersHeadline => 'Membri';
-
-  @override
-  String get messaging_GroupBuilderScreen_addUserBtnText => 'Aggiungi utente';
-
-  @override
-  String get messaging_GroupBuilderScreen_submitBtnText => 'Invia';
-
-  @override
-  String get messaging_GroupBuilderScreen_nameFieldLabel => 'Nome del gruppo';
-
-  @override
-  String get messaging_GroupBuilderScreen_nameFieldEmpty => 'Inserisci un nome di gruppo';
-
-  @override
-  String get messaging_GroupBuilderScreen_nameFieldShort => 'Il nome del gruppo deve essere composto da almeno 3 caratteri';
-
-  @override
-  String get messaging_GroupBuilderScreen_connectionError => 'Errore di connessione, riprova più tardi';
-
-  @override
-  String get messaging_GroupBuilderScreen_submitError => 'Si è verificato un errore durante la creazione del gruppo, riprovare.';
 
   @override
   String get messaging_MessageListView_typingTrail => 'stampe...';
