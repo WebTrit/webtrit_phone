@@ -15,6 +15,7 @@ import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/features/features.dart';
+import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
@@ -39,6 +40,12 @@ class _MainShellState extends State<MainShell> {
   void initState() {
     super.initState();
     callkeep = Callkeep();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
     callkeep.setUp(
       CallkeepOptions(
         ios: CallkeepIOSOptions(
@@ -65,8 +72,8 @@ class _MainShellState extends State<MainShell> {
       onChangedLifecycle: foreground_call_isolate.onChangedLifecycle,
       autoStartOnBoot: incomingCallSocketType,
       autoRestartOnTerminate: incomingCallSocketType,
-      androidNotificationName: 'Webtrit Inbound Calls Service',
-      androidNotificationDescription: 'This is required to receive calls while in background',
+      androidNotificationName: context.l10n.settings_network_androidNotificationName,
+      androidNotificationDescription: context.l10n.settings_network_androidNotificationDescription,
     );
 
     if (incomingCallSocketType) {
