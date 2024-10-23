@@ -261,4 +261,9 @@ class BackgroundCallHandler implements CallkeepBackgroundServiceDelegate {
     await _recentsRepository.add(recent);
     _logger.info('endCallReceived: $recent');
   }
+
+  @override
+  void performServiceAnswerCall(String callId) {
+    _onCallAnswer?.call();
+  }
 }
