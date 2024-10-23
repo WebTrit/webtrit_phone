@@ -17,112 +17,100 @@ const int _kUndefinedLine = -1;
 final _logger = Logger('IsolateBackgroundCallHandler');
 
 class BackgroundCallService implements CallkeepBackgroundServiceDelegate {
-  static late BackgroundCallService _instance;
-
   BackgroundCallService._(
     this._recentsRepository,
-    this._callkeepBackgroundService,
-    this.storage,
-    this.certificates,
+    this._callkeep,
+    this._storage,
+    this._certificates,
+    this._incomingCallType,
   );
 
-  static Future<BackgroundCallService> init() async {
-    await AppPreferences.init();
-    await SecureStorage.init();
-    await AppCertificates.init();
+  factory BackgroundCallService() => _instance;
 
-    final callkeepBackgroundService = CallkeepBackgroundService();
+  static late BackgroundCallService _instance;
+
+  final RecentsRepository _recentsRepository;
+  final SecureStorage _storage;
+  final TrustedCertificates _certificates;
+  final CallkeepBackgroundService _callkeep;
+  final IncomingCallType _incomingCallType;
+
+  final List<Line?> _lines = [];
+
+  WebtritSignalingClient? _client;
+  StreamSubscription<List<ConnectivityResult>>? _connectivitySubscription;
+  bool _isConnected = false;
+  bool _isConnecting = false;
+
+  static Future<BackgroundCallService> init(IncomingCallType type) async {
+    await Future.wait([
+      AppPreferences.init(),
+      SecureStorage.init(),
+      AppCertificates.init(),
+    ]);
+
+    final callkeep = CallkeepBackgroundService();
     final repository = RecentsRepository(appDatabase: await FCMIsolateDatabase.db());
 
     _instance = BackgroundCallService._(
       repository,
-      callkeepBackgroundService,
+      callkeep,
       SecureStorage(),
       AppCertificates().trustedCertificates,
+      type,
     );
 
-    callkeepBackgroundService.setBackgroundServiceDelegate(_instance);
-
+    callkeep.setBackgroundServiceDelegate(_instance);
     return _instance;
   }
 
-  factory BackgroundCallService() {
-    return _instance;
-  }
-
-  get isPushNotificationIncomingCall => AppPreferences().getIncomingCallType() == IncomingCallType.pushNotification;
-
-  get isSocketIncomingCall => AppPreferences().getIncomingCallType() == IncomingCallType.socket;
-
-  final RecentsRepository _recentsRepository;
-  final SecureStorage storage;
-  final TrustedCertificates certificates;
-  final CallkeepBackgroundService _callkeepBackgroundService;
-
-  final List<Line?> _lines = [];
-  final Connectivity _connectivity = Connectivity();
-
-  WebtritSignalingClient? client;
-
-  StreamSubscription<List<ConnectivityResult>>? _connectivitySubscription;
-
-  Function? _onCallCompletion;
-  Function? _onCallAnswer;
-
-  set onCallCompletion(Function? value) {
-    _onCallCompletion = value;
-  }
-
-  set onCallAnswer(Function? value) {
-    _onCallAnswer = value;
-  }
-
-  bool _isConnected = false;
-  bool _isConnecting = false;
+  bool get _isPushNotificationIncomingCall => _incomingCallType == IncomingCallType.pushNotification;
 
   void launch() async {
     if (_isConnecting) return;
+
     _isConnecting = true;
-    _logger.info('launch');
-    await _callkeepBackgroundService.endAllBackgroundCalls();
-    await _initializeSignalClient();
+    _logger.info('Launching service');
+
+    await Future.wait([
+      _callkeep.endAllBackgroundCalls(),
+      _initializeSignalClient(),
+    ]);
 
     _monitorConnectivity();
   }
 
   Future<void> _initializeSignalClient() async {
-    _logger.info('_initializeSignalClient');
-
     if (_isConnected) {
-      _logger.info('Client is already connected. Skipping initialization.');
+      _logger.info('Already connected. Skipping initialization.');
       return;
     }
 
-    final signalingUrl = _parseCoreUrlToSignalingUrl(storage.readCoreUrl() ?? '');
-    final token = storage.readToken();
-    final tenantId = storage.readTenantId() ?? '';
+    final signalingUrl = _parseCoreUrlToSignalingUrl(_storage.readCoreUrl() ?? '');
+    final token = _storage.readToken();
+    final tenantId = _storage.readTenantId() ?? '';
 
-    client = await WebtritSignalingClient.connect(
+    _client = await WebtritSignalingClient.connect(
       signalingUrl,
       tenantId,
       token!,
       true,
-      certs: certificates,
+      certs: _certificates,
     );
 
     _isConnected = true;
     _isConnecting = false;
 
-    client?.listen(
+    _client?.listen(
       onStateHandshake: _signalingInitialize,
-      onEvent: _onSignalingEvent,
-      onError: _onSignalingError,
-      onDisconnect: _onSignalingDisconnect,
+      onEvent: _handleSignalingEvent,
+      onError: _handleSignalingError,
+      onDisconnect: _handleSignalingDisconnect,
     );
   }
 
   void _monitorConnectivity() {
-    _connectivitySubscription = _connectivity.onConnectivityChanged.listen((List<ConnectivityResult> result) {
+    _connectivitySubscription = Connectivity().onConnectivityChanged.listen((List<ConnectivityResult> result) {
       if (result.isNotEmpty && result.any((connectivityResult) => connectivityResult != ConnectivityResult.none)) {
         _reconnect();
       }
@@ -130,113 +118,128 @@ class BackgroundCallService implements CallkeepBackgroundServiceDelegate {
   }
 
   Future<void> _reconnect() async {
-    if (_isConnected) {
-      _logger.info('Client is already connected. Skipping reconnection.');
-      return;
-    }
+    if (_isConnected) return;
 
-    _logger.info('Attempting to reconnect signaling client');
+    _logger.info('Reconnecting to signaling client');
     try {
       await _initializeSignalClient();
       _logger.info('Reconnected successfully');
     } catch (e) {
-      _logger.severe('Failed to reconnect', e);
+      _logger.severe('Reconnection failed', e);
     }
   }
 
-  void _onSignalingError(error, [StackTrace? stackTrace]) {
-    _logger.severe('_onErrorCallback', error, stackTrace);
+  void _handleSignalingError(error, [StackTrace? stackTrace]) {
+    _logger.severe('Signaling error', error, stackTrace);
     _isConnected = false;
-    _onCallCompletion?.call();
+    if (_isPushNotificationIncomingCall) {
+      _callkeep.stopService();
+    }
   }
 
-  void _onSignalingDisconnect(int? code, String? reason) {
-    _logger.fine('_onSignalingDisconnect code: $code reason: $reason');
-    _onCallCompletion?.call();
+  void _handleSignalingDisconnect(int? code, String? reason) {
+    _logger.fine('Disconnected. Code: $code, Reason: $reason');
     _isConnected = false;
+    if (_isPushNotificationIncomingCall) {
+      _callkeep.stopService();
+    }
   }
 
   void _signalingInitialize(StateHandshake stateHandshake) {
-    _lines.clear();
-    _lines.addAll(stateHandshake.lines);
-
-    for (final activeLine in stateHandshake.lines.whereType<Line>()) {
+    final activeLines = stateHandshake.lines.whereType<Line>().toList();
+    for (final activeLine in activeLines) {
       for (final callLog in activeLine.callLogs) {
         if (callLog is CallEventLog) {
-          _onSignalingEvent(callLog.callEvent);
+          _handleSignalingEvent(callLog.callEvent);
         }
       }
     }
   }
 
-  void _onSignalingEvent(Event event) {
-    _logger.info('_onSignalingEvent $event');
+  void _handleSignalingEvent(Event event) {
+    _logger.info('Handling event: $event');
 
     if (event is IncomingCallEvent) {
       _handleIncomingCall(event);
     } else if (event is HangupEvent) {
       _handleHangupCall(event);
     } else if (event is UnregisteredEvent) {
-      _handleUnregisteredEvent(event);
+      _handleUnregisteredEvent();
     } else {
-      _logger.warning('Unhandled signaling event $event');
+      _logger.warning('Unhandled event: $event');
     }
   }
 
   void _handleIncomingCall(IncomingCallEvent event) {
     final number = CallkeepHandle.number(event.caller);
-    _callkeepBackgroundService.incomingCall(event.callId, number,
-        displayName: event.callerDisplayName, hasVideo: false);
+    _callkeep.incomingCall(event.callId, number, displayName: event.callerDisplayName, hasVideo: false);
   }
 
   void _handleHangupCall(HangupEvent event) {
-    _callkeepBackgroundService.endBackgroundCall(event.callId);
-    CallkeepBackgroundService().finishActivity();
-
-    _onCallCompletion?.call();
+    _callkeep.endBackgroundCall(event.callId);
+    if (_isPushNotificationIncomingCall) {
+      close();
+    }
   }
 
-  void _handleUnregisteredEvent(UnregisteredEvent event) {
-    _callkeepBackgroundService.endAllBackgroundCalls();
-  }
+  void _handleUnregisteredEvent() => _callkeep.endAllBackgroundCalls();
 
   Uri _parseCoreUrlToSignalingUrl(String coreUrl) {
     final uri = Uri.parse(coreUrl);
     return uri.replace(scheme: uri.scheme.endsWith('s') ? 'wss' : 'ws');
   }
 
-  Future<void> _declineCall(String callId) async {
-    final transaction = WebtritSignalingClient.generateTransactionId();
-    final line = _lines.indexWhere((line) => line?.callId == callId);
-
-    if (line != _kUndefinedLine) {
-      final decline = DeclineRequest(
-        transaction: transaction,
-        line: line,
-        callId: _lines[line]!.callId,
-      );
-      await client?.execute(decline);
-    } else {
-      _logger.warning('declineCall: callId not found $callId');
-    }
-  }
-
   Future<void> close() async {
-    _logger.info('_close signaling client');
+    _logger.info('Closing service');
     _connectivitySubscription?.cancel();
     _isConnected = false;
+
     try {
-      await client?.disconnect();
+      await _client?.disconnect();
+      if (_isPushNotificationIncomingCall) {
+        await _callkeep.stopService();
+      }
     } catch (e) {
-      _logger.severe('Failed to disconnect client', e);
+      _logger.severe('Error closing service', e);
     }
   }
 
   @override
-  void performServiceEndCall(String callId) => _declineCall(callId);
+  void performServiceEndCall(String callId) async {
+    final lineIndex = _lines.indexWhere((line) => line?.callId == callId);
+
+    // Early return if the call ID is not found
+    if (lineIndex == _kUndefinedLine) {
+      _logger.warning('Call ID not found: $callId');
+      if (_isPushNotificationIncomingCall) {
+        close();
+      }
+      return;
+    }
+
+    // Retrieve the line once instead of accessing it multiple times
+    final line = _lines[lineIndex];
+    final decline = DeclineRequest(
+      transaction: WebtritSignalingClient.generateTransactionId(),
+      line: lineIndex,
+      callId: line!.callId,
+    );
+
+    // Execute the decline request
+    await _client?.execute(decline);
+
+    // Close if push notification incoming call type
+    if (_isPushNotificationIncomingCall) {
+      close();
+    }
+  }
 
   @override
-  void performServiceAnswerCall(String callId) => _onCallAnswer?.call();
+  void performServiceAnswerCall(String callId) {
+    if (_isPushNotificationIncomingCall) {
+      close();
+    }
+  }
 
   @override
   Future<void> endCallReceived(
@@ -256,6 +259,6 @@ class BackgroundCallService implements CallkeepBackgroundServiceDelegate {
       hungUpTime: hungUpTime,
     );
     await _recentsRepository.add(recent);
-    _logger.info('endCallReceived: $recent');
+    _logger.info('End call received: $recent');
   }
 }

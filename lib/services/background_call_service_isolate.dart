@@ -9,7 +9,6 @@ import '../data/app_preferences.dart';
 import 'background_call_service.dart';
 
 final _logger = Logger('IsolateBackgroundCallHandler');
-final _callkeep = CallkeepBackgroundService();
 
 BackgroundCallService? _isolateBackgroundHandler;
 bool _launchingBackgroundSignaling = false;
@@ -26,13 +25,15 @@ Future<void> _initializeDependencies() async {
 Future<void> onStart(CallkeepServiceStatus status, Map<String, dynamic> data) async {
   _initializeDependencies();
 
+  _logger.info('Starting background signaling with data: $data status: $status');
+
   var incomingCallTypeData = data[CallkeepBackgroundService.incomingCallType] ?? IncomingCallType.socket.name;
   final incomingCallType = IncomingCallType.values.byName(incomingCallTypeData);
 
+  _isolateBackgroundHandler ??= await BackgroundCallService.init(incomingCallType);
+
   if (incomingCallType == IncomingCallType.pushNotification) {
-    await _initSignaling(terminateServiceOnActivityLaunch: true);
-  } else {
-    _logger.info('Call type is not push notification, so not initializing signaling');
+    _isolateBackgroundHandler?.launch();
   }
 }
 
@@ -42,7 +43,7 @@ Future<void> onChangedLifecycle(CallkeepServiceStatus status) async {
     case CallkeepLifecycleType.onStop:
       if (status.autoRestartOnTerminate) {
         _launchingBackgroundSignaling = false;
-        await _initSignaling();
+        _isolateBackgroundHandler?.launch();
       }
       break;
     case CallkeepLifecycleType.onResume:
@@ -56,31 +57,8 @@ Future<void> onChangedLifecycle(CallkeepServiceStatus status) async {
   }
 }
 
-Future<void> _initSignaling({
-  bool terminateServiceOnActivityLaunch = false,
-}) async {
-  _logger.info('Initializing background signaling');
-  _isolateBackgroundHandler ??= await BackgroundCallService.init();
-  _isolateBackgroundHandler?.launch();
-
-  if (terminateServiceOnActivityLaunch) {
-    await _callkeep.setUp(autoRestartOnTerminate: false, autoStartOnBoot: false);
-
-    _isolateBackgroundHandler?.onCallAnswer = () async {
-      await _callkeep.stopService();
-      _closeSignaling();
-    };
-
-    _isolateBackgroundHandler?.onCallCompletion = () async {
-      await _callkeep.finishActivity();
-      await _callkeep.stopService();
-      _closeSignaling();
-    };
-  }
-}
-
-void _closeSignaling() {
+Future _closeSignaling() async {
   _logger.info('Closing background signaling');
-  _isolateBackgroundHandler?.close();
+  await _isolateBackgroundHandler?.close();
   _isolateBackgroundHandler = null;
 }

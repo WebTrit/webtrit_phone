@@ -40,8 +40,9 @@ class NetworkCubit extends Cubit<NetworkState> {
         callkeepBackgroundService.stopService();
         break;
       case IncomingCallType.socket:
+        final data = {CallkeepBackgroundService.incomingCallType: IncomingCallType.socket};
         callkeepBackgroundService.setUp(autoStartOnBoot: true, autoRestartOnTerminate: true);
-        callkeepBackgroundService.startService();
+        callkeepBackgroundService.startService(data: data);
         break;
     }
 
