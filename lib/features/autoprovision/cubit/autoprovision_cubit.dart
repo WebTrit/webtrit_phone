@@ -18,14 +18,15 @@ class AutoprovisionCubit extends Cubit<AutoprovisionState> {
     this._tenantId,
     this._oldToken,
     this._oldTenantId,
+    this._coreUrl,
   ) : super(AutoprovisionState.initial());
 
   final String _configToken;
   final String _tenantId;
   final String? _oldToken;
   final String _oldTenantId;
+  final String _coreUrl;
 
-  final _coreUrl = EnvironmentConfig.CORE_URL ?? EnvironmentConfig.DEMO_CORE_URL;
   final _identifier = AppInfo().identifier;
   final _bundleId = PackageInfo().packageName;
   final _appType = PlatformInfo().appType;
