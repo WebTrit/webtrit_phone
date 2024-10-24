@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 
 import 'package:auto_route/auto_route.dart';
@@ -93,18 +91,16 @@ class SettingsScreen extends StatelessWidget {
                     ),
                     ...[
                       for (var item in section.items)
-                        // TODO(Serdun): Refactor condition into the scheme configuration for better maintainability.
-                        if (!(item.flavor == SettingsFlavor.network && Platform.isAndroid))
-                          Column(
-                            children: [
-                              ListTile(
-                                leading: Icon(item.icon),
-                                title: Text(context.parseL10n(item.titleL10n)),
-                                onTap: () => _onSectionItemTap(context, item),
-                              ),
-                              const ListTileSeparator(),
-                            ],
-                          ),
+                        Column(
+                          children: [
+                            ListTile(
+                              leading: Icon(item.icon),
+                              title: Text(context.parseL10n(item.titleL10n)),
+                              onTap: () => _onSectionItemTap(context, item),
+                            ),
+                            const ListTileSeparator(),
+                          ],
+                        ),
                     ],
                   ],
                 ),
