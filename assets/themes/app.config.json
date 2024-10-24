@@ -62,6 +62,13 @@
           "icon": "0xe1ce"
         },
         {
+          "enabled": true,
+          "initial": false,
+          "type": "messaging",
+          "titleL10n": "main_BottomNavigationBarItemLabel_chats",
+          "icon": "0xe155"
+        },
+        {
           "enabled": false,
           "initial": false,
           "type": "embedded1",
@@ -91,6 +98,7 @@
             "url": "https://webtrit-app.web.app/example/example_embedded_wallet_balance.html"
           }
         }
+    
       ]
     }
   },

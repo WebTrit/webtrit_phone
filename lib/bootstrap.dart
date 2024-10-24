@@ -8,6 +8,7 @@ import 'package:bloc/bloc.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:logging/logging.dart';
 import 'package:logging_appenders/logging_appenders.dart';
 
@@ -16,6 +17,7 @@ import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 import 'package:webtrit_phone/app/app_bloc_observer.dart';
 import 'package:webtrit_phone/app/assets.gen.dart';
 import 'package:webtrit_phone/data/data.dart';
+import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/push_notification/push_notifications.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/utils/path_provider/_native.dart';
@@ -35,6 +37,7 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
 
       await _initFirebase();
       await _initFirebaseMessaging();
+      await _initLocalNotifications();
 
       if (!kIsWeb && kDebugMode) {
         FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(false);
@@ -97,13 +100,19 @@ Future<void> _initFirebaseMessaging() async {
 
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
     logger.info('onMessage: ${message.toMap()}');
+    final appNotification = AppRemoteNotification.fromFCM(message);
+    RemoteNotificationsBroker.handleForegroundNotification(appNotification);
   });
   FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
     logger.info('onMessageOpenedApp: ${message.toMap()}');
+    final appNotification = AppRemoteNotification.fromFCM(message);
+    RemoteNotificationsBroker.handleOpenedNotification(appNotification);
   });
   final initialMessage = await FirebaseMessaging.instance.getInitialMessage();
   if (initialMessage != null) {
     logger.info('initialMessage: ${initialMessage.toMap()}');
+    final appNotification = AppRemoteNotification.fromFCM(initialMessage);
+    RemoteNotificationsBroker.handleOpenedNotification(appNotification);
   }
 
   // actual FirebaseMessaging permission request executed in [PermissionsCubit]
@@ -112,34 +121,43 @@ Future<void> _initFirebaseMessaging() async {
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   _initLogs();
+  final appNotification = AppRemoteNotification.fromFCM(message);
+  final logger = Logger('_firebaseMessagingBackgroundHandler')..info('RemoteNotification: $appNotification');
 
-  final logger = Logger('FCM')..info('_firebaseMessagingBackgroundHandler: ${message.toMap()}');
-
-  final fcmHandler = FCMHandler(message);
-  final fcmType = fcmHandler.getMessageType();
-
-  logger.info('Push notification type: $fcmType');
-
-  if (fcmType == FCMType.call && Platform.isAndroid) {
-    final call = fcmHandler.getPendingCall()!;
-    final logger = Logger('_backgroundAndroidCall')..info('Initial call: $call');
+  if (appNotification is PendingCallNotification && Platform.isAndroid) {
+    final call = appNotification.call;
 
     WebtritCallkeepLogs().setLogsDelegate(CallkeepLogs());
-
-    final appDatabase = FCMIsolateDatabase.instance(
-      createAppDatabaseConnection(
-        await getApplicationDocumentsPath(),
-        'db.sqlite',
-        logStatements: EnvironmentConfig.DATABASE_LOG_STATEMENTS,
-      ),
+    final dbConnection = createAppDatabaseConnection(
+      await getApplicationDocumentsPath(),
+      'db.sqlite',
+      logStatements: EnvironmentConfig.DATABASE_LOG_STATEMENTS,
     );
-    final repository = RecentsRepository(
-      appDatabase: appDatabase,
-    );
+    final appDatabase = FCMIsolateDatabase.instance(dbConnection);
+    final repository = RecentsRepository(appDatabase: appDatabase);
 
     logger.info('Initial incoming call');
 
     BackgroundCallHandler(call, repository).init();
+  }
+  if (appNotification is MessageNotification) {
+    final dbConnection = createAppDatabaseConnection(
+      await getApplicationDocumentsPath(),
+      'db.sqlite',
+      logStatements: EnvironmentConfig.DATABASE_LOG_STATEMENTS,
+    );
+    final appDatabase = FCMIsolateDatabase.instance(dbConnection);
+    final repo = ActiveMessageNotificationsRepositoryDriftImpl(appDatabase: appDatabase);
+
+    final activeMessageNotification = ActiveMessageNotification(
+      notificationId: appNotification.id,
+      messageId: appNotification.messageId,
+      conversationId: appNotification.conversationId,
+      title: appNotification.title ?? '',
+      body: appNotification.body ?? '',
+      time: DateTime.now(),
+    );
+    await repo.set(activeMessageNotification);
   }
 }
 
@@ -157,9 +175,20 @@ class FCMIsolateDatabase extends AppDatabase {
 
   static FCMIsolateDatabase? _instance;
 
-  static instance(executor) {
+  static FCMIsolateDatabase instance(executor) {
     _instance ??= FCMIsolateDatabase(executor);
 
     return _instance!;
   }
+}
+
+Future _initLocalNotifications() async {
+  await FlutterLocalNotificationsPlugin().initialize(
+    const InitializationSettings(
+      iOS: DarwinInitializationSettings(),
+      android: AndroidInitializationSettings('@mipmap/ic_launcher'),
+    ),
+    onDidReceiveNotificationResponse: LocalNotificationsBroker.handleActionReceived,
+    onDidReceiveBackgroundNotificationResponse: LocalNotificationsBroker.handleActionReceived,
+  );
 }

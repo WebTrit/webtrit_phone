@@ -5,5 +5,6 @@ enum MainFlavor {
   keypad,
   embedded1,
   embedded2,
-  embedded3;
+  embedded3,
+  messaging,
 }

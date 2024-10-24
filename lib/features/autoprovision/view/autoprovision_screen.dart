@@ -57,6 +57,9 @@ class _AutoprovisionScreenState extends State<AutoprovisionScreen> {
   }
 
   void onSessionCreated(SessionCreated state) async {
+    final [coreUrl, token, userId, tenantId] = [state.coreUrl, state.token, state.userId, state.tenantId];
+    final loginEvent = AppLogined(coreUrl: coreUrl, token: token, userId: userId, tenantId: tenantId);
+
     if (router.canPop()) {
       final loginUnderneeth = router.stack.first.name == LoginRouterPageRoute.name;
       final mainShellUnderneeth = router.stack.first.name == MainShellRoute.name;
@@ -64,7 +67,7 @@ class _AutoprovisionScreenState extends State<AutoprovisionScreen> {
       // For case when app is launched with the autoprovision screen on top of the login screen.
       if (loginUnderneeth) {
         await router.maybePop();
-        appBloc.add(AppLogined(coreUrl: state.coreUrl, token: state.token, tenantId: state.tenantId));
+        appBloc.add(loginEvent);
       }
 
       // For case when app is launched with the autoprovision screen on top of the main shell.
@@ -73,13 +76,13 @@ class _AutoprovisionScreenState extends State<AutoprovisionScreen> {
         await router.maybePop();
         appBloc.add(const AppLogouted());
         await appBloc.stream.firstWhere((element) => element.token == null);
-        appBloc.add(AppLogined(coreUrl: state.coreUrl, token: state.token, tenantId: state.tenantId));
-        await appBloc.stream.firstWhere((element) => element.token == state.token);
+        appBloc.add(loginEvent);
+        await appBloc.stream.firstWhere((element) => element.token == token);
       }
     } else {
       // For the case when the app is launched with the autoprovision screen as initial route.
-      appBloc.add(AppLogined(coreUrl: state.coreUrl, token: state.token, tenantId: state.tenantId));
-      await appBloc.stream.firstWhere((element) => element.token == state.token);
+      appBloc.add(loginEvent);
+      await appBloc.stream.firstWhere((element) => element.token == token);
       // Then will be redirected by router reevaluation and redirect inside [onAutoprovisionScreenPageRouteGuardNavigation]
     }
 

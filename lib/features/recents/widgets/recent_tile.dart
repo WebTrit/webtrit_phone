@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:intl/intl.dart';
+import 'package:webtrit_phone/environment_config.dart';
 
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
@@ -16,6 +17,7 @@ class RecentTile extends StatelessWidget {
     this.onTap,
     this.onLongPress,
     this.onInfoPressed,
+    this.onMessagePressed,
     this.onDeleted,
   });
 
@@ -25,6 +27,7 @@ class RecentTile extends StatelessWidget {
   final GestureTapCallback? onTap;
   final GestureLongPressCallback? onLongPress;
   final GestureTapCallback? onInfoPressed;
+  final GestureTapCallback? onMessagePressed;
   final void Function(Recent)? onDeleted;
 
   @override
@@ -32,6 +35,7 @@ class RecentTile extends StatelessWidget {
     final themeData = Theme.of(context);
     final onDeleted = this.onDeleted;
     final dateFormat = this.dateFormat ?? DateFormat();
+    const chatsEnabled = EnvironmentConfig.CHAT_FEATURE_ENABLE;
 
     return Dismissible(
       key: ObjectKey(recent),
@@ -68,6 +72,21 @@ class RecentTile extends StatelessWidget {
               icon: const Icon(Icons.info_outlined),
               onPressed: onInfoPressed,
             ),
+            if (chatsEnabled && onMessagePressed != null)
+              IconButton(
+                splashRadius: 24,
+                icon: const Icon(Icons.messenger_outline),
+                onPressed: onMessagePressed,
+              ),
+            if (chatsEnabled && onMessagePressed == null)
+              GestureDetector(
+                onTap: () {},
+                child: const IconButton(
+                  splashRadius: 24,
+                  icon: Icon(Icons.messenger_outline),
+                  onPressed: null,
+                ),
+              )
           ],
         ),
         title: Text(

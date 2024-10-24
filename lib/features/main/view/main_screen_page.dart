@@ -23,6 +23,7 @@ class MainScreenPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final mainScreenRouteStateRepository = context.read<MainScreenRouteStateRepository>();
     const appDemoFlow = EnvironmentConfig.CORE_URL == null;
 
     final bottomMenuManager = context.read<FeatureAccess>().bottomMenuFeature;
@@ -56,6 +57,7 @@ class MainScreenPage extends StatelessWidget {
               )
             : child;
       },
+      navigatorObservers: () => [MainScreenNavigatorObserver(mainScreenRouteStateRepository)],
     );
     final provider = BlocProvider(
       create: (context) {
@@ -107,6 +109,8 @@ class MainScreenPage extends StatelessWidget {
           );
         case MainFlavor.keypad:
           return const KeypadScreenPageRoute();
+        case MainFlavor.messaging:
+          return const ConversationsScreenPageRoute();
         default:
           final embedded = EmbeddedScreenPage.getPageRoute(tab.flavor, tab.data!);
           if (embedded != null) {

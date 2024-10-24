@@ -103,6 +103,10 @@ class AppLocalizationsMapper {
       'callStatus_connectivityNone': localizations.callStatus_connectivityNone,
       'callStatus_inProgress': localizations.callStatus_inProgress,
       'callStatus_ready': localizations.callStatus_ready,
+      'callProcessingStatus_disconnecting':
+          localizations.callProcessingStatus_disconnecting,
+      'call_ThumbnailAvatar_currentlyNoActiveCall':
+          localizations.call_ThumbnailAvatar_currentlyNoActiveCall,
       'connectToYourOwnVoIPSystem_Button_Action':
           localizations.connectToYourOwnVoIPSystem_Button_Action,
       'contacts_ExternalTabButton_refresh':
@@ -143,6 +147,8 @@ class AppLocalizationsMapper {
       'default_RequestFailureError': localizations.default_RequestFailureError,
       'default_SocketExceptionError':
           localizations.default_SocketExceptionError,
+      'default_TimeoutExceptionError':
+          localizations.default_TimeoutExceptionError,
       'default_TlsExceptionError': localizations.default_TlsExceptionError,
       'default_TypeErrorError': localizations.default_TypeErrorError,
       'default_UnauthorizedRequestFailureError':
@@ -269,6 +275,8 @@ class AppLocalizationsMapper {
           localizations.main_BottomNavigationBarItemLabel_favorites,
       'main_BottomNavigationBarItemLabel_keypad':
           localizations.main_BottomNavigationBarItemLabel_keypad,
+      'main_BottomNavigationBarItemLabel_chats':
+          localizations.main_BottomNavigationBarItemLabel_chats,
       'main_BottomNavigationBarItemLabel_recents':
           localizations.main_BottomNavigationBarItemLabel_recents,
       'main_CompatibilityIssueDialogActions_logout':
@@ -405,6 +413,213 @@ class AppLocalizationsMapper {
           localizations.webRegistration_ErrorAcknowledgeDialogActions_skip,
       'webRegistration_ErrorAcknowledgeDialog_title':
           localizations.webRegistration_ErrorAcknowledgeDialog_title,
+      'messaging_Conversation_failure':
+          localizations.messaging_Conversation_failure,
+      'messaging_ActionBtn_retry': localizations.messaging_ActionBtn_retry,
+      'messaging_MessageView_textcopy':
+          localizations.messaging_MessageView_textcopy,
+      'messaging_MessageView_reply': localizations.messaging_MessageView_reply,
+      'messaging_MessageView_forward':
+          localizations.messaging_MessageView_forward,
+      'messaging_MessageView_edit': localizations.messaging_MessageView_edit,
+      'messaging_MessageView_delete':
+          localizations.messaging_MessageView_delete,
+      'messaging_MessageView_forwarded':
+          localizations.messaging_MessageView_forwarded,
+      'messaging_MessageView_edited':
+          localizations.messaging_MessageView_edited,
+      'messaging_MessageView_deleted':
+          localizations.messaging_MessageView_deleted,
+      'messaging_SmsSendingStatus_waiting':
+          localizations.messaging_SmsSendingStatus_waiting,
+      'messaging_SmsSendingStatus_sent':
+          localizations.messaging_SmsSendingStatus_sent,
+      'messaging_SmsSendingStatus_failed':
+          localizations.messaging_SmsSendingStatus_failed,
+      'messaging_SmsSendingStatus_delivered':
+          localizations.messaging_SmsSendingStatus_delivered,
+      'messaging_ParticipantName_you':
+          localizations.messaging_ParticipantName_you,
+      'messaging_StateBar_initializing':
+          localizations.messaging_StateBar_initializing,
+      'messaging_StateBar_connecting':
+          localizations.messaging_StateBar_connecting,
+      'messaging_StateBar_error': localizations.messaging_StateBar_error,
+      'messaging_ConversationsScreen_startDialog':
+          localizations.messaging_ConversationsScreen_startDialog,
+      'messaging_ConversationsScreen_empty':
+          localizations.messaging_ConversationsScreen_empty,
+      'messaging_ConversationsScreen_chatsSearch_hint':
+          localizations.messaging_ConversationsScreen_chatsSearch_hint,
+      'messaging_ConversationsScreen_smssSearch_hint':
+          localizations.messaging_ConversationsScreen_smssSearch_hint,
+      'messaging_ConversationsScreen_messages_title':
+          localizations.messaging_ConversationsScreen_messages_title,
+      'messaging_ConversationsScreen_smses_title':
+          localizations.messaging_ConversationsScreen_smses_title,
+      'messaging_ConversationsScreen_selectNumberSheet_title':
+          localizations.messaging_ConversationsScreen_selectNumberSheet_title,
+      'messaging_ConversationsScreen_noNumberAlert_title':
+          localizations.messaging_ConversationsScreen_noNumberAlert_title,
+      'messaging_ConversationsScreen_noNumberAlert_text':
+          localizations.messaging_ConversationsScreen_noNumberAlert_text,
+      'messaging_Conversations_tile_empty':
+          localizations.messaging_Conversations_tile_empty,
+      'messaging_Conversations_tile_you':
+          localizations.messaging_Conversations_tile_you,
+      'messaging_MessageField_hint': localizations.messaging_MessageField_hint,
+      'messaging_ConversationScreen_titlePrefix':
+          localizations.messaging_ConversationScreen_titlePrefix,
+      'messaging_DialogInfo_deleteAsk':
+          localizations.messaging_DialogInfo_deleteAsk,
+      'messaging_DialogInfo_title': localizations.messaging_DialogInfo_title,
+      'messaging_DialogInfo_deleteBtn':
+          localizations.messaging_DialogInfo_deleteBtn,
+      'messaging_ConversationBuilders_createGroup':
+          localizations.messaging_ConversationBuilders_createGroup,
+      'messaging_ConversationBuilders_title_new':
+          localizations.messaging_ConversationBuilders_title_new,
+      'messaging_ConversationBuilders_cancel':
+          localizations.messaging_ConversationBuilders_cancel,
+      'messaging_ConversationBuilders_back':
+          localizations.messaging_ConversationBuilders_back,
+      'messaging_ConversationBuilders_create':
+          localizations.messaging_ConversationBuilders_create,
+      'messaging_ConversationBuilders_externalContacts_heading':
+          localizations.messaging_ConversationBuilders_externalContacts_heading,
+      'messaging_ConversationBuilders_localContacts_heading':
+          localizations.messaging_ConversationBuilders_localContacts_heading,
+      'messaging_ConversationBuilders_contactSearch_hint':
+          localizations.messaging_ConversationBuilders_contactSearch_hint,
+      'messaging_ConversationBuilders_contactOrNumberSearch_hint': localizations
+          .messaging_ConversationBuilders_contactOrNumberSearch_hint,
+      'messaging_ConversationBuilders_numberFormatExample':
+          localizations.messaging_ConversationBuilders_numberFormatExample,
+      'messaging_ConversationBuilders_numberSearch_errorHint':
+          localizations.messaging_ConversationBuilders_numberSearch_errorHint,
+      'messaging_ConversationBuilders_numberSearch_errorError':
+          localizations.messaging_ConversationBuilders_numberSearch_errorError,
+      'messaging_ConversationBuilders_invite_heading':
+          localizations.messaging_ConversationBuilders_invite_heading,
+      'messaging_ConversationBuilders_next_action':
+          localizations.messaging_ConversationBuilders_next_action,
+      'messaging_ConversationBuilders_back_action':
+          localizations.messaging_ConversationBuilders_back_action,
+      'messaging_ConversationBuilders_noContacts':
+          localizations.messaging_ConversationBuilders_noContacts,
+      'messaging_ConversationBuilders_invalidNumber_title':
+          localizations.messaging_ConversationBuilders_invalidNumber_title,
+      'messaging_ConversationBuilders_invalidNumber_message1':
+          localizations.messaging_ConversationBuilders_invalidNumber_message1,
+      'messaging_ConversationBuilders_invalidNumber_message2':
+          localizations.messaging_ConversationBuilders_invalidNumber_message2,
+      'messaging_ConversationBuilders_invalidNumber_ok':
+          localizations.messaging_ConversationBuilders_invalidNumber_ok,
+      'messaging_GroupScreen_titlePrefix':
+          localizations.messaging_GroupScreen_titlePrefix,
+      'messaging_ChooseContact_title':
+          localizations.messaging_ChooseContact_title,
+      'messaging_ChooseContact_empty':
+          localizations.messaging_ChooseContact_empty,
+      'messaging_ChooseContact_cancel':
+          localizations.messaging_ChooseContact_cancel,
+      'messaging_ConfirmDialog_ask': localizations.messaging_ConfirmDialog_ask,
+      'messaging_ConfirmDialog_confirm':
+          localizations.messaging_ConfirmDialog_confirm,
+      'messaging_ConfirmDialog_cancel':
+          localizations.messaging_ConfirmDialog_cancel,
+      'messaging_GroupAuthorities_noauthorities':
+          localizations.messaging_GroupAuthorities_noauthorities,
+      'messaging_GroupAuthorities_moderator':
+          localizations.messaging_GroupAuthorities_moderator,
+      'messaging_GroupAuthorities_owner':
+          localizations.messaging_GroupAuthorities_owner,
+      'messaging_GroupInfo_title': localizations.messaging_GroupInfo_title,
+      'messaging_GroupInfo_leaveAsk':
+          localizations.messaging_GroupInfo_leaveAsk,
+      'messaging_GroupInfo_leaveAndDeleteAsk':
+          localizations.messaging_GroupInfo_leaveAndDeleteAsk,
+      'messaging_GroupInfo_removeUserAsk':
+          localizations.messaging_GroupInfo_removeUserAsk,
+      'messaging_GroupInfo_makeModeratorAsk':
+          localizations.messaging_GroupInfo_makeModeratorAsk,
+      'messaging_GroupInfo_removeModeratorAsk':
+          localizations.messaging_GroupInfo_removeModeratorAsk,
+      'messaging_GroupInfo_titlePrefix':
+          localizations.messaging_GroupInfo_titlePrefix,
+      'messaging_GroupInfo_groupMembersHeadline':
+          localizations.messaging_GroupInfo_groupMembersHeadline,
+      'messaging_GroupInfo_addUserBtnText':
+          localizations.messaging_GroupInfo_addUserBtnText,
+      'messaging_GroupInfo_leaveBtnText':
+          localizations.messaging_GroupInfo_leaveBtnText,
+      'messaging_GroupInfo_deleteLeaveBtnText':
+          localizations.messaging_GroupInfo_deleteLeaveBtnText,
+      'messaging_GroupInfo_makeModeratorBtnText':
+          localizations.messaging_GroupInfo_makeModeratorBtnText,
+      'messaging_GroupInfo_unmakeModeratorBtnText':
+          localizations.messaging_GroupInfo_unmakeModeratorBtnText,
+      'messaging_GroupInfo_removeUserBtnText':
+          localizations.messaging_GroupInfo_removeUserBtnText,
+      'messaging_GroupNameDialog_title':
+          localizations.messaging_GroupNameDialog_title,
+      'messaging_GroupNameDialog_fieldLabel':
+          localizations.messaging_GroupNameDialog_fieldLabel,
+      'messaging_GroupNameDialog_fieldHint':
+          localizations.messaging_GroupNameDialog_fieldHint,
+      'messaging_GroupNameDialog_fieldValidation_empty':
+          localizations.messaging_GroupNameDialog_fieldValidation_empty,
+      'messaging_GroupNameDialog_fieldValidation_short':
+          localizations.messaging_GroupNameDialog_fieldValidation_short,
+      'messaging_GroupNameDialog_saveBtnText':
+          localizations.messaging_GroupNameDialog_saveBtnText,
+      'messaging_GroupNameDialog_cancelBtnText':
+          localizations.messaging_GroupNameDialog_cancelBtnText,
+      'messaging_ConversationBuilders_title_group':
+          localizations.messaging_ConversationBuilders_title_group,
+      'messaging_ConversationBuilders_groupNameHeadline':
+          localizations.messaging_ConversationBuilders_groupNameHeadline,
+      'messaging_ConversationBuilders_membersHeadline':
+          localizations.messaging_ConversationBuilders_membersHeadline,
+      'messaging_ConversationBuilders_addUserBtnText':
+          localizations.messaging_ConversationBuilders_addUserBtnText,
+      'messaging_ConversationBuilders_submitBtnText':
+          localizations.messaging_ConversationBuilders_submitBtnText,
+      'messaging_ConversationBuilders_nameFieldLabel':
+          localizations.messaging_ConversationBuilders_nameFieldLabel,
+      'messaging_ConversationBuilders_nameFieldEmpty':
+          localizations.messaging_ConversationBuilders_nameFieldEmpty,
+      'messaging_ConversationBuilders_nameFieldShort':
+          localizations.messaging_ConversationBuilders_nameFieldShort,
+      'messaging_ConversationBuilders_connectionError':
+          localizations.messaging_ConversationBuilders_connectionError,
+      'messaging_ConversationBuilders_submitError':
+          localizations.messaging_ConversationBuilders_submitError,
+      'messaging_MessageListView_typingTrail':
+          localizations.messaging_MessageListView_typingTrail,
+      'default_MessagingSocketException':
+          localizations.default_MessagingSocketException,
+      'default_UnauthorizedMessagingSocketException':
+          localizations.default_UnauthorizedMessagingSocketException,
+      'default_ForbiddenMessagingSocketException':
+          localizations.default_ForbiddenMessagingSocketException,
+      'default_InternalErrorMessagingSocketException':
+          localizations.default_InternalErrorMessagingSocketException,
+      'default_ChatNotFoundMessagingSocketException':
+          localizations.default_ChatNotFoundMessagingSocketException,
+      'default_InvalidChatTypeMessagingSocketException':
+          localizations.default_InvalidChatTypeMessagingSocketException,
+      'default_UserAlreadyInChatMessagingSocketException':
+          localizations.default_UserAlreadyInChatMessagingSocketException,
+      'default_ChatMemberNotFoundMessagingSocketException':
+          localizations.default_ChatMemberNotFoundMessagingSocketException,
+      'default_SelfRemovalForbiddenMessagingSocketException':
+          localizations.default_SelfRemovalForbiddenMessagingSocketException,
+      'default_SelfAuthorityAssignmentForbiddenMessagingSocketException':
+          localizations
+              .default_SelfAuthorityAssignmentForbiddenMessagingSocketException,
+      'default_SmsConversationNotFoundMessagingSocketException':
+          localizations.default_SmsConversationNotFoundMessagingSocketException,
       'account_selfCarePasswordExpired_message':
           localizations.account_selfCarePasswordExpired_message,
       'common_noInternetConnection_title':

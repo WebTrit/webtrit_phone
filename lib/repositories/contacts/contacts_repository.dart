@@ -33,6 +33,26 @@ class ContactsRepository {
         .map(_toContact);
   }
 
+  Stream<Contact?> watchContactBySource(ContactSourceType sourceType, String sourceId) {
+    return _appDatabase.contactsDao.watchContactBySource(sourceType.toData(), sourceId).map((c) {
+      if (c == null) return null;
+      return _toContact(c);
+    });
+  }
+
+  Stream<Contact?> watchContactBySourceWithPhonesAndEmails(ContactSourceType sourceType, String sourceId) {
+    return _appDatabase.contactsDao.watchContactExtBySource(sourceType.toData(), sourceId).map((c) {
+      if (c == null) return null;
+      return _toContactWithPhonesAndEmails(c);
+    });
+  }
+
+  Future<Contact?> getContactBySource(ContactSourceType sourceType, String sourceId) async {
+    final contactData = await _appDatabase.contactsDao.getContactBySource(sourceType.toData(), sourceId);
+    if (contactData == null) return null;
+    return _toContact(contactData);
+  }
+
   Stream<List<ContactPhone>> watchContactPhones(ContactId contactId) {
     return _appDatabase.contactPhonesDao
         .watchContactPhonesExtByContactId(contactId)
@@ -67,11 +87,15 @@ class ContactsRepository {
       sourceType: data.contact.sourceType.toModel(),
       sourceId: data.contact.sourceId,
       registered: data.contact.registered,
+      userRegistered: data.contact.userRegistered,
+      isCurrentUser: data.contact.isCurrentUser,
       firstName: data.contact.firstName,
       lastName: data.contact.lastName,
       aliasName: data.contact.aliasName,
       thumbnail: data.contact.thumbnail,
       thumbnailUrl: gravatarUrl,
+      phones: data.phones.map(_toRealContactPhone).toList(),
+      emails: data.emails.map(_toContactEmail).toList(),
     );
   }
 
@@ -81,6 +105,8 @@ class ContactsRepository {
       sourceType: data.sourceType.toModel(),
       sourceId: data.sourceId,
       registered: data.registered,
+      userRegistered: data.userRegistered,
+      isCurrentUser: data.isCurrentUser,
       firstName: data.firstName,
       lastName: data.lastName,
       aliasName: data.aliasName,
@@ -94,6 +120,15 @@ class ContactsRepository {
       number: data.contactPhoneData.number,
       label: data.contactPhoneData.label,
       favorite: data.favoriteData != null,
+    );
+  }
+
+  ContactPhone _toRealContactPhone(ContactPhoneData data) {
+    return ContactPhone(
+      id: data.id,
+      number: data.number,
+      label: data.label,
+      favorite: false,
     );
   }
 
