@@ -48,8 +48,7 @@ Future<void> onChangedLifecycle(CallkeepServiceStatus status) async {
       break;
     case CallkeepLifecycleType.onResume:
       if (!_launchingBackgroundSignaling && status.activityReady) {
-        _launchingBackgroundSignaling = true;
-        _closeSignaling();
+        await _closeSignaling();
       }
       break;
     default:
@@ -60,5 +59,4 @@ Future<void> onChangedLifecycle(CallkeepServiceStatus status) async {
 Future _closeSignaling() async {
   _logger.info('Closing background signaling');
   await _isolateBackgroundHandler?.close();
-  _isolateBackgroundHandler = null;
 }
