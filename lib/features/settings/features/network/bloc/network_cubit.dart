@@ -23,7 +23,7 @@ class NetworkCubit extends Cubit<NetworkState> {
   final AppPreferences appPreferences;
   final CallkeepBackgroundService callkeepBackgroundService;
 
-  _getActiveIncomingType() async {
+  void _getActiveIncomingType() async {
     final type = appPreferences.getIncomingCallType();
 
     emit(NetworkState(
@@ -40,7 +40,7 @@ class NetworkCubit extends Cubit<NetworkState> {
         callkeepBackgroundService.stopService();
         break;
       case IncomingCallType.socket:
-        final data = {CallkeepBackgroundService.incomingCallType: IncomingCallType.socket};
+        final data = {CallkeepBackgroundService.incomingCallType: IncomingCallType.socket.name};
         callkeepBackgroundService.setUp(autoStartOnBoot: true, autoRestartOnTerminate: true);
         callkeepBackgroundService.startService(data: data);
         break;
