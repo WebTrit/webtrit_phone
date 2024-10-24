@@ -695,7 +695,17 @@ sealed class UserChannelEvent {
   const UserChannelEvent();
 
   factory UserChannelEvent.fromEvent(Message e) {
+    // TODO: - remove fallback events
+    // chat_membership_join
+    // chat_membership_left
+    // chat_membership_leave
     switch (e.event.value) {
+      case 'chat_membership_join':
+        return ChatConversationJoin(int.parse(e.payload!['chat_id'].toString()));
+      case 'chat_membership_left':
+        return ChatConversationLeave(int.parse(e.payload!['chat_id'].toString()));
+      case 'chat_membership_leave':
+        return ChatConversationLeave(int.parse(e.payload!['chat_id'].toString()));
       case 'chat_join':
         return ChatConversationJoin(int.parse(e.payload!['chat_id'].toString()));
       case 'chat_left':
