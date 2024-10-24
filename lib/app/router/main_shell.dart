@@ -15,6 +15,7 @@ import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/features/features.dart';
+import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
@@ -30,12 +31,20 @@ class MainShell extends StatefulWidget {
 
 class _MainShellState extends State<MainShell> {
   late final Callkeep callkeep;
+  late final CallkeepBackgroundService androidCallkeepBackgroundService;
   late final FeatureAccess featureAccess;
 
   @override
   void initState() {
     super.initState();
     callkeep = Callkeep();
+    androidCallkeepBackgroundService = CallkeepBackgroundService();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
     callkeep.setUp(
       CallkeepOptions(
         ios: CallkeepIOSOptions(
@@ -53,6 +62,19 @@ class _MainShellState extends State<MainShell> {
         ),
       ),
     );
+
+    final incomingCallSocketType = AppPreferences().getIncomingCallType() == IncomingCallType.socket;
+
+    androidCallkeepBackgroundService.setUp(
+      autoStartOnBoot: incomingCallSocketType,
+      autoRestartOnTerminate: incomingCallSocketType,
+      androidNotificationName: context.l10n.settings_network_androidNotificationName,
+      androidNotificationDescription: context.l10n.settings_network_androidNotificationDescription,
+    );
+
+    if (incomingCallSocketType) {
+      CallkeepBackgroundService().startService();
+    }
     featureAccess = FeatureAccess();
   }
 

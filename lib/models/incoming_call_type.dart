@@ -1,0 +1,4 @@
+enum IncomingCallType {
+  pushNotification,
+  socket,
+}

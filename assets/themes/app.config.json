@@ -109,7 +109,7 @@
         "enabled": true,
         "items": [
           {
-            "enabled": false,
+            "enabled": true,
             "type": "network",
             "titleL10n": "settings_ListViewTileTitle_network",
             "icon": "0xe424"

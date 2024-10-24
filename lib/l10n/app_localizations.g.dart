@@ -1411,6 +1411,42 @@ abstract class AppLocalizations {
   /// **'Confirm logout'**
   String get settings_LogoutConfirmDialog_title;
 
+  /// No description provided for @settings_network_incomingCallType_pushNotification_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Push Notification'**
+  String get settings_network_incomingCallType_pushNotification_title;
+
+  /// No description provided for @settings_network_incomingCallType_pushNotification_description.
+  ///
+  /// In en, this message translates to:
+  /// **'When the app is not in use, it stops running and consumes minimal resources, which helps conserve battery life. During an incoming call, the server sends a push notification to the phone, prompting the mobile operating system to launch the app to handle the call. However, this method does not guarantee that all calls will be received. If the phone has been inactive for an extended period, some versions of Android may limit push notifications, potentially causing you to miss an incoming call.'**
+  String get settings_network_incomingCallType_pushNotification_description;
+
+  /// No description provided for @settings_network_incomingCallType_socket_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Persistent Connection to the Server'**
+  String get settings_network_incomingCallType_socket_title;
+
+  /// No description provided for @settings_network_incomingCallType_socket_description.
+  ///
+  /// In en, this message translates to:
+  /// **'The app continues running in the background and always maintains an active connection to the server. This increases the chances of receiving an incoming call but may drain the battery more quickly.'**
+  String get settings_network_incomingCallType_socket_description;
+
+  /// No description provided for @settings_network_androidNotificationName.
+  ///
+  /// In en, this message translates to:
+  /// **'Inbound Calls Service'**
+  String get settings_network_androidNotificationName;
+
+  /// No description provided for @settings_network_androidNotificationDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'This is required to receive calls while in background'**
+  String get settings_network_androidNotificationDescription;
+
   /// No description provided for @themeMode_dark.
   ///
   /// In en, this message translates to:

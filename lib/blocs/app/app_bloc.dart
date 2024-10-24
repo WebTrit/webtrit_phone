@@ -26,6 +26,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     required this.appPreferences,
     required this.secureStorage,
     required this.appDatabase,
+    required this.callkeepBackgroundService,
     required this.pendingCallHandler,
     @visibleForTesting this.createWebtritApiClient = defaultCreateWebtritApiClient,
     required AppThemes appThemes,
@@ -52,6 +53,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   final SecureStorage secureStorage;
   final AppDatabase appDatabase;
   final AndroidPendingCallHandler pendingCallHandler;
+  final CallkeepBackgroundService callkeepBackgroundService;
   final WebtritApiClientFactory createWebtritApiClient;
 
   Future<void> _cleanUpUserData() async {
@@ -99,6 +101,8 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     }
 
     await _cleanUpUserData();
+
+    callkeepBackgroundService.stopService();
 
     emit(state.copyWith(
       coreUrl: null,

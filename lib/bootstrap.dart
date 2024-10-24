@@ -22,7 +22,9 @@ import 'package:webtrit_phone/push_notification/push_notifications.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/utils/path_provider/_native.dart';
 
-import 'background_call_handler.dart';
+import 'package:webtrit_phone/services/services.dart' as call_fcm_isolate show initializeCall;
+import 'package:webtrit_phone/services/services.dart' as foreground_call_isolate show onStart, onChangedLifecycle;
+
 import 'environment_config.dart';
 import 'firebase_options.dart';
 
@@ -64,11 +66,10 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
       await AppTime.init();
       await SessionCleanupWorker.init();
 
-      if (Platform.isAndroid) {
-        WebtritCallkeepLogs().setLogsDelegate(CallkeepLogs());
-      }
-
       Bloc.observer = AppBlocObserver();
+
+      await _initFirebaseMessaging();
+      await _initCallkeep();
 
       runApp(await builder());
     },
@@ -91,6 +92,17 @@ Future<void> _initFirebase() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+}
+
+Future<void> _initCallkeep() async {
+  CallkeepBackgroundService.setUpServiceCallback(
+    onStart: foreground_call_isolate.onStart,
+    onChangedLifecycle: foreground_call_isolate.onChangedLifecycle,
+  );
+
+  if (Platform.isAndroid) {
+    WebtritCallkeepLogs().setLogsDelegate(CallkeepLogs());
+  }
 }
 
 Future<void> _initFirebaseMessaging() async {
@@ -122,31 +134,14 @@ Future<void> _initFirebaseMessaging() async {
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   _initLogs();
   final appNotification = AppRemoteNotification.fromFCM(message);
-  final logger = Logger('_firebaseMessagingBackgroundHandler')..info('RemoteNotification: $appNotification');
+  Logger('_firebaseMessagingBackgroundHandler').info('RemoteNotification: $appNotification');
 
   if (appNotification is PendingCallNotification && Platform.isAndroid) {
-    final call = appNotification.call;
-
-    WebtritCallkeepLogs().setLogsDelegate(CallkeepLogs());
-    final dbConnection = createAppDatabaseConnection(
-      await getApplicationDocumentsPath(),
-      'db.sqlite',
-      logStatements: EnvironmentConfig.DATABASE_LOG_STATEMENTS,
-    );
-    final appDatabase = FCMIsolateDatabase.instance(dbConnection);
-    final repository = RecentsRepository(appDatabase: appDatabase);
-
-    logger.info('Initial incoming call');
-
-    BackgroundCallHandler(call, repository).init();
+    await call_fcm_isolate.initializeCall(message.data);
   }
+
   if (appNotification is MessageNotification) {
-    final dbConnection = createAppDatabaseConnection(
-      await getApplicationDocumentsPath(),
-      'db.sqlite',
-      logStatements: EnvironmentConfig.DATABASE_LOG_STATEMENTS,
-    );
-    final appDatabase = FCMIsolateDatabase.instance(dbConnection);
+    final appDatabase = await FCMIsolateDatabase.db();
     final repo = ActiveMessageNotificationsRepositoryDriftImpl(appDatabase: appDatabase);
 
     final activeMessageNotification = ActiveMessageNotification(
@@ -161,6 +156,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   }
 }
 
+//TODO(Serdun): Move to a separate file
 class CallkeepLogs implements CallkeepLogsDelegate {
   final _logger = Logger('CallkeepLogs');
 
@@ -170,12 +166,23 @@ class CallkeepLogs implements CallkeepLogsDelegate {
   }
 }
 
+//TODO(Serdun): Rename and move to a separate file
 class FCMIsolateDatabase extends AppDatabase {
   FCMIsolateDatabase(super.e);
 
   static FCMIsolateDatabase? _instance;
 
-  static FCMIsolateDatabase instance(executor) {
+  static Future<FCMIsolateDatabase> db() async {
+    return FCMIsolateDatabase.instance(
+      createAppDatabaseConnection(
+        await getApplicationDocumentsPath(),
+        'db.sqlite',
+        logStatements: EnvironmentConfig.DATABASE_LOG_STATEMENTS,
+      ),
+    );
+  }
+
+  static instance(executor) {
     _instance ??= FCMIsolateDatabase(executor);
 
     return _instance!;

@@ -49,6 +49,7 @@ class _AppState extends State<App> {
       secureStorage: widget.secureStorage,
       appDatabase: widget.appDatabase,
       appThemes: widget.appThemes,
+      callkeepBackgroundService: CallkeepBackgroundService(),
       pendingCallHandler: AndroidPendingCallHandler(),
     );
     _appRouter = AppRouter(
@@ -62,6 +63,7 @@ class _AppState extends State<App> {
   @override
   void dispose() {
     appBloc.close();
+    appBloc.pendingCallHandler.dispose();
     super.dispose();
   }
 
