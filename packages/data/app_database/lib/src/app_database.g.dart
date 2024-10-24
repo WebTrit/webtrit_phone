@@ -7867,27 +7867,6 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules(
         [
           WritePropagation(
-            on: TableUpdateQuery.onTableName('contacts',
-                limitUpdateKind: UpdateKind.delete),
-            result: [
-              TableUpdate('contact_phones', kind: UpdateKind.delete),
-            ],
-          ),
-          WritePropagation(
-            on: TableUpdateQuery.onTableName('contacts',
-                limitUpdateKind: UpdateKind.delete),
-            result: [
-              TableUpdate('contact_emails', kind: UpdateKind.delete),
-            ],
-          ),
-          WritePropagation(
-            on: TableUpdateQuery.onTableName('contact_phones',
-                limitUpdateKind: UpdateKind.delete),
-            result: [
-              TableUpdate('favorites', kind: UpdateKind.delete),
-            ],
-          ),
-          WritePropagation(
             on: TableUpdateQuery.onTableName('chats',
                 limitUpdateKind: UpdateKind.delete),
             result: [
@@ -8022,46 +8001,6 @@ typedef $$ContactsTableTableUpdateCompanionBuilder = ContactDataCompanion
   Value<DateTime?> updatedAt,
 });
 
-final class $$ContactsTableTableReferences
-    extends BaseReferences<_$AppDatabase, $ContactsTableTable, ContactData> {
-  $$ContactsTableTableReferences(
-      super.$_db, super.$_table, super.$_typedResult);
-
-  static MultiTypedResultKey<$ContactPhonesTableTable, List<ContactPhoneData>>
-      _contactPhonesTableRefsTable(_$AppDatabase db) =>
-          MultiTypedResultKey.fromTable(db.contactPhonesTable,
-              aliasName: $_aliasNameGenerator(
-                  db.contactsTable.id, db.contactPhonesTable.contactId));
-
-  $$ContactPhonesTableTableProcessedTableManager get contactPhonesTableRefs {
-    final manager =
-        $$ContactPhonesTableTableTableManager($_db, $_db.contactPhonesTable)
-            .filter((f) => f.contactId.id($_item.id));
-
-    final cache =
-        $_typedResult.readTableOrNull(_contactPhonesTableRefsTable($_db));
-    return ProcessedTableManager(
-        manager.$state.copyWith(prefetchedData: cache));
-  }
-
-  static MultiTypedResultKey<$ContactEmailsTableTable, List<ContactEmailData>>
-      _contactEmailsTableRefsTable(_$AppDatabase db) =>
-          MultiTypedResultKey.fromTable(db.contactEmailsTable,
-              aliasName: $_aliasNameGenerator(
-                  db.contactsTable.id, db.contactEmailsTable.contactId));
-
-  $$ContactEmailsTableTableProcessedTableManager get contactEmailsTableRefs {
-    final manager =
-        $$ContactEmailsTableTableTableManager($_db, $_db.contactEmailsTable)
-            .filter((f) => f.contactId.id($_item.id));
-
-    final cache =
-        $_typedResult.readTableOrNull(_contactEmailsTableRefsTable($_db));
-    return ProcessedTableManager(
-        manager.$state.copyWith(prefetchedData: cache));
-  }
-}
-
 class $$ContactsTableTableFilterComposer
     extends FilterComposer<_$AppDatabase, $ContactsTableTable> {
   $$ContactsTableTableFilterComposer(super.$state);
@@ -8127,40 +8066,6 @@ class $$ContactsTableTableFilterComposer
       column: $state.table.updatedAt,
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ComposableFilter contactPhonesTableRefs(
-      ComposableFilter Function($$ContactPhonesTableTableFilterComposer f) f) {
-    final $$ContactPhonesTableTableFilterComposer composer = $state
-        .composerBuilder(
-            composer: this,
-            getCurrentColumn: (t) => t.id,
-            referencedTable: $state.db.contactPhonesTable,
-            getReferencedColumn: (t) => t.contactId,
-            builder: (joinBuilder, parentComposers) =>
-                $$ContactPhonesTableTableFilterComposer(ComposerState(
-                    $state.db,
-                    $state.db.contactPhonesTable,
-                    joinBuilder,
-                    parentComposers)));
-    return f(composer);
-  }
-
-  ComposableFilter contactEmailsTableRefs(
-      ComposableFilter Function($$ContactEmailsTableTableFilterComposer f) f) {
-    final $$ContactEmailsTableTableFilterComposer composer = $state
-        .composerBuilder(
-            composer: this,
-            getCurrentColumn: (t) => t.id,
-            referencedTable: $state.db.contactEmailsTable,
-            getReferencedColumn: (t) => t.contactId,
-            builder: (joinBuilder, parentComposers) =>
-                $$ContactEmailsTableTableFilterComposer(ComposerState(
-                    $state.db,
-                    $state.db.contactEmailsTable,
-                    joinBuilder,
-                    parentComposers)));
-    return f(composer);
-  }
 }
 
 class $$ContactsTableTableOrderingComposer
@@ -8235,10 +8140,12 @@ class $$ContactsTableTableTableManager extends RootTableManager<
     $$ContactsTableTableOrderingComposer,
     $$ContactsTableTableCreateCompanionBuilder,
     $$ContactsTableTableUpdateCompanionBuilder,
-    (ContactData, $$ContactsTableTableReferences),
+    (
+      ContactData,
+      BaseReferences<_$AppDatabase, $ContactsTableTable, ContactData>
+    ),
     ContactData,
-    PrefetchHooks Function(
-        {bool contactPhonesTableRefs, bool contactEmailsTableRefs})> {
+    PrefetchHooks Function()> {
   $$ContactsTableTableTableManager(_$AppDatabase db, $ContactsTableTable table)
       : super(TableManagerState(
           db: db,
@@ -8304,51 +8211,9 @@ class $$ContactsTableTableTableManager extends RootTableManager<
             updatedAt: updatedAt,
           ),
           withReferenceMapper: (p0) => p0
-              .map((e) => (
-                    e.readTable(table),
-                    $$ContactsTableTableReferences(db, table, e)
-                  ))
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
               .toList(),
-          prefetchHooksCallback: (
-              {contactPhonesTableRefs = false,
-              contactEmailsTableRefs = false}) {
-            return PrefetchHooks(
-              db: db,
-              explicitlyWatchedTables: [
-                if (contactPhonesTableRefs) db.contactPhonesTable,
-                if (contactEmailsTableRefs) db.contactEmailsTable
-              ],
-              addJoins: null,
-              getPrefetchedDataCallback: (items) async {
-                return [
-                  if (contactPhonesTableRefs)
-                    await $_getPrefetchedData(
-                        currentTable: table,
-                        referencedTable: $$ContactsTableTableReferences
-                            ._contactPhonesTableRefsTable(db),
-                        managerFromTypedResult: (p0) =>
-                            $$ContactsTableTableReferences(db, table, p0)
-                                .contactPhonesTableRefs,
-                        referencedItemsForCurrentItem:
-                            (item, referencedItems) => referencedItems
-                                .where((e) => e.contactId == item.id),
-                        typedResults: items),
-                  if (contactEmailsTableRefs)
-                    await $_getPrefetchedData(
-                        currentTable: table,
-                        referencedTable: $$ContactsTableTableReferences
-                            ._contactEmailsTableRefsTable(db),
-                        managerFromTypedResult: (p0) =>
-                            $$ContactsTableTableReferences(db, table, p0)
-                                .contactEmailsTableRefs,
-                        referencedItemsForCurrentItem:
-                            (item, referencedItems) => referencedItems
-                                .where((e) => e.contactId == item.id),
-                        typedResults: items)
-                ];
-              },
-            );
-          },
+          prefetchHooksCallback: null,
         ));
 }
 
@@ -8360,10 +8225,12 @@ typedef $$ContactsTableTableProcessedTableManager = ProcessedTableManager<
     $$ContactsTableTableOrderingComposer,
     $$ContactsTableTableCreateCompanionBuilder,
     $$ContactsTableTableUpdateCompanionBuilder,
-    (ContactData, $$ContactsTableTableReferences),
+    (
+      ContactData,
+      BaseReferences<_$AppDatabase, $ContactsTableTable, ContactData>
+    ),
     ContactData,
-    PrefetchHooks Function(
-        {bool contactPhonesTableRefs, bool contactEmailsTableRefs})>;
+    PrefetchHooks Function()>;
 typedef $$ContactPhonesTableTableCreateCompanionBuilder
     = ContactPhoneDataCompanion Function({
   Value<int> id,
@@ -8383,41 +8250,6 @@ typedef $$ContactPhonesTableTableUpdateCompanionBuilder
   Value<DateTime?> updatedAt,
 });
 
-final class $$ContactPhonesTableTableReferences extends BaseReferences<
-    _$AppDatabase, $ContactPhonesTableTable, ContactPhoneData> {
-  $$ContactPhonesTableTableReferences(
-      super.$_db, super.$_table, super.$_typedResult);
-
-  static $ContactsTableTable _contactIdTable(_$AppDatabase db) =>
-      db.contactsTable.createAlias($_aliasNameGenerator(
-          db.contactPhonesTable.contactId, db.contactsTable.id));
-
-  $$ContactsTableTableProcessedTableManager? get contactId {
-    if ($_item.contactId == null) return null;
-    final manager = $$ContactsTableTableTableManager($_db, $_db.contactsTable)
-        .filter((f) => f.id($_item.contactId!));
-    final item = $_typedResult.readTableOrNull(_contactIdTable($_db));
-    if (item == null) return manager;
-    return ProcessedTableManager(
-        manager.$state.copyWith(prefetchedData: [item]));
-  }
-
-  static MultiTypedResultKey<$FavoritesTableTable, List<FavoriteData>>
-      _favoritesTableRefsTable(_$AppDatabase db) =>
-          MultiTypedResultKey.fromTable(db.favoritesTable,
-              aliasName: $_aliasNameGenerator(
-                  db.contactPhonesTable.id, db.favoritesTable.contactPhoneId));
-
-  $$FavoritesTableTableProcessedTableManager get favoritesTableRefs {
-    final manager = $$FavoritesTableTableTableManager($_db, $_db.favoritesTable)
-        .filter((f) => f.contactPhoneId.id($_item.id));
-
-    final cache = $_typedResult.readTableOrNull(_favoritesTableRefsTable($_db));
-    return ProcessedTableManager(
-        manager.$state.copyWith(prefetchedData: cache));
-  }
-}
-
 class $$ContactPhonesTableTableFilterComposer
     extends FilterComposer<_$AppDatabase, $ContactPhonesTableTable> {
   $$ContactPhonesTableTableFilterComposer(super.$state);
@@ -8436,6 +8268,11 @@ class $$ContactPhonesTableTableFilterComposer
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
 
+  ColumnFilters<int> get contactId => $state.composableBuilder(
+      column: $state.table.contactId,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
   ColumnFilters<DateTime> get insertedAt => $state.composableBuilder(
       column: $state.table.insertedAt,
       builder: (column, joinBuilders) =>
@@ -8445,31 +8282,6 @@ class $$ContactPhonesTableTableFilterComposer
       column: $state.table.updatedAt,
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
-
-  $$ContactsTableTableFilterComposer get contactId {
-    final $$ContactsTableTableFilterComposer composer = $state.composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.contactId,
-        referencedTable: $state.db.contactsTable,
-        getReferencedColumn: (t) => t.id,
-        builder: (joinBuilder, parentComposers) =>
-            $$ContactsTableTableFilterComposer(ComposerState($state.db,
-                $state.db.contactsTable, joinBuilder, parentComposers)));
-    return composer;
-  }
-
-  ComposableFilter favoritesTableRefs(
-      ComposableFilter Function($$FavoritesTableTableFilterComposer f) f) {
-    final $$FavoritesTableTableFilterComposer composer = $state.composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.id,
-        referencedTable: $state.db.favoritesTable,
-        getReferencedColumn: (t) => t.contactPhoneId,
-        builder: (joinBuilder, parentComposers) =>
-            $$FavoritesTableTableFilterComposer(ComposerState($state.db,
-                $state.db.favoritesTable, joinBuilder, parentComposers)));
-    return f(composer);
-  }
 }
 
 class $$ContactPhonesTableTableOrderingComposer
@@ -8490,6 +8302,11 @@ class $$ContactPhonesTableTableOrderingComposer
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
 
+  ColumnOrderings<int> get contactId => $state.composableBuilder(
+      column: $state.table.contactId,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
   ColumnOrderings<DateTime> get insertedAt => $state.composableBuilder(
       column: $state.table.insertedAt,
       builder: (column, joinBuilders) =>
@@ -8499,19 +8316,6 @@ class $$ContactPhonesTableTableOrderingComposer
       column: $state.table.updatedAt,
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  $$ContactsTableTableOrderingComposer get contactId {
-    final $$ContactsTableTableOrderingComposer composer =
-        $state.composerBuilder(
-            composer: this,
-            getCurrentColumn: (t) => t.contactId,
-            referencedTable: $state.db.contactsTable,
-            getReferencedColumn: (t) => t.id,
-            builder: (joinBuilder, parentComposers) =>
-                $$ContactsTableTableOrderingComposer(ComposerState($state.db,
-                    $state.db.contactsTable, joinBuilder, parentComposers)));
-    return composer;
-  }
 }
 
 class $$ContactPhonesTableTableTableManager extends RootTableManager<
@@ -8522,9 +8326,12 @@ class $$ContactPhonesTableTableTableManager extends RootTableManager<
     $$ContactPhonesTableTableOrderingComposer,
     $$ContactPhonesTableTableCreateCompanionBuilder,
     $$ContactPhonesTableTableUpdateCompanionBuilder,
-    (ContactPhoneData, $$ContactPhonesTableTableReferences),
+    (
+      ContactPhoneData,
+      BaseReferences<_$AppDatabase, $ContactPhonesTableTable, ContactPhoneData>
+    ),
     ContactPhoneData,
-    PrefetchHooks Function({bool contactId, bool favoritesTableRefs})> {
+    PrefetchHooks Function()> {
   $$ContactPhonesTableTableTableManager(
       _$AppDatabase db, $ContactPhonesTableTable table)
       : super(TableManagerState(
@@ -8567,62 +8374,9 @@ class $$ContactPhonesTableTableTableManager extends RootTableManager<
             updatedAt: updatedAt,
           ),
           withReferenceMapper: (p0) => p0
-              .map((e) => (
-                    e.readTable(table),
-                    $$ContactPhonesTableTableReferences(db, table, e)
-                  ))
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
               .toList(),
-          prefetchHooksCallback: (
-              {contactId = false, favoritesTableRefs = false}) {
-            return PrefetchHooks(
-              db: db,
-              explicitlyWatchedTables: [
-                if (favoritesTableRefs) db.favoritesTable
-              ],
-              addJoins: <
-                  T extends TableManagerState<
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic>>(state) {
-                if (contactId) {
-                  state = state.withJoin(
-                    currentTable: table,
-                    currentColumn: table.contactId,
-                    referencedTable:
-                        $$ContactPhonesTableTableReferences._contactIdTable(db),
-                    referencedColumn: $$ContactPhonesTableTableReferences
-                        ._contactIdTable(db)
-                        .id,
-                  ) as T;
-                }
-
-                return state;
-              },
-              getPrefetchedDataCallback: (items) async {
-                return [
-                  if (favoritesTableRefs)
-                    await $_getPrefetchedData(
-                        currentTable: table,
-                        referencedTable: $$ContactPhonesTableTableReferences
-                            ._favoritesTableRefsTable(db),
-                        managerFromTypedResult: (p0) =>
-                            $$ContactPhonesTableTableReferences(db, table, p0)
-                                .favoritesTableRefs,
-                        referencedItemsForCurrentItem:
-                            (item, referencedItems) => referencedItems
-                                .where((e) => e.contactPhoneId == item.id),
-                        typedResults: items)
-                ];
-              },
-            );
-          },
+          prefetchHooksCallback: null,
         ));
 }
 
@@ -8634,9 +8388,12 @@ typedef $$ContactPhonesTableTableProcessedTableManager = ProcessedTableManager<
     $$ContactPhonesTableTableOrderingComposer,
     $$ContactPhonesTableTableCreateCompanionBuilder,
     $$ContactPhonesTableTableUpdateCompanionBuilder,
-    (ContactPhoneData, $$ContactPhonesTableTableReferences),
+    (
+      ContactPhoneData,
+      BaseReferences<_$AppDatabase, $ContactPhonesTableTable, ContactPhoneData>
+    ),
     ContactPhoneData,
-    PrefetchHooks Function({bool contactId, bool favoritesTableRefs})>;
+    PrefetchHooks Function()>;
 typedef $$ContactEmailsTableTableCreateCompanionBuilder
     = ContactEmailDataCompanion Function({
   Value<int> id,
@@ -8656,26 +8413,6 @@ typedef $$ContactEmailsTableTableUpdateCompanionBuilder
   Value<DateTime?> updatedAt,
 });
 
-final class $$ContactEmailsTableTableReferences extends BaseReferences<
-    _$AppDatabase, $ContactEmailsTableTable, ContactEmailData> {
-  $$ContactEmailsTableTableReferences(
-      super.$_db, super.$_table, super.$_typedResult);
-
-  static $ContactsTableTable _contactIdTable(_$AppDatabase db) =>
-      db.contactsTable.createAlias($_aliasNameGenerator(
-          db.contactEmailsTable.contactId, db.contactsTable.id));
-
-  $$ContactsTableTableProcessedTableManager? get contactId {
-    if ($_item.contactId == null) return null;
-    final manager = $$ContactsTableTableTableManager($_db, $_db.contactsTable)
-        .filter((f) => f.id($_item.contactId!));
-    final item = $_typedResult.readTableOrNull(_contactIdTable($_db));
-    if (item == null) return manager;
-    return ProcessedTableManager(
-        manager.$state.copyWith(prefetchedData: [item]));
-  }
-}
-
 class $$ContactEmailsTableTableFilterComposer
     extends FilterComposer<_$AppDatabase, $ContactEmailsTableTable> {
   $$ContactEmailsTableTableFilterComposer(super.$state);
@@ -8694,6 +8431,11 @@ class $$ContactEmailsTableTableFilterComposer
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
 
+  ColumnFilters<int> get contactId => $state.composableBuilder(
+      column: $state.table.contactId,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
   ColumnFilters<DateTime> get insertedAt => $state.composableBuilder(
       column: $state.table.insertedAt,
       builder: (column, joinBuilders) =>
@@ -8703,18 +8445,6 @@ class $$ContactEmailsTableTableFilterComposer
       column: $state.table.updatedAt,
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
-
-  $$ContactsTableTableFilterComposer get contactId {
-    final $$ContactsTableTableFilterComposer composer = $state.composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.contactId,
-        referencedTable: $state.db.contactsTable,
-        getReferencedColumn: (t) => t.id,
-        builder: (joinBuilder, parentComposers) =>
-            $$ContactsTableTableFilterComposer(ComposerState($state.db,
-                $state.db.contactsTable, joinBuilder, parentComposers)));
-    return composer;
-  }
 }
 
 class $$ContactEmailsTableTableOrderingComposer
@@ -8735,6 +8465,11 @@ class $$ContactEmailsTableTableOrderingComposer
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
 
+  ColumnOrderings<int> get contactId => $state.composableBuilder(
+      column: $state.table.contactId,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
   ColumnOrderings<DateTime> get insertedAt => $state.composableBuilder(
       column: $state.table.insertedAt,
       builder: (column, joinBuilders) =>
@@ -8744,19 +8479,6 @@ class $$ContactEmailsTableTableOrderingComposer
       column: $state.table.updatedAt,
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  $$ContactsTableTableOrderingComposer get contactId {
-    final $$ContactsTableTableOrderingComposer composer =
-        $state.composerBuilder(
-            composer: this,
-            getCurrentColumn: (t) => t.contactId,
-            referencedTable: $state.db.contactsTable,
-            getReferencedColumn: (t) => t.id,
-            builder: (joinBuilder, parentComposers) =>
-                $$ContactsTableTableOrderingComposer(ComposerState($state.db,
-                    $state.db.contactsTable, joinBuilder, parentComposers)));
-    return composer;
-  }
 }
 
 class $$ContactEmailsTableTableTableManager extends RootTableManager<
@@ -8767,9 +8489,12 @@ class $$ContactEmailsTableTableTableManager extends RootTableManager<
     $$ContactEmailsTableTableOrderingComposer,
     $$ContactEmailsTableTableCreateCompanionBuilder,
     $$ContactEmailsTableTableUpdateCompanionBuilder,
-    (ContactEmailData, $$ContactEmailsTableTableReferences),
+    (
+      ContactEmailData,
+      BaseReferences<_$AppDatabase, $ContactEmailsTableTable, ContactEmailData>
+    ),
     ContactEmailData,
-    PrefetchHooks Function({bool contactId})> {
+    PrefetchHooks Function()> {
   $$ContactEmailsTableTableTableManager(
       _$AppDatabase db, $ContactEmailsTableTable table)
       : super(TableManagerState(
@@ -8812,46 +8537,9 @@ class $$ContactEmailsTableTableTableManager extends RootTableManager<
             updatedAt: updatedAt,
           ),
           withReferenceMapper: (p0) => p0
-              .map((e) => (
-                    e.readTable(table),
-                    $$ContactEmailsTableTableReferences(db, table, e)
-                  ))
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
               .toList(),
-          prefetchHooksCallback: ({contactId = false}) {
-            return PrefetchHooks(
-              db: db,
-              explicitlyWatchedTables: [],
-              addJoins: <
-                  T extends TableManagerState<
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic>>(state) {
-                if (contactId) {
-                  state = state.withJoin(
-                    currentTable: table,
-                    currentColumn: table.contactId,
-                    referencedTable:
-                        $$ContactEmailsTableTableReferences._contactIdTable(db),
-                    referencedColumn: $$ContactEmailsTableTableReferences
-                        ._contactIdTable(db)
-                        .id,
-                  ) as T;
-                }
-
-                return state;
-              },
-              getPrefetchedDataCallback: (items) async {
-                return [];
-              },
-            );
-          },
+          prefetchHooksCallback: null,
         ));
 }
 
@@ -8863,9 +8551,12 @@ typedef $$ContactEmailsTableTableProcessedTableManager = ProcessedTableManager<
     $$ContactEmailsTableTableOrderingComposer,
     $$ContactEmailsTableTableCreateCompanionBuilder,
     $$ContactEmailsTableTableUpdateCompanionBuilder,
-    (ContactEmailData, $$ContactEmailsTableTableReferences),
+    (
+      ContactEmailData,
+      BaseReferences<_$AppDatabase, $ContactEmailsTableTable, ContactEmailData>
+    ),
     ContactEmailData,
-    PrefetchHooks Function({bool contactId})>;
+    PrefetchHooks Function()>;
 typedef $$CallLogsTableTableCreateCompanionBuilder = CallLogDataCompanion
     Function({
   Value<int> id,
@@ -9060,27 +8751,6 @@ typedef $$FavoritesTableTableUpdateCompanionBuilder = FavoriteDataCompanion
   Value<int> position,
 });
 
-final class $$FavoritesTableTableReferences
-    extends BaseReferences<_$AppDatabase, $FavoritesTableTable, FavoriteData> {
-  $$FavoritesTableTableReferences(
-      super.$_db, super.$_table, super.$_typedResult);
-
-  static $ContactPhonesTableTable _contactPhoneIdTable(_$AppDatabase db) =>
-      db.contactPhonesTable.createAlias($_aliasNameGenerator(
-          db.favoritesTable.contactPhoneId, db.contactPhonesTable.id));
-
-  $$ContactPhonesTableTableProcessedTableManager? get contactPhoneId {
-    if ($_item.contactPhoneId == null) return null;
-    final manager =
-        $$ContactPhonesTableTableTableManager($_db, $_db.contactPhonesTable)
-            .filter((f) => f.id($_item.contactPhoneId!));
-    final item = $_typedResult.readTableOrNull(_contactPhoneIdTable($_db));
-    if (item == null) return manager;
-    return ProcessedTableManager(
-        manager.$state.copyWith(prefetchedData: [item]));
-  }
-}
-
 class $$FavoritesTableTableFilterComposer
     extends FilterComposer<_$AppDatabase, $FavoritesTableTable> {
   $$FavoritesTableTableFilterComposer(super.$state);
@@ -9089,26 +8759,15 @@ class $$FavoritesTableTableFilterComposer
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
 
+  ColumnFilters<int> get contactPhoneId => $state.composableBuilder(
+      column: $state.table.contactPhoneId,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
   ColumnFilters<int> get position => $state.composableBuilder(
       column: $state.table.position,
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
-
-  $$ContactPhonesTableTableFilterComposer get contactPhoneId {
-    final $$ContactPhonesTableTableFilterComposer composer = $state
-        .composerBuilder(
-            composer: this,
-            getCurrentColumn: (t) => t.contactPhoneId,
-            referencedTable: $state.db.contactPhonesTable,
-            getReferencedColumn: (t) => t.id,
-            builder: (joinBuilder, parentComposers) =>
-                $$ContactPhonesTableTableFilterComposer(ComposerState(
-                    $state.db,
-                    $state.db.contactPhonesTable,
-                    joinBuilder,
-                    parentComposers)));
-    return composer;
-  }
 }
 
 class $$FavoritesTableTableOrderingComposer
@@ -9119,26 +8778,15 @@ class $$FavoritesTableTableOrderingComposer
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
 
+  ColumnOrderings<int> get contactPhoneId => $state.composableBuilder(
+      column: $state.table.contactPhoneId,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
   ColumnOrderings<int> get position => $state.composableBuilder(
       column: $state.table.position,
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  $$ContactPhonesTableTableOrderingComposer get contactPhoneId {
-    final $$ContactPhonesTableTableOrderingComposer composer =
-        $state.composerBuilder(
-            composer: this,
-            getCurrentColumn: (t) => t.contactPhoneId,
-            referencedTable: $state.db.contactPhonesTable,
-            getReferencedColumn: (t) => t.id,
-            builder: (joinBuilder, parentComposers) =>
-                $$ContactPhonesTableTableOrderingComposer(ComposerState(
-                    $state.db,
-                    $state.db.contactPhonesTable,
-                    joinBuilder,
-                    parentComposers)));
-    return composer;
-  }
 }
 
 class $$FavoritesTableTableTableManager extends RootTableManager<
@@ -9149,9 +8797,12 @@ class $$FavoritesTableTableTableManager extends RootTableManager<
     $$FavoritesTableTableOrderingComposer,
     $$FavoritesTableTableCreateCompanionBuilder,
     $$FavoritesTableTableUpdateCompanionBuilder,
-    (FavoriteData, $$FavoritesTableTableReferences),
+    (
+      FavoriteData,
+      BaseReferences<_$AppDatabase, $FavoritesTableTable, FavoriteData>
+    ),
     FavoriteData,
-    PrefetchHooks Function({bool contactPhoneId})> {
+    PrefetchHooks Function()> {
   $$FavoritesTableTableTableManager(
       _$AppDatabase db, $FavoritesTableTable table)
       : super(TableManagerState(
@@ -9182,46 +8833,9 @@ class $$FavoritesTableTableTableManager extends RootTableManager<
             position: position,
           ),
           withReferenceMapper: (p0) => p0
-              .map((e) => (
-                    e.readTable(table),
-                    $$FavoritesTableTableReferences(db, table, e)
-                  ))
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
               .toList(),
-          prefetchHooksCallback: ({contactPhoneId = false}) {
-            return PrefetchHooks(
-              db: db,
-              explicitlyWatchedTables: [],
-              addJoins: <
-                  T extends TableManagerState<
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic>>(state) {
-                if (contactPhoneId) {
-                  state = state.withJoin(
-                    currentTable: table,
-                    currentColumn: table.contactPhoneId,
-                    referencedTable: $$FavoritesTableTableReferences
-                        ._contactPhoneIdTable(db),
-                    referencedColumn: $$FavoritesTableTableReferences
-                        ._contactPhoneIdTable(db)
-                        .id,
-                  ) as T;
-                }
-
-                return state;
-              },
-              getPrefetchedDataCallback: (items) async {
-                return [];
-              },
-            );
-          },
+          prefetchHooksCallback: null,
         ));
 }
 
@@ -9233,9 +8847,12 @@ typedef $$FavoritesTableTableProcessedTableManager = ProcessedTableManager<
     $$FavoritesTableTableOrderingComposer,
     $$FavoritesTableTableCreateCompanionBuilder,
     $$FavoritesTableTableUpdateCompanionBuilder,
-    (FavoriteData, $$FavoritesTableTableReferences),
+    (
+      FavoriteData,
+      BaseReferences<_$AppDatabase, $FavoritesTableTable, FavoriteData>
+    ),
     FavoriteData,
-    PrefetchHooks Function({bool contactPhoneId})>;
+    PrefetchHooks Function()>;
 typedef $$ChatsTableTableCreateCompanionBuilder = ChatDataCompanion Function({
   Value<int> id,
   required ChatTypeEnum type,
@@ -13812,76 +13429,4 @@ class $AppDatabaseManager {
       get activeMessageNotificationsTable =>
           $$ActiveMessageNotificationsTableTableTableManager(
               _db, _db.activeMessageNotificationsTable);
-}
-
-mixin _$ContactsDaoMixin on DatabaseAccessor<AppDatabase> {
-  $ContactsTableTable get contactsTable => attachedDatabase.contactsTable;
-  $ContactPhonesTableTable get contactPhonesTable =>
-      attachedDatabase.contactPhonesTable;
-  $ContactEmailsTableTable get contactEmailsTable =>
-      attachedDatabase.contactEmailsTable;
-}
-mixin _$ContactPhonesDaoMixin on DatabaseAccessor<AppDatabase> {
-  $ContactsTableTable get contactsTable => attachedDatabase.contactsTable;
-  $ContactPhonesTableTable get contactPhonesTable =>
-      attachedDatabase.contactPhonesTable;
-  $FavoritesTableTable get favoritesTable => attachedDatabase.favoritesTable;
-}
-mixin _$ContactEmailsDaoMixin on DatabaseAccessor<AppDatabase> {
-  $ContactsTableTable get contactsTable => attachedDatabase.contactsTable;
-  $ContactEmailsTableTable get contactEmailsTable =>
-      attachedDatabase.contactEmailsTable;
-}
-mixin _$CallLogsDaoMixin on DatabaseAccessor<AppDatabase> {
-  $CallLogsTableTable get callLogsTable => attachedDatabase.callLogsTable;
-  $ContactsTableTable get contactsTable => attachedDatabase.contactsTable;
-  $ContactPhonesTableTable get contactPhonesTable =>
-      attachedDatabase.contactPhonesTable;
-}
-mixin _$FavoritesDaoMixin on DatabaseAccessor<AppDatabase> {
-  $ContactsTableTable get contactsTable => attachedDatabase.contactsTable;
-  $ContactPhonesTableTable get contactPhonesTable =>
-      attachedDatabase.contactPhonesTable;
-  $FavoritesTableTable get favoritesTable => attachedDatabase.favoritesTable;
-}
-mixin _$ChatsDaoMixin on DatabaseAccessor<AppDatabase> {
-  $ChatsTableTable get chatsTable => attachedDatabase.chatsTable;
-  $ChatMembersTableTable get chatMembersTable =>
-      attachedDatabase.chatMembersTable;
-  $ChatMessagesTableTable get chatMessagesTable =>
-      attachedDatabase.chatMessagesTable;
-  $ChatMessageSyncCursorTableTable get chatMessageSyncCursorTable =>
-      attachedDatabase.chatMessageSyncCursorTable;
-  $ChatMessageReadCursorTableTable get chatMessageReadCursorTable =>
-      attachedDatabase.chatMessageReadCursorTable;
-  $ChatOutboxMessageTableTable get chatOutboxMessageTable =>
-      attachedDatabase.chatOutboxMessageTable;
-  $ChatOutboxMessageEditTableTable get chatOutboxMessageEditTable =>
-      attachedDatabase.chatOutboxMessageEditTable;
-  $ChatOutboxMessageDeleteTableTable get chatOutboxMessageDeleteTable =>
-      attachedDatabase.chatOutboxMessageDeleteTable;
-  $ChatOutboxReadCursorsTableTable get chatOutboxReadCursorsTable =>
-      attachedDatabase.chatOutboxReadCursorsTable;
-}
-mixin _$SmsDaoMixin on DatabaseAccessor<AppDatabase> {
-  $SmsConversationsTableTable get smsConversationsTable =>
-      attachedDatabase.smsConversationsTable;
-  $SmsMessagesTableTable get smsMessagesTable =>
-      attachedDatabase.smsMessagesTable;
-  $SmsMessageSyncCursorTableTable get smsMessageSyncCursorTable =>
-      attachedDatabase.smsMessageSyncCursorTable;
-  $SmsMessageReadCursorTableTable get smsMessageReadCursorTable =>
-      attachedDatabase.smsMessageReadCursorTable;
-  $SmsOutboxMessagesTableTable get smsOutboxMessagesTable =>
-      attachedDatabase.smsOutboxMessagesTable;
-  $SmsOutboxMessageDeleteTableTable get smsOutboxMessageDeleteTable =>
-      attachedDatabase.smsOutboxMessageDeleteTable;
-  $SmsOutboxReadCursorsTableTable get smsOutboxReadCursorsTable =>
-      attachedDatabase.smsOutboxReadCursorsTable;
-  $UserSmsNumbersTableTable get userSmsNumbersTable =>
-      attachedDatabase.userSmsNumbersTable;
-}
-mixin _$ActiveMessageNotificationsDaoMixin on DatabaseAccessor<AppDatabase> {
-  $ActiveMessageNotificationsTableTable get activeMessageNotificationsTable =>
-      attachedDatabase.activeMessageNotificationsTable;
 }
