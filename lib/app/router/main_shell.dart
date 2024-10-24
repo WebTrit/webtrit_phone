@@ -15,6 +15,7 @@ import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/features/features.dart';
+import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
 @RoutePage()
@@ -29,6 +30,7 @@ class MainShell extends StatefulWidget {
 
 class _MainShellState extends State<MainShell> {
   late final Callkeep callkeep;
+  late final FeatureAccess featureAccess;
 
   @override
   void initState() {
@@ -51,6 +53,7 @@ class _MainShellState extends State<MainShell> {
         ),
       ),
     );
+    featureAccess = FeatureAccess();
   }
 
   @override
@@ -58,6 +61,8 @@ class _MainShellState extends State<MainShell> {
     callkeep.tearDown();
     super.dispose();
   }
+
+  get _messagingEnabled => featureAccess.isMessagingEnabled();
 
   @override
   Widget build(BuildContext context) {
@@ -221,7 +226,7 @@ class _MainShellState extends State<MainShell> {
               )..add(const CallStarted());
             },
           ),
-          if (_kMessagingEnabled)
+          if (_messagingEnabled)
             BlocProvider<MessagingBloc>(
               lazy: false,
               create: (context) {
@@ -244,7 +249,7 @@ class _MainShellState extends State<MainShell> {
                 )..add(const Connect());
               },
             ),
-          if (_kMessagingEnabled)
+          if (_messagingEnabled)
             BlocProvider<UnreadCountCubit>(
               create: (context) {
                 return UnreadCountCubit(
@@ -254,7 +259,7 @@ class _MainShellState extends State<MainShell> {
                 )..init();
               },
             ),
-          if (_kMessagingEnabled)
+          if (_messagingEnabled)
             BlocProvider(
               create: (_) => ChatsForwardingCubit(),
             )
@@ -273,5 +278,3 @@ class _MainShellState extends State<MainShell> {
     );
   }
 }
-
-const _kMessagingEnabled = EnvironmentConfig.CHAT_FEATURE_ENABLE || EnvironmentConfig.SMS_FEATURE_ENABLE;

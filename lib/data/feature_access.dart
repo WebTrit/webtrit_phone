@@ -48,6 +48,11 @@ class FeatureAccess {
 
   factory FeatureAccess() => _instance;
 
+  // TODO(Serdun): move to field
+  bool isMessagingEnabled() {
+    return bottomMenuFeature._tabs.map((it) => it.flavor).contains(MainFlavor.messaging);
+  }
+
   static BottomMenuFeature _tryConfigureBottomMenuFeature(
     AppConfig appConfig,
     AppPreferences preferences,
