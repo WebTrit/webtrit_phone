@@ -63,6 +63,7 @@ class _AppState extends State<App> {
   @override
   void dispose() {
     appBloc.close();
+    appBloc.pendingCallHandler.dispose();
     super.dispose();
   }
 
