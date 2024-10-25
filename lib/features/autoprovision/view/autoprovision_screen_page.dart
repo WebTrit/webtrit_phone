@@ -28,10 +28,13 @@ class AutoprovisionScreenPage extends StatelessWidget {
     // coz value are verified by the router guard [onAutoprovisionScreenPageRouteGuardNavigation]
     final configToken = this.configToken!;
     final oldToken = context.read<AppBloc>().state.token;
+
     final tenantId = this.tenantId ?? '';
     final oldTenant = context.read<AppBloc>().state.tenantId ?? '';
+
+    const defaultCoreUrl = EnvironmentConfig.CORE_URL ?? EnvironmentConfig.DEMO_CORE_URL;
     final coreUrl = this.coreUrl;
-    final oldCoreUrl = context.read<AppBloc>().state.coreUrl ?? EnvironmentConfig.DEMO_CORE_URL;
+    final oldCoreUrl = context.read<AppBloc>().state.coreUrl ?? defaultCoreUrl;
 
     final widget = BlocProvider(
       create: (context) => AutoprovisionCubit(AutoprovisionConfig(
