@@ -784,7 +784,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     } catch (e, stackTrace) {
       _logger.warning('__onCallSignalingEventIncoming _getUserMedia', e, stackTrace);
 
-      await callkeep.reportEndCall(event.callId, CallkeepEndCallReason.failed);
+      await callkeep.reportEndCall(
+        event.callId,
+        activeCall.displayName ?? activeCall.handle.value,
+        CallkeepEndCallReason.failed,
+      );
 
       _addToRecents(activeCall.copyWith(hungUpTime: clock.now()));
 
@@ -877,20 +881,25 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     try {
       await _ringtoneStop();
 
-      emit(state.copyWithMappedActiveCall(event.callId, (activeCall) {
-        final activeCallUpdated = activeCall.copyWith(hungUpTime: clock.now());
-        if (activeCall.wasHungUp == false) _addToRecents(activeCallUpdated);
-        return activeCallUpdated;
-      }));
+      ActiveCall? call = state.retrieveActiveCall(event.callId);
 
-      await state.performOnActiveCall(event.callId, (activeCall) async {
-        await (await _peerConnectionRetrieve(activeCall.callId))?.close();
-        await activeCall.localStream?.dispose();
-      });
+      if (call != null) {
+        CallkeepEndCallReason endReason = CallkeepEndCallReason.remoteEnded;
 
-      emit(state.copyWithPopActiveCall(event.callId));
+        if (call.wasHungUp == false) {
+          _addToRecents(call.copyWith(hungUpTime: clock.now()));
+        }
+        if (call.direction == Direction.incoming && !call.wasAccepted) {
+          endReason = CallkeepEndCallReason.unanswered;
+        }
 
-      await callkeep.reportEndCall(event.callId, CallkeepEndCallReason.remoteEnded);
+        await (await _peerConnectionRetrieve(event.callId))?.close();
+        await call.localStream?.dispose();
+
+        emit(state.copyWithPopActiveCall(event.callId));
+
+        await callkeep.reportEndCall(event.callId, call.displayName ?? call.handle.value, endReason);
+      }
     } catch (e) {
       _logger.warning('__onCallSignalingEventHangup: $e');
     }
