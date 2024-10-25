@@ -31,18 +31,18 @@ class NetworkCubit extends Cubit<NetworkState> {
     ));
   }
 
-  void selectIncomingCallType(IncomingCallTypeModel incomingCallTypeModel) {
+  void selectIncomingCallType(IncomingCallTypeModel incomingCallTypeModel) async {
     appPreferences.setIncomingCallType(incomingCallTypeModel.incomingCallType);
 
     switch (incomingCallTypeModel.incomingCallType) {
       case IncomingCallType.pushNotification:
-        callkeepBackgroundService.setUp(autoStartOnBoot: false, autoRestartOnTerminate: false);
-        callkeepBackgroundService.stopService();
+        await callkeepBackgroundService.setUp(autoStartOnBoot: false, autoRestartOnTerminate: false);
+        await callkeepBackgroundService.stopService();
         break;
       case IncomingCallType.socket:
         final data = {CallkeepBackgroundService.incomingCallType: IncomingCallType.socket.name};
-        callkeepBackgroundService.setUp(autoStartOnBoot: true, autoRestartOnTerminate: true);
-        callkeepBackgroundService.startService(data: data);
+        await callkeepBackgroundService.setUp(autoStartOnBoot: true, autoRestartOnTerminate: true);
+        await callkeepBackgroundService.startService(data: data);
         break;
     }
 
