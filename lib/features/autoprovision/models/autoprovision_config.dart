@@ -4,6 +4,7 @@ class AutoprovisionConfig {
   final String tenantId;
   final String oldTenantId;
   final String coreUrl;
+  final String oldCoreUrl;
 
   const AutoprovisionConfig({
     required this.configToken,
@@ -11,10 +12,11 @@ class AutoprovisionConfig {
     required this.oldTenantId,
     this.oldToken,
     required this.coreUrl,
+    required this.oldCoreUrl,
   });
 
   @override
   String toString() {
-    return 'configToken: $configToken,oldToken: $oldToken, tenantId: $tenantId, oldTenantId: $oldTenantId,  coreUrl: $coreUrl';
+    return 'configToken: $configToken,oldToken: $oldToken, tenantId: $tenantId, oldTenantId: $oldTenantId,  coreUrl: $coreUrl, oldCoreUrl: $oldCoreUrl';
   }
 }

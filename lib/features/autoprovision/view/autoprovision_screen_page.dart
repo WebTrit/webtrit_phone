@@ -30,7 +30,8 @@ class AutoprovisionScreenPage extends StatelessWidget {
     final oldToken = context.read<AppBloc>().state.token;
     final tenantId = this.tenantId ?? '';
     final oldTenant = context.read<AppBloc>().state.tenantId ?? '';
-    final coreUrl = this.coreUrl ?? context.read<AppBloc>().state.coreUrl ?? EnvironmentConfig.DEMO_CORE_URL;
+    final coreUrl = this.coreUrl;
+    final oldCoreUrl = context.read<AppBloc>().state.coreUrl ?? EnvironmentConfig.DEMO_CORE_URL;
 
     final widget = BlocProvider(
       create: (context) => AutoprovisionCubit(AutoprovisionConfig(
@@ -38,7 +39,8 @@ class AutoprovisionScreenPage extends StatelessWidget {
         oldToken: oldToken,
         tenantId: tenantId,
         oldTenantId: oldTenant,
-        coreUrl: coreUrl,
+        coreUrl: coreUrl ?? oldCoreUrl,
+        oldCoreUrl: oldCoreUrl,
       )),
       child: const AutoprovisionScreen(),
     );

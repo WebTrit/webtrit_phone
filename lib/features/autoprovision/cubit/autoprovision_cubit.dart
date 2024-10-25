@@ -23,9 +23,9 @@ class AutoprovisionCubit extends Cubit<AutoprovisionState> {
   final _bundleId = PackageInfo().packageName;
   final _appType = PlatformInfo().appType;
 
-  WebtritApiClient _apiClient(String tenantId) {
+  WebtritApiClient _apiClient(String coreUrl, String tenantId) {
     return WebtritApiClient(
-      Uri.parse(config.coreUrl),
+      Uri.parse(coreUrl),
       tenantId,
       connectionTimeout: kApiClientConnectionTimeout,
     );
@@ -43,13 +43,13 @@ class AutoprovisionCubit extends Cubit<AutoprovisionState> {
     );
 
     try {
-      final result = await _apiClient(config.tenantId).createSessionAutoProvision(credentials);
+      final result = await _apiClient(config.coreUrl, config.tenantId).createSessionAutoProvision(credentials);
       final token = result.token;
       final userId = result.userId;
       final tenantId = result.tenantId ?? config.tenantId;
 
       if (config.oldToken != null) {
-        await _apiClient(config.oldTenantId).deleteSession(config.oldToken!).catchError((e) {
+        await _apiClient(config.oldCoreUrl, config.oldTenantId).deleteSession(config.oldToken!).catchError((e) {
           _logger.warning('deleteSession error: $e');
         });
       }
