@@ -7,6 +7,8 @@ import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/features/features.dart';
 
+import '../models/models.dart';
+
 @RoutePage()
 class AutoprovisionScreenPage extends StatelessWidget {
   // ignore: use_key_in_widget_constructors
@@ -25,13 +27,19 @@ class AutoprovisionScreenPage extends StatelessWidget {
     // Explicitly cast to string,
     // coz value are verified by the router guard [onAutoprovisionScreenPageRouteGuardNavigation]
     final configToken = this.configToken!;
-    final tenantId = this.tenantId ?? '';
-    final coreUrl = this.coreUrl ?? context.read<AppBloc>().state.coreUrl ?? EnvironmentConfig.DEMO_CORE_URL;
     final oldToken = context.read<AppBloc>().state.token;
+    final tenantId = this.tenantId ?? '';
     final oldTenant = context.read<AppBloc>().state.tenantId ?? '';
+    final coreUrl = this.coreUrl ?? context.read<AppBloc>().state.coreUrl ?? EnvironmentConfig.DEMO_CORE_URL;
 
     final widget = BlocProvider(
-      create: (context) => AutoprovisionCubit(configToken, tenantId, oldToken, oldTenant, coreUrl),
+      create: (context) => AutoprovisionCubit(AutoprovisionConfig(
+        configToken: configToken,
+        oldToken: oldToken,
+        tenantId: tenantId,
+        oldTenantId: oldTenant,
+        coreUrl: coreUrl,
+      )),
       child: const AutoprovisionScreen(),
     );
 

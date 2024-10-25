@@ -8,24 +8,16 @@ import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';
 
+import '../models/models.dart';
+
 part 'autoprovision_state.dart';
 
 final _logger = Logger('AutoprovisionCubit');
 
 class AutoprovisionCubit extends Cubit<AutoprovisionState> {
-  AutoprovisionCubit(
-    this._configToken,
-    this._tenantId,
-    this._oldToken,
-    this._oldTenantId,
-    this._coreUrl,
-  ) : super(AutoprovisionState.initial());
+  AutoprovisionCubit(this.config) : super(AutoprovisionState.initial());
 
-  final String _configToken;
-  final String _tenantId;
-  final String? _oldToken;
-  final String _oldTenantId;
-  final String _coreUrl;
+  final AutoprovisionConfig config;
 
   final _identifier = AppInfo().identifier;
   final _bundleId = PackageInfo().packageName;
@@ -33,7 +25,7 @@ class AutoprovisionCubit extends Cubit<AutoprovisionState> {
 
   WebtritApiClient _apiClient(String tenantId) {
     return WebtritApiClient(
-      Uri.parse(_coreUrl),
+      Uri.parse(config.coreUrl),
       tenantId,
       connectionTimeout: kApiClientConnectionTimeout,
     );
@@ -47,23 +39,23 @@ class AutoprovisionCubit extends Cubit<AutoprovisionState> {
       bundleId: _bundleId,
       type: _appType,
       identifier: _identifier,
-      configToken: _configToken,
+      configToken: config.configToken,
     );
 
     try {
-      final result = await _apiClient(_tenantId).createSessionAutoProvision(credentials);
+      final result = await _apiClient(config.tenantId).createSessionAutoProvision(credentials);
       final token = result.token;
       final userId = result.userId;
-      final tenantId = result.tenantId ?? _tenantId;
+      final tenantId = result.tenantId ?? config.tenantId;
 
-      if (_oldToken != null) {
-        await _apiClient(_oldTenantId).deleteSession(_oldToken).catchError((e) {
+      if (config.oldToken != null) {
+        await _apiClient(config.oldTenantId).deleteSession(config.oldToken!).catchError((e) {
           _logger.warning('deleteSession error: $e');
         });
       }
 
       _logger.info('processToken success: $token, $tenantId');
-      emit(AutoprovisionState.sessionCreated(token, userId, _coreUrl, tenantId));
+      emit(AutoprovisionState.sessionCreated(token, userId, config.coreUrl, tenantId));
     } catch (e) {
       _logger.warning('processToken error: $e');
       emit(AutoprovisionState.error(e));
@@ -76,11 +68,11 @@ class AutoprovisionCubit extends Cubit<AutoprovisionState> {
   }
 
   init() {
-    _logger.info('init: $_configToken, $_tenantId, $_oldToken, $_oldTenantId');
+    _logger.info('init: $config');
 
     // Ask for confirmation if the user is logged-in without config_token exchange
     // to avoid closing the current session from signaling server without user consent.
-    if (_oldToken != null) {
+    if (config.oldToken != null) {
       emit(AutoprovisionState.replaceConfirmationNeeded());
     } else {
       _processToken();
