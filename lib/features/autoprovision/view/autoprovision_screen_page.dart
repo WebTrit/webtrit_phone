@@ -34,7 +34,7 @@ class AutoprovisionScreenPage extends StatelessWidget {
 
     const defaultCoreUrl = EnvironmentConfig.CORE_URL ?? EnvironmentConfig.DEMO_CORE_URL;
     final coreUrl = this.coreUrl;
-    final oldCoreUrl = context.read<AppBloc>().state.coreUrl ?? defaultCoreUrl;
+    final oldCoreUrl = context.read<AppBloc>().state.coreUrl;
 
     final widget = BlocProvider(
       create: (context) => AutoprovisionCubit(AutoprovisionConfig(
@@ -42,6 +42,7 @@ class AutoprovisionScreenPage extends StatelessWidget {
         oldToken: oldToken,
         tenantId: tenantId,
         oldTenantId: oldTenant,
+        defaultCoreUrl: defaultCoreUrl,
         coreUrl: coreUrl ?? oldCoreUrl,
         oldCoreUrl: oldCoreUrl,
       )),

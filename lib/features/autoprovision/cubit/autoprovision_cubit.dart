@@ -6,7 +6,6 @@ import 'package:webtrit_api/webtrit_api.dart';
 
 import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/data/data.dart';
-import 'package:webtrit_phone/environment_config.dart';
 
 import '../models/models.dart';
 
@@ -35,6 +34,9 @@ class AutoprovisionCubit extends Cubit<AutoprovisionState> {
     _logger.info('processToken: starts');
     emit(AutoprovisionState.processing());
 
+    final coreUrl = config.coreUrl ?? config.defaultCoreUrl;
+    final oldCoreUrl = config.oldCoreUrl ?? config.defaultCoreUrl;
+
     final credentials = SessionAutoProvisionCredential(
       bundleId: _bundleId,
       type: _appType,
@@ -43,19 +45,19 @@ class AutoprovisionCubit extends Cubit<AutoprovisionState> {
     );
 
     try {
-      final result = await _apiClient(config.coreUrl, config.tenantId).createSessionAutoProvision(credentials);
+      final result = await _apiClient(coreUrl, config.tenantId).createSessionAutoProvision(credentials);
       final token = result.token;
       final userId = result.userId;
       final tenantId = result.tenantId ?? config.tenantId;
 
       if (config.oldToken != null) {
-        await _apiClient(config.oldCoreUrl, config.oldTenantId).deleteSession(config.oldToken!).catchError((e) {
+        await _apiClient(oldCoreUrl, config.oldTenantId).deleteSession(config.oldToken!).catchError((e) {
           _logger.warning('deleteSession error: $e');
         });
       }
 
       _logger.info('processToken success: $token, $tenantId');
-      emit(AutoprovisionState.sessionCreated(token, userId, config.coreUrl, tenantId));
+      emit(AutoprovisionState.sessionCreated(token, userId, coreUrl, tenantId));
     } catch (e) {
       _logger.warning('processToken error: $e');
       emit(AutoprovisionState.error(e));
