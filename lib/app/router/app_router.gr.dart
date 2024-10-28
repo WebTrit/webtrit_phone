@@ -33,7 +33,7 @@ abstract class _$AppRouter extends RootStackRouter {
           orElse: () => AutoprovisionScreenPageRouteArgs(
                 configToken: queryParams.optString('config_token'),
                 tenantId: queryParams.optString('tenant_id'),
-                coreUrl: queryParams.optString('core'),
+                coreUrl: queryParams.optString('core_url'),
               ));
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -392,7 +392,7 @@ class AutoprovisionScreenPageRoute
           rawQueryParams: {
             'config_token': configToken,
             'tenant_id': tenantId,
-            'core': coreUrl,
+            'core_url': coreUrl,
           },
           initialChildren: children,
         );

@@ -15,7 +15,7 @@ class AutoprovisionScreenPage extends StatelessWidget {
   const AutoprovisionScreenPage({
     @QueryParam('config_token') this.configToken,
     @QueryParam('tenant_id') this.tenantId,
-    @QueryParam('core') this.coreUrl,
+    @QueryParam('core_url') this.coreUrl,
   });
 
   final String? configToken;
