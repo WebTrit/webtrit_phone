@@ -302,19 +302,23 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     final video = event.call?.hasVideo ?? false;
     final createdTime = DateTime.now();
 
-    callkeep.setSpeaker(callId, enabled: video);
+    if (state.activeCalls.any((element) => element.callId != callId)) {
+      callkeep.setSpeaker(callId, enabled: video);
 
-    emit(state.copyWithPushActiveCall(
-      ActiveCall(
-        direction: direction,
-        line: _kUndefinedLine,
-        callId: callId,
-        handle: handle,
-        displayName: displayName,
-        video: video,
-        createdTime: createdTime,
-      ),
-    ));
+      emit(state.copyWithPushActiveCall(
+        ActiveCall(
+          direction: direction,
+          line: _kUndefinedLine,
+          callId: callId,
+          handle: handle,
+          displayName: displayName,
+          video: video,
+          createdTime: createdTime,
+        ),
+      ));
+    } else {
+      _logger.warning('_onAndroidPendingCallAdded: callId already exists: $callId');
+    }
   }
 
   Future<void> _onCallStarted(
