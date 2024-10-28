@@ -41,7 +41,7 @@ Future<void> onStart(CallkeepServiceStatus status, Map<String, dynamic> data) as
 Future<void> onChangedLifecycle(CallkeepServiceStatus status) async {
   switch (status.lifecycle) {
     case CallkeepLifecycleType.onStop:
-      if (status.autoRestartOnTerminate) {
+      if (status.autoRestartOnTerminate && !status.activeCalls) {
         _launchingBackgroundSignaling = false;
         _isolateBackgroundHandler?.launch();
       }
