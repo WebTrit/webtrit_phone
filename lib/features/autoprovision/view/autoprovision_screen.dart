@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:webtrit_api/webtrit_api.dart';
 
 import 'package:webtrit_phone/app/notifications/notifications.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/blocs/blocs.dart';
+import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/features.dart';
 
 class AutoprovisionScreen extends StatefulWidget {
@@ -18,6 +20,7 @@ class AutoprovisionScreen extends StatefulWidget {
 
 class _AutoprovisionScreenState extends State<AutoprovisionScreen> {
   late final appBloc = context.read<AppBloc>();
+  late final callBloc = context.readOrNull<CallBloc>();
   late final notificationsBloc = context.read<NotificationsBloc>();
   late final autoprovisionCubit = context.read<AutoprovisionCubit>();
   late final router = context.router;
@@ -78,11 +81,13 @@ class _AutoprovisionScreenState extends State<AutoprovisionScreen> {
         await appBloc.stream.firstWhere((element) => element.token == null);
         appBloc.add(loginEvent);
         await appBloc.stream.firstWhere((element) => element.token == token);
+        callBloc?.add(UpdateCallSignalingCoreUrl(coreUrl));
       }
     } else {
       // For the case when the app is launched with the autoprovision screen as initial route.
       appBloc.add(loginEvent);
       await appBloc.stream.firstWhere((element) => element.token == token);
+      callBloc?.add(UpdateCallSignalingCoreUrl(coreUrl));
       // Then will be redirected by router reevaluation and redirect inside [onAutoprovisionScreenPageRouteGuardNavigation]
     }
 
