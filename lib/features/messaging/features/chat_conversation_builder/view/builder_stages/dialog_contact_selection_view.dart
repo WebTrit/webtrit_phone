@@ -10,7 +10,7 @@ import '../../chat_conversation_builder.dart';
 class DialogContactSelectionView extends StatelessWidget {
   const DialogContactSelectionView(this.state, {super.key});
 
-  final DialogContactSelection state;
+  final ChatCBDialogContactSelection state;
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);

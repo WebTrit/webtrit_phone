@@ -1,24 +1,32 @@
 part of 'chat_conversation_builder_cubit.dart';
 
-/// Represents the base state of the Chat Conversation Builder (ChatCB).
-abstract class ChatCBState {
+/// Represents the base state of the chat conversation builder (next ChatCB).
+abstract class ChatCBState with EquatableMixin {
   ChatCBState();
 
-  factory ChatCBState.initializing() => Initializing();
-  factory ChatCBState.initializingError(Object error) => InitializingError(error);
-  factory ChatCBState.initialized(List<Contact> contacts) => InitializedCommon.initialized(contacts);
+  factory ChatCBState.initializing() => ChatCBInitializing();
+  factory ChatCBState.initializingError(Object error) => ChatCBInitializingError(error);
+  factory ChatCBState.common(List<Contact> contacts) => ChatCBCommon.initialized(contacts);
 }
 
-/// State when the chat conversation builder is initializing.
-class Initializing extends ChatCBState {
-  Initializing();
+/// Represents state when the chat conversation builder is initializing.
+/// loading contacts, parsing, filtering etc.
+class ChatCBInitializing extends ChatCBState {
+  ChatCBInitializing();
+
+  @override
+  List<Object> get props => [];
+
+  @override
+  bool get stringify => true;
 }
 
-/// State when there is an error during the initialization of the chat conversation builder.
-class InitializingError extends ChatCBState with EquatableMixin {
-  InitializingError(this.error);
+/// Represents state when there is an error during the initialization of the chat conversation builder.
+class ChatCBInitializingError extends ChatCBState {
+  ChatCBInitializingError(this.error) : assert(error is Error || error is Exception);
 
-  /// The error that occurred during initialization.
+  /// The error that occurred during initialization,
+  /// can be error-contanted object, such as [Error], [Exception], or custom exception.
   final Object error;
 
   @override
@@ -30,10 +38,10 @@ class InitializingError extends ChatCBState with EquatableMixin {
 
 /// Represents the common state for initialized chat conversation builder.
 /// Uses as second hierarchy level containing the list of [contacts] that needed in child stages,
-/// such as [DialogContactSelection], [GroupContactsSelection], and [GroupFillInfo].
+/// such as [ChatCBDialogContactSelection], [ChatCBGroupContactsSelection], and [ChatCBGroupFillInfo].
 /// Also, contains the [cameBack] flag that indicates if the user came back to previous stage.
-sealed class InitializedCommon extends ChatCBState {
-  InitializedCommon(this.contacts, {this.cameBack = false});
+sealed class ChatCBCommon extends ChatCBState {
+  ChatCBCommon(this.contacts, {this.cameBack = false});
 
   /// The list of contacts that able to involve in the chat conversation.
   final List<Contact> contacts;
@@ -42,38 +50,33 @@ sealed class InitializedCommon extends ChatCBState {
   final bool cameBack;
 
   /// Creates an instance of default initialized state with the given list of [contacts].
-  factory InitializedCommon.initialized(List<Contact> contacts) => DialogContactSelection(contacts);
+  factory ChatCBCommon.initialized(List<Contact> contacts) => ChatCBDialogContactSelection(contacts);
 
   /// Creates a copy of this state with the given properties.
   ///
   /// The [contacts] parameter is optional and will replace the current list of contacts if provided.
-  InitializedCommon copyWith({List<Contact>? contacts});
+  ChatCBCommon copyWith({List<Contact>? contacts});
 }
 
 /// Represents the state when user has ability to
 /// choose contact to start dialog with or switch to group creation form.
-class DialogContactSelection extends InitializedCommon with EquatableMixin {
-  DialogContactSelection(super.contacts, {super.cameBack, this.searchFilter = ''});
+class ChatCBDialogContactSelection extends ChatCBCommon {
+  ChatCBDialogContactSelection(super.contacts, {super.cameBack, this.searchFilter = ''});
 
   /// The search filter applied to the contacts.
   final String searchFilter;
 
-  /// List of contacts after applying the search filter.
-  late final List<Contact> filteredContacts = searchFilter.trim().isEmpty
-      ? contacts
-      : contacts.where((contact) => contact.name.toLowerCase().contains(searchFilter.toLowerCase())).toList();
+  /// Computed lists of contacts based on the search filter.
+  late final filteredContacts = contacts.where((c) => _searchMatcher(c, searchFilter));
 
-  /// Create next [GroupContactsSelection] stage from this state.
-  GroupContactsSelection toGroupContactsSelection() {
-    return GroupContactsSelection(contacts, searchFilter: searchFilter);
+  /// Create next [ChatCBGroupContactsSelection] stage from this state.
+  ChatCBGroupContactsSelection toGroupContactsSelection() {
+    return ChatCBGroupContactsSelection(contacts, searchFilter: searchFilter);
   }
 
   @override
-  DialogContactSelection copyWith({List<Contact>? contacts, String? searchFilter}) {
-    return DialogContactSelection(
-      contacts ?? this.contacts,
-      searchFilter: searchFilter ?? this.searchFilter,
-    );
+  ChatCBDialogContactSelection copyWith({List<Contact>? contacts, String? searchFilter}) {
+    return ChatCBDialogContactSelection(contacts ?? this.contacts, searchFilter: searchFilter ?? this.searchFilter);
   }
 
   @override
@@ -83,37 +86,40 @@ class DialogContactSelection extends InitializedCommon with EquatableMixin {
   bool get stringify => true;
 }
 
-/// State for when the group contacts selection is active.
-class GroupContactsSelection extends InitializedCommon with EquatableMixin {
-  GroupContactsSelection(super.contacts, {super.cameBack, this.searchFilter = '', this.selectedContacts = const {}});
+/// Represents state for when the group contacts selection is active.
+class ChatCBGroupContactsSelection extends ChatCBCommon {
+  ChatCBGroupContactsSelection(super.contacts,
+      {super.cameBack, this.searchFilter = '', this.selectedContacts = const {}});
 
   /// The search filter applied to the contacts.
   final String searchFilter;
 
-  /// List of contacts after applying the search filter.
-  late final List<Contact> filteredContacts = searchFilter.trim().isEmpty
-      ? contacts
-      : contacts.where((contact) => contact.name.toLowerCase().contains(searchFilter.toLowerCase())).toList();
-
   /// Contacts that user selected for the group.
   final Set<Contact> selectedContacts;
 
-  /// Create next [GroupFillInfo] stage from this state.
-  GroupFillInfo toFillInfoStage() {
-    return GroupFillInfo(contacts, selectedContacts);
+  /// Computed lists of contacts based on the search filter.
+  late final filteredContacts = contacts.where((c) => _searchMatcher(c, searchFilter));
+
+  /// Create next [ChatCBGroupFillInfo] stage from this state.
+  ChatCBGroupFillInfo toFillInfoStage() {
+    return ChatCBGroupFillInfo(contacts, selectedContacts);
   }
 
-  /// Create previous [DialogContactSelection] stage from this state.
-  DialogContactSelection toDialogContactStage() {
-    return DialogContactSelection(contacts, searchFilter: searchFilter, cameBack: true);
+  /// Restore previous [ChatCBDialogContactSelection] stage from this state.
+  ChatCBDialogContactSelection toDialogContactStage() {
+    return ChatCBDialogContactSelection(contacts, searchFilter: searchFilter, cameBack: true);
   }
 
   @override
-  GroupContactsSelection copyWith({List<Contact>? contacts, Set<Contact>? selectedContacts, String? searchFilter}) {
-    return GroupContactsSelection(
+  ChatCBGroupContactsSelection copyWith({
+    List<Contact>? contacts,
+    String? searchFilter,
+    Set<Contact>? selectedContacts,
+  }) {
+    return ChatCBGroupContactsSelection(
       contacts ?? this.contacts,
-      selectedContacts: selectedContacts ?? this.selectedContacts,
       searchFilter: searchFilter ?? this.searchFilter,
+      selectedContacts: selectedContacts ?? this.selectedContacts,
     );
   }
 
@@ -124,9 +130,9 @@ class GroupContactsSelection extends InitializedCommon with EquatableMixin {
   bool get stringify => true;
 }
 
-/// State for when the group info fill  is active.
-class GroupFillInfo extends InitializedCommon with EquatableMixin {
-  GroupFillInfo(super.contacts, this.selectedContacts, {this.name = '', this.processing = false});
+/// Represents state for when the group info fill is active.
+class ChatCBGroupFillInfo extends ChatCBCommon {
+  ChatCBGroupFillInfo(super.contacts, this.selectedContacts, {this.name = '', this.processing = false});
 
   /// The list of chosen contacts.
   final Set<Contact> selectedContacts;
@@ -137,14 +143,19 @@ class GroupFillInfo extends InitializedCommon with EquatableMixin {
   /// Indicates if the group is being submitted to the server, and waiting for a response.
   final bool processing;
 
-  /// Create previous [GroupContactsSelection] stage from this state.
-  GroupContactsSelection toGroupContactsStage() {
-    return GroupContactsSelection(contacts, selectedContacts: selectedContacts, cameBack: true);
+  /// Restore previous [ChatCBGroupContactsSelection] stage from this state.
+  ChatCBGroupContactsSelection toGroupContactsStage() {
+    return ChatCBGroupContactsSelection(contacts, selectedContacts: selectedContacts, cameBack: true);
   }
 
   @override
-  GroupFillInfo copyWith({List<Contact>? contacts, Set<Contact>? selectedContacts, String? name, bool? processing}) {
-    return GroupFillInfo(
+  ChatCBGroupFillInfo copyWith({
+    List<Contact>? contacts,
+    Set<Contact>? selectedContacts,
+    String? name,
+    bool? processing,
+  }) {
+    return ChatCBGroupFillInfo(
       contacts ?? this.contacts,
       selectedContacts ?? this.selectedContacts,
       name: name ?? this.name,
@@ -157,4 +168,11 @@ class GroupFillInfo extends InitializedCommon with EquatableMixin {
 
   @override
   bool get stringify => true;
+}
+
+bool _searchMatcher(Contact contact, String searchFilterValue) {
+  if (searchFilterValue.isEmpty) return true;
+  matchName() => contact.name.toLowerCase().contains(searchFilterValue.toLowerCase());
+  matchPhone() => contact.phones.any((phone) => phone.number.contains(searchFilterValue));
+  return matchName() || matchPhone();
 }

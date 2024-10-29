@@ -10,7 +10,7 @@ import '../../chat_conversation_builder.dart';
 class GroupFillInfoView extends StatefulWidget {
   const GroupFillInfoView(this.state, {super.key});
 
-  final GroupFillInfo state;
+  final ChatCBGroupFillInfo state;
 
   @override
   State<GroupFillInfoView> createState() => _GroupFillInfoViewState();
