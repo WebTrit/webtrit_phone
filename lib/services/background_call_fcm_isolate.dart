@@ -25,10 +25,7 @@ Future<void> initializeCall(Map<String, dynamic> message) async {
   final callkeepBackgroundService = CallkeepBackgroundService();
 
   if (callType == IncomingCallType.pushNotification) {
-    callkeepBackgroundService.startService(data: {
-      CallkeepBackgroundService.incomingCallType: callType.name,
-      ...message,
-    });
+    callkeepBackgroundService.startService();
   } else {
     _logger.info('Call type is not push notification, so skip initializing signaling');
   }

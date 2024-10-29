@@ -22,7 +22,6 @@ class BackgroundCallService implements CallkeepBackgroundServiceDelegate {
     this._callkeep,
     this._storage,
     this._certificates,
-    this._incomingCallType,
   );
 
   factory BackgroundCallService() => _instance;
@@ -33,16 +32,15 @@ class BackgroundCallService implements CallkeepBackgroundServiceDelegate {
   final SecureStorage _storage;
   final TrustedCertificates _certificates;
   final CallkeepBackgroundService _callkeep;
-  final IncomingCallType _incomingCallType;
 
   final List<Line?> _lines = [];
 
   WebtritSignalingClient? _client;
   StreamSubscription<List<ConnectivityResult>>? _connectivitySubscription;
   bool _isConnected = false;
-  bool _isConnecting = false;
+  IncomingCallType _incomingCallType = IncomingCallType.socket;
 
-  static Future<BackgroundCallService> init(IncomingCallType type) async {
+  static Future<BackgroundCallService> init() async {
     await Future.wait([
       AppPreferences.init(),
       SecureStorage.init(),
@@ -57,19 +55,19 @@ class BackgroundCallService implements CallkeepBackgroundServiceDelegate {
       callkeep,
       SecureStorage(),
       AppCertificates().trustedCertificates,
-      type,
     );
 
     callkeep.setBackgroundServiceDelegate(_instance);
     return _instance;
   }
 
+  void setIncomingCallType(IncomingCallType type) {
+    _incomingCallType = type;
+  }
+
   bool get _isPushNotificationIncomingCall => _incomingCallType == IncomingCallType.pushNotification;
 
   void launch() async {
-    if (_isConnecting) return;
-
-    _isConnecting = true;
     _logger.info('Launching service');
 
     await Future.wait([
@@ -99,7 +97,6 @@ class BackgroundCallService implements CallkeepBackgroundServiceDelegate {
     );
 
     _isConnected = true;
-    _isConnecting = false;
 
     _client?.listen(
       onStateHandshake: _signalingInitialize,

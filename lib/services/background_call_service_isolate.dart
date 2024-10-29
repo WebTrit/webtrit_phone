@@ -11,7 +11,6 @@ import 'background_call_service.dart';
 final _logger = Logger('IsolateBackgroundCallHandler');
 
 BackgroundCallService? _isolateBackgroundHandler;
-bool _launchingBackgroundSignaling = false;
 
 Future<void> _initializeDependencies() async {
   await AppPreferences.init();
@@ -22,17 +21,20 @@ Future<void> _initializeDependencies() async {
 }
 
 @pragma('vm:entry-point')
-Future<void> onStart(CallkeepServiceStatus status, Map<String, dynamic> data) async {
+Future<void> onStart(CallkeepServiceStatus status) async {
   _initializeDependencies();
 
-  _logger.info('Starting background signaling with data: $data status: $status');
+  _logger.info(
+      'onStart: ${status.type} lifecycle: ${status.lifecycle} activeCalls: ${status.activeCalls} autoRestartOnTerminate: ${status.autoRestartOnTerminate} activityReady: ${status.activityReady} lockScreen: ${status.lockScreen} autoStartOnBoot: ${status.autoStartOnBoot}');
 
-  var incomingCallTypeData = data[CallkeepBackgroundService.incomingCallType] ?? IncomingCallType.socket.name;
-  final incomingCallType = IncomingCallType.values.byName(incomingCallTypeData);
+  _isolateBackgroundHandler ??= await BackgroundCallService.init();
+  _isolateBackgroundHandler?.setIncomingCallType(
+      status.type == CallkeepIncomingType.socket ? IncomingCallType.socket : IncomingCallType.pushNotification);
 
-  _isolateBackgroundHandler ??= await BackgroundCallService.init(incomingCallType);
-
-  if (incomingCallType == IncomingCallType.pushNotification) {
+  if (status.lifecycle == CallkeepLifecycleType.onStop ||
+      status.lifecycle == CallkeepLifecycleType.onAny ||
+      status.lifecycle == CallkeepLifecycleType.onDestroy) {
+    _logger.info('launching isolateBackgroundHandler $_isolateBackgroundHandler');
     _isolateBackgroundHandler?.launch();
   }
 }
@@ -42,21 +44,17 @@ Future<void> onChangedLifecycle(CallkeepServiceStatus status) async {
   switch (status.lifecycle) {
     case CallkeepLifecycleType.onStop:
       if (status.autoRestartOnTerminate && !status.activeCalls) {
-        _launchingBackgroundSignaling = false;
+        _logger.info('onChangedLifecycle launch');
         _isolateBackgroundHandler?.launch();
       }
       break;
     case CallkeepLifecycleType.onResume:
-      if (!_launchingBackgroundSignaling && status.activityReady) {
-        await _closeSignaling();
+      if (status.activityReady) {
+        _logger.info('onChangedLifecycle close');
+        await _isolateBackgroundHandler?.close();
       }
       break;
     default:
       break;
   }
-}
-
-Future _closeSignaling() async {
-  _logger.info('Closing background signaling');
-  await _isolateBackgroundHandler?.close();
 }

@@ -66,6 +66,7 @@ class _MainShellState extends State<MainShell> {
     final incomingCallSocketType = AppPreferences().getIncomingCallType() == IncomingCallType.socket;
 
     androidCallkeepBackgroundService.setUp(
+      type: incomingCallSocketType ? CallkeepIncomingType.socket : CallkeepIncomingType.pushNotification,
       autoStartOnBoot: incomingCallSocketType,
       autoRestartOnTerminate: incomingCallSocketType,
       androidNotificationName: context.l10n.settings_network_androidNotificationName,
