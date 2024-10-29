@@ -9,6 +9,9 @@ class AppLocalizationsUk extends AppLocalizations {
   AppLocalizationsUk([String locale = 'uk']) : super(locale);
 
   @override
+  String get account_selfCarePasswordExpired_message => 'Термін дії вашого пароля самообслуговування минув. Оновіть його за допомогою самообслуговування.\nДоки пароль не буде змінено, доступ до служби буде обмежено.';
+
+  @override
   String get alertDialogActions_no => 'Ні';
 
   @override
@@ -123,6 +126,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get call_FailureAcknowledgeDialog_title => 'Помилка';
 
   @override
+  String get callProcessingStatus_disconnecting => 'Відключення дзвінка, будь ласка, зачекайте…';
+
+  @override
   String get callStatus_appUnregistered => 'Незареєстровано';
 
   @override
@@ -141,10 +147,202 @@ class AppLocalizationsUk extends AppLocalizations {
   String get callStatus_ready => 'Підключення встановлено';
 
   @override
-  String get callProcessingStatus_disconnecting => 'Відключення дзвінка, будь ласка, зачекайте…';
+  String get call_ThumbnailAvatar_currentlyNoActiveCall => 'Зараз немає активних дзвінків';
 
   @override
-  String get call_ThumbnailAvatar_currentlyNoActiveCall => 'Зараз немає активних дзвінків';
+  String get chats_ActionBtn_retry => 'Повторить спробу';
+
+  @override
+  String get chats_AddContactDialog_cancel => 'Скасувати';
+
+  @override
+  String get chats_AddContactDialog_empty => 'Контакти не знайдено';
+
+  @override
+  String get chats_AddContactDialog_title => 'Виберіть контакт:';
+
+  @override
+  String get chats_ChatListItem_empty => 'Поки немає повідомлень';
+
+  @override
+  String get chats_ChatListScreen_createGroup => 'Створити групу';
+
+  @override
+  String get chats_ChatListScreen_empty => 'Немає переписок';
+
+  @override
+  String get chats_ChatListScreen_startDialog => 'Почати діалог';
+
+  @override
+  String get chats_ConfirmDialog_ask => 'Ви впевнені?';
+
+  @override
+  String get chats_ConfirmDialog_cancel => 'Ні';
+
+  @override
+  String get chats_ConfirmDialog_confirm => 'Так';
+
+  @override
+  String get chats_Conversation_failure => 'Помилка завантаження розмови';
+
+  @override
+  String get chats_ConversationScreen_deleteAsk => 'Ви впевнені, що хочете видалити цей діалог?';
+
+  @override
+  String get chats_ConversationScreen_deleteDialog => 'Видалити діалог';
+
+  @override
+  String get chats_ConversationScreen_titlePrefix => 'Діалог:';
+
+  @override
+  String get chats_GroupAuthorities_moderator => 'модератор';
+
+  @override
+  String get chats_GroupAuthorities_noauthorities => 'учасник';
+
+  @override
+  String get chats_GroupAuthorities_owner => 'власник';
+
+  @override
+  String get chats_GroupBuilderScreen_addUserBtnText => 'Додати користувача';
+
+  @override
+  String get chats_GroupBuilderScreen_connectionError => 'Помилка підключення, спробуйте пізніше';
+
+  @override
+  String get chats_GroupBuilderScreen_groupNameHeadline => 'Назва групи';
+
+  @override
+  String get chats_GroupBuilderScreen_membersHeadline => 'Члени групи';
+
+  @override
+  String get chats_GroupBuilderScreen_nameFieldEmpty => 'Будь ласка, введіть назву групи';
+
+  @override
+  String get chats_GroupBuilderScreen_nameFieldLabel => 'Назва групи';
+
+  @override
+  String get chats_GroupBuilderScreen_nameFieldShort => 'Назва групи має містити не менше 3 символів';
+
+  @override
+  String get chats_GroupBuilderScreen_screenTitle => 'Створити групу';
+
+  @override
+  String get chats_GroupBuilderScreen_submitBtnText => 'Надіслати';
+
+  @override
+  String get chats_GroupBuilderScreen_submitError => 'Під час створення групи сталася помилка, повторіть спробу';
+
+  @override
+  String get chats_GroupDrawer_addUserBtnText => 'Додати користувача';
+
+  @override
+  String get chats_GroupDrawer_deleteLeaveBtnText => 'Видалити і залишити';
+
+  @override
+  String get chats_GroupDrawer_groupMembersHeadline => 'Члени групи';
+
+  @override
+  String get chats_GroupDrawer_leaveAndDeleteAsk => 'Ви впевнені, що бажаєте залишити та видалити цю групу?';
+
+  @override
+  String get chats_GroupDrawer_leaveAsk => 'Ви впевнені, що бажаєте залишити цю групу?';
+
+  @override
+  String get chats_GroupDrawer_leaveBtnText => 'Вийти з групи';
+
+  @override
+  String get chats_GroupDrawer_makeModeratorAsk => 'Ви впевнені, що хочете зробити цього користувача модератором?';
+
+  @override
+  String get chats_GroupDrawer_makeModeratorBtnText => 'Зробити модератором';
+
+  @override
+  String get chats_GroupDrawer_removeModeratorAsk => 'Ви впевнені, що хочете видалити цього користувача з модераторів?';
+
+  @override
+  String get chats_GroupDrawer_removeUserAsk => 'Ви впевнені, що хочете видалити цього користувача з групи?';
+
+  @override
+  String get chats_GroupDrawer_removeUserBtnText => 'Видалити';
+
+  @override
+  String get chats_GroupDrawer_titlePrefix => 'Група:';
+
+  @override
+  String get chats_GroupDrawer_unmakeModeratorBtnText => 'Прибрати модератора';
+
+  @override
+  String get chats_GroupNameDialog_cancelBtnText => 'Скасувати';
+
+  @override
+  String get chats_GroupNameDialog_fieldHint => 'Введіть назву групи';
+
+  @override
+  String get chats_GroupNameDialog_fieldLabel => 'Назва групи';
+
+  @override
+  String get chats_GroupNameDialog_fieldValidation_empty => 'Будь ласка, введіть назву групи';
+
+  @override
+  String get chats_GroupNameDialog_fieldValidation_short => 'Назва групи занадто коротка';
+
+  @override
+  String get chats_GroupNameDialog_saveBtnText => 'Зберегти';
+
+  @override
+  String get chats_GroupNameDialog_title => 'Назва групи';
+
+  @override
+  String get chats_GroupScreen_titlePrefix => 'Група:';
+
+  @override
+  String get chats_MessageView_delete => 'Видалити';
+
+  @override
+  String get chats_MessageView_deleted => '[видалено]';
+
+  @override
+  String get chats_MessageView_edit => 'Редагувати';
+
+  @override
+  String get chats_MessageView_edited => '[відредаговано]';
+
+  @override
+  String get chats_MessageView_forward => 'Переслати';
+
+  @override
+  String get chats_MessageView_forwarded => '[переслано]';
+
+  @override
+  String get chats_MessageView_reply => 'Відповісти';
+
+  @override
+  String get chats_MessageView_textcopy => 'Копіювати в буфер обміну';
+
+  @override
+  String get chats_ParticipantName_you => 'Ви';
+
+  @override
+  String get chats_StateBar_connecting => 'ПІДКЛЮЧЕННЯ';
+
+  @override
+  String get chats_StateBar_error => 'ВІДКЛЮЧЕНО';
+
+  @override
+  String get chats_StateBar_initializing => 'ІНІЦІАЛІЗАЦІЯ';
+
+  @override
+  String get common_noInternetConnection_message => 'Схоже, ви не підключені до Інтернету. Перевірте своє підключення і спробуйте ще раз.';
+
+  @override
+  String get common_noInternetConnection_retryButton => 'Спробуйте ще раз';
+
+  @override
+  String get common_noInternetConnection_title => 'Немає підключення до Інтернету';
+
+  @override
+  String get common_problemWithLoadingPage => 'Виникла проблема з завантаженням сторінки.';
 
   @override
   String get connectToYourOwnVoIPSystem_Button_Action => 'Підключітись до власної VoIP-системи';
@@ -195,6 +393,12 @@ class AppLocalizationsUk extends AppLocalizations {
   String get copyToClipboard_popupMenuItem => 'Скопіювати в буфер обміну';
 
   @override
+  String get default_ChatMemberNotFoundMessagingSocketException => 'Учасник чату не знайдений';
+
+  @override
+  String get default_ChatNotFoundMessagingSocketException => 'Чат не знайдено';
+
+  @override
   String get default_ClientExceptionError => 'Сталася проблема з клієнтом HTTP';
 
   @override
@@ -210,10 +414,31 @@ class AppLocalizationsUk extends AppLocalizations {
   String get default_ErrorTransactionId => 'Ідентифікатор транзакції';
 
   @override
+  String get default_ForbiddenMessagingSocketException => 'Доступ заборонено';
+
+  @override
   String get default_FormatExceptionError => 'Виникла проблема формату відповіді';
 
   @override
+  String get default_InternalErrorMessagingSocketException => 'Внутрішня помилка сервера';
+
+  @override
+  String get default_InvalidChatTypeMessagingSocketException => 'Недійсний тип чату';
+
+  @override
+  String get default_MessagingSocketException => 'Помилка з\'єднання з сервером';
+
+  @override
   String get default_RequestFailureError => 'Сталася помилка на сервері';
+
+  @override
+  String get default_SelfAuthorityAssignmentForbiddenMessagingSocketException => 'Призначення власних прав заборонено';
+
+  @override
+  String get default_SelfRemovalForbiddenMessagingSocketException => 'Видалення самого себе заборонено';
+
+  @override
+  String get default_SmsConversationNotFoundMessagingSocketException => 'SMS-розмова не знайдена';
 
   @override
   String get default_SocketExceptionError => 'Виникла проблема з мережею';
@@ -228,7 +453,13 @@ class AppLocalizationsUk extends AppLocalizations {
   String get default_TypeErrorError => 'Виникла проблема з відповіддю';
 
   @override
+  String get default_UnauthorizedMessagingSocketException => 'Помилка авторизації';
+
+  @override
   String get default_UnauthorizedRequestFailureError => 'Сталася помилка несанкціонованого запиту';
+
+  @override
+  String get default_UserAlreadyInChatMessagingSocketException => 'Користувач вже в чаті';
 
   @override
   String get favorites_BodyCenter_empty => 'Наразі у вас немає обраних номерів.\nДодайте обрані номери з Контактів, використовуючи іконку зірочки';
@@ -476,6 +707,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get logRecordsConsole_Text_failure => 'Виникла неочікувана помилка';
 
   @override
+  String get main_BottomNavigationBarItemLabel_chats => 'Чати';
+
+  @override
   String get main_BottomNavigationBarItemLabel_contacts => 'Контакти';
 
   @override
@@ -483,9 +717,6 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get main_BottomNavigationBarItemLabel_keypad => 'Клавіатура';
-
-  @override
-  String get main_BottomNavigationBarItemLabel_chats => 'Чати';
 
   @override
   String get main_BottomNavigationBarItemLabel_recents => 'Останні';
@@ -508,7 +739,397 @@ class AppLocalizationsUk extends AppLocalizations {
   String get main_CompatibilityIssueDialog_title => 'Проблема сумісності';
 
   @override
+  String get messaging_ActionBtn_retry => 'Повторить спробу';
+
+  @override
+  String get messaging_ChooseContact_cancel => 'Скасувати';
+
+  @override
+  String get messaging_ChooseContact_empty => 'Контакти не знайдено';
+
+  @override
+  String get messaging_ChooseContact_title => 'Виберіть контакт:';
+
+  @override
+  String get messaging_ConfirmDialog_ask => 'Ви впевнені?';
+
+  @override
+  String get messaging_ConfirmDialog_cancel => 'Ні';
+
+  @override
+  String get messaging_ConfirmDialog_confirm => 'Так';
+
+  @override
+  String get messaging_ConversationBuilders_addUserBtnText => 'Додати користувача';
+
+  @override
+  String get messaging_ConversationBuilders_back => 'Назад';
+
+  @override
+  String get messaging_ConversationBuilders_back_action => 'Назад';
+
+  @override
+  String get messaging_ConversationBuilders_cancel => 'Скасувати';
+
+  @override
+  String get messaging_ConversationBuilders_connectionError => 'Помилка підключення, спробуйте пізніше';
+
+  @override
+  String get messaging_ConversationBuilders_contactOrNumberSearch_hint => 'Введіть ім\'я або номер телефону';
+
+  @override
+  String get messaging_ConversationBuilders_contactSearch_hint => 'Пошук контактів';
+
+  @override
+  String get messaging_ConversationBuilders_create => 'Створити';
+
+  @override
+  String get messaging_ConversationBuilders_createGroup => 'Створити групу';
+
+  @override
+  String get messaging_ConversationBuilders_externalContacts_heading => 'Контакти Хмарної АТС';
+
+  @override
+  String get messaging_ConversationBuilders_groupNameHeadline => 'Назва групи';
+
+  @override
+  String get messaging_ConversationBuilders_invalidNumber_message1 => 'Контакт має недійсний номер телефону. Він має бути у форматі ';
+
+  @override
+  String get messaging_ConversationBuilders_invalidNumber_message2 => '. Будь ласка, виправте це у своїй телефонній книзі.';
+
+  @override
+  String get messaging_ConversationBuilders_invalidNumber_ok => 'Закрити';
+
+  @override
+  String get messaging_ConversationBuilders_invalidNumber_title => 'Невірний номер телефону';
+
+  @override
+  String get messaging_ConversationBuilders_invite_heading => 'Запросити користувачів:';
+
+  @override
+  String get messaging_ConversationBuilders_localContacts_heading => 'Локальні контакти';
+
+  @override
+  String get messaging_ConversationBuilders_membersHeadline => 'Члени групи';
+
+  @override
+  String get messaging_ConversationBuilders_nameFieldEmpty => 'Будь ласка, введіть назву групи';
+
+  @override
+  String get messaging_ConversationBuilders_nameFieldLabel => 'Назва групи';
+
+  @override
+  String get messaging_ConversationBuilders_nameFieldShort => 'Назва групи має містити не менше 3 символів';
+
+  @override
+  String get messaging_ConversationBuilders_next_action => 'Далі';
+
+  @override
+  String get messaging_ConversationBuilders_noContacts => 'Немає контактів, що відповідають результату пошуку';
+
+  @override
+  String get messaging_ConversationBuilders_numberFormatExample => '+ [код країни] [код регіону/оператора] [номер абонента]';
+
+  @override
+  String get messaging_ConversationBuilders_numberSearch_errorError => 'Введений номер телефону недійсний. Його слід ввести у форматі: ';
+
+  @override
+  String get messaging_ConversationBuilders_numberSearch_errorHint => 'Формат номера телефону: ';
+
+  @override
+  String get messaging_ConversationBuilders_submitBtnText => 'Надіслати';
+
+  @override
+  String get messaging_ConversationBuilders_submitError => 'Під час створення групи сталася помилка, повторіть спробу';
+
+  @override
+  String get messaging_ConversationBuilders_title_group => 'Створити групу';
+
+  @override
+  String get messaging_ConversationBuilders_title_new => 'Новий чат';
+
+  @override
+  String get messaging_Conversation_failure => 'Помилка завантаження розмови';
+
+  @override
+  String get messaging_ConversationInfo_deleteAsk => 'Ви впевнені, що хочете видалити цей діалог?';
+
+  @override
+  String get messaging_ConversationInfo_deleteBtn => 'Видалити діалог';
+
+  @override
+  String get messaging_ConversationInfo_title => 'Контактна інформація';
+
+  @override
+  String get messaging_ConversationScreen_titlePrefix => 'Діалог:';
+
+  @override
+  String get messaging_ConversationsScreen_chatsSearch_hint => 'Введіть ім\'я чату або користувача';
+
+  @override
+  String get messaging_ConversationsScreen_empty => 'Немає переписок';
+
+  @override
+  String get messaging_ConversationsScreen_messages_title => 'Повідомлення';
+
+  @override
+  String get messaging_ConversationsScreen_noNumberAlert_text => 'Щоб надсилати SMS-повідомлення, потрібно мати номер телефону, прив’язаний до вашого облікового запису';
+
+  @override
+  String get messaging_ConversationsScreen_noNumberAlert_title => 'Немає номера телефону';
+
+  @override
+  String get messaging_ConversationsScreen_selectNumberSheet_title => 'Виберіть номер';
+
+  @override
+  String get messaging_ConversationsScreen_smses_title => 'SMS';
+
+  @override
+  String get messaging_ConversationsScreen_smssSearch_hint => 'Введіть номер телефону';
+
+  @override
+  String get messaging_ConversationsScreen_startDialog => 'Почати діалог';
+
+  @override
+  String get messaging_Conversations_tile_empty => 'Поки немає повідомлень';
+
+  @override
+  String get messaging_Conversations_tile_you => 'Ви';
+
+  @override
+  String get messaging_DialogInfo_deleteAsk => 'Ви впевнені, що хочете видалити цей діалог?';
+
+  @override
+  String get messaging_DialogInfo_deleteBtn => 'Видалити діалог';
+
+  @override
+  String get messaging_DialogInfo_title => 'Контактна інформація';
+
+  @override
+  String get messaging_GroupAuthorities_moderator => 'модератор';
+
+  @override
+  String get messaging_GroupAuthorities_noauthorities => 'учасник';
+
+  @override
+  String get messaging_GroupAuthorities_owner => 'власник';
+
+  @override
+  String get messaging_GroupBuilderScreen_addUserBtnText => 'Додати користувача';
+
+  @override
+  String get messaging_GroupBuilderScreen_connectionError => 'Помилка підключення, спробуйте пізніше';
+
+  @override
+  String get messaging_GroupBuilderScreen_groupNameHeadline => 'Назва групи';
+
+  @override
+  String get messaging_GroupBuilderScreen_membersHeadline => 'Члени групи';
+
+  @override
+  String get messaging_GroupBuilderScreen_nameFieldEmpty => 'Будь ласка, введіть назву групи';
+
+  @override
+  String get messaging_GroupBuilderScreen_nameFieldLabel => 'Назва групи';
+
+  @override
+  String get messaging_GroupBuilderScreen_nameFieldShort => 'Назва групи має містити не менше 3 символів';
+
+  @override
+  String get messaging_GroupBuilderScreen_screenTitle => 'Створити групу';
+
+  @override
+  String get messaging_GroupBuilderScreen_submitBtnText => 'Надіслати';
+
+  @override
+  String get messaging_GroupBuilderScreen_submitError => 'Під час створення групи сталася помилка, повторіть спробу';
+
+  @override
+  String get messaging_GroupInfo_addUserBtnText => 'Додати користувача';
+
+  @override
+  String get messaging_GroupInfo_deleteLeaveBtnText => 'Видалити і залишити';
+
+  @override
+  String get messaging_GroupInfo_groupMembersHeadline => 'Члени групи';
+
+  @override
+  String get messaging_GroupInfo_leaveAndDeleteAsk => 'Ви впевнені, що бажаєте залишити та видалити цю групу?';
+
+  @override
+  String get messaging_GroupInfo_leaveAsk => 'Ви впевнені, що бажаєте залишити цю групу?';
+
+  @override
+  String get messaging_GroupInfo_leaveBtnText => 'Вийти з групи';
+
+  @override
+  String get messaging_GroupInfo_makeModeratorAsk => 'Ви впевнені, що хочете зробити цього користувача модератором?';
+
+  @override
+  String get messaging_GroupInfo_makeModeratorBtnText => 'Зробити модератором';
+
+  @override
+  String get messaging_GroupInfo_removeModeratorAsk => 'Ви впевнені, що хочете видалити цього користувача з модераторів?';
+
+  @override
+  String get messaging_GroupInfo_removeUserAsk => 'Ви впевнені, що хочете видалити цього користувача з групи?';
+
+  @override
+  String get messaging_GroupInfo_removeUserBtnText => 'Видалити';
+
+  @override
+  String get messaging_GroupInfo_title => 'Інформація про групу';
+
+  @override
+  String get messaging_GroupInfo_titlePrefix => 'Група:';
+
+  @override
+  String get messaging_GroupInfo_unmakeModeratorBtnText => 'Прибрати модератора';
+
+  @override
+  String get messaging_GroupNameDialog_cancelBtnText => 'Скасувати';
+
+  @override
+  String get messaging_GroupNameDialog_fieldHint => 'Введіть назву групи';
+
+  @override
+  String get messaging_GroupNameDialog_fieldLabel => 'Назва групи';
+
+  @override
+  String get messaging_GroupNameDialog_fieldValidation_empty => 'Будь ласка, введіть назву групи';
+
+  @override
+  String get messaging_GroupNameDialog_fieldValidation_short => 'Назва групи занадто коротка';
+
+  @override
+  String get messaging_GroupNameDialog_saveBtnText => 'Зберегти';
+
+  @override
+  String get messaging_GroupNameDialog_title => 'Назва групи';
+
+  @override
+  String get messaging_GroupScreen_titlePrefix => 'Група:';
+
+  @override
+  String get messaging_MessageField_hint => 'Введіть повідомлення';
+
+  @override
+  String get messaging_MessageListView_typingTrail => 'надруковує...';
+
+  @override
+  String get messaging_MessageView_delete => 'Видалити';
+
+  @override
+  String get messaging_MessageView_deleted => '[видалено]';
+
+  @override
+  String get messaging_MessageView_edit => 'Редагувати';
+
+  @override
+  String get messaging_MessageView_edited => '[відредаговано]';
+
+  @override
+  String get messaging_MessageView_forward => 'Переслати';
+
+  @override
+  String get messaging_MessageView_forwarded => '[переслано]';
+
+  @override
+  String get messaging_MessageView_reply => 'Відповісти';
+
+  @override
+  String get messaging_MessageView_textcopy => 'Копіювати в буфер обміну';
+
+  @override
+  String get messaging_NewConversation_back_action => 'Назад';
+
+  @override
+  String get messaging_NewConversation_cancel => 'Скасувати';
+
+  @override
+  String get messaging_NewConversation_contactOrNumberSearch_hint => 'Введіть ім\'я або номер телефону';
+
+  @override
+  String get messaging_NewConversation_contactSearch_hint => 'Пошук контактів';
+
+  @override
+  String get messaging_NewConversation_create => 'Створити';
+
+  @override
+  String get messaging_NewConversation_createGroup => 'Створити групу';
+
+  @override
+  String get messaging_NewConversation_externalContacts_heading => 'Контакти Хмарної АТС';
+
+  @override
+  String get messaging_NewConversation_invalidNumber_message => '. Будь ласка, виправте це у своїй телефонній книзі.';
+
+  @override
+  String get messaging_NewConversation_invalidNumber_message1 => 'The contact has an invalid phone number. It should be in the format ';
+
+  @override
+  String get messaging_NewConversation_invalidNumber_message2 => '. Please fix it in your phone book.';
+
+  @override
+  String get messaging_NewConversation_invalidNumber_ok => 'Закрити';
+
+  @override
+  String get messaging_NewConversation_invalidNumber_title => 'Невірний номер телефону';
+
+  @override
+  String get messaging_NewConversation_invite_heading => 'Запросити користувачів:';
+
+  @override
+  String get messaging_NewConversation_localContacts_heading => 'Локальні контакти';
+
+  @override
+  String get messaging_NewConversation_next_action => 'Далі';
+
+  @override
+  String get messaging_NewConversation_noContacts => 'Немає контактів, що відповідають результату пошуку';
+
+  @override
+  String get messaging_NewConversation_numberFormatExample => '+ [код країни] [код регіону/оператора] [номер абонента]';
+
+  @override
+  String get messaging_NewConversation_numberSearch_errorError => 'Введений номер телефону недійсний. Його слід ввести у форматі: ';
+
+  @override
+  String get messaging_NewConversation_numberSearch_errorHint => 'Формат номера телефону: ';
+
+  @override
+  String get messaging_NewConversation_title => 'Новий чат';
+
+  @override
+  String get messaging_ParticipantName_you => 'Ви';
+
+  @override
+  String get messaging_SmsSendingStatus_delivered => 'доставлено';
+
+  @override
+  String get messaging_SmsSendingStatus_failed => 'не вдалось';
+
+  @override
+  String get messaging_SmsSendingStatus_sent => 'надіслано';
+
+  @override
+  String get messaging_SmsSendingStatus_waiting => 'очікування';
+
+  @override
+  String get messaging_StateBar_connecting => 'ПІДКЛЮЧЕННЯ';
+
+  @override
+  String get messaging_StateBar_error => 'ВІДКЛЮЧЕНО';
+
+  @override
+  String get messaging_StateBar_initializing => 'ІНІЦІАЛІЗАЦІЯ';
+
+  @override
   String get notifications_errorSnackBarAction_callUserMedia => 'Перевірити';
+
+  @override
+  String get notifications_errorSnackBar_activeLineBlindTransferWarning => 'Ви вже на лінії з одержувачем, до якого намагаєтеся здійснити безумовний переказ';
 
   @override
   String get notifications_errorSnackBar_appOffline => 'Ваш додаток зараз офлайн.';
@@ -518,9 +1139,6 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get notifications_errorSnackBar_appUnregistered => 'Вибачте, ваш додаток наразі відключений від серверів WebTrit та не може здійснювати запити. Будь ласка, перейдіть на сторінку налаштувань і перемістіть вимикач стану онлайн у вимкнути й увімкнути знову, щоб відновити з\'єднання.';
-
-  @override
-  String get notifications_errorSnackBar_sipServiceUnavailable => 'Помилка аутентифікації з віддаленою VoIP системою';
 
   @override
   String get notifications_errorSnackBar_callConnect => 'Підключення до ядра не вдалося, спроба з\'єднання';
@@ -538,7 +1156,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get notifications_errorSnackBar_callUserMedia => 'Немає доступу до медіа-входу, будь ласка, перевірте дозволи програми';
 
   @override
-  String get notifications_errorSnackBar_activeLineBlindTransferWarning => 'Ви вже на лінії з одержувачем, до якого намагаєтеся здійснити безумовний переказ';
+  String get notifications_errorSnackBar_sipServiceUnavailable => 'Помилка аутентифікації з віддаленою VoIP системою';
 
   @override
   String get notImplemented => 'Вибачте, ця функція ще не реалізована';
@@ -746,340 +1364,4 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get webRegistration_ErrorAcknowledgeDialog_title => 'Web resource error';
-
-  @override
-  String get messaging_Conversation_failure => 'Помилка завантаження розмови';
-
-  @override
-  String get messaging_ActionBtn_retry => 'Повторить спробу';
-
-  @override
-  String get messaging_MessageView_textcopy => 'Копіювати в буфер обміну';
-
-  @override
-  String get messaging_MessageView_reply => 'Відповісти';
-
-  @override
-  String get messaging_MessageView_forward => 'Переслати';
-
-  @override
-  String get messaging_MessageView_edit => 'Редагувати';
-
-  @override
-  String get messaging_MessageView_delete => 'Видалити';
-
-  @override
-  String get messaging_MessageView_forwarded => '[переслано]';
-
-  @override
-  String get messaging_MessageView_edited => '[відредаговано]';
-
-  @override
-  String get messaging_MessageView_deleted => '[видалено]';
-
-  @override
-  String get messaging_SmsSendingStatus_waiting => 'очікування';
-
-  @override
-  String get messaging_SmsSendingStatus_sent => 'надіслано';
-
-  @override
-  String get messaging_SmsSendingStatus_failed => 'не вдалось';
-
-  @override
-  String get messaging_SmsSendingStatus_delivered => 'доставлено';
-
-  @override
-  String get messaging_ParticipantName_you => 'Ви';
-
-  @override
-  String get messaging_StateBar_initializing => 'ІНІЦІАЛІЗАЦІЯ';
-
-  @override
-  String get messaging_StateBar_connecting => 'ПІДКЛЮЧЕННЯ';
-
-  @override
-  String get messaging_StateBar_error => 'ВІДКЛЮЧЕНО';
-
-  @override
-  String get messaging_ConversationsScreen_startDialog => 'Почати діалог';
-
-  @override
-  String get messaging_ConversationsScreen_empty => 'Немає переписок';
-
-  @override
-  String get messaging_ConversationsScreen_chatsSearch_hint => 'Введіть ім\'я чату або користувача';
-
-  @override
-  String get messaging_ConversationsScreen_smssSearch_hint => 'Введіть номер телефону';
-
-  @override
-  String get messaging_ConversationsScreen_messages_title => 'Повідомлення';
-
-  @override
-  String get messaging_ConversationsScreen_smses_title => 'SMS';
-
-  @override
-  String get messaging_ConversationsScreen_selectNumberSheet_title => 'Виберіть номер';
-
-  @override
-  String get messaging_ConversationsScreen_noNumberAlert_title => 'Немає номера телефону';
-
-  @override
-  String get messaging_ConversationsScreen_noNumberAlert_text => 'Щоб надсилати SMS-повідомлення, потрібно мати номер телефону, прив’язаний до вашого облікового запису';
-
-  @override
-  String get messaging_Conversations_tile_empty => 'Поки немає повідомлень';
-
-  @override
-  String get messaging_Conversations_tile_you => 'Ви';
-
-  @override
-  String get messaging_MessageField_hint => 'Введіть повідомлення';
-
-  @override
-  String get messaging_ConversationScreen_titlePrefix => 'Діалог:';
-
-  @override
-  String get messaging_DialogInfo_deleteAsk => 'Ви впевнені, що хочете видалити цей діалог?';
-
-  @override
-  String get messaging_DialogInfo_title => 'Контактна інформація';
-
-  @override
-  String get messaging_DialogInfo_deleteBtn => 'Видалити діалог';
-
-  @override
-  String get messaging_ConversationBuilders_createGroup => 'Створити групу';
-
-  @override
-  String get messaging_ConversationBuilders_title_new => 'Новий чат';
-
-  @override
-  String get messaging_ConversationBuilders_cancel => 'Скасувати';
-
-  @override
-  String get messaging_ConversationBuilders_back => 'Назад';
-
-  @override
-  String get messaging_ConversationBuilders_create => 'Створити';
-
-  @override
-  String get messaging_ConversationBuilders_externalContacts_heading => 'Контакти Хмарної АТС';
-
-  @override
-  String get messaging_ConversationBuilders_localContacts_heading => 'Локальні контакти';
-
-  @override
-  String get messaging_ConversationBuilders_contactSearch_hint => 'Пошук контактів';
-
-  @override
-  String get messaging_ConversationBuilders_contactOrNumberSearch_hint => 'Введіть ім\'я або номер телефону';
-
-  @override
-  String get messaging_ConversationBuilders_numberFormatExample => '+ [код країни] [код регіону/оператора] [номер абонента]';
-
-  @override
-  String get messaging_ConversationBuilders_numberSearch_errorHint => 'Формат номера телефону: ';
-
-  @override
-  String get messaging_ConversationBuilders_numberSearch_errorError => 'Введений номер телефону недійсний. Його слід ввести у форматі: ';
-
-  @override
-  String get messaging_ConversationBuilders_invite_heading => 'Запросити користувачів:';
-
-  @override
-  String get messaging_ConversationBuilders_next_action => 'Далі';
-
-  @override
-  String get messaging_ConversationBuilders_back_action => 'Назад';
-
-  @override
-  String get messaging_ConversationBuilders_noContacts => 'Немає контактів, що відповідають результату пошуку';
-
-  @override
-  String get messaging_ConversationBuilders_invalidNumber_title => 'Невірний номер телефону';
-
-  @override
-  String get messaging_ConversationBuilders_invalidNumber_message1 => 'Контакт має недійсний номер телефону. Він має бути у форматі ';
-
-  @override
-  String get messaging_ConversationBuilders_invalidNumber_message2 => '. Будь ласка, виправте це у своїй телефонній книзі.';
-
-  @override
-  String get messaging_ConversationBuilders_invalidNumber_ok => 'Закрити';
-
-  @override
-  String get messaging_ConversationBuilders_title_group => 'Створити групу';
-
-  @override
-  String get messaging_ConversationBuilders_groupNameHeadline => 'Назва групи';
-
-  @override
-  String get messaging_ConversationBuilders_membersHeadline => 'Члени групи';
-
-  @override
-  String get messaging_ConversationBuilders_addUserBtnText => 'Додати користувача';
-
-  @override
-  String get messaging_ConversationBuilders_submitBtnText => 'Надіслати';
-
-  @override
-  String get messaging_ConversationBuilders_nameFieldLabel => 'Назва групи';
-
-  @override
-  String get messaging_ConversationBuilders_nameFieldEmpty => 'Будь ласка, введіть назву групи';
-
-  @override
-  String get messaging_ConversationBuilders_nameFieldShort => 'Назва групи має містити не менше 3 символів';
-
-  @override
-  String get messaging_ConversationBuilders_connectionError => 'Помилка підключення, спробуйте пізніше';
-
-  @override
-  String get messaging_ConversationBuilders_submitError => 'Під час створення групи сталася помилка, повторіть спробу';
-
-  @override
-  String get messaging_GroupScreen_titlePrefix => 'Група:';
-
-  @override
-  String get messaging_ChooseContact_title => 'Виберіть контакт:';
-
-  @override
-  String get messaging_ChooseContact_empty => 'Контакти не знайдено';
-
-  @override
-  String get messaging_ChooseContact_cancel => 'Скасувати';
-
-  @override
-  String get messaging_ConfirmDialog_ask => 'Ви впевнені?';
-
-  @override
-  String get messaging_ConfirmDialog_confirm => 'Так';
-
-  @override
-  String get messaging_ConfirmDialog_cancel => 'Ні';
-
-  @override
-  String get messaging_GroupAuthorities_noauthorities => 'учасник';
-
-  @override
-  String get messaging_GroupAuthorities_moderator => 'модератор';
-
-  @override
-  String get messaging_GroupAuthorities_owner => 'власник';
-
-  @override
-  String get messaging_GroupInfo_title => 'Інформація про групу';
-
-  @override
-  String get messaging_GroupInfo_leaveAsk => 'Ви впевнені, що бажаєте залишити цю групу?';
-
-  @override
-  String get messaging_GroupInfo_leaveAndDeleteAsk => 'Ви впевнені, що бажаєте залишити та видалити цю групу?';
-
-  @override
-  String get messaging_GroupInfo_removeUserAsk => 'Ви впевнені, що хочете видалити цього користувача з групи?';
-
-  @override
-  String get messaging_GroupInfo_makeModeratorAsk => 'Ви впевнені, що хочете зробити цього користувача модератором?';
-
-  @override
-  String get messaging_GroupInfo_removeModeratorAsk => 'Ви впевнені, що хочете видалити цього користувача з модераторів?';
-
-  @override
-  String get messaging_GroupInfo_titlePrefix => 'Група:';
-
-  @override
-  String get messaging_GroupInfo_groupMembersHeadline => 'Члени групи';
-
-  @override
-  String get messaging_GroupInfo_addUserBtnText => 'Додати користувача';
-
-  @override
-  String get messaging_GroupInfo_leaveBtnText => 'Вийти з групи';
-
-  @override
-  String get messaging_GroupInfo_deleteLeaveBtnText => 'Видалити і залишити';
-
-  @override
-  String get messaging_GroupInfo_makeModeratorBtnText => 'Зробити модератором';
-
-  @override
-  String get messaging_GroupInfo_unmakeModeratorBtnText => 'Прибрати модератора';
-
-  @override
-  String get messaging_GroupInfo_removeUserBtnText => 'Видалити';
-
-  @override
-  String get messaging_GroupNameDialog_title => 'Назва групи';
-
-  @override
-  String get messaging_GroupNameDialog_fieldLabel => 'Назва групи';
-
-  @override
-  String get messaging_GroupNameDialog_fieldHint => 'Введіть назву групи';
-
-  @override
-  String get messaging_GroupNameDialog_fieldValidation_empty => 'Будь ласка, введіть назву групи';
-
-  @override
-  String get messaging_GroupNameDialog_fieldValidation_short => 'Назва групи занадто коротка';
-
-  @override
-  String get messaging_GroupNameDialog_saveBtnText => 'Зберегти';
-
-  @override
-  String get messaging_GroupNameDialog_cancelBtnText => 'Скасувати';
-
-  @override
-  String get messaging_MessageListView_typingTrail => 'надруковує...';
-
-  @override
-  String get default_MessagingSocketException => 'Помилка з\'єднання з сервером';
-
-  @override
-  String get default_UnauthorizedMessagingSocketException => 'Помилка авторизації';
-
-  @override
-  String get default_ForbiddenMessagingSocketException => 'Доступ заборонено';
-
-  @override
-  String get default_InternalErrorMessagingSocketException => 'Внутрішня помилка сервера';
-
-  @override
-  String get default_ChatNotFoundMessagingSocketException => 'Чат не знайдено';
-
-  @override
-  String get default_InvalidChatTypeMessagingSocketException => 'Недійсний тип чату';
-
-  @override
-  String get default_UserAlreadyInChatMessagingSocketException => 'Користувач вже в чаті';
-
-  @override
-  String get default_ChatMemberNotFoundMessagingSocketException => 'Учасник чату не знайдений';
-
-  @override
-  String get default_SelfRemovalForbiddenMessagingSocketException => 'Видалення самого себе заборонено';
-
-  @override
-  String get default_SelfAuthorityAssignmentForbiddenMessagingSocketException => 'Призначення власних прав заборонено';
-
-  @override
-  String get default_SmsConversationNotFoundMessagingSocketException => 'SMS-розмова не знайдена';
-
-  @override
-  String get account_selfCarePasswordExpired_message => 'Термін дії вашого пароля самообслуговування минув. Оновіть його за допомогою самообслуговування.\nДоки пароль не буде змінено, доступ до служби буде обмежено.';
-
-  @override
-  String get common_noInternetConnection_title => 'Немає підключення до Інтернету';
-
-  @override
-  String get common_noInternetConnection_message => 'Схоже, ви не підключені до Інтернету. Перевірте своє підключення і спробуйте ще раз.';
-
-  @override
-  String get common_noInternetConnection_retryButton => 'Спробуйте ще раз';
-
-  @override
-  String get common_problemWithLoadingPage => 'Виникла проблема з завантаженням сторінки.';
 }
