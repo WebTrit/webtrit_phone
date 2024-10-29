@@ -9,6 +9,9 @@ class AppLocalizationsIt extends AppLocalizations {
   AppLocalizationsIt([String locale = 'it']) : super(locale);
 
   @override
+  String get account_selfCarePasswordExpired_message => 'La tua password di self-care è scaduta. Ti preghiamo di aggiornarla utilizzando il self-care.\nFino a quando la password non sarà cambiata, l\'accesso al servizio sarà limitato.';
+
+  @override
   String get alertDialogActions_no => 'No';
 
   @override
@@ -123,6 +126,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get call_FailureAcknowledgeDialog_title => 'Guasto';
 
   @override
+  String get callProcessingStatus_disconnecting => 'Desconectando la llamada, por favor espere…';
+
+  @override
   String get callStatus_appUnregistered => 'Non registrato';
 
   @override
@@ -141,10 +147,202 @@ class AppLocalizationsIt extends AppLocalizations {
   String get callStatus_ready => 'Connessione stabilita';
 
   @override
-  String get callProcessingStatus_disconnecting => 'Desconectando la llamada, por favor espere…';
+  String get call_ThumbnailAvatar_currentlyNoActiveCall => 'Actualmente, no hay ninguna llamada activa';
 
   @override
-  String get call_ThumbnailAvatar_currentlyNoActiveCall => 'Actualmente, no hay ninguna llamada activa';
+  String get chats_ActionBtn_retry => 'Riprova';
+
+  @override
+  String get chats_AddContactDialog_cancel => 'Cancellare';
+
+  @override
+  String get chats_AddContactDialog_empty => 'Nessun contatto trovato';
+
+  @override
+  String get chats_AddContactDialog_title => 'Scegli il contatto:';
+
+  @override
+  String get chats_ChatListItem_empty => 'Nessun messaggio ancora';
+
+  @override
+  String get chats_ChatListScreen_createGroup => 'Crea gruppo';
+
+  @override
+  String get chats_ChatListScreen_empty => 'Nessuna conversazione è ancora iniziata';
+
+  @override
+  String get chats_ChatListScreen_startDialog => 'Avvia dialogo';
+
+  @override
+  String get chats_ConfirmDialog_ask => 'SÌ?';
+
+  @override
+  String get chats_ConfirmDialog_cancel => 'No';
+
+  @override
+  String get chats_ConfirmDialog_confirm => 'SÌ';
+
+  @override
+  String get chats_Conversation_failure => 'Errore di caricamento della conversazione';
+
+  @override
+  String get chats_ConversationScreen_deleteAsk => 'Sei sicuro di voler eliminare questa finestra di dialogo?';
+
+  @override
+  String get chats_ConversationScreen_deleteDialog => 'Elimina dialogo';
+
+  @override
+  String get chats_ConversationScreen_titlePrefix => 'Dialogo:';
+
+  @override
+  String get chats_GroupAuthorities_moderator => 'moderatore';
+
+  @override
+  String get chats_GroupAuthorities_noauthorities => 'membro';
+
+  @override
+  String get chats_GroupAuthorities_owner => 'proprietario';
+
+  @override
+  String get chats_GroupBuilderScreen_addUserBtnText => 'Aggiungi utente';
+
+  @override
+  String get chats_GroupBuilderScreen_connectionError => 'Errore di connessione, riprova più tardi';
+
+  @override
+  String get chats_GroupBuilderScreen_groupNameHeadline => 'Nome del gruppo';
+
+  @override
+  String get chats_GroupBuilderScreen_membersHeadline => 'Membri';
+
+  @override
+  String get chats_GroupBuilderScreen_nameFieldEmpty => 'Inserisci un nome di gruppo';
+
+  @override
+  String get chats_GroupBuilderScreen_nameFieldLabel => 'Nome del gruppo';
+
+  @override
+  String get chats_GroupBuilderScreen_nameFieldShort => 'Il nome del gruppo deve essere composto da almeno 3 caratteri';
+
+  @override
+  String get chats_GroupBuilderScreen_screenTitle => 'Crea gruppo';
+
+  @override
+  String get chats_GroupBuilderScreen_submitBtnText => 'Invia';
+
+  @override
+  String get chats_GroupBuilderScreen_submitError => 'Si è verificato un errore durante la creazione del gruppo, riprovare.';
+
+  @override
+  String get chats_GroupDrawer_addUserBtnText => 'Aggiungi utente';
+
+  @override
+  String get chats_GroupDrawer_deleteLeaveBtnText => 'Elimina e lascia';
+
+  @override
+  String get chats_GroupDrawer_groupMembersHeadline => 'Membri del gruppo';
+
+  @override
+  String get chats_GroupDrawer_leaveAndDeleteAsk => 'Vuoi davvero uscire ed eliminare questo gruppo?';
+
+  @override
+  String get chats_GroupDrawer_leaveAsk => 'Sei sicuro di voler abbandonare questo gruppo?';
+
+  @override
+  String get chats_GroupDrawer_leaveBtnText => 'Lascia il gruppo';
+
+  @override
+  String get chats_GroupDrawer_makeModeratorAsk => 'Sei sicuro di voler rendere questo utente un moderatore?';
+
+  @override
+  String get chats_GroupDrawer_makeModeratorBtnText => 'Rendi moderatore';
+
+  @override
+  String get chats_GroupDrawer_removeModeratorAsk => 'Sei sicuro di voler rimuovere questo utente dai moderatori?';
+
+  @override
+  String get chats_GroupDrawer_removeUserAsk => 'Vuoi davvero rimuovere questo utente dal gruppo?';
+
+  @override
+  String get chats_GroupDrawer_removeUserBtnText => 'Rimuovere';
+
+  @override
+  String get chats_GroupDrawer_titlePrefix => 'Gruppo:';
+
+  @override
+  String get chats_GroupDrawer_unmakeModeratorBtnText => 'Annulla moderatore';
+
+  @override
+  String get chats_GroupNameDialog_cancelBtnText => 'Cancellare';
+
+  @override
+  String get chats_GroupNameDialog_fieldHint => 'Inserisci il nome del gruppo';
+
+  @override
+  String get chats_GroupNameDialog_fieldLabel => 'Nome del gruppo';
+
+  @override
+  String get chats_GroupNameDialog_fieldValidation_empty => 'Per favore, inserisci il nome del gruppo';
+
+  @override
+  String get chats_GroupNameDialog_fieldValidation_short => 'Il nome del gruppo è troppo corto';
+
+  @override
+  String get chats_GroupNameDialog_saveBtnText => 'Salva';
+
+  @override
+  String get chats_GroupNameDialog_title => 'Nome del gruppo';
+
+  @override
+  String get chats_GroupScreen_titlePrefix => 'Gruppo:';
+
+  @override
+  String get chats_MessageView_delete => 'Eliminare';
+
+  @override
+  String get chats_MessageView_deleted => '[cancellato]';
+
+  @override
+  String get chats_MessageView_edit => 'Modificare';
+
+  @override
+  String get chats_MessageView_edited => '[modificato]';
+
+  @override
+  String get chats_MessageView_forward => 'Inoltrare';
+
+  @override
+  String get chats_MessageView_forwarded => '[inoltrato]';
+
+  @override
+  String get chats_MessageView_reply => 'Rispondere';
+
+  @override
+  String get chats_MessageView_textcopy => 'Copia negli appunti';
+
+  @override
+  String get chats_ParticipantName_you => 'Voi';
+
+  @override
+  String get chats_StateBar_connecting => 'CONNESSIONE';
+
+  @override
+  String get chats_StateBar_error => 'DISCONNESSO';
+
+  @override
+  String get chats_StateBar_initializing => 'INIZIALIZZAZIONE';
+
+  @override
+  String get common_noInternetConnection_message => 'Sembra che tu non sia connesso a Internet. Controlla la tua connessione e riprova.';
+
+  @override
+  String get common_noInternetConnection_retryButton => 'Riprova';
+
+  @override
+  String get common_noInternetConnection_title => 'Nessuna connessione Internet';
+
+  @override
+  String get common_problemWithLoadingPage => 'Si è verificato un problema durante il caricamento della pagina.';
 
   @override
   String get connectToYourOwnVoIPSystem_Button_Action => 'Connettiti al tuo sistema VoIP';
@@ -195,6 +393,12 @@ class AppLocalizationsIt extends AppLocalizations {
   String get copyToClipboard_popupMenuItem => 'Copia negli appunti';
 
   @override
+  String get default_ChatMemberNotFoundMessagingSocketException => 'Membro della chat non trovato';
+
+  @override
+  String get default_ChatNotFoundMessagingSocketException => 'Chat non trovata';
+
+  @override
   String get default_ClientExceptionError => 'Si è verificato un problema con il client HTTP';
 
   @override
@@ -210,10 +414,31 @@ class AppLocalizationsIt extends AppLocalizations {
   String get default_ErrorTransactionId => 'ID transazione';
 
   @override
+  String get default_ForbiddenMessagingSocketException => 'Vietato';
+
+  @override
   String get default_FormatExceptionError => 'Si è verificato un problema di formato della risposta';
 
   @override
+  String get default_InternalErrorMessagingSocketException => 'Errore interno del server';
+
+  @override
+  String get default_InvalidChatTypeMessagingSocketException => 'Tipo di chat non valido';
+
+  @override
+  String get default_MessagingSocketException => 'Si è verificato un errore durante la comunicazione con il server';
+
+  @override
   String get default_RequestFailureError => 'Si è verificato un errore del server';
+
+  @override
+  String get default_SelfAuthorityAssignmentForbiddenMessagingSocketException => 'Assegnazione di autorità a se stessi vietata';
+
+  @override
+  String get default_SelfRemovalForbiddenMessagingSocketException => 'Rimozione di se stessi vietata';
+
+  @override
+  String get default_SmsConversationNotFoundMessagingSocketException => 'Conversazione SMS non trovata';
 
   @override
   String get default_SocketExceptionError => 'Si è verificato un problema di rete';
@@ -228,7 +453,13 @@ class AppLocalizationsIt extends AppLocalizations {
   String get default_TypeErrorError => 'Si è verificato un problema di risposta';
 
   @override
+  String get default_UnauthorizedMessagingSocketException => 'Non autorizzato';
+
+  @override
   String get default_UnauthorizedRequestFailureError => 'Si è verificato un errore di richiesta non autorizzata';
+
+  @override
+  String get default_UserAlreadyInChatMessagingSocketException => 'Utente già nella chat';
 
   @override
   String get favorites_BodyCenter_empty => 'Al momento non hai numeri preferiti.\nAggiungi ai preferiti dai Contatti usando l\'icona a stella';
@@ -476,6 +707,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get logRecordsConsole_Text_failure => 'Si è verificato un errore imprevisto';
 
   @override
+  String get main_BottomNavigationBarItemLabel_chats => 'Le chat';
+
+  @override
   String get main_BottomNavigationBarItemLabel_contacts => 'Contatti';
 
   @override
@@ -483,9 +717,6 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get main_BottomNavigationBarItemLabel_keypad => 'Tastiera';
-
-  @override
-  String get main_BottomNavigationBarItemLabel_chats => 'Le chat';
 
   @override
   String get main_BottomNavigationBarItemLabel_recents => 'Recenti';
@@ -508,7 +739,397 @@ class AppLocalizationsIt extends AppLocalizations {
   String get main_CompatibilityIssueDialog_title => 'Problema di compatibilità';
 
   @override
+  String get messaging_ActionBtn_retry => 'Riprova';
+
+  @override
+  String get messaging_ChooseContact_cancel => 'Cancellare';
+
+  @override
+  String get messaging_ChooseContact_empty => 'Nessun contatto trovato';
+
+  @override
+  String get messaging_ChooseContact_title => 'Scegli il contatto:';
+
+  @override
+  String get messaging_ConfirmDialog_ask => 'SÌ?';
+
+  @override
+  String get messaging_ConfirmDialog_cancel => 'No';
+
+  @override
+  String get messaging_ConfirmDialog_confirm => 'SÌ';
+
+  @override
+  String get messaging_ConversationBuilders_addUserBtnText => 'Aggiungi utente';
+
+  @override
+  String get messaging_ConversationBuilders_back => 'Dopo';
+
+  @override
+  String get messaging_ConversationBuilders_back_action => 'Dopo';
+
+  @override
+  String get messaging_ConversationBuilders_cancel => 'Cancellare';
+
+  @override
+  String get messaging_ConversationBuilders_connectionError => 'Errore di connessione, riprova più tardi';
+
+  @override
+  String get messaging_ConversationBuilders_contactOrNumberSearch_hint => 'Inserisci nome o numero di telefono';
+
+  @override
+  String get messaging_ConversationBuilders_contactSearch_hint => 'Cerca contatti';
+
+  @override
+  String get messaging_ConversationBuilders_create => 'Creare';
+
+  @override
+  String get messaging_ConversationBuilders_createGroup => 'Crea gruppo';
+
+  @override
+  String get messaging_ConversationBuilders_externalContacts_heading => 'Contatti Cloud PBX';
+
+  @override
+  String get messaging_ConversationBuilders_groupNameHeadline => 'Nome del gruppo';
+
+  @override
+  String get messaging_ConversationBuilders_invalidNumber_message1 => 'Il tsontact ha un numero di telefono non valido. Dovrebbe essere nel formato ';
+
+  @override
+  String get messaging_ConversationBuilders_invalidNumber_message2 => '. Per favore, lo trovi nella nostra rubrica.';
+
+  @override
+  String get messaging_ConversationBuilders_invalidNumber_ok => 'Tslose';
+
+  @override
+  String get messaging_ConversationBuilders_invalidNumber_title => 'Numero di telefono disabilitato';
+
+  @override
+  String get messaging_ConversationBuilders_invite_heading => 'Invita utenti:';
+
+  @override
+  String get messaging_ConversationBuilders_localContacts_heading => 'Contatti locali';
+
+  @override
+  String get messaging_ConversationBuilders_membersHeadline => 'Membri';
+
+  @override
+  String get messaging_ConversationBuilders_nameFieldEmpty => 'Inserisci un nome di gruppo';
+
+  @override
+  String get messaging_ConversationBuilders_nameFieldLabel => 'Nome del gruppo';
+
+  @override
+  String get messaging_ConversationBuilders_nameFieldShort => 'Il nome del gruppo deve essere composto da almeno 3 caratteri';
+
+  @override
+  String get messaging_ConversationBuilders_next_action => 'Prossima';
+
+  @override
+  String get messaging_ConversationBuilders_noContacts => 'Non ci sono contatti che corrispondono al risultato della ricerca';
+
+  @override
+  String get messaging_ConversationBuilders_numberFormatExample => '+ [prefisso nazionale] [prefisso operatore] [numero abbonato]';
+
+  @override
+  String get messaging_ConversationBuilders_numberSearch_errorError => 'Il numero di telefono inserito non è valido. Deve essere inserito nel formato: ';
+
+  @override
+  String get messaging_ConversationBuilders_numberSearch_errorHint => 'Formato del numero di telefono: ';
+
+  @override
+  String get messaging_ConversationBuilders_submitBtnText => 'Invia';
+
+  @override
+  String get messaging_ConversationBuilders_submitError => 'Si è verificato un errore durante la creazione del gruppo, riprovare.';
+
+  @override
+  String get messaging_ConversationBuilders_title_group => 'Crea gruppo';
+
+  @override
+  String get messaging_ConversationBuilders_title_new => 'Nuova chat';
+
+  @override
+  String get messaging_Conversation_failure => 'Errore di caricamento della conversazione';
+
+  @override
+  String get messaging_ConversationInfo_deleteAsk => 'Sei sicuro di voler eliminare questa finestra di dialogo?';
+
+  @override
+  String get messaging_ConversationInfo_deleteBtn => 'Elimina dialogo';
+
+  @override
+  String get messaging_ConversationInfo_title => 'Informazioni contatto';
+
+  @override
+  String get messaging_ConversationScreen_titlePrefix => 'Dialogo:';
+
+  @override
+  String get messaging_ConversationsScreen_chatsSearch_hint => 'Inserisci il nome della chat o dell\'utente';
+
+  @override
+  String get messaging_ConversationsScreen_empty => 'Nessuna conversazione è ancora iniziata';
+
+  @override
+  String get messaging_ConversationsScreen_messages_title => 'Messaggi';
+
+  @override
+  String get messaging_ConversationsScreen_noNumberAlert_text => 'Per inviare messaggi SMS è necessario avere un numero di telefono collegato al tuo account';
+
+  @override
+  String get messaging_ConversationsScreen_noNumberAlert_title => 'Nessun numero di telefono';
+
+  @override
+  String get messaging_ConversationsScreen_selectNumberSheet_title => 'Seleziona un numero';
+
+  @override
+  String get messaging_ConversationsScreen_smses_title => 'SMS';
+
+  @override
+  String get messaging_ConversationsScreen_smssSearch_hint => 'Inserisci il numero di telefono';
+
+  @override
+  String get messaging_ConversationsScreen_startDialog => 'Avvia dialogo';
+
+  @override
+  String get messaging_Conversations_tile_empty => 'Nessun messaggio ancora';
+
+  @override
+  String get messaging_Conversations_tile_you => 'Voi';
+
+  @override
+  String get messaging_DialogInfo_deleteAsk => 'Sei sicuro di voler eliminare questa finestra di dialogo?';
+
+  @override
+  String get messaging_DialogInfo_deleteBtn => 'Elimina dialogo';
+
+  @override
+  String get messaging_DialogInfo_title => 'Informazioni contatto';
+
+  @override
+  String get messaging_GroupAuthorities_moderator => 'moderatore';
+
+  @override
+  String get messaging_GroupAuthorities_noauthorities => 'membro';
+
+  @override
+  String get messaging_GroupAuthorities_owner => 'proprietario';
+
+  @override
+  String get messaging_GroupBuilderScreen_addUserBtnText => 'Aggiungi utente';
+
+  @override
+  String get messaging_GroupBuilderScreen_connectionError => 'Errore di connessione, riprova più tardi';
+
+  @override
+  String get messaging_GroupBuilderScreen_groupNameHeadline => 'Nome del gruppo';
+
+  @override
+  String get messaging_GroupBuilderScreen_membersHeadline => 'Membri';
+
+  @override
+  String get messaging_GroupBuilderScreen_nameFieldEmpty => 'Inserisci un nome di gruppo';
+
+  @override
+  String get messaging_GroupBuilderScreen_nameFieldLabel => 'Nome del gruppo';
+
+  @override
+  String get messaging_GroupBuilderScreen_nameFieldShort => 'Il nome del gruppo deve essere composto da almeno 3 caratteri';
+
+  @override
+  String get messaging_GroupBuilderScreen_screenTitle => 'Crea gruppo';
+
+  @override
+  String get messaging_GroupBuilderScreen_submitBtnText => 'Invia';
+
+  @override
+  String get messaging_GroupBuilderScreen_submitError => 'Si è verificato un errore durante la creazione del gruppo, riprovare.';
+
+  @override
+  String get messaging_GroupInfo_addUserBtnText => 'Aggiungi utente';
+
+  @override
+  String get messaging_GroupInfo_deleteLeaveBtnText => 'Elimina e lascia';
+
+  @override
+  String get messaging_GroupInfo_groupMembersHeadline => 'Membri del gruppo';
+
+  @override
+  String get messaging_GroupInfo_leaveAndDeleteAsk => 'Vuoi davvero uscire ed eliminare questo gruppo?';
+
+  @override
+  String get messaging_GroupInfo_leaveAsk => 'Sei sicuro di voler abbandonare questo gruppo?';
+
+  @override
+  String get messaging_GroupInfo_leaveBtnText => 'Lascia il gruppo';
+
+  @override
+  String get messaging_GroupInfo_makeModeratorAsk => 'Sei sicuro di voler rendere questo utente un moderatore?';
+
+  @override
+  String get messaging_GroupInfo_makeModeratorBtnText => 'Rendi moderatore';
+
+  @override
+  String get messaging_GroupInfo_removeModeratorAsk => 'Sei sicuro di voler rimuovere questo utente dai moderatori?';
+
+  @override
+  String get messaging_GroupInfo_removeUserAsk => 'Vuoi davvero rimuovere questo utente dal gruppo?';
+
+  @override
+  String get messaging_GroupInfo_removeUserBtnText => 'Rimuovere';
+
+  @override
+  String get messaging_GroupInfo_title => 'Informazioni sul gruppo';
+
+  @override
+  String get messaging_GroupInfo_titlePrefix => 'Gruppo:';
+
+  @override
+  String get messaging_GroupInfo_unmakeModeratorBtnText => 'Annulla moderatore';
+
+  @override
+  String get messaging_GroupNameDialog_cancelBtnText => 'Cancellare';
+
+  @override
+  String get messaging_GroupNameDialog_fieldHint => 'Inserisci il nome del gruppo';
+
+  @override
+  String get messaging_GroupNameDialog_fieldLabel => 'Nome del gruppo';
+
+  @override
+  String get messaging_GroupNameDialog_fieldValidation_empty => 'Per favore, inserisci il nome del gruppo';
+
+  @override
+  String get messaging_GroupNameDialog_fieldValidation_short => 'Il nome del gruppo è troppo corto';
+
+  @override
+  String get messaging_GroupNameDialog_saveBtnText => 'Salva';
+
+  @override
+  String get messaging_GroupNameDialog_title => 'Nome del gruppo';
+
+  @override
+  String get messaging_GroupScreen_titlePrefix => 'Gruppo:';
+
+  @override
+  String get messaging_MessageField_hint => 'Scrivi un messaggio';
+
+  @override
+  String get messaging_MessageListView_typingTrail => 'stampe...';
+
+  @override
+  String get messaging_MessageView_delete => 'Eliminare';
+
+  @override
+  String get messaging_MessageView_deleted => '[cancellato]';
+
+  @override
+  String get messaging_MessageView_edit => 'Modificare';
+
+  @override
+  String get messaging_MessageView_edited => '[modificato]';
+
+  @override
+  String get messaging_MessageView_forward => 'Inoltrare';
+
+  @override
+  String get messaging_MessageView_forwarded => '[inoltrato]';
+
+  @override
+  String get messaging_MessageView_reply => 'Rispondere';
+
+  @override
+  String get messaging_MessageView_textcopy => 'Copia negli appunti';
+
+  @override
+  String get messaging_NewConversation_back_action => 'Dopo';
+
+  @override
+  String get messaging_NewConversation_cancel => 'Cancellare';
+
+  @override
+  String get messaging_NewConversation_contactOrNumberSearch_hint => 'Inserisci nome o numero di telefono';
+
+  @override
+  String get messaging_NewConversation_contactSearch_hint => 'Cerca contatti';
+
+  @override
+  String get messaging_NewConversation_create => 'Creare';
+
+  @override
+  String get messaging_NewConversation_createGroup => 'Crea gruppo';
+
+  @override
+  String get messaging_NewConversation_externalContacts_heading => 'Contatti Cloud PBX';
+
+  @override
+  String get messaging_NewConversation_invalidNumber_message => '';
+
+  @override
+  String get messaging_NewConversation_invalidNumber_message1 => 'Il tsontact ha un numero di telefono non valido. Dovrebbe essere nel formato ';
+
+  @override
+  String get messaging_NewConversation_invalidNumber_message2 => '. Per favore, lo trovi nella nostra rubrica.';
+
+  @override
+  String get messaging_NewConversation_invalidNumber_ok => 'Tslose';
+
+  @override
+  String get messaging_NewConversation_invalidNumber_title => 'Numero di telefono disabilitato';
+
+  @override
+  String get messaging_NewConversation_invite_heading => 'Invita utenti:';
+
+  @override
+  String get messaging_NewConversation_localContacts_heading => 'Contatti locali';
+
+  @override
+  String get messaging_NewConversation_next_action => 'Prossima';
+
+  @override
+  String get messaging_NewConversation_noContacts => 'Non ci sono contatti che corrispondono al risultato della ricerca';
+
+  @override
+  String get messaging_NewConversation_numberFormatExample => '+ [prefisso nazionale] [prefisso operatore] [numero abbonato]';
+
+  @override
+  String get messaging_NewConversation_numberSearch_errorError => 'Il numero di telefono inserito non è valido. Deve essere inserito nel formato: ';
+
+  @override
+  String get messaging_NewConversation_numberSearch_errorHint => 'Formato del numero di telefono: ';
+
+  @override
+  String get messaging_NewConversation_title => 'Nuova chat';
+
+  @override
+  String get messaging_ParticipantName_you => 'Voi';
+
+  @override
+  String get messaging_SmsSendingStatus_delivered => 'consegnato';
+
+  @override
+  String get messaging_SmsSendingStatus_failed => 'fallito';
+
+  @override
+  String get messaging_SmsSendingStatus_sent => 'inviato';
+
+  @override
+  String get messaging_SmsSendingStatus_waiting => 'inatteso';
+
+  @override
+  String get messaging_StateBar_connecting => 'CONNESSIONE';
+
+  @override
+  String get messaging_StateBar_error => 'DISCONNESSO';
+
+  @override
+  String get messaging_StateBar_initializing => 'INIZIALIZZAZIONE';
+
+  @override
   String get notifications_errorSnackBarAction_callUserMedia => 'Verifica';
+
+  @override
+  String get notifications_errorSnackBar_activeLineBlindTransferWarning => 'Sei già in linea con il destinatario a cui stai cercando di trasferire alla cieca';
 
   @override
   String get notifications_errorSnackBar_appOffline => 'La tua apllicazione è offline';
@@ -518,9 +1139,6 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get notifications_errorSnackBar_appUnregistered => 'Siamo spiacenti, la tua applicazione è attualmente disconnessa dai server principali WebTrit e quindi non è possibile chiamare in questo momento. Vai alla pagina delle impostazioni e fai scorrere l\'interruttore dello stato online ( a OFF e poi ancora ad ON) per ristabilire la connessione';
-
-  @override
-  String get notifications_errorSnackBar_sipServiceUnavailable => 'Errore di autenticazione con il sistema VoIP remoto';
 
   @override
   String get notifications_errorSnackBar_callConnect => 'Connessione al server non riuscita, tentativo di riconnessione in corso';
@@ -538,7 +1156,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get notifications_errorSnackBar_callUserMedia => 'Nessun accesso al server multimediale, controlla le autorizzazioni dell\'app';
 
   @override
-  String get notifications_errorSnackBar_activeLineBlindTransferWarning => 'Sei già in linea con il destinatario a cui stai cercando di trasferire alla cieca';
+  String get notifications_errorSnackBar_sipServiceUnavailable => 'Errore di autenticazione con il sistema VoIP remoto';
 
   @override
   String get notImplemented => 'Spiacente, non ancora implementato';
@@ -746,340 +1364,4 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get webRegistration_ErrorAcknowledgeDialog_title => 'Web resource error';
-
-  @override
-  String get messaging_Conversation_failure => 'Errore di caricamento della conversazione';
-
-  @override
-  String get messaging_ActionBtn_retry => 'Riprova';
-
-  @override
-  String get messaging_MessageView_textcopy => 'Copia negli appunti';
-
-  @override
-  String get messaging_MessageView_reply => 'Rispondere';
-
-  @override
-  String get messaging_MessageView_forward => 'Inoltrare';
-
-  @override
-  String get messaging_MessageView_edit => 'Modificare';
-
-  @override
-  String get messaging_MessageView_delete => 'Eliminare';
-
-  @override
-  String get messaging_MessageView_forwarded => '[inoltrato]';
-
-  @override
-  String get messaging_MessageView_edited => '[modificato]';
-
-  @override
-  String get messaging_MessageView_deleted => '[cancellato]';
-
-  @override
-  String get messaging_SmsSendingStatus_waiting => 'inatteso';
-
-  @override
-  String get messaging_SmsSendingStatus_sent => 'inviato';
-
-  @override
-  String get messaging_SmsSendingStatus_failed => 'fallito';
-
-  @override
-  String get messaging_SmsSendingStatus_delivered => 'consegnato';
-
-  @override
-  String get messaging_ParticipantName_you => 'Voi';
-
-  @override
-  String get messaging_StateBar_initializing => 'INIZIALIZZAZIONE';
-
-  @override
-  String get messaging_StateBar_connecting => 'CONNESSIONE';
-
-  @override
-  String get messaging_StateBar_error => 'DISCONNESSO';
-
-  @override
-  String get messaging_ConversationsScreen_startDialog => 'Avvia dialogo';
-
-  @override
-  String get messaging_ConversationsScreen_empty => 'Nessuna conversazione è ancora iniziata';
-
-  @override
-  String get messaging_ConversationsScreen_chatsSearch_hint => 'Inserisci il nome della chat o dell\'utente';
-
-  @override
-  String get messaging_ConversationsScreen_smssSearch_hint => 'Inserisci il numero di telefono';
-
-  @override
-  String get messaging_ConversationsScreen_messages_title => 'Messaggi';
-
-  @override
-  String get messaging_ConversationsScreen_smses_title => 'SMS';
-
-  @override
-  String get messaging_ConversationsScreen_selectNumberSheet_title => 'Seleziona un numero';
-
-  @override
-  String get messaging_ConversationsScreen_noNumberAlert_title => 'Nessun numero di telefono';
-
-  @override
-  String get messaging_ConversationsScreen_noNumberAlert_text => 'Per inviare messaggi SMS è necessario avere un numero di telefono collegato al tuo account';
-
-  @override
-  String get messaging_Conversations_tile_empty => 'Nessun messaggio ancora';
-
-  @override
-  String get messaging_Conversations_tile_you => 'Voi';
-
-  @override
-  String get messaging_MessageField_hint => 'Scrivi un messaggio';
-
-  @override
-  String get messaging_ConversationScreen_titlePrefix => 'Dialogo:';
-
-  @override
-  String get messaging_DialogInfo_deleteAsk => 'Sei sicuro di voler eliminare questa finestra di dialogo?';
-
-  @override
-  String get messaging_DialogInfo_title => 'Informazioni contatto';
-
-  @override
-  String get messaging_DialogInfo_deleteBtn => 'Elimina dialogo';
-
-  @override
-  String get messaging_ConversationBuilders_createGroup => 'Crea gruppo';
-
-  @override
-  String get messaging_ConversationBuilders_title_new => 'Nuova chat';
-
-  @override
-  String get messaging_ConversationBuilders_cancel => 'Cancellare';
-
-  @override
-  String get messaging_ConversationBuilders_back => 'Dopo';
-
-  @override
-  String get messaging_ConversationBuilders_create => 'Creare';
-
-  @override
-  String get messaging_ConversationBuilders_externalContacts_heading => 'Contatti Cloud PBX';
-
-  @override
-  String get messaging_ConversationBuilders_localContacts_heading => 'Contatti locali';
-
-  @override
-  String get messaging_ConversationBuilders_contactSearch_hint => 'Cerca contatti';
-
-  @override
-  String get messaging_ConversationBuilders_contactOrNumberSearch_hint => 'Inserisci nome o numero di telefono';
-
-  @override
-  String get messaging_ConversationBuilders_numberFormatExample => '+ [prefisso nazionale] [prefisso operatore] [numero abbonato]';
-
-  @override
-  String get messaging_ConversationBuilders_numberSearch_errorHint => 'Formato del numero di telefono: ';
-
-  @override
-  String get messaging_ConversationBuilders_numberSearch_errorError => 'Il numero di telefono inserito non è valido. Deve essere inserito nel formato: ';
-
-  @override
-  String get messaging_ConversationBuilders_invite_heading => 'Invita utenti:';
-
-  @override
-  String get messaging_ConversationBuilders_next_action => 'Prossima';
-
-  @override
-  String get messaging_ConversationBuilders_back_action => 'Dopo';
-
-  @override
-  String get messaging_ConversationBuilders_noContacts => 'Non ci sono contatti che corrispondono al risultato della ricerca';
-
-  @override
-  String get messaging_ConversationBuilders_invalidNumber_title => 'Numero di telefono disabilitato';
-
-  @override
-  String get messaging_ConversationBuilders_invalidNumber_message1 => 'Il tsontact ha un numero di telefono non valido. Dovrebbe essere nel formato ';
-
-  @override
-  String get messaging_ConversationBuilders_invalidNumber_message2 => '. Per favore, lo trovi nella nostra rubrica.';
-
-  @override
-  String get messaging_ConversationBuilders_invalidNumber_ok => 'Tslose';
-
-  @override
-  String get messaging_ConversationBuilders_title_group => 'Crea gruppo';
-
-  @override
-  String get messaging_ConversationBuilders_groupNameHeadline => 'Nome del gruppo';
-
-  @override
-  String get messaging_ConversationBuilders_membersHeadline => 'Membri';
-
-  @override
-  String get messaging_ConversationBuilders_addUserBtnText => 'Aggiungi utente';
-
-  @override
-  String get messaging_ConversationBuilders_submitBtnText => 'Invia';
-
-  @override
-  String get messaging_ConversationBuilders_nameFieldLabel => 'Nome del gruppo';
-
-  @override
-  String get messaging_ConversationBuilders_nameFieldEmpty => 'Inserisci un nome di gruppo';
-
-  @override
-  String get messaging_ConversationBuilders_nameFieldShort => 'Il nome del gruppo deve essere composto da almeno 3 caratteri';
-
-  @override
-  String get messaging_ConversationBuilders_connectionError => 'Errore di connessione, riprova più tardi';
-
-  @override
-  String get messaging_ConversationBuilders_submitError => 'Si è verificato un errore durante la creazione del gruppo, riprovare.';
-
-  @override
-  String get messaging_GroupScreen_titlePrefix => 'Gruppo:';
-
-  @override
-  String get messaging_ChooseContact_title => 'Scegli il contatto:';
-
-  @override
-  String get messaging_ChooseContact_empty => 'Nessun contatto trovato';
-
-  @override
-  String get messaging_ChooseContact_cancel => 'Cancellare';
-
-  @override
-  String get messaging_ConfirmDialog_ask => 'SÌ?';
-
-  @override
-  String get messaging_ConfirmDialog_confirm => 'SÌ';
-
-  @override
-  String get messaging_ConfirmDialog_cancel => 'No';
-
-  @override
-  String get messaging_GroupAuthorities_noauthorities => 'membro';
-
-  @override
-  String get messaging_GroupAuthorities_moderator => 'moderatore';
-
-  @override
-  String get messaging_GroupAuthorities_owner => 'proprietario';
-
-  @override
-  String get messaging_GroupInfo_title => 'Informazioni sul gruppo';
-
-  @override
-  String get messaging_GroupInfo_leaveAsk => 'Sei sicuro di voler abbandonare questo gruppo?';
-
-  @override
-  String get messaging_GroupInfo_leaveAndDeleteAsk => 'Vuoi davvero uscire ed eliminare questo gruppo?';
-
-  @override
-  String get messaging_GroupInfo_removeUserAsk => 'Vuoi davvero rimuovere questo utente dal gruppo?';
-
-  @override
-  String get messaging_GroupInfo_makeModeratorAsk => 'Sei sicuro di voler rendere questo utente un moderatore?';
-
-  @override
-  String get messaging_GroupInfo_removeModeratorAsk => 'Sei sicuro di voler rimuovere questo utente dai moderatori?';
-
-  @override
-  String get messaging_GroupInfo_titlePrefix => 'Gruppo:';
-
-  @override
-  String get messaging_GroupInfo_groupMembersHeadline => 'Membri del gruppo';
-
-  @override
-  String get messaging_GroupInfo_addUserBtnText => 'Aggiungi utente';
-
-  @override
-  String get messaging_GroupInfo_leaveBtnText => 'Lascia il gruppo';
-
-  @override
-  String get messaging_GroupInfo_deleteLeaveBtnText => 'Elimina e lascia';
-
-  @override
-  String get messaging_GroupInfo_makeModeratorBtnText => 'Rendi moderatore';
-
-  @override
-  String get messaging_GroupInfo_unmakeModeratorBtnText => 'Annulla moderatore';
-
-  @override
-  String get messaging_GroupInfo_removeUserBtnText => 'Rimuovere';
-
-  @override
-  String get messaging_GroupNameDialog_title => 'Nome del gruppo';
-
-  @override
-  String get messaging_GroupNameDialog_fieldLabel => 'Nome del gruppo';
-
-  @override
-  String get messaging_GroupNameDialog_fieldHint => 'Inserisci il nome del gruppo';
-
-  @override
-  String get messaging_GroupNameDialog_fieldValidation_empty => 'Per favore, inserisci il nome del gruppo';
-
-  @override
-  String get messaging_GroupNameDialog_fieldValidation_short => 'Il nome del gruppo è troppo corto';
-
-  @override
-  String get messaging_GroupNameDialog_saveBtnText => 'Salva';
-
-  @override
-  String get messaging_GroupNameDialog_cancelBtnText => 'Cancellare';
-
-  @override
-  String get messaging_MessageListView_typingTrail => 'stampe...';
-
-  @override
-  String get default_MessagingSocketException => 'Si è verificato un errore durante la comunicazione con il server';
-
-  @override
-  String get default_UnauthorizedMessagingSocketException => 'Non autorizzato';
-
-  @override
-  String get default_ForbiddenMessagingSocketException => 'Vietato';
-
-  @override
-  String get default_InternalErrorMessagingSocketException => 'Errore interno del server';
-
-  @override
-  String get default_ChatNotFoundMessagingSocketException => 'Chat non trovata';
-
-  @override
-  String get default_InvalidChatTypeMessagingSocketException => 'Tipo di chat non valido';
-
-  @override
-  String get default_UserAlreadyInChatMessagingSocketException => 'Utente già nella chat';
-
-  @override
-  String get default_ChatMemberNotFoundMessagingSocketException => 'Membro della chat non trovato';
-
-  @override
-  String get default_SelfRemovalForbiddenMessagingSocketException => 'Rimozione di se stessi vietata';
-
-  @override
-  String get default_SelfAuthorityAssignmentForbiddenMessagingSocketException => 'Assegnazione di autorità a se stessi vietata';
-
-  @override
-  String get default_SmsConversationNotFoundMessagingSocketException => 'Conversazione SMS non trovata';
-
-  @override
-  String get account_selfCarePasswordExpired_message => 'La tua password di self-care è scaduta. Ti preghiamo di aggiornarla utilizzando il self-care.\nFino a quando la password non sarà cambiata, l\'accesso al servizio sarà limitato.';
-
-  @override
-  String get common_noInternetConnection_title => 'Nessuna connessione Internet';
-
-  @override
-  String get common_noInternetConnection_message => 'Sembra che tu non sia connesso a Internet. Controlla la tua connessione e riprova.';
-
-  @override
-  String get common_noInternetConnection_retryButton => 'Riprova';
-
-  @override
-  String get common_problemWithLoadingPage => 'Si è verificato un problema durante il caricamento della pagina.';
 }
