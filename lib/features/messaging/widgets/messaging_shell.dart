@@ -19,7 +19,7 @@ class MessagingShell extends StatefulWidget {
 }
 
 class _MessagingShellState extends State<MessagingShell> {
-  late final MessagingNotificationsService notificationsService;
+  MessagingNotificationsService? notificationsService;
 
   @override
   void initState() {
@@ -49,7 +49,7 @@ class _MessagingShellState extends State<MessagingShell> {
 
   @override
   void dispose() {
-    notificationsService.dispose();
+    notificationsService?.dispose();
     super.dispose();
   }
 
