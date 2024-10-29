@@ -901,10 +901,10 @@ class AppLocalizationsUk extends AppLocalizations {
   String get messaging_ConversationBuilders_invalidNumber_title => 'Невірний номер телефону';
 
   @override
-  String get messaging_ConversationBuilders_invalidNumber_message1 => 'The contact has an invalid phone number. It should be in the format ';
+  String get messaging_ConversationBuilders_invalidNumber_message1 => 'Контакт має недійсний номер телефону. Він має бути у форматі ';
 
   @override
-  String get messaging_ConversationBuilders_invalidNumber_message2 => '. Please fix it in your phone book.';
+  String get messaging_ConversationBuilders_invalidNumber_message2 => '. Будь ласка, виправте це у своїй телефонній книзі.';
 
   @override
   String get messaging_ConversationBuilders_invalidNumber_ok => 'Закрити';

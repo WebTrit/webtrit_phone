@@ -88,4 +88,7 @@ class Contact extends Equatable {
         phones,
         emails,
       ];
+
+  @override
+  bool get stringify => true;
 }

@@ -10,7 +10,7 @@ import '../../chat_conversation_builder.dart';
 class GroupContactsSelectionView extends StatelessWidget {
   const GroupContactsSelectionView(this.state, {super.key});
 
-  final GroupContactsSelection state;
+  final ChatCBGroupContactsSelection state;
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;

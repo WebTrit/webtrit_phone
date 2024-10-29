@@ -29,52 +29,18 @@ class _ChatConversationBuilderViewState extends State<ChatConversationBuilderVie
           child: Stack(
             children: [
               Scaffold(
-                appBar: AppBar(
-                  title: Builder(builder: (context) {
-                    if (state is GroupContactsSelection || state is GroupFillInfo) {
-                      return Text(context.l10n.messaging_ConversationBuilders_title_group);
-                    } else {
-                      return Text(context.l10n.messaging_ConversationBuilders_title_new);
-                    }
-                  }),
-                  leading: Builder(builder: (context) {
-                    if (state is DialogContactSelection) {
-                      return TextButton(
-                        onPressed: () => Navigator.of(context).pop(),
-                        child: Text(context.l10n.messaging_ConversationBuilders_cancel),
-                      );
-                    } else {
-                      return TextButton(
-                        onPressed: builderCubit.onBackToPrevStage,
-                        child: Text(context.l10n.messaging_ConversationBuilders_back),
-                      );
-                    }
-                  }),
-                  leadingWidth: 100,
-                  actions: [
-                    if (state is GroupContactsSelection && state.selectedContacts.isNotEmpty)
-                      TextButton(
-                        onPressed: builderCubit.onGroupFillInfoStageChoosen,
-                        child: Text(context.l10n.messaging_ConversationBuilders_next_action),
-                      ),
-                    if (state is GroupFillInfo && state.name.length >= 3)
-                      TextButton(
-                        onPressed: builderCubit.onGroupCreateConfirm,
-                        child: Text(context.l10n.messaging_ConversationBuilders_create),
-                      ),
-                  ],
-                ),
+                appBar: buildAppBar(state),
                 body: Builder(builder: (context) {
-                  if (state is InitializedCommon) {
+                  if (state is ChatCBCommon) {
                     return AnimatedSwitcher(
                       duration: const Duration(milliseconds: 300),
                       reverseDuration: const Duration(milliseconds: 0),
                       switchInCurve: Curves.easeOutExpo,
                       switchOutCurve: Curves.easeInExpo,
                       child: switch (state) {
-                        DialogContactSelection() => DialogContactSelectionView(state),
-                        GroupContactsSelection() => GroupContactsSelectionView(state),
-                        GroupFillInfo() => GroupFillInfoView(state)
+                        ChatCBDialogContactSelection() => DialogContactSelectionView(state),
+                        ChatCBGroupContactsSelection() => GroupContactsSelectionView(state),
+                        ChatCBGroupFillInfo() => GroupFillInfoView(state)
                       },
                       transitionBuilder: (child, animation) {
                         final reverse = state.cameBack;
@@ -87,7 +53,7 @@ class _ChatConversationBuilderViewState extends State<ChatConversationBuilderVie
                     );
                   }
 
-                  if (state is InitializingError) {
+                  if (state is ChatCBInitializingError) {
                     return Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 32),
                       child: Column(
@@ -101,7 +67,7 @@ class _ChatConversationBuilderViewState extends State<ChatConversationBuilderVie
                   // return widget;
                 }),
               ),
-              if (state is GroupFillInfo && state.processing)
+              if (state is ChatCBGroupFillInfo && state.processing)
                 Container(
                   color: Colors.black.withOpacity(0.1),
                   child: BackdropFilter(
@@ -113,6 +79,39 @@ class _ChatConversationBuilderViewState extends State<ChatConversationBuilderVie
           ),
         );
       },
+    );
+  }
+
+  AppBar buildAppBar(ChatCBState state) {
+    if (state is ChatCBGroupContactsSelection || state is ChatCBGroupFillInfo) {
+      return AppBar(
+        title: Text(context.l10n.messaging_ConversationBuilders_title_group),
+        leading: TextButton(
+          onPressed: builderCubit.onBackToPrevStage,
+          child: Text(context.l10n.messaging_ConversationBuilders_back),
+        ),
+        leadingWidth: 100,
+        actions: [
+          if (state is ChatCBGroupContactsSelection && state.selectedContacts.isNotEmpty)
+            TextButton(
+              onPressed: builderCubit.onGroupFillInfoStageChoosen,
+              child: Text(context.l10n.messaging_ConversationBuilders_next_action),
+            ),
+          if (state is ChatCBGroupFillInfo && state.name.length >= 3)
+            TextButton(
+              onPressed: builderCubit.onGroupCreateConfirm,
+              child: Text(context.l10n.messaging_ConversationBuilders_create),
+            ),
+        ],
+      );
+    }
+    return AppBar(
+      title: Text(context.l10n.messaging_ConversationBuilders_title_new),
+      leadingWidth: 100,
+      leading: TextButton(
+        onPressed: () => Navigator.of(context).pop(),
+        child: Text(context.l10n.messaging_ConversationBuilders_cancel),
+      ),
     );
   }
 }

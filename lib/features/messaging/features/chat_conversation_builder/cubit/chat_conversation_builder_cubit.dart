@@ -4,6 +4,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logging/logging.dart';
 import 'package:phoenix_socket/phoenix_socket.dart';
+import 'package:stream_transform/stream_transform.dart';
 
 import 'package:webtrit_phone/app/notifications/notifications.dart';
 import 'package:webtrit_phone/features/messaging/extensions/contact.dart';
@@ -25,6 +26,7 @@ class ChatConversationBuilderCubit extends Cubit<ChatCBState> {
     required this.submitNotification,
     this.contactfilter = _defaultContactFilter,
   }) : super(ChatCBState.initializing()) {
+    /// Initialize the contacts subscription.
     _contactsSub = _contactsSubFactory;
   }
   final PhoenixSocket client;
@@ -45,34 +47,25 @@ class ChatConversationBuilderCubit extends Cubit<ChatCBState> {
   /// The filter of contact that able to involve in the chat conversation or invite to the group.
   final bool Function(Contact) contactfilter;
 
-  /// The subscription to the contacts stream. Used to listen for changes in the contacts data.
   late final StreamSubscription _contactsSub;
 
-  /// A getter that returns a [StreamSubscription] for the contacts subscription factory.
-  ///
-  /// This getter is used to manage the subscription to the contacts stream,
-  /// allowing the application to listen for changes in the contacts data.
   StreamSubscription get _contactsSubFactory {
-    return contactsRepository.watchContacts('', ContactSourceType.external).listen(
+    return contactsRepository
+        .watchContacts('', ContactSourceType.external)
+        .debounce(const Duration(milliseconds: 250))
+        .listen(
           (contacts) => _contactsUpdateHandler(contacts),
           onError: (error) => emit(ChatCBState.initializingError(error)),
         );
   }
 
-  /// Handles updates to the list of contacts.
-  ///
-  /// This method is called whenever there is a change in the list of contacts.
-  /// It processes the updated list of contacts and performs necessary actions.
-  ///
-  /// Parameters:
-  /// - `contacts`: A list of `Contact` objects representing the updated contacts.
   void _contactsUpdateHandler(List<Contact> contacts) {
     final state = this.state;
     final filtered = contacts.where(contactfilter).toList();
 
     /// Initialize builder state with the contacts list filtered by the provided filter
     /// If the state is already initialized update the contacts list using covariant copyWith method
-    state is InitializedCommon ? emit(state.copyWith(contacts: filtered)) : emit(ChatCBState.initialized(filtered));
+    state is ChatCBCommon ? emit(state.copyWith(contacts: filtered)) : emit(ChatCBState.common(filtered));
   }
 
   /// Handles the confirmation of dialog creation for a given contact.
@@ -81,7 +74,7 @@ class ChatConversationBuilderCubit extends Cubit<ChatCBState> {
   ///
   /// Parameters:
   /// - [contact]: The contact for whom the dialog is being created.
-  onDialogCreateConfirm(Contact contact) {
+  void onDialogCreateConfirm(Contact contact) {
     openDialog(contact);
   }
 
@@ -91,46 +84,46 @@ class ChatConversationBuilderCubit extends Cubit<ChatCBState> {
   /// the contact list based on the provided search criteria.
   ///
   /// [searchFilter] The new search filter string.
-  onSearchFilterChange(String searchFilter) {
+  void onSearchFilterChange(String searchFilter) {
     final state = this.state;
     switch (state) {
-      case DialogContactSelection state:
+      case ChatCBDialogContactSelection state:
         emit(state.copyWith(searchFilter: searchFilter));
-      case GroupContactsSelection state:
+      case ChatCBGroupContactsSelection state:
         emit(state.copyWith(searchFilter: searchFilter));
       default:
     }
   }
 
   /// Handles the event when a group creation stage is chosen.
-  onGroupCreateStageChoosen() {
+  void onGroupCreateStageChoosen() {
     final currentState = state;
-    if (currentState is! DialogContactSelection) return;
+    if (currentState is! ChatCBDialogContactSelection) return;
     emit(currentState.toGroupContactsSelection());
   }
 
   /// Handles the event when contact is selected.
   ///
   /// [contact] The contact that has been selected for invite to group.
-  onGroupContactSelected(Contact contact) {
+  void onGroupContactSelected(Contact contact) {
     final currentState = state;
-    if (currentState is! GroupContactsSelection) return;
+    if (currentState is! ChatCBGroupContactsSelection) return;
     emit(currentState.copyWith(selectedContacts: {...currentState.selectedContacts, contact}));
   }
 
   /// Handles the event when a group contact is deselected.
   ///
   /// [contact] The contact that was deselected for invite to group.
-  onGroupContactDeselected(Contact contact) {
+  void onGroupContactDeselected(Contact contact) {
     final currentState = state;
-    if (currentState is! GroupContactsSelection) return;
+    if (currentState is! ChatCBGroupContactsSelection) return;
     emit(currentState.copyWith(selectedContacts: {...currentState.selectedContacts}..remove(contact)));
   }
 
   /// Handles the event when the group fill info stage is chosen.
-  onGroupFillInfoStageChoosen() {
+  void onGroupFillInfoStageChoosen() {
     final currentState = state;
-    if (currentState is! GroupContactsSelection) return;
+    if (currentState is! ChatCBGroupContactsSelection) return;
     emit(currentState.toFillInfoStage());
   }
 
@@ -140,18 +133,18 @@ class ChatConversationBuilderCubit extends Cubit<ChatCBState> {
   /// It takes the new group name as a parameter and processes it accordingly.
   ///
   /// [name] The new name of the group.
-  onGroupNameChange(String name) {
+  void onGroupNameChange(String name) {
     final currentState = state;
-    if (currentState is! GroupFillInfo) return;
+    if (currentState is! ChatCBGroupFillInfo) return;
     emit(currentState.copyWith(name: name));
   }
 
   /// Handles the action of navigating back to the previous stage in the chat conversation builder.
   /// This method is typically called when the user wants to return to the previous step in the conversation setup process.
-  onBackToPrevStage() {
+  void onBackToPrevStage() {
     final state = this.state;
-    if (state is GroupContactsSelection) emit(state.toDialogContactStage());
-    if (state is GroupFillInfo) emit(state.toGroupContactsStage());
+    if (state is ChatCBGroupContactsSelection) emit(state.toDialogContactStage());
+    if (state is ChatCBGroupFillInfo) emit(state.toGroupContactsStage());
   }
 
   /// Handles the confirmation action for creating a new group chat.
@@ -161,9 +154,9 @@ class ChatConversationBuilderCubit extends Cubit<ChatCBState> {
   ///
   /// The method is asynchronous and may involve network requests or other
   /// asynchronous operations.
-  onGroupCreateConfirm() async {
+  void onGroupCreateConfirm() async {
     final state = this.state;
-    if (state is! GroupFillInfo) return;
+    if (state is! ChatCBGroupFillInfo) return;
 
     final userChannel = client.userChannel;
     if (userChannel == null || userChannel.state != PhoenixChannelState.joined) return;
