@@ -445,6 +445,55 @@ abstract class _ResetStateEventCompleteCall implements _ResetStateEvent {
 }
 
 /// @nodoc
+mixin _$UpdateCallSignalingCoreUrl {
+  String get url => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+
+class _$UpdateCallSignalingCoreUrlImpl
+    with DiagnosticableTreeMixin
+    implements _UpdateCallSignalingCoreUrl {
+  const _$UpdateCallSignalingCoreUrlImpl(this.url);
+
+  @override
+  final String url;
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'UpdateCallSignalingCoreUrl(url: $url)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('type', 'UpdateCallSignalingCoreUrl'))
+      ..add(DiagnosticsProperty('url', url));
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$UpdateCallSignalingCoreUrlImpl &&
+            (identical(other.url, url) || other.url == url));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, url);
+}
+
+abstract class _UpdateCallSignalingCoreUrl
+    implements UpdateCallSignalingCoreUrl {
+  const factory _UpdateCallSignalingCoreUrl(final String url) =
+      _$UpdateCallSignalingCoreUrlImpl;
+
+  @override
+  String get url;
+}
+
+/// @nodoc
 mixin _$SignalingClientEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({

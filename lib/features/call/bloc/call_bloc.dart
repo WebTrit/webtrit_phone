@@ -40,7 +40,6 @@ const int _kUndefinedLine = -1;
 final _logger = Logger('CallBloc');
 
 class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver implements CallkeepDelegate {
-  final String coreUrl;
   final String tenantId;
   final String token;
   final TrustedCertificates trustedCertificates;
@@ -53,6 +52,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   StreamSubscription<List<ConnectivityResult>>? _connectivityChangedSubscription;
   StreamSubscription<PendingCall>? _pendingCallHandlerSubscription;
 
+  String _coreUrl;
   WebtritSignalingClient? _signalingClient;
   Timer? _signalingClientReconnectTimer;
 
@@ -61,7 +61,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   final _appSound = AppSound();
 
   CallBloc({
-    required this.coreUrl,
+    required String coreUrl,
     required this.tenantId,
     required this.token,
     required this.trustedCertificates,
@@ -69,7 +69,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     required this.notificationsBloc,
     required this.callkeep,
     required this.pendingCallHandler,
-  }) : super(const CallState()) {
+  })  : _coreUrl = coreUrl,
+        super(const CallState()) {
     on<CallStarted>(
       _onCallStarted,
       transformer: sequential(),
@@ -97,6 +98,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     on<_ResetStateEvent>(
       _onResetStateEvent,
       transformer: droppable(),
+    );
+    on<UpdateCallSignalingCoreUrl>(
+      _onUpdateCallSignalingCoreUrl,
+      transformer: restartable(),
     );
     on<_SignalingClientEvent>(
       _onSignalingClientEvent,
@@ -471,6 +476,15 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
   // processing signaling client events
 
+  Future<void> _onUpdateCallSignalingCoreUrl(
+    UpdateCallSignalingCoreUrl event,
+    Emitter<CallState> emit,
+  ) async {
+    _coreUrl = event.url;
+
+    _reconnectInitiated();
+  }
+
   Future<void> _onSignalingClientEvent(
     _SignalingClientEvent event,
     Emitter<CallState> emit,
@@ -501,7 +515,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
       if (emit.isDone) return;
 
-      final signalingUrl = _parseCoreUrlToSignalingUrl(coreUrl);
+      final signalingUrl = _parseCoreUrlToSignalingUrl(_coreUrl);
       final signalingClient = await WebtritSignalingClient.connect(
         signalingUrl,
         tenantId,

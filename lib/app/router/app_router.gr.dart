@@ -33,12 +33,14 @@ abstract class _$AppRouter extends RootStackRouter {
           orElse: () => AutoprovisionScreenPageRouteArgs(
                 configToken: queryParams.optString('config_token'),
                 tenantId: queryParams.optString('tenant_id'),
+                coreUrl: queryParams.optString('core_url'),
               ));
       return AutoRoutePage<dynamic>(
         routeData: routeData,
         child: AutoprovisionScreenPage(
           configToken: args.configToken,
           tenantId: args.tenantId,
+          coreUrl: args.coreUrl,
         ),
       );
     },
@@ -378,16 +380,19 @@ class AutoprovisionScreenPageRoute
   AutoprovisionScreenPageRoute({
     String? configToken,
     String? tenantId,
+    String? coreUrl,
     List<PageRouteInfo>? children,
   }) : super(
           AutoprovisionScreenPageRoute.name,
           args: AutoprovisionScreenPageRouteArgs(
             configToken: configToken,
             tenantId: tenantId,
+            coreUrl: coreUrl,
           ),
           rawQueryParams: {
             'config_token': configToken,
             'tenant_id': tenantId,
+            'core_url': coreUrl,
           },
           initialChildren: children,
         );
@@ -402,15 +407,18 @@ class AutoprovisionScreenPageRouteArgs {
   const AutoprovisionScreenPageRouteArgs({
     this.configToken,
     this.tenantId,
+    this.coreUrl,
   });
 
   final String? configToken;
 
   final String? tenantId;
 
+  final String? coreUrl;
+
   @override
   String toString() {
-    return 'AutoprovisionScreenPageRouteArgs{configToken: $configToken, tenantId: $tenantId}';
+    return 'AutoprovisionScreenPageRouteArgs{configToken: $configToken, tenantId: $tenantId, coreUrl: $coreUrl}';
   }
 }
 
