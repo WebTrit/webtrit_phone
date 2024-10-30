@@ -515,6 +515,26 @@ class AppLocalizationsMapper {
           localizations.messaging_ConversationBuilders_invalidNumber_message2,
       'messaging_ConversationBuilders_invalidNumber_ok':
           localizations.messaging_ConversationBuilders_invalidNumber_ok,
+      'messaging_ConversationBuilders_title_group':
+          localizations.messaging_ConversationBuilders_title_group,
+      'messaging_ConversationBuilders_groupNameHeadline':
+          localizations.messaging_ConversationBuilders_groupNameHeadline,
+      'messaging_ConversationBuilders_membersHeadline':
+          localizations.messaging_ConversationBuilders_membersHeadline,
+      'messaging_ConversationBuilders_addUserBtnText':
+          localizations.messaging_ConversationBuilders_addUserBtnText,
+      'messaging_ConversationBuilders_submitBtnText':
+          localizations.messaging_ConversationBuilders_submitBtnText,
+      'messaging_ConversationBuilders_nameFieldLabel':
+          localizations.messaging_ConversationBuilders_nameFieldLabel,
+      'messaging_ConversationBuilders_nameFieldEmpty':
+          localizations.messaging_ConversationBuilders_nameFieldEmpty,
+      'messaging_ConversationBuilders_nameFieldShort':
+          localizations.messaging_ConversationBuilders_nameFieldShort,
+      'messaging_ConversationBuilders_connectionError':
+          localizations.messaging_ConversationBuilders_connectionError,
+      'messaging_ConversationBuilders_submitError':
+          localizations.messaging_ConversationBuilders_submitError,
       'messaging_GroupScreen_titlePrefix':
           localizations.messaging_GroupScreen_titlePrefix,
       'messaging_ChooseContact_title':
@@ -575,30 +595,12 @@ class AppLocalizationsMapper {
           localizations.messaging_GroupNameDialog_saveBtnText,
       'messaging_GroupNameDialog_cancelBtnText':
           localizations.messaging_GroupNameDialog_cancelBtnText,
-      'messaging_ConversationBuilders_title_group':
-          localizations.messaging_ConversationBuilders_title_group,
-      'messaging_ConversationBuilders_groupNameHeadline':
-          localizations.messaging_ConversationBuilders_groupNameHeadline,
-      'messaging_ConversationBuilders_membersHeadline':
-          localizations.messaging_ConversationBuilders_membersHeadline,
-      'messaging_ConversationBuilders_addUserBtnText':
-          localizations.messaging_ConversationBuilders_addUserBtnText,
-      'messaging_ConversationBuilders_submitBtnText':
-          localizations.messaging_ConversationBuilders_submitBtnText,
-      'messaging_ConversationBuilders_nameFieldLabel':
-          localizations.messaging_ConversationBuilders_nameFieldLabel,
-      'messaging_ConversationBuilders_nameFieldEmpty':
-          localizations.messaging_ConversationBuilders_nameFieldEmpty,
-      'messaging_ConversationBuilders_nameFieldShort':
-          localizations.messaging_ConversationBuilders_nameFieldShort,
-      'messaging_ConversationBuilders_connectionError':
-          localizations.messaging_ConversationBuilders_connectionError,
-      'messaging_ConversationBuilders_submitError':
-          localizations.messaging_ConversationBuilders_submitError,
       'messaging_MessageListView_typingTrail':
           localizations.messaging_MessageListView_typingTrail,
       'default_MessagingSocketException':
           localizations.default_MessagingSocketException,
+      'default_TimeoutMessagingSocketException':
+          localizations.default_TimeoutMessagingSocketException,
       'default_UnauthorizedMessagingSocketException':
           localizations.default_UnauthorizedMessagingSocketException,
       'default_ForbiddenMessagingSocketException':

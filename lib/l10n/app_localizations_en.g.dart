@@ -1039,6 +1039,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get default_MessagingSocketException => 'An error occurred while processing the request';
 
   @override
+  String get default_TimeoutMessagingSocketException => 'The request has timed out';
+
+  @override
   String get default_UnauthorizedMessagingSocketException => 'Unauthorized request';
 
   @override

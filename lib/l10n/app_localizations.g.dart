@@ -2077,6 +2077,12 @@ abstract class AppLocalizations {
   /// **'An error occurred while processing the request'**
   String get default_MessagingSocketException;
 
+  /// No description provided for @default_TimeoutMessagingSocketException.
+  ///
+  /// In en, this message translates to:
+  /// **'The request has timed out'**
+  String get default_TimeoutMessagingSocketException;
+
   /// No description provided for @default_UnauthorizedMessagingSocketException.
   ///
   /// In en, this message translates to:

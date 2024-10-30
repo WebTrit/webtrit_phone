@@ -1039,6 +1039,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get default_MessagingSocketException => 'Помилка з\'єднання з сервером';
 
   @override
+  String get default_TimeoutMessagingSocketException => 'Час очікування відповіді сервера закінчився';
+
+  @override
   String get default_UnauthorizedMessagingSocketException => 'Помилка авторизації';
 
   @override

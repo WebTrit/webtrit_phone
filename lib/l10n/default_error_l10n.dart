@@ -55,6 +55,8 @@ String _defaultMessagingSocketExceptionL10n(BuildContext context, MessagingSocke
       return l10n.default_SelfAuthorityAssignmentForbiddenMessagingSocketException;
     case 'sms_conversation_not_found':
       return l10n.default_SmsConversationNotFoundMessagingSocketException;
+    case 'timeout':
+      return l10n.default_TimeoutMessagingSocketException;
     default:
       return l10n.default_MessagingSocketException;
   }

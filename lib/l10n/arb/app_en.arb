@@ -746,6 +746,8 @@
   "@messaging_MessageListView_typingTrail": {},
   "default_MessagingSocketException": "An error occurred while processing the request",
   "@default_MessagingSocketException": {},
+  "default_TimeoutMessagingSocketException": "The request has timed out", 
+  "@default_TimeoutMessagingSocketException": {},
   "default_UnauthorizedMessagingSocketException": "Unauthorized request",
   "@default_UnauthorizedMessagingSocketException": {},
   "default_ForbiddenMessagingSocketException": "Forbidden request",

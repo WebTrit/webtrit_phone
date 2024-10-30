@@ -746,6 +746,8 @@
   "@messaging_MessageListView_typingTrail": {},
   "default_MessagingSocketException": "Помилка з'єднання з сервером",
   "@default_MessagingSocketException": {},
+  "default_TimeoutMessagingSocketException": "Час очікування відповіді сервера закінчився",
+  "@default_TimeoutMessagingSocketException": {},
   "default_UnauthorizedMessagingSocketException": "Помилка авторизації",
   "@default_UnauthorizedMessagingSocketException": {},
   "default_ForbiddenMessagingSocketException": "Доступ заборонено",

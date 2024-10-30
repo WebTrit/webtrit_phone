@@ -746,6 +746,8 @@
   "@messaging_MessageListView_typingTrail": {},
   "default_MessagingSocketException": "Si è verificato un errore durante la comunicazione con il server",
   "@default_MessagingSocketException": {},
+  "default_TimeoutMessagingSocketException": "Tempo di attesa scaduto",
+  "@default_TimeoutMessagingSocketException": {},
   "default_UnauthorizedMessagingSocketException": "Non autorizzato",
   "@default_UnauthorizedMessagingSocketException": {},
   "default_ForbiddenMessagingSocketException": "Vietato",
