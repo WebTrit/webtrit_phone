@@ -72,7 +72,7 @@ extension PhoenixChannelExt on PhoenixChannel {
   /// final conversationIds = await chatConversationsIds;
   /// ```
   Future<Iterable<int>> get chatConversationsIds async {
-    final req = await push('chat:get_ids', {}).future;
+    final req = await push('chat:get_all', {}).future;
     final response = req.response;
 
     if (req.isOk && response is Iterable) {
@@ -91,7 +91,7 @@ extension PhoenixChannelExt on PhoenixChannel {
   /// This method returns a [Future] that completes with an [Iterable] of
   /// integers representing the IDs of SMS conversations.
   Future<Iterable<int>> get smsConversationsIds async {
-    final req = await push('sms:conversation:get_ids', {}).future;
+    final req = await push('sms:conversation:get_all', {}).future;
     final response = req.response;
 
     if (req.isOk && response is Iterable) {
@@ -347,9 +347,9 @@ extension PhoenixChannelExt on PhoenixChannel {
     Chat? chat;
 
     if (req.isOk && response is Map<String, dynamic>) {
-      if (response.containsKey('chat') && response.containsKey('msg')) {
+      if (response.containsKey('chat') && response.containsKey('message')) {
         chat = Chat.fromMap(response['chat']);
-        message = ChatMessage.fromMap(response['msg']);
+        message = ChatMessage.fromMap(response['message']);
         return (message, chat);
       }
 
