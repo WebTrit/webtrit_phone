@@ -74,7 +74,7 @@ class _ChooseContactState extends State<ChooseContact> {
                     registered: contact.registered,
                     radius: 24,
                   ),
-                  title: Text(contact.name),
+                  title: Text(contact.name ?? contact.mobileNumber ?? contact.sourceId.toString()),
                   subtitle: Text(contact.phones.firstOrNull?.number ?? ''),
                 );
               }).toList(),

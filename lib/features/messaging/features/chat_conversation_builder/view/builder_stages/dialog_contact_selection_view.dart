@@ -72,7 +72,7 @@ class DialogContactSelectionView extends StatelessWidget {
                     registered: contact.registered,
                     radius: 24,
                   ),
-                  title: Text(contact.name),
+                  title: Text(contact.name ?? contact.mobileNumber ?? contact.sourceId.toString()),
                   subtitle: Text('Ext: ${contact.extension ?? "N/A"}', style: theme.textTheme.bodySmall),
                   onTap: () => builderCubit.onDialogCreateConfirm(contact),
                 ),

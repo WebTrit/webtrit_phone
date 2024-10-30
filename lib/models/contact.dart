@@ -50,18 +50,23 @@ class Contact extends Equatable {
 
   final List<ContactPhone> phones;
   final List<ContactEmail> emails;
-
-  String get name {
+  String? get name {
     final aliasName = this.aliasName;
     if (aliasName != null) {
       return aliasName;
-    } else {
+    } else if (firstName != null && lastName != null) {
       return [firstName, lastName].readableJoin();
+    } else {
+      return firstName ?? lastName;
     }
   }
 
   String? get extension {
     return phones.firstWhereOrNull((element) => element.label == 'ext')?.number;
+  }
+
+  String? get mobileNumber {
+    return phones.firstWhereOrNull((element) => element.label == 'mobile')?.number;
   }
 
   List<String> get smsNumbers {

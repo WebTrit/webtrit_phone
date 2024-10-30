@@ -53,7 +53,10 @@ class GroupContactsSelectionView extends StatelessWidget {
                         radius: 12,
                       ),
                       const SizedBox(width: 4),
-                      Text(contact.name, style: TextStyle(color: colorScheme.secondary, fontSize: 12)),
+                      Text(
+                        contact.name ?? contact.mobileNumber ?? contact.sourceId.toString(),
+                        style: TextStyle(color: colorScheme.secondary, fontSize: 12),
+                      ),
                     ],
                   ),
                 );
@@ -116,7 +119,7 @@ class GroupContactsSelectionView extends StatelessWidget {
                           thumbnailUrl: contact.thumbnailUrl,
                           registered: contact.registered,
                         ),
-                        title: Text(contact.name),
+                        title: Text(contact.name ?? contact.mobileNumber ?? contact.sourceId.toString()),
                       ),
                     ),
                   ],

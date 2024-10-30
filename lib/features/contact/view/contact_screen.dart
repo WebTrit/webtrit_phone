@@ -67,7 +67,7 @@ class ContactScreen extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      contact.name,
+                      contact.name ?? contact.mobileNumber ?? contact.sourceId.toString(),
                       style: themeData.textTheme.headlineMedium,
                       textAlign: TextAlign.center,
                     ),

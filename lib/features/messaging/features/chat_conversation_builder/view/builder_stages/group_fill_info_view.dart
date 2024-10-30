@@ -92,7 +92,7 @@ class _GroupFillInfoViewState extends State<GroupFillInfoView> {
                           registered: contact.registered,
                           radius: 24,
                         ),
-                        title: Text(contact.name),
+                        title: Text(contact.name ?? contact.mobileNumber ?? contact.sourceId.toString()),
                       ),
                     ),
                   ],

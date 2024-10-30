@@ -42,7 +42,7 @@ class ContactsLocalTab extends StatelessWidget {
             itemBuilder: (context, index) {
               final contact = state.contacts[index];
               return ContactTile(
-                displayName: contact.name,
+                displayName: contact.name ?? contact.mobileNumber ?? contact.sourceId.toString(),
                 thumbnail: contact.thumbnail,
                 thumbnailUrl: contact.thumbnailUrl,
                 onTap: () {

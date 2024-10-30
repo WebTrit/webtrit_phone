@@ -323,7 +323,7 @@ class _SmsConversationBuilderViewState extends State<SmsConversationBuilderView>
             registered: contact.registered,
             radius: 24,
           ),
-          title: Text(contact.name),
+          title: Text(contact.name ?? contact.mobileNumber ?? contact.sourceId.toString()),
           subtitle: Text(phones.first, style: theme.textTheme.bodySmall),
           children: phones.map((number) {
             return ListTile(
@@ -343,7 +343,7 @@ class _SmsConversationBuilderViewState extends State<SmsConversationBuilderView>
         registered: contact.registered,
         radius: 24,
       ),
-      title: Text(contact.name),
+      title: Text(contact.name ?? contact.mobileNumber ?? contact.sourceId.toString()),
       subtitle: Text(phones.first, style: theme.textTheme.bodySmall),
       onTap: () => builderCubit.onConfirm(phones.first, extId),
     );

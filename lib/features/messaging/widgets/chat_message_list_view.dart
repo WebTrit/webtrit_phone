@@ -295,7 +295,8 @@ class _ChatMessageListViewState extends State<ChatMessageListView> {
                       sourceId: id,
                       builder: (context, contact, {required bool loading}) {
                         if (contact == null) return const SizedBox();
-                        return Text(contact.name, style: textStyle);
+                        final name = contact.name ?? contact.mobileNumber ?? contact.sourceId.toString();
+                        return Text(name, style: textStyle);
                       }),
                 ],
                 Text(context.l10n.messaging_MessageListView_typingTrail, style: textStyle),
