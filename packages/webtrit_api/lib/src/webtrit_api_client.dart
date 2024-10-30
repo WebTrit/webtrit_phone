@@ -456,7 +456,7 @@ class WebtritApiClient {
     final requestJson = callToActionsParam.toJson();
 
     final responseJson = await _httpClientExecutePost(
-      ['custom', 'private', 'call-to-actions', '/'],
+      ['custom', 'private', 'call-to-actions'],
       {'Accept-Language': locale},
       token,
       requestJson,
