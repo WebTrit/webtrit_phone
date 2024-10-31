@@ -24,6 +24,7 @@ class MainScreenPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final mainScreenRouteStateRepository = context.read<MainScreenRouteStateRepository>();
+    // TODO(Serdun): Move this to the environment configuration not to use the CORE_URL.
     const appDemoFlow = EnvironmentConfig.CORE_URL == null;
 
     final bottomMenuManager = context.read<FeatureAccess>().bottomMenuFeature;
