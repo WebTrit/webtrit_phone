@@ -53,8 +53,8 @@ class DemoCubit extends Cubit<DemoCubitState> {
     final flavor = state.flavor;
 
     final userInfo = await _getUserInfo();
-
-    if (flavorActions[flavor]?.isIncomplete ?? true) {
+    final loadAction = flavorActions[flavor]?.isIncomplete ?? true;
+    if (loadAction) {
       try {
         final actions = await _getActions(flavor, userInfo);
         flavorActions[flavor] = DemoActions.complete(actions.actions);
