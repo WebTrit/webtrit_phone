@@ -83,29 +83,33 @@ class WebtritApiClient {
         ...pathSegments,
       ],
     );
-    final httpRequest = http.Request(method, url);
 
     final xRequestId = requestId ?? _generateRequestId();
 
-    httpRequest.headers.addAll({
+    final requestHeaders = {
       'content-type': 'application/json; charset=utf-8',
       'accept': 'application/json',
       'x-request-id': xRequestId,
       if (token != null) 'authorization': 'Bearer $token',
-    });
+    };
 
-    if (headers != null) {
-      httpRequest.headers.addAll(headers);
-    }
-
-    if (requestDataJson != null) {
-      httpRequest.body = jsonEncode(requestDataJson);
-    }
+    final requestData = requestDataJson != null ? jsonEncode(requestDataJson) : null;
 
     int requestAttempt = 0;
 
     while (true) {
       try {
+        // Create a new `http.Request` instance for each iteration.
+        // Once sent, a request is finalized and cannot be reused.
+        // A fresh instance prevents "Can't finalize a finalized Request" errors.
+        final httpRequest = http.Request(method, url);
+
+        httpRequest.headers.addAll(requestHeaders);
+
+        if (headers != null) httpRequest.headers.addAll(headers);
+
+        if (requestData != null) httpRequest.body = requestData;
+
         _logger.info(' ${method.toUpperCase()} request($requestAttempt) to $url with requestId: $xRequestId');
 
         final httpResponse = await http.Response.fromStream(await _httpClient.send(httpRequest));
