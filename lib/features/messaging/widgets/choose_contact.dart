@@ -68,13 +68,13 @@ class _ChooseContactState extends State<ChooseContact> {
                   onTap: () => onConfirm(contact),
                   contentPadding: const EdgeInsets.symmetric(horizontal: 0),
                   leading: LeadingAvatar(
-                    username: contact.name,
+                    username: contact.displayTitle,
                     thumbnail: contact.thumbnail,
                     thumbnailUrl: contact.thumbnailUrl,
                     registered: contact.registered,
                     radius: 24,
                   ),
-                  title: Text(contact.name ?? contact.mobileNumber ?? contact.sourceId.toString()),
+                  title: Text(contact.displayTitle),
                   subtitle: Text(contact.phones.firstOrNull?.number ?? ''),
                 );
               }).toList(),

@@ -59,7 +59,7 @@ class ContactScreen extends StatelessWidget {
                     Padding(
                       padding: kAllPadding16,
                       child: LeadingAvatar(
-                        username: contact.name,
+                        username: contact.displayTitle,
                         thumbnail: contact.thumbnail,
                         thumbnailUrl: contact.thumbnailUrl ?? gravatarThumbnailUrl(email),
                         registered: contact.registered,
@@ -67,7 +67,7 @@ class ContactScreen extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      contact.name ?? contact.mobileNumber ?? contact.sourceId.toString(),
+                      contact.displayTitle,
                       style: themeData.textTheme.headlineMedium,
                       textAlign: TextAlign.center,
                     ),
@@ -94,7 +94,7 @@ class ContactScreen extends StatelessWidget {
                           final callBloc = context.read<CallBloc>();
                           callBloc.add(CallControlEvent.started(
                             number: contactPhone.number,
-                            displayName: contact.name,
+                            displayName: contact.maybeName,
                             video: false,
                           ));
                           context.router.maybePop();
@@ -103,7 +103,7 @@ class ContactScreen extends StatelessWidget {
                           final callBloc = context.read<CallBloc>();
                           callBloc.add(CallControlEvent.started(
                             number: contactPhone.number,
-                            displayName: contact.name,
+                            displayName: contact.maybeName,
                             video: true,
                           ));
                           context.router.maybePop();

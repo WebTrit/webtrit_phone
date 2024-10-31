@@ -317,13 +317,13 @@ class _SmsConversationBuilderViewState extends State<SmsConversationBuilderView>
         ),
         child: ExpansionTile(
           leading: LeadingAvatar(
-            username: contact.name,
+            username: contact.displayTitle,
             thumbnail: contact.thumbnail,
             thumbnailUrl: contact.thumbnailUrl,
             registered: contact.registered,
             radius: 24,
           ),
-          title: Text(contact.name ?? contact.mobileNumber ?? contact.sourceId.toString()),
+          title: Text(contact.displayTitle),
           subtitle: Text(phones.first, style: theme.textTheme.bodySmall),
           children: phones.map((number) {
             return ListTile(
@@ -337,13 +337,13 @@ class _SmsConversationBuilderViewState extends State<SmsConversationBuilderView>
 
     return ListTile(
       leading: LeadingAvatar(
-        username: contact.name,
+        username: contact.displayTitle,
         thumbnail: contact.thumbnail,
         thumbnailUrl: contact.thumbnailUrl,
         registered: contact.registered,
         radius: 24,
       ),
-      title: Text(contact.name ?? contact.mobileNumber ?? contact.sourceId.toString()),
+      title: Text(contact.displayTitle),
       subtitle: Text(phones.first, style: theme.textTheme.bodySmall),
       onTap: () => builderCubit.onConfirm(phones.first, extId),
     );

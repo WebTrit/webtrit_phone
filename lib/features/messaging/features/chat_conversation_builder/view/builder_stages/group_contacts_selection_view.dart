@@ -46,17 +46,14 @@ class GroupContactsSelectionView extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       LeadingAvatar(
-                        username: contact.name,
+                        username: contact.displayTitle,
                         thumbnail: contact.thumbnail,
                         thumbnailUrl: contact.thumbnailUrl,
                         registered: contact.registered,
                         radius: 12,
                       ),
                       const SizedBox(width: 4),
-                      Text(
-                        contact.name ?? contact.mobileNumber ?? contact.sourceId.toString(),
-                        style: TextStyle(color: colorScheme.secondary, fontSize: 12),
-                      ),
+                      Text(contact.displayTitle, style: TextStyle(color: colorScheme.secondary, fontSize: 12)),
                     ],
                   ),
                 );
@@ -114,12 +111,12 @@ class GroupContactsSelectionView extends StatelessWidget {
                       child: ListTile(
                         contentPadding: const EdgeInsets.symmetric(horizontal: 0),
                         leading: LeadingAvatar(
-                          username: contact.name,
+                          username: contact.displayTitle,
                           thumbnail: contact.thumbnail,
                           thumbnailUrl: contact.thumbnailUrl,
                           registered: contact.registered,
                         ),
-                        title: Text(contact.name ?? contact.mobileNumber ?? contact.sourceId.toString()),
+                        title: Text(contact.displayTitle),
                       ),
                     ),
                   ],

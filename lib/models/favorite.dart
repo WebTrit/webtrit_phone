@@ -17,7 +17,7 @@ class Favorite extends Equatable {
   final String label;
   final Contact contact;
 
-  String get name => contact.name ?? number;
+  String get name => contact.maybeName ?? number;
 
   @override
   List<Object?> get props => [id, number, label, contact];

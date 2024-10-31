@@ -13,7 +13,7 @@ typedef ContactId = int;
 const contactIdPathParameterName = 'contactId';
 
 class Contact extends Equatable {
-  const Contact({
+  Contact({
     required this.id,
     required this.sourceType,
     required this.sourceId,
@@ -50,32 +50,42 @@ class Contact extends Equatable {
 
   final List<ContactPhone> phones;
   final List<ContactEmail> emails;
-  String? get name {
-    final aliasName = this.aliasName;
-    if (aliasName != null) {
-      return aliasName;
-    } else if (firstName != null && lastName != null) {
-      return [firstName, lastName].readableJoin();
-    } else {
-      return firstName ?? lastName;
-    }
-  }
 
-  String? get extension {
-    return phones.firstWhereOrNull((element) => element.label == 'ext')?.number;
-  }
+  /// Computed getter for contact's PBX network `extension`.
+  late final String? extension = phones.firstWhereOrNull((element) => element.label == 'ext')?.number;
 
-  String? get mobileNumber {
-    return phones.firstWhereOrNull((element) => element.label == 'mobile')?.number;
-  }
+  /// Computed getter for contact's first mobile phone number
+  /// also known as the primary phone number or `main` number.
+  late final String? mobileNumber = phones.firstWhereOrNull((element) => element.label == 'mobile')?.number;
 
-  List<String> get smsNumbers {
-    if (sourceType == ContactSourceType.external) {
-      return phones.where((phone) => phone.label == 'sms').map((phone) => phone.number).toList();
-    } else {
-      return phones.map((phone) => phone.number).toList();
-    }
-  }
+  /// Computed list for contact's of sms phone numbers
+  /// suitable as list of number to wich user can send sms messages.
+  ///
+  /// If the contact is external, only the `sms` numbers are returned.
+  /// Otherwise, all the numbers are returned for phonebook contacts.
+  late final List<String> smsNumbers = phones
+      .where((phone) => (sourceType == ContactSourceType.local) || phone.label == 'sms')
+      .map((phone) => phone.number)
+      .toList();
+
+  /// Computed name of the contact in a single string if possible.
+  ///
+  /// Returns a [String] representing the name of the contact
+  /// in the format `"aliasName"` or `"firstName lastName"`
+  /// or `null` if no name source is available.
+  late final String? maybeName =
+      aliasName ?? (firstName != null && lastName != null ? '$firstName $lastName' : firstName ?? lastName);
+
+  /// Computed displaing title for the contact.
+  ///
+  /// Used for displaying the contact title in the UI, for identifying the contact in any case of data absence.
+  ///
+  /// The display title is determined by the following order of preference:
+  /// - `name` if it is not null
+  /// - `extension` if `name` is null and `extension` is not null
+  /// - `mobileNumber` if both `name` and `extension` are null
+  /// - `sourceId` if all of the above are null
+  late final String displayTitle = maybeName ?? extension ?? mobileNumber ?? sourceId;
 
   @override
   List<Object?> get props => [

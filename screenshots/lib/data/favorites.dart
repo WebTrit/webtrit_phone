@@ -1,6 +1,6 @@
 import 'package:webtrit_phone/models/models.dart';
 
-const dFavorites = [
+final dFavorites = [
   Favorite(
     id: 0,
     number: '1234',
