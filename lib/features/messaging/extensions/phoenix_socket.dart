@@ -819,7 +819,10 @@ sealed class ChatChannelEvent {
         return ChatChannelInfoUpdate(Chat.fromMap(e.payload as Map<String, dynamic>));
       case 'message_update':
         return ChatChannelMessageUpdate(ChatMessage.fromMap(e.payload as Map<String, dynamic>));
+      // Backward compatibility, remove in future some day
       case 'chat:cursor:set':
+        return ChatChannelCursorSet(ChatMessageReadCursor.fromMap(e.payload as Map<String, dynamic>));
+      case 'chat_cursor_set':
         return ChatChannelCursorSet(ChatMessageReadCursor.fromMap(e.payload as Map<String, dynamic>));
       case 'typing':
         return ChatChannelTyping(e.payload!['user_id'].toString());
@@ -888,7 +891,10 @@ sealed class SmsChannelEvent {
         return SmsChannelInfoUpdate(SmsConversation.fromMap(e.payload as Map<String, dynamic>));
       case 'sms_message_update':
         return SmsChannelMessageUpdate(SmsMessage.fromMap(e.payload as Map<String, dynamic>));
+      // Backward compatibility, remove in future some day
       case 'sms:conversation:cursor:set':
+        return SmsChannelCursorSet(SmsMessageReadCursor.fromMap(e.payload as Map<String, dynamic>));
+      case 'sms_conversation_cursor_set':
         return SmsChannelCursorSet(SmsMessageReadCursor.fromMap(e.payload as Map<String, dynamic>));
       case 'phx_error':
         return SmsChannelDisconnect();
