@@ -764,6 +764,8 @@
   "@default_ChatMemberNotFoundMessagingSocketException": {},
   "default_SelfRemovalForbiddenMessagingSocketException": "Видалення самого себе заборонено",
   "@default_SelfRemovalForbiddenMessagingSocketException": {},
+  "default_CannotRemoveOwnerMessagingSocketException": "Неможливо видалити власника",
+  "@default_CannotRemoveOwnerMessagingSocketException": {},
   "default_SelfAuthorityAssignmentForbiddenMessagingSocketException": "Призначення власних прав заборонено",
   "@default_SelfAuthorityAssignmentForbiddenMessagingSocketException": {},
   "default_SmsConversationNotFoundMessagingSocketException": "SMS-розмова не знайдена",

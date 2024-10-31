@@ -2131,6 +2131,12 @@ abstract class AppLocalizations {
   /// **'Self removal is forbidden'**
   String get default_SelfRemovalForbiddenMessagingSocketException;
 
+  /// No description provided for @default_CannotRemoveOwnerMessagingSocketException.
+  ///
+  /// In en, this message translates to:
+  /// **'Cannot remove owner'**
+  String get default_CannotRemoveOwnerMessagingSocketException;
+
   /// No description provided for @default_SelfAuthorityAssignmentForbiddenMessagingSocketException.
   ///
   /// In en, this message translates to:

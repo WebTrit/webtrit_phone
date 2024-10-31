@@ -764,6 +764,8 @@
   "@default_ChatMemberNotFoundMessagingSocketException": {},
   "default_SelfRemovalForbiddenMessagingSocketException": "Rimozione di se stessi vietata",
   "@default_SelfRemovalForbiddenMessagingSocketException": {},
+  "default_CannotRemoveOwnerMessagingSocketException": "Impossibile rimuovere il proprietario",
+  "@default_CannotRemoveOwnerMessagingSocketException": {},
   "default_SelfAuthorityAssignmentForbiddenMessagingSocketException": "Assegnazione di autorità a se stessi vietata",
   "@default_SelfAuthorityAssignmentForbiddenMessagingSocketException": {},
   "default_SmsConversationNotFoundMessagingSocketException": "Conversazione SMS non trovata",

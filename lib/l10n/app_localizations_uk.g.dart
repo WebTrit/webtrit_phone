@@ -1066,6 +1066,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get default_SelfRemovalForbiddenMessagingSocketException => 'Видалення самого себе заборонено';
 
   @override
+  String get default_CannotRemoveOwnerMessagingSocketException => 'Неможливо видалити власника';
+
+  @override
   String get default_SelfAuthorityAssignmentForbiddenMessagingSocketException => 'Призначення власних прав заборонено';
 
   @override

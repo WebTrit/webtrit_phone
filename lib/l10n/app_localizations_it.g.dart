@@ -1066,6 +1066,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get default_SelfRemovalForbiddenMessagingSocketException => 'Rimozione di se stessi vietata';
 
   @override
+  String get default_CannotRemoveOwnerMessagingSocketException => 'Impossibile rimuovere il proprietario';
+
+  @override
   String get default_SelfAuthorityAssignmentForbiddenMessagingSocketException => 'Assegnazione di autorità a se stessi vietata';
 
   @override
