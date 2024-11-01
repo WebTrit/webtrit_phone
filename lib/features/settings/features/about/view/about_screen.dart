@@ -37,7 +37,7 @@ class AboutScreen extends StatelessWidget {
             title: Text(context.l10n.settings_ListViewTileTitle_about),
           ),
           body: Padding(
-            padding: EdgeInsets.all(16),
+            padding: const EdgeInsets.all(16),
             child: Center(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
