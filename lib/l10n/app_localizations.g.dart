@@ -2332,7 +2332,7 @@ abstract class AppLocalizations {
   /// No description provided for @notifications_errorSnackBar_callSignalingClientSessionMissed.
   ///
   /// In en, this message translates to:
-  /// **'The current connection session is invalid, please sign in again'**
+  /// **'Authentication error, please re-login'**
   String get notifications_errorSnackBar_callSignalingClientSessionMissed;
 
   /// No description provided for @notifications_errorSnackBar_callUndefinedLine.

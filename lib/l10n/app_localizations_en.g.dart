@@ -1147,7 +1147,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get notifications_errorSnackBar_callSignalingClientNotConnect => 'Cannot initiate the call, please check the connection status';
 
   @override
-  String get notifications_errorSnackBar_callSignalingClientSessionMissed => 'The current connection session is invalid, please sign in again';
+  String get notifications_errorSnackBar_callSignalingClientSessionMissed => 'Authentication error, please re-login';
 
   @override
   String get notifications_errorSnackBar_callUndefinedLine => 'No idle lines to initiate the call';
