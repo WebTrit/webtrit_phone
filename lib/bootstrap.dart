@@ -191,4 +191,8 @@ Future _initLocalNotifications() async {
     onDidReceiveNotificationResponse: LocalNotificationsBroker.handleActionReceived,
     onDidReceiveBackgroundNotificationResponse: LocalNotificationsBroker.handleActionReceived,
   );
+
+  final launchDetails = await FlutterLocalNotificationsPlugin().getNotificationAppLaunchDetails();
+  final data = launchDetails?.notificationResponse;
+  if (data != null) LocalNotificationsBroker.handleActionReceived(data);
 }
