@@ -98,7 +98,6 @@
             "url": "https://webtrit-app.web.app/example/example_embedded_wallet_balance.html"
           }
         }
-    
       ]
     }
   },
@@ -148,7 +147,7 @@
         "enabled": true,
         "items": [
           {
-            "enabled": false,
+            "enabled": true,
             "titleL10n": "settings_ListViewTileTitle_logRecordsConsole",
             "icon": "0xee79",
             "type": "log"
