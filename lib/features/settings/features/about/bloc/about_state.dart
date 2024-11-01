@@ -14,7 +14,6 @@ class AboutState with _$AboutState {
     required Uri coreUrl,
     String? fcmPushToken,
     Version? coreVersion,
-    String? fcmPushToken,
   }) = _AboutState;
 
   String get storeVersion => '$storeBuildVersion-$storeBuildNumber';
