@@ -12,6 +12,7 @@ class AboutState with _$AboutState {
     required String storeBuildNumber,
     required String appVersion,
     required Uri coreUrl,
+    String? fcmPushToken,
     Version? coreVersion,
   }) = _AboutState;
 

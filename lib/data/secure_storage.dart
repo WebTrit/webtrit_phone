@@ -6,6 +6,9 @@ class SecureStorage {
   static const _kTokenKey = 'token';
   static const _kUserIdKey = 'user-id';
 
+  // Last FCM token that was pushed to the server
+  static const _kFCMPushToken = 'fcm-push-token';
+
   static late SecureStorage _instance;
 
   static Future<void> init() async {
@@ -109,5 +112,13 @@ class SecureStorage {
 
   Future<void> deleteUserId() {
     return _delete(_kUserIdKey);
+  }
+
+  String? readFCMPushToken() {
+    return _read(_kFCMPushToken);
+  }
+
+  Future<void> writeFCMPushToken(String token) {
+    return _write(_kFCMPushToken, token);
   }
 }

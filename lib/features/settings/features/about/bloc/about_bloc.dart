@@ -21,6 +21,7 @@ class AboutBloc extends Bloc<AboutEvent, AboutState> {
     required this.notificationsBloc,
     required AppInfo appInfo,
     required PackageInfo packageInfo,
+    required SecureStorage secureStorage,
     required this.infoRepository,
   }) : super(AboutState(
           appName: packageInfo.appName,
@@ -28,6 +29,7 @@ class AboutBloc extends Bloc<AboutEvent, AboutState> {
           storeBuildVersion: packageInfo.version,
           storeBuildNumber: packageInfo.buildNumber,
           appVersion: appInfo.version,
+          fcmPushToken: secureStorage.readFCMPushToken(),
           coreUrl: infoRepository.coreUrl,
         )) {
     on<AboutStarted>(_onStarted, transformer: restartable());

@@ -8,6 +8,7 @@ import 'package:logging/logging.dart';
 import 'package:webtrit_api/webtrit_api.dart';
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 
+import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
@@ -20,6 +21,7 @@ final _logger = Logger('PushTokensBloc');
 class PushTokensBloc extends Bloc<PushTokensEvent, PushTokensState> implements PushRegistryDelegate {
   PushTokensBloc({
     required this.pushTokensRepository,
+    required this.secureStorage,
     required this.firebaseMessaging,
     required this.callkeep,
   }) : super(const PushTokensInitial()) {
@@ -33,6 +35,7 @@ class PushTokensBloc extends Bloc<PushTokensEvent, PushTokensState> implements P
   }
 
   final PushTokensRepository pushTokensRepository;
+  final SecureStorage secureStorage;
   final FirebaseMessaging firebaseMessaging;
   final Callkeep callkeep;
 
@@ -63,6 +66,10 @@ class PushTokensBloc extends Bloc<PushTokensEvent, PushTokensState> implements P
   void _onInsertedOrUpdated(PushTokensInsertedOrUpdated event, Emitter<PushTokensState> emit) async {
     try {
       await pushTokensRepository.insertOrUpdatePushToken(event.type, event.value);
+
+      if (event.type == AppPushTokenType.fcm) {
+        secureStorage.writeFCMPushToken(event.value);
+      }
     } catch (e, stackTrace) {
       _logger.warning('_onInsertedOrUpdated', e, stackTrace);
     }

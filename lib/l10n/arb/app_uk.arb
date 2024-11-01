@@ -898,6 +898,8 @@
   "@settings_AboutText_CoreVersionUndefined": {},
   "settings_AboutText_StoreVersion": "Версія збірки в магазині",
   "@settings_AboutText_StoreVersion": {},
+  "settings_AboutText_FCMPushNotificationToken": "Токен для Push-повідомлень FCM",
+  "@settings_AboutText_FCMPushNotificationToken": {},
   "settings_AccountDeleteConfirmDialog_content": "Ви впевнені, що хочете видалити обліковий запис?",
   "@settings_AccountDeleteConfirmDialog_content": {},
   "settings_AccountDeleteConfirmDialog_title": "Підтвердіть видалення облікового запису",
