@@ -2533,6 +2533,12 @@ abstract class AppLocalizations {
   /// **'Build version in the Store'**
   String get settings_AboutText_StoreVersion;
 
+  /// No description provided for @settings_AboutText_FCMPushNotificationToken.
+  ///
+  /// In en, this message translates to:
+  /// **'FCM Push Notification Token'**
+  String get settings_AboutText_FCMPushNotificationToken;
+
   /// No description provided for @settings_AccountDeleteConfirmDialog_content.
   ///
   /// In en, this message translates to:

@@ -898,6 +898,8 @@
   "@settings_AboutText_CoreVersionUndefined": {},
   "settings_AboutText_StoreVersion": "Build version in the Store",
   "@settings_AboutText_StoreVersion": {},
+  "settings_AboutText_FCMPushNotificationToken": "FCM Push Notification Token",
+  "@settings_AboutText_FCMPushNotificationToken": {},
   "settings_AccountDeleteConfirmDialog_content": "Are you sure you want to delete account?",
   "@settings_AccountDeleteConfirmDialog_content": {},
   "settings_AccountDeleteConfirmDialog_title": "Confirm delete account",
