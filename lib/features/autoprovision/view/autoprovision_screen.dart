@@ -4,6 +4,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_api/webtrit_api.dart';
+import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 
 import 'package:webtrit_phone/app/notifications/notifications.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
@@ -76,9 +77,17 @@ class _AutoprovisionScreenState extends State<AutoprovisionScreen> {
       // For case when app is launched with the autoprovision screen on top of the main shell.
       // To avoid callkeep and signaling panic it required full sequence of dispose and init.
       if (mainShellUnderneeth) {
+        final callkeep = Callkeep();
+
         await router.maybePop();
         appBloc.add(const AppLogouted());
         await appBloc.stream.firstWhere((element) => element.token == null);
+
+        // Wait until Callkeep is uninitialized, if needed
+        if (callkeep.currentStatus != CallkeepStatus.uninitialized) {
+          await callkeep.statusStream.firstWhere((status) => status == CallkeepStatus.uninitialized);
+        }
+
         appBloc.add(loginEvent);
         await appBloc.stream.firstWhere((element) => element.token == token);
       }
