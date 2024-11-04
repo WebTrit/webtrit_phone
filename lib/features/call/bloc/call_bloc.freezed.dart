@@ -1081,6 +1081,7 @@ mixin _$CallSignalingEvent {
     required TResult Function(int line, String referId, String referTo,
             String? referredBy, String? replaceCallId)
         transfer,
+    required TResult Function(int line, String callId) transferring,
     required TResult Function(
             int line,
             String callId,
@@ -1130,6 +1131,7 @@ mixin _$CallSignalingEvent {
     TResult? Function(int line, String referId, String referTo,
             String? referredBy, String? replaceCallId)?
         transfer,
+    TResult? Function(int line, String callId)? transferring,
     TResult? Function(
             int line,
             String callId,
@@ -1179,6 +1181,7 @@ mixin _$CallSignalingEvent {
     TResult Function(int line, String referId, String referTo,
             String? referredBy, String? replaceCallId)?
         transfer,
+    TResult Function(int line, String callId)? transferring,
     TResult Function(
             int line,
             String callId,
@@ -1205,6 +1208,8 @@ mixin _$CallSignalingEvent {
     required TResult Function(_CallSignalingEventUpdating value) updating,
     required TResult Function(_CallSignalingEventUpdated value) updated,
     required TResult Function(_CallSignalingEventTransfer value) transfer,
+    required TResult Function(_CallSignalingEventTransferring value)
+        transferring,
     required TResult Function(_CallSignalingEventNotify value) notify,
     required TResult Function(_CallSignalingEventRegistering value) registering,
     required TResult Function(_CallSignalingEventRegistered value) registered,
@@ -1226,6 +1231,7 @@ mixin _$CallSignalingEvent {
     TResult? Function(_CallSignalingEventUpdating value)? updating,
     TResult? Function(_CallSignalingEventUpdated value)? updated,
     TResult? Function(_CallSignalingEventTransfer value)? transfer,
+    TResult? Function(_CallSignalingEventTransferring value)? transferring,
     TResult? Function(_CallSignalingEventNotify value)? notify,
     TResult? Function(_CallSignalingEventRegistering value)? registering,
     TResult? Function(_CallSignalingEventRegistered value)? registered,
@@ -1245,6 +1251,7 @@ mixin _$CallSignalingEvent {
     TResult Function(_CallSignalingEventUpdating value)? updating,
     TResult Function(_CallSignalingEventUpdated value)? updated,
     TResult Function(_CallSignalingEventTransfer value)? transfer,
+    TResult Function(_CallSignalingEventTransferring value)? transferring,
     TResult Function(_CallSignalingEventNotify value)? notify,
     TResult Function(_CallSignalingEventRegistering value)? registering,
     TResult Function(_CallSignalingEventRegistered value)? registered,
@@ -1374,6 +1381,7 @@ class _$CallSignalingEventIncomingImpl
     required TResult Function(int line, String referId, String referTo,
             String? referredBy, String? replaceCallId)
         transfer,
+    required TResult Function(int line, String callId) transferring,
     required TResult Function(
             int line,
             String callId,
@@ -1427,6 +1435,7 @@ class _$CallSignalingEventIncomingImpl
     TResult? Function(int line, String referId, String referTo,
             String? referredBy, String? replaceCallId)?
         transfer,
+    TResult? Function(int line, String callId)? transferring,
     TResult? Function(
             int line,
             String callId,
@@ -1480,6 +1489,7 @@ class _$CallSignalingEventIncomingImpl
     TResult Function(int line, String referId, String referTo,
             String? referredBy, String? replaceCallId)?
         transfer,
+    TResult Function(int line, String callId)? transferring,
     TResult Function(
             int line,
             String callId,
@@ -1513,6 +1523,8 @@ class _$CallSignalingEventIncomingImpl
     required TResult Function(_CallSignalingEventUpdating value) updating,
     required TResult Function(_CallSignalingEventUpdated value) updated,
     required TResult Function(_CallSignalingEventTransfer value) transfer,
+    required TResult Function(_CallSignalingEventTransferring value)
+        transferring,
     required TResult Function(_CallSignalingEventNotify value) notify,
     required TResult Function(_CallSignalingEventRegistering value) registering,
     required TResult Function(_CallSignalingEventRegistered value) registered,
@@ -1537,6 +1549,7 @@ class _$CallSignalingEventIncomingImpl
     TResult? Function(_CallSignalingEventUpdating value)? updating,
     TResult? Function(_CallSignalingEventUpdated value)? updated,
     TResult? Function(_CallSignalingEventTransfer value)? transfer,
+    TResult? Function(_CallSignalingEventTransferring value)? transferring,
     TResult? Function(_CallSignalingEventNotify value)? notify,
     TResult? Function(_CallSignalingEventRegistering value)? registering,
     TResult? Function(_CallSignalingEventRegistered value)? registered,
@@ -1559,6 +1572,7 @@ class _$CallSignalingEventIncomingImpl
     TResult Function(_CallSignalingEventUpdating value)? updating,
     TResult Function(_CallSignalingEventUpdated value)? updated,
     TResult Function(_CallSignalingEventTransfer value)? transfer,
+    TResult Function(_CallSignalingEventTransferring value)? transferring,
     TResult Function(_CallSignalingEventNotify value)? notify,
     TResult Function(_CallSignalingEventRegistering value)? registering,
     TResult Function(_CallSignalingEventRegistered value)? registered,
@@ -1675,6 +1689,7 @@ class _$CallSignalingEventRingingImpl
     required TResult Function(int line, String referId, String referTo,
             String? referredBy, String? replaceCallId)
         transfer,
+    required TResult Function(int line, String callId) transferring,
     required TResult Function(
             int line,
             String callId,
@@ -1727,6 +1742,7 @@ class _$CallSignalingEventRingingImpl
     TResult? Function(int line, String referId, String referTo,
             String? referredBy, String? replaceCallId)?
         transfer,
+    TResult? Function(int line, String callId)? transferring,
     TResult? Function(
             int line,
             String callId,
@@ -1779,6 +1795,7 @@ class _$CallSignalingEventRingingImpl
     TResult Function(int line, String referId, String referTo,
             String? referredBy, String? replaceCallId)?
         transfer,
+    TResult Function(int line, String callId)? transferring,
     TResult Function(
             int line,
             String callId,
@@ -1811,6 +1828,8 @@ class _$CallSignalingEventRingingImpl
     required TResult Function(_CallSignalingEventUpdating value) updating,
     required TResult Function(_CallSignalingEventUpdated value) updated,
     required TResult Function(_CallSignalingEventTransfer value) transfer,
+    required TResult Function(_CallSignalingEventTransferring value)
+        transferring,
     required TResult Function(_CallSignalingEventNotify value) notify,
     required TResult Function(_CallSignalingEventRegistering value) registering,
     required TResult Function(_CallSignalingEventRegistered value) registered,
@@ -1835,6 +1854,7 @@ class _$CallSignalingEventRingingImpl
     TResult? Function(_CallSignalingEventUpdating value)? updating,
     TResult? Function(_CallSignalingEventUpdated value)? updated,
     TResult? Function(_CallSignalingEventTransfer value)? transfer,
+    TResult? Function(_CallSignalingEventTransferring value)? transferring,
     TResult? Function(_CallSignalingEventNotify value)? notify,
     TResult? Function(_CallSignalingEventRegistering value)? registering,
     TResult? Function(_CallSignalingEventRegistered value)? registered,
@@ -1857,6 +1877,7 @@ class _$CallSignalingEventRingingImpl
     TResult Function(_CallSignalingEventUpdating value)? updating,
     TResult Function(_CallSignalingEventUpdated value)? updated,
     TResult Function(_CallSignalingEventTransfer value)? transfer,
+    TResult Function(_CallSignalingEventTransferring value)? transferring,
     TResult Function(_CallSignalingEventNotify value)? notify,
     TResult Function(_CallSignalingEventRegistering value)? registering,
     TResult Function(_CallSignalingEventRegistered value)? registered,
@@ -1970,6 +1991,7 @@ class _$CallSignalingEventProgressImpl
     required TResult Function(int line, String referId, String referTo,
             String? referredBy, String? replaceCallId)
         transfer,
+    required TResult Function(int line, String callId) transferring,
     required TResult Function(
             int line,
             String callId,
@@ -2022,6 +2044,7 @@ class _$CallSignalingEventProgressImpl
     TResult? Function(int line, String referId, String referTo,
             String? referredBy, String? replaceCallId)?
         transfer,
+    TResult? Function(int line, String callId)? transferring,
     TResult? Function(
             int line,
             String callId,
@@ -2074,6 +2097,7 @@ class _$CallSignalingEventProgressImpl
     TResult Function(int line, String referId, String referTo,
             String? referredBy, String? replaceCallId)?
         transfer,
+    TResult Function(int line, String callId)? transferring,
     TResult Function(
             int line,
             String callId,
@@ -2106,6 +2130,8 @@ class _$CallSignalingEventProgressImpl
     required TResult Function(_CallSignalingEventUpdating value) updating,
     required TResult Function(_CallSignalingEventUpdated value) updated,
     required TResult Function(_CallSignalingEventTransfer value) transfer,
+    required TResult Function(_CallSignalingEventTransferring value)
+        transferring,
     required TResult Function(_CallSignalingEventNotify value) notify,
     required TResult Function(_CallSignalingEventRegistering value) registering,
     required TResult Function(_CallSignalingEventRegistered value) registered,
@@ -2130,6 +2156,7 @@ class _$CallSignalingEventProgressImpl
     TResult? Function(_CallSignalingEventUpdating value)? updating,
     TResult? Function(_CallSignalingEventUpdated value)? updated,
     TResult? Function(_CallSignalingEventTransfer value)? transfer,
+    TResult? Function(_CallSignalingEventTransferring value)? transferring,
     TResult? Function(_CallSignalingEventNotify value)? notify,
     TResult? Function(_CallSignalingEventRegistering value)? registering,
     TResult? Function(_CallSignalingEventRegistered value)? registered,
@@ -2152,6 +2179,7 @@ class _$CallSignalingEventProgressImpl
     TResult Function(_CallSignalingEventUpdating value)? updating,
     TResult Function(_CallSignalingEventUpdated value)? updated,
     TResult Function(_CallSignalingEventTransfer value)? transfer,
+    TResult Function(_CallSignalingEventTransferring value)? transferring,
     TResult Function(_CallSignalingEventNotify value)? notify,
     TResult Function(_CallSignalingEventRegistering value)? registering,
     TResult Function(_CallSignalingEventRegistered value)? registered,
@@ -2266,6 +2294,7 @@ class _$CallSignalingEventAcceptedImpl
     required TResult Function(int line, String referId, String referTo,
             String? referredBy, String? replaceCallId)
         transfer,
+    required TResult Function(int line, String callId) transferring,
     required TResult Function(
             int line,
             String callId,
@@ -2318,6 +2347,7 @@ class _$CallSignalingEventAcceptedImpl
     TResult? Function(int line, String referId, String referTo,
             String? referredBy, String? replaceCallId)?
         transfer,
+    TResult? Function(int line, String callId)? transferring,
     TResult? Function(
             int line,
             String callId,
@@ -2370,6 +2400,7 @@ class _$CallSignalingEventAcceptedImpl
     TResult Function(int line, String referId, String referTo,
             String? referredBy, String? replaceCallId)?
         transfer,
+    TResult Function(int line, String callId)? transferring,
     TResult Function(
             int line,
             String callId,
@@ -2402,6 +2433,8 @@ class _$CallSignalingEventAcceptedImpl
     required TResult Function(_CallSignalingEventUpdating value) updating,
     required TResult Function(_CallSignalingEventUpdated value) updated,
     required TResult Function(_CallSignalingEventTransfer value) transfer,
+    required TResult Function(_CallSignalingEventTransferring value)
+        transferring,
     required TResult Function(_CallSignalingEventNotify value) notify,
     required TResult Function(_CallSignalingEventRegistering value) registering,
     required TResult Function(_CallSignalingEventRegistered value) registered,
@@ -2426,6 +2459,7 @@ class _$CallSignalingEventAcceptedImpl
     TResult? Function(_CallSignalingEventUpdating value)? updating,
     TResult? Function(_CallSignalingEventUpdated value)? updated,
     TResult? Function(_CallSignalingEventTransfer value)? transfer,
+    TResult? Function(_CallSignalingEventTransferring value)? transferring,
     TResult? Function(_CallSignalingEventNotify value)? notify,
     TResult? Function(_CallSignalingEventRegistering value)? registering,
     TResult? Function(_CallSignalingEventRegistered value)? registered,
@@ -2448,6 +2482,7 @@ class _$CallSignalingEventAcceptedImpl
     TResult Function(_CallSignalingEventUpdating value)? updating,
     TResult Function(_CallSignalingEventUpdated value)? updated,
     TResult Function(_CallSignalingEventTransfer value)? transfer,
+    TResult Function(_CallSignalingEventTransferring value)? transferring,
     TResult Function(_CallSignalingEventNotify value)? notify,
     TResult Function(_CallSignalingEventRegistering value)? registering,
     TResult Function(_CallSignalingEventRegistered value)? registered,
@@ -2565,6 +2600,7 @@ class _$CallSignalingEventHangupImpl
     required TResult Function(int line, String referId, String referTo,
             String? referredBy, String? replaceCallId)
         transfer,
+    required TResult Function(int line, String callId) transferring,
     required TResult Function(
             int line,
             String callId,
@@ -2617,6 +2653,7 @@ class _$CallSignalingEventHangupImpl
     TResult? Function(int line, String referId, String referTo,
             String? referredBy, String? replaceCallId)?
         transfer,
+    TResult? Function(int line, String callId)? transferring,
     TResult? Function(
             int line,
             String callId,
@@ -2669,6 +2706,7 @@ class _$CallSignalingEventHangupImpl
     TResult Function(int line, String referId, String referTo,
             String? referredBy, String? replaceCallId)?
         transfer,
+    TResult Function(int line, String callId)? transferring,
     TResult Function(
             int line,
             String callId,
@@ -2701,6 +2739,8 @@ class _$CallSignalingEventHangupImpl
     required TResult Function(_CallSignalingEventUpdating value) updating,
     required TResult Function(_CallSignalingEventUpdated value) updated,
     required TResult Function(_CallSignalingEventTransfer value) transfer,
+    required TResult Function(_CallSignalingEventTransferring value)
+        transferring,
     required TResult Function(_CallSignalingEventNotify value) notify,
     required TResult Function(_CallSignalingEventRegistering value) registering,
     required TResult Function(_CallSignalingEventRegistered value) registered,
@@ -2725,6 +2765,7 @@ class _$CallSignalingEventHangupImpl
     TResult? Function(_CallSignalingEventUpdating value)? updating,
     TResult? Function(_CallSignalingEventUpdated value)? updated,
     TResult? Function(_CallSignalingEventTransfer value)? transfer,
+    TResult? Function(_CallSignalingEventTransferring value)? transferring,
     TResult? Function(_CallSignalingEventNotify value)? notify,
     TResult? Function(_CallSignalingEventRegistering value)? registering,
     TResult? Function(_CallSignalingEventRegistered value)? registered,
@@ -2747,6 +2788,7 @@ class _$CallSignalingEventHangupImpl
     TResult Function(_CallSignalingEventUpdating value)? updating,
     TResult Function(_CallSignalingEventUpdated value)? updated,
     TResult Function(_CallSignalingEventTransfer value)? transfer,
+    TResult Function(_CallSignalingEventTransferring value)? transferring,
     TResult Function(_CallSignalingEventNotify value)? notify,
     TResult Function(_CallSignalingEventRegistering value)? registering,
     TResult Function(_CallSignalingEventRegistered value)? registered,
@@ -2893,6 +2935,7 @@ class _$CallSignalingEventUpdatingImpl
     required TResult Function(int line, String referId, String referTo,
             String? referredBy, String? replaceCallId)
         transfer,
+    required TResult Function(int line, String callId) transferring,
     required TResult Function(
             int line,
             String callId,
@@ -2946,6 +2989,7 @@ class _$CallSignalingEventUpdatingImpl
     TResult? Function(int line, String referId, String referTo,
             String? referredBy, String? replaceCallId)?
         transfer,
+    TResult? Function(int line, String callId)? transferring,
     TResult? Function(
             int line,
             String callId,
@@ -2999,6 +3043,7 @@ class _$CallSignalingEventUpdatingImpl
     TResult Function(int line, String referId, String referTo,
             String? referredBy, String? replaceCallId)?
         transfer,
+    TResult Function(int line, String callId)? transferring,
     TResult Function(
             int line,
             String callId,
@@ -3032,6 +3077,8 @@ class _$CallSignalingEventUpdatingImpl
     required TResult Function(_CallSignalingEventUpdating value) updating,
     required TResult Function(_CallSignalingEventUpdated value) updated,
     required TResult Function(_CallSignalingEventTransfer value) transfer,
+    required TResult Function(_CallSignalingEventTransferring value)
+        transferring,
     required TResult Function(_CallSignalingEventNotify value) notify,
     required TResult Function(_CallSignalingEventRegistering value) registering,
     required TResult Function(_CallSignalingEventRegistered value) registered,
@@ -3056,6 +3103,7 @@ class _$CallSignalingEventUpdatingImpl
     TResult? Function(_CallSignalingEventUpdating value)? updating,
     TResult? Function(_CallSignalingEventUpdated value)? updated,
     TResult? Function(_CallSignalingEventTransfer value)? transfer,
+    TResult? Function(_CallSignalingEventTransferring value)? transferring,
     TResult? Function(_CallSignalingEventNotify value)? notify,
     TResult? Function(_CallSignalingEventRegistering value)? registering,
     TResult? Function(_CallSignalingEventRegistered value)? registered,
@@ -3078,6 +3126,7 @@ class _$CallSignalingEventUpdatingImpl
     TResult Function(_CallSignalingEventUpdating value)? updating,
     TResult Function(_CallSignalingEventUpdated value)? updated,
     TResult Function(_CallSignalingEventTransfer value)? transfer,
+    TResult Function(_CallSignalingEventTransferring value)? transferring,
     TResult Function(_CallSignalingEventNotify value)? notify,
     TResult Function(_CallSignalingEventRegistering value)? registering,
     TResult Function(_CallSignalingEventRegistered value)? registered,
@@ -3194,6 +3243,7 @@ class _$CallSignalingEventUpdatedImpl
     required TResult Function(int line, String referId, String referTo,
             String? referredBy, String? replaceCallId)
         transfer,
+    required TResult Function(int line, String callId) transferring,
     required TResult Function(
             int line,
             String callId,
@@ -3246,6 +3296,7 @@ class _$CallSignalingEventUpdatedImpl
     TResult? Function(int line, String referId, String referTo,
             String? referredBy, String? replaceCallId)?
         transfer,
+    TResult? Function(int line, String callId)? transferring,
     TResult? Function(
             int line,
             String callId,
@@ -3298,6 +3349,7 @@ class _$CallSignalingEventUpdatedImpl
     TResult Function(int line, String referId, String referTo,
             String? referredBy, String? replaceCallId)?
         transfer,
+    TResult Function(int line, String callId)? transferring,
     TResult Function(
             int line,
             String callId,
@@ -3330,6 +3382,8 @@ class _$CallSignalingEventUpdatedImpl
     required TResult Function(_CallSignalingEventUpdating value) updating,
     required TResult Function(_CallSignalingEventUpdated value) updated,
     required TResult Function(_CallSignalingEventTransfer value) transfer,
+    required TResult Function(_CallSignalingEventTransferring value)
+        transferring,
     required TResult Function(_CallSignalingEventNotify value) notify,
     required TResult Function(_CallSignalingEventRegistering value) registering,
     required TResult Function(_CallSignalingEventRegistered value) registered,
@@ -3354,6 +3408,7 @@ class _$CallSignalingEventUpdatedImpl
     TResult? Function(_CallSignalingEventUpdating value)? updating,
     TResult? Function(_CallSignalingEventUpdated value)? updated,
     TResult? Function(_CallSignalingEventTransfer value)? transfer,
+    TResult? Function(_CallSignalingEventTransferring value)? transferring,
     TResult? Function(_CallSignalingEventNotify value)? notify,
     TResult? Function(_CallSignalingEventRegistering value)? registering,
     TResult? Function(_CallSignalingEventRegistered value)? registered,
@@ -3376,6 +3431,7 @@ class _$CallSignalingEventUpdatedImpl
     TResult Function(_CallSignalingEventUpdating value)? updating,
     TResult Function(_CallSignalingEventUpdated value)? updated,
     TResult Function(_CallSignalingEventTransfer value)? transfer,
+    TResult Function(_CallSignalingEventTransferring value)? transferring,
     TResult Function(_CallSignalingEventNotify value)? notify,
     TResult Function(_CallSignalingEventRegistering value)? registering,
     TResult Function(_CallSignalingEventRegistered value)? registered,
@@ -3497,6 +3553,7 @@ class _$CallSignalingEventTransferImpl
     required TResult Function(int line, String referId, String referTo,
             String? referredBy, String? replaceCallId)
         transfer,
+    required TResult Function(int line, String callId) transferring,
     required TResult Function(
             int line,
             String callId,
@@ -3549,6 +3606,7 @@ class _$CallSignalingEventTransferImpl
     TResult? Function(int line, String referId, String referTo,
             String? referredBy, String? replaceCallId)?
         transfer,
+    TResult? Function(int line, String callId)? transferring,
     TResult? Function(
             int line,
             String callId,
@@ -3601,6 +3659,7 @@ class _$CallSignalingEventTransferImpl
     TResult Function(int line, String referId, String referTo,
             String? referredBy, String? replaceCallId)?
         transfer,
+    TResult Function(int line, String callId)? transferring,
     TResult Function(
             int line,
             String callId,
@@ -3633,6 +3692,8 @@ class _$CallSignalingEventTransferImpl
     required TResult Function(_CallSignalingEventUpdating value) updating,
     required TResult Function(_CallSignalingEventUpdated value) updated,
     required TResult Function(_CallSignalingEventTransfer value) transfer,
+    required TResult Function(_CallSignalingEventTransferring value)
+        transferring,
     required TResult Function(_CallSignalingEventNotify value) notify,
     required TResult Function(_CallSignalingEventRegistering value) registering,
     required TResult Function(_CallSignalingEventRegistered value) registered,
@@ -3657,6 +3718,7 @@ class _$CallSignalingEventTransferImpl
     TResult? Function(_CallSignalingEventUpdating value)? updating,
     TResult? Function(_CallSignalingEventUpdated value)? updated,
     TResult? Function(_CallSignalingEventTransfer value)? transfer,
+    TResult? Function(_CallSignalingEventTransferring value)? transferring,
     TResult? Function(_CallSignalingEventNotify value)? notify,
     TResult? Function(_CallSignalingEventRegistering value)? registering,
     TResult? Function(_CallSignalingEventRegistered value)? registered,
@@ -3679,6 +3741,7 @@ class _$CallSignalingEventTransferImpl
     TResult Function(_CallSignalingEventUpdating value)? updating,
     TResult Function(_CallSignalingEventUpdated value)? updated,
     TResult Function(_CallSignalingEventTransfer value)? transfer,
+    TResult Function(_CallSignalingEventTransferring value)? transferring,
     TResult Function(_CallSignalingEventNotify value)? notify,
     TResult Function(_CallSignalingEventRegistering value)? registering,
     TResult Function(_CallSignalingEventRegistered value)? registered,
@@ -3708,6 +3771,297 @@ abstract class _CallSignalingEventTransfer implements _CallSignalingEvent {
   String get referTo;
   String? get referredBy;
   String? get replaceCallId;
+}
+
+/// @nodoc
+
+class _$CallSignalingEventTransferringImpl
+    with DiagnosticableTreeMixin
+    implements _CallSignalingEventTransferring {
+  const _$CallSignalingEventTransferringImpl(
+      {required this.line, required this.callId});
+
+  @override
+  final int line;
+  @override
+  final String callId;
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return '_CallSignalingEvent.transferring(line: $line, callId: $callId)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('type', '_CallSignalingEvent.transferring'))
+      ..add(DiagnosticsProperty('line', line))
+      ..add(DiagnosticsProperty('callId', callId));
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$CallSignalingEventTransferringImpl &&
+            (identical(other.line, line) || other.line == line) &&
+            (identical(other.callId, callId) || other.callId == callId));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, line, callId);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(
+            int line,
+            String callId,
+            String callee,
+            String caller,
+            String? callerDisplayName,
+            String? referredBy,
+            String? replaceCallId,
+            bool? isFocus,
+            JsepValue? jsep)
+        incoming,
+    required TResult Function(int line, String callId) ringing,
+    required TResult Function(
+            int line, String callId, String callee, JsepValue? jsep)
+        progress,
+    required TResult Function(
+            int line, String callId, String? callee, JsepValue? jsep)
+        accepted,
+    required TResult Function(int line, String callId, int code, String reason)
+        hangup,
+    required TResult Function(
+            int line,
+            String callId,
+            String callee,
+            String caller,
+            String? callerDisplayName,
+            String? referredBy,
+            String? replaceCallId,
+            bool? isFocus,
+            JsepValue? jsep)
+        updating,
+    required TResult Function(int line, String callId) updated,
+    required TResult Function(int line, String referId, String referTo,
+            String? referredBy, String? replaceCallId)
+        transfer,
+    required TResult Function(int line, String callId) transferring,
+    required TResult Function(
+            int line,
+            String callId,
+            String? notify,
+            SubscriptionState? subscriptionState,
+            String? contentType,
+            String content)
+        notify,
+    required TResult Function() registering,
+    required TResult Function() registered,
+    required TResult Function(int code, String reason) registrationFailed,
+    required TResult Function() unregistering,
+    required TResult Function() unregistered,
+  }) {
+    return transferring(line, callId);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(
+            int line,
+            String callId,
+            String callee,
+            String caller,
+            String? callerDisplayName,
+            String? referredBy,
+            String? replaceCallId,
+            bool? isFocus,
+            JsepValue? jsep)?
+        incoming,
+    TResult? Function(int line, String callId)? ringing,
+    TResult? Function(int line, String callId, String callee, JsepValue? jsep)?
+        progress,
+    TResult? Function(int line, String callId, String? callee, JsepValue? jsep)?
+        accepted,
+    TResult? Function(int line, String callId, int code, String reason)? hangup,
+    TResult? Function(
+            int line,
+            String callId,
+            String callee,
+            String caller,
+            String? callerDisplayName,
+            String? referredBy,
+            String? replaceCallId,
+            bool? isFocus,
+            JsepValue? jsep)?
+        updating,
+    TResult? Function(int line, String callId)? updated,
+    TResult? Function(int line, String referId, String referTo,
+            String? referredBy, String? replaceCallId)?
+        transfer,
+    TResult? Function(int line, String callId)? transferring,
+    TResult? Function(
+            int line,
+            String callId,
+            String? notify,
+            SubscriptionState? subscriptionState,
+            String? contentType,
+            String content)?
+        notify,
+    TResult? Function()? registering,
+    TResult? Function()? registered,
+    TResult? Function(int code, String reason)? registrationFailed,
+    TResult? Function()? unregistering,
+    TResult? Function()? unregistered,
+  }) {
+    return transferring?.call(line, callId);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(
+            int line,
+            String callId,
+            String callee,
+            String caller,
+            String? callerDisplayName,
+            String? referredBy,
+            String? replaceCallId,
+            bool? isFocus,
+            JsepValue? jsep)?
+        incoming,
+    TResult Function(int line, String callId)? ringing,
+    TResult Function(int line, String callId, String callee, JsepValue? jsep)?
+        progress,
+    TResult Function(int line, String callId, String? callee, JsepValue? jsep)?
+        accepted,
+    TResult Function(int line, String callId, int code, String reason)? hangup,
+    TResult Function(
+            int line,
+            String callId,
+            String callee,
+            String caller,
+            String? callerDisplayName,
+            String? referredBy,
+            String? replaceCallId,
+            bool? isFocus,
+            JsepValue? jsep)?
+        updating,
+    TResult Function(int line, String callId)? updated,
+    TResult Function(int line, String referId, String referTo,
+            String? referredBy, String? replaceCallId)?
+        transfer,
+    TResult Function(int line, String callId)? transferring,
+    TResult Function(
+            int line,
+            String callId,
+            String? notify,
+            SubscriptionState? subscriptionState,
+            String? contentType,
+            String content)?
+        notify,
+    TResult Function()? registering,
+    TResult Function()? registered,
+    TResult Function(int code, String reason)? registrationFailed,
+    TResult Function()? unregistering,
+    TResult Function()? unregistered,
+    required TResult orElse(),
+  }) {
+    if (transferring != null) {
+      return transferring(line, callId);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_CallSignalingEventIncoming value) incoming,
+    required TResult Function(_CallSignalingEventRinging value) ringing,
+    required TResult Function(_CallSignalingEventProgress value) progress,
+    required TResult Function(_CallSignalingEventAccepted value) accepted,
+    required TResult Function(_CallSignalingEventHangup value) hangup,
+    required TResult Function(_CallSignalingEventUpdating value) updating,
+    required TResult Function(_CallSignalingEventUpdated value) updated,
+    required TResult Function(_CallSignalingEventTransfer value) transfer,
+    required TResult Function(_CallSignalingEventTransferring value)
+        transferring,
+    required TResult Function(_CallSignalingEventNotify value) notify,
+    required TResult Function(_CallSignalingEventRegistering value) registering,
+    required TResult Function(_CallSignalingEventRegistered value) registered,
+    required TResult Function(_CallSignalingEventRegisterationFailed value)
+        registrationFailed,
+    required TResult Function(_CallSignalingEventUnregistering value)
+        unregistering,
+    required TResult Function(_CallSignalingEventUnregistered value)
+        unregistered,
+  }) {
+    return transferring(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_CallSignalingEventIncoming value)? incoming,
+    TResult? Function(_CallSignalingEventRinging value)? ringing,
+    TResult? Function(_CallSignalingEventProgress value)? progress,
+    TResult? Function(_CallSignalingEventAccepted value)? accepted,
+    TResult? Function(_CallSignalingEventHangup value)? hangup,
+    TResult? Function(_CallSignalingEventUpdating value)? updating,
+    TResult? Function(_CallSignalingEventUpdated value)? updated,
+    TResult? Function(_CallSignalingEventTransfer value)? transfer,
+    TResult? Function(_CallSignalingEventTransferring value)? transferring,
+    TResult? Function(_CallSignalingEventNotify value)? notify,
+    TResult? Function(_CallSignalingEventRegistering value)? registering,
+    TResult? Function(_CallSignalingEventRegistered value)? registered,
+    TResult? Function(_CallSignalingEventRegisterationFailed value)?
+        registrationFailed,
+    TResult? Function(_CallSignalingEventUnregistering value)? unregistering,
+    TResult? Function(_CallSignalingEventUnregistered value)? unregistered,
+  }) {
+    return transferring?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_CallSignalingEventIncoming value)? incoming,
+    TResult Function(_CallSignalingEventRinging value)? ringing,
+    TResult Function(_CallSignalingEventProgress value)? progress,
+    TResult Function(_CallSignalingEventAccepted value)? accepted,
+    TResult Function(_CallSignalingEventHangup value)? hangup,
+    TResult Function(_CallSignalingEventUpdating value)? updating,
+    TResult Function(_CallSignalingEventUpdated value)? updated,
+    TResult Function(_CallSignalingEventTransfer value)? transfer,
+    TResult Function(_CallSignalingEventTransferring value)? transferring,
+    TResult Function(_CallSignalingEventNotify value)? notify,
+    TResult Function(_CallSignalingEventRegistering value)? registering,
+    TResult Function(_CallSignalingEventRegistered value)? registered,
+    TResult Function(_CallSignalingEventRegisterationFailed value)?
+        registrationFailed,
+    TResult Function(_CallSignalingEventUnregistering value)? unregistering,
+    TResult Function(_CallSignalingEventUnregistered value)? unregistered,
+    required TResult orElse(),
+  }) {
+    if (transferring != null) {
+      return transferring(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _CallSignalingEventTransferring implements _CallSignalingEvent {
+  const factory _CallSignalingEventTransferring(
+      {required final int line,
+      required final String callId}) = _$CallSignalingEventTransferringImpl;
+
+  int get line;
+  String get callId;
 }
 
 /// @nodoc
@@ -3811,6 +4165,7 @@ class _$CallSignalingEventNotifyImpl
     required TResult Function(int line, String referId, String referTo,
             String? referredBy, String? replaceCallId)
         transfer,
+    required TResult Function(int line, String callId) transferring,
     required TResult Function(
             int line,
             String callId,
@@ -3864,6 +4219,7 @@ class _$CallSignalingEventNotifyImpl
     TResult? Function(int line, String referId, String referTo,
             String? referredBy, String? replaceCallId)?
         transfer,
+    TResult? Function(int line, String callId)? transferring,
     TResult? Function(
             int line,
             String callId,
@@ -3917,6 +4273,7 @@ class _$CallSignalingEventNotifyImpl
     TResult Function(int line, String referId, String referTo,
             String? referredBy, String? replaceCallId)?
         transfer,
+    TResult Function(int line, String callId)? transferring,
     TResult Function(
             int line,
             String callId,
@@ -3950,6 +4307,8 @@ class _$CallSignalingEventNotifyImpl
     required TResult Function(_CallSignalingEventUpdating value) updating,
     required TResult Function(_CallSignalingEventUpdated value) updated,
     required TResult Function(_CallSignalingEventTransfer value) transfer,
+    required TResult Function(_CallSignalingEventTransferring value)
+        transferring,
     required TResult Function(_CallSignalingEventNotify value) notify,
     required TResult Function(_CallSignalingEventRegistering value) registering,
     required TResult Function(_CallSignalingEventRegistered value) registered,
@@ -3974,6 +4333,7 @@ class _$CallSignalingEventNotifyImpl
     TResult? Function(_CallSignalingEventUpdating value)? updating,
     TResult? Function(_CallSignalingEventUpdated value)? updated,
     TResult? Function(_CallSignalingEventTransfer value)? transfer,
+    TResult? Function(_CallSignalingEventTransferring value)? transferring,
     TResult? Function(_CallSignalingEventNotify value)? notify,
     TResult? Function(_CallSignalingEventRegistering value)? registering,
     TResult? Function(_CallSignalingEventRegistered value)? registered,
@@ -3996,6 +4356,7 @@ class _$CallSignalingEventNotifyImpl
     TResult Function(_CallSignalingEventUpdating value)? updating,
     TResult Function(_CallSignalingEventUpdated value)? updated,
     TResult Function(_CallSignalingEventTransfer value)? transfer,
+    TResult Function(_CallSignalingEventTransferring value)? transferring,
     TResult Function(_CallSignalingEventNotify value)? notify,
     TResult Function(_CallSignalingEventRegistering value)? registering,
     TResult Function(_CallSignalingEventRegistered value)? registered,
@@ -4096,6 +4457,7 @@ class _$CallSignalingEventRegisteringImpl
     required TResult Function(int line, String referId, String referTo,
             String? referredBy, String? replaceCallId)
         transfer,
+    required TResult Function(int line, String callId) transferring,
     required TResult Function(
             int line,
             String callId,
@@ -4148,6 +4510,7 @@ class _$CallSignalingEventRegisteringImpl
     TResult? Function(int line, String referId, String referTo,
             String? referredBy, String? replaceCallId)?
         transfer,
+    TResult? Function(int line, String callId)? transferring,
     TResult? Function(
             int line,
             String callId,
@@ -4200,6 +4563,7 @@ class _$CallSignalingEventRegisteringImpl
     TResult Function(int line, String referId, String referTo,
             String? referredBy, String? replaceCallId)?
         transfer,
+    TResult Function(int line, String callId)? transferring,
     TResult Function(
             int line,
             String callId,
@@ -4232,6 +4596,8 @@ class _$CallSignalingEventRegisteringImpl
     required TResult Function(_CallSignalingEventUpdating value) updating,
     required TResult Function(_CallSignalingEventUpdated value) updated,
     required TResult Function(_CallSignalingEventTransfer value) transfer,
+    required TResult Function(_CallSignalingEventTransferring value)
+        transferring,
     required TResult Function(_CallSignalingEventNotify value) notify,
     required TResult Function(_CallSignalingEventRegistering value) registering,
     required TResult Function(_CallSignalingEventRegistered value) registered,
@@ -4256,6 +4622,7 @@ class _$CallSignalingEventRegisteringImpl
     TResult? Function(_CallSignalingEventUpdating value)? updating,
     TResult? Function(_CallSignalingEventUpdated value)? updated,
     TResult? Function(_CallSignalingEventTransfer value)? transfer,
+    TResult? Function(_CallSignalingEventTransferring value)? transferring,
     TResult? Function(_CallSignalingEventNotify value)? notify,
     TResult? Function(_CallSignalingEventRegistering value)? registering,
     TResult? Function(_CallSignalingEventRegistered value)? registered,
@@ -4278,6 +4645,7 @@ class _$CallSignalingEventRegisteringImpl
     TResult Function(_CallSignalingEventUpdating value)? updating,
     TResult Function(_CallSignalingEventUpdated value)? updated,
     TResult Function(_CallSignalingEventTransfer value)? transfer,
+    TResult Function(_CallSignalingEventTransferring value)? transferring,
     TResult Function(_CallSignalingEventNotify value)? notify,
     TResult Function(_CallSignalingEventRegistering value)? registering,
     TResult Function(_CallSignalingEventRegistered value)? registered,
@@ -4366,6 +4734,7 @@ class _$CallSignalingEventRegisteredImpl
     required TResult Function(int line, String referId, String referTo,
             String? referredBy, String? replaceCallId)
         transfer,
+    required TResult Function(int line, String callId) transferring,
     required TResult Function(
             int line,
             String callId,
@@ -4418,6 +4787,7 @@ class _$CallSignalingEventRegisteredImpl
     TResult? Function(int line, String referId, String referTo,
             String? referredBy, String? replaceCallId)?
         transfer,
+    TResult? Function(int line, String callId)? transferring,
     TResult? Function(
             int line,
             String callId,
@@ -4470,6 +4840,7 @@ class _$CallSignalingEventRegisteredImpl
     TResult Function(int line, String referId, String referTo,
             String? referredBy, String? replaceCallId)?
         transfer,
+    TResult Function(int line, String callId)? transferring,
     TResult Function(
             int line,
             String callId,
@@ -4502,6 +4873,8 @@ class _$CallSignalingEventRegisteredImpl
     required TResult Function(_CallSignalingEventUpdating value) updating,
     required TResult Function(_CallSignalingEventUpdated value) updated,
     required TResult Function(_CallSignalingEventTransfer value) transfer,
+    required TResult Function(_CallSignalingEventTransferring value)
+        transferring,
     required TResult Function(_CallSignalingEventNotify value) notify,
     required TResult Function(_CallSignalingEventRegistering value) registering,
     required TResult Function(_CallSignalingEventRegistered value) registered,
@@ -4526,6 +4899,7 @@ class _$CallSignalingEventRegisteredImpl
     TResult? Function(_CallSignalingEventUpdating value)? updating,
     TResult? Function(_CallSignalingEventUpdated value)? updated,
     TResult? Function(_CallSignalingEventTransfer value)? transfer,
+    TResult? Function(_CallSignalingEventTransferring value)? transferring,
     TResult? Function(_CallSignalingEventNotify value)? notify,
     TResult? Function(_CallSignalingEventRegistering value)? registering,
     TResult? Function(_CallSignalingEventRegistered value)? registered,
@@ -4548,6 +4922,7 @@ class _$CallSignalingEventRegisteredImpl
     TResult Function(_CallSignalingEventUpdating value)? updating,
     TResult Function(_CallSignalingEventUpdated value)? updated,
     TResult Function(_CallSignalingEventTransfer value)? transfer,
+    TResult Function(_CallSignalingEventTransferring value)? transferring,
     TResult Function(_CallSignalingEventNotify value)? notify,
     TResult Function(_CallSignalingEventRegistering value)? registering,
     TResult Function(_CallSignalingEventRegistered value)? registered,
@@ -4646,6 +5021,7 @@ class _$CallSignalingEventRegisterationFailedImpl
     required TResult Function(int line, String referId, String referTo,
             String? referredBy, String? replaceCallId)
         transfer,
+    required TResult Function(int line, String callId) transferring,
     required TResult Function(
             int line,
             String callId,
@@ -4698,6 +5074,7 @@ class _$CallSignalingEventRegisterationFailedImpl
     TResult? Function(int line, String referId, String referTo,
             String? referredBy, String? replaceCallId)?
         transfer,
+    TResult? Function(int line, String callId)? transferring,
     TResult? Function(
             int line,
             String callId,
@@ -4750,6 +5127,7 @@ class _$CallSignalingEventRegisterationFailedImpl
     TResult Function(int line, String referId, String referTo,
             String? referredBy, String? replaceCallId)?
         transfer,
+    TResult Function(int line, String callId)? transferring,
     TResult Function(
             int line,
             String callId,
@@ -4782,6 +5160,8 @@ class _$CallSignalingEventRegisterationFailedImpl
     required TResult Function(_CallSignalingEventUpdating value) updating,
     required TResult Function(_CallSignalingEventUpdated value) updated,
     required TResult Function(_CallSignalingEventTransfer value) transfer,
+    required TResult Function(_CallSignalingEventTransferring value)
+        transferring,
     required TResult Function(_CallSignalingEventNotify value) notify,
     required TResult Function(_CallSignalingEventRegistering value) registering,
     required TResult Function(_CallSignalingEventRegistered value) registered,
@@ -4806,6 +5186,7 @@ class _$CallSignalingEventRegisterationFailedImpl
     TResult? Function(_CallSignalingEventUpdating value)? updating,
     TResult? Function(_CallSignalingEventUpdated value)? updated,
     TResult? Function(_CallSignalingEventTransfer value)? transfer,
+    TResult? Function(_CallSignalingEventTransferring value)? transferring,
     TResult? Function(_CallSignalingEventNotify value)? notify,
     TResult? Function(_CallSignalingEventRegistering value)? registering,
     TResult? Function(_CallSignalingEventRegistered value)? registered,
@@ -4828,6 +5209,7 @@ class _$CallSignalingEventRegisterationFailedImpl
     TResult Function(_CallSignalingEventUpdating value)? updating,
     TResult Function(_CallSignalingEventUpdated value)? updated,
     TResult Function(_CallSignalingEventTransfer value)? transfer,
+    TResult Function(_CallSignalingEventTransferring value)? transferring,
     TResult Function(_CallSignalingEventNotify value)? notify,
     TResult Function(_CallSignalingEventRegistering value)? registering,
     TResult Function(_CallSignalingEventRegistered value)? registered,
@@ -4921,6 +5303,7 @@ class _$CallSignalingEventUnregisteringImpl
     required TResult Function(int line, String referId, String referTo,
             String? referredBy, String? replaceCallId)
         transfer,
+    required TResult Function(int line, String callId) transferring,
     required TResult Function(
             int line,
             String callId,
@@ -4973,6 +5356,7 @@ class _$CallSignalingEventUnregisteringImpl
     TResult? Function(int line, String referId, String referTo,
             String? referredBy, String? replaceCallId)?
         transfer,
+    TResult? Function(int line, String callId)? transferring,
     TResult? Function(
             int line,
             String callId,
@@ -5025,6 +5409,7 @@ class _$CallSignalingEventUnregisteringImpl
     TResult Function(int line, String referId, String referTo,
             String? referredBy, String? replaceCallId)?
         transfer,
+    TResult Function(int line, String callId)? transferring,
     TResult Function(
             int line,
             String callId,
@@ -5057,6 +5442,8 @@ class _$CallSignalingEventUnregisteringImpl
     required TResult Function(_CallSignalingEventUpdating value) updating,
     required TResult Function(_CallSignalingEventUpdated value) updated,
     required TResult Function(_CallSignalingEventTransfer value) transfer,
+    required TResult Function(_CallSignalingEventTransferring value)
+        transferring,
     required TResult Function(_CallSignalingEventNotify value) notify,
     required TResult Function(_CallSignalingEventRegistering value) registering,
     required TResult Function(_CallSignalingEventRegistered value) registered,
@@ -5081,6 +5468,7 @@ class _$CallSignalingEventUnregisteringImpl
     TResult? Function(_CallSignalingEventUpdating value)? updating,
     TResult? Function(_CallSignalingEventUpdated value)? updated,
     TResult? Function(_CallSignalingEventTransfer value)? transfer,
+    TResult? Function(_CallSignalingEventTransferring value)? transferring,
     TResult? Function(_CallSignalingEventNotify value)? notify,
     TResult? Function(_CallSignalingEventRegistering value)? registering,
     TResult? Function(_CallSignalingEventRegistered value)? registered,
@@ -5103,6 +5491,7 @@ class _$CallSignalingEventUnregisteringImpl
     TResult Function(_CallSignalingEventUpdating value)? updating,
     TResult Function(_CallSignalingEventUpdated value)? updated,
     TResult Function(_CallSignalingEventTransfer value)? transfer,
+    TResult Function(_CallSignalingEventTransferring value)? transferring,
     TResult Function(_CallSignalingEventNotify value)? notify,
     TResult Function(_CallSignalingEventRegistering value)? registering,
     TResult Function(_CallSignalingEventRegistered value)? registered,
@@ -5191,6 +5580,7 @@ class _$CallSignalingEventUnregisteredImpl
     required TResult Function(int line, String referId, String referTo,
             String? referredBy, String? replaceCallId)
         transfer,
+    required TResult Function(int line, String callId) transferring,
     required TResult Function(
             int line,
             String callId,
@@ -5243,6 +5633,7 @@ class _$CallSignalingEventUnregisteredImpl
     TResult? Function(int line, String referId, String referTo,
             String? referredBy, String? replaceCallId)?
         transfer,
+    TResult? Function(int line, String callId)? transferring,
     TResult? Function(
             int line,
             String callId,
@@ -5295,6 +5686,7 @@ class _$CallSignalingEventUnregisteredImpl
     TResult Function(int line, String referId, String referTo,
             String? referredBy, String? replaceCallId)?
         transfer,
+    TResult Function(int line, String callId)? transferring,
     TResult Function(
             int line,
             String callId,
@@ -5327,6 +5719,8 @@ class _$CallSignalingEventUnregisteredImpl
     required TResult Function(_CallSignalingEventUpdating value) updating,
     required TResult Function(_CallSignalingEventUpdated value) updated,
     required TResult Function(_CallSignalingEventTransfer value) transfer,
+    required TResult Function(_CallSignalingEventTransferring value)
+        transferring,
     required TResult Function(_CallSignalingEventNotify value) notify,
     required TResult Function(_CallSignalingEventRegistering value) registering,
     required TResult Function(_CallSignalingEventRegistered value) registered,
@@ -5351,6 +5745,7 @@ class _$CallSignalingEventUnregisteredImpl
     TResult? Function(_CallSignalingEventUpdating value)? updating,
     TResult? Function(_CallSignalingEventUpdated value)? updated,
     TResult? Function(_CallSignalingEventTransfer value)? transfer,
+    TResult? Function(_CallSignalingEventTransferring value)? transferring,
     TResult? Function(_CallSignalingEventNotify value)? notify,
     TResult? Function(_CallSignalingEventRegistering value)? registering,
     TResult? Function(_CallSignalingEventRegistered value)? registered,
@@ -5373,6 +5768,7 @@ class _$CallSignalingEventUnregisteredImpl
     TResult Function(_CallSignalingEventUpdating value)? updating,
     TResult Function(_CallSignalingEventUpdated value)? updated,
     TResult Function(_CallSignalingEventTransfer value)? transfer,
+    TResult Function(_CallSignalingEventTransferring value)? transferring,
     TResult Function(_CallSignalingEventNotify value)? notify,
     TResult Function(_CallSignalingEventRegistering value)? registering,
     TResult Function(_CallSignalingEventRegistered value)? registered,

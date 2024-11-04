@@ -140,6 +140,11 @@ class _CallSignalingEvent with _$CallSignalingEvent implements CallEvent {
     required String? replaceCallId,
   }) = _CallSignalingEventTransfer;
 
+  const factory _CallSignalingEvent.transferring({
+    required int line,
+    required String callId,
+  }) = _CallSignalingEventTransferring;
+
   const factory _CallSignalingEvent.notify({
     required int line,
     required String callId,
