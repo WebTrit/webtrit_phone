@@ -50,11 +50,6 @@ class _ResetStateEvent with _$ResetStateEvent implements CallEvent {
 // signaling client events
 
 @Freezed(copyWith: false)
-class UpdateCallSignalingCoreUrl with _$UpdateCallSignalingCoreUrl implements CallEvent {
-  const factory UpdateCallSignalingCoreUrl(String url) = _UpdateCallSignalingCoreUrl;
-}
-
-@Freezed(copyWith: false)
 class _SignalingClientEvent with _$SignalingClientEvent implements CallEvent {
   const factory _SignalingClientEvent.connectInitiated() = _SignalingClientEventConnectInitiated;
 

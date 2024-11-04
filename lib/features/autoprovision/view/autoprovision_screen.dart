@@ -81,13 +81,11 @@ class _AutoprovisionScreenState extends State<AutoprovisionScreen> {
         await appBloc.stream.firstWhere((element) => element.token == null);
         appBloc.add(loginEvent);
         await appBloc.stream.firstWhere((element) => element.token == token);
-        callBloc?.add(UpdateCallSignalingCoreUrl(coreUrl));
       }
     } else {
       // For the case when the app is launched with the autoprovision screen as initial route.
       appBloc.add(loginEvent);
       await appBloc.stream.firstWhere((element) => element.token == token);
-      callBloc?.add(UpdateCallSignalingCoreUrl(coreUrl));
       // Then will be redirected by router reevaluation and redirect inside [onAutoprovisionScreenPageRouteGuardNavigation]
     }
 
