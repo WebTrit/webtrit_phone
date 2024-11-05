@@ -96,6 +96,8 @@ Future<void> _initFirebase() async {
 Future<void> _initFirebaseMessaging() async {
   final logger = Logger('FirebaseMessaging');
 
+  FirebaseMessaging.instance.setDeliveryMetricsExportToBigQuery(true);
+
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
