@@ -26,6 +26,9 @@ class _AutoprovisionScreenState extends State<AutoprovisionScreen> {
   late final autoprovisionCubit = context.read<AutoprovisionCubit>();
   late final router = context.router;
 
+  // TODO(Serdun): Add Callkeep to the provider and access it using context.read<Callkeep>() for consistency.
+  final callkeep = Callkeep();
+
   Future navigateBack() async {
     if (router.canPop(ignorePagelessRoutes: true)) {
       // For case when app is launched with the autoprovision screen on top of any screen.
@@ -65,32 +68,22 @@ class _AutoprovisionScreenState extends State<AutoprovisionScreen> {
     final loginEvent = AppLogined(coreUrl: coreUrl, token: token, userId: userId, tenantId: tenantId);
 
     if (router.canPop()) {
-      final loginUnderneeth = router.stack.first.name == LoginRouterPageRoute.name;
-      final mainShellUnderneeth = router.stack.first.name == MainShellRoute.name;
+      await router.maybePop();
 
-      // For case when app is launched with the autoprovision screen on top of the login screen.
-      if (loginUnderneeth) {
-        await router.maybePop();
-        appBloc.add(loginEvent);
-      }
-
-      // For case when app is launched with the autoprovision screen on top of the main shell.
-      // To avoid callkeep and signaling panic it required full sequence of dispose and init.
-      if (mainShellUnderneeth) {
-        final callkeep = Callkeep();
-
-        await router.maybePop();
+      // Logout if the session exists
+      if (appBloc.state.token != null) {
         appBloc.add(const AppLogouted());
         await appBloc.stream.firstWhere((element) => element.token == null);
-
-        // Wait until Callkeep is uninitialized, if needed
-        if (callkeep.currentStatus != CallkeepStatus.uninitialized) {
-          await callkeep.statusStream.firstWhere((status) => status == CallkeepStatus.uninitialized);
-        }
-
-        appBloc.add(loginEvent);
-        await appBloc.stream.firstWhere((element) => element.token == token);
       }
+
+      // Wait until Callkeep is uninitialized, if needed
+      if (callkeep.currentStatus != CallkeepStatus.uninitialized) {
+        await callkeep.statusStream.firstWhere((status) => status == CallkeepStatus.uninitialized);
+      }
+
+      // Login with the new session
+      appBloc.add(loginEvent);
+      await appBloc.stream.firstWhere((element) => element.token == token);
     } else {
       // For the case when the app is launched with the autoprovision screen as initial route.
       appBloc.add(loginEvent);
