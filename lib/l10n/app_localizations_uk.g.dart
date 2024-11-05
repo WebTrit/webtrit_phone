@@ -1147,7 +1147,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get notifications_errorSnackBar_callSignalingClientNotConnect => 'Не вдається ініціювати дзвінок, перевірте статус з\'єднання';
 
   @override
-  String get notifications_errorSnackBar_callSignalingClientSessionMissed => 'Поточна сесія з\'єднання недійсна, будь ласка, увійдіть знову';
+  String get notifications_errorSnackBar_callSignalingClientSessionMissed => 'Помилка автентифікації, будь ласка увійдіть знову';
 
   @override
   String get notifications_errorSnackBar_callUndefinedLine => 'Немає вільних ліній для ініціювання дзвінка';

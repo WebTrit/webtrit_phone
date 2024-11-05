@@ -810,7 +810,7 @@
   "@notifications_errorSnackBar_callConnect": {},
   "notifications_errorSnackBar_callSignalingClientNotConnect": "Не вдається ініціювати дзвінок, перевірте статус з'єднання",
   "@notifications_errorSnackBar_callSignalingClientNotConnect": {},
-  "notifications_errorSnackBar_callSignalingClientSessionMissed": "Поточна сесія з'єднання недійсна, будь ласка, увійдіть знову",
+  "notifications_errorSnackBar_callSignalingClientSessionMissed": "Помилка автентифікації, будь ласка увійдіть знову",
   "@notifications_errorSnackBar_callSignalingClientSessionMissed": {},
   "notifications_errorSnackBar_callUndefinedLine": "Немає вільних ліній для ініціювання дзвінка",
   "@notifications_errorSnackBar_callUndefinedLine": {},

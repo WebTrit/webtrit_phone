@@ -1147,7 +1147,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get notifications_errorSnackBar_callSignalingClientNotConnect => 'Impossibile eseguire la chiamata, verificare lo stato della connessione';
 
   @override
-  String get notifications_errorSnackBar_callSignalingClientSessionMissed => 'L\'attuale sessione non risulta più attiva, si prega di accedere nuovamente';
+  String get notifications_errorSnackBar_callSignalingClientSessionMissed => 'Errore di autenticazione, effettuare nuovamente l\'accesso';
 
   @override
   String get notifications_errorSnackBar_callUndefinedLine => 'Nessuna linea disponibile per avviare una chiamata';

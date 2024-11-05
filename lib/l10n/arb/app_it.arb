@@ -810,7 +810,7 @@
   "@notifications_errorSnackBar_callConnect": {},
   "notifications_errorSnackBar_callSignalingClientNotConnect": "Impossibile eseguire la chiamata, verificare lo stato della connessione",
   "@notifications_errorSnackBar_callSignalingClientNotConnect": {},
-  "notifications_errorSnackBar_callSignalingClientSessionMissed": "L'attuale sessione non risulta più attiva, si prega di accedere nuovamente",
+  "notifications_errorSnackBar_callSignalingClientSessionMissed": "Errore di autenticazione, effettuare nuovamente l'accesso",
   "@notifications_errorSnackBar_callSignalingClientSessionMissed": {},
   "notifications_errorSnackBar_callUndefinedLine": "Nessuna linea disponibile per avviare una chiamata",
   "@notifications_errorSnackBar_callUndefinedLine": {},
