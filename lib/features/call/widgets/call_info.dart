@@ -121,6 +121,8 @@ class _CallInfoState extends State<CallInfo> {
           widget.username,
           style: textTheme.displaySmall!.copyWith(color: widget.color),
           textAlign: TextAlign.center,
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
         ),
         Text(
           statusMessage,
