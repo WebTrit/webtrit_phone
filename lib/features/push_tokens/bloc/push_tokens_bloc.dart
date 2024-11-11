@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:logging/logging.dart';
 
 import 'package:webtrit_api/webtrit_api.dart';
@@ -11,6 +11,8 @@ import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
+
+part 'push_tokens_bloc.freezed.dart';
 
 part 'push_tokens_event.dart';
 
@@ -24,7 +26,7 @@ class PushTokensBloc extends Bloc<PushTokensEvent, PushTokensState> implements P
     required this.secureStorage,
     required this.firebaseMessaging,
     required this.callkeep,
-  }) : super(const PushTokensInitial()) {
+  }) : super(PushTokensState.initial()) {
     _onTokenRefreshSubscription = firebaseMessaging.onTokenRefresh.listen((fcmToken) {
       add(PushTokensInsertedOrUpdated(AppPushTokenType.fcm, fcmToken));
     });
@@ -60,7 +62,7 @@ class PushTokensBloc extends Bloc<PushTokensEvent, PushTokensState> implements P
       add(PushTokensInsertedOrUpdated(AppPushTokenType.apns, apnsToken));
     }
 
-    emit(const PushTokensUploadSuccess());
+    emit(PushTokensState.uploadSuccess());
   }
 
   void _onInsertedOrUpdated(PushTokensInsertedOrUpdated event, Emitter<PushTokensState> emit) async {
