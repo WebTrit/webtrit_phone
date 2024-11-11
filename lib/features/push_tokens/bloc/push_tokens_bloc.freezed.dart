@@ -21,18 +21,21 @@ mixin _$PushTokensEvent {
     required TResult Function() started,
     required TResult Function(AppPushTokenType type, String value)
         insertedOrUpdated,
+    required TResult Function(String errorMessage) error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? started,
     TResult? Function(AppPushTokenType type, String value)? insertedOrUpdated,
+    TResult? Function(String errorMessage)? error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? started,
     TResult Function(AppPushTokenType type, String value)? insertedOrUpdated,
+    TResult Function(String errorMessage)? error,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -41,18 +44,21 @@ mixin _$PushTokensEvent {
     required TResult Function(PushTokensStarted value) started,
     required TResult Function(PushTokensInsertedOrUpdated value)
         insertedOrUpdated,
+    required TResult Function(_PushTokensError value) error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(PushTokensStarted value)? started,
     TResult? Function(PushTokensInsertedOrUpdated value)? insertedOrUpdated,
+    TResult? Function(_PushTokensError value)? error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(PushTokensStarted value)? started,
     TResult Function(PushTokensInsertedOrUpdated value)? insertedOrUpdated,
+    TResult Function(_PushTokensError value)? error,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -123,6 +129,7 @@ class _$PushTokensStartedImpl implements PushTokensStarted {
     required TResult Function() started,
     required TResult Function(AppPushTokenType type, String value)
         insertedOrUpdated,
+    required TResult Function(String errorMessage) error,
   }) {
     return started();
   }
@@ -132,6 +139,7 @@ class _$PushTokensStartedImpl implements PushTokensStarted {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? started,
     TResult? Function(AppPushTokenType type, String value)? insertedOrUpdated,
+    TResult? Function(String errorMessage)? error,
   }) {
     return started?.call();
   }
@@ -141,6 +149,7 @@ class _$PushTokensStartedImpl implements PushTokensStarted {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? started,
     TResult Function(AppPushTokenType type, String value)? insertedOrUpdated,
+    TResult Function(String errorMessage)? error,
     required TResult orElse(),
   }) {
     if (started != null) {
@@ -155,6 +164,7 @@ class _$PushTokensStartedImpl implements PushTokensStarted {
     required TResult Function(PushTokensStarted value) started,
     required TResult Function(PushTokensInsertedOrUpdated value)
         insertedOrUpdated,
+    required TResult Function(_PushTokensError value) error,
   }) {
     return started(this);
   }
@@ -164,6 +174,7 @@ class _$PushTokensStartedImpl implements PushTokensStarted {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(PushTokensStarted value)? started,
     TResult? Function(PushTokensInsertedOrUpdated value)? insertedOrUpdated,
+    TResult? Function(_PushTokensError value)? error,
   }) {
     return started?.call(this);
   }
@@ -173,6 +184,7 @@ class _$PushTokensStartedImpl implements PushTokensStarted {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(PushTokensStarted value)? started,
     TResult Function(PushTokensInsertedOrUpdated value)? insertedOrUpdated,
+    TResult Function(_PushTokensError value)? error,
     required TResult orElse(),
   }) {
     if (started != null) {
@@ -269,6 +281,7 @@ class _$PushTokensInsertedOrUpdatedImpl implements PushTokensInsertedOrUpdated {
     required TResult Function() started,
     required TResult Function(AppPushTokenType type, String value)
         insertedOrUpdated,
+    required TResult Function(String errorMessage) error,
   }) {
     return insertedOrUpdated(type, value);
   }
@@ -278,6 +291,7 @@ class _$PushTokensInsertedOrUpdatedImpl implements PushTokensInsertedOrUpdated {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? started,
     TResult? Function(AppPushTokenType type, String value)? insertedOrUpdated,
+    TResult? Function(String errorMessage)? error,
   }) {
     return insertedOrUpdated?.call(type, value);
   }
@@ -287,6 +301,7 @@ class _$PushTokensInsertedOrUpdatedImpl implements PushTokensInsertedOrUpdated {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? started,
     TResult Function(AppPushTokenType type, String value)? insertedOrUpdated,
+    TResult Function(String errorMessage)? error,
     required TResult orElse(),
   }) {
     if (insertedOrUpdated != null) {
@@ -301,6 +316,7 @@ class _$PushTokensInsertedOrUpdatedImpl implements PushTokensInsertedOrUpdated {
     required TResult Function(PushTokensStarted value) started,
     required TResult Function(PushTokensInsertedOrUpdated value)
         insertedOrUpdated,
+    required TResult Function(_PushTokensError value) error,
   }) {
     return insertedOrUpdated(this);
   }
@@ -310,6 +326,7 @@ class _$PushTokensInsertedOrUpdatedImpl implements PushTokensInsertedOrUpdated {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(PushTokensStarted value)? started,
     TResult? Function(PushTokensInsertedOrUpdated value)? insertedOrUpdated,
+    TResult? Function(_PushTokensError value)? error,
   }) {
     return insertedOrUpdated?.call(this);
   }
@@ -319,6 +336,7 @@ class _$PushTokensInsertedOrUpdatedImpl implements PushTokensInsertedOrUpdated {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(PushTokensStarted value)? started,
     TResult Function(PushTokensInsertedOrUpdated value)? insertedOrUpdated,
+    TResult Function(_PushTokensError value)? error,
     required TResult orElse(),
   }) {
     if (insertedOrUpdated != null) {
@@ -344,8 +362,159 @@ abstract class PushTokensInsertedOrUpdated implements PushTokensEvent {
 }
 
 /// @nodoc
+abstract class _$$PushTokensErrorImplCopyWith<$Res> {
+  factory _$$PushTokensErrorImplCopyWith(_$PushTokensErrorImpl value,
+          $Res Function(_$PushTokensErrorImpl) then) =
+      __$$PushTokensErrorImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({String errorMessage});
+}
+
+/// @nodoc
+class __$$PushTokensErrorImplCopyWithImpl<$Res>
+    extends _$PushTokensEventCopyWithImpl<$Res, _$PushTokensErrorImpl>
+    implements _$$PushTokensErrorImplCopyWith<$Res> {
+  __$$PushTokensErrorImplCopyWithImpl(
+      _$PushTokensErrorImpl _value, $Res Function(_$PushTokensErrorImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of PushTokensEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? errorMessage = null,
+  }) {
+    return _then(_$PushTokensErrorImpl(
+      null == errorMessage
+          ? _value.errorMessage
+          : errorMessage // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$PushTokensErrorImpl implements _PushTokensError {
+  const _$PushTokensErrorImpl(this.errorMessage);
+
+  @override
+  final String errorMessage;
+
+  @override
+  String toString() {
+    return 'PushTokensEvent.error(errorMessage: $errorMessage)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$PushTokensErrorImpl &&
+            (identical(other.errorMessage, errorMessage) ||
+                other.errorMessage == errorMessage));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, errorMessage);
+
+  /// Create a copy of PushTokensEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$PushTokensErrorImplCopyWith<_$PushTokensErrorImpl> get copyWith =>
+      __$$PushTokensErrorImplCopyWithImpl<_$PushTokensErrorImpl>(
+          this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() started,
+    required TResult Function(AppPushTokenType type, String value)
+        insertedOrUpdated,
+    required TResult Function(String errorMessage) error,
+  }) {
+    return error(errorMessage);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? started,
+    TResult? Function(AppPushTokenType type, String value)? insertedOrUpdated,
+    TResult? Function(String errorMessage)? error,
+  }) {
+    return error?.call(errorMessage);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? started,
+    TResult Function(AppPushTokenType type, String value)? insertedOrUpdated,
+    TResult Function(String errorMessage)? error,
+    required TResult orElse(),
+  }) {
+    if (error != null) {
+      return error(errorMessage);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(PushTokensStarted value) started,
+    required TResult Function(PushTokensInsertedOrUpdated value)
+        insertedOrUpdated,
+    required TResult Function(_PushTokensError value) error,
+  }) {
+    return error(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(PushTokensStarted value)? started,
+    TResult? Function(PushTokensInsertedOrUpdated value)? insertedOrUpdated,
+    TResult? Function(_PushTokensError value)? error,
+  }) {
+    return error?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(PushTokensStarted value)? started,
+    TResult Function(PushTokensInsertedOrUpdated value)? insertedOrUpdated,
+    TResult Function(_PushTokensError value)? error,
+    required TResult orElse(),
+  }) {
+    if (error != null) {
+      return error(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _PushTokensError implements PushTokensEvent {
+  const factory _PushTokensError(final String errorMessage) =
+      _$PushTokensErrorImpl;
+
+  String get errorMessage;
+
+  /// Create a copy of PushTokensEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$PushTokensErrorImplCopyWith<_$PushTokensErrorImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
 mixin _$PushTokensState {
-  PushTokensStateType get type => throw _privateConstructorUsedError;
+  String? get pushToken => throw _privateConstructorUsedError;
   String? get errorMessage => throw _privateConstructorUsedError;
 
   /// Create a copy of PushTokensState
@@ -361,7 +530,7 @@ abstract class $PushTokensStateCopyWith<$Res> {
           PushTokensState value, $Res Function(PushTokensState) then) =
       _$PushTokensStateCopyWithImpl<$Res, PushTokensState>;
   @useResult
-  $Res call({PushTokensStateType type, String? errorMessage});
+  $Res call({String? pushToken, String? errorMessage});
 }
 
 /// @nodoc
@@ -379,14 +548,14 @@ class _$PushTokensStateCopyWithImpl<$Res, $Val extends PushTokensState>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? type = null,
+    Object? pushToken = freezed,
     Object? errorMessage = freezed,
   }) {
     return _then(_value.copyWith(
-      type: null == type
-          ? _value.type
-          : type // ignore: cast_nullable_to_non_nullable
-              as PushTokensStateType,
+      pushToken: freezed == pushToken
+          ? _value.pushToken
+          : pushToken // ignore: cast_nullable_to_non_nullable
+              as String?,
       errorMessage: freezed == errorMessage
           ? _value.errorMessage
           : errorMessage // ignore: cast_nullable_to_non_nullable
@@ -403,7 +572,7 @@ abstract class _$$PushTokensStateImplCopyWith<$Res>
       __$$PushTokensStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({PushTokensStateType type, String? errorMessage});
+  $Res call({String? pushToken, String? errorMessage});
 }
 
 /// @nodoc
@@ -419,14 +588,14 @@ class __$$PushTokensStateImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? type = null,
+    Object? pushToken = freezed,
     Object? errorMessage = freezed,
   }) {
     return _then(_$PushTokensStateImpl(
-      type: null == type
-          ? _value.type
-          : type // ignore: cast_nullable_to_non_nullable
-              as PushTokensStateType,
+      pushToken: freezed == pushToken
+          ? _value.pushToken
+          : pushToken // ignore: cast_nullable_to_non_nullable
+              as String?,
       errorMessage: freezed == errorMessage
           ? _value.errorMessage
           : errorMessage // ignore: cast_nullable_to_non_nullable
@@ -438,16 +607,16 @@ class __$$PushTokensStateImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$PushTokensStateImpl implements _PushTokensState {
-  const _$PushTokensStateImpl({required this.type, this.errorMessage});
+  const _$PushTokensStateImpl({this.pushToken, this.errorMessage});
 
   @override
-  final PushTokensStateType type;
+  final String? pushToken;
   @override
   final String? errorMessage;
 
   @override
   String toString() {
-    return 'PushTokensState(type: $type, errorMessage: $errorMessage)';
+    return 'PushTokensState(pushToken: $pushToken, errorMessage: $errorMessage)';
   }
 
   @override
@@ -455,13 +624,14 @@ class _$PushTokensStateImpl implements _PushTokensState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$PushTokensStateImpl &&
-            (identical(other.type, type) || other.type == type) &&
+            (identical(other.pushToken, pushToken) ||
+                other.pushToken == pushToken) &&
             (identical(other.errorMessage, errorMessage) ||
                 other.errorMessage == errorMessage));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, type, errorMessage);
+  int get hashCode => Object.hash(runtimeType, pushToken, errorMessage);
 
   /// Create a copy of PushTokensState
   /// with the given fields replaced by the non-null parameter values.
@@ -475,11 +645,11 @@ class _$PushTokensStateImpl implements _PushTokensState {
 
 abstract class _PushTokensState implements PushTokensState {
   const factory _PushTokensState(
-      {required final PushTokensStateType type,
+      {final String? pushToken,
       final String? errorMessage}) = _$PushTokensStateImpl;
 
   @override
-  PushTokensStateType get type;
+  String? get pushToken;
   @override
   String? get errorMessage;
 
