@@ -63,7 +63,7 @@ class _CallShellState extends State<CallShell> {
   Widget displayListener(Widget child) {
     return BlocListener<CallBloc, CallState>(
       listenWhen: (previous, current) => previous.display != current.display,
-      listener: (context, state) {
+      listener: (context, state) async {
         final router = context.router;
 
         final orientationsBloc = context.read<OrientationsBloc>();
@@ -79,11 +79,13 @@ class _CallShellState extends State<CallShell> {
           }
         } else {
           if (router.isRouteActive(CallScreenPageRoute.name)) {
-            if (state.isBlingTransferInitiated) {
-              router.navigate(const MainScreenPageRoute());
-            } else {
-              router.back();
-            }
+            // Try to pop the top route, if not possible, or navigate to the main screen.
+            //
+            // Not used router.navigate(const MainScreenPageRoute()) directly to prevent overriding route on
+            // back by last saved tab in RedirectRoute(path: '') that static and stays the same until app restarts.
+            // eg. on unattended transfer init.
+            final popped = await router.maybePopTop();
+            if (!popped) router.navigate(const MainScreenPageRoute());
           }
         }
 
