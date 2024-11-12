@@ -15,7 +15,7 @@ class MainAppBar extends AppBar {
   }) : super(
           centerTitle: false,
           actions: [
-            BlocBuilder<CallBloc, CallState>(
+            BlocBuilder<SessionStatusCubit, SessionStatusState>(
               builder: (context, state) {
                 return Ink(
                   decoration: ShapeDecoration(

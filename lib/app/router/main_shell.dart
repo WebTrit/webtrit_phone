@@ -266,10 +266,22 @@ class _MainShellState extends State<MainShell> {
         ],
         child: Builder(
           builder: (context) {
-            var mainShellRepo = context.read<MainShellRouteStateRepository>();
-            return CallShell(
-              child: MessagingShell(
-                child: AutoRouter(navigatorObservers: () => [MainShellNavigatorObserver(mainShellRepo)]),
+            final mainShellRepo = context.read<MainShellRouteStateRepository>();
+            return BlocProvider<SessionStatusCubit>(
+              create: (context) => SessionStatusCubit(
+                pushTokensBloc: context.read<PushTokensBloc>(),
+                callBloc: context.read<CallBloc>(),
+              ),
+              child: Builder(
+                builder: (context) => CallShell(
+                  child: MessagingShell(
+                    child: AutoRouter(
+                      navigatorObservers: () => [
+                        MainShellNavigatorObserver(mainShellRepo),
+                      ],
+                    ),
+                  ),
+                ),
               ),
             );
           },
