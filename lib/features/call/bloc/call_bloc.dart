@@ -641,6 +641,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       displayName: event.displayName,
       video: event.video,
       createdTime: clock.now(),
+      status: ActiveCallStatus.incomingPushedFromCallKeep,
     )));
 
     // Function to verify speaker availability for the upcoming event, ensuring the speaker button is correctly enabled or disabled
@@ -768,7 +769,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       _peerConnectionComplete(event.callId, peerConnection);
 
       emit(state.copyWithMappedActiveCall(event.callId, (activeCall) {
-        return activeCall.copyWith(localStream: localStream);
+        return activeCall.copyWith(localStream: localStream, status: ActiveCallStatus.incomingJsepProcessed);
       }));
 
       // Defer the event execution to the end of the event loop to avoid exceptions like CallkeepCallRequestError.internal.
@@ -1539,35 +1540,60 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     Emitter<CallState> emit,
   ) async {
     event.fulfill();
-
-    await _ringtoneStop();
-
-    emit(state.copyWithMappedActiveCall(event.callId, (activeCall) {
-      return activeCall.copyWith(acceptedTime: clock.now());
-    }));
-
     try {
-      await state.performOnActiveCall(event.callId, (activeCall) async {
-        // Condition occur when the user interacts with a push notification before signaling is properly initialized.
-        // In this case, the CallKeep method "reportNewIncomingCall" may return callIdAlreadyExistsAndAnswered.
-        if (activeCall.line == _kUndefinedLine) return;
+      await _ringtoneStop();
 
-        final peerConnection = await _peerConnectionRetrieve(activeCall.callId);
-        if (peerConnection == null) {
-          _logger.warning('__onCallPerformEventAnswered: peerConnection is null - most likely some permissions issue');
-        } else {
-          final localDescription = peerConnection.signalingState == RTCSignalingState.RTCSignalingStateHaveRemoteOffer
-              ? await peerConnection.createAnswer({})
-              : await peerConnection.createOffer({});
-          await _signalingClient?.execute(AcceptRequest(
-            transaction: WebtritSignalingClient.generateTransactionId(),
-            line: activeCall.line,
-            callId: activeCall.callId,
-            jsep: localDescription.toMap(),
-          ));
-          await peerConnection.setLocalDescription(localDescription);
-        }
+      // Try to wait until signaling is properly initialized and processed incoming call.
+      //
+      // 1 May occur when the user interacts with a push notification before signaling is properly initialized.
+      // In this case, the CallKeep method "reportNewIncomingCall" may return callIdAlreadyAnswered, and processing can be skipped.
+      //
+      // 2 Or in case when the user answers the call before incoming jsep and offer processed
+      // e.g in race condition between [_CallPerformEventAnswered], [_CallSignalingEventIncoming] and [_CallSignalingEventProgress].
+      //
+      // 3 Or in case when the user answers the call multiple times (coz ui didnt blocked),
+      // the first answer is processed, and the second answer is ignored.
+      //
+      // Reproduce cases -
+      // ios app in foreground + screen locked, answer the call from the lock screen as fast as possible
+      // ios app in terminated state pressing push, but this case cant be debugged.
+      // android app in foreground/background state + screen locked, press button(flutter ui) multiple times to trigger concurrent events
+      final doTime = clock.now();
+      bool canAnswer = false;
+      await Future.doWhile(() async {
+        final call = state.retrieveActiveCall(event.callId);
+        final jsepProcessed = call?.status == ActiveCallStatus.incomingJsepProcessed;
+
+        final pc = await _peerConnectionRetrieve(event.callId);
+        final offerReceived = pc?.signalingState == RTCSignalingState.RTCSignalingStateHaveRemoteOffer;
+
+        final alreadyAnswered = call?.status == ActiveCallStatus.incomingAnswered;
+        final timedOut = clock.now().difference(doTime).inSeconds > 5;
+
+        _logger.fine(
+            '__onCallPerformEventAnswered: jsepProcessed: $jsepProcessed, offerReceived: $offerReceived, alreadyAnswered:$alreadyAnswered , timedOut: $timedOut');
+        canAnswer = jsepProcessed && offerReceived && !alreadyAnswered;
+        if (alreadyAnswered || timedOut || canAnswer) return false;
+        return await Future.delayed(const Duration(milliseconds: 100), () => true);
       });
+
+      if (canAnswer == false) return;
+      final call = state.retrieveActiveCall(event.callId)!;
+      final peerConnection = (await _peerConnectionRetrieve(call.callId))!;
+
+      final localDescription = await peerConnection.createAnswer({});
+      await _signalingClient?.execute(AcceptRequest(
+        transaction: WebtritSignalingClient.generateTransactionId(),
+        line: call.line,
+        callId: call.callId,
+        jsep: localDescription.toMap(),
+      ));
+      await peerConnection.setLocalDescription(localDescription);
+
+      emit(state.copyWithMappedActiveCall(
+        event.callId,
+        (call) => call.copyWith(acceptedTime: clock.now(), status: ActiveCallStatus.incomingAnswered),
+      ));
     } catch (e) {
       _logger.warning('__onCallPerformEventAnswered: $e');
       notificationsBloc.add(NotificationsSubmitted(DefaultErrorNotification(e)));
