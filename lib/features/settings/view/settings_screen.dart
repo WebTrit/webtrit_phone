@@ -52,6 +52,7 @@ class SettingsScreen extends StatelessWidget {
             builder: (context, callState) {
               return SessionStatusListTile(
                 status: callState.status,
+                onTap: () => context.router.navigate(const DiagnosticScreenPageRoute()),
               );
             },
           ),
