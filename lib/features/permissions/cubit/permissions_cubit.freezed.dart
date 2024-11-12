@@ -418,10 +418,10 @@ class __$$PermissionFullScreenIntentNeededImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? permission = freezed,
+    Object? permission = null,
   }) {
     return _then(_$PermissionFullScreenIntentNeededImpl(
-      freezed == permission
+      null == permission
           ? _value.permission
           : permission // ignore: cast_nullable_to_non_nullable
               as CallkeepSpecialPermissions,
@@ -448,13 +448,12 @@ class _$PermissionFullScreenIntentNeededImpl
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$PermissionFullScreenIntentNeededImpl &&
-            const DeepCollectionEquality()
-                .equals(other.permission, permission));
+            (identical(other.permission, permission) ||
+                other.permission == permission));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(permission));
+  int get hashCode => Object.hash(runtimeType, permission);
 
   /// Create a copy of PermissionsState
   /// with the given fields replaced by the non-null parameter values.

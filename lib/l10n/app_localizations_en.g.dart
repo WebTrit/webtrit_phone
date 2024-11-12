@@ -1385,4 +1385,58 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get webRegistration_ErrorAcknowledgeDialog_title => 'Web resource error';
+
+  @override
+  String get diagnostic_AppBar_title => 'Diagnostic';
+
+  @override
+  String get diagnosticPermissionDetails_title_statusPermission => 'Status permission';
+
+  @override
+  String get diagnosticPermissionDetails_button_requestPermission => 'Request Permission';
+
+  @override
+  String get diagnosticPermissionDetails_button_managePermission => 'Manage Permission';
+
+  @override
+  String get diagnostic_permissionStatus_denied => 'Access Denied';
+
+  @override
+  String get diagnostic_permissionStatus_granted => 'Access Granted';
+
+  @override
+  String get diagnostic_permissionStatus_restricted => 'Restricted Access';
+
+  @override
+  String get diagnostic_permissionStatus_limited => 'Limited Access';
+
+  @override
+  String get diagnostic_permissionStatus_permanentlyDenied => 'Access Permanently Denied';
+
+  @override
+  String get diagnostic_permissionStatus_provisional => 'Provisional Access';
+
+  @override
+  String get diagnostic_permission_camera_title => 'Camera';
+
+  @override
+  String get diagnostic_permission_microphone_title => 'Microphone';
+
+  @override
+  String get diagnostic_permission_contacts_title => 'Contacts';
+
+  @override
+  String get diagnostic_permission_notification_title => 'Notification';
+
+  @override
+  String get diagnostic_permission_camera_description => 'This app requires permission to access the camera to make video calls.';
+
+  @override
+  String get diagnostic_permission_microphone_description => 'This app requires permission to access the microphone to make audio calls.';
+
+  @override
+  String get diagnostic_permission_contacts_description => 'This app requires permission to access contacts to make calls within your address book.';
+
+  @override
+  String get diagnostic_permission_notification_description => 'Enables the app to trigger incoming call.';
 }

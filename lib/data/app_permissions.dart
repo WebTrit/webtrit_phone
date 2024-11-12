@@ -42,6 +42,8 @@ class AppPermissions {
 
   List<Permission> _permissions;
 
+  get permissions => _permissions;
+
   bool get isDenied => _isDenied;
 
   Future<List<CallkeepSpecialPermissions>> deniedSpecialPermissions() async {

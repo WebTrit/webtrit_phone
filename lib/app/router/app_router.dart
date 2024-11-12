@@ -275,6 +275,10 @@ class AppRouter extends _$AppRouter {
                       page: ThemeModeScreenPageRoute.page,
                       path: 'theme-mode',
                     ),
+                    AutoRoute(
+                      page: DiagnosticScreenPageRoute.page,
+                      path: 'diagnostic',
+                    ),
                   ],
                 ),
               ],

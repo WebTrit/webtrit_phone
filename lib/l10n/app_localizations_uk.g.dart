@@ -1385,4 +1385,58 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get webRegistration_ErrorAcknowledgeDialog_title => 'Web resource error';
+
+  @override
+  String get diagnostic_AppBar_title => 'Діагностика';
+
+  @override
+  String get diagnosticPermissionDetails_title_statusPermission => 'Статус дозволу';
+
+  @override
+  String get diagnosticPermissionDetails_button_requestPermission => 'Запит дозволу';
+
+  @override
+  String get diagnosticPermissionDetails_button_managePermission => 'Керування дозволами';
+
+  @override
+  String get diagnostic_permissionStatus_denied => 'Доступ заборонено';
+
+  @override
+  String get diagnostic_permissionStatus_granted => 'Доступ надано';
+
+  @override
+  String get diagnostic_permissionStatus_restricted => 'Обмежений доступ';
+
+  @override
+  String get diagnostic_permissionStatus_limited => 'Обмежений доступ';
+
+  @override
+  String get diagnostic_permissionStatus_permanentlyDenied => 'Доступ назавжди заборонено';
+
+  @override
+  String get diagnostic_permissionStatus_provisional => 'Тимчасовий доступ';
+
+  @override
+  String get diagnostic_permission_camera_title => 'Камера';
+
+  @override
+  String get diagnostic_permission_microphone_title => 'Мікрофон';
+
+  @override
+  String get diagnostic_permission_contacts_title => 'Контакти';
+
+  @override
+  String get diagnostic_permission_notification_title => 'Сповіщення';
+
+  @override
+  String get diagnostic_permission_camera_description => 'Цей додаток потребує дозволу на доступ до камери для здійснення відеодзвінків.';
+
+  @override
+  String get diagnostic_permission_microphone_description => 'Цей додаток потребує дозволу на доступ до мікрофона для здійснення аудіодзвінків.';
+
+  @override
+  String get diagnostic_permission_contacts_description => 'Цей додаток потребує дозволу на доступ до контактів для здійснення дзвінків із вашої телефонної книги.';
+
+  @override
+  String get diagnostic_permission_notification_description => 'Дозволяє додатку активувати вхідні дзвінки.';
 }

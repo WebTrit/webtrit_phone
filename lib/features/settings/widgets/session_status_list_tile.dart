@@ -38,6 +38,7 @@ class SessionStatusListTile extends StatelessWidget {
         status.l10n(context),
         style: themeData.textTheme.labelLarge,
       ),
+      trailing: const Icon(Icons.arrow_right),
     );
   }
 }

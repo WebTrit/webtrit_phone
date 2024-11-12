@@ -1385,4 +1385,58 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get webRegistration_ErrorAcknowledgeDialog_title => 'Web resource error';
+
+  @override
+  String get diagnostic_AppBar_title => 'Diagnostica';
+
+  @override
+  String get diagnosticPermissionDetails_title_statusPermission => 'Stato del permesso';
+
+  @override
+  String get diagnosticPermissionDetails_button_requestPermission => 'Richiedi permesso';
+
+  @override
+  String get diagnosticPermissionDetails_button_managePermission => 'Gestisci permessi';
+
+  @override
+  String get diagnostic_permissionStatus_denied => 'Accesso negato';
+
+  @override
+  String get diagnostic_permissionStatus_granted => 'Accesso consentito';
+
+  @override
+  String get diagnostic_permissionStatus_restricted => 'Accesso limitato';
+
+  @override
+  String get diagnostic_permissionStatus_limited => 'Accesso limitato';
+
+  @override
+  String get diagnostic_permissionStatus_permanentlyDenied => 'Accesso permanentemente negato';
+
+  @override
+  String get diagnostic_permissionStatus_provisional => 'Accesso provvisorio';
+
+  @override
+  String get diagnostic_permission_camera_title => 'Fotocamera';
+
+  @override
+  String get diagnostic_permission_microphone_title => 'Microfono';
+
+  @override
+  String get diagnostic_permission_contacts_title => 'Contatti';
+
+  @override
+  String get diagnostic_permission_notification_title => 'Notifiche';
+
+  @override
+  String get diagnostic_permission_camera_description => 'Questa app richiede il permesso di accedere alla fotocamera per effettuare videochiamate.';
+
+  @override
+  String get diagnostic_permission_microphone_description => 'Questa app richiede il permesso di accedere al microfono per effettuare chiamate audio.';
+
+  @override
+  String get diagnostic_permission_contacts_description => 'Questa app richiede il permesso di accedere ai contatti per effettuare chiamate dalla tua rubrica.';
+
+  @override
+  String get diagnostic_permission_notification_description => 'Permette all\'app di attivare le chiamate in arrivo.';
 }

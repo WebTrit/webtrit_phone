@@ -2772,6 +2772,114 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Web resource error'**
   String get webRegistration_ErrorAcknowledgeDialog_title;
+
+  /// No description provided for @diagnostic_AppBar_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Diagnostic'**
+  String get diagnostic_AppBar_title;
+
+  /// No description provided for @diagnosticPermissionDetails_title_statusPermission.
+  ///
+  /// In en, this message translates to:
+  /// **'Status permission'**
+  String get diagnosticPermissionDetails_title_statusPermission;
+
+  /// No description provided for @diagnosticPermissionDetails_button_requestPermission.
+  ///
+  /// In en, this message translates to:
+  /// **'Request Permission'**
+  String get diagnosticPermissionDetails_button_requestPermission;
+
+  /// No description provided for @diagnosticPermissionDetails_button_managePermission.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage Permission'**
+  String get diagnosticPermissionDetails_button_managePermission;
+
+  /// No description provided for @diagnostic_permissionStatus_denied.
+  ///
+  /// In en, this message translates to:
+  /// **'Access Denied'**
+  String get diagnostic_permissionStatus_denied;
+
+  /// No description provided for @diagnostic_permissionStatus_granted.
+  ///
+  /// In en, this message translates to:
+  /// **'Access Granted'**
+  String get diagnostic_permissionStatus_granted;
+
+  /// No description provided for @diagnostic_permissionStatus_restricted.
+  ///
+  /// In en, this message translates to:
+  /// **'Restricted Access'**
+  String get diagnostic_permissionStatus_restricted;
+
+  /// No description provided for @diagnostic_permissionStatus_limited.
+  ///
+  /// In en, this message translates to:
+  /// **'Limited Access'**
+  String get diagnostic_permissionStatus_limited;
+
+  /// No description provided for @diagnostic_permissionStatus_permanentlyDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'Access Permanently Denied'**
+  String get diagnostic_permissionStatus_permanentlyDenied;
+
+  /// No description provided for @diagnostic_permissionStatus_provisional.
+  ///
+  /// In en, this message translates to:
+  /// **'Provisional Access'**
+  String get diagnostic_permissionStatus_provisional;
+
+  /// No description provided for @diagnostic_permission_camera_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera'**
+  String get diagnostic_permission_camera_title;
+
+  /// No description provided for @diagnostic_permission_microphone_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Microphone'**
+  String get diagnostic_permission_microphone_title;
+
+  /// No description provided for @diagnostic_permission_contacts_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Contacts'**
+  String get diagnostic_permission_contacts_title;
+
+  /// No description provided for @diagnostic_permission_notification_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Notification'**
+  String get diagnostic_permission_notification_title;
+
+  /// No description provided for @diagnostic_permission_camera_description.
+  ///
+  /// In en, this message translates to:
+  /// **'This app requires permission to access the camera to make video calls.'**
+  String get diagnostic_permission_camera_description;
+
+  /// No description provided for @diagnostic_permission_microphone_description.
+  ///
+  /// In en, this message translates to:
+  /// **'This app requires permission to access the microphone to make audio calls.'**
+  String get diagnostic_permission_microphone_description;
+
+  /// No description provided for @diagnostic_permission_contacts_description.
+  ///
+  /// In en, this message translates to:
+  /// **'This app requires permission to access contacts to make calls within your address book.'**
+  String get diagnostic_permission_contacts_description;
+
+  /// No description provided for @diagnostic_permission_notification_description.
+  ///
+  /// In en, this message translates to:
+  /// **'Enables the app to trigger incoming call.'**
+  String get diagnostic_permission_notification_description;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

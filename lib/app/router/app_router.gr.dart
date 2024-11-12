@@ -97,6 +97,12 @@ abstract class _$AppRouter extends RootStackRouter {
         child: DemoWebPage(args.initialUrl),
       );
     },
+    DiagnosticScreenPageRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: DiagnosticScreenPage(),
+      );
+    },
     EmbeddedScreenPage1Route.name: (routeData) {
       final args = routeData.argsAs<EmbeddedScreenPage1RouteArgs>();
       return AutoRoutePage<dynamic>(
@@ -590,6 +596,20 @@ class DemoWebPageRouteArgs {
   String toString() {
     return 'DemoWebPageRouteArgs{initialUrl: $initialUrl}';
   }
+}
+
+/// generated route for
+/// [DiagnosticScreenPage]
+class DiagnosticScreenPageRoute extends PageRouteInfo<void> {
+  const DiagnosticScreenPageRoute({List<PageRouteInfo>? children})
+      : super(
+          DiagnosticScreenPageRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'DiagnosticScreenPageRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
 }
 
 /// generated route for
