@@ -1177,13 +1177,31 @@ class AppLocalizationsUk extends AppLocalizations {
   String get permission_manufacturer_Text_trailing => 'Дозволи можуть бути змінені в будь-який час у майбутньому.';
 
   @override
-  String get permission_manufacturer_Text_xiaomi_tip1 => '1. Перейдіть у «Налаштування програми» → «Сповіщення».';
+  String get permission_manufacturer_Text_xiaomi_tip1 => 'Перейдіть у «Налаштування програми» → «Сповіщення».';
 
   @override
-  String get permission_manufacturer_Text_xiaomi_tip2 => '2. Знайдіть і ввімкніть «Сповіщення на екрані блокування».';
+  String get permission_manufacturer_Text_xiaomi_tip2 => 'Знайдіть і ввімкніть «Сповіщення на екрані блокування».';
 
   @override
   String get permission_Text_description => 'Для забезпечення найкращого досвіду користувача програма потребує наступні дозволи: мікрофон для аудіодзвінків, камера для відеодзвінків та доступ до контактів для спрощення їх використання в програмі.\n\nДозволи можуть бути змінені у майбутньому.';
+
+  @override
+  String get permission_manageFullScreenNotificationPermissions => 'Manage Full-Screen Notification Permissions';
+
+  @override
+  String get permission_manageFullScreenNotificationInstructions_step1 => 'Go to your phone\'s Settings.';
+
+  @override
+  String get permission_manageFullScreenNotificationInstructions_step2 => 'Navigate to \'Special App Access\' under the \'Apps & notifications\' section.';
+
+  @override
+  String get permission_manageFullScreenNotificationInstructions_step3 => 'Find and tap on \'Manage full screen intents\'.';
+
+  @override
+  String get permission_manageFullScreenNotificationInstructions_step4 => 'Select the app for which you want to manage full-screen notifications.';
+
+  @override
+  String get permission_manageFullScreenNotificationInstructions_step5 => 'Toggle the permission to enable or disable full-screen notifications for that app.';
 
   @override
   String recents_BodyCenter_empty(Object filter) {

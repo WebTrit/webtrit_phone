@@ -710,6 +710,18 @@ class AppLocalizationsMapper {
       'permission_manufacturer_Text_xiaomi_tip2':
           localizations.permission_manufacturer_Text_xiaomi_tip2,
       'permission_Text_description': localizations.permission_Text_description,
+      'permission_manageFullScreenNotificationPermissions':
+          localizations.permission_manageFullScreenNotificationPermissions,
+      'permission_manageFullScreenNotificationInstructions_step1': localizations
+          .permission_manageFullScreenNotificationInstructions_step1,
+      'permission_manageFullScreenNotificationInstructions_step2': localizations
+          .permission_manageFullScreenNotificationInstructions_step2,
+      'permission_manageFullScreenNotificationInstructions_step3': localizations
+          .permission_manageFullScreenNotificationInstructions_step3,
+      'permission_manageFullScreenNotificationInstructions_step4': localizations
+          .permission_manageFullScreenNotificationInstructions_step4,
+      'permission_manageFullScreenNotificationInstructions_step5': localizations
+          .permission_manageFullScreenNotificationInstructions_step5,
       'recents_DeleteConfirmDialog_content':
           localizations.recents_DeleteConfirmDialog_content,
       'recents_DeleteConfirmDialog_title':
