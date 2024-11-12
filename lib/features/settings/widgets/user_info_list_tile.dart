@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:webtrit_api/webtrit_api.dart';
 
 import 'package:webtrit_phone/extensions/extensions.dart';
-import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
@@ -12,13 +11,11 @@ const _kHoldSpaceData = ' ';
 class UserInfoListTile extends StatelessWidget {
   const UserInfoListTile({
     super.key,
-    required this.callStatus,
     this.info,
     this.onEditPressed,
     this.contentPadding,
   });
 
-  final CallStatus callStatus;
   final UserInfo? info;
   final VoidCallback? onEditPressed;
 
@@ -40,7 +37,6 @@ class UserInfoListTile extends StatelessWidget {
     const radius = 32.0;
 
     return Ink(
-      height: radius * 3,
       child: SafeArea(
         top: false,
         bottom: false,
@@ -58,25 +54,6 @@ class UserInfoListTile extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Text.rich(
-                    TextSpan(
-                      children: [
-                        WidgetSpan(
-                          child: Container(
-                            width: radius / 3,
-                            height: radius / 3,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: callStatus.color(context),
-                            ),
-                          ),
-                          alignment: PlaceholderAlignment.middle,
-                        ),
-                        const TextSpan(text: ' '),
-                        TextSpan(text: callStatus.l10n(context)),
-                      ],
-                    ),
-                  ),
                   CopyToClipboard(
                     data: info?.name,
                     child: Text(
