@@ -1439,4 +1439,7 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get diagnostic_permission_notification_description => 'Дозволяє додатку активувати вхідні дзвінки.';
+
+  @override
+  String get sessionStatus_pushNotificationServiceProblem => 'Проблема з налаштуванням служби пуш-сповіщень';
 }

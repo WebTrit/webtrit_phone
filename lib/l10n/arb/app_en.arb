@@ -1013,5 +1013,7 @@
   "diagnostic_permission_contacts_description": "This app requires permission to access contacts to make calls within your address book.",
   "@diagnostic_permission_contacts_description": {},
   "diagnostic_permission_notification_description": "Enables the app to trigger incoming call.",
-  "@diagnostic_permission_notification_description": {}
+  "@diagnostic_permission_notification_description": {},
+  "sessionStatus_pushNotificationServiceProblem": "Problem with configuration push notification service",
+  "@sessionStatus_pushNotificationServiceProblem": {}
 }

@@ -1439,4 +1439,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get diagnostic_permission_notification_description => 'Enables the app to trigger incoming call.';
+
+  @override
+  String get sessionStatus_pushNotificationServiceProblem => 'Problem with configuration push notification service';
 }

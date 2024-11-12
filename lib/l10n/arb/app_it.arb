@@ -1013,5 +1013,7 @@
   "diagnostic_permission_contacts_description": "Questa app richiede il permesso di accedere ai contatti per effettuare chiamate dalla tua rubrica.",
   "@diagnostic_permission_contacts_description": {},
   "diagnostic_permission_notification_description": "Permette all'app di attivare le chiamate in arrivo.",
-  "@diagnostic_permission_notification_description": {}
+  "@diagnostic_permission_notification_description": {},
+  "sessionStatus_pushNotificationServiceProblem": "Problema con la configurazione del servizio di notifiche push",
+  "@sessionStatus_pushNotificationServiceProblem": {}
 }

@@ -1439,4 +1439,7 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get diagnostic_permission_notification_description => 'Permette all\'app di attivare le chiamate in arrivo.';
+
+  @override
+  String get sessionStatus_pushNotificationServiceProblem => 'Problema con la configurazione del servizio di notifiche push';
 }

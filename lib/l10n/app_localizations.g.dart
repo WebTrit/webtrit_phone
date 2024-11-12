@@ -2880,6 +2880,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Enables the app to trigger incoming call.'**
   String get diagnostic_permission_notification_description;
+
+  /// No description provided for @sessionStatus_pushNotificationServiceProblem.
+  ///
+  /// In en, this message translates to:
+  /// **'Problem with configuration push notification service'**
+  String get sessionStatus_pushNotificationServiceProblem;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

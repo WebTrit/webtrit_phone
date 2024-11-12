@@ -1013,5 +1013,7 @@
   "diagnostic_permission_contacts_description": "Цей додаток потребує дозволу на доступ до контактів для здійснення дзвінків із вашої телефонної книги.",
   "@diagnostic_permission_contacts_description": {},
   "diagnostic_permission_notification_description": "Дозволяє додатку активувати вхідні дзвінки.",
-  "@diagnostic_permission_notification_description": {}
+  "@diagnostic_permission_notification_description": {},
+  "sessionStatus_pushNotificationServiceProblem": "Проблема з налаштуванням служби пуш-сповіщень",
+  "@sessionStatus_pushNotificationServiceProblem": {}
 }
