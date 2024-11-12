@@ -274,12 +274,12 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
   //
 
-  void _reconnectInitiated([Duration delay = kSignalingClientFastReconnectDelay]) {
+  void _reconnectInitiated([Duration delay = kSignalingClientFastReconnectDelay, bool reconnecting = false]) {
     _signalingClientReconnectTimer?.cancel();
     _signalingClientReconnectTimer = Timer(delay, () {
       _logger.info('_reconnectInitiated Timer callback after $delay, isClosed: $isClosed');
       if (isClosed) return; // to eliminate possible [StateError] in [add]
-      add(const _SignalingClientEvent.connectInitiated());
+      add(_SignalingClientEvent.connectInitiated(reconnecting: reconnecting));
     });
   }
 
@@ -520,7 +520,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         onStateHandshake: _onSignalingStateHandshake,
         onEvent: _onSignalingEvent,
         onError: _onSignalingError,
-        onDisconnect: _onSignalingDisconnect,
+        onDisconnect: (c, r) => _onSignalingDisconnect(c, r, event.reconnecting),
       );
       _signalingClient = signalingClient;
 
@@ -589,7 +589,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _signalingClient = null;
 
     final signalingDisconnectCode = event.code;
-    final signalingDisconnectReason = event.reason ?? event.code.toString();
     if (signalingDisconnectCode != null) {
       final code = SignalingDisconnectCode.values.byCode(signalingDisconnectCode);
       if (code == SignalingDisconnectCode.sessionMissedError) {
@@ -604,11 +603,18 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         _logger.info(
             '__onSignalingClientEventDisconnected: skipping user notification for controller exit as it is expected during system unregistration');
       } else {
-        notificationsBloc.add(NotificationsSubmitted(ErrorMessageNotification(signalingDisconnectReason)));
+        final signalingDisconnectReason = event.reason ?? event.code?.toString() ?? 'Unexpected error';
+        final afterReconnect = event.afterReconnect;
+        if (afterReconnect) {
+          _logger.info('__onSignalingClientEventDisconnected: skipping user notification to prevent reconnect spam');
+        } else {
+          final notification = ErrorMessageNotification(signalingDisconnectReason);
+          notificationsBloc.add(NotificationsSubmitted(notification));
+        }
       }
     }
 
-    _reconnectInitiated(kSignalingClientReconnectDelay);
+    _reconnectInitiated(kSignalingClientReconnectDelay, true);
   }
 
   // processing call push events
@@ -2066,8 +2072,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _reconnectInitiated();
   }
 
-  void _onSignalingDisconnect(int? code, String? reason) {
-    add(_SignalingClientEvent.disconnected(code, reason));
+  void _onSignalingDisconnect(int? code, String? reason, bool afterReconnect) {
+    add(_SignalingClientEvent.disconnected(code, reason, afterReconnect: afterReconnect));
   }
 
   // WidgetsBindingObserver
