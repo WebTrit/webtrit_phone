@@ -1,20 +1,13 @@
 part of 'push_tokens_bloc.dart';
 
-abstract class PushTokensState extends Equatable {
-  const PushTokensState();
+@freezed
+class PushTokensState with _$PushTokensState {
+  const factory PushTokensState({
+    String? pushToken,
+    String? errorMessage,
+  }) = _PushTokensState;
 
-  @override
-  List<Object> get props => [];
-}
+  factory PushTokensState.initial() => const PushTokensState();
 
-class PushTokensInitial extends PushTokensState {
-  const PushTokensInitial();
-}
-
-class PushTokensUploadSuccess extends PushTokensState {
-  const PushTokensUploadSuccess();
-}
-
-class PushTokensUploadFailure extends PushTokensState {
-  const PushTokensUploadFailure();
+  factory PushTokensState.uploadFailure(String? errorMessage) => PushTokensState(errorMessage: errorMessage);
 }
