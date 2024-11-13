@@ -16,6 +16,7 @@ import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 
 import 'package:webtrit_phone/app/app_bloc_observer.dart';
 import 'package:webtrit_phone/app/assets.gen.dart';
+import 'package:webtrit_phone/common/common.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/push_notification/push_notifications.dart';
@@ -166,27 +167,6 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
       time: DateTime.now(),
     );
     await repo.set(activeMessageNotification);
-  }
-}
-
-class CallkeepLogs implements CallkeepLogsDelegate {
-  final _logger = Logger('CallkeepLogs');
-
-  @override
-  void onLog(CallkeepLogType type, String tag, String message) {
-    _logger.info('$tag $message');
-  }
-}
-
-class FCMIsolateDatabase extends AppDatabase {
-  FCMIsolateDatabase(super.e);
-
-  static FCMIsolateDatabase? _instance;
-
-  static FCMIsolateDatabase instance(executor) {
-    _instance ??= FCMIsolateDatabase(executor);
-
-    return _instance!;
   }
 }
 
