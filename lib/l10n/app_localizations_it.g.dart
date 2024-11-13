@@ -1439,4 +1439,46 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get diagnostic_permission_notification_description => 'Permette all\'app di attivare le chiamate in arrivo.';
+
+  @override
+  String get diagnosticScreen_pushNotificationService_title => 'Servizio di notifiche push';
+
+  @override
+  String get diagnosticScreen_permissionsGroup_title => 'Permessi';
+
+  @override
+  String get diagnosticPushDetails_configuration_title => 'Configurazione del servizio di notifiche push';
+
+  @override
+  String get diagnosticPushDetails_successMessage => 'Il servizio di notifica è stato configurato con successo ed è pronto per l’uso per ricevere messaggi e gestire le chiamate in arrivo.';
+
+  @override
+  String get diagnosticPushDetails_errorMessage_intro => 'Alcuni passi da provare:\n';
+
+  @override
+  String get diagnosticPushDetails_errorMessage_step1 => '1. Assicurati che il telefono sia connesso a Internet.\n';
+
+  @override
+  String get diagnosticPushDetails_errorMessage_step2 => '2. Se connesso, verifica che il telefono possa accedere ai servizi Google visitando un sito web.\n';
+
+  @override
+  String get diagnosticPushDetails_errorMessage_step3 => '3. Aspetta qualche minuto e riprova – i server di messaggistica Firebase potrebbero essere temporaneamente inattivi.\n';
+
+  @override
+  String get diagnosticPushDetails_errorMessage_step4 => '4. Riavvia i servizi di Google Play per assicurarne il corretto funzionamento.\n';
+
+  @override
+  String get diagnosticPushDetails_errorMessage_step5 => '5. Verifica che i servizi di Google Play siano installati sul tuo dispositivo.\n';
+
+  @override
+  String get diagnostic_pushTokenStatusType_success => 'Servizio configurato con successo';
+
+  @override
+  String get diagnostic_pushTokenStatusType_error => 'Problema con la configurazione del servizio di notifiche push';
+
+  @override
+  String get sessionStatus_pushNotificationServiceProblem => 'Problema con la configurazione del servizio di notifiche push';
+
+  @override
+  String get diagnostic_pushTokenStatusType_progress => 'In corso';
 }

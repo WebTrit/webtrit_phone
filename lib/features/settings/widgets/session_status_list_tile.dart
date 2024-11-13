@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:webtrit_api/webtrit_api.dart';
 
 import 'package:webtrit_phone/extensions/extensions.dart';
-import 'package:webtrit_phone/features/features.dart';
+import 'package:webtrit_phone/models/models.dart';
 
 class SessionStatusListTile extends StatelessWidget {
   const SessionStatusListTile({
@@ -14,7 +14,7 @@ class SessionStatusListTile extends StatelessWidget {
     this.contentPadding,
   });
 
-  final CallStatus status;
+  final SessionStatus status;
   final UserInfo? info;
   final VoidCallback? onTap;
   final EdgeInsetsGeometry? contentPadding;

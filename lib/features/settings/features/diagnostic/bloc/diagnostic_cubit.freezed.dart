@@ -18,6 +18,7 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$DiagnosticState {
   List<PermissionWithStatus> get permissions =>
       throw _privateConstructorUsedError;
+  PushTokenStatus get pushTokenStatus => throw _privateConstructorUsedError;
 
   /// Create a copy of DiagnosticState
   /// with the given fields replaced by the non-null parameter values.
@@ -32,7 +33,9 @@ abstract class $DiagnosticStateCopyWith<$Res> {
           DiagnosticState value, $Res Function(DiagnosticState) then) =
       _$DiagnosticStateCopyWithImpl<$Res, DiagnosticState>;
   @useResult
-  $Res call({List<PermissionWithStatus> permissions});
+  $Res call(
+      {List<PermissionWithStatus> permissions,
+      PushTokenStatus pushTokenStatus});
 }
 
 /// @nodoc
@@ -51,12 +54,17 @@ class _$DiagnosticStateCopyWithImpl<$Res, $Val extends DiagnosticState>
   @override
   $Res call({
     Object? permissions = null,
+    Object? pushTokenStatus = null,
   }) {
     return _then(_value.copyWith(
       permissions: null == permissions
           ? _value.permissions
           : permissions // ignore: cast_nullable_to_non_nullable
               as List<PermissionWithStatus>,
+      pushTokenStatus: null == pushTokenStatus
+          ? _value.pushTokenStatus
+          : pushTokenStatus // ignore: cast_nullable_to_non_nullable
+              as PushTokenStatus,
     ) as $Val);
   }
 }
@@ -69,7 +77,9 @@ abstract class _$$InitialImplCopyWith<$Res>
       __$$InitialImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({List<PermissionWithStatus> permissions});
+  $Res call(
+      {List<PermissionWithStatus> permissions,
+      PushTokenStatus pushTokenStatus});
 }
 
 /// @nodoc
@@ -86,12 +96,17 @@ class __$$InitialImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? permissions = null,
+    Object? pushTokenStatus = null,
   }) {
     return _then(_$InitialImpl(
       permissions: null == permissions
           ? _value._permissions
           : permissions // ignore: cast_nullable_to_non_nullable
               as List<PermissionWithStatus>,
+      pushTokenStatus: null == pushTokenStatus
+          ? _value.pushTokenStatus
+          : pushTokenStatus // ignore: cast_nullable_to_non_nullable
+              as PushTokenStatus,
     ));
   }
 }
@@ -99,7 +114,9 @@ class __$$InitialImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$InitialImpl implements _Initial {
-  const _$InitialImpl({final List<PermissionWithStatus> permissions = const []})
+  const _$InitialImpl(
+      {final List<PermissionWithStatus> permissions = const [],
+      this.pushTokenStatus = const PushTokenStatus()})
       : _permissions = permissions;
 
   final List<PermissionWithStatus> _permissions;
@@ -112,8 +129,12 @@ class _$InitialImpl implements _Initial {
   }
 
   @override
+  @JsonKey()
+  final PushTokenStatus pushTokenStatus;
+
+  @override
   String toString() {
-    return 'DiagnosticState(permissions: $permissions)';
+    return 'DiagnosticState(permissions: $permissions, pushTokenStatus: $pushTokenStatus)';
   }
 
   @override
@@ -122,12 +143,14 @@ class _$InitialImpl implements _Initial {
         (other.runtimeType == runtimeType &&
             other is _$InitialImpl &&
             const DeepCollectionEquality()
-                .equals(other._permissions, _permissions));
+                .equals(other._permissions, _permissions) &&
+            (identical(other.pushTokenStatus, pushTokenStatus) ||
+                other.pushTokenStatus == pushTokenStatus));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType, const DeepCollectionEquality().hash(_permissions));
+  int get hashCode => Object.hash(runtimeType,
+      const DeepCollectionEquality().hash(_permissions), pushTokenStatus);
 
   /// Create a copy of DiagnosticState
   /// with the given fields replaced by the non-null parameter values.
@@ -139,11 +162,14 @@ class _$InitialImpl implements _Initial {
 }
 
 abstract class _Initial implements DiagnosticState {
-  const factory _Initial({final List<PermissionWithStatus> permissions}) =
-      _$InitialImpl;
+  const factory _Initial(
+      {final List<PermissionWithStatus> permissions,
+      final PushTokenStatus pushTokenStatus}) = _$InitialImpl;
 
   @override
   List<PermissionWithStatus> get permissions;
+  @override
+  PushTokenStatus get pushTokenStatus;
 
   /// Create a copy of DiagnosticState
   /// with the given fields replaced by the non-null parameter values.

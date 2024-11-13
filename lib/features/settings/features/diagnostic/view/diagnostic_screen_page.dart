@@ -6,8 +6,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/features/features.dart';
 
-import '../bloc/diagnostic_cubit.dart';
-
 import 'diagnostic_screen.dart';
 
 @RoutePage()
@@ -19,6 +17,7 @@ class DiagnosticScreenPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider<DiagnosticCubit>(
       create: (context) => DiagnosticCubit(
+        pushTokensBloc: context.read<PushTokensBloc>(),
         appPermissions: AppPermissions(),
       ),
       child: const DiagnosticScreen(),
