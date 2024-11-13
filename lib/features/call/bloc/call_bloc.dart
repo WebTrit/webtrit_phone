@@ -40,6 +40,7 @@ const int _kUndefinedLine = -1;
 final _logger = Logger('CallBloc');
 
 class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver implements CallkeepDelegate {
+  final String coreUrl;
   final String tenantId;
   final String token;
   final TrustedCertificates trustedCertificates;
@@ -52,7 +53,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   StreamSubscription<List<ConnectivityResult>>? _connectivityChangedSubscription;
   StreamSubscription<PendingCall>? _pendingCallHandlerSubscription;
 
-  String _coreUrl;
   WebtritSignalingClient? _signalingClient;
   Timer? _signalingClientReconnectTimer;
 
@@ -61,7 +61,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   final _appSound = AppSound();
 
   CallBloc({
-    required String coreUrl,
+    required this.coreUrl,
     required this.tenantId,
     required this.token,
     required this.trustedCertificates,
@@ -69,8 +69,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     required this.notificationsBloc,
     required this.callkeep,
     required this.pendingCallHandler,
-  })  : _coreUrl = coreUrl,
-        super(const CallState()) {
+  }) : super(const CallState()) {
     on<CallStarted>(
       _onCallStarted,
       transformer: sequential(),
@@ -98,10 +97,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     on<_ResetStateEvent>(
       _onResetStateEvent,
       transformer: droppable(),
-    );
-    on<UpdateCallSignalingCoreUrl>(
-      _onUpdateCallSignalingCoreUrl,
-      transformer: restartable(),
     );
     on<_SignalingClientEvent>(
       _onSignalingClientEvent,
@@ -279,12 +274,12 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
   //
 
-  void _reconnectInitiated([Duration delay = kSignalingClientFastReconnectDelay]) {
+  void _reconnectInitiated([Duration delay = kSignalingClientFastReconnectDelay, bool reconnecting = false]) {
     _signalingClientReconnectTimer?.cancel();
     _signalingClientReconnectTimer = Timer(delay, () {
       _logger.info('_reconnectInitiated Timer callback after $delay, isClosed: $isClosed');
       if (isClosed) return; // to eliminate possible [StateError] in [add]
-      add(const _SignalingClientEvent.connectInitiated());
+      add(_SignalingClientEvent.connectInitiated(reconnecting: reconnecting));
     });
   }
 
@@ -476,15 +471,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
   // processing signaling client events
 
-  Future<void> _onUpdateCallSignalingCoreUrl(
-    UpdateCallSignalingCoreUrl event,
-    Emitter<CallState> emit,
-  ) async {
-    _coreUrl = event.url;
-
-    _reconnectInitiated();
-  }
-
   Future<void> _onSignalingClientEvent(
     _SignalingClientEvent event,
     Emitter<CallState> emit,
@@ -515,7 +501,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
       if (emit.isDone) return;
 
-      final signalingUrl = _parseCoreUrlToSignalingUrl(_coreUrl);
+      final signalingUrl = _parseCoreUrlToSignalingUrl(coreUrl);
       final signalingClient = await WebtritSignalingClient.connect(
         signalingUrl,
         tenantId,
@@ -534,7 +520,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         onStateHandshake: _onSignalingStateHandshake,
         onEvent: _onSignalingEvent,
         onError: _onSignalingError,
-        onDisconnect: _onSignalingDisconnect,
+        onDisconnect: (c, r) => _onSignalingDisconnect(c, r, event.reconnecting),
       );
       _signalingClient = signalingClient;
 
@@ -603,7 +589,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _signalingClient = null;
 
     final signalingDisconnectCode = event.code;
-    final signalingDisconnectReason = event.reason ?? event.code.toString();
     if (signalingDisconnectCode != null) {
       final code = SignalingDisconnectCode.values.byCode(signalingDisconnectCode);
       if (code == SignalingDisconnectCode.sessionMissedError) {
@@ -618,11 +603,18 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         _logger.info(
             '__onSignalingClientEventDisconnected: skipping user notification for controller exit as it is expected during system unregistration');
       } else {
-        notificationsBloc.add(NotificationsSubmitted(ErrorMessageNotification(signalingDisconnectReason)));
+        final signalingDisconnectReason = event.reason ?? event.code?.toString() ?? 'Unexpected error';
+        final afterReconnect = event.afterReconnect;
+        if (afterReconnect) {
+          _logger.info('__onSignalingClientEventDisconnected: skipping user notification to prevent reconnect spam');
+        } else {
+          final notification = ErrorMessageNotification(signalingDisconnectReason);
+          notificationsBloc.add(NotificationsSubmitted(notification));
+        }
       }
     }
 
-    _reconnectInitiated(kSignalingClientReconnectDelay);
+    _reconnectInitiated(kSignalingClientReconnectDelay, true);
   }
 
   // processing call push events
@@ -2094,8 +2086,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _reconnectInitiated();
   }
 
-  void _onSignalingDisconnect(int? code, String? reason) {
-    add(_SignalingClientEvent.disconnected(code, reason));
+  void _onSignalingDisconnect(int? code, String? reason, bool afterReconnect) {
+    add(_SignalingClientEvent.disconnected(code, reason, afterReconnect: afterReconnect));
   }
 
   // WidgetsBindingObserver

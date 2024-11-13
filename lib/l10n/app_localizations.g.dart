@@ -2332,7 +2332,7 @@ abstract class AppLocalizations {
   /// No description provided for @notifications_errorSnackBar_callSignalingClientSessionMissed.
   ///
   /// In en, this message translates to:
-  /// **'The current connection session is invalid, please sign in again'**
+  /// **'Authentication error, please re-login'**
   String get notifications_errorSnackBar_callSignalingClientSessionMissed;
 
   /// No description provided for @notifications_errorSnackBar_callUndefinedLine.
@@ -2392,13 +2392,13 @@ abstract class AppLocalizations {
   /// No description provided for @permission_manufacturer_Text_xiaomi_tip1.
   ///
   /// In en, this message translates to:
-  /// **'1. Go to \"App settings\" → \"Notifications\".'**
+  /// **'Go to \"App settings\" → \"Notifications\".'**
   String get permission_manufacturer_Text_xiaomi_tip1;
 
   /// No description provided for @permission_manufacturer_Text_xiaomi_tip2.
   ///
   /// In en, this message translates to:
-  /// **'2. Find and turn on \"Lockscreen notifications\".'**
+  /// **'Find and turn on \"Lockscreen notifications\".'**
   String get permission_manufacturer_Text_xiaomi_tip2;
 
   /// No description provided for @permission_Text_description.
@@ -2406,6 +2406,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'To ensure the best user experience, the app needs to be granted the following permissions: microphone for audio calls, camera for video calls, and contacts to simplify reaching them from the app.\n\nPermissions could be changed at any time in the future.'**
   String get permission_Text_description;
+
+  /// No description provided for @permission_manageFullScreenNotificationPermissions.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage Full-Screen Notification Permissions'**
+  String get permission_manageFullScreenNotificationPermissions;
+
+  /// No description provided for @permission_manageFullScreenNotificationInstructions_step1.
+  ///
+  /// In en, this message translates to:
+  /// **'Go to your phone\'s Settings.'**
+  String get permission_manageFullScreenNotificationInstructions_step1;
+
+  /// No description provided for @permission_manageFullScreenNotificationInstructions_step2.
+  ///
+  /// In en, this message translates to:
+  /// **'Navigate to \'Special App Access\' under the \'Apps & notifications\' section.'**
+  String get permission_manageFullScreenNotificationInstructions_step2;
+
+  /// No description provided for @permission_manageFullScreenNotificationInstructions_step3.
+  ///
+  /// In en, this message translates to:
+  /// **'Find and tap on \'Manage full screen intents\'.'**
+  String get permission_manageFullScreenNotificationInstructions_step3;
+
+  /// No description provided for @permission_manageFullScreenNotificationInstructions_step4.
+  ///
+  /// In en, this message translates to:
+  /// **'Select the app for which you want to manage full-screen notifications.'**
+  String get permission_manageFullScreenNotificationInstructions_step4;
+
+  /// No description provided for @permission_manageFullScreenNotificationInstructions_step5.
+  ///
+  /// In en, this message translates to:
+  /// **'Toggle the permission to enable or disable full-screen notifications for that app.'**
+  String get permission_manageFullScreenNotificationInstructions_step5;
 
   /// No description provided for @recents_BodyCenter_empty.
   ///
@@ -2736,6 +2772,114 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Web resource error'**
   String get webRegistration_ErrorAcknowledgeDialog_title;
+
+  /// No description provided for @diagnostic_AppBar_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Diagnostic'**
+  String get diagnostic_AppBar_title;
+
+  /// No description provided for @diagnosticPermissionDetails_title_statusPermission.
+  ///
+  /// In en, this message translates to:
+  /// **'Status permission'**
+  String get diagnosticPermissionDetails_title_statusPermission;
+
+  /// No description provided for @diagnosticPermissionDetails_button_requestPermission.
+  ///
+  /// In en, this message translates to:
+  /// **'Request Permission'**
+  String get diagnosticPermissionDetails_button_requestPermission;
+
+  /// No description provided for @diagnosticPermissionDetails_button_managePermission.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage Permission'**
+  String get diagnosticPermissionDetails_button_managePermission;
+
+  /// No description provided for @diagnostic_permissionStatus_denied.
+  ///
+  /// In en, this message translates to:
+  /// **'Access Denied'**
+  String get diagnostic_permissionStatus_denied;
+
+  /// No description provided for @diagnostic_permissionStatus_granted.
+  ///
+  /// In en, this message translates to:
+  /// **'Access Granted'**
+  String get diagnostic_permissionStatus_granted;
+
+  /// No description provided for @diagnostic_permissionStatus_restricted.
+  ///
+  /// In en, this message translates to:
+  /// **'Restricted Access'**
+  String get diagnostic_permissionStatus_restricted;
+
+  /// No description provided for @diagnostic_permissionStatus_limited.
+  ///
+  /// In en, this message translates to:
+  /// **'Limited Access'**
+  String get diagnostic_permissionStatus_limited;
+
+  /// No description provided for @diagnostic_permissionStatus_permanentlyDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'Access Permanently Denied'**
+  String get diagnostic_permissionStatus_permanentlyDenied;
+
+  /// No description provided for @diagnostic_permissionStatus_provisional.
+  ///
+  /// In en, this message translates to:
+  /// **'Provisional Access'**
+  String get diagnostic_permissionStatus_provisional;
+
+  /// No description provided for @diagnostic_permission_camera_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera'**
+  String get diagnostic_permission_camera_title;
+
+  /// No description provided for @diagnostic_permission_microphone_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Microphone'**
+  String get diagnostic_permission_microphone_title;
+
+  /// No description provided for @diagnostic_permission_contacts_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Contacts'**
+  String get diagnostic_permission_contacts_title;
+
+  /// No description provided for @diagnostic_permission_notification_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Notification'**
+  String get diagnostic_permission_notification_title;
+
+  /// No description provided for @diagnostic_permission_camera_description.
+  ///
+  /// In en, this message translates to:
+  /// **'This app requires permission to access the camera to make video calls.'**
+  String get diagnostic_permission_camera_description;
+
+  /// No description provided for @diagnostic_permission_microphone_description.
+  ///
+  /// In en, this message translates to:
+  /// **'This app requires permission to access the microphone to make audio calls.'**
+  String get diagnostic_permission_microphone_description;
+
+  /// No description provided for @diagnostic_permission_contacts_description.
+  ///
+  /// In en, this message translates to:
+  /// **'This app requires permission to access contacts to make calls within your address book.'**
+  String get diagnostic_permission_contacts_description;
+
+  /// No description provided for @diagnostic_permission_notification_description.
+  ///
+  /// In en, this message translates to:
+  /// **'Enables the app to trigger incoming call.'**
+  String get diagnostic_permission_notification_description;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

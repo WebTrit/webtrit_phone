@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logging/logging.dart';
@@ -17,8 +18,10 @@ void main() {
   preBootstrap();
 
   bootstrap(() async {
-    final logRecordsRepository = LogRecordsRepository()..attachToLogger(Logger.root);
+    final rootLogger = Logger.root;
+    final logRecordsRepository = LogRecordsRepository()..attachToLogger(rootLogger);
     final appAnalyticsRepository = AppAnalyticsRepository(instance: FirebaseAnalytics.instance);
+    rootLogger.onRecord.listen((record) => FirebaseCrashlytics.instance.log(record.toString()));
 
     final applicationDocumentsPath = await getApplicationDocumentsPath();
 

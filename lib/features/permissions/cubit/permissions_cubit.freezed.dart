@@ -20,6 +20,8 @@ mixin _$PermissionsState {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() inProgress,
+    required TResult Function(CallkeepSpecialPermissions permission)
+        permissionFullScreenIntentNeeded,
     required TResult Function(Manufacturer manufacturer) manufacturerTipNeeded,
     required TResult Function() success,
     required TResult Function(Object error) failure,
@@ -29,6 +31,8 @@ mixin _$PermissionsState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? inProgress,
+    TResult? Function(CallkeepSpecialPermissions permission)?
+        permissionFullScreenIntentNeeded,
     TResult? Function(Manufacturer manufacturer)? manufacturerTipNeeded,
     TResult? Function()? success,
     TResult? Function(Object error)? failure,
@@ -38,6 +42,8 @@ mixin _$PermissionsState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? inProgress,
+    TResult Function(CallkeepSpecialPermissions permission)?
+        permissionFullScreenIntentNeeded,
     TResult Function(Manufacturer manufacturer)? manufacturerTipNeeded,
     TResult Function()? success,
     TResult Function(Object error)? failure,
@@ -48,6 +54,8 @@ mixin _$PermissionsState {
   TResult map<TResult extends Object?>({
     required TResult Function(PermissionsStateInitial value) initial,
     required TResult Function(PermissionsStateInProgress value) inProgress,
+    required TResult Function(PermissionFullScreenIntentNeeded value)
+        permissionFullScreenIntentNeeded,
     required TResult Function(PermissionsManufacturerTipNeeded value)
         manufacturerTipNeeded,
     required TResult Function(PermissionsStateSuccess value) success,
@@ -58,6 +66,8 @@ mixin _$PermissionsState {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(PermissionsStateInitial value)? initial,
     TResult? Function(PermissionsStateInProgress value)? inProgress,
+    TResult? Function(PermissionFullScreenIntentNeeded value)?
+        permissionFullScreenIntentNeeded,
     TResult? Function(PermissionsManufacturerTipNeeded value)?
         manufacturerTipNeeded,
     TResult? Function(PermissionsStateSuccess value)? success,
@@ -68,6 +78,8 @@ mixin _$PermissionsState {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(PermissionsStateInitial value)? initial,
     TResult Function(PermissionsStateInProgress value)? inProgress,
+    TResult Function(PermissionFullScreenIntentNeeded value)?
+        permissionFullScreenIntentNeeded,
     TResult Function(PermissionsManufacturerTipNeeded value)?
         manufacturerTipNeeded,
     TResult Function(PermissionsStateSuccess value)? success,
@@ -144,6 +156,8 @@ class _$PermissionsStateInitialImpl implements PermissionsStateInitial {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() inProgress,
+    required TResult Function(CallkeepSpecialPermissions permission)
+        permissionFullScreenIntentNeeded,
     required TResult Function(Manufacturer manufacturer) manufacturerTipNeeded,
     required TResult Function() success,
     required TResult Function(Object error) failure,
@@ -156,6 +170,8 @@ class _$PermissionsStateInitialImpl implements PermissionsStateInitial {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? inProgress,
+    TResult? Function(CallkeepSpecialPermissions permission)?
+        permissionFullScreenIntentNeeded,
     TResult? Function(Manufacturer manufacturer)? manufacturerTipNeeded,
     TResult? Function()? success,
     TResult? Function(Object error)? failure,
@@ -168,6 +184,8 @@ class _$PermissionsStateInitialImpl implements PermissionsStateInitial {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? inProgress,
+    TResult Function(CallkeepSpecialPermissions permission)?
+        permissionFullScreenIntentNeeded,
     TResult Function(Manufacturer manufacturer)? manufacturerTipNeeded,
     TResult Function()? success,
     TResult Function(Object error)? failure,
@@ -184,6 +202,8 @@ class _$PermissionsStateInitialImpl implements PermissionsStateInitial {
   TResult map<TResult extends Object?>({
     required TResult Function(PermissionsStateInitial value) initial,
     required TResult Function(PermissionsStateInProgress value) inProgress,
+    required TResult Function(PermissionFullScreenIntentNeeded value)
+        permissionFullScreenIntentNeeded,
     required TResult Function(PermissionsManufacturerTipNeeded value)
         manufacturerTipNeeded,
     required TResult Function(PermissionsStateSuccess value) success,
@@ -197,6 +217,8 @@ class _$PermissionsStateInitialImpl implements PermissionsStateInitial {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(PermissionsStateInitial value)? initial,
     TResult? Function(PermissionsStateInProgress value)? inProgress,
+    TResult? Function(PermissionFullScreenIntentNeeded value)?
+        permissionFullScreenIntentNeeded,
     TResult? Function(PermissionsManufacturerTipNeeded value)?
         manufacturerTipNeeded,
     TResult? Function(PermissionsStateSuccess value)? success,
@@ -210,6 +232,8 @@ class _$PermissionsStateInitialImpl implements PermissionsStateInitial {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(PermissionsStateInitial value)? initial,
     TResult Function(PermissionsStateInProgress value)? inProgress,
+    TResult Function(PermissionFullScreenIntentNeeded value)?
+        permissionFullScreenIntentNeeded,
     TResult Function(PermissionsManufacturerTipNeeded value)?
         manufacturerTipNeeded,
     TResult Function(PermissionsStateSuccess value)? success,
@@ -274,6 +298,8 @@ class _$PermissionsStateInProgressImpl implements PermissionsStateInProgress {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() inProgress,
+    required TResult Function(CallkeepSpecialPermissions permission)
+        permissionFullScreenIntentNeeded,
     required TResult Function(Manufacturer manufacturer) manufacturerTipNeeded,
     required TResult Function() success,
     required TResult Function(Object error) failure,
@@ -286,6 +312,8 @@ class _$PermissionsStateInProgressImpl implements PermissionsStateInProgress {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? inProgress,
+    TResult? Function(CallkeepSpecialPermissions permission)?
+        permissionFullScreenIntentNeeded,
     TResult? Function(Manufacturer manufacturer)? manufacturerTipNeeded,
     TResult? Function()? success,
     TResult? Function(Object error)? failure,
@@ -298,6 +326,8 @@ class _$PermissionsStateInProgressImpl implements PermissionsStateInProgress {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? inProgress,
+    TResult Function(CallkeepSpecialPermissions permission)?
+        permissionFullScreenIntentNeeded,
     TResult Function(Manufacturer manufacturer)? manufacturerTipNeeded,
     TResult Function()? success,
     TResult Function(Object error)? failure,
@@ -314,6 +344,8 @@ class _$PermissionsStateInProgressImpl implements PermissionsStateInProgress {
   TResult map<TResult extends Object?>({
     required TResult Function(PermissionsStateInitial value) initial,
     required TResult Function(PermissionsStateInProgress value) inProgress,
+    required TResult Function(PermissionFullScreenIntentNeeded value)
+        permissionFullScreenIntentNeeded,
     required TResult Function(PermissionsManufacturerTipNeeded value)
         manufacturerTipNeeded,
     required TResult Function(PermissionsStateSuccess value) success,
@@ -327,6 +359,8 @@ class _$PermissionsStateInProgressImpl implements PermissionsStateInProgress {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(PermissionsStateInitial value)? initial,
     TResult? Function(PermissionsStateInProgress value)? inProgress,
+    TResult? Function(PermissionFullScreenIntentNeeded value)?
+        permissionFullScreenIntentNeeded,
     TResult? Function(PermissionsManufacturerTipNeeded value)?
         manufacturerTipNeeded,
     TResult? Function(PermissionsStateSuccess value)? success,
@@ -340,6 +374,8 @@ class _$PermissionsStateInProgressImpl implements PermissionsStateInProgress {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(PermissionsStateInitial value)? initial,
     TResult Function(PermissionsStateInProgress value)? inProgress,
+    TResult Function(PermissionFullScreenIntentNeeded value)?
+        permissionFullScreenIntentNeeded,
     TResult Function(PermissionsManufacturerTipNeeded value)?
         manufacturerTipNeeded,
     TResult Function(PermissionsStateSuccess value)? success,
@@ -355,6 +391,189 @@ class _$PermissionsStateInProgressImpl implements PermissionsStateInProgress {
 
 abstract class PermissionsStateInProgress implements PermissionsState {
   const factory PermissionsStateInProgress() = _$PermissionsStateInProgressImpl;
+}
+
+/// @nodoc
+abstract class _$$PermissionFullScreenIntentNeededImplCopyWith<$Res> {
+  factory _$$PermissionFullScreenIntentNeededImplCopyWith(
+          _$PermissionFullScreenIntentNeededImpl value,
+          $Res Function(_$PermissionFullScreenIntentNeededImpl) then) =
+      __$$PermissionFullScreenIntentNeededImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({CallkeepSpecialPermissions permission});
+}
+
+/// @nodoc
+class __$$PermissionFullScreenIntentNeededImplCopyWithImpl<$Res>
+    extends _$PermissionsStateCopyWithImpl<$Res,
+        _$PermissionFullScreenIntentNeededImpl>
+    implements _$$PermissionFullScreenIntentNeededImplCopyWith<$Res> {
+  __$$PermissionFullScreenIntentNeededImplCopyWithImpl(
+      _$PermissionFullScreenIntentNeededImpl _value,
+      $Res Function(_$PermissionFullScreenIntentNeededImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of PermissionsState
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? permission = null,
+  }) {
+    return _then(_$PermissionFullScreenIntentNeededImpl(
+      null == permission
+          ? _value.permission
+          : permission // ignore: cast_nullable_to_non_nullable
+              as CallkeepSpecialPermissions,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$PermissionFullScreenIntentNeededImpl
+    implements PermissionFullScreenIntentNeeded {
+  const _$PermissionFullScreenIntentNeededImpl(this.permission);
+
+  @override
+  final CallkeepSpecialPermissions permission;
+
+  @override
+  String toString() {
+    return 'PermissionsState.permissionFullScreenIntentNeeded(permission: $permission)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$PermissionFullScreenIntentNeededImpl &&
+            (identical(other.permission, permission) ||
+                other.permission == permission));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, permission);
+
+  /// Create a copy of PermissionsState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$PermissionFullScreenIntentNeededImplCopyWith<
+          _$PermissionFullScreenIntentNeededImpl>
+      get copyWith => __$$PermissionFullScreenIntentNeededImplCopyWithImpl<
+          _$PermissionFullScreenIntentNeededImpl>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function() inProgress,
+    required TResult Function(CallkeepSpecialPermissions permission)
+        permissionFullScreenIntentNeeded,
+    required TResult Function(Manufacturer manufacturer) manufacturerTipNeeded,
+    required TResult Function() success,
+    required TResult Function(Object error) failure,
+  }) {
+    return permissionFullScreenIntentNeeded(permission);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function()? inProgress,
+    TResult? Function(CallkeepSpecialPermissions permission)?
+        permissionFullScreenIntentNeeded,
+    TResult? Function(Manufacturer manufacturer)? manufacturerTipNeeded,
+    TResult? Function()? success,
+    TResult? Function(Object error)? failure,
+  }) {
+    return permissionFullScreenIntentNeeded?.call(permission);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? inProgress,
+    TResult Function(CallkeepSpecialPermissions permission)?
+        permissionFullScreenIntentNeeded,
+    TResult Function(Manufacturer manufacturer)? manufacturerTipNeeded,
+    TResult Function()? success,
+    TResult Function(Object error)? failure,
+    required TResult orElse(),
+  }) {
+    if (permissionFullScreenIntentNeeded != null) {
+      return permissionFullScreenIntentNeeded(permission);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(PermissionsStateInitial value) initial,
+    required TResult Function(PermissionsStateInProgress value) inProgress,
+    required TResult Function(PermissionFullScreenIntentNeeded value)
+        permissionFullScreenIntentNeeded,
+    required TResult Function(PermissionsManufacturerTipNeeded value)
+        manufacturerTipNeeded,
+    required TResult Function(PermissionsStateSuccess value) success,
+    required TResult Function(PermissionsStateFailure value) failure,
+  }) {
+    return permissionFullScreenIntentNeeded(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(PermissionsStateInitial value)? initial,
+    TResult? Function(PermissionsStateInProgress value)? inProgress,
+    TResult? Function(PermissionFullScreenIntentNeeded value)?
+        permissionFullScreenIntentNeeded,
+    TResult? Function(PermissionsManufacturerTipNeeded value)?
+        manufacturerTipNeeded,
+    TResult? Function(PermissionsStateSuccess value)? success,
+    TResult? Function(PermissionsStateFailure value)? failure,
+  }) {
+    return permissionFullScreenIntentNeeded?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(PermissionsStateInitial value)? initial,
+    TResult Function(PermissionsStateInProgress value)? inProgress,
+    TResult Function(PermissionFullScreenIntentNeeded value)?
+        permissionFullScreenIntentNeeded,
+    TResult Function(PermissionsManufacturerTipNeeded value)?
+        manufacturerTipNeeded,
+    TResult Function(PermissionsStateSuccess value)? success,
+    TResult Function(PermissionsStateFailure value)? failure,
+    required TResult orElse(),
+  }) {
+    if (permissionFullScreenIntentNeeded != null) {
+      return permissionFullScreenIntentNeeded(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class PermissionFullScreenIntentNeeded implements PermissionsState {
+  const factory PermissionFullScreenIntentNeeded(
+          final CallkeepSpecialPermissions permission) =
+      _$PermissionFullScreenIntentNeededImpl;
+
+  CallkeepSpecialPermissions get permission;
+
+  /// Create a copy of PermissionsState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$PermissionFullScreenIntentNeededImplCopyWith<
+          _$PermissionFullScreenIntentNeededImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -434,6 +653,8 @@ class _$PermissionsManufacturerTipNeededImpl
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() inProgress,
+    required TResult Function(CallkeepSpecialPermissions permission)
+        permissionFullScreenIntentNeeded,
     required TResult Function(Manufacturer manufacturer) manufacturerTipNeeded,
     required TResult Function() success,
     required TResult Function(Object error) failure,
@@ -446,6 +667,8 @@ class _$PermissionsManufacturerTipNeededImpl
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? inProgress,
+    TResult? Function(CallkeepSpecialPermissions permission)?
+        permissionFullScreenIntentNeeded,
     TResult? Function(Manufacturer manufacturer)? manufacturerTipNeeded,
     TResult? Function()? success,
     TResult? Function(Object error)? failure,
@@ -458,6 +681,8 @@ class _$PermissionsManufacturerTipNeededImpl
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? inProgress,
+    TResult Function(CallkeepSpecialPermissions permission)?
+        permissionFullScreenIntentNeeded,
     TResult Function(Manufacturer manufacturer)? manufacturerTipNeeded,
     TResult Function()? success,
     TResult Function(Object error)? failure,
@@ -474,6 +699,8 @@ class _$PermissionsManufacturerTipNeededImpl
   TResult map<TResult extends Object?>({
     required TResult Function(PermissionsStateInitial value) initial,
     required TResult Function(PermissionsStateInProgress value) inProgress,
+    required TResult Function(PermissionFullScreenIntentNeeded value)
+        permissionFullScreenIntentNeeded,
     required TResult Function(PermissionsManufacturerTipNeeded value)
         manufacturerTipNeeded,
     required TResult Function(PermissionsStateSuccess value) success,
@@ -487,6 +714,8 @@ class _$PermissionsManufacturerTipNeededImpl
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(PermissionsStateInitial value)? initial,
     TResult? Function(PermissionsStateInProgress value)? inProgress,
+    TResult? Function(PermissionFullScreenIntentNeeded value)?
+        permissionFullScreenIntentNeeded,
     TResult? Function(PermissionsManufacturerTipNeeded value)?
         manufacturerTipNeeded,
     TResult? Function(PermissionsStateSuccess value)? success,
@@ -500,6 +729,8 @@ class _$PermissionsManufacturerTipNeededImpl
   TResult maybeMap<TResult extends Object?>({
     TResult Function(PermissionsStateInitial value)? initial,
     TResult Function(PermissionsStateInProgress value)? inProgress,
+    TResult Function(PermissionFullScreenIntentNeeded value)?
+        permissionFullScreenIntentNeeded,
     TResult Function(PermissionsManufacturerTipNeeded value)?
         manufacturerTipNeeded,
     TResult Function(PermissionsStateSuccess value)? success,
@@ -573,6 +804,8 @@ class _$PermissionsStateSuccessImpl implements PermissionsStateSuccess {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() inProgress,
+    required TResult Function(CallkeepSpecialPermissions permission)
+        permissionFullScreenIntentNeeded,
     required TResult Function(Manufacturer manufacturer) manufacturerTipNeeded,
     required TResult Function() success,
     required TResult Function(Object error) failure,
@@ -585,6 +818,8 @@ class _$PermissionsStateSuccessImpl implements PermissionsStateSuccess {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? inProgress,
+    TResult? Function(CallkeepSpecialPermissions permission)?
+        permissionFullScreenIntentNeeded,
     TResult? Function(Manufacturer manufacturer)? manufacturerTipNeeded,
     TResult? Function()? success,
     TResult? Function(Object error)? failure,
@@ -597,6 +832,8 @@ class _$PermissionsStateSuccessImpl implements PermissionsStateSuccess {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? inProgress,
+    TResult Function(CallkeepSpecialPermissions permission)?
+        permissionFullScreenIntentNeeded,
     TResult Function(Manufacturer manufacturer)? manufacturerTipNeeded,
     TResult Function()? success,
     TResult Function(Object error)? failure,
@@ -613,6 +850,8 @@ class _$PermissionsStateSuccessImpl implements PermissionsStateSuccess {
   TResult map<TResult extends Object?>({
     required TResult Function(PermissionsStateInitial value) initial,
     required TResult Function(PermissionsStateInProgress value) inProgress,
+    required TResult Function(PermissionFullScreenIntentNeeded value)
+        permissionFullScreenIntentNeeded,
     required TResult Function(PermissionsManufacturerTipNeeded value)
         manufacturerTipNeeded,
     required TResult Function(PermissionsStateSuccess value) success,
@@ -626,6 +865,8 @@ class _$PermissionsStateSuccessImpl implements PermissionsStateSuccess {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(PermissionsStateInitial value)? initial,
     TResult? Function(PermissionsStateInProgress value)? inProgress,
+    TResult? Function(PermissionFullScreenIntentNeeded value)?
+        permissionFullScreenIntentNeeded,
     TResult? Function(PermissionsManufacturerTipNeeded value)?
         manufacturerTipNeeded,
     TResult? Function(PermissionsStateSuccess value)? success,
@@ -639,6 +880,8 @@ class _$PermissionsStateSuccessImpl implements PermissionsStateSuccess {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(PermissionsStateInitial value)? initial,
     TResult Function(PermissionsStateInProgress value)? inProgress,
+    TResult Function(PermissionFullScreenIntentNeeded value)?
+        permissionFullScreenIntentNeeded,
     TResult Function(PermissionsManufacturerTipNeeded value)?
         manufacturerTipNeeded,
     TResult Function(PermissionsStateSuccess value)? success,
@@ -727,6 +970,8 @@ class _$PermissionsStateFailureImpl implements PermissionsStateFailure {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() inProgress,
+    required TResult Function(CallkeepSpecialPermissions permission)
+        permissionFullScreenIntentNeeded,
     required TResult Function(Manufacturer manufacturer) manufacturerTipNeeded,
     required TResult Function() success,
     required TResult Function(Object error) failure,
@@ -739,6 +984,8 @@ class _$PermissionsStateFailureImpl implements PermissionsStateFailure {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? inProgress,
+    TResult? Function(CallkeepSpecialPermissions permission)?
+        permissionFullScreenIntentNeeded,
     TResult? Function(Manufacturer manufacturer)? manufacturerTipNeeded,
     TResult? Function()? success,
     TResult? Function(Object error)? failure,
@@ -751,6 +998,8 @@ class _$PermissionsStateFailureImpl implements PermissionsStateFailure {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? inProgress,
+    TResult Function(CallkeepSpecialPermissions permission)?
+        permissionFullScreenIntentNeeded,
     TResult Function(Manufacturer manufacturer)? manufacturerTipNeeded,
     TResult Function()? success,
     TResult Function(Object error)? failure,
@@ -767,6 +1016,8 @@ class _$PermissionsStateFailureImpl implements PermissionsStateFailure {
   TResult map<TResult extends Object?>({
     required TResult Function(PermissionsStateInitial value) initial,
     required TResult Function(PermissionsStateInProgress value) inProgress,
+    required TResult Function(PermissionFullScreenIntentNeeded value)
+        permissionFullScreenIntentNeeded,
     required TResult Function(PermissionsManufacturerTipNeeded value)
         manufacturerTipNeeded,
     required TResult Function(PermissionsStateSuccess value) success,
@@ -780,6 +1031,8 @@ class _$PermissionsStateFailureImpl implements PermissionsStateFailure {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(PermissionsStateInitial value)? initial,
     TResult? Function(PermissionsStateInProgress value)? inProgress,
+    TResult? Function(PermissionFullScreenIntentNeeded value)?
+        permissionFullScreenIntentNeeded,
     TResult? Function(PermissionsManufacturerTipNeeded value)?
         manufacturerTipNeeded,
     TResult? Function(PermissionsStateSuccess value)? success,
@@ -793,6 +1046,8 @@ class _$PermissionsStateFailureImpl implements PermissionsStateFailure {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(PermissionsStateInitial value)? initial,
     TResult Function(PermissionsStateInProgress value)? inProgress,
+    TResult Function(PermissionFullScreenIntentNeeded value)?
+        permissionFullScreenIntentNeeded,
     TResult Function(PermissionsManufacturerTipNeeded value)?
         manufacturerTipNeeded,
     TResult Function(PermissionsStateSuccess value)? success,
