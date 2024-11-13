@@ -811,6 +811,43 @@ class AppLocalizationsMapper {
           localizations.webRegistration_ErrorAcknowledgeDialogActions_skip,
       'webRegistration_ErrorAcknowledgeDialog_title':
           localizations.webRegistration_ErrorAcknowledgeDialog_title,
+      'diagnostic_AppBar_title': localizations.diagnostic_AppBar_title,
+      'diagnosticPermissionDetails_title_statusPermission':
+          localizations.diagnosticPermissionDetails_title_statusPermission,
+      'diagnosticPermissionDetails_button_requestPermission':
+          localizations.diagnosticPermissionDetails_button_requestPermission,
+      'diagnosticPermissionDetails_button_managePermission':
+          localizations.diagnosticPermissionDetails_button_managePermission,
+      'diagnostic_permissionStatus_denied':
+          localizations.diagnostic_permissionStatus_denied,
+      'diagnostic_permissionStatus_granted':
+          localizations.diagnostic_permissionStatus_granted,
+      'diagnostic_permissionStatus_restricted':
+          localizations.diagnostic_permissionStatus_restricted,
+      'diagnostic_permissionStatus_limited':
+          localizations.diagnostic_permissionStatus_limited,
+      'diagnostic_permissionStatus_permanentlyDenied':
+          localizations.diagnostic_permissionStatus_permanentlyDenied,
+      'diagnostic_permissionStatus_provisional':
+          localizations.diagnostic_permissionStatus_provisional,
+      'diagnostic_permission_camera_title':
+          localizations.diagnostic_permission_camera_title,
+      'diagnostic_permission_microphone_title':
+          localizations.diagnostic_permission_microphone_title,
+      'diagnostic_permission_contacts_title':
+          localizations.diagnostic_permission_contacts_title,
+      'diagnostic_permission_notification_title':
+          localizations.diagnostic_permission_notification_title,
+      'diagnostic_permission_camera_description':
+          localizations.diagnostic_permission_camera_description,
+      'diagnostic_permission_microphone_description':
+          localizations.diagnostic_permission_microphone_description,
+      'diagnostic_permission_contacts_description':
+          localizations.diagnostic_permission_contacts_description,
+      'diagnostic_permission_notification_description':
+          localizations.diagnostic_permission_notification_description,
+      'sessionStatus_pushNotificationServiceProblem':
+          localizations.sessionStatus_pushNotificationServiceProblem,
       'favorites_SnackBar_deleted': (name) =>
           localizations.favorites_SnackBar_deleted(name),
       'login_Button_otpSigninVerifyRepeatInterval': (seconds) =>

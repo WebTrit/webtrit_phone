@@ -6,8 +6,9 @@ import 'package:logging/logging.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import 'package:webtrit_phone/data/app_permissions.dart';
+import 'package:webtrit_phone/features/features.dart';
 
-import '../models/permission_with_status.dart';
+import '../models/models.dart';
 
 part 'diagnostic_state.dart';
 
@@ -16,13 +17,39 @@ part 'diagnostic_cubit.freezed.dart';
 final _logger = Logger('DiagnosticCubit');
 
 class DiagnosticCubit extends Cubit<DiagnosticState> {
-  DiagnosticCubit({required AppPermissions appPermissions})
-      : _appPermissions = appPermissions,
+  DiagnosticCubit({
+    required PushTokensBloc pushTokensBloc,
+    required AppPermissions appPermissions,
+  })  : _appPermissions = appPermissions,
         super(const DiagnosticState()) {
     fetchPermissionsStatus();
+    _onPushTokensChanged(pushTokensBloc.state);
+
+    _pushTokensSubscription = pushTokensBloc.stream.listen(_onPushTokensChanged);
   }
 
   final AppPermissions _appPermissions;
+
+  late final StreamSubscription<PushTokensState> _pushTokensSubscription;
+
+  void _onPushTokensChanged(PushTokensState pushTokens) {
+    final pushToken = pushTokens.pushToken;
+    final pushError = pushTokens.errorMessage;
+
+    final pushTokenStatusType = pushToken != null
+        ? PushTokenStatusType.success
+        : pushError != null
+            ? PushTokenStatusType.error
+            : PushTokenStatusType.progress;
+
+    emit(state.copyWith(
+      pushTokenStatus: PushTokenStatus(
+        token: pushToken,
+        error: pushError,
+        type: pushTokenStatusType,
+      ),
+    ));
+  }
 
   Future<void> fetchPermissionsStatus() async {
     try {
@@ -57,5 +84,11 @@ class DiagnosticCubit extends Cubit<DiagnosticState> {
 
   Future<void> _openAppSettings() async {
     await _appPermissions.toAppSettings();
+  }
+
+  @override
+  Future<void> close() async {
+    super.close();
+    _pushTokensSubscription.cancel();
   }
 }

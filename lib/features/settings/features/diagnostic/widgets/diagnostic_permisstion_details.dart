@@ -26,28 +26,34 @@ class DiagnosticPermissionDetails extends StatelessWidget {
     final statusColor = status.color(context);
     final statusText = permissionWithStatus.status.title(context);
 
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        ListTile(
-          title: Text(permissionTitle),
-          subtitle: Text(permissionDescription),
-        ),
-        ListTile(
-          title: Text(context.l10n.diagnosticPermissionDetails_title_statusPermission),
-          subtitle: Text(
-            statusText,
-            style: themeData.textTheme.bodyMedium?.copyWith(color: statusColor),
+    return Container(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          ListTile(
+            contentPadding: EdgeInsets.zero,
+            title: Text(permissionTitle),
+            subtitle: Text(permissionDescription),
           ),
-        ),
-        const SizedBox(height: 16),
-        ElevatedButton(
-          onPressed: onTap,
-          child: status == PermissionStatus.denied
-              ? Text(context.l10n.diagnosticPermissionDetails_button_requestPermission)
-              : Text(context.l10n.diagnosticPermissionDetails_button_managePermission),
-        ),
-      ],
+          ListTile(
+            contentPadding: EdgeInsets.zero,
+            title: Text(context.l10n.diagnosticPermissionDetails_title_statusPermission),
+            subtitle: Text(
+              statusText,
+              style: themeData.textTheme.bodyMedium?.copyWith(color: statusColor),
+            ),
+          ),
+          const SizedBox(height: 16),
+          ElevatedButton(
+            onPressed: onTap,
+            child: status == PermissionStatus.denied
+                ? Text(context.l10n.diagnosticPermissionDetails_button_requestPermission)
+                : Text(context.l10n.diagnosticPermissionDetails_button_managePermission),
+          ),
+          const SizedBox(height: 16),
+        ],
+      ),
     );
   }
 }

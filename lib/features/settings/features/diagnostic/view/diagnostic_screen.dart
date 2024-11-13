@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:webtrit_phone/l10n/l10n.dart';
 
+import '../../../widgets/widgets.dart';
 import '../bloc/diagnostic_cubit.dart';
 
 import '../models/models.dart';
 import '../widgets/widgets.dart';
+import '../extensions/extensions.dart';
 
 class DiagnosticScreen extends StatefulWidget {
   const DiagnosticScreen({
@@ -49,6 +52,26 @@ class _DiagnosticScreenState extends State<DiagnosticScreen> with WidgetsBinding
           body: SingleChildScrollView(
             child: Column(
               children: [
+                ListTile(
+                  title: Text(context.l10n.diagnosticScreen_pushNotificationService_title),
+                  trailing: Icon(
+                    state.pushTokenStatus.type.isSuccess ? Icons.check_circle : Icons.error_outline,
+                    color: state.pushTokenStatus.type.isSuccess ? Colors.green : Colors.red,
+                  ),
+                  subtitle: Text(
+                    state.pushTokenStatus.type.title(context),
+                  ),
+                  onTap: () {
+                    showModalBottomSheet(
+                      context: context,
+                      builder: (BuildContext context) => DiagnosticPushDetails(
+                        status: state.pushTokenStatus,
+                        onTap: () => Navigator.of(context).pop(),
+                      ),
+                    );
+                  },
+                ),
+                GroupTitleListTile(titleData: context.l10n.diagnosticScreen_permissionsGroup_title),
                 ...state.permissions.map(
                   (permission) => DiagnosticPermissionItem(
                     permissionWithStatus: permission,

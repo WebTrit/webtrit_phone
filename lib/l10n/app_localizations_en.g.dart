@@ -1441,5 +1441,44 @@ class AppLocalizationsEn extends AppLocalizations {
   String get diagnostic_permission_notification_description => 'Enables the app to trigger incoming call.';
 
   @override
+  String get diagnosticScreen_pushNotificationService_title => 'Push notification service';
+
+  @override
+  String get diagnosticScreen_permissionsGroup_title => 'Permissions';
+
+  @override
+  String get diagnosticPushDetails_configuration_title => 'Push Notification service configuration';
+
+  @override
+  String get diagnosticPushDetails_successMessage => 'The notification service is successfully configured and ready for use to receive messages and handle incoming calls.';
+
+  @override
+  String get diagnosticPushDetails_errorMessage_intro => 'Some steps to try:\n';
+
+  @override
+  String get diagnosticPushDetails_errorMessage_step1 => '1. Ensure your phone is connected to the internet.\n';
+
+  @override
+  String get diagnosticPushDetails_errorMessage_step2 => '2. If connected, check that your phone can access Google services by visiting a website.\n';
+
+  @override
+  String get diagnosticPushDetails_errorMessage_step3 => '3. Wait a few minutes and try again – Firebase messaging servers may be temporarily down.\n';
+
+  @override
+  String get diagnosticPushDetails_errorMessage_step4 => '4. Restart Google Play services to ensure they are functioning correctly.\n';
+
+  @override
+  String get diagnosticPushDetails_errorMessage_step5 => '5. Verify that Google Play services are installed on your device.\n';
+
+  @override
+  String get diagnostic_pushTokenStatusType_success => 'Service successfully configured';
+
+  @override
+  String get diagnostic_pushTokenStatusType_error => 'Problem with configuration push notification service';
+
+  @override
   String get sessionStatus_pushNotificationServiceProblem => 'Problem with configuration push notification service';
+
+  @override
+  String get diagnostic_pushTokenStatusType_progress => 'In progress';
 }

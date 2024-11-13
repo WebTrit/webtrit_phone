@@ -2881,11 +2881,89 @@ abstract class AppLocalizations {
   /// **'Enables the app to trigger incoming call.'**
   String get diagnostic_permission_notification_description;
 
+  /// No description provided for @diagnosticScreen_pushNotificationService_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Push notification service'**
+  String get diagnosticScreen_pushNotificationService_title;
+
+  /// No description provided for @diagnosticScreen_permissionsGroup_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Permissions'**
+  String get diagnosticScreen_permissionsGroup_title;
+
+  /// No description provided for @diagnosticPushDetails_configuration_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Push Notification service configuration'**
+  String get diagnosticPushDetails_configuration_title;
+
+  /// No description provided for @diagnosticPushDetails_successMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'The notification service is successfully configured and ready for use to receive messages and handle incoming calls.'**
+  String get diagnosticPushDetails_successMessage;
+
+  /// No description provided for @diagnosticPushDetails_errorMessage_intro.
+  ///
+  /// In en, this message translates to:
+  /// **'Some steps to try:\n'**
+  String get diagnosticPushDetails_errorMessage_intro;
+
+  /// No description provided for @diagnosticPushDetails_errorMessage_step1.
+  ///
+  /// In en, this message translates to:
+  /// **'1. Ensure your phone is connected to the internet.\n'**
+  String get diagnosticPushDetails_errorMessage_step1;
+
+  /// No description provided for @diagnosticPushDetails_errorMessage_step2.
+  ///
+  /// In en, this message translates to:
+  /// **'2. If connected, check that your phone can access Google services by visiting a website.\n'**
+  String get diagnosticPushDetails_errorMessage_step2;
+
+  /// No description provided for @diagnosticPushDetails_errorMessage_step3.
+  ///
+  /// In en, this message translates to:
+  /// **'3. Wait a few minutes and try again – Firebase messaging servers may be temporarily down.\n'**
+  String get diagnosticPushDetails_errorMessage_step3;
+
+  /// No description provided for @diagnosticPushDetails_errorMessage_step4.
+  ///
+  /// In en, this message translates to:
+  /// **'4. Restart Google Play services to ensure they are functioning correctly.\n'**
+  String get diagnosticPushDetails_errorMessage_step4;
+
+  /// No description provided for @diagnosticPushDetails_errorMessage_step5.
+  ///
+  /// In en, this message translates to:
+  /// **'5. Verify that Google Play services are installed on your device.\n'**
+  String get diagnosticPushDetails_errorMessage_step5;
+
+  /// No description provided for @diagnostic_pushTokenStatusType_success.
+  ///
+  /// In en, this message translates to:
+  /// **'Service successfully configured'**
+  String get diagnostic_pushTokenStatusType_success;
+
+  /// No description provided for @diagnostic_pushTokenStatusType_error.
+  ///
+  /// In en, this message translates to:
+  /// **'Problem with configuration push notification service'**
+  String get diagnostic_pushTokenStatusType_error;
+
   /// No description provided for @sessionStatus_pushNotificationServiceProblem.
   ///
   /// In en, this message translates to:
   /// **'Problem with configuration push notification service'**
   String get sessionStatus_pushNotificationServiceProblem;
+
+  /// No description provided for @diagnostic_pushTokenStatusType_progress.
+  ///
+  /// In en, this message translates to:
+  /// **'In progress'**
+  String get diagnostic_pushTokenStatusType_progress;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

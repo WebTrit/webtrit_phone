@@ -1441,5 +1441,44 @@ class AppLocalizationsUk extends AppLocalizations {
   String get diagnostic_permission_notification_description => 'Дозволяє додатку активувати вхідні дзвінки.';
 
   @override
+  String get diagnosticScreen_pushNotificationService_title => 'Служба push-сповіщень';
+
+  @override
+  String get diagnosticScreen_permissionsGroup_title => 'Дозволи';
+
+  @override
+  String get diagnosticPushDetails_configuration_title => 'Налаштування служби push-сповіщень';
+
+  @override
+  String get diagnosticPushDetails_successMessage => 'Служба сповіщень успішно налаштована та готова до використання для отримання повідомлень і обробки вхідних дзвінків.';
+
+  @override
+  String get diagnosticPushDetails_errorMessage_intro => 'Декілька кроків, які можна спробувати:\n';
+
+  @override
+  String get diagnosticPushDetails_errorMessage_step1 => '1. Переконайтеся, що ваш телефон підключений до Інтернету.\n';
+
+  @override
+  String get diagnosticPushDetails_errorMessage_step2 => '2. Якщо підключено, перевірте, чи може ваш телефон отримати доступ до сервісів Google, відвідавши веб-сайт.\n';
+
+  @override
+  String get diagnosticPushDetails_errorMessage_step3 => '3. Зачекайте кілька хвилин і спробуйте знову – сервери Firebase можуть тимчасово не працювати.\n';
+
+  @override
+  String get diagnosticPushDetails_errorMessage_step4 => '4. Перезапустіть сервіси Google Play, щоб переконатися, що вони працюють належним чином.\n';
+
+  @override
+  String get diagnosticPushDetails_errorMessage_step5 => '5. Переконайтеся, що сервіси Google Play встановлені на вашому пристрої.\n';
+
+  @override
+  String get diagnostic_pushTokenStatusType_success => 'Служба успішно налаштована ';
+
+  @override
+  String get diagnostic_pushTokenStatusType_error => 'Проблема з налаштуванням служби push-сповіщень';
+
+  @override
   String get sessionStatus_pushNotificationServiceProblem => 'Проблема з налаштуванням служби пуш-сповіщень';
+
+  @override
+  String get diagnostic_pushTokenStatusType_progress => 'В процесі';
 }
