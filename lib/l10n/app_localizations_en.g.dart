@@ -1147,7 +1147,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get notifications_errorSnackBar_callSignalingClientNotConnect => 'Cannot initiate the call, please check the connection status';
 
   @override
-  String get notifications_errorSnackBar_callSignalingClientSessionMissed => 'The current connection session is invalid, please sign in again';
+  String get notifications_errorSnackBar_callSignalingClientSessionMissed => 'Authentication error, please re-login';
 
   @override
   String get notifications_errorSnackBar_callUndefinedLine => 'No idle lines to initiate the call';
@@ -1177,13 +1177,31 @@ class AppLocalizationsEn extends AppLocalizations {
   String get permission_manufacturer_Text_trailing => 'Permissions could be changed at any time in the future.';
 
   @override
-  String get permission_manufacturer_Text_xiaomi_tip1 => '1. Go to \"App settings\" → \"Notifications\".';
+  String get permission_manufacturer_Text_xiaomi_tip1 => 'Go to \"App settings\" → \"Notifications\".';
 
   @override
-  String get permission_manufacturer_Text_xiaomi_tip2 => '2. Find and turn on \"Lockscreen notifications\".';
+  String get permission_manufacturer_Text_xiaomi_tip2 => 'Find and turn on \"Lockscreen notifications\".';
 
   @override
   String get permission_Text_description => 'To ensure the best user experience, the app needs to be granted the following permissions: microphone for audio calls, camera for video calls, and contacts to simplify reaching them from the app.\n\nPermissions could be changed at any time in the future.';
+
+  @override
+  String get permission_manageFullScreenNotificationPermissions => 'Manage Full-Screen Notification Permissions';
+
+  @override
+  String get permission_manageFullScreenNotificationInstructions_step1 => 'Go to your phone\'s Settings.';
+
+  @override
+  String get permission_manageFullScreenNotificationInstructions_step2 => 'Navigate to \'Special App Access\' under the \'Apps & notifications\' section.';
+
+  @override
+  String get permission_manageFullScreenNotificationInstructions_step3 => 'Find and tap on \'Manage full screen intents\'.';
+
+  @override
+  String get permission_manageFullScreenNotificationInstructions_step4 => 'Select the app for which you want to manage full-screen notifications.';
+
+  @override
+  String get permission_manageFullScreenNotificationInstructions_step5 => 'Toggle the permission to enable or disable full-screen notifications for that app.';
 
   @override
   String recents_BodyCenter_empty(Object filter) {
@@ -1261,6 +1279,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settings_AboutText_StoreVersion => 'Build version in the Store';
+
+  @override
+  String get settings_AboutText_FCMPushNotificationToken => 'FCM Push Notification Token';
 
   @override
   String get settings_AccountDeleteConfirmDialog_content => 'Are you sure you want to delete account?';
@@ -1364,4 +1385,58 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get webRegistration_ErrorAcknowledgeDialog_title => 'Web resource error';
+
+  @override
+  String get diagnostic_AppBar_title => 'Diagnostic';
+
+  @override
+  String get diagnosticPermissionDetails_title_statusPermission => 'Status permission';
+
+  @override
+  String get diagnosticPermissionDetails_button_requestPermission => 'Request Permission';
+
+  @override
+  String get diagnosticPermissionDetails_button_managePermission => 'Manage Permission';
+
+  @override
+  String get diagnostic_permissionStatus_denied => 'Access Denied';
+
+  @override
+  String get diagnostic_permissionStatus_granted => 'Access Granted';
+
+  @override
+  String get diagnostic_permissionStatus_restricted => 'Restricted Access';
+
+  @override
+  String get diagnostic_permissionStatus_limited => 'Limited Access';
+
+  @override
+  String get diagnostic_permissionStatus_permanentlyDenied => 'Access Permanently Denied';
+
+  @override
+  String get diagnostic_permissionStatus_provisional => 'Provisional Access';
+
+  @override
+  String get diagnostic_permission_camera_title => 'Camera';
+
+  @override
+  String get diagnostic_permission_microphone_title => 'Microphone';
+
+  @override
+  String get diagnostic_permission_contacts_title => 'Contacts';
+
+  @override
+  String get diagnostic_permission_notification_title => 'Notification';
+
+  @override
+  String get diagnostic_permission_camera_description => 'This app requires permission to access the camera to make video calls.';
+
+  @override
+  String get diagnostic_permission_microphone_description => 'This app requires permission to access the microphone to make audio calls.';
+
+  @override
+  String get diagnostic_permission_contacts_description => 'This app requires permission to access contacts to make calls within your address book.';
+
+  @override
+  String get diagnostic_permission_notification_description => 'Enables the app to trigger incoming call.';
 }

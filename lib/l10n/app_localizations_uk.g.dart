@@ -1147,7 +1147,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get notifications_errorSnackBar_callSignalingClientNotConnect => 'Не вдається ініціювати дзвінок, перевірте статус з\'єднання';
 
   @override
-  String get notifications_errorSnackBar_callSignalingClientSessionMissed => 'Поточна сесія з\'єднання недійсна, будь ласка, увійдіть знову';
+  String get notifications_errorSnackBar_callSignalingClientSessionMissed => 'Помилка автентифікації, будь ласка увійдіть знову';
 
   @override
   String get notifications_errorSnackBar_callUndefinedLine => 'Немає вільних ліній для ініціювання дзвінка';
@@ -1177,13 +1177,31 @@ class AppLocalizationsUk extends AppLocalizations {
   String get permission_manufacturer_Text_trailing => 'Дозволи можуть бути змінені в будь-який час у майбутньому.';
 
   @override
-  String get permission_manufacturer_Text_xiaomi_tip1 => '1. Перейдіть у «Налаштування програми» → «Сповіщення».';
+  String get permission_manufacturer_Text_xiaomi_tip1 => 'Перейдіть у «Налаштування програми» → «Сповіщення».';
 
   @override
-  String get permission_manufacturer_Text_xiaomi_tip2 => '2. Знайдіть і ввімкніть «Сповіщення на екрані блокування».';
+  String get permission_manufacturer_Text_xiaomi_tip2 => 'Знайдіть і ввімкніть «Сповіщення на екрані блокування».';
 
   @override
   String get permission_Text_description => 'Для забезпечення найкращого досвіду користувача програма потребує наступні дозволи: мікрофон для аудіодзвінків, камера для відеодзвінків та доступ до контактів для спрощення їх використання в програмі.\n\nДозволи можуть бути змінені у майбутньому.';
+
+  @override
+  String get permission_manageFullScreenNotificationPermissions => 'Manage Full-Screen Notification Permissions';
+
+  @override
+  String get permission_manageFullScreenNotificationInstructions_step1 => 'Go to your phone\'s Settings.';
+
+  @override
+  String get permission_manageFullScreenNotificationInstructions_step2 => 'Navigate to \'Special App Access\' under the \'Apps & notifications\' section.';
+
+  @override
+  String get permission_manageFullScreenNotificationInstructions_step3 => 'Find and tap on \'Manage full screen intents\'.';
+
+  @override
+  String get permission_manageFullScreenNotificationInstructions_step4 => 'Select the app for which you want to manage full-screen notifications.';
+
+  @override
+  String get permission_manageFullScreenNotificationInstructions_step5 => 'Toggle the permission to enable or disable full-screen notifications for that app.';
 
   @override
   String recents_BodyCenter_empty(Object filter) {
@@ -1261,6 +1279,9 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get settings_AboutText_StoreVersion => 'Версія збірки в магазині';
+
+  @override
+  String get settings_AboutText_FCMPushNotificationToken => 'Токен для Push-повідомлень FCM';
 
   @override
   String get settings_AccountDeleteConfirmDialog_content => 'Ви впевнені, що хочете видалити обліковий запис?';
@@ -1364,4 +1385,58 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get webRegistration_ErrorAcknowledgeDialog_title => 'Web resource error';
+
+  @override
+  String get diagnostic_AppBar_title => 'Діагностика';
+
+  @override
+  String get diagnosticPermissionDetails_title_statusPermission => 'Статус дозволу';
+
+  @override
+  String get diagnosticPermissionDetails_button_requestPermission => 'Запит дозволу';
+
+  @override
+  String get diagnosticPermissionDetails_button_managePermission => 'Керування дозволами';
+
+  @override
+  String get diagnostic_permissionStatus_denied => 'Доступ заборонено';
+
+  @override
+  String get diagnostic_permissionStatus_granted => 'Доступ надано';
+
+  @override
+  String get diagnostic_permissionStatus_restricted => 'Обмежений доступ';
+
+  @override
+  String get diagnostic_permissionStatus_limited => 'Обмежений доступ';
+
+  @override
+  String get diagnostic_permissionStatus_permanentlyDenied => 'Доступ назавжди заборонено';
+
+  @override
+  String get diagnostic_permissionStatus_provisional => 'Тимчасовий доступ';
+
+  @override
+  String get diagnostic_permission_camera_title => 'Камера';
+
+  @override
+  String get diagnostic_permission_microphone_title => 'Мікрофон';
+
+  @override
+  String get diagnostic_permission_contacts_title => 'Контакти';
+
+  @override
+  String get diagnostic_permission_notification_title => 'Сповіщення';
+
+  @override
+  String get diagnostic_permission_camera_description => 'Цей додаток потребує дозволу на доступ до камери для здійснення відеодзвінків.';
+
+  @override
+  String get diagnostic_permission_microphone_description => 'Цей додаток потребує дозволу на доступ до мікрофона для здійснення аудіодзвінків.';
+
+  @override
+  String get diagnostic_permission_contacts_description => 'Цей додаток потребує дозволу на доступ до контактів для здійснення дзвінків із вашої телефонної книги.';
+
+  @override
+  String get diagnostic_permission_notification_description => 'Дозволяє додатку активувати вхідні дзвінки.';
 }

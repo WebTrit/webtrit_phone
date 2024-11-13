@@ -445,75 +445,29 @@ abstract class _ResetStateEventCompleteCall implements _ResetStateEvent {
 }
 
 /// @nodoc
-mixin _$UpdateCallSignalingCoreUrl {
-  String get url => throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-
-class _$UpdateCallSignalingCoreUrlImpl
-    with DiagnosticableTreeMixin
-    implements _UpdateCallSignalingCoreUrl {
-  const _$UpdateCallSignalingCoreUrlImpl(this.url);
-
-  @override
-  final String url;
-
-  @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'UpdateCallSignalingCoreUrl(url: $url)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', 'UpdateCallSignalingCoreUrl'))
-      ..add(DiagnosticsProperty('url', url));
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$UpdateCallSignalingCoreUrlImpl &&
-            (identical(other.url, url) || other.url == url));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, url);
-}
-
-abstract class _UpdateCallSignalingCoreUrl
-    implements UpdateCallSignalingCoreUrl {
-  const factory _UpdateCallSignalingCoreUrl(final String url) =
-      _$UpdateCallSignalingCoreUrlImpl;
-
-  @override
-  String get url;
-}
-
-/// @nodoc
 mixin _$SignalingClientEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function() connectInitiated,
+    required TResult Function(bool reconnecting) connectInitiated,
     required TResult Function() disconnectInitiated,
-    required TResult Function(int? code, String? reason) disconnected,
+    required TResult Function(int? code, String? reason, bool afterReconnect)
+        disconnected,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? connectInitiated,
+    TResult? Function(bool reconnecting)? connectInitiated,
     TResult? Function()? disconnectInitiated,
-    TResult? Function(int? code, String? reason)? disconnected,
+    TResult? Function(int? code, String? reason, bool afterReconnect)?
+        disconnected,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? connectInitiated,
+    TResult Function(bool reconnecting)? connectInitiated,
     TResult Function()? disconnectInitiated,
-    TResult Function(int? code, String? reason)? disconnected,
+    TResult Function(int? code, String? reason, bool afterReconnect)?
+        disconnected,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -553,60 +507,71 @@ mixin _$SignalingClientEvent {
 class _$SignalingClientEventConnectInitiatedImpl
     with DiagnosticableTreeMixin
     implements _SignalingClientEventConnectInitiated {
-  const _$SignalingClientEventConnectInitiatedImpl();
+  const _$SignalingClientEventConnectInitiatedImpl({this.reconnecting = false});
+
+  @override
+  @JsonKey()
+  final bool reconnecting;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return '_SignalingClientEvent.connectInitiated()';
+    return '_SignalingClientEvent.connectInitiated(reconnecting: $reconnecting)';
   }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties.add(
-        DiagnosticsProperty('type', '_SignalingClientEvent.connectInitiated'));
+    properties
+      ..add(
+          DiagnosticsProperty('type', '_SignalingClientEvent.connectInitiated'))
+      ..add(DiagnosticsProperty('reconnecting', reconnecting));
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$SignalingClientEventConnectInitiatedImpl);
+            other is _$SignalingClientEventConnectInitiatedImpl &&
+            (identical(other.reconnecting, reconnecting) ||
+                other.reconnecting == reconnecting));
   }
 
   @override
-  int get hashCode => runtimeType.hashCode;
+  int get hashCode => Object.hash(runtimeType, reconnecting);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function() connectInitiated,
+    required TResult Function(bool reconnecting) connectInitiated,
     required TResult Function() disconnectInitiated,
-    required TResult Function(int? code, String? reason) disconnected,
+    required TResult Function(int? code, String? reason, bool afterReconnect)
+        disconnected,
   }) {
-    return connectInitiated();
+    return connectInitiated(reconnecting);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? connectInitiated,
+    TResult? Function(bool reconnecting)? connectInitiated,
     TResult? Function()? disconnectInitiated,
-    TResult? Function(int? code, String? reason)? disconnected,
+    TResult? Function(int? code, String? reason, bool afterReconnect)?
+        disconnected,
   }) {
-    return connectInitiated?.call();
+    return connectInitiated?.call(reconnecting);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? connectInitiated,
+    TResult Function(bool reconnecting)? connectInitiated,
     TResult Function()? disconnectInitiated,
-    TResult Function(int? code, String? reason)? disconnected,
+    TResult Function(int? code, String? reason, bool afterReconnect)?
+        disconnected,
     required TResult orElse(),
   }) {
     if (connectInitiated != null) {
-      return connectInitiated();
+      return connectInitiated(reconnecting);
     }
     return orElse();
   }
@@ -655,8 +620,10 @@ class _$SignalingClientEventConnectInitiatedImpl
 
 abstract class _SignalingClientEventConnectInitiated
     implements _SignalingClientEvent {
-  const factory _SignalingClientEventConnectInitiated() =
-      _$SignalingClientEventConnectInitiatedImpl;
+  const factory _SignalingClientEventConnectInitiated(
+      {final bool reconnecting}) = _$SignalingClientEventConnectInitiatedImpl;
+
+  bool get reconnecting;
 }
 
 /// @nodoc
@@ -691,9 +658,10 @@ class _$SignalingClientEventDisconnectInitiatedImpl
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function() connectInitiated,
+    required TResult Function(bool reconnecting) connectInitiated,
     required TResult Function() disconnectInitiated,
-    required TResult Function(int? code, String? reason) disconnected,
+    required TResult Function(int? code, String? reason, bool afterReconnect)
+        disconnected,
   }) {
     return disconnectInitiated();
   }
@@ -701,9 +669,10 @@ class _$SignalingClientEventDisconnectInitiatedImpl
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? connectInitiated,
+    TResult? Function(bool reconnecting)? connectInitiated,
     TResult? Function()? disconnectInitiated,
-    TResult? Function(int? code, String? reason)? disconnected,
+    TResult? Function(int? code, String? reason, bool afterReconnect)?
+        disconnected,
   }) {
     return disconnectInitiated?.call();
   }
@@ -711,9 +680,10 @@ class _$SignalingClientEventDisconnectInitiatedImpl
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? connectInitiated,
+    TResult Function(bool reconnecting)? connectInitiated,
     TResult Function()? disconnectInitiated,
-    TResult Function(int? code, String? reason)? disconnected,
+    TResult Function(int? code, String? reason, bool afterReconnect)?
+        disconnected,
     required TResult orElse(),
   }) {
     if (disconnectInitiated != null) {
@@ -775,16 +745,20 @@ abstract class _SignalingClientEventDisconnectInitiated
 class _$SignalingClientEventDisconnectedImpl
     with DiagnosticableTreeMixin
     implements _SignalingClientEventDisconnected {
-  const _$SignalingClientEventDisconnectedImpl(this.code, this.reason);
+  const _$SignalingClientEventDisconnectedImpl(this.code, this.reason,
+      {this.afterReconnect = false});
 
   @override
   final int? code;
   @override
   final String? reason;
+  @override
+  @JsonKey()
+  final bool afterReconnect;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return '_SignalingClientEvent.disconnected(code: $code, reason: $reason)';
+    return '_SignalingClientEvent.disconnected(code: $code, reason: $reason, afterReconnect: $afterReconnect)';
   }
 
   @override
@@ -793,7 +767,8 @@ class _$SignalingClientEventDisconnectedImpl
     properties
       ..add(DiagnosticsProperty('type', '_SignalingClientEvent.disconnected'))
       ..add(DiagnosticsProperty('code', code))
-      ..add(DiagnosticsProperty('reason', reason));
+      ..add(DiagnosticsProperty('reason', reason))
+      ..add(DiagnosticsProperty('afterReconnect', afterReconnect));
   }
 
   @override
@@ -802,42 +777,47 @@ class _$SignalingClientEventDisconnectedImpl
         (other.runtimeType == runtimeType &&
             other is _$SignalingClientEventDisconnectedImpl &&
             (identical(other.code, code) || other.code == code) &&
-            (identical(other.reason, reason) || other.reason == reason));
+            (identical(other.reason, reason) || other.reason == reason) &&
+            (identical(other.afterReconnect, afterReconnect) ||
+                other.afterReconnect == afterReconnect));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, code, reason);
+  int get hashCode => Object.hash(runtimeType, code, reason, afterReconnect);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function() connectInitiated,
+    required TResult Function(bool reconnecting) connectInitiated,
     required TResult Function() disconnectInitiated,
-    required TResult Function(int? code, String? reason) disconnected,
+    required TResult Function(int? code, String? reason, bool afterReconnect)
+        disconnected,
   }) {
-    return disconnected(code, reason);
+    return disconnected(code, reason, afterReconnect);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? connectInitiated,
+    TResult? Function(bool reconnecting)? connectInitiated,
     TResult? Function()? disconnectInitiated,
-    TResult? Function(int? code, String? reason)? disconnected,
+    TResult? Function(int? code, String? reason, bool afterReconnect)?
+        disconnected,
   }) {
-    return disconnected?.call(code, reason);
+    return disconnected?.call(code, reason, afterReconnect);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? connectInitiated,
+    TResult Function(bool reconnecting)? connectInitiated,
     TResult Function()? disconnectInitiated,
-    TResult Function(int? code, String? reason)? disconnected,
+    TResult Function(int? code, String? reason, bool afterReconnect)?
+        disconnected,
     required TResult orElse(),
   }) {
     if (disconnected != null) {
-      return disconnected(code, reason);
+      return disconnected(code, reason, afterReconnect);
     }
     return orElse();
   }
@@ -887,11 +867,12 @@ class _$SignalingClientEventDisconnectedImpl
 abstract class _SignalingClientEventDisconnected
     implements _SignalingClientEvent {
   const factory _SignalingClientEventDisconnected(
-          final int? code, final String? reason) =
+          final int? code, final String? reason, {final bool afterReconnect}) =
       _$SignalingClientEventDisconnectedImpl;
 
   int? get code;
   String? get reason;
+  bool get afterReconnect;
 }
 
 /// @nodoc

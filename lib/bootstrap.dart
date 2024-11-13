@@ -96,12 +96,17 @@ Future<void> _initFirebase() async {
 Future<void> _initFirebaseMessaging() async {
   final logger = Logger('FirebaseMessaging');
 
+  FirebaseMessaging.instance.setDeliveryMetricsExportToBigQuery(true);
+
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
     logger.info('onMessage: ${message.toMap()}');
     final appNotification = AppRemoteNotification.fromFCM(message);
     RemoteNotificationsBroker.handleForegroundNotification(appNotification);
+
+    // Type of notification for testing purposes
+    _dHandleInspectPushNotification(message.data, false);
   });
   FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
     logger.info('onMessageOpenedApp: ${message.toMap()}');
@@ -123,6 +128,9 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   _initLogs();
   final appNotification = AppRemoteNotification.fromFCM(message);
   final logger = Logger('_firebaseMessagingBackgroundHandler')..info('RemoteNotification: $appNotification');
+
+  // Type of notification for testing purposes
+  _dHandleInspectPushNotification(message.data, true);
 
   if (appNotification is PendingCallNotification && Platform.isAndroid) {
     final call = appNotification.call;
@@ -190,5 +198,41 @@ Future _initLocalNotifications() async {
     ),
     onDidReceiveNotificationResponse: LocalNotificationsBroker.handleActionReceived,
     onDidReceiveBackgroundNotificationResponse: LocalNotificationsBroker.handleActionReceived,
+  );
+
+  final launchDetails = await FlutterLocalNotificationsPlugin().getNotificationAppLaunchDetails();
+  final data = launchDetails?.notificationResponse;
+  if (data != null) LocalNotificationsBroker.handleActionReceived(data);
+}
+
+// Debugging push notifications
+void _dHandleInspectPushNotification(Map<String, dynamic> data, bool background) {
+  if (data.containsKey('type') && data['type'] == 'inspect-push') {
+    final title = data['title'] ?? 'Inspect Notification';
+    final body =
+        "${data['body'] ?? 'This is a local notification for testing notifications'} ${background ? 'Background' : 'Foreground'}";
+
+    _dShowInspectLocalNotification(title: title, body: body);
+  }
+}
+
+// Debugging push notifications
+Future<void> _dShowInspectLocalNotification({
+  required String title,
+  required String body,
+}) async {
+  await FlutterLocalNotificationsPlugin().show(
+    0,
+    title,
+    body,
+    const NotificationDetails(
+      android: AndroidNotificationDetails(
+        'inspect_push_channel',
+        'Inspect Push Notifications',
+        channelDescription: 'Channel for debugging push notifications',
+        importance: Importance.max,
+        priority: Priority.high,
+      ),
+    ),
   );
 }

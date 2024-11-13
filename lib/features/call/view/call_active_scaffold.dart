@@ -131,10 +131,11 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                     ),
                   ),
                 if (!compact)
-                  Positioned(
-                    left: 0 + mediaQueryData.padding.left,
-                    right: 0 + mediaQueryData.padding.right,
-                    top: 10 + mediaQueryData.padding.top,
+                  Positioned.fill(
+                    left: mediaQueryData.padding.left,
+                    right: mediaQueryData.padding.right,
+                    top: mediaQueryData.padding.top,
+                    bottom: mediaQueryData.padding.bottom,
                     child: Column(
                       children: [
                         AppBar(
@@ -143,152 +144,186 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                           foregroundColor: onTabGradient,
                           primary: false,
                         ),
-                        for (final activeCall in activeCalls)
-                          CallInfo(
-                            transferProcessing: activeTransfer?.processing ?? false,
-                            requestToAttendedTransfer: false,
-                            inviteToAttendedTransfer: activeCall.transfer?.inviteToAttendedTransfer ?? false,
-                            isIncoming: activeCall.isIncoming,
-                            held: activeCall.held,
-                            username: activeCall.displayName ?? activeCall.handle.value,
-                            acceptedTime: activeCall.acceptedTime,
-                            color: onTabGradient,
-                            activeCallStatus: activeCall.status,
-                          ),
-                        if (maybeTransferRequest != null)
-                          CallInfo(
-                            transferProcessing: false,
-                            requestToAttendedTransfer: true,
-                            inviteToAttendedTransfer: false,
-                            isIncoming: false,
-                            held: false,
-                            username: maybeTransferRequest.referTo,
-                            color: onTabGradient,
-                          ),
+                        Expanded(
+                          child: LayoutBuilder(builder: (context, constraints) {
+                            return FittedBox(
+                              child: ConstrainedBox(
+                                constraints: BoxConstraints(
+                                  maxWidth: constraints.maxWidth,
+                                  minHeight: constraints.minHeight,
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    for (final activeCall in activeCalls)
+                                      CallInfo(
+                                        transferProcessing: activeTransfer?.processing ?? false,
+                                        requestToAttendedTransfer: false,
+                                        inviteToAttendedTransfer:
+                                            activeCall.transfer?.inviteToAttendedTransfer ?? false,
+                                        isIncoming: activeCall.isIncoming,
+                                        held: activeCall.held,
+                                        username: activeCall.displayName ?? activeCall.handle.value,
+                                        acceptedTime: activeCall.acceptedTime,
+                                        color: onTabGradient,
+                                        activeCallStatus: activeCall.status,
+                                      ),
+                                    if (maybeTransferRequest != null)
+                                      CallInfo(
+                                        transferProcessing: false,
+                                        requestToAttendedTransfer: true,
+                                        inviteToAttendedTransfer: false,
+                                        isIncoming: false,
+                                        held: false,
+                                        username: maybeTransferRequest.referTo,
+                                        color: onTabGradient,
+                                      ),
+                                    CallActions(
+                                      isIncoming: activeCall.isIncoming,
+                                      video: activeCall.video,
+                                      wasAccepted: activeCall.wasAccepted,
+                                      wasHungUp: activeCall.wasHungUp,
+                                      cameraValue: cameraEnabled,
+                                      inviteToAttendedTransfer: activeCall.transfer?.inviteToAttendedTransfer ?? false,
+                                      onCameraChanged: (bool value) {
+                                        setState(() {
+                                          cameraEnabled = value;
+                                        });
+                                        context
+                                            .read<CallBloc>()
+                                            .add(CallControlEvent.cameraEnabled(activeCall.callId, value));
+                                      },
+                                      mutedValue: activeCall.muted,
+                                      onMutedChanged: (bool value) {
+                                        context
+                                            .read<CallBloc>()
+                                            .add(CallControlEvent.setMuted(activeCall.callId, value));
+                                      },
+                                      speakerValue: widget.speaker,
+                                      onSpeakerChanged: (bool value) {
+                                        context
+                                            .read<CallBloc>()
+                                            .add(CallControlEvent.speakerEnabled(activeCall.callId, value));
+                                      },
+                                      transferableCalls: heldCalls,
+                                      onBlindTransferInitiated: widget.transferConfig.enableBlindTransfer
+                                          ? (!activeCall.wasAccepted || activeTransfer != null
+                                              ? null
+                                              : () {
+                                                  context
+                                                      .read<CallBloc>()
+                                                      .add(CallControlEvent.blindTransferInitiated(activeCall.callId));
+                                                })
+                                          : null,
+                                      // TODO (Serdun): Simplify complex condition in the widget tree.
+                                      onAttendedTransferInitiated: widget.transferConfig.enableAttendedTransfer
+                                          ? (!activeCall.wasAccepted || activeTransfer != null
+                                              ? null
+                                              : () {
+                                                  context.read<CallBloc>().add(
+                                                      CallControlEvent.attendedTransferInitiated(activeCall.callId));
+                                                })
+                                          : null,
+                                      // TODO (Serdun): Simplify complex condition in the widget tree.
+                                      onAttendedTransferSubmitted: widget.transferConfig.enableAttendedTransfer
+                                          ? (!activeCall.wasAccepted || activeTransfer != null
+                                              ? null
+                                              : (ActiveCall referorCall) {
+                                                  context.read<CallBloc>().add(
+                                                        CallControlEvent.attendedTransferSubmitted(
+                                                          referorCall: referorCall,
+                                                          replaceCall: activeCall,
+                                                        ),
+                                                      );
+                                                })
+                                          : null,
+                                      heldValue: activeCall.held,
+                                      onHeldChanged: (bool value) {
+                                        context
+                                            .read<CallBloc>()
+                                            .add(CallControlEvent.setHeld(activeCall.callId, value));
+                                      },
+                                      onSwapPressed: activeCalls.length == 2
+                                          ? () {
+                                              // TODO maybe introduce particular event with particular callkeep method
+                                              context
+                                                  .read<CallBloc>()
+                                                  .add(CallControlEvent.setHeld(activeCall.callId, true));
+                                              for (final otherActiveCall in activeCalls) {
+                                                if (otherActiveCall.callId != activeCall.callId) {
+                                                  context
+                                                      .read<CallBloc>()
+                                                      .add(CallControlEvent.setHeld(otherActiveCall.callId, false));
+                                                }
+                                              }
+                                            }
+                                          : null,
+                                      onHangupPressed: () {
+                                        context.read<CallBloc>().add(CallControlEvent.ended(activeCall.callId));
+                                      },
+                                      onHangupAndAcceptPressed: activeCalls.length > 1
+                                          ? () {
+                                              // TODO maybe introduce particular event with particular callkeep method
+                                              for (final otherActiveCall in activeCalls) {
+                                                if (otherActiveCall.callId != activeCall.callId) {
+                                                  context
+                                                      .read<CallBloc>()
+                                                      .add(CallControlEvent.ended(otherActiveCall.callId));
+                                                }
+                                              }
+                                              context
+                                                  .read<CallBloc>()
+                                                  .add(CallControlEvent.answered(activeCall.callId));
+                                            }
+                                          : null,
+                                      onHoldAndAcceptPressed: activeCalls.length > 1
+                                          ? () {
+                                              // TODO maybe introduce particular event with particular callkeep method
+                                              for (final otherActiveCall in activeCalls) {
+                                                if (otherActiveCall.callId != activeCall.callId) {
+                                                  context
+                                                      .read<CallBloc>()
+                                                      .add(CallControlEvent.setHeld(otherActiveCall.callId, true));
+                                                }
+                                              }
+                                              context
+                                                  .read<CallBloc>()
+                                                  .add(CallControlEvent.answered(activeCall.callId));
+                                            }
+                                          : null,
+                                      onAcceptPressed: () {
+                                        context.read<CallBloc>().add(CallControlEvent.answered(activeCall.callId));
+                                      },
+                                      onApproveTransferPressed: maybeTransferRequest == null
+                                          ? null
+                                          : () {
+                                              context.read<CallBloc>().add(CallControlEvent.attendedRequestApproved(
+                                                    referId: maybeTransferRequest.referId,
+                                                    referTo: maybeTransferRequest.referTo,
+                                                  ));
+                                            },
+                                      onDeclineTransferPressed: maybeTransferRequest == null
+                                          ? null
+                                          : () {
+                                              context.read<CallBloc>().add(CallControlEvent.attendedRequestDeclined(
+                                                    callId: activeCall.callId,
+                                                    referId: maybeTransferRequest.referId,
+                                                  ));
+                                            },
+                                      onKeyPressed: (value) {
+                                        context
+                                            .read<CallBloc>()
+                                            .add(CallControlEvent.sentDTMF(activeCall.callId, value));
+                                      },
+                                    )
+                                  ],
+                                ),
+                              ),
+                            );
+                          }),
+                        ),
+                        const SizedBox(height: 20)
                       ],
-                    ),
-                  ),
-                if (!compact)
-                  Positioned(
-                    left: 0 + mediaQueryData.padding.left,
-                    right: 0 + mediaQueryData.padding.right,
-                    bottom: 20 + mediaQueryData.padding.bottom,
-                    child: CallActions(
-                      isIncoming: activeCall.isIncoming,
-                      video: activeCall.video,
-                      wasAccepted: activeCall.wasAccepted,
-                      wasHungUp: activeCall.wasHungUp,
-                      cameraValue: cameraEnabled,
-                      inviteToAttendedTransfer: activeCall.transfer?.inviteToAttendedTransfer ?? false,
-                      onCameraChanged: (bool value) {
-                        setState(() {
-                          cameraEnabled = value;
-                        });
-                        context.read<CallBloc>().add(CallControlEvent.cameraEnabled(activeCall.callId, value));
-                      },
-                      mutedValue: activeCall.muted,
-                      onMutedChanged: (bool value) {
-                        context.read<CallBloc>().add(CallControlEvent.setMuted(activeCall.callId, value));
-                      },
-                      speakerValue: widget.speaker,
-                      onSpeakerChanged: (bool value) {
-                        context.read<CallBloc>().add(CallControlEvent.speakerEnabled(activeCall.callId, value));
-                      },
-                      transferableCalls: heldCalls,
-                      onBlindTransferInitiated: widget.transferConfig.enableBlindTransfer
-                          ? (!activeCall.wasAccepted || activeTransfer != null
-                              ? null
-                              : () {
-                                  context
-                                      .read<CallBloc>()
-                                      .add(CallControlEvent.blindTransferInitiated(activeCall.callId));
-                                })
-                          : null,
-                      // TODO (Serdun): Simplify complex condition in the widget tree.
-                      onAttendedTransferInitiated: widget.transferConfig.enableAttendedTransfer
-                          ? (!activeCall.wasAccepted || activeTransfer != null
-                              ? null
-                              : () {
-                                  context
-                                      .read<CallBloc>()
-                                      .add(CallControlEvent.attendedTransferInitiated(activeCall.callId));
-                                })
-                          : null,
-                      // TODO (Serdun): Simplify complex condition in the widget tree.
-                      onAttendedTransferSubmitted: widget.transferConfig.enableAttendedTransfer
-                          ? (!activeCall.wasAccepted || activeTransfer != null
-                              ? null
-                              : (ActiveCall referorCall) {
-                                  context.read<CallBloc>().add(
-                                        CallControlEvent.attendedTransferSubmitted(
-                                          referorCall: referorCall,
-                                          replaceCall: activeCall,
-                                        ),
-                                      );
-                                })
-                          : null,
-                      heldValue: activeCall.held,
-                      onHeldChanged: (bool value) {
-                        context.read<CallBloc>().add(CallControlEvent.setHeld(activeCall.callId, value));
-                      },
-                      onSwapPressed: activeCalls.length == 2
-                          ? () {
-                              // TODO maybe introduce particular event with particular callkeep method
-                              context.read<CallBloc>().add(CallControlEvent.setHeld(activeCall.callId, true));
-                              for (final otherActiveCall in activeCalls) {
-                                if (otherActiveCall.callId != activeCall.callId) {
-                                  context.read<CallBloc>().add(CallControlEvent.setHeld(otherActiveCall.callId, false));
-                                }
-                              }
-                            }
-                          : null,
-                      onHangupPressed: () {
-                        context.read<CallBloc>().add(CallControlEvent.ended(activeCall.callId));
-                      },
-                      onHangupAndAcceptPressed: activeCalls.length > 1
-                          ? () {
-                              // TODO maybe introduce particular event with particular callkeep method
-                              for (final otherActiveCall in activeCalls) {
-                                if (otherActiveCall.callId != activeCall.callId) {
-                                  context.read<CallBloc>().add(CallControlEvent.ended(otherActiveCall.callId));
-                                }
-                              }
-                              context.read<CallBloc>().add(CallControlEvent.answered(activeCall.callId));
-                            }
-                          : null,
-                      onHoldAndAcceptPressed: activeCalls.length > 1
-                          ? () {
-                              // TODO maybe introduce particular event with particular callkeep method
-                              for (final otherActiveCall in activeCalls) {
-                                if (otherActiveCall.callId != activeCall.callId) {
-                                  context.read<CallBloc>().add(CallControlEvent.setHeld(otherActiveCall.callId, true));
-                                }
-                              }
-                              context.read<CallBloc>().add(CallControlEvent.answered(activeCall.callId));
-                            }
-                          : null,
-                      onAcceptPressed: () {
-                        context.read<CallBloc>().add(CallControlEvent.answered(activeCall.callId));
-                      },
-                      onApproveTransferPressed: maybeTransferRequest == null
-                          ? null
-                          : () {
-                              context.read<CallBloc>().add(CallControlEvent.attendedRequestApproved(
-                                    referId: maybeTransferRequest.referId,
-                                    referTo: maybeTransferRequest.referTo,
-                                  ));
-                            },
-                      onDeclineTransferPressed: maybeTransferRequest == null
-                          ? null
-                          : () {
-                              context.read<CallBloc>().add(CallControlEvent.attendedRequestDeclined(
-                                    callId: activeCall.callId,
-                                    referId: maybeTransferRequest.referId,
-                                  ));
-                            },
-                      onKeyPressed: (value) {
-                        context.read<CallBloc>().add(CallControlEvent.sentDTMF(activeCall.callId, value));
-                      },
                     ),
                   ),
               ],

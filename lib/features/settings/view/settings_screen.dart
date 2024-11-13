@@ -40,15 +40,19 @@ class SettingsScreen extends StatelessWidget {
       ),
       body: ListView(
         children: [
+          const SizedBox(height: 16),
           BlocBuilder<SettingsBloc, SettingsState>(
             builder: (context, settingsState) {
-              return BlocBuilder<CallBloc, CallState>(
-                builder: (context, callState) {
-                  return UserInfoListTile(
-                    callStatus: callState.status,
-                    info: settingsState.info,
-                  );
-                },
+              return UserInfoListTile(
+                info: settingsState.info,
+              );
+            },
+          ),
+          BlocBuilder<CallBloc, CallState>(
+            builder: (context, callState) {
+              return SessionStatusListTile(
+                status: callState.status,
+                onTap: () => context.router.navigate(const DiagnosticScreenPageRoute()),
               );
             },
           ),

@@ -175,6 +175,7 @@ class _MainShellState extends State<MainShell> {
             create: (context) {
               return PushTokensBloc(
                 pushTokensRepository: context.read<PushTokensRepository>(),
+                secureStorage: context.read<SecureStorage>(),
                 firebaseMessaging: FirebaseMessaging.instance,
                 callkeep: callkeep,
               )..add(const PushTokensStarted());
