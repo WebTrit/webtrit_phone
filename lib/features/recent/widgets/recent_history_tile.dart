@@ -66,7 +66,7 @@ class RecentHistoryTile extends StatelessWidget {
             ),
             const Text(' · '),
             Text(
-              recent.isComplete ? _formatDuration(recent.duration!) : 'Missed',
+              recent.isComplete ? _formatDuration(recent.duration ?? Duration.zero) : 'Missed',
             ),
           ],
         ),
