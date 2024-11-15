@@ -21,7 +21,6 @@ import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/push_notification/push_notifications.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
-import 'package:webtrit_phone/utils/path_provider/_native.dart';
 
 import 'background_call_handler.dart';
 import 'environment_config.dart';
@@ -137,12 +136,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
     final call = appNotification.call;
 
     WebtritCallkeepLogs().setLogsDelegate(CallkeepLogs());
-    final dbConnection = createAppDatabaseConnection(
-      await getApplicationDocumentsPath(),
-      'db.sqlite',
-      logStatements: EnvironmentConfig.DATABASE_LOG_STATEMENTS,
-    );
-    final appDatabase = FCMIsolateDatabase.instance(dbConnection);
+    final appDatabase = await IsolateDatabase.create();
     final repository = RecentsRepository(appDatabase: appDatabase);
 
     logger.info('Initial incoming call');
@@ -150,12 +144,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
     BackgroundCallHandler(call, repository).init();
   }
   if (appNotification is MessageNotification) {
-    final dbConnection = createAppDatabaseConnection(
-      await getApplicationDocumentsPath(),
-      'db.sqlite',
-      logStatements: EnvironmentConfig.DATABASE_LOG_STATEMENTS,
-    );
-    final appDatabase = FCMIsolateDatabase.instance(dbConnection);
+    final appDatabase = await IsolateDatabase.create();
     final repo = ActiveMessageNotificationsRepositoryDriftImpl(appDatabase: appDatabase);
 
     final activeMessageNotification = ActiveMessageNotification(
