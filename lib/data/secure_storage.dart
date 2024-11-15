@@ -1,5 +1,19 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
+/// The `SecureStorage` class uses a local cache (`_cache`) to store values
+/// read from `FlutterSecureStorage`, reducing the number of expensive read/write
+/// operations and improving performance.
+///
+/// Issue:
+/// In multi-isolate scenarios, each isolate creates its own instance of `SecureStorage`
+/// with an independent local cache. If one isolate updates the data, other isolates
+/// will not be aware of the changes because the cache is local and not synchronized
+/// across isolates.
+///
+/// Recommendation:
+/// If it is necessary to access up-to-date data in a secondary isolate,
+/// consider creating a new instance of `SecureStorage` each time or reading
+/// directly from `FlutterSecureStorage`, avoiding reliance on the local cache.
 class SecureStorage {
   static const _kCoreUrlKey = 'core-url';
   static const _kTenantIdKey = 'tenant-id';
