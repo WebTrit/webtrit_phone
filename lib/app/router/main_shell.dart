@@ -28,14 +28,13 @@ class MainShell extends StatefulWidget {
 }
 
 class _MainShellState extends State<MainShell> {
-  late final Callkeep callkeep;
-  late final FeatureAccess featureAccess;
+  late final Callkeep _callkeep = Callkeep();
+  late final FeatureAccess _featureAccess = FeatureAccess();
 
   @override
   void initState() {
     super.initState();
-    callkeep = Callkeep();
-    callkeep.setUp(
+    _callkeep.setUp(
       CallkeepOptions(
         ios: CallkeepIOSOptions(
           localizedName: PackageInfo().appName,
@@ -52,16 +51,15 @@ class _MainShellState extends State<MainShell> {
         ),
       ),
     );
-    featureAccess = FeatureAccess();
   }
 
   @override
   void dispose() {
-    callkeep.tearDown();
+    _callkeep.tearDown();
     super.dispose();
   }
 
-  get _messagingEnabled => featureAccess.isMessagingEnabled();
+  get _messagingEnabled => _featureAccess.isMessagingEnabled();
 
   @override
   Widget build(BuildContext context) {
@@ -177,7 +175,7 @@ class _MainShellState extends State<MainShell> {
                 pushTokensRepository: context.read<PushTokensRepository>(),
                 secureStorage: context.read<SecureStorage>(),
                 firebaseMessaging: FirebaseMessaging.instance,
-                callkeep: callkeep,
+                callkeep: _callkeep,
               )..add(const PushTokensStarted());
             },
           ),
@@ -221,7 +219,7 @@ class _MainShellState extends State<MainShell> {
                 trustedCertificates: appCertificates.trustedCertificates,
                 recentsRepository: context.read<RecentsRepository>(),
                 notificationsBloc: context.read<NotificationsBloc>(),
-                callkeep: callkeep,
+                callkeep: _callkeep,
                 pendingCallHandler: appBloc.pendingCallHandler,
               )..add(const CallStarted());
             },
