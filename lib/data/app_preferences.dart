@@ -32,8 +32,9 @@ class AppPreferences {
 
   static late AppPreferences _instance;
 
-  static Future<void> init() async {
+  static Future<AppPreferences> init() async {
     _instance = AppPreferences._(await SharedPreferences.getInstance());
+    return _instance;
   }
 
   factory AppPreferences() {

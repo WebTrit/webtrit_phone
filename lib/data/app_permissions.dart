@@ -15,7 +15,7 @@ class AppPermissions {
 
   static late AppPermissions _instance;
 
-  static Future<void> init() async {
+  static Future<AppPermissions> init() async {
     final featureAccess = FeatureAccess();
 
     final specialStatuses = await Future.wait(_specialPermissions.map((permission) => permission.status()));
@@ -30,6 +30,7 @@ class AppPermissions {
     final statuses = await Future.wait(permissions.map((permission) => permission.status));
     final isDenied = statuses.every((status) => status.isDenied) || specialStatuses.every((status) => status.isDenied);
     _instance = AppPermissions._(isDenied, permissions);
+    return _instance;
   }
 
   factory AppPermissions() {

@@ -21,7 +21,7 @@ class AppCertificates {
   TrustedCertificates get trustedCertificates => _trustedCertificates;
 
   /// Initialize the AppCerts instance with the certificates
-  static Future<void> init() async {
+  static Future<AppCertificates> init() async {
     final certificatePaths = Assets.certificates.values.where((it) => it != Assets.certificates.credentials);
     final credentialsPath = Assets.certificates.credentials;
 
@@ -33,6 +33,7 @@ class AppCertificates {
         certificates: certificates,
       ),
     );
+    return _instance;
   }
 
   /// Loads certificate bytes from assets using the provided path and credentials.

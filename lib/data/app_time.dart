@@ -8,7 +8,7 @@ final Logger _logger = Logger('AppTime');
 class AppTime {
   static late final AppTime _instance;
 
-  static Future<void> init() async {
+  static Future<AppTime> init() async {
     final is24HourFormat = await _determine24HourFormat();
 
     final shortDateFormat = is24HourFormat ? DateFormat.Hm() : DateFormat.jms();
@@ -17,6 +17,7 @@ class AppTime {
     _logger.info('Initialized with format: $is24HourFormat');
 
     _instance = AppTime._(is24HourFormat, shortDateFormat, detailDateFormat);
+    return _instance;
   }
 
   static Future<bool> _determine24HourFormat() async {

@@ -11,9 +11,10 @@ final logger = Logger('SessionCleanupWorker');
 class SessionCleanupWorker {
   static late SessionCleanupWorker _instance;
 
-  static Future<void> init() async {
+  static Future<SessionCleanupWorker> init() async {
     final requestStorage = RequestStorage();
     _instance = SessionCleanupWorker._(requestStorage);
+    return _instance;
   }
 
   factory SessionCleanupWorker() {
