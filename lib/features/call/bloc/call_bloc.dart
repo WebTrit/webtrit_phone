@@ -14,6 +14,7 @@ import 'package:logging/logging.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
+import 'package:webtrit_phone/utils/utils.dart';
 import 'package:webtrit_signaling/webtrit_signaling.dart';
 import 'package:ssl_certificates/ssl_certificates.dart';
 
@@ -501,7 +502,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
       if (emit.isDone) return;
 
-      final signalingUrl = _parseCoreUrlToSignalingUrl(coreUrl);
+      final signalingUrl = WebtritSignalingUtils.parseCoreUrlToSignalingUrl(coreUrl);
       final signalingClient = await WebtritSignalingClient.connect(
         signalingUrl,
         tenantId,
@@ -2378,15 +2379,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       await _appSound.stopOutgoingCall();
     } catch (e) {
       _logger.info('_ringtoneStop: $e');
-    }
-  }
-
-  Uri _parseCoreUrlToSignalingUrl(String coreUrl) {
-    final uri = Uri.parse(coreUrl);
-    if (uri.scheme.endsWith('s')) {
-      return uri.replace(scheme: 'wss');
-    } else {
-      return uri.replace(scheme: 'ws');
     }
   }
 }
