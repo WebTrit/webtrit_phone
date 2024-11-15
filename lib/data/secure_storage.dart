@@ -11,7 +11,7 @@ class SecureStorage {
 
   static late SecureStorage _instance;
 
-  static Future<void> init() async {
+  static Future<SecureStorage> init() async {
     const storage = FlutterSecureStorage(
       iOptions: IOSOptions(
         accessibility: KeychainAccessibility.first_unlock,
@@ -26,6 +26,7 @@ class SecureStorage {
     }
 
     _instance = SecureStorage._(storage, cache);
+    return _instance;
   }
 
   factory SecureStorage() {

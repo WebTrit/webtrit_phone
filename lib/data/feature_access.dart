@@ -27,7 +27,7 @@ class FeatureAccess {
   final SettingsFeature settingsFeature;
   final CallFeature callFeature;
 
-  static Future<void> init() async {
+  static Future<FeatureAccess> init() async {
     final theme = AppThemes();
     final preferences = AppPreferences();
 
@@ -44,6 +44,7 @@ class FeatureAccess {
       _logger.severe('Failed to initialize FeatureAccess', e, stackTrace);
       rethrow;
     }
+    return _instance;
   }
 
   factory FeatureAccess() => _instance;

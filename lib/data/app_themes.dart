@@ -14,7 +14,7 @@ final Logger _logger = Logger('AppThemes');
 class AppThemes {
   static late AppThemes _instance;
 
-  static Future<void> init() async {
+  static Future<AppThemes> init() async {
     final themeJson = await _getJson(Assets.themes.original);
 
     final themeWidgetLightConfigJson = await _getJson(Assets.themes.originalWidgetLightConfig);
@@ -53,6 +53,7 @@ class AppThemes {
     }
 
     _instance = AppThemes._(themes, appConfig);
+    return _instance;
   }
 
   static Future<dynamic> _getJson(String path) async {

@@ -3,8 +3,9 @@ import 'package:package_info_plus/package_info_plus.dart' as plugin;
 class PackageInfo {
   static late PackageInfo _instance;
 
-  static Future<void> init() async {
+  static Future<PackageInfo> init() async {
     _instance = PackageInfo._(await plugin.PackageInfo.fromPlatform());
+    return _instance;
   }
 
   factory PackageInfo() {
