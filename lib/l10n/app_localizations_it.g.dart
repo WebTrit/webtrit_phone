@@ -1226,6 +1226,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get recents_Text_blingTransferInitiated => 'Trasferimento senza vedere';
 
   @override
+  String get recents_HistoryTile_missedCallText => 'Chiamata persa';
+
+  @override
   String get recentsVisibilityFilter_all => 'Tutto';
 
   @override

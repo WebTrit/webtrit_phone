@@ -866,6 +866,8 @@
   },
   "recents_Text_blingTransferInitiated": "Performing blind transfer",
   "@recents_Text_blingTransferInitiated": {},
+  "recents_HistoryTile_missedCallText": "Missed",
+  "@recents_HistoryTile_missedCallText": {},
   "recentsVisibilityFilter_all": "All",
   "@recentsVisibilityFilter_all": {},
   "recentsVisibilityFilter_all_preposit": "all",

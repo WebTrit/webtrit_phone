@@ -1226,6 +1226,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get recents_Text_blingTransferInitiated => 'Performing blind transfer';
 
   @override
+  String get recents_HistoryTile_missedCallText => 'Missed';
+
+  @override
   String get recentsVisibilityFilter_all => 'All';
 
   @override
