@@ -73,21 +73,11 @@ class _CallShellState extends State<CallShell> {
           orientationsBloc.add(const OrientationsChanged(PreferredOrientation.regular));
         }
 
-        if (state.display == CallDisplay.screen) {
-          if (!router.isRouteActive(CallScreenPageRoute.name)) {
-            _openCallScreen(router, state.activeCalls.isNotEmpty);
-          }
-        } else {
-          if (router.isRouteActive(CallScreenPageRoute.name)) {
-            // Try to pop the top route, if not possible, or navigate to the main screen.
-            //
-            // Not used router.navigate(const MainScreenPageRoute()) directly to prevent overriding route on
-            // back by last saved tab in RedirectRoute(path: '') that static and stays the same until app restarts.
-            // eg. on unattended transfer init.
-            final popped = await router.maybePopTop();
-            if (!popped) router.navigate(const MainScreenPageRoute());
-          }
-        }
+        final callScreenActive = router.isRouteActive(CallScreenPageRoute.name);
+        final callScreenShouldDisplay = state.display == CallDisplay.screen;
+
+        if (callScreenShouldDisplay && !callScreenActive) _openCallScreen(router, state.activeCalls.isNotEmpty);
+        if (!callScreenShouldDisplay && callScreenActive) _backToMainScreen(router);
 
         if (state.display == CallDisplay.overlay) {
           final avatar = _avatar;
@@ -146,6 +136,19 @@ class _CallShellState extends State<CallShell> {
         ),
       );
     }
+  }
+
+  /// Pops the stack until the main screen is reached.
+  /// This is useful when the user is on a different route branch like LogRecordsConsoleScreenPageRoute.
+  /// Uses only on programmatic back navigation, for events like `transferring`.
+  /// But if user back manually using the back button hi'll be just popped to the previous screen.
+  ///
+  /// router.navigate(const MainScreenPageRoute()) didnt used to avoid bug
+  /// that triggers redirect('') from empty MainScreenPageRoute subroute to
+  /// initial(last remembered since restart) flavor that final and not changed across the app router lifecycle.
+  /// example redirect('') will always redirect to contacts page even if user was on the calls or chat page.
+  void _backToMainScreen(StackRouter router) {
+    router.popUntil((route) => route.settings.name == MainScreenPageRoute.name, scoped: false);
   }
 }
 
