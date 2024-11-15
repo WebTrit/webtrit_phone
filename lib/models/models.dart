@@ -15,6 +15,7 @@ export 'contact_source_type.dart';
 export 'external_contact.dart';
 export 'favorite.dart';
 export 'feature_access/exports.dart';
+export 'incoming_call_type.dart';
 export 'keypad_key.dart';
 export 'local_contact.dart';
 export 'local_contact_email.dart';
