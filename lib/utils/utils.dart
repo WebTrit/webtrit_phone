@@ -7,3 +7,4 @@ export 'orientations.dart';
 export 'path_provider/path_provider.dart';
 export 'regexes.dart';
 export 'webtrit_api_client.dart';
+export 'webtrit_signaling_utils.dart';
