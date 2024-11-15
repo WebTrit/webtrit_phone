@@ -866,6 +866,8 @@
   },
   "recents_Text_blingTransferInitiated": "Trasferimento senza vedere",
   "@recents_Text_blingTransferInitiated": {},
+  "recents_HistoryTile_missedCallText": "Chiamata persa",
+  "@recents_HistoryTile_missedCallText": {},
   "recentsVisibilityFilter_all": "Tutto",
   "@recentsVisibilityFilter_all": {},
   "recentsVisibilityFilter_all_preposit": "tutto",

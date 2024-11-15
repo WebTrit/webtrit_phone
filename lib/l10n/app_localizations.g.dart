@@ -2479,6 +2479,12 @@ abstract class AppLocalizations {
   /// **'Performing blind transfer'**
   String get recents_Text_blingTransferInitiated;
 
+  /// No description provided for @recents_HistoryTile_missedCallText.
+  ///
+  /// In en, this message translates to:
+  /// **'Missed'**
+  String get recents_HistoryTile_missedCallText;
+
   /// No description provided for @recentsVisibilityFilter_all.
   ///
   /// In en, this message translates to:

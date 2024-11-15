@@ -1226,6 +1226,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get recents_Text_blingTransferInitiated => 'Безумовне переведення дзвінка';
 
   @override
+  String get recents_HistoryTile_missedCallText => 'Пропущено';
+
+  @override
   String get recentsVisibilityFilter_all => 'Всі';
 
   @override
