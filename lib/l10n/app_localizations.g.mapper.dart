@@ -730,6 +730,8 @@ class AppLocalizationsMapper {
           localizations.recents_errorSnackBar_loadFailure,
       'recents_Text_blingTransferInitiated':
           localizations.recents_Text_blingTransferInitiated,
+      'recents_HistoryTile_missedCallText':
+          localizations.recents_HistoryTile_missedCallText,
       'recentsVisibilityFilter_all': localizations.recentsVisibilityFilter_all,
       'recentsVisibilityFilter_all_preposit':
           localizations.recentsVisibilityFilter_all_preposit,
@@ -846,8 +848,34 @@ class AppLocalizationsMapper {
           localizations.diagnostic_permission_contacts_description,
       'diagnostic_permission_notification_description':
           localizations.diagnostic_permission_notification_description,
+      'diagnosticScreen_pushNotificationService_title':
+          localizations.diagnosticScreen_pushNotificationService_title,
+      'diagnosticScreen_permissionsGroup_title':
+          localizations.diagnosticScreen_permissionsGroup_title,
+      'diagnosticPushDetails_configuration_title':
+          localizations.diagnosticPushDetails_configuration_title,
+      'diagnosticPushDetails_successMessage':
+          localizations.diagnosticPushDetails_successMessage,
+      'diagnosticPushDetails_errorMessage_intro':
+          localizations.diagnosticPushDetails_errorMessage_intro,
+      'diagnosticPushDetails_errorMessage_step1':
+          localizations.diagnosticPushDetails_errorMessage_step1,
+      'diagnosticPushDetails_errorMessage_step2':
+          localizations.diagnosticPushDetails_errorMessage_step2,
+      'diagnosticPushDetails_errorMessage_step3':
+          localizations.diagnosticPushDetails_errorMessage_step3,
+      'diagnosticPushDetails_errorMessage_step4':
+          localizations.diagnosticPushDetails_errorMessage_step4,
+      'diagnosticPushDetails_errorMessage_step5':
+          localizations.diagnosticPushDetails_errorMessage_step5,
+      'diagnostic_pushTokenStatusType_success':
+          localizations.diagnostic_pushTokenStatusType_success,
+      'diagnostic_pushTokenStatusType_error':
+          localizations.diagnostic_pushTokenStatusType_error,
       'sessionStatus_pushNotificationServiceProblem':
           localizations.sessionStatus_pushNotificationServiceProblem,
+      'diagnostic_pushTokenStatusType_progress':
+          localizations.diagnostic_pushTokenStatusType_progress,
       'favorites_SnackBar_deleted': (name) =>
           localizations.favorites_SnackBar_deleted(name),
       'login_Button_otpSigninVerifyRepeatInterval': (seconds) =>
