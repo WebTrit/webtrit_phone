@@ -88,7 +88,7 @@ class _ChatConversationsTileState extends State<ChatConversationsTile> {
         sourceId: participant.userId,
         builder: (context, contact, {required bool loading}) {
           return LeadingAvatar(
-            username: contact?.name,
+            username: contact?.displayTitle,
             thumbnail: contact?.thumbnail,
             thumbnailUrl: contact?.thumbnailUrl,
             registered: contact?.registered,

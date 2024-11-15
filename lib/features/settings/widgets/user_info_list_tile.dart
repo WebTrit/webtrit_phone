@@ -6,8 +6,6 @@ import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
-const _kHoldSpaceData = ' ';
-
 class UserInfoListTile extends StatelessWidget {
   const UserInfoListTile({
     super.key,
@@ -44,7 +42,7 @@ class UserInfoListTile extends StatelessWidget {
         child: Row(
           children: [
             LeadingAvatar(
-              username: info?.name ?? '?',
+              username: info?.name ?? info?.numbers.main ?? 'N/A',
               thumbnailUrl: gravatarThumbnailUrl(info?.email),
               radius: radius,
             ),
@@ -54,26 +52,52 @@ class UserInfoListTile extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  CopyToClipboard(
-                    data: info?.name,
-                    child: Text(
-                      info?.name ?? _kHoldSpaceData,
-                      style: themeData.textTheme.bodyLarge!.copyWith(
-                        fontWeight: FontWeight.bold,
+                  Text.rich(
+                    TextSpan(
+                      children: [
+                        WidgetSpan(
+                          child: Container(
+                            width: radius / 3,
+                            height: radius / 3,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: callStatus.color(context),
+                            ),
+                          ),
+                          alignment: PlaceholderAlignment.middle,
+                        ),
+                        const TextSpan(text: ' '),
+                        TextSpan(text: callStatus.l10n(context)),
+                      ],
+                    ),
+                  ),
+                  if (info != null) ...[
+                    if (info.name != null)
+                      CopyToClipboard(
+                        data: info.name,
+                        child: Text(
+                          info.name!,
+                          style: themeData.textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold),
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
-                    ),
-                  ),
-                  CopyToClipboard(
-                    data: info?.numbers.main,
-                    child: Text(
-                      info?.numberWithExtension ?? _kHoldSpaceData,
-                      style: themeData.textTheme.bodyLarge,
-                    ),
-                  ),
-                  Text(
-                    info?.balanceWithCurrency ?? _kHoldSpaceData,
-                    style: themeData.textTheme.labelLarge,
-                  ),
+                    if (info.numbers.main.isNotEmpty)
+                      CopyToClipboard(
+                        data: info.numbers.main,
+                        child: Text(
+                          info.numberWithExtension,
+                          style: themeData.textTheme.bodyLarge,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    if (info.balanceWithCurrency?.isNotEmpty == true)
+                      Text(
+                        info.balanceWithCurrency!,
+                        style: themeData.textTheme.labelLarge,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                  ],
+                  const Spacer(),
                 ],
               ),
             ),
