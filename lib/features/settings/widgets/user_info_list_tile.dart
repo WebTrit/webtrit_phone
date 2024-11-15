@@ -49,28 +49,10 @@ class UserInfoListTile extends StatelessWidget {
             const SizedBox(width: 8),
             Expanded(
               child: Column(
+                mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Text.rich(
-                    TextSpan(
-                      children: [
-                        WidgetSpan(
-                          child: Container(
-                            width: radius / 3,
-                            height: radius / 3,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: callStatus.color(context),
-                            ),
-                          ),
-                          alignment: PlaceholderAlignment.middle,
-                        ),
-                        const TextSpan(text: ' '),
-                        TextSpan(text: callStatus.l10n(context)),
-                      ],
-                    ),
-                  ),
                   if (info != null) ...[
                     if (info.name != null)
                       CopyToClipboard(
@@ -97,7 +79,6 @@ class UserInfoListTile extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                       ),
                   ],
-                  const Spacer(),
                 ],
               ),
             ),
