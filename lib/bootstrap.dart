@@ -96,6 +96,10 @@ Future<void> _initCallkeep() async {
     autoRestartOnTerminate: incomingCalType.isSocket,
   );
 
+  if (incomingCalType.isPushNotification) {
+    callkeep.stopService();
+  }
+
   WebtritCallkeepLogs().setLogsDelegate(CallkeepLogs());
 }
 

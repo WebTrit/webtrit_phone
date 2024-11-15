@@ -46,19 +46,39 @@ class BackgroundCallEventService implements CallkeepBackgroundServiceDelegate {
     _incomingCallType = callType;
   }
 
+  // Handles the service startup. This can occur under several scenarios:
+  // - Launching from an FCM isolate.
+  // - User enabling the socket type.
+  // - Service being restarted.
+  // - Automatic start during system boot.
   Future<void> onStart(CallkeepServiceStatus status) async {
-    if (status.lifecycle == CallkeepLifecycleType.onStop ||
+    final isBackground = status.lifecycle == CallkeepLifecycleType.onStop ||
         status.lifecycle == CallkeepLifecycleType.onAny ||
-        status.lifecycle == CallkeepLifecycleType.onDestroy) {
+        status.lifecycle == CallkeepLifecycleType.onDestroy;
+
+    if (isBackground) {
+      // Connects to the signaling serve if not connected yet
       _signalingManager.launch();
     }
   }
 
   Future<void> onChangedLifecycle(CallkeepServiceStatus status) async {
-    if (status.lifecycle == CallkeepLifecycleType.onStop && (!status.activeCalls)) {
+    // [Socket]
+    // If the app is hidden and there are no active calls, launch the signaling manager in the background.
+    if (status.lifecycle == CallkeepLifecycleType.onStop && !status.activeCalls) {
       _signalingManager.launch();
-    } else if (status.lifecycle == CallkeepLifecycleType.onResume) {
+    }
+
+    // [Socket, Push Notifications]
+    // Close the signaling manager when the app is resumed to switch signaling to the main isolate.
+    if (status.lifecycle == CallkeepLifecycleType.onResume) {
       await _signalingManager.close();
+    }
+
+    // [Push Notifications]
+    // Stop the foreground service when the app is resumed. Push notifications will handle incoming calls in the future.
+    if (status.lifecycle == CallkeepLifecycleType.onResume && _incomingCallType.isPushNotification) {
+      await _callkeep.stopService();
     }
   }
 
