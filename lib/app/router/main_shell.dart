@@ -29,11 +29,16 @@ class MainShell extends StatefulWidget {
 
 class _MainShellState extends State<MainShell> {
   late final Callkeep _callkeep = Callkeep();
+  late final CallkeepBackgroundService _callkeepBackgroundService = CallkeepBackgroundService();
+
   late final FeatureAccess _featureAccess = FeatureAccess();
+  late final AppPreferences _appPreferences = AppPreferences();
 
   @override
   void initState() {
     super.initState();
+    final incomingCallType = _appPreferences.getIncomingCallType();
+
     _callkeep.setUp(
       CallkeepOptions(
         ios: CallkeepIOSOptions(
@@ -51,6 +56,11 @@ class _MainShellState extends State<MainShell> {
         ),
       ),
     );
+
+    // Launch the service after user authorization if the selected incoming call type is socket-based.
+    if (incomingCallType.isSocket) {
+      _callkeepBackgroundService.startService();
+    }
   }
 
   @override
