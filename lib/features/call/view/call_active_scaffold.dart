@@ -45,7 +45,6 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
     final heldCalls = activeCalls.nonCurrent;
 
     final activeTransfer = activeCall.transfer;
-    final maybeTransferRequest = activeTransfer is AttendedTransferConfirmationRequested ? activeTransfer : null;
 
     final video = activeCall.video;
 
@@ -157,10 +156,9 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                                   children: [
                                     for (final activeCall in activeCalls)
                                       CallInfo(
-                                        transferProcessing: activeTransfer?.processing ?? false,
+                                        transfering: activeTransfer is Transfering,
                                         requestToAttendedTransfer: false,
-                                        inviteToAttendedTransfer:
-                                            activeCall.transfer?.inviteToAttendedTransfer ?? false,
+                                        inviteToAttendedTransfer: activeTransfer is InviteToAttendedTransfer,
                                         isIncoming: activeCall.isIncoming,
                                         held: activeCall.held,
                                         username: activeCall.displayName ?? activeCall.handle.value,
@@ -168,14 +166,14 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                                         color: onTabGradient,
                                         activeCallStatus: activeCall.status,
                                       ),
-                                    if (maybeTransferRequest != null)
+                                    if (activeTransfer is AttendedTransferConfirmationRequested)
                                       CallInfo(
-                                        transferProcessing: false,
+                                        transfering: false,
                                         requestToAttendedTransfer: true,
                                         inviteToAttendedTransfer: false,
                                         isIncoming: false,
                                         held: false,
-                                        username: maybeTransferRequest.referTo,
+                                        username: activeTransfer.referTo,
                                         color: onTabGradient,
                                       ),
                                     CallActions(
@@ -184,7 +182,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                                       wasAccepted: activeCall.wasAccepted,
                                       wasHungUp: activeCall.wasHungUp,
                                       cameraValue: cameraEnabled,
-                                      inviteToAttendedTransfer: activeCall.transfer?.inviteToAttendedTransfer ?? false,
+                                      inviteToAttendedTransfer: activeTransfer is InviteToAttendedTransfer,
                                       onCameraChanged: (bool value) {
                                         setState(() {
                                           cameraEnabled = value;
@@ -294,22 +292,22 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                                       onAcceptPressed: () {
                                         context.read<CallBloc>().add(CallControlEvent.answered(activeCall.callId));
                                       },
-                                      onApproveTransferPressed: maybeTransferRequest == null
-                                          ? null
-                                          : () {
+                                      onApproveTransferPressed: activeTransfer is AttendedTransferConfirmationRequested
+                                          ? () {
                                               context.read<CallBloc>().add(CallControlEvent.attendedRequestApproved(
-                                                    referId: maybeTransferRequest.referId,
-                                                    referTo: maybeTransferRequest.referTo,
+                                                    referId: activeTransfer.referId,
+                                                    referTo: activeTransfer.referTo,
                                                   ));
-                                            },
-                                      onDeclineTransferPressed: maybeTransferRequest == null
-                                          ? null
-                                          : () {
+                                            }
+                                          : null,
+                                      onDeclineTransferPressed: activeTransfer is AttendedTransferConfirmationRequested
+                                          ? () {
                                               context.read<CallBloc>().add(CallControlEvent.attendedRequestDeclined(
                                                     callId: activeCall.callId,
-                                                    referId: maybeTransferRequest.referId,
+                                                    referId: activeTransfer.referId,
                                                   ));
-                                            },
+                                            }
+                                          : null,
                                       onKeyPressed: (value) {
                                         context
                                             .read<CallBloc>()
