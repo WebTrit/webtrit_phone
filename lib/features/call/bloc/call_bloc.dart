@@ -140,9 +140,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     callkeep.setDelegate(this);
 
-    _pendingCallHandlerSubscription = pendingCallHandler.subscribe((call) {
-      add(AndroidPendingCallAdded(call));
-    });
+    // TODO(Serdun): Remove pendingCallHandler and depends components, will use didPushIncomingCall for initialize call
+    // _pendingCallHandlerSubscription = pendingCallHandler.subscribe((call) {
+    //   add(AndroidPendingCallAdded(call));
+    // });
   }
 
   @override
@@ -2155,19 +2156,13 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _logger.fine(() => 'didPushIncomingCall handle: $handle displayName: $displayName video: $video'
         ' callId: $callId error: $error');
 
-    /// Workaround (Android call this method)
-    ///
-    /// The problem is that I receive a notification about an incoming call as a push notification in service. the block knows nothing about this and accordingly _peerConnectionCompleters is empty. (when the application is collapsed, the block exists but is not subscribed to the events)
-    /// To fix this, I call the didPushIncomingCall method, which synchronizes the connectors.
-    if (!_peerConnectionCompleters.containsKey(callId)) {
-      add(_CallPushEvent.incoming(
-        callId: callId,
-        handle: handle,
-        displayName: displayName,
-        video: video,
-        error: error,
-      ));
-    }
+    add(_CallPushEvent.incoming(
+      callId: callId,
+      handle: handle,
+      displayName: displayName,
+      video: video,
+      error: error,
+    ));
   }
 
   @override
