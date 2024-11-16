@@ -153,7 +153,7 @@ class AppPreferences {
       _sharedPreferences.setString(_kIncomingCallTypeKey, value.name);
 
   IncomingCallType getIncomingCallType({
-    IncomingCallType defaultValue = IncomingCallType.socket,
+    IncomingCallType defaultValue = IncomingCallType.pushNotification,
   }) {
     final incomingCallType = _sharedPreferences.getString(_kIncomingCallTypeKey);
     if (incomingCallType != null) {
