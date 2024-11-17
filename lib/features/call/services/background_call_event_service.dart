@@ -19,6 +19,7 @@ class BackgroundCallEventService implements CallkeepBackgroundServiceDelegate {
   })  : _recentsRepository = recentsRepository,
         _callkeep = callkeep {
     _initSignalingManager(storage, certificates);
+    _callkeep.setBackgroundServiceDelegate(this);
   }
 
   final RecentsRepository _recentsRepository;
