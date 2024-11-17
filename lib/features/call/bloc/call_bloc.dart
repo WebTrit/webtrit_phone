@@ -49,7 +49,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   final RecentsRepository recentsRepository;
   final NotificationsBloc notificationsBloc;
   final Callkeep callkeep;
-  final AndroidPendingCallHandler pendingCallHandler;
 
   StreamSubscription<List<ConnectivityResult>>? _connectivityChangedSubscription;
   StreamSubscription<PendingCall>? _pendingCallHandlerSubscription;
@@ -69,7 +68,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     required this.recentsRepository,
     required this.notificationsBloc,
     required this.callkeep,
-    required this.pendingCallHandler,
   }) : super(const CallState()) {
     on<CallStarted>(
       _onCallStarted,

@@ -230,7 +230,6 @@ class _MainShellState extends State<MainShell> {
                 recentsRepository: context.read<RecentsRepository>(),
                 notificationsBloc: context.read<NotificationsBloc>(),
                 callkeep: _callkeep,
-                pendingCallHandler: appBloc.pendingCallHandler,
               )..add(const CallStarted());
             },
           ),
