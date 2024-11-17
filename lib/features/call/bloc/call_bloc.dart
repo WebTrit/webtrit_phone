@@ -49,7 +49,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   final RecentsRepository recentsRepository;
   final NotificationsBloc notificationsBloc;
   final Callkeep callkeep;
-  final AndroidPendingCallHandler pendingCallHandler;
 
   StreamSubscription<List<ConnectivityResult>>? _connectivityChangedSubscription;
   StreamSubscription<PendingCall>? _pendingCallHandlerSubscription;
@@ -69,14 +68,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     required this.recentsRepository,
     required this.notificationsBloc,
     required this.callkeep,
-    required this.pendingCallHandler,
   }) : super(const CallState()) {
     on<CallStarted>(
       _onCallStarted,
-      transformer: sequential(),
-    );
-    on<AndroidPendingCallAdded>(
-      _onAndroidPendingCallAdded,
       transformer: sequential(),
     );
     on<_AppLifecycleStateChanged>(
@@ -139,11 +133,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     WidgetsBinding.instance.addObserver(this);
 
     callkeep.setDelegate(this);
-
-    // TODO(Serdun): Remove pendingCallHandler and depends components, will use didPushIncomingCall for initialize call
-    // _pendingCallHandlerSubscription = pendingCallHandler.subscribe((call) {
-    //   add(AndroidPendingCallAdded(call));
-    // });
   }
 
   @override
@@ -292,32 +281,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   }
 
   //
-
-  Future<void> _onAndroidPendingCallAdded(
-    AndroidPendingCallAdded event,
-    Emitter<CallState> emit,
-  ) async {
-    const direction = Direction.incoming;
-    final callId = event.call!.id;
-    final handle = CallkeepHandle.number(event.call!.handle);
-    final displayName = event.call?.displayName;
-    final video = event.call?.hasVideo ?? false;
-    final createdTime = DateTime.now();
-
-    callkeep.setSpeaker(callId, enabled: video);
-
-    emit(state.copyWithPushActiveCall(
-      ActiveCall(
-        direction: direction,
-        line: _kUndefinedLine,
-        callId: callId,
-        handle: handle,
-        displayName: displayName,
-        video: video,
-        createdTime: createdTime,
-      ),
-    ));
-  }
 
   Future<void> _onCallStarted(
     CallStarted event,
