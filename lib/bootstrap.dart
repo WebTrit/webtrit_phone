@@ -22,7 +22,8 @@ import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/push_notification/push_notifications.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
-import 'background_call_handler.dart';
+import 'package:webtrit_phone/features/call/call.dart' as background_call_isolate show onStart, onChangedLifecycle;
+
 import 'environment_config.dart';
 import 'firebase_options.dart';
 
@@ -64,9 +65,7 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
       await AppTime.init();
       await SessionCleanupWorker.init();
 
-      if (Platform.isAndroid) {
-        WebtritCallkeepLogs().setLogsDelegate(CallkeepLogs());
-      }
+      await _initCallkeep();
 
       Bloc.observer = AppBlocObserver();
 
@@ -79,6 +78,29 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
       }
     },
   );
+}
+
+Future<void> _initCallkeep() async {
+  if (!Platform.isAndroid) return;
+
+  final incomingCalType = AppPreferences().getIncomingCallType();
+  final callkeep = CallkeepBackgroundService();
+
+  CallkeepBackgroundService.setUpServiceCallback(
+    onStart: background_call_isolate.onStart,
+    onChangedLifecycle: background_call_isolate.onChangedLifecycle,
+  );
+
+  callkeep.setUp(
+    autoStartOnBoot: incomingCalType.isSocket,
+    autoRestartOnTerminate: incomingCalType.isSocket,
+  );
+
+  if (incomingCalType.isPushNotification) {
+    callkeep.stopService();
+  }
+
+  WebtritCallkeepLogs().setLogsDelegate(CallkeepLogs());
 }
 
 _initLogs() {
@@ -127,22 +149,14 @@ Future<void> _initFirebaseMessaging() async {
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   _initLogs();
   final appNotification = AppRemoteNotification.fromFCM(message);
-  final logger = Logger('_firebaseMessagingBackgroundHandler')..info('RemoteNotification: $appNotification');
 
   // Type of notification for testing purposes
   _dHandleInspectPushNotification(message.data, true);
 
   if (appNotification is PendingCallNotification && Platform.isAndroid) {
-    final call = appNotification.call;
-
-    WebtritCallkeepLogs().setLogsDelegate(CallkeepLogs());
-    final appDatabase = await IsolateDatabase.create();
-    final repository = RecentsRepository(appDatabase: appDatabase);
-
-    logger.info('Initial incoming call');
-
-    BackgroundCallHandler(call, repository).init();
+    CallkeepBackgroundService().startService();
   }
+
   if (appNotification is MessageNotification) {
     final appDatabase = await IsolateDatabase.create();
     final repo = ActiveMessageNotificationsRepositoryDriftImpl(appDatabase: appDatabase);
