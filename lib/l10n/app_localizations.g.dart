@@ -2695,6 +2695,12 @@ abstract class AppLocalizations {
   /// **'Confirm logout'**
   String get settings_LogoutConfirmDialog_title;
 
+  /// No description provided for @settings_network_incomingCallType_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Incoming Call Type'**
+  String get settings_network_incomingCallType_title;
+
   /// No description provided for @settings_network_incomingCallType_pushNotification_title.
   ///
   /// In en, this message translates to:

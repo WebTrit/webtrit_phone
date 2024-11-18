@@ -1344,6 +1344,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get settings_LogoutConfirmDialog_title => 'Confermare la disconnessione';
 
   @override
+  String get settings_network_incomingCallType_title => 'Tipo di chiamata in entrata';
+
+  @override
   String get settings_network_incomingCallType_pushNotification_title => 'Notifica Push';
 
   @override

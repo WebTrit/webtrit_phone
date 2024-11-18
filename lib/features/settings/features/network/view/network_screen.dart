@@ -31,7 +31,7 @@ class NetworkScreen extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Text(
-                    'Incoming Call Type',
+                    context.l10n.settings_network_incomingCallType_title,
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
                 ),

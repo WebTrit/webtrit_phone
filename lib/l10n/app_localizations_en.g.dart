@@ -1344,6 +1344,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings_LogoutConfirmDialog_title => 'Confirm logout';
 
   @override
+  String get settings_network_incomingCallType_title => 'Incoming Call Type';
+
+  @override
   String get settings_network_incomingCallType_pushNotification_title => 'Push Notification';
 
   @override

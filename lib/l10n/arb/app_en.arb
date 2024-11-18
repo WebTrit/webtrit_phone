@@ -952,6 +952,8 @@
   "@settings_LogoutConfirmDialog_content": {},
   "settings_LogoutConfirmDialog_title": "Confirm logout",
   "@settings_LogoutConfirmDialog_title": {},
+  "settings_network_incomingCallType_title": "Incoming Call Type",
+  "@settings_network_incomingCallType_title": {},
   "settings_network_incomingCallType_pushNotification_title": "Push Notification",
   "@settings_network_incomingCallType_pushNotification_title": {},
   "settings_network_incomingCallType_pushNotification_description": "When the app is not in use, it stops running and consumes minimal resources, which helps conserve battery life. During an incoming call, the server sends a push notification to the phone, prompting the mobile operating system to launch the app to handle the call. However, this method does not guarantee that all calls will be received. If the phone has been inactive for an extended period, some versions of Android may limit push notifications, potentially causing you to miss an incoming call.",

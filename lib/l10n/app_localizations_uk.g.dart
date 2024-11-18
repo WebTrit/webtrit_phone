@@ -1344,6 +1344,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get settings_LogoutConfirmDialog_title => 'Підтвердження виходу';
 
   @override
+  String get settings_network_incomingCallType_title => 'Тип вхідного дзвінка';
+
+  @override
   String get settings_network_incomingCallType_pushNotification_title => 'Пуш-нотифікація';
 
   @override
