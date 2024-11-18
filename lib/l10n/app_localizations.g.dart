@@ -3012,6 +3012,72 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'In progress'**
   String get diagnostic_pushTokenStatusType_progress;
+
+  /// No description provided for @diagnostic_batteryMode_unrestricted_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Unrestricted'**
+  String get diagnostic_batteryMode_unrestricted_title;
+
+  /// No description provided for @diagnostic_batteryMode_optimized_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Optimized'**
+  String get diagnostic_batteryMode_optimized_title;
+
+  /// No description provided for @diagnostic_batteryMode_restricted_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Restricted'**
+  String get diagnostic_batteryMode_restricted_title;
+
+  /// No description provided for @diagnostic_batteryMode_unknown_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown'**
+  String get diagnostic_batteryMode_unknown_title;
+
+  /// No description provided for @diagnostic_batteryMode_unrestricted_description.
+  ///
+  /// In en, this message translates to:
+  /// **'The app has full access to run in the background without restrictions.'**
+  String get diagnostic_batteryMode_unrestricted_description;
+
+  /// No description provided for @diagnostic_batteryMode_optimized_description.
+  ///
+  /// In en, this message translates to:
+  /// **'The app\'s background activity is managed by the system to save the battery. It may not work correctly with incoming calls triggered by push notifications.'**
+  String get diagnostic_batteryMode_optimized_description;
+
+  /// No description provided for @diagnostic_batteryMode_restricted_description.
+  ///
+  /// In en, this message translates to:
+  /// **'The app\'s background activity is heavily restricted to conserve the battery. Incoming calls may be missed.'**
+  String get diagnostic_batteryMode_restricted_description;
+
+  /// No description provided for @diagnostic_batteryMode_unknown_description.
+  ///
+  /// In en, this message translates to:
+  /// **'The battery mode status is unknown. The app might have unpredictable behavior.'**
+  String get diagnostic_batteryMode_unknown_description;
+
+  /// No description provided for @diagnostic_battery_groupTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Battery'**
+  String get diagnostic_battery_groupTitle;
+
+  /// No description provided for @diagnostic_battery_tile_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Battery mode'**
+  String get diagnostic_battery_tile_title;
+
+  /// No description provided for @diagnostic_battery_navigate_section.
+  ///
+  /// In en, this message translates to:
+  /// **'Navigate to the Battery section'**
+  String get diagnostic_battery_navigate_section;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

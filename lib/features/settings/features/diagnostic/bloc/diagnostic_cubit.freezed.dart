@@ -19,6 +19,8 @@ mixin _$DiagnosticState {
   List<PermissionWithStatus> get permissions =>
       throw _privateConstructorUsedError;
   PushTokenStatus get pushTokenStatus => throw _privateConstructorUsedError;
+  CallkeepAndroidBatteryMode get batteryMode =>
+      throw _privateConstructorUsedError;
 
   /// Create a copy of DiagnosticState
   /// with the given fields replaced by the non-null parameter values.
@@ -35,7 +37,8 @@ abstract class $DiagnosticStateCopyWith<$Res> {
   @useResult
   $Res call(
       {List<PermissionWithStatus> permissions,
-      PushTokenStatus pushTokenStatus});
+      PushTokenStatus pushTokenStatus,
+      CallkeepAndroidBatteryMode batteryMode});
 }
 
 /// @nodoc
@@ -55,6 +58,7 @@ class _$DiagnosticStateCopyWithImpl<$Res, $Val extends DiagnosticState>
   $Res call({
     Object? permissions = null,
     Object? pushTokenStatus = null,
+    Object? batteryMode = null,
   }) {
     return _then(_value.copyWith(
       permissions: null == permissions
@@ -65,6 +69,10 @@ class _$DiagnosticStateCopyWithImpl<$Res, $Val extends DiagnosticState>
           ? _value.pushTokenStatus
           : pushTokenStatus // ignore: cast_nullable_to_non_nullable
               as PushTokenStatus,
+      batteryMode: null == batteryMode
+          ? _value.batteryMode
+          : batteryMode // ignore: cast_nullable_to_non_nullable
+              as CallkeepAndroidBatteryMode,
     ) as $Val);
   }
 }
@@ -79,7 +87,8 @@ abstract class _$$InitialImplCopyWith<$Res>
   @useResult
   $Res call(
       {List<PermissionWithStatus> permissions,
-      PushTokenStatus pushTokenStatus});
+      PushTokenStatus pushTokenStatus,
+      CallkeepAndroidBatteryMode batteryMode});
 }
 
 /// @nodoc
@@ -97,6 +106,7 @@ class __$$InitialImplCopyWithImpl<$Res>
   $Res call({
     Object? permissions = null,
     Object? pushTokenStatus = null,
+    Object? batteryMode = null,
   }) {
     return _then(_$InitialImpl(
       permissions: null == permissions
@@ -107,6 +117,10 @@ class __$$InitialImplCopyWithImpl<$Res>
           ? _value.pushTokenStatus
           : pushTokenStatus // ignore: cast_nullable_to_non_nullable
               as PushTokenStatus,
+      batteryMode: null == batteryMode
+          ? _value.batteryMode
+          : batteryMode // ignore: cast_nullable_to_non_nullable
+              as CallkeepAndroidBatteryMode,
     ));
   }
 }
@@ -116,7 +130,8 @@ class __$$InitialImplCopyWithImpl<$Res>
 class _$InitialImpl implements _Initial {
   const _$InitialImpl(
       {final List<PermissionWithStatus> permissions = const [],
-      this.pushTokenStatus = const PushTokenStatus()})
+      this.pushTokenStatus = const PushTokenStatus(),
+      this.batteryMode = CallkeepAndroidBatteryMode.unknown})
       : _permissions = permissions;
 
   final List<PermissionWithStatus> _permissions;
@@ -131,10 +146,13 @@ class _$InitialImpl implements _Initial {
   @override
   @JsonKey()
   final PushTokenStatus pushTokenStatus;
+  @override
+  @JsonKey()
+  final CallkeepAndroidBatteryMode batteryMode;
 
   @override
   String toString() {
-    return 'DiagnosticState(permissions: $permissions, pushTokenStatus: $pushTokenStatus)';
+    return 'DiagnosticState(permissions: $permissions, pushTokenStatus: $pushTokenStatus, batteryMode: $batteryMode)';
   }
 
   @override
@@ -145,12 +163,17 @@ class _$InitialImpl implements _Initial {
             const DeepCollectionEquality()
                 .equals(other._permissions, _permissions) &&
             (identical(other.pushTokenStatus, pushTokenStatus) ||
-                other.pushTokenStatus == pushTokenStatus));
+                other.pushTokenStatus == pushTokenStatus) &&
+            (identical(other.batteryMode, batteryMode) ||
+                other.batteryMode == batteryMode));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType,
-      const DeepCollectionEquality().hash(_permissions), pushTokenStatus);
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(_permissions),
+      pushTokenStatus,
+      batteryMode);
 
   /// Create a copy of DiagnosticState
   /// with the given fields replaced by the non-null parameter values.
@@ -164,12 +187,15 @@ class _$InitialImpl implements _Initial {
 abstract class _Initial implements DiagnosticState {
   const factory _Initial(
       {final List<PermissionWithStatus> permissions,
-      final PushTokenStatus pushTokenStatus}) = _$InitialImpl;
+      final PushTokenStatus pushTokenStatus,
+      final CallkeepAndroidBatteryMode batteryMode}) = _$InitialImpl;
 
   @override
   List<PermissionWithStatus> get permissions;
   @override
   PushTokenStatus get pushTokenStatus;
+  @override
+  CallkeepAndroidBatteryMode get batteryMode;
 
   /// Create a copy of DiagnosticState
   /// with the given fields replaced by the non-null parameter values.

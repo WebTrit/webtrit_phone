@@ -6,7 +6,6 @@ import 'package:webtrit_phone/l10n/l10n.dart';
 
 import '../../../widgets/widgets.dart';
 import '../bloc/diagnostic_cubit.dart';
-
 import '../models/models.dart';
 import '../widgets/widgets.dart';
 import '../extensions/extensions.dart';
@@ -37,7 +36,7 @@ class _DiagnosticScreenState extends State<DiagnosticScreen> with WidgetsBinding
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
-      context.read<DiagnosticCubit>().fetchPermissionsStatus();
+      context.read<DiagnosticCubit>().fetchStatuses();
     }
   }
 
@@ -71,6 +70,22 @@ class _DiagnosticScreenState extends State<DiagnosticScreen> with WidgetsBinding
                     );
                   },
                 ),
+                GroupTitleListTile(titleData: context.l10n.diagnostic_battery_groupTitle),
+                DiagnosticBatteryModeItem(
+                  batteryMode: state.batteryMode,
+                  onTap: () {
+                    showModalBottomSheet(
+                      context: context,
+                      builder: (BuildContext context) => DiagnosticBatteryModeDetails(
+                        batteryMode: state.batteryMode,
+                        onTap: () {
+                          _openPermissions();
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    );
+                  },
+                ),
                 GroupTitleListTile(titleData: context.l10n.diagnosticScreen_permissionsGroup_title),
                 ...state.permissions.map(
                   (permission) => DiagnosticPermissionItem(
@@ -99,5 +114,9 @@ class _DiagnosticScreenState extends State<DiagnosticScreen> with WidgetsBinding
 
   void _handleRequestPermission(PermissionWithStatus permission) {
     context.read<DiagnosticCubit>().handleRequestPermission(permission);
+  }
+
+  void _openPermissions() {
+    context.read<DiagnosticCubit>().openAppSettings();
   }
 }
