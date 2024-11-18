@@ -15,39 +15,38 @@ const _noActiveLines = 0;
 class BackgroundCallEventService implements CallkeepBackgroundServiceDelegate {
   BackgroundCallEventService({
     required RecentsRepository recentsRepository,
+    required AppPreferences appPreferences,
     required CallkeepBackgroundService callkeep,
     required SecureStorage storage,
     required TrustedCertificates certificates,
   })  : _recentsRepository = recentsRepository,
+        _appPreferences = appPreferences,
         _callkeep = callkeep {
     _initSignalingManager(storage, certificates);
     _callkeep.setBackgroundServiceDelegate(this);
   }
 
   final RecentsRepository _recentsRepository;
+  final AppPreferences _appPreferences;
   final CallkeepBackgroundService _callkeep;
-  late IncomingCallType _incomingCallType;
 
   late final SignalingManager _signalingManager;
 
+  IncomingCallType get _incomingCallType => _appPreferences.getIncomingCallType();
+
   void _initSignalingManager(SecureStorage storage, TrustedCertificates certificates) {
     _signalingManager = SignalingManager(
-      coreUrl: storage.readCoreUrl() ?? '',
-      tenantId: storage.readTenantId() ?? '',
-      token: storage.readToken() ?? '',
-      enableReconnect: true,
-      certificates: certificates,
-      onDisconnect: _handleSignalingDisconnect,
-      onError: _handleSignalingError,
-      onHangupCallEvent: _handleHangupCall,
-      onIncomingCallEvent: _handleIncomingCall,
-      onUnregisteredEvent: _handleUnregisteredEvent,
-      onActiveLine: _handleActiveLines,
-    );
-  }
-
-  set incomingCallType(IncomingCallType callType) {
-    _incomingCallType = callType;
+        coreUrl: storage.readCoreUrl() ?? '',
+        tenantId: storage.readTenantId() ?? '',
+        token: storage.readToken() ?? '',
+        enableReconnect: true,
+        certificates: certificates,
+        onDisconnect: _handleSignalingDisconnect,
+        onError: _handleSignalingError,
+        onHangupCallEvent: _handleHangupCall,
+        onIncomingCallEvent: _handleIncomingCall,
+        onUnregisteredEvent: _handleUnregisteredEvent,
+        onActiveLine: _handleActiveLines);
   }
 
   // Handles the service startup. This can occur under several scenarios:

@@ -31,12 +31,11 @@ Future<void> _initializeDependencies() async {
 
   _backgroundCallEventManager ??= BackgroundCallEventService(
     recentsRepository: _recentsRepository!,
+    appPreferences: _appPreferences!,
     callkeep: _callkeep!,
     storage: _secureStorage!,
     certificates: _appCertificates!.trustedCertificates,
   );
-
-  _backgroundCallEventManager?.incomingCallType = _appPreferences!.getIncomingCallType();
 
   hierarchicalLoggingEnabled = true;
   final logLevel = Level.LEVELS.firstWhere((level) => level.name == EnvironmentConfig.DEBUG_LEVEL);
