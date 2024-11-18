@@ -795,6 +795,21 @@ class AppLocalizationsMapper {
           localizations.settings_LogoutConfirmDialog_content,
       'settings_LogoutConfirmDialog_title':
           localizations.settings_LogoutConfirmDialog_title,
+      'settings_network_incomingCallType_title':
+          localizations.settings_network_incomingCallType_title,
+      'settings_network_incomingCallType_pushNotification_title': localizations
+          .settings_network_incomingCallType_pushNotification_title,
+      'settings_network_incomingCallType_pushNotification_description':
+          localizations
+              .settings_network_incomingCallType_pushNotification_description,
+      'settings_network_incomingCallType_socket_title':
+          localizations.settings_network_incomingCallType_socket_title,
+      'settings_network_incomingCallType_socket_description':
+          localizations.settings_network_incomingCallType_socket_description,
+      'settings_network_androidNotificationName':
+          localizations.settings_network_androidNotificationName,
+      'settings_network_androidNotificationDescription':
+          localizations.settings_network_androidNotificationDescription,
       'themeMode_dark': localizations.themeMode_dark,
       'themeMode_light': localizations.themeMode_light,
       'themeMode_system': localizations.themeMode_system,
@@ -876,6 +891,26 @@ class AppLocalizationsMapper {
           localizations.sessionStatus_pushNotificationServiceProblem,
       'diagnostic_pushTokenStatusType_progress':
           localizations.diagnostic_pushTokenStatusType_progress,
+      'diagnostic_batteryMode_unrestricted_title':
+          localizations.diagnostic_batteryMode_unrestricted_title,
+      'diagnostic_batteryMode_optimized_title':
+          localizations.diagnostic_batteryMode_optimized_title,
+      'diagnostic_batteryMode_restricted_title':
+          localizations.diagnostic_batteryMode_restricted_title,
+      'diagnostic_batteryMode_unknown_title':
+          localizations.diagnostic_batteryMode_unknown_title,
+      'diagnostic_batteryMode_unrestricted_description':
+          localizations.diagnostic_batteryMode_unrestricted_description,
+      'diagnostic_batteryMode_optimized_description':
+          localizations.diagnostic_batteryMode_optimized_description,
+      'diagnostic_batteryMode_restricted_description':
+          localizations.diagnostic_batteryMode_restricted_description,
+      'diagnostic_batteryMode_unknown_description':
+          localizations.diagnostic_batteryMode_unknown_description,
+      'diagnostic_battery_groupTitle':
+          localizations.diagnostic_battery_groupTitle,
+      'diagnostic_battery_tile_title':
+          localizations.diagnostic_battery_tile_title,
       'favorites_SnackBar_deleted': (name) =>
           localizations.favorites_SnackBar_deleted(name),
       'login_Button_otpSigninVerifyRepeatInterval': (seconds) =>

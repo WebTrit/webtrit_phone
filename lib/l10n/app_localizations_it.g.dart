@@ -1505,4 +1505,37 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get diagnostic_pushTokenStatusType_progress => 'In corso';
+
+  @override
+  String get diagnostic_batteryMode_unrestricted_title => 'Senza restrizioni';
+
+  @override
+  String get diagnostic_batteryMode_optimized_title => 'Ottimizzato';
+
+  @override
+  String get diagnostic_batteryMode_restricted_title => 'Limitato';
+
+  @override
+  String get diagnostic_batteryMode_unknown_title => 'Sconosciuto';
+
+  @override
+  String get diagnostic_batteryMode_unrestricted_description => 'L\'app ha pieno accesso per funzionare in background senza restrizioni.';
+
+  @override
+  String get diagnostic_batteryMode_optimized_description => 'L\'attività in background dell\'app è gestita dal sistema per risparmiare batteria. Potrebbe non funzionare correttamente con chiamate in arrivo attivate da notifiche push.';
+
+  @override
+  String get diagnostic_batteryMode_restricted_description => 'L\'attività in background dell\'app è fortemente limitata per conservare la batteria. Potrebbero essere perse chiamate in arrivo.';
+
+  @override
+  String get diagnostic_batteryMode_unknown_description => 'Lo stato della modalità batteria è sconosciuto. L\'app potrebbe avere un comportamento imprevedibile.';
+
+  @override
+  String get diagnostic_battery_groupTitle => 'Batteria';
+
+  @override
+  String get diagnostic_battery_tile_title => 'Modalità batteria';
+
+  @override
+  String get diagnostic_battery_navigate_section => 'Vai alla sezione Batteria';
 }

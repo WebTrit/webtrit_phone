@@ -1,20 +1,19 @@
 import 'package:flutter/material.dart';
 
-import 'package:permission_handler/permission_handler.dart';
+import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 
 import 'package:webtrit_phone/l10n/l10n.dart';
 
-import '../models/models.dart';
 import '../extensions/extensions.dart';
 
-class DiagnosticPermissionDetails extends StatelessWidget {
-  const DiagnosticPermissionDetails({
+class DiagnosticBatteryModeDetails extends StatelessWidget {
+  const DiagnosticBatteryModeDetails({
     super.key,
+    required this.batteryMode,
     this.onTap,
-    required this.permissionWithStatus,
   });
 
-  final PermissionWithStatus permissionWithStatus;
+  final CallkeepAndroidBatteryMode batteryMode;
   final Function()? onTap;
 
   @override
@@ -22,12 +21,9 @@ class DiagnosticPermissionDetails extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
     final colorScheme = Theme.of(context).colorScheme;
 
-    final status = permissionWithStatus.status;
-
-    final permissionTitle = permissionWithStatus.permission.title(context);
-    final permissionDescription = permissionWithStatus.permission.description(context);
-    final statusColor = status.color(context);
-    final statusText = permissionWithStatus.status.title(context);
+    final permissionTitle = batteryMode.title(context);
+    final permissionDescription = batteryMode.description(context);
+    final statusColor = batteryMode.color(context);
 
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 16),
@@ -35,24 +31,26 @@ class DiagnosticPermissionDetails extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           ListTile(
-            title: Text(permissionTitle),
+            title: Text(context.l10n.diagnostic_battery_tile_title),
             subtitle: Text(permissionDescription),
           ),
           ListTile(
             title: Text(context.l10n.diagnosticPermissionDetails_title_statusPermission),
             subtitle: Text(
-              statusText,
+              permissionTitle,
               style: textTheme.bodyMedium?.copyWith(color: statusColor),
             ),
           ),
           ListTile(
             title: Text(
-              status == PermissionStatus.denied
-                  ? context.l10n.diagnosticPermissionDetails_button_requestPermission
-                  : context.l10n.diagnosticPermissionDetails_button_managePermission,
+              context.l10n.diagnosticPermissionDetails_button_managePermission,
               style: textTheme.bodyMedium?.copyWith(color: colorScheme.primary),
             ),
-            trailing: status == PermissionStatus.denied ? null : const Icon(Icons.keyboard_arrow_right),
+            subtitle: Text(
+              context.l10n.diagnostic_battery_navigate_section,
+              style: textTheme.bodySmall,
+            ),
+            trailing: const Icon(Icons.keyboard_arrow_right),
             onTap: onTap,
           ),
         ],

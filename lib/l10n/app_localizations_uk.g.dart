@@ -1505,4 +1505,37 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get diagnostic_pushTokenStatusType_progress => 'В процесі';
+
+  @override
+  String get diagnostic_batteryMode_unrestricted_title => 'Без обмежень';
+
+  @override
+  String get diagnostic_batteryMode_optimized_title => 'Оптимізовано';
+
+  @override
+  String get diagnostic_batteryMode_restricted_title => 'Обмежено';
+
+  @override
+  String get diagnostic_batteryMode_unknown_title => 'Невідомо';
+
+  @override
+  String get diagnostic_batteryMode_unrestricted_description => 'Додаток має повний доступ для роботи у фоновому режимі без обмежень.';
+
+  @override
+  String get diagnostic_batteryMode_optimized_description => 'Фонова активність додатка керується системою для економії батареї. Може працювати некоректно для вхідних дзвінків, що активуються через push-сповіщення.';
+
+  @override
+  String get diagnostic_batteryMode_restricted_description => 'Фонова активність додатка суворо обмежена для збереження заряду батареї. Можливі пропущені вхідні дзвінки.';
+
+  @override
+  String get diagnostic_batteryMode_unknown_description => 'Статус режиму батареї невідомий. Додаток може поводитися непередбачувано.';
+
+  @override
+  String get diagnostic_battery_groupTitle => 'Батарея';
+
+  @override
+  String get diagnostic_battery_tile_title => 'Режим батареї';
+
+  @override
+  String get diagnostic_battery_navigate_section => 'Перейдіть до розділу «Батарея»';
 }
