@@ -1,7 +1,8 @@
 import 'dart:async';
 
-import 'package:ssl_certificates/ssl_certificates.dart';
+import 'package:logging/logging.dart';
 
+import 'package:ssl_certificates/ssl_certificates.dart';
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 import 'package:webtrit_signaling/webtrit_signaling.dart';
 
@@ -11,6 +12,8 @@ import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
 const _noActiveLines = 0;
+
+final _logger = Logger('BackgroundCallEventService');
 
 class BackgroundCallEventService implements CallkeepBackgroundServiceDelegate {
   BackgroundCallEventService({
@@ -55,6 +58,8 @@ class BackgroundCallEventService implements CallkeepBackgroundServiceDelegate {
   // - Service being restarted.
   // - Automatic start during system boot.
   Future<void> onStart(CallkeepServiceStatus status) async {
+    _logger.info('onStart: $status');
+
     final isBackground = status.lifecycle == CallkeepLifecycleType.onStop ||
         status.lifecycle == CallkeepLifecycleType.onAny ||
         status.lifecycle == CallkeepLifecycleType.onDestroy;
@@ -66,6 +71,8 @@ class BackgroundCallEventService implements CallkeepBackgroundServiceDelegate {
   }
 
   Future<void> onChangedLifecycle(CallkeepServiceStatus status) async {
+    _logger.info('onChangedLifecycle: $status');
+
     // [Socket]
     // If the app is hidden and there are no active calls, launch the signaling manager in the background.
     if (status.lifecycle == CallkeepLifecycleType.onStop && !status.activeCalls) {
@@ -99,16 +106,6 @@ class BackgroundCallEventService implements CallkeepBackgroundServiceDelegate {
     }
   }
 
-  @override
-  void performServiceEndCall(String callId) async {
-    await _signalingManager.declineRequest(callId);
-
-    if (_incomingCallType.isPushNotification) {
-      await _signalingManager.close();
-      await _callkeep.stopService();
-    }
-  }
-
   void _handleSignalingError(error, [StackTrace? stackTrace]) async {
     if (_incomingCallType.isPushNotification) await _callkeep.stopService();
   }
@@ -131,6 +128,17 @@ class BackgroundCallEventService implements CallkeepBackgroundServiceDelegate {
   @override
   void performServiceAnswerCall(String callId) {}
 
+  @override
+  void performServiceEndCall(String callId) async {
+    await _signalingManager.declineRequest(callId);
+
+    if (_incomingCallType.isPushNotification) {
+      await _signalingManager.close();
+      await _callkeep.stopService();
+    }
+  }
+
+// TODO (Serdun): Rename this callback to align with naming conventions.
   @override
   Future<void> endCallReceived(
     String callId,
