@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:permission_handler/permission_handler.dart';
+
 import 'package:webtrit_phone/l10n/l10n.dart';
 
 import '../models/models.dart';
@@ -18,7 +19,9 @@ class DiagnosticPermissionDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final themeData = Theme.of(context);
+    final textTheme = Theme.of(context).textTheme;
+    final colorScheme = Theme.of(context).colorScheme;
+
     final status = permissionWithStatus.status;
 
     final permissionTitle = permissionWithStatus.permission.title(context);
@@ -27,31 +30,31 @@ class DiagnosticPermissionDetails extends StatelessWidget {
     final statusText = permissionWithStatus.status.title(context);
 
     return Container(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.symmetric(vertical: 16),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           ListTile(
-            contentPadding: EdgeInsets.zero,
             title: Text(permissionTitle),
             subtitle: Text(permissionDescription),
           ),
           ListTile(
-            contentPadding: EdgeInsets.zero,
             title: Text(context.l10n.diagnosticPermissionDetails_title_statusPermission),
             subtitle: Text(
               statusText,
-              style: themeData.textTheme.bodyMedium?.copyWith(color: statusColor),
+              style: textTheme.bodyMedium?.copyWith(color: statusColor),
             ),
           ),
-          const SizedBox(height: 16),
-          ElevatedButton(
-            onPressed: onTap,
-            child: status == PermissionStatus.denied
-                ? Text(context.l10n.diagnosticPermissionDetails_button_requestPermission)
-                : Text(context.l10n.diagnosticPermissionDetails_button_managePermission),
+          ListTile(
+            title: Text(
+              status == PermissionStatus.denied
+                  ? context.l10n.diagnosticPermissionDetails_button_requestPermission
+                  : context.l10n.diagnosticPermissionDetails_button_managePermission,
+              style: textTheme.bodyMedium?.copyWith(color: colorScheme.primary),
+            ),
+            trailing: status == PermissionStatus.denied ? null : const Icon(Icons.keyboard_arrow_right),
+            onTap: onTap,
           ),
-          const SizedBox(height: 16),
         ],
       ),
     );
