@@ -1344,6 +1344,24 @@ class AppLocalizationsUk extends AppLocalizations {
   String get settings_LogoutConfirmDialog_title => 'Підтвердження виходу';
 
   @override
+  String get settings_network_incomingCallType_pushNotification_title => 'Пуш-нотифікація';
+
+  @override
+  String get settings_network_incomingCallType_pushNotification_description => 'Коли додаток не використувується, він зупиняється і не використовує ресурси, що дозволяє мінімізувати споживання батареї. Під час вхідного дзвінку <brand> сервер посилає push нотифікацію на телефон, після чого мобільна операціонна система запускає додаток для отримання дзвінка. Цей спосіб не гарантує отримання всіх дзвінків, бо якщо телефон довго не використовується, то деякі версії Android можуть обмежити отримання push нотифікацій, і ви можете не отримати вхідний дзвінок.';
+
+  @override
+  String get settings_network_incomingCallType_socket_title => 'Постійне підключення до серверу';
+
+  @override
+  String get settings_network_incomingCallType_socket_description => 'Додаток залишається працювати в фоні та завжди підтримує активне підключення до сервера. Це збільшує шанси отримати вхідний дзвінок, але може швидше розряджати батарею.';
+
+  @override
+  String get settings_network_androidNotificationName => 'Служба вхідних дзвінків';
+
+  @override
+  String get settings_network_androidNotificationDescription => 'Це необхідно для отримання дзвінків у фоновому режимі';
+
+  @override
   String get themeMode_dark => 'Темний';
 
   @override

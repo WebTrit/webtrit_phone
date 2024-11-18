@@ -1344,6 +1344,24 @@ class AppLocalizationsIt extends AppLocalizations {
   String get settings_LogoutConfirmDialog_title => 'Confermare la disconnessione';
 
   @override
+  String get settings_network_incomingCallType_pushNotification_title => 'Notifica Push';
+
+  @override
+  String get settings_network_incomingCallType_pushNotification_description => 'Quando l\'app non è in uso, smette di funzionare e consuma risorse minime, il che aiuta a conservare la durata della batteria. Durante una chiamata in arrivo, il server invia una notifica push al telefono, spingendo il sistema operativo mobile a lanciare l\'app per gestire la chiamata. Tuttavia, questo metodo non garantisce che tutte le chiamate verranno ricevute. Se il telefono è stato inattivo per un periodo prolungato, alcune versioni di Android potrebbero limitare le notifiche push, con il rischio di perdere una chiamata in arrivo.';
+
+  @override
+  String get settings_network_incomingCallType_socket_title => 'Connessione Persistente al Server';
+
+  @override
+  String get settings_network_incomingCallType_socket_description => 'L\'app continua a funzionare in background e mantiene sempre una connessione attiva al server. Questo aumenta le probabilità di ricevere una chiamata in arrivo, ma potrebbe scaricare la batteria più rapidamente.';
+
+  @override
+  String get settings_network_androidNotificationName => 'Servizio di Chiamate in Entrata';
+
+  @override
+  String get settings_network_androidNotificationDescription => 'Questo è necessario per ricevere le chiamate in background';
+
+  @override
   String get themeMode_dark => 'Scuro';
 
   @override
