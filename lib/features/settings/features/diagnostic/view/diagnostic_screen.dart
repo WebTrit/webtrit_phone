@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 
 import '../../../widgets/widgets.dart';
@@ -42,6 +43,8 @@ class _DiagnosticScreenState extends State<DiagnosticScreen> with WidgetsBinding
 
   @override
   Widget build(BuildContext context) {
+    final androidTarget = PlatformInfo().isAndroid;
+
     return BlocBuilder<DiagnosticCubit, DiagnosticState>(
       builder: (context, state) {
         return Scaffold(
@@ -70,22 +73,23 @@ class _DiagnosticScreenState extends State<DiagnosticScreen> with WidgetsBinding
                     );
                   },
                 ),
-                GroupTitleListTile(titleData: context.l10n.diagnostic_battery_groupTitle),
-                DiagnosticBatteryModeItem(
-                  batteryMode: state.batteryMode,
-                  onTap: () {
-                    showModalBottomSheet(
-                      context: context,
-                      builder: (BuildContext context) => DiagnosticBatteryModeDetails(
-                        batteryMode: state.batteryMode,
-                        onTap: () {
-                          _openPermissions();
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                    );
-                  },
-                ),
+                if (androidTarget) GroupTitleListTile(titleData: context.l10n.diagnostic_battery_groupTitle),
+                if (androidTarget)
+                  DiagnosticBatteryModeItem(
+                    batteryMode: state.batteryMode,
+                    onTap: () {
+                      showModalBottomSheet(
+                        context: context,
+                        builder: (BuildContext context) => DiagnosticBatteryModeDetails(
+                          batteryMode: state.batteryMode,
+                          onTap: () {
+                            _openPermissions();
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      );
+                    },
+                  ),
                 GroupTitleListTile(titleData: context.l10n.diagnosticScreen_permissionsGroup_title),
                 ...state.permissions.map(
                   (permission) => DiagnosticPermissionItem(
