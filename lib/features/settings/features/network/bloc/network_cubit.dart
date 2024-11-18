@@ -6,7 +6,6 @@ import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/models/models.dart';
 
 import '../models/models.dart';
-import '../extensions/extensions.dart';
 
 part 'network_state.dart';
 
@@ -48,7 +47,6 @@ class NetworkCubit extends Cubit<NetworkState> {
 
   Future<void> _setUpForegroundServiceConfiguration(IncomingCallType incomingCallType) async {
     await _callkeepBackgroundService.setUp(
-      type: incomingCallType.toCalkeep(),
       autoStartOnBoot: incomingCallType.isSocket,
       autoRestartOnTerminate: incomingCallType.isSocket,
     );
