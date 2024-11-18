@@ -7,13 +7,15 @@ import 'package:webtrit_phone/features/messaging/messaging.dart';
 import 'package:webtrit_phone/models/models.dart';
 
 PhoenixSocket createMessagingSocket(String coreUrl, String token, String tenantId) {
-  final baseUrl = coreUrl
-    ..replaceFirst('http://', 'ws://')
-    ..replaceFirst('https://', 'wss://')
-    ..replaceFirst(RegExp(r'/$'), '');
+  String baseUrl = coreUrl;
+  baseUrl = baseUrl.replaceFirst('http://', 'ws://');
+  baseUrl = baseUrl.replaceFirst('https://', 'wss://');
+  baseUrl = baseUrl.replaceFirst(RegExp(r'/$'), '');
+
+  String finalUrl = '$baseUrl/messaging/v1/websocket';
 
   final socketOpts = PhoenixSocketOptions(params: {'token': token, 'tenant_id': tenantId});
-  return PhoenixSocket('$baseUrl/messaging/v1/websocket', socketOptions: socketOpts);
+  return PhoenixSocket(finalUrl, socketOptions: socketOpts);
 }
 
 extension PhoenixSocketExt on PhoenixSocket {

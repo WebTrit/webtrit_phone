@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:phoenix_socket/phoenix_socket.dart';
 
 import 'package:webtrit_api/webtrit_api.dart';
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
@@ -240,14 +239,9 @@ class _MainShellState extends State<MainShell> {
                 final appState = context.read<AppBloc>().state;
                 final (token, tenantId, userId) = (appState.token!, appState.tenantId!, appState.userId!);
 
-                // TODO: replace with createMessagingSocket after messaging-core merging
-                const url = EnvironmentConfig.CHAT_SERVICE_URL;
-                final socketOpts = PhoenixSocketOptions(params: {'token': token, 'tenant_id': tenantId});
-
                 return MessagingBloc(
                   userId,
-                  // createMessagingSocket(appState.coreUrl!, token, tenantId),
-                  PhoenixSocket(url, socketOptions: socketOpts),
+                  createMessagingSocket(appState.coreUrl!, token, tenantId),
                   context.read<ChatsRepository>(),
                   context.read<ChatsOutboxRepository>(),
                   context.read<SmsRepository>(),

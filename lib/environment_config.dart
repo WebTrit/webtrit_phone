@@ -103,23 +103,9 @@ class EnvironmentConfig {
     defaultValue: false,
   );
 
-  static const CHAT_SERVICE_URL__NAME = 'WEBTRIT_APP_CHAT_SERVICE_URL';
-  static const CHAT_SERVICE_URL = bool.hasEnvironment(CHAT_SERVICE_URL__NAME)
-      ? String.fromEnvironment(
-          CHAT_SERVICE_URL__NAME,
-        )
-      : 'ws://localhost:4000/socket/websocket';
-
   static const SMS_FEATURE_ENABLE__NAME = 'WEBTRIT_APP_SMS_FEATURE_ENABLE';
   static const SMS_FEATURE_ENABLE = bool.fromEnvironment(
     SMS_FEATURE_ENABLE__NAME,
     defaultValue: false,
   );
-
-  static const SMS_SERVICE_URL__NAME = 'WEBTRIT_APP_SMS_SERVICE_URL';
-  static const SMS_SERVICE_URL = bool.hasEnvironment(SMS_SERVICE_URL__NAME)
-      ? String.fromEnvironment(
-          SMS_SERVICE_URL__NAME,
-        )
-      : 'ws://localhost:4000/socket/websocket';
 }
