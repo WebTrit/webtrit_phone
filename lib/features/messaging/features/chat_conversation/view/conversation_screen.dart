@@ -150,7 +150,7 @@ class _ChatConversationScreenState extends State<ChatConversationScreen> {
           return Column(
             children: [
               Text(
-                contact.name,
+                contact.displayTitle,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: const TextStyle(fontSize: 20),

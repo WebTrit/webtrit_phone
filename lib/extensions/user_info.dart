@@ -3,8 +3,14 @@ import 'package:webtrit_api/webtrit_api.dart';
 import 'iterable.dart';
 
 extension UserInfoFormatting on UserInfo {
-  String get name {
-    return [firstName, lastName].readableJoin();
+  String? get name {
+    if (aliasName != null) {
+      return aliasName;
+    } else if (firstName != null && lastName != null) {
+      return [firstName, lastName].readableJoin();
+    } else {
+      return firstName ?? lastName;
+    }
   }
 
   String? get balanceWithCurrency {

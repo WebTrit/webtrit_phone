@@ -82,7 +82,7 @@ class _DialogInfoState extends State<DialogInfo> {
                           children: [
                             const SizedBox(height: 32),
                             LeadingAvatar(
-                              username: contact?.name,
+                              username: contact?.displayTitle,
                               thumbnail: contact?.thumbnail,
                               thumbnailUrl: contact?.thumbnailUrl,
                               registered: contact?.registered,
@@ -90,7 +90,7 @@ class _DialogInfoState extends State<DialogInfo> {
                             ),
                             const SizedBox(height: 8),
                             Text(
-                              contact?.name ?? participant,
+                              contact?.displayTitle ?? participant,
                               style: theme.textTheme.headlineSmall?.copyWith(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
@@ -122,7 +122,7 @@ class _DialogInfoState extends State<DialogInfo> {
                                             final callBloc = context.read<CallBloc>();
                                             callBloc.add(CallControlEvent.started(
                                               number: contactPhone.number,
-                                              displayName: contact?.name,
+                                              displayName: contact?.maybeName,
                                               video: false,
                                             ));
                                             context.router.maybePop();
@@ -135,7 +135,7 @@ class _DialogInfoState extends State<DialogInfo> {
                                             final callBloc = context.read<CallBloc>();
                                             callBloc.add(CallControlEvent.started(
                                               number: contactPhone.number,
-                                              displayName: contact?.name,
+                                              displayName: contact?.maybeName,
                                               video: true,
                                             ));
                                             context.router.maybePop();

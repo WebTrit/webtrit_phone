@@ -66,13 +66,13 @@ class DialogContactSelectionView extends StatelessWidget {
                 ),
                 child: ListTile(
                   leading: LeadingAvatar(
-                    username: contact.name,
+                    username: contact.displayTitle,
                     thumbnail: contact.thumbnail,
                     thumbnailUrl: contact.thumbnailUrl,
                     registered: contact.registered,
                     radius: 24,
                   ),
-                  title: Text(contact.name),
+                  title: Text(contact.displayTitle),
                   subtitle: Text('Ext: ${contact.extension ?? "N/A"}', style: theme.textTheme.bodySmall),
                   onTap: () => builderCubit.onDialogCreateConfirm(contact),
                 ),

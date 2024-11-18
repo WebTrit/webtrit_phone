@@ -19,11 +19,13 @@ class MessagingShell extends StatefulWidget {
 }
 
 class _MessagingShellState extends State<MessagingShell> {
-  late final MessagingNotificationsService notificationsService;
+  MessagingNotificationsService? notificationsService;
 
   @override
   void initState() {
     super.initState();
+    // TODO(Serdun): Integrate feature enablement with app configuration. Move hardcoded constants `chatsEnabled` and `smsEnabled`
+    // from `EnvironmentConfig` to the constructor for improved flexibility.
     const chatsEnabled = EnvironmentConfig.CHAT_FEATURE_ENABLE;
     const smsEnabled = EnvironmentConfig.SMS_FEATURE_ENABLE;
     if (!chatsEnabled && !smsEnabled) return;
@@ -47,7 +49,7 @@ class _MessagingShellState extends State<MessagingShell> {
 
   @override
   void dispose() {
-    notificationsService.dispose();
+    notificationsService?.dispose();
     super.dispose();
   }
 

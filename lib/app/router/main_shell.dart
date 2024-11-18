@@ -28,14 +28,18 @@ class MainShell extends StatefulWidget {
 }
 
 class _MainShellState extends State<MainShell> {
-  late final Callkeep callkeep;
-  late final FeatureAccess featureAccess;
+  late final Callkeep _callkeep = Callkeep();
+  late final CallkeepBackgroundService _callkeepBackgroundService = CallkeepBackgroundService();
+
+  late final FeatureAccess _featureAccess = FeatureAccess();
+  late final AppPreferences _appPreferences = AppPreferences();
 
   @override
   void initState() {
     super.initState();
-    callkeep = Callkeep();
-    callkeep.setUp(
+    final incomingCallType = _appPreferences.getIncomingCallType();
+
+    _callkeep.setUp(
       CallkeepOptions(
         ios: CallkeepIOSOptions(
           localizedName: PackageInfo().appName,
@@ -52,16 +56,20 @@ class _MainShellState extends State<MainShell> {
         ),
       ),
     );
-    featureAccess = FeatureAccess();
+
+    // Launch the service after user authorization if the selected incoming call type is socket-based.
+    if (incomingCallType.isSocket) {
+      _callkeepBackgroundService.startService();
+    }
   }
 
   @override
   void dispose() {
-    callkeep.tearDown();
+    _callkeep.tearDown();
     super.dispose();
   }
 
-  get _messagingEnabled => featureAccess.isMessagingEnabled();
+  get _messagingEnabled => _featureAccess.isMessagingEnabled();
 
   @override
   Widget build(BuildContext context) {
@@ -175,8 +183,9 @@ class _MainShellState extends State<MainShell> {
             create: (context) {
               return PushTokensBloc(
                 pushTokensRepository: context.read<PushTokensRepository>(),
+                secureStorage: context.read<SecureStorage>(),
                 firebaseMessaging: FirebaseMessaging.instance,
-                callkeep: callkeep,
+                callkeep: _callkeep,
               )..add(const PushTokensStarted());
             },
           ),
@@ -220,8 +229,7 @@ class _MainShellState extends State<MainShell> {
                 trustedCertificates: appCertificates.trustedCertificates,
                 recentsRepository: context.read<RecentsRepository>(),
                 notificationsBloc: context.read<NotificationsBloc>(),
-                callkeep: callkeep,
-                pendingCallHandler: appBloc.pendingCallHandler,
+                callkeep: _callkeep,
               )..add(const CallStarted());
             },
           ),
@@ -265,10 +273,22 @@ class _MainShellState extends State<MainShell> {
         ],
         child: Builder(
           builder: (context) {
-            var mainShellRepo = context.read<MainShellRouteStateRepository>();
-            return CallShell(
-              child: MessagingShell(
-                child: AutoRouter(navigatorObservers: () => [MainShellNavigatorObserver(mainShellRepo)]),
+            final mainShellRepo = context.read<MainShellRouteStateRepository>();
+            return BlocProvider<SessionStatusCubit>(
+              create: (context) => SessionStatusCubit(
+                pushTokensBloc: context.read<PushTokensBloc>(),
+                callBloc: context.read<CallBloc>(),
+              ),
+              child: Builder(
+                builder: (context) => CallShell(
+                  child: MessagingShell(
+                    child: AutoRouter(
+                      navigatorObservers: () => [
+                        MainShellNavigatorObserver(mainShellRepo),
+                      ],
+                    ),
+                  ),
+                ),
               ),
             );
           },

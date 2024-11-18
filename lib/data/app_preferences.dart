@@ -13,6 +13,7 @@ class AppPreferences {
   static const _kActiveRecentsVisibilityFilterKey = 'active-recents-visibility-filter';
   static const _kActiveContactSourceTypeKey = 'active-contact-source-type';
   static const _kUserAgreementAcceptedKey = 'user-agreement-accepted';
+  static const _kIncomingCallTypeKey = 'call-incoming-type';
 
   // Please add all new keys here for proper cleaning of preferences
   static const _kPreferencesList = [
@@ -23,6 +24,7 @@ class AppPreferences {
     _kActiveRecentsVisibilityFilterKey,
     _kActiveContactSourceTypeKey,
     _kUserAgreementAcceptedKey,
+    _kIncomingCallTypeKey,
   ];
 
   // List of preferences keys to exclude by default during clean operation
@@ -32,8 +34,9 @@ class AppPreferences {
 
   static late AppPreferences _instance;
 
-  static Future<void> init() async {
+  static Future<AppPreferences> init() async {
     _instance = AppPreferences._(await SharedPreferences.getInstance());
+    return _instance;
   }
 
   factory AppPreferences() {
@@ -145,4 +148,22 @@ class AppPreferences {
   Future<bool> setUserAgreementAccepted(bool value) => _sharedPreferences.setBool(_kUserAgreementAcceptedKey, value);
 
   bool getUserAgreementAccepted() => _sharedPreferences.getBool(_kUserAgreementAcceptedKey) ?? false;
+
+  Future<bool> setIncomingCallType(IncomingCallType value) =>
+      _sharedPreferences.setString(_kIncomingCallTypeKey, value.name);
+
+  IncomingCallType getIncomingCallType({
+    IncomingCallType defaultValue = IncomingCallType.pushNotification,
+  }) {
+    final incomingCallType = _sharedPreferences.getString(_kIncomingCallTypeKey);
+    if (incomingCallType != null) {
+      try {
+        return IncomingCallType.values.byName(incomingCallType);
+      } catch (_) {
+        return defaultValue;
+      }
+    } else {
+      return defaultValue;
+    }
+  }
 }

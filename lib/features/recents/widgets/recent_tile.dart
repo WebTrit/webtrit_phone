@@ -57,40 +57,41 @@ class RecentTile extends StatelessWidget {
       onDismissed: onDeleted == null ? null : (direction) => onDeleted(recent),
       direction: DismissDirection.endToStart,
       child: ListTile(
-        contentPadding: const EdgeInsets.only(left: 16.0),
+        contentPadding: const EdgeInsets.only(left: 16, right: 8),
         leading: LeadingAvatar(
           username: recent.name,
         ),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
-              dateFormat.format(recent.createdTime),
-            ),
-            IconButton(
-              splashRadius: 24,
-              icon: const Icon(Icons.info_outlined),
-              onPressed: onInfoPressed,
-            ),
-            if (chatsEnabled && onMessagePressed != null)
-              IconButton(
-                splashRadius: 24,
-                icon: const Icon(Icons.messenger_outline),
-                onPressed: onMessagePressed,
+            Text(dateFormat.format(recent.createdTime)),
+            const SizedBox(width: 4),
+            InkWell(
+              borderRadius: BorderRadius.circular(24),
+              onTap: onInfoPressed,
+              child: const Padding(
+                padding: EdgeInsets.all(4.0),
+                child: Icon(Icons.info_outlined),
               ),
-            if (chatsEnabled && onMessagePressed == null)
-              GestureDetector(
-                onTap: () {},
-                child: const IconButton(
-                  splashRadius: 24,
-                  icon: Icon(Icons.messenger_outline),
-                  onPressed: null,
+            ),
+            if (chatsEnabled)
+              InkWell(
+                borderRadius: BorderRadius.circular(24),
+                onTap: onMessagePressed,
+                child: Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: Icon(
+                    Icons.messenger_outline,
+                    color: onMessagePressed == null ? Colors.grey : null,
+                  ),
                 ),
               )
           ],
         ),
         title: Text(
           recent.name,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
         ),
         subtitle: Row(
           children: [
@@ -108,8 +109,12 @@ class RecentTile extends StatelessWidget {
               color: Colors.grey,
             ),
             const Text(' '),
-            Text(
-              recent.number,
+            Flexible(
+              child: Text(
+                recent.number,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
             ),
           ],
         ),

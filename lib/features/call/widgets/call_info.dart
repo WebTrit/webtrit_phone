@@ -13,7 +13,7 @@ import '../models/models.dart';
 class CallInfo extends StatefulWidget {
   const CallInfo({
     super.key,
-    required this.transferProcessing,
+    required this.transfering,
     required this.requestToAttendedTransfer,
     required this.inviteToAttendedTransfer,
     required this.isIncoming,
@@ -24,7 +24,7 @@ class CallInfo extends StatefulWidget {
     this.activeCallStatus,
   });
 
-  final bool transferProcessing;
+  final bool transfering;
   final bool requestToAttendedTransfer;
   final bool inviteToAttendedTransfer;
   final bool isIncoming;
@@ -107,7 +107,7 @@ class _CallInfoState extends State<CallInfo> {
       } else {
         statusMessage = context.l10n.call_description_outgoing;
       }
-    } else if (widget.transferProcessing) {
+    } else if (widget.transfering) {
       statusMessage = context.l10n.call_description_transferProcessing;
     } else if (widget.held) {
       statusMessage = context.l10n.call_description_held;
@@ -121,6 +121,8 @@ class _CallInfoState extends State<CallInfo> {
           widget.username,
           style: textTheme.displaySmall!.copyWith(color: widget.color),
           textAlign: TextAlign.center,
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
         ),
         Text(
           statusMessage,

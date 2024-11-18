@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:provider/provider.dart';
+
 import 'package:webtrit_phone/theme/styles/styles.dart';
 
 extension BuildContextSnackBar on BuildContext {
@@ -64,5 +66,13 @@ extension BuildContextSnackBar on BuildContext {
       action: action,
       backgroundColor: callStatusStyles?.successBackgroundColor ?? themeData.colorScheme.tertiary,
     ));
+  }
+
+  T? readOrNull<T>() {
+    try {
+      return read<T>();
+    } on ProviderNotFoundException catch (_) {
+      return null;
+    }
   }
 }

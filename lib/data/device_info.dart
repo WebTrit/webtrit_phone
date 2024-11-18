@@ -11,7 +11,7 @@ final Logger _logger = Logger('DeviceInfo');
 class DeviceInfo {
   static late DeviceInfo _instance;
 
-  static Future<void> init() async {
+  static Future<DeviceInfo> init() async {
     final deviceInfoPlugin = DeviceInfoPlugin();
 
     late final Map<String, dynamic> deviceData;
@@ -41,6 +41,7 @@ class DeviceInfo {
       };
     }
     _instance = DeviceInfo._(deviceData);
+    return _instance;
   }
 
   factory DeviceInfo() {

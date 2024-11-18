@@ -69,7 +69,7 @@ class KeypadViewState extends State<KeypadView> {
                   ),
                   BlocBuilder<KeypadCubit, KeypadState>(
                     builder: (context, state) => Text(
-                      state.contact?.name ?? '',
+                      state.contact?.maybeName ?? '',
                       style: themeData.textTheme.bodyMedium,
                     ),
                   )
@@ -124,7 +124,7 @@ class KeypadViewState extends State<KeypadView> {
   void _onCallPressed(bool video) {
     _focusNode.unfocus();
 
-    final displayName = context.read<KeypadCubit>().state.contact?.name;
+    final displayName = context.read<KeypadCubit>().state.contact?.maybeName;
 
     final callBloc = context.read<CallBloc>();
     callBloc.add(CallControlEvent.started(

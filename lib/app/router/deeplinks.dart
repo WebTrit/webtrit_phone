@@ -17,10 +17,9 @@ abstract class DeepLinkHandler {
 }
 
 class HandleAndroidBackgroundIncomingCall implements DeepLinkHandler {
-  HandleAndroidBackgroundIncomingCall(this.deepLink, this.pendingCalls);
+  HandleAndroidBackgroundIncomingCall(this.deepLink);
 
   final PlatformDeepLink deepLink;
-  final AndroidPendingCallHandler pendingCalls;
 
   @override
   DeepLink? handle() {
@@ -29,7 +28,6 @@ class HandleAndroidBackgroundIncomingCall implements DeepLinkHandler {
       final pendingCall = PendingCall.fromMap(uri.queryParameters);
 
       _logger.fine('Pending call deeplink: $pendingCall');
-      pendingCalls.add(pendingCall);
 
       return deepLink.initial ? DeepLink.defaultPath : DeepLink.none;
     } else {

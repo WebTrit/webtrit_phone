@@ -4,40 +4,45 @@ import 'package:webtrit_phone/features/call/call.dart';
 
 class DemoActionOverlay {
   DemoActionOverlay({
-    required this.child,
+    required this.screenSize,
+    required this.safePadding,
     required this.stickyPadding,
-    required this.size,
-    this.onTap,
-    Offset? offset,
-  })  : _offset = offset,
-        _visible = true;
+    GestureTapCallback? onTap,
+  });
 
-  final Widget child;
+  static const _converterCardSize = Size(120, 120);
+  static const _stickyPadding = EdgeInsets.all(8);
+
+  final Size screenSize;
+  final EdgeInsets safePadding;
 
   final EdgeInsets stickyPadding;
-  final GestureTapCallback? onTap;
-  final Size size;
 
   Offset? _offset;
   OverlayEntry? _entry;
-  bool _visible;
 
   bool get inserted => _entry != null;
 
-  bool get visible => _visible;
-
-  void insert(BuildContext context) {
+  void insert({
+    required BuildContext context,
+    required Widget child,
+    required GestureTapCallback onTap,
+  }) {
     if (inserted) return;
 
     _entry = OverlayEntry(
       builder: (context) => DraggableThumbnail(
         stickyPadding: stickyPadding,
-        initialOffset: _offset,
+        initialOffset: _offset ?? _calculateButtonOffset(),
         onOffsetUpdate: (offset) => _offset = offset,
         onTap: onTap,
-        child: child,
+        child: Container(
+          constraints: BoxConstraints.tight(_converterCardSize),
+          child: child,
+        ),
       ),
     );
+
     Overlay.of(context).insert(_entry!);
   }
 
@@ -46,15 +51,14 @@ class DemoActionOverlay {
     _entry = null;
   }
 
-  void hide() {
-    remove();
-    _visible = false;
-  }
+  Offset _calculateButtonOffset() {
+    const bottomBarHeight = kBottomNavigationBarHeight;
+    final cardAndPadding = _converterCardSize.height + _stickyPadding.bottom;
+    final totalHeight = screenSize.height - bottomBarHeight - safePadding.bottom;
 
-  void show(BuildContext context) {
-    _visible = true;
-    if (_offset != null) {
-      insert(context);
-    }
+    return Offset(
+      screenSize.width - _converterCardSize.width - _stickyPadding.right,
+      totalHeight - cardAndPadding,
+    );
   }
 }

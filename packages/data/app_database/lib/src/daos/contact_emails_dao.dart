@@ -1,6 +1,6 @@
-import 'package:app_database/src/app_database.dart';
-import 'package:app_database/src/tables/contact_emails_table.dart';
 import 'package:drift/drift.dart';
+
+import 'package:app_database/src/app_database.dart';
 
 part 'contact_emails_dao.g.dart';
 

@@ -8,12 +8,6 @@ class CallStarted extends CallEvent {
   const CallStarted();
 }
 
-class AndroidPendingCallAdded extends CallEvent {
-  const AndroidPendingCallAdded(this.call);
-
-  final PendingCall? call;
-}
-
 @Freezed(copyWith: false)
 class _AppLifecycleStateChanged with _$AppLifecycleStateChanged implements CallEvent {
   const factory _AppLifecycleStateChanged(AppLifecycleState state) = __AppLifecycleStateChanged;
@@ -51,11 +45,17 @@ class _ResetStateEvent with _$ResetStateEvent implements CallEvent {
 
 @Freezed(copyWith: false)
 class _SignalingClientEvent with _$SignalingClientEvent implements CallEvent {
-  const factory _SignalingClientEvent.connectInitiated() = _SignalingClientEventConnectInitiated;
+  const factory _SignalingClientEvent.connectInitiated({
+    @Default(false) bool reconnecting,
+  }) = _SignalingClientEventConnectInitiated;
 
   const factory _SignalingClientEvent.disconnectInitiated() = _SignalingClientEventDisconnectInitiated;
 
-  const factory _SignalingClientEvent.disconnected(int? code, String? reason) = _SignalingClientEventDisconnected;
+  const factory _SignalingClientEvent.disconnected(
+    int? code,
+    String? reason, {
+    @Default(false) bool afterReconnect,
+  }) = _SignalingClientEventDisconnected;
 }
 
 // handshake signaling events
@@ -134,6 +134,11 @@ class _CallSignalingEvent with _$CallSignalingEvent implements CallEvent {
     required String? referredBy,
     required String? replaceCallId,
   }) = _CallSignalingEventTransfer;
+
+  const factory _CallSignalingEvent.transferring({
+    required int line,
+    required String callId,
+  }) = _CallSignalingEventTransferring;
 
   const factory _CallSignalingEvent.notify({
     required int line,

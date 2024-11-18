@@ -9,6 +9,9 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
+  String get account_selfCarePasswordExpired_message => 'Your self-care password has expired. Please update it using your self-care.\nUntil the password is changed, access to the service will be limited.';
+
+  @override
   String get alertDialogActions_no => 'No';
 
   @override
@@ -123,6 +126,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get call_FailureAcknowledgeDialog_title => 'Failure';
 
   @override
+  String get callProcessingStatus_disconnecting => 'Disconnecting the call, please hold on…';
+
+  @override
   String get callStatus_appUnregistered => 'Unregistered';
 
   @override
@@ -141,10 +147,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get callStatus_ready => 'Connection established';
 
   @override
-  String get callProcessingStatus_disconnecting => 'Disconnecting the call, please hold on…';
+  String get call_ThumbnailAvatar_currentlyNoActiveCall => 'Currently, there is no active call';
 
   @override
-  String get call_ThumbnailAvatar_currentlyNoActiveCall => 'Currently, there is no active call';
+  String get common_noInternetConnection_message => 'It seems you are not connected to the internet. Please check your connection and try again.';
+
+  @override
+  String get common_noInternetConnection_retryButton => 'Try Again';
+
+  @override
+  String get common_noInternetConnection_title => 'No Internet Connection';
+
+  @override
+  String get common_problemWithLoadingPage => 'There was an issue loading the page.';
 
   @override
   String get connectToYourOwnVoIPSystem_Button_Action => 'Connect to your own VoIP system';
@@ -195,6 +210,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get copyToClipboard_popupMenuItem => 'Copy to clipboard';
 
   @override
+  String get default_ChatMemberNotFoundMessagingSocketException => 'Chat member not found';
+
+  @override
+  String get default_ChatNotFoundMessagingSocketException => 'Chat not found';
+
+  @override
   String get default_ClientExceptionError => 'A HTTP client issue occurred';
 
   @override
@@ -210,10 +231,31 @@ class AppLocalizationsEn extends AppLocalizations {
   String get default_ErrorTransactionId => 'Transaction ID';
 
   @override
+  String get default_ForbiddenMessagingSocketException => 'Forbidden request';
+
+  @override
   String get default_FormatExceptionError => 'A response format issue occurred';
 
   @override
+  String get default_InternalErrorMessagingSocketException => 'Internal server error';
+
+  @override
+  String get default_InvalidChatTypeMessagingSocketException => 'Invalid chat type';
+
+  @override
+  String get default_MessagingSocketException => 'An error occurred while processing the request';
+
+  @override
   String get default_RequestFailureError => 'A server failure occurred';
+
+  @override
+  String get default_SelfAuthorityAssignmentForbiddenMessagingSocketException => 'Self authority assignment is forbidden';
+
+  @override
+  String get default_SelfRemovalForbiddenMessagingSocketException => 'Self removal is forbidden';
+
+  @override
+  String get default_SmsConversationNotFoundMessagingSocketException => 'SMS conversation not found';
 
   @override
   String get default_SocketExceptionError => 'A network issue occurred';
@@ -228,7 +270,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get default_TypeErrorError => 'A response issue occurred';
 
   @override
+  String get default_UnauthorizedMessagingSocketException => 'Unauthorized request';
+
+  @override
   String get default_UnauthorizedRequestFailureError => 'An unauthorized request failure occurred';
+
+  @override
+  String get default_UserAlreadyInChatMessagingSocketException => 'User is already in chat';
 
   @override
   String get favorites_BodyCenter_empty => 'Currently, you have no favorite numbers.\nAdd favorites from Contacts using the star icon';
@@ -476,6 +524,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get logRecordsConsole_Text_failure => 'An unexpected error occurred';
 
   @override
+  String get main_BottomNavigationBarItemLabel_chats => 'Chats';
+
+  @override
   String get main_BottomNavigationBarItemLabel_contacts => 'Contacts';
 
   @override
@@ -483,9 +534,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get main_BottomNavigationBarItemLabel_keypad => 'Keypad';
-
-  @override
-  String get main_BottomNavigationBarItemLabel_chats => 'Chats';
 
   @override
   String get main_BottomNavigationBarItemLabel_recents => 'Recents';
@@ -508,7 +556,397 @@ class AppLocalizationsEn extends AppLocalizations {
   String get main_CompatibilityIssueDialog_title => 'Compatibility issue';
 
   @override
+  String get messaging_ActionBtn_retry => 'Retry';
+
+  @override
+  String get messaging_ChooseContact_cancel => 'Cancel';
+
+  @override
+  String get messaging_ChooseContact_empty => 'No contacts found';
+
+  @override
+  String get messaging_ChooseContact_title => 'Choose contact:';
+
+  @override
+  String get messaging_ConfirmDialog_ask => 'Are you sure?';
+
+  @override
+  String get messaging_ConfirmDialog_cancel => 'No';
+
+  @override
+  String get messaging_ConfirmDialog_confirm => 'Yes';
+
+  @override
+  String get messaging_ConversationBuilders_addUserBtnText => 'Add user';
+
+  @override
+  String get messaging_ConversationBuilders_back => 'Back';
+
+  @override
+  String get messaging_ConversationBuilders_back_action => 'Back';
+
+  @override
+  String get messaging_ConversationBuilders_cancel => 'Cancel';
+
+  @override
+  String get messaging_ConversationBuilders_connectionError => 'Connection error, please try later';
+
+  @override
+  String get messaging_ConversationBuilders_contactOrNumberSearch_hint => 'Enter name or phone number';
+
+  @override
+  String get messaging_ConversationBuilders_contactSearch_hint => 'Search contacts';
+
+  @override
+  String get messaging_ConversationBuilders_create => 'Create';
+
+  @override
+  String get messaging_ConversationBuilders_createGroup => 'Create group';
+
+  @override
+  String get messaging_ConversationBuilders_externalContacts_heading => 'Cloud PBX contacts';
+
+  @override
+  String get messaging_ConversationBuilders_groupNameHeadline => 'Group name';
+
+  @override
+  String get messaging_ConversationBuilders_invalidNumber_message1 => 'The contact has an invalid phone number. It should be in the format ';
+
+  @override
+  String get messaging_ConversationBuilders_invalidNumber_message2 => '. Please fix it in your phone book.';
+
+  @override
+  String get messaging_ConversationBuilders_invalidNumber_ok => 'Close';
+
+  @override
+  String get messaging_ConversationBuilders_invalidNumber_title => 'Invalid phone number';
+
+  @override
+  String get messaging_ConversationBuilders_invite_heading => 'Invite users:';
+
+  @override
+  String get messaging_ConversationBuilders_localContacts_heading => 'Local contacts';
+
+  @override
+  String get messaging_ConversationBuilders_membersHeadline => 'Members';
+
+  @override
+  String get messaging_ConversationBuilders_nameFieldEmpty => 'Please enter a group name';
+
+  @override
+  String get messaging_ConversationBuilders_nameFieldLabel => 'Group Name';
+
+  @override
+  String get messaging_ConversationBuilders_nameFieldShort => 'Group name must be at least 3 characters';
+
+  @override
+  String get messaging_ConversationBuilders_next_action => 'Next';
+
+  @override
+  String get messaging_ConversationBuilders_noContacts => 'There are no contacts matching the search result';
+
+  @override
+  String get messaging_ConversationBuilders_numberFormatExample => '+ [country code] [area/operator code] [subscriber number]';
+
+  @override
+  String get messaging_ConversationBuilders_numberSearch_errorError => 'The entered phone number is invalid. It should be entered in the format: ';
+
+  @override
+  String get messaging_ConversationBuilders_numberSearch_errorHint => 'Phone number format: ';
+
+  @override
+  String get messaging_ConversationBuilders_submitBtnText => 'Submit';
+
+  @override
+  String get messaging_ConversationBuilders_submitError => 'Error happened while creating group, please try again';
+
+  @override
+  String get messaging_ConversationBuilders_title_group => 'Create group';
+
+  @override
+  String get messaging_ConversationBuilders_title_new => 'New chat';
+
+  @override
+  String get messaging_Conversation_failure => 'Conversation load error';
+
+  @override
+  String get messaging_ConversationInfo_deleteAsk => 'Are you sure you want to delete this dialog?';
+
+  @override
+  String get messaging_ConversationInfo_deleteBtn => 'Delete dialog';
+
+  @override
+  String get messaging_ConversationInfo_title => 'Contact info';
+
+  @override
+  String get messaging_ConversationScreen_titlePrefix => 'Dialog:';
+
+  @override
+  String get messaging_ConversationsScreen_chatsSearch_hint => 'Enter chat or user name';
+
+  @override
+  String get messaging_ConversationsScreen_empty => 'No conversations started yet';
+
+  @override
+  String get messaging_ConversationsScreen_messages_title => 'Messages';
+
+  @override
+  String get messaging_ConversationsScreen_noNumberAlert_text => 'You need to have a phone number linked to you account to send SMS messages';
+
+  @override
+  String get messaging_ConversationsScreen_noNumberAlert_title => 'No phone number';
+
+  @override
+  String get messaging_ConversationsScreen_selectNumberSheet_title => 'Select a number';
+
+  @override
+  String get messaging_ConversationsScreen_smses_title => 'SMS';
+
+  @override
+  String get messaging_ConversationsScreen_smssSearch_hint => 'Enter phone number';
+
+  @override
+  String get messaging_ConversationsScreen_startDialog => 'Start dialog';
+
+  @override
+  String get messaging_Conversations_tile_empty => 'No messages yet';
+
+  @override
+  String get messaging_Conversations_tile_you => 'You';
+
+  @override
+  String get messaging_DialogInfo_deleteAsk => 'Are you sure you want to delete this dialog?';
+
+  @override
+  String get messaging_DialogInfo_deleteBtn => 'Delete dialog';
+
+  @override
+  String get messaging_DialogInfo_title => 'Contact info';
+
+  @override
+  String get messaging_GroupAuthorities_moderator => 'moderator';
+
+  @override
+  String get messaging_GroupAuthorities_noauthorities => 'member';
+
+  @override
+  String get messaging_GroupAuthorities_owner => 'owner';
+
+  @override
+  String get messaging_GroupBuilderScreen_addUserBtnText => 'Add user';
+
+  @override
+  String get messaging_GroupBuilderScreen_connectionError => 'Connection error, please try later';
+
+  @override
+  String get messaging_GroupBuilderScreen_groupNameHeadline => 'Group name';
+
+  @override
+  String get messaging_GroupBuilderScreen_membersHeadline => 'Members';
+
+  @override
+  String get messaging_GroupBuilderScreen_nameFieldEmpty => 'Please enter a group name';
+
+  @override
+  String get messaging_GroupBuilderScreen_nameFieldLabel => 'Group Name';
+
+  @override
+  String get messaging_GroupBuilderScreen_nameFieldShort => 'Group name must be at least 3 characters';
+
+  @override
+  String get messaging_GroupBuilderScreen_screenTitle => 'Create group';
+
+  @override
+  String get messaging_GroupBuilderScreen_submitBtnText => 'Submit';
+
+  @override
+  String get messaging_GroupBuilderScreen_submitError => 'Error happened while creating group, please try again';
+
+  @override
+  String get messaging_GroupInfo_addUserBtnText => 'Add user';
+
+  @override
+  String get messaging_GroupInfo_deleteLeaveBtnText => 'Delete and leave';
+
+  @override
+  String get messaging_GroupInfo_groupMembersHeadline => 'Group members';
+
+  @override
+  String get messaging_GroupInfo_leaveAndDeleteAsk => 'Are you sure you want leave and delete this group?';
+
+  @override
+  String get messaging_GroupInfo_leaveAsk => 'Are you sure you want to leave this group?';
+
+  @override
+  String get messaging_GroupInfo_leaveBtnText => 'Leave group';
+
+  @override
+  String get messaging_GroupInfo_makeModeratorAsk => 'Are you sure you want to make this user a moderator?';
+
+  @override
+  String get messaging_GroupInfo_makeModeratorBtnText => 'Make moderator';
+
+  @override
+  String get messaging_GroupInfo_removeModeratorAsk => 'Are you sure you want to remove this user from moderators?';
+
+  @override
+  String get messaging_GroupInfo_removeUserAsk => 'Are you sure you want to remove this user from the group?';
+
+  @override
+  String get messaging_GroupInfo_removeUserBtnText => 'Remove';
+
+  @override
+  String get messaging_GroupInfo_title => 'Group info';
+
+  @override
+  String get messaging_GroupInfo_titlePrefix => 'Group:';
+
+  @override
+  String get messaging_GroupInfo_unmakeModeratorBtnText => 'Unmake moderator';
+
+  @override
+  String get messaging_GroupNameDialog_cancelBtnText => 'Cancel';
+
+  @override
+  String get messaging_GroupNameDialog_fieldHint => 'Enter group name';
+
+  @override
+  String get messaging_GroupNameDialog_fieldLabel => 'Group name';
+
+  @override
+  String get messaging_GroupNameDialog_fieldValidation_empty => 'Please enter group name';
+
+  @override
+  String get messaging_GroupNameDialog_fieldValidation_short => 'Group name is too short';
+
+  @override
+  String get messaging_GroupNameDialog_saveBtnText => 'Save';
+
+  @override
+  String get messaging_GroupNameDialog_title => 'Group name';
+
+  @override
+  String get messaging_GroupScreen_titlePrefix => 'Group:';
+
+  @override
+  String get messaging_MessageField_hint => 'Type a message';
+
+  @override
+  String get messaging_MessageListView_typingTrail => 'is typing...';
+
+  @override
+  String get messaging_MessageView_delete => 'Delete';
+
+  @override
+  String get messaging_MessageView_deleted => '[deleted]';
+
+  @override
+  String get messaging_MessageView_edit => 'Edit';
+
+  @override
+  String get messaging_MessageView_edited => '[edited]';
+
+  @override
+  String get messaging_MessageView_forward => 'Forward';
+
+  @override
+  String get messaging_MessageView_forwarded => '[forwarded]';
+
+  @override
+  String get messaging_MessageView_reply => 'Reply';
+
+  @override
+  String get messaging_MessageView_textcopy => 'Copy to clipboard';
+
+  @override
+  String get messaging_NewConversation_back_action => 'Back';
+
+  @override
+  String get messaging_NewConversation_cancel => 'Cancel';
+
+  @override
+  String get messaging_NewConversation_contactOrNumberSearch_hint => 'Enter name or phone number';
+
+  @override
+  String get messaging_NewConversation_contactSearch_hint => 'Search contacts';
+
+  @override
+  String get messaging_NewConversation_create => 'Create';
+
+  @override
+  String get messaging_NewConversation_createGroup => 'Create group';
+
+  @override
+  String get messaging_NewConversation_externalContacts_heading => 'Cloud PBX contacts';
+
+  @override
+  String get messaging_NewConversation_invalidNumber_message => '';
+
+  @override
+  String get messaging_NewConversation_invalidNumber_message1 => 'The contact has an invalid phone number. It should be in the format ';
+
+  @override
+  String get messaging_NewConversation_invalidNumber_message2 => '. Please fix it in your phone book.';
+
+  @override
+  String get messaging_NewConversation_invalidNumber_ok => 'Close';
+
+  @override
+  String get messaging_NewConversation_invalidNumber_title => 'Invalid phone number';
+
+  @override
+  String get messaging_NewConversation_invite_heading => 'Invite users:';
+
+  @override
+  String get messaging_NewConversation_localContacts_heading => 'Local contacts';
+
+  @override
+  String get messaging_NewConversation_next_action => 'Next';
+
+  @override
+  String get messaging_NewConversation_noContacts => 'There are no contacts matching the search result';
+
+  @override
+  String get messaging_NewConversation_numberFormatExample => '+ [country code] [area/operator code] [subscriber number]';
+
+  @override
+  String get messaging_NewConversation_numberSearch_errorError => 'The entered phone number is invalid. It should be entered in the format: ';
+
+  @override
+  String get messaging_NewConversation_numberSearch_errorHint => 'Phone number format: ';
+
+  @override
+  String get messaging_NewConversation_title => 'New chat';
+
+  @override
+  String get messaging_ParticipantName_you => 'You';
+
+  @override
+  String get messaging_SmsSendingStatus_delivered => 'delivered';
+
+  @override
+  String get messaging_SmsSendingStatus_failed => 'failed';
+
+  @override
+  String get messaging_SmsSendingStatus_sent => 'sent';
+
+  @override
+  String get messaging_SmsSendingStatus_waiting => 'waiting';
+
+  @override
+  String get messaging_StateBar_connecting => 'CONNECTING';
+
+  @override
+  String get messaging_StateBar_error => 'DISCONNECTED';
+
+  @override
+  String get messaging_StateBar_initializing => 'INITIALIZING';
+
+  @override
   String get notifications_errorSnackBarAction_callUserMedia => 'Check';
+
+  @override
+  String get notifications_errorSnackBar_activeLineBlindTransferWarning => 'You are already on the line with the recipient you are trying to blind transfer to';
 
   @override
   String get notifications_errorSnackBar_appOffline => 'Your application is currently offline';
@@ -520,16 +958,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get notifications_errorSnackBar_appUnregistered => 'Sorry, your application is currently disconnected from the WebTrit core servers and hence can\'t call right now. Please go to the settings page, and slide the online status toggle switch off and on again to reestablish the connection';
 
   @override
-  String get notifications_errorSnackBar_sipServiceUnavailable => 'Authentication error with the remote VoIP system';
-
-  @override
   String get notifications_errorSnackBar_callConnect => 'Connecting to the core failed, trying to reconnect';
 
   @override
   String get notifications_errorSnackBar_callSignalingClientNotConnect => 'Cannot initiate the call, please check the connection status';
 
   @override
-  String get notifications_errorSnackBar_callSignalingClientSessionMissed => 'The current connection session is invalid, please sign in again';
+  String get notifications_errorSnackBar_callSignalingClientSessionMissed => 'Authentication error, please re-login';
 
   @override
   String get notifications_errorSnackBar_callUndefinedLine => 'No idle lines to initiate the call';
@@ -538,7 +973,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get notifications_errorSnackBar_callUserMedia => 'No access to media input, please check app permissions';
 
   @override
-  String get notifications_errorSnackBar_activeLineBlindTransferWarning => 'You are already on the line with the recipient you are trying to blind transfer to';
+  String get notifications_errorSnackBar_sipServiceUnavailable => 'Authentication error with the remote VoIP system';
 
   @override
   String get notImplemented => 'Sorry, not implemented yet';
@@ -559,13 +994,31 @@ class AppLocalizationsEn extends AppLocalizations {
   String get permission_manufacturer_Text_trailing => 'Permissions could be changed at any time in the future.';
 
   @override
-  String get permission_manufacturer_Text_xiaomi_tip1 => '1. Go to \"App settings\" → \"Notifications\".';
+  String get permission_manufacturer_Text_xiaomi_tip1 => 'Go to \"App settings\" → \"Notifications\".';
 
   @override
-  String get permission_manufacturer_Text_xiaomi_tip2 => '2. Find and turn on \"Lockscreen notifications\".';
+  String get permission_manufacturer_Text_xiaomi_tip2 => 'Find and turn on \"Lockscreen notifications\".';
 
   @override
   String get permission_Text_description => 'To ensure the best user experience, the app needs to be granted the following permissions: microphone for audio calls, camera for video calls, and contacts to simplify reaching them from the app.\n\nPermissions could be changed at any time in the future.';
+
+  @override
+  String get permission_manageFullScreenNotificationPermissions => 'Manage Full-Screen Notification Permissions';
+
+  @override
+  String get permission_manageFullScreenNotificationInstructions_step1 => 'Go to your phone\'s Settings.';
+
+  @override
+  String get permission_manageFullScreenNotificationInstructions_step2 => 'Navigate to \'Special App Access\' under the \'Apps & notifications\' section.';
+
+  @override
+  String get permission_manageFullScreenNotificationInstructions_step3 => 'Find and tap on \'Manage full screen intents\'.';
+
+  @override
+  String get permission_manageFullScreenNotificationInstructions_step4 => 'Select the app for which you want to manage full-screen notifications.';
+
+  @override
+  String get permission_manageFullScreenNotificationInstructions_step5 => 'Toggle the permission to enable or disable full-screen notifications for that app.';
 
   @override
   String recents_BodyCenter_empty(Object filter) {
@@ -588,6 +1041,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get recents_Text_blingTransferInitiated => 'Performing blind transfer';
+
+  @override
+  String get recents_HistoryTile_missedCallText => 'Missed';
 
   @override
   String get recentsVisibilityFilter_all => 'All';
@@ -643,6 +1099,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settings_AboutText_StoreVersion => 'Build version in the Store';
+
+  @override
+  String get settings_AboutText_FCMPushNotificationToken => 'FCM Push Notification Token';
 
   @override
   String get settings_AccountDeleteConfirmDialog_content => 'Are you sure you want to delete account?';
@@ -702,6 +1161,27 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings_LogoutConfirmDialog_title => 'Confirm logout';
 
   @override
+  String get settings_network_incomingCallType_title => 'Incoming Call Type';
+
+  @override
+  String get settings_network_incomingCallType_pushNotification_title => 'Push Notification';
+
+  @override
+  String get settings_network_incomingCallType_pushNotification_description => 'When the app is not in use, it stops running and consumes minimal resources, which helps conserve battery life. During an incoming call, the server sends a push notification to the phone, prompting the mobile operating system to launch the app to handle the call. However, this method does not guarantee that all calls will be received. If the phone has been inactive for an extended period, some versions of Android may limit push notifications, potentially causing you to miss an incoming call.';
+
+  @override
+  String get settings_network_incomingCallType_socket_title => 'Persistent Connection to the Server';
+
+  @override
+  String get settings_network_incomingCallType_socket_description => 'The app continues running in the background and always maintains an active connection to the server. This increases the chances of receiving an incoming call but may drain the battery more quickly.';
+
+  @override
+  String get settings_network_androidNotificationName => 'Inbound Calls Service';
+
+  @override
+  String get settings_network_androidNotificationDescription => 'This is required to receive calls while in background';
+
+  @override
   String get themeMode_dark => 'Dark';
 
   @override
@@ -748,344 +1228,137 @@ class AppLocalizationsEn extends AppLocalizations {
   String get webRegistration_ErrorAcknowledgeDialog_title => 'Web resource error';
 
   @override
-  String get messaging_Conversation_failure => 'Conversation load error';
-
-  @override
-  String get messaging_ActionBtn_retry => 'Retry';
-
-  @override
-  String get messaging_MessageView_textcopy => 'Copy to clipboard';
-
-  @override
-  String get messaging_MessageView_reply => 'Reply';
-
-  @override
-  String get messaging_MessageView_forward => 'Forward';
-
-  @override
-  String get messaging_MessageView_edit => 'Edit';
-
-  @override
-  String get messaging_MessageView_delete => 'Delete';
-
-  @override
-  String get messaging_MessageView_forwarded => '[forwarded]';
-
-  @override
-  String get messaging_MessageView_edited => '[edited]';
-
-  @override
-  String get messaging_MessageView_deleted => '[deleted]';
-
-  @override
-  String get messaging_SmsSendingStatus_waiting => 'waiting';
-
-  @override
-  String get messaging_SmsSendingStatus_sent => 'sent';
-
-  @override
-  String get messaging_SmsSendingStatus_failed => 'failed';
-
-  @override
-  String get messaging_SmsSendingStatus_delivered => 'delivered';
-
-  @override
-  String get messaging_ParticipantName_you => 'You';
-
-  @override
-  String get messaging_StateBar_initializing => 'INITIALIZING';
-
-  @override
-  String get messaging_StateBar_connecting => 'CONNECTING';
-
-  @override
-  String get messaging_StateBar_error => 'DISCONNECTED';
-
-  @override
-  String get messaging_ConversationsScreen_startDialog => 'Start dialog';
-
-  @override
-  String get messaging_ConversationsScreen_empty => 'No conversations started yet';
-
-  @override
-  String get messaging_ConversationsScreen_chatsSearch_hint => 'Enter chat or user name';
-
-  @override
-  String get messaging_ConversationsScreen_smssSearch_hint => 'Enter phone number';
-
-  @override
-  String get messaging_ConversationsScreen_messages_title => 'Messages';
-
-  @override
-  String get messaging_ConversationsScreen_smses_title => 'SMS';
-
-  @override
-  String get messaging_ConversationsScreen_selectNumberSheet_title => 'Select a number';
-
-  @override
-  String get messaging_ConversationsScreen_noNumberAlert_title => 'No phone number';
-
-  @override
-  String get messaging_ConversationsScreen_noNumberAlert_text => 'You need to have a phone number linked to you account to send SMS messages';
-
-  @override
-  String get messaging_Conversations_tile_empty => 'No messages yet';
-
-  @override
-  String get messaging_Conversations_tile_you => 'You';
-
-  @override
-  String get messaging_MessageField_hint => 'Type a message';
-
-  @override
-  String get messaging_ConversationScreen_titlePrefix => 'Dialog:';
-
-  @override
-  String get messaging_DialogInfo_deleteAsk => 'Are you sure you want to delete this dialog?';
-
-  @override
-  String get messaging_DialogInfo_title => 'Contact info';
-
-  @override
-  String get messaging_DialogInfo_deleteBtn => 'Delete dialog';
-
-  @override
-  String get messaging_ConversationBuilders_createGroup => 'Create group';
-
-  @override
-  String get messaging_ConversationBuilders_title_new => 'New chat';
-
-  @override
-  String get messaging_ConversationBuilders_cancel => 'Cancel';
-
-  @override
-  String get messaging_ConversationBuilders_back => 'Back';
-
-  @override
-  String get messaging_ConversationBuilders_create => 'Create';
-
-  @override
-  String get messaging_ConversationBuilders_externalContacts_heading => 'Cloud PBX contacts';
-
-  @override
-  String get messaging_ConversationBuilders_localContacts_heading => 'Local contacts';
-
-  @override
-  String get messaging_ConversationBuilders_contactSearch_hint => 'Search contacts';
-
-  @override
-  String get messaging_ConversationBuilders_contactOrNumberSearch_hint => 'Enter name or phone number';
-
-  @override
-  String get messaging_ConversationBuilders_numberFormatExample => '+ [country code] [area/operator code] [subscriber number]';
-
-  @override
-  String get messaging_ConversationBuilders_numberSearch_errorHint => 'Phone number format: ';
-
-  @override
-  String get messaging_ConversationBuilders_numberSearch_errorError => 'The entered phone number is invalid. It should be entered in the format: ';
-
-  @override
-  String get messaging_ConversationBuilders_invite_heading => 'Invite users:';
-
-  @override
-  String get messaging_ConversationBuilders_next_action => 'Next';
-
-  @override
-  String get messaging_ConversationBuilders_back_action => 'Back';
-
-  @override
-  String get messaging_ConversationBuilders_noContacts => 'There are no contacts matching the search result';
-
-  @override
-  String get messaging_ConversationBuilders_invalidNumber_title => 'Invalid phone number';
-
-  @override
-  String get messaging_ConversationBuilders_invalidNumber_message1 => 'The contact has an invalid phone number. It should be in the format ';
-
-  @override
-  String get messaging_ConversationBuilders_invalidNumber_message2 => '. Please fix it in your phone book.';
-
-  @override
-  String get messaging_ConversationBuilders_invalidNumber_ok => 'Close';
-
-  @override
-  String get messaging_ConversationBuilders_title_group => 'Create group';
-
-  @override
-  String get messaging_ConversationBuilders_groupNameHeadline => 'Group name';
-
-  @override
-  String get messaging_ConversationBuilders_membersHeadline => 'Members';
-
-  @override
-  String get messaging_ConversationBuilders_addUserBtnText => 'Add user';
-
-  @override
-  String get messaging_ConversationBuilders_submitBtnText => 'Submit';
-
-  @override
-  String get messaging_ConversationBuilders_nameFieldLabel => 'Group Name';
-
-  @override
-  String get messaging_ConversationBuilders_nameFieldEmpty => 'Please enter a group name';
-
-  @override
-  String get messaging_ConversationBuilders_nameFieldShort => 'Group name must be at least 3 characters';
-
-  @override
-  String get messaging_ConversationBuilders_connectionError => 'Connection error, please try later';
-
-  @override
-  String get messaging_ConversationBuilders_submitError => 'Error happened while creating group, please try again';
-
-  @override
-  String get messaging_GroupScreen_titlePrefix => 'Group:';
-
-  @override
-  String get messaging_ChooseContact_title => 'Choose contact:';
-
-  @override
-  String get messaging_ChooseContact_empty => 'No contacts found';
-
-  @override
-  String get messaging_ChooseContact_cancel => 'Cancel';
-
-  @override
-  String get messaging_ConfirmDialog_ask => 'Are you sure?';
-
-  @override
-  String get messaging_ConfirmDialog_confirm => 'Yes';
-
-  @override
-  String get messaging_ConfirmDialog_cancel => 'No';
-
-  @override
-  String get messaging_GroupAuthorities_noauthorities => 'member';
-
-  @override
-  String get messaging_GroupAuthorities_moderator => 'moderator';
-
-  @override
-  String get messaging_GroupAuthorities_owner => 'owner';
-
-  @override
-  String get messaging_GroupInfo_title => 'Group info';
-
-  @override
-  String get messaging_GroupInfo_leaveAsk => 'Are you sure you want to leave this group?';
-
-  @override
-  String get messaging_GroupInfo_leaveAndDeleteAsk => 'Are you sure you want leave and delete this group?';
-
-  @override
-  String get messaging_GroupInfo_removeUserAsk => 'Are you sure you want to remove this user from the group?';
-
-  @override
-  String get messaging_GroupInfo_makeModeratorAsk => 'Are you sure you want to make this user a moderator?';
-
-  @override
-  String get messaging_GroupInfo_removeModeratorAsk => 'Are you sure you want to remove this user from moderators?';
-
-  @override
-  String get messaging_GroupInfo_titlePrefix => 'Group:';
-
-  @override
-  String get messaging_GroupInfo_groupMembersHeadline => 'Group members';
-
-  @override
-  String get messaging_GroupInfo_addUserBtnText => 'Add user';
-
-  @override
-  String get messaging_GroupInfo_leaveBtnText => 'Leave group';
-
-  @override
-  String get messaging_GroupInfo_deleteLeaveBtnText => 'Delete and leave';
-
-  @override
-  String get messaging_GroupInfo_makeModeratorBtnText => 'Make moderator';
-
-  @override
-  String get messaging_GroupInfo_unmakeModeratorBtnText => 'Unmake moderator';
-
-  @override
-  String get messaging_GroupInfo_removeUserBtnText => 'Remove';
-
-  @override
-  String get messaging_GroupNameDialog_title => 'Group name';
-
-  @override
-  String get messaging_GroupNameDialog_fieldLabel => 'Group name';
-
-  @override
-  String get messaging_GroupNameDialog_fieldHint => 'Enter group name';
-
-  @override
-  String get messaging_GroupNameDialog_fieldValidation_empty => 'Please enter group name';
-
-  @override
-  String get messaging_GroupNameDialog_fieldValidation_short => 'Group name is too short';
-
-  @override
-  String get messaging_GroupNameDialog_saveBtnText => 'Save';
-
-  @override
-  String get messaging_GroupNameDialog_cancelBtnText => 'Cancel';
-
-  @override
-  String get messaging_MessageListView_typingTrail => 'is typing...';
-
-  @override
-  String get default_MessagingSocketException => 'An error occurred while processing the request';
-
-  @override
   String get default_TimeoutMessagingSocketException => 'The request has timed out';
-
-  @override
-  String get default_UnauthorizedMessagingSocketException => 'Unauthorized request';
-
-  @override
-  String get default_ForbiddenMessagingSocketException => 'Forbidden request';
-
-  @override
-  String get default_InternalErrorMessagingSocketException => 'Internal server error';
-
-  @override
-  String get default_ChatNotFoundMessagingSocketException => 'Chat not found';
-
-  @override
-  String get default_InvalidChatTypeMessagingSocketException => 'Invalid chat type';
-
-  @override
-  String get default_UserAlreadyInChatMessagingSocketException => 'User is already in chat';
-
-  @override
-  String get default_ChatMemberNotFoundMessagingSocketException => 'Chat member not found';
-
-  @override
-  String get default_SelfRemovalForbiddenMessagingSocketException => 'Self removal is forbidden';
 
   @override
   String get default_CannotRemoveOwnerMessagingSocketException => 'Cannot remove owner';
 
   @override
-  String get default_SelfAuthorityAssignmentForbiddenMessagingSocketException => 'Self authority assignment is forbidden';
+  String get diagnostic_AppBar_title => 'Diagnostic';
 
   @override
-  String get default_SmsConversationNotFoundMessagingSocketException => 'SMS conversation not found';
+  String get diagnosticPermissionDetails_title_statusPermission => 'Status permission';
 
   @override
-  String get account_selfCarePasswordExpired_message => 'Your self-care password has expired. Please update it using your self-care.\nUntil the password is changed, access to the service will be limited.';
+  String get diagnosticPermissionDetails_button_requestPermission => 'Request Permission';
 
   @override
-  String get common_noInternetConnection_title => 'No Internet Connection';
+  String get diagnosticPermissionDetails_button_managePermission => 'Manage Permission';
 
   @override
-  String get common_noInternetConnection_message => 'It seems you are not connected to the internet. Please check your connection and try again.';
+  String get diagnostic_permissionStatus_denied => 'Access Denied';
 
   @override
-  String get common_noInternetConnection_retryButton => 'Try Again';
+  String get diagnostic_permissionStatus_granted => 'Access Granted';
 
   @override
-  String get common_problemWithLoadingPage => 'There was an issue loading the page.';
+  String get diagnostic_permissionStatus_restricted => 'Restricted Access';
+
+  @override
+  String get diagnostic_permissionStatus_limited => 'Limited Access';
+
+  @override
+  String get diagnostic_permissionStatus_permanentlyDenied => 'Access Permanently Denied';
+
+  @override
+  String get diagnostic_permissionStatus_provisional => 'Provisional Access';
+
+  @override
+  String get diagnostic_permission_camera_title => 'Camera';
+
+  @override
+  String get diagnostic_permission_microphone_title => 'Microphone';
+
+  @override
+  String get diagnostic_permission_contacts_title => 'Contacts';
+
+  @override
+  String get diagnostic_permission_notification_title => 'Notification';
+
+  @override
+  String get diagnostic_permission_camera_description => 'This app requires permission to access the camera to make video calls.';
+
+  @override
+  String get diagnostic_permission_microphone_description => 'This app requires permission to access the microphone to make audio calls.';
+
+  @override
+  String get diagnostic_permission_contacts_description => 'This app requires permission to access contacts to make calls within your address book.';
+
+  @override
+  String get diagnostic_permission_notification_description => 'Enables the app to trigger incoming call.';
+
+  @override
+  String get diagnosticScreen_pushNotificationService_title => 'Push notification service';
+
+  @override
+  String get diagnosticScreen_permissionsGroup_title => 'Permissions';
+
+  @override
+  String get diagnosticPushDetails_configuration_title => 'Push Notification service configuration';
+
+  @override
+  String get diagnosticPushDetails_successMessage => 'The notification service is successfully configured and ready for use to receive messages and handle incoming calls.';
+
+  @override
+  String get diagnosticPushDetails_errorMessage_intro => 'Some steps to try:\n';
+
+  @override
+  String get diagnosticPushDetails_errorMessage_step1 => '1. Ensure your phone is connected to the internet.\n';
+
+  @override
+  String get diagnosticPushDetails_errorMessage_step2 => '2. If connected, check that your phone can access Google services by visiting a website.\n';
+
+  @override
+  String get diagnosticPushDetails_errorMessage_step3 => '3. Wait a few minutes and try again – Firebase messaging servers may be temporarily down.\n';
+
+  @override
+  String get diagnosticPushDetails_errorMessage_step4 => '4. Restart Google Play services to ensure they are functioning correctly.\n';
+
+  @override
+  String get diagnosticPushDetails_errorMessage_step5 => '5. Verify that Google Play services are installed on your device.\n';
+
+  @override
+  String get diagnostic_pushTokenStatusType_success => 'Service successfully configured';
+
+  @override
+  String get diagnostic_pushTokenStatusType_error => 'Problem with configuration push notification service';
+
+  @override
+  String get sessionStatus_pushNotificationServiceProblem => 'Problem with configuration push notification service';
+
+  @override
+  String get diagnostic_pushTokenStatusType_progress => 'In progress';
+
+  @override
+  String get diagnostic_batteryMode_unrestricted_title => 'Unrestricted';
+
+  @override
+  String get diagnostic_batteryMode_optimized_title => 'Optimized';
+
+  @override
+  String get diagnostic_batteryMode_restricted_title => 'Restricted';
+
+  @override
+  String get diagnostic_batteryMode_unknown_title => 'Unknown';
+
+  @override
+  String get diagnostic_batteryMode_unrestricted_description => 'The app has full access to run in the background without restrictions.';
+
+  @override
+  String get diagnostic_batteryMode_optimized_description => 'The app\'s background activity is managed by the system to save the battery. It may not work correctly with incoming calls triggered by push notifications.';
+
+  @override
+  String get diagnostic_batteryMode_restricted_description => 'The app\'s background activity is heavily restricted to conserve the battery. Incoming calls may be missed.';
+
+  @override
+  String get diagnostic_batteryMode_unknown_description => 'The battery mode status is unknown. The app might have unpredictable behavior.';
+
+  @override
+  String get diagnostic_battery_groupTitle => 'Battery';
+
+  @override
+  String get diagnostic_battery_tile_title => 'Battery mode';
+
+  @override
+  String get diagnostic_battery_navigate_section => 'Navigate to the Battery section';
 }

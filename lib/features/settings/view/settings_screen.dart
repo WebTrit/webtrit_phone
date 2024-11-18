@@ -5,11 +5,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/features/embedded/exports.dart';
+import 'package:webtrit_phone/features/session_status/session_status.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
-import '../../call/call.dart';
 import '../settings.dart';
 import '../widgets/widgets.dart';
 
@@ -40,15 +40,19 @@ class SettingsScreen extends StatelessWidget {
       ),
       body: ListView(
         children: [
+          const SizedBox(height: 16),
           BlocBuilder<SettingsBloc, SettingsState>(
             builder: (context, settingsState) {
-              return BlocBuilder<CallBloc, CallState>(
-                builder: (context, callState) {
-                  return UserInfoListTile(
-                    callStatus: callState.status,
-                    info: settingsState.info,
-                  );
-                },
+              return UserInfoListTile(
+                info: settingsState.info,
+              );
+            },
+          ),
+          BlocBuilder<SessionStatusCubit, SessionStatusState>(
+            builder: (context, callState) {
+              return SessionStatusListTile(
+                status: callState.status,
+                onTap: () => context.router.navigate(const DiagnosticScreenPageRoute()),
               );
             },
           ),

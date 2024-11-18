@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:logging/logging.dart';
 
 import 'package:webtrit_phone/data/app_preferences.dart';
@@ -27,7 +29,7 @@ class FeatureAccess {
   final SettingsFeature settingsFeature;
   final CallFeature callFeature;
 
-  static Future<void> init() async {
+  static Future<FeatureAccess> init() async {
     final theme = AppThemes();
     final preferences = AppPreferences();
 
@@ -44,6 +46,7 @@ class FeatureAccess {
       _logger.severe('Failed to initialize FeatureAccess', e, stackTrace);
       rethrow;
     }
+    return _instance;
   }
 
   factory FeatureAccess() => _instance;
@@ -120,6 +123,12 @@ class FeatureAccess {
       for (var item in section.items.where((item) => item.enabled)) {
         final urlString = item.data[AppConfigBottomMenuTab.dataUrl] as String?;
         final data = urlString == null ? null : ConfigData(url: Uri.parse(urlString));
+        final flavor = SettingsFlavor.values.byName(item.type);
+
+        // TODO (Serdun): Move platform-specific configuration to a separate config file.
+        // Currently, the settings screen includes this configuration only for Android.
+        // For other platforms, this item is hidden. Update the logic to handle configurations for all platforms.
+        if (flavor == SettingsFlavor.network && !Platform.isAndroid) continue;
 
         final settingItem = SettingItem(
           titleL10n: item.titleL10n,

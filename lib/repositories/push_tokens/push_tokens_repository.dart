@@ -14,6 +14,13 @@ class PushTokensRepository {
 
   Future<void> insertOrUpdatePushToken(AppPushTokenType type, String value) async {
     var appPushToken = AppPushToken(type: type, value: value);
-    return await _webtritApiClient.createAppPushToken(_token, appPushToken);
+    return await _webtritApiClient.createAppPushToken(
+      _token,
+      appPushToken,
+      // TODO(Serdun): Retry up to 100 times with a 1-second delay between attempts. This is necessary to ensure FCM token registration.
+      // Note: This does not cover all cases (e.g., extended lack of internet); 100 retries cover approximately 2 minutes.
+      // Additional logic may be needed for handling prolonged connectivity issues.
+      options: const RequestOptions(retries: 100),
+    );
   }
 }

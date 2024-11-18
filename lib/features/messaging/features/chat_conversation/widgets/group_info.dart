@@ -294,13 +294,13 @@ class _GroupInfoState extends State<GroupInfo> {
               minTileHeight: 0,
               contentPadding: EdgeInsets.zero,
               leading: LeadingAvatar(
-                username: contact?.name ?? 'unknown user',
+                username: contact?.displayTitle,
                 thumbnail: contact?.thumbnail,
                 thumbnailUrl: contact?.thumbnailUrl,
                 registered: contact?.registered,
                 radius: 20,
               ),
-              title: Text(contact?.name ?? member.userId),
+              title: Text(contact?.displayTitle ?? member.userId),
               subtitle: Text(
                 member.groupAuthorities?.nameL10n(context) ?? context.l10n.messaging_GroupAuthorities_noauthorities,
                 style: const TextStyle(fontSize: 12),
