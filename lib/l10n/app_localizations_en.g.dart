@@ -1344,6 +1344,27 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings_LogoutConfirmDialog_title => 'Confirm logout';
 
   @override
+  String get settings_network_incomingCallType_title => 'Incoming Call Type';
+
+  @override
+  String get settings_network_incomingCallType_pushNotification_title => 'Push Notification';
+
+  @override
+  String get settings_network_incomingCallType_pushNotification_description => 'When the app is not in use, it stops running and consumes minimal resources, which helps conserve battery life. During an incoming call, the server sends a push notification to the phone, prompting the mobile operating system to launch the app to handle the call. However, this method does not guarantee that all calls will be received. If the phone has been inactive for an extended period, some versions of Android may limit push notifications, potentially causing you to miss an incoming call.';
+
+  @override
+  String get settings_network_incomingCallType_socket_title => 'Persistent Connection to the Server';
+
+  @override
+  String get settings_network_incomingCallType_socket_description => 'The app continues running in the background and always maintains an active connection to the server. This increases the chances of receiving an incoming call but may drain the battery more quickly.';
+
+  @override
+  String get settings_network_androidNotificationName => 'Inbound Calls Service';
+
+  @override
+  String get settings_network_androidNotificationDescription => 'This is required to receive calls while in background';
+
+  @override
   String get themeMode_dark => 'Dark';
 
   @override
