@@ -99,16 +99,6 @@ class BackgroundCallEventService implements CallkeepBackgroundServiceDelegate {
     }
   }
 
-  @override
-  void performServiceEndCall(String callId) async {
-    await _signalingManager.declineRequest(callId);
-
-    if (_incomingCallType.isPushNotification) {
-      await _signalingManager.close();
-      await _callkeep.stopService();
-    }
-  }
-
   void _handleSignalingError(error, [StackTrace? stackTrace]) async {
     if (_incomingCallType.isPushNotification) await _callkeep.stopService();
   }
@@ -131,6 +121,17 @@ class BackgroundCallEventService implements CallkeepBackgroundServiceDelegate {
   @override
   void performServiceAnswerCall(String callId) {}
 
+  @override
+  void performServiceEndCall(String callId) async {
+    await _signalingManager.declineRequest(callId);
+
+    if (_incomingCallType.isPushNotification) {
+      await _signalingManager.close();
+      await _callkeep.stopService();
+    }
+  }
+
+// TODO (Serdun): Rename this callback to align with naming conventions.
   @override
   Future<void> endCallReceived(
     String callId,
