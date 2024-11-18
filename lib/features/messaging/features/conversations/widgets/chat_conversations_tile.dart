@@ -162,11 +162,18 @@ class _ChatConversationsTileState extends State<ChatConversationsTile> {
                   style: textStyle,
                   textMap: (name) => '$name:',
                 ),
-                Text(
-                  lastMessage.content,
-                  style: textStyle,
-                  overflow: TextOverflow.ellipsis,
-                ),
+                if (lastMessage.deletedAt != null)
+                  Text(
+                    context.l10n.messaging_MessageView_deleted,
+                    style: textStyle,
+                    overflow: TextOverflow.ellipsis,
+                  )
+                else
+                  Text(
+                    lastMessage.content,
+                    style: textStyle,
+                    overflow: TextOverflow.ellipsis,
+                  ),
               ],
             ),
           )
