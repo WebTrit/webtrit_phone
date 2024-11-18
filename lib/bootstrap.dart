@@ -154,7 +154,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   _dHandleInspectPushNotification(message.data, true);
 
   if (appNotification is PendingCallNotification && Platform.isAndroid) {
-    CallkeepBackgroundService().startService();
+    CallkeepBackgroundService().startService(data: message.data);
   }
 
   if (appNotification is MessageNotification) {
