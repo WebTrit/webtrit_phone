@@ -114,172 +114,145 @@ class ConversationCubit extends Cubit<ConversationState> {
   }
 
   Future deleteChat() async {
-    final state = this.state;
-    if (state is! CVSReady) return;
-    if (state.busy) return;
-
-    final channel = _channel;
+    final channel = _getChannel();
     if (channel == null) return;
 
+    final busy = _acquireBusy();
+    if (busy == false) return;
+
     try {
-      emit(state.copyWith(busy: true));
       await channel.deleteChatConversation();
       emit(ConversationState.left(state.credentials));
     } catch (e, s) {
       _logger.warning('deleteChat failed', e, s);
       _submitNotification(DefaultErrorNotification(e));
-      emit(state.copyWith(busy: false));
+      _releaseBusy();
     }
   }
 
   Future leaveGroup() async {
-    final state = this.state;
-    if (state is! CVSReady) return;
-    if (state.busy) return;
-
-    final channel = _channel;
+    final channel = _getChannel();
     if (channel == null) return;
 
+    final busy = _acquireBusy();
+    if (busy == false) return;
+
     try {
-      emit(state.copyWith(busy: true));
       await channel.leaveGroup();
       emit(ConversationState.left(state.credentials));
     } catch (e, s) {
       _logger.warning('leaveGroup failed', e, s);
       _submitNotification(DefaultErrorNotification(e));
-      emit(state.copyWith(busy: false));
+      _releaseBusy();
     }
   }
 
   Future addGroupMember(String userId) async {
-    final state = this.state;
-    if (state is! CVSReady) return;
-    if (state.busy) return;
-
-    final channel = _channel;
+    final channel = _getChannel();
     if (channel == null) return;
 
+    final busy = _acquireBusy();
+    if (busy == false) return;
+
     try {
-      emit(state.copyWith(busy: true));
       await channel.addGroupMember(userId);
     } catch (e, s) {
       _logger.warning('addGroupMember failed', e, s);
       _submitNotification(DefaultErrorNotification(e));
     } finally {
-      emit(state.copyWith(busy: false));
+      _releaseBusy();
     }
   }
 
   Future removeGroupMember(String userId) async {
-    final state = this.state;
-    if (state is! CVSReady) return;
-    if (state.busy) return;
-
-    final channel = _channel;
+    final channel = _getChannel();
     if (channel == null) return;
 
+    final busy = _acquireBusy();
+    if (busy == false) return;
+
     try {
-      emit(state.copyWith(busy: true));
       await channel.removeGroupMember(userId);
     } catch (e, s) {
       _logger.warning('removeGroupMember failed', e, s);
       _submitNotification(DefaultErrorNotification(e));
     } finally {
-      emit(state.copyWith(busy: false));
+      _releaseBusy();
     }
   }
 
   Future setGroupModerator(String userId, bool isModerator) async {
-    final state = this.state;
-    if (state is! CVSReady) return;
-    if (state.busy) return;
-
-    final channel = _channel;
+    final channel = _getChannel();
     if (channel == null) return;
 
+    final busy = _acquireBusy();
+    if (busy == false) return;
+
     try {
-      emit(state.copyWith(busy: true));
       await channel.setGroupModerator(userId, isModerator);
     } catch (e, s) {
       _logger.warning('setGroupModerator failed', e, s);
       _submitNotification(DefaultErrorNotification(e));
     } finally {
-      emit(state.copyWith(busy: false));
+      _releaseBusy();
     }
   }
 
   Future setGroupName(String name) async {
-    final state = this.state;
-    if (state is! CVSReady) return;
-    if (state.busy) return;
-
-    final channel = _channel;
+    final channel = _getChannel();
     if (channel == null) return;
 
+    final busy = _acquireBusy();
+    if (busy == false) return;
+
     try {
-      emit(state.copyWith(busy: true));
       await channel.setGroupName(name);
     } catch (e, s) {
       _logger.warning('setGroupName failed', e, s);
       _submitNotification(DefaultErrorNotification(e));
     } finally {
-      emit(state.copyWith(busy: false));
+      _releaseBusy();
     }
   }
 
   Future fetchHistory() async {
-    final state = this.state;
-    final chatId = state.credentials.chatId;
+    final hLock = _acquireHistoryFetching();
+    if (hLock == null) return;
+    final (topDate, chatId) = hLock;
 
-    if (state is! CVSReady) return;
-    if (chatId == null) return;
-    if (state.fetchingHistory || state.historyEndReached) return;
-
-    final topMessage = state.messages.lastOrNull;
-    if (topMessage == null) return;
-    final topDate = topMessage.createdAt;
-
-    emit(state.copyWith(fetchingHistory: true));
-
-    _logger.info('fetchHistory: $chatId, ${topMessage.createdAt}');
+    _logger.info('fetchHistory: $chatId, $topDate');
 
     try {
-      List<ChatMessage> messages = [];
+      List<ChatMessage> newMessages = [];
 
       // Fetch history from local storage
       // Exclude reply,forward cache and other messages that are not in sync boundaries
       final oldestCursor = await _chatsRepository.getChatMessageSyncCursor(chatId, MessageSyncCursorType.oldest);
       final syncedTo = oldestCursor?.time;
-      messages = await _chatsRepository.getMessageHistory(chatId, from: topDate, to: syncedTo);
-      _logger.info('fetchHistory: local messages ${messages.length}');
+      newMessages = await _chatsRepository.getMessageHistory(chatId, from: topDate, to: syncedTo);
+      _logger.info('fetchHistory: local messages ${newMessages.length}');
 
       // If no messages found in local storage, fetch from the remote server
-      final channel = _channel;
-      if (messages.isEmpty && channel != null) {
-        messages = await channel.chatMessagHistory(50, createdBefore: topDate);
-        _logger.info('fetchHistory: remote messages ${messages.length}');
+      final channel = _getChannel();
+      if (newMessages.isEmpty && channel != null) {
+        newMessages = await channel.chatMessagHistory(50, createdBefore: topDate);
+        _logger.info('fetchHistory: remote messages ${newMessages.length}');
 
-        if (messages.isNotEmpty) {
-          await _chatsRepository.upsertMessages(messages, silent: true);
+        if (newMessages.isNotEmpty) {
+          await _chatsRepository.upsertMessages(newMessages, silent: true);
           final newSyncCursor = ChatMessageSyncCursor(
             chatId: chatId,
             cursorType: MessageSyncCursorType.oldest,
-            time: messages.last.createdAt,
+            time: newMessages.last.createdAt,
           );
           await _chatsRepository.upsertChatMessageSyncCursor(newSyncCursor);
         }
       }
 
       if (isClosed) return;
-
-      final updatedMessages = [...state.messages, ...messages];
-      if (messages.isNotEmpty) {
-        emit(state.copyWith(messages: updatedMessages, fetchingHistory: false, historyEndReached: false));
-      } else {
-        emit(state.copyWith(fetchingHistory: false, historyEndReached: true));
-      }
+      _releaseHistoryFetching(endReached: newMessages.isEmpty, newMessages: newMessages);
     } on Exception catch (e, s) {
-      emit(state.copyWith(fetchingHistory: false));
+      _releaseHistoryFetching();
       _logger.warning('fetchHistory failed', e, s);
       _submitNotification(DefaultErrorNotification(e));
     }
@@ -458,7 +431,8 @@ class ConversationCubit extends Cubit<ConversationState> {
     if (state is CVSReady) emit(state.copyWith(readCursors: cursors));
   }
 
-  PhoenixChannel? get _channel {
+  /// Try get the chat channel if it's connected and ready to use
+  PhoenixChannel? _getChannel() {
     final state = this.state;
     final chatId = state.credentials.chatId;
     if (chatId != null) {
@@ -467,6 +441,48 @@ class ConversationCubit extends Cubit<ConversationState> {
     }
 
     return null;
+  }
+
+  /// Acquire busy lock state if it's not busy yet
+  /// Returns true if busy state was acquired, false otherwise
+  /// The lock state will be released by [_releaseBusy]
+  bool _acquireBusy() {
+    final state = this.state;
+    if (state is! CVSReady) return false;
+    emit(state.copyWith(busy: true));
+    return true;
+  }
+
+  /// Release busy lock state
+  void _releaseBusy() {
+    final state = this.state;
+    if (state is CVSReady) emit(state.copyWith(busy: false));
+  }
+
+  /// Acquire fetching history lock state if it's not fetching yet
+  /// Returns the data needed to fetch history if it's able to fetch, null otherwise
+  /// The lock state will be released by [_releaseHistoryFetching]
+  (DateTime, int)? _acquireHistoryFetching() {
+    final state = this.state;
+    if (state is! CVSReady || state.fetchingHistory) return null;
+
+    final chatId = state.credentials.chatId;
+    if (chatId == null) return null;
+
+    final topMessage = state.messages.lastOrNull;
+    if (topMessage == null) return null;
+
+    emit(state.copyWith(fetchingHistory: true));
+    return (topMessage.createdAt, chatId);
+  }
+
+  /// Release fetching history lock state and update the state with new messages if any
+  void _releaseHistoryFetching({bool endReached = false, List<ChatMessage> newMessages = const []}) {
+    final state = this.state;
+    if (state is CVSReady) {
+      final messages = [...state.messages, ...newMessages];
+      emit(state.copyWith(fetchingHistory: false, historyEndReached: endReached, messages: messages));
+    }
   }
 
   @override
