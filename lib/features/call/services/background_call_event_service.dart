@@ -10,6 +10,8 @@ import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
+const _noActiveLines = 0;
+
 class BackgroundCallEventService implements CallkeepBackgroundServiceDelegate {
   BackgroundCallEventService({
     required RecentsRepository recentsRepository,
@@ -40,6 +42,7 @@ class BackgroundCallEventService implements CallkeepBackgroundServiceDelegate {
       onHangupCallEvent: _handleHangupCall,
       onIncomingCallEvent: _handleIncomingCall,
       onUnregisteredEvent: _handleUnregisteredEvent,
+      onActiveLine: _handleActiveLines,
     );
   }
 
@@ -118,6 +121,12 @@ class BackgroundCallEventService implements CallkeepBackgroundServiceDelegate {
   void _handleUnregisteredEvent(UnregisteredEvent event) async {
     await _callkeep.endAllBackgroundCalls();
     if (_incomingCallType.isPushNotification) _callkeep.stopService();
+  }
+
+  void _handleActiveLines(int count) async {
+    if (count == _noActiveLines) {
+      if (_incomingCallType.isPushNotification) _callkeep.stopService();
+    }
   }
 
   @override
