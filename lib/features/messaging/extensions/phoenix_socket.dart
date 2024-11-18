@@ -524,17 +524,8 @@ extension PhoenixChannelExt on PhoenixChannel {
   }
 
   /// This function sends a typing event to the chat channel.
-  Future<bool> sendChatTyping() async {
-    final p = push('chat:typing', {});
-    final req = await p.future.catchError(_mapPhxError);
-
-    if (req.isOk) return true;
-
-    throw MessagingSocketException(
-      'Error sending chat typing',
-      response: req.response,
-      topic: topic,
-    );
+  void sendChatTyping() async {
+    push('chat:typing', {});
   }
 
   /// Deletes a chat conversation (group or dialog) from the server.
