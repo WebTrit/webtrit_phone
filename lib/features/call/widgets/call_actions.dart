@@ -14,6 +14,7 @@ export 'call_actions_styles.dart';
 class CallActions extends StatefulWidget {
   const CallActions({
     super.key,
+    required this.enableInteractions,
     required this.isIncoming,
     required this.video,
     required this.wasAccepted,
@@ -42,6 +43,7 @@ class CallActions extends StatefulWidget {
     this.style,
   });
 
+  final bool enableInteractions;
   final bool isIncoming;
   final bool video;
   final bool wasAccepted;
@@ -147,22 +149,22 @@ class _CallActionsState extends State<CallActions> {
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
 
-    final onCameraChanged = widget.onCameraChanged;
-    final onMutedChanged = widget.onMutedChanged;
-    final speakerValue = widget.speakerValue;
-    final onSpeakerChanged = widget.onSpeakerChanged;
-    final onBlindTransferInitiated = widget.onBlindTransferInitiated;
-    final onAttendedTransferInitiated = widget.onAttendedTransferInitiated;
-    final onAttendedTransferSubmitted = widget.onAttendedTransferSubmitted;
-    final onHeldChanged = widget.onHeldChanged;
-    final onSwapPressed = widget.onSwapPressed;
-    final onAcceptPressed = widget.onAcceptPressed;
-    final onHangupPressed = widget.onHangupPressed;
-    final onHangupAndAcceptPressed = widget.onHangupAndAcceptPressed;
-    final onKeyPressed = widget.onKeyPressed;
-    final onApproveTransferPressed = widget.onApproveTransferPressed;
-    final onHoldAndAcceptPressed = widget.onHoldAndAcceptPressed;
-    final onDeclineTransferPressed = widget.onDeclineTransferPressed;
+    final onCameraChanged = widget.enableInteractions ? widget.onCameraChanged : null;
+    final onMutedChanged = widget.enableInteractions ? widget.onMutedChanged : null;
+    final speakerValue = widget.enableInteractions ? widget.speakerValue : null;
+    final onSpeakerChanged = widget.enableInteractions ? widget.onSpeakerChanged : null;
+    final onBlindTransferInitiated = widget.enableInteractions ? widget.onBlindTransferInitiated : null;
+    final onAttendedTransferInitiated = widget.enableInteractions ? widget.onAttendedTransferInitiated : null;
+    final onAttendedTransferSubmitted = widget.enableInteractions ? widget.onAttendedTransferSubmitted : null;
+    final onHeldChanged = widget.enableInteractions ? widget.onHeldChanged : null;
+    final onSwapPressed = widget.enableInteractions ? widget.onSwapPressed : null;
+    final onAcceptPressed = widget.enableInteractions ? widget.onAcceptPressed : null;
+    final onHangupPressed = widget.enableInteractions ? widget.onHangupPressed : null;
+    final onHangupAndAcceptPressed = widget.enableInteractions ? widget.onHangupAndAcceptPressed : null;
+    final onKeyPressed = widget.enableInteractions ? widget.onKeyPressed : null;
+    final onApproveTransferPressed = widget.enableInteractions ? widget.onApproveTransferPressed : null;
+    final onHoldAndAcceptPressed = widget.enableInteractions ? widget.onHoldAndAcceptPressed : null;
+    final onDeclineTransferPressed = widget.enableInteractions ? widget.onDeclineTransferPressed : null;
 
     final style = CallActionsStyle.merge(widget.style, Theme.of(context).extension<CallActionsStyles>()?.primary);
 
