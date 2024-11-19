@@ -156,6 +156,13 @@ class _CallActionsState extends State<CallActions> {
     final onAttendedTransferSubmitted = widget.onAttendedTransferSubmitted;
     final onHeldChanged = widget.onHeldChanged;
     final onSwapPressed = widget.onSwapPressed;
+    final onAcceptPressed = widget.onAcceptPressed;
+    final onHangupPressed = widget.onHangupPressed;
+    final onHangupAndAcceptPressed = widget.onHangupAndAcceptPressed;
+    final onKeyPressed = widget.onKeyPressed;
+    final onApproveTransferPressed = widget.onApproveTransferPressed;
+    final onHoldAndAcceptPressed = widget.onHoldAndAcceptPressed;
+    final onDeclineTransferPressed = widget.onDeclineTransferPressed;
 
     final style = CallActionsStyle.merge(widget.style, Theme.of(context).extension<CallActionsStyles>()?.primary);
 
@@ -170,7 +177,7 @@ class _CallActionsState extends State<CallActions> {
                   ? context.l10n.call_CallActionsTooltip_decline_inviteToAttendedTransfer
                   : context.l10n.call_CallActionsTooltip_hangup,
               child: TextButton(
-                onPressed: widget.onHangupPressed,
+                onPressed: onHangupPressed,
                 style: style.hangup,
                 child: const Icon(Icons.call_end),
               ),
@@ -181,7 +188,7 @@ class _CallActionsState extends State<CallActions> {
                   ? context.l10n.call_CallActionsTooltip_accept_inviteToAttendedTransfer
                   : context.l10n.call_CallActionsTooltip_accept,
               child: TextButton(
-                onPressed: widget.onAcceptPressed,
+                onPressed: onAcceptPressed,
                 style: style.callStart,
                 child: Icon(widget.video ? Icons.videocam : Icons.call),
               ),
@@ -195,7 +202,7 @@ class _CallActionsState extends State<CallActions> {
             Tooltip(
               message: context.l10n.call_CallActionsTooltip_hangupAndAccept,
               child: TextButton(
-                onPressed: widget.onHangupAndAcceptPressed,
+                onPressed: onHangupAndAcceptPressed,
                 style: style.callStart,
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
@@ -209,7 +216,7 @@ class _CallActionsState extends State<CallActions> {
             Tooltip(
               message: context.l10n.call_CallActionsTooltip_hangup,
               child: TextButton(
-                onPressed: widget.onHangupPressed,
+                onPressed: onHangupPressed,
                 style: style.hangup,
                 child: const Icon(Icons.call_end),
               ),
@@ -217,7 +224,7 @@ class _CallActionsState extends State<CallActions> {
             Tooltip(
               message: context.l10n.call_CallActionsTooltip_holdAndAccept,
               child: TextButton(
-                onPressed: widget.onHoldAndAcceptPressed,
+                onPressed: onHoldAndAcceptPressed,
                 style: style.callStart,
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
@@ -231,14 +238,14 @@ class _CallActionsState extends State<CallActions> {
           ],
         );
       }
-    } else if (widget.onApproveTransferPressed != null || widget.onDeclineTransferPressed != null) {
+    } else if (onApproveTransferPressed != null || onDeclineTransferPressed != null) {
       buttonsTable = TextButtonsTable(
         minimumSize: Size.square(_dimension),
         children: [
           Tooltip(
             message: context.l10n.call_CallActionsTooltip_hangup,
             child: TextButton(
-              onPressed: widget.onDeclineTransferPressed,
+              onPressed: onDeclineTransferPressed,
               style: style.hangup,
               child: const Icon(Icons.call_end),
             ),
@@ -247,7 +254,7 @@ class _CallActionsState extends State<CallActions> {
           Tooltip(
             message: context.l10n.call_CallActionsTooltip_accept,
             child: TextButton(
-              onPressed: widget.onApproveTransferPressed,
+              onPressed: onApproveTransferPressed,
               style: style.callStart,
               child: const Icon(Icons.phone_forwarded),
             ),
@@ -274,7 +281,7 @@ class _CallActionsState extends State<CallActions> {
                     _keypadTextFieldEditableTextState?.userUpdateTextEditingValue(
                         value, SelectionChangedCause.keyboard);
 
-                    widget.onKeyPressed!(key);
+                    onKeyPressed!(key);
                   },
                   style: style.key,
                 ),
@@ -429,7 +436,7 @@ class _CallActionsState extends State<CallActions> {
           Tooltip(
             message: context.l10n.call_CallActionsTooltip_showKeypad,
             child: TextButton(
-              onPressed: widget.onKeyPressed == null || !_isOrientationPortrait
+              onPressed: onKeyPressed == null || !_isOrientationPortrait
                   ? null
                   : () {
                       setState(() {
@@ -458,7 +465,7 @@ class _CallActionsState extends State<CallActions> {
           Tooltip(
             message: context.l10n.call_CallActionsTooltip_hangup,
             child: TextButton(
-              onPressed: widget.onHangupPressed,
+              onPressed: onHangupPressed,
               style: style.hangup,
               child: const Icon(Icons.call_end),
             ),
