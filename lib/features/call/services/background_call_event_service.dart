@@ -92,8 +92,12 @@ class BackgroundCallEventService implements CallkeepBackgroundServiceDelegate {
 
   void _handleIncomingCall(IncomingCallEvent event) {
     try {
-      final number = CallkeepHandle.number(event.caller);
-      _callkeep.incomingCall(event.callId, number, displayName: event.callerDisplayName, hasVideo: false);
+      _callkeep.incomingCall(
+        event.callId,
+        CallkeepHandle.number(event.caller),
+        displayName: event.callerDisplayName,
+        hasVideo: false,
+      );
     } catch (e) {
       _handleExceptions(e);
     }
@@ -113,7 +117,9 @@ class BackgroundCallEventService implements CallkeepBackgroundServiceDelegate {
 
   void _handleSignalingError(error, [StackTrace? stackTrace]) async {
     try {
-      if (_incomingCallType.isPushNotification) await _stopIsolate();
+      if (_incomingCallType.isPushNotification) {
+        await _stopIsolate();
+      }
     } catch (e) {
       _handleExceptions(e);
     }
@@ -121,7 +127,9 @@ class BackgroundCallEventService implements CallkeepBackgroundServiceDelegate {
 
   void _handleSignalingDisconnect(int? code, String? reason) async {
     try {
-      if (_incomingCallType.isPushNotification) await _stopIsolate();
+      if (_incomingCallType.isPushNotification) {
+        await _stopIsolate();
+      }
     } catch (e) {
       _handleExceptions(e);
     }
@@ -130,7 +138,10 @@ class BackgroundCallEventService implements CallkeepBackgroundServiceDelegate {
   void _handleUnregisteredEvent(UnregisteredEvent event) async {
     try {
       await _callkeep.endAllBackgroundCalls();
-      if (_incomingCallType.isPushNotification) await _stopIsolate();
+
+      if (_incomingCallType.isPushNotification) {
+        await _stopIsolate();
+      }
     } catch (e) {
       _handleExceptions(e);
     }
@@ -138,8 +149,11 @@ class BackgroundCallEventService implements CallkeepBackgroundServiceDelegate {
 
   void _handleActiveLines(int count) async {
     try {
-      if (count == _noActiveLines) {
-        if (_incomingCallType.isPushNotification) await _stopIsolate();
+      // If there are no active lines (e.g., the caller canceled the call),
+      // and the call was triggered by a push notification, stop the signaling
+      // and terminate the isolate to free resources.
+      if (count == _noActiveLines && _incomingCallType.isPushNotification) {
+        await _stopIsolate();
       }
     } catch (e) {
       _handleExceptions(e);
