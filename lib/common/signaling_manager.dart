@@ -164,11 +164,12 @@ class SignalingManager {
   //  Cleans up resources and disconnects the client.
   Future<void> close() async {
     _logger.info('Closing service');
-    _connectivitySubscription?.cancel();
-    _isConnected = false;
 
     try {
       await _client?.disconnect();
+      await _connectivitySubscription?.cancel();
+
+      _isConnected = false;
     } catch (e) {
       _logger.severe('Error closing service', e);
     }
