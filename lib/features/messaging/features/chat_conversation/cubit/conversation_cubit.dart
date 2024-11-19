@@ -317,6 +317,8 @@ class ConversationCubit extends Cubit<ConversationState> {
 
     // Subscribe to chat remove event
     _chatRemoveSub = _chatRemoveSubFactory(chatId, _handleChatRemove);
+
+    // _fillHistory();
   }
 
   StreamSubscription _chatUpdateSubFactory(void Function(Chat) onArrive) {
@@ -482,6 +484,17 @@ class ConversationCubit extends Cubit<ConversationState> {
     if (state is CVSReady) {
       final messages = [...state.messages, ...newMessages];
       emit(state.copyWith(fetchingHistory: false, historyEndReached: endReached, messages: messages));
+    }
+  }
+
+  // reserved for testing purposes
+  // ignore: unused_element
+  Future<void> _fillHistory({int index = 0}) async {
+    if (isClosed) return;
+    await sendMessage('Hello, I am a bot. I am here to help you. \n $index');
+    if (index < 100) {
+      await Future.delayed(const Duration(seconds: 2));
+      await _fillHistory(index: index + 1);
     }
   }
 

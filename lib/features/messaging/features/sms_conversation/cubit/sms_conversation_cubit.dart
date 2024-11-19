@@ -201,6 +201,8 @@ class SmsConversationCubit extends Cubit<SmsConversationState> {
     // Subscribe to outbox messages updates
     _outboxMessageDeletesSub =
         _outboxMessageDeletesSubFactory((entries) => _handleOutboxMessageDeletesUpdate(conversationId, entries));
+
+    // _fillHistory();
   }
 
   StreamSubscription _conversationUpdateSubFactory(void Function(SmsConversation) onArrive) {
@@ -330,6 +332,17 @@ class SmsConversationCubit extends Cubit<SmsConversationState> {
     if (state is SCSReady) {
       final messages = [...state.messages, ...newMessages];
       emit(state.copyWith(fetchingHistory: false, historyEndReached: endReached, messages: messages));
+    }
+  }
+
+  // reserved for testing purposes
+  // ignore: unused_element
+  Future<void> _fillHistory({int index = 0}) async {
+    if (isClosed) return;
+    await sendMessage('Hello, I am a bot. I am here to help you. \n $index');
+    if (index < 100) {
+      await Future.delayed(const Duration(seconds: 2));
+      await _fillHistory(index: index + 1);
     }
   }
 
