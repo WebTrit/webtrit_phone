@@ -71,57 +71,78 @@ class BackgroundCallEventService implements CallkeepBackgroundServiceDelegate {
   }
 
   Future<void> onChangedLifecycle(CallkeepServiceStatus status) async {
-    _logger.info('onChangedLifecycle: $status');
+    try {
+      _logger.info('onChangedLifecycle: $status');
 
-    // [Socket]
-    // If the app is hidden and there are no active calls, launch the signaling manager in the background.
-    if (status.lifecycle == CallkeepLifecycleType.onStop && !status.activeCalls) {
-      _signalingManager.launch();
-    }
+      // [Socket]
+      // If the app is hidden and there are no active calls, launch the signaling manager in the background.
+      if (status.lifecycle == CallkeepLifecycleType.onStop && !status.activeCalls) {
+        _signalingManager.launch();
+      }
 
-    // [Socket, Push Notifications]
-    // Close the signaling manager when the app is resumed to switch signaling to the main isolate.
-    if (status.lifecycle == CallkeepLifecycleType.onResume) {
-      await _signalingManager.close();
-    }
-
-    // [Push Notifications]
-    // Stop the foreground service when the app is resumed. Push notifications will handle incoming calls in the future.
-    if (status.lifecycle == CallkeepLifecycleType.onResume && _incomingCallType.isPushNotification) {
-      await _callkeep.stopService();
+      // [Push Notifications]
+      // Stop the foreground service when the app is resumed. Push notifications will handle incoming calls in the future.
+      if (status.lifecycle == CallkeepLifecycleType.onResume && _incomingCallType.isPushNotification) {
+        await _stopIsolate();
+      }
+    } catch (e) {
+      _handleExceptions(e);
     }
   }
 
   void _handleIncomingCall(IncomingCallEvent event) {
-    final number = CallkeepHandle.number(event.caller);
-    _callkeep.incomingCall(event.callId, number, displayName: event.callerDisplayName, hasVideo: false);
+    try {
+      final number = CallkeepHandle.number(event.caller);
+      _callkeep.incomingCall(event.callId, number, displayName: event.callerDisplayName, hasVideo: false);
+    } catch (e) {
+      _handleExceptions(e);
+    }
   }
 
   void _handleHangupCall(HangupEvent event) async {
-    await _callkeep.endBackgroundCall(event.callId);
+    try {
+      await _callkeep.endBackgroundCall(event.callId);
 
-    if (_incomingCallType.isPushNotification) {
-      await _signalingManager.close();
-      await _callkeep.stopService();
+      if (_incomingCallType.isPushNotification) {
+        await _stopIsolate();
+      }
+    } catch (e) {
+      _handleExceptions(e);
     }
   }
 
   void _handleSignalingError(error, [StackTrace? stackTrace]) async {
-    if (_incomingCallType.isPushNotification) await _callkeep.stopService();
+    try {
+      if (_incomingCallType.isPushNotification) await _stopIsolate();
+    } catch (e) {
+      _handleExceptions(e);
+    }
   }
 
   void _handleSignalingDisconnect(int? code, String? reason) async {
-    if (_incomingCallType.isPushNotification) await _callkeep.stopService();
+    try {
+      if (_incomingCallType.isPushNotification) await _stopIsolate();
+    } catch (e) {
+      _handleExceptions(e);
+    }
   }
 
   void _handleUnregisteredEvent(UnregisteredEvent event) async {
-    await _callkeep.endAllBackgroundCalls();
-    if (_incomingCallType.isPushNotification) _callkeep.stopService();
+    try {
+      await _callkeep.endAllBackgroundCalls();
+      if (_incomingCallType.isPushNotification) await _stopIsolate();
+    } catch (e) {
+      _handleExceptions(e);
+    }
   }
 
   void _handleActiveLines(int count) async {
-    if (count == _noActiveLines) {
-      if (_incomingCallType.isPushNotification) _callkeep.stopService();
+    try {
+      if (count == _noActiveLines) {
+        if (_incomingCallType.isPushNotification) await _stopIsolate();
+      }
+    } catch (e) {
+      _handleExceptions(e);
     }
   }
 
@@ -130,11 +151,14 @@ class BackgroundCallEventService implements CallkeepBackgroundServiceDelegate {
 
   @override
   void performServiceEndCall(String callId) async {
-    await _signalingManager.declineRequest(callId);
+    try {
+      await _signalingManager.declineRequest(callId);
 
-    if (_incomingCallType.isPushNotification) {
-      await _signalingManager.close();
-      await _callkeep.stopService();
+      if (_incomingCallType.isPushNotification) {
+        await _stopIsolate();
+      }
+    } catch (e) {
+      _handleExceptions(e);
     }
   }
 
@@ -156,5 +180,14 @@ class BackgroundCallEventService implements CallkeepBackgroundServiceDelegate {
       acceptedTime: acceptedTime,
       hungUpTime: hungUpTime,
     ));
+  }
+
+  Future<void> _stopIsolate() async {
+    await _signalingManager.close();
+    await _callkeep.stopService();
+  }
+
+  void _handleExceptions(e) {
+    _logger.severe(e);
   }
 }
