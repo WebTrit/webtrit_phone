@@ -159,7 +159,8 @@ class _CallActionsState extends State<CallActions> {
     final onHeldChanged = widget.enableInteractions ? widget.onHeldChanged : null;
     final onSwapPressed = widget.enableInteractions ? widget.onSwapPressed : null;
     final onAcceptPressed = widget.enableInteractions ? widget.onAcceptPressed : null;
-    final onHangupPressed = widget.enableInteractions ? widget.onHangupPressed : null;
+    // Always allow the user to hang up the call
+    final onHangupPressed = widget.onHangupPressed;
     final onHangupAndAcceptPressed = widget.enableInteractions ? widget.onHangupAndAcceptPressed : null;
     final onKeyPressed = widget.enableInteractions ? widget.onKeyPressed : null;
     final onApproveTransferPressed = widget.enableInteractions ? widget.onApproveTransferPressed : null;
