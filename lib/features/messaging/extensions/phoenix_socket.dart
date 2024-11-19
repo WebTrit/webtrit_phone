@@ -809,7 +809,7 @@ sealed class ChatChannelEvent {
       case 'phx_error':
         return ChatChannelDisconnect();
       default:
-        return ChatChannelUnknown();
+        return ChatChannelUnknown(event: e.event.value);
     }
   }
 }
@@ -860,7 +860,13 @@ class ChatChannelTyping extends ChatChannelEvent with EquatableMixin {
 
 class ChatChannelDisconnect extends ChatChannelEvent {}
 
-class ChatChannelUnknown extends ChatChannelEvent {}
+class ChatChannelUnknown extends ChatChannelEvent {
+  ChatChannelUnknown({this.event = 'unknown'});
+  final String event;
+
+  @override
+  String toString() => 'ChatChannelUnknown: $event';
+}
 
 sealed class SmsChannelEvent {
   const SmsChannelEvent();
@@ -876,7 +882,7 @@ sealed class SmsChannelEvent {
       case 'phx_error':
         return SmsChannelDisconnect();
       default:
-        return SmsChannelUnknown();
+        return SmsChannelUnknown(event: e.event.value);
     }
   }
 }
@@ -916,7 +922,13 @@ class SmsChannelCursorSet extends SmsChannelEvent with EquatableMixin {
 
 class SmsChannelDisconnect extends SmsChannelEvent {}
 
-class SmsChannelUnknown extends SmsChannelEvent {}
+class SmsChannelUnknown extends SmsChannelEvent {
+  SmsChannelUnknown({this.event = 'unknown'});
+  final String event;
+
+  @override
+  String toString() => 'SmsChannelUnknown: $event';
+}
 
 class MessagingSocketException with EquatableMixin implements Exception {
   /// This message is intended to provide a human-readable description of the error from invokation side.
