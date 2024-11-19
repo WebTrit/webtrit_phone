@@ -728,17 +728,7 @@ sealed class UserChannelEvent {
   const UserChannelEvent();
 
   factory UserChannelEvent.fromEvent(Message e) {
-    // TODO: - remove fallback events
-    // chat_membership_join
-    // chat_membership_left
-    // chat_membership_leave
     switch (e.event.value) {
-      case 'chat_membership_join':
-        return ChatConversationJoin(int.parse(e.payload!['chat_id'].toString()));
-      case 'chat_membership_left':
-        return ChatConversationLeave(int.parse(e.payload!['chat_id'].toString()));
-      case 'chat_membership_leave':
-        return ChatConversationLeave(int.parse(e.payload!['chat_id'].toString()));
       case 'chat_join':
         return ChatConversationJoin(int.parse(e.payload!['chat_id'].toString()));
       case 'chat_left':
@@ -812,9 +802,6 @@ sealed class ChatChannelEvent {
         return ChatChannelInfoUpdate(Chat.fromMap(e.payload as Map<String, dynamic>));
       case 'message_update':
         return ChatChannelMessageUpdate(ChatMessage.fromMap(e.payload as Map<String, dynamic>));
-      // Backward compatibility, remove in future some day
-      case 'chat:cursor:set':
-        return ChatChannelCursorSet(ChatMessageReadCursor.fromMap(e.payload as Map<String, dynamic>));
       case 'chat_cursor_set':
         return ChatChannelCursorSet(ChatMessageReadCursor.fromMap(e.payload as Map<String, dynamic>));
       case 'typing':
@@ -884,9 +871,6 @@ sealed class SmsChannelEvent {
         return SmsChannelInfoUpdate(SmsConversation.fromMap(e.payload as Map<String, dynamic>));
       case 'sms_message_update':
         return SmsChannelMessageUpdate(SmsMessage.fromMap(e.payload as Map<String, dynamic>));
-      // Backward compatibility, remove in future some day
-      case 'sms:conversation:cursor:set':
-        return SmsChannelCursorSet(SmsMessageReadCursor.fromMap(e.payload as Map<String, dynamic>));
       case 'sms_conversation_cursor_set':
         return SmsChannelCursorSet(SmsMessageReadCursor.fromMap(e.payload as Map<String, dynamic>));
       case 'phx_error':
