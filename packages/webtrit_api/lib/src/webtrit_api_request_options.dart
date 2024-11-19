@@ -3,7 +3,7 @@ class RequestOptions {
   final Duration retryDelay;
 
   const RequestOptions({
-    this.retries = 0,
+    this.retries = 3,
     this.retryDelay = const Duration(seconds: 1),
   });
 
