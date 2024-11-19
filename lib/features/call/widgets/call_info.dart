@@ -22,6 +22,7 @@ class CallInfo extends StatefulWidget {
     this.acceptedTime,
     this.color,
     this.activeCallStatus,
+    required this.callStatus,
   });
 
   final bool transfering;
@@ -33,6 +34,9 @@ class CallInfo extends StatefulWidget {
   final DateTime? acceptedTime;
   final Color? color;
   final ActiveCallStatus? activeCallStatus;
+
+// TODO(Serdun): Rename class to better represent the actual data it holds
+  final CallStatus callStatus;
 
   @override
   State<CallInfo> createState() => _CallInfoState();
@@ -97,7 +101,9 @@ class _CallInfoState extends State<CallInfo> {
     final statusStyle = textTheme.labelLarge!.copyWith(color: themeData.colorScheme.surface);
 
     final String statusMessage;
-    if (duration == null) {
+    if (widget.callStatus != CallStatus.ready) {
+      statusMessage = widget.callStatus.l10n(context);
+    } else if (duration == null) {
       if (widget.inviteToAttendedTransfer) {
         statusMessage = context.l10n.call_description_inviteToAttendedTransfer;
       } else if (widget.requestToAttendedTransfer) {

@@ -12,6 +12,7 @@ class CallActiveScaffold extends StatefulWidget {
   const CallActiveScaffold({
     super.key,
     required this.speaker,
+    required this.callStatus,
     required this.activeCalls,
     required this.transferConfig,
     required this.localePlaceholderBuilder,
@@ -19,6 +20,7 @@ class CallActiveScaffold extends StatefulWidget {
   });
 
   final bool? speaker;
+  final CallStatus callStatus;
   final List<ActiveCall> activeCalls;
   final TransferConfig transferConfig;
   final WidgetBuilder? localePlaceholderBuilder;
@@ -165,6 +167,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                                         acceptedTime: activeCall.acceptedTime,
                                         color: onTabGradient,
                                         activeCallStatus: activeCall.status,
+                                        callStatus: widget.callStatus,
                                       ),
                                     if (activeTransfer is AttendedTransferConfirmationRequested)
                                       CallInfo(
@@ -175,8 +178,10 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                                         held: false,
                                         username: activeTransfer.referTo,
                                         color: onTabGradient,
+                                        callStatus: widget.callStatus,
                                       ),
                                     CallActions(
+                                      enableInteractions: widget.callStatus == CallStatus.ready,
                                       isIncoming: activeCall.isIncoming,
                                       video: activeCall.video,
                                       wasAccepted: activeCall.wasAccepted,

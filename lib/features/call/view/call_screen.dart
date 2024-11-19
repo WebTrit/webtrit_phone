@@ -67,6 +67,7 @@ class _CallScreenState extends State<CallScreen> with AutoRouteAwareStateMixin {
         if (state.isActive) {
           return CallActiveScaffold(
             speaker: state.speaker,
+            callStatus: state.status,
             activeCalls: state.activeCalls,
             transferConfig: widget.transferConfig,
             localePlaceholderBuilder: widget.localePlaceholderBuilder,
