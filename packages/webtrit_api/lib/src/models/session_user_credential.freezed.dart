@@ -26,8 +26,12 @@ mixin _$SessionUserCredential {
   String get identifier => throw _privateConstructorUsedError;
   String get email => throw _privateConstructorUsedError;
 
+  /// Serializes this SessionUserCredential to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of SessionUserCredential
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $SessionUserCredentialCopyWith<SessionUserCredential> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -52,6 +56,8 @@ class _$SessionUserCredentialCopyWithImpl<$Res,
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of SessionUserCredential
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -102,6 +108,8 @@ class __$$SessionUserCredentialImplCopyWithImpl<$Res>
       $Res Function(_$SessionUserCredentialImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of SessionUserCredential
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -171,12 +179,14 @@ class _$SessionUserCredentialImpl implements _SessionUserCredential {
             (identical(other.email, email) || other.email == email));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode =>
       Object.hash(runtimeType, bundleId, type, identifier, email);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of SessionUserCredential
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$SessionUserCredentialImplCopyWith<_$SessionUserCredentialImpl>
@@ -209,8 +219,11 @@ abstract class _SessionUserCredential implements SessionUserCredential {
   String get identifier;
   @override
   String get email;
+
+  /// Create a copy of SessionUserCredential
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$SessionUserCredentialImplCopyWith<_$SessionUserCredentialImpl>
       get copyWith => throw _privateConstructorUsedError;
 }

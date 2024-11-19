@@ -25,8 +25,12 @@ mixin _$SessionOtpCredential {
   String get identifier => throw _privateConstructorUsedError;
   String get userRef => throw _privateConstructorUsedError;
 
+  /// Serializes this SessionOtpCredential to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of SessionOtpCredential
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $SessionOtpCredentialCopyWith<SessionOtpCredential> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -52,6 +56,8 @@ class _$SessionOtpCredentialCopyWithImpl<$Res,
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of SessionOtpCredential
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -101,6 +107,8 @@ class __$$SessionOtpCredentialImplCopyWithImpl<$Res>
       $Res Function(_$SessionOtpCredentialImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of SessionOtpCredential
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -170,12 +178,14 @@ class _$SessionOtpCredentialImpl implements _SessionOtpCredential {
             (identical(other.userRef, userRef) || other.userRef == userRef));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode =>
       Object.hash(runtimeType, bundleId, type, identifier, userRef);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of SessionOtpCredential
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$SessionOtpCredentialImplCopyWith<_$SessionOtpCredentialImpl>
@@ -209,8 +219,11 @@ abstract class _SessionOtpCredential implements SessionOtpCredential {
   String get identifier;
   @override
   String get userRef;
+
+  /// Create a copy of SessionOtpCredential
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$SessionOtpCredentialImplCopyWith<_$SessionOtpCredentialImpl>
       get copyWith => throw _privateConstructorUsedError;
 }

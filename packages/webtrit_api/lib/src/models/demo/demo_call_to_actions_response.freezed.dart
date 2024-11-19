@@ -24,8 +24,12 @@ mixin _$DemoCallToActionsResponse {
   List<DemoCallToActionsResponseActions> get actions =>
       throw _privateConstructorUsedError;
 
+  /// Serializes this DemoCallToActionsResponse to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of DemoCallToActionsResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $DemoCallToActionsResponseCopyWith<DemoCallToActionsResponse> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -50,6 +54,8 @@ class _$DemoCallToActionsResponseCopyWithImpl<$Res,
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of DemoCallToActionsResponse
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -86,6 +92,8 @@ class __$$DemoCallToActionsResponseImplCopyWithImpl<$Res>
       $Res Function(_$DemoCallToActionsResponseImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of DemoCallToActionsResponse
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -132,12 +140,14 @@ class _$DemoCallToActionsResponseImpl implements _DemoCallToActionsResponse {
             const DeepCollectionEquality().equals(other._actions, _actions));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode =>
       Object.hash(runtimeType, const DeepCollectionEquality().hash(_actions));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of DemoCallToActionsResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$DemoCallToActionsResponseImplCopyWith<_$DemoCallToActionsResponseImpl>
@@ -162,8 +172,11 @@ abstract class _DemoCallToActionsResponse implements DemoCallToActionsResponse {
 
   @override
   List<DemoCallToActionsResponseActions> get actions;
+
+  /// Create a copy of DemoCallToActionsResponse
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$DemoCallToActionsResponseImplCopyWith<_$DemoCallToActionsResponseImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
@@ -182,8 +195,12 @@ mixin _$DemoCallToActionsResponseActions {
   DemoCallToActionsResponseActionsExtraData get extraData =>
       throw _privateConstructorUsedError;
 
+  /// Serializes this DemoCallToActionsResponseActions to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of DemoCallToActionsResponseActions
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $DemoCallToActionsResponseActionsCopyWith<DemoCallToActionsResponseActions>
       get copyWith => throw _privateConstructorUsedError;
 }
@@ -217,6 +234,8 @@ class _$DemoCallToActionsResponseActionsCopyWithImpl<$Res,
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of DemoCallToActionsResponseActions
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -245,6 +264,8 @@ class _$DemoCallToActionsResponseActionsCopyWithImpl<$Res,
     ) as $Val);
   }
 
+  /// Create a copy of DemoCallToActionsResponseActions
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $DemoCallToActionsResponseActionsExtraDataCopyWith<$Res> get extraData {
@@ -285,6 +306,8 @@ class __$$DemoCallToActionsResponseActionsImplCopyWithImpl<$Res>
       $Res Function(_$DemoCallToActionsResponseActionsImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of DemoCallToActionsResponseActions
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -357,12 +380,14 @@ class _$DemoCallToActionsResponseActionsImpl
                 other.extraData == extraData));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode =>
       Object.hash(runtimeType, title, description, url, extraData);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of DemoCallToActionsResponseActions
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$DemoCallToActionsResponseActionsImplCopyWith<
@@ -401,8 +426,11 @@ abstract class _DemoCallToActionsResponseActions
   @override
   @JsonKey(name: 'extra_data')
   DemoCallToActionsResponseActionsExtraData get extraData;
+
+  /// Create a copy of DemoCallToActionsResponseActions
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$DemoCallToActionsResponseActionsImplCopyWith<
           _$DemoCallToActionsResponseActionsImpl>
       get copyWith => throw _privateConstructorUsedError;
@@ -421,8 +449,12 @@ mixin _$DemoCallToActionsResponseActionsExtraData {
   @JsonKey(name: 'token_expires')
   String get tokenExpires => throw _privateConstructorUsedError;
 
+  /// Serializes this DemoCallToActionsResponseActionsExtraData to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of DemoCallToActionsResponseActionsExtraData
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $DemoCallToActionsResponseActionsExtraDataCopyWith<
           DemoCallToActionsResponseActionsExtraData>
       get copyWith => throw _privateConstructorUsedError;
@@ -453,6 +485,8 @@ class _$DemoCallToActionsResponseActionsExtraDataCopyWithImpl<$Res,
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of DemoCallToActionsResponseActionsExtraData
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -496,6 +530,8 @@ class __$$DemoCallToActionsResponseActionsExtraDataImplCopyWithImpl<$Res>
       $Res Function(_$DemoCallToActionsResponseActionsExtraDataImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of DemoCallToActionsResponseActionsExtraData
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -551,11 +587,13 @@ class _$DemoCallToActionsResponseActionsExtraDataImpl
                 other.tokenExpires == tokenExpires));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, apiToken, tokenExpires);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of DemoCallToActionsResponseActionsExtraData
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$DemoCallToActionsResponseActionsExtraDataImplCopyWith<
@@ -590,8 +628,11 @@ abstract class _DemoCallToActionsResponseActionsExtraData
   @override
   @JsonKey(name: 'token_expires')
   String get tokenExpires;
+
+  /// Create a copy of DemoCallToActionsResponseActionsExtraData
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$DemoCallToActionsResponseActionsExtraDataImplCopyWith<
           _$DemoCallToActionsResponseActionsExtraDataImpl>
       get copyWith => throw _privateConstructorUsedError;

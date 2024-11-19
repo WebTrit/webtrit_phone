@@ -26,8 +26,12 @@ mixin _$SessionAutoProvisionCredential {
   String get identifier => throw _privateConstructorUsedError;
   String get configToken => throw _privateConstructorUsedError;
 
+  /// Serializes this SessionAutoProvisionCredential to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of SessionAutoProvisionCredential
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $SessionAutoProvisionCredentialCopyWith<SessionAutoProvisionCredential>
       get copyWith => throw _privateConstructorUsedError;
 }
@@ -55,6 +59,8 @@ class _$SessionAutoProvisionCredentialCopyWithImpl<$Res,
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of SessionAutoProvisionCredential
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -107,6 +113,8 @@ class __$$SessionAutoProvisionCredentialImplCopyWithImpl<$Res>
       $Res Function(_$SessionAutoProvisionCredentialImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of SessionAutoProvisionCredential
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -179,12 +187,14 @@ class _$SessionAutoProvisionCredentialImpl
                 other.configToken == configToken));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode =>
       Object.hash(runtimeType, bundleId, type, identifier, configToken);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of SessionAutoProvisionCredential
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$SessionAutoProvisionCredentialImplCopyWith<
@@ -220,8 +230,11 @@ abstract class _SessionAutoProvisionCredential
   String get identifier;
   @override
   String get configToken;
+
+  /// Create a copy of SessionAutoProvisionCredential
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$SessionAutoProvisionCredentialImplCopyWith<
           _$SessionAutoProvisionCredentialImpl>
       get copyWith => throw _privateConstructorUsedError;

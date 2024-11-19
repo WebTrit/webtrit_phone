@@ -23,8 +23,12 @@ mixin _$AppPushToken {
   AppPushTokenType get type => throw _privateConstructorUsedError;
   String get value => throw _privateConstructorUsedError;
 
+  /// Serializes this AppPushToken to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of AppPushToken
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $AppPushTokenCopyWith<AppPushToken> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -48,6 +52,8 @@ class _$AppPushTokenCopyWithImpl<$Res, $Val extends AppPushToken>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of AppPushToken
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -86,6 +92,8 @@ class __$$AppPushTokenImplCopyWithImpl<$Res>
       _$AppPushTokenImpl _value, $Res Function(_$AppPushTokenImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of AppPushToken
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -133,11 +141,13 @@ class _$AppPushTokenImpl implements _AppPushToken {
             (identical(other.value, value) || other.value == value));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, type, value);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of AppPushToken
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$AppPushTokenImplCopyWith<_$AppPushTokenImpl> get copyWith =>
@@ -163,8 +173,11 @@ abstract class _AppPushToken implements AppPushToken {
   AppPushTokenType get type;
   @override
   String get value;
+
+  /// Create a copy of AppPushToken
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$AppPushTokenImplCopyWith<_$AppPushTokenImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

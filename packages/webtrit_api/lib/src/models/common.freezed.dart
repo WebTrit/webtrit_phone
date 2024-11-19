@@ -25,8 +25,12 @@ mixin _$Numbers {
   List<String>? get additional => throw _privateConstructorUsedError;
   List<String>? get sms => throw _privateConstructorUsedError;
 
+  /// Serializes this Numbers to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of Numbers
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $NumbersCopyWith<Numbers> get copyWith => throw _privateConstructorUsedError;
 }
 
@@ -49,6 +53,8 @@ class _$NumbersCopyWithImpl<$Res, $Val extends Numbers>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of Numbers
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -97,6 +103,8 @@ class __$$NumbersImplCopyWithImpl<$Res>
       _$NumbersImpl _value, $Res Function(_$NumbersImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of Numbers
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -182,7 +190,7 @@ class _$NumbersImpl implements _Numbers {
             const DeepCollectionEquality().equals(other._sms, _sms));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -191,7 +199,9 @@ class _$NumbersImpl implements _Numbers {
       const DeepCollectionEquality().hash(_additional),
       const DeepCollectionEquality().hash(_sms));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Numbers
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$NumbersImplCopyWith<_$NumbersImpl> get copyWith =>
@@ -222,8 +232,11 @@ abstract class _Numbers implements Numbers {
   List<String>? get additional;
   @override
   List<String>? get sms;
+
+  /// Create a copy of Numbers
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$NumbersImplCopyWith<_$NumbersImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -239,8 +252,12 @@ mixin _$Balance {
   double? get creditLimit => throw _privateConstructorUsedError;
   String? get currency => throw _privateConstructorUsedError;
 
+  /// Serializes this Balance to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of Balance
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $BalanceCopyWith<Balance> get copyWith => throw _privateConstructorUsedError;
 }
 
@@ -266,6 +283,8 @@ class _$BalanceCopyWithImpl<$Res, $Val extends Balance>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of Balance
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -317,6 +336,8 @@ class __$$BalanceImplCopyWithImpl<$Res>
       _$BalanceImpl _value, $Res Function(_$BalanceImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of Balance
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -384,12 +405,14 @@ class _$BalanceImpl implements _Balance {
                 other.currency == currency));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode =>
       Object.hash(runtimeType, balanceType, amount, creditLimit, currency);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Balance
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$BalanceImplCopyWith<_$BalanceImpl> get copyWith =>
@@ -420,8 +443,11 @@ abstract class _Balance implements Balance {
   double? get creditLimit;
   @override
   String? get currency;
+
+  /// Create a copy of Balance
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$BalanceImplCopyWith<_$BalanceImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
