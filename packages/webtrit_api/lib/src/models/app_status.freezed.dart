@@ -22,8 +22,12 @@ AppStatus _$AppStatusFromJson(Map<String, dynamic> json) {
 mixin _$AppStatus {
   bool get register => throw _privateConstructorUsedError;
 
+  /// Serializes this AppStatus to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of AppStatus
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $AppStatusCopyWith<AppStatus> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -46,6 +50,8 @@ class _$AppStatusCopyWithImpl<$Res, $Val extends AppStatus>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of AppStatus
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -79,6 +85,8 @@ class __$$AppStatusImplCopyWithImpl<$Res>
       _$AppStatusImpl _value, $Res Function(_$AppStatusImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of AppStatus
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -119,11 +127,13 @@ class _$AppStatusImpl implements _AppStatus {
                 other.register == register));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, register);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of AppStatus
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$AppStatusImplCopyWith<_$AppStatusImpl> get copyWith =>
@@ -145,8 +155,11 @@ abstract class _AppStatus implements AppStatus {
 
   @override
   bool get register;
+
+  /// Create a copy of AppStatus
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$AppStatusImplCopyWith<_$AppStatusImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

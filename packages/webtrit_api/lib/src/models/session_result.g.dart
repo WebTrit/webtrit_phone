@@ -35,7 +35,7 @@ const _$OtpNotificationTypeEnumMap = {
 _$SessionTokenImpl _$$SessionTokenImplFromJson(Map<String, dynamic> json) =>
     _$SessionTokenImpl(
       token: json['token'] as String,
-      userId: json['user_id'] as String,
+      userId: json['user_id'] as String?,
       tenantId: json['tenant_id'] as String?,
       $type: json['runtimeType'] as String?,
     );

@@ -50,6 +50,14 @@ class AutoprovisionCubit extends Cubit<AutoprovisionState> {
       final userId = result.userId;
       final tenantId = result.tenantId ?? config.tenantId;
 
+      if (userId == null) {
+        // TODO(Serdun): Move exception text to localization resources for better maintainability.
+        final notSupportedCoreException =
+            Exception('User ID is required for proper auto provisioning. Please verify the core version.');
+        emit(AutoprovisionState.error(notSupportedCoreException));
+        return;
+      }
+
       if (config.oldToken != null) {
         await _apiClient(oldCoreUrl, config.oldTenantId).deleteSession(config.oldToken!).catchError((e) {
           _logger.warning('deleteSession error: $e');

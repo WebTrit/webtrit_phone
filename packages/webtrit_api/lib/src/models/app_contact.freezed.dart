@@ -23,8 +23,12 @@ mixin _$AppContact {
   String get identifier => throw _privateConstructorUsedError;
   List<String> get phones => throw _privateConstructorUsedError;
 
+  /// Serializes this AppContact to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of AppContact
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $AppContactCopyWith<AppContact> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -48,6 +52,8 @@ class _$AppContactCopyWithImpl<$Res, $Val extends AppContact>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of AppContact
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -86,6 +92,8 @@ class __$$AppContactImplCopyWithImpl<$Res>
       _$AppContactImpl _value, $Res Function(_$AppContactImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of AppContact
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -141,12 +149,14 @@ class _$AppContactImpl implements _AppContact {
             const DeepCollectionEquality().equals(other._phones, _phones));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType, identifier, const DeepCollectionEquality().hash(_phones));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of AppContact
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$AppContactImplCopyWith<_$AppContactImpl> get copyWith =>
@@ -172,8 +182,11 @@ abstract class _AppContact implements AppContact {
   String get identifier;
   @override
   List<String> get phones;
+
+  /// Create a copy of AppContact
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$AppContactImplCopyWith<_$AppContactImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

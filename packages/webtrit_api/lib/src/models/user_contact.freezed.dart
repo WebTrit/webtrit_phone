@@ -31,8 +31,12 @@ mixin _$UserContact {
   bool? get isCurrentUser => throw _privateConstructorUsedError;
   bool? get isRegisteredUser => throw _privateConstructorUsedError;
 
+  /// Serializes this UserContact to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of UserContact
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $UserContactCopyWith<UserContact> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -68,6 +72,8 @@ class _$UserContactCopyWithImpl<$Res, $Val extends UserContact>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of UserContact
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -126,6 +132,8 @@ class _$UserContactCopyWithImpl<$Res, $Val extends UserContact>
     ) as $Val);
   }
 
+  /// Create a copy of UserContact
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $NumbersCopyWith<$Res> get numbers {
@@ -167,6 +175,8 @@ class __$$UserContactImplCopyWithImpl<$Res>
       _$UserContactImpl _value, $Res Function(_$UserContactImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of UserContact
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -295,7 +305,7 @@ class _$UserContactImpl implements _UserContact {
                 other.isRegisteredUser == isRegisteredUser));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -310,7 +320,9 @@ class _$UserContactImpl implements _UserContact {
       isCurrentUser,
       isRegisteredUser);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of UserContact
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$UserContactImplCopyWith<_$UserContactImpl> get copyWith =>
@@ -360,8 +372,11 @@ abstract class _UserContact implements UserContact {
   bool? get isCurrentUser;
   @override
   bool? get isRegisteredUser;
+
+  /// Create a copy of UserContact
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$UserContactImplCopyWith<_$UserContactImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
