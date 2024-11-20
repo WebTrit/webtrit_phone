@@ -9,7 +9,7 @@ class AppSound {
     required String outgoingCallRingAsset,
     int outgoingCallRingRepeat = 50,
   }) async {
-    final sound = Soundpool.fromOptions(options: const SoundpoolOptions(streamType: StreamType.ring));
+    final sound = Soundpool.fromOptions(options: const SoundpoolOptions(streamType: StreamType.music));
 
     final ringSoundId = await sound.loadAsset(outgoingCallRingAsset);
 
@@ -34,6 +34,9 @@ class AppSound {
 
   final List<int> _activeStreamIds = [];
 
+  /// Play the outgoing call ring sound e.g `ringback` sound.
+  /// Don't get confused with ringtone and ringback sound.
+  /// use StreamType.music instead of StreamType.ring to not block sound by silence mode or system preferences.
   Future<void> playOutgoingCall() async {
     await stopOutgoingCall();
 
