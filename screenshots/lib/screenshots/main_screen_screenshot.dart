@@ -63,8 +63,10 @@ class MainScreenScreenshot extends StatelessWidget {
       ],
       child: MainScreen(
         body: _flavorWidgetBuilder(context, flavor),
-        tabs: tabs,
-        currentTab: tabs.firstWhere((tab) => tab.flavor == flavor),
+        bottomNavigationBar: BottomNavigationBar(
+          currentIndex: tabs.indexWhere((tab) => tab.flavor == flavor),
+          items: tabs.map((tab) => BottomNavigationBarItem(icon: Icon(tab.icon), label: tab.titleL10n)).toList(),
+        ),
       ),
     );
   }
