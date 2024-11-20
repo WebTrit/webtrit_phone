@@ -2,12 +2,12 @@
   "loginConfig": {
     "modeSelectActions": [
       {
-        "enabled": true,
+        "enabled": false,
         "type": "login",
         "titleL10n": "login_Button_signUpToDemoInstance"
       },
       {
-        "enabled": false,
+        "enabled": true,
         "embeddedId": 1,
         "type": "embedded",
         "titleL10n": "login_Button_signIn"
@@ -19,7 +19,7 @@
         "launch": false,
         "showToolbar": true,
         "titleL10n": "login_requestCredentials_title",
-        "url": "https://webtrit-app.web.app/example/example_embedded_login.html"
+        "url": "https://bronze-rosalinde-1.tiiny.site"
       }
     ]
   },

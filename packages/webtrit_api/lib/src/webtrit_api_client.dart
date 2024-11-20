@@ -9,6 +9,7 @@ import 'package:meta/meta.dart';
 import 'package:_http_client/_http_client.dart';
 
 import 'exceptions.dart';
+import 'models/session_user_credential_number.dart';
 import 'webtrit_api_request_options.dart';
 import 'models/models.dart';
 
@@ -237,6 +238,23 @@ class WebtritApiClient {
     SessionUserCredential sessionUserCredential, {
     RequestOptions options = const RequestOptions(),
   }) async {
+    final requestJson = sessionUserCredential.toJson();
+
+    final responseJson = await _httpClientExecutePost(
+      ['user'],
+      null,
+      null,
+      requestJson,
+      options: options,
+    );
+
+    return SessionResult.fromJson(responseJson);
+  }
+
+  Future<SessionResult> createUserByNumber(
+      SessionUserCredentialNumber sessionUserCredential, {
+        RequestOptions options = const RequestOptions(),
+      }) async {
     final requestJson = sessionUserCredential.toJson();
 
     final responseJson = await _httpClientExecutePost(

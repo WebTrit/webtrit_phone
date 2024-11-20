@@ -184,7 +184,10 @@ abstract class _$AppRouter extends RootStackRouter {
       final args = routeData.argsAs<LoginEmbeddedScreenPageRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: LoginEmbeddedScreenPage(loginEmbedded: args.loginEmbedded),
+        child: LoginEmbeddedScreenPage(
+          loginEmbedded: args.loginEmbedded,
+          key: args.key,
+        ),
       );
     },
     LoginModeSelectScreenPageRoute.name: (routeData) {
@@ -862,10 +865,14 @@ class LoginEmbeddedScreenPageRoute
     extends PageRouteInfo<LoginEmbeddedScreenPageRouteArgs> {
   LoginEmbeddedScreenPageRoute({
     required LoginEmbedded loginEmbedded,
+    Key? key,
     List<PageRouteInfo>? children,
   }) : super(
           LoginEmbeddedScreenPageRoute.name,
-          args: LoginEmbeddedScreenPageRouteArgs(loginEmbedded: loginEmbedded),
+          args: LoginEmbeddedScreenPageRouteArgs(
+            loginEmbedded: loginEmbedded,
+            key: key,
+          ),
           initialChildren: children,
         );
 
@@ -876,13 +883,18 @@ class LoginEmbeddedScreenPageRoute
 }
 
 class LoginEmbeddedScreenPageRouteArgs {
-  const LoginEmbeddedScreenPageRouteArgs({required this.loginEmbedded});
+  const LoginEmbeddedScreenPageRouteArgs({
+    required this.loginEmbedded,
+    this.key,
+  });
 
   final LoginEmbedded loginEmbedded;
 
+  final Key? key;
+
   @override
   String toString() {
-    return 'LoginEmbeddedScreenPageRouteArgs{loginEmbedded: $loginEmbedded}';
+    return 'LoginEmbeddedScreenPageRouteArgs{loginEmbedded: $loginEmbedded, key: $key}';
   }
 }
 

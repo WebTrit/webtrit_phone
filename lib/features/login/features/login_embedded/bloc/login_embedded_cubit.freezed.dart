@@ -15,13 +15,41 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
-mixin _$LoginEmbeddedState {}
+mixin _$LoginEmbeddedState {
+  SessionResult? get result => throw _privateConstructorUsedError;
+  String? get tenantId => throw _privateConstructorUsedError;
+  String? get token => throw _privateConstructorUsedError;
+  String? get userId => throw _privateConstructorUsedError;
+  (
+    SessionOtpProvisional,
+    DateTime
+  )? get signupSessionOtpProvisionalWithDateTime =>
+      throw _privateConstructorUsedError;
+
+  /// Create a copy of LoginEmbeddedState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $LoginEmbeddedStateCopyWith<LoginEmbeddedState> get copyWith =>
+      throw _privateConstructorUsedError;
+}
 
 /// @nodoc
 abstract class $LoginEmbeddedStateCopyWith<$Res> {
   factory $LoginEmbeddedStateCopyWith(
           LoginEmbeddedState value, $Res Function(LoginEmbeddedState) then) =
       _$LoginEmbeddedStateCopyWithImpl<$Res, LoginEmbeddedState>;
+  @useResult
+  $Res call(
+      {SessionResult? result,
+      String? tenantId,
+      String? token,
+      String? userId,
+      (
+        SessionOtpProvisional,
+        DateTime
+      )? signupSessionOtpProvisionalWithDateTime});
+
+  $SessionResultCopyWith<$Res>? get result;
 }
 
 /// @nodoc
@@ -36,14 +64,76 @@ class _$LoginEmbeddedStateCopyWithImpl<$Res, $Val extends LoginEmbeddedState>
 
   /// Create a copy of LoginEmbeddedState
   /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? result = freezed,
+    Object? tenantId = freezed,
+    Object? token = freezed,
+    Object? userId = freezed,
+    Object? signupSessionOtpProvisionalWithDateTime = freezed,
+  }) {
+    return _then(_value.copyWith(
+      result: freezed == result
+          ? _value.result
+          : result // ignore: cast_nullable_to_non_nullable
+              as SessionResult?,
+      tenantId: freezed == tenantId
+          ? _value.tenantId
+          : tenantId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      token: freezed == token
+          ? _value.token
+          : token // ignore: cast_nullable_to_non_nullable
+              as String?,
+      userId: freezed == userId
+          ? _value.userId
+          : userId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      signupSessionOtpProvisionalWithDateTime: freezed ==
+              signupSessionOtpProvisionalWithDateTime
+          ? _value.signupSessionOtpProvisionalWithDateTime
+          : signupSessionOtpProvisionalWithDateTime // ignore: cast_nullable_to_non_nullable
+              as (SessionOtpProvisional, DateTime)?,
+    ) as $Val);
+  }
+
+  /// Create a copy of LoginEmbeddedState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $SessionResultCopyWith<$Res>? get result {
+    if (_value.result == null) {
+      return null;
+    }
+
+    return $SessionResultCopyWith<$Res>(_value.result!, (value) {
+      return _then(_value.copyWith(result: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
-abstract class _$$LoginCustomSigninStateImplCopyWith<$Res> {
+abstract class _$$LoginCustomSigninStateImplCopyWith<$Res>
+    implements $LoginEmbeddedStateCopyWith<$Res> {
   factory _$$LoginCustomSigninStateImplCopyWith(
           _$LoginCustomSigninStateImpl value,
           $Res Function(_$LoginCustomSigninStateImpl) then) =
       __$$LoginCustomSigninStateImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {SessionResult? result,
+      String? tenantId,
+      String? token,
+      String? userId,
+      (
+        SessionOtpProvisional,
+        DateTime
+      )? signupSessionOtpProvisionalWithDateTime});
+
+  @override
+  $SessionResultCopyWith<$Res>? get result;
 }
 
 /// @nodoc
@@ -57,29 +147,128 @@ class __$$LoginCustomSigninStateImplCopyWithImpl<$Res>
 
   /// Create a copy of LoginEmbeddedState
   /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? result = freezed,
+    Object? tenantId = freezed,
+    Object? token = freezed,
+    Object? userId = freezed,
+    Object? signupSessionOtpProvisionalWithDateTime = freezed,
+  }) {
+    return _then(_$LoginCustomSigninStateImpl(
+      result: freezed == result
+          ? _value.result
+          : result // ignore: cast_nullable_to_non_nullable
+              as SessionResult?,
+      tenantId: freezed == tenantId
+          ? _value.tenantId
+          : tenantId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      token: freezed == token
+          ? _value.token
+          : token // ignore: cast_nullable_to_non_nullable
+              as String?,
+      userId: freezed == userId
+          ? _value.userId
+          : userId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      signupSessionOtpProvisionalWithDateTime: freezed ==
+              signupSessionOtpProvisionalWithDateTime
+          ? _value.signupSessionOtpProvisionalWithDateTime
+          : signupSessionOtpProvisionalWithDateTime // ignore: cast_nullable_to_non_nullable
+              as (SessionOtpProvisional, DateTime)?,
+    ));
+  }
 }
 
 /// @nodoc
 
 class _$LoginCustomSigninStateImpl implements _LoginCustomSigninState {
-  const _$LoginCustomSigninStateImpl();
+  const _$LoginCustomSigninStateImpl(
+      {this.result,
+      this.tenantId,
+      this.token,
+      this.userId,
+      this.signupSessionOtpProvisionalWithDateTime});
+
+  @override
+  final SessionResult? result;
+  @override
+  final String? tenantId;
+  @override
+  final String? token;
+  @override
+  final String? userId;
+  @override
+  final (
+    SessionOtpProvisional,
+    DateTime
+  )? signupSessionOtpProvisionalWithDateTime;
 
   @override
   String toString() {
-    return 'LoginEmbeddedState()';
+    return 'LoginEmbeddedState(result: $result, tenantId: $tenantId, token: $token, userId: $userId, signupSessionOtpProvisionalWithDateTime: $signupSessionOtpProvisionalWithDateTime)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$LoginCustomSigninStateImpl);
+            other is _$LoginCustomSigninStateImpl &&
+            (identical(other.result, result) || other.result == result) &&
+            (identical(other.tenantId, tenantId) ||
+                other.tenantId == tenantId) &&
+            (identical(other.token, token) || other.token == token) &&
+            (identical(other.userId, userId) || other.userId == userId) &&
+            (identical(other.signupSessionOtpProvisionalWithDateTime,
+                    signupSessionOtpProvisionalWithDateTime) ||
+                other.signupSessionOtpProvisionalWithDateTime ==
+                    signupSessionOtpProvisionalWithDateTime));
   }
 
   @override
-  int get hashCode => runtimeType.hashCode;
+  int get hashCode => Object.hash(runtimeType, result, tenantId, token, userId,
+      signupSessionOtpProvisionalWithDateTime);
+
+  /// Create a copy of LoginEmbeddedState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$LoginCustomSigninStateImplCopyWith<_$LoginCustomSigninStateImpl>
+      get copyWith => __$$LoginCustomSigninStateImplCopyWithImpl<
+          _$LoginCustomSigninStateImpl>(this, _$identity);
 }
 
 abstract class _LoginCustomSigninState implements LoginEmbeddedState {
-  const factory _LoginCustomSigninState() = _$LoginCustomSigninStateImpl;
+  const factory _LoginCustomSigninState(
+          {final SessionResult? result,
+          final String? tenantId,
+          final String? token,
+          final String? userId,
+          final (
+            SessionOtpProvisional,
+            DateTime
+          )? signupSessionOtpProvisionalWithDateTime}) =
+      _$LoginCustomSigninStateImpl;
+
+  @override
+  SessionResult? get result;
+  @override
+  String? get tenantId;
+  @override
+  String? get token;
+  @override
+  String? get userId;
+  @override
+  (SessionOtpProvisional, DateTime)?
+      get signupSessionOtpProvisionalWithDateTime;
+
+  /// Create a copy of LoginEmbeddedState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$LoginCustomSigninStateImplCopyWith<_$LoginCustomSigninStateImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }

@@ -33,6 +33,16 @@ class $AssetsCertificatesGen {
   List<String> get values => [credentials];
 }
 
+class $AssetsHtmlGen {
+  const $AssetsHtmlGen();
+
+  /// File path: assets/html/index.html
+  String get index => 'assets/html/index.html';
+
+  /// List of all assets
+  List<String> get values => [index];
+}
+
 class $AssetsLoginGen {
   const $AssetsLoginGen();
 
@@ -98,6 +108,7 @@ class Assets {
 
   static const $AssetsCallkeepGen callkeep = $AssetsCallkeepGen();
   static const $AssetsCertificatesGen certificates = $AssetsCertificatesGen();
+  static const $AssetsHtmlGen html = $AssetsHtmlGen();
   static const $AssetsLoginGen login = $AssetsLoginGen();
   static const SvgGenImage primaryOnboardinLogo =
       SvgGenImage('assets/primary_onboardin_logo.svg');

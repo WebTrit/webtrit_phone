@@ -358,34 +358,34 @@ class LoginCubit extends Cubit<LoginState> {
   }
 
   void loginSignupVerifySubmitted() async {
-    if (state.processing || !state.signupCodeInput.isValid) {
-      return;
-    }
+      if (state.processing || !state.signupCodeInput.isValid) {
+        return;
+      }
 
-    emit(state.copyWith(
-      processing: true,
-    ));
-
-    try {
-      final client = createWebtritApiClient(state.coreUrl!, state.tenantId!);
-      final sessionToken = await _verifySessionOtp(
-        client,
-        state.signupSessionOtpProvisionalWithDateTime!.$1,
-        state.signupCodeInput.value,
-      );
-
-      // does not set processing to false to hold processing widgets state during navigation
       emit(state.copyWith(
-        tenantId: sessionToken.tenantId ?? state.tenantId!,
-        token: sessionToken.token,
-        // Use an empty user ID as a fallback for outdated core versions that do not support this field.
-        userId: sessionToken.userId ?? '',
+        processing: true,
       ));
-    } catch (e) {
-      notificationsBloc.add(NotificationsSubmitted(LoginErrorNotification(e)));
 
-      emit(state.copyWith(processing: false));
-    }
+      try {
+        final client = createWebtritApiClient(state.coreUrl!, state.tenantId!);
+        final sessionToken = await _verifySessionOtp(
+          client,
+          state.signupSessionOtpProvisionalWithDateTime!.$1,
+          state.signupCodeInput.value,
+        );
+
+        // does not set processing to false to hold processing widgets state during navigation
+        emit(state.copyWith(
+          tenantId: sessionToken.tenantId ?? state.tenantId!,
+          token: sessionToken.token,
+          // Use an empty user ID as a fallback for outdated core versions that do not support this field.
+          userId: sessionToken.userId ?? '',
+        ));
+      } catch (e) {
+        notificationsBloc.add(NotificationsSubmitted(LoginErrorNotification(e)));
+
+        emit(state.copyWith(processing: false));
+      }
   }
 
   void loginSignupVerifyBack() async {

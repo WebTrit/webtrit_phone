@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OTP Login</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .form-container {
+            padding: 40px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            max-width: 400px;
+            width: 100%;
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .description {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 5px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+            transition: border-color 0.2s ease-in-out;
+        }
+
+        .form-group input:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+
+        .form-group button {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        .form-group button:hover {
+            background-color: #0056b3;
+        }
+
+        #otpSection,
+        #successSection {
+            display: none;
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 20px;
+            }
+
+            .form-container {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<div class="form-container">
+    <div id="phoneNumberSection">
+        <p class="description">
+            Enter your phone number to receive a one-time password (OTP) for login.
+        </p>
+        <h1>Login</h1>
+        <form onsubmit="return handleLogin()">
+            <div class="form-group">
+                <label for="phoneNumber">Phone Number</label>
+                <input type="tel" id="phoneNumber" name="phoneNumber" placeholder="+1 234 567 890" pattern="^\+\d{1,15}$" required>
+            </div>
+            <div class="form-group">
+                <button type="submit">Send OTP</button>
+            </div>
+        </form>
+    </div>
+
+    <div id="otpSection">
+        <h1>Verify OTP</h1>
+        <p class="description">
+            An OTP has been sent to your phone number. Please enter it below to verify.
+        </p>
+        <form onsubmit="return handleOtpVerify()">
+            <div class="form-group">
+                <label for="otp">One-Time Password (OTP)</label>
+                <input type="text" id="otp" name="otp" placeholder="Enter your OTP" maxlength="6" required>
+            </div>
+            <div class="form-group">
+                <button type="submit">Verify</button>
+            </div>
+        </form>
+    </div>
+
+    <div id="successSection">
+        <h1>Success</h1>
+        <p class="description">
+            You have successfully logged in. Thank you!
+        </p>
+    </div>
+</div>
+
+<script>
+    function handleLogin() {
+        const phoneNumber = document.getElementById("phoneNumber").value;
+
+        const json = JSON.stringify({
+            event: "sendOtp",
+            data: {
+                phoneNumber: phoneNumber
+            }
+        });
+
+        WebtritLoginChannel.postMessage(json);
+
+        return false;
+    }
+
+    function handleOtpVerify() {
+        const otp = document.getElementById("otp").value;
+
+        const json = JSON.stringify({
+            event: "validateOtp",
+            data: {
+                otp: otp
+            }
+        });
+
+        WebtritLoginChannel.postMessage(json);
+
+        return false;
+    }
+
+    function showOtpVerify() {
+        document.getElementById("phoneNumberSection").style.display = "none";
+        document.getElementById("otpSection").style.display = "block";
+        document.getElementById("successSection").style.display = "none";
+    }
+
+    function showSuccess() {
+        document.getElementById("phoneNumberSection").style.display = "none";
+        document.getElementById("otpSection").style.display = "none";
+        document.getElementById("successSection").style.display = "block";
+    }
+</script>
+</body>
+
+</html>

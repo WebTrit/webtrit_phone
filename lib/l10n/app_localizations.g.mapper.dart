@@ -911,6 +911,8 @@ class AppLocalizationsMapper {
           localizations.diagnostic_battery_groupTitle,
       'diagnostic_battery_tile_title':
           localizations.diagnostic_battery_tile_title,
+      'diagnostic_battery_navigate_section':
+          localizations.diagnostic_battery_navigate_section,
       'favorites_SnackBar_deleted': (name) =>
           localizations.favorites_SnackBar_deleted(name),
       'login_Button_otpSigninVerifyRepeatInterval': (seconds) =>
