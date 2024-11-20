@@ -24,6 +24,7 @@ class WebViewScaffold extends StatefulWidget {
     this.javaScriptChannels = const {},
     this.errorPlaceholder,
     this.showToolbar = true,
+    this.controller,
   });
 
   final Widget? title;
@@ -32,13 +33,14 @@ class WebViewScaffold extends StatefulWidget {
   final Map<String, void Function(JavaScriptMessage)> javaScriptChannels;
   final Widget? Function(BuildContext context, WebResourceError error, WebViewController controller)? errorPlaceholder;
   final bool showToolbar;
+  final WebViewController? controller;
 
   @override
   State<WebViewScaffold> createState() => _WebViewScaffoldState();
 }
 
 class _WebViewScaffoldState extends State<WebViewScaffold> {
-  final _webViewController = WebViewController();
+  late final WebViewController _webViewController;
   final _progressStreamController = StreamController<int>.broadcast();
 
   Color? _backgroundColorCache;
@@ -63,6 +65,8 @@ class _WebViewScaffoldState extends State<WebViewScaffold> {
   @override
   void initState() {
     super.initState();
+
+    _webViewController = widget.controller ?? WebViewController();
 
     final userAgent = '${PackageInfo().appName}/${PackageInfo().version} '
         '(${Platform.operatingSystem}; ${Platform.operatingSystemVersion})';
