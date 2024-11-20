@@ -10,7 +10,6 @@ part 'session_user_credential.g.dart';
 
 @freezed
 class SessionUserCredential with _$SessionUserCredential {
-  // Private main constructor
   const SessionUserCredential._();
 
   @JsonSerializable(fieldRename: FieldRename.snake)
@@ -22,7 +21,6 @@ class SessionUserCredential with _$SessionUserCredential {
     String? phoneNumber,
   }) = _SessionUserCredential;
 
-  /// Public factory for creating an object with an email
   factory SessionUserCredential.withEmail({
     String? bundleId,
     required AppType type,
@@ -37,7 +35,6 @@ class SessionUserCredential with _$SessionUserCredential {
         phoneNumber: null,
       );
 
-  /// Public factory for creating an object with a phone number
   factory SessionUserCredential.withPhoneNumber({
     String? bundleId,
     required AppType type,
