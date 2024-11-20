@@ -12,7 +12,8 @@ _$SessionUserCredentialImpl _$$SessionUserCredentialImplFromJson(
       bundleId: json['bundle_id'] as String?,
       type: $enumDecode(_$AppTypeEnumMap, json['type']),
       identifier: json['identifier'] as String,
-      email: json['email'] as String,
+      email: json['email'] as String?,
+      phoneNumber: json['phone_number'] as String?,
     );
 
 Map<String, dynamic> _$$SessionUserCredentialImplToJson(
@@ -22,6 +23,7 @@ Map<String, dynamic> _$$SessionUserCredentialImplToJson(
       'type': _$AppTypeEnumMap[instance.type]!,
       'identifier': instance.identifier,
       'email': instance.email,
+      'phone_number': instance.phoneNumber,
     };
 
 const _$AppTypeEnumMap = {
