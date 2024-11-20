@@ -553,30 +553,25 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     _signalingClient = null;
 
-    final signalingDisconnectCode = event.code;
-    if (signalingDisconnectCode != null) {
-      final code = SignalingDisconnectCode.values.byCode(signalingDisconnectCode);
-      if (code == SignalingDisconnectCode.sessionMissedError) {
-        notificationsBloc.add(const NotificationsSubmitted(CallSignalingClientSessionMissedErrorNotification()));
-      } else if (code == SignalingDisconnectCode.appUnregisteredError) {
-        add(const _RegistrationChange(registration: Registration(status: RegistrationStatus.unregistered)));
-      } else if (code == SignalingDisconnectCode.requestCallIdError) {
-        state.activeCalls.where((element) => element.wasHungUp).forEach((element) {
-          add(_ResetStateEvent.completeCall(element.callId));
-        });
-      } else if (code == SignalingDisconnectCode.controllerExitError) {
-        _logger.info(
-            '__onSignalingClientEventDisconnected: skipping user notification for controller exit as it is expected during system unregistration');
-      } else {
-        final signalingDisconnectReason = event.reason ?? event.code?.toString() ?? 'Unexpected error';
-        final afterReconnect = event.afterReconnect;
-        if (afterReconnect) {
-          _logger.info('__onSignalingClientEventDisconnected: skipping user notification to prevent reconnect spam');
-        } else {
-          final notification = ErrorMessageNotification(signalingDisconnectReason);
-          notificationsBloc.add(NotificationsSubmitted(notification));
-        }
-      }
+    final code = SignalingDisconnectCode.values.byCode(event.code ?? -1);
+    final afterReconnect = event.afterReconnect;
+    Notification? notificationToShow;
+
+    if (code == SignalingDisconnectCode.appUnregisteredError) {
+      add(const _RegistrationChange(registration: Registration(status: RegistrationStatus.unregistered)));
+    } else if (code == SignalingDisconnectCode.requestCallIdError) {
+      state.activeCalls.where((e) => e.wasHungUp).forEach((e) => add(_ResetStateEvent.completeCall(e.callId)));
+    } else if (code == SignalingDisconnectCode.controllerExitError) {
+      _logger.info('__onSignalingClientEventDisconnected: skipping expected system unregistration notification');
+    } else if (code == SignalingDisconnectCode.sessionMissedError) {
+      notificationToShow = const CallSignalingClientSessionMissedErrorNotification();
+    } else {
+      final errorText = event.reason?.isNotEmpty == true ? event.reason! : code.name;
+      notificationToShow = ErrorMessageNotification(errorText);
+    }
+
+    if (notificationToShow != null && !afterReconnect) {
+      notificationsBloc.add(NotificationsSubmitted(notificationToShow));
     }
 
     _reconnectInitiated(kSignalingClientReconnectDelay, true);
