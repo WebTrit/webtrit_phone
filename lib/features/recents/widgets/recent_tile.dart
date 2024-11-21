@@ -40,8 +40,6 @@ class RecentTile extends StatelessWidget {
     final callLogEntry = recent.callLogEntry;
     final contact = recent.contact;
 
-    final title = contact?.displayTitle ?? callLogEntry.number;
-
     return Dismissible(
       key: ObjectKey(recent),
       background: Container(
@@ -63,7 +61,12 @@ class RecentTile extends StatelessWidget {
       direction: DismissDirection.endToStart,
       child: ListTile(
         contentPadding: const EdgeInsets.only(left: 16, right: 8),
-        leading: LeadingAvatar(username: title),
+        leading: LeadingAvatar(
+          username: recent.name,
+          thumbnail: contact?.thumbnail,
+          thumbnailUrl: contact?.thumbnailUrl,
+          registered: contact?.registered,
+        ),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -92,7 +95,7 @@ class RecentTile extends StatelessWidget {
           ],
         ),
         title: Text(
-          title,
+          recent.name,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
         ),

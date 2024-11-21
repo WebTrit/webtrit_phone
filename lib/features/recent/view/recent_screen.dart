@@ -47,7 +47,13 @@ class RecentScreen extends StatelessWidget {
               children: [
                 Padding(
                   padding: kAllPadding16,
-                  child: LeadingAvatar(username: title, radius: 50),
+                  child: LeadingAvatar(
+                    username: title,
+                    thumbnail: contact?.thumbnail,
+                    thumbnailUrl: contact?.thumbnailUrl,
+                    registered: contact?.registered,
+                    radius: 50,
+                  ),
                 ),
                 CopyToClipboard(
                   data: logEntry.number,

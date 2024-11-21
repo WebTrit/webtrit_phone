@@ -147,14 +147,12 @@ class _RecentsScreenState extends State<RecentsScreen> with SingleTickerProvider
                                 final callBloc = context.read<CallBloc>();
                                 callBloc.add(CallControlEvent.started(
                                   number: callLogEntry.number,
-                                  displayName: contact?.displayTitle,
+                                  displayName: contact?.maybeName,
                                   video: !callLogEntry.video && widget.videoCallEnable,
                                 ));
                               },
                         onDeleted: (recent) {
-                          context.showSnackBar(context.l10n.recents_snackBar_deleted(
-                            contact?.displayTitle ?? callLogEntry.number,
-                          ));
+                          context.showSnackBar(context.l10n.recents_snackBar_deleted(recent.name));
                           context.read<RecentsBloc>().add(RecentsDeleted(recent));
                         },
                         onMessagePressed: chatsEnabled && (recent.contact?.canMessage == true)
