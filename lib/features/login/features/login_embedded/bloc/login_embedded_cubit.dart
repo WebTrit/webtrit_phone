@@ -61,7 +61,7 @@ class LoginEmbeddedCubit extends Cubit<LoginEmbeddedState> {
   }
 
   void verifyOtp(String otp) async {
-    final client = createWebtritApiClient(url, state.tenantId ?? '');
+    final client = createWebtritApiClient(url, '');
 
     emit(state.copyWith(processing: true));
 
