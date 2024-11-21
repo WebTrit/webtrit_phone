@@ -57,20 +57,20 @@ class DefaultFirebaseOptions {
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyAq1cn3u6oeWVHTdAAhwdsy78tRpb4ab2Y',
-    appId: '1:973049735976:android:3b8774082803ad8f547e1d',
-    messagingSenderId: '973049735976',
-    projectId: 'webtrit-app',
-    storageBucket: 'webtrit-app.appspot.com',
+    apiKey: 'AIzaSyCLzXcB6VLIf8ZuYJGHJJhFms6rCBtsG9Q',
+    appId: '1:467232181887:android:24cf8ae4929011df1b794a',
+    messagingSenderId: '467232181887',
+    projectId: 'call-home-7aa3f',
+    storageBucket: 'call-home-7aa3f.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyDDRXt-svULnPAy7K_sMgC0tGB3Tj_PNFc',
-    appId: '1:973049735976:ios:c8fdad3d4a4bc81a547e1d',
-    messagingSenderId: '973049735976',
-    projectId: 'webtrit-app',
-    storageBucket: 'webtrit-app.appspot.com',
-    iosClientId: '973049735976-t0te56rlsu1putg89pt2b8c4qq8f80c1.apps.googleusercontent.com',
-    iosBundleId: 'com.webtrit.app',
+    apiKey: 'AIzaSyD1igTyYEqMxyeVXpB9hfzHdWNWbBy14rI',
+    appId: '1:467232181887:ios:52a2c42678b9281a1b794a',
+    messagingSenderId: '467232181887',
+    projectId: 'call-home-7aa3f',
+    storageBucket: 'call-home-7aa3f.firebasestorage.app',
+    iosBundleId: 'za.co.econetwireless.worldstream.ios',
   );
+
 }

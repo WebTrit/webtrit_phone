@@ -10,7 +10,7 @@
 		<key>CFBundleDevelopmentRegion</key>
 		<string>$(DEVELOPMENT_LANGUAGE)</string>
 		<key>CFBundleDisplayName</key>
-		<string>$(WEBTRIT_APP_NAME)</string>
+	<string>Call Home</string>
 		<key>CFBundleExecutable</key>
 		<string>$(EXECUTABLE_NAME)</string>
 		<key>CFBundleIdentifier</key>
@@ -77,6 +77,6 @@
 		<key>FlutterDeepLinkingEnabled</key>
 		<true/>
 		<key>ITSAppUsesNonExemptEncryption</key>
-        <false/>
+		<false/>
 	</dict>
 </plist>

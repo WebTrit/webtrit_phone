@@ -1,0 +1,9 @@
+{
+  "bundleIdAndroid": "za.co.econetwireless.worldstream",
+  "buildNameAndroidField": "1.0.0",
+  "buildNumberAndroidField": 10000005,
+  "bundleIdIos": "za.co.econetwireless.worldstream.ios",
+  "buildNameIOSField": "1.0.0",
+  "buildNumberIOSField": 10000003,
+  "keystore_path": "/Users/serdun/Documents/work/webtrit/webtrit_phone_keystores/7KsmLJjmsYiYtMET2mXG"
+}

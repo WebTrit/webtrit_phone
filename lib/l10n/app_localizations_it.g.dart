@@ -462,6 +462,132 @@ class AppLocalizationsIt extends AppLocalizations {
   String get default_UserAlreadyInChatMessagingSocketException => 'Utente già nella chat';
 
   @override
+  String get diagnostic_AppBar_title => 'Diagnostica';
+
+  @override
+  String get diagnostic_battery_groupTitle => 'Batteria';
+
+  @override
+  String get diagnostic_batteryMode_optimized_description => 'L\'attività in background dell\'app è gestita dal sistema per risparmiare batteria. Potrebbe non funzionare correttamente con chiamate in arrivo attivate da notifiche push.';
+
+  @override
+  String get diagnostic_batteryMode_optimized_title => 'Ottimizzato';
+
+  @override
+  String get diagnostic_batteryMode_restricted_description => 'L\'attività in background dell\'app è fortemente limitata per conservare la batteria. Potrebbero essere perse chiamate in arrivo.';
+
+  @override
+  String get diagnostic_batteryMode_restricted_title => 'Limitato';
+
+  @override
+  String get diagnostic_batteryMode_unknown_description => 'Lo stato della modalità batteria è sconosciuto. L\'app potrebbe avere un comportamento imprevedibile.';
+
+  @override
+  String get diagnostic_batteryMode_unknown_title => 'Sconosciuto';
+
+  @override
+  String get diagnostic_batteryMode_unrestricted_description => 'L\'app ha pieno accesso per funzionare in background senza restrizioni.';
+
+  @override
+  String get diagnostic_batteryMode_unrestricted_title => 'Senza restrizioni';
+
+  @override
+  String get diagnostic_battery_navigate_section => 'Vai alla sezione Batteria';
+
+  @override
+  String get diagnostic_battery_tile_title => 'Modalità batteria';
+
+  @override
+  String get diagnostic_permission_camera_description => 'Questa app richiede il permesso di accedere alla fotocamera per effettuare videochiamate.';
+
+  @override
+  String get diagnostic_permission_camera_title => 'Fotocamera';
+
+  @override
+  String get diagnostic_permission_contacts_description => 'Questa app richiede il permesso di accedere ai contatti per effettuare chiamate dalla tua rubrica.';
+
+  @override
+  String get diagnostic_permission_contacts_title => 'Contatti';
+
+  @override
+  String get diagnosticPermissionDetails_button_managePermission => 'Gestisci permessi';
+
+  @override
+  String get diagnosticPermissionDetails_button_requestPermission => 'Richiedi permesso';
+
+  @override
+  String get diagnosticPermissionDetails_title_statusPermission => 'Stato del permesso';
+
+  @override
+  String get diagnostic_permission_microphone_description => 'Questa app richiede il permesso di accedere al microfono per effettuare chiamate audio.';
+
+  @override
+  String get diagnostic_permission_microphone_title => 'Microfono';
+
+  @override
+  String get diagnostic_permission_notification_description => 'Permette all\'app di attivare le chiamate in arrivo.';
+
+  @override
+  String get diagnostic_permission_notification_title => 'Notifiche';
+
+  @override
+  String get diagnostic_permissionStatus_denied => 'Accesso negato';
+
+  @override
+  String get diagnostic_permissionStatus_granted => 'Accesso consentito';
+
+  @override
+  String get diagnostic_permissionStatus_limited => 'Accesso limitato';
+
+  @override
+  String get diagnostic_permissionStatus_permanentlyDenied => 'Accesso permanentemente negato';
+
+  @override
+  String get diagnostic_permissionStatus_provisional => 'Accesso provvisorio';
+
+  @override
+  String get diagnostic_permissionStatus_restricted => 'Accesso limitato';
+
+  @override
+  String get diagnosticPushDetails_configuration_title => 'Configurazione del servizio di notifiche push';
+
+  @override
+  String get diagnosticPushDetails_errorMessage_intro => 'Alcuni passi da provare:\n';
+
+  @override
+  String get diagnosticPushDetails_errorMessage_step1 => '1. Assicurati che il telefono sia connesso a Internet.\n';
+
+  @override
+  String get diagnosticPushDetails_errorMessage_step2 => '2. Se connesso, verifica che il telefono possa accedere ai servizi Google visitando un sito web.\n';
+
+  @override
+  String get diagnosticPushDetails_errorMessage_step3 => '3. Aspetta qualche minuto e riprova – i server di messaggistica Firebase potrebbero essere temporaneamente inattivi.\n';
+
+  @override
+  String get diagnosticPushDetails_errorMessage_step4 => '4. Riavvia i servizi di Google Play per assicurarne il corretto funzionamento.\n';
+
+  @override
+  String get diagnosticPushDetails_errorMessage_step5 => '5. Verifica che i servizi di Google Play siano installati sul tuo dispositivo.\n';
+
+  @override
+  String get diagnosticPushDetails_successMessage => 'Il servizio di notifica è stato configurato con successo ed è pronto per l’uso per ricevere messaggi e gestire le chiamate in arrivo.';
+
+  @override
+  String get diagnostic_pushTokenStatusType_error => 'Problema con la configurazione del servizio di notifiche push';
+
+  @override
+  String get diagnostic_pushTokenStatusType_progress => 'In corso';
+
+  @override
+  String get diagnostic_pushTokenStatusType_success => 'Servizio configurato con successo';
+
+  @override
+  String get diagnosticScreen_permissionsGroup_title => 'Permessi';
+
+  @override
+  String get diagnosticScreen_pushNotificationService_title => 'Servizio di notifiche push';
+
+  @override
   String get favorites_BodyCenter_empty => 'Al momento non hai numeri preferiti.\nAggiungi ai preferiti dai Contatti usando l\'icona a stella';
 
   @override
@@ -1165,6 +1291,24 @@ class AppLocalizationsIt extends AppLocalizations {
   String get permission_Button_request => 'Continua';
 
   @override
+  String get permission_manageFullScreenNotificationInstructions_step1 => 'Go to your phone\'s Settings.';
+
+  @override
+  String get permission_manageFullScreenNotificationInstructions_step2 => 'Navigate to \'Special App Access\' under the \'Apps & notifications\' section.';
+
+  @override
+  String get permission_manageFullScreenNotificationInstructions_step3 => 'Find and tap on \'Manage full screen intents\'.';
+
+  @override
+  String get permission_manageFullScreenNotificationInstructions_step4 => 'Select the app for which you want to manage full-screen notifications.';
+
+  @override
+  String get permission_manageFullScreenNotificationInstructions_step5 => 'Toggle the permission to enable or disable full-screen notifications for that app.';
+
+  @override
+  String get permission_manageFullScreenNotificationPermissions => 'Manage Full-Screen Notification Permissions';
+
+  @override
   String get permission_manufacturer_Button_gotIt => 'Capito';
 
   @override
@@ -1186,24 +1330,6 @@ class AppLocalizationsIt extends AppLocalizations {
   String get permission_Text_description => 'Per garantire la migliore esperienza utente, all\'app devono essere concesse le seguenti autorizzazioni: microfono per le chiamate audio, fotocamera per le videochiamate e contatti per semplificare il raggiungimento degli utenti dall\'app.\n\nLe autorizzazioni possono essere modificate in qualsiasi momento anche successivamente.';
 
   @override
-  String get permission_manageFullScreenNotificationPermissions => 'Manage Full-Screen Notification Permissions';
-
-  @override
-  String get permission_manageFullScreenNotificationInstructions_step1 => 'Go to your phone\'s Settings.';
-
-  @override
-  String get permission_manageFullScreenNotificationInstructions_step2 => 'Navigate to \'Special App Access\' under the \'Apps & notifications\' section.';
-
-  @override
-  String get permission_manageFullScreenNotificationInstructions_step3 => 'Find and tap on \'Manage full screen intents\'.';
-
-  @override
-  String get permission_manageFullScreenNotificationInstructions_step4 => 'Select the app for which you want to manage full-screen notifications.';
-
-  @override
-  String get permission_manageFullScreenNotificationInstructions_step5 => 'Toggle the permission to enable or disable full-screen notifications for that app.';
-
-  @override
   String recents_BodyCenter_empty(Object filter) {
     return 'Attualmente non hai chiamate recenti con $filter.';
   }
@@ -1218,15 +1344,15 @@ class AppLocalizationsIt extends AppLocalizations {
   String get recents_errorSnackBar_loadFailure => 'Spiacenti... si è verificato un errore ☹️';
 
   @override
+  String get recents_HistoryTile_missedCallText => 'Chiamata persa';
+
+  @override
   String recents_snackBar_deleted(String name) {
     return '$name cancellato';
   }
 
   @override
   String get recents_Text_blingTransferInitiated => 'Trasferimento senza vedere';
-
-  @override
-  String get recents_HistoryTile_missedCallText => 'Chiamata persa';
 
   @override
   String get recentsVisibilityFilter_all => 'Tutto';
@@ -1275,16 +1401,19 @@ class AppLocalizationsIt extends AppLocalizations {
   String get request_StatusCode => 'Codice di stato';
 
   @override
+  String get sessionStatus_pushNotificationServiceProblem => 'Problema con la configurazione del servizio di notifiche push';
+
+  @override
   String get settings_AboutText_AppVersion => 'Versione dell\'app';
 
   @override
   String get settings_AboutText_CoreVersionUndefined => '?.?.?';
 
   @override
-  String get settings_AboutText_StoreVersion => 'La nuova versione è disponibile nello Store';
+  String get settings_AboutText_FCMPushNotificationToken => 'Token di Notifica Push FCM';
 
   @override
-  String get settings_AboutText_FCMPushNotificationToken => 'Token di Notifica Push FCM';
+  String get settings_AboutText_StoreVersion => 'La nuova versione è disponibile nello Store';
 
   @override
   String get settings_AccountDeleteConfirmDialog_content => 'Sei sicuro di voler eliminare l\'account?';
@@ -1344,25 +1473,25 @@ class AppLocalizationsIt extends AppLocalizations {
   String get settings_LogoutConfirmDialog_title => 'Confermare la disconnessione';
 
   @override
-  String get settings_network_incomingCallType_title => 'Tipo di chiamata in entrata';
-
-  @override
-  String get settings_network_incomingCallType_pushNotification_title => 'Notifica Push';
-
-  @override
-  String get settings_network_incomingCallType_pushNotification_description => 'Quando l\'app non è in uso, smette di funzionare e consuma risorse minime, il che aiuta a conservare la durata della batteria. Durante una chiamata in arrivo, il server invia una notifica push al telefono, spingendo il sistema operativo mobile a lanciare l\'app per gestire la chiamata. Tuttavia, questo metodo non garantisce che tutte le chiamate verranno ricevute. Se il telefono è stato inattivo per un periodo prolungato, alcune versioni di Android potrebbero limitare le notifiche push, con il rischio di perdere una chiamata in arrivo.';
-
-  @override
-  String get settings_network_incomingCallType_socket_title => 'Connessione Persistente al Server';
-
-  @override
-  String get settings_network_incomingCallType_socket_description => 'L\'app continua a funzionare in background e mantiene sempre una connessione attiva al server. Questo aumenta le probabilità di ricevere una chiamata in arrivo, ma potrebbe scaricare la batteria più rapidamente.';
+  String get settings_network_androidNotificationDescription => 'Questo è necessario per ricevere le chiamate in background';
 
   @override
   String get settings_network_androidNotificationName => 'Servizio di Chiamate in Entrata';
 
   @override
-  String get settings_network_androidNotificationDescription => 'Questo è necessario per ricevere le chiamate in background';
+  String get settings_network_incomingCallType_pushNotification_description => 'Quando l\'app non è in uso, smette di funzionare e consuma risorse minime, il che aiuta a conservare la durata della batteria. Durante una chiamata in arrivo, il server invia una notifica push al telefono, spingendo il sistema operativo mobile a lanciare l\'app per gestire la chiamata. Tuttavia, questo metodo non garantisce che tutte le chiamate verranno ricevute. Se il telefono è stato inattivo per un periodo prolungato, alcune versioni di Android potrebbero limitare le notifiche push, con il rischio di perdere una chiamata in arrivo.';
+
+  @override
+  String get settings_network_incomingCallType_pushNotification_title => 'Notifica Push';
+
+  @override
+  String get settings_network_incomingCallType_socket_description => 'L\'app continua a funzionare in background e mantiene sempre una connessione attiva al server. Questo aumenta le probabilità di ricevere una chiamata in arrivo, ma potrebbe scaricare la batteria più rapidamente.';
+
+  @override
+  String get settings_network_incomingCallType_socket_title => 'Connessione Persistente al Server';
+
+  @override
+  String get settings_network_incomingCallType_title => 'Tipo di chiamata in entrata';
 
   @override
   String get themeMode_dark => 'Scuro';
@@ -1409,133 +1538,4 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get webRegistration_ErrorAcknowledgeDialog_title => 'Web resource error';
-
-  @override
-  String get diagnostic_AppBar_title => 'Diagnostica';
-
-  @override
-  String get diagnosticPermissionDetails_title_statusPermission => 'Stato del permesso';
-
-  @override
-  String get diagnosticPermissionDetails_button_requestPermission => 'Richiedi permesso';
-
-  @override
-  String get diagnosticPermissionDetails_button_managePermission => 'Gestisci permessi';
-
-  @override
-  String get diagnostic_permissionStatus_denied => 'Accesso negato';
-
-  @override
-  String get diagnostic_permissionStatus_granted => 'Accesso consentito';
-
-  @override
-  String get diagnostic_permissionStatus_restricted => 'Accesso limitato';
-
-  @override
-  String get diagnostic_permissionStatus_limited => 'Accesso limitato';
-
-  @override
-  String get diagnostic_permissionStatus_permanentlyDenied => 'Accesso permanentemente negato';
-
-  @override
-  String get diagnostic_permissionStatus_provisional => 'Accesso provvisorio';
-
-  @override
-  String get diagnostic_permission_camera_title => 'Fotocamera';
-
-  @override
-  String get diagnostic_permission_microphone_title => 'Microfono';
-
-  @override
-  String get diagnostic_permission_contacts_title => 'Contatti';
-
-  @override
-  String get diagnostic_permission_notification_title => 'Notifiche';
-
-  @override
-  String get diagnostic_permission_camera_description => 'Questa app richiede il permesso di accedere alla fotocamera per effettuare videochiamate.';
-
-  @override
-  String get diagnostic_permission_microphone_description => 'Questa app richiede il permesso di accedere al microfono per effettuare chiamate audio.';
-
-  @override
-  String get diagnostic_permission_contacts_description => 'Questa app richiede il permesso di accedere ai contatti per effettuare chiamate dalla tua rubrica.';
-
-  @override
-  String get diagnostic_permission_notification_description => 'Permette all\'app di attivare le chiamate in arrivo.';
-
-  @override
-  String get diagnosticScreen_pushNotificationService_title => 'Servizio di notifiche push';
-
-  @override
-  String get diagnosticScreen_permissionsGroup_title => 'Permessi';
-
-  @override
-  String get diagnosticPushDetails_configuration_title => 'Configurazione del servizio di notifiche push';
-
-  @override
-  String get diagnosticPushDetails_successMessage => 'Il servizio di notifica è stato configurato con successo ed è pronto per l’uso per ricevere messaggi e gestire le chiamate in arrivo.';
-
-  @override
-  String get diagnosticPushDetails_errorMessage_intro => 'Alcuni passi da provare:\n';
-
-  @override
-  String get diagnosticPushDetails_errorMessage_step1 => '1. Assicurati che il telefono sia connesso a Internet.\n';
-
-  @override
-  String get diagnosticPushDetails_errorMessage_step2 => '2. Se connesso, verifica che il telefono possa accedere ai servizi Google visitando un sito web.\n';
-
-  @override
-  String get diagnosticPushDetails_errorMessage_step3 => '3. Aspetta qualche minuto e riprova – i server di messaggistica Firebase potrebbero essere temporaneamente inattivi.\n';
-
-  @override
-  String get diagnosticPushDetails_errorMessage_step4 => '4. Riavvia i servizi di Google Play per assicurarne il corretto funzionamento.\n';
-
-  @override
-  String get diagnosticPushDetails_errorMessage_step5 => '5. Verifica che i servizi di Google Play siano installati sul tuo dispositivo.\n';
-
-  @override
-  String get diagnostic_pushTokenStatusType_success => 'Servizio configurato con successo';
-
-  @override
-  String get diagnostic_pushTokenStatusType_error => 'Problema con la configurazione del servizio di notifiche push';
-
-  @override
-  String get sessionStatus_pushNotificationServiceProblem => 'Problema con la configurazione del servizio di notifiche push';
-
-  @override
-  String get diagnostic_pushTokenStatusType_progress => 'In corso';
-
-  @override
-  String get diagnostic_batteryMode_unrestricted_title => 'Senza restrizioni';
-
-  @override
-  String get diagnostic_batteryMode_optimized_title => 'Ottimizzato';
-
-  @override
-  String get diagnostic_batteryMode_restricted_title => 'Limitato';
-
-  @override
-  String get diagnostic_batteryMode_unknown_title => 'Sconosciuto';
-
-  @override
-  String get diagnostic_batteryMode_unrestricted_description => 'L\'app ha pieno accesso per funzionare in background senza restrizioni.';
-
-  @override
-  String get diagnostic_batteryMode_optimized_description => 'L\'attività in background dell\'app è gestita dal sistema per risparmiare batteria. Potrebbe non funzionare correttamente con chiamate in arrivo attivate da notifiche push.';
-
-  @override
-  String get diagnostic_batteryMode_restricted_description => 'L\'attività in background dell\'app è fortemente limitata per conservare la batteria. Potrebbero essere perse chiamate in arrivo.';
-
-  @override
-  String get diagnostic_batteryMode_unknown_description => 'Lo stato della modalità batteria è sconosciuto. L\'app potrebbe avere un comportamento imprevedibile.';
-
-  @override
-  String get diagnostic_battery_groupTitle => 'Batteria';
-
-  @override
-  String get diagnostic_battery_tile_title => 'Modalità batteria';
-
-  @override
-  String get diagnostic_battery_navigate_section => 'Vai alla sezione Batteria';
 }

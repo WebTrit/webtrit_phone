@@ -1003,6 +1003,258 @@ abstract class AppLocalizations {
   /// **'User is already in chat'**
   String get default_UserAlreadyInChatMessagingSocketException;
 
+  /// No description provided for @diagnostic_AppBar_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Diagnostic'**
+  String get diagnostic_AppBar_title;
+
+  /// No description provided for @diagnostic_battery_groupTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Battery'**
+  String get diagnostic_battery_groupTitle;
+
+  /// No description provided for @diagnostic_batteryMode_optimized_description.
+  ///
+  /// In en, this message translates to:
+  /// **'The app\'s background activity is managed by the system to save the battery. It may not work correctly with incoming calls triggered by push notifications.'**
+  String get diagnostic_batteryMode_optimized_description;
+
+  /// No description provided for @diagnostic_batteryMode_optimized_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Optimized'**
+  String get diagnostic_batteryMode_optimized_title;
+
+  /// No description provided for @diagnostic_batteryMode_restricted_description.
+  ///
+  /// In en, this message translates to:
+  /// **'The app\'s background activity is heavily restricted to conserve the battery. Incoming calls may be missed.'**
+  String get diagnostic_batteryMode_restricted_description;
+
+  /// No description provided for @diagnostic_batteryMode_restricted_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Restricted'**
+  String get diagnostic_batteryMode_restricted_title;
+
+  /// No description provided for @diagnostic_batteryMode_unknown_description.
+  ///
+  /// In en, this message translates to:
+  /// **'The battery mode status is unknown. The app might have unpredictable behavior.'**
+  String get diagnostic_batteryMode_unknown_description;
+
+  /// No description provided for @diagnostic_batteryMode_unknown_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown'**
+  String get diagnostic_batteryMode_unknown_title;
+
+  /// No description provided for @diagnostic_batteryMode_unrestricted_description.
+  ///
+  /// In en, this message translates to:
+  /// **'The app has full access to run in the background without restrictions.'**
+  String get diagnostic_batteryMode_unrestricted_description;
+
+  /// No description provided for @diagnostic_batteryMode_unrestricted_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Unrestricted'**
+  String get diagnostic_batteryMode_unrestricted_title;
+
+  /// No description provided for @diagnostic_battery_navigate_section.
+  ///
+  /// In en, this message translates to:
+  /// **'Navigate to the Battery section'**
+  String get diagnostic_battery_navigate_section;
+
+  /// No description provided for @diagnostic_battery_tile_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Battery mode'**
+  String get diagnostic_battery_tile_title;
+
+  /// No description provided for @diagnostic_permission_camera_description.
+  ///
+  /// In en, this message translates to:
+  /// **'This app requires permission to access the camera to make video calls.'**
+  String get diagnostic_permission_camera_description;
+
+  /// No description provided for @diagnostic_permission_camera_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera'**
+  String get diagnostic_permission_camera_title;
+
+  /// No description provided for @diagnostic_permission_contacts_description.
+  ///
+  /// In en, this message translates to:
+  /// **'This app requires permission to access contacts to make calls within your address book.'**
+  String get diagnostic_permission_contacts_description;
+
+  /// No description provided for @diagnostic_permission_contacts_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Contacts'**
+  String get diagnostic_permission_contacts_title;
+
+  /// No description provided for @diagnosticPermissionDetails_button_managePermission.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage Permission'**
+  String get diagnosticPermissionDetails_button_managePermission;
+
+  /// No description provided for @diagnosticPermissionDetails_button_requestPermission.
+  ///
+  /// In en, this message translates to:
+  /// **'Request Permission'**
+  String get diagnosticPermissionDetails_button_requestPermission;
+
+  /// No description provided for @diagnosticPermissionDetails_title_statusPermission.
+  ///
+  /// In en, this message translates to:
+  /// **'Status permission'**
+  String get diagnosticPermissionDetails_title_statusPermission;
+
+  /// No description provided for @diagnostic_permission_microphone_description.
+  ///
+  /// In en, this message translates to:
+  /// **'This app requires permission to access the microphone to make audio calls.'**
+  String get diagnostic_permission_microphone_description;
+
+  /// No description provided for @diagnostic_permission_microphone_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Microphone'**
+  String get diagnostic_permission_microphone_title;
+
+  /// No description provided for @diagnostic_permission_notification_description.
+  ///
+  /// In en, this message translates to:
+  /// **'Enables the app to trigger incoming call.'**
+  String get diagnostic_permission_notification_description;
+
+  /// No description provided for @diagnostic_permission_notification_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Notification'**
+  String get diagnostic_permission_notification_title;
+
+  /// No description provided for @diagnostic_permissionStatus_denied.
+  ///
+  /// In en, this message translates to:
+  /// **'Access Denied'**
+  String get diagnostic_permissionStatus_denied;
+
+  /// No description provided for @diagnostic_permissionStatus_granted.
+  ///
+  /// In en, this message translates to:
+  /// **'Access Granted'**
+  String get diagnostic_permissionStatus_granted;
+
+  /// No description provided for @diagnostic_permissionStatus_limited.
+  ///
+  /// In en, this message translates to:
+  /// **'Limited Access'**
+  String get diagnostic_permissionStatus_limited;
+
+  /// No description provided for @diagnostic_permissionStatus_permanentlyDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'Access Permanently Denied'**
+  String get diagnostic_permissionStatus_permanentlyDenied;
+
+  /// No description provided for @diagnostic_permissionStatus_provisional.
+  ///
+  /// In en, this message translates to:
+  /// **'Provisional Access'**
+  String get diagnostic_permissionStatus_provisional;
+
+  /// No description provided for @diagnostic_permissionStatus_restricted.
+  ///
+  /// In en, this message translates to:
+  /// **'Restricted Access'**
+  String get diagnostic_permissionStatus_restricted;
+
+  /// No description provided for @diagnosticPushDetails_configuration_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Push Notification service configuration'**
+  String get diagnosticPushDetails_configuration_title;
+
+  /// No description provided for @diagnosticPushDetails_errorMessage_intro.
+  ///
+  /// In en, this message translates to:
+  /// **'Some steps to try:\n'**
+  String get diagnosticPushDetails_errorMessage_intro;
+
+  /// No description provided for @diagnosticPushDetails_errorMessage_step1.
+  ///
+  /// In en, this message translates to:
+  /// **'1. Ensure your phone is connected to the internet.\n'**
+  String get diagnosticPushDetails_errorMessage_step1;
+
+  /// No description provided for @diagnosticPushDetails_errorMessage_step2.
+  ///
+  /// In en, this message translates to:
+  /// **'2. If connected, check that your phone can access Google services by visiting a website.\n'**
+  String get diagnosticPushDetails_errorMessage_step2;
+
+  /// No description provided for @diagnosticPushDetails_errorMessage_step3.
+  ///
+  /// In en, this message translates to:
+  /// **'3. Wait a few minutes and try again – Firebase messaging servers may be temporarily down.\n'**
+  String get diagnosticPushDetails_errorMessage_step3;
+
+  /// No description provided for @diagnosticPushDetails_errorMessage_step4.
+  ///
+  /// In en, this message translates to:
+  /// **'4. Restart Google Play services to ensure they are functioning correctly.\n'**
+  String get diagnosticPushDetails_errorMessage_step4;
+
+  /// No description provided for @diagnosticPushDetails_errorMessage_step5.
+  ///
+  /// In en, this message translates to:
+  /// **'5. Verify that Google Play services are installed on your device.\n'**
+  String get diagnosticPushDetails_errorMessage_step5;
+
+  /// No description provided for @diagnosticPushDetails_successMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'The notification service is successfully configured and ready for use to receive messages and handle incoming calls.'**
+  String get diagnosticPushDetails_successMessage;
+
+  /// No description provided for @diagnostic_pushTokenStatusType_error.
+  ///
+  /// In en, this message translates to:
+  /// **'Problem with configuration push notification service'**
+  String get diagnostic_pushTokenStatusType_error;
+
+  /// No description provided for @diagnostic_pushTokenStatusType_progress.
+  ///
+  /// In en, this message translates to:
+  /// **'In progress'**
+  String get diagnostic_pushTokenStatusType_progress;
+
+  /// No description provided for @diagnostic_pushTokenStatusType_success.
+  ///
+  /// In en, this message translates to:
+  /// **'Service successfully configured'**
+  String get diagnostic_pushTokenStatusType_success;
+
+  /// No description provided for @diagnosticScreen_permissionsGroup_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Permissions'**
+  String get diagnosticScreen_permissionsGroup_title;
+
+  /// No description provided for @diagnosticScreen_pushNotificationService_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Push notification service'**
+  String get diagnosticScreen_pushNotificationService_title;
+
   /// No description provided for @favorites_BodyCenter_empty.
   ///
   /// In en, this message translates to:
@@ -2365,6 +2617,42 @@ abstract class AppLocalizations {
   /// **'Continue'**
   String get permission_Button_request;
 
+  /// No description provided for @permission_manageFullScreenNotificationInstructions_step1.
+  ///
+  /// In en, this message translates to:
+  /// **'Go to your phone\'s Settings.'**
+  String get permission_manageFullScreenNotificationInstructions_step1;
+
+  /// No description provided for @permission_manageFullScreenNotificationInstructions_step2.
+  ///
+  /// In en, this message translates to:
+  /// **'Navigate to \'Special App Access\' under the \'Apps & notifications\' section.'**
+  String get permission_manageFullScreenNotificationInstructions_step2;
+
+  /// No description provided for @permission_manageFullScreenNotificationInstructions_step3.
+  ///
+  /// In en, this message translates to:
+  /// **'Find and tap on \'Manage full screen intents\'.'**
+  String get permission_manageFullScreenNotificationInstructions_step3;
+
+  /// No description provided for @permission_manageFullScreenNotificationInstructions_step4.
+  ///
+  /// In en, this message translates to:
+  /// **'Select the app for which you want to manage full-screen notifications.'**
+  String get permission_manageFullScreenNotificationInstructions_step4;
+
+  /// No description provided for @permission_manageFullScreenNotificationInstructions_step5.
+  ///
+  /// In en, this message translates to:
+  /// **'Toggle the permission to enable or disable full-screen notifications for that app.'**
+  String get permission_manageFullScreenNotificationInstructions_step5;
+
+  /// No description provided for @permission_manageFullScreenNotificationPermissions.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage Full-Screen Notification Permissions'**
+  String get permission_manageFullScreenNotificationPermissions;
+
   /// No description provided for @permission_manufacturer_Button_gotIt.
   ///
   /// In en, this message translates to:
@@ -2407,42 +2695,6 @@ abstract class AppLocalizations {
   /// **'To ensure the best user experience, the app needs to be granted the following permissions: microphone for audio calls, camera for video calls, and contacts to simplify reaching them from the app.\n\nPermissions could be changed at any time in the future.'**
   String get permission_Text_description;
 
-  /// No description provided for @permission_manageFullScreenNotificationPermissions.
-  ///
-  /// In en, this message translates to:
-  /// **'Manage Full-Screen Notification Permissions'**
-  String get permission_manageFullScreenNotificationPermissions;
-
-  /// No description provided for @permission_manageFullScreenNotificationInstructions_step1.
-  ///
-  /// In en, this message translates to:
-  /// **'Go to your phone\'s Settings.'**
-  String get permission_manageFullScreenNotificationInstructions_step1;
-
-  /// No description provided for @permission_manageFullScreenNotificationInstructions_step2.
-  ///
-  /// In en, this message translates to:
-  /// **'Navigate to \'Special App Access\' under the \'Apps & notifications\' section.'**
-  String get permission_manageFullScreenNotificationInstructions_step2;
-
-  /// No description provided for @permission_manageFullScreenNotificationInstructions_step3.
-  ///
-  /// In en, this message translates to:
-  /// **'Find and tap on \'Manage full screen intents\'.'**
-  String get permission_manageFullScreenNotificationInstructions_step3;
-
-  /// No description provided for @permission_manageFullScreenNotificationInstructions_step4.
-  ///
-  /// In en, this message translates to:
-  /// **'Select the app for which you want to manage full-screen notifications.'**
-  String get permission_manageFullScreenNotificationInstructions_step4;
-
-  /// No description provided for @permission_manageFullScreenNotificationInstructions_step5.
-  ///
-  /// In en, this message translates to:
-  /// **'Toggle the permission to enable or disable full-screen notifications for that app.'**
-  String get permission_manageFullScreenNotificationInstructions_step5;
-
   /// No description provided for @recents_BodyCenter_empty.
   ///
   /// In en, this message translates to:
@@ -2467,6 +2719,12 @@ abstract class AppLocalizations {
   /// **'Oops... an error happened ☹️'**
   String get recents_errorSnackBar_loadFailure;
 
+  /// No description provided for @recents_HistoryTile_missedCallText.
+  ///
+  /// In en, this message translates to:
+  /// **'Missed'**
+  String get recents_HistoryTile_missedCallText;
+
   /// No description provided for @recents_snackBar_deleted.
   ///
   /// In en, this message translates to:
@@ -2478,12 +2736,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Performing blind transfer'**
   String get recents_Text_blingTransferInitiated;
-
-  /// No description provided for @recents_HistoryTile_missedCallText.
-  ///
-  /// In en, this message translates to:
-  /// **'Missed'**
-  String get recents_HistoryTile_missedCallText;
 
   /// No description provided for @recentsVisibilityFilter_all.
   ///
@@ -2557,6 +2809,12 @@ abstract class AppLocalizations {
   /// **'Status code'**
   String get request_StatusCode;
 
+  /// No description provided for @sessionStatus_pushNotificationServiceProblem.
+  ///
+  /// In en, this message translates to:
+  /// **'Problem with configuration push notification service'**
+  String get sessionStatus_pushNotificationServiceProblem;
+
   /// No description provided for @settings_AboutText_AppVersion.
   ///
   /// In en, this message translates to:
@@ -2569,17 +2827,17 @@ abstract class AppLocalizations {
   /// **'?.?.?'**
   String get settings_AboutText_CoreVersionUndefined;
 
-  /// No description provided for @settings_AboutText_StoreVersion.
-  ///
-  /// In en, this message translates to:
-  /// **'Build version in the Store'**
-  String get settings_AboutText_StoreVersion;
-
   /// No description provided for @settings_AboutText_FCMPushNotificationToken.
   ///
   /// In en, this message translates to:
   /// **'FCM Push Notification Token'**
   String get settings_AboutText_FCMPushNotificationToken;
+
+  /// No description provided for @settings_AboutText_StoreVersion.
+  ///
+  /// In en, this message translates to:
+  /// **'Build version in the Store'**
+  String get settings_AboutText_StoreVersion;
 
   /// No description provided for @settings_AccountDeleteConfirmDialog_content.
   ///
@@ -2695,35 +2953,11 @@ abstract class AppLocalizations {
   /// **'Confirm logout'**
   String get settings_LogoutConfirmDialog_title;
 
-  /// No description provided for @settings_network_incomingCallType_title.
+  /// No description provided for @settings_network_androidNotificationDescription.
   ///
   /// In en, this message translates to:
-  /// **'Incoming Call Type'**
-  String get settings_network_incomingCallType_title;
-
-  /// No description provided for @settings_network_incomingCallType_pushNotification_title.
-  ///
-  /// In en, this message translates to:
-  /// **'Push Notification'**
-  String get settings_network_incomingCallType_pushNotification_title;
-
-  /// No description provided for @settings_network_incomingCallType_pushNotification_description.
-  ///
-  /// In en, this message translates to:
-  /// **'When the app is not in use, it stops running and consumes minimal resources, which helps conserve battery life. During an incoming call, the server sends a push notification to the phone, prompting the mobile operating system to launch the app to handle the call. However, this method does not guarantee that all calls will be received. If the phone has been inactive for an extended period, some versions of Android may limit push notifications, potentially causing you to miss an incoming call.'**
-  String get settings_network_incomingCallType_pushNotification_description;
-
-  /// No description provided for @settings_network_incomingCallType_socket_title.
-  ///
-  /// In en, this message translates to:
-  /// **'Persistent Connection to the Server'**
-  String get settings_network_incomingCallType_socket_title;
-
-  /// No description provided for @settings_network_incomingCallType_socket_description.
-  ///
-  /// In en, this message translates to:
-  /// **'The app continues running in the background and always maintains an active connection to the server. This increases the chances of receiving an incoming call but may drain the battery more quickly.'**
-  String get settings_network_incomingCallType_socket_description;
+  /// **'This is required to receive calls while in background'**
+  String get settings_network_androidNotificationDescription;
 
   /// No description provided for @settings_network_androidNotificationName.
   ///
@@ -2731,11 +2965,35 @@ abstract class AppLocalizations {
   /// **'Inbound Calls Service'**
   String get settings_network_androidNotificationName;
 
-  /// No description provided for @settings_network_androidNotificationDescription.
+  /// No description provided for @settings_network_incomingCallType_pushNotification_description.
   ///
   /// In en, this message translates to:
-  /// **'This is required to receive calls while in background'**
-  String get settings_network_androidNotificationDescription;
+  /// **'When the app is not in use, it stops running and consumes minimal resources, which helps conserve battery life. During an incoming call, the server sends a push notification to the phone, prompting the mobile operating system to launch the app to handle the call. However, this method does not guarantee that all calls will be received. If the phone has been inactive for an extended period, some versions of Android may limit push notifications, potentially causing you to miss an incoming call.'**
+  String get settings_network_incomingCallType_pushNotification_description;
+
+  /// No description provided for @settings_network_incomingCallType_pushNotification_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Push Notification'**
+  String get settings_network_incomingCallType_pushNotification_title;
+
+  /// No description provided for @settings_network_incomingCallType_socket_description.
+  ///
+  /// In en, this message translates to:
+  /// **'The app continues running in the background and always maintains an active connection to the server. This increases the chances of receiving an incoming call but may drain the battery more quickly.'**
+  String get settings_network_incomingCallType_socket_description;
+
+  /// No description provided for @settings_network_incomingCallType_socket_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Persistent Connection to the Server'**
+  String get settings_network_incomingCallType_socket_title;
+
+  /// No description provided for @settings_network_incomingCallType_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Incoming Call Type'**
+  String get settings_network_incomingCallType_title;
 
   /// No description provided for @themeMode_dark.
   ///
@@ -2820,264 +3078,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Web resource error'**
   String get webRegistration_ErrorAcknowledgeDialog_title;
-
-  /// No description provided for @diagnostic_AppBar_title.
-  ///
-  /// In en, this message translates to:
-  /// **'Diagnostic'**
-  String get diagnostic_AppBar_title;
-
-  /// No description provided for @diagnosticPermissionDetails_title_statusPermission.
-  ///
-  /// In en, this message translates to:
-  /// **'Status permission'**
-  String get diagnosticPermissionDetails_title_statusPermission;
-
-  /// No description provided for @diagnosticPermissionDetails_button_requestPermission.
-  ///
-  /// In en, this message translates to:
-  /// **'Request Permission'**
-  String get diagnosticPermissionDetails_button_requestPermission;
-
-  /// No description provided for @diagnosticPermissionDetails_button_managePermission.
-  ///
-  /// In en, this message translates to:
-  /// **'Manage Permission'**
-  String get diagnosticPermissionDetails_button_managePermission;
-
-  /// No description provided for @diagnostic_permissionStatus_denied.
-  ///
-  /// In en, this message translates to:
-  /// **'Access Denied'**
-  String get diagnostic_permissionStatus_denied;
-
-  /// No description provided for @diagnostic_permissionStatus_granted.
-  ///
-  /// In en, this message translates to:
-  /// **'Access Granted'**
-  String get diagnostic_permissionStatus_granted;
-
-  /// No description provided for @diagnostic_permissionStatus_restricted.
-  ///
-  /// In en, this message translates to:
-  /// **'Restricted Access'**
-  String get diagnostic_permissionStatus_restricted;
-
-  /// No description provided for @diagnostic_permissionStatus_limited.
-  ///
-  /// In en, this message translates to:
-  /// **'Limited Access'**
-  String get diagnostic_permissionStatus_limited;
-
-  /// No description provided for @diagnostic_permissionStatus_permanentlyDenied.
-  ///
-  /// In en, this message translates to:
-  /// **'Access Permanently Denied'**
-  String get diagnostic_permissionStatus_permanentlyDenied;
-
-  /// No description provided for @diagnostic_permissionStatus_provisional.
-  ///
-  /// In en, this message translates to:
-  /// **'Provisional Access'**
-  String get diagnostic_permissionStatus_provisional;
-
-  /// No description provided for @diagnostic_permission_camera_title.
-  ///
-  /// In en, this message translates to:
-  /// **'Camera'**
-  String get diagnostic_permission_camera_title;
-
-  /// No description provided for @diagnostic_permission_microphone_title.
-  ///
-  /// In en, this message translates to:
-  /// **'Microphone'**
-  String get diagnostic_permission_microphone_title;
-
-  /// No description provided for @diagnostic_permission_contacts_title.
-  ///
-  /// In en, this message translates to:
-  /// **'Contacts'**
-  String get diagnostic_permission_contacts_title;
-
-  /// No description provided for @diagnostic_permission_notification_title.
-  ///
-  /// In en, this message translates to:
-  /// **'Notification'**
-  String get diagnostic_permission_notification_title;
-
-  /// No description provided for @diagnostic_permission_camera_description.
-  ///
-  /// In en, this message translates to:
-  /// **'This app requires permission to access the camera to make video calls.'**
-  String get diagnostic_permission_camera_description;
-
-  /// No description provided for @diagnostic_permission_microphone_description.
-  ///
-  /// In en, this message translates to:
-  /// **'This app requires permission to access the microphone to make audio calls.'**
-  String get diagnostic_permission_microphone_description;
-
-  /// No description provided for @diagnostic_permission_contacts_description.
-  ///
-  /// In en, this message translates to:
-  /// **'This app requires permission to access contacts to make calls within your address book.'**
-  String get diagnostic_permission_contacts_description;
-
-  /// No description provided for @diagnostic_permission_notification_description.
-  ///
-  /// In en, this message translates to:
-  /// **'Enables the app to trigger incoming call.'**
-  String get diagnostic_permission_notification_description;
-
-  /// No description provided for @diagnosticScreen_pushNotificationService_title.
-  ///
-  /// In en, this message translates to:
-  /// **'Push notification service'**
-  String get diagnosticScreen_pushNotificationService_title;
-
-  /// No description provided for @diagnosticScreen_permissionsGroup_title.
-  ///
-  /// In en, this message translates to:
-  /// **'Permissions'**
-  String get diagnosticScreen_permissionsGroup_title;
-
-  /// No description provided for @diagnosticPushDetails_configuration_title.
-  ///
-  /// In en, this message translates to:
-  /// **'Push Notification service configuration'**
-  String get diagnosticPushDetails_configuration_title;
-
-  /// No description provided for @diagnosticPushDetails_successMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'The notification service is successfully configured and ready for use to receive messages and handle incoming calls.'**
-  String get diagnosticPushDetails_successMessage;
-
-  /// No description provided for @diagnosticPushDetails_errorMessage_intro.
-  ///
-  /// In en, this message translates to:
-  /// **'Some steps to try:\n'**
-  String get diagnosticPushDetails_errorMessage_intro;
-
-  /// No description provided for @diagnosticPushDetails_errorMessage_step1.
-  ///
-  /// In en, this message translates to:
-  /// **'1. Ensure your phone is connected to the internet.\n'**
-  String get diagnosticPushDetails_errorMessage_step1;
-
-  /// No description provided for @diagnosticPushDetails_errorMessage_step2.
-  ///
-  /// In en, this message translates to:
-  /// **'2. If connected, check that your phone can access Google services by visiting a website.\n'**
-  String get diagnosticPushDetails_errorMessage_step2;
-
-  /// No description provided for @diagnosticPushDetails_errorMessage_step3.
-  ///
-  /// In en, this message translates to:
-  /// **'3. Wait a few minutes and try again – Firebase messaging servers may be temporarily down.\n'**
-  String get diagnosticPushDetails_errorMessage_step3;
-
-  /// No description provided for @diagnosticPushDetails_errorMessage_step4.
-  ///
-  /// In en, this message translates to:
-  /// **'4. Restart Google Play services to ensure they are functioning correctly.\n'**
-  String get diagnosticPushDetails_errorMessage_step4;
-
-  /// No description provided for @diagnosticPushDetails_errorMessage_step5.
-  ///
-  /// In en, this message translates to:
-  /// **'5. Verify that Google Play services are installed on your device.\n'**
-  String get diagnosticPushDetails_errorMessage_step5;
-
-  /// No description provided for @diagnostic_pushTokenStatusType_success.
-  ///
-  /// In en, this message translates to:
-  /// **'Service successfully configured'**
-  String get diagnostic_pushTokenStatusType_success;
-
-  /// No description provided for @diagnostic_pushTokenStatusType_error.
-  ///
-  /// In en, this message translates to:
-  /// **'Problem with configuration push notification service'**
-  String get diagnostic_pushTokenStatusType_error;
-
-  /// No description provided for @sessionStatus_pushNotificationServiceProblem.
-  ///
-  /// In en, this message translates to:
-  /// **'Problem with configuration push notification service'**
-  String get sessionStatus_pushNotificationServiceProblem;
-
-  /// No description provided for @diagnostic_pushTokenStatusType_progress.
-  ///
-  /// In en, this message translates to:
-  /// **'In progress'**
-  String get diagnostic_pushTokenStatusType_progress;
-
-  /// No description provided for @diagnostic_batteryMode_unrestricted_title.
-  ///
-  /// In en, this message translates to:
-  /// **'Unrestricted'**
-  String get diagnostic_batteryMode_unrestricted_title;
-
-  /// No description provided for @diagnostic_batteryMode_optimized_title.
-  ///
-  /// In en, this message translates to:
-  /// **'Optimized'**
-  String get diagnostic_batteryMode_optimized_title;
-
-  /// No description provided for @diagnostic_batteryMode_restricted_title.
-  ///
-  /// In en, this message translates to:
-  /// **'Restricted'**
-  String get diagnostic_batteryMode_restricted_title;
-
-  /// No description provided for @diagnostic_batteryMode_unknown_title.
-  ///
-  /// In en, this message translates to:
-  /// **'Unknown'**
-  String get diagnostic_batteryMode_unknown_title;
-
-  /// No description provided for @diagnostic_batteryMode_unrestricted_description.
-  ///
-  /// In en, this message translates to:
-  /// **'The app has full access to run in the background without restrictions.'**
-  String get diagnostic_batteryMode_unrestricted_description;
-
-  /// No description provided for @diagnostic_batteryMode_optimized_description.
-  ///
-  /// In en, this message translates to:
-  /// **'The app\'s background activity is managed by the system to save the battery. It may not work correctly with incoming calls triggered by push notifications.'**
-  String get diagnostic_batteryMode_optimized_description;
-
-  /// No description provided for @diagnostic_batteryMode_restricted_description.
-  ///
-  /// In en, this message translates to:
-  /// **'The app\'s background activity is heavily restricted to conserve the battery. Incoming calls may be missed.'**
-  String get diagnostic_batteryMode_restricted_description;
-
-  /// No description provided for @diagnostic_batteryMode_unknown_description.
-  ///
-  /// In en, this message translates to:
-  /// **'The battery mode status is unknown. The app might have unpredictable behavior.'**
-  String get diagnostic_batteryMode_unknown_description;
-
-  /// No description provided for @diagnostic_battery_groupTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Battery'**
-  String get diagnostic_battery_groupTitle;
-
-  /// No description provided for @diagnostic_battery_tile_title.
-  ///
-  /// In en, this message translates to:
-  /// **'Battery mode'**
-  String get diagnostic_battery_tile_title;
-
-  /// No description provided for @diagnostic_battery_navigate_section.
-  ///
-  /// In en, this message translates to:
-  /// **'Navigate to the Battery section'**
-  String get diagnostic_battery_navigate_section;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

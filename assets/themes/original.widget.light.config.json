@@ -1,4 +1,31 @@
 {
+  "picture": {
+    "onboardingPictureLogo": {
+      "scale": 0.75
+    },
+    "onboardingLogo": {
+      "scale": 0.25
+    }
+  },
+  "bar": {
+    "bottomNavigationBar": {
+      "backgroundColor": "#D9F2F7",
+      "selectedItemColor": "#2351A3",
+      "unSelectedItemColor": "#5C7FC1"
+    },
+    "extTabBar": {
+      "foregroundColor": "#2351A3",
+      "backgroundColor": "#D9F2F7",
+      "selectedItemColor": "#2351A3",
+      "unSelectedItemColor": "#5C7FC1"
+    }
+  },
+  "group": {
+    "groupTitleListTile": {
+      "backgroundColor": "#D9F2F7",
+      "textColor": "#000000"
+    }
+  },
   "dialog": {
     "snackBar": {
       "successBackgroundColor": "#75B943",
@@ -10,7 +37,7 @@
   "statuses": {
     "registrationStatuses": {
       "online": "#75B943",
-      "offline": "#EEF3F6"
+      "offline": "#D2DFE4"
     },
     "calStatuses": {
       "connectivityNone": "#E74C3C",

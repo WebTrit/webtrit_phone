@@ -1,43 +1,26 @@
 {
   "project_info": {
-    "project_number": "973049735976",
-    "project_id": "webtrit-app",
-    "storage_bucket": "webtrit-app.appspot.com"
+    "project_number": "467232181887",
+    "project_id": "call-home-7aa3f",
+    "storage_bucket": "call-home-7aa3f.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:973049735976:android:3b8774082803ad8f547e1d",
+        "mobilesdk_app_id": "1:467232181887:android:24cf8ae4929011df1b794a",
         "android_client_info": {
-          "package_name": "com.webtrit.app"
+          "package_name": "za.co.econetwireless.worldstream"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "973049735976-p4dg2dikj1goumh7i00l0pf6d628s66q.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyAq1cn3u6oeWVHTdAAhwdsy78tRpb4ab2Y"
+          "current_key": "AIzaSyCLzXcB6VLIf8ZuYJGHJJhFms6rCBtsG9Q"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "973049735976-p4dg2dikj1goumh7i00l0pf6d628s66q.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "973049735976-t0te56rlsu1putg89pt2b8c4qq8f80c1.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.webtrit.app"
-              }
-            }
-          ]
+          "other_platform_oauth_client": []
         }
       }
     }

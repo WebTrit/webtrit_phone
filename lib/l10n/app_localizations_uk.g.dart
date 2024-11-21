@@ -462,6 +462,132 @@ class AppLocalizationsUk extends AppLocalizations {
   String get default_UserAlreadyInChatMessagingSocketException => 'Користувач вже в чаті';
 
   @override
+  String get diagnostic_AppBar_title => 'Діагностика';
+
+  @override
+  String get diagnostic_battery_groupTitle => 'Батарея';
+
+  @override
+  String get diagnostic_batteryMode_optimized_description => 'Фонова активність додатка керується системою для економії батареї. Може працювати некоректно для вхідних дзвінків, що активуються через push-сповіщення.';
+
+  @override
+  String get diagnostic_batteryMode_optimized_title => 'Оптимізовано';
+
+  @override
+  String get diagnostic_batteryMode_restricted_description => 'Фонова активність додатка суворо обмежена для збереження заряду батареї. Можливі пропущені вхідні дзвінки.';
+
+  @override
+  String get diagnostic_batteryMode_restricted_title => 'Обмежено';
+
+  @override
+  String get diagnostic_batteryMode_unknown_description => 'Статус режиму батареї невідомий. Додаток може поводитися непередбачувано.';
+
+  @override
+  String get diagnostic_batteryMode_unknown_title => 'Невідомо';
+
+  @override
+  String get diagnostic_batteryMode_unrestricted_description => 'Додаток має повний доступ для роботи у фоновому режимі без обмежень.';
+
+  @override
+  String get diagnostic_batteryMode_unrestricted_title => 'Без обмежень';
+
+  @override
+  String get diagnostic_battery_navigate_section => 'Перейдіть до розділу «Батарея»';
+
+  @override
+  String get diagnostic_battery_tile_title => 'Режим батареї';
+
+  @override
+  String get diagnostic_permission_camera_description => 'Цей додаток потребує дозволу на доступ до камери для здійснення відеодзвінків.';
+
+  @override
+  String get diagnostic_permission_camera_title => 'Камера';
+
+  @override
+  String get diagnostic_permission_contacts_description => 'Цей додаток потребує дозволу на доступ до контактів для здійснення дзвінків із вашої телефонної книги.';
+
+  @override
+  String get diagnostic_permission_contacts_title => 'Контакти';
+
+  @override
+  String get diagnosticPermissionDetails_button_managePermission => 'Керування дозволами';
+
+  @override
+  String get diagnosticPermissionDetails_button_requestPermission => 'Запит дозволу';
+
+  @override
+  String get diagnosticPermissionDetails_title_statusPermission => 'Статус дозволу';
+
+  @override
+  String get diagnostic_permission_microphone_description => 'Цей додаток потребує дозволу на доступ до мікрофона для здійснення аудіодзвінків.';
+
+  @override
+  String get diagnostic_permission_microphone_title => 'Мікрофон';
+
+  @override
+  String get diagnostic_permission_notification_description => 'Дозволяє додатку активувати вхідні дзвінки.';
+
+  @override
+  String get diagnostic_permission_notification_title => 'Сповіщення';
+
+  @override
+  String get diagnostic_permissionStatus_denied => 'Доступ заборонено';
+
+  @override
+  String get diagnostic_permissionStatus_granted => 'Доступ надано';
+
+  @override
+  String get diagnostic_permissionStatus_limited => 'Обмежений доступ';
+
+  @override
+  String get diagnostic_permissionStatus_permanentlyDenied => 'Доступ назавжди заборонено';
+
+  @override
+  String get diagnostic_permissionStatus_provisional => 'Тимчасовий доступ';
+
+  @override
+  String get diagnostic_permissionStatus_restricted => 'Обмежений доступ';
+
+  @override
+  String get diagnosticPushDetails_configuration_title => 'Налаштування служби push-сповіщень';
+
+  @override
+  String get diagnosticPushDetails_errorMessage_intro => 'Декілька кроків, які можна спробувати:\n';
+
+  @override
+  String get diagnosticPushDetails_errorMessage_step1 => '1. Переконайтеся, що ваш телефон підключений до Інтернету.\n';
+
+  @override
+  String get diagnosticPushDetails_errorMessage_step2 => '2. Якщо підключено, перевірте, чи може ваш телефон отримати доступ до сервісів Google, відвідавши веб-сайт.\n';
+
+  @override
+  String get diagnosticPushDetails_errorMessage_step3 => '3. Зачекайте кілька хвилин і спробуйте знову – сервери Firebase можуть тимчасово не працювати.\n';
+
+  @override
+  String get diagnosticPushDetails_errorMessage_step4 => '4. Перезапустіть сервіси Google Play, щоб переконатися, що вони працюють належним чином.\n';
+
+  @override
+  String get diagnosticPushDetails_errorMessage_step5 => '5. Переконайтеся, що сервіси Google Play встановлені на вашому пристрої.\n';
+
+  @override
+  String get diagnosticPushDetails_successMessage => 'Служба сповіщень успішно налаштована та готова до використання для отримання повідомлень і обробки вхідних дзвінків.';
+
+  @override
+  String get diagnostic_pushTokenStatusType_error => 'Проблема з налаштуванням служби push-сповіщень';
+
+  @override
+  String get diagnostic_pushTokenStatusType_progress => 'В процесі';
+
+  @override
+  String get diagnostic_pushTokenStatusType_success => 'Служба успішно налаштована ';
+
+  @override
+  String get diagnosticScreen_permissionsGroup_title => 'Дозволи';
+
+  @override
+  String get diagnosticScreen_pushNotificationService_title => 'Служба push-сповіщень';
+
+  @override
   String get favorites_BodyCenter_empty => 'Наразі у вас немає обраних номерів.\nДодайте обрані номери з Контактів, використовуючи іконку зірочки';
 
   @override
@@ -1165,6 +1291,24 @@ class AppLocalizationsUk extends AppLocalizations {
   String get permission_Button_request => 'Продовжити';
 
   @override
+  String get permission_manageFullScreenNotificationInstructions_step1 => 'Go to your phone\'s Settings.';
+
+  @override
+  String get permission_manageFullScreenNotificationInstructions_step2 => 'Navigate to \'Special App Access\' under the \'Apps & notifications\' section.';
+
+  @override
+  String get permission_manageFullScreenNotificationInstructions_step3 => 'Find and tap on \'Manage full screen intents\'.';
+
+  @override
+  String get permission_manageFullScreenNotificationInstructions_step4 => 'Select the app for which you want to manage full-screen notifications.';
+
+  @override
+  String get permission_manageFullScreenNotificationInstructions_step5 => 'Toggle the permission to enable or disable full-screen notifications for that app.';
+
+  @override
+  String get permission_manageFullScreenNotificationPermissions => 'Manage Full-Screen Notification Permissions';
+
+  @override
   String get permission_manufacturer_Button_gotIt => 'Зрозуміло';
 
   @override
@@ -1186,24 +1330,6 @@ class AppLocalizationsUk extends AppLocalizations {
   String get permission_Text_description => 'Для забезпечення найкращого досвіду користувача програма потребує наступні дозволи: мікрофон для аудіодзвінків, камера для відеодзвінків та доступ до контактів для спрощення їх використання в програмі.\n\nДозволи можуть бути змінені у майбутньому.';
 
   @override
-  String get permission_manageFullScreenNotificationPermissions => 'Manage Full-Screen Notification Permissions';
-
-  @override
-  String get permission_manageFullScreenNotificationInstructions_step1 => 'Go to your phone\'s Settings.';
-
-  @override
-  String get permission_manageFullScreenNotificationInstructions_step2 => 'Navigate to \'Special App Access\' under the \'Apps & notifications\' section.';
-
-  @override
-  String get permission_manageFullScreenNotificationInstructions_step3 => 'Find and tap on \'Manage full screen intents\'.';
-
-  @override
-  String get permission_manageFullScreenNotificationInstructions_step4 => 'Select the app for which you want to manage full-screen notifications.';
-
-  @override
-  String get permission_manageFullScreenNotificationInstructions_step5 => 'Toggle the permission to enable or disable full-screen notifications for that app.';
-
-  @override
   String recents_BodyCenter_empty(Object filter) {
     return 'Зараз у вас немає жодних $filter останніх дзвінків.';
   }
@@ -1218,15 +1344,15 @@ class AppLocalizationsUk extends AppLocalizations {
   String get recents_errorSnackBar_loadFailure => 'Упс... сталася помилка ☹️';
 
   @override
+  String get recents_HistoryTile_missedCallText => 'Пропущено';
+
+  @override
   String recents_snackBar_deleted(String name) {
     return '$name видалено';
   }
 
   @override
   String get recents_Text_blingTransferInitiated => 'Безумовне переведення дзвінка';
-
-  @override
-  String get recents_HistoryTile_missedCallText => 'Пропущено';
 
   @override
   String get recentsVisibilityFilter_all => 'Всі';
@@ -1275,16 +1401,19 @@ class AppLocalizationsUk extends AppLocalizations {
   String get request_StatusCode => 'Код статусу запиту';
 
   @override
+  String get sessionStatus_pushNotificationServiceProblem => 'Проблема з налаштуванням служби пуш-сповіщень';
+
+  @override
   String get settings_AboutText_AppVersion => 'Версія додатка';
 
   @override
   String get settings_AboutText_CoreVersionUndefined => '?.?.?';
 
   @override
-  String get settings_AboutText_StoreVersion => 'Версія збірки в магазині';
+  String get settings_AboutText_FCMPushNotificationToken => 'Токен для Push-повідомлень FCM';
 
   @override
-  String get settings_AboutText_FCMPushNotificationToken => 'Токен для Push-повідомлень FCM';
+  String get settings_AboutText_StoreVersion => 'Версія збірки в магазині';
 
   @override
   String get settings_AccountDeleteConfirmDialog_content => 'Ви впевнені, що хочете видалити обліковий запис?';
@@ -1344,25 +1473,25 @@ class AppLocalizationsUk extends AppLocalizations {
   String get settings_LogoutConfirmDialog_title => 'Підтвердження виходу';
 
   @override
-  String get settings_network_incomingCallType_title => 'Тип вхідного дзвінка';
-
-  @override
-  String get settings_network_incomingCallType_pushNotification_title => 'Пуш-нотифікація';
-
-  @override
-  String get settings_network_incomingCallType_pushNotification_description => 'Коли додаток не використувується, він зупиняється і не використовує ресурси, що дозволяє мінімізувати споживання батареї. Під час вхідного дзвінку <brand> сервер посилає push нотифікацію на телефон, після чого мобільна операціонна система запускає додаток для отримання дзвінка. Цей спосіб не гарантує отримання всіх дзвінків, бо якщо телефон довго не використовується, то деякі версії Android можуть обмежити отримання push нотифікацій, і ви можете не отримати вхідний дзвінок.';
-
-  @override
-  String get settings_network_incomingCallType_socket_title => 'Постійне підключення до серверу';
-
-  @override
-  String get settings_network_incomingCallType_socket_description => 'Додаток залишається працювати в фоні та завжди підтримує активне підключення до сервера. Це збільшує шанси отримати вхідний дзвінок, але може швидше розряджати батарею.';
+  String get settings_network_androidNotificationDescription => 'Це необхідно для отримання дзвінків у фоновому режимі';
 
   @override
   String get settings_network_androidNotificationName => 'Служба вхідних дзвінків';
 
   @override
-  String get settings_network_androidNotificationDescription => 'Це необхідно для отримання дзвінків у фоновому режимі';
+  String get settings_network_incomingCallType_pushNotification_description => 'Коли додаток не використувується, він зупиняється і не використовує ресурси, що дозволяє мінімізувати споживання батареї. Під час вхідного дзвінку <brand> сервер посилає push нотифікацію на телефон, після чого мобільна операціонна система запускає додаток для отримання дзвінка. Цей спосіб не гарантує отримання всіх дзвінків, бо якщо телефон довго не використовується, то деякі версії Android можуть обмежити отримання push нотифікацій, і ви можете не отримати вхідний дзвінок.';
+
+  @override
+  String get settings_network_incomingCallType_pushNotification_title => 'Пуш-нотифікація';
+
+  @override
+  String get settings_network_incomingCallType_socket_description => 'Додаток залишається працювати в фоні та завжди підтримує активне підключення до сервера. Це збільшує шанси отримати вхідний дзвінок, але може швидше розряджати батарею.';
+
+  @override
+  String get settings_network_incomingCallType_socket_title => 'Постійне підключення до серверу';
+
+  @override
+  String get settings_network_incomingCallType_title => 'Тип вхідного дзвінка';
 
   @override
   String get themeMode_dark => 'Темний';
@@ -1409,133 +1538,4 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get webRegistration_ErrorAcknowledgeDialog_title => 'Web resource error';
-
-  @override
-  String get diagnostic_AppBar_title => 'Діагностика';
-
-  @override
-  String get diagnosticPermissionDetails_title_statusPermission => 'Статус дозволу';
-
-  @override
-  String get diagnosticPermissionDetails_button_requestPermission => 'Запит дозволу';
-
-  @override
-  String get diagnosticPermissionDetails_button_managePermission => 'Керування дозволами';
-
-  @override
-  String get diagnostic_permissionStatus_denied => 'Доступ заборонено';
-
-  @override
-  String get diagnostic_permissionStatus_granted => 'Доступ надано';
-
-  @override
-  String get diagnostic_permissionStatus_restricted => 'Обмежений доступ';
-
-  @override
-  String get diagnostic_permissionStatus_limited => 'Обмежений доступ';
-
-  @override
-  String get diagnostic_permissionStatus_permanentlyDenied => 'Доступ назавжди заборонено';
-
-  @override
-  String get diagnostic_permissionStatus_provisional => 'Тимчасовий доступ';
-
-  @override
-  String get diagnostic_permission_camera_title => 'Камера';
-
-  @override
-  String get diagnostic_permission_microphone_title => 'Мікрофон';
-
-  @override
-  String get diagnostic_permission_contacts_title => 'Контакти';
-
-  @override
-  String get diagnostic_permission_notification_title => 'Сповіщення';
-
-  @override
-  String get diagnostic_permission_camera_description => 'Цей додаток потребує дозволу на доступ до камери для здійснення відеодзвінків.';
-
-  @override
-  String get diagnostic_permission_microphone_description => 'Цей додаток потребує дозволу на доступ до мікрофона для здійснення аудіодзвінків.';
-
-  @override
-  String get diagnostic_permission_contacts_description => 'Цей додаток потребує дозволу на доступ до контактів для здійснення дзвінків із вашої телефонної книги.';
-
-  @override
-  String get diagnostic_permission_notification_description => 'Дозволяє додатку активувати вхідні дзвінки.';
-
-  @override
-  String get diagnosticScreen_pushNotificationService_title => 'Служба push-сповіщень';
-
-  @override
-  String get diagnosticScreen_permissionsGroup_title => 'Дозволи';
-
-  @override
-  String get diagnosticPushDetails_configuration_title => 'Налаштування служби push-сповіщень';
-
-  @override
-  String get diagnosticPushDetails_successMessage => 'Служба сповіщень успішно налаштована та готова до використання для отримання повідомлень і обробки вхідних дзвінків.';
-
-  @override
-  String get diagnosticPushDetails_errorMessage_intro => 'Декілька кроків, які можна спробувати:\n';
-
-  @override
-  String get diagnosticPushDetails_errorMessage_step1 => '1. Переконайтеся, що ваш телефон підключений до Інтернету.\n';
-
-  @override
-  String get diagnosticPushDetails_errorMessage_step2 => '2. Якщо підключено, перевірте, чи може ваш телефон отримати доступ до сервісів Google, відвідавши веб-сайт.\n';
-
-  @override
-  String get diagnosticPushDetails_errorMessage_step3 => '3. Зачекайте кілька хвилин і спробуйте знову – сервери Firebase можуть тимчасово не працювати.\n';
-
-  @override
-  String get diagnosticPushDetails_errorMessage_step4 => '4. Перезапустіть сервіси Google Play, щоб переконатися, що вони працюють належним чином.\n';
-
-  @override
-  String get diagnosticPushDetails_errorMessage_step5 => '5. Переконайтеся, що сервіси Google Play встановлені на вашому пристрої.\n';
-
-  @override
-  String get diagnostic_pushTokenStatusType_success => 'Служба успішно налаштована ';
-
-  @override
-  String get diagnostic_pushTokenStatusType_error => 'Проблема з налаштуванням служби push-сповіщень';
-
-  @override
-  String get sessionStatus_pushNotificationServiceProblem => 'Проблема з налаштуванням служби пуш-сповіщень';
-
-  @override
-  String get diagnostic_pushTokenStatusType_progress => 'В процесі';
-
-  @override
-  String get diagnostic_batteryMode_unrestricted_title => 'Без обмежень';
-
-  @override
-  String get diagnostic_batteryMode_optimized_title => 'Оптимізовано';
-
-  @override
-  String get diagnostic_batteryMode_restricted_title => 'Обмежено';
-
-  @override
-  String get diagnostic_batteryMode_unknown_title => 'Невідомо';
-
-  @override
-  String get diagnostic_batteryMode_unrestricted_description => 'Додаток має повний доступ для роботи у фоновому режимі без обмежень.';
-
-  @override
-  String get diagnostic_batteryMode_optimized_description => 'Фонова активність додатка керується системою для економії батареї. Може працювати некоректно для вхідних дзвінків, що активуються через push-сповіщення.';
-
-  @override
-  String get diagnostic_batteryMode_restricted_description => 'Фонова активність додатка суворо обмежена для збереження заряду батареї. Можливі пропущені вхідні дзвінки.';
-
-  @override
-  String get diagnostic_batteryMode_unknown_description => 'Статус режиму батареї невідомий. Додаток може поводитися непередбачувано.';
-
-  @override
-  String get diagnostic_battery_groupTitle => 'Батарея';
-
-  @override
-  String get diagnostic_battery_tile_title => 'Режим батареї';
-
-  @override
-  String get diagnostic_battery_navigate_section => 'Перейдіть до розділу «Батарея»';
 }

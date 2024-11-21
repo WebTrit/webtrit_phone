@@ -111,6 +111,15 @@ class WebtritApiClient {
 
         if (requestData != null) httpRequest.body = requestData;
 
+        // Construct the curl command for debugging.
+        final curlCommand = StringBuffer('curl -X $method')
+          ..write(' \'${url.toString()}\'')
+          ..writeAll(requestHeaders.entries.map((e) => " -H '${e.key}: ${e.value}'"))
+          ..write(headers?.entries.map((e) => " -H '${e.key}: ${e.value}'") ?? [])
+          ..write(requestData != null ? " --data '${requestData.replaceAll("'", "\\'")}'" : '');
+
+        _logger.info('Generated curl command: $curlCommand');
+
         _logger.info(' ${method.toUpperCase()} request($requestAttempt) to $url with requestId: $xRequestId');
 
         final httpResponse = await http.Response.fromStream(await _httpClient.send(httpRequest));

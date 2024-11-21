@@ -78,7 +78,7 @@ if (!envDefine.WEBTRIT_ANDROID_RELEASE_UPLOAD_KEYSTORE_PATH.isEmpty()) {
 }
 
 android {
-    namespace "com.webtrit.app"
+    namespace = "za.co.econetwireless.worldstream"
     compileSdkVersion flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
 
@@ -96,7 +96,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.webtrit.app"
+        applicationId = "za.co.econetwireless.worldstream"
         minSdkVersion 26 // flutter.minSdkVersion
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()

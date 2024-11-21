@@ -1,16 +1,13 @@
 {
+  "WEBTRIT_APP_ENABLE_ATTENDED_TRANSFER": false,
   "WEBTRIT_APP_DEBUG_LEVEL": "ALL",
   "WEBTRIT_APP_DATABASE_LOG_STATEMENTS": false,
   "WEBTRIT_APP_PERIODIC_POLLING": true,
-  "WEBTRIT_APP_ENABLE_ATTENDED_TRANSFER": true,
-  "__WEBTRIT_APP_CORE_URL": "",
-  "WEBTRIT_APP_DEMO_CORE_URL": "https://core.demo.webtrit.com",
   "WEBTRIT_APP_LINK_DOMAIN": "app.webtrit.com",
-  "WEBTRIT_APP_NAME": "WebTrit",
-  "WEBTRIT_APP_DESCRIPTION": "WebTrit application",
-  "__WEBTRIT_APP_HELP_URL": "",
-  "__WEBTRIT_APP_ABOUT_URL": "",
-  "__WEBTRIT_APP_CREDENTIALS_REQUEST_URL": "",
-  "WEBTRIT_APP_SALES_EMAIL": "sales@webtrit.com",
-  "WEBTRIT_APP_FCM_VAPID_KEY": "BPBbn4Fc-PNQA5_mSj623NYDEGa5lqFLKVZ9qcfLPp2zrot2Vb5GzCx-3IbhKi1EsFuzgHY11BOpkXvZqXq-5w4"
+  "WEBTRIT_APP_CORE_URL": "https://core.econetwireless.co.za/tenant/90753924-c540-4e27-9017-74785bd8c45e",
+  "WEBTRIT_APP_NAME": "Call Home",
+  "WEBTRIT_APP_DESCRIPTION": "",
+  "WEBTRIT_APP_TERMS_AND_CONDITIONS_URL": "https://call-home-7aa3f.web.app/privacy.html",
+  "WEBTRIT_APP_SALES_EMAIL": "",
+  "WEBTRIT_ANDROID_RELEASE_UPLOAD_KEYSTORE_PATH": "/Users/serdun/Documents/work/webtrit/webtrit_phone_keystores/7KsmLJjmsYiYtMET2mXG"
 }

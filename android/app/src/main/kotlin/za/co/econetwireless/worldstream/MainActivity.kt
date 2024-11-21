@@ -1,4 +1,4 @@
-package com.webtrit.app
+package za.co.econetwireless.worldstream
 
 import io.flutter.embedding.android.FlutterActivity
 

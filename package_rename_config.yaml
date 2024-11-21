@@ -1,0 +1,9 @@
+package_rename_config:
+  android:
+    app_name: Call Home
+    package_name: za.co.econetwireless.worldstream
+    override_old_package: com.webtrit.app
+    lang: kotlin
+  ios:
+    app_name: Call Home
+    package_name: za.co.econetwireless.worldstream.ios

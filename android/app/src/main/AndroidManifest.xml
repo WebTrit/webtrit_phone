@@ -43,7 +43,7 @@
         </intent>
     </queries>
     <application
-        android:label="@string/APP_NAME"
+        android:label="Call Home"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
         android:allowBackup="false">
