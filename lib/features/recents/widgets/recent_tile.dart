@@ -63,7 +63,12 @@ class RecentTile extends StatelessWidget {
       direction: DismissDirection.endToStart,
       child: ListTile(
         contentPadding: const EdgeInsets.only(left: 16, right: 8),
-        leading: LeadingAvatar(username: title),
+        leading: LeadingAvatar(
+          username: title,
+          thumbnail: contact?.thumbnail,
+          thumbnailUrl: contact?.thumbnailUrl,
+          registered: contact?.registered,
+        ),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
