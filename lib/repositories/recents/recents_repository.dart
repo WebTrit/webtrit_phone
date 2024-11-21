@@ -3,84 +3,79 @@ import 'dart:async';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/utils/utils.dart';
 
 class RecentsRepository {
-  RecentsRepository({
-    required AppDatabase appDatabase,
-  }) : _appDatabase = appDatabase;
+  RecentsRepository({required AppDatabase appDatabase}) : _appDatabase = appDatabase;
 
   final AppDatabase _appDatabase;
 
   Stream<List<Recent>> watchRecents() {
-    return _appDatabase.callLogsDao
-        .watchLastCallLogsExt()
-        .map((callLogsExt) => callLogsExt.map(_toRecentExt).toList(growable: false));
+    return _appDatabase.recentsDao
+        .watchLastRecents()
+        .map((callLogsExt) => callLogsExt.map(_toRecent).toList(growable: false));
   }
 
-  Future<Recent> getRecent(RecentId recentId) {
-    return _appDatabase.callLogsDao
-        .getCallLogExt(CallLogDataCompanion(
-          id: Value(recentId),
-        ))
-        .then(_toRecentExt);
+  Future<void> deleteByCallId(int id) async {
+    await _appDatabase.recentsDao.deleteRecent(id);
   }
 
-  Stream<List<Recent>> watchHistory(Recent recent) {
-    return _appDatabase.callLogsDao
-        .watchLastCallLogsByNumber(recent.number)
-        .map((callLogs) => callLogs.map(_toRecent).toList(growable: false));
+  Future<Recent> getRecentByCallId(int id) {
+    return _appDatabase.recentsDao.getRecentByCallId(id).then(_toRecent);
   }
 
-  Future<void> add(Recent recent) async {
-    await _appDatabase.callLogsDao.insertCallLog(CallLogDataCompanion(
-      direction: Value(recent.direction.toData()),
-      number: Value(recent.number),
-      video: Value(recent.video),
-      createdAt: Value(recent.createdTime),
-      acceptedAt: Value(recent.acceptedTime),
-      hungUpAt: Value(recent.hungUpTime),
-    ));
-  }
+  Recent _toRecent(RecentData data) {
+    Contact? contact;
 
-  Future<void> delete(Recent recent) async {
-    final id = recent.id;
-    if (id != null) {
-      await _appDatabase.callLogsDao.deleteCallLog(CallLogDataCompanion(
-        id: Value(id),
-      ));
+    if (data.contactData != null) {
+      final email = data.contactEmails.firstOrNull?.address;
+      final gravatarUrl = gravatarThumbnailUrl(email);
+
+      contact = Contact(
+        id: data.contactData!.id,
+        sourceType: data.contactData!.sourceType.toModel(),
+        sourceId: data.contactData!.sourceId,
+        registered: data.contactData!.registered,
+        userRegistered: data.contactData!.userRegistered,
+        isCurrentUser: data.contactData!.isCurrentUser,
+        firstName: data.contactData!.firstName,
+        lastName: data.contactData!.lastName,
+        aliasName: data.contactData!.aliasName,
+        thumbnail: data.contactData!.thumbnail,
+        thumbnailUrl: gravatarUrl,
+        phones: data.contactPhones.map(_toRealContactPhone).toList(),
+        emails: data.contactEmails.map(_toContactEmail).toList(),
+      );
     }
-  }
 
-  Recent _toRecentExt(CallLogDataWithContactPhoneDataAndContactData callLogExt) {
-    final callLog = callLogExt.callLog;
-    final contactData = callLogExt.contactData;
     return Recent(
-      direction: callLog.direction.toModel(),
-      number: callLog.number,
-      video: callLog.video,
-      createdTime: callLog.createdAt,
-      acceptedTime: callLog.acceptedAt,
-      hungUpTime: callLog.hungUpAt,
-      id: callLog.id,
-      firstName: contactData?.firstName,
-      lastName: contactData?.lastName,
-      aliasName: contactData?.aliasName,
-      contactSourceId: contactData?.sourceId,
-      contactSourceType: contactData?.sourceType.toModel(),
-      contactUserRegistered: contactData?.userRegistered,
-      contactIsCurrentUser: contactData?.isCurrentUser,
+      callLogEntry: CallLogEntry(
+        id: data.callLog.id,
+        direction: CallDirection.values.byName(data.callLog.direction.name),
+        number: data.callLog.number,
+        video: data.callLog.video,
+        createdTime: data.callLog.createdAt,
+        acceptedTime: data.callLog.acceptedAt,
+        hungUpTime: data.callLog.hungUpAt,
+      ),
+      contact: contact,
     );
   }
 
-  Recent _toRecent(CallLogData callLogData) {
-    return Recent(
-      direction: callLogData.direction.toModel(),
-      number: callLogData.number,
-      video: callLogData.video,
-      createdTime: callLogData.createdAt,
-      acceptedTime: callLogData.acceptedAt,
-      hungUpTime: callLogData.hungUpAt,
-      id: callLogData.id,
+  ContactPhone _toRealContactPhone(ContactPhoneData data) {
+    return ContactPhone(
+      id: data.id,
+      number: data.number,
+      label: data.label,
+      favorite: false,
+    );
+  }
+
+  ContactEmail _toContactEmail(ContactEmailData data) {
+    return ContactEmail(
+      id: data.id,
+      address: data.address,
+      label: data.label,
     );
   }
 }

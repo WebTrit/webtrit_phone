@@ -17,19 +17,19 @@ final _logger = Logger('BackgroundCallEventService');
 
 class BackgroundCallEventService implements CallkeepBackgroundServiceDelegate {
   BackgroundCallEventService({
-    required RecentsRepository recentsRepository,
+    required CallLogsRepository callLogsRepository,
     required AppPreferences appPreferences,
     required CallkeepBackgroundService callkeep,
     required SecureStorage storage,
     required TrustedCertificates certificates,
-  })  : _recentsRepository = recentsRepository,
+  })  : _callLogsRepository = callLogsRepository,
         _appPreferences = appPreferences,
         _callkeep = callkeep {
     _initSignalingManager(storage, certificates);
     _callkeep.setBackgroundServiceDelegate(this);
   }
 
-  final RecentsRepository _recentsRepository;
+  final CallLogsRepository _callLogsRepository;
   final AppPreferences _appPreferences;
   final CallkeepBackgroundService _callkeep;
 
@@ -186,14 +186,15 @@ class BackgroundCallEventService implements CallkeepBackgroundServiceDelegate {
     DateTime? hungUpTime, {
     bool video = false,
   }) async {
-    await _recentsRepository.add(Recent(
-      direction: Direction.incoming,
+    NewCall call = (
+      direction: CallDirection.incoming,
       number: number,
       video: video,
       createdTime: createdTime,
       acceptedTime: acceptedTime,
       hungUpTime: hungUpTime,
-    ));
+    );
+    await _callLogsRepository.add(call);
   }
 
   Future<void> _stopIsolate() async {

@@ -37,6 +37,11 @@ class RecentTile extends StatelessWidget {
     final dateFormat = this.dateFormat ?? DateFormat();
     const chatsEnabled = EnvironmentConfig.CHAT_FEATURE_ENABLE;
 
+    final callLogEntry = recent.callLogEntry;
+    final contact = recent.contact;
+
+    final title = contact?.displayTitle ?? callLogEntry.number;
+
     return Dismissible(
       key: ObjectKey(recent),
       background: Container(
@@ -58,13 +63,11 @@ class RecentTile extends StatelessWidget {
       direction: DismissDirection.endToStart,
       child: ListTile(
         contentPadding: const EdgeInsets.only(left: 16, right: 8),
-        leading: LeadingAvatar(
-          username: recent.name,
-        ),
+        leading: LeadingAvatar(username: title),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(dateFormat.format(recent.createdTime)),
+            Text(dateFormat.format(callLogEntry.createdTime)),
             const SizedBox(width: 4),
             InkWell(
               borderRadius: BorderRadius.circular(24),
@@ -89,29 +92,29 @@ class RecentTile extends StatelessWidget {
           ],
         ),
         title: Text(
-          recent.name,
+          title,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
         ),
         subtitle: Row(
           children: [
             Icon(
-              recent.direction.icon(recent.isComplete),
+              callLogEntry.direction.icon(callLogEntry.isComplete),
               size: 16,
-              color: recent.isComplete
-                  ? (recent.direction == Direction.incoming ? Colors.blue : Colors.green)
+              color: callLogEntry.isComplete
+                  ? (callLogEntry.direction == CallDirection.incoming ? Colors.blue : Colors.green)
                   : Colors.red,
             ),
             const Text(' '),
             Icon(
-              recent.video ? Icons.videocam : Icons.call,
+              callLogEntry.video ? Icons.videocam : Icons.call,
               size: 16,
               color: Colors.grey,
             ),
             const Text(' '),
             Flexible(
               child: Text(
-                recent.number,
+                callLogEntry.number,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),

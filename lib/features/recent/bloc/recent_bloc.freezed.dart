@@ -15,46 +15,48 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
-mixin _$RecentDeleted {
-  Recent get recent => throw _privateConstructorUsedError;
+mixin _$CallLogEntryDeleted {
+  CallLogEntry get callLogEntry => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 
-class _$RecentDeletedImpl implements _RecentDeleted {
-  const _$RecentDeletedImpl(this.recent);
+class _$CallLogEntryDeletedImpl implements _CallLogEntryDeleted {
+  const _$CallLogEntryDeletedImpl(this.callLogEntry);
 
   @override
-  final Recent recent;
+  final CallLogEntry callLogEntry;
 
   @override
   String toString() {
-    return 'RecentDeleted(recent: $recent)';
+    return 'CallLogEntryDeleted(callLogEntry: $callLogEntry)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$RecentDeletedImpl &&
-            (identical(other.recent, recent) || other.recent == recent));
+            other is _$CallLogEntryDeletedImpl &&
+            (identical(other.callLogEntry, callLogEntry) ||
+                other.callLogEntry == callLogEntry));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, recent);
+  int get hashCode => Object.hash(runtimeType, callLogEntry);
 }
 
-abstract class _RecentDeleted implements RecentDeleted {
-  const factory _RecentDeleted(final Recent recent) = _$RecentDeletedImpl;
+abstract class _CallLogEntryDeleted implements CallLogEntryDeleted {
+  const factory _CallLogEntryDeleted(final CallLogEntry callLogEntry) =
+      _$CallLogEntryDeletedImpl;
 
   @override
-  Recent get recent;
+  CallLogEntry get callLogEntry;
 }
 
 /// @nodoc
 mixin _$RecentState {
   Recent? get recent => throw _privateConstructorUsedError;
-  List<Recent>? get recents => throw _privateConstructorUsedError;
+  List<CallLogEntry>? get callLog => throw _privateConstructorUsedError;
 
   /// Create a copy of RecentState
   /// with the given fields replaced by the non-null parameter values.
@@ -69,7 +71,7 @@ abstract class $RecentStateCopyWith<$Res> {
           RecentState value, $Res Function(RecentState) then) =
       _$RecentStateCopyWithImpl<$Res, RecentState>;
   @useResult
-  $Res call({Recent? recent, List<Recent>? recents});
+  $Res call({Recent? recent, List<CallLogEntry>? callLog});
 }
 
 /// @nodoc
@@ -88,17 +90,17 @@ class _$RecentStateCopyWithImpl<$Res, $Val extends RecentState>
   @override
   $Res call({
     Object? recent = freezed,
-    Object? recents = freezed,
+    Object? callLog = freezed,
   }) {
     return _then(_value.copyWith(
       recent: freezed == recent
           ? _value.recent
           : recent // ignore: cast_nullable_to_non_nullable
               as Recent?,
-      recents: freezed == recents
-          ? _value.recents
-          : recents // ignore: cast_nullable_to_non_nullable
-              as List<Recent>?,
+      callLog: freezed == callLog
+          ? _value.callLog
+          : callLog // ignore: cast_nullable_to_non_nullable
+              as List<CallLogEntry>?,
     ) as $Val);
   }
 }
@@ -111,7 +113,7 @@ abstract class _$$RecentStateImplCopyWith<$Res>
       __$$RecentStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({Recent? recent, List<Recent>? recents});
+  $Res call({Recent? recent, List<CallLogEntry>? callLog});
 }
 
 /// @nodoc
@@ -128,17 +130,17 @@ class __$$RecentStateImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? recent = freezed,
-    Object? recents = freezed,
+    Object? callLog = freezed,
   }) {
     return _then(_$RecentStateImpl(
       recent: freezed == recent
           ? _value.recent
           : recent // ignore: cast_nullable_to_non_nullable
               as Recent?,
-      recents: freezed == recents
-          ? _value._recents
-          : recents // ignore: cast_nullable_to_non_nullable
-              as List<Recent>?,
+      callLog: freezed == callLog
+          ? _value._callLog
+          : callLog // ignore: cast_nullable_to_non_nullable
+              as List<CallLogEntry>?,
     ));
   }
 }
@@ -146,24 +148,24 @@ class __$$RecentStateImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$RecentStateImpl implements _RecentState {
-  const _$RecentStateImpl({this.recent, final List<Recent>? recents})
-      : _recents = recents;
+  const _$RecentStateImpl({this.recent, final List<CallLogEntry>? callLog})
+      : _callLog = callLog;
 
   @override
   final Recent? recent;
-  final List<Recent>? _recents;
+  final List<CallLogEntry>? _callLog;
   @override
-  List<Recent>? get recents {
-    final value = _recents;
+  List<CallLogEntry>? get callLog {
+    final value = _callLog;
     if (value == null) return null;
-    if (_recents is EqualUnmodifiableListView) return _recents;
+    if (_callLog is EqualUnmodifiableListView) return _callLog;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(value);
   }
 
   @override
   String toString() {
-    return 'RecentState(recent: $recent, recents: $recents)';
+    return 'RecentState(recent: $recent, callLog: $callLog)';
   }
 
   @override
@@ -172,12 +174,12 @@ class _$RecentStateImpl implements _RecentState {
         (other.runtimeType == runtimeType &&
             other is _$RecentStateImpl &&
             (identical(other.recent, recent) || other.recent == recent) &&
-            const DeepCollectionEquality().equals(other._recents, _recents));
+            const DeepCollectionEquality().equals(other._callLog, _callLog));
   }
 
   @override
   int get hashCode => Object.hash(
-      runtimeType, recent, const DeepCollectionEquality().hash(_recents));
+      runtimeType, recent, const DeepCollectionEquality().hash(_callLog));
 
   /// Create a copy of RecentState
   /// with the given fields replaced by the non-null parameter values.
@@ -190,12 +192,13 @@ class _$RecentStateImpl implements _RecentState {
 
 abstract class _RecentState implements RecentState {
   const factory _RecentState(
-      {final Recent? recent, final List<Recent>? recents}) = _$RecentStateImpl;
+      {final Recent? recent,
+      final List<CallLogEntry>? callLog}) = _$RecentStateImpl;
 
   @override
   Recent? get recent;
   @override
-  List<Recent>? get recents;
+  List<CallLogEntry>? get callLog;
 
   /// Create a copy of RecentState
   /// with the given fields replaced by the non-null parameter values.

@@ -25,12 +25,19 @@ class RecentScreen extends StatelessWidget {
       body: BlocBuilder<RecentBloc, RecentState>(
         builder: (context, state) {
           final recent = state.recent;
-          final recents = state.recents;
+
           if (recent == null) {
             return const Center(
               child: CircularProgressIndicator(),
             );
           } else {
+            final logEntry = recent.callLogEntry;
+            final contact = recent.contact;
+
+            final callLog = state.callLog;
+
+            final title = contact?.displayTitle ?? logEntry.number;
+
             final themeData = Theme.of(context);
             final buttonStyle = OutlinedButton.styleFrom(
               side: BorderSide(color: themeData.colorScheme.surfaceTint),
@@ -40,15 +47,12 @@ class RecentScreen extends StatelessWidget {
               children: [
                 Padding(
                   padding: kAllPadding16,
-                  child: LeadingAvatar(
-                    username: recent.name,
-                    radius: 50,
-                  ),
+                  child: LeadingAvatar(username: title, radius: 50),
                 ),
                 CopyToClipboard(
-                  data: recent.number,
+                  data: logEntry.number,
                   child: Text(
-                    recent.number,
+                    logEntry.number,
                     style: themeData.textTheme.labelLarge?.copyWith(
                       color: themeData.colorScheme.outlineVariant,
                     ),
@@ -56,7 +60,7 @@ class RecentScreen extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  recent.name,
+                  title,
                   style: themeData.textTheme.headlineMedium,
                   textAlign: TextAlign.center,
                 ),
@@ -88,19 +92,18 @@ class RecentScreen extends StatelessWidget {
                 const Divider(
                   height: 16,
                 ),
-                if (recents == null)
+                if (callLog == null)
                   const Center(
                     child: CircularProgressIndicator(),
                   )
                 else
-                  for (final recent in recents)
+                  for (final entry in callLog)
                     RecentHistoryTile(
-                      recent: recent,
+                      callLogEntry: entry,
                       dateFormat: context.read<RecentBloc>().dateFormat,
-                      onDeleted: (recent) {
-                        context.showSnackBar(context.l10n.recents_snackBar_deleted(recent.name));
-
-                        context.read<RecentBloc>().add(RecentDeleted(recent));
+                      onDeleted: (callLogEntry) {
+                        context.showSnackBar(context.l10n.recents_snackBar_deleted(entry.number));
+                        context.read<RecentBloc>().add(CallLogEntryDeleted(entry));
                       },
                     )
               ],
@@ -114,8 +117,8 @@ class RecentScreen extends StatelessWidget {
   void _initiateCall(BuildContext context, Recent recent, bool video) {
     final callBloc = context.read<CallBloc>();
     callBloc.add(CallControlEvent.started(
-      number: recent.number,
-      displayName: recent.name,
+      number: recent.callLogEntry.number,
+      displayName: recent.contact?.maybeName,
       video: video,
     ));
     context.maybePop();

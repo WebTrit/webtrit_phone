@@ -117,28 +117,28 @@ class _RecentsScreenState extends State<RecentsScreen> with SingleTickerProvider
                     itemCount: recentsFiltered.length,
                     itemBuilder: (context, index) {
                       final recent = recentsFiltered[index];
-                      final contactSourceId = recent.contactSourceId;
+                      final callLogEntry = recent.callLogEntry;
+                      final contact = recent.contact;
+                      final contactSourceId = contact?.sourceId;
                       return RecentTile(
                         recent: recent,
                         dateFormat: context.read<RecentsBloc>().dateFormat,
                         onInfoPressed: () {
-                          context.router.navigate(RecentScreenPageRoute(
-                            recentId: recent.id!,
-                          ));
+                          context.router.navigate(RecentScreenPageRoute(callId: callLogEntry.id));
                         },
                         onTap: transfer
                             ? () {
                                 final callBloc = context.read<CallBloc>();
                                 callBloc.add(CallControlEvent.blindTransferSubmitted(
-                                  number: recent.number,
+                                  number: callLogEntry.number,
                                 ));
                               }
                             : () {
                                 final callBloc = context.read<CallBloc>();
                                 callBloc.add(CallControlEvent.started(
-                                  number: recent.number,
-                                  displayName: recent.name,
-                                  video: recent.video && widget.videoCallEnable,
+                                  number: callLogEntry.number,
+                                  displayName: contact?.maybeName,
+                                  video: callLogEntry.video && widget.videoCallEnable,
                                 ));
                               },
                         onLongPress: transfer
@@ -146,16 +146,18 @@ class _RecentsScreenState extends State<RecentsScreen> with SingleTickerProvider
                             : () {
                                 final callBloc = context.read<CallBloc>();
                                 callBloc.add(CallControlEvent.started(
-                                  number: recent.number,
-                                  displayName: recent.name,
-                                  video: !recent.video && widget.videoCallEnable,
+                                  number: callLogEntry.number,
+                                  displayName: contact?.displayTitle,
+                                  video: !callLogEntry.video && widget.videoCallEnable,
                                 ));
                               },
                         onDeleted: (recent) {
-                          context.showSnackBar(context.l10n.recents_snackBar_deleted(recent.name));
+                          context.showSnackBar(context.l10n.recents_snackBar_deleted(
+                            contact?.displayTitle ?? callLogEntry.number,
+                          ));
                           context.read<RecentsBloc>().add(RecentsDeleted(recent));
                         },
-                        onMessagePressed: chatsEnabled && recent.canMessage
+                        onMessagePressed: chatsEnabled && (recent.contact?.canMessage == true)
                             ? () {
                                 context.router
                                     .navigate(ChatConversationScreenPageRoute(participantId: contactSourceId!));

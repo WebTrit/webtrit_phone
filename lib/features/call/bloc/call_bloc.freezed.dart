@@ -12827,7 +12827,7 @@ abstract class _CallState extends CallState {
 
 /// @nodoc
 mixin _$ActiveCall {
-  Direction get direction => throw _privateConstructorUsedError;
+  CallDirection get direction => throw _privateConstructorUsedError;
   int get line => throw _privateConstructorUsedError;
   String get callId => throw _privateConstructorUsedError;
   CallkeepHandle get handle => throw _privateConstructorUsedError;
@@ -12863,7 +12863,7 @@ abstract class $ActiveCallCopyWith<$Res> {
       _$ActiveCallCopyWithImpl<$Res, ActiveCall>;
   @useResult
   $Res call(
-      {Direction direction,
+      {CallDirection direction,
       int line,
       String callId,
       CallkeepHandle handle,
@@ -12925,7 +12925,7 @@ class _$ActiveCallCopyWithImpl<$Res, $Val extends ActiveCall>
       direction: null == direction
           ? _value.direction
           : direction // ignore: cast_nullable_to_non_nullable
-              as Direction,
+              as CallDirection,
       line: null == line
           ? _value.line
           : line // ignore: cast_nullable_to_non_nullable
@@ -13022,7 +13022,7 @@ abstract class _$$ActiveCallImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {Direction direction,
+      {CallDirection direction,
       int line,
       String callId,
       CallkeepHandle handle,
@@ -13083,7 +13083,7 @@ class __$$ActiveCallImplCopyWithImpl<$Res>
       direction: null == direction
           ? _value.direction
           : direction // ignore: cast_nullable_to_non_nullable
-              as Direction,
+              as CallDirection,
       line: null == line
           ? _value.line
           : line // ignore: cast_nullable_to_non_nullable
@@ -13183,7 +13183,7 @@ class _$ActiveCallImpl extends _ActiveCall with DiagnosticableTreeMixin {
       : super._();
 
   @override
-  final Direction direction;
+  final CallDirection direction;
   @override
   final int line;
   @override
@@ -13330,7 +13330,7 @@ class _$ActiveCallImpl extends _ActiveCall with DiagnosticableTreeMixin {
 
 abstract class _ActiveCall extends ActiveCall {
   factory _ActiveCall(
-      {required final Direction direction,
+      {required final CallDirection direction,
       required final int line,
       required final String callId,
       required final CallkeepHandle handle,
@@ -13352,7 +13352,7 @@ abstract class _ActiveCall extends ActiveCall {
   _ActiveCall._() : super._();
 
   @override
-  Direction get direction;
+  CallDirection get direction;
   @override
   int get line;
   @override
