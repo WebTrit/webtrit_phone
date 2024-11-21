@@ -4,7 +4,7 @@
   "WEBTRIT_APP_DATABASE_LOG_STATEMENTS": false,
   "WEBTRIT_APP_PERIODIC_POLLING": true,
   "WEBTRIT_APP_LINK_DOMAIN": "app.webtrit.com",
-  "WEBTRIT_APP_CORE_URL": "https://core.econetwireless.co.za",
+  "WEBTRIT_APP_DEMO_CORE_URL": "https://core.econetwireless.co.za",
   "WEBTRIT_APP_NAME": "Call Home",
   "WEBTRIT_APP_DESCRIPTION": "",
   "WEBTRIT_APP_TERMS_AND_CONDITIONS_URL": "https://call-home-7aa3f.web.app/privacy.html",
