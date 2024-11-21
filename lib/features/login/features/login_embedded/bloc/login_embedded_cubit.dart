@@ -29,7 +29,8 @@ class LoginEmbeddedCubit extends Cubit<LoginEmbeddedState> {
   final WebtritApiClientFactory createWebtritApiClient;
 
   void loginByNumber(String number) async {
-    final url = EnvironmentConfig.CORE_URL;
+    const url = EnvironmentConfig.CORE_URL ?? EnvironmentConfig.DEMO_CORE_URL;
+
     final client = createWebtritApiClient(url!, number);
 
     emit(state.copyWith(processing: true, coreUrl: url, tenantId: number));
