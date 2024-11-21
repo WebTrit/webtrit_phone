@@ -16,6 +16,8 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$LoginEmbeddedState {
+  bool get processing => throw _privateConstructorUsedError;
+  String? get coreUrl => throw _privateConstructorUsedError;
   SessionResult? get result => throw _privateConstructorUsedError;
   String? get tenantId => throw _privateConstructorUsedError;
   String? get token => throw _privateConstructorUsedError;
@@ -40,7 +42,9 @@ abstract class $LoginEmbeddedStateCopyWith<$Res> {
       _$LoginEmbeddedStateCopyWithImpl<$Res, LoginEmbeddedState>;
   @useResult
   $Res call(
-      {SessionResult? result,
+      {bool processing,
+      String? coreUrl,
+      SessionResult? result,
       String? tenantId,
       String? token,
       String? userId,
@@ -67,6 +71,8 @@ class _$LoginEmbeddedStateCopyWithImpl<$Res, $Val extends LoginEmbeddedState>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? processing = null,
+    Object? coreUrl = freezed,
     Object? result = freezed,
     Object? tenantId = freezed,
     Object? token = freezed,
@@ -74,6 +80,14 @@ class _$LoginEmbeddedStateCopyWithImpl<$Res, $Val extends LoginEmbeddedState>
     Object? signupSessionOtpProvisionalWithDateTime = freezed,
   }) {
     return _then(_value.copyWith(
+      processing: null == processing
+          ? _value.processing
+          : processing // ignore: cast_nullable_to_non_nullable
+              as bool,
+      coreUrl: freezed == coreUrl
+          ? _value.coreUrl
+          : coreUrl // ignore: cast_nullable_to_non_nullable
+              as String?,
       result: freezed == result
           ? _value.result
           : result // ignore: cast_nullable_to_non_nullable
@@ -123,7 +137,9 @@ abstract class _$$LoginCustomSigninStateImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {SessionResult? result,
+      {bool processing,
+      String? coreUrl,
+      SessionResult? result,
       String? tenantId,
       String? token,
       String? userId,
@@ -150,6 +166,8 @@ class __$$LoginCustomSigninStateImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? processing = null,
+    Object? coreUrl = freezed,
     Object? result = freezed,
     Object? tenantId = freezed,
     Object? token = freezed,
@@ -157,6 +175,14 @@ class __$$LoginCustomSigninStateImplCopyWithImpl<$Res>
     Object? signupSessionOtpProvisionalWithDateTime = freezed,
   }) {
     return _then(_$LoginCustomSigninStateImpl(
+      processing: null == processing
+          ? _value.processing
+          : processing // ignore: cast_nullable_to_non_nullable
+              as bool,
+      coreUrl: freezed == coreUrl
+          ? _value.coreUrl
+          : coreUrl // ignore: cast_nullable_to_non_nullable
+              as String?,
       result: freezed == result
           ? _value.result
           : result // ignore: cast_nullable_to_non_nullable
@@ -186,12 +212,19 @@ class __$$LoginCustomSigninStateImplCopyWithImpl<$Res>
 
 class _$LoginCustomSigninStateImpl implements _LoginCustomSigninState {
   const _$LoginCustomSigninStateImpl(
-      {this.result,
+      {this.processing = false,
+      this.coreUrl,
+      this.result,
       this.tenantId,
       this.token,
       this.userId,
       this.signupSessionOtpProvisionalWithDateTime});
 
+  @override
+  @JsonKey()
+  final bool processing;
+  @override
+  final String? coreUrl;
   @override
   final SessionResult? result;
   @override
@@ -208,7 +241,7 @@ class _$LoginCustomSigninStateImpl implements _LoginCustomSigninState {
 
   @override
   String toString() {
-    return 'LoginEmbeddedState(result: $result, tenantId: $tenantId, token: $token, userId: $userId, signupSessionOtpProvisionalWithDateTime: $signupSessionOtpProvisionalWithDateTime)';
+    return 'LoginEmbeddedState(processing: $processing, coreUrl: $coreUrl, result: $result, tenantId: $tenantId, token: $token, userId: $userId, signupSessionOtpProvisionalWithDateTime: $signupSessionOtpProvisionalWithDateTime)';
   }
 
   @override
@@ -216,6 +249,9 @@ class _$LoginCustomSigninStateImpl implements _LoginCustomSigninState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$LoginCustomSigninStateImpl &&
+            (identical(other.processing, processing) ||
+                other.processing == processing) &&
+            (identical(other.coreUrl, coreUrl) || other.coreUrl == coreUrl) &&
             (identical(other.result, result) || other.result == result) &&
             (identical(other.tenantId, tenantId) ||
                 other.tenantId == tenantId) &&
@@ -228,8 +264,8 @@ class _$LoginCustomSigninStateImpl implements _LoginCustomSigninState {
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, result, tenantId, token, userId,
-      signupSessionOtpProvisionalWithDateTime);
+  int get hashCode => Object.hash(runtimeType, processing, coreUrl, result,
+      tenantId, token, userId, signupSessionOtpProvisionalWithDateTime);
 
   /// Create a copy of LoginEmbeddedState
   /// with the given fields replaced by the non-null parameter values.
@@ -243,7 +279,9 @@ class _$LoginCustomSigninStateImpl implements _LoginCustomSigninState {
 
 abstract class _LoginCustomSigninState implements LoginEmbeddedState {
   const factory _LoginCustomSigninState(
-          {final SessionResult? result,
+          {final bool processing,
+          final String? coreUrl,
+          final SessionResult? result,
           final String? tenantId,
           final String? token,
           final String? userId,
@@ -253,6 +291,10 @@ abstract class _LoginCustomSigninState implements LoginEmbeddedState {
           )? signupSessionOtpProvisionalWithDateTime}) =
       _$LoginCustomSigninStateImpl;
 
+  @override
+  bool get processing;
+  @override
+  String? get coreUrl;
   @override
   SessionResult? get result;
   @override

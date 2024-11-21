@@ -42,8 +42,6 @@ abstract class $DemoCubitStateCopyWith<$Res> {
       UserInfo? userInfo,
       bool enable,
       Map<MainFlavor, DemoActions> actions});
-
-  $UserInfoCopyWith<$Res>? get userInfo;
 }
 
 /// @nodoc
@@ -90,20 +88,6 @@ class _$DemoCubitStateCopyWithImpl<$Res, $Val extends DemoCubitState>
               as Map<MainFlavor, DemoActions>,
     ) as $Val);
   }
-
-  /// Create a copy of DemoCubitState
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $UserInfoCopyWith<$Res>? get userInfo {
-    if (_value.userInfo == null) {
-      return null;
-    }
-
-    return $UserInfoCopyWith<$Res>(_value.userInfo!, (value) {
-      return _then(_value.copyWith(userInfo: value) as $Val);
-    });
-  }
 }
 
 /// @nodoc
@@ -120,9 +104,6 @@ abstract class _$$DemoCubitStateImplCopyWith<$Res>
       UserInfo? userInfo,
       bool enable,
       Map<MainFlavor, DemoActions> actions});
-
-  @override
-  $UserInfoCopyWith<$Res>? get userInfo;
 }
 
 /// @nodoc
@@ -211,14 +192,18 @@ class _$DemoCubitStateImpl extends _DemoCubitState {
             other is _$DemoCubitStateImpl &&
             (identical(other.flavor, flavor) || other.flavor == flavor) &&
             (identical(other.locale, locale) || other.locale == locale) &&
-            (identical(other.userInfo, userInfo) ||
-                other.userInfo == userInfo) &&
+            const DeepCollectionEquality().equals(other.userInfo, userInfo) &&
             (identical(other.enable, enable) || other.enable == enable) &&
             const DeepCollectionEquality().equals(other._actions, _actions));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, flavor, locale, userInfo, enable,
+  int get hashCode => Object.hash(
+      runtimeType,
+      flavor,
+      locale,
+      const DeepCollectionEquality().hash(userInfo),
+      enable,
       const DeepCollectionEquality().hash(_actions));
 
   /// Create a copy of DemoCubitState

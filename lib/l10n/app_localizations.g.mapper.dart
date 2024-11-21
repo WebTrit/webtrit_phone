@@ -287,6 +287,89 @@ class AppLocalizationsMapper {
           localizations.default_UnauthorizedRequestFailureError,
       'default_UserAlreadyInChatMessagingSocketException':
           localizations.default_UserAlreadyInChatMessagingSocketException,
+      'diagnostic_AppBar_title': localizations.diagnostic_AppBar_title,
+      'diagnostic_battery_groupTitle':
+          localizations.diagnostic_battery_groupTitle,
+      'diagnostic_batteryMode_optimized_description':
+          localizations.diagnostic_batteryMode_optimized_description,
+      'diagnostic_batteryMode_optimized_title':
+          localizations.diagnostic_batteryMode_optimized_title,
+      'diagnostic_batteryMode_restricted_description':
+          localizations.diagnostic_batteryMode_restricted_description,
+      'diagnostic_batteryMode_restricted_title':
+          localizations.diagnostic_batteryMode_restricted_title,
+      'diagnostic_batteryMode_unknown_description':
+          localizations.diagnostic_batteryMode_unknown_description,
+      'diagnostic_batteryMode_unknown_title':
+          localizations.diagnostic_batteryMode_unknown_title,
+      'diagnostic_batteryMode_unrestricted_description':
+          localizations.diagnostic_batteryMode_unrestricted_description,
+      'diagnostic_batteryMode_unrestricted_title':
+          localizations.diagnostic_batteryMode_unrestricted_title,
+      'diagnostic_battery_navigate_section':
+          localizations.diagnostic_battery_navigate_section,
+      'diagnostic_battery_tile_title':
+          localizations.diagnostic_battery_tile_title,
+      'diagnostic_permission_camera_description':
+          localizations.diagnostic_permission_camera_description,
+      'diagnostic_permission_camera_title':
+          localizations.diagnostic_permission_camera_title,
+      'diagnostic_permission_contacts_description':
+          localizations.diagnostic_permission_contacts_description,
+      'diagnostic_permission_contacts_title':
+          localizations.diagnostic_permission_contacts_title,
+      'diagnosticPermissionDetails_button_managePermission':
+          localizations.diagnosticPermissionDetails_button_managePermission,
+      'diagnosticPermissionDetails_button_requestPermission':
+          localizations.diagnosticPermissionDetails_button_requestPermission,
+      'diagnosticPermissionDetails_title_statusPermission':
+          localizations.diagnosticPermissionDetails_title_statusPermission,
+      'diagnostic_permission_microphone_description':
+          localizations.diagnostic_permission_microphone_description,
+      'diagnostic_permission_microphone_title':
+          localizations.diagnostic_permission_microphone_title,
+      'diagnostic_permission_notification_description':
+          localizations.diagnostic_permission_notification_description,
+      'diagnostic_permission_notification_title':
+          localizations.diagnostic_permission_notification_title,
+      'diagnostic_permissionStatus_denied':
+          localizations.diagnostic_permissionStatus_denied,
+      'diagnostic_permissionStatus_granted':
+          localizations.diagnostic_permissionStatus_granted,
+      'diagnostic_permissionStatus_limited':
+          localizations.diagnostic_permissionStatus_limited,
+      'diagnostic_permissionStatus_permanentlyDenied':
+          localizations.diagnostic_permissionStatus_permanentlyDenied,
+      'diagnostic_permissionStatus_provisional':
+          localizations.diagnostic_permissionStatus_provisional,
+      'diagnostic_permissionStatus_restricted':
+          localizations.diagnostic_permissionStatus_restricted,
+      'diagnosticPushDetails_configuration_title':
+          localizations.diagnosticPushDetails_configuration_title,
+      'diagnosticPushDetails_errorMessage_intro':
+          localizations.diagnosticPushDetails_errorMessage_intro,
+      'diagnosticPushDetails_errorMessage_step1':
+          localizations.diagnosticPushDetails_errorMessage_step1,
+      'diagnosticPushDetails_errorMessage_step2':
+          localizations.diagnosticPushDetails_errorMessage_step2,
+      'diagnosticPushDetails_errorMessage_step3':
+          localizations.diagnosticPushDetails_errorMessage_step3,
+      'diagnosticPushDetails_errorMessage_step4':
+          localizations.diagnosticPushDetails_errorMessage_step4,
+      'diagnosticPushDetails_errorMessage_step5':
+          localizations.diagnosticPushDetails_errorMessage_step5,
+      'diagnosticPushDetails_successMessage':
+          localizations.diagnosticPushDetails_successMessage,
+      'diagnostic_pushTokenStatusType_error':
+          localizations.diagnostic_pushTokenStatusType_error,
+      'diagnostic_pushTokenStatusType_progress':
+          localizations.diagnostic_pushTokenStatusType_progress,
+      'diagnostic_pushTokenStatusType_success':
+          localizations.diagnostic_pushTokenStatusType_success,
+      'diagnosticScreen_permissionsGroup_title':
+          localizations.diagnosticScreen_permissionsGroup_title,
+      'diagnosticScreen_pushNotificationService_title':
+          localizations.diagnosticScreen_pushNotificationService_title,
       'favorites_BodyCenter_empty': localizations.favorites_BodyCenter_empty,
       'favorites_DeleteConfirmDialog_content':
           localizations.favorites_DeleteConfirmDialog_content,
@@ -697,6 +780,18 @@ class AppLocalizationsMapper {
           localizations.notifications_errorSnackBar_sipServiceUnavailable,
       'notImplemented': localizations.notImplemented,
       'permission_Button_request': localizations.permission_Button_request,
+      'permission_manageFullScreenNotificationInstructions_step1': localizations
+          .permission_manageFullScreenNotificationInstructions_step1,
+      'permission_manageFullScreenNotificationInstructions_step2': localizations
+          .permission_manageFullScreenNotificationInstructions_step2,
+      'permission_manageFullScreenNotificationInstructions_step3': localizations
+          .permission_manageFullScreenNotificationInstructions_step3,
+      'permission_manageFullScreenNotificationInstructions_step4': localizations
+          .permission_manageFullScreenNotificationInstructions_step4,
+      'permission_manageFullScreenNotificationInstructions_step5': localizations
+          .permission_manageFullScreenNotificationInstructions_step5,
+      'permission_manageFullScreenNotificationPermissions':
+          localizations.permission_manageFullScreenNotificationPermissions,
       'permission_manufacturer_Button_gotIt':
           localizations.permission_manufacturer_Button_gotIt,
       'permission_manufacturer_Button_toSettings':
@@ -710,28 +805,16 @@ class AppLocalizationsMapper {
       'permission_manufacturer_Text_xiaomi_tip2':
           localizations.permission_manufacturer_Text_xiaomi_tip2,
       'permission_Text_description': localizations.permission_Text_description,
-      'permission_manageFullScreenNotificationPermissions':
-          localizations.permission_manageFullScreenNotificationPermissions,
-      'permission_manageFullScreenNotificationInstructions_step1': localizations
-          .permission_manageFullScreenNotificationInstructions_step1,
-      'permission_manageFullScreenNotificationInstructions_step2': localizations
-          .permission_manageFullScreenNotificationInstructions_step2,
-      'permission_manageFullScreenNotificationInstructions_step3': localizations
-          .permission_manageFullScreenNotificationInstructions_step3,
-      'permission_manageFullScreenNotificationInstructions_step4': localizations
-          .permission_manageFullScreenNotificationInstructions_step4,
-      'permission_manageFullScreenNotificationInstructions_step5': localizations
-          .permission_manageFullScreenNotificationInstructions_step5,
       'recents_DeleteConfirmDialog_content':
           localizations.recents_DeleteConfirmDialog_content,
       'recents_DeleteConfirmDialog_title':
           localizations.recents_DeleteConfirmDialog_title,
       'recents_errorSnackBar_loadFailure':
           localizations.recents_errorSnackBar_loadFailure,
-      'recents_Text_blingTransferInitiated':
-          localizations.recents_Text_blingTransferInitiated,
       'recents_HistoryTile_missedCallText':
           localizations.recents_HistoryTile_missedCallText,
+      'recents_Text_blingTransferInitiated':
+          localizations.recents_Text_blingTransferInitiated,
       'recentsVisibilityFilter_all': localizations.recentsVisibilityFilter_all,
       'recentsVisibilityFilter_all_preposit':
           localizations.recentsVisibilityFilter_all_preposit,
@@ -749,14 +832,16 @@ class AppLocalizationsMapper {
           localizations.recentsVisibilityFilter_outgoing_preposit,
       'request_Id': localizations.request_Id,
       'request_StatusCode': localizations.request_StatusCode,
+      'sessionStatus_pushNotificationServiceProblem':
+          localizations.sessionStatus_pushNotificationServiceProblem,
       'settings_AboutText_AppVersion':
           localizations.settings_AboutText_AppVersion,
       'settings_AboutText_CoreVersionUndefined':
           localizations.settings_AboutText_CoreVersionUndefined,
-      'settings_AboutText_StoreVersion':
-          localizations.settings_AboutText_StoreVersion,
       'settings_AboutText_FCMPushNotificationToken':
           localizations.settings_AboutText_FCMPushNotificationToken,
+      'settings_AboutText_StoreVersion':
+          localizations.settings_AboutText_StoreVersion,
       'settings_AccountDeleteConfirmDialog_content':
           localizations.settings_AccountDeleteConfirmDialog_content,
       'settings_AccountDeleteConfirmDialog_title':
@@ -795,21 +880,21 @@ class AppLocalizationsMapper {
           localizations.settings_LogoutConfirmDialog_content,
       'settings_LogoutConfirmDialog_title':
           localizations.settings_LogoutConfirmDialog_title,
-      'settings_network_incomingCallType_title':
-          localizations.settings_network_incomingCallType_title,
-      'settings_network_incomingCallType_pushNotification_title': localizations
-          .settings_network_incomingCallType_pushNotification_title,
+      'settings_network_androidNotificationDescription':
+          localizations.settings_network_androidNotificationDescription,
+      'settings_network_androidNotificationName':
+          localizations.settings_network_androidNotificationName,
       'settings_network_incomingCallType_pushNotification_description':
           localizations
               .settings_network_incomingCallType_pushNotification_description,
-      'settings_network_incomingCallType_socket_title':
-          localizations.settings_network_incomingCallType_socket_title,
+      'settings_network_incomingCallType_pushNotification_title': localizations
+          .settings_network_incomingCallType_pushNotification_title,
       'settings_network_incomingCallType_socket_description':
           localizations.settings_network_incomingCallType_socket_description,
-      'settings_network_androidNotificationName':
-          localizations.settings_network_androidNotificationName,
-      'settings_network_androidNotificationDescription':
-          localizations.settings_network_androidNotificationDescription,
+      'settings_network_incomingCallType_socket_title':
+          localizations.settings_network_incomingCallType_socket_title,
+      'settings_network_incomingCallType_title':
+          localizations.settings_network_incomingCallType_title,
       'themeMode_dark': localizations.themeMode_dark,
       'themeMode_light': localizations.themeMode_light,
       'themeMode_system': localizations.themeMode_system,
@@ -828,91 +913,6 @@ class AppLocalizationsMapper {
           localizations.webRegistration_ErrorAcknowledgeDialogActions_skip,
       'webRegistration_ErrorAcknowledgeDialog_title':
           localizations.webRegistration_ErrorAcknowledgeDialog_title,
-      'diagnostic_AppBar_title': localizations.diagnostic_AppBar_title,
-      'diagnosticPermissionDetails_title_statusPermission':
-          localizations.diagnosticPermissionDetails_title_statusPermission,
-      'diagnosticPermissionDetails_button_requestPermission':
-          localizations.diagnosticPermissionDetails_button_requestPermission,
-      'diagnosticPermissionDetails_button_managePermission':
-          localizations.diagnosticPermissionDetails_button_managePermission,
-      'diagnostic_permissionStatus_denied':
-          localizations.diagnostic_permissionStatus_denied,
-      'diagnostic_permissionStatus_granted':
-          localizations.diagnostic_permissionStatus_granted,
-      'diagnostic_permissionStatus_restricted':
-          localizations.diagnostic_permissionStatus_restricted,
-      'diagnostic_permissionStatus_limited':
-          localizations.diagnostic_permissionStatus_limited,
-      'diagnostic_permissionStatus_permanentlyDenied':
-          localizations.diagnostic_permissionStatus_permanentlyDenied,
-      'diagnostic_permissionStatus_provisional':
-          localizations.diagnostic_permissionStatus_provisional,
-      'diagnostic_permission_camera_title':
-          localizations.diagnostic_permission_camera_title,
-      'diagnostic_permission_microphone_title':
-          localizations.diagnostic_permission_microphone_title,
-      'diagnostic_permission_contacts_title':
-          localizations.diagnostic_permission_contacts_title,
-      'diagnostic_permission_notification_title':
-          localizations.diagnostic_permission_notification_title,
-      'diagnostic_permission_camera_description':
-          localizations.diagnostic_permission_camera_description,
-      'diagnostic_permission_microphone_description':
-          localizations.diagnostic_permission_microphone_description,
-      'diagnostic_permission_contacts_description':
-          localizations.diagnostic_permission_contacts_description,
-      'diagnostic_permission_notification_description':
-          localizations.diagnostic_permission_notification_description,
-      'diagnosticScreen_pushNotificationService_title':
-          localizations.diagnosticScreen_pushNotificationService_title,
-      'diagnosticScreen_permissionsGroup_title':
-          localizations.diagnosticScreen_permissionsGroup_title,
-      'diagnosticPushDetails_configuration_title':
-          localizations.diagnosticPushDetails_configuration_title,
-      'diagnosticPushDetails_successMessage':
-          localizations.diagnosticPushDetails_successMessage,
-      'diagnosticPushDetails_errorMessage_intro':
-          localizations.diagnosticPushDetails_errorMessage_intro,
-      'diagnosticPushDetails_errorMessage_step1':
-          localizations.diagnosticPushDetails_errorMessage_step1,
-      'diagnosticPushDetails_errorMessage_step2':
-          localizations.diagnosticPushDetails_errorMessage_step2,
-      'diagnosticPushDetails_errorMessage_step3':
-          localizations.diagnosticPushDetails_errorMessage_step3,
-      'diagnosticPushDetails_errorMessage_step4':
-          localizations.diagnosticPushDetails_errorMessage_step4,
-      'diagnosticPushDetails_errorMessage_step5':
-          localizations.diagnosticPushDetails_errorMessage_step5,
-      'diagnostic_pushTokenStatusType_success':
-          localizations.diagnostic_pushTokenStatusType_success,
-      'diagnostic_pushTokenStatusType_error':
-          localizations.diagnostic_pushTokenStatusType_error,
-      'sessionStatus_pushNotificationServiceProblem':
-          localizations.sessionStatus_pushNotificationServiceProblem,
-      'diagnostic_pushTokenStatusType_progress':
-          localizations.diagnostic_pushTokenStatusType_progress,
-      'diagnostic_batteryMode_unrestricted_title':
-          localizations.diagnostic_batteryMode_unrestricted_title,
-      'diagnostic_batteryMode_optimized_title':
-          localizations.diagnostic_batteryMode_optimized_title,
-      'diagnostic_batteryMode_restricted_title':
-          localizations.diagnostic_batteryMode_restricted_title,
-      'diagnostic_batteryMode_unknown_title':
-          localizations.diagnostic_batteryMode_unknown_title,
-      'diagnostic_batteryMode_unrestricted_description':
-          localizations.diagnostic_batteryMode_unrestricted_description,
-      'diagnostic_batteryMode_optimized_description':
-          localizations.diagnostic_batteryMode_optimized_description,
-      'diagnostic_batteryMode_restricted_description':
-          localizations.diagnostic_batteryMode_restricted_description,
-      'diagnostic_batteryMode_unknown_description':
-          localizations.diagnostic_batteryMode_unknown_description,
-      'diagnostic_battery_groupTitle':
-          localizations.diagnostic_battery_groupTitle,
-      'diagnostic_battery_tile_title':
-          localizations.diagnostic_battery_tile_title,
-      'diagnostic_battery_navigate_section':
-          localizations.diagnostic_battery_navigate_section,
       'favorites_SnackBar_deleted': (name) =>
           localizations.favorites_SnackBar_deleted(name),
       'login_Button_otpSigninVerifyRepeatInterval': (seconds) =>

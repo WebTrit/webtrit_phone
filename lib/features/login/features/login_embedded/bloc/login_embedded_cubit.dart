@@ -10,6 +10,8 @@ import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 
+import '../../../../../environment_config.dart';
+
 part 'login_embedded_state.dart';
 
 part 'login_embedded_cubit.freezed.dart';
@@ -27,51 +29,56 @@ class LoginEmbeddedCubit extends Cubit<LoginEmbeddedState> {
   final WebtritApiClientFactory createWebtritApiClient;
 
   void loginByNumber(String number) async {
-    final url = loginCubit.state.coreUrl!;
-    final tenantId = loginCubit.defaultTenantId;
-    final client = createWebtritApiClient(url, tenantId);
+    final url = EnvironmentConfig.CORE_URL;
+    final client = createWebtritApiClient(url!, number);
 
-    final result = await _createUserRequest(client, number);
+    emit(state.copyWith(processing: true, coreUrl: url, tenantId: number));
 
-    if (result is SessionOtpProvisional) {
-      emit(state.copyWith(
-        //   processing: false,
-        signupSessionOtpProvisionalWithDateTime: (result, DateTime.now()),
-      ));
-    } else if (result is SessionToken) {
-      // does not set processing to false to hold processing widgets state during navigation
-      emit(state.copyWith(
-        tenantId: result.tenantId ?? state.tenantId!,
-        token: result.token,
-        // Use an empty user ID as a fallback for outdated core versions that do not support this field.
-        userId: result.userId ?? '',
-      ));
-    } else {
-      throw UnimplementedError();
+    try {
+      final result = await _createUserRequest(client, number);
+
+      if (result is SessionOtpProvisional) {
+        emit(state.copyWith(
+          processing: false,
+          signupSessionOtpProvisionalWithDateTime: (result, DateTime.now()),
+        ));
+      } else if (result is SessionToken) {
+        emit(state.copyWith(
+          processing: false,
+          tenantId: result.tenantId ?? state.tenantId!,
+          token: result.token,
+          userId: result.userId ?? '',
+        ));
+      } else {
+        throw UnimplementedError();
+      }
+    } catch (e) {
+      emit(state.copyWith(processing: false));
+
+      notificationsBloc.add(NotificationsSubmitted(LoginErrorNotification(e)));
     }
   }
 
   void verifyOtp(String otp) async {
     final url = loginCubit.state.coreUrl!;
-    final tenantId = loginCubit.defaultTenantId;
-    final client = createWebtritApiClient(url, tenantId);
+    final client = createWebtritApiClient(url, state.tenantId ?? "");
 
-    // try {
-    //   final client = createWebtritApiClient(state.coreUrl!, state.tenantId!);
-    final sessionToken = await _verifySessionOtp(client, state.signupSessionOtpProvisionalWithDateTime!.$1, otp);
-    //
-    //   // does not set processing to false to hold processing widgets state during navigation
-    emit(state.copyWith(
-      tenantId: sessionToken.tenantId ?? state.tenantId!,
-      token: sessionToken.token,
-      // Use an empty user ID as a fallback for outdated core versions that do not support this field.
-      userId: sessionToken.userId ?? '',
-    ));
-    // } catch (e) {
-    //   notificationsBloc.add(NotificationsSubmitted(LoginErrorNotification(e)));
-    //
-    //   emit(state.copyWith(processing: false));
-    // }
+    emit(state.copyWith(processing: true));
+
+    try {
+      final sessionToken = await _verifySessionOtp(client, state.signupSessionOtpProvisionalWithDateTime!.$1, otp);
+
+      emit(state.copyWith(
+        tenantId: state.tenantId,
+        token: sessionToken.token,
+        userId: sessionToken.userId ?? '',
+        processing: false,
+      ));
+    } catch (e) {
+      notificationsBloc.add(NotificationsSubmitted(LoginErrorNotification(e)));
+
+      emit(state.copyWith(processing: false));
+    }
   }
 
   void login(String data) async {
@@ -79,9 +86,8 @@ class LoginEmbeddedCubit extends Cubit<LoginEmbeddedState> {
       final sessionToken = _parseSessionToken(data);
 
       final url = loginCubit.state.coreUrl!;
-      final tenantId = sessionToken.tenantId ?? loginCubit.defaultTenantId;
 
-      await createWebtritApiClient(url, tenantId).getUserInfo(sessionToken.token);
+      await createWebtritApiClient(url, state.tenantId ?? "").getUserInfo(sessionToken.token);
 
       loginCubit.loginSigninSubmitted(sessionToken);
     } catch (e) {
@@ -101,12 +107,14 @@ class LoginEmbeddedCubit extends Cubit<LoginEmbeddedState> {
     WebtritApiClient webtritApiClient,
     String number,
   ) async {
-    return await webtritApiClient.createUserByNumber(SessionUserCredentialNumber(
-      bundleId: PackageInfo().packageName,
-      type: PlatformInfo().appType,
-      identifier: AppInfo().identifier,
-      phoneNumber: number,
-    ));
+    return await webtritApiClient.createUserByNumber(
+        SessionUserCredentialNumber(
+          bundleId: PackageInfo().packageName,
+          type: PlatformInfo().appType,
+          identifier: AppInfo().identifier,
+          phoneNumber: number,
+        ),
+        options: const RequestOptions(retries: 1));
   }
 
   Future<SessionToken> _verifySessionOtp(
@@ -114,6 +122,10 @@ class LoginEmbeddedCubit extends Cubit<LoginEmbeddedState> {
     SessionOtpProvisional sessionOtpProvisional,
     String code,
   ) async {
-    return await webtritApiClient.verifySessionOtp(sessionOtpProvisional, code);
+    return await webtritApiClient.verifySessionOtp(
+      sessionOtpProvisional,
+      code,
+      options: const RequestOptions(retries: 1),
+    );
   }
 }

@@ -15,6 +15,8 @@ import 'webview_progress_indicator.dart';
 
 export 'package:webview_flutter/webview_flutter.dart' show JavaScriptMessage;
 
+typedef TransitionBuilder = Widget Function(BuildContext context, Widget child);
+
 class WebViewScaffold extends StatefulWidget {
   const WebViewScaffold({
     super.key,
@@ -25,6 +27,7 @@ class WebViewScaffold extends StatefulWidget {
     this.errorPlaceholder,
     this.showToolbar = true,
     this.controller,
+    this.builder,
   });
 
   final Widget? title;
@@ -34,6 +37,7 @@ class WebViewScaffold extends StatefulWidget {
   final Widget? Function(BuildContext context, WebResourceError error, WebViewController controller)? errorPlaceholder;
   final bool showToolbar;
   final WebViewController? controller;
+  final TransitionBuilder? builder;
 
   @override
   State<WebViewScaffold> createState() => _WebViewScaffoldState();
@@ -168,7 +172,9 @@ class _WebViewScaffoldState extends State<WebViewScaffold> {
             children: [
               (widget.errorPlaceholder != null && _latestError != null)
                   ? widget.errorPlaceholder!(context, _latestError!, _webViewController) ?? const SizedBox.shrink()
-                  : WebViewWidget(controller: _webViewController),
+                  : widget.builder != null
+                      ? widget.builder!(context, WebViewWidget(controller: _webViewController))
+                      : WebViewWidget(controller: _webViewController),
               WebViewProgressIndicator(stream: _progressStreamController.stream),
             ],
           );

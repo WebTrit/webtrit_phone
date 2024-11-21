@@ -24,13 +24,14 @@
             max-width: 400px;
             width: 100%;
             box-sizing: border-box;
-            text-align: center;
+            text-align: left;
         }
 
         h1 {
             color: #333;
             font-size: 24px;
             margin-bottom: 20px;
+            text-align: left;
         }
 
         .description {
@@ -38,6 +39,7 @@
             color: #666;
             margin-bottom: 20px;
             line-height: 1.5;
+            text-align: left;
         }
 
         .form-group {
@@ -50,6 +52,7 @@
             font-size: 14px;
             color: #555;
             margin-bottom: 5px;
+            text-align: left;
         }
 
         .form-group input {
@@ -74,7 +77,7 @@
             color: #fff;
             background-color: #007bff;
             border: none;
-            border-radius: 4px;
+            border-radius: 16px;
             cursor: pointer;
             transition: background-color 0.3s ease-in-out;
         }
@@ -110,7 +113,7 @@
         <form onsubmit="return handleLogin()">
             <div class="form-group">
                 <label for="phoneNumber">Phone Number</label>
-                <input type="tel" id="phoneNumber" name="phoneNumber" placeholder="+1 234 567 890"  >
+                <input type="tel" id="phoneNumber" name="phoneNumber" placeholder="1234567">
             </div>
             <div class="form-group">
                 <button type="submit">Send OTP</button>
