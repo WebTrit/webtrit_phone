@@ -18,22 +18,21 @@ part 'login_embedded_cubit.freezed.dart';
 
 class LoginEmbeddedCubit extends Cubit<LoginEmbeddedState> {
   LoginEmbeddedCubit(
-    this.notificationsBloc,
-    this.loginCubit, {
+    this.notificationsBloc, {
     @visibleForTesting this.createWebtritApiClient = defaultCreateWebtritApiClient,
   }) : super(const LoginEmbeddedState());
 
   final NotificationsBloc notificationsBloc;
-  final LoginCubit loginCubit;
 
   final WebtritApiClientFactory createWebtritApiClient;
 
+  final url = EnvironmentConfig.CORE_URL ?? EnvironmentConfig.DEMO_CORE_URL;
+
   void loginByNumber(String number) async {
-    const url = EnvironmentConfig.CORE_URL ?? EnvironmentConfig.DEMO_CORE_URL;
+    final emptyTenant =number;
+    final client = createWebtritApiClient(url!, emptyTenant);
 
-    final client = createWebtritApiClient(url!, number);
-
-    emit(state.copyWith(processing: true, coreUrl: url, tenantId: number));
+    emit(state.copyWith(processing: true, coreUrl: url, tenantId: emptyTenant));
 
     try {
       final result = await _createUserRequest(client, number);
@@ -41,6 +40,7 @@ class LoginEmbeddedCubit extends Cubit<LoginEmbeddedState> {
       if (result is SessionOtpProvisional) {
         emit(state.copyWith(
           processing: false,
+          tenantId: result.tenantId ?? state.tenantId!,
           signupSessionOtpProvisionalWithDateTime: (result, DateTime.now()),
         ));
       } else if (result is SessionToken) {
@@ -61,8 +61,7 @@ class LoginEmbeddedCubit extends Cubit<LoginEmbeddedState> {
   }
 
   void verifyOtp(String otp) async {
-    final url = loginCubit.state.coreUrl!;
-    final client = createWebtritApiClient(url, state.tenantId ?? "");
+    final client = createWebtritApiClient(url, state.tenantId ?? '');
 
     emit(state.copyWith(processing: true));
 
@@ -82,19 +81,7 @@ class LoginEmbeddedCubit extends Cubit<LoginEmbeddedState> {
     }
   }
 
-  void login(String data) async {
-    try {
-      final sessionToken = _parseSessionToken(data);
-
-      final url = loginCubit.state.coreUrl!;
-
-      await createWebtritApiClient(url, state.tenantId ?? "").getUserInfo(sessionToken.token);
-
-      loginCubit.loginSigninSubmitted(sessionToken);
-    } catch (e) {
-      notificationsBloc.add(NotificationsSubmitted(LoginErrorNotification(e)));
-    }
-  }
+  void login(String data) async {}
 
   SessionToken _parseSessionToken(String data) {
     try {

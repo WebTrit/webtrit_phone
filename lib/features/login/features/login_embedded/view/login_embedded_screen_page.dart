@@ -41,7 +41,6 @@ class LoginEmbeddedScreenPage extends StatelessWidget {
           return BlocProvider(
             create: (context) => LoginEmbeddedCubit(
               context.read<NotificationsBloc>(),
-              context.read<LoginCubit>(),
             ),
             child: LoginEmbeddedScreen(
               title: loginEmbedded.titleL10n != null ? context.parseL10n(loginEmbedded.titleL10n!) : null,
