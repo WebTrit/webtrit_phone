@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:webtrit_phone/data/data.dart';
+import 'package:webtrit_phone/mappers/mappers.dart';
 import 'package:webtrit_phone/models/models.dart';
 
 class CallLogsRepository {
@@ -9,7 +10,9 @@ class CallLogsRepository {
   final AppDatabase _appDatabase;
 
   Stream<List<CallLogEntry>> watchHistoryByNumber(String number) {
-    return _appDatabase.callLogsDao.watchLastCallLogsByNumber(number).map((data) => data.map(_toCallLogEntry).toList());
+    return _appDatabase.callLogsDao
+        .watchLastCallLogsByNumber(number)
+        .map((data) => data.map(callLogEntryFromDrift).toList());
   }
 
   Future<void> add(NewCall call) {
@@ -25,18 +28,6 @@ class CallLogsRepository {
 
   Future<void> deleteById(int id) async {
     await _appDatabase.callLogsDao.deleteCallLog(id);
-  }
-
-  CallLogEntry _toCallLogEntry(CallLogData callLogData) {
-    return CallLogEntry(
-      direction: CallDirection.values.byName(callLogData.direction.name),
-      number: callLogData.number,
-      video: callLogData.video,
-      createdTime: callLogData.createdAt,
-      acceptedTime: callLogData.acceptedAt,
-      hungUpTime: callLogData.hungUpAt,
-      id: callLogData.id,
-    );
   }
 }
 

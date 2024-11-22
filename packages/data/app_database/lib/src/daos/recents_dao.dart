@@ -6,13 +6,13 @@ part 'recents_dao.g.dart';
 
 class RecentData {
   RecentData({
-    required this.callLog,
+    required this.callLogEntry,
     required this.contactData,
     required this.contactPhones,
     required this.contactEmails,
   });
 
-  final CallLogData callLog;
+  final CallLogData callLogEntry;
   final ContactData? contactData;
   final Set<ContactPhoneData> contactPhones;
   final Set<ContactEmailData> contactEmails;
@@ -57,18 +57,18 @@ class RecentsDao extends DatabaseAccessor<AppDatabase> with _$RecentsDaoMixin {
     Map<int, RecentData> recents = {};
 
     for (final row in rows) {
-      final callLog = row.readTable(callLogsTable);
+      final callLogEntry = row.readTable(callLogsTable);
       final contactData = row.readTableOrNull(contactsTable);
       final contactPhone = row.readTableOrNull(contactPhonesTable);
       final contactEmail = row.readTableOrNull(contactEmailsTable);
 
       recents.putIfAbsent(
-        callLog.id,
-        () => RecentData(callLog: callLog, contactData: contactData, contactPhones: {}, contactEmails: {}),
+        callLogEntry.id,
+        () => RecentData(callLogEntry: callLogEntry, contactData: contactData, contactPhones: {}, contactEmails: {}),
       );
 
-      if (contactPhone != null) recents[callLog.id]!.contactPhones.add(contactPhone);
-      if (contactEmail != null) recents[callLog.id]!.contactEmails.add(contactEmail);
+      if (contactPhone != null) recents[callLogEntry.id]!.contactPhones.add(contactPhone);
+      if (contactEmail != null) recents[callLogEntry.id]!.contactEmails.add(contactEmail);
     }
 
     return recents.values.toList();
