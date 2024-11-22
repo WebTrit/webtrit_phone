@@ -12,86 +12,75 @@ export 'package:webtrit_api/webtrit_api.dart'
 final _logger = Logger('UserRepository');
 
 class UserRepository {
-  UserRepository({
-    SessionCleanupWorker? sessionCleanupWorker,
-    required WebtritApiClient webtritApiClient,
-    required String token,
-    bool periodicPolling = true,
-  })  : _sessionCleanupWorker = sessionCleanupWorker,
-        _webtritApiClient = webtritApiClient,
-        _token = token,
-        _periodicPolling = periodicPolling {
-    _controller = StreamController<UserInfo>.broadcast(
-      onListen: _onListenCallback,
-      onCancel: _onCancelCallback,
+  UserRepository(
+    this.webtritApiClient,
+    this.token, {
+    this.polling = true,
+    this.pollPeriod = const Duration(seconds: 10),
+    this.sessionCleanupWorker,
+  }) {
+    _updatesController = StreamController<UserInfo>.broadcast(
+      onListen: _onListen,
+      onCancel: _onCancel,
     );
-    _listenedCounter = 0;
   }
 
-  final WebtritApiClient _webtritApiClient;
-  final String _token;
-  final bool _periodicPolling;
+  final WebtritApiClient webtritApiClient;
+  final String token;
+  final bool polling;
+  final Duration pollPeriod;
+  final SessionCleanupWorker? sessionCleanupWorker;
+  late final StreamController<UserInfo> _updatesController;
 
-  final SessionCleanupWorker? _sessionCleanupWorker;
+  Timer? _pullTimer;
+  UserInfo? _lastInfo;
 
-  late StreamController<UserInfo> _controller;
-  // TODO: Remove useless variable _listenedCounter
-  // *The [onListen] callback is called when the first listener is subscribed, and the [onCancel] is called when there are no longer any active listeners. If a listener is added again later, after the [onCancel] was called, the [onListen] will be called again.*
-  late int _listenedCounter;
-  Timer? _periodicTimer;
-
-  UserInfo? _info;
-
-  Future<UserInfo> getInfo() {
-    return _webtritApiClient.getUserInfo(_token);
-  }
-
-  Stream<UserInfo> info() {
-    return _controller.stream;
-  }
-
-  void _onListenCallback() async {
-    if (_periodicPolling && _listenedCounter++ == 0) {
-      _periodicTimer = Timer.periodic(const Duration(seconds: 10), (timer) => _gatherUserInfo());
-      _gatherUserInfo();
+  /// Pay attention, this callback calling only on first listener
+  /// read [StreamController.broadcast]
+  void _onListen() async {
+    if (polling) {
+      _pullTimer = Timer.periodic(pollPeriod, (_) => _gatherUserInfo());
     }
   }
 
-  void _onCancelCallback() {
-    if (_periodicPolling && --_listenedCounter == 0) {
-      _periodicTimer?.cancel();
-      _periodicTimer = null;
-    }
+  void _onCancel() {
+    _pullTimer?.cancel();
+    _pullTimer = null;
   }
 
-  void _gatherUserInfo() async {
+  Future<UserInfo> _gatherUserInfo() async {
     try {
-      final newInfo = await getInfo();
-      if (newInfo != _info) {
-        _info = newInfo;
-        _controller.add(_info!);
-      }
+      final newInfo = await webtritApiClient.getUserInfo(token);
+      if (newInfo != _lastInfo) _updatesController.add(newInfo);
+      _lastInfo = newInfo;
+      return newInfo;
     } catch (e, stackTrace) {
       _logger.warning('_gatherUserInfo', e, stackTrace);
-      _controller.addError(e, stackTrace);
+      _updatesController.addError(e, stackTrace);
+      rethrow;
     }
   }
+
+  Future<UserInfo> getInfo([bool force = false]) {
+    if (force == false && _lastInfo != null) {
+      return Future.value(_lastInfo);
+    } else {
+      return _gatherUserInfo();
+    }
+  }
+
+  Stream<UserInfo> infoUpdates() => _updatesController.stream;
 
   Future<void> logout() async {
     try {
-      await _webtritApiClient.deleteSession(
-        _token,
-        options: RequestOptions.withExtraRetries(),
-      );
+      await webtritApiClient.deleteSession(token, options: RequestOptions.withExtraRetries());
     } catch (e) {
-      if (e is RequestFailure && e.statusCode == null) {
-        _sessionCleanupWorker?.saveFailedSession(e.url, token: _token);
-      }
+      if (e is RequestFailure && e.statusCode == null) sessionCleanupWorker?.saveFailedSession(e.url, token: token);
       rethrow;
     }
   }
 
   Future<void> delete() async {
-    await _webtritApiClient.deleteUserInfo(_token);
+    await webtritApiClient.deleteUserInfo(token);
   }
 }

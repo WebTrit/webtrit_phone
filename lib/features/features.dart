@@ -20,3 +20,4 @@ export 'settings/settings.dart';
 export 'terms_conditions/terms_conditions.dart';
 export 'undefined/undefined.dart';
 export 'user_agreement/user_agreement.dart';
+export 'user_info/user_info.dart';

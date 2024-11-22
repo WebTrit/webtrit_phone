@@ -121,10 +121,10 @@ class _MainShellState extends State<MainShell> {
         ),
         RepositoryProvider<UserRepository>(
           create: (context) => UserRepository(
+            context.read<WebtritApiClient>(),
+            context.read<AppBloc>().state.token!,
+            polling: EnvironmentConfig.PERIODIC_POLLING,
             sessionCleanupWorker: SessionCleanupWorker(),
-            webtritApiClient: context.read<WebtritApiClient>(),
-            token: context.read<AppBloc>().state.token!,
-            periodicPolling: EnvironmentConfig.PERIODIC_POLLING,
           ),
         ),
         RepositoryProvider<AppRepository>(
@@ -273,18 +273,26 @@ class _MainShellState extends State<MainShell> {
         ],
         child: Builder(
           builder: (context) {
-            final mainShellRepo = context.read<MainShellRouteStateRepository>();
-            return BlocProvider<SessionStatusCubit>(
-              create: (context) => SessionStatusCubit(
-                pushTokensBloc: context.read<PushTokensBloc>(),
-                callBloc: context.read<CallBloc>(),
-              ),
+            return MultiBlocProvider(
+              providers: [
+                BlocProvider(
+                  create: (_) => UserInfoCubit(
+                    context.read<UserRepository>(),
+                  ),
+                ),
+                BlocProvider(
+                  create: (_) => SessionStatusCubit(
+                    pushTokensBloc: context.read<PushTokensBloc>(),
+                    callBloc: context.read<CallBloc>(),
+                  ),
+                ),
+              ],
               child: Builder(
                 builder: (context) => CallShell(
                   child: MessagingShell(
                     child: AutoRouter(
                       navigatorObservers: () => [
-                        MainShellNavigatorObserver(mainShellRepo),
+                        MainShellNavigatorObserver(context.read<MainShellRouteStateRepository>()),
                       ],
                     ),
                   ),
