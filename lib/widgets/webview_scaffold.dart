@@ -25,6 +25,7 @@ class WebViewScaffold extends StatefulWidget {
     this.errorPlaceholder,
     this.showToolbar = true,
     this.controller,
+    this.builder,
   });
 
   final Widget? title;
@@ -34,6 +35,7 @@ class WebViewScaffold extends StatefulWidget {
   final Widget? Function(BuildContext context, WebResourceError error, WebViewController controller)? errorPlaceholder;
   final bool showToolbar;
   final WebViewController? controller;
+  final TransitionBuilder? builder;
 
   @override
   State<WebViewScaffold> createState() => _WebViewScaffoldState();
@@ -163,12 +165,21 @@ class _WebViewScaffoldState extends State<WebViewScaffold> {
           : null,
       body: Builder(
         builder: (context) {
+          final hasWebViewError = widget.errorPlaceholder != null && _latestError != null;
+
+          final errorPlaceholderBuilder = Builder(builder: (context) {
+            return widget.errorPlaceholder!(context, _latestError!, _webViewController) ?? const SizedBox.shrink();
+          });
+
+          final successBuilder = Builder(builder: (context) {
+            final webViewWidget = WebViewWidget(controller: _webViewController);
+            return widget.builder != null ? widget.builder!(context, webViewWidget) : webViewWidget;
+          });
+
           return Stack(
             alignment: AlignmentDirectional.topCenter,
             children: [
-              (widget.errorPlaceholder != null && _latestError != null)
-                  ? widget.errorPlaceholder!(context, _latestError!, _webViewController) ?? const SizedBox.shrink()
-                  : WebViewWidget(controller: _webViewController),
+              hasWebViewError ? errorPlaceholderBuilder : successBuilder,
               WebViewProgressIndicator(stream: _progressStreamController.stream),
             ],
           );
