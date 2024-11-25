@@ -29,7 +29,7 @@ class WebtritSignalingClient {
     if (tenantId.isEmpty) {
       return baseUrl;
     } else {
-      final baseUrlPathSegments = List.of(baseUrl.pathSegments);
+      final baseUrlPathSegments = List.of(baseUrl.pathSegments.where((segment) => segment.isNotEmpty));
       if (baseUrlPathSegments.length >= 2 && baseUrlPathSegments[baseUrlPathSegments.length - 2] == 'tenant') {
         baseUrlPathSegments.removeRange(baseUrlPathSegments.length - 2, baseUrlPathSegments.length);
       }
