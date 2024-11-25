@@ -105,6 +105,10 @@ class AppRouter extends _$AppRouter {
                           maintainState: false,
                         ),
                         AutoRoute(
+                          page: LoginSignupEmbeddedRequestScreenPageRoute.page,
+                          maintainState: false,
+                        ),
+                        AutoRoute(
                           page: LoginSignupVerifyScreenPageRoute.page,
                           maintainState: false,
                         ),

@@ -28,7 +28,8 @@ class LoginSignupRouterPage extends StatelessWidget {
         return AutoRouter.declarative(
           routes: (handler) {
             return [
-              const LoginSignupRequestScreenPageRoute(),
+              // const LoginSignupRequestScreenPageRoute(),
+              const LoginSignupEmbeddedRequestScreenPageRoute(),
               if (whenLoginSignupVerifyScreenPageActive(state)) const LoginSignupVerifyScreenPageRoute(),
             ];
           },

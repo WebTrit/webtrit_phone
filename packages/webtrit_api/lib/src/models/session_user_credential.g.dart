@@ -12,7 +12,7 @@ _$SessionUserCredentialImpl _$$SessionUserCredentialImplFromJson(
       bundleId: json['bundle_id'] as String?,
       type: $enumDecode(_$AppTypeEnumMap, json['type']),
       identifier: json['identifier'] as String,
-      email: json['email'] as String,
+      email: json['email'] as String?,
     );
 
 Map<String, dynamic> _$$SessionUserCredentialImplToJson(

@@ -15,7 +15,7 @@ class SessionUserCredential with _$SessionUserCredential {
     String? bundleId,
     required AppType type,
     required String identifier,
-    required String email,
+    String? email,
   }) = _SessionUserCredential;
 
   factory SessionUserCredential.fromJson(Map<String, dynamic> json) => _$SessionUserCredentialFromJson(json);

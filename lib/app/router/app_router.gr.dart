@@ -225,6 +225,12 @@ abstract class _$AppRouter extends RootStackRouter {
         child: LoginRouterPage(launchLoginEmbedded: args.launchLoginEmbedded),
       );
     },
+    LoginSignupEmbeddedRequestScreenPageRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: LoginSignupEmbeddedRequestScreenPage(),
+      );
+    },
     LoginSignupRequestScreenPageRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -984,6 +990,21 @@ class LoginRouterPageRouteArgs {
   String toString() {
     return 'LoginRouterPageRouteArgs{launchLoginEmbedded: $launchLoginEmbedded}';
   }
+}
+
+/// generated route for
+/// [LoginSignupEmbeddedRequestScreenPage]
+class LoginSignupEmbeddedRequestScreenPageRoute extends PageRouteInfo<void> {
+  const LoginSignupEmbeddedRequestScreenPageRoute(
+      {List<PageRouteInfo>? children})
+      : super(
+          LoginSignupEmbeddedRequestScreenPageRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'LoginSignupEmbeddedRequestScreenPageRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
 }
 
 /// generated route for

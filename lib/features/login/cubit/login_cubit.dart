@@ -453,9 +453,9 @@ Future<SessionResult> _createUserRequest(
   String email,
 ) async {
   return await webtritApiClient.createUser(SessionUserCredential(
-    bundleId: PackageInfo().packageName,
-    type: PlatformInfo().appType,
-    identifier: AppInfo().identifier,
-    email: email,
-  ));
+      bundleId: PackageInfo().packageName,
+      type: PlatformInfo().appType,
+      identifier: AppInfo().identifier,
+      email: email,
+      dynamicFields: {"test": "test1"}));
 }

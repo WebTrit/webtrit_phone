@@ -1,9 +1,11 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/app/constants.dart';
+import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
@@ -27,6 +29,7 @@ class LoginSwitchScreen extends StatelessWidget {
       buildWhen: (previous, current) => previous.processing != current.processing,
       builder: (context, state) {
         final themeData = Theme.of(context);
+
         return LoginScaffold(
           appBar: AppBar(
             leading: ExtBackButton(
@@ -37,8 +40,9 @@ class LoginSwitchScreen extends StatelessWidget {
           ),
           body: Column(
             children: [
-              const OnboardingLogo(),
-              const SizedBox(height: kInset),
+              if (context.router.isRouteActive(LoginSignupEmbeddedRequestScreenPageRoute.name)) const OnboardingLogo(),
+              if (context.router.isRouteActive(LoginSignupEmbeddedRequestScreenPageRoute.name))
+                const SizedBox(height: kInset),
               if (supportedLoginTypes.length > 1) ...[
                 SegmentedButton<LoginType>(
                   segments: supportedLoginTypes

@@ -132,6 +132,7 @@ flutter:
     - assets/ringtones/
     - assets/themes/
     - assets/certificates/
+    - assets/html/
 
 flutter_gen:
   output: lib/app/

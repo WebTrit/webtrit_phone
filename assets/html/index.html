@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OTP Login</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .form-container {
+            padding: 40px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            max-width: 400px;
+            width: 100%;
+            box-sizing: border-box;
+            text-align: left;
+        }
+
+        h1 {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .description {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.5;
+            text-align: left;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 5px;
+            text-align: left;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+            transition: border-color 0.2s ease-in-out;
+        }
+
+        .form-group input:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+
+        .form-group button {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        .form-group button:hover {
+            background-color: #0056b3;
+        }
+
+        #otpSection,
+        #successSection {
+            display: none;
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 20px;
+            }
+
+            .form-container {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<div class="form-container">
+    <div id="phoneNumberSection">
+        <p class="description">
+            Enter your phone number to receive a one-time password (OTP) for login.
+        </p>
+        <h1>Login</h1>
+        <form onsubmit="return handleLogin()">
+            <div class="form-group">
+                <label for="phoneNumber">Phone Number</label>
+                <input id="phoneNumber" name="phoneNumber">
+            </div>
+            <div class="form-group">
+                <button type="submit">Send OTP</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function handleLogin() {
+        const phoneNumber = document.getElementById("phoneNumber").value;
+
+        const json = JSON.stringify({
+            event: "signup",
+            data: {
+                phoneNumber: phoneNumber
+            }
+        });
+
+        WebtritLoginChannel.postMessage(json);
+
+        return false;
+    }
+
+</script>
+</body>
+
+</html>
