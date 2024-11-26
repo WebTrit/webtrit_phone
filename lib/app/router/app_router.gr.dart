@@ -225,6 +225,14 @@ abstract class _$AppRouter extends RootStackRouter {
         child: LoginRouterPage(launchLoginEmbedded: args.launchLoginEmbedded),
       );
     },
+    LoginSignupEmbeddedRequestScreenPageRoute.name: (routeData) {
+      final args =
+          routeData.argsAs<LoginSignupEmbeddedRequestScreenPageRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: LoginSignupEmbeddedRequestScreenPage(args.embeddedData),
+      );
+    },
     LoginSignupRequestScreenPageRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -983,6 +991,38 @@ class LoginRouterPageRouteArgs {
   @override
   String toString() {
     return 'LoginRouterPageRouteArgs{launchLoginEmbedded: $launchLoginEmbedded}';
+  }
+}
+
+/// generated route for
+/// [LoginSignupEmbeddedRequestScreenPage]
+class LoginSignupEmbeddedRequestScreenPageRoute
+    extends PageRouteInfo<LoginSignupEmbeddedRequestScreenPageRouteArgs> {
+  LoginSignupEmbeddedRequestScreenPageRoute({
+    required LoginEmbeddedModeButton embeddedData,
+    List<PageRouteInfo>? children,
+  }) : super(
+          LoginSignupEmbeddedRequestScreenPageRoute.name,
+          args: LoginSignupEmbeddedRequestScreenPageRouteArgs(
+              embeddedData: embeddedData),
+          initialChildren: children,
+        );
+
+  static const String name = 'LoginSignupEmbeddedRequestScreenPageRoute';
+
+  static const PageInfo<LoginSignupEmbeddedRequestScreenPageRouteArgs> page =
+      PageInfo<LoginSignupEmbeddedRequestScreenPageRouteArgs>(name);
+}
+
+class LoginSignupEmbeddedRequestScreenPageRouteArgs {
+  const LoginSignupEmbeddedRequestScreenPageRouteArgs(
+      {required this.embeddedData});
+
+  final LoginEmbeddedModeButton embeddedData;
+
+  @override
+  String toString() {
+    return 'LoginSignupEmbeddedRequestScreenPageRouteArgs{embeddedData: $embeddedData}';
   }
 }
 

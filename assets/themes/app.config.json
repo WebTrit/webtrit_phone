@@ -19,7 +19,7 @@
         "launch": false,
         "showToolbar": true,
         "titleL10n": "login_requestCredentials_title",
-        "resource": "https://webtrit-app.web.app/example/example_embedded_login.html"
+        "resource": "assets/themes/custom_signup.html"
       }
     ]
   },
