@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
-import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
@@ -17,13 +16,11 @@ class LoginModeSelectScreen extends StatelessWidget {
   const LoginModeSelectScreen({
     super.key,
     this.appGreeting,
-    required this.actions,
     this.style,
   });
 
   final String? appGreeting;
 
-  final List<LoginModeAction> actions;
   final LoginModeSelectScreenStyle? style;
 
   @override
@@ -71,19 +68,22 @@ class LoginModeSelectScreen extends StatelessWidget {
                   text: appGreeting,
                 ),
                 const Spacer(),
-                ...actions.map((button) {
-                  return ElevatedButton(
-                    onPressed: state.processing ? null : () => _onActionItemTap(context, isDemoModeEnabled, button),
-                    style: elevatedButtonStyles?.getStyle(localStyle?.signUpTypeButton),
-                    child: !state.processing || button.flavor != LoginFlavor.login
-                        ? Text(context.parseL10n(button.titleL10n))
-                        : SizedCircularProgressIndicator(
-                            size: 16,
-                            strokeWidth: 2,
-                            color: elevatedButtonStyles?.primary?.foregroundColor?.resolve({}),
-                          ),
-                  );
-                }),
+                const Spacer(),
+                ElevatedButton(
+                  onPressed: state.processing ? null : () => _onActionPressed(context, isDemoModeEnabled),
+                  style: elevatedButtonStyles?.getStyle(localStyle?.signUpTypeButton),
+                  child: !state.processing
+                      ? Text(
+                          isDemoModeEnabled
+                              ? context.l10n.login_Button_signUpToDemoInstance
+                              : context.l10n.login_Button_signIn,
+                        )
+                      : SizedCircularProgressIndicator(
+                          size: 16,
+                          strokeWidth: 2,
+                          color: elevatedButtonStyles?.primary?.foregroundColor?.resolve({}),
+                        ),
+                ),
               ],
             ),
           ),
@@ -92,15 +92,8 @@ class LoginModeSelectScreen extends StatelessWidget {
     );
   }
 
-  void _onActionItemTap(BuildContext context, bool demo, LoginModeAction button) {
-    switch (button.flavor) {
-      case LoginFlavor.login:
-        context.read<LoginCubit>().loginModeSelectSubmitted(demo ? LoginMode.demoCore : LoginMode.core);
-        break;
-      case LoginFlavor.embedded:
-        context.read<LoginCubit>().setCustomLogin((button as LoginEmbeddedModeButton).customLoginFeature);
-        break;
-    }
+  void _onActionPressed(BuildContext context, bool demo) {
+    context.read<LoginCubit>().loginModeSelectSubmitted(demo ? LoginMode.demoCore : LoginMode.core);
   }
 
   void _onCustomCoreLogin(BuildContext context) {

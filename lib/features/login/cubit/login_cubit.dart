@@ -313,6 +313,23 @@ class LoginCubit extends Cubit<LoginState> {
     ));
   }
 
+  void loginCustomSignupRequest(Map<String, dynamic>? extras) async {
+    emit(state.copyWith(
+      processing: true,
+    ));
+
+    try {
+      final client = createWebtritApiClient(state.coreUrl!, state.tenantId!);
+      final result = await _createUserRequest(client: client, extraPayload: extras);
+
+      _handleLoginResult(result);
+    } catch (e) {
+      notificationsBloc.add(NotificationsSubmitted(LoginErrorNotification(e)));
+
+      emit(state.copyWith(processing: false));
+    }
+  }
+
   void loginSignupRequestSubmitted() async {
     if (state.processing || !state.signupEmailInput.isValid) {
       return;
@@ -324,28 +341,31 @@ class LoginCubit extends Cubit<LoginState> {
 
     try {
       final client = createWebtritApiClient(state.coreUrl!, state.tenantId!);
-      final result = await _createUserRequest(client, state.signupEmailInput.value);
+      final result = await _createUserRequest(client: client, email: state.signupEmailInput.value);
 
-      if (result is SessionOtpProvisional) {
-        emit(state.copyWith(
-          processing: false,
-          signupSessionOtpProvisionalWithDateTime: (result, DateTime.now()),
-        ));
-      } else if (result is SessionToken) {
-        // does not set processing to false to hold processing widgets state during navigation
-        emit(state.copyWith(
-          tenantId: result.tenantId ?? state.tenantId!,
-          token: result.token,
-          // Use an empty user ID as a fallback for outdated core versions that do not support this field.
-          userId: result.userId ?? '',
-        ));
-      } else {
-        throw UnimplementedError();
-      }
+      _handleLoginResult(result);
     } catch (e) {
       notificationsBloc.add(NotificationsSubmitted(LoginErrorNotification(e)));
 
       emit(state.copyWith(processing: false));
+    }
+  }
+
+  void _handleLoginResult(SessionResult result) {
+    if (result is SessionOtpProvisional) {
+      emit(state.copyWith(
+        processing: false,
+        signupSessionOtpProvisionalWithDateTime: (result, DateTime.now()),
+      ));
+    } else if (result is SessionToken) {
+      // Maintain processing state during navigation
+      emit(state.copyWith(
+        tenantId: result.tenantId ?? state.tenantId!,
+        token: result.token,
+        userId: result.userId ?? '', // Fallback for outdated core versions
+      ));
+    } else {
+      throw UnimplementedError('Unexpected login result type');
     }
   }
 
@@ -448,14 +468,18 @@ Future<SessionToken> _createSessionRequest(
   ));
 }
 
-Future<SessionResult> _createUserRequest(
-  WebtritApiClient webtritApiClient,
-  String email,
-) async {
-  return await webtritApiClient.createUser(SessionUserCredential(
-    bundleId: PackageInfo().packageName,
-    type: PlatformInfo().appType,
-    identifier: AppInfo().identifier,
-    email: email,
-  ));
+Future<SessionResult> _createUserRequest({
+  required WebtritApiClient client,
+  String? email,
+  Map<String, dynamic>? extraPayload,
+}) async {
+  return await client.createUser(
+    SessionUserCredential(
+      bundleId: PackageInfo().packageName,
+      type: PlatformInfo().appType,
+      identifier: AppInfo().identifier,
+      email: email,
+    ),
+    extraPayload: extraPayload,
+  );
 }

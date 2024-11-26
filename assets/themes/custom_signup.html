@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OTP Login</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .form-container {
+            padding: 16px;
+            margin-bottom: 80px;
+        }
+
+        .description {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 8px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .form-group input:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+
+        .fixed-button {
+            position: fixed;
+            bottom: 16px;
+            left: 16px;
+            right: 16px;
+            height: 40px;
+            background-color: #F95A14;
+            color: white;
+            font-size: 16px;
+            text-align: center;
+            border: none;
+            border-radius: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .fixed-button:disabled {
+            background-color: #ddd;
+            cursor: not-allowed;
+        }
+
+        .fixed-button .button-text {
+            display: inline-block;
+        }
+
+        .fixed-button .spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 3px solid white;
+            border-top: 3px solid #F95A14;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        .fixed-button.loading .button-text {
+            display: none;
+        }
+
+        .fixed-button.loading .spinner {
+            display: inline-block;
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+<div class="form-container">
+    <p class="description" id="descriptionText">
+        Enter your email to receive a one-time password (OTP) for login.
+    </p>
+    <div class="form-group">
+        <label for="email" id="emailLabel">Email</label>
+        <input id="email" name="email" required>
+    </div>
+</div>
+
+<button class="fixed-button" id="submitButton" onclick="handleLogin()">
+    <span class="button-text" id="submitButtonText">Submit</span>
+    <div class="spinner"></div>
+</button>
+
+<script>
+    const translations = {
+        en: {
+            description: "Enter your email to receive a one-time password (OTP) for login.",
+            emailLabel: "Email",
+            submitButtonText: "Submit",
+            alert: "Please enter your email."
+        },
+        uk: {
+            description: "Введіть свою електронну адресу, щоб отримати одноразовий пароль (OTP) для входу.",
+            emailLabel: "Електронна пошта",
+            submitButtonText: "Надіслати",
+            alert: "Будь ласка, введіть свою електронну адресу."
+        },
+        it: {
+            description: "Inserisci la tua email per ricevere una password monouso (OTP) per l'accesso.",
+            emailLabel: "Email",
+            submitButtonText: "Invia",
+            alert: "Per favore inserisci la tua email."
+        }
+    };
+
+    function setLocale(locale) {
+        const translation = translations[locale];
+        if (!translation) return;
+
+        document.getElementById("descriptionText").textContent = translation.description;
+        document.getElementById("emailLabel").textContent = translation.emailLabel;
+        document.getElementById("submitButtonText").textContent = translation.submitButtonText;
+
+        // Store the locale in a global variable for later use (e.g., for alerts)
+        window.currentLocale = locale;
+    }
+
+        function showProgress() {
+            const button = document.getElementById("submitButton");
+            button.disabled = true;
+            button.classList.add("loading");
+        }
+
+        function hideProgress() {
+            const button = document.getElementById("submitButton");
+            button.disabled = false;
+            button.classList.remove("loading");
+        }
+
+    function handleLogin() {
+        const email = document.getElementById("email").value;
+
+        if (!email) {
+            const alertMessage = translations[window.currentLocale || "en"].alert;
+            alert(alertMessage);
+            return;
+        }
+
+        const json = {
+            event: "signup",
+            data: {
+                email: email
+            }
+        };
+
+        WebtritLoginChannel.postMessage(JSON.stringify(json));
+    }
+
+    // Initialize default locale
+    setLocale("en");
+</script>
+</body>
+
+</html>
