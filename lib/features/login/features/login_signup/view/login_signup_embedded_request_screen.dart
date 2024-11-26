@@ -103,7 +103,7 @@ class _LoginSignupEmbeddedRequestScreenState extends State<LoginSignupEmbeddedRe
 
       if (event == 'signup') {
         _controller.runJavaScript('showProgress();');
-        //  context.read<LoginCubit>().loginCustomSignupRequest(data);
+        context.read<LoginCubit>().loginCustomSignupRequest(data);
       }
     } catch (e) {
       _logger.severe('Error decoding message', e);
