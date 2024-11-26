@@ -81,8 +81,8 @@ class FeatureAccess {
 
   static BottomMenuTab _createBottomMenuTab(AppConfigBottomMenuTab tab) {
     final flavor = MainFlavor.values.byName(tab.type);
-    final urlString = tab.data[AppConfigBottomMenuTab.dataUrl] as String?;
-    final data = urlString == null ? null : ConfigData(url: Uri.parse(urlString));
+    final resourceString = tab.data[AppConfigBottomMenuTab.dataResource] as String?;
+    final data = resourceString == null ? null : ConfigData(resource: Uri.parse(resourceString));
 
     if (flavor == MainFlavor.contacts) {
       final sourceTypesList = (tab.data[AppConfigBottomMenuTab.dataContactSourceTypes] as List<dynamic>).cast<String>();
@@ -121,8 +121,8 @@ class FeatureAccess {
       final items = <SettingItem>[];
 
       for (var item in section.items.where((item) => item.enabled)) {
-        final urlString = item.data[AppConfigBottomMenuTab.dataUrl] as String?;
-        final data = urlString == null ? null : ConfigData(url: Uri.parse(urlString));
+        final resourceString = item.data[AppConfigBottomMenuTab.dataResource] as String?;
+        final data = resourceString == null ? null : ConfigData(resource: Uri.parse(resourceString));
         final flavor = SettingsFlavor.values.byName(item.type);
 
         // TODO (Serdun): Move platform-specific configuration to a separate config file.
@@ -138,8 +138,8 @@ class FeatureAccess {
         );
 
         if (settingItem.flavor == SettingsFlavor.terms) {
-          if (settingItem.data?.url != null) {
-            termsAndConditions = settingItem.data!.url;
+          if (settingItem.data?.resource != null) {
+            termsAndConditions = settingItem.data!.resource;
           } else {
             throw Exception('Terms and conditions not found');
           }
@@ -193,7 +193,7 @@ class FeatureAccess {
     return embeddedDTO != null
         ? LoginEmbedded(
             titleL10n: embeddedDTO.titleL10n,
-            url: Uri.parse(embeddedDTO.url),
+            resource: Uri.parse(embeddedDTO.resource),
             showToolbar: embeddedDTO.showToolbar,
           )
         : null;

@@ -1,9 +1,9 @@
 class ConfigData {
   ConfigData({
-    required this.url,
+    required this.resource,
     this.titleL10n,
   });
 
-  final Uri url;
+  final Uri resource;
   final String? titleL10n;
 }
