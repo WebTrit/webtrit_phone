@@ -235,15 +235,19 @@ class WebtritApiClient {
 
   Future<SessionResult> createUser(
     SessionUserCredential sessionUserCredential, {
+    Map<String, dynamic>? extraPayload,
     RequestOptions options = const RequestOptions(),
   }) async {
-    final requestJson = sessionUserCredential.toJson();
+    final requestPayload = {
+      ...sessionUserCredential.toJson(),
+      if (extraPayload?.isNotEmpty == true) ...extraPayload!,
+    };
 
     final responseJson = await _httpClientExecutePost(
       ['user'],
       null,
       null,
-      requestJson,
+      requestPayload,
       options: options,
     );
 
