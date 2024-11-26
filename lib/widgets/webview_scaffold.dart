@@ -22,7 +22,7 @@ class WebViewScaffold extends StatefulWidget {
     required this.initialUri,
     this.addLocaleNameToQueryParameters = true,
     this.javaScriptChannels = const {},
-    this.errorPlaceholder,
+    this.errorBuilder,
     this.showToolbar = true,
     this.builder,
   });
@@ -31,8 +31,8 @@ class WebViewScaffold extends StatefulWidget {
   final Uri initialUri;
   final bool addLocaleNameToQueryParameters;
   final Map<String, void Function(JavaScriptMessage)> javaScriptChannels;
-  final Widget? Function(BuildContext context, WebResourceError error, WebViewController controller)? errorPlaceholder;
   final bool showToolbar;
+  final Widget? Function(BuildContext context, WebResourceError error, WebViewController controller)? errorBuilder;
   final TransitionBuilder? builder;
 
   @override
@@ -163,10 +163,10 @@ class _WebViewScaffoldState extends State<WebViewScaffold> {
           : null,
       body: Builder(
         builder: (context) {
-          final hasWebViewError = widget.errorPlaceholder != null && _latestError != null;
+          final hasWebViewError = widget.errorBuilder != null && _latestError != null;
 
           final errorPlaceholderBuilder = Builder(builder: (context) {
-            return widget.errorPlaceholder!(context, _latestError!, _webViewController) ?? const SizedBox.shrink();
+            return widget.errorBuilder!(context, _latestError!, _webViewController) ?? const SizedBox.shrink();
           });
 
           final successBuilder = Builder(builder: (context) {
