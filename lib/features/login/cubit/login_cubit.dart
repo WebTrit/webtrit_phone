@@ -351,7 +351,7 @@ class LoginCubit extends Cubit<LoginState> {
     }
   }
 
-  void _handleLoginResult(dynamic result) {
+  void _handleLoginResult(SessionResult result) {
     if (result is SessionOtpProvisional) {
       emit(state.copyWith(
         processing: false,
