@@ -78,7 +78,7 @@ _$AppConfigLoginEmbeddedImpl _$$AppConfigLoginEmbeddedImplFromJson(
       launch: json['launch'] as bool? ?? false,
       titleL10n: json['titleL10n'] as String?,
       showToolbar: json['showToolbar'] as bool? ?? false,
-      url: json['url'] as String,
+      resource: json['resource'] as String,
     );
 
 Map<String, dynamic> _$$AppConfigLoginEmbeddedImplToJson(
@@ -88,7 +88,7 @@ Map<String, dynamic> _$$AppConfigLoginEmbeddedImplToJson(
       'launch': instance.launch,
       'titleL10n': instance.titleL10n,
       'showToolbar': instance.showToolbar,
-      'url': instance.url,
+      'resource': instance.resource,
     };
 
 _$AppConfigMainImpl _$$AppConfigMainImplFromJson(Map<String, dynamic> json) =>

@@ -35,7 +35,7 @@ abstract class EmbeddedScreenPage extends StatelessWidget {
     return BlocProvider(
       create: (context) => EmbeddedCubit(),
       child: EmbeddedScreen(
-        initialUri: data.url,
+        initialUri: data.resource,
         appBar: appbar,
       ),
     );

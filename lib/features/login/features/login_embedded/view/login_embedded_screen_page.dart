@@ -28,7 +28,7 @@ class LoginEmbeddedScreenPage extends StatelessWidget {
       ),
       child: LoginEmbeddedScreen(
         title: loginEmbedded.titleL10n != null ? context.parseL10n(loginEmbedded.titleL10n!) : null,
-        initialUrl: loginEmbedded.url,
+        initialUrl: loginEmbedded.resource,
         showToolbar: loginEmbedded.showToolbar,
       ),
     );
