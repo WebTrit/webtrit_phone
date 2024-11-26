@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:logging/logging.dart';
 
@@ -80,6 +81,10 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       token: event.token,
       userId: event.userId,
     ));
+
+    FirebaseCrashlytics.instance.setUserIdentifier(event.userId).ignore();
+    FirebaseCrashlytics.instance.setCustomKey('coreUrl', event.coreUrl).ignore();
+    FirebaseCrashlytics.instance.setCustomKey('tenantId', event.tenantId).ignore();
   }
 
   void _onLogouted(AppLogouted event, Emitter<AppState> emit) async {
