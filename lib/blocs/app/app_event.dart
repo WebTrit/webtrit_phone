@@ -16,7 +16,9 @@ class AppLogined with _$AppLogined implements AppEvent {
 
 @Freezed(copyWith: false)
 class AppLogouted with _$AppLogouted implements AppEvent {
-  const factory AppLogouted() = _AppLogouted;
+  const factory AppLogouted({
+    @Default(false) bool checkTokenForError,
+  }) = _AppLogouted;
 }
 
 @Freezed(copyWith: false)

@@ -80,30 +80,43 @@ abstract class _AppLogined implements AppLogined {
 }
 
 /// @nodoc
-mixin _$AppLogouted {}
+mixin _$AppLogouted {
+  bool get checkTokenForError => throw _privateConstructorUsedError;
+}
 
 /// @nodoc
 
 class _$AppLogoutedImpl implements _AppLogouted {
-  const _$AppLogoutedImpl();
+  const _$AppLogoutedImpl({this.checkTokenForError = false});
+
+  @override
+  @JsonKey()
+  final bool checkTokenForError;
 
   @override
   String toString() {
-    return 'AppLogouted()';
+    return 'AppLogouted(checkTokenForError: $checkTokenForError)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$AppLogoutedImpl);
+        (other.runtimeType == runtimeType &&
+            other is _$AppLogoutedImpl &&
+            (identical(other.checkTokenForError, checkTokenForError) ||
+                other.checkTokenForError == checkTokenForError));
   }
 
   @override
-  int get hashCode => runtimeType.hashCode;
+  int get hashCode => Object.hash(runtimeType, checkTokenForError);
 }
 
 abstract class _AppLogouted implements AppLogouted {
-  const factory _AppLogouted() = _$AppLogoutedImpl;
+  const factory _AppLogouted({final bool checkTokenForError}) =
+      _$AppLogoutedImpl;
+
+  @override
+  bool get checkTokenForError;
 }
 
 /// @nodoc
