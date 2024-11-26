@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:webtrit_phone/l10n/l10n.dart';
-import 'package:webtrit_phone/theme/extension/extension.dart';
+
 import 'package:webview_flutter/webview_flutter.dart';
 
-import '../../../../../app/constants.dart';
+import 'package:webtrit_phone/app/constants.dart';
+import 'package:webtrit_phone/l10n/l10n.dart';
+import 'package:webtrit_phone/theme/extension/extension.dart';
+
 import '../extension/extensions.dart';
 
 class EmbeddedRequestError extends StatelessWidget {
