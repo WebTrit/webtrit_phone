@@ -29,7 +29,7 @@ class LoginSignupEmbeddedRequestScreen extends StatefulWidget {
 }
 
 class _LoginSignupEmbeddedRequestScreenState extends State<LoginSignupEmbeddedRequestScreen> {
-  final _controller = WebViewController();
+  final _webViewController = WebViewController();
   final _progressStreamController = StreamController<int>.broadcast();
 
   WebResourceError? _latestError;
@@ -38,13 +38,13 @@ class _LoginSignupEmbeddedRequestScreenState extends State<LoginSignupEmbeddedRe
   @override
   void initState() {
     super.initState();
-    _controller.setJavaScriptMode(JavaScriptMode.unrestricted);
-    _controller.addJavaScriptChannel(
+    _webViewController.setJavaScriptMode(JavaScriptMode.unrestricted);
+    _webViewController.addJavaScriptChannel(
       _loginJavascriptChannelName,
       onMessageReceived: _onJavaScriptMessageReceived,
     );
-    _controller.loadRequest(Uri.parse(widget.initialUrl.toString()));
-    _controller.setNavigationDelegate(NavigationDelegate(
+    _webViewController.loadRequest(Uri.parse(widget.initialUrl.toString()));
+    _webViewController.setNavigationDelegate(NavigationDelegate(
       onPageFinished: (_) {
         _setWebViewLocale();
         if (_currentError == null) _latestError = null;
@@ -76,15 +76,18 @@ class _LoginSignupEmbeddedRequestScreenState extends State<LoginSignupEmbeddedRe
         final hasWebViewError = _latestError != null;
 
         return Stack(alignment: AlignmentDirectional.topCenter, children: [
-          if (hasWebViewError) EmbeddedRequestError(error: _latestError!) else WebViewWidget(controller: _controller),
+          if (hasWebViewError)
+            EmbeddedRequestError(error: _latestError!)
+          else
+            WebViewWidget(controller: _webViewController),
           WebViewProgressIndicator(stream: _progressStreamController.stream),
         ]);
       },
       listener: (BuildContext context, LoginState state) {
         if (state.processing) {
-          _controller.runJavaScript('showProgress();');
+          _webViewController.runJavaScript('showProgress();');
         } else {
-          _controller.runJavaScript('hideProgress();');
+          _webViewController.runJavaScript('hideProgress();');
         }
       },
     );
@@ -92,7 +95,7 @@ class _LoginSignupEmbeddedRequestScreenState extends State<LoginSignupEmbeddedRe
 
   void _setWebViewLocale() {
     Locale currentLocale = Localizations.localeOf(context);
-    _controller.runJavaScript('setLocale("${currentLocale.languageCode}");');
+    _webViewController.runJavaScript('setLocale("${currentLocale.languageCode}");');
   }
 
   void _onJavaScriptMessageReceived(JavaScriptMessage message) {
@@ -102,7 +105,7 @@ class _LoginSignupEmbeddedRequestScreenState extends State<LoginSignupEmbeddedRe
       final data = decodedMessage['data'];
 
       if (event == 'signup') {
-        _controller.runJavaScript('showProgress();');
+        _webViewController.runJavaScript('showProgress();');
         context.read<LoginCubit>().loginCustomSignupRequest(data);
       }
     } catch (e) {
