@@ -313,6 +313,37 @@ class LoginCubit extends Cubit<LoginState> {
     ));
   }
 
+  void loginCustomSignupRequest(Map<String, dynamic>? extras) async {
+    emit(state.copyWith(
+      processing: true,
+    ));
+    try {
+      final client = createWebtritApiClient(state.coreUrl!, state.tenantId!);
+      final result = await _createUserRequest(client: client, extras: extras);
+
+      if (result is SessionOtpProvisional) {
+        emit(state.copyWith(
+          processing: false,
+          signupSessionOtpProvisionalWithDateTime: (result, DateTime.now()),
+        ));
+      } else if (result is SessionToken) {
+        // does not set processing to false to hold processing widgets state during navigation
+        emit(state.copyWith(
+          tenantId: result.tenantId ?? state.tenantId!,
+          token: result.token,
+          // Use an empty user ID as a fallback for outdated core versions that do not support this field.
+          userId: result.userId ?? '',
+        ));
+      } else {
+        throw UnimplementedError();
+      }
+    } catch (e) {
+      notificationsBloc.add(NotificationsSubmitted(LoginErrorNotification(e)));
+
+      emit(state.copyWith(processing: false));
+    }
+  }
+
   void loginSignupRequestSubmitted() async {
     if (state.processing || !state.signupEmailInput.isValid) {
       return;
@@ -324,7 +355,7 @@ class LoginCubit extends Cubit<LoginState> {
 
     try {
       final client = createWebtritApiClient(state.coreUrl!, state.tenantId!);
-      final result = await _createUserRequest(client, state.signupEmailInput.value);
+      final result = await _createUserRequest(client: client, email: state.signupEmailInput.value);
 
       if (result is SessionOtpProvisional) {
         emit(state.copyWith(
@@ -400,9 +431,7 @@ class LoginCubit extends Cubit<LoginState> {
   }
 }
 
-Future<List<LoginType>?> _verifyCoreVersionAndRetrieveSupportedLoginTypes(
-  WebtritApiClient webtritApiClient,
-) async {
+Future<List<LoginType>?> _verifyCoreVersionAndRetrieveSupportedLoginTypes(WebtritApiClient webtritApiClient,) async {
   final systemInfo = await webtritApiClient.getSystemInfo();
 
   CoreVersion.supported().verify(systemInfo.core.version);
@@ -414,10 +443,8 @@ Future<List<LoginType>?> _verifyCoreVersionAndRetrieveSupportedLoginTypes(
       .toList();
 }
 
-Future<SessionOtpProvisional> _createSessionOtp(
-  WebtritApiClient webtritApiClient,
-  String userRef,
-) async {
+Future<SessionOtpProvisional> _createSessionOtp(WebtritApiClient webtritApiClient,
+    String userRef,) async {
   return await webtritApiClient.createSessionOtp(SessionOtpCredential(
     bundleId: PackageInfo().packageName,
     type: PlatformInfo().appType,
@@ -426,19 +453,15 @@ Future<SessionOtpProvisional> _createSessionOtp(
   ));
 }
 
-Future<SessionToken> _verifySessionOtp(
-  WebtritApiClient webtritApiClient,
-  SessionOtpProvisional sessionOtpProvisional,
-  String code,
-) async {
+Future<SessionToken> _verifySessionOtp(WebtritApiClient webtritApiClient,
+    SessionOtpProvisional sessionOtpProvisional,
+    String code,) async {
   return await webtritApiClient.verifySessionOtp(sessionOtpProvisional, code);
 }
 
-Future<SessionToken> _createSessionRequest(
-  WebtritApiClient webtritApiClient,
-  String userRef,
-  String password,
-) async {
+Future<SessionToken> _createSessionRequest(WebtritApiClient webtritApiClient,
+    String userRef,
+    String password,) async {
   return await webtritApiClient.createSession(SessionLoginCredential(
     bundleId: PackageInfo().packageName,
     type: PlatformInfo().appType,
@@ -448,14 +471,18 @@ Future<SessionToken> _createSessionRequest(
   ));
 }
 
-Future<SessionResult> _createUserRequest(
-  WebtritApiClient webtritApiClient,
-  String email,
-) async {
-  return await webtritApiClient.createUser(SessionUserCredential(
+Future<SessionResult> _createUserRequest({
+  required WebtritApiClient client,
+  String? email,
+  Map<String, dynamic>? extras,
+}) async {
+  return await client.createUser(
+    SessionUserCredential(
       bundleId: PackageInfo().packageName,
       type: PlatformInfo().appType,
       identifier: AppInfo().identifier,
       email: email,
-      dynamicFields: {"test": "test1"}));
+    ),
+    extras: extras,
+  );
 }

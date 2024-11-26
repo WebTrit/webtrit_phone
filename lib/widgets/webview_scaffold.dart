@@ -26,6 +26,7 @@ class WebViewScaffold extends StatefulWidget {
     this.showToolbar = true,
     this.controller,
     this.builder,
+    this.navigationDelegate,
   });
 
   final Widget? title;
@@ -36,6 +37,7 @@ class WebViewScaffold extends StatefulWidget {
   final bool showToolbar;
   final WebViewController? controller;
   final TransitionBuilder? builder;
+  final NavigationDelegate? navigationDelegate;
 
   @override
   State<WebViewScaffold> createState() => _WebViewScaffoldState();
@@ -84,6 +86,8 @@ class _WebViewScaffoldState extends State<WebViewScaffold> {
           _webViewController.setNavigationDelegate(
             NavigationDelegate(
               onPageFinished: (url) {
+                widget.navigationDelegate?.onPageFinished?.call(url);
+
                 if (_currentError == null) {
                   _latestError = null; // Reset the error only if the page loaded successfully
                 }
@@ -92,9 +96,13 @@ class _WebViewScaffoldState extends State<WebViewScaffold> {
                 });
               },
               onProgress: (progress) {
+                widget.navigationDelegate?.onProgress?.call(progress);
+
                 _progressStreamController.add(progress);
               },
               onWebResourceError: (error) {
+                widget.navigationDelegate?.onWebResourceError?.call(error);
+
                 setState(() {
                   _currentError = error; // Capture the current error
                   _latestError = error; // Store the error for future reference or display
@@ -104,7 +112,8 @@ class _WebViewScaffoldState extends State<WebViewScaffold> {
           ),
         ]);
       }
-    }();
+    }
+    ();
   }
 
   @override
@@ -112,7 +121,7 @@ class _WebViewScaffoldState extends State<WebViewScaffold> {
     super.didChangeDependencies();
 
     final themeData = Theme.of(context);
-    final backgroundColor = themeData.colorScheme.surface;
+    final backgroundColor = Colors.white;
     if (_backgroundColorCache != backgroundColor) {
       _backgroundColorCache = backgroundColor;
       _webViewController.setBackgroundColor(backgroundColor);
@@ -143,7 +152,8 @@ class _WebViewScaffoldState extends State<WebViewScaffold> {
       await _webViewController.setNavigationDelegate(NavigationDelegate());
       await _webViewController.loadBlank();
       await _progressStreamController.close();
-    }();
+    }
+    ();
 
     super.dispose();
   }
@@ -153,15 +163,15 @@ class _WebViewScaffoldState extends State<WebViewScaffold> {
     return Scaffold(
       appBar: widget.showToolbar
           ? AppBar(
-              title: widget.title,
-              leading: const ExtBackButton(),
-              actions: [
-                IconButton(
-                  icon: const Icon(Icons.refresh),
-                  onPressed: _webViewController.reload,
-                ),
-              ],
-            )
+        title: widget.title,
+        leading: const ExtBackButton(),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.refresh),
+            onPressed: _webViewController.reload,
+          ),
+        ],
+      )
           : null,
       body: Builder(
         builder: (context) {

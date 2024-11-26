@@ -40,9 +40,8 @@ class LoginSwitchScreen extends StatelessWidget {
           ),
           body: Column(
             children: [
-              if (context.router.isRouteActive(LoginSignupEmbeddedRequestScreenPageRoute.name)) const OnboardingLogo(),
-              if (context.router.isRouteActive(LoginSignupEmbeddedRequestScreenPageRoute.name))
-                const SizedBox(height: kInset),
+              const OnboardingLogo(),
+              const SizedBox(height: kInset),
               if (supportedLoginTypes.length > 1) ...[
                 SegmentedButton<LoginType>(
                   segments: supportedLoginTypes

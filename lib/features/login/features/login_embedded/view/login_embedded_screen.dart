@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/app/constants.dart';
-import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/theme/extension/extension.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
+import '../bloc/login_embedded_cubit.dart';
 import '../extensions/extensions.dart';
 
 const _loginJavascriptChannelName = 'WebtritLoginChannel';
