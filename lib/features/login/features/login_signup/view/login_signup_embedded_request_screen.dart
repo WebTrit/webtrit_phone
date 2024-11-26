@@ -63,6 +63,12 @@ class _LoginSignupEmbeddedRequestScreenState extends State<LoginSignupEmbeddedRe
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _webViewController.setBackgroundColor(Colors.transparent);
+  }
+
+  @override
   void dispose() {
     _progressStreamController.close();
     super.dispose();
