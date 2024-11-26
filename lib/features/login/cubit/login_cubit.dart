@@ -324,7 +324,7 @@ class LoginCubit extends Cubit<LoginState> {
 
     try {
       final client = createWebtritApiClient(state.coreUrl!, state.tenantId!);
-      final result = await _createUserRequest(client, state.signupEmailInput.value);
+      final result = await _createUserRequest(client: client, email: state.signupEmailInput.value);
 
       if (result is SessionOtpProvisional) {
         emit(state.copyWith(
@@ -448,14 +448,18 @@ Future<SessionToken> _createSessionRequest(
   ));
 }
 
-Future<SessionResult> _createUserRequest(
-  WebtritApiClient webtritApiClient,
-  String email,
-) async {
-  return await webtritApiClient.createUser(SessionUserCredential(
-    bundleId: PackageInfo().packageName,
-    type: PlatformInfo().appType,
-    identifier: AppInfo().identifier,
-    email: email,
-  ));
+Future<SessionResult> _createUserRequest({
+  required WebtritApiClient client,
+  String? email,
+  Map<String, dynamic>? extraPayload,
+}) async {
+  return await client.createUser(
+    SessionUserCredential(
+      bundleId: PackageInfo().packageName,
+      type: PlatformInfo().appType,
+      identifier: AppInfo().identifier,
+      email: email,
+    ),
+    extraPayload: extraPayload,
+  );
 }
