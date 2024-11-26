@@ -24,7 +24,7 @@ mixin _$SessionUserCredential {
   String? get bundleId => throw _privateConstructorUsedError;
   AppType get type => throw _privateConstructorUsedError;
   String get identifier => throw _privateConstructorUsedError;
-  String get email => throw _privateConstructorUsedError;
+  String? get email => throw _privateConstructorUsedError;
 
   /// Serializes this SessionUserCredential to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -42,7 +42,7 @@ abstract class $SessionUserCredentialCopyWith<$Res> {
           $Res Function(SessionUserCredential) then) =
       _$SessionUserCredentialCopyWithImpl<$Res, SessionUserCredential>;
   @useResult
-  $Res call({String? bundleId, AppType type, String identifier, String email});
+  $Res call({String? bundleId, AppType type, String identifier, String? email});
 }
 
 /// @nodoc
@@ -64,7 +64,7 @@ class _$SessionUserCredentialCopyWithImpl<$Res,
     Object? bundleId = freezed,
     Object? type = null,
     Object? identifier = null,
-    Object? email = null,
+    Object? email = freezed,
   }) {
     return _then(_value.copyWith(
       bundleId: freezed == bundleId
@@ -79,10 +79,10 @@ class _$SessionUserCredentialCopyWithImpl<$Res,
           ? _value.identifier
           : identifier // ignore: cast_nullable_to_non_nullable
               as String,
-      email: null == email
+      email: freezed == email
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
     ) as $Val);
   }
 }
@@ -96,7 +96,7 @@ abstract class _$$SessionUserCredentialImplCopyWith<$Res>
       __$$SessionUserCredentialImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String? bundleId, AppType type, String identifier, String email});
+  $Res call({String? bundleId, AppType type, String identifier, String? email});
 }
 
 /// @nodoc
@@ -116,7 +116,7 @@ class __$$SessionUserCredentialImplCopyWithImpl<$Res>
     Object? bundleId = freezed,
     Object? type = null,
     Object? identifier = null,
-    Object? email = null,
+    Object? email = freezed,
   }) {
     return _then(_$SessionUserCredentialImpl(
       bundleId: freezed == bundleId
@@ -131,10 +131,10 @@ class __$$SessionUserCredentialImplCopyWithImpl<$Res>
           ? _value.identifier
           : identifier // ignore: cast_nullable_to_non_nullable
               as String,
-      email: null == email
+      email: freezed == email
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
     ));
   }
 }
@@ -147,7 +147,7 @@ class _$SessionUserCredentialImpl implements _SessionUserCredential {
       {this.bundleId,
       required this.type,
       required this.identifier,
-      required this.email});
+      this.email});
 
   factory _$SessionUserCredentialImpl.fromJson(Map<String, dynamic> json) =>
       _$$SessionUserCredentialImplFromJson(json);
@@ -159,7 +159,7 @@ class _$SessionUserCredentialImpl implements _SessionUserCredential {
   @override
   final String identifier;
   @override
-  final String email;
+  final String? email;
 
   @override
   String toString() {
@@ -206,7 +206,7 @@ abstract class _SessionUserCredential implements SessionUserCredential {
       {final String? bundleId,
       required final AppType type,
       required final String identifier,
-      required final String email}) = _$SessionUserCredentialImpl;
+      final String? email}) = _$SessionUserCredentialImpl;
 
   factory _SessionUserCredential.fromJson(Map<String, dynamic> json) =
       _$SessionUserCredentialImpl.fromJson;
@@ -218,7 +218,7 @@ abstract class _SessionUserCredential implements SessionUserCredential {
   @override
   String get identifier;
   @override
-  String get email;
+  String? get email;
 
   /// Create a copy of SessionUserCredential
   /// with the given fields replaced by the non-null parameter values.
