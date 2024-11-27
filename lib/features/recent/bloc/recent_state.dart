@@ -4,6 +4,6 @@ part of 'recent_bloc.dart';
 class RecentState with _$RecentState {
   const factory RecentState({
     Recent? recent,
-    List<Recent>? recents,
+    List<CallLogEntry>? callLog,
   }) = _RecentState;
 }

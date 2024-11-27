@@ -49,6 +49,7 @@ class FavoriteTile extends StatelessWidget {
         leading: LeadingAvatar(
           username: favorite.name,
           thumbnail: favorite.contact.thumbnail,
+          thumbnailUrl: favorite.contact.thumbnailUrl,
           registered: favorite.contact.registered,
         ),
         trailing: IconButton(
@@ -56,9 +57,7 @@ class FavoriteTile extends StatelessWidget {
           icon: const Icon(Icons.info_outline),
           onPressed: onInfoPressed,
         ),
-        title: Text(
-          favorite.name,
-        ),
+        title: Text(favorite.name),
         subtitle: Text('${favorite.label.capitalize}: ${favorite.number}'),
         onTap: onTap,
         onLongPress: onLongPress,

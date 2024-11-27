@@ -17,7 +17,7 @@ AppPreferences? _appPreferences;
 SecureStorage? _secureStorage;
 AppCertificates? _appCertificates;
 
-RecentsRepository? _recentsRepository;
+CallLogsRepository? _callLogsRepository;
 
 Future<void> _initializeDependencies() async {
   _appPreferences ??= await AppPreferences.init();
@@ -26,11 +26,11 @@ Future<void> _initializeDependencies() async {
   // Always create a new instance to avoid caching issues
   _secureStorage = await SecureStorage.init();
 
-  _recentsRepository ??= RecentsRepository(appDatabase: await IsolateDatabase.create());
+  _callLogsRepository ??= CallLogsRepository(appDatabase: await IsolateDatabase.create());
   _callkeep ??= CallkeepBackgroundService();
 
   _backgroundCallEventManager ??= BackgroundCallEventService(
-    recentsRepository: _recentsRepository!,
+    callLogsRepository: _callLogsRepository!,
     appPreferences: _appPreferences!,
     callkeep: _callkeep!,
     storage: _secureStorage!,

@@ -38,7 +38,7 @@ class RecentsBloc extends Bloc<RecentsEvent, RecentsState> {
   }
 
   Future<void> _onDeleted(RecentsDeleted event, Emitter<RecentsState> emit) async {
-    await recentsRepository.delete(event.recent);
+    await recentsRepository.deleteByCallId(event.recent.callLogEntry.id);
   }
 
   Future<void> _onFiltered(RecentsFiltered event, Emitter<RecentsState> emit) async {

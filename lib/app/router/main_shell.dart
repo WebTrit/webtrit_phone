@@ -98,6 +98,11 @@ class _MainShellState extends State<MainShell> {
             appDatabase: context.read<AppDatabase>(),
           ),
         ),
+        RepositoryProvider<CallLogsRepository>(
+          create: (context) => CallLogsRepository(
+            appDatabase: context.read<AppDatabase>(),
+          ),
+        ),
         RepositoryProvider<ContactsRepository>(
           create: (context) => ContactsRepository(
             appDatabase: context.read<AppDatabase>(),
@@ -227,7 +232,7 @@ class _MainShellState extends State<MainShell> {
                 tenantId: appBloc.state.tenantId!,
                 token: appBloc.state.token!,
                 trustedCertificates: appCertificates.trustedCertificates,
-                recentsRepository: context.read<RecentsRepository>(),
+                callLogsRepository: context.read<CallLogsRepository>(),
                 notificationsBloc: context.read<NotificationsBloc>(),
                 callkeep: _callkeep,
               )..add(const CallStarted());

@@ -122,7 +122,7 @@ class ActiveCall with _$ActiveCall {
   ActiveCall._();
 
   factory ActiveCall({
-    required Direction direction,
+    required CallDirection direction,
     required int line,
     required String callId,
     required CallkeepHandle handle,
@@ -145,9 +145,9 @@ class ActiveCall with _$ActiveCall {
     MediaStream? remoteStream,
   }) = _ActiveCall;
 
-  bool get isIncoming => direction == Direction.incoming;
+  bool get isIncoming => direction == CallDirection.incoming;
 
-  bool get isOutgoing => direction == Direction.outgoing;
+  bool get isOutgoing => direction == CallDirection.outgoing;
 
   bool get wasAccepted => acceptedTime != null;
 

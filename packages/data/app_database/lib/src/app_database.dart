@@ -40,6 +40,7 @@ part 'app_database.g.dart';
     ContactPhonesDao,
     ContactEmailsDao,
     CallLogsDao,
+    RecentsDao,
     FavoritesDao,
     ChatsDao,
     SmsDao,

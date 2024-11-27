@@ -22,7 +22,7 @@ import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/app/notifications/notifications.dart';
 import 'package:webtrit_phone/data/app_sound.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
-import 'package:webtrit_phone/models/recent.dart';
+import 'package:webtrit_phone/models/call_log_entry.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
 import '../extensions/extensions.dart';
@@ -46,7 +46,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   final String token;
   final TrustedCertificates trustedCertificates;
 
-  final RecentsRepository recentsRepository;
+  final CallLogsRepository callLogsRepository;
   final NotificationsBloc notificationsBloc;
   final Callkeep callkeep;
 
@@ -65,7 +65,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     required this.tenantId,
     required this.token,
     required this.trustedCertificates,
-    required this.recentsRepository,
+    required this.callLogsRepository,
     required this.notificationsBloc,
     required this.callkeep,
   }) : super(const CallState()) {
@@ -600,7 +600,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     }
 
     emit(state.copyWithPushActiveCall(ActiveCall(
-      direction: Direction.incoming,
+      direction: CallDirection.incoming,
       line: _kUndefinedLine,
       callId: event.callId,
       handle: event.handle,
@@ -701,7 +701,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         : null;
 
     final newActiveCall = ActiveCall(
-      direction: Direction.incoming,
+      direction: CallDirection.incoming,
       line: event.line,
       callId: event.callId,
       handle: handle,
@@ -857,7 +857,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         if (call.wasHungUp == false) {
           _addToRecents(call.copyWith(hungUpTime: clock.now()));
         }
-        if (call.direction == Direction.incoming && !call.wasAccepted) {
+        if (call.direction == CallDirection.incoming && !call.wasAccepted) {
           endReason = CallkeepEndCallReason.unanswered;
         }
 
@@ -1103,7 +1103,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       }
     } else {
       final newCall = ActiveCall(
-        direction: Direction.outgoing,
+        direction: CallDirection.outgoing,
         line: event.line ?? state.retrieveIdleLine() ?? _kUndefinedLine,
         callId: callId,
         handle: event.handle,
@@ -1353,7 +1353,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     }
 
     final newCall = ActiveCall(
-      direction: Direction.outgoing,
+      direction: CallDirection.outgoing,
       line: state.retrieveIdleLine() ?? _kUndefinedLine,
       callId: callId,
       handle: newHandle,
@@ -1943,7 +1943,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
           continue activeCallsLoop;
         }
       }
-      if (activeCall.direction == Direction.outgoing &&
+      if (activeCall.direction == CallDirection.outgoing &&
           activeCall.acceptedTime == null &&
           activeCall.hungUpTime == null) {
         // Handles an outgoing active call that has not yet started, typically initiated
@@ -2309,14 +2309,15 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   }
 
   void _addToRecents(ActiveCall activeCall) {
-    recentsRepository.add(Recent(
+    NewCall call = (
       direction: activeCall.direction,
       number: activeCall.handle.value,
       video: activeCall.video,
       createdTime: activeCall.createdTime,
       acceptedTime: activeCall.acceptedTime,
       hungUpTime: activeCall.hungUpTime,
-    ));
+    );
+    callLogsRepository.add(call);
   }
 
   Future<void> _ringtoneOutgoingPlay() async {

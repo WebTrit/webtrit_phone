@@ -10,14 +10,14 @@ import '../recent.dart';
 class RecentHistoryTile extends StatelessWidget {
   const RecentHistoryTile({
     super.key,
-    required this.recent,
+    required this.callLogEntry,
     this.dateFormat,
     this.onDeleted,
   });
 
-  final Recent recent;
+  final CallLogEntry callLogEntry;
   final DateFormat? dateFormat;
-  final void Function(Recent)? onDeleted;
+  final void Function(CallLogEntry)? onDeleted;
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +26,7 @@ class RecentHistoryTile extends StatelessWidget {
     final dateFormat = this.dateFormat ?? DateFormat();
 
     return Dismissible(
-      key: ObjectKey(recent),
+      key: ObjectKey(callLogEntry),
       background: Container(
         color: themeData.colorScheme.error,
         padding: const EdgeInsets.only(right: 16),
@@ -42,32 +42,32 @@ class RecentHistoryTile extends StatelessWidget {
         title: context.l10n.recents_DeleteConfirmDialog_title,
         content: context.l10n.recents_DeleteConfirmDialog_content,
       ),
-      onDismissed: onDeleted == null ? null : (direction) => onDeleted(recent),
+      onDismissed: onDeleted == null ? null : (direction) => onDeleted(callLogEntry),
       direction: DismissDirection.endToStart,
       child: ListTile(
         contentPadding: const EdgeInsets.only(left: 16.0),
         title: Text(
-          dateFormat.format(recent.createdTime),
+          dateFormat.format(callLogEntry.createdTime),
         ),
         subtitle: Row(
           children: [
             Icon(
-              recent.direction.icon(recent.isComplete),
+              callLogEntry.direction.icon(callLogEntry.isComplete),
               size: 16,
-              color: recent.isComplete
-                  ? (recent.direction == Direction.incoming ? Colors.blue : Colors.green)
+              color: callLogEntry.isComplete
+                  ? (callLogEntry.direction == CallDirection.incoming ? Colors.blue : Colors.green)
                   : Colors.red,
             ),
             const Text(' · '),
             Icon(
-              recent.video ? Icons.videocam : Icons.call,
+              callLogEntry.video ? Icons.videocam : Icons.call,
               size: 16,
               color: Colors.grey,
             ),
             const Text(' · '),
             Text(
-              recent.isComplete
-                  ? _formatDuration(recent.duration ?? Duration.zero)
+              callLogEntry.isComplete
+                  ? _formatDuration(callLogEntry.duration ?? Duration.zero)
                   : context.l10n.recents_HistoryTile_missedCallText,
             ),
           ],

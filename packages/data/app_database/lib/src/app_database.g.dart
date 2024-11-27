@@ -7829,6 +7829,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final ContactEmailsDao contactEmailsDao =
       ContactEmailsDao(this as AppDatabase);
   late final CallLogsDao callLogsDao = CallLogsDao(this as AppDatabase);
+  late final RecentsDao recentsDao = RecentsDao(this as AppDatabase);
   late final FavoritesDao favoritesDao = FavoritesDao(this as AppDatabase);
   late final ChatsDao chatsDao = ChatsDao(this as AppDatabase);
   late final SmsDao smsDao = SmsDao(this as AppDatabase);

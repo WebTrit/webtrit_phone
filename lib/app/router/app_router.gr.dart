@@ -284,11 +284,11 @@ abstract class _$AppRouter extends RootStackRouter {
     RecentScreenPageRoute.name: (routeData) {
       final pathParams = routeData.inheritedPathParams;
       final args = routeData.argsAs<RecentScreenPageRouteArgs>(
-          orElse: () => RecentScreenPageRouteArgs(
-              recentId: pathParams.getInt('recentId')));
+          orElse: () =>
+              RecentScreenPageRouteArgs(callId: pathParams.getInt('callId')));
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: RecentScreenPage(args.recentId),
+        child: RecentScreenPage(args.callId),
       );
     },
     RecentsRouterPageRoute.name: (routeData) {
@@ -1142,12 +1142,12 @@ class PermissionsScreenPageRoute extends PageRouteInfo<void> {
 /// [RecentScreenPage]
 class RecentScreenPageRoute extends PageRouteInfo<RecentScreenPageRouteArgs> {
   RecentScreenPageRoute({
-    required int recentId,
+    required int callId,
     List<PageRouteInfo>? children,
   }) : super(
           RecentScreenPageRoute.name,
-          args: RecentScreenPageRouteArgs(recentId: recentId),
-          rawPathParams: {'recentId': recentId},
+          args: RecentScreenPageRouteArgs(callId: callId),
+          rawPathParams: {'callId': callId},
           initialChildren: children,
         );
 
@@ -1158,13 +1158,13 @@ class RecentScreenPageRoute extends PageRouteInfo<RecentScreenPageRouteArgs> {
 }
 
 class RecentScreenPageRouteArgs {
-  const RecentScreenPageRouteArgs({required this.recentId});
+  const RecentScreenPageRouteArgs({required this.callId});
 
-  final int recentId;
+  final int callId;
 
   @override
   String toString() {
-    return 'RecentScreenPageRouteArgs{recentId: $recentId}';
+    return 'RecentScreenPageRouteArgs{callId: $callId}';
   }
 }
 
