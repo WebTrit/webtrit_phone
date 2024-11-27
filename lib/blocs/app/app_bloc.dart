@@ -88,26 +88,24 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   }
 
   void _onLogouted(AppLogouted event, Emitter<AppState> emit) async {
-    final client = createWebtritApiClient(state.coreUrl!, state.tenantId ?? '');
+    final token = state.token;
+    final coreUrl = state.coreUrl;
 
-    try {
-      await client.getUserInfo(state.token!);
-    } on RequestFailure catch (e) {
-      emit(state.copyWith(
-        accountErrorCode: AccountErrorCode.values.firstWhereOrNull((it) => it.value == e.error?.code),
-      ));
-    } catch (e) {
-      _logger.severe('_onLogouted', e);
+    if (token != null && coreUrl != null && event.checkTokenForError) {
+      try {
+        final client = createWebtritApiClient(coreUrl, state.tenantId ?? '');
+        await client.getUserInfo(token, options: const RequestOptions(retries: 0));
+      } on RequestFailure catch (e) {
+        final errorCode = AccountErrorCode.values.firstWhereOrNull((it) => it.value == e.error?.code);
+        emit(state.copyWith(accountErrorCode: errorCode));
+      } catch (e) {
+        _logger.severe('_onLogouted', e);
+      }
     }
 
     await _cleanUpUserData();
 
-    emit(state.copyWith(
-      coreUrl: null,
-      tenantId: null,
-      token: null,
-      userId: null,
-    ));
+    emit(state.copyWith(coreUrl: null, tenantId: null, token: null, userId: null));
   }
 
   void _onLogoutedTeardown(AppLogoutedTeardown event, Emitter<AppState> emit) async {
