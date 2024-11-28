@@ -20,7 +20,7 @@ UserContact _$UserContactFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$UserContact {
-  String get userId => throw _privateConstructorUsedError;
+  String? get userId => throw _privateConstructorUsedError;
   SipStatus? get sipStatus => throw _privateConstructorUsedError;
   Numbers get numbers => throw _privateConstructorUsedError;
   String? get email => throw _privateConstructorUsedError;
@@ -48,7 +48,7 @@ abstract class $UserContactCopyWith<$Res> {
       _$UserContactCopyWithImpl<$Res, UserContact>;
   @useResult
   $Res call(
-      {String userId,
+      {String? userId,
       SipStatus? sipStatus,
       Numbers numbers,
       String? email,
@@ -77,7 +77,7 @@ class _$UserContactCopyWithImpl<$Res, $Val extends UserContact>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? userId = null,
+    Object? userId = freezed,
     Object? sipStatus = freezed,
     Object? numbers = null,
     Object? email = freezed,
@@ -89,10 +89,10 @@ class _$UserContactCopyWithImpl<$Res, $Val extends UserContact>
     Object? isRegisteredUser = freezed,
   }) {
     return _then(_value.copyWith(
-      userId: null == userId
+      userId: freezed == userId
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       sipStatus: freezed == sipStatus
           ? _value.sipStatus
           : sipStatus // ignore: cast_nullable_to_non_nullable
@@ -152,7 +152,7 @@ abstract class _$$UserContactImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String userId,
+      {String? userId,
       SipStatus? sipStatus,
       Numbers numbers,
       String? email,
@@ -180,7 +180,7 @@ class __$$UserContactImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? userId = null,
+    Object? userId = freezed,
     Object? sipStatus = freezed,
     Object? numbers = null,
     Object? email = freezed,
@@ -192,10 +192,10 @@ class __$$UserContactImplCopyWithImpl<$Res>
     Object? isRegisteredUser = freezed,
   }) {
     return _then(_$UserContactImpl(
-      userId: null == userId
+      userId: freezed == userId
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       sipStatus: freezed == sipStatus
           ? _value.sipStatus
           : sipStatus // ignore: cast_nullable_to_non_nullable
@@ -241,7 +241,7 @@ class __$$UserContactImplCopyWithImpl<$Res>
 @JsonSerializable(fieldRename: FieldRename.snake)
 class _$UserContactImpl implements _UserContact {
   const _$UserContactImpl(
-      {required this.userId,
+      {this.userId,
       this.sipStatus,
       required this.numbers,
       this.email,
@@ -256,7 +256,7 @@ class _$UserContactImpl implements _UserContact {
       _$$UserContactImplFromJson(json);
 
   @override
-  final String userId;
+  final String? userId;
   @override
   final SipStatus? sipStatus;
   @override
@@ -338,7 +338,7 @@ class _$UserContactImpl implements _UserContact {
 
 abstract class _UserContact implements UserContact {
   const factory _UserContact(
-      {required final String userId,
+      {final String? userId,
       final SipStatus? sipStatus,
       required final Numbers numbers,
       final String? email,
@@ -353,7 +353,7 @@ abstract class _UserContact implements UserContact {
       _$UserContactImpl.fromJson;
 
   @override
-  String get userId;
+  String? get userId;
   @override
   SipStatus? get sipStatus;
   @override

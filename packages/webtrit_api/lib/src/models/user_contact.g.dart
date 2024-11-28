@@ -8,7 +8,7 @@ part of 'user_contact.dart';
 
 _$UserContactImpl _$$UserContactImplFromJson(Map<String, dynamic> json) =>
     _$UserContactImpl(
-      userId: json['user_id'] as String,
+      userId: json['user_id'] as String?,
       sipStatus: $enumDecodeNullable(_$SipStatusEnumMap, json['sip_status']),
       numbers: Numbers.fromJson(json['numbers'] as Map<String, dynamic>),
       email: json['email'] as String?,
