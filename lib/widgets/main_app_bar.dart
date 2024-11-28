@@ -15,7 +15,7 @@ class MainAppBar extends AppBar {
   }) : super(
           centerTitle: false,
           actions: [
-            BlocBuilder<CallBloc, CallState>(
+            BlocBuilder<SessionStatusCubit, SessionStatusState>(
               builder: (context, state) {
                 return Ink(
                   decoration: ShapeDecoration(
@@ -34,7 +34,7 @@ class MainAppBar extends AppBar {
                       Icons.person,
                     ),
                     onPressed: () {
-                      context.router.push(const SettingsRouterPageRoute());
+                      context.router.navigate(const SettingsRouterPageRoute());
                     },
                   ),
                 );

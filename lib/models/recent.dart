@@ -4,6 +4,8 @@ import 'package:equatable/equatable.dart';
 
 import 'package:webtrit_phone/extensions/iterable.dart';
 
+import 'contact_source_type.dart';
+
 enum Direction {
   incoming,
   outgoing,
@@ -26,6 +28,10 @@ class Recent extends Equatable {
   final String? lastName;
   final String? aliasName;
   final Uint8List? thumbnail;
+  final String? contactSourceId;
+  final ContactSourceType? contactSourceType;
+  final bool? contactUserRegistered;
+  final bool? contactIsCurrentUser;
 
   const Recent({
     required this.direction,
@@ -39,6 +45,10 @@ class Recent extends Equatable {
     this.lastName,
     this.aliasName,
     this.thumbnail,
+    this.contactSourceId,
+    this.contactSourceType,
+    this.contactUserRegistered,
+    this.contactIsCurrentUser,
   });
 
   bool get isComplete => acceptedTime != null;
@@ -80,5 +90,9 @@ class Recent extends Equatable {
         lastName,
         aliasName,
         thumbnail,
+        contactSourceId,
+        contactSourceType,
+        contactUserRegistered,
+        contactIsCurrentUser,
       ];
 }

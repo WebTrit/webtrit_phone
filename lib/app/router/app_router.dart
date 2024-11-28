@@ -8,8 +8,8 @@ import 'package:webtrit_phone/app/router/app_shell.dart';
 import 'package:webtrit_phone/app/router/main_shell.dart';
 import 'package:webtrit_phone/blocs/app/app_bloc.dart';
 import 'package:webtrit_phone/data/data.dart';
-import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/features/features.dart';
+import 'package:webtrit_phone/models/models.dart';
 
 import 'deeplinks.dart';
 
@@ -26,18 +26,28 @@ final _logger = Logger('AppRouter');
 class AppRouter extends _$AppRouter {
   AppRouter(
     this._appBloc,
-    this._appPreferences,
     this._appPermissions,
+    this._launchLoginEmbedded,
+    this._initialBottomMenuTab,
   );
 
   final AppBloc _appBloc;
-  final AppPreferences _appPreferences;
   final AppPermissions _appPermissions;
 
+  final LoginEmbedded? _launchLoginEmbedded;
+  final BottomMenuTab _initialBottomMenuTab;
+
   String? get coreUrl => _appBloc.state.coreUrl;
+
   String? get token => _appBloc.state.token;
+
+  String? get userId => _appBloc.state.userId;
+
   bool get appPermissionsDenied => _appPermissions.isDenied;
+
   bool get appUserAgreementUnaccepted => _appBloc.state.userAgreementAccepted != true;
+
+  bool get appLoggedIn => coreUrl != null && token != null && userId != null;
 
   @override
   List<AutoRoute> get routes => [
@@ -59,7 +69,7 @@ class AppRouter extends _$AppRouter {
                   page: LoginModeSelectScreenPageRoute.page,
                 ),
                 AutoRoute(
-                  page: LoginCredentialsRequestScreenPageRoute.page,
+                  page: LoginEmbeddedScreenPageRoute.page,
                   maintainState: false,
                 ),
                 AutoRoute(
@@ -127,10 +137,20 @@ class AppRouter extends _$AppRouter {
                 AutoRoute(
                   page: MainScreenPageRoute.page,
                   path: '',
+                  guards: [
+                    // Redirects to the appropriate screen if required parameters are missing
+                    // This ensures that necessary data is passed to the  screen when the initial route is loaded.
+                    AutoRouteGuard.redirect(
+                      (resolver) => EmbeddedScreenPage.getPageRouteInfo(
+                        resolver.route,
+                        _initialBottomMenuTab.data,
+                      ),
+                    ),
+                  ],
                   children: [
                     RedirectRoute(
                       path: '',
-                      redirectTo: _appPreferences.getActiveMainFlavor().name,
+                      redirectTo: _initialBottomMenuTab.flavor.name,
                     ),
                     AutoRoute(
                       page: FavoritesRouterPageRoute.page,
@@ -166,6 +186,16 @@ class AppRouter extends _$AppRouter {
                       children: [
                         AutoRoute(
                           page: ContactsScreenPageRoute.page,
+                          guards: [
+                            // Redirects to the appropriate screen if required parameters are missing
+                            // This ensures that necessary data is passed to the  screen when the initial route is loaded.
+                            AutoRouteGuard.redirect(
+                              (resolver) => ContactsScreenPage.getPageRouteInfo(
+                                resolver.route,
+                                () => _initialBottomMenuTab.toContacts.contactSourceTypes,
+                              ),
+                            ),
+                          ],
                           path: '',
                         ),
                         AutoRoute(
@@ -178,7 +208,32 @@ class AppRouter extends _$AppRouter {
                       page: KeypadScreenPageRoute.page,
                       path: MainFlavor.keypad.name,
                     ),
+                    // Embedded flavors
+                    AutoRoute(
+                      page: EmbeddedScreenPage1Route.page,
+                      path: MainFlavor.embedded1.name,
+                    ),
+                    AutoRoute(
+                      page: EmbeddedScreenPage2Route.page,
+                      path: MainFlavor.embedded2.name,
+                    ),
+                    AutoRoute(
+                      page: EmbeddedScreenPage3Route.page,
+                      path: MainFlavor.embedded3.name,
+                    ),
+                    AutoRoute(
+                      page: ConversationsScreenPageRoute.page,
+                      path: MainFlavor.messaging.name,
+                    ),
                   ],
+                ),
+                AutoRoute(
+                  page: ChatConversationScreenPageRoute.page,
+                  path: 'chat_conversation',
+                ),
+                AutoRoute(
+                  page: SmsConversationScreenPageRoute.page,
+                  path: 'sms_conversation',
                 ),
                 AutoRoute(
                   page: DemoWebPageRoute.page,
@@ -220,6 +275,10 @@ class AppRouter extends _$AppRouter {
                       page: ThemeModeScreenPageRoute.page,
                       path: 'theme-mode',
                     ),
+                    AutoRoute(
+                      page: DiagnosticScreenPageRoute.page,
+                      path: 'diagnostic',
+                    ),
                   ],
                 ),
               ],
@@ -240,6 +299,10 @@ class AppRouter extends _$AppRouter {
               page: UndefinedScreenPageRoute.page,
               path: 'undefined',
             ),
+            AutoRoute(
+              page: EmbeddedScreenPage1Route.page,
+              path: 'embedded',
+            ),
           ],
         ),
       ];
@@ -247,7 +310,7 @@ class AppRouter extends _$AppRouter {
   void onLoginScreenPageRouteGuardNavigation(NavigationResolver resolver, StackRouter router) {
     _logger.fine(_onNavigationLoggerMessage('onLoginScreenPageRouteGuardNavigation', resolver));
 
-    if (coreUrl != null && token != null) {
+    if (appLoggedIn) {
       resolver.next(false);
       router.replaceAll(
         [const MainShellRoute()],
@@ -286,11 +349,8 @@ class AppRouter extends _$AppRouter {
   void onMainShellRouteGuardNavigation(NavigationResolver resolver, StackRouter router) {
     _logger.fine(_onNavigationLoggerMessage('onMainShellRouteGuardNavigation', resolver));
 
-    const appTermsAndConditionsUrl = EnvironmentConfig.APP_TERMS_AND_CONDITIONS_URL;
-    final hasToAcceptUserAgreement = appUserAgreementUnaccepted && appTermsAndConditionsUrl?.isNotEmpty == true;
-
-    if (coreUrl != null && token != null) {
-      if (hasToAcceptUserAgreement) {
+    if (appLoggedIn) {
+      if (appUserAgreementUnaccepted) {
         resolver.next(false);
         router.replaceAll(
           [const UserAgreementScreenPageRoute()],
@@ -306,7 +366,11 @@ class AppRouter extends _$AppRouter {
     } else {
       resolver.next(false);
       router.replaceAll(
-        [const LoginRouterPageRoute()],
+        [
+          LoginRouterPageRoute(
+            launchLoginEmbedded: _launchLoginEmbedded,
+          )
+        ],
       );
     }
   }
@@ -347,7 +411,7 @@ class AppRouter extends _$AppRouter {
   FutureOr<DeepLink> deepLinkBuilder(PlatformDeepLink deepLink) {
     final handlers = <DeepLinkHandler>[
       // Internal deep-links within the platform
-      HandleAndroidBackgroundIncomingCall(deepLink, _appBloc.pendingCallHandler),
+      HandleAndroidBackgroundIncomingCall(deepLink),
       HandleReturnToMain(deepLink),
       // External deep-links from outside the application
       HandleAutoprovision(deepLink),

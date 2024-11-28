@@ -8,6 +8,8 @@ export 'app_sound.dart';
 export 'app_themes.dart';
 export 'app_time.dart';
 export 'device_info.dart';
+export 'feature_access.dart';
 export 'package_info.dart';
 export 'platform_info.dart';
 export 'secure_storage.dart';
+export 'session_cleanup_worker.dart';

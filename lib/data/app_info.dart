@@ -10,12 +10,13 @@ final Logger _logger = Logger('AppInfo');
 class AppInfo {
   static late AppInfo _instance;
 
-  static Future<void> init() async {
+  static Future<AppInfo> init() async {
     final id = await FirebaseInstallations.instance.getId();
 
     String? appVersion = await _getAppVersion();
 
     _instance = AppInfo._(id, appVersion);
+    return _instance;
   }
 
   static Future<String?> _getAppVersion() async {

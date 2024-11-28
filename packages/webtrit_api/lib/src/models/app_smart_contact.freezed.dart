@@ -23,8 +23,12 @@ mixin _$AppSmartContact {
   String get identifier => throw _privateConstructorUsedError;
   List<String> get phones => throw _privateConstructorUsedError;
 
+  /// Serializes this AppSmartContact to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of AppSmartContact
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $AppSmartContactCopyWith<AppSmartContact> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -48,6 +52,8 @@ class _$AppSmartContactCopyWithImpl<$Res, $Val extends AppSmartContact>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of AppSmartContact
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -86,6 +92,8 @@ class __$$AppSmartContactImplCopyWithImpl<$Res>
       _$AppSmartContactImpl _value, $Res Function(_$AppSmartContactImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of AppSmartContact
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -141,12 +149,14 @@ class _$AppSmartContactImpl implements _AppSmartContact {
             const DeepCollectionEquality().equals(other._phones, _phones));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType, identifier, const DeepCollectionEquality().hash(_phones));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of AppSmartContact
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$AppSmartContactImplCopyWith<_$AppSmartContactImpl> get copyWith =>
@@ -173,8 +183,11 @@ abstract class _AppSmartContact implements AppSmartContact {
   String get identifier;
   @override
   List<String> get phones;
+
+  /// Create a copy of AppSmartContact
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$AppSmartContactImplCopyWith<_$AppSmartContactImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

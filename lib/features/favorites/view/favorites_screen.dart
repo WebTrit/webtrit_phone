@@ -15,9 +15,11 @@ class FavoritesScreen extends StatelessWidget {
   const FavoritesScreen({
     super.key,
     this.title,
+    required this.videoCallEnable,
   });
 
   final Widget? title;
+  final bool videoCallEnable;
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +72,7 @@ class FavoritesScreen extends StatelessWidget {
                                 callBloc.add(CallControlEvent.started(
                                   number: favorite.number,
                                   displayName: favorite.name,
-                                  video: true,
+                                  video: videoCallEnable,
                                 ));
                               },
                         onInfoPressed: () {

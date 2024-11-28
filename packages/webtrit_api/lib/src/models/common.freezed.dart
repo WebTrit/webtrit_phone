@@ -23,9 +23,14 @@ mixin _$Numbers {
   String get main => throw _privateConstructorUsedError;
   String? get ext => throw _privateConstructorUsedError;
   List<String>? get additional => throw _privateConstructorUsedError;
+  List<String>? get sms => throw _privateConstructorUsedError;
 
+  /// Serializes this Numbers to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of Numbers
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $NumbersCopyWith<Numbers> get copyWith => throw _privateConstructorUsedError;
 }
 
@@ -34,7 +39,8 @@ abstract class $NumbersCopyWith<$Res> {
   factory $NumbersCopyWith(Numbers value, $Res Function(Numbers) then) =
       _$NumbersCopyWithImpl<$Res, Numbers>;
   @useResult
-  $Res call({String main, String? ext, List<String>? additional});
+  $Res call(
+      {String main, String? ext, List<String>? additional, List<String>? sms});
 }
 
 /// @nodoc
@@ -47,12 +53,15 @@ class _$NumbersCopyWithImpl<$Res, $Val extends Numbers>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of Numbers
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? main = null,
     Object? ext = freezed,
     Object? additional = freezed,
+    Object? sms = freezed,
   }) {
     return _then(_value.copyWith(
       main: null == main
@@ -67,6 +76,10 @@ class _$NumbersCopyWithImpl<$Res, $Val extends Numbers>
           ? _value.additional
           : additional // ignore: cast_nullable_to_non_nullable
               as List<String>?,
+      sms: freezed == sms
+          ? _value.sms
+          : sms // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
     ) as $Val);
   }
 }
@@ -78,7 +91,8 @@ abstract class _$$NumbersImplCopyWith<$Res> implements $NumbersCopyWith<$Res> {
       __$$NumbersImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String main, String? ext, List<String>? additional});
+  $Res call(
+      {String main, String? ext, List<String>? additional, List<String>? sms});
 }
 
 /// @nodoc
@@ -89,12 +103,15 @@ class __$$NumbersImplCopyWithImpl<$Res>
       _$NumbersImpl _value, $Res Function(_$NumbersImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of Numbers
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? main = null,
     Object? ext = freezed,
     Object? additional = freezed,
+    Object? sms = freezed,
   }) {
     return _then(_$NumbersImpl(
       main: null == main
@@ -109,6 +126,10 @@ class __$$NumbersImplCopyWithImpl<$Res>
           ? _value._additional
           : additional // ignore: cast_nullable_to_non_nullable
               as List<String>?,
+      sms: freezed == sms
+          ? _value._sms
+          : sms // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
     ));
   }
 }
@@ -118,8 +139,12 @@ class __$$NumbersImplCopyWithImpl<$Res>
 @JsonSerializable(fieldRename: FieldRename.snake)
 class _$NumbersImpl implements _Numbers {
   const _$NumbersImpl(
-      {required this.main, this.ext, final List<String>? additional})
-      : _additional = additional;
+      {required this.main,
+      this.ext,
+      final List<String>? additional,
+      final List<String>? sms})
+      : _additional = additional,
+        _sms = sms;
 
   factory _$NumbersImpl.fromJson(Map<String, dynamic> json) =>
       _$$NumbersImplFromJson(json);
@@ -138,9 +163,19 @@ class _$NumbersImpl implements _Numbers {
     return EqualUnmodifiableListView(value);
   }
 
+  final List<String>? _sms;
+  @override
+  List<String>? get sms {
+    final value = _sms;
+    if (value == null) return null;
+    if (_sms is EqualUnmodifiableListView) return _sms;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
   @override
   String toString() {
-    return 'Numbers(main: $main, ext: $ext, additional: $additional)';
+    return 'Numbers(main: $main, ext: $ext, additional: $additional, sms: $sms)';
   }
 
   @override
@@ -151,15 +186,22 @@ class _$NumbersImpl implements _Numbers {
             (identical(other.main, main) || other.main == main) &&
             (identical(other.ext, ext) || other.ext == ext) &&
             const DeepCollectionEquality()
-                .equals(other._additional, _additional));
+                .equals(other._additional, _additional) &&
+            const DeepCollectionEquality().equals(other._sms, _sms));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
-      runtimeType, main, ext, const DeepCollectionEquality().hash(_additional));
+      runtimeType,
+      main,
+      ext,
+      const DeepCollectionEquality().hash(_additional),
+      const DeepCollectionEquality().hash(_sms));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Numbers
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$NumbersImplCopyWith<_$NumbersImpl> get copyWith =>
@@ -177,7 +219,8 @@ abstract class _Numbers implements Numbers {
   const factory _Numbers(
       {required final String main,
       final String? ext,
-      final List<String>? additional}) = _$NumbersImpl;
+      final List<String>? additional,
+      final List<String>? sms}) = _$NumbersImpl;
 
   factory _Numbers.fromJson(Map<String, dynamic> json) = _$NumbersImpl.fromJson;
 
@@ -188,7 +231,12 @@ abstract class _Numbers implements Numbers {
   @override
   List<String>? get additional;
   @override
-  @JsonKey(ignore: true)
+  List<String>? get sms;
+
+  /// Create a copy of Numbers
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$NumbersImplCopyWith<_$NumbersImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -204,8 +252,12 @@ mixin _$Balance {
   double? get creditLimit => throw _privateConstructorUsedError;
   String? get currency => throw _privateConstructorUsedError;
 
+  /// Serializes this Balance to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of Balance
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $BalanceCopyWith<Balance> get copyWith => throw _privateConstructorUsedError;
 }
 
@@ -231,6 +283,8 @@ class _$BalanceCopyWithImpl<$Res, $Val extends Balance>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of Balance
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -282,6 +336,8 @@ class __$$BalanceImplCopyWithImpl<$Res>
       _$BalanceImpl _value, $Res Function(_$BalanceImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of Balance
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -349,12 +405,14 @@ class _$BalanceImpl implements _Balance {
                 other.currency == currency));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode =>
       Object.hash(runtimeType, balanceType, amount, creditLimit, currency);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Balance
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$BalanceImplCopyWith<_$BalanceImpl> get copyWith =>
@@ -385,8 +443,11 @@ abstract class _Balance implements Balance {
   double? get creditLimit;
   @override
   String? get currency;
+
+  /// Create a copy of Balance
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$BalanceImplCopyWith<_$BalanceImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

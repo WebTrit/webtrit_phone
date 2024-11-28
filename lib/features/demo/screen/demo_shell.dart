@@ -22,11 +22,15 @@ class DemoShell extends StatefulWidget {
 }
 
 class _DemoShellState extends State<DemoShell> with RouteAware {
-  late final _demoActionButtonController = DemoActionOverlayController(context);
+  late final DemoActionOverlay _actionOverlay = DemoActionOverlay(
+    screenSize: MediaQuery.of(context).size,
+    safePadding: MediaQuery.of(context).padding,
+    stickyPadding: const EdgeInsets.all(8),
+  );
 
   @override
   void dispose() {
-    _demoActionButtonController.removeAllOverlay();
+    _actionOverlay.remove();
     super.dispose();
   }
 
@@ -52,18 +56,23 @@ class _DemoShellState extends State<DemoShell> with RouteAware {
   }
 
   void _listenActionsChanging(BuildContext context, DemoCubitState state) {
-    _demoActionButtonController.hideAllOverlay();
-    for (var it in state.flavorActions) {
-      _demoActionButtonController.addOverlay(
-        id: it.url,
-        child: DemoActionButton(
-          title: it.title,
-          description: it.description,
-        ),
-        onTap: () => context.router.push(DemoWebPageRoute(
-          initialUrl: Uri.parse(it.url),
-        )),
-      );
+    final it = state.actions[state.flavor]?.action.firstOrNull;
+    if (it == null || !state.enable) {
+      _actionOverlay.remove();
+      return;
     }
+    _actionOverlay.remove();
+    _actionOverlay.insert(
+      context: context,
+      child: DemoActionButton(
+        title: it.title,
+        description: it.description,
+      ),
+      onTap: () => context.router.push(
+        DemoWebPageRoute(
+          initialUrl: Uri.parse(it.url),
+        ),
+      ),
+    );
   }
 }

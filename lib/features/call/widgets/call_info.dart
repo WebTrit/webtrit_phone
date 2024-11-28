@@ -7,10 +7,13 @@ import 'package:clock/clock.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 
+import '../extensions/extensions.dart';
+import '../models/models.dart';
+
 class CallInfo extends StatefulWidget {
   const CallInfo({
     super.key,
-    required this.transferProcessing,
+    required this.transfering,
     required this.requestToAttendedTransfer,
     required this.inviteToAttendedTransfer,
     required this.isIncoming,
@@ -18,9 +21,11 @@ class CallInfo extends StatefulWidget {
     required this.username,
     this.acceptedTime,
     this.color,
+    this.activeCallStatus,
+    required this.callStatus,
   });
 
-  final bool transferProcessing;
+  final bool transfering;
   final bool requestToAttendedTransfer;
   final bool inviteToAttendedTransfer;
   final bool isIncoming;
@@ -28,6 +33,10 @@ class CallInfo extends StatefulWidget {
   final String username;
   final DateTime? acceptedTime;
   final Color? color;
+  final ActiveCallStatus? activeCallStatus;
+
+// TODO(Serdun): Rename class to better represent the actual data it holds
+  final CallStatus callStatus;
 
   @override
   State<CallInfo> createState() => _CallInfoState();
@@ -89,8 +98,12 @@ class _CallInfoState extends State<CallInfo> {
     final themeData = Theme.of(context);
     final textTheme = themeData.textTheme;
 
+    final statusStyle = textTheme.labelLarge!.copyWith(color: themeData.colorScheme.surface);
+
     final String statusMessage;
-    if (duration == null) {
+    if (widget.callStatus != CallStatus.ready) {
+      statusMessage = widget.callStatus.l10n(context);
+    } else if (duration == null) {
       if (widget.inviteToAttendedTransfer) {
         statusMessage = context.l10n.call_description_inviteToAttendedTransfer;
       } else if (widget.requestToAttendedTransfer) {
@@ -100,7 +113,7 @@ class _CallInfoState extends State<CallInfo> {
       } else {
         statusMessage = context.l10n.call_description_outgoing;
       }
-    } else if (widget.transferProcessing) {
+    } else if (widget.transfering) {
       statusMessage = context.l10n.call_description_transferProcessing;
     } else if (widget.held) {
       statusMessage = context.l10n.call_description_held;
@@ -114,6 +127,8 @@ class _CallInfoState extends State<CallInfo> {
           widget.username,
           style: textTheme.displaySmall!.copyWith(color: widget.color),
           textAlign: TextAlign.center,
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
         ),
         Text(
           statusMessage,
@@ -125,6 +140,15 @@ class _CallInfoState extends State<CallInfo> {
           ),
         ),
         const SizedBox(height: 10),
+        if (widget.activeCallStatus != null)
+          Padding(
+            padding: const EdgeInsets.only(top: 8),
+            child: Text(
+              widget.activeCallStatus!.l10n(context),
+              style: statusStyle,
+              textAlign: TextAlign.center,
+            ),
+          ),
       ],
     );
   }

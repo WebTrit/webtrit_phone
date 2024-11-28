@@ -12,9 +12,7 @@ class MockFavoritesBloc extends MockBloc<FavoritesEvent, FavoritesState> impleme
     whenListen(
       mock,
       const Stream<FavoritesState>.empty(),
-      initialState: const FavoritesState(
-        favorites: dFavorites,
-      ),
+      initialState: FavoritesState(favorites: dFavorites),
     );
     return mock;
   }

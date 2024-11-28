@@ -24,8 +24,12 @@ mixin _$DemoCallToActionsParam {
   String get email => throw _privateConstructorUsedError;
   String get tab => throw _privateConstructorUsedError;
 
+  /// Serializes this DemoCallToActionsParam to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of DemoCallToActionsParam
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $DemoCallToActionsParamCopyWith<DemoCallToActionsParam> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -50,6 +54,8 @@ class _$DemoCallToActionsParamCopyWithImpl<$Res,
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of DemoCallToActionsParam
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -91,6 +97,8 @@ class __$$DemoCallToActionsParamImplCopyWithImpl<$Res>
       $Res Function(_$DemoCallToActionsParamImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of DemoCallToActionsParam
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -138,11 +146,13 @@ class _$DemoCallToActionsParamImpl implements _DemoCallToActionsParam {
             (identical(other.tab, tab) || other.tab == tab));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, email, tab);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of DemoCallToActionsParam
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$DemoCallToActionsParamImplCopyWith<_$DemoCallToActionsParamImpl>
@@ -169,8 +179,11 @@ abstract class _DemoCallToActionsParam implements DemoCallToActionsParam {
   String get email;
   @override
   String get tab;
+
+  /// Create a copy of DemoCallToActionsParam
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$DemoCallToActionsParamImplCopyWith<_$DemoCallToActionsParamImpl>
       get copyWith => throw _privateConstructorUsedError;
 }

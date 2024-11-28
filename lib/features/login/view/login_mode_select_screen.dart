@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
+import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
@@ -16,11 +17,13 @@ class LoginModeSelectScreen extends StatelessWidget {
   const LoginModeSelectScreen({
     super.key,
     this.appGreeting,
+    required this.actions,
     this.style,
   });
 
   final String? appGreeting;
 
+  final List<LoginModeAction> actions;
   final LoginModeSelectScreenStyle? style;
 
   @override
@@ -34,8 +37,8 @@ class LoginModeSelectScreen extends StatelessWidget {
     return BlocBuilder<LoginCubit, LoginState>(
       buildWhen: (previous, current) => previous.processing != current.processing,
       builder: (context, state) {
+        // TODO(Serdun): Looks like we can move logic with enabling demo mode to the app config
         final isDemoModeEnabled = context.read<LoginCubit>().isDemoModeEnabled;
-        final isCredentialsRequestUrlEnabled = context.read<LoginCubit>().isCredentialsRequestUrlEnabled;
 
         return Scaffold(
           extendBodyBehindAppBar: true,
@@ -50,9 +53,7 @@ class LoginModeSelectScreen extends StatelessWidget {
                         color: themeData.colorScheme.onPrimary,
                       ),
                       tooltip: context.l10n.login_ButtonTooltip_signInToYourInstance,
-                      onPressed: state.processing
-                          ? null
-                          : () => context.read<LoginCubit>().loginModeSelectSubmitted(LoginMode.customCore),
+                      onPressed: state.processing ? null : () => _onCustomCoreLogin(context),
                     ),
                   ]
                 : null,
@@ -70,33 +71,39 @@ class LoginModeSelectScreen extends StatelessWidget {
                   text: appGreeting,
                 ),
                 const Spacer(),
-                ElevatedButton(
-                  onPressed: state.processing
-                      ? null
-                      : () => context
-                          .read<LoginCubit>()
-                          .loginModeSelectSubmitted(isDemoModeEnabled ? LoginMode.demoCore : LoginMode.core),
-                  style: elevatedButtonStyles?.getStyle(localStyle?.signUpTypeButton),
-                  child: !state.processing
-                      ? Text(isDemoModeEnabled
-                          ? context.l10n.login_Button_signUpToDemoInstance
-                          : context.l10n.login_Button_signIn)
-                      : SizedCircularProgressIndicator(
-                          size: 16,
-                          strokeWidth: 2,
-                          color: elevatedButtonStyles?.primary?.foregroundColor?.resolve({}),
-                        ),
-                ),
-                if (isCredentialsRequestUrlEnabled)
-                  TextButton(
-                    onPressed: () => context.read<LoginCubit>().loginModeSelectSubmitted(LoginMode.credentialsRequest),
-                    child: Text(context.l10n.login_requestCredentials_button),
-                  ),
+                ...actions.map((button) {
+                  return ElevatedButton(
+                    onPressed: state.processing ? null : () => _onActionItemTap(context, isDemoModeEnabled, button),
+                    style: elevatedButtonStyles?.getStyle(localStyle?.signUpTypeButton),
+                    child: !state.processing || button.flavor != LoginFlavor.login
+                        ? Text(context.parseL10n(button.titleL10n))
+                        : SizedCircularProgressIndicator(
+                            size: 16,
+                            strokeWidth: 2,
+                            color: elevatedButtonStyles?.primary?.foregroundColor?.resolve({}),
+                          ),
+                  );
+                }),
               ],
             ),
           ),
         );
       },
     );
+  }
+
+  void _onActionItemTap(BuildContext context, bool demo, LoginModeAction button) {
+    switch (button.flavor) {
+      case LoginFlavor.login:
+        context.read<LoginCubit>().loginModeSelectSubmitted(demo ? LoginMode.demoCore : LoginMode.core);
+        break;
+      case LoginFlavor.embedded:
+        context.read<LoginCubit>().setCustomLogin((button as LoginEmbeddedModeButton).customLoginFeature);
+        break;
+    }
+  }
+
+  void _onCustomCoreLogin(BuildContext context) {
+    context.read<LoginCubit>().loginModeSelectSubmitted(LoginMode.customCore);
   }
 }

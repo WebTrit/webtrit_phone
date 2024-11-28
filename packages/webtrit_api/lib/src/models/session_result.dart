@@ -17,11 +17,15 @@ class SessionResult with _$SessionResult {
     String? fromEmail,
     String? tenantId,
   }) = SessionOtpProvisional;
+
   @JsonSerializable(fieldRename: FieldRename.snake)
   const factory SessionResult.token({
     required String token,
+    // Maintain backward compatibility by providing a default null value for userId, as older core versions do not utilize this field.
+    String? userId,
     String? tenantId,
   }) = SessionToken;
+
   @JsonSerializable(fieldRename: FieldRename.snake)
   const factory SessionResult.data({
     required Map<String, dynamic> data,

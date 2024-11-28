@@ -6,6 +6,8 @@ const kSignalingClientConnectionTimeout = Duration(seconds: 10);
 const kSignalingClientReconnectDelay = Duration(seconds: 3);
 const kSignalingClientFastReconnectDelay = Duration(seconds: 1);
 
+const kPeerConnectionRetrieveTimeout = Duration(seconds: 5);
+
 const kCompatibilityVerifyRepeatDelay = Duration(seconds: 2);
 
 const kDebounceDuration = Duration(milliseconds: 275);

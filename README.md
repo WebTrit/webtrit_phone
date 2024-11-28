@@ -6,7 +6,6 @@ WebTrit Phone application.
 
 ### Dart define
 
-* `WEBTRIT_APP_ID_SUFFIX` - suffix added to `applicationId` (_with value `com.webtrit.app`_) on Android and to `CFBundleIdentifier` (_with value `com.webtrit.app`_) on iOS (_default is empty_)
 * `WEBTRIT_APP_LINK_DOMAIN` - domain used to set up [Android app links](https://docs.flutter.dev/cookbook/navigation/set-up-app-links) and [iOS universal links](https://docs.flutter.dev/cookbook/navigation/set-up-universal-links) (to generate the required `.well-known` files, use the `assetlinks-generate` command from [webtrit_phone_tools](https://github.com/WebTrit/webtrit_phone_tools)
 * `WEBTRIT_APP_NAME` (_default **WebTrit**_)
 * `WEBTRIT_APP_DESCRIPTION` (_default is empty_)
@@ -95,8 +94,16 @@ Follow these steps according to your specific activity to manage the localizatio
 1. Commit the changes.
 
 
-## Theme Configuration
-For the theme configuration documentation, please refer to the [Theme Configuration](doc/theme_config/index.md)  .
+## Application Configuration
+
+### 1. Theme Settings
+For guidance on configuring themes in your application, refer to the [Theme Settings](doc/theme_config/index.md) documentation.
+
+### 2. Custom Login Setup
+To learn how to configure and customize the login process, please consult the [Custom Login Setup](doc/custom_login/index.md) guide.
+
+### 3. Custom Bottom Menu
+To configure the bottom menu according to your application’s needs, refer to the [Bottom Menu Configuration](doc/bottom_menu_config/index.md) guide. 
 
 ## Make commands
 * `run` - Run the Flutter application

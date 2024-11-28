@@ -36,63 +36,87 @@ class AboutScreen extends StatelessWidget {
           appBar: AppBar(
             title: Text(context.l10n.settings_ListViewTileTitle_about),
           ),
-          body: Center(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                if (logo != null)
-                  logo.svg(
-                    height: logoHeight,
-                  ),
-                Text(
-                  state.appName,
-                  style: themeData.textTheme.displaySmall,
-                ),
-                Text(state.packageName),
-                SizedBox(
-                  height: delimiterHeight,
-                ),
-                Text(
-                  context.l10n.settings_AboutText_AppVersion,
-                ),
-                Text(
-                  state.appVersion,
-                  style: themeData.textTheme.titleLarge,
-                ),
-                SizedBox(
-                  height: delimiterHeight,
-                ),
-                Text(
-                  context.l10n.settings_AboutText_StoreVersion,
-                ),
-                Text(
-                  state.storeVersion,
-                  style: themeData.textTheme.titleLarge,
-                ),
-                SizedBox(
-                  height: delimiterHeight,
-                ),
-                Text(
-                  state.coreUrl.toString(),
-                  textAlign: TextAlign.center,
-                ),
-                Stack(
-                  alignment: AlignmentDirectional.center,
-                  children: [
-                    Text(
-                      state.progress
-                          ? ''
-                          : (state.coreVersion ?? context.l10n.settings_AboutText_CoreVersionUndefined).toString(),
-                      style: themeData.textTheme.bodyMedium,
+          body: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (logo != null)
+                    logo.svg(
+                      height: logoHeight,
                     ),
-                    if (state.progress)
-                      SizedCircularProgressIndicator(
-                        size: themeData.textTheme.bodyMedium!.fontSize!,
-                        strokeWidth: 2,
+                  Text(
+                    state.appName,
+                    style: themeData.textTheme.displaySmall,
+                  ),
+                  Text(state.packageName),
+                  SizedBox(
+                    height: delimiterHeight,
+                  ),
+                  Text(
+                    context.l10n.settings_AboutText_AppVersion,
+                  ),
+                  Text(
+                    state.appVersion,
+                    style: themeData.textTheme.titleLarge,
+                  ),
+                  SizedBox(
+                    height: delimiterHeight,
+                  ),
+                  Text(
+                    context.l10n.settings_AboutText_StoreVersion,
+                  ),
+                  Text(
+                    state.storeVersion,
+                    style: themeData.textTheme.titleLarge,
+                  ),
+                  SizedBox(
+                    height: delimiterHeight,
+                  ),
+                  CopyToClipboard(
+                    data: state.fcmPushToken,
+                    child: Text(
+                      context.l10n.settings_AboutText_FCMPushNotificationToken,
+                    ),
+                  ),
+                  CopyToClipboard(
+                    data: state.fcmPushToken,
+                    child: Text(
+                      state.fcmPushToken ?? '-',
+                      style: themeData.textTheme.labelSmall,
+                      textAlign: TextAlign.center,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  SizedBox(
+                    height: delimiterHeight,
+                  ),
+                  CopyToClipboard(
+                    data: state.coreUrl.toString(),
+                    child: Text(
+                      state.coreUrl.toString(),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  Stack(
+                    alignment: AlignmentDirectional.center,
+                    children: [
+                      Text(
+                        state.progress
+                            ? ''
+                            : (state.coreVersion ?? context.l10n.settings_AboutText_CoreVersionUndefined).toString(),
+                        style: themeData.textTheme.bodyMedium,
                       ),
-                  ],
-                ),
-              ],
+                      if (state.progress)
+                        SizedCircularProgressIndicator(
+                          size: themeData.textTheme.bodyMedium!.fontSize!,
+                          strokeWidth: 2,
+                        ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         );

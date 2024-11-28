@@ -21,6 +21,7 @@ class ThemeWidgetConfig with _$ThemeWidgetConfig {
     TextWidgetConfig? text,
     DialogWidgetConfig? dialog,
     ActionPadWidgetConfig? actionPad,
+    @Default(StatusesWidgetConfig()) StatusesWidgetConfig statuses,
   }) = _ThemeWidgetConfig;
 
   factory ThemeWidgetConfig.fromJson(Map<String, dynamic> json) => _$ThemeWidgetConfigFromJson(json);
@@ -269,6 +270,7 @@ class DialogWidgetConfig with _$DialogWidgetConfig {
   @themeJsonSerializable
   const factory DialogWidgetConfig({
     ConfirmDialogWidgetConfig? confirmDialog,
+    @Default(SnackBarWidgetConfig()) SnackBarWidgetConfig snackBar,
   }) = _DialogWidgetConfig;
 
   factory DialogWidgetConfig.fromJson(Map<String, dynamic> json) => _$DialogWidgetConfigFromJson(json);
@@ -288,6 +290,20 @@ class ConfirmDialogWidgetConfig with _$ConfirmDialogWidgetConfig {
 }
 
 @freezed
+class SnackBarWidgetConfig with _$SnackBarWidgetConfig {
+  // ignore: invalid_annotation_target
+  @themeJsonSerializable
+  const factory SnackBarWidgetConfig({
+    @Default(Color(0xFF75B943)) Color successBackgroundColor,
+    @Default(Color(0xFFE74C3C)) Color errorBackgroundColor,
+    @Default(Color(0xFF494949)) Color infoBackgroundColor,
+    @Default(Color(0xFFF95A14)) Color warningBackgroundColor,
+  }) = _SnackBarWidgetConfig;
+
+  factory SnackBarWidgetConfig.fromJson(Map<String, dynamic> json) => _$SnackBarWidgetConfigFromJson(json);
+}
+
+@freezed
 class ActionPadWidgetConfig with _$ActionPadWidgetConfig {
   // ignore: invalid_annotation_target
   @themeJsonSerializable
@@ -298,4 +314,45 @@ class ActionPadWidgetConfig with _$ActionPadWidgetConfig {
   }) = _ActionPadWidgetConfig;
 
   factory ActionPadWidgetConfig.fromJson(Map<String, dynamic> json) => _$ActionPadWidgetConfigFromJson(json);
+}
+
+@freezed
+class StatusesWidgetConfig with _$StatusesWidgetConfig {
+  // ignore: invalid_annotation_target
+  @themeJsonSerializable
+  const factory StatusesWidgetConfig({
+    @Default(RegistrationStatusesWidgetConfig()) RegistrationStatusesWidgetConfig registrationStatuses,
+    @Default(CallStatusesWidgetConfig()) CallStatusesWidgetConfig callStatuses,
+  }) = _StatusesWidgetConfig;
+
+  factory StatusesWidgetConfig.fromJson(Map<String, dynamic> json) => _$StatusesWidgetConfigFromJson(json);
+}
+
+@freezed
+class RegistrationStatusesWidgetConfig with _$RegistrationStatusesWidgetConfig {
+  // ignore: invalid_annotation_target
+  @themeJsonSerializable
+  const factory RegistrationStatusesWidgetConfig({
+    @Default(Color(0xFF75B943)) Color online,
+    @Default(Color(0xFFEEF3F6)) Color offline,
+  }) = _RegistrationStatusesWidgetConfig;
+
+  factory RegistrationStatusesWidgetConfig.fromJson(Map<String, dynamic> json) =>
+      _$RegistrationStatusesWidgetConfigFromJson(json);
+}
+
+@freezed
+class CallStatusesWidgetConfig with _$CallStatusesWidgetConfig {
+  // ignore: invalid_annotation_target
+  @themeJsonSerializable
+  const factory CallStatusesWidgetConfig({
+    @Default(Color(0xFFE74C3C)) Color connectivityNone,
+    @Default(Color(0xFFE74C3C)) Color connectError,
+    @Default(Color(0xFF494949)) Color appUnregistered,
+    @Default(Color(0xFFE74C3C)) Color connectIssue,
+    @Default(Color(0xFF123752)) Color inProgress,
+    @Default(Color(0xFF75B943)) Color ready,
+  }) = _CallStatusesWidgetConfig;
+
+  factory CallStatusesWidgetConfig.fromJson(Map<String, dynamic> json) => _$CallStatusesWidgetConfigFromJson(json);
 }

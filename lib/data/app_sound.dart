@@ -5,7 +5,7 @@ import 'package:webtrit_phone/extensions/extensions.dart';
 class AppSound {
   static late AppSound _instance;
 
-  static Future<void> init({
+  static Future<AppSound> init({
     required String outgoingCallRingAsset,
     int outgoingCallRingRepeat = 50,
   }) async {
@@ -14,6 +14,7 @@ class AppSound {
     final ringSoundId = await sound.loadAsset(outgoingCallRingAsset);
 
     _instance = AppSound._(sound, outgoingCallRingRepeat, ringSoundId);
+    return _instance;
   }
 
   factory AppSound() {

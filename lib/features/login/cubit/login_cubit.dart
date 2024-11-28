@@ -11,6 +11,7 @@ import 'package:webtrit_phone/app/core_version.dart';
 import 'package:webtrit_phone/app/notifications/notifications.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';
+import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 
 import '../login.dart';
@@ -94,9 +95,17 @@ class LoginCubit extends Cubit<LoginState> {
 
     final demo = mode == LoginMode.demoCore;
     final coreUrl = demo ? demoCoreUrlFromEnvironment : coreUrlFromEnvironment;
-    if (coreUrl != null && mode != LoginMode.credentialsRequest) {
+
+    if (coreUrl != null) {
       await _verifyCoreVersionAndRetrieveSupportedLoginTypesSubmitted(coreUrl, defaultTenantId, demo);
     }
+  }
+
+  void setCustomLogin(LoginEmbedded login) {
+    emit(state.copyWith(
+      embedded: login,
+      coreUrl: isDemoModeEnabled ? demoCoreUrlFromEnvironment : coreUrlFromEnvironment,
+    ));
   }
 
   // LoginCoreUrlAssign
@@ -130,6 +139,12 @@ class LoginCubit extends Cubit<LoginState> {
   void credentialsRequestUrlAssignBack() async {
     emit(state.copyWith(
       mode: null,
+    ));
+  }
+
+  void embeddedPageAssignBack() async {
+    emit(state.copyWith(
+      embedded: null,
     ));
   }
 
@@ -210,6 +225,8 @@ class LoginCubit extends Cubit<LoginState> {
       emit(state.copyWith(
         tenantId: sessionToken.tenantId ?? state.tenantId!,
         token: sessionToken.token,
+        // Use an empty user ID as a fallback for outdated core versions that do not support this field.
+        userId: sessionToken.userId ?? '',
       ));
     } catch (e) {
       emit(state.copyWith(processing: false));
@@ -264,15 +281,21 @@ class LoginCubit extends Cubit<LoginState> {
           client, state.passwordSigninUserRefInput.value, state.passwordSigninPasswordInput.value);
 
       // does not set processing to false to hold processing widgets state during navigation
-      emit(state.copyWith(
-        tenantId: sessionToken.tenantId ?? state.tenantId!,
-        token: sessionToken.token,
-      ));
+      loginSigninSubmitted(sessionToken);
     } catch (e) {
       emit(state.copyWith(processing: false));
 
       notificationsBloc.add(NotificationsSubmitted(LoginErrorNotification(e)));
     }
+  }
+
+  void loginSigninSubmitted(SessionToken token) async {
+    emit(state.copyWith(
+      tenantId: token.tenantId ?? state.tenantId ?? defaultTenantId,
+      token: token.token,
+      // Use an empty user ID as a fallback for outdated core versions that do not support this field.
+      userId: token.userId ?? '',
+    ));
   }
 
   void loginPasswordSigninBack() async {
@@ -313,6 +336,8 @@ class LoginCubit extends Cubit<LoginState> {
         emit(state.copyWith(
           tenantId: result.tenantId ?? state.tenantId!,
           token: result.token,
+          // Use an empty user ID as a fallback for outdated core versions that do not support this field.
+          userId: result.userId ?? '',
         ));
       } else {
         throw UnimplementedError();
@@ -344,12 +369,17 @@ class LoginCubit extends Cubit<LoginState> {
     try {
       final client = createWebtritApiClient(state.coreUrl!, state.tenantId!);
       final sessionToken = await _verifySessionOtp(
-          client, state.signupSessionOtpProvisionalWithDateTime!.$1, state.signupCodeInput.value);
+        client,
+        state.signupSessionOtpProvisionalWithDateTime!.$1,
+        state.signupCodeInput.value,
+      );
 
       // does not set processing to false to hold processing widgets state during navigation
       emit(state.copyWith(
         tenantId: sessionToken.tenantId ?? state.tenantId!,
         token: sessionToken.token,
+        // Use an empty user ID as a fallback for outdated core versions that do not support this field.
+        userId: sessionToken.userId ?? '',
       ));
     } catch (e) {
       notificationsBloc.add(NotificationsSubmitted(LoginErrorNotification(e)));

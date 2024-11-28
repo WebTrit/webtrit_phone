@@ -50,10 +50,11 @@ class EnvironmentConfig {
   );
 
   static const APP_GREETING__NAME = 'WEBTRIT_APP_GREETING';
-  static const APP_GREETING = String.fromEnvironment(
-    APP_GREETING__NAME,
-    defaultValue: 'WebTrit',
-  );
+  static const APP_GREETING = bool.hasEnvironment(APP_GREETING__NAME)
+      ? String.fromEnvironment(
+          APP_GREETING__NAME,
+        )
+      : null;
 
   static const APP_DESCRIPTION__NAME = 'WEBTRIT_APP_DESCRIPTION';
   static const APP_DESCRIPTION = bool.hasEnvironment(APP_HELP_URL__NAME)
@@ -76,13 +77,6 @@ class EnvironmentConfig {
         )
       : null;
 
-  static const APP_TERMS_AND_CONDITIONS_URL__NAME = 'WEBTRIT_APP_TERMS_AND_CONDITIONS_URL';
-  static const APP_TERMS_AND_CONDITIONS_URL = bool.hasEnvironment(APP_TERMS_AND_CONDITIONS_URL__NAME)
-      ? String.fromEnvironment(
-          APP_TERMS_AND_CONDITIONS_URL__NAME,
-        )
-      : null;
-
   static const APP_CREDENTIALS_REQUEST_URL__NAME = 'WEBTRIT_APP_CREDENTIALS_REQUEST_URL';
   static const APP_CREDENTIALS_REQUEST_URL = bool.hasEnvironment(APP_CREDENTIALS_REQUEST_URL__NAME)
       ? String.fromEnvironment(
@@ -102,4 +96,30 @@ class EnvironmentConfig {
           FCM_VAPID_KEY__NAME,
         )
       : null;
+
+  static const CHAT_FEATURE_ENABLE__NAME = 'WEBTRIT_APP_CHAT_FEATURE_ENABLE';
+  static const CHAT_FEATURE_ENABLE = bool.fromEnvironment(
+    CHAT_FEATURE_ENABLE__NAME,
+    defaultValue: false,
+  );
+
+  static const CHAT_SERVICE_URL__NAME = 'WEBTRIT_APP_CHAT_SERVICE_URL';
+  static const CHAT_SERVICE_URL = bool.hasEnvironment(CHAT_SERVICE_URL__NAME)
+      ? String.fromEnvironment(
+          CHAT_SERVICE_URL__NAME,
+        )
+      : 'ws://localhost:4000/socket/websocket';
+
+  static const SMS_FEATURE_ENABLE__NAME = 'WEBTRIT_APP_SMS_FEATURE_ENABLE';
+  static const SMS_FEATURE_ENABLE = bool.fromEnvironment(
+    SMS_FEATURE_ENABLE__NAME,
+    defaultValue: false,
+  );
+
+  static const SMS_SERVICE_URL__NAME = 'WEBTRIT_APP_SMS_SERVICE_URL';
+  static const SMS_SERVICE_URL = bool.hasEnvironment(SMS_SERVICE_URL__NAME)
+      ? String.fromEnvironment(
+          SMS_SERVICE_URL__NAME,
+        )
+      : 'ws://localhost:4000/socket/websocket';
 }

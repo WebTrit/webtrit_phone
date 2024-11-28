@@ -35,6 +35,8 @@ mixin _$LoginState {
   )? get signupSessionOtpProvisionalWithDateTime =>
       throw _privateConstructorUsedError;
   String? get token => throw _privateConstructorUsedError;
+  String? get userId => throw _privateConstructorUsedError;
+  LoginEmbedded? get embedded => throw _privateConstructorUsedError;
   UrlInput get coreUrlInput => throw _privateConstructorUsedError;
   UserRefInput get otpSigninUserRefInput => throw _privateConstructorUsedError;
   CodeInput get otpSigninCodeInput => throw _privateConstructorUsedError;
@@ -45,7 +47,9 @@ mixin _$LoginState {
   EmailInput get signupEmailInput => throw _privateConstructorUsedError;
   CodeInput get signupCodeInput => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of LoginState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $LoginStateCopyWith<LoginState> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -72,6 +76,8 @@ abstract class $LoginStateCopyWith<$Res> {
         DateTime
       )? signupSessionOtpProvisionalWithDateTime,
       String? token,
+      String? userId,
+      LoginEmbedded? embedded,
       UrlInput coreUrlInput,
       UserRefInput otpSigninUserRefInput,
       CodeInput otpSigninCodeInput,
@@ -91,6 +97,8 @@ class _$LoginStateCopyWithImpl<$Res, $Val extends LoginState>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of LoginState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -103,6 +111,8 @@ class _$LoginStateCopyWithImpl<$Res, $Val extends LoginState>
     Object? passwordSigninPasswordInputObscureText = null,
     Object? signupSessionOtpProvisionalWithDateTime = freezed,
     Object? token = freezed,
+    Object? userId = freezed,
+    Object? embedded = freezed,
     Object? coreUrlInput = null,
     Object? otpSigninUserRefInput = null,
     Object? otpSigninCodeInput = null,
@@ -151,6 +161,14 @@ class _$LoginStateCopyWithImpl<$Res, $Val extends LoginState>
           ? _value.token
           : token // ignore: cast_nullable_to_non_nullable
               as String?,
+      userId: freezed == userId
+          ? _value.userId
+          : userId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      embedded: freezed == embedded
+          ? _value.embedded
+          : embedded // ignore: cast_nullable_to_non_nullable
+              as LoginEmbedded?,
       coreUrlInput: null == coreUrlInput
           ? _value.coreUrlInput
           : coreUrlInput // ignore: cast_nullable_to_non_nullable
@@ -207,6 +225,8 @@ abstract class _$$LoginStateImplCopyWith<$Res>
         DateTime
       )? signupSessionOtpProvisionalWithDateTime,
       String? token,
+      String? userId,
+      LoginEmbedded? embedded,
       UrlInput coreUrlInput,
       UserRefInput otpSigninUserRefInput,
       CodeInput otpSigninCodeInput,
@@ -224,6 +244,8 @@ class __$$LoginStateImplCopyWithImpl<$Res>
       _$LoginStateImpl _value, $Res Function(_$LoginStateImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of LoginState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -236,6 +258,8 @@ class __$$LoginStateImplCopyWithImpl<$Res>
     Object? passwordSigninPasswordInputObscureText = null,
     Object? signupSessionOtpProvisionalWithDateTime = freezed,
     Object? token = freezed,
+    Object? userId = freezed,
+    Object? embedded = freezed,
     Object? coreUrlInput = null,
     Object? otpSigninUserRefInput = null,
     Object? otpSigninCodeInput = null,
@@ -284,6 +308,14 @@ class __$$LoginStateImplCopyWithImpl<$Res>
           ? _value.token
           : token // ignore: cast_nullable_to_non_nullable
               as String?,
+      userId: freezed == userId
+          ? _value.userId
+          : userId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      embedded: freezed == embedded
+          ? _value.embedded
+          : embedded // ignore: cast_nullable_to_non_nullable
+              as LoginEmbedded?,
       coreUrlInput: null == coreUrlInput
           ? _value.coreUrlInput
           : coreUrlInput // ignore: cast_nullable_to_non_nullable
@@ -329,6 +361,8 @@ class _$LoginStateImpl implements _LoginState {
       this.passwordSigninPasswordInputObscureText = true,
       this.signupSessionOtpProvisionalWithDateTime,
       this.token,
+      this.userId,
+      this.embedded,
       this.coreUrlInput = const UrlInput.pure(),
       this.otpSigninUserRefInput = const UserRefInput.pure(),
       this.otpSigninCodeInput = const CodeInput.pure(),
@@ -374,6 +408,10 @@ class _$LoginStateImpl implements _LoginState {
   @override
   final String? token;
   @override
+  final String? userId;
+  @override
+  final LoginEmbedded? embedded;
+  @override
   @JsonKey()
   final UrlInput coreUrlInput;
   @override
@@ -397,7 +435,7 @@ class _$LoginStateImpl implements _LoginState {
 
   @override
   String toString() {
-    return 'LoginState(processing: $processing, mode: $mode, coreUrl: $coreUrl, tenantId: $tenantId, supportedLoginTypes: $supportedLoginTypes, otpSigninSessionOtpProvisionalWithDateTime: $otpSigninSessionOtpProvisionalWithDateTime, passwordSigninPasswordInputObscureText: $passwordSigninPasswordInputObscureText, signupSessionOtpProvisionalWithDateTime: $signupSessionOtpProvisionalWithDateTime, token: $token, coreUrlInput: $coreUrlInput, otpSigninUserRefInput: $otpSigninUserRefInput, otpSigninCodeInput: $otpSigninCodeInput, passwordSigninUserRefInput: $passwordSigninUserRefInput, passwordSigninPasswordInput: $passwordSigninPasswordInput, signupEmailInput: $signupEmailInput, signupCodeInput: $signupCodeInput)';
+    return 'LoginState(processing: $processing, mode: $mode, coreUrl: $coreUrl, tenantId: $tenantId, supportedLoginTypes: $supportedLoginTypes, otpSigninSessionOtpProvisionalWithDateTime: $otpSigninSessionOtpProvisionalWithDateTime, passwordSigninPasswordInputObscureText: $passwordSigninPasswordInputObscureText, signupSessionOtpProvisionalWithDateTime: $signupSessionOtpProvisionalWithDateTime, token: $token, userId: $userId, embedded: $embedded, coreUrlInput: $coreUrlInput, otpSigninUserRefInput: $otpSigninUserRefInput, otpSigninCodeInput: $otpSigninCodeInput, passwordSigninUserRefInput: $passwordSigninUserRefInput, passwordSigninPasswordInput: $passwordSigninPasswordInput, signupEmailInput: $signupEmailInput, signupCodeInput: $signupCodeInput)';
   }
 
   @override
@@ -426,6 +464,9 @@ class _$LoginStateImpl implements _LoginState {
                 other.signupSessionOtpProvisionalWithDateTime ==
                     signupSessionOtpProvisionalWithDateTime) &&
             (identical(other.token, token) || other.token == token) &&
+            (identical(other.userId, userId) || other.userId == userId) &&
+            (identical(other.embedded, embedded) ||
+                other.embedded == embedded) &&
             (identical(other.coreUrlInput, coreUrlInput) ||
                 other.coreUrlInput == coreUrlInput) &&
             (identical(other.otpSigninUserRefInput, otpSigninUserRefInput) ||
@@ -440,8 +481,7 @@ class _$LoginStateImpl implements _LoginState {
                     passwordSigninPasswordInput) &&
             (identical(other.signupEmailInput, signupEmailInput) ||
                 other.signupEmailInput == signupEmailInput) &&
-            (identical(other.signupCodeInput, signupCodeInput) ||
-                other.signupCodeInput == signupCodeInput));
+            (identical(other.signupCodeInput, signupCodeInput) || other.signupCodeInput == signupCodeInput));
   }
 
   @override
@@ -456,6 +496,8 @@ class _$LoginStateImpl implements _LoginState {
       passwordSigninPasswordInputObscureText,
       signupSessionOtpProvisionalWithDateTime,
       token,
+      userId,
+      embedded,
       coreUrlInput,
       otpSigninUserRefInput,
       otpSigninCodeInput,
@@ -464,7 +506,9 @@ class _$LoginStateImpl implements _LoginState {
       signupEmailInput,
       signupCodeInput);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of LoginState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$LoginStateImplCopyWith<_$LoginStateImpl> get copyWith =>
@@ -488,6 +532,8 @@ abstract class _LoginState implements LoginState {
         DateTime
       )? signupSessionOtpProvisionalWithDateTime,
       final String? token,
+      final String? userId,
+      final LoginEmbedded? embedded,
       final UrlInput coreUrlInput,
       final UserRefInput otpSigninUserRefInput,
       final CodeInput otpSigninCodeInput,
@@ -517,6 +563,10 @@ abstract class _LoginState implements LoginState {
   @override
   String? get token;
   @override
+  String? get userId;
+  @override
+  LoginEmbedded? get embedded;
+  @override
   UrlInput get coreUrlInput;
   @override
   UserRefInput get otpSigninUserRefInput;
@@ -530,8 +580,11 @@ abstract class _LoginState implements LoginState {
   EmailInput get signupEmailInput;
   @override
   CodeInput get signupCodeInput;
+
+  /// Create a copy of LoginState
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$LoginStateImplCopyWith<_$LoginStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

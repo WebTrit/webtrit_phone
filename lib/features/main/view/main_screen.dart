@@ -10,38 +10,15 @@ class MainScreen extends StatelessWidget {
   const MainScreen({
     Key? key,
     required this.body,
-    required this.navigationBarFlavor,
-    this.onNavigationBarTap,
+    required this.bottomNavigationBar,
   }) : super(key: key ?? const ValueKey<String>('MainScreen'));
 
   final Widget body;
-  final MainFlavor navigationBarFlavor;
-  final ValueChanged<MainFlavor>? onNavigationBarTap;
+  final BottomNavigationBar bottomNavigationBar;
 
   @override
   Widget build(BuildContext context) {
-    final themeData = Theme.of(context);
-    final scaffold = Scaffold(
-      body: body,
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        selectedLabelStyle: themeData.textTheme.bodySmall,
-        unselectedLabelStyle: themeData.textTheme.bodySmall,
-        currentIndex: navigationBarFlavor.index,
-        onTap: (index) {
-          final onNavigationBarTap = this.onNavigationBarTap;
-          if (onNavigationBarTap != null) {
-            onNavigationBarTap(MainFlavor.values[index]);
-          }
-        },
-        items: MainFlavor.values.map((flavor) {
-          return BottomNavigationBarItem(
-            icon: Icon(flavor.icon),
-            label: flavor.labelL10n(context),
-          );
-        }).toList(),
-      ),
-    );
+    final scaffold = Scaffold(body: body, bottomNavigationBar: bottomNavigationBar);
 
     return BlocListener<MainBloc, MainState>(
       listener: (context, state) async {

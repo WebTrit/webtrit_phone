@@ -4,6 +4,8 @@ import 'package:logging/logging.dart';
 
 import 'package:webtrit_api/webtrit_api.dart';
 
+import 'package:webtrit_phone/data/data.dart';
+
 export 'package:webtrit_api/webtrit_api.dart'
     show Balance, BalanceType, BillingModel, Numbers, UserInfo, $UserInfoCopyWith;
 
@@ -11,10 +13,12 @@ final _logger = Logger('UserRepository');
 
 class UserRepository {
   UserRepository({
+    SessionCleanupWorker? sessionCleanupWorker,
     required WebtritApiClient webtritApiClient,
     required String token,
     bool periodicPolling = true,
-  })  : _webtritApiClient = webtritApiClient,
+  })  : _sessionCleanupWorker = sessionCleanupWorker,
+        _webtritApiClient = webtritApiClient,
         _token = token,
         _periodicPolling = periodicPolling {
     _controller = StreamController<UserInfo>.broadcast(
@@ -28,7 +32,11 @@ class UserRepository {
   final String _token;
   final bool _periodicPolling;
 
+  final SessionCleanupWorker? _sessionCleanupWorker;
+
   late StreamController<UserInfo> _controller;
+  // TODO: Remove useless variable _listenedCounter
+  // *The [onListen] callback is called when the first listener is subscribed, and the [onCancel] is called when there are no longer any active listeners. If a listener is added again later, after the [onCancel] was called, the [onListen] will be called again.*
   late int _listenedCounter;
   Timer? _periodicTimer;
 
@@ -70,7 +78,17 @@ class UserRepository {
   }
 
   Future<void> logout() async {
-    await _webtritApiClient.deleteSession(_token);
+    try {
+      await _webtritApiClient.deleteSession(
+        _token,
+        options: RequestOptions.withExtraRetries(),
+      );
+    } catch (e) {
+      if (e is RequestFailure && e.statusCode == null) {
+        _sessionCleanupWorker?.saveFailedSession(e.url, token: _token);
+      }
+      rethrow;
+    }
   }
 
   Future<void> delete() async {

@@ -42,7 +42,6 @@ if (project.hasProperty('dart-defines')) {
 }
 
 def dartDefine = [
-        WEBTRIT_APP_ID_SUFFIX  : projectPropertyDartDefines['WEBTRIT_APP_ID_SUFFIX'] ?: '',
         WEBTRIT_APP_LINK_DOMAIN: projectPropertyDartDefines['WEBTRIT_APP_LINK_DOMAIN'] ?: 'app.webtrit.com',
         WEBTRIT_APP_NAME       : projectPropertyDartDefines['WEBTRIT_APP_NAME'] ?: 'WebTrit',
 ]
@@ -98,7 +97,6 @@ android {
 
     defaultConfig {
         applicationId "com.webtrit.app"
-        applicationIdSuffix dartDefine.WEBTRIT_APP_ID_SUFFIX
         minSdkVersion 26 // flutter.minSdkVersion
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()

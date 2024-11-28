@@ -1,13 +1,31 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
+/// The `SecureStorage` class uses a local cache (`_cache`) to store values
+/// read from `FlutterSecureStorage`, reducing the number of expensive read/write
+/// operations and improving performance.
+///
+/// Issue:
+/// In multi-isolate scenarios, each isolate creates its own instance of `SecureStorage`
+/// with an independent local cache. If one isolate updates the data, other isolates
+/// will not be aware of the changes because the cache is local and not synchronized
+/// across isolates.
+///
+/// Recommendation:
+/// If it is necessary to access up-to-date data in a secondary isolate,
+/// consider creating a new instance of `SecureStorage` each time or reading
+/// directly from `FlutterSecureStorage`, avoiding reliance on the local cache.
 class SecureStorage {
   static const _kCoreUrlKey = 'core-url';
   static const _kTenantIdKey = 'tenant-id';
   static const _kTokenKey = 'token';
+  static const _kUserIdKey = 'user-id';
+
+  // Last FCM token that was pushed to the server
+  static const _kFCMPushToken = 'fcm-push-token';
 
   static late SecureStorage _instance;
 
-  static Future<void> init() async {
+  static Future<SecureStorage> init() async {
     const storage = FlutterSecureStorage(
       iOptions: IOSOptions(
         accessibility: KeychainAccessibility.first_unlock,
@@ -15,7 +33,14 @@ class SecureStorage {
     );
     final cache = await storage.readAll();
 
+    // Migration from old version of the app where the user ID wasnt provided to the app
+    // to avoid data inconsistency in the cache, we should clear it if the user ID is not present
+    if (!cache.containsKey(_kUserIdKey)) {
+      cache.clear();
+    }
+
     _instance = SecureStorage._(storage, cache);
+    return _instance;
   }
 
   factory SecureStorage() {
@@ -90,5 +115,25 @@ class SecureStorage {
 
   Future<void> deleteToken() {
     return _delete(_kTokenKey);
+  }
+
+  String? readUserId() {
+    return _read(_kUserIdKey);
+  }
+
+  Future<void> writeUserId(String userId) {
+    return _write(_kUserIdKey, userId);
+  }
+
+  Future<void> deleteUserId() {
+    return _delete(_kUserIdKey);
+  }
+
+  String? readFCMPushToken() {
+    return _read(_kFCMPushToken);
+  }
+
+  Future<void> writeFCMPushToken(String token) {
+    return _write(_kFCMPushToken, token);
   }
 }

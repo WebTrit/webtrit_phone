@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 
+import 'package:provider/provider.dart';
+
+import 'package:webtrit_phone/theme/styles/styles.dart';
+
 extension BuildContextSnackBar on BuildContext {
   void removeCurrentSnackBar() {
     ScaffoldMessenger.of(this).removeCurrentSnackBar();
@@ -26,10 +30,13 @@ extension BuildContextSnackBar on BuildContext {
     SnackBarAction? action,
     Duration duration = const Duration(seconds: 5),
   }) {
+    final themeData = Theme.of(this);
+    final callStatusStyles = themeData.extension<SnackBarStyles>()?.primary;
+
     return (ScaffoldMessenger.of(this)..removeCurrentSnackBar()).showSnackBar(SnackBar(
       content: Text(data),
       action: action,
-      backgroundColor: Theme.of(this).colorScheme.error,
+      backgroundColor: callStatusStyles?.errorBackgroundColor ?? themeData.colorScheme.error,
     ));
   }
 
@@ -51,10 +58,21 @@ extension BuildContextSnackBar on BuildContext {
     SnackBarAction? action,
     Duration duration = const Duration(seconds: 5),
   }) {
+    final themeData = Theme.of(this);
+    final callStatusStyles = themeData.extension<SnackBarStyles>()?.primary;
+
     return (ScaffoldMessenger.of(this)..removeCurrentSnackBar()).showSnackBar(SnackBar(
       content: Text(data),
       action: action,
-      backgroundColor: Theme.of(this).colorScheme.tertiary,
+      backgroundColor: callStatusStyles?.successBackgroundColor ?? themeData.colorScheme.tertiary,
     ));
+  }
+
+  T? readOrNull<T>() {
+    try {
+      return read<T>();
+    } on ProviderNotFoundException catch (_) {
+      return null;
+    }
   }
 }

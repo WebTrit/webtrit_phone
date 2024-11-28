@@ -10,6 +10,7 @@ import 'package:webtrit_api/webtrit_api.dart';
 void main() {
   const authority = 'core.webtrit.com';
   const token = 'qwerty';
+  const userId = '123';
 
   group('buildTenantUrl', () {
     test('do not add tenant path segments for empty tenantId 1', () {
@@ -209,6 +210,7 @@ void main() {
         return Response(
           jsonEncode({
             'token': token,
+            'user_id': userId,
           }),
           200,
           request: request,
@@ -233,6 +235,7 @@ void main() {
         return Response(
           jsonEncode({
             'token': token,
+            'user_id': userId,
           }),
           200,
           request: request,
@@ -249,9 +252,7 @@ void main() {
           email: 'email_1',
         )),
         completion(equals(
-          SessionToken(
-            token: token,
-          ),
+          SessionToken(token: token, userId: userId),
         )),
       );
       expect(
@@ -262,9 +263,7 @@ void main() {
           email: 'email_2',
         )),
         completion(equals(
-          SessionToken(
-            token: token,
-          ),
+          SessionToken(token: token, userId: userId),
         )),
       );
     });
@@ -460,6 +459,7 @@ void main() {
         return Response(
           jsonEncode({
             'token': token,
+            'user_id': userId,
           }),
           200,
           request: request,
@@ -474,7 +474,7 @@ void main() {
           SessionOtpProvisional(otpId: 'otp_id_1'),
           'code_1',
         ),
-        completion(equals(SessionToken(token: token))),
+        completion(equals(SessionToken(token: token, userId: userId))),
       );
     });
 
@@ -496,6 +496,7 @@ void main() {
         return Response(
           jsonEncode({
             'token': token,
+            'user_id': userId,
           }),
           200,
           request: request,
@@ -521,6 +522,7 @@ void main() {
         return Response(
           jsonEncode({
             'token': token,
+            'user_id': userId,
           }),
           200,
           request: request,
@@ -537,7 +539,7 @@ void main() {
           login: 'login_1',
           password: 'password_1',
         )),
-        completion(equals(SessionToken(token: token))),
+        completion(equals(SessionToken(token: token, userId: userId))),
       );
       expect(
         apiClient.createSession(SessionLoginCredential(
@@ -547,7 +549,7 @@ void main() {
           login: 'login_2',
           password: 'password_2',
         )),
-        completion(equals(SessionToken(token: token))),
+        completion(equals(SessionToken(token: token, userId: userId))),
       );
     });
 
@@ -641,6 +643,7 @@ void main() {
           jsonEncode({
             'items': [
               {
+                'user_id': '123',
                 'sip_status': 'registered',
                 'numbers': {
                   'main': '14155551234',
@@ -654,6 +657,7 @@ void main() {
                 'company_name': 'company_name',
               },
               {
+                'user_id': '234',
                 'numbers': {
                   'main': 'number_2',
                 },
@@ -676,6 +680,7 @@ void main() {
         completion(equals(
           [
             UserContact(
+              userId: '123',
               sipStatus: SipStatus.registered,
               numbers: Numbers(
                 main: '14155551234',
@@ -692,6 +697,7 @@ void main() {
               companyName: 'company_name',
             ),
             UserContact(
+              userId: '234',
               numbers: Numbers(main: 'number_2'),
               firstName: 'first_name_2',
               lastName: 'last_name_2',

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 
 import 'package:webtrit_phone/app/notifications/notifications.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
@@ -42,17 +41,19 @@ class _AppState extends State<App> {
   @override
   void initState() {
     super.initState();
+    final featureAccess = FeatureAccess();
+
     appBloc = AppBloc(
       appPreferences: widget.appPreferences,
       secureStorage: widget.secureStorage,
       appDatabase: widget.appDatabase,
       appThemes: widget.appThemes,
-      pendingCallHandler: AndroidPendingCallHandler(),
     );
     _appRouter = AppRouter(
       appBloc,
-      widget.appPreferences,
       widget.appPermissions,
+      featureAccess.loginFeature.launchLoginPage,
+      featureAccess.bottomMenuFeature.activeTab,
     );
   }
 

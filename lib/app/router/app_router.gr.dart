@@ -33,12 +33,14 @@ abstract class _$AppRouter extends RootStackRouter {
           orElse: () => AutoprovisionScreenPageRouteArgs(
                 configToken: queryParams.optString('config_token'),
                 tenantId: queryParams.optString('tenant_id'),
+                coreUrl: queryParams.optString('core_url'),
               ));
       return AutoRoutePage<dynamic>(
         routeData: routeData,
         child: AutoprovisionScreenPage(
           configToken: args.configToken,
           tenantId: args.tenantId,
+          coreUrl: args.coreUrl,
         ),
       );
     },
@@ -46,6 +48,17 @@ abstract class _$AppRouter extends RootStackRouter {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
         child: CallScreenPage(),
+      );
+    },
+    ChatConversationScreenPageRoute.name: (routeData) {
+      final args = routeData.argsAs<ChatConversationScreenPageRouteArgs>(
+          orElse: () => const ChatConversationScreenPageRouteArgs());
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: ChatConversationScreenPage(
+          participantId: args.participantId,
+          chatId: args.chatId,
+        ),
       );
     },
     ContactScreenPageRoute.name: (routeData) {
@@ -65,9 +78,16 @@ abstract class _$AppRouter extends RootStackRouter {
       );
     },
     ContactsScreenPageRoute.name: (routeData) {
+      final args = routeData.argsAs<ContactsScreenPageRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: ContactsScreenPage(),
+        child: ContactsScreenPage(sourceTypes: args.sourceTypes),
+      );
+    },
+    ConversationsScreenPageRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: ConversationsScreenPage(),
       );
     },
     DemoWebPageRoute.name: (routeData) {
@@ -75,6 +95,33 @@ abstract class _$AppRouter extends RootStackRouter {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
         child: DemoWebPage(args.initialUrl),
+      );
+    },
+    DiagnosticScreenPageRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: DiagnosticScreenPage(),
+      );
+    },
+    EmbeddedScreenPage1Route.name: (routeData) {
+      final args = routeData.argsAs<EmbeddedScreenPage1RouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: EmbeddedScreenPage1(args.data),
+      );
+    },
+    EmbeddedScreenPage2Route.name: (routeData) {
+      final args = routeData.argsAs<EmbeddedScreenPage2RouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: EmbeddedScreenPage2(args.data),
+      );
+    },
+    EmbeddedScreenPage3Route.name: (routeData) {
+      final args = routeData.argsAs<EmbeddedScreenPage3RouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: EmbeddedScreenPage3(args.data),
       );
     },
     ErrorDetailsScreenPageRoute.name: (routeData) {
@@ -133,10 +180,11 @@ abstract class _$AppRouter extends RootStackRouter {
         child: LoginCoreUrlAssignScreenPage(),
       );
     },
-    LoginCredentialsRequestScreenPageRoute.name: (routeData) {
+    LoginEmbeddedScreenPageRoute.name: (routeData) {
+      final args = routeData.argsAs<LoginEmbeddedScreenPageRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: LoginCredentialsRequestScreenPage(),
+        child: LoginEmbeddedScreenPage(loginEmbedded: args.loginEmbedded),
       );
     },
     LoginModeSelectScreenPageRoute.name: (routeData) {
@@ -170,9 +218,11 @@ abstract class _$AppRouter extends RootStackRouter {
       );
     },
     LoginRouterPageRoute.name: (routeData) {
+      final args = routeData.argsAs<LoginRouterPageRouteArgs>(
+          orElse: () => const LoginRouterPageRouteArgs());
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: LoginRouterPage(),
+        child: LoginRouterPage(launchLoginEmbedded: args.launchLoginEmbedded),
       );
     },
     LoginSignupRequestScreenPageRoute.name: (routeData) {
@@ -257,6 +307,17 @@ abstract class _$AppRouter extends RootStackRouter {
         child: SettingsScreenPage(),
       );
     },
+    SmsConversationScreenPageRoute.name: (routeData) {
+      final args = routeData.argsAs<SmsConversationScreenPageRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: SmsConversationScreenPage(
+          firstNumber: args.firstNumber,
+          secondNumber: args.secondNumber,
+          recipientId: args.recipientId,
+        ),
+      );
+    },
     TermsConditionsScreenPageRoute.name: (routeData) {
       final queryParams = routeData.queryParams;
       final args = routeData.argsAs<TermsConditionsScreenPageRouteArgs>(
@@ -325,16 +386,19 @@ class AutoprovisionScreenPageRoute
   AutoprovisionScreenPageRoute({
     String? configToken,
     String? tenantId,
+    String? coreUrl,
     List<PageRouteInfo>? children,
   }) : super(
           AutoprovisionScreenPageRoute.name,
           args: AutoprovisionScreenPageRouteArgs(
             configToken: configToken,
             tenantId: tenantId,
+            coreUrl: coreUrl,
           ),
           rawQueryParams: {
             'config_token': configToken,
             'tenant_id': tenantId,
+            'core_url': coreUrl,
           },
           initialChildren: children,
         );
@@ -349,15 +413,18 @@ class AutoprovisionScreenPageRouteArgs {
   const AutoprovisionScreenPageRouteArgs({
     this.configToken,
     this.tenantId,
+    this.coreUrl,
   });
 
   final String? configToken;
 
   final String? tenantId;
 
+  final String? coreUrl;
+
   @override
   String toString() {
-    return 'AutoprovisionScreenPageRouteArgs{configToken: $configToken, tenantId: $tenantId}';
+    return 'AutoprovisionScreenPageRouteArgs{configToken: $configToken, tenantId: $tenantId, coreUrl: $coreUrl}';
   }
 }
 
@@ -373,6 +440,45 @@ class CallScreenPageRoute extends PageRouteInfo<void> {
   static const String name = 'CallScreenPageRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [ChatConversationScreenPage]
+class ChatConversationScreenPageRoute
+    extends PageRouteInfo<ChatConversationScreenPageRouteArgs> {
+  ChatConversationScreenPageRoute({
+    String? participantId,
+    int? chatId,
+    List<PageRouteInfo>? children,
+  }) : super(
+          ChatConversationScreenPageRoute.name,
+          args: ChatConversationScreenPageRouteArgs(
+            participantId: participantId,
+            chatId: chatId,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'ChatConversationScreenPageRoute';
+
+  static const PageInfo<ChatConversationScreenPageRouteArgs> page =
+      PageInfo<ChatConversationScreenPageRouteArgs>(name);
+}
+
+class ChatConversationScreenPageRouteArgs {
+  const ChatConversationScreenPageRouteArgs({
+    this.participantId,
+    this.chatId,
+  });
+
+  final String? participantId;
+
+  final int? chatId;
+
+  @override
+  String toString() {
+    return 'ChatConversationScreenPageRouteArgs{participantId: $participantId, chatId: $chatId}';
+  }
 }
 
 /// generated route for
@@ -421,14 +527,44 @@ class ContactsRouterPageRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [ContactsScreenPage]
-class ContactsScreenPageRoute extends PageRouteInfo<void> {
-  const ContactsScreenPageRoute({List<PageRouteInfo>? children})
-      : super(
+class ContactsScreenPageRoute
+    extends PageRouteInfo<ContactsScreenPageRouteArgs> {
+  ContactsScreenPageRoute({
+    required List<ContactSourceType> sourceTypes,
+    List<PageRouteInfo>? children,
+  }) : super(
           ContactsScreenPageRoute.name,
+          args: ContactsScreenPageRouteArgs(sourceTypes: sourceTypes),
           initialChildren: children,
         );
 
   static const String name = 'ContactsScreenPageRoute';
+
+  static const PageInfo<ContactsScreenPageRouteArgs> page =
+      PageInfo<ContactsScreenPageRouteArgs>(name);
+}
+
+class ContactsScreenPageRouteArgs {
+  const ContactsScreenPageRouteArgs({required this.sourceTypes});
+
+  final List<ContactSourceType> sourceTypes;
+
+  @override
+  String toString() {
+    return 'ContactsScreenPageRouteArgs{sourceTypes: $sourceTypes}';
+  }
+}
+
+/// generated route for
+/// [ConversationsScreenPage]
+class ConversationsScreenPageRoute extends PageRouteInfo<void> {
+  const ConversationsScreenPageRoute({List<PageRouteInfo>? children})
+      : super(
+          ConversationsScreenPageRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'ConversationsScreenPageRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }
@@ -459,6 +595,110 @@ class DemoWebPageRouteArgs {
   @override
   String toString() {
     return 'DemoWebPageRouteArgs{initialUrl: $initialUrl}';
+  }
+}
+
+/// generated route for
+/// [DiagnosticScreenPage]
+class DiagnosticScreenPageRoute extends PageRouteInfo<void> {
+  const DiagnosticScreenPageRoute({List<PageRouteInfo>? children})
+      : super(
+          DiagnosticScreenPageRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'DiagnosticScreenPageRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [EmbeddedScreenPage1]
+class EmbeddedScreenPage1Route
+    extends PageRouteInfo<EmbeddedScreenPage1RouteArgs> {
+  EmbeddedScreenPage1Route({
+    required ConfigData data,
+    List<PageRouteInfo>? children,
+  }) : super(
+          EmbeddedScreenPage1Route.name,
+          args: EmbeddedScreenPage1RouteArgs(data: data),
+          initialChildren: children,
+        );
+
+  static const String name = 'EmbeddedScreenPage1Route';
+
+  static const PageInfo<EmbeddedScreenPage1RouteArgs> page =
+      PageInfo<EmbeddedScreenPage1RouteArgs>(name);
+}
+
+class EmbeddedScreenPage1RouteArgs {
+  const EmbeddedScreenPage1RouteArgs({required this.data});
+
+  final ConfigData data;
+
+  @override
+  String toString() {
+    return 'EmbeddedScreenPage1RouteArgs{data: $data}';
+  }
+}
+
+/// generated route for
+/// [EmbeddedScreenPage2]
+class EmbeddedScreenPage2Route
+    extends PageRouteInfo<EmbeddedScreenPage2RouteArgs> {
+  EmbeddedScreenPage2Route({
+    required ConfigData data,
+    List<PageRouteInfo>? children,
+  }) : super(
+          EmbeddedScreenPage2Route.name,
+          args: EmbeddedScreenPage2RouteArgs(data: data),
+          initialChildren: children,
+        );
+
+  static const String name = 'EmbeddedScreenPage2Route';
+
+  static const PageInfo<EmbeddedScreenPage2RouteArgs> page =
+      PageInfo<EmbeddedScreenPage2RouteArgs>(name);
+}
+
+class EmbeddedScreenPage2RouteArgs {
+  const EmbeddedScreenPage2RouteArgs({required this.data});
+
+  final ConfigData data;
+
+  @override
+  String toString() {
+    return 'EmbeddedScreenPage2RouteArgs{data: $data}';
+  }
+}
+
+/// generated route for
+/// [EmbeddedScreenPage3]
+class EmbeddedScreenPage3Route
+    extends PageRouteInfo<EmbeddedScreenPage3RouteArgs> {
+  EmbeddedScreenPage3Route({
+    required ConfigData data,
+    List<PageRouteInfo>? children,
+  }) : super(
+          EmbeddedScreenPage3Route.name,
+          args: EmbeddedScreenPage3RouteArgs(data: data),
+          initialChildren: children,
+        );
+
+  static const String name = 'EmbeddedScreenPage3Route';
+
+  static const PageInfo<EmbeddedScreenPage3RouteArgs> page =
+      PageInfo<EmbeddedScreenPage3RouteArgs>(name);
+}
+
+class EmbeddedScreenPage3RouteArgs {
+  const EmbeddedScreenPage3RouteArgs({required this.data});
+
+  final ConfigData data;
+
+  @override
+  String toString() {
+    return 'EmbeddedScreenPage3RouteArgs{data: $data}';
   }
 }
 
@@ -617,17 +857,33 @@ class LoginCoreUrlAssignScreenPageRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [LoginCredentialsRequestScreenPage]
-class LoginCredentialsRequestScreenPageRoute extends PageRouteInfo<void> {
-  const LoginCredentialsRequestScreenPageRoute({List<PageRouteInfo>? children})
-      : super(
-          LoginCredentialsRequestScreenPageRoute.name,
+/// [LoginEmbeddedScreenPage]
+class LoginEmbeddedScreenPageRoute
+    extends PageRouteInfo<LoginEmbeddedScreenPageRouteArgs> {
+  LoginEmbeddedScreenPageRoute({
+    required LoginEmbedded loginEmbedded,
+    List<PageRouteInfo>? children,
+  }) : super(
+          LoginEmbeddedScreenPageRoute.name,
+          args: LoginEmbeddedScreenPageRouteArgs(loginEmbedded: loginEmbedded),
           initialChildren: children,
         );
 
-  static const String name = 'LoginCredentialsRequestScreenPageRoute';
+  static const String name = 'LoginEmbeddedScreenPageRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static const PageInfo<LoginEmbeddedScreenPageRouteArgs> page =
+      PageInfo<LoginEmbeddedScreenPageRouteArgs>(name);
+}
+
+class LoginEmbeddedScreenPageRouteArgs {
+  const LoginEmbeddedScreenPageRouteArgs({required this.loginEmbedded});
+
+  final LoginEmbedded loginEmbedded;
+
+  @override
+  String toString() {
+    return 'LoginEmbeddedScreenPageRouteArgs{loginEmbedded: $loginEmbedded}';
+  }
 }
 
 /// generated route for
@@ -702,16 +958,32 @@ class LoginPasswordSigninScreenPageRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [LoginRouterPage]
-class LoginRouterPageRoute extends PageRouteInfo<void> {
-  const LoginRouterPageRoute({List<PageRouteInfo>? children})
-      : super(
+class LoginRouterPageRoute extends PageRouteInfo<LoginRouterPageRouteArgs> {
+  LoginRouterPageRoute({
+    LoginEmbedded? launchLoginEmbedded,
+    List<PageRouteInfo>? children,
+  }) : super(
           LoginRouterPageRoute.name,
+          args: LoginRouterPageRouteArgs(
+              launchLoginEmbedded: launchLoginEmbedded),
           initialChildren: children,
         );
 
   static const String name = 'LoginRouterPageRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static const PageInfo<LoginRouterPageRouteArgs> page =
+      PageInfo<LoginRouterPageRouteArgs>(name);
+}
+
+class LoginRouterPageRouteArgs {
+  const LoginRouterPageRouteArgs({this.launchLoginEmbedded});
+
+  final LoginEmbedded? launchLoginEmbedded;
+
+  @override
+  String toString() {
+    return 'LoginRouterPageRouteArgs{launchLoginEmbedded: $launchLoginEmbedded}';
+  }
 }
 
 /// generated route for
@@ -910,6 +1182,50 @@ class SettingsScreenPageRoute extends PageRouteInfo<void> {
   static const String name = 'SettingsScreenPageRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [SmsConversationScreenPage]
+class SmsConversationScreenPageRoute
+    extends PageRouteInfo<SmsConversationScreenPageRouteArgs> {
+  SmsConversationScreenPageRoute({
+    required String firstNumber,
+    required String secondNumber,
+    String? recipientId,
+    List<PageRouteInfo>? children,
+  }) : super(
+          SmsConversationScreenPageRoute.name,
+          args: SmsConversationScreenPageRouteArgs(
+            firstNumber: firstNumber,
+            secondNumber: secondNumber,
+            recipientId: recipientId,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'SmsConversationScreenPageRoute';
+
+  static const PageInfo<SmsConversationScreenPageRouteArgs> page =
+      PageInfo<SmsConversationScreenPageRouteArgs>(name);
+}
+
+class SmsConversationScreenPageRouteArgs {
+  const SmsConversationScreenPageRouteArgs({
+    required this.firstNumber,
+    required this.secondNumber,
+    this.recipientId,
+  });
+
+  final String firstNumber;
+
+  final String secondNumber;
+
+  final String? recipientId;
+
+  @override
+  String toString() {
+    return 'SmsConversationScreenPageRouteArgs{firstNumber: $firstNumber, secondNumber: $secondNumber, recipientId: $recipientId}';
+  }
 }
 
 /// generated route for

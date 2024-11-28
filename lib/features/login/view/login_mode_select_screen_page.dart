@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:auto_route/auto_route.dart';
 
+import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';
 
 import 'login_mode_select_screen.dart';
@@ -13,8 +14,11 @@ class LoginModeSelectScreenPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const widget = LoginModeSelectScreen(
+    final featureAccess = FeatureAccess();
+
+    final widget = LoginModeSelectScreen(
       appGreeting: EnvironmentConfig.APP_GREETING,
+      actions: featureAccess.loginFeature.actions,
     );
     return widget;
   }

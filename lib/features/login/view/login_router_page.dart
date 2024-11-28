@@ -8,14 +8,16 @@ import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/features.dart';
+import 'package:webtrit_phone/models/models.dart';
 
 bool whenLoginRouterPageChange(LoginState previous, LoginState current) {
   return (previous.mode != current.mode) ||
-      (previous.coreUrl != current.coreUrl || previous.supportedLoginTypes != current.supportedLoginTypes);
+      (previous.coreUrl != current.coreUrl || previous.supportedLoginTypes != current.supportedLoginTypes) ||
+      previous.embedded != current.embedded;
 }
 
-bool whenCredentialsRequestScreenPageActive(LoginState state) {
-  return state.mode == LoginMode.credentialsRequest;
+bool whenLoginEmbeddedScreenPageActive(LoginState state) {
+  return state.embedded != null;
 }
 
 bool whenLoginCoreUrlAssignScreenPageActive(LoginState state) {
@@ -29,18 +31,23 @@ bool whenLoginSwitchScreenPageActive(LoginState state) {
 @RoutePage()
 class LoginRouterPage extends StatelessWidget {
   // ignore: use_key_in_widget_constructors
-  const LoginRouterPage();
+  const LoginRouterPage({
+    LoginEmbedded? launchLoginEmbedded,
+  }) : _launchLoginEmbedded = launchLoginEmbedded;
+
+  final LoginEmbedded? _launchLoginEmbedded;
+
+  bool get isLaunchLoginEmbedded => _launchLoginEmbedded != null;
 
   @override
   Widget build(BuildContext context) {
     final declarativeAutoRouter = BlocConsumer<LoginCubit, LoginState>(
       listener: (context, state) {
-        if (state.coreUrl != null && state.tenantId != null && state.token != null) {
-          context.read<AppBloc>().add(AppLogined(
-                coreUrl: state.coreUrl!,
-                tenantId: state.tenantId!,
-                token: state.token!,
-              ));
+        final [coreUrl, tenantId, token, userId] = [state.coreUrl, state.tenantId, state.token, state.userId];
+
+        if (coreUrl != null && tenantId != null && token != null && userId != null) {
+          final event = AppLogined(coreUrl: coreUrl, tenantId: tenantId, token: token, userId: userId);
+          context.read<AppBloc>().add(event);
         }
       },
       buildWhen: whenLoginRouterPageChange,
@@ -49,9 +56,10 @@ class LoginRouterPage extends StatelessWidget {
           navigatorObservers: () => [_HideCurrentSnackBarNavigatorObserver(context)],
           routes: (handler) {
             return [
-              const LoginModeSelectScreenPageRoute(),
+              if (!isLaunchLoginEmbedded) const LoginModeSelectScreenPageRoute(),
               if (whenLoginCoreUrlAssignScreenPageActive(state)) const LoginCoreUrlAssignScreenPageRoute(),
-              if (whenCredentialsRequestScreenPageActive(state)) const LoginCredentialsRequestScreenPageRoute(),
+              if (whenLoginEmbeddedScreenPageActive(state))
+                LoginEmbeddedScreenPageRoute(loginEmbedded: state.embedded!),
               if (whenLoginSwitchScreenPageActive(state)) const LoginSwitchScreenPageRoute(),
             ];
           },
@@ -60,8 +68,8 @@ class LoginRouterPage extends StatelessWidget {
               case LoginCoreUrlAssignScreenPageRoute.name:
                 _onCoreUrlAssignBack(context);
                 break;
-              case LoginCredentialsRequestScreenPageRoute.name:
-                _onCredentialsRequestUrlAssignBack(context);
+              case LoginEmbeddedScreenPageRoute.name:
+                _onEmbeddedPageAssignBackAssignBack(context);
                 break;
               case LoginSwitchScreenPageRoute.name:
                 _onSwitchBack(context);
@@ -72,10 +80,12 @@ class LoginRouterPage extends StatelessWidget {
       },
     );
 
+    final login = LoginCubit(notificationsBloc: context.read<NotificationsBloc>());
+    if (_launchLoginEmbedded != null) {
+      login.setCustomLogin(_launchLoginEmbedded);
+    }
     final provider = BlocProvider(
-      create: (context) => LoginCubit(
-        notificationsBloc: context.read<NotificationsBloc>(),
-      ),
+      create: (context) => login,
       child: declarativeAutoRouter,
     );
     return provider;
@@ -85,8 +95,8 @@ class LoginRouterPage extends StatelessWidget {
     context.read<LoginCubit>().loginCoreUrlAssignBack();
   }
 
-  void _onCredentialsRequestUrlAssignBack(BuildContext context) {
-    context.read<LoginCubit>().credentialsRequestUrlAssignBack();
+  void _onEmbeddedPageAssignBackAssignBack(BuildContext context) {
+    context.read<LoginCubit>().embeddedPageAssignBack();
   }
 
   void _onSwitchBack(BuildContext context) {

@@ -5,7 +5,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
+import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
+import 'package:webtrit_phone/features/messaging/messaging.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
@@ -18,9 +20,11 @@ class RecentsScreen extends StatefulWidget {
     super.key,
     this.recentsFilters = const [RecentsVisibilityFilter.all, RecentsVisibilityFilter.missed],
     this.title,
+    required this.videoCallEnable,
   });
 
   final List<RecentsVisibilityFilter> recentsFilters;
+  final bool videoCallEnable;
 
   final Widget? title;
 
@@ -63,6 +67,7 @@ class _RecentsScreenState extends State<RecentsScreen> with SingleTickerProvider
   @override
   Widget build(BuildContext context) {
     final mediaQueryData = MediaQuery.of(context);
+    const chatsEnabled = EnvironmentConfig.CHAT_FEATURE_ENABLE;
 
     return Scaffold(
       appBar: MainAppBar(
@@ -112,6 +117,7 @@ class _RecentsScreenState extends State<RecentsScreen> with SingleTickerProvider
                     itemCount: recentsFiltered.length,
                     itemBuilder: (context, index) {
                       final recent = recentsFiltered[index];
+                      final contactSourceId = recent.contactSourceId;
                       return RecentTile(
                         recent: recent,
                         dateFormat: context.read<RecentsBloc>().dateFormat,
@@ -132,7 +138,7 @@ class _RecentsScreenState extends State<RecentsScreen> with SingleTickerProvider
                                 callBloc.add(CallControlEvent.started(
                                   number: recent.number,
                                   displayName: recent.name,
-                                  video: recent.video,
+                                  video: recent.video && widget.videoCallEnable,
                                 ));
                               },
                         onLongPress: transfer
@@ -142,13 +148,19 @@ class _RecentsScreenState extends State<RecentsScreen> with SingleTickerProvider
                                 callBloc.add(CallControlEvent.started(
                                   number: recent.number,
                                   displayName: recent.name,
-                                  video: !recent.video,
+                                  video: !recent.video && widget.videoCallEnable,
                                 ));
                               },
                         onDeleted: (recent) {
                           context.showSnackBar(context.l10n.recents_snackBar_deleted(recent.name));
                           context.read<RecentsBloc>().add(RecentsDeleted(recent));
                         },
+                        onMessagePressed: chatsEnabled && recent.canMessage
+                            ? () {
+                                context.router
+                                    .navigate(ChatConversationScreenPageRoute(participantId: contactSourceId!));
+                              }
+                            : null,
                       );
                     },
                   );

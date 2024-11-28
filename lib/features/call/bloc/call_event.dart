@@ -8,12 +8,6 @@ class CallStarted extends CallEvent {
   const CallStarted();
 }
 
-class AndroidPendingCallAdded extends CallEvent {
-  const AndroidPendingCallAdded(this.call);
-
-  final PendingCall? call;
-}
-
 @Freezed(copyWith: false)
 class _AppLifecycleStateChanged with _$AppLifecycleStateChanged implements CallEvent {
   const factory _AppLifecycleStateChanged(AppLifecycleState state) = __AppLifecycleStateChanged;
@@ -34,9 +28,7 @@ class _NavigatorMediaDevicesChange with _$NavigatorMediaDevicesChange implements
 @Freezed(copyWith: false)
 class _RegistrationChange with _$RegistrationChange implements CallEvent {
   const factory _RegistrationChange({
-    required RegistrationStatus registrationStatus,
-    String? reason,
-    int? code,
+    required Registration registration,
   }) = __RegistrationChange;
 }
 
@@ -53,11 +45,17 @@ class _ResetStateEvent with _$ResetStateEvent implements CallEvent {
 
 @Freezed(copyWith: false)
 class _SignalingClientEvent with _$SignalingClientEvent implements CallEvent {
-  const factory _SignalingClientEvent.connectInitiated() = _SignalingClientEventConnectInitiated;
+  const factory _SignalingClientEvent.connectInitiated({
+    @Default(false) bool reconnecting,
+  }) = _SignalingClientEventConnectInitiated;
 
   const factory _SignalingClientEvent.disconnectInitiated() = _SignalingClientEventDisconnectInitiated;
 
-  const factory _SignalingClientEvent.disconnected(int? code, String? reason) = _SignalingClientEventDisconnected;
+  const factory _SignalingClientEvent.disconnected(
+    int? code,
+    String? reason, {
+    @Default(false) bool afterReconnect,
+  }) = _SignalingClientEventDisconnected;
 }
 
 // handshake signaling events
@@ -137,6 +135,11 @@ class _CallSignalingEvent with _$CallSignalingEvent implements CallEvent {
     required String? replaceCallId,
   }) = _CallSignalingEventTransfer;
 
+  const factory _CallSignalingEvent.transferring({
+    required int line,
+    required String callId,
+  }) = _CallSignalingEventTransferring;
+
   const factory _CallSignalingEvent.notify({
     required int line,
     required String callId,
@@ -150,7 +153,10 @@ class _CallSignalingEvent with _$CallSignalingEvent implements CallEvent {
 
   const factory _CallSignalingEvent.registered() = _CallSignalingEventRegistered;
 
-  const factory _CallSignalingEvent.registrationFailed() = _CallSignalingEventRegisterationFailed;
+  const factory _CallSignalingEvent.registrationFailed(
+    int code,
+    String reason,
+  ) = _CallSignalingEventRegisterationFailed;
 
   const factory _CallSignalingEvent.unregistering() = _CallSignalingEventUnregistering;
 

@@ -7,16 +7,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:device_info_plus/device_info_plus.dart';
+
 import 'package:screenshots/data/data.dart';
 import 'package:screenshots/screenshots/screenshots.dart';
+import 'package:screenshots/mocks/mocks.dart';
+import 'package:screenshots/widgets/widgets.dart';
 
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';
-import 'package:webtrit_phone/features/features.dart';
-
-import 'package:screenshots/mocks/mocks.dart';
-import 'package:screenshots/widgets/widgets.dart';
+import 'package:webtrit_phone/models/models.dart';
 
 void main() {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();

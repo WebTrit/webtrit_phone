@@ -19,13 +19,17 @@ mixin _$AppLogined {
   String get coreUrl => throw _privateConstructorUsedError;
   String get tenantId => throw _privateConstructorUsedError;
   String get token => throw _privateConstructorUsedError;
+  String get userId => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 
 class _$AppLoginedImpl implements _AppLogined {
   const _$AppLoginedImpl(
-      {required this.coreUrl, required this.tenantId, required this.token});
+      {required this.coreUrl,
+      required this.tenantId,
+      required this.token,
+      required this.userId});
 
   @override
   final String coreUrl;
@@ -33,10 +37,12 @@ class _$AppLoginedImpl implements _AppLogined {
   final String tenantId;
   @override
   final String token;
+  @override
+  final String userId;
 
   @override
   String toString() {
-    return 'AppLogined(coreUrl: $coreUrl, tenantId: $tenantId, token: $token)';
+    return 'AppLogined(coreUrl: $coreUrl, tenantId: $tenantId, token: $token, userId: $userId)';
   }
 
   @override
@@ -47,18 +53,21 @@ class _$AppLoginedImpl implements _AppLogined {
             (identical(other.coreUrl, coreUrl) || other.coreUrl == coreUrl) &&
             (identical(other.tenantId, tenantId) ||
                 other.tenantId == tenantId) &&
-            (identical(other.token, token) || other.token == token));
+            (identical(other.token, token) || other.token == token) &&
+            (identical(other.userId, userId) || other.userId == userId));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, coreUrl, tenantId, token);
+  int get hashCode =>
+      Object.hash(runtimeType, coreUrl, tenantId, token, userId);
 }
 
 abstract class _AppLogined implements AppLogined {
   const factory _AppLogined(
       {required final String coreUrl,
       required final String tenantId,
-      required final String token}) = _$AppLoginedImpl;
+      required final String token,
+      required final String userId}) = _$AppLoginedImpl;
 
   @override
   String get coreUrl;
@@ -66,6 +75,8 @@ abstract class _AppLogined implements AppLogined {
   String get tenantId;
   @override
   String get token;
+  @override
+  String get userId;
 }
 
 /// @nodoc
@@ -268,13 +279,16 @@ mixin _$AppState {
   String? get coreUrl => throw _privateConstructorUsedError;
   String? get tenantId => throw _privateConstructorUsedError;
   String? get token => throw _privateConstructorUsedError;
+  String? get userId => throw _privateConstructorUsedError;
   AccountErrorCode? get accountErrorCode => throw _privateConstructorUsedError;
   ThemeSettings get themeSettings => throw _privateConstructorUsedError;
   ThemeMode get themeMode => throw _privateConstructorUsedError;
   Locale get locale => throw _privateConstructorUsedError;
   bool get userAgreementAccepted => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of AppState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $AppStateCopyWith<AppState> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -288,6 +302,7 @@ abstract class $AppStateCopyWith<$Res> {
       {String? coreUrl,
       String? tenantId,
       String? token,
+      String? userId,
       AccountErrorCode? accountErrorCode,
       ThemeSettings themeSettings,
       ThemeMode themeMode,
@@ -307,12 +322,15 @@ class _$AppStateCopyWithImpl<$Res, $Val extends AppState>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of AppState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? coreUrl = freezed,
     Object? tenantId = freezed,
     Object? token = freezed,
+    Object? userId = freezed,
     Object? accountErrorCode = freezed,
     Object? themeSettings = null,
     Object? themeMode = null,
@@ -331,6 +349,10 @@ class _$AppStateCopyWithImpl<$Res, $Val extends AppState>
       token: freezed == token
           ? _value.token
           : token // ignore: cast_nullable_to_non_nullable
+              as String?,
+      userId: freezed == userId
+          ? _value.userId
+          : userId // ignore: cast_nullable_to_non_nullable
               as String?,
       accountErrorCode: freezed == accountErrorCode
           ? _value.accountErrorCode
@@ -355,6 +377,8 @@ class _$AppStateCopyWithImpl<$Res, $Val extends AppState>
     ) as $Val);
   }
 
+  /// Create a copy of AppState
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $ThemeSettingsCopyWith<$Res> get themeSettings {
@@ -376,6 +400,7 @@ abstract class _$$AppStateImplCopyWith<$Res>
       {String? coreUrl,
       String? tenantId,
       String? token,
+      String? userId,
       AccountErrorCode? accountErrorCode,
       ThemeSettings themeSettings,
       ThemeMode themeMode,
@@ -394,12 +419,15 @@ class __$$AppStateImplCopyWithImpl<$Res>
       _$AppStateImpl _value, $Res Function(_$AppStateImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of AppState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? coreUrl = freezed,
     Object? tenantId = freezed,
     Object? token = freezed,
+    Object? userId = freezed,
     Object? accountErrorCode = freezed,
     Object? themeSettings = null,
     Object? themeMode = null,
@@ -418,6 +446,10 @@ class __$$AppStateImplCopyWithImpl<$Res>
       token: freezed == token
           ? _value.token
           : token // ignore: cast_nullable_to_non_nullable
+              as String?,
+      userId: freezed == userId
+          ? _value.userId
+          : userId // ignore: cast_nullable_to_non_nullable
               as String?,
       accountErrorCode: freezed == accountErrorCode
           ? _value.accountErrorCode
@@ -450,6 +482,7 @@ class _$AppStateImpl extends _AppState {
       {this.coreUrl,
       this.tenantId,
       this.token,
+      this.userId,
       this.accountErrorCode,
       required this.themeSettings,
       required this.themeMode,
@@ -464,6 +497,8 @@ class _$AppStateImpl extends _AppState {
   @override
   final String? token;
   @override
+  final String? userId;
+  @override
   final AccountErrorCode? accountErrorCode;
   @override
   final ThemeSettings themeSettings;
@@ -476,7 +511,7 @@ class _$AppStateImpl extends _AppState {
 
   @override
   String toString() {
-    return 'AppState(coreUrl: $coreUrl, tenantId: $tenantId, token: $token, accountErrorCode: $accountErrorCode, themeSettings: $themeSettings, themeMode: $themeMode, locale: $locale, userAgreementAccepted: $userAgreementAccepted)';
+    return 'AppState(coreUrl: $coreUrl, tenantId: $tenantId, token: $token, userId: $userId, accountErrorCode: $accountErrorCode, themeSettings: $themeSettings, themeMode: $themeMode, locale: $locale, userAgreementAccepted: $userAgreementAccepted)';
   }
 
   @override
@@ -488,6 +523,7 @@ class _$AppStateImpl extends _AppState {
             (identical(other.tenantId, tenantId) ||
                 other.tenantId == tenantId) &&
             (identical(other.token, token) || other.token == token) &&
+            (identical(other.userId, userId) || other.userId == userId) &&
             (identical(other.accountErrorCode, accountErrorCode) ||
                 other.accountErrorCode == accountErrorCode) &&
             (identical(other.themeSettings, themeSettings) ||
@@ -505,13 +541,16 @@ class _$AppStateImpl extends _AppState {
       coreUrl,
       tenantId,
       token,
+      userId,
       accountErrorCode,
       themeSettings,
       themeMode,
       locale,
       userAgreementAccepted);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of AppState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$AppStateImplCopyWith<_$AppStateImpl> get copyWith =>
@@ -523,6 +562,7 @@ abstract class _AppState extends AppState {
       {final String? coreUrl,
       final String? tenantId,
       final String? token,
+      final String? userId,
       final AccountErrorCode? accountErrorCode,
       required final ThemeSettings themeSettings,
       required final ThemeMode themeMode,
@@ -537,6 +577,8 @@ abstract class _AppState extends AppState {
   @override
   String? get token;
   @override
+  String? get userId;
+  @override
   AccountErrorCode? get accountErrorCode;
   @override
   ThemeSettings get themeSettings;
@@ -546,8 +588,11 @@ abstract class _AppState extends AppState {
   Locale get locale;
   @override
   bool get userAgreementAccepted;
+
+  /// Create a copy of AppState
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$AppStateImplCopyWith<_$AppStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

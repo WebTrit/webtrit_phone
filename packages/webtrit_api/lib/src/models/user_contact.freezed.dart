@@ -20,6 +20,7 @@ UserContact _$UserContactFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$UserContact {
+  String get userId => throw _privateConstructorUsedError;
   SipStatus? get sipStatus => throw _privateConstructorUsedError;
   Numbers get numbers => throw _privateConstructorUsedError;
   String? get email => throw _privateConstructorUsedError;
@@ -27,9 +28,15 @@ mixin _$UserContact {
   String? get lastName => throw _privateConstructorUsedError;
   String? get aliasName => throw _privateConstructorUsedError;
   String? get companyName => throw _privateConstructorUsedError;
+  bool? get isCurrentUser => throw _privateConstructorUsedError;
+  bool? get isRegisteredUser => throw _privateConstructorUsedError;
 
+  /// Serializes this UserContact to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of UserContact
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $UserContactCopyWith<UserContact> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -41,13 +48,16 @@ abstract class $UserContactCopyWith<$Res> {
       _$UserContactCopyWithImpl<$Res, UserContact>;
   @useResult
   $Res call(
-      {SipStatus? sipStatus,
+      {String userId,
+      SipStatus? sipStatus,
       Numbers numbers,
       String? email,
       String? firstName,
       String? lastName,
       String? aliasName,
-      String? companyName});
+      String? companyName,
+      bool? isCurrentUser,
+      bool? isRegisteredUser});
 
   $NumbersCopyWith<$Res> get numbers;
 }
@@ -62,9 +72,12 @@ class _$UserContactCopyWithImpl<$Res, $Val extends UserContact>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of UserContact
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? userId = null,
     Object? sipStatus = freezed,
     Object? numbers = null,
     Object? email = freezed,
@@ -72,8 +85,14 @@ class _$UserContactCopyWithImpl<$Res, $Val extends UserContact>
     Object? lastName = freezed,
     Object? aliasName = freezed,
     Object? companyName = freezed,
+    Object? isCurrentUser = freezed,
+    Object? isRegisteredUser = freezed,
   }) {
     return _then(_value.copyWith(
+      userId: null == userId
+          ? _value.userId
+          : userId // ignore: cast_nullable_to_non_nullable
+              as String,
       sipStatus: freezed == sipStatus
           ? _value.sipStatus
           : sipStatus // ignore: cast_nullable_to_non_nullable
@@ -102,9 +121,19 @@ class _$UserContactCopyWithImpl<$Res, $Val extends UserContact>
           ? _value.companyName
           : companyName // ignore: cast_nullable_to_non_nullable
               as String?,
+      isCurrentUser: freezed == isCurrentUser
+          ? _value.isCurrentUser
+          : isCurrentUser // ignore: cast_nullable_to_non_nullable
+              as bool?,
+      isRegisteredUser: freezed == isRegisteredUser
+          ? _value.isRegisteredUser
+          : isRegisteredUser // ignore: cast_nullable_to_non_nullable
+              as bool?,
     ) as $Val);
   }
 
+  /// Create a copy of UserContact
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $NumbersCopyWith<$Res> get numbers {
@@ -123,13 +152,16 @@ abstract class _$$UserContactImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {SipStatus? sipStatus,
+      {String userId,
+      SipStatus? sipStatus,
       Numbers numbers,
       String? email,
       String? firstName,
       String? lastName,
       String? aliasName,
-      String? companyName});
+      String? companyName,
+      bool? isCurrentUser,
+      bool? isRegisteredUser});
 
   @override
   $NumbersCopyWith<$Res> get numbers;
@@ -143,9 +175,12 @@ class __$$UserContactImplCopyWithImpl<$Res>
       _$UserContactImpl _value, $Res Function(_$UserContactImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of UserContact
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? userId = null,
     Object? sipStatus = freezed,
     Object? numbers = null,
     Object? email = freezed,
@@ -153,8 +188,14 @@ class __$$UserContactImplCopyWithImpl<$Res>
     Object? lastName = freezed,
     Object? aliasName = freezed,
     Object? companyName = freezed,
+    Object? isCurrentUser = freezed,
+    Object? isRegisteredUser = freezed,
   }) {
     return _then(_$UserContactImpl(
+      userId: null == userId
+          ? _value.userId
+          : userId // ignore: cast_nullable_to_non_nullable
+              as String,
       sipStatus: freezed == sipStatus
           ? _value.sipStatus
           : sipStatus // ignore: cast_nullable_to_non_nullable
@@ -183,6 +224,14 @@ class __$$UserContactImplCopyWithImpl<$Res>
           ? _value.companyName
           : companyName // ignore: cast_nullable_to_non_nullable
               as String?,
+      isCurrentUser: freezed == isCurrentUser
+          ? _value.isCurrentUser
+          : isCurrentUser // ignore: cast_nullable_to_non_nullable
+              as bool?,
+      isRegisteredUser: freezed == isRegisteredUser
+          ? _value.isRegisteredUser
+          : isRegisteredUser // ignore: cast_nullable_to_non_nullable
+              as bool?,
     ));
   }
 }
@@ -192,17 +241,22 @@ class __$$UserContactImplCopyWithImpl<$Res>
 @JsonSerializable(fieldRename: FieldRename.snake)
 class _$UserContactImpl implements _UserContact {
   const _$UserContactImpl(
-      {this.sipStatus,
+      {required this.userId,
+      this.sipStatus,
       required this.numbers,
       this.email,
       this.firstName,
       this.lastName,
       this.aliasName,
-      this.companyName});
+      this.companyName,
+      this.isCurrentUser,
+      this.isRegisteredUser});
 
   factory _$UserContactImpl.fromJson(Map<String, dynamic> json) =>
       _$$UserContactImplFromJson(json);
 
+  @override
+  final String userId;
   @override
   final SipStatus? sipStatus;
   @override
@@ -217,10 +271,14 @@ class _$UserContactImpl implements _UserContact {
   final String? aliasName;
   @override
   final String? companyName;
+  @override
+  final bool? isCurrentUser;
+  @override
+  final bool? isRegisteredUser;
 
   @override
   String toString() {
-    return 'UserContact(sipStatus: $sipStatus, numbers: $numbers, email: $email, firstName: $firstName, lastName: $lastName, aliasName: $aliasName, companyName: $companyName)';
+    return 'UserContact(userId: $userId, sipStatus: $sipStatus, numbers: $numbers, email: $email, firstName: $firstName, lastName: $lastName, aliasName: $aliasName, companyName: $companyName, isCurrentUser: $isCurrentUser, isRegisteredUser: $isRegisteredUser)';
   }
 
   @override
@@ -228,6 +286,7 @@ class _$UserContactImpl implements _UserContact {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$UserContactImpl &&
+            (identical(other.userId, userId) || other.userId == userId) &&
             (identical(other.sipStatus, sipStatus) ||
                 other.sipStatus == sipStatus) &&
             (identical(other.numbers, numbers) || other.numbers == numbers) &&
@@ -239,15 +298,31 @@ class _$UserContactImpl implements _UserContact {
             (identical(other.aliasName, aliasName) ||
                 other.aliasName == aliasName) &&
             (identical(other.companyName, companyName) ||
-                other.companyName == companyName));
+                other.companyName == companyName) &&
+            (identical(other.isCurrentUser, isCurrentUser) ||
+                other.isCurrentUser == isCurrentUser) &&
+            (identical(other.isRegisteredUser, isRegisteredUser) ||
+                other.isRegisteredUser == isRegisteredUser));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, sipStatus, numbers, email,
-      firstName, lastName, aliasName, companyName);
+  int get hashCode => Object.hash(
+      runtimeType,
+      userId,
+      sipStatus,
+      numbers,
+      email,
+      firstName,
+      lastName,
+      aliasName,
+      companyName,
+      isCurrentUser,
+      isRegisteredUser);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of UserContact
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$UserContactImplCopyWith<_$UserContactImpl> get copyWith =>
@@ -263,17 +338,22 @@ class _$UserContactImpl implements _UserContact {
 
 abstract class _UserContact implements UserContact {
   const factory _UserContact(
-      {final SipStatus? sipStatus,
+      {required final String userId,
+      final SipStatus? sipStatus,
       required final Numbers numbers,
       final String? email,
       final String? firstName,
       final String? lastName,
       final String? aliasName,
-      final String? companyName}) = _$UserContactImpl;
+      final String? companyName,
+      final bool? isCurrentUser,
+      final bool? isRegisteredUser}) = _$UserContactImpl;
 
   factory _UserContact.fromJson(Map<String, dynamic> json) =
       _$UserContactImpl.fromJson;
 
+  @override
+  String get userId;
   @override
   SipStatus? get sipStatus;
   @override
@@ -289,7 +369,14 @@ abstract class _UserContact implements UserContact {
   @override
   String? get companyName;
   @override
-  @JsonKey(ignore: true)
+  bool? get isCurrentUser;
+  @override
+  bool? get isRegisteredUser;
+
+  /// Create a copy of UserContact
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$UserContactImplCopyWith<_$UserContactImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

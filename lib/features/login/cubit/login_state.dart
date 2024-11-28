@@ -14,6 +14,8 @@ class LoginState with _$LoginState {
     @Default(true) bool passwordSigninPasswordInputObscureText,
     SessionOtpProvisionalWithDateTime? signupSessionOtpProvisionalWithDateTime,
     String? token,
+    String? userId,
+    LoginEmbedded? embedded,
     @Default(UrlInput.pure()) UrlInput coreUrlInput,
     @Default(UserRefInput.pure()) UserRefInput otpSigninUserRefInput,
     @Default(CodeInput.pure()) CodeInput otpSigninCodeInput,

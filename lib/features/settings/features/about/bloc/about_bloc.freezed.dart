@@ -50,9 +50,12 @@ mixin _$AboutState {
   String get storeBuildNumber => throw _privateConstructorUsedError;
   String get appVersion => throw _privateConstructorUsedError;
   Uri get coreUrl => throw _privateConstructorUsedError;
+  String? get fcmPushToken => throw _privateConstructorUsedError;
   Version? get coreVersion => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of AboutState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $AboutStateCopyWith<AboutState> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -71,6 +74,7 @@ abstract class $AboutStateCopyWith<$Res> {
       String storeBuildNumber,
       String appVersion,
       Uri coreUrl,
+      String? fcmPushToken,
       Version? coreVersion});
 }
 
@@ -84,6 +88,8 @@ class _$AboutStateCopyWithImpl<$Res, $Val extends AboutState>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of AboutState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -94,6 +100,7 @@ class _$AboutStateCopyWithImpl<$Res, $Val extends AboutState>
     Object? storeBuildNumber = null,
     Object? appVersion = null,
     Object? coreUrl = null,
+    Object? fcmPushToken = freezed,
     Object? coreVersion = freezed,
   }) {
     return _then(_value.copyWith(
@@ -125,6 +132,10 @@ class _$AboutStateCopyWithImpl<$Res, $Val extends AboutState>
           ? _value.coreUrl
           : coreUrl // ignore: cast_nullable_to_non_nullable
               as Uri,
+      fcmPushToken: freezed == fcmPushToken
+          ? _value.fcmPushToken
+          : fcmPushToken // ignore: cast_nullable_to_non_nullable
+              as String?,
       coreVersion: freezed == coreVersion
           ? _value.coreVersion
           : coreVersion // ignore: cast_nullable_to_non_nullable
@@ -149,6 +160,7 @@ abstract class _$$AboutStateImplCopyWith<$Res>
       String storeBuildNumber,
       String appVersion,
       Uri coreUrl,
+      String? fcmPushToken,
       Version? coreVersion});
 }
 
@@ -160,6 +172,8 @@ class __$$AboutStateImplCopyWithImpl<$Res>
       _$AboutStateImpl _value, $Res Function(_$AboutStateImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of AboutState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -170,6 +184,7 @@ class __$$AboutStateImplCopyWithImpl<$Res>
     Object? storeBuildNumber = null,
     Object? appVersion = null,
     Object? coreUrl = null,
+    Object? fcmPushToken = freezed,
     Object? coreVersion = freezed,
   }) {
     return _then(_$AboutStateImpl(
@@ -201,6 +216,10 @@ class __$$AboutStateImplCopyWithImpl<$Res>
           ? _value.coreUrl
           : coreUrl // ignore: cast_nullable_to_non_nullable
               as Uri,
+      fcmPushToken: freezed == fcmPushToken
+          ? _value.fcmPushToken
+          : fcmPushToken // ignore: cast_nullable_to_non_nullable
+              as String?,
       coreVersion: freezed == coreVersion
           ? _value.coreVersion
           : coreVersion // ignore: cast_nullable_to_non_nullable
@@ -220,6 +239,7 @@ class _$AboutStateImpl extends _AboutState {
       required this.storeBuildNumber,
       required this.appVersion,
       required this.coreUrl,
+      this.fcmPushToken,
       this.coreVersion})
       : super._();
 
@@ -239,11 +259,13 @@ class _$AboutStateImpl extends _AboutState {
   @override
   final Uri coreUrl;
   @override
+  final String? fcmPushToken;
+  @override
   final Version? coreVersion;
 
   @override
   String toString() {
-    return 'AboutState(progress: $progress, appName: $appName, packageName: $packageName, storeBuildVersion: $storeBuildVersion, storeBuildNumber: $storeBuildNumber, appVersion: $appVersion, coreUrl: $coreUrl, coreVersion: $coreVersion)';
+    return 'AboutState(progress: $progress, appName: $appName, packageName: $packageName, storeBuildVersion: $storeBuildVersion, storeBuildNumber: $storeBuildNumber, appVersion: $appVersion, coreUrl: $coreUrl, fcmPushToken: $fcmPushToken, coreVersion: $coreVersion)';
   }
 
   @override
@@ -263,15 +285,28 @@ class _$AboutStateImpl extends _AboutState {
             (identical(other.appVersion, appVersion) ||
                 other.appVersion == appVersion) &&
             (identical(other.coreUrl, coreUrl) || other.coreUrl == coreUrl) &&
+            (identical(other.fcmPushToken, fcmPushToken) ||
+                other.fcmPushToken == fcmPushToken) &&
             (identical(other.coreVersion, coreVersion) ||
                 other.coreVersion == coreVersion));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, progress, appName, packageName,
-      storeBuildVersion, storeBuildNumber, appVersion, coreUrl, coreVersion);
+  int get hashCode => Object.hash(
+      runtimeType,
+      progress,
+      appName,
+      packageName,
+      storeBuildVersion,
+      storeBuildNumber,
+      appVersion,
+      coreUrl,
+      fcmPushToken,
+      coreVersion);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of AboutState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$AboutStateImplCopyWith<_$AboutStateImpl> get copyWith =>
@@ -287,6 +322,7 @@ abstract class _AboutState extends AboutState {
       required final String storeBuildNumber,
       required final String appVersion,
       required final Uri coreUrl,
+      final String? fcmPushToken,
       final Version? coreVersion}) = _$AboutStateImpl;
   const _AboutState._() : super._();
 
@@ -305,9 +341,14 @@ abstract class _AboutState extends AboutState {
   @override
   Uri get coreUrl;
   @override
-  Version? get coreVersion;
+  String? get fcmPushToken;
   @override
-  @JsonKey(ignore: true)
+  Version? get coreVersion;
+
+  /// Create a copy of AboutState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$AboutStateImplCopyWith<_$AboutStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

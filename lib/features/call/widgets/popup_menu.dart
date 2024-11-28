@@ -33,9 +33,11 @@ class CallPopupMenuItem extends PopupMenuItem {
                 padding: const EdgeInsets.all(8),
                 child: icon,
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 4),
-                child: Text(text),
+              Flexible(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 4),
+                  child: Text(text, overflow: TextOverflow.ellipsis, maxLines: 2),
+                ),
               ),
             ],
           ),

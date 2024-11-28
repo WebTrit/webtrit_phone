@@ -8,22 +8,28 @@ import 'package:bloc/bloc.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:logging/logging.dart';
+import 'package:logging_appenders/logging_appenders.dart';
 
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 
 import 'package:webtrit_phone/app/app_bloc_observer.dart';
 import 'package:webtrit_phone/app/assets.gen.dart';
+import 'package:webtrit_phone/common/common.dart';
 import 'package:webtrit_phone/data/data.dart';
+import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/push_notification/push_notifications.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
-import 'package:webtrit_phone/utils/path_provider/_native.dart';
 
-import 'background_call_handler.dart';
+import 'package:webtrit_phone/features/call/call.dart' as background_call_isolate show onStart, onChangedLifecycle;
+
 import 'environment_config.dart';
 import 'firebase_options.dart';
 
 Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
+  _initLogs();
+
   final logger = Logger('bootstrap');
 
   await runZonedGuarded(
@@ -32,6 +38,7 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
 
       await _initFirebase();
       await _initFirebaseMessaging();
+      await _initLocalNotifications();
 
       if (!kIsWeb && kDebugMode) {
         FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(false);
@@ -44,20 +51,21 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
         }
       };
 
+      // Initialization order is crucial for proper app setup
       await AppInfo.init();
-      await AppPermissions.init();
+      await AppThemes.init();
       await AppPreferences.init();
+      await FeatureAccess.init();
+      await AppPermissions.init();
       await DeviceInfo.init();
       await PackageInfo.init();
       await SecureStorage.init();
-      await AppThemes.init();
       await AppSound.init(outgoingCallRingAsset: Assets.ringtones.outgoingCall1);
       await AppCertificates.init();
       await AppTime.init();
+      await SessionCleanupWorker.init();
 
-      if (Platform.isAndroid) {
-        WebtritCallkeepLogs().setLogsDelegate(CallkeepLogs());
-      }
+      await _initCallkeep();
 
       Bloc.observer = AppBlocObserver();
 
@@ -72,6 +80,34 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
   );
 }
 
+Future<void> _initCallkeep() async {
+  if (!Platform.isAndroid) return;
+
+  final incomingCalType = AppPreferences().getIncomingCallType();
+  final callkeep = CallkeepBackgroundService();
+
+  CallkeepBackgroundService.setUpServiceCallback(
+    onStart: background_call_isolate.onStart,
+    onChangedLifecycle: background_call_isolate.onChangedLifecycle,
+  );
+
+  callkeep.setUp(
+    autoStartOnBoot: incomingCalType.isSocket,
+    autoRestartOnTerminate: incomingCalType.isSocket,
+  );
+
+  if (incomingCalType.isPushNotification) {
+    callkeep.stopService();
+  }
+
+  WebtritCallkeepLogs().setLogsDelegate(CallkeepLogs());
+}
+
+_initLogs() {
+  hierarchicalLoggingEnabled = true;
+  PrintAppender.setupLogging(level: Level.LEVELS.firstWhere((level) => level.name == EnvironmentConfig.DEBUG_LEVEL));
+}
+
 @pragma('vm:entry-point')
 Future<void> _initFirebase() async {
   await Firebase.initializeApp(
@@ -82,17 +118,28 @@ Future<void> _initFirebase() async {
 Future<void> _initFirebaseMessaging() async {
   final logger = Logger('FirebaseMessaging');
 
+  FirebaseMessaging.instance.setDeliveryMetricsExportToBigQuery(true);
+
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
     logger.info('onMessage: ${message.toMap()}');
+    final appNotification = AppRemoteNotification.fromFCM(message);
+    RemoteNotificationsBroker.handleForegroundNotification(appNotification);
+
+    // Type of notification for testing purposes
+    _dHandleInspectPushNotification(message.data, false);
   });
   FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
     logger.info('onMessageOpenedApp: ${message.toMap()}');
+    final appNotification = AppRemoteNotification.fromFCM(message);
+    RemoteNotificationsBroker.handleOpenedNotification(appNotification);
   });
   final initialMessage = await FirebaseMessaging.instance.getInitialMessage();
   if (initialMessage != null) {
     logger.info('initialMessage: ${initialMessage.toMap()}');
+    final appNotification = AppRemoteNotification.fromFCM(initialMessage);
+    RemoteNotificationsBroker.handleOpenedNotification(appNotification);
   }
 
   // actual FirebaseMessaging permission request executed in [PermissionsCubit]
@@ -100,53 +147,75 @@ Future<void> _initFirebaseMessaging() async {
 
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  final logger = Logger('FCM')..info('_firebaseMessagingBackgroundHandler: ${message.toMap()}');
+  _initLogs();
+  final appNotification = AppRemoteNotification.fromFCM(message);
 
-  final fcmHandler = FCMHandler(message);
-  final fcmType = fcmHandler.getMessageType();
+  // Type of notification for testing purposes
+  _dHandleInspectPushNotification(message.data, true);
 
-  logger.info('Push notification type: $fcmType');
+  if (appNotification is PendingCallNotification && Platform.isAndroid) {
+    CallkeepBackgroundService().startService(data: message.data);
+  }
 
-  if (fcmType == FCMType.call && Platform.isAndroid) {
-    final call = fcmHandler.getPendingCall()!;
-    final logger = Logger('_backgroundAndroidCall')..info('Initial call: $call');
+  if (appNotification is MessageNotification) {
+    final appDatabase = await IsolateDatabase.create();
+    final repo = ActiveMessageNotificationsRepositoryDriftImpl(appDatabase: appDatabase);
 
-    WebtritCallkeepLogs().setLogsDelegate(CallkeepLogs());
+    final activeMessageNotification = ActiveMessageNotification(
+      notificationId: appNotification.id,
+      messageId: appNotification.messageId,
+      conversationId: appNotification.conversationId,
+      title: appNotification.title ?? '',
+      body: appNotification.body ?? '',
+      time: DateTime.now(),
+    );
+    await repo.set(activeMessageNotification);
+  }
+}
 
-    final appDatabase = FCMIsolateDatabase.instance(
-      createAppDatabaseConnection(
-        await getApplicationDocumentsPath(),
-        'db.sqlite',
-        logStatements: EnvironmentConfig.DATABASE_LOG_STATEMENTS,
+Future _initLocalNotifications() async {
+  await FlutterLocalNotificationsPlugin().initialize(
+    const InitializationSettings(
+      iOS: DarwinInitializationSettings(),
+      android: AndroidInitializationSettings('@mipmap/ic_launcher'),
+    ),
+    onDidReceiveNotificationResponse: LocalNotificationsBroker.handleActionReceived,
+    onDidReceiveBackgroundNotificationResponse: LocalNotificationsBroker.handleActionReceived,
+  );
+
+  final launchDetails = await FlutterLocalNotificationsPlugin().getNotificationAppLaunchDetails();
+  final data = launchDetails?.notificationResponse;
+  if (data != null) LocalNotificationsBroker.handleActionReceived(data);
+}
+
+// Debugging push notifications
+void _dHandleInspectPushNotification(Map<String, dynamic> data, bool background) {
+  if (data.containsKey('type') && data['type'] == 'inspect-push') {
+    final title = data['title'] ?? 'Inspect Notification';
+    final body =
+        "${data['body'] ?? 'This is a local notification for testing notifications'} ${background ? 'Background' : 'Foreground'}";
+
+    _dShowInspectLocalNotification(title: title, body: body);
+  }
+}
+
+// Debugging push notifications
+Future<void> _dShowInspectLocalNotification({
+  required String title,
+  required String body,
+}) async {
+  await FlutterLocalNotificationsPlugin().show(
+    0,
+    title,
+    body,
+    const NotificationDetails(
+      android: AndroidNotificationDetails(
+        'inspect_push_channel',
+        'Inspect Push Notifications',
+        channelDescription: 'Channel for debugging push notifications',
+        importance: Importance.max,
+        priority: Priority.high,
       ),
-    );
-    final repository = RecentsRepository(
-      appDatabase: appDatabase,
-    );
-
-    logger.info('Initial incoming call');
-
-    BackgroundCallHandler(call, repository).init();
-  }
-}
-
-class CallkeepLogs implements CallkeepLogsDelegate {
-  final _logger = Logger('CallkeepLogs');
-
-  @override
-  void onLog(CallkeepLogType type, String tag, String message) {
-    _logger.info('$tag $message');
-  }
-}
-
-class FCMIsolateDatabase extends AppDatabase {
-  FCMIsolateDatabase(super.e);
-
-  static FCMIsolateDatabase? _instance;
-
-  static instance(executor) {
-    _instance ??= FCMIsolateDatabase(executor);
-
-    return _instance!;
-  }
+    ),
+  );
 }

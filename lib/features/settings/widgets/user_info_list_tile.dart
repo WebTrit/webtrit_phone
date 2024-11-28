@@ -3,21 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:webtrit_api/webtrit_api.dart';
 
 import 'package:webtrit_phone/extensions/extensions.dart';
-import 'package:webtrit_phone/features/features.dart';
+import 'package:webtrit_phone/utils/utils.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
-
-const _kHoldSpaceData = ' ';
 
 class UserInfoListTile extends StatelessWidget {
   const UserInfoListTile({
     super.key,
-    required this.callStatus,
     this.info,
     this.onEditPressed,
     this.contentPadding,
   });
 
-  final CallStatus callStatus;
   final UserInfo? info;
   final VoidCallback? onEditPressed;
 
@@ -39,7 +35,6 @@ class UserInfoListTile extends StatelessWidget {
     const radius = 32.0;
 
     return Ink(
-      height: radius * 3,
       child: SafeArea(
         top: false,
         bottom: false,
@@ -47,54 +42,43 @@ class UserInfoListTile extends StatelessWidget {
         child: Row(
           children: [
             LeadingAvatar(
-              username: info?.name ?? '?',
+              username: info?.name ?? info?.numbers.main ?? 'N/A',
+              thumbnailUrl: gravatarThumbnailUrl(info?.email),
               radius: radius,
             ),
             const SizedBox(width: 8),
             Expanded(
               child: Column(
+                mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Text.rich(
-                    TextSpan(
-                      children: [
-                        WidgetSpan(
-                          child: Container(
-                            width: radius / 3,
-                            height: radius / 3,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: callStatus.color(context),
-                            ),
-                          ),
-                          alignment: PlaceholderAlignment.middle,
+                  if (info != null) ...[
+                    if (info.name != null)
+                      CopyToClipboard(
+                        data: info.name,
+                        child: Text(
+                          info.name!,
+                          style: themeData.textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold),
+                          overflow: TextOverflow.ellipsis,
                         ),
-                        const TextSpan(text: ' '),
-                        TextSpan(text: callStatus.l10n(context)),
-                      ],
-                    ),
-                  ),
-                  CopyToClipboard(
-                    data: info?.name,
-                    child: Text(
-                      info?.name ?? _kHoldSpaceData,
-                      style: themeData.textTheme.bodyLarge!.copyWith(
-                        fontWeight: FontWeight.bold,
                       ),
-                    ),
-                  ),
-                  CopyToClipboard(
-                    data: info?.numbers.main,
-                    child: Text(
-                      info?.numberWithExtension ?? _kHoldSpaceData,
-                      style: themeData.textTheme.bodyLarge,
-                    ),
-                  ),
-                  Text(
-                    info?.balanceWithCurrency ?? _kHoldSpaceData,
-                    style: themeData.textTheme.labelLarge,
-                  ),
+                    if (info.numbers.main.isNotEmpty)
+                      CopyToClipboard(
+                        data: info.numbers.main,
+                        child: Text(
+                          info.numberWithExtension,
+                          style: themeData.textTheme.bodyLarge,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    if (info.balanceWithCurrency?.isNotEmpty == true)
+                      Text(
+                        info.balanceWithCurrency!,
+                        style: themeData.textTheme.labelLarge,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                  ],
                 ],
               ),
             ),

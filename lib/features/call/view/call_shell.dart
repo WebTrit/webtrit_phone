@@ -4,10 +4,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:logging/logging.dart';
 
+import 'package:webtrit_signaling/webtrit_signaling.dart';
+
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/features/orientations/orientations.dart';
-import 'package:webtrit_signaling/webtrit_signaling.dart';
+import 'package:webtrit_phone/l10n/l10n.dart';
 
 import '../call.dart';
 import 'call_active_thumbnail.dart';
@@ -30,6 +32,7 @@ class CallShell extends StatefulWidget {
 
 class _CallShellState extends State<CallShell> {
   ThumbnailAvatar? _avatar;
+
   @override
   Widget build(BuildContext context) {
     return signalingListener(displayListener(widget.child));
@@ -60,7 +63,7 @@ class _CallShellState extends State<CallShell> {
   Widget displayListener(Widget child) {
     return BlocListener<CallBloc, CallState>(
       listenWhen: (previous, current) => previous.display != current.display,
-      listener: (context, state) {
+      listener: (context, state) async {
         final router = context.router;
 
         final orientationsBloc = context.read<OrientationsBloc>();
@@ -70,15 +73,11 @@ class _CallShellState extends State<CallShell> {
           orientationsBloc.add(const OrientationsChanged(PreferredOrientation.regular));
         }
 
-        if (state.display == CallDisplay.screen) {
-          if (!router.isRouteActive(CallScreenPageRoute.name)) {
-            router.push(const CallScreenPageRoute());
-          }
-        } else {
-          if (router.isRouteActive(CallScreenPageRoute.name)) {
-            router.back();
-          }
-        }
+        final callScreenActive = router.isRouteActive(CallScreenPageRoute.name);
+        final callScreenShouldDisplay = state.display == CallDisplay.screen;
+
+        if (callScreenShouldDisplay && !callScreenActive) _openCallScreen(router, state.activeCalls.isNotEmpty);
+        if (!callScreenShouldDisplay && callScreenActive) _backToMainScreen(router);
 
         if (state.display == CallDisplay.overlay) {
           final avatar = _avatar;
@@ -89,18 +88,13 @@ class _CallShellState extends State<CallShell> {
           } else {
             final avatar = ThumbnailAvatar(
               stickyPadding: widget.stickyPadding,
-              onTap: () => router.push(const CallScreenPageRoute()),
+              onTap: () => _openCallScreen(router, state.activeCalls.isNotEmpty),
             );
             _avatar = avatar;
             avatar.insert(context, state);
           }
         } else {
-          final avatar = _avatar;
-          if (avatar != null) {
-            if (avatar.inserted) {
-              avatar.remove();
-            }
-          }
+          _removeThumbnailAvatar();
         }
 
         if (state.display == CallDisplay.none) {
@@ -109,6 +103,52 @@ class _CallShellState extends State<CallShell> {
       },
       child: child,
     );
+  }
+
+  void _removeThumbnailAvatar() {
+    final avatar = _avatar;
+    if (avatar != null) {
+      if (avatar.inserted) {
+        avatar.remove();
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    _removeThumbnailAvatar();
+    super.dispose();
+  }
+
+  void _openCallScreen(StackRouter router, bool hasActiveCalls) {
+    if (hasActiveCalls) {
+      // Use navigate to prevent duplicating CallScreenPageRoute in the stack.
+      // For example, if the user is on a different route branch like LogRecordsConsoleScreenPageRoute, navigate ensures CallScreenPageRoute is not added again.
+      router.navigate(const CallScreenPageRoute());
+    } else {
+      // Handle scenario where no active call exists, ensuring the listener is properly removed and the thumbnail is correctly managed.
+      _removeThumbnailAvatar();
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(context.l10n.call_ThumbnailAvatar_currentlyNoActiveCall),
+          backgroundColor: Colors.grey,
+        ),
+      );
+    }
+  }
+
+  /// Pops the stack until the main screen is reached.
+  /// This is useful when the user is on a different route branch like LogRecordsConsoleScreenPageRoute.
+  /// Uses only on programmatic back navigation, for events like `transferring`.
+  /// But if user back manually using the back button hi'll be just popped to the previous screen.
+  ///
+  /// router.navigate(const MainScreenPageRoute()) didnt used to avoid bug
+  /// that triggers redirect('') from empty MainScreenPageRoute subroute to
+  /// initial(last remembered since restart) flavor that final and not changed across the app router lifecycle.
+  /// example redirect('') will always redirect to contacts page even if user was on the calls or chat page.
+  void _backToMainScreen(StackRouter router) {
+    router.popUntil((route) => route.settings.name == MainScreenPageRoute.name, scoped: false);
   }
 }
 

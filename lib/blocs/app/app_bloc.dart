@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:webtrit_callkeep/webtrit_callkeep.dart';
+import 'package:logging/logging.dart';
 
 import 'package:webtrit_api/webtrit_api.dart';
 
@@ -18,18 +18,20 @@ part 'app_event.dart';
 
 part 'app_state.dart';
 
+final _logger = Logger('AppBloc');
+
 class AppBloc extends Bloc<AppEvent, AppState> {
   AppBloc({
     required this.appPreferences,
     required this.secureStorage,
     required this.appDatabase,
-    required this.pendingCallHandler,
     @visibleForTesting this.createWebtritApiClient = defaultCreateWebtritApiClient,
     required AppThemes appThemes,
   }) : super(AppState(
           coreUrl: secureStorage.readCoreUrl(),
           tenantId: secureStorage.readTenantId(),
           token: secureStorage.readToken(),
+          userId: secureStorage.readUserId(),
           themeSettings: appThemes.values.first.settings,
           themeMode: appPreferences.getThemeMode(),
           locale: appPreferences.getLocale(),
@@ -47,7 +49,6 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   final AppPreferences appPreferences;
   final SecureStorage secureStorage;
   final AppDatabase appDatabase;
-  final AndroidPendingCallHandler pendingCallHandler;
   final WebtritApiClientFactory createWebtritApiClient;
 
   Future<void> _cleanUpUserData() async {
@@ -56,6 +57,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     await secureStorage.deleteCoreUrl();
     await secureStorage.deleteTenantId();
     await secureStorage.deleteToken();
+    await secureStorage.deleteUserId();
 
     await appDatabase.deleteEverything();
   }
@@ -70,11 +72,13 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     await secureStorage.writeCoreUrl(event.coreUrl);
     await secureStorage.writeTenantId(event.tenantId);
     await secureStorage.writeToken(event.token);
+    await secureStorage.writeUserId(event.userId);
 
     emit(state.copyWith(
       coreUrl: event.coreUrl,
       tenantId: event.tenantId,
       token: event.token,
+      userId: event.userId,
     ));
   }
 
@@ -87,6 +91,8 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       emit(state.copyWith(
         accountErrorCode: AccountErrorCode.values.firstWhereOrNull((it) => it.value == e.error?.code),
       ));
+    } catch (e) {
+      _logger.severe('_onLogouted', e);
     }
 
     await _cleanUpUserData();
@@ -95,6 +101,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       coreUrl: null,
       tenantId: null,
       token: null,
+      userId: null,
     ));
   }
 

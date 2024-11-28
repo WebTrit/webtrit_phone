@@ -99,16 +99,20 @@ class ExternalContactsSyncBloc extends Bloc<ExternalContactsSyncEvent, ExternalC
             lastName: Value(externalContact.lastName),
             aliasName: Value(externalContact.aliasName),
             registered: Value(externalContact.registered),
+            userRegistered: Value(externalContact.userRegistered),
+            isCurrentUser: Value(externalContact.isCurrentUser),
           ));
 
           final externalContactNumber = externalContact.number;
           final externalContactExt = externalContact.ext;
           final externalContactMobile = externalContact.mobile;
+          final externalSmsNumbers = externalContact.smsNumbers;
 
           final externalContactNumbers = [
             if (externalContactNumber != null) externalContactNumber,
             if (externalContactExt != null) externalContactExt,
             if (externalContactMobile != null) externalContactMobile,
+            if (externalSmsNumbers != null) ...externalSmsNumbers,
           ];
 
           await appDatabase.contactPhonesDao
@@ -134,6 +138,15 @@ class ExternalContactsSyncBloc extends Bloc<ExternalContactsSyncEvent, ExternalC
               label: const Value('mobile'),
               contactId: Value(insertOrUpdateContactData.id),
             ));
+          }
+          if (externalSmsNumbers != null) {
+            for (final externalSmsNumber in externalSmsNumbers) {
+              await appDatabase.contactPhonesDao.insertOnUniqueConflictUpdateContactPhone(ContactPhoneDataCompanion(
+                number: Value(externalSmsNumber),
+                label: const Value('sms'),
+                contactId: Value(insertOrUpdateContactData.id),
+              ));
+            }
           }
 
           final externalContactEmail = externalContact.email;

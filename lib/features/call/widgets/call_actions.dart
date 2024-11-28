@@ -14,6 +14,7 @@ export 'call_actions_styles.dart';
 class CallActions extends StatefulWidget {
   const CallActions({
     super.key,
+    required this.enableInteractions,
     required this.isIncoming,
     required this.video,
     required this.wasAccepted,
@@ -42,6 +43,7 @@ class CallActions extends StatefulWidget {
     this.style,
   });
 
+  final bool enableInteractions;
   final bool isIncoming;
   final bool video;
   final bool wasAccepted;
@@ -147,15 +149,23 @@ class _CallActionsState extends State<CallActions> {
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
 
-    final onCameraChanged = widget.onCameraChanged;
-    final onMutedChanged = widget.onMutedChanged;
-    final speakerValue = widget.speakerValue;
-    final onSpeakerChanged = widget.onSpeakerChanged;
-    final onBlindTransferInitiated = widget.onBlindTransferInitiated;
-    final onAttendedTransferInitiated = widget.onAttendedTransferInitiated;
-    final onAttendedTransferSubmitted = widget.onAttendedTransferSubmitted;
-    final onHeldChanged = widget.onHeldChanged;
-    final onSwapPressed = widget.onSwapPressed;
+    final onCameraChanged = widget.enableInteractions ? widget.onCameraChanged : null;
+    final onMutedChanged = widget.enableInteractions ? widget.onMutedChanged : null;
+    final speakerValue = widget.enableInteractions ? widget.speakerValue : null;
+    final onSpeakerChanged = widget.enableInteractions ? widget.onSpeakerChanged : null;
+    final onBlindTransferInitiated = widget.enableInteractions ? widget.onBlindTransferInitiated : null;
+    final onAttendedTransferInitiated = widget.enableInteractions ? widget.onAttendedTransferInitiated : null;
+    final onAttendedTransferSubmitted = widget.enableInteractions ? widget.onAttendedTransferSubmitted : null;
+    final onHeldChanged = widget.enableInteractions ? widget.onHeldChanged : null;
+    final onSwapPressed = widget.enableInteractions ? widget.onSwapPressed : null;
+    final onAcceptPressed = widget.enableInteractions ? widget.onAcceptPressed : null;
+    // Always allow the user to hang up the call
+    final onHangupPressed = widget.onHangupPressed;
+    final onHangupAndAcceptPressed = widget.enableInteractions ? widget.onHangupAndAcceptPressed : null;
+    final onKeyPressed = widget.enableInteractions ? widget.onKeyPressed : null;
+    final onApproveTransferPressed = widget.enableInteractions ? widget.onApproveTransferPressed : null;
+    final onHoldAndAcceptPressed = widget.enableInteractions ? widget.onHoldAndAcceptPressed : null;
+    final onDeclineTransferPressed = widget.enableInteractions ? widget.onDeclineTransferPressed : null;
 
     final style = CallActionsStyle.merge(widget.style, Theme.of(context).extension<CallActionsStyles>()?.primary);
 
@@ -170,7 +180,7 @@ class _CallActionsState extends State<CallActions> {
                   ? context.l10n.call_CallActionsTooltip_decline_inviteToAttendedTransfer
                   : context.l10n.call_CallActionsTooltip_hangup,
               child: TextButton(
-                onPressed: widget.onHangupPressed,
+                onPressed: onHangupPressed,
                 style: style.hangup,
                 child: const Icon(Icons.call_end),
               ),
@@ -181,7 +191,7 @@ class _CallActionsState extends State<CallActions> {
                   ? context.l10n.call_CallActionsTooltip_accept_inviteToAttendedTransfer
                   : context.l10n.call_CallActionsTooltip_accept,
               child: TextButton(
-                onPressed: widget.onAcceptPressed,
+                onPressed: onAcceptPressed,
                 style: style.callStart,
                 child: Icon(widget.video ? Icons.videocam : Icons.call),
               ),
@@ -195,7 +205,7 @@ class _CallActionsState extends State<CallActions> {
             Tooltip(
               message: context.l10n.call_CallActionsTooltip_hangupAndAccept,
               child: TextButton(
-                onPressed: widget.onHangupAndAcceptPressed,
+                onPressed: onHangupAndAcceptPressed,
                 style: style.callStart,
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
@@ -209,7 +219,7 @@ class _CallActionsState extends State<CallActions> {
             Tooltip(
               message: context.l10n.call_CallActionsTooltip_hangup,
               child: TextButton(
-                onPressed: widget.onHangupPressed,
+                onPressed: onHangupPressed,
                 style: style.hangup,
                 child: const Icon(Icons.call_end),
               ),
@@ -217,7 +227,7 @@ class _CallActionsState extends State<CallActions> {
             Tooltip(
               message: context.l10n.call_CallActionsTooltip_holdAndAccept,
               child: TextButton(
-                onPressed: widget.onHoldAndAcceptPressed,
+                onPressed: onHoldAndAcceptPressed,
                 style: style.callStart,
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
@@ -231,14 +241,14 @@ class _CallActionsState extends State<CallActions> {
           ],
         );
       }
-    } else if (widget.onApproveTransferPressed != null || widget.onDeclineTransferPressed != null) {
+    } else if (onApproveTransferPressed != null || onDeclineTransferPressed != null) {
       buttonsTable = TextButtonsTable(
         minimumSize: Size.square(_dimension),
         children: [
           Tooltip(
             message: context.l10n.call_CallActionsTooltip_hangup,
             child: TextButton(
-              onPressed: widget.onDeclineTransferPressed,
+              onPressed: onDeclineTransferPressed,
               style: style.hangup,
               child: const Icon(Icons.call_end),
             ),
@@ -247,7 +257,7 @@ class _CallActionsState extends State<CallActions> {
           Tooltip(
             message: context.l10n.call_CallActionsTooltip_accept,
             child: TextButton(
-              onPressed: widget.onApproveTransferPressed,
+              onPressed: onApproveTransferPressed,
               style: style.callStart,
               child: const Icon(Icons.phone_forwarded),
             ),
@@ -274,7 +284,7 @@ class _CallActionsState extends State<CallActions> {
                     _keypadTextFieldEditableTextState?.userUpdateTextEditingValue(
                         value, SelectionChangedCause.keyboard);
 
-                    widget.onKeyPressed!(key);
+                    onKeyPressed!(key);
                   },
                   style: style.key,
                 ),
@@ -347,16 +357,17 @@ class _CallActionsState extends State<CallActions> {
                         ),
                         textStyle: themeData.textTheme.bodyMedium,
                       ),
-                  CallPopupMenuItem(
-                    onTap: onBlindTransferInitiated,
-                    text: context.l10n.call_CallActionsTooltip_transfer_choose,
-                    icon: Icon(
-                      Icons.phone_forwarded_outlined,
-                      size: themeData.textTheme.bodyLarge!.fontSize,
-                      color: themeData.textTheme.bodyMedium!.color,
-                    ),
-                    textStyle: themeData.textTheme.bodyMedium,
-                  )
+                  if (onBlindTransferInitiated != null)
+                    CallPopupMenuItem(
+                      onTap: onBlindTransferInitiated,
+                      text: context.l10n.call_CallActionsTooltip_transfer_choose,
+                      icon: Icon(
+                        Icons.phone_forwarded_outlined,
+                        size: themeData.textTheme.bodyLarge!.fontSize,
+                        color: themeData.textTheme.bodyMedium!.color,
+                      ),
+                      textStyle: themeData.textTheme.bodyMedium,
+                    )
                 ],
                 child: IgnorePointer(
                   child: TextButton(
@@ -373,16 +384,17 @@ class _CallActionsState extends State<CallActions> {
               child: CallPopupMenuButton(
                 offset: Offset(_dimension + 8, 0),
                 items: [
-                  CallPopupMenuItem(
-                    onTap: onBlindTransferInitiated,
-                    text: context.l10n.call_CallActionsTooltip_unattended_transfer,
-                    icon: Icon(
-                      Icons.phone_forwarded_outlined,
-                      size: themeData.textTheme.bodyLarge!.fontSize,
-                      color: themeData.textTheme.bodyMedium!.color,
+                  if (onBlindTransferInitiated != null)
+                    CallPopupMenuItem(
+                      onTap: onBlindTransferInitiated,
+                      text: context.l10n.call_CallActionsTooltip_unattended_transfer,
+                      icon: Icon(
+                        Icons.phone_forwarded_outlined,
+                        size: themeData.textTheme.bodyLarge!.fontSize,
+                        color: themeData.textTheme.bodyMedium!.color,
+                      ),
+                      textStyle: themeData.textTheme.bodyMedium,
                     ),
-                    textStyle: themeData.textTheme.bodyMedium,
-                  ),
                   if (onAttendedTransferInitiated != null)
                     CallPopupMenuItem(
                       onTap: onAttendedTransferInitiated,
@@ -397,7 +409,7 @@ class _CallActionsState extends State<CallActions> {
                 ],
                 child: IgnorePointer(
                   child: TextButton(
-                    onPressed: () {},
+                    onPressed: onBlindTransferInitiated == null && onAttendedTransferInitiated == null ? null : () {},
                     style: style.transfer,
                     child: const Icon(Icons.phone_forwarded),
                   ),
@@ -427,7 +439,7 @@ class _CallActionsState extends State<CallActions> {
           Tooltip(
             message: context.l10n.call_CallActionsTooltip_showKeypad,
             child: TextButton(
-              onPressed: widget.onKeyPressed == null || !_isOrientationPortrait
+              onPressed: onKeyPressed == null || !_isOrientationPortrait
                   ? null
                   : () {
                       setState(() {
@@ -456,7 +468,7 @@ class _CallActionsState extends State<CallActions> {
           Tooltip(
             message: context.l10n.call_CallActionsTooltip_hangup,
             child: TextButton(
-              onPressed: widget.onHangupPressed,
+              onPressed: onHangupPressed,
               style: style.hangup,
               child: const Icon(Icons.call_end),
             ),

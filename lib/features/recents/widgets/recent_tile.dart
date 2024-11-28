@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:intl/intl.dart';
+import 'package:webtrit_phone/environment_config.dart';
 
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
@@ -16,6 +17,7 @@ class RecentTile extends StatelessWidget {
     this.onTap,
     this.onLongPress,
     this.onInfoPressed,
+    this.onMessagePressed,
     this.onDeleted,
   });
 
@@ -25,6 +27,7 @@ class RecentTile extends StatelessWidget {
   final GestureTapCallback? onTap;
   final GestureLongPressCallback? onLongPress;
   final GestureTapCallback? onInfoPressed;
+  final GestureTapCallback? onMessagePressed;
   final void Function(Recent)? onDeleted;
 
   @override
@@ -32,6 +35,7 @@ class RecentTile extends StatelessWidget {
     final themeData = Theme.of(context);
     final onDeleted = this.onDeleted;
     final dateFormat = this.dateFormat ?? DateFormat();
+    const chatsEnabled = EnvironmentConfig.CHAT_FEATURE_ENABLE;
 
     return Dismissible(
       key: ObjectKey(recent),
@@ -53,25 +57,41 @@ class RecentTile extends StatelessWidget {
       onDismissed: onDeleted == null ? null : (direction) => onDeleted(recent),
       direction: DismissDirection.endToStart,
       child: ListTile(
-        contentPadding: const EdgeInsets.only(left: 16.0),
+        contentPadding: const EdgeInsets.only(left: 16, right: 8),
         leading: LeadingAvatar(
           username: recent.name,
         ),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
-              dateFormat.format(recent.createdTime),
+            Text(dateFormat.format(recent.createdTime)),
+            const SizedBox(width: 4),
+            InkWell(
+              borderRadius: BorderRadius.circular(24),
+              onTap: onInfoPressed,
+              child: const Padding(
+                padding: EdgeInsets.all(4.0),
+                child: Icon(Icons.info_outlined),
+              ),
             ),
-            IconButton(
-              splashRadius: 24,
-              icon: const Icon(Icons.info_outlined),
-              onPressed: onInfoPressed,
-            ),
+            if (chatsEnabled)
+              InkWell(
+                borderRadius: BorderRadius.circular(24),
+                onTap: onMessagePressed,
+                child: Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: Icon(
+                    Icons.messenger_outline,
+                    color: onMessagePressed == null ? Colors.grey : null,
+                  ),
+                ),
+              )
           ],
         ),
         title: Text(
           recent.name,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
         ),
         subtitle: Row(
           children: [
@@ -89,8 +109,12 @@ class RecentTile extends StatelessWidget {
               color: Colors.grey,
             ),
             const Text(' '),
-            Text(
-              recent.number,
+            Flexible(
+              child: Text(
+                recent.number,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
             ),
           ],
         ),

@@ -6,33 +6,25 @@ import 'package:webtrit_api/webtrit_api.dart';
 
 import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/data/data.dart';
-import 'package:webtrit_phone/environment_config.dart';
+
+import '../models/models.dart';
 
 part 'autoprovision_state.dart';
 
 final _logger = Logger('AutoprovisionCubit');
 
 class AutoprovisionCubit extends Cubit<AutoprovisionState> {
-  AutoprovisionCubit(
-    this._configToken,
-    this._tenantId,
-    this._oldToken,
-    this._oldTenantId,
-  ) : super(AutoprovisionState.initial());
+  AutoprovisionCubit(this.config) : super(AutoprovisionState.initial());
 
-  final String _configToken;
-  final String _tenantId;
-  final String? _oldToken;
-  final String _oldTenantId;
+  final AutoprovisionConfig config;
 
-  final _coreUrl = EnvironmentConfig.CORE_URL ?? EnvironmentConfig.DEMO_CORE_URL;
   final _identifier = AppInfo().identifier;
   final _bundleId = PackageInfo().packageName;
   final _appType = PlatformInfo().appType;
 
-  WebtritApiClient _apiClient(String tenantId) {
+  WebtritApiClient _apiClient(String coreUrl, String tenantId) {
     return WebtritApiClient(
-      Uri.parse(_coreUrl),
+      Uri.parse(coreUrl),
       tenantId,
       connectionTimeout: kApiClientConnectionTimeout,
     );
@@ -42,26 +34,38 @@ class AutoprovisionCubit extends Cubit<AutoprovisionState> {
     _logger.info('processToken: starts');
     emit(AutoprovisionState.processing());
 
+    final coreUrl = config.coreUrl ?? config.defaultCoreUrl;
+    final oldCoreUrl = config.oldCoreUrl ?? config.defaultCoreUrl;
+
     final credentials = SessionAutoProvisionCredential(
       bundleId: _bundleId,
       type: _appType,
       identifier: _identifier,
-      configToken: _configToken,
+      configToken: config.configToken,
     );
 
     try {
-      final result = await _apiClient(_tenantId).createSessionAutoProvision(credentials);
+      final result = await _apiClient(coreUrl, config.tenantId).createSessionAutoProvision(credentials);
       final token = result.token;
-      final tenantId = result.tenantId ?? _tenantId;
+      final userId = result.userId;
+      final tenantId = result.tenantId ?? config.tenantId;
 
-      if (_oldToken != null) {
-        await _apiClient(_oldTenantId).deleteSession(_oldToken).catchError((e) {
+      if (userId == null) {
+        // TODO(Serdun): Move exception text to localization resources for better maintainability.
+        final notSupportedCoreException =
+            Exception('User ID is required for proper auto provisioning. Please verify the core version.');
+        emit(AutoprovisionState.error(notSupportedCoreException));
+        return;
+      }
+
+      if (config.oldToken != null) {
+        await _apiClient(oldCoreUrl, config.oldTenantId).deleteSession(config.oldToken!).catchError((e) {
           _logger.warning('deleteSession error: $e');
         });
       }
 
       _logger.info('processToken success: $token, $tenantId');
-      emit(AutoprovisionState.sessionCreated(token, _coreUrl, tenantId));
+      emit(AutoprovisionState.sessionCreated(token, userId, coreUrl, tenantId));
     } catch (e) {
       _logger.warning('processToken error: $e');
       emit(AutoprovisionState.error(e));
@@ -74,11 +78,11 @@ class AutoprovisionCubit extends Cubit<AutoprovisionState> {
   }
 
   init() {
-    _logger.info('init: $_configToken, $_tenantId, $_oldToken, $_oldTenantId');
+    _logger.info('init: $config');
 
     // Ask for confirmation if the user is logged-in without config_token exchange
     // to avoid closing the current session from signaling server without user consent.
-    if (_oldToken != null) {
+    if (config.oldToken != null) {
       emit(AutoprovisionState.replaceConfirmationNeeded());
     } else {
       _processToken();
