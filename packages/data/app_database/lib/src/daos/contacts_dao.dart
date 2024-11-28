@@ -169,12 +169,26 @@ class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin 
     });
   }
 
-  Future<ContactData> insertOnUniqueConflictUpdateContact(Insertable<ContactData> contact) =>
-      into(contactsTable).insertReturning(contact,
-          onConflict: DoUpdate((_) => contact, target: [contactsTable.sourceType, contactsTable.sourceId]));
+  Future<ContactData> insertOnUniqueConflictUpdateContact(Insertable<ContactData> contact) {
+    return into(contactsTable).insertReturning(
+      contact,
+      onConflict: DoUpdate(
+        (old) => contact,
+        target: [
+          contactsTable.sourceType,
+          contactsTable.sourceId,
+        ],
+      ),
+    );
+  }
 
   Future<int> deleteContact(Insertable<ContactData> contact) => delete(contactsTable).delete(contact);
 
-  Future<int> deleteContactBySource(ContactSourceTypeEnum sourceType, String sourceId) =>
-      (delete(contactsTable)..where((t) => t.sourceType.equalsValue(sourceType) & t.sourceId.equals(sourceId))).go();
+  Future<int> deleteContactBySource(ContactSourceTypeEnum sourceType, String? sourceId) {
+    final query = delete(contactsTable)
+      ..where((t) => t.sourceType.equalsValue(sourceType))
+      ..where((t) => sourceId != null ? t.sourceId.equals(sourceId) : t.sourceId.isNull());
+
+    return query.go();
+  }
 }
