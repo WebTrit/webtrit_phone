@@ -5,7 +5,7 @@ extension ContactMessagingExt on Contact {
   /// Whether the user can send a message to this contact using the chat messaging feature.
   bool get canMessage {
     return (sourceType == ContactSourceType.external) &&
-        sourceId.isNotEmpty &&
+        sourceId?.isNotEmpty == true &&
         userRegistered == true &&
         isCurrentUser == false;
   }

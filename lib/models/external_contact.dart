@@ -2,7 +2,7 @@ import 'package:equatable/equatable.dart';
 
 class ExternalContact extends Equatable {
   const ExternalContact({
-    required this.id,
+    this.id,
     this.registered,
     this.userRegistered,
     this.isCurrentUser,
@@ -16,7 +16,7 @@ class ExternalContact extends Equatable {
     this.email,
   });
 
-  final String id;
+  final String? id;
 
   /// SIP Registered status
   final bool? registered;
