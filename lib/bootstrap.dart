@@ -15,7 +15,6 @@ import 'package:logging_appenders/logging_appenders.dart';
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 
 import 'package:webtrit_phone/app/app_bloc_observer.dart';
-import 'package:webtrit_phone/app/assets.gen.dart';
 import 'package:webtrit_phone/common/common.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/models/models.dart';
@@ -60,7 +59,6 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
       await DeviceInfo.init();
       await PackageInfo.init();
       await SecureStorage.init();
-      await AppSound.init(outgoingCallRingAsset: Assets.ringtones.outgoingCall1);
       await AppCertificates.init();
       await AppTime.init();
       await SessionCleanupWorker.init();

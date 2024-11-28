@@ -4,7 +4,6 @@ export 'app_certificates.dart';
 export 'app_info.dart';
 export 'app_permissions.dart';
 export 'app_preferences.dart';
-export 'app_sound.dart';
 export 'app_themes.dart';
 export 'app_time.dart';
 export 'device_info.dart';
