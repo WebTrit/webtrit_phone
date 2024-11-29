@@ -52,7 +52,7 @@ class _DemoShellState extends State<DemoShell> with RouteAware {
   }
 
   void _listenLocaleChanging(BuildContext context, AppState state) {
-    context.read<DemoCubit>().updateConfiguration(locale: state.locale);
+    context.read<DemoCubit>().getActions(locale: state.locale);
   }
 
   void _listenActionsChanging(BuildContext context, DemoCubitState state) {

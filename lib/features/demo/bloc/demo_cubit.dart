@@ -33,12 +33,13 @@ class DemoCubit extends Cubit<DemoCubitState> {
 
   bool get _isLoadActionForCurrentFlavor => state.actions[state.flavor]?.isIncomplete ?? true;
 
-  void updateConfiguration({
+  void getActions({
     MainFlavor? flavor,
     bool? enable,
     Locale? locale,
   }) async {
     final newFlavor = flavor ?? state.flavor;
+    final oldFlavor = state.flavor;
     final newAvailability = enable ?? state.enable;
     final newLocale = locale ?? state.locale;
     final newActions = locale != state.locale ? <MainFlavor, DemoActions>{} : state.actions;
@@ -51,31 +52,29 @@ class DemoCubit extends Cubit<DemoCubitState> {
       locale: newLocale,
       actions: newActions,
     ));
-  }
 
-  void getActions() async {
-    if (!state.enable) return;
+    if (newAvailability && newFlavor != oldFlavor) {
+      final flavorActions = Map.of(newActions);
+      final flavorToFetch = newFlavor;
 
-    final flavorActions = Map.of(state.actions);
-    final flavor = state.flavor;
-
-    final userInfo = await _getUserInfo();
-    if (_isLoadActionForCurrentFlavor) {
-      _logger.fine('Load actions for flavor: $flavor');
-      try {
-        final actions = await _getActions(flavor, userInfo);
-        flavorActions[flavor] = DemoActions.complete(actions.actions);
-      } catch (e) {
-        flavorActions[flavor] = DemoActions.complete([]);
+      final userInfo = await _getUserInfo();
+      if (_isLoadActionForCurrentFlavor) {
+        _logger.fine('Load actions for flavor: $flavorToFetch');
+        try {
+          final actions = await _getActions(flavorToFetch, userInfo);
+          flavorActions[flavorToFetch] = DemoActions.complete(actions.actions);
+        } catch (e) {
+          flavorActions[flavorToFetch] = DemoActions.complete([]);
+        }
+      } else {
+        _logger.fine('Actions for flavor $flavorToFetch already loaded');
       }
-    } else {
-      _logger.fine('Actions for flavor $flavor already loaded');
-    }
 
-    emit(state.copyWith(
-      actions: flavorActions,
-      userInfo: userInfo,
-    ));
+      emit(state.copyWith(
+        actions: flavorActions,
+        userInfo: userInfo,
+      ));
+    }
   }
 
   Future<DemoCallToActionsResponse> _getActions(MainFlavor tab, UserInfo userInfo) async {

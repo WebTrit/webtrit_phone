@@ -43,8 +43,7 @@ class MainScreenPage extends StatelessWidget {
         if (appDemoFlow) {
           final locale = context.read<AppBloc>().state.locale;
 
-          context.read<DemoCubit>().updateConfiguration(flavor: flavor, enable: isRouteActive, locale: locale);
-          context.read<DemoCubit>().getActions();
+          context.read<DemoCubit>().getActions(flavor: flavor, enable: isRouteActive, locale: locale);
         }
 
         // Tabs are guaranteed to be non-empty due to validation during the bootstrap phase.
