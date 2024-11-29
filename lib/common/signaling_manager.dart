@@ -108,13 +108,15 @@ class SignalingManager {
   void _signalingInitialize(StateHandshake stateHandshake) {
     final activeLines = stateHandshake.lines.whereType<Line>().toList();
 
+    _lines.clear();
+    _lines.addAll(activeLines);
+
+    // Notify about call line counts to manage stop flow when active lines become empty
     onActiveLine?.call(activeLines.length);
 
-    for (final activeLine in activeLines) {
-      for (final callLog in activeLine.callLogs) {
-        if (callLog is CallEventLog) {
-          _handleSignalingEvent(callLog.callEvent);
-        }
+    for (final callLog in activeLines.expand((line) => line.callLogs)) {
+      if (callLog is CallEventLog) {
+        _handleSignalingEvent(callLog.callEvent);
       }
     }
   }
