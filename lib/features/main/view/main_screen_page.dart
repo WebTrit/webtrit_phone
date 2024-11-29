@@ -5,8 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:store_info_extractor/store_info_extractor.dart';
 
-import 'package:webtrit_api/webtrit_api.dart';
-
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/data/data.dart';
@@ -39,12 +37,13 @@ class MainScreenPage extends StatelessWidget {
         final tabsRouter = AutoTabsRouter.of(context);
 
         if (appDemoFlow) {
-          final locale = context.read<AppBloc>().state.locale;
           final isRouteActive = context.router.isRouteActive(MainScreenPageRoute.name);
           final tabsRouter = AutoTabsRouter.of(context);
           final flavor = MainFlavor.values[tabsRouter.activeIndex];
 
-          context.read<DemoCubit>().getActions(flavor: flavor, enable: isRouteActive, locale: locale);
+          context.read<DemoCubit>()
+            ..getActions(flavor)
+            ..changeVisibility(isRouteActive);
         }
 
         // Tabs are guaranteed to be non-empty due to validation during the bootstrap phase.
@@ -83,9 +82,7 @@ class MainScreenPage extends StatelessWidget {
       child: appDemoFlow
           ? BlocProvider<DemoCubit>(
               create: (context) => DemoCubit(
-                webtritApiClient: context.read<WebtritApiClient>(),
-                token: context.read<AppBloc>().state.token!,
-                flavor: MainFlavor.contacts,
+                callToActionsRepository: context.read<CallToActionsRepository>(),
                 locale: context.read<AppBloc>().state.locale,
               ),
               child: DemoShell(child: autoTabsRouter),

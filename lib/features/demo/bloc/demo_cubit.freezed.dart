@@ -16,12 +16,11 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$DemoCubitState {
-  MainFlavor get flavor => throw _privateConstructorUsedError;
   Locale get locale => throw _privateConstructorUsedError;
-  UserInfo? get userInfo => throw _privateConstructorUsedError;
-  bool get enable => throw _privateConstructorUsedError;
-  Map<MainFlavor, DemoActions> get actions =>
+  Map<MainFlavor, List<CallToAction>> get actions =>
       throw _privateConstructorUsedError;
+  bool get visible => throw _privateConstructorUsedError;
+  MainFlavor? get flavor => throw _privateConstructorUsedError;
 
   /// Create a copy of DemoCubitState
   /// with the given fields replaced by the non-null parameter values.
@@ -37,13 +36,10 @@ abstract class $DemoCubitStateCopyWith<$Res> {
       _$DemoCubitStateCopyWithImpl<$Res, DemoCubitState>;
   @useResult
   $Res call(
-      {MainFlavor flavor,
-      Locale locale,
-      UserInfo? userInfo,
-      bool enable,
-      Map<MainFlavor, DemoActions> actions});
-
-  $UserInfoCopyWith<$Res>? get userInfo;
+      {Locale locale,
+      Map<MainFlavor, List<CallToAction>> actions,
+      bool visible,
+      MainFlavor? flavor});
 }
 
 /// @nodoc
@@ -61,48 +57,29 @@ class _$DemoCubitStateCopyWithImpl<$Res, $Val extends DemoCubitState>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? flavor = null,
     Object? locale = null,
-    Object? userInfo = freezed,
-    Object? enable = null,
     Object? actions = null,
+    Object? visible = null,
+    Object? flavor = freezed,
   }) {
     return _then(_value.copyWith(
-      flavor: null == flavor
-          ? _value.flavor
-          : flavor // ignore: cast_nullable_to_non_nullable
-              as MainFlavor,
       locale: null == locale
           ? _value.locale
           : locale // ignore: cast_nullable_to_non_nullable
               as Locale,
-      userInfo: freezed == userInfo
-          ? _value.userInfo
-          : userInfo // ignore: cast_nullable_to_non_nullable
-              as UserInfo?,
-      enable: null == enable
-          ? _value.enable
-          : enable // ignore: cast_nullable_to_non_nullable
-              as bool,
       actions: null == actions
           ? _value.actions
           : actions // ignore: cast_nullable_to_non_nullable
-              as Map<MainFlavor, DemoActions>,
+              as Map<MainFlavor, List<CallToAction>>,
+      visible: null == visible
+          ? _value.visible
+          : visible // ignore: cast_nullable_to_non_nullable
+              as bool,
+      flavor: freezed == flavor
+          ? _value.flavor
+          : flavor // ignore: cast_nullable_to_non_nullable
+              as MainFlavor?,
     ) as $Val);
-  }
-
-  /// Create a copy of DemoCubitState
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $UserInfoCopyWith<$Res>? get userInfo {
-    if (_value.userInfo == null) {
-      return null;
-    }
-
-    return $UserInfoCopyWith<$Res>(_value.userInfo!, (value) {
-      return _then(_value.copyWith(userInfo: value) as $Val);
-    });
   }
 }
 
@@ -115,14 +92,10 @@ abstract class _$$DemoCubitStateImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {MainFlavor flavor,
-      Locale locale,
-      UserInfo? userInfo,
-      bool enable,
-      Map<MainFlavor, DemoActions> actions});
-
-  @override
-  $UserInfoCopyWith<$Res>? get userInfo;
+      {Locale locale,
+      Map<MainFlavor, List<CallToAction>> actions,
+      bool visible,
+      MainFlavor? flavor});
 }
 
 /// @nodoc
@@ -138,33 +111,28 @@ class __$$DemoCubitStateImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? flavor = null,
     Object? locale = null,
-    Object? userInfo = freezed,
-    Object? enable = null,
     Object? actions = null,
+    Object? visible = null,
+    Object? flavor = freezed,
   }) {
     return _then(_$DemoCubitStateImpl(
-      flavor: null == flavor
-          ? _value.flavor
-          : flavor // ignore: cast_nullable_to_non_nullable
-              as MainFlavor,
       locale: null == locale
           ? _value.locale
           : locale // ignore: cast_nullable_to_non_nullable
               as Locale,
-      userInfo: freezed == userInfo
-          ? _value.userInfo
-          : userInfo // ignore: cast_nullable_to_non_nullable
-              as UserInfo?,
-      enable: null == enable
-          ? _value.enable
-          : enable // ignore: cast_nullable_to_non_nullable
-              as bool,
       actions: null == actions
           ? _value._actions
           : actions // ignore: cast_nullable_to_non_nullable
-              as Map<MainFlavor, DemoActions>,
+              as Map<MainFlavor, List<CallToAction>>,
+      visible: null == visible
+          ? _value.visible
+          : visible // ignore: cast_nullable_to_non_nullable
+              as bool,
+      flavor: freezed == flavor
+          ? _value.flavor
+          : flavor // ignore: cast_nullable_to_non_nullable
+              as MainFlavor?,
     ));
   }
 }
@@ -173,35 +141,33 @@ class __$$DemoCubitStateImplCopyWithImpl<$Res>
 
 class _$DemoCubitStateImpl extends _DemoCubitState {
   const _$DemoCubitStateImpl(
-      {required this.flavor,
-      required this.locale,
-      this.userInfo,
-      this.enable = true,
-      final Map<MainFlavor, DemoActions> actions = const {}})
+      {required this.locale,
+      final Map<MainFlavor, List<CallToAction>> actions = const {},
+      this.visible = true,
+      this.flavor})
       : _actions = actions,
         super._();
 
   @override
-  final MainFlavor flavor;
-  @override
   final Locale locale;
-  @override
-  final UserInfo? userInfo;
-  @override
-  @JsonKey()
-  final bool enable;
-  final Map<MainFlavor, DemoActions> _actions;
+  final Map<MainFlavor, List<CallToAction>> _actions;
   @override
   @JsonKey()
-  Map<MainFlavor, DemoActions> get actions {
+  Map<MainFlavor, List<CallToAction>> get actions {
     if (_actions is EqualUnmodifiableMapView) return _actions;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableMapView(_actions);
   }
 
   @override
+  @JsonKey()
+  final bool visible;
+  @override
+  final MainFlavor? flavor;
+
+  @override
   String toString() {
-    return 'DemoCubitState(flavor: $flavor, locale: $locale, userInfo: $userInfo, enable: $enable, actions: $actions)';
+    return 'DemoCubitState(locale: $locale, actions: $actions, visible: $visible, flavor: $flavor)';
   }
 
   @override
@@ -209,17 +175,15 @@ class _$DemoCubitStateImpl extends _DemoCubitState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$DemoCubitStateImpl &&
-            (identical(other.flavor, flavor) || other.flavor == flavor) &&
             (identical(other.locale, locale) || other.locale == locale) &&
-            (identical(other.userInfo, userInfo) ||
-                other.userInfo == userInfo) &&
-            (identical(other.enable, enable) || other.enable == enable) &&
-            const DeepCollectionEquality().equals(other._actions, _actions));
+            const DeepCollectionEquality().equals(other._actions, _actions) &&
+            (identical(other.visible, visible) || other.visible == visible) &&
+            (identical(other.flavor, flavor) || other.flavor == flavor));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, flavor, locale, userInfo, enable,
-      const DeepCollectionEquality().hash(_actions));
+  int get hashCode => Object.hash(runtimeType, locale,
+      const DeepCollectionEquality().hash(_actions), visible, flavor);
 
   /// Create a copy of DemoCubitState
   /// with the given fields replaced by the non-null parameter values.
@@ -233,23 +197,20 @@ class _$DemoCubitStateImpl extends _DemoCubitState {
 
 abstract class _DemoCubitState extends DemoCubitState {
   const factory _DemoCubitState(
-      {required final MainFlavor flavor,
-      required final Locale locale,
-      final UserInfo? userInfo,
-      final bool enable,
-      final Map<MainFlavor, DemoActions> actions}) = _$DemoCubitStateImpl;
+      {required final Locale locale,
+      final Map<MainFlavor, List<CallToAction>> actions,
+      final bool visible,
+      final MainFlavor? flavor}) = _$DemoCubitStateImpl;
   const _DemoCubitState._() : super._();
 
   @override
-  MainFlavor get flavor;
-  @override
   Locale get locale;
   @override
-  UserInfo? get userInfo;
+  Map<MainFlavor, List<CallToAction>> get actions;
   @override
-  bool get enable;
+  bool get visible;
   @override
-  Map<MainFlavor, DemoActions> get actions;
+  MainFlavor? get flavor;
 
   /// Create a copy of DemoCubitState
   /// with the given fields replaced by the non-null parameter values.

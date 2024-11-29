@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/blocs/app/app_bloc.dart';
+import 'package:webtrit_phone/models/models.dart';
 
 import '../bloc/demo_cubit.dart';
 import '../widgets/widgets.dart';
@@ -52,27 +53,45 @@ class _DemoShellState extends State<DemoShell> with RouteAware {
   }
 
   void _listenLocaleChanging(BuildContext context, AppState state) {
-    context.read<DemoCubit>().getActions(locale: state.locale);
+    context.read<DemoCubit>().changeLocale(state.locale);
   }
 
   void _listenActionsChanging(BuildContext context, DemoCubitState state) {
-    final it = state.actions[state.flavor]?.action.firstOrNull;
-    if (it == null || !state.enable) {
-      _actionOverlay.remove();
+    final callToAction = state.action;
+
+    // Exit early if the call-to-action overlay should not be visible
+    if (!state.isActionVisible) {
+      _removeActionOverlay();
       return;
     }
+
+    // Proceed only if there's a valid call-to-action
+    if (callToAction != null) {
+      _updateActionOverlay(context, callToAction);
+    }
+  }
+
+  void _removeActionOverlay() {
     _actionOverlay.remove();
+  }
+
+  void _updateActionOverlay(BuildContext context, CallToAction action) {
+    // Remove any existing overlay before inserting a new one
+    _removeActionOverlay();
+
+    final url = action.url;
+    final button = DemoActionButton(title: action.title, description: action.description);
+
     _actionOverlay.insert(
       context: context,
-      child: DemoActionButton(
-        title: it.title,
-        description: it.description,
-      ),
-      onTap: () => context.router.push(
-        DemoWebPageRoute(
-          initialUrl: Uri.parse(it.url),
-        ),
-      ),
+      child: button,
+      onTap: url != null ? () => _navigateToAction(context, url) : null,
+    );
+  }
+
+  void _navigateToAction(BuildContext context, String url) {
+    context.router.push(
+      DemoWebPageRoute(initialUrl: Uri.parse(url)),
     );
   }
 }

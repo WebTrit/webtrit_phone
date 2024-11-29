@@ -5,11 +5,8 @@ import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:logging/logging.dart';
 
-import 'package:webtrit_api/webtrit_api.dart';
-
 import 'package:webtrit_phone/models/models.dart';
-
-import '../models/models.dart';
+import 'package:webtrit_phone/repositories/repositories.dart';
 
 part 'demo_cubit_state.dart';
 
@@ -19,81 +16,56 @@ final _logger = Logger('DemoCubit');
 
 class DemoCubit extends Cubit<DemoCubitState> {
   DemoCubit({
-    required WebtritApiClient webtritApiClient,
-    required String token,
+    required CallToActionsRepository callToActionsRepository,
     required Locale locale,
-    required MainFlavor flavor,
-  })  : _webtritApiClient = webtritApiClient,
-        _token = token,
-        super(DemoCubitState(flavor: flavor, locale: locale));
+  })  : _callToActionsRepository = callToActionsRepository,
+        super(DemoCubitState(locale: locale));
 
-  final WebtritApiClient _webtritApiClient;
+  final CallToActionsRepository _callToActionsRepository;
 
-  final String _token;
+  void changeVisibility(bool visible) {
+    emit(state.copyWith(visible: visible));
+  }
 
-  bool get _isLoadActionForCurrentFlavor => state.actions[state.flavor]?.isIncomplete ?? true;
+  void changeLocale(Locale locale) {
+    final flavor = state.flavor;
 
-  void getActions({
-    MainFlavor? flavor,
-    bool? enable,
-    Locale? locale,
-  }) async {
-    final newFlavor = flavor ?? state.flavor;
-    final oldFlavor = state.flavor;
-    final newAvailability = enable ?? state.enable;
-    final newLocale = locale ?? state.locale;
-    final newActions = locale != state.locale ? <MainFlavor, DemoActions>{} : state.actions;
-
-    _logger.fine('Update configuration: flavor=$newFlavor, enable=$newAvailability, locale=$newLocale');
-
+    // Emit the updated state with the new locale, resetting flavor and actions
     emit(state.copyWith(
-      flavor: newFlavor,
-      enable: newAvailability,
-      locale: newLocale,
-      actions: newActions,
+      locale: locale,
+      flavor: null,
+      actions: {},
     ));
 
-    if (newAvailability && newFlavor != oldFlavor) {
-      final flavorActions = Map.of(newActions);
-      final flavorToFetch = newFlavor;
+    // Re-fetch actions if a flavor was previously set
+    if (flavor != null) getActions(state.flavor!);
+  }
 
-      final userInfo = await _getUserInfo();
-      if (_isLoadActionForCurrentFlavor) {
-        _logger.fine('Load actions for flavor: $flavorToFetch');
-        try {
-          final actions = await _getActions(flavorToFetch, userInfo);
-          flavorActions[flavorToFetch] = DemoActions.complete(actions.actions);
-        } catch (e) {
-          flavorActions[flavorToFetch] = DemoActions.complete([]);
-        }
-      } else {
-        _logger.fine('Actions for flavor $flavorToFetch already loaded');
-      }
+  Future<void> getActions(MainFlavor flavor) async {
+    if (state.flavor == flavor) {
+      _logger.fine('Flavor $flavor is already set.');
+      return;
+    }
 
-      emit(state.copyWith(
-        actions: flavorActions,
-        userInfo: userInfo,
-      ));
+    emit(state.copyWith(flavor: flavor));
+
+    // Load actions only if not already available
+    if (state.actions[flavor] == null) {
+      await _loadFlavorActions(flavor, state.locale);
+    } else {
+      _logger.fine('Actions for flavor $flavor already loaded.');
     }
   }
 
-  Future<DemoCallToActionsResponse> _getActions(MainFlavor tab, UserInfo userInfo) async {
-    _logger.fine('Get actions for tab: $tab');
-    final param = DemoCallToActionsParam(
-      email: userInfo.email!,
-      tab: tab.name,
-    );
+  // Loads and updates state with actions for the specified flavor and locale
+  Future<void> _loadFlavorActions(MainFlavor flavor, Locale locale) async {
+    try {
+      final flavorCallToActions = await _callToActionsRepository.getActions(flavor, locale);
+      final updatedFlavorCallToActions = {...state.actions, flavor: flavorCallToActions};
 
-    return _webtritApiClient.getCallToActions(
-      _token,
-      state.locale.toString(),
-      param,
-      options: RequestOptions.withNoRetries(),
-    );
-  }
-
-  Future<UserInfo> _getUserInfo() async {
-    final account = state.userInfo ?? await _webtritApiClient.getUserInfo(_token);
-    return account;
+      emit(state.copyWith(actions: updatedFlavorCallToActions));
+    } catch (e, stackTrace) {
+      _logger.severe('Failed to fetch actions for flavor $flavor: $e', e, stackTrace);
+    }
   }
 }
