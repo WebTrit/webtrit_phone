@@ -37,11 +37,12 @@ class MainScreenPage extends StatelessWidget {
       duration: Duration.zero,
       builder: (context, child) {
         final tabsRouter = AutoTabsRouter.of(context);
-        final isRouteActive = context.router.isRouteActive(MainScreenPageRoute.name);
-        final flavor = MainFlavor.values[tabsRouter.activeIndex];
 
         if (appDemoFlow) {
           final locale = context.read<AppBloc>().state.locale;
+          final isRouteActive = context.router.isRouteActive(MainScreenPageRoute.name);
+          final tabsRouter = AutoTabsRouter.of(context);
+          final flavor = MainFlavor.values[tabsRouter.activeIndex];
 
           context.read<DemoCubit>().getActions(flavor: flavor, enable: isRouteActive, locale: locale);
         }
