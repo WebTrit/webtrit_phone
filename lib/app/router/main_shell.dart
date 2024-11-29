@@ -180,6 +180,12 @@ class _MainShellState extends State<MainShell> {
             appDatabase: context.read<AppDatabase>(),
           ),
         ),
+        RepositoryProvider<CallToActionsRepository>(
+          create: (context) => CallToActionsRepositoryImpl(
+            webtritApiClient: context.read<WebtritApiClient>(),
+            token: context.read<AppBloc>().state.token!,
+          ),
+        ),
       ],
       child: MultiBlocProvider(
         providers: [

@@ -240,7 +240,7 @@ class AppRouter extends _$AppRouter {
                   path: 'sms_conversation',
                 ),
                 AutoRoute(
-                  page: DemoWebPageRoute.page,
+                  page: CallToActionsWebPageRoute.page,
                   path: 'demo',
                 ),
                 CustomRoute(
