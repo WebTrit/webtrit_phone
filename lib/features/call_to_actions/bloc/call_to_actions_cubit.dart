@@ -8,18 +8,18 @@ import 'package:logging/logging.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
-part 'demo_cubit_state.dart';
+part 'call_to_actions_cubit_state.dart';
 
-part 'demo_cubit.freezed.dart';
+part 'call_to_actions_cubit.freezed.dart';
 
 final _logger = Logger('DemoCubit');
 
-class DemoCubit extends Cubit<DemoCubitState> {
-  DemoCubit({
+class CallToActionsCubit extends Cubit<CallToActionsCubitState> {
+  CallToActionsCubit({
     required CallToActionsRepository callToActionsRepository,
     required Locale locale,
   })  : _callToActionsRepository = callToActionsRepository,
-        super(DemoCubitState(locale: locale));
+        super(CallToActionsCubitState(locale: locale));
 
   final CallToActionsRepository _callToActionsRepository;
 

@@ -8,8 +8,8 @@ import 'package:webview_flutter/webview_flutter.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 
-class DemoWebScreen extends StatefulWidget {
-  const DemoWebScreen({
+class CallToActionsWebScreen extends StatefulWidget {
+  const CallToActionsWebScreen({
     super.key,
     required this.initialUrl,
   });
@@ -17,10 +17,10 @@ class DemoWebScreen extends StatefulWidget {
   final Uri initialUrl;
 
   @override
-  State<DemoWebScreen> createState() => _DemoWebScreenState();
+  State<CallToActionsWebScreen> createState() => _CallToActionsWebScreenState();
 }
 
-class _DemoWebScreenState extends State<DemoWebScreen> with WidgetsBindingObserver {
+class _CallToActionsWebScreenState extends State<CallToActionsWebScreen> with WidgetsBindingObserver {
   final WebViewController _webViewController = WebViewController();
 
   WebResourceError? _error;
@@ -112,7 +112,7 @@ class _DemoWebScreenState extends State<DemoWebScreen> with WidgetsBindingObserv
   }
 
   @override
-  void didUpdateWidget(DemoWebScreen oldWidget) {
+  void didUpdateWidget(CallToActionsWebScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
 
     if (widget.initialUrl != oldWidget.initialUrl) {

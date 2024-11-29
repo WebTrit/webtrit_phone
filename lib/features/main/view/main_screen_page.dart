@@ -41,7 +41,7 @@ class MainScreenPage extends StatelessWidget {
           final tabsRouter = AutoTabsRouter.of(context);
           final flavor = MainFlavor.values[tabsRouter.activeIndex];
 
-          context.read<DemoCubit>()
+          context.read<CallToActionsCubit>()
             ..getActions(flavor)
             ..changeVisibility(isRouteActive);
         }
@@ -80,12 +80,12 @@ class MainScreenPage extends StatelessWidget {
         )..add(const MainStarted());
       },
       child: appDemoFlow
-          ? BlocProvider<DemoCubit>(
-              create: (context) => DemoCubit(
+          ? BlocProvider<CallToActionsCubit>(
+              create: (context) => CallToActionsCubit(
                 callToActionsRepository: context.read<CallToActionsRepository>(),
                 locale: context.read<AppBloc>().state.locale,
               ),
-              child: DemoShell(child: autoTabsRouter),
+              child: CallToActionsShell(child: autoTabsRouter),
             )
           : autoTabsRouter,
     );

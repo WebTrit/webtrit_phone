@@ -7,11 +7,11 @@ import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/blocs/app/app_bloc.dart';
 import 'package:webtrit_phone/models/models.dart';
 
-import '../bloc/demo_cubit.dart';
+import '../bloc/call_to_actions_cubit.dart';
 import '../widgets/widgets.dart';
 
-class DemoShell extends StatefulWidget {
-  const DemoShell({
+class CallToActionsShell extends StatefulWidget {
+  const CallToActionsShell({
     super.key,
     required this.child,
   });
@@ -19,10 +19,10 @@ class DemoShell extends StatefulWidget {
   final Widget child;
 
   @override
-  State<DemoShell> createState() => _DemoShellState();
+  State<CallToActionsShell> createState() => _CallToActionsShellState();
 }
 
-class _DemoShellState extends State<DemoShell> with RouteAware {
+class _CallToActionsShellState extends State<CallToActionsShell> with RouteAware {
   late final DemoActionOverlay _actionOverlay = DemoActionOverlay(
     screenSize: MediaQuery.of(context).size,
     safePadding: MediaQuery.of(context).padding,
@@ -39,7 +39,7 @@ class _DemoShellState extends State<DemoShell> with RouteAware {
   Widget build(BuildContext context) {
     return MultiBlocListener(
       listeners: [
-        BlocListener<DemoCubit, DemoCubitState>(
+        BlocListener<CallToActionsCubit, CallToActionsCubitState>(
           listener: _listenActionsChanging,
           child: widget.child,
         ),
@@ -53,10 +53,10 @@ class _DemoShellState extends State<DemoShell> with RouteAware {
   }
 
   void _listenLocaleChanging(BuildContext context, AppState state) {
-    context.read<DemoCubit>().changeLocale(state.locale);
+    context.read<CallToActionsCubit>().changeLocale(state.locale);
   }
 
-  void _listenActionsChanging(BuildContext context, DemoCubitState state) {
+  void _listenActionsChanging(BuildContext context, CallToActionsCubitState state) {
     final callToAction = state.action;
 
     // Exit early if the call-to-action overlay should not be visible
@@ -90,8 +90,6 @@ class _DemoShellState extends State<DemoShell> with RouteAware {
   }
 
   void _navigateToAction(BuildContext context, String url) {
-    context.router.push(
-      DemoWebPageRoute(initialUrl: Uri.parse(url)),
-    );
+    context.router.push(CallToActionsWebPageRoute(initialUrl: Uri.parse(url)));
   }
 }
