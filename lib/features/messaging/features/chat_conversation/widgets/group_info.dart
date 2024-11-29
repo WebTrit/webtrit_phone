@@ -83,7 +83,7 @@ class _GroupInfoState extends State<GroupInfo> {
       ),
     );
     if (!mounted) return;
-    if (result != null) await conversationCubit.addGroupMember(result.sourceId);
+    if (result?.sourceId != null) await conversationCubit.addGroupMember(result!.sourceId!);
   }
 
   onRemoveUser(String userId) async {

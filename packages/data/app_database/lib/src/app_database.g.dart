@@ -30,8 +30,8 @@ class $ContactsTableTable extends ContactsTable
       const VerificationMeta('sourceId');
   @override
   late final GeneratedColumn<String> sourceId = GeneratedColumn<String>(
-      'source_id', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
+      'source_id', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
   static const VerificationMeta _firstNameMeta =
       const VerificationMeta('firstName');
   @override
@@ -127,8 +127,6 @@ class $ContactsTableTable extends ContactsTable
     if (data.containsKey('source_id')) {
       context.handle(_sourceIdMeta,
           sourceId.isAcceptableOrUnknown(data['source_id']!, _sourceIdMeta));
-    } else if (isInserting) {
-      context.missing(_sourceIdMeta);
     }
     if (data.containsKey('first_name')) {
       context.handle(_firstNameMeta,
@@ -189,7 +187,7 @@ class $ContactsTableTable extends ContactsTable
           attachedDatabase.typeMapping
               .read(DriftSqlType.int, data['${effectivePrefix}source_type'])!),
       sourceId: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}source_id'])!,
+          .read(DriftSqlType.string, data['${effectivePrefix}source_id']),
       firstName: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}first_name']),
       lastName: attachedDatabase.typeMapping
@@ -224,7 +222,7 @@ class $ContactsTableTable extends ContactsTable
 class ContactData extends DataClass implements Insertable<ContactData> {
   final int id;
   final ContactSourceTypeEnum sourceType;
-  final String sourceId;
+  final String? sourceId;
   final String? firstName;
   final String? lastName;
   final String? aliasName;
@@ -237,7 +235,7 @@ class ContactData extends DataClass implements Insertable<ContactData> {
   const ContactData(
       {required this.id,
       required this.sourceType,
-      required this.sourceId,
+      this.sourceId,
       this.firstName,
       this.lastName,
       this.aliasName,
@@ -255,7 +253,9 @@ class ContactData extends DataClass implements Insertable<ContactData> {
       map['source_type'] = Variable<int>(
           $ContactsTableTable.$convertersourceType.toSql(sourceType));
     }
-    map['source_id'] = Variable<String>(sourceId);
+    if (!nullToAbsent || sourceId != null) {
+      map['source_id'] = Variable<String>(sourceId);
+    }
     if (!nullToAbsent || firstName != null) {
       map['first_name'] = Variable<String>(firstName);
     }
@@ -290,7 +290,9 @@ class ContactData extends DataClass implements Insertable<ContactData> {
     return ContactDataCompanion(
       id: Value(id),
       sourceType: Value(sourceType),
-      sourceId: Value(sourceId),
+      sourceId: sourceId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(sourceId),
       firstName: firstName == null && nullToAbsent
           ? const Value.absent()
           : Value(firstName),
@@ -328,7 +330,7 @@ class ContactData extends DataClass implements Insertable<ContactData> {
       id: serializer.fromJson<int>(json['id']),
       sourceType: $ContactsTableTable.$convertersourceType
           .fromJson(serializer.fromJson<int>(json['sourceType'])),
-      sourceId: serializer.fromJson<String>(json['sourceId']),
+      sourceId: serializer.fromJson<String?>(json['sourceId']),
       firstName: serializer.fromJson<String?>(json['firstName']),
       lastName: serializer.fromJson<String?>(json['lastName']),
       aliasName: serializer.fromJson<String?>(json['aliasName']),
@@ -347,7 +349,7 @@ class ContactData extends DataClass implements Insertable<ContactData> {
       'id': serializer.toJson<int>(id),
       'sourceType': serializer.toJson<int>(
           $ContactsTableTable.$convertersourceType.toJson(sourceType)),
-      'sourceId': serializer.toJson<String>(sourceId),
+      'sourceId': serializer.toJson<String?>(sourceId),
       'firstName': serializer.toJson<String?>(firstName),
       'lastName': serializer.toJson<String?>(lastName),
       'aliasName': serializer.toJson<String?>(aliasName),
@@ -363,7 +365,7 @@ class ContactData extends DataClass implements Insertable<ContactData> {
   ContactData copyWith(
           {int? id,
           ContactSourceTypeEnum? sourceType,
-          String? sourceId,
+          Value<String?> sourceId = const Value.absent(),
           Value<String?> firstName = const Value.absent(),
           Value<String?> lastName = const Value.absent(),
           Value<String?> aliasName = const Value.absent(),
@@ -376,7 +378,7 @@ class ContactData extends DataClass implements Insertable<ContactData> {
       ContactData(
         id: id ?? this.id,
         sourceType: sourceType ?? this.sourceType,
-        sourceId: sourceId ?? this.sourceId,
+        sourceId: sourceId.present ? sourceId.value : this.sourceId,
         firstName: firstName.present ? firstName.value : this.firstName,
         lastName: lastName.present ? lastName.value : this.lastName,
         aliasName: aliasName.present ? aliasName.value : this.aliasName,
@@ -467,7 +469,7 @@ class ContactData extends DataClass implements Insertable<ContactData> {
 class ContactDataCompanion extends UpdateCompanion<ContactData> {
   final Value<int> id;
   final Value<ContactSourceTypeEnum> sourceType;
-  final Value<String> sourceId;
+  final Value<String?> sourceId;
   final Value<String?> firstName;
   final Value<String?> lastName;
   final Value<String?> aliasName;
@@ -494,7 +496,7 @@ class ContactDataCompanion extends UpdateCompanion<ContactData> {
   ContactDataCompanion.insert({
     this.id = const Value.absent(),
     required ContactSourceTypeEnum sourceType,
-    required String sourceId,
+    this.sourceId = const Value.absent(),
     this.firstName = const Value.absent(),
     this.lastName = const Value.absent(),
     this.aliasName = const Value.absent(),
@@ -504,8 +506,7 @@ class ContactDataCompanion extends UpdateCompanion<ContactData> {
     this.isCurrentUser = const Value.absent(),
     this.insertedAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
-  })  : sourceType = Value(sourceType),
-        sourceId = Value(sourceId);
+  }) : sourceType = Value(sourceType);
   static Insertable<ContactData> custom({
     Expression<int>? id,
     Expression<int>? sourceType,
@@ -539,7 +540,7 @@ class ContactDataCompanion extends UpdateCompanion<ContactData> {
   ContactDataCompanion copyWith(
       {Value<int>? id,
       Value<ContactSourceTypeEnum>? sourceType,
-      Value<String>? sourceId,
+      Value<String?>? sourceId,
       Value<String?>? firstName,
       Value<String?>? lastName,
       Value<String?>? aliasName,
@@ -7975,7 +7976,7 @@ typedef $$ContactsTableTableCreateCompanionBuilder = ContactDataCompanion
     Function({
   Value<int> id,
   required ContactSourceTypeEnum sourceType,
-  required String sourceId,
+  Value<String?> sourceId,
   Value<String?> firstName,
   Value<String?> lastName,
   Value<String?> aliasName,
@@ -7990,7 +7991,7 @@ typedef $$ContactsTableTableUpdateCompanionBuilder = ContactDataCompanion
     Function({
   Value<int> id,
   Value<ContactSourceTypeEnum> sourceType,
-  Value<String> sourceId,
+  Value<String?> sourceId,
   Value<String?> firstName,
   Value<String?> lastName,
   Value<String?> aliasName,
@@ -8175,7 +8176,7 @@ class $$ContactsTableTableTableManager extends RootTableManager<
           updateCompanionCallback: ({
             Value<int> id = const Value.absent(),
             Value<ContactSourceTypeEnum> sourceType = const Value.absent(),
-            Value<String> sourceId = const Value.absent(),
+            Value<String?> sourceId = const Value.absent(),
             Value<String?> firstName = const Value.absent(),
             Value<String?> lastName = const Value.absent(),
             Value<String?> aliasName = const Value.absent(),
@@ -8203,7 +8204,7 @@ class $$ContactsTableTableTableManager extends RootTableManager<
           createCompanionCallback: ({
             Value<int> id = const Value.absent(),
             required ContactSourceTypeEnum sourceType,
-            required String sourceId,
+            Value<String?> sourceId = const Value.absent(),
             Value<String?> firstName = const Value.absent(),
             Value<String?> lastName = const Value.absent(),
             Value<String?> aliasName = const Value.absent(),

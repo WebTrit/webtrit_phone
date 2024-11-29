@@ -163,10 +163,14 @@ class ChatConversationBuilderCubit extends Cubit<ChatCBState> {
 
     try {
       emit(state.copyWith(processing: true));
-      final group = await userChannel.newGroup(
-        state.name,
-        state.selectedContacts.map((contact) => contact.sourceId).toList(),
-      );
+
+      final selectedContacts = state.selectedContacts
+          .map((contact) => contact.sourceId)
+          .where((sourceId) => sourceId != null && sourceId.isNotEmpty)
+          .cast<String>()
+          .toList();
+
+      final group = await userChannel.newGroup(state.name, selectedContacts);
       await chatsRepository.upsertChat(group);
       openGroup(group.id);
     } catch (e, s) {
