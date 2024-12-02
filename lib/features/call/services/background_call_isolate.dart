@@ -16,10 +16,14 @@ BackgroundCallEventService? _backgroundCallEventManager;
 AppPreferences? _appPreferences;
 SecureStorage? _secureStorage;
 AppCertificates? _appCertificates;
+AppLogger? _appLogger;
 
 CallLogsRepository? _callLogsRepository;
 
+final _logger = Logger('BackgroundCallIsolate');
+
 Future<void> _initializeDependencies() async {
+  _appLogger ??= await AppLogger.init();
   _appPreferences ??= await AppPreferences.init();
   _appCertificates ??= await AppCertificates.init();
 
@@ -36,19 +40,19 @@ Future<void> _initializeDependencies() async {
     storage: _secureStorage!,
     certificates: _appCertificates!.trustedCertificates,
   );
-
-  hierarchicalLoggingEnabled = true;
-  final logLevel = Level.LEVELS.firstWhere((level) => level.name == EnvironmentConfig.DEBUG_LEVEL);
-  PrintAppender.setupLogging(level: logLevel);
 }
 
 @pragma('vm:entry-point')
 Future<void> onStart(CallkeepServiceStatus status) async {
+  _logger.info('onStart: $status');
+
   await _initializeDependencies();
   await _backgroundCallEventManager?.onStart(status);
 }
 
 @pragma('vm:entry-point')
 Future<void> onChangedLifecycle(CallkeepServiceStatus status) async {
+  _logger.info('onChangedLifecycle: $status');
+
   await _backgroundCallEventManager?.onChangedLifecycle(status);
 }

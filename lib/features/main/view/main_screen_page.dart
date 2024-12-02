@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:logging/logging.dart';
 
 import 'package:store_info_extractor/store_info_extractor.dart';
 
@@ -14,6 +15,8 @@ import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
+
+final logger = Logger('MyApp');
 
 @RoutePage()
 class MainScreenPage extends StatelessWidget {
@@ -35,6 +38,7 @@ class MainScreenPage extends StatelessWidget {
       duration: Duration.zero,
       builder: (context, child) {
         final tabsRouter = AutoTabsRouter.of(context);
+        logger.info('User logged in with email: user@example.com and IP: 192.168.1.1');
 
         if (appDemoFlow) {
           final isRouteActive = context.router.isRouteActive(MainScreenPageRoute.name);

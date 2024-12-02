@@ -62,7 +62,7 @@
           "icon": "0xe1ce"
         },
         {
-          "enabled": true,
+          "enabled": false,
           "initial": false,
           "type": "messaging",
           "titleL10n": "main_BottomNavigationBarItemLabel_chats",

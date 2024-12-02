@@ -23,12 +23,11 @@ import 'package:webtrit_phone/repositories/repositories.dart';
 
 import 'package:webtrit_phone/features/call/call.dart' as background_call_isolate show onStart, onChangedLifecycle;
 
+import 'anonymizing_log_appender.dart';
 import 'environment_config.dart';
 import 'firebase_options.dart';
 
 Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
-  _initLogs();
-
   final logger = Logger('bootstrap');
 
   await runZonedGuarded(
@@ -51,6 +50,7 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
       };
 
       // Initialization order is crucial for proper app setup
+      await AppLogger.init();
       await AppInfo.init();
       await AppThemes.init();
       await AppPreferences.init();
@@ -101,11 +101,6 @@ Future<void> _initCallkeep() async {
   WebtritCallkeepLogs().setLogsDelegate(CallkeepLogs());
 }
 
-_initLogs() {
-  hierarchicalLoggingEnabled = true;
-  PrintAppender.setupLogging(level: Level.LEVELS.firstWhere((level) => level.name == EnvironmentConfig.DEBUG_LEVEL));
-}
-
 @pragma('vm:entry-point')
 Future<void> _initFirebase() async {
   await Firebase.initializeApp(
@@ -145,7 +140,8 @@ Future<void> _initFirebaseMessaging() async {
 
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  _initLogs();
+  await AppLogger.init();
+
   final appNotification = AppRemoteNotification.fromFCM(message);
 
   // Type of notification for testing purposes
