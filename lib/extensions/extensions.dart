@@ -14,7 +14,6 @@ export 'request_failure.dart';
 export 'route_match.dart';
 export 'session_status.dart';
 export 'signaling_exception.dart';
-export 'soundpool.dart';
 export 'string.dart';
 export 'theme_mode.dart';
 export 'user_info.dart';
