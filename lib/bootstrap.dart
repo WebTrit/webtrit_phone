@@ -135,7 +135,6 @@ Future<void> _initFirebaseMessaging() async {
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   // Initialize the logger for handling Firebase Cloud Messaging (FCM) in the background isolate.
-  await AppInfo.init();
   await DeviceInfo.init();
   await PackageInfo.init();
   await AppLogger.init();

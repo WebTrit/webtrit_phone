@@ -9,7 +9,6 @@ import 'background_call_event_service.dart';
 CallkeepBackgroundService? _callkeep;
 BackgroundCallEventService? _backgroundCallEventManager;
 
-AppInfo? _appInfo;
 DeviceInfo? _deviceInfo;
 PackageInfo? _packageInfo;
 AppLogger? _appLogger;
@@ -20,7 +19,6 @@ AppCertificates? _appCertificates;
 CallLogsRepository? _callLogsRepository;
 
 Future<void> _initializeDependencies() async {
-  _appInfo ??= await AppInfo.init();
   _deviceInfo ??= await DeviceInfo.init();
   _packageInfo ??= await PackageInfo.init();
   _appLogger ??= await AppLogger.init();

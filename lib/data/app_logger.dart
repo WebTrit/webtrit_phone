@@ -36,7 +36,7 @@ class AppLogger {
         url: remoteLoggingUrl,
         apiToken: remoteLoggingToken,
         bufferSize: EnvironmentConfig.REMOTE_LOGGING_BUFFER_SIZE,
-        labels: _prepareRemoteLabels(),
+        labels: await _prepareRemoteLabels(),
       ).attachToLogger(Logger.root);
     }
 
@@ -47,14 +47,17 @@ class AppLogger {
     return _instance;
   }
 
-  static Map<String, String> _prepareRemoteLabels() {
+  static Future<Map<String, String>> _prepareRemoteLabels() async {
     final packageInfo = PackageInfo();
     final deviceInfo = DeviceInfo();
-    final appInfo = AppInfo();
+
+    // TODO(Serdun): Use getAppVersion directly to avoid initializing Firebase inside isolates,
+    // as AppInfo depends on Firebase.
+    final appVersion = await AppInfo.getAppVersion() ?? 'Undefine';
 
     return <String, String>{
       'app': packageInfo.appName,
-      'appVersion': appInfo.version,
+      'appVersion': appVersion,
       'storeVersion': packageInfo.version,
       'packageName': packageInfo.packageName,
       'buildNumber': packageInfo.buildNumber,
