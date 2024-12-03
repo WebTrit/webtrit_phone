@@ -20,6 +20,7 @@ mixin _$LoginState {
   LoginMode? get mode => throw _privateConstructorUsedError;
   String? get coreUrl => throw _privateConstructorUsedError;
   String? get tenantId => throw _privateConstructorUsedError;
+  WebtritSystemInfo? get systemInfo => throw _privateConstructorUsedError;
   List<LoginType>? get supportedLoginTypes =>
       throw _privateConstructorUsedError;
   (
@@ -65,6 +66,7 @@ abstract class $LoginStateCopyWith<$Res> {
       LoginMode? mode,
       String? coreUrl,
       String? tenantId,
+      WebtritSystemInfo? systemInfo,
       List<LoginType>? supportedLoginTypes,
       (
         SessionOtpProvisional,
@@ -106,6 +108,7 @@ class _$LoginStateCopyWithImpl<$Res, $Val extends LoginState>
     Object? mode = freezed,
     Object? coreUrl = freezed,
     Object? tenantId = freezed,
+    Object? systemInfo = freezed,
     Object? supportedLoginTypes = freezed,
     Object? otpSigninSessionOtpProvisionalWithDateTime = freezed,
     Object? passwordSigninPasswordInputObscureText = null,
@@ -138,6 +141,10 @@ class _$LoginStateCopyWithImpl<$Res, $Val extends LoginState>
           ? _value.tenantId
           : tenantId // ignore: cast_nullable_to_non_nullable
               as String?,
+      systemInfo: freezed == systemInfo
+          ? _value.systemInfo
+          : systemInfo // ignore: cast_nullable_to_non_nullable
+              as WebtritSystemInfo?,
       supportedLoginTypes: freezed == supportedLoginTypes
           ? _value.supportedLoginTypes
           : supportedLoginTypes // ignore: cast_nullable_to_non_nullable
@@ -214,6 +221,7 @@ abstract class _$$LoginStateImplCopyWith<$Res>
       LoginMode? mode,
       String? coreUrl,
       String? tenantId,
+      WebtritSystemInfo? systemInfo,
       List<LoginType>? supportedLoginTypes,
       (
         SessionOtpProvisional,
@@ -253,6 +261,7 @@ class __$$LoginStateImplCopyWithImpl<$Res>
     Object? mode = freezed,
     Object? coreUrl = freezed,
     Object? tenantId = freezed,
+    Object? systemInfo = freezed,
     Object? supportedLoginTypes = freezed,
     Object? otpSigninSessionOtpProvisionalWithDateTime = freezed,
     Object? passwordSigninPasswordInputObscureText = null,
@@ -285,6 +294,10 @@ class __$$LoginStateImplCopyWithImpl<$Res>
           ? _value.tenantId
           : tenantId // ignore: cast_nullable_to_non_nullable
               as String?,
+      systemInfo: freezed == systemInfo
+          ? _value.systemInfo
+          : systemInfo // ignore: cast_nullable_to_non_nullable
+              as WebtritSystemInfo?,
       supportedLoginTypes: freezed == supportedLoginTypes
           ? _value._supportedLoginTypes
           : supportedLoginTypes // ignore: cast_nullable_to_non_nullable
@@ -356,6 +369,7 @@ class _$LoginStateImpl implements _LoginState {
       this.mode,
       this.coreUrl,
       this.tenantId,
+      this.systemInfo,
       final List<LoginType>? supportedLoginTypes,
       this.otpSigninSessionOtpProvisionalWithDateTime,
       this.passwordSigninPasswordInputObscureText = true,
@@ -381,6 +395,8 @@ class _$LoginStateImpl implements _LoginState {
   final String? coreUrl;
   @override
   final String? tenantId;
+  @override
+  final WebtritSystemInfo? systemInfo;
   final List<LoginType>? _supportedLoginTypes;
   @override
   List<LoginType>? get supportedLoginTypes {
@@ -435,7 +451,7 @@ class _$LoginStateImpl implements _LoginState {
 
   @override
   String toString() {
-    return 'LoginState(processing: $processing, mode: $mode, coreUrl: $coreUrl, tenantId: $tenantId, supportedLoginTypes: $supportedLoginTypes, otpSigninSessionOtpProvisionalWithDateTime: $otpSigninSessionOtpProvisionalWithDateTime, passwordSigninPasswordInputObscureText: $passwordSigninPasswordInputObscureText, signupSessionOtpProvisionalWithDateTime: $signupSessionOtpProvisionalWithDateTime, token: $token, userId: $userId, embedded: $embedded, coreUrlInput: $coreUrlInput, otpSigninUserRefInput: $otpSigninUserRefInput, otpSigninCodeInput: $otpSigninCodeInput, passwordSigninUserRefInput: $passwordSigninUserRefInput, passwordSigninPasswordInput: $passwordSigninPasswordInput, signupEmailInput: $signupEmailInput, signupCodeInput: $signupCodeInput)';
+    return 'LoginState(processing: $processing, mode: $mode, coreUrl: $coreUrl, tenantId: $tenantId, systemInfo: $systemInfo, supportedLoginTypes: $supportedLoginTypes, otpSigninSessionOtpProvisionalWithDateTime: $otpSigninSessionOtpProvisionalWithDateTime, passwordSigninPasswordInputObscureText: $passwordSigninPasswordInputObscureText, signupSessionOtpProvisionalWithDateTime: $signupSessionOtpProvisionalWithDateTime, token: $token, userId: $userId, embedded: $embedded, coreUrlInput: $coreUrlInput, otpSigninUserRefInput: $otpSigninUserRefInput, otpSigninCodeInput: $otpSigninCodeInput, passwordSigninUserRefInput: $passwordSigninUserRefInput, passwordSigninPasswordInput: $passwordSigninPasswordInput, signupEmailInput: $signupEmailInput, signupCodeInput: $signupCodeInput)';
   }
 
   @override
@@ -449,14 +465,15 @@ class _$LoginStateImpl implements _LoginState {
             (identical(other.coreUrl, coreUrl) || other.coreUrl == coreUrl) &&
             (identical(other.tenantId, tenantId) ||
                 other.tenantId == tenantId) &&
+            (identical(other.systemInfo, systemInfo) ||
+                other.systemInfo == systemInfo) &&
             const DeepCollectionEquality()
                 .equals(other._supportedLoginTypes, _supportedLoginTypes) &&
             (identical(other.otpSigninSessionOtpProvisionalWithDateTime,
                     otpSigninSessionOtpProvisionalWithDateTime) ||
                 other.otpSigninSessionOtpProvisionalWithDateTime ==
                     otpSigninSessionOtpProvisionalWithDateTime) &&
-            (identical(other.passwordSigninPasswordInputObscureText,
-                    passwordSigninPasswordInputObscureText) ||
+            (identical(other.passwordSigninPasswordInputObscureText, passwordSigninPasswordInputObscureText) ||
                 other.passwordSigninPasswordInputObscureText ==
                     passwordSigninPasswordInputObscureText) &&
             (identical(other.signupSessionOtpProvisionalWithDateTime,
@@ -481,30 +498,33 @@ class _$LoginStateImpl implements _LoginState {
                     passwordSigninPasswordInput) &&
             (identical(other.signupEmailInput, signupEmailInput) ||
                 other.signupEmailInput == signupEmailInput) &&
-            (identical(other.signupCodeInput, signupCodeInput) || other.signupCodeInput == signupCodeInput));
+            (identical(other.signupCodeInput, signupCodeInput) ||
+                other.signupCodeInput == signupCodeInput));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      processing,
-      mode,
-      coreUrl,
-      tenantId,
-      const DeepCollectionEquality().hash(_supportedLoginTypes),
-      otpSigninSessionOtpProvisionalWithDateTime,
-      passwordSigninPasswordInputObscureText,
-      signupSessionOtpProvisionalWithDateTime,
-      token,
-      userId,
-      embedded,
-      coreUrlInput,
-      otpSigninUserRefInput,
-      otpSigninCodeInput,
-      passwordSigninUserRefInput,
-      passwordSigninPasswordInput,
-      signupEmailInput,
-      signupCodeInput);
+  int get hashCode => Object.hashAll([
+        runtimeType,
+        processing,
+        mode,
+        coreUrl,
+        tenantId,
+        systemInfo,
+        const DeepCollectionEquality().hash(_supportedLoginTypes),
+        otpSigninSessionOtpProvisionalWithDateTime,
+        passwordSigninPasswordInputObscureText,
+        signupSessionOtpProvisionalWithDateTime,
+        token,
+        userId,
+        embedded,
+        coreUrlInput,
+        otpSigninUserRefInput,
+        otpSigninCodeInput,
+        passwordSigninUserRefInput,
+        passwordSigninPasswordInput,
+        signupEmailInput,
+        signupCodeInput
+      ]);
 
   /// Create a copy of LoginState
   /// with the given fields replaced by the non-null parameter values.
@@ -521,6 +541,7 @@ abstract class _LoginState implements LoginState {
       final LoginMode? mode,
       final String? coreUrl,
       final String? tenantId,
+      final WebtritSystemInfo? systemInfo,
       final List<LoginType>? supportedLoginTypes,
       final (
         SessionOtpProvisional,
@@ -550,6 +571,8 @@ abstract class _LoginState implements LoginState {
   String? get coreUrl;
   @override
   String? get tenantId;
+  @override
+  WebtritSystemInfo? get systemInfo;
   @override
   List<LoginType>? get supportedLoginTypes;
   @override

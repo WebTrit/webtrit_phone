@@ -728,9 +728,6 @@ class AppLocalizationsUk extends AppLocalizations {
   String get main_CompatibilityIssueDialogActions_update => 'Оновити';
 
   @override
-  String get main_CompatibilityIssueDialogActions_verify => 'Перевірити знову';
-
-  @override
   String main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError(String actual, String supportedConstraint) {
     return 'Несумісна версія WebTrit Cloud Backend, будь ласка, зв\'яжіться з адміністратором вашої системи.\n\nВерсія екземпляру:\n$actual\n\nПідтримувана версія:\n$supportedConstraint\n';
   }

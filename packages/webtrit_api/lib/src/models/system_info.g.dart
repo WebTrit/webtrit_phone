@@ -10,24 +10,34 @@ _$SystemInfoImpl _$$SystemInfoImplFromJson(Map<String, dynamic> json) =>
     _$SystemInfoImpl(
       core: CoreInfo.fromJson(json['core'] as Map<String, dynamic>),
       postgres: PostgresInfo.fromJson(json['postgres'] as Map<String, dynamic>),
+      adapter: json['adapter'] == null
+          ? null
+          : AdapterInfo.fromJson(json['adapter'] as Map<String, dynamic>),
       janus: json['janus'] == null
           ? null
           : JanusInfo.fromJson(json['janus'] as Map<String, dynamic>),
       gorush: json['gorush'] == null
           ? null
           : GorushInfo.fromJson(json['gorush'] as Map<String, dynamic>),
-      adapter: json['adapter'] == null
-          ? null
-          : AdapterInfo.fromJson(json['adapter'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$$SystemInfoImplToJson(_$SystemInfoImpl instance) =>
     <String, dynamic>{
       'core': instance.core,
       'postgres': instance.postgres,
+      'adapter': instance.adapter,
       'janus': instance.janus,
       'gorush': instance.gorush,
-      'adapter': instance.adapter,
+    };
+
+_$CoreInfoImpl _$$CoreInfoImplFromJson(Map<String, dynamic> json) =>
+    _$CoreInfoImpl(
+      version: const VersionConverter().fromJson(json['version'] as String),
+    );
+
+Map<String, dynamic> _$$CoreInfoImplToJson(_$CoreInfoImpl instance) =>
+    <String, dynamic>{
+      'version': const VersionConverter().toJson(instance.version),
     };
 
 _$PostgresInfoImpl _$$PostgresInfoImplFromJson(Map<String, dynamic> json) =>
@@ -38,6 +48,24 @@ _$PostgresInfoImpl _$$PostgresInfoImplFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$$PostgresInfoImplToJson(_$PostgresInfoImpl instance) =>
     <String, dynamic>{
       'version': instance.version,
+    };
+
+_$AdapterInfoImpl _$$AdapterInfoImplFromJson(Map<String, dynamic> json) =>
+    _$AdapterInfoImpl(
+      name: json['name'] as String?,
+      version: json['version'] as String?,
+      supported: (json['supported'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
+      custom: json['custom'] as Map<String, dynamic>?,
+    );
+
+Map<String, dynamic> _$$AdapterInfoImplToJson(_$AdapterInfoImpl instance) =>
+    <String, dynamic>{
+      'name': instance.name,
+      'version': instance.version,
+      'supported': instance.supported,
+      'custom': instance.custom,
     };
 
 _$JanusInfoImpl _$$JanusInfoImplFromJson(Map<String, dynamic> json) =>
@@ -55,6 +83,16 @@ Map<String, dynamic> _$$JanusInfoImplToJson(_$JanusInfoImpl instance) =>
     <String, dynamic>{
       'plugins': instance.plugins,
       'transports': instance.transports,
+      'version': instance.version,
+    };
+
+_$GorushInfoImpl _$$GorushInfoImplFromJson(Map<String, dynamic> json) =>
+    _$GorushInfoImpl(
+      version: json['version'] as String?,
+    );
+
+Map<String, dynamic> _$$GorushInfoImplToJson(_$GorushInfoImpl instance) =>
+    <String, dynamic>{
       'version': instance.version,
     };
 
@@ -100,42 +138,4 @@ _$SipVersionImpl _$$SipVersionImplFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$$SipVersionImplToJson(_$SipVersionImpl instance) =>
     <String, dynamic>{
       'version': instance.version,
-    };
-
-_$GorushInfoImpl _$$GorushInfoImplFromJson(Map<String, dynamic> json) =>
-    _$GorushInfoImpl(
-      version: json['version'] as String?,
-    );
-
-Map<String, dynamic> _$$GorushInfoImplToJson(_$GorushInfoImpl instance) =>
-    <String, dynamic>{
-      'version': instance.version,
-    };
-
-_$CoreInfoImpl _$$CoreInfoImplFromJson(Map<String, dynamic> json) =>
-    _$CoreInfoImpl(
-      version: const VersionConverter().fromJson(json['version'] as String),
-    );
-
-Map<String, dynamic> _$$CoreInfoImplToJson(_$CoreInfoImpl instance) =>
-    <String, dynamic>{
-      'version': const VersionConverter().toJson(instance.version),
-    };
-
-_$AdapterInfoImpl _$$AdapterInfoImplFromJson(Map<String, dynamic> json) =>
-    _$AdapterInfoImpl(
-      name: json['name'] as String?,
-      version: json['version'] as String?,
-      supported: (json['supported'] as List<dynamic>?)
-          ?.map((e) => e as String)
-          .toList(),
-      custom: json['custom'] as Map<String, dynamic>?,
-    );
-
-Map<String, dynamic> _$$AdapterInfoImplToJson(_$AdapterInfoImpl instance) =>
-    <String, dynamic>{
-      'name': instance.name,
-      'version': instance.version,
-      'supported': instance.supported,
-      'custom': instance.custom,
     };

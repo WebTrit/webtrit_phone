@@ -36,19 +36,17 @@ class AboutBloc extends Bloc<AboutEvent, AboutState> {
   }
 
   final NotificationsBloc notificationsBloc;
-  final InfoRepository infoRepository;
+  final SystemInfoRepository infoRepository;
 
   void _onStarted(AboutStarted event, Emitter<AboutState> emit) async {
     emit(state.copyWith(progress: true));
     try {
-      final coreVersion = await infoRepository.getCoreVersion();
+      final systemInfo = await infoRepository.getInfo();
+      final coreVersion = systemInfo.core.version;
 
       if (emit.isDone) return;
 
-      emit(state.copyWith(
-        progress: false,
-        coreVersion: coreVersion,
-      ));
+      emit(state.copyWith(progress: false, coreVersion: coreVersion));
     } catch (e, stackTrace) {
       _logger.warning('_onStarted', e, stackTrace);
 

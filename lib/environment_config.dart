@@ -40,6 +40,12 @@ class EnvironmentConfig {
     defaultValue: 'http://localhost:4000',
   );
 
+  static const CORE_VERSION_CONSTRAINT__NAME = 'WEBTRIT_APP_CORE_VERSION_CONSTRAINT';
+  static const CORE_VERSION_CONSTRAINT = String.fromEnvironment(
+    CORE_VERSION_CONSTRAINT__NAME,
+    defaultValue: '>=0.7.0-alpha <2.0.0',
+  );
+
   static const APP_LINK_DOMAIN__NAME = 'WEBTRIT_APP_LINK_DOMAIN';
   static const APP_LINK_DOMAIN = String.fromEnvironment(APP_LINK_DOMAIN__NAME, defaultValue: '');
 

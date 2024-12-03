@@ -9,6 +9,7 @@ class LoginState with _$LoginState {
     LoginMode? mode,
     String? coreUrl,
     String? tenantId,
+    WebtritSystemInfo? systemInfo,
     List<LoginType>? supportedLoginTypes,
     SessionOtpProvisionalWithDateTime? otpSigninSessionOtpProvisionalWithDateTime,
     @Default(true) bool passwordSigninPasswordInputObscureText,

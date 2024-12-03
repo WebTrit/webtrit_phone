@@ -14,12 +14,23 @@ class SystemInfo with _$SystemInfo {
   const factory SystemInfo({
     required CoreInfo core,
     required PostgresInfo postgres,
+    AdapterInfo? adapter,
     JanusInfo? janus,
     GorushInfo? gorush,
-    AdapterInfo? adapter,
   }) = _SystemInfo;
 
   factory SystemInfo.fromJson(Map<String, Object?> json) => _$SystemInfoFromJson(json);
+}
+
+@freezed
+class CoreInfo with _$CoreInfo {
+  // ignore: invalid_annotation_target
+  @JsonSerializable(fieldRename: FieldRename.snake)
+  const factory CoreInfo({
+    @VersionConverter() required Version version,
+  }) = _CoreInfo;
+
+  factory CoreInfo.fromJson(Map<String, Object?> json) => _$CoreInfoFromJson(json);
 }
 
 @freezed
@@ -34,6 +45,20 @@ class PostgresInfo with _$PostgresInfo {
 }
 
 @freezed
+class AdapterInfo with _$AdapterInfo {
+  // ignore: invalid_annotation_target
+  @JsonSerializable(fieldRename: FieldRename.snake)
+  const factory AdapterInfo({
+    String? name,
+    String? version,
+    List<String>? supported,
+    Map<String, dynamic>? custom,
+  }) = _AdapterInfo;
+
+  factory AdapterInfo.fromJson(Map<String, Object?> json) => _$AdapterInfoFromJson(json);
+}
+
+@freezed
 class JanusInfo with _$JanusInfo {
   // ignore: invalid_annotation_target
   @JsonSerializable(fieldRename: FieldRename.snake)
@@ -44,6 +69,17 @@ class JanusInfo with _$JanusInfo {
   }) = _JanusInfo;
 
   factory JanusInfo.fromJson(Map<String, Object?> json) => _$JanusInfoFromJson(json);
+}
+
+@freezed
+class GorushInfo with _$GorushInfo {
+  // ignore: invalid_annotation_target
+  @JsonSerializable(fieldRename: FieldRename.snake)
+  const factory GorushInfo({
+    String? version,
+  }) = _GorushInfo;
+
+  factory GorushInfo.fromJson(Map<String, Object?> json) => _$GorushInfoFromJson(json);
 }
 
 @freezed
@@ -88,40 +124,4 @@ class SipVersion with _$SipVersion {
   }) = _SipVersion;
 
   factory SipVersion.fromJson(Map<String, Object?> json) => _$SipVersionFromJson(json);
-}
-
-@freezed
-class GorushInfo with _$GorushInfo {
-  // ignore: invalid_annotation_target
-  @JsonSerializable(fieldRename: FieldRename.snake)
-  const factory GorushInfo({
-    String? version,
-  }) = _GorushInfo;
-
-  factory GorushInfo.fromJson(Map<String, Object?> json) => _$GorushInfoFromJson(json);
-}
-
-@freezed
-class CoreInfo with _$CoreInfo {
-  // ignore: invalid_annotation_target
-  @JsonSerializable(fieldRename: FieldRename.snake)
-  const factory CoreInfo({
-    @VersionConverter() required Version version,
-  }) = _CoreInfo;
-
-  factory CoreInfo.fromJson(Map<String, Object?> json) => _$CoreInfoFromJson(json);
-}
-
-@freezed
-class AdapterInfo with _$AdapterInfo {
-  // ignore: invalid_annotation_target
-  @JsonSerializable(fieldRename: FieldRename.snake)
-  const factory AdapterInfo({
-    String? name,
-    String? version,
-    List<String>? supported,
-    Map<String, dynamic>? custom,
-  }) = _AdapterInfo;
-
-  factory AdapterInfo.fromJson(Map<String, Object?> json) => _$AdapterInfoFromJson(json);
 }

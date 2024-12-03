@@ -11,6 +11,7 @@ class AppLogined with _$AppLogined implements AppEvent {
     required String tenantId,
     required String token,
     required String userId,
+    required WebtritSystemInfo systemInfo,
   }) = _AppLogined;
 }
 

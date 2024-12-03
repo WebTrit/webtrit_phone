@@ -10,6 +10,7 @@ import 'package:webtrit_api/webtrit_api.dart';
 
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
+import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 
@@ -74,6 +75,8 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     await secureStorage.writeTenantId(event.tenantId);
     await secureStorage.writeToken(event.token);
     await secureStorage.writeUserId(event.userId);
+
+    await appPreferences.setSystemInfo(event.systemInfo);
 
     emit(state.copyWith(
       coreUrl: event.coreUrl,
