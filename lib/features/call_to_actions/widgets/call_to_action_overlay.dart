@@ -26,7 +26,7 @@ class DemoActionOverlay {
   void insert({
     required BuildContext context,
     required Widget child,
-    required GestureTapCallback onTap,
+    GestureTapCallback? onTap,
   }) {
     if (inserted) return;
 

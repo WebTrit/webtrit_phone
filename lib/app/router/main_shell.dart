@@ -44,6 +44,7 @@ class _MainShellState extends State<MainShell> {
         ios: CallkeepIOSOptions(
           localizedName: PackageInfo().appName,
           ringtoneSound: Assets.ringtones.incomingCall1,
+          ringbackSound: Assets.ringtones.outgoingCall1,
           iconTemplateImageAssetName: Assets.callkeep.iosIconTemplateImage.path,
           maximumCallGroups: 13,
           maximumCallsPerCallGroup: 13,
@@ -53,6 +54,7 @@ class _MainShellState extends State<MainShell> {
           incomingPath: initialCallRout,
           rootPath: initialMainRout,
           ringtoneSound: Assets.ringtones.incomingCall1,
+          ringbackSound: Assets.ringtones.outgoingCall1,
         ),
       ),
     );
@@ -178,6 +180,12 @@ class _MainShellState extends State<MainShell> {
         RepositoryProvider<ActiveMessageNotificationsRepository>(
           create: (context) => ActiveMessageNotificationsRepositoryDriftImpl(
             appDatabase: context.read<AppDatabase>(),
+          ),
+        ),
+        RepositoryProvider<CallToActionsRepository>(
+          create: (context) => CallToActionsRepositoryImpl(
+            webtritApiClient: context.read<WebtritApiClient>(),
+            token: context.read<AppBloc>().state.token!,
           ),
         ),
       ],

@@ -50,6 +50,13 @@ abstract class _$AppRouter extends RootStackRouter {
         child: CallScreenPage(),
       );
     },
+    CallToActionsWebPageRoute.name: (routeData) {
+      final args = routeData.argsAs<CallToActionsWebPageRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: CallToActionsWebPage(args.initialUrl),
+      );
+    },
     ChatConversationScreenPageRoute.name: (routeData) {
       final args = routeData.argsAs<ChatConversationScreenPageRouteArgs>(
           orElse: () => const ChatConversationScreenPageRouteArgs());
@@ -88,13 +95,6 @@ abstract class _$AppRouter extends RootStackRouter {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
         child: ConversationsScreenPage(),
-      );
-    },
-    DemoWebPageRoute.name: (routeData) {
-      final args = routeData.argsAs<DemoWebPageRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: DemoWebPage(args.initialUrl),
       );
     },
     DiagnosticScreenPageRoute.name: (routeData) {
@@ -451,6 +451,36 @@ class CallScreenPageRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [CallToActionsWebPage]
+class CallToActionsWebPageRoute
+    extends PageRouteInfo<CallToActionsWebPageRouteArgs> {
+  CallToActionsWebPageRoute({
+    required Uri initialUrl,
+    List<PageRouteInfo>? children,
+  }) : super(
+          CallToActionsWebPageRoute.name,
+          args: CallToActionsWebPageRouteArgs(initialUrl: initialUrl),
+          initialChildren: children,
+        );
+
+  static const String name = 'CallToActionsWebPageRoute';
+
+  static const PageInfo<CallToActionsWebPageRouteArgs> page =
+      PageInfo<CallToActionsWebPageRouteArgs>(name);
+}
+
+class CallToActionsWebPageRouteArgs {
+  const CallToActionsWebPageRouteArgs({required this.initialUrl});
+
+  final Uri initialUrl;
+
+  @override
+  String toString() {
+    return 'CallToActionsWebPageRouteArgs{initialUrl: $initialUrl}';
+  }
+}
+
+/// generated route for
 /// [ChatConversationScreenPage]
 class ChatConversationScreenPageRoute
     extends PageRouteInfo<ChatConversationScreenPageRouteArgs> {
@@ -575,35 +605,6 @@ class ConversationsScreenPageRoute extends PageRouteInfo<void> {
   static const String name = 'ConversationsScreenPageRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
-}
-
-/// generated route for
-/// [DemoWebPage]
-class DemoWebPageRoute extends PageRouteInfo<DemoWebPageRouteArgs> {
-  DemoWebPageRoute({
-    required Uri initialUrl,
-    List<PageRouteInfo>? children,
-  }) : super(
-          DemoWebPageRoute.name,
-          args: DemoWebPageRouteArgs(initialUrl: initialUrl),
-          initialChildren: children,
-        );
-
-  static const String name = 'DemoWebPageRoute';
-
-  static const PageInfo<DemoWebPageRouteArgs> page =
-      PageInfo<DemoWebPageRouteArgs>(name);
-}
-
-class DemoWebPageRouteArgs {
-  const DemoWebPageRouteArgs({required this.initialUrl});
-
-  final Uri initialUrl;
-
-  @override
-  String toString() {
-    return 'DemoWebPageRouteArgs{initialUrl: $initialUrl}';
-  }
 }
 
 /// generated route for

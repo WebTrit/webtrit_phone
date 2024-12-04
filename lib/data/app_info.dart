@@ -13,13 +13,13 @@ class AppInfo {
   static Future<AppInfo> init() async {
     final id = await FirebaseInstallations.instance.getId();
 
-    String? appVersion = await _getAppVersion();
+    String? appVersion = await getAppVersion();
 
     _instance = AppInfo._(id, appVersion);
     return _instance;
   }
 
-  static Future<String?> _getAppVersion() async {
+  static Future<String?> getAppVersion() async {
     try {
       final pubspecString = await services.rootBundle.loadString(Assets.pubspec);
       final regExp = RegExp(r'app_version:\s*(\d+\.\d+\.\d+(\+\d+)?)');

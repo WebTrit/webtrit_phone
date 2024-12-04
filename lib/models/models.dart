@@ -1,4 +1,6 @@
 export 'active_message_notification.dart';
+export 'call_log_entry.dart';
+export 'call_to_action.dart';
 export 'chat.dart';
 export 'chat_member.dart';
 export 'chat_message.dart';
@@ -13,7 +15,6 @@ export 'contact_email.dart';
 export 'contact_phone.dart';
 export 'contact_source_type.dart';
 export 'external_contact.dart';
-export 'call_log_entry.dart';
 export 'favorite.dart';
 export 'feature_access/exports.dart';
 export 'incoming_call_type.dart';

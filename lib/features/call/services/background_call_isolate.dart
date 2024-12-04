@@ -1,11 +1,7 @@
-import 'package:logging/logging.dart';
-import 'package:logging_appenders/logging_appenders.dart';
-
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 
 import 'package:webtrit_phone/common/common.dart';
 import 'package:webtrit_phone/data/data.dart';
-import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
 import 'background_call_event_service.dart';
@@ -13,6 +9,9 @@ import 'background_call_event_service.dart';
 CallkeepBackgroundService? _callkeep;
 BackgroundCallEventService? _backgroundCallEventManager;
 
+DeviceInfo? _deviceInfo;
+PackageInfo? _packageInfo;
+AppLogger? _appLogger;
 AppPreferences? _appPreferences;
 SecureStorage? _secureStorage;
 AppCertificates? _appCertificates;
@@ -20,6 +19,9 @@ AppCertificates? _appCertificates;
 CallLogsRepository? _callLogsRepository;
 
 Future<void> _initializeDependencies() async {
+  _deviceInfo ??= await DeviceInfo.init();
+  _packageInfo ??= await PackageInfo.init();
+  _appLogger ??= await AppLogger.init();
   _appPreferences ??= await AppPreferences.init();
   _appCertificates ??= await AppCertificates.init();
 
@@ -36,10 +38,6 @@ Future<void> _initializeDependencies() async {
     storage: _secureStorage!,
     certificates: _appCertificates!.trustedCertificates,
   );
-
-  hierarchicalLoggingEnabled = true;
-  final logLevel = Level.LEVELS.firstWhere((level) => level.name == EnvironmentConfig.DEBUG_LEVEL);
-  PrintAppender.setupLogging(level: logLevel);
 }
 
 @pragma('vm:entry-point')
