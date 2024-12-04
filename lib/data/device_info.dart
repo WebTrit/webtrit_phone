@@ -56,7 +56,13 @@ class DeviceInfo {
 
   final Map<String, dynamic> data;
 
-  String? get manufacturer => data['manufacturer'];
+  String get manufacturer => data['manufacturer'] ?? 'unknown';
+
+  String get model => data['model'] ?? 'unknown';
+
+  String get systemName => data['systemName'] ?? 'unknown';
+
+  String get systemVersion => data['systemVersion'] ?? 'unknown';
 
   static Map<String, dynamic> _readWebBrowserInfo(WebBrowserInfo data) {
     return <String, dynamic>{
