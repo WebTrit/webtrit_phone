@@ -7,7 +7,18 @@ enum AnonymizationType {
   port,
   phoneNumber,
   token,
-  personalInfo;
+  personalInfo,
+  identifier,
+  userId,
+  tenantId,
+  balance,
+  bundleId,
+  configToken,
+  login,
+  password,
+  otpId,
+  code,
+  userRef;
 
   static const List<AnonymizationType> none = [];
 
@@ -45,7 +56,18 @@ class AnonymizingFormatter extends ColorFormatter {
       AnonymizationType.port: RegExp(r'\bport\s*=\s*\d+\b'),
       AnonymizationType.phoneNumber: RegExp(r'\b\d{10,15}\b'),
       AnonymizationType.token: RegExp(r'eyJ[a-zA-Z0-9._-]+'),
-      AnonymizationType.personalInfo: RegExp(r'"(first_name|last_name)":"[^"]+"'),
+      AnonymizationType.personalInfo: RegExp(r'"(first_name|last_name|alias_name|company_name)":"[^"]+"'),
+      AnonymizationType.identifier: RegExp(r'"identifier":"[^"]+"'),
+      AnonymizationType.userId: RegExp(r'"user_id":"[^"]+"'),
+      AnonymizationType.tenantId: RegExp(r'"tenant_id":"[^"]+"'),
+      AnonymizationType.balance: RegExp(r'"balance":\{[^}]+\}'),
+      AnonymizationType.bundleId: RegExp(r'"bundle_id":"[^"]+"'),
+      AnonymizationType.configToken: RegExp(r'"config_token":"[^"]+"'),
+      AnonymizationType.login: RegExp(r'"login":"[^"]+"'),
+      AnonymizationType.password: RegExp(r'"password":"[^"]+"'),
+      AnonymizationType.otpId: RegExp(r'"otp_id":"[^"]+"'),
+      AnonymizationType.userRef: RegExp(r'"user_ref":"[^"]+"'),
+      AnonymizationType.code: RegExp(r'"code":"[^"]+"'),
     };
 
     var sanitized = input;
