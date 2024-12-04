@@ -1,7 +1,9 @@
 import 'package:equatable/equatable.dart';
 
 class Websocket with EquatableMixin {
-  Websocket({this.version});
+  Websocket({
+    this.version,
+  });
 
   final String? version;
 

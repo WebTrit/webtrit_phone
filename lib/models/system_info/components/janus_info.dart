@@ -4,7 +4,11 @@ import 'plugins.dart';
 import 'transports.dart';
 
 class JanusInfo with EquatableMixin {
-  JanusInfo({this.plugins, this.transports, this.version});
+  JanusInfo({
+    this.plugins,
+    this.transports,
+    this.version,
+  });
 
   final Plugins? plugins;
   final Transports? transports;

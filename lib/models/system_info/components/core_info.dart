@@ -2,7 +2,9 @@ import 'package:equatable/equatable.dart';
 import 'package:pub_semver/pub_semver.dart';
 
 class CoreInfo with EquatableMixin {
-  CoreInfo({required this.version});
+  CoreInfo({
+    required this.version,
+  });
 
   final Version version;
 
