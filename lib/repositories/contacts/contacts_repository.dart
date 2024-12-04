@@ -5,7 +5,7 @@ import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/mappers/mappers.dart';
 import 'package:webtrit_phone/models/models.dart';
 
-class ContactsRepository {
+class ContactsRepository with ContactsDriftMapper {
   ContactsRepository({
     required AppDatabase appDatabase,
   }) : _appDatabase = appDatabase;

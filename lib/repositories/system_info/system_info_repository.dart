@@ -9,7 +9,7 @@ import 'package:webtrit_phone/models/models.dart';
 
 final _logger = Logger('SystemInfoRepository');
 
-class SystemInfoRepository {
+class SystemInfoRepository with SystemInfoApiMapper {
   SystemInfoRepository(
     this.webtritApiClient, {
     this.polling = true,

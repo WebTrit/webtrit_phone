@@ -1,9 +1,8 @@
 import 'dart:async';
 
 import 'package:webtrit_phone/data/data.dart';
+import 'package:webtrit_phone/mappers/mappers.dart';
 import 'package:webtrit_phone/models/models.dart';
-
-import 'components/chats_outbox_drift_mapper.dart';
 
 class ChatsOutboxRepository with ChatsOutboxDriftMapper {
   ChatsOutboxRepository({required AppDatabase appDatabase}) : _appDatabase = appDatabase;

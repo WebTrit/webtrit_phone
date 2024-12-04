@@ -1,7 +1,6 @@
 import 'package:webtrit_phone/data/data.dart';
+import 'package:webtrit_phone/mappers/mappers.dart';
 import 'package:webtrit_phone/models/models.dart';
-
-import 'components/sms_outbox_drift_mapper.dart';
 
 class SmsOutboxRepository with SmsOutboxDriftMapper {
   SmsOutboxRepository({required AppDatabase appDatabase}) : _appDatabase = appDatabase;

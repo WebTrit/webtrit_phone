@@ -1,10 +1,8 @@
 import 'dart:async';
 
 import 'package:webtrit_phone/data/data.dart';
+import 'package:webtrit_phone/mappers/mappers.dart';
 import 'package:webtrit_phone/models/models.dart';
-
-import 'components/sms_events.dart';
-import 'components/sms_drift_mapper.dart';
 
 class SmsRepository with SmsDriftMapper {
   SmsRepository({required AppDatabase appDatabase}) : _appDatabase = appDatabase;
