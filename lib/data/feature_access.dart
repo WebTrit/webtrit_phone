@@ -4,6 +4,7 @@ import 'package:logging/logging.dart';
 
 import 'package:webtrit_phone/data/app_preferences.dart';
 import 'package:webtrit_phone/extensions/iterable.dart';
+import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/theme/models/models.dart';
 
@@ -22,12 +23,14 @@ class FeatureAccess {
     this.bottomMenuFeature,
     this.settingsFeature,
     this.callFeature,
+    this.messagingFeature,
   );
 
   final LoginFeature loginFeature;
   final BottomMenuFeature bottomMenuFeature;
   final SettingsFeature settingsFeature;
   final CallFeature callFeature;
+  final MessagingFeature messagingFeature;
 
   static Future<FeatureAccess> init() async {
     final theme = AppThemes();
@@ -40,8 +43,15 @@ class FeatureAccess {
       final bottomMenuManager = _tryConfigureBottomMenuFeature(appConfig, preferences);
       final settingsFeature = _tryConfigureSettingsFeature(appConfig, preferences);
       final callFeature = _tryConfigureCallFeature(appConfig);
+      final messagingFeature = _tryConfigureMessagingFeature(appConfig, preferences);
 
-      _instance = FeatureAccess._(customLoginFeature, bottomMenuManager, settingsFeature, callFeature);
+      _instance = FeatureAccess._(
+        customLoginFeature,
+        bottomMenuManager,
+        settingsFeature,
+        callFeature,
+        messagingFeature,
+      );
     } catch (e, stackTrace) {
       _logger.severe('Failed to initialize FeatureAccess', e, stackTrace);
       rethrow;
@@ -51,7 +61,7 @@ class FeatureAccess {
 
   factory FeatureAccess() => _instance;
 
-  // TODO(Serdun): move to field
+  @Deprecated('Will be removed soon, use [MessagingFeature] instead')
   bool isMessagingEnabled() {
     return bottomMenuFeature._tabs.map((it) => it.flavor).contains(MainFlavor.messaging);
   }
@@ -210,6 +220,11 @@ class FeatureAccess {
       ),
     );
   }
+
+  static MessagingFeature _tryConfigureMessagingFeature(AppConfig appConfig, AppPreferences preferences) {
+    final tabEnabled = appConfig.mainConfig.bottomMenu.tabs.any((tab) => tab.type == MainFlavor.messaging.name);
+    return MessagingFeature(preferences, tabEnabled: tabEnabled);
+  }
 }
 
 class LoginFeature {
@@ -275,4 +290,22 @@ class CallFeature {
     required this.videoEnable,
     required this.transfer,
   });
+}
+
+class MessagingFeature {
+  MessagingFeature(this._appPreferences, {bool tabEnabled = false}) : _tabEnabled = tabEnabled;
+
+  final AppPreferences _appPreferences;
+  final bool _tabEnabled;
+
+  List<String> get _coreSupportedFeatures {
+    final systemInfo = _appPreferences.getSystemInfo();
+    return systemInfo?.adapter?.supported ?? [];
+  }
+
+  bool get smsMessagingEnabled => _tabEnabled && _coreSupportedFeatures.contains(kSmsMessagingFeatureFlag);
+
+  bool get instantMessagingEnabled => _tabEnabled && _coreSupportedFeatures.contains(kInstantMessagingFeatureFlag);
+
+  bool get anyMessagingEnabled => smsMessagingEnabled || instantMessagingEnabled;
 }
