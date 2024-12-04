@@ -123,22 +123,29 @@ class EnvironmentConfig {
         )
       : 'ws://localhost:4000/socket/websocket';
 
-  static const REMOTE_LOGGING_URL__NAME = 'WEBTRIT_APP_REMOTE_LOGGING_URL';
-  static const REMOTE_LOGGING_URL = bool.hasEnvironment(REMOTE_LOGGING_URL__NAME)
+  // LOGZIO service-specific configuration.
+  // If additional logging services are introduced, consider moving these to a separate logging configuration file.
+  static const REMOTE_LOGZIO_LOGGING_URL__NAME = 'WEBTRIT_APP_REMOTE_LOGZIO_LOGGING_URL';
+  static const REMOTE_LOGZIO_LOGGING_URL = bool.hasEnvironment(REMOTE_LOGZIO_LOGGING_URL__NAME)
       ? String.fromEnvironment(
-          REMOTE_LOGGING_URL__NAME,
+          REMOTE_LOGZIO_LOGGING_URL__NAME,
         )
       : null;
 
-  static const REMOTE_LOGGING_TOKEN__NAME = 'WEBTRIT_APP_REMOTE_LOGGING_TOKEN';
-  static const REMOTE_LOGGING_TOKEN = bool.hasEnvironment(REMOTE_LOGGING_TOKEN__NAME)
+  // LOGZIO service-specific configuration.
+  // If additional logging services are introduced, consider moving these to a separate logging configuration file.
+  static const REMOTE_LOGZIO_LOGGING_TOKEN__NAME = 'WEBTRIT_APP_REMOTE_LOGZIO_LOGGING_TOKEN';
+  static const REMOTE_LOGZIO_LOGGING_TOKEN = bool.hasEnvironment(REMOTE_LOGZIO_LOGGING_TOKEN__NAME)
       ? String.fromEnvironment(
-          REMOTE_LOGGING_TOKEN__NAME,
+          REMOTE_LOGZIO_LOGGING_TOKEN__NAME,
         )
       : null;
 
-  static const _REMOTE_LOGGING_BUFFER_SIZE__KB = 0;
-  static const REMOTE_LOGGING_BUFFER_SIZE__NAME = 'WEBTRIT_APP_REMOTE_LOGGING_BUFFER_SIZE';
-  static final REMOTE_LOGGING_BUFFER_SIZE =
-      int.tryParse(const String.fromEnvironment(REMOTE_LOGGING_BUFFER_SIZE__NAME)) ?? _REMOTE_LOGGING_BUFFER_SIZE__KB;
+  // LOGZIO service-specific configuration.
+  // If additional logging services are introduced, consider moving these to a separate logging configuration file.
+  static const _REMOTE_LOGZIO_LOGGING_BUFFER_SIZE__KB = 0;
+  static const REMOTE_LOGZIO_LOGGING_BUFFER_SIZE__NAME = 'WEBTRIT_APP_REMOTE_LOGZIO_LOGGING_BUFFER_SIZE';
+  static final REMOTE_LOGZIO_LOGGING_BUFFER_SIZE =
+      int.tryParse(const String.fromEnvironment(REMOTE_LOGZIO_LOGGING_BUFFER_SIZE__NAME)) ??
+          _REMOTE_LOGZIO_LOGGING_BUFFER_SIZE__KB;
 }

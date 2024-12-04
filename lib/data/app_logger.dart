@@ -21,11 +21,13 @@ class AppLogger {
       formatter: const ColorFormatter(),
     ).attachToLogger(Logger.root);
 
-    // Set up remote logs with an anonymizing formatter if remote logging is enabled
-    const remoteLoggingUrl = EnvironmentConfig.REMOTE_LOGGING_URL;
-    const remoteLoggingToken = EnvironmentConfig.REMOTE_LOGGING_TOKEN;
+    // Configure remote logging for Logz.io with an anonymizing formatter.
+    // If additional logging services are added in the future, consider extracting these settings
+    // into a dedicated logging configuration module to improve maintainability and separation of concerns.
+    const remoteLogzIOLoggingUrl = EnvironmentConfig.REMOTE_LOGZIO_LOGGING_URL;
+    const remoteLogzIOLoggingToken = EnvironmentConfig.REMOTE_LOGZIO_LOGGING_TOKEN;
 
-    if (remoteLoggingUrl != null && remoteLoggingToken != null) {
+    if (remoteLogzIOLoggingUrl != null && remoteLogzIOLoggingToken != null) {
       final remoteFormatter = AnonymizingFormatter(
         anonymizationTypes: AnonymizationType.full,
         wrappedFormatter: const RemoteFormatter(),
@@ -33,9 +35,9 @@ class AppLogger {
 
       LogzIoApiAppender(
         formatter: remoteFormatter,
-        url: remoteLoggingUrl,
-        apiToken: remoteLoggingToken,
-        bufferSize: EnvironmentConfig.REMOTE_LOGGING_BUFFER_SIZE,
+        url: remoteLogzIOLoggingUrl,
+        apiToken: remoteLogzIOLoggingToken,
+        bufferSize: EnvironmentConfig.REMOTE_LOGZIO_LOGGING_BUFFER_SIZE,
         labels: await _prepareRemoteLabels(),
       ).attachToLogger(Logger.root);
     }
