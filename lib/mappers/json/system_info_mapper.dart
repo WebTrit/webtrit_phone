@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:pub_semver/pub_semver.dart';
+
 import 'package:webtrit_phone/models/models.dart';
 
 WebtritSystemInfo systemInfoFromJson(String json) {

@@ -1,4 +1,5 @@
 import 'package:webtrit_api/webtrit_api.dart' as api;
+
 import 'package:webtrit_phone/models/models.dart';
 
 WebtritSystemInfo systemInfoFromApi(api.SystemInfo systemInfo) {
