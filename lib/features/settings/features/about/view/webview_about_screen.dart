@@ -15,7 +15,7 @@ class WebAboutScreen extends StatelessWidget {
 
   final Uri baseAppAboutUrl;
   final PackageInfo packageInfo;
-  final InfoRepository infoRepository;
+  final SystemInfoRepository infoRepository;
 
   @override
   Widget build(BuildContext context) {

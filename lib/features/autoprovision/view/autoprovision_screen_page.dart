@@ -36,6 +36,8 @@ class AutoprovisionScreenPage extends StatelessWidget {
     final coreUrl = this.coreUrl;
     final oldCoreUrl = context.read<AppBloc>().state.coreUrl;
 
+    const coreVersionConstraint = EnvironmentConfig.CORE_VERSION_CONSTRAINT;
+
     final widget = BlocProvider(
       create: (context) => AutoprovisionCubit(AutoprovisionConfig(
         configToken: configToken,
@@ -45,6 +47,7 @@ class AutoprovisionScreenPage extends StatelessWidget {
         defaultCoreUrl: defaultCoreUrl,
         coreUrl: coreUrl ?? oldCoreUrl,
         oldCoreUrl: oldCoreUrl,
+        coreVersionConstraint: coreVersionConstraint,
       )),
       child: const AutoprovisionScreen(),
     );

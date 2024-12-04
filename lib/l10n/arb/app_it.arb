@@ -523,8 +523,6 @@
   "@main_CompatibilityIssueDialogActions_logout": {},
   "main_CompatibilityIssueDialogActions_update": "Aggiornamento",
   "@main_CompatibilityIssueDialogActions_update": {},
-  "main_CompatibilityIssueDialogActions_verify": "Controlla nuovamente",
-  "@main_CompatibilityIssueDialogActions_verify": {},
   "main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError": "Versione di WebTrit Cloud Backend incompatibile, si prega di contattare l'amministratore del sistema.\n\nVersione dell'istanza:\n{actual}\n\nVersione supportata:\n{supportedConstraint}\n",
   "@main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError": {
     "placeholders": {

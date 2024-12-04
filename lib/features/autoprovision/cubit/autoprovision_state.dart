@@ -9,8 +9,14 @@ abstract base class AutoprovisionState {
   factory AutoprovisionState.processing() => const ProcessingToken._();
   factory AutoprovisionState.replaceConfirmationNeeded() => const ReplaceConfirmationNeeded._();
 
-  factory AutoprovisionState.sessionCreated(String token, String userId, String coreUrl, String tenantId) {
-    return SessionCreated._(token, userId, coreUrl, tenantId);
+  factory AutoprovisionState.sessionCreated(
+    WebtritSystemInfo systemInfo,
+    String token,
+    String userId,
+    String coreUrl,
+    String tenantId,
+  ) {
+    return SessionCreated._(systemInfo, token, userId, coreUrl, tenantId);
   }
 }
 
@@ -62,15 +68,16 @@ final class ReplaceConfirmationNeeded extends AutoprovisionState with EquatableM
 
 /// Represents the state of the autoprovision cubit when the session is created.
 final class SessionCreated extends AutoprovisionState with EquatableMixin {
-  const SessionCreated._(this.token, this.userId, this.coreUrl, this.tenantId);
+  const SessionCreated._(this.systemInfo, this.token, this.userId, this.coreUrl, this.tenantId);
 
+  final WebtritSystemInfo systemInfo;
   final String token;
   final String userId;
   final String coreUrl;
   final String tenantId;
 
   @override
-  List<Object?> get props => [token, userId, coreUrl, tenantId];
+  List<Object?> get props => [systemInfo, token, userId, coreUrl, tenantId];
 
   @override
   bool? get stringify => true;

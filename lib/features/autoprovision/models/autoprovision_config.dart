@@ -7,6 +7,7 @@ class AutoprovisionConfig {
     required this.defaultCoreUrl,
     this.coreUrl,
     this.oldCoreUrl,
+    required this.coreVersionConstraint,
   });
 
   final String configToken;
@@ -16,9 +17,10 @@ class AutoprovisionConfig {
   final String defaultCoreUrl;
   final String? coreUrl;
   final String? oldCoreUrl;
+  final String coreVersionConstraint;
 
   @override
   String toString() {
-    return 'configToken: $configToken, oldToken: $oldToken, tenantId: $tenantId, oldTenantId: $oldTenantId, defaultCoreUrl: $defaultCoreUrl, coreUrl: $coreUrl, oldCoreUrl: $oldCoreUrl';
+    return 'configToken: $configToken, oldToken: $oldToken, tenantId: $tenantId, oldTenantId: $oldTenantId, defaultCoreUrl: $defaultCoreUrl, coreUrl: $coreUrl, oldCoreUrl: $oldCoreUrl, coreVersionConstraint: $coreVersionConstraint';
   }
 }

@@ -2,96 +2,119 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:equatable/equatable.dart';
 import 'package:logging/logging.dart';
 import 'package:pub_semver/pub_semver.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:store_info_extractor/store_info_extractor.dart';
 
-import 'package:webtrit_phone/app/constants.dart';
-import 'package:webtrit_phone/app/core_version.dart';
 import 'package:webtrit_phone/data/data.dart';
+import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
-part 'main_bloc.freezed.dart';
-
 part 'main_event.dart';
-
 part 'main_state.dart';
+
+// TODO: maybe split the bloc into two separate blocs: SystemInfoSyncBloc and (CoreCompatibilityBloc or MainScreenBloc)
+// coz the the system info sync not binded to MainScreen lifecycle, but url launch logic is
 
 final _logger = Logger('MainBloc');
 
-class MainBloc extends Bloc<MainEvent, MainState> {
-  MainBloc({
-    required this.infoRepository,
+class MainBloc extends Bloc<MainBlocEvent, MainBlocState> {
+  MainBloc(
+    this.systemInfoRemoteRepository,
+    this.appPreferences,
+    this.coreVersionConstraint, {
     this.storeInfoExtractor,
-  }) : super(const MainState()) {
-    on<MainStarted>(_onStarted, transformer: restartable());
-    on<MainCompatibilityVerified>(_onCompatibilityVerified, transformer: sequential());
-    on<MainAppUpdated>(_onAppUpdated, transformer: droppable());
+  }) : super(MainBlocState.initial()) {
+    on<MainBlocInit>(_onInit, transformer: restartable());
+    on<MainBlocSystemInfoArrived>(_onSystemInfoArrived, transformer: droppable());
+    on<MainBlocAppUpdatePressed>(_onAppUpdatePressed, transformer: droppable());
   }
 
-  final InfoRepository infoRepository;
+  final SystemInfoRepository systemInfoRemoteRepository;
+  final AppPreferences appPreferences;
+  final String coreVersionConstraint;
   final StoreInfoExtractor? storeInfoExtractor;
 
-  Timer? _repeatTimer;
+  StreamSubscription<WebtritSystemInfo>? _systemInfoSubscription;
 
   @override
   Future<void> close() async {
-    _repeatTimer?.cancel();
-
+    _systemInfoSubscription?.cancel();
     await super.close();
   }
 
-  void _onStarted(MainStarted event, Emitter<MainState> emit) async {
-    add(const MainCompatibilityVerified());
+  /// Handles the [MainBlocInit] event.
+  ///
+  /// Initialize local system info and keeps it in sync with the remote one.
+  /// To use it in core version compatibility verification, it emits the [MainBlocSystemInfoArrived] event.
+  void _onInit(MainBlocInit event, Emitter<MainBlocState> emit) async {
+    var currentSystemInfo = appPreferences.getSystemInfo();
+
+    /// Migration workaround from the old version of the app
+    /// Normally, the system info should be fetched during the login process and stored in sync with
+    /// other session data as token, tenant, userid etc.
+    if (currentSystemInfo == null) {
+      try {
+        final remoteSystemInfo = await systemInfoRemoteRepository.getInfo();
+        appPreferences.setSystemInfo(remoteSystemInfo);
+        currentSystemInfo = remoteSystemInfo;
+      } catch (e) {
+        _logger.warning('Failed to fetch initial system info', e);
+      }
+    }
+
+    if (currentSystemInfo != null) add(MainBlocSystemInfoArrived(currentSystemInfo));
+
+    // subscribe to the system info updates
+    _systemInfoSubscription?.cancel();
+    _systemInfoSubscription = systemInfoRemoteRepository.infoUpdates.listen((systemInfoUpdate) {
+      appPreferences.setSystemInfo(systemInfoUpdate);
+      add(MainBlocSystemInfoArrived(systemInfoUpdate));
+    });
   }
 
-  void _onCompatibilityVerified(MainCompatibilityVerified event, Emitter<MainState> emit) async {
-    emit(state.copyWith(
-      error: null,
-      updateStoreViewUrl: null,
-    ));
-    try {
-      final actualCoreVersion = await infoRepository.getCoreVersion();
-      CoreVersion.supported().verify(actualCoreVersion);
-    } on CoreVersionUnsupportedException catch (e) {
+  /// Handles the [WebtritSystemInfo] arrival event.
+  /// Verifies the compatibility of the core version with the app.
+  /// If the core version is not supported, it shows the compatibility issue dialog.
+  ///
+  /// Also chacks if the app is up to date and can be a reason for the incompatibility.
+  /// in this case, it shows the dialog with the app update button.
+  void _onSystemInfoArrived(MainBlocSystemInfoArrived event, Emitter<MainBlocState> emit) async {
+    final coreInfo = event.systemInfo.core;
+    final constraint = VersionConstraint.parse(coreVersionConstraint);
+    final isCoreSupported = coreInfo.verifyVersionStr(coreVersionConstraint);
+
+    if (isCoreSupported) {
+      emit(state.copyWith(coreVersionState: Compatible()));
+    } else {
+      Uri? maybeStoreUrl;
+
       final appPackageName = PackageInfo().packageName;
       final appVersion = Version.parse(PackageInfo().version);
+
       StoreInfo? storeInfo;
+
       try {
         storeInfo = await storeInfoExtractor?.getStoreInfo(appPackageName);
       } catch (e, stackTrace) {
-        // this error can be ignored because, technically, this functionality is optional
         _logger.warning('storeInfoExtractor.getStoreInfo for $appPackageName error - ignore', e, stackTrace);
       }
-      Uri? storeViewUrl;
+
       if (storeInfo != null && storeInfo.version > appVersion) {
-        storeViewUrl = storeInfo.viewUrl;
+        maybeStoreUrl = storeInfo.viewUrl;
       }
-      emit(state.copyWith(
-        error: e,
-        updateStoreViewUrl: storeViewUrl,
-      ));
-    } catch (e, stackTrace) {
-      const delay = kCompatibilityVerifyRepeatDelay;
-      _logger.warning('_onCompatibilityVerified error - repeat in $delay', e, stackTrace);
-      _repeatTimer?.cancel();
-      _repeatTimer = Timer(delay, () {
-        _logger.info('Timer callback - repeat after $delay');
-        add(const MainCompatibilityVerified());
-      });
+
+      var coreVersionState = Incompatible(coreInfo.version, constraint, updateStoreUrl: maybeStoreUrl);
+      emit(state.copyWith(coreVersionState: coreVersionState));
     }
   }
 
-  void _onAppUpdated(MainAppUpdated event, Emitter<MainState> emit) async {
-    final storeViewUrl = event.storeViewUrl;
-    if (await canLaunchUrl(storeViewUrl)) {
-      await launchUrl(
-        storeViewUrl,
-        mode: LaunchMode.externalApplication,
-      );
+  void _onAppUpdatePressed(MainBlocAppUpdatePressed event, Emitter<MainBlocState> emit) async {
+    if (await canLaunchUrl(event.storeUrl)) {
+      await launchUrl(event.storeUrl, mode: LaunchMode.externalApplication);
     }
   }
 }

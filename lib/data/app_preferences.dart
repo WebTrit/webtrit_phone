@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/mappers/mappers.dart';
 
 class AppPreferences {
   static const _kRegisterStatusKey = 'register-status';
@@ -14,6 +15,7 @@ class AppPreferences {
   static const _kActiveContactSourceTypeKey = 'active-contact-source-type';
   static const _kUserAgreementAcceptedKey = 'user-agreement-accepted';
   static const _kIncomingCallTypeKey = 'call-incoming-type';
+  static const _kSystemInfoKey = 'system-info';
 
   // Please add all new keys here for proper cleaning of preferences
   static const _kPreferencesList = [
@@ -25,6 +27,7 @@ class AppPreferences {
     _kActiveContactSourceTypeKey,
     _kUserAgreementAcceptedKey,
     _kIncomingCallTypeKey,
+    _kSystemInfoKey,
   ];
 
   // List of preferences keys to exclude by default during clean operation
@@ -165,5 +168,15 @@ class AppPreferences {
     } else {
       return defaultValue;
     }
+  }
+
+  Future<void> setSystemInfo(WebtritSystemInfo systemInfo) async {
+    await _sharedPreferences.setString(_kSystemInfoKey, systemInfoToJson(systemInfo));
+  }
+
+  WebtritSystemInfo? getSystemInfo() {
+    final systemInfoString = _sharedPreferences.getString(_kSystemInfoKey);
+    if (systemInfoString != null) return systemInfoFromJson(systemInfoString);
+    return null;
   }
 }

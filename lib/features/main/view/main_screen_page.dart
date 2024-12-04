@@ -75,9 +75,11 @@ class MainScreenPage extends StatelessWidget {
     final provider = BlocProvider(
       create: (context) {
         return MainBloc(
-          infoRepository: context.read<InfoRepository>(),
+          context.read<SystemInfoRepository>(),
+          AppPreferences(),
+          EnvironmentConfig.CORE_VERSION_CONSTRAINT,
           storeInfoExtractor: StoreInfoExtractor(),
-        )..add(const MainStarted());
+        )..add(const MainBlocInit());
       },
       child: appDemoFlow
           ? BlocProvider<CallToActionsCubit>(

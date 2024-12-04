@@ -1,19 +1,19 @@
 part of 'main_bloc.dart';
 
-abstract class MainEvent {
-  const MainEvent();
+abstract class MainBlocEvent {
+  const MainBlocEvent();
 }
 
-class MainStarted extends MainEvent {
-  const MainStarted();
+final class MainBlocInit extends MainBlocEvent {
+  const MainBlocInit();
 }
 
-@Freezed(copyWith: false)
-class MainCompatibilityVerified with _$MainCompatibilityVerified implements MainEvent {
-  const factory MainCompatibilityVerified() = _MainCompatibilityVerified;
+final class MainBlocSystemInfoArrived extends MainBlocEvent {
+  final WebtritSystemInfo systemInfo;
+  const MainBlocSystemInfoArrived(this.systemInfo);
 }
 
-@Freezed(copyWith: false)
-class MainAppUpdated with _$MainAppUpdated implements MainEvent {
-  const factory MainAppUpdated(Uri storeViewUrl) = _MainAppUpdated;
+final class MainBlocAppUpdatePressed extends MainBlocEvent {
+  final Uri storeUrl;
+  const MainBlocAppUpdatePressed(this.storeUrl);
 }

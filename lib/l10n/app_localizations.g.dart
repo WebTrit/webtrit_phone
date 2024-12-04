@@ -1495,12 +1495,6 @@ abstract class AppLocalizations {
   /// **'Update'**
   String get main_CompatibilityIssueDialogActions_update;
 
-  /// No description provided for @main_CompatibilityIssueDialogActions_verify.
-  ///
-  /// In en, this message translates to:
-  /// **'Check again'**
-  String get main_CompatibilityIssueDialogActions_verify;
-
   /// No description provided for @main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError.
   ///
   /// In en, this message translates to:

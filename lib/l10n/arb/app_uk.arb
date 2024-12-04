@@ -523,8 +523,6 @@
   "@main_CompatibilityIssueDialogActions_logout": {},
   "main_CompatibilityIssueDialogActions_update": "Оновити",
   "@main_CompatibilityIssueDialogActions_update": {},
-  "main_CompatibilityIssueDialogActions_verify": "Перевірити знову",
-  "@main_CompatibilityIssueDialogActions_verify": {},
   "main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError": "Несумісна версія WebTrit Cloud Backend, будь ласка, зв'яжіться з адміністратором вашої системи.\n\nВерсія екземпляру:\n{actual}\n\nПідтримувана версія:\n{supportedConstraint}\n",
   "@main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError": {
     "placeholders": {

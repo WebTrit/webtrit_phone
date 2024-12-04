@@ -134,15 +134,15 @@ class _MainShellState extends State<MainShell> {
             sessionCleanupWorker: SessionCleanupWorker(),
           ),
         ),
+        RepositoryProvider<SystemInfoRepository>(
+          create: (context) => SystemInfoRepository(
+            context.read<WebtritApiClient>(),
+          ),
+        ),
         RepositoryProvider<AppRepository>(
           create: (context) => AppRepository(
             webtritApiClient: context.read<WebtritApiClient>(),
             token: context.read<AppBloc>().state.token!,
-          ),
-        ),
-        RepositoryProvider<InfoRepository>(
-          create: (context) => InfoRepository(
-            webtritApiClient: context.read<WebtritApiClient>(),
           ),
         ),
         RepositoryProvider<ChatsRepository>(
