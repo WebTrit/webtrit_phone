@@ -17,9 +17,7 @@ class AppLogger {
     Logger.root.level = Level.LEVELS.firstWhere((level) => level.name == EnvironmentConfig.DEBUG_LEVEL);
 
     // Set up local logs printing with a color formatter
-    PrintAppender(
-      formatter: const ColorFormatter(),
-    ).attachToLogger(Logger.root);
+    PrintAppender(formatter: const ColorFormatter()).attachToLogger(Logger.root);
 
     // Configure remote logging for Logz.io with an anonymizing formatter.
     // If additional logging services are added in the future, consider extracting these settings
