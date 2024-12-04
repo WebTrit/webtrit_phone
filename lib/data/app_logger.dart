@@ -14,8 +14,10 @@ class AppLogger {
   static Future<AppLogger> init() async {
     hierarchicalLoggingEnabled = true;
 
-    final logLevel = Level.LEVELS.firstWhere((level) => level.name == EnvironmentConfig.DEBUG_LEVEL);
-    PrintAppender.setupLogging(level: logLevel);
+    Logger.root.clearListeners();
+    Logger.root.level = Level.LEVELS.firstWhere((level) => level.name == EnvironmentConfig.DEBUG_LEVEL);
+
+    PrintAppender(formatter: AnonymizingFormatter()).attachToLogger(Logger.root);
 
     if (Platform.isAndroid) WebtritCallkeepLogs().setLogsDelegate(CallkeepLogs());
 
