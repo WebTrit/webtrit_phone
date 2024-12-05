@@ -5,7 +5,6 @@ import 'package:auto_route/auto_route.dart';
 
 import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
-import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/features/call/call.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 import 'package:webtrit_phone/features/messaging/extensions/contact.dart';
@@ -19,16 +18,17 @@ class ContactScreen extends StatelessWidget {
     required this.favoriteVisible,
     required this.transferVisible,
     required this.videoVisible,
+    required this.chatsEnabled,
   });
 
   final bool favoriteVisible;
   final bool transferVisible;
   final bool videoVisible;
+  final bool chatsEnabled;
 
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
-    const chatsEnabled = EnvironmentConfig.CHAT_FEATURE_ENABLE;
 
     return BlocBuilder<ContactBloc, ContactState>(
       builder: (context, state) {

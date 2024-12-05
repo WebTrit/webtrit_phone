@@ -502,6 +502,8 @@
   "@messaging_ConversationsScreen_chatsSearch_hint": {},
   "messaging_ConversationsScreen_empty": "Немає переписок",
   "@messaging_ConversationsScreen_empty": {},
+  "messaging_ConversationsScreen_unsupported": "Обмін повідомленнями не підтримується віддаленою системою, зверніться до свого адміністратора, щоб увімкнути його",
+  "@messaging_ConversationsScreen_unsupported": {},
   "messaging_ConversationsScreen_messages_title": "Повідомлення",
   "@messaging_ConversationsScreen_messages_title": {},
   "messaging_ConversationsScreen_noNumberAlert_text": "Щоб надсилати SMS-повідомлення, потрібно мати номер телефону, прив’язаний до вашого облікового запису",

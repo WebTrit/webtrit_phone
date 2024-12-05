@@ -4,7 +4,7 @@ import 'package:logging/logging.dart';
 import 'package:phoenix_socket/phoenix_socket.dart';
 
 import 'package:webtrit_phone/app/notifications/notifications.dart';
-import 'package:webtrit_phone/environment_config.dart';
+import 'package:webtrit_phone/data/feature_access.dart';
 import 'package:webtrit_phone/features/messaging/extensions/phoenix_socket.dart';
 import 'package:webtrit_phone/features/messaging/services/services.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
@@ -20,6 +20,7 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
   MessagingBloc(
     this._userId,
     this._client,
+    this._messagingFeature,
     this._chatsRepository,
     this._chatsOutboxRepository,
     this._smsRepository,
@@ -44,6 +45,7 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
   }
   final String _userId;
   final PhoenixSocket _client;
+  final MessagingFeature _messagingFeature;
   final ChatsRepository _chatsRepository;
   final ChatsOutboxRepository _chatsOutboxRepository;
   final SmsRepository _smsRepository;
@@ -56,6 +58,8 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
   SmsOutboxWorker? _smsOutboxWorker;
 
   void _connect(Connect event, Emitter<MessagingState> emit) async {
+    if (_messagingFeature.anyMessagingEnabled == false) return;
+
     emit(state.copyWith(status: ConnectionStatus.connecting));
     // -
     // Uncomment section below to wipe messaging related data
@@ -64,6 +68,7 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
     // _chatsOutboxRepository.wipeOutboxData();
     // _smsRepository.wipeData();
     // _smsOutboxRepository.wipeOutboxData();
+
     _client.connect();
   }
 
@@ -82,12 +87,12 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
       }
 
       // Init workers
-      if (EnvironmentConfig.CHAT_FEATURE_ENABLE) {
+      if (_messagingFeature.coreChatsSupport) {
         _chatsSyncWorker ??= ChatsSyncWorker(_client, _chatsRepository, _submitNotification)..init();
         _chatsOutboxWorker ??= ChatsOutboxWorker(_client, _chatsRepository, _chatsOutboxRepository, _submitNotification)
           ..init();
       }
-      if (EnvironmentConfig.SMS_FEATURE_ENABLE) {
+      if (_messagingFeature.coreSmsSupport) {
         _smsSyncWorker ??= SmsSyncWorker(_client, _smsRepository, _submitNotification)..init();
         _smsOutboxWorker ??= SmsOutboxWorker(_client, _smsRepository, _smsOutboxRepository, _submitNotification)
           ..init();

@@ -502,6 +502,8 @@
   "@messaging_ConversationsScreen_chatsSearch_hint": {},
   "messaging_ConversationsScreen_empty": "Nessuna conversazione è ancora iniziata",
   "@messaging_ConversationsScreen_empty": {},
+  "messaging_ConversationsScreen_unsupported": "La messaggistica non è supportata dal sistema remoto, contattare l'amministratore per abilitarla",
+  "@messaging_ConversationsScreen_unsupported": {},
   "messaging_ConversationsScreen_messages_title": "Messaggi",
   "@messaging_ConversationsScreen_messages_title": {},
   "messaging_ConversationsScreen_noNumberAlert_text": "Per inviare messaggi SMS è necessario avere un numero di telefono collegato al tuo account",

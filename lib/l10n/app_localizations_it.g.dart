@@ -685,6 +685,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get messaging_ConversationsScreen_empty => 'Nessuna conversazione è ancora iniziata';
 
   @override
+  String get messaging_ConversationsScreen_unsupported => 'La messaggistica non è supportata dal sistema remoto, contattare l\'amministratore per abilitarla';
+
+  @override
   String get messaging_ConversationsScreen_messages_title => 'Messaggi';
 
   @override

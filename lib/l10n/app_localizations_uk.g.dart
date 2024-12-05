@@ -685,6 +685,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get messaging_ConversationsScreen_empty => 'Немає переписок';
 
   @override
+  String get messaging_ConversationsScreen_unsupported => 'Обмін повідомленнями не підтримується віддаленою системою, зверніться до свого адміністратора, щоб увімкнути його';
+
+  @override
   String get messaging_ConversationsScreen_messages_title => 'Повідомлення';
 
   @override

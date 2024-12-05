@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 
+import 'package:webtrit_phone/data/feature_access.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
@@ -14,29 +16,30 @@ class ConversationsScreenPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const chatsEnabled = EnvironmentConfig.CHAT_FEATURE_ENABLE;
-    const smsEnabled = EnvironmentConfig.SMS_FEATURE_ENABLE;
-
-    final client = context.read<MessagingBloc>().state.client;
-    final chatsRepository = context.read<ChatsRepository>();
-    final smsRepository = context.read<SmsRepository>();
-    final contactsRepository = context.read<ContactsRepository>();
+    final messagingFeature = FeatureAccess().messagingFeature;
+    final chatsEnabled = messagingFeature.chatsPresent;
+    final smsEnabled = messagingFeature.smsPresent;
 
     final widget = MultiBlocProvider(
       providers: [
+        Provider(
+          create: (context) => ('stub', 123),
+        ),
         if (chatsEnabled)
           BlocProvider(
+            key: const Key('chat_conversations_cubit'),
             create: (context) => ChatConversationsCubit(
-              client,
-              chatsRepository,
-              contactsRepository,
+              context.read<MessagingBloc>().state.client,
+              context.read<ChatsRepository>(),
+              context.read<ContactsRepository>(),
             ),
           ),
         if (smsEnabled)
           BlocProvider(
+            key: const Key('sms_conversations_cubit'),
             create: (context) => SmsConversationsCubit(
-              client,
-              smsRepository,
+              context.read<MessagingBloc>().state.client,
+              context.read<SmsRepository>(),
             ),
           ),
       ],

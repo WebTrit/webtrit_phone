@@ -502,6 +502,8 @@
   "@messaging_ConversationsScreen_chatsSearch_hint": {},
   "messaging_ConversationsScreen_empty": "No conversations started yet",
   "@messaging_ConversationsScreen_empty": {},
+  "messaging_ConversationsScreen_unsupported": "Messaging is not supported by remote system, please contact your administrator to enable it",
+  "@messaging_ConversationsScreen_unsupported": {},
   "messaging_ConversationsScreen_messages_title": "Messages",
   "@messaging_ConversationsScreen_messages_title": {},
   "messaging_ConversationsScreen_noNumberAlert_text": "You need to have a phone number linked to you account to send SMS messages",

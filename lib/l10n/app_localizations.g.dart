@@ -1405,6 +1405,12 @@ abstract class AppLocalizations {
   /// **'No conversations started yet'**
   String get messaging_ConversationsScreen_empty;
 
+  /// No description provided for @messaging_ConversationsScreen_unsupported.
+  ///
+  /// In en, this message translates to:
+  /// **'Messaging is not supported by remote system, please contact your administrator to enable it'**
+  String get messaging_ConversationsScreen_unsupported;
+
   /// No description provided for @messaging_ConversationsScreen_messages_title.
   ///
   /// In en, this message translates to:

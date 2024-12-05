@@ -30,7 +30,6 @@ class _MainShellState extends State<MainShell> {
   late final Callkeep _callkeep = Callkeep();
   late final CallkeepBackgroundService _callkeepBackgroundService = CallkeepBackgroundService();
 
-  late final FeatureAccess _featureAccess = FeatureAccess();
   late final AppPreferences _appPreferences = AppPreferences();
 
   @override
@@ -69,8 +68,6 @@ class _MainShellState extends State<MainShell> {
     _callkeep.tearDown();
     super.dispose();
   }
-
-  get _messagingEnabled => _featureAccess.isMessagingEnabled();
 
   @override
   Widget build(BuildContext context) {
@@ -245,38 +242,36 @@ class _MainShellState extends State<MainShell> {
               )..add(const CallStarted());
             },
           ),
-          if (_messagingEnabled)
-            BlocProvider<MessagingBloc>(
-              lazy: false,
-              create: (context) {
-                final appState = context.read<AppBloc>().state;
-                final (token, tenantId, userId) = (appState.token!, appState.tenantId!, appState.userId!);
+          BlocProvider<MessagingBloc>(
+            lazy: false,
+            create: (context) {
+              final appState = context.read<AppBloc>().state;
+              final (token, tenantId, userId) = (appState.token!, appState.tenantId!, appState.userId!);
 
-                return MessagingBloc(
-                  userId,
-                  createMessagingSocket(appState.coreUrl!, token, tenantId),
-                  context.read<ChatsRepository>(),
-                  context.read<ChatsOutboxRepository>(),
-                  context.read<SmsRepository>(),
-                  context.read<SmsOutboxRepository>(),
-                  (n) => context.read<NotificationsBloc>().add(NotificationsSubmitted(n)),
-                )..add(const Connect());
-              },
-            ),
-          if (_messagingEnabled)
-            BlocProvider<UnreadCountCubit>(
-              create: (context) {
-                return UnreadCountCubit(
-                  userId: context.read<AppBloc>().state.userId!,
-                  chatsRepository: context.read<ChatsRepository>(),
-                  smsRepository: context.read<SmsRepository>(),
-                )..init();
-              },
-            ),
-          if (_messagingEnabled)
-            BlocProvider(
-              create: (_) => ChatsForwardingCubit(),
-            )
+              return MessagingBloc(
+                userId,
+                createMessagingSocket(appState.coreUrl!, token, tenantId),
+                FeatureAccess().messagingFeature,
+                context.read<ChatsRepository>(),
+                context.read<ChatsOutboxRepository>(),
+                context.read<SmsRepository>(),
+                context.read<SmsOutboxRepository>(),
+                (n) => context.read<NotificationsBloc>().add(NotificationsSubmitted(n)),
+              )..add(const Connect());
+            },
+          ),
+          BlocProvider<UnreadCountCubit>(
+            create: (context) {
+              return UnreadCountCubit(
+                userId: context.read<AppBloc>().state.userId!,
+                chatsRepository: context.read<ChatsRepository>(),
+                smsRepository: context.read<SmsRepository>(),
+              )..init();
+            },
+          ),
+          BlocProvider(
+            create: (_) => ChatsForwardingCubit(),
+          )
         ],
         child: Builder(
           builder: (context) {
