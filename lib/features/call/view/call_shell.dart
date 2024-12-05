@@ -148,7 +148,7 @@ class _CallShellState extends State<CallShell> {
   /// initial(last remembered since restart) flavor that final and not changed across the app router lifecycle.
   /// example redirect('') will always redirect to contacts page even if user was on the calls or chat page.
   void _backToMainScreen(StackRouter router) {
-    router.popUntil((route) => route.settings.name == MainScreenPageRoute.name, scoped: false);
+    router.navigateNamed(MainShellRoute.name);
   }
 }
 
