@@ -39,7 +39,7 @@ mixin _$SessionResult {
             String? fromEmail,
             String? tenantId)
         otpProvisional,
-    required TResult Function(String token, String userId, String? tenantId)
+    required TResult Function(String token, String? userId, String? tenantId)
         token,
     required TResult Function(Map<String, dynamic> data) data,
   }) =>
@@ -49,7 +49,7 @@ mixin _$SessionResult {
     TResult? Function(String otpId, OtpNotificationType? notificationType,
             String? fromEmail, String? tenantId)?
         otpProvisional,
-    TResult? Function(String token, String userId, String? tenantId)? token,
+    TResult? Function(String token, String? userId, String? tenantId)? token,
     TResult? Function(Map<String, dynamic> data)? data,
   }) =>
       throw _privateConstructorUsedError;
@@ -58,7 +58,7 @@ mixin _$SessionResult {
     TResult Function(String otpId, OtpNotificationType? notificationType,
             String? fromEmail, String? tenantId)?
         otpProvisional,
-    TResult Function(String token, String userId, String? tenantId)? token,
+    TResult Function(String token, String? userId, String? tenantId)? token,
     TResult Function(Map<String, dynamic> data)? data,
     required TResult orElse(),
   }) =>
@@ -103,6 +103,9 @@ class _$SessionResultCopyWithImpl<$Res, $Val extends SessionResult>
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
+
+  /// Create a copy of SessionResult
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -127,6 +130,8 @@ class __$$SessionOtpProvisionalImplCopyWithImpl<$Res>
       $Res Function(_$SessionOtpProvisionalImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of SessionResult
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -202,12 +207,14 @@ class _$SessionOtpProvisionalImpl implements SessionOtpProvisional {
                 other.tenantId == tenantId));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode =>
       Object.hash(runtimeType, otpId, notificationType, fromEmail, tenantId);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of SessionResult
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$SessionOtpProvisionalImplCopyWith<_$SessionOtpProvisionalImpl>
@@ -223,7 +230,7 @@ class _$SessionOtpProvisionalImpl implements SessionOtpProvisional {
             String? fromEmail,
             String? tenantId)
         otpProvisional,
-    required TResult Function(String token, String userId, String? tenantId)
+    required TResult Function(String token, String? userId, String? tenantId)
         token,
     required TResult Function(Map<String, dynamic> data) data,
   }) {
@@ -236,7 +243,7 @@ class _$SessionOtpProvisionalImpl implements SessionOtpProvisional {
     TResult? Function(String otpId, OtpNotificationType? notificationType,
             String? fromEmail, String? tenantId)?
         otpProvisional,
-    TResult? Function(String token, String userId, String? tenantId)? token,
+    TResult? Function(String token, String? userId, String? tenantId)? token,
     TResult? Function(Map<String, dynamic> data)? data,
   }) {
     return otpProvisional?.call(otpId, notificationType, fromEmail, tenantId);
@@ -248,7 +255,7 @@ class _$SessionOtpProvisionalImpl implements SessionOtpProvisional {
     TResult Function(String otpId, OtpNotificationType? notificationType,
             String? fromEmail, String? tenantId)?
         otpProvisional,
-    TResult Function(String token, String userId, String? tenantId)? token,
+    TResult Function(String token, String? userId, String? tenantId)? token,
     TResult Function(Map<String, dynamic> data)? data,
     required TResult orElse(),
   }) {
@@ -307,7 +314,10 @@ abstract class SessionOtpProvisional implements SessionResult {
   OtpNotificationType? get notificationType;
   String? get fromEmail;
   String? get tenantId;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of SessionResult
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$SessionOtpProvisionalImplCopyWith<_$SessionOtpProvisionalImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
@@ -318,7 +328,7 @@ abstract class _$$SessionTokenImplCopyWith<$Res> {
           _$SessionTokenImpl value, $Res Function(_$SessionTokenImpl) then) =
       __$$SessionTokenImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({String token, String userId, String? tenantId});
+  $Res call({String token, String? userId, String? tenantId});
 }
 
 /// @nodoc
@@ -329,11 +339,13 @@ class __$$SessionTokenImplCopyWithImpl<$Res>
       _$SessionTokenImpl _value, $Res Function(_$SessionTokenImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of SessionResult
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? token = null,
-    Object? userId = null,
+    Object? userId = freezed,
     Object? tenantId = freezed,
   }) {
     return _then(_$SessionTokenImpl(
@@ -341,10 +353,10 @@ class __$$SessionTokenImplCopyWithImpl<$Res>
           ? _value.token
           : token // ignore: cast_nullable_to_non_nullable
               as String,
-      userId: null == userId
+      userId: freezed == userId
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       tenantId: freezed == tenantId
           ? _value.tenantId
           : tenantId // ignore: cast_nullable_to_non_nullable
@@ -358,10 +370,7 @@ class __$$SessionTokenImplCopyWithImpl<$Res>
 @JsonSerializable(fieldRename: FieldRename.snake)
 class _$SessionTokenImpl implements SessionToken {
   const _$SessionTokenImpl(
-      {required this.token,
-      required this.userId,
-      this.tenantId,
-      final String? $type})
+      {required this.token, this.userId, this.tenantId, final String? $type})
       : $type = $type ?? 'token';
 
   factory _$SessionTokenImpl.fromJson(Map<String, dynamic> json) =>
@@ -369,8 +378,9 @@ class _$SessionTokenImpl implements SessionToken {
 
   @override
   final String token;
+// Maintain backward compatibility by providing a default null value for userId, as older core versions do not utilize this field.
   @override
-  final String userId;
+  final String? userId;
   @override
   final String? tenantId;
 
@@ -393,11 +403,13 @@ class _$SessionTokenImpl implements SessionToken {
                 other.tenantId == tenantId));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, token, userId, tenantId);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of SessionResult
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$SessionTokenImplCopyWith<_$SessionTokenImpl> get copyWith =>
@@ -412,7 +424,7 @@ class _$SessionTokenImpl implements SessionToken {
             String? fromEmail,
             String? tenantId)
         otpProvisional,
-    required TResult Function(String token, String userId, String? tenantId)
+    required TResult Function(String token, String? userId, String? tenantId)
         token,
     required TResult Function(Map<String, dynamic> data) data,
   }) {
@@ -425,7 +437,7 @@ class _$SessionTokenImpl implements SessionToken {
     TResult? Function(String otpId, OtpNotificationType? notificationType,
             String? fromEmail, String? tenantId)?
         otpProvisional,
-    TResult? Function(String token, String userId, String? tenantId)? token,
+    TResult? Function(String token, String? userId, String? tenantId)? token,
     TResult? Function(Map<String, dynamic> data)? data,
   }) {
     return token?.call(this.token, userId, tenantId);
@@ -437,7 +449,7 @@ class _$SessionTokenImpl implements SessionToken {
     TResult Function(String otpId, OtpNotificationType? notificationType,
             String? fromEmail, String? tenantId)?
         otpProvisional,
-    TResult Function(String token, String userId, String? tenantId)? token,
+    TResult Function(String token, String? userId, String? tenantId)? token,
     TResult Function(Map<String, dynamic> data)? data,
     required TResult orElse(),
   }) {
@@ -485,16 +497,20 @@ class _$SessionTokenImpl implements SessionToken {
 abstract class SessionToken implements SessionResult {
   const factory SessionToken(
       {required final String token,
-      required final String userId,
+      final String? userId,
       final String? tenantId}) = _$SessionTokenImpl;
 
   factory SessionToken.fromJson(Map<String, dynamic> json) =
       _$SessionTokenImpl.fromJson;
 
-  String get token;
-  String get userId;
+  String
+      get token; // Maintain backward compatibility by providing a default null value for userId, as older core versions do not utilize this field.
+  String? get userId;
   String? get tenantId;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of SessionResult
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$SessionTokenImplCopyWith<_$SessionTokenImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -516,6 +532,8 @@ class __$$SessionDataImplCopyWithImpl<$Res>
       _$SessionDataImpl _value, $Res Function(_$SessionDataImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of SessionResult
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -566,12 +584,14 @@ class _$SessionDataImpl implements SessionData {
             const DeepCollectionEquality().equals(other._data, _data));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode =>
       Object.hash(runtimeType, const DeepCollectionEquality().hash(_data));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of SessionResult
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$SessionDataImplCopyWith<_$SessionDataImpl> get copyWith =>
@@ -586,7 +606,7 @@ class _$SessionDataImpl implements SessionData {
             String? fromEmail,
             String? tenantId)
         otpProvisional,
-    required TResult Function(String token, String userId, String? tenantId)
+    required TResult Function(String token, String? userId, String? tenantId)
         token,
     required TResult Function(Map<String, dynamic> data) data,
   }) {
@@ -599,7 +619,7 @@ class _$SessionDataImpl implements SessionData {
     TResult? Function(String otpId, OtpNotificationType? notificationType,
             String? fromEmail, String? tenantId)?
         otpProvisional,
-    TResult? Function(String token, String userId, String? tenantId)? token,
+    TResult? Function(String token, String? userId, String? tenantId)? token,
     TResult? Function(Map<String, dynamic> data)? data,
   }) {
     return data?.call(this.data);
@@ -611,7 +631,7 @@ class _$SessionDataImpl implements SessionData {
     TResult Function(String otpId, OtpNotificationType? notificationType,
             String? fromEmail, String? tenantId)?
         otpProvisional,
-    TResult Function(String token, String userId, String? tenantId)? token,
+    TResult Function(String token, String? userId, String? tenantId)? token,
     TResult Function(Map<String, dynamic> data)? data,
     required TResult orElse(),
   }) {
@@ -664,7 +684,10 @@ abstract class SessionData implements SessionResult {
       _$SessionDataImpl.fromJson;
 
   Map<String, dynamic> get data;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of SessionResult
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$SessionDataImplCopyWith<_$SessionDataImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

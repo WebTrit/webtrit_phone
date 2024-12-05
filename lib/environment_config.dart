@@ -40,6 +40,12 @@ class EnvironmentConfig {
     defaultValue: 'http://localhost:4000',
   );
 
+  static const CORE_VERSION_CONSTRAINT__NAME = 'WEBTRIT_APP_CORE_VERSION_CONSTRAINT';
+  static const CORE_VERSION_CONSTRAINT = String.fromEnvironment(
+    CORE_VERSION_CONSTRAINT__NAME,
+    defaultValue: '>=0.7.0-alpha <2.0.0',
+  );
+
   static const APP_LINK_DOMAIN__NAME = 'WEBTRIT_APP_LINK_DOMAIN';
   static const APP_LINK_DOMAIN = String.fromEnvironment(APP_LINK_DOMAIN__NAME, defaultValue: '');
 
@@ -98,14 +104,42 @@ class EnvironmentConfig {
       : null;
 
   static const CHAT_FEATURE_ENABLE__NAME = 'WEBTRIT_APP_CHAT_FEATURE_ENABLE';
+  @Deprecated('Will be moved to feature access provider')
   static const CHAT_FEATURE_ENABLE = bool.fromEnvironment(
     CHAT_FEATURE_ENABLE__NAME,
     defaultValue: false,
   );
 
   static const SMS_FEATURE_ENABLE__NAME = 'WEBTRIT_APP_SMS_FEATURE_ENABLE';
+  @Deprecated('Will be moved to feature access provider')
   static const SMS_FEATURE_ENABLE = bool.fromEnvironment(
     SMS_FEATURE_ENABLE__NAME,
     defaultValue: false,
   );
+
+  // LOGZIO service-specific configuration.
+  // If additional logging services are introduced, consider moving these to a separate logging configuration file.
+  static const REMOTE_LOGZIO_LOGGING_URL__NAME = 'WEBTRIT_APP_REMOTE_LOGZIO_LOGGING_URL';
+  static const REMOTE_LOGZIO_LOGGING_URL = bool.hasEnvironment(REMOTE_LOGZIO_LOGGING_URL__NAME)
+      ? String.fromEnvironment(
+          REMOTE_LOGZIO_LOGGING_URL__NAME,
+        )
+      : null;
+
+  // LOGZIO service-specific configuration.
+  // If additional logging services are introduced, consider moving these to a separate logging configuration file.
+  static const REMOTE_LOGZIO_LOGGING_TOKEN__NAME = 'WEBTRIT_APP_REMOTE_LOGZIO_LOGGING_TOKEN';
+  static const REMOTE_LOGZIO_LOGGING_TOKEN = bool.hasEnvironment(REMOTE_LOGZIO_LOGGING_TOKEN__NAME)
+      ? String.fromEnvironment(
+          REMOTE_LOGZIO_LOGGING_TOKEN__NAME,
+        )
+      : null;
+
+  // LOGZIO service-specific configuration.
+  // If additional logging services are introduced, consider moving these to a separate logging configuration file.
+  static const _REMOTE_LOGZIO_LOGGING_BUFFER_SIZE__KB = 0;
+  static const REMOTE_LOGZIO_LOGGING_BUFFER_SIZE__NAME = 'WEBTRIT_APP_REMOTE_LOGZIO_LOGGING_BUFFER_SIZE';
+  static final REMOTE_LOGZIO_LOGGING_BUFFER_SIZE =
+      int.tryParse(const String.fromEnvironment(REMOTE_LOGZIO_LOGGING_BUFFER_SIZE__NAME)) ??
+          _REMOTE_LOGZIO_LOGGING_BUFFER_SIZE__KB;
 }

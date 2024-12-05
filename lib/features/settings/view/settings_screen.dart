@@ -131,9 +131,9 @@ class SettingsScreen extends StatelessWidget {
       case SettingsFlavor.language:
         context.router.navigate(const LanguageScreenPageRoute());
       case SettingsFlavor.help:
-        context.router.navigate(HelpScreenPageRoute(initialUriQueryParam: item.data!.url.toString()));
+        context.router.navigate(HelpScreenPageRoute(initialUriQueryParam: item.data!.resource.toString()));
       case SettingsFlavor.terms:
-        context.router.navigate(TermsConditionsScreenPageRoute(initialUriQueryParam: item.data!.url.toString()));
+        context.router.navigate(TermsConditionsScreenPageRoute(initialUriQueryParam: item.data!.resource.toString()));
       case SettingsFlavor.about:
         context.router.navigate(const AboutScreenPageRoute());
       case SettingsFlavor.log:

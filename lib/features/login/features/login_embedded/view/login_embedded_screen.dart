@@ -41,7 +41,7 @@ class LoginEmbeddedScreen extends StatelessWidget {
               _loginJavascriptChannelName: (JavaScriptMessage message) =>
                   context.read<LoginEmbeddedCubit>().login(message.message),
             },
-            errorPlaceholder: (context, error, controller) => Column(
+            errorBuilder: (context, error, controller) => Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [

@@ -30,8 +30,8 @@ class $ContactsTableTable extends ContactsTable
       const VerificationMeta('sourceId');
   @override
   late final GeneratedColumn<String> sourceId = GeneratedColumn<String>(
-      'source_id', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
+      'source_id', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
   static const VerificationMeta _firstNameMeta =
       const VerificationMeta('firstName');
   @override
@@ -127,8 +127,6 @@ class $ContactsTableTable extends ContactsTable
     if (data.containsKey('source_id')) {
       context.handle(_sourceIdMeta,
           sourceId.isAcceptableOrUnknown(data['source_id']!, _sourceIdMeta));
-    } else if (isInserting) {
-      context.missing(_sourceIdMeta);
     }
     if (data.containsKey('first_name')) {
       context.handle(_firstNameMeta,
@@ -189,7 +187,7 @@ class $ContactsTableTable extends ContactsTable
           attachedDatabase.typeMapping
               .read(DriftSqlType.int, data['${effectivePrefix}source_type'])!),
       sourceId: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}source_id'])!,
+          .read(DriftSqlType.string, data['${effectivePrefix}source_id']),
       firstName: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}first_name']),
       lastName: attachedDatabase.typeMapping
@@ -224,7 +222,7 @@ class $ContactsTableTable extends ContactsTable
 class ContactData extends DataClass implements Insertable<ContactData> {
   final int id;
   final ContactSourceTypeEnum sourceType;
-  final String sourceId;
+  final String? sourceId;
   final String? firstName;
   final String? lastName;
   final String? aliasName;
@@ -237,7 +235,7 @@ class ContactData extends DataClass implements Insertable<ContactData> {
   const ContactData(
       {required this.id,
       required this.sourceType,
-      required this.sourceId,
+      this.sourceId,
       this.firstName,
       this.lastName,
       this.aliasName,
@@ -255,7 +253,9 @@ class ContactData extends DataClass implements Insertable<ContactData> {
       map['source_type'] = Variable<int>(
           $ContactsTableTable.$convertersourceType.toSql(sourceType));
     }
-    map['source_id'] = Variable<String>(sourceId);
+    if (!nullToAbsent || sourceId != null) {
+      map['source_id'] = Variable<String>(sourceId);
+    }
     if (!nullToAbsent || firstName != null) {
       map['first_name'] = Variable<String>(firstName);
     }
@@ -290,7 +290,9 @@ class ContactData extends DataClass implements Insertable<ContactData> {
     return ContactDataCompanion(
       id: Value(id),
       sourceType: Value(sourceType),
-      sourceId: Value(sourceId),
+      sourceId: sourceId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(sourceId),
       firstName: firstName == null && nullToAbsent
           ? const Value.absent()
           : Value(firstName),
@@ -328,7 +330,7 @@ class ContactData extends DataClass implements Insertable<ContactData> {
       id: serializer.fromJson<int>(json['id']),
       sourceType: $ContactsTableTable.$convertersourceType
           .fromJson(serializer.fromJson<int>(json['sourceType'])),
-      sourceId: serializer.fromJson<String>(json['sourceId']),
+      sourceId: serializer.fromJson<String?>(json['sourceId']),
       firstName: serializer.fromJson<String?>(json['firstName']),
       lastName: serializer.fromJson<String?>(json['lastName']),
       aliasName: serializer.fromJson<String?>(json['aliasName']),
@@ -347,7 +349,7 @@ class ContactData extends DataClass implements Insertable<ContactData> {
       'id': serializer.toJson<int>(id),
       'sourceType': serializer.toJson<int>(
           $ContactsTableTable.$convertersourceType.toJson(sourceType)),
-      'sourceId': serializer.toJson<String>(sourceId),
+      'sourceId': serializer.toJson<String?>(sourceId),
       'firstName': serializer.toJson<String?>(firstName),
       'lastName': serializer.toJson<String?>(lastName),
       'aliasName': serializer.toJson<String?>(aliasName),
@@ -363,7 +365,7 @@ class ContactData extends DataClass implements Insertable<ContactData> {
   ContactData copyWith(
           {int? id,
           ContactSourceTypeEnum? sourceType,
-          String? sourceId,
+          Value<String?> sourceId = const Value.absent(),
           Value<String?> firstName = const Value.absent(),
           Value<String?> lastName = const Value.absent(),
           Value<String?> aliasName = const Value.absent(),
@@ -376,7 +378,7 @@ class ContactData extends DataClass implements Insertable<ContactData> {
       ContactData(
         id: id ?? this.id,
         sourceType: sourceType ?? this.sourceType,
-        sourceId: sourceId ?? this.sourceId,
+        sourceId: sourceId.present ? sourceId.value : this.sourceId,
         firstName: firstName.present ? firstName.value : this.firstName,
         lastName: lastName.present ? lastName.value : this.lastName,
         aliasName: aliasName.present ? aliasName.value : this.aliasName,
@@ -467,7 +469,7 @@ class ContactData extends DataClass implements Insertable<ContactData> {
 class ContactDataCompanion extends UpdateCompanion<ContactData> {
   final Value<int> id;
   final Value<ContactSourceTypeEnum> sourceType;
-  final Value<String> sourceId;
+  final Value<String?> sourceId;
   final Value<String?> firstName;
   final Value<String?> lastName;
   final Value<String?> aliasName;
@@ -494,7 +496,7 @@ class ContactDataCompanion extends UpdateCompanion<ContactData> {
   ContactDataCompanion.insert({
     this.id = const Value.absent(),
     required ContactSourceTypeEnum sourceType,
-    required String sourceId,
+    this.sourceId = const Value.absent(),
     this.firstName = const Value.absent(),
     this.lastName = const Value.absent(),
     this.aliasName = const Value.absent(),
@@ -504,8 +506,7 @@ class ContactDataCompanion extends UpdateCompanion<ContactData> {
     this.isCurrentUser = const Value.absent(),
     this.insertedAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
-  })  : sourceType = Value(sourceType),
-        sourceId = Value(sourceId);
+  }) : sourceType = Value(sourceType);
   static Insertable<ContactData> custom({
     Expression<int>? id,
     Expression<int>? sourceType,
@@ -539,7 +540,7 @@ class ContactDataCompanion extends UpdateCompanion<ContactData> {
   ContactDataCompanion copyWith(
       {Value<int>? id,
       Value<ContactSourceTypeEnum>? sourceType,
-      Value<String>? sourceId,
+      Value<String?>? sourceId,
       Value<String?>? firstName,
       Value<String?>? lastName,
       Value<String?>? aliasName,
@@ -7829,6 +7830,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final ContactEmailsDao contactEmailsDao =
       ContactEmailsDao(this as AppDatabase);
   late final CallLogsDao callLogsDao = CallLogsDao(this as AppDatabase);
+  late final RecentsDao recentsDao = RecentsDao(this as AppDatabase);
   late final FavoritesDao favoritesDao = FavoritesDao(this as AppDatabase);
   late final ChatsDao chatsDao = ChatsDao(this as AppDatabase);
   late final SmsDao smsDao = SmsDao(this as AppDatabase);
@@ -7974,7 +7976,7 @@ typedef $$ContactsTableTableCreateCompanionBuilder = ContactDataCompanion
     Function({
   Value<int> id,
   required ContactSourceTypeEnum sourceType,
-  required String sourceId,
+  Value<String?> sourceId,
   Value<String?> firstName,
   Value<String?> lastName,
   Value<String?> aliasName,
@@ -7989,7 +7991,7 @@ typedef $$ContactsTableTableUpdateCompanionBuilder = ContactDataCompanion
     Function({
   Value<int> id,
   Value<ContactSourceTypeEnum> sourceType,
-  Value<String> sourceId,
+  Value<String?> sourceId,
   Value<String?> firstName,
   Value<String?> lastName,
   Value<String?> aliasName,
@@ -8002,134 +8004,148 @@ typedef $$ContactsTableTableUpdateCompanionBuilder = ContactDataCompanion
 });
 
 class $$ContactsTableTableFilterComposer
-    extends FilterComposer<_$AppDatabase, $ContactsTableTable> {
-  $$ContactsTableTableFilterComposer(super.$state);
-  ColumnFilters<int> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+    extends Composer<_$AppDatabase, $ContactsTableTable> {
+  $$ContactsTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
 
   ColumnWithTypeConverterFilters<ContactSourceTypeEnum, ContactSourceTypeEnum,
           int>
-      get sourceType => $state.composableBuilder(
-          column: $state.table.sourceType,
-          builder: (column, joinBuilders) => ColumnWithTypeConverterFilters(
-              column,
-              joinBuilders: joinBuilders));
+      get sourceType => $composableBuilder(
+          column: $table.sourceType,
+          builder: (column) => ColumnWithTypeConverterFilters(column));
 
-  ColumnFilters<String> get sourceId => $state.composableBuilder(
-      column: $state.table.sourceId,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<String> get sourceId => $composableBuilder(
+      column: $table.sourceId, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get firstName => $state.composableBuilder(
-      column: $state.table.firstName,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<String> get firstName => $composableBuilder(
+      column: $table.firstName, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get lastName => $state.composableBuilder(
-      column: $state.table.lastName,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<String> get lastName => $composableBuilder(
+      column: $table.lastName, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get aliasName => $state.composableBuilder(
-      column: $state.table.aliasName,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<String> get aliasName => $composableBuilder(
+      column: $table.aliasName, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<Uint8List> get thumbnail => $state.composableBuilder(
-      column: $state.table.thumbnail,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<Uint8List> get thumbnail => $composableBuilder(
+      column: $table.thumbnail, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<bool> get registered => $state.composableBuilder(
-      column: $state.table.registered,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<bool> get registered => $composableBuilder(
+      column: $table.registered, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<bool> get userRegistered => $state.composableBuilder(
-      column: $state.table.userRegistered,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<bool> get userRegistered => $composableBuilder(
+      column: $table.userRegistered,
+      builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<bool> get isCurrentUser => $state.composableBuilder(
-      column: $state.table.isCurrentUser,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<bool> get isCurrentUser => $composableBuilder(
+      column: $table.isCurrentUser, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<DateTime> get insertedAt => $state.composableBuilder(
-      column: $state.table.insertedAt,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<DateTime> get insertedAt => $composableBuilder(
+      column: $table.insertedAt, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<DateTime> get updatedAt => $state.composableBuilder(
-      column: $state.table.updatedAt,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<DateTime> get updatedAt => $composableBuilder(
+      column: $table.updatedAt, builder: (column) => ColumnFilters(column));
 }
 
 class $$ContactsTableTableOrderingComposer
-    extends OrderingComposer<_$AppDatabase, $ContactsTableTable> {
-  $$ContactsTableTableOrderingComposer(super.$state);
-  ColumnOrderings<int> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+    extends Composer<_$AppDatabase, $ContactsTableTable> {
+  $$ContactsTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<int> get sourceType => $state.composableBuilder(
-      column: $state.table.sourceType,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<int> get sourceType => $composableBuilder(
+      column: $table.sourceType, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get sourceId => $state.composableBuilder(
-      column: $state.table.sourceId,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get sourceId => $composableBuilder(
+      column: $table.sourceId, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get firstName => $state.composableBuilder(
-      column: $state.table.firstName,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get firstName => $composableBuilder(
+      column: $table.firstName, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get lastName => $state.composableBuilder(
-      column: $state.table.lastName,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get lastName => $composableBuilder(
+      column: $table.lastName, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get aliasName => $state.composableBuilder(
-      column: $state.table.aliasName,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get aliasName => $composableBuilder(
+      column: $table.aliasName, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<Uint8List> get thumbnail => $state.composableBuilder(
-      column: $state.table.thumbnail,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<Uint8List> get thumbnail => $composableBuilder(
+      column: $table.thumbnail, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<bool> get registered => $state.composableBuilder(
-      column: $state.table.registered,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<bool> get registered => $composableBuilder(
+      column: $table.registered, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<bool> get userRegistered => $state.composableBuilder(
-      column: $state.table.userRegistered,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<bool> get userRegistered => $composableBuilder(
+      column: $table.userRegistered,
+      builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<bool> get isCurrentUser => $state.composableBuilder(
-      column: $state.table.isCurrentUser,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<bool> get isCurrentUser => $composableBuilder(
+      column: $table.isCurrentUser,
+      builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<DateTime> get insertedAt => $state.composableBuilder(
-      column: $state.table.insertedAt,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<DateTime> get insertedAt => $composableBuilder(
+      column: $table.insertedAt, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<DateTime> get updatedAt => $state.composableBuilder(
-      column: $state.table.updatedAt,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
+      column: $table.updatedAt, builder: (column) => ColumnOrderings(column));
+}
+
+class $$ContactsTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $ContactsTableTable> {
+  $$ContactsTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<ContactSourceTypeEnum, int> get sourceType =>
+      $composableBuilder(
+          column: $table.sourceType, builder: (column) => column);
+
+  GeneratedColumn<String> get sourceId =>
+      $composableBuilder(column: $table.sourceId, builder: (column) => column);
+
+  GeneratedColumn<String> get firstName =>
+      $composableBuilder(column: $table.firstName, builder: (column) => column);
+
+  GeneratedColumn<String> get lastName =>
+      $composableBuilder(column: $table.lastName, builder: (column) => column);
+
+  GeneratedColumn<String> get aliasName =>
+      $composableBuilder(column: $table.aliasName, builder: (column) => column);
+
+  GeneratedColumn<Uint8List> get thumbnail =>
+      $composableBuilder(column: $table.thumbnail, builder: (column) => column);
+
+  GeneratedColumn<bool> get registered => $composableBuilder(
+      column: $table.registered, builder: (column) => column);
+
+  GeneratedColumn<bool> get userRegistered => $composableBuilder(
+      column: $table.userRegistered, builder: (column) => column);
+
+  GeneratedColumn<bool> get isCurrentUser => $composableBuilder(
+      column: $table.isCurrentUser, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get insertedAt => $composableBuilder(
+      column: $table.insertedAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
 }
 
 class $$ContactsTableTableTableManager extends RootTableManager<
@@ -8138,6 +8154,7 @@ class $$ContactsTableTableTableManager extends RootTableManager<
     ContactData,
     $$ContactsTableTableFilterComposer,
     $$ContactsTableTableOrderingComposer,
+    $$ContactsTableTableAnnotationComposer,
     $$ContactsTableTableCreateCompanionBuilder,
     $$ContactsTableTableUpdateCompanionBuilder,
     (
@@ -8150,14 +8167,16 @@ class $$ContactsTableTableTableManager extends RootTableManager<
       : super(TableManagerState(
           db: db,
           table: table,
-          filteringComposer:
-              $$ContactsTableTableFilterComposer(ComposerState(db, table)),
-          orderingComposer:
-              $$ContactsTableTableOrderingComposer(ComposerState(db, table)),
+          createFilteringComposer: () =>
+              $$ContactsTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$ContactsTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$ContactsTableTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback: ({
             Value<int> id = const Value.absent(),
             Value<ContactSourceTypeEnum> sourceType = const Value.absent(),
-            Value<String> sourceId = const Value.absent(),
+            Value<String?> sourceId = const Value.absent(),
             Value<String?> firstName = const Value.absent(),
             Value<String?> lastName = const Value.absent(),
             Value<String?> aliasName = const Value.absent(),
@@ -8185,7 +8204,7 @@ class $$ContactsTableTableTableManager extends RootTableManager<
           createCompanionCallback: ({
             Value<int> id = const Value.absent(),
             required ContactSourceTypeEnum sourceType,
-            required String sourceId,
+            Value<String?> sourceId = const Value.absent(),
             Value<String?> firstName = const Value.absent(),
             Value<String?> lastName = const Value.absent(),
             Value<String?> aliasName = const Value.absent(),
@@ -8223,6 +8242,7 @@ typedef $$ContactsTableTableProcessedTableManager = ProcessedTableManager<
     ContactData,
     $$ContactsTableTableFilterComposer,
     $$ContactsTableTableOrderingComposer,
+    $$ContactsTableTableAnnotationComposer,
     $$ContactsTableTableCreateCompanionBuilder,
     $$ContactsTableTableUpdateCompanionBuilder,
     (
@@ -8251,71 +8271,87 @@ typedef $$ContactPhonesTableTableUpdateCompanionBuilder
 });
 
 class $$ContactPhonesTableTableFilterComposer
-    extends FilterComposer<_$AppDatabase, $ContactPhonesTableTable> {
-  $$ContactPhonesTableTableFilterComposer(super.$state);
-  ColumnFilters<int> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+    extends Composer<_$AppDatabase, $ContactPhonesTableTable> {
+  $$ContactPhonesTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get number => $state.composableBuilder(
-      column: $state.table.number,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<String> get number => $composableBuilder(
+      column: $table.number, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get label => $state.composableBuilder(
-      column: $state.table.label,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<String> get label => $composableBuilder(
+      column: $table.label, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<int> get contactId => $state.composableBuilder(
-      column: $state.table.contactId,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<int> get contactId => $composableBuilder(
+      column: $table.contactId, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<DateTime> get insertedAt => $state.composableBuilder(
-      column: $state.table.insertedAt,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<DateTime> get insertedAt => $composableBuilder(
+      column: $table.insertedAt, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<DateTime> get updatedAt => $state.composableBuilder(
-      column: $state.table.updatedAt,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<DateTime> get updatedAt => $composableBuilder(
+      column: $table.updatedAt, builder: (column) => ColumnFilters(column));
 }
 
 class $$ContactPhonesTableTableOrderingComposer
-    extends OrderingComposer<_$AppDatabase, $ContactPhonesTableTable> {
-  $$ContactPhonesTableTableOrderingComposer(super.$state);
-  ColumnOrderings<int> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+    extends Composer<_$AppDatabase, $ContactPhonesTableTable> {
+  $$ContactPhonesTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get number => $state.composableBuilder(
-      column: $state.table.number,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get number => $composableBuilder(
+      column: $table.number, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get label => $state.composableBuilder(
-      column: $state.table.label,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get label => $composableBuilder(
+      column: $table.label, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<int> get contactId => $state.composableBuilder(
-      column: $state.table.contactId,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<int> get contactId => $composableBuilder(
+      column: $table.contactId, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<DateTime> get insertedAt => $state.composableBuilder(
-      column: $state.table.insertedAt,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<DateTime> get insertedAt => $composableBuilder(
+      column: $table.insertedAt, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<DateTime> get updatedAt => $state.composableBuilder(
-      column: $state.table.updatedAt,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
+      column: $table.updatedAt, builder: (column) => ColumnOrderings(column));
+}
+
+class $$ContactPhonesTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $ContactPhonesTableTable> {
+  $$ContactPhonesTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get number =>
+      $composableBuilder(column: $table.number, builder: (column) => column);
+
+  GeneratedColumn<String> get label =>
+      $composableBuilder(column: $table.label, builder: (column) => column);
+
+  GeneratedColumn<int> get contactId =>
+      $composableBuilder(column: $table.contactId, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get insertedAt => $composableBuilder(
+      column: $table.insertedAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
 }
 
 class $$ContactPhonesTableTableTableManager extends RootTableManager<
@@ -8324,6 +8360,7 @@ class $$ContactPhonesTableTableTableManager extends RootTableManager<
     ContactPhoneData,
     $$ContactPhonesTableTableFilterComposer,
     $$ContactPhonesTableTableOrderingComposer,
+    $$ContactPhonesTableTableAnnotationComposer,
     $$ContactPhonesTableTableCreateCompanionBuilder,
     $$ContactPhonesTableTableUpdateCompanionBuilder,
     (
@@ -8337,10 +8374,13 @@ class $$ContactPhonesTableTableTableManager extends RootTableManager<
       : super(TableManagerState(
           db: db,
           table: table,
-          filteringComposer:
-              $$ContactPhonesTableTableFilterComposer(ComposerState(db, table)),
-          orderingComposer: $$ContactPhonesTableTableOrderingComposer(
-              ComposerState(db, table)),
+          createFilteringComposer: () =>
+              $$ContactPhonesTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$ContactPhonesTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$ContactPhonesTableTableAnnotationComposer(
+                  $db: db, $table: table),
           updateCompanionCallback: ({
             Value<int> id = const Value.absent(),
             Value<String> number = const Value.absent(),
@@ -8386,6 +8426,7 @@ typedef $$ContactPhonesTableTableProcessedTableManager = ProcessedTableManager<
     ContactPhoneData,
     $$ContactPhonesTableTableFilterComposer,
     $$ContactPhonesTableTableOrderingComposer,
+    $$ContactPhonesTableTableAnnotationComposer,
     $$ContactPhonesTableTableCreateCompanionBuilder,
     $$ContactPhonesTableTableUpdateCompanionBuilder,
     (
@@ -8414,71 +8455,87 @@ typedef $$ContactEmailsTableTableUpdateCompanionBuilder
 });
 
 class $$ContactEmailsTableTableFilterComposer
-    extends FilterComposer<_$AppDatabase, $ContactEmailsTableTable> {
-  $$ContactEmailsTableTableFilterComposer(super.$state);
-  ColumnFilters<int> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+    extends Composer<_$AppDatabase, $ContactEmailsTableTable> {
+  $$ContactEmailsTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get address => $state.composableBuilder(
-      column: $state.table.address,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<String> get address => $composableBuilder(
+      column: $table.address, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get label => $state.composableBuilder(
-      column: $state.table.label,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<String> get label => $composableBuilder(
+      column: $table.label, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<int> get contactId => $state.composableBuilder(
-      column: $state.table.contactId,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<int> get contactId => $composableBuilder(
+      column: $table.contactId, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<DateTime> get insertedAt => $state.composableBuilder(
-      column: $state.table.insertedAt,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<DateTime> get insertedAt => $composableBuilder(
+      column: $table.insertedAt, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<DateTime> get updatedAt => $state.composableBuilder(
-      column: $state.table.updatedAt,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<DateTime> get updatedAt => $composableBuilder(
+      column: $table.updatedAt, builder: (column) => ColumnFilters(column));
 }
 
 class $$ContactEmailsTableTableOrderingComposer
-    extends OrderingComposer<_$AppDatabase, $ContactEmailsTableTable> {
-  $$ContactEmailsTableTableOrderingComposer(super.$state);
-  ColumnOrderings<int> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+    extends Composer<_$AppDatabase, $ContactEmailsTableTable> {
+  $$ContactEmailsTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get address => $state.composableBuilder(
-      column: $state.table.address,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get address => $composableBuilder(
+      column: $table.address, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get label => $state.composableBuilder(
-      column: $state.table.label,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get label => $composableBuilder(
+      column: $table.label, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<int> get contactId => $state.composableBuilder(
-      column: $state.table.contactId,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<int> get contactId => $composableBuilder(
+      column: $table.contactId, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<DateTime> get insertedAt => $state.composableBuilder(
-      column: $state.table.insertedAt,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<DateTime> get insertedAt => $composableBuilder(
+      column: $table.insertedAt, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<DateTime> get updatedAt => $state.composableBuilder(
-      column: $state.table.updatedAt,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
+      column: $table.updatedAt, builder: (column) => ColumnOrderings(column));
+}
+
+class $$ContactEmailsTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $ContactEmailsTableTable> {
+  $$ContactEmailsTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get address =>
+      $composableBuilder(column: $table.address, builder: (column) => column);
+
+  GeneratedColumn<String> get label =>
+      $composableBuilder(column: $table.label, builder: (column) => column);
+
+  GeneratedColumn<int> get contactId =>
+      $composableBuilder(column: $table.contactId, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get insertedAt => $composableBuilder(
+      column: $table.insertedAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
 }
 
 class $$ContactEmailsTableTableTableManager extends RootTableManager<
@@ -8487,6 +8544,7 @@ class $$ContactEmailsTableTableTableManager extends RootTableManager<
     ContactEmailData,
     $$ContactEmailsTableTableFilterComposer,
     $$ContactEmailsTableTableOrderingComposer,
+    $$ContactEmailsTableTableAnnotationComposer,
     $$ContactEmailsTableTableCreateCompanionBuilder,
     $$ContactEmailsTableTableUpdateCompanionBuilder,
     (
@@ -8500,10 +8558,13 @@ class $$ContactEmailsTableTableTableManager extends RootTableManager<
       : super(TableManagerState(
           db: db,
           table: table,
-          filteringComposer:
-              $$ContactEmailsTableTableFilterComposer(ComposerState(db, table)),
-          orderingComposer: $$ContactEmailsTableTableOrderingComposer(
-              ComposerState(db, table)),
+          createFilteringComposer: () =>
+              $$ContactEmailsTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$ContactEmailsTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$ContactEmailsTableTableAnnotationComposer(
+                  $db: db, $table: table),
           updateCompanionCallback: ({
             Value<int> id = const Value.absent(),
             Value<String> address = const Value.absent(),
@@ -8549,6 +8610,7 @@ typedef $$ContactEmailsTableTableProcessedTableManager = ProcessedTableManager<
     ContactEmailData,
     $$ContactEmailsTableTableFilterComposer,
     $$ContactEmailsTableTableOrderingComposer,
+    $$ContactEmailsTableTableAnnotationComposer,
     $$ContactEmailsTableTableCreateCompanionBuilder,
     $$ContactEmailsTableTableUpdateCompanionBuilder,
     (
@@ -8579,84 +8641,99 @@ typedef $$CallLogsTableTableUpdateCompanionBuilder = CallLogDataCompanion
 });
 
 class $$CallLogsTableTableFilterComposer
-    extends FilterComposer<_$AppDatabase, $CallLogsTableTable> {
-  $$CallLogsTableTableFilterComposer(super.$state);
-  ColumnFilters<int> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+    extends Composer<_$AppDatabase, $CallLogsTableTable> {
+  $$CallLogsTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
 
   ColumnWithTypeConverterFilters<CallLogDirectionEnum, CallLogDirectionEnum,
           int>
-      get direction => $state.composableBuilder(
-          column: $state.table.direction,
-          builder: (column, joinBuilders) => ColumnWithTypeConverterFilters(
-              column,
-              joinBuilders: joinBuilders));
+      get direction => $composableBuilder(
+          column: $table.direction,
+          builder: (column) => ColumnWithTypeConverterFilters(column));
 
-  ColumnFilters<String> get number => $state.composableBuilder(
-      column: $state.table.number,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<String> get number => $composableBuilder(
+      column: $table.number, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<bool> get video => $state.composableBuilder(
-      column: $state.table.video,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<bool> get video => $composableBuilder(
+      column: $table.video, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<DateTime> get createdAt => $state.composableBuilder(
-      column: $state.table.createdAt,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<DateTime> get acceptedAt => $state.composableBuilder(
-      column: $state.table.acceptedAt,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<DateTime> get acceptedAt => $composableBuilder(
+      column: $table.acceptedAt, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<DateTime> get hungUpAt => $state.composableBuilder(
-      column: $state.table.hungUpAt,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<DateTime> get hungUpAt => $composableBuilder(
+      column: $table.hungUpAt, builder: (column) => ColumnFilters(column));
 }
 
 class $$CallLogsTableTableOrderingComposer
-    extends OrderingComposer<_$AppDatabase, $CallLogsTableTable> {
-  $$CallLogsTableTableOrderingComposer(super.$state);
-  ColumnOrderings<int> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+    extends Composer<_$AppDatabase, $CallLogsTableTable> {
+  $$CallLogsTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<int> get direction => $state.composableBuilder(
-      column: $state.table.direction,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<int> get direction => $composableBuilder(
+      column: $table.direction, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get number => $state.composableBuilder(
-      column: $state.table.number,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get number => $composableBuilder(
+      column: $table.number, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<bool> get video => $state.composableBuilder(
-      column: $state.table.video,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<bool> get video => $composableBuilder(
+      column: $table.video, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<DateTime> get createdAt => $state.composableBuilder(
-      column: $state.table.createdAt,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<DateTime> get acceptedAt => $state.composableBuilder(
-      column: $state.table.acceptedAt,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<DateTime> get acceptedAt => $composableBuilder(
+      column: $table.acceptedAt, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<DateTime> get hungUpAt => $state.composableBuilder(
-      column: $state.table.hungUpAt,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<DateTime> get hungUpAt => $composableBuilder(
+      column: $table.hungUpAt, builder: (column) => ColumnOrderings(column));
+}
+
+class $$CallLogsTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $CallLogsTableTable> {
+  $$CallLogsTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<CallLogDirectionEnum, int> get direction =>
+      $composableBuilder(column: $table.direction, builder: (column) => column);
+
+  GeneratedColumn<String> get number =>
+      $composableBuilder(column: $table.number, builder: (column) => column);
+
+  GeneratedColumn<bool> get video =>
+      $composableBuilder(column: $table.video, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get acceptedAt => $composableBuilder(
+      column: $table.acceptedAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get hungUpAt =>
+      $composableBuilder(column: $table.hungUpAt, builder: (column) => column);
 }
 
 class $$CallLogsTableTableTableManager extends RootTableManager<
@@ -8665,6 +8742,7 @@ class $$CallLogsTableTableTableManager extends RootTableManager<
     CallLogData,
     $$CallLogsTableTableFilterComposer,
     $$CallLogsTableTableOrderingComposer,
+    $$CallLogsTableTableAnnotationComposer,
     $$CallLogsTableTableCreateCompanionBuilder,
     $$CallLogsTableTableUpdateCompanionBuilder,
     (
@@ -8677,10 +8755,12 @@ class $$CallLogsTableTableTableManager extends RootTableManager<
       : super(TableManagerState(
           db: db,
           table: table,
-          filteringComposer:
-              $$CallLogsTableTableFilterComposer(ComposerState(db, table)),
-          orderingComposer:
-              $$CallLogsTableTableOrderingComposer(ComposerState(db, table)),
+          createFilteringComposer: () =>
+              $$CallLogsTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$CallLogsTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$CallLogsTableTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback: ({
             Value<int> id = const Value.absent(),
             Value<CallLogDirectionEnum> direction = const Value.absent(),
@@ -8730,6 +8810,7 @@ typedef $$CallLogsTableTableProcessedTableManager = ProcessedTableManager<
     CallLogData,
     $$CallLogsTableTableFilterComposer,
     $$CallLogsTableTableOrderingComposer,
+    $$CallLogsTableTableAnnotationComposer,
     $$CallLogsTableTableCreateCompanionBuilder,
     $$CallLogsTableTableUpdateCompanionBuilder,
     (
@@ -8752,41 +8833,62 @@ typedef $$FavoritesTableTableUpdateCompanionBuilder = FavoriteDataCompanion
 });
 
 class $$FavoritesTableTableFilterComposer
-    extends FilterComposer<_$AppDatabase, $FavoritesTableTable> {
-  $$FavoritesTableTableFilterComposer(super.$state);
-  ColumnFilters<int> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+    extends Composer<_$AppDatabase, $FavoritesTableTable> {
+  $$FavoritesTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<int> get contactPhoneId => $state.composableBuilder(
-      column: $state.table.contactPhoneId,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<int> get contactPhoneId => $composableBuilder(
+      column: $table.contactPhoneId,
+      builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<int> get position => $state.composableBuilder(
-      column: $state.table.position,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<int> get position => $composableBuilder(
+      column: $table.position, builder: (column) => ColumnFilters(column));
 }
 
 class $$FavoritesTableTableOrderingComposer
-    extends OrderingComposer<_$AppDatabase, $FavoritesTableTable> {
-  $$FavoritesTableTableOrderingComposer(super.$state);
-  ColumnOrderings<int> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+    extends Composer<_$AppDatabase, $FavoritesTableTable> {
+  $$FavoritesTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<int> get contactPhoneId => $state.composableBuilder(
-      column: $state.table.contactPhoneId,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<int> get contactPhoneId => $composableBuilder(
+      column: $table.contactPhoneId,
+      builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<int> get position => $state.composableBuilder(
-      column: $state.table.position,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<int> get position => $composableBuilder(
+      column: $table.position, builder: (column) => ColumnOrderings(column));
+}
+
+class $$FavoritesTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $FavoritesTableTable> {
+  $$FavoritesTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<int> get contactPhoneId => $composableBuilder(
+      column: $table.contactPhoneId, builder: (column) => column);
+
+  GeneratedColumn<int> get position =>
+      $composableBuilder(column: $table.position, builder: (column) => column);
 }
 
 class $$FavoritesTableTableTableManager extends RootTableManager<
@@ -8795,6 +8897,7 @@ class $$FavoritesTableTableTableManager extends RootTableManager<
     FavoriteData,
     $$FavoritesTableTableFilterComposer,
     $$FavoritesTableTableOrderingComposer,
+    $$FavoritesTableTableAnnotationComposer,
     $$FavoritesTableTableCreateCompanionBuilder,
     $$FavoritesTableTableUpdateCompanionBuilder,
     (
@@ -8808,10 +8911,12 @@ class $$FavoritesTableTableTableManager extends RootTableManager<
       : super(TableManagerState(
           db: db,
           table: table,
-          filteringComposer:
-              $$FavoritesTableTableFilterComposer(ComposerState(db, table)),
-          orderingComposer:
-              $$FavoritesTableTableOrderingComposer(ComposerState(db, table)),
+          createFilteringComposer: () =>
+              $$FavoritesTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$FavoritesTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$FavoritesTableTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback: ({
             Value<int> id = const Value.absent(),
             Value<int> contactPhoneId = const Value.absent(),
@@ -8845,6 +8950,7 @@ typedef $$FavoritesTableTableProcessedTableManager = ProcessedTableManager<
     FavoriteData,
     $$FavoritesTableTableFilterComposer,
     $$FavoritesTableTableOrderingComposer,
+    $$FavoritesTableTableAnnotationComposer,
     $$FavoritesTableTableCreateCompanionBuilder,
     $$FavoritesTableTableUpdateCompanionBuilder,
     (
@@ -9022,207 +9128,455 @@ final class $$ChatsTableTableReferences
 }
 
 class $$ChatsTableTableFilterComposer
-    extends FilterComposer<_$AppDatabase, $ChatsTableTable> {
-  $$ChatsTableTableFilterComposer(super.$state);
-  ColumnFilters<int> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+    extends Composer<_$AppDatabase, $ChatsTableTable> {
+  $$ChatsTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
 
   ColumnWithTypeConverterFilters<ChatTypeEnum, ChatTypeEnum, String> get type =>
-      $state.composableBuilder(
-          column: $state.table.type,
-          builder: (column, joinBuilders) => ColumnWithTypeConverterFilters(
-              column,
-              joinBuilders: joinBuilders));
+      $composableBuilder(
+          column: $table.type,
+          builder: (column) => ColumnWithTypeConverterFilters(column));
 
-  ColumnFilters<String> get name => $state.composableBuilder(
-      column: $state.table.name,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<String> get name => $composableBuilder(
+      column: $table.name, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<DateTime> get createdAtRemote => $state.composableBuilder(
-      column: $state.table.createdAtRemote,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<DateTime> get createdAtRemote => $composableBuilder(
+      column: $table.createdAtRemote,
+      builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<DateTime> get updatedAtRemote => $state.composableBuilder(
-      column: $state.table.updatedAtRemote,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<DateTime> get updatedAtRemote => $composableBuilder(
+      column: $table.updatedAtRemote,
+      builder: (column) => ColumnFilters(column));
 
-  ComposableFilter chatMembersTableRefs(
-      ComposableFilter Function($$ChatMembersTableTableFilterComposer f) f) {
-    final $$ChatMembersTableTableFilterComposer composer =
-        $state.composerBuilder(
-            composer: this,
-            getCurrentColumn: (t) => t.id,
-            referencedTable: $state.db.chatMembersTable,
-            getReferencedColumn: (t) => t.chatId,
-            builder: (joinBuilder, parentComposers) =>
-                $$ChatMembersTableTableFilterComposer(ComposerState($state.db,
-                    $state.db.chatMembersTable, joinBuilder, parentComposers)));
+  Expression<bool> chatMembersTableRefs(
+      Expression<bool> Function($$ChatMembersTableTableFilterComposer f) f) {
+    final $$ChatMembersTableTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.chatMembersTable,
+        getReferencedColumn: (t) => t.chatId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ChatMembersTableTableFilterComposer(
+              $db: $db,
+              $table: $db.chatMembersTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
     return f(composer);
   }
 
-  ComposableFilter chatMessagesTableRefs(
-      ComposableFilter Function($$ChatMessagesTableTableFilterComposer f) f) {
-    final $$ChatMessagesTableTableFilterComposer composer =
-        $state.composerBuilder(
-            composer: this,
-            getCurrentColumn: (t) => t.id,
-            referencedTable: $state.db.chatMessagesTable,
-            getReferencedColumn: (t) => t.chatId,
-            builder: (joinBuilder, parentComposers) =>
-                $$ChatMessagesTableTableFilterComposer(ComposerState(
-                    $state.db,
-                    $state.db.chatMessagesTable,
-                    joinBuilder,
-                    parentComposers)));
+  Expression<bool> chatMessagesTableRefs(
+      Expression<bool> Function($$ChatMessagesTableTableFilterComposer f) f) {
+    final $$ChatMessagesTableTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.chatMessagesTable,
+        getReferencedColumn: (t) => t.chatId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ChatMessagesTableTableFilterComposer(
+              $db: $db,
+              $table: $db.chatMessagesTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
     return f(composer);
   }
 
-  ComposableFilter chatMessageSyncCursorTableRefs(
-      ComposableFilter Function(
+  Expression<bool> chatMessageSyncCursorTableRefs(
+      Expression<bool> Function(
               $$ChatMessageSyncCursorTableTableFilterComposer f)
           f) {
     final $$ChatMessageSyncCursorTableTableFilterComposer composer =
-        $state.composerBuilder(
+        $composerBuilder(
             composer: this,
             getCurrentColumn: (t) => t.id,
-            referencedTable: $state.db.chatMessageSyncCursorTable,
+            referencedTable: $db.chatMessageSyncCursorTable,
             getReferencedColumn: (t) => t.chatId,
-            builder: (joinBuilder, parentComposers) =>
-                $$ChatMessageSyncCursorTableTableFilterComposer(ComposerState(
-                    $state.db,
-                    $state.db.chatMessageSyncCursorTable,
-                    joinBuilder,
-                    parentComposers)));
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$ChatMessageSyncCursorTableTableFilterComposer(
+                  $db: $db,
+                  $table: $db.chatMessageSyncCursorTable,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
     return f(composer);
   }
 
-  ComposableFilter chatMessageReadCursorTableRefs(
-      ComposableFilter Function(
+  Expression<bool> chatMessageReadCursorTableRefs(
+      Expression<bool> Function(
               $$ChatMessageReadCursorTableTableFilterComposer f)
           f) {
     final $$ChatMessageReadCursorTableTableFilterComposer composer =
-        $state.composerBuilder(
+        $composerBuilder(
             composer: this,
             getCurrentColumn: (t) => t.id,
-            referencedTable: $state.db.chatMessageReadCursorTable,
+            referencedTable: $db.chatMessageReadCursorTable,
             getReferencedColumn: (t) => t.chatId,
-            builder: (joinBuilder, parentComposers) =>
-                $$ChatMessageReadCursorTableTableFilterComposer(ComposerState(
-                    $state.db,
-                    $state.db.chatMessageReadCursorTable,
-                    joinBuilder,
-                    parentComposers)));
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$ChatMessageReadCursorTableTableFilterComposer(
+                  $db: $db,
+                  $table: $db.chatMessageReadCursorTable,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
     return f(composer);
   }
 
-  ComposableFilter chatOutboxMessageTableRefs(
-      ComposableFilter Function($$ChatOutboxMessageTableTableFilterComposer f)
+  Expression<bool> chatOutboxMessageTableRefs(
+      Expression<bool> Function($$ChatOutboxMessageTableTableFilterComposer f)
           f) {
     final $$ChatOutboxMessageTableTableFilterComposer composer =
-        $state.composerBuilder(
+        $composerBuilder(
             composer: this,
             getCurrentColumn: (t) => t.id,
-            referencedTable: $state.db.chatOutboxMessageTable,
+            referencedTable: $db.chatOutboxMessageTable,
             getReferencedColumn: (t) => t.chatId,
-            builder: (joinBuilder, parentComposers) =>
-                $$ChatOutboxMessageTableTableFilterComposer(ComposerState(
-                    $state.db,
-                    $state.db.chatOutboxMessageTable,
-                    joinBuilder,
-                    parentComposers)));
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$ChatOutboxMessageTableTableFilterComposer(
+                  $db: $db,
+                  $table: $db.chatOutboxMessageTable,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
     return f(composer);
   }
 
-  ComposableFilter chatOutboxMessageEditTableRefs(
-      ComposableFilter Function(
+  Expression<bool> chatOutboxMessageEditTableRefs(
+      Expression<bool> Function(
               $$ChatOutboxMessageEditTableTableFilterComposer f)
           f) {
     final $$ChatOutboxMessageEditTableTableFilterComposer composer =
-        $state.composerBuilder(
+        $composerBuilder(
             composer: this,
             getCurrentColumn: (t) => t.id,
-            referencedTable: $state.db.chatOutboxMessageEditTable,
+            referencedTable: $db.chatOutboxMessageEditTable,
             getReferencedColumn: (t) => t.chatId,
-            builder: (joinBuilder, parentComposers) =>
-                $$ChatOutboxMessageEditTableTableFilterComposer(ComposerState(
-                    $state.db,
-                    $state.db.chatOutboxMessageEditTable,
-                    joinBuilder,
-                    parentComposers)));
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$ChatOutboxMessageEditTableTableFilterComposer(
+                  $db: $db,
+                  $table: $db.chatOutboxMessageEditTable,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
     return f(composer);
   }
 
-  ComposableFilter chatOutboxMessageDeleteTableRefs(
-      ComposableFilter Function(
+  Expression<bool> chatOutboxMessageDeleteTableRefs(
+      Expression<bool> Function(
               $$ChatOutboxMessageDeleteTableTableFilterComposer f)
           f) {
     final $$ChatOutboxMessageDeleteTableTableFilterComposer composer =
-        $state.composerBuilder(
+        $composerBuilder(
             composer: this,
             getCurrentColumn: (t) => t.id,
-            referencedTable: $state.db.chatOutboxMessageDeleteTable,
+            referencedTable: $db.chatOutboxMessageDeleteTable,
             getReferencedColumn: (t) => t.chatId,
-            builder: (joinBuilder, parentComposers) =>
-                $$ChatOutboxMessageDeleteTableTableFilterComposer(ComposerState(
-                    $state.db,
-                    $state.db.chatOutboxMessageDeleteTable,
-                    joinBuilder,
-                    parentComposers)));
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$ChatOutboxMessageDeleteTableTableFilterComposer(
+                  $db: $db,
+                  $table: $db.chatOutboxMessageDeleteTable,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
     return f(composer);
   }
 
-  ComposableFilter chatOutboxReadCursorsTableRefs(
-      ComposableFilter Function(
+  Expression<bool> chatOutboxReadCursorsTableRefs(
+      Expression<bool> Function(
               $$ChatOutboxReadCursorsTableTableFilterComposer f)
           f) {
     final $$ChatOutboxReadCursorsTableTableFilterComposer composer =
-        $state.composerBuilder(
+        $composerBuilder(
             composer: this,
             getCurrentColumn: (t) => t.id,
-            referencedTable: $state.db.chatOutboxReadCursorsTable,
+            referencedTable: $db.chatOutboxReadCursorsTable,
             getReferencedColumn: (t) => t.chatId,
-            builder: (joinBuilder, parentComposers) =>
-                $$ChatOutboxReadCursorsTableTableFilterComposer(ComposerState(
-                    $state.db,
-                    $state.db.chatOutboxReadCursorsTable,
-                    joinBuilder,
-                    parentComposers)));
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$ChatOutboxReadCursorsTableTableFilterComposer(
+                  $db: $db,
+                  $table: $db.chatOutboxReadCursorsTable,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
     return f(composer);
   }
 }
 
 class $$ChatsTableTableOrderingComposer
-    extends OrderingComposer<_$AppDatabase, $ChatsTableTable> {
-  $$ChatsTableTableOrderingComposer(super.$state);
-  ColumnOrderings<int> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+    extends Composer<_$AppDatabase, $ChatsTableTable> {
+  $$ChatsTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get type => $state.composableBuilder(
-      column: $state.table.type,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get type => $composableBuilder(
+      column: $table.type, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get name => $state.composableBuilder(
-      column: $state.table.name,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get name => $composableBuilder(
+      column: $table.name, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<DateTime> get createdAtRemote => $state.composableBuilder(
-      column: $state.table.createdAtRemote,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<DateTime> get createdAtRemote => $composableBuilder(
+      column: $table.createdAtRemote,
+      builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<DateTime> get updatedAtRemote => $state.composableBuilder(
-      column: $state.table.updatedAtRemote,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<DateTime> get updatedAtRemote => $composableBuilder(
+      column: $table.updatedAtRemote,
+      builder: (column) => ColumnOrderings(column));
+}
+
+class $$ChatsTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $ChatsTableTable> {
+  $$ChatsTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<ChatTypeEnum, String> get type =>
+      $composableBuilder(column: $table.type, builder: (column) => column);
+
+  GeneratedColumn<String> get name =>
+      $composableBuilder(column: $table.name, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAtRemote => $composableBuilder(
+      column: $table.createdAtRemote, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get updatedAtRemote => $composableBuilder(
+      column: $table.updatedAtRemote, builder: (column) => column);
+
+  Expression<T> chatMembersTableRefs<T extends Object>(
+      Expression<T> Function($$ChatMembersTableTableAnnotationComposer a) f) {
+    final $$ChatMembersTableTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.chatMembersTable,
+        getReferencedColumn: (t) => t.chatId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ChatMembersTableTableAnnotationComposer(
+              $db: $db,
+              $table: $db.chatMembersTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+
+  Expression<T> chatMessagesTableRefs<T extends Object>(
+      Expression<T> Function($$ChatMessagesTableTableAnnotationComposer a) f) {
+    final $$ChatMessagesTableTableAnnotationComposer composer =
+        $composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.id,
+            referencedTable: $db.chatMessagesTable,
+            getReferencedColumn: (t) => t.chatId,
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$ChatMessagesTableTableAnnotationComposer(
+                  $db: $db,
+                  $table: $db.chatMessagesTable,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
+    return f(composer);
+  }
+
+  Expression<T> chatMessageSyncCursorTableRefs<T extends Object>(
+      Expression<T> Function(
+              $$ChatMessageSyncCursorTableTableAnnotationComposer a)
+          f) {
+    final $$ChatMessageSyncCursorTableTableAnnotationComposer composer =
+        $composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.id,
+            referencedTable: $db.chatMessageSyncCursorTable,
+            getReferencedColumn: (t) => t.chatId,
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$ChatMessageSyncCursorTableTableAnnotationComposer(
+                  $db: $db,
+                  $table: $db.chatMessageSyncCursorTable,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
+    return f(composer);
+  }
+
+  Expression<T> chatMessageReadCursorTableRefs<T extends Object>(
+      Expression<T> Function(
+              $$ChatMessageReadCursorTableTableAnnotationComposer a)
+          f) {
+    final $$ChatMessageReadCursorTableTableAnnotationComposer composer =
+        $composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.id,
+            referencedTable: $db.chatMessageReadCursorTable,
+            getReferencedColumn: (t) => t.chatId,
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$ChatMessageReadCursorTableTableAnnotationComposer(
+                  $db: $db,
+                  $table: $db.chatMessageReadCursorTable,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
+    return f(composer);
+  }
+
+  Expression<T> chatOutboxMessageTableRefs<T extends Object>(
+      Expression<T> Function($$ChatOutboxMessageTableTableAnnotationComposer a)
+          f) {
+    final $$ChatOutboxMessageTableTableAnnotationComposer composer =
+        $composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.id,
+            referencedTable: $db.chatOutboxMessageTable,
+            getReferencedColumn: (t) => t.chatId,
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$ChatOutboxMessageTableTableAnnotationComposer(
+                  $db: $db,
+                  $table: $db.chatOutboxMessageTable,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
+    return f(composer);
+  }
+
+  Expression<T> chatOutboxMessageEditTableRefs<T extends Object>(
+      Expression<T> Function(
+              $$ChatOutboxMessageEditTableTableAnnotationComposer a)
+          f) {
+    final $$ChatOutboxMessageEditTableTableAnnotationComposer composer =
+        $composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.id,
+            referencedTable: $db.chatOutboxMessageEditTable,
+            getReferencedColumn: (t) => t.chatId,
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$ChatOutboxMessageEditTableTableAnnotationComposer(
+                  $db: $db,
+                  $table: $db.chatOutboxMessageEditTable,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
+    return f(composer);
+  }
+
+  Expression<T> chatOutboxMessageDeleteTableRefs<T extends Object>(
+      Expression<T> Function(
+              $$ChatOutboxMessageDeleteTableTableAnnotationComposer a)
+          f) {
+    final $$ChatOutboxMessageDeleteTableTableAnnotationComposer composer =
+        $composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.id,
+            referencedTable: $db.chatOutboxMessageDeleteTable,
+            getReferencedColumn: (t) => t.chatId,
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$ChatOutboxMessageDeleteTableTableAnnotationComposer(
+                  $db: $db,
+                  $table: $db.chatOutboxMessageDeleteTable,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
+    return f(composer);
+  }
+
+  Expression<T> chatOutboxReadCursorsTableRefs<T extends Object>(
+      Expression<T> Function(
+              $$ChatOutboxReadCursorsTableTableAnnotationComposer a)
+          f) {
+    final $$ChatOutboxReadCursorsTableTableAnnotationComposer composer =
+        $composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.id,
+            referencedTable: $db.chatOutboxReadCursorsTable,
+            getReferencedColumn: (t) => t.chatId,
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$ChatOutboxReadCursorsTableTableAnnotationComposer(
+                  $db: $db,
+                  $table: $db.chatOutboxReadCursorsTable,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
+    return f(composer);
+  }
 }
 
 class $$ChatsTableTableTableManager extends RootTableManager<
@@ -9231,6 +9585,7 @@ class $$ChatsTableTableTableManager extends RootTableManager<
     ChatData,
     $$ChatsTableTableFilterComposer,
     $$ChatsTableTableOrderingComposer,
+    $$ChatsTableTableAnnotationComposer,
     $$ChatsTableTableCreateCompanionBuilder,
     $$ChatsTableTableUpdateCompanionBuilder,
     (ChatData, $$ChatsTableTableReferences),
@@ -9248,10 +9603,12 @@ class $$ChatsTableTableTableManager extends RootTableManager<
       : super(TableManagerState(
           db: db,
           table: table,
-          filteringComposer:
-              $$ChatsTableTableFilterComposer(ComposerState(db, table)),
-          orderingComposer:
-              $$ChatsTableTableOrderingComposer(ComposerState(db, table)),
+          createFilteringComposer: () =>
+              $$ChatsTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$ChatsTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$ChatsTableTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback: ({
             Value<int> id = const Value.absent(),
             Value<ChatTypeEnum> type = const Value.absent(),
@@ -9424,6 +9781,7 @@ typedef $$ChatsTableTableProcessedTableManager = ProcessedTableManager<
     ChatData,
     $$ChatsTableTableFilterComposer,
     $$ChatsTableTableOrderingComposer,
+    $$ChatsTableTableAnnotationComposer,
     $$ChatsTableTableCreateCompanionBuilder,
     $$ChatsTableTableUpdateCompanionBuilder,
     (ChatData, $$ChatsTableTableReferences),
@@ -9461,8 +9819,7 @@ final class $$ChatMembersTableTableReferences extends BaseReferences<
       db.chatsTable.createAlias(
           $_aliasNameGenerator(db.chatMembersTable.chatId, db.chatsTable.id));
 
-  $$ChatsTableTableProcessedTableManager? get chatId {
-    if ($_item.chatId == null) return null;
+  $$ChatsTableTableProcessedTableManager get chatId {
     final manager = $$ChatsTableTableTableManager($_db, $_db.chatsTable)
         .filter((f) => f.id($_item.chatId!));
     final item = $_typedResult.readTableOrNull(_chatIdTable($_db));
@@ -9473,66 +9830,123 @@ final class $$ChatMembersTableTableReferences extends BaseReferences<
 }
 
 class $$ChatMembersTableTableFilterComposer
-    extends FilterComposer<_$AppDatabase, $ChatMembersTableTable> {
-  $$ChatMembersTableTableFilterComposer(super.$state);
-  ColumnFilters<int> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+    extends Composer<_$AppDatabase, $ChatMembersTableTable> {
+  $$ChatMembersTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get userId => $state.composableBuilder(
-      column: $state.table.userId,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<String> get userId => $composableBuilder(
+      column: $table.userId, builder: (column) => ColumnFilters(column));
 
   ColumnWithTypeConverterFilters<GroupAuthoritiesEnum?, GroupAuthoritiesEnum,
           String>
-      get groupAuthorities => $state.composableBuilder(
-          column: $state.table.groupAuthorities,
-          builder: (column, joinBuilders) => ColumnWithTypeConverterFilters(
-              column,
-              joinBuilders: joinBuilders));
+      get groupAuthorities => $composableBuilder(
+          column: $table.groupAuthorities,
+          builder: (column) => ColumnWithTypeConverterFilters(column));
 
   $$ChatsTableTableFilterComposer get chatId {
-    final $$ChatsTableTableFilterComposer composer = $state.composerBuilder(
+    final $$ChatsTableTableFilterComposer composer = $composerBuilder(
         composer: this,
         getCurrentColumn: (t) => t.chatId,
-        referencedTable: $state.db.chatsTable,
+        referencedTable: $db.chatsTable,
         getReferencedColumn: (t) => t.id,
-        builder: (joinBuilder, parentComposers) =>
-            $$ChatsTableTableFilterComposer(ComposerState($state.db,
-                $state.db.chatsTable, joinBuilder, parentComposers)));
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ChatsTableTableFilterComposer(
+              $db: $db,
+              $table: $db.chatsTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
     return composer;
   }
 }
 
 class $$ChatMembersTableTableOrderingComposer
-    extends OrderingComposer<_$AppDatabase, $ChatMembersTableTable> {
-  $$ChatMembersTableTableOrderingComposer(super.$state);
-  ColumnOrderings<int> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+    extends Composer<_$AppDatabase, $ChatMembersTableTable> {
+  $$ChatMembersTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get userId => $state.composableBuilder(
-      column: $state.table.userId,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get userId => $composableBuilder(
+      column: $table.userId, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get groupAuthorities => $state.composableBuilder(
-      column: $state.table.groupAuthorities,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get groupAuthorities => $composableBuilder(
+      column: $table.groupAuthorities,
+      builder: (column) => ColumnOrderings(column));
 
   $$ChatsTableTableOrderingComposer get chatId {
-    final $$ChatsTableTableOrderingComposer composer = $state.composerBuilder(
+    final $$ChatsTableTableOrderingComposer composer = $composerBuilder(
         composer: this,
         getCurrentColumn: (t) => t.chatId,
-        referencedTable: $state.db.chatsTable,
+        referencedTable: $db.chatsTable,
         getReferencedColumn: (t) => t.id,
-        builder: (joinBuilder, parentComposers) =>
-            $$ChatsTableTableOrderingComposer(ComposerState($state.db,
-                $state.db.chatsTable, joinBuilder, parentComposers)));
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ChatsTableTableOrderingComposer(
+              $db: $db,
+              $table: $db.chatsTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$ChatMembersTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $ChatMembersTableTable> {
+  $$ChatMembersTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get userId =>
+      $composableBuilder(column: $table.userId, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<GroupAuthoritiesEnum?, String>
+      get groupAuthorities => $composableBuilder(
+          column: $table.groupAuthorities, builder: (column) => column);
+
+  $$ChatsTableTableAnnotationComposer get chatId {
+    final $$ChatsTableTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.chatId,
+        referencedTable: $db.chatsTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ChatsTableTableAnnotationComposer(
+              $db: $db,
+              $table: $db.chatsTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
     return composer;
   }
 }
@@ -9543,6 +9957,7 @@ class $$ChatMembersTableTableTableManager extends RootTableManager<
     ChatMemberData,
     $$ChatMembersTableTableFilterComposer,
     $$ChatMembersTableTableOrderingComposer,
+    $$ChatMembersTableTableAnnotationComposer,
     $$ChatMembersTableTableCreateCompanionBuilder,
     $$ChatMembersTableTableUpdateCompanionBuilder,
     (ChatMemberData, $$ChatMembersTableTableReferences),
@@ -9553,10 +9968,12 @@ class $$ChatMembersTableTableTableManager extends RootTableManager<
       : super(TableManagerState(
           db: db,
           table: table,
-          filteringComposer:
-              $$ChatMembersTableTableFilterComposer(ComposerState(db, table)),
-          orderingComposer:
-              $$ChatMembersTableTableOrderingComposer(ComposerState(db, table)),
+          createFilteringComposer: () =>
+              $$ChatMembersTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$ChatMembersTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$ChatMembersTableTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback: ({
             Value<int> id = const Value.absent(),
             Value<int> chatId = const Value.absent(),
@@ -9604,6 +10021,7 @@ class $$ChatMembersTableTableTableManager extends RootTableManager<
                       dynamic,
                       dynamic,
                       dynamic,
+                      dynamic,
                       dynamic>>(state) {
                 if (chatId) {
                   state = state.withJoin(
@@ -9632,6 +10050,7 @@ typedef $$ChatMembersTableTableProcessedTableManager = ProcessedTableManager<
     ChatMemberData,
     $$ChatMembersTableTableFilterComposer,
     $$ChatMembersTableTableOrderingComposer,
+    $$ChatMembersTableTableAnnotationComposer,
     $$ChatMembersTableTableCreateCompanionBuilder,
     $$ChatMembersTableTableUpdateCompanionBuilder,
     (ChatMemberData, $$ChatMembersTableTableReferences),
@@ -9677,8 +10096,7 @@ final class $$ChatMessagesTableTableReferences extends BaseReferences<
       db.chatsTable.createAlias(
           $_aliasNameGenerator(db.chatMessagesTable.chatId, db.chatsTable.id));
 
-  $$ChatsTableTableProcessedTableManager? get chatId {
-    if ($_item.chatId == null) return null;
+  $$ChatsTableTableProcessedTableManager get chatId {
     final manager = $$ChatsTableTableTableManager($_db, $_db.chatsTable)
         .filter((f) => f.id($_item.chatId!));
     final item = $_typedResult.readTableOrNull(_chatIdTable($_db));
@@ -9689,143 +10107,199 @@ final class $$ChatMessagesTableTableReferences extends BaseReferences<
 }
 
 class $$ChatMessagesTableTableFilterComposer
-    extends FilterComposer<_$AppDatabase, $ChatMessagesTableTable> {
-  $$ChatMessagesTableTableFilterComposer(super.$state);
-  ColumnFilters<int> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+    extends Composer<_$AppDatabase, $ChatMessagesTableTable> {
+  $$ChatMessagesTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get idKey => $state.composableBuilder(
-      column: $state.table.idKey,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<String> get idKey => $composableBuilder(
+      column: $table.idKey, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get senderId => $state.composableBuilder(
-      column: $state.table.senderId,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<String> get senderId => $composableBuilder(
+      column: $table.senderId, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<int> get replyToId => $state.composableBuilder(
-      column: $state.table.replyToId,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<int> get replyToId => $composableBuilder(
+      column: $table.replyToId, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<int> get forwardFromId => $state.composableBuilder(
-      column: $state.table.forwardFromId,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<int> get forwardFromId => $composableBuilder(
+      column: $table.forwardFromId, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get authorId => $state.composableBuilder(
-      column: $state.table.authorId,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<String> get authorId => $composableBuilder(
+      column: $table.authorId, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get content => $state.composableBuilder(
-      column: $state.table.content,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<String> get content => $composableBuilder(
+      column: $table.content, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<int> get createdAtRemoteUsec => $state.composableBuilder(
-      column: $state.table.createdAtRemoteUsec,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<int> get createdAtRemoteUsec => $composableBuilder(
+      column: $table.createdAtRemoteUsec,
+      builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<int> get updatedAtRemoteUsec => $state.composableBuilder(
-      column: $state.table.updatedAtRemoteUsec,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<int> get updatedAtRemoteUsec => $composableBuilder(
+      column: $table.updatedAtRemoteUsec,
+      builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<int> get editedAtRemoteUsec => $state.composableBuilder(
-      column: $state.table.editedAtRemoteUsec,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<int> get editedAtRemoteUsec => $composableBuilder(
+      column: $table.editedAtRemoteUsec,
+      builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<int> get deletedAtRemoteUsec => $state.composableBuilder(
-      column: $state.table.deletedAtRemoteUsec,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<int> get deletedAtRemoteUsec => $composableBuilder(
+      column: $table.deletedAtRemoteUsec,
+      builder: (column) => ColumnFilters(column));
 
   $$ChatsTableTableFilterComposer get chatId {
-    final $$ChatsTableTableFilterComposer composer = $state.composerBuilder(
+    final $$ChatsTableTableFilterComposer composer = $composerBuilder(
         composer: this,
         getCurrentColumn: (t) => t.chatId,
-        referencedTable: $state.db.chatsTable,
+        referencedTable: $db.chatsTable,
         getReferencedColumn: (t) => t.id,
-        builder: (joinBuilder, parentComposers) =>
-            $$ChatsTableTableFilterComposer(ComposerState($state.db,
-                $state.db.chatsTable, joinBuilder, parentComposers)));
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ChatsTableTableFilterComposer(
+              $db: $db,
+              $table: $db.chatsTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
     return composer;
   }
 }
 
 class $$ChatMessagesTableTableOrderingComposer
-    extends OrderingComposer<_$AppDatabase, $ChatMessagesTableTable> {
-  $$ChatMessagesTableTableOrderingComposer(super.$state);
-  ColumnOrderings<int> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+    extends Composer<_$AppDatabase, $ChatMessagesTableTable> {
+  $$ChatMessagesTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get idKey => $state.composableBuilder(
-      column: $state.table.idKey,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get idKey => $composableBuilder(
+      column: $table.idKey, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get senderId => $state.composableBuilder(
-      column: $state.table.senderId,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get senderId => $composableBuilder(
+      column: $table.senderId, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<int> get replyToId => $state.composableBuilder(
-      column: $state.table.replyToId,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<int> get replyToId => $composableBuilder(
+      column: $table.replyToId, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<int> get forwardFromId => $state.composableBuilder(
-      column: $state.table.forwardFromId,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<int> get forwardFromId => $composableBuilder(
+      column: $table.forwardFromId,
+      builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get authorId => $state.composableBuilder(
-      column: $state.table.authorId,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get authorId => $composableBuilder(
+      column: $table.authorId, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get content => $state.composableBuilder(
-      column: $state.table.content,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get content => $composableBuilder(
+      column: $table.content, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<int> get createdAtRemoteUsec => $state.composableBuilder(
-      column: $state.table.createdAtRemoteUsec,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<int> get createdAtRemoteUsec => $composableBuilder(
+      column: $table.createdAtRemoteUsec,
+      builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<int> get updatedAtRemoteUsec => $state.composableBuilder(
-      column: $state.table.updatedAtRemoteUsec,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<int> get updatedAtRemoteUsec => $composableBuilder(
+      column: $table.updatedAtRemoteUsec,
+      builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<int> get editedAtRemoteUsec => $state.composableBuilder(
-      column: $state.table.editedAtRemoteUsec,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<int> get editedAtRemoteUsec => $composableBuilder(
+      column: $table.editedAtRemoteUsec,
+      builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<int> get deletedAtRemoteUsec => $state.composableBuilder(
-      column: $state.table.deletedAtRemoteUsec,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<int> get deletedAtRemoteUsec => $composableBuilder(
+      column: $table.deletedAtRemoteUsec,
+      builder: (column) => ColumnOrderings(column));
 
   $$ChatsTableTableOrderingComposer get chatId {
-    final $$ChatsTableTableOrderingComposer composer = $state.composerBuilder(
+    final $$ChatsTableTableOrderingComposer composer = $composerBuilder(
         composer: this,
         getCurrentColumn: (t) => t.chatId,
-        referencedTable: $state.db.chatsTable,
+        referencedTable: $db.chatsTable,
         getReferencedColumn: (t) => t.id,
-        builder: (joinBuilder, parentComposers) =>
-            $$ChatsTableTableOrderingComposer(ComposerState($state.db,
-                $state.db.chatsTable, joinBuilder, parentComposers)));
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ChatsTableTableOrderingComposer(
+              $db: $db,
+              $table: $db.chatsTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$ChatMessagesTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $ChatMessagesTableTable> {
+  $$ChatMessagesTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get idKey =>
+      $composableBuilder(column: $table.idKey, builder: (column) => column);
+
+  GeneratedColumn<String> get senderId =>
+      $composableBuilder(column: $table.senderId, builder: (column) => column);
+
+  GeneratedColumn<int> get replyToId =>
+      $composableBuilder(column: $table.replyToId, builder: (column) => column);
+
+  GeneratedColumn<int> get forwardFromId => $composableBuilder(
+      column: $table.forwardFromId, builder: (column) => column);
+
+  GeneratedColumn<String> get authorId =>
+      $composableBuilder(column: $table.authorId, builder: (column) => column);
+
+  GeneratedColumn<String> get content =>
+      $composableBuilder(column: $table.content, builder: (column) => column);
+
+  GeneratedColumn<int> get createdAtRemoteUsec => $composableBuilder(
+      column: $table.createdAtRemoteUsec, builder: (column) => column);
+
+  GeneratedColumn<int> get updatedAtRemoteUsec => $composableBuilder(
+      column: $table.updatedAtRemoteUsec, builder: (column) => column);
+
+  GeneratedColumn<int> get editedAtRemoteUsec => $composableBuilder(
+      column: $table.editedAtRemoteUsec, builder: (column) => column);
+
+  GeneratedColumn<int> get deletedAtRemoteUsec => $composableBuilder(
+      column: $table.deletedAtRemoteUsec, builder: (column) => column);
+
+  $$ChatsTableTableAnnotationComposer get chatId {
+    final $$ChatsTableTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.chatId,
+        referencedTable: $db.chatsTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ChatsTableTableAnnotationComposer(
+              $db: $db,
+              $table: $db.chatsTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
     return composer;
   }
 }
@@ -9836,6 +10310,7 @@ class $$ChatMessagesTableTableTableManager extends RootTableManager<
     ChatMessageData,
     $$ChatMessagesTableTableFilterComposer,
     $$ChatMessagesTableTableOrderingComposer,
+    $$ChatMessagesTableTableAnnotationComposer,
     $$ChatMessagesTableTableCreateCompanionBuilder,
     $$ChatMessagesTableTableUpdateCompanionBuilder,
     (ChatMessageData, $$ChatMessagesTableTableReferences),
@@ -9846,10 +10321,13 @@ class $$ChatMessagesTableTableTableManager extends RootTableManager<
       : super(TableManagerState(
           db: db,
           table: table,
-          filteringComposer:
-              $$ChatMessagesTableTableFilterComposer(ComposerState(db, table)),
-          orderingComposer: $$ChatMessagesTableTableOrderingComposer(
-              ComposerState(db, table)),
+          createFilteringComposer: () =>
+              $$ChatMessagesTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$ChatMessagesTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$ChatMessagesTableTableAnnotationComposer(
+                  $db: db, $table: table),
           updateCompanionCallback: ({
             Value<int> id = const Value.absent(),
             Value<String> idKey = const Value.absent(),
@@ -9927,6 +10405,7 @@ class $$ChatMessagesTableTableTableManager extends RootTableManager<
                       dynamic,
                       dynamic,
                       dynamic,
+                      dynamic,
                       dynamic>>(state) {
                 if (chatId) {
                   state = state.withJoin(
@@ -9955,6 +10434,7 @@ typedef $$ChatMessagesTableTableProcessedTableManager = ProcessedTableManager<
     ChatMessageData,
     $$ChatMessagesTableTableFilterComposer,
     $$ChatMessagesTableTableOrderingComposer,
+    $$ChatMessagesTableTableAnnotationComposer,
     $$ChatMessagesTableTableCreateCompanionBuilder,
     $$ChatMessagesTableTableUpdateCompanionBuilder,
     (ChatMessageData, $$ChatMessagesTableTableReferences),
@@ -9986,8 +10466,7 @@ final class $$ChatMessageSyncCursorTableTableReferences extends BaseReferences<
       db.chatsTable.createAlias($_aliasNameGenerator(
           db.chatMessageSyncCursorTable.chatId, db.chatsTable.id));
 
-  $$ChatsTableTableProcessedTableManager? get chatId {
-    if ($_item.chatId == null) return null;
+  $$ChatsTableTableProcessedTableManager get chatId {
     final manager = $$ChatsTableTableTableManager($_db, $_db.chatsTable)
         .filter((f) => f.id($_item.chatId!));
     final item = $_typedResult.readTableOrNull(_chatIdTable($_db));
@@ -9998,56 +10477,114 @@ final class $$ChatMessageSyncCursorTableTableReferences extends BaseReferences<
 }
 
 class $$ChatMessageSyncCursorTableTableFilterComposer
-    extends FilterComposer<_$AppDatabase, $ChatMessageSyncCursorTableTable> {
-  $$ChatMessageSyncCursorTableTableFilterComposer(super.$state);
+    extends Composer<_$AppDatabase, $ChatMessageSyncCursorTableTable> {
+  $$ChatMessageSyncCursorTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
   ColumnWithTypeConverterFilters<MessageSyncCursorTypeEnum,
           MessageSyncCursorTypeEnum, String>
-      get cursorType => $state.composableBuilder(
-          column: $state.table.cursorType,
-          builder: (column, joinBuilders) => ColumnWithTypeConverterFilters(
-              column,
-              joinBuilders: joinBuilders));
+      get cursorType => $composableBuilder(
+          column: $table.cursorType,
+          builder: (column) => ColumnWithTypeConverterFilters(column));
 
-  ColumnFilters<int> get timestampUsec => $state.composableBuilder(
-      column: $state.table.timestampUsec,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<int> get timestampUsec => $composableBuilder(
+      column: $table.timestampUsec, builder: (column) => ColumnFilters(column));
 
   $$ChatsTableTableFilterComposer get chatId {
-    final $$ChatsTableTableFilterComposer composer = $state.composerBuilder(
+    final $$ChatsTableTableFilterComposer composer = $composerBuilder(
         composer: this,
         getCurrentColumn: (t) => t.chatId,
-        referencedTable: $state.db.chatsTable,
+        referencedTable: $db.chatsTable,
         getReferencedColumn: (t) => t.id,
-        builder: (joinBuilder, parentComposers) =>
-            $$ChatsTableTableFilterComposer(ComposerState($state.db,
-                $state.db.chatsTable, joinBuilder, parentComposers)));
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ChatsTableTableFilterComposer(
+              $db: $db,
+              $table: $db.chatsTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
     return composer;
   }
 }
 
 class $$ChatMessageSyncCursorTableTableOrderingComposer
-    extends OrderingComposer<_$AppDatabase, $ChatMessageSyncCursorTableTable> {
-  $$ChatMessageSyncCursorTableTableOrderingComposer(super.$state);
-  ColumnOrderings<String> get cursorType => $state.composableBuilder(
-      column: $state.table.cursorType,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+    extends Composer<_$AppDatabase, $ChatMessageSyncCursorTableTable> {
+  $$ChatMessageSyncCursorTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get cursorType => $composableBuilder(
+      column: $table.cursorType, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<int> get timestampUsec => $state.composableBuilder(
-      column: $state.table.timestampUsec,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<int> get timestampUsec => $composableBuilder(
+      column: $table.timestampUsec,
+      builder: (column) => ColumnOrderings(column));
 
   $$ChatsTableTableOrderingComposer get chatId {
-    final $$ChatsTableTableOrderingComposer composer = $state.composerBuilder(
+    final $$ChatsTableTableOrderingComposer composer = $composerBuilder(
         composer: this,
         getCurrentColumn: (t) => t.chatId,
-        referencedTable: $state.db.chatsTable,
+        referencedTable: $db.chatsTable,
         getReferencedColumn: (t) => t.id,
-        builder: (joinBuilder, parentComposers) =>
-            $$ChatsTableTableOrderingComposer(ComposerState($state.db,
-                $state.db.chatsTable, joinBuilder, parentComposers)));
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ChatsTableTableOrderingComposer(
+              $db: $db,
+              $table: $db.chatsTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$ChatMessageSyncCursorTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $ChatMessageSyncCursorTableTable> {
+  $$ChatMessageSyncCursorTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumnWithTypeConverter<MessageSyncCursorTypeEnum, String>
+      get cursorType => $composableBuilder(
+          column: $table.cursorType, builder: (column) => column);
+
+  GeneratedColumn<int> get timestampUsec => $composableBuilder(
+      column: $table.timestampUsec, builder: (column) => column);
+
+  $$ChatsTableTableAnnotationComposer get chatId {
+    final $$ChatsTableTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.chatId,
+        referencedTable: $db.chatsTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ChatsTableTableAnnotationComposer(
+              $db: $db,
+              $table: $db.chatsTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
     return composer;
   }
 }
@@ -10058,6 +10595,7 @@ class $$ChatMessageSyncCursorTableTableTableManager extends RootTableManager<
     ChatMessageSyncCursorData,
     $$ChatMessageSyncCursorTableTableFilterComposer,
     $$ChatMessageSyncCursorTableTableOrderingComposer,
+    $$ChatMessageSyncCursorTableTableAnnotationComposer,
     $$ChatMessageSyncCursorTableTableCreateCompanionBuilder,
     $$ChatMessageSyncCursorTableTableUpdateCompanionBuilder,
     (ChatMessageSyncCursorData, $$ChatMessageSyncCursorTableTableReferences),
@@ -10068,10 +10606,15 @@ class $$ChatMessageSyncCursorTableTableTableManager extends RootTableManager<
       : super(TableManagerState(
           db: db,
           table: table,
-          filteringComposer: $$ChatMessageSyncCursorTableTableFilterComposer(
-              ComposerState(db, table)),
-          orderingComposer: $$ChatMessageSyncCursorTableTableOrderingComposer(
-              ComposerState(db, table)),
+          createFilteringComposer: () =>
+              $$ChatMessageSyncCursorTableTableFilterComposer(
+                  $db: db, $table: table),
+          createOrderingComposer: () =>
+              $$ChatMessageSyncCursorTableTableOrderingComposer(
+                  $db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$ChatMessageSyncCursorTableTableAnnotationComposer(
+                  $db: db, $table: table),
           updateCompanionCallback: ({
             Value<int> chatId = const Value.absent(),
             Value<MessageSyncCursorTypeEnum> cursorType = const Value.absent(),
@@ -10117,6 +10660,7 @@ class $$ChatMessageSyncCursorTableTableTableManager extends RootTableManager<
                       dynamic,
                       dynamic,
                       dynamic,
+                      dynamic,
                       dynamic>>(state) {
                 if (chatId) {
                   state = state.withJoin(
@@ -10148,6 +10692,7 @@ typedef $$ChatMessageSyncCursorTableTableProcessedTableManager
         ChatMessageSyncCursorData,
         $$ChatMessageSyncCursorTableTableFilterComposer,
         $$ChatMessageSyncCursorTableTableOrderingComposer,
+        $$ChatMessageSyncCursorTableTableAnnotationComposer,
         $$ChatMessageSyncCursorTableTableCreateCompanionBuilder,
         $$ChatMessageSyncCursorTableTableUpdateCompanionBuilder,
         (
@@ -10182,8 +10727,7 @@ final class $$ChatMessageReadCursorTableTableReferences extends BaseReferences<
       db.chatsTable.createAlias($_aliasNameGenerator(
           db.chatMessageReadCursorTable.chatId, db.chatsTable.id));
 
-  $$ChatsTableTableProcessedTableManager? get chatId {
-    if ($_item.chatId == null) return null;
+  $$ChatsTableTableProcessedTableManager get chatId {
     final manager = $$ChatsTableTableTableManager($_db, $_db.chatsTable)
         .filter((f) => f.id($_item.chatId!));
     final item = $_typedResult.readTableOrNull(_chatIdTable($_db));
@@ -10194,53 +10738,110 @@ final class $$ChatMessageReadCursorTableTableReferences extends BaseReferences<
 }
 
 class $$ChatMessageReadCursorTableTableFilterComposer
-    extends FilterComposer<_$AppDatabase, $ChatMessageReadCursorTableTable> {
-  $$ChatMessageReadCursorTableTableFilterComposer(super.$state);
-  ColumnFilters<String> get userId => $state.composableBuilder(
-      column: $state.table.userId,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+    extends Composer<_$AppDatabase, $ChatMessageReadCursorTableTable> {
+  $$ChatMessageReadCursorTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get userId => $composableBuilder(
+      column: $table.userId, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<int> get timestampUsec => $state.composableBuilder(
-      column: $state.table.timestampUsec,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<int> get timestampUsec => $composableBuilder(
+      column: $table.timestampUsec, builder: (column) => ColumnFilters(column));
 
   $$ChatsTableTableFilterComposer get chatId {
-    final $$ChatsTableTableFilterComposer composer = $state.composerBuilder(
+    final $$ChatsTableTableFilterComposer composer = $composerBuilder(
         composer: this,
         getCurrentColumn: (t) => t.chatId,
-        referencedTable: $state.db.chatsTable,
+        referencedTable: $db.chatsTable,
         getReferencedColumn: (t) => t.id,
-        builder: (joinBuilder, parentComposers) =>
-            $$ChatsTableTableFilterComposer(ComposerState($state.db,
-                $state.db.chatsTable, joinBuilder, parentComposers)));
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ChatsTableTableFilterComposer(
+              $db: $db,
+              $table: $db.chatsTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
     return composer;
   }
 }
 
 class $$ChatMessageReadCursorTableTableOrderingComposer
-    extends OrderingComposer<_$AppDatabase, $ChatMessageReadCursorTableTable> {
-  $$ChatMessageReadCursorTableTableOrderingComposer(super.$state);
-  ColumnOrderings<String> get userId => $state.composableBuilder(
-      column: $state.table.userId,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+    extends Composer<_$AppDatabase, $ChatMessageReadCursorTableTable> {
+  $$ChatMessageReadCursorTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get userId => $composableBuilder(
+      column: $table.userId, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<int> get timestampUsec => $state.composableBuilder(
-      column: $state.table.timestampUsec,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<int> get timestampUsec => $composableBuilder(
+      column: $table.timestampUsec,
+      builder: (column) => ColumnOrderings(column));
 
   $$ChatsTableTableOrderingComposer get chatId {
-    final $$ChatsTableTableOrderingComposer composer = $state.composerBuilder(
+    final $$ChatsTableTableOrderingComposer composer = $composerBuilder(
         composer: this,
         getCurrentColumn: (t) => t.chatId,
-        referencedTable: $state.db.chatsTable,
+        referencedTable: $db.chatsTable,
         getReferencedColumn: (t) => t.id,
-        builder: (joinBuilder, parentComposers) =>
-            $$ChatsTableTableOrderingComposer(ComposerState($state.db,
-                $state.db.chatsTable, joinBuilder, parentComposers)));
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ChatsTableTableOrderingComposer(
+              $db: $db,
+              $table: $db.chatsTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$ChatMessageReadCursorTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $ChatMessageReadCursorTableTable> {
+  $$ChatMessageReadCursorTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get userId =>
+      $composableBuilder(column: $table.userId, builder: (column) => column);
+
+  GeneratedColumn<int> get timestampUsec => $composableBuilder(
+      column: $table.timestampUsec, builder: (column) => column);
+
+  $$ChatsTableTableAnnotationComposer get chatId {
+    final $$ChatsTableTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.chatId,
+        referencedTable: $db.chatsTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ChatsTableTableAnnotationComposer(
+              $db: $db,
+              $table: $db.chatsTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
     return composer;
   }
 }
@@ -10251,6 +10852,7 @@ class $$ChatMessageReadCursorTableTableTableManager extends RootTableManager<
     ChatMessageReadCursorData,
     $$ChatMessageReadCursorTableTableFilterComposer,
     $$ChatMessageReadCursorTableTableOrderingComposer,
+    $$ChatMessageReadCursorTableTableAnnotationComposer,
     $$ChatMessageReadCursorTableTableCreateCompanionBuilder,
     $$ChatMessageReadCursorTableTableUpdateCompanionBuilder,
     (ChatMessageReadCursorData, $$ChatMessageReadCursorTableTableReferences),
@@ -10261,10 +10863,15 @@ class $$ChatMessageReadCursorTableTableTableManager extends RootTableManager<
       : super(TableManagerState(
           db: db,
           table: table,
-          filteringComposer: $$ChatMessageReadCursorTableTableFilterComposer(
-              ComposerState(db, table)),
-          orderingComposer: $$ChatMessageReadCursorTableTableOrderingComposer(
-              ComposerState(db, table)),
+          createFilteringComposer: () =>
+              $$ChatMessageReadCursorTableTableFilterComposer(
+                  $db: db, $table: table),
+          createOrderingComposer: () =>
+              $$ChatMessageReadCursorTableTableOrderingComposer(
+                  $db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$ChatMessageReadCursorTableTableAnnotationComposer(
+                  $db: db, $table: table),
           updateCompanionCallback: ({
             Value<int> chatId = const Value.absent(),
             Value<String> userId = const Value.absent(),
@@ -10310,6 +10917,7 @@ class $$ChatMessageReadCursorTableTableTableManager extends RootTableManager<
                       dynamic,
                       dynamic,
                       dynamic,
+                      dynamic,
                       dynamic>>(state) {
                 if (chatId) {
                   state = state.withJoin(
@@ -10341,6 +10949,7 @@ typedef $$ChatMessageReadCursorTableTableProcessedTableManager
         ChatMessageReadCursorData,
         $$ChatMessageReadCursorTableTableFilterComposer,
         $$ChatMessageReadCursorTableTableOrderingComposer,
+        $$ChatMessageReadCursorTableTableAnnotationComposer,
         $$ChatMessageReadCursorTableTableCreateCompanionBuilder,
         $$ChatMessageReadCursorTableTableUpdateCompanionBuilder,
         (
@@ -10395,103 +11004,157 @@ final class $$ChatOutboxMessageTableTableReferences extends BaseReferences<
 }
 
 class $$ChatOutboxMessageTableTableFilterComposer
-    extends FilterComposer<_$AppDatabase, $ChatOutboxMessageTableTable> {
-  $$ChatOutboxMessageTableTableFilterComposer(super.$state);
-  ColumnFilters<String> get idKey => $state.composableBuilder(
-      column: $state.table.idKey,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+    extends Composer<_$AppDatabase, $ChatOutboxMessageTableTable> {
+  $$ChatOutboxMessageTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get idKey => $composableBuilder(
+      column: $table.idKey, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get participantId => $state.composableBuilder(
-      column: $state.table.participantId,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<String> get participantId => $composableBuilder(
+      column: $table.participantId, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<int> get replyToId => $state.composableBuilder(
-      column: $state.table.replyToId,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<int> get replyToId => $composableBuilder(
+      column: $table.replyToId, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<int> get forwardFromId => $state.composableBuilder(
-      column: $state.table.forwardFromId,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<int> get forwardFromId => $composableBuilder(
+      column: $table.forwardFromId, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get authorId => $state.composableBuilder(
-      column: $state.table.authorId,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<String> get authorId => $composableBuilder(
+      column: $table.authorId, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get content => $state.composableBuilder(
-      column: $state.table.content,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<String> get content => $composableBuilder(
+      column: $table.content, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<int> get sendAttempts => $state.composableBuilder(
-      column: $state.table.sendAttempts,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<int> get sendAttempts => $composableBuilder(
+      column: $table.sendAttempts, builder: (column) => ColumnFilters(column));
 
   $$ChatsTableTableFilterComposer get chatId {
-    final $$ChatsTableTableFilterComposer composer = $state.composerBuilder(
+    final $$ChatsTableTableFilterComposer composer = $composerBuilder(
         composer: this,
         getCurrentColumn: (t) => t.chatId,
-        referencedTable: $state.db.chatsTable,
+        referencedTable: $db.chatsTable,
         getReferencedColumn: (t) => t.id,
-        builder: (joinBuilder, parentComposers) =>
-            $$ChatsTableTableFilterComposer(ComposerState($state.db,
-                $state.db.chatsTable, joinBuilder, parentComposers)));
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ChatsTableTableFilterComposer(
+              $db: $db,
+              $table: $db.chatsTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
     return composer;
   }
 }
 
 class $$ChatOutboxMessageTableTableOrderingComposer
-    extends OrderingComposer<_$AppDatabase, $ChatOutboxMessageTableTable> {
-  $$ChatOutboxMessageTableTableOrderingComposer(super.$state);
-  ColumnOrderings<String> get idKey => $state.composableBuilder(
-      column: $state.table.idKey,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+    extends Composer<_$AppDatabase, $ChatOutboxMessageTableTable> {
+  $$ChatOutboxMessageTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get idKey => $composableBuilder(
+      column: $table.idKey, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get participantId => $state.composableBuilder(
-      column: $state.table.participantId,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get participantId => $composableBuilder(
+      column: $table.participantId,
+      builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<int> get replyToId => $state.composableBuilder(
-      column: $state.table.replyToId,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<int> get replyToId => $composableBuilder(
+      column: $table.replyToId, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<int> get forwardFromId => $state.composableBuilder(
-      column: $state.table.forwardFromId,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<int> get forwardFromId => $composableBuilder(
+      column: $table.forwardFromId,
+      builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get authorId => $state.composableBuilder(
-      column: $state.table.authorId,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get authorId => $composableBuilder(
+      column: $table.authorId, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get content => $state.composableBuilder(
-      column: $state.table.content,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get content => $composableBuilder(
+      column: $table.content, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<int> get sendAttempts => $state.composableBuilder(
-      column: $state.table.sendAttempts,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<int> get sendAttempts => $composableBuilder(
+      column: $table.sendAttempts,
+      builder: (column) => ColumnOrderings(column));
 
   $$ChatsTableTableOrderingComposer get chatId {
-    final $$ChatsTableTableOrderingComposer composer = $state.composerBuilder(
+    final $$ChatsTableTableOrderingComposer composer = $composerBuilder(
         composer: this,
         getCurrentColumn: (t) => t.chatId,
-        referencedTable: $state.db.chatsTable,
+        referencedTable: $db.chatsTable,
         getReferencedColumn: (t) => t.id,
-        builder: (joinBuilder, parentComposers) =>
-            $$ChatsTableTableOrderingComposer(ComposerState($state.db,
-                $state.db.chatsTable, joinBuilder, parentComposers)));
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ChatsTableTableOrderingComposer(
+              $db: $db,
+              $table: $db.chatsTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$ChatOutboxMessageTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $ChatOutboxMessageTableTable> {
+  $$ChatOutboxMessageTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get idKey =>
+      $composableBuilder(column: $table.idKey, builder: (column) => column);
+
+  GeneratedColumn<String> get participantId => $composableBuilder(
+      column: $table.participantId, builder: (column) => column);
+
+  GeneratedColumn<int> get replyToId =>
+      $composableBuilder(column: $table.replyToId, builder: (column) => column);
+
+  GeneratedColumn<int> get forwardFromId => $composableBuilder(
+      column: $table.forwardFromId, builder: (column) => column);
+
+  GeneratedColumn<String> get authorId =>
+      $composableBuilder(column: $table.authorId, builder: (column) => column);
+
+  GeneratedColumn<String> get content =>
+      $composableBuilder(column: $table.content, builder: (column) => column);
+
+  GeneratedColumn<int> get sendAttempts => $composableBuilder(
+      column: $table.sendAttempts, builder: (column) => column);
+
+  $$ChatsTableTableAnnotationComposer get chatId {
+    final $$ChatsTableTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.chatId,
+        referencedTable: $db.chatsTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ChatsTableTableAnnotationComposer(
+              $db: $db,
+              $table: $db.chatsTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
     return composer;
   }
 }
@@ -10502,6 +11165,7 @@ class $$ChatOutboxMessageTableTableTableManager extends RootTableManager<
     ChatOutboxMessageData,
     $$ChatOutboxMessageTableTableFilterComposer,
     $$ChatOutboxMessageTableTableOrderingComposer,
+    $$ChatOutboxMessageTableTableAnnotationComposer,
     $$ChatOutboxMessageTableTableCreateCompanionBuilder,
     $$ChatOutboxMessageTableTableUpdateCompanionBuilder,
     (ChatOutboxMessageData, $$ChatOutboxMessageTableTableReferences),
@@ -10512,10 +11176,15 @@ class $$ChatOutboxMessageTableTableTableManager extends RootTableManager<
       : super(TableManagerState(
           db: db,
           table: table,
-          filteringComposer: $$ChatOutboxMessageTableTableFilterComposer(
-              ComposerState(db, table)),
-          orderingComposer: $$ChatOutboxMessageTableTableOrderingComposer(
-              ComposerState(db, table)),
+          createFilteringComposer: () =>
+              $$ChatOutboxMessageTableTableFilterComposer(
+                  $db: db, $table: table),
+          createOrderingComposer: () =>
+              $$ChatOutboxMessageTableTableOrderingComposer(
+                  $db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$ChatOutboxMessageTableTableAnnotationComposer(
+                  $db: db, $table: table),
           updateCompanionCallback: ({
             Value<String> idKey = const Value.absent(),
             Value<int?> chatId = const Value.absent(),
@@ -10581,6 +11250,7 @@ class $$ChatOutboxMessageTableTableTableManager extends RootTableManager<
                       dynamic,
                       dynamic,
                       dynamic,
+                      dynamic,
                       dynamic>>(state) {
                 if (chatId) {
                   state = state.withJoin(
@@ -10611,6 +11281,7 @@ typedef $$ChatOutboxMessageTableTableProcessedTableManager
         ChatOutboxMessageData,
         $$ChatOutboxMessageTableTableFilterComposer,
         $$ChatOutboxMessageTableTableOrderingComposer,
+        $$ChatOutboxMessageTableTableAnnotationComposer,
         $$ChatOutboxMessageTableTableCreateCompanionBuilder,
         $$ChatOutboxMessageTableTableUpdateCompanionBuilder,
         (ChatOutboxMessageData, $$ChatOutboxMessageTableTableReferences),
@@ -10644,8 +11315,7 @@ final class $$ChatOutboxMessageEditTableTableReferences extends BaseReferences<
       db.chatsTable.createAlias($_aliasNameGenerator(
           db.chatOutboxMessageEditTable.chatId, db.chatsTable.id));
 
-  $$ChatsTableTableProcessedTableManager? get chatId {
-    if ($_item.chatId == null) return null;
+  $$ChatsTableTableProcessedTableManager get chatId {
     final manager = $$ChatsTableTableTableManager($_db, $_db.chatsTable)
         .filter((f) => f.id($_item.chatId!));
     final item = $_typedResult.readTableOrNull(_chatIdTable($_db));
@@ -10656,73 +11326,128 @@ final class $$ChatOutboxMessageEditTableTableReferences extends BaseReferences<
 }
 
 class $$ChatOutboxMessageEditTableTableFilterComposer
-    extends FilterComposer<_$AppDatabase, $ChatOutboxMessageEditTableTable> {
-  $$ChatOutboxMessageEditTableTableFilterComposer(super.$state);
-  ColumnFilters<int> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+    extends Composer<_$AppDatabase, $ChatOutboxMessageEditTableTable> {
+  $$ChatOutboxMessageEditTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get idKey => $state.composableBuilder(
-      column: $state.table.idKey,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<String> get idKey => $composableBuilder(
+      column: $table.idKey, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get newContent => $state.composableBuilder(
-      column: $state.table.newContent,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<String> get newContent => $composableBuilder(
+      column: $table.newContent, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<int> get sendAttempts => $state.composableBuilder(
-      column: $state.table.sendAttempts,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<int> get sendAttempts => $composableBuilder(
+      column: $table.sendAttempts, builder: (column) => ColumnFilters(column));
 
   $$ChatsTableTableFilterComposer get chatId {
-    final $$ChatsTableTableFilterComposer composer = $state.composerBuilder(
+    final $$ChatsTableTableFilterComposer composer = $composerBuilder(
         composer: this,
         getCurrentColumn: (t) => t.chatId,
-        referencedTable: $state.db.chatsTable,
+        referencedTable: $db.chatsTable,
         getReferencedColumn: (t) => t.id,
-        builder: (joinBuilder, parentComposers) =>
-            $$ChatsTableTableFilterComposer(ComposerState($state.db,
-                $state.db.chatsTable, joinBuilder, parentComposers)));
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ChatsTableTableFilterComposer(
+              $db: $db,
+              $table: $db.chatsTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
     return composer;
   }
 }
 
 class $$ChatOutboxMessageEditTableTableOrderingComposer
-    extends OrderingComposer<_$AppDatabase, $ChatOutboxMessageEditTableTable> {
-  $$ChatOutboxMessageEditTableTableOrderingComposer(super.$state);
-  ColumnOrderings<int> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+    extends Composer<_$AppDatabase, $ChatOutboxMessageEditTableTable> {
+  $$ChatOutboxMessageEditTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get idKey => $state.composableBuilder(
-      column: $state.table.idKey,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get idKey => $composableBuilder(
+      column: $table.idKey, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get newContent => $state.composableBuilder(
-      column: $state.table.newContent,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get newContent => $composableBuilder(
+      column: $table.newContent, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<int> get sendAttempts => $state.composableBuilder(
-      column: $state.table.sendAttempts,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<int> get sendAttempts => $composableBuilder(
+      column: $table.sendAttempts,
+      builder: (column) => ColumnOrderings(column));
 
   $$ChatsTableTableOrderingComposer get chatId {
-    final $$ChatsTableTableOrderingComposer composer = $state.composerBuilder(
+    final $$ChatsTableTableOrderingComposer composer = $composerBuilder(
         composer: this,
         getCurrentColumn: (t) => t.chatId,
-        referencedTable: $state.db.chatsTable,
+        referencedTable: $db.chatsTable,
         getReferencedColumn: (t) => t.id,
-        builder: (joinBuilder, parentComposers) =>
-            $$ChatsTableTableOrderingComposer(ComposerState($state.db,
-                $state.db.chatsTable, joinBuilder, parentComposers)));
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ChatsTableTableOrderingComposer(
+              $db: $db,
+              $table: $db.chatsTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$ChatOutboxMessageEditTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $ChatOutboxMessageEditTableTable> {
+  $$ChatOutboxMessageEditTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get idKey =>
+      $composableBuilder(column: $table.idKey, builder: (column) => column);
+
+  GeneratedColumn<String> get newContent => $composableBuilder(
+      column: $table.newContent, builder: (column) => column);
+
+  GeneratedColumn<int> get sendAttempts => $composableBuilder(
+      column: $table.sendAttempts, builder: (column) => column);
+
+  $$ChatsTableTableAnnotationComposer get chatId {
+    final $$ChatsTableTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.chatId,
+        referencedTable: $db.chatsTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ChatsTableTableAnnotationComposer(
+              $db: $db,
+              $table: $db.chatsTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
     return composer;
   }
 }
@@ -10733,6 +11458,7 @@ class $$ChatOutboxMessageEditTableTableTableManager extends RootTableManager<
     ChatOutboxMessageEditData,
     $$ChatOutboxMessageEditTableTableFilterComposer,
     $$ChatOutboxMessageEditTableTableOrderingComposer,
+    $$ChatOutboxMessageEditTableTableAnnotationComposer,
     $$ChatOutboxMessageEditTableTableCreateCompanionBuilder,
     $$ChatOutboxMessageEditTableTableUpdateCompanionBuilder,
     (ChatOutboxMessageEditData, $$ChatOutboxMessageEditTableTableReferences),
@@ -10743,10 +11469,15 @@ class $$ChatOutboxMessageEditTableTableTableManager extends RootTableManager<
       : super(TableManagerState(
           db: db,
           table: table,
-          filteringComposer: $$ChatOutboxMessageEditTableTableFilterComposer(
-              ComposerState(db, table)),
-          orderingComposer: $$ChatOutboxMessageEditTableTableOrderingComposer(
-              ComposerState(db, table)),
+          createFilteringComposer: () =>
+              $$ChatOutboxMessageEditTableTableFilterComposer(
+                  $db: db, $table: table),
+          createOrderingComposer: () =>
+              $$ChatOutboxMessageEditTableTableOrderingComposer(
+                  $db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$ChatOutboxMessageEditTableTableAnnotationComposer(
+                  $db: db, $table: table),
           updateCompanionCallback: ({
             Value<int> id = const Value.absent(),
             Value<String> idKey = const Value.absent(),
@@ -10796,6 +11527,7 @@ class $$ChatOutboxMessageEditTableTableTableManager extends RootTableManager<
                       dynamic,
                       dynamic,
                       dynamic,
+                      dynamic,
                       dynamic>>(state) {
                 if (chatId) {
                   state = state.withJoin(
@@ -10827,6 +11559,7 @@ typedef $$ChatOutboxMessageEditTableTableProcessedTableManager
         ChatOutboxMessageEditData,
         $$ChatOutboxMessageEditTableTableFilterComposer,
         $$ChatOutboxMessageEditTableTableOrderingComposer,
+        $$ChatOutboxMessageEditTableTableAnnotationComposer,
         $$ChatOutboxMessageEditTableTableCreateCompanionBuilder,
         $$ChatOutboxMessageEditTableTableUpdateCompanionBuilder,
         (
@@ -10860,8 +11593,7 @@ final class $$ChatOutboxMessageDeleteTableTableReferences
       db.chatsTable.createAlias($_aliasNameGenerator(
           db.chatOutboxMessageDeleteTable.chatId, db.chatsTable.id));
 
-  $$ChatsTableTableProcessedTableManager? get chatId {
-    if ($_item.chatId == null) return null;
+  $$ChatsTableTableProcessedTableManager get chatId {
     final manager = $$ChatsTableTableTableManager($_db, $_db.chatsTable)
         .filter((f) => f.id($_item.chatId!));
     final item = $_typedResult.readTableOrNull(_chatIdTable($_db));
@@ -10872,64 +11604,119 @@ final class $$ChatOutboxMessageDeleteTableTableReferences
 }
 
 class $$ChatOutboxMessageDeleteTableTableFilterComposer
-    extends FilterComposer<_$AppDatabase, $ChatOutboxMessageDeleteTableTable> {
-  $$ChatOutboxMessageDeleteTableTableFilterComposer(super.$state);
-  ColumnFilters<int> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+    extends Composer<_$AppDatabase, $ChatOutboxMessageDeleteTableTable> {
+  $$ChatOutboxMessageDeleteTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get idKey => $state.composableBuilder(
-      column: $state.table.idKey,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<String> get idKey => $composableBuilder(
+      column: $table.idKey, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<int> get sendAttempts => $state.composableBuilder(
-      column: $state.table.sendAttempts,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<int> get sendAttempts => $composableBuilder(
+      column: $table.sendAttempts, builder: (column) => ColumnFilters(column));
 
   $$ChatsTableTableFilterComposer get chatId {
-    final $$ChatsTableTableFilterComposer composer = $state.composerBuilder(
+    final $$ChatsTableTableFilterComposer composer = $composerBuilder(
         composer: this,
         getCurrentColumn: (t) => t.chatId,
-        referencedTable: $state.db.chatsTable,
+        referencedTable: $db.chatsTable,
         getReferencedColumn: (t) => t.id,
-        builder: (joinBuilder, parentComposers) =>
-            $$ChatsTableTableFilterComposer(ComposerState($state.db,
-                $state.db.chatsTable, joinBuilder, parentComposers)));
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ChatsTableTableFilterComposer(
+              $db: $db,
+              $table: $db.chatsTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
     return composer;
   }
 }
 
 class $$ChatOutboxMessageDeleteTableTableOrderingComposer
-    extends OrderingComposer<_$AppDatabase,
-        $ChatOutboxMessageDeleteTableTable> {
-  $$ChatOutboxMessageDeleteTableTableOrderingComposer(super.$state);
-  ColumnOrderings<int> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+    extends Composer<_$AppDatabase, $ChatOutboxMessageDeleteTableTable> {
+  $$ChatOutboxMessageDeleteTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get idKey => $state.composableBuilder(
-      column: $state.table.idKey,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get idKey => $composableBuilder(
+      column: $table.idKey, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<int> get sendAttempts => $state.composableBuilder(
-      column: $state.table.sendAttempts,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<int> get sendAttempts => $composableBuilder(
+      column: $table.sendAttempts,
+      builder: (column) => ColumnOrderings(column));
 
   $$ChatsTableTableOrderingComposer get chatId {
-    final $$ChatsTableTableOrderingComposer composer = $state.composerBuilder(
+    final $$ChatsTableTableOrderingComposer composer = $composerBuilder(
         composer: this,
         getCurrentColumn: (t) => t.chatId,
-        referencedTable: $state.db.chatsTable,
+        referencedTable: $db.chatsTable,
         getReferencedColumn: (t) => t.id,
-        builder: (joinBuilder, parentComposers) =>
-            $$ChatsTableTableOrderingComposer(ComposerState($state.db,
-                $state.db.chatsTable, joinBuilder, parentComposers)));
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ChatsTableTableOrderingComposer(
+              $db: $db,
+              $table: $db.chatsTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$ChatOutboxMessageDeleteTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $ChatOutboxMessageDeleteTableTable> {
+  $$ChatOutboxMessageDeleteTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get idKey =>
+      $composableBuilder(column: $table.idKey, builder: (column) => column);
+
+  GeneratedColumn<int> get sendAttempts => $composableBuilder(
+      column: $table.sendAttempts, builder: (column) => column);
+
+  $$ChatsTableTableAnnotationComposer get chatId {
+    final $$ChatsTableTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.chatId,
+        referencedTable: $db.chatsTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ChatsTableTableAnnotationComposer(
+              $db: $db,
+              $table: $db.chatsTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
     return composer;
   }
 }
@@ -10940,6 +11727,7 @@ class $$ChatOutboxMessageDeleteTableTableTableManager extends RootTableManager<
     ChatOutboxMessageDeleteData,
     $$ChatOutboxMessageDeleteTableTableFilterComposer,
     $$ChatOutboxMessageDeleteTableTableOrderingComposer,
+    $$ChatOutboxMessageDeleteTableTableAnnotationComposer,
     $$ChatOutboxMessageDeleteTableTableCreateCompanionBuilder,
     $$ChatOutboxMessageDeleteTableTableUpdateCompanionBuilder,
     (
@@ -10953,10 +11741,15 @@ class $$ChatOutboxMessageDeleteTableTableTableManager extends RootTableManager<
       : super(TableManagerState(
           db: db,
           table: table,
-          filteringComposer: $$ChatOutboxMessageDeleteTableTableFilterComposer(
-              ComposerState(db, table)),
-          orderingComposer: $$ChatOutboxMessageDeleteTableTableOrderingComposer(
-              ComposerState(db, table)),
+          createFilteringComposer: () =>
+              $$ChatOutboxMessageDeleteTableTableFilterComposer(
+                  $db: db, $table: table),
+          createOrderingComposer: () =>
+              $$ChatOutboxMessageDeleteTableTableOrderingComposer(
+                  $db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$ChatOutboxMessageDeleteTableTableAnnotationComposer(
+                  $db: db, $table: table),
           updateCompanionCallback: ({
             Value<int> id = const Value.absent(),
             Value<String> idKey = const Value.absent(),
@@ -11002,6 +11795,7 @@ class $$ChatOutboxMessageDeleteTableTableTableManager extends RootTableManager<
                       dynamic,
                       dynamic,
                       dynamic,
+                      dynamic,
                       dynamic>>(state) {
                 if (chatId) {
                   state = state.withJoin(
@@ -11034,6 +11828,7 @@ typedef $$ChatOutboxMessageDeleteTableTableProcessedTableManager
         ChatOutboxMessageDeleteData,
         $$ChatOutboxMessageDeleteTableTableFilterComposer,
         $$ChatOutboxMessageDeleteTableTableOrderingComposer,
+        $$ChatOutboxMessageDeleteTableTableAnnotationComposer,
         $$ChatOutboxMessageDeleteTableTableCreateCompanionBuilder,
         $$ChatOutboxMessageDeleteTableTableUpdateCompanionBuilder,
         (
@@ -11064,8 +11859,7 @@ final class $$ChatOutboxReadCursorsTableTableReferences extends BaseReferences<
       db.chatsTable.createAlias($_aliasNameGenerator(
           db.chatOutboxReadCursorsTable.chatId, db.chatsTable.id));
 
-  $$ChatsTableTableProcessedTableManager? get chatId {
-    if ($_item.chatId == null) return null;
+  $$ChatsTableTableProcessedTableManager get chatId {
     final manager = $$ChatsTableTableTableManager($_db, $_db.chatsTable)
         .filter((f) => f.id($_item.chatId!));
     final item = $_typedResult.readTableOrNull(_chatIdTable($_db));
@@ -11076,53 +11870,111 @@ final class $$ChatOutboxReadCursorsTableTableReferences extends BaseReferences<
 }
 
 class $$ChatOutboxReadCursorsTableTableFilterComposer
-    extends FilterComposer<_$AppDatabase, $ChatOutboxReadCursorsTableTable> {
-  $$ChatOutboxReadCursorsTableTableFilterComposer(super.$state);
-  ColumnFilters<int> get timestampUsec => $state.composableBuilder(
-      column: $state.table.timestampUsec,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+    extends Composer<_$AppDatabase, $ChatOutboxReadCursorsTableTable> {
+  $$ChatOutboxReadCursorsTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get timestampUsec => $composableBuilder(
+      column: $table.timestampUsec, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<int> get sendAttempts => $state.composableBuilder(
-      column: $state.table.sendAttempts,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<int> get sendAttempts => $composableBuilder(
+      column: $table.sendAttempts, builder: (column) => ColumnFilters(column));
 
   $$ChatsTableTableFilterComposer get chatId {
-    final $$ChatsTableTableFilterComposer composer = $state.composerBuilder(
+    final $$ChatsTableTableFilterComposer composer = $composerBuilder(
         composer: this,
         getCurrentColumn: (t) => t.chatId,
-        referencedTable: $state.db.chatsTable,
+        referencedTable: $db.chatsTable,
         getReferencedColumn: (t) => t.id,
-        builder: (joinBuilder, parentComposers) =>
-            $$ChatsTableTableFilterComposer(ComposerState($state.db,
-                $state.db.chatsTable, joinBuilder, parentComposers)));
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ChatsTableTableFilterComposer(
+              $db: $db,
+              $table: $db.chatsTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
     return composer;
   }
 }
 
 class $$ChatOutboxReadCursorsTableTableOrderingComposer
-    extends OrderingComposer<_$AppDatabase, $ChatOutboxReadCursorsTableTable> {
-  $$ChatOutboxReadCursorsTableTableOrderingComposer(super.$state);
-  ColumnOrderings<int> get timestampUsec => $state.composableBuilder(
-      column: $state.table.timestampUsec,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+    extends Composer<_$AppDatabase, $ChatOutboxReadCursorsTableTable> {
+  $$ChatOutboxReadCursorsTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get timestampUsec => $composableBuilder(
+      column: $table.timestampUsec,
+      builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<int> get sendAttempts => $state.composableBuilder(
-      column: $state.table.sendAttempts,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<int> get sendAttempts => $composableBuilder(
+      column: $table.sendAttempts,
+      builder: (column) => ColumnOrderings(column));
 
   $$ChatsTableTableOrderingComposer get chatId {
-    final $$ChatsTableTableOrderingComposer composer = $state.composerBuilder(
+    final $$ChatsTableTableOrderingComposer composer = $composerBuilder(
         composer: this,
         getCurrentColumn: (t) => t.chatId,
-        referencedTable: $state.db.chatsTable,
+        referencedTable: $db.chatsTable,
         getReferencedColumn: (t) => t.id,
-        builder: (joinBuilder, parentComposers) =>
-            $$ChatsTableTableOrderingComposer(ComposerState($state.db,
-                $state.db.chatsTable, joinBuilder, parentComposers)));
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ChatsTableTableOrderingComposer(
+              $db: $db,
+              $table: $db.chatsTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$ChatOutboxReadCursorsTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $ChatOutboxReadCursorsTableTable> {
+  $$ChatOutboxReadCursorsTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get timestampUsec => $composableBuilder(
+      column: $table.timestampUsec, builder: (column) => column);
+
+  GeneratedColumn<int> get sendAttempts => $composableBuilder(
+      column: $table.sendAttempts, builder: (column) => column);
+
+  $$ChatsTableTableAnnotationComposer get chatId {
+    final $$ChatsTableTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.chatId,
+        referencedTable: $db.chatsTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ChatsTableTableAnnotationComposer(
+              $db: $db,
+              $table: $db.chatsTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
     return composer;
   }
 }
@@ -11133,6 +11985,7 @@ class $$ChatOutboxReadCursorsTableTableTableManager extends RootTableManager<
     ChatOutboxReadCursorData,
     $$ChatOutboxReadCursorsTableTableFilterComposer,
     $$ChatOutboxReadCursorsTableTableOrderingComposer,
+    $$ChatOutboxReadCursorsTableTableAnnotationComposer,
     $$ChatOutboxReadCursorsTableTableCreateCompanionBuilder,
     $$ChatOutboxReadCursorsTableTableUpdateCompanionBuilder,
     (ChatOutboxReadCursorData, $$ChatOutboxReadCursorsTableTableReferences),
@@ -11143,10 +11996,15 @@ class $$ChatOutboxReadCursorsTableTableTableManager extends RootTableManager<
       : super(TableManagerState(
           db: db,
           table: table,
-          filteringComposer: $$ChatOutboxReadCursorsTableTableFilterComposer(
-              ComposerState(db, table)),
-          orderingComposer: $$ChatOutboxReadCursorsTableTableOrderingComposer(
-              ComposerState(db, table)),
+          createFilteringComposer: () =>
+              $$ChatOutboxReadCursorsTableTableFilterComposer(
+                  $db: db, $table: table),
+          createOrderingComposer: () =>
+              $$ChatOutboxReadCursorsTableTableOrderingComposer(
+                  $db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$ChatOutboxReadCursorsTableTableAnnotationComposer(
+                  $db: db, $table: table),
           updateCompanionCallback: ({
             Value<int> chatId = const Value.absent(),
             Value<int> timestampUsec = const Value.absent(),
@@ -11188,6 +12046,7 @@ class $$ChatOutboxReadCursorsTableTableTableManager extends RootTableManager<
                       dynamic,
                       dynamic,
                       dynamic,
+                      dynamic,
                       dynamic>>(state) {
                 if (chatId) {
                   state = state.withJoin(
@@ -11219,6 +12078,7 @@ typedef $$ChatOutboxReadCursorsTableTableProcessedTableManager
         ChatOutboxReadCursorData,
         $$ChatOutboxReadCursorsTableTableFilterComposer,
         $$ChatOutboxReadCursorsTableTableOrderingComposer,
+        $$ChatOutboxReadCursorsTableTableAnnotationComposer,
         $$ChatOutboxReadCursorsTableTableCreateCompanionBuilder,
         $$ChatOutboxReadCursorsTableTableUpdateCompanionBuilder,
         (ChatOutboxReadCursorData, $$ChatOutboxReadCursorsTableTableReferences),
@@ -11360,169 +12220,366 @@ final class $$SmsConversationsTableTableReferences extends BaseReferences<
 }
 
 class $$SmsConversationsTableTableFilterComposer
-    extends FilterComposer<_$AppDatabase, $SmsConversationsTableTable> {
-  $$SmsConversationsTableTableFilterComposer(super.$state);
-  ColumnFilters<int> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+    extends Composer<_$AppDatabase, $SmsConversationsTableTable> {
+  $$SmsConversationsTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get firstPhoneNumber => $state.composableBuilder(
-      column: $state.table.firstPhoneNumber,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<String> get firstPhoneNumber => $composableBuilder(
+      column: $table.firstPhoneNumber,
+      builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get secondPhoneNumber => $state.composableBuilder(
-      column: $state.table.secondPhoneNumber,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<String> get secondPhoneNumber => $composableBuilder(
+      column: $table.secondPhoneNumber,
+      builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<DateTime> get createdAtRemote => $state.composableBuilder(
-      column: $state.table.createdAtRemote,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<DateTime> get createdAtRemote => $composableBuilder(
+      column: $table.createdAtRemote,
+      builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<DateTime> get updatedAtRemote => $state.composableBuilder(
-      column: $state.table.updatedAtRemote,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<DateTime> get updatedAtRemote => $composableBuilder(
+      column: $table.updatedAtRemote,
+      builder: (column) => ColumnFilters(column));
 
-  ComposableFilter smsMessagesTableRefs(
-      ComposableFilter Function($$SmsMessagesTableTableFilterComposer f) f) {
-    final $$SmsMessagesTableTableFilterComposer composer =
-        $state.composerBuilder(
-            composer: this,
-            getCurrentColumn: (t) => t.id,
-            referencedTable: $state.db.smsMessagesTable,
-            getReferencedColumn: (t) => t.conversationId,
-            builder: (joinBuilder, parentComposers) =>
-                $$SmsMessagesTableTableFilterComposer(ComposerState($state.db,
-                    $state.db.smsMessagesTable, joinBuilder, parentComposers)));
+  Expression<bool> smsMessagesTableRefs(
+      Expression<bool> Function($$SmsMessagesTableTableFilterComposer f) f) {
+    final $$SmsMessagesTableTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.smsMessagesTable,
+        getReferencedColumn: (t) => t.conversationId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$SmsMessagesTableTableFilterComposer(
+              $db: $db,
+              $table: $db.smsMessagesTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
     return f(composer);
   }
 
-  ComposableFilter smsMessageSyncCursorTableRefs(
-      ComposableFilter Function(
+  Expression<bool> smsMessageSyncCursorTableRefs(
+      Expression<bool> Function(
               $$SmsMessageSyncCursorTableTableFilterComposer f)
           f) {
     final $$SmsMessageSyncCursorTableTableFilterComposer composer =
-        $state.composerBuilder(
+        $composerBuilder(
             composer: this,
             getCurrentColumn: (t) => t.id,
-            referencedTable: $state.db.smsMessageSyncCursorTable,
+            referencedTable: $db.smsMessageSyncCursorTable,
             getReferencedColumn: (t) => t.conversationId,
-            builder: (joinBuilder, parentComposers) =>
-                $$SmsMessageSyncCursorTableTableFilterComposer(ComposerState(
-                    $state.db,
-                    $state.db.smsMessageSyncCursorTable,
-                    joinBuilder,
-                    parentComposers)));
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$SmsMessageSyncCursorTableTableFilterComposer(
+                  $db: $db,
+                  $table: $db.smsMessageSyncCursorTable,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
     return f(composer);
   }
 
-  ComposableFilter smsMessageReadCursorTableRefs(
-      ComposableFilter Function(
+  Expression<bool> smsMessageReadCursorTableRefs(
+      Expression<bool> Function(
               $$SmsMessageReadCursorTableTableFilterComposer f)
           f) {
     final $$SmsMessageReadCursorTableTableFilterComposer composer =
-        $state.composerBuilder(
+        $composerBuilder(
             composer: this,
             getCurrentColumn: (t) => t.id,
-            referencedTable: $state.db.smsMessageReadCursorTable,
+            referencedTable: $db.smsMessageReadCursorTable,
             getReferencedColumn: (t) => t.conversationId,
-            builder: (joinBuilder, parentComposers) =>
-                $$SmsMessageReadCursorTableTableFilterComposer(ComposerState(
-                    $state.db,
-                    $state.db.smsMessageReadCursorTable,
-                    joinBuilder,
-                    parentComposers)));
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$SmsMessageReadCursorTableTableFilterComposer(
+                  $db: $db,
+                  $table: $db.smsMessageReadCursorTable,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
     return f(composer);
   }
 
-  ComposableFilter smsOutboxMessagesTableRefs(
-      ComposableFilter Function($$SmsOutboxMessagesTableTableFilterComposer f)
+  Expression<bool> smsOutboxMessagesTableRefs(
+      Expression<bool> Function($$SmsOutboxMessagesTableTableFilterComposer f)
           f) {
     final $$SmsOutboxMessagesTableTableFilterComposer composer =
-        $state.composerBuilder(
+        $composerBuilder(
             composer: this,
             getCurrentColumn: (t) => t.id,
-            referencedTable: $state.db.smsOutboxMessagesTable,
+            referencedTable: $db.smsOutboxMessagesTable,
             getReferencedColumn: (t) => t.conversationId,
-            builder: (joinBuilder, parentComposers) =>
-                $$SmsOutboxMessagesTableTableFilterComposer(ComposerState(
-                    $state.db,
-                    $state.db.smsOutboxMessagesTable,
-                    joinBuilder,
-                    parentComposers)));
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$SmsOutboxMessagesTableTableFilterComposer(
+                  $db: $db,
+                  $table: $db.smsOutboxMessagesTable,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
     return f(composer);
   }
 
-  ComposableFilter smsOutboxMessageDeleteTableRefs(
-      ComposableFilter Function(
+  Expression<bool> smsOutboxMessageDeleteTableRefs(
+      Expression<bool> Function(
               $$SmsOutboxMessageDeleteTableTableFilterComposer f)
           f) {
     final $$SmsOutboxMessageDeleteTableTableFilterComposer composer =
-        $state.composerBuilder(
+        $composerBuilder(
             composer: this,
             getCurrentColumn: (t) => t.id,
-            referencedTable: $state.db.smsOutboxMessageDeleteTable,
+            referencedTable: $db.smsOutboxMessageDeleteTable,
             getReferencedColumn: (t) => t.conversationId,
-            builder: (joinBuilder, parentComposers) =>
-                $$SmsOutboxMessageDeleteTableTableFilterComposer(ComposerState(
-                    $state.db,
-                    $state.db.smsOutboxMessageDeleteTable,
-                    joinBuilder,
-                    parentComposers)));
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$SmsOutboxMessageDeleteTableTableFilterComposer(
+                  $db: $db,
+                  $table: $db.smsOutboxMessageDeleteTable,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
     return f(composer);
   }
 
-  ComposableFilter smsOutboxReadCursorsTableRefs(
-      ComposableFilter Function(
+  Expression<bool> smsOutboxReadCursorsTableRefs(
+      Expression<bool> Function(
               $$SmsOutboxReadCursorsTableTableFilterComposer f)
           f) {
     final $$SmsOutboxReadCursorsTableTableFilterComposer composer =
-        $state.composerBuilder(
+        $composerBuilder(
             composer: this,
             getCurrentColumn: (t) => t.id,
-            referencedTable: $state.db.smsOutboxReadCursorsTable,
+            referencedTable: $db.smsOutboxReadCursorsTable,
             getReferencedColumn: (t) => t.conversationId,
-            builder: (joinBuilder, parentComposers) =>
-                $$SmsOutboxReadCursorsTableTableFilterComposer(ComposerState(
-                    $state.db,
-                    $state.db.smsOutboxReadCursorsTable,
-                    joinBuilder,
-                    parentComposers)));
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$SmsOutboxReadCursorsTableTableFilterComposer(
+                  $db: $db,
+                  $table: $db.smsOutboxReadCursorsTable,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
     return f(composer);
   }
 }
 
 class $$SmsConversationsTableTableOrderingComposer
-    extends OrderingComposer<_$AppDatabase, $SmsConversationsTableTable> {
-  $$SmsConversationsTableTableOrderingComposer(super.$state);
-  ColumnOrderings<int> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+    extends Composer<_$AppDatabase, $SmsConversationsTableTable> {
+  $$SmsConversationsTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get firstPhoneNumber => $state.composableBuilder(
-      column: $state.table.firstPhoneNumber,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get firstPhoneNumber => $composableBuilder(
+      column: $table.firstPhoneNumber,
+      builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get secondPhoneNumber => $state.composableBuilder(
-      column: $state.table.secondPhoneNumber,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get secondPhoneNumber => $composableBuilder(
+      column: $table.secondPhoneNumber,
+      builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<DateTime> get createdAtRemote => $state.composableBuilder(
-      column: $state.table.createdAtRemote,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<DateTime> get createdAtRemote => $composableBuilder(
+      column: $table.createdAtRemote,
+      builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<DateTime> get updatedAtRemote => $state.composableBuilder(
-      column: $state.table.updatedAtRemote,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<DateTime> get updatedAtRemote => $composableBuilder(
+      column: $table.updatedAtRemote,
+      builder: (column) => ColumnOrderings(column));
+}
+
+class $$SmsConversationsTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $SmsConversationsTableTable> {
+  $$SmsConversationsTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get firstPhoneNumber => $composableBuilder(
+      column: $table.firstPhoneNumber, builder: (column) => column);
+
+  GeneratedColumn<String> get secondPhoneNumber => $composableBuilder(
+      column: $table.secondPhoneNumber, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAtRemote => $composableBuilder(
+      column: $table.createdAtRemote, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get updatedAtRemote => $composableBuilder(
+      column: $table.updatedAtRemote, builder: (column) => column);
+
+  Expression<T> smsMessagesTableRefs<T extends Object>(
+      Expression<T> Function($$SmsMessagesTableTableAnnotationComposer a) f) {
+    final $$SmsMessagesTableTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.smsMessagesTable,
+        getReferencedColumn: (t) => t.conversationId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$SmsMessagesTableTableAnnotationComposer(
+              $db: $db,
+              $table: $db.smsMessagesTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+
+  Expression<T> smsMessageSyncCursorTableRefs<T extends Object>(
+      Expression<T> Function(
+              $$SmsMessageSyncCursorTableTableAnnotationComposer a)
+          f) {
+    final $$SmsMessageSyncCursorTableTableAnnotationComposer composer =
+        $composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.id,
+            referencedTable: $db.smsMessageSyncCursorTable,
+            getReferencedColumn: (t) => t.conversationId,
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$SmsMessageSyncCursorTableTableAnnotationComposer(
+                  $db: $db,
+                  $table: $db.smsMessageSyncCursorTable,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
+    return f(composer);
+  }
+
+  Expression<T> smsMessageReadCursorTableRefs<T extends Object>(
+      Expression<T> Function(
+              $$SmsMessageReadCursorTableTableAnnotationComposer a)
+          f) {
+    final $$SmsMessageReadCursorTableTableAnnotationComposer composer =
+        $composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.id,
+            referencedTable: $db.smsMessageReadCursorTable,
+            getReferencedColumn: (t) => t.conversationId,
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$SmsMessageReadCursorTableTableAnnotationComposer(
+                  $db: $db,
+                  $table: $db.smsMessageReadCursorTable,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
+    return f(composer);
+  }
+
+  Expression<T> smsOutboxMessagesTableRefs<T extends Object>(
+      Expression<T> Function($$SmsOutboxMessagesTableTableAnnotationComposer a)
+          f) {
+    final $$SmsOutboxMessagesTableTableAnnotationComposer composer =
+        $composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.id,
+            referencedTable: $db.smsOutboxMessagesTable,
+            getReferencedColumn: (t) => t.conversationId,
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$SmsOutboxMessagesTableTableAnnotationComposer(
+                  $db: $db,
+                  $table: $db.smsOutboxMessagesTable,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
+    return f(composer);
+  }
+
+  Expression<T> smsOutboxMessageDeleteTableRefs<T extends Object>(
+      Expression<T> Function(
+              $$SmsOutboxMessageDeleteTableTableAnnotationComposer a)
+          f) {
+    final $$SmsOutboxMessageDeleteTableTableAnnotationComposer composer =
+        $composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.id,
+            referencedTable: $db.smsOutboxMessageDeleteTable,
+            getReferencedColumn: (t) => t.conversationId,
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$SmsOutboxMessageDeleteTableTableAnnotationComposer(
+                  $db: $db,
+                  $table: $db.smsOutboxMessageDeleteTable,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
+    return f(composer);
+  }
+
+  Expression<T> smsOutboxReadCursorsTableRefs<T extends Object>(
+      Expression<T> Function(
+              $$SmsOutboxReadCursorsTableTableAnnotationComposer a)
+          f) {
+    final $$SmsOutboxReadCursorsTableTableAnnotationComposer composer =
+        $composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.id,
+            referencedTable: $db.smsOutboxReadCursorsTable,
+            getReferencedColumn: (t) => t.conversationId,
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$SmsOutboxReadCursorsTableTableAnnotationComposer(
+                  $db: $db,
+                  $table: $db.smsOutboxReadCursorsTable,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
+    return f(composer);
+  }
 }
 
 class $$SmsConversationsTableTableTableManager extends RootTableManager<
@@ -11531,6 +12588,7 @@ class $$SmsConversationsTableTableTableManager extends RootTableManager<
     SmsConversationData,
     $$SmsConversationsTableTableFilterComposer,
     $$SmsConversationsTableTableOrderingComposer,
+    $$SmsConversationsTableTableAnnotationComposer,
     $$SmsConversationsTableTableCreateCompanionBuilder,
     $$SmsConversationsTableTableUpdateCompanionBuilder,
     (SmsConversationData, $$SmsConversationsTableTableReferences),
@@ -11547,10 +12605,15 @@ class $$SmsConversationsTableTableTableManager extends RootTableManager<
       : super(TableManagerState(
           db: db,
           table: table,
-          filteringComposer: $$SmsConversationsTableTableFilterComposer(
-              ComposerState(db, table)),
-          orderingComposer: $$SmsConversationsTableTableOrderingComposer(
-              ComposerState(db, table)),
+          createFilteringComposer: () =>
+              $$SmsConversationsTableTableFilterComposer(
+                  $db: db, $table: table),
+          createOrderingComposer: () =>
+              $$SmsConversationsTableTableOrderingComposer(
+                  $db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$SmsConversationsTableTableAnnotationComposer(
+                  $db: db, $table: table),
           updateCompanionCallback: ({
             Value<int> id = const Value.absent(),
             Value<String> firstPhoneNumber = const Value.absent(),
@@ -11698,6 +12761,7 @@ typedef $$SmsConversationsTableTableProcessedTableManager
         SmsConversationData,
         $$SmsConversationsTableTableFilterComposer,
         $$SmsConversationsTableTableOrderingComposer,
+        $$SmsConversationsTableTableAnnotationComposer,
         $$SmsConversationsTableTableCreateCompanionBuilder,
         $$SmsConversationsTableTableUpdateCompanionBuilder,
         (SmsConversationData, $$SmsConversationsTableTableReferences),
@@ -11747,8 +12811,7 @@ final class $$SmsMessagesTableTableReferences extends BaseReferences<
       db.smsConversationsTable.createAlias($_aliasNameGenerator(
           db.smsMessagesTable.conversationId, db.smsConversationsTable.id));
 
-  $$SmsConversationsTableTableProcessedTableManager? get conversationId {
-    if ($_item.conversationId == null) return null;
+  $$SmsConversationsTableTableProcessedTableManager get conversationId {
     final manager = $$SmsConversationsTableTableTableManager(
             $_db, $_db.smsConversationsTable)
         .filter((f) => f.id($_item.conversationId!));
@@ -11760,144 +12823,198 @@ final class $$SmsMessagesTableTableReferences extends BaseReferences<
 }
 
 class $$SmsMessagesTableTableFilterComposer
-    extends FilterComposer<_$AppDatabase, $SmsMessagesTableTable> {
-  $$SmsMessagesTableTableFilterComposer(super.$state);
-  ColumnFilters<int> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+    extends Composer<_$AppDatabase, $SmsMessagesTableTable> {
+  $$SmsMessagesTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get idKey => $state.composableBuilder(
-      column: $state.table.idKey,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<String> get idKey => $composableBuilder(
+      column: $table.idKey, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get externalId => $state.composableBuilder(
-      column: $state.table.externalId,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<String> get externalId => $composableBuilder(
+      column: $table.externalId, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get fromPhoneNumber => $state.composableBuilder(
-      column: $state.table.fromPhoneNumber,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<String> get fromPhoneNumber => $composableBuilder(
+      column: $table.fromPhoneNumber,
+      builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get toPhoneNumber => $state.composableBuilder(
-      column: $state.table.toPhoneNumber,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<String> get toPhoneNumber => $composableBuilder(
+      column: $table.toPhoneNumber, builder: (column) => ColumnFilters(column));
 
   ColumnWithTypeConverterFilters<SmsSendingStatusEnum, SmsSendingStatusEnum,
           String>
-      get sendingStatus => $state.composableBuilder(
-          column: $state.table.sendingStatus,
-          builder: (column, joinBuilders) => ColumnWithTypeConverterFilters(
-              column,
-              joinBuilders: joinBuilders));
+      get sendingStatus => $composableBuilder(
+          column: $table.sendingStatus,
+          builder: (column) => ColumnWithTypeConverterFilters(column));
 
-  ColumnFilters<String> get content => $state.composableBuilder(
-      column: $state.table.content,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<String> get content => $composableBuilder(
+      column: $table.content, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<int> get createdAtRemoteUsec => $state.composableBuilder(
-      column: $state.table.createdAtRemoteUsec,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<int> get createdAtRemoteUsec => $composableBuilder(
+      column: $table.createdAtRemoteUsec,
+      builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<int> get updatedAtRemoteUsec => $state.composableBuilder(
-      column: $state.table.updatedAtRemoteUsec,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<int> get updatedAtRemoteUsec => $composableBuilder(
+      column: $table.updatedAtRemoteUsec,
+      builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<int> get deletedAtRemoteUsec => $state.composableBuilder(
-      column: $state.table.deletedAtRemoteUsec,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<int> get deletedAtRemoteUsec => $composableBuilder(
+      column: $table.deletedAtRemoteUsec,
+      builder: (column) => ColumnFilters(column));
 
   $$SmsConversationsTableTableFilterComposer get conversationId {
     final $$SmsConversationsTableTableFilterComposer composer =
-        $state.composerBuilder(
+        $composerBuilder(
             composer: this,
             getCurrentColumn: (t) => t.conversationId,
-            referencedTable: $state.db.smsConversationsTable,
+            referencedTable: $db.smsConversationsTable,
             getReferencedColumn: (t) => t.id,
-            builder: (joinBuilder, parentComposers) =>
-                $$SmsConversationsTableTableFilterComposer(ComposerState(
-                    $state.db,
-                    $state.db.smsConversationsTable,
-                    joinBuilder,
-                    parentComposers)));
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$SmsConversationsTableTableFilterComposer(
+                  $db: $db,
+                  $table: $db.smsConversationsTable,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
     return composer;
   }
 }
 
 class $$SmsMessagesTableTableOrderingComposer
-    extends OrderingComposer<_$AppDatabase, $SmsMessagesTableTable> {
-  $$SmsMessagesTableTableOrderingComposer(super.$state);
-  ColumnOrderings<int> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+    extends Composer<_$AppDatabase, $SmsMessagesTableTable> {
+  $$SmsMessagesTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get idKey => $state.composableBuilder(
-      column: $state.table.idKey,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get idKey => $composableBuilder(
+      column: $table.idKey, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get externalId => $state.composableBuilder(
-      column: $state.table.externalId,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get externalId => $composableBuilder(
+      column: $table.externalId, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get fromPhoneNumber => $state.composableBuilder(
-      column: $state.table.fromPhoneNumber,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get fromPhoneNumber => $composableBuilder(
+      column: $table.fromPhoneNumber,
+      builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get toPhoneNumber => $state.composableBuilder(
-      column: $state.table.toPhoneNumber,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get toPhoneNumber => $composableBuilder(
+      column: $table.toPhoneNumber,
+      builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get sendingStatus => $state.composableBuilder(
-      column: $state.table.sendingStatus,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get sendingStatus => $composableBuilder(
+      column: $table.sendingStatus,
+      builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get content => $state.composableBuilder(
-      column: $state.table.content,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get content => $composableBuilder(
+      column: $table.content, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<int> get createdAtRemoteUsec => $state.composableBuilder(
-      column: $state.table.createdAtRemoteUsec,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<int> get createdAtRemoteUsec => $composableBuilder(
+      column: $table.createdAtRemoteUsec,
+      builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<int> get updatedAtRemoteUsec => $state.composableBuilder(
-      column: $state.table.updatedAtRemoteUsec,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<int> get updatedAtRemoteUsec => $composableBuilder(
+      column: $table.updatedAtRemoteUsec,
+      builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<int> get deletedAtRemoteUsec => $state.composableBuilder(
-      column: $state.table.deletedAtRemoteUsec,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<int> get deletedAtRemoteUsec => $composableBuilder(
+      column: $table.deletedAtRemoteUsec,
+      builder: (column) => ColumnOrderings(column));
 
   $$SmsConversationsTableTableOrderingComposer get conversationId {
     final $$SmsConversationsTableTableOrderingComposer composer =
-        $state.composerBuilder(
+        $composerBuilder(
             composer: this,
             getCurrentColumn: (t) => t.conversationId,
-            referencedTable: $state.db.smsConversationsTable,
+            referencedTable: $db.smsConversationsTable,
             getReferencedColumn: (t) => t.id,
-            builder: (joinBuilder, parentComposers) =>
-                $$SmsConversationsTableTableOrderingComposer(ComposerState(
-                    $state.db,
-                    $state.db.smsConversationsTable,
-                    joinBuilder,
-                    parentComposers)));
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$SmsConversationsTableTableOrderingComposer(
+                  $db: $db,
+                  $table: $db.smsConversationsTable,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
+    return composer;
+  }
+}
+
+class $$SmsMessagesTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $SmsMessagesTableTable> {
+  $$SmsMessagesTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get idKey =>
+      $composableBuilder(column: $table.idKey, builder: (column) => column);
+
+  GeneratedColumn<String> get externalId => $composableBuilder(
+      column: $table.externalId, builder: (column) => column);
+
+  GeneratedColumn<String> get fromPhoneNumber => $composableBuilder(
+      column: $table.fromPhoneNumber, builder: (column) => column);
+
+  GeneratedColumn<String> get toPhoneNumber => $composableBuilder(
+      column: $table.toPhoneNumber, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<SmsSendingStatusEnum, String>
+      get sendingStatus => $composableBuilder(
+          column: $table.sendingStatus, builder: (column) => column);
+
+  GeneratedColumn<String> get content =>
+      $composableBuilder(column: $table.content, builder: (column) => column);
+
+  GeneratedColumn<int> get createdAtRemoteUsec => $composableBuilder(
+      column: $table.createdAtRemoteUsec, builder: (column) => column);
+
+  GeneratedColumn<int> get updatedAtRemoteUsec => $composableBuilder(
+      column: $table.updatedAtRemoteUsec, builder: (column) => column);
+
+  GeneratedColumn<int> get deletedAtRemoteUsec => $composableBuilder(
+      column: $table.deletedAtRemoteUsec, builder: (column) => column);
+
+  $$SmsConversationsTableTableAnnotationComposer get conversationId {
+    final $$SmsConversationsTableTableAnnotationComposer composer =
+        $composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.conversationId,
+            referencedTable: $db.smsConversationsTable,
+            getReferencedColumn: (t) => t.id,
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$SmsConversationsTableTableAnnotationComposer(
+                  $db: $db,
+                  $table: $db.smsConversationsTable,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
     return composer;
   }
 }
@@ -11908,6 +13025,7 @@ class $$SmsMessagesTableTableTableManager extends RootTableManager<
     SmsMessageData,
     $$SmsMessagesTableTableFilterComposer,
     $$SmsMessagesTableTableOrderingComposer,
+    $$SmsMessagesTableTableAnnotationComposer,
     $$SmsMessagesTableTableCreateCompanionBuilder,
     $$SmsMessagesTableTableUpdateCompanionBuilder,
     (SmsMessageData, $$SmsMessagesTableTableReferences),
@@ -11918,10 +13036,12 @@ class $$SmsMessagesTableTableTableManager extends RootTableManager<
       : super(TableManagerState(
           db: db,
           table: table,
-          filteringComposer:
-              $$SmsMessagesTableTableFilterComposer(ComposerState(db, table)),
-          orderingComposer:
-              $$SmsMessagesTableTableOrderingComposer(ComposerState(db, table)),
+          createFilteringComposer: () =>
+              $$SmsMessagesTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$SmsMessagesTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$SmsMessagesTableTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback: ({
             Value<int> id = const Value.absent(),
             Value<String> idKey = const Value.absent(),
@@ -11995,6 +13115,7 @@ class $$SmsMessagesTableTableTableManager extends RootTableManager<
                       dynamic,
                       dynamic,
                       dynamic,
+                      dynamic,
                       dynamic>>(state) {
                 if (conversationId) {
                   state = state.withJoin(
@@ -12024,6 +13145,7 @@ typedef $$SmsMessagesTableTableProcessedTableManager = ProcessedTableManager<
     SmsMessageData,
     $$SmsMessagesTableTableFilterComposer,
     $$SmsMessagesTableTableOrderingComposer,
+    $$SmsMessagesTableTableAnnotationComposer,
     $$SmsMessagesTableTableCreateCompanionBuilder,
     $$SmsMessagesTableTableUpdateCompanionBuilder,
     (SmsMessageData, $$SmsMessagesTableTableReferences),
@@ -12054,8 +13176,7 @@ final class $$SmsMessageSyncCursorTableTableReferences extends BaseReferences<
           db.smsMessageSyncCursorTable.conversationId,
           db.smsConversationsTable.id));
 
-  $$SmsConversationsTableTableProcessedTableManager? get conversationId {
-    if ($_item.conversationId == null) return null;
+  $$SmsConversationsTableTableProcessedTableManager get conversationId {
     final manager = $$SmsConversationsTableTableTableManager(
             $_db, $_db.smsConversationsTable)
         .filter((f) => f.id($_item.conversationId!));
@@ -12067,64 +13188,117 @@ final class $$SmsMessageSyncCursorTableTableReferences extends BaseReferences<
 }
 
 class $$SmsMessageSyncCursorTableTableFilterComposer
-    extends FilterComposer<_$AppDatabase, $SmsMessageSyncCursorTableTable> {
-  $$SmsMessageSyncCursorTableTableFilterComposer(super.$state);
+    extends Composer<_$AppDatabase, $SmsMessageSyncCursorTableTable> {
+  $$SmsMessageSyncCursorTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
   ColumnWithTypeConverterFilters<SmsSyncCursorTypeEnum, SmsSyncCursorTypeEnum,
           String>
-      get cursorType => $state.composableBuilder(
-          column: $state.table.cursorType,
-          builder: (column, joinBuilders) => ColumnWithTypeConverterFilters(
-              column,
-              joinBuilders: joinBuilders));
+      get cursorType => $composableBuilder(
+          column: $table.cursorType,
+          builder: (column) => ColumnWithTypeConverterFilters(column));
 
-  ColumnFilters<int> get timestampUsec => $state.composableBuilder(
-      column: $state.table.timestampUsec,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<int> get timestampUsec => $composableBuilder(
+      column: $table.timestampUsec, builder: (column) => ColumnFilters(column));
 
   $$SmsConversationsTableTableFilterComposer get conversationId {
     final $$SmsConversationsTableTableFilterComposer composer =
-        $state.composerBuilder(
+        $composerBuilder(
             composer: this,
             getCurrentColumn: (t) => t.conversationId,
-            referencedTable: $state.db.smsConversationsTable,
+            referencedTable: $db.smsConversationsTable,
             getReferencedColumn: (t) => t.id,
-            builder: (joinBuilder, parentComposers) =>
-                $$SmsConversationsTableTableFilterComposer(ComposerState(
-                    $state.db,
-                    $state.db.smsConversationsTable,
-                    joinBuilder,
-                    parentComposers)));
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$SmsConversationsTableTableFilterComposer(
+                  $db: $db,
+                  $table: $db.smsConversationsTable,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
     return composer;
   }
 }
 
 class $$SmsMessageSyncCursorTableTableOrderingComposer
-    extends OrderingComposer<_$AppDatabase, $SmsMessageSyncCursorTableTable> {
-  $$SmsMessageSyncCursorTableTableOrderingComposer(super.$state);
-  ColumnOrderings<String> get cursorType => $state.composableBuilder(
-      column: $state.table.cursorType,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+    extends Composer<_$AppDatabase, $SmsMessageSyncCursorTableTable> {
+  $$SmsMessageSyncCursorTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get cursorType => $composableBuilder(
+      column: $table.cursorType, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<int> get timestampUsec => $state.composableBuilder(
-      column: $state.table.timestampUsec,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<int> get timestampUsec => $composableBuilder(
+      column: $table.timestampUsec,
+      builder: (column) => ColumnOrderings(column));
 
   $$SmsConversationsTableTableOrderingComposer get conversationId {
     final $$SmsConversationsTableTableOrderingComposer composer =
-        $state.composerBuilder(
+        $composerBuilder(
             composer: this,
             getCurrentColumn: (t) => t.conversationId,
-            referencedTable: $state.db.smsConversationsTable,
+            referencedTable: $db.smsConversationsTable,
             getReferencedColumn: (t) => t.id,
-            builder: (joinBuilder, parentComposers) =>
-                $$SmsConversationsTableTableOrderingComposer(ComposerState(
-                    $state.db,
-                    $state.db.smsConversationsTable,
-                    joinBuilder,
-                    parentComposers)));
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$SmsConversationsTableTableOrderingComposer(
+                  $db: $db,
+                  $table: $db.smsConversationsTable,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
+    return composer;
+  }
+}
+
+class $$SmsMessageSyncCursorTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $SmsMessageSyncCursorTableTable> {
+  $$SmsMessageSyncCursorTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumnWithTypeConverter<SmsSyncCursorTypeEnum, String>
+      get cursorType => $composableBuilder(
+          column: $table.cursorType, builder: (column) => column);
+
+  GeneratedColumn<int> get timestampUsec => $composableBuilder(
+      column: $table.timestampUsec, builder: (column) => column);
+
+  $$SmsConversationsTableTableAnnotationComposer get conversationId {
+    final $$SmsConversationsTableTableAnnotationComposer composer =
+        $composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.conversationId,
+            referencedTable: $db.smsConversationsTable,
+            getReferencedColumn: (t) => t.id,
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$SmsConversationsTableTableAnnotationComposer(
+                  $db: $db,
+                  $table: $db.smsConversationsTable,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
     return composer;
   }
 }
@@ -12135,6 +13309,7 @@ class $$SmsMessageSyncCursorTableTableTableManager extends RootTableManager<
     SmsMessageSyncCursorData,
     $$SmsMessageSyncCursorTableTableFilterComposer,
     $$SmsMessageSyncCursorTableTableOrderingComposer,
+    $$SmsMessageSyncCursorTableTableAnnotationComposer,
     $$SmsMessageSyncCursorTableTableCreateCompanionBuilder,
     $$SmsMessageSyncCursorTableTableUpdateCompanionBuilder,
     (SmsMessageSyncCursorData, $$SmsMessageSyncCursorTableTableReferences),
@@ -12145,10 +13320,15 @@ class $$SmsMessageSyncCursorTableTableTableManager extends RootTableManager<
       : super(TableManagerState(
           db: db,
           table: table,
-          filteringComposer: $$SmsMessageSyncCursorTableTableFilterComposer(
-              ComposerState(db, table)),
-          orderingComposer: $$SmsMessageSyncCursorTableTableOrderingComposer(
-              ComposerState(db, table)),
+          createFilteringComposer: () =>
+              $$SmsMessageSyncCursorTableTableFilterComposer(
+                  $db: db, $table: table),
+          createOrderingComposer: () =>
+              $$SmsMessageSyncCursorTableTableOrderingComposer(
+                  $db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$SmsMessageSyncCursorTableTableAnnotationComposer(
+                  $db: db, $table: table),
           updateCompanionCallback: ({
             Value<int> conversationId = const Value.absent(),
             Value<SmsSyncCursorTypeEnum> cursorType = const Value.absent(),
@@ -12194,6 +13374,7 @@ class $$SmsMessageSyncCursorTableTableTableManager extends RootTableManager<
                       dynamic,
                       dynamic,
                       dynamic,
+                      dynamic,
                       dynamic>>(state) {
                 if (conversationId) {
                   state = state.withJoin(
@@ -12224,6 +13405,7 @@ typedef $$SmsMessageSyncCursorTableTableProcessedTableManager
         SmsMessageSyncCursorData,
         $$SmsMessageSyncCursorTableTableFilterComposer,
         $$SmsMessageSyncCursorTableTableOrderingComposer,
+        $$SmsMessageSyncCursorTableTableAnnotationComposer,
         $$SmsMessageSyncCursorTableTableCreateCompanionBuilder,
         $$SmsMessageSyncCursorTableTableUpdateCompanionBuilder,
         (SmsMessageSyncCursorData, $$SmsMessageSyncCursorTableTableReferences),
@@ -12254,8 +13436,7 @@ final class $$SmsMessageReadCursorTableTableReferences extends BaseReferences<
           db.smsMessageReadCursorTable.conversationId,
           db.smsConversationsTable.id));
 
-  $$SmsConversationsTableTableProcessedTableManager? get conversationId {
-    if ($_item.conversationId == null) return null;
+  $$SmsConversationsTableTableProcessedTableManager get conversationId {
     final manager = $$SmsConversationsTableTableTableManager(
             $_db, $_db.smsConversationsTable)
         .filter((f) => f.id($_item.conversationId!));
@@ -12267,61 +13448,113 @@ final class $$SmsMessageReadCursorTableTableReferences extends BaseReferences<
 }
 
 class $$SmsMessageReadCursorTableTableFilterComposer
-    extends FilterComposer<_$AppDatabase, $SmsMessageReadCursorTableTable> {
-  $$SmsMessageReadCursorTableTableFilterComposer(super.$state);
-  ColumnFilters<String> get userId => $state.composableBuilder(
-      column: $state.table.userId,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+    extends Composer<_$AppDatabase, $SmsMessageReadCursorTableTable> {
+  $$SmsMessageReadCursorTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get userId => $composableBuilder(
+      column: $table.userId, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<int> get timestampUsec => $state.composableBuilder(
-      column: $state.table.timestampUsec,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<int> get timestampUsec => $composableBuilder(
+      column: $table.timestampUsec, builder: (column) => ColumnFilters(column));
 
   $$SmsConversationsTableTableFilterComposer get conversationId {
     final $$SmsConversationsTableTableFilterComposer composer =
-        $state.composerBuilder(
+        $composerBuilder(
             composer: this,
             getCurrentColumn: (t) => t.conversationId,
-            referencedTable: $state.db.smsConversationsTable,
+            referencedTable: $db.smsConversationsTable,
             getReferencedColumn: (t) => t.id,
-            builder: (joinBuilder, parentComposers) =>
-                $$SmsConversationsTableTableFilterComposer(ComposerState(
-                    $state.db,
-                    $state.db.smsConversationsTable,
-                    joinBuilder,
-                    parentComposers)));
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$SmsConversationsTableTableFilterComposer(
+                  $db: $db,
+                  $table: $db.smsConversationsTable,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
     return composer;
   }
 }
 
 class $$SmsMessageReadCursorTableTableOrderingComposer
-    extends OrderingComposer<_$AppDatabase, $SmsMessageReadCursorTableTable> {
-  $$SmsMessageReadCursorTableTableOrderingComposer(super.$state);
-  ColumnOrderings<String> get userId => $state.composableBuilder(
-      column: $state.table.userId,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+    extends Composer<_$AppDatabase, $SmsMessageReadCursorTableTable> {
+  $$SmsMessageReadCursorTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get userId => $composableBuilder(
+      column: $table.userId, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<int> get timestampUsec => $state.composableBuilder(
-      column: $state.table.timestampUsec,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<int> get timestampUsec => $composableBuilder(
+      column: $table.timestampUsec,
+      builder: (column) => ColumnOrderings(column));
 
   $$SmsConversationsTableTableOrderingComposer get conversationId {
     final $$SmsConversationsTableTableOrderingComposer composer =
-        $state.composerBuilder(
+        $composerBuilder(
             composer: this,
             getCurrentColumn: (t) => t.conversationId,
-            referencedTable: $state.db.smsConversationsTable,
+            referencedTable: $db.smsConversationsTable,
             getReferencedColumn: (t) => t.id,
-            builder: (joinBuilder, parentComposers) =>
-                $$SmsConversationsTableTableOrderingComposer(ComposerState(
-                    $state.db,
-                    $state.db.smsConversationsTable,
-                    joinBuilder,
-                    parentComposers)));
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$SmsConversationsTableTableOrderingComposer(
+                  $db: $db,
+                  $table: $db.smsConversationsTable,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
+    return composer;
+  }
+}
+
+class $$SmsMessageReadCursorTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $SmsMessageReadCursorTableTable> {
+  $$SmsMessageReadCursorTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get userId =>
+      $composableBuilder(column: $table.userId, builder: (column) => column);
+
+  GeneratedColumn<int> get timestampUsec => $composableBuilder(
+      column: $table.timestampUsec, builder: (column) => column);
+
+  $$SmsConversationsTableTableAnnotationComposer get conversationId {
+    final $$SmsConversationsTableTableAnnotationComposer composer =
+        $composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.conversationId,
+            referencedTable: $db.smsConversationsTable,
+            getReferencedColumn: (t) => t.id,
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$SmsConversationsTableTableAnnotationComposer(
+                  $db: $db,
+                  $table: $db.smsConversationsTable,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
     return composer;
   }
 }
@@ -12332,6 +13565,7 @@ class $$SmsMessageReadCursorTableTableTableManager extends RootTableManager<
     SmsMessageReadCursorData,
     $$SmsMessageReadCursorTableTableFilterComposer,
     $$SmsMessageReadCursorTableTableOrderingComposer,
+    $$SmsMessageReadCursorTableTableAnnotationComposer,
     $$SmsMessageReadCursorTableTableCreateCompanionBuilder,
     $$SmsMessageReadCursorTableTableUpdateCompanionBuilder,
     (SmsMessageReadCursorData, $$SmsMessageReadCursorTableTableReferences),
@@ -12342,10 +13576,15 @@ class $$SmsMessageReadCursorTableTableTableManager extends RootTableManager<
       : super(TableManagerState(
           db: db,
           table: table,
-          filteringComposer: $$SmsMessageReadCursorTableTableFilterComposer(
-              ComposerState(db, table)),
-          orderingComposer: $$SmsMessageReadCursorTableTableOrderingComposer(
-              ComposerState(db, table)),
+          createFilteringComposer: () =>
+              $$SmsMessageReadCursorTableTableFilterComposer(
+                  $db: db, $table: table),
+          createOrderingComposer: () =>
+              $$SmsMessageReadCursorTableTableOrderingComposer(
+                  $db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$SmsMessageReadCursorTableTableAnnotationComposer(
+                  $db: db, $table: table),
           updateCompanionCallback: ({
             Value<int> conversationId = const Value.absent(),
             Value<String> userId = const Value.absent(),
@@ -12391,6 +13630,7 @@ class $$SmsMessageReadCursorTableTableTableManager extends RootTableManager<
                       dynamic,
                       dynamic,
                       dynamic,
+                      dynamic,
                       dynamic>>(state) {
                 if (conversationId) {
                   state = state.withJoin(
@@ -12421,6 +13661,7 @@ typedef $$SmsMessageReadCursorTableTableProcessedTableManager
         SmsMessageReadCursorData,
         $$SmsMessageReadCursorTableTableFilterComposer,
         $$SmsMessageReadCursorTableTableOrderingComposer,
+        $$SmsMessageReadCursorTableTableAnnotationComposer,
         $$SmsMessageReadCursorTableTableCreateCompanionBuilder,
         $$SmsMessageReadCursorTableTableUpdateCompanionBuilder,
         (SmsMessageReadCursorData, $$SmsMessageReadCursorTableTableReferences),
@@ -12472,101 +13713,152 @@ final class $$SmsOutboxMessagesTableTableReferences extends BaseReferences<
 }
 
 class $$SmsOutboxMessagesTableTableFilterComposer
-    extends FilterComposer<_$AppDatabase, $SmsOutboxMessagesTableTable> {
-  $$SmsOutboxMessagesTableTableFilterComposer(super.$state);
-  ColumnFilters<String> get idKey => $state.composableBuilder(
-      column: $state.table.idKey,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+    extends Composer<_$AppDatabase, $SmsOutboxMessagesTableTable> {
+  $$SmsOutboxMessagesTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get idKey => $composableBuilder(
+      column: $table.idKey, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get fromPhoneNumber => $state.composableBuilder(
-      column: $state.table.fromPhoneNumber,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<String> get fromPhoneNumber => $composableBuilder(
+      column: $table.fromPhoneNumber,
+      builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get toPhoneNumber => $state.composableBuilder(
-      column: $state.table.toPhoneNumber,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<String> get toPhoneNumber => $composableBuilder(
+      column: $table.toPhoneNumber, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get recepientId => $state.composableBuilder(
-      column: $state.table.recepientId,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<String> get recepientId => $composableBuilder(
+      column: $table.recepientId, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get content => $state.composableBuilder(
-      column: $state.table.content,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<String> get content => $composableBuilder(
+      column: $table.content, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<int> get sendAttempts => $state.composableBuilder(
-      column: $state.table.sendAttempts,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<int> get sendAttempts => $composableBuilder(
+      column: $table.sendAttempts, builder: (column) => ColumnFilters(column));
 
   $$SmsConversationsTableTableFilterComposer get conversationId {
     final $$SmsConversationsTableTableFilterComposer composer =
-        $state.composerBuilder(
+        $composerBuilder(
             composer: this,
             getCurrentColumn: (t) => t.conversationId,
-            referencedTable: $state.db.smsConversationsTable,
+            referencedTable: $db.smsConversationsTable,
             getReferencedColumn: (t) => t.id,
-            builder: (joinBuilder, parentComposers) =>
-                $$SmsConversationsTableTableFilterComposer(ComposerState(
-                    $state.db,
-                    $state.db.smsConversationsTable,
-                    joinBuilder,
-                    parentComposers)));
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$SmsConversationsTableTableFilterComposer(
+                  $db: $db,
+                  $table: $db.smsConversationsTable,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
     return composer;
   }
 }
 
 class $$SmsOutboxMessagesTableTableOrderingComposer
-    extends OrderingComposer<_$AppDatabase, $SmsOutboxMessagesTableTable> {
-  $$SmsOutboxMessagesTableTableOrderingComposer(super.$state);
-  ColumnOrderings<String> get idKey => $state.composableBuilder(
-      column: $state.table.idKey,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+    extends Composer<_$AppDatabase, $SmsOutboxMessagesTableTable> {
+  $$SmsOutboxMessagesTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get idKey => $composableBuilder(
+      column: $table.idKey, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get fromPhoneNumber => $state.composableBuilder(
-      column: $state.table.fromPhoneNumber,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get fromPhoneNumber => $composableBuilder(
+      column: $table.fromPhoneNumber,
+      builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get toPhoneNumber => $state.composableBuilder(
-      column: $state.table.toPhoneNumber,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get toPhoneNumber => $composableBuilder(
+      column: $table.toPhoneNumber,
+      builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get recepientId => $state.composableBuilder(
-      column: $state.table.recepientId,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get recepientId => $composableBuilder(
+      column: $table.recepientId, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get content => $state.composableBuilder(
-      column: $state.table.content,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get content => $composableBuilder(
+      column: $table.content, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<int> get sendAttempts => $state.composableBuilder(
-      column: $state.table.sendAttempts,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<int> get sendAttempts => $composableBuilder(
+      column: $table.sendAttempts,
+      builder: (column) => ColumnOrderings(column));
 
   $$SmsConversationsTableTableOrderingComposer get conversationId {
     final $$SmsConversationsTableTableOrderingComposer composer =
-        $state.composerBuilder(
+        $composerBuilder(
             composer: this,
             getCurrentColumn: (t) => t.conversationId,
-            referencedTable: $state.db.smsConversationsTable,
+            referencedTable: $db.smsConversationsTable,
             getReferencedColumn: (t) => t.id,
-            builder: (joinBuilder, parentComposers) =>
-                $$SmsConversationsTableTableOrderingComposer(ComposerState(
-                    $state.db,
-                    $state.db.smsConversationsTable,
-                    joinBuilder,
-                    parentComposers)));
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$SmsConversationsTableTableOrderingComposer(
+                  $db: $db,
+                  $table: $db.smsConversationsTable,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
+    return composer;
+  }
+}
+
+class $$SmsOutboxMessagesTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $SmsOutboxMessagesTableTable> {
+  $$SmsOutboxMessagesTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get idKey =>
+      $composableBuilder(column: $table.idKey, builder: (column) => column);
+
+  GeneratedColumn<String> get fromPhoneNumber => $composableBuilder(
+      column: $table.fromPhoneNumber, builder: (column) => column);
+
+  GeneratedColumn<String> get toPhoneNumber => $composableBuilder(
+      column: $table.toPhoneNumber, builder: (column) => column);
+
+  GeneratedColumn<String> get recepientId => $composableBuilder(
+      column: $table.recepientId, builder: (column) => column);
+
+  GeneratedColumn<String> get content =>
+      $composableBuilder(column: $table.content, builder: (column) => column);
+
+  GeneratedColumn<int> get sendAttempts => $composableBuilder(
+      column: $table.sendAttempts, builder: (column) => column);
+
+  $$SmsConversationsTableTableAnnotationComposer get conversationId {
+    final $$SmsConversationsTableTableAnnotationComposer composer =
+        $composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.conversationId,
+            referencedTable: $db.smsConversationsTable,
+            getReferencedColumn: (t) => t.id,
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$SmsConversationsTableTableAnnotationComposer(
+                  $db: $db,
+                  $table: $db.smsConversationsTable,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
     return composer;
   }
 }
@@ -12577,6 +13869,7 @@ class $$SmsOutboxMessagesTableTableTableManager extends RootTableManager<
     SmsOutboxMessageData,
     $$SmsOutboxMessagesTableTableFilterComposer,
     $$SmsOutboxMessagesTableTableOrderingComposer,
+    $$SmsOutboxMessagesTableTableAnnotationComposer,
     $$SmsOutboxMessagesTableTableCreateCompanionBuilder,
     $$SmsOutboxMessagesTableTableUpdateCompanionBuilder,
     (SmsOutboxMessageData, $$SmsOutboxMessagesTableTableReferences),
@@ -12587,10 +13880,15 @@ class $$SmsOutboxMessagesTableTableTableManager extends RootTableManager<
       : super(TableManagerState(
           db: db,
           table: table,
-          filteringComposer: $$SmsOutboxMessagesTableTableFilterComposer(
-              ComposerState(db, table)),
-          orderingComposer: $$SmsOutboxMessagesTableTableOrderingComposer(
-              ComposerState(db, table)),
+          createFilteringComposer: () =>
+              $$SmsOutboxMessagesTableTableFilterComposer(
+                  $db: db, $table: table),
+          createOrderingComposer: () =>
+              $$SmsOutboxMessagesTableTableOrderingComposer(
+                  $db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$SmsOutboxMessagesTableTableAnnotationComposer(
+                  $db: db, $table: table),
           updateCompanionCallback: ({
             Value<String> idKey = const Value.absent(),
             Value<int?> conversationId = const Value.absent(),
@@ -12652,6 +13950,7 @@ class $$SmsOutboxMessagesTableTableTableManager extends RootTableManager<
                       dynamic,
                       dynamic,
                       dynamic,
+                      dynamic,
                       dynamic>>(state) {
                 if (conversationId) {
                   state = state.withJoin(
@@ -12682,6 +13981,7 @@ typedef $$SmsOutboxMessagesTableTableProcessedTableManager
         SmsOutboxMessageData,
         $$SmsOutboxMessagesTableTableFilterComposer,
         $$SmsOutboxMessagesTableTableOrderingComposer,
+        $$SmsOutboxMessagesTableTableAnnotationComposer,
         $$SmsOutboxMessagesTableTableCreateCompanionBuilder,
         $$SmsOutboxMessagesTableTableUpdateCompanionBuilder,
         (SmsOutboxMessageData, $$SmsOutboxMessagesTableTableReferences),
@@ -12714,8 +14014,7 @@ final class $$SmsOutboxMessageDeleteTableTableReferences extends BaseReferences<
           db.smsOutboxMessageDeleteTable.conversationId,
           db.smsConversationsTable.id));
 
-  $$SmsConversationsTableTableProcessedTableManager? get conversationId {
-    if ($_item.conversationId == null) return null;
+  $$SmsConversationsTableTableProcessedTableManager get conversationId {
     final manager = $$SmsConversationsTableTableTableManager(
             $_db, $_db.smsConversationsTable)
         .filter((f) => f.id($_item.conversationId!));
@@ -12727,71 +14026,122 @@ final class $$SmsOutboxMessageDeleteTableTableReferences extends BaseReferences<
 }
 
 class $$SmsOutboxMessageDeleteTableTableFilterComposer
-    extends FilterComposer<_$AppDatabase, $SmsOutboxMessageDeleteTableTable> {
-  $$SmsOutboxMessageDeleteTableTableFilterComposer(super.$state);
-  ColumnFilters<int> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+    extends Composer<_$AppDatabase, $SmsOutboxMessageDeleteTableTable> {
+  $$SmsOutboxMessageDeleteTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get idKey => $state.composableBuilder(
-      column: $state.table.idKey,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<String> get idKey => $composableBuilder(
+      column: $table.idKey, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<int> get sendAttempts => $state.composableBuilder(
-      column: $state.table.sendAttempts,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<int> get sendAttempts => $composableBuilder(
+      column: $table.sendAttempts, builder: (column) => ColumnFilters(column));
 
   $$SmsConversationsTableTableFilterComposer get conversationId {
     final $$SmsConversationsTableTableFilterComposer composer =
-        $state.composerBuilder(
+        $composerBuilder(
             composer: this,
             getCurrentColumn: (t) => t.conversationId,
-            referencedTable: $state.db.smsConversationsTable,
+            referencedTable: $db.smsConversationsTable,
             getReferencedColumn: (t) => t.id,
-            builder: (joinBuilder, parentComposers) =>
-                $$SmsConversationsTableTableFilterComposer(ComposerState(
-                    $state.db,
-                    $state.db.smsConversationsTable,
-                    joinBuilder,
-                    parentComposers)));
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$SmsConversationsTableTableFilterComposer(
+                  $db: $db,
+                  $table: $db.smsConversationsTable,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
     return composer;
   }
 }
 
 class $$SmsOutboxMessageDeleteTableTableOrderingComposer
-    extends OrderingComposer<_$AppDatabase, $SmsOutboxMessageDeleteTableTable> {
-  $$SmsOutboxMessageDeleteTableTableOrderingComposer(super.$state);
-  ColumnOrderings<int> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+    extends Composer<_$AppDatabase, $SmsOutboxMessageDeleteTableTable> {
+  $$SmsOutboxMessageDeleteTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get idKey => $state.composableBuilder(
-      column: $state.table.idKey,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get idKey => $composableBuilder(
+      column: $table.idKey, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<int> get sendAttempts => $state.composableBuilder(
-      column: $state.table.sendAttempts,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<int> get sendAttempts => $composableBuilder(
+      column: $table.sendAttempts,
+      builder: (column) => ColumnOrderings(column));
 
   $$SmsConversationsTableTableOrderingComposer get conversationId {
     final $$SmsConversationsTableTableOrderingComposer composer =
-        $state.composerBuilder(
+        $composerBuilder(
             composer: this,
             getCurrentColumn: (t) => t.conversationId,
-            referencedTable: $state.db.smsConversationsTable,
+            referencedTable: $db.smsConversationsTable,
             getReferencedColumn: (t) => t.id,
-            builder: (joinBuilder, parentComposers) =>
-                $$SmsConversationsTableTableOrderingComposer(ComposerState(
-                    $state.db,
-                    $state.db.smsConversationsTable,
-                    joinBuilder,
-                    parentComposers)));
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$SmsConversationsTableTableOrderingComposer(
+                  $db: $db,
+                  $table: $db.smsConversationsTable,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
+    return composer;
+  }
+}
+
+class $$SmsOutboxMessageDeleteTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $SmsOutboxMessageDeleteTableTable> {
+  $$SmsOutboxMessageDeleteTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get idKey =>
+      $composableBuilder(column: $table.idKey, builder: (column) => column);
+
+  GeneratedColumn<int> get sendAttempts => $composableBuilder(
+      column: $table.sendAttempts, builder: (column) => column);
+
+  $$SmsConversationsTableTableAnnotationComposer get conversationId {
+    final $$SmsConversationsTableTableAnnotationComposer composer =
+        $composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.conversationId,
+            referencedTable: $db.smsConversationsTable,
+            getReferencedColumn: (t) => t.id,
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$SmsConversationsTableTableAnnotationComposer(
+                  $db: $db,
+                  $table: $db.smsConversationsTable,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
     return composer;
   }
 }
@@ -12802,6 +14152,7 @@ class $$SmsOutboxMessageDeleteTableTableTableManager extends RootTableManager<
     SmsOutboxMessageDeleteData,
     $$SmsOutboxMessageDeleteTableTableFilterComposer,
     $$SmsOutboxMessageDeleteTableTableOrderingComposer,
+    $$SmsOutboxMessageDeleteTableTableAnnotationComposer,
     $$SmsOutboxMessageDeleteTableTableCreateCompanionBuilder,
     $$SmsOutboxMessageDeleteTableTableUpdateCompanionBuilder,
     (SmsOutboxMessageDeleteData, $$SmsOutboxMessageDeleteTableTableReferences),
@@ -12812,10 +14163,15 @@ class $$SmsOutboxMessageDeleteTableTableTableManager extends RootTableManager<
       : super(TableManagerState(
           db: db,
           table: table,
-          filteringComposer: $$SmsOutboxMessageDeleteTableTableFilterComposer(
-              ComposerState(db, table)),
-          orderingComposer: $$SmsOutboxMessageDeleteTableTableOrderingComposer(
-              ComposerState(db, table)),
+          createFilteringComposer: () =>
+              $$SmsOutboxMessageDeleteTableTableFilterComposer(
+                  $db: db, $table: table),
+          createOrderingComposer: () =>
+              $$SmsOutboxMessageDeleteTableTableOrderingComposer(
+                  $db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$SmsOutboxMessageDeleteTableTableAnnotationComposer(
+                  $db: db, $table: table),
           updateCompanionCallback: ({
             Value<int> id = const Value.absent(),
             Value<String> idKey = const Value.absent(),
@@ -12861,6 +14217,7 @@ class $$SmsOutboxMessageDeleteTableTableTableManager extends RootTableManager<
                       dynamic,
                       dynamic,
                       dynamic,
+                      dynamic,
                       dynamic>>(state) {
                 if (conversationId) {
                   state = state.withJoin(
@@ -12893,6 +14250,7 @@ typedef $$SmsOutboxMessageDeleteTableTableProcessedTableManager
         SmsOutboxMessageDeleteData,
         $$SmsOutboxMessageDeleteTableTableFilterComposer,
         $$SmsOutboxMessageDeleteTableTableOrderingComposer,
+        $$SmsOutboxMessageDeleteTableTableAnnotationComposer,
         $$SmsOutboxMessageDeleteTableTableCreateCompanionBuilder,
         $$SmsOutboxMessageDeleteTableTableUpdateCompanionBuilder,
         (
@@ -12924,8 +14282,7 @@ final class $$SmsOutboxReadCursorsTableTableReferences extends BaseReferences<
           db.smsOutboxReadCursorsTable.conversationId,
           db.smsConversationsTable.id));
 
-  $$SmsConversationsTableTableProcessedTableManager? get conversationId {
-    if ($_item.conversationId == null) return null;
+  $$SmsConversationsTableTableProcessedTableManager get conversationId {
     final manager = $$SmsConversationsTableTableTableManager(
             $_db, $_db.smsConversationsTable)
         .filter((f) => f.id($_item.conversationId!));
@@ -12937,61 +14294,114 @@ final class $$SmsOutboxReadCursorsTableTableReferences extends BaseReferences<
 }
 
 class $$SmsOutboxReadCursorsTableTableFilterComposer
-    extends FilterComposer<_$AppDatabase, $SmsOutboxReadCursorsTableTable> {
-  $$SmsOutboxReadCursorsTableTableFilterComposer(super.$state);
-  ColumnFilters<int> get timestampUsec => $state.composableBuilder(
-      column: $state.table.timestampUsec,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+    extends Composer<_$AppDatabase, $SmsOutboxReadCursorsTableTable> {
+  $$SmsOutboxReadCursorsTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get timestampUsec => $composableBuilder(
+      column: $table.timestampUsec, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<int> get sendAttempts => $state.composableBuilder(
-      column: $state.table.sendAttempts,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<int> get sendAttempts => $composableBuilder(
+      column: $table.sendAttempts, builder: (column) => ColumnFilters(column));
 
   $$SmsConversationsTableTableFilterComposer get conversationId {
     final $$SmsConversationsTableTableFilterComposer composer =
-        $state.composerBuilder(
+        $composerBuilder(
             composer: this,
             getCurrentColumn: (t) => t.conversationId,
-            referencedTable: $state.db.smsConversationsTable,
+            referencedTable: $db.smsConversationsTable,
             getReferencedColumn: (t) => t.id,
-            builder: (joinBuilder, parentComposers) =>
-                $$SmsConversationsTableTableFilterComposer(ComposerState(
-                    $state.db,
-                    $state.db.smsConversationsTable,
-                    joinBuilder,
-                    parentComposers)));
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$SmsConversationsTableTableFilterComposer(
+                  $db: $db,
+                  $table: $db.smsConversationsTable,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
     return composer;
   }
 }
 
 class $$SmsOutboxReadCursorsTableTableOrderingComposer
-    extends OrderingComposer<_$AppDatabase, $SmsOutboxReadCursorsTableTable> {
-  $$SmsOutboxReadCursorsTableTableOrderingComposer(super.$state);
-  ColumnOrderings<int> get timestampUsec => $state.composableBuilder(
-      column: $state.table.timestampUsec,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+    extends Composer<_$AppDatabase, $SmsOutboxReadCursorsTableTable> {
+  $$SmsOutboxReadCursorsTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get timestampUsec => $composableBuilder(
+      column: $table.timestampUsec,
+      builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<int> get sendAttempts => $state.composableBuilder(
-      column: $state.table.sendAttempts,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<int> get sendAttempts => $composableBuilder(
+      column: $table.sendAttempts,
+      builder: (column) => ColumnOrderings(column));
 
   $$SmsConversationsTableTableOrderingComposer get conversationId {
     final $$SmsConversationsTableTableOrderingComposer composer =
-        $state.composerBuilder(
+        $composerBuilder(
             composer: this,
             getCurrentColumn: (t) => t.conversationId,
-            referencedTable: $state.db.smsConversationsTable,
+            referencedTable: $db.smsConversationsTable,
             getReferencedColumn: (t) => t.id,
-            builder: (joinBuilder, parentComposers) =>
-                $$SmsConversationsTableTableOrderingComposer(ComposerState(
-                    $state.db,
-                    $state.db.smsConversationsTable,
-                    joinBuilder,
-                    parentComposers)));
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$SmsConversationsTableTableOrderingComposer(
+                  $db: $db,
+                  $table: $db.smsConversationsTable,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
+    return composer;
+  }
+}
+
+class $$SmsOutboxReadCursorsTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $SmsOutboxReadCursorsTableTable> {
+  $$SmsOutboxReadCursorsTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get timestampUsec => $composableBuilder(
+      column: $table.timestampUsec, builder: (column) => column);
+
+  GeneratedColumn<int> get sendAttempts => $composableBuilder(
+      column: $table.sendAttempts, builder: (column) => column);
+
+  $$SmsConversationsTableTableAnnotationComposer get conversationId {
+    final $$SmsConversationsTableTableAnnotationComposer composer =
+        $composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.conversationId,
+            referencedTable: $db.smsConversationsTable,
+            getReferencedColumn: (t) => t.id,
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$SmsConversationsTableTableAnnotationComposer(
+                  $db: $db,
+                  $table: $db.smsConversationsTable,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
     return composer;
   }
 }
@@ -13002,6 +14412,7 @@ class $$SmsOutboxReadCursorsTableTableTableManager extends RootTableManager<
     SmsOutboxReadCursorData,
     $$SmsOutboxReadCursorsTableTableFilterComposer,
     $$SmsOutboxReadCursorsTableTableOrderingComposer,
+    $$SmsOutboxReadCursorsTableTableAnnotationComposer,
     $$SmsOutboxReadCursorsTableTableCreateCompanionBuilder,
     $$SmsOutboxReadCursorsTableTableUpdateCompanionBuilder,
     (SmsOutboxReadCursorData, $$SmsOutboxReadCursorsTableTableReferences),
@@ -13012,10 +14423,15 @@ class $$SmsOutboxReadCursorsTableTableTableManager extends RootTableManager<
       : super(TableManagerState(
           db: db,
           table: table,
-          filteringComposer: $$SmsOutboxReadCursorsTableTableFilterComposer(
-              ComposerState(db, table)),
-          orderingComposer: $$SmsOutboxReadCursorsTableTableOrderingComposer(
-              ComposerState(db, table)),
+          createFilteringComposer: () =>
+              $$SmsOutboxReadCursorsTableTableFilterComposer(
+                  $db: db, $table: table),
+          createOrderingComposer: () =>
+              $$SmsOutboxReadCursorsTableTableOrderingComposer(
+                  $db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$SmsOutboxReadCursorsTableTableAnnotationComposer(
+                  $db: db, $table: table),
           updateCompanionCallback: ({
             Value<int> conversationId = const Value.absent(),
             Value<int> timestampUsec = const Value.absent(),
@@ -13057,6 +14473,7 @@ class $$SmsOutboxReadCursorsTableTableTableManager extends RootTableManager<
                       dynamic,
                       dynamic,
                       dynamic,
+                      dynamic,
                       dynamic>>(state) {
                 if (conversationId) {
                   state = state.withJoin(
@@ -13087,6 +14504,7 @@ typedef $$SmsOutboxReadCursorsTableTableProcessedTableManager
         SmsOutboxReadCursorData,
         $$SmsOutboxReadCursorsTableTableFilterComposer,
         $$SmsOutboxReadCursorsTableTableOrderingComposer,
+        $$SmsOutboxReadCursorsTableTableAnnotationComposer,
         $$SmsOutboxReadCursorsTableTableCreateCompanionBuilder,
         $$SmsOutboxReadCursorsTableTableUpdateCompanionBuilder,
         (SmsOutboxReadCursorData, $$SmsOutboxReadCursorsTableTableReferences),
@@ -13104,21 +14522,42 @@ typedef $$UserSmsNumbersTableTableUpdateCompanionBuilder
 });
 
 class $$UserSmsNumbersTableTableFilterComposer
-    extends FilterComposer<_$AppDatabase, $UserSmsNumbersTableTable> {
-  $$UserSmsNumbersTableTableFilterComposer(super.$state);
-  ColumnFilters<String> get phoneNumber => $state.composableBuilder(
-      column: $state.table.phoneNumber,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+    extends Composer<_$AppDatabase, $UserSmsNumbersTableTable> {
+  $$UserSmsNumbersTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get phoneNumber => $composableBuilder(
+      column: $table.phoneNumber, builder: (column) => ColumnFilters(column));
 }
 
 class $$UserSmsNumbersTableTableOrderingComposer
-    extends OrderingComposer<_$AppDatabase, $UserSmsNumbersTableTable> {
-  $$UserSmsNumbersTableTableOrderingComposer(super.$state);
-  ColumnOrderings<String> get phoneNumber => $state.composableBuilder(
-      column: $state.table.phoneNumber,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+    extends Composer<_$AppDatabase, $UserSmsNumbersTableTable> {
+  $$UserSmsNumbersTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get phoneNumber => $composableBuilder(
+      column: $table.phoneNumber, builder: (column) => ColumnOrderings(column));
+}
+
+class $$UserSmsNumbersTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $UserSmsNumbersTableTable> {
+  $$UserSmsNumbersTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get phoneNumber => $composableBuilder(
+      column: $table.phoneNumber, builder: (column) => column);
 }
 
 class $$UserSmsNumbersTableTableTableManager extends RootTableManager<
@@ -13127,6 +14566,7 @@ class $$UserSmsNumbersTableTableTableManager extends RootTableManager<
     UserSmsNumberData,
     $$UserSmsNumbersTableTableFilterComposer,
     $$UserSmsNumbersTableTableOrderingComposer,
+    $$UserSmsNumbersTableTableAnnotationComposer,
     $$UserSmsNumbersTableTableCreateCompanionBuilder,
     $$UserSmsNumbersTableTableUpdateCompanionBuilder,
     (
@@ -13141,10 +14581,14 @@ class $$UserSmsNumbersTableTableTableManager extends RootTableManager<
       : super(TableManagerState(
           db: db,
           table: table,
-          filteringComposer: $$UserSmsNumbersTableTableFilterComposer(
-              ComposerState(db, table)),
-          orderingComposer: $$UserSmsNumbersTableTableOrderingComposer(
-              ComposerState(db, table)),
+          createFilteringComposer: () =>
+              $$UserSmsNumbersTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$UserSmsNumbersTableTableOrderingComposer(
+                  $db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$UserSmsNumbersTableTableAnnotationComposer(
+                  $db: db, $table: table),
           updateCompanionCallback: ({
             Value<String> phoneNumber = const Value.absent(),
             Value<int> rowid = const Value.absent(),
@@ -13174,6 +14618,7 @@ typedef $$UserSmsNumbersTableTableProcessedTableManager = ProcessedTableManager<
     UserSmsNumberData,
     $$UserSmsNumbersTableTableFilterComposer,
     $$UserSmsNumbersTableTableOrderingComposer,
+    $$UserSmsNumbersTableTableAnnotationComposer,
     $$UserSmsNumbersTableTableCreateCompanionBuilder,
     $$UserSmsNumbersTableTableUpdateCompanionBuilder,
     (
@@ -13205,73 +14650,91 @@ typedef $$ActiveMessageNotificationsTableTableUpdateCompanionBuilder
 });
 
 class $$ActiveMessageNotificationsTableTableFilterComposer
-    extends FilterComposer<_$AppDatabase,
-        $ActiveMessageNotificationsTableTable> {
-  $$ActiveMessageNotificationsTableTableFilterComposer(super.$state);
-  ColumnFilters<String> get notificationId => $state.composableBuilder(
-      column: $state.table.notificationId,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+    extends Composer<_$AppDatabase, $ActiveMessageNotificationsTableTable> {
+  $$ActiveMessageNotificationsTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get notificationId => $composableBuilder(
+      column: $table.notificationId,
+      builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<int> get messageId => $state.composableBuilder(
-      column: $state.table.messageId,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<int> get messageId => $composableBuilder(
+      column: $table.messageId, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<int> get conversationId => $state.composableBuilder(
-      column: $state.table.conversationId,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<int> get conversationId => $composableBuilder(
+      column: $table.conversationId,
+      builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get title => $state.composableBuilder(
-      column: $state.table.title,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<String> get title => $composableBuilder(
+      column: $table.title, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get body => $state.composableBuilder(
-      column: $state.table.body,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<String> get body => $composableBuilder(
+      column: $table.body, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<DateTime> get time => $state.composableBuilder(
-      column: $state.table.time,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<DateTime> get time => $composableBuilder(
+      column: $table.time, builder: (column) => ColumnFilters(column));
 }
 
 class $$ActiveMessageNotificationsTableTableOrderingComposer
-    extends OrderingComposer<_$AppDatabase,
-        $ActiveMessageNotificationsTableTable> {
-  $$ActiveMessageNotificationsTableTableOrderingComposer(super.$state);
-  ColumnOrderings<String> get notificationId => $state.composableBuilder(
-      column: $state.table.notificationId,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+    extends Composer<_$AppDatabase, $ActiveMessageNotificationsTableTable> {
+  $$ActiveMessageNotificationsTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get notificationId => $composableBuilder(
+      column: $table.notificationId,
+      builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<int> get messageId => $state.composableBuilder(
-      column: $state.table.messageId,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<int> get messageId => $composableBuilder(
+      column: $table.messageId, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<int> get conversationId => $state.composableBuilder(
-      column: $state.table.conversationId,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<int> get conversationId => $composableBuilder(
+      column: $table.conversationId,
+      builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get title => $state.composableBuilder(
-      column: $state.table.title,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get title => $composableBuilder(
+      column: $table.title, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get body => $state.composableBuilder(
-      column: $state.table.body,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get body => $composableBuilder(
+      column: $table.body, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<DateTime> get time => $state.composableBuilder(
-      column: $state.table.time,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<DateTime> get time => $composableBuilder(
+      column: $table.time, builder: (column) => ColumnOrderings(column));
+}
+
+class $$ActiveMessageNotificationsTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $ActiveMessageNotificationsTableTable> {
+  $$ActiveMessageNotificationsTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get notificationId => $composableBuilder(
+      column: $table.notificationId, builder: (column) => column);
+
+  GeneratedColumn<int> get messageId =>
+      $composableBuilder(column: $table.messageId, builder: (column) => column);
+
+  GeneratedColumn<int> get conversationId => $composableBuilder(
+      column: $table.conversationId, builder: (column) => column);
+
+  GeneratedColumn<String> get title =>
+      $composableBuilder(column: $table.title, builder: (column) => column);
+
+  GeneratedColumn<String> get body =>
+      $composableBuilder(column: $table.body, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get time =>
+      $composableBuilder(column: $table.time, builder: (column) => column);
 }
 
 class $$ActiveMessageNotificationsTableTableTableManager
@@ -13281,6 +14744,7 @@ class $$ActiveMessageNotificationsTableTableTableManager
         ActiveMessageNotificationData,
         $$ActiveMessageNotificationsTableTableFilterComposer,
         $$ActiveMessageNotificationsTableTableOrderingComposer,
+        $$ActiveMessageNotificationsTableTableAnnotationComposer,
         $$ActiveMessageNotificationsTableTableCreateCompanionBuilder,
         $$ActiveMessageNotificationsTableTableUpdateCompanionBuilder,
         (
@@ -13295,12 +14759,15 @@ class $$ActiveMessageNotificationsTableTableTableManager
       : super(TableManagerState(
           db: db,
           table: table,
-          filteringComposer:
+          createFilteringComposer: () =>
               $$ActiveMessageNotificationsTableTableFilterComposer(
-                  ComposerState(db, table)),
-          orderingComposer:
+                  $db: db, $table: table),
+          createOrderingComposer: () =>
               $$ActiveMessageNotificationsTableTableOrderingComposer(
-                  ComposerState(db, table)),
+                  $db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$ActiveMessageNotificationsTableTableAnnotationComposer(
+                  $db: db, $table: table),
           updateCompanionCallback: ({
             Value<String> notificationId = const Value.absent(),
             Value<int> messageId = const Value.absent(),
@@ -13351,6 +14818,7 @@ typedef $$ActiveMessageNotificationsTableTableProcessedTableManager
         ActiveMessageNotificationData,
         $$ActiveMessageNotificationsTableTableFilterComposer,
         $$ActiveMessageNotificationsTableTableOrderingComposer,
+        $$ActiveMessageNotificationsTableTableAnnotationComposer,
         $$ActiveMessageNotificationsTableTableCreateCompanionBuilder,
         $$ActiveMessageNotificationsTableTableUpdateCompanionBuilder,
         (

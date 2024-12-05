@@ -24,8 +24,12 @@ mixin _$ErrorResponse {
   String? get message => throw _privateConstructorUsedError;
   ErrorDetail? get details => throw _privateConstructorUsedError;
 
+  /// Serializes this ErrorResponse to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of ErrorResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $ErrorResponseCopyWith<ErrorResponse> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -51,6 +55,8 @@ class _$ErrorResponseCopyWithImpl<$Res, $Val extends ErrorResponse>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of ErrorResponse
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -74,6 +80,8 @@ class _$ErrorResponseCopyWithImpl<$Res, $Val extends ErrorResponse>
     ) as $Val);
   }
 
+  /// Create a copy of ErrorResponse
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $ErrorDetailCopyWith<$Res>? get details {
@@ -109,6 +117,8 @@ class __$$ErrorResponseImplCopyWithImpl<$Res>
       _$ErrorResponseImpl _value, $Res Function(_$ErrorResponseImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of ErrorResponse
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -164,11 +174,13 @@ class _$ErrorResponseImpl implements _ErrorResponse {
             (identical(other.details, details) || other.details == details));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, code, message, details);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ErrorResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$ErrorResponseImplCopyWith<_$ErrorResponseImpl> get copyWith =>
@@ -197,8 +209,11 @@ abstract class _ErrorResponse implements ErrorResponse {
   String? get message;
   @override
   ErrorDetail? get details;
+
+  /// Create a copy of ErrorResponse
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ErrorResponseImplCopyWith<_$ErrorResponseImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -212,8 +227,12 @@ mixin _$ErrorDetail {
   String? get path => throw _privateConstructorUsedError;
   String get reason => throw _privateConstructorUsedError;
 
+  /// Serializes this ErrorDetail to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of ErrorDetail
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $ErrorDetailCopyWith<ErrorDetail> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -237,6 +256,8 @@ class _$ErrorDetailCopyWithImpl<$Res, $Val extends ErrorDetail>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of ErrorDetail
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -275,6 +296,8 @@ class __$$ErrorDetailImplCopyWithImpl<$Res>
       _$ErrorDetailImpl _value, $Res Function(_$ErrorDetailImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of ErrorDetail
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -322,11 +345,13 @@ class _$ErrorDetailImpl implements _ErrorDetail {
             (identical(other.reason, reason) || other.reason == reason));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, path, reason);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ErrorDetail
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$ErrorDetailImplCopyWith<_$ErrorDetailImpl> get copyWith =>
@@ -351,8 +376,11 @@ abstract class _ErrorDetail implements ErrorDetail {
   String? get path;
   @override
   String get reason;
+
+  /// Create a copy of ErrorDetail
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ErrorDetailImplCopyWith<_$ErrorDetailImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

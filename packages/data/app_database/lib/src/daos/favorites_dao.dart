@@ -3,34 +3,34 @@ import 'package:drift/drift.dart';
 
 part 'favorites_dao.g.dart';
 
-class FavoriteDataWithContactPhoneDataAndContactData {
-  FavoriteDataWithContactPhoneDataAndContactData(this.favoriteData, this.contactPhoneData, this.contactData);
+class FavoriteWithContactData {
+  FavoriteWithContactData(
+    this.favoriteData,
+    this.contactPhoneData,
+    this.contactData,
+    this.contactPhones,
+    this.contactEmails,
+  );
 
   final FavoriteData favoriteData;
   final ContactPhoneData contactPhoneData;
   final ContactData contactData;
+  final Set<ContactPhoneData> contactPhones;
+  final Set<ContactEmailData> contactEmails;
 }
 
-@DriftAccessor(tables: [
-  FavoritesTable,
-  ContactPhonesTable,
-  ContactsTable,
-])
+@DriftAccessor(tables: [FavoritesTable, ContactsTable, ContactPhonesTable, ContactEmailsTable])
 class FavoritesDao extends DatabaseAccessor<AppDatabase> with _$FavoritesDaoMixin {
   FavoritesDao(super.db);
 
-  Stream<List<FavoriteDataWithContactPhoneDataAndContactData>> watchFavoritesExt() {
+  Stream<List<FavoriteWithContactData>> watchFavoritesExt() {
     final q = (select(favoritesTable)..orderBy([(t) => OrderingTerm.asc(t.position)])).join([
-      leftOuterJoin(contactPhonesTable, contactPhonesTable.id.equalsExp(favoritesTable.contactPhoneId)),
-      leftOuterJoin(contactsTable, contactsTable.id.equalsExp(contactPhonesTable.contactId)),
+      leftOuterJoin(_sourcePhone, favoritesTable.contactPhoneId.equalsExp(_sourcePhone.id)),
+      leftOuterJoin(contactsTable, contactsTable.id.equalsExp(_sourcePhone.contactId)),
+      leftOuterJoin(contactEmailsTable, contactEmailsTable.contactId.equalsExp(contactsTable.id)),
+      leftOuterJoin(_contactPhones, _contactPhones.contactId.equalsExp(contactsTable.id)),
     ]);
-    return q.watch().map((rows) => rows
-        .map((row) => FavoriteDataWithContactPhoneDataAndContactData(
-              row.readTable(favoritesTable),
-              row.readTable(contactPhonesTable),
-              row.readTable(contactsTable),
-            ))
-        .toList());
+    return q.watch().map(_rowsToData);
   }
 
   Future<int> insertFavoriteByContactPhoneId(int contactPhoneId) => customInsert(
@@ -43,4 +43,30 @@ class FavoritesDao extends DatabaseAccessor<AppDatabase> with _$FavoritesDaoMixi
       (delete(favoritesTable)..where((t) => t.contactPhoneId.equals(contactPhoneId))).go();
 
   Future<int> deleteFavorite(Insertable<FavoriteData> favoriteData) => delete(favoritesTable).delete(favoriteData);
+
+  List<FavoriteWithContactData> _rowsToData(Iterable<TypedResult> rows) {
+    Map<int, FavoriteWithContactData> favorites = {};
+
+    for (final row in rows) {
+      final favoriteData = row.readTable(favoritesTable);
+      final contactData = row.readTable(contactsTable);
+      final sourcePhone = row.readTable(_sourcePhone);
+
+      final contactPhone = row.readTableOrNull(_contactPhones);
+      final contactEmail = row.readTableOrNull(contactEmailsTable);
+
+      favorites.putIfAbsent(
+        favoriteData.id,
+        () => FavoriteWithContactData(favoriteData, sourcePhone, contactData, {}, {}),
+      );
+
+      if (contactPhone != null) favorites[favoriteData.id]!.contactPhones.add(contactPhone);
+      if (contactEmail != null) favorites[favoriteData.id]!.contactEmails.add(contactEmail);
+    }
+
+    return favorites.values.toList();
+  }
+
+  get _sourcePhone => alias(contactPhonesTable, 'source_phone');
+  get _contactPhones => alias(contactPhonesTable, 'contact_phones');
 }

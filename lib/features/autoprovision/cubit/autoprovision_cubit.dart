@@ -6,10 +6,14 @@ import 'package:webtrit_api/webtrit_api.dart';
 
 import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/data/data.dart';
+import 'package:webtrit_phone/mappers/mappers.dart';
+import 'package:webtrit_phone/models/models.dart';
 
 import '../models/models.dart';
 
 part 'autoprovision_state.dart';
+
+// TODO(Serdun + Vlad): Move exception text to localization resources for better maintainability.
 
 final _logger = Logger('AutoprovisionCubit');
 
@@ -23,11 +27,13 @@ class AutoprovisionCubit extends Cubit<AutoprovisionState> {
   final _appType = PlatformInfo().appType;
 
   WebtritApiClient _apiClient(String coreUrl, String tenantId) {
-    return WebtritApiClient(
-      Uri.parse(coreUrl),
-      tenantId,
-      connectionTimeout: kApiClientConnectionTimeout,
-    );
+    return WebtritApiClient(Uri.parse(coreUrl), tenantId, connectionTimeout: kApiClientConnectionTimeout);
+  }
+
+  Future<WebtritSystemInfo> _retrieveSystemInfo(WebtritApiClient webtritApiClient) async {
+    final apiSystemInfo = await webtritApiClient.getSystemInfo();
+    final systemInfo = systemInfoFromApi(apiSystemInfo);
+    return systemInfo;
   }
 
   Future<void> _processToken() async {
@@ -45,10 +51,29 @@ class AutoprovisionCubit extends Cubit<AutoprovisionState> {
     );
 
     try {
-      final result = await _apiClient(coreUrl, config.tenantId).createSessionAutoProvision(credentials);
-      final token = result.token;
-      final userId = result.userId;
-      final tenantId = result.tenantId ?? config.tenantId;
+      final apiClient = _apiClient(coreUrl, config.tenantId);
+
+      final systemInfo = await _retrieveSystemInfo(apiClient);
+      final coreInfo = systemInfo.core;
+      final isCoreSupported = coreInfo.verifyVersionStr(config.coreVersionConstraint);
+
+      if (isCoreSupported == false) {
+        final notSupportedCoreException = Exception('Core version is not supported. Please update the core.');
+        emit(AutoprovisionState.error(notSupportedCoreException));
+        return;
+      }
+
+      final session = await apiClient.createSessionAutoProvision(credentials);
+      final token = session.token;
+      final userId = session.userId;
+      final tenantId = session.tenantId ?? config.tenantId;
+
+      if (userId == null) {
+        final notSupportedCoreException =
+            Exception('User ID is required for proper auto provisioning. Please verify the core version.');
+        emit(AutoprovisionState.error(notSupportedCoreException));
+        return;
+      }
 
       if (config.oldToken != null) {
         await _apiClient(oldCoreUrl, config.oldTenantId).deleteSession(config.oldToken!).catchError((e) {
@@ -56,8 +81,8 @@ class AutoprovisionCubit extends Cubit<AutoprovisionState> {
         });
       }
 
-      _logger.info('processToken success: $token, $tenantId');
-      emit(AutoprovisionState.sessionCreated(token, userId, coreUrl, tenantId));
+      _logger.info('processToken success: $systemInfo, $session');
+      emit(AutoprovisionState.sessionCreated(systemInfo, token, userId, coreUrl, tenantId));
     } catch (e) {
       _logger.warning('processToken error: $e');
       emit(AutoprovisionState.error(e));

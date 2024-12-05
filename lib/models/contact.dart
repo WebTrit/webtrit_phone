@@ -16,7 +16,7 @@ class Contact extends Equatable {
   Contact({
     required this.id,
     required this.sourceType,
-    required this.sourceId,
+    this.sourceId,
     this.registered,
     this.userRegistered,
     this.isCurrentUser,
@@ -31,7 +31,7 @@ class Contact extends Equatable {
 
   final ContactId id;
   final ContactSourceType sourceType;
-  final String sourceId;
+  final String? sourceId;
 
   /// SIP Registered status
   final bool? registered;
@@ -84,8 +84,9 @@ class Contact extends Equatable {
   /// - `name` if it is not null
   /// - `extension` if `name` is null and `extension` is not null
   /// - `mobileNumber` if both `name` and `extension` are null
-  /// - `sourceId` if all of the above are null
-  late final String displayTitle = maybeName ?? extension ?? mobileNumber ?? sourceId;
+  /// - `sourceId` if none of the above exist
+  /// - `id` as a fallback if all fields are absent
+  late final String displayTitle = maybeName ?? extension ?? mobileNumber ?? sourceId ?? id.toString();
 
   @override
   List<Object?> get props => [

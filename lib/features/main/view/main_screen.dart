@@ -20,30 +20,27 @@ class MainScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final scaffold = Scaffold(body: body, bottomNavigationBar: bottomNavigationBar);
 
-    return BlocListener<MainBloc, MainState>(
+    return BlocListener<MainBloc, MainBlocState>(
       listener: (context, state) async {
-        final error = state.error;
-        final updateStoreViewUrl = state.updateStoreViewUrl;
-        if (error != null) {
-          final appBloc = context.read<AppBloc>();
-          final mainBloc = context.read<MainBloc>();
-          final result = await CompatibilityIssueDialog.show(
+        final coreVersionState = state.coreVersionState;
+
+        if (coreVersionState is Incompatible) {
+          final canUpdateApp = coreVersionState.updateStoreUrl != null;
+
+          CompatibilityIssueDialog.show(
             context,
-            error: error,
-            onUpdatePressed: updateStoreViewUrl == null
-                ? null
-                : () {
-                    context.read<MainBloc>().add(MainAppUpdated(updateStoreViewUrl));
-                  },
+            coreVersionState.currentVersion,
+            coreVersionState.supportedConstraint,
+            onUpdatePressed: canUpdateApp
+                ? () {
+                    context.read<MainBloc>().add(MainBlocAppUpdatePressed(coreVersionState.updateStoreUrl!));
+                  }
+                : null,
+            onLogoutPressed: () {
+              Navigator.of(context).maybePop();
+              context.read<AppBloc>().add(const AppLogouted());
+            },
           );
-          switch (result) {
-            case CompatibilityIssueDialogResult.logout:
-              appBloc.add(const AppLogouted());
-              break;
-            default:
-              mainBloc.add(const MainCompatibilityVerified());
-              break;
-          }
         }
       },
       child: scaffold,

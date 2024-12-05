@@ -1,38 +1,42 @@
 import 'package:flutter/material.dart';
 
-import 'package:webtrit_phone/app/core_version.dart';
+import 'package:pub_semver/pub_semver.dart';
+
 import 'package:webtrit_phone/l10n/l10n.dart';
 
-enum CompatibilityIssueDialogResult {
-  verify,
-  logout,
-}
-
 class CompatibilityIssueDialog extends StatelessWidget {
-  static Future<CompatibilityIssueDialogResult?> show(
-    BuildContext context, {
-    required Object error,
+  static Future show(
+    BuildContext context,
+    Version currentVersion,
+    VersionConstraint supportedConstraint, {
     VoidCallback? onUpdatePressed,
+    VoidCallback? onLogoutPressed,
   }) {
-    return showDialog<CompatibilityIssueDialogResult>(
+    return showDialog(
       context: context,
       builder: (context) {
         return CompatibilityIssueDialog._(
-          error: error,
+          currentVersion,
+          supportedConstraint,
           onUpdatePressed: onUpdatePressed,
+          onLogoutPressed: onLogoutPressed,
         );
       },
       barrierDismissible: false,
     );
   }
 
-  const CompatibilityIssueDialog._({
-    required this.error,
+  const CompatibilityIssueDialog._(
+    this.currentVersion,
+    this.supportedConstraint, {
     this.onUpdatePressed,
+    this.onLogoutPressed,
   });
 
-  final Object error;
+  final Version currentVersion;
+  final VersionConstraint supportedConstraint;
   final VoidCallback? onUpdatePressed;
+  final VoidCallback? onLogoutPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +46,10 @@ class CompatibilityIssueDialog extends StatelessWidget {
         textAlign: TextAlign.center,
       ),
       content: Text(
-        _errorL10n(context),
+        context.l10n.main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError(
+          currentVersion.toString(),
+          supportedConstraint.toString(),
+        ),
       ),
       actions: [
         if (onUpdatePressed != null)
@@ -51,30 +58,10 @@ class CompatibilityIssueDialog extends StatelessWidget {
             child: Text(context.l10n.main_CompatibilityIssueDialogActions_update),
           ),
         TextButton(
-          child: Text(context.l10n.main_CompatibilityIssueDialogActions_verify),
-          onPressed: () {
-            Navigator.of(context).pop(CompatibilityIssueDialogResult.verify);
-          },
-        ),
-        TextButton(
+          onPressed: onLogoutPressed,
           child: Text(context.l10n.main_CompatibilityIssueDialogActions_logout),
-          onPressed: () {
-            Navigator.of(context).pop(CompatibilityIssueDialogResult.logout);
-          },
         ),
       ],
     );
-  }
-
-  String _errorL10n(BuildContext context) {
-    final error = this.error;
-    if (error is CoreVersionUnsupportedException) {
-      return context.l10n.main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError(
-        error.actual.toString(),
-        error.supportedConstraint.toString(),
-      );
-    } else {
-      return error.toString();
-    }
   }
 }

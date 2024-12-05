@@ -20,6 +20,7 @@ mixin _$AppLogined {
   String get tenantId => throw _privateConstructorUsedError;
   String get token => throw _privateConstructorUsedError;
   String get userId => throw _privateConstructorUsedError;
+  WebtritSystemInfo get systemInfo => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -29,7 +30,8 @@ class _$AppLoginedImpl implements _AppLogined {
       {required this.coreUrl,
       required this.tenantId,
       required this.token,
-      required this.userId});
+      required this.userId,
+      required this.systemInfo});
 
   @override
   final String coreUrl;
@@ -39,10 +41,12 @@ class _$AppLoginedImpl implements _AppLogined {
   final String token;
   @override
   final String userId;
+  @override
+  final WebtritSystemInfo systemInfo;
 
   @override
   String toString() {
-    return 'AppLogined(coreUrl: $coreUrl, tenantId: $tenantId, token: $token, userId: $userId)';
+    return 'AppLogined(coreUrl: $coreUrl, tenantId: $tenantId, token: $token, userId: $userId, systemInfo: $systemInfo)';
   }
 
   @override
@@ -54,12 +58,14 @@ class _$AppLoginedImpl implements _AppLogined {
             (identical(other.tenantId, tenantId) ||
                 other.tenantId == tenantId) &&
             (identical(other.token, token) || other.token == token) &&
-            (identical(other.userId, userId) || other.userId == userId));
+            (identical(other.userId, userId) || other.userId == userId) &&
+            (identical(other.systemInfo, systemInfo) ||
+                other.systemInfo == systemInfo));
   }
 
   @override
   int get hashCode =>
-      Object.hash(runtimeType, coreUrl, tenantId, token, userId);
+      Object.hash(runtimeType, coreUrl, tenantId, token, userId, systemInfo);
 }
 
 abstract class _AppLogined implements AppLogined {
@@ -67,7 +73,8 @@ abstract class _AppLogined implements AppLogined {
       {required final String coreUrl,
       required final String tenantId,
       required final String token,
-      required final String userId}) = _$AppLoginedImpl;
+      required final String userId,
+      required final WebtritSystemInfo systemInfo}) = _$AppLoginedImpl;
 
   @override
   String get coreUrl;
@@ -77,33 +84,48 @@ abstract class _AppLogined implements AppLogined {
   String get token;
   @override
   String get userId;
+  @override
+  WebtritSystemInfo get systemInfo;
 }
 
 /// @nodoc
-mixin _$AppLogouted {}
+mixin _$AppLogouted {
+  bool get checkTokenForError => throw _privateConstructorUsedError;
+}
 
 /// @nodoc
 
 class _$AppLogoutedImpl implements _AppLogouted {
-  const _$AppLogoutedImpl();
+  const _$AppLogoutedImpl({this.checkTokenForError = false});
+
+  @override
+  @JsonKey()
+  final bool checkTokenForError;
 
   @override
   String toString() {
-    return 'AppLogouted()';
+    return 'AppLogouted(checkTokenForError: $checkTokenForError)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$AppLogoutedImpl);
+        (other.runtimeType == runtimeType &&
+            other is _$AppLogoutedImpl &&
+            (identical(other.checkTokenForError, checkTokenForError) ||
+                other.checkTokenForError == checkTokenForError));
   }
 
   @override
-  int get hashCode => runtimeType.hashCode;
+  int get hashCode => Object.hash(runtimeType, checkTokenForError);
 }
 
 abstract class _AppLogouted implements AppLogouted {
-  const factory _AppLogouted() = _$AppLogoutedImpl;
+  const factory _AppLogouted({final bool checkTokenForError}) =
+      _$AppLogoutedImpl;
+
+  @override
+  bool get checkTokenForError;
 }
 
 /// @nodoc

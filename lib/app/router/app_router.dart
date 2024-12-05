@@ -105,6 +105,10 @@ class AppRouter extends _$AppRouter {
                           maintainState: false,
                         ),
                         AutoRoute(
+                          page: LoginSignupEmbeddedRequestScreenPageRoute.page,
+                          maintainState: false,
+                        ),
+                        AutoRoute(
                           page: LoginSignupVerifyScreenPageRoute.page,
                           maintainState: false,
                         ),
@@ -236,7 +240,7 @@ class AppRouter extends _$AppRouter {
                   path: 'sms_conversation',
                 ),
                 AutoRoute(
-                  page: DemoWebPageRoute.page,
+                  page: CallToActionsWebPageRoute.page,
                   path: 'demo',
                 ),
                 CustomRoute(

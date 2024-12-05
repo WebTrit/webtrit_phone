@@ -11,6 +11,7 @@ WebTrit Phone application.
 * `WEBTRIT_APP_DESCRIPTION` (_default is empty_)
 * `WEBTRIT_APP_CORE_URL` (_optional_)
 * `WEBTRIT_APP_DEMO_CORE_URL` (_default **http://localhost:4000**_)
+* `WEBTRIT_APP_CORE_VERSION_CONSTRAINT` (_default **">=0.7.0-alpha <2.0.0"**_)
 * `WEBTRIT_APP_PERIODIC_POLLING` (_default **true**_)
 * `WEBTRIT_APP_DEBUG_LEVEL` (_default **INFO**_)
 * `WEBTRIT_APP_DATABASE_LOG_STATEMENTS` (_default **false**_)

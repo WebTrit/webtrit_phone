@@ -77,7 +77,13 @@ void main() {
         return Response(
           jsonEncode({
             'core': {'version': '1.0.0'},
-            'postgres': {'version': '1.0.0'}
+            'postgres': {'version': '1.0.0'},
+            'adapter': {
+              'name': 'sample_text',
+              'version': '1.2.3',
+              'supported': ['feat1', 'feat2'],
+              'custom': {'abc': 'qwe'},
+            },
           }),
           200,
           request: request,
@@ -93,6 +99,12 @@ void main() {
           SystemInfo(
             core: CoreInfo(
               version: Version(1, 0, 0),
+            ),
+            adapter: AdapterInfo(
+              name: 'sample_text',
+              version: '1.2.3',
+              supported: ['feat1', 'feat2'],
+              custom: {'abc': 'qwe'},
             ),
             postgres: PostgresInfo(
               version: '1.0.0',

@@ -10,9 +10,9 @@ import 'package:webtrit_phone/repositories/repositories.dart';
 @RoutePage()
 class RecentScreenPage extends StatelessWidget {
   // ignore: use_key_in_widget_constructors
-  const RecentScreenPage(@pathParam this.recentId);
+  const RecentScreenPage(@pathParam this.callId);
 
-  final int recentId;
+  final int callId;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +24,8 @@ class RecentScreenPage extends StatelessWidget {
     var provider = BlocProvider(
       create: (context) {
         return RecentBloc(
-          recentId,
+          callId,
+          callLogsRepository: context.read<CallLogsRepository>(),
           recentsRepository: context.read<RecentsRepository>(),
           dateFormat: AppTime().formatDateTime(true),
         )..add(const RecentStarted());

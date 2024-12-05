@@ -11,12 +11,14 @@ class RecentsState with _$RecentsState {
 
   List<Recent>? get recentsFiltered {
     return recents?.where((recent) {
+      final callLogEntry = recent.callLogEntry;
+
       if (filter == RecentsVisibilityFilter.missed) {
-        return !recent.isComplete && recent.direction == Direction.incoming;
+        return !callLogEntry.isComplete && callLogEntry.direction == CallDirection.incoming;
       } else if (filter == RecentsVisibilityFilter.incoming) {
-        return recent.direction == Direction.incoming;
+        return callLogEntry.direction == CallDirection.incoming;
       } else if (filter == RecentsVisibilityFilter.outgoing) {
-        return recent.direction == Direction.outgoing;
+        return callLogEntry.direction == CallDirection.outgoing;
       } else {
         return true;
       }

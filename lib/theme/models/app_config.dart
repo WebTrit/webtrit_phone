@@ -57,7 +57,7 @@ class AppConfigLoginEmbedded with _$AppConfigLoginEmbedded {
     @Default(false) bool launch,
     String? titleL10n,
     @Default(false) bool showToolbar,
-    required String url,
+    required String resource,
   }) = _AppConfigLoginEmbedded;
 
   factory AppConfigLoginEmbedded.fromJson(Map<String, dynamic> json) => _$AppConfigLoginEmbeddedFromJson(json);
@@ -91,7 +91,7 @@ class AppConfigBottomMenuTab with _$AppConfigBottomMenuTab {
   const AppConfigBottomMenuTab._();
 
   static const String dataContactSourceTypes = 'contactSourceTypes';
-  static const String dataUrl = 'url';
+  static const String dataResource = 'resource';
 
   const factory AppConfigBottomMenuTab({
     @Default(true) bool enabled,

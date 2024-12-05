@@ -1,1 +1,1 @@
-export 'incoming_type_ext.dart';
+export 'incoming_call_type_l10n.dart';

@@ -11,7 +11,7 @@ class ContactsTable extends Table {
 
   IntColumn get sourceType => intEnum<ContactSourceTypeEnum>()();
 
-  TextColumn get sourceId => text()();
+  TextColumn get sourceId => text().nullable()();
 
   TextColumn get firstName => text().nullable()();
 

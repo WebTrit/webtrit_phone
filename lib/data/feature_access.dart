@@ -4,6 +4,7 @@ import 'package:logging/logging.dart';
 
 import 'package:webtrit_phone/data/app_preferences.dart';
 import 'package:webtrit_phone/extensions/iterable.dart';
+import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/theme/models/models.dart';
 
@@ -22,12 +23,14 @@ class FeatureAccess {
     this.bottomMenuFeature,
     this.settingsFeature,
     this.callFeature,
+    this.messagingFeature,
   );
 
   final LoginFeature loginFeature;
   final BottomMenuFeature bottomMenuFeature;
   final SettingsFeature settingsFeature;
   final CallFeature callFeature;
+  final MessagingFeature messagingFeature;
 
   static Future<FeatureAccess> init() async {
     final theme = AppThemes();
@@ -40,8 +43,15 @@ class FeatureAccess {
       final bottomMenuManager = _tryConfigureBottomMenuFeature(appConfig, preferences);
       final settingsFeature = _tryConfigureSettingsFeature(appConfig, preferences);
       final callFeature = _tryConfigureCallFeature(appConfig);
+      final messagingFeature = _tryConfigureMessagingFeature(appConfig, preferences);
 
-      _instance = FeatureAccess._(customLoginFeature, bottomMenuManager, settingsFeature, callFeature);
+      _instance = FeatureAccess._(
+        customLoginFeature,
+        bottomMenuManager,
+        settingsFeature,
+        callFeature,
+        messagingFeature,
+      );
     } catch (e, stackTrace) {
       _logger.severe('Failed to initialize FeatureAccess', e, stackTrace);
       rethrow;
@@ -51,7 +61,7 @@ class FeatureAccess {
 
   factory FeatureAccess() => _instance;
 
-  // TODO(Serdun): move to field
+  @Deprecated('Will be removed soon, use [MessagingFeature] instead')
   bool isMessagingEnabled() {
     return bottomMenuFeature._tabs.map((it) => it.flavor).contains(MainFlavor.messaging);
   }
@@ -81,8 +91,8 @@ class FeatureAccess {
 
   static BottomMenuTab _createBottomMenuTab(AppConfigBottomMenuTab tab) {
     final flavor = MainFlavor.values.byName(tab.type);
-    final urlString = tab.data[AppConfigBottomMenuTab.dataUrl] as String?;
-    final data = urlString == null ? null : ConfigData(url: Uri.parse(urlString));
+    final resourceString = tab.data[AppConfigBottomMenuTab.dataResource] as String?;
+    final data = resourceString == null ? null : ConfigData(resource: Uri.parse(resourceString));
 
     if (flavor == MainFlavor.contacts) {
       final sourceTypesList = (tab.data[AppConfigBottomMenuTab.dataContactSourceTypes] as List<dynamic>).cast<String>();
@@ -121,8 +131,8 @@ class FeatureAccess {
       final items = <SettingItem>[];
 
       for (var item in section.items.where((item) => item.enabled)) {
-        final urlString = item.data[AppConfigBottomMenuTab.dataUrl] as String?;
-        final data = urlString == null ? null : ConfigData(url: Uri.parse(urlString));
+        final resourceString = item.data[AppConfigBottomMenuTab.dataResource] as String?;
+        final data = resourceString == null ? null : ConfigData(resource: Uri.parse(resourceString));
         final flavor = SettingsFlavor.values.byName(item.type);
 
         // TODO (Serdun): Move platform-specific configuration to a separate config file.
@@ -138,8 +148,8 @@ class FeatureAccess {
         );
 
         if (settingItem.flavor == SettingsFlavor.terms) {
-          if (settingItem.data?.url != null) {
-            termsAndConditions = settingItem.data!.url;
+          if (settingItem.data?.resource != null) {
+            termsAndConditions = settingItem.data!.resource;
           } else {
             throw Exception('Terms and conditions not found');
           }
@@ -193,7 +203,7 @@ class FeatureAccess {
     return embeddedDTO != null
         ? LoginEmbedded(
             titleL10n: embeddedDTO.titleL10n,
-            url: Uri.parse(embeddedDTO.url),
+            resource: Uri.parse(embeddedDTO.resource),
             showToolbar: embeddedDTO.showToolbar,
           )
         : null;
@@ -209,6 +219,11 @@ class FeatureAccess {
         enableAttendedTransfer: callConfig.transfer.enableAttendedTransfer,
       ),
     );
+  }
+
+  static MessagingFeature _tryConfigureMessagingFeature(AppConfig appConfig, AppPreferences preferences) {
+    final tabEnabled = appConfig.mainConfig.bottomMenu.tabs.any((tab) => tab.type == MainFlavor.messaging.name);
+    return MessagingFeature(preferences, tabEnabled: tabEnabled);
   }
 }
 
@@ -275,4 +290,22 @@ class CallFeature {
     required this.videoEnable,
     required this.transfer,
   });
+}
+
+class MessagingFeature {
+  MessagingFeature(this._appPreferences, {bool tabEnabled = false}) : _tabEnabled = tabEnabled;
+
+  final AppPreferences _appPreferences;
+  final bool _tabEnabled;
+
+  List<String> get _coreSupportedFeatures {
+    final systemInfo = _appPreferences.getSystemInfo();
+    return systemInfo?.adapter?.supported ?? [];
+  }
+
+  bool get smsMessagingEnabled => _tabEnabled && _coreSupportedFeatures.contains(kSmsMessagingFeatureFlag);
+
+  bool get instantMessagingEnabled => _tabEnabled && _coreSupportedFeatures.contains(kInstantMessagingFeatureFlag);
+
+  bool get anyMessagingEnabled => smsMessagingEnabled || instantMessagingEnabled;
 }

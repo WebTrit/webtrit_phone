@@ -64,8 +64,19 @@ class _AutoprovisionScreenState extends State<AutoprovisionScreen> {
   }
 
   void onSessionCreated(SessionCreated state) async {
-    final [coreUrl, token, userId, tenantId] = [state.coreUrl, state.token, state.userId, state.tenantId];
-    final loginEvent = AppLogined(coreUrl: coreUrl, token: token, userId: userId, tenantId: tenantId);
+    final coreUrl = state.coreUrl;
+    final token = state.token;
+    final userId = state.userId;
+    final tenantId = state.tenantId;
+    final systemInfo = state.systemInfo;
+
+    final loginEvent = AppLogined(
+      coreUrl: coreUrl,
+      token: token,
+      userId: userId,
+      tenantId: tenantId,
+      systemInfo: systemInfo,
+    );
 
     if (router.canPop()) {
       await router.maybePop();

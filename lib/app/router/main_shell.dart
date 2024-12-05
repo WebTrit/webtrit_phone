@@ -43,6 +43,7 @@ class _MainShellState extends State<MainShell> {
         ios: CallkeepIOSOptions(
           localizedName: PackageInfo().appName,
           ringtoneSound: Assets.ringtones.incomingCall1,
+          ringbackSound: Assets.ringtones.outgoingCall1,
           iconTemplateImageAssetName: Assets.callkeep.iosIconTemplateImage.path,
           maximumCallGroups: 13,
           maximumCallsPerCallGroup: 13,
@@ -52,6 +53,7 @@ class _MainShellState extends State<MainShell> {
           incomingPath: initialCallRout,
           rootPath: initialMainRout,
           ringtoneSound: Assets.ringtones.incomingCall1,
+          ringbackSound: Assets.ringtones.outgoingCall1,
         ),
       ),
     );
@@ -97,6 +99,11 @@ class _MainShellState extends State<MainShell> {
             appDatabase: context.read<AppDatabase>(),
           ),
         ),
+        RepositoryProvider<CallLogsRepository>(
+          create: (context) => CallLogsRepository(
+            appDatabase: context.read<AppDatabase>(),
+          ),
+        ),
         RepositoryProvider<ContactsRepository>(
           create: (context) => ContactsRepository(
             appDatabase: context.read<AppDatabase>(),
@@ -120,21 +127,21 @@ class _MainShellState extends State<MainShell> {
         ),
         RepositoryProvider<UserRepository>(
           create: (context) => UserRepository(
+            context.read<WebtritApiClient>(),
+            context.read<AppBloc>().state.token!,
+            polling: EnvironmentConfig.PERIODIC_POLLING,
             sessionCleanupWorker: SessionCleanupWorker(),
-            webtritApiClient: context.read<WebtritApiClient>(),
-            token: context.read<AppBloc>().state.token!,
-            periodicPolling: EnvironmentConfig.PERIODIC_POLLING,
+          ),
+        ),
+        RepositoryProvider<SystemInfoRepository>(
+          create: (context) => SystemInfoRepository(
+            context.read<WebtritApiClient>(),
           ),
         ),
         RepositoryProvider<AppRepository>(
           create: (context) => AppRepository(
             webtritApiClient: context.read<WebtritApiClient>(),
             token: context.read<AppBloc>().state.token!,
-          ),
-        ),
-        RepositoryProvider<InfoRepository>(
-          create: (context) => InfoRepository(
-            webtritApiClient: context.read<WebtritApiClient>(),
           ),
         ),
         RepositoryProvider<ChatsRepository>(
@@ -172,6 +179,12 @@ class _MainShellState extends State<MainShell> {
         RepositoryProvider<ActiveMessageNotificationsRepository>(
           create: (context) => ActiveMessageNotificationsRepositoryDriftImpl(
             appDatabase: context.read<AppDatabase>(),
+          ),
+        ),
+        RepositoryProvider<CallToActionsRepository>(
+          create: (context) => CallToActionsRepositoryImpl(
+            webtritApiClient: context.read<WebtritApiClient>(),
+            token: context.read<AppBloc>().state.token!,
           ),
         ),
       ],
@@ -226,7 +239,7 @@ class _MainShellState extends State<MainShell> {
                 tenantId: appBloc.state.tenantId!,
                 token: appBloc.state.token!,
                 trustedCertificates: appCertificates.trustedCertificates,
-                recentsRepository: context.read<RecentsRepository>(),
+                callLogsRepository: context.read<CallLogsRepository>(),
                 notificationsBloc: context.read<NotificationsBloc>(),
                 callkeep: _callkeep,
               )..add(const CallStarted());
@@ -267,18 +280,26 @@ class _MainShellState extends State<MainShell> {
         ],
         child: Builder(
           builder: (context) {
-            final mainShellRepo = context.read<MainShellRouteStateRepository>();
-            return BlocProvider<SessionStatusCubit>(
-              create: (context) => SessionStatusCubit(
-                pushTokensBloc: context.read<PushTokensBloc>(),
-                callBloc: context.read<CallBloc>(),
-              ),
+            return MultiBlocProvider(
+              providers: [
+                BlocProvider(
+                  create: (_) => UserInfoCubit(
+                    context.read<UserRepository>(),
+                  ),
+                ),
+                BlocProvider(
+                  create: (_) => SessionStatusCubit(
+                    pushTokensBloc: context.read<PushTokensBloc>(),
+                    callBloc: context.read<CallBloc>(),
+                  ),
+                ),
+              ],
               child: Builder(
                 builder: (context) => CallShell(
                   child: MessagingShell(
                     child: AutoRouter(
                       navigatorObservers: () => [
-                        MainShellNavigatorObserver(mainShellRepo),
+                        MainShellNavigatorObserver(context.read<MainShellRouteStateRepository>()),
                       ],
                     ),
                   ),

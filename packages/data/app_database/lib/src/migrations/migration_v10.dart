@@ -10,14 +10,13 @@ class MigrationV10 extends Migration {
 
   @override
   Future<void> execute(AppDatabase db, Migrator m) async {
-    final chatsTable = v10.Chats(db);
+    final contactsTable = v10.Contacts(db);
 
-    // Update chats type value change from 'dialog' to 'direct'
-    final [tableName, columnName] = [chatsTable.aliasedName, chatsTable.type.$name];
-    final [oldType, newType] = ['dialog', 'direct'];
-    await db.customUpdate(
-      'UPDATE $tableName SET $columnName = ? WHERE $columnName = ?',
-      variables: [Variable(newType), Variable(oldType)],
+    await m.alterTable(
+      TableMigration(
+        contactsTable,
+        columnTransformer: {},
+      ),
     );
   }
 }

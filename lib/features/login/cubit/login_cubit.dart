@@ -7,11 +7,11 @@ import 'package:url_launcher/url_launcher.dart';
 
 import 'package:webtrit_api/webtrit_api.dart';
 
-import 'package:webtrit_phone/app/core_version.dart';
 import 'package:webtrit_phone/app/notifications/notifications.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/mappers/mappers.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 
 import '../login.dart';
@@ -35,6 +35,8 @@ class LoginCubit extends Cubit<LoginState> {
 
   String? get demoCoreUrlFromEnvironment => EnvironmentConfig.DEMO_CORE_URL;
 
+  String get coreVersionConstraint => EnvironmentConfig.CORE_VERSION_CONSTRAINT;
+
   String get defaultTenantId => '';
 
   bool get isDemoModeEnabled => coreUrlFromEnvironment == null;
@@ -48,37 +50,49 @@ class LoginCubit extends Cubit<LoginState> {
     }
   }
 
-  Future<void> _verifyCoreVersionAndRetrieveSupportedLoginTypesSubmitted(String coreUrl, String tenantId,
-      [bool demo = false]) async {
+  Future<void> _processSystemInfo(String coreUrl, String tenantId, [bool demo = false]) async {
     emit(state.copyWith(
       processing: true,
     ));
 
     try {
       final client = createWebtritApiClient(coreUrl, tenantId);
-      final supportedLoginTypes = await _verifyCoreVersionAndRetrieveSupportedLoginTypes(client);
-      if (demo) {
-        supportedLoginTypes?.removeWhere((loginType) => loginType != LoginType.signup);
-      }
-      if (supportedLoginTypes != null && supportedLoginTypes.isNotEmpty) {
-        emit(state.copyWith(
-          processing: false,
-          coreUrl: coreUrl,
-          tenantId: tenantId,
-          supportedLoginTypes: supportedLoginTypes,
-        ));
-      } else {
-        notificationsBloc.add(const NotificationsSubmitted(SupportedLoginTypeMissedErrorNotification()));
+      final systemInfo = await _retrieveSystemInfo(client);
+
+      final coreInfo = systemInfo.core;
+
+      final isCoreSupported = coreInfo.verifyVersionStr(coreVersionConstraint);
+      if (isCoreSupported == false) {
+        var coreUnsupportedNotification = CoreVersionUnsupportedErrorNotification(
+          coreInfo.version.toString(),
+          coreVersionConstraint,
+        );
+        notificationsBloc.add(NotificationsSubmitted(coreUnsupportedNotification));
 
         emit(state.copyWith(processing: false));
+        return;
       }
-    } on CoreVersionUnsupportedException catch (e) {
-      notificationsBloc.add(NotificationsSubmitted(CoreVersionUnsupportedErrorNotification(
-        e.actual.toString(),
-        e.supportedConstraint.toString(),
-      )));
 
-      emit(state.copyWith(processing: false));
+      final supportedFeatures = systemInfo.adapter?.supported ?? [];
+      final supportedLoginTypes = supportedFeatures
+          .where((f) => LoginType.values.map((e) => e.name).contains(f))
+          .map((f) => LoginType.values.byName(f))
+          .toList();
+      if (demo) supportedLoginTypes.removeWhere((loginType) => loginType != LoginType.signup);
+
+      if (supportedLoginTypes.isEmpty) {
+        notificationsBloc.add(const NotificationsSubmitted(SupportedLoginTypeMissedErrorNotification()));
+        emit(state.copyWith(processing: false));
+        return;
+      }
+
+      emit(state.copyWith(
+        processing: false,
+        coreUrl: coreUrl,
+        tenantId: tenantId,
+        supportedLoginTypes: supportedLoginTypes,
+        systemInfo: systemInfo,
+      ));
     } catch (e) {
       notificationsBloc.add(NotificationsSubmitted(LoginErrorNotification(e)));
 
@@ -96,9 +110,7 @@ class LoginCubit extends Cubit<LoginState> {
     final demo = mode == LoginMode.demoCore;
     final coreUrl = demo ? demoCoreUrlFromEnvironment : coreUrlFromEnvironment;
 
-    if (coreUrl != null) {
-      await _verifyCoreVersionAndRetrieveSupportedLoginTypesSubmitted(coreUrl, defaultTenantId, demo);
-    }
+    if (coreUrl != null) await _processSystemInfo(coreUrl, defaultTenantId, demo);
   }
 
   void setCustomLogin(LoginEmbedded login) {
@@ -126,7 +138,7 @@ class LoginCubit extends Cubit<LoginState> {
       coreUrlInputValue = 'https://$coreUrlInputValue';
     }
 
-    await _verifyCoreVersionAndRetrieveSupportedLoginTypesSubmitted(coreUrlInputValue, defaultTenantId);
+    await _processSystemInfo(coreUrlInputValue, defaultTenantId);
   }
 
   void loginCoreUrlAssignBack() async {
@@ -225,7 +237,8 @@ class LoginCubit extends Cubit<LoginState> {
       emit(state.copyWith(
         tenantId: sessionToken.tenantId ?? state.tenantId!,
         token: sessionToken.token,
-        userId: sessionToken.userId,
+        // Use an empty user ID as a fallback for outdated core versions that do not support this field.
+        userId: sessionToken.userId ?? '',
       ));
     } catch (e) {
       emit(state.copyWith(processing: false));
@@ -292,7 +305,8 @@ class LoginCubit extends Cubit<LoginState> {
     emit(state.copyWith(
       tenantId: token.tenantId ?? state.tenantId ?? defaultTenantId,
       token: token.token,
-      userId: token.userId,
+      // Use an empty user ID as a fallback for outdated core versions that do not support this field.
+      userId: token.userId ?? '',
     ));
   }
 
@@ -311,6 +325,23 @@ class LoginCubit extends Cubit<LoginState> {
     ));
   }
 
+  void loginCustomSignupRequest(Map<String, dynamic>? extras) async {
+    emit(state.copyWith(
+      processing: true,
+    ));
+
+    try {
+      final client = createWebtritApiClient(state.coreUrl!, state.tenantId!);
+      final result = await _createUserRequest(client: client, extraPayload: extras);
+
+      _handleLoginResult(result);
+    } catch (e) {
+      notificationsBloc.add(NotificationsSubmitted(LoginErrorNotification(e)));
+
+      emit(state.copyWith(processing: false));
+    }
+  }
+
   void loginSignupRequestSubmitted() async {
     if (state.processing || !state.signupEmailInput.isValid) {
       return;
@@ -322,27 +353,31 @@ class LoginCubit extends Cubit<LoginState> {
 
     try {
       final client = createWebtritApiClient(state.coreUrl!, state.tenantId!);
-      final result = await _createUserRequest(client, state.signupEmailInput.value);
+      final result = await _createUserRequest(client: client, email: state.signupEmailInput.value);
 
-      if (result is SessionOtpProvisional) {
-        emit(state.copyWith(
-          processing: false,
-          signupSessionOtpProvisionalWithDateTime: (result, DateTime.now()),
-        ));
-      } else if (result is SessionToken) {
-        // does not set processing to false to hold processing widgets state during navigation
-        emit(state.copyWith(
-          tenantId: result.tenantId ?? state.tenantId!,
-          token: result.token,
-          userId: result.userId,
-        ));
-      } else {
-        throw UnimplementedError();
-      }
+      _handleLoginResult(result);
     } catch (e) {
       notificationsBloc.add(NotificationsSubmitted(LoginErrorNotification(e)));
 
       emit(state.copyWith(processing: false));
+    }
+  }
+
+  void _handleLoginResult(SessionResult result) {
+    if (result is SessionOtpProvisional) {
+      emit(state.copyWith(
+        processing: false,
+        signupSessionOtpProvisionalWithDateTime: (result, DateTime.now()),
+      ));
+    } else if (result is SessionToken) {
+      // Maintain processing state during navigation
+      emit(state.copyWith(
+        tenantId: result.tenantId ?? state.tenantId!,
+        token: result.token,
+        userId: result.userId ?? '', // Fallback for outdated core versions
+      ));
+    } else {
+      throw UnimplementedError('Unexpected login result type');
     }
   }
 
@@ -366,13 +401,17 @@ class LoginCubit extends Cubit<LoginState> {
     try {
       final client = createWebtritApiClient(state.coreUrl!, state.tenantId!);
       final sessionToken = await _verifySessionOtp(
-          client, state.signupSessionOtpProvisionalWithDateTime!.$1, state.signupCodeInput.value);
+        client,
+        state.signupSessionOtpProvisionalWithDateTime!.$1,
+        state.signupCodeInput.value,
+      );
 
       // does not set processing to false to hold processing widgets state during navigation
       emit(state.copyWith(
         tenantId: sessionToken.tenantId ?? state.tenantId!,
         token: sessionToken.token,
-        userId: sessionToken.userId,
+        // Use an empty user ID as a fallback for outdated core versions that do not support this field.
+        userId: sessionToken.userId ?? '',
       ));
     } catch (e) {
       notificationsBloc.add(NotificationsSubmitted(LoginErrorNotification(e)));
@@ -393,18 +432,10 @@ class LoginCubit extends Cubit<LoginState> {
   }
 }
 
-Future<List<LoginType>?> _verifyCoreVersionAndRetrieveSupportedLoginTypes(
-  WebtritApiClient webtritApiClient,
-) async {
-  final systemInfo = await webtritApiClient.getSystemInfo();
-
-  CoreVersion.supported().verify(systemInfo.core.version);
-
-  final supportedLoginTypeNames = Set.from(LoginType.values.map((e) => e.name));
-  return systemInfo.adapter?.supported
-      ?.where((supportedName) => supportedLoginTypeNames.contains(supportedName))
-      .map((supportedLoginTypeName) => LoginType.values.byName(supportedLoginTypeName))
-      .toList();
+Future<WebtritSystemInfo> _retrieveSystemInfo(WebtritApiClient webtritApiClient) async {
+  final apiSystemInfo = await webtritApiClient.getSystemInfo();
+  final systemInfo = systemInfoFromApi(apiSystemInfo);
+  return systemInfo;
 }
 
 Future<SessionOtpProvisional> _createSessionOtp(
@@ -441,14 +472,18 @@ Future<SessionToken> _createSessionRequest(
   ));
 }
 
-Future<SessionResult> _createUserRequest(
-  WebtritApiClient webtritApiClient,
-  String email,
-) async {
-  return await webtritApiClient.createUser(SessionUserCredential(
-    bundleId: PackageInfo().packageName,
-    type: PlatformInfo().appType,
-    identifier: AppInfo().identifier,
-    email: email,
-  ));
+Future<SessionResult> _createUserRequest({
+  required WebtritApiClient client,
+  String? email,
+  Map<String, dynamic>? extraPayload,
+}) async {
+  return await client.createUser(
+    SessionUserCredential(
+      bundleId: PackageInfo().packageName,
+      type: PlatformInfo().appType,
+      identifier: AppInfo().identifier,
+      email: email,
+    ),
+    extraPayload: extraPayload,
+  );
 }

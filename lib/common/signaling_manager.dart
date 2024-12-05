@@ -24,6 +24,7 @@ class SignalingManager {
     this.onIncomingCallEvent,
     this.onHangupCallEvent,
     this.onUnregisteredEvent,
+    this.onActiveLine,
     this.onError,
     this.onDisconnect,
     this.enableReconnect = false,
@@ -43,6 +44,7 @@ class SignalingManager {
   final Function(UnregisteredEvent event)? onUnregisteredEvent;
   final Function(Object error, StackTrace? stackTrace)? onError;
   final Function(int? code, String? reason)? onDisconnect;
+  final Function(int count)? onActiveLine;
 
   final List<Line?> _lines = [];
 
@@ -105,11 +107,16 @@ class SignalingManager {
 
   void _signalingInitialize(StateHandshake stateHandshake) {
     final activeLines = stateHandshake.lines.whereType<Line>().toList();
-    for (final activeLine in activeLines) {
-      for (final callLog in activeLine.callLogs) {
-        if (callLog is CallEventLog) {
-          _handleSignalingEvent(callLog.callEvent);
-        }
+
+    _lines.clear();
+    _lines.addAll(activeLines);
+
+    // Notify about call line counts to manage stop flow when active lines become empty
+    onActiveLine?.call(activeLines.length);
+
+    for (final callLog in activeLines.expand((line) => line.callLogs)) {
+      if (callLog is CallEventLog) {
+        _handleSignalingEvent(callLog.callEvent);
       }
     }
   }
@@ -159,11 +166,12 @@ class SignalingManager {
   //  Cleans up resources and disconnects the client.
   Future<void> close() async {
     _logger.info('Closing service');
-    _connectivitySubscription?.cancel();
-    _isConnected = false;
 
     try {
       await _client?.disconnect();
+      await _connectivitySubscription?.cancel();
+
+      _isConnected = false;
     } catch (e) {
       _logger.severe('Error closing service', e);
     }

@@ -73,6 +73,6 @@ class PermissionsCubit extends Cubit<PermissionsState> {
   }
 
   Manufacturer? _checkManufacturer() {
-    return Manufacturer.values.asNameMap()[deviceInfo.manufacturer?.toLowerCase()];
+    return Manufacturer.values.asNameMap()[deviceInfo.manufacturer.toLowerCase()];
   }
 }

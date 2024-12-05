@@ -50,6 +50,13 @@ abstract class _$AppRouter extends RootStackRouter {
         child: CallScreenPage(),
       );
     },
+    CallToActionsWebPageRoute.name: (routeData) {
+      final args = routeData.argsAs<CallToActionsWebPageRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: CallToActionsWebPage(args.initialUrl),
+      );
+    },
     ChatConversationScreenPageRoute.name: (routeData) {
       final args = routeData.argsAs<ChatConversationScreenPageRouteArgs>(
           orElse: () => const ChatConversationScreenPageRouteArgs());
@@ -88,13 +95,6 @@ abstract class _$AppRouter extends RootStackRouter {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
         child: ConversationsScreenPage(),
-      );
-    },
-    DemoWebPageRoute.name: (routeData) {
-      final args = routeData.argsAs<DemoWebPageRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: DemoWebPage(args.initialUrl),
       );
     },
     DiagnosticScreenPageRoute.name: (routeData) {
@@ -225,6 +225,14 @@ abstract class _$AppRouter extends RootStackRouter {
         child: LoginRouterPage(launchLoginEmbedded: args.launchLoginEmbedded),
       );
     },
+    LoginSignupEmbeddedRequestScreenPageRoute.name: (routeData) {
+      final args =
+          routeData.argsAs<LoginSignupEmbeddedRequestScreenPageRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: LoginSignupEmbeddedRequestScreenPage(args.embeddedData),
+      );
+    },
     LoginSignupRequestScreenPageRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -276,11 +284,11 @@ abstract class _$AppRouter extends RootStackRouter {
     RecentScreenPageRoute.name: (routeData) {
       final pathParams = routeData.inheritedPathParams;
       final args = routeData.argsAs<RecentScreenPageRouteArgs>(
-          orElse: () => RecentScreenPageRouteArgs(
-              recentId: pathParams.getInt('recentId')));
+          orElse: () =>
+              RecentScreenPageRouteArgs(callId: pathParams.getInt('callId')));
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: RecentScreenPage(args.recentId),
+        child: RecentScreenPage(args.callId),
       );
     },
     RecentsRouterPageRoute.name: (routeData) {
@@ -443,6 +451,36 @@ class CallScreenPageRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [CallToActionsWebPage]
+class CallToActionsWebPageRoute
+    extends PageRouteInfo<CallToActionsWebPageRouteArgs> {
+  CallToActionsWebPageRoute({
+    required Uri initialUrl,
+    List<PageRouteInfo>? children,
+  }) : super(
+          CallToActionsWebPageRoute.name,
+          args: CallToActionsWebPageRouteArgs(initialUrl: initialUrl),
+          initialChildren: children,
+        );
+
+  static const String name = 'CallToActionsWebPageRoute';
+
+  static const PageInfo<CallToActionsWebPageRouteArgs> page =
+      PageInfo<CallToActionsWebPageRouteArgs>(name);
+}
+
+class CallToActionsWebPageRouteArgs {
+  const CallToActionsWebPageRouteArgs({required this.initialUrl});
+
+  final Uri initialUrl;
+
+  @override
+  String toString() {
+    return 'CallToActionsWebPageRouteArgs{initialUrl: $initialUrl}';
+  }
+}
+
+/// generated route for
 /// [ChatConversationScreenPage]
 class ChatConversationScreenPageRoute
     extends PageRouteInfo<ChatConversationScreenPageRouteArgs> {
@@ -567,35 +605,6 @@ class ConversationsScreenPageRoute extends PageRouteInfo<void> {
   static const String name = 'ConversationsScreenPageRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
-}
-
-/// generated route for
-/// [DemoWebPage]
-class DemoWebPageRoute extends PageRouteInfo<DemoWebPageRouteArgs> {
-  DemoWebPageRoute({
-    required Uri initialUrl,
-    List<PageRouteInfo>? children,
-  }) : super(
-          DemoWebPageRoute.name,
-          args: DemoWebPageRouteArgs(initialUrl: initialUrl),
-          initialChildren: children,
-        );
-
-  static const String name = 'DemoWebPageRoute';
-
-  static const PageInfo<DemoWebPageRouteArgs> page =
-      PageInfo<DemoWebPageRouteArgs>(name);
-}
-
-class DemoWebPageRouteArgs {
-  const DemoWebPageRouteArgs({required this.initialUrl});
-
-  final Uri initialUrl;
-
-  @override
-  String toString() {
-    return 'DemoWebPageRouteArgs{initialUrl: $initialUrl}';
-  }
 }
 
 /// generated route for
@@ -987,6 +996,38 @@ class LoginRouterPageRouteArgs {
 }
 
 /// generated route for
+/// [LoginSignupEmbeddedRequestScreenPage]
+class LoginSignupEmbeddedRequestScreenPageRoute
+    extends PageRouteInfo<LoginSignupEmbeddedRequestScreenPageRouteArgs> {
+  LoginSignupEmbeddedRequestScreenPageRoute({
+    required LoginEmbeddedModeButton embeddedData,
+    List<PageRouteInfo>? children,
+  }) : super(
+          LoginSignupEmbeddedRequestScreenPageRoute.name,
+          args: LoginSignupEmbeddedRequestScreenPageRouteArgs(
+              embeddedData: embeddedData),
+          initialChildren: children,
+        );
+
+  static const String name = 'LoginSignupEmbeddedRequestScreenPageRoute';
+
+  static const PageInfo<LoginSignupEmbeddedRequestScreenPageRouteArgs> page =
+      PageInfo<LoginSignupEmbeddedRequestScreenPageRouteArgs>(name);
+}
+
+class LoginSignupEmbeddedRequestScreenPageRouteArgs {
+  const LoginSignupEmbeddedRequestScreenPageRouteArgs(
+      {required this.embeddedData});
+
+  final LoginEmbeddedModeButton embeddedData;
+
+  @override
+  String toString() {
+    return 'LoginSignupEmbeddedRequestScreenPageRouteArgs{embeddedData: $embeddedData}';
+  }
+}
+
+/// generated route for
 /// [LoginSignupRequestScreenPage]
 class LoginSignupRequestScreenPageRoute extends PageRouteInfo<void> {
   const LoginSignupRequestScreenPageRoute({List<PageRouteInfo>? children})
@@ -1102,12 +1143,12 @@ class PermissionsScreenPageRoute extends PageRouteInfo<void> {
 /// [RecentScreenPage]
 class RecentScreenPageRoute extends PageRouteInfo<RecentScreenPageRouteArgs> {
   RecentScreenPageRoute({
-    required int recentId,
+    required int callId,
     List<PageRouteInfo>? children,
   }) : super(
           RecentScreenPageRoute.name,
-          args: RecentScreenPageRouteArgs(recentId: recentId),
-          rawPathParams: {'recentId': recentId},
+          args: RecentScreenPageRouteArgs(callId: callId),
+          rawPathParams: {'callId': callId},
           initialChildren: children,
         );
 
@@ -1118,13 +1159,13 @@ class RecentScreenPageRoute extends PageRouteInfo<RecentScreenPageRouteArgs> {
 }
 
 class RecentScreenPageRouteArgs {
-  const RecentScreenPageRouteArgs({required this.recentId});
+  const RecentScreenPageRouteArgs({required this.callId});
 
-  final int recentId;
+  final int callId;
 
   @override
   String toString() {
-    return 'RecentScreenPageRouteArgs{recentId: $recentId}';
+    return 'RecentScreenPageRouteArgs{callId: $callId}';
   }
 }
 

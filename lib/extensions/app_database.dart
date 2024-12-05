@@ -22,25 +22,3 @@ extension ContactSourceTypeEnumExtension on ContactSourceTypeEnum {
     }
   }
 }
-
-extension DirectionExtension on Direction {
-  CallLogDirectionEnum toData() {
-    switch (this) {
-      case Direction.incoming:
-        return CallLogDirectionEnum.incoming;
-      case Direction.outgoing:
-        return CallLogDirectionEnum.outgoing;
-    }
-  }
-}
-
-extension CallLogDirectionEnumExtension on CallLogDirectionEnum {
-  Direction toModel() {
-    switch (this) {
-      case CallLogDirectionEnum.incoming:
-        return Direction.incoming;
-      case CallLogDirectionEnum.outgoing:
-        return Direction.outgoing;
-    }
-  }
-}

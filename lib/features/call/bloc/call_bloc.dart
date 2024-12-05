@@ -20,9 +20,8 @@ import 'package:ssl_certificates/ssl_certificates.dart';
 
 import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/app/notifications/notifications.dart';
-import 'package:webtrit_phone/data/app_sound.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
-import 'package:webtrit_phone/models/recent.dart';
+import 'package:webtrit_phone/models/call_log_entry.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
 import '../extensions/extensions.dart';
@@ -46,7 +45,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   final String token;
   final TrustedCertificates trustedCertificates;
 
-  final RecentsRepository recentsRepository;
+  final CallLogsRepository callLogsRepository;
   final NotificationsBloc notificationsBloc;
   final Callkeep callkeep;
 
@@ -58,14 +57,14 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
   final _peerConnectionCompleters = <String, Completer<RTCPeerConnection>>{};
 
-  final _appSound = AppSound();
+  final _callkeepSound = WebtritCallkeepSound();
 
   CallBloc({
     required this.coreUrl,
     required this.tenantId,
     required this.token,
     required this.trustedCertificates,
-    required this.recentsRepository,
+    required this.callLogsRepository,
     required this.notificationsBloc,
     required this.callkeep,
   }) : super(const CallState()) {
@@ -150,7 +149,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _signalingClientReconnectTimer?.cancel();
     await _signalingClient?.disconnect();
 
-    await _appSound.stopOutgoingCall();
+    await _stopRingbackSound();
 
     await super.close();
   }
@@ -553,30 +552,25 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     _signalingClient = null;
 
-    final signalingDisconnectCode = event.code;
-    if (signalingDisconnectCode != null) {
-      final code = SignalingDisconnectCode.values.byCode(signalingDisconnectCode);
-      if (code == SignalingDisconnectCode.sessionMissedError) {
-        notificationsBloc.add(const NotificationsSubmitted(CallSignalingClientSessionMissedErrorNotification()));
-      } else if (code == SignalingDisconnectCode.appUnregisteredError) {
-        add(const _RegistrationChange(registration: Registration(status: RegistrationStatus.unregistered)));
-      } else if (code == SignalingDisconnectCode.requestCallIdError) {
-        state.activeCalls.where((element) => element.wasHungUp).forEach((element) {
-          add(_ResetStateEvent.completeCall(element.callId));
-        });
-      } else if (code == SignalingDisconnectCode.controllerExitError) {
-        _logger.info(
-            '__onSignalingClientEventDisconnected: skipping user notification for controller exit as it is expected during system unregistration');
-      } else {
-        final signalingDisconnectReason = event.reason ?? event.code?.toString() ?? 'Unexpected error';
-        final afterReconnect = event.afterReconnect;
-        if (afterReconnect) {
-          _logger.info('__onSignalingClientEventDisconnected: skipping user notification to prevent reconnect spam');
-        } else {
-          final notification = ErrorMessageNotification(signalingDisconnectReason);
-          notificationsBloc.add(NotificationsSubmitted(notification));
-        }
-      }
+    final code = SignalingDisconnectCode.values.byCode(event.code ?? -1);
+    final afterReconnect = event.afterReconnect;
+    Notification? notificationToShow;
+
+    if (code == SignalingDisconnectCode.appUnregisteredError) {
+      add(const _RegistrationChange(registration: Registration(status: RegistrationStatus.unregistered)));
+    } else if (code == SignalingDisconnectCode.requestCallIdError) {
+      state.activeCalls.where((e) => e.wasHungUp).forEach((e) => add(_ResetStateEvent.completeCall(e.callId)));
+    } else if (code == SignalingDisconnectCode.controllerExitError) {
+      _logger.info('__onSignalingClientEventDisconnected: skipping expected system unregistration notification');
+    } else if (code == SignalingDisconnectCode.sessionMissedError) {
+      notificationToShow = const CallSignalingClientSessionMissedErrorNotification();
+    } else {
+      final errorText = event.reason?.isNotEmpty == true ? event.reason! : code.name;
+      notificationToShow = ErrorMessageNotification(errorText);
+    }
+
+    if (notificationToShow != null && !afterReconnect) {
+      notificationsBloc.add(NotificationsSubmitted(notificationToShow));
     }
 
     _reconnectInitiated(kSignalingClientReconnectDelay, true);
@@ -605,7 +599,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     }
 
     emit(state.copyWithPushActiveCall(ActiveCall(
-      direction: Direction.incoming,
+      direction: CallDirection.incoming,
       line: _kUndefinedLine,
       callId: event.callId,
       handle: event.handle,
@@ -706,7 +700,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         : null;
 
     final newActiveCall = ActiveCall(
-      direction: Direction.incoming,
+      direction: CallDirection.incoming,
       line: event.line,
       callId: event.callId,
       handle: handle,
@@ -788,7 +782,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _CallSignalingEventRinging event,
     Emitter<CallState> emit,
   ) async {
-    await _ringtoneOutgoingPlay();
+    await _playRingbackSound();
   }
 
   // early media - set specified session description
@@ -796,7 +790,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _CallSignalingEventProgress event,
     Emitter<CallState> emit,
   ) async {
-    await _ringtoneStop();
+    await _stopRingbackSound();
 
     final jsep = event.jsep;
     if (jsep != null) {
@@ -816,7 +810,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _CallSignalingEventAccepted event,
     Emitter<CallState> emit,
   ) async {
-    await _ringtoneStop();
+    await _stopRingbackSound();
 
     await callkeep.reportConnectedOutgoingCall(event.callId);
 
@@ -852,7 +846,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     }
 
     try {
-      await _ringtoneStop();
+      _stopRingbackSound();
 
       ActiveCall? call = state.retrieveActiveCall(event.callId);
 
@@ -862,7 +856,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         if (call.wasHungUp == false) {
           _addToRecents(call.copyWith(hungUpTime: clock.now()));
         }
-        if (call.direction == Direction.incoming && !call.wasAccepted) {
+        if (call.direction == CallDirection.incoming && !call.wasAccepted) {
           endReason = CallkeepEndCallReason.unanswered;
         }
 
@@ -1108,7 +1102,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       }
     } else {
       final newCall = ActiveCall(
-        direction: Direction.outgoing,
+        direction: CallDirection.outgoing,
         line: event.line ?? state.retrieveIdleLine() ?? _kUndefinedLine,
         callId: callId,
         handle: event.handle,
@@ -1358,7 +1352,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     }
 
     final newCall = ActiveCall(
-      direction: Direction.outgoing,
+      direction: CallDirection.outgoing,
       line: state.retrieveIdleLine() ?? _kUndefinedLine,
       callId: callId,
       handle: newHandle,
@@ -1511,7 +1505,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       _logger.warning('__onCallPerformEventStarted: $e');
       notificationsBloc.add(NotificationsSubmitted(DefaultErrorNotification(e)));
 
-      _ringtoneStop();
+      await _stopRingbackSound();
       _peerConnectionCompleteError(event.callId, e);
 
       add(_ResetStateEvent.completeCall(event.callId));
@@ -1524,7 +1518,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   ) async {
     event.fulfill();
     try {
-      await _ringtoneStop();
+      await _stopRingbackSound();
 
       // Try to wait until signaling is properly initialized and processed incoming call.
       //
@@ -1607,7 +1601,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     }
     event.fulfill();
 
-    await _ringtoneStop();
+    await _stopRingbackSound();
 
     emit(state.copyWithMappedActiveCall(event.callId, (activeCall) {
       final activeCallUpdated = activeCall.copyWith(hungUpTime: clock.now());
@@ -1948,7 +1942,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
           continue activeCallsLoop;
         }
       }
-      if (activeCall.direction == Direction.outgoing &&
+      if (activeCall.direction == CallDirection.outgoing &&
           activeCall.acceptedTime == null &&
           activeCall.hungUpTime == null) {
         // Handles an outgoing active call that has not yet started, typically initiated
@@ -2314,29 +2308,18 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   }
 
   void _addToRecents(ActiveCall activeCall) {
-    recentsRepository.add(Recent(
+    NewCall call = (
       direction: activeCall.direction,
       number: activeCall.handle.value,
       video: activeCall.video,
       createdTime: activeCall.createdTime,
       acceptedTime: activeCall.acceptedTime,
       hungUpTime: activeCall.hungUpTime,
-    ));
+    );
+    callLogsRepository.add(call);
   }
 
-  Future<void> _ringtoneOutgoingPlay() async {
-    try {
-      await _appSound.playOutgoingCall();
-    } catch (e) {
-      _logger.info('_ringtoneOutgoingPlay: $e');
-    }
-  }
+  Future<void> _playRingbackSound() => _callkeepSound.playRingbackSound();
 
-  Future<void> _ringtoneStop() async {
-    try {
-      await _appSound.stopOutgoingCall();
-    } catch (e) {
-      _logger.info('_ringtoneStop: $e');
-    }
-  }
+  Future<void> _stopRingbackSound() => _callkeepSound.stopRingbackSound();
 }

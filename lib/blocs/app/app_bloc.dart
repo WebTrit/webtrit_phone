@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:logging/logging.dart';
 
@@ -9,6 +10,7 @@ import 'package:webtrit_api/webtrit_api.dart';
 
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
+import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 
@@ -74,35 +76,39 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     await secureStorage.writeToken(event.token);
     await secureStorage.writeUserId(event.userId);
 
+    await appPreferences.setSystemInfo(event.systemInfo);
+
     emit(state.copyWith(
       coreUrl: event.coreUrl,
       tenantId: event.tenantId,
       token: event.token,
       userId: event.userId,
     ));
+
+    FirebaseCrashlytics.instance.setUserIdentifier(event.userId).ignore();
+    FirebaseCrashlytics.instance.setCustomKey('coreUrl', event.coreUrl).ignore();
+    FirebaseCrashlytics.instance.setCustomKey('tenantId', event.tenantId).ignore();
   }
 
   void _onLogouted(AppLogouted event, Emitter<AppState> emit) async {
-    final client = createWebtritApiClient(state.coreUrl!, state.tenantId ?? '');
+    final token = state.token;
+    final coreUrl = state.coreUrl;
 
-    try {
-      await client.getUserInfo(state.token!);
-    } on RequestFailure catch (e) {
-      emit(state.copyWith(
-        accountErrorCode: AccountErrorCode.values.firstWhereOrNull((it) => it.value == e.error?.code),
-      ));
-    } catch (e) {
-      _logger.severe('_onLogouted', e);
+    if (token != null && coreUrl != null && event.checkTokenForError) {
+      try {
+        final client = createWebtritApiClient(coreUrl, state.tenantId ?? '');
+        await client.getUserInfo(token, options: const RequestOptions(retries: 0));
+      } on RequestFailure catch (e) {
+        final errorCode = AccountErrorCode.values.firstWhereOrNull((it) => it.value == e.error?.code);
+        emit(state.copyWith(accountErrorCode: errorCode));
+      } catch (e) {
+        _logger.severe('_onLogouted', e);
+      }
     }
 
     await _cleanUpUserData();
 
-    emit(state.copyWith(
-      coreUrl: null,
-      tenantId: null,
-      token: null,
-      userId: null,
-    ));
+    emit(state.copyWith(coreUrl: null, tenantId: null, token: null, userId: null));
   }
 
   void _onLogoutedTeardown(AppLogoutedTeardown event, Emitter<AppState> emit) async {

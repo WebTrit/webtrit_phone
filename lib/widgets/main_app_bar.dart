@@ -6,6 +6,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/features.dart';
+import 'package:webtrit_phone/utils/utils.dart';
+import 'package:webtrit_phone/widgets/widgets.dart';
 
 class MainAppBar extends AppBar {
   MainAppBar({
@@ -16,25 +18,33 @@ class MainAppBar extends AppBar {
           centerTitle: false,
           actions: [
             BlocBuilder<SessionStatusCubit, SessionStatusState>(
-              builder: (context, state) {
+              builder: (context, sessionState) {
                 return Ink(
                   decoration: ShapeDecoration(
                     shape: CircleBorder(
                       side: BorderSide(
-                        color: state.status.color(context),
+                        color: sessionState.status.color(context),
                       ),
                     ),
                   ),
-                  child: IconButton(
-                    constraints: const BoxConstraints.tightFor(
-                      width: kMinInteractiveDimension,
-                      height: kMinInteractiveDimension,
-                    ),
-                    icon: const Icon(
-                      Icons.person,
-                    ),
-                    onPressed: () {
-                      context.router.navigate(const SettingsRouterPageRoute());
+                  child: BlocBuilder<UserInfoCubit, UserInfoState>(
+                    builder: (context, userinfoState) {
+                      final info = userinfoState.userInfo;
+                      return IconButton(
+                        constraints: const BoxConstraints.tightFor(
+                          width: kMinInteractiveDimension,
+                          height: kMinInteractiveDimension,
+                        ),
+                        padding: const EdgeInsets.all(2),
+                        icon: LeadingAvatar(
+                          username: info?.name ?? info?.numbers.main ?? 'N/A',
+                          thumbnailUrl: gravatarThumbnailUrl(info?.email),
+                          radius: kMinInteractiveDimension / 2,
+                        ),
+                        onPressed: () {
+                          context.router.navigate(const SettingsRouterPageRoute());
+                        },
+                      );
                     },
                   ),
                 );

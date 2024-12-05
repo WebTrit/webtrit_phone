@@ -80,28 +80,12 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   }
 
   FutureOr<void> _onLogouted(SettingsLogouted event, Emitter<SettingsState> emit) async {
-    if (state.progress) return;
-
-    emit(state.copyWith(progress: true));
-    try {
-      await userRepository.logout();
-
-      appBloc.add(const AppLogouted());
-
-      if (emit.isDone) return;
-
-      emit(state.copyWith(progress: false));
-    } catch (e, stackTrace) {
-      _logger.warning('_onLogouted', e, stackTrace);
-
-      // TODO(Serdun): Implement a queue for logging out the server session once the connection is re-established.
-      appBloc.add(const AppLogouted());
-      notificationsBloc.add(NotificationsSubmitted(DefaultErrorNotification(e)));
-
-      if (emit.isDone) return;
-
-      emit(state.copyWith(progress: false));
-    }
+    // No need to wait any results here to not stop user from logging out.
+    // Errors will handled by [SessionCleanupWorker] inside to avoid connection issues on session cleanup.
+    //
+    // Also, its needed to avoid race conditions with Signaling client, that happens if we wait for the result here.
+    userRepository.logout().ignore();
+    appBloc.add(const AppLogouted());
   }
 
   FutureOr<void> _onRegisterStatusChanged(SettingsRegisterStatusChanged event, Emitter<SettingsState> emit) async {

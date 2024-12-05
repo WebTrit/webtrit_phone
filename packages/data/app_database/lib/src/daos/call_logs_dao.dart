@@ -4,19 +4,7 @@ import 'package:drift/drift.dart';
 
 part 'call_logs_dao.g.dart';
 
-class CallLogDataWithContactPhoneDataAndContactData {
-  CallLogDataWithContactPhoneDataAndContactData(this.callLog, this.contactPhoneData, this.contactData);
-
-  final CallLogData callLog;
-  final ContactPhoneData? contactPhoneData;
-  final ContactData? contactData;
-}
-
-@DriftAccessor(tables: [
-  CallLogsTable,
-  ContactPhonesTable,
-  ContactsTable,
-])
+@DriftAccessor(tables: [CallLogsTable])
 class CallLogsDao extends DatabaseAccessor<AppDatabase> with _$CallLogsDaoMixin {
   CallLogsDao(super.db);
 
@@ -38,43 +26,11 @@ class CallLogsDao extends DatabaseAccessor<AppDatabase> with _$CallLogsDaoMixin 
     return _selectLastCallLogsByNumber(number, period).watch();
   }
 
-  Stream<List<CallLogDataWithContactPhoneDataAndContactData>> watchLastCallLogsExt(
-      [Duration period = const Duration(days: 14)]) {
-    final q = _selectLastCallLogs(period).join([
-      leftOuterJoin(contactPhonesTable, contactPhonesTable.number.equalsExp(callLogsTable.number)),
-      leftOuterJoin(contactsTable, contactsTable.id.equalsExp(contactPhonesTable.contactId)),
-    ]);
-    _groupByCallLogsTableId(q);
-    return q.watch().map((rows) => rows.map(_toCallLogDataWithContactPhoneDataAndContactData).toList());
-  }
-
-  Future<CallLogDataWithContactPhoneDataAndContactData> getCallLogExt(Insertable<CallLogData> callLogData) {
-    final q = (select(callLogsTable)..whereSamePrimaryKey(callLogData)).join([
-      leftOuterJoin(contactPhonesTable, contactPhonesTable.number.equalsExp(callLogsTable.number)),
-      leftOuterJoin(contactsTable, contactsTable.id.equalsExp(contactPhonesTable.contactId)),
-    ]);
-    _groupByCallLogsTableId(q);
-    return q.getSingle().then(_toCallLogDataWithContactPhoneDataAndContactData);
-  }
-
   Future<int> insertCallLog(Insertable<CallLogData> callLogData) {
     return into(callLogsTable).insert(callLogData);
   }
 
-  Future<int> deleteCallLog(Insertable<CallLogData> callLogData) {
-    return delete(callLogsTable).delete(callLogData);
-  }
-
-  // necessary to overcome the possibility that one particular number be assigned to more than one contact
-  void _groupByCallLogsTableId(JoinedSelectStatement statement) {
-    statement.groupBy([callLogsTable.id]);
-  }
-
-  CallLogDataWithContactPhoneDataAndContactData _toCallLogDataWithContactPhoneDataAndContactData(TypedResult row) {
-    return CallLogDataWithContactPhoneDataAndContactData(
-      row.readTable(callLogsTable),
-      row.readTableOrNull(contactPhonesTable),
-      row.readTableOrNull(contactsTable),
-    );
+  Future deleteCallLog(int id) {
+    return (delete(callLogsTable)..where((t) => t.id.equals(id))).go();
   }
 }

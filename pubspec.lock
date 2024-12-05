@@ -415,10 +415,10 @@ packages:
     dependency: transitive
     description:
       name: drift
-      sha256: d6ff1ec6a0f3fa097dda6b776cf601f1f3d88b53b287288e09c1306f394fb1b3
+      sha256: df027d168a2985a2e9da900adeba2ab0136f0d84436592cf3cd5135f82c8579c
       url: "https://pub.dev"
     source: hosted
-    version: "2.20.3"
+    version: "2.21.0"
   equatable:
     dependency: "direct main"
     description:
@@ -1429,38 +1429,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.99"
-  soundpool:
-    dependency: "direct main"
-    description:
-      name: soundpool
-      sha256: fe7302005759d6a3561de1711e3ea818b1ba025a62375b469196dda5b654bd38
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.4.1"
-  soundpool_macos:
-    dependency: transitive
-    description:
-      name: soundpool_macos
-      sha256: e0440a19d4e8f344dace336923b369184e91eebbbd8348266f4434b675bd15db
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.3.0"
-  soundpool_platform_interface:
-    dependency: transitive
-    description:
-      name: soundpool_platform_interface
-      sha256: "7c6666e19319151b2036c4fc9b6da3a83f2ebf4097989e6ba1c2b0bfe3612e9f"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.2.0"
-  soundpool_web:
-    dependency: transitive
-    description:
-      name: soundpool_web
-      sha256: "3d1eb8d6cceb8a0aec38ff9aec4fbd11a9a8101d27b27a6eb29305b83d46aee5"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.3.0"
   source_gen:
     dependency: transitive
     description:
@@ -1521,10 +1489,10 @@ packages:
     dependency: transitive
     description:
       name: sqlite3_flutter_libs
-      sha256: "62bbb4073edbcdf53f40c80775f33eea01d301b7b81417e5b3fb7395416258c1"
+      sha256: "7ae52b23366e5295005022e62fa093f64bfe190810223ea0ebf733a4cd140bce"
       url: "https://pub.dev"
     source: hosted
-    version: "0.5.24"
+    version: "0.5.26"
   ssl_certificates:
     dependency: "direct main"
     description:

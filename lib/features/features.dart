@@ -1,8 +1,8 @@
 export 'autoprovision/autoprovision.dart';
 export 'call/call.dart';
+export 'call_to_actions/call_to_actions.dart';
 export 'contact/contact.dart';
 export 'contacts/contacts.dart';
-export 'demo/demo.dart';
 export 'embedded/exports.dart';
 export 'favorites/favorites.dart';
 export 'keypad/keypad.dart';
@@ -20,3 +20,4 @@ export 'settings/settings.dart';
 export 'terms_conditions/terms_conditions.dart';
 export 'undefined/undefined.dart';
 export 'user_agreement/user_agreement.dart';
+export 'user_info/user_info.dart';

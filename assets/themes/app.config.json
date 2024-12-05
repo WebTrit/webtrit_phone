@@ -19,7 +19,7 @@
         "launch": false,
         "showToolbar": true,
         "titleL10n": "login_requestCredentials_title",
-        "url": "https://webtrit-app.web.app/example/example_embedded_login.html"
+        "resource": "assets/themes/custom_signup.html"
       }
     ]
   },
@@ -75,7 +75,7 @@
           "titleL10n": "embaded1TitleL10n",
           "icon": "0xe2ce",
           "data": {
-            "url": "https://webtrit-app.web.app/example/example_embedded_advertisement.html"
+            "resource": "https://webtrit-app.web.app/example/example_embedded_advertisement.html"
           }
         },
         {
@@ -85,7 +85,7 @@
           "titleL10n": "embaded2TitleL10n",
           "icon": "0xe2ce",
           "data": {
-            "url": "https://webtrit-app.web.app/example/example_embedded_call.html"
+            "resource": "https://webtrit-app.web.app/example/example_embedded_call.html"
           }
         },
         {
@@ -95,7 +95,7 @@
           "titleL10n": "embaded3TitleL10n",
           "icon": "0xe2ce",
           "data": {
-            "url": "https://webtrit-app.web.app/example/example_embedded_wallet_balance.html"
+            "resource": "https://webtrit-app.web.app/example/example_embedded_wallet_balance.html"
           }
         }
       ]
@@ -131,7 +131,7 @@
             "titleL10n": "settings_ListViewTileTitle_termsConditions",
             "icon": "0xeedf",
             "data": {
-              "url": "https://webtrit.com/legal/privacy-policy-for-webtrit-app/"
+              "resource": "https://webtrit.com/legal/privacy-policy-for-webtrit-app/"
             }
           },
           {
@@ -164,7 +164,7 @@
             "icon": "0xe3a2",
             "type": "embedded",
             "data": {
-              "url": "https://webtrit-app.web.app/example/example_embedded_registration.html"
+              "resource": "https://webtrit-app.web.app/example/example_embedded_registration.html"
             }
           },
           {
@@ -173,7 +173,7 @@
             "icon": "0xe3a2",
             "type": "embedded",
             "data": {
-              "url": "https://webtrit-app.web.app/example/example_embedded_statistics.html"
+              "resource": "https://webtrit-app.web.app/example/example_embedded_statistics.html"
             }
           }
         ]
@@ -188,7 +188,7 @@
             "icon": "0xe3a2",
             "type": "embedded",
             "data": {
-              "url": "https://webtrit-app.web.app/example/example_embedded_rating.html"
+              "resource": "https://webtrit-app.web.app/example/example_embedded_rating.html"
             }
           }
         ]

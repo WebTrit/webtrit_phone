@@ -9,6 +9,6 @@ class RecentStarted extends RecentEvent {
 }
 
 @Freezed(copyWith: false)
-class RecentDeleted with _$RecentDeleted implements RecentEvent {
-  const factory RecentDeleted(Recent recent) = _RecentDeleted;
+class CallLogEntryDeleted with _$CallLogEntryDeleted implements RecentEvent {
+  const factory CallLogEntryDeleted(CallLogEntry callLogEntry) = _CallLogEntryDeleted;
 }

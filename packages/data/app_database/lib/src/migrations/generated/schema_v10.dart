@@ -20,10 +20,10 @@ class Contacts extends Table with TableInfo {
       requiredDuringInsert: true,
       $customConstraints: 'NOT NULL');
   late final GeneratedColumn<String> sourceId = GeneratedColumn<String>(
-      'source_id', aliasedName, false,
+      'source_id', aliasedName, true,
       type: DriftSqlType.string,
-      requiredDuringInsert: true,
-      $customConstraints: 'NOT NULL');
+      requiredDuringInsert: false,
+      $customConstraints: 'NULL');
   late final GeneratedColumn<String> firstName = GeneratedColumn<String>(
       'first_name', aliasedName, true,
       type: DriftSqlType.string,

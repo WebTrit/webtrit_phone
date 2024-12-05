@@ -52,7 +52,7 @@ class _CallShellState extends State<CallShell> {
           final code = SignalingDisconnectCode.values.byCode(signalingDisconnectCode);
           if (code == SignalingDisconnectCode.sessionMissedError) {
             _logger.warning('Signaling session listener: missed error $signalingDisconnectCode');
-            context.read<AppBloc>().add(const AppLogouted());
+            context.read<AppBloc>().add(const AppLogouted(checkTokenForError: true));
           }
         }
       },
