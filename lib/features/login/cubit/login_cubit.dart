@@ -20,7 +20,7 @@ part 'login_cubit.freezed.dart';
 
 part 'login_state.dart';
 
-class LoginCubit extends Cubit<LoginState> {
+class LoginCubit extends Cubit<LoginState> with SystemInfoApiMapper {
   LoginCubit({
     @visibleForTesting this.createWebtritApiClient = defaultCreateWebtritApiClient,
     required this.notificationsBloc,
@@ -430,12 +430,12 @@ class LoginCubit extends Cubit<LoginState> {
   void loginSignupVerifyRepeat() {
     loginSignupRequestSubmitted();
   }
-}
 
-Future<WebtritSystemInfo> _retrieveSystemInfo(WebtritApiClient webtritApiClient) async {
-  final apiSystemInfo = await webtritApiClient.getSystemInfo();
-  final systemInfo = systemInfoFromApi(apiSystemInfo);
-  return systemInfo;
+  Future<WebtritSystemInfo> _retrieveSystemInfo(WebtritApiClient webtritApiClient) async {
+    final apiSystemInfo = await webtritApiClient.getSystemInfo();
+    final systemInfo = systemInfoFromApi(apiSystemInfo);
+    return systemInfo;
+  }
 }
 
 Future<SessionOtpProvisional> _createSessionOtp(

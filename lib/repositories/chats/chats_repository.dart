@@ -1,10 +1,8 @@
 import 'dart:async';
 
 import 'package:webtrit_phone/data/data.dart';
+import 'package:webtrit_phone/mappers/mappers.dart';
 import 'package:webtrit_phone/models/models.dart';
-
-import 'components/chats_events.dart';
-import 'components/chats_drift_mapper.dart';
 
 class ChatsRepository with ChatsDriftMapper {
   ChatsRepository({required AppDatabase appDatabase}) : _appDatabase = appDatabase;
