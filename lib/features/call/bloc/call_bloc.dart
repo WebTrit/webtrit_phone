@@ -49,6 +49,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   final NotificationsBloc notificationsBloc;
   final Callkeep callkeep;
 
+  final String? forceAudioCodec;
+  final String? forceVideoCodec;
+
   StreamSubscription<List<ConnectivityResult>>? _connectivityChangedSubscription;
   StreamSubscription<PendingCall>? _pendingCallHandlerSubscription;
 
@@ -67,6 +70,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     required this.callLogsRepository,
     required this.notificationsBloc,
     required this.callkeep,
+    this.forceAudioCodec,
+    this.forceVideoCodec,
   }) : super(const CallState()) {
     on<CallStarted>(
       _onCallStarted,
@@ -908,6 +913,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
           } else {
             await peerConnection.setRemoteDescription(remoteDescription);
             final localDescription = await peerConnection.createAnswer({});
+            WebrtcSdpUtils.forceCodecIfSupports(localDescription, audio: forceAudioCodec, video: forceVideoCodec);
+
             await _signalingClient?.execute(UpdateRequest(
               transaction: WebtritSignalingClient.generateTransactionId(),
               line: activeCall.line,
@@ -1482,6 +1489,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     try {
       final localDescription = await peerConnection.createOffer({});
+      WebrtcSdpUtils.forceCodecIfSupports(localDescription, audio: forceAudioCodec, video: forceVideoCodec);
+
       // Need to initiate outgoing call before set localDescription to avoid races
       // between [OutgoingCallRequest] and [IceTrickleRequest]s.
       await state.performOnActiveCall(event.callId, (activeCall) {
@@ -1559,6 +1568,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       final peerConnection = (await _peerConnectionRetrieve(call.callId))!;
 
       final localDescription = await peerConnection.createAnswer({});
+      WebrtcSdpUtils.forceCodecIfSupports(localDescription, audio: forceAudioCodec, video: forceVideoCodec);
+
       await _signalingClient?.execute(AcceptRequest(
         transaction: WebtritSignalingClient.generateTransactionId(),
         line: call.line,
@@ -1798,6 +1809,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
           } else {
             await peerConnection.restartIce();
             final localDescription = await peerConnection.createOffer({});
+            WebrtcSdpUtils.forceCodecIfSupports(localDescription, audio: forceAudioCodec, video: forceVideoCodec);
+
             await peerConnection.setLocalDescription(localDescription);
 
             final updateRequest = UpdateRequest(
