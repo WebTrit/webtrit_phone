@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/blocs/app/app_bloc.dart';
-import 'package:webtrit_phone/environment_config.dart';
+import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
@@ -24,11 +24,8 @@ class _MessagingShellState extends State<MessagingShell> {
   @override
   void initState() {
     super.initState();
-    // TODO(Serdun): Integrate feature enablement with app configuration. Move hardcoded constants `chatsEnabled` and `smsEnabled`
-    // from `EnvironmentConfig` to the constructor for improved flexibility.
-    const chatsEnabled = EnvironmentConfig.CHAT_FEATURE_ENABLE;
-    const smsEnabled = EnvironmentConfig.SMS_FEATURE_ENABLE;
-    if (!chatsEnabled && !smsEnabled) return;
+
+    if (FeatureAccess().messagingFeature.anyMessagingEnabled == false) return;
 
     notificationsService = MessagingNotificationsService(
       context.read<AppBloc>().state.userId!,

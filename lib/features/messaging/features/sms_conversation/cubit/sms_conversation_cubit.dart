@@ -104,33 +104,25 @@ class SmsConversationCubit extends Cubit<SmsConversationState> {
     final channel = _client.getSmsConversationChannel(conversationId);
     if (channel == null || channel.state != PhoenixChannelState.joined) return false;
 
+    final busy = _acquireBusy();
+    if (busy == false) return;
+
     try {
-      emit(state.copyWith(busy: true));
       await channel.deleteSmsConversation();
       emit(SmsConversationState.left(_creds));
     } catch (e, s) {
       _logger.warning('deleteConversation failed', e, s);
       _submitNotification(DefaultErrorNotification(e));
-      emit(state.copyWith(busy: false));
+      _releaseBusy();
     }
   }
 
   Future fetchHistory() async {
-    final state = this.state;
-    if (state is! SCSReady) return;
+    final hLock = _acquireHistoryFetching();
+    if (hLock == null) return;
+    final (topDate, conversationId) = hLock;
 
-    if (state.fetchingHistory || state.historyEndReached) return;
-
-    final conversationId = state.conversation?.id;
-    if (conversationId == null) return;
-
-    final topMessage = state.messages.lastOrNull;
-    if (topMessage == null) return;
-    final topDate = topMessage.createdAt;
-
-    emit(state.copyWith(fetchingHistory: true));
-
-    _logger.info('fetchHistory: $conversationId, ${topMessage.createdAt}');
+    _logger.info('fetchHistory: $conversationId, $topDate');
 
     try {
       List<SmsMessage> messages = [];
@@ -158,15 +150,9 @@ class SmsConversationCubit extends Cubit<SmsConversationState> {
       }
 
       if (isClosed) return;
-
-      final updatedMessages = [...state.messages, ...messages];
-      if (messages.isNotEmpty) {
-        emit(state.copyWith(messages: updatedMessages, fetchingHistory: false, historyEndReached: false));
-      } else {
-        emit(state.copyWith(fetchingHistory: false, historyEndReached: true));
-      }
+      _releaseHistoryFetching(endReached: messages.isEmpty, newMessages: messages);
     } on Exception catch (e, s) {
-      emit(state.copyWith(fetchingHistory: false));
+      _releaseHistoryFetching();
       _logger.warning('fetchHistory failed', e, s);
       _submitNotification(DefaultErrorNotification(e));
     }
@@ -215,6 +201,8 @@ class SmsConversationCubit extends Cubit<SmsConversationState> {
     // Subscribe to outbox messages updates
     _outboxMessageDeletesSub =
         _outboxMessageDeletesSubFactory((entries) => _handleOutboxMessageDeletesUpdate(conversationId, entries));
+
+    // _fillHistory();
   }
 
   StreamSubscription _conversationUpdateSubFactory(void Function(SmsConversation) onArrive) {
@@ -303,6 +291,59 @@ class SmsConversationCubit extends Cubit<SmsConversationState> {
     _logger.info('_handleReadCursorsUpdate: ${cursors.length}');
     final state = this.state;
     if (state is SCSReady) emit(state.copyWith(readCursors: cursors));
+  }
+
+  /// Acquire busy lock state if it's not busy yet
+  /// Returns true if busy state was acquired, false otherwise
+  /// The lock state will be released by [_releaseBusy]
+  bool _acquireBusy() {
+    final state = this.state;
+    if (state is! SCSReady) return false;
+    emit(state.copyWith(busy: true));
+    return true;
+  }
+
+  /// Release busy lock state
+  void _releaseBusy() {
+    final state = this.state;
+    if (state is SCSReady) emit(state.copyWith(busy: false));
+  }
+
+  /// Acquire fetching history lock state if it's not fetching yet
+  /// Returns the data needed to fetch history if it's able to fetch, null otherwise
+  /// The lock state will be released by [_releaseHistoryFetching]
+  (DateTime, int)? _acquireHistoryFetching() {
+    final state = this.state;
+    if (state is! SCSReady || state.fetchingHistory) return null;
+
+    final conversationId = state.conversation?.id;
+    if (conversationId == null) return null;
+
+    final topMessage = state.messages.lastOrNull;
+    if (topMessage == null) return null;
+
+    emit(state.copyWith(fetchingHistory: true));
+    return (topMessage.createdAt, conversationId);
+  }
+
+  /// Release fetching history lock state and update the state with new messages if any
+  void _releaseHistoryFetching({bool endReached = false, List<SmsMessage> newMessages = const []}) {
+    final state = this.state;
+    if (state is SCSReady) {
+      final messages = [...state.messages, ...newMessages];
+      emit(state.copyWith(fetchingHistory: false, historyEndReached: endReached, messages: messages));
+    }
+  }
+
+  // reserved for testing purposes
+  // ignore: unused_element
+  Future<void> _fillHistory({int index = 0}) async {
+    if (isClosed) return;
+    await sendMessage('Hello, I am a bot. I am here to help you. \n $index');
+    if (index < 100) {
+      await Future.delayed(const Duration(seconds: 2));
+      await _fillHistory(index: index + 1);
+    }
   }
 
   @override

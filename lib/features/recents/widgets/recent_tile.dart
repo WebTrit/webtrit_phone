@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:intl/intl.dart';
-import 'package:webtrit_phone/environment_config.dart';
 
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
@@ -13,6 +12,7 @@ class RecentTile extends StatelessWidget {
   const RecentTile({
     super.key,
     required this.recent,
+    required this.chatsEnabled,
     this.dateFormat,
     this.onTap,
     this.onLongPress,
@@ -22,6 +22,7 @@ class RecentTile extends StatelessWidget {
   });
 
   final Recent recent;
+  final bool chatsEnabled;
   final DateFormat? dateFormat;
 
   final GestureTapCallback? onTap;
@@ -35,7 +36,6 @@ class RecentTile extends StatelessWidget {
     final themeData = Theme.of(context);
     final onDeleted = this.onDeleted;
     final dateFormat = this.dateFormat ?? DateFormat();
-    const chatsEnabled = EnvironmentConfig.CHAT_FEATURE_ENABLE;
 
     final callLogEntry = recent.callLogEntry;
     final contact = recent.contact;
