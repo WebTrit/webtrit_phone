@@ -6,11 +6,12 @@ import 'package:logging/logging.dart';
 
 import 'package:webtrit_api/webtrit_api.dart';
 
+import 'package:webtrit_phone/mappers/mappers.dart';
 import 'package:webtrit_phone/models/models.dart';
 
 final _logger = Logger('ExternalContactsRepository');
 
-class ExternalContactsRepository {
+class ExternalContactsRepository with ExternalContactApiMapper {
   ExternalContactsRepository({
     required WebtritApiClient webtritApiClient,
     required String token,
@@ -75,23 +76,6 @@ class ExternalContactsRepository {
 
   Future<List<ExternalContact>> _listContacts() async {
     final contacts = await _webtritApiClient.getUserContactList(_token);
-
-    return contacts.map((contact) {
-      final numbers = contact.numbers;
-      return ExternalContact(
-        id: contact.userId,
-        registered: contact.sipStatus == null ? null : contact.sipStatus == SipStatus.registered,
-        userRegistered: contact.isRegisteredUser,
-        isCurrentUser: contact.isCurrentUser,
-        firstName: contact.firstName,
-        lastName: contact.lastName,
-        aliasName: contact.aliasName,
-        number: numbers.main,
-        ext: numbers.ext,
-        mobile: numbers.main,
-        smsNumbers: numbers.sms,
-        email: contact.email,
-      );
-    }).toList();
+    return contacts.map(externalContactFromApi).toList();
   }
 }

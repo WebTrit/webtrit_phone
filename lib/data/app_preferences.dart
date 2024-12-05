@@ -6,7 +6,7 @@ import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/mappers/mappers.dart';
 
-class AppPreferences {
+class AppPreferences with SystemInfoJsonMapper {
   static const _kRegisterStatusKey = 'register-status';
   static const _kThemeModeKey = 'theme-mode';
   static const _kLocaleLanguageTagKey = 'locale-language-tag';

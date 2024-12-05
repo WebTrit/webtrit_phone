@@ -17,7 +17,7 @@ part 'autoprovision_state.dart';
 
 final _logger = Logger('AutoprovisionCubit');
 
-class AutoprovisionCubit extends Cubit<AutoprovisionState> {
+class AutoprovisionCubit extends Cubit<AutoprovisionState> with SystemInfoApiMapper {
   AutoprovisionCubit(this.config) : super(AutoprovisionState.initial());
 
   final AutoprovisionConfig config;
