@@ -49,6 +49,7 @@ class AboutScreen extends StatelessWidget {
                   Text(
                     state.appName,
                     style: themeData.textTheme.displaySmall,
+                    textAlign: TextAlign.center,
                   ),
                   Text(state.packageName),
                   SizedBox(
