@@ -14,11 +14,10 @@ import 'package:logging/logging.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
-import 'package:webtrit_phone/utils/utils.dart';
-import 'package:webtrit_phone/features/call/utils/utils.dart';
 import 'package:webtrit_signaling/webtrit_signaling.dart';
 import 'package:ssl_certificates/ssl_certificates.dart';
 
+import 'package:webtrit_phone/utils/utils.dart';
 import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/app/notifications/notifications.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
@@ -27,6 +26,7 @@ import 'package:webtrit_phone/repositories/repositories.dart';
 
 import '../extensions/extensions.dart';
 import '../models/models.dart';
+import '../services/services.dart';
 
 export 'package:webtrit_callkeep/webtrit_callkeep.dart' show CallkeepHandle, CallkeepHandleType;
 
@@ -50,8 +50,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   final NotificationsBloc notificationsBloc;
   final Callkeep callkeep;
 
-  final String? forceAudioCodec;
-  final String? forceVideoCodec;
+  final SDPMunger? sdpMunger;
 
   StreamSubscription<List<ConnectivityResult>>? _connectivityChangedSubscription;
   StreamSubscription<PendingCall>? _pendingCallHandlerSubscription;
@@ -71,8 +70,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     required this.callLogsRepository,
     required this.notificationsBloc,
     required this.callkeep,
-    this.forceAudioCodec,
-    this.forceVideoCodec,
+    this.sdpMunger,
   }) : super(const CallState()) {
     on<CallStarted>(
       _onCallStarted,
@@ -914,7 +912,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
           } else {
             await peerConnection.setRemoteDescription(remoteDescription);
             final localDescription = await peerConnection.createAnswer({});
-            WebrtcSdpUtils.forceCodecIfSupports(localDescription, audio: forceAudioCodec, video: forceVideoCodec);
+            sdpMunger?.modify(localDescription);
 
             await _signalingClient?.execute(UpdateRequest(
               transaction: WebtritSignalingClient.generateTransactionId(),
@@ -1490,7 +1488,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     try {
       final localDescription = await peerConnection.createOffer({});
-      WebrtcSdpUtils.forceCodecIfSupports(localDescription, audio: forceAudioCodec, video: forceVideoCodec);
+      sdpMunger?.modify(localDescription);
 
       // Need to initiate outgoing call before set localDescription to avoid races
       // between [OutgoingCallRequest] and [IceTrickleRequest]s.
@@ -1569,7 +1567,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       final peerConnection = (await _peerConnectionRetrieve(call.callId))!;
 
       final localDescription = await peerConnection.createAnswer({});
-      WebrtcSdpUtils.forceCodecIfSupports(localDescription, audio: forceAudioCodec, video: forceVideoCodec);
+      sdpMunger?.modify(localDescription);
 
       await _signalingClient?.execute(AcceptRequest(
         transaction: WebtritSignalingClient.generateTransactionId(),
@@ -1810,7 +1808,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
           } else {
             await peerConnection.restartIce();
             final localDescription = await peerConnection.createOffer({});
-            WebrtcSdpUtils.forceCodecIfSupports(localDescription, audio: forceAudioCodec, video: forceVideoCodec);
+            sdpMunger?.modify(localDescription);
 
             await peerConnection.setLocalDescription(localDescription);
 

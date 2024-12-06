@@ -1,38 +1,48 @@
-// ignore_for_file: unnecessary_null_comparison
-import 'dart:developer';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:sdp_transform/sdp_transform.dart' as sdp_transform;
 
 class WebrtcSdpUtils {
-  /// Specify the codec if it is supported by the client.
+  static bool _sameCodec(dynamic codecData, String codecName) {
+    return (codecData['codec'] as String).toLowerCase() == codecName.toLowerCase();
+  }
+
+  /// Specify the audio codec if it is supported by the client.
   /// by excluding other codecs from the SDP, so the client can force the server to use the specified codec.
   ///
   /// [audio] codec name, e.g. `opus`, `g722`, `ilbc`, `pcmu`, `pcma`.
   ///
+  /// if the codec is not supported by the client, the SDP will not be changed.
+  static forceAudioCodecIfSupports(RTCSessionDescription description, String audio) {
+    var capSel = _CodecCapabilitySelector(description.sdp!);
+
+    var acaps = capSel.getCapabilities('audio');
+    if (acaps != null) {
+      final supported = acaps.codecs.any((data) => _sameCodec(data, audio));
+      if (supported) {
+        acaps.codecs = acaps.codecs.where((data) => _sameCodec(data, audio)).toList();
+        acaps.setCodecPreferences('audio', acaps.codecs);
+        capSel.setCapabilities(acaps);
+      }
+    }
+
+    description.sdp = capSel.sdp();
+  }
+
+  /// Specify the video codec if it is supported by the client.
+  /// by excluding other codecs from the SDP, so the client can force the server to use the specified codec.
+  ///
   /// [video] codec name, e.g. `av1`, `h264`, `h265`, `vp8`, `vp9`.
   ///
   /// if the codec is not supported by the client, the SDP will not be changed.
-  static forceCodecIfSupports(RTCSessionDescription description, {String? audio, String? video}) {
+  static forceVideoCodecIfSupports(RTCSessionDescription description, String video) {
     var capSel = _CodecCapabilitySelector(description.sdp!);
 
     bool sameCodec(dynamic codecData, String codecName) {
       return (codecData['codec'] as String).toLowerCase() == codecName.toLowerCase();
     }
 
-    // audio = 'opus';
-    var acaps = capSel.getCapabilities('audio');
-    if (audio != null && acaps != null) {
-      final supported = acaps.codecs.any((data) => sameCodec(data, audio));
-      if (supported) {
-        acaps.codecs = acaps.codecs.where((data) => sameCodec(data, audio)).toList();
-        acaps.setCodecPreferences('audio', acaps.codecs);
-        capSel.setCapabilities(acaps);
-      }
-    }
-
-    // video = 'h264';
     var vcaps = capSel.getCapabilities('video');
-    if (video != null && vcaps != null) {
+    if (vcaps != null) {
       final supported = vcaps.codecs.any((data) => sameCodec(data, video));
       if (supported) {
         vcaps.codecs = vcaps.codecs.where((data) => sameCodec(data, video)).toList();
@@ -41,12 +51,7 @@ class WebrtcSdpUtils {
       }
     }
 
-    final newSdp = capSel.sdp();
-    final oldSdp = description.sdp;
-    log('oldSdp:\n$oldSdp');
-    log('newSdp:\n$newSdp');
-
-    description.sdp = newSdp;
+    description.sdp = capSel.sdp();
   }
 }
 
