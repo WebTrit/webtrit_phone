@@ -1125,6 +1125,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _CallControlEventAnswered event,
     Emitter<CallState> emit,
   ) async {
+    emit(state.copyWithMappedActiveCall(
+      event.callId,
+      (call) => call.copyWith(status: ActiveCallStatus.answering),
+    ));
+
     final error = await callkeep.answerCall(event.callId);
     if (error != null) {
       _logger.warning('__onCallControlEventAnswered error: $error');
@@ -1547,7 +1552,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       bool canAnswer = false;
       await Future.doWhile(() async {
         final call = state.retrieveActiveCall(event.callId);
-        final jsepProcessed = call?.status == ActiveCallStatus.incomingJsepProcessed;
+        final jsepProcessed =
+            call?.status == ActiveCallStatus.incomingJsepProcessed || call?.status == ActiveCallStatus.answering;
 
         final pc = await _peerConnectionRetrieve(event.callId);
         final offerReceived = pc?.signalingState == RTCSignalingState.RTCSignalingStateHaveRemoteOffer;

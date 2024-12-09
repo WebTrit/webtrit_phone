@@ -337,6 +337,12 @@ abstract class AppLocalizations {
   /// **'Disconnecting the call, please hold on…'**
   String get callProcessingStatus_disconnecting;
 
+  /// No description provided for @callProcessingStatus_answering.
+  ///
+  /// In en, this message translates to:
+  /// **'Answering the call, please hold on…'**
+  String get callProcessingStatus_answering;
+
   /// No description provided for @callStatus_appUnregistered.
   ///
   /// In en, this message translates to:

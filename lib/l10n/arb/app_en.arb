@@ -80,6 +80,8 @@
   "@call_FailureAcknowledgeDialog_title": {},
   "callProcessingStatus_disconnecting": "Disconnecting the call, please hold on…",
   "@callProcessingStatus_disconnecting": {},
+  "callProcessingStatus_answering": "Answering the call, please hold on…",
+  "@callProcessingStatus_answering": {},
   "callStatus_appUnregistered": "Unregistered",
   "@callStatus_appUnregistered": {},
   "callStatus_connectError": "Connection error",
