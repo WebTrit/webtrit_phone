@@ -37,7 +37,7 @@ class ChatsDao extends DatabaseAccessor<AppDatabase> with _$ChatsDaoMixin {
   }
 
   Future<int?> findDialogId(String participantId) async {
-    var variables = [Variable.withString(ChatTypeEnum.dialog.name), Variable.withString(participantId)];
+    var variables = [Variable.withString(ChatTypeEnum.direct.name), Variable.withString(participantId)];
     final query = customSelect('''
       SELECT c.id, c.type
       FROM chats c

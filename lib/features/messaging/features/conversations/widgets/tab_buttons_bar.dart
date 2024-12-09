@@ -6,9 +6,9 @@ import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 
 class TabButtonsBar extends StatelessWidget {
-  const TabButtonsBar(this.tabType, {required this.onChange, super.key});
+  const TabButtonsBar(this.selectedTab, {required this.onChange, super.key});
 
-  final TabType tabType;
+  final TabType selectedTab;
   final Function(TabType) onChange;
 
   @override
@@ -30,7 +30,7 @@ class TabButtonsBar extends StatelessWidget {
             children: [
               AnimatedContainer(
                 decoration: BoxDecoration(
-                  color: tabType == TabType.chat ? colorScheme.primary : colorScheme.surfaceBright,
+                  color: selectedTab == TabType.chat ? colorScheme.primary : colorScheme.surfaceBright,
                   borderRadius: BorderRadius.circular(8),
                 ),
                 duration: const Duration(milliseconds: 300),
@@ -48,7 +48,7 @@ class TabButtonsBar extends StatelessWidget {
                           Text(
                             context.l10n.messaging_ConversationsScreen_messages_title,
                             style: theme.textTheme.bodyMedium!.copyWith(
-                              color: tabType == TabType.chat ? colorScheme.onPrimary : colorScheme.onSurface,
+                              color: selectedTab == TabType.chat ? colorScheme.onPrimary : colorScheme.onSurface,
                             ),
                           ),
                           if (state.chatsWithUnreadCount > 0) ...[
@@ -58,14 +58,14 @@ class TabButtonsBar extends StatelessWidget {
                               height: 14,
                               padding: const EdgeInsets.symmetric(horizontal: 1),
                               decoration: BoxDecoration(
-                                color: tabType == TabType.chat ? colorScheme.onPrimary : colorScheme.onSurface,
+                                color: selectedTab == TabType.chat ? colorScheme.onPrimary : colorScheme.onSurface,
                                 shape: BoxShape.circle,
                               ),
                               child: FittedBox(
                                 child: Text(
                                   state.chatsWithUnreadCount.toString(),
                                   style: TextStyle(
-                                    color: tabType == TabType.chat ? colorScheme.onSurface : colorScheme.onPrimary,
+                                    color: selectedTab == TabType.chat ? colorScheme.onSurface : colorScheme.onPrimary,
                                   ),
                                 ),
                               ),
@@ -79,7 +79,7 @@ class TabButtonsBar extends StatelessWidget {
               ),
               AnimatedContainer(
                 decoration: BoxDecoration(
-                  color: tabType == TabType.sms ? colorScheme.primary : colorScheme.surfaceBright,
+                  color: selectedTab == TabType.sms ? colorScheme.primary : colorScheme.surfaceBright,
                   borderRadius: BorderRadius.circular(8),
                 ),
                 duration: const Duration(milliseconds: 300),
@@ -97,7 +97,7 @@ class TabButtonsBar extends StatelessWidget {
                           Text(
                             context.l10n.messaging_ConversationsScreen_smses_title,
                             style: theme.textTheme.bodyMedium!.copyWith(
-                              color: tabType == TabType.sms ? colorScheme.onPrimary : colorScheme.onSurface,
+                              color: selectedTab == TabType.sms ? colorScheme.onPrimary : colorScheme.onSurface,
                             ),
                           ),
                           if (state.smsConversationsWithUnreadCount > 0) ...[
@@ -107,14 +107,14 @@ class TabButtonsBar extends StatelessWidget {
                               height: 14,
                               padding: const EdgeInsets.symmetric(horizontal: 1),
                               decoration: BoxDecoration(
-                                color: tabType == TabType.sms ? colorScheme.onPrimary : colorScheme.onSurface,
+                                color: selectedTab == TabType.sms ? colorScheme.onPrimary : colorScheme.onSurface,
                                 shape: BoxShape.circle,
                               ),
                               child: FittedBox(
                                 child: Text(
                                   state.smsConversationsWithUnreadCount.toString(),
                                   style: TextStyle(
-                                    color: tabType == TabType.sms ? colorScheme.onSurface : colorScheme.onPrimary,
+                                    color: selectedTab == TabType.sms ? colorScheme.onSurface : colorScheme.onPrimary,
                                   ),
                                 ),
                               ),

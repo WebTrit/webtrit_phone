@@ -9819,8 +9819,7 @@ final class $$ChatMembersTableTableReferences extends BaseReferences<
       db.chatsTable.createAlias(
           $_aliasNameGenerator(db.chatMembersTable.chatId, db.chatsTable.id));
 
-  $$ChatsTableTableProcessedTableManager? get chatId {
-    if ($_item.chatId == null) return null;
+  $$ChatsTableTableProcessedTableManager get chatId {
     final manager = $$ChatsTableTableTableManager($_db, $_db.chatsTable)
         .filter((f) => f.id($_item.chatId!));
     final item = $_typedResult.readTableOrNull(_chatIdTable($_db));
@@ -10097,8 +10096,7 @@ final class $$ChatMessagesTableTableReferences extends BaseReferences<
       db.chatsTable.createAlias(
           $_aliasNameGenerator(db.chatMessagesTable.chatId, db.chatsTable.id));
 
-  $$ChatsTableTableProcessedTableManager? get chatId {
-    if ($_item.chatId == null) return null;
+  $$ChatsTableTableProcessedTableManager get chatId {
     final manager = $$ChatsTableTableTableManager($_db, $_db.chatsTable)
         .filter((f) => f.id($_item.chatId!));
     final item = $_typedResult.readTableOrNull(_chatIdTable($_db));
@@ -10468,8 +10466,7 @@ final class $$ChatMessageSyncCursorTableTableReferences extends BaseReferences<
       db.chatsTable.createAlias($_aliasNameGenerator(
           db.chatMessageSyncCursorTable.chatId, db.chatsTable.id));
 
-  $$ChatsTableTableProcessedTableManager? get chatId {
-    if ($_item.chatId == null) return null;
+  $$ChatsTableTableProcessedTableManager get chatId {
     final manager = $$ChatsTableTableTableManager($_db, $_db.chatsTable)
         .filter((f) => f.id($_item.chatId!));
     final item = $_typedResult.readTableOrNull(_chatIdTable($_db));
@@ -10730,8 +10727,7 @@ final class $$ChatMessageReadCursorTableTableReferences extends BaseReferences<
       db.chatsTable.createAlias($_aliasNameGenerator(
           db.chatMessageReadCursorTable.chatId, db.chatsTable.id));
 
-  $$ChatsTableTableProcessedTableManager? get chatId {
-    if ($_item.chatId == null) return null;
+  $$ChatsTableTableProcessedTableManager get chatId {
     final manager = $$ChatsTableTableTableManager($_db, $_db.chatsTable)
         .filter((f) => f.id($_item.chatId!));
     final item = $_typedResult.readTableOrNull(_chatIdTable($_db));
@@ -11319,8 +11315,7 @@ final class $$ChatOutboxMessageEditTableTableReferences extends BaseReferences<
       db.chatsTable.createAlias($_aliasNameGenerator(
           db.chatOutboxMessageEditTable.chatId, db.chatsTable.id));
 
-  $$ChatsTableTableProcessedTableManager? get chatId {
-    if ($_item.chatId == null) return null;
+  $$ChatsTableTableProcessedTableManager get chatId {
     final manager = $$ChatsTableTableTableManager($_db, $_db.chatsTable)
         .filter((f) => f.id($_item.chatId!));
     final item = $_typedResult.readTableOrNull(_chatIdTable($_db));
@@ -11598,8 +11593,7 @@ final class $$ChatOutboxMessageDeleteTableTableReferences
       db.chatsTable.createAlias($_aliasNameGenerator(
           db.chatOutboxMessageDeleteTable.chatId, db.chatsTable.id));
 
-  $$ChatsTableTableProcessedTableManager? get chatId {
-    if ($_item.chatId == null) return null;
+  $$ChatsTableTableProcessedTableManager get chatId {
     final manager = $$ChatsTableTableTableManager($_db, $_db.chatsTable)
         .filter((f) => f.id($_item.chatId!));
     final item = $_typedResult.readTableOrNull(_chatIdTable($_db));
@@ -11865,8 +11859,7 @@ final class $$ChatOutboxReadCursorsTableTableReferences extends BaseReferences<
       db.chatsTable.createAlias($_aliasNameGenerator(
           db.chatOutboxReadCursorsTable.chatId, db.chatsTable.id));
 
-  $$ChatsTableTableProcessedTableManager? get chatId {
-    if ($_item.chatId == null) return null;
+  $$ChatsTableTableProcessedTableManager get chatId {
     final manager = $$ChatsTableTableTableManager($_db, $_db.chatsTable)
         .filter((f) => f.id($_item.chatId!));
     final item = $_typedResult.readTableOrNull(_chatIdTable($_db));
@@ -12818,8 +12811,7 @@ final class $$SmsMessagesTableTableReferences extends BaseReferences<
       db.smsConversationsTable.createAlias($_aliasNameGenerator(
           db.smsMessagesTable.conversationId, db.smsConversationsTable.id));
 
-  $$SmsConversationsTableTableProcessedTableManager? get conversationId {
-    if ($_item.conversationId == null) return null;
+  $$SmsConversationsTableTableProcessedTableManager get conversationId {
     final manager = $$SmsConversationsTableTableTableManager(
             $_db, $_db.smsConversationsTable)
         .filter((f) => f.id($_item.conversationId!));
@@ -13184,8 +13176,7 @@ final class $$SmsMessageSyncCursorTableTableReferences extends BaseReferences<
           db.smsMessageSyncCursorTable.conversationId,
           db.smsConversationsTable.id));
 
-  $$SmsConversationsTableTableProcessedTableManager? get conversationId {
-    if ($_item.conversationId == null) return null;
+  $$SmsConversationsTableTableProcessedTableManager get conversationId {
     final manager = $$SmsConversationsTableTableTableManager(
             $_db, $_db.smsConversationsTable)
         .filter((f) => f.id($_item.conversationId!));
@@ -13445,8 +13436,7 @@ final class $$SmsMessageReadCursorTableTableReferences extends BaseReferences<
           db.smsMessageReadCursorTable.conversationId,
           db.smsConversationsTable.id));
 
-  $$SmsConversationsTableTableProcessedTableManager? get conversationId {
-    if ($_item.conversationId == null) return null;
+  $$SmsConversationsTableTableProcessedTableManager get conversationId {
     final manager = $$SmsConversationsTableTableTableManager(
             $_db, $_db.smsConversationsTable)
         .filter((f) => f.id($_item.conversationId!));
@@ -14024,8 +14014,7 @@ final class $$SmsOutboxMessageDeleteTableTableReferences extends BaseReferences<
           db.smsOutboxMessageDeleteTable.conversationId,
           db.smsConversationsTable.id));
 
-  $$SmsConversationsTableTableProcessedTableManager? get conversationId {
-    if ($_item.conversationId == null) return null;
+  $$SmsConversationsTableTableProcessedTableManager get conversationId {
     final manager = $$SmsConversationsTableTableTableManager(
             $_db, $_db.smsConversationsTable)
         .filter((f) => f.id($_item.conversationId!));
@@ -14293,8 +14282,7 @@ final class $$SmsOutboxReadCursorsTableTableReferences extends BaseReferences<
           db.smsOutboxReadCursorsTable.conversationId,
           db.smsConversationsTable.id));
 
-  $$SmsConversationsTableTableProcessedTableManager? get conversationId {
-    if ($_item.conversationId == null) return null;
+  $$SmsConversationsTableTableProcessedTableManager get conversationId {
     final manager = $$SmsConversationsTableTableTableManager(
             $_db, $_db.smsConversationsTable)
         .filter((f) => f.id($_item.conversationId!));

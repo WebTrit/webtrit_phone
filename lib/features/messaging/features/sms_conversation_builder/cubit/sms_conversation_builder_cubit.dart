@@ -113,14 +113,15 @@ class SmsConversationBuilderCubit extends Cubit<SmsCBState> {
     if (state is! SmsCBCommon) return;
 
     if (recipientNumber.isValidPhone) {
+      final recipientE164 = recipientNumber.e164Phone!;
       final userNumbers = await smsRepository.getUserSmsNumbers();
 
-      if (userNumbers.contains(recipientNumber)) {
-        emit(state.toWrongNumberSelected(recipientNumber));
+      if (userNumbers.contains(recipientE164)) {
+        emit(state.toWrongNumberSelected(recipientE164));
       } else if (userNumbers.length != 1) {
-        emit(state.toUserNumberConfirmationNeeded((number: recipientNumber, id: recipientId), userNumbers));
+        emit(state.toUserNumberConfirmationNeeded((number: recipientE164, id: recipientId), userNumbers));
       } else {
-        openSmsDialog(userNumbers.first, recipientNumber, recipientId);
+        openSmsDialog(userNumbers.first, recipientE164, recipientId);
       }
     } else {
       emit(state.toWrongNumberSelected(recipientNumber));

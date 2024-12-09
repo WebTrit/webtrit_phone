@@ -23,7 +23,7 @@ class ChatConversationsTile extends StatefulWidget {
 
 class _ChatConversationsTileState extends State<ChatConversationsTile> {
   onTap() {
-    if (widget.conversation.type == ChatType.dialog) {
+    if (widget.conversation.type == ChatType.direct) {
       final userId = widget.userId;
       final participant = widget.conversation.members.firstWhere((m) => m.userId != userId);
       context.router.navigate(ChatConversationScreenPageRoute(participantId: participant.userId));
@@ -38,7 +38,7 @@ class _ChatConversationsTileState extends State<ChatConversationsTile> {
     if (!mounted) return false;
 
     final conversation = widget.conversation;
-    if (conversation.type == ChatType.dialog) {
+    if (conversation.type == ChatType.direct) {
       return context.read<ChatConversationsCubit>().deleteConversation(conversation.id);
     } else {
       if (conversation.members.isGroupOwner(widget.userId)) {
@@ -80,7 +80,7 @@ class _ChatConversationsTileState extends State<ChatConversationsTile> {
   }
 
   Widget leading() {
-    if (widget.conversation.type == ChatType.dialog) {
+    if (widget.conversation.type == ChatType.direct) {
       final userId = widget.userId;
       final participant = widget.conversation.members.firstWhere((m) => m.userId != userId);
       return ContactInfoBuilder(
@@ -105,7 +105,7 @@ class _ChatConversationsTileState extends State<ChatConversationsTile> {
   Widget title() {
     final lastMessage = widget.lastMessage;
 
-    if (widget.conversation.type == ChatType.dialog) {
+    if (widget.conversation.type == ChatType.direct) {
       final userId = widget.userId;
       final participant = widget.conversation.members.firstWhere((m) => m.userId != userId);
       return Row(
@@ -162,11 +162,18 @@ class _ChatConversationsTileState extends State<ChatConversationsTile> {
                   style: textStyle,
                   textMap: (name) => '$name:',
                 ),
-                Text(
-                  lastMessage.content,
-                  style: textStyle,
-                  overflow: TextOverflow.ellipsis,
-                ),
+                if (lastMessage.deletedAt != null)
+                  Text(
+                    context.l10n.messaging_MessageView_deleted,
+                    style: textStyle,
+                    overflow: TextOverflow.ellipsis,
+                  )
+                else
+                  Text(
+                    lastMessage.content,
+                    style: textStyle,
+                    overflow: TextOverflow.ellipsis,
+                  ),
               ],
             ),
           )

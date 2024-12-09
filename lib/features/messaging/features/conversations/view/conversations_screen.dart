@@ -7,7 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/app/notifications/notifications.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
-import 'package:webtrit_phone/environment_config.dart';
+import 'package:webtrit_phone/data/feature_access.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
@@ -30,16 +30,21 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
   late final contactsRepository = context.read<ContactsRepository>();
   late final notificationsBloc = context.read<NotificationsBloc>();
 
-  final chatsEnabled = EnvironmentConfig.CHAT_FEATURE_ENABLE;
-  final smsEnabled = EnvironmentConfig.SMS_FEATURE_ENABLE;
+  late final messagingFeature = FeatureAccess().messagingFeature;
+  late final chatsEnabled = messagingFeature.chatsPresent;
+  late final smsEnabled = messagingFeature.smsPresent;
 
-  late TabType tabType = chatsEnabled ? TabType.chat : TabType.sms;
+  late TabType? selectedTab = chatsEnabled
+      ? TabType.chat
+      : smsEnabled
+          ? TabType.sms
+          : null;
 
   onFloatingButton() {
-    if (tabType == TabType.chat) {
+    if (selectedTab == TabType.chat) {
       onNewChatConversation();
     }
-    if (tabType == TabType.sms) {
+    if (selectedTab == TabType.sms) {
       onNewSmsConversation();
     }
   }
@@ -127,20 +132,24 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
         child: Column(
           children: [
             const SizedBox(height: 10),
-            if (chatsEnabled && smsEnabled) ...[
-              TabButtonsBar(tabType, onChange: (t) => setState(() => tabType = t)),
+            if (chatsEnabled && smsEnabled && selectedTab != null) ...[
+              TabButtonsBar(selectedTab!, onChange: (t) => setState(() => selectedTab = t)),
               const SizedBox(height: 10),
             ],
-            Expanded(child: ConversationsList(tabType: tabType)),
+            Expanded(child: ConversationsList(selectedTab: selectedTab)),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: colorScheme.primary,
-        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(32))),
-        onPressed: onFloatingButton,
-        child: Icon(Icons.add, color: colorScheme.onPrimary),
-      ),
+      floatingActionButton: Builder(builder: (context) {
+        if (selectedTab == null) return const SizedBox();
+
+        return FloatingActionButton(
+          backgroundColor: colorScheme.primary,
+          shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(32))),
+          onPressed: onFloatingButton,
+          child: Icon(Icons.add, color: colorScheme.onPrimary),
+        );
+      }),
     );
   }
 }

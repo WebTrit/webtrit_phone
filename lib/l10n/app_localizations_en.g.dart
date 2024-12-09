@@ -153,189 +153,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get call_ThumbnailAvatar_currentlyNoActiveCall => 'Currently, there is no active call';
 
   @override
-  String get chats_ActionBtn_retry => 'Retry';
-
-  @override
-  String get chats_AddContactDialog_cancel => 'Cancel';
-
-  @override
-  String get chats_AddContactDialog_empty => 'No contacts found';
-
-  @override
-  String get chats_AddContactDialog_title => 'Choose contact:';
-
-  @override
-  String get chats_ChatListItem_empty => 'No messages yet';
-
-  @override
-  String get chats_ChatListScreen_createGroup => 'Create group';
-
-  @override
-  String get chats_ChatListScreen_empty => 'No conversations started yet';
-
-  @override
-  String get chats_ChatListScreen_startDialog => 'Start dialog';
-
-  @override
-  String get chats_ConfirmDialog_ask => 'Are you sure?';
-
-  @override
-  String get chats_ConfirmDialog_cancel => 'No';
-
-  @override
-  String get chats_ConfirmDialog_confirm => 'Yes';
-
-  @override
-  String get chats_Conversation_failure => 'Conversation load error';
-
-  @override
-  String get chats_ConversationScreen_deleteAsk => 'Are you sure you want to delete this dialog?';
-
-  @override
-  String get chats_ConversationScreen_deleteDialog => 'Delete dialog';
-
-  @override
-  String get chats_ConversationScreen_titlePrefix => 'Dialog:';
-
-  @override
-  String get chats_GroupAuthorities_moderator => 'moderator';
-
-  @override
-  String get chats_GroupAuthorities_noauthorities => 'member';
-
-  @override
-  String get chats_GroupAuthorities_owner => 'owner';
-
-  @override
-  String get chats_GroupBuilderScreen_addUserBtnText => 'Add user';
-
-  @override
-  String get chats_GroupBuilderScreen_connectionError => 'Connection error, please try later';
-
-  @override
-  String get chats_GroupBuilderScreen_groupNameHeadline => 'Group name';
-
-  @override
-  String get chats_GroupBuilderScreen_membersHeadline => 'Members';
-
-  @override
-  String get chats_GroupBuilderScreen_nameFieldEmpty => 'Please enter a group name';
-
-  @override
-  String get chats_GroupBuilderScreen_nameFieldLabel => 'Group Name';
-
-  @override
-  String get chats_GroupBuilderScreen_nameFieldShort => 'Group name must be at least 3 characters';
-
-  @override
-  String get chats_GroupBuilderScreen_screenTitle => 'Create group';
-
-  @override
-  String get chats_GroupBuilderScreen_submitBtnText => 'Submit';
-
-  @override
-  String get chats_GroupBuilderScreen_submitError => 'Error happened while creating group, please try again';
-
-  @override
-  String get chats_GroupDrawer_addUserBtnText => 'Add user';
-
-  @override
-  String get chats_GroupDrawer_deleteLeaveBtnText => 'Delete and leave';
-
-  @override
-  String get chats_GroupDrawer_groupMembersHeadline => 'Group members';
-
-  @override
-  String get chats_GroupDrawer_leaveAndDeleteAsk => 'Are you sure you want leave and delete this group?';
-
-  @override
-  String get chats_GroupDrawer_leaveAsk => 'Are you sure you want to leave this group?';
-
-  @override
-  String get chats_GroupDrawer_leaveBtnText => 'Leave group';
-
-  @override
-  String get chats_GroupDrawer_makeModeratorAsk => 'Are you sure you want to make this user a moderator?';
-
-  @override
-  String get chats_GroupDrawer_makeModeratorBtnText => 'Make moderator';
-
-  @override
-  String get chats_GroupDrawer_removeModeratorAsk => 'Are you sure you want to remove this user from moderators?';
-
-  @override
-  String get chats_GroupDrawer_removeUserAsk => 'Are you sure you want to remove this user from the group?';
-
-  @override
-  String get chats_GroupDrawer_removeUserBtnText => 'Remove';
-
-  @override
-  String get chats_GroupDrawer_titlePrefix => 'Group:';
-
-  @override
-  String get chats_GroupDrawer_unmakeModeratorBtnText => 'Unmake moderator';
-
-  @override
-  String get chats_GroupNameDialog_cancelBtnText => 'Cancel';
-
-  @override
-  String get chats_GroupNameDialog_fieldHint => 'Enter group name';
-
-  @override
-  String get chats_GroupNameDialog_fieldLabel => 'Group name';
-
-  @override
-  String get chats_GroupNameDialog_fieldValidation_empty => 'Please enter group name';
-
-  @override
-  String get chats_GroupNameDialog_fieldValidation_short => 'Group name is too short';
-
-  @override
-  String get chats_GroupNameDialog_saveBtnText => 'Save';
-
-  @override
-  String get chats_GroupNameDialog_title => 'Group name';
-
-  @override
-  String get chats_GroupScreen_titlePrefix => 'Group:';
-
-  @override
-  String get chats_MessageView_delete => 'Delete';
-
-  @override
-  String get chats_MessageView_deleted => '[deleted]';
-
-  @override
-  String get chats_MessageView_edit => 'Edit';
-
-  @override
-  String get chats_MessageView_edited => '[edited]';
-
-  @override
-  String get chats_MessageView_forward => 'Forward';
-
-  @override
-  String get chats_MessageView_forwarded => '[forwarded]';
-
-  @override
-  String get chats_MessageView_reply => 'Reply';
-
-  @override
-  String get chats_MessageView_textcopy => 'Copy to clipboard';
-
-  @override
-  String get chats_ParticipantName_you => 'You';
-
-  @override
-  String get chats_StateBar_connecting => 'CONNECTING';
-
-  @override
-  String get chats_StateBar_error => 'DISCONNECTED';
-
-  @override
-  String get chats_StateBar_initializing => 'INITIALIZING';
-
-  @override
   String get common_noInternetConnection_message => 'It seems you are not connected to the internet. Please check your connection and try again.';
 
   @override
@@ -869,6 +686,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get messaging_ConversationsScreen_empty => 'No conversations started yet';
+
+  @override
+  String get messaging_ConversationsScreen_unsupported => 'Messaging is not supported by remote system, please contact your administrator to enable it';
 
   @override
   String get messaging_ConversationsScreen_messages_title => 'Messages';
@@ -1409,6 +1229,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get webRegistration_ErrorAcknowledgeDialog_title => 'Web resource error';
+
+  @override
+  String get default_TimeoutMessagingSocketException => 'The request has timed out';
+
+  @override
+  String get default_CannotRemoveOwnerMessagingSocketException => 'Cannot remove owner';
 
   @override
   String get diagnostic_AppBar_title => 'Diagnostic';

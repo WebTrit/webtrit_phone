@@ -8,8 +8,3 @@ export 'features/sms_conversation_builder/sms_conversation_builder.dart';
 export 'cubits/cubits.dart';
 export 'services/services.dart';
 export 'widgets/widgets.dart';
-
-
-// TODO: 
-// - remove messaging service envs
-// - wrap messaging socket as dedicated class and inject/read using context provider

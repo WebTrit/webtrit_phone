@@ -27,5 +27,5 @@ const initialCallRout = '/main/call';
 
 const kAutoprovisionRout = '/autoprovision';
 
-const kInstantMessagingFeatureFlag = 'instantMessaging';
 const kSmsMessagingFeatureFlag = 'smsMessaging';
+const kChatMessagingFeatureFlag = 'internalMessaging';

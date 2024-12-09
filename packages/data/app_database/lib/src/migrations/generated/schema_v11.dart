@@ -20,10 +20,10 @@ class Contacts extends Table with TableInfo {
       requiredDuringInsert: true,
       $customConstraints: 'NOT NULL');
   late final GeneratedColumn<String> sourceId = GeneratedColumn<String>(
-      'source_id', aliasedName, false,
+      'source_id', aliasedName, true,
       type: DriftSqlType.string,
-      requiredDuringInsert: true,
-      $customConstraints: 'NOT NULL');
+      requiredDuringInsert: false,
+      $customConstraints: 'NULL');
   late final GeneratedColumn<String> firstName = GeneratedColumn<String>(
       'first_name', aliasedName, true,
       type: DriftSqlType.string,
@@ -1415,8 +1415,8 @@ class ActiveMessagingNotifications extends Table with TableInfo {
   bool get dontWriteConstraints => true;
 }
 
-class DatabaseAtV9 extends GeneratedDatabase {
-  DatabaseAtV9(QueryExecutor e) : super(e);
+class DatabaseAtV11 extends GeneratedDatabase {
+  DatabaseAtV11(QueryExecutor e) : super(e);
   late final Contacts contacts = Contacts(this);
   late final ContactPhones contactPhones = ContactPhones(this);
   late final ContactEmails contactEmails = ContactEmails(this);
@@ -1539,5 +1539,5 @@ class DatabaseAtV9 extends GeneratedDatabase {
         ],
       );
   @override
-  int get schemaVersion => 9;
+  int get schemaVersion => 11;
 }
