@@ -80,6 +80,8 @@
   "@call_FailureAcknowledgeDialog_title": {},
   "callProcessingStatus_disconnecting": "Desconectando la llamada, por favor espere…",
   "@callProcessingStatus_disconnecting": {},
+  "callProcessingStatus_answering": "Rispondendo alla chiamata, attendi prego…",
+  "@callProcessingStatus_answering": {},
   "callStatus_appUnregistered": "Non registrato",
   "@callStatus_appUnregistered": {},
   "callStatus_connectError": "Errore di connessione",

@@ -129,6 +129,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get callProcessingStatus_disconnecting => 'Disconnecting the call, please hold on…';
 
   @override
+  String get callProcessingStatus_answering => 'Answering the call, please hold on…';
+
+  @override
   String get callStatus_appUnregistered => 'Unregistered';
 
   @override

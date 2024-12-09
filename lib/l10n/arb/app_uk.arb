@@ -80,6 +80,8 @@
   "@call_FailureAcknowledgeDialog_title": {},
   "callProcessingStatus_disconnecting": "Відключення дзвінка, будь ласка, зачекайте…",
   "@callProcessingStatus_disconnecting": {},
+  "callProcessingStatus_answering": "Прийняття виклику, будь ласка, зачекайте…",
+  "@callProcessingStatus_answering": {},
   "callStatus_appUnregistered": "Незареєстровано",
   "@callStatus_appUnregistered": {},
   "callStatus_connectError": "Помилка підключення",

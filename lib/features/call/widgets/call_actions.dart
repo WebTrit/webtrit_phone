@@ -158,14 +158,15 @@ class _CallActionsState extends State<CallActions> {
     final onAttendedTransferSubmitted = widget.enableInteractions ? widget.onAttendedTransferSubmitted : null;
     final onHeldChanged = widget.enableInteractions ? widget.onHeldChanged : null;
     final onSwapPressed = widget.enableInteractions ? widget.onSwapPressed : null;
-    final onAcceptPressed = widget.enableInteractions ? widget.onAcceptPressed : null;
-    // Always allow the user to hang up the call
-    final onHangupPressed = widget.onHangupPressed;
     final onHangupAndAcceptPressed = widget.enableInteractions ? widget.onHangupAndAcceptPressed : null;
     final onKeyPressed = widget.enableInteractions ? widget.onKeyPressed : null;
     final onApproveTransferPressed = widget.enableInteractions ? widget.onApproveTransferPressed : null;
     final onHoldAndAcceptPressed = widget.enableInteractions ? widget.onHoldAndAcceptPressed : null;
     final onDeclineTransferPressed = widget.enableInteractions ? widget.onDeclineTransferPressed : null;
+
+    // Always allow the user to hang up or answer the call
+    final onAcceptPressed = widget.onAcceptPressed;
+    final onHangupPressed = widget.onHangupPressed;
 
     final style = CallActionsStyle.merge(widget.style, Theme.of(context).extension<CallActionsStyles>()?.primary);
 

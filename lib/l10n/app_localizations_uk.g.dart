@@ -129,6 +129,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get callProcessingStatus_disconnecting => 'Відключення дзвінка, будь ласка, зачекайте…';
 
   @override
+  String get callProcessingStatus_answering => 'Прийняття виклику, будь ласка, зачекайте…';
+
+  @override
   String get callStatus_appUnregistered => 'Незареєстровано';
 
   @override
