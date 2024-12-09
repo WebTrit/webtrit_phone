@@ -13,8 +13,8 @@ class LerpTools {
   ) {
     if (a == null || b == null) {
       return a ?? b;
+    } else {
+      return t < 0.5 ? a : b;
     }
-    final int lerpValue = (lerpDouble(a.index.toDouble(), b.index.toDouble(), t) + 0.5).round();
-    return ElevatedButtonStyleType.values[lerpValue];
   }
 }
