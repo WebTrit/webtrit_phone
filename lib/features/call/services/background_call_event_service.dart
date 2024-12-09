@@ -11,6 +11,8 @@ import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
+import '../models/models.dart';
+
 const _noActiveLines = 0;
 
 final _logger = Logger('BackgroundCallEventService');
@@ -96,7 +98,7 @@ class BackgroundCallEventService implements CallkeepBackgroundServiceDelegate {
         event.callId,
         CallkeepHandle.number(event.caller),
         displayName: event.callerDisplayName,
-        hasVideo: false,
+        hasVideo: JsepValue.fromOptional(event.jsep)?.hasVideo ?? false,
       );
     } catch (e) {
       _handleExceptions(e);
