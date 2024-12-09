@@ -115,6 +115,12 @@
           },
           {
             "enabled": true,
+            "type": "callCodecs",
+            "titleL10n": "settings_ListViewTileTitle_call_codecs",
+            "icon": "0xf1cf"
+          },
+          {
+            "enabled": true,
             "type": "language",
             "titleL10n": "settings_ListViewTileTitle_language",
             "icon": "0xe366"

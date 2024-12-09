@@ -2653,6 +2653,12 @@ abstract class AppLocalizations {
   /// **'Network settings'**
   String get settings_ListViewTileTitle_network;
 
+  /// No description provided for @settings_ListViewTileTitle_call_codecs.
+  ///
+  /// In en, this message translates to:
+  /// **'Call codecs'**
+  String get settings_ListViewTileTitle_call_codecs;
+
   /// No description provided for @settings_ListViewTileTitle_registered.
   ///
   /// In en, this message translates to:
@@ -2736,6 +2742,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'This is required to receive calls while in background'**
   String get settings_network_androidNotificationDescription;
+
+  /// No description provided for @settings_call_codecs_preferred_audio_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Preferred audio codec'**
+  String get settings_call_codecs_preferred_audio_title;
+
+  /// No description provided for @settings_call_codecs_preferred_audio_tip.
+  ///
+  /// In en, this message translates to:
+  /// **'The preferred audio codec is used for audio calls. If the codec is not supported by device, the call will be established using the next available codec.'**
+  String get settings_call_codecs_preferred_audio_tip;
+
+  /// No description provided for @settings_call_codecs_preferred_audio_default.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto'**
+  String get settings_call_codecs_preferred_audio_default;
+
+  /// No description provided for @settings_call_codecs_preferred_video_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Preferred video codec'**
+  String get settings_call_codecs_preferred_video_title;
+
+  /// No description provided for @settings_call_codecs_preferred_video_tip.
+  ///
+  /// In en, this message translates to:
+  /// **'The preferred video codec is used for video calls. If the codec is not supported by device, the call will be established using the next available codec.'**
+  String get settings_call_codecs_preferred_video_tip;
+
+  /// No description provided for @settings_call_codecs_preferred_video_default.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto'**
+  String get settings_call_codecs_preferred_video_default;
 
   /// No description provided for @themeMode_dark.
   ///

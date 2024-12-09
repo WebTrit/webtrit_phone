@@ -184,8 +184,13 @@ class AppPreferences with SystemInfoJsonMapper {
     return null;
   }
 
-  Future<void> setPreferedAudioCodec(AudioCodec value) =>
-      _sharedPreferences.setString(_kPreferedAudioCodecKey, value.name);
+  Future<void> setPreferedAudioCodec(AudioCodec? value) {
+    if (value != null) {
+      return _sharedPreferences.setString(_kPreferedAudioCodecKey, value.name);
+    } else {
+      return _sharedPreferences.remove(_kPreferedAudioCodecKey);
+    }
+  }
 
   AudioCodec? getPreferedAudioCodec() {
     final preferedAudioCodec = _sharedPreferences.getString(_kPreferedAudioCodecKey);
@@ -193,8 +198,13 @@ class AppPreferences with SystemInfoJsonMapper {
     return AudioCodec.values.byName(preferedAudioCodec);
   }
 
-  Future<void> setPreferedVideoCodec(VideoCodec value) =>
-      _sharedPreferences.setString(_kPreferedVideoCodecKey, value.name);
+  Future<void> setPreferedVideoCodec(VideoCodec? value) {
+    if (value != null) {
+      return _sharedPreferences.setString(_kPreferedVideoCodecKey, value.name);
+    } else {
+      return _sharedPreferences.remove(_kPreferedVideoCodecKey);
+    }
+  }
 
   VideoCodec? getPreferedVideoCodec() {
     final preferedVideoCodec = _sharedPreferences.getString(_kPreferedVideoCodecKey);
