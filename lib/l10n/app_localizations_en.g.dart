@@ -1323,6 +1323,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings_ListViewTileTitle_network => 'Network settings';
 
   @override
+  String get settings_ListViewTileTitle_call_codecs => 'Call codecs';
+
+  @override
   String get settings_ListViewTileTitle_registered => 'Online';
 
   @override
@@ -1363,6 +1366,24 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settings_network_androidNotificationDescription => 'This is required to receive calls while in background';
+
+  @override
+  String get settings_call_codecs_preferred_audio_title => 'Preferred audio codec';
+
+  @override
+  String get settings_call_codecs_preferred_audio_tip => 'The preferred audio codec is used for audio calls. If the codec is not supported by device, the call will be established using the next available codec.';
+
+  @override
+  String get settings_call_codecs_preferred_audio_default => 'Auto';
+
+  @override
+  String get settings_call_codecs_preferred_video_title => 'Preferred video codec';
+
+  @override
+  String get settings_call_codecs_preferred_video_tip => 'The preferred video codec is used for video calls. If the codec is not supported by device, the call will be established using the next available codec.';
+
+  @override
+  String get settings_call_codecs_preferred_video_default => 'Auto';
 
   @override
   String get themeMode_dark => 'Dark';

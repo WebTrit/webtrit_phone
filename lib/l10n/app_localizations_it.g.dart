@@ -1323,6 +1323,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get settings_ListViewTileTitle_network => 'Impostazioni di rete';
 
   @override
+  String get settings_ListViewTileTitle_call_codecs => 'Codec di chiamata';
+
+  @override
   String get settings_ListViewTileTitle_registered => 'Registrato';
 
   @override
@@ -1363,6 +1366,24 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get settings_network_androidNotificationDescription => 'Questo è necessario per ricevere le chiamate in background';
+
+  @override
+  String get settings_call_codecs_preferred_audio_title => 'Codec audio preferito';
+
+  @override
+  String get settings_call_codecs_preferred_audio_tip => 'Il codec audio preferito viene utilizzato per le chiamate audio. Se il codec non è supportato dal dispositivo, la chiamata verrà stabilita utilizzando il codec successivo disponibile.';
+
+  @override
+  String get settings_call_codecs_preferred_audio_default => 'Predefinito';
+
+  @override
+  String get settings_call_codecs_preferred_video_title => 'Codec video preferito';
+
+  @override
+  String get settings_call_codecs_preferred_video_tip => 'Il codec video preferito viene utilizzato per le chiamate video. Se il codec non è supportato dal dispositivo, la chiamata verrà stabilita utilizzando il codec successivo disponibile.';
+
+  @override
+  String get settings_call_codecs_preferred_video_default => 'Predefinito';
 
   @override
   String get themeMode_dark => 'Scuro';

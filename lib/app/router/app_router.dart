@@ -276,6 +276,10 @@ class AppRouter extends _$AppRouter {
                       path: 'network',
                     ),
                     AutoRoute(
+                      page: CallCodecsScreenPageRoute.page,
+                      path: 'call_codecs',
+                    ),
+                    AutoRoute(
                       page: ThemeModeScreenPageRoute.page,
                       path: 'theme-mode',
                     ),
