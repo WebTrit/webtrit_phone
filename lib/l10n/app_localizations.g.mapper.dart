@@ -95,8 +95,6 @@ class AppLocalizationsMapper {
           localizations.call_description_requestToAttendedTransfer,
       'call_description_transferProcessing':
           localizations.call_description_transferProcessing,
-      'call_description_transfer_requested':
-          localizations.call_description_transfer_requested,
       'call_FailureAcknowledgeDialog_title':
           localizations.call_FailureAcknowledgeDialog_title,
       'callProcessingStatus_disconnecting':
@@ -111,107 +109,6 @@ class AppLocalizationsMapper {
       'callStatus_ready': localizations.callStatus_ready,
       'call_ThumbnailAvatar_currentlyNoActiveCall':
           localizations.call_ThumbnailAvatar_currentlyNoActiveCall,
-      'chats_ActionBtn_retry': localizations.chats_ActionBtn_retry,
-      'chats_AddContactDialog_cancel':
-          localizations.chats_AddContactDialog_cancel,
-      'chats_AddContactDialog_empty':
-          localizations.chats_AddContactDialog_empty,
-      'chats_AddContactDialog_title':
-          localizations.chats_AddContactDialog_title,
-      'chats_ChatListItem_empty': localizations.chats_ChatListItem_empty,
-      'chats_ChatListScreen_createGroup':
-          localizations.chats_ChatListScreen_createGroup,
-      'chats_ChatListScreen_empty': localizations.chats_ChatListScreen_empty,
-      'chats_ChatListScreen_startDialog':
-          localizations.chats_ChatListScreen_startDialog,
-      'chats_ConfirmDialog_ask': localizations.chats_ConfirmDialog_ask,
-      'chats_ConfirmDialog_cancel': localizations.chats_ConfirmDialog_cancel,
-      'chats_ConfirmDialog_confirm': localizations.chats_ConfirmDialog_confirm,
-      'chats_Conversation_failure': localizations.chats_Conversation_failure,
-      'chats_ConversationScreen_deleteAsk':
-          localizations.chats_ConversationScreen_deleteAsk,
-      'chats_ConversationScreen_deleteDialog':
-          localizations.chats_ConversationScreen_deleteDialog,
-      'chats_ConversationScreen_titlePrefix':
-          localizations.chats_ConversationScreen_titlePrefix,
-      'chats_GroupAuthorities_moderator':
-          localizations.chats_GroupAuthorities_moderator,
-      'chats_GroupAuthorities_noauthorities':
-          localizations.chats_GroupAuthorities_noauthorities,
-      'chats_GroupAuthorities_owner':
-          localizations.chats_GroupAuthorities_owner,
-      'chats_GroupBuilderScreen_addUserBtnText':
-          localizations.chats_GroupBuilderScreen_addUserBtnText,
-      'chats_GroupBuilderScreen_connectionError':
-          localizations.chats_GroupBuilderScreen_connectionError,
-      'chats_GroupBuilderScreen_groupNameHeadline':
-          localizations.chats_GroupBuilderScreen_groupNameHeadline,
-      'chats_GroupBuilderScreen_membersHeadline':
-          localizations.chats_GroupBuilderScreen_membersHeadline,
-      'chats_GroupBuilderScreen_nameFieldEmpty':
-          localizations.chats_GroupBuilderScreen_nameFieldEmpty,
-      'chats_GroupBuilderScreen_nameFieldLabel':
-          localizations.chats_GroupBuilderScreen_nameFieldLabel,
-      'chats_GroupBuilderScreen_nameFieldShort':
-          localizations.chats_GroupBuilderScreen_nameFieldShort,
-      'chats_GroupBuilderScreen_screenTitle':
-          localizations.chats_GroupBuilderScreen_screenTitle,
-      'chats_GroupBuilderScreen_submitBtnText':
-          localizations.chats_GroupBuilderScreen_submitBtnText,
-      'chats_GroupBuilderScreen_submitError':
-          localizations.chats_GroupBuilderScreen_submitError,
-      'chats_GroupDrawer_addUserBtnText':
-          localizations.chats_GroupDrawer_addUserBtnText,
-      'chats_GroupDrawer_deleteLeaveBtnText':
-          localizations.chats_GroupDrawer_deleteLeaveBtnText,
-      'chats_GroupDrawer_groupMembersHeadline':
-          localizations.chats_GroupDrawer_groupMembersHeadline,
-      'chats_GroupDrawer_leaveAndDeleteAsk':
-          localizations.chats_GroupDrawer_leaveAndDeleteAsk,
-      'chats_GroupDrawer_leaveAsk': localizations.chats_GroupDrawer_leaveAsk,
-      'chats_GroupDrawer_leaveBtnText':
-          localizations.chats_GroupDrawer_leaveBtnText,
-      'chats_GroupDrawer_makeModeratorAsk':
-          localizations.chats_GroupDrawer_makeModeratorAsk,
-      'chats_GroupDrawer_makeModeratorBtnText':
-          localizations.chats_GroupDrawer_makeModeratorBtnText,
-      'chats_GroupDrawer_removeModeratorAsk':
-          localizations.chats_GroupDrawer_removeModeratorAsk,
-      'chats_GroupDrawer_removeUserAsk':
-          localizations.chats_GroupDrawer_removeUserAsk,
-      'chats_GroupDrawer_removeUserBtnText':
-          localizations.chats_GroupDrawer_removeUserBtnText,
-      'chats_GroupDrawer_titlePrefix':
-          localizations.chats_GroupDrawer_titlePrefix,
-      'chats_GroupDrawer_unmakeModeratorBtnText':
-          localizations.chats_GroupDrawer_unmakeModeratorBtnText,
-      'chats_GroupNameDialog_cancelBtnText':
-          localizations.chats_GroupNameDialog_cancelBtnText,
-      'chats_GroupNameDialog_fieldHint':
-          localizations.chats_GroupNameDialog_fieldHint,
-      'chats_GroupNameDialog_fieldLabel':
-          localizations.chats_GroupNameDialog_fieldLabel,
-      'chats_GroupNameDialog_fieldValidation_empty':
-          localizations.chats_GroupNameDialog_fieldValidation_empty,
-      'chats_GroupNameDialog_fieldValidation_short':
-          localizations.chats_GroupNameDialog_fieldValidation_short,
-      'chats_GroupNameDialog_saveBtnText':
-          localizations.chats_GroupNameDialog_saveBtnText,
-      'chats_GroupNameDialog_title': localizations.chats_GroupNameDialog_title,
-      'chats_GroupScreen_titlePrefix':
-          localizations.chats_GroupScreen_titlePrefix,
-      'chats_MessageView_delete': localizations.chats_MessageView_delete,
-      'chats_MessageView_deleted': localizations.chats_MessageView_deleted,
-      'chats_MessageView_edit': localizations.chats_MessageView_edit,
-      'chats_MessageView_edited': localizations.chats_MessageView_edited,
-      'chats_MessageView_forward': localizations.chats_MessageView_forward,
-      'chats_MessageView_forwarded': localizations.chats_MessageView_forwarded,
-      'chats_MessageView_reply': localizations.chats_MessageView_reply,
-      'chats_MessageView_textcopy': localizations.chats_MessageView_textcopy,
-      'chats_ParticipantName_you': localizations.chats_ParticipantName_you,
-      'chats_StateBar_connecting': localizations.chats_StateBar_connecting,
-      'chats_StateBar_error': localizations.chats_StateBar_error,
-      'chats_StateBar_initializing': localizations.chats_StateBar_initializing,
       'common_noInternetConnection_message':
           localizations.common_noInternetConnection_message,
       'common_noInternetConnection_retryButton':
@@ -220,8 +117,6 @@ class AppLocalizationsMapper {
           localizations.common_noInternetConnection_title,
       'common_problemWithLoadingPage':
           localizations.common_problemWithLoadingPage,
-      'connectToYourOwnVoIPSystem_Button_Action':
-          localizations.connectToYourOwnVoIPSystem_Button_Action,
       'contacts_ExternalTabButton_refresh':
           localizations.contacts_ExternalTabButton_refresh,
       'contacts_ExternalTabText_empty':
@@ -296,9 +191,6 @@ class AppLocalizationsMapper {
           localizations.favorites_DeleteConfirmDialog_title,
       'favorites_Text_blingTransferInitiated':
           localizations.favorites_Text_blingTransferInitiated,
-      'inviteFriends_Dialog_close': localizations.inviteFriends_Dialog_close,
-      'inviteFriends_Dialog_invite': localizations.inviteFriends_Dialog_invite,
-      'inviteFriends_Dialog_title': localizations.inviteFriends_Dialog_title,
       'locale_default': localizations.locale_default,
       'locale_en': localizations.locale_en,
       'locale_it': localizations.locale_it,
@@ -324,14 +216,6 @@ class AppLocalizationsMapper {
           localizations.login_Button_signupVerifyRepeat,
       'login_ButtonTooltip_signInToYourInstance':
           localizations.login_ButtonTooltip_signInToYourInstance,
-      'login_requestCredentials_button':
-          localizations.login_requestCredentials_button,
-      'login_requestCredentials_DialogContent':
-          localizations.login_requestCredentials_DialogContent,
-      'login_requestCredentials_DialogTitle':
-          localizations.login_requestCredentials_DialogTitle,
-      'login_requestCredentials_title':
-          localizations.login_requestCredentials_title,
       'login_RequestFailureEmptyEmailError':
           localizations.login_RequestFailureEmptyEmailError,
       'login_RequestFailureIdentifierIsNotValid':
@@ -433,16 +317,10 @@ class AppLocalizationsMapper {
           localizations.messaging_ConfirmDialog_cancel,
       'messaging_ConfirmDialog_confirm':
           localizations.messaging_ConfirmDialog_confirm,
-      'messaging_ConversationBuilders_addUserBtnText':
-          localizations.messaging_ConversationBuilders_addUserBtnText,
       'messaging_ConversationBuilders_back':
           localizations.messaging_ConversationBuilders_back,
-      'messaging_ConversationBuilders_back_action':
-          localizations.messaging_ConversationBuilders_back_action,
       'messaging_ConversationBuilders_cancel':
           localizations.messaging_ConversationBuilders_cancel,
-      'messaging_ConversationBuilders_connectionError':
-          localizations.messaging_ConversationBuilders_connectionError,
       'messaging_ConversationBuilders_contactOrNumberSearch_hint': localizations
           .messaging_ConversationBuilders_contactOrNumberSearch_hint,
       'messaging_ConversationBuilders_contactSearch_hint':
@@ -453,8 +331,6 @@ class AppLocalizationsMapper {
           localizations.messaging_ConversationBuilders_createGroup,
       'messaging_ConversationBuilders_externalContacts_heading':
           localizations.messaging_ConversationBuilders_externalContacts_heading,
-      'messaging_ConversationBuilders_groupNameHeadline':
-          localizations.messaging_ConversationBuilders_groupNameHeadline,
       'messaging_ConversationBuilders_invalidNumber_message1':
           localizations.messaging_ConversationBuilders_invalidNumber_message1,
       'messaging_ConversationBuilders_invalidNumber_message2':
@@ -485,22 +361,12 @@ class AppLocalizationsMapper {
           localizations.messaging_ConversationBuilders_numberSearch_errorError,
       'messaging_ConversationBuilders_numberSearch_errorHint':
           localizations.messaging_ConversationBuilders_numberSearch_errorHint,
-      'messaging_ConversationBuilders_submitBtnText':
-          localizations.messaging_ConversationBuilders_submitBtnText,
-      'messaging_ConversationBuilders_submitError':
-          localizations.messaging_ConversationBuilders_submitError,
       'messaging_ConversationBuilders_title_group':
           localizations.messaging_ConversationBuilders_title_group,
       'messaging_ConversationBuilders_title_new':
           localizations.messaging_ConversationBuilders_title_new,
       'messaging_Conversation_failure':
           localizations.messaging_Conversation_failure,
-      'messaging_ConversationInfo_deleteAsk':
-          localizations.messaging_ConversationInfo_deleteAsk,
-      'messaging_ConversationInfo_deleteBtn':
-          localizations.messaging_ConversationInfo_deleteBtn,
-      'messaging_ConversationInfo_title':
-          localizations.messaging_ConversationInfo_title,
       'messaging_ConversationScreen_titlePrefix':
           localizations.messaging_ConversationScreen_titlePrefix,
       'messaging_ConversationsScreen_chatsSearch_hint':
@@ -519,8 +385,6 @@ class AppLocalizationsMapper {
           localizations.messaging_ConversationsScreen_smses_title,
       'messaging_ConversationsScreen_smssSearch_hint':
           localizations.messaging_ConversationsScreen_smssSearch_hint,
-      'messaging_ConversationsScreen_startDialog':
-          localizations.messaging_ConversationsScreen_startDialog,
       'messaging_Conversations_tile_empty':
           localizations.messaging_Conversations_tile_empty,
       'messaging_Conversations_tile_you':
@@ -536,26 +400,6 @@ class AppLocalizationsMapper {
           localizations.messaging_GroupAuthorities_noauthorities,
       'messaging_GroupAuthorities_owner':
           localizations.messaging_GroupAuthorities_owner,
-      'messaging_GroupBuilderScreen_addUserBtnText':
-          localizations.messaging_GroupBuilderScreen_addUserBtnText,
-      'messaging_GroupBuilderScreen_connectionError':
-          localizations.messaging_GroupBuilderScreen_connectionError,
-      'messaging_GroupBuilderScreen_groupNameHeadline':
-          localizations.messaging_GroupBuilderScreen_groupNameHeadline,
-      'messaging_GroupBuilderScreen_membersHeadline':
-          localizations.messaging_GroupBuilderScreen_membersHeadline,
-      'messaging_GroupBuilderScreen_nameFieldEmpty':
-          localizations.messaging_GroupBuilderScreen_nameFieldEmpty,
-      'messaging_GroupBuilderScreen_nameFieldLabel':
-          localizations.messaging_GroupBuilderScreen_nameFieldLabel,
-      'messaging_GroupBuilderScreen_nameFieldShort':
-          localizations.messaging_GroupBuilderScreen_nameFieldShort,
-      'messaging_GroupBuilderScreen_screenTitle':
-          localizations.messaging_GroupBuilderScreen_screenTitle,
-      'messaging_GroupBuilderScreen_submitBtnText':
-          localizations.messaging_GroupBuilderScreen_submitBtnText,
-      'messaging_GroupBuilderScreen_submitError':
-          localizations.messaging_GroupBuilderScreen_submitError,
       'messaging_GroupInfo_addUserBtnText':
           localizations.messaging_GroupInfo_addUserBtnText,
       'messaging_GroupInfo_deleteLeaveBtnText':
@@ -585,20 +429,6 @@ class AppLocalizationsMapper {
           localizations.messaging_GroupInfo_unmakeModeratorBtnText,
       'messaging_GroupNameDialog_cancelBtnText':
           localizations.messaging_GroupNameDialog_cancelBtnText,
-      'messaging_GroupNameDialog_fieldHint':
-          localizations.messaging_GroupNameDialog_fieldHint,
-      'messaging_GroupNameDialog_fieldLabel':
-          localizations.messaging_GroupNameDialog_fieldLabel,
-      'messaging_GroupNameDialog_fieldValidation_empty':
-          localizations.messaging_GroupNameDialog_fieldValidation_empty,
-      'messaging_GroupNameDialog_fieldValidation_short':
-          localizations.messaging_GroupNameDialog_fieldValidation_short,
-      'messaging_GroupNameDialog_saveBtnText':
-          localizations.messaging_GroupNameDialog_saveBtnText,
-      'messaging_GroupNameDialog_title':
-          localizations.messaging_GroupNameDialog_title,
-      'messaging_GroupScreen_titlePrefix':
-          localizations.messaging_GroupScreen_titlePrefix,
       'messaging_MessageField_hint': localizations.messaging_MessageField_hint,
       'messaging_MessageListView_typingTrail':
           localizations.messaging_MessageListView_typingTrail,
@@ -611,51 +441,9 @@ class AppLocalizationsMapper {
           localizations.messaging_MessageView_edited,
       'messaging_MessageView_forward':
           localizations.messaging_MessageView_forward,
-      'messaging_MessageView_forwarded':
-          localizations.messaging_MessageView_forwarded,
       'messaging_MessageView_reply': localizations.messaging_MessageView_reply,
       'messaging_MessageView_textcopy':
           localizations.messaging_MessageView_textcopy,
-      'messaging_NewConversation_back_action':
-          localizations.messaging_NewConversation_back_action,
-      'messaging_NewConversation_cancel':
-          localizations.messaging_NewConversation_cancel,
-      'messaging_NewConversation_contactOrNumberSearch_hint':
-          localizations.messaging_NewConversation_contactOrNumberSearch_hint,
-      'messaging_NewConversation_contactSearch_hint':
-          localizations.messaging_NewConversation_contactSearch_hint,
-      'messaging_NewConversation_create':
-          localizations.messaging_NewConversation_create,
-      'messaging_NewConversation_createGroup':
-          localizations.messaging_NewConversation_createGroup,
-      'messaging_NewConversation_externalContacts_heading':
-          localizations.messaging_NewConversation_externalContacts_heading,
-      'messaging_NewConversation_invalidNumber_message':
-          localizations.messaging_NewConversation_invalidNumber_message,
-      'messaging_NewConversation_invalidNumber_message1':
-          localizations.messaging_NewConversation_invalidNumber_message1,
-      'messaging_NewConversation_invalidNumber_message2':
-          localizations.messaging_NewConversation_invalidNumber_message2,
-      'messaging_NewConversation_invalidNumber_ok':
-          localizations.messaging_NewConversation_invalidNumber_ok,
-      'messaging_NewConversation_invalidNumber_title':
-          localizations.messaging_NewConversation_invalidNumber_title,
-      'messaging_NewConversation_invite_heading':
-          localizations.messaging_NewConversation_invite_heading,
-      'messaging_NewConversation_localContacts_heading':
-          localizations.messaging_NewConversation_localContacts_heading,
-      'messaging_NewConversation_next_action':
-          localizations.messaging_NewConversation_next_action,
-      'messaging_NewConversation_noContacts':
-          localizations.messaging_NewConversation_noContacts,
-      'messaging_NewConversation_numberFormatExample':
-          localizations.messaging_NewConversation_numberFormatExample,
-      'messaging_NewConversation_numberSearch_errorError':
-          localizations.messaging_NewConversation_numberSearch_errorError,
-      'messaging_NewConversation_numberSearch_errorHint':
-          localizations.messaging_NewConversation_numberSearch_errorHint,
-      'messaging_NewConversation_title':
-          localizations.messaging_NewConversation_title,
       'messaging_ParticipantName_you':
           localizations.messaging_ParticipantName_you,
       'messaging_SmsSendingStatus_delivered':
@@ -695,7 +483,6 @@ class AppLocalizationsMapper {
           localizations.notifications_errorSnackBar_callUserMedia,
       'notifications_errorSnackBar_sipServiceUnavailable':
           localizations.notifications_errorSnackBar_sipServiceUnavailable,
-      'notImplemented': localizations.notImplemented,
       'permission_Button_request': localizations.permission_Button_request,
       'permission_manufacturer_Button_gotIt':
           localizations.permission_manufacturer_Button_gotIt,
@@ -726,8 +513,6 @@ class AppLocalizationsMapper {
           localizations.recents_DeleteConfirmDialog_content,
       'recents_DeleteConfirmDialog_title':
           localizations.recents_DeleteConfirmDialog_title,
-      'recents_errorSnackBar_loadFailure':
-          localizations.recents_errorSnackBar_loadFailure,
       'recents_Text_blingTransferInitiated':
           localizations.recents_Text_blingTransferInitiated,
       'recents_HistoryTile_missedCallText':
@@ -763,10 +548,6 @@ class AppLocalizationsMapper {
           localizations.settings_AccountDeleteConfirmDialog_title,
       'settings_AppBarTitle_myAccount':
           localizations.settings_AppBarTitle_myAccount,
-      'settings_ForceLogoutConfirmDialog_content':
-          localizations.settings_ForceLogoutConfirmDialog_content,
-      'settings_ForceLogoutConfirmDialog_title':
-          localizations.settings_ForceLogoutConfirmDialog_title,
       'settings_ListViewTileTitle_about':
           localizations.settings_ListViewTileTitle_about,
       'settings_ListViewTileTitle_accountDelete':
@@ -808,10 +589,6 @@ class AppLocalizationsMapper {
           localizations.settings_network_incomingCallType_socket_title,
       'settings_network_incomingCallType_socket_description':
           localizations.settings_network_incomingCallType_socket_description,
-      'settings_network_androidNotificationName':
-          localizations.settings_network_androidNotificationName,
-      'settings_network_androidNotificationDescription':
-          localizations.settings_network_androidNotificationDescription,
       'settings_call_codecs_preferred_audio_title':
           localizations.settings_call_codecs_preferred_audio_title,
       'settings_call_codecs_preferred_audio_tip':
@@ -827,15 +604,10 @@ class AppLocalizationsMapper {
       'themeMode_dark': localizations.themeMode_dark,
       'themeMode_light': localizations.themeMode_light,
       'themeMode_system': localizations.themeMode_system,
-      'undefine_DeeplinkConfigurationInvalid_text':
-          localizations.undefine_DeeplinkConfigurationInvalid_text,
-      'underDevelopment': localizations.underDevelopment,
       'user_agreement_agrement_link':
           localizations.user_agreement_agrement_link,
       'user_agreement_button_text': localizations.user_agreement_button_text,
       'validationBlankError': localizations.validationBlankError,
-      'webRegistration_ErrorAcknowledgeDialogActions_demo':
-          localizations.webRegistration_ErrorAcknowledgeDialogActions_demo,
       'webRegistration_ErrorAcknowledgeDialogActions_retry':
           localizations.webRegistration_ErrorAcknowledgeDialogActions_retry,
       'webRegistration_ErrorAcknowledgeDialogActions_skip':
@@ -899,8 +671,6 @@ class AppLocalizationsMapper {
           localizations.diagnosticPushDetails_errorMessage_step5,
       'diagnostic_pushTokenStatusType_success':
           localizations.diagnostic_pushTokenStatusType_success,
-      'diagnostic_pushTokenStatusType_error':
-          localizations.diagnostic_pushTokenStatusType_error,
       'sessionStatus_pushNotificationServiceProblem':
           localizations.sessionStatus_pushNotificationServiceProblem,
       'diagnostic_pushTokenStatusType_progress':
@@ -945,8 +715,6 @@ class AppLocalizationsMapper {
       'login_Text_otpSigninVerifyPreDescriptionUserRef': (userRef) =>
           localizations
               .login_Text_otpSigninVerifyPreDescriptionUserRef(userRef),
-      'login_Text_otpVerifySentToEmailAssignedWithPhone': (phone) =>
-          localizations.login_Text_otpVerifySentToEmailAssignedWithPhone(phone),
       'login_Text_signupVerifyPostDescriptionFromEmail': (email) =>
           localizations.login_Text_signupVerifyPostDescriptionFromEmail(email),
       'login_Text_signupVerifyPreDescriptionEmail': (email) =>
