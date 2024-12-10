@@ -234,6 +234,7 @@ class _MainShellState extends State<MainShell> {
             create: (context) {
               final appBloc = context.read<AppBloc>();
               final appCertificates = AppCertificates();
+              final appPreferences = AppPreferences();
 
               return CallBloc(
                 coreUrl: appBloc.state.coreUrl!,
@@ -243,6 +244,7 @@ class _MainShellState extends State<MainShell> {
                 callLogsRepository: context.read<CallLogsRepository>(),
                 notificationsBloc: context.read<NotificationsBloc>(),
                 callkeep: _callkeep,
+                sdpMunger: ForceCodecsByUserPrefs(appPreferences),
               )..add(const CallStarted());
             },
           ),

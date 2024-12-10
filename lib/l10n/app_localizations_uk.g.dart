@@ -1323,6 +1323,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get settings_ListViewTileTitle_network => 'Налаштування мережі';
 
   @override
+  String get settings_ListViewTileTitle_call_codecs => 'Кодеки дзвінка';
+
+  @override
   String get settings_ListViewTileTitle_registered => 'Зареєстровано';
 
   @override
@@ -1363,6 +1366,24 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get settings_network_androidNotificationDescription => 'Це необхідно для отримання дзвінків у фоновому режимі';
+
+  @override
+  String get settings_call_codecs_preferred_audio_title => 'Предпочитайомий відеокодек';
+
+  @override
+  String get settings_call_codecs_preferred_audio_tip => 'Використовується для аудіодзвінків. Якщо кодек не підтримується пристроєм, дзвінок буде встановлено за допомогою наступного доступного кодеку.';
+
+  @override
+  String get settings_call_codecs_preferred_audio_default => 'Автоматично';
+
+  @override
+  String get settings_call_codecs_preferred_video_title => 'Предпочитайомий відеокодек';
+
+  @override
+  String get settings_call_codecs_preferred_video_tip => 'Використовується для відеодзвінків. Якщо кодек не підтримується пристроєм, дзвінок буде встановлено за допомогою наступного доступного кодеку.';
+
+  @override
+  String get settings_call_codecs_preferred_video_default => 'Автоматично';
 
   @override
   String get themeMode_dark => 'Темний';

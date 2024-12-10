@@ -142,6 +142,8 @@ class SettingsScreen extends StatelessWidget {
         _deleteAccount(context);
       case SettingsFlavor.embedded:
         context.router.navigate(EmbeddedScreenPage.route(item.data!));
+      case SettingsFlavor.callCodecs:
+        context.router.navigate(const CallCodecsScreenPageRoute());
     }
   }
 
