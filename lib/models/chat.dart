@@ -21,7 +21,7 @@ class Chat extends Equatable {
   });
 
   bool isDialogWith(String participantId) {
-    return type == ChatType.dialog && members.any((member) => member.userId == participantId);
+    return type == ChatType.direct && members.any((member) => member.userId == participantId);
   }
 
   @override
@@ -61,6 +61,10 @@ class Chat extends Equatable {
   }
 
   factory Chat.fromMap(Map<String, dynamic> map) {
+    // Backward compatibility for the old 'dialog' type
+    // TODO: Remove someday
+    if (map['type'] == 'dialog') map['type'] = 'direct';
+
     return Chat(
       id: map['id'] as int,
       type: ChatType.values.byName(map['type']),
@@ -80,7 +84,7 @@ class Chat extends Equatable {
   factory Chat.fromJson(String source) => Chat.fromMap(json.decode(source) as Map<String, dynamic>);
 }
 
-enum ChatType { dialog, group }
+enum ChatType { direct, group }
 
 extension ChatListExtension<T extends Chat> on List<T> {
   T findById(int id) => firstWhere((element) => element.id == id);

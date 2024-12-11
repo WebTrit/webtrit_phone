@@ -1297,6 +1297,12 @@ abstract class AppLocalizations {
   /// **'No conversations started yet'**
   String get messaging_ConversationsScreen_empty;
 
+  /// No description provided for @messaging_ConversationsScreen_unsupported.
+  ///
+  /// In en, this message translates to:
+  /// **'Messaging is not supported by remote system, please contact your administrator to enable it'**
+  String get messaging_ConversationsScreen_unsupported;
+
   /// No description provided for @messaging_ConversationsScreen_messages_title.
   ///
   /// In en, this message translates to:
@@ -2094,6 +2100,108 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Web resource error'**
   String get webRegistration_ErrorAcknowledgeDialog_title;
+
+  /// No description provided for @messaging_MessageView_forwarded.
+  ///
+  /// In en, this message translates to:
+  /// **'[forwarded]'**
+  String get messaging_MessageView_forwarded;
+
+  /// No description provided for @messaging_ConversationsScreen_startDialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Start dialog'**
+  String get messaging_ConversationsScreen_startDialog;
+
+  /// No description provided for @messaging_ConversationBuilders_back_action.
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get messaging_ConversationBuilders_back_action;
+
+  /// No description provided for @messaging_ConversationBuilders_groupNameHeadline.
+  ///
+  /// In en, this message translates to:
+  /// **'Group name'**
+  String get messaging_ConversationBuilders_groupNameHeadline;
+
+  /// No description provided for @messaging_ConversationBuilders_addUserBtnText.
+  ///
+  /// In en, this message translates to:
+  /// **'Add user'**
+  String get messaging_ConversationBuilders_addUserBtnText;
+
+  /// No description provided for @messaging_ConversationBuilders_submitBtnText.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit'**
+  String get messaging_ConversationBuilders_submitBtnText;
+
+  /// No description provided for @messaging_ConversationBuilders_connectionError.
+  ///
+  /// In en, this message translates to:
+  /// **'Connection error, please try later'**
+  String get messaging_ConversationBuilders_connectionError;
+
+  /// No description provided for @messaging_ConversationBuilders_submitError.
+  ///
+  /// In en, this message translates to:
+  /// **'Error happened while creating group, please try again'**
+  String get messaging_ConversationBuilders_submitError;
+
+  /// No description provided for @messaging_GroupScreen_titlePrefix.
+  ///
+  /// In en, this message translates to:
+  /// **'Group:'**
+  String get messaging_GroupScreen_titlePrefix;
+
+  /// No description provided for @messaging_GroupNameDialog_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Group name'**
+  String get messaging_GroupNameDialog_title;
+
+  /// No description provided for @messaging_GroupNameDialog_fieldLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Group name'**
+  String get messaging_GroupNameDialog_fieldLabel;
+
+  /// No description provided for @messaging_GroupNameDialog_fieldHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter group name'**
+  String get messaging_GroupNameDialog_fieldHint;
+
+  /// No description provided for @messaging_GroupNameDialog_fieldValidation_empty.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter group name'**
+  String get messaging_GroupNameDialog_fieldValidation_empty;
+
+  /// No description provided for @messaging_GroupNameDialog_fieldValidation_short.
+  ///
+  /// In en, this message translates to:
+  /// **'Group name is too short'**
+  String get messaging_GroupNameDialog_fieldValidation_short;
+
+  /// No description provided for @messaging_GroupNameDialog_saveBtnText.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get messaging_GroupNameDialog_saveBtnText;
+
+  /// No description provided for @default_TimeoutMessagingSocketException.
+  ///
+  /// In en, this message translates to:
+  /// **'The request has timed out'**
+  String get default_TimeoutMessagingSocketException;
+
+  /// No description provided for @default_CannotRemoveOwnerMessagingSocketException.
+  ///
+  /// In en, this message translates to:
+  /// **'Cannot remove owner'**
+  String get default_CannotRemoveOwnerMessagingSocketException;
 
   /// No description provided for @diagnostic_AppBar_title.
   ///

@@ -629,6 +629,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get messaging_ConversationsScreen_empty => 'Немає переписок';
 
   @override
+  String get messaging_ConversationsScreen_unsupported => 'Обмін повідомленнями не підтримується віддаленою системою, зверніться до свого адміністратора, щоб увімкнути його';
+
+  @override
   String get messaging_ConversationsScreen_messages_title => 'Повідомлення';
 
   @override
@@ -1044,6 +1047,57 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get webRegistration_ErrorAcknowledgeDialog_title => 'Web resource error';
+
+  @override
+  String get messaging_MessageView_forwarded => '[переслано]';
+
+  @override
+  String get messaging_ConversationsScreen_startDialog => 'Почати діалог';
+
+  @override
+  String get messaging_ConversationBuilders_back_action => 'Назад';
+
+  @override
+  String get messaging_ConversationBuilders_groupNameHeadline => 'Назва групи';
+
+  @override
+  String get messaging_ConversationBuilders_addUserBtnText => 'Додати користувача';
+
+  @override
+  String get messaging_ConversationBuilders_submitBtnText => 'Надіслати';
+
+  @override
+  String get messaging_ConversationBuilders_connectionError => 'Помилка підключення, спробуйте пізніше';
+
+  @override
+  String get messaging_ConversationBuilders_submitError => 'Під час створення групи сталася помилка, повторіть спробу';
+
+  @override
+  String get messaging_GroupScreen_titlePrefix => 'Група:';
+
+  @override
+  String get messaging_GroupNameDialog_title => 'Назва групи';
+
+  @override
+  String get messaging_GroupNameDialog_fieldLabel => 'Назва групи';
+
+  @override
+  String get messaging_GroupNameDialog_fieldHint => 'Введіть назву групи';
+
+  @override
+  String get messaging_GroupNameDialog_fieldValidation_empty => 'Будь ласка, введіть назву групи';
+
+  @override
+  String get messaging_GroupNameDialog_fieldValidation_short => 'Назва групи занадто коротка';
+
+  @override
+  String get messaging_GroupNameDialog_saveBtnText => 'Зберегти';
+
+  @override
+  String get default_TimeoutMessagingSocketException => 'Час очікування відповіді сервера закінчився';
+
+  @override
+  String get default_CannotRemoveOwnerMessagingSocketException => 'Неможливо видалити власника';
 
   @override
   String get diagnostic_AppBar_title => 'Діагностика';

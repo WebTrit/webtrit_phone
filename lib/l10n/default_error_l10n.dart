@@ -56,12 +56,18 @@ String _defaultMessagingSocketExceptionL10n(BuildContext context, MessagingSocke
       return l10n.default_UserAlreadyInChatMessagingSocketException;
     case 'chat_member_not_found':
       return l10n.default_ChatMemberNotFoundMessagingSocketException;
+    case 'user_not_in_chat':
+      return l10n.default_ChatMemberNotFoundMessagingSocketException;
     case 'self_removal_forbidden':
       return l10n.default_SelfRemovalForbiddenMessagingSocketException;
+    case 'cannot_remove_owner':
+      return l10n.default_CannotRemoveOwnerMessagingSocketException;
     case 'self_authority_assignment_forbidden':
       return l10n.default_SelfAuthorityAssignmentForbiddenMessagingSocketException;
     case 'sms_conversation_not_found':
       return l10n.default_SmsConversationNotFoundMessagingSocketException;
+    case 'timeout':
+      return l10n.default_TimeoutMessagingSocketException;
     default:
       return l10n.default_MessagingSocketException;
   }

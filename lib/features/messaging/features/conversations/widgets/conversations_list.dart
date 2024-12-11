@@ -8,9 +8,9 @@ import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 class ConversationsList extends StatefulWidget {
-  const ConversationsList({required this.tabType, super.key});
+  const ConversationsList({required this.selectedTab, super.key});
 
-  final TabType tabType;
+  final TabType? selectedTab;
 
   @override
   State<ConversationsList> createState() => _ConversationsListState();
@@ -212,14 +212,28 @@ class _ConversationsListState extends State<ConversationsList> {
       },
     );
 
+    final unsupported = Padding(
+      padding: const EdgeInsets.all(16),
+      child: Center(
+        child: Text(
+          context.l10n.messaging_ConversationsScreen_unsupported,
+          textAlign: TextAlign.center,
+        ),
+      ),
+    );
+
     return AnimatedSwitcher(
       duration: const Duration(milliseconds: 300),
       reverseDuration: const Duration(milliseconds: 0),
       switchInCurve: Curves.easeOutExpo,
       switchOutCurve: Curves.easeInExpo,
-      child: widget.tabType == TabType.chat ? chats : smses,
+      child: switch (widget.selectedTab) {
+        TabType.chat => chats,
+        TabType.sms => smses,
+        _ => unsupported,
+      },
       transitionBuilder: (child, animation) {
-        final reverse = widget.tabType == TabType.sms;
+        final reverse = widget.selectedTab == TabType.sms;
 
         final begin = Offset(reverse ? 1.0 : -1.0, 0);
         const end = Offset(0, 0);

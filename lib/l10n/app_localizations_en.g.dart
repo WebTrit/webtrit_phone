@@ -629,6 +629,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get messaging_ConversationsScreen_empty => 'No conversations started yet';
 
   @override
+  String get messaging_ConversationsScreen_unsupported => 'Messaging is not supported by remote system, please contact your administrator to enable it';
+
+  @override
   String get messaging_ConversationsScreen_messages_title => 'Messages';
 
   @override
@@ -1044,6 +1047,57 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get webRegistration_ErrorAcknowledgeDialog_title => 'Web resource error';
+
+  @override
+  String get messaging_MessageView_forwarded => '[forwarded]';
+
+  @override
+  String get messaging_ConversationsScreen_startDialog => 'Start dialog';
+
+  @override
+  String get messaging_ConversationBuilders_back_action => 'Back';
+
+  @override
+  String get messaging_ConversationBuilders_groupNameHeadline => 'Group name';
+
+  @override
+  String get messaging_ConversationBuilders_addUserBtnText => 'Add user';
+
+  @override
+  String get messaging_ConversationBuilders_submitBtnText => 'Submit';
+
+  @override
+  String get messaging_ConversationBuilders_connectionError => 'Connection error, please try later';
+
+  @override
+  String get messaging_ConversationBuilders_submitError => 'Error happened while creating group, please try again';
+
+  @override
+  String get messaging_GroupScreen_titlePrefix => 'Group:';
+
+  @override
+  String get messaging_GroupNameDialog_title => 'Group name';
+
+  @override
+  String get messaging_GroupNameDialog_fieldLabel => 'Group name';
+
+  @override
+  String get messaging_GroupNameDialog_fieldHint => 'Enter group name';
+
+  @override
+  String get messaging_GroupNameDialog_fieldValidation_empty => 'Please enter group name';
+
+  @override
+  String get messaging_GroupNameDialog_fieldValidation_short => 'Group name is too short';
+
+  @override
+  String get messaging_GroupNameDialog_saveBtnText => 'Save';
+
+  @override
+  String get default_TimeoutMessagingSocketException => 'The request has timed out';
+
+  @override
+  String get default_CannotRemoveOwnerMessagingSocketException => 'Cannot remove owner';
 
   @override
   String get diagnostic_AppBar_title => 'Diagnostic';

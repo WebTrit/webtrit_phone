@@ -210,22 +210,7 @@ class _ChatMessageViewState extends State<ChatMessageView> {
             ],
             Flexible(
               child: Container(
-                decoration: BoxDecoration(
-                  color: isMine
-                      ? colorScheme.secondaryFixed.withOpacity(0.3)
-                      : colorScheme.surfaceContainer.withOpacity(isViewedByUser ? 1 : 0.85),
-                  borderRadius: isMine
-                      ? const BorderRadius.only(
-                          topLeft: Radius.circular(12),
-                          topRight: Radius.circular(12),
-                          bottomLeft: Radius.circular(12),
-                        )
-                      : const BorderRadius.only(
-                          topLeft: Radius.circular(12),
-                          topRight: Radius.circular(12),
-                          bottomRight: Radius.circular(12),
-                        ),
-                ),
+                decoration: theme.messageDecoration(isMine, isViewedByUser),
                 padding: const EdgeInsets.all(12),
                 child: IntrinsicWidth(
                   child: Column(
@@ -240,14 +225,14 @@ class _ChatMessageViewState extends State<ChatMessageView> {
                       ),
                       const SizedBox(height: 4),
                       if (isReply) ...[
-                        ReplyQuote(userId: widget.userId, message: message!),
+                        ReplyQuote(userId: widget.userId, message: message!, isMine: isMine),
                         const SizedBox(height: 4),
                       ],
                       if (isForward) ...[
-                        ForwartQuote(context: context, userId: widget.userId, msg: message!),
+                        ForwartQuote(context: context, userId: widget.userId, msg: message!, isMine: isMine),
                       ],
                       if (!isForward && !isDeleted) ...[
-                        MessageBody(text: content, style: theme.contentStyle),
+                        MessageBody(text: content, isMine: isMine, style: theme.contentStyle),
                       ],
                       if (isEdited && !isDeleted) ...[
                         const SizedBox(height: 4),
@@ -290,10 +275,12 @@ class ReplyQuote extends StatefulWidget {
     super.key,
     required this.userId,
     required this.message,
+    required this.isMine,
   });
 
   final String userId;
   final ChatMessage message;
+  final bool isMine;
 
   @override
   State<ReplyQuote> createState() => _ReplyQuoteState();
@@ -334,7 +321,7 @@ class _ReplyQuoteState extends State<ReplyQuote> {
 
           return Container(
             padding: const EdgeInsets.all(8),
-            decoration: theme.quoteDecoration,
+            decoration: theme.quoteDecoration(widget.isMine),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -357,6 +344,7 @@ class _ReplyQuoteState extends State<ReplyQuote> {
                 const SizedBox(height: 4),
                 MessageBody(
                   text: message?.content ?? '...',
+                  isMine: widget.isMine,
                   style: theme.contentStyle,
                 ),
               ],
@@ -372,11 +360,13 @@ class ForwartQuote extends StatelessWidget {
     required this.context,
     required this.userId,
     required this.msg,
+    required this.isMine,
   });
 
   final BuildContext context;
   final String userId;
   final ChatMessage msg;
+  final bool isMine;
 
   @override
   Widget build(BuildContext context) {
@@ -384,7 +374,7 @@ class ForwartQuote extends StatelessWidget {
 
     return Container(
       padding: const EdgeInsets.all(8),
-      decoration: theme.quoteDecoration,
+      decoration: theme.quoteDecoration(isMine),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -397,7 +387,7 @@ class ForwartQuote extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 4),
-          MessageBody(text: msg.content, style: theme.contentStyle),
+          MessageBody(text: msg.content, isMine: isMine, style: theme.contentStyle),
         ],
       ),
     );

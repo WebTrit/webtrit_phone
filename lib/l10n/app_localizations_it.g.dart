@@ -629,6 +629,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get messaging_ConversationsScreen_empty => 'Nessuna conversazione è ancora iniziata';
 
   @override
+  String get messaging_ConversationsScreen_unsupported => 'La messaggistica non è supportata dal sistema remoto, contattare l\'amministratore per abilitarla';
+
+  @override
   String get messaging_ConversationsScreen_messages_title => 'Messaggi';
 
   @override
@@ -1044,6 +1047,57 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get webRegistration_ErrorAcknowledgeDialog_title => 'Web resource error';
+
+  @override
+  String get messaging_MessageView_forwarded => '[inoltrato]';
+
+  @override
+  String get messaging_ConversationsScreen_startDialog => 'Avvia dialogo';
+
+  @override
+  String get messaging_ConversationBuilders_back_action => 'Dopo';
+
+  @override
+  String get messaging_ConversationBuilders_groupNameHeadline => 'Nome del gruppo';
+
+  @override
+  String get messaging_ConversationBuilders_addUserBtnText => 'Aggiungi utente';
+
+  @override
+  String get messaging_ConversationBuilders_submitBtnText => 'Invia';
+
+  @override
+  String get messaging_ConversationBuilders_connectionError => 'Errore di connessione, riprova più tardi';
+
+  @override
+  String get messaging_ConversationBuilders_submitError => 'Si è verificato un errore durante la creazione del gruppo, riprovare.';
+
+  @override
+  String get messaging_GroupScreen_titlePrefix => 'Gruppo:';
+
+  @override
+  String get messaging_GroupNameDialog_title => 'Nome del gruppo';
+
+  @override
+  String get messaging_GroupNameDialog_fieldLabel => 'Nome del gruppo';
+
+  @override
+  String get messaging_GroupNameDialog_fieldHint => 'Inserisci il nome del gruppo';
+
+  @override
+  String get messaging_GroupNameDialog_fieldValidation_empty => 'Per favore, inserisci il nome del gruppo';
+
+  @override
+  String get messaging_GroupNameDialog_fieldValidation_short => 'Il nome del gruppo è troppo corto';
+
+  @override
+  String get messaging_GroupNameDialog_saveBtnText => 'Salva';
+
+  @override
+  String get default_TimeoutMessagingSocketException => 'Tempo di attesa scaduto';
+
+  @override
+  String get default_CannotRemoveOwnerMessagingSocketException => 'Impossibile rimuovere il proprietario';
 
   @override
   String get diagnostic_AppBar_title => 'Diagnostica';

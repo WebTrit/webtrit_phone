@@ -1,6 +1,6 @@
 import 'package:drift/drift.dart';
 
-enum ChatTypeEnum { dialog, group }
+enum ChatTypeEnum { direct, group }
 
 @DataClassName('ChatData')
 class ChatsTable extends Table {

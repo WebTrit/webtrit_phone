@@ -373,6 +373,8 @@ class AppLocalizationsMapper {
           localizations.messaging_ConversationsScreen_chatsSearch_hint,
       'messaging_ConversationsScreen_empty':
           localizations.messaging_ConversationsScreen_empty,
+      'messaging_ConversationsScreen_unsupported':
+          localizations.messaging_ConversationsScreen_unsupported,
       'messaging_ConversationsScreen_messages_title':
           localizations.messaging_ConversationsScreen_messages_title,
       'messaging_ConversationsScreen_noNumberAlert_text':
@@ -614,6 +616,40 @@ class AppLocalizationsMapper {
           localizations.webRegistration_ErrorAcknowledgeDialogActions_skip,
       'webRegistration_ErrorAcknowledgeDialog_title':
           localizations.webRegistration_ErrorAcknowledgeDialog_title,
+      'messaging_MessageView_forwarded':
+          localizations.messaging_MessageView_forwarded,
+      'messaging_ConversationsScreen_startDialog':
+          localizations.messaging_ConversationsScreen_startDialog,
+      'messaging_ConversationBuilders_back_action':
+          localizations.messaging_ConversationBuilders_back_action,
+      'messaging_ConversationBuilders_groupNameHeadline':
+          localizations.messaging_ConversationBuilders_groupNameHeadline,
+      'messaging_ConversationBuilders_addUserBtnText':
+          localizations.messaging_ConversationBuilders_addUserBtnText,
+      'messaging_ConversationBuilders_submitBtnText':
+          localizations.messaging_ConversationBuilders_submitBtnText,
+      'messaging_ConversationBuilders_connectionError':
+          localizations.messaging_ConversationBuilders_connectionError,
+      'messaging_ConversationBuilders_submitError':
+          localizations.messaging_ConversationBuilders_submitError,
+      'messaging_GroupScreen_titlePrefix':
+          localizations.messaging_GroupScreen_titlePrefix,
+      'messaging_GroupNameDialog_title':
+          localizations.messaging_GroupNameDialog_title,
+      'messaging_GroupNameDialog_fieldLabel':
+          localizations.messaging_GroupNameDialog_fieldLabel,
+      'messaging_GroupNameDialog_fieldHint':
+          localizations.messaging_GroupNameDialog_fieldHint,
+      'messaging_GroupNameDialog_fieldValidation_empty':
+          localizations.messaging_GroupNameDialog_fieldValidation_empty,
+      'messaging_GroupNameDialog_fieldValidation_short':
+          localizations.messaging_GroupNameDialog_fieldValidation_short,
+      'messaging_GroupNameDialog_saveBtnText':
+          localizations.messaging_GroupNameDialog_saveBtnText,
+      'default_TimeoutMessagingSocketException':
+          localizations.default_TimeoutMessagingSocketException,
+      'default_CannotRemoveOwnerMessagingSocketException':
+          localizations.default_CannotRemoveOwnerMessagingSocketException,
       'diagnostic_AppBar_title': localizations.diagnostic_AppBar_title,
       'diagnosticPermissionDetails_title_statusPermission':
           localizations.diagnosticPermissionDetails_title_statusPermission,
