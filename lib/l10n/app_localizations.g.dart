@@ -2346,6 +2346,210 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Navigate to the Battery section'**
   String get diagnostic_battery_navigate_section;
+
+  /// No description provided for @signalingResponseCodeType_unauthorized.
+  ///
+  /// In en, this message translates to:
+  /// **'You do not have the proper authorization. Please sign in or contact support.'**
+  String get signalingResponseCodeType_unauthorized;
+
+  /// No description provided for @signalingResponseCodeType_unknown.
+  ///
+  /// In en, this message translates to:
+  /// **'An unexpected issue occurred. Please try again later.'**
+  String get signalingResponseCodeType_unknown;
+
+  /// No description provided for @signalingResponseCodeType_transport.
+  ///
+  /// In en, this message translates to:
+  /// **'We\'re having trouble communicating with the server. Please check your connection and try again.'**
+  String get signalingResponseCodeType_transport;
+
+  /// No description provided for @signalingResponseCodeType_request.
+  ///
+  /// In en, this message translates to:
+  /// **'There\'s an issue with your request. Please try again.'**
+  String get signalingResponseCodeType_request;
+
+  /// No description provided for @signalingResponseCodeType_session.
+  ///
+  /// In en, this message translates to:
+  /// **'There\'s an issue with your session. Please sign in again or restart the app.'**
+  String get signalingResponseCodeType_session;
+
+  /// No description provided for @signalingResponseCodeType_plugin.
+  ///
+  /// In en, this message translates to:
+  /// **'A required feature isn\'t working properly. Try restarting the app.'**
+  String get signalingResponseCodeType_plugin;
+
+  /// No description provided for @signalingResponseCodeType_webrtc.
+  ///
+  /// In en, this message translates to:
+  /// **'There\'s an issue with the call connection. Please hang up and try again.'**
+  String get signalingResponseCodeType_webrtc;
+
+  /// No description provided for @signalingResponseCodeType_token.
+  ///
+  /// In en, this message translates to:
+  /// **'Your access token isn\'t valid. Please sign in again.'**
+  String get signalingResponseCodeType_token;
+
+  /// No description provided for @signalingResponseCode_unauthorizedRequest.
+  ///
+  /// In en, this message translates to:
+  /// **'Your request could not be authorized. Please try signing in again.'**
+  String get signalingResponseCode_unauthorizedRequest;
+
+  /// No description provided for @signalingResponseCode_unauthorizedAccess.
+  ///
+  /// In en, this message translates to:
+  /// **'You do not have permission to access this feature. Please contact support if you believe this is an error.'**
+  String get signalingResponseCode_unauthorizedAccess;
+
+  /// No description provided for @signalingResponseCode_unknownError.
+  ///
+  /// In en, this message translates to:
+  /// **'An unexpected error occurred. Please try again later.'**
+  String get signalingResponseCode_unknownError;
+
+  /// No description provided for @signalingResponseCode_transportSpecificError.
+  ///
+  /// In en, this message translates to:
+  /// **'A connection issue occurred. Please check your network and try again.'**
+  String get signalingResponseCode_transportSpecificError;
+
+  /// No description provided for @signalingResponseCode_missingRequest.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong with your request. Please try again.'**
+  String get signalingResponseCode_missingRequest;
+
+  /// No description provided for @signalingResponseCode_unknownRequest.
+  ///
+  /// In en, this message translates to:
+  /// **'We didn\'t recognize that request. Please try again or contact support.'**
+  String get signalingResponseCode_unknownRequest;
+
+  /// No description provided for @signalingResponseCode_invalidJson.
+  ///
+  /// In en, this message translates to:
+  /// **'There was an error processing your data. Please try again.'**
+  String get signalingResponseCode_invalidJson;
+
+  /// No description provided for @signalingResponseCode_invalidJsonObject.
+  ///
+  /// In en, this message translates to:
+  /// **'Some of the information provided was not valid. Please double-check and try again.'**
+  String get signalingResponseCode_invalidJsonObject;
+
+  /// No description provided for @signalingResponseCode_missingMandatoryElement.
+  ///
+  /// In en, this message translates to:
+  /// **'Required information is missing. Please fill in all required fields.'**
+  String get signalingResponseCode_missingMandatoryElement;
+
+  /// No description provided for @signalingResponseCode_invalidPath.
+  ///
+  /// In en, this message translates to:
+  /// **'The requested action isn\'t available. Please try a different option.'**
+  String get signalingResponseCode_invalidPath;
+
+  /// No description provided for @signalingResponseCode_sessionNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Your session could not be found. Please sign in and try again.'**
+  String get signalingResponseCode_sessionNotFound;
+
+  /// No description provided for @signalingResponseCode_handleNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'We couldn\'t find what you were looking for. Please try again.'**
+  String get signalingResponseCode_handleNotFound;
+
+  /// No description provided for @signalingResponseCode_pluginNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'A required component is missing. Please try restarting the app.'**
+  String get signalingResponseCode_pluginNotFound;
+
+  /// No description provided for @signalingResponseCode_errorAttachingPlugin.
+  ///
+  /// In en, this message translates to:
+  /// **'We had trouble connecting a feature. Please try again later.'**
+  String get signalingResponseCode_errorAttachingPlugin;
+
+  /// No description provided for @signalingResponseCode_errorSendingMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'We couldn\'t send your message. Check your network and try again.'**
+  String get signalingResponseCode_errorSendingMessage;
+
+  /// No description provided for @signalingResponseCode_errorDetachingPlugin.
+  ///
+  /// In en, this message translates to:
+  /// **'We had trouble disconnecting a feature. Please try again later.'**
+  String get signalingResponseCode_errorDetachingPlugin;
+
+  /// No description provided for @signalingResponseCode_unsupportedJsepType.
+  ///
+  /// In en, this message translates to:
+  /// **'This action isn\'t supported by your current setup.'**
+  String get signalingResponseCode_unsupportedJsepType;
+
+  /// No description provided for @signalingResponseCode_invalidSdp.
+  ///
+  /// In en, this message translates to:
+  /// **'We encountered a technical error. Please try again later.'**
+  String get signalingResponseCode_invalidSdp;
+
+  /// No description provided for @signalingResponseCode_invalidStream.
+  ///
+  /// In en, this message translates to:
+  /// **'The requested stream isn\'t available. Please try again.'**
+  String get signalingResponseCode_invalidStream;
+
+  /// No description provided for @signalingResponseCode_invalidElementType.
+  ///
+  /// In en, this message translates to:
+  /// **'Something isn\'t quite right. Please try again.'**
+  String get signalingResponseCode_invalidElementType;
+
+  /// No description provided for @signalingResponseCode_sessionIdInUse.
+  ///
+  /// In en, this message translates to:
+  /// **'This session is already active. Try using a different session.'**
+  String get signalingResponseCode_sessionIdInUse;
+
+  /// No description provided for @signalingResponseCode_unexpectedAnswer.
+  ///
+  /// In en, this message translates to:
+  /// **'We got an unexpected response. Please try again.'**
+  String get signalingResponseCode_unexpectedAnswer;
+
+  /// No description provided for @signalingResponseCode_tokenNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Your access token is missing or invalid. Please sign in again.'**
+  String get signalingResponseCode_tokenNotFound;
+
+  /// No description provided for @signalingResponseCode_wrongWebrtcState.
+  ///
+  /// In en, this message translates to:
+  /// **'A call-related error occurred. Please hang up and try again.'**
+  String get signalingResponseCode_wrongWebrtcState;
+
+  /// No description provided for @signalingResponseCode_notAcceptingNewSessions.
+  ///
+  /// In en, this message translates to:
+  /// **'We\'re not able to start new sessions at the moment. Please try later.'**
+  String get signalingResponseCode_notAcceptingNewSessions;
+
+  /// No description provided for @signalingResponseCode_notFoundRoutesInReplyFromBE.
+  ///
+  /// In en, this message translates to:
+  /// **'We couldn\'t find a route to complete your request. Please try again later.'**
+  String get signalingResponseCode_notFoundRoutesInReplyFromBE;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

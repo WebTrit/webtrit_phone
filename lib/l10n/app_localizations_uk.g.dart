@@ -1170,4 +1170,106 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get diagnostic_battery_navigate_section => 'Перейдіть до розділу «Батарея»';
+
+  @override
+  String get signalingResponseCodeType_unauthorized => 'У вас немає належного доступу. Будь ласка, увійдіть у систему або зверніться до служби підтримки.';
+
+  @override
+  String get signalingResponseCodeType_unknown => 'Сталася несподівана помилка. Будь ласка, спробуйте пізніше.';
+
+  @override
+  String get signalingResponseCodeType_transport => 'Ми маємо труднощі з підключенням до сервера. Перевірте ваше з\'єднання та спробуйте знову.';
+
+  @override
+  String get signalingResponseCodeType_request => 'Сталася помилка у вашому запиті. Будь ласка, спробуйте ще раз.';
+
+  @override
+  String get signalingResponseCodeType_session => 'Виникла проблема з вашою сесією. Будь ласка, увійдіть у систему знову або перезапустіть додаток.';
+
+  @override
+  String get signalingResponseCodeType_plugin => 'Не працює необхідна функція. Спробуйте перезапустити додаток.';
+
+  @override
+  String get signalingResponseCodeType_webrtc => 'Виникла проблема з підключенням дзвінка. Завершіть дзвінок і спробуйте знову.';
+
+  @override
+  String get signalingResponseCodeType_token => 'Ваш токен доступу недійсний. Будь ласка, увійдіть у систему знову.';
+
+  @override
+  String get signalingResponseCode_unauthorizedRequest => 'Ваш запит не може бути авторизованим. Будь ласка, спробуйте увійти знову.';
+
+  @override
+  String get signalingResponseCode_unauthorizedAccess => 'У вас немає дозволу на доступ до цієї функції. Зверніться до служби підтримки, якщо вважаєте, що це помилка.';
+
+  @override
+  String get signalingResponseCode_unknownError => 'Сталася несподівана помилка. Будь ласка, спробуйте пізніше.';
+
+  @override
+  String get signalingResponseCode_transportSpecificError => 'Виникла проблема з підключенням. Перевірте свою мережу і спробуйте знову.';
+
+  @override
+  String get signalingResponseCode_missingRequest => 'Щось пішло не так із вашим запитом. Будь ласка, спробуйте ще раз.';
+
+  @override
+  String get signalingResponseCode_unknownRequest => 'Ми не впізнали ваш запит. Будь ласка, спробуйте ще раз або зверніться до служби підтримки.';
+
+  @override
+  String get signalingResponseCode_invalidJson => 'Сталася помилка під час обробки ваших даних. Будь ласка, спробуйте ще раз.';
+
+  @override
+  String get signalingResponseCode_invalidJsonObject => 'Деяка інформація, яку ви надали, є недійсною. Будь ласка, перевірте і спробуйте ще раз.';
+
+  @override
+  String get signalingResponseCode_missingMandatoryElement => 'Необхідна інформація відсутня. Будь ласка, заповніть усі обов\'язкові поля.';
+
+  @override
+  String get signalingResponseCode_invalidPath => 'Запитувана дія недоступна. Будь ласка, спробуйте інший варіант.';
+
+  @override
+  String get signalingResponseCode_sessionNotFound => 'Не вдалося знайти вашу сесію. Будь ласка, увійдіть у систему і спробуйте ще раз.';
+
+  @override
+  String get signalingResponseCode_handleNotFound => 'Ми не змогли знайти те, що ви шукаєте. Будь ласка, спробуйте ще раз.';
+
+  @override
+  String get signalingResponseCode_pluginNotFound => 'Відсутній необхідний компонент. Спробуйте перезапустити додаток.';
+
+  @override
+  String get signalingResponseCode_errorAttachingPlugin => 'Ми зіткнулися з проблемою підключення функції. Будь ласка, спробуйте пізніше.';
+
+  @override
+  String get signalingResponseCode_errorSendingMessage => 'Ми не змогли відправити ваше повідомлення. Перевірте мережу і спробуйте ще раз.';
+
+  @override
+  String get signalingResponseCode_errorDetachingPlugin => 'Ми зіткнулися з проблемою відключення функції. Будь ласка, спробуйте пізніше.';
+
+  @override
+  String get signalingResponseCode_unsupportedJsepType => 'Ця дія не підтримується вашими поточними налаштуваннями.';
+
+  @override
+  String get signalingResponseCode_invalidSdp => 'Ми зіткнулися з технічною помилкою. Будь ласка, спробуйте пізніше.';
+
+  @override
+  String get signalingResponseCode_invalidStream => 'Запитуваний потік недоступний. Будь ласка, спробуйте ще раз.';
+
+  @override
+  String get signalingResponseCode_invalidElementType => 'Щось пішло не так. Будь ласка, спробуйте ще раз.';
+
+  @override
+  String get signalingResponseCode_sessionIdInUse => 'Ця сесія вже активна. Спробуйте використовувати іншу сесію.';
+
+  @override
+  String get signalingResponseCode_unexpectedAnswer => 'Ми отримали несподівану відповідь. Будь ласка, спробуйте ще раз.';
+
+  @override
+  String get signalingResponseCode_tokenNotFound => 'Ваш токен доступу відсутній або недійсний. Будь ласка, увійдіть у систему знову.';
+
+  @override
+  String get signalingResponseCode_wrongWebrtcState => 'Сталася помилка, пов’язана з викликом. Завершіть виклик і спробуйте ще раз.';
+
+  @override
+  String get signalingResponseCode_notAcceptingNewSessions => 'Ми не можемо розпочати нові сесії зараз. Будь ласка, спробуйте пізніше.';
+
+  @override
+  String get signalingResponseCode_notFoundRoutesInReplyFromBE => 'Ми не змогли знайти маршрут для виконання вашого запиту. Будь ласка, спробуйте пізніше.';
 }

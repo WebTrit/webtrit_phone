@@ -1170,4 +1170,106 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get diagnostic_battery_navigate_section => 'Navigate to the Battery section';
+
+  @override
+  String get signalingResponseCodeType_unauthorized => 'You do not have the proper authorization. Please sign in or contact support.';
+
+  @override
+  String get signalingResponseCodeType_unknown => 'An unexpected issue occurred. Please try again later.';
+
+  @override
+  String get signalingResponseCodeType_transport => 'We\'re having trouble communicating with the server. Please check your connection and try again.';
+
+  @override
+  String get signalingResponseCodeType_request => 'There\'s an issue with your request. Please try again.';
+
+  @override
+  String get signalingResponseCodeType_session => 'There\'s an issue with your session. Please sign in again or restart the app.';
+
+  @override
+  String get signalingResponseCodeType_plugin => 'A required feature isn\'t working properly. Try restarting the app.';
+
+  @override
+  String get signalingResponseCodeType_webrtc => 'There\'s an issue with the call connection. Please hang up and try again.';
+
+  @override
+  String get signalingResponseCodeType_token => 'Your access token isn\'t valid. Please sign in again.';
+
+  @override
+  String get signalingResponseCode_unauthorizedRequest => 'Your request could not be authorized. Please try signing in again.';
+
+  @override
+  String get signalingResponseCode_unauthorizedAccess => 'You do not have permission to access this feature. Please contact support if you believe this is an error.';
+
+  @override
+  String get signalingResponseCode_unknownError => 'An unexpected error occurred. Please try again later.';
+
+  @override
+  String get signalingResponseCode_transportSpecificError => 'A connection issue occurred. Please check your network and try again.';
+
+  @override
+  String get signalingResponseCode_missingRequest => 'Something went wrong with your request. Please try again.';
+
+  @override
+  String get signalingResponseCode_unknownRequest => 'We didn\'t recognize that request. Please try again or contact support.';
+
+  @override
+  String get signalingResponseCode_invalidJson => 'There was an error processing your data. Please try again.';
+
+  @override
+  String get signalingResponseCode_invalidJsonObject => 'Some of the information provided was not valid. Please double-check and try again.';
+
+  @override
+  String get signalingResponseCode_missingMandatoryElement => 'Required information is missing. Please fill in all required fields.';
+
+  @override
+  String get signalingResponseCode_invalidPath => 'The requested action isn\'t available. Please try a different option.';
+
+  @override
+  String get signalingResponseCode_sessionNotFound => 'Your session could not be found. Please sign in and try again.';
+
+  @override
+  String get signalingResponseCode_handleNotFound => 'We couldn\'t find what you were looking for. Please try again.';
+
+  @override
+  String get signalingResponseCode_pluginNotFound => 'A required component is missing. Please try restarting the app.';
+
+  @override
+  String get signalingResponseCode_errorAttachingPlugin => 'We had trouble connecting a feature. Please try again later.';
+
+  @override
+  String get signalingResponseCode_errorSendingMessage => 'We couldn\'t send your message. Check your network and try again.';
+
+  @override
+  String get signalingResponseCode_errorDetachingPlugin => 'We had trouble disconnecting a feature. Please try again later.';
+
+  @override
+  String get signalingResponseCode_unsupportedJsepType => 'This action isn\'t supported by your current setup.';
+
+  @override
+  String get signalingResponseCode_invalidSdp => 'We encountered a technical error. Please try again later.';
+
+  @override
+  String get signalingResponseCode_invalidStream => 'The requested stream isn\'t available. Please try again.';
+
+  @override
+  String get signalingResponseCode_invalidElementType => 'Something isn\'t quite right. Please try again.';
+
+  @override
+  String get signalingResponseCode_sessionIdInUse => 'This session is already active. Try using a different session.';
+
+  @override
+  String get signalingResponseCode_unexpectedAnswer => 'We got an unexpected response. Please try again.';
+
+  @override
+  String get signalingResponseCode_tokenNotFound => 'Your access token is missing or invalid. Please sign in again.';
+
+  @override
+  String get signalingResponseCode_wrongWebrtcState => 'A call-related error occurred. Please hang up and try again.';
+
+  @override
+  String get signalingResponseCode_notAcceptingNewSessions => 'We\'re not able to start new sessions at the moment. Please try later.';
+
+  @override
+  String get signalingResponseCode_notFoundRoutesInReplyFromBE => 'We couldn\'t find a route to complete your request. Please try again later.';
 }
