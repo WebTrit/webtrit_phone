@@ -259,7 +259,7 @@ class _MainShellState extends State<MainShell> {
                 context.read<SmsRepository>(),
                 context.read<SmsOutboxRepository>(),
                 (n) => context.read<NotificationsBloc>().add(NotificationsSubmitted(n)),
-              )..add(const Connect());
+              );
             },
           ),
           BlocProvider<UnreadCountCubit>(

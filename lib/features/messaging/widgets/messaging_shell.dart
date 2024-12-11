@@ -19,29 +19,58 @@ class MessagingShell extends StatefulWidget {
 }
 
 class _MessagingShellState extends State<MessagingShell> {
+  late final messagingBloc = context.read<MessagingBloc>();
+  late final messagingFeature = FeatureAccess().messagingFeature;
+
   MessagingNotificationsService? notificationsService;
 
   @override
   void initState() {
     super.initState();
 
-    if (FeatureAccess().messagingFeature.anyMessagingEnabled == false) return;
+    /// Init messaging feature watcher
+    Future.doWhile(() async {
+      syncMessaging();
+      if (!mounted) return false;
+      return await Future.delayed(const Duration(seconds: 5), () => true);
+    });
+  }
 
-    notificationsService = MessagingNotificationsService(
-      context.read<AppBloc>().state.userId!,
-      context.read<ChatsRepository>(),
-      context.read<SmsRepository>(),
-      context.read<ContactsRepository>(),
-      context.read<RemoteNotificationRepository>(),
-      context.read<LocalNotificationRepository>(),
-      context.read<ActiveMessageNotificationsRepository>(),
-      context.read<MainScreenRouteStateRepository>(),
-      context.read<MainShellRouteStateRepository>(),
-      onOpenChatList,
-      onOpenChat,
-      onOpenConversation,
-      onOpenSmsConversation,
-    )..init();
+  /// Sync messaging services with the feature configuration state
+  /// user for enabling/disabling messaging services on the fly if remote confing changes
+  /// init messaging socket connection and notifications service if messaging is enabled
+  /// dispose messaging socket connection and notifications service if messaging is disabled
+  syncMessaging() {
+    final messagingEnabled = messagingFeature.anyMessagingEnabled;
+
+    if (messagingEnabled == true) {
+      final connectionStatus = messagingBloc.state.status;
+      if (connectionStatus == ConnectionStatus.initial) messagingBloc.add(const Connect());
+
+      notificationsService ??= MessagingNotificationsService(
+        context.read<AppBloc>().state.userId!,
+        context.read<ChatsRepository>(),
+        context.read<SmsRepository>(),
+        context.read<ContactsRepository>(),
+        context.read<RemoteNotificationRepository>(),
+        context.read<LocalNotificationRepository>(),
+        context.read<ActiveMessageNotificationsRepository>(),
+        context.read<MainScreenRouteStateRepository>(),
+        context.read<MainShellRouteStateRepository>(),
+        onOpenChatList,
+        onOpenChat,
+        onOpenConversation,
+        onOpenSmsConversation,
+      )..init();
+    }
+
+    if (messagingEnabled == false) {
+      final connectionStatus = messagingBloc.state.status;
+      if (connectionStatus != ConnectionStatus.initial) messagingBloc.add(const Disconnect());
+
+      notificationsService?.dispose();
+      notificationsService = null;
+    }
   }
 
   @override

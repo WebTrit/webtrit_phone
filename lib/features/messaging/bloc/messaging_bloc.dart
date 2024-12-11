@@ -9,7 +9,12 @@ import 'package:webtrit_phone/features/messaging/extensions/phoenix_socket.dart'
 import 'package:webtrit_phone/features/messaging/services/services.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
-// TODO: maybe rename to "messaging connection bloc" and place /cubits and /bloc together
+// TODO:
+// -  maybe rename to "messaging connection bloc" and place /cubits and /bloc together
+//
+// -  initialize new socket client on reconnect because socket cant restart after _client.dispose()
+//    so for multiple remote config changes app restart is required,
+//    but for rare change (like customer paid montly for sms feature) it's fine
 
 part 'messaging_event.dart';
 part 'messaging_state.dart';
@@ -29,6 +34,7 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
   ) : super(MessagingState.initial(_client)) {
     on<Connect>(_connect);
     on<Refresh>(_refresh);
+    on<Disconnect>(_onDisconnect);
     on<_ClientConnected>(_onClientConnected);
     on<_ClientDisconnected>(_onClientDisconnected);
     on<_ClientError>(_onClientError);
@@ -60,7 +66,6 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
   void _connect(Connect event, Emitter<MessagingState> emit) async {
     if (_messagingFeature.anyMessagingEnabled == false) return;
 
-    emit(state.copyWith(status: ConnectionStatus.connecting));
     // -
     // Uncomment section below to wipe messaging related data
     // -
@@ -69,11 +74,12 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
     // _smsRepository.wipeData();
     // _smsOutboxRepository.wipeOutboxData();
 
+    emit(state.copyWith(status: ConnectionStatus.connecting));
     _client.connect();
   }
 
   void _refresh(Refresh event, Emitter<MessagingState> emit) async {
-    if (_client.isConnected) _client.dispose();
+    _client.dispose();
     await Future.delayed(const Duration(milliseconds: 10)); // _client.dispose() fake sync so...
     add(const Connect());
   }
@@ -117,12 +123,26 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
     _logger.warning('_onClientError', event.error);
   }
 
+  void _onDisconnect(Disconnect event, Emitter<MessagingState> emit) {
+    _disposeWorkers();
+    _client.dispose();
+    emit(state.copyWith(status: ConnectionStatus.initial));
+  }
+
+  void _disposeWorkers() {
+    _chatsSyncWorker?.dispose();
+    _chatsSyncWorker = null;
+    _chatsOutboxWorker?.dispose();
+    _chatsOutboxWorker = null;
+    _smsSyncWorker?.dispose();
+    _smsSyncWorker = null;
+    _smsOutboxWorker?.dispose();
+    _smsOutboxWorker = null;
+  }
+
   @override
   Future<void> close() {
-    _chatsSyncWorker?.dispose();
-    _chatsOutboxWorker?.dispose();
-    _smsSyncWorker?.dispose();
-    _smsOutboxWorker?.dispose();
+    _disposeWorkers();
     _client.dispose();
     return super.close();
   }

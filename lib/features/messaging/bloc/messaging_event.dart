@@ -12,6 +12,10 @@ class Refresh extends MessagingEvent {
   const Refresh();
 }
 
+class Disconnect extends MessagingEvent {
+  const Disconnect();
+}
+
 class _ClientConnected extends MessagingEvent {
   const _ClientConnected();
 }
