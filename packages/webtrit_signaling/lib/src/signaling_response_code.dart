@@ -36,7 +36,8 @@ enum SignalingResponseCode {
   unexpectedAnswer(SignalingResponseCodeType.plugin, 469),
   tokenNotFound(SignalingResponseCodeType.token, 470),
   wrongWebrtcState(SignalingResponseCodeType.webrtc, 471),
-  notAcceptingNewSessions(SignalingResponseCodeType.session, 472);
+  notAcceptingNewSessions(SignalingResponseCodeType.session, 472),
+  notFoundRoutesInReplyFromBE(SignalingResponseCodeType.transport, 500);
 
   const SignalingResponseCode(this.type, this.code);
 
