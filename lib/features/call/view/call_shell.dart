@@ -147,8 +147,12 @@ class _CallShellState extends State<CallShell> {
   /// that triggers redirect('') from empty MainScreenPageRoute subroute to
   /// initial(last remembered since restart) flavor that final and not changed across the app router lifecycle.
   /// example redirect('') will always redirect to contacts page even if user was on the calls or chat page.
+  ///
+  /// On iOS, using popUntil doesn't work when the app is collapsed because pushing routes isn’t allowed until the app resumes.
+  /// As a result, popUntil is called too early, leaving the route not yet present in the stack once the app reopens.
+  /// Using navigate with a path-based approach fixes this issue by properly restoring state and avoiding the redirect bug.
   void _backToMainScreen(StackRouter router) {
-    router.popUntil((route) => route.settings.name == MainScreenPageRoute.name, scoped: false);
+    router.navigateNamed(MainShellRoute.name);
   }
 }
 

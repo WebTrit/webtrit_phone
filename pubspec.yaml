@@ -66,6 +66,7 @@ dependencies:
   phoenix_socket: ^0.7.4
   provider: ^6.1.2
   pub_semver: ^2.1.4
+  sdp_transform: ^0.3.2
   share_plus: ^10.0.3
   shared_preferences: ^2.2.3
   stream_transform: ^2.1.0

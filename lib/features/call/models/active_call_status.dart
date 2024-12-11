@@ -3,4 +3,5 @@ enum ActiveCallStatus {
   incomingJsepProcessed,
   incomingAnswered,
   disconnecting,
+  answering,
 }

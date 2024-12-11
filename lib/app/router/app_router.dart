@@ -58,7 +58,7 @@ class AppRouter extends _$AppRouter {
           children: [
             RedirectRoute(
               path: '',
-              redirectTo: 'main',
+              redirectTo: MainShellRoute.name,
             ),
             AutoRoute.guarded(
               page: LoginRouterPageRoute.page,
@@ -136,7 +136,7 @@ class AppRouter extends _$AppRouter {
             AutoRoute.guarded(
               page: MainShellRoute.page,
               onNavigation: onMainShellRouteGuardNavigation,
-              path: 'main',
+              path: MainShellRoute.name,
               children: [
                 AutoRoute(
                   page: MainScreenPageRoute.page,
@@ -274,6 +274,10 @@ class AppRouter extends _$AppRouter {
                     AutoRoute(
                       page: NetworkScreenPageRoute.page,
                       path: 'network',
+                    ),
+                    AutoRoute(
+                      page: CallCodecsScreenPageRoute.page,
+                      path: 'call_codecs',
                     ),
                     AutoRoute(
                       page: ThemeModeScreenPageRoute.page,

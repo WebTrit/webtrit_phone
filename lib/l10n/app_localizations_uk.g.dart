@@ -120,13 +120,13 @@ class AppLocalizationsUk extends AppLocalizations {
   String get call_description_transferProcessing => 'Обробка переадресації';
 
   @override
-  String get call_description_transfer_requested => 'Запит на переадресацію';
-
-  @override
   String get call_FailureAcknowledgeDialog_title => 'Помилка';
 
   @override
   String get callProcessingStatus_disconnecting => 'Відключення дзвінка, будь ласка, зачекайте…';
+
+  @override
+  String get callProcessingStatus_answering => 'Прийняття виклику, будь ласка, зачекайте…';
 
   @override
   String get callStatus_appUnregistered => 'Незареєстровано';
@@ -160,9 +160,6 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get common_problemWithLoadingPage => 'Виникла проблема з завантаженням сторінки.';
-
-  @override
-  String get connectToYourOwnVoIPSystem_Button_Action => 'Підключітись до власної VoIP-системи';
 
   @override
   String get contacts_ExternalTabButton_refresh => 'Оновити';
@@ -296,15 +293,6 @@ class AppLocalizationsUk extends AppLocalizations {
   String get favorites_Text_blingTransferInitiated => 'Безумовне переведення дзвінка';
 
   @override
-  String get inviteFriends_Dialog_close => 'Приховати це повідомлення';
-
-  @override
-  String get inviteFriends_Dialog_invite => 'Запросити';
-
-  @override
-  String get inviteFriends_Dialog_title => 'Запросити друзів спробувати WebTrit';
-
-  @override
   String get locale_default => 'За замовчуванням';
 
   @override
@@ -363,18 +351,6 @@ class AppLocalizationsUk extends AppLocalizations {
   String login_CoreVersionUnsupportedExceptionError(String actual, String supportedConstraint) {
     return 'Непідтримувана версія екземпляра, будь ласка, зверніться до адміністратора вашої системи (фактична: $actual, підтримувана: $supportedConstraint)';
   }
-
-  @override
-  String get login_requestCredentials_button => 'Зареєструватися';
-
-  @override
-  String get login_requestCredentials_DialogContent => 'Будь ласка, надайте базову інформацію і зазначте у повідомленні, що ви хотіли б отримати обліковий запис. Наші адміністратори перевірять інформацію і надішлють деталі облікового запису на вашу електронну пошту.';
-
-  @override
-  String get login_requestCredentials_DialogTitle => 'Запит на обліковий запис';
-
-  @override
-  String get login_requestCredentials_title => 'Зареєструватися';
 
   @override
   String get login_RequestFailureEmptyEmailError => 'Не вдалося відправити код підтвердження';
@@ -455,11 +431,6 @@ class AppLocalizationsUk extends AppLocalizations {
   @override
   String login_Text_otpSigninVerifyPreDescriptionUserRef(String userRef) {
     return 'На електронну пошту, прив\'язану до наданого номера телефону чи електронної пошти, надіслано одноразовий код підтвердження.';
-  }
-
-  @override
-  String login_Text_otpVerifySentToEmailAssignedWithPhone(String phone) {
-    return 'На електронну пошту, прив\'язану до телефону tel:$phone, надіслано одноразовий код підтвердження.';
   }
 
   @override
@@ -574,19 +545,10 @@ class AppLocalizationsUk extends AppLocalizations {
   String get messaging_ConfirmDialog_confirm => 'Так';
 
   @override
-  String get messaging_ConversationBuilders_addUserBtnText => 'Додати користувача';
-
-  @override
   String get messaging_ConversationBuilders_back => 'Назад';
 
   @override
-  String get messaging_ConversationBuilders_back_action => 'Назад';
-
-  @override
   String get messaging_ConversationBuilders_cancel => 'Скасувати';
-
-  @override
-  String get messaging_ConversationBuilders_connectionError => 'Помилка підключення, спробуйте пізніше';
 
   @override
   String get messaging_ConversationBuilders_contactOrNumberSearch_hint => 'Введіть ім\'я або номер телефону';
@@ -602,9 +564,6 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get messaging_ConversationBuilders_externalContacts_heading => 'Контакти Хмарної АТС';
-
-  @override
-  String get messaging_ConversationBuilders_groupNameHeadline => 'Назва групи';
 
   @override
   String get messaging_ConversationBuilders_invalidNumber_message1 => 'Контакт має недійсний номер телефону. Він має бути у форматі ';
@@ -652,12 +611,6 @@ class AppLocalizationsUk extends AppLocalizations {
   String get messaging_ConversationBuilders_numberSearch_errorHint => 'Формат номера телефону: ';
 
   @override
-  String get messaging_ConversationBuilders_submitBtnText => 'Надіслати';
-
-  @override
-  String get messaging_ConversationBuilders_submitError => 'Під час створення групи сталася помилка, повторіть спробу';
-
-  @override
   String get messaging_ConversationBuilders_title_group => 'Створити групу';
 
   @override
@@ -665,15 +618,6 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get messaging_Conversation_failure => 'Помилка завантаження розмови';
-
-  @override
-  String get messaging_ConversationInfo_deleteAsk => 'Ви впевнені, що хочете видалити цей діалог?';
-
-  @override
-  String get messaging_ConversationInfo_deleteBtn => 'Видалити діалог';
-
-  @override
-  String get messaging_ConversationInfo_title => 'Контактна інформація';
 
   @override
   String get messaging_ConversationScreen_titlePrefix => 'Діалог:';
@@ -706,9 +650,6 @@ class AppLocalizationsUk extends AppLocalizations {
   String get messaging_ConversationsScreen_smssSearch_hint => 'Введіть номер телефону';
 
   @override
-  String get messaging_ConversationsScreen_startDialog => 'Почати діалог';
-
-  @override
   String get messaging_Conversations_tile_empty => 'Поки немає повідомлень';
 
   @override
@@ -731,36 +672,6 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get messaging_GroupAuthorities_owner => 'власник';
-
-  @override
-  String get messaging_GroupBuilderScreen_addUserBtnText => 'Додати користувача';
-
-  @override
-  String get messaging_GroupBuilderScreen_connectionError => 'Помилка підключення, спробуйте пізніше';
-
-  @override
-  String get messaging_GroupBuilderScreen_groupNameHeadline => 'Назва групи';
-
-  @override
-  String get messaging_GroupBuilderScreen_membersHeadline => 'Члени групи';
-
-  @override
-  String get messaging_GroupBuilderScreen_nameFieldEmpty => 'Будь ласка, введіть назву групи';
-
-  @override
-  String get messaging_GroupBuilderScreen_nameFieldLabel => 'Назва групи';
-
-  @override
-  String get messaging_GroupBuilderScreen_nameFieldShort => 'Назва групи має містити не менше 3 символів';
-
-  @override
-  String get messaging_GroupBuilderScreen_screenTitle => 'Створити групу';
-
-  @override
-  String get messaging_GroupBuilderScreen_submitBtnText => 'Надіслати';
-
-  @override
-  String get messaging_GroupBuilderScreen_submitError => 'Під час створення групи сталася помилка, повторіть спробу';
 
   @override
   String get messaging_GroupInfo_addUserBtnText => 'Додати користувача';
@@ -808,27 +719,6 @@ class AppLocalizationsUk extends AppLocalizations {
   String get messaging_GroupNameDialog_cancelBtnText => 'Скасувати';
 
   @override
-  String get messaging_GroupNameDialog_fieldHint => 'Введіть назву групи';
-
-  @override
-  String get messaging_GroupNameDialog_fieldLabel => 'Назва групи';
-
-  @override
-  String get messaging_GroupNameDialog_fieldValidation_empty => 'Будь ласка, введіть назву групи';
-
-  @override
-  String get messaging_GroupNameDialog_fieldValidation_short => 'Назва групи занадто коротка';
-
-  @override
-  String get messaging_GroupNameDialog_saveBtnText => 'Зберегти';
-
-  @override
-  String get messaging_GroupNameDialog_title => 'Назва групи';
-
-  @override
-  String get messaging_GroupScreen_titlePrefix => 'Група:';
-
-  @override
   String get messaging_MessageField_hint => 'Введіть повідомлення';
 
   @override
@@ -850,73 +740,10 @@ class AppLocalizationsUk extends AppLocalizations {
   String get messaging_MessageView_forward => 'Переслати';
 
   @override
-  String get messaging_MessageView_forwarded => '[переслано]';
-
-  @override
   String get messaging_MessageView_reply => 'Відповісти';
 
   @override
   String get messaging_MessageView_textcopy => 'Копіювати в буфер обміну';
-
-  @override
-  String get messaging_NewConversation_back_action => 'Назад';
-
-  @override
-  String get messaging_NewConversation_cancel => 'Скасувати';
-
-  @override
-  String get messaging_NewConversation_contactOrNumberSearch_hint => 'Введіть ім\'я або номер телефону';
-
-  @override
-  String get messaging_NewConversation_contactSearch_hint => 'Пошук контактів';
-
-  @override
-  String get messaging_NewConversation_create => 'Створити';
-
-  @override
-  String get messaging_NewConversation_createGroup => 'Створити групу';
-
-  @override
-  String get messaging_NewConversation_externalContacts_heading => 'Контакти Хмарної АТС';
-
-  @override
-  String get messaging_NewConversation_invalidNumber_message => '. Будь ласка, виправте це у своїй телефонній книзі.';
-
-  @override
-  String get messaging_NewConversation_invalidNumber_message1 => 'The contact has an invalid phone number. It should be in the format ';
-
-  @override
-  String get messaging_NewConversation_invalidNumber_message2 => '. Please fix it in your phone book.';
-
-  @override
-  String get messaging_NewConversation_invalidNumber_ok => 'Закрити';
-
-  @override
-  String get messaging_NewConversation_invalidNumber_title => 'Невірний номер телефону';
-
-  @override
-  String get messaging_NewConversation_invite_heading => 'Запросити користувачів:';
-
-  @override
-  String get messaging_NewConversation_localContacts_heading => 'Локальні контакти';
-
-  @override
-  String get messaging_NewConversation_next_action => 'Далі';
-
-  @override
-  String get messaging_NewConversation_noContacts => 'Немає контактів, що відповідають результату пошуку';
-
-  @override
-  String get messaging_NewConversation_numberFormatExample => '+ [код країни] [код регіону/оператора] [номер абонента]';
-
-  @override
-  String get messaging_NewConversation_numberSearch_errorError => 'Введений номер телефону недійсний. Його слід ввести у форматі: ';
-
-  @override
-  String get messaging_NewConversation_numberSearch_errorHint => 'Формат номера телефону: ';
-
-  @override
-  String get messaging_NewConversation_title => 'Новий чат';
 
   @override
   String get messaging_ParticipantName_you => 'Ви';
@@ -976,9 +803,6 @@ class AppLocalizationsUk extends AppLocalizations {
   String get notifications_errorSnackBar_sipServiceUnavailable => 'Помилка аутентифікації з віддаленою VoIP системою';
 
   @override
-  String get notImplemented => 'Вибачте, ця функція ще не реалізована';
-
-  @override
   String get permission_Button_request => 'Продовжити';
 
   @override
@@ -1030,9 +854,6 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get recents_DeleteConfirmDialog_title => 'Підтвердження видалення';
-
-  @override
-  String get recents_errorSnackBar_loadFailure => 'Упс... сталася помилка ☹️';
 
   @override
   String recents_snackBar_deleted(String name) {
@@ -1113,12 +934,6 @@ class AppLocalizationsUk extends AppLocalizations {
   String get settings_AppBarTitle_myAccount => 'Мій обліковий запис';
 
   @override
-  String get settings_ForceLogoutConfirmDialog_content => 'Ви впевнені, що хочете примусово вийти?';
-
-  @override
-  String get settings_ForceLogoutConfirmDialog_title => 'Підтвердіть примусовий вихід';
-
-  @override
   String get settings_ListViewTileTitle_about => 'Про програму';
 
   @override
@@ -1138,6 +953,9 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get settings_ListViewTileTitle_network => 'Налаштування мережі';
+
+  @override
+  String get settings_ListViewTileTitle_call_codecs => 'Кодеки дзвінка';
 
   @override
   String get settings_ListViewTileTitle_registered => 'Зареєстровано';
@@ -1176,10 +994,22 @@ class AppLocalizationsUk extends AppLocalizations {
   String get settings_network_incomingCallType_socket_description => 'Додаток залишається працювати в фоні та завжди підтримує активне підключення до сервера. Це збільшує шанси отримати вхідний дзвінок, але може швидше розряджати батарею.';
 
   @override
-  String get settings_network_androidNotificationName => 'Служба вхідних дзвінків';
+  String get settings_call_codecs_preferred_audio_title => 'Предпочитайомий відеокодек';
 
   @override
-  String get settings_network_androidNotificationDescription => 'Це необхідно для отримання дзвінків у фоновому режимі';
+  String get settings_call_codecs_preferred_audio_tip => 'Використовується для аудіодзвінків. Якщо кодек не підтримується пристроєм, дзвінок буде встановлено за допомогою наступного доступного кодеку.';
+
+  @override
+  String get settings_call_codecs_preferred_audio_default => 'Автоматично';
+
+  @override
+  String get settings_call_codecs_preferred_video_title => 'Предпочитайомий відеокодек';
+
+  @override
+  String get settings_call_codecs_preferred_video_tip => 'Використовується для відеодзвінків. Якщо кодек не підтримується пристроєм, дзвінок буде встановлено за допомогою наступного доступного кодеку.';
+
+  @override
+  String get settings_call_codecs_preferred_video_default => 'Автоматично';
 
   @override
   String get themeMode_dark => 'Темний';
@@ -1189,12 +1019,6 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get themeMode_system => 'Системний';
-
-  @override
-  String get undefine_DeeplinkConfigurationInvalid_text => 'Облікові дані автоматичної конфігурації недійсні, увійдіть';
-
-  @override
-  String get underDevelopment => 'Ця сторінка знаходиться в розробці.';
 
   @override
   String get user_agreement_agrement_link => 'угодою';
@@ -1216,9 +1040,6 @@ class AppLocalizationsUk extends AppLocalizations {
   String get validationBlankError => 'Будь ласка, введіть значення';
 
   @override
-  String get webRegistration_ErrorAcknowledgeDialogActions_demo => 'Demo';
-
-  @override
   String get webRegistration_ErrorAcknowledgeDialogActions_retry => 'Retry';
 
   @override
@@ -1226,6 +1047,51 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get webRegistration_ErrorAcknowledgeDialog_title => 'Web resource error';
+
+  @override
+  String get messaging_MessageView_forwarded => '[переслано]';
+
+  @override
+  String get messaging_ConversationsScreen_startDialog => 'Почати діалог';
+
+  @override
+  String get messaging_ConversationBuilders_back_action => 'Назад';
+
+  @override
+  String get messaging_ConversationBuilders_groupNameHeadline => 'Назва групи';
+
+  @override
+  String get messaging_ConversationBuilders_addUserBtnText => 'Додати користувача';
+
+  @override
+  String get messaging_ConversationBuilders_submitBtnText => 'Надіслати';
+
+  @override
+  String get messaging_ConversationBuilders_connectionError => 'Помилка підключення, спробуйте пізніше';
+
+  @override
+  String get messaging_ConversationBuilders_submitError => 'Під час створення групи сталася помилка, повторіть спробу';
+
+  @override
+  String get messaging_GroupScreen_titlePrefix => 'Група:';
+
+  @override
+  String get messaging_GroupNameDialog_title => 'Назва групи';
+
+  @override
+  String get messaging_GroupNameDialog_fieldLabel => 'Назва групи';
+
+  @override
+  String get messaging_GroupNameDialog_fieldHint => 'Введіть назву групи';
+
+  @override
+  String get messaging_GroupNameDialog_fieldValidation_empty => 'Будь ласка, введіть назву групи';
+
+  @override
+  String get messaging_GroupNameDialog_fieldValidation_short => 'Назва групи занадто коротка';
+
+  @override
+  String get messaging_GroupNameDialog_saveBtnText => 'Зберегти';
 
   @override
   String get default_TimeoutMessagingSocketException => 'Час очікування відповіді сервера закінчився';
@@ -1319,9 +1185,6 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get diagnostic_pushTokenStatusType_success => 'Служба успішно налаштована ';
-
-  @override
-  String get diagnostic_pushTokenStatusType_error => 'Проблема з налаштуванням служби push-сповіщень';
 
   @override
   String get sessionStatus_pushNotificationServiceProblem => 'Проблема з налаштуванням служби пуш-сповіщень';

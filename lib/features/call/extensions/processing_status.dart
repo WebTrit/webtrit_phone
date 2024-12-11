@@ -9,6 +9,8 @@ extension ProcessingStatusL10n on ActiveCallStatus {
     switch (this) {
       case ActiveCallStatus.disconnecting:
         return context.l10n.callProcessingStatus_disconnecting;
+      case ActiveCallStatus.answering:
+        return context.l10n.callProcessingStatus_answering;
       default:
         return '';
     }

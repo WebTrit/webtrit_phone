@@ -16,6 +16,8 @@ class AppPreferences with SystemInfoJsonMapper {
   static const _kUserAgreementAcceptedKey = 'user-agreement-accepted';
   static const _kIncomingCallTypeKey = 'call-incoming-type';
   static const _kSystemInfoKey = 'system-info';
+  static const _kPreferedAudioCodecKey = 'prefered-audio-codec';
+  static const _kPreferedVideoCodecKey = 'prefered-video-codec';
 
   // Please add all new keys here for proper cleaning of preferences
   static const _kPreferencesList = [
@@ -28,6 +30,8 @@ class AppPreferences with SystemInfoJsonMapper {
     _kUserAgreementAcceptedKey,
     _kIncomingCallTypeKey,
     _kSystemInfoKey,
+    _kPreferedAudioCodecKey,
+    _kPreferedVideoCodecKey,
   ];
 
   // List of preferences keys to exclude by default during clean operation
@@ -178,5 +182,33 @@ class AppPreferences with SystemInfoJsonMapper {
     final systemInfoString = _sharedPreferences.getString(_kSystemInfoKey);
     if (systemInfoString != null) return systemInfoFromJson(systemInfoString);
     return null;
+  }
+
+  Future<void> setPreferedAudioCodec(AudioCodec? value) {
+    if (value != null) {
+      return _sharedPreferences.setString(_kPreferedAudioCodecKey, value.name);
+    } else {
+      return _sharedPreferences.remove(_kPreferedAudioCodecKey);
+    }
+  }
+
+  AudioCodec? getPreferedAudioCodec() {
+    final preferedAudioCodec = _sharedPreferences.getString(_kPreferedAudioCodecKey);
+    if (preferedAudioCodec == null) return null;
+    return AudioCodec.values.byName(preferedAudioCodec);
+  }
+
+  Future<void> setPreferedVideoCodec(VideoCodec? value) {
+    if (value != null) {
+      return _sharedPreferences.setString(_kPreferedVideoCodecKey, value.name);
+    } else {
+      return _sharedPreferences.remove(_kPreferedVideoCodecKey);
+    }
+  }
+
+  VideoCodec? getPreferedVideoCodec() {
+    final preferedVideoCodec = _sharedPreferences.getString(_kPreferedVideoCodecKey);
+    if (preferedVideoCodec == null) return null;
+    return VideoCodec.values.byName(preferedVideoCodec);
   }
 }

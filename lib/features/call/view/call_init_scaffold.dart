@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:webtrit_phone/theme/theme.dart';
+import 'package:webtrit_phone/widgets/widgets.dart';
 
 class CallInitScaffold extends StatelessWidget {
   const CallInitScaffold({
@@ -21,13 +22,26 @@ class CallInitScaffold extends StatelessWidget {
         decoration: BoxDecoration(
           gradient: gradients?.tab,
         ),
-        child: !showProgressIndicator
-            ? null
-            : Center(
+        child: Stack(
+          children: [
+            SafeArea(
+              child: AppBar(
+                leading: const ExtBackButton(),
+                backgroundColor: Colors.transparent,
+                foregroundColor: onTabGradient,
+                primary: false,
+              ),
+            ),
+            Center(
+              child: Visibility(
+                visible: showProgressIndicator,
                 child: CircularProgressIndicator(
                   color: onTabGradient,
                 ),
               ),
+            )
+          ],
+        ),
       ),
     );
   }

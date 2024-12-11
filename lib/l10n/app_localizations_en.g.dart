@@ -120,13 +120,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get call_description_transferProcessing => 'Transfer processing';
 
   @override
-  String get call_description_transfer_requested => 'Transfer request';
-
-  @override
   String get call_FailureAcknowledgeDialog_title => 'Failure';
 
   @override
   String get callProcessingStatus_disconnecting => 'Disconnecting the call, please hold on…';
+
+  @override
+  String get callProcessingStatus_answering => 'Answering the call, please hold on…';
 
   @override
   String get callStatus_appUnregistered => 'Unregistered';
@@ -160,9 +160,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get common_problemWithLoadingPage => 'There was an issue loading the page.';
-
-  @override
-  String get connectToYourOwnVoIPSystem_Button_Action => 'Connect to your own VoIP system';
 
   @override
   String get contacts_ExternalTabButton_refresh => 'Refresh';
@@ -296,15 +293,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get favorites_Text_blingTransferInitiated => 'Performing blind transfer';
 
   @override
-  String get inviteFriends_Dialog_close => 'Hide this message';
-
-  @override
-  String get inviteFriends_Dialog_invite => 'Invite';
-
-  @override
-  String get inviteFriends_Dialog_title => 'Invite your friends \nto try WebTrit';
-
-  @override
   String get locale_default => 'Default';
 
   @override
@@ -363,18 +351,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String login_CoreVersionUnsupportedExceptionError(String actual, String supportedConstraint) {
     return 'An incompatible instance version provided, please contact the administrator of your system (actual: $actual, supported: $supportedConstraint)';
   }
-
-  @override
-  String get login_requestCredentials_button => 'Sign up';
-
-  @override
-  String get login_requestCredentials_DialogContent => 'Please provide basic information and specify in the message that you would like to receive an account. Our administrators will verify the information and send the account details to your email.';
-
-  @override
-  String get login_requestCredentials_DialogTitle => 'Account Request';
-
-  @override
-  String get login_requestCredentials_title => 'Sign up';
 
   @override
   String get login_RequestFailureEmptyEmailError => 'Cannot send the verification code';
@@ -455,11 +431,6 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String login_Text_otpSigninVerifyPreDescriptionUserRef(String userRef) {
     return 'A one-time verification code was sent to the email assigned to provided phone number or email.';
-  }
-
-  @override
-  String login_Text_otpVerifySentToEmailAssignedWithPhone(String phone) {
-    return 'A one-time verification code was sent to the email assigned to the tel:$phone phone number.';
   }
 
   @override
@@ -574,19 +545,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get messaging_ConfirmDialog_confirm => 'Yes';
 
   @override
-  String get messaging_ConversationBuilders_addUserBtnText => 'Add user';
-
-  @override
   String get messaging_ConversationBuilders_back => 'Back';
 
   @override
-  String get messaging_ConversationBuilders_back_action => 'Back';
-
-  @override
   String get messaging_ConversationBuilders_cancel => 'Cancel';
-
-  @override
-  String get messaging_ConversationBuilders_connectionError => 'Connection error, please try later';
 
   @override
   String get messaging_ConversationBuilders_contactOrNumberSearch_hint => 'Enter name or phone number';
@@ -602,9 +564,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get messaging_ConversationBuilders_externalContacts_heading => 'Cloud PBX contacts';
-
-  @override
-  String get messaging_ConversationBuilders_groupNameHeadline => 'Group name';
 
   @override
   String get messaging_ConversationBuilders_invalidNumber_message1 => 'The contact has an invalid phone number. It should be in the format ';
@@ -652,12 +611,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get messaging_ConversationBuilders_numberSearch_errorHint => 'Phone number format: ';
 
   @override
-  String get messaging_ConversationBuilders_submitBtnText => 'Submit';
-
-  @override
-  String get messaging_ConversationBuilders_submitError => 'Error happened while creating group, please try again';
-
-  @override
   String get messaging_ConversationBuilders_title_group => 'Create group';
 
   @override
@@ -665,15 +618,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get messaging_Conversation_failure => 'Conversation load error';
-
-  @override
-  String get messaging_ConversationInfo_deleteAsk => 'Are you sure you want to delete this dialog?';
-
-  @override
-  String get messaging_ConversationInfo_deleteBtn => 'Delete dialog';
-
-  @override
-  String get messaging_ConversationInfo_title => 'Contact info';
 
   @override
   String get messaging_ConversationScreen_titlePrefix => 'Dialog:';
@@ -706,9 +650,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get messaging_ConversationsScreen_smssSearch_hint => 'Enter phone number';
 
   @override
-  String get messaging_ConversationsScreen_startDialog => 'Start dialog';
-
-  @override
   String get messaging_Conversations_tile_empty => 'No messages yet';
 
   @override
@@ -731,36 +672,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get messaging_GroupAuthorities_owner => 'owner';
-
-  @override
-  String get messaging_GroupBuilderScreen_addUserBtnText => 'Add user';
-
-  @override
-  String get messaging_GroupBuilderScreen_connectionError => 'Connection error, please try later';
-
-  @override
-  String get messaging_GroupBuilderScreen_groupNameHeadline => 'Group name';
-
-  @override
-  String get messaging_GroupBuilderScreen_membersHeadline => 'Members';
-
-  @override
-  String get messaging_GroupBuilderScreen_nameFieldEmpty => 'Please enter a group name';
-
-  @override
-  String get messaging_GroupBuilderScreen_nameFieldLabel => 'Group Name';
-
-  @override
-  String get messaging_GroupBuilderScreen_nameFieldShort => 'Group name must be at least 3 characters';
-
-  @override
-  String get messaging_GroupBuilderScreen_screenTitle => 'Create group';
-
-  @override
-  String get messaging_GroupBuilderScreen_submitBtnText => 'Submit';
-
-  @override
-  String get messaging_GroupBuilderScreen_submitError => 'Error happened while creating group, please try again';
 
   @override
   String get messaging_GroupInfo_addUserBtnText => 'Add user';
@@ -808,27 +719,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get messaging_GroupNameDialog_cancelBtnText => 'Cancel';
 
   @override
-  String get messaging_GroupNameDialog_fieldHint => 'Enter group name';
-
-  @override
-  String get messaging_GroupNameDialog_fieldLabel => 'Group name';
-
-  @override
-  String get messaging_GroupNameDialog_fieldValidation_empty => 'Please enter group name';
-
-  @override
-  String get messaging_GroupNameDialog_fieldValidation_short => 'Group name is too short';
-
-  @override
-  String get messaging_GroupNameDialog_saveBtnText => 'Save';
-
-  @override
-  String get messaging_GroupNameDialog_title => 'Group name';
-
-  @override
-  String get messaging_GroupScreen_titlePrefix => 'Group:';
-
-  @override
   String get messaging_MessageField_hint => 'Type a message';
 
   @override
@@ -850,73 +740,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get messaging_MessageView_forward => 'Forward';
 
   @override
-  String get messaging_MessageView_forwarded => '[forwarded]';
-
-  @override
   String get messaging_MessageView_reply => 'Reply';
 
   @override
   String get messaging_MessageView_textcopy => 'Copy to clipboard';
-
-  @override
-  String get messaging_NewConversation_back_action => 'Back';
-
-  @override
-  String get messaging_NewConversation_cancel => 'Cancel';
-
-  @override
-  String get messaging_NewConversation_contactOrNumberSearch_hint => 'Enter name or phone number';
-
-  @override
-  String get messaging_NewConversation_contactSearch_hint => 'Search contacts';
-
-  @override
-  String get messaging_NewConversation_create => 'Create';
-
-  @override
-  String get messaging_NewConversation_createGroup => 'Create group';
-
-  @override
-  String get messaging_NewConversation_externalContacts_heading => 'Cloud PBX contacts';
-
-  @override
-  String get messaging_NewConversation_invalidNumber_message => '';
-
-  @override
-  String get messaging_NewConversation_invalidNumber_message1 => 'The contact has an invalid phone number. It should be in the format ';
-
-  @override
-  String get messaging_NewConversation_invalidNumber_message2 => '. Please fix it in your phone book.';
-
-  @override
-  String get messaging_NewConversation_invalidNumber_ok => 'Close';
-
-  @override
-  String get messaging_NewConversation_invalidNumber_title => 'Invalid phone number';
-
-  @override
-  String get messaging_NewConversation_invite_heading => 'Invite users:';
-
-  @override
-  String get messaging_NewConversation_localContacts_heading => 'Local contacts';
-
-  @override
-  String get messaging_NewConversation_next_action => 'Next';
-
-  @override
-  String get messaging_NewConversation_noContacts => 'There are no contacts matching the search result';
-
-  @override
-  String get messaging_NewConversation_numberFormatExample => '+ [country code] [area/operator code] [subscriber number]';
-
-  @override
-  String get messaging_NewConversation_numberSearch_errorError => 'The entered phone number is invalid. It should be entered in the format: ';
-
-  @override
-  String get messaging_NewConversation_numberSearch_errorHint => 'Phone number format: ';
-
-  @override
-  String get messaging_NewConversation_title => 'New chat';
 
   @override
   String get messaging_ParticipantName_you => 'You';
@@ -976,9 +803,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get notifications_errorSnackBar_sipServiceUnavailable => 'Authentication error with the remote VoIP system';
 
   @override
-  String get notImplemented => 'Sorry, not implemented yet';
-
-  @override
   String get permission_Button_request => 'Continue';
 
   @override
@@ -1030,9 +854,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get recents_DeleteConfirmDialog_title => 'Confirm deleting';
-
-  @override
-  String get recents_errorSnackBar_loadFailure => 'Oops... an error happened ☹️';
 
   @override
   String recents_snackBar_deleted(String name) {
@@ -1113,12 +934,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings_AppBarTitle_myAccount => 'My account';
 
   @override
-  String get settings_ForceLogoutConfirmDialog_content => 'Are you sure you want to force logout?';
-
-  @override
-  String get settings_ForceLogoutConfirmDialog_title => 'Confirm force logout';
-
-  @override
   String get settings_ListViewTileTitle_about => 'About';
 
   @override
@@ -1138,6 +953,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settings_ListViewTileTitle_network => 'Network settings';
+
+  @override
+  String get settings_ListViewTileTitle_call_codecs => 'Call codecs';
 
   @override
   String get settings_ListViewTileTitle_registered => 'Online';
@@ -1176,10 +994,22 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings_network_incomingCallType_socket_description => 'The app continues running in the background and always maintains an active connection to the server. This increases the chances of receiving an incoming call but may drain the battery more quickly.';
 
   @override
-  String get settings_network_androidNotificationName => 'Inbound Calls Service';
+  String get settings_call_codecs_preferred_audio_title => 'Preferred audio codec';
 
   @override
-  String get settings_network_androidNotificationDescription => 'This is required to receive calls while in background';
+  String get settings_call_codecs_preferred_audio_tip => 'The preferred audio codec is used for audio calls. If the codec is not supported by device, the call will be established using the next available codec.';
+
+  @override
+  String get settings_call_codecs_preferred_audio_default => 'Auto';
+
+  @override
+  String get settings_call_codecs_preferred_video_title => 'Preferred video codec';
+
+  @override
+  String get settings_call_codecs_preferred_video_tip => 'The preferred video codec is used for video calls. If the codec is not supported by device, the call will be established using the next available codec.';
+
+  @override
+  String get settings_call_codecs_preferred_video_default => 'Auto';
 
   @override
   String get themeMode_dark => 'Dark';
@@ -1189,12 +1019,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get themeMode_system => 'System';
-
-  @override
-  String get undefine_DeeplinkConfigurationInvalid_text => 'The autoconfiguration credentials are invalid, please log in';
-
-  @override
-  String get underDevelopment => 'This page is under development.';
 
   @override
   String get user_agreement_agrement_link => 'The terms and conditions of the agreement';
@@ -1216,9 +1040,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get validationBlankError => 'Please enter a value';
 
   @override
-  String get webRegistration_ErrorAcknowledgeDialogActions_demo => 'Demo';
-
-  @override
   String get webRegistration_ErrorAcknowledgeDialogActions_retry => 'Retry';
 
   @override
@@ -1226,6 +1047,51 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get webRegistration_ErrorAcknowledgeDialog_title => 'Web resource error';
+
+  @override
+  String get messaging_MessageView_forwarded => '[forwarded]';
+
+  @override
+  String get messaging_ConversationsScreen_startDialog => 'Start dialog';
+
+  @override
+  String get messaging_ConversationBuilders_back_action => 'Back';
+
+  @override
+  String get messaging_ConversationBuilders_groupNameHeadline => 'Group name';
+
+  @override
+  String get messaging_ConversationBuilders_addUserBtnText => 'Add user';
+
+  @override
+  String get messaging_ConversationBuilders_submitBtnText => 'Submit';
+
+  @override
+  String get messaging_ConversationBuilders_connectionError => 'Connection error, please try later';
+
+  @override
+  String get messaging_ConversationBuilders_submitError => 'Error happened while creating group, please try again';
+
+  @override
+  String get messaging_GroupScreen_titlePrefix => 'Group:';
+
+  @override
+  String get messaging_GroupNameDialog_title => 'Group name';
+
+  @override
+  String get messaging_GroupNameDialog_fieldLabel => 'Group name';
+
+  @override
+  String get messaging_GroupNameDialog_fieldHint => 'Enter group name';
+
+  @override
+  String get messaging_GroupNameDialog_fieldValidation_empty => 'Please enter group name';
+
+  @override
+  String get messaging_GroupNameDialog_fieldValidation_short => 'Group name is too short';
+
+  @override
+  String get messaging_GroupNameDialog_saveBtnText => 'Save';
 
   @override
   String get default_TimeoutMessagingSocketException => 'The request has timed out';
@@ -1319,9 +1185,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get diagnostic_pushTokenStatusType_success => 'Service successfully configured';
-
-  @override
-  String get diagnostic_pushTokenStatusType_error => 'Problem with configuration push notification service';
 
   @override
   String get sessionStatus_pushNotificationServiceProblem => 'Problem with configuration push notification service';
