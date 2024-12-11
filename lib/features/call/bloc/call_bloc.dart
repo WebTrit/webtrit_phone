@@ -21,8 +21,8 @@ import 'package:webtrit_phone/utils/utils.dart';
 import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/app/notifications/notifications.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
-import 'package:webtrit_phone/models/call_log_entry.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
+import 'package:webtrit_phone/models/models.dart';
 
 import '../extensions/extensions.dart';
 import '../models/models.dart';
@@ -842,11 +842,17 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _CallSignalingEventHangup event,
     Emitter<CallState> emit,
   ) async {
-    // TODO(Serdun): extend the implementation to handle all potential response codes, not just 403.
     final code = SignalingResponseCode.values.byCode(event.code);
-    if (code != null) {
-      _logger.warning('__onCallSignalingEventHangup: $code');
-      notificationsBloc.add(NotificationsSubmitted(AppUnregisteredNotification()));
+
+    switch (code) {
+      case null:
+        break;
+      case SignalingResponseCode.unauthorizedRequest:
+        notificationsBloc.add(NotificationsSubmitted(AppUnregisteredNotification()));
+      default:
+        final signalingHangupException = SignalingHangupFailure(code);
+        final defaultErrorNotification = DefaultErrorNotification(signalingHangupException);
+        notificationsBloc.add(NotificationsSubmitted(defaultErrorNotification));
     }
 
     try {

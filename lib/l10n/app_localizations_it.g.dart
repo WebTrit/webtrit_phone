@@ -1170,4 +1170,106 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get diagnostic_battery_navigate_section => 'Vai alla sezione Batteria';
+
+  @override
+  String get signalingResponseCodeType_unauthorized => 'Non hai l\'autorizzazione necessaria. Effettua l\'accesso o contatta il supporto.';
+
+  @override
+  String get signalingResponseCodeType_unknown => 'Si è verificato un problema imprevisto. Riprova più tardi.';
+
+  @override
+  String get signalingResponseCodeType_transport => 'Stiamo riscontrando difficoltà di comunicazione con il server. Controlla la tua connessione e riprova.';
+
+  @override
+  String get signalingResponseCodeType_request => 'C\'è un problema con la tua richiesta. Riprova.';
+
+  @override
+  String get signalingResponseCodeType_session => 'C\'è un problema con la tua sessione. Effettua nuovamente l\'accesso o riavvia l\'app.';
+
+  @override
+  String get signalingResponseCodeType_plugin => 'Una funzionalità necessaria non sta funzionando correttamente. Prova a riavviare l\'app.';
+
+  @override
+  String get signalingResponseCodeType_webrtc => 'C\'è un problema con la connessione della chiamata. Riaggancia e riprova.';
+
+  @override
+  String get signalingResponseCodeType_token => 'Il tuo token di accesso non è valido. Effettua nuovamente l\'accesso.';
+
+  @override
+  String get signalingResponseCode_unauthorizedRequest => 'La tua richiesta non può essere autorizzata. Prova ad accedere di nuovo.';
+
+  @override
+  String get signalingResponseCode_unauthorizedAccess => 'Non hai l\'autorizzazione per accedere a questa funzione. Contatta il supporto se pensi che ci sia un errore.';
+
+  @override
+  String get signalingResponseCode_unknownError => 'Si è verificato un errore imprevisto. Riprova più tardi.';
+
+  @override
+  String get signalingResponseCode_transportSpecificError => 'Si è verificato un problema di connessione. Controlla la tua rete e riprova.';
+
+  @override
+  String get signalingResponseCode_missingRequest => 'C\'è stato un problema con la tua richiesta. Riprova.';
+
+  @override
+  String get signalingResponseCode_unknownRequest => 'Non abbiamo riconosciuto la tua richiesta. Riprova o contatta il supporto.';
+
+  @override
+  String get signalingResponseCode_invalidJson => 'Si è verificato un errore nell\'elaborazione dei tuoi dati. Riprova.';
+
+  @override
+  String get signalingResponseCode_invalidJsonObject => 'Alcune delle informazioni fornite non sono valide. Verifica e riprova.';
+
+  @override
+  String get signalingResponseCode_missingMandatoryElement => 'Mancano informazioni obbligatorie. Compila tutti i campi richiesti.';
+
+  @override
+  String get signalingResponseCode_invalidPath => 'L\'azione richiesta non è disponibile. Prova un\'opzione diversa.';
+
+  @override
+  String get signalingResponseCode_sessionNotFound => 'Non è stata trovata la tua sessione. Effettua l\'accesso e riprova.';
+
+  @override
+  String get signalingResponseCode_handleNotFound => 'Non abbiamo trovato ciò che stavi cercando. Riprova.';
+
+  @override
+  String get signalingResponseCode_pluginNotFound => 'Manca un componente necessario. Prova a riavviare l\'app.';
+
+  @override
+  String get signalingResponseCode_errorAttachingPlugin => 'Abbiamo avuto problemi a connettere una funzione. Riprova più tardi.';
+
+  @override
+  String get signalingResponseCode_errorSendingMessage => 'Non siamo riusciti a inviare il tuo messaggio. Controlla la rete e riprova.';
+
+  @override
+  String get signalingResponseCode_errorDetachingPlugin => 'Abbiamo avuto problemi a disconnettere una funzione. Riprova più tardi.';
+
+  @override
+  String get signalingResponseCode_unsupportedJsepType => 'Questa azione non è supportata dalla tua configurazione attuale.';
+
+  @override
+  String get signalingResponseCode_invalidSdp => 'Si è verificato un errore tecnico. Riprova più tardi.';
+
+  @override
+  String get signalingResponseCode_invalidStream => 'Lo stream richiesto non è disponibile. Riprova.';
+
+  @override
+  String get signalingResponseCode_invalidElementType => 'Qualcosa non va. Riprova.';
+
+  @override
+  String get signalingResponseCode_sessionIdInUse => 'Questa sessione è già attiva. Prova a usarne un\'altra.';
+
+  @override
+  String get signalingResponseCode_unexpectedAnswer => 'Abbiamo ricevuto una risposta inaspettata. Riprova.';
+
+  @override
+  String get signalingResponseCode_tokenNotFound => 'Il tuo token di accesso è mancante o non valido. Effettua nuovamente l\'accesso.';
+
+  @override
+  String get signalingResponseCode_wrongWebrtcState => 'Si è verificato un errore relativo alla chiamata. Riaggancia e riprova.';
+
+  @override
+  String get signalingResponseCode_notAcceptingNewSessions => 'Non siamo in grado di avviare nuove sessioni al momento. Riprova più tardi.';
+
+  @override
+  String get signalingResponseCode_notFoundRoutesInReplyFromBE => 'Non abbiamo trovato un percorso per completare la tua richiesta. Riprova più tardi.';
 }
