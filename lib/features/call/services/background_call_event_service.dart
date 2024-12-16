@@ -22,11 +22,13 @@ class BackgroundCallEventService implements CallkeepBackgroundServiceDelegate {
     required CallLogsRepository callLogsRepository,
     required AppPreferences appPreferences,
     required CallkeepBackgroundService callkeep,
+    required CallkeepConnections callkeepConnections,
     required SecureStorage storage,
     required TrustedCertificates certificates,
   })  : _callLogsRepository = callLogsRepository,
         _appPreferences = appPreferences,
-        _callkeep = callkeep {
+        _callkeep = callkeep,
+        _callkeepConnections = callkeepConnections {
     _initSignalingManager(storage, certificates);
     _callkeep.setBackgroundServiceDelegate(this);
   }
@@ -34,6 +36,7 @@ class BackgroundCallEventService implements CallkeepBackgroundServiceDelegate {
   final CallLogsRepository _callLogsRepository;
   final AppPreferences _appPreferences;
   final CallkeepBackgroundService _callkeep;
+  final CallkeepConnections _callkeepConnections;
 
   late final SignalingManager _signalingManager;
 
@@ -41,17 +44,18 @@ class BackgroundCallEventService implements CallkeepBackgroundServiceDelegate {
 
   void _initSignalingManager(SecureStorage storage, TrustedCertificates certificates) {
     _signalingManager = SignalingManager(
-        coreUrl: storage.readCoreUrl() ?? '',
-        tenantId: storage.readTenantId() ?? '',
-        token: storage.readToken() ?? '',
-        enableReconnect: true,
-        certificates: certificates,
-        onDisconnect: _handleSignalingDisconnect,
-        onError: _handleSignalingError,
-        onHangupCallEvent: _handleHangupCall,
-        onIncomingCallEvent: _handleIncomingCall,
-        onUnregisteredEvent: _handleUnregisteredEvent,
-        onActiveLine: _handleActiveLines);
+      coreUrl: storage.readCoreUrl() ?? '',
+      tenantId: storage.readTenantId() ?? '',
+      token: storage.readToken() ?? '',
+      enableReconnect: true,
+      certificates: certificates,
+      onDisconnect: _handleSignalingDisconnect,
+      onError: _handleSignalingError,
+      onHangupCallEvent: _handleHangupCall,
+      onIncomingCallEvent: _handleIncomingCall,
+      onUnregisteredEvent: _handleUnregisteredEvent,
+      onStateHandshake: _onStateHandshake,
+    );
   }
 
   // Handles the service startup. This can occur under several scenarios:
@@ -149,13 +153,49 @@ class BackgroundCallEventService implements CallkeepBackgroundServiceDelegate {
     }
   }
 
-  void _handleActiveLines(int count) async {
+  void _onStateHandshake(List<Line> lines) async {
     try {
       // If there are no active lines (e.g., the caller canceled the call),
       // and the call was triggered by a push notification, stop the signaling
       // and terminate the isolate to free resources.
-      if (count == _noActiveLines && _incomingCallType.isPushNotification) {
+      if (lines.length == _noActiveLines && _incomingCallType.isPushNotification) {
         await _stopIsolate();
+      }
+
+      for (final activeLine in lines.whereType<Line>()) {
+        // Retrieve the most recent call event from the core logs for the current line.
+        final callEvent = activeLine.callLogs.whereType<CallEventLog>().map((log) => log.callEvent).firstOrNull;
+
+        if (callEvent != null) {
+          // Obtain the corresponding Callkeep connection for the line.
+          // Callkeep maintains connection states even if the app's lifecycle has ended.
+          final connection = await _callkeepConnections.getConnection(callEvent.callId);
+
+          // Check if the Callkeep connection exists and its state is `stateDisconnected`.
+          // Indicates that the call has been terminated by the user or system (e.g., due to connectivity issues).
+          // Synchronize the signaling state with the local state for such scenarios.
+          if (connection?.state == CallkeepConnectionState.stateDisconnected) {
+            // Handle outgoing or accepted calls. If the event is `AcceptedEvent` or `ProceedingEvent`,
+            // initiate a hang-up request to align the signaling state.
+            if (callEvent is AcceptedEvent || callEvent is ProceedingEvent) {
+              await _signalingManager.hangUpRequest(callEvent.callId);
+              return;
+            }
+
+            // Handle incoming calls. If the event is `IncomingCallEvent`, send a decline request to update the signaling state accordingly.
+            if (callEvent is IncomingCallEvent) {
+              await _signalingManager.declineRequest(callEvent.callId);
+
+              return;
+            }
+          }
+        }
+
+        // Process all remaining call events for the line, regardless of the connection state.
+        // This includes events where the connection is `stateDisconnected`.
+        for (var event in activeLine.callLogs.whereType<CallEventLog>().map((log) => log.callEvent)) {
+          _signalingManager.handleSignalingEvent(event);
+        }
       }
     } catch (e) {
       _handleExceptions(e);

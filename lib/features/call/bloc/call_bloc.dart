@@ -48,7 +48,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
   final CallLogsRepository callLogsRepository;
   final NotificationsBloc notificationsBloc;
+
   final Callkeep callkeep;
+  final CallkeepConnections callkeepConnections;
 
   final SDPMunger? sdpMunger;
 
@@ -70,6 +72,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     required this.callLogsRepository,
     required this.notificationsBloc,
     required this.callkeep,
+    required this.callkeepConnections,
     this.sdpMunger,
   }) : super(const CallState()) {
     on<CallStarted>(
@@ -1946,7 +1949,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
   // WebtritSignalingClient listen handlers
 
-  void _onSignalingStateHandshake(StateHandshake stateHandshake) {
+  void _onSignalingStateHandshake(StateHandshake stateHandshake) async {
     add(_HandshakeSignalingEvent.state(
       registration: stateHandshake.registration,
       linesCount: stateHandshake.lines.length,
@@ -1987,13 +1990,37 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     }
 
     for (final activeLine in stateHandshake.lines.whereType<Line>()) {
-      // TODO: extend logic of call logs analysis for such case as signaling reconnect
-      for (final callLog in activeLine.callLogs) {
-        if (callLog is CallEventLog) {
-          final event = callLog.callEvent;
-          if (event is IncomingCallEvent && activeLine.callLogs.length == 1) {
-            _onSignalingEvent(event);
+      // Get the first call event from the call logs, if any
+      final callEvent = activeLine.callLogs.whereType<CallEventLog>().map((log) => log.callEvent).firstOrNull;
+
+      if (callEvent != null) {
+        // Obtain the corresponding Callkeep connection for the line.
+        // Callkeep maintains connection states even if the app's lifecycle has ended.
+        final connection = await callkeepConnections.getConnection(callEvent.callId);
+
+        // Check if the Callkeep connection exists and its state is `stateDisconnected`.
+        // Indicates that the call has been terminated by the user or system (e.g., due to connectivity issues).
+        // Synchronize the signaling state with the local state for such scenarios.
+        if (connection?.state == CallkeepConnectionState.stateDisconnected) {
+          // Handle outgoing or accepted calls. If the event is `AcceptedEvent` or `ProceedingEvent`,
+          // initiate a hang-up request to align the signaling state.
+          if (callEvent is AcceptedEvent || callEvent is ProceedingEvent) {
+            // Handle outgoing or accepted calls. If the event is `AcceptedEvent` or `ProceedingEvent`,
+            // initiate a hang-up request to align the signaling state.
+            await _signalingHungUpCall(callEvent.line, callEvent.callId);
+            return;
+          } else if (callEvent is IncomingCallEvent) {
+            // Handle incoming calls. If the event is `IncomingCallEvent`, send a decline request to update the signaling state accordingly.
+            await _signalingDeclineCall(callEvent.line, callEvent.callId);
+            return;
           }
+        }
+      }
+
+      if (activeLine.callLogs.length == 1) {
+        final singleCallLog = activeLine.callLogs.first;
+        if (singleCallLog is CallEventLog && singleCallLog.callEvent is IncomingCallEvent) {
+          _onSignalingEvent(singleCallLog.callEvent as IncomingCallEvent);
         }
       }
     }
@@ -2346,4 +2373,32 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   Future<void> _playRingbackSound() => _callkeepSound.playRingbackSound();
 
   Future<void> _stopRingbackSound() => _callkeepSound.stopRingbackSound();
+
+  // Signaling base requests
+
+  // TODO(Serdun): Replace other hangup request calls with this method for consistency.
+  Future<void> _signalingHungUpCall(int line, String callId) async {
+    final hangupRequest = HangupRequest(
+      transaction: WebtritSignalingClient.generateTransactionId(),
+      line: line,
+      callId: callId,
+    );
+    // Attempt to execute the hangup request to synchronize the signaling state.
+    await _signalingClient?.execute(hangupRequest).catchError((e) {
+      _logger.warning('_signalingHungUpCall hangupRequest error: $e');
+    });
+  }
+
+  // TODO(Serdun): Replace other decline request calls with this method for consistency.
+  Future<void> _signalingDeclineCall(int line, String callId) async {
+    final hangupRequest = DeclineRequest(
+      transaction: WebtritSignalingClient.generateTransactionId(),
+      line: line,
+      callId: callId,
+    );
+    // Attempt to execute the hangup request to synchronize the signaling state.
+    await _signalingClient?.execute(hangupRequest).catchError((e) {
+      _logger.warning('_signalingDeclineCall hangupRequest error: $e');
+    });
+  }
 }
