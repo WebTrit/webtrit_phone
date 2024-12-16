@@ -10,13 +10,15 @@ final _logger = Logger('BackoffRetries');
 class BackoffRetries {
   final int? maxAttempts;
   final Duration initialDelay;
+  final Duration maxDelay;
   final RetryDelayStrategy delayStrategy;
   bool _canceled = false;
 
   BackoffRetries({
     this.maxAttempts,
     this.initialDelay = const Duration(seconds: 2),
-    this.delayStrategy = RetryDelayStrategy.exponential,
+    this.maxDelay = const Duration(seconds: 10),
+    this.delayStrategy = RetryDelayStrategy.linear,
   });
 
   Future<T?> execute<T>(
@@ -49,9 +51,11 @@ class BackoffRetries {
   Duration _calculateNextDelay(Duration currentDelay, int attempt) {
     switch (delayStrategy) {
       case RetryDelayStrategy.linear:
-        return initialDelay * (attempt + 1);
+        final linearDelay = initialDelay * (attempt + 1);
+        return linearDelay <= maxDelay ? linearDelay : maxDelay;
       case RetryDelayStrategy.exponential:
-        return currentDelay * 2;
+        final exponentialDelay = currentDelay * 2;
+        return exponentialDelay <= maxDelay ? exponentialDelay : maxDelay;
       default:
         return currentDelay;
     }
