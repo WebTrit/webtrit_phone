@@ -31,7 +31,7 @@ class AppLogger {
         wrappedFormatter: const RemoteFormatter(),
       );
 
-      LogzIoApiAppender(
+      FilteredLogzIoAppender(
         formatter: remoteFormatter,
         url: remoteLogzIOLoggingUrl,
         apiToken: remoteLogzIOLoggingToken,
