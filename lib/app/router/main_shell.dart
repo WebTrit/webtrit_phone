@@ -28,7 +28,6 @@ class MainShell extends StatefulWidget {
 
 class _MainShellState extends State<MainShell> {
   late final Callkeep _callkeep = Callkeep();
-  late final CallkeepConnections _callkeepConnections = CallkeepConnections();
   late final CallkeepBackgroundService _callkeepBackgroundService = CallkeepBackgroundService();
 
   late final AppPreferences _appPreferences = AppPreferences();
@@ -241,7 +240,6 @@ class _MainShellState extends State<MainShell> {
                 callLogsRepository: context.read<CallLogsRepository>(),
                 notificationsBloc: context.read<NotificationsBloc>(),
                 callkeep: _callkeep,
-                callkeepConnections: _callkeepConnections,
                 sdpMunger: ForceCodecsByUserPrefs(appPreferences),
               )..add(const CallStarted());
             },
