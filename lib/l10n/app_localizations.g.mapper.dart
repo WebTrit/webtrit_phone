@@ -733,6 +733,74 @@ class AppLocalizationsMapper {
           localizations.diagnostic_battery_tile_title,
       'diagnostic_battery_navigate_section':
           localizations.diagnostic_battery_navigate_section,
+      'signalingResponseCodeType_unauthorized':
+          localizations.signalingResponseCodeType_unauthorized,
+      'signalingResponseCodeType_unknown':
+          localizations.signalingResponseCodeType_unknown,
+      'signalingResponseCodeType_transport':
+          localizations.signalingResponseCodeType_transport,
+      'signalingResponseCodeType_request':
+          localizations.signalingResponseCodeType_request,
+      'signalingResponseCodeType_session':
+          localizations.signalingResponseCodeType_session,
+      'signalingResponseCodeType_plugin':
+          localizations.signalingResponseCodeType_plugin,
+      'signalingResponseCodeType_webrtc':
+          localizations.signalingResponseCodeType_webrtc,
+      'signalingResponseCodeType_token':
+          localizations.signalingResponseCodeType_token,
+      'signalingResponseCode_unauthorizedRequest':
+          localizations.signalingResponseCode_unauthorizedRequest,
+      'signalingResponseCode_unauthorizedAccess':
+          localizations.signalingResponseCode_unauthorizedAccess,
+      'signalingResponseCode_unknownError':
+          localizations.signalingResponseCode_unknownError,
+      'signalingResponseCode_transportSpecificError':
+          localizations.signalingResponseCode_transportSpecificError,
+      'signalingResponseCode_missingRequest':
+          localizations.signalingResponseCode_missingRequest,
+      'signalingResponseCode_unknownRequest':
+          localizations.signalingResponseCode_unknownRequest,
+      'signalingResponseCode_invalidJson':
+          localizations.signalingResponseCode_invalidJson,
+      'signalingResponseCode_invalidJsonObject':
+          localizations.signalingResponseCode_invalidJsonObject,
+      'signalingResponseCode_missingMandatoryElement':
+          localizations.signalingResponseCode_missingMandatoryElement,
+      'signalingResponseCode_invalidPath':
+          localizations.signalingResponseCode_invalidPath,
+      'signalingResponseCode_sessionNotFound':
+          localizations.signalingResponseCode_sessionNotFound,
+      'signalingResponseCode_handleNotFound':
+          localizations.signalingResponseCode_handleNotFound,
+      'signalingResponseCode_pluginNotFound':
+          localizations.signalingResponseCode_pluginNotFound,
+      'signalingResponseCode_errorAttachingPlugin':
+          localizations.signalingResponseCode_errorAttachingPlugin,
+      'signalingResponseCode_errorSendingMessage':
+          localizations.signalingResponseCode_errorSendingMessage,
+      'signalingResponseCode_errorDetachingPlugin':
+          localizations.signalingResponseCode_errorDetachingPlugin,
+      'signalingResponseCode_unsupportedJsepType':
+          localizations.signalingResponseCode_unsupportedJsepType,
+      'signalingResponseCode_invalidSdp':
+          localizations.signalingResponseCode_invalidSdp,
+      'signalingResponseCode_invalidStream':
+          localizations.signalingResponseCode_invalidStream,
+      'signalingResponseCode_invalidElementType':
+          localizations.signalingResponseCode_invalidElementType,
+      'signalingResponseCode_sessionIdInUse':
+          localizations.signalingResponseCode_sessionIdInUse,
+      'signalingResponseCode_unexpectedAnswer':
+          localizations.signalingResponseCode_unexpectedAnswer,
+      'signalingResponseCode_tokenNotFound':
+          localizations.signalingResponseCode_tokenNotFound,
+      'signalingResponseCode_wrongWebrtcState':
+          localizations.signalingResponseCode_wrongWebrtcState,
+      'signalingResponseCode_notAcceptingNewSessions':
+          localizations.signalingResponseCode_notAcceptingNewSessions,
+      'signalingResponseCode_notFoundRoutesInReplyFromBE':
+          localizations.signalingResponseCode_notFoundRoutesInReplyFromBE,
       'favorites_SnackBar_deleted': (name) =>
           localizations.favorites_SnackBar_deleted(name),
       'login_Button_otpSigninVerifyRepeatInterval': (seconds) =>

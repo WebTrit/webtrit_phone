@@ -669,6 +669,8 @@
   "@settings_AboutText_StoreVersion": {},
   "settings_AboutText_FCMPushNotificationToken": "Токен для Push-повідомлень FCM",
   "@settings_AboutText_FCMPushNotificationToken": {},
+  "settings_AboutText_AppSessionIdentifier": "Ідентифікатор сесії застосунку",
+  "@settings_AboutText_AppSessionIdentifier": {},
   "settings_AccountDeleteConfirmDialog_content": "Ви впевнені, що хочете видалити обліковий запис?",
   "@settings_AccountDeleteConfirmDialog_content": {},
   "settings_AccountDeleteConfirmDialog_title": "Підтвердіть видалення облікового запису",

@@ -55,6 +55,7 @@ class AppLogger {
     return <String, String>{
       'app': packageInfo.appName,
       'appVersion': appInfo.version,
+      'appSessionIdentifier': appInfo.identifier,
       'storeVersion': packageInfo.version,
       'packageName': packageInfo.packageName,
       'buildNumber': packageInfo.buildNumber,

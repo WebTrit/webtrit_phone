@@ -925,6 +925,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings_AboutText_FCMPushNotificationToken => 'FCM Push Notification Token';
 
   @override
+  String get settings_AboutText_AppSessionIdentifier => 'Application session identifier';
+
+  @override
   String get settings_AccountDeleteConfirmDialog_content => 'Are you sure you want to delete account?';
 
   @override
