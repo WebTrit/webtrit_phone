@@ -29,6 +29,7 @@ class AboutBloc extends Bloc<AboutEvent, AboutState> {
           storeBuildVersion: packageInfo.version,
           storeBuildNumber: packageInfo.buildNumber,
           appVersion: appInfo.version,
+          appIdentifier: appInfo.identifier,
           fcmPushToken: secureStorage.readFCMPushToken(),
           coreUrl: infoRepository.coreUrl,
         )) {

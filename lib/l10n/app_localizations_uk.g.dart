@@ -925,6 +925,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get settings_AboutText_FCMPushNotificationToken => 'Токен для Push-повідомлень FCM';
 
   @override
+  String get settings_AboutText_AppSessionIdentifier => 'Ідентифікатор сесії застосунку';
+
+  @override
   String get settings_AccountDeleteConfirmDialog_content => 'Ви впевнені, що хочете видалити обліковий запис?';
 
   @override

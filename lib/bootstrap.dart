@@ -46,7 +46,7 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
       };
 
       // Initialization order is crucial for proper app setup
-      await AppInfo.init();
+      await AppInfo.init(FirebaseAppIdProvider());
       await DeviceInfo.init();
       await PackageInfo.init();
       await AppLogger.init();
@@ -135,6 +135,7 @@ Future<void> _initFirebaseMessaging() async {
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   // Initialize the logger for handling Firebase Cloud Messaging (FCM) in the background isolate.
+  await AppInfo.init(const SharedPreferencesAppIdProvider());
   await DeviceInfo.init();
   await PackageInfo.init();
   await AppLogger.init();

@@ -11,6 +11,7 @@ class AboutState with _$AboutState {
     required String storeBuildVersion,
     required String storeBuildNumber,
     required String appVersion,
+    required String appIdentifier,
     required Uri coreUrl,
     String? fcmPushToken,
     Version? coreVersion,
