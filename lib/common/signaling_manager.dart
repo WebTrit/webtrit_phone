@@ -24,7 +24,7 @@ class SignalingManager {
     this.onIncomingCallEvent,
     this.onHangupCallEvent,
     this.onUnregisteredEvent,
-    this.onActiveLine,
+    this.onStateHandshake,
     this.onError,
     this.onDisconnect,
     this.enableReconnect = false,
@@ -44,7 +44,7 @@ class SignalingManager {
   final Function(UnregisteredEvent event)? onUnregisteredEvent;
   final Function(Object error, StackTrace? stackTrace)? onError;
   final Function(int? code, String? reason)? onDisconnect;
-  final Function(int count)? onActiveLine;
+  final Function(List<Line> lines)? onStateHandshake;
 
   final List<Line?> _lines = [];
 
@@ -76,8 +76,8 @@ class SignalingManager {
     _isConnected = true;
 
     _client?.listen(
-      onStateHandshake: _signalingInitialize,
-      onEvent: _handleSignalingEvent,
+      onStateHandshake: _handleStateHandshake,
+      onEvent: handleSignalingEvent,
       onError: _handleSignalingError,
       onDisconnect: _handleSignalingDisconnect,
     );
@@ -105,24 +105,43 @@ class SignalingManager {
     }
   }
 
-  void _signalingInitialize(StateHandshake stateHandshake) {
+  void _handleStateHandshake(StateHandshake stateHandshake) async {
     final activeLines = stateHandshake.lines.whereType<Line>().toList();
 
     _lines.clear();
     _lines.addAll(activeLines);
 
-    // Notify about call line counts to manage stop flow when active lines become empty
-    onActiveLine?.call(activeLines.length);
-
-    for (final callLog in activeLines.expand((line) => line.callLogs)) {
-      if (callLog is CallEventLog) {
-        _handleSignalingEvent(callLog.callEvent);
-      }
-    }
+    onStateHandshake?.call(activeLines);
   }
 
   // Sends requests to decline calls.
+
   Future<void> declineRequest(String callId) async {
+    await _handleRequest(
+      callId,
+      (lineIndex, callId, transaction) => DeclineRequest(
+        transaction: transaction,
+        line: lineIndex,
+        callId: callId,
+      ),
+    );
+  }
+
+  Future<void> hangUpRequest(String callId) async {
+    await _handleRequest(
+      callId,
+      (lineIndex, callId, transaction) => HangupRequest(
+        transaction: transaction,
+        line: lineIndex,
+        callId: callId,
+      ),
+    );
+  }
+
+  Future<void> _handleRequest(
+    String callId,
+    dynamic Function(int lineIndex, String callId, String transaction) requestConstructor,
+  ) async {
     final lineIndex = _lines.indexWhere((line) => line?.callId == callId);
     if (lineIndex == _kUndefinedLine) {
       _logger.warning('Call ID not found: $callId');
@@ -130,16 +149,13 @@ class SignalingManager {
     }
 
     final line = _lines[lineIndex];
-    final decline = DeclineRequest(
-      transaction: WebtritSignalingClient.generateTransactionId(),
-      line: lineIndex,
-      callId: line!.callId,
-    );
+    final transactionId = WebtritSignalingClient.generateTransactionId();
 
-    await _client?.execute(decline);
+    final request = requestConstructor(lineIndex, line!.callId, transactionId);
+    await _client?.execute(request);
   }
 
-  void _handleSignalingEvent(Event event) {
+  void handleSignalingEvent(Event event) {
     _logger.info('Handling event: $event');
 
     if (event is IncomingCallEvent) {
