@@ -217,7 +217,9 @@ class FeatureAccess {
   }
 
   static MessagingFeature _tryConfigureMessagingFeature(AppConfig appConfig, AppPreferences preferences) {
-    final tabEnabled = appConfig.mainConfig.bottomMenu.tabs.any((tab) => tab.type == MainFlavor.messaging.name);
+    final tabEnabled = appConfig.mainConfig.bottomMenu.tabs.any((tab) {
+      return tab.type == MainFlavor.messaging.name && tab.enabled;
+    });
     return MessagingFeature(preferences, tabEnabled: tabEnabled);
   }
 }
