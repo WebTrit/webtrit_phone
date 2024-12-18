@@ -26,7 +26,7 @@ class _ConversationsListState extends State<ConversationsList> {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
 
-    final chats = BlocBuilder<ChatConversationsCubit, ChatConversationsState>(
+    late final chats = BlocBuilder<ChatConversationsCubit, ChatConversationsState>(
       builder: (context, state) {
         if (state.initialising) return const Center(child: CircularProgressIndicator());
 
@@ -123,7 +123,7 @@ class _ConversationsListState extends State<ConversationsList> {
       },
     );
 
-    final smses = BlocBuilder<SmsConversationsCubit, SmsConversationsState>(
+    late final smses = BlocBuilder<SmsConversationsCubit, SmsConversationsState>(
       builder: (context, state) {
         if (state.initialising) return const Center(child: CircularProgressIndicator());
 
@@ -212,7 +212,7 @@ class _ConversationsListState extends State<ConversationsList> {
       },
     );
 
-    final unsupported = Padding(
+    late final unsupported = Padding(
       padding: const EdgeInsets.all(16),
       child: Center(
         child: Text(
