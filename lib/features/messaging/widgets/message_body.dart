@@ -10,12 +10,14 @@ import 'package:webtrit_phone/utils/utils.dart';
 class MessageBody extends StatefulWidget {
   const MessageBody({
     required this.text,
+    required this.isMine,
     this.style,
     this.previewDecoration,
     super.key,
   });
 
   final String text;
+  final bool isMine;
   final TextStyle? style;
   final BoxDecoration? previewDecoration;
 
@@ -62,7 +64,7 @@ class _MessageBodyState extends State<MessageBody> {
     final theme = Theme.of(context);
 
     final style = widget.style ?? theme.contentStyle;
-    final previewDecoration = widget.previewDecoration ?? theme.quoteDecoration;
+    final previewDecoration = widget.previewDecoration ?? theme.quoteDecoration(widget.isMine);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

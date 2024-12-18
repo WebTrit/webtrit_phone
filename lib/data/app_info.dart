@@ -1,21 +1,21 @@
 import 'package:flutter/services.dart' as services;
 
-import 'package:firebase_app_installations/firebase_app_installations.dart';
 import 'package:logging/logging.dart';
 
 import 'package:webtrit_phone/app/assets.gen.dart';
+import 'package:webtrit_phone/common/common.dart';
 
 final Logger _logger = Logger('AppInfo');
 
 class AppInfo {
   static late AppInfo _instance;
 
-  static Future<AppInfo> init() async {
-    final id = await FirebaseInstallations.instance.getId();
+  static Future<AppInfo> init(AppIdProvider appIdProvider) async {
+    final id = await appIdProvider.getId();
 
     String? appVersion = await getAppVersion();
 
-    _instance = AppInfo._(id, appVersion);
+    _instance = AppInfo._(appIdProvider, id, appVersion);
     return _instance;
   }
 
@@ -34,11 +34,13 @@ class AppInfo {
     return _instance;
   }
 
-  AppInfo._(this._identifier, this._appVersion) {
-    FirebaseInstallations.instance.onIdChange.listen((String id) {
+  AppInfo._(this.appInfo, this._identifier, this._appVersion) {
+    appInfo.onIdChange.listen((String id) {
       _identifier = id;
     });
   }
+
+  AppIdProvider appInfo;
 
   String _identifier;
 

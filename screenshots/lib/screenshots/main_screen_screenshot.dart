@@ -87,6 +87,7 @@ class MainScreenScreenshot extends StatelessWidget {
         final widget = RecentsScreen(
           title: title,
           videoCallEnable: true,
+          chatsEnabled: false,
         );
         final provider = BlocProvider<RecentsBloc>(
           create: (context) => MockRecentsBloc.mainScreen(),

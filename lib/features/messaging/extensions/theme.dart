@@ -4,10 +4,32 @@ extension MsgViewExt on ThemeData {
   TextStyle get userNameStyle => TextStyle(color: colorScheme.onSurface, fontSize: 12, fontWeight: FontWeight.w600);
   TextStyle get contentStyle => TextStyle(color: colorScheme.onSurface, fontSize: 12);
   TextStyle get subContentStyle => TextStyle(color: colorScheme.onSurface.withOpacity(0.5), fontSize: 10);
-  Color get contentColor => colorScheme.onSecondaryFixed;
-  BoxDecoration get quoteDecoration => BoxDecoration(
-        color: colorScheme.secondaryFixed.withOpacity(0.25),
-        borderRadius: BorderRadius.circular(8),
-        border: Border(left: BorderSide(color: colorScheme.secondaryFixed, width: 2)),
-      );
+  Color get contentColor => colorScheme.onPrimaryFixed;
+
+  BoxDecoration messageDecoration(bool isMine, bool isViewedByUser) {
+    return BoxDecoration(
+      color: isMine
+          ? colorScheme.primaryFixed.withOpacity(0.3)
+          : colorScheme.tertiaryFixed.withOpacity(isViewedByUser ? 0.3 : 0.15),
+      borderRadius: isMine
+          ? const BorderRadius.only(
+              topLeft: Radius.circular(12),
+              topRight: Radius.circular(12),
+              bottomLeft: Radius.circular(12),
+            )
+          : const BorderRadius.only(
+              topLeft: Radius.circular(12),
+              topRight: Radius.circular(12),
+              bottomRight: Radius.circular(12),
+            ),
+    );
+  }
+
+  BoxDecoration quoteDecoration(bool isMine) {
+    return BoxDecoration(
+      color: isMine ? colorScheme.primaryFixed.withOpacity(0.5) : colorScheme.tertiaryFixed.withOpacity(0.5),
+      borderRadius: BorderRadius.circular(8),
+      border: Border(left: BorderSide(color: colorScheme.primaryFixed, width: 2)),
+    );
+  }
 }

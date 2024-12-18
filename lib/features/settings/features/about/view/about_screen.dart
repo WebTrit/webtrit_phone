@@ -76,6 +76,24 @@ class AboutScreen extends StatelessWidget {
                     height: delimiterHeight,
                   ),
                   CopyToClipboard(
+                    data: state.appIdentifier,
+                    child: Text(
+                      context.l10n.settings_AboutText_AppSessionIdentifier,
+                    ),
+                  ),
+                  CopyToClipboard(
+                    data: state.appIdentifier,
+                    child: Text(
+                      state.appIdentifier ?? '-',
+                      style: themeData.textTheme.labelSmall,
+                      textAlign: TextAlign.center,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  SizedBox(
+                    height: delimiterHeight,
+                  ),
+                  CopyToClipboard(
                     data: state.fcmPushToken,
                     child: Text(
                       context.l10n.settings_AboutText_FCMPushNotificationToken,

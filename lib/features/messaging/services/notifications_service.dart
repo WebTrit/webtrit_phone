@@ -205,7 +205,7 @@ class MessagingNotificationsService {
       return openChat(chatId);
     }
 
-    if (chat.type == ChatType.dialog) {
+    if (chat.type == ChatType.direct) {
       final participant = chat.members.firstWhere((m) => m.userId != userId);
       _logger.info('Opening conversation with $participant');
       return openConversation(participant.userId);
@@ -230,7 +230,7 @@ class MessagingNotificationsService {
     _logger.info('_shouldSkipChatNotification chat: $chatId type: $chatType');
 
     String? participantId;
-    if (chatType == ChatType.dialog) {
+    if (chatType == ChatType.direct) {
       participantId = chat.members.firstWhere((m) => m.userId != userId).userId;
     }
 

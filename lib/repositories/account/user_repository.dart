@@ -39,7 +39,7 @@ class UserRepository {
   /// read [StreamController.broadcast]
   void _onListen() async {
     if (polling) {
-      _pullTimer = Timer.periodic(pollPeriod, (_) => _gatherUserInfo());
+      _pullTimer = Timer.periodic(pollPeriod, (_) => _gatherUserInfo().ignore());
     }
   }
 

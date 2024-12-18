@@ -61,11 +61,6 @@ class FeatureAccess {
 
   factory FeatureAccess() => _instance;
 
-  @Deprecated('Will be removed soon, use [MessagingFeature] instead')
-  bool isMessagingEnabled() {
-    return bottomMenuFeature._tabs.map((it) => it.flavor).contains(MainFlavor.messaging);
-  }
-
   static BottomMenuFeature _tryConfigureBottomMenuFeature(
     AppConfig appConfig,
     AppPreferences preferences,
@@ -222,7 +217,9 @@ class FeatureAccess {
   }
 
   static MessagingFeature _tryConfigureMessagingFeature(AppConfig appConfig, AppPreferences preferences) {
-    final tabEnabled = appConfig.mainConfig.bottomMenu.tabs.any((tab) => tab.type == MainFlavor.messaging.name);
+    final tabEnabled = appConfig.mainConfig.bottomMenu.tabs.any((tab) {
+      return tab.type == MainFlavor.messaging.name && tab.enabled;
+    });
     return MessagingFeature(preferences, tabEnabled: tabEnabled);
   }
 }
@@ -303,9 +300,24 @@ class MessagingFeature {
     return systemInfo?.adapter?.supported ?? [];
   }
 
-  bool get smsMessagingEnabled => _tabEnabled && _coreSupportedFeatures.contains(kSmsMessagingFeatureFlag);
+  /// Check if the SMS messaging feature is supported by remote system.
+  bool get coreSmsSupport => _coreSupportedFeatures.contains(kSmsMessagingFeatureFlag);
 
-  bool get instantMessagingEnabled => _tabEnabled && _coreSupportedFeatures.contains(kInstantMessagingFeatureFlag);
+  /// Check if the internal messaging feature is supported by remote system.
+  bool get coreChatsSupport => _coreSupportedFeatures.contains(kChatMessagingFeatureFlag);
 
-  bool get anyMessagingEnabled => smsMessagingEnabled || instantMessagingEnabled;
+  /// Check if the messaging tab is enabled within the app configuration.
+  bool get tabEnabled => _tabEnabled;
+
+  /// Check if any messaging feature is enabled.
+  /// This is used to determine if messaging services should be initialized or can be skipped.
+  bool get anyMessagingEnabled => (coreSmsSupport || coreChatsSupport) && tabEnabled;
+
+  /// Check if the SMS messaging feature is enabled and supported by remote system.
+  /// This is used to determine if SMS messaging UI components should be displayed or hidden.
+  bool get smsPresent => coreSmsSupport && tabEnabled;
+
+  /// Check if the internal messaging feature is enabled and supported by remote system.
+  /// This is used to determine if internal messaging UI components should be displayed or hidden.
+  bool get chatsPresent => coreChatsSupport && tabEnabled;
 }

@@ -123,10 +123,10 @@ class AppLocalizationsUk extends AppLocalizations {
   String get call_FailureAcknowledgeDialog_title => 'Помилка';
 
   @override
-  String get callProcessingStatus_disconnecting => 'Відключення дзвінка, будь ласка, зачекайте…';
+  String get callProcessingStatus_answering => 'Прийняття виклику, будь ласка, зачекайте…';
 
   @override
-  String get callProcessingStatus_answering => 'Прийняття виклику, будь ласка, зачекайте…';
+  String get callProcessingStatus_disconnecting => 'Відключення дзвінка, будь ласка, зачекайте…';
 
   @override
   String get callStatus_appUnregistered => 'Незареєстровано';
@@ -207,6 +207,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get copyToClipboard_popupMenuItem => 'Скопіювати в буфер обміну';
 
   @override
+  String get default_CannotRemoveOwnerMessagingSocketException => 'Неможливо видалити власника';
+
+  @override
   String get default_ChatMemberNotFoundMessagingSocketException => 'Учасник чату не знайдений';
 
   @override
@@ -261,6 +264,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get default_TimeoutExceptionError => 'Сталася проблема з таймаутом сервера';
 
   @override
+  String get default_TimeoutMessagingSocketException => 'Час очікування відповіді сервера закінчився';
+
+  @override
   String get default_TlsExceptionError => 'Виникла проблема з безпековим мережевим протоколом (TLS/SSL)';
 
   @override
@@ -274,6 +280,129 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get default_UserAlreadyInChatMessagingSocketException => 'Користувач вже в чаті';
+
+  @override
+  String get diagnostic_AppBar_title => 'Діагностика';
+
+  @override
+  String get diagnostic_battery_groupTitle => 'Батарея';
+
+  @override
+  String get diagnostic_batteryMode_optimized_description => 'Фонова активність додатка керується системою для економії батареї. Може працювати некоректно для вхідних дзвінків, що активуються через push-сповіщення.';
+
+  @override
+  String get diagnostic_batteryMode_optimized_title => 'Оптимізовано';
+
+  @override
+  String get diagnostic_batteryMode_restricted_description => 'Фонова активність додатка суворо обмежена для збереження заряду батареї. Можливі пропущені вхідні дзвінки.';
+
+  @override
+  String get diagnostic_batteryMode_restricted_title => 'Обмежено';
+
+  @override
+  String get diagnostic_batteryMode_unknown_description => 'Статус режиму батареї невідомий. Додаток може поводитися непередбачувано.';
+
+  @override
+  String get diagnostic_batteryMode_unknown_title => 'Невідомо';
+
+  @override
+  String get diagnostic_batteryMode_unrestricted_description => 'Додаток має повний доступ для роботи у фоновому режимі без обмежень.';
+
+  @override
+  String get diagnostic_batteryMode_unrestricted_title => 'Без обмежень';
+
+  @override
+  String get diagnostic_battery_navigate_section => 'Перейдіть до розділу «Батарея»';
+
+  @override
+  String get diagnostic_battery_tile_title => 'Режим батареї';
+
+  @override
+  String get diagnostic_permission_camera_description => 'Цей додаток потребує дозволу на доступ до камери для здійснення відеодзвінків.';
+
+  @override
+  String get diagnostic_permission_camera_title => 'Камера';
+
+  @override
+  String get diagnostic_permission_contacts_description => 'Цей додаток потребує дозволу на доступ до контактів для здійснення дзвінків із вашої телефонної книги.';
+
+  @override
+  String get diagnostic_permission_contacts_title => 'Контакти';
+
+  @override
+  String get diagnosticPermissionDetails_button_managePermission => 'Керування дозволами';
+
+  @override
+  String get diagnosticPermissionDetails_button_requestPermission => 'Запит дозволу';
+
+  @override
+  String get diagnosticPermissionDetails_title_statusPermission => 'Статус дозволу';
+
+  @override
+  String get diagnostic_permission_microphone_description => 'Цей додаток потребує дозволу на доступ до мікрофона для здійснення аудіодзвінків.';
+
+  @override
+  String get diagnostic_permission_microphone_title => 'Мікрофон';
+
+  @override
+  String get diagnostic_permission_notification_description => 'Дозволяє додатку активувати вхідні дзвінки.';
+
+  @override
+  String get diagnostic_permission_notification_title => 'Сповіщення';
+
+  @override
+  String get diagnostic_permissionStatus_denied => 'Доступ заборонено';
+
+  @override
+  String get diagnostic_permissionStatus_granted => 'Доступ надано';
+
+  @override
+  String get diagnostic_permissionStatus_limited => 'Обмежений доступ';
+
+  @override
+  String get diagnostic_permissionStatus_permanentlyDenied => 'Доступ назавжди заборонено';
+
+  @override
+  String get diagnostic_permissionStatus_provisional => 'Тимчасовий доступ';
+
+  @override
+  String get diagnostic_permissionStatus_restricted => 'Обмежений доступ';
+
+  @override
+  String get diagnosticPushDetails_configuration_title => 'Налаштування служби push-сповіщень';
+
+  @override
+  String get diagnosticPushDetails_errorMessage_intro => 'Декілька кроків, які можна спробувати:\n';
+
+  @override
+  String get diagnosticPushDetails_errorMessage_step1 => '1. Переконайтеся, що ваш телефон підключений до Інтернету.\n';
+
+  @override
+  String get diagnosticPushDetails_errorMessage_step2 => '2. Якщо підключено, перевірте, чи може ваш телефон отримати доступ до сервісів Google, відвідавши веб-сайт.\n';
+
+  @override
+  String get diagnosticPushDetails_errorMessage_step3 => '3. Зачекайте кілька хвилин і спробуйте знову – сервери Firebase можуть тимчасово не працювати.\n';
+
+  @override
+  String get diagnosticPushDetails_errorMessage_step4 => '4. Перезапустіть сервіси Google Play, щоб переконатися, що вони працюють належним чином.\n';
+
+  @override
+  String get diagnosticPushDetails_errorMessage_step5 => '5. Переконайтеся, що сервіси Google Play встановлені на вашому пристрої.\n';
+
+  @override
+  String get diagnosticPushDetails_successMessage => 'Служба сповіщень успішно налаштована та готова до використання для отримання повідомлень і обробки вхідних дзвінків.';
+
+  @override
+  String get diagnostic_pushTokenStatusType_progress => 'В процесі';
+
+  @override
+  String get diagnostic_pushTokenStatusType_success => 'Служба успішно налаштована ';
+
+  @override
+  String get diagnosticScreen_permissionsGroup_title => 'Дозволи';
+
+  @override
+  String get diagnosticScreen_pushNotificationService_title => 'Служба push-сповіщень';
 
   @override
   String get favorites_BodyCenter_empty => 'Наразі у вас немає обраних номерів.\nДодайте обрані номери з Контактів, використовуючи іконку зірочки';
@@ -545,10 +674,19 @@ class AppLocalizationsUk extends AppLocalizations {
   String get messaging_ConfirmDialog_confirm => 'Так';
 
   @override
+  String get messaging_ConversationBuilders_addUserBtnText => 'Додати користувача';
+
+  @override
   String get messaging_ConversationBuilders_back => 'Назад';
 
   @override
+  String get messaging_ConversationBuilders_back_action => 'Назад';
+
+  @override
   String get messaging_ConversationBuilders_cancel => 'Скасувати';
+
+  @override
+  String get messaging_ConversationBuilders_connectionError => 'Помилка підключення, спробуйте пізніше';
 
   @override
   String get messaging_ConversationBuilders_contactOrNumberSearch_hint => 'Введіть ім\'я або номер телефону';
@@ -564,6 +702,9 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get messaging_ConversationBuilders_externalContacts_heading => 'Контакти Хмарної АТС';
+
+  @override
+  String get messaging_ConversationBuilders_groupNameHeadline => 'Назва групи';
 
   @override
   String get messaging_ConversationBuilders_invalidNumber_message1 => 'Контакт має недійсний номер телефону. Він має бути у форматі ';
@@ -611,6 +752,12 @@ class AppLocalizationsUk extends AppLocalizations {
   String get messaging_ConversationBuilders_numberSearch_errorHint => 'Формат номера телефону: ';
 
   @override
+  String get messaging_ConversationBuilders_submitBtnText => 'Надіслати';
+
+  @override
+  String get messaging_ConversationBuilders_submitError => 'Під час створення групи сталася помилка, повторіть спробу';
+
+  @override
   String get messaging_ConversationBuilders_title_group => 'Створити групу';
 
   @override
@@ -645,6 +792,12 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get messaging_ConversationsScreen_smssSearch_hint => 'Введіть номер телефону';
+
+  @override
+  String get messaging_ConversationsScreen_startDialog => 'Почати діалог';
+
+  @override
+  String get messaging_ConversationsScreen_unsupported => 'Обмін повідомленнями не підтримується віддаленою системою, зверніться до свого адміністратора, щоб увімкнути його';
 
   @override
   String get messaging_Conversations_tile_empty => 'Поки немає повідомлень';
@@ -716,6 +869,27 @@ class AppLocalizationsUk extends AppLocalizations {
   String get messaging_GroupNameDialog_cancelBtnText => 'Скасувати';
 
   @override
+  String get messaging_GroupNameDialog_fieldHint => 'Введіть назву групи';
+
+  @override
+  String get messaging_GroupNameDialog_fieldLabel => 'Назва групи';
+
+  @override
+  String get messaging_GroupNameDialog_fieldValidation_empty => 'Будь ласка, введіть назву групи';
+
+  @override
+  String get messaging_GroupNameDialog_fieldValidation_short => 'Назва групи занадто коротка';
+
+  @override
+  String get messaging_GroupNameDialog_saveBtnText => 'Зберегти';
+
+  @override
+  String get messaging_GroupNameDialog_title => 'Назва групи';
+
+  @override
+  String get messaging_GroupScreen_titlePrefix => 'Група:';
+
+  @override
   String get messaging_MessageField_hint => 'Введіть повідомлення';
 
   @override
@@ -737,10 +911,19 @@ class AppLocalizationsUk extends AppLocalizations {
   String get messaging_MessageView_forward => 'Переслати';
 
   @override
+  String get messaging_MessageView_forwarded => '[переслано]';
+
+  @override
   String get messaging_MessageView_reply => 'Відповісти';
 
   @override
   String get messaging_MessageView_textcopy => 'Копіювати в буфер обміну';
+
+  @override
+  String get messaging_NewConversation_createGroup => '';
+
+  @override
+  String get messaging_NewConversation_title => '';
 
   @override
   String get messaging_ParticipantName_you => 'Ви';
@@ -803,6 +986,24 @@ class AppLocalizationsUk extends AppLocalizations {
   String get permission_Button_request => 'Продовжити';
 
   @override
+  String get permission_manageFullScreenNotificationInstructions_step1 => 'Go to your phone\'s Settings.';
+
+  @override
+  String get permission_manageFullScreenNotificationInstructions_step2 => 'Navigate to \'Special App Access\' under the \'Apps & notifications\' section.';
+
+  @override
+  String get permission_manageFullScreenNotificationInstructions_step3 => 'Find and tap on \'Manage full screen intents\'.';
+
+  @override
+  String get permission_manageFullScreenNotificationInstructions_step4 => 'Select the app for which you want to manage full-screen notifications.';
+
+  @override
+  String get permission_manageFullScreenNotificationInstructions_step5 => 'Toggle the permission to enable or disable full-screen notifications for that app.';
+
+  @override
+  String get permission_manageFullScreenNotificationPermissions => 'Manage Full-Screen Notification Permissions';
+
+  @override
   String get permission_manufacturer_Button_gotIt => 'Зрозуміло';
 
   @override
@@ -824,24 +1025,6 @@ class AppLocalizationsUk extends AppLocalizations {
   String get permission_Text_description => 'Для забезпечення найкращого досвіду користувача програма потребує наступні дозволи: мікрофон для аудіодзвінків, камера для відеодзвінків та доступ до контактів для спрощення їх використання в програмі.\n\nДозволи можуть бути змінені у майбутньому.';
 
   @override
-  String get permission_manageFullScreenNotificationPermissions => 'Manage Full-Screen Notification Permissions';
-
-  @override
-  String get permission_manageFullScreenNotificationInstructions_step1 => 'Go to your phone\'s Settings.';
-
-  @override
-  String get permission_manageFullScreenNotificationInstructions_step2 => 'Navigate to \'Special App Access\' under the \'Apps & notifications\' section.';
-
-  @override
-  String get permission_manageFullScreenNotificationInstructions_step3 => 'Find and tap on \'Manage full screen intents\'.';
-
-  @override
-  String get permission_manageFullScreenNotificationInstructions_step4 => 'Select the app for which you want to manage full-screen notifications.';
-
-  @override
-  String get permission_manageFullScreenNotificationInstructions_step5 => 'Toggle the permission to enable or disable full-screen notifications for that app.';
-
-  @override
   String recents_BodyCenter_empty(Object filter) {
     return 'Зараз у вас немає жодних $filter останніх дзвінків.';
   }
@@ -853,15 +1036,15 @@ class AppLocalizationsUk extends AppLocalizations {
   String get recents_DeleteConfirmDialog_title => 'Підтвердження видалення';
 
   @override
+  String get recents_HistoryTile_missedCallText => 'Пропущено';
+
+  @override
   String recents_snackBar_deleted(String name) {
     return '$name видалено';
   }
 
   @override
   String get recents_Text_blingTransferInitiated => 'Безумовне переведення дзвінка';
-
-  @override
-  String get recents_HistoryTile_missedCallText => 'Пропущено';
 
   @override
   String get recentsVisibilityFilter_all => 'Всі';
@@ -910,16 +1093,22 @@ class AppLocalizationsUk extends AppLocalizations {
   String get request_StatusCode => 'Код статусу запиту';
 
   @override
+  String get sessionStatus_pushNotificationServiceProblem => 'Проблема з налаштуванням служби пуш-сповіщень';
+
+  @override
+  String get settings_AboutText_AppSessionIdentifier => 'Ідентифікатор сесії застосунку';
+
+  @override
   String get settings_AboutText_AppVersion => 'Версія додатка';
 
   @override
   String get settings_AboutText_CoreVersionUndefined => '?.?.?';
 
   @override
-  String get settings_AboutText_StoreVersion => 'Версія збірки в магазині';
+  String get settings_AboutText_FCMPushNotificationToken => 'Токен для Push-повідомлень FCM';
 
   @override
-  String get settings_AboutText_FCMPushNotificationToken => 'Токен для Push-повідомлень FCM';
+  String get settings_AboutText_StoreVersion => 'Версія збірки в магазині';
 
   @override
   String get settings_AccountDeleteConfirmDialog_content => 'Ви впевнені, що хочете видалити обліковий запис?';
@@ -931,10 +1120,31 @@ class AppLocalizationsUk extends AppLocalizations {
   String get settings_AppBarTitle_myAccount => 'Мій обліковий запис';
 
   @override
+  String get settings_call_codecs_preferred_audio_default => 'Автоматично';
+
+  @override
+  String get settings_call_codecs_preferred_audio_tip => 'Використовується для аудіодзвінків. Якщо кодек не підтримується пристроєм, дзвінок буде встановлено за допомогою наступного доступного кодеку.';
+
+  @override
+  String get settings_call_codecs_preferred_audio_title => 'Предпочитайомий відеокодек';
+
+  @override
+  String get settings_call_codecs_preferred_video_default => 'Автоматично';
+
+  @override
+  String get settings_call_codecs_preferred_video_tip => 'Використовується для відеодзвінків. Якщо кодек не підтримується пристроєм, дзвінок буде встановлено за допомогою наступного доступного кодеку.';
+
+  @override
+  String get settings_call_codecs_preferred_video_title => 'Предпочитайомий відеокодек';
+
+  @override
   String get settings_ListViewTileTitle_about => 'Про програму';
 
   @override
   String get settings_ListViewTileTitle_accountDelete => 'Видалити обліковий запис';
+
+  @override
+  String get settings_ListViewTileTitle_call_codecs => 'Кодеки дзвінка';
 
   @override
   String get settings_ListViewTileTitle_help => 'Допомога';
@@ -950,9 +1160,6 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get settings_ListViewTileTitle_network => 'Налаштування мережі';
-
-  @override
-  String get settings_ListViewTileTitle_call_codecs => 'Кодеки дзвінка';
 
   @override
   String get settings_ListViewTileTitle_registered => 'Зареєстровано';
@@ -976,37 +1183,121 @@ class AppLocalizationsUk extends AppLocalizations {
   String get settings_LogoutConfirmDialog_title => 'Підтвердження виходу';
 
   @override
-  String get settings_network_incomingCallType_title => 'Тип вхідного дзвінка';
+  String get settings_network_incomingCallType_pushNotification_description => 'Коли додаток не використувується, він зупиняється і не використовує ресурси, що дозволяє мінімізувати споживання батареї. Під час вхідного дзвінку <brand> сервер посилає push нотифікацію на телефон, після чого мобільна операціонна система запускає додаток для отримання дзвінка. Цей спосіб не гарантує отримання всіх дзвінків, бо якщо телефон довго не використовується, то деякі версії Android можуть обмежити отримання push нотифікацій, і ви можете не отримати вхідний дзвінок.';
 
   @override
   String get settings_network_incomingCallType_pushNotification_title => 'Пуш-нотифікація';
 
   @override
-  String get settings_network_incomingCallType_pushNotification_description => 'Коли додаток не використувується, він зупиняється і не використовує ресурси, що дозволяє мінімізувати споживання батареї. Під час вхідного дзвінку <brand> сервер посилає push нотифікацію на телефон, після чого мобільна операціонна система запускає додаток для отримання дзвінка. Цей спосіб не гарантує отримання всіх дзвінків, бо якщо телефон довго не використовується, то деякі версії Android можуть обмежити отримання push нотифікацій, і ви можете не отримати вхідний дзвінок.';
+  String get settings_network_incomingCallType_socket_description => 'Додаток залишається працювати в фоні та завжди підтримує активне підключення до сервера. Це збільшує шанси отримати вхідний дзвінок, але може швидше розряджати батарею.';
 
   @override
   String get settings_network_incomingCallType_socket_title => 'Постійне підключення до серверу';
 
   @override
-  String get settings_network_incomingCallType_socket_description => 'Додаток залишається працювати в фоні та завжди підтримує активне підключення до сервера. Це збільшує шанси отримати вхідний дзвінок, але може швидше розряджати батарею.';
+  String get settings_network_incomingCallType_title => 'Тип вхідного дзвінка';
 
   @override
-  String get settings_call_codecs_preferred_audio_title => 'Предпочитайомий відеокодек';
+  String get signalingResponseCode_errorAttachingPlugin => 'Ми зіткнулися з проблемою підключення функції. Будь ласка, спробуйте пізніше.';
 
   @override
-  String get settings_call_codecs_preferred_audio_tip => 'Використовується для аудіодзвінків. Якщо кодек не підтримується пристроєм, дзвінок буде встановлено за допомогою наступного доступного кодеку.';
+  String get signalingResponseCode_errorDetachingPlugin => 'Ми зіткнулися з проблемою відключення функції. Будь ласка, спробуйте пізніше.';
 
   @override
-  String get settings_call_codecs_preferred_audio_default => 'Автоматично';
+  String get signalingResponseCode_errorSendingMessage => 'Ми не змогли відправити ваше повідомлення. Перевірте мережу і спробуйте ще раз.';
 
   @override
-  String get settings_call_codecs_preferred_video_title => 'Предпочитайомий відеокодек';
+  String get signalingResponseCode_handleNotFound => 'Ми не змогли знайти те, що ви шукаєте. Будь ласка, спробуйте ще раз.';
 
   @override
-  String get settings_call_codecs_preferred_video_tip => 'Використовується для відеодзвінків. Якщо кодек не підтримується пристроєм, дзвінок буде встановлено за допомогою наступного доступного кодеку.';
+  String get signalingResponseCode_invalidElementType => 'Щось пішло не так. Будь ласка, спробуйте ще раз.';
 
   @override
-  String get settings_call_codecs_preferred_video_default => 'Автоматично';
+  String get signalingResponseCode_invalidJson => 'Сталася помилка під час обробки ваших даних. Будь ласка, спробуйте ще раз.';
+
+  @override
+  String get signalingResponseCode_invalidJsonObject => 'Деяка інформація, яку ви надали, є недійсною. Будь ласка, перевірте і спробуйте ще раз.';
+
+  @override
+  String get signalingResponseCode_invalidPath => 'Запитувана дія недоступна. Будь ласка, спробуйте інший варіант.';
+
+  @override
+  String get signalingResponseCode_invalidSdp => 'Ми зіткнулися з технічною помилкою. Будь ласка, спробуйте пізніше.';
+
+  @override
+  String get signalingResponseCode_invalidStream => 'Запитуваний потік недоступний. Будь ласка, спробуйте ще раз.';
+
+  @override
+  String get signalingResponseCode_missingMandatoryElement => 'Необхідна інформація відсутня. Будь ласка, заповніть усі обов\'язкові поля.';
+
+  @override
+  String get signalingResponseCode_missingRequest => 'Щось пішло не так із вашим запитом. Будь ласка, спробуйте ще раз.';
+
+  @override
+  String get signalingResponseCode_notAcceptingNewSessions => 'Ми не можемо розпочати нові сесії зараз. Будь ласка, спробуйте пізніше.';
+
+  @override
+  String get signalingResponseCode_notFoundRoutesInReplyFromBE => 'Ми не змогли знайти маршрут для виконання вашого запиту. Будь ласка, спробуйте пізніше.';
+
+  @override
+  String get signalingResponseCode_pluginNotFound => 'Відсутній необхідний компонент. Спробуйте перезапустити додаток.';
+
+  @override
+  String get signalingResponseCode_sessionIdInUse => 'Ця сесія вже активна. Спробуйте використовувати іншу сесію.';
+
+  @override
+  String get signalingResponseCode_sessionNotFound => 'Не вдалося знайти вашу сесію. Будь ласка, увійдіть у систему і спробуйте ще раз.';
+
+  @override
+  String get signalingResponseCode_tokenNotFound => 'Ваш токен доступу відсутній або недійсний. Будь ласка, увійдіть у систему знову.';
+
+  @override
+  String get signalingResponseCode_transportSpecificError => 'Виникла проблема з підключенням. Перевірте свою мережу і спробуйте знову.';
+
+  @override
+  String get signalingResponseCodeType_plugin => 'Не працює необхідна функція. Спробуйте перезапустити додаток.';
+
+  @override
+  String get signalingResponseCodeType_request => 'Сталася помилка у вашому запиті. Будь ласка, спробуйте ще раз.';
+
+  @override
+  String get signalingResponseCodeType_session => 'Виникла проблема з вашою сесією. Будь ласка, увійдіть у систему знову або перезапустіть додаток.';
+
+  @override
+  String get signalingResponseCodeType_token => 'Ваш токен доступу недійсний. Будь ласка, увійдіть у систему знову.';
+
+  @override
+  String get signalingResponseCodeType_transport => 'Ми маємо труднощі з підключенням до сервера. Перевірте ваше з\'єднання та спробуйте знову.';
+
+  @override
+  String get signalingResponseCodeType_unauthorized => 'У вас немає належного доступу. Будь ласка, увійдіть у систему або зверніться до служби підтримки.';
+
+  @override
+  String get signalingResponseCodeType_unknown => 'Сталася несподівана помилка. Будь ласка, спробуйте пізніше.';
+
+  @override
+  String get signalingResponseCodeType_webrtc => 'Виникла проблема з підключенням дзвінка. Завершіть дзвінок і спробуйте знову.';
+
+  @override
+  String get signalingResponseCode_unauthorizedAccess => 'У вас немає дозволу на доступ до цієї функції. Зверніться до служби підтримки, якщо вважаєте, що це помилка.';
+
+  @override
+  String get signalingResponseCode_unauthorizedRequest => 'Ваш запит не може бути авторизованим. Будь ласка, спробуйте увійти знову.';
+
+  @override
+  String get signalingResponseCode_unexpectedAnswer => 'Ми отримали несподівану відповідь. Будь ласка, спробуйте ще раз.';
+
+  @override
+  String get signalingResponseCode_unknownError => 'Сталася несподівана помилка. Будь ласка, спробуйте пізніше.';
+
+  @override
+  String get signalingResponseCode_unknownRequest => 'Ми не впізнали ваш запит. Будь ласка, спробуйте ще раз або зверніться до служби підтримки.';
+
+  @override
+  String get signalingResponseCode_unsupportedJsepType => 'Ця дія не підтримується вашими поточними налаштуваннями.';
+
+  @override
+  String get signalingResponseCode_wrongWebrtcState => 'Сталася помилка, пов’язана з викликом. Завершіть виклик і спробуйте ще раз.';
 
   @override
   String get themeMode_dark => 'Темний';
@@ -1044,130 +1335,4 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get webRegistration_ErrorAcknowledgeDialog_title => 'Web resource error';
-
-  @override
-  String get diagnostic_AppBar_title => 'Діагностика';
-
-  @override
-  String get diagnosticPermissionDetails_title_statusPermission => 'Статус дозволу';
-
-  @override
-  String get diagnosticPermissionDetails_button_requestPermission => 'Запит дозволу';
-
-  @override
-  String get diagnosticPermissionDetails_button_managePermission => 'Керування дозволами';
-
-  @override
-  String get diagnostic_permissionStatus_denied => 'Доступ заборонено';
-
-  @override
-  String get diagnostic_permissionStatus_granted => 'Доступ надано';
-
-  @override
-  String get diagnostic_permissionStatus_restricted => 'Обмежений доступ';
-
-  @override
-  String get diagnostic_permissionStatus_limited => 'Обмежений доступ';
-
-  @override
-  String get diagnostic_permissionStatus_permanentlyDenied => 'Доступ назавжди заборонено';
-
-  @override
-  String get diagnostic_permissionStatus_provisional => 'Тимчасовий доступ';
-
-  @override
-  String get diagnostic_permission_camera_title => 'Камера';
-
-  @override
-  String get diagnostic_permission_microphone_title => 'Мікрофон';
-
-  @override
-  String get diagnostic_permission_contacts_title => 'Контакти';
-
-  @override
-  String get diagnostic_permission_notification_title => 'Сповіщення';
-
-  @override
-  String get diagnostic_permission_camera_description => 'Цей додаток потребує дозволу на доступ до камери для здійснення відеодзвінків.';
-
-  @override
-  String get diagnostic_permission_microphone_description => 'Цей додаток потребує дозволу на доступ до мікрофона для здійснення аудіодзвінків.';
-
-  @override
-  String get diagnostic_permission_contacts_description => 'Цей додаток потребує дозволу на доступ до контактів для здійснення дзвінків із вашої телефонної книги.';
-
-  @override
-  String get diagnostic_permission_notification_description => 'Дозволяє додатку активувати вхідні дзвінки.';
-
-  @override
-  String get diagnosticScreen_pushNotificationService_title => 'Служба push-сповіщень';
-
-  @override
-  String get diagnosticScreen_permissionsGroup_title => 'Дозволи';
-
-  @override
-  String get diagnosticPushDetails_configuration_title => 'Налаштування служби push-сповіщень';
-
-  @override
-  String get diagnosticPushDetails_successMessage => 'Служба сповіщень успішно налаштована та готова до використання для отримання повідомлень і обробки вхідних дзвінків.';
-
-  @override
-  String get diagnosticPushDetails_errorMessage_intro => 'Декілька кроків, які можна спробувати:\n';
-
-  @override
-  String get diagnosticPushDetails_errorMessage_step1 => '1. Переконайтеся, що ваш телефон підключений до Інтернету.\n';
-
-  @override
-  String get diagnosticPushDetails_errorMessage_step2 => '2. Якщо підключено, перевірте, чи може ваш телефон отримати доступ до сервісів Google, відвідавши веб-сайт.\n';
-
-  @override
-  String get diagnosticPushDetails_errorMessage_step3 => '3. Зачекайте кілька хвилин і спробуйте знову – сервери Firebase можуть тимчасово не працювати.\n';
-
-  @override
-  String get diagnosticPushDetails_errorMessage_step4 => '4. Перезапустіть сервіси Google Play, щоб переконатися, що вони працюють належним чином.\n';
-
-  @override
-  String get diagnosticPushDetails_errorMessage_step5 => '5. Переконайтеся, що сервіси Google Play встановлені на вашому пристрої.\n';
-
-  @override
-  String get diagnostic_pushTokenStatusType_success => 'Служба успішно налаштована ';
-
-  @override
-  String get sessionStatus_pushNotificationServiceProblem => 'Проблема з налаштуванням служби пуш-сповіщень';
-
-  @override
-  String get diagnostic_pushTokenStatusType_progress => 'В процесі';
-
-  @override
-  String get diagnostic_batteryMode_unrestricted_title => 'Без обмежень';
-
-  @override
-  String get diagnostic_batteryMode_optimized_title => 'Оптимізовано';
-
-  @override
-  String get diagnostic_batteryMode_restricted_title => 'Обмежено';
-
-  @override
-  String get diagnostic_batteryMode_unknown_title => 'Невідомо';
-
-  @override
-  String get diagnostic_batteryMode_unrestricted_description => 'Додаток має повний доступ для роботи у фоновому режимі без обмежень.';
-
-  @override
-  String get diagnostic_batteryMode_optimized_description => 'Фонова активність додатка керується системою для економії батареї. Може працювати некоректно для вхідних дзвінків, що активуються через push-сповіщення.';
-
-  @override
-  String get diagnostic_batteryMode_restricted_description => 'Фонова активність додатка суворо обмежена для збереження заряду батареї. Можливі пропущені вхідні дзвінки.';
-
-  @override
-  String get diagnostic_batteryMode_unknown_description => 'Статус режиму батареї невідомий. Додаток може поводитися непередбачувано.';
-
-  @override
-  String get diagnostic_battery_groupTitle => 'Батарея';
-
-  @override
-  String get diagnostic_battery_tile_title => 'Режим батареї';
-
-  @override
-  String get diagnostic_battery_navigate_section => 'Перейдіть до розділу «Батарея»';
 }

@@ -31,7 +31,7 @@ class AppLogger {
         wrappedFormatter: const RemoteFormatter(),
       );
 
-      LogzIoApiAppender(
+      FilteredLogzIoAppender(
         formatter: remoteFormatter,
         url: remoteLogzIOLoggingUrl,
         apiToken: remoteLogzIOLoggingToken,
@@ -50,14 +50,12 @@ class AppLogger {
   static Future<Map<String, String>> _prepareRemoteLabels() async {
     final packageInfo = PackageInfo();
     final deviceInfo = DeviceInfo();
-
-    // TODO(Serdun): Use getAppVersion directly to avoid initializing Firebase inside isolates,
-    // as AppInfo depends on Firebase.
-    final appVersion = await AppInfo.getAppVersion() ?? 'Undefine';
+    final appInfo = AppInfo();
 
     return <String, String>{
       'app': packageInfo.appName,
-      'appVersion': appVersion,
+      'appVersion': appInfo.version,
+      'appSessionIdentifier': appInfo.identifier,
       'storeVersion': packageInfo.version,
       'packageName': packageInfo.packageName,
       'buildNumber': packageInfo.buildNumber,

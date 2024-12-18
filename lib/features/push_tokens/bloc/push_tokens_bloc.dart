@@ -106,7 +106,16 @@ class PushTokensBloc extends Bloc<PushTokensEvent, PushTokensState> implements P
 
   void _onInsertedOrUpdated(PushTokensInsertedOrUpdated event, Emitter<PushTokensState> emit) async {
     try {
-      await pushTokensRepository.insertOrUpdatePushToken(event.type, event.value);
+      await _backoffRetries.execute<void>(
+        (attempt) async {
+          _logger.info('_onInsertedOrUpdated attempt $attempt');
+          await pushTokensRepository.insertOrUpdatePushToken(event.type, event.value);
+        },
+        shouldRetry: (e, attempt) {
+          _logger.warning('Retrying insertOrUpdatePushToken due to: $e (attempt: $attempt)');
+          return true;
+        },
+      );
 
       emit(state.copyWith(pushToken: event.value));
 

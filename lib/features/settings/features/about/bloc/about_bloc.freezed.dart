@@ -49,6 +49,7 @@ mixin _$AboutState {
   String get storeBuildVersion => throw _privateConstructorUsedError;
   String get storeBuildNumber => throw _privateConstructorUsedError;
   String get appVersion => throw _privateConstructorUsedError;
+  String get appIdentifier => throw _privateConstructorUsedError;
   Uri get coreUrl => throw _privateConstructorUsedError;
   String? get fcmPushToken => throw _privateConstructorUsedError;
   Version? get coreVersion => throw _privateConstructorUsedError;
@@ -73,6 +74,7 @@ abstract class $AboutStateCopyWith<$Res> {
       String storeBuildVersion,
       String storeBuildNumber,
       String appVersion,
+      String appIdentifier,
       Uri coreUrl,
       String? fcmPushToken,
       Version? coreVersion});
@@ -99,6 +101,7 @@ class _$AboutStateCopyWithImpl<$Res, $Val extends AboutState>
     Object? storeBuildVersion = null,
     Object? storeBuildNumber = null,
     Object? appVersion = null,
+    Object? appIdentifier = null,
     Object? coreUrl = null,
     Object? fcmPushToken = freezed,
     Object? coreVersion = freezed,
@@ -127,6 +130,10 @@ class _$AboutStateCopyWithImpl<$Res, $Val extends AboutState>
       appVersion: null == appVersion
           ? _value.appVersion
           : appVersion // ignore: cast_nullable_to_non_nullable
+              as String,
+      appIdentifier: null == appIdentifier
+          ? _value.appIdentifier
+          : appIdentifier // ignore: cast_nullable_to_non_nullable
               as String,
       coreUrl: null == coreUrl
           ? _value.coreUrl
@@ -159,6 +166,7 @@ abstract class _$$AboutStateImplCopyWith<$Res>
       String storeBuildVersion,
       String storeBuildNumber,
       String appVersion,
+      String appIdentifier,
       Uri coreUrl,
       String? fcmPushToken,
       Version? coreVersion});
@@ -183,6 +191,7 @@ class __$$AboutStateImplCopyWithImpl<$Res>
     Object? storeBuildVersion = null,
     Object? storeBuildNumber = null,
     Object? appVersion = null,
+    Object? appIdentifier = null,
     Object? coreUrl = null,
     Object? fcmPushToken = freezed,
     Object? coreVersion = freezed,
@@ -212,6 +221,10 @@ class __$$AboutStateImplCopyWithImpl<$Res>
           ? _value.appVersion
           : appVersion // ignore: cast_nullable_to_non_nullable
               as String,
+      appIdentifier: null == appIdentifier
+          ? _value.appIdentifier
+          : appIdentifier // ignore: cast_nullable_to_non_nullable
+              as String,
       coreUrl: null == coreUrl
           ? _value.coreUrl
           : coreUrl // ignore: cast_nullable_to_non_nullable
@@ -238,6 +251,7 @@ class _$AboutStateImpl extends _AboutState {
       required this.storeBuildVersion,
       required this.storeBuildNumber,
       required this.appVersion,
+      required this.appIdentifier,
       required this.coreUrl,
       this.fcmPushToken,
       this.coreVersion})
@@ -257,6 +271,8 @@ class _$AboutStateImpl extends _AboutState {
   @override
   final String appVersion;
   @override
+  final String appIdentifier;
+  @override
   final Uri coreUrl;
   @override
   final String? fcmPushToken;
@@ -265,7 +281,7 @@ class _$AboutStateImpl extends _AboutState {
 
   @override
   String toString() {
-    return 'AboutState(progress: $progress, appName: $appName, packageName: $packageName, storeBuildVersion: $storeBuildVersion, storeBuildNumber: $storeBuildNumber, appVersion: $appVersion, coreUrl: $coreUrl, fcmPushToken: $fcmPushToken, coreVersion: $coreVersion)';
+    return 'AboutState(progress: $progress, appName: $appName, packageName: $packageName, storeBuildVersion: $storeBuildVersion, storeBuildNumber: $storeBuildNumber, appVersion: $appVersion, appIdentifier: $appIdentifier, coreUrl: $coreUrl, fcmPushToken: $fcmPushToken, coreVersion: $coreVersion)';
   }
 
   @override
@@ -284,6 +300,8 @@ class _$AboutStateImpl extends _AboutState {
                 other.storeBuildNumber == storeBuildNumber) &&
             (identical(other.appVersion, appVersion) ||
                 other.appVersion == appVersion) &&
+            (identical(other.appIdentifier, appIdentifier) ||
+                other.appIdentifier == appIdentifier) &&
             (identical(other.coreUrl, coreUrl) || other.coreUrl == coreUrl) &&
             (identical(other.fcmPushToken, fcmPushToken) ||
                 other.fcmPushToken == fcmPushToken) &&
@@ -300,6 +318,7 @@ class _$AboutStateImpl extends _AboutState {
       storeBuildVersion,
       storeBuildNumber,
       appVersion,
+      appIdentifier,
       coreUrl,
       fcmPushToken,
       coreVersion);
@@ -321,6 +340,7 @@ abstract class _AboutState extends AboutState {
       required final String storeBuildVersion,
       required final String storeBuildNumber,
       required final String appVersion,
+      required final String appIdentifier,
       required final Uri coreUrl,
       final String? fcmPushToken,
       final Version? coreVersion}) = _$AboutStateImpl;
@@ -338,6 +358,8 @@ abstract class _AboutState extends AboutState {
   String get storeBuildNumber;
   @override
   String get appVersion;
+  @override
+  String get appIdentifier;
   @override
   Uri get coreUrl;
   @override

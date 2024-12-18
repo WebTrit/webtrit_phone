@@ -23,6 +23,7 @@ class ContactScreenPage extends StatelessWidget {
       favoriteVisible: featureAccess.bottomMenuFeature.isTabEnabled(MainFlavor.favorites),
       transferVisible: featureAccess.callFeature.transfer.enableBlindTransfer,
       videoVisible: featureAccess.callFeature.videoEnable,
+      chatsEnabled: featureAccess.messagingFeature.chatsPresent,
     );
     final provider = BlocProvider(
       create: (context) {
