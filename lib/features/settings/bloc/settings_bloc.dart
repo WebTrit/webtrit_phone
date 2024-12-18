@@ -8,6 +8,7 @@ import 'package:logging/logging.dart';
 import 'package:webtrit_phone/app/notifications/notifications.dart';
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/data/data.dart';
+import 'package:webtrit_phone/models/self_config.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
 part 'settings_bloc.freezed.dart';
@@ -23,6 +24,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     required this.notificationsBloc,
     required this.appBloc,
     required this.userRepository,
+    required this.selfConfigRepository,
     required this.appRepository,
     required this.appPreferences,
   }) : super(SettingsState(registerStatus: appPreferences.getRegisterStatus())) {
@@ -35,6 +37,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   final NotificationsBloc notificationsBloc;
   final AppBloc appBloc;
   final UserRepository userRepository;
+  final SelfConfigRepository selfConfigRepository;
   final AppRepository appRepository;
   final AppPreferences appPreferences;
 
@@ -44,11 +47,16 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
       _logger.info('Refreshing settings');
       final infoFuture = userRepository.getInfo();
       final registerStatusFuture = appRepository.getRegisterStatus();
+      final selfConfigFuture = Future<SelfConfig?>(selfConfigRepository.getSelfConfig).onError((e, s) {
+        _logger.info('Failed to get self config', e, s);
+        return null;
+      });
 
-      final r = await Future.wait([infoFuture, registerStatusFuture]);
+      final r = await Future.wait([infoFuture, registerStatusFuture, selfConfigFuture]);
 
       final info = r[0] as UserInfo;
       final registerStatus = r[1] as bool;
+      final selfConfig = r[2] as SelfConfig?;
 
       if (registerStatus != state.registerStatus) {
         await appPreferences.setRegisterStatus(registerStatus);
@@ -60,6 +68,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
         progress: false,
         info: info,
         registerStatus: registerStatus,
+        selfConfig: selfConfig,
       ));
     } catch (e, stackTrace) {
       _logger.warning('_onRefreshed', e, stackTrace);

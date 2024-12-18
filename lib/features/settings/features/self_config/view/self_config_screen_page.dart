@@ -7,10 +7,11 @@ import '../self_config.dart';
 @RoutePage()
 class SelfConfigScreenPage extends StatelessWidget {
   // ignore: use_key_in_widget_constructors
-  const SelfConfigScreenPage();
+  const SelfConfigScreenPage(this.url);
+  final Uri url;
 
   @override
   Widget build(BuildContext context) {
-    return const SelfConfigScreen();
+    return SelfConfigScreen(url);
   }
 }

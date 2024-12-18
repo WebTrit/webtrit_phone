@@ -26,6 +26,7 @@ class SettingsScreenPage extends StatelessWidget {
           notificationsBloc: context.read<NotificationsBloc>(),
           appBloc: context.read<AppBloc>(),
           userRepository: context.read<UserRepository>(),
+          selfConfigRepository: context.read<SelfConfigRepository>(),
           appRepository: context.read<AppRepository>(),
           appPreferences: context.read<AppPreferences>(),
         )..add(const SettingsRefreshed());

@@ -85,30 +85,118 @@ class SettingsScreen extends StatelessWidget {
               }
             },
           ),
-          Column(
-            children: [
-              for (var section in sections)
-                Column(
-                  children: [
-                    GroupTitleListTile(
-                      titleData: context.parseL10n(section.titleL10n),
-                    ),
-                    ...[
-                      for (var item in section.items)
-                        Column(
-                          children: [
-                            ListTile(
-                              leading: Icon(item.icon),
-                              title: Text(context.parseL10n(item.titleL10n)),
-                              onTap: () => _onSectionItemTap(context, item),
-                            ),
-                            const ListTileSeparator(),
-                          ],
+          BlocBuilder<SettingsBloc, SettingsState>(
+            builder: (context, state) {
+              return Column(
+                children: [
+                  for (var section in sections)
+                    Column(
+                      children: [
+                        GroupTitleListTile(
+                          titleData: context.parseL10n(section.titleL10n),
                         ),
-                    ],
-                  ],
-                ),
-            ],
+                        ...[
+                          for (var item in section.items)
+                            if (item.flavor == SettingsFlavor.network)
+                              Column(children: [
+                                ListTile(
+                                  leading: Icon(item.icon),
+                                  title: Text(context.parseL10n(item.titleL10n)),
+                                  onTap: () => context.router.navigate(const NetworkScreenPageRoute()),
+                                ),
+                                const ListTileSeparator(),
+                              ])
+                            else if (item.flavor == SettingsFlavor.language)
+                              Column(children: [
+                                ListTile(
+                                  leading: Icon(item.icon),
+                                  title: Text(context.parseL10n(item.titleL10n)),
+                                  onTap: () => context.router.navigate(const LanguageScreenPageRoute()),
+                                ),
+                                const ListTileSeparator(),
+                              ])
+                            else if (item.flavor == SettingsFlavor.help)
+                              Column(children: [
+                                ListTile(
+                                  leading: Icon(item.icon),
+                                  title: Text(context.parseL10n(item.titleL10n)),
+                                  onTap: () => context.router.navigate(
+                                      HelpScreenPageRoute(initialUriQueryParam: item.data!.resource.toString())),
+                                ),
+                                const ListTileSeparator(),
+                              ])
+                            else if (item.flavor == SettingsFlavor.terms)
+                              Column(children: [
+                                ListTile(
+                                  leading: Icon(item.icon),
+                                  title: Text(context.parseL10n(item.titleL10n)),
+                                  onTap: () => context.router.navigate(TermsConditionsScreenPageRoute(
+                                      initialUriQueryParam: item.data!.resource.toString())),
+                                ),
+                                const ListTileSeparator(),
+                              ])
+                            else if (item.flavor == SettingsFlavor.about)
+                              Column(children: [
+                                ListTile(
+                                  leading: Icon(item.icon),
+                                  title: Text(context.parseL10n(item.titleL10n)),
+                                  onTap: () => context.router.navigate(const AboutScreenPageRoute()),
+                                ),
+                                const ListTileSeparator(),
+                              ])
+                            else if (item.flavor == SettingsFlavor.log)
+                              Column(children: [
+                                ListTile(
+                                  leading: Icon(item.icon),
+                                  title: Text(context.parseL10n(item.titleL10n)),
+                                  onTap: () => context.router.navigate(const LogRecordsConsoleScreenPageRoute()),
+                                ),
+                                const ListTileSeparator(),
+                              ])
+                            else if (item.flavor == SettingsFlavor.deleteAccount)
+                              Column(children: [
+                                ListTile(
+                                  leading: Icon(item.icon),
+                                  title: Text(context.parseL10n(item.titleL10n)),
+                                  onTap: () => _deleteAccount(context),
+                                ),
+                                const ListTileSeparator(),
+                              ])
+                            else if (item.flavor == SettingsFlavor.embedded)
+                              Column(children: [
+                                ListTile(
+                                  leading: Icon(item.icon),
+                                  title: Text(context.parseL10n(item.titleL10n)),
+                                  onTap: () => context.router.navigate(EmbeddedScreenPage.route(item.data!)),
+                                ),
+                                const ListTileSeparator(),
+                              ])
+                            else if (item.flavor == SettingsFlavor.callCodecs)
+                              Column(children: [
+                                ListTile(
+                                  leading: Icon(item.icon),
+                                  title: Text(context.parseL10n(item.titleL10n)),
+                                  onTap: () => context.router.navigate(const CallCodecsScreenPageRoute()),
+                                ),
+                                const ListTileSeparator(),
+                              ])
+                            else if (item.flavor == SettingsFlavor.selfConfig && state.selfConfig != null)
+                              Column(children: [
+                                ListTile(
+                                  leading: Icon(item.icon),
+                                  title: Text(context.parseL10n(item.titleL10n)),
+                                  onTap: () {
+                                    context.router.navigate(SelfConfigScreenPageRoute(url: state.selfConfig!.url));
+                                  },
+                                ),
+                                const ListTileSeparator(),
+                              ])
+                        ],
+                      ],
+                    ),
+                ],
+              );
+            },
           )
         ],
       ),
@@ -122,31 +210,6 @@ class SettingsScreen extends StatelessWidget {
       },
       child: scaffold,
     );
-  }
-
-  void _onSectionItemTap(BuildContext context, SettingItem item) {
-    switch (item.flavor) {
-      case SettingsFlavor.network:
-        context.router.navigate(const NetworkScreenPageRoute());
-      case SettingsFlavor.language:
-        context.router.navigate(const LanguageScreenPageRoute());
-      case SettingsFlavor.help:
-        context.router.navigate(HelpScreenPageRoute(initialUriQueryParam: item.data!.resource.toString()));
-      case SettingsFlavor.terms:
-        context.router.navigate(TermsConditionsScreenPageRoute(initialUriQueryParam: item.data!.resource.toString()));
-      case SettingsFlavor.about:
-        context.router.navigate(const AboutScreenPageRoute());
-      case SettingsFlavor.log:
-        context.router.navigate(const LogRecordsConsoleScreenPageRoute());
-      case SettingsFlavor.deleteAccount:
-        _deleteAccount(context);
-      case SettingsFlavor.embedded:
-        context.router.navigate(EmbeddedScreenPage.route(item.data!));
-      case SettingsFlavor.callCodecs:
-        context.router.navigate(const CallCodecsScreenPageRoute());
-      case SettingsFlavor.selfConfig:
-        context.router.navigate(const SelfConfigScreenPageRoute());
-    }
   }
 
   Future<void> _deleteAccount(BuildContext context) async {
