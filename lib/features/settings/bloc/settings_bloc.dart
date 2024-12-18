@@ -41,51 +41,47 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   final AppRepository appRepository;
   final AppPreferences appPreferences;
 
-  FutureOr<void> _onRefreshed(SettingsRefreshed event, Emitter<SettingsState> emit) async {
-    emit(state.copyWith(progress: true));
+  Future<void> fetchUserInfo(Emitter<SettingsState> emit) async {
     try {
-      _logger.info('Refreshing settings');
-      final infoFuture = userRepository.getInfo();
-      final registerStatusFuture = appRepository.getRegisterStatus();
-      final selfConfigFuture = Future<SelfConfig?>(selfConfigRepository.getSelfConfig).onError((e, s) {
-        _logger.info('Failed to get self config', e, s);
-        return null;
-      });
-
-      final r = await Future.wait([infoFuture, registerStatusFuture, selfConfigFuture]);
-
-      final info = r[0] as UserInfo;
-      final registerStatus = r[1] as bool;
-      final selfConfig = r[2] as SelfConfig?;
-
-      if (registerStatus != state.registerStatus) {
-        await appPreferences.setRegisterStatus(registerStatus);
-      }
-
-      if (emit.isDone) return;
-
-      emit(state.copyWith(
-        progress: false,
-        info: info,
-        registerStatus: registerStatus,
-        selfConfig: selfConfig,
-      ));
-    } catch (e, stackTrace) {
-      _logger.warning('_onRefreshed', e, stackTrace);
-      _logger.info('isClosed: $isClosed');
-      _logger.info('emit.isDone: ${emit.isDone}');
-      if (isClosed) return;
-      if (emit.isDone) return;
-
+      final info = await userRepository.getInfo();
+      emit(state.copyWith(info: info));
+    } catch (e, s) {
+      _logger.warning('Failed to get user info', e, s);
       notificationsBloc.add(NotificationsSubmitted(DefaultErrorNotification(e)));
       appBloc.maybeHandleError(e);
-
-      emit(state.copyWith(
-        progress: false,
-        info: null,
-        registerStatus: appPreferences.getRegisterStatus(),
-      ));
     }
+  }
+
+  Future<void> fetchRegisterStatus(Emitter<SettingsState> emit) async {
+    try {
+      final status = await appRepository.getRegisterStatus();
+      appPreferences.setRegisterStatus(status);
+      emit(state.copyWith(registerStatus: status));
+    } catch (e, s) {
+      _logger.warning('Failed to get register status', e, s);
+      notificationsBloc.add(NotificationsSubmitted(DefaultErrorNotification(e)));
+      appBloc.maybeHandleError(e);
+      emit(state.copyWith(registerStatus: appPreferences.getRegisterStatus()));
+    }
+  }
+
+  Future<void> fetchSelfConfig(Emitter<SettingsState> emit) async {
+    try {
+      final selfConfig = await selfConfigRepository.getSelfConfig();
+      emit(state.copyWith(selfConfig: selfConfig));
+    } catch (e, s) {
+      /// Optional feature, so no need to show error to user.
+      _logger.info('Failed to get self config', e, s);
+      appBloc.maybeHandleError(e);
+    }
+  }
+
+  FutureOr<void> _onRefreshed(SettingsRefreshed event, Emitter<SettingsState> emit) async {
+    emit(state.copyWith(progress: true));
+    _logger.info('Refreshing settings');
+    await Future.wait([fetchUserInfo(emit), fetchSelfConfig(emit), fetchRegisterStatus(emit)]);
+    emit(state.copyWith(progress: false));
+    _logger.info('Settings refreshed');
   }
 
   FutureOr<void> _onLogouted(SettingsLogouted event, Emitter<SettingsState> emit) async {
