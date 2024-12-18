@@ -280,6 +280,10 @@ class AppRouter extends _$AppRouter {
                       path: 'call_codecs',
                     ),
                     AutoRoute(
+                      page: SelfConfigScreenPageRoute.page,
+                      path: 'self_config',
+                    ),
+                    AutoRoute(
                       page: ThemeModeScreenPageRoute.page,
                       path: 'theme-mode',
                     ),

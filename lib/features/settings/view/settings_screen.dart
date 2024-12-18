@@ -144,6 +144,8 @@ class SettingsScreen extends StatelessWidget {
         context.router.navigate(EmbeddedScreenPage.route(item.data!));
       case SettingsFlavor.callCodecs:
         context.router.navigate(const CallCodecsScreenPageRoute());
+      case SettingsFlavor.selfConfig:
+        context.router.navigate(const SelfConfigScreenPageRoute());
     }
   }
 

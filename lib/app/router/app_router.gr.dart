@@ -309,6 +309,12 @@ abstract class _$AppRouter extends RootStackRouter {
         child: RecentsScreenPage(),
       );
     },
+    SelfConfigScreenPageRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: SelfConfigScreenPage(),
+      );
+    },
     SettingsRouterPageRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -1213,6 +1219,20 @@ class RecentsScreenPageRoute extends PageRouteInfo<void> {
         );
 
   static const String name = 'RecentsScreenPageRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [SelfConfigScreenPage]
+class SelfConfigScreenPageRoute extends PageRouteInfo<void> {
+  const SelfConfigScreenPageRoute({List<PageRouteInfo>? children})
+      : super(
+          SelfConfigScreenPageRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'SelfConfigScreenPageRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }

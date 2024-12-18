@@ -2305,6 +2305,12 @@ abstract class AppLocalizations {
   /// **'Call codecs'**
   String get settings_ListViewTileTitle_call_codecs;
 
+  /// No description provided for @settings_ListViewTileTitle_self_config.
+  ///
+  /// In en, this message translates to:
+  /// **'Self-config page'**
+  String get settings_ListViewTileTitle_self_config;
+
   /// No description provided for @settings_ListViewTileTitle_help.
   ///
   /// In en, this message translates to:

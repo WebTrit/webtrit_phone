@@ -121,6 +121,12 @@
           },
           {
             "enabled": true,
+            "type": "selfConfig",
+            "titleL10n": "settings_ListViewTileTitle_self_config",
+            "icon": "0xef7a"
+          },
+          {
+            "enabled": true,
             "type": "language",
             "titleL10n": "settings_ListViewTileTitle_language",
             "icon": "0xe366"
