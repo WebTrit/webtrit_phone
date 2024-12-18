@@ -123,10 +123,10 @@ class AppLocalizationsIt extends AppLocalizations {
   String get call_FailureAcknowledgeDialog_title => 'Guasto';
 
   @override
-  String get callProcessingStatus_disconnecting => 'Desconectando la llamada, por favor espere…';
+  String get callProcessingStatus_answering => 'Rispondendo alla chiamata, attendi prego…';
 
   @override
-  String get callProcessingStatus_answering => 'Rispondendo alla chiamata, attendi prego…';
+  String get callProcessingStatus_disconnecting => 'Desconectando la llamada, por favor espere…';
 
   @override
   String get callStatus_appUnregistered => 'Non registrato';
@@ -207,6 +207,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get copyToClipboard_popupMenuItem => 'Copia negli appunti';
 
   @override
+  String get default_CannotRemoveOwnerMessagingSocketException => 'Impossibile rimuovere il proprietario';
+
+  @override
   String get default_ChatMemberNotFoundMessagingSocketException => 'Membro della chat non trovato';
 
   @override
@@ -261,6 +264,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get default_TimeoutExceptionError => 'Si è verificato un problema di timeout del server';
 
   @override
+  String get default_TimeoutMessagingSocketException => 'Tempo di attesa scaduto';
+
+  @override
   String get default_TlsExceptionError => 'Si è verificato un problema con il protocollo di rete sicuro (TLS/SSL)';
 
   @override
@@ -274,6 +280,129 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get default_UserAlreadyInChatMessagingSocketException => 'Utente già nella chat';
+
+  @override
+  String get diagnostic_AppBar_title => 'Diagnostica';
+
+  @override
+  String get diagnostic_battery_groupTitle => 'Batteria';
+
+  @override
+  String get diagnostic_batteryMode_optimized_description => 'L\'attività in background dell\'app è gestita dal sistema per risparmiare batteria. Potrebbe non funzionare correttamente con chiamate in arrivo attivate da notifiche push.';
+
+  @override
+  String get diagnostic_batteryMode_optimized_title => 'Ottimizzato';
+
+  @override
+  String get diagnostic_batteryMode_restricted_description => 'L\'attività in background dell\'app è fortemente limitata per conservare la batteria. Potrebbero essere perse chiamate in arrivo.';
+
+  @override
+  String get diagnostic_batteryMode_restricted_title => 'Limitato';
+
+  @override
+  String get diagnostic_batteryMode_unknown_description => 'Lo stato della modalità batteria è sconosciuto. L\'app potrebbe avere un comportamento imprevedibile.';
+
+  @override
+  String get diagnostic_batteryMode_unknown_title => 'Sconosciuto';
+
+  @override
+  String get diagnostic_batteryMode_unrestricted_description => 'L\'app ha pieno accesso per funzionare in background senza restrizioni.';
+
+  @override
+  String get diagnostic_batteryMode_unrestricted_title => 'Senza restrizioni';
+
+  @override
+  String get diagnostic_battery_navigate_section => 'Vai alla sezione Batteria';
+
+  @override
+  String get diagnostic_battery_tile_title => 'Modalità batteria';
+
+  @override
+  String get diagnostic_permission_camera_description => 'Questa app richiede il permesso di accedere alla fotocamera per effettuare videochiamate.';
+
+  @override
+  String get diagnostic_permission_camera_title => 'Fotocamera';
+
+  @override
+  String get diagnostic_permission_contacts_description => 'Questa app richiede il permesso di accedere ai contatti per effettuare chiamate dalla tua rubrica.';
+
+  @override
+  String get diagnostic_permission_contacts_title => 'Contatti';
+
+  @override
+  String get diagnosticPermissionDetails_button_managePermission => 'Gestisci permessi';
+
+  @override
+  String get diagnosticPermissionDetails_button_requestPermission => 'Richiedi permesso';
+
+  @override
+  String get diagnosticPermissionDetails_title_statusPermission => 'Stato del permesso';
+
+  @override
+  String get diagnostic_permission_microphone_description => 'Questa app richiede il permesso di accedere al microfono per effettuare chiamate audio.';
+
+  @override
+  String get diagnostic_permission_microphone_title => 'Microfono';
+
+  @override
+  String get diagnostic_permission_notification_description => 'Permette all\'app di attivare le chiamate in arrivo.';
+
+  @override
+  String get diagnostic_permission_notification_title => 'Notifiche';
+
+  @override
+  String get diagnostic_permissionStatus_denied => 'Accesso negato';
+
+  @override
+  String get diagnostic_permissionStatus_granted => 'Accesso consentito';
+
+  @override
+  String get diagnostic_permissionStatus_limited => 'Accesso limitato';
+
+  @override
+  String get diagnostic_permissionStatus_permanentlyDenied => 'Accesso permanentemente negato';
+
+  @override
+  String get diagnostic_permissionStatus_provisional => 'Accesso provvisorio';
+
+  @override
+  String get diagnostic_permissionStatus_restricted => 'Accesso limitato';
+
+  @override
+  String get diagnosticPushDetails_configuration_title => 'Configurazione del servizio di notifiche push';
+
+  @override
+  String get diagnosticPushDetails_errorMessage_intro => 'Alcuni passi da provare:\n';
+
+  @override
+  String get diagnosticPushDetails_errorMessage_step1 => '1. Assicurati che il telefono sia connesso a Internet.\n';
+
+  @override
+  String get diagnosticPushDetails_errorMessage_step2 => '2. Se connesso, verifica che il telefono possa accedere ai servizi Google visitando un sito web.\n';
+
+  @override
+  String get diagnosticPushDetails_errorMessage_step3 => '3. Aspetta qualche minuto e riprova – i server di messaggistica Firebase potrebbero essere temporaneamente inattivi.\n';
+
+  @override
+  String get diagnosticPushDetails_errorMessage_step4 => '4. Riavvia i servizi di Google Play per assicurarne il corretto funzionamento.\n';
+
+  @override
+  String get diagnosticPushDetails_errorMessage_step5 => '5. Verifica che i servizi di Google Play siano installati sul tuo dispositivo.\n';
+
+  @override
+  String get diagnosticPushDetails_successMessage => 'Il servizio di notifica è stato configurato con successo ed è pronto per l’uso per ricevere messaggi e gestire le chiamate in arrivo.';
+
+  @override
+  String get diagnostic_pushTokenStatusType_progress => 'In corso';
+
+  @override
+  String get diagnostic_pushTokenStatusType_success => 'Servizio configurato con successo';
+
+  @override
+  String get diagnosticScreen_permissionsGroup_title => 'Permessi';
+
+  @override
+  String get diagnosticScreen_pushNotificationService_title => 'Servizio di notifiche push';
 
   @override
   String get favorites_BodyCenter_empty => 'Al momento non hai numeri preferiti.\nAggiungi ai preferiti dai Contatti usando l\'icona a stella';
@@ -545,10 +674,19 @@ class AppLocalizationsIt extends AppLocalizations {
   String get messaging_ConfirmDialog_confirm => 'SÌ';
 
   @override
+  String get messaging_ConversationBuilders_addUserBtnText => 'Aggiungi utente';
+
+  @override
   String get messaging_ConversationBuilders_back => 'Dopo';
 
   @override
+  String get messaging_ConversationBuilders_back_action => 'Dopo';
+
+  @override
   String get messaging_ConversationBuilders_cancel => 'Cancellare';
+
+  @override
+  String get messaging_ConversationBuilders_connectionError => 'Errore di connessione, riprova più tardi';
 
   @override
   String get messaging_ConversationBuilders_contactOrNumberSearch_hint => 'Inserisci nome o numero di telefono';
@@ -564,6 +702,9 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get messaging_ConversationBuilders_externalContacts_heading => 'Contatti Cloud PBX';
+
+  @override
+  String get messaging_ConversationBuilders_groupNameHeadline => 'Nome del gruppo';
 
   @override
   String get messaging_ConversationBuilders_invalidNumber_message1 => 'Il tsontact ha un numero di telefono non valido. Dovrebbe essere nel formato ';
@@ -611,6 +752,12 @@ class AppLocalizationsIt extends AppLocalizations {
   String get messaging_ConversationBuilders_numberSearch_errorHint => 'Formato del numero di telefono: ';
 
   @override
+  String get messaging_ConversationBuilders_submitBtnText => 'Invia';
+
+  @override
+  String get messaging_ConversationBuilders_submitError => 'Si è verificato un errore durante la creazione del gruppo, riprovare.';
+
+  @override
   String get messaging_ConversationBuilders_title_group => 'Crea gruppo';
 
   @override
@@ -629,9 +776,6 @@ class AppLocalizationsIt extends AppLocalizations {
   String get messaging_ConversationsScreen_empty => 'Nessuna conversazione è ancora iniziata';
 
   @override
-  String get messaging_ConversationsScreen_unsupported => 'La messaggistica non è supportata dal sistema remoto, contattare l\'amministratore per abilitarla';
-
-  @override
   String get messaging_ConversationsScreen_messages_title => 'Messaggi';
 
   @override
@@ -648,6 +792,12 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get messaging_ConversationsScreen_smssSearch_hint => 'Inserisci il numero di telefono';
+
+  @override
+  String get messaging_ConversationsScreen_startDialog => 'Avvia dialogo';
+
+  @override
+  String get messaging_ConversationsScreen_unsupported => 'La messaggistica non è supportata dal sistema remoto, contattare l\'amministratore per abilitarla';
 
   @override
   String get messaging_Conversations_tile_empty => 'Nessun messaggio ancora';
@@ -719,6 +869,27 @@ class AppLocalizationsIt extends AppLocalizations {
   String get messaging_GroupNameDialog_cancelBtnText => 'Cancellare';
 
   @override
+  String get messaging_GroupNameDialog_fieldHint => 'Inserisci il nome del gruppo';
+
+  @override
+  String get messaging_GroupNameDialog_fieldLabel => 'Nome del gruppo';
+
+  @override
+  String get messaging_GroupNameDialog_fieldValidation_empty => 'Per favore, inserisci il nome del gruppo';
+
+  @override
+  String get messaging_GroupNameDialog_fieldValidation_short => 'Il nome del gruppo è troppo corto';
+
+  @override
+  String get messaging_GroupNameDialog_saveBtnText => 'Salva';
+
+  @override
+  String get messaging_GroupNameDialog_title => 'Nome del gruppo';
+
+  @override
+  String get messaging_GroupScreen_titlePrefix => 'Gruppo:';
+
+  @override
   String get messaging_MessageField_hint => 'Scrivi un messaggio';
 
   @override
@@ -740,10 +911,19 @@ class AppLocalizationsIt extends AppLocalizations {
   String get messaging_MessageView_forward => 'Inoltrare';
 
   @override
+  String get messaging_MessageView_forwarded => '[inoltrato]';
+
+  @override
   String get messaging_MessageView_reply => 'Rispondere';
 
   @override
   String get messaging_MessageView_textcopy => 'Copia negli appunti';
+
+  @override
+  String get messaging_NewConversation_createGroup => '';
+
+  @override
+  String get messaging_NewConversation_title => '';
 
   @override
   String get messaging_ParticipantName_you => 'Voi';
@@ -806,6 +986,24 @@ class AppLocalizationsIt extends AppLocalizations {
   String get permission_Button_request => 'Continua';
 
   @override
+  String get permission_manageFullScreenNotificationInstructions_step1 => 'Go to your phone\'s Settings.';
+
+  @override
+  String get permission_manageFullScreenNotificationInstructions_step2 => 'Navigate to \'Special App Access\' under the \'Apps & notifications\' section.';
+
+  @override
+  String get permission_manageFullScreenNotificationInstructions_step3 => 'Find and tap on \'Manage full screen intents\'.';
+
+  @override
+  String get permission_manageFullScreenNotificationInstructions_step4 => 'Select the app for which you want to manage full-screen notifications.';
+
+  @override
+  String get permission_manageFullScreenNotificationInstructions_step5 => 'Toggle the permission to enable or disable full-screen notifications for that app.';
+
+  @override
+  String get permission_manageFullScreenNotificationPermissions => 'Manage Full-Screen Notification Permissions';
+
+  @override
   String get permission_manufacturer_Button_gotIt => 'Capito';
 
   @override
@@ -827,24 +1025,6 @@ class AppLocalizationsIt extends AppLocalizations {
   String get permission_Text_description => 'Per garantire la migliore esperienza utente, all\'app devono essere concesse le seguenti autorizzazioni: microfono per le chiamate audio, fotocamera per le videochiamate e contatti per semplificare il raggiungimento degli utenti dall\'app.\n\nLe autorizzazioni possono essere modificate in qualsiasi momento anche successivamente.';
 
   @override
-  String get permission_manageFullScreenNotificationPermissions => 'Manage Full-Screen Notification Permissions';
-
-  @override
-  String get permission_manageFullScreenNotificationInstructions_step1 => 'Go to your phone\'s Settings.';
-
-  @override
-  String get permission_manageFullScreenNotificationInstructions_step2 => 'Navigate to \'Special App Access\' under the \'Apps & notifications\' section.';
-
-  @override
-  String get permission_manageFullScreenNotificationInstructions_step3 => 'Find and tap on \'Manage full screen intents\'.';
-
-  @override
-  String get permission_manageFullScreenNotificationInstructions_step4 => 'Select the app for which you want to manage full-screen notifications.';
-
-  @override
-  String get permission_manageFullScreenNotificationInstructions_step5 => 'Toggle the permission to enable or disable full-screen notifications for that app.';
-
-  @override
   String recents_BodyCenter_empty(Object filter) {
     return 'Attualmente non hai chiamate recenti con $filter.';
   }
@@ -856,15 +1036,15 @@ class AppLocalizationsIt extends AppLocalizations {
   String get recents_DeleteConfirmDialog_title => 'Confermare l\'eliminazione';
 
   @override
+  String get recents_HistoryTile_missedCallText => 'Chiamata persa';
+
+  @override
   String recents_snackBar_deleted(String name) {
     return '$name cancellato';
   }
 
   @override
   String get recents_Text_blingTransferInitiated => 'Trasferimento senza vedere';
-
-  @override
-  String get recents_HistoryTile_missedCallText => 'Chiamata persa';
 
   @override
   String get recentsVisibilityFilter_all => 'Tutto';
@@ -913,19 +1093,22 @@ class AppLocalizationsIt extends AppLocalizations {
   String get request_StatusCode => 'Codice di stato';
 
   @override
+  String get sessionStatus_pushNotificationServiceProblem => 'Problema con la configurazione del servizio di notifiche push';
+
+  @override
+  String get settings_AboutText_AppSessionIdentifier => 'Identificatore della sessione dell\'applicazione';
+
+  @override
   String get settings_AboutText_AppVersion => 'Versione dell\'app';
 
   @override
   String get settings_AboutText_CoreVersionUndefined => '?.?.?';
 
   @override
-  String get settings_AboutText_StoreVersion => 'La nuova versione è disponibile nello Store';
-
-  @override
   String get settings_AboutText_FCMPushNotificationToken => 'Token di Notifica Push FCM';
 
   @override
-  String get settings_AboutText_AppSessionIdentifier => 'Identificatore della sessione dell\'applicazione';
+  String get settings_AboutText_StoreVersion => 'La nuova versione è disponibile nello Store';
 
   @override
   String get settings_AccountDeleteConfirmDialog_content => 'Sei sicuro di voler eliminare l\'account?';
@@ -937,10 +1120,31 @@ class AppLocalizationsIt extends AppLocalizations {
   String get settings_AppBarTitle_myAccount => 'Il mio account';
 
   @override
+  String get settings_call_codecs_preferred_audio_default => 'Predefinito';
+
+  @override
+  String get settings_call_codecs_preferred_audio_tip => 'Il codec audio preferito viene utilizzato per le chiamate audio. Se il codec non è supportato dal dispositivo, la chiamata verrà stabilita utilizzando il codec successivo disponibile.';
+
+  @override
+  String get settings_call_codecs_preferred_audio_title => 'Codec audio preferito';
+
+  @override
+  String get settings_call_codecs_preferred_video_default => 'Predefinito';
+
+  @override
+  String get settings_call_codecs_preferred_video_tip => 'Il codec video preferito viene utilizzato per le chiamate video. Se il codec non è supportato dal dispositivo, la chiamata verrà stabilita utilizzando il codec successivo disponibile.';
+
+  @override
+  String get settings_call_codecs_preferred_video_title => 'Codec video preferito';
+
+  @override
   String get settings_ListViewTileTitle_about => 'Riguardo a';
 
   @override
   String get settings_ListViewTileTitle_accountDelete => 'Elimina account';
+
+  @override
+  String get settings_ListViewTileTitle_call_codecs => 'Codec di chiamata';
 
   @override
   String get settings_ListViewTileTitle_help => 'Aiuto';
@@ -956,9 +1160,6 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get settings_ListViewTileTitle_network => 'Impostazioni di rete';
-
-  @override
-  String get settings_ListViewTileTitle_call_codecs => 'Codec di chiamata';
 
   @override
   String get settings_ListViewTileTitle_registered => 'Registrato';
@@ -982,37 +1183,121 @@ class AppLocalizationsIt extends AppLocalizations {
   String get settings_LogoutConfirmDialog_title => 'Confermare la disconnessione';
 
   @override
-  String get settings_network_incomingCallType_title => 'Tipo di chiamata in entrata';
+  String get settings_network_incomingCallType_pushNotification_description => 'Quando l\'app non è in uso, smette di funzionare e consuma risorse minime, il che aiuta a conservare la durata della batteria. Durante una chiamata in arrivo, il server invia una notifica push al telefono, spingendo il sistema operativo mobile a lanciare l\'app per gestire la chiamata. Tuttavia, questo metodo non garantisce che tutte le chiamate verranno ricevute. Se il telefono è stato inattivo per un periodo prolungato, alcune versioni di Android potrebbero limitare le notifiche push, con il rischio di perdere una chiamata in arrivo.';
 
   @override
   String get settings_network_incomingCallType_pushNotification_title => 'Notifica Push';
 
   @override
-  String get settings_network_incomingCallType_pushNotification_description => 'Quando l\'app non è in uso, smette di funzionare e consuma risorse minime, il che aiuta a conservare la durata della batteria. Durante una chiamata in arrivo, il server invia una notifica push al telefono, spingendo il sistema operativo mobile a lanciare l\'app per gestire la chiamata. Tuttavia, questo metodo non garantisce che tutte le chiamate verranno ricevute. Se il telefono è stato inattivo per un periodo prolungato, alcune versioni di Android potrebbero limitare le notifiche push, con il rischio di perdere una chiamata in arrivo.';
+  String get settings_network_incomingCallType_socket_description => 'L\'app continua a funzionare in background e mantiene sempre una connessione attiva al server. Questo aumenta le probabilità di ricevere una chiamata in arrivo, ma potrebbe scaricare la batteria più rapidamente.';
 
   @override
   String get settings_network_incomingCallType_socket_title => 'Connessione Persistente al Server';
 
   @override
-  String get settings_network_incomingCallType_socket_description => 'L\'app continua a funzionare in background e mantiene sempre una connessione attiva al server. Questo aumenta le probabilità di ricevere una chiamata in arrivo, ma potrebbe scaricare la batteria più rapidamente.';
+  String get settings_network_incomingCallType_title => 'Tipo di chiamata in entrata';
 
   @override
-  String get settings_call_codecs_preferred_audio_title => 'Codec audio preferito';
+  String get signalingResponseCode_errorAttachingPlugin => 'Abbiamo avuto problemi a connettere una funzione. Riprova più tardi.';
 
   @override
-  String get settings_call_codecs_preferred_audio_tip => 'Il codec audio preferito viene utilizzato per le chiamate audio. Se il codec non è supportato dal dispositivo, la chiamata verrà stabilita utilizzando il codec successivo disponibile.';
+  String get signalingResponseCode_errorDetachingPlugin => 'Abbiamo avuto problemi a disconnettere una funzione. Riprova più tardi.';
 
   @override
-  String get settings_call_codecs_preferred_audio_default => 'Predefinito';
+  String get signalingResponseCode_errorSendingMessage => 'Non siamo riusciti a inviare il tuo messaggio. Controlla la rete e riprova.';
 
   @override
-  String get settings_call_codecs_preferred_video_title => 'Codec video preferito';
+  String get signalingResponseCode_handleNotFound => 'Non abbiamo trovato ciò che stavi cercando. Riprova.';
 
   @override
-  String get settings_call_codecs_preferred_video_tip => 'Il codec video preferito viene utilizzato per le chiamate video. Se il codec non è supportato dal dispositivo, la chiamata verrà stabilita utilizzando il codec successivo disponibile.';
+  String get signalingResponseCode_invalidElementType => 'Qualcosa non va. Riprova.';
 
   @override
-  String get settings_call_codecs_preferred_video_default => 'Predefinito';
+  String get signalingResponseCode_invalidJson => 'Si è verificato un errore nell\'elaborazione dei tuoi dati. Riprova.';
+
+  @override
+  String get signalingResponseCode_invalidJsonObject => 'Alcune delle informazioni fornite non sono valide. Verifica e riprova.';
+
+  @override
+  String get signalingResponseCode_invalidPath => 'L\'azione richiesta non è disponibile. Prova un\'opzione diversa.';
+
+  @override
+  String get signalingResponseCode_invalidSdp => 'Si è verificato un errore tecnico. Riprova più tardi.';
+
+  @override
+  String get signalingResponseCode_invalidStream => 'Lo stream richiesto non è disponibile. Riprova.';
+
+  @override
+  String get signalingResponseCode_missingMandatoryElement => 'Mancano informazioni obbligatorie. Compila tutti i campi richiesti.';
+
+  @override
+  String get signalingResponseCode_missingRequest => 'C\'è stato un problema con la tua richiesta. Riprova.';
+
+  @override
+  String get signalingResponseCode_notAcceptingNewSessions => 'Non siamo in grado di avviare nuove sessioni al momento. Riprova più tardi.';
+
+  @override
+  String get signalingResponseCode_notFoundRoutesInReplyFromBE => 'Non abbiamo trovato un percorso per completare la tua richiesta. Riprova più tardi.';
+
+  @override
+  String get signalingResponseCode_pluginNotFound => 'Manca un componente necessario. Prova a riavviare l\'app.';
+
+  @override
+  String get signalingResponseCode_sessionIdInUse => 'Questa sessione è già attiva. Prova a usarne un\'altra.';
+
+  @override
+  String get signalingResponseCode_sessionNotFound => 'Non è stata trovata la tua sessione. Effettua l\'accesso e riprova.';
+
+  @override
+  String get signalingResponseCode_tokenNotFound => 'Il tuo token di accesso è mancante o non valido. Effettua nuovamente l\'accesso.';
+
+  @override
+  String get signalingResponseCode_transportSpecificError => 'Si è verificato un problema di connessione. Controlla la tua rete e riprova.';
+
+  @override
+  String get signalingResponseCodeType_plugin => 'Una funzionalità necessaria non sta funzionando correttamente. Prova a riavviare l\'app.';
+
+  @override
+  String get signalingResponseCodeType_request => 'C\'è un problema con la tua richiesta. Riprova.';
+
+  @override
+  String get signalingResponseCodeType_session => 'C\'è un problema con la tua sessione. Effettua nuovamente l\'accesso o riavvia l\'app.';
+
+  @override
+  String get signalingResponseCodeType_token => 'Il tuo token di accesso non è valido. Effettua nuovamente l\'accesso.';
+
+  @override
+  String get signalingResponseCodeType_transport => 'Stiamo riscontrando difficoltà di comunicazione con il server. Controlla la tua connessione e riprova.';
+
+  @override
+  String get signalingResponseCodeType_unauthorized => 'Non hai l\'autorizzazione necessaria. Effettua l\'accesso o contatta il supporto.';
+
+  @override
+  String get signalingResponseCodeType_unknown => 'Si è verificato un problema imprevisto. Riprova più tardi.';
+
+  @override
+  String get signalingResponseCodeType_webrtc => 'C\'è un problema con la connessione della chiamata. Riaggancia e riprova.';
+
+  @override
+  String get signalingResponseCode_unauthorizedAccess => 'Non hai l\'autorizzazione per accedere a questa funzione. Contatta il supporto se pensi che ci sia un errore.';
+
+  @override
+  String get signalingResponseCode_unauthorizedRequest => 'La tua richiesta non può essere autorizzata. Prova ad accedere di nuovo.';
+
+  @override
+  String get signalingResponseCode_unexpectedAnswer => 'Abbiamo ricevuto una risposta inaspettata. Riprova.';
+
+  @override
+  String get signalingResponseCode_unknownError => 'Si è verificato un errore imprevisto. Riprova più tardi.';
+
+  @override
+  String get signalingResponseCode_unknownRequest => 'Non abbiamo riconosciuto la tua richiesta. Riprova o contatta il supporto.';
+
+  @override
+  String get signalingResponseCode_unsupportedJsepType => 'Questa azione non è supportata dalla tua configurazione attuale.';
+
+  @override
+  String get signalingResponseCode_wrongWebrtcState => 'Si è verificato un errore relativo alla chiamata. Riaggancia e riprova.';
 
   @override
   String get themeMode_dark => 'Scuro';
@@ -1050,283 +1335,4 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get webRegistration_ErrorAcknowledgeDialog_title => 'Web resource error';
-
-  @override
-  String get messaging_MessageView_forwarded => '[inoltrato]';
-
-  @override
-  String get messaging_ConversationsScreen_startDialog => 'Avvia dialogo';
-
-  @override
-  String get messaging_ConversationBuilders_back_action => 'Dopo';
-
-  @override
-  String get messaging_ConversationBuilders_groupNameHeadline => 'Nome del gruppo';
-
-  @override
-  String get messaging_ConversationBuilders_addUserBtnText => 'Aggiungi utente';
-
-  @override
-  String get messaging_ConversationBuilders_submitBtnText => 'Invia';
-
-  @override
-  String get messaging_ConversationBuilders_connectionError => 'Errore di connessione, riprova più tardi';
-
-  @override
-  String get messaging_ConversationBuilders_submitError => 'Si è verificato un errore durante la creazione del gruppo, riprovare.';
-
-  @override
-  String get messaging_GroupScreen_titlePrefix => 'Gruppo:';
-
-  @override
-  String get messaging_GroupNameDialog_title => 'Nome del gruppo';
-
-  @override
-  String get messaging_GroupNameDialog_fieldLabel => 'Nome del gruppo';
-
-  @override
-  String get messaging_GroupNameDialog_fieldHint => 'Inserisci il nome del gruppo';
-
-  @override
-  String get messaging_GroupNameDialog_fieldValidation_empty => 'Per favore, inserisci il nome del gruppo';
-
-  @override
-  String get messaging_GroupNameDialog_fieldValidation_short => 'Il nome del gruppo è troppo corto';
-
-  @override
-  String get messaging_GroupNameDialog_saveBtnText => 'Salva';
-
-  @override
-  String get default_TimeoutMessagingSocketException => 'Tempo di attesa scaduto';
-
-  @override
-  String get default_CannotRemoveOwnerMessagingSocketException => 'Impossibile rimuovere il proprietario';
-
-  @override
-  String get diagnostic_AppBar_title => 'Diagnostica';
-
-  @override
-  String get diagnosticPermissionDetails_title_statusPermission => 'Stato del permesso';
-
-  @override
-  String get diagnosticPermissionDetails_button_requestPermission => 'Richiedi permesso';
-
-  @override
-  String get diagnosticPermissionDetails_button_managePermission => 'Gestisci permessi';
-
-  @override
-  String get diagnostic_permissionStatus_denied => 'Accesso negato';
-
-  @override
-  String get diagnostic_permissionStatus_granted => 'Accesso consentito';
-
-  @override
-  String get diagnostic_permissionStatus_restricted => 'Accesso limitato';
-
-  @override
-  String get diagnostic_permissionStatus_limited => 'Accesso limitato';
-
-  @override
-  String get diagnostic_permissionStatus_permanentlyDenied => 'Accesso permanentemente negato';
-
-  @override
-  String get diagnostic_permissionStatus_provisional => 'Accesso provvisorio';
-
-  @override
-  String get diagnostic_permission_camera_title => 'Fotocamera';
-
-  @override
-  String get diagnostic_permission_microphone_title => 'Microfono';
-
-  @override
-  String get diagnostic_permission_contacts_title => 'Contatti';
-
-  @override
-  String get diagnostic_permission_notification_title => 'Notifiche';
-
-  @override
-  String get diagnostic_permission_camera_description => 'Questa app richiede il permesso di accedere alla fotocamera per effettuare videochiamate.';
-
-  @override
-  String get diagnostic_permission_microphone_description => 'Questa app richiede il permesso di accedere al microfono per effettuare chiamate audio.';
-
-  @override
-  String get diagnostic_permission_contacts_description => 'Questa app richiede il permesso di accedere ai contatti per effettuare chiamate dalla tua rubrica.';
-
-  @override
-  String get diagnostic_permission_notification_description => 'Permette all\'app di attivare le chiamate in arrivo.';
-
-  @override
-  String get diagnosticScreen_pushNotificationService_title => 'Servizio di notifiche push';
-
-  @override
-  String get diagnosticScreen_permissionsGroup_title => 'Permessi';
-
-  @override
-  String get diagnosticPushDetails_configuration_title => 'Configurazione del servizio di notifiche push';
-
-  @override
-  String get diagnosticPushDetails_successMessage => 'Il servizio di notifica è stato configurato con successo ed è pronto per l’uso per ricevere messaggi e gestire le chiamate in arrivo.';
-
-  @override
-  String get diagnosticPushDetails_errorMessage_intro => 'Alcuni passi da provare:\n';
-
-  @override
-  String get diagnosticPushDetails_errorMessage_step1 => '1. Assicurati che il telefono sia connesso a Internet.\n';
-
-  @override
-  String get diagnosticPushDetails_errorMessage_step2 => '2. Se connesso, verifica che il telefono possa accedere ai servizi Google visitando un sito web.\n';
-
-  @override
-  String get diagnosticPushDetails_errorMessage_step3 => '3. Aspetta qualche minuto e riprova – i server di messaggistica Firebase potrebbero essere temporaneamente inattivi.\n';
-
-  @override
-  String get diagnosticPushDetails_errorMessage_step4 => '4. Riavvia i servizi di Google Play per assicurarne il corretto funzionamento.\n';
-
-  @override
-  String get diagnosticPushDetails_errorMessage_step5 => '5. Verifica che i servizi di Google Play siano installati sul tuo dispositivo.\n';
-
-  @override
-  String get diagnostic_pushTokenStatusType_success => 'Servizio configurato con successo';
-
-  @override
-  String get sessionStatus_pushNotificationServiceProblem => 'Problema con la configurazione del servizio di notifiche push';
-
-  @override
-  String get diagnostic_pushTokenStatusType_progress => 'In corso';
-
-  @override
-  String get diagnostic_batteryMode_unrestricted_title => 'Senza restrizioni';
-
-  @override
-  String get diagnostic_batteryMode_optimized_title => 'Ottimizzato';
-
-  @override
-  String get diagnostic_batteryMode_restricted_title => 'Limitato';
-
-  @override
-  String get diagnostic_batteryMode_unknown_title => 'Sconosciuto';
-
-  @override
-  String get diagnostic_batteryMode_unrestricted_description => 'L\'app ha pieno accesso per funzionare in background senza restrizioni.';
-
-  @override
-  String get diagnostic_batteryMode_optimized_description => 'L\'attività in background dell\'app è gestita dal sistema per risparmiare batteria. Potrebbe non funzionare correttamente con chiamate in arrivo attivate da notifiche push.';
-
-  @override
-  String get diagnostic_batteryMode_restricted_description => 'L\'attività in background dell\'app è fortemente limitata per conservare la batteria. Potrebbero essere perse chiamate in arrivo.';
-
-  @override
-  String get diagnostic_batteryMode_unknown_description => 'Lo stato della modalità batteria è sconosciuto. L\'app potrebbe avere un comportamento imprevedibile.';
-
-  @override
-  String get diagnostic_battery_groupTitle => 'Batteria';
-
-  @override
-  String get diagnostic_battery_tile_title => 'Modalità batteria';
-
-  @override
-  String get diagnostic_battery_navigate_section => 'Vai alla sezione Batteria';
-
-  @override
-  String get signalingResponseCodeType_unauthorized => 'Non hai l\'autorizzazione necessaria. Effettua l\'accesso o contatta il supporto.';
-
-  @override
-  String get signalingResponseCodeType_unknown => 'Si è verificato un problema imprevisto. Riprova più tardi.';
-
-  @override
-  String get signalingResponseCodeType_transport => 'Stiamo riscontrando difficoltà di comunicazione con il server. Controlla la tua connessione e riprova.';
-
-  @override
-  String get signalingResponseCodeType_request => 'C\'è un problema con la tua richiesta. Riprova.';
-
-  @override
-  String get signalingResponseCodeType_session => 'C\'è un problema con la tua sessione. Effettua nuovamente l\'accesso o riavvia l\'app.';
-
-  @override
-  String get signalingResponseCodeType_plugin => 'Una funzionalità necessaria non sta funzionando correttamente. Prova a riavviare l\'app.';
-
-  @override
-  String get signalingResponseCodeType_webrtc => 'C\'è un problema con la connessione della chiamata. Riaggancia e riprova.';
-
-  @override
-  String get signalingResponseCodeType_token => 'Il tuo token di accesso non è valido. Effettua nuovamente l\'accesso.';
-
-  @override
-  String get signalingResponseCode_unauthorizedRequest => 'La tua richiesta non può essere autorizzata. Prova ad accedere di nuovo.';
-
-  @override
-  String get signalingResponseCode_unauthorizedAccess => 'Non hai l\'autorizzazione per accedere a questa funzione. Contatta il supporto se pensi che ci sia un errore.';
-
-  @override
-  String get signalingResponseCode_unknownError => 'Si è verificato un errore imprevisto. Riprova più tardi.';
-
-  @override
-  String get signalingResponseCode_transportSpecificError => 'Si è verificato un problema di connessione. Controlla la tua rete e riprova.';
-
-  @override
-  String get signalingResponseCode_missingRequest => 'C\'è stato un problema con la tua richiesta. Riprova.';
-
-  @override
-  String get signalingResponseCode_unknownRequest => 'Non abbiamo riconosciuto la tua richiesta. Riprova o contatta il supporto.';
-
-  @override
-  String get signalingResponseCode_invalidJson => 'Si è verificato un errore nell\'elaborazione dei tuoi dati. Riprova.';
-
-  @override
-  String get signalingResponseCode_invalidJsonObject => 'Alcune delle informazioni fornite non sono valide. Verifica e riprova.';
-
-  @override
-  String get signalingResponseCode_missingMandatoryElement => 'Mancano informazioni obbligatorie. Compila tutti i campi richiesti.';
-
-  @override
-  String get signalingResponseCode_invalidPath => 'L\'azione richiesta non è disponibile. Prova un\'opzione diversa.';
-
-  @override
-  String get signalingResponseCode_sessionNotFound => 'Non è stata trovata la tua sessione. Effettua l\'accesso e riprova.';
-
-  @override
-  String get signalingResponseCode_handleNotFound => 'Non abbiamo trovato ciò che stavi cercando. Riprova.';
-
-  @override
-  String get signalingResponseCode_pluginNotFound => 'Manca un componente necessario. Prova a riavviare l\'app.';
-
-  @override
-  String get signalingResponseCode_errorAttachingPlugin => 'Abbiamo avuto problemi a connettere una funzione. Riprova più tardi.';
-
-  @override
-  String get signalingResponseCode_errorSendingMessage => 'Non siamo riusciti a inviare il tuo messaggio. Controlla la rete e riprova.';
-
-  @override
-  String get signalingResponseCode_errorDetachingPlugin => 'Abbiamo avuto problemi a disconnettere una funzione. Riprova più tardi.';
-
-  @override
-  String get signalingResponseCode_unsupportedJsepType => 'Questa azione non è supportata dalla tua configurazione attuale.';
-
-  @override
-  String get signalingResponseCode_invalidSdp => 'Si è verificato un errore tecnico. Riprova più tardi.';
-
-  @override
-  String get signalingResponseCode_invalidStream => 'Lo stream richiesto non è disponibile. Riprova.';
-
-  @override
-  String get signalingResponseCode_invalidElementType => 'Qualcosa non va. Riprova.';
-
-  @override
-  String get signalingResponseCode_sessionIdInUse => 'Questa sessione è già attiva. Prova a usarne un\'altra.';
-
-  @override
-  String get signalingResponseCode_unexpectedAnswer => 'Abbiamo ricevuto una risposta inaspettata. Riprova.';
-
-  @override
-  String get signalingResponseCode_tokenNotFound => 'Il tuo token di accesso è mancante o non valido. Effettua nuovamente l\'accesso.';
-
-  @override
-  String get signalingResponseCode_wrongWebrtcState => 'Si è verificato un errore relativo alla chiamata. Riaggancia e riprova.';
-
-  @override
-  String get signalingResponseCode_notAcceptingNewSessions => 'Non siamo in grado di avviare nuove sessioni al momento. Riprova più tardi.';
-
-  @override
-  String get signalingResponseCode_notFoundRoutesInReplyFromBE => 'Non abbiamo trovato un percorso per completare la tua richiesta. Riprova più tardi.';
 }
