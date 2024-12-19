@@ -44,21 +44,13 @@ class _LoginSignupEmbeddedRequestScreenState extends State<LoginSignupEmbeddedRe
       onMessageReceived: _onJavaScriptMessageReceived,
     );
     _webViewController.loadRequest(Uri.parse(widget.initialUrl.toString()));
+
+    // Ensure NavigationDelegate callbacks are only triggered if the widget is still mounted.
+    // This prevents potential errors caused by invoking callbacks after the widget has been disposed.
     _webViewController.setNavigationDelegate(NavigationDelegate(
-      onPageFinished: (_) {
-        _setWebViewLocale();
-        if (_currentError == null) _latestError = null;
-        setState(() {
-          _currentError = null;
-        });
-      },
-      onProgress: (progress) => _progressStreamController.add(progress),
-      onWebResourceError: (error) {
-        setState(() {
-          _currentError = error;
-          _latestError = error;
-        });
-      },
+      onPageFinished: (_) => mounted ? _onPageFinishedNavigationDelegate() : null,
+      onProgress: (progress) => mounted ? _onProgressNavigationDelegate(progress) : null,
+      onWebResourceError: (error) => mounted ? _onWebResourceErrorNavigationDelegate(error) : null,
     ));
   }
 
@@ -99,9 +91,28 @@ class _LoginSignupEmbeddedRequestScreenState extends State<LoginSignupEmbeddedRe
     );
   }
 
-  void _setWebViewLocale() {
-    Locale currentLocale = Localizations.localeOf(context);
+  // WebView navigation delegates
+  void _onPageFinishedNavigationDelegate() {
+    final currentLocale = Localizations.localeOf(context);
     _webViewController.runJavaScript('setLocale("${currentLocale.languageCode}");');
+
+    if (_currentError == null) _latestError = null;
+    setState(() {
+      _currentError = null;
+    });
+  }
+
+  void _onProgressNavigationDelegate(int progress) {
+    if (!_progressStreamController.isClosed) {
+      _progressStreamController.add(progress);
+    }
+  }
+
+  void _onWebResourceErrorNavigationDelegate(WebResourceError error) {
+    setState(() {
+      _currentError = error;
+      _latestError = error;
+    });
   }
 
   void _onJavaScriptMessageReceived(JavaScriptMessage message) {
