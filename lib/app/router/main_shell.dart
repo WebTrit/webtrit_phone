@@ -136,6 +136,12 @@ class _MainShellState extends State<MainShell> {
             context.read<WebtritApiClient>(),
           ),
         ),
+        RepositoryProvider<SelfConfigRepository>(
+          create: (context) => SelfConfigRepository(
+            context.read<WebtritApiClient>(),
+            context.read<AppBloc>().state.token!,
+          ),
+        ),
         RepositoryProvider<AppRepository>(
           create: (context) => AppRepository(
             webtritApiClient: context.read<WebtritApiClient>(),

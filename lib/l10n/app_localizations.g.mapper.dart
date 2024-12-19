@@ -97,10 +97,10 @@ class AppLocalizationsMapper {
           localizations.call_description_transferProcessing,
       'call_FailureAcknowledgeDialog_title':
           localizations.call_FailureAcknowledgeDialog_title,
-      'callProcessingStatus_disconnecting':
-          localizations.callProcessingStatus_disconnecting,
       'callProcessingStatus_answering':
           localizations.callProcessingStatus_answering,
+      'callProcessingStatus_disconnecting':
+          localizations.callProcessingStatus_disconnecting,
       'callStatus_appUnregistered': localizations.callStatus_appUnregistered,
       'callStatus_connectError': localizations.callStatus_connectError,
       'callStatus_connectIssue': localizations.callStatus_connectIssue,
@@ -144,6 +144,8 @@ class AppLocalizationsMapper {
           localizations.copyToClipboard_floatingSnackBar,
       'copyToClipboard_popupMenuItem':
           localizations.copyToClipboard_popupMenuItem,
+      'default_CannotRemoveOwnerMessagingSocketException':
+          localizations.default_CannotRemoveOwnerMessagingSocketException,
       'default_ChatMemberNotFoundMessagingSocketException':
           localizations.default_ChatMemberNotFoundMessagingSocketException,
       'default_ChatNotFoundMessagingSocketException':
@@ -176,6 +178,8 @@ class AppLocalizationsMapper {
           localizations.default_SocketExceptionError,
       'default_TimeoutExceptionError':
           localizations.default_TimeoutExceptionError,
+      'default_TimeoutMessagingSocketException':
+          localizations.default_TimeoutMessagingSocketException,
       'default_TlsExceptionError': localizations.default_TlsExceptionError,
       'default_TypeErrorError': localizations.default_TypeErrorError,
       'default_UnauthorizedMessagingSocketException':
@@ -184,6 +188,87 @@ class AppLocalizationsMapper {
           localizations.default_UnauthorizedRequestFailureError,
       'default_UserAlreadyInChatMessagingSocketException':
           localizations.default_UserAlreadyInChatMessagingSocketException,
+      'diagnostic_AppBar_title': localizations.diagnostic_AppBar_title,
+      'diagnostic_battery_groupTitle':
+          localizations.diagnostic_battery_groupTitle,
+      'diagnostic_batteryMode_optimized_description':
+          localizations.diagnostic_batteryMode_optimized_description,
+      'diagnostic_batteryMode_optimized_title':
+          localizations.diagnostic_batteryMode_optimized_title,
+      'diagnostic_batteryMode_restricted_description':
+          localizations.diagnostic_batteryMode_restricted_description,
+      'diagnostic_batteryMode_restricted_title':
+          localizations.diagnostic_batteryMode_restricted_title,
+      'diagnostic_batteryMode_unknown_description':
+          localizations.diagnostic_batteryMode_unknown_description,
+      'diagnostic_batteryMode_unknown_title':
+          localizations.diagnostic_batteryMode_unknown_title,
+      'diagnostic_batteryMode_unrestricted_description':
+          localizations.diagnostic_batteryMode_unrestricted_description,
+      'diagnostic_batteryMode_unrestricted_title':
+          localizations.diagnostic_batteryMode_unrestricted_title,
+      'diagnostic_battery_navigate_section':
+          localizations.diagnostic_battery_navigate_section,
+      'diagnostic_battery_tile_title':
+          localizations.diagnostic_battery_tile_title,
+      'diagnostic_permission_camera_description':
+          localizations.diagnostic_permission_camera_description,
+      'diagnostic_permission_camera_title':
+          localizations.diagnostic_permission_camera_title,
+      'diagnostic_permission_contacts_description':
+          localizations.diagnostic_permission_contacts_description,
+      'diagnostic_permission_contacts_title':
+          localizations.diagnostic_permission_contacts_title,
+      'diagnosticPermissionDetails_button_managePermission':
+          localizations.diagnosticPermissionDetails_button_managePermission,
+      'diagnosticPermissionDetails_button_requestPermission':
+          localizations.diagnosticPermissionDetails_button_requestPermission,
+      'diagnosticPermissionDetails_title_statusPermission':
+          localizations.diagnosticPermissionDetails_title_statusPermission,
+      'diagnostic_permission_microphone_description':
+          localizations.diagnostic_permission_microphone_description,
+      'diagnostic_permission_microphone_title':
+          localizations.diagnostic_permission_microphone_title,
+      'diagnostic_permission_notification_description':
+          localizations.diagnostic_permission_notification_description,
+      'diagnostic_permission_notification_title':
+          localizations.diagnostic_permission_notification_title,
+      'diagnostic_permissionStatus_denied':
+          localizations.diagnostic_permissionStatus_denied,
+      'diagnostic_permissionStatus_granted':
+          localizations.diagnostic_permissionStatus_granted,
+      'diagnostic_permissionStatus_limited':
+          localizations.diagnostic_permissionStatus_limited,
+      'diagnostic_permissionStatus_permanentlyDenied':
+          localizations.diagnostic_permissionStatus_permanentlyDenied,
+      'diagnostic_permissionStatus_provisional':
+          localizations.diagnostic_permissionStatus_provisional,
+      'diagnostic_permissionStatus_restricted':
+          localizations.diagnostic_permissionStatus_restricted,
+      'diagnosticPushDetails_configuration_title':
+          localizations.diagnosticPushDetails_configuration_title,
+      'diagnosticPushDetails_errorMessage_intro':
+          localizations.diagnosticPushDetails_errorMessage_intro,
+      'diagnosticPushDetails_errorMessage_step1':
+          localizations.diagnosticPushDetails_errorMessage_step1,
+      'diagnosticPushDetails_errorMessage_step2':
+          localizations.diagnosticPushDetails_errorMessage_step2,
+      'diagnosticPushDetails_errorMessage_step3':
+          localizations.diagnosticPushDetails_errorMessage_step3,
+      'diagnosticPushDetails_errorMessage_step4':
+          localizations.diagnosticPushDetails_errorMessage_step4,
+      'diagnosticPushDetails_errorMessage_step5':
+          localizations.diagnosticPushDetails_errorMessage_step5,
+      'diagnosticPushDetails_successMessage':
+          localizations.diagnosticPushDetails_successMessage,
+      'diagnostic_pushTokenStatusType_progress':
+          localizations.diagnostic_pushTokenStatusType_progress,
+      'diagnostic_pushTokenStatusType_success':
+          localizations.diagnostic_pushTokenStatusType_success,
+      'diagnosticScreen_permissionsGroup_title':
+          localizations.diagnosticScreen_permissionsGroup_title,
+      'diagnosticScreen_pushNotificationService_title':
+          localizations.diagnosticScreen_pushNotificationService_title,
       'favorites_BodyCenter_empty': localizations.favorites_BodyCenter_empty,
       'favorites_DeleteConfirmDialog_content':
           localizations.favorites_DeleteConfirmDialog_content,
@@ -317,10 +402,16 @@ class AppLocalizationsMapper {
           localizations.messaging_ConfirmDialog_cancel,
       'messaging_ConfirmDialog_confirm':
           localizations.messaging_ConfirmDialog_confirm,
+      'messaging_ConversationBuilders_addUserBtnText':
+          localizations.messaging_ConversationBuilders_addUserBtnText,
       'messaging_ConversationBuilders_back':
           localizations.messaging_ConversationBuilders_back,
+      'messaging_ConversationBuilders_back_action':
+          localizations.messaging_ConversationBuilders_back_action,
       'messaging_ConversationBuilders_cancel':
           localizations.messaging_ConversationBuilders_cancel,
+      'messaging_ConversationBuilders_connectionError':
+          localizations.messaging_ConversationBuilders_connectionError,
       'messaging_ConversationBuilders_contactOrNumberSearch_hint': localizations
           .messaging_ConversationBuilders_contactOrNumberSearch_hint,
       'messaging_ConversationBuilders_contactSearch_hint':
@@ -331,6 +422,8 @@ class AppLocalizationsMapper {
           localizations.messaging_ConversationBuilders_createGroup,
       'messaging_ConversationBuilders_externalContacts_heading':
           localizations.messaging_ConversationBuilders_externalContacts_heading,
+      'messaging_ConversationBuilders_groupNameHeadline':
+          localizations.messaging_ConversationBuilders_groupNameHeadline,
       'messaging_ConversationBuilders_invalidNumber_message1':
           localizations.messaging_ConversationBuilders_invalidNumber_message1,
       'messaging_ConversationBuilders_invalidNumber_message2':
@@ -361,6 +454,10 @@ class AppLocalizationsMapper {
           localizations.messaging_ConversationBuilders_numberSearch_errorError,
       'messaging_ConversationBuilders_numberSearch_errorHint':
           localizations.messaging_ConversationBuilders_numberSearch_errorHint,
+      'messaging_ConversationBuilders_submitBtnText':
+          localizations.messaging_ConversationBuilders_submitBtnText,
+      'messaging_ConversationBuilders_submitError':
+          localizations.messaging_ConversationBuilders_submitError,
       'messaging_ConversationBuilders_title_group':
           localizations.messaging_ConversationBuilders_title_group,
       'messaging_ConversationBuilders_title_new':
@@ -373,8 +470,6 @@ class AppLocalizationsMapper {
           localizations.messaging_ConversationsScreen_chatsSearch_hint,
       'messaging_ConversationsScreen_empty':
           localizations.messaging_ConversationsScreen_empty,
-      'messaging_ConversationsScreen_unsupported':
-          localizations.messaging_ConversationsScreen_unsupported,
       'messaging_ConversationsScreen_messages_title':
           localizations.messaging_ConversationsScreen_messages_title,
       'messaging_ConversationsScreen_noNumberAlert_text':
@@ -387,6 +482,10 @@ class AppLocalizationsMapper {
           localizations.messaging_ConversationsScreen_smses_title,
       'messaging_ConversationsScreen_smssSearch_hint':
           localizations.messaging_ConversationsScreen_smssSearch_hint,
+      'messaging_ConversationsScreen_startDialog':
+          localizations.messaging_ConversationsScreen_startDialog,
+      'messaging_ConversationsScreen_unsupported':
+          localizations.messaging_ConversationsScreen_unsupported,
       'messaging_Conversations_tile_empty':
           localizations.messaging_Conversations_tile_empty,
       'messaging_Conversations_tile_you':
@@ -431,6 +530,20 @@ class AppLocalizationsMapper {
           localizations.messaging_GroupInfo_unmakeModeratorBtnText,
       'messaging_GroupNameDialog_cancelBtnText':
           localizations.messaging_GroupNameDialog_cancelBtnText,
+      'messaging_GroupNameDialog_fieldHint':
+          localizations.messaging_GroupNameDialog_fieldHint,
+      'messaging_GroupNameDialog_fieldLabel':
+          localizations.messaging_GroupNameDialog_fieldLabel,
+      'messaging_GroupNameDialog_fieldValidation_empty':
+          localizations.messaging_GroupNameDialog_fieldValidation_empty,
+      'messaging_GroupNameDialog_fieldValidation_short':
+          localizations.messaging_GroupNameDialog_fieldValidation_short,
+      'messaging_GroupNameDialog_saveBtnText':
+          localizations.messaging_GroupNameDialog_saveBtnText,
+      'messaging_GroupNameDialog_title':
+          localizations.messaging_GroupNameDialog_title,
+      'messaging_GroupScreen_titlePrefix':
+          localizations.messaging_GroupScreen_titlePrefix,
       'messaging_MessageField_hint': localizations.messaging_MessageField_hint,
       'messaging_MessageListView_typingTrail':
           localizations.messaging_MessageListView_typingTrail,
@@ -443,9 +556,15 @@ class AppLocalizationsMapper {
           localizations.messaging_MessageView_edited,
       'messaging_MessageView_forward':
           localizations.messaging_MessageView_forward,
+      'messaging_MessageView_forwarded':
+          localizations.messaging_MessageView_forwarded,
       'messaging_MessageView_reply': localizations.messaging_MessageView_reply,
       'messaging_MessageView_textcopy':
           localizations.messaging_MessageView_textcopy,
+      'messaging_NewConversation_createGroup':
+          localizations.messaging_NewConversation_createGroup,
+      'messaging_NewConversation_title':
+          localizations.messaging_NewConversation_title,
       'messaging_ParticipantName_you':
           localizations.messaging_ParticipantName_you,
       'messaging_SmsSendingStatus_delivered':
@@ -486,6 +605,18 @@ class AppLocalizationsMapper {
       'notifications_errorSnackBar_sipServiceUnavailable':
           localizations.notifications_errorSnackBar_sipServiceUnavailable,
       'permission_Button_request': localizations.permission_Button_request,
+      'permission_manageFullScreenNotificationInstructions_step1': localizations
+          .permission_manageFullScreenNotificationInstructions_step1,
+      'permission_manageFullScreenNotificationInstructions_step2': localizations
+          .permission_manageFullScreenNotificationInstructions_step2,
+      'permission_manageFullScreenNotificationInstructions_step3': localizations
+          .permission_manageFullScreenNotificationInstructions_step3,
+      'permission_manageFullScreenNotificationInstructions_step4': localizations
+          .permission_manageFullScreenNotificationInstructions_step4,
+      'permission_manageFullScreenNotificationInstructions_step5': localizations
+          .permission_manageFullScreenNotificationInstructions_step5,
+      'permission_manageFullScreenNotificationPermissions':
+          localizations.permission_manageFullScreenNotificationPermissions,
       'permission_manufacturer_Button_gotIt':
           localizations.permission_manufacturer_Button_gotIt,
       'permission_manufacturer_Button_toSettings':
@@ -499,26 +630,14 @@ class AppLocalizationsMapper {
       'permission_manufacturer_Text_xiaomi_tip2':
           localizations.permission_manufacturer_Text_xiaomi_tip2,
       'permission_Text_description': localizations.permission_Text_description,
-      'permission_manageFullScreenNotificationPermissions':
-          localizations.permission_manageFullScreenNotificationPermissions,
-      'permission_manageFullScreenNotificationInstructions_step1': localizations
-          .permission_manageFullScreenNotificationInstructions_step1,
-      'permission_manageFullScreenNotificationInstructions_step2': localizations
-          .permission_manageFullScreenNotificationInstructions_step2,
-      'permission_manageFullScreenNotificationInstructions_step3': localizations
-          .permission_manageFullScreenNotificationInstructions_step3,
-      'permission_manageFullScreenNotificationInstructions_step4': localizations
-          .permission_manageFullScreenNotificationInstructions_step4,
-      'permission_manageFullScreenNotificationInstructions_step5': localizations
-          .permission_manageFullScreenNotificationInstructions_step5,
       'recents_DeleteConfirmDialog_content':
           localizations.recents_DeleteConfirmDialog_content,
       'recents_DeleteConfirmDialog_title':
           localizations.recents_DeleteConfirmDialog_title,
-      'recents_Text_blingTransferInitiated':
-          localizations.recents_Text_blingTransferInitiated,
       'recents_HistoryTile_missedCallText':
           localizations.recents_HistoryTile_missedCallText,
+      'recents_Text_blingTransferInitiated':
+          localizations.recents_Text_blingTransferInitiated,
       'recentsVisibilityFilter_all': localizations.recentsVisibilityFilter_all,
       'recentsVisibilityFilter_all_preposit':
           localizations.recentsVisibilityFilter_all_preposit,
@@ -536,24 +655,44 @@ class AppLocalizationsMapper {
           localizations.recentsVisibilityFilter_outgoing_preposit,
       'request_Id': localizations.request_Id,
       'request_StatusCode': localizations.request_StatusCode,
+      'sessionStatus_pushNotificationServiceProblem':
+          localizations.sessionStatus_pushNotificationServiceProblem,
+      'settings_AboutText_AppSessionIdentifier':
+          localizations.settings_AboutText_AppSessionIdentifier,
       'settings_AboutText_AppVersion':
           localizations.settings_AboutText_AppVersion,
       'settings_AboutText_CoreVersionUndefined':
           localizations.settings_AboutText_CoreVersionUndefined,
-      'settings_AboutText_StoreVersion':
-          localizations.settings_AboutText_StoreVersion,
       'settings_AboutText_FCMPushNotificationToken':
           localizations.settings_AboutText_FCMPushNotificationToken,
+      'settings_AboutText_StoreVersion':
+          localizations.settings_AboutText_StoreVersion,
       'settings_AccountDeleteConfirmDialog_content':
           localizations.settings_AccountDeleteConfirmDialog_content,
       'settings_AccountDeleteConfirmDialog_title':
           localizations.settings_AccountDeleteConfirmDialog_title,
       'settings_AppBarTitle_myAccount':
           localizations.settings_AppBarTitle_myAccount,
+      'settings_call_codecs_preferred_audio_default':
+          localizations.settings_call_codecs_preferred_audio_default,
+      'settings_call_codecs_preferred_audio_tip':
+          localizations.settings_call_codecs_preferred_audio_tip,
+      'settings_call_codecs_preferred_audio_title':
+          localizations.settings_call_codecs_preferred_audio_title,
+      'settings_call_codecs_preferred_video_default':
+          localizations.settings_call_codecs_preferred_video_default,
+      'settings_call_codecs_preferred_video_tip':
+          localizations.settings_call_codecs_preferred_video_tip,
+      'settings_call_codecs_preferred_video_title':
+          localizations.settings_call_codecs_preferred_video_title,
       'settings_ListViewTileTitle_about':
           localizations.settings_ListViewTileTitle_about,
       'settings_ListViewTileTitle_accountDelete':
           localizations.settings_ListViewTileTitle_accountDelete,
+      'settings_ListViewTileTitle_call_codecs':
+          localizations.settings_ListViewTileTitle_call_codecs,
+      'settings_ListViewTileTitle_self_config':
+          localizations.settings_ListViewTileTitle_self_config,
       'settings_ListViewTileTitle_help':
           localizations.settings_ListViewTileTitle_help,
       'settings_ListViewTileTitle_language':
@@ -564,8 +703,6 @@ class AppLocalizationsMapper {
           localizations.settings_ListViewTileTitle_logRecordsConsole,
       'settings_ListViewTileTitle_network':
           localizations.settings_ListViewTileTitle_network,
-      'settings_ListViewTileTitle_call_codecs':
-          localizations.settings_ListViewTileTitle_call_codecs,
       'settings_ListViewTileTitle_registered':
           localizations.settings_ListViewTileTitle_registered,
       'settings_ListViewTileTitle_settings':
@@ -580,29 +717,85 @@ class AppLocalizationsMapper {
           localizations.settings_LogoutConfirmDialog_content,
       'settings_LogoutConfirmDialog_title':
           localizations.settings_LogoutConfirmDialog_title,
-      'settings_network_incomingCallType_title':
-          localizations.settings_network_incomingCallType_title,
-      'settings_network_incomingCallType_pushNotification_title': localizations
-          .settings_network_incomingCallType_pushNotification_title,
       'settings_network_incomingCallType_pushNotification_description':
           localizations
               .settings_network_incomingCallType_pushNotification_description,
-      'settings_network_incomingCallType_socket_title':
-          localizations.settings_network_incomingCallType_socket_title,
+      'settings_network_incomingCallType_pushNotification_title': localizations
+          .settings_network_incomingCallType_pushNotification_title,
       'settings_network_incomingCallType_socket_description':
           localizations.settings_network_incomingCallType_socket_description,
-      'settings_call_codecs_preferred_audio_title':
-          localizations.settings_call_codecs_preferred_audio_title,
-      'settings_call_codecs_preferred_audio_tip':
-          localizations.settings_call_codecs_preferred_audio_tip,
-      'settings_call_codecs_preferred_audio_default':
-          localizations.settings_call_codecs_preferred_audio_default,
-      'settings_call_codecs_preferred_video_title':
-          localizations.settings_call_codecs_preferred_video_title,
-      'settings_call_codecs_preferred_video_tip':
-          localizations.settings_call_codecs_preferred_video_tip,
-      'settings_call_codecs_preferred_video_default':
-          localizations.settings_call_codecs_preferred_video_default,
+      'settings_network_incomingCallType_socket_title':
+          localizations.settings_network_incomingCallType_socket_title,
+      'settings_network_incomingCallType_title':
+          localizations.settings_network_incomingCallType_title,
+      'signalingResponseCode_errorAttachingPlugin':
+          localizations.signalingResponseCode_errorAttachingPlugin,
+      'signalingResponseCode_errorDetachingPlugin':
+          localizations.signalingResponseCode_errorDetachingPlugin,
+      'signalingResponseCode_errorSendingMessage':
+          localizations.signalingResponseCode_errorSendingMessage,
+      'signalingResponseCode_handleNotFound':
+          localizations.signalingResponseCode_handleNotFound,
+      'signalingResponseCode_invalidElementType':
+          localizations.signalingResponseCode_invalidElementType,
+      'signalingResponseCode_invalidJson':
+          localizations.signalingResponseCode_invalidJson,
+      'signalingResponseCode_invalidJsonObject':
+          localizations.signalingResponseCode_invalidJsonObject,
+      'signalingResponseCode_invalidPath':
+          localizations.signalingResponseCode_invalidPath,
+      'signalingResponseCode_invalidSdp':
+          localizations.signalingResponseCode_invalidSdp,
+      'signalingResponseCode_invalidStream':
+          localizations.signalingResponseCode_invalidStream,
+      'signalingResponseCode_missingMandatoryElement':
+          localizations.signalingResponseCode_missingMandatoryElement,
+      'signalingResponseCode_missingRequest':
+          localizations.signalingResponseCode_missingRequest,
+      'signalingResponseCode_notAcceptingNewSessions':
+          localizations.signalingResponseCode_notAcceptingNewSessions,
+      'signalingResponseCode_notFoundRoutesInReplyFromBE':
+          localizations.signalingResponseCode_notFoundRoutesInReplyFromBE,
+      'signalingResponseCode_pluginNotFound':
+          localizations.signalingResponseCode_pluginNotFound,
+      'signalingResponseCode_sessionIdInUse':
+          localizations.signalingResponseCode_sessionIdInUse,
+      'signalingResponseCode_sessionNotFound':
+          localizations.signalingResponseCode_sessionNotFound,
+      'signalingResponseCode_tokenNotFound':
+          localizations.signalingResponseCode_tokenNotFound,
+      'signalingResponseCode_transportSpecificError':
+          localizations.signalingResponseCode_transportSpecificError,
+      'signalingResponseCodeType_plugin':
+          localizations.signalingResponseCodeType_plugin,
+      'signalingResponseCodeType_request':
+          localizations.signalingResponseCodeType_request,
+      'signalingResponseCodeType_session':
+          localizations.signalingResponseCodeType_session,
+      'signalingResponseCodeType_token':
+          localizations.signalingResponseCodeType_token,
+      'signalingResponseCodeType_transport':
+          localizations.signalingResponseCodeType_transport,
+      'signalingResponseCodeType_unauthorized':
+          localizations.signalingResponseCodeType_unauthorized,
+      'signalingResponseCodeType_unknown':
+          localizations.signalingResponseCodeType_unknown,
+      'signalingResponseCodeType_webrtc':
+          localizations.signalingResponseCodeType_webrtc,
+      'signalingResponseCode_unauthorizedAccess':
+          localizations.signalingResponseCode_unauthorizedAccess,
+      'signalingResponseCode_unauthorizedRequest':
+          localizations.signalingResponseCode_unauthorizedRequest,
+      'signalingResponseCode_unexpectedAnswer':
+          localizations.signalingResponseCode_unexpectedAnswer,
+      'signalingResponseCode_unknownError':
+          localizations.signalingResponseCode_unknownError,
+      'signalingResponseCode_unknownRequest':
+          localizations.signalingResponseCode_unknownRequest,
+      'signalingResponseCode_unsupportedJsepType':
+          localizations.signalingResponseCode_unsupportedJsepType,
+      'signalingResponseCode_wrongWebrtcState':
+          localizations.signalingResponseCode_wrongWebrtcState,
       'themeMode_dark': localizations.themeMode_dark,
       'themeMode_light': localizations.themeMode_light,
       'themeMode_system': localizations.themeMode_system,
@@ -616,191 +809,6 @@ class AppLocalizationsMapper {
           localizations.webRegistration_ErrorAcknowledgeDialogActions_skip,
       'webRegistration_ErrorAcknowledgeDialog_title':
           localizations.webRegistration_ErrorAcknowledgeDialog_title,
-      'messaging_MessageView_forwarded':
-          localizations.messaging_MessageView_forwarded,
-      'messaging_ConversationsScreen_startDialog':
-          localizations.messaging_ConversationsScreen_startDialog,
-      'messaging_ConversationBuilders_back_action':
-          localizations.messaging_ConversationBuilders_back_action,
-      'messaging_ConversationBuilders_groupNameHeadline':
-          localizations.messaging_ConversationBuilders_groupNameHeadline,
-      'messaging_ConversationBuilders_addUserBtnText':
-          localizations.messaging_ConversationBuilders_addUserBtnText,
-      'messaging_ConversationBuilders_submitBtnText':
-          localizations.messaging_ConversationBuilders_submitBtnText,
-      'messaging_ConversationBuilders_connectionError':
-          localizations.messaging_ConversationBuilders_connectionError,
-      'messaging_ConversationBuilders_submitError':
-          localizations.messaging_ConversationBuilders_submitError,
-      'messaging_GroupScreen_titlePrefix':
-          localizations.messaging_GroupScreen_titlePrefix,
-      'messaging_GroupNameDialog_title':
-          localizations.messaging_GroupNameDialog_title,
-      'messaging_GroupNameDialog_fieldLabel':
-          localizations.messaging_GroupNameDialog_fieldLabel,
-      'messaging_GroupNameDialog_fieldHint':
-          localizations.messaging_GroupNameDialog_fieldHint,
-      'messaging_GroupNameDialog_fieldValidation_empty':
-          localizations.messaging_GroupNameDialog_fieldValidation_empty,
-      'messaging_GroupNameDialog_fieldValidation_short':
-          localizations.messaging_GroupNameDialog_fieldValidation_short,
-      'messaging_GroupNameDialog_saveBtnText':
-          localizations.messaging_GroupNameDialog_saveBtnText,
-      'default_TimeoutMessagingSocketException':
-          localizations.default_TimeoutMessagingSocketException,
-      'default_CannotRemoveOwnerMessagingSocketException':
-          localizations.default_CannotRemoveOwnerMessagingSocketException,
-      'diagnostic_AppBar_title': localizations.diagnostic_AppBar_title,
-      'diagnosticPermissionDetails_title_statusPermission':
-          localizations.diagnosticPermissionDetails_title_statusPermission,
-      'diagnosticPermissionDetails_button_requestPermission':
-          localizations.diagnosticPermissionDetails_button_requestPermission,
-      'diagnosticPermissionDetails_button_managePermission':
-          localizations.diagnosticPermissionDetails_button_managePermission,
-      'diagnostic_permissionStatus_denied':
-          localizations.diagnostic_permissionStatus_denied,
-      'diagnostic_permissionStatus_granted':
-          localizations.diagnostic_permissionStatus_granted,
-      'diagnostic_permissionStatus_restricted':
-          localizations.diagnostic_permissionStatus_restricted,
-      'diagnostic_permissionStatus_limited':
-          localizations.diagnostic_permissionStatus_limited,
-      'diagnostic_permissionStatus_permanentlyDenied':
-          localizations.diagnostic_permissionStatus_permanentlyDenied,
-      'diagnostic_permissionStatus_provisional':
-          localizations.diagnostic_permissionStatus_provisional,
-      'diagnostic_permission_camera_title':
-          localizations.diagnostic_permission_camera_title,
-      'diagnostic_permission_microphone_title':
-          localizations.diagnostic_permission_microphone_title,
-      'diagnostic_permission_contacts_title':
-          localizations.diagnostic_permission_contacts_title,
-      'diagnostic_permission_notification_title':
-          localizations.diagnostic_permission_notification_title,
-      'diagnostic_permission_camera_description':
-          localizations.diagnostic_permission_camera_description,
-      'diagnostic_permission_microphone_description':
-          localizations.diagnostic_permission_microphone_description,
-      'diagnostic_permission_contacts_description':
-          localizations.diagnostic_permission_contacts_description,
-      'diagnostic_permission_notification_description':
-          localizations.diagnostic_permission_notification_description,
-      'diagnosticScreen_pushNotificationService_title':
-          localizations.diagnosticScreen_pushNotificationService_title,
-      'diagnosticScreen_permissionsGroup_title':
-          localizations.diagnosticScreen_permissionsGroup_title,
-      'diagnosticPushDetails_configuration_title':
-          localizations.diagnosticPushDetails_configuration_title,
-      'diagnosticPushDetails_successMessage':
-          localizations.diagnosticPushDetails_successMessage,
-      'diagnosticPushDetails_errorMessage_intro':
-          localizations.diagnosticPushDetails_errorMessage_intro,
-      'diagnosticPushDetails_errorMessage_step1':
-          localizations.diagnosticPushDetails_errorMessage_step1,
-      'diagnosticPushDetails_errorMessage_step2':
-          localizations.diagnosticPushDetails_errorMessage_step2,
-      'diagnosticPushDetails_errorMessage_step3':
-          localizations.diagnosticPushDetails_errorMessage_step3,
-      'diagnosticPushDetails_errorMessage_step4':
-          localizations.diagnosticPushDetails_errorMessage_step4,
-      'diagnosticPushDetails_errorMessage_step5':
-          localizations.diagnosticPushDetails_errorMessage_step5,
-      'diagnostic_pushTokenStatusType_success':
-          localizations.diagnostic_pushTokenStatusType_success,
-      'sessionStatus_pushNotificationServiceProblem':
-          localizations.sessionStatus_pushNotificationServiceProblem,
-      'diagnostic_pushTokenStatusType_progress':
-          localizations.diagnostic_pushTokenStatusType_progress,
-      'diagnostic_batteryMode_unrestricted_title':
-          localizations.diagnostic_batteryMode_unrestricted_title,
-      'diagnostic_batteryMode_optimized_title':
-          localizations.diagnostic_batteryMode_optimized_title,
-      'diagnostic_batteryMode_restricted_title':
-          localizations.diagnostic_batteryMode_restricted_title,
-      'diagnostic_batteryMode_unknown_title':
-          localizations.diagnostic_batteryMode_unknown_title,
-      'diagnostic_batteryMode_unrestricted_description':
-          localizations.diagnostic_batteryMode_unrestricted_description,
-      'diagnostic_batteryMode_optimized_description':
-          localizations.diagnostic_batteryMode_optimized_description,
-      'diagnostic_batteryMode_restricted_description':
-          localizations.diagnostic_batteryMode_restricted_description,
-      'diagnostic_batteryMode_unknown_description':
-          localizations.diagnostic_batteryMode_unknown_description,
-      'diagnostic_battery_groupTitle':
-          localizations.diagnostic_battery_groupTitle,
-      'diagnostic_battery_tile_title':
-          localizations.diagnostic_battery_tile_title,
-      'diagnostic_battery_navigate_section':
-          localizations.diagnostic_battery_navigate_section,
-      'signalingResponseCodeType_unauthorized':
-          localizations.signalingResponseCodeType_unauthorized,
-      'signalingResponseCodeType_unknown':
-          localizations.signalingResponseCodeType_unknown,
-      'signalingResponseCodeType_transport':
-          localizations.signalingResponseCodeType_transport,
-      'signalingResponseCodeType_request':
-          localizations.signalingResponseCodeType_request,
-      'signalingResponseCodeType_session':
-          localizations.signalingResponseCodeType_session,
-      'signalingResponseCodeType_plugin':
-          localizations.signalingResponseCodeType_plugin,
-      'signalingResponseCodeType_webrtc':
-          localizations.signalingResponseCodeType_webrtc,
-      'signalingResponseCodeType_token':
-          localizations.signalingResponseCodeType_token,
-      'signalingResponseCode_unauthorizedRequest':
-          localizations.signalingResponseCode_unauthorizedRequest,
-      'signalingResponseCode_unauthorizedAccess':
-          localizations.signalingResponseCode_unauthorizedAccess,
-      'signalingResponseCode_unknownError':
-          localizations.signalingResponseCode_unknownError,
-      'signalingResponseCode_transportSpecificError':
-          localizations.signalingResponseCode_transportSpecificError,
-      'signalingResponseCode_missingRequest':
-          localizations.signalingResponseCode_missingRequest,
-      'signalingResponseCode_unknownRequest':
-          localizations.signalingResponseCode_unknownRequest,
-      'signalingResponseCode_invalidJson':
-          localizations.signalingResponseCode_invalidJson,
-      'signalingResponseCode_invalidJsonObject':
-          localizations.signalingResponseCode_invalidJsonObject,
-      'signalingResponseCode_missingMandatoryElement':
-          localizations.signalingResponseCode_missingMandatoryElement,
-      'signalingResponseCode_invalidPath':
-          localizations.signalingResponseCode_invalidPath,
-      'signalingResponseCode_sessionNotFound':
-          localizations.signalingResponseCode_sessionNotFound,
-      'signalingResponseCode_handleNotFound':
-          localizations.signalingResponseCode_handleNotFound,
-      'signalingResponseCode_pluginNotFound':
-          localizations.signalingResponseCode_pluginNotFound,
-      'signalingResponseCode_errorAttachingPlugin':
-          localizations.signalingResponseCode_errorAttachingPlugin,
-      'signalingResponseCode_errorSendingMessage':
-          localizations.signalingResponseCode_errorSendingMessage,
-      'signalingResponseCode_errorDetachingPlugin':
-          localizations.signalingResponseCode_errorDetachingPlugin,
-      'signalingResponseCode_unsupportedJsepType':
-          localizations.signalingResponseCode_unsupportedJsepType,
-      'signalingResponseCode_invalidSdp':
-          localizations.signalingResponseCode_invalidSdp,
-      'signalingResponseCode_invalidStream':
-          localizations.signalingResponseCode_invalidStream,
-      'signalingResponseCode_invalidElementType':
-          localizations.signalingResponseCode_invalidElementType,
-      'signalingResponseCode_sessionIdInUse':
-          localizations.signalingResponseCode_sessionIdInUse,
-      'signalingResponseCode_unexpectedAnswer':
-          localizations.signalingResponseCode_unexpectedAnswer,
-      'signalingResponseCode_tokenNotFound':
-          localizations.signalingResponseCode_tokenNotFound,
-      'signalingResponseCode_wrongWebrtcState':
-          localizations.signalingResponseCode_wrongWebrtcState,
-      'signalingResponseCode_notAcceptingNewSessions':
-          localizations.signalingResponseCode_notAcceptingNewSessions,
-      'signalingResponseCode_notFoundRoutesInReplyFromBE':
-          localizations.signalingResponseCode_notFoundRoutesInReplyFromBE,
       'favorites_SnackBar_deleted': (name) =>
           localizations.favorites_SnackBar_deleted(name),
       'login_Button_otpSigninVerifyRepeatInterval': (seconds) =>

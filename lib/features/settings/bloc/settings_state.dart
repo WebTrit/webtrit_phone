@@ -6,5 +6,6 @@ class SettingsState with _$SettingsState {
     @Default(false) bool progress,
     required bool registerStatus,
     UserInfo? info,
+    SelfConfig? selfConfig,
   }) = _SettingsState;
 }

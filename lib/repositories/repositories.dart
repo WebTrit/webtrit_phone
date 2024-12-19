@@ -17,3 +17,4 @@ export 'recents/recents_repository.dart';
 export 'route_state/route_state.dart';
 export 'sms/sms.dart';
 export 'system_info/system_info_repository.dart';
+export 'self_config/self_config_repository.dart';
