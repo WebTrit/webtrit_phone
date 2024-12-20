@@ -8,6 +8,7 @@ import 'package:webtrit_phone/features/embedded/exports.dart';
 import 'package:webtrit_phone/features/session_status/session_status.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/models/self_config.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../settings.dart';
@@ -97,6 +98,8 @@ class SettingsScreen extends StatelessWidget {
                   BlocBuilder<SettingsBloc, SettingsState>(
                     buildWhen: (previous, current) => previous.selfConfig != current.selfConfig,
                     builder: (context, state) {
+                      final selfConfig = state.selfConfig;
+
                       return Column(
                         children: [
                           for (var section in sections)
@@ -191,14 +194,14 @@ class SettingsScreen extends StatelessWidget {
                                         ),
                                         const ListTileSeparator(),
                                       ])
-                                    else if (item.flavor == SettingsFlavor.selfConfig && state.selfConfig != null)
+                                    else if (item.flavor == SettingsFlavor.selfConfig &&
+                                        selfConfig is SelfConfigSupported)
                                       Column(children: [
                                         ListTile(
                                           leading: Icon(item.icon),
                                           title: Text(context.parseL10n(item.titleL10n)),
                                           onTap: () {
-                                            context.router
-                                                .navigate(SelfConfigScreenPageRoute(url: state.selfConfig!.url));
+                                            context.router.navigate(SelfConfigScreenPageRoute(url: selfConfig.url));
                                           },
                                         ),
                                         const ListTileSeparator(),

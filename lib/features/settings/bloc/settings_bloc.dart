@@ -27,6 +27,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     required this.selfConfigRepository,
     required this.appRepository,
     required this.appPreferences,
+    required this.settingsFeature,
   }) : super(SettingsState(registerStatus: appPreferences.getRegisterStatus())) {
     on<SettingsRefreshed>(_onRefreshed, transformer: restartable());
     on<SettingsLogouted>(_onLogouted, transformer: droppable());
@@ -40,6 +41,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   final SelfConfigRepository selfConfigRepository;
   final AppRepository appRepository;
   final AppPreferences appPreferences;
+  final SettingsFeature settingsFeature;
 
   Future<void> fetchUserInfo(Emitter<SettingsState> emit) async {
     try {
@@ -77,9 +79,17 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   }
 
   FutureOr<void> _onRefreshed(SettingsRefreshed event, Emitter<SettingsState> emit) async {
+    final isSelfConfigEnabled = settingsFeature.isSelfConfigEnabled;
+
     emit(state.copyWith(progress: true));
     _logger.info('Refreshing settings');
-    await Future.wait([fetchUserInfo(emit), fetchSelfConfig(emit), fetchRegisterStatus(emit)]);
+
+    await Future.wait([
+      fetchUserInfo(emit),
+      fetchRegisterStatus(emit),
+      if (isSelfConfigEnabled) fetchSelfConfig(emit),
+    ]);
+
     emit(state.copyWith(progress: false));
     _logger.info('Settings refreshed');
   }

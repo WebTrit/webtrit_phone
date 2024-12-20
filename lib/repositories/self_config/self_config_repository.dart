@@ -12,13 +12,22 @@ class SelfConfigRepository with SelfConfigApiMapper {
   SelfConfig? _lastSelfConfig;
 
   Future<SelfConfig> _getSelfConfigRemote() async {
-    final response = await _webtritApiClient.getSelfConfig(_token);
-    return selfConfigFromApi(response);
+    try {
+      final response = await _webtritApiClient.getSelfConfig(_token);
+      return selfConfigFromApi(response);
+    } on RequestFailure catch (e) {
+      if (e.statusCode == 404 || e.statusCode == 501) {
+        return SelfConfig.unsupported();
+      }
+      rethrow;
+    }
   }
 
   Future<SelfConfig> getSelfConfig() async {
     final cached = _lastSelfConfig;
-    if (cached != null && !cached.isExpired) return cached;
+
+    if (cached is SelfConfigUnsupported) return cached;
+    if (cached is SelfConfigSupported && !cached.isExpired) return cached;
 
     return (_lastSelfConfig = await _getSelfConfigRemote());
   }

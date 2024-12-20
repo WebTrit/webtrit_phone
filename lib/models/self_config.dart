@@ -1,8 +1,19 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:equatable/equatable.dart';
 
-class SelfConfig with EquatableMixin {
-  SelfConfig({
+sealed class SelfConfig {
+  const SelfConfig();
+
+  factory SelfConfig.unsupported() => const SelfConfigUnsupported();
+  factory SelfConfig.supported({required Uri url, required DateTime expiresAt}) =>
+      SelfConfigSupported(url: url, expiresAt: expiresAt);
+}
+
+final class SelfConfigUnsupported extends SelfConfig {
+  const SelfConfigUnsupported();
+}
+
+final class SelfConfigSupported extends SelfConfig with EquatableMixin {
+  SelfConfigSupported({
     required this.url,
     required this.expiresAt,
   });

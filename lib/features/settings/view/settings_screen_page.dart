@@ -29,6 +29,7 @@ class SettingsScreenPage extends StatelessWidget {
           selfConfigRepository: context.read<SelfConfigRepository>(),
           appRepository: context.read<AppRepository>(),
           appPreferences: context.read<AppPreferences>(),
+          settingsFeature: settingsFeature,
         )..add(const SettingsRefreshed());
       },
       child: widget,
