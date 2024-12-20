@@ -277,6 +277,12 @@ class SettingsFeature {
   SettingsFeature(this._sections, this.termsAndConditions);
 
   List<SettingsSection> get sections => List.unmodifiable(_sections);
+
+  bool get isSelfConfigEnabled => _sections.any((section) {
+        return section.items.any((item) {
+          return item.flavor == SettingsFlavor.selfConfig;
+        });
+      });
 }
 
 class CallFeature {

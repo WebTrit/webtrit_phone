@@ -816,6 +816,8 @@
   "@settings_ListViewTileTitle_accountDelete": {},
   "settings_ListViewTileTitle_call_codecs": "Кодеки дзвінка",
   "@settings_ListViewTileTitle_call_codecs": {},
+  "settings_ListViewTileTitle_self_config": "Сторінка спец-налаштувань",
+  "@settings_ListViewTileTitle_self_config": {},
   "settings_ListViewTileTitle_help": "Допомога",
   "@settings_ListViewTileTitle_help": {},
   "settings_ListViewTileTitle_language": "Мова",

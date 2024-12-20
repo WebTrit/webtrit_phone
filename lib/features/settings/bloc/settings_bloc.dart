@@ -8,6 +8,7 @@ import 'package:logging/logging.dart';
 import 'package:webtrit_phone/app/notifications/notifications.dart';
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/data/data.dart';
+import 'package:webtrit_phone/models/self_config.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
 part 'settings_bloc.freezed.dart';
@@ -23,8 +24,10 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     required this.notificationsBloc,
     required this.appBloc,
     required this.userRepository,
+    required this.selfConfigRepository,
     required this.appRepository,
     required this.appPreferences,
+    required this.settingsFeature,
   }) : super(SettingsState(registerStatus: appPreferences.getRegisterStatus())) {
     on<SettingsRefreshed>(_onRefreshed, transformer: restartable());
     on<SettingsLogouted>(_onLogouted, transformer: droppable());
@@ -35,48 +38,60 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   final NotificationsBloc notificationsBloc;
   final AppBloc appBloc;
   final UserRepository userRepository;
+  final SelfConfigRepository selfConfigRepository;
   final AppRepository appRepository;
   final AppPreferences appPreferences;
+  final SettingsFeature settingsFeature;
 
-  FutureOr<void> _onRefreshed(SettingsRefreshed event, Emitter<SettingsState> emit) async {
-    emit(state.copyWith(progress: true));
+  Future<void> fetchUserInfo(Emitter<SettingsState> emit) async {
     try {
-      _logger.info('Refreshing settings');
-      final infoFuture = userRepository.getInfo();
-      final registerStatusFuture = appRepository.getRegisterStatus();
-
-      final r = await Future.wait([infoFuture, registerStatusFuture]);
-
-      final info = r[0] as UserInfo;
-      final registerStatus = r[1] as bool;
-
-      if (registerStatus != state.registerStatus) {
-        await appPreferences.setRegisterStatus(registerStatus);
-      }
-
-      if (emit.isDone) return;
-
-      emit(state.copyWith(
-        progress: false,
-        info: info,
-        registerStatus: registerStatus,
-      ));
-    } catch (e, stackTrace) {
-      _logger.warning('_onRefreshed', e, stackTrace);
-      _logger.info('isClosed: $isClosed');
-      _logger.info('emit.isDone: ${emit.isDone}');
-      if (isClosed) return;
-      if (emit.isDone) return;
-
+      final info = await userRepository.getInfo();
+      emit(state.copyWith(info: info));
+    } catch (e, s) {
+      _logger.warning('Failed to get user info', e, s);
       notificationsBloc.add(NotificationsSubmitted(DefaultErrorNotification(e)));
       appBloc.maybeHandleError(e);
-
-      emit(state.copyWith(
-        progress: false,
-        info: null,
-        registerStatus: appPreferences.getRegisterStatus(),
-      ));
     }
+  }
+
+  Future<void> fetchRegisterStatus(Emitter<SettingsState> emit) async {
+    try {
+      final status = await appRepository.getRegisterStatus();
+      appPreferences.setRegisterStatus(status);
+      emit(state.copyWith(registerStatus: status));
+    } catch (e, s) {
+      _logger.warning('Failed to get register status', e, s);
+      notificationsBloc.add(NotificationsSubmitted(DefaultErrorNotification(e)));
+      appBloc.maybeHandleError(e);
+      emit(state.copyWith(registerStatus: appPreferences.getRegisterStatus()));
+    }
+  }
+
+  Future<void> fetchSelfConfig(Emitter<SettingsState> emit) async {
+    try {
+      final selfConfig = await selfConfigRepository.getSelfConfig();
+      emit(state.copyWith(selfConfig: selfConfig));
+    } catch (e, s) {
+      /// Optional feature, so no need to show error to user.
+      _logger.info('Failed to get self config', e, s);
+      appBloc.maybeHandleError(e);
+    }
+  }
+
+  FutureOr<void> _onRefreshed(SettingsRefreshed event, Emitter<SettingsState> emit) async {
+    final isSelfConfigEnabled = settingsFeature.isSelfConfigEnabled;
+
+    emit(state.copyWith(progress: true));
+    _logger.info('Refreshing settings');
+
+    await Future.wait([
+      fetchUserInfo(emit),
+      fetchRegisterStatus(emit),
+      if (isSelfConfigEnabled) fetchSelfConfig(emit),
+    ]);
+
+    emit(state.copyWith(progress: false));
+    _logger.info('Settings refreshed');
   }
 
   FutureOr<void> _onLogouted(SettingsLogouted event, Emitter<SettingsState> emit) async {

@@ -17,5 +17,6 @@ export 'session_otp_credential.dart';
 export 'session_result.dart';
 export 'session_user_credential.dart';
 export 'system_info.dart';
+export 'self_config.dart';
 export 'user_contact.dart';
 export 'user_info.dart';

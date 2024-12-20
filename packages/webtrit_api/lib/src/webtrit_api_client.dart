@@ -473,4 +473,19 @@ class WebtritApiClient {
 
     return DemoCallToActionsResponse.fromJson(responseJson);
   }
+
+  Future<SelfConfigResponse> getSelfConfig(
+    String token, {
+    RequestOptions options = const RequestOptions(),
+  }) async {
+    final responseJson = await _httpClientExecutePost(
+      ['custom', 'private', 'self-config-portal-url'],
+      null,
+      token,
+      {},
+      options: options,
+    );
+
+    return SelfConfigResponse.fromJson(responseJson);
+  }
 }

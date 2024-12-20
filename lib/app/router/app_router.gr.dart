@@ -309,6 +309,13 @@ abstract class _$AppRouter extends RootStackRouter {
         child: RecentsScreenPage(),
       );
     },
+    SelfConfigScreenPageRoute.name: (routeData) {
+      final args = routeData.argsAs<SelfConfigScreenPageRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: SelfConfigScreenPage(args.url),
+      );
+    },
     SettingsRouterPageRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -1215,6 +1222,36 @@ class RecentsScreenPageRoute extends PageRouteInfo<void> {
   static const String name = 'RecentsScreenPageRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [SelfConfigScreenPage]
+class SelfConfigScreenPageRoute
+    extends PageRouteInfo<SelfConfigScreenPageRouteArgs> {
+  SelfConfigScreenPageRoute({
+    required Uri url,
+    List<PageRouteInfo>? children,
+  }) : super(
+          SelfConfigScreenPageRoute.name,
+          args: SelfConfigScreenPageRouteArgs(url: url),
+          initialChildren: children,
+        );
+
+  static const String name = 'SelfConfigScreenPageRoute';
+
+  static const PageInfo<SelfConfigScreenPageRouteArgs> page =
+      PageInfo<SelfConfigScreenPageRouteArgs>(name);
+}
+
+class SelfConfigScreenPageRouteArgs {
+  const SelfConfigScreenPageRouteArgs({required this.url});
+
+  final Uri url;
+
+  @override
+  String toString() {
+    return 'SelfConfigScreenPageRouteArgs{url: $url}';
+  }
 }
 
 /// generated route for

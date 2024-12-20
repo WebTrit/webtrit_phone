@@ -136,6 +136,12 @@ class _MainShellState extends State<MainShell> {
             context.read<WebtritApiClient>(),
           ),
         ),
+        RepositoryProvider<SelfConfigRepository>(
+          create: (context) => SelfConfigRepository(
+            context.read<WebtritApiClient>(),
+            context.read<AppBloc>().state.token!,
+          ),
+        ),
         RepositoryProvider<AppRepository>(
           create: (context) => AppRepository(
             webtritApiClient: context.read<WebtritApiClient>(),
@@ -282,11 +288,20 @@ class _MainShellState extends State<MainShell> {
             return MultiBlocProvider(
               providers: [
                 BlocProvider(
+                  lazy: false,
                   create: (_) => UserInfoCubit(
                     context.read<UserRepository>(),
                   ),
                 ),
                 BlocProvider(
+                  lazy: false,
+                  create: (_) => SelfConfigCubit(
+                    context.read<SelfConfigRepository>(),
+                    context.read<FeatureAccess>().settingsFeature.isSelfConfigEnabled,
+                  ),
+                ),
+                BlocProvider(
+                  lazy: false,
                   create: (_) => SessionStatusCubit(
                     pushTokensBloc: context.read<PushTokensBloc>(),
                     callBloc: context.read<CallBloc>(),
