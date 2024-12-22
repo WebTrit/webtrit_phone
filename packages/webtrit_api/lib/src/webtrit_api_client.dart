@@ -341,6 +341,8 @@ class WebtritApiClient {
     String token, {
     RequestOptions options = const RequestOptions(),
   }) async {
+    throw RequestFailure(statusCode: 401, url: Uri.base, requestId: '111');
+
     final responseJson = await _httpClientExecuteGet(
       ['user'],
       null,
@@ -355,6 +357,8 @@ class WebtritApiClient {
     String token, {
     RequestOptions options = const RequestOptions(),
   }) async {
+    throw RequestFailure(statusCode: 401, url: Uri.base, requestId: '111');
+
     final responseJson = await _httpClientExecuteGet(
       ['user', 'contacts'],
       null,
@@ -383,6 +387,8 @@ class WebtritApiClient {
     String token, {
     RequestOptions options = const RequestOptions(),
   }) async {
+    throw RequestFailure(statusCode: 401, url: Uri.base, requestId: '111');
+
     final responseJson = await _httpClientExecuteGet(
       ['app', 'status'],
       null,
@@ -429,6 +435,8 @@ class WebtritApiClient {
     String token, {
     RequestOptions options = const RequestOptions(),
   }) async {
+    throw RequestFailure(statusCode: 401, url: Uri.base, requestId: '111');
+
     final responseJson = await _httpClientExecuteGet(
       ['app', 'contacts', 'smart'],
       null,
@@ -444,6 +452,8 @@ class WebtritApiClient {
     AppPushToken appPushToken, {
     RequestOptions options = const RequestOptions(),
   }) async {
+    throw RequestFailure(statusCode: 401, url: Uri.base, requestId: '111');
+
     final requestJson = appPushToken.toJson();
 
     await _httpClientExecutePost(
@@ -461,6 +471,8 @@ class WebtritApiClient {
     DemoCallToActionsParam callToActionsParam, {
     RequestOptions options = const RequestOptions(),
   }) async {
+    throw RequestFailure(statusCode: 401, url: Uri.base, requestId: '111');
+
     final requestJson = callToActionsParam.toJson();
 
     final responseJson = await _httpClientExecutePost(

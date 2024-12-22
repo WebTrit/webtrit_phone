@@ -74,7 +74,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     required this.callkeep,
     required this.callkeepConnections,
     this.sdpMunger,
-  }) : super(const CallState()) {
+  }) : super(const CallState(lastSignalingDisconnectCode: 4201)) {
     on<CallStarted>(
       _onCallStarted,
       transformer: sequential(),
@@ -137,6 +137,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     };
 
     WidgetsBinding.instance.addObserver(this);
+
+    Future.delayed(Duration(seconds: 10), () {
+      add(const _SignalingClientEvent.disconnected(4201, "Test"));
+    });
 
     callkeep.setDelegate(this);
   }
@@ -498,7 +502,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       emit(state.copyWith(
         signalingClientStatus: SignalingClientStatus.connect,
         lastSignalingClientConnectError: null,
-        lastSignalingDisconnectCode: null,
+        lastSignalingDisconnectCode: 4201,
       ));
     } catch (e) {
       if (emit.isDone) return;
@@ -536,7 +540,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       emit(state.copyWith(
         signalingClientStatus: SignalingClientStatus.disconnect,
         lastSignalingClientDisconnectError: null,
-        lastSignalingDisconnectCode: null,
+        lastSignalingDisconnectCode: 4201,
       ));
     } catch (e) {
       if (emit.isDone) return;
