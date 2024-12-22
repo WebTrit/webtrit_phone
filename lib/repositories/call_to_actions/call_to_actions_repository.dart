@@ -23,23 +23,29 @@ class CallToActionsRepositoryImpl implements CallToActionsRepository {
 
   @override
   Future<List<CallToAction>> getActions(MainFlavor flavor, Locale locale) async {
-    final userInfo = await _getUserInfo();
+    try {
+      final userInfo = await _getUserInfo();
 
-    final param = DemoCallToActionsParam(
-      email: userInfo.email!,
-      tab: flavor.name,
-    );
+      final param = DemoCallToActionsParam(
+        email: userInfo.email!,
+        tab: flavor.name,
+      );
 
-    final callToActions = await _webtritApiClient.getCallToActions(
-      _token,
-      locale.toString(),
-      param,
-      options: RequestOptions.withNoRetries(),
-    );
+      final callToActions = await _webtritApiClient.getCallToActions(
+        _token,
+        locale.toString(),
+        param,
+        options: RequestOptions.withNoRetries(),
+      );
 
-    return callToActions.actions
-        .map((it) => CallToAction(title: it.title, description: it.description, url: it.url))
-        .toList();
+      return callToActions.actions
+          .map((it) => CallToAction(title: it.title, description: it.description, url: it.url))
+          .toList();
+    } catch (e) {
+      // Per the agreed behavior, any failure (e.g., unimplemented method, invalid session)
+      // should result in returning an empty list without interrupting the flow.
+      return [];
+    }
   }
 
   Future<UserInfo> _getUserInfo() async {
