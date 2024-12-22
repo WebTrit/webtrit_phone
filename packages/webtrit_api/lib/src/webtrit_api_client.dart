@@ -138,8 +138,11 @@ class WebtritApiClient {
         }
       } catch (e) {
         _logger.severe('${method.toUpperCase()} failed for requestId: $requestId with error: $e');
+
+        // Do not retry for valid server responses with a defined HTTP status code.
+        if (e is RequestFailure) rethrow;
+
         if (requestAttempt >= options.retries) {
-          if (e is RequestFailure) rethrow;
           throw RequestFailure(
             url: tenantUrl,
             requestId: xRequestId,
