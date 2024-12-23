@@ -30,94 +30,123 @@ class LeadingAvatar extends StatefulWidget {
 }
 
 class _LeadingAvatarState extends State<LeadingAvatar> {
-  bool _imageLoadFailed = false;
-
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
     final colorScheme = themeData.colorScheme;
-
     final diameter = widget.radius * 2;
-    final foregroundImage = _getImageProvider();
 
     final registeredStatusStyle = themeData.extension<RegisteredStatusStyles>()!.primary;
+    final cacheSize = (diameter * MediaQuery.of(context).devicePixelRatio).toInt();
 
-    return SizedBox(
+    return Container(
       width: diameter,
       height: diameter,
-      child: Center(
-        child: Stack(
-          alignment: AlignmentDirectional.center,
-          clipBehavior: Clip.none,
-          children: [
-            CircleAvatar(
-              radius: widget.radius,
-              backgroundColor: colorScheme.secondaryContainer,
-              foregroundColor: colorScheme.onSecondaryContainer,
-              foregroundImage: foregroundImage,
-              // Conditionally set onForegroundImageError
-              onForegroundImageError: foregroundImage != null
-                  ? (_, __) {
-                      setState(() {
-                        _imageLoadFailed = true;
-                      });
-                    }
-                  : null,
-              child: _LeadingForegroundWidget(
-                username: widget.username,
-                foregroundImage: foregroundImage,
-                placeholderIcon: widget.placeholderIcon,
-              ),
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: colorScheme.secondaryContainer,
+      ),
+      child: Stack(
+        children: [
+          _Placeholder(
+            placeholderIcon: widget.placeholderIcon,
+            username: widget.username,
+          ),
+          if (widget.thumbnail != null)
+            _BlobImage(
+              blob: widget.thumbnail!,
+              cacheSize: cacheSize,
             ),
-            if (widget.smart) _SmartIndicator(diameter: diameter, colorScheme: colorScheme),
-            if (widget.registered != null)
-              _RegisteredIndicator(
-                diameter: diameter,
-                registered: widget.registered!,
-                registeredStatusStyle: registeredStatusStyle,
-              ),
-          ],
-        ),
+          if (widget.thumbnailUrl != null)
+            _UrlImage(
+              url: widget.thumbnailUrl.toString(),
+              cacheSize: cacheSize,
+            ),
+          if (widget.smart)
+            _SmartIndicator(
+              diameter: diameter,
+              colorScheme: colorScheme,
+            ),
+          if (widget.registered != null)
+            _RegisteredIndicator(
+              diameter: diameter,
+              registered: widget.registered!,
+              registeredStatusStyle: registeredStatusStyle,
+            ),
+        ],
       ),
     );
   }
-
-  ImageProvider? _getImageProvider() {
-    if (_imageLoadFailed) {
-      return null;
-    }
-    if (widget.thumbnail != null) {
-      return MemoryImage(widget.thumbnail!);
-    } else if (widget.thumbnailUrl != null) {
-      return NetworkImage(widget.thumbnailUrl.toString());
-    }
-    return null;
-  }
 }
 
-class _LeadingForegroundWidget extends StatelessWidget {
-  const _LeadingForegroundWidget({
-    required this.username,
-    required this.foregroundImage,
+class _Placeholder extends StatelessWidget {
+  const _Placeholder({
     required this.placeholderIcon,
+    this.username,
   });
 
-  final String? username;
-  final ImageProvider? foregroundImage;
   final IconData placeholderIcon;
+  final String? username;
 
   @override
   Widget build(BuildContext context) {
-    if (foregroundImage != null) return const SizedBox.shrink();
+    return username != null
+        ? Center(
+            child: Text(
+              username!.initialism,
+              softWrap: false,
+              overflow: TextOverflow.fade,
+            ),
+          )
+        : Center(
+            child: Icon(placeholderIcon),
+          );
+  }
+}
 
-    if (username != null) {
-      return Text(
-        username!.initialism,
-        softWrap: false,
-        overflow: TextOverflow.fade,
-      );
-    }
-    return Icon(placeholderIcon);
+class _BlobImage extends StatelessWidget {
+  const _BlobImage({
+    required this.blob,
+    required this.cacheSize,
+  });
+
+  final Uint8List blob;
+  final int cacheSize;
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipOval(
+      child: Image.memory(
+        blob,
+        fit: BoxFit.cover,
+        errorBuilder: (context, error, stackTrace) => const SizedBox.shrink(),
+        cacheHeight: cacheSize,
+        cacheWidth: cacheSize,
+      ),
+    );
+  }
+}
+
+class _UrlImage extends StatelessWidget {
+  const _UrlImage({
+    required this.url,
+    required this.cacheSize,
+  });
+
+  final String url;
+  final int cacheSize;
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipOval(
+      child: Image.network(
+        url,
+        fit: BoxFit.cover,
+        errorBuilder: (context, error, stackTrace) => const SizedBox.shrink(),
+        cacheHeight: cacheSize,
+        cacheWidth: cacheSize,
+      ),
+    );
   }
 }
 
