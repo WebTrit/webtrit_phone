@@ -51,7 +51,7 @@ class _CallShellState extends State<CallShell> {
         if (signalingClientStatus == SignalingClientStatus.disconnect && signalingDisconnectCode is int) {
           final code = SignalingDisconnectCode.values.byCode(signalingDisconnectCode);
           if (code == SignalingDisconnectCode.sessionMissedError) {
-            _logger.warning('Signaling session listener: missed error $signalingDisconnectCode');
+            _logger.info('Signaling session listener: session is missing $signalingDisconnectCode');
             context.read<AppBloc>().add(const AppLogouted(checkTokenForError: true));
           }
         }
