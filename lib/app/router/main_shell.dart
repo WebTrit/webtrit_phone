@@ -307,6 +307,17 @@ class _MainShellState extends State<MainShell> {
                     callBloc: context.read<CallBloc>(),
                   ),
                 ),
+                BlocProvider(
+                  lazy: false,
+                  create: (_) => RegisterStatusCubit(
+                    context.read<AppRepository>(),
+                    context.read<AppPreferences>(),
+                    handleError: (error, stackTrace) {
+                      context.read<NotificationsBloc>().add(NotificationsSubmitted(DefaultErrorNotification(error)));
+                      context.read<AppBloc>().maybeHandleError(error);
+                    },
+                  ),
+                ),
               ],
               child: Builder(
                 builder: (context) => CallShell(

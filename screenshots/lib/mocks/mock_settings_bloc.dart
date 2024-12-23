@@ -10,9 +10,7 @@ class MockSettingsBloc extends MockBloc<SettingsEvent, SettingsState> implements
     whenListen(
       mock,
       const Stream<SettingsState>.empty(),
-      initialState: const SettingsState(
-        registerStatus: true,
-      ),
+      initialState: SettingsState(progress: false),
     );
     return mock;
   }

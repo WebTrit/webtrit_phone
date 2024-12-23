@@ -1,9 +1,18 @@
 part of 'settings_bloc.dart';
 
-@freezed
-class SettingsState with _$SettingsState {
-  const factory SettingsState({
-    @Default(false) bool progress,
-    required bool registerStatus,
-  }) = _SettingsState;
+class SettingsState with EquatableMixin {
+  final bool progress;
+  SettingsState({
+    required this.progress,
+  });
+
+  @override
+  List<Object> get props => [progress];
+
+  @override
+  bool get stringify => true;
+
+  SettingsState copyWith({bool? progress}) {
+    return SettingsState(progress: progress ?? this.progress);
+  }
 }

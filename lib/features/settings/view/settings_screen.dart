@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/features/embedded/exports.dart';
+import 'package:webtrit_phone/features/register_status/register_status.dart';
 import 'package:webtrit_phone/features/self_config/self_config.dart';
 import 'package:webtrit_phone/features/user_info/user_info.dart';
 import 'package:webtrit_phone/features/session_status/session_status.dart';
@@ -36,7 +37,7 @@ class SettingsScreen extends StatelessWidget {
               Icons.refresh,
             ),
             onPressed: () {
-              context.read<SettingsBloc>().add(const SettingsRefreshed());
+              context.read<RegisterStatusCubit>().fetchStatus();
             },
           ),
         ],
@@ -67,15 +68,12 @@ class SettingsScreen extends StatelessWidget {
                     },
                   ),
                   const ListTileSeparator(),
-                  BlocBuilder<SettingsBloc, SettingsState>(
-                    buildWhen: (previous, current) => previous.registerStatus != current.registerStatus,
+                  BlocBuilder<RegisterStatusCubit, RegisterStatus>(
                     builder: (context, state) {
                       return SwitchListTile(
                         title: Text(context.l10n.settings_ListViewTileTitle_registered),
-                        value: state.registerStatus,
-                        onChanged: (value) {
-                          context.read<SettingsBloc>().add(SettingsRegisterStatusChanged(value));
-                        },
+                        value: state,
+                        onChanged: (value) => context.read<RegisterStatusCubit>().setStatus(value),
                         secondary: const Icon(Icons.account_circle_outlined),
                       );
                     },

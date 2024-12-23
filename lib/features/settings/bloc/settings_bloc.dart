@@ -2,15 +2,12 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:equatable/equatable.dart';
 import 'package:logging/logging.dart';
 
 import 'package:webtrit_phone/app/notifications/notifications.dart';
 import 'package:webtrit_phone/blocs/blocs.dart';
-import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
-
-part 'settings_bloc.freezed.dart';
 
 part 'settings_event.dart';
 
@@ -23,49 +20,14 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     required this.notificationsBloc,
     required this.appBloc,
     required this.userRepository,
-    required this.selfConfigRepository,
-    required this.appRepository,
-    required this.appPreferences,
-    required this.settingsFeature,
-  }) : super(SettingsState(registerStatus: appPreferences.getRegisterStatus())) {
-    on<SettingsRefreshed>(_onRefreshed, transformer: restartable());
+  }) : super(SettingsState(progress: false)) {
     on<SettingsLogouted>(_onLogouted, transformer: droppable());
-    on<SettingsRegisterStatusChanged>(_onRegisterStatusChanged, transformer: sequential());
     on<SettingsAccountDeleted>(_onAccountDeleted, transformer: droppable());
   }
 
   final NotificationsBloc notificationsBloc;
   final AppBloc appBloc;
   final UserRepository userRepository;
-  final SelfConfigRepository selfConfigRepository;
-  final AppRepository appRepository;
-  final AppPreferences appPreferences;
-  final SettingsFeature settingsFeature;
-
-  Future<void> fetchRegisterStatus(Emitter<SettingsState> emit) async {
-    try {
-      final status = await appRepository.getRegisterStatus();
-      appPreferences.setRegisterStatus(status);
-      emit(state.copyWith(registerStatus: status));
-    } catch (e, s) {
-      _logger.warning('Failed to get register status', e, s);
-      notificationsBloc.add(NotificationsSubmitted(DefaultErrorNotification(e)));
-      appBloc.maybeHandleError(e);
-      emit(state.copyWith(registerStatus: appPreferences.getRegisterStatus()));
-    }
-  }
-
-  FutureOr<void> _onRefreshed(SettingsRefreshed event, Emitter<SettingsState> emit) async {
-    emit(state.copyWith(progress: true));
-    _logger.info('Refreshing settings');
-
-    await Future.wait([
-      fetchRegisterStatus(emit),
-    ]);
-
-    emit(state.copyWith(progress: false));
-    _logger.info('Settings refreshed');
-  }
 
   FutureOr<void> _onLogouted(SettingsLogouted event, Emitter<SettingsState> emit) async {
     // No need to wait any results here to not stop user from logging out.
@@ -74,37 +36,6 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     // Also, its needed to avoid race conditions with Signaling client, that happens if we wait for the result here.
     userRepository.logout().ignore();
     appBloc.add(const AppLogouted());
-  }
-
-  FutureOr<void> _onRegisterStatusChanged(SettingsRegisterStatusChanged event, Emitter<SettingsState> emit) async {
-    if (state.progress) return;
-
-    final previousRegisterStatus = state.registerStatus;
-
-    emit(state.copyWith(
-      progress: true,
-      registerStatus: event.value,
-    ));
-    try {
-      await appRepository.setRegisterStatus(event.value);
-      await appPreferences.setRegisterStatus(event.value);
-
-      if (emit.isDone) return;
-
-      emit(state.copyWith(progress: false));
-    } catch (e, stackTrace) {
-      _logger.warning('_onRegisterStatusChanged', e, stackTrace);
-
-      notificationsBloc.add(NotificationsSubmitted(DefaultErrorNotification(e)));
-      appBloc.maybeHandleError(e);
-
-      if (emit.isDone) return;
-
-      emit(state.copyWith(
-        progress: false,
-        registerStatus: previousRegisterStatus,
-      ));
-    }
   }
 
   FutureOr<void> _onAccountDeleted(SettingsAccountDeleted event, Emitter<SettingsState> emit) async {
