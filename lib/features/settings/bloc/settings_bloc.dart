@@ -43,17 +43,6 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   final AppPreferences appPreferences;
   final SettingsFeature settingsFeature;
 
-  Future<void> fetchUserInfo(Emitter<SettingsState> emit) async {
-    try {
-      final info = await userRepository.getInfo();
-      emit(state.copyWith(info: info));
-    } catch (e, s) {
-      _logger.warning('Failed to get user info', e, s);
-      notificationsBloc.add(NotificationsSubmitted(DefaultErrorNotification(e)));
-      appBloc.maybeHandleError(e);
-    }
-  }
-
   Future<void> fetchRegisterStatus(Emitter<SettingsState> emit) async {
     try {
       final status = await appRepository.getRegisterStatus();
@@ -85,7 +74,6 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     _logger.info('Refreshing settings');
 
     await Future.wait([
-      fetchUserInfo(emit),
       fetchRegisterStatus(emit),
       if (isSelfConfigEnabled) fetchSelfConfig(emit),
     ]);

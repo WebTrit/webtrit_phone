@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/features/embedded/exports.dart';
+import 'package:webtrit_phone/features/user_info/user_info.dart';
 import 'package:webtrit_phone/features/session_status/session_status.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
@@ -47,12 +48,11 @@ class SettingsScreen extends StatelessWidget {
               ListView(
                 children: [
                   const SizedBox(height: 16),
-                  BlocBuilder<SettingsBloc, SettingsState>(
-                    buildWhen: (previous, current) => previous.info != current.info,
-                    builder: (context, settingsState) {
+                  BlocBuilder<UserInfoCubit, UserInfoState>(
+                    builder: (context, state) {
                       return FadeIn(
                         duration: const Duration(milliseconds: 600),
-                        child: UserInfoListTile(info: settingsState.info),
+                        child: UserInfoListTile(info: state.userInfo),
                       );
                     },
                   ),
