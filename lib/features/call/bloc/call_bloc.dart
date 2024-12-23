@@ -1247,6 +1247,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     Emitter<CallState> emit,
   ) async {
     var newState = state.copyWith(minimized: true);
+    await __onCallControlEventSetHeld(_CallControlEventSetHeld(event.callId, true), emit);
 
     newState = newState.copyWithMappedActiveCall(event.callId, (activeCall) {
       return activeCall.copyWith(
