@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:equatable/equatable.dart';
 import 'package:logging/logging.dart';
 
@@ -12,11 +13,16 @@ final _logger = Logger('SelfConfigCubit');
 /// A simple cubit that prefetches selfconfig and store data during the user's session.
 class SelfConfigCubit extends Cubit<SelfConfigState> {
   SelfConfigCubit(this._selfConfigRepository, this._enabled) : super(SelfConfigState.initial()) {
-    if (_enabled) fetchSelfConfig();
+    if (_enabled) {
+      fetchSelfConfig();
+      _connectivitySub = Connectivity().onConnectivityChanged.listen((_) => fetchSelfConfig());
+    }
   }
 
   final SelfConfigRepository _selfConfigRepository;
   final bool _enabled;
+
+  StreamSubscription? _connectivitySub;
 
   Future<void> fetchSelfConfig() async {
     try {
@@ -26,12 +32,13 @@ class SelfConfigCubit extends Cubit<SelfConfigState> {
     } catch (e, s) {
       _logger.severe('Error fetching selfconfig', e, s);
       emit(SelfConfigState.errored(e));
-
-      // Auto retry after 10 seconds on unexpected error
-      if (isClosed == false) {
-        return Future.delayed(const Duration(seconds: 10), fetchSelfConfig);
-      }
     }
+  }
+
+  @override
+  Future<void> close() {
+    _connectivitySub?.cancel();
+    return super.close();
   }
 }
 

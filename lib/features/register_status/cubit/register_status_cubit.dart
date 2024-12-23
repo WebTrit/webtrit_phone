@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:logging/logging.dart';
 
 import 'package:webtrit_phone/data/data.dart';
@@ -13,11 +16,14 @@ class RegisterStatusCubit extends Cubit<RegisterStatus> {
     this.handleError,
   }) : super(appPreferences.getRegisterStatus()) {
     fetchStatus();
+    _connectivitySub = Connectivity().onConnectivityChanged.listen((_) => fetchStatus());
   }
 
   final AppRepository appRepository;
   final AppPreferences appPreferences;
   final Function(Object error, StackTrace stackTrace)? handleError;
+
+  late final StreamSubscription _connectivitySub;
 
   Future<void> fetchStatus() async {
     try {
@@ -39,6 +45,12 @@ class RegisterStatusCubit extends Cubit<RegisterStatus> {
       _logger.warning('_onRegisterStatusChanged', e, stackTrace);
       handleError?.call(e, stackTrace);
     }
+  }
+
+  @override
+  Future<void> close() {
+    _connectivitySub.cancel();
+    return super.close();
   }
 }
 
