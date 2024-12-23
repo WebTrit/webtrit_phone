@@ -52,10 +52,7 @@ class SettingsScreen extends StatelessWidget {
                   const SizedBox(height: 16),
                   BlocBuilder<UserInfoCubit, UserInfoState>(
                     builder: (context, state) {
-                      return FadeIn(
-                        duration: const Duration(milliseconds: 600),
-                        child: UserInfoListTile(info: state.userInfo),
-                      );
+                      return UserInfoListTile(info: state.userInfo);
                     },
                   ),
                   BlocBuilder<SessionStatusCubit, SessionStatusState>(
