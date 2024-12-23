@@ -190,20 +190,18 @@ class SettingsScreen extends StatelessWidget {
                                 else if (item.flavor == SettingsFlavor.selfConfig)
                                   BlocBuilder<SelfConfigCubit, SelfConfigState>(
                                     builder: (context, state) {
-                                      if (state is SelfConfigStateCommon) {
-                                        final selfConfig = state.selfConfig;
-                                        if (selfConfig is SelfConfigSupported) {
-                                          return Column(children: [
-                                            ListTile(
-                                              leading: Icon(item.icon),
-                                              title: Text(context.parseL10n(item.titleL10n)),
-                                              onTap: () => context.router.navigate(
-                                                SelfConfigScreenPageRoute(url: selfConfig.url),
-                                              ),
+                                      final selfConfig = state.selfConfig;
+                                      if (selfConfig is SelfConfigSupported) {
+                                        return Column(children: [
+                                          ListTile(
+                                            leading: Icon(item.icon),
+                                            title: Text(context.parseL10n(item.titleL10n)),
+                                            onTap: () => context.router.navigate(
+                                              SelfConfigScreenPageRoute(url: selfConfig.url),
                                             ),
-                                            const ListTileSeparator(),
-                                          ]);
-                                        }
+                                          ),
+                                          const ListTileSeparator(),
+                                        ]);
                                       }
 
                                       return const SizedBox.shrink();

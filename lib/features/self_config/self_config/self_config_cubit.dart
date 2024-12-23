@@ -12,26 +12,22 @@ final _logger = Logger('SelfConfigCubit');
 
 /// A simple cubit that prefetches selfconfig and store data during the user's session.
 class SelfConfigCubit extends Cubit<SelfConfigState> {
-  SelfConfigCubit(this._selfConfigRepository, this._enabled) : super(SelfConfigState.initial()) {
-    if (_enabled) {
-      fetchSelfConfig();
-      _connectivitySub = Connectivity().onConnectivityChanged.listen((_) => fetchSelfConfig());
-    }
+  SelfConfigCubit(this._selfConfigRepository, this._enabled) : super(SelfConfigState()) {
+    if (!_enabled) return;
+    fetchSelfConfig();
+    _connectivitySub = Connectivity().onConnectivityChanged.listen((_) => fetchSelfConfig());
   }
 
   final SelfConfigRepository _selfConfigRepository;
   final bool _enabled;
-
   StreamSubscription? _connectivitySub;
 
   Future<void> fetchSelfConfig() async {
     try {
-      emit(SelfConfigState.initial());
       final selfConfig = await _selfConfigRepository.getSelfConfig();
-      emit(SelfConfigState.common(selfConfig));
+      emit(SelfConfigState(selfConfig: selfConfig));
     } catch (e, s) {
-      _logger.severe('Error fetching selfconfig', e, s);
-      emit(SelfConfigState.errored(e));
+      _logger.warning('Failed to get self config', e, s);
     }
   }
 
@@ -42,35 +38,14 @@ class SelfConfigCubit extends Cubit<SelfConfigState> {
   }
 }
 
-sealed class SelfConfigState {
-  const SelfConfigState();
+class SelfConfigState with EquatableMixin {
+  SelfConfigState({this.selfConfig});
 
-  factory SelfConfigState.initial() => SelfConfigStateInitial();
-  factory SelfConfigState.common(SelfConfig selfConfig) => SelfConfigStateCommon(selfConfig);
-  factory SelfConfigState.errored(Object error) => SelfConfigStateErrored(error);
-}
-
-final class SelfConfigStateInitial extends SelfConfigState {}
-
-final class SelfConfigStateCommon extends SelfConfigState with EquatableMixin {
-  SelfConfigStateCommon(this.selfConfig);
-  final SelfConfig selfConfig;
+  final SelfConfig? selfConfig;
 
   @override
   List<Object?> get props => [selfConfig];
 
   @override
-  toString() => 'SelfConfigState(userInfo: $selfConfig)';
-}
-
-final class SelfConfigStateErrored extends SelfConfigState with EquatableMixin {
-  SelfConfigStateErrored(this.error);
-
-  final Object error;
-
-  @override
-  List<Object> get props => [error];
-
-  @override
-  String toString() => 'SelfConfigStateError { error: $error }';
+  bool get stringify => true;
 }
