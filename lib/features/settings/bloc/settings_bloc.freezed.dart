@@ -140,8 +140,6 @@ abstract class _SettingsAccountDeleted implements SettingsAccountDeleted {
 mixin _$SettingsState {
   bool get progress => throw _privateConstructorUsedError;
   bool get registerStatus => throw _privateConstructorUsedError;
-  UserInfo? get info => throw _privateConstructorUsedError;
-  SelfConfig? get selfConfig => throw _privateConstructorUsedError;
 
   /// Create a copy of SettingsState
   /// with the given fields replaced by the non-null parameter values.
@@ -156,13 +154,7 @@ abstract class $SettingsStateCopyWith<$Res> {
           SettingsState value, $Res Function(SettingsState) then) =
       _$SettingsStateCopyWithImpl<$Res, SettingsState>;
   @useResult
-  $Res call(
-      {bool progress,
-      bool registerStatus,
-      UserInfo? info,
-      SelfConfig? selfConfig});
-
-  $UserInfoCopyWith<$Res>? get info;
+  $Res call({bool progress, bool registerStatus});
 }
 
 /// @nodoc
@@ -182,8 +174,6 @@ class _$SettingsStateCopyWithImpl<$Res, $Val extends SettingsState>
   $Res call({
     Object? progress = null,
     Object? registerStatus = null,
-    Object? info = freezed,
-    Object? selfConfig = freezed,
   }) {
     return _then(_value.copyWith(
       progress: null == progress
@@ -194,29 +184,7 @@ class _$SettingsStateCopyWithImpl<$Res, $Val extends SettingsState>
           ? _value.registerStatus
           : registerStatus // ignore: cast_nullable_to_non_nullable
               as bool,
-      info: freezed == info
-          ? _value.info
-          : info // ignore: cast_nullable_to_non_nullable
-              as UserInfo?,
-      selfConfig: freezed == selfConfig
-          ? _value.selfConfig
-          : selfConfig // ignore: cast_nullable_to_non_nullable
-              as SelfConfig?,
     ) as $Val);
-  }
-
-  /// Create a copy of SettingsState
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $UserInfoCopyWith<$Res>? get info {
-    if (_value.info == null) {
-      return null;
-    }
-
-    return $UserInfoCopyWith<$Res>(_value.info!, (value) {
-      return _then(_value.copyWith(info: value) as $Val);
-    });
   }
 }
 
@@ -228,14 +196,7 @@ abstract class _$$SettingsStateImplCopyWith<$Res>
       __$$SettingsStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {bool progress,
-      bool registerStatus,
-      UserInfo? info,
-      SelfConfig? selfConfig});
-
-  @override
-  $UserInfoCopyWith<$Res>? get info;
+  $Res call({bool progress, bool registerStatus});
 }
 
 /// @nodoc
@@ -253,8 +214,6 @@ class __$$SettingsStateImplCopyWithImpl<$Res>
   $Res call({
     Object? progress = null,
     Object? registerStatus = null,
-    Object? info = freezed,
-    Object? selfConfig = freezed,
   }) {
     return _then(_$SettingsStateImpl(
       progress: null == progress
@@ -265,14 +224,6 @@ class __$$SettingsStateImplCopyWithImpl<$Res>
           ? _value.registerStatus
           : registerStatus // ignore: cast_nullable_to_non_nullable
               as bool,
-      info: freezed == info
-          ? _value.info
-          : info // ignore: cast_nullable_to_non_nullable
-              as UserInfo?,
-      selfConfig: freezed == selfConfig
-          ? _value.selfConfig
-          : selfConfig // ignore: cast_nullable_to_non_nullable
-              as SelfConfig?,
     ));
   }
 }
@@ -281,24 +232,17 @@ class __$$SettingsStateImplCopyWithImpl<$Res>
 
 class _$SettingsStateImpl implements _SettingsState {
   const _$SettingsStateImpl(
-      {this.progress = false,
-      required this.registerStatus,
-      this.info,
-      this.selfConfig});
+      {this.progress = false, required this.registerStatus});
 
   @override
   @JsonKey()
   final bool progress;
   @override
   final bool registerStatus;
-  @override
-  final UserInfo? info;
-  @override
-  final SelfConfig? selfConfig;
 
   @override
   String toString() {
-    return 'SettingsState(progress: $progress, registerStatus: $registerStatus, info: $info, selfConfig: $selfConfig)';
+    return 'SettingsState(progress: $progress, registerStatus: $registerStatus)';
   }
 
   @override
@@ -309,15 +253,11 @@ class _$SettingsStateImpl implements _SettingsState {
             (identical(other.progress, progress) ||
                 other.progress == progress) &&
             (identical(other.registerStatus, registerStatus) ||
-                other.registerStatus == registerStatus) &&
-            (identical(other.info, info) || other.info == info) &&
-            (identical(other.selfConfig, selfConfig) ||
-                other.selfConfig == selfConfig));
+                other.registerStatus == registerStatus));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, progress, registerStatus, info, selfConfig);
+  int get hashCode => Object.hash(runtimeType, progress, registerStatus);
 
   /// Create a copy of SettingsState
   /// with the given fields replaced by the non-null parameter values.
@@ -331,18 +271,12 @@ class _$SettingsStateImpl implements _SettingsState {
 abstract class _SettingsState implements SettingsState {
   const factory _SettingsState(
       {final bool progress,
-      required final bool registerStatus,
-      final UserInfo? info,
-      final SelfConfig? selfConfig}) = _$SettingsStateImpl;
+      required final bool registerStatus}) = _$SettingsStateImpl;
 
   @override
   bool get progress;
   @override
   bool get registerStatus;
-  @override
-  UserInfo? get info;
-  @override
-  SelfConfig? get selfConfig;
 
   /// Create a copy of SettingsState
   /// with the given fields replaced by the non-null parameter values.

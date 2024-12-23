@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/features/embedded/exports.dart';
+import 'package:webtrit_phone/features/self_config/self_config.dart';
 import 'package:webtrit_phone/features/user_info/user_info.dart';
 import 'package:webtrit_phone/features/session_status/session_status.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
@@ -95,123 +96,125 @@ class SettingsScreen extends StatelessWidget {
                       }
                     },
                   ),
-                  BlocBuilder<SettingsBloc, SettingsState>(
-                    buildWhen: (previous, current) => previous.selfConfig != current.selfConfig,
-                    builder: (context, state) {
-                      final selfConfig = state.selfConfig;
-
-                      return Column(
-                        children: [
-                          for (var section in sections)
-                            Column(
-                              children: [
-                                GroupTitleListTile(
-                                  titleData: context.parseL10n(section.titleL10n),
-                                ),
-                                ...[
-                                  for (var item in section.items)
-                                    if (item.flavor == SettingsFlavor.network)
-                                      Column(children: [
-                                        ListTile(
-                                          leading: Icon(item.icon),
-                                          title: Text(context.parseL10n(item.titleL10n)),
-                                          onTap: () => context.router.navigate(const NetworkScreenPageRoute()),
-                                        ),
-                                        const ListTileSeparator(),
-                                      ])
-                                    else if (item.flavor == SettingsFlavor.language)
-                                      Column(children: [
-                                        ListTile(
-                                          leading: Icon(item.icon),
-                                          title: Text(context.parseL10n(item.titleL10n)),
-                                          onTap: () => context.router.navigate(const LanguageScreenPageRoute()),
-                                        ),
-                                        const ListTileSeparator(),
-                                      ])
-                                    else if (item.flavor == SettingsFlavor.help)
-                                      Column(children: [
-                                        ListTile(
-                                          leading: Icon(item.icon),
-                                          title: Text(context.parseL10n(item.titleL10n)),
-                                          onTap: () => context.router.navigate(HelpScreenPageRoute(
-                                              initialUriQueryParam: item.data!.resource.toString())),
-                                        ),
-                                        const ListTileSeparator(),
-                                      ])
-                                    else if (item.flavor == SettingsFlavor.terms)
-                                      Column(children: [
-                                        ListTile(
-                                          leading: Icon(item.icon),
-                                          title: Text(context.parseL10n(item.titleL10n)),
-                                          onTap: () => context.router.navigate(TermsConditionsScreenPageRoute(
-                                              initialUriQueryParam: item.data!.resource.toString())),
-                                        ),
-                                        const ListTileSeparator(),
-                                      ])
-                                    else if (item.flavor == SettingsFlavor.about)
-                                      Column(children: [
-                                        ListTile(
-                                          leading: Icon(item.icon),
-                                          title: Text(context.parseL10n(item.titleL10n)),
-                                          onTap: () => context.router.navigate(const AboutScreenPageRoute()),
-                                        ),
-                                        const ListTileSeparator(),
-                                      ])
-                                    else if (item.flavor == SettingsFlavor.log)
-                                      Column(children: [
-                                        ListTile(
-                                          leading: Icon(item.icon),
-                                          title: Text(context.parseL10n(item.titleL10n)),
-                                          onTap: () =>
-                                              context.router.navigate(const LogRecordsConsoleScreenPageRoute()),
-                                        ),
-                                        const ListTileSeparator(),
-                                      ])
-                                    else if (item.flavor == SettingsFlavor.deleteAccount)
-                                      Column(children: [
-                                        ListTile(
-                                          leading: Icon(item.icon),
-                                          title: Text(context.parseL10n(item.titleL10n)),
-                                          onTap: () => _deleteAccount(context),
-                                        ),
-                                        const ListTileSeparator(),
-                                      ])
-                                    else if (item.flavor == SettingsFlavor.embedded)
-                                      Column(children: [
-                                        ListTile(
-                                          leading: Icon(item.icon),
-                                          title: Text(context.parseL10n(item.titleL10n)),
-                                          onTap: () => context.router.navigate(EmbeddedScreenPage.route(item.data!)),
-                                        ),
-                                        const ListTileSeparator(),
-                                      ])
-                                    else if (item.flavor == SettingsFlavor.callCodecs)
-                                      Column(children: [
-                                        ListTile(
-                                          leading: Icon(item.icon),
-                                          title: Text(context.parseL10n(item.titleL10n)),
-                                          onTap: () => context.router.navigate(const CallCodecsScreenPageRoute()),
-                                        ),
-                                        const ListTileSeparator(),
-                                      ])
-                                    else if (item.flavor == SettingsFlavor.selfConfig &&
-                                        selfConfig is SelfConfigSupported)
-                                      Column(children: [
-                                        ListTile(
-                                          leading: Icon(item.icon),
-                                          title: Text(context.parseL10n(item.titleL10n)),
-                                          onTap: () {
-                                            context.router.navigate(SelfConfigScreenPageRoute(url: selfConfig.url));
-                                          },
-                                        ),
-                                        const ListTileSeparator(),
-                                      ])
-                                ],
-                              ],
+                  Column(
+                    children: [
+                      for (var section in sections)
+                        Column(
+                          children: [
+                            GroupTitleListTile(
+                              titleData: context.parseL10n(section.titleL10n),
                             ),
-                        ],
-                      );
-                    },
+                            ...[
+                              for (var item in section.items)
+                                if (item.flavor == SettingsFlavor.network)
+                                  Column(children: [
+                                    ListTile(
+                                      leading: Icon(item.icon),
+                                      title: Text(context.parseL10n(item.titleL10n)),
+                                      onTap: () => context.router.navigate(const NetworkScreenPageRoute()),
+                                    ),
+                                    const ListTileSeparator(),
+                                  ])
+                                else if (item.flavor == SettingsFlavor.language)
+                                  Column(children: [
+                                    ListTile(
+                                      leading: Icon(item.icon),
+                                      title: Text(context.parseL10n(item.titleL10n)),
+                                      onTap: () => context.router.navigate(const LanguageScreenPageRoute()),
+                                    ),
+                                    const ListTileSeparator(),
+                                  ])
+                                else if (item.flavor == SettingsFlavor.help)
+                                  Column(children: [
+                                    ListTile(
+                                      leading: Icon(item.icon),
+                                      title: Text(context.parseL10n(item.titleL10n)),
+                                      onTap: () => context.router.navigate(
+                                          HelpScreenPageRoute(initialUriQueryParam: item.data!.resource.toString())),
+                                    ),
+                                    const ListTileSeparator(),
+                                  ])
+                                else if (item.flavor == SettingsFlavor.terms)
+                                  Column(children: [
+                                    ListTile(
+                                      leading: Icon(item.icon),
+                                      title: Text(context.parseL10n(item.titleL10n)),
+                                      onTap: () => context.router.navigate(TermsConditionsScreenPageRoute(
+                                          initialUriQueryParam: item.data!.resource.toString())),
+                                    ),
+                                    const ListTileSeparator(),
+                                  ])
+                                else if (item.flavor == SettingsFlavor.about)
+                                  Column(children: [
+                                    ListTile(
+                                      leading: Icon(item.icon),
+                                      title: Text(context.parseL10n(item.titleL10n)),
+                                      onTap: () => context.router.navigate(const AboutScreenPageRoute()),
+                                    ),
+                                    const ListTileSeparator(),
+                                  ])
+                                else if (item.flavor == SettingsFlavor.log)
+                                  Column(children: [
+                                    ListTile(
+                                      leading: Icon(item.icon),
+                                      title: Text(context.parseL10n(item.titleL10n)),
+                                      onTap: () => context.router.navigate(const LogRecordsConsoleScreenPageRoute()),
+                                    ),
+                                    const ListTileSeparator(),
+                                  ])
+                                else if (item.flavor == SettingsFlavor.deleteAccount)
+                                  Column(children: [
+                                    ListTile(
+                                      leading: Icon(item.icon),
+                                      title: Text(context.parseL10n(item.titleL10n)),
+                                      onTap: () => _deleteAccount(context),
+                                    ),
+                                    const ListTileSeparator(),
+                                  ])
+                                else if (item.flavor == SettingsFlavor.embedded)
+                                  Column(children: [
+                                    ListTile(
+                                      leading: Icon(item.icon),
+                                      title: Text(context.parseL10n(item.titleL10n)),
+                                      onTap: () => context.router.navigate(EmbeddedScreenPage.route(item.data!)),
+                                    ),
+                                    const ListTileSeparator(),
+                                  ])
+                                else if (item.flavor == SettingsFlavor.callCodecs)
+                                  Column(children: [
+                                    ListTile(
+                                      leading: Icon(item.icon),
+                                      title: Text(context.parseL10n(item.titleL10n)),
+                                      onTap: () => context.router.navigate(const CallCodecsScreenPageRoute()),
+                                    ),
+                                    const ListTileSeparator(),
+                                  ])
+                                else if (item.flavor == SettingsFlavor.selfConfig)
+                                  BlocBuilder<SelfConfigCubit, SelfConfigState>(
+                                    builder: (context, state) {
+                                      if (state is SelfConfigStateCommon) {
+                                        final selfConfig = state.selfConfig;
+                                        if (selfConfig is SelfConfigSupported) {
+                                          return Column(children: [
+                                            ListTile(
+                                              leading: Icon(item.icon),
+                                              title: Text(context.parseL10n(item.titleL10n)),
+                                              onTap: () => context.router.navigate(
+                                                SelfConfigScreenPageRoute(url: selfConfig.url),
+                                              ),
+                                            ),
+                                            const ListTileSeparator(),
+                                          ]);
+                                        }
+                                      }
+
+                                      return const SizedBox.shrink();
+                                    },
+                                  )
+                            ],
+                          ],
+                        ),
+                    ],
                   ),
                 ],
               ),
