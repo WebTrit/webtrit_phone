@@ -45,11 +45,15 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
         }
       };
 
+      // Remote configuration
+      final remoteCacheConfigService = await DefaultRemoteCacheConfigService.init();
+      final remoteFirebaseConfigService = await FirebaseRemoteConfigService.init(remoteCacheConfigService);
+
       // Initialization order is crucial for proper app setup
       await AppInfo.init(FirebaseAppIdProvider());
       await DeviceInfo.init();
       await PackageInfo.init();
-      await AppLogger.init();
+      await AppLogger.init(remoteFirebaseConfigService);
       await AppThemes.init();
       await AppPreferences.init();
       await FeatureAccess.init();
@@ -134,11 +138,14 @@ Future<void> _initFirebaseMessaging() async {
 
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  // Cache remote configuration
+  final remoteCacheConfigService = await DefaultRemoteCacheConfigService.init();
+
   // Initialize the logger for handling Firebase Cloud Messaging (FCM) in the background isolate.
   await AppInfo.init(const SharedPreferencesAppIdProvider());
   await DeviceInfo.init();
   await PackageInfo.init();
-  await AppLogger.init();
+  await AppLogger.init(remoteCacheConfigService);
 
   final appNotification = AppRemoteNotification.fromFCM(message);
 

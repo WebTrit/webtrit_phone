@@ -2,7 +2,6 @@ import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 
 import 'package:webtrit_phone/common/common.dart';
 import 'package:webtrit_phone/data/data.dart';
-import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
 import 'background_call_event_service.dart';
@@ -10,6 +9,8 @@ import 'background_call_event_service.dart';
 CallkeepBackgroundService? _callkeep;
 CallkeepConnections? _callkeepConnections;
 BackgroundCallEventService? _backgroundCallEventManager;
+
+RemoteConfigService? _remoteConfigService;
 
 DeviceInfo? _deviceInfo;
 PackageInfo? _packageInfo;
@@ -22,10 +23,14 @@ AppInfo? _appInfo;
 CallLogsRepository? _callLogsRepository;
 
 Future<void> _initializeDependencies() async {
+  // Cache remote configuration
+  _remoteConfigService ??= await DefaultRemoteCacheConfigService.init();
+
+  // Data classes
   _appInfo ??= await AppInfo.init(const SharedPreferencesAppIdProvider());
   _deviceInfo ??= await DeviceInfo.init();
   _packageInfo ??= await PackageInfo.init();
-  _appLogger ??= await AppLogger.init();
+  _appLogger ??= await AppLogger.init(_remoteConfigService!);
   _appPreferences ??= await AppPreferences.init();
   _appCertificates ??= await AppCertificates.init();
 
