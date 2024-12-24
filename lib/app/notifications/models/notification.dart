@@ -10,8 +10,13 @@ import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 
-// Base notifications definitions
+enum NotificationScope {
+  login,
+  main,
+  call;
+}
 
+// Base notifications definitions
 @immutable
 sealed class Notification {
   const Notification();
@@ -19,6 +24,8 @@ sealed class Notification {
   String l10n(BuildContext context);
 
   SnackBarAction? action(BuildContext context) => null;
+
+  List<NotificationScope> scopes() => NotificationScope.values;
 }
 
 abstract class ErrorNotification extends Notification {
