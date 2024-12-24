@@ -14,12 +14,19 @@ class AppShell extends StatelessWidget {
     super.key,
   });
 
-// TODO(Serdun): The logic here is not ideal and may result in missing important notifications.
-// Consider adding a scoped mechanism to control when notifications can be displayed.
-// Alternatively, create a dedicated notification page to store and display all missed notifications.
-  static const _ignoreSuccessNotificationOnScreens = [
-    CallScreenPageRoute.name,
-  ];
+  // Map scopes to their associated routes
+  static const Map<NotificationScope, List<String>> _scopeRoutes = {
+    NotificationScope.login: [
+      LoginRouterPageRoute.name,
+    ],
+    NotificationScope.main: [
+      MainScreenPageRoute.name,
+      SettingsScreenPageRoute.name,
+    ],
+    NotificationScope.call: [
+      CallScreenPageRoute.name,
+    ],
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -29,28 +36,30 @@ class AppShell extends StatelessWidget {
           listener: (context, state) {
             final lastNotification = state.lastNotification;
             if (lastNotification != null) {
-              switch (lastNotification) {
-                case ErrorNotification():
-                  context.showErrorSnackBar(
-                    lastNotification.l10n(context),
-                    action: lastNotification.action(context),
-                  );
-                case MessageNotification():
-                  context.showSnackBar(
-                    lastNotification.l10n(context),
-                    action: lastNotification.action(context),
-                  );
-                case SuccessNotification():
-                  final shouldAllowNotification = _ignoreSuccessNotificationOnScreens.any(
-                    (routeName) => !context.router.isRouteActive(routeName),
-                  );
+              // Check if the notification matches any active scope
+              final isNotificationInScope = lastNotification.scopes().any((scope) {
+                final routes = _scopeRoutes[scope] ?? [];
+                return routes.any((routeName) => context.router.isRouteActive(routeName));
+              });
 
-                  if (shouldAllowNotification) {
+              if (isNotificationInScope) {
+                switch (lastNotification) {
+                  case ErrorNotification():
+                    context.showErrorSnackBar(
+                      lastNotification.l10n(context),
+                      action: lastNotification.action(context),
+                    );
+                  case MessageNotification():
+                    context.showSnackBar(
+                      lastNotification.l10n(context),
+                      action: lastNotification.action(context),
+                    );
+                  case SuccessNotification():
                     context.showSuccessSnackBar(
                       lastNotification.l10n(context),
                       action: lastNotification.action(context),
                     );
-                  }
+                }
               }
               context.read<NotificationsBloc>().add(const NotificationsCleared());
             }
