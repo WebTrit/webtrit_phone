@@ -77,6 +77,11 @@ final class AppOfflineNotification extends MessageNotification {
   String l10n(BuildContext context) {
     return context.l10n.notifications_errorSnackBar_appOffline;
   }
+
+  @override
+  List<NotificationScope> scopes() => [
+        NotificationScope.main,
+      ];
 }
 
 final class AppOnlineNotification extends SuccessNotification {
@@ -84,6 +89,11 @@ final class AppOnlineNotification extends SuccessNotification {
   String l10n(BuildContext context) {
     return context.l10n.notifications_errorSnackBar_appOnline;
   }
+
+  @override
+  List<NotificationScope> scopes() => [
+        NotificationScope.main,
+      ];
 }
 
 final class ActiveLineBlindTransferWarningNotification extends MessageNotification {
