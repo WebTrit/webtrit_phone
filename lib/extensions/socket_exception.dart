@@ -7,20 +7,27 @@ import 'package:webtrit_phone/l10n/l10n.dart';
 
 // The meaning of each code can be found at:
 // https://www.gnu.org/software/libc/manual/html_node/Error-Codes.html
+const int _errorHostDown = 7; // EHOSTDOWN
+const int _errorHostUnreachable = 8; // EHOSTUNREACH
+const int _errorTimeout = 11; // ETIMEDOUT
+const int _errorConnectionRefused = 111; // ECONNREFUSED
+const int _errorNetworkUnreachable = 101; // ENETUNREACH
+const int _errorConnectionReset = 104; // ECONNRESET
+
 extension SocketExceptionL10n on SocketException {
   String titleL10n(BuildContext context) {
     switch (osError?.errorCode) {
-      case 7:
+      case _errorHostDown:
         return context.l10n.socketError_serverUnreachable;
-      case 8: // EHOSTUNREACH
+      case _errorHostUnreachable:
         return context.l10n.socketError_networkUnreachable;
-      case 11: // ETIMEDOUT
+      case _errorTimeout:
         return context.l10n.socketError_connectionTimedOut;
-      case 111: // ECONNREFUSED
+      case _errorConnectionRefused:
         return context.l10n.socketError_connectionRefused;
-      case 101: // ENETUNREACH
+      case _errorNetworkUnreachable:
         return context.l10n.socketError_networkUnreachable;
-      case 104: // ECONNRESET
+      case _errorConnectionReset:
         return context.l10n.socketError_connectionReset;
       default:
         return context.l10n.socketError_default;
@@ -29,17 +36,17 @@ extension SocketExceptionL10n on SocketException {
 
   String descriptionL10n(BuildContext context) {
     switch (osError?.errorCode) {
-      case 7: // EHOSTDOWN
+      case _errorHostDown:
         return context.l10n.socketError_serverUnreachableDescription;
-      case 8: // EHOSTUNREACH
+      case _errorHostUnreachable:
         return context.l10n.socketError_networkUnreachableDescription;
-      case 11: // ETIMEDOUT
+      case _errorTimeout:
         return context.l10n.socketError_connectionTimedOutDescription;
-      case 111: // ECONNREFUSED
+      case _errorConnectionRefused:
         return context.l10n.socketError_connectionRefusedDescription;
-      case 101: // ENETUNREACH
+      case _errorNetworkUnreachable:
         return context.l10n.socketError_networkUnreachableDescription;
-      case 104: // ECONNRESET
+      case _errorConnectionReset:
         return context.l10n.socketError_connectionResetDescription;
       default:
         return context.l10n.socketError_defaultDescription(osError?.errorCode);
