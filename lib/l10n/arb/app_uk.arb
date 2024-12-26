@@ -941,5 +941,36 @@
   "webRegistration_ErrorAcknowledgeDialogActions_skip": "Skip",
   "@webRegistration_ErrorAcknowledgeDialogActions_skip": {},
   "webRegistration_ErrorAcknowledgeDialog_title": "Web resource error",
-  "@webRegistration_ErrorAcknowledgeDialog_title": {}
+  "@webRegistration_ErrorAcknowledgeDialog_title": {},
+  "socketError_serverUnreachable": "Сервер недоступний через проблеми з мережею",
+  "@socketError_serverUnreachable": {},
+  "socketError_networkUnreachable": "Мережа недоступна",
+  "@socketError_networkUnreachable": {},
+  "socketError_connectionTimedOut": "Час з'єднання вичерпано",
+  "@socketError_connectionTimedOut": {},
+  "socketError_connectionRefused": "З'єднання відхилено",
+  "@socketError_connectionRefused": {},
+  "socketError_connectionReset": "З'єднання було скинуто",
+  "@socketError_connectionReset": {},
+  "socketError_default": "Мережева помилка",
+  "@socketError_default": {},
+  "socketError_serverUnreachableDescription": "Сервер недоступний. Це може бути спричинено відсутністю інтернет-з'єднання або технічним обслуговуванням сервера. Перевірте інтернет-з'єднання та спробуйте знову.",
+  "@socketError_serverUnreachableDescription": {},
+  "socketError_networkUnreachableDescription": "Мережа недоступна. Це може бути спричинено слабким інтернет-з'єднанням, обмеженнями мережі, такими як фаєрволи, або неправильними налаштуваннями DNS. Якщо ви використовуєте робочу або обмежену мережу, зверніться до адміністратора мережі або спробуйте підключитися до іншої мережі.",
+  "@socketError_networkUnreachableDescription": {},
+  "socketError_connectionTimedOutDescription": "Час з'єднання вичерпано. Це може статися через повільне або нестабільне інтернет-з'єднання. Перевірте своє з'єднання та спробуйте знову.",
+  "@socketError_connectionTimedOutDescription": {},
+  "socketError_connectionRefusedDescription": "Сервер відхилив з'єднання. Можливо, сервер недоступний або відхиляє запити. Спробуйте пізніше.",
+  "@socketError_connectionRefusedDescription": {},
+  "socketError_connectionResetDescription": "З'єднання було скинуто сервером. Спробуйте знову.",
+  "@socketError_connectionResetDescription": {},
+  "socketError_defaultDescription": "Виникла неочікувана мережева помилка (Код помилки: {errorCode}). Це може бути спричинено проблемами з мережею або сервером. Спробуйте пізніше.",
+  "@socketError_defaultDescription": {
+    "placeholders": {
+      "errorCode": {
+        "type": "int?",
+        "optional": true
+      }
+    }
+  }
 }

@@ -1338,4 +1338,42 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get webRegistration_ErrorAcknowledgeDialog_title => 'Web resource error';
+
+  @override
+  String get socketError_serverUnreachable => 'The server is unreachable due to network issues';
+
+  @override
+  String get socketError_networkUnreachable => 'Network Unreachable';
+
+  @override
+  String get socketError_connectionTimedOut => 'Connection Timed Out';
+
+  @override
+  String get socketError_connectionRefused => 'Connection Refused';
+
+  @override
+  String get socketError_connectionReset => 'Connection Reset';
+
+  @override
+  String get socketError_default => 'Network Error';
+
+  @override
+  String get socketError_serverUnreachableDescription => 'The server is unreachable. This could be due to no internet connection or server maintenance. Please check your internet connection and try again.';
+
+  @override
+  String get socketError_networkUnreachableDescription => 'The network is unreachable. This could be due to a weak internet connection, network restrictions such as firewalls, or incorrect DNS settings. If you\'re on a work or restricted network, please contact your network administrator or try using a different network.';
+
+  @override
+  String get socketError_connectionTimedOutDescription => 'The connection has timed out. This might happen due to a slow or unstable internet connection. Please check your connection and try again.';
+
+  @override
+  String get socketError_connectionRefusedDescription => 'The server refused the connection. The server may be down or rejecting requests. Please try again later.';
+
+  @override
+  String get socketError_connectionResetDescription => 'The connection was reset by the server. Please try again.';
+
+  @override
+  String socketError_defaultDescription(int? errorCode) {
+    return 'An unexpected network error occurred (Error code: $errorCode). This might be caused by network issues or server problems. Please try again later.';
+  }
 }

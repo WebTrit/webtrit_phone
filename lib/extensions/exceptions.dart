@@ -11,38 +11,38 @@ extension SocketExceptionL10n on SocketException {
   String titleL10n(BuildContext context) {
     switch (osError?.errorCode) {
       case 7:
-        return 'The server is unreachable due to network issues';
+        return context.l10n.socketError_serverUnreachable;
       case 8: // EHOSTUNREACH
-        return 'Network Unreachable';
+        return context.l10n.socketError_networkUnreachable;
       case 11: // ETIMEDOUT
-        return 'Connection Timed Out';
+        return context.l10n.socketError_connectionTimedOut;
       case 111: // ECONNREFUSED
-        return 'Connection Refused';
+        return context.l10n.socketError_connectionRefused;
       case 101: // ENETUNREACH
-        return 'The server is unreachable due to network issues';
+        return context.l10n.socketError_networkUnreachable;
       case 104: // ECONNRESET
-        return 'Connection Reset';
+        return context.l10n.socketError_connectionReset;
       default:
-        return 'Network Error';
+        return context.l10n.socketError_default;
     }
   }
 
   String descriptionL10n(BuildContext context) {
     switch (osError?.errorCode) {
       case 7: // EHOSTDOWN
-        return 'The server is unreachable. This could be due to no internet connection or server maintenance. Please check your internet connection and try again.';
+        return context.l10n.socketError_serverUnreachableDescription;
       case 8: // EHOSTUNREACH
-        return 'The network is unreachable. This could be due to a weak internet connection, network restrictions such as firewalls, or incorrect DNS settings. If you\'re on a work or restricted network, please contact your network administrator or try using a different network.';
+        return context.l10n.socketError_networkUnreachableDescription;
       case 11: // ETIMEDOUT
-        return 'The connection has timed out. This might happen due to a slow or unstable internet connection. Please check your connection and try again.';
+        return context.l10n.socketError_connectionTimedOutDescription;
       case 111: // ECONNREFUSED
-        return 'The server refused the connection. The server may be down or rejecting requests. Please try again later.';
+        return context.l10n.socketError_connectionRefusedDescription;
       case 101: // ENETUNREACH
-        return 'The network is unreachable. Please ensure your device is connected to the internet or switch to a more reliable network.';
+        return context.l10n.socketError_networkUnreachableDescription;
       case 104: // ECONNRESET
-        return 'The connection was reset by the server. Please try again.';
+        return context.l10n.socketError_connectionResetDescription;
       default:
-        return 'An unexpected network error occurred (Error code: ${osError?.errorCode}). This might be caused by network issues or server problems. Please try again later.';
+        return context.l10n.socketError_defaultDescription(osError?.errorCode);
     }
   }
 
