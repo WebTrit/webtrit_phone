@@ -6,6 +6,7 @@ export 'clock.dart';
 export 'contact_source_type.dart';
 export 'datetime.dart';
 export 'duration.dart';
+export 'exceptions.dart';
 export 'iterable.dart';
 export 'locale.dart';
 export 'messaging_socket_exception.dart';
