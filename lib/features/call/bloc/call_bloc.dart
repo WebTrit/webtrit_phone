@@ -872,10 +872,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         }
 
         if (call.direction == CallDirection.incoming && !call.wasAccepted) {
-          /// TODO: extend signaling package with hangup codes and docs
-          /// https://developer.signalwire.com/freeswitch/FreeSWITCH-Explained/Troubleshooting-Debugging/Hangup-Cause-Code-Table_3964945/
-          if (event.code == 603) endReason = CallkeepEndCallReason.declinedElsewhere;
-          if (event.code == 487) endReason = CallkeepEndCallReason.unanswered;
+          if (code == SignalingResponseCode.declineCall) endReason = CallkeepEndCallReason.declinedElsewhere;
+          if (code == SignalingResponseCode.requestTerminated) endReason = CallkeepEndCallReason.unanswered;
         }
 
         await (await _peerConnectionRetrieve(event.callId))?.close();
