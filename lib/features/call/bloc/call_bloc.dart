@@ -870,8 +870,12 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         if (call.wasHungUp == false) {
           _addToRecents(call.copyWith(hungUpTime: clock.now()));
         }
+
         if (call.direction == CallDirection.incoming && !call.wasAccepted) {
-          endReason = CallkeepEndCallReason.unanswered;
+          /// TODO: extend signaling package with hangup codes and docs
+          /// https://developer.signalwire.com/freeswitch/FreeSWITCH-Explained/Troubleshooting-Debugging/Hangup-Cause-Code-Table_3964945/
+          if (event.code == 603) endReason = CallkeepEndCallReason.declinedElsewhere;
+          if (event.code == 487) endReason = CallkeepEndCallReason.unanswered;
         }
 
         await (await _peerConnectionRetrieve(event.callId))?.close();
