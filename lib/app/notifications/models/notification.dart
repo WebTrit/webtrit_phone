@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 import 'package:auto_route/auto_route.dart';
 
 import 'package:webtrit_api/webtrit_api.dart';
+
 import 'package:webtrit_phone/features/messaging/messaging.dart';
 import 'package:webtrit_phone/models/failures/failures.dart';
 import 'package:webtrit_signaling/webtrit_signaling.dart';
@@ -98,6 +101,16 @@ class DefaultErrorNotification extends ErrorNotification {
         },
       );
     } else if (error is MessagingSocketException) {
+      final title = l10n(context);
+      final errorFields = error.errorFields(context);
+
+      return SnackBarAction(
+        label: context.l10n.default_ErrorDetails,
+        onPressed: () {
+          context.router.push(ErrorDetailsScreenPageRoute(title: title, fields: errorFields));
+        },
+      );
+    } else if (error is SocketException) {
       final title = l10n(context);
       final errorFields = error.errorFields(context);
 

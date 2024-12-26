@@ -4,6 +4,8 @@ import 'dart:io';
 import 'package:flutter/widgets.dart';
 
 import 'package:webtrit_api/webtrit_api.dart';
+
+import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/call/extensions/extensions.dart';
 import 'package:webtrit_phone/features/messaging/messaging.dart';
 import 'package:webtrit_phone/models/models.dart';
@@ -14,7 +16,7 @@ String defaultErrorL10n(BuildContext context, Object error) {
   return switch (error) {
     FormatException() => context.l10n.default_FormatExceptionError,
     TlsException() => context.l10n.default_TlsExceptionError,
-    SocketException() => context.l10n.default_SocketExceptionError,
+    SocketException() => _defaultSocketExceptionL10n(context, error),
     TimeoutException() => context.l10n.default_TimeoutExceptionError,
     ClientException() => context.l10n.default_ClientExceptionError,
     TypeError() => context.l10n.default_TypeErrorError,
@@ -35,6 +37,10 @@ String _defaultRequestFailureL10n(BuildContext context, RequestFailure error) {
 
 String _defaultSignalingHangupFailureL10n(BuildContext context, SignalingHangupFailure failure) {
   return failure.code.type.l10n(context);
+}
+
+String _defaultSocketExceptionL10n(BuildContext context, SocketException exception) {
+  return exception.titleL10n(context);
 }
 
 String _defaultMessagingSocketExceptionL10n(BuildContext context, MessagingSocketException error) {
