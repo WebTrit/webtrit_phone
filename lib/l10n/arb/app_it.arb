@@ -941,5 +941,36 @@
   "webRegistration_ErrorAcknowledgeDialogActions_skip": "Skip",
   "@webRegistration_ErrorAcknowledgeDialogActions_skip": {},
   "webRegistration_ErrorAcknowledgeDialog_title": "Web resource error",
-  "@webRegistration_ErrorAcknowledgeDialog_title": {}
+  "@webRegistration_ErrorAcknowledgeDialog_title": {},
+  "socketError_serverUnreachable": "Il server non è raggiungibile a causa di problemi di rete",
+  "@socketError_serverUnreachable": {},
+  "socketError_networkUnreachable": "Rete non raggiungibile",
+  "@socketError_networkUnreachable": {},
+  "socketError_connectionTimedOut": "Connessione scaduta",
+  "@socketError_connectionTimedOut": {},
+  "socketError_connectionRefused": "Connessione rifiutata",
+  "@socketError_connectionRefused": {},
+  "socketError_connectionReset": "Connessione reimpostata",
+  "@socketError_connectionReset": {},
+  "socketError_default": "Errore di rete",
+  "@socketError_default": {},
+  "socketError_serverUnreachableDescription": "Il server non è raggiungibile. Questo potrebbe essere dovuto a un'assenza di connessione a Internet o alla manutenzione del server. Si prega di controllare la connessione a Internet e riprovare.",
+  "@socketError_serverUnreachableDescription": {},
+  "socketError_networkUnreachableDescription": "La rete non è raggiungibile. Questo potrebbe essere dovuto a una connessione Internet debole, restrizioni di rete come firewall o impostazioni DNS errate. Se sei su una rete aziendale o con restrizioni, contatta l'amministratore di rete o prova a utilizzare un'altra rete.",
+  "@socketError_networkUnreachableDescription": {},
+  "socketError_connectionTimedOutDescription": "La connessione è scaduta. Questo potrebbe accadere a causa di una connessione Internet lenta o instabile. Si prega di controllare la connessione e riprovare.",
+  "@socketError_connectionTimedOutDescription": {},
+  "socketError_connectionRefusedDescription": "Il server ha rifiutato la connessione. Il server potrebbe essere inattivo o rifiutare le richieste. Si prega di riprovare più tardi.",
+  "@socketError_connectionRefusedDescription": {},
+  "socketError_connectionResetDescription": "La connessione è stata reimpostata dal server. Si prega di riprovare.",
+  "@socketError_connectionResetDescription": {},
+  "socketError_defaultDescription": "Si è verificato un errore di rete imprevisto (Codice errore: {errorCode}). Questo potrebbe essere causato da problemi di rete o del server. Si prega di riprovare più tardi.",
+  "@socketError_defaultDescription": {
+    "placeholders": {
+      "errorCode": {
+         "type": "int?",
+         "optional": true
+      }
+    }
+  }
 }

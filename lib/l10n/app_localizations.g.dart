@@ -2682,6 +2682,78 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Web resource error'**
   String get webRegistration_ErrorAcknowledgeDialog_title;
+
+  /// No description provided for @socketError_serverUnreachable.
+  ///
+  /// In en, this message translates to:
+  /// **'The server is unreachable due to network issues'**
+  String get socketError_serverUnreachable;
+
+  /// No description provided for @socketError_networkUnreachable.
+  ///
+  /// In en, this message translates to:
+  /// **'Network Unreachable'**
+  String get socketError_networkUnreachable;
+
+  /// No description provided for @socketError_connectionTimedOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Connection Timed Out'**
+  String get socketError_connectionTimedOut;
+
+  /// No description provided for @socketError_connectionRefused.
+  ///
+  /// In en, this message translates to:
+  /// **'Connection Refused'**
+  String get socketError_connectionRefused;
+
+  /// No description provided for @socketError_connectionReset.
+  ///
+  /// In en, this message translates to:
+  /// **'Connection Reset'**
+  String get socketError_connectionReset;
+
+  /// No description provided for @socketError_default.
+  ///
+  /// In en, this message translates to:
+  /// **'Network Error'**
+  String get socketError_default;
+
+  /// No description provided for @socketError_serverUnreachableDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'The server is unreachable. This could be due to no internet connection or server maintenance. Please check your internet connection and try again.'**
+  String get socketError_serverUnreachableDescription;
+
+  /// No description provided for @socketError_networkUnreachableDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'The network is unreachable. This could be due to a weak internet connection, network restrictions such as firewalls, or incorrect DNS settings. If you\'re on a work or restricted network, please contact your network administrator or try using a different network.'**
+  String get socketError_networkUnreachableDescription;
+
+  /// No description provided for @socketError_connectionTimedOutDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'The connection has timed out. This might happen due to a slow or unstable internet connection. Please check your connection and try again.'**
+  String get socketError_connectionTimedOutDescription;
+
+  /// No description provided for @socketError_connectionRefusedDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'The server refused the connection. The server may be down or rejecting requests. Please try again later.'**
+  String get socketError_connectionRefusedDescription;
+
+  /// No description provided for @socketError_connectionResetDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'The connection was reset by the server. Please try again.'**
+  String get socketError_connectionResetDescription;
+
+  /// No description provided for @socketError_defaultDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'An unexpected network error occurred (Error code: {errorCode}). This might be caused by network issues or server problems. Please try again later.'**
+  String socketError_defaultDescription(int? errorCode);
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

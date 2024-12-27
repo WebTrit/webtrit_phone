@@ -1338,4 +1338,42 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get webRegistration_ErrorAcknowledgeDialog_title => 'Web resource error';
+
+  @override
+  String get socketError_serverUnreachable => 'Il server non è raggiungibile a causa di problemi di rete';
+
+  @override
+  String get socketError_networkUnreachable => 'Rete non raggiungibile';
+
+  @override
+  String get socketError_connectionTimedOut => 'Connessione scaduta';
+
+  @override
+  String get socketError_connectionRefused => 'Connessione rifiutata';
+
+  @override
+  String get socketError_connectionReset => 'Connessione reimpostata';
+
+  @override
+  String get socketError_default => 'Errore di rete';
+
+  @override
+  String get socketError_serverUnreachableDescription => 'Il server non è raggiungibile. Questo potrebbe essere dovuto a un\'assenza di connessione a Internet o alla manutenzione del server. Si prega di controllare la connessione a Internet e riprovare.';
+
+  @override
+  String get socketError_networkUnreachableDescription => 'La rete non è raggiungibile. Questo potrebbe essere dovuto a una connessione Internet debole, restrizioni di rete come firewall o impostazioni DNS errate. Se sei su una rete aziendale o con restrizioni, contatta l\'amministratore di rete o prova a utilizzare un\'altra rete.';
+
+  @override
+  String get socketError_connectionTimedOutDescription => 'La connessione è scaduta. Questo potrebbe accadere a causa di una connessione Internet lenta o instabile. Si prega di controllare la connessione e riprovare.';
+
+  @override
+  String get socketError_connectionRefusedDescription => 'Il server ha rifiutato la connessione. Il server potrebbe essere inattivo o rifiutare le richieste. Si prega di riprovare più tardi.';
+
+  @override
+  String get socketError_connectionResetDescription => 'La connessione è stata reimpostata dal server. Si prega di riprovare.';
+
+  @override
+  String socketError_defaultDescription(int? errorCode) {
+    return 'Si è verificato un errore di rete imprevisto (Codice errore: $errorCode). Questo potrebbe essere causato da problemi di rete o del server. Si prega di riprovare più tardi.';
+  }
 }

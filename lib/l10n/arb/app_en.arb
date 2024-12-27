@@ -941,5 +941,36 @@
   "webRegistration_ErrorAcknowledgeDialogActions_skip": "Skip",
   "@webRegistration_ErrorAcknowledgeDialogActions_skip": {},
   "webRegistration_ErrorAcknowledgeDialog_title": "Web resource error",
-  "@webRegistration_ErrorAcknowledgeDialog_title": {}
+  "@webRegistration_ErrorAcknowledgeDialog_title": {},
+  "socketError_serverUnreachable": "The server is unreachable due to network issues",
+  "@socketError_serverUnreachable": {},
+  "socketError_networkUnreachable": "Network Unreachable",
+  "@socketError_networkUnreachable": {},
+  "socketError_connectionTimedOut": "Connection Timed Out",
+  "@socketError_connectionTimedOut": {},
+  "socketError_connectionRefused": "Connection Refused",
+  "@socketError_connectionRefused": {},
+  "socketError_connectionReset": "Connection Reset",
+  "@socketError_connectionReset": {},
+  "socketError_default": "Network Error",
+  "@socketError_default": {},
+  "socketError_serverUnreachableDescription": "The server is unreachable. This could be due to no internet connection or server maintenance. Please check your internet connection and try again.",
+  "@socketError_serverUnreachableDescription": {},
+  "socketError_networkUnreachableDescription": "The network is unreachable. This could be due to a weak internet connection, network restrictions such as firewalls, or incorrect DNS settings. If you're on a work or restricted network, please contact your network administrator or try using a different network.",
+  "@socketError_networkUnreachableDescription": {},
+  "socketError_connectionTimedOutDescription": "The connection has timed out. This might happen due to a slow or unstable internet connection. Please check your connection and try again.",
+  "@socketError_connectionTimedOutDescription": {},
+  "socketError_connectionRefusedDescription": "The server refused the connection. The server may be down or rejecting requests. Please try again later.",
+  "@socketError_connectionRefusedDescription": {},
+  "socketError_connectionResetDescription": "The connection was reset by the server. Please try again.",
+  "@socketError_connectionResetDescription": {},
+  "socketError_defaultDescription": "An unexpected network error occurred (Error code: {errorCode}). This might be caused by network issues or server problems. Please try again later.",
+  "@socketError_defaultDescription": {
+    "placeholders": {
+      "errorCode": {
+         "type": "int?",
+         "optional": true
+      }
+    }
+  }
 }

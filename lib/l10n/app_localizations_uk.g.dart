@@ -1338,4 +1338,42 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get webRegistration_ErrorAcknowledgeDialog_title => 'Web resource error';
+
+  @override
+  String get socketError_serverUnreachable => 'Сервер недоступний через проблеми з мережею';
+
+  @override
+  String get socketError_networkUnreachable => 'Мережа недоступна';
+
+  @override
+  String get socketError_connectionTimedOut => 'Час з\'єднання вичерпано';
+
+  @override
+  String get socketError_connectionRefused => 'З\'єднання відхилено';
+
+  @override
+  String get socketError_connectionReset => 'З\'єднання було скинуто';
+
+  @override
+  String get socketError_default => 'Мережева помилка';
+
+  @override
+  String get socketError_serverUnreachableDescription => 'Сервер недоступний. Це може бути спричинено відсутністю інтернет-з\'єднання або технічним обслуговуванням сервера. Перевірте інтернет-з\'єднання та спробуйте знову.';
+
+  @override
+  String get socketError_networkUnreachableDescription => 'Мережа недоступна. Це може бути спричинено слабким інтернет-з\'єднанням, обмеженнями мережі, такими як фаєрволи, або неправильними налаштуваннями DNS. Якщо ви використовуєте робочу або обмежену мережу, зверніться до адміністратора мережі або спробуйте підключитися до іншої мережі.';
+
+  @override
+  String get socketError_connectionTimedOutDescription => 'Час з\'єднання вичерпано. Це може статися через повільне або нестабільне інтернет-з\'єднання. Перевірте своє з\'єднання та спробуйте знову.';
+
+  @override
+  String get socketError_connectionRefusedDescription => 'Сервер відхилив з\'єднання. Можливо, сервер недоступний або відхиляє запити. Спробуйте пізніше.';
+
+  @override
+  String get socketError_connectionResetDescription => 'З\'єднання було скинуто сервером. Спробуйте знову.';
+
+  @override
+  String socketError_defaultDescription(int? errorCode) {
+    return 'Виникла неочікувана мережева помилка (Код помилки: $errorCode). Це може бути спричинено проблемами з мережею або сервером. Спробуйте пізніше.';
+  }
 }
