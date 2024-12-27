@@ -10,8 +10,16 @@ enum SignalingResponseCodeType {
   callHangup,
 }
 
-// The meaning of each code can be found at:
-// https://github.com/WebTrit/webtrit_docs/blob/b2148c4011d98f2887a3994b8f63c351632ad9dd/signaling/responses/error_codes.md
+/// The meaning of each code can be found at:
+/// https://github.com/WebTrit/webtrit_docs/blob/b2148c4011d98f2887a3994b8f63c351632ad9dd/signaling/responses/error_codes.md
+///
+/// Also, the following links can be useful:
+///
+/// General SIP response codes
+/// https://en.wikipedia.org/wiki/List_of_SIP_response_codes
+///
+/// Q.850 to SIP Code Table (hangup codes)
+/// https://developer.signalwire.com/freeswitch/FreeSWITCH-Explained/Troubleshooting-Debugging/Hangup-Cause-Code-Table_3964945/
 enum SignalingResponseCode {
   unauthorizedRequest(SignalingResponseCodeType.unauthorized, 403),
   unauthorizedAccess(SignalingResponseCodeType.unauthorized, 405),
