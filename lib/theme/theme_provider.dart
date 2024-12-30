@@ -345,9 +345,13 @@ class ThemeProvider extends InheritedWidget {
   ) {
     final callStartForegroundColor = config?.callStart?.foregroundColor ?? colors.onTertiary;
     final callStartBackgroundColor = config?.callStart?.backgroundColor ?? colors.tertiary;
+    final callStartIconColor = config?.callStart?.iconColor ?? colors.surface;
+    final callStartDisabledIconColor = config?.callStart?.disabledIconColor ?? colors.surface.withOpacity(0.38);
 
     final callTransferForegroundColor = config?.callTransfer?.foregroundColor ?? colors.onSecondary;
     final callTransferBackgroundColor = config?.callTransfer?.backgroundColor ?? colors.secondary;
+    final callTransferIconColor = config?.callTransfer?.iconColor ?? colors.surface;
+    final callTransferDisabledIconColor = config?.callTransfer?.disabledIconColor ?? colors.surface.withOpacity(0.38);
 
     final backspacePressedStyleForegroundColor = config?.backspacePressed?.foregroundColor ?? colors.onSecondary;
     final backspacePressedStyleBackgroundColor = config?.backspacePressed?.backgroundColor;
@@ -358,6 +362,8 @@ class ThemeProvider extends InheritedWidget {
       foregroundColor: callStartForegroundColor,
       backgroundColor: callStartBackgroundColor,
       disabledForegroundColor: colors.onTertiary.withOpacity(0.38),
+      iconColor: callStartIconColor,
+      disabledIconColor: callStartDisabledIconColor,
       padding: EdgeInsets.zero,
     );
 
@@ -365,6 +371,8 @@ class ThemeProvider extends InheritedWidget {
       foregroundColor: callTransferForegroundColor,
       backgroundColor: callTransferBackgroundColor,
       disabledForegroundColor: colors.secondary.withOpacity(0.38),
+      iconColor: callTransferIconColor,
+      disabledIconColor: callTransferDisabledIconColor,
       padding: EdgeInsets.zero,
     );
 
