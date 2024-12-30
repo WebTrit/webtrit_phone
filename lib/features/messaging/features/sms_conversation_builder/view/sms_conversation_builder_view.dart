@@ -313,7 +313,7 @@ class _SmsConversationBuilderViewState extends State<SmsConversationBuilderView>
       return Theme(
         data: theme.copyWith(
           dividerColor: Colors.transparent,
-          highlightColor: colorScheme.primary.withOpacity(0.1),
+          highlightColor: colorScheme.primary.withValues(alpha: 0.1),
         ),
         child: ExpansionTile(
           leading: LeadingAvatar(

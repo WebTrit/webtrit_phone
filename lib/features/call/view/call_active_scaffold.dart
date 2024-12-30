@@ -99,7 +99,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                       child: Stack(
                         children: [
                           Container(
-                            decoration: BoxDecoration(color: onTabGradient.withOpacity(0.3)),
+                            decoration: BoxDecoration(color: onTabGradient.withValues(alpha: 0.3)),
                             width: orientation == Orientation.portrait ? 90.0 : 120.0,
                             height: orientation == Orientation.portrait ? 120.0 : 90.0,
                             child: activeCall.frontCamera == null

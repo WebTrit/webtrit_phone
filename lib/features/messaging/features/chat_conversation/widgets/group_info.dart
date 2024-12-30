@@ -217,7 +217,7 @@ class _GroupInfoState extends State<GroupInfo> {
               ),
               if (state.busy)
                 Container(
-                  color: Colors.black.withOpacity(0.1),
+                  color: Colors.black.withValues(alpha: 0.1),
                   child: BackdropFilter(
                     filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
                     child: const Center(child: CircularProgressIndicator()),

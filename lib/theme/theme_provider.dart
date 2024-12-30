@@ -218,8 +218,8 @@ class ThemeProvider extends InheritedWidget {
         foregroundColor: elevatedButtonAddons?.foregroundColor ?? colors.onPrimary,
         backgroundColor: elevatedButtonAddons?.backgroundColor ?? colors.primary,
         textStyle: TextStyle(color: elevatedButtonAddons?.textColor),
-        disabledForegroundColor: colors.onPrimaryContainer.withOpacity(0.38),
-        disabledBackgroundColor: colors.onPrimaryContainer.withOpacity(0.12),
+        disabledForegroundColor: colors.onPrimaryContainer.withValues(alpha: 0.38),
+        disabledBackgroundColor: colors.onPrimaryContainer.withValues(alpha: 0.12),
       ).copyWith(elevation: ButtonStyleButton.allOrNull(0.0)),
       neutral: ElevatedButton.styleFrom(
         foregroundColor: colors.onSurface,
@@ -228,14 +228,14 @@ class ThemeProvider extends InheritedWidget {
       primaryOnDark: ElevatedButton.styleFrom(
         foregroundColor: colors.onPrimary,
         backgroundColor: colors.primary,
-        disabledForegroundColor: colors.onPrimary.withOpacity(0.5),
-        disabledBackgroundColor: colors.primary.withOpacity(0.5),
+        disabledForegroundColor: colors.onPrimary.withValues(alpha: 0.5),
+        disabledBackgroundColor: colors.primary.withValues(alpha: 0.5),
       ).copyWith(elevation: ButtonStyleButton.allOrNull(0.0)),
       neutralOnDark: ElevatedButton.styleFrom(
         foregroundColor: colors.onSurface,
         backgroundColor: colors.surface,
-        disabledForegroundColor: colors.onSurface.withOpacity(0.5),
-        disabledBackgroundColor: colors.surface.withOpacity(0.5),
+        disabledForegroundColor: colors.onSurface.withValues(alpha: 0.5),
+        disabledBackgroundColor: colors.surface.withValues(alpha: 0.5),
       ).copyWith(elevation: ButtonStyleButton.allOrNull(0.0)),
     );
   }
@@ -245,7 +245,7 @@ class ThemeProvider extends InheritedWidget {
       neutral: OutlinedButton.styleFrom(
         foregroundColor: colors.onSurface,
         side: BorderSide(
-          color: colors.onSurface.withOpacity(0.2),
+          color: colors.onSurface.withValues(alpha: 0.2),
         ),
       ),
     );
@@ -271,24 +271,24 @@ class ThemeProvider extends InheritedWidget {
       callStart: TextButton.styleFrom(
         foregroundColor: colors.onTertiary,
         backgroundColor: colors.tertiary,
-        disabledForegroundColor: colors.onTertiary.withOpacity(0.38),
+        disabledForegroundColor: colors.onTertiary.withValues(alpha: 0.38),
         padding: EdgeInsets.zero,
       ),
       callHangup: TextButton.styleFrom(
         foregroundColor: colors.onError,
         backgroundColor: colors.error,
-        disabledForegroundColor: colors.onError.withOpacity(0.38),
+        disabledForegroundColor: colors.onError.withValues(alpha: 0.38),
         padding: EdgeInsets.zero,
       ),
       callTransfer: TextButton.styleFrom(
         foregroundColor: colors.onSecondary,
         backgroundColor: colors.secondary,
-        disabledForegroundColor: colors.secondary.withOpacity(0.38),
+        disabledForegroundColor: colors.secondary.withValues(alpha: 0.38),
         padding: EdgeInsets.zero,
       ),
       callAction: TextButton.styleFrom(
         foregroundColor: colors.surface,
-        backgroundColor: colors.surface.withOpacity(0.3),
+        backgroundColor: colors.surface.withValues(alpha: 0.3),
         padding: EdgeInsets.zero,
       ),
       callActiveAction: TextButton.styleFrom(
@@ -343,19 +343,19 @@ class ThemeProvider extends InheritedWidget {
     ColorScheme colors,
     ActionPadWidgetConfig? config,
   ) {
-    const disabledOpacity = 0.4;
+    const disabledColorOpacity = 0.4;
+
+    final defaultCallDisabledIconColor = colors.surface.withValues(alpha: disabledColorOpacity);
 
     final callStartForegroundColor = config?.callStart?.foregroundColor ?? colors.onTertiary;
     final callStartBackgroundColor = config?.callStart?.backgroundColor ?? colors.tertiary;
     final callStartIconColor = config?.callStart?.iconColor ?? colors.surface;
-    final callStartDisabledIconColor =
-        config?.callStart?.disabledIconColor ?? colors.surface.withOpacity(disabledOpacity);
+    final callStartDisabledIconColor = config?.callStart?.disabledIconColor ?? defaultCallDisabledIconColor;
 
     final callTransferForegroundColor = config?.callTransfer?.foregroundColor ?? colors.onSecondary;
     final callTransferBackgroundColor = config?.callTransfer?.backgroundColor ?? colors.secondary;
     final callTransferIconColor = config?.callTransfer?.iconColor ?? colors.surface;
-    final callTransferDisabledIconColor =
-        config?.callTransfer?.disabledIconColor ?? colors.surface.withOpacity(disabledOpacity);
+    final callTransferDisabledIconColor = config?.callTransfer?.disabledIconColor ?? defaultCallDisabledIconColor;
 
     final backspacePressedStyleForegroundColor = config?.backspacePressed?.foregroundColor ?? colors.onSecondary;
     final backspacePressedStyleBackgroundColor = config?.backspacePressed?.backgroundColor;
@@ -365,7 +365,7 @@ class ThemeProvider extends InheritedWidget {
     final callStartStyle = TextButton.styleFrom(
       foregroundColor: callStartForegroundColor,
       backgroundColor: callStartBackgroundColor,
-      disabledForegroundColor: colors.onTertiary.withOpacity(disabledOpacity),
+      disabledForegroundColor: colors.onTertiary.withValues(alpha: disabledColorOpacity),
       iconColor: callStartIconColor,
       disabledIconColor: callStartDisabledIconColor,
       padding: EdgeInsets.zero,
@@ -374,7 +374,7 @@ class ThemeProvider extends InheritedWidget {
     final callTransferStyle = TextButton.styleFrom(
       foregroundColor: callTransferForegroundColor,
       backgroundColor: callTransferBackgroundColor,
-      disabledForegroundColor: colors.secondary.withOpacity(disabledOpacity),
+      disabledForegroundColor: colors.secondary.withValues(alpha: disabledColorOpacity),
       iconColor: callTransferIconColor,
       disabledIconColor: callTransferDisabledIconColor,
       padding: EdgeInsets.zero,
@@ -400,13 +400,13 @@ class ThemeProvider extends InheritedWidget {
     ColorScheme colors,
     CallActionsWidgetConfig? config,
   ) {
-    const disabledOpacity = 0.4;
+    const disabledColorOpacity = 0.4;
 
     final inactiveIconColor = colors.surface;
     final activeIconColor = colors.onSecondaryFixedVariant;
 
     final activeActionBackgroundColor = colors.surface;
-    final actionBackgroundColor = colors.surface.withOpacity(disabledOpacity);
+    final actionBackgroundColor = colors.surface.withValues(alpha: disabledColorOpacity);
 
     // Common color group
     final callStartBackgroundColor = config?.callStartBackgroundColor ?? colors.tertiary;
@@ -441,7 +441,7 @@ class ThemeProvider extends InheritedWidget {
     final callStart = TextButton.styleFrom(
       foregroundColor: colors.onTertiary,
       backgroundColor: callStartBackgroundColor,
-      disabledForegroundColor: colors.onTertiary.withOpacity(disabledOpacity),
+      disabledForegroundColor: colors.onTertiary.withValues(alpha: disabledColorOpacity),
       iconColor: inactiveIconColor,
       padding: EdgeInsets.zero,
     );
@@ -450,7 +450,7 @@ class ThemeProvider extends InheritedWidget {
     final callHangup = TextButton.styleFrom(
       foregroundColor: colors.onError,
       backgroundColor: hangupBackgroundColor,
-      disabledForegroundColor: colors.onError.withOpacity(disabledOpacity),
+      disabledForegroundColor: colors.onError.withValues(alpha: disabledColorOpacity),
       iconColor: inactiveIconColor,
       padding: EdgeInsets.zero,
     );
@@ -459,7 +459,7 @@ class ThemeProvider extends InheritedWidget {
     final callTransfer = TextButton.styleFrom(
       foregroundColor: colors.onSecondary,
       backgroundColor: transferBackgroundColor,
-      disabledForegroundColor: colors.secondary.withOpacity(disabledOpacity),
+      disabledForegroundColor: colors.secondary.withValues(alpha: disabledColorOpacity),
       iconColor: inactiveIconColor,
       padding: EdgeInsets.zero,
     );
@@ -596,16 +596,16 @@ class ThemeProvider extends InheritedWidget {
         final bool isError = states.contains(WidgetState.error);
         if (states.contains(WidgetState.disabled)) {
           borderColor = isError
-              ? primary?.border?.disabled?.errorColor ?? colors.error.withOpacity(0.25)
-              : primary?.border?.disabled?.typicalColor ?? colors.onSurface.withOpacity(0.25);
+              ? primary?.border?.disabled?.errorColor ?? colors.error.withValues(alpha: 0.25)
+              : primary?.border?.disabled?.typicalColor ?? colors.onSurface.withValues(alpha: 0.25);
         } else if (states.contains(WidgetState.focused)) {
           borderColor = isError
               ? primary?.border?.focused?.errorColor ?? colors.error
               : primary?.border?.focused?.typicalColor ?? colors.primary;
         } else {
           borderColor = isError
-              ? primary?.border?.any?.errorColor ?? colors.error.withOpacity(0.5)
-              : primary?.border?.any?.typicalColor ?? colors.onSurface.withOpacity(0.5);
+              ? primary?.border?.any?.errorColor ?? colors.error.withValues(alpha: 0.5)
+              : primary?.border?.any?.typicalColor ?? colors.onSurface.withValues(alpha: 0.5);
         }
         return OutlineInputBorder(
           borderSide: BorderSide(
