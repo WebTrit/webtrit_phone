@@ -339,7 +339,7 @@ class ThemeProvider extends InheritedWidget {
     );
   }
 
-  ActionpadStyles actionpadStyles(
+  ActionpadStyles actionPadStyles(
     ColorScheme colors,
     ActionPadWidgetConfig? config,
   ) {
@@ -801,7 +801,7 @@ class ThemeProvider extends InheritedWidget {
           colorScheme,
           themeWidgetConfig?.dialog?.snackBar,
         ),
-        actionpadStyles(
+        actionPadStyles(
           colorScheme,
           themeWidgetConfig?.actionPad,
         ),
