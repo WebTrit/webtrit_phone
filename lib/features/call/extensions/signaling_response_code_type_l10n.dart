@@ -23,6 +23,8 @@ extension SignalingResponseCodeTypeL10n on SignalingResponseCodeType {
         return context.l10n.signalingResponseCodeType_webrtc;
       case SignalingResponseCodeType.token:
         return context.l10n.signalingResponseCodeType_token;
+      case SignalingResponseCodeType.callHangup:
+        return context.l10n.signalingResponseCodeType_callHangup;
     }
   }
 }

@@ -59,6 +59,36 @@ extension SignalingResponseCodeL10n on SignalingResponseCode {
         return context.l10n.signalingResponseCode_notAcceptingNewSessions;
       case SignalingResponseCode.notFoundRoutesInReplyFromBE:
         return context.l10n.signalingResponseCode_notFoundRoutesInReplyFromBE;
+      case SignalingResponseCode.normalUnspecified:
+        return context.l10n.signalingResponseCode_normalUnspecified;
+      case SignalingResponseCode.callNotExist:
+        return context.l10n.signalingResponseCode_callNotExist;
+      case SignalingResponseCode.loopDetected:
+        return context.l10n.signalingResponseCode_loopDetected;
+      case SignalingResponseCode.exchangeRoutingError:
+        return context.l10n.signalingResponseCode_exchangeRoutingError;
+      case SignalingResponseCode.invalidNumberFormat:
+        return context.l10n.signalingResponseCode_invalidNumberFormat;
+      case SignalingResponseCode.ambiguousRequest:
+        return context.l10n.signalingResponseCode_ambiguousRequest;
+      case SignalingResponseCode.userBusy:
+        return context.l10n.signalingResponseCode_userBusy;
+      case SignalingResponseCode.requestTerminated:
+        return context.l10n.signalingResponseCode_requestTerminated;
+      case SignalingResponseCode.incompatibleDestination:
+        return context.l10n.signalingResponseCode_incompatibleDestination;
+      case SignalingResponseCode.busyEverywhere:
+        return context.l10n.signalingResponseCode_busyEverywhere;
+      case SignalingResponseCode.declineCall:
+        return context.l10n.signalingResponseCode_declineCall;
+      case SignalingResponseCode.userNotExist:
+        return context.l10n.signalingResponseCode_userNotExist;
+      case SignalingResponseCode.notAcceptable:
+        return context.l10n.signalingResponseCode_notAcceptable;
+      case SignalingResponseCode.unwanted:
+        return context.l10n.signalingResponseCode_unwanted;
+      case SignalingResponseCode.rejected:
+        return context.l10n.signalingResponseCode_rejected;
     }
   }
 }

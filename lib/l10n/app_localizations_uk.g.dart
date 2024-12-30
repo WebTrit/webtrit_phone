@@ -1258,6 +1258,51 @@ class AppLocalizationsUk extends AppLocalizations {
   String get signalingResponseCode_transportSpecificError => 'Виникла проблема з підключенням. Перевірте свою мережу і спробуйте знову.';
 
   @override
+  String get signalingResponseCode_normalUnspecified => 'Щось пішло не так. Будь ласка, спробуйте ще раз.';
+
+  @override
+  String get signalingResponseCode_callNotExist => 'Дзвінок не існує.';
+
+  @override
+  String get signalingResponseCode_loopDetected => 'Ми не можемо знайти маршрут для виконання вашого запиту. Будь ласка, спробуйте пізніше.';
+
+  @override
+  String get signalingResponseCode_exchangeRoutingError => 'Ми не можемо знайти маршрут для виконання вашого запиту. Будь ласка, спробуйте пізніше.';
+
+  @override
+  String get signalingResponseCode_invalidNumberFormat => 'Невірний формат номера';
+
+  @override
+  String get signalingResponseCode_ambiguousRequest => 'Ваш запит не може бути виконаний. Будь ласка, спробуйте ще раз.';
+
+  @override
+  String get signalingResponseCode_userBusy => 'Користувач, якого ви намагаєтеся знайти, зайнятий. Будь ласка, спробуйте пізніше.';
+
+  @override
+  String get signalingResponseCode_requestTerminated => 'Ваш запит було відхилено. Будь ласка, спробуйте ще раз.';
+
+  @override
+  String get signalingResponseCode_incompatibleDestination => 'Ваш запит не може бути виконаний.';
+
+  @override
+  String get signalingResponseCode_busyEverywhere => 'Всі лінії зайняті. Будь ласка, спробуйте пізніше.';
+
+  @override
+  String get signalingResponseCode_declineCall => 'Ваш дзвінок було відхилено.';
+
+  @override
+  String get signalingResponseCode_userNotExist => 'Користувача, якого ви намагаєтеся знайти, не існує.';
+
+  @override
+  String get signalingResponseCode_notAcceptable => 'Ваш запит не може бути виконаний. Будь ласка, спробуйте ще раз.';
+
+  @override
+  String get signalingResponseCode_unwanted => 'Ваш запит не може бути виконаний. Будь ласка, спробуйте ще раз.';
+
+  @override
+  String get signalingResponseCode_rejected => 'Ваш запит було відхилено. Будь ласка, спробуйте ще раз.';
+
+  @override
   String get signalingResponseCodeType_plugin => 'Не працює необхідна функція. Спробуйте перезапустити додаток.';
 
   @override
@@ -1280,6 +1325,9 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get signalingResponseCodeType_webrtc => 'Виникла проблема з підключенням дзвінка. Завершіть дзвінок і спробуйте знову.';
+
+  @override
+  String get signalingResponseCodeType_callHangup => 'Ваш дзвінок було завершено.';
 
   @override
   String get signalingResponseCode_unauthorizedAccess => 'У вас немає дозволу на доступ до цієї функції. Зверніться до служби підтримки, якщо вважаєте, що це помилка.';
