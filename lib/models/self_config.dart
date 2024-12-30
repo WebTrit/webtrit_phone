@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 
+@Deprecated('Moved to custom_pages feature')
 sealed class SelfConfig {
   const SelfConfig();
 
@@ -8,10 +9,12 @@ sealed class SelfConfig {
       SelfConfigSupported(url: url, expiresAt: expiresAt);
 }
 
+@Deprecated('Moved to custom_pages feature')
 final class SelfConfigUnsupported extends SelfConfig {
   const SelfConfigUnsupported();
 }
 
+@Deprecated('Moved to custom_pages feature')
 final class SelfConfigSupported extends SelfConfig with EquatableMixin {
   SelfConfigSupported({
     required this.url,

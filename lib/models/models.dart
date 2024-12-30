@@ -15,6 +15,7 @@ export 'contact.dart';
 export 'contact_email.dart';
 export 'contact_phone.dart';
 export 'contact_source_type.dart';
+export 'custom_page.dart';
 export 'external_contact.dart';
 export 'failures/failures.dart';
 export 'favorite.dart';

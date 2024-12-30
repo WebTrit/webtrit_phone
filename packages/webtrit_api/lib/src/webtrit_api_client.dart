@@ -469,6 +469,7 @@ class WebtritApiClient {
     return DemoCallToActionsResponse.fromJson(responseJson);
   }
 
+  @Deprecated('replaced by getCustomPages')
   Future<SelfConfigResponse> getSelfConfig(
     String token, {
     RequestOptions options = const RequestOptions(),
@@ -482,5 +483,21 @@ class WebtritApiClient {
     );
 
     return SelfConfigResponse.fromJson(responseJson);
+  }
+
+  Future<CustomPagesResponse> getCustomPages(
+    String token,
+    String locale, {
+    RequestOptions options = const RequestOptions(),
+  }) async {
+    final responseJson = await _httpClientExecutePost(
+      ['custom', 'private', 'custom-pages'],
+      {'Accept-Language': locale},
+      token,
+      {},
+      options: options,
+    );
+
+    return CustomPagesResponse.fromJson(responseJson);
   }
 }

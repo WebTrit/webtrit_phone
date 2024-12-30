@@ -5,6 +5,7 @@ export 'call_logs/call_logs_repository.dart';
 export 'call_to_actions/call_to_actions_repository.dart';
 export 'chats/chats.dart';
 export 'contacts/contacts_repository.dart';
+export 'custom_pages/custom_pages_repository.dart';
 export 'external_contacts/external_contacts_repository.dart';
 export 'favorites/favorites_repository.dart';
 export 'local_contacts/local_contacts_repository.dart';
