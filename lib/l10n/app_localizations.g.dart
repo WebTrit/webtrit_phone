@@ -2527,6 +2527,96 @@ abstract class AppLocalizations {
   /// **'A connection issue occurred. Please check your network and try again.'**
   String get signalingResponseCode_transportSpecificError;
 
+  /// No description provided for @signalingResponseCode_normalUnspecified.
+  ///
+  /// In en, this message translates to:
+  /// **'An error occurred. Please try again later.'**
+  String get signalingResponseCode_normalUnspecified;
+
+  /// No description provided for @signalingResponseCode_callNotExist.
+  ///
+  /// In en, this message translates to:
+  /// **'The call you\'re trying to reach doesn\'t exist.'**
+  String get signalingResponseCode_callNotExist;
+
+  /// No description provided for @signalingResponseCode_loopDetected.
+  ///
+  /// In en, this message translates to:
+  /// **'We detected a loop in the call. Please try again.'**
+  String get signalingResponseCode_loopDetected;
+
+  /// No description provided for @signalingResponseCode_exchangeRoutingError.
+  ///
+  /// In en, this message translates to:
+  /// **'We couldn\'t find a route to complete your request. Please try again later.'**
+  String get signalingResponseCode_exchangeRoutingError;
+
+  /// No description provided for @signalingResponseCode_invalidNumberFormat.
+  ///
+  /// In en, this message translates to:
+  /// **'The number you entered is invalid.'**
+  String get signalingResponseCode_invalidNumberFormat;
+
+  /// No description provided for @signalingResponseCode_ambiguousRequest.
+  ///
+  /// In en, this message translates to:
+  /// **'We couldn\'t understand your request.'**
+  String get signalingResponseCode_ambiguousRequest;
+
+  /// No description provided for @signalingResponseCode_userBusy.
+  ///
+  /// In en, this message translates to:
+  /// **'The user you\'re trying to reach is busy. Please try again later.'**
+  String get signalingResponseCode_userBusy;
+
+  /// No description provided for @signalingResponseCode_requestTerminated.
+  ///
+  /// In en, this message translates to:
+  /// **'Your request was terminated. Please try again.'**
+  String get signalingResponseCode_requestTerminated;
+
+  /// No description provided for @signalingResponseCode_incompatibleDestination.
+  ///
+  /// In en, this message translates to:
+  /// **'The destination you\'re trying to reach is incompatible.'**
+  String get signalingResponseCode_incompatibleDestination;
+
+  /// No description provided for @signalingResponseCode_busyEverywhere.
+  ///
+  /// In en, this message translates to:
+  /// **'The user you\'re trying to reach is busy. Please try again later.'**
+  String get signalingResponseCode_busyEverywhere;
+
+  /// No description provided for @signalingResponseCode_declineCall.
+  ///
+  /// In en, this message translates to:
+  /// **'The call was declined'**
+  String get signalingResponseCode_declineCall;
+
+  /// No description provided for @signalingResponseCode_userNotExist.
+  ///
+  /// In en, this message translates to:
+  /// **'The user you\'re trying to reach doesn\'t exist.'**
+  String get signalingResponseCode_userNotExist;
+
+  /// No description provided for @signalingResponseCode_notAcceptable.
+  ///
+  /// In en, this message translates to:
+  /// **'The call is not acceptable.'**
+  String get signalingResponseCode_notAcceptable;
+
+  /// No description provided for @signalingResponseCode_unwanted.
+  ///
+  /// In en, this message translates to:
+  /// **'The call is unwanted.'**
+  String get signalingResponseCode_unwanted;
+
+  /// No description provided for @signalingResponseCode_rejected.
+  ///
+  /// In en, this message translates to:
+  /// **'The call was rejected.'**
+  String get signalingResponseCode_rejected;
+
   /// No description provided for @signalingResponseCodeType_plugin.
   ///
   /// In en, this message translates to:
@@ -2574,6 +2664,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'There\'s an issue with the call connection. Please hang up and try again.'**
   String get signalingResponseCodeType_webrtc;
+
+  /// No description provided for @signalingResponseCodeType_callHangup.
+  ///
+  /// In en, this message translates to:
+  /// **'The call was ended.'**
+  String get signalingResponseCodeType_callHangup;
 
   /// No description provided for @signalingResponseCode_unauthorizedAccess.
   ///

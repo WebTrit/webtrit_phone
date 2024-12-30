@@ -1258,6 +1258,51 @@ class AppLocalizationsEn extends AppLocalizations {
   String get signalingResponseCode_transportSpecificError => 'A connection issue occurred. Please check your network and try again.';
 
   @override
+  String get signalingResponseCode_normalUnspecified => 'An error occurred. Please try again later.';
+
+  @override
+  String get signalingResponseCode_callNotExist => 'The call you\'re trying to reach doesn\'t exist.';
+
+  @override
+  String get signalingResponseCode_loopDetected => 'We detected a loop in the call. Please try again.';
+
+  @override
+  String get signalingResponseCode_exchangeRoutingError => 'We couldn\'t find a route to complete your request. Please try again later.';
+
+  @override
+  String get signalingResponseCode_invalidNumberFormat => 'The number you entered is invalid.';
+
+  @override
+  String get signalingResponseCode_ambiguousRequest => 'We couldn\'t understand your request.';
+
+  @override
+  String get signalingResponseCode_userBusy => 'The user you\'re trying to reach is busy. Please try again later.';
+
+  @override
+  String get signalingResponseCode_requestTerminated => 'Your request was terminated. Please try again.';
+
+  @override
+  String get signalingResponseCode_incompatibleDestination => 'The destination you\'re trying to reach is incompatible.';
+
+  @override
+  String get signalingResponseCode_busyEverywhere => 'The user you\'re trying to reach is busy. Please try again later.';
+
+  @override
+  String get signalingResponseCode_declineCall => 'The call was declined';
+
+  @override
+  String get signalingResponseCode_userNotExist => 'The user you\'re trying to reach doesn\'t exist.';
+
+  @override
+  String get signalingResponseCode_notAcceptable => 'The call is not acceptable.';
+
+  @override
+  String get signalingResponseCode_unwanted => 'The call is unwanted.';
+
+  @override
+  String get signalingResponseCode_rejected => 'The call was rejected.';
+
+  @override
   String get signalingResponseCodeType_plugin => 'A required feature isn\'t working properly. Try restarting the app.';
 
   @override
@@ -1280,6 +1325,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get signalingResponseCodeType_webrtc => 'There\'s an issue with the call connection. Please hang up and try again.';
+
+  @override
+  String get signalingResponseCodeType_callHangup => 'The call was ended.';
 
   @override
   String get signalingResponseCode_unauthorizedAccess => 'You do not have permission to access this feature. Please contact support if you believe this is an error.';

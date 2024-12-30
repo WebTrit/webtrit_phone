@@ -1258,6 +1258,51 @@ class AppLocalizationsIt extends AppLocalizations {
   String get signalingResponseCode_transportSpecificError => 'Si è verificato un problema di connessione. Controlla la tua rete e riprova.';
 
   @override
+  String get signalingResponseCode_normalUnspecified => 'Si è verificato un errore imprevisto. Riprova più tardi.';
+
+  @override
+  String get signalingResponseCode_callNotExist => 'La chiamata non esiste. Riprova.';
+
+  @override
+  String get signalingResponseCode_loopDetected => 'C\'è un problema con la tua richiesta. Riprova.';
+
+  @override
+  String get signalingResponseCode_exchangeRoutingError => 'Si è verificato un errore di routing. Riprova.';
+
+  @override
+  String get signalingResponseCode_invalidNumberFormat => 'Il numero di telefono inserito non è valido. Deve essere inserito nel formato: ';
+
+  @override
+  String get signalingResponseCode_ambiguousRequest => 'La tua richiesta non è chiara. Riprova.';
+
+  @override
+  String get signalingResponseCode_userBusy => 'Il destinatario è occupato. Riprova più tardi.';
+
+  @override
+  String get signalingResponseCode_requestTerminated => 'La tua richiesta è stata terminata. Riprova.';
+
+  @override
+  String get signalingResponseCode_incompatibleDestination => 'Il destinatario non è compatibile con la tua richiesta. Riprova.';
+
+  @override
+  String get signalingResponseCode_busyEverywhere => 'Tutti i destinatari sono occupati. Riprova più tardi.';
+
+  @override
+  String get signalingResponseCode_declineCall => 'La chiamata è stata rifiutata.';
+
+  @override
+  String get signalingResponseCode_userNotExist => 'Il destinatario non esiste. Controlla il numero di telefono e riprova.';
+
+  @override
+  String get signalingResponseCode_notAcceptable => 'La tua richiesta non è accettabile. Riprova.';
+
+  @override
+  String get signalingResponseCode_unwanted => 'La tua richiesta non è gradita. Riprova.';
+
+  @override
+  String get signalingResponseCode_rejected => 'La tua richiesta è stata rifiutata. Riprova.';
+
+  @override
   String get signalingResponseCodeType_plugin => 'Una funzionalità necessaria non sta funzionando correttamente. Prova a riavviare l\'app.';
 
   @override
@@ -1280,6 +1325,9 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get signalingResponseCodeType_webrtc => 'C\'è un problema con la connessione della chiamata. Riaggancia e riprova.';
+
+  @override
+  String get signalingResponseCodeType_callHangup => 'La chiamata è stata terminata.';
 
   @override
   String get signalingResponseCode_unauthorizedAccess => 'Non hai l\'autorizzazione per accedere a questa funzione. Contatta il supporto se pensi che ci sia un errore.';

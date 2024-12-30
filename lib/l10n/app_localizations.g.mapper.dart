@@ -766,6 +766,36 @@ class AppLocalizationsMapper {
           localizations.signalingResponseCode_tokenNotFound,
       'signalingResponseCode_transportSpecificError':
           localizations.signalingResponseCode_transportSpecificError,
+      'signalingResponseCode_normalUnspecified':
+          localizations.signalingResponseCode_normalUnspecified,
+      'signalingResponseCode_callNotExist':
+          localizations.signalingResponseCode_callNotExist,
+      'signalingResponseCode_loopDetected':
+          localizations.signalingResponseCode_loopDetected,
+      'signalingResponseCode_exchangeRoutingError':
+          localizations.signalingResponseCode_exchangeRoutingError,
+      'signalingResponseCode_invalidNumberFormat':
+          localizations.signalingResponseCode_invalidNumberFormat,
+      'signalingResponseCode_ambiguousRequest':
+          localizations.signalingResponseCode_ambiguousRequest,
+      'signalingResponseCode_userBusy':
+          localizations.signalingResponseCode_userBusy,
+      'signalingResponseCode_requestTerminated':
+          localizations.signalingResponseCode_requestTerminated,
+      'signalingResponseCode_incompatibleDestination':
+          localizations.signalingResponseCode_incompatibleDestination,
+      'signalingResponseCode_busyEverywhere':
+          localizations.signalingResponseCode_busyEverywhere,
+      'signalingResponseCode_declineCall':
+          localizations.signalingResponseCode_declineCall,
+      'signalingResponseCode_userNotExist':
+          localizations.signalingResponseCode_userNotExist,
+      'signalingResponseCode_notAcceptable':
+          localizations.signalingResponseCode_notAcceptable,
+      'signalingResponseCode_unwanted':
+          localizations.signalingResponseCode_unwanted,
+      'signalingResponseCode_rejected':
+          localizations.signalingResponseCode_rejected,
       'signalingResponseCodeType_plugin':
           localizations.signalingResponseCodeType_plugin,
       'signalingResponseCodeType_request':
@@ -782,6 +812,8 @@ class AppLocalizationsMapper {
           localizations.signalingResponseCodeType_unknown,
       'signalingResponseCodeType_webrtc':
           localizations.signalingResponseCodeType_webrtc,
+      'signalingResponseCodeType_callHangup':
+          localizations.signalingResponseCodeType_callHangup,
       'signalingResponseCode_unauthorizedAccess':
           localizations.signalingResponseCode_unauthorizedAccess,
       'signalingResponseCode_unauthorizedRequest':
@@ -809,6 +841,26 @@ class AppLocalizationsMapper {
           localizations.webRegistration_ErrorAcknowledgeDialogActions_skip,
       'webRegistration_ErrorAcknowledgeDialog_title':
           localizations.webRegistration_ErrorAcknowledgeDialog_title,
+      'socketError_serverUnreachable':
+          localizations.socketError_serverUnreachable,
+      'socketError_networkUnreachable':
+          localizations.socketError_networkUnreachable,
+      'socketError_connectionTimedOut':
+          localizations.socketError_connectionTimedOut,
+      'socketError_connectionRefused':
+          localizations.socketError_connectionRefused,
+      'socketError_connectionReset': localizations.socketError_connectionReset,
+      'socketError_default': localizations.socketError_default,
+      'socketError_serverUnreachableDescription':
+          localizations.socketError_serverUnreachableDescription,
+      'socketError_networkUnreachableDescription':
+          localizations.socketError_networkUnreachableDescription,
+      'socketError_connectionTimedOutDescription':
+          localizations.socketError_connectionTimedOutDescription,
+      'socketError_connectionRefusedDescription':
+          localizations.socketError_connectionRefusedDescription,
+      'socketError_connectionResetDescription':
+          localizations.socketError_connectionResetDescription,
       'favorites_SnackBar_deleted': (name) =>
           localizations.favorites_SnackBar_deleted(name),
       'login_Button_otpSigninVerifyRepeatInterval': (seconds) =>
@@ -847,6 +899,8 @@ class AppLocalizationsMapper {
           localizations.user_agreement_checkbox_text(url),
       'user_agreement_description': (appName) =>
           localizations.user_agreement_description(appName),
+      'socketError_defaultDescription': (errorCode) =>
+          localizations.socketError_defaultDescription(errorCode),
     };
   }
 }
