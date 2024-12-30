@@ -345,9 +345,13 @@ class ThemeProvider extends InheritedWidget {
   ) {
     final callStartForegroundColor = config?.callStart?.foregroundColor ?? colors.onTertiary;
     final callStartBackgroundColor = config?.callStart?.backgroundColor ?? colors.tertiary;
+    final callStartIconColor = config?.callStart?.iconColor ?? colors.surface;
+    final callStartDisabledIconColor = config?.callStart?.disabledIconColor ?? colors.surface.withOpacity(0.38);
 
     final callTransferForegroundColor = config?.callTransfer?.foregroundColor ?? colors.onSecondary;
     final callTransferBackgroundColor = config?.callTransfer?.backgroundColor ?? colors.secondary;
+    final callTransferIconColor = config?.callTransfer?.iconColor ?? colors.surface;
+    final callTransferDisabledIconColor = config?.callTransfer?.disabledIconColor ?? colors.surface.withOpacity(0.38);
 
     final backspacePressedStyleForegroundColor = config?.backspacePressed?.foregroundColor ?? colors.onSecondary;
     final backspacePressedStyleBackgroundColor = config?.backspacePressed?.backgroundColor;
@@ -358,6 +362,8 @@ class ThemeProvider extends InheritedWidget {
       foregroundColor: callStartForegroundColor,
       backgroundColor: callStartBackgroundColor,
       disabledForegroundColor: colors.onTertiary.withOpacity(0.38),
+      iconColor: callStartIconColor,
+      disabledIconColor: callStartDisabledIconColor,
       padding: EdgeInsets.zero,
     );
 
@@ -365,6 +371,8 @@ class ThemeProvider extends InheritedWidget {
       foregroundColor: callTransferForegroundColor,
       backgroundColor: callTransferBackgroundColor,
       disabledForegroundColor: colors.secondary.withOpacity(0.38),
+      iconColor: callTransferIconColor,
+      disabledIconColor: callTransferDisabledIconColor,
       padding: EdgeInsets.zero,
     );
 
@@ -388,8 +396,11 @@ class ThemeProvider extends InheritedWidget {
     ColorScheme colors,
     CallActionsWidgetConfig? config,
   ) {
-    final actionBackgroundColor = colors.surface.withOpacity(0.3);
+    final inactiveIconColor = colors.surface;
+    final activeIconColor = colors.onSecondaryFixedVariant;
+
     final activeActionBackgroundColor = colors.surface;
+    final actionBackgroundColor = colors.surface.withOpacity(0.3);
 
     // Common color group
     final callStartBackgroundColor = config?.callStartBackgroundColor ?? colors.tertiary;
@@ -425,6 +436,7 @@ class ThemeProvider extends InheritedWidget {
       foregroundColor: colors.onTertiary,
       backgroundColor: callStartBackgroundColor,
       disabledForegroundColor: colors.onTertiary.withOpacity(0.38),
+      iconColor: inactiveIconColor,
       padding: EdgeInsets.zero,
     );
 
@@ -433,6 +445,7 @@ class ThemeProvider extends InheritedWidget {
       foregroundColor: colors.onError,
       backgroundColor: hangupBackgroundColor,
       disabledForegroundColor: colors.onError.withOpacity(0.38),
+      iconColor: inactiveIconColor,
       padding: EdgeInsets.zero,
     );
 
@@ -441,16 +454,19 @@ class ThemeProvider extends InheritedWidget {
       foregroundColor: colors.onSecondary,
       backgroundColor: transferBackgroundColor,
       disabledForegroundColor: colors.secondary.withOpacity(0.38),
+      iconColor: inactiveIconColor,
       padding: EdgeInsets.zero,
     );
 
     // Common style group
     final callAction = TextButton.styleFrom(
       foregroundColor: colors.surface,
+      iconColor: inactiveIconColor,
       padding: EdgeInsets.zero,
     );
     final callActiveAction = TextButton.styleFrom(
       foregroundColor: colors.onSurface,
+      iconColor: inactiveIconColor,
       padding: EdgeInsets.zero,
     );
 
@@ -460,6 +476,7 @@ class ThemeProvider extends InheritedWidget {
     );
     final cameraActiveStyle = callActiveAction.copyWith(
       backgroundColor: WidgetStatePropertyAll(cameraActiveBackgroundColor),
+      iconColor: WidgetStatePropertyAll(activeIconColor),
     );
 
     // Muted style group
@@ -468,6 +485,7 @@ class ThemeProvider extends InheritedWidget {
     );
     final mutedActiveStyle = callActiveAction.copyWith(
       backgroundColor: WidgetStatePropertyAll(mutedActiveBackgroundColor),
+      iconColor: WidgetStatePropertyAll(activeIconColor),
     );
 
     // Speaker style group
@@ -476,6 +494,7 @@ class ThemeProvider extends InheritedWidget {
     );
     final speakerActiveStyle = callActiveAction.copyWith(
       backgroundColor: WidgetStatePropertyAll(speakerActiveBackgroundColor),
+      iconColor: WidgetStatePropertyAll(activeIconColor),
     );
 
     // Held style group
@@ -484,6 +503,7 @@ class ThemeProvider extends InheritedWidget {
     );
     final heldActiveStyle = callActiveAction.copyWith(
       backgroundColor: WidgetStatePropertyAll(heldActiveBackgroundColor),
+      iconColor: WidgetStatePropertyAll(activeIconColor),
     );
 
     // Swap style group
@@ -500,6 +520,7 @@ class ThemeProvider extends InheritedWidget {
     );
     final keypadActiveStyle = callActiveAction.copyWith(
       backgroundColor: WidgetStatePropertyAll(keypadActiveBackgroundColor),
+      iconColor: WidgetStatePropertyAll(activeIconColor),
     );
 
     return CallActionsStyles(
