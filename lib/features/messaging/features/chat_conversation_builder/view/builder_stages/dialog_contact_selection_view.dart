@@ -11,6 +11,7 @@ class DialogContactSelectionView extends StatelessWidget {
   const DialogContactSelectionView(this.state, {super.key});
 
   final ChatCBDialogContactSelection state;
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -26,7 +27,7 @@ class DialogContactSelectionView extends StatelessWidget {
             title: Text(context.l10n.messaging_ConversationBuilders_createGroup),
             leading: Icon(
               Icons.group_add_rounded,
-              color: colorScheme.onSurface.withOpacity(0.75),
+              color: colorScheme.onSurface.withValues(alpha: 0.75),
             ),
             onTap: () => builderCubit.onGroupCreateStageChoosen(),
           ),
@@ -62,7 +63,7 @@ class DialogContactSelectionView extends StatelessWidget {
               return Theme(
                 data: theme.copyWith(
                   dividerColor: Colors.transparent,
-                  highlightColor: colorScheme.primary.withOpacity(0.1),
+                  highlightColor: colorScheme.primary.withValues(alpha: 0.1),
                 ),
                 child: ListTile(
                   leading: LeadingAvatar(

@@ -45,11 +45,11 @@ class KeypadKeyButton extends StatelessWidget {
               final defaultTextStyle = DefaultTextStyle.of(context);
               var color = textColor ?? defaultTextStyle.style.color;
               if (color != null) {
-                var opacity = color.opacity - 0.3;
+                var opacity = color.a - 0.3;
                 if (opacity < 0.2) {
                   opacity = 0.2;
                 }
-                color = color.withOpacity(opacity);
+                color = color.withValues(alpha: opacity);
               }
               return Text(
                 subtext,

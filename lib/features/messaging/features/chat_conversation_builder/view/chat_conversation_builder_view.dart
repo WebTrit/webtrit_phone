@@ -69,7 +69,7 @@ class _ChatConversationBuilderViewState extends State<ChatConversationBuilderVie
               ),
               if (state is ChatCBGroupFillInfo && state.processing)
                 Container(
-                  color: Colors.black.withOpacity(0.1),
+                  color: Colors.black.withValues(alpha: 0.1),
                   child: BackdropFilter(
                     filter: ImageFilter.blur(sigmaX: 1, sigmaY: 1),
                     child: const Center(child: CircularProgressIndicator()),

@@ -28,7 +28,7 @@ class SessionStatusListTile extends StatelessWidget {
       contentPadding: contentPadding,
       leading: CircleAvatar(
         radius: 12,
-        backgroundColor: themeData.colorScheme.surface.withOpacity(0.5),
+        backgroundColor: themeData.colorScheme.surface.withValues(alpha: 0.5),
         child: CircleAvatar(
           radius: 4,
           backgroundColor: status.color(context),
