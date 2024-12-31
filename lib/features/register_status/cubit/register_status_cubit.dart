@@ -16,7 +16,7 @@ class RegisterStatusCubit extends Cubit<RegisterStatus> {
     this.handleError,
   }) : super(appPreferences.getRegisterStatus()) {
     fetchStatus();
-    _connectivitySub = Connectivity().onConnectivityChanged.listen((_) => fetchStatus());
+    _connectivitySub = Connectivity().onConnectivityChanged.listen(_handleConnectivity);
   }
 
   final AppRepository appRepository;
@@ -24,6 +24,10 @@ class RegisterStatusCubit extends Cubit<RegisterStatus> {
   final Function(Object error, StackTrace stackTrace)? handleError;
 
   late final StreamSubscription _connectivitySub;
+
+  void _handleConnectivity(List<ConnectivityResult> crs) {
+    if (crs.any((cr) => cr != ConnectivityResult.none)) fetchStatus();
+  }
 
   Future<void> fetchStatus() async {
     try {

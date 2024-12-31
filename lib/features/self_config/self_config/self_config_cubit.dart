@@ -15,12 +15,16 @@ class SelfConfigCubit extends Cubit<SelfConfigState> {
   SelfConfigCubit(this._selfConfigRepository, this._enabled) : super(SelfConfigState()) {
     if (!_enabled) return;
     fetchSelfConfig();
-    _connectivitySub = Connectivity().onConnectivityChanged.listen((_) => fetchSelfConfig());
+    _connectivitySub = Connectivity().onConnectivityChanged.listen(_handleConnectivity);
   }
 
   final SelfConfigRepository _selfConfigRepository;
   final bool _enabled;
   StreamSubscription? _connectivitySub;
+
+  void _handleConnectivity(List<ConnectivityResult> crs) {
+    if (crs.any((cr) => cr != ConnectivityResult.none)) fetchSelfConfig();
+  }
 
   Future<void> fetchSelfConfig() async {
     try {

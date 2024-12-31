@@ -14,12 +14,20 @@ class UserInfoCubit extends Cubit<UserInfoState> {
   UserInfoCubit(this._userRepository) : super(const UserInfoState()) {
     fetchUserInfo();
     _userInfoSub = _userRepository.infoUpdates().listen(_handleUserInfo);
-    _connectivitySub = Connectivity().onConnectivityChanged.listen((_) => fetchUserInfo());
+    _connectivitySub = Connectivity().onConnectivityChanged.listen(_handleConnectivity);
   }
 
   final UserRepository _userRepository;
   late final StreamSubscription _userInfoSub;
   late final StreamSubscription _connectivitySub;
+
+  void _handleUserInfo(UserInfo userInfo) async {
+    emit(UserInfoState(userInfo: userInfo));
+  }
+
+  void _handleConnectivity(List<ConnectivityResult> crs) {
+    if (crs.any((cr) => cr != ConnectivityResult.none)) fetchUserInfo();
+  }
 
   void fetchUserInfo() async {
     try {
@@ -28,10 +36,6 @@ class UserInfoCubit extends Cubit<UserInfoState> {
     } catch (e, s) {
       _logger.warning('Failed to get user info', e, s);
     }
-  }
-
-  Future<void> _handleUserInfo(UserInfo userInfo) async {
-    emit(UserInfoState(userInfo: userInfo));
   }
 
   @override
