@@ -166,6 +166,12 @@
           },
           {
             "enabled": true,
+            "type": "customPages",
+            "titleL10n": "",
+            "icon": "0xef7a"
+          },
+          {
+            "enabled": true,
             "titleL10n": "settings_ListViewTileTitle_accountDelete",
             "icon": "0xe1bb",
             "type": "deleteAccount"

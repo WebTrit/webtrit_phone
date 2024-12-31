@@ -1,4 +1,5 @@
 export 'about/about.dart';
+export 'custom_pages/custom_pages.dart';
 export 'diagnostic/diagnostic.dart';
 export 'help/help.dart';
 export 'language/language.dart';

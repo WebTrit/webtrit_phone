@@ -103,6 +103,16 @@ abstract class _$AppRouter extends RootStackRouter {
         child: ConversationsScreenPage(),
       );
     },
+    CustomPageViewPageRoute.name: (routeData) {
+      final args = routeData.argsAs<CustomPageViewPageRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: CustomPageViewPage(
+          args.url,
+          args.title,
+        ),
+      );
+    },
     DiagnosticScreenPageRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -632,6 +642,45 @@ class ConversationsScreenPageRoute extends PageRouteInfo<void> {
   static const String name = 'ConversationsScreenPageRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [CustomPageViewPage]
+class CustomPageViewPageRoute
+    extends PageRouteInfo<CustomPageViewPageRouteArgs> {
+  CustomPageViewPageRoute({
+    required Uri url,
+    required String title,
+    List<PageRouteInfo>? children,
+  }) : super(
+          CustomPageViewPageRoute.name,
+          args: CustomPageViewPageRouteArgs(
+            url: url,
+            title: title,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'CustomPageViewPageRoute';
+
+  static const PageInfo<CustomPageViewPageRouteArgs> page =
+      PageInfo<CustomPageViewPageRouteArgs>(name);
+}
+
+class CustomPageViewPageRouteArgs {
+  const CustomPageViewPageRouteArgs({
+    required this.url,
+    required this.title,
+  });
+
+  final Uri url;
+
+  final String title;
+
+  @override
+  String toString() {
+    return 'CustomPageViewPageRouteArgs{url: $url, title: $title}';
+  }
 }
 
 /// generated route for
