@@ -25,8 +25,8 @@ class UserInfoCubit extends Cubit<UserInfoState> {
     emit(UserInfoState(userInfo: userInfo));
   }
 
-  void _handleConnectivity(List<ConnectivityResult> crs) {
-    if (crs.any((cr) => cr != ConnectivityResult.none)) fetchUserInfo();
+  void _handleConnectivity(List<ConnectivityResult> results) {
+    if (results.any((result) => result != ConnectivityResult.none)) fetchUserInfo();
   }
 
   void fetchUserInfo() async {

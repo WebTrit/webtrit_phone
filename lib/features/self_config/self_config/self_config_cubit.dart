@@ -22,8 +22,8 @@ class SelfConfigCubit extends Cubit<SelfConfigState> {
   final bool _enabled;
   StreamSubscription? _connectivitySub;
 
-  void _handleConnectivity(List<ConnectivityResult> crs) {
-    if (crs.any((cr) => cr != ConnectivityResult.none)) fetchSelfConfig();
+  void _handleConnectivity(List<ConnectivityResult> results) {
+    if (results.any((result) => result != ConnectivityResult.none)) fetchSelfConfig();
   }
 
   Future<void> fetchSelfConfig() async {

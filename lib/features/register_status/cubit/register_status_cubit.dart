@@ -25,8 +25,8 @@ class RegisterStatusCubit extends Cubit<RegisterStatus> {
 
   late final StreamSubscription _connectivitySub;
 
-  void _handleConnectivity(List<ConnectivityResult> crs) {
-    if (crs.any((cr) => cr != ConnectivityResult.none)) fetchStatus();
+  void _handleConnectivity(List<ConnectivityResult> results) {
+    if (results.any((result) => result != ConnectivityResult.none)) fetchStatus();
   }
 
   Future<void> fetchStatus() async {
