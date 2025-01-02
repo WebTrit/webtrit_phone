@@ -41,6 +41,8 @@ class Actionpad extends StatelessWidget {
     final mediaQueryData = MediaQuery.of(context);
     final minimumDimension = min(mediaQueryData.size.width / 5, mediaQueryData.size.height / 7);
 
+    final iconSize = Theme.of(context).textTheme.headlineLarge!.fontSize;
+
     return TextButtonsTable(
       minimumSize: Size.square(minimumDimension),
       children: [
@@ -53,7 +55,7 @@ class Actionpad extends StatelessWidget {
               style: localStyle?.callStart,
               child: Icon(
                 Icons.videocam,
-                size: Theme.of(context).textTheme.displayMedium!.fontSize,
+                size: iconSize,
               ),
             ),
           ),
@@ -63,7 +65,7 @@ class Actionpad extends StatelessWidget {
           style: transfer ? localStyle?.callTransfer : localStyle?.callStart,
           child: Icon(
             transfer ? Icons.phone_forwarded : Icons.call,
-            size: Theme.of(context).textTheme.displayMedium!.fontSize,
+            size: iconSize,
           ),
         ),
         TextButton(
