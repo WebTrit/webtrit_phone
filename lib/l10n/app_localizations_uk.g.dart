@@ -1147,6 +1147,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get settings_ListViewTileTitle_call_codecs => 'Кодеки дзвінка';
 
   @override
+  String get settings_ListViewTileTitle_call_id => 'Номер абонента';
+
+  @override
   String get settings_ListViewTileTitle_self_config => 'Сторінка спец-налаштувань';
 
   @override
@@ -1199,6 +1202,12 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get settings_network_incomingCallType_title => 'Тип вхідного дзвінка';
+
+  @override
+  String get settings_caller_id_enabled => 'Показати мій номер абонента';
+
+  @override
+  String get settings_caller_id_auto => 'Автоматично';
 
   @override
   String get signalingResponseCode_errorAttachingPlugin => 'Ми зіткнулися з проблемою підключення функції. Будь ласка, спробуйте пізніше.';

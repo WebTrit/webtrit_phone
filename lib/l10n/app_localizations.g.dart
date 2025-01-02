@@ -2305,6 +2305,12 @@ abstract class AppLocalizations {
   /// **'Call codecs'**
   String get settings_ListViewTileTitle_call_codecs;
 
+  /// No description provided for @settings_ListViewTileTitle_call_id.
+  ///
+  /// In en, this message translates to:
+  /// **'Caller ID'**
+  String get settings_ListViewTileTitle_call_id;
+
   /// No description provided for @settings_ListViewTileTitle_self_config.
   ///
   /// In en, this message translates to:
@@ -2412,6 +2418,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Incoming Call Type'**
   String get settings_network_incomingCallType_title;
+
+  /// No description provided for @settings_caller_id_enabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Show my caller ID'**
+  String get settings_caller_id_enabled;
+
+  /// No description provided for @settings_caller_id_auto.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto'**
+  String get settings_caller_id_auto;
 
   /// No description provided for @signalingResponseCode_errorAttachingPlugin.
   ///

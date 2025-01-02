@@ -1147,6 +1147,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings_ListViewTileTitle_call_codecs => 'Call codecs';
 
   @override
+  String get settings_ListViewTileTitle_call_id => 'Caller ID';
+
+  @override
   String get settings_ListViewTileTitle_self_config => 'Self-config page';
 
   @override
@@ -1199,6 +1202,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settings_network_incomingCallType_title => 'Incoming Call Type';
+
+  @override
+  String get settings_caller_id_enabled => 'Show my caller ID';
+
+  @override
+  String get settings_caller_id_auto => 'Auto';
 
   @override
   String get signalingResponseCode_errorAttachingPlugin => 'We had trouble connecting a feature. Please try again later.';

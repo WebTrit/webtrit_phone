@@ -50,6 +50,12 @@ abstract class _$AppRouter extends RootStackRouter {
         child: CallCodecsScreenPage(),
       );
     },
+    CallIdScreenPageRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: CallIdScreenPage(),
+      );
+    },
     CallScreenPageRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -459,6 +465,20 @@ class CallCodecsScreenPageRoute extends PageRouteInfo<void> {
         );
 
   static const String name = 'CallCodecsScreenPageRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [CallIdScreenPage]
+class CallIdScreenPageRoute extends PageRouteInfo<void> {
+  const CallIdScreenPageRoute({List<PageRouteInfo>? children})
+      : super(
+          CallIdScreenPageRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'CallIdScreenPageRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }
