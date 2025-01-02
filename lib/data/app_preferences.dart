@@ -18,6 +18,8 @@ class AppPreferences with SystemInfoJsonMapper {
   static const _kSystemInfoKey = 'system-info';
   static const _kPreferedAudioCodecKey = 'prefered-audio-codec';
   static const _kPreferedVideoCodecKey = 'prefered-video-codec';
+  static const _kCallIdEnabledKey = 'call_id_enabled';
+  static const _kCallIdSelectedKey = 'call_id_selected';
 
   // Please add all new keys here for proper cleaning of preferences
   static const _kPreferencesList = [
@@ -32,6 +34,8 @@ class AppPreferences with SystemInfoJsonMapper {
     _kSystemInfoKey,
     _kPreferedAudioCodecKey,
     _kPreferedVideoCodecKey,
+    _kCallIdEnabledKey,
+    _kCallIdSelectedKey,
   ];
 
   // List of preferences keys to exclude by default during clean operation
@@ -210,5 +214,25 @@ class AppPreferences with SystemInfoJsonMapper {
     final preferedVideoCodec = _sharedPreferences.getString(_kPreferedVideoCodecKey);
     if (preferedVideoCodec == null) return null;
     return VideoCodec.values.byName(preferedVideoCodec);
+  }
+
+  Future<bool> setCallIdEnabled(bool value) {
+    return _sharedPreferences.setBool(_kCallIdEnabledKey, value);
+  }
+
+  bool getCallIdEnabled({bool defaultValue = false}) {
+    return _sharedPreferences.getBool(_kCallIdEnabledKey) ?? defaultValue;
+  }
+
+  Future<bool> setCallIdSelected(String? value) {
+    if (value != null) {
+      return _sharedPreferences.setString(_kCallIdSelectedKey, value);
+    } else {
+      return _sharedPreferences.remove(_kCallIdSelectedKey);
+    }
+  }
+
+  String? getCallIdSelected() {
+    return _sharedPreferences.getString(_kCallIdSelectedKey);
   }
 }
