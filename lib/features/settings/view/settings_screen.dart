@@ -4,6 +4,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/app/router/app_router.dart';
+import 'package:webtrit_phone/features/custom_pages/custom_pages.dart';
 import 'package:webtrit_phone/features/embedded/exports.dart';
 import 'package:webtrit_phone/features/register_status/register_status.dart';
 import 'package:webtrit_phone/features/self_config/self_config.dart';
@@ -188,20 +189,36 @@ class SettingsScreen extends StatelessWidget {
                                   BlocBuilder<SelfConfigCubit, SelfConfigState>(
                                     builder: (context, state) {
                                       final selfConfig = state.selfConfig;
-                                      if (selfConfig is SelfConfigSupported) {
-                                        return Column(children: [
+                                      if (selfConfig is! SelfConfigSupported) return const SizedBox.shrink();
+
+                                      return Column(children: [
+                                        ListTile(
+                                          leading: Icon(item.icon),
+                                          title: Text(context.parseL10n(item.titleL10n)),
+                                          onTap: () => context.router.navigate(
+                                            SelfConfigScreenPageRoute(url: selfConfig.url),
+                                          ),
+                                        ),
+                                        const ListTileSeparator(),
+                                      ]);
+                                    },
+                                  )
+                                else if (item.flavor == SettingsFlavor.customPages)
+                                  BlocBuilder<CustomPagesCubit, CustomPagesState>(
+                                    builder: (context, state) {
+                                      if (state.pages.isEmpty) return const SizedBox.shrink();
+
+                                      return Column(children: [
+                                        for (var page in state.pages)
                                           ListTile(
                                             leading: Icon(item.icon),
-                                            title: Text(context.parseL10n(item.titleL10n)),
+                                            title: Text(page.title),
                                             onTap: () => context.router.navigate(
-                                              SelfConfigScreenPageRoute(url: selfConfig.url),
+                                              CustomPageViewPageRoute(url: page.url, title: page.title),
                                             ),
                                           ),
-                                          const ListTileSeparator(),
-                                        ]);
-                                      }
-
-                                      return const SizedBox.shrink();
+                                        const ListTileSeparator(),
+                                      ]);
                                     },
                                   )
                             ],

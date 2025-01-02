@@ -5,6 +5,7 @@ part 'self_config.freezed.dart';
 part 'self_config.g.dart';
 
 @freezed
+@Deprecated('Replaced by custom pages response')
 class SelfConfigResponse with _$SelfConfigResponse {
   // ignore: invalid_annotation_target
   @JsonSerializable(fieldRename: FieldRename.snake)

@@ -7,6 +7,7 @@ export 'app_type.dart';
 export 'balance_type.dart';
 export 'billing_model.dart';
 export 'common.dart';
+export 'custom_pages.dart';
 export 'demo/demo.dart';
 export 'error.dart';
 export 'error_code.dart';

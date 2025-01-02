@@ -9,4 +9,5 @@ enum SettingsFlavor {
   embedded,
   callCodecs,
   selfConfig,
+  customPages,
 }

@@ -284,6 +284,10 @@ class AppRouter extends _$AppRouter {
                       path: 'self_config',
                     ),
                     AutoRoute(
+                      page: CustomPageViewPageRoute.page,
+                      path: 'custom_page',
+                    ),
+                    AutoRoute(
                       page: ThemeModeScreenPageRoute.page,
                       path: 'theme-mode',
                     ),

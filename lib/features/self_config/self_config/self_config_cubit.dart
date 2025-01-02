@@ -11,6 +11,7 @@ import 'package:webtrit_phone/repositories/repositories.dart';
 final _logger = Logger('SelfConfigCubit');
 
 /// A simple cubit that prefetches selfconfig and store data during the user's session.
+@Deprecated('Moved to custom_pages feature')
 class SelfConfigCubit extends Cubit<SelfConfigState> {
   SelfConfigCubit(this._selfConfigRepository, this._enabled) : super(SelfConfigState()) {
     if (!_enabled) return;

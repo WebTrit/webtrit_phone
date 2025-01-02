@@ -142,6 +142,12 @@ class _MainShellState extends State<MainShell> {
             context.read<AppBloc>().state.token!,
           ),
         ),
+        RepositoryProvider<CustomPagesRepository>(
+          create: (context) => CustomPagesRepository(
+            context.read<WebtritApiClient>(),
+            context.read<AppBloc>().state.token!,
+          ),
+        ),
         RepositoryProvider<AppRepository>(
           create: (context) => AppRepository(
             webtritApiClient: context.read<WebtritApiClient>(),
@@ -298,6 +304,14 @@ class _MainShellState extends State<MainShell> {
                   create: (_) => SelfConfigCubit(
                     context.read<SelfConfigRepository>(),
                     context.read<FeatureAccess>().settingsFeature.isSelfConfigEnabled,
+                  ),
+                ),
+                BlocProvider(
+                  lazy: false,
+                  create: (_) => CustomPagesCubit(
+                    context.read<CustomPagesRepository>(),
+                    context.read<AppBloc>().state.locale.languageCode,
+                    context.read<AppBloc>().stream.map((state) => state.locale.languageCode).distinct(),
                   ),
                 ),
                 BlocProvider(
