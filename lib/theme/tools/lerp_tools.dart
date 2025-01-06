@@ -1,4 +1,4 @@
-import 'package:webtrit_appearance_theme/webtrit_appearance_theme.dart';
+import '../models/models.dart';
 
 class LerpTools {
   static double lerpDouble(double? a, double? b, double t) {

@@ -7,7 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:logging/logging.dart';
 
 import 'package:webtrit_phone/app/assets.gen.dart';
-import 'package:webtrit_phone/theme/models/models.dart';
+import 'package:webtrit_phone/theme/theme.dart';
 
 final Logger _logger = Logger('AppThemes');
 
