@@ -65,7 +65,7 @@ const _$ElevatedButtonStyleTypeEnumMap = {
 _$AboutPageConfigImpl _$$AboutPageConfigImplFromJson(
         Map<String, dynamic> json) =>
     _$AboutPageConfigImpl(
-      picture: ThemeSvgAsset.fromJson(json['picture'] as String),
+      picture: json['picture'] as String,
     );
 
 Map<String, dynamic> _$$AboutPageConfigImplToJson(

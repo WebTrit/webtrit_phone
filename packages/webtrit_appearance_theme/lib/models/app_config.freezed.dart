@@ -27,173 +27,6 @@ mixin _$AppConfig {
 
   /// Serializes this AppConfig to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
-  /// Create a copy of AppConfig
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  $AppConfigCopyWith<AppConfig> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class $AppConfigCopyWith<$Res> {
-  factory $AppConfigCopyWith(AppConfig value, $Res Function(AppConfig) then) =
-      _$AppConfigCopyWithImpl<$Res, AppConfig>;
-  @useResult
-  $Res call(
-      {AppConfigLogin loginConfig,
-      AppConfigMain mainConfig,
-      AppConfigSettings settingsConfig,
-      AppConfigCall callConfig});
-
-  $AppConfigLoginCopyWith<$Res> get loginConfig;
-  $AppConfigMainCopyWith<$Res> get mainConfig;
-  $AppConfigSettingsCopyWith<$Res> get settingsConfig;
-  $AppConfigCallCopyWith<$Res> get callConfig;
-}
-
-/// @nodoc
-class _$AppConfigCopyWithImpl<$Res, $Val extends AppConfig>
-    implements $AppConfigCopyWith<$Res> {
-  _$AppConfigCopyWithImpl(this._value, this._then);
-
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
-
-  /// Create a copy of AppConfig
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? loginConfig = null,
-    Object? mainConfig = null,
-    Object? settingsConfig = null,
-    Object? callConfig = null,
-  }) {
-    return _then(_value.copyWith(
-      loginConfig: null == loginConfig
-          ? _value.loginConfig
-          : loginConfig // ignore: cast_nullable_to_non_nullable
-              as AppConfigLogin,
-      mainConfig: null == mainConfig
-          ? _value.mainConfig
-          : mainConfig // ignore: cast_nullable_to_non_nullable
-              as AppConfigMain,
-      settingsConfig: null == settingsConfig
-          ? _value.settingsConfig
-          : settingsConfig // ignore: cast_nullable_to_non_nullable
-              as AppConfigSettings,
-      callConfig: null == callConfig
-          ? _value.callConfig
-          : callConfig // ignore: cast_nullable_to_non_nullable
-              as AppConfigCall,
-    ) as $Val);
-  }
-
-  /// Create a copy of AppConfig
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $AppConfigLoginCopyWith<$Res> get loginConfig {
-    return $AppConfigLoginCopyWith<$Res>(_value.loginConfig, (value) {
-      return _then(_value.copyWith(loginConfig: value) as $Val);
-    });
-  }
-
-  /// Create a copy of AppConfig
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $AppConfigMainCopyWith<$Res> get mainConfig {
-    return $AppConfigMainCopyWith<$Res>(_value.mainConfig, (value) {
-      return _then(_value.copyWith(mainConfig: value) as $Val);
-    });
-  }
-
-  /// Create a copy of AppConfig
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $AppConfigSettingsCopyWith<$Res> get settingsConfig {
-    return $AppConfigSettingsCopyWith<$Res>(_value.settingsConfig, (value) {
-      return _then(_value.copyWith(settingsConfig: value) as $Val);
-    });
-  }
-
-  /// Create a copy of AppConfig
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $AppConfigCallCopyWith<$Res> get callConfig {
-    return $AppConfigCallCopyWith<$Res>(_value.callConfig, (value) {
-      return _then(_value.copyWith(callConfig: value) as $Val);
-    });
-  }
-}
-
-/// @nodoc
-abstract class _$$AppConfigImplCopyWith<$Res>
-    implements $AppConfigCopyWith<$Res> {
-  factory _$$AppConfigImplCopyWith(
-          _$AppConfigImpl value, $Res Function(_$AppConfigImpl) then) =
-      __$$AppConfigImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call(
-      {AppConfigLogin loginConfig,
-      AppConfigMain mainConfig,
-      AppConfigSettings settingsConfig,
-      AppConfigCall callConfig});
-
-  @override
-  $AppConfigLoginCopyWith<$Res> get loginConfig;
-  @override
-  $AppConfigMainCopyWith<$Res> get mainConfig;
-  @override
-  $AppConfigSettingsCopyWith<$Res> get settingsConfig;
-  @override
-  $AppConfigCallCopyWith<$Res> get callConfig;
-}
-
-/// @nodoc
-class __$$AppConfigImplCopyWithImpl<$Res>
-    extends _$AppConfigCopyWithImpl<$Res, _$AppConfigImpl>
-    implements _$$AppConfigImplCopyWith<$Res> {
-  __$$AppConfigImplCopyWithImpl(
-      _$AppConfigImpl _value, $Res Function(_$AppConfigImpl) _then)
-      : super(_value, _then);
-
-  /// Create a copy of AppConfig
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? loginConfig = null,
-    Object? mainConfig = null,
-    Object? settingsConfig = null,
-    Object? callConfig = null,
-  }) {
-    return _then(_$AppConfigImpl(
-      loginConfig: null == loginConfig
-          ? _value.loginConfig
-          : loginConfig // ignore: cast_nullable_to_non_nullable
-              as AppConfigLogin,
-      mainConfig: null == mainConfig
-          ? _value.mainConfig
-          : mainConfig // ignore: cast_nullable_to_non_nullable
-              as AppConfigMain,
-      settingsConfig: null == settingsConfig
-          ? _value.settingsConfig
-          : settingsConfig // ignore: cast_nullable_to_non_nullable
-              as AppConfigSettings,
-      callConfig: null == callConfig
-          ? _value.callConfig
-          : callConfig // ignore: cast_nullable_to_non_nullable
-              as AppConfigCall,
-    ));
-  }
 }
 
 /// @nodoc
@@ -223,39 +56,6 @@ class _$AppConfigImpl extends _AppConfig {
   final AppConfigCall callConfig;
 
   @override
-  String toString() {
-    return 'AppConfig(loginConfig: $loginConfig, mainConfig: $mainConfig, settingsConfig: $settingsConfig, callConfig: $callConfig)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$AppConfigImpl &&
-            (identical(other.loginConfig, loginConfig) ||
-                other.loginConfig == loginConfig) &&
-            (identical(other.mainConfig, mainConfig) ||
-                other.mainConfig == mainConfig) &&
-            (identical(other.settingsConfig, settingsConfig) ||
-                other.settingsConfig == settingsConfig) &&
-            (identical(other.callConfig, callConfig) ||
-                other.callConfig == callConfig));
-  }
-
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  int get hashCode => Object.hash(
-      runtimeType, loginConfig, mainConfig, settingsConfig, callConfig);
-
-  /// Create a copy of AppConfig
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$AppConfigImplCopyWith<_$AppConfigImpl> get copyWith =>
-      __$$AppConfigImplCopyWithImpl<_$AppConfigImpl>(this, _$identity);
-
-  @override
   Map<String, dynamic> toJson() {
     return _$$AppConfigImplToJson(
       this,
@@ -282,13 +82,6 @@ abstract class _AppConfig extends AppConfig {
   AppConfigSettings get settingsConfig;
   @override
   AppConfigCall get callConfig;
-
-  /// Create a copy of AppConfig
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$AppConfigImplCopyWith<_$AppConfigImpl> get copyWith =>
-      throw _privateConstructorUsedError;
 }
 
 AppConfigLogin _$AppConfigLoginFromJson(Map<String, dynamic> json) {
@@ -1316,8 +1109,7 @@ mixin _$AppConfigBottomMenuTab {
   bool get initial => throw _privateConstructorUsedError;
   String get type => throw _privateConstructorUsedError;
   String get titleL10n => throw _privateConstructorUsedError;
-  @IconDataConverter()
-  IconData get icon => throw _privateConstructorUsedError;
+  String get icon => throw _privateConstructorUsedError;
   Map<String, dynamic> get data => throw _privateConstructorUsedError;
 
   /// Serializes this AppConfigBottomMenuTab to a JSON map.
@@ -1341,7 +1133,7 @@ abstract class $AppConfigBottomMenuTabCopyWith<$Res> {
       bool initial,
       String type,
       String titleL10n,
-      @IconDataConverter() IconData icon,
+      String icon,
       Map<String, dynamic> data});
 }
 
@@ -1388,7 +1180,7 @@ class _$AppConfigBottomMenuTabCopyWithImpl<$Res,
       icon: null == icon
           ? _value.icon
           : icon // ignore: cast_nullable_to_non_nullable
-              as IconData,
+              as String,
       data: null == data
           ? _value.data
           : data // ignore: cast_nullable_to_non_nullable
@@ -1411,7 +1203,7 @@ abstract class _$$AppConfigBottomMenuTabImplCopyWith<$Res>
       bool initial,
       String type,
       String titleL10n,
-      @IconDataConverter() IconData icon,
+      String icon,
       Map<String, dynamic> data});
 }
 
@@ -1457,7 +1249,7 @@ class __$$AppConfigBottomMenuTabImplCopyWithImpl<$Res>
       icon: null == icon
           ? _value.icon
           : icon // ignore: cast_nullable_to_non_nullable
-              as IconData,
+              as String,
       data: null == data
           ? _value._data
           : data // ignore: cast_nullable_to_non_nullable
@@ -1474,7 +1266,7 @@ class _$AppConfigBottomMenuTabImpl extends _AppConfigBottomMenuTab {
       this.initial = false,
       required this.type,
       required this.titleL10n,
-      @IconDataConverter() required this.icon,
+      required this.icon,
       final Map<String, dynamic> data = const {}})
       : _data = data,
         super._();
@@ -1493,8 +1285,7 @@ class _$AppConfigBottomMenuTabImpl extends _AppConfigBottomMenuTab {
   @override
   final String titleL10n;
   @override
-  @IconDataConverter()
-  final IconData icon;
+  final String icon;
   final Map<String, dynamic> _data;
   @override
   @JsonKey()
@@ -1551,7 +1342,7 @@ abstract class _AppConfigBottomMenuTab extends AppConfigBottomMenuTab {
       final bool initial,
       required final String type,
       required final String titleL10n,
-      @IconDataConverter() required final IconData icon,
+      required final String icon,
       final Map<String, dynamic> data}) = _$AppConfigBottomMenuTabImpl;
   const _AppConfigBottomMenuTab._() : super._();
 
@@ -1567,8 +1358,7 @@ abstract class _AppConfigBottomMenuTab extends AppConfigBottomMenuTab {
   @override
   String get titleL10n;
   @override
-  @IconDataConverter()
-  IconData get icon;
+  String get icon;
   @override
   Map<String, dynamic> get data;
 
@@ -1962,8 +1752,7 @@ mixin _$AppConfigSettingsItem {
   bool get enabled => throw _privateConstructorUsedError;
   String get titleL10n => throw _privateConstructorUsedError;
   String get type => throw _privateConstructorUsedError;
-  @IconDataConverter()
-  IconData get icon => throw _privateConstructorUsedError;
+  String get icon => throw _privateConstructorUsedError;
   Map<String, dynamic> get data => throw _privateConstructorUsedError;
 
   /// Serializes this AppConfigSettingsItem to a JSON map.
@@ -1986,7 +1775,7 @@ abstract class $AppConfigSettingsItemCopyWith<$Res> {
       {bool enabled,
       String titleL10n,
       String type,
-      @IconDataConverter() IconData icon,
+      String icon,
       Map<String, dynamic> data});
 }
 
@@ -2028,7 +1817,7 @@ class _$AppConfigSettingsItemCopyWithImpl<$Res,
       icon: null == icon
           ? _value.icon
           : icon // ignore: cast_nullable_to_non_nullable
-              as IconData,
+              as String,
       data: null == data
           ? _value.data
           : data // ignore: cast_nullable_to_non_nullable
@@ -2050,7 +1839,7 @@ abstract class _$$AppConfigSettingsItemImplCopyWith<$Res>
       {bool enabled,
       String titleL10n,
       String type,
-      @IconDataConverter() IconData icon,
+      String icon,
       Map<String, dynamic> data});
 }
 
@@ -2090,7 +1879,7 @@ class __$$AppConfigSettingsItemImplCopyWithImpl<$Res>
       icon: null == icon
           ? _value.icon
           : icon // ignore: cast_nullable_to_non_nullable
-              as IconData,
+              as String,
       data: null == data
           ? _value._data
           : data // ignore: cast_nullable_to_non_nullable
@@ -2106,7 +1895,7 @@ class _$AppConfigSettingsItemImpl extends _AppConfigSettingsItem {
       {this.enabled = true,
       required this.titleL10n,
       required this.type,
-      @IconDataConverter() required this.icon,
+      required this.icon,
       final Map<String, dynamic> data = const {}})
       : _data = data,
         super._();
@@ -2122,8 +1911,7 @@ class _$AppConfigSettingsItemImpl extends _AppConfigSettingsItem {
   @override
   final String type;
   @override
-  @IconDataConverter()
-  final IconData icon;
+  final String icon;
   final Map<String, dynamic> _data;
   @override
   @JsonKey()
@@ -2178,7 +1966,7 @@ abstract class _AppConfigSettingsItem extends AppConfigSettingsItem {
       {final bool enabled,
       required final String titleL10n,
       required final String type,
-      @IconDataConverter() required final IconData icon,
+      required final String icon,
       final Map<String, dynamic> data}) = _$AppConfigSettingsItemImpl;
   const _AppConfigSettingsItem._() : super._();
 
@@ -2192,8 +1980,7 @@ abstract class _AppConfigSettingsItem extends AppConfigSettingsItem {
   @override
   String get type;
   @override
-  @IconDataConverter()
-  IconData get icon;
+  String get icon;
   @override
   Map<String, dynamic> get data;
 

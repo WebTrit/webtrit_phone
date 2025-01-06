@@ -1,14 +1,10 @@
-import 'package:flutter/widgets.dart';
-
 import 'package:freezed_annotation/freezed_annotation.dart';
-
-import 'icon_data_converter.dart';
 
 part 'app_config.freezed.dart';
 
 part 'app_config.g.dart';
 
-@freezed
+@Freezed(copyWith: false, equal: false, toStringOverride: false)
 class AppConfig with _$AppConfig {
   const AppConfig._();
 
@@ -98,7 +94,7 @@ class AppConfigBottomMenuTab with _$AppConfigBottomMenuTab {
     @Default(false) bool initial,
     required String type,
     required String titleL10n,
-    @IconDataConverter() required IconData icon,
+    required String icon,
     @Default({}) Map<String, dynamic> data,
   }) = _AppConfigBottomMenuTab;
 
@@ -137,7 +133,7 @@ class AppConfigSettingsItem with _$AppConfigSettingsItem {
     @Default(true) bool enabled,
     required String titleL10n,
     required String type,
-    @IconDataConverter() required IconData icon,
+    required String icon,
     @Default({}) Map<String, dynamic> data,
   }) = _AppConfigSettingsItem;
 
