@@ -691,6 +691,8 @@ class AppLocalizationsMapper {
           localizations.settings_ListViewTileTitle_accountDelete,
       'settings_ListViewTileTitle_call_codecs':
           localizations.settings_ListViewTileTitle_call_codecs,
+      'settings_ListViewTileTitle_call_id':
+          localizations.settings_ListViewTileTitle_call_id,
       'settings_ListViewTileTitle_self_config':
           localizations.settings_ListViewTileTitle_self_config,
       'settings_ListViewTileTitle_help':
@@ -728,6 +730,8 @@ class AppLocalizationsMapper {
           localizations.settings_network_incomingCallType_socket_title,
       'settings_network_incomingCallType_title':
           localizations.settings_network_incomingCallType_title,
+      'settings_caller_id_enabled': localizations.settings_caller_id_enabled,
+      'settings_caller_id_auto': localizations.settings_caller_id_auto,
       'signalingResponseCode_errorAttachingPlugin':
           localizations.signalingResponseCode_errorAttachingPlugin,
       'signalingResponseCode_errorDetachingPlugin':

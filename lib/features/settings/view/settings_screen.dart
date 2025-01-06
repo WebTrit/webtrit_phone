@@ -204,6 +204,15 @@ class SettingsScreen extends StatelessWidget {
                                       return const SizedBox.shrink();
                                     },
                                   )
+                                else if (item.flavor == SettingsFlavor.callId)
+                                  Column(children: [
+                                    ListTile(
+                                      leading: Icon(item.icon),
+                                      title: Text(context.parseL10n(item.titleL10n)),
+                                      onTap: () => context.router.navigate(const CallIdScreenPageRoute()),
+                                    ),
+                                    const ListTileSeparator(),
+                                  ])
                             ],
                           ],
                         ),
