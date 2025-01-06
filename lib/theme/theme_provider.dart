@@ -13,8 +13,8 @@ import 'package:webtrit_phone/features/settings/widgets/group_title_list_tile.da
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 import 'styles/styles.dart';
-
-import 'theme.dart';
+import 'models/models.dart';
+import 'extension/extension.dart';
 
 class ThemeProvider extends InheritedWidget {
   const ThemeProvider({
@@ -31,18 +31,18 @@ class ThemeProvider extends InheritedWidget {
 
   Color custom(CustomColor custom) {
     if (custom.blend) {
-      return blend(custom.color);
+      return blend(custom.color.toColor());
     } else {
-      return custom.color;
+      return custom.color.toColor();
     }
   }
 
   Color blend(Color targetColor) {
-    return Color(Blend.harmonize(targetColor.value, settings.seedColor.value));
+    return Color(Blend.harmonize(targetColor.value, settings.seedColor.toColor().value));
   }
 
   Color source(Color? target) {
-    Color source = settings.seedColor;
+    Color source = settings.seedColor.toColor();
     if (target != null) {
       source = blend(target);
     }
@@ -56,51 +56,51 @@ class ThemeProvider extends InheritedWidget {
     return ColorScheme.fromSeed(
       seedColor: dynamicPrimary ?? source(targetColor),
       brightness: brightness,
-      primary: colorSchemeOverride?.primary,
-      onPrimary: colorSchemeOverride?.onPrimary,
-      primaryContainer: colorSchemeOverride?.primaryContainer,
-      onPrimaryContainer: colorSchemeOverride?.onPrimaryContainer,
-      primaryFixed: colorSchemeOverride?.primaryFixed,
-      primaryFixedDim: colorSchemeOverride?.primaryFixedDim,
-      onPrimaryFixed: colorSchemeOverride?.onPrimaryFixed,
-      onPrimaryFixedVariant: colorSchemeOverride?.onPrimaryFixedVariant,
-      secondary: colorSchemeOverride?.secondary,
-      onSecondary: colorSchemeOverride?.onSecondary,
-      secondaryContainer: colorSchemeOverride?.secondaryContainer,
-      secondaryFixed: colorSchemeOverride?.secondaryFixed,
-      secondaryFixedDim: colorSchemeOverride?.secondaryFixedDim,
-      onSecondaryFixed: colorSchemeOverride?.onSecondaryFixed,
-      onSecondaryFixedVariant: colorSchemeOverride?.onSecondaryFixedVariant,
-      tertiary: colorSchemeOverride?.tertiary,
-      onTertiary: colorSchemeOverride?.onTertiary,
-      tertiaryContainer: colorSchemeOverride?.tertiaryContainer,
-      onTertiaryContainer: colorSchemeOverride?.onTertiaryContainer,
-      tertiaryFixed: colorSchemeOverride?.tertiaryFixed,
-      tertiaryFixedDim: colorSchemeOverride?.tertiaryFixedDim,
-      onTertiaryFixed: colorSchemeOverride?.onTertiaryFixed,
-      onTertiaryFixedVariant: colorSchemeOverride?.onTertiaryFixedVariant,
-      error: colorSchemeOverride?.error,
-      onError: colorSchemeOverride?.onError,
-      errorContainer: colorSchemeOverride?.errorContainer,
-      onErrorContainer: colorSchemeOverride?.onErrorContainer,
-      outline: colorSchemeOverride?.outline,
-      outlineVariant: colorSchemeOverride?.outlineVariant,
-      surface: colorSchemeOverride?.surface,
-      onSurface: colorSchemeOverride?.onSurface,
-      surfaceDim: colorSchemeOverride?.surfaceDim,
-      surfaceBright: colorSchemeOverride?.surfaceBright,
-      surfaceContainerLowest: colorSchemeOverride?.surfaceContainerLowest,
-      surfaceContainerLow: colorSchemeOverride?.surfaceContainerLow,
-      surfaceContainer: colorSchemeOverride?.surfaceContainer,
-      surfaceContainerHigh: colorSchemeOverride?.surfaceContainerHigh,
-      surfaceContainerHighest: colorSchemeOverride?.surfaceContainerHighest,
-      onSurfaceVariant: colorSchemeOverride?.onSurfaceVariant,
-      inverseSurface: colorSchemeOverride?.inverseSurface,
-      onInverseSurface: colorSchemeOverride?.onInverseSurface,
-      inversePrimary: colorSchemeOverride?.inversePrimary,
-      shadow: colorSchemeOverride?.shadow,
-      scrim: colorSchemeOverride?.scrim,
-      surfaceTint: colorSchemeOverride?.surfaceTint,
+      primary: colorSchemeOverride?.primary?.toColor(),
+      onPrimary: colorSchemeOverride?.onPrimary?.toColor(),
+      primaryContainer: colorSchemeOverride?.primaryContainer?.toColor(),
+      onPrimaryContainer: colorSchemeOverride?.onPrimaryContainer?.toColor(),
+      primaryFixed: colorSchemeOverride?.primaryFixed?.toColor(),
+      primaryFixedDim: colorSchemeOverride?.primaryFixedDim?.toColor(),
+      onPrimaryFixed: colorSchemeOverride?.onPrimaryFixed?.toColor(),
+      onPrimaryFixedVariant: colorSchemeOverride?.onPrimaryFixedVariant?.toColor(),
+      secondary: colorSchemeOverride?.secondary?.toColor(),
+      onSecondary: colorSchemeOverride?.onSecondary?.toColor(),
+      secondaryContainer: colorSchemeOverride?.secondaryContainer?.toColor(),
+      secondaryFixed: colorSchemeOverride?.secondaryFixed?.toColor(),
+      secondaryFixedDim: colorSchemeOverride?.secondaryFixedDim?.toColor(),
+      onSecondaryFixed: colorSchemeOverride?.onSecondaryFixed?.toColor(),
+      onSecondaryFixedVariant: colorSchemeOverride?.onSecondaryFixedVariant?.toColor(),
+      tertiary: colorSchemeOverride?.tertiary?.toColor(),
+      onTertiary: colorSchemeOverride?.onTertiary?.toColor(),
+      tertiaryContainer: colorSchemeOverride?.tertiaryContainer?.toColor(),
+      onTertiaryContainer: colorSchemeOverride?.onTertiaryContainer?.toColor(),
+      tertiaryFixed: colorSchemeOverride?.tertiaryFixed?.toColor(),
+      tertiaryFixedDim: colorSchemeOverride?.tertiaryFixedDim?.toColor(),
+      onTertiaryFixed: colorSchemeOverride?.onTertiaryFixed?.toColor(),
+      onTertiaryFixedVariant: colorSchemeOverride?.onTertiaryFixedVariant?.toColor(),
+      error: colorSchemeOverride?.error?.toColor(),
+      onError: colorSchemeOverride?.onError?.toColor(),
+      errorContainer: colorSchemeOverride?.errorContainer?.toColor(),
+      onErrorContainer: colorSchemeOverride?.onErrorContainer?.toColor(),
+      outline: colorSchemeOverride?.outline?.toColor(),
+      outlineVariant: colorSchemeOverride?.outlineVariant?.toColor(),
+      surface: colorSchemeOverride?.surface?.toColor(),
+      onSurface: colorSchemeOverride?.onSurface?.toColor(),
+      surfaceDim: colorSchemeOverride?.surfaceDim?.toColor(),
+      surfaceBright: colorSchemeOverride?.surfaceBright?.toColor(),
+      surfaceContainerLowest: colorSchemeOverride?.surfaceContainerLowest?.toColor(),
+      surfaceContainerLow: colorSchemeOverride?.surfaceContainerLow?.toColor(),
+      surfaceContainer: colorSchemeOverride?.surfaceContainer?.toColor(),
+      surfaceContainerHigh: colorSchemeOverride?.surfaceContainerHigh?.toColor(),
+      surfaceContainerHighest: colorSchemeOverride?.surfaceContainerHighest?.toColor(),
+      onSurfaceVariant: colorSchemeOverride?.onSurfaceVariant?.toColor(),
+      inverseSurface: colorSchemeOverride?.inverseSurface?.toColor(),
+      onInverseSurface: colorSchemeOverride?.onInverseSurface?.toColor(),
+      inversePrimary: colorSchemeOverride?.inversePrimary?.toColor(),
+      shadow: colorSchemeOverride?.shadow?.toColor(),
+      scrim: colorSchemeOverride?.scrim?.toColor(),
+      surfaceTint: colorSchemeOverride?.surfaceTint?.toColor(),
     );
   }
 
@@ -148,8 +148,8 @@ class ThemeProvider extends InheritedWidget {
   }
 
   GroupTitleListStyles groupTitleListStyles(GroupTitleListTileWidgetConfig? groupTitleListTile) {
-    final textColor = groupTitleListTile?.textColor;
-    final backgroundColor = groupTitleListTile?.backgroundColor;
+    final textColor = groupTitleListTile?.textColor?.toColor();
+    final backgroundColor = groupTitleListTile?.backgroundColor?.toColor();
 
     final textStyle = TextStyle(
       color: textColor,
@@ -168,7 +168,7 @@ class ThemeProvider extends InheritedWidget {
     ThemeSvgAsset? picture,
     LogoWidgetConfig? onboardingPictureLogo,
   ) {
-    final textStyleColor = onboardingPictureLogo?.labelColor ?? colors.onPrimary;
+    final textStyleColor = onboardingPictureLogo?.labelColor?.toColor() ?? colors.onPrimary;
 
     final textStyle = TextStyle(color: textStyleColor, fontWeight: FontWeight.w600);
 
@@ -186,7 +186,7 @@ class ThemeProvider extends InheritedWidget {
     ThemeSvgAsset? picture,
     LogoWidgetConfig? onboardingLogoWidgetConfig,
   ) {
-    final textStyleColor = onboardingLogoWidgetConfig?.labelColor;
+    final textStyleColor = onboardingLogoWidgetConfig?.labelColor?.toColor();
 
     final textStyle = TextStyle(color: textStyleColor);
 
@@ -204,7 +204,7 @@ class ThemeProvider extends InheritedWidget {
   ) {
     return AboutScreenStyles(
       primary: AboutScreenStyle(
-        picture: aboutPageConfig?.picture,
+        picture: aboutPageConfig?.picture != null ? ThemeSvgAsset.fromJson(aboutPageConfig!.picture) : null,
       ),
     );
   }
@@ -213,11 +213,15 @@ class ThemeProvider extends InheritedWidget {
     ColorScheme colors,
     ElevatedButtonWidgetConfig? elevatedButtonAddons,
   ) {
+    final foregroundColor = elevatedButtonAddons?.foregroundColor?.toColor() ?? colors.onPrimary;
+    final backgroundColor = elevatedButtonAddons?.backgroundColor?.toColor() ?? colors.primary;
+    final textStyleColor = elevatedButtonAddons?.textColor?.toColor();
+
     return ElevatedButtonStyles(
       primary: ElevatedButton.styleFrom(
-        foregroundColor: elevatedButtonAddons?.foregroundColor ?? colors.onPrimary,
-        backgroundColor: elevatedButtonAddons?.backgroundColor ?? colors.primary,
-        textStyle: TextStyle(color: elevatedButtonAddons?.textColor),
+        foregroundColor: foregroundColor,
+        backgroundColor: backgroundColor,
+        textStyle: TextStyle(color: textStyleColor),
         disabledForegroundColor: colors.onPrimaryContainer.withValues(alpha: 0.38),
         disabledBackgroundColor: colors.onPrimaryContainer.withValues(alpha: 0.12),
       ).copyWith(elevation: ButtonStyleButton.allOrNull(0.0)),
@@ -300,12 +304,13 @@ class ThemeProvider extends InheritedWidget {
   }
 
   Gradients gradients(ColorScheme colors) {
-    final customColors = settings.primaryGradientColors;
+    final customColors = settings.primaryGradientColors.map((it) => it.color.toColor()).toList();
+
     return Gradients(
       tab: LinearGradient(
         begin: Alignment.topCenter,
         end: Alignment.bottomCenter,
-        colors: customColors.map((customColor) => customColor.value(this)).toList(growable: false),
+        colors: customColors,
       ),
     );
   }
@@ -314,10 +319,14 @@ class ThemeProvider extends InheritedWidget {
     ColorScheme colors,
     TextSelectionWidgetConfig? selection,
   ) {
+    final cursorColor = selection?.cursorColor?.toColor();
+    final selectionColor = selection?.selectionColor?.toColor();
+    final selectionHandleColor = selection?.selectionHandleColor?.toColor();
+
     return TextSelectionThemeData(
-      cursorColor: selection?.cursorColor,
-      selectionColor: selection?.selectionColor,
-      selectionHandleColor: selection?.selectionHandleColor,
+      cursorColor: cursorColor,
+      selectionColor: selectionColor,
+      selectionHandleColor: selectionHandleColor,
     );
   }
 
@@ -325,8 +334,8 @@ class ThemeProvider extends InheritedWidget {
     ColorScheme colors,
     LinkifyWidgetConfig? linkifyWidgetConfig,
   ) {
-    final regularTextColor = linkifyWidgetConfig?.styleColor;
-    final linkifyTextColor = linkifyWidgetConfig?.linkifyStyleColor ?? colors.primary;
+    final regularTextColor = linkifyWidgetConfig?.styleColor?.toColor();
+    final linkifyTextColor = linkifyWidgetConfig?.linkifyStyleColor?.toColor() ?? colors.primary;
 
     final regularTextStyle = TextStyle(color: regularTextColor);
     final linkifyTextStyle = TextStyle(color: linkifyTextColor);
@@ -347,20 +356,23 @@ class ThemeProvider extends InheritedWidget {
 
     final defaultCallDisabledIconColor = colors.surface.withValues(alpha: disabledColorOpacity);
 
-    final callStartForegroundColor = config?.callStart?.foregroundColor ?? colors.onTertiary;
-    final callStartBackgroundColor = config?.callStart?.backgroundColor ?? colors.tertiary;
-    final callStartIconColor = config?.callStart?.iconColor ?? colors.surface;
-    final callStartDisabledIconColor = config?.callStart?.disabledIconColor ?? defaultCallDisabledIconColor;
+    final callStartForegroundColor = config?.callStart?.foregroundColor?.toColor() ?? colors.onTertiary;
+    final callStartBackgroundColor = config?.callStart?.backgroundColor?.toColor() ?? colors.tertiary;
+    final callStartIconColor = config?.callStart?.iconColor?.toColor() ?? colors.surface;
+    final callStartDisabledIconColor = config?.callStart?.disabledIconColor?.toColor() ?? defaultCallDisabledIconColor;
 
-    final callTransferForegroundColor = config?.callTransfer?.foregroundColor ?? colors.onSecondary;
-    final callTransferBackgroundColor = config?.callTransfer?.backgroundColor ?? colors.secondary;
-    final callTransferIconColor = config?.callTransfer?.iconColor ?? colors.surface;
-    final callTransferDisabledIconColor = config?.callTransfer?.disabledIconColor ?? defaultCallDisabledIconColor;
+    final callTransferForegroundColor = config?.callTransfer?.foregroundColor?.toColor() ?? colors.onSecondary;
+    final callTransferBackgroundColor = config?.callTransfer?.backgroundColor?.toColor() ?? colors.secondary;
+    final callTransferIconColor = config?.callTransfer?.iconColor?.toColor() ?? colors.surface;
+    final callTransferDisabledIconColor =
+        config?.callTransfer?.disabledIconColor?.toColor() ?? defaultCallDisabledIconColor;
 
-    final backspacePressedStyleForegroundColor = config?.backspacePressed?.foregroundColor ?? colors.onSecondary;
-    final backspacePressedStyleBackgroundColor = config?.backspacePressed?.backgroundColor;
-    final backspacePressedStyleIconColor = config?.backspacePressed?.iconColor ?? colors.onSurface;
-    final backspacePressedStyleDisabledIconColor = config?.backspacePressed?.disabledIconColor ?? colors.surface;
+    final backspacePressedStyleForegroundColor =
+        config?.backspacePressed?.foregroundColor?.toColor() ?? colors.onSecondary;
+    final backspacePressedStyleBackgroundColor = config?.backspacePressed?.backgroundColor?.toColor();
+    final backspacePressedStyleIconColor = config?.backspacePressed?.iconColor?.toColor() ?? colors.onSurface;
+    final backspacePressedStyleDisabledIconColor =
+        config?.backspacePressed?.disabledIconColor?.toColor() ?? colors.surface;
 
     final callStartStyle = TextButton.styleFrom(
       foregroundColor: callStartForegroundColor,
@@ -409,33 +421,33 @@ class ThemeProvider extends InheritedWidget {
     final actionBackgroundColor = colors.surface.withValues(alpha: disabledColorOpacity);
 
     // Common color group
-    final callStartBackgroundColor = config?.callStartBackgroundColor ?? colors.tertiary;
-    final hangupBackgroundColor = config?.hangupBackgroundColor ?? colors.error;
-    final transferBackgroundColor = config?.transferBackgroundColor ?? actionBackgroundColor;
+    final callStartBackgroundColor = config?.callStartBackgroundColor?.toColor() ?? colors.tertiary;
+    final hangupBackgroundColor = config?.hangupBackgroundColor?.toColor() ?? colors.error;
+    final transferBackgroundColor = config?.transferBackgroundColor?.toColor() ?? actionBackgroundColor;
 
     // Camera color group
-    final cameraBackgroundColor = config?.cameraBackgroundColor ?? actionBackgroundColor;
-    final cameraActiveBackgroundColor = config?.cameraActiveBackgroundColor ?? activeActionBackgroundColor;
+    final cameraBackgroundColor = config?.cameraBackgroundColor?.toColor() ?? actionBackgroundColor;
+    final cameraActiveBackgroundColor = config?.cameraActiveBackgroundColor?.toColor() ?? activeActionBackgroundColor;
 
     // Muted color group
-    final mutedBackgroundColor = config?.mutedBackgroundColor ?? actionBackgroundColor;
-    final mutedActiveBackgroundColor = config?.mutedActiveBackgroundColor ?? activeActionBackgroundColor;
+    final mutedBackgroundColor = config?.mutedBackgroundColor?.toColor() ?? actionBackgroundColor;
+    final mutedActiveBackgroundColor = config?.mutedActiveBackgroundColor?.toColor() ?? activeActionBackgroundColor;
 
     // Speaker color group
-    final speakerBackgroundColor = config?.speakerBackgroundColor ?? actionBackgroundColor;
-    final speakerActiveBackgroundColor = config?.speakerActiveBackgroundColor ?? activeActionBackgroundColor;
+    final speakerBackgroundColor = config?.speakerBackgroundColor?.toColor() ?? actionBackgroundColor;
+    final speakerActiveBackgroundColor = config?.speakerActiveBackgroundColor?.toColor() ?? activeActionBackgroundColor;
 
     // Held color group
-    final heldBackgroundColor = config?.heldBackgroundColor ?? actionBackgroundColor;
-    final heldActiveBackgroundColor = config?.heldActiveBackgroundColor ?? activeActionBackgroundColor;
+    final heldBackgroundColor = config?.heldBackgroundColor?.toColor() ?? actionBackgroundColor;
+    final heldActiveBackgroundColor = config?.heldActiveBackgroundColor?.toColor() ?? activeActionBackgroundColor;
 
     // Swap color group
-    final swapBackgroundColor = config?.swapBackgroundColor ?? actionBackgroundColor;
+    final swapBackgroundColor = config?.swapBackgroundColor?.toColor() ?? actionBackgroundColor;
 
     // Key color group
-    final keyBackgroundColor = config?.keyBackgroundColor ?? actionBackgroundColor;
-    final keypadBackgroundColor = config?.keypadBackgroundColor ?? actionBackgroundColor;
-    final keypadActiveBackgroundColor = config?.keypadActiveBackgroundColor ?? activeActionBackgroundColor;
+    final keyBackgroundColor = config?.keyBackgroundColor?.toColor() ?? actionBackgroundColor;
+    final keypadBackgroundColor = config?.keypadBackgroundColor?.toColor() ?? actionBackgroundColor;
+    final keypadActiveBackgroundColor = config?.keypadActiveBackgroundColor?.toColor() ?? activeActionBackgroundColor;
 
     // Start call style group
     final callStart = TextButton.styleFrom(
@@ -551,9 +563,11 @@ class ThemeProvider extends InheritedWidget {
   }
 
   AppIconStyles appIconStyle(ColorScheme colors, AppIconWidgetConfig? appIcon) {
+    final appIconColor = appIcon?.color?.toColor() ?? colors.primary;
+
     return AppIconStyles(
       primary: AppIconStyle(
-        color: appIcon?.color ?? colors.primary,
+        color: appIconColor,
       ),
     );
   }
@@ -563,9 +577,9 @@ class ThemeProvider extends InheritedWidget {
     TextButtonStyles styles,
     ConfirmDialogWidgetConfig? dialogConfig,
   ) {
-    final activeButtonStyle1ForegroundColor = WidgetStatePropertyAll(dialogConfig?.activeButtonColor1);
-    final activeButtonStyle2ForegroundColor = WidgetStatePropertyAll(dialogConfig?.activeButtonColor2);
-    final defaultButtonStyleForegroundColor = WidgetStatePropertyAll(dialogConfig?.defaultButtonColor);
+    final activeButtonStyle1ForegroundColor = WidgetStatePropertyAll(dialogConfig?.activeButtonColor1?.toColor());
+    final activeButtonStyle2ForegroundColor = WidgetStatePropertyAll(dialogConfig?.activeButtonColor2?.toColor());
+    final defaultButtonStyleForegroundColor = WidgetStatePropertyAll(dialogConfig?.defaultButtonColor?.toColor());
 
     final activeButtonStyle1 = styles.neutral?.copyWith(foregroundColor: activeButtonStyle1ForegroundColor);
     final activeButtonStyle2 = styles.dangerous?.copyWith(foregroundColor: activeButtonStyle2ForegroundColor);
@@ -584,33 +598,39 @@ class ThemeProvider extends InheritedWidget {
     ColorScheme colors,
     TextFormFieldWidgetConfig? primary,
   ) {
+    final labelStyleColor = primary?.labelColor?.toColor();
+    final disabledErrorBorderColor = primary?.border?.disabled?.errorColor?.toColor();
+    final disabledPrimaryBorderColor = primary?.border?.disabled?.typicalColor?.toColor();
+    final focusedErrorBorderColor = primary?.border?.focused?.errorColor?.toColor();
+    final focusedPrimaryBorderColor = primary?.border?.focused?.typicalColor?.toColor();
+    final anyErrorBorderColor = primary?.border?.any?.errorColor?.toColor();
+    final anyPrimaryBorderColor = primary?.border?.any?.typicalColor?.toColor();
+
     return InputDecorationTheme(
       floatingLabelBehavior: FloatingLabelBehavior.always,
       isDense: true,
       filled: true,
-      // TODO(Serdun): add fill color from widget settings model
+      // TODO: add fill color from widget settings model
       fillColor: colors.surfaceBright,
-      labelStyle: TextStyle(color: primary?.labelColor),
+      labelStyle: TextStyle(color: labelStyleColor),
       border: MaterialStateOutlineInputBorder.resolveWith((states) {
-        final Color borderColor;
         final bool isError = states.contains(WidgetState.error);
+        final Color borderColor;
+
         if (states.contains(WidgetState.disabled)) {
           borderColor = isError
-              ? primary?.border?.disabled?.errorColor ?? colors.error.withValues(alpha: 0.25)
-              : primary?.border?.disabled?.typicalColor ?? colors.onSurface.withValues(alpha: 0.25);
+              ? disabledErrorBorderColor ?? colors.error.withAlpha(64)
+              : disabledPrimaryBorderColor ?? colors.onSurface.withAlpha(64);
         } else if (states.contains(WidgetState.focused)) {
-          borderColor = isError
-              ? primary?.border?.focused?.errorColor ?? colors.error
-              : primary?.border?.focused?.typicalColor ?? colors.primary;
+          borderColor = isError ? focusedErrorBorderColor ?? colors.error : focusedPrimaryBorderColor ?? colors.primary;
         } else {
           borderColor = isError
-              ? primary?.border?.any?.errorColor ?? colors.error.withValues(alpha: 0.5)
-              : primary?.border?.any?.typicalColor ?? colors.onSurface.withValues(alpha: 0.5);
+              ? anyErrorBorderColor ?? colors.error.withAlpha(128)
+              : anyPrimaryBorderColor ?? colors.onSurface.withAlpha(128);
         }
+
         return OutlineInputBorder(
-          borderSide: BorderSide(
-            color: borderColor,
-          ),
+          borderSide: BorderSide(color: borderColor),
         );
       }),
     );
@@ -620,12 +640,12 @@ class ThemeProvider extends InheritedWidget {
     ColorScheme colors,
     CallStatusesWidgetConfig? callStatuses,
   ) {
-    final connectivityNone = callStatuses?.connectivityNone ?? colors.error;
-    final connectError = callStatuses?.connectError ?? colors.error;
-    final appUnregistered = callStatuses?.appUnregistered ?? colors.onSurfaceVariant;
-    final connectIssue = callStatuses?.connectIssue ?? colors.error;
-    final inProgress = callStatuses?.inProgress ?? colors.secondary;
-    final ready = callStatuses?.ready ?? colors.tertiary;
+    final connectivityNone = callStatuses?.connectivityNone.toColor() ?? colors.error;
+    final connectError = callStatuses?.connectError.toColor() ?? colors.error;
+    final appUnregistered = callStatuses?.appUnregistered.toColor() ?? colors.onSurfaceVariant;
+    final connectIssue = callStatuses?.connectIssue.toColor() ?? colors.error;
+    final inProgress = callStatuses?.inProgress.toColor() ?? colors.secondary;
+    final ready = callStatuses?.ready.toColor() ?? colors.tertiary;
 
     return CallStatusStyles(
       primary: CallStatusStyle(
@@ -643,8 +663,8 @@ class ThemeProvider extends InheritedWidget {
     ColorScheme colors,
     RegistrationStatusesWidgetConfig? registrationStatuses,
   ) {
-    final registered = registrationStatuses?.online ?? colors.error;
-    final unregisters = registrationStatuses?.offline ?? colors.error;
+    final registered = registrationStatuses?.online.toColor() ?? colors.error;
+    final unregisters = registrationStatuses?.offline.toColor() ?? colors.error;
 
     return RegisteredStatusStyles(
       primary: RegisteredStatusStyle(
@@ -658,10 +678,10 @@ class ThemeProvider extends InheritedWidget {
     ColorScheme colors,
     SnackBarWidgetConfig? snackBarConfig,
   ) {
-    final successBackgroundColor = snackBarConfig?.successBackgroundColor ?? colors.primary;
-    final errorBackgroundColor = snackBarConfig?.errorBackgroundColor ?? colors.error;
-    final infoBackgroundColor = snackBarConfig?.infoBackgroundColor ?? colors.secondary;
-    final warningBackgroundColor = snackBarConfig?.warningBackgroundColor ?? colors.tertiary;
+    final successBackgroundColor = snackBarConfig?.successBackgroundColor.toColor() ?? colors.primary;
+    final errorBackgroundColor = snackBarConfig?.errorBackgroundColor.toColor() ?? colors.error;
+    final infoBackgroundColor = snackBarConfig?.infoBackgroundColor.toColor() ?? colors.secondary;
+    final warningBackgroundColor = snackBarConfig?.warningBackgroundColor.toColor() ?? colors.tertiary;
 
     return SnackBarStyles(
       primary: SnackBarStyle(
@@ -677,11 +697,15 @@ class ThemeProvider extends InheritedWidget {
     ColorScheme colors,
     ExtTabBarWidgetConfig? extTabBar,
   ) {
+    final backgroundColor = extTabBar?.backgroundColor?.toColor();
+    final foregroundColor = extTabBar?.foregroundColor?.toColor();
+    const surfaceTintColor = Colors.white;
+
     return AppBarTheme(
-      backgroundColor: extTabBar?.backgroundColor,
-      foregroundColor: extTabBar?.foregroundColor,
-      surfaceTintColor: Colors.white,
-      scrolledUnderElevation: 0,
+      backgroundColor: backgroundColor,
+      foregroundColor: foregroundColor,
+      surfaceTintColor: surfaceTintColor,
+      scrolledUnderElevation: 0.0,
       centerTitle: true,
     );
   }
@@ -690,10 +714,14 @@ class ThemeProvider extends InheritedWidget {
     ColorScheme colors,
     ExtTabBarWidgetConfig? extTabBar,
   ) {
+    final unselectedLabelColor = extTabBar?.unSelectedItemColor?.toColor() ?? colors.onSurface;
+    const dividerColor = Colors.transparent;
+    final labelColor = colors.onPrimary;
+
     return TabBarTheme(
-      unselectedLabelColor: extTabBar?.unSelectedItemColor ?? colors.onSurface,
-      dividerColor: Colors.transparent,
-      labelColor: colors.onPrimary,
+      unselectedLabelColor: unselectedLabelColor,
+      dividerColor: dividerColor,
+      labelColor: labelColor,
     );
   }
 
@@ -701,10 +729,14 @@ class ThemeProvider extends InheritedWidget {
     ColorScheme colors,
     BottomNavigationBarWidgetConfig? bottomNavigationBar,
   ) {
+    final backgroundColor = bottomNavigationBar?.backgroundColor?.toColor();
+    final unselectedItemColor = bottomNavigationBar?.unSelectedItemColor?.toColor();
+    final selectedItemColor = bottomNavigationBar?.selectedItemColor?.toColor();
+
     return BottomNavigationBarThemeData(
-      backgroundColor: bottomNavigationBar?.backgroundColor ?? colors.surface,
-      unselectedItemColor: bottomNavigationBar?.unSelectedItemColor,
-      selectedItemColor: bottomNavigationBar?.selectedItemColor,
+      backgroundColor: backgroundColor ?? colors.surface,
+      unselectedItemColor: unselectedItemColor,
+      selectedItemColor: selectedItemColor,
     );
   }
 
@@ -814,20 +846,20 @@ class ThemeProvider extends InheritedWidget {
         textButtonStyles,
         gradients(colorScheme),
         logoAssets(
-          primaryOnboardin: settings.primaryOnboardingLogo,
-          secondaryOnboardin: settings.secondaryOnboardingLogo,
+          primaryOnboardin: ThemeSvgAsset.fromJson(settings.primaryOnboardingLogo),
+          secondaryOnboardin: ThemeSvgAsset.fromJson(settings.secondaryOnboardingLogo),
         ),
         groupTitleListStyles(
           themeWidgetConfig?.group?.groupTitleListTile,
         ),
         onboardingPictureLogoStyles(
           colorScheme,
-          settings.primaryOnboardingLogo,
+          ThemeSvgAsset.fromJson(settings.primaryOnboardingLogo),
           themeWidgetConfig?.picture?.onboardingPictureLogo,
         ),
         onboardingLogoStyles(
           colorScheme,
-          settings.secondaryOnboardingLogo,
+          ThemeSvgAsset.fromJson(settings.secondaryOnboardingLogo),
           themeWidgetConfig?.picture?.onboardingLogo,
         ),
         aboutScreenStyles(themePageConfig?.about)
