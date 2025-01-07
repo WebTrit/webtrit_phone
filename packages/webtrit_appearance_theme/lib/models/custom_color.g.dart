@@ -6,13 +6,14 @@ part of 'custom_color.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-CustomColor _$CustomColorFromJson(Map<String, dynamic> json) => CustomColor(
-      color: const CSSColorConverter().fromJson(json['color'] as String),
+_$CustomColorImpl _$$CustomColorImplFromJson(Map<String, dynamic> json) =>
+    _$CustomColorImpl(
+      color: json['color'] as String,
       blend: json['blend'] as bool? ?? true,
     );
 
-Map<String, dynamic> _$CustomColorToJson(CustomColor instance) =>
+Map<String, dynamic> _$$CustomColorImplToJson(_$CustomColorImpl instance) =>
     <String, dynamic>{
-      'color': const CSSColorConverter().toJson(instance.color),
+      'color': instance.color,
       'blend': instance.blend,
     };

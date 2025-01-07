@@ -129,7 +129,7 @@ _$AppConfigBottomMenuTabImpl _$$AppConfigBottomMenuTabImplFromJson(
       initial: json['initial'] as bool? ?? false,
       type: json['type'] as String,
       titleL10n: json['titleL10n'] as String,
-      icon: const IconDataConverter().fromJson(json['icon'] as String),
+      icon: json['icon'] as String,
       data: json['data'] as Map<String, dynamic>? ?? const {},
     );
 
@@ -140,7 +140,7 @@ Map<String, dynamic> _$$AppConfigBottomMenuTabImplToJson(
       'initial': instance.initial,
       'type': instance.type,
       'titleL10n': instance.titleL10n,
-      'icon': const IconDataConverter().toJson(instance.icon),
+      'icon': instance.icon,
       'data': instance.data,
     };
 
@@ -186,7 +186,7 @@ _$AppConfigSettingsItemImpl _$$AppConfigSettingsItemImplFromJson(
       enabled: json['enabled'] as bool? ?? true,
       titleL10n: json['titleL10n'] as String,
       type: json['type'] as String,
-      icon: const IconDataConverter().fromJson(json['icon'] as String),
+      icon: json['icon'] as String,
       data: json['data'] as Map<String, dynamic>? ?? const {},
     );
 
@@ -196,7 +196,7 @@ Map<String, dynamic> _$$AppConfigSettingsItemImplToJson(
       'enabled': instance.enabled,
       'titleL10n': instance.titleL10n,
       'type': instance.type,
-      'icon': const IconDataConverter().toJson(instance.icon),
+      'icon': instance.icon,
       'data': instance.data,
     };
 

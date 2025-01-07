@@ -3,10 +3,10 @@ import 'dart:io';
 import 'package:logging/logging.dart';
 
 import 'package:webtrit_phone/data/app_preferences.dart';
-import 'package:webtrit_phone/extensions/iterable.dart';
+import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/models/models.dart';
-import 'package:webtrit_phone/theme/models/models.dart';
+import 'package:webtrit_phone/theme/theme.dart';
 
 import 'app_themes.dart';
 
@@ -98,7 +98,7 @@ class FeatureAccess {
         initial: tab.initial,
         flavor: flavor,
         titleL10n: tab.titleL10n,
-        icon: tab.icon,
+        icon: tab.icon.toIconData(),
         data: data,
         contactSourceTypes: sourceTypes,
       );
@@ -108,7 +108,7 @@ class FeatureAccess {
         initial: tab.initial,
         flavor: flavor,
         titleL10n: tab.titleL10n,
-        icon: tab.icon,
+        icon: tab.icon.toIconData(),
         data: data,
       );
     }
@@ -137,7 +137,7 @@ class FeatureAccess {
 
         final settingItem = SettingItem(
           titleL10n: item.titleL10n,
-          icon: item.icon,
+          icon: item.icon.toIconData(),
           data: data,
           flavor: SettingsFlavor.values.byName(item.type),
         );

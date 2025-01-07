@@ -101,6 +101,8 @@ dependencies:
     path: ./packages/ssl_certificates
   app_database:
     path: ./packages/data/app_database
+  webtrit_appearance_theme:
+    path: ./packages/webtrit_appearance_theme
 
 dev_dependencies:
   integration_test:

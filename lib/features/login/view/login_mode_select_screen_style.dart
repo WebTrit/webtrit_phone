@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+
 import 'package:webtrit_phone/theme/theme.dart';
 
 class LoginModeSelectScreenStyle with Diagnosticable {
