@@ -158,6 +158,8 @@
   "@default_InvalidChatTypeMessagingSocketException": {},
   "default_MessagingSocketException": "An error occurred while processing the request",
   "@default_MessagingSocketException": {},
+  "default_JoinCrashedMessagingSocketException": "Error occurred while joining the conversation",
+  "@default_JoinCrashedMessagingSocketException": {},
   "default_RequestFailureError": "A server failure occurred",
   "@default_RequestFailureError": {},
   "default_SelfAuthorityAssignmentForbiddenMessagingSocketException": "Self authority assignment is forbidden",

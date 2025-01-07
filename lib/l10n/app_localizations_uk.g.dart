@@ -246,6 +246,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get default_MessagingSocketException => 'Помилка з\'єднання з сервером';
 
   @override
+  String get default_JoinCrashedMessagingSocketException => 'Під час приєднання до розмови сталася помилка';
+
+  @override
   String get default_RequestFailureError => 'Сталася помилка на сервері';
 
   @override

@@ -246,6 +246,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get default_MessagingSocketException => 'Si è verificato un errore durante la comunicazione con il server';
 
   @override
+  String get default_JoinCrashedMessagingSocketException => 'Si è verificato un errore durante l\'adesione alla conversazione';
+
+  @override
   String get default_RequestFailureError => 'Si è verificato un errore del server';
 
   @override

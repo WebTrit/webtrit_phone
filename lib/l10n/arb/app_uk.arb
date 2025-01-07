@@ -158,6 +158,8 @@
   "@default_InvalidChatTypeMessagingSocketException": {},
   "default_MessagingSocketException": "Помилка з'єднання з сервером",
   "@default_MessagingSocketException": {},
+  "default_JoinCrashedMessagingSocketException": "Під час приєднання до розмови сталася помилка",
+  "@default_JoinCrashedMessagingSocketException": {},
   "default_RequestFailureError": "Сталася помилка на сервері",
   "@default_RequestFailureError": {},
   "default_SelfAuthorityAssignmentForbiddenMessagingSocketException": "Призначення власних прав заборонено",

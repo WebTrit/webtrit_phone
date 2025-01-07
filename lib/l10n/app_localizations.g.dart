@@ -571,6 +571,12 @@ abstract class AppLocalizations {
   /// **'An error occurred while processing the request'**
   String get default_MessagingSocketException;
 
+  /// No description provided for @default_JoinCrashedMessagingSocketException.
+  ///
+  /// In en, this message translates to:
+  /// **'Error occurred while joining the conversation'**
+  String get default_JoinCrashedMessagingSocketException;
+
   /// No description provided for @default_RequestFailureError.
   ///
   /// In en, this message translates to:
