@@ -27,56 +27,88 @@ final _logger = Logger('SmsSyncWorker');
 /// smsSyncWorker.init();
 /// ```
 class SmsSyncWorker {
-  SmsSyncWorker(this.client, this.smsRepository, this.submitNotification, {this.pageSize = 50});
+  SmsSyncWorker(
+    this.client,
+    this.smsRepository,
+    this.submitNotification, {
+    this.pageSize = 50,
+    this.listThrottle = const Duration(seconds: 1),
+    this.roomThrottle = const Duration(seconds: 5),
+  });
 
   final PhoenixSocket client;
   final SmsRepository smsRepository;
   final Function(Notification) submitNotification;
   final int pageSize;
+  final Duration listThrottle;
+  final Duration roomThrottle;
 
-  StreamSubscription? _conversationlistSyncSub;
+  StreamSubscription? _conversationsSyncSub;
   final Map<int, StreamSubscription> _conversationSyncSubs = {};
 
   Future init() async {
     _logger.info('Initialising...');
-    await _closeSubs();
-    _conversationlistSyncSub = _conversationlistSyncStream().listen(
-      (e) => _logger.info('_conversationlistSyncStream event: $e'),
+    _closeSubs();
+    _conversationsSyncSub = _conversationsSyncStream().listen(
+      (e) {
+        if (e is (Object, StackTrace)) {
+          _logger.warning('conversations sync error:', e.$1, e.$2);
+          submitNotification(DefaultErrorNotification(e));
+        } else {
+          _logger.info('conversations sync event: $e');
+        }
+      },
     );
   }
 
   Future dispose() async {
     _logger.info('Disposing...');
-    await _closeSubs();
+    _closeSubs();
   }
 
-  Future _conversationSubscribe(int conversationId) async {
-    _logger.info('Subscribing to conversation $conversationId');
-    PhoenixChannel? channel = client.getSmsConversationChannel(conversationId);
+  Future _conversationSubscribe(int id) async {
+    _logger.info('Subscribing to conversation $id');
+
+    PhoenixChannel? channel = client.getSmsConversationChannel(id);
+
     if (channel == null) {
-      channel = client.createSmsConversationChannel(conversationId);
-      await channel.join().future;
+      channel = client.createSmsConversationChannel(id);
+      await channel.connect().catchError((e, s) {
+        _logger.warning('Failed to connect to sms conversation $id', e, s);
+        submitNotification(DefaultErrorNotification(e));
+      });
     }
+
     _conversationSyncSubs.putIfAbsent(
-      conversationId,
-      () => _conversationSyncStream(conversationId, channel!).listen(
-        (e) => _logger.info('_conversationSyncStream $conversationId event: $e'),
+      id,
+      () => _conversationSyncStream(id, channel!).listen(
+        (e) {
+          if (e is (Object, StackTrace)) {
+            _logger.warning('conversation sync error: $id', e.$1, e.$2);
+            submitNotification(DefaultErrorNotification(e));
+          } else {
+            _logger.info('conversation sync event: $id $e');
+          }
+        },
       ),
     );
   }
 
-  Future _conversationUnsubscribe(int conversationId) async {
-    _logger.info('Unsubscribing from chat $conversationId');
-    _conversationSyncSubs.remove(conversationId)?.cancel();
-    await client.getSmsConversationChannel(conversationId)?.leave().future;
+  Future _conversationUnsubscribe(int id) async {
+    _logger.info('Unsubscribing from $id');
+    _conversationSyncSubs.remove(id)?.cancel();
+    await client.getSmsConversationChannel(id)?.leave().future;
   }
 
-  Stream<dynamic> _conversationlistSyncStream() async* {
+  Stream<dynamic> _conversationsSyncStream() async* {
     while (true) {
       try {
         // Get and wait for user channel to be ready
         final userChannel = client.userChannel;
-        if (userChannel == null || userChannel.state != PhoenixChannelState.joined) throw _Disconnected();
+
+        // Check if connection ready to use
+        final connected = userChannel != null && userChannel.state == PhoenixChannelState.joined;
+        if (!connected) continue;
 
         // Fetch user phone numbers
         final smsNumbers = await userChannel.smsPhoneNumbers;
@@ -99,7 +131,9 @@ class SmsSyncWorker {
         yield {'actualIds': actualIds, 'removeIds': removeIds};
 
         // Process buffered and listen for future events
+        eventsIterator:
         await for (final event in eventsStream) {
+          yield event;
           switch (event) {
             case SmsConversationJoin smsEvent:
               await _conversationSubscribe(smsEvent.conversationId);
@@ -107,30 +141,25 @@ class SmsSyncWorker {
               await _conversationUnsubscribe(smsEvent.conversationId);
               await smsRepository.deleteConversationById(smsEvent.conversationId);
             case UserChannelDisconnect _:
-              throw _Disconnected();
+              break eventsIterator;
             default:
           }
-
-          yield event;
         }
       } catch (e, s) {
-        _logger.warning('_conversationlistSyncStream error:', e, s);
-        if (e is! _Disconnected) submitNotification(DefaultErrorNotification(e));
+        yield (e, s);
       } finally {
-        _conversationSyncSubs.forEach((key, value) => value.cancel());
-        _conversationSyncSubs.clear();
-        // Wait a sec before retrying
-        await Future.delayed(const Duration(seconds: 1));
-        yield {'event': 'retry'}; // Do not remove this yield, it's important for break on close stream
+        _closeConversationSubs();
+        yield await Future.delayed(listThrottle, () => _kRetryStub);
       }
     }
   }
 
-  Stream<dynamic> _conversationSyncStream(int conversationId, PhoenixChannel channel) async* {
+  Stream<dynamic> _conversationSyncStream(int id, PhoenixChannel channel) async* {
     while (true) {
       try {
-        _logger.info('Sms channel state: $conversationId ${channel.state}');
-        if (channel.state != PhoenixChannelState.joined) throw _Disconnected();
+        // Check if connection ready to use
+        final connected = (channel.state == PhoenixChannelState.joined);
+        if (!connected) continue;
 
         // Buffer updates that may come in a gap between fetching and subscribing
         final eventsStream = channel.smsEvents.transform(BufferTransformer());
@@ -146,7 +175,7 @@ class SmsSyncWorker {
         yield cursors;
 
         // Get last update time for sync messages from
-        final newestCursor = await smsRepository.getMessageSyncCursor(conversationId, SmsSyncCursorType.newest);
+        final newestCursor = await smsRepository.getMessageSyncCursor(id, SmsSyncCursorType.newest);
 
         // If no last update, fetch history of last [pageSize] messages for initial state
         if (newestCursor == null) {
@@ -160,12 +189,12 @@ class SmsSyncWorker {
             // set initial cursors
             // Pay attention, the history is fetched in reverse order
             await smsRepository.upsertSmsMessageSyncCursor(SmsMessageSyncCursor(
-              conversationId: conversationId,
+              conversationId: id,
               cursorType: SmsSyncCursorType.oldest,
               time: messages.last.createdAt,
             ));
             await smsRepository.upsertSmsMessageSyncCursor(SmsMessageSyncCursor(
-              conversationId: conversationId,
+              conversationId: id,
               cursorType: SmsSyncCursorType.newest,
               time: messages.first.updatedAt,
             ));
@@ -188,7 +217,7 @@ class SmsSyncWorker {
 
               // Update local newest cursor to continue pagination
               pagingCursor = SmsMessageSyncCursor(
-                conversationId: conversationId,
+                conversationId: id,
                 cursorType: SmsSyncCursorType.newest,
                 time: messages.last.updatedAt,
               );
@@ -204,42 +233,43 @@ class SmsSyncWorker {
         }
 
         // Process buffered and listen for future events
+        eventsIterator:
         await for (final event in eventsStream) {
+          yield event;
           switch (event) {
-            case SmsChannelInfoUpdate e:
-              await smsRepository.upsertConversation(e.conversation);
-            case SmsChannelMessageUpdate e:
-              await smsRepository.upsertMessage(e.message);
+            case SmsChannelInfoUpdate _:
+              await smsRepository.upsertConversation(event.conversation);
+            case SmsChannelMessageUpdate _:
+              await smsRepository.upsertMessage(event.message);
               await smsRepository.upsertSmsMessageSyncCursor(SmsMessageSyncCursor(
-                conversationId: conversationId,
+                conversationId: id,
                 cursorType: SmsSyncCursorType.newest,
-                time: e.message.updatedAt,
+                time: event.message.updatedAt,
               ));
-            case SmsChannelCursorSet e:
-              await smsRepository.upsertMessageReadCursor(e.cursor);
+            case SmsChannelCursorSet _:
+              await smsRepository.upsertMessageReadCursor(event.cursor);
             case SmsChannelDisconnect _:
-              throw _Disconnected();
+              break eventsIterator;
             default:
           }
-
-          yield event;
         }
       } catch (e, s) {
-        _logger.warning('_conversationSyncStream $conversationId error:', e, s);
-        if (e is! _Disconnected) submitNotification(DefaultErrorNotification(e));
+        yield (e, s);
       } finally {
-        // Wait a sec before retrying
-        await Future.delayed(const Duration(seconds: 1));
-        yield {'event': 'retry'}; // Do not remove this yield, it's important for break on close stream
+        yield await Future.delayed(roomThrottle, () => _kRetryStub);
       }
     }
   }
 
-  Future<void> _closeSubs() async {
-    _conversationlistSyncSub?.cancel();
+  void _closeSubs() async {
+    _conversationsSyncSub?.cancel();
+    _closeConversationSubs();
+  }
+
+  void _closeConversationSubs() {
     _conversationSyncSubs.forEach((key, value) => value.cancel());
     _conversationSyncSubs.clear();
   }
 }
 
-class _Disconnected implements Exception {}
+const _kRetryStub = 'retry';

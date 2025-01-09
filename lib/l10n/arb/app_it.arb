@@ -158,6 +158,8 @@
   "@default_InvalidChatTypeMessagingSocketException": {},
   "default_MessagingSocketException": "Si è verificato un errore durante la comunicazione con il server",
   "@default_MessagingSocketException": {},
+  "default_JoinCrashedMessagingSocketException": "Si è verificato un errore durante l'adesione alla conversazione",
+  "@default_JoinCrashedMessagingSocketException": {},
   "default_RequestFailureError": "Si è verificato un errore del server",
   "@default_RequestFailureError": {},
   "default_SelfAuthorityAssignmentForbiddenMessagingSocketException": "Assegnazione di autorità a se stessi vietata",

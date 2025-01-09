@@ -246,6 +246,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get default_MessagingSocketException => 'An error occurred while processing the request';
 
   @override
+  String get default_JoinCrashedMessagingSocketException => 'Error occurred while joining the conversation';
+
+  @override
   String get default_RequestFailureError => 'A server failure occurred';
 
   @override

@@ -74,6 +74,8 @@ String _defaultMessagingSocketExceptionL10n(BuildContext context, MessagingSocke
       return l10n.default_SmsConversationNotFoundMessagingSocketException;
     case 'timeout':
       return l10n.default_TimeoutMessagingSocketException;
+    case 'join crashed':
+      return l10n.default_JoinCrashedMessagingSocketException;
     default:
       return l10n.default_MessagingSocketException;
   }
