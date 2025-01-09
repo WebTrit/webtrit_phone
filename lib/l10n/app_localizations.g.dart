@@ -2005,11 +2005,23 @@ abstract class AppLocalizations {
   /// **'No access to media input, please check app permissions'**
   String get notifications_errorSnackBar_callUserMedia;
 
-  /// No description provided for @notifications_errorSnackBar_sipServiceUnavailable.
+  /// No description provided for @notifications_errorSnackBar_sipRegistrationFailed_Unavailable.
   ///
   /// In en, this message translates to:
-  /// **'Authentication error with the remote VoIP system'**
-  String get notifications_errorSnackBar_sipServiceUnavailable;
+  /// **'Registration with the remote VoIP system failed, the service is unavailable'**
+  String get notifications_errorSnackBar_sipRegistrationFailed_Unavailable;
+
+  /// No description provided for @notifications_errorSnackBar_sipRegistrationFailed_WithSystemReason.
+  ///
+  /// In en, this message translates to:
+  /// **'Registration with the remote VoIP system failed with reason: {reason}'**
+  String notifications_errorSnackBar_sipRegistrationFailed_WithSystemReason(String reason);
+
+  /// No description provided for @notifications_errorSnackBar_sipRegistrationFailed_Unexpected.
+  ///
+  /// In en, this message translates to:
+  /// **'Registration with the remote VoIP system failed due to an unexpected error'**
+  String get notifications_errorSnackBar_sipRegistrationFailed_Unexpected;
 
   /// No description provided for @permission_Button_request.
   ///
@@ -2202,6 +2214,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Status code'**
   String get request_StatusCode;
+
+  /// No description provided for @request_StatusName.
+  ///
+  /// In en, this message translates to:
+  /// **'Status name'**
+  String get request_StatusName;
 
   /// No description provided for @sessionStatus_pushNotificationServiceProblem.
   ///

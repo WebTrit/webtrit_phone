@@ -983,7 +983,15 @@ class AppLocalizationsUk extends AppLocalizations {
   String get notifications_errorSnackBar_callUserMedia => 'Немає доступу до медіа-входу, будь ласка, перевірте дозволи програми';
 
   @override
-  String get notifications_errorSnackBar_sipServiceUnavailable => 'Помилка аутентифікації з віддаленою VoIP системою';
+  String get notifications_errorSnackBar_sipRegistrationFailed_Unavailable => 'Помилка реєстрації у віддаленій системі VoIP, послуга недоступна';
+
+  @override
+  String notifications_errorSnackBar_sipRegistrationFailed_WithSystemReason(String reason) {
+    return 'Помилка реєстрації у віддаленій системі VoIP з причини: $reason';
+  }
+
+  @override
+  String get notifications_errorSnackBar_sipRegistrationFailed_Unexpected => 'Помилка реєстрації у віддаленій системі VoIP через неочікувану помилку';
 
   @override
   String get permission_Button_request => 'Продовжити';
@@ -1094,6 +1102,9 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get request_StatusCode => 'Код статусу запиту';
+
+  @override
+  String get request_StatusName => 'Назва статусу запиту';
 
   @override
   String get sessionStatus_pushNotificationServiceProblem => 'Проблема з налаштуванням служби пуш-сповіщень';

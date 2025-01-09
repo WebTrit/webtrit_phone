@@ -696,8 +696,18 @@
   "@notifications_errorSnackBar_callUndefinedLine": {},
   "notifications_errorSnackBar_callUserMedia": "Немає доступу до медіа-входу, будь ласка, перевірте дозволи програми",
   "@notifications_errorSnackBar_callUserMedia": {},
-  "notifications_errorSnackBar_sipServiceUnavailable": "Помилка аутентифікації з віддаленою VoIP системою",
-  "@notifications_errorSnackBar_sipServiceUnavailable": {},
+  "notifications_errorSnackBar_sipRegistrationFailed_Unavailable": "Помилка реєстрації у віддаленій системі VoIP, послуга недоступна",
+  "@notifications_errorSnackBar_sipRegistrationFailed_Unavailable": {},
+  "notifications_errorSnackBar_sipRegistrationFailed_WithSystemReason": "Помилка реєстрації у віддаленій системі VoIP з причини: {reason}",
+  "@notifications_errorSnackBar_sipRegistrationFailed_WithSystemReason": {
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "notifications_errorSnackBar_sipRegistrationFailed_Unexpected": "Помилка реєстрації у віддаленій системі VoIP через неочікувану помилку",
+  "@notifications_errorSnackBar_sipRegistrationFailed_Unexpected": {},
   "permission_Button_request": "Продовжити",
   "@permission_Button_request": {},
   "permission_manageFullScreenNotificationInstructions_step1": "Go to your phone's Settings.",
@@ -782,6 +792,8 @@
   "@request_Id": {},
   "request_StatusCode": "Код статусу запиту",
   "@request_StatusCode": {},
+  "request_StatusName": "Назва статусу запиту",
+  "@request_StatusName": {},
   "sessionStatus_pushNotificationServiceProblem": "Проблема з налаштуванням служби пуш-сповіщень",
   "@sessionStatus_pushNotificationServiceProblem": {},
   "settings_AboutText_AppSessionIdentifier": "Ідентифікатор сесії застосунку",

@@ -602,8 +602,12 @@ class AppLocalizationsMapper {
           localizations.notifications_errorSnackBar_callUndefinedLine,
       'notifications_errorSnackBar_callUserMedia':
           localizations.notifications_errorSnackBar_callUserMedia,
-      'notifications_errorSnackBar_sipServiceUnavailable':
-          localizations.notifications_errorSnackBar_sipServiceUnavailable,
+      'notifications_errorSnackBar_sipRegistrationFailed_Unavailable':
+          localizations
+              .notifications_errorSnackBar_sipRegistrationFailed_Unavailable,
+      'notifications_errorSnackBar_sipRegistrationFailed_Unexpected':
+          localizations
+              .notifications_errorSnackBar_sipRegistrationFailed_Unexpected,
       'permission_Button_request': localizations.permission_Button_request,
       'permission_manageFullScreenNotificationInstructions_step1': localizations
           .permission_manageFullScreenNotificationInstructions_step1,
@@ -655,6 +659,7 @@ class AppLocalizationsMapper {
           localizations.recentsVisibilityFilter_outgoing_preposit,
       'request_Id': localizations.request_Id,
       'request_StatusCode': localizations.request_StatusCode,
+      'request_StatusName': localizations.request_StatusName,
       'sessionStatus_pushNotificationServiceProblem':
           localizations.sessionStatus_pushNotificationServiceProblem,
       'settings_AboutText_AppSessionIdentifier':
@@ -887,6 +892,10 @@ class AppLocalizationsMapper {
           (actual, supportedConstraint) => localizations
               .main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError(
                   actual, supportedConstraint),
+      'notifications_errorSnackBar_sipRegistrationFailed_WithSystemReason':
+          (reason) => localizations
+              .notifications_errorSnackBar_sipRegistrationFailed_WithSystemReason(
+                  reason),
       'recents_BodyCenter_empty': (filter) =>
           localizations.recents_BodyCenter_empty(filter),
       'recents_snackBar_deleted': (name) =>

@@ -983,7 +983,15 @@ class AppLocalizationsIt extends AppLocalizations {
   String get notifications_errorSnackBar_callUserMedia => 'Nessun accesso al server multimediale, controlla le autorizzazioni dell\'app';
 
   @override
-  String get notifications_errorSnackBar_sipServiceUnavailable => 'Errore di autenticazione con il sistema VoIP remoto';
+  String get notifications_errorSnackBar_sipRegistrationFailed_Unavailable => 'La registrazione al sistema VoIP remoto non è riuscita, il servizio non è disponibile';
+
+  @override
+  String notifications_errorSnackBar_sipRegistrationFailed_WithSystemReason(String reason) {
+    return 'La registrazione con il sistema VoIP remoto è fallita con il motivo: $reason';
+  }
+
+  @override
+  String get notifications_errorSnackBar_sipRegistrationFailed_Unexpected => 'La registrazione con il sistema VoIP remoto non è riuscita a causa di un errore imprevisto';
 
   @override
   String get permission_Button_request => 'Continua';
@@ -1094,6 +1102,9 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get request_StatusCode => 'Codice di stato';
+
+  @override
+  String get request_StatusName => 'Nome dello stato';
 
   @override
   String get sessionStatus_pushNotificationServiceProblem => 'Problema con la configurazione del servizio di notifiche push';

@@ -696,8 +696,18 @@
   "@notifications_errorSnackBar_callUndefinedLine": {},
   "notifications_errorSnackBar_callUserMedia": "No access to media input, please check app permissions",
   "@notifications_errorSnackBar_callUserMedia": {},
-  "notifications_errorSnackBar_sipServiceUnavailable": "Authentication error with the remote VoIP system",
-  "@notifications_errorSnackBar_sipServiceUnavailable": {},
+  "notifications_errorSnackBar_sipRegistrationFailed_Unavailable": "Registration with the remote VoIP system failed, the service is unavailable",
+  "@notifications_errorSnackBar_sipRegistrationFailed_Unavailable": {},
+  "notifications_errorSnackBar_sipRegistrationFailed_WithSystemReason": "Registration with the remote VoIP system failed with reason: {reason}",
+  "@notifications_errorSnackBar_sipRegistrationFailed_WithSystemReason": {
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "notifications_errorSnackBar_sipRegistrationFailed_Unexpected": "Registration with the remote VoIP system failed due to an unexpected error",
+  "@notifications_errorSnackBar_sipRegistrationFailed_Unexpected": {},
   "permission_Button_request": "Continue",
   "@permission_Button_request": {},
   "permission_manageFullScreenNotificationInstructions_step1": "Go to your phone's Settings.",
@@ -782,6 +792,8 @@
   "@request_Id": {},
   "request_StatusCode": "Status code",
   "@request_StatusCode": {},
+  "request_StatusName": "Status name",
+  "@request_StatusName": {},
   "sessionStatus_pushNotificationServiceProblem": "Problem with configuration push notification service",
   "@sessionStatus_pushNotificationServiceProblem": {},
   "settings_AboutText_AppSessionIdentifier": "Application session identifier",

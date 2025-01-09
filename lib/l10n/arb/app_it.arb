@@ -696,8 +696,18 @@
   "@notifications_errorSnackBar_callUndefinedLine": {},
   "notifications_errorSnackBar_callUserMedia": "Nessun accesso al server multimediale, controlla le autorizzazioni dell'app",
   "@notifications_errorSnackBar_callUserMedia": {},
-  "notifications_errorSnackBar_sipServiceUnavailable": "Errore di autenticazione con il sistema VoIP remoto",
-  "@notifications_errorSnackBar_sipServiceUnavailable": {},
+  "notifications_errorSnackBar_sipRegistrationFailed_Unavailable": "La registrazione al sistema VoIP remoto non è riuscita, il servizio non è disponibile",
+  "@notifications_errorSnackBar_sipRegistrationFailed_Unavailable": {},
+  "notifications_errorSnackBar_sipRegistrationFailed_WithSystemReason": "La registrazione con il sistema VoIP remoto è fallita con il motivo: {reason}",
+  "@notifications_errorSnackBar_sipRegistrationFailed_WithSystemReason": {
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "notifications_errorSnackBar_sipRegistrationFailed_Unexpected": "La registrazione con il sistema VoIP remoto non è riuscita a causa di un errore imprevisto",
+  "@notifications_errorSnackBar_sipRegistrationFailed_Unexpected": {},
   "permission_Button_request": "Continua",
   "@permission_Button_request": {},
   "permission_manageFullScreenNotificationInstructions_step1": "Go to your phone's Settings.",
@@ -782,6 +792,8 @@
   "@request_Id": {},
   "request_StatusCode": "Codice di stato",
   "@request_StatusCode": {},
+  "request_StatusName": "Nome dello stato",
+  "@request_StatusName": {},
   "sessionStatus_pushNotificationServiceProblem": "Problema con la configurazione del servizio di notifiche push",
   "@sessionStatus_pushNotificationServiceProblem": {},
   "settings_AboutText_AppSessionIdentifier": "Identificatore della sessione dell'applicazione",

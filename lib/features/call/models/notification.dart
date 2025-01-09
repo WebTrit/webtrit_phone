@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 
 import 'package:permission_handler/permission_handler.dart';
+import 'package:auto_route/auto_route.dart';
+
+import 'package:webtrit_signaling/webtrit_signaling.dart';
 
 import 'package:webtrit_phone/app/notifications/models/notification.dart';
+import 'package:webtrit_phone/app/notifications/models/error_field.dart';
+import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 
 final class CallUndefinedLineErrorNotification extends ErrorNotification {
@@ -58,10 +63,47 @@ final class CallUserMediaErrorNotification extends ErrorNotification {
   }
 }
 
-final class SipServerUnavailable extends ErrorNotification {
+final class SipRegistrationFailed extends ErrorNotification {
+  const SipRegistrationFailed({
+    required this.knownCode,
+    this.systemCode,
+    this.systemReason,
+  });
+
+  final SignalingRegistrationFailedCode knownCode;
+  final int? systemCode;
+  final String? systemReason;
+
   @override
   String l10n(BuildContext context) {
-    return context.l10n.notifications_errorSnackBar_sipServiceUnavailable;
+    switch (knownCode) {
+      case SignalingRegistrationFailedCode.sipServerUnavailable:
+        return context.l10n.notifications_errorSnackBar_sipRegistrationFailed_Unavailable;
+      default:
+        if (systemReason != null) {
+          return context.l10n.notifications_errorSnackBar_sipRegistrationFailed_WithSystemReason(systemReason!);
+        } else {
+          return context.l10n.notifications_errorSnackBar_sipRegistrationFailed_Unexpected;
+        }
+    }
+  }
+
+  @override
+  SnackBarAction action(BuildContext context) {
+    final title = l10n(context);
+    final errorFields = [
+      ErrorFieldModel(context.l10n.default_ErrorMessage, title),
+      ErrorFieldModel(context.l10n.request_StatusName, knownCode.name),
+      ErrorFieldModel(context.l10n.request_StatusCode, systemCode?.toString() ?? 'N/A'),
+      ErrorFieldModel(context.l10n.default_ErrorDetails, systemReason ?? 'N/A'),
+    ];
+
+    return SnackBarAction(
+      label: context.l10n.default_ErrorDetails,
+      onPressed: () {
+        context.router.push(ErrorDetailsScreenPageRoute(title: title, fields: errorFields));
+      },
+    );
   }
 }
 

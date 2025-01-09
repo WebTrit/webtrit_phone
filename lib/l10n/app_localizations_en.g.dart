@@ -983,7 +983,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get notifications_errorSnackBar_callUserMedia => 'No access to media input, please check app permissions';
 
   @override
-  String get notifications_errorSnackBar_sipServiceUnavailable => 'Authentication error with the remote VoIP system';
+  String get notifications_errorSnackBar_sipRegistrationFailed_Unavailable => 'Registration with the remote VoIP system failed, the service is unavailable';
+
+  @override
+  String notifications_errorSnackBar_sipRegistrationFailed_WithSystemReason(String reason) {
+    return 'Registration with the remote VoIP system failed with reason: $reason';
+  }
+
+  @override
+  String get notifications_errorSnackBar_sipRegistrationFailed_Unexpected => 'Registration with the remote VoIP system failed due to an unexpected error';
 
   @override
   String get permission_Button_request => 'Continue';
@@ -1094,6 +1102,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get request_StatusCode => 'Status code';
+
+  @override
+  String get request_StatusName => 'Status name';
 
   @override
   String get sessionStatus_pushNotificationServiceProblem => 'Problem with configuration push notification service';

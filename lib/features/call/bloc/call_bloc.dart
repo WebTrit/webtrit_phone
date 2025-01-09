@@ -385,16 +385,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     }
 
     if (newRegistrationStatus.isFailed) {
-      final code = SignalingRegistrationFailedCode.values.byCode(event.registration.code);
-      final reason = event.registration.reason ?? code.toString();
-
-      switch (code) {
-        case SignalingRegistrationFailedCode.sipServerUnavailable:
-          submitNotification(SipServerUnavailable());
-          return;
-        default:
-          submitNotification(ErrorMessageNotification(reason));
-      }
+      submitNotification(SipRegistrationFailed(
+        knownCode: SignalingRegistrationFailedCode.values.byCode(event.registration.code),
+        systemCode: event.registration.code,
+        systemReason: event.registration.reason,
+      ));
     }
   }
 
