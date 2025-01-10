@@ -10,39 +10,59 @@ import 'package:webtrit_phone/app/notifications/models/error_field.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 
-final class CallUndefinedLineErrorNotification extends ErrorNotification {
-  const CallUndefinedLineErrorNotification();
+final class SignalingSessionMissedNotification extends ErrorNotification {
+  const SignalingSessionMissedNotification();
 
   @override
   String l10n(BuildContext context) {
-    return context.l10n.notifications_errorSnackBar_callUndefinedLine;
+    return context.l10n.notifications_errorSnackBar_SignalingSessionMissed;
   }
 }
 
-final class CallSignalingClientNotConnectErrorNotification extends ErrorNotification {
-  const CallSignalingClientNotConnectErrorNotification();
+final class SignalingConnectFailedNotification extends ErrorNotification {
+  const SignalingConnectFailedNotification();
 
   @override
   String l10n(BuildContext context) {
-    return context.l10n.notifications_errorSnackBar_callSignalingClientNotConnect;
+    return context.l10n.notifications_errorSnackBar_SignalingConnectFailed;
   }
 }
 
-final class CallSignalingClientSessionMissedErrorNotification extends ErrorNotification {
-  const CallSignalingClientSessionMissedErrorNotification();
+final class SignalingDisconnectNotification extends ErrorNotification {
+  const SignalingDisconnectNotification({
+    required this.knownCode,
+    this.systemCode,
+    this.systemReason,
+  });
+
+  final SignalingDisconnectCode knownCode;
+  final int? systemCode;
+  final String? systemReason;
 
   @override
   String l10n(BuildContext context) {
-    return context.l10n.notifications_errorSnackBar_callSignalingClientSessionMissed;
+    if (systemReason != null) {
+      return context.l10n.notifications_errorSnackBar_signalingDisconnectWithSystemReason(systemReason!);
+    }
+    return context.l10n.notifications_errorSnackBar_signalingDisconnectWithCodeName(knownCode.name);
   }
-}
-
-final class CallConnectErrorNotification extends ErrorNotification {
-  const CallConnectErrorNotification();
 
   @override
-  String l10n(BuildContext context) {
-    return context.l10n.notifications_errorSnackBar_callConnect;
+  SnackBarAction action(BuildContext context) {
+    final title = l10n(context);
+    final errorFields = [
+      ErrorFieldModel(context.l10n.default_ErrorMessage, title),
+      ErrorFieldModel(context.l10n.request_StatusName, knownCode.name),
+      ErrorFieldModel(context.l10n.request_StatusCode, systemCode?.toString() ?? 'N/A'),
+      ErrorFieldModel(context.l10n.default_ErrorDetails, systemReason ?? 'N/A'),
+    ];
+
+    return SnackBarAction(
+      label: context.l10n.default_ErrorDetails,
+      onPressed: () {
+        context.router.push(ErrorDetailsScreenPageRoute(title: title, fields: errorFields));
+      },
+    );
   }
 }
 
@@ -63,8 +83,33 @@ final class CallUserMediaErrorNotification extends ErrorNotification {
   }
 }
 
-final class SipRegistrationFailed extends ErrorNotification {
-  const SipRegistrationFailed({
+final class CallUndefinedLineNotification extends ErrorNotification {
+  const CallUndefinedLineNotification();
+
+  @override
+  String l10n(BuildContext context) {
+    return context.l10n.notifications_errorSnackBar_callUndefinedLine;
+  }
+}
+
+final class CallWhileOfflineNotification extends ErrorNotification {
+  const CallWhileOfflineNotification();
+
+  @override
+  String l10n(BuildContext context) {
+    return context.l10n.notifications_errorSnackBar_callWhileOffline;
+  }
+}
+
+final class CallWhileUnregisteredNotification extends MessageNotification {
+  @override
+  String l10n(BuildContext context) {
+    return context.l10n.notifications_errorSnackBar_callWhileUnregistered;
+  }
+}
+
+final class SipRegistrationFailedNotification extends ErrorNotification {
+  const SipRegistrationFailedNotification({
     required this.knownCode,
     this.systemCode,
     this.systemReason,
@@ -107,17 +152,10 @@ final class SipRegistrationFailed extends ErrorNotification {
   }
 }
 
-final class AppUnregisteredNotification extends MessageNotification {
-  @override
-  String l10n(BuildContext context) {
-    return context.l10n.notifications_errorSnackBar_appUnregistered;
-  }
-}
-
 final class AppOfflineNotification extends MessageNotification {
   @override
   String l10n(BuildContext context) {
-    return context.l10n.notifications_errorSnackBar_appOffline;
+    return context.l10n.notifications_messageSnackBar_appOffline;
   }
 
   @override
@@ -129,7 +167,7 @@ final class AppOfflineNotification extends MessageNotification {
 final class AppOnlineNotification extends SuccessNotification {
   @override
   String l10n(BuildContext context) {
-    return context.l10n.notifications_errorSnackBar_appOnline;
+    return context.l10n.notifications_successSnackBar_appOnline;
   }
 
   @override

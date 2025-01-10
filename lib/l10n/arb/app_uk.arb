@@ -680,18 +680,34 @@
   "@notifications_errorSnackBarAction_callUserMedia": {},
   "notifications_errorSnackBar_activeLineBlindTransferWarning": "Ви вже на лінії з одержувачем, до якого намагаєтеся здійснити безумовний переказ",
   "@notifications_errorSnackBar_activeLineBlindTransferWarning": {},
-  "notifications_errorSnackBar_appOffline": "Ваш додаток зараз офлайн.",
-  "@notifications_errorSnackBar_appOffline": {},
-  "notifications_errorSnackBar_appOnline": "Ваш додаток онлайн.",
-  "@notifications_errorSnackBar_appOnline": {},
-  "notifications_errorSnackBar_appUnregistered": "Вибачте, ваш додаток наразі відключений від серверів WebTrit та не може здійснювати запити. Будь ласка, перейдіть на сторінку налаштувань і перемістіть вимикач стану онлайн у вимкнути й увімкнути знову, щоб відновити з'єднання.",
-  "@notifications_errorSnackBar_appUnregistered": {},
-  "notifications_errorSnackBar_callConnect": "Підключення до ядра не вдалося, спроба з'єднання",
-  "@notifications_errorSnackBar_callConnect": {},
-  "notifications_errorSnackBar_callSignalingClientNotConnect": "Не вдається ініціювати дзвінок, перевірте статус з'єднання",
-  "@notifications_errorSnackBar_callSignalingClientNotConnect": {},
-  "notifications_errorSnackBar_callSignalingClientSessionMissed": "Помилка автентифікації, будь ласка увійдіть знову",
-  "@notifications_errorSnackBar_callSignalingClientSessionMissed": {},
+  "notifications_messageSnackBar_appOffline": "Ваш додаток зараз офлайн.",
+  "@notifications_messageSnackBar_appOffline": {},
+  "notifications_successSnackBar_appOnline": "Ваш додаток онлайн.",
+  "@notifications_successSnackBar_appOnline": {},
+  "notifications_errorSnackBar_callWhileUnregistered": "Вибачте, ваш додаток наразі відключений від серверів WebTrit та не може здійснювати запити. Будь ласка, перейдіть на сторінку налаштувань і перемістіть вимикач стану онлайн у вимкнути й увімкнути знову, щоб відновити з'єднання.",
+  "@notifications_errorSnackBar_callWhileUnregistered": {},
+  "notifications_errorSnackBar_SignalingConnectFailed": "Підключення до ядра не вдалося, спроба з'єднання",
+  "@notifications_errorSnackBar_SignalingConnectFailed": {},
+  "notifications_errorSnackBar_callWhileOffline": "Не вдається ініціювати дзвінок, перевірте статус з'єднання",
+  "@notifications_errorSnackBar_callWhileOffline": {},
+  "notifications_errorSnackBar_SignalingSessionMissed": "Помилка автентифікації, будь ласка увійдіть знову",
+  "@notifications_errorSnackBar_SignalingSessionMissed": {},
+  "notifications_errorSnackBar_signalingDisconnectWithSystemReason": "Відключено від ядра з причини: {reason}",
+  "@notifications_errorSnackBar_signalingDisconnectWithSystemReason": {
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "notifications_errorSnackBar_signalingDisconnectWithCodeName": "Від’єднано від ядра за кодом: {codeName}",
+  "@notifications_errorSnackBar_signalingDisconnectWithCodeName": {
+    "placeholders": {
+      "codeName": {
+        "type": "String"
+      }
+    }
+  },
   "notifications_errorSnackBar_callUndefinedLine": "Немає вільних ліній для ініціювання дзвінка",
   "@notifications_errorSnackBar_callUndefinedLine": {},
   "notifications_errorSnackBar_callUserMedia": "Немає доступу до медіа-входу, будь ласка, перевірте дозволи програми",

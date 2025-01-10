@@ -448,26 +448,23 @@ abstract class _ResetStateEventCompleteCall implements _ResetStateEvent {
 mixin _$SignalingClientEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(bool reconnecting) connectInitiated,
+    required TResult Function() connectInitiated,
     required TResult Function() disconnectInitiated,
-    required TResult Function(int? code, String? reason, bool afterReconnect)
-        disconnected,
+    required TResult Function(int? code, String? reason) disconnected,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(bool reconnecting)? connectInitiated,
+    TResult? Function()? connectInitiated,
     TResult? Function()? disconnectInitiated,
-    TResult? Function(int? code, String? reason, bool afterReconnect)?
-        disconnected,
+    TResult? Function(int? code, String? reason)? disconnected,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(bool reconnecting)? connectInitiated,
+    TResult Function()? connectInitiated,
     TResult Function()? disconnectInitiated,
-    TResult Function(int? code, String? reason, bool afterReconnect)?
-        disconnected,
+    TResult Function(int? code, String? reason)? disconnected,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -507,71 +504,60 @@ mixin _$SignalingClientEvent {
 class _$SignalingClientEventConnectInitiatedImpl
     with DiagnosticableTreeMixin
     implements _SignalingClientEventConnectInitiated {
-  const _$SignalingClientEventConnectInitiatedImpl({this.reconnecting = false});
-
-  @override
-  @JsonKey()
-  final bool reconnecting;
+  const _$SignalingClientEventConnectInitiatedImpl();
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return '_SignalingClientEvent.connectInitiated(reconnecting: $reconnecting)';
+    return '_SignalingClientEvent.connectInitiated()';
   }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties
-      ..add(
-          DiagnosticsProperty('type', '_SignalingClientEvent.connectInitiated'))
-      ..add(DiagnosticsProperty('reconnecting', reconnecting));
+    properties.add(
+        DiagnosticsProperty('type', '_SignalingClientEvent.connectInitiated'));
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$SignalingClientEventConnectInitiatedImpl &&
-            (identical(other.reconnecting, reconnecting) ||
-                other.reconnecting == reconnecting));
+            other is _$SignalingClientEventConnectInitiatedImpl);
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, reconnecting);
+  int get hashCode => runtimeType.hashCode;
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(bool reconnecting) connectInitiated,
+    required TResult Function() connectInitiated,
     required TResult Function() disconnectInitiated,
-    required TResult Function(int? code, String? reason, bool afterReconnect)
-        disconnected,
+    required TResult Function(int? code, String? reason) disconnected,
   }) {
-    return connectInitiated(reconnecting);
+    return connectInitiated();
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(bool reconnecting)? connectInitiated,
+    TResult? Function()? connectInitiated,
     TResult? Function()? disconnectInitiated,
-    TResult? Function(int? code, String? reason, bool afterReconnect)?
-        disconnected,
+    TResult? Function(int? code, String? reason)? disconnected,
   }) {
-    return connectInitiated?.call(reconnecting);
+    return connectInitiated?.call();
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(bool reconnecting)? connectInitiated,
+    TResult Function()? connectInitiated,
     TResult Function()? disconnectInitiated,
-    TResult Function(int? code, String? reason, bool afterReconnect)?
-        disconnected,
+    TResult Function(int? code, String? reason)? disconnected,
     required TResult orElse(),
   }) {
     if (connectInitiated != null) {
-      return connectInitiated(reconnecting);
+      return connectInitiated();
     }
     return orElse();
   }
@@ -620,10 +606,8 @@ class _$SignalingClientEventConnectInitiatedImpl
 
 abstract class _SignalingClientEventConnectInitiated
     implements _SignalingClientEvent {
-  const factory _SignalingClientEventConnectInitiated(
-      {final bool reconnecting}) = _$SignalingClientEventConnectInitiatedImpl;
-
-  bool get reconnecting;
+  const factory _SignalingClientEventConnectInitiated() =
+      _$SignalingClientEventConnectInitiatedImpl;
 }
 
 /// @nodoc
@@ -658,10 +642,9 @@ class _$SignalingClientEventDisconnectInitiatedImpl
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(bool reconnecting) connectInitiated,
+    required TResult Function() connectInitiated,
     required TResult Function() disconnectInitiated,
-    required TResult Function(int? code, String? reason, bool afterReconnect)
-        disconnected,
+    required TResult Function(int? code, String? reason) disconnected,
   }) {
     return disconnectInitiated();
   }
@@ -669,10 +652,9 @@ class _$SignalingClientEventDisconnectInitiatedImpl
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(bool reconnecting)? connectInitiated,
+    TResult? Function()? connectInitiated,
     TResult? Function()? disconnectInitiated,
-    TResult? Function(int? code, String? reason, bool afterReconnect)?
-        disconnected,
+    TResult? Function(int? code, String? reason)? disconnected,
   }) {
     return disconnectInitiated?.call();
   }
@@ -680,10 +662,9 @@ class _$SignalingClientEventDisconnectInitiatedImpl
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(bool reconnecting)? connectInitiated,
+    TResult Function()? connectInitiated,
     TResult Function()? disconnectInitiated,
-    TResult Function(int? code, String? reason, bool afterReconnect)?
-        disconnected,
+    TResult Function(int? code, String? reason)? disconnected,
     required TResult orElse(),
   }) {
     if (disconnectInitiated != null) {
@@ -745,20 +726,16 @@ abstract class _SignalingClientEventDisconnectInitiated
 class _$SignalingClientEventDisconnectedImpl
     with DiagnosticableTreeMixin
     implements _SignalingClientEventDisconnected {
-  const _$SignalingClientEventDisconnectedImpl(this.code, this.reason,
-      {this.afterReconnect = false});
+  const _$SignalingClientEventDisconnectedImpl(this.code, this.reason);
 
   @override
   final int? code;
   @override
   final String? reason;
-  @override
-  @JsonKey()
-  final bool afterReconnect;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return '_SignalingClientEvent.disconnected(code: $code, reason: $reason, afterReconnect: $afterReconnect)';
+    return '_SignalingClientEvent.disconnected(code: $code, reason: $reason)';
   }
 
   @override
@@ -767,8 +744,7 @@ class _$SignalingClientEventDisconnectedImpl
     properties
       ..add(DiagnosticsProperty('type', '_SignalingClientEvent.disconnected'))
       ..add(DiagnosticsProperty('code', code))
-      ..add(DiagnosticsProperty('reason', reason))
-      ..add(DiagnosticsProperty('afterReconnect', afterReconnect));
+      ..add(DiagnosticsProperty('reason', reason));
   }
 
   @override
@@ -777,47 +753,42 @@ class _$SignalingClientEventDisconnectedImpl
         (other.runtimeType == runtimeType &&
             other is _$SignalingClientEventDisconnectedImpl &&
             (identical(other.code, code) || other.code == code) &&
-            (identical(other.reason, reason) || other.reason == reason) &&
-            (identical(other.afterReconnect, afterReconnect) ||
-                other.afterReconnect == afterReconnect));
+            (identical(other.reason, reason) || other.reason == reason));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, code, reason, afterReconnect);
+  int get hashCode => Object.hash(runtimeType, code, reason);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(bool reconnecting) connectInitiated,
+    required TResult Function() connectInitiated,
     required TResult Function() disconnectInitiated,
-    required TResult Function(int? code, String? reason, bool afterReconnect)
-        disconnected,
+    required TResult Function(int? code, String? reason) disconnected,
   }) {
-    return disconnected(code, reason, afterReconnect);
+    return disconnected(code, reason);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(bool reconnecting)? connectInitiated,
+    TResult? Function()? connectInitiated,
     TResult? Function()? disconnectInitiated,
-    TResult? Function(int? code, String? reason, bool afterReconnect)?
-        disconnected,
+    TResult? Function(int? code, String? reason)? disconnected,
   }) {
-    return disconnected?.call(code, reason, afterReconnect);
+    return disconnected?.call(code, reason);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(bool reconnecting)? connectInitiated,
+    TResult Function()? connectInitiated,
     TResult Function()? disconnectInitiated,
-    TResult Function(int? code, String? reason, bool afterReconnect)?
-        disconnected,
+    TResult Function(int? code, String? reason)? disconnected,
     required TResult orElse(),
   }) {
     if (disconnected != null) {
-      return disconnected(code, reason, afterReconnect);
+      return disconnected(code, reason);
     }
     return orElse();
   }
@@ -867,12 +838,11 @@ class _$SignalingClientEventDisconnectedImpl
 abstract class _SignalingClientEventDisconnected
     implements _SignalingClientEvent {
   const factory _SignalingClientEventDisconnected(
-          final int? code, final String? reason, {final bool afterReconnect}) =
+          final int? code, final String? reason) =
       _$SignalingClientEventDisconnectedImpl;
 
   int? get code;
   String? get reason;
-  bool get afterReconnect;
 }
 
 /// @nodoc
@@ -12454,6 +12424,8 @@ abstract class _CallScreenEventDidPop implements CallScreenEvent {
 mixin _$CallState {
   ConnectivityResult? get currentConnectivityResult =>
       throw _privateConstructorUsedError;
+  AppLifecycleState? get currentAppLifecycleState =>
+      throw _privateConstructorUsedError;
   RegistrationStatus get registrationStatus =>
       throw _privateConstructorUsedError;
   SignalingClientStatus get signalingClientStatus =>
@@ -12482,6 +12454,7 @@ abstract class $CallStateCopyWith<$Res> {
   @useResult
   $Res call(
       {ConnectivityResult? currentConnectivityResult,
+      AppLifecycleState? currentAppLifecycleState,
       RegistrationStatus registrationStatus,
       SignalingClientStatus signalingClientStatus,
       Object? lastSignalingClientConnectError,
@@ -12509,6 +12482,7 @@ class _$CallStateCopyWithImpl<$Res, $Val extends CallState>
   @override
   $Res call({
     Object? currentConnectivityResult = freezed,
+    Object? currentAppLifecycleState = freezed,
     Object? registrationStatus = null,
     Object? signalingClientStatus = null,
     Object? lastSignalingClientConnectError = freezed,
@@ -12524,6 +12498,10 @@ class _$CallStateCopyWithImpl<$Res, $Val extends CallState>
           ? _value.currentConnectivityResult
           : currentConnectivityResult // ignore: cast_nullable_to_non_nullable
               as ConnectivityResult?,
+      currentAppLifecycleState: freezed == currentAppLifecycleState
+          ? _value.currentAppLifecycleState
+          : currentAppLifecycleState // ignore: cast_nullable_to_non_nullable
+              as AppLifecycleState?,
       registrationStatus: null == registrationStatus
           ? _value.registrationStatus
           : registrationStatus // ignore: cast_nullable_to_non_nullable
@@ -12574,6 +12552,7 @@ abstract class _$$CallStateImplCopyWith<$Res>
   @useResult
   $Res call(
       {ConnectivityResult? currentConnectivityResult,
+      AppLifecycleState? currentAppLifecycleState,
       RegistrationStatus registrationStatus,
       SignalingClientStatus signalingClientStatus,
       Object? lastSignalingClientConnectError,
@@ -12599,6 +12578,7 @@ class __$$CallStateImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? currentConnectivityResult = freezed,
+    Object? currentAppLifecycleState = freezed,
     Object? registrationStatus = null,
     Object? signalingClientStatus = null,
     Object? lastSignalingClientConnectError = freezed,
@@ -12614,6 +12594,10 @@ class __$$CallStateImplCopyWithImpl<$Res>
           ? _value.currentConnectivityResult
           : currentConnectivityResult // ignore: cast_nullable_to_non_nullable
               as ConnectivityResult?,
+      currentAppLifecycleState: freezed == currentAppLifecycleState
+          ? _value.currentAppLifecycleState
+          : currentAppLifecycleState // ignore: cast_nullable_to_non_nullable
+              as AppLifecycleState?,
       registrationStatus: null == registrationStatus
           ? _value.registrationStatus
           : registrationStatus // ignore: cast_nullable_to_non_nullable
@@ -12659,6 +12643,7 @@ class __$$CallStateImplCopyWithImpl<$Res>
 class _$CallStateImpl extends _CallState with DiagnosticableTreeMixin {
   const _$CallStateImpl(
       {this.currentConnectivityResult,
+      this.currentAppLifecycleState,
       this.registrationStatus = RegistrationStatus.registering,
       this.signalingClientStatus = SignalingClientStatus.disconnect,
       this.lastSignalingClientConnectError,
@@ -12673,6 +12658,8 @@ class _$CallStateImpl extends _CallState with DiagnosticableTreeMixin {
 
   @override
   final ConnectivityResult? currentConnectivityResult;
+  @override
+  final AppLifecycleState? currentAppLifecycleState;
   @override
   @JsonKey()
   final RegistrationStatus registrationStatus;
@@ -12704,7 +12691,7 @@ class _$CallStateImpl extends _CallState with DiagnosticableTreeMixin {
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'CallState(currentConnectivityResult: $currentConnectivityResult, registrationStatus: $registrationStatus, signalingClientStatus: $signalingClientStatus, lastSignalingClientConnectError: $lastSignalingClientConnectError, lastSignalingClientDisconnectError: $lastSignalingClientDisconnectError, lastSignalingDisconnectCode: $lastSignalingDisconnectCode, linesCount: $linesCount, activeCalls: $activeCalls, minimized: $minimized, speaker: $speaker)';
+    return 'CallState(currentConnectivityResult: $currentConnectivityResult, currentAppLifecycleState: $currentAppLifecycleState, registrationStatus: $registrationStatus, signalingClientStatus: $signalingClientStatus, lastSignalingClientConnectError: $lastSignalingClientConnectError, lastSignalingClientDisconnectError: $lastSignalingClientDisconnectError, lastSignalingDisconnectCode: $lastSignalingDisconnectCode, linesCount: $linesCount, activeCalls: $activeCalls, minimized: $minimized, speaker: $speaker)';
   }
 
   @override
@@ -12714,6 +12701,8 @@ class _$CallStateImpl extends _CallState with DiagnosticableTreeMixin {
       ..add(DiagnosticsProperty('type', 'CallState'))
       ..add(DiagnosticsProperty(
           'currentConnectivityResult', currentConnectivityResult))
+      ..add(DiagnosticsProperty(
+          'currentAppLifecycleState', currentAppLifecycleState))
       ..add(DiagnosticsProperty('registrationStatus', registrationStatus))
       ..add(DiagnosticsProperty('signalingClientStatus', signalingClientStatus))
       ..add(DiagnosticsProperty(
@@ -12736,6 +12725,9 @@ class _$CallStateImpl extends _CallState with DiagnosticableTreeMixin {
             (identical(other.currentConnectivityResult,
                     currentConnectivityResult) ||
                 other.currentConnectivityResult == currentConnectivityResult) &&
+            (identical(
+                    other.currentAppLifecycleState, currentAppLifecycleState) ||
+                other.currentAppLifecycleState == currentAppLifecycleState) &&
             (identical(other.registrationStatus, registrationStatus) ||
                 other.registrationStatus == registrationStatus) &&
             (identical(other.signalingClientStatus, signalingClientStatus) ||
@@ -12763,6 +12755,7 @@ class _$CallStateImpl extends _CallState with DiagnosticableTreeMixin {
   int get hashCode => Object.hash(
       runtimeType,
       currentConnectivityResult,
+      currentAppLifecycleState,
       registrationStatus,
       signalingClientStatus,
       const DeepCollectionEquality().hash(lastSignalingClientConnectError),
@@ -12785,6 +12778,7 @@ class _$CallStateImpl extends _CallState with DiagnosticableTreeMixin {
 abstract class _CallState extends CallState {
   const factory _CallState(
       {final ConnectivityResult? currentConnectivityResult,
+      final AppLifecycleState? currentAppLifecycleState,
       final RegistrationStatus registrationStatus,
       final SignalingClientStatus signalingClientStatus,
       final Object? lastSignalingClientConnectError,
@@ -12798,6 +12792,8 @@ abstract class _CallState extends CallState {
 
   @override
   ConnectivityResult? get currentConnectivityResult;
+  @override
+  AppLifecycleState? get currentAppLifecycleState;
   @override
   RegistrationStatus get registrationStatus;
   @override

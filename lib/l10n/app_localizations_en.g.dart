@@ -959,22 +959,32 @@ class AppLocalizationsEn extends AppLocalizations {
   String get notifications_errorSnackBar_activeLineBlindTransferWarning => 'You are already on the line with the recipient you are trying to blind transfer to';
 
   @override
-  String get notifications_errorSnackBar_appOffline => 'Your application is currently offline';
+  String get notifications_messageSnackBar_appOffline => 'Your application is currently offline';
 
   @override
-  String get notifications_errorSnackBar_appOnline => 'Your application is online';
+  String get notifications_successSnackBar_appOnline => 'Your application is online';
 
   @override
-  String get notifications_errorSnackBar_appUnregistered => 'Sorry, your application is currently disconnected from the WebTrit core servers and hence can\'t call right now. Please go to the settings page, and slide the online status toggle switch off and on again to reestablish the connection';
+  String get notifications_errorSnackBar_callWhileUnregistered => 'Sorry, your application is currently disconnected from the WebTrit core servers and hence can\'t call right now. Please go to the settings page, and slide the online status toggle switch off and on again to reestablish the connection';
 
   @override
-  String get notifications_errorSnackBar_callConnect => 'Connecting to the core failed, trying to reconnect';
+  String get notifications_errorSnackBar_SignalingConnectFailed => 'Connecting to the core failed, trying to reconnect';
 
   @override
-  String get notifications_errorSnackBar_callSignalingClientNotConnect => 'Cannot initiate the call, please check the connection status';
+  String get notifications_errorSnackBar_callWhileOffline => 'Cannot initiate the call, please check the connection status';
 
   @override
-  String get notifications_errorSnackBar_callSignalingClientSessionMissed => 'Authentication error, please re-login';
+  String get notifications_errorSnackBar_SignalingSessionMissed => 'Authentication error, please re-login';
+
+  @override
+  String notifications_errorSnackBar_signalingDisconnectWithSystemReason(String reason) {
+    return 'Disconnected from the core with reason: $reason';
+  }
+
+  @override
+  String notifications_errorSnackBar_signalingDisconnectWithCodeName(String codeName) {
+    return 'Disconnected from the core with code: $codeName';
+  }
 
   @override
   String get notifications_errorSnackBar_callUndefinedLine => 'No idle lines to initiate the call';

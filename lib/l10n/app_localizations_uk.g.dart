@@ -959,22 +959,32 @@ class AppLocalizationsUk extends AppLocalizations {
   String get notifications_errorSnackBar_activeLineBlindTransferWarning => 'Ви вже на лінії з одержувачем, до якого намагаєтеся здійснити безумовний переказ';
 
   @override
-  String get notifications_errorSnackBar_appOffline => 'Ваш додаток зараз офлайн.';
+  String get notifications_messageSnackBar_appOffline => 'Ваш додаток зараз офлайн.';
 
   @override
-  String get notifications_errorSnackBar_appOnline => 'Ваш додаток онлайн.';
+  String get notifications_successSnackBar_appOnline => 'Ваш додаток онлайн.';
 
   @override
-  String get notifications_errorSnackBar_appUnregistered => 'Вибачте, ваш додаток наразі відключений від серверів WebTrit та не може здійснювати запити. Будь ласка, перейдіть на сторінку налаштувань і перемістіть вимикач стану онлайн у вимкнути й увімкнути знову, щоб відновити з\'єднання.';
+  String get notifications_errorSnackBar_callWhileUnregistered => 'Вибачте, ваш додаток наразі відключений від серверів WebTrit та не може здійснювати запити. Будь ласка, перейдіть на сторінку налаштувань і перемістіть вимикач стану онлайн у вимкнути й увімкнути знову, щоб відновити з\'єднання.';
 
   @override
-  String get notifications_errorSnackBar_callConnect => 'Підключення до ядра не вдалося, спроба з\'єднання';
+  String get notifications_errorSnackBar_SignalingConnectFailed => 'Підключення до ядра не вдалося, спроба з\'єднання';
 
   @override
-  String get notifications_errorSnackBar_callSignalingClientNotConnect => 'Не вдається ініціювати дзвінок, перевірте статус з\'єднання';
+  String get notifications_errorSnackBar_callWhileOffline => 'Не вдається ініціювати дзвінок, перевірте статус з\'єднання';
 
   @override
-  String get notifications_errorSnackBar_callSignalingClientSessionMissed => 'Помилка автентифікації, будь ласка увійдіть знову';
+  String get notifications_errorSnackBar_SignalingSessionMissed => 'Помилка автентифікації, будь ласка увійдіть знову';
+
+  @override
+  String notifications_errorSnackBar_signalingDisconnectWithSystemReason(String reason) {
+    return 'Відключено від ядра з причини: $reason';
+  }
+
+  @override
+  String notifications_errorSnackBar_signalingDisconnectWithCodeName(String codeName) {
+    return 'Від’єднано від ядра за кодом: $codeName';
+  }
 
   @override
   String get notifications_errorSnackBar_callUndefinedLine => 'Немає вільних ліній для ініціювання дзвінка';

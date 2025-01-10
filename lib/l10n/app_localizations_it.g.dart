@@ -959,22 +959,32 @@ class AppLocalizationsIt extends AppLocalizations {
   String get notifications_errorSnackBar_activeLineBlindTransferWarning => 'Sei già in linea con il destinatario a cui stai cercando di trasferire alla cieca';
 
   @override
-  String get notifications_errorSnackBar_appOffline => 'La tua apllicazione è offline';
+  String get notifications_messageSnackBar_appOffline => 'La tua apllicazione è offline';
 
   @override
-  String get notifications_errorSnackBar_appOnline => 'La tua apllicazione è online';
+  String get notifications_successSnackBar_appOnline => 'La tua apllicazione è online';
 
   @override
-  String get notifications_errorSnackBar_appUnregistered => 'Siamo spiacenti, la tua applicazione è attualmente disconnessa dai server principali WebTrit e quindi non è possibile chiamare in questo momento. Vai alla pagina delle impostazioni e fai scorrere l\'interruttore dello stato online ( a OFF e poi ancora ad ON) per ristabilire la connessione';
+  String get notifications_errorSnackBar_callWhileUnregistered => 'Siamo spiacenti, la tua applicazione è attualmente disconnessa dai server principali WebTrit e quindi non è possibile chiamare in questo momento. Vai alla pagina delle impostazioni e fai scorrere l\'interruttore dello stato online ( a OFF e poi ancora ad ON) per ristabilire la connessione';
 
   @override
-  String get notifications_errorSnackBar_callConnect => 'Connessione al server non riuscita, tentativo di riconnessione in corso';
+  String get notifications_errorSnackBar_SignalingConnectFailed => 'Connessione al server non riuscita, tentativo di riconnessione in corso';
 
   @override
-  String get notifications_errorSnackBar_callSignalingClientNotConnect => 'Impossibile eseguire la chiamata, verificare lo stato della connessione';
+  String get notifications_errorSnackBar_callWhileOffline => 'Impossibile eseguire la chiamata, verificare lo stato della connessione';
 
   @override
-  String get notifications_errorSnackBar_callSignalingClientSessionMissed => 'Errore di autenticazione, effettuare nuovamente l\'accesso';
+  String get notifications_errorSnackBar_SignalingSessionMissed => 'Errore di autenticazione, effettuare nuovamente l\'accesso';
+
+  @override
+  String notifications_errorSnackBar_signalingDisconnectWithSystemReason(String reason) {
+    return 'Disconnesso dal nucleo con ragione: $reason';
+  }
+
+  @override
+  String notifications_errorSnackBar_signalingDisconnectWithCodeName(String codeName) {
+    return 'Disconnesso dal core con codice: $codeName';
+  }
 
   @override
   String get notifications_errorSnackBar_callUndefinedLine => 'Nessuna linea disponibile per avviare una chiamata';
