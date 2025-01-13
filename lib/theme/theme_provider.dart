@@ -303,9 +303,13 @@ class ThemeProvider extends InheritedWidget {
     );
   }
 
-  Gradients gradients(ColorScheme colors) {
+  Gradients? gradients(ColorScheme colors) {
     final customColors = settings.primaryGradientColors.map((it) => it.color.toColor()).toList();
 
+    // Check if there are at least two colors to form a gradient
+    if (customColors.length < 2) {
+      return null;
+    }
     return Gradients(
       tab: LinearGradient(
         begin: Alignment.topCenter,
@@ -783,6 +787,7 @@ class ThemeProvider extends InheritedWidget {
     final themePageConfig = _themePageConfig(brightness);
 
     final textButtonStyles = _textButtonStyles(colorScheme);
+    final gradientStyles = gradients(colorScheme);
 
     return ThemeData.from(
       colorScheme: colorScheme,
@@ -844,7 +849,6 @@ class ThemeProvider extends InheritedWidget {
         ),
         outlinedButtonStyles(colorScheme),
         textButtonStyles,
-        gradients(colorScheme),
         logoAssets(
           primaryOnboardin: ThemeSvgAsset.fromJson(settings.primaryOnboardingLogo),
           secondaryOnboardin: ThemeSvgAsset.fromJson(settings.secondaryOnboardingLogo),
@@ -862,7 +866,10 @@ class ThemeProvider extends InheritedWidget {
           ThemeSvgAsset.fromJson(settings.secondaryOnboardingLogo),
           themeWidgetConfig?.picture?.onboardingLogo,
         ),
-        aboutScreenStyles(themePageConfig?.about)
+        aboutScreenStyles(themePageConfig?.about),
+
+        // Nullable styles
+        if (gradientStyles != null) gradientStyles
       ],
       // COLOR
       primaryColorLight: colorScheme.secondaryContainer,
