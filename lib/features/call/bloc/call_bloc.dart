@@ -872,9 +872,16 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     Emitter<CallState> emit,
   ) async {
     final code = SignalingResponseCode.values.byCode(event.code);
+    _logger.fine('__onCallSignalingEventHangup code: ${code?.name} ${code?.code} ${code?.type.name}');
 
     switch (code) {
       case null:
+        break;
+      case SignalingResponseCode.declineCall:
+        break;
+      case SignalingResponseCode.normalUnspecified:
+        break;
+      case SignalingResponseCode.requestTerminated:
         break;
       case SignalingResponseCode.unauthorizedRequest:
         submitNotification(CallWhileUnregisteredNotification());

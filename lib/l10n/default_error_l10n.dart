@@ -36,7 +36,7 @@ String _defaultRequestFailureL10n(BuildContext context, RequestFailure error) {
 }
 
 String _defaultSignalingHangupFailureL10n(BuildContext context, SignalingHangupFailure failure) {
-  return failure.code.type.l10n(context);
+  return failure.code.l10n(context);
 }
 
 String _defaultSocketExceptionL10n(BuildContext context, SocketException exception) {
