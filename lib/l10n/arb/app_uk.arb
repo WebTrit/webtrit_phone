@@ -184,6 +184,14 @@
   "@default_UnauthorizedRequestFailureError": {},
   "default_UserAlreadyInChatMessagingSocketException": "Користувач вже в чаті",
   "@default_UserAlreadyInChatMessagingSocketException": {},
+  "default_UnknownExceptionError": "Сталася невідома помилка: {error}",
+  "@default_UnknownExceptionError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "diagnostic_AppBar_title": "Діагностика",
   "@diagnostic_AppBar_title": {},
   "diagnostic_battery_groupTitle": "Батарея",

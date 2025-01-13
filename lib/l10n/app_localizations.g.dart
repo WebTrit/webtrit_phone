@@ -649,6 +649,12 @@ abstract class AppLocalizations {
   /// **'User is already in chat'**
   String get default_UserAlreadyInChatMessagingSocketException;
 
+  /// No description provided for @default_UnknownExceptionError.
+  ///
+  /// In en, this message translates to:
+  /// **'An unknown issue occurred: {error}'**
+  String default_UnknownExceptionError(String error);
+
   /// No description provided for @diagnostic_AppBar_title.
   ///
   /// In en, this message translates to:

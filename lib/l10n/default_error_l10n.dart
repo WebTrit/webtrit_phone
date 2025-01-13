@@ -23,7 +23,7 @@ String defaultErrorL10n(BuildContext context, Object error) {
     SignalingHangupFailure() => _defaultSignalingHangupFailureL10n(context, error),
     RequestFailure() => _defaultRequestFailureL10n(context, error),
     MessagingSocketException() => _defaultMessagingSocketExceptionL10n(context, error),
-    _ => error.toString(),
+    _ => context.l10n.default_UnknownExceptionError(error.toString()),
   };
 }
 

@@ -184,6 +184,14 @@
   "@default_UnauthorizedRequestFailureError": {},
   "default_UserAlreadyInChatMessagingSocketException": "User is already in chat",
   "@default_UserAlreadyInChatMessagingSocketException": {},
+  "default_UnknownExceptionError": "An unknown issue occurred: {error}",
+  "@default_UnknownExceptionError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "diagnostic_AppBar_title": "Diagnostic",
   "@diagnostic_AppBar_title": {},
   "diagnostic_battery_groupTitle": "Battery",

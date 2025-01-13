@@ -285,6 +285,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get default_UserAlreadyInChatMessagingSocketException => 'User is already in chat';
 
   @override
+  String default_UnknownExceptionError(String error) {
+    return 'An unknown issue occurred: $error';
+  }
+
+  @override
   String get diagnostic_AppBar_title => 'Diagnostic';
 
   @override

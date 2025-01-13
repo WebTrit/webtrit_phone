@@ -285,6 +285,11 @@ class AppLocalizationsUk extends AppLocalizations {
   String get default_UserAlreadyInChatMessagingSocketException => 'Користувач вже в чаті';
 
   @override
+  String default_UnknownExceptionError(String error) {
+    return 'Сталася невідома помилка: $error';
+  }
+
+  @override
   String get diagnostic_AppBar_title => 'Діагностика';
 
   @override
