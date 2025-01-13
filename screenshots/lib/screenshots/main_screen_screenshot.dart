@@ -60,6 +60,12 @@ class MainScreenScreenshot extends StatelessWidget {
         BlocProvider<MainBloc>(
           create: (context) => MockMainBloc.mainScreen(),
         ),
+        BlocProvider<SessionStatusCubit>(
+          create: (context) => MockSessionStatusCubit.initial(),
+        ),
+        BlocProvider<UserInfoCubit>(
+          create: (context) => MockUserInfoCubit.initial(),
+        ),
       ],
       child: MainScreen(
         body: _flavorWidgetBuilder(context, flavor),
