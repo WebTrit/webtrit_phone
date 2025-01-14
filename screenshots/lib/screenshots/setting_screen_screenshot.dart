@@ -40,6 +40,15 @@ class _SettingScreenScreenshotState extends State<SettingScreenScreenshot> {
                   BlocProvider<SettingsBloc>(
                     create: (context) => MockSettingsBloc.settingsScreen(),
                   ),
+                  BlocProvider<RegisterStatusCubit>(
+                    create: (context) => MockRegisterStatusCubit.initial(false),
+                  ),
+                  BlocProvider<SessionStatusCubit>(
+                    create: (context) => MockSessionStatusCubit.initial(),
+                  ),
+                  BlocProvider<UserInfoCubit>(
+                    create: (context) => MockUserInfoCubit.initial(),
+                  ),
                 ],
                 child: SettingsScreen(
                   sections: [

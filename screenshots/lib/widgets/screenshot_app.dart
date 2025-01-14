@@ -74,20 +74,28 @@ class ScreenshotApp extends StatelessWidget {
   }
 }
 
-class ScreenshotRouterDelegate extends RouterDelegate<Object> with ChangeNotifier {
+class ScreenshotRouterDelegate extends RouterDelegate<Object>
+    with ChangeNotifier, PopNavigatorRouterDelegateMixin<Object> {
   ScreenshotRouterDelegate(this.child);
 
   final Widget child;
 
   @override
+  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
+  @override
   Widget build(BuildContext context) {
     return Navigator(
+      key: navigatorKey,
       pages: [
-        MaterialPage(
-          child: child,
-        ),
+        MaterialPage(child: child),
       ],
+      onDidRemovePage: _handlePageRemoved,
     );
+  }
+
+  void _handlePageRemoved(Page<Object?> page) {
+    notifyListeners();
   }
 
   @override
