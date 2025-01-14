@@ -2,7 +2,6 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'app_config.dart';
 import 'color_scheme.config.dart';
-import 'custom_color.dart';
 import 'theme_page_config.dart';
 import 'theme_widget_config.dart';
 
