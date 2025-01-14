@@ -108,7 +108,6 @@ class _SmsMessageListViewState extends State<SmsMessageListView> {
     widget.onSendMessage(content);
 
     inputController.text = '';
-    FocusScope.of(context).unfocus();
     scrollToBottom();
   }
 
@@ -143,56 +142,59 @@ class _SmsMessageListViewState extends State<SmsMessageListView> {
       child: ScrollToBottomOverlay(
         scrolledAway: scrolledAway,
         onScrollToBottom: scrollToBottom,
-        child: ListView.builder(
-          controller: scrollController,
-          reverse: true,
-          cacheExtent: 500,
-          padding: const EdgeInsets.symmetric(vertical: 16),
-          itemCount: viewEntries.length + 1,
-          itemBuilder: (context, index) {
-            if (index == viewEntries.length) return historyFetchIndicator();
+        child: GestureDetector(
+          onTap: () => FocusScope.of(context).unfocus(),
+          child: ListView.builder(
+            controller: scrollController,
+            reverse: true,
+            cacheExtent: 500,
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            itemCount: viewEntries.length + 1,
+            itemBuilder: (context, index) {
+              if (index == viewEntries.length) return historyFetchIndicator();
 
-            final entry = viewEntries[index];
-            if (entry is _MessageViewEntry) {
-              return FadeIn(
-                child: SmsMessageView(
-                  key: Key(entry.message?.idKey ?? entry.outboxEntry!.idKey),
-                  userNumber: widget.userNumber,
-                  message: entry.message,
-                  outboxMessage: entry.outboxEntry,
-                  outboxDeleteEntry: entry.outboxDeleteEntry,
-                  userReadedUntil: entry.userReadedUntil,
-                  membersReadedUntil: entry.membersReadedUntil,
-                  handleDelete: handleDelete,
-                  onRendered: () {
-                    final message = entry.message;
-                    if (message == null) return;
+              final entry = viewEntries[index];
+              if (entry is _MessageViewEntry) {
+                return FadeIn(
+                  child: SmsMessageView(
+                    key: Key(entry.message?.idKey ?? entry.outboxEntry!.idKey),
+                    userNumber: widget.userNumber,
+                    message: entry.message,
+                    outboxMessage: entry.outboxEntry,
+                    outboxDeleteEntry: entry.outboxDeleteEntry,
+                    userReadedUntil: entry.userReadedUntil,
+                    membersReadedUntil: entry.membersReadedUntil,
+                    handleDelete: handleDelete,
+                    onRendered: () {
+                      final message = entry.message;
+                      if (message == null) return;
 
-                    final mine = message.fromPhoneNumber == widget.userNumber;
-                    if (mine) return;
+                      final mine = message.fromPhoneNumber == widget.userNumber;
+                      if (mine) return;
 
-                    final userReadedUntil = widget.readCursors.userReadedUntil(widget.userId);
-                    final reachedUnreaded = userReadedUntil == null || message.createdAt.isAfter(userReadedUntil);
-                    if (reachedUnreaded) widget.userReadedUntilUpdate(message.createdAt);
-                  },
-                ),
-              );
-            }
-
-            if (entry is _DateViewEntry) {
-              return Padding(
-                padding: const EdgeInsets.only(top: 8),
-                child: Center(
-                  child: Text(
-                    entry.date.toDayOfMonth,
-                    style: const TextStyle(fontSize: 12, color: Colors.grey),
+                      final userReadedUntil = widget.readCursors.userReadedUntil(widget.userId);
+                      final reachedUnreaded = userReadedUntil == null || message.createdAt.isAfter(userReadedUntil);
+                      if (reachedUnreaded) widget.userReadedUntilUpdate(message.createdAt);
+                    },
                   ),
-                ),
-              );
-            }
+                );
+              }
 
-            return const SizedBox();
-          },
+              if (entry is _DateViewEntry) {
+                return Padding(
+                  padding: const EdgeInsets.only(top: 8),
+                  child: Center(
+                    child: Text(
+                      entry.date.toDayOfMonth,
+                      style: const TextStyle(fontSize: 12, color: Colors.grey),
+                    ),
+                  ),
+                );
+              }
+
+              return const SizedBox();
+            },
+          ),
         ),
       ),
     );
