@@ -15,7 +15,8 @@ class AppThemes {
   static late AppThemes _instance;
 
   static Future<AppThemes> init() async {
-    final themeJson = await _getJson(Assets.themes.original);
+    final themeColorSchemeLightConfigJson = await _getJson(Assets.themes.originalColorSchemeLightConfig);
+    final themeColorSchemeDarkConfigJson = await _getJson(Assets.themes.originalColorSchemeDarkConfig);
 
     final themeWidgetLightConfigJson = await _getJson(Assets.themes.originalWidgetLightConfig);
     final themePageLightConfigJson = await _getJson(Assets.themes.originalPageLightConfig);
@@ -25,6 +26,10 @@ class AppThemes {
 
     final appConfigJson = await _getJson(Assets.themes.appConfig);
 
+
+    final themeColorSchemeLightConfig= ColorSchemeConfig.fromJson(themeColorSchemeLightConfigJson);
+    final themeColorSchemeDarkConfig = ColorSchemeConfig.fromJson(themeColorSchemeDarkConfigJson);
+
     final themeWidgetLightConfig = ThemeWidgetConfig.fromJson(themeWidgetLightConfigJson);
     final themePageLightConfig = ThemePageConfig.fromJson(themePageLightConfigJson);
 
@@ -33,21 +38,23 @@ class AppThemes {
 
     final appConfig = AppConfig.fromJson(appConfigJson);
 
-    final settings = ThemeSettings.fromJson(themeJson).copyWith(
+    final settings = ThemeSettings(
+      lightColorSchemeConfig: themeColorSchemeLightConfig,
+      darkColorSchemeConfig: themeColorSchemeDarkConfig,
       themeWidgetLightConfig: themeWidgetLightConfig,
       themePageLightConfig: themePageLightConfig,
       themeWidgetDarkConfig: themeWidgetDarkConfig,
       themePageDarkConfig: themePageDarkConfig,
     );
+
     final themes = [AppTheme(settings: settings)];
 
     try {
       // Preload Google Fonts for preventing flickering during the first render
-      if (settings.fontFamily != null) {
-        await GoogleFonts.pendingFonts([
-          GoogleFonts.getFont(settings.fontFamily!),
-        ]);
-      }
+      await GoogleFonts.pendingFonts([
+        GoogleFonts.getFont((themeWidgetLightConfig.fonts.fontFamily)),
+        GoogleFonts.getFont((themeWidgetDarkConfig.fonts.fontFamily)),
+      ]);
     } catch (e) {
       _logger.warning('Failed to preload Google Fonts: $e');
     }
