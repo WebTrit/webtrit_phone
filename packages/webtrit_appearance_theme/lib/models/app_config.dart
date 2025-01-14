@@ -4,10 +4,11 @@ part 'app_config.freezed.dart';
 
 part 'app_config.g.dart';
 
-@Freezed(copyWith: false, equal: false, toStringOverride: false)
+@Freezed()
 class AppConfig with _$AppConfig {
   const AppConfig._();
 
+  @JsonSerializable(explicitToJson: true)
   const factory AppConfig({
     @Default(AppConfigLogin()) AppConfigLogin loginConfig,
     @Default(AppConfigMain()) AppConfigMain mainConfig,
@@ -22,7 +23,9 @@ class AppConfig with _$AppConfig {
 class AppConfigLogin with _$AppConfigLogin {
   const AppConfigLogin._();
 
+  @JsonSerializable(explicitToJson: true)
   const factory AppConfigLogin({
+    String? label,
     @Default([]) List<AppConfigModeSelectAction> modeSelectActions,
     @Default([]) List<AppConfigLoginEmbedded> embedded,
   }) = _AppConfigLogin;
@@ -34,6 +37,7 @@ class AppConfigLogin with _$AppConfigLogin {
 class AppConfigModeSelectAction with _$AppConfigModeSelectAction {
   const AppConfigModeSelectAction._();
 
+  @JsonSerializable(explicitToJson: true)
   const factory AppConfigModeSelectAction({
     required bool enabled,
     int? embeddedId,
@@ -48,6 +52,7 @@ class AppConfigModeSelectAction with _$AppConfigModeSelectAction {
 class AppConfigLoginEmbedded with _$AppConfigLoginEmbedded {
   const AppConfigLoginEmbedded._();
 
+  @JsonSerializable(explicitToJson: true)
   const factory AppConfigLoginEmbedded({
     required int id,
     @Default(false) bool launch,
@@ -63,6 +68,7 @@ class AppConfigLoginEmbedded with _$AppConfigLoginEmbedded {
 class AppConfigMain with _$AppConfigMain {
   const AppConfigMain._();
 
+  @JsonSerializable(explicitToJson: true)
   const factory AppConfigMain({
     @Default(AppConfigBottomMenu(cacheSelectedTab: true, tabs: [])) AppConfigBottomMenu bottomMenu,
   }) = _AppConfigMain;
@@ -74,6 +80,7 @@ class AppConfigMain with _$AppConfigMain {
 class AppConfigBottomMenu with _$AppConfigBottomMenu {
   const AppConfigBottomMenu._();
 
+  @JsonSerializable(explicitToJson: true)
   const factory AppConfigBottomMenu({
     @Default(true) bool cacheSelectedTab,
     @Default([]) List<AppConfigBottomMenuTab> tabs,
@@ -89,6 +96,7 @@ class AppConfigBottomMenuTab with _$AppConfigBottomMenuTab {
   static const String dataContactSourceTypes = 'contactSourceTypes';
   static const String dataResource = 'resource';
 
+  @JsonSerializable(explicitToJson: true)
   const factory AppConfigBottomMenuTab({
     @Default(true) bool enabled,
     @Default(false) bool initial,
@@ -105,6 +113,7 @@ class AppConfigBottomMenuTab with _$AppConfigBottomMenuTab {
 class AppConfigSettings with _$AppConfigSettings {
   const AppConfigSettings._();
 
+  @JsonSerializable(explicitToJson: true)
   const factory AppConfigSettings({
     @Default([]) List<AppConfigSettingsSection> sections,
   }) = _AppConfigSettings;
@@ -116,6 +125,7 @@ class AppConfigSettings with _$AppConfigSettings {
 class AppConfigSettingsSection with _$AppConfigSettingsSection {
   const AppConfigSettingsSection._();
 
+  @JsonSerializable(explicitToJson: true)
   const factory AppConfigSettingsSection({
     required String titleL10n,
     @Default(true) bool enabled,
@@ -129,6 +139,7 @@ class AppConfigSettingsSection with _$AppConfigSettingsSection {
 class AppConfigSettingsItem with _$AppConfigSettingsItem {
   const AppConfigSettingsItem._();
 
+  @JsonSerializable(explicitToJson: true)
   const factory AppConfigSettingsItem({
     @Default(true) bool enabled,
     required String titleL10n,
@@ -144,6 +155,7 @@ class AppConfigSettingsItem with _$AppConfigSettingsItem {
 class AppConfigCall with _$AppConfigCall {
   const AppConfigCall._();
 
+  @JsonSerializable(explicitToJson: true)
   const factory AppConfigCall({
     @Default(true) bool videoEnabled,
     @Default(AppConfigTransfer(
@@ -160,6 +172,7 @@ class AppConfigCall with _$AppConfigCall {
 class AppConfigTransfer with _$AppConfigTransfer {
   const AppConfigTransfer._();
 
+  @JsonSerializable(explicitToJson: true)
   const factory AppConfigTransfer({
     @Default(true) bool enableBlindTransfer,
     @Default(true) bool enableAttendedTransfer,
