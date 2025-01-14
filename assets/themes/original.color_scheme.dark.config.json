@@ -1,6 +1,6 @@
 {
   "seedColor": "#F95A14",
-  "lightColorSchemeOverride": {
+  "colorSchemeOverride": {
     "primary": "#5CACE3",
     "onPrimary": "#FFFFFF",
     "primaryContainer": "#B9E3F9",
@@ -47,18 +47,5 @@
     "shadow": "#000000",
     "scrim": "#000000",
     "surfaceTint": "#F95A14"
-  },
-  "primaryGradientColors": [
-    {
-      "color": "#5CACE3",
-      "blend": false
-    },
-    {
-      "color": "#123752",
-      "blend": false
-    }
-  ],
-  "fontFamily": "Montserrat",
-  "primaryOnboardingLogo": "asset://assets/primary_onboardin_logo.svg",
-  "secondaryOnboardingLogo": "asset://assets/secondary_onboardin_logo.svg"
+  }
 }

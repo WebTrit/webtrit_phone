@@ -1,4 +1,11 @@
 {
+  "fonts": {
+    "fontFamily": "Montserrat"
+  },
+  "pictureWidgetConfig": {
+    "primaryOnboardingLogo": "asset://assets/primary_onboardin_logo.svg",
+    "secondaryOnboardingLogo": "asset://assets/secondary_onboardin_logo.svg"
+  },
   "dialog": {
     "snackBar": {
       "successBackgroundColor": "#75B943",
@@ -19,6 +26,20 @@
       "connectIssue": "#E74C3C",
       "inProgress": "#123752",
       "ready": "#75B943"
+    }
+  },
+  "decorationConfig": {
+    "primaryGradientColorsConfig": {
+      "colors": [
+        {
+          "color": "#5CACE3",
+          "blend": true
+        },
+        {
+          "color": "#123752",
+          "blend": true
+        }
+      ]
     }
   }
 }
