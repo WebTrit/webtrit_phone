@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:webtrit_phone/features/messaging/extensions/extensions.dart';
 import 'package:webtrit_phone/features/messaging/widgets/widgets.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
@@ -22,8 +23,7 @@ class ParticipantName extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final scheme = theme.colorScheme;
-    final textStyle = style ?? TextStyle(color: scheme.secondaryFixed, fontSize: 12, fontWeight: FontWeight.bold);
+    final textStyle = style ?? theme.userNameStyle;
 
     if (isMine) {
       return Text(
