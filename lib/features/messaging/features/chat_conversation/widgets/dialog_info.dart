@@ -90,7 +90,7 @@ class _DialogInfoState extends State<DialogInfo> {
                             ),
                             const SizedBox(height: 8),
                             Text(
-                              contact?.displayTitle ?? participant,
+                              contact?.displayTitle ?? context.l10n.messaging_ParticipantName_unknown,
                               style: theme.textTheme.headlineSmall?.copyWith(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,

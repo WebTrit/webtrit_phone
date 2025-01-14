@@ -290,13 +290,7 @@ class _ChatMessageListViewState extends State<ChatMessageListView> {
               children: [
                 const TypingIconDriver(),
                 for (final id in typingUsers) ...[
-                  ContactInfoBuilder(
-                      sourceType: ContactSourceType.external,
-                      sourceId: id,
-                      builder: (context, contact, {required bool loading}) {
-                        if (contact == null) return const SizedBox();
-                        return Text(contact.displayTitle, style: textStyle);
-                      }),
+                  ParticipantName(senderId: id, userId: widget.userId, style: textStyle)
                 ],
                 Text(context.l10n.messaging_MessageListView_typingTrail, style: textStyle),
               ],

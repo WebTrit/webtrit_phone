@@ -37,7 +37,7 @@ class ParticipantName extends StatelessWidget {
         builder: (context, contact, {required bool loading}) {
           if (loading) return const SizedBox.shrink();
 
-          final name = contact?.displayTitle ?? senderId;
+          final name = contact?.displayTitle ?? context.l10n.messaging_ParticipantName_unknown;
           final mappedName = textMap?.call(name) ?? name;
           return Text(mappedName, style: textStyle, maxLines: 1, overflow: TextOverflow.ellipsis);
         },
