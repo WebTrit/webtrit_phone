@@ -45,17 +45,11 @@ class _ResetStateEvent with _$ResetStateEvent implements CallEvent {
 
 @Freezed(copyWith: false)
 class _SignalingClientEvent with _$SignalingClientEvent implements CallEvent {
-  const factory _SignalingClientEvent.connectInitiated({
-    @Default(false) bool reconnecting,
-  }) = _SignalingClientEventConnectInitiated;
+  const factory _SignalingClientEvent.connectInitiated() = _SignalingClientEventConnectInitiated;
 
   const factory _SignalingClientEvent.disconnectInitiated() = _SignalingClientEventDisconnectInitiated;
 
-  const factory _SignalingClientEvent.disconnected(
-    int? code,
-    String? reason, {
-    @Default(false) bool afterReconnect,
-  }) = _SignalingClientEventDisconnected;
+  const factory _SignalingClientEvent.disconnected(int? code, String? reason) = _SignalingClientEventDisconnected;
 }
 
 // handshake signaling events

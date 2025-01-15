@@ -285,6 +285,11 @@ class AppLocalizationsUk extends AppLocalizations {
   String get default_UserAlreadyInChatMessagingSocketException => 'Користувач вже в чаті';
 
   @override
+  String default_UnknownExceptionError(String error) {
+    return 'Сталася невідома помилка: $error';
+  }
+
+  @override
   String get diagnostic_AppBar_title => 'Діагностика';
 
   @override
@@ -959,22 +964,32 @@ class AppLocalizationsUk extends AppLocalizations {
   String get notifications_errorSnackBar_activeLineBlindTransferWarning => 'Ви вже на лінії з одержувачем, до якого намагаєтеся здійснити безумовний переказ';
 
   @override
-  String get notifications_errorSnackBar_appOffline => 'Ваш додаток зараз офлайн.';
+  String get notifications_messageSnackBar_appOffline => 'Ваш додаток зараз офлайн.';
 
   @override
-  String get notifications_errorSnackBar_appOnline => 'Ваш додаток онлайн.';
+  String get notifications_successSnackBar_appOnline => 'Ваш додаток онлайн.';
 
   @override
-  String get notifications_errorSnackBar_appUnregistered => 'Вибачте, ваш додаток наразі відключений від серверів WebTrit та не може здійснювати запити. Будь ласка, перейдіть на сторінку налаштувань і перемістіть вимикач стану онлайн у вимкнути й увімкнути знову, щоб відновити з\'єднання.';
+  String get notifications_errorSnackBar_callWhileUnregistered => 'Вибачте, ваш додаток наразі відключений від серверів WebTrit та не може здійснювати запити. Будь ласка, перейдіть на сторінку налаштувань і перемістіть вимикач стану онлайн у вимкнути й увімкнути знову, щоб відновити з\'єднання.';
 
   @override
-  String get notifications_errorSnackBar_callConnect => 'Підключення до ядра не вдалося, спроба з\'єднання';
+  String get notifications_errorSnackBar_SignalingConnectFailed => 'Підключення до ядра не вдалося, спроба з\'єднання';
 
   @override
-  String get notifications_errorSnackBar_callSignalingClientNotConnect => 'Не вдається ініціювати дзвінок, перевірте статус з\'єднання';
+  String get notifications_errorSnackBar_callWhileOffline => 'Не вдається ініціювати дзвінок, перевірте статус з\'єднання';
 
   @override
-  String get notifications_errorSnackBar_callSignalingClientSessionMissed => 'Помилка автентифікації, будь ласка увійдіть знову';
+  String get notifications_errorSnackBar_SignalingSessionMissed => 'Помилка автентифікації, будь ласка увійдіть знову';
+
+  @override
+  String notifications_errorSnackBar_signalingDisconnectWithSystemReason(String reason) {
+    return 'Відключено від ядра з причини: $reason';
+  }
+
+  @override
+  String notifications_errorSnackBar_signalingDisconnectWithCodeName(String codeName) {
+    return 'Від’єднано від ядра за кодом: $codeName';
+  }
 
   @override
   String get notifications_errorSnackBar_callUndefinedLine => 'Немає вільних ліній для ініціювання дзвінка';
@@ -983,7 +998,15 @@ class AppLocalizationsUk extends AppLocalizations {
   String get notifications_errorSnackBar_callUserMedia => 'Немає доступу до медіа-входу, будь ласка, перевірте дозволи програми';
 
   @override
-  String get notifications_errorSnackBar_sipServiceUnavailable => 'Помилка аутентифікації з віддаленою VoIP системою';
+  String get notifications_errorSnackBar_sipRegistrationFailed_Unavailable => 'Помилка реєстрації у віддаленій системі VoIP, послуга недоступна';
+
+  @override
+  String notifications_errorSnackBar_sipRegistrationFailed_WithSystemReason(String reason) {
+    return 'Помилка реєстрації у віддаленій системі VoIP з причини: $reason';
+  }
+
+  @override
+  String get notifications_errorSnackBar_sipRegistrationFailed_Unexpected => 'Помилка реєстрації у віддаленій системі VoIP через неочікувану помилку';
 
   @override
   String get permission_Button_request => 'Продовжити';
@@ -1094,6 +1117,9 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get request_StatusCode => 'Код статусу запиту';
+
+  @override
+  String get request_StatusName => 'Назва статусу запиту';
 
   @override
   String get sessionStatus_pushNotificationServiceProblem => 'Проблема з налаштуванням служби пуш-сповіщень';

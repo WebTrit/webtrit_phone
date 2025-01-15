@@ -184,6 +184,14 @@
   "@default_UnauthorizedRequestFailureError": {},
   "default_UserAlreadyInChatMessagingSocketException": "User is already in chat",
   "@default_UserAlreadyInChatMessagingSocketException": {},
+  "default_UnknownExceptionError": "An unknown issue occurred: {error}",
+  "@default_UnknownExceptionError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "diagnostic_AppBar_title": "Diagnostic",
   "@diagnostic_AppBar_title": {},
   "diagnostic_battery_groupTitle": "Battery",
@@ -680,24 +688,50 @@
   "@notifications_errorSnackBarAction_callUserMedia": {},
   "notifications_errorSnackBar_activeLineBlindTransferWarning": "You are already on the line with the recipient you are trying to blind transfer to",
   "@notifications_errorSnackBar_activeLineBlindTransferWarning": {},
-  "notifications_errorSnackBar_appOffline": "Your application is currently offline",
-  "@notifications_errorSnackBar_appOffline": {},
-  "notifications_errorSnackBar_appOnline": "Your application is online",
-  "@notifications_errorSnackBar_appOnline": {},
-  "notifications_errorSnackBar_appUnregistered": "Sorry, your application is currently disconnected from the WebTrit core servers and hence can't call right now. Please go to the settings page, and slide the online status toggle switch off and on again to reestablish the connection",
-  "@notifications_errorSnackBar_appUnregistered": {},
-  "notifications_errorSnackBar_callConnect": "Connecting to the core failed, trying to reconnect",
-  "@notifications_errorSnackBar_callConnect": {},
-  "notifications_errorSnackBar_callSignalingClientNotConnect": "Cannot initiate the call, please check the connection status",
-  "@notifications_errorSnackBar_callSignalingClientNotConnect": {},
-  "notifications_errorSnackBar_callSignalingClientSessionMissed": "Authentication error, please re-login",
-  "@notifications_errorSnackBar_callSignalingClientSessionMissed": {},
+  "notifications_messageSnackBar_appOffline": "Your application is currently offline",
+  "@notifications_messageSnackBar_appOffline": {},
+  "notifications_successSnackBar_appOnline": "Your application is online",
+  "@notifications_successSnackBar_appOnline": {},
+  "notifications_errorSnackBar_callWhileUnregistered": "Sorry, your application is currently disconnected from the WebTrit core servers and hence can't call right now. Please go to the settings page, and slide the online status toggle switch off and on again to reestablish the connection",
+  "@notifications_errorSnackBar_callWhileUnregistered": {},
+  "notifications_errorSnackBar_SignalingConnectFailed": "Connecting to the core failed, trying to reconnect",
+  "@notifications_errorSnackBar_SignalingConnectFailed": {},
+  "notifications_errorSnackBar_callWhileOffline": "Cannot initiate the call, please check the connection status",
+  "@notifications_errorSnackBar_callWhileOffline": {},
+  "notifications_errorSnackBar_SignalingSessionMissed": "Authentication error, please re-login",
+  "@notifications_errorSnackBar_SignalingSessionMissed": {},
+  "notifications_errorSnackBar_signalingDisconnectWithSystemReason": "Disconnected from the core with reason: {reason}",
+  "@notifications_errorSnackBar_signalingDisconnectWithSystemReason": {
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "notifications_errorSnackBar_signalingDisconnectWithCodeName": "Disconnected from the core with code: {codeName}",
+  "@notifications_errorSnackBar_signalingDisconnectWithCodeName": {
+    "placeholders": {
+      "codeName": {
+        "type": "String"
+      }
+    }
+  },
   "notifications_errorSnackBar_callUndefinedLine": "No idle lines to initiate the call",
   "@notifications_errorSnackBar_callUndefinedLine": {},
   "notifications_errorSnackBar_callUserMedia": "No access to media input, please check app permissions",
   "@notifications_errorSnackBar_callUserMedia": {},
-  "notifications_errorSnackBar_sipServiceUnavailable": "Authentication error with the remote VoIP system",
-  "@notifications_errorSnackBar_sipServiceUnavailable": {},
+  "notifications_errorSnackBar_sipRegistrationFailed_Unavailable": "Registration with the remote VoIP system failed, the service is unavailable",
+  "@notifications_errorSnackBar_sipRegistrationFailed_Unavailable": {},
+  "notifications_errorSnackBar_sipRegistrationFailed_WithSystemReason": "Registration with the remote VoIP system failed with reason: {reason}",
+  "@notifications_errorSnackBar_sipRegistrationFailed_WithSystemReason": {
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "notifications_errorSnackBar_sipRegistrationFailed_Unexpected": "Registration with the remote VoIP system failed due to an unexpected error",
+  "@notifications_errorSnackBar_sipRegistrationFailed_Unexpected": {},
   "permission_Button_request": "Continue",
   "@permission_Button_request": {},
   "permission_manageFullScreenNotificationInstructions_step1": "Go to your phone's Settings.",
@@ -782,6 +816,8 @@
   "@request_Id": {},
   "request_StatusCode": "Status code",
   "@request_StatusCode": {},
+  "request_StatusName": "Status name",
+  "@request_StatusName": {},
   "sessionStatus_pushNotificationServiceProblem": "Problem with configuration push notification service",
   "@sessionStatus_pushNotificationServiceProblem": {},
   "settings_AboutText_AppSessionIdentifier": "Application session identifier",

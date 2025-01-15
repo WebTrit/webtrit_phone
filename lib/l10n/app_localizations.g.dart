@@ -649,6 +649,12 @@ abstract class AppLocalizations {
   /// **'User is already in chat'**
   String get default_UserAlreadyInChatMessagingSocketException;
 
+  /// No description provided for @default_UnknownExceptionError.
+  ///
+  /// In en, this message translates to:
+  /// **'An unknown issue occurred: {error}'**
+  String default_UnknownExceptionError(String error);
+
   /// No description provided for @diagnostic_AppBar_title.
   ///
   /// In en, this message translates to:
@@ -1957,41 +1963,53 @@ abstract class AppLocalizations {
   /// **'You are already on the line with the recipient you are trying to blind transfer to'**
   String get notifications_errorSnackBar_activeLineBlindTransferWarning;
 
-  /// No description provided for @notifications_errorSnackBar_appOffline.
+  /// No description provided for @notifications_messageSnackBar_appOffline.
   ///
   /// In en, this message translates to:
   /// **'Your application is currently offline'**
-  String get notifications_errorSnackBar_appOffline;
+  String get notifications_messageSnackBar_appOffline;
 
-  /// No description provided for @notifications_errorSnackBar_appOnline.
+  /// No description provided for @notifications_successSnackBar_appOnline.
   ///
   /// In en, this message translates to:
   /// **'Your application is online'**
-  String get notifications_errorSnackBar_appOnline;
+  String get notifications_successSnackBar_appOnline;
 
-  /// No description provided for @notifications_errorSnackBar_appUnregistered.
+  /// No description provided for @notifications_errorSnackBar_callWhileUnregistered.
   ///
   /// In en, this message translates to:
   /// **'Sorry, your application is currently disconnected from the WebTrit core servers and hence can\'t call right now. Please go to the settings page, and slide the online status toggle switch off and on again to reestablish the connection'**
-  String get notifications_errorSnackBar_appUnregistered;
+  String get notifications_errorSnackBar_callWhileUnregistered;
 
-  /// No description provided for @notifications_errorSnackBar_callConnect.
+  /// No description provided for @notifications_errorSnackBar_SignalingConnectFailed.
   ///
   /// In en, this message translates to:
   /// **'Connecting to the core failed, trying to reconnect'**
-  String get notifications_errorSnackBar_callConnect;
+  String get notifications_errorSnackBar_SignalingConnectFailed;
 
-  /// No description provided for @notifications_errorSnackBar_callSignalingClientNotConnect.
+  /// No description provided for @notifications_errorSnackBar_callWhileOffline.
   ///
   /// In en, this message translates to:
   /// **'Cannot initiate the call, please check the connection status'**
-  String get notifications_errorSnackBar_callSignalingClientNotConnect;
+  String get notifications_errorSnackBar_callWhileOffline;
 
-  /// No description provided for @notifications_errorSnackBar_callSignalingClientSessionMissed.
+  /// No description provided for @notifications_errorSnackBar_SignalingSessionMissed.
   ///
   /// In en, this message translates to:
   /// **'Authentication error, please re-login'**
-  String get notifications_errorSnackBar_callSignalingClientSessionMissed;
+  String get notifications_errorSnackBar_SignalingSessionMissed;
+
+  /// No description provided for @notifications_errorSnackBar_signalingDisconnectWithSystemReason.
+  ///
+  /// In en, this message translates to:
+  /// **'Disconnected from the core with reason: {reason}'**
+  String notifications_errorSnackBar_signalingDisconnectWithSystemReason(String reason);
+
+  /// No description provided for @notifications_errorSnackBar_signalingDisconnectWithCodeName.
+  ///
+  /// In en, this message translates to:
+  /// **'Disconnected from the core with code: {codeName}'**
+  String notifications_errorSnackBar_signalingDisconnectWithCodeName(String codeName);
 
   /// No description provided for @notifications_errorSnackBar_callUndefinedLine.
   ///
@@ -2005,11 +2023,23 @@ abstract class AppLocalizations {
   /// **'No access to media input, please check app permissions'**
   String get notifications_errorSnackBar_callUserMedia;
 
-  /// No description provided for @notifications_errorSnackBar_sipServiceUnavailable.
+  /// No description provided for @notifications_errorSnackBar_sipRegistrationFailed_Unavailable.
   ///
   /// In en, this message translates to:
-  /// **'Authentication error with the remote VoIP system'**
-  String get notifications_errorSnackBar_sipServiceUnavailable;
+  /// **'Registration with the remote VoIP system failed, the service is unavailable'**
+  String get notifications_errorSnackBar_sipRegistrationFailed_Unavailable;
+
+  /// No description provided for @notifications_errorSnackBar_sipRegistrationFailed_WithSystemReason.
+  ///
+  /// In en, this message translates to:
+  /// **'Registration with the remote VoIP system failed with reason: {reason}'**
+  String notifications_errorSnackBar_sipRegistrationFailed_WithSystemReason(String reason);
+
+  /// No description provided for @notifications_errorSnackBar_sipRegistrationFailed_Unexpected.
+  ///
+  /// In en, this message translates to:
+  /// **'Registration with the remote VoIP system failed due to an unexpected error'**
+  String get notifications_errorSnackBar_sipRegistrationFailed_Unexpected;
 
   /// No description provided for @permission_Button_request.
   ///
@@ -2202,6 +2232,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Status code'**
   String get request_StatusCode;
+
+  /// No description provided for @request_StatusName.
+  ///
+  /// In en, this message translates to:
+  /// **'Status name'**
+  String get request_StatusName;
 
   /// No description provided for @sessionStatus_pushNotificationServiceProblem.
   ///
