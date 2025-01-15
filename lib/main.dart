@@ -29,7 +29,7 @@ void main() {
       providers: [
         Provider<AppPreferences>(
           create: (context) {
-            return AppPreferences();
+            return AppPreferencesFactory.instance;
           },
         ),
         Provider<FeatureAccess>(

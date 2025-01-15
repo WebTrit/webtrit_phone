@@ -31,12 +31,10 @@ class _MainShellState extends State<MainShell> {
   late final CallkeepConnections _callkeepConnections = CallkeepConnections();
   late final CallkeepBackgroundService _callkeepBackgroundService = CallkeepBackgroundService();
 
-  late final AppPreferences _appPreferences = AppPreferences();
-
   @override
   void initState() {
     super.initState();
-    final incomingCallType = _appPreferences.getIncomingCallType();
+    final incomingCallType = context.read<AppPreferences>().getIncomingCallType();
 
     _callkeep.setUp(
       CallkeepOptions(
@@ -236,9 +234,9 @@ class _MainShellState extends State<MainShell> {
           BlocProvider<CallBloc>(
             create: (context) {
               final appBloc = context.read<AppBloc>();
-              final appCertificates = AppCertificates();
-              final appPreferences = AppPreferences();
+              final appPreferences = context.read<AppPreferences>();
               final notificationsBloc = context.read<NotificationsBloc>();
+              final appCertificates = AppCertificates();
 
               return CallBloc(
                 coreUrl: appBloc.state.coreUrl!,

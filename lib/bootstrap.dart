@@ -50,20 +50,24 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
       final remoteFirebaseConfigService = await FirebaseRemoteConfigService.init(remoteCacheConfigService);
 
       // Initialization order is crucial for proper app setup
+
+      final appThemes = await AppThemes.init();
+      final appPreferences = await AppPreferencesFactory.init();
+
+      final featureAccess = FeatureAccess.init(appThemes.appConfig, appPreferences);
+
       await AppInfo.init(FirebaseAppIdProvider());
       await DeviceInfo.init();
       await PackageInfo.init();
       await AppLogger.init(remoteFirebaseConfigService);
       await AppThemes.init();
-      await AppPreferences.init();
-      await FeatureAccess.init();
-      await AppPermissions.init();
+      await AppPermissions.init(featureAccess);
       await SecureStorage.init();
       await AppCertificates.init();
       await AppTime.init();
       await SessionCleanupWorker.init();
 
-      await _initCallkeep();
+      await _initCallkeep(appPreferences);
 
       Bloc.observer = AppBlocObserver();
 
@@ -78,10 +82,10 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
   );
 }
 
-Future<void> _initCallkeep() async {
+Future<void> _initCallkeep(AppPreferences appPreferences) async {
   if (!Platform.isAndroid) return;
 
-  final incomingCalType = AppPreferences().getIncomingCallType();
+  final incomingCalType = appPreferences.getIncomingCallType();
   final callkeep = CallkeepBackgroundService();
 
   CallkeepBackgroundService.setUpServiceCallback(

@@ -31,7 +31,7 @@ Future<void> _initializeDependencies() async {
   _deviceInfo ??= await DeviceInfo.init();
   _packageInfo ??= await PackageInfo.init();
   _appLogger ??= await AppLogger.init(_remoteConfigService!);
-  _appPreferences ??= await AppPreferences.init();
+  _appPreferences ??= await AppPreferencesFactory.init();
   _appCertificates ??= await AppCertificates.init();
 
   // Always create a new instance to avoid caching issues

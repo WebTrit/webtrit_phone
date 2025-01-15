@@ -15,9 +15,7 @@ class AppPermissions {
 
   static late AppPermissions _instance;
 
-  static Future<AppPermissions> init() async {
-    final featureAccess = FeatureAccess();
-
+  static Future<AppPermissions> init(FeatureAccess featureAccess) async {
     final specialStatuses = await Future.wait(_specialPermissions.map((permission) => permission.status()));
 
     // Update initialization logic for better clarity and maintainability
