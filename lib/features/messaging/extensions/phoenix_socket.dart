@@ -549,6 +549,11 @@ extension PhoenixChannelExt on PhoenixChannel {
     push('chat:typing', {});
   }
 
+  /// This function sends a typing event to the SMS conversation channel.
+  void sendSmsTypnig() async {
+    push('sms:conversation:typing', {});
+  }
+
   /// Deletes a chat conversation (group or dialog) from the server.
   ///
   /// This method asynchronously deletes a chat conversation and returns a
@@ -936,6 +941,17 @@ class SmsChannelCursorSet extends SmsChannelEvent with EquatableMixin {
 
   @override
   List<Object> get props => [cursor];
+
+  @override
+  bool get stringify => true;
+}
+
+class SmsChannelTyping extends ChatChannelEvent with EquatableMixin {
+  SmsChannelTyping(this.number);
+  final String number;
+
+  @override
+  List<Object> get props => [number];
 
   @override
   bool get stringify => true;

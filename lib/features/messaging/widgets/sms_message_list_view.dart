@@ -1,8 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/messaging/messaging.dart';
+import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
@@ -119,7 +122,11 @@ class _SmsMessageListViewState extends State<SmsMessageListView> {
   Widget build(BuildContext context) {
     return Column(children: [
       Expanded(child: MessagingStateWrapper(child: list())),
-      MessageTextField(controller: inputController, onSend: handleSend),
+      MessageTextField(
+        controller: inputController,
+        onSend: handleSend,
+        onChanged: (value) => context.read<SmsTypingCubit>().sendTyping(),
+      ),
     ]);
   }
 
@@ -149,11 +156,13 @@ class _SmsMessageListViewState extends State<SmsMessageListView> {
             reverse: true,
             cacheExtent: 500,
             padding: const EdgeInsets.symmetric(vertical: 16),
-            itemCount: viewEntries.length + 1,
+            itemCount: viewEntries.length + 2,
             itemBuilder: (context, index) {
-              if (index == viewEntries.length) return historyFetchIndicator();
+              if (index == 0) return typingIndicator();
+              if (index == viewEntries.length + 1) return historyFetchIndicator();
 
-              final entry = viewEntries[index];
+              final entry = viewEntries[index - 1];
+
               if (entry is _MessageViewEntry) {
                 return FadeIn(
                   child: SmsMessageView(
@@ -215,6 +224,39 @@ class _SmsMessageListViewState extends State<SmsMessageListView> {
     }
 
     return const SizedBox();
+  }
+
+  Widget typingIndicator() {
+    return BlocBuilder<SmsTypingCubit, TypingNumbers>(
+      builder: (context, state) {
+        final typingUsers = state;
+        final anybodyTyping = typingUsers.isNotEmpty;
+
+        const textStyle = TextStyle(fontSize: 12, color: Colors.grey);
+
+        return AnimatedCrossFade(
+          duration: const Duration(milliseconds: 600),
+          sizeCurve: Curves.elasticOut,
+          firstChild: const SizedBox(),
+          secondChild: Container(
+            margin: const EdgeInsets.only(top: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Wrap(
+              crossAxisAlignment: WrapCrossAlignment.center,
+              spacing: 4,
+              children: [
+                const TypingIconDriver(),
+                for (final number in typingUsers) ...[
+                  Text(number, style: textStyle),
+                ],
+                Text(context.l10n.messaging_MessageListView_typingTrail, style: textStyle),
+              ],
+            ),
+          ),
+          crossFadeState: anybodyTyping ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+        );
+      },
+    );
   }
 }
 

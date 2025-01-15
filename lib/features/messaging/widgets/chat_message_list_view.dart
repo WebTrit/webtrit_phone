@@ -272,7 +272,7 @@ class _ChatMessageListViewState extends State<ChatMessageListView> {
   }
 
   Widget typingIndicator() {
-    return BlocBuilder<ChatTypingCubit, TypingState>(
+    return BlocBuilder<ChatTypingCubit, TypingUsers>(
       builder: (context, state) {
         final typingUsers = state;
         final anybodyTyping = typingUsers.isNotEmpty;
