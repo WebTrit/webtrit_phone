@@ -7,11 +7,15 @@ import 'package:auto_route/auto_route.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/messaging/messaging.dart';
-import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
-import 'chat_message_view.dart';
+import 'exchange_bar.dart';
+import 'history_fetch_indicator.dart';
+import 'message_text_field.dart';
+import 'scroll_to_bottom.dart';
+import 'typing_indicator.dart';
+import '../message_view/chat_message_view.dart';
 
 class ChatMessageListView extends StatefulWidget {
   const ChatMessageListView({
@@ -199,8 +203,14 @@ class _ChatMessageListViewState extends State<ChatMessageListView> {
             padding: const EdgeInsets.symmetric(vertical: 16),
             itemCount: viewEntries.length + 2,
             itemBuilder: (context, index) {
-              if (index == 0) return typingIndicator();
-              if (index == viewEntries.length + 1) return historyFetchIndicator();
+              if (index == 0) {
+                return BlocBuilder<ChatTypingCubit, TypingUsers>(
+                  builder: (_, users) => TypingIndicator(userId: widget.userId, typingUsers: users),
+                );
+              }
+              if (index == viewEntries.length + 1) {
+                return HistoryFetchIndicator(widget.fetchingHistory);
+              }
 
               final entry = viewEntries[index - 1];
 
@@ -251,56 +261,6 @@ class _ChatMessageListViewState extends State<ChatMessageListView> {
           ),
         ),
       ),
-    );
-  }
-
-  Widget historyFetchIndicator() {
-    if (widget.fetchingHistory) {
-      return const Padding(
-        padding: EdgeInsets.all(8.0),
-        child: Center(
-          child: SizedBox(
-            width: 16,
-            height: 16,
-            child: CircularProgressIndicator(),
-          ),
-        ),
-      );
-    }
-
-    return const SizedBox();
-  }
-
-  Widget typingIndicator() {
-    return BlocBuilder<ChatTypingCubit, TypingUsers>(
-      builder: (context, state) {
-        final typingUsers = state;
-        final anybodyTyping = typingUsers.isNotEmpty;
-
-        const textStyle = TextStyle(fontSize: 12, color: Colors.grey);
-
-        return AnimatedCrossFade(
-          duration: const Duration(milliseconds: 600),
-          sizeCurve: Curves.elasticOut,
-          firstChild: const SizedBox(),
-          secondChild: Container(
-            margin: const EdgeInsets.only(top: 8),
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Wrap(
-              crossAxisAlignment: WrapCrossAlignment.center,
-              spacing: 4,
-              children: [
-                const TypingIconDriver(),
-                for (final id in typingUsers) ...[
-                  ParticipantName(senderId: id, userId: widget.userId, style: textStyle)
-                ],
-                Text(context.l10n.messaging_MessageListView_typingTrail, style: textStyle),
-              ],
-            ),
-          ),
-          crossFadeState: anybodyTyping ? CrossFadeState.showSecond : CrossFadeState.showFirst,
-        );
-      },
     );
   }
 
