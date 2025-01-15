@@ -52,7 +52,7 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
       // Initialization order is crucial for proper app setup
 
       final appThemes = await AppThemes.init();
-      final appPreferences = await AppPreferences.init();
+      final appPreferences = await AppPreferencesFactory.init();
 
       final featureAccess = FeatureAccess.init(appThemes.appConfig, appPreferences);
 
@@ -67,7 +67,7 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
       await AppTime.init();
       await SessionCleanupWorker.init();
 
-      await _initCallkeep();
+      await _initCallkeep(appPreferences);
 
       Bloc.observer = AppBlocObserver();
 
@@ -82,10 +82,10 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
   );
 }
 
-Future<void> _initCallkeep() async {
+Future<void> _initCallkeep(AppPreferences appPreferences) async {
   if (!Platform.isAndroid) return;
 
-  final incomingCalType = AppPreferences().getIncomingCallType();
+  final incomingCalType = appPreferences.getIncomingCallType();
   final callkeep = CallkeepBackgroundService();
 
   CallkeepBackgroundService.setUpServiceCallback(

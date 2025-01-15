@@ -76,7 +76,7 @@ class MainScreenPage extends StatelessWidget {
       create: (context) {
         return MainBloc(
           context.read<SystemInfoRepository>(),
-          AppPreferences(),
+          context.read<AppPreferences>(),
           EnvironmentConfig.CORE_VERSION_CONSTRAINT,
           storeInfoExtractor: StoreInfoExtractor(),
         )..add(const MainBlocInit());
