@@ -3,7 +3,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'custom_color.freezed.dart';
 part 'custom_color.g.dart';
 
-@Freezed(copyWith: false, equal: false, toStringOverride: false)
+@Freezed()
 class CustomColor with _$CustomColor {
   const factory CustomColor({
     required String color,

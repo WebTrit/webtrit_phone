@@ -1,4 +1,5 @@
 export 'app_config.dart';
+export 'color_scheme.config.dart';
 export 'custom_color.dart';
 export 'elevated_button_style_type.dart';
 export 'theme_page_config.dart';

@@ -26,14 +26,15 @@ _$AppConfigImpl _$$AppConfigImplFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$$AppConfigImplToJson(_$AppConfigImpl instance) =>
     <String, dynamic>{
-      'loginConfig': instance.loginConfig,
-      'mainConfig': instance.mainConfig,
-      'settingsConfig': instance.settingsConfig,
-      'callConfig': instance.callConfig,
+      'loginConfig': instance.loginConfig.toJson(),
+      'mainConfig': instance.mainConfig.toJson(),
+      'settingsConfig': instance.settingsConfig.toJson(),
+      'callConfig': instance.callConfig.toJson(),
     };
 
 _$AppConfigLoginImpl _$$AppConfigLoginImplFromJson(Map<String, dynamic> json) =>
     _$AppConfigLoginImpl(
+      label: json['label'] as String?,
       modeSelectActions: (json['modeSelectActions'] as List<dynamic>?)
               ?.map((e) =>
                   AppConfigModeSelectAction.fromJson(e as Map<String, dynamic>))
@@ -49,8 +50,10 @@ _$AppConfigLoginImpl _$$AppConfigLoginImplFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$$AppConfigLoginImplToJson(
         _$AppConfigLoginImpl instance) =>
     <String, dynamic>{
-      'modeSelectActions': instance.modeSelectActions,
-      'embedded': instance.embedded,
+      'label': instance.label,
+      'modeSelectActions':
+          instance.modeSelectActions.map((e) => e.toJson()).toList(),
+      'embedded': instance.embedded.map((e) => e.toJson()).toList(),
     };
 
 _$AppConfigModeSelectActionImpl _$$AppConfigModeSelectActionImplFromJson(
@@ -101,7 +104,7 @@ _$AppConfigMainImpl _$$AppConfigMainImplFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$$AppConfigMainImplToJson(_$AppConfigMainImpl instance) =>
     <String, dynamic>{
-      'bottomMenu': instance.bottomMenu,
+      'bottomMenu': instance.bottomMenu.toJson(),
     };
 
 _$AppConfigBottomMenuImpl _$$AppConfigBottomMenuImplFromJson(
@@ -119,7 +122,7 @@ Map<String, dynamic> _$$AppConfigBottomMenuImplToJson(
         _$AppConfigBottomMenuImpl instance) =>
     <String, dynamic>{
       'cacheSelectedTab': instance.cacheSelectedTab,
-      'tabs': instance.tabs,
+      'tabs': instance.tabs.map((e) => e.toJson()).toList(),
     };
 
 _$AppConfigBottomMenuTabImpl _$$AppConfigBottomMenuTabImplFromJson(
@@ -157,7 +160,7 @@ _$AppConfigSettingsImpl _$$AppConfigSettingsImplFromJson(
 Map<String, dynamic> _$$AppConfigSettingsImplToJson(
         _$AppConfigSettingsImpl instance) =>
     <String, dynamic>{
-      'sections': instance.sections,
+      'sections': instance.sections.map((e) => e.toJson()).toList(),
     };
 
 _$AppConfigSettingsSectionImpl _$$AppConfigSettingsSectionImplFromJson(
@@ -177,7 +180,7 @@ Map<String, dynamic> _$$AppConfigSettingsSectionImplToJson(
     <String, dynamic>{
       'titleL10n': instance.titleL10n,
       'enabled': instance.enabled,
-      'items': instance.items,
+      'items': instance.items.map((e) => e.toJson()).toList(),
     };
 
 _$AppConfigSettingsItemImpl _$$AppConfigSettingsItemImplFromJson(
@@ -213,7 +216,7 @@ _$AppConfigCallImpl _$$AppConfigCallImplFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$$AppConfigCallImplToJson(_$AppConfigCallImpl instance) =>
     <String, dynamic>{
       'videoEnabled': instance.videoEnabled,
-      'transfer': instance.transfer,
+      'transfer': instance.transfer.toJson(),
     };
 
 _$AppConfigTransferImpl _$$AppConfigTransferImplFromJson(

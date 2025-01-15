@@ -29,97 +29,55 @@ class ThemeProvider extends InheritedWidget {
   final ColorScheme? lightDynamic;
   final ColorScheme? darkDynamic;
 
-  Color custom(CustomColor custom) {
-    if (custom.blend) {
-      return blend(custom.color.toColor());
-    } else {
-      return custom.color.toColor();
-    }
+  /// Retrieves the widget-specific theme configuration based on brightness.
+  ThemeWidgetConfig? _getThemeWidgetConfig(Brightness brightness) {
+    return brightness.isLight ? settings.themeWidgetLightConfig : settings.themeWidgetDarkConfig;
   }
 
-  Color blend(Color targetColor) {
-    return Color(Blend.harmonize(targetColor.value, settings.seedColor.toColor().value));
+  /// Retrieves the page-specific theme configuration based on brightness.
+  ThemePageConfig? _getThemePageConfig(Brightness brightness) {
+    return brightness.isLight ? settings.themePageLightConfig : settings.themePageDarkConfig;
   }
 
-  Color source(Color? target) {
-    Color source = settings.seedColor.toColor();
-    if (target != null) {
-      source = blend(target);
-    }
-    return source;
+  /// Computes a custom color based on blending settings.
+  Color custom(CustomColor custom, Color seedColor) {
+    return custom.blend ? _blend(custom.color.toColor(), seedColor) : custom.color.toColor();
   }
 
-  ColorScheme colors(Brightness brightness, Color? targetColor) {
-    final dynamicPrimary = brightness == Brightness.light ? lightDynamic?.primary : darkDynamic?.primary;
-    final colorSchemeOverride =
-        brightness == Brightness.light ? settings.lightColorSchemeOverride : settings.darkColorSchemeOverride;
-    return ColorScheme.fromSeed(
-      seedColor: dynamicPrimary ?? source(targetColor),
+  /// Blends two colors using harmonization.
+  Color _blend(Color targetColor, Color seedColor) {
+    return Color(Blend.harmonize(targetColor.value, seedColor.value));
+  }
+
+  /// Determines the source color based on target and seed color.
+  Color _source(Color? target, Color seedColor) {
+    return target != null ? _blend(target, seedColor) : seedColor;
+  }
+
+  /// Generates a [ColorScheme] based on brightness and target color.
+  ColorScheme _buildColorScheme(Brightness brightness, Color? targetColor) {
+    final dynamicPrimary = brightness.isLight ? lightDynamic?.primary : darkDynamic?.primary;
+    final colorSchemeConfig = brightness.isLight ? settings.lightColorSchemeConfig : settings.darkColorSchemeConfig;
+
+    final seedColor = colorSchemeConfig.seedColor.toColor();
+
+    return colorSchemeConfig.toColorScheme(
+      seedColor: dynamicPrimary ?? _source(targetColor, seedColor),
       brightness: brightness,
-      primary: colorSchemeOverride?.primary?.toColor(),
-      onPrimary: colorSchemeOverride?.onPrimary?.toColor(),
-      primaryContainer: colorSchemeOverride?.primaryContainer?.toColor(),
-      onPrimaryContainer: colorSchemeOverride?.onPrimaryContainer?.toColor(),
-      primaryFixed: colorSchemeOverride?.primaryFixed?.toColor(),
-      primaryFixedDim: colorSchemeOverride?.primaryFixedDim?.toColor(),
-      onPrimaryFixed: colorSchemeOverride?.onPrimaryFixed?.toColor(),
-      onPrimaryFixedVariant: colorSchemeOverride?.onPrimaryFixedVariant?.toColor(),
-      secondary: colorSchemeOverride?.secondary?.toColor(),
-      onSecondary: colorSchemeOverride?.onSecondary?.toColor(),
-      secondaryContainer: colorSchemeOverride?.secondaryContainer?.toColor(),
-      secondaryFixed: colorSchemeOverride?.secondaryFixed?.toColor(),
-      secondaryFixedDim: colorSchemeOverride?.secondaryFixedDim?.toColor(),
-      onSecondaryFixed: colorSchemeOverride?.onSecondaryFixed?.toColor(),
-      onSecondaryFixedVariant: colorSchemeOverride?.onSecondaryFixedVariant?.toColor(),
-      tertiary: colorSchemeOverride?.tertiary?.toColor(),
-      onTertiary: colorSchemeOverride?.onTertiary?.toColor(),
-      tertiaryContainer: colorSchemeOverride?.tertiaryContainer?.toColor(),
-      onTertiaryContainer: colorSchemeOverride?.onTertiaryContainer?.toColor(),
-      tertiaryFixed: colorSchemeOverride?.tertiaryFixed?.toColor(),
-      tertiaryFixedDim: colorSchemeOverride?.tertiaryFixedDim?.toColor(),
-      onTertiaryFixed: colorSchemeOverride?.onTertiaryFixed?.toColor(),
-      onTertiaryFixedVariant: colorSchemeOverride?.onTertiaryFixedVariant?.toColor(),
-      error: colorSchemeOverride?.error?.toColor(),
-      onError: colorSchemeOverride?.onError?.toColor(),
-      errorContainer: colorSchemeOverride?.errorContainer?.toColor(),
-      onErrorContainer: colorSchemeOverride?.onErrorContainer?.toColor(),
-      outline: colorSchemeOverride?.outline?.toColor(),
-      outlineVariant: colorSchemeOverride?.outlineVariant?.toColor(),
-      surface: colorSchemeOverride?.surface?.toColor(),
-      onSurface: colorSchemeOverride?.onSurface?.toColor(),
-      surfaceDim: colorSchemeOverride?.surfaceDim?.toColor(),
-      surfaceBright: colorSchemeOverride?.surfaceBright?.toColor(),
-      surfaceContainerLowest: colorSchemeOverride?.surfaceContainerLowest?.toColor(),
-      surfaceContainerLow: colorSchemeOverride?.surfaceContainerLow?.toColor(),
-      surfaceContainer: colorSchemeOverride?.surfaceContainer?.toColor(),
-      surfaceContainerHigh: colorSchemeOverride?.surfaceContainerHigh?.toColor(),
-      surfaceContainerHighest: colorSchemeOverride?.surfaceContainerHighest?.toColor(),
-      onSurfaceVariant: colorSchemeOverride?.onSurfaceVariant?.toColor(),
-      inverseSurface: colorSchemeOverride?.inverseSurface?.toColor(),
-      onInverseSurface: colorSchemeOverride?.onInverseSurface?.toColor(),
-      inversePrimary: colorSchemeOverride?.inversePrimary?.toColor(),
-      shadow: colorSchemeOverride?.shadow?.toColor(),
-      scrim: colorSchemeOverride?.scrim?.toColor(),
-      surfaceTint: colorSchemeOverride?.surfaceTint?.toColor(),
+      dynamicPrimary: dynamicPrimary,
+      targetColor: targetColor,
     );
   }
 
-  ThemeWidgetConfig? _themeWidgetConfig(Brightness brightness) {
-    return brightness == Brightness.light ? settings.themeWidgetLightConfig : settings.themeWidgetDarkConfig;
-  }
+  /// Returns a [TextTheme] customized for the given brightness.
+  TextTheme _textTheme(Brightness brightness) {
+    final themeConfig = brightness.isLight ? settings.themeWidgetLightConfig : settings.themeWidgetDarkConfig;
 
-  ThemePageConfig? _themePageConfig(Brightness brightness) {
-    return brightness == Brightness.light ? settings.themePageLightConfig : settings.themePageDarkConfig;
-  }
+    final fontFamily = themeConfig.fonts.fontFamily;
 
-  TextTheme? textTheme(Brightness brightness) {
-    final fontFamily = settings.fontFamily;
-    if (fontFamily == null) {
-      return null;
-    } else {
-      final textTheme = brightness == Brightness.light ? ThemeData.light().textTheme : ThemeData.dark().textTheme;
-      return GoogleFonts.getTextTheme(fontFamily, textTheme);
-    }
+    final baseTextTheme = brightness.isLight ? ThemeData.light().textTheme : ThemeData.dark().textTheme;
+
+    return GoogleFonts.getTextTheme(fontFamily, baseTextTheme);
   }
 
   InputDecorations inputDecorations(ColorScheme colors) {
@@ -204,7 +162,7 @@ class ThemeProvider extends InheritedWidget {
   ) {
     return AboutScreenStyles(
       primary: AboutScreenStyle(
-        picture: aboutPageConfig?.picture != null ? ThemeSvgAsset.fromJson(aboutPageConfig!.picture) : null,
+        picture: aboutPageConfig?.picture != null ? ThemeSvgAsset.fromJson(aboutPageConfig!.picture!) : null,
       ),
     );
   }
@@ -303,8 +261,12 @@ class ThemeProvider extends InheritedWidget {
     );
   }
 
-  Gradients? gradients(ColorScheme colors) {
-    final customColors = settings.primaryGradientColors.map((it) => it.color.toColor()).toList();
+  Gradients? gradients(Brightness brightness) {
+    final gradient = brightness == Brightness.light
+        ? settings.themeWidgetLightConfig.decorationConfig.primaryGradientColorsConfig.colors
+        : settings.themeWidgetDarkConfig.decorationConfig.primaryGradientColorsConfig.colors;
+
+    final customColors = gradient.map((it) => it.color.toColor()).toList();
 
     // Check if there are at least two colors to form a gradient
     if (customColors.length < 2) {
@@ -360,23 +322,23 @@ class ThemeProvider extends InheritedWidget {
 
     final defaultCallDisabledIconColor = colors.surface.withValues(alpha: disabledColorOpacity);
 
-    final callStartForegroundColor = config?.callStart?.foregroundColor?.toColor() ?? colors.onTertiary;
-    final callStartBackgroundColor = config?.callStart?.backgroundColor?.toColor() ?? colors.tertiary;
-    final callStartIconColor = config?.callStart?.iconColor?.toColor() ?? colors.surface;
-    final callStartDisabledIconColor = config?.callStart?.disabledIconColor?.toColor() ?? defaultCallDisabledIconColor;
+    final callStartForegroundColor = config?.callStart.foregroundColor?.toColor() ?? colors.onTertiary;
+    final callStartBackgroundColor = config?.callStart.backgroundColor?.toColor() ?? colors.tertiary;
+    final callStartIconColor = config?.callStart.iconColor?.toColor() ?? colors.surface;
+    final callStartDisabledIconColor = config?.callStart.disabledIconColor?.toColor() ?? defaultCallDisabledIconColor;
 
-    final callTransferForegroundColor = config?.callTransfer?.foregroundColor?.toColor() ?? colors.onSecondary;
-    final callTransferBackgroundColor = config?.callTransfer?.backgroundColor?.toColor() ?? colors.secondary;
-    final callTransferIconColor = config?.callTransfer?.iconColor?.toColor() ?? colors.surface;
+    final callTransferForegroundColor = config?.callTransfer.foregroundColor?.toColor() ?? colors.onSecondary;
+    final callTransferBackgroundColor = config?.callTransfer.backgroundColor?.toColor() ?? colors.secondary;
+    final callTransferIconColor = config?.callTransfer.iconColor?.toColor() ?? colors.surface;
     final callTransferDisabledIconColor =
-        config?.callTransfer?.disabledIconColor?.toColor() ?? defaultCallDisabledIconColor;
+        config?.callTransfer.disabledIconColor?.toColor() ?? defaultCallDisabledIconColor;
 
     final backspacePressedStyleForegroundColor =
-        config?.backspacePressed?.foregroundColor?.toColor() ?? colors.onSecondary;
-    final backspacePressedStyleBackgroundColor = config?.backspacePressed?.backgroundColor?.toColor();
-    final backspacePressedStyleIconColor = config?.backspacePressed?.iconColor?.toColor() ?? colors.onSurface;
+        config?.backspacePressed.foregroundColor?.toColor() ?? colors.onSecondary;
+    final backspacePressedStyleBackgroundColor = config?.backspacePressed.backgroundColor?.toColor();
+    final backspacePressedStyleIconColor = config?.backspacePressed.iconColor?.toColor() ?? colors.onSurface;
     final backspacePressedStyleDisabledIconColor =
-        config?.backspacePressed?.disabledIconColor?.toColor() ?? colors.surface;
+        config?.backspacePressed.disabledIconColor?.toColor() ?? colors.surface;
 
     final callStartStyle = TextButton.styleFrom(
       foregroundColor: callStartForegroundColor,
@@ -603,12 +565,12 @@ class ThemeProvider extends InheritedWidget {
     TextFormFieldWidgetConfig? primary,
   ) {
     final labelStyleColor = primary?.labelColor?.toColor();
-    final disabledErrorBorderColor = primary?.border?.disabled?.errorColor?.toColor();
-    final disabledPrimaryBorderColor = primary?.border?.disabled?.typicalColor?.toColor();
-    final focusedErrorBorderColor = primary?.border?.focused?.errorColor?.toColor();
-    final focusedPrimaryBorderColor = primary?.border?.focused?.typicalColor?.toColor();
-    final anyErrorBorderColor = primary?.border?.any?.errorColor?.toColor();
-    final anyPrimaryBorderColor = primary?.border?.any?.typicalColor?.toColor();
+    final disabledErrorBorderColor = primary?.border.disabled.errorColor?.toColor();
+    final disabledPrimaryBorderColor = primary?.border.disabled.typicalColor?.toColor();
+    final focusedErrorBorderColor = primary?.border.focused.errorColor?.toColor();
+    final focusedPrimaryBorderColor = primary?.border.focused.typicalColor?.toColor();
+    final anyErrorBorderColor = primary?.border.any.errorColor?.toColor();
+    final anyPrimaryBorderColor = primary?.border.any.typicalColor?.toColor();
 
     return InputDecorationTheme(
       floatingLabelBehavior: FloatingLabelBehavior.always,
@@ -782,45 +744,45 @@ class ThemeProvider extends InheritedWidget {
 
   ThemeData? light([Color? targetColor]) {
     const brightness = Brightness.light;
-    final colorScheme = colors(brightness, targetColor);
-    final themeWidgetConfig = _themeWidgetConfig(brightness);
-    final themePageConfig = _themePageConfig(brightness);
+    final colorScheme = _buildColorScheme(brightness, targetColor);
+    final themeWidgetConfig = _getThemeWidgetConfig(brightness);
+    final themePageConfig = _getThemePageConfig(brightness);
 
     final textButtonStyles = _textButtonStyles(colorScheme);
-    final gradientStyles = gradients(colorScheme);
+    final gradientStyles = gradients(brightness);
 
     return ThemeData.from(
       colorScheme: colorScheme,
-      textTheme: textTheme(brightness),
+      textTheme: _textTheme(brightness),
       useMaterial3: true,
     ).copyWith(
       textSelectionTheme: textSelectionThemeData(
         colorScheme,
-        themeWidgetConfig?.text?.selection,
+        themeWidgetConfig?.text.selection,
       ),
       // GENERAL CONFIGURATIONValueNotifier
       inputDecorationTheme: inputDecorationTheme(
         colorScheme,
-        themeWidgetConfig?.input?.primary,
+        themeWidgetConfig?.input.primary,
       ),
       extensions: [
         // PAGES
         loginPageStyles(
-          themePageConfig?.login?.modeSelect,
+          themePageConfig?.login.modeSelect,
         ),
         // WIDGETS
         appIconStyle(
           colorScheme,
-          themeWidgetConfig?.picture?.appIcon,
+          themeWidgetConfig?.picture.appIcon,
         ),
         confirmDialogStyles(
           colorScheme,
           textButtonStyles,
-          themeWidgetConfig?.dialog?.confirmDialog,
+          themeWidgetConfig?.dialog.confirmDialog,
         ),
         linkifyStyles(
           colorScheme,
-          themeWidgetConfig?.text?.linkify,
+          themeWidgetConfig?.text.linkify,
         ),
         callActionsStyles(
           colorScheme,
@@ -836,7 +798,7 @@ class ThemeProvider extends InheritedWidget {
         ),
         snackBarStyles(
           colorScheme,
-          themeWidgetConfig?.dialog?.snackBar,
+          themeWidgetConfig?.dialog.snackBar,
         ),
         actionPadStyles(
           colorScheme,
@@ -845,28 +807,42 @@ class ThemeProvider extends InheritedWidget {
         inputDecorations(colorScheme),
         elevatedButtonStyles(
           colorScheme,
-          themeWidgetConfig?.button?.primaryElevatedButton,
+          themeWidgetConfig?.button.primaryElevatedButton,
         ),
         outlinedButtonStyles(colorScheme),
         textButtonStyles,
         logoAssets(
-          primaryOnboardin: ThemeSvgAsset.fromJson(settings.primaryOnboardingLogo),
-          secondaryOnboardin: ThemeSvgAsset.fromJson(settings.secondaryOnboardingLogo),
+          primaryOnboardin: // TODO(Serdun): Refactor to move logic out of the function argument.
+              ThemeSvgAsset.fromJson(brightness.isLight
+                  ? settings.themeWidgetLightConfig.picture.secondaryOnboardingLogo
+                  : settings.themeWidgetDarkConfig.picture.secondaryOnboardingLogo),
+          secondaryOnboardin: // TODO(Serdun): Refactor to move logic out of the function argument.
+              ThemeSvgAsset.fromJson(brightness.isLight
+                  ? settings.themeWidgetLightConfig.picture.secondaryOnboardingLogo
+                  : settings.themeWidgetDarkConfig.picture.secondaryOnboardingLogo),
         ),
         groupTitleListStyles(
           themeWidgetConfig?.group?.groupTitleListTile,
         ),
         onboardingPictureLogoStyles(
           colorScheme,
-          ThemeSvgAsset.fromJson(settings.primaryOnboardingLogo),
-          themeWidgetConfig?.picture?.onboardingPictureLogo,
+          // TODO(Serdun): Refactor to move logic out of the function argument.
+          ThemeSvgAsset.fromJson(brightness.isLight
+              ? settings.themeWidgetLightConfig.picture.primaryOnboardingLogo
+              : settings.themeWidgetDarkConfig.picture.primaryOnboardingLogo),
+          themeWidgetConfig?.picture.onboardingPictureLogo,
         ),
         onboardingLogoStyles(
           colorScheme,
-          ThemeSvgAsset.fromJson(settings.secondaryOnboardingLogo),
-          themeWidgetConfig?.picture?.onboardingLogo,
+          // TODO(Serdun): Refactor to move logic out of the function argument.
+          ThemeSvgAsset.fromJson(brightness.isLight
+              ? settings.themeWidgetLightConfig.picture.secondaryOnboardingLogo
+              : settings.themeWidgetDarkConfig.picture.secondaryOnboardingLogo),
+          themeWidgetConfig?.picture.onboardingLogo,
         ),
-        aboutScreenStyles(themePageConfig?.about),
+        aboutScreenStyles(
+            // TODO(Serdun): Refactor to move logic out of the function argument.
+            brightness.isLight ? settings.themePageLightConfig.about : settings.themePageDarkConfig.about),
 
         // Nullable styles
         if (gradientStyles != null) gradientStyles
@@ -880,16 +856,16 @@ class ThemeProvider extends InheritedWidget {
       // COMPONENT THEMES
       appBarTheme: appBarTheme(
         colorScheme,
-        themeWidgetConfig?.bar?.extTabBar,
+        themeWidgetConfig?.bar.extTabBar,
       ),
 
       tabBarTheme: tabBarTheme(
         colorScheme,
-        themeWidgetConfig?.bar?.extTabBar,
+        themeWidgetConfig?.bar.extTabBar,
       ),
       bottomNavigationBarTheme: bottomNavigationBarTheme(
         colorScheme,
-        themeWidgetConfig?.bar?.bottomNavigationBar,
+        themeWidgetConfig?.bar.bottomNavigationBar,
       ),
       elevatedButtonTheme: elevatedButtonTheme(colorScheme),
       outlinedButtonTheme: outlinedButtonTheme(colorScheme),
@@ -903,9 +879,9 @@ class ThemeProvider extends InheritedWidget {
   ThemeData? dark([Color? targetColor]) {
     const brightness = Brightness.dark;
     // ignore: unused_local_variable
-    final colorScheme = colors(brightness, targetColor);
+    final colorScheme = _buildColorScheme(brightness, targetColor);
     // ignore: unused_local_variable
-    final themeWidgetConfig = _themeWidgetConfig(brightness);
+    final themeWidgetConfig = _getThemeWidgetConfig(brightness);
     // TODO: Not implemented yet
     return null;
   }

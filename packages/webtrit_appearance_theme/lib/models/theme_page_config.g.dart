@@ -10,45 +10,52 @@ _$ThemePageConfigImpl _$$ThemePageConfigImplFromJson(
         Map<String, dynamic> json) =>
     _$ThemePageConfigImpl(
       login: json['login'] == null
-          ? null
+          ? const LoginPageConfig()
           : LoginPageConfig.fromJson(json['login'] as Map<String, dynamic>),
       about: json['about'] == null
-          ? null
+          ? const AboutPageConfig()
           : AboutPageConfig.fromJson(json['about'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$$ThemePageConfigImplToJson(
         _$ThemePageConfigImpl instance) =>
     <String, dynamic>{
-      'login': instance.login,
-      'about': instance.about,
+      'login': instance.login.toJson(),
+      'about': instance.about.toJson(),
     };
 
 _$LoginPageConfigImpl _$$LoginPageConfigImplFromJson(
         Map<String, dynamic> json) =>
     _$LoginPageConfigImpl(
-      modeSelect: LoginModeSelectPageConfig.fromJson(
-          json['modeSelect'] as Map<String, dynamic>),
+      modeSelect: json['modeSelect'] == null
+          ? const LoginModeSelectPageConfig()
+          : LoginModeSelectPageConfig.fromJson(
+              json['modeSelect'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$$LoginPageConfigImplToJson(
         _$LoginPageConfigImpl instance) =>
     <String, dynamic>{
-      'modeSelect': instance.modeSelect,
+      'modeSelect': instance.modeSelect.toJson(),
     };
 
 _$LoginModeSelectPageConfigImpl _$$LoginModeSelectPageConfigImplFromJson(
         Map<String, dynamic> json) =>
     _$LoginModeSelectPageConfigImpl(
-      buttonLoginStyleType: $enumDecode(
-          _$ElevatedButtonStyleTypeEnumMap, json['buttonLoginStyleType']),
-      buttonSignupStyleType: $enumDecode(
-          _$ElevatedButtonStyleTypeEnumMap, json['buttonSignupStyleType']),
+      title: json['title'] as String?,
+      buttonLoginStyleType: $enumDecodeNullable(
+              _$ElevatedButtonStyleTypeEnumMap, json['buttonLoginStyleType']) ??
+          ElevatedButtonStyleType.primary,
+      buttonSignupStyleType: $enumDecodeNullable(
+              _$ElevatedButtonStyleTypeEnumMap,
+              json['buttonSignupStyleType']) ??
+          ElevatedButtonStyleType.primary,
     );
 
 Map<String, dynamic> _$$LoginModeSelectPageConfigImplToJson(
         _$LoginModeSelectPageConfigImpl instance) =>
     <String, dynamic>{
+      'title': instance.title,
       'buttonLoginStyleType':
           _$ElevatedButtonStyleTypeEnumMap[instance.buttonLoginStyleType]!,
       'buttonSignupStyleType':
@@ -65,7 +72,7 @@ const _$ElevatedButtonStyleTypeEnumMap = {
 _$AboutPageConfigImpl _$$AboutPageConfigImplFromJson(
         Map<String, dynamic> json) =>
     _$AboutPageConfigImpl(
-      picture: json['picture'] as String,
+      picture: json['picture'] as String?,
     );
 
 Map<String, dynamic> _$$AboutPageConfigImplToJson(

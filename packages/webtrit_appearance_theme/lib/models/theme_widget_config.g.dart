@@ -9,57 +9,76 @@ part of 'theme_widget_config.dart';
 _$ThemeWidgetConfigImpl _$$ThemeWidgetConfigImplFromJson(
         Map<String, dynamic> json) =>
     _$ThemeWidgetConfigImpl(
+      fonts: json['fonts'] == null
+          ? const FontsConfig()
+          : FontsConfig.fromJson(json['fonts'] as Map<String, dynamic>),
       button: json['button'] == null
-          ? null
+          ? const ButtonWidgetConfig()
           : ButtonWidgetConfig.fromJson(json['button'] as Map<String, dynamic>),
       group: json['group'] == null
-          ? null
+          ? const GroupWidgetConfig()
           : GroupWidgetConfig.fromJson(json['group'] as Map<String, dynamic>),
       bar: json['bar'] == null
-          ? null
+          ? const BarWidgetConfig()
           : BarWidgetConfig.fromJson(json['bar'] as Map<String, dynamic>),
       picture: json['picture'] == null
-          ? null
+          ? const PictureWidgetConfig()
           : PictureWidgetConfig.fromJson(
               json['picture'] as Map<String, dynamic>),
       input: json['input'] == null
-          ? null
+          ? const InputWidgetConfig()
           : InputWidgetConfig.fromJson(json['input'] as Map<String, dynamic>),
       text: json['text'] == null
-          ? null
+          ? const TextWidgetConfig()
           : TextWidgetConfig.fromJson(json['text'] as Map<String, dynamic>),
       dialog: json['dialog'] == null
-          ? null
+          ? const DialogWidgetConfig()
           : DialogWidgetConfig.fromJson(json['dialog'] as Map<String, dynamic>),
       actionPad: json['actionPad'] == null
-          ? null
+          ? const ActionPadWidgetConfig()
           : ActionPadWidgetConfig.fromJson(
               json['actionPad'] as Map<String, dynamic>),
       statuses: json['statuses'] == null
           ? const StatusesWidgetConfig()
           : StatusesWidgetConfig.fromJson(
               json['statuses'] as Map<String, dynamic>),
+      decorationConfig: json['decorationConfig'] == null
+          ? const DecorationConfig()
+          : DecorationConfig.fromJson(
+              json['decorationConfig'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$$ThemeWidgetConfigImplToJson(
         _$ThemeWidgetConfigImpl instance) =>
     <String, dynamic>{
-      'button': instance.button,
-      'group': instance.group,
-      'bar': instance.bar,
-      'picture': instance.picture,
-      'input': instance.input,
-      'text': instance.text,
-      'dialog': instance.dialog,
-      'actionPad': instance.actionPad,
-      'statuses': instance.statuses,
+      'fonts': instance.fonts.toJson(),
+      'button': instance.button.toJson(),
+      'group': instance.group?.toJson(),
+      'bar': instance.bar.toJson(),
+      'picture': instance.picture.toJson(),
+      'input': instance.input.toJson(),
+      'text': instance.text.toJson(),
+      'dialog': instance.dialog.toJson(),
+      'actionPad': instance.actionPad.toJson(),
+      'statuses': instance.statuses.toJson(),
+      'decorationConfig': instance.decorationConfig.toJson(),
+    };
+
+_$FontsConfigImpl _$$FontsConfigImplFromJson(Map<String, dynamic> json) =>
+    _$FontsConfigImpl(
+      fontFamily: json['fontFamily'] as String? ?? 'Montserrat',
+    );
+
+Map<String, dynamic> _$$FontsConfigImplToJson(_$FontsConfigImpl instance) =>
+    <String, dynamic>{
+      'fontFamily': instance.fontFamily,
     };
 
 _$ButtonWidgetConfigImpl _$$ButtonWidgetConfigImplFromJson(
         Map<String, dynamic> json) =>
     _$ButtonWidgetConfigImpl(
       primaryElevatedButton: json['primaryElevatedButton'] == null
-          ? null
+          ? const ElevatedButtonWidgetConfig()
           : ElevatedButtonWidgetConfig.fromJson(
               json['primaryElevatedButton'] as Map<String, dynamic>),
     );
@@ -67,7 +86,7 @@ _$ButtonWidgetConfigImpl _$$ButtonWidgetConfigImplFromJson(
 Map<String, dynamic> _$$ButtonWidgetConfigImplToJson(
         _$ButtonWidgetConfigImpl instance) =>
     <String, dynamic>{
-      'primaryElevatedButton': instance.primaryElevatedButton,
+      'primaryElevatedButton': instance.primaryElevatedButton.toJson(),
     };
 
 _$ElevatedButtonWidgetConfigImpl _$$ElevatedButtonWidgetConfigImplFromJson(
@@ -94,11 +113,11 @@ _$GroupWidgetConfigImpl _$$GroupWidgetConfigImplFromJson(
         Map<String, dynamic> json) =>
     _$GroupWidgetConfigImpl(
       groupTitleListTile: json['groupTitleListTile'] == null
-          ? null
+          ? const GroupTitleListTileWidgetConfig()
           : GroupTitleListTileWidgetConfig.fromJson(
               json['groupTitleListTile'] as Map<String, dynamic>),
       callActions: json['callActions'] == null
-          ? null
+          ? const CallActionsWidgetConfig()
           : CallActionsWidgetConfig.fromJson(
               json['callActions'] as Map<String, dynamic>),
     );
@@ -106,19 +125,19 @@ _$GroupWidgetConfigImpl _$$GroupWidgetConfigImplFromJson(
 Map<String, dynamic> _$$GroupWidgetConfigImplToJson(
         _$GroupWidgetConfigImpl instance) =>
     <String, dynamic>{
-      'groupTitleListTile': instance.groupTitleListTile,
-      'callActions': instance.callActions,
+      'groupTitleListTile': instance.groupTitleListTile.toJson(),
+      'callActions': instance.callActions.toJson(),
     };
 
 _$BarWidgetConfigImpl _$$BarWidgetConfigImplFromJson(
         Map<String, dynamic> json) =>
     _$BarWidgetConfigImpl(
       bottomNavigationBar: json['bottomNavigationBar'] == null
-          ? null
+          ? const BottomNavigationBarWidgetConfig()
           : BottomNavigationBarWidgetConfig.fromJson(
               json['bottomNavigationBar'] as Map<String, dynamic>),
       extTabBar: json['extTabBar'] == null
-          ? null
+          ? const ExtTabBarWidgetConfig()
           : ExtTabBarWidgetConfig.fromJson(
               json['extTabBar'] as Map<String, dynamic>),
     );
@@ -126,8 +145,8 @@ _$BarWidgetConfigImpl _$$BarWidgetConfigImplFromJson(
 Map<String, dynamic> _$$BarWidgetConfigImplToJson(
         _$BarWidgetConfigImpl instance) =>
     <String, dynamic>{
-      'bottomNavigationBar': instance.bottomNavigationBar,
-      'extTabBar': instance.extTabBar,
+      'bottomNavigationBar': instance.bottomNavigationBar.toJson(),
+      'extTabBar': instance.extTabBar.toJson(),
     };
 
 _$BottomNavigationBarWidgetConfigImpl
@@ -224,16 +243,20 @@ Map<String, dynamic> _$$CallActionsWidgetConfigImplToJson(
 _$PictureWidgetConfigImpl _$$PictureWidgetConfigImplFromJson(
         Map<String, dynamic> json) =>
     _$PictureWidgetConfigImpl(
+      primaryOnboardingLogo: json['primaryOnboardingLogo'] as String? ??
+          'asset://assets/primary_onboardin_logo.svg',
+      secondaryOnboardingLogo: json['secondaryOnboardingLogo'] as String? ??
+          'asset://assets/secondary_onboardin_logo.svg',
       onboardingPictureLogo: json['onboardingPictureLogo'] == null
-          ? null
+          ? const LogoWidgetConfig()
           : LogoWidgetConfig.fromJson(
               json['onboardingPictureLogo'] as Map<String, dynamic>),
       onboardingLogo: json['onboardingLogo'] == null
-          ? null
+          ? const LogoWidgetConfig()
           : LogoWidgetConfig.fromJson(
               json['onboardingLogo'] as Map<String, dynamic>),
       appIcon: json['appIcon'] == null
-          ? null
+          ? const AppIconWidgetConfig()
           : AppIconWidgetConfig.fromJson(
               json['appIcon'] as Map<String, dynamic>),
     );
@@ -241,9 +264,11 @@ _$PictureWidgetConfigImpl _$$PictureWidgetConfigImplFromJson(
 Map<String, dynamic> _$$PictureWidgetConfigImplToJson(
         _$PictureWidgetConfigImpl instance) =>
     <String, dynamic>{
-      'onboardingPictureLogo': instance.onboardingPictureLogo,
-      'onboardingLogo': instance.onboardingLogo,
-      'appIcon': instance.appIcon,
+      'primaryOnboardingLogo': instance.primaryOnboardingLogo,
+      'secondaryOnboardingLogo': instance.secondaryOnboardingLogo,
+      'onboardingPictureLogo': instance.onboardingPictureLogo.toJson(),
+      'onboardingLogo': instance.onboardingLogo.toJson(),
+      'appIcon': instance.appIcon.toJson(),
     };
 
 _$LogoWidgetConfigImpl _$$LogoWidgetConfigImplFromJson(
@@ -276,7 +301,7 @@ _$InputWidgetConfigImpl _$$InputWidgetConfigImplFromJson(
         Map<String, dynamic> json) =>
     _$InputWidgetConfigImpl(
       primary: json['primary'] == null
-          ? null
+          ? const TextFormFieldWidgetConfig()
           : TextFormFieldWidgetConfig.fromJson(
               json['primary'] as Map<String, dynamic>),
     );
@@ -284,7 +309,7 @@ _$InputWidgetConfigImpl _$$InputWidgetConfigImplFromJson(
 Map<String, dynamic> _$$InputWidgetConfigImplToJson(
         _$InputWidgetConfigImpl instance) =>
     <String, dynamic>{
-      'primary': instance.primary,
+      'primary': instance.primary.toJson(),
     };
 
 _$TextFormFieldWidgetConfigImpl _$$TextFormFieldWidgetConfigImplFromJson(
@@ -292,7 +317,7 @@ _$TextFormFieldWidgetConfigImpl _$$TextFormFieldWidgetConfigImplFromJson(
     _$TextFormFieldWidgetConfigImpl(
       labelColor: json['labelColor'] as String?,
       border: json['border'] == null
-          ? null
+          ? const InputBorderWidgetConfig()
           : InputBorderWidgetConfig.fromJson(
               json['border'] as Map<String, dynamic>),
     );
@@ -301,31 +326,31 @@ Map<String, dynamic> _$$TextFormFieldWidgetConfigImplToJson(
         _$TextFormFieldWidgetConfigImpl instance) =>
     <String, dynamic>{
       'labelColor': instance.labelColor,
-      'border': instance.border,
+      'border': instance.border.toJson(),
     };
 
 _$InputBorderWidgetConfigImpl _$$InputBorderWidgetConfigImplFromJson(
         Map<String, dynamic> json) =>
     _$InputBorderWidgetConfigImpl(
       disabled: json['disabled'] == null
-          ? null
+          ? const BorderWidgetConfig()
           : BorderWidgetConfig.fromJson(
               json['disabled'] as Map<String, dynamic>),
       focused: json['focused'] == null
-          ? null
+          ? const BorderWidgetConfig()
           : BorderWidgetConfig.fromJson(
               json['focused'] as Map<String, dynamic>),
       any: json['any'] == null
-          ? null
+          ? const BorderWidgetConfig()
           : BorderWidgetConfig.fromJson(json['any'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$$InputBorderWidgetConfigImplToJson(
         _$InputBorderWidgetConfigImpl instance) =>
     <String, dynamic>{
-      'disabled': instance.disabled,
-      'focused': instance.focused,
-      'any': instance.any,
+      'disabled': instance.disabled.toJson(),
+      'focused': instance.focused.toJson(),
+      'any': instance.any.toJson(),
     };
 
 _$BorderWidgetConfigImpl _$$BorderWidgetConfigImplFromJson(
@@ -346,11 +371,11 @@ _$TextWidgetConfigImpl _$$TextWidgetConfigImplFromJson(
         Map<String, dynamic> json) =>
     _$TextWidgetConfigImpl(
       selection: json['selection'] == null
-          ? null
+          ? const TextSelectionWidgetConfig()
           : TextSelectionWidgetConfig.fromJson(
               json['selection'] as Map<String, dynamic>),
       linkify: json['linkify'] == null
-          ? null
+          ? const LinkifyWidgetConfig()
           : LinkifyWidgetConfig.fromJson(
               json['linkify'] as Map<String, dynamic>),
     );
@@ -358,8 +383,8 @@ _$TextWidgetConfigImpl _$$TextWidgetConfigImplFromJson(
 Map<String, dynamic> _$$TextWidgetConfigImplToJson(
         _$TextWidgetConfigImpl instance) =>
     <String, dynamic>{
-      'selection': instance.selection,
-      'linkify': instance.linkify,
+      'selection': instance.selection.toJson(),
+      'linkify': instance.linkify.toJson(),
     };
 
 _$TextSelectionWidgetConfigImpl _$$TextSelectionWidgetConfigImplFromJson(
@@ -396,7 +421,7 @@ _$DialogWidgetConfigImpl _$$DialogWidgetConfigImplFromJson(
         Map<String, dynamic> json) =>
     _$DialogWidgetConfigImpl(
       confirmDialog: json['confirmDialog'] == null
-          ? null
+          ? const ConfirmDialogWidgetConfig()
           : ConfirmDialogWidgetConfig.fromJson(
               json['confirmDialog'] as Map<String, dynamic>),
       snackBar: json['snackBar'] == null
@@ -408,8 +433,8 @@ _$DialogWidgetConfigImpl _$$DialogWidgetConfigImplFromJson(
 Map<String, dynamic> _$$DialogWidgetConfigImplToJson(
         _$DialogWidgetConfigImpl instance) =>
     <String, dynamic>{
-      'confirmDialog': instance.confirmDialog,
-      'snackBar': instance.snackBar,
+      'confirmDialog': instance.confirmDialog.toJson(),
+      'snackBar': instance.snackBar.toJson(),
     };
 
 _$ConfirmDialogWidgetConfigImpl _$$ConfirmDialogWidgetConfigImplFromJson(
@@ -453,15 +478,15 @@ _$ActionPadWidgetConfigImpl _$$ActionPadWidgetConfigImplFromJson(
         Map<String, dynamic> json) =>
     _$ActionPadWidgetConfigImpl(
       callStart: json['callStart'] == null
-          ? null
+          ? const ElevatedButtonWidgetConfig()
           : ElevatedButtonWidgetConfig.fromJson(
               json['callStart'] as Map<String, dynamic>),
       callTransfer: json['callTransfer'] == null
-          ? null
+          ? const ElevatedButtonWidgetConfig()
           : ElevatedButtonWidgetConfig.fromJson(
               json['callTransfer'] as Map<String, dynamic>),
       backspacePressed: json['backspacePressed'] == null
-          ? null
+          ? const ElevatedButtonWidgetConfig()
           : ElevatedButtonWidgetConfig.fromJson(
               json['backspacePressed'] as Map<String, dynamic>),
     );
@@ -469,9 +494,9 @@ _$ActionPadWidgetConfigImpl _$$ActionPadWidgetConfigImplFromJson(
 Map<String, dynamic> _$$ActionPadWidgetConfigImplToJson(
         _$ActionPadWidgetConfigImpl instance) =>
     <String, dynamic>{
-      'callStart': instance.callStart,
-      'callTransfer': instance.callTransfer,
-      'backspacePressed': instance.backspacePressed,
+      'callStart': instance.callStart.toJson(),
+      'callTransfer': instance.callTransfer.toJson(),
+      'backspacePressed': instance.backspacePressed.toJson(),
     };
 
 _$StatusesWidgetConfigImpl _$$StatusesWidgetConfigImplFromJson(
@@ -490,8 +515,8 @@ _$StatusesWidgetConfigImpl _$$StatusesWidgetConfigImplFromJson(
 Map<String, dynamic> _$$StatusesWidgetConfigImplToJson(
         _$StatusesWidgetConfigImpl instance) =>
     <String, dynamic>{
-      'registrationStatuses': instance.registrationStatuses,
-      'callStatuses': instance.callStatuses,
+      'registrationStatuses': instance.registrationStatuses.toJson(),
+      'callStatuses': instance.callStatuses.toJson(),
     };
 
 _$RegistrationStatusesWidgetConfigImpl
@@ -529,4 +554,35 @@ Map<String, dynamic> _$$CallStatusesWidgetConfigImplToJson(
       'connectIssue': instance.connectIssue,
       'inProgress': instance.inProgress,
       'ready': instance.ready,
+    };
+
+_$DecorationConfigImpl _$$DecorationConfigImplFromJson(
+        Map<String, dynamic> json) =>
+    _$DecorationConfigImpl(
+      primaryGradientColorsConfig: json['primaryGradientColorsConfig'] == null
+          ? const GradientColorsConfig()
+          : GradientColorsConfig.fromJson(
+              json['primaryGradientColorsConfig'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$$DecorationConfigImplToJson(
+        _$DecorationConfigImpl instance) =>
+    <String, dynamic>{
+      'primaryGradientColorsConfig':
+          instance.primaryGradientColorsConfig.toJson(),
+    };
+
+_$PrimaryGradientColorsConfigImpl _$$PrimaryGradientColorsConfigImplFromJson(
+        Map<String, dynamic> json) =>
+    _$PrimaryGradientColorsConfigImpl(
+      colors: (json['colors'] as List<dynamic>?)
+              ?.map((e) => CustomColor.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          const [],
+    );
+
+Map<String, dynamic> _$$PrimaryGradientColorsConfigImplToJson(
+        _$PrimaryGradientColorsConfigImpl instance) =>
+    <String, dynamic>{
+      'colors': instance.colors.map((e) => e.toJson()).toList(),
     };
