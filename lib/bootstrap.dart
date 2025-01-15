@@ -54,13 +54,14 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
       final appThemes = await AppThemes.init();
       final appPreferences = await AppPreferences.init();
 
+      final featureAccess = FeatureAccess.init(appThemes.appConfig, appPreferences);
+
       await AppInfo.init(FirebaseAppIdProvider());
       await DeviceInfo.init();
       await PackageInfo.init();
       await AppLogger.init(remoteFirebaseConfigService);
       await AppThemes.init();
-      FeatureAccess.init(appThemes.appConfig, appPreferences);
-      await AppPermissions.init();
+      await AppPermissions.init(featureAccess);
       await SecureStorage.init();
       await AppCertificates.init();
       await AppTime.init();
