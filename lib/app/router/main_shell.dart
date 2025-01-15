@@ -238,7 +238,6 @@ class _MainShellState extends State<MainShell> {
               final notificationsBloc = context.read<NotificationsBloc>();
               final appCertificates = AppCertificates();
 
-
               return CallBloc(
                 coreUrl: appBloc.state.coreUrl!,
                 tenantId: appBloc.state.tenantId!,
