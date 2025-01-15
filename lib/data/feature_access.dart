@@ -32,7 +32,7 @@ class FeatureAccess {
   final CallFeature callFeature;
   final MessagingFeature messagingFeature;
 
-  static Future<FeatureAccess> init(AppConfig appConfig, AppPreferences preferences) async {
+  static FeatureAccess init(AppConfig appConfig, AppPreferences preferences) {
     try {
       final customLoginFeature = _tryEnableCustomLoginFeature(appConfig.loginConfig);
       final bottomMenuManager = _tryConfigureBottomMenuFeature(appConfig, preferences);

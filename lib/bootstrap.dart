@@ -59,7 +59,7 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
       await PackageInfo.init();
       await AppLogger.init(remoteFirebaseConfigService);
       await AppThemes.init();
-      await FeatureAccess.init(appThemes.appConfig, appPreferences);
+      FeatureAccess.init(appThemes.appConfig, appPreferences);
       await AppPermissions.init();
       await SecureStorage.init();
       await AppCertificates.init();
