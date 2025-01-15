@@ -50,13 +50,16 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
       final remoteFirebaseConfigService = await FirebaseRemoteConfigService.init(remoteCacheConfigService);
 
       // Initialization order is crucial for proper app setup
+
+      final appThemes = await AppThemes.init();
+      final appPreferences = await AppPreferences.init();
+
       await AppInfo.init(FirebaseAppIdProvider());
       await DeviceInfo.init();
       await PackageInfo.init();
       await AppLogger.init(remoteFirebaseConfigService);
       await AppThemes.init();
-      await AppPreferences.init();
-      await FeatureAccess.init();
+      await FeatureAccess.init(appThemes.appConfig, appPreferences);
       await AppPermissions.init();
       await SecureStorage.init();
       await AppCertificates.init();

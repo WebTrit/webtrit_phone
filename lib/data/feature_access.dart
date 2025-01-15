@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
+
 import 'package:logging/logging.dart';
 
 import 'package:webtrit_phone/data/app_preferences.dart';
@@ -7,8 +9,6 @@ import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/theme/theme.dart';
-
-import 'app_themes.dart';
 
 final Logger _logger = Logger('FeatureAccess');
 
@@ -32,12 +32,7 @@ class FeatureAccess {
   final CallFeature callFeature;
   final MessagingFeature messagingFeature;
 
-  static Future<FeatureAccess> init() async {
-    final theme = AppThemes();
-    final preferences = AppPreferences();
-
-    final appConfig = theme.appConfig;
-
+  static Future<FeatureAccess> init(AppConfig appConfig, AppPreferences preferences) async {
     try {
       final customLoginFeature = _tryEnableCustomLoginFeature(appConfig.loginConfig);
       final bottomMenuManager = _tryConfigureBottomMenuFeature(appConfig, preferences);
@@ -133,7 +128,7 @@ class FeatureAccess {
         // TODO (Serdun): Move platform-specific configuration to a separate config file.
         // Currently, the settings screen includes this configuration only for Android.
         // For other platforms, this item is hidden. Update the logic to handle configurations for all platforms.
-        if (flavor == SettingsFlavor.network && !Platform.isAndroid) continue;
+        if (flavor == SettingsFlavor.network && !kIsWeb && !Platform.isAndroid) continue;
 
         final settingItem = SettingItem(
           titleL10n: item.titleL10n,
