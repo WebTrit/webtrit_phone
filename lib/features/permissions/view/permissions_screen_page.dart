@@ -16,6 +16,7 @@ class PermissionsScreenPage extends StatelessWidget {
     const widget = PermissionsScreen();
     final provider = BlocProvider(
       create: (context) => PermissionsCubit(
+        appPreferences: context.read<AppPreferences>(),
         appPermissions: AppPermissions(),
         deviceInfo: DeviceInfo(),
       ),

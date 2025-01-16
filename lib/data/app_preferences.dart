@@ -14,7 +14,7 @@ class AppPreferences with SystemInfoJsonMapper {
   static const _kActiveRecentsVisibilityFilterKey = 'active-recents-visibility-filter';
   static const _kActiveContactSourceTypeKey = 'active-contact-source-type';
   static const _kUserAgreementAcceptedKey = 'user-agreement-accepted';
-  static const _kContactsAgreementAcceptedKey = 'contacts-agreement-accepted';
+  static const _kContactsAgreementAcceptedKey = 'contacts-agreement-status';
   static const _kIncomingCallTypeKey = 'call-incoming-type';
   static const _kSystemInfoKey = 'system-info';
   static const _kPreferedAudioCodecKey = 'prefered-audio-codec';
@@ -159,10 +159,21 @@ class AppPreferences with SystemInfoJsonMapper {
 
   bool getUserAgreementAccepted() => _sharedPreferences.getBool(_kUserAgreementAcceptedKey) ?? false;
 
-  Future<bool> setContactsAgreementAccepted(bool value) =>
-      _sharedPreferences.setBool(_kContactsAgreementAcceptedKey, value);
+  Future<bool> setContactsAgreementAccepted(AgreementStatus value) =>
+      _sharedPreferences.setString(_kContactsAgreementAcceptedKey, value.name);
 
-  bool getContactsAgreementAccepted() => _sharedPreferences.getBool(_kContactsAgreementAcceptedKey) ?? false;
+  AgreementStatus getContactsAgreementAccepted({AgreementStatus defaultValue = AgreementStatus.pending}) {
+    final agreementStatusString = _sharedPreferences.getString(_kContactsAgreementAcceptedKey);
+    if (agreementStatusString != null) {
+      try {
+        return AgreementStatus.values.byName(agreementStatusString);
+      } catch (_) {
+        return defaultValue;
+      }
+    } else {
+      return defaultValue;
+    }
+  }
 
   Future<bool> setIncomingCallType(IncomingCallType value) =>
       _sharedPreferences.setString(_kIncomingCallTypeKey, value.name);

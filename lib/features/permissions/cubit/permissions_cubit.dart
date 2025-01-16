@@ -15,22 +15,35 @@ part 'permissions_state.dart';
 
 class PermissionsCubit extends Cubit<PermissionsState> {
   PermissionsCubit({
+    required this.appPreferences,
     required this.appPermissions,
     required this.deviceInfo,
   }) : super(const PermissionsState.initial());
 
+  final AppPreferences appPreferences;
   final AppPermissions appPermissions;
   final DeviceInfo deviceInfo;
 
   void requestPermissions() async {
     emit(const PermissionsState.inProgress());
     try {
-      await appPermissions.request();
+      // Check if the contacts agreement is accepted
+      final contactsAgreementStatus = appPreferences.getContactsAgreementAccepted();
+
+      // Prepare the exclude list based on the contacts agreement status
+      final excludePermissions = <Permission>[
+        if (!contactsAgreementStatus.isAccepted) Permission.contacts,
+      ];
+
+      // Request permissions, excluding the specified ones
+      await appPermissions.request(exclude: excludePermissions);
       await requestFirebaseMessagingPermission();
 
+      // Handle special permissions
       final specialPermissions = await appPermissions.deniedSpecialPermissions();
-      final manufacturer = _checkManufacturer();
 
+      // Check for manufacturer-specific tips or denied special permissions
+      final manufacturer = _checkManufacturer();
       if (manufacturer == null && specialPermissions.isEmpty) {
         emit(const PermissionsState.success());
       } else if (manufacturer != null) {
