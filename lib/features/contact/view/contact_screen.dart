@@ -56,8 +56,9 @@ class ContactScreen extends StatelessWidget {
                 ),
                 body: ListView(
                   children: [
-                    Padding(
+                    Container(
                       padding: kAllPadding16,
+                      alignment: Alignment.center,
                       child: LeadingAvatar(
                         username: contact.displayTitle,
                         thumbnail: contact.thumbnail,

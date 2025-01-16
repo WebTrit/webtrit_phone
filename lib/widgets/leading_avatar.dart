@@ -47,9 +47,12 @@ class _LeadingAvatarState extends State<LeadingAvatar> {
         color: colorScheme.secondaryContainer,
       ),
       child: Stack(
+        alignment: Alignment.center,
+        fit: StackFit.loose,
         children: [
           _Placeholder(
             placeholderIcon: widget.placeholderIcon,
+            diameter: diameter,
             username: widget.username,
           ),
           if (widget.thumbnail != null)
@@ -82,25 +85,28 @@ class _LeadingAvatarState extends State<LeadingAvatar> {
 class _Placeholder extends StatelessWidget {
   const _Placeholder({
     required this.placeholderIcon,
+    required this.diameter,
     this.username,
   });
 
   final IconData placeholderIcon;
+  final double diameter;
   final String? username;
 
   @override
   Widget build(BuildContext context) {
     return username != null
-        ? Center(
-            child: Text(
-              username!.initialism,
-              softWrap: false,
-              overflow: TextOverflow.fade,
+        ? Text(
+            username!.initialism,
+            softWrap: false,
+            overflow: TextOverflow.fade,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: diameter * 0.35,
+              fontWeight: FontWeight.bold,
             ),
           )
-        : Center(
-            child: Icon(placeholderIcon),
-          );
+        : Icon(placeholderIcon);
   }
 }
 
@@ -115,13 +121,15 @@ class _BlobImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ClipOval(
-      child: Image.memory(
-        blob,
-        fit: BoxFit.cover,
-        errorBuilder: (context, error, stackTrace) => const SizedBox.shrink(),
-        cacheHeight: cacheSize,
-        cacheWidth: cacheSize,
+    return Positioned.fill(
+      child: ClipOval(
+        child: Image.memory(
+          blob,
+          fit: BoxFit.cover,
+          errorBuilder: (context, error, stackTrace) => const SizedBox.shrink(),
+          cacheHeight: cacheSize,
+          cacheWidth: cacheSize,
+        ),
       ),
     );
   }
@@ -138,13 +146,15 @@ class _UrlImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ClipOval(
-      child: Image.network(
-        url,
-        fit: BoxFit.cover,
-        errorBuilder: (context, error, stackTrace) => const SizedBox.shrink(),
-        cacheHeight: cacheSize,
-        cacheWidth: cacheSize,
+    return Positioned.fill(
+      child: ClipOval(
+        child: Image.network(
+          url,
+          fit: BoxFit.cover,
+          errorBuilder: (context, error, stackTrace) => const SizedBox.shrink(),
+          cacheHeight: cacheSize,
+          cacheWidth: cacheSize,
+        ),
       ),
     );
   }
