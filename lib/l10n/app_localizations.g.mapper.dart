@@ -166,6 +166,8 @@ class AppLocalizationsMapper {
           localizations.default_InvalidChatTypeMessagingSocketException,
       'default_MessagingSocketException':
           localizations.default_MessagingSocketException,
+      'default_JoinCrashedMessagingSocketException':
+          localizations.default_JoinCrashedMessagingSocketException,
       'default_RequestFailureError': localizations.default_RequestFailureError,
       'default_SelfAuthorityAssignmentForbiddenMessagingSocketException':
           localizations
@@ -585,25 +587,28 @@ class AppLocalizationsMapper {
       'notifications_errorSnackBar_activeLineBlindTransferWarning':
           localizations
               .notifications_errorSnackBar_activeLineBlindTransferWarning,
-      'notifications_errorSnackBar_appOffline':
-          localizations.notifications_errorSnackBar_appOffline,
-      'notifications_errorSnackBar_appOnline':
-          localizations.notifications_errorSnackBar_appOnline,
-      'notifications_errorSnackBar_appUnregistered':
-          localizations.notifications_errorSnackBar_appUnregistered,
-      'notifications_errorSnackBar_callConnect':
-          localizations.notifications_errorSnackBar_callConnect,
-      'notifications_errorSnackBar_callSignalingClientNotConnect': localizations
-          .notifications_errorSnackBar_callSignalingClientNotConnect,
-      'notifications_errorSnackBar_callSignalingClientSessionMissed':
-          localizations
-              .notifications_errorSnackBar_callSignalingClientSessionMissed,
+      'notifications_messageSnackBar_appOffline':
+          localizations.notifications_messageSnackBar_appOffline,
+      'notifications_successSnackBar_appOnline':
+          localizations.notifications_successSnackBar_appOnline,
+      'notifications_errorSnackBar_callWhileUnregistered':
+          localizations.notifications_errorSnackBar_callWhileUnregistered,
+      'notifications_errorSnackBar_SignalingConnectFailed':
+          localizations.notifications_errorSnackBar_SignalingConnectFailed,
+      'notifications_errorSnackBar_callWhileOffline':
+          localizations.notifications_errorSnackBar_callWhileOffline,
+      'notifications_errorSnackBar_SignalingSessionMissed':
+          localizations.notifications_errorSnackBar_SignalingSessionMissed,
       'notifications_errorSnackBar_callUndefinedLine':
           localizations.notifications_errorSnackBar_callUndefinedLine,
       'notifications_errorSnackBar_callUserMedia':
           localizations.notifications_errorSnackBar_callUserMedia,
-      'notifications_errorSnackBar_sipServiceUnavailable':
-          localizations.notifications_errorSnackBar_sipServiceUnavailable,
+      'notifications_errorSnackBar_sipRegistrationFailed_Unavailable':
+          localizations
+              .notifications_errorSnackBar_sipRegistrationFailed_Unavailable,
+      'notifications_errorSnackBar_sipRegistrationFailed_Unexpected':
+          localizations
+              .notifications_errorSnackBar_sipRegistrationFailed_Unexpected,
       'permission_Button_request': localizations.permission_Button_request,
       'permission_manageFullScreenNotificationInstructions_step1': localizations
           .permission_manageFullScreenNotificationInstructions_step1,
@@ -655,6 +660,7 @@ class AppLocalizationsMapper {
           localizations.recentsVisibilityFilter_outgoing_preposit,
       'request_Id': localizations.request_Id,
       'request_StatusCode': localizations.request_StatusCode,
+      'request_StatusName': localizations.request_StatusName,
       'sessionStatus_pushNotificationServiceProblem':
           localizations.sessionStatus_pushNotificationServiceProblem,
       'settings_AboutText_AppSessionIdentifier':
@@ -691,6 +697,8 @@ class AppLocalizationsMapper {
           localizations.settings_ListViewTileTitle_accountDelete,
       'settings_ListViewTileTitle_call_codecs':
           localizations.settings_ListViewTileTitle_call_codecs,
+      'settings_ListViewTileTitle_self_config':
+          localizations.settings_ListViewTileTitle_self_config,
       'settings_ListViewTileTitle_help':
           localizations.settings_ListViewTileTitle_help,
       'settings_ListViewTileTitle_language':
@@ -764,6 +772,36 @@ class AppLocalizationsMapper {
           localizations.signalingResponseCode_tokenNotFound,
       'signalingResponseCode_transportSpecificError':
           localizations.signalingResponseCode_transportSpecificError,
+      'signalingResponseCode_normalUnspecified':
+          localizations.signalingResponseCode_normalUnspecified,
+      'signalingResponseCode_callNotExist':
+          localizations.signalingResponseCode_callNotExist,
+      'signalingResponseCode_loopDetected':
+          localizations.signalingResponseCode_loopDetected,
+      'signalingResponseCode_exchangeRoutingError':
+          localizations.signalingResponseCode_exchangeRoutingError,
+      'signalingResponseCode_invalidNumberFormat':
+          localizations.signalingResponseCode_invalidNumberFormat,
+      'signalingResponseCode_ambiguousRequest':
+          localizations.signalingResponseCode_ambiguousRequest,
+      'signalingResponseCode_userBusy':
+          localizations.signalingResponseCode_userBusy,
+      'signalingResponseCode_requestTerminated':
+          localizations.signalingResponseCode_requestTerminated,
+      'signalingResponseCode_incompatibleDestination':
+          localizations.signalingResponseCode_incompatibleDestination,
+      'signalingResponseCode_busyEverywhere':
+          localizations.signalingResponseCode_busyEverywhere,
+      'signalingResponseCode_declineCall':
+          localizations.signalingResponseCode_declineCall,
+      'signalingResponseCode_userNotExist':
+          localizations.signalingResponseCode_userNotExist,
+      'signalingResponseCode_notAcceptable':
+          localizations.signalingResponseCode_notAcceptable,
+      'signalingResponseCode_unwanted':
+          localizations.signalingResponseCode_unwanted,
+      'signalingResponseCode_rejected':
+          localizations.signalingResponseCode_rejected,
       'signalingResponseCodeType_plugin':
           localizations.signalingResponseCodeType_plugin,
       'signalingResponseCodeType_request':
@@ -780,6 +818,8 @@ class AppLocalizationsMapper {
           localizations.signalingResponseCodeType_unknown,
       'signalingResponseCodeType_webrtc':
           localizations.signalingResponseCodeType_webrtc,
+      'signalingResponseCodeType_callHangup':
+          localizations.signalingResponseCodeType_callHangup,
       'signalingResponseCode_unauthorizedAccess':
           localizations.signalingResponseCode_unauthorizedAccess,
       'signalingResponseCode_unauthorizedRequest':
@@ -814,6 +854,28 @@ class AppLocalizationsMapper {
           localizations.webRegistration_ErrorAcknowledgeDialogActions_skip,
       'webRegistration_ErrorAcknowledgeDialog_title':
           localizations.webRegistration_ErrorAcknowledgeDialog_title,
+      'socketError_serverUnreachable':
+          localizations.socketError_serverUnreachable,
+      'socketError_networkUnreachable':
+          localizations.socketError_networkUnreachable,
+      'socketError_connectionTimedOut':
+          localizations.socketError_connectionTimedOut,
+      'socketError_connectionRefused':
+          localizations.socketError_connectionRefused,
+      'socketError_connectionReset': localizations.socketError_connectionReset,
+      'socketError_default': localizations.socketError_default,
+      'socketError_serverUnreachableDescription':
+          localizations.socketError_serverUnreachableDescription,
+      'socketError_networkUnreachableDescription':
+          localizations.socketError_networkUnreachableDescription,
+      'socketError_connectionTimedOutDescription':
+          localizations.socketError_connectionTimedOutDescription,
+      'socketError_connectionRefusedDescription':
+          localizations.socketError_connectionRefusedDescription,
+      'socketError_connectionResetDescription':
+          localizations.socketError_connectionResetDescription,
+      'default_UnknownExceptionError': (error) =>
+          localizations.default_UnknownExceptionError(error),
       'favorites_SnackBar_deleted': (name) =>
           localizations.favorites_SnackBar_deleted(name),
       'login_Button_otpSigninVerifyRepeatInterval': (seconds) =>
@@ -840,6 +902,18 @@ class AppLocalizationsMapper {
           (actual, supportedConstraint) => localizations
               .main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError(
                   actual, supportedConstraint),
+      'notifications_errorSnackBar_signalingDisconnectWithSystemReason':
+          (reason) => localizations
+              .notifications_errorSnackBar_signalingDisconnectWithSystemReason(
+                  reason),
+      'notifications_errorSnackBar_signalingDisconnectWithCodeName':
+          (codeName) => localizations
+              .notifications_errorSnackBar_signalingDisconnectWithCodeName(
+                  codeName),
+      'notifications_errorSnackBar_sipRegistrationFailed_WithSystemReason':
+          (reason) => localizations
+              .notifications_errorSnackBar_sipRegistrationFailed_WithSystemReason(
+                  reason),
       'recents_BodyCenter_empty': (filter) =>
           localizations.recents_BodyCenter_empty(filter),
       'recents_snackBar_deleted': (name) =>
@@ -852,6 +926,8 @@ class AppLocalizationsMapper {
           localizations.user_agreement_checkbox_text(url),
       'user_agreement_description': (appName) =>
           localizations.user_agreement_description(appName),
+      'socketError_defaultDescription': (errorCode) =>
+          localizations.socketError_defaultDescription(errorCode),
     };
   }
 }

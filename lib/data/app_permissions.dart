@@ -5,8 +5,6 @@ import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/models/models.dart';
 
-import 'feature_access.dart';
-
 export 'package:permission_handler/permission_handler.dart' show Permission, PermissionStatus;
 
 class AppPermissions {

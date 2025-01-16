@@ -43,6 +43,10 @@ abstract class AppPreferences {
 
   Future<bool> setUserAgreementAccepted(bool value);
 
+  Future<bool> setContactsAgreementAccepted(AgreementStatus value);
+
+  AgreementStatus getContactsAgreementAccepted({AgreementStatus defaultValue = AgreementStatus.pending});
+
   IncomingCallType getIncomingCallType({IncomingCallType defaultValue});
 
   Future<bool> setIncomingCallType(IncomingCallType value);
@@ -232,9 +236,11 @@ class AppPreferencesImpl with SystemInfoJsonMapper implements AppPreferences {
   @override
   bool getUserAgreementAccepted() => _sharedPreferences.getBool(_kUserAgreementAcceptedKey) ?? false;
 
+  @override
   Future<bool> setContactsAgreementAccepted(AgreementStatus value) =>
       _sharedPreferences.setString(_kContactsAgreementAcceptedKey, value.name);
 
+  @override
   AgreementStatus getContactsAgreementAccepted({AgreementStatus defaultValue = AgreementStatus.pending}) {
     final agreementStatusString = _sharedPreferences.getString(_kContactsAgreementAcceptedKey);
     if (agreementStatusString != null) {
@@ -248,6 +254,7 @@ class AppPreferencesImpl with SystemInfoJsonMapper implements AppPreferences {
     }
   }
 
+  @override
   Future<bool> setIncomingCallType(IncomingCallType value) =>
       _sharedPreferences.setString(_kIncomingCallTypeKey, value.name);
 
