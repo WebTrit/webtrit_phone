@@ -53,7 +53,7 @@ class _AppState extends State<App> {
       appBloc,
       widget.appPermissions,
       featureAccess.loginFeature.launchLoginPage,
-      featureAccess.bottomMenuFeature.activeTab,
+      featureAccess.bottomMenuFeature,
     );
   }
 

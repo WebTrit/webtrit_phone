@@ -273,19 +273,19 @@ mixin _$AppAgreementAccepted {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() userAgreementAccepted,
-    required TResult Function() contactsAgreementAccepted,
+    required TResult Function(AgreementStatus status) updateContactsAgreement,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? userAgreementAccepted,
-    TResult? Function()? contactsAgreementAccepted,
+    TResult? Function(AgreementStatus status)? updateContactsAgreement,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? userAgreementAccepted,
-    TResult Function()? contactsAgreementAccepted,
+    TResult Function(AgreementStatus status)? updateContactsAgreement,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -293,22 +293,22 @@ mixin _$AppAgreementAccepted {
   TResult map<TResult extends Object?>({
     required TResult Function(_UserAppAgreementAccepted value)
         userAgreementAccepted,
-    required TResult Function(_ContactsAppAgreementAccepted value)
-        contactsAgreementAccepted,
+    required TResult Function(_ContactsAppAgreementUpdate value)
+        updateContactsAgreement,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_UserAppAgreementAccepted value)? userAgreementAccepted,
-    TResult? Function(_ContactsAppAgreementAccepted value)?
-        contactsAgreementAccepted,
+    TResult? Function(_ContactsAppAgreementUpdate value)?
+        updateContactsAgreement,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_UserAppAgreementAccepted value)? userAgreementAccepted,
-    TResult Function(_ContactsAppAgreementAccepted value)?
-        contactsAgreementAccepted,
+    TResult Function(_ContactsAppAgreementUpdate value)?
+        updateContactsAgreement,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -338,7 +338,7 @@ class _$UserAppAgreementAcceptedImpl implements _UserAppAgreementAccepted {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() userAgreementAccepted,
-    required TResult Function() contactsAgreementAccepted,
+    required TResult Function(AgreementStatus status) updateContactsAgreement,
   }) {
     return userAgreementAccepted();
   }
@@ -347,7 +347,7 @@ class _$UserAppAgreementAcceptedImpl implements _UserAppAgreementAccepted {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? userAgreementAccepted,
-    TResult? Function()? contactsAgreementAccepted,
+    TResult? Function(AgreementStatus status)? updateContactsAgreement,
   }) {
     return userAgreementAccepted?.call();
   }
@@ -356,7 +356,7 @@ class _$UserAppAgreementAcceptedImpl implements _UserAppAgreementAccepted {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? userAgreementAccepted,
-    TResult Function()? contactsAgreementAccepted,
+    TResult Function(AgreementStatus status)? updateContactsAgreement,
     required TResult orElse(),
   }) {
     if (userAgreementAccepted != null) {
@@ -370,8 +370,8 @@ class _$UserAppAgreementAcceptedImpl implements _UserAppAgreementAccepted {
   TResult map<TResult extends Object?>({
     required TResult Function(_UserAppAgreementAccepted value)
         userAgreementAccepted,
-    required TResult Function(_ContactsAppAgreementAccepted value)
-        contactsAgreementAccepted,
+    required TResult Function(_ContactsAppAgreementUpdate value)
+        updateContactsAgreement,
   }) {
     return userAgreementAccepted(this);
   }
@@ -380,8 +380,8 @@ class _$UserAppAgreementAcceptedImpl implements _UserAppAgreementAccepted {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_UserAppAgreementAccepted value)? userAgreementAccepted,
-    TResult? Function(_ContactsAppAgreementAccepted value)?
-        contactsAgreementAccepted,
+    TResult? Function(_ContactsAppAgreementUpdate value)?
+        updateContactsAgreement,
   }) {
     return userAgreementAccepted?.call(this);
   }
@@ -390,8 +390,8 @@ class _$UserAppAgreementAcceptedImpl implements _UserAppAgreementAccepted {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_UserAppAgreementAccepted value)? userAgreementAccepted,
-    TResult Function(_ContactsAppAgreementAccepted value)?
-        contactsAgreementAccepted,
+    TResult Function(_ContactsAppAgreementUpdate value)?
+        updateContactsAgreement,
     required TResult orElse(),
   }) {
     if (userAgreementAccepted != null) {
@@ -407,52 +407,55 @@ abstract class _UserAppAgreementAccepted implements AppAgreementAccepted {
 
 /// @nodoc
 
-class _$ContactsAppAgreementAcceptedImpl
-    implements _ContactsAppAgreementAccepted {
-  const _$ContactsAppAgreementAcceptedImpl();
+class _$ContactsAppAgreementUpdateImpl implements _ContactsAppAgreementUpdate {
+  const _$ContactsAppAgreementUpdateImpl(this.status);
+
+  @override
+  final AgreementStatus status;
 
   @override
   String toString() {
-    return 'AppAgreementAccepted.contactsAgreementAccepted()';
+    return 'AppAgreementAccepted.updateContactsAgreement(status: $status)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$ContactsAppAgreementAcceptedImpl);
+            other is _$ContactsAppAgreementUpdateImpl &&
+            (identical(other.status, status) || other.status == status));
   }
 
   @override
-  int get hashCode => runtimeType.hashCode;
+  int get hashCode => Object.hash(runtimeType, status);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() userAgreementAccepted,
-    required TResult Function() contactsAgreementAccepted,
+    required TResult Function(AgreementStatus status) updateContactsAgreement,
   }) {
-    return contactsAgreementAccepted();
+    return updateContactsAgreement(status);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? userAgreementAccepted,
-    TResult? Function()? contactsAgreementAccepted,
+    TResult? Function(AgreementStatus status)? updateContactsAgreement,
   }) {
-    return contactsAgreementAccepted?.call();
+    return updateContactsAgreement?.call(status);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? userAgreementAccepted,
-    TResult Function()? contactsAgreementAccepted,
+    TResult Function(AgreementStatus status)? updateContactsAgreement,
     required TResult orElse(),
   }) {
-    if (contactsAgreementAccepted != null) {
-      return contactsAgreementAccepted();
+    if (updateContactsAgreement != null) {
+      return updateContactsAgreement(status);
     }
     return orElse();
   }
@@ -462,40 +465,42 @@ class _$ContactsAppAgreementAcceptedImpl
   TResult map<TResult extends Object?>({
     required TResult Function(_UserAppAgreementAccepted value)
         userAgreementAccepted,
-    required TResult Function(_ContactsAppAgreementAccepted value)
-        contactsAgreementAccepted,
+    required TResult Function(_ContactsAppAgreementUpdate value)
+        updateContactsAgreement,
   }) {
-    return contactsAgreementAccepted(this);
+    return updateContactsAgreement(this);
   }
 
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_UserAppAgreementAccepted value)? userAgreementAccepted,
-    TResult? Function(_ContactsAppAgreementAccepted value)?
-        contactsAgreementAccepted,
+    TResult? Function(_ContactsAppAgreementUpdate value)?
+        updateContactsAgreement,
   }) {
-    return contactsAgreementAccepted?.call(this);
+    return updateContactsAgreement?.call(this);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_UserAppAgreementAccepted value)? userAgreementAccepted,
-    TResult Function(_ContactsAppAgreementAccepted value)?
-        contactsAgreementAccepted,
+    TResult Function(_ContactsAppAgreementUpdate value)?
+        updateContactsAgreement,
     required TResult orElse(),
   }) {
-    if (contactsAgreementAccepted != null) {
-      return contactsAgreementAccepted(this);
+    if (updateContactsAgreement != null) {
+      return updateContactsAgreement(this);
     }
     return orElse();
   }
 }
 
-abstract class _ContactsAppAgreementAccepted implements AppAgreementAccepted {
-  const factory _ContactsAppAgreementAccepted() =
-      _$ContactsAppAgreementAcceptedImpl;
+abstract class _ContactsAppAgreementUpdate implements AppAgreementAccepted {
+  const factory _ContactsAppAgreementUpdate(final AgreementStatus status) =
+      _$ContactsAppAgreementUpdateImpl;
+
+  AgreementStatus get status;
 }
 
 /// @nodoc
@@ -509,7 +514,8 @@ mixin _$AppState {
   ThemeMode get themeMode => throw _privateConstructorUsedError;
   Locale get locale => throw _privateConstructorUsedError;
   bool get userAgreementAccepted => throw _privateConstructorUsedError;
-  bool get contactsAgreementUnaccepted => throw _privateConstructorUsedError;
+  AgreementStatus get contactsAgreementStatus =>
+      throw _privateConstructorUsedError;
 
   /// Create a copy of AppState
   /// with the given fields replaced by the non-null parameter values.
@@ -533,7 +539,7 @@ abstract class $AppStateCopyWith<$Res> {
       ThemeMode themeMode,
       Locale locale,
       bool userAgreementAccepted,
-      bool contactsAgreementUnaccepted});
+      AgreementStatus contactsAgreementStatus});
 
   $ThemeSettingsCopyWith<$Res> get themeSettings;
 }
@@ -562,7 +568,7 @@ class _$AppStateCopyWithImpl<$Res, $Val extends AppState>
     Object? themeMode = null,
     Object? locale = null,
     Object? userAgreementAccepted = null,
-    Object? contactsAgreementUnaccepted = null,
+    Object? contactsAgreementStatus = null,
   }) {
     return _then(_value.copyWith(
       coreUrl: freezed == coreUrl
@@ -601,10 +607,10 @@ class _$AppStateCopyWithImpl<$Res, $Val extends AppState>
           ? _value.userAgreementAccepted
           : userAgreementAccepted // ignore: cast_nullable_to_non_nullable
               as bool,
-      contactsAgreementUnaccepted: null == contactsAgreementUnaccepted
-          ? _value.contactsAgreementUnaccepted
-          : contactsAgreementUnaccepted // ignore: cast_nullable_to_non_nullable
-              as bool,
+      contactsAgreementStatus: null == contactsAgreementStatus
+          ? _value.contactsAgreementStatus
+          : contactsAgreementStatus // ignore: cast_nullable_to_non_nullable
+              as AgreementStatus,
     ) as $Val);
   }
 
@@ -637,7 +643,7 @@ abstract class _$$AppStateImplCopyWith<$Res>
       ThemeMode themeMode,
       Locale locale,
       bool userAgreementAccepted,
-      bool contactsAgreementUnaccepted});
+      AgreementStatus contactsAgreementStatus});
 
   @override
   $ThemeSettingsCopyWith<$Res> get themeSettings;
@@ -665,7 +671,7 @@ class __$$AppStateImplCopyWithImpl<$Res>
     Object? themeMode = null,
     Object? locale = null,
     Object? userAgreementAccepted = null,
-    Object? contactsAgreementUnaccepted = null,
+    Object? contactsAgreementStatus = null,
   }) {
     return _then(_$AppStateImpl(
       coreUrl: freezed == coreUrl
@@ -704,10 +710,10 @@ class __$$AppStateImplCopyWithImpl<$Res>
           ? _value.userAgreementAccepted
           : userAgreementAccepted // ignore: cast_nullable_to_non_nullable
               as bool,
-      contactsAgreementUnaccepted: null == contactsAgreementUnaccepted
-          ? _value.contactsAgreementUnaccepted
-          : contactsAgreementUnaccepted // ignore: cast_nullable_to_non_nullable
-              as bool,
+      contactsAgreementStatus: null == contactsAgreementStatus
+          ? _value.contactsAgreementStatus
+          : contactsAgreementStatus // ignore: cast_nullable_to_non_nullable
+              as AgreementStatus,
     ));
   }
 }
@@ -725,7 +731,7 @@ class _$AppStateImpl extends _AppState {
       required this.themeMode,
       required this.locale,
       required this.userAgreementAccepted,
-      required this.contactsAgreementUnaccepted})
+      required this.contactsAgreementStatus})
       : super._();
 
   @override
@@ -747,11 +753,11 @@ class _$AppStateImpl extends _AppState {
   @override
   final bool userAgreementAccepted;
   @override
-  final bool contactsAgreementUnaccepted;
+  final AgreementStatus contactsAgreementStatus;
 
   @override
   String toString() {
-    return 'AppState(coreUrl: $coreUrl, tenantId: $tenantId, token: $token, userId: $userId, accountErrorCode: $accountErrorCode, themeSettings: $themeSettings, themeMode: $themeMode, locale: $locale, userAgreementAccepted: $userAgreementAccepted, contactsAgreementUnaccepted: $contactsAgreementUnaccepted)';
+    return 'AppState(coreUrl: $coreUrl, tenantId: $tenantId, token: $token, userId: $userId, accountErrorCode: $accountErrorCode, themeSettings: $themeSettings, themeMode: $themeMode, locale: $locale, userAgreementAccepted: $userAgreementAccepted, contactsAgreementStatus: $contactsAgreementStatus)';
   }
 
   @override
@@ -773,10 +779,9 @@ class _$AppStateImpl extends _AppState {
             (identical(other.locale, locale) || other.locale == locale) &&
             (identical(other.userAgreementAccepted, userAgreementAccepted) ||
                 other.userAgreementAccepted == userAgreementAccepted) &&
-            (identical(other.contactsAgreementUnaccepted,
-                    contactsAgreementUnaccepted) ||
-                other.contactsAgreementUnaccepted ==
-                    contactsAgreementUnaccepted));
+            (identical(
+                    other.contactsAgreementStatus, contactsAgreementStatus) ||
+                other.contactsAgreementStatus == contactsAgreementStatus));
   }
 
   @override
@@ -791,7 +796,7 @@ class _$AppStateImpl extends _AppState {
       themeMode,
       locale,
       userAgreementAccepted,
-      contactsAgreementUnaccepted);
+      contactsAgreementStatus);
 
   /// Create a copy of AppState
   /// with the given fields replaced by the non-null parameter values.
@@ -813,7 +818,7 @@ abstract class _AppState extends AppState {
       required final ThemeMode themeMode,
       required final Locale locale,
       required final bool userAgreementAccepted,
-      required final bool contactsAgreementUnaccepted}) = _$AppStateImpl;
+      required final AgreementStatus contactsAgreementStatus}) = _$AppStateImpl;
   const _AppState._() : super._();
 
   @override
@@ -835,7 +840,7 @@ abstract class _AppState extends AppState {
   @override
   bool get userAgreementAccepted;
   @override
-  bool get contactsAgreementUnaccepted;
+  AgreementStatus get contactsAgreementStatus;
 
   /// Create a copy of AppState
   /// with the given fields replaced by the non-null parameter values.

@@ -28,14 +28,14 @@ class AppRouter extends _$AppRouter {
     this._appBloc,
     this._appPermissions,
     this._launchLoginEmbedded,
-    this._initialBottomMenuTab,
+    this._bottomMenuFeature,
   );
 
   final AppBloc _appBloc;
   final AppPermissions _appPermissions;
 
   final LoginEmbedded? _launchLoginEmbedded;
-  final BottomMenuTab _initialBottomMenuTab;
+  final BottomMenuFeature _bottomMenuFeature;
 
   String? get coreUrl => _appBloc.state.coreUrl;
 
@@ -47,7 +47,7 @@ class AppRouter extends _$AppRouter {
 
   bool get appUserAgreementUnaccepted => _appBloc.state.userAgreementAccepted != true;
 
-  bool get appContactsAgreementUnaccepted => _appBloc.state.contactsAgreementUnaccepted != true;
+  bool get appContactsAgreementUnaccepted => _appBloc.state.contactsAgreementStatus.isPending;
 
   bool get appLoggedIn => coreUrl != null && token != null && userId != null;
 
@@ -154,14 +154,14 @@ class AppRouter extends _$AppRouter {
                     AutoRouteGuard.redirect(
                       (resolver) => EmbeddedScreenPage.getPageRouteInfo(
                         resolver.route,
-                        _initialBottomMenuTab.data,
+                        _bottomMenuFeature.activeTab.data,
                       ),
                     ),
                   ],
                   children: [
                     RedirectRoute(
                       path: '',
-                      redirectTo: _initialBottomMenuTab.flavor.name,
+                      redirectTo: _bottomMenuFeature.activeTab.flavor.name,
                     ),
                     AutoRoute(
                       page: FavoritesRouterPageRoute.page,
@@ -203,7 +203,7 @@ class AppRouter extends _$AppRouter {
                             AutoRouteGuard.redirect(
                               (resolver) => ContactsScreenPage.getPageRouteInfo(
                                 resolver.route,
-                                () => _initialBottomMenuTab.toContacts.contactSourceTypes,
+                                () => _bottomMenuFeature.activeTab.toContacts?.contactSourceTypes ?? [],
                               ),
                             ),
                           ],
@@ -382,12 +382,15 @@ class AppRouter extends _$AppRouter {
     _logger.fine(_onNavigationLoggerMessage('onMainShellRouteGuardNavigation', resolver));
 
     if (appLoggedIn) {
+      final contactsSourceTypes = _bottomMenuFeature.getTabEnabled(MainFlavor.contacts)?.toContacts?.contactSourceTypes;
+      final localContactsSourceTypeEnabled = contactsSourceTypes?.contains(ContactSourceType.local) == true;
+
       if (appUserAgreementUnaccepted) {
         resolver.next(false);
         router.replaceAll(
           [const UserAgreementScreenPageRoute()],
         );
-      } else if (appContactsAgreementUnaccepted) {
+      } else if (appContactsAgreementUnaccepted && localContactsSourceTypeEnabled) {
         resolver.next(false);
         router.replaceAll(
           [const ContactsAgreementScreenPageRoute()],

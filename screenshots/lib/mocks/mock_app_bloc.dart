@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:bloc_test/bloc_test.dart';
 
 import 'package:webtrit_phone/blocs/blocs.dart';
+import 'package:webtrit_phone/models/agreement_status.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 
 class MockAppBloc extends MockBloc<AppEvent, AppState> implements AppBloc {
@@ -22,7 +23,7 @@ class MockAppBloc extends MockBloc<AppEvent, AppState> implements AppBloc {
         themeMode: themeMode,
         locale: locale,
         userAgreementAccepted: false,
-        contactsAgreementUnaccepted: false,
+        contactsAgreementStatus: AgreementStatus.pending,
       ),
     );
     return mock;
