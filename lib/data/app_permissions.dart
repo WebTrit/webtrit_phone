@@ -2,6 +2,7 @@ import 'package:permission_handler/permission_handler.dart';
 
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 
+import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/models/main_flavor.dart';
 
 import 'feature_access.dart';
@@ -17,6 +18,8 @@ class AppPermissions {
 
   static Future<AppPermissions> init() async {
     final featureAccess = FeatureAccess();
+    // TODO(Serdun): Move to parameter after merge to develop
+    final appPreferences = AppPreferences();
 
     final specialStatuses = await Future.wait(_specialPermissions.map((permission) => permission.status()));
 
@@ -24,7 +27,10 @@ class AppPermissions {
     final permissions = [
       Permission.microphone,
       Permission.camera,
-      if (featureAccess.bottomMenuFeature.isTabEnabled(MainFlavor.contacts)) Permission.contacts,
+      //TODO(Serdun): Simplify after merge to develop
+      if (featureAccess.bottomMenuFeature.isTabEnabled(MainFlavor.contacts) &&
+          appPreferences.getContactsAgreementAccepted())
+        Permission.contacts,
     ];
 
     final statuses = await Future.wait(permissions.map((permission) => permission.status));
