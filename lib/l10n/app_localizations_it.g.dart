@@ -1331,6 +1331,18 @@ class AppLocalizationsIt extends AppLocalizations {
   String get webRegistration_ErrorAcknowledgeDialogActions_retry => 'Retry';
 
   @override
+  String get contacts_agreement_title => 'Data collection';
+
+  @override
+  String get contacts_agreement_description => 'This app requires access to your contact list to display your contacts in the app\'s Contacts tab. \n\nThe contact data is temporarily stored locally on your device to enable features like making calls directly from the app. \n\nThis data is not collected, transmitted, or shared outside the app.';
+
+  @override
+  String get contacts_agreement_checkbox_text => 'I agree to allow the app to access my contacts to enhance my user experience.';
+
+  @override
+  String get contacts_agreement_button_text => 'Continue';
+
+  @override
   String get webRegistration_ErrorAcknowledgeDialogActions_skip => 'Skip';
 
   @override
