@@ -84,6 +84,12 @@ abstract class _$AppRouter extends RootStackRouter {
         child: ContactScreenPage(args.contactId),
       );
     },
+    ContactsAgreementScreenPageRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: ContactsAgreementScreenPage(),
+      );
+    },
     ContactsRouterPageRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -567,6 +573,20 @@ class ContactScreenPageRouteArgs {
   String toString() {
     return 'ContactScreenPageRouteArgs{contactId: $contactId}';
   }
+}
+
+/// generated route for
+/// [ContactsAgreementScreenPage]
+class ContactsAgreementScreenPageRoute extends PageRouteInfo<void> {
+  const ContactsAgreementScreenPageRoute({List<PageRouteInfo>? children})
+      : super(
+          ContactsAgreementScreenPageRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'ContactsAgreementScreenPageRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
 }
 
 /// generated route for

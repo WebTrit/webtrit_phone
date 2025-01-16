@@ -47,6 +47,8 @@ class AppRouter extends _$AppRouter {
 
   bool get appUserAgreementUnaccepted => _appBloc.state.userAgreementAccepted != true;
 
+  bool get appContactsAgreementUnaccepted => _appBloc.state.contactsAgreementUnaccepted != true;
+
   bool get appLoggedIn => coreUrl != null && token != null && userId != null;
 
   @override
@@ -127,6 +129,11 @@ class AppRouter extends _$AppRouter {
               page: UserAgreementScreenPageRoute.page,
               onNavigation: onUserAgreementScreenPageRouteGuardNavigation,
               path: 'user-agreement',
+            ),
+            AutoRoute.guarded(
+              page: ContactsAgreementScreenPageRoute.page,
+              onNavigation: onContactsAgreementScreenPageRouteGuardNavigation,
+              path: 'contacts-agreement',
             ),
             AutoRoute.guarded(
               page: AutoprovisionScreenPageRoute.page,
@@ -342,9 +349,22 @@ class AppRouter extends _$AppRouter {
   }
 
   void onUserAgreementScreenPageRouteGuardNavigation(NavigationResolver resolver, StackRouter router) {
-    _logger.fine(_onNavigationLoggerMessage('onPermissionsScreenPageRouteGuardNavigation', resolver));
+    _logger.fine(_onNavigationLoggerMessage('onUserAgreementScreenPageRouteGuardNavigation', resolver));
 
     if (appUserAgreementUnaccepted) {
+      resolver.next(true);
+    } else {
+      resolver.next(false);
+      router.replaceAll(
+        [const MainShellRoute()],
+      );
+    }
+  }
+
+  void onContactsAgreementScreenPageRouteGuardNavigation(NavigationResolver resolver, StackRouter router) {
+    _logger.fine(_onNavigationLoggerMessage('onContactsAgreementScreenPageRouteGuardNavigation', resolver));
+
+    if (appContactsAgreementUnaccepted) {
       resolver.next(true);
     } else {
       resolver.next(false);
@@ -362,6 +382,11 @@ class AppRouter extends _$AppRouter {
         resolver.next(false);
         router.replaceAll(
           [const UserAgreementScreenPageRoute()],
+        );
+      } else if (appContactsAgreementUnaccepted) {
+        resolver.next(false);
+        router.replaceAll(
+          [const ContactsAgreementScreenPageRoute()],
         );
       } else if (appPermissionsDenied) {
         resolver.next(false);

@@ -38,6 +38,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
           themeMode: appPreferences.getThemeMode(),
           locale: appPreferences.getLocale(),
           userAgreementAccepted: appPreferences.getUserAgreementAccepted(),
+          contactsAgreementUnaccepted: appPreferences.getContactsAgreementAccepted(),
         )) {
     on<AppLogined>(_onLogined, transformer: sequential());
     on<AppLogouted>(_onLogouted, transformer: sequential());
@@ -45,7 +46,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     on<AppThemeSettingsChanged>(_onThemeSettingsChanged, transformer: droppable());
     on<AppThemeModeChanged>(_onThemeModeChanged, transformer: droppable());
     on<AppLocaleChanged>(_onLocaleChanged, transformer: droppable());
-    on<AppUserAgreementAccepted>(_onUserAgreementAccepted, transformer: droppable());
+    on<AppAgreementAccepted>(_onUserAgreementAccepted, transformer: droppable());
   }
 
   final AppPreferences appPreferences;
@@ -149,8 +150,29 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     }
   }
 
-  void _onUserAgreementAccepted(AppUserAgreementAccepted event, Emitter<AppState> emit) async {
+  Future<void> _onUserAgreementAccepted(
+    AppAgreementAccepted event,
+    Emitter<AppState> emit,
+  ) {
+    return event.map(
+      userAgreementAccepted: (event) => __onUserAgreementAccepted(event, emit),
+      contactsAgreementAccepted: (event) => __onContactsAgreementAccepted(event, emit),
+    );
+  }
+
+  Future<void> __onUserAgreementAccepted(
+    _UserAppAgreementAccepted event,
+    Emitter<AppState> emit,
+  ) async {
     await appPreferences.setUserAgreementAccepted(true);
     emit(state.copyWith(userAgreementAccepted: true));
+  }
+
+  Future<void> __onContactsAgreementAccepted(
+    _ContactsAppAgreementAccepted event,
+    Emitter<AppState> emit,
+  ) async {
+    await appPreferences.setContactsAgreementAccepted(true);
+    emit(state.copyWith(contactsAgreementUnaccepted: true));
   }
 }
