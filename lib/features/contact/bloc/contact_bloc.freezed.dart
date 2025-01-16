@@ -136,8 +136,6 @@ abstract class _ContactEmailSend implements ContactEmailSend {
 /// @nodoc
 mixin _$ContactState {
   Contact? get contact => throw _privateConstructorUsedError;
-  List<ContactPhone>? get contactPhones => throw _privateConstructorUsedError;
-  List<ContactEmail>? get contactEmails => throw _privateConstructorUsedError;
 
   /// Create a copy of ContactState
   /// with the given fields replaced by the non-null parameter values.
@@ -152,10 +150,7 @@ abstract class $ContactStateCopyWith<$Res> {
           ContactState value, $Res Function(ContactState) then) =
       _$ContactStateCopyWithImpl<$Res, ContactState>;
   @useResult
-  $Res call(
-      {Contact? contact,
-      List<ContactPhone>? contactPhones,
-      List<ContactEmail>? contactEmails});
+  $Res call({Contact? contact});
 }
 
 /// @nodoc
@@ -174,22 +169,12 @@ class _$ContactStateCopyWithImpl<$Res, $Val extends ContactState>
   @override
   $Res call({
     Object? contact = freezed,
-    Object? contactPhones = freezed,
-    Object? contactEmails = freezed,
   }) {
     return _then(_value.copyWith(
       contact: freezed == contact
           ? _value.contact
           : contact // ignore: cast_nullable_to_non_nullable
               as Contact?,
-      contactPhones: freezed == contactPhones
-          ? _value.contactPhones
-          : contactPhones // ignore: cast_nullable_to_non_nullable
-              as List<ContactPhone>?,
-      contactEmails: freezed == contactEmails
-          ? _value.contactEmails
-          : contactEmails // ignore: cast_nullable_to_non_nullable
-              as List<ContactEmail>?,
     ) as $Val);
   }
 }
@@ -202,10 +187,7 @@ abstract class _$$ContactStateImplCopyWith<$Res>
       __$$ContactStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {Contact? contact,
-      List<ContactPhone>? contactPhones,
-      List<ContactEmail>? contactEmails});
+  $Res call({Contact? contact});
 }
 
 /// @nodoc
@@ -222,22 +204,12 @@ class __$$ContactStateImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? contact = freezed,
-    Object? contactPhones = freezed,
-    Object? contactEmails = freezed,
   }) {
     return _then(_$ContactStateImpl(
       contact: freezed == contact
           ? _value.contact
           : contact // ignore: cast_nullable_to_non_nullable
               as Contact?,
-      contactPhones: freezed == contactPhones
-          ? _value._contactPhones
-          : contactPhones // ignore: cast_nullable_to_non_nullable
-              as List<ContactPhone>?,
-      contactEmails: freezed == contactEmails
-          ? _value._contactEmails
-          : contactEmails // ignore: cast_nullable_to_non_nullable
-              as List<ContactEmail>?,
     ));
   }
 }
@@ -245,38 +217,14 @@ class __$$ContactStateImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$ContactStateImpl implements _ContactState {
-  const _$ContactStateImpl(
-      {this.contact,
-      final List<ContactPhone>? contactPhones,
-      final List<ContactEmail>? contactEmails})
-      : _contactPhones = contactPhones,
-        _contactEmails = contactEmails;
+  const _$ContactStateImpl({this.contact});
 
   @override
   final Contact? contact;
-  final List<ContactPhone>? _contactPhones;
-  @override
-  List<ContactPhone>? get contactPhones {
-    final value = _contactPhones;
-    if (value == null) return null;
-    if (_contactPhones is EqualUnmodifiableListView) return _contactPhones;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(value);
-  }
-
-  final List<ContactEmail>? _contactEmails;
-  @override
-  List<ContactEmail>? get contactEmails {
-    final value = _contactEmails;
-    if (value == null) return null;
-    if (_contactEmails is EqualUnmodifiableListView) return _contactEmails;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(value);
-  }
 
   @override
   String toString() {
-    return 'ContactState(contact: $contact, contactPhones: $contactPhones, contactEmails: $contactEmails)';
+    return 'ContactState(contact: $contact)';
   }
 
   @override
@@ -284,19 +232,11 @@ class _$ContactStateImpl implements _ContactState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$ContactStateImpl &&
-            (identical(other.contact, contact) || other.contact == contact) &&
-            const DeepCollectionEquality()
-                .equals(other._contactPhones, _contactPhones) &&
-            const DeepCollectionEquality()
-                .equals(other._contactEmails, _contactEmails));
+            (identical(other.contact, contact) || other.contact == contact));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      contact,
-      const DeepCollectionEquality().hash(_contactPhones),
-      const DeepCollectionEquality().hash(_contactEmails));
+  int get hashCode => Object.hash(runtimeType, contact);
 
   /// Create a copy of ContactState
   /// with the given fields replaced by the non-null parameter values.
@@ -308,17 +248,10 @@ class _$ContactStateImpl implements _ContactState {
 }
 
 abstract class _ContactState implements ContactState {
-  const factory _ContactState(
-      {final Contact? contact,
-      final List<ContactPhone>? contactPhones,
-      final List<ContactEmail>? contactEmails}) = _$ContactStateImpl;
+  const factory _ContactState({final Contact? contact}) = _$ContactStateImpl;
 
   @override
   Contact? get contact;
-  @override
-  List<ContactPhone>? get contactPhones;
-  @override
-  List<ContactEmail>? get contactEmails;
 
   /// Create a copy of ContactState
   /// with the given fields replaced by the non-null parameter values.

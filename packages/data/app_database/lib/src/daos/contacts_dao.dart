@@ -1,17 +1,25 @@
-import 'package:app_database/src/app_database.dart';
+import 'dart:async';
+
 import 'package:drift/drift.dart';
+import 'package:app_database/src/app_database.dart';
 
 part 'contacts_dao.g.dart';
 
-class ContactWithPhonesAndEmailsData {
-  ContactWithPhonesAndEmailsData({required this.contact, required this.phones, required this.emails});
+class FullContactData {
+  FullContactData({
+    required this.contact,
+    required this.phones,
+    required this.emails,
+    required this.favorites,
+  });
 
   final ContactData contact;
   final List<ContactPhoneData> phones;
   final List<ContactEmailData> emails;
+  final List<FavoriteData> favorites;
 }
 
-@DriftAccessor(tables: [ContactsTable, ContactPhonesTable, ContactEmailsTable])
+@DriftAccessor(tables: [ContactsTable, ContactPhonesTable, ContactEmailsTable, FavoritesTable])
 class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin {
   ContactsDao(super.db);
 
@@ -30,76 +38,106 @@ class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin 
           (t) => OrderingTerm.asc(t.aliasName),
         ]);
 
-  Stream<List<ContactData>> watchAllContacts([ContactSourceTypeEnum? sourceType]) =>
-      _selectAllContacts(sourceType).watch();
+  SimpleSelectStatement<$ContactsTableTable, ContactData> _selectBySource(
+          ContactSourceTypeEnum sourceType, String sourceId) =>
+      (select(contactsTable)..where((t) => t.sourceType.equalsValue(sourceType) & t.sourceId.equals(sourceId)));
 
-  Future<List<ContactData>> getAllContacts([ContactSourceTypeEnum? sourceType]) => _selectAllContacts(sourceType).get();
+  FullContactData? _gatherSingleContact(List<TypedResult> rows) {
+    if (rows.isEmpty) return null;
+    ContactData contact = rows.first.readTable(contactsTable);
+    List<ContactPhoneData> phones = [];
+    List<ContactEmailData> emails = [];
+    List<FavoriteData> favorites = [];
 
-  Future<List<ContactData>> getContactsByPhoneNumber(String number) async {
-    final query = select(contactsTable)
-        .join([innerJoin(contactPhonesTable, contactPhonesTable.contactId.equalsExp(contactsTable.id))])
-      ..groupBy([contactPhonesTable.contactId])
-      ..where(contactPhonesTable.number.equals(number));
+    for (final row in rows) {
+      final phone = row.readTableOrNull(contactPhonesTable);
+      final email = row.readTableOrNull(contactEmailsTable);
+      final favorite = row.readTableOrNull(favoritesTable);
 
-    final results = await query.get();
-    return results.map((row) => row.readTable(contactsTable)).toList();
-  }
-
-  Stream<List<ContactData>> watchAllNotEmptyContacts([ContactSourceTypeEnum? sourceType]) {
-    final q = _selectAllContacts(sourceType);
-    q.where(
-      (t) => [
-        t.lastName,
-        t.firstName,
-        t.aliasName,
-      ].map((c) => c.isNotNull() & c.equalsExp(const Constant('')).not()).reduce((v, e) => v | e),
-    );
-    return q.watch();
-  }
-
-  Stream<List<ContactData>> watchAllLikeContacts(Iterable<String> searchBits, [ContactSourceTypeEnum? sourceType]) {
-    final q = _selectAllContacts(sourceType).join([
-      leftOuterJoin(contactPhonesTable, contactPhonesTable.contactId.equalsExp(contactsTable.id)),
-    ]);
-    for (final searchBit in searchBits) {
-      q.where(
-        [
-          contactsTable.lastName,
-          contactsTable.firstName,
-          contactsTable.aliasName,
-          contactPhonesTable.number,
-        ].map((c) => c.regexp('.*$searchBit.*', caseSensitive: false)).reduce((v, e) => v | e),
-      );
+      if (phone != null && !phones.contains(phone)) phones.add(phone);
+      if (email != null && !emails.contains(email)) emails.add(email);
+      if (favorite != null && !favorites.contains(favorite)) favorites.add(favorite);
     }
-    q.groupBy([contactPhonesTable.contactId]);
-    return q.watch().map((rows) => rows.map((row) => row.readTable(contactsTable)).toList());
+
+    return FullContactData(contact: contact, phones: phones, emails: emails, favorites: favorites);
   }
 
-  Stream<ContactData> watchContact(Insertable<ContactData> contact) {
-    return (select(contactsTable)..whereSamePrimaryKey(contact)).watchSingle();
+  List<FullContactData> _gatherMultipleContacts(List<TypedResult> rows) {
+    final Map<int, FullContactData> contactMap = {};
+
+    for (final row in rows) {
+      final contact = row.readTable(contactsTable);
+      final phone = row.readTableOrNull(contactPhonesTable);
+      final email = row.readTableOrNull(contactEmailsTable);
+      final favorite = row.readTableOrNull(favoritesTable);
+
+      final contactWithPhonesAndEmails = contactMap.putIfAbsent(
+        contact.id,
+        () => FullContactData(contact: contact, phones: [], emails: [], favorites: []),
+      );
+
+      if (phone != null && !contactWithPhonesAndEmails.phones.contains(phone)) {
+        contactWithPhonesAndEmails.phones.add(phone);
+      }
+
+      if (email != null && !contactWithPhonesAndEmails.emails.contains(email)) {
+        contactWithPhonesAndEmails.emails.add(email);
+      }
+
+      if (favorite != null && !contactWithPhonesAndEmails.favorites.contains(favorite)) {
+        contactWithPhonesAndEmails.favorites.add(favorite);
+      }
+    }
+
+    return contactMap.values.toList();
   }
 
-  Stream<ContactData?> watchContactBySource(ContactSourceTypeEnum sourceType, String sourceId) {
-    return (select(contactsTable)..where((t) => t.sourceType.equalsValue(sourceType) & t.sourceId.equals(sourceId)))
-        .watchSingleOrNull();
+  JoinedSelectStatement _joinPhonesAndEmails(SimpleSelectStatement select) {
+    return select.join([
+      leftOuterJoin(contactPhonesTable, contactPhonesTable.contactId.equalsExp(contactsTable.id)),
+      leftOuterJoin(contactEmailsTable, contactEmailsTable.contactId.equalsExp(contactsTable.id)),
+      leftOuterJoin(favoritesTable, favoritesTable.contactPhoneId.equalsExp(contactPhonesTable.id)),
+    ]);
   }
 
-  Future<ContactData?> getContactBySource(ContactSourceTypeEnum sourceType, String sourceId) {
-    return (select(contactsTable)..where((t) => t.sourceType.equalsValue(sourceType) & t.sourceId.equals(sourceId)))
-        .getSingleOrNull();
+  Future<FullContactData?> getContactByPhoneNumber(String number) async {
+    final query = _joinPhonesAndEmails(select(contactsTable))
+      ..where(contactPhonesTable.number.equals(number))
+      ..limit(1);
+
+    return query.get().then(_gatherSingleContact);
   }
 
-  Stream<List<ContactWithPhonesAndEmailsData>> watchAllContactsExt([
+  Stream<FullContactData?> watchContact(int id) {
+    final s = (select(contactsTable)..where((t) => t.id.equals(id)));
+    final query = _joinPhonesAndEmails(s);
+    return query.watch().map(_gatherSingleContact);
+  }
+
+  Future<FullContactData?> getContactBySource(ContactSourceTypeEnum sourceType, String sourceId) {
+    final query = _joinPhonesAndEmails(_selectBySource(sourceType, sourceId));
+    return query.get().then(_gatherSingleContact);
+  }
+
+  Stream<FullContactData?> watchContactBySource(ContactSourceTypeEnum sourceType, String sourceId) {
+    final query = _joinPhonesAndEmails(_selectBySource(sourceType, sourceId));
+    return query.watch().map(_gatherSingleContact);
+  }
+
+  Future<List<FullContactData>> getAllContacts([ContactSourceTypeEnum? sourceType]) async {
+    final query = _joinPhonesAndEmails(_selectAllContacts(sourceType));
+    final rows = await query.get();
+    return _gatherMultipleContacts(rows);
+  }
+
+  Stream<List<FullContactData>> watchAllContacts([
     Iterable<String>? searchBits,
     ContactSourceTypeEnum? sourceType,
   ]) {
-    final q = _selectAllContacts(sourceType).join([
-      leftOuterJoin(contactPhonesTable, contactPhonesTable.contactId.equalsExp(contactsTable.id)),
-      leftOuterJoin(contactEmailsTable, contactEmailsTable.contactId.equalsExp(contactsTable.id)),
-    ]);
+    final query = _joinPhonesAndEmails(_selectAllContacts(sourceType));
 
     if (searchBits != null) {
-      q.where(
+      query.where(
         searchBits.map((searchBit) {
           return [
             contactsTable.lastName,
@@ -112,61 +150,16 @@ class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin 
       );
     }
 
-    return q.watch().map((rows) {
-      final Map<int, ContactWithPhonesAndEmailsData> contactMap = {};
-
-      for (final row in rows) {
-        final contact = row.readTable(contactsTable);
-        final phone = row.readTableOrNull(contactPhonesTable);
-        final email = row.readTableOrNull(contactEmailsTable);
-
-        final contactWithPhonesAndEmails = contactMap.putIfAbsent(
-          contact.id,
-          () => ContactWithPhonesAndEmailsData(
-            contact: contact,
-            phones: [],
-            emails: [],
-          ),
-        );
-
-        if (phone != null && !contactWithPhonesAndEmails.phones.contains(phone)) {
-          contactWithPhonesAndEmails.phones.add(phone);
-        }
-
-        if (email != null && !contactWithPhonesAndEmails.emails.contains(email)) {
-          contactWithPhonesAndEmails.emails.add(email);
-        }
-      }
-
-      return contactMap.values.toList();
-    });
+    return query.watch().map(_gatherMultipleContacts);
   }
 
-  Stream<ContactWithPhonesAndEmailsData?> watchContactExtBySource(ContactSourceTypeEnum sourceType, String sourceId) {
-    final q =
-        (select(contactsTable)..where((t) => t.sourceType.equalsValue(sourceType) & t.sourceId.equals(sourceId))).join(
-      [
-        leftOuterJoin(contactPhonesTable, contactPhonesTable.contactId.equalsExp(contactsTable.id)),
-        leftOuterJoin(contactEmailsTable, contactEmailsTable.contactId.equalsExp(contactsTable.id)),
-      ],
-    );
+  Future<Set<String>> getContactsSourceIds(ContactSourceTypeEnum sourceType) async {
+    final query = selectOnly(contactsTable);
+    query.addColumns([contactsTable.id, contactsTable.sourceId, contactsTable.sourceType]);
+    query.where(contactsTable.sourceType.equals(sourceType.index));
 
-    return q.watch().map((rows) {
-      if (rows.isEmpty) return null;
-      ContactData contact = rows.first.readTable(contactsTable);
-      List<ContactPhoneData> phones = [];
-      List<ContactEmailData> emails = [];
-
-      for (final row in rows) {
-        final phone = row.readTableOrNull(contactPhonesTable);
-        final email = row.readTableOrNull(contactEmailsTable);
-
-        if (phone != null && !phones.contains(phone)) phones.add(phone);
-        if (email != null && !emails.contains(email)) emails.add(email);
-      }
-
-      return ContactWithPhonesAndEmailsData(contact: contact, phones: phones, emails: emails);
-    });
+    final rows = await query.get();
+    return rows.map((row) => row.read(contactsTable.sourceId)).nonNulls.toSet();
   }
 
   Future<ContactData> insertOnUniqueConflictUpdateContact(Insertable<ContactData> contact) {
