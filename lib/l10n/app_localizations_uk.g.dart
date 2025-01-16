@@ -1411,6 +1411,18 @@ class AppLocalizationsUk extends AppLocalizations {
   String get webRegistration_ErrorAcknowledgeDialogActions_retry => 'Retry';
 
   @override
+  String get contacts_agreement_title => 'Збір даних';
+
+  @override
+  String get contacts_agreement_description => 'Цей додаток потребує доступу до вашого списку контактів, щоб відображати їх у вкладці «Контакти» додатку. \n\nДані контактів тимчасово зберігаються локально на вашому пристрої для забезпечення функцій, таких як здійснення дзвінків прямо з додатку. \n\nЦі дані не збираються, не передаються та не поширюються за межами додатку.';
+
+  @override
+  String get contacts_agreement_checkbox_text => 'Я погоджуюсь дозволити додатку доступ до моїх контактів для покращення користувацького досвіду.';
+
+  @override
+  String get contacts_agreement_button_text => 'Продовжити';
+
+  @override
   String get webRegistration_ErrorAcknowledgeDialogActions_skip => 'Skip';
 
   @override

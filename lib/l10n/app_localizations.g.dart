@@ -2809,6 +2809,30 @@ abstract class AppLocalizations {
   /// **'Retry'**
   String get webRegistration_ErrorAcknowledgeDialogActions_retry;
 
+  /// No description provided for @contacts_agreement_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Data collection'**
+  String get contacts_agreement_title;
+
+  /// No description provided for @contacts_agreement_description.
+  ///
+  /// In en, this message translates to:
+  /// **'This app requires access to your contact list to display your contacts in the app\'s Contacts tab. \n\nThe contact data is temporarily stored locally on your device to enable features like making calls directly from the app. \n\nThis data is not collected, transmitted, or shared outside the app.'**
+  String get contacts_agreement_description;
+
+  /// No description provided for @contacts_agreement_checkbox_text.
+  ///
+  /// In en, this message translates to:
+  /// **'I agree to allow the app to access my contacts to enhance my user experience.'**
+  String get contacts_agreement_checkbox_text;
+
+  /// No description provided for @contacts_agreement_button_text.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get contacts_agreement_button_text;
+
   /// No description provided for @webRegistration_ErrorAcknowledgeDialogActions_skip.
   ///
   /// In en, this message translates to:

@@ -3,6 +3,7 @@ export 'call/call.dart';
 export 'call_to_actions/call_to_actions.dart';
 export 'contact/contact.dart';
 export 'contacts/contacts.dart';
+export 'contacts_agreement/contacts_agreement.dart';
 export 'embedded/exports.dart';
 export 'favorites/favorites.dart';
 export 'keypad/keypad.dart';

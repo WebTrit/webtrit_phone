@@ -80,6 +80,7 @@ class AppPreferencesImpl with SystemInfoJsonMapper implements AppPreferences {
   static const _kActiveRecentsVisibilityFilterKey = 'active-recents-visibility-filter';
   static const _kActiveContactSourceTypeKey = 'active-contact-source-type';
   static const _kUserAgreementAcceptedKey = 'user-agreement-accepted';
+  static const _kContactsAgreementAcceptedKey = 'contacts-agreement-accepted';
   static const _kIncomingCallTypeKey = 'call-incoming-type';
   static const _kSystemInfoKey = 'system-info';
   static const _kPreferedAudioCodecKey = 'prefered-audio-codec';
@@ -94,6 +95,7 @@ class AppPreferencesImpl with SystemInfoJsonMapper implements AppPreferences {
     _kActiveRecentsVisibilityFilterKey,
     _kActiveContactSourceTypeKey,
     _kUserAgreementAcceptedKey,
+    _kContactsAgreementAcceptedKey,
     _kIncomingCallTypeKey,
     _kSystemInfoKey,
     _kPreferedAudioCodecKey,
@@ -103,6 +105,7 @@ class AppPreferencesImpl with SystemInfoJsonMapper implements AppPreferences {
   // List of preferences keys to exclude by default during clean operation
   static const List<String> _defaultCleanExclusionList = [
     _kUserAgreementAcceptedKey,
+    _kContactsAgreementAcceptedKey,
   ];
 
   final SharedPreferences _sharedPreferences;
@@ -229,7 +232,11 @@ class AppPreferencesImpl with SystemInfoJsonMapper implements AppPreferences {
   @override
   bool getUserAgreementAccepted() => _sharedPreferences.getBool(_kUserAgreementAcceptedKey) ?? false;
 
-  @override
+  Future<bool> setContactsAgreementAccepted(bool value) =>
+      _sharedPreferences.setBool(_kContactsAgreementAcceptedKey, value);
+
+  bool getContactsAgreementAccepted() => _sharedPreferences.getBool(_kContactsAgreementAcceptedKey) ?? false;
+
   Future<bool> setIncomingCallType(IncomingCallType value) =>
       _sharedPreferences.setString(_kIncomingCallTypeKey, value.name);
 
