@@ -38,7 +38,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
           themeMode: appPreferences.getThemeMode(),
           locale: appPreferences.getLocale(),
           userAgreementAccepted: appPreferences.getUserAgreementAccepted(),
-          contactsAgreementUnaccepted: appPreferences.getContactsAgreementAccepted(),
+          contactsAgreementStatus: appPreferences.getContactsAgreementAccepted(),
         )) {
     on<AppLogined>(_onLogined, transformer: sequential());
     on<AppLogouted>(_onLogouted, transformer: sequential());
@@ -155,9 +155,8 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     Emitter<AppState> emit,
   ) {
     return event.map(
-      userAgreementAccepted: (event) => __onUserAgreementAccepted(event, emit),
-      contactsAgreementAccepted: (event) => __onContactsAgreementAccepted(event, emit),
-    );
+        userAgreementAccepted: (event) => __onUserAgreementAccepted(event, emit),
+        updateContactsAgreement: (event) => __onContactsAgreementAccepted(event, emit));
   }
 
   Future<void> __onUserAgreementAccepted(
@@ -169,10 +168,10 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   }
 
   Future<void> __onContactsAgreementAccepted(
-    _ContactsAppAgreementAccepted event,
+    _ContactsAppAgreementUpdate event,
     Emitter<AppState> emit,
   ) async {
-    await appPreferences.setContactsAgreementAccepted(true);
-    emit(state.copyWith(contactsAgreementUnaccepted: true));
+    await appPreferences.setContactsAgreementAccepted(event.status);
+    emit(state.copyWith(contactsAgreementStatus: event.status));
   }
 }

@@ -46,5 +46,5 @@ class AppLocaleChanged with _$AppLocaleChanged implements AppEvent {
 class AppAgreementAccepted with _$AppAgreementAccepted implements AppEvent {
   const factory AppAgreementAccepted.userAgreementAccepted() = _UserAppAgreementAccepted;
 
-  const factory AppAgreementAccepted.contactsAgreementAccepted() = _ContactsAppAgreementAccepted;
+  const factory AppAgreementAccepted.updateContactsAgreement(AgreementStatus status) = _ContactsAppAgreementUpdate;
 }

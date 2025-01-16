@@ -116,7 +116,7 @@ class MainScreenPage extends StatelessWidget {
           return ContactsRouterPageRoute(
             children: [
               ContactsScreenPageRoute(
-                sourceTypes: tab.toContacts.contactSourceTypes,
+                sourceTypes: tab.toContacts?.contactSourceTypes ?? [],
               )
             ],
           );
