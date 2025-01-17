@@ -45,8 +45,17 @@ class AppRouter extends _$AppRouter {
 
   bool get appPermissionsDenied => _appPermissions.isDenied;
 
+  /// Indicates whether the user agreement is unaccepted.
+  ///
+  /// Navigates the user to the agreement screen if the agreement status
+  /// is anything other than `accepted`.
   bool get appUserAgreementUnaccepted => !_appBloc.state.userAgreementStatus.isAccepted;
 
+  /// Indicates whether the contacts agreement is unaccepted.
+  ///
+  /// Navigates the user to the contacts agreement screen only once.
+  /// If the user views the agreement and does not accept it, the status
+  /// is updated to `declined`, ensuring the user does not see the screen again automatically.
   bool get appContactsAgreementUnaccepted => _appBloc.state.contactsAgreementStatus.isPending;
 
   bool get appLoggedIn => coreUrl != null && token != null && userId != null;
