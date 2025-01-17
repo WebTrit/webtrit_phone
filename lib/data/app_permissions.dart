@@ -2,9 +2,8 @@ import 'package:permission_handler/permission_handler.dart';
 
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 
-import 'package:webtrit_phone/models/main_flavor.dart';
-
-import 'feature_access.dart';
+import 'package:webtrit_phone/data/data.dart';
+import 'package:webtrit_phone/models/models.dart';
 
 export 'package:permission_handler/permission_handler.dart' show Permission, PermissionStatus;
 
@@ -16,13 +15,17 @@ class AppPermissions {
   static late AppPermissions _instance;
 
   static Future<AppPermissions> init(FeatureAccess featureAccess) async {
+    final bottomMenuFeature = featureAccess.bottomMenuFeature;
+    final contactsSourceTypes = bottomMenuFeature.getTabEnabled(MainFlavor.contacts)?.toContacts?.contactSourceTypes;
+    final localContactsSourceTypeEnabled = contactsSourceTypes?.contains(ContactSourceType.local) == true;
+
     final specialStatuses = await Future.wait(_specialPermissions.map((permission) => permission.status()));
 
     // Update initialization logic for better clarity and maintainability
     final permissions = [
       Permission.microphone,
       Permission.camera,
-      if (featureAccess.bottomMenuFeature.isTabEnabled(MainFlavor.contacts)) Permission.contacts,
+      if (localContactsSourceTypeEnabled) Permission.contacts,
     ];
 
     final statuses = await Future.wait(permissions.map((permission) => permission.status));
@@ -41,7 +44,7 @@ class AppPermissions {
 
   List<Permission> _permissions;
 
-  get permissions => _permissions;
+  List<Permission> get permissions => _permissions;
 
   bool get isDenied => _isDenied;
 
@@ -53,14 +56,22 @@ class AppPermissions {
     return statuses.whereType<CallkeepSpecialPermissions>().toList();
   }
 
-  Future<Map<Permission, PermissionStatus>> request() async {
-    final statusesPerRequestedPermission = await _permissions.request();
+  Future<Map<Permission, PermissionStatus>> request({List<Permission>? exclude}) async {
+    // Filter out permissions that are in the exclude list
+    final filteredPermissions = _permissions.where((permission) {
+      return exclude == null || !exclude.contains(permission);
+    }).toList();
+
+    // Request statuses for the filtered permissions
+    final statusesPerRequestedPermission = await filteredPermissions.request();
+
+    // Get statuses for special permissions
     final specialStatuses = await Future.wait(_specialPermissions.map((permission) => permission.status()));
 
+    // Update the denied status flag based on the remaining permissions
     _isDenied = statusesPerRequestedPermission.values.every((status) => status.isDenied) ||
         specialStatuses.every((status) => status.isDenied);
 
-    _isDenied = statusesPerRequestedPermission.values.every((status) => status.isDenied);
     return statusesPerRequestedPermission;
   }
 

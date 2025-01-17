@@ -66,7 +66,8 @@ class _UserAgreementScreenState extends State<UserAgreementScreen> {
                     const SizedBox(height: kInset / 2),
                     if (userAgreementAccepted)
                       OutlinedButton(
-                        onPressed: () => context.read<AppBloc>().add(const AppUserAgreementAccepted()),
+                        onPressed: () =>
+                            context.read<AppBloc>().add(const AppAgreementAccepted.userAgreementAccepted()),
                         style: elevatedButtonStyles?.primary,
                         child: Text(context.l10n.user_agreement_button_text),
                       )
@@ -97,5 +98,3 @@ class _UserAgreementScreenState extends State<UserAgreementScreen> {
     );
   }
 }
-
-// TODO : New description and icon for user agreement

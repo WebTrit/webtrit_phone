@@ -258,6 +258,10 @@ class BottomMenuFeature {
     return tabs.any((tab) => tab.flavor == flavor && tab.enabled);
   }
 
+  BottomMenuTab? getTabEnabled(MainFlavor flavor) {
+    return tabs.firstWhereOrNull((tab) => tab.flavor == flavor);
+  }
+
   set activeFlavor(BottomMenuTab flavor) {
     _appPreferences.setActiveMainFlavor(flavor.flavor);
     _activeTab = flavor;
