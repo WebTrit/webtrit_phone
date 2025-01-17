@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 extension MsgViewExt on ThemeData {
-  TextStyle get userNameStyle => TextStyle(color: colorScheme.onSurface, fontSize: 12, fontWeight: FontWeight.w600);
+  TextStyle get userNameStyle => TextStyle(color: colorScheme.onSurface, fontSize: 14, fontWeight: FontWeight.w600);
 
-  TextStyle get contentStyle => TextStyle(color: colorScheme.onSurface, fontSize: 12);
+  TextStyle get contentStyle => TextStyle(color: colorScheme.onSurface, fontSize: 14);
 
   TextStyle get subContentStyle => TextStyle(color: colorScheme.onSurface.withValues(alpha: 0.5), fontSize: 10);
 
@@ -30,7 +30,8 @@ extension MsgViewExt on ThemeData {
 
   BoxDecoration quoteDecoration(bool isMine) {
     return BoxDecoration(
-      color: isMine ? colorScheme.primaryFixed.withValues(alpha: 0.5) : colorScheme.tertiaryFixed.withValues(alpha: 0.5),
+      color:
+          isMine ? colorScheme.primaryFixed.withValues(alpha: 0.5) : colorScheme.tertiaryFixed.withValues(alpha: 0.5),
       borderRadius: BorderRadius.circular(8),
       border: Border(left: BorderSide(color: colorScheme.primaryFixed, width: 2)),
     );

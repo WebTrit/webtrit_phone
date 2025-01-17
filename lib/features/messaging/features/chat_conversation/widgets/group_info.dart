@@ -300,7 +300,7 @@ class _GroupInfoState extends State<GroupInfo> {
                 registered: contact?.registered,
                 radius: 20,
               ),
-              title: Text(contact?.displayTitle ?? member.userId),
+              title: ParticipantName(senderId: member.userId, userId: widget.userId),
               subtitle: Text(
                 member.groupAuthorities?.nameL10n(context) ?? context.l10n.messaging_GroupAuthorities_noauthorities,
                 style: const TextStyle(fontSize: 12),

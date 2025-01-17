@@ -670,6 +670,8 @@
   "@messaging_NewConversation_title": {},
   "messaging_ParticipantName_you": "You",
   "@messaging_ParticipantName_you": {},
+  "messaging_ParticipantName_unknown": "Unknown user",
+  "@messaging_ParticipantName_unknown": {},
   "messaging_SmsSendingStatus_delivered": "delivered",
   "@messaging_SmsSendingStatus_delivered": {},
   "messaging_SmsSendingStatus_failed": "failed",

@@ -1,12 +1,18 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/messaging/messaging.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
-import 'sms_message_view.dart';
+import 'history_fetch_indicator.dart';
+import 'message_text_field.dart';
+import 'scroll_to_bottom.dart';
+import 'typing_indicator.dart';
+import '../message_view/sms_message_view.dart';
 
 class SmsMessageListView extends StatefulWidget {
   const SmsMessageListView({
@@ -108,7 +114,6 @@ class _SmsMessageListViewState extends State<SmsMessageListView> {
     widget.onSendMessage(content);
 
     inputController.text = '';
-    FocusScope.of(context).unfocus();
     scrollToBottom();
   }
 
@@ -120,7 +125,11 @@ class _SmsMessageListViewState extends State<SmsMessageListView> {
   Widget build(BuildContext context) {
     return Column(children: [
       Expanded(child: MessagingStateWrapper(child: list())),
-      MessageTextField(controller: inputController, onSend: handleSend),
+      MessageTextField(
+        controller: inputController,
+        onSend: handleSend,
+        onChanged: (value) => context.read<SmsTypingCubit>().sendTyping(),
+      ),
     ]);
   }
 
@@ -143,76 +152,70 @@ class _SmsMessageListViewState extends State<SmsMessageListView> {
       child: ScrollToBottomOverlay(
         scrolledAway: scrolledAway,
         onScrollToBottom: scrollToBottom,
-        child: ListView.builder(
-          controller: scrollController,
-          reverse: true,
-          cacheExtent: 500,
-          padding: const EdgeInsets.symmetric(vertical: 16),
-          itemCount: viewEntries.length + 1,
-          itemBuilder: (context, index) {
-            if (index == viewEntries.length) return historyFetchIndicator();
+        child: GestureDetector(
+          onTap: () => FocusScope.of(context).unfocus(),
+          child: ListView.builder(
+            controller: scrollController,
+            reverse: true,
+            cacheExtent: 500,
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            itemCount: viewEntries.length + 2,
+            itemBuilder: (context, index) {
+              if (index == 0) {
+                return BlocBuilder<SmsTypingCubit, TypingNumbers>(
+                  builder: (_, numbers) => TypingIndicator(userId: widget.userId, typingNumbers: numbers),
+                );
+              }
+              if (index == viewEntries.length + 1) {
+                return HistoryFetchIndicator(widget.fetchingHistory);
+              }
 
-            final entry = viewEntries[index];
-            if (entry is _MessageViewEntry) {
-              return FadeIn(
-                child: SmsMessageView(
-                  key: Key(entry.message?.idKey ?? entry.outboxEntry!.idKey),
-                  userNumber: widget.userNumber,
-                  message: entry.message,
-                  outboxMessage: entry.outboxEntry,
-                  outboxDeleteEntry: entry.outboxDeleteEntry,
-                  userReadedUntil: entry.userReadedUntil,
-                  membersReadedUntil: entry.membersReadedUntil,
-                  handleDelete: handleDelete,
-                  onRendered: () {
-                    final message = entry.message;
-                    if (message == null) return;
+              final entry = viewEntries[index - 1];
 
-                    final mine = message.fromPhoneNumber == widget.userNumber;
-                    if (mine) return;
+              if (entry is _MessageViewEntry) {
+                return FadeIn(
+                  child: SmsMessageView(
+                    key: Key(entry.message?.idKey ?? entry.outboxEntry!.idKey),
+                    userNumber: widget.userNumber,
+                    message: entry.message,
+                    outboxMessage: entry.outboxEntry,
+                    outboxDeleteEntry: entry.outboxDeleteEntry,
+                    userReadedUntil: entry.userReadedUntil,
+                    membersReadedUntil: entry.membersReadedUntil,
+                    handleDelete: handleDelete,
+                    onRendered: () {
+                      final message = entry.message;
+                      if (message == null) return;
 
-                    final userReadedUntil = widget.readCursors.userReadedUntil(widget.userId);
-                    final reachedUnreaded = userReadedUntil == null || message.createdAt.isAfter(userReadedUntil);
-                    if (reachedUnreaded) widget.userReadedUntilUpdate(message.createdAt);
-                  },
-                ),
-              );
-            }
+                      final mine = message.fromPhoneNumber == widget.userNumber;
+                      if (mine) return;
 
-            if (entry is _DateViewEntry) {
-              return Padding(
-                padding: const EdgeInsets.only(top: 8),
-                child: Center(
-                  child: Text(
-                    entry.date.toDayOfMonth,
-                    style: const TextStyle(fontSize: 12, color: Colors.grey),
+                      final userReadedUntil = widget.readCursors.userReadedUntil(widget.userId);
+                      final reachedUnreaded = userReadedUntil == null || message.createdAt.isAfter(userReadedUntil);
+                      if (reachedUnreaded) widget.userReadedUntilUpdate(message.createdAt);
+                    },
                   ),
-                ),
-              );
-            }
+                );
+              }
 
-            return const SizedBox();
-          },
+              if (entry is _DateViewEntry) {
+                return Padding(
+                  padding: const EdgeInsets.only(top: 8),
+                  child: Center(
+                    child: Text(
+                      entry.date.toDayOfMonth,
+                      style: const TextStyle(fontSize: 12, color: Colors.grey),
+                    ),
+                  ),
+                );
+              }
+
+              return const SizedBox();
+            },
+          ),
         ),
       ),
     );
-  }
-
-  Widget historyFetchIndicator() {
-    if (widget.fetchingHistory) {
-      return const Padding(
-        padding: EdgeInsets.all(8.0),
-        child: Center(
-          child: SizedBox(
-            width: 16,
-            height: 16,
-            child: CircularProgressIndicator(),
-          ),
-        ),
-      );
-    }
-
-    return const SizedBox();
   }
 }
 

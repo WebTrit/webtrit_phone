@@ -10,10 +10,10 @@ import 'package:webtrit_phone/features/features.dart';
 
 final _logger = Logger('ChatTypingCubit');
 
-typedef TypingState = Set<String>;
+typedef TypingNumbers = Set<String>;
 
-class ChatTypingCubit extends Cubit<TypingState> {
-  ChatTypingCubit(
+class SmsTypingCubit extends Cubit<TypingNumbers> {
+  SmsTypingCubit(
     this.client, {
     this.typeThrottle = const Duration(seconds: 3),
     this.typeTimeout = const Duration(seconds: 5),
@@ -23,67 +23,67 @@ class ChatTypingCubit extends Cubit<TypingState> {
   final Duration typeThrottle;
   final Duration typeTimeout;
 
-  int? _chatId;
+  int? _conversationId;
   StreamSubscription? _typingSub;
   final Map<String, Timer> _typingTimers = {};
   DateTime? _lastTypingSent;
 
-  init(int chatId) {
-    if (_chatId != chatId) {
-      _chatId = chatId;
+  initConversation(int id) {
+    if (_conversationId != id) {
+      _conversationId = id;
       _typingSub?.cancel();
-      _typingSub = _typingStream(chatId).listen((_) {});
+      _typingSub = _typingStream(id).listen((_) {});
     }
   }
 
   Future sendTyping() async {
-    if (_chatId == null) return;
+    if (_conversationId == null) return;
     if (_lastTypingSent != null && DateTime.now().difference(_lastTypingSent!) < typeThrottle) return;
 
     try {
-      final channel = client.getChatChannel(_chatId!);
+      final channel = client.getSmsConversationChannel(_conversationId!);
       if (channel == null || channel.state != PhoenixChannelState.joined) throw Exception('Channel not ready yet');
-      channel.sendChatTyping();
+      channel.sendSmsTypnig();
       _lastTypingSent = DateTime.now();
     } catch (e) {
       _logger.warning('Failed to send typing event: $e');
     }
   }
 
-  _addTypingUser(String userId) {
+  _addTypingNumber(String number) {
     if (isClosed) return;
 
     final typings = state;
-    typings.add(userId);
+    typings.add(number);
     emit(Set.from(typings));
 
     // Start auto-remove timer
-    _typingTimers[userId]?.cancel();
-    _typingTimers[userId] = Timer(typeTimeout, () {
-      _removeTypingUser(userId);
+    _typingTimers[number]?.cancel();
+    _typingTimers[number] = Timer(typeTimeout, () {
+      _removeTypingNumber(number);
     });
   }
 
-  _removeTypingUser(String userId) {
+  _removeTypingNumber(String number) {
     if (isClosed) return;
 
     final typings = state;
-    typings.remove(userId);
+    typings.remove(number);
     emit(Set.from(typings));
   }
 
-  Stream<dynamic> _typingStream(int chatId) async* {
+  Stream<dynamic> _typingStream(int conversationId) async* {
     while (true) {
       try {
-        final channel = client.getChatChannel(chatId);
+        final channel = client.getSmsConversationChannel(conversationId);
         if (channel == null || channel.state != PhoenixChannelState.joined) throw Exception('Channel not ready yet');
 
         await for (var event in channel.chatEvents) {
           switch (event) {
-            case ChatChannelTyping event:
-              _addTypingUser((event).userId);
-            case ChatChannelMessageUpdate event:
-              _removeTypingUser((event).message.senderId);
+            case SmsChannelTyping event:
+              _addTypingNumber((event).number);
+            case SmsChannelMessageUpdate event:
+              _removeTypingNumber((event).message.fromPhoneNumber);
             default:
           }
 
