@@ -1909,6 +1909,12 @@ abstract class AppLocalizations {
   /// **'You'**
   String get messaging_ParticipantName_you;
 
+  /// No description provided for @messaging_ParticipantName_unknown.
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown user'**
+  String get messaging_ParticipantName_unknown;
+
   /// No description provided for @messaging_SmsSendingStatus_delivered.
   ///
   /// In en, this message translates to:

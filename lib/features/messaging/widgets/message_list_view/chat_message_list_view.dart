@@ -7,11 +7,15 @@ import 'package:auto_route/auto_route.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/messaging/messaging.dart';
-import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
-import 'chat_message_view.dart';
+import 'exchange_bar.dart';
+import 'history_fetch_indicator.dart';
+import 'message_text_field.dart';
+import 'scroll_to_bottom.dart';
+import 'typing_indicator.dart';
+import '../message_view/chat_message_view.dart';
 
 class ChatMessageListView extends StatefulWidget {
   const ChatMessageListView({
@@ -134,7 +138,6 @@ class _ChatMessageListViewState extends State<ChatMessageListView> {
     }
 
     inputController.text = '';
-    FocusScope.of(context).unfocus();
     scrollToBottom();
   }
 
@@ -191,120 +194,73 @@ class _ChatMessageListViewState extends State<ChatMessageListView> {
       child: ScrollToBottomOverlay(
         scrolledAway: scrolledAway,
         onScrollToBottom: scrollToBottom,
-        child: ListView.builder(
-          controller: scrollController,
-          reverse: true,
-          cacheExtent: 500,
-          padding: const EdgeInsets.symmetric(vertical: 16),
-          itemCount: viewEntries.length + 2,
-          itemBuilder: (context, index) {
-            if (index == 0) return typingIndicator();
-            if (index == viewEntries.length + 1) return historyFetchIndicator();
+        child: GestureDetector(
+          onTap: () => FocusScope.of(context).unfocus(),
+          child: ListView.builder(
+            controller: scrollController,
+            reverse: true,
+            cacheExtent: 500,
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            itemCount: viewEntries.length + 2,
+            itemBuilder: (context, index) {
+              if (index == 0) {
+                return BlocBuilder<ChatTypingCubit, TypingUsers>(
+                  builder: (_, users) => TypingIndicator(userId: widget.userId, typingUsers: users),
+                );
+              }
+              if (index == viewEntries.length + 1) {
+                return HistoryFetchIndicator(widget.fetchingHistory);
+              }
 
-            final entry = viewEntries[index - 1];
+              final entry = viewEntries[index - 1];
 
-            if (entry is _MessageViewEntry) {
-              return FadeIn(
-                child: ChatMessageView(
-                  key: Key(entry.message?.idKey ?? entry.outboxMessage!.idKey),
-                  userId: widget.userId,
-                  message: entry.message,
-                  outboxMessage: entry.outboxMessage,
-                  outboxEditEntry: entry.outboxEditEntry,
-                  outboxDeleteEntry: entry.outboxDeleteEntry,
-                  userReadedUntil: entry.userReadedUntil,
-                  membersReadedUntil: entry.membersReadedUntil,
-                  handleSetForReply: handleSetForReply,
-                  handleSetForForward: handleSetForForward,
-                  handleSetForEdit: handleSetForEdit,
-                  handleDelete: handleDelete,
-                  onRendered: () {
-                    final message = entry.message;
-                    if (message == null) return;
+              if (entry is _MessageViewEntry) {
+                return FadeIn(
+                  child: ChatMessageView(
+                    key: Key(entry.message?.idKey ?? entry.outboxMessage!.idKey),
+                    userId: widget.userId,
+                    message: entry.message,
+                    outboxMessage: entry.outboxMessage,
+                    outboxEditEntry: entry.outboxEditEntry,
+                    outboxDeleteEntry: entry.outboxDeleteEntry,
+                    userReadedUntil: entry.userReadedUntil,
+                    membersReadedUntil: entry.membersReadedUntil,
+                    handleSetForReply: handleSetForReply,
+                    handleSetForForward: handleSetForForward,
+                    handleSetForEdit: handleSetForEdit,
+                    handleDelete: handleDelete,
+                    onRendered: () {
+                      final message = entry.message;
+                      if (message == null) return;
 
-                    final mine = message.senderId == widget.userId;
-                    if (mine) return;
+                      final mine = message.senderId == widget.userId;
+                      if (mine) return;
 
-                    final userReadedUntil = widget.readCursors.userReadedUntil(widget.userId);
-                    final reachedUnreaded = userReadedUntil == null || message.createdAt.isAfter(userReadedUntil);
-                    if (reachedUnreaded) widget.userReadedUntilUpdate(message.createdAt);
-                  },
-                ),
-              );
-            }
-
-            if (entry is _DateViewEntry) {
-              return Padding(
-                padding: const EdgeInsets.only(top: 8),
-                child: Center(
-                  child: Text(
-                    entry.date.toDayOfMonth,
-                    style: const TextStyle(fontSize: 12, color: Colors.grey),
+                      final userReadedUntil = widget.readCursors.userReadedUntil(widget.userId);
+                      final reachedUnreaded = userReadedUntil == null || message.createdAt.isAfter(userReadedUntil);
+                      if (reachedUnreaded) widget.userReadedUntilUpdate(message.createdAt);
+                    },
                   ),
-                ),
-              );
-            }
+                );
+              }
 
-            return const SizedBox();
-          },
+              if (entry is _DateViewEntry) {
+                return Padding(
+                  padding: const EdgeInsets.only(top: 8),
+                  child: Center(
+                    child: Text(
+                      entry.date.toDayOfMonth,
+                      style: const TextStyle(fontSize: 12, color: Colors.grey),
+                    ),
+                  ),
+                );
+              }
+
+              return const SizedBox();
+            },
+          ),
         ),
       ),
-    );
-  }
-
-  Widget historyFetchIndicator() {
-    if (widget.fetchingHistory) {
-      return const Padding(
-        padding: EdgeInsets.all(8.0),
-        child: Center(
-          child: SizedBox(
-            width: 16,
-            height: 16,
-            child: CircularProgressIndicator(),
-          ),
-        ),
-      );
-    }
-
-    return const SizedBox();
-  }
-
-  Widget typingIndicator() {
-    return BlocBuilder<ChatTypingCubit, TypingState>(
-      builder: (context, state) {
-        final typingUsers = state;
-        final anybodyTyping = typingUsers.isNotEmpty;
-
-        const textStyle = TextStyle(fontSize: 12, color: Colors.grey);
-
-        return AnimatedCrossFade(
-          duration: const Duration(milliseconds: 600),
-          sizeCurve: Curves.elasticOut,
-          firstChild: const SizedBox(),
-          secondChild: Container(
-            margin: const EdgeInsets.only(top: 8),
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Wrap(
-              crossAxisAlignment: WrapCrossAlignment.center,
-              spacing: 4,
-              children: [
-                const TypingIconDriver(),
-                for (final id in typingUsers) ...[
-                  ContactInfoBuilder(
-                      sourceType: ContactSourceType.external,
-                      sourceId: id,
-                      builder: (context, contact, {required bool loading}) {
-                        if (contact == null) return const SizedBox();
-                        return Text(contact.displayTitle, style: textStyle);
-                      }),
-                ],
-                Text(context.l10n.messaging_MessageListView_typingTrail, style: textStyle),
-              ],
-            ),
-          ),
-          crossFadeState: anybodyTyping ? CrossFadeState.showSecond : CrossFadeState.showFirst,
-        );
-      },
     );
   }
 

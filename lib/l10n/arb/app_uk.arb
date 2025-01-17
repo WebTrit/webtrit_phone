@@ -670,6 +670,8 @@
   "@messaging_NewConversation_title": {},
   "messaging_ParticipantName_you": "Ви",
   "@messaging_ParticipantName_you": {},
+  "messaging_ParticipantName_unknown": "Невідомий користувач",
+  "@messaging_ParticipantName_unknown": {},
   "messaging_SmsSendingStatus_delivered": "доставлено",
   "@messaging_SmsSendingStatus_delivered": {},
   "messaging_SmsSendingStatus_failed": "не вдалось",

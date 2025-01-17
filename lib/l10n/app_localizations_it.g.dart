@@ -937,6 +937,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get messaging_ParticipantName_you => 'Voi';
 
   @override
+  String get messaging_ParticipantName_unknown => 'Utente sconosciuto';
+
+  @override
   String get messaging_SmsSendingStatus_delivered => 'consegnato';
 
   @override

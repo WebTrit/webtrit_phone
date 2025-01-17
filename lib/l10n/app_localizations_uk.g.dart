@@ -937,6 +937,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get messaging_ParticipantName_you => 'Ви';
 
   @override
+  String get messaging_ParticipantName_unknown => 'Невідомий користувач';
+
+  @override
   String get messaging_SmsSendingStatus_delivered => 'доставлено';
 
   @override

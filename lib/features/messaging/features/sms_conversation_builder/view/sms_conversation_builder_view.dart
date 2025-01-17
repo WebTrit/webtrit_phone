@@ -132,7 +132,7 @@ class _SmsConversationBuilderViewState extends State<SmsConversationBuilderView>
                       const SizedBox(height: 8),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: buildField(state.searchFilter, isValidNumberInField),
+                        child: buildField(state.searchFilter, state.parsedNumber),
                       ),
                       const SizedBox(height: 8),
                       Expanded(child: buildContactsList(state.externalContacts, state.localContacts)),
@@ -253,16 +253,23 @@ class _SmsConversationBuilderViewState extends State<SmsConversationBuilderView>
     );
   }
 
-  Widget buildField(String searchFilter, bool isValidNumberInField) {
+  Widget buildField(String searchFilter, String parsedNumber) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+
+    final numbersEntered = searchFilter.length > 6 && RegExp(r'^[0-9]*$').hasMatch(searchFilter);
+
+    String prefix = '';
+    if (numbersEntered && parsedNumber.isNotEmpty) {
+      if (parsedNumber.contains(searchFilter)) {
+        prefix = parsedNumber.substring(0, parsedNumber.length - searchFilter.length);
+      }
+    }
 
     return TextFormField(
       decoration: InputDecoration(
         error: Builder(builder: (context) {
-          final numbersEntered = searchFilter.length > 3 && RegExp(r'^[0-9]*$').hasMatch(searchFilter);
-
-          if (numbersEntered && !isValidNumberInField) {
+          if (numbersEntered && parsedNumber.isEmpty) {
             return RichText(
               text: TextSpan(
                 children: [
@@ -293,6 +300,7 @@ class _SmsConversationBuilderViewState extends State<SmsConversationBuilderView>
           );
         }),
         hintText: context.l10n.messaging_ConversationBuilders_contactOrNumberSearch_hint,
+        prefix: Text(prefix),
         fillColor: colorScheme.surface,
         border: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(12)),
         prefixIcon: const Icon(Icons.search),
