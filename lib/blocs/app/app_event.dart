@@ -44,7 +44,7 @@ class AppLocaleChanged with _$AppLocaleChanged implements AppEvent {
 
 @Freezed(copyWith: false)
 class AppAgreementAccepted with _$AppAgreementAccepted implements AppEvent {
-  const factory AppAgreementAccepted.userAgreementAccepted() = _UserAppAgreementAccepted;
+  const factory AppAgreementAccepted.updateUserAgreement(AgreementStatus status) = _UserAppAgreementUpdate;
 
   const factory AppAgreementAccepted.updateContactsAgreement(AgreementStatus status) = _ContactsAppAgreementUpdate;
 }

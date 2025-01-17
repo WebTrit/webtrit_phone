@@ -28,7 +28,7 @@ class PermissionsCubit extends Cubit<PermissionsState> {
     emit(const PermissionsState.inProgress());
     try {
       // Check if the contacts agreement is accepted
-      final contactsAgreementStatus = appPreferences.getContactsAgreementAccepted();
+      final contactsAgreementStatus = appPreferences.getContactsAgreementStatus();
 
       // Prepare the exclude list based on the contacts agreement status
       final excludePermissions = <Permission>[

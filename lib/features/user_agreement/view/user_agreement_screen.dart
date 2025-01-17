@@ -8,6 +8,7 @@ import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/features/user_agreement/widgets/widgets.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
+import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
@@ -26,7 +27,7 @@ class UserAgreementScreen extends StatefulWidget {
 }
 
 class _UserAgreementScreenState extends State<UserAgreementScreen> {
-  bool userAgreementAccepted = false;
+  late AgreementStatus agreementStatus = context.read<AppBloc>().state.userAgreementStatus;
 
   @override
   Widget build(BuildContext context) {
@@ -58,25 +59,17 @@ class _UserAgreementScreenState extends State<UserAgreementScreen> {
                     const SizedBox(height: kInset),
                     AgreementCheckbox(
                       agreementLink: widget.appTermsAndConditionsUrl,
-                      userAgreementAccepted: userAgreementAccepted,
-                      onChanged: (value) => setState(() => userAgreementAccepted = value),
+                      userAgreementAccepted: agreementStatus.isAccepted,
+                      onChanged: _handleAgreementStatusChange,
                       onAgreementLinkTap: () => context.router.navigate(
                           TermsConditionsScreenPageRoute(initialUriQueryParam: widget.appTermsAndConditionsUrl)),
                     ),
                     const SizedBox(height: kInset / 2),
-                    if (userAgreementAccepted)
-                      OutlinedButton(
-                        onPressed: () =>
-                            context.read<AppBloc>().add(const AppAgreementAccepted.userAgreementAccepted()),
-                        style: elevatedButtonStyles?.primary,
-                        child: Text(context.l10n.user_agreement_button_text),
-                      )
-                    else
-                      OutlinedButton(
-                        onPressed: null,
-                        style: elevatedButtonStyles?.primary,
-                        child: Text(context.l10n.user_agreement_button_text),
-                      )
+                    OutlinedButton(
+                      onPressed: agreementStatus.isAccepted ? _submitAgreement : null,
+                      style: elevatedButtonStyles?.primary,
+                      child: Text(context.l10n.user_agreement_button_text),
+                    )
                   ],
                 ),
               );
@@ -96,5 +89,14 @@ class _UserAgreementScreenState extends State<UserAgreementScreen> {
         },
       ),
     );
+  }
+
+  void _handleAgreementStatusChange(bool value) {
+    agreementStatus = value ? AgreementStatus.accepted : AgreementStatus.declined;
+    setState(() {});
+  }
+
+  void _submitAgreement() {
+    context.read<AppBloc>().add(AppAgreementAccepted.updateUserAgreement(agreementStatus));
   }
 }
