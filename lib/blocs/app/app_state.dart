@@ -13,7 +13,7 @@ class AppState with _$AppState {
     required ThemeSettings themeSettings,
     required ThemeMode themeMode,
     required Locale locale,
-    required bool userAgreementAccepted,
+    required AgreementStatus userAgreementStatus,
     required AgreementStatus contactsAgreementStatus,
   }) = _AppState;
 

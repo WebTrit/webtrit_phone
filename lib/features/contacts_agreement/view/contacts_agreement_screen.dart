@@ -59,12 +59,12 @@ class _ContactsAgreementScreenState extends State<ContactsAgreementScreen> {
                           const SizedBox(height: kInset),
                           AgreementCheckbox(
                             agreementAccepted: agreementStatus.isAccepted,
-                            onChanged: _onUpdateAgreementStatus,
+                            onChanged: _handleAgreementStatusChange,
                             text: context.l10n.contacts_agreement_checkbox_text,
                           ),
                           const SizedBox(height: kInset / 2),
                           OutlinedButton(
-                            onPressed: _onContinue,
+                            onPressed: _submitAgreement,
                             style: elevatedButtonStyles?.primary,
                             child: Text(context.l10n.contacts_agreement_button_text),
                           ),
@@ -81,12 +81,12 @@ class _ContactsAgreementScreenState extends State<ContactsAgreementScreen> {
     );
   }
 
-  void _onUpdateAgreementStatus(bool value) {
+  void _handleAgreementStatusChange(bool value) {
     agreementStatus = value ? AgreementStatus.accepted : AgreementStatus.declined;
     setState(() {});
   }
 
-  void _onContinue() {
+  void _submitAgreement() {
     final resultStatus = agreementStatus.isPending ? AgreementStatus.declined : agreementStatus;
     context.read<AppBloc>().add(AppAgreementAccepted.updateContactsAgreement(resultStatus));
   }

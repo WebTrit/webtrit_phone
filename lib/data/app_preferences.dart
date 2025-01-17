@@ -39,13 +39,13 @@ abstract class AppPreferences {
 
   Future<bool> setActiveContactSourceType(ContactSourceType value);
 
-  bool getUserAgreementAccepted();
+  Future<bool> setUserAgreementStatus(AgreementStatus value);
 
-  Future<bool> setUserAgreementAccepted(bool value);
+  AgreementStatus getUserAgreementStatus({AgreementStatus defaultValue = AgreementStatus.pending});
 
-  Future<bool> setContactsAgreementAccepted(AgreementStatus value);
+  Future<bool> setContactsAgreementStatus(AgreementStatus value);
 
-  AgreementStatus getContactsAgreementAccepted({AgreementStatus defaultValue = AgreementStatus.pending});
+  AgreementStatus getContactsAgreementStatus({AgreementStatus defaultValue = AgreementStatus.pending});
 
   IncomingCallType getIncomingCallType({IncomingCallType defaultValue});
 
@@ -83,7 +83,7 @@ class AppPreferencesImpl with SystemInfoJsonMapper implements AppPreferences {
   static const _kActiveMainFlavorKey = 'active-main-flavor';
   static const _kActiveRecentsVisibilityFilterKey = 'active-recents-visibility-filter';
   static const _kActiveContactSourceTypeKey = 'active-contact-source-type';
-  static const _kUserAgreementAcceptedKey = 'user-agreement-accepted';
+  static const _kUserAgreementAcceptedKey = 'user-agreement-status';
   static const _kContactsAgreementAcceptedKey = 'contacts-agreement-status';
   static const _kIncomingCallTypeKey = 'call-incoming-type';
   static const _kSystemInfoKey = 'system-info';
@@ -231,17 +231,29 @@ class AppPreferencesImpl with SystemInfoJsonMapper implements AppPreferences {
       _sharedPreferences.setString(_kActiveContactSourceTypeKey, value.name);
 
   @override
-  Future<bool> setUserAgreementAccepted(bool value) => _sharedPreferences.setBool(_kUserAgreementAcceptedKey, value);
+  Future<bool> setUserAgreementStatus(AgreementStatus value) =>
+      _sharedPreferences.setString(_kUserAgreementAcceptedKey, value.name);
 
   @override
-  bool getUserAgreementAccepted() => _sharedPreferences.getBool(_kUserAgreementAcceptedKey) ?? false;
+  AgreementStatus getUserAgreementStatus({AgreementStatus defaultValue = AgreementStatus.pending}) {
+    final agreementStatusString = _sharedPreferences.getString(_kUserAgreementAcceptedKey);
+    if (agreementStatusString != null) {
+      try {
+        return AgreementStatus.values.byName(agreementStatusString);
+      } catch (_) {
+        return defaultValue;
+      }
+    } else {
+      return defaultValue;
+    }
+  }
 
   @override
-  Future<bool> setContactsAgreementAccepted(AgreementStatus value) =>
+  Future<bool> setContactsAgreementStatus(AgreementStatus value) =>
       _sharedPreferences.setString(_kContactsAgreementAcceptedKey, value.name);
 
   @override
-  AgreementStatus getContactsAgreementAccepted({AgreementStatus defaultValue = AgreementStatus.pending}) {
+  AgreementStatus getContactsAgreementStatus({AgreementStatus defaultValue = AgreementStatus.pending}) {
     final agreementStatusString = _sharedPreferences.getString(_kContactsAgreementAcceptedKey);
     if (agreementStatusString != null) {
       try {

@@ -45,7 +45,7 @@ class AppRouter extends _$AppRouter {
 
   bool get appPermissionsDenied => _appPermissions.isDenied;
 
-  bool get appUserAgreementUnaccepted => _appBloc.state.userAgreementAccepted != true;
+  bool get appUserAgreementUnaccepted => !_appBloc.state.userAgreementStatus.isAccepted;
 
   bool get appContactsAgreementUnaccepted => _appBloc.state.contactsAgreementStatus.isPending;
 
