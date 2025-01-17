@@ -569,6 +569,8 @@ class AppLocalizationsMapper {
           localizations.messaging_NewConversation_title,
       'messaging_ParticipantName_you':
           localizations.messaging_ParticipantName_you,
+      'messaging_ParticipantName_unknown':
+          localizations.messaging_ParticipantName_unknown,
       'messaging_SmsSendingStatus_delivered':
           localizations.messaging_SmsSendingStatus_delivered,
       'messaging_SmsSendingStatus_failed':
