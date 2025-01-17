@@ -29,32 +29,10 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
   final ContactsRepository contactsRepository;
 
   FutureOr<void> _onStarted(ContactStarted event, Emitter<ContactState> emit) async {
-    final watchContactForEachFuture = emit.forEach(
+    await emit.forEach(
       contactsRepository.watchContact(contactId),
-      onData: (contact) => state.copyWith(
-        contact: contact,
-      ),
+      onData: (contact) => state.copyWith(contact: contact),
     );
-
-    final watchContactPhonesForEachFuture = emit.forEach(
-      contactsRepository.watchContactPhones(contactId),
-      onData: (contactPhones) => state.copyWith(
-        contactPhones: contactPhones,
-      ),
-    );
-
-    final watchContactEmailsForEachFuture = emit.forEach(
-      contactsRepository.watchContactEmails(contactId),
-      onData: (contactEmails) => state.copyWith(
-        contactEmails: contactEmails,
-      ),
-    );
-
-    await Future.wait([
-      watchContactForEachFuture,
-      watchContactPhonesForEachFuture,
-      watchContactEmailsForEachFuture,
-    ]);
   }
 
   FutureOr<void> _onAddedToFavorites(ContactAddedToFavorites event, Emitter<ContactState> emit) async {

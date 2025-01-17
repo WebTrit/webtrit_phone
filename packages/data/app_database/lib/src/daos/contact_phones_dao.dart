@@ -3,13 +3,6 @@ import 'package:drift/drift.dart';
 
 part 'contact_phones_dao.g.dart';
 
-class ContactPhoneDataWithFavoriteData {
-  ContactPhoneDataWithFavoriteData(this.contactPhoneData, this.favoriteData);
-
-  final ContactPhoneData contactPhoneData;
-  final FavoriteData? favoriteData;
-}
-
 @DriftAccessor(tables: [
   ContactPhonesTable,
   FavoritesTable,
@@ -31,31 +24,6 @@ class ContactPhonesDao extends DatabaseAccessor<AppDatabase> with _$ContactPhone
 
   Future<List<ContactPhoneData>> getContactPhonesByContactId(int contactId) {
     return _selectContactPhonesByContactId(contactId).get();
-  }
-
-  JoinedSelectStatement _selectContactPhonesByContactIdJoinFavorites(int contactId) {
-    return _selectContactPhonesByContactId(contactId).join([
-      leftOuterJoin(favoritesTable, favoritesTable.contactPhoneId.equalsExp(contactPhonesTable.id)),
-    ]);
-  }
-
-  ContactPhoneDataWithFavoriteData _mapContactPhoneDataWithFavoriteData(TypedResult row) {
-    return ContactPhoneDataWithFavoriteData(
-      row.readTable(contactPhonesTable),
-      row.readTableOrNull(favoritesTable),
-    );
-  }
-
-  Stream<List<ContactPhoneDataWithFavoriteData>> watchContactPhonesExtByContactId(int contactId) {
-    return _selectContactPhonesByContactIdJoinFavorites(contactId)
-        .watch()
-        .map((rows) => rows.map(_mapContactPhoneDataWithFavoriteData).toList());
-  }
-
-  Future<List<ContactPhoneDataWithFavoriteData>> getContactPhonesExtByContactId(int contactId) {
-    return _selectContactPhonesByContactIdJoinFavorites(contactId)
-        .get()
-        .then((rows) => rows.map(_mapContactPhoneDataWithFavoriteData).toList());
   }
 
   Future<int> insertOnUniqueConflictUpdateContactPhone(Insertable<ContactPhoneData> contactPhone) {
