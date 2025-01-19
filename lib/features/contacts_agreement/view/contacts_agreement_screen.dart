@@ -9,8 +9,6 @@ import 'package:webtrit_phone/models/agreement_status.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
-import '../widgets/widgets.dart';
-
 class ContactsAgreementScreen extends StatefulWidget {
   const ContactsAgreementScreen({
     super.key,
