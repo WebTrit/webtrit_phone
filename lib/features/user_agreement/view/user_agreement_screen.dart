@@ -57,7 +57,7 @@ class _UserAgreementScreenState extends State<UserAgreementScreen> {
                     ),
                     const Spacer(),
                     const SizedBox(height: kInset),
-                    AgreementCheckbox(
+                    LinkifyAgreementCheckbox(
                       agreementLink: widget.appTermsAndConditionsUrl,
                       userAgreementAccepted: agreementStatus.isAccepted,
                       onChanged: _handleAgreementStatusChange,

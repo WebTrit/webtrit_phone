@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
-class AgreementCheckbox extends StatelessWidget {
-  const AgreementCheckbox({
+class LinkifyAgreementCheckbox extends StatelessWidget {
+  const LinkifyAgreementCheckbox({
     super.key,
     required this.agreementLink,
     required this.userAgreementAccepted,
