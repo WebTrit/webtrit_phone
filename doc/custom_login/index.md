@@ -1,143 +1,152 @@
-# README
+# Configuring Custom Signup
+
+This document provides guidelines for configuring custom signup functionality in your application by embedding custom HTML files or using the default login flow.
 
 ## Overview
 
-This documentation describes the structure and flow of data from a web page to a Flutter application to successfully log
-in using a session token. The communication between the web page and the Flutter app is facilitated through
-the `WebtritLoginChannel` JavaScript channel.
+The custom signup configuration allows developers to:
+- Use a custom HTML file for the login flow.
+- Continue using the default login flow if a custom configuration is not provided.
 
-## Web Page Requirements
+## Configuration Options
 
-The web page should contain a login form that collects user credentials (email and password). Upon form submission, the
-credentials should be concatenated to form a token, which is then wrapped in a JSON structure and sent to the Flutter
-app using the `WebtritLoginChannel`.
+### Custom Signup Configuration
 
-### HTML Structure
+To enable custom signup, add a configuration entry to the `loginConfig` section of your app configuration file. Here is an example:
+
+```json
+"loginConfig": {
+  "modeSelectActions": [
+    {
+      "enabled": true,
+      "embeddedId": 1,
+      "type": "embedded",
+      "titleL10n": "login_Button_signIn"
+    }
+  ],
+  "embedded": [
+    {
+      "id": 1,
+      "launch": false,
+      "showToolbar": true,
+      "titleL10n": "login_requestCredentials_title",
+      "resource": "assets/themes/custom_signup.html"
+    }
+  ]
+}
+```
+
+### Default Login Flow
+
+If no custom HTML is provided, the application will use the default login flow. Example configuration:
+
+```json
+"loginConfig": {
+  "modeSelectActions": [
+    {
+      "enabled": true,
+      "type": "login",
+      "titleL10n": "login_Button_signUpToDemoInstance"
+    }
+  ]
+}
+```
+
+## HTML Structure for Custom Signup
+
+An example HTML template for custom signup:
 
 ```html
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Form</title>
+    <title>OTP Login</title>
     <style>
-        /* Add your CSS styles here */
+        /* Add CSS styling here */
     </style>
 </head>
+
 <body>
 <div class="form-container">
-    <p class="description">
-        This is a sample embedded page to display a user login form.
-    </p>
-    <h1>Login</h1>
-    <form onsubmit="return handleLogin()">
-        <div class="form-group">
-            <label for="email">Email</label>
-            <input type="email" id="email" name="email" required>
-        </div>
-        <div class="form-group">
-            <label for="password">Password</label>
-            <input type="password" id="password" name="password" required>
-        </div>
-        <div class="form-group">
-            <button type="submit">Login</button>
-        </div>
-    </form>
+    <p class="description" id="descriptionText">Enter your phone number to receive a one-time password (OTP) for login.</p>
+    <div class="form-group">
+        <label for="phone" id="phoneLabel">Phone Number</label>
+        <input id="phone" name="phone" required>
+    </div>
 </div>
 
+<button class="fixed-button" id="submitButton" onclick="handleLogin()">
+    <span class="button-text" id="submitButtonText">Submit</span>
+    <div class="spinner"></div>
+</button>
+
 <script>
-    function handleLogin() {
-        var email = document.getElementById('email').value;
-        var password = document.getElementById('password').value;
+    const translations = {
+        en: {
+            description: "Enter your phone number to receive a one-time password (OTP) for login.",
+            phoneLabel: "Phone Number",
+            submitButtonText: "Submit",
+            alert: "Please enter your phone number."
+        }
+        // Add other locales as needed
+    };
 
-        // Generate the token using concatenation
-        var token = email + ':' + password;
-
-        // Wrap the token in a JSON structure
-        var tokenJson = JSON.stringify({ token: token });
-
-        // Send the JSON string to Flutter using the JavaScript channel
-        WebtritLoginChannel.postMessage(tokenJson);
-
-        return false; // Prevent form submission
+    function setLocale(locale) {
+        const translation = translations[locale];
+        document.getElementById("descriptionText").textContent = translation.description;
+        document.getElementById("phoneLabel").textContent = translation.phoneLabel;
+        document.getElementById("submitButtonText").textContent = translation.submitButtonText;
     }
+
+    function handleLogin() {
+        const phone = document.getElementById("phone").value;
+
+        if (!phone) {
+            alert(translations.en.alert);
+            return;
+        }
+
+        const json = {
+            event: "signup",
+            data: {
+                phone_number: phone
+            }
+        };
+
+        WebtritLoginChannel.postMessage(JSON.stringify(json));
+    }
+
+    setLocale("en");
 </script>
 </body>
+
 </html>
+```
+
+### Key Points
+1. Data collected from the form is sent in JSON format to `WebtritLoginChannel.postMessage(JSON.stringify(json));`.
+2. The `event` is always set to `signup`.
+3. Data can include additional key-value pairs, such as `tenant_id`.
+4. The `tenant_id` is used to construct the API path dynamically.
+
+Example:
+
+```dart
+return baseUrl.replace(
+  pathSegments: [
+    ...baseUrlPathSegments,
+    ...['tenant', tenantId],
+  ],
+);
 ```
 
 ## Flutter Integration
 
-### JavaScript Channel
-
-The Flutter app uses the `WebtritLoginChannel` to receive the session token from the web page. The channel is defined in
-the `LoginCustomSigninScreen` widget.
-
-### JSON Structure
-
-The JSON structure for the session token can be represented as follows:
-
-```json
-{
-  "token": "string",
-  "tenantId": "string (optional)"
-}
-```
-
-This JSON structure includes:
-
-- `token`: A required string that represents the session token.
-- `tenantId`: An optional string that represents the tenant ID.
-
-## Configuring WebView in the App
-
-To configure the WebView in your app, you need to specify the settings in a configuration file. Here's an example of how
-to set up the WebView:
-
-### Configuration Schema
-
-```json
-{
-  "login": {
-    "customSignIn": {
-      "enabled": false,
-      "titleL10n": "login_requestCredentials_title",
-      "url": "https://webtrit-app.web.app/example/example_embedded_login.html"
-    }
-  }
-}
-```
-
-This JSON scheme includes:
-
-- `enable`: A boolean value that determines whether the custom sign-in feature is enabled.
-- `titleL10n`: A string that represents the localization key for the toolbar title.
-- `url`: A string that represents the URL of the embedded login page.
-
-### File Path
-
-The configuration should be placed in the following file:
-
-```
-webtrit_phone/assets/themes/original.ui.compose.config.json
-```
+When `WebtritLoginChannel.postMessage` is called with the `signup` event, the Flutter application initiates the custom signup process using the provided data.
 
 ## Summary
 
-- The web page collects user credentials and sends a JSON-encoded session token to the Flutter app using
-  the `WebtritLoginChannel`.
-- The Flutter app listens for messages on the `WebtritLoginChannel` and processes the session token to log in the user.
-- Configure the WebView by updating the configuration file with the appropriate schema and file path.
-
-## Diagram
-
-Below is the sequence diagram illustrating the flow from opening the WebView to receiving the session token and logging
-in the user:
-
-```sequence
-App->>WebPage: Open WebView
-WebPage->>WebPage: Perform tasks (e.g., API calls)
-WebPage->>FlutterApp: Send JSON with token
-FlutterApp->>FlutterApp: Process token and log in user
-```
+By configuring the `loginConfig` section, you can seamlessly integrate a custom signup flow with your app, providing a tailored user experience while maintaining flexibility to fall back on the default login process.
