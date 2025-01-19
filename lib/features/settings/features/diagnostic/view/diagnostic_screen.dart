@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
+import 'package:webtrit_phone/models/agreement_status.dart';
 
 import '../../../widgets/widgets.dart';
 import '../bloc/diagnostic_cubit.dart';
@@ -44,6 +46,7 @@ class _DiagnosticScreenState extends State<DiagnosticScreen> with WidgetsBinding
   @override
   Widget build(BuildContext context) {
     final androidTarget = PlatformInfo().isAndroid;
+    final contactsAgreementStatus = context.watch<AppBloc>().state.contactsAgreementStatus;
 
     return BlocBuilder<DiagnosticCubit, DiagnosticState>(
       builder: (context, state) {
@@ -91,7 +94,9 @@ class _DiagnosticScreenState extends State<DiagnosticScreen> with WidgetsBinding
                     },
                   ),
                 GroupTitleListTile(titleData: context.l10n.diagnosticScreen_permissionsGroup_title),
-                ...state.permissions.map(
+                ...state.filterPermissionsByAgreement(exclude: [
+                  if (!contactsAgreementStatus.isAccepted) Permission.contacts,
+                ]).map(
                   (permission) => DiagnosticPermissionItem(
                     permissionWithStatus: permission,
                     onTap: () => showModalBottomSheet(
@@ -108,6 +113,26 @@ class _DiagnosticScreenState extends State<DiagnosticScreen> with WidgetsBinding
                     ),
                   ),
                 ),
+                GroupTitleListTile(titleData: context.l10n.diagnosticScreen_contacts_agreement_group_title),
+                DiagnosticAgreementItem(
+                  title: context.l10n.diagnosticScreen_contacts_agreement_title,
+                  description: context.l10n.diagnosticScreen_contacts_agreement_description,
+                  status: contactsAgreementStatus,
+                  onTap: () {
+                    showModalBottomSheet(
+                      context: context,
+                      builder: (BuildContext context) => DiagnosticAgreementDetails(
+                        title: context.l10n.diagnosticScreen_contacts_agreement_title,
+                        description: context.l10n.contacts_agreement_description,
+                        status: contactsAgreementStatus,
+                        onApply: (AgreementStatus value) {
+                          context.read<AppBloc>().add(AppAgreementAccepted.updateContactsAgreement(value));
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    );
+                  },
+                )
               ],
             ),
           ),
