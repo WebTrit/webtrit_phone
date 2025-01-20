@@ -30,14 +30,14 @@ class LeadingAvatar extends StatefulWidget {
 }
 
 class _LeadingAvatarState extends State<LeadingAvatar> {
+  late final diameter = widget.radius * 2;
+  late final registeredPosition = Rect.fromLTWH(diameter * 0.8, diameter * 0.8, diameter * 0.2, diameter * 0.2);
+  late final smartPosition = Rect.fromLTWH(diameter * -0.1, diameter * -0.1, diameter * 0.4, diameter * 0.4);
+
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
     final colorScheme = themeData.colorScheme;
-    final diameter = widget.radius * 2;
-
-    final registeredStatusStyle = themeData.extension<RegisteredStatusStyles>()!.primary;
-    final cacheSize = (diameter * MediaQuery.of(context).devicePixelRatio).toInt();
 
     return Container(
       width: diameter,
@@ -50,168 +50,80 @@ class _LeadingAvatarState extends State<LeadingAvatar> {
         alignment: Alignment.center,
         fit: StackFit.loose,
         children: [
-          _Placeholder(
-            placeholderIcon: widget.placeholderIcon,
-            diameter: diameter,
-            username: widget.username,
-          ),
-          if (widget.thumbnail != null)
-            _BlobImage(
-              blob: widget.thumbnail!,
-              cacheSize: cacheSize,
-            ),
           if (widget.thumbnailUrl != null)
-            _UrlImage(
-              url: widget.thumbnailUrl.toString(),
-              cacheSize: cacheSize,
-            ),
+            Positioned.fill(child: ClipOval(child: remoteImage()))
+          else if (widget.thumbnail != null)
+            Positioned.fill(child: ClipOval(child: localImage()))
+          else
+            Positioned.fill(child: placeholder()),
           if (widget.smart)
-            _SmartIndicator(
-              diameter: diameter,
-              colorScheme: colorScheme,
-            ),
-          if (widget.registered != null)
-            _RegisteredIndicator(
-              diameter: diameter,
-              registered: widget.registered!,
-              registeredStatusStyle: registeredStatusStyle,
-            ),
+            Positioned.fromRect(rect: smartPosition, child: smartIndicator())
+          else if (widget.registered != null)
+            Positioned.fromRect(rect: registeredPosition, child: registeredIndicator()),
         ],
       ),
     );
   }
-}
 
-class _Placeholder extends StatelessWidget {
-  const _Placeholder({
-    required this.placeholderIcon,
-    required this.diameter,
-    this.username,
-  });
+  Widget remoteImage() {
+    return Image.network(
+      widget.thumbnailUrl.toString(),
+      fit: BoxFit.cover,
+      errorBuilder: (context, error, stackTrace) {
+        if (widget.thumbnail != null) return localImage();
+        return placeholder();
+      },
+    );
+  }
 
-  final IconData placeholderIcon;
-  final double diameter;
-  final String? username;
+  Widget localImage() {
+    return Image.memory(
+      widget.thumbnail!,
+      fit: BoxFit.cover,
+      errorBuilder: (context, error, stackTrace) => placeholder(),
+    );
+  }
 
-  @override
-  Widget build(BuildContext context) {
+  Widget placeholder() {
+    final username = widget.username;
+    final placeholderIcon = widget.placeholderIcon;
     return username != null
-        ? Text(
-            username!.initialism,
-            softWrap: false,
-            overflow: TextOverflow.fade,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: diameter * 0.35,
-              fontWeight: FontWeight.bold,
+        ? Center(
+            child: Text(
+              username.initialism,
+              softWrap: false,
+              overflow: TextOverflow.fade,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: diameter * 0.35,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           )
-        : Icon(placeholderIcon);
+        : Icon(placeholderIcon, size: diameter * 0.5);
   }
-}
 
-class _BlobImage extends StatelessWidget {
-  const _BlobImage({
-    required this.blob,
-    required this.cacheSize,
-  });
+  Widget registeredIndicator() {
+    final themeData = Theme.of(context);
+    final registeredStatusStyle = themeData.extension<RegisteredStatusStyles>()!.primary;
 
-  final Uint8List blob;
-  final int cacheSize;
+    final registered = widget.registered!;
 
-  @override
-  Widget build(BuildContext context) {
-    return Positioned.fill(
-      child: ClipOval(
-        child: Image.memory(
-          blob,
-          fit: BoxFit.cover,
-          errorBuilder: (context, error, stackTrace) => const SizedBox.shrink(),
-          cacheHeight: cacheSize,
-          cacheWidth: cacheSize,
-        ),
+    return Container(
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: registered ? registeredStatusStyle.registered : registeredStatusStyle.unregistered,
       ),
     );
   }
-}
 
-class _UrlImage extends StatelessWidget {
-  const _UrlImage({
-    required this.url,
-    required this.cacheSize,
-  });
+  Widget smartIndicator() {
+    final themeData = Theme.of(context);
+    final colorScheme = themeData.colorScheme;
 
-  final String url;
-  final int cacheSize;
-
-  @override
-  Widget build(BuildContext context) {
-    return Positioned.fill(
-      child: ClipOval(
-        child: Image.network(
-          url,
-          fit: BoxFit.cover,
-          errorBuilder: (context, error, stackTrace) => const SizedBox.shrink(),
-          cacheHeight: cacheSize,
-          cacheWidth: cacheSize,
-        ),
-      ),
-    );
-  }
-}
-
-class _SmartIndicator extends StatelessWidget {
-  const _SmartIndicator({
-    required this.diameter,
-    required this.colorScheme,
-  });
-
-  final double diameter;
-  final ColorScheme colorScheme;
-
-  @override
-  Widget build(BuildContext context) {
-    return Positioned(
-      left: diameter * -0.1,
-      bottom: diameter * -0.1,
-      width: diameter * 0.4,
-      height: diameter * 0.4,
-      child: CircleAvatar(
-        backgroundColor: colorScheme.surfaceContainerLowest,
-        child: Icon(
-          Icons.person,
-          size: diameter * 0.4 * 0.9,
-        ),
-      ),
-    );
-  }
-}
-
-class _RegisteredIndicator extends StatelessWidget {
-  const _RegisteredIndicator({
-    required this.diameter,
-    required this.registered,
-    required this.registeredStatusStyle,
-  });
-
-  final double diameter;
-  final bool registered;
-
-  final RegisteredStatusStyle registeredStatusStyle;
-
-  @override
-  Widget build(BuildContext context) {
-    return Positioned(
-      right: 0,
-      bottom: 0,
-      width: diameter * 0.2,
-      height: diameter * 0.2,
-      child: Container(
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: registered ? registeredStatusStyle.registered : registeredStatusStyle.unregistered,
-        ),
-      ),
+    return CircleAvatar(
+      backgroundColor: colorScheme.surfaceContainerLowest,
+      child: Icon(Icons.person, size: diameter * 0.4 * 0.9),
     );
   }
 }
