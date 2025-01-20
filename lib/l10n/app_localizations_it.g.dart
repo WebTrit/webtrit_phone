@@ -413,6 +413,15 @@ class AppLocalizationsIt extends AppLocalizations {
   String get diagnosticScreen_pushNotificationService_title => 'Servizio di notifiche push';
 
   @override
+  String get diagnosticScreen_contacts_agreement_group_title => 'Accordo';
+
+  @override
+  String get diagnosticScreen_contacts_agreement_title => 'Accordo sui Contatti';
+
+  @override
+  String get diagnosticScreen_contacts_agreement_description => 'Consenti all\'app di accedere ai miei contatti per migliorare la mia esperienza utente.';
+
+  @override
   String get favorites_BodyCenter_empty => 'Al momento non hai numeri preferiti.\nAggiungi ai preferiti dai Contatti usando l\'icona a stella';
 
   @override

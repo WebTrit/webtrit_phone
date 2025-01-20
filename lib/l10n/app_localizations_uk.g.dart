@@ -413,6 +413,15 @@ class AppLocalizationsUk extends AppLocalizations {
   String get diagnosticScreen_pushNotificationService_title => 'Служба push-сповіщень';
 
   @override
+  String get diagnosticScreen_contacts_agreement_group_title => 'Угода';
+
+  @override
+  String get diagnosticScreen_contacts_agreement_title => 'Угода про контакти';
+
+  @override
+  String get diagnosticScreen_contacts_agreement_description => 'Дозвольте додатку отримати доступ до ваших контактів для покращення користувацького досвіду.';
+
+  @override
   String get favorites_BodyCenter_empty => 'Наразі у вас немає обраних номерів.\nДодайте обрані номери з Контактів, використовуючи іконку зірочки';
 
   @override

@@ -901,6 +901,24 @@ abstract class AppLocalizations {
   /// **'Push notification service'**
   String get diagnosticScreen_pushNotificationService_title;
 
+  /// No description provided for @diagnosticScreen_contacts_agreement_group_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Agreement'**
+  String get diagnosticScreen_contacts_agreement_group_title;
+
+  /// No description provided for @diagnosticScreen_contacts_agreement_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Contacts Agreement'**
+  String get diagnosticScreen_contacts_agreement_title;
+
+  /// No description provided for @diagnosticScreen_contacts_agreement_description.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow the app to access my contacts to enhance my user experience.'**
+  String get diagnosticScreen_contacts_agreement_description;
+
   /// No description provided for @favorites_BodyCenter_empty.
   ///
   /// In en, this message translates to:

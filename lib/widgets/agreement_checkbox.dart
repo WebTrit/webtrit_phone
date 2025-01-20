@@ -10,7 +10,7 @@ class AgreementCheckbox extends StatelessWidget {
 
   final String text;
   final bool agreementAccepted;
-  final Function(bool) onChanged;
+  final ValueChanged<bool> onChanged;
 
   @override
   Widget build(BuildContext context) {
