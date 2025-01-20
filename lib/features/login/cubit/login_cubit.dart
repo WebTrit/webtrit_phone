@@ -331,7 +331,8 @@ class LoginCubit extends Cubit<LoginState> with SystemInfoApiMapper {
     ));
 
     try {
-      final client = createWebtritApiClient(state.coreUrl!, state.tenantId!);
+      final tenantId = extras?['tenant_id'] ?? state.tenantId ?? defaultTenantId;
+      final client = createWebtritApiClient(state.coreUrl!, tenantId);
       final result = await _createUserRequest(client: client, extraPayload: extras);
 
       _handleLoginResult(result);

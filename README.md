@@ -100,8 +100,8 @@ Follow these steps according to your specific activity to manage the localizatio
 ### 1. Theme Settings
 For guidance on configuring themes in your application, refer to the [Theme Settings](doc/theme_config/index.md) documentation.
 
-### 2. Custom Login Setup
-To learn how to configure and customize the login process, please consult the [Custom Login Setup](doc/custom_login/index.md) guide.
+### 2. Custom Signup Setup
+To learn how to configure and customize the signup process, please consult the [Custom Signup Setup](doc/custom_signup/index.md) guide.
 
 ### 3. Custom Bottom Menu
 To configure the bottom menu according to your application’s needs, refer to the [Bottom Menu Configuration](doc/bottom_menu_config/index.md) guide. 
