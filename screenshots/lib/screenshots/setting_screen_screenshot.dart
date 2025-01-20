@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:webtrit_phone/data/data.dart';
 
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/models/models.dart';
@@ -32,6 +33,10 @@ class _SettingScreenScreenshotState extends State<SettingScreenScreenshot> {
           context,
           PageRouteBuilder(
             pageBuilder: (context, _, __) {
+              // Fetch sections for the settings screen using FeatureAccess, specifically used in the configurator project.
+              // Fallback to default sections if FeatureAccess is not available.
+              final sections = context.read<FeatureAccess?>()?.settingsFeature.sections ?? _defaultSections();
+
               return MultiBlocProvider(
                 providers: [
                   BlocProvider<CallBloc>(
@@ -51,48 +56,7 @@ class _SettingScreenScreenshotState extends State<SettingScreenScreenshot> {
                   ),
                 ],
                 child: SettingsScreen(
-                  sections: [
-                    SettingsSection(
-                      titleL10n: 'settings_section_title_general',
-                      items: [
-                        SettingItem(
-                          titleL10n: 'settings_ListViewTileTitle_network',
-                          icon: Icons.network_check,
-                          flavor: SettingsFlavor.network,
-                        ),
-                        SettingItem(
-                          titleL10n: 'settings_ListViewTileTitle_language',
-                          icon: Icons.language,
-                          flavor: SettingsFlavor.language,
-                        ),
-                        SettingItem(
-                          titleL10n: 'settings_ListViewTileTitle_termsConditions',
-                          icon: Icons.book_outlined,
-                          flavor: SettingsFlavor.terms,
-                        ),
-                        SettingItem(
-                          titleL10n: 'settings_ListViewTileTitle_about',
-                          icon: Icons.card_travel,
-                          flavor: SettingsFlavor.about,
-                        ),
-                      ],
-                    ),
-                    SettingsSection(
-                      titleL10n: 'settings_ListViewTileTitle_toolbox',
-                      items: [
-                        SettingItem(
-                          titleL10n: 'settings_ListViewTileTitle_logRecordsConsole',
-                          icon: Icons.aod_outlined,
-                          flavor: SettingsFlavor.log,
-                        ),
-                        SettingItem(
-                          titleL10n: 'settings_ListViewTileTitle_accountDelete',
-                          icon: Icons.delete_outline,
-                          flavor: SettingsFlavor.deleteAccount,
-                        ),
-                      ],
-                    ),
-                  ],
+                  sections: sections,
                 ),
               );
             },
@@ -103,6 +67,51 @@ class _SettingScreenScreenshotState extends State<SettingScreenScreenshot> {
         );
       },
     );
+  }
+
+  List<SettingsSection> _defaultSections() {
+    return [
+      SettingsSection(
+        titleL10n: 'settings_section_title_general',
+        items: [
+          SettingItem(
+            titleL10n: 'settings_ListViewTileTitle_network',
+            icon: Icons.network_check,
+            flavor: SettingsFlavor.network,
+          ),
+          SettingItem(
+            titleL10n: 'settings_ListViewTileTitle_language',
+            icon: Icons.language,
+            flavor: SettingsFlavor.language,
+          ),
+          SettingItem(
+            titleL10n: 'settings_ListViewTileTitle_termsConditions',
+            icon: Icons.book_outlined,
+            flavor: SettingsFlavor.terms,
+          ),
+          SettingItem(
+            titleL10n: 'settings_ListViewTileTitle_about',
+            icon: Icons.card_travel,
+            flavor: SettingsFlavor.about,
+          ),
+        ],
+      ),
+      SettingsSection(
+        titleL10n: 'settings_ListViewTileTitle_toolbox',
+        items: [
+          SettingItem(
+            titleL10n: 'settings_ListViewTileTitle_logRecordsConsole',
+            icon: Icons.aod_outlined,
+            flavor: SettingsFlavor.log,
+          ),
+          SettingItem(
+            titleL10n: 'settings_ListViewTileTitle_accountDelete',
+            icon: Icons.delete_outline,
+            flavor: SettingsFlavor.deleteAccount,
+          ),
+        ],
+      ),
+    ];
   }
 
   @override
