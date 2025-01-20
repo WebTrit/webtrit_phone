@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
@@ -16,12 +17,33 @@ class MainScreenScreenshot extends StatelessWidget {
   });
 
   final MainFlavor flavor;
-
   final Widget? title;
 
   @override
   Widget build(BuildContext context) {
-    List<BottomMenuTab> tabs = [
+    // Fetch tabs for the bottom menu using FeatureAccess, which is specifically used in the configurator project.
+    // If FeatureAccess is not available, fallback to predefined default tabs.
+    final tabs = context.read<FeatureAccess?>()?.bottomMenuFeature.tabs ?? _defaultTabs();
+    return MultiBlocProvider(
+      providers: _createMockBlocProviders(),
+      child: MainScreen(
+        body: _buildFlavorWidget(context, flavor),
+        bottomNavigationBar: _buildBottomNavigationBar(tabs),
+      ),
+    );
+  }
+
+  List<BlocProvider> _createMockBlocProviders() {
+    return [
+      BlocProvider<CallBloc>(create: (_) => MockCallBloc.mainScreen()),
+      BlocProvider<MainBloc>(create: (_) => MockMainBloc.mainScreen()),
+      BlocProvider<SessionStatusCubit>(create: (_) => MockSessionStatusCubit.initial()),
+      BlocProvider<UserInfoCubit>(create: (_) => MockUserInfoCubit.initial()),
+    ];
+  }
+
+  List<BottomMenuTab> _defaultTabs() {
+    return [
       const BottomMenuTab(
         enabled: true,
         initial: true,
@@ -33,7 +55,7 @@ class MainScreenScreenshot extends StatelessWidget {
         enabled: true,
         initial: false,
         flavor: MainFlavor.recents,
-        titleL10n: ' main_BottomNavigationBarItemLabel_recents ',
+        titleL10n: 'main_BottomNavigationBarItemLabel_recents',
         icon: Icons.history,
       ),
       const BottomMenuTab(
@@ -49,86 +71,66 @@ class MainScreenScreenshot extends StatelessWidget {
         flavor: MainFlavor.keypad,
         titleL10n: 'main_BottomNavigationBarItemLabel_keypad',
         icon: Icons.dialpad,
-      )
-    ];
-
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider<CallBloc>(
-          create: (context) => MockCallBloc.mainScreen(),
-        ),
-        BlocProvider<MainBloc>(
-          create: (context) => MockMainBloc.mainScreen(),
-        ),
-        BlocProvider<SessionStatusCubit>(
-          create: (context) => MockSessionStatusCubit.initial(),
-        ),
-        BlocProvider<UserInfoCubit>(
-          create: (context) => MockUserInfoCubit.initial(),
-        ),
-      ],
-      child: MainScreen(
-        body: _flavorWidgetBuilder(context, flavor),
-        bottomNavigationBar: BottomNavigationBar(
-          currentIndex: tabs.indexWhere((tab) => tab.flavor == flavor),
-          items: tabs.map((tab) => BottomNavigationBarItem(icon: Icon(tab.icon), label: tab.titleL10n)).toList(),
-        ),
       ),
+    ];
+  }
+
+  BottomNavigationBar _buildBottomNavigationBar(List<BottomMenuTab> tabs) {
+    return BottomNavigationBar(
+      currentIndex: tabs.indexWhere((tab) => tab.flavor == flavor),
+      items: tabs
+          .map((tab) => BottomNavigationBarItem(
+                icon: Icon(tab.icon),
+                label: tab.titleL10n,
+              ))
+          .toList(),
     );
   }
 
-  Widget _flavorWidgetBuilder(BuildContext context, MainFlavor flavor) {
+  Widget _buildFlavorWidget(BuildContext context, MainFlavor flavor) {
     switch (flavor) {
       case MainFlavor.favorites:
-        final widget = FavoritesScreen(
-          title: title,
-          videoCallEnable: true,
+        return BlocProvider<FavoritesBloc>(
+          create: (_) => MockFavoritesBloc.mainScreen(),
+          child: FavoritesScreen(
+            title: title,
+            videoCallEnable: true,
+          ),
         );
-        final provider = BlocProvider<FavoritesBloc>(
-          create: (context) => MockFavoritesBloc.mainScreen(),
-          child: widget,
-        );
-        return provider;
       case MainFlavor.recents:
-        final widget = RecentsScreen(
-          title: title,
-          videoCallEnable: true,
-          chatsEnabled: false,
+        return BlocProvider<RecentsBloc>(
+          create: (_) => MockRecentsBloc.mainScreen(),
+          child: RecentsScreen(
+            title: title,
+            videoCallEnable: true,
+            chatsEnabled: false,
+          ),
         );
-        final provider = BlocProvider<RecentsBloc>(
-          create: (context) => MockRecentsBloc.mainScreen(),
-          child: widget,
-        );
-        return provider;
       case MainFlavor.contacts:
-        final widget = ContactsScreen(
-          sourceTypes: const [
-            ContactSourceType.local,
-            ContactSourceType.external,
-          ],
-          sourceTypeWidgetBuilder: _contactSourceTypeWidgetBuilder,
-          title: title,
+        return BlocProvider<ContactsBloc>(
+          create: (_) => MockContactsSearchBloc.mainScreen(),
+          child: ContactsScreen(
+            sourceTypes: const [
+              ContactSourceType.local,
+              ContactSourceType.external,
+            ],
+            sourceTypeWidgetBuilder: _buildContactSourceTypeWidget,
+            title: title,
+          ),
         );
-        final provider = BlocProvider<ContactsBloc>(
-          create: (context) => MockContactsSearchBloc.mainScreen(),
-          child: widget,
-        );
-        return provider;
       case MainFlavor.keypad:
-        final widget = KeypadScreen(
-          title: title,
-          videoVisible: true,
+        return BlocProvider<KeypadCubit>(
+          create: (_) => MockKeypadCubit.mainScreen(),
+          child: KeypadScreen(
+            title: title,
+            videoVisible: true,
+          ),
         );
-        final provider = BlocProvider<KeypadCubit>(
-          create: (context) => MockKeypadCubit.mainScreen(),
-          child: widget,
-        );
-        return provider;
       case MainFlavor.embedded1:
       case MainFlavor.embedded2:
       case MainFlavor.embedded3:
-        final provider = BlocProvider<EmbeddedCubit>(
-          create: (context) => MockEmbeddedCubit.mainScreen(),
+        return BlocProvider<EmbeddedCubit>(
+          create: (_) => MockEmbeddedCubit.mainScreen(),
           child: EmbeddedScreen(
             initialUri: Uri.parse('https://example.com'),
             appBar: MainAppBar(
@@ -136,29 +138,23 @@ class MainScreenScreenshot extends StatelessWidget {
             ),
           ),
         );
-        return provider;
       case MainFlavor.messaging:
-        const widget = Placeholder();
-        return widget;
+        return const Placeholder();
     }
   }
 
-  Widget _contactSourceTypeWidgetBuilder(BuildContext context, ContactSourceType sourceType) {
+  Widget _buildContactSourceTypeWidget(BuildContext context, ContactSourceType sourceType) {
     switch (sourceType) {
       case ContactSourceType.local:
-        const widget = ContactsLocalTab();
-        final provider = BlocProvider<ContactsLocalTabBloc>(
-          create: (context) => MockContactsLocalTabBloc.mainScreen(),
-          child: widget,
+        return BlocProvider<ContactsLocalTabBloc>(
+          create: (_) => MockContactsLocalTabBloc.mainScreen(),
+          child: const ContactsLocalTab(),
         );
-        return provider;
       case ContactSourceType.external:
-        const widget = ContactsExternalTab();
-        final provider = BlocProvider<ContactsExternalTabBloc>(
-          create: (context) => MockContactsExternalTabBloc.mainScreen(),
-          child: widget,
+        return BlocProvider<ContactsExternalTabBloc>(
+          create: (_) => MockContactsExternalTabBloc.mainScreen(),
+          child: const ContactsExternalTab(),
         );
-        return provider;
     }
   }
 }
