@@ -40,7 +40,7 @@ class ScreenshotApp extends StatelessWidget {
                 previous.effectiveThemeMode != current.effectiveThemeMode,
             builder: (context, state) {
               final themeProvider = ThemeProvider.of(context);
-              return MaterialApp.router(
+              return MaterialApp(
                 locale: state.effectiveLocale,
                 localizationsDelegates: AppLocalizations.localizationsDelegates,
                 supportedLocales: AppLocalizations.supportedLocales,
@@ -48,8 +48,8 @@ class ScreenshotApp extends StatelessWidget {
                 themeMode: state.effectiveThemeMode,
                 theme: themeProvider.light(),
                 darkTheme: themeProvider.dark(),
+                home: child,
                 debugShowCheckedModeBanner: false,
-                routerDelegate: ScreenshotRouterDelegate(child),
               );
             },
           ),
@@ -71,41 +71,6 @@ class ScreenshotApp extends StatelessWidget {
     );
 
     return provider;
-  }
-}
-
-class ScreenshotRouterDelegate extends RouterDelegate<Object>
-    with ChangeNotifier, PopNavigatorRouterDelegateMixin<Object> {
-  ScreenshotRouterDelegate(this.child);
-
-  final Widget child;
-
-  @override
-  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
-
-  @override
-  Widget build(BuildContext context) {
-    return Navigator(
-      key: navigatorKey,
-      pages: [
-        MaterialPage(child: child),
-      ],
-      onDidRemovePage: _handlePageRemoved,
-    );
-  }
-
-  void _handlePageRemoved(Page<Object?> page) {
-    notifyListeners();
-  }
-
-  @override
-  Future<void> setNewRoutePath(Object configuration) async {
-    return;
-  }
-
-  @override
-  Future<bool> popRoute() async {
-    return false;
   }
 }
 
