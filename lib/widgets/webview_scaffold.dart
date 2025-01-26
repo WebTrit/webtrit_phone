@@ -111,7 +111,7 @@ class _WebViewScaffoldState extends State<WebViewScaffold> {
 
     final themeData = Theme.of(context);
     final backgroundColor = themeData.colorScheme.surface;
-    if (_backgroundColorCache != backgroundColor) {
+    if (_backgroundColorCache != backgroundColor && !kIsWeb) {
       _backgroundColorCache = backgroundColor;
       _webViewController.setBackgroundColor(backgroundColor);
     }
@@ -138,7 +138,9 @@ class _WebViewScaffoldState extends State<WebViewScaffold> {
   @override
   void dispose() {
     () async {
-      await _webViewController.setNavigationDelegate(NavigationDelegate());
+      if (!kIsWeb) {
+        await _webViewController.setNavigationDelegate(NavigationDelegate());
+      }
       await _webViewController.loadBlank();
       await _progressStreamController.close();
     }();

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -38,26 +39,32 @@ class _LoginSignupEmbeddedRequestScreenState extends State<LoginSignupEmbeddedRe
   @override
   void initState() {
     super.initState();
-    _webViewController.setJavaScriptMode(JavaScriptMode.unrestricted);
-    _webViewController.addJavaScriptChannel(
-      _loginJavascriptChannelName,
-      onMessageReceived: _onJavaScriptMessageReceived,
-    );
-    _webViewController.loadRequest(Uri.parse(widget.initialUrl.toString()));
+    if (!kIsWeb) {
+      _webViewController.setJavaScriptMode(JavaScriptMode.unrestricted);
 
-    // Ensure NavigationDelegate callbacks are only triggered if the widget is still mounted.
-    // This prevents potential errors caused by invoking callbacks after the widget has been disposed.
-    _webViewController.setNavigationDelegate(NavigationDelegate(
-      onPageFinished: (_) => mounted ? _onPageFinishedNavigationDelegate() : null,
-      onProgress: (progress) => mounted ? _onProgressNavigationDelegate(progress) : null,
-      onWebResourceError: (error) => mounted ? _onWebResourceErrorNavigationDelegate(error) : null,
-    ));
+      _webViewController.addJavaScriptChannel(
+        _loginJavascriptChannelName,
+        onMessageReceived: _onJavaScriptMessageReceived,
+      );
+
+      // Ensure NavigationDelegate callbacks are only triggered if the widget is still mounted.
+      // This prevents potential errors caused by invoking callbacks after the widget has been disposed.
+      _webViewController.setNavigationDelegate(NavigationDelegate(
+        onPageFinished: (_) => mounted ? _onPageFinishedNavigationDelegate() : null,
+        onProgress: (progress) => mounted ? _onProgressNavigationDelegate(progress) : null,
+        onWebResourceError: (error) => mounted ? _onWebResourceErrorNavigationDelegate(error) : null,
+      ));
+    }
+
+    _webViewController.loadRequest(Uri.parse(widget.initialUrl.toString()));
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _webViewController.setBackgroundColor(Colors.transparent);
+    if (!kIsWeb) {
+      _webViewController.setBackgroundColor(Colors.transparent);
+    }
   }
 
   @override
