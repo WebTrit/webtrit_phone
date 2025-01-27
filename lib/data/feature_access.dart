@@ -118,8 +118,8 @@ class FeatureAccess {
       final items = <SettingItem>[];
 
       for (var item in section.items.where((item) => item.enabled)) {
-        final resourceString = item.embeddedData?.attributes[BottomMenuTabScheme.dataResource] as String?;
-        final data = resourceString == null ? null : ConfigData(resource: Uri.parse(resourceString));
+        final embeddedDataResourceUrl = item.embeddedData?.resource;
+        final data = embeddedDataResourceUrl == null ? null : ConfigData(resource: embeddedDataResourceUrl);
         final flavor = SettingsFlavor.values.byName(item.type);
 
         // TODO (Serdun): Move platform-specific configuration to a separate config file.
