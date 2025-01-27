@@ -1,5 +1,10 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '../converters/converters.dart';
+import '../parsers/parsers.dart';
+
+import 'bottom_menu_tab_type.dart';
+
 part 'app_config.freezed.dart';
 
 part 'app_config.g.dart';
@@ -25,9 +30,9 @@ class AppConfigLogin with _$AppConfigLogin {
 
   @JsonSerializable(explicitToJson: true)
   const factory AppConfigLogin({
-    String? label,
+    String? greetingL10n,
     @Default([]) List<AppConfigModeSelectAction> modeSelectActions,
-    @Default([]) List<AppConfigLoginEmbedded> embedded,
+    @Default([]) List<EmbeddedData> embedded,
   }) = _AppConfigLogin;
 
   factory AppConfigLogin.fromJson(Map<String, dynamic> json) => _$AppConfigLoginFromJson(json);
@@ -49,22 +54,6 @@ class AppConfigModeSelectAction with _$AppConfigModeSelectAction {
 }
 
 @freezed
-class AppConfigLoginEmbedded with _$AppConfigLoginEmbedded {
-  const AppConfigLoginEmbedded._();
-
-  @JsonSerializable(explicitToJson: true)
-  const factory AppConfigLoginEmbedded({
-    required int id,
-    @Default(false) bool launch,
-    String? titleL10n,
-    @Default(false) bool showToolbar,
-    required String resource,
-  }) = _AppConfigLoginEmbedded;
-
-  factory AppConfigLoginEmbedded.fromJson(Map<String, dynamic> json) => _$AppConfigLoginEmbeddedFromJson(json);
-}
-
-@freezed
 class AppConfigMain with _$AppConfigMain {
   const AppConfigMain._();
 
@@ -83,30 +72,82 @@ class AppConfigBottomMenu with _$AppConfigBottomMenu {
   @JsonSerializable(explicitToJson: true)
   const factory AppConfigBottomMenu({
     @Default(true) bool cacheSelectedTab,
-    @Default([]) List<AppConfigBottomMenuTab> tabs,
+    @Default([]) List<BottomMenuTabScheme> tabs,
   }) = _AppConfigBottomMenu;
 
   factory AppConfigBottomMenu.fromJson(Map<String, dynamic> json) => _$AppConfigBottomMenuFromJson(json);
 }
 
 @freezed
-class AppConfigBottomMenuTab with _$AppConfigBottomMenuTab {
-  const AppConfigBottomMenuTab._();
+class AppConfigCall with _$AppConfigCall {
+  const AppConfigCall._();
 
+  @JsonSerializable(explicitToJson: true)
+  const factory AppConfigCall({
+    @Default(true) bool videoEnabled,
+    @Default(AppConfigTransfer(
+      enableBlindTransfer: true,
+      enableAttendedTransfer: true,
+    ))
+    AppConfigTransfer transfer,
+  }) = _AppConfigCall;
+
+  factory AppConfigCall.fromJson(Map<String, dynamic> json) => _$AppConfigCallFromJson(json);
+}
+
+@freezed
+class AppConfigTransfer with _$AppConfigTransfer {
+  const AppConfigTransfer._();
+
+  @JsonSerializable(explicitToJson: true)
+  const factory AppConfigTransfer({
+    @Default(true) bool enableBlindTransfer,
+    @Default(true) bool enableAttendedTransfer,
+  }) = _AppConfigTransfer;
+
+  factory AppConfigTransfer.fromJson(Map<String, dynamic> json) => _$AppConfigTransferFromJson(json);
+}
+
+@freezed
+class BottomMenuTabScheme with _$BottomMenuTabScheme {
   static const String dataContactSourceTypes = 'contactSourceTypes';
   static const String dataResource = 'resource';
 
+  const BottomMenuTabScheme._();
+
   @JsonSerializable(explicitToJson: true)
-  const factory AppConfigBottomMenuTab({
+  const factory BottomMenuTabScheme.base({
     @Default(true) bool enabled,
     @Default(false) bool initial,
-    required String type,
+    @BottomMenuTabTypeConverter() required BottomMenuTabType type,
     required String titleL10n,
     required String icon,
-    @Default({}) Map<String, dynamic> data,
-  }) = _AppConfigBottomMenuTab;
+  }) = BaseTabScheme;
 
-  factory AppConfigBottomMenuTab.fromJson(Map<String, dynamic> json) => _$AppConfigBottomMenuTabFromJson(json);
+  @JsonSerializable(explicitToJson: true)
+  const factory BottomMenuTabScheme.contacts({
+    @Default(true) bool enabled,
+    @Default(false) bool initial,
+    @BottomMenuTabTypeConverter() required BottomMenuTabType type,
+    required String titleL10n,
+    required String icon,
+    @Default([]) List<String> contactSourceTypes,
+  }) = ContactsTabScheme;
+
+  @JsonSerializable(explicitToJson: true)
+  const factory BottomMenuTabScheme.embedded({
+    @Default(true) bool enabled,
+    @Default(false) bool initial,
+    @BottomMenuTabTypeConverter() required BottomMenuTabType type,
+    required String titleL10n,
+    required String icon,
+    required EmbeddedData data,
+  }) = EmbededTabScheme;
+
+  factory BottomMenuTabScheme.fromJson(Map<String, dynamic> json) => BottomMenuTabSchemeParser.fromJson(json);
+
+  @override
+  Map<String, dynamic> toJson() => BottomMenuTabSchemeParser.toJson(this);
 }
 
 @freezed
@@ -145,38 +186,34 @@ class AppConfigSettingsItem with _$AppConfigSettingsItem {
     required String titleL10n,
     required String type,
     required String icon,
-    @Default({}) Map<String, dynamic> data,
+    EmbeddedData? embeddedData,
   }) = _AppConfigSettingsItem;
 
   factory AppConfigSettingsItem.fromJson(Map<String, dynamic> json) => _$AppConfigSettingsItemFromJson(json);
 }
 
 @freezed
-class AppConfigCall with _$AppConfigCall {
-  const AppConfigCall._();
+class EmbeddedData with _$EmbeddedData {
+  const EmbeddedData._();
 
   @JsonSerializable(explicitToJson: true)
-  const factory AppConfigCall({
-    @Default(true) bool videoEnabled,
-    @Default(AppConfigTransfer(
-      enableBlindTransfer: true,
-      enableAttendedTransfer: true,
-    ))
-    AppConfigTransfer transfer,
-  }) = _AppConfigCall;
+  const factory EmbeddedData({
+    int? id,
+    @UriConverter() required Uri resource,
+    @Default({}) Map<String, dynamic> attributes,
+    @Default(ToolbarConfig()) ToolbarConfig toolbar,
+  }) = _EmbeddedData;
 
-  factory AppConfigCall.fromJson(Map<String, dynamic> json) => _$AppConfigCallFromJson(json);
+  factory EmbeddedData.fromJson(Map<String, dynamic> json) => _$EmbeddedDataFromJson(json);
 }
 
 @freezed
-class AppConfigTransfer with _$AppConfigTransfer {
-  const AppConfigTransfer._();
-
+class ToolbarConfig with _$ToolbarConfig {
   @JsonSerializable(explicitToJson: true)
-  const factory AppConfigTransfer({
-    @Default(true) bool enableBlindTransfer,
-    @Default(true) bool enableAttendedTransfer,
-  }) = _AppConfigTransfer;
+  const factory ToolbarConfig({
+    String? titleL10n,
+    @Default(false) bool showToolbar,
+  }) = _ToolbarConfig;
 
-  factory AppConfigTransfer.fromJson(Map<String, dynamic> json) => _$AppConfigTransferFromJson(json);
+  factory ToolbarConfig.fromJson(Map<String, dynamic> json) => _$ToolbarConfigFromJson(json);
 }

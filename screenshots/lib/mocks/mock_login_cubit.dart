@@ -6,6 +6,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:webtrit_api/webtrit_api.dart';
 
 import 'package:webtrit_phone/features/features.dart';
+import 'package:webtrit_phone/models/models.dart';
 
 class MockLoginCubit extends MockCubit<LoginState> implements LoginCubit {
   MockLoginCubit();
@@ -32,12 +33,13 @@ class MockLoginCubit extends MockCubit<LoginState> implements LoginCubit {
     return mock;
   }
 
-  factory MockLoginCubit.loginSwitchScreen() {
+  factory MockLoginCubit.loginSwitchScreen({LoginEmbedded? embedded}) {
     final mock = MockLoginCubit();
     whenListen(
       mock,
       const Stream<LoginState>.empty(),
       initialState: LoginState(
+        embedded: embedded,
         processing: false,
         mode: LoginMode.demoCore,
         coreUrl: '_',

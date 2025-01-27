@@ -79,34 +79,33 @@ class FeatureAccess {
     );
   }
 
-  static BottomMenuTab _createBottomMenuTab(AppConfigBottomMenuTab tab) {
-    final flavor = MainFlavor.values.byName(tab.type);
-    final resourceString = tab.data[AppConfigBottomMenuTab.dataResource] as String?;
-    final data = resourceString == null ? null : ConfigData(resource: Uri.parse(resourceString));
+  static BottomMenuTab _createBottomMenuTab(BottomMenuTabScheme tab) {
+    final flavor = MainFlavor.values.byName(tab.type.name);
 
-    if (flavor == MainFlavor.contacts) {
-      final sourceTypesList = (tab.data[AppConfigBottomMenuTab.dataContactSourceTypes] as List<dynamic>).cast<String>();
-      final sourceTypes = sourceTypesList.map((type) => ContactSourceType.values.byName(type)).toList();
-
-      return ContactsBottomMenuTab(
+    return tab.when(
+      base: (enabled, initial, type, titleL10n, icon) => BottomMenuTab(
         enabled: tab.enabled,
         initial: tab.initial,
         flavor: flavor,
         titleL10n: tab.titleL10n,
         icon: tab.icon.toIconData(),
-        data: data,
-        contactSourceTypes: sourceTypes,
-      );
-    } else {
-      return BottomMenuTab(
+      ),
+      contacts: (enabled, initial, type, titleL10n, icon, contactSourceTypes) => ContactsBottomMenuTab(
         enabled: tab.enabled,
         initial: tab.initial,
         flavor: flavor,
         titleL10n: tab.titleL10n,
         icon: tab.icon.toIconData(),
-        data: data,
-      );
-    }
+        contactSourceTypes: contactSourceTypes.map((type) => ContactSourceType.values.byName(type)).toList(),
+      ),
+      embedded: (enabled, initial, type, titleL10n, icon, data) => BottomMenuTab(
+        enabled: tab.enabled,
+        initial: tab.initial,
+        flavor: flavor,
+        titleL10n: tab.titleL10n,
+        icon: tab.icon.toIconData(),
+      ),
+    );
   }
 
   static SettingsFeature _tryConfigureSettingsFeature(
@@ -115,14 +114,12 @@ class FeatureAccess {
   ) {
     final settingSections = <SettingsSection>[];
 
-    late final Uri termsAndConditions;
-
     for (var section in appConfig.settingsConfig.sections.where((section) => section.enabled)) {
       final items = <SettingItem>[];
 
       for (var item in section.items.where((item) => item.enabled)) {
-        final resourceString = item.data[AppConfigBottomMenuTab.dataResource] as String?;
-        final data = resourceString == null ? null : ConfigData(resource: Uri.parse(resourceString));
+        final embeddedDataResourceUrl = item.embeddedData?.resource;
+        final data = embeddedDataResourceUrl == null ? null : ConfigData(resource: embeddedDataResourceUrl);
         final flavor = SettingsFlavor.values.byName(item.type);
 
         // TODO (Serdun): Move platform-specific configuration to a separate config file.
@@ -137,13 +134,6 @@ class FeatureAccess {
           flavor: SettingsFlavor.values.byName(item.type),
         );
 
-        if (settingItem.flavor == SettingsFlavor.terms) {
-          if (settingItem.data?.resource != null) {
-            termsAndConditions = settingItem.data!.resource;
-          } else {
-            throw Exception('Terms and conditions not found');
-          }
-        }
         items.add(settingItem);
       }
 
@@ -155,14 +145,14 @@ class FeatureAccess {
       );
     }
 
-    return SettingsFeature(settingSections, termsAndConditions);
+    return SettingsFeature(settingSections, Uri.parse(''));
   }
 
   static LoginFeature _tryEnableCustomLoginFeature(AppConfigLogin loginConfig) {
     final buttons = <LoginModeAction>[];
 
     final launchEmbeddedScreen = _toLoginEmbeddedModel(
-      loginConfig.embedded.firstWhereOrNull((embeddedScreen) => embeddedScreen.launch),
+      loginConfig.embedded.firstWhereOrNull((embeddedScreen) => embeddedScreen.attributes['launch'] == true),
     );
 
     for (var actions in loginConfig.modeSelectActions.where((button) => button.enabled)) {
@@ -184,18 +174,16 @@ class FeatureAccess {
     }
 
     return LoginFeature(
+      titleL10n: loginConfig.greetingL10n,
       actions: buttons,
       launchLoginPage: launchEmbeddedScreen,
     );
   }
 
-  static LoginEmbedded? _toLoginEmbeddedModel(AppConfigLoginEmbedded? embeddedDTO) {
-    return embeddedDTO != null
+  static LoginEmbedded? _toLoginEmbeddedModel(EmbeddedData? data) {
+    return data != null
         ? LoginEmbedded(
-            titleL10n: embeddedDTO.titleL10n,
-            resource: Uri.parse(embeddedDTO.resource),
-            showToolbar: embeddedDTO.showToolbar,
-          )
+            titleL10n: data.toolbar.titleL10n, showToolbar: data.toolbar.showToolbar, resource: data.resource)
         : null;
   }
 
@@ -213,17 +201,19 @@ class FeatureAccess {
 
   static MessagingFeature _tryConfigureMessagingFeature(AppConfig appConfig, AppPreferences preferences) {
     final tabEnabled = appConfig.mainConfig.bottomMenu.tabs.any((tab) {
-      return tab.type == MainFlavor.messaging.name && tab.enabled;
+      return tab.type.name == MainFlavor.messaging.name && tab.enabled;
     });
     return MessagingFeature(preferences, tabEnabled: tabEnabled);
   }
 }
 
 class LoginFeature {
+  final String? titleL10n;
   final List<LoginModeAction> actions;
   final LoginEmbedded? launchLoginPage;
 
   LoginFeature({
+    required this.titleL10n,
     required this.actions,
     required this.launchLoginPage,
   });
