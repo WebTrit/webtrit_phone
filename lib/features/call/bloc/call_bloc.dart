@@ -1130,39 +1130,54 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     if (!state.registrationStatus.isRegistered) {
       _logger.info('__onCallControlEventStarted account is not registered');
       submitNotification(CallWhileUnregisteredNotification());
-
       return;
     }
 
+    final line = state.retrieveIdleLine();
+    if (line == null) {
+      _logger.info('__onCallControlEventStarted no idle line');
+      submitNotification(const CallUndefinedLineNotification());
+      return;
+    }
+
+    /// If there is an active call, the call should be put on hold before making a new call.
+    /// Or it will be ended automatically by platform (via callkeep:performEndAction).
+    await Future.forEach(state.activeCalls, (ActiveCall activeCall) async {
+      final shouldHold = activeCall.held == false;
+      if (shouldHold) await callkeep.setHeld(activeCall.callId, onHold: true);
+    });
+
     final callId = WebtritSignalingClient.generateCallId();
 
-    final error = await callkeep.startCall(
+    final callkeepError = await callkeep.startCall(
       callId,
       event.handle,
       displayNameOrContactIdentifier: event.displayName,
       hasVideo: event.video,
       proximityEnabled: !event.video,
     );
-    if (error != null) {
-      if (error == CallkeepCallRequestError.emergencyNumber) {
+
+    if (callkeepError != null) {
+      if (callkeepError == CallkeepCallRequestError.emergencyNumber) {
         final Uri telLaunchUri = Uri(scheme: 'tel', path: event.handle.value);
         launchUrl(telLaunchUri);
       } else {
-        _logger.warning('__onCallControlEventStarted error: $error');
+        _logger.warning('__onCallControlEventStarted callkeepError: $callkeepError');
       }
-    } else {
-      final newCall = ActiveCall(
-        direction: CallDirection.outgoing,
-        line: event.line ?? state.retrieveIdleLine() ?? _kUndefinedLine,
-        callId: callId,
-        handle: event.handle,
-        displayName: event.displayName,
-        video: event.video,
-        createdTime: clock.now(),
-      );
-
-      emit(state.copyWithPushActiveCall(newCall).copyWith(minimized: false));
+      return;
     }
+
+    final newCall = ActiveCall(
+      direction: CallDirection.outgoing,
+      line: line,
+      callId: callId,
+      handle: event.handle,
+      displayName: event.displayName,
+      video: event.video,
+      createdTime: clock.now(),
+    );
+
+    emit(state.copyWithPushActiveCall(newCall).copyWith(minimized: false));
   }
 
   Future<void> __onCallControlEventAnswered(
