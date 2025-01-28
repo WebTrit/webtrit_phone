@@ -32,6 +32,9 @@ _$LoginPageConfigImpl _$$LoginPageConfigImplFromJson(
           ? const LoginModeSelectPageConfig()
           : LoginModeSelectPageConfig.fromJson(
               json['modeSelect'] as Map<String, dynamic>),
+      metadata: json['metadata'] == null
+          ? const Metadata()
+          : Metadata.fromJson(json['metadata'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$$LoginPageConfigImplToJson(
@@ -39,6 +42,7 @@ Map<String, dynamic> _$$LoginPageConfigImplToJson(
     <String, dynamic>{
       'picture': instance.picture,
       'modeSelect': instance.modeSelect.toJson(),
+      'metadata': instance.metadata.toJson(),
     };
 
 _$LoginModeSelectPageConfigImpl _$$LoginModeSelectPageConfigImplFromJson(
@@ -73,10 +77,12 @@ _$AboutPageConfigImpl _$$AboutPageConfigImplFromJson(
         Map<String, dynamic> json) =>
     _$AboutPageConfigImpl(
       picture: json['picture'] as String?,
+      metadata: json['metadata'] as Map<String, dynamic>? ?? const {},
     );
 
 Map<String, dynamic> _$$AboutPageConfigImplToJson(
         _$AboutPageConfigImpl instance) =>
     <String, dynamic>{
       'picture': instance.picture,
+      'metadata': instance.metadata,
     };

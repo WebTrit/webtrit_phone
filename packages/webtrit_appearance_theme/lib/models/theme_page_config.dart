@@ -1,6 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'elevated_button_style_type.dart';
+import 'metadata.dart';
 
 part 'theme_page_config.freezed.dart';
 
@@ -24,9 +25,12 @@ class LoginPageConfig with _$LoginPageConfig {
   const factory LoginPageConfig({
     String? picture,
     @Default(LoginModeSelectPageConfig()) LoginModeSelectPageConfig modeSelect,
+    @Default(Metadata()) Metadata metadata,
   }) = _LoginPageConfig;
 
   factory LoginPageConfig.fromJson(Map<String, dynamic> json) => _$LoginPageConfigFromJson(json);
+
+  static const String pictureKey = 'pictureUrlKey';
 }
 
 @Freezed()
@@ -45,6 +49,7 @@ class AboutPageConfig with _$AboutPageConfig {
   @JsonSerializable(explicitToJson: true)
   const factory AboutPageConfig({
     String? picture,
+    @Default({}) Map<String, dynamic> metadata,
   }) = _AboutPageConfig;
 
   factory AboutPageConfig.fromJson(Map<String, dynamic> json) => _$AboutPageConfigFromJson(json);

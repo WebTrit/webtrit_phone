@@ -259,6 +259,9 @@ _$PictureWidgetConfigImpl _$$PictureWidgetConfigImplFromJson(
           ? const AppIconWidgetConfig()
           : AppIconWidgetConfig.fromJson(
               json['appIcon'] as Map<String, dynamic>),
+      metadata: json['metadata'] == null
+          ? const Metadata()
+          : Metadata.fromJson(json['metadata'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$$PictureWidgetConfigImplToJson(
@@ -269,6 +272,7 @@ Map<String, dynamic> _$$PictureWidgetConfigImplToJson(
       'onboardingPictureLogo': instance.onboardingPictureLogo.toJson(),
       'onboardingLogo': instance.onboardingLogo.toJson(),
       'appIcon': instance.appIcon.toJson(),
+      'metadata': instance.metadata.toJson(),
     };
 
 _$LogoWidgetConfigImpl _$$LogoWidgetConfigImplFromJson(

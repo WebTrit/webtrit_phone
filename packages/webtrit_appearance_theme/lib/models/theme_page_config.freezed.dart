@@ -224,6 +224,7 @@ mixin _$LoginPageConfig {
   String? get picture => throw _privateConstructorUsedError;
   LoginModeSelectPageConfig get modeSelect =>
       throw _privateConstructorUsedError;
+  Metadata get metadata => throw _privateConstructorUsedError;
 
   /// Serializes this LoginPageConfig to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -241,9 +242,13 @@ abstract class $LoginPageConfigCopyWith<$Res> {
           LoginPageConfig value, $Res Function(LoginPageConfig) then) =
       _$LoginPageConfigCopyWithImpl<$Res, LoginPageConfig>;
   @useResult
-  $Res call({String? picture, LoginModeSelectPageConfig modeSelect});
+  $Res call(
+      {String? picture,
+      LoginModeSelectPageConfig modeSelect,
+      Metadata metadata});
 
   $LoginModeSelectPageConfigCopyWith<$Res> get modeSelect;
+  $MetadataCopyWith<$Res> get metadata;
 }
 
 /// @nodoc
@@ -263,6 +268,7 @@ class _$LoginPageConfigCopyWithImpl<$Res, $Val extends LoginPageConfig>
   $Res call({
     Object? picture = freezed,
     Object? modeSelect = null,
+    Object? metadata = null,
   }) {
     return _then(_value.copyWith(
       picture: freezed == picture
@@ -273,6 +279,10 @@ class _$LoginPageConfigCopyWithImpl<$Res, $Val extends LoginPageConfig>
           ? _value.modeSelect
           : modeSelect // ignore: cast_nullable_to_non_nullable
               as LoginModeSelectPageConfig,
+      metadata: null == metadata
+          ? _value.metadata
+          : metadata // ignore: cast_nullable_to_non_nullable
+              as Metadata,
     ) as $Val);
   }
 
@@ -285,6 +295,16 @@ class _$LoginPageConfigCopyWithImpl<$Res, $Val extends LoginPageConfig>
       return _then(_value.copyWith(modeSelect: value) as $Val);
     });
   }
+
+  /// Create a copy of LoginPageConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $MetadataCopyWith<$Res> get metadata {
+    return $MetadataCopyWith<$Res>(_value.metadata, (value) {
+      return _then(_value.copyWith(metadata: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
@@ -295,10 +315,15 @@ abstract class _$$LoginPageConfigImplCopyWith<$Res>
       __$$LoginPageConfigImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String? picture, LoginModeSelectPageConfig modeSelect});
+  $Res call(
+      {String? picture,
+      LoginModeSelectPageConfig modeSelect,
+      Metadata metadata});
 
   @override
   $LoginModeSelectPageConfigCopyWith<$Res> get modeSelect;
+  @override
+  $MetadataCopyWith<$Res> get metadata;
 }
 
 /// @nodoc
@@ -316,6 +341,7 @@ class __$$LoginPageConfigImplCopyWithImpl<$Res>
   $Res call({
     Object? picture = freezed,
     Object? modeSelect = null,
+    Object? metadata = null,
   }) {
     return _then(_$LoginPageConfigImpl(
       picture: freezed == picture
@@ -326,6 +352,10 @@ class __$$LoginPageConfigImplCopyWithImpl<$Res>
           ? _value.modeSelect
           : modeSelect // ignore: cast_nullable_to_non_nullable
               as LoginModeSelectPageConfig,
+      metadata: null == metadata
+          ? _value.metadata
+          : metadata // ignore: cast_nullable_to_non_nullable
+              as Metadata,
     ));
   }
 }
@@ -335,7 +365,9 @@ class __$$LoginPageConfigImplCopyWithImpl<$Res>
 @JsonSerializable(explicitToJson: true)
 class _$LoginPageConfigImpl implements _LoginPageConfig {
   const _$LoginPageConfigImpl(
-      {this.picture, this.modeSelect = const LoginModeSelectPageConfig()});
+      {this.picture,
+      this.modeSelect = const LoginModeSelectPageConfig(),
+      this.metadata = const Metadata()});
 
   factory _$LoginPageConfigImpl.fromJson(Map<String, dynamic> json) =>
       _$$LoginPageConfigImplFromJson(json);
@@ -345,10 +377,13 @@ class _$LoginPageConfigImpl implements _LoginPageConfig {
   @override
   @JsonKey()
   final LoginModeSelectPageConfig modeSelect;
+  @override
+  @JsonKey()
+  final Metadata metadata;
 
   @override
   String toString() {
-    return 'LoginPageConfig(picture: $picture, modeSelect: $modeSelect)';
+    return 'LoginPageConfig(picture: $picture, modeSelect: $modeSelect, metadata: $metadata)';
   }
 
   @override
@@ -358,12 +393,14 @@ class _$LoginPageConfigImpl implements _LoginPageConfig {
             other is _$LoginPageConfigImpl &&
             (identical(other.picture, picture) || other.picture == picture) &&
             (identical(other.modeSelect, modeSelect) ||
-                other.modeSelect == modeSelect));
+                other.modeSelect == modeSelect) &&
+            (identical(other.metadata, metadata) ||
+                other.metadata == metadata));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, picture, modeSelect);
+  int get hashCode => Object.hash(runtimeType, picture, modeSelect, metadata);
 
   /// Create a copy of LoginPageConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -385,7 +422,8 @@ class _$LoginPageConfigImpl implements _LoginPageConfig {
 abstract class _LoginPageConfig implements LoginPageConfig {
   const factory _LoginPageConfig(
       {final String? picture,
-      final LoginModeSelectPageConfig modeSelect}) = _$LoginPageConfigImpl;
+      final LoginModeSelectPageConfig modeSelect,
+      final Metadata metadata}) = _$LoginPageConfigImpl;
 
   factory _LoginPageConfig.fromJson(Map<String, dynamic> json) =
       _$LoginPageConfigImpl.fromJson;
@@ -394,6 +432,8 @@ abstract class _LoginPageConfig implements LoginPageConfig {
   String? get picture;
   @override
   LoginModeSelectPageConfig get modeSelect;
+  @override
+  Metadata get metadata;
 
   /// Create a copy of LoginPageConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -598,6 +638,7 @@ AboutPageConfig _$AboutPageConfigFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$AboutPageConfig {
   String? get picture => throw _privateConstructorUsedError;
+  Map<String, dynamic> get metadata => throw _privateConstructorUsedError;
 
   /// Serializes this AboutPageConfig to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -615,7 +656,7 @@ abstract class $AboutPageConfigCopyWith<$Res> {
           AboutPageConfig value, $Res Function(AboutPageConfig) then) =
       _$AboutPageConfigCopyWithImpl<$Res, AboutPageConfig>;
   @useResult
-  $Res call({String? picture});
+  $Res call({String? picture, Map<String, dynamic> metadata});
 }
 
 /// @nodoc
@@ -634,12 +675,17 @@ class _$AboutPageConfigCopyWithImpl<$Res, $Val extends AboutPageConfig>
   @override
   $Res call({
     Object? picture = freezed,
+    Object? metadata = null,
   }) {
     return _then(_value.copyWith(
       picture: freezed == picture
           ? _value.picture
           : picture // ignore: cast_nullable_to_non_nullable
               as String?,
+      metadata: null == metadata
+          ? _value.metadata
+          : metadata // ignore: cast_nullable_to_non_nullable
+              as Map<String, dynamic>,
     ) as $Val);
   }
 }
@@ -652,7 +698,7 @@ abstract class _$$AboutPageConfigImplCopyWith<$Res>
       __$$AboutPageConfigImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String? picture});
+  $Res call({String? picture, Map<String, dynamic> metadata});
 }
 
 /// @nodoc
@@ -669,12 +715,17 @@ class __$$AboutPageConfigImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? picture = freezed,
+    Object? metadata = null,
   }) {
     return _then(_$AboutPageConfigImpl(
       picture: freezed == picture
           ? _value.picture
           : picture // ignore: cast_nullable_to_non_nullable
               as String?,
+      metadata: null == metadata
+          ? _value._metadata
+          : metadata // ignore: cast_nullable_to_non_nullable
+              as Map<String, dynamic>,
     ));
   }
 }
@@ -683,17 +734,27 @@ class __$$AboutPageConfigImplCopyWithImpl<$Res>
 
 @JsonSerializable(explicitToJson: true)
 class _$AboutPageConfigImpl implements _AboutPageConfig {
-  const _$AboutPageConfigImpl({this.picture});
+  const _$AboutPageConfigImpl(
+      {this.picture, final Map<String, dynamic> metadata = const {}})
+      : _metadata = metadata;
 
   factory _$AboutPageConfigImpl.fromJson(Map<String, dynamic> json) =>
       _$$AboutPageConfigImplFromJson(json);
 
   @override
   final String? picture;
+  final Map<String, dynamic> _metadata;
+  @override
+  @JsonKey()
+  Map<String, dynamic> get metadata {
+    if (_metadata is EqualUnmodifiableMapView) return _metadata;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableMapView(_metadata);
+  }
 
   @override
   String toString() {
-    return 'AboutPageConfig(picture: $picture)';
+    return 'AboutPageConfig(picture: $picture, metadata: $metadata)';
   }
 
   @override
@@ -701,12 +762,14 @@ class _$AboutPageConfigImpl implements _AboutPageConfig {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$AboutPageConfigImpl &&
-            (identical(other.picture, picture) || other.picture == picture));
+            (identical(other.picture, picture) || other.picture == picture) &&
+            const DeepCollectionEquality().equals(other._metadata, _metadata));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, picture);
+  int get hashCode => Object.hash(
+      runtimeType, picture, const DeepCollectionEquality().hash(_metadata));
 
   /// Create a copy of AboutPageConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -726,14 +789,17 @@ class _$AboutPageConfigImpl implements _AboutPageConfig {
 }
 
 abstract class _AboutPageConfig implements AboutPageConfig {
-  const factory _AboutPageConfig({final String? picture}) =
-      _$AboutPageConfigImpl;
+  const factory _AboutPageConfig(
+      {final String? picture,
+      final Map<String, dynamic> metadata}) = _$AboutPageConfigImpl;
 
   factory _AboutPageConfig.fromJson(Map<String, dynamic> json) =
       _$AboutPageConfigImpl.fromJson;
 
   @override
   String? get picture;
+  @override
+  Map<String, dynamic> get metadata;
 
   /// Create a copy of AboutPageConfig
   /// with the given fields replaced by the non-null parameter values.
