@@ -24,4 +24,9 @@ class RecentsState with _$RecentsState {
       }
     }).toList();
   }
+
+  @override
+  String toString() {
+    return 'RecentsState { recents: ${recents?.length ?? 0} items, filter: $filter }';
+  }
 }

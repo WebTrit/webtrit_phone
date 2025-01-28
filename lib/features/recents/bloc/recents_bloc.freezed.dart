@@ -202,11 +202,6 @@ class _$RecentsStateImpl extends _RecentsState {
   final RecentsVisibilityFilter filter;
 
   @override
-  String toString() {
-    return 'RecentsState(recents: $recents, filter: $filter)';
-  }
-
-  @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&

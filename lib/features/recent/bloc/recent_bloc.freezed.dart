@@ -164,11 +164,6 @@ class _$RecentStateImpl implements _RecentState {
   }
 
   @override
-  String toString() {
-    return 'RecentState(recent: $recent, callLog: $callLog)';
-  }
-
-  @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
