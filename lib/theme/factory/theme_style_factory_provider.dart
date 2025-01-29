@@ -17,7 +17,7 @@ class ThemeStyleFactoryProvider {
     required this.pageConfig,
   });
 
-  List<ThemeExtension> createFactory() {
+  List<ThemeExtension> createThemeExtensions() {
     // Page schema
     final loginPageScheme = pageConfig.login;
 

@@ -109,7 +109,7 @@ class ThemeProvider extends InheritedWidget {
       inputDecorationTheme: style.createInputDecorationTheme(),
 
       // Custom extensions
-      extensions: style.createFactory(),
+      extensions: style.createThemeExtensions(),
     );
   }
 
