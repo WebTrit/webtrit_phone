@@ -28,17 +28,25 @@ _$LoginPageConfigImpl _$$LoginPageConfigImplFromJson(
         Map<String, dynamic> json) =>
     _$LoginPageConfigImpl(
       picture: json['picture'] as String?,
+      scale: (json['scale'] as num?)?.toDouble(),
+      labelColor: json['labelColor'] as String?,
       modeSelect: json['modeSelect'] == null
           ? const LoginModeSelectPageConfig()
           : LoginModeSelectPageConfig.fromJson(
               json['modeSelect'] as Map<String, dynamic>),
+      metadata: json['metadata'] == null
+          ? const Metadata()
+          : Metadata.fromJson(json['metadata'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$$LoginPageConfigImplToJson(
         _$LoginPageConfigImpl instance) =>
     <String, dynamic>{
       'picture': instance.picture,
+      'scale': instance.scale,
+      'labelColor': instance.labelColor,
       'modeSelect': instance.modeSelect.toJson(),
+      'metadata': instance.metadata.toJson(),
     };
 
 _$LoginModeSelectPageConfigImpl _$$LoginModeSelectPageConfigImplFromJson(
@@ -73,10 +81,14 @@ _$AboutPageConfigImpl _$$AboutPageConfigImplFromJson(
         Map<String, dynamic> json) =>
     _$AboutPageConfigImpl(
       picture: json['picture'] as String?,
+      metadata: json['metadata'] == null
+          ? const Metadata()
+          : Metadata.fromJson(json['metadata'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$$AboutPageConfigImplToJson(
         _$AboutPageConfigImpl instance) =>
     <String, dynamic>{
       'picture': instance.picture,
+      'metadata': instance.metadata.toJson(),
     };
