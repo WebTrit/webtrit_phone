@@ -22,6 +22,7 @@ class ThemePageConfig with _$ThemePageConfig {
 class LoginPageConfig with _$LoginPageConfig {
   @JsonSerializable(explicitToJson: true)
   const factory LoginPageConfig({
+    String? picture,
     @Default(LoginModeSelectPageConfig()) LoginModeSelectPageConfig modeSelect,
   }) = _LoginPageConfig;
 
@@ -32,7 +33,6 @@ class LoginPageConfig with _$LoginPageConfig {
 class LoginModeSelectPageConfig with _$LoginModeSelectPageConfig {
   @JsonSerializable(explicitToJson: true)
   const factory LoginModeSelectPageConfig({
-    String? title,
     @Default(ElevatedButtonStyleType.primary) ElevatedButtonStyleType buttonLoginStyleType,
     @Default(ElevatedButtonStyleType.primary) ElevatedButtonStyleType buttonSignupStyleType,
   }) = _LoginModeSelectPageConfig;

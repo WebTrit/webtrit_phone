@@ -221,6 +221,7 @@ LoginPageConfig _$LoginPageConfigFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$LoginPageConfig {
+  String? get picture => throw _privateConstructorUsedError;
   LoginModeSelectPageConfig get modeSelect =>
       throw _privateConstructorUsedError;
 
@@ -240,7 +241,7 @@ abstract class $LoginPageConfigCopyWith<$Res> {
           LoginPageConfig value, $Res Function(LoginPageConfig) then) =
       _$LoginPageConfigCopyWithImpl<$Res, LoginPageConfig>;
   @useResult
-  $Res call({LoginModeSelectPageConfig modeSelect});
+  $Res call({String? picture, LoginModeSelectPageConfig modeSelect});
 
   $LoginModeSelectPageConfigCopyWith<$Res> get modeSelect;
 }
@@ -260,9 +261,14 @@ class _$LoginPageConfigCopyWithImpl<$Res, $Val extends LoginPageConfig>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? picture = freezed,
     Object? modeSelect = null,
   }) {
     return _then(_value.copyWith(
+      picture: freezed == picture
+          ? _value.picture
+          : picture // ignore: cast_nullable_to_non_nullable
+              as String?,
       modeSelect: null == modeSelect
           ? _value.modeSelect
           : modeSelect // ignore: cast_nullable_to_non_nullable
@@ -289,7 +295,7 @@ abstract class _$$LoginPageConfigImplCopyWith<$Res>
       __$$LoginPageConfigImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({LoginModeSelectPageConfig modeSelect});
+  $Res call({String? picture, LoginModeSelectPageConfig modeSelect});
 
   @override
   $LoginModeSelectPageConfigCopyWith<$Res> get modeSelect;
@@ -308,9 +314,14 @@ class __$$LoginPageConfigImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? picture = freezed,
     Object? modeSelect = null,
   }) {
     return _then(_$LoginPageConfigImpl(
+      picture: freezed == picture
+          ? _value.picture
+          : picture // ignore: cast_nullable_to_non_nullable
+              as String?,
       modeSelect: null == modeSelect
           ? _value.modeSelect
           : modeSelect // ignore: cast_nullable_to_non_nullable
@@ -324,18 +335,20 @@ class __$$LoginPageConfigImplCopyWithImpl<$Res>
 @JsonSerializable(explicitToJson: true)
 class _$LoginPageConfigImpl implements _LoginPageConfig {
   const _$LoginPageConfigImpl(
-      {this.modeSelect = const LoginModeSelectPageConfig()});
+      {this.picture, this.modeSelect = const LoginModeSelectPageConfig()});
 
   factory _$LoginPageConfigImpl.fromJson(Map<String, dynamic> json) =>
       _$$LoginPageConfigImplFromJson(json);
 
+  @override
+  final String? picture;
   @override
   @JsonKey()
   final LoginModeSelectPageConfig modeSelect;
 
   @override
   String toString() {
-    return 'LoginPageConfig(modeSelect: $modeSelect)';
+    return 'LoginPageConfig(picture: $picture, modeSelect: $modeSelect)';
   }
 
   @override
@@ -343,13 +356,14 @@ class _$LoginPageConfigImpl implements _LoginPageConfig {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$LoginPageConfigImpl &&
+            (identical(other.picture, picture) || other.picture == picture) &&
             (identical(other.modeSelect, modeSelect) ||
                 other.modeSelect == modeSelect));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, modeSelect);
+  int get hashCode => Object.hash(runtimeType, picture, modeSelect);
 
   /// Create a copy of LoginPageConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -369,12 +383,15 @@ class _$LoginPageConfigImpl implements _LoginPageConfig {
 }
 
 abstract class _LoginPageConfig implements LoginPageConfig {
-  const factory _LoginPageConfig({final LoginModeSelectPageConfig modeSelect}) =
-      _$LoginPageConfigImpl;
+  const factory _LoginPageConfig(
+      {final String? picture,
+      final LoginModeSelectPageConfig modeSelect}) = _$LoginPageConfigImpl;
 
   factory _LoginPageConfig.fromJson(Map<String, dynamic> json) =
       _$LoginPageConfigImpl.fromJson;
 
+  @override
+  String? get picture;
   @override
   LoginModeSelectPageConfig get modeSelect;
 
@@ -393,7 +410,6 @@ LoginModeSelectPageConfig _$LoginModeSelectPageConfigFromJson(
 
 /// @nodoc
 mixin _$LoginModeSelectPageConfig {
-  String? get title => throw _privateConstructorUsedError;
   ElevatedButtonStyleType get buttonLoginStyleType =>
       throw _privateConstructorUsedError;
   ElevatedButtonStyleType get buttonSignupStyleType =>
@@ -416,8 +432,7 @@ abstract class $LoginModeSelectPageConfigCopyWith<$Res> {
       _$LoginModeSelectPageConfigCopyWithImpl<$Res, LoginModeSelectPageConfig>;
   @useResult
   $Res call(
-      {String? title,
-      ElevatedButtonStyleType buttonLoginStyleType,
+      {ElevatedButtonStyleType buttonLoginStyleType,
       ElevatedButtonStyleType buttonSignupStyleType});
 }
 
@@ -437,15 +452,10 @@ class _$LoginModeSelectPageConfigCopyWithImpl<$Res,
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? title = freezed,
     Object? buttonLoginStyleType = null,
     Object? buttonSignupStyleType = null,
   }) {
     return _then(_value.copyWith(
-      title: freezed == title
-          ? _value.title
-          : title // ignore: cast_nullable_to_non_nullable
-              as String?,
       buttonLoginStyleType: null == buttonLoginStyleType
           ? _value.buttonLoginStyleType
           : buttonLoginStyleType // ignore: cast_nullable_to_non_nullable
@@ -468,8 +478,7 @@ abstract class _$$LoginModeSelectPageConfigImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String? title,
-      ElevatedButtonStyleType buttonLoginStyleType,
+      {ElevatedButtonStyleType buttonLoginStyleType,
       ElevatedButtonStyleType buttonSignupStyleType});
 }
 
@@ -488,15 +497,10 @@ class __$$LoginModeSelectPageConfigImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? title = freezed,
     Object? buttonLoginStyleType = null,
     Object? buttonSignupStyleType = null,
   }) {
     return _then(_$LoginModeSelectPageConfigImpl(
-      title: freezed == title
-          ? _value.title
-          : title // ignore: cast_nullable_to_non_nullable
-              as String?,
       buttonLoginStyleType: null == buttonLoginStyleType
           ? _value.buttonLoginStyleType
           : buttonLoginStyleType // ignore: cast_nullable_to_non_nullable
@@ -514,15 +518,12 @@ class __$$LoginModeSelectPageConfigImplCopyWithImpl<$Res>
 @JsonSerializable(explicitToJson: true)
 class _$LoginModeSelectPageConfigImpl implements _LoginModeSelectPageConfig {
   const _$LoginModeSelectPageConfigImpl(
-      {this.title,
-      this.buttonLoginStyleType = ElevatedButtonStyleType.primary,
+      {this.buttonLoginStyleType = ElevatedButtonStyleType.primary,
       this.buttonSignupStyleType = ElevatedButtonStyleType.primary});
 
   factory _$LoginModeSelectPageConfigImpl.fromJson(Map<String, dynamic> json) =>
       _$$LoginModeSelectPageConfigImplFromJson(json);
 
-  @override
-  final String? title;
   @override
   @JsonKey()
   final ElevatedButtonStyleType buttonLoginStyleType;
@@ -532,7 +533,7 @@ class _$LoginModeSelectPageConfigImpl implements _LoginModeSelectPageConfig {
 
   @override
   String toString() {
-    return 'LoginModeSelectPageConfig(title: $title, buttonLoginStyleType: $buttonLoginStyleType, buttonSignupStyleType: $buttonSignupStyleType)';
+    return 'LoginModeSelectPageConfig(buttonLoginStyleType: $buttonLoginStyleType, buttonSignupStyleType: $buttonSignupStyleType)';
   }
 
   @override
@@ -540,7 +541,6 @@ class _$LoginModeSelectPageConfigImpl implements _LoginModeSelectPageConfig {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$LoginModeSelectPageConfigImpl &&
-            (identical(other.title, title) || other.title == title) &&
             (identical(other.buttonLoginStyleType, buttonLoginStyleType) ||
                 other.buttonLoginStyleType == buttonLoginStyleType) &&
             (identical(other.buttonSignupStyleType, buttonSignupStyleType) ||
@@ -549,8 +549,8 @@ class _$LoginModeSelectPageConfigImpl implements _LoginModeSelectPageConfig {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(
-      runtimeType, title, buttonLoginStyleType, buttonSignupStyleType);
+  int get hashCode =>
+      Object.hash(runtimeType, buttonLoginStyleType, buttonSignupStyleType);
 
   /// Create a copy of LoginModeSelectPageConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -571,16 +571,13 @@ class _$LoginModeSelectPageConfigImpl implements _LoginModeSelectPageConfig {
 
 abstract class _LoginModeSelectPageConfig implements LoginModeSelectPageConfig {
   const factory _LoginModeSelectPageConfig(
-          {final String? title,
-          final ElevatedButtonStyleType buttonLoginStyleType,
+          {final ElevatedButtonStyleType buttonLoginStyleType,
           final ElevatedButtonStyleType buttonSignupStyleType}) =
       _$LoginModeSelectPageConfigImpl;
 
   factory _LoginModeSelectPageConfig.fromJson(Map<String, dynamic> json) =
       _$LoginModeSelectPageConfigImpl.fromJson;
 
-  @override
-  String? get title;
   @override
   ElevatedButtonStyleType get buttonLoginStyleType;
   @override

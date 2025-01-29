@@ -157,13 +157,11 @@ class ThemeProvider extends InheritedWidget {
     );
   }
 
-  AboutScreenStyles aboutScreenStyles(
-    AboutPageConfig? aboutPageConfig,
-  ) {
+  AboutScreenStyles aboutScreenStyles({
+    ThemeSvgAsset? picture,
+  }) {
     return AboutScreenStyles(
-      primary: AboutScreenStyle(
-        picture: aboutPageConfig?.picture != null ? ThemeSvgAsset.fromJson(aboutPageConfig!.picture!) : null,
-      ),
+      primary: AboutScreenStyle(picture: picture),
     );
   }
 
@@ -751,6 +749,24 @@ class ThemeProvider extends InheritedWidget {
     final textButtonStyles = _textButtonStyles(colorScheme);
     final gradientStyles = gradients(brightness);
 
+    final primaryOnboardingLogoPath = brightness.isLight
+        ? settings.themeWidgetLightConfig.picture.primaryOnboardingLogo
+        : settings.themeWidgetLightConfig.picture.primaryOnboardingLogo;
+    final secondaryOnboardingLogoPath = brightness.isLight
+        ? settings.themeWidgetLightConfig.picture.secondaryOnboardingLogo
+        : settings.themeWidgetLightConfig.picture.secondaryOnboardingLogo;
+
+    final onboardingPictureLogoPath =
+        brightness.isLight ? settings.themePageLightConfig.login.picture : settings.themePageDarkConfig.login.picture;
+    final aboutScreenPageLogoPath =
+        brightness.isLight ? settings.themePageLightConfig.about.picture : settings.themePageDarkConfig.about.picture;
+
+    final primaryOnboardingLogo = _tryParseThemeSvgAsset(primaryOnboardingLogoPath);
+    final secondaryOnboardingLogo = _tryParseThemeSvgAsset(secondaryOnboardingLogoPath);
+
+    final onboardingPictureLogo = _tryParseThemeSvgAsset(onboardingPictureLogoPath ?? primaryOnboardingLogoPath);
+    final aboutPictureLogo = _tryParseThemeSvgAsset(aboutScreenPageLogoPath ?? primaryOnboardingLogoPath);
+
     return ThemeData.from(
       colorScheme: colorScheme,
       textTheme: _textTheme(brightness),
@@ -760,7 +776,7 @@ class ThemeProvider extends InheritedWidget {
         colorScheme,
         themeWidgetConfig?.text.selection,
       ),
-      // GENERAL CONFIGURATIONValueNotifier
+      // GENERAL CONFIGURATION
       inputDecorationTheme: inputDecorationTheme(
         colorScheme,
         themeWidgetConfig?.input.primary,
@@ -812,40 +828,25 @@ class ThemeProvider extends InheritedWidget {
         outlinedButtonStyles(colorScheme),
         textButtonStyles,
         logoAssets(
-          primaryOnboardin: // TODO(Serdun): Refactor to move logic out of the function argument.
-              ThemeSvgAsset.fromJson(brightness.isLight
-                  ? settings.themeWidgetLightConfig.picture.secondaryOnboardingLogo
-                  : settings.themeWidgetDarkConfig.picture.secondaryOnboardingLogo),
-          secondaryOnboardin: // TODO(Serdun): Refactor to move logic out of the function argument.
-              ThemeSvgAsset.fromJson(brightness.isLight
-                  ? settings.themeWidgetLightConfig.picture.secondaryOnboardingLogo
-                  : settings.themeWidgetDarkConfig.picture.secondaryOnboardingLogo),
+          primaryOnboardin: primaryOnboardingLogo!,
+          secondaryOnboardin: secondaryOnboardingLogo!,
         ),
         groupTitleListStyles(
           themeWidgetConfig?.group?.groupTitleListTile,
         ),
         onboardingPictureLogoStyles(
           colorScheme,
-          // TODO(Serdun): Refactor to move logic out of the function argument.
-          ThemeSvgAsset.fromJson(brightness.isLight
-              ? settings.themeWidgetLightConfig.picture.primaryOnboardingLogo
-              : settings.themeWidgetDarkConfig.picture.primaryOnboardingLogo),
+          onboardingPictureLogo,
           themeWidgetConfig?.picture.onboardingPictureLogo,
         ),
         onboardingLogoStyles(
           colorScheme,
-          // TODO(Serdun): Refactor to move logic out of the function argument.
-          ThemeSvgAsset.fromJson(brightness.isLight
-              ? settings.themeWidgetLightConfig.picture.secondaryOnboardingLogo
-              : settings.themeWidgetDarkConfig.picture.secondaryOnboardingLogo),
+          secondaryOnboardingLogo,
           themeWidgetConfig?.picture.onboardingLogo,
         ),
-        aboutScreenStyles(
-            // TODO(Serdun): Refactor to move logic out of the function argument.
-            brightness.isLight ? settings.themePageLightConfig.about : settings.themePageDarkConfig.about),
-
+        aboutScreenStyles(picture: aboutPictureLogo),
         // Nullable styles
-        if (gradientStyles != null) gradientStyles
+        if (gradientStyles != null) gradientStyles,
       ],
       // COLOR
       primaryColorLight: colorScheme.secondaryContainer,
@@ -858,7 +859,6 @@ class ThemeProvider extends InheritedWidget {
         colorScheme,
         themeWidgetConfig?.bar.extTabBar,
       ),
-
       tabBarTheme: tabBarTheme(
         colorScheme,
         themeWidgetConfig?.bar.extTabBar,
@@ -884,6 +884,12 @@ class ThemeProvider extends InheritedWidget {
     final themeWidgetConfig = _getThemeWidgetConfig(brightness);
     // TODO: Not implemented yet
     return null;
+  }
+
+  // Safely create a ThemeSvgAsset or return null if the input JSON is null
+  ThemeSvgAsset? _tryParseThemeSvgAsset(String? json) {
+    if (json == null || json.isEmpty) return null; // Return null if JSON is invalid
+    return ThemeSvgAsset.fromJson(json);
   }
 
   static ThemeProvider of(BuildContext context) {
