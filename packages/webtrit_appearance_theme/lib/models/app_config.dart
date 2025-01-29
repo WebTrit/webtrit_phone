@@ -207,6 +207,9 @@ class EmbeddedData with _$EmbeddedData {
   }) = _EmbeddedData;
 
   factory EmbeddedData.fromJson(Map<String, dynamic> json) => _$EmbeddedDataFromJson(json);
+
+  /// A globally consistent metadata key used to associate additional resources
+  static const String metadataResourceUrl = 'resourceUrl';
 }
 
 @freezed

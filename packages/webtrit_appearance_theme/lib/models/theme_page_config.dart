@@ -33,7 +33,8 @@ class LoginPageConfig with _$LoginPageConfig {
 
   factory LoginPageConfig.fromJson(Map<String, dynamic> json) => _$LoginPageConfigFromJson(json);
 
-  static const String pictureKey = 'pictureUrlKey';
+  /// A globally consistent metadata key used to associate additional resources
+  static const String metadataPictureUrl = 'pictureUrl';
 }
 
 @Freezed()
@@ -57,5 +58,6 @@ class AboutPageConfig with _$AboutPageConfig {
 
   factory AboutPageConfig.fromJson(Map<String, dynamic> json) => _$AboutPageConfigFromJson(json);
 
-  static const String pictureKey = 'pictureUrlKey';
+  /// A globally consistent metadata key used to associate additional resources
+  static const String metadataPictureUrl = 'pictureUrl';
 }

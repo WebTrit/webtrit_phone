@@ -159,8 +159,11 @@ class PictureWidgetConfig with _$PictureWidgetConfig {
 
   factory PictureWidgetConfig.fromJson(Map<String, dynamic> json) => _$PictureWidgetConfigFromJson(json);
 
-  static const String primaryOnboardingLogoUrlKey = 'primaryOnboardingLogoUrlKey';
-  static const String secondaryOnboardingLogoUrlKey = 'secondaryOnboardingLogoUrlKey';
+  /// A globally consistent metadata key used to associate additional resources
+  static const String metadataPrimaryOnboardingLogoUrl = 'primaryOnboardingLogoUrl';
+
+  /// A globally consistent metadata key used to associate additional resources
+  static const String metadataSecondaryOnboardingLogoUrl = 'secondaryOnboardingLogoUrl';
 }
 
 @Freezed()
