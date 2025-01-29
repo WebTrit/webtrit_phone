@@ -8,3 +8,4 @@ export 'snack_bar_theme_data_factory.dart';
 export 'tab_bar_theme_data_factory.dart';
 export 'text_button_theme_data_factory.dart';
 export 'text_selection_theme_data_factory.dart';
+export 'text_theme_data_factory.dart';

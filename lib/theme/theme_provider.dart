@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:google_fonts/google_fonts.dart';
 import 'package:material_color_utilities/material_color_utilities.dart';
 
 import 'factory/factory.dart';
@@ -60,29 +59,24 @@ class ThemeProvider extends InheritedWidget {
     );
   }
 
-  /// Returns a [TextTheme] customized for the given brightness.
-  TextTheme _textTheme(Brightness brightness) {
-    final themeConfig = brightness.isLight ? settings.themeWidgetLightConfig : settings.themeWidgetDarkConfig;
-
-    final fontFamily = themeConfig.fonts.fontFamily;
-
-    final baseTextTheme = brightness.isLight ? ThemeData.light().textTheme : ThemeData.dark().textTheme;
-
-    return GoogleFonts.getTextTheme(fontFamily, baseTextTheme);
-  }
-
   ThemeData? light([Color? targetColor]) {
     const brightness = Brightness.light;
     final colorScheme = _buildColorScheme(brightness, targetColor);
     final themeWidgetConfig = _getThemeWidgetConfig(brightness);
     final themePageConfig = _getThemePageConfig(brightness);
 
+    final seedThemeData = brightness.isLight ? ThemeData.light() : ThemeData.dark();
+
     final style = ThemeStyleFactoryProvider(
-        colorScheme: colorScheme, widgetConfig: themeWidgetConfig!, pageConfig: themePageConfig!);
+      colorScheme: colorScheme,
+      widgetConfig: themeWidgetConfig!,
+      pageConfig: themePageConfig!,
+      seedThemeData: seedThemeData,
+    );
 
     return ThemeData.from(
       colorScheme: colorScheme,
-      textTheme: _textTheme(brightness),
+      textTheme: style.createTextTheme(),
       useMaterial3: true,
     ).copyWith(
       // General properties

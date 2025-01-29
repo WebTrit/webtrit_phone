@@ -7,15 +7,17 @@ import 'theme_data/theme_data.dart';
 
 // TODO(Serdun): Decompose correctly common widget styles configurations from t;he page styles configurations
 class ThemeStyleFactoryProvider {
-  final ColorScheme colorScheme;
-  final ThemeWidgetConfig widgetConfig;
-  final ThemePageConfig pageConfig;
-
   ThemeStyleFactoryProvider({
     required this.colorScheme,
     required this.widgetConfig,
     required this.pageConfig,
+    required this.seedThemeData,
   });
+
+  final ColorScheme colorScheme;
+  final ThemeWidgetConfig widgetConfig;
+  final ThemePageConfig pageConfig;
+  final ThemeData seedThemeData;
 
   List<ThemeExtension> createThemeExtensions() {
     // Page schema
@@ -79,7 +81,7 @@ class ThemeStyleFactoryProvider {
       onLogoStyleFactory.create(),
       gradientsStyleFactory.create(),
       aboutScreenStyleFactory.create(),
-      loginModeSelectStyleFactory.create()
+      loginModeSelectStyleFactory.create(),
     ].nonNulls.toList();
   }
 
@@ -121,5 +123,9 @@ class ThemeStyleFactoryProvider {
 
   TextSelectionThemeData createTextSelectionThemeData() {
     return TextSelectionThemeDataFactory(colorScheme, widgetConfig.text.selection).create();
+  }
+
+  TextTheme createTextTheme() {
+    return TextThemeDataFactory(colorScheme, widgetConfig.fonts, seedThemeData).create();
   }
 }
