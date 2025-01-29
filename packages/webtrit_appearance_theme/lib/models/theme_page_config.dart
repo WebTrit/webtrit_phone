@@ -24,6 +24,8 @@ class LoginPageConfig with _$LoginPageConfig {
   @JsonSerializable(explicitToJson: true)
   const factory LoginPageConfig({
     String? picture,
+    double? scale,
+    String? labelColor,
     @Default(LoginModeSelectPageConfig()) LoginModeSelectPageConfig modeSelect,
     @Default(Metadata()) Metadata metadata,
   }) = _LoginPageConfig;

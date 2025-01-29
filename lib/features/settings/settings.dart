@@ -3,3 +3,4 @@ export 'features/features.dart';
 export 'view/settings_router_page.dart';
 export 'view/settings_screen.dart';
 export 'view/settings_screen_page.dart';
+export 'widgets/widgets.dart';

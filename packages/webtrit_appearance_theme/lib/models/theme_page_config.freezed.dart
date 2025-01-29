@@ -222,6 +222,8 @@ LoginPageConfig _$LoginPageConfigFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$LoginPageConfig {
   String? get picture => throw _privateConstructorUsedError;
+  double? get scale => throw _privateConstructorUsedError;
+  String? get labelColor => throw _privateConstructorUsedError;
   LoginModeSelectPageConfig get modeSelect =>
       throw _privateConstructorUsedError;
   Metadata get metadata => throw _privateConstructorUsedError;
@@ -244,6 +246,8 @@ abstract class $LoginPageConfigCopyWith<$Res> {
   @useResult
   $Res call(
       {String? picture,
+      double? scale,
+      String? labelColor,
       LoginModeSelectPageConfig modeSelect,
       Metadata metadata});
 
@@ -267,6 +271,8 @@ class _$LoginPageConfigCopyWithImpl<$Res, $Val extends LoginPageConfig>
   @override
   $Res call({
     Object? picture = freezed,
+    Object? scale = freezed,
+    Object? labelColor = freezed,
     Object? modeSelect = null,
     Object? metadata = null,
   }) {
@@ -274,6 +280,14 @@ class _$LoginPageConfigCopyWithImpl<$Res, $Val extends LoginPageConfig>
       picture: freezed == picture
           ? _value.picture
           : picture // ignore: cast_nullable_to_non_nullable
+              as String?,
+      scale: freezed == scale
+          ? _value.scale
+          : scale // ignore: cast_nullable_to_non_nullable
+              as double?,
+      labelColor: freezed == labelColor
+          ? _value.labelColor
+          : labelColor // ignore: cast_nullable_to_non_nullable
               as String?,
       modeSelect: null == modeSelect
           ? _value.modeSelect
@@ -317,6 +331,8 @@ abstract class _$$LoginPageConfigImplCopyWith<$Res>
   @useResult
   $Res call(
       {String? picture,
+      double? scale,
+      String? labelColor,
       LoginModeSelectPageConfig modeSelect,
       Metadata metadata});
 
@@ -340,6 +356,8 @@ class __$$LoginPageConfigImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? picture = freezed,
+    Object? scale = freezed,
+    Object? labelColor = freezed,
     Object? modeSelect = null,
     Object? metadata = null,
   }) {
@@ -347,6 +365,14 @@ class __$$LoginPageConfigImplCopyWithImpl<$Res>
       picture: freezed == picture
           ? _value.picture
           : picture // ignore: cast_nullable_to_non_nullable
+              as String?,
+      scale: freezed == scale
+          ? _value.scale
+          : scale // ignore: cast_nullable_to_non_nullable
+              as double?,
+      labelColor: freezed == labelColor
+          ? _value.labelColor
+          : labelColor // ignore: cast_nullable_to_non_nullable
               as String?,
       modeSelect: null == modeSelect
           ? _value.modeSelect
@@ -366,6 +392,8 @@ class __$$LoginPageConfigImplCopyWithImpl<$Res>
 class _$LoginPageConfigImpl implements _LoginPageConfig {
   const _$LoginPageConfigImpl(
       {this.picture,
+      this.scale,
+      this.labelColor,
       this.modeSelect = const LoginModeSelectPageConfig(),
       this.metadata = const Metadata()});
 
@@ -375,6 +403,10 @@ class _$LoginPageConfigImpl implements _LoginPageConfig {
   @override
   final String? picture;
   @override
+  final double? scale;
+  @override
+  final String? labelColor;
+  @override
   @JsonKey()
   final LoginModeSelectPageConfig modeSelect;
   @override
@@ -383,7 +415,7 @@ class _$LoginPageConfigImpl implements _LoginPageConfig {
 
   @override
   String toString() {
-    return 'LoginPageConfig(picture: $picture, modeSelect: $modeSelect, metadata: $metadata)';
+    return 'LoginPageConfig(picture: $picture, scale: $scale, labelColor: $labelColor, modeSelect: $modeSelect, metadata: $metadata)';
   }
 
   @override
@@ -392,6 +424,9 @@ class _$LoginPageConfigImpl implements _LoginPageConfig {
         (other.runtimeType == runtimeType &&
             other is _$LoginPageConfigImpl &&
             (identical(other.picture, picture) || other.picture == picture) &&
+            (identical(other.scale, scale) || other.scale == scale) &&
+            (identical(other.labelColor, labelColor) ||
+                other.labelColor == labelColor) &&
             (identical(other.modeSelect, modeSelect) ||
                 other.modeSelect == modeSelect) &&
             (identical(other.metadata, metadata) ||
@@ -400,7 +435,8 @@ class _$LoginPageConfigImpl implements _LoginPageConfig {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, picture, modeSelect, metadata);
+  int get hashCode => Object.hash(
+      runtimeType, picture, scale, labelColor, modeSelect, metadata);
 
   /// Create a copy of LoginPageConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -422,6 +458,8 @@ class _$LoginPageConfigImpl implements _LoginPageConfig {
 abstract class _LoginPageConfig implements LoginPageConfig {
   const factory _LoginPageConfig(
       {final String? picture,
+      final double? scale,
+      final String? labelColor,
       final LoginModeSelectPageConfig modeSelect,
       final Metadata metadata}) = _$LoginPageConfigImpl;
 
@@ -430,6 +468,10 @@ abstract class _LoginPageConfig implements LoginPageConfig {
 
   @override
   String? get picture;
+  @override
+  double? get scale;
+  @override
+  String? get labelColor;
   @override
   LoginModeSelectPageConfig get modeSelect;
   @override

@@ -28,6 +28,8 @@ _$LoginPageConfigImpl _$$LoginPageConfigImplFromJson(
         Map<String, dynamic> json) =>
     _$LoginPageConfigImpl(
       picture: json['picture'] as String?,
+      scale: (json['scale'] as num?)?.toDouble(),
+      labelColor: json['labelColor'] as String?,
       modeSelect: json['modeSelect'] == null
           ? const LoginModeSelectPageConfig()
           : LoginModeSelectPageConfig.fromJson(
@@ -41,6 +43,8 @@ Map<String, dynamic> _$$LoginPageConfigImplToJson(
         _$LoginPageConfigImpl instance) =>
     <String, dynamic>{
       'picture': instance.picture,
+      'scale': instance.scale,
+      'labelColor': instance.labelColor,
       'modeSelect': instance.modeSelect.toJson(),
       'metadata': instance.metadata.toJson(),
     };
