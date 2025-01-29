@@ -4,6 +4,7 @@ import '../converters/converters.dart';
 import '../parsers/parsers.dart';
 
 import 'bottom_menu_tab_type.dart';
+import 'metadata.dart';
 
 part 'app_config.freezed.dart';
 
@@ -202,6 +203,7 @@ class EmbeddedData with _$EmbeddedData {
     @UriConverter() required Uri resource,
     @Default({}) Map<String, dynamic> attributes,
     @Default(ToolbarConfig()) ToolbarConfig toolbar,
+    @Default(Metadata()) Metadata metadata,
   }) = _EmbeddedData;
 
   factory EmbeddedData.fromJson(Map<String, dynamic> json) => _$EmbeddedDataFromJson(json);
