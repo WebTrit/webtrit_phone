@@ -10,7 +10,6 @@ class AboutScreenStyleFactory implements ThemeStyleFactory<AboutScreenStyles> {
 
   final LoginPageConfig? config;
 
-
   @override
   AboutScreenStyles create() {
     final picturePath = config?.picture;

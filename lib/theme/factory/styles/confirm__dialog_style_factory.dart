@@ -14,7 +14,6 @@ class ConfirmDialogStyleFactory implements ThemeStyleFactory<ConfirmDialogStyles
   final TextButtonStyles styles;
   final ConfirmDialogWidgetConfig? config;
 
-
   @override
   ConfirmDialogStyles create() {
     final activeButtonStyle1ForegroundColor = WidgetStatePropertyAll(config?.activeButtonColor1?.toColor());
