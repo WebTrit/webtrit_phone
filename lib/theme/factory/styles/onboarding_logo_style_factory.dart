@@ -18,13 +18,13 @@ class OnboardingLogoStyleFactory implements ThemeStyleFactory<OnboardingLogoStyl
     final textStyleColor = onboardingLogoConfig?.labelColor?.toColor() ?? colors.onPrimary;
 
     final onboardingLogoLoginConfig = loginPageConfig?.picture ?? pictureWidgetConfig?.secondaryOnboardingLogo;
-
+    final scale = loginPageConfig?.scale ?? pictureWidgetConfig?.onboardingLogo.scale;
     final textStyle = TextStyle(color: textStyleColor, fontWeight: FontWeight.w600);
 
     return OnboardingLogoStyles(
       primary: OnboardingLogoStyle(
         picture: onboardingLogoLoginConfig?.toThemeSvgAsset(),
-        scale: pictureWidgetConfig?.onboardingLogo.scale,
+        scale: scale,
         textStyle: textStyle,
       ),
     );
