@@ -89,8 +89,7 @@ class AppConfigCall with _$AppConfigCall {
     @Default(AppConfigTransfer(
       enableBlindTransfer: true,
       enableAttendedTransfer: true,
-    ))
-    AppConfigTransfer transfer,
+    )) AppConfigTransfer transfer,
   }) = _AppConfigCall;
 
   factory AppConfigCall.fromJson(Map<String, dynamic> json) => _$AppConfigCallFromJson(json);
@@ -210,6 +209,12 @@ class EmbeddedData with _$EmbeddedData {
 
   /// A globally consistent metadata key used to associate additional resources
   static const String metadataResourceUrl = 'resourceUrl';
+
+  /// A globally consistent metadata key used to associate additional resources
+  static const String metadataResourceId = 'resourceId';
+
+  /// A globally consistent metadata key used to associate additional resources
+  static const String metadataResourceURI = 'resourceURI';
 }
 
 @freezed
