@@ -1,6 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'elevated_button_style_type.dart';
+import 'metadata.dart';
 
 part 'theme_page_config.freezed.dart';
 
@@ -18,15 +19,22 @@ class ThemePageConfig with _$ThemePageConfig {
   factory ThemePageConfig.fromJson(Map<String, dynamic> json) => _$ThemePageConfigFromJson(json);
 }
 
+// TODO(Serdun): Decompose image properties into a separate class
 @Freezed()
 class LoginPageConfig with _$LoginPageConfig {
   @JsonSerializable(explicitToJson: true)
   const factory LoginPageConfig({
     String? picture,
+    double? scale,
+    String? labelColor,
     @Default(LoginModeSelectPageConfig()) LoginModeSelectPageConfig modeSelect,
+    @Default(Metadata()) Metadata metadata,
   }) = _LoginPageConfig;
 
   factory LoginPageConfig.fromJson(Map<String, dynamic> json) => _$LoginPageConfigFromJson(json);
+
+  /// A globally consistent metadata key used to associate additional resources
+  static const String metadataPictureUrl = 'pictureUrl';
 }
 
 @Freezed()
@@ -45,7 +53,11 @@ class AboutPageConfig with _$AboutPageConfig {
   @JsonSerializable(explicitToJson: true)
   const factory AboutPageConfig({
     String? picture,
+    @Default(Metadata()) Metadata metadata,
   }) = _AboutPageConfig;
 
   factory AboutPageConfig.fromJson(Map<String, dynamic> json) => _$AboutPageConfigFromJson(json);
+
+  /// A globally consistent metadata key used to associate additional resources
+  static const String metadataPictureUrl = 'pictureUrl';
 }

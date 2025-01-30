@@ -4,6 +4,7 @@ import '../converters/converters.dart';
 import '../parsers/parsers.dart';
 
 import 'bottom_menu_tab_type.dart';
+import 'metadata.dart';
 
 part 'app_config.freezed.dart';
 
@@ -88,8 +89,7 @@ class AppConfigCall with _$AppConfigCall {
     @Default(AppConfigTransfer(
       enableBlindTransfer: true,
       enableAttendedTransfer: true,
-    ))
-    AppConfigTransfer transfer,
+    )) AppConfigTransfer transfer,
   }) = _AppConfigCall;
 
   factory AppConfigCall.fromJson(Map<String, dynamic> json) => _$AppConfigCallFromJson(json);
@@ -202,9 +202,19 @@ class EmbeddedData with _$EmbeddedData {
     @UriConverter() required Uri resource,
     @Default({}) Map<String, dynamic> attributes,
     @Default(ToolbarConfig()) ToolbarConfig toolbar,
+    @Default(Metadata()) Metadata metadata,
   }) = _EmbeddedData;
 
   factory EmbeddedData.fromJson(Map<String, dynamic> json) => _$EmbeddedDataFromJson(json);
+
+  /// A globally consistent metadata key used to associate additional resources
+  static const String metadataResourceUrl = 'resourceUrl';
+
+  /// A globally consistent metadata key used to associate additional resources
+  static const String metadataResourceId = 'resourceId';
+
+  /// A globally consistent metadata key used to associate additional resources
+  static const String metadataResourceURI = 'resourceURI';
 }
 
 @freezed

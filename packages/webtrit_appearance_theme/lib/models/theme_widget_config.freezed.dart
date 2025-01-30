@@ -2633,6 +2633,7 @@ mixin _$PictureWidgetConfig {
       throw _privateConstructorUsedError;
   LogoWidgetConfig get onboardingLogo => throw _privateConstructorUsedError;
   AppIconWidgetConfig get appIcon => throw _privateConstructorUsedError;
+  Metadata get metadata => throw _privateConstructorUsedError;
 
   /// Serializes this PictureWidgetConfig to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -2655,11 +2656,13 @@ abstract class $PictureWidgetConfigCopyWith<$Res> {
       String secondaryOnboardingLogo,
       LogoWidgetConfig onboardingPictureLogo,
       LogoWidgetConfig onboardingLogo,
-      AppIconWidgetConfig appIcon});
+      AppIconWidgetConfig appIcon,
+      Metadata metadata});
 
   $LogoWidgetConfigCopyWith<$Res> get onboardingPictureLogo;
   $LogoWidgetConfigCopyWith<$Res> get onboardingLogo;
   $AppIconWidgetConfigCopyWith<$Res> get appIcon;
+  $MetadataCopyWith<$Res> get metadata;
 }
 
 /// @nodoc
@@ -2682,6 +2685,7 @@ class _$PictureWidgetConfigCopyWithImpl<$Res, $Val extends PictureWidgetConfig>
     Object? onboardingPictureLogo = null,
     Object? onboardingLogo = null,
     Object? appIcon = null,
+    Object? metadata = null,
   }) {
     return _then(_value.copyWith(
       primaryOnboardingLogo: null == primaryOnboardingLogo
@@ -2704,6 +2708,10 @@ class _$PictureWidgetConfigCopyWithImpl<$Res, $Val extends PictureWidgetConfig>
           ? _value.appIcon
           : appIcon // ignore: cast_nullable_to_non_nullable
               as AppIconWidgetConfig,
+      metadata: null == metadata
+          ? _value.metadata
+          : metadata // ignore: cast_nullable_to_non_nullable
+              as Metadata,
     ) as $Val);
   }
 
@@ -2737,6 +2745,16 @@ class _$PictureWidgetConfigCopyWithImpl<$Res, $Val extends PictureWidgetConfig>
       return _then(_value.copyWith(appIcon: value) as $Val);
     });
   }
+
+  /// Create a copy of PictureWidgetConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $MetadataCopyWith<$Res> get metadata {
+    return $MetadataCopyWith<$Res>(_value.metadata, (value) {
+      return _then(_value.copyWith(metadata: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
@@ -2752,7 +2770,8 @@ abstract class _$$PictureWidgetConfigImplCopyWith<$Res>
       String secondaryOnboardingLogo,
       LogoWidgetConfig onboardingPictureLogo,
       LogoWidgetConfig onboardingLogo,
-      AppIconWidgetConfig appIcon});
+      AppIconWidgetConfig appIcon,
+      Metadata metadata});
 
   @override
   $LogoWidgetConfigCopyWith<$Res> get onboardingPictureLogo;
@@ -2760,6 +2779,8 @@ abstract class _$$PictureWidgetConfigImplCopyWith<$Res>
   $LogoWidgetConfigCopyWith<$Res> get onboardingLogo;
   @override
   $AppIconWidgetConfigCopyWith<$Res> get appIcon;
+  @override
+  $MetadataCopyWith<$Res> get metadata;
 }
 
 /// @nodoc
@@ -2780,6 +2801,7 @@ class __$$PictureWidgetConfigImplCopyWithImpl<$Res>
     Object? onboardingPictureLogo = null,
     Object? onboardingLogo = null,
     Object? appIcon = null,
+    Object? metadata = null,
   }) {
     return _then(_$PictureWidgetConfigImpl(
       primaryOnboardingLogo: null == primaryOnboardingLogo
@@ -2802,6 +2824,10 @@ class __$$PictureWidgetConfigImplCopyWithImpl<$Res>
           ? _value.appIcon
           : appIcon // ignore: cast_nullable_to_non_nullable
               as AppIconWidgetConfig,
+      metadata: null == metadata
+          ? _value.metadata
+          : metadata // ignore: cast_nullable_to_non_nullable
+              as Metadata,
     ));
   }
 }
@@ -2816,7 +2842,8 @@ class _$PictureWidgetConfigImpl implements _PictureWidgetConfig {
           'asset://assets/secondary_onboardin_logo.svg',
       this.onboardingPictureLogo = const LogoWidgetConfig(),
       this.onboardingLogo = const LogoWidgetConfig(),
-      this.appIcon = const AppIconWidgetConfig()});
+      this.appIcon = const AppIconWidgetConfig(),
+      this.metadata = const Metadata()});
 
   factory _$PictureWidgetConfigImpl.fromJson(Map<String, dynamic> json) =>
       _$$PictureWidgetConfigImplFromJson(json);
@@ -2836,10 +2863,13 @@ class _$PictureWidgetConfigImpl implements _PictureWidgetConfig {
   @override
   @JsonKey()
   final AppIconWidgetConfig appIcon;
+  @override
+  @JsonKey()
+  final Metadata metadata;
 
   @override
   String toString() {
-    return 'PictureWidgetConfig(primaryOnboardingLogo: $primaryOnboardingLogo, secondaryOnboardingLogo: $secondaryOnboardingLogo, onboardingPictureLogo: $onboardingPictureLogo, onboardingLogo: $onboardingLogo, appIcon: $appIcon)';
+    return 'PictureWidgetConfig(primaryOnboardingLogo: $primaryOnboardingLogo, secondaryOnboardingLogo: $secondaryOnboardingLogo, onboardingPictureLogo: $onboardingPictureLogo, onboardingLogo: $onboardingLogo, appIcon: $appIcon, metadata: $metadata)';
   }
 
   @override
@@ -2856,13 +2886,21 @@ class _$PictureWidgetConfigImpl implements _PictureWidgetConfig {
                 other.onboardingPictureLogo == onboardingPictureLogo) &&
             (identical(other.onboardingLogo, onboardingLogo) ||
                 other.onboardingLogo == onboardingLogo) &&
-            (identical(other.appIcon, appIcon) || other.appIcon == appIcon));
+            (identical(other.appIcon, appIcon) || other.appIcon == appIcon) &&
+            (identical(other.metadata, metadata) ||
+                other.metadata == metadata));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, primaryOnboardingLogo,
-      secondaryOnboardingLogo, onboardingPictureLogo, onboardingLogo, appIcon);
+  int get hashCode => Object.hash(
+      runtimeType,
+      primaryOnboardingLogo,
+      secondaryOnboardingLogo,
+      onboardingPictureLogo,
+      onboardingLogo,
+      appIcon,
+      metadata);
 
   /// Create a copy of PictureWidgetConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -2887,7 +2925,8 @@ abstract class _PictureWidgetConfig implements PictureWidgetConfig {
       final String secondaryOnboardingLogo,
       final LogoWidgetConfig onboardingPictureLogo,
       final LogoWidgetConfig onboardingLogo,
-      final AppIconWidgetConfig appIcon}) = _$PictureWidgetConfigImpl;
+      final AppIconWidgetConfig appIcon,
+      final Metadata metadata}) = _$PictureWidgetConfigImpl;
 
   factory _PictureWidgetConfig.fromJson(Map<String, dynamic> json) =
       _$PictureWidgetConfigImpl.fromJson;
@@ -2902,6 +2941,8 @@ abstract class _PictureWidgetConfig implements PictureWidgetConfig {
   LogoWidgetConfig get onboardingLogo;
   @override
   AppIconWidgetConfig get appIcon;
+  @override
+  Metadata get metadata;
 
   /// Create a copy of PictureWidgetConfig
   /// with the given fields replaced by the non-null parameter values.

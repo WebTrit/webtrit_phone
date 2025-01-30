@@ -3235,6 +3235,7 @@ mixin _$EmbeddedData {
   Uri get resource => throw _privateConstructorUsedError;
   Map<String, dynamic> get attributes => throw _privateConstructorUsedError;
   ToolbarConfig get toolbar => throw _privateConstructorUsedError;
+  Metadata get metadata => throw _privateConstructorUsedError;
 
   /// Serializes this EmbeddedData to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -3256,9 +3257,11 @@ abstract class $EmbeddedDataCopyWith<$Res> {
       {int? id,
       @UriConverter() Uri resource,
       Map<String, dynamic> attributes,
-      ToolbarConfig toolbar});
+      ToolbarConfig toolbar,
+      Metadata metadata});
 
   $ToolbarConfigCopyWith<$Res> get toolbar;
+  $MetadataCopyWith<$Res> get metadata;
 }
 
 /// @nodoc
@@ -3280,6 +3283,7 @@ class _$EmbeddedDataCopyWithImpl<$Res, $Val extends EmbeddedData>
     Object? resource = null,
     Object? attributes = null,
     Object? toolbar = null,
+    Object? metadata = null,
   }) {
     return _then(_value.copyWith(
       id: freezed == id
@@ -3298,6 +3302,10 @@ class _$EmbeddedDataCopyWithImpl<$Res, $Val extends EmbeddedData>
           ? _value.toolbar
           : toolbar // ignore: cast_nullable_to_non_nullable
               as ToolbarConfig,
+      metadata: null == metadata
+          ? _value.metadata
+          : metadata // ignore: cast_nullable_to_non_nullable
+              as Metadata,
     ) as $Val);
   }
 
@@ -3308,6 +3316,16 @@ class _$EmbeddedDataCopyWithImpl<$Res, $Val extends EmbeddedData>
   $ToolbarConfigCopyWith<$Res> get toolbar {
     return $ToolbarConfigCopyWith<$Res>(_value.toolbar, (value) {
       return _then(_value.copyWith(toolbar: value) as $Val);
+    });
+  }
+
+  /// Create a copy of EmbeddedData
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $MetadataCopyWith<$Res> get metadata {
+    return $MetadataCopyWith<$Res>(_value.metadata, (value) {
+      return _then(_value.copyWith(metadata: value) as $Val);
     });
   }
 }
@@ -3324,10 +3342,13 @@ abstract class _$$EmbeddedDataImplCopyWith<$Res>
       {int? id,
       @UriConverter() Uri resource,
       Map<String, dynamic> attributes,
-      ToolbarConfig toolbar});
+      ToolbarConfig toolbar,
+      Metadata metadata});
 
   @override
   $ToolbarConfigCopyWith<$Res> get toolbar;
+  @override
+  $MetadataCopyWith<$Res> get metadata;
 }
 
 /// @nodoc
@@ -3347,6 +3368,7 @@ class __$$EmbeddedDataImplCopyWithImpl<$Res>
     Object? resource = null,
     Object? attributes = null,
     Object? toolbar = null,
+    Object? metadata = null,
   }) {
     return _then(_$EmbeddedDataImpl(
       id: freezed == id
@@ -3365,6 +3387,10 @@ class __$$EmbeddedDataImplCopyWithImpl<$Res>
           ? _value.toolbar
           : toolbar // ignore: cast_nullable_to_non_nullable
               as ToolbarConfig,
+      metadata: null == metadata
+          ? _value.metadata
+          : metadata // ignore: cast_nullable_to_non_nullable
+              as Metadata,
     ));
   }
 }
@@ -3377,7 +3403,8 @@ class _$EmbeddedDataImpl extends _EmbeddedData {
       {this.id,
       @UriConverter() required this.resource,
       final Map<String, dynamic> attributes = const {},
-      this.toolbar = const ToolbarConfig()})
+      this.toolbar = const ToolbarConfig(),
+      this.metadata = const Metadata()})
       : _attributes = attributes,
         super._();
 
@@ -3401,10 +3428,13 @@ class _$EmbeddedDataImpl extends _EmbeddedData {
   @override
   @JsonKey()
   final ToolbarConfig toolbar;
+  @override
+  @JsonKey()
+  final Metadata metadata;
 
   @override
   String toString() {
-    return 'EmbeddedData(id: $id, resource: $resource, attributes: $attributes, toolbar: $toolbar)';
+    return 'EmbeddedData(id: $id, resource: $resource, attributes: $attributes, toolbar: $toolbar, metadata: $metadata)';
   }
 
   @override
@@ -3417,13 +3447,15 @@ class _$EmbeddedDataImpl extends _EmbeddedData {
                 other.resource == resource) &&
             const DeepCollectionEquality()
                 .equals(other._attributes, _attributes) &&
-            (identical(other.toolbar, toolbar) || other.toolbar == toolbar));
+            (identical(other.toolbar, toolbar) || other.toolbar == toolbar) &&
+            (identical(other.metadata, metadata) ||
+                other.metadata == metadata));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, id, resource,
-      const DeepCollectionEquality().hash(_attributes), toolbar);
+      const DeepCollectionEquality().hash(_attributes), toolbar, metadata);
 
   /// Create a copy of EmbeddedData
   /// with the given fields replaced by the non-null parameter values.
@@ -3446,7 +3478,8 @@ abstract class _EmbeddedData extends EmbeddedData {
       {final int? id,
       @UriConverter() required final Uri resource,
       final Map<String, dynamic> attributes,
-      final ToolbarConfig toolbar}) = _$EmbeddedDataImpl;
+      final ToolbarConfig toolbar,
+      final Metadata metadata}) = _$EmbeddedDataImpl;
   const _EmbeddedData._() : super._();
 
   factory _EmbeddedData.fromJson(Map<String, dynamic> json) =
@@ -3461,6 +3494,8 @@ abstract class _EmbeddedData extends EmbeddedData {
   Map<String, dynamic> get attributes;
   @override
   ToolbarConfig get toolbar;
+  @override
+  Metadata get metadata;
 
   /// Create a copy of EmbeddedData
   /// with the given fields replaced by the non-null parameter values.

@@ -22,6 +22,12 @@ class LoginSignUpScreenshot extends StatelessWidget {
 
     final embedded = sections as LoginEmbeddedModeButton?;
 
+    if (embedded == null) {
+      return const Center(
+        child: Text('Embedded page not set up'),
+      );
+    }
+
     return BlocProvider<LoginCubit>(
       create: (context) => MockLoginCubit.loginSwitchScreen(embedded: embedded.customLoginFeature),
       child: LoginSwitchScreen(

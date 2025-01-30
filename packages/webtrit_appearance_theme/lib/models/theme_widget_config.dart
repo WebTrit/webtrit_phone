@@ -1,6 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'custom_color.dart';
+import 'metadata.dart';
 
 part 'theme_widget_config.freezed.dart';
 
@@ -20,7 +21,7 @@ class ThemeWidgetConfig with _$ThemeWidgetConfig {
     @Default(DialogWidgetConfig()) DialogWidgetConfig dialog,
     @Default(ActionPadWidgetConfig()) ActionPadWidgetConfig actionPad,
     @Default(StatusesWidgetConfig()) StatusesWidgetConfig statuses,
-      @Default(DecorationConfig()) DecorationConfig decorationConfig,
+    @Default(DecorationConfig()) DecorationConfig decorationConfig,
   }) = _ThemeWidgetConfig;
 
   factory ThemeWidgetConfig.fromJson(Map<String, dynamic> json) => _$ThemeWidgetConfigFromJson(json);
@@ -153,9 +154,16 @@ class PictureWidgetConfig with _$PictureWidgetConfig {
     @Default(LogoWidgetConfig()) LogoWidgetConfig onboardingPictureLogo,
     @Default(LogoWidgetConfig()) LogoWidgetConfig onboardingLogo,
     @Default(AppIconWidgetConfig()) AppIconWidgetConfig appIcon,
+    @Default(Metadata()) Metadata metadata,
   }) = _PictureWidgetConfig;
 
   factory PictureWidgetConfig.fromJson(Map<String, dynamic> json) => _$PictureWidgetConfigFromJson(json);
+
+  /// A globally consistent metadata key used to associate additional resources
+  static const String metadataPrimaryOnboardingLogoUrl = 'primaryOnboardingLogoUrl';
+
+  /// A globally consistent metadata key used to associate additional resources
+  static const String metadataSecondaryOnboardingLogoUrl = 'secondaryOnboardingLogoUrl';
 }
 
 @Freezed()
