@@ -30,6 +30,7 @@ export 'main_flavor.dart';
 export 'media_codecs.dart';
 export 'recent.dart';
 export 'recents_visibility_filter.dart';
+export 'rtp_codec_profile.dart';
 export 'session_status.dart';
 export 'settings_flavor.dart';
 export 'sms_conversation.dart';
