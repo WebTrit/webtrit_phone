@@ -1188,6 +1188,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings_ListViewTileTitle_call_codecs => 'Call codecs';
 
   @override
+  String get settings_ListViewTileTitle_encoding => 'Media encoding settings';
+
+  @override
   String get settings_ListViewTileTitle_self_config => 'Self-config page';
 
   @override

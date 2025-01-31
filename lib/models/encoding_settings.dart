@@ -2,6 +2,7 @@ import 'dart:collection';
 
 import 'package:equatable/equatable.dart';
 
+import 'package:webtrit_phone/models/enableble.dart';
 import 'package:webtrit_phone/models/rtp_codec_profile.dart';
 
 class EncodingSettings extends Equatable {
@@ -15,6 +16,8 @@ class EncodingSettings extends Equatable {
     this.audioProfiles,
     this.videoProfiles,
   });
+
+  factory EncodingSettings.blank() => const EncodingSettings();
 
   /// Set the bitrate for audio stream.
   /// In range `8-256kbps` for audio.
@@ -56,38 +59,38 @@ class EncodingSettings extends Equatable {
   /// Ordered list of audio codec profiles to be used.
   /// Used to prioritize the codec profiles based on the order or enable/disable them.
   /// `null` means not set and use automatic mode.
-  final List<ProfileParam>? audioProfiles;
-  static List<ProfileParam> defaultAudioProfilesOrder = [
-    (profile: RTPCodecProfile.opus, enabled: true),
-    (profile: RTPCodecProfile.redAudio, enabled: true),
-    (profile: RTPCodecProfile.g722, enabled: true),
-    (profile: RTPCodecProfile.ilbc, enabled: true),
-    (profile: RTPCodecProfile.pcmu, enabled: true),
-    (profile: RTPCodecProfile.pcma, enabled: true),
-    (profile: RTPCodecProfile.cn, enabled: true),
-    (profile: RTPCodecProfile.telephoneEvent8, enabled: true),
-    (profile: RTPCodecProfile.telephoneEvent48, enabled: true),
+  final List<Enableble<RTPCodecProfile>>? audioProfiles;
+  static List<Enableble<RTPCodecProfile>> defaultAudioProfilesOrder = [
+    (option: RTPCodecProfile.opus, enabled: true),
+    (option: RTPCodecProfile.redAudio, enabled: true),
+    (option: RTPCodecProfile.g722, enabled: true),
+    (option: RTPCodecProfile.ilbc, enabled: true),
+    (option: RTPCodecProfile.pcmu, enabled: true),
+    (option: RTPCodecProfile.pcma, enabled: true),
+    (option: RTPCodecProfile.cn, enabled: true),
+    (option: RTPCodecProfile.telephoneEvent8, enabled: true),
+    (option: RTPCodecProfile.telephoneEvent48, enabled: true),
   ];
 
   /// Ordered list of video codec profiles to be used.
   /// Used to prioritize the codec profiles based on the order or enable/disable them.
   /// `null` means not set and use automatic mode.
-  final List<ProfileParam>? videoProfiles;
-  static List<ProfileParam> defaultVideoProfilesOrder = [
-    (profile: RTPCodecProfile.h264_42e01f, enabled: true),
-    (profile: RTPCodecProfile.h264_42e034, enabled: true),
-    (profile: RTPCodecProfile.h264_640c34, enabled: true),
-    (profile: RTPCodecProfile.h265, enabled: true),
-    (profile: RTPCodecProfile.vp8, enabled: true),
-    (profile: RTPCodecProfile.vp9, enabled: true),
-    (profile: RTPCodecProfile.av1, enabled: true),
-    (profile: RTPCodecProfile.redVideo, enabled: true),
+  final List<Enableble<RTPCodecProfile>>? videoProfiles;
+  static List<Enableble<RTPCodecProfile>> defaultVideoProfilesOrder = [
+    (option: RTPCodecProfile.h264_42e01f, enabled: true),
+    (option: RTPCodecProfile.h264_42e034, enabled: true),
+    (option: RTPCodecProfile.h264_640c34, enabled: true),
+    (option: RTPCodecProfile.h265, enabled: true),
+    (option: RTPCodecProfile.vp8, enabled: true),
+    (option: RTPCodecProfile.vp9, enabled: true),
+    (option: RTPCodecProfile.av1, enabled: true),
+    (option: RTPCodecProfile.redVideo, enabled: true),
   ];
 
   /// For tracking the model schema changes on serializing.
   static int schemaVersion = 1;
 
-  EncodingSettings copyWithAudioBitrate({int? audioBitrate}) {
+  EncodingSettings copyWithAudioBitrate(int? audioBitrate) {
     return EncodingSettings(
       audioBitrate: audioBitrate,
       videoBitrate: videoBitrate,
@@ -100,7 +103,7 @@ class EncodingSettings extends Equatable {
     );
   }
 
-  EncodingSettings copyWithVideoBitrate({int? videoBitrate}) {
+  EncodingSettings copyWithVideoBitrate(int? videoBitrate) {
     return EncodingSettings(
       audioBitrate: audioBitrate,
       videoBitrate: videoBitrate,
@@ -113,7 +116,7 @@ class EncodingSettings extends Equatable {
     );
   }
 
-  EncodingSettings copyWithPtime({int? ptime}) {
+  EncodingSettings copyWithPtime(int? ptime) {
     return EncodingSettings(
       audioBitrate: audioBitrate,
       videoBitrate: videoBitrate,
@@ -126,7 +129,7 @@ class EncodingSettings extends Equatable {
     );
   }
 
-  EncodingSettings copyWithMaxptime({int? maxptime}) {
+  EncodingSettings copyWithMaxptime(int? maxptime) {
     return EncodingSettings(
       audioBitrate: audioBitrate,
       videoBitrate: videoBitrate,
@@ -139,7 +142,7 @@ class EncodingSettings extends Equatable {
     );
   }
 
-  EncodingSettings copyWithOpusBandwidthLimit({int? opusBandwidthLimit}) {
+  EncodingSettings copyWithOpusBandwidthLimit(int? opusBandwidthLimit) {
     return EncodingSettings(
       audioBitrate: audioBitrate,
       videoBitrate: videoBitrate,
@@ -152,7 +155,7 @@ class EncodingSettings extends Equatable {
     );
   }
 
-  EncodingSettings copyWithOpusStereo({bool? opusStereo}) {
+  EncodingSettings copyWithOpusStereo(bool? opusStereo) {
     return EncodingSettings(
       audioBitrate: audioBitrate,
       videoBitrate: videoBitrate,
@@ -165,7 +168,7 @@ class EncodingSettings extends Equatable {
     );
   }
 
-  EncodingSettings copyWithAudioProfiles({List<ProfileParam>? audioProfiles}) {
+  EncodingSettings copyWithAudioProfiles(List<Enableble<RTPCodecProfile>>? audioProfiles) {
     return EncodingSettings(
       audioBitrate: audioBitrate,
       videoBitrate: videoBitrate,
@@ -178,7 +181,7 @@ class EncodingSettings extends Equatable {
     );
   }
 
-  EncodingSettings copyWithVideoProfiles({List<ProfileParam>? videoProfiles}) {
+  EncodingSettings copyWithVideoProfiles(List<Enableble<RTPCodecProfile>>? videoProfiles) {
     return EncodingSettings(
       audioBitrate: audioBitrate,
       videoBitrate: videoBitrate,
@@ -206,5 +209,3 @@ class EncodingSettings extends Equatable {
   @override
   bool get stringify => true;
 }
-
-typedef ProfileParam = ({RTPCodecProfile profile, bool enabled});

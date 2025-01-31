@@ -271,6 +271,12 @@ class AppLocalizationsMapper {
           localizations.diagnosticScreen_permissionsGroup_title,
       'diagnosticScreen_pushNotificationService_title':
           localizations.diagnosticScreen_pushNotificationService_title,
+      'diagnosticScreen_contacts_agreement_group_title':
+          localizations.diagnosticScreen_contacts_agreement_group_title,
+      'diagnosticScreen_contacts_agreement_title':
+          localizations.diagnosticScreen_contacts_agreement_title,
+      'diagnosticScreen_contacts_agreement_description':
+          localizations.diagnosticScreen_contacts_agreement_description,
       'favorites_BodyCenter_empty': localizations.favorites_BodyCenter_empty,
       'favorites_DeleteConfirmDialog_content':
           localizations.favorites_DeleteConfirmDialog_content,
@@ -699,6 +705,8 @@ class AppLocalizationsMapper {
           localizations.settings_ListViewTileTitle_accountDelete,
       'settings_ListViewTileTitle_call_codecs':
           localizations.settings_ListViewTileTitle_call_codecs,
+      'settings_ListViewTileTitle_encoding':
+          localizations.settings_ListViewTileTitle_encoding,
       'settings_ListViewTileTitle_self_config':
           localizations.settings_ListViewTileTitle_self_config,
       'settings_ListViewTileTitle_help':

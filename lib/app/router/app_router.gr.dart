@@ -136,6 +136,12 @@ abstract class _$AppRouter extends RootStackRouter {
         child: EmbeddedScreenPage3(args.data),
       );
     },
+    EncodingSettingsScreenPageRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: EncodingSettingsScreenPage(),
+      );
+    },
     ErrorDetailsScreenPageRoute.name: (routeData) {
       final args = routeData.argsAs<ErrorDetailsScreenPageRouteArgs>();
       return AutoRoutePage<dynamic>(
@@ -756,6 +762,20 @@ class EmbeddedScreenPage3RouteArgs {
   String toString() {
     return 'EmbeddedScreenPage3RouteArgs{data: $data}';
   }
+}
+
+/// generated route for
+/// [EncodingSettingsScreenPage]
+class EncodingSettingsScreenPageRoute extends PageRouteInfo<void> {
+  const EncodingSettingsScreenPageRoute({List<PageRouteInfo>? children})
+      : super(
+          EncodingSettingsScreenPageRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'EncodingSettingsScreenPageRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
 }
 
 /// generated route for

@@ -1188,6 +1188,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get settings_ListViewTileTitle_call_codecs => 'Кодеки дзвінка';
 
   @override
+  String get settings_ListViewTileTitle_encoding => 'Hалаштування кодування медіа';
+
+  @override
   String get settings_ListViewTileTitle_self_config => 'Сторінка спец-налаштувань';
 
   @override

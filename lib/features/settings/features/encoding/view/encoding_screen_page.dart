@@ -5,19 +5,18 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/data/data.dart';
 
-import '../call_codecs.dart';
+import '../encoding.dart';
 
-@Deprecated('Use EncodingSettingsScreen instead')
 @RoutePage()
-class CallCodecsScreenPage extends StatelessWidget {
+class EncodingSettingsScreenPage extends StatelessWidget {
   // ignore: use_key_in_widget_constructors
-  const CallCodecsScreenPage();
+  const EncodingSettingsScreenPage();
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => CallCodecsCubit(context.read<AppPreferences>()),
-      child: const CallCodecsScreen(),
+      create: (context) => EncodingSettingsCubit(context.read<AppPreferences>()),
+      child: const EncodingSettingsScreen(),
     );
   }
 }

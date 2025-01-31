@@ -1,7 +1,7 @@
 import 'dart:convert';
 
+import 'package:webtrit_phone/models/enableble.dart';
 import 'package:webtrit_phone/models/encoding_settings.dart';
-
 import 'package:webtrit_phone/models/rtp_codec_profile.dart';
 
 mixin EncodingSettingsJsonMapper {
@@ -21,8 +21,8 @@ mixin EncodingSettingsJsonMapper {
       maxptime: map['maxptime'] as int?,
       opusBandwidthLimit: map['opusBandwidthLimit'] as int?,
       opusStereo: map['opusStereo'] as bool?,
-      audioProfiles: (map['audioProfiles'] as List<dynamic>?)?.map((p) => profileParamFromMap(p)).toList(),
-      videoProfiles: (map['videoProfiles'] as List<dynamic>?)?.map((p) => profileParamFromMap(p)).toList(),
+      audioProfiles: (map['audioProfiles'] as List<dynamic>?)?.map((p) => profileFromMap(p)).toList(),
+      videoProfiles: (map['videoProfiles'] as List<dynamic>?)?.map((p) => profileFromMap(p)).toList(),
     );
   }
 
@@ -34,16 +34,16 @@ mixin EncodingSettingsJsonMapper {
       'maxptime': settings.maxptime,
       'opusBandwidthLimit': settings.opusBandwidthLimit,
       'opusStereo': settings.opusStereo,
-      'audioProfiles': settings.audioProfiles?.map((e) => profileParamToMap(e)).toList(),
-      'videoProfiles': settings.videoProfiles?.map((e) => profileParamToMap(e)).toList(),
+      'audioProfiles': settings.audioProfiles?.map((e) => profileToMap(e)).toList(),
+      'videoProfiles': settings.videoProfiles?.map((e) => profileToMap(e)).toList(),
     };
   }
 
-  ProfileParam profileParamFromMap(Map<String, dynamic> map) {
-    return (profile: RTPCodecProfile.values.byName(map['profile']), enabled: map['enabled']);
+  Enableble<RTPCodecProfile> profileFromMap(Map<String, dynamic> map) {
+    return (option: RTPCodecProfile.values.byName(map['profile']), enabled: map['enabled']);
   }
 
-  Map<String, dynamic> profileParamToMap(ProfileParam param) {
-    return {'profile': param.profile.name, 'enabled': param.enabled};
+  Map<String, dynamic> profileToMap(Enableble<RTPCodecProfile> param) {
+    return {'profile': param.option.name, 'enabled': param.enabled};
   }
 }

@@ -123,6 +123,12 @@
           },
           {
             "enabled": true,
+            "type": "encoding",
+            "titleL10n": "settings_ListViewTileTitle_encoding",
+            "icon": "0xf1cf"
+          },
+          {
+            "enabled": true,
             "type": "language",
             "titleL10n": "settings_ListViewTileTitle_language",
             "icon": "0xe366"

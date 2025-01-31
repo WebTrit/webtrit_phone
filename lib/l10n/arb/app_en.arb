@@ -862,6 +862,8 @@
   "@settings_ListViewTileTitle_accountDelete": {},
   "settings_ListViewTileTitle_call_codecs": "Call codecs",
   "@settings_ListViewTileTitle_call_codecs": {},
+  "settings_ListViewTileTitle_encoding": "Media encoding settings",
+  "@settings_ListViewTileTitle_encoding": {},
   "settings_ListViewTileTitle_self_config": "Self-config page",
   "@settings_ListViewTileTitle_self_config": {},
   "settings_ListViewTileTitle_help": "Help",

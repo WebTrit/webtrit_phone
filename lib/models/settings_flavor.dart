@@ -8,5 +8,6 @@ enum SettingsFlavor {
   deleteAccount,
   embedded,
   callCodecs,
+  encoding,
   selfConfig,
 }
