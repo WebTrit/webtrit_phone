@@ -1,6 +1,7 @@
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:sdp_transform/sdp_transform.dart' as sdp_transform;
 
+@Deprecated('Use SDPModBuilder instead')
 class WebrtcSdpUtils {
   static bool _sameCodec(dynamic codecData, String codecName) {
     return (codecData['codec'] as String).toLowerCase() == codecName.toLowerCase();
