@@ -44,12 +44,6 @@ abstract class _$AppRouter extends RootStackRouter {
         ),
       );
     },
-    CallCodecsScreenPageRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: CallCodecsScreenPage(),
-      );
-    },
     CallScreenPageRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -459,20 +453,6 @@ class AutoprovisionScreenPageRouteArgs {
   String toString() {
     return 'AutoprovisionScreenPageRouteArgs{configToken: $configToken, tenantId: $tenantId, coreUrl: $coreUrl}';
   }
-}
-
-/// generated route for
-/// [CallCodecsScreenPage]
-class CallCodecsScreenPageRoute extends PageRouteInfo<void> {
-  const CallCodecsScreenPageRoute({List<PageRouteInfo>? children})
-      : super(
-          CallCodecsScreenPageRoute.name,
-          initialChildren: children,
-        );
-
-  static const String name = 'CallCodecsScreenPageRoute';
-
-  static const PageInfo<void> page = PageInfo<void>(name);
 }
 
 /// generated route for

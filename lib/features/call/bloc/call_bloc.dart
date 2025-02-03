@@ -26,7 +26,7 @@ import 'package:webtrit_phone/models/models.dart';
 
 import '../extensions/extensions.dart';
 import '../models/models.dart';
-import '../services/services.dart';
+import '../utils/utils.dart';
 
 export 'package:webtrit_callkeep/webtrit_callkeep.dart' show CallkeepHandle, CallkeepHandleType;
 
@@ -956,7 +956,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
           } else {
             await peerConnection.setRemoteDescription(remoteDescription);
             final localDescription = await peerConnection.createAnswer({});
-            sdpMunger?.modify(localDescription);
+            sdpMunger?.apply(localDescription);
 
             await _signalingClient?.execute(UpdateRequest(
               transaction: WebtritSignalingClient.generateTransactionId(),
@@ -1561,7 +1561,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     try {
       final localDescription = await peerConnection.createOffer({});
-      sdpMunger?.modify(localDescription);
+      sdpMunger?.apply(localDescription);
 
       // Need to initiate outgoing call before set localDescription to avoid races
       // between [OutgoingCallRequest] and [IceTrickleRequest]s.
@@ -1641,7 +1641,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       final peerConnection = (await _peerConnectionRetrieve(call.callId))!;
 
       final localDescription = await peerConnection.createAnswer({});
-      sdpMunger?.modify(localDescription);
+      sdpMunger?.apply(localDescription);
 
       await _signalingClient?.execute(AcceptRequest(
         transaction: WebtritSignalingClient.generateTransactionId(),
@@ -1882,7 +1882,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
           } else {
             await peerConnection.restartIce();
             final localDescription = await peerConnection.createOffer({});
-            sdpMunger?.modify(localDescription);
+            sdpMunger?.apply(localDescription);
 
             await peerConnection.setLocalDescription(localDescription);
 

@@ -29,7 +29,6 @@ export 'local_contact_email.dart';
 export 'local_contact_phone.dart';
 export 'login_flavor.dart';
 export 'main_flavor.dart';
-export 'media_codecs.dart';
 export 'recent.dart';
 export 'recents_visibility_filter.dart';
 export 'rtp_codec_profile.dart';

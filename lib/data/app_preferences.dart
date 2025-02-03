@@ -55,18 +55,6 @@ abstract class AppPreferences {
 
   Future<void> setSystemInfo(WebtritSystemInfo systemInfo);
 
-  @Deprecated('Use encoding settings instead')
-  AudioCodec? getPreferedAudioCodec();
-
-  @Deprecated('Use encoding settings instead')
-  Future<void> setPreferedAudioCodec(AudioCodec? value);
-
-  @Deprecated('Use encoding settings instead')
-  VideoCodec? getPreferedVideoCodec();
-
-  @Deprecated('Use encoding settings instead')
-  Future<void> setPreferedVideoCodec(VideoCodec? value);
-
   EncodingSettings getEncodingSettings();
 
   Future<void> setEncodingSettings(EncodingSettings settings);
@@ -95,8 +83,6 @@ class AppPreferencesImpl with SystemInfoJsonMapper, EncodingSettingsJsonMapper i
   static const _kContactsAgreementAcceptedKey = 'contacts-agreement-status';
   static const _kIncomingCallTypeKey = 'call-incoming-type';
   static const _kSystemInfoKey = 'system-info';
-  static const _kPreferedAudioCodecKey = 'prefered-audio-codec';
-  static const _kPreferedVideoCodecKey = 'prefered-video-codec';
   static const _kEncodingSettingsKey = 'encoding-settings';
 
   // Please add all new keys here for proper cleaning of preferences
@@ -111,8 +97,6 @@ class AppPreferencesImpl with SystemInfoJsonMapper, EncodingSettingsJsonMapper i
     _kContactsAgreementAcceptedKey,
     _kIncomingCallTypeKey,
     _kSystemInfoKey,
-    _kPreferedAudioCodecKey,
-    _kPreferedVideoCodecKey,
     _kEncodingSettingsKey,
   ];
 
@@ -306,38 +290,6 @@ class AppPreferencesImpl with SystemInfoJsonMapper, EncodingSettingsJsonMapper i
     final systemInfoString = _sharedPreferences.getString(_kSystemInfoKey);
     if (systemInfoString != null) return systemInfoFromJson(systemInfoString);
     return null;
-  }
-
-  @override
-  Future<void> setPreferedAudioCodec(AudioCodec? value) {
-    if (value != null) {
-      return _sharedPreferences.setString(_kPreferedAudioCodecKey, value.name);
-    } else {
-      return _sharedPreferences.remove(_kPreferedAudioCodecKey);
-    }
-  }
-
-  @override
-  AudioCodec? getPreferedAudioCodec() {
-    final preferedAudioCodec = _sharedPreferences.getString(_kPreferedAudioCodecKey);
-    if (preferedAudioCodec == null) return null;
-    return AudioCodec.values.byName(preferedAudioCodec);
-  }
-
-  @override
-  Future<void> setPreferedVideoCodec(VideoCodec? value) {
-    if (value != null) {
-      return _sharedPreferences.setString(_kPreferedVideoCodecKey, value.name);
-    } else {
-      return _sharedPreferences.remove(_kPreferedVideoCodecKey);
-    }
-  }
-
-  @override
-  VideoCodec? getPreferedVideoCodec() {
-    final preferedVideoCodec = _sharedPreferences.getString(_kPreferedVideoCodecKey);
-    if (preferedVideoCodec == null) return null;
-    return VideoCodec.values.byName(preferedVideoCodec);
   }
 
   @override

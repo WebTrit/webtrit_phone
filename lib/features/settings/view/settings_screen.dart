@@ -175,15 +175,6 @@ class SettingsScreen extends StatelessWidget {
                                     ),
                                     const ListTileSeparator(),
                                   ])
-                                else if (item.flavor == SettingsFlavor.callCodecs)
-                                  Column(children: [
-                                    ListTile(
-                                      leading: Icon(item.icon),
-                                      title: Text(context.parseL10n(item.titleL10n)),
-                                      onTap: () => context.router.navigate(const CallCodecsScreenPageRoute()),
-                                    ),
-                                    const ListTileSeparator(),
-                                  ])
                                 else if (item.flavor == SettingsFlavor.encoding)
                                   Column(children: [
                                     ListTile(
