@@ -91,11 +91,7 @@ abstract class AppLocalizations {
   ];
 
   /// A list of this localizations delegate's supported locales.
-  static const List<Locale> supportedLocales = <Locale>[
-    Locale('en'),
-    Locale('it'),
-    Locale('uk')
-  ];
+  static const List<Locale> supportedLocales = <Locale>[Locale('en'), Locale('it'), Locale('uk')];
 
   /// No description provided for @account_selfCarePasswordExpired_message.
   ///
@@ -1367,7 +1363,8 @@ abstract class AppLocalizations {
   ///
   /// In en, this message translates to:
   /// **'Incompatible WebTrit Cloud Backend version, please contact the administrator of your system.\n\nInstance version:\n{actual}\n\nSupported version:\n{supportedConstraint}'**
-  String main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError(String actual, String supportedConstraint);
+  String main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError(
+      String actual, String supportedConstraint);
 
   /// No description provided for @main_CompatibilityIssueDialog_title.
   ///
@@ -2317,42 +2314,6 @@ abstract class AppLocalizations {
   /// **'My account'**
   String get settings_AppBarTitle_myAccount;
 
-  /// No description provided for @settings_call_codecs_preferred_audio_default.
-  ///
-  /// In en, this message translates to:
-  /// **'Auto'**
-  String get settings_call_codecs_preferred_audio_default;
-
-  /// No description provided for @settings_call_codecs_preferred_audio_tip.
-  ///
-  /// In en, this message translates to:
-  /// **'The preferred audio codec is used for audio calls. If the codec is not supported by the device, the call will be established using the next available codec.'**
-  String get settings_call_codecs_preferred_audio_tip;
-
-  /// No description provided for @settings_call_codecs_preferred_audio_title.
-  ///
-  /// In en, this message translates to:
-  /// **'Preferred audio codec'**
-  String get settings_call_codecs_preferred_audio_title;
-
-  /// No description provided for @settings_call_codecs_preferred_video_default.
-  ///
-  /// In en, this message translates to:
-  /// **'Auto'**
-  String get settings_call_codecs_preferred_video_default;
-
-  /// No description provided for @settings_call_codecs_preferred_video_tip.
-  ///
-  /// In en, this message translates to:
-  /// **'The preferred video codec is used for video calls. If the codec is not supported by the device, the call will be established using the next available codec.'**
-  String get settings_call_codecs_preferred_video_tip;
-
-  /// No description provided for @settings_call_codecs_preferred_video_title.
-  ///
-  /// In en, this message translates to:
-  /// **'Preferred video codec'**
-  String get settings_call_codecs_preferred_video_title;
-
   /// No description provided for @settings_encoding_AppBar_reset_tooltip.
   ///
   /// In en, this message translates to:
@@ -2550,12 +2511,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Delete account'**
   String get settings_ListViewTileTitle_accountDelete;
-
-  /// No description provided for @settings_ListViewTileTitle_call_codecs.
-  ///
-  /// In en, this message translates to:
-  /// **'Call codecs'**
-  String get settings_ListViewTileTitle_call_codecs;
 
   /// No description provided for @settings_ListViewTileTitle_encoding.
   ///
@@ -3150,19 +3105,18 @@ class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> 
 }
 
 AppLocalizations lookupAppLocalizations(Locale locale) {
-
-
   // Lookup logic when only language code is specified.
   switch (locale.languageCode) {
-    case 'en': return AppLocalizationsEn();
-    case 'it': return AppLocalizationsIt();
-    case 'uk': return AppLocalizationsUk();
+    case 'en':
+      return AppLocalizationsEn();
+    case 'it':
+      return AppLocalizationsIt();
+    case 'uk':
+      return AppLocalizationsUk();
   }
 
-  throw FlutterError(
-    'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
-    'an issue with the localizations generation tool. Please file an issue '
-    'on GitHub with a reproducible sample app and the gen-l10n configuration '
-    'that was used.'
-  );
+  throw FlutterError('AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
+      'an issue with the localizations generation tool. Please file an issue '
+      'on GitHub with a reproducible sample app and the gen-l10n configuration '
+      'that was used.');
 }
