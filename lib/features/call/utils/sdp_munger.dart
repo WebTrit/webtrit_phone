@@ -51,9 +51,9 @@ class ModifyWithEncodingSettings implements SDPMunger {
       modified = true;
     }
 
-    if (settings.opusStereo != null || settings.opusBandwidthLimit != null) {
+    if (settings.opusBandwidthLimit != null || settings.opusStereo != null || settings.opusDtx != null) {
       _logger.info('Setting opus params, stereo:${settings.opusStereo} bandwidth:${settings.opusBandwidthLimit}');
-      builder.setOpusParams(settings.opusStereo, settings.opusBandwidthLimit);
+      builder.setOpusParams(settings.opusBandwidthLimit, settings.opusStereo, settings.opusDtx);
       modified = true;
     }
 

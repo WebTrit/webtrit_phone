@@ -21,6 +21,7 @@ mixin EncodingSettingsJsonMapper {
       maxptime: map['maxptime'] as int?,
       opusBandwidthLimit: map['opusBandwidthLimit'] as int?,
       opusStereo: map['opusStereo'] as bool?,
+      opusDtx: map['opusDtx'] as bool?,
       audioProfiles: (map['audioProfiles'] as List<dynamic>?)?.map((p) => profileFromMap(p)).toList(),
       videoProfiles: (map['videoProfiles'] as List<dynamic>?)?.map((p) => profileFromMap(p)).toList(),
     );
@@ -34,6 +35,7 @@ mixin EncodingSettingsJsonMapper {
       'maxptime': settings.maxptime,
       'opusBandwidthLimit': settings.opusBandwidthLimit,
       'opusStereo': settings.opusStereo,
+      'opusDtx': settings.opusDtx,
       'audioProfiles': settings.audioProfiles?.map((e) => profileToMap(e)).toList(),
       'videoProfiles': settings.videoProfiles?.map((e) => profileToMap(e)).toList(),
     };

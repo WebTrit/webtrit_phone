@@ -13,6 +13,7 @@ class EncodingSettings extends Equatable {
     this.maxptime,
     this.opusBandwidthLimit,
     this.opusStereo,
+    this.opusDtx,
     this.audioProfiles,
     this.videoProfiles,
   });
@@ -56,6 +57,11 @@ class EncodingSettings extends Equatable {
   /// `null` means not set and use automatic mode.
   final bool? opusStereo;
 
+  /// Set opus specific DTX parameter.
+  /// [opusDtx] DTX support on/off.
+  /// `null` means not set and use automatic mode.
+  final bool? opusDtx;
+
   /// Ordered list of audio codec profiles to be used.
   /// Used to prioritize the codec profiles based on the order or enable/disable them.
   /// `null` means not set and use automatic mode.
@@ -98,6 +104,7 @@ class EncodingSettings extends Equatable {
       maxptime: maxptime,
       opusBandwidthLimit: opusBandwidthLimit,
       opusStereo: opusStereo,
+      opusDtx: opusDtx,
       audioProfiles: audioProfiles,
       videoProfiles: videoProfiles,
     );
@@ -111,6 +118,7 @@ class EncodingSettings extends Equatable {
       maxptime: maxptime,
       opusBandwidthLimit: opusBandwidthLimit,
       opusStereo: opusStereo,
+      opusDtx: opusDtx,
       audioProfiles: audioProfiles,
       videoProfiles: videoProfiles,
     );
@@ -124,6 +132,7 @@ class EncodingSettings extends Equatable {
       maxptime: maxptime,
       opusBandwidthLimit: opusBandwidthLimit,
       opusStereo: opusStereo,
+      opusDtx: opusDtx,
       audioProfiles: audioProfiles,
       videoProfiles: videoProfiles,
     );
@@ -137,6 +146,7 @@ class EncodingSettings extends Equatable {
       maxptime: maxptime,
       opusBandwidthLimit: opusBandwidthLimit,
       opusStereo: opusStereo,
+      opusDtx: opusDtx,
       audioProfiles: audioProfiles,
       videoProfiles: videoProfiles,
     );
@@ -150,6 +160,7 @@ class EncodingSettings extends Equatable {
       maxptime: maxptime,
       opusBandwidthLimit: opusBandwidthLimit,
       opusStereo: opusStereo,
+      opusDtx: opusDtx,
       audioProfiles: audioProfiles,
       videoProfiles: videoProfiles,
     );
@@ -163,6 +174,21 @@ class EncodingSettings extends Equatable {
       maxptime: maxptime,
       opusBandwidthLimit: opusBandwidthLimit,
       opusStereo: opusStereo,
+      opusDtx: opusDtx,
+      audioProfiles: audioProfiles,
+      videoProfiles: videoProfiles,
+    );
+  }
+
+  EncodingSettings copyWithOpusDtx(bool? opusDtx) {
+    return EncodingSettings(
+      audioBitrate: audioBitrate,
+      videoBitrate: videoBitrate,
+      ptime: ptime,
+      maxptime: maxptime,
+      opusBandwidthLimit: opusBandwidthLimit,
+      opusStereo: opusStereo,
+      opusDtx: opusDtx,
       audioProfiles: audioProfiles,
       videoProfiles: videoProfiles,
     );
@@ -176,6 +202,7 @@ class EncodingSettings extends Equatable {
       maxptime: maxptime,
       opusBandwidthLimit: opusBandwidthLimit,
       opusStereo: opusStereo,
+      opusDtx: opusDtx,
       audioProfiles: audioProfiles,
       videoProfiles: videoProfiles,
     );
@@ -189,6 +216,7 @@ class EncodingSettings extends Equatable {
       maxptime: maxptime,
       opusBandwidthLimit: opusBandwidthLimit,
       opusStereo: opusStereo,
+      opusDtx: opusDtx,
       audioProfiles: audioProfiles,
       videoProfiles: videoProfiles,
     );
@@ -202,6 +230,7 @@ class EncodingSettings extends Equatable {
         maxptime,
         opusBandwidthLimit,
         opusStereo,
+        opusDtx,
         audioProfiles,
         videoProfiles,
       ];

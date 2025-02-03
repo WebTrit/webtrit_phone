@@ -146,6 +146,19 @@ class _EncodingSettingsScreenState extends State<EncodingSettingsScreen> {
                   selected: settings.opusStereo,
                   onSelect: (option) => cubit.setNew(settings.copyWithOpusStereo(option)),
                 ),
+                const SizedBox(height: 16.0),
+                ChoosableSection<bool>(
+                  title: context.l10n.settings_encoding_Section_opus_dtx,
+                  buildOptionTitle: (option) {
+                    if (option == true) return Text(context.l10n.settings_encoding_Section_value_enable);
+                    if (option == false) return Text(context.l10n.settings_encoding_Section_value_disable);
+
+                    return Text(context.l10n.settings_encoding_Section_value_auto);
+                  },
+                  options: const [true, false],
+                  selected: settings.opusDtx,
+                  onSelect: (option) => cubit.setNew(settings.copyWithOpusDtx(option)),
+                ),
                 const SizedBox(height: 24),
                 HeadingSection(
                   title: context.l10n.settings_encoding_Section_rtp_override_title,

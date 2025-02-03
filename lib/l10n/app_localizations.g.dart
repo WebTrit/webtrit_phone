@@ -2395,6 +2395,18 @@ abstract class AppLocalizations {
   /// **'Stereo'**
   String get settings_encoding_Section_value_stereo;
 
+  /// No description provided for @settings_encoding_Section_value_enable.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable'**
+  String get settings_encoding_Section_value_enable;
+
+  /// No description provided for @settings_encoding_Section_value_disable.
+  ///
+  /// In en, this message translates to:
+  /// **'Disable'**
+  String get settings_encoding_Section_value_disable;
+
   /// No description provided for @settings_encoding_Section_bitrate_prefix.
   ///
   /// In en, this message translates to:
@@ -2484,6 +2496,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Channels mode override: '**
   String get settings_encoding_Section_opus_channels;
+
+  /// No description provided for @settings_encoding_Section_opus_dtx.
+  ///
+  /// In en, this message translates to:
+  /// **'DTX mode override: '**
+  String get settings_encoding_Section_opus_dtx;
 
   /// No description provided for @settings_encoding_Section_rtp_override_title.
   ///

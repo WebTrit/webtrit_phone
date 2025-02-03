@@ -1200,6 +1200,12 @@ class AppLocalizationsUk extends AppLocalizations {
   String get settings_encoding_Section_value_stereo => 'Стерео';
 
   @override
+  String get settings_encoding_Section_value_enable => 'Увімкнено';
+
+  @override
+  String get settings_encoding_Section_value_disable => 'Вимкнено';
+
+  @override
   String get settings_encoding_Section_bitrate_prefix => 'Бітрейт: ';
 
   @override
@@ -1243,6 +1249,9 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get settings_encoding_Section_opus_channels => 'Перевизначення режиму каналів: ';
+
+  @override
+  String get settings_encoding_Section_opus_dtx => 'Перевизначення режиму DTX: ';
 
   @override
   String get settings_encoding_Section_rtp_override_title => 'Пріоретизація та вилучення профілів RTP';

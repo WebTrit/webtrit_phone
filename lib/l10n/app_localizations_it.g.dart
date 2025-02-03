@@ -1200,6 +1200,12 @@ class AppLocalizationsIt extends AppLocalizations {
   String get settings_encoding_Section_value_stereo => 'Stereo';
 
   @override
+  String get settings_encoding_Section_value_enable => 'Abilitato';
+
+  @override
+  String get settings_encoding_Section_value_disable => 'Disabilitato';
+
+  @override
   String get settings_encoding_Section_bitrate_prefix => 'Bitrate: ';
 
   @override
@@ -1243,6 +1249,9 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get settings_encoding_Section_opus_channels => 'Ridefinire dei modalità canale: ';
+
+  @override
+  String get settings_encoding_Section_opus_dtx => 'Ridefinire la trasmissione DTX: ';
 
   @override
   String get settings_encoding_Section_rtp_override_title => 'Estrazione e riordino dei profili RTP';

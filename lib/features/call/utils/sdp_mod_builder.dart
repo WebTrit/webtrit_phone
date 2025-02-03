@@ -62,7 +62,8 @@ class SDPModBuilder {
   /// Set opus specific parameters
   /// [bandWidthLimit] limit maximum bandwidth in hz, range `8000-48000`.
   /// [stereo] stereo support on/off.
-  setOpusParams(bool? stereo, int? bandWidthLimit) {
+  /// [dtx] DTX support on/off.
+  setOpusParams(int? bandWidthLimit, bool? stereo, bool? dtx) {
     final profileId = getProfileId(RTPCodecProfile.opus);
     if (profileId == null) return;
 
@@ -92,6 +93,10 @@ class SDPModBuilder {
           bandWidthLimit = bandWidthLimit.clamp(8000, 48000);
           configMap['maxplaybackrate'] = bandWidthLimit.toStringAsFixed(0);
           configMap['sprop-maxcapturerate'] = bandWidthLimit.toStringAsFixed(0);
+        }
+
+        if (dtx != null) {
+          configMap['usedtx'] = dtx ? '1' : '0';
         }
 
         String newConfig = '';

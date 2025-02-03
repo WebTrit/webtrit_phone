@@ -713,6 +713,10 @@ class AppLocalizationsMapper {
           localizations.settings_encoding_Section_value_mono,
       'settings_encoding_Section_value_stereo':
           localizations.settings_encoding_Section_value_stereo,
+      'settings_encoding_Section_value_enable':
+          localizations.settings_encoding_Section_value_enable,
+      'settings_encoding_Section_value_disable':
+          localizations.settings_encoding_Section_value_disable,
       'settings_encoding_Section_bitrate_prefix':
           localizations.settings_encoding_Section_bitrate_prefix,
       'settings_encoding_Section_ptime_prefix':
@@ -743,6 +747,8 @@ class AppLocalizationsMapper {
           localizations.settings_encoding_Section_opus_bandwidth,
       'settings_encoding_Section_opus_channels':
           localizations.settings_encoding_Section_opus_channels,
+      'settings_encoding_Section_opus_dtx':
+          localizations.settings_encoding_Section_opus_dtx,
       'settings_encoding_Section_rtp_override_title':
           localizations.settings_encoding_Section_rtp_override_title,
       'settings_encoding_Section_rtp_override_tooltip':
