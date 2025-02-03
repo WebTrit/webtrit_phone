@@ -1179,6 +1179,90 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings_call_codecs_preferred_video_title => 'Preferred video codec';
 
   @override
+  String get settings_encoding_AppBar_reset_tooltip => 'Reset to default';
+
+  @override
+  String get settings_encoding_Section_measure_kbps => 'Kbps';
+
+  @override
+  String get settings_encoding_Section_measure_ms => 'ms';
+
+  @override
+  String get settings_encoding_Section_measure_hz => 'Hz';
+
+  @override
+  String get settings_encoding_Section_value_auto => 'Auto';
+
+  @override
+  String get settings_encoding_Section_value_mono => 'Mono';
+
+  @override
+  String get settings_encoding_Section_value_stereo => 'Stereo';
+
+  @override
+  String get settings_encoding_Section_bitrate_prefix => 'Bitrate: ';
+
+  @override
+  String get settings_encoding_Section_ptime_prefix => 'Ptime: ';
+
+  @override
+  String get settings_encoding_Section_bandwidth_prefix => 'Bandwidth: ';
+
+  @override
+  String get settings_encoding_Section_bitrate_title => 'Codec bitrate settings';
+
+  @override
+  String get settings_encoding_Section_bitrate_tooltip => 'Adjust the bitrate settings for audio and video codecs, lower values will reduce the bandwidth usage but affect the quality, higher values will increase the quality but also the bandwidth usage.';
+
+  @override
+  String get settings_encoding_Section_target_audio_bitrate => 'Audio target bitrate: ';
+
+  @override
+  String get settings_encoding_Section_target_video_bitrate => 'Video target bitrate: ';
+
+  @override
+  String get settings_encoding_Section_packetization_title => 'Audio packetization';
+
+  @override
+  String get settings_encoding_Section_packetization_tooltip => 'Adjust audio packetization-time in milliseconds, can be used to reduce audio latency or fix Network MTU size issues';
+
+  @override
+  String get settings_encoding_Section_audio_ptime => 'Audio target ptime: ';
+
+  @override
+  String get settings_encoding_Section_audio_ptime_limit => 'Audio ptime limit: ';
+
+  @override
+  String get settings_encoding_Section_opus_title => 'Opus codec tuning';
+
+  @override
+  String get settings_encoding_Section_opus_tooltip => 'Adjust the opus specific codec settings, can be used to reduce bandwidth usage or improve audio quality';
+
+  @override
+  String get settings_encoding_Section_opus_bandwidth => 'Bandwidth override: ';
+
+  @override
+  String get settings_encoding_Section_opus_channels => 'Channels mode override: ';
+
+  @override
+  String get settings_encoding_Section_rtp_override_title => 'RTP Profiles extraction and reorder';
+
+  @override
+  String get settings_encoding_Section_rtp_override_tooltip => 'Can be used to override the audio and video rtp profiles priority order or exclude some profiles from SDP negotiation list, this can be used to force the usage of specific codecs or exclude some codecs if they poorly supported by device, network or remote system';
+
+  @override
+  String get settings_encoding_Section_rtp_override_audio => 'Audio Profiles override';
+
+  @override
+  String get settings_encoding_Section_rtp_override_video => 'Video Profiles override';
+
+  @override
+  String get settings_encoding_Section_rtp_override_warning_title => 'Warning:';
+
+  @override
+  String get settings_encoding_Section_rtp_override_warning_message => 'Overriding may affect the compatibility with other devices or media systems and cause call errors, use only if you know what you are doing.';
+
+  @override
   String get settings_ListViewTileTitle_about => 'About';
 
   @override
@@ -1188,7 +1272,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings_ListViewTileTitle_call_codecs => 'Call codecs';
 
   @override
-  String get settings_ListViewTileTitle_encoding => 'Media encoding settings';
+  String get settings_ListViewTileTitle_encoding => 'Media encoding';
 
   @override
   String get settings_ListViewTileTitle_self_config => 'Self-config page';

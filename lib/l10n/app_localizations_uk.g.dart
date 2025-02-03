@@ -1179,6 +1179,90 @@ class AppLocalizationsUk extends AppLocalizations {
   String get settings_call_codecs_preferred_video_title => 'Предпочитайомий відеокодек';
 
   @override
+  String get settings_encoding_AppBar_reset_tooltip => 'Скинути до замовчування';
+
+  @override
+  String get settings_encoding_Section_measure_kbps => 'Kbps';
+
+  @override
+  String get settings_encoding_Section_measure_ms => 'ms';
+
+  @override
+  String get settings_encoding_Section_measure_hz => 'Hz';
+
+  @override
+  String get settings_encoding_Section_value_auto => 'Авто';
+
+  @override
+  String get settings_encoding_Section_value_mono => 'Моно';
+
+  @override
+  String get settings_encoding_Section_value_stereo => 'Стерео';
+
+  @override
+  String get settings_encoding_Section_bitrate_prefix => 'Бітрейт: ';
+
+  @override
+  String get settings_encoding_Section_ptime_prefix => 'Розмір: ';
+
+  @override
+  String get settings_encoding_Section_bandwidth_prefix => 'Діапазон: ';
+
+  @override
+  String get settings_encoding_Section_bitrate_title => 'Налаштування пропускної здатності';
+
+  @override
+  String get settings_encoding_Section_bitrate_tooltip => 'Налаштування пропускної здатності для аудіо-відео потоку, нижчі значення зменшать використання трафіку, більші значення покращать якість потоку';
+
+  @override
+  String get settings_encoding_Section_target_audio_bitrate => 'Цільовий бітрейт аудіо: ';
+
+  @override
+  String get settings_encoding_Section_target_video_bitrate => 'Цільовий бітрейт відео: ';
+
+  @override
+  String get settings_encoding_Section_packetization_title => 'Пакетизація аудіо';
+
+  @override
+  String get settings_encoding_Section_packetization_tooltip => 'Налаштування часу пакетування аудіо в мілісекундах, можна використовувати для зменшення затримки аудіо або вирішення проблем із розміром MTU мережі';
+
+  @override
+  String get settings_encoding_Section_audio_ptime => 'Цільовий розмір аудіо пакета: ';
+
+  @override
+  String get settings_encoding_Section_audio_ptime_limit => 'Ліміт розміру аудіо пакета: ';
+
+  @override
+  String get settings_encoding_Section_opus_title => 'Налаштування кодека Opus';
+
+  @override
+  String get settings_encoding_Section_opus_tooltip => 'Налаштування кодека Opus, які можна використовувати для зменшення використання пропускної здатності або покращення якості звуку';
+
+  @override
+  String get settings_encoding_Section_opus_bandwidth => 'Перевизначення частотного діапазону: ';
+
+  @override
+  String get settings_encoding_Section_opus_channels => 'Перевизначення режиму каналів: ';
+
+  @override
+  String get settings_encoding_Section_rtp_override_title => 'Пріоретизація та вилучення профілів RTP';
+
+  @override
+  String get settings_encoding_Section_rtp_override_tooltip => 'Можна використовувати для зміни порядку пріоритету профілів аудіо та відео rtp або виключення деяких профілів зі списку узгодження SDP, це можна використовувати для примусового використання певних кодеків або виключення деяких кодеків, якщо вони погано підтримуються пристроєм, мережею чи віддаленою системою';
+
+  @override
+  String get settings_encoding_Section_rtp_override_audio => 'Перевизначення аудіо профілів';
+
+  @override
+  String get settings_encoding_Section_rtp_override_video => 'Перевизначення відео профілів';
+
+  @override
+  String get settings_encoding_Section_rtp_override_warning_title => 'Увага';
+
+  @override
+  String get settings_encoding_Section_rtp_override_warning_message => 'Перевизначення профілів може вплинути на сумісність з іншими пристроями чи медіасистемами та спричинити помилки виклику. Використовуйте, лише якщо знаєте, що робите';
+
+  @override
   String get settings_ListViewTileTitle_about => 'Про програму';
 
   @override
@@ -1188,7 +1272,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get settings_ListViewTileTitle_call_codecs => 'Кодеки дзвінка';
 
   @override
-  String get settings_ListViewTileTitle_encoding => 'Hалаштування кодування медіа';
+  String get settings_ListViewTileTitle_encoding => 'Кодування медіа';
 
   @override
   String get settings_ListViewTileTitle_self_config => 'Сторінка спец-налаштувань';

@@ -1179,6 +1179,90 @@ class AppLocalizationsIt extends AppLocalizations {
   String get settings_call_codecs_preferred_video_title => 'Codec video preferito';
 
   @override
+  String get settings_encoding_AppBar_reset_tooltip => 'Ripristinare le impostazioni predefinite';
+
+  @override
+  String get settings_encoding_Section_measure_kbps => 'Kbps';
+
+  @override
+  String get settings_encoding_Section_measure_ms => 'ms';
+
+  @override
+  String get settings_encoding_Section_measure_hz => 'Hz';
+
+  @override
+  String get settings_encoding_Section_value_auto => 'Auto';
+
+  @override
+  String get settings_encoding_Section_value_mono => 'Mono';
+
+  @override
+  String get settings_encoding_Section_value_stereo => 'Stereo';
+
+  @override
+  String get settings_encoding_Section_bitrate_prefix => 'Bitrate: ';
+
+  @override
+  String get settings_encoding_Section_ptime_prefix => 'Dimensione: ';
+
+  @override
+  String get settings_encoding_Section_bandwidth_prefix => 'Gamma di frequenza: ';
+
+  @override
+  String get settings_encoding_Section_bitrate_title => 'Impostazioni della larghezza di banda';
+
+  @override
+  String get settings_encoding_Section_bitrate_tooltip => 'Regola le impostazioni del bitrate per i codec audio e video: valori più bassi ridurranno l\'utilizzo della larghezza di banda ma influenzeranno la qualità, mentre valori più alti aumenteranno la qualità ma anche l\'utilizzo della larghezza di banda.';
+
+  @override
+  String get settings_encoding_Section_target_audio_bitrate => 'Bitrate di destinazione audio: ';
+
+  @override
+  String get settings_encoding_Section_target_video_bitrate => 'Bitrate di destinazione video: ';
+
+  @override
+  String get settings_encoding_Section_packetization_title => 'Pacchettizzazione audio';
+
+  @override
+  String get settings_encoding_Section_packetization_tooltip => 'Regola il tempo di pacchettizzazione audio in millisecondi, può essere utilizzato per ridurre la latenza audio o risolvere problemi di dimensione MTU di rete';
+
+  @override
+  String get settings_encoding_Section_audio_ptime => 'Dimensione del pacchetto audio target: ';
+
+  @override
+  String get settings_encoding_Section_audio_ptime_limit => 'Limite dimensione pacchetto audio: ';
+
+  @override
+  String get settings_encoding_Section_opus_title => 'Ottimizzazione del codec Opus';
+
+  @override
+  String get settings_encoding_Section_opus_tooltip => 'Regola le impostazioni specifiche del codec dell\'opus, può essere utilizzato per ridurre l\'utilizzo della larghezza di banda o migliorare la qualità audio';
+
+  @override
+  String get settings_encoding_Section_opus_bandwidth => 'Ridefinire la gamma di frequenza: ';
+
+  @override
+  String get settings_encoding_Section_opus_channels => 'Ridefinire dei modalità canale: ';
+
+  @override
+  String get settings_encoding_Section_rtp_override_title => 'Estrazione e riordino dei profili RTP';
+
+  @override
+  String get settings_encoding_Section_rtp_override_tooltip => 'Può essere utilizzato per sovrascrivere l\'ordine di priorità dei profili audio e video rtp o escludere alcuni profili dall\'elenco di negoziazione SDP, può essere utilizzato per forzare l\'utilizzo di codec specifici o escludere alcuni codec se sono scarsamente supportati dal dispositivo, dalla rete o dal sistema remoto';
+
+  @override
+  String get settings_encoding_Section_rtp_override_audio => 'Ridefinire i profili audio';
+
+  @override
+  String get settings_encoding_Section_rtp_override_video => 'Ridefinire i profili video';
+
+  @override
+  String get settings_encoding_Section_rtp_override_warning_title => 'Avvertimento:';
+
+  @override
+  String get settings_encoding_Section_rtp_override_warning_message => 'L\'override può influire sulla compatibilità con altri dispositivi o sistemi multimediali e causare errori di chiamata, utilizzare solo se si sa cosa si sta facendo';
+
+  @override
   String get settings_ListViewTileTitle_about => 'Riguardo a';
 
   @override
@@ -1188,7 +1272,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get settings_ListViewTileTitle_call_codecs => 'Codec di chiamata';
 
   @override
-  String get settings_ListViewTileTitle_encoding => 'impostazioni di codifica multimediale';
+  String get settings_ListViewTileTitle_encoding => 'Codifica multimediale';
 
   @override
   String get settings_ListViewTileTitle_self_config => 'Self-config pagina';

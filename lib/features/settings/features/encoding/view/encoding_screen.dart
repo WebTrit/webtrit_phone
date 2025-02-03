@@ -29,8 +29,7 @@ class _EncodingSettingsScreenState extends State<EncodingSettingsScreen> {
         actions: [
           IconButton(
             icon: const Icon(Icons.settings_backup_restore),
-            // TODO: l10n
-            tooltip: 'Reset',
+            tooltip: context.l10n.settings_encoding_AppBar_reset_tooltip,
             onPressed: () => cubit.setNew(EncodingSettings.blank()),
             color: Theme.of(context).colorScheme.onSurface,
           ),
@@ -43,19 +42,18 @@ class _EncodingSettingsScreenState extends State<EncodingSettingsScreen> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const HeadingSection(
-                  title: 'Codec bitrate settings',
-                  tooltip:
-                      'Adjust the bitrate settings for audio and video codecs, lower values will reduce the bandwidth usage but affect the quality, higher values will increase the quality but also the bandwidth usage.',
-                  icon: Icon(Icons.one_k_plus_sharp),
+                HeadingSection(
+                  title: context.l10n.settings_encoding_Section_bitrate_title,
+                  tooltip: context.l10n.settings_encoding_Section_bitrate_tooltip,
+                  icon: const Icon(Icons.one_k_plus_sharp),
                 ),
                 const SizedBox(height: 16.0),
                 SlidableSection<int>(
-                  title: 'Audio target bitrate: ',
-                  optionPrefix: 'Bitrate: ',
+                  title: context.l10n.settings_encoding_Section_target_audio_bitrate,
+                  optionPrefix: context.l10n.settings_encoding_Section_bitrate_prefix,
                   buildOptionLabel: (option) {
-                    if (option == null) return 'Auto';
-                    return '$option kbps';
+                    if (option == null) return context.l10n.settings_encoding_Section_value_auto;
+                    return '$option ${context.l10n.settings_encoding_Section_measure_kbps}';
                   },
                   options: EncodingSettings.audioBitrateOptions,
                   selected: settings.audioBitrate,
@@ -63,30 +61,29 @@ class _EncodingSettingsScreenState extends State<EncodingSettingsScreen> {
                 ),
                 const SizedBox(height: 16.0),
                 SlidableSection<int>(
-                  title: 'Video target bitrate: ',
-                  optionPrefix: 'Bitrate: ',
+                  title: context.l10n.settings_encoding_Section_target_video_bitrate,
+                  optionPrefix: context.l10n.settings_encoding_Section_bitrate_prefix,
                   buildOptionLabel: (option) {
-                    if (option == null) return 'Auto';
-                    return '$option kbps';
+                    if (option == null) return context.l10n.settings_encoding_Section_value_auto;
+                    return '$option ${context.l10n.settings_encoding_Section_measure_kbps}';
                   },
                   options: EncodingSettings.videoBitrateOptions,
                   selected: settings.videoBitrate,
                   onSelect: (option) => cubit.setNew(settings.copyWithVideoBitrate(option)),
                 ),
                 const SizedBox(height: 24),
-                const HeadingSection(
-                  title: 'Audio packetization',
-                  tooltip:
-                      'Adjust audio packetization-time in milliseconds, can be used to reduce audio latency or fix Network MTU size issues',
-                  icon: Icon(Icons.vertical_split_rounded),
+                HeadingSection(
+                  title: context.l10n.settings_encoding_Section_packetization_title,
+                  tooltip: context.l10n.settings_encoding_Section_packetization_tooltip,
+                  icon: const Icon(Icons.vertical_split_rounded),
                 ),
                 const SizedBox(height: 16.0),
                 SlidableSection<int>(
-                  title: 'Audio target ptime: ',
-                  optionPrefix: 'Ptime: ',
+                  title: context.l10n.settings_encoding_Section_audio_ptime,
+                  optionPrefix: context.l10n.settings_encoding_Section_ptime_prefix,
                   buildOptionLabel: (option) {
-                    if (option == null) return 'Auto';
-                    return '$option ms';
+                    if (option == null) return context.l10n.settings_encoding_Section_value_auto;
+                    return '$option ${context.l10n.settings_encoding_Section_measure_ms}';
                   },
                   options: EncodingSettings.ptimeOptions,
                   selected: settings.ptime,
@@ -101,11 +98,11 @@ class _EncodingSettingsScreenState extends State<EncodingSettingsScreen> {
                 ),
                 const SizedBox(height: 16.0),
                 SlidableSection<int>(
-                  title: 'Audio ptime limit: ',
-                  optionPrefix: 'Ptime: ',
+                  title: context.l10n.settings_encoding_Section_audio_ptime_limit,
+                  optionPrefix: context.l10n.settings_encoding_Section_ptime_prefix,
                   buildOptionLabel: (option) {
-                    if (option == null) return 'Auto';
-                    return '$option ms';
+                    if (option == null) return context.l10n.settings_encoding_Section_value_auto;
+                    return '$option ${context.l10n.settings_encoding_Section_measure_ms}';
                   },
                   options: EncodingSettings.ptimeOptions,
                   selected: settings.maxptime,
@@ -119,19 +116,18 @@ class _EncodingSettingsScreenState extends State<EncodingSettingsScreen> {
                   },
                 ),
                 const SizedBox(height: 24),
-                const HeadingSection(
-                  title: 'Opus codec tuning',
-                  tooltip:
-                      'Adjust the opus specific codec settings, can be used to reduce bandwidth usage or improve audio quality',
-                  icon: Icon(Icons.settings),
+                HeadingSection(
+                  title: context.l10n.settings_encoding_Section_opus_title,
+                  tooltip: context.l10n.settings_encoding_Section_opus_tooltip,
+                  icon: const Icon(Icons.settings),
                 ),
                 const SizedBox(height: 16.0),
                 SlidableSection<int>(
-                  title: 'Opus bandwidth override: ',
-                  optionPrefix: 'Bandwidth: ',
+                  title: context.l10n.settings_encoding_Section_opus_bandwidth,
+                  optionPrefix: context.l10n.settings_encoding_Section_bandwidth_prefix,
                   buildOptionLabel: (option) {
-                    if (option == null) return 'Auto';
-                    return '${option}hz';
+                    if (option == null) return context.l10n.settings_encoding_Section_value_auto;
+                    return '$option ${context.l10n.settings_encoding_Section_measure_hz}';
                   },
                   options: EncodingSettings.opusBandwidthLimitOptions,
                   selected: settings.opusBandwidthLimit,
@@ -139,27 +135,30 @@ class _EncodingSettingsScreenState extends State<EncodingSettingsScreen> {
                 ),
                 const SizedBox(height: 16.0),
                 ChoosableSection<bool>(
-                  title: 'Opus channels override: ',
+                  title: context.l10n.settings_encoding_Section_opus_channels,
                   buildOptionTitle: (option) {
-                    if (option == null) return const Text('Auto');
-                    return Text(option ? 'Stereo' : 'Mono');
+                    if (option == true) return Text(context.l10n.settings_encoding_Section_value_stereo);
+                    if (option == false) return Text(context.l10n.settings_encoding_Section_value_mono);
+
+                    return Text(context.l10n.settings_encoding_Section_value_auto);
                   },
                   options: const [true, false],
                   selected: settings.opusStereo,
                   onSelect: (option) => cubit.setNew(settings.copyWithOpusStereo(option)),
                 ),
                 const SizedBox(height: 24),
-                const HeadingSection(
-                  title: 'RTP Profiles priority and exclusion',
-                  tooltip:
-                      'Can be used to override the audio and video profiles priority order or exclude some profiles from SDP negotiation list',
-                  icon: Icon(Icons.sip),
+                HeadingSection(
+                  title: context.l10n.settings_encoding_Section_rtp_override_title,
+                  tooltip: context.l10n.settings_encoding_Section_rtp_override_tooltip,
+                  icon: const Icon(Icons.sip),
                 ),
                 const SizedBox(height: 16.0),
                 ReorderableSection<RTPCodecProfile>(
-                  title: 'Audio RTP Profiles override',
+                  title: context.l10n.settings_encoding_Section_rtp_override_audio,
+                  warningTitle: context.l10n.settings_encoding_Section_rtp_override_warning_title,
+                  warningMessage: context.l10n.settings_encoding_Section_rtp_override_warning_message,
                   buildOptionTitle: (option) {
-                    if (option == null) return const Text('Auto');
+                    if (option == null) return Text(context.l10n.settings_encoding_Section_value_auto);
                     return Text(option.name);
                   },
                   enabled: settings.audioProfiles != null,
@@ -176,9 +175,11 @@ class _EncodingSettingsScreenState extends State<EncodingSettingsScreen> {
                 ),
                 const SizedBox(height: 16.0),
                 ReorderableSection<RTPCodecProfile>(
-                  title: 'Video RTP Profiles override',
+                  title: context.l10n.settings_encoding_Section_rtp_override_video,
+                  warningTitle: context.l10n.settings_encoding_Section_rtp_override_warning_title,
+                  warningMessage: context.l10n.settings_encoding_Section_rtp_override_warning_message,
                   buildOptionTitle: (option) {
-                    if (option == null) return const Text('Auto');
+                    if (option == null) return Text(context.l10n.settings_encoding_Section_value_auto);
                     return Text(option.name);
                   },
                   enabled: settings.videoProfiles != null,
@@ -217,20 +218,19 @@ class HeadingSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textStyle = Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w600);
+
     return Row(
       children: [
         icon,
         const SizedBox(width: 8),
-        Text(
-          title,
-          style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w600),
-        ),
-        const Spacer(),
+        Expanded(child: Text(title, style: textStyle)),
+        const SizedBox(width: 8),
         Tooltip(
           message: tooltip,
           triggerMode: TooltipTriggerMode.tap,
-          padding: const EdgeInsets.all(12.0),
-          margin: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(16),
+          margin: const EdgeInsets.all(16),
           showDuration: const Duration(seconds: 10),
           child: const Icon(Icons.info_outline),
         )
@@ -263,8 +263,8 @@ class ChoosableSection<T> extends StatelessWidget {
         Row(
           children: [
             const SizedBox(width: 4),
-            Text(title),
-            const Spacer(),
+            Expanded(child: Text(title)),
+            const SizedBox(width: 4),
           ],
         ),
         const SizedBox(height: 8.0),
@@ -320,8 +320,8 @@ class SlidableSection<T> extends StatelessWidget {
         Row(
           children: [
             const SizedBox(width: 4),
-            Text(title),
-            const Spacer(),
+            Expanded(child: Text(title)),
+            const SizedBox(width: 4),
           ],
         ),
         Slider(
@@ -362,6 +362,8 @@ class SlidableSection<T> extends StatelessWidget {
 class ReorderableSection<T> extends StatelessWidget {
   const ReorderableSection({
     required this.title,
+    required this.warningTitle,
+    required this.warningMessage,
     required this.buildOptionTitle,
     required this.enabled,
     required this.onEnable,
@@ -371,7 +373,8 @@ class ReorderableSection<T> extends StatelessWidget {
   });
 
   final String title;
-
+  final String warningTitle;
+  final String warningMessage;
   final Widget Function(T?) buildOptionTitle;
 
   final bool enabled;
@@ -386,8 +389,8 @@ class ReorderableSection<T> extends StatelessWidget {
         Row(
           children: [
             const SizedBox(width: 4),
-            Text(title),
-            const Spacer(),
+            Expanded(child: Text(title)),
+            const SizedBox(width: 4),
             Switch(value: enabled, onChanged: onEnable),
             const SizedBox(width: 8.0),
           ],
@@ -395,9 +398,8 @@ class ReorderableSection<T> extends StatelessWidget {
         if (enabled) ...[
           Column(
             children: [
-              // TODO: l10n
               Text(
-                'Warning:',
+                warningTitle,
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.error,
                   fontWeight: FontWeight.bold,
@@ -405,7 +407,7 @@ class ReorderableSection<T> extends StatelessWidget {
                 ),
               ),
               Text(
-                'Overriding may affect the compatibility with other devices or media systems and cause call errors, use only if you know what you are doing.',
+                warningMessage,
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.error,
                   fontSize: 12.0,
