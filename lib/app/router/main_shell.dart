@@ -255,7 +255,7 @@ class _MainShellState extends State<MainShell> {
                 submitNotification: (n) => notificationsBloc.add(NotificationsSubmitted(n)),
                 callkeep: _callkeep,
                 callkeepConnections: _callkeepConnections,
-                sdpMunger: ForceCodecsByUserPrefs(appPreferences),
+                sdpMunger: ModifyWithEncodingSettings(appPreferences),
               )..add(const CallStarted());
             },
           ),

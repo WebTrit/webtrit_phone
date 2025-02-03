@@ -5,11 +5,11 @@ import 'package:webtrit_phone/models/rtp_codec_profile.dart';
 // TODO: cover with tests
 
 class SDPModBuilder {
-  SDPModBuilder({required String sdp}) : _data = sdp_transform.parse(sdp);
-  final Map<String, dynamic> _data;
+  SDPModBuilder({required String sdp}) : data = sdp_transform.parse(sdp);
+  final Map<String, dynamic> data;
 
   /// Get the modified SDP string.
-  String get sdp => sdp_transform.write(_data, null);
+  String get sdp => sdp_transform.write(data, null);
 
   /// Sets the packetization-time for the audio codec.
   /// [ptime] is in milliseconds, range `10-120ms`
@@ -234,7 +234,7 @@ class SDPModBuilder {
   }
 
   Map<String, dynamic>? _getMedia(RTPCodecKind kind) {
-    return (_data['media'] as List<dynamic>).firstWhereOrNull((m) => m['type'] == kind.name);
+    return (data['media'] as List<dynamic>).firstWhereOrNull((m) => m['type'] == kind.name);
   }
 }
 
