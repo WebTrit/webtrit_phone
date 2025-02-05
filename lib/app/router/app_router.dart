@@ -292,8 +292,8 @@ class AppRouter extends _$AppRouter {
                       path: 'network',
                     ),
                     AutoRoute(
-                      page: CallCodecsScreenPageRoute.page,
-                      path: 'call_codecs',
+                      page: EncodingSettingsScreenPageRoute.page,
+                      path: 'encoding',
                     ),
                     AutoRoute(
                       page: SelfConfigScreenPageRoute.page,

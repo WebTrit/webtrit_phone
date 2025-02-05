@@ -271,6 +271,12 @@ class AppLocalizationsMapper {
           localizations.diagnosticScreen_permissionsGroup_title,
       'diagnosticScreen_pushNotificationService_title':
           localizations.diagnosticScreen_pushNotificationService_title,
+      'diagnosticScreen_contacts_agreement_group_title':
+          localizations.diagnosticScreen_contacts_agreement_group_title,
+      'diagnosticScreen_contacts_agreement_title':
+          localizations.diagnosticScreen_contacts_agreement_title,
+      'diagnosticScreen_contacts_agreement_description':
+          localizations.diagnosticScreen_contacts_agreement_description,
       'favorites_BodyCenter_empty': localizations.favorites_BodyCenter_empty,
       'favorites_DeleteConfirmDialog_content':
           localizations.favorites_DeleteConfirmDialog_content,
@@ -681,24 +687,74 @@ class AppLocalizationsMapper {
           localizations.settings_AccountDeleteConfirmDialog_title,
       'settings_AppBarTitle_myAccount':
           localizations.settings_AppBarTitle_myAccount,
-      'settings_call_codecs_preferred_audio_default':
-          localizations.settings_call_codecs_preferred_audio_default,
-      'settings_call_codecs_preferred_audio_tip':
-          localizations.settings_call_codecs_preferred_audio_tip,
-      'settings_call_codecs_preferred_audio_title':
-          localizations.settings_call_codecs_preferred_audio_title,
-      'settings_call_codecs_preferred_video_default':
-          localizations.settings_call_codecs_preferred_video_default,
-      'settings_call_codecs_preferred_video_tip':
-          localizations.settings_call_codecs_preferred_video_tip,
-      'settings_call_codecs_preferred_video_title':
-          localizations.settings_call_codecs_preferred_video_title,
+      'settings_encoding_AppBar_reset_tooltip':
+          localizations.settings_encoding_AppBar_reset_tooltip,
+      'settings_encoding_Section_measure_kbps':
+          localizations.settings_encoding_Section_measure_kbps,
+      'settings_encoding_Section_measure_ms':
+          localizations.settings_encoding_Section_measure_ms,
+      'settings_encoding_Section_measure_hz':
+          localizations.settings_encoding_Section_measure_hz,
+      'settings_encoding_Section_value_auto':
+          localizations.settings_encoding_Section_value_auto,
+      'settings_encoding_Section_value_mono':
+          localizations.settings_encoding_Section_value_mono,
+      'settings_encoding_Section_value_stereo':
+          localizations.settings_encoding_Section_value_stereo,
+      'settings_encoding_Section_value_enable':
+          localizations.settings_encoding_Section_value_enable,
+      'settings_encoding_Section_value_disable':
+          localizations.settings_encoding_Section_value_disable,
+      'settings_encoding_Section_bitrate_prefix':
+          localizations.settings_encoding_Section_bitrate_prefix,
+      'settings_encoding_Section_ptime_prefix':
+          localizations.settings_encoding_Section_ptime_prefix,
+      'settings_encoding_Section_bandwidth_prefix':
+          localizations.settings_encoding_Section_bandwidth_prefix,
+      'settings_encoding_Section_bitrate_title':
+          localizations.settings_encoding_Section_bitrate_title,
+      'settings_encoding_Section_bitrate_tooltip':
+          localizations.settings_encoding_Section_bitrate_tooltip,
+      'settings_encoding_Section_target_audio_bitrate':
+          localizations.settings_encoding_Section_target_audio_bitrate,
+      'settings_encoding_Section_target_video_bitrate':
+          localizations.settings_encoding_Section_target_video_bitrate,
+      'settings_encoding_Section_packetization_title':
+          localizations.settings_encoding_Section_packetization_title,
+      'settings_encoding_Section_packetization_tooltip':
+          localizations.settings_encoding_Section_packetization_tooltip,
+      'settings_encoding_Section_audio_ptime':
+          localizations.settings_encoding_Section_audio_ptime,
+      'settings_encoding_Section_audio_ptime_limit':
+          localizations.settings_encoding_Section_audio_ptime_limit,
+      'settings_encoding_Section_opus_title':
+          localizations.settings_encoding_Section_opus_title,
+      'settings_encoding_Section_opus_tooltip':
+          localizations.settings_encoding_Section_opus_tooltip,
+      'settings_encoding_Section_opus_bandwidth':
+          localizations.settings_encoding_Section_opus_bandwidth,
+      'settings_encoding_Section_opus_channels':
+          localizations.settings_encoding_Section_opus_channels,
+      'settings_encoding_Section_opus_dtx':
+          localizations.settings_encoding_Section_opus_dtx,
+      'settings_encoding_Section_rtp_override_title':
+          localizations.settings_encoding_Section_rtp_override_title,
+      'settings_encoding_Section_rtp_override_tooltip':
+          localizations.settings_encoding_Section_rtp_override_tooltip,
+      'settings_encoding_Section_rtp_override_audio':
+          localizations.settings_encoding_Section_rtp_override_audio,
+      'settings_encoding_Section_rtp_override_video':
+          localizations.settings_encoding_Section_rtp_override_video,
+      'settings_encoding_Section_rtp_override_warning_title':
+          localizations.settings_encoding_Section_rtp_override_warning_title,
+      'settings_encoding_Section_rtp_override_warning_message':
+          localizations.settings_encoding_Section_rtp_override_warning_message,
       'settings_ListViewTileTitle_about':
           localizations.settings_ListViewTileTitle_about,
       'settings_ListViewTileTitle_accountDelete':
           localizations.settings_ListViewTileTitle_accountDelete,
-      'settings_ListViewTileTitle_call_codecs':
-          localizations.settings_ListViewTileTitle_call_codecs,
+      'settings_ListViewTileTitle_encoding':
+          localizations.settings_ListViewTileTitle_encoding,
       'settings_ListViewTileTitle_self_config':
           localizations.settings_ListViewTileTitle_self_config,
       'settings_ListViewTileTitle_help':

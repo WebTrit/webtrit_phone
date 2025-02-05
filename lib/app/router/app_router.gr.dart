@@ -44,12 +44,6 @@ abstract class _$AppRouter extends RootStackRouter {
         ),
       );
     },
-    CallCodecsScreenPageRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: CallCodecsScreenPage(),
-      );
-    },
     CallScreenPageRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -134,6 +128,12 @@ abstract class _$AppRouter extends RootStackRouter {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
         child: EmbeddedScreenPage3(args.data),
+      );
+    },
+    EncodingSettingsScreenPageRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: EncodingSettingsScreenPage(),
       );
     },
     ErrorDetailsScreenPageRoute.name: (routeData) {
@@ -456,20 +456,6 @@ class AutoprovisionScreenPageRouteArgs {
 }
 
 /// generated route for
-/// [CallCodecsScreenPage]
-class CallCodecsScreenPageRoute extends PageRouteInfo<void> {
-  const CallCodecsScreenPageRoute({List<PageRouteInfo>? children})
-      : super(
-          CallCodecsScreenPageRoute.name,
-          initialChildren: children,
-        );
-
-  static const String name = 'CallCodecsScreenPageRoute';
-
-  static const PageInfo<void> page = PageInfo<void>(name);
-}
-
-/// generated route for
 /// [CallScreenPage]
 class CallScreenPageRoute extends PageRouteInfo<void> {
   const CallScreenPageRoute({List<PageRouteInfo>? children})
@@ -756,6 +742,20 @@ class EmbeddedScreenPage3RouteArgs {
   String toString() {
     return 'EmbeddedScreenPage3RouteArgs{data: $data}';
   }
+}
+
+/// generated route for
+/// [EncodingSettingsScreenPage]
+class EncodingSettingsScreenPageRoute extends PageRouteInfo<void> {
+  const EncodingSettingsScreenPageRoute({List<PageRouteInfo>? children})
+      : super(
+          EncodingSettingsScreenPageRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'EncodingSettingsScreenPageRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
 }
 
 /// generated route for

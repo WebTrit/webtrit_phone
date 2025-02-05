@@ -55,13 +55,9 @@ abstract class AppPreferences {
 
   Future<void> setSystemInfo(WebtritSystemInfo systemInfo);
 
-  AudioCodec? getPreferedAudioCodec();
+  EncodingSettings getEncodingSettings();
 
-  Future<void> setPreferedAudioCodec(AudioCodec? value);
-
-  VideoCodec? getPreferedVideoCodec();
-
-  Future<void> setPreferedVideoCodec(VideoCodec? value);
+  Future<void> setEncodingSettings(EncodingSettings settings);
 }
 
 class AppPreferencesFactory {
@@ -76,7 +72,7 @@ class AppPreferencesFactory {
   static AppPreferences get instance => _instance;
 }
 
-class AppPreferencesImpl with SystemInfoJsonMapper implements AppPreferences {
+class AppPreferencesImpl with SystemInfoJsonMapper, EncodingSettingsJsonMapper implements AppPreferences {
   static const _kRegisterStatusKey = 'register-status';
   static const _kThemeModeKey = 'theme-mode';
   static const _kLocaleLanguageTagKey = 'locale-language-tag';
@@ -87,8 +83,7 @@ class AppPreferencesImpl with SystemInfoJsonMapper implements AppPreferences {
   static const _kContactsAgreementAcceptedKey = 'contacts-agreement-status';
   static const _kIncomingCallTypeKey = 'call-incoming-type';
   static const _kSystemInfoKey = 'system-info';
-  static const _kPreferedAudioCodecKey = 'prefered-audio-codec';
-  static const _kPreferedVideoCodecKey = 'prefered-video-codec';
+  static const _kEncodingSettingsKey = 'encoding-settings';
 
   // Please add all new keys here for proper cleaning of preferences
   static const _kPreferencesList = [
@@ -102,8 +97,7 @@ class AppPreferencesImpl with SystemInfoJsonMapper implements AppPreferences {
     _kContactsAgreementAcceptedKey,
     _kIncomingCallTypeKey,
     _kSystemInfoKey,
-    _kPreferedAudioCodecKey,
-    _kPreferedVideoCodecKey,
+    _kEncodingSettingsKey,
   ];
 
   // List of preferences keys to exclude by default during clean operation
@@ -299,34 +293,17 @@ class AppPreferencesImpl with SystemInfoJsonMapper implements AppPreferences {
   }
 
   @override
-  Future<void> setPreferedAudioCodec(AudioCodec? value) {
-    if (value != null) {
-      return _sharedPreferences.setString(_kPreferedAudioCodecKey, value.name);
+  EncodingSettings getEncodingSettings() {
+    final encodingSettingsString = _sharedPreferences.getString(_kEncodingSettingsKey);
+    if (encodingSettingsString != null) {
+      return encodingSettingsFromJson(encodingSettingsString);
     } else {
-      return _sharedPreferences.remove(_kPreferedAudioCodecKey);
+      return const EncodingSettings();
     }
   }
 
   @override
-  AudioCodec? getPreferedAudioCodec() {
-    final preferedAudioCodec = _sharedPreferences.getString(_kPreferedAudioCodecKey);
-    if (preferedAudioCodec == null) return null;
-    return AudioCodec.values.byName(preferedAudioCodec);
-  }
-
-  @override
-  Future<void> setPreferedVideoCodec(VideoCodec? value) {
-    if (value != null) {
-      return _sharedPreferences.setString(_kPreferedVideoCodecKey, value.name);
-    } else {
-      return _sharedPreferences.remove(_kPreferedVideoCodecKey);
-    }
-  }
-
-  @override
-  VideoCodec? getPreferedVideoCodec() {
-    final preferedVideoCodec = _sharedPreferences.getString(_kPreferedVideoCodecKey);
-    if (preferedVideoCodec == null) return null;
-    return VideoCodec.values.byName(preferedVideoCodec);
+  Future<void> setEncodingSettings(EncodingSettings settings) {
+    return _sharedPreferences.setString(_kEncodingSettingsKey, encodingSettingsToJson(settings));
   }
 }

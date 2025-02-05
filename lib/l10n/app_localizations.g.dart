@@ -91,11 +91,7 @@ abstract class AppLocalizations {
   ];
 
   /// A list of this localizations delegate's supported locales.
-  static const List<Locale> supportedLocales = <Locale>[
-    Locale('en'),
-    Locale('it'),
-    Locale('uk')
-  ];
+  static const List<Locale> supportedLocales = <Locale>[Locale('en'), Locale('it'), Locale('uk')];
 
   /// No description provided for @account_selfCarePasswordExpired_message.
   ///
@@ -1367,7 +1363,8 @@ abstract class AppLocalizations {
   ///
   /// In en, this message translates to:
   /// **'Incompatible WebTrit Cloud Backend version, please contact the administrator of your system.\n\nInstance version:\n{actual}\n\nSupported version:\n{supportedConstraint}'**
-  String main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError(String actual, String supportedConstraint);
+  String main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError(
+      String actual, String supportedConstraint);
 
   /// No description provided for @main_CompatibilityIssueDialog_title.
   ///
@@ -2317,41 +2314,191 @@ abstract class AppLocalizations {
   /// **'My account'**
   String get settings_AppBarTitle_myAccount;
 
-  /// No description provided for @settings_call_codecs_preferred_audio_default.
+  /// No description provided for @settings_encoding_AppBar_reset_tooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset to default'**
+  String get settings_encoding_AppBar_reset_tooltip;
+
+  /// No description provided for @settings_encoding_Section_measure_kbps.
+  ///
+  /// In en, this message translates to:
+  /// **'Kbps'**
+  String get settings_encoding_Section_measure_kbps;
+
+  /// No description provided for @settings_encoding_Section_measure_ms.
+  ///
+  /// In en, this message translates to:
+  /// **'ms'**
+  String get settings_encoding_Section_measure_ms;
+
+  /// No description provided for @settings_encoding_Section_measure_hz.
+  ///
+  /// In en, this message translates to:
+  /// **'Hz'**
+  String get settings_encoding_Section_measure_hz;
+
+  /// No description provided for @settings_encoding_Section_value_auto.
   ///
   /// In en, this message translates to:
   /// **'Auto'**
-  String get settings_call_codecs_preferred_audio_default;
+  String get settings_encoding_Section_value_auto;
 
-  /// No description provided for @settings_call_codecs_preferred_audio_tip.
+  /// No description provided for @settings_encoding_Section_value_mono.
   ///
   /// In en, this message translates to:
-  /// **'The preferred audio codec is used for audio calls. If the codec is not supported by the device, the call will be established using the next available codec.'**
-  String get settings_call_codecs_preferred_audio_tip;
+  /// **'Mono'**
+  String get settings_encoding_Section_value_mono;
 
-  /// No description provided for @settings_call_codecs_preferred_audio_title.
+  /// No description provided for @settings_encoding_Section_value_stereo.
   ///
   /// In en, this message translates to:
-  /// **'Preferred audio codec'**
-  String get settings_call_codecs_preferred_audio_title;
+  /// **'Stereo'**
+  String get settings_encoding_Section_value_stereo;
 
-  /// No description provided for @settings_call_codecs_preferred_video_default.
+  /// No description provided for @settings_encoding_Section_value_enable.
   ///
   /// In en, this message translates to:
-  /// **'Auto'**
-  String get settings_call_codecs_preferred_video_default;
+  /// **'Enable'**
+  String get settings_encoding_Section_value_enable;
 
-  /// No description provided for @settings_call_codecs_preferred_video_tip.
+  /// No description provided for @settings_encoding_Section_value_disable.
   ///
   /// In en, this message translates to:
-  /// **'The preferred video codec is used for video calls. If the codec is not supported by the device, the call will be established using the next available codec.'**
-  String get settings_call_codecs_preferred_video_tip;
+  /// **'Disable'**
+  String get settings_encoding_Section_value_disable;
 
-  /// No description provided for @settings_call_codecs_preferred_video_title.
+  /// No description provided for @settings_encoding_Section_bitrate_prefix.
   ///
   /// In en, this message translates to:
-  /// **'Preferred video codec'**
-  String get settings_call_codecs_preferred_video_title;
+  /// **'Bitrate: '**
+  String get settings_encoding_Section_bitrate_prefix;
+
+  /// No description provided for @settings_encoding_Section_ptime_prefix.
+  ///
+  /// In en, this message translates to:
+  /// **'Ptime: '**
+  String get settings_encoding_Section_ptime_prefix;
+
+  /// No description provided for @settings_encoding_Section_bandwidth_prefix.
+  ///
+  /// In en, this message translates to:
+  /// **'Bandwidth: '**
+  String get settings_encoding_Section_bandwidth_prefix;
+
+  /// No description provided for @settings_encoding_Section_bitrate_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Codec bitrate settings'**
+  String get settings_encoding_Section_bitrate_title;
+
+  /// No description provided for @settings_encoding_Section_bitrate_tooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Adjust the bitrate settings for audio and video codecs, lower values will reduce the bandwidth usage but affect the quality, higher values will increase the quality but also the bandwidth usage.'**
+  String get settings_encoding_Section_bitrate_tooltip;
+
+  /// No description provided for @settings_encoding_Section_target_audio_bitrate.
+  ///
+  /// In en, this message translates to:
+  /// **'Audio target bitrate: '**
+  String get settings_encoding_Section_target_audio_bitrate;
+
+  /// No description provided for @settings_encoding_Section_target_video_bitrate.
+  ///
+  /// In en, this message translates to:
+  /// **'Video target bitrate: '**
+  String get settings_encoding_Section_target_video_bitrate;
+
+  /// No description provided for @settings_encoding_Section_packetization_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Audio packetization'**
+  String get settings_encoding_Section_packetization_title;
+
+  /// No description provided for @settings_encoding_Section_packetization_tooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Adjust audio packetization-time in milliseconds, can be used to reduce audio latency or fix Network MTU size issues'**
+  String get settings_encoding_Section_packetization_tooltip;
+
+  /// No description provided for @settings_encoding_Section_audio_ptime.
+  ///
+  /// In en, this message translates to:
+  /// **'Audio target ptime: '**
+  String get settings_encoding_Section_audio_ptime;
+
+  /// No description provided for @settings_encoding_Section_audio_ptime_limit.
+  ///
+  /// In en, this message translates to:
+  /// **'Audio ptime limit: '**
+  String get settings_encoding_Section_audio_ptime_limit;
+
+  /// No description provided for @settings_encoding_Section_opus_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Opus codec tuning'**
+  String get settings_encoding_Section_opus_title;
+
+  /// No description provided for @settings_encoding_Section_opus_tooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Adjust the opus specific codec settings, can be used to reduce bandwidth usage or improve audio quality'**
+  String get settings_encoding_Section_opus_tooltip;
+
+  /// No description provided for @settings_encoding_Section_opus_bandwidth.
+  ///
+  /// In en, this message translates to:
+  /// **'Bandwidth override: '**
+  String get settings_encoding_Section_opus_bandwidth;
+
+  /// No description provided for @settings_encoding_Section_opus_channels.
+  ///
+  /// In en, this message translates to:
+  /// **'Channels mode override: '**
+  String get settings_encoding_Section_opus_channels;
+
+  /// No description provided for @settings_encoding_Section_opus_dtx.
+  ///
+  /// In en, this message translates to:
+  /// **'DTX mode override: '**
+  String get settings_encoding_Section_opus_dtx;
+
+  /// No description provided for @settings_encoding_Section_rtp_override_title.
+  ///
+  /// In en, this message translates to:
+  /// **'RTP Profiles extraction and reorder'**
+  String get settings_encoding_Section_rtp_override_title;
+
+  /// No description provided for @settings_encoding_Section_rtp_override_tooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Can be used to override the audio and video rtp profiles priority order or exclude some profiles from SDP negotiation list, this can be used to force the usage of specific codecs or exclude some codecs if they poorly supported by device, network or remote system'**
+  String get settings_encoding_Section_rtp_override_tooltip;
+
+  /// No description provided for @settings_encoding_Section_rtp_override_audio.
+  ///
+  /// In en, this message translates to:
+  /// **'Audio Profiles override'**
+  String get settings_encoding_Section_rtp_override_audio;
+
+  /// No description provided for @settings_encoding_Section_rtp_override_video.
+  ///
+  /// In en, this message translates to:
+  /// **'Video Profiles override'**
+  String get settings_encoding_Section_rtp_override_video;
+
+  /// No description provided for @settings_encoding_Section_rtp_override_warning_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Warning:'**
+  String get settings_encoding_Section_rtp_override_warning_title;
+
+  /// No description provided for @settings_encoding_Section_rtp_override_warning_message.
+  ///
+  /// In en, this message translates to:
+  /// **'Overriding may affect the compatibility with other devices or media systems and cause call errors, use only if you know what you are doing.'**
+  String get settings_encoding_Section_rtp_override_warning_message;
 
   /// No description provided for @settings_ListViewTileTitle_about.
   ///
@@ -2365,11 +2512,11 @@ abstract class AppLocalizations {
   /// **'Delete account'**
   String get settings_ListViewTileTitle_accountDelete;
 
-  /// No description provided for @settings_ListViewTileTitle_call_codecs.
+  /// No description provided for @settings_ListViewTileTitle_encoding.
   ///
   /// In en, this message translates to:
-  /// **'Call codecs'**
-  String get settings_ListViewTileTitle_call_codecs;
+  /// **'Media encoding'**
+  String get settings_ListViewTileTitle_encoding;
 
   /// No description provided for @settings_ListViewTileTitle_self_config.
   ///
@@ -2958,19 +3105,18 @@ class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> 
 }
 
 AppLocalizations lookupAppLocalizations(Locale locale) {
-
-
   // Lookup logic when only language code is specified.
   switch (locale.languageCode) {
-    case 'en': return AppLocalizationsEn();
-    case 'it': return AppLocalizationsIt();
-    case 'uk': return AppLocalizationsUk();
+    case 'en':
+      return AppLocalizationsEn();
+    case 'it':
+      return AppLocalizationsIt();
+    case 'uk':
+      return AppLocalizationsUk();
   }
 
-  throw FlutterError(
-    'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
-    'an issue with the localizations generation tool. Please file an issue '
-    'on GitHub with a reproducible sample app and the gen-l10n configuration '
-    'that was used.'
-  );
+  throw FlutterError('AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
+      'an issue with the localizations generation tool. Please file an issue '
+      'on GitHub with a reproducible sample app and the gen-l10n configuration '
+      'that was used.');
 }
