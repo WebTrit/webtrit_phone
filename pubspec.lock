@@ -335,10 +335,10 @@ packages:
     dependency: transitive
     description:
       name: dart_webrtc
-      sha256: c664ad88d5646735753add421ee2118486c100febef5e92b7f59cdbabf6a51f6
+      sha256: e65506edb452148220efab53d8d2f8bb9d827bd8bcd53cf3a3e6df70b27f3d86
       url: "https://pub.dev"
     source: hosted
-    version: "1.4.9"
+    version: "1.4.10"
   dartx:
     dependency: transitive
     description:
@@ -769,11 +769,11 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "main_ext_rebase14.10.24"
-      resolved-ref: "367a097a54c4aebf35ef63247f3156da6409ec91"
+      ref: "main_ext_rebase_04.02.25"
+      resolved-ref: f3ea97f93fcb8cb3482249f5fc236620e9ddd9e8
       url: "https://github.com/WebTrit/flutter-webrtc.git"
     source: git
-    version: "0.11.7"
+    version: "0.12.7"
   formz:
     dependency: "direct main"
     description:
@@ -1882,7 +1882,7 @@ packages:
       path: "../webtrit_callkeep/webtrit_callkeep_platform_interface"
       relative: true
     source: path
-    version: "0.3.2+0"
+    version: "0.1.0+1"
   webtrit_callkeep_web:
     dependency: transitive
     description:

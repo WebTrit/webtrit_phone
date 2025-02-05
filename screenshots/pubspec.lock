@@ -675,11 +675,11 @@ packages:
     dependency: transitive
     description:
       path: "."
-      ref: "main_ext_rebase14.10.24"
-      resolved-ref: "367a097a54c4aebf35ef63247f3156da6409ec91"
+      ref: "main_ext_rebase_04.02.25"
+      resolved-ref: f3ea97f93fcb8cb3482249f5fc236620e9ddd9e8
       url: "https://github.com/WebTrit/flutter-webrtc.git"
     source: git
-    version: "0.11.7"
+    version: "0.12.7"
   formz:
     dependency: transitive
     description:
@@ -1716,7 +1716,7 @@ packages:
       path: "../../webtrit_callkeep/webtrit_callkeep_platform_interface"
       relative: true
     source: path
-    version: "0.3.2+0"
+    version: "0.1.0+1"
   webtrit_callkeep_web:
     dependency: transitive
     description:
