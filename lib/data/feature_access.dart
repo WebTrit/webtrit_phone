@@ -118,7 +118,7 @@ class FeatureAccess {
       final items = <SettingItem>[];
 
       for (var item in section.items.where((item) => item.enabled)) {
-        final embeddedDataResourceUrl = item.embeddedData?.resource;
+        final embeddedDataResourceUrl = item.embeddedData?.uri;
         final data = embeddedDataResourceUrl == null ? null : ConfigData(resource: embeddedDataResourceUrl);
         final flavor = SettingsFlavor.values.byName(item.type);
 
@@ -145,7 +145,7 @@ class FeatureAccess {
       );
     }
 
-    return SettingsFeature(settingSections, Uri.parse(''));
+    return SettingsFeature(settingSections);
   }
 
   static LoginFeature _tryEnableCustomLoginFeature(AppConfigLogin loginConfig) {
@@ -181,9 +181,8 @@ class FeatureAccess {
   }
 
   static LoginEmbedded? _toLoginEmbeddedModel(EmbeddedData? data) {
-    return data != null
-        ? LoginEmbedded(
-            titleL10n: data.toolbar.titleL10n, showToolbar: data.toolbar.showToolbar, resource: data.resource)
+    return data?.uri != null
+        ? LoginEmbedded(titleL10n: data!.toolbar.titleL10n, showToolbar: data.toolbar.showToolbar, resource: data!.uri!)
         : null;
   }
 
@@ -217,6 +216,8 @@ class LoginFeature {
     required this.actions,
     required this.launchLoginPage,
   });
+
+  bool get hasEmbeddedPage => actions.any((flavor) => flavor.flavor == LoginFlavor.embedded);
 }
 
 class BottomMenuFeature {
@@ -261,11 +262,13 @@ class BottomMenuFeature {
 class SettingsFeature {
   final List<SettingsSection> _sections;
 
-  final Uri termsAndConditions;
-
-  SettingsFeature(this._sections, this.termsAndConditions);
+  SettingsFeature(this._sections);
 
   List<SettingsSection> get sections => List.unmodifiable(_sections);
+
+  SettingItem? get termsAndConditions => _sections.expand((section) => section.items).firstWhereOrNull(
+        (item) => item.flavor == SettingsFlavor.terms,
+      );
 
   bool get isSelfConfigEnabled => _sections.any((section) {
         return section.items.any((item) {
