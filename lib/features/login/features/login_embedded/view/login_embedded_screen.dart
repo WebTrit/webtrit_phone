@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/app/constants.dart';
-import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/theme/extension/extension.dart';
+import 'package:webtrit_phone/utils/utils.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../extensions/extensions.dart';
@@ -73,8 +73,7 @@ class LoginEmbeddedScreen extends StatelessWidget {
                 ),
               ],
             ),
-            // TODO(Serdun): Move PackageInfo dependency to constructor
-            packageInfo: context.read<PackageInfo>(),
+            userAgent: UserAgent.of(context),
           );
         },
       ),
