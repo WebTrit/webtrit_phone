@@ -42,6 +42,11 @@ void main() {
             return PackageInfoFactory.instance;
           },
         ),
+        Provider<DeviceInfo>(
+          create: (context) {
+            return DeviceInfoFactory.instance;
+          },
+        ),
         Provider<AppPreferences>(
           create: (context) {
             return AppPreferencesFactory.instance;

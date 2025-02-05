@@ -55,7 +55,7 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
       final appPreferences = await AppPreferencesFactory.init();
       final featureAccess = FeatureAccess.init(appThemes.appConfig, appPreferences);
       final appInfo = await AppInfo.init(FirebaseAppIdProvider());
-      final deviceInfo = await DeviceInfo.init();
+      final deviceInfo = await DeviceInfoFactory.init();
       final packageInfo = await PackageInfoFactory.init();
 
       await AppThemes.init();
@@ -152,7 +152,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   // Initialize the logger for handling Firebase Cloud Messaging (FCM) in the background isolate.
   await AppInfo.init(const SharedPreferencesAppIdProvider());
   final appInfo = await AppInfo.init(FirebaseAppIdProvider());
-  final deviceInfo = await DeviceInfo.init();
+  final deviceInfo = await DeviceInfoFactory.init();
   final packageInfo = await PackageInfoFactory.init();
 
   await AppLogger.init(
