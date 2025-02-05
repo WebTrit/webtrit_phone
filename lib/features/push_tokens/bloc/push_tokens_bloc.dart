@@ -60,8 +60,12 @@ class PushTokensBloc extends Bloc<PushTokensEvent, PushTokensState> implements P
   }
 
   void _onStarted(PushTokensEvent event, Emitter<PushTokensState> emit) async {
-    if (Platform.isAndroid) unawaited(_retrieveAndStoreFcmToken());
-    if (Platform.isIOS) unawaited(_retrieveAndStoreApnsToken());
+    if (Platform.isAndroid || Platform.isIOS) {
+      unawaited(_retrieveAndStoreFcmToken());
+    }
+    if (Platform.isIOS) {
+      unawaited(_retrieveAndStoreApnsToken());
+    }
   }
 
   Future<void> _retrieveAndStoreFcmToken() async {
