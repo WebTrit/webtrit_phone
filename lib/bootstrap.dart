@@ -53,19 +53,23 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
 
       final appThemes = await AppThemes.init();
       final appPreferences = await AppPreferencesFactory.init();
-
       final featureAccess = FeatureAccess.init(appThemes.appConfig, appPreferences);
+      final appInfo = await AppInfo.init(FirebaseAppIdProvider());
+      final deviceInfo = await DeviceInfo.init();
+      final packageInfo = await PackageInfoFactory.init();
 
-      await AppInfo.init(FirebaseAppIdProvider());
-      await DeviceInfo.init();
-      await PackageInfo.init();
-      await AppLogger.init(remoteFirebaseConfigService);
       await AppThemes.init();
       await AppPermissions.init(featureAccess);
       await SecureStorage.init();
       await AppCertificates.init();
       await AppTime.init();
       await SessionCleanupWorker.init();
+      await AppLogger.init(
+        remoteConfigService: remoteFirebaseConfigService,
+        packageInfo: packageInfo,
+        deviceInfo: deviceInfo,
+        appInfo: appInfo,
+      );
 
       await _initCallkeep(appPreferences);
 
@@ -147,9 +151,16 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
   // Initialize the logger for handling Firebase Cloud Messaging (FCM) in the background isolate.
   await AppInfo.init(const SharedPreferencesAppIdProvider());
-  await DeviceInfo.init();
-  await PackageInfo.init();
-  await AppLogger.init(remoteCacheConfigService);
+  final appInfo = await AppInfo.init(FirebaseAppIdProvider());
+  final deviceInfo = await DeviceInfo.init();
+  final packageInfo = await PackageInfoFactory.init();
+
+  await AppLogger.init(
+    remoteConfigService: remoteCacheConfigService,
+    packageInfo: packageInfo,
+    deviceInfo: deviceInfo,
+    appInfo: appInfo,
+  );
 
   final appNotification = AppRemoteNotification.fromFCM(message);
 

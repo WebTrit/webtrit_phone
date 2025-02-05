@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:provider/provider.dart';
+
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
@@ -28,6 +30,7 @@ class WebAboutScreen extends StatelessWidget {
         'buildNumber': packageInfo.buildNumber,
         'coreUrl': infoRepository.coreUrl.toString(),
       }),
+      packageInfo: context.read<PackageInfo>(),
     );
   }
 }

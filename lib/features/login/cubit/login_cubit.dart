@@ -24,10 +24,22 @@ class LoginCubit extends Cubit<LoginState> with SystemInfoApiMapper {
   LoginCubit({
     @visibleForTesting this.createWebtritApiClient = defaultCreateWebtritApiClient,
     required this.notificationsBloc,
+    required this.packageInfo,
+    required this.appInfo,
+    required this.platformInfo,
   }) : super(const LoginState());
 
   final WebtritApiClientFactory createWebtritApiClient;
   final NotificationsBloc notificationsBloc;
+  final PlatformInfo platformInfo;
+  final PackageInfo packageInfo;
+  final AppInfo appInfo;
+
+  String get appBundleId => packageInfo.packageName;
+
+  AppType get appType => platformInfo.appType;
+
+  String get appIdentifier => appInfo.identifier;
 
   String? get coreUrlFromEnvironment => EnvironmentConfig.CORE_URL;
 
@@ -437,54 +449,54 @@ class LoginCubit extends Cubit<LoginState> with SystemInfoApiMapper {
     final systemInfo = systemInfoFromApi(apiSystemInfo);
     return systemInfo;
   }
-}
 
-Future<SessionOtpProvisional> _createSessionOtp(
-  WebtritApiClient webtritApiClient,
-  String userRef,
-) async {
-  return await webtritApiClient.createSessionOtp(SessionOtpCredential(
-    bundleId: PackageInfo().packageName,
-    type: PlatformInfo().appType,
-    identifier: AppInfo().identifier,
-    userRef: userRef,
-  ));
-}
+  Future<SessionOtpProvisional> _createSessionOtp(
+    WebtritApiClient webtritApiClient,
+    String userRef,
+  ) async {
+    return await webtritApiClient.createSessionOtp(SessionOtpCredential(
+      bundleId: appBundleId,
+      type: appType,
+      identifier: appIdentifier,
+      userRef: userRef,
+    ));
+  }
 
-Future<SessionToken> _verifySessionOtp(
-  WebtritApiClient webtritApiClient,
-  SessionOtpProvisional sessionOtpProvisional,
-  String code,
-) async {
-  return await webtritApiClient.verifySessionOtp(sessionOtpProvisional, code);
-}
+  Future<SessionToken> _verifySessionOtp(
+    WebtritApiClient webtritApiClient,
+    SessionOtpProvisional sessionOtpProvisional,
+    String code,
+  ) async {
+    return await webtritApiClient.verifySessionOtp(sessionOtpProvisional, code);
+  }
 
-Future<SessionToken> _createSessionRequest(
-  WebtritApiClient webtritApiClient,
-  String userRef,
-  String password,
-) async {
-  return await webtritApiClient.createSession(SessionLoginCredential(
-    bundleId: PackageInfo().packageName,
-    type: PlatformInfo().appType,
-    identifier: AppInfo().identifier,
-    login: userRef,
-    password: password,
-  ));
-}
+  Future<SessionToken> _createSessionRequest(
+    WebtritApiClient webtritApiClient,
+    String userRef,
+    String password,
+  ) async {
+    return await webtritApiClient.createSession(SessionLoginCredential(
+      bundleId: appBundleId,
+      type: appType,
+      identifier: appIdentifier,
+      login: userRef,
+      password: password,
+    ));
+  }
 
-Future<SessionResult> _createUserRequest({
-  required WebtritApiClient client,
-  String? email,
-  Map<String, dynamic>? extraPayload,
-}) async {
-  return await client.createUser(
-    SessionUserCredential(
-      bundleId: PackageInfo().packageName,
-      type: PlatformInfo().appType,
-      identifier: AppInfo().identifier,
-      email: email,
-    ),
-    extraPayload: extraPayload,
-  );
+  Future<SessionResult> _createUserRequest({
+    required WebtritApiClient client,
+    String? email,
+    Map<String, dynamic>? extraPayload,
+  }) async {
+    return await client.createUser(
+      SessionUserCredential(
+        bundleId: appBundleId,
+        type: appType,
+        identifier: appIdentifier,
+        email: email,
+      ),
+      extraPayload: extraPayload,
+    );
+  }
 }

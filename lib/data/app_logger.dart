@@ -10,7 +10,12 @@ import 'package:webtrit_phone/environment_config.dart';
 class AppLogger {
   static late AppLogger _instance;
 
-  static Future<AppLogger> init(RemoteConfigService remoteConfigService) async {
+  static Future<AppLogger> init({
+    required RemoteConfigService remoteConfigService,
+    required PackageInfo packageInfo,
+    required DeviceInfo deviceInfo,
+    required AppInfo appInfo,
+  }) async {
     hierarchicalLoggingEnabled = true;
 
     Logger.root.clearListeners();
@@ -39,7 +44,7 @@ class AppLogger {
 
     if (isRemoteLoggingEnabled) {
       for (var it in remoteLoggingServices) {
-        it.initialize(await _prepareRemoteLabels());
+        it.initialize(await _prepareRemoteLabels(packageInfo, deviceInfo, appInfo));
       }
     }
 
@@ -47,11 +52,11 @@ class AppLogger {
     return _instance;
   }
 
-  static Future<Map<String, String>> _prepareRemoteLabels() async {
-    final packageInfo = PackageInfo();
-    final deviceInfo = DeviceInfo();
-    final appInfo = AppInfo();
-
+  static Future<Map<String, String>> _prepareRemoteLabels(
+    PackageInfo packageInfo,
+    DeviceInfo deviceInfo,
+    AppInfo appInfo,
+  ) async {
     return <String, String>{
       'app': packageInfo.appName,
       'appVersion': appInfo.version,

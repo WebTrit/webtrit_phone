@@ -4,6 +4,8 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/blocs/blocs.dart';
+import 'package:webtrit_phone/data/app_info.dart';
+import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/features/features.dart';
 
@@ -37,18 +39,24 @@ class AutoprovisionScreenPage extends StatelessWidget {
     final oldCoreUrl = context.read<AppBloc>().state.coreUrl;
 
     const coreVersionConstraint = EnvironmentConfig.CORE_VERSION_CONSTRAINT;
+    final config = AutoprovisionConfig(
+      configToken: configToken,
+      oldToken: oldToken,
+      tenantId: tenantId,
+      oldTenantId: oldTenant,
+      defaultCoreUrl: defaultCoreUrl,
+      coreUrl: coreUrl ?? oldCoreUrl,
+      oldCoreUrl: oldCoreUrl,
+      coreVersionConstraint: coreVersionConstraint,
+    );
 
     final widget = BlocProvider(
-      create: (context) => AutoprovisionCubit(AutoprovisionConfig(
-        configToken: configToken,
-        oldToken: oldToken,
-        tenantId: tenantId,
-        oldTenantId: oldTenant,
-        defaultCoreUrl: defaultCoreUrl,
-        coreUrl: coreUrl ?? oldCoreUrl,
-        oldCoreUrl: oldCoreUrl,
-        coreVersionConstraint: coreVersionConstraint,
-      )),
+      create: (context) => AutoprovisionCubit(
+        appInfo: context.read<AppInfo>(),
+        packageInfo: context.read<PackageInfo>(),
+        platformInfo: context.read<PlatformInfo>(),
+        config: config,
+      ),
       child: const AutoprovisionScreen(),
     );
 

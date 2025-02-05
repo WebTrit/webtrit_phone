@@ -29,8 +29,13 @@ Future<void> _initializeDependencies() async {
   // Data classes
   _appInfo ??= await AppInfo.init(const SharedPreferencesAppIdProvider());
   _deviceInfo ??= await DeviceInfo.init();
-  _packageInfo ??= await PackageInfo.init();
-  _appLogger ??= await AppLogger.init(_remoteConfigService!);
+  _packageInfo ??= await PackageInfoFactory.init();
+  _appLogger ??= await AppLogger.init(
+    remoteConfigService: _remoteConfigService!,
+    packageInfo: _packageInfo!,
+    deviceInfo: _deviceInfo!,
+    appInfo: _appInfo!,
+  );
   _appPreferences ??= await AppPreferencesFactory.init();
   _appCertificates ??= await AppCertificates.init();
 
