@@ -14,6 +14,7 @@ import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
 part 'main_event.dart';
+
 part 'main_state.dart';
 
 // TODO: maybe split the bloc into two separate blocs: SystemInfoSyncBloc and (CoreCompatibilityBloc or MainScreenBloc)
@@ -25,7 +26,8 @@ class MainBloc extends Bloc<MainBlocEvent, MainBlocState> {
   MainBloc(
     this.systemInfoRemoteRepository,
     this.appPreferences,
-    this.coreVersionConstraint, {
+    this.coreVersionConstraint,
+    this.packageInfo, {
     this.storeInfoExtractor,
   }) : super(MainBlocState.initial()) {
     on<MainBlocInit>(_onInit, transformer: restartable());
@@ -37,6 +39,11 @@ class MainBloc extends Bloc<MainBlocEvent, MainBlocState> {
   final AppPreferences appPreferences;
   final String coreVersionConstraint;
   final StoreInfoExtractor? storeInfoExtractor;
+  final PackageInfo packageInfo;
+
+  String get appPackageName => packageInfo.packageName;
+
+  Version get appVersion => Version.parse(packageInfo.version);
 
   StreamSubscription<WebtritSystemInfo>? _systemInfoSubscription;
 
@@ -91,9 +98,6 @@ class MainBloc extends Bloc<MainBlocEvent, MainBlocState> {
       emit(state.copyWith(coreVersionState: Compatible()));
     } else {
       Uri? maybeStoreUrl;
-
-      final appPackageName = PackageInfo().packageName;
-      final appVersion = Version.parse(PackageInfo().version);
 
       StoreInfo? storeInfo;
 

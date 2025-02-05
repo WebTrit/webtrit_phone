@@ -25,6 +25,7 @@ class WebViewScaffold extends StatefulWidget {
     this.errorBuilder,
     this.showToolbar = true,
     this.builder,
+    required this.packageInfo,
   });
 
   final Widget? title;
@@ -34,6 +35,7 @@ class WebViewScaffold extends StatefulWidget {
   final bool showToolbar;
   final Widget? Function(BuildContext context, WebResourceError error, WebViewController controller)? errorBuilder;
   final TransitionBuilder? builder;
+  final PackageInfo packageInfo;
 
   @override
   State<WebViewScaffold> createState() => _WebViewScaffoldState();
@@ -68,7 +70,7 @@ class _WebViewScaffoldState extends State<WebViewScaffold> {
 
     _webViewController = WebViewController();
 
-    final userAgent = '${PackageInfo().appName}/${PackageInfo().version} '
+    final userAgent = '${widget.packageInfo.appName}/${widget.packageInfo.version} '
         '(${Platform.operatingSystem}; ${Platform.operatingSystemVersion})';
 
     () async {

@@ -39,7 +39,7 @@ class _MainShellState extends State<MainShell> {
     _callkeep.setUp(
       CallkeepOptions(
         ios: CallkeepIOSOptions(
-          localizedName: PackageInfo().appName,
+          localizedName: context.read<PackageInfo>().appName,
           ringtoneSound: Assets.ringtones.incomingCall1,
           ringbackSound: Assets.ringtones.outgoingCall1,
           iconTemplateImageAssetName: Assets.callkeep.iosIconTemplateImage.path,
