@@ -23,8 +23,12 @@ class ThemeStyleFactoryProvider {
     // Page schema
     final loginPageScheme = pageConfig.login;
 
-    // Widget schema
+    // Widget images config
     final imageAssetsConfig = widgetConfig.imageAssets;
+    final primaryOnboardingLogo = imageAssetsConfig.primaryOnboardingLogo;
+    final secondaryOnboardingLogo = imageAssetsConfig.secondaryOnboardingLogo;
+
+    // Other widgets config
     final appIconConfig = imageAssetsConfig.appIcon;
     final primaryGradientColorsConfig = widgetConfig.decorationConfig.primaryGradientColorsConfig;
     final confirmDialog = widgetConfig.dialog.confirmDialog;
@@ -56,8 +60,8 @@ class ThemeStyleFactoryProvider {
     final snackBarStyleFactory = SnackBarStyleFactory(colorScheme, snackBar);
     final groupTitleListStyleFactory = GroupTitleListStyleFactory(groupTitleListTile);
     final onPictureLogoStyleFactory =
-        OnboardingPictureLogoStyleFactory(colorScheme, imageAssetsConfig, loginPageScheme);
-    final onLogoStyleFactory = OnboardingLogoStyleFactory(colorScheme, imageAssetsConfig, loginPageScheme);
+        OnboardingPictureLogoStyleFactory(colorScheme, primaryOnboardingLogo, loginPageScheme);
+    final onLogoStyleFactory = OnboardingLogoStyleFactory(colorScheme, secondaryOnboardingLogo, loginPageScheme);
     final gradientsStyleFactory = GradientsStyleFactory(primaryGradientColorsConfig);
     final aboutScreenStyleFactory = AboutScreenStyleFactory(loginPageScheme);
     final loginModeSelectStyleFactory = LoginModeSelectScreenStyleFactory(loginPageScheme.modeSelect);

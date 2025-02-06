@@ -2878,8 +2878,8 @@ ImageAssetConfig _$ImageAssetConfigFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$ImageAssetConfig {
   String get uri => throw _privateConstructorUsedError;
-  double? get scale => throw _privateConstructorUsedError;
-  String? get labelColor => throw _privateConstructorUsedError;
+  double get widthFactor => throw _privateConstructorUsedError;
+  String get labelColor => throw _privateConstructorUsedError;
   Metadata get metadata => throw _privateConstructorUsedError;
 
   /// Serializes this ImageAssetConfig to a JSON map.
@@ -2898,7 +2898,8 @@ abstract class $ImageAssetConfigCopyWith<$Res> {
           ImageAssetConfig value, $Res Function(ImageAssetConfig) then) =
       _$ImageAssetConfigCopyWithImpl<$Res, ImageAssetConfig>;
   @useResult
-  $Res call({String uri, double? scale, String? labelColor, Metadata metadata});
+  $Res call(
+      {String uri, double widthFactor, String labelColor, Metadata metadata});
 
   $MetadataCopyWith<$Res> get metadata;
 }
@@ -2919,8 +2920,8 @@ class _$ImageAssetConfigCopyWithImpl<$Res, $Val extends ImageAssetConfig>
   @override
   $Res call({
     Object? uri = null,
-    Object? scale = freezed,
-    Object? labelColor = freezed,
+    Object? widthFactor = null,
+    Object? labelColor = null,
     Object? metadata = null,
   }) {
     return _then(_value.copyWith(
@@ -2928,14 +2929,14 @@ class _$ImageAssetConfigCopyWithImpl<$Res, $Val extends ImageAssetConfig>
           ? _value.uri
           : uri // ignore: cast_nullable_to_non_nullable
               as String,
-      scale: freezed == scale
-          ? _value.scale
-          : scale // ignore: cast_nullable_to_non_nullable
-              as double?,
-      labelColor: freezed == labelColor
+      widthFactor: null == widthFactor
+          ? _value.widthFactor
+          : widthFactor // ignore: cast_nullable_to_non_nullable
+              as double,
+      labelColor: null == labelColor
           ? _value.labelColor
           : labelColor // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
       metadata: null == metadata
           ? _value.metadata
           : metadata // ignore: cast_nullable_to_non_nullable
@@ -2962,7 +2963,8 @@ abstract class _$$ImageAssetConfigImplCopyWith<$Res>
       __$$ImageAssetConfigImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String uri, double? scale, String? labelColor, Metadata metadata});
+  $Res call(
+      {String uri, double widthFactor, String labelColor, Metadata metadata});
 
   @override
   $MetadataCopyWith<$Res> get metadata;
@@ -2982,8 +2984,8 @@ class __$$ImageAssetConfigImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? uri = null,
-    Object? scale = freezed,
-    Object? labelColor = freezed,
+    Object? widthFactor = null,
+    Object? labelColor = null,
     Object? metadata = null,
   }) {
     return _then(_$ImageAssetConfigImpl(
@@ -2991,14 +2993,14 @@ class __$$ImageAssetConfigImplCopyWithImpl<$Res>
           ? _value.uri
           : uri // ignore: cast_nullable_to_non_nullable
               as String,
-      scale: freezed == scale
-          ? _value.scale
-          : scale // ignore: cast_nullable_to_non_nullable
-              as double?,
-      labelColor: freezed == labelColor
+      widthFactor: null == widthFactor
+          ? _value.widthFactor
+          : widthFactor // ignore: cast_nullable_to_non_nullable
+              as double,
+      labelColor: null == labelColor
           ? _value.labelColor
           : labelColor // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
       metadata: null == metadata
           ? _value.metadata
           : metadata // ignore: cast_nullable_to_non_nullable
@@ -3013,8 +3015,8 @@ class __$$ImageAssetConfigImplCopyWithImpl<$Res>
 class _$ImageAssetConfigImpl implements _ImageAssetConfig {
   const _$ImageAssetConfigImpl(
       {required this.uri,
-      this.scale,
-      this.labelColor,
+      this.widthFactor = 1.0,
+      this.labelColor = '#FFFFFF',
       this.metadata = const Metadata()});
 
   factory _$ImageAssetConfigImpl.fromJson(Map<String, dynamic> json) =>
@@ -3023,16 +3025,18 @@ class _$ImageAssetConfigImpl implements _ImageAssetConfig {
   @override
   final String uri;
   @override
-  final double? scale;
+  @JsonKey()
+  final double widthFactor;
   @override
-  final String? labelColor;
+  @JsonKey()
+  final String labelColor;
   @override
   @JsonKey()
   final Metadata metadata;
 
   @override
   String toString() {
-    return 'ImageAssetConfig(uri: $uri, scale: $scale, labelColor: $labelColor, metadata: $metadata)';
+    return 'ImageAssetConfig(uri: $uri, widthFactor: $widthFactor, labelColor: $labelColor, metadata: $metadata)';
   }
 
   @override
@@ -3041,7 +3045,8 @@ class _$ImageAssetConfigImpl implements _ImageAssetConfig {
         (other.runtimeType == runtimeType &&
             other is _$ImageAssetConfigImpl &&
             (identical(other.uri, uri) || other.uri == uri) &&
-            (identical(other.scale, scale) || other.scale == scale) &&
+            (identical(other.widthFactor, widthFactor) ||
+                other.widthFactor == widthFactor) &&
             (identical(other.labelColor, labelColor) ||
                 other.labelColor == labelColor) &&
             (identical(other.metadata, metadata) ||
@@ -3051,7 +3056,7 @@ class _$ImageAssetConfigImpl implements _ImageAssetConfig {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode =>
-      Object.hash(runtimeType, uri, scale, labelColor, metadata);
+      Object.hash(runtimeType, uri, widthFactor, labelColor, metadata);
 
   /// Create a copy of ImageAssetConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -3073,8 +3078,8 @@ class _$ImageAssetConfigImpl implements _ImageAssetConfig {
 abstract class _ImageAssetConfig implements ImageAssetConfig {
   const factory _ImageAssetConfig(
       {required final String uri,
-      final double? scale,
-      final String? labelColor,
+      final double widthFactor,
+      final String labelColor,
       final Metadata metadata}) = _$ImageAssetConfigImpl;
 
   factory _ImageAssetConfig.fromJson(Map<String, dynamic> json) =
@@ -3083,9 +3088,9 @@ abstract class _ImageAssetConfig implements ImageAssetConfig {
   @override
   String get uri;
   @override
-  double? get scale;
+  double get widthFactor;
   @override
-  String? get labelColor;
+  String get labelColor;
   @override
   Metadata get metadata;
 

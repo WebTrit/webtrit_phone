@@ -169,8 +169,8 @@ class ImageAssetConfig with _$ImageAssetConfig {
   @JsonSerializable(explicitToJson: true)
   const factory ImageAssetConfig({
     required String uri,
-    double? scale,
-    String? labelColor,
+    @Default(1.0) double widthFactor,
+    @Default('#FFFFFF') String labelColor,
     @Default(Metadata()) Metadata metadata,
   }) = _ImageAssetConfig;
 

@@ -4,10 +4,12 @@
   },
   "imageAssets": {
     "primaryOnboardingLogo": {
-      "uri": "asset://assets/primary_onboardin_logo.svg"
+      "uri": "asset://assets/primary_onboardin_logo.svg",
+      "widthFactor": 0.45
     },
     "secondaryOnboardingLogo": {
-      "uri": "asset://assets/secondary_onboardin_logo.svg"
+      "uri": "asset://assets/secondary_onboardin_logo.svg",
+      "widthFactor": 0.25
     }
   },
   "dialog": {

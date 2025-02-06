@@ -271,8 +271,8 @@ _$ImageAssetConfigImpl _$$ImageAssetConfigImplFromJson(
         Map<String, dynamic> json) =>
     _$ImageAssetConfigImpl(
       uri: json['uri'] as String,
-      scale: (json['scale'] as num?)?.toDouble(),
-      labelColor: json['labelColor'] as String?,
+      widthFactor: (json['widthFactor'] as num?)?.toDouble() ?? 1.0,
+      labelColor: json['labelColor'] as String? ?? '#FFFFFF',
       metadata: json['metadata'] == null
           ? const Metadata()
           : Metadata.fromJson(json['metadata'] as Map<String, dynamic>),
@@ -282,7 +282,7 @@ Map<String, dynamic> _$$ImageAssetConfigImplToJson(
         _$ImageAssetConfigImpl instance) =>
     <String, dynamic>{
       'uri': instance.uri,
-      'scale': instance.scale,
+      'widthFactor': instance.widthFactor,
       'labelColor': instance.labelColor,
       'metadata': instance.metadata.toJson(),
     };
