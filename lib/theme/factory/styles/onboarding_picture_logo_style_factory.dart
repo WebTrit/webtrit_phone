@@ -24,7 +24,7 @@ class OnboardingPictureLogoStyleFactory implements ThemeStyleFactory<OnboardingP
     return OnboardingPictureLogoStyles(
       primary: OnboardingPictureLogoStyle(
         picture: primaryOnboardingLogoPath?.toThemeSvgAsset(),
-        scale: widthFactor,
+        widthFactor: widthFactor,
         textStyle: textStyle,
       ),
     );
