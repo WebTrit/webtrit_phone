@@ -176,8 +176,6 @@ class AppLocalizationsMapper {
           localizations.default_SelfRemovalForbiddenMessagingSocketException,
       'default_SmsConversationNotFoundMessagingSocketException':
           localizations.default_SmsConversationNotFoundMessagingSocketException,
-      'default_SocketExceptionError':
-          localizations.default_SocketExceptionError,
       'default_TimeoutExceptionError':
           localizations.default_TimeoutExceptionError,
       'default_TimeoutMessagingSocketException':
@@ -410,16 +408,10 @@ class AppLocalizationsMapper {
           localizations.messaging_ConfirmDialog_cancel,
       'messaging_ConfirmDialog_confirm':
           localizations.messaging_ConfirmDialog_confirm,
-      'messaging_ConversationBuilders_addUserBtnText':
-          localizations.messaging_ConversationBuilders_addUserBtnText,
       'messaging_ConversationBuilders_back':
           localizations.messaging_ConversationBuilders_back,
-      'messaging_ConversationBuilders_back_action':
-          localizations.messaging_ConversationBuilders_back_action,
       'messaging_ConversationBuilders_cancel':
           localizations.messaging_ConversationBuilders_cancel,
-      'messaging_ConversationBuilders_connectionError':
-          localizations.messaging_ConversationBuilders_connectionError,
       'messaging_ConversationBuilders_contactOrNumberSearch_hint': localizations
           .messaging_ConversationBuilders_contactOrNumberSearch_hint,
       'messaging_ConversationBuilders_contactSearch_hint':
@@ -430,8 +422,6 @@ class AppLocalizationsMapper {
           localizations.messaging_ConversationBuilders_createGroup,
       'messaging_ConversationBuilders_externalContacts_heading':
           localizations.messaging_ConversationBuilders_externalContacts_heading,
-      'messaging_ConversationBuilders_groupNameHeadline':
-          localizations.messaging_ConversationBuilders_groupNameHeadline,
       'messaging_ConversationBuilders_invalidNumber_message1':
           localizations.messaging_ConversationBuilders_invalidNumber_message1,
       'messaging_ConversationBuilders_invalidNumber_message2':
@@ -462,10 +452,6 @@ class AppLocalizationsMapper {
           localizations.messaging_ConversationBuilders_numberSearch_errorError,
       'messaging_ConversationBuilders_numberSearch_errorHint':
           localizations.messaging_ConversationBuilders_numberSearch_errorHint,
-      'messaging_ConversationBuilders_submitBtnText':
-          localizations.messaging_ConversationBuilders_submitBtnText,
-      'messaging_ConversationBuilders_submitError':
-          localizations.messaging_ConversationBuilders_submitError,
       'messaging_ConversationBuilders_title_group':
           localizations.messaging_ConversationBuilders_title_group,
       'messaging_ConversationBuilders_title_new':
@@ -490,8 +476,6 @@ class AppLocalizationsMapper {
           localizations.messaging_ConversationsScreen_smses_title,
       'messaging_ConversationsScreen_smssSearch_hint':
           localizations.messaging_ConversationsScreen_smssSearch_hint,
-      'messaging_ConversationsScreen_startDialog':
-          localizations.messaging_ConversationsScreen_startDialog,
       'messaging_ConversationsScreen_unsupported':
           localizations.messaging_ConversationsScreen_unsupported,
       'messaging_Conversations_tile_empty':
@@ -536,22 +520,6 @@ class AppLocalizationsMapper {
           localizations.messaging_GroupInfo_titlePrefix,
       'messaging_GroupInfo_unmakeModeratorBtnText':
           localizations.messaging_GroupInfo_unmakeModeratorBtnText,
-      'messaging_GroupNameDialog_cancelBtnText':
-          localizations.messaging_GroupNameDialog_cancelBtnText,
-      'messaging_GroupNameDialog_fieldHint':
-          localizations.messaging_GroupNameDialog_fieldHint,
-      'messaging_GroupNameDialog_fieldLabel':
-          localizations.messaging_GroupNameDialog_fieldLabel,
-      'messaging_GroupNameDialog_fieldValidation_empty':
-          localizations.messaging_GroupNameDialog_fieldValidation_empty,
-      'messaging_GroupNameDialog_fieldValidation_short':
-          localizations.messaging_GroupNameDialog_fieldValidation_short,
-      'messaging_GroupNameDialog_saveBtnText':
-          localizations.messaging_GroupNameDialog_saveBtnText,
-      'messaging_GroupNameDialog_title':
-          localizations.messaging_GroupNameDialog_title,
-      'messaging_GroupScreen_titlePrefix':
-          localizations.messaging_GroupScreen_titlePrefix,
       'messaging_MessageField_hint': localizations.messaging_MessageField_hint,
       'messaging_MessageListView_typingTrail':
           localizations.messaging_MessageListView_typingTrail,
@@ -564,15 +532,9 @@ class AppLocalizationsMapper {
           localizations.messaging_MessageView_edited,
       'messaging_MessageView_forward':
           localizations.messaging_MessageView_forward,
-      'messaging_MessageView_forwarded':
-          localizations.messaging_MessageView_forwarded,
       'messaging_MessageView_reply': localizations.messaging_MessageView_reply,
       'messaging_MessageView_textcopy':
           localizations.messaging_MessageView_textcopy,
-      'messaging_NewConversation_createGroup':
-          localizations.messaging_NewConversation_createGroup,
-      'messaging_NewConversation_title':
-          localizations.messaging_NewConversation_title,
       'messaging_ParticipantName_you':
           localizations.messaging_ParticipantName_you,
       'messaging_ParticipantName_unknown':
