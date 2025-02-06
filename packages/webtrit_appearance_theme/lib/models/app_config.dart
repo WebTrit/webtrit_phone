@@ -67,44 +67,46 @@ class AppConfigMain with _$AppConfigMain {
 
   @JsonSerializable(explicitToJson: true)
   const factory AppConfigMain({
-    @Default(AppConfigBottomMenu(cacheSelectedTab: true, tabs: [
-      BaseTabScheme(
-        enabled: true,
-        initial: false,
-        type: BottomMenuTabType.favorites,
-        titleL10n: 'main_BottomNavigationBarItemLabel_favorites',
-        icon: '0xe5fd',
-      ),
-      BaseTabScheme(
-        enabled: true,
-        initial: false,
-        type: BottomMenuTabType.recents,
-        titleL10n: 'main_BottomNavigationBarItemLabel_recents',
-        icon: '0xe03a',
-      ),
-      ContactsTabScheme(
-        enabled: true,
-        initial: false,
-        type: BottomMenuTabType.contacts,
-        titleL10n: 'main_BottomNavigationBarItemLabel_contacts',
-        icon: '0xee35',
-        contactSourceTypes: ['local', 'external'],
-      ),
-      BaseTabScheme(
-        enabled: true,
-        initial: true,
-        type: BottomMenuTabType.keypad,
-        titleL10n: 'main_BottomNavigationBarItemLabel_keypad',
-        icon: '0xe1ce',
-      ),
-      BaseTabScheme(
-        enabled: false,
-        initial: false,
-        type: BottomMenuTabType.messaging,
-        titleL10n: 'main_BottomNavigationBarItemLabel_chats',
-        icon: '0xe155',
-      )
-    ]))
+    @Default(
+      AppConfigBottomMenu(cacheSelectedTab: true, tabs: [
+        BaseTabScheme(
+          enabled: true,
+          initial: false,
+          type: BottomMenuTabType.favorites,
+          titleL10n: 'main_BottomNavigationBarItemLabel_favorites',
+          icon: '0xe5fd',
+        ),
+        BaseTabScheme(
+          enabled: true,
+          initial: false,
+          type: BottomMenuTabType.recents,
+          titleL10n: 'main_BottomNavigationBarItemLabel_recents',
+          icon: '0xe03a',
+        ),
+        ContactsTabScheme(
+          enabled: true,
+          initial: false,
+          type: BottomMenuTabType.contacts,
+          titleL10n: 'main_BottomNavigationBarItemLabel_contacts',
+          icon: '0xee35',
+          contactSourceTypes: ['local', 'external'],
+        ),
+        BaseTabScheme(
+          enabled: true,
+          initial: true,
+          type: BottomMenuTabType.keypad,
+          titleL10n: 'main_BottomNavigationBarItemLabel_keypad',
+          icon: '0xe1ce',
+        ),
+        BaseTabScheme(
+          enabled: false,
+          initial: false,
+          type: BottomMenuTabType.messaging,
+          titleL10n: 'main_BottomNavigationBarItemLabel_chats',
+          icon: '0xe155',
+        )
+      ]),
+    )
     AppConfigBottomMenu bottomMenu,
   }) = _AppConfigMain;
 
@@ -328,7 +330,7 @@ class EmbeddedData with _$EmbeddedData {
 
   factory EmbeddedData.fromJson(Map<String, dynamic> json) => _$EmbeddedDataFromJson(json);
 
-  /// safely parses `resource` to a `uri`, returning `null` if invalid
+  /// Safely parses `resource` to a `uri`, returning `null` if invalid
   Uri? get uri => Uri.tryParse(resource);
 
   /// A globally consistent metadata key used to associate additional resources
