@@ -39,7 +39,12 @@ _$AppConfigLoginImpl _$$AppConfigLoginImplFromJson(Map<String, dynamic> json) =>
               ?.map((e) =>
                   AppConfigModeSelectAction.fromJson(e as Map<String, dynamic>))
               .toList() ??
-          const [],
+          const [
+            AppConfigModeSelectAction(
+                enabled: true,
+                type: 'login',
+                titleL10n: 'login_Button_signUpToDemoInstance')
+          ],
       embedded: (json['embedded'] as List<dynamic>?)
               ?.map((e) => EmbeddedData.fromJson(e as Map<String, dynamic>))
               .toList() ??
@@ -76,7 +81,39 @@ Map<String, dynamic> _$$AppConfigModeSelectActionImplToJson(
 _$AppConfigMainImpl _$$AppConfigMainImplFromJson(Map<String, dynamic> json) =>
     _$AppConfigMainImpl(
       bottomMenu: json['bottomMenu'] == null
-          ? const AppConfigBottomMenu(cacheSelectedTab: true, tabs: [])
+          ? const AppConfigBottomMenu(cacheSelectedTab: true, tabs: [
+              BaseTabScheme(
+                  enabled: true,
+                  initial: false,
+                  type: BottomMenuTabType.favorites,
+                  titleL10n: 'main_BottomNavigationBarItemLabel_favorites',
+                  icon: '0xe5fd'),
+              BaseTabScheme(
+                  enabled: true,
+                  initial: false,
+                  type: BottomMenuTabType.recents,
+                  titleL10n: 'main_BottomNavigationBarItemLabel_recents',
+                  icon: '0xe03a'),
+              ContactsTabScheme(
+                  enabled: true,
+                  initial: false,
+                  type: BottomMenuTabType.contacts,
+                  titleL10n: 'main_BottomNavigationBarItemLabel_contacts',
+                  icon: '0xee35',
+                  contactSourceTypes: ['local', 'external']),
+              BaseTabScheme(
+                  enabled: true,
+                  initial: true,
+                  type: BottomMenuTabType.keypad,
+                  titleL10n: 'main_BottomNavigationBarItemLabel_keypad',
+                  icon: '0xe1ce'),
+              BaseTabScheme(
+                  enabled: false,
+                  initial: false,
+                  type: BottomMenuTabType.messaging,
+                  titleL10n: 'main_BottomNavigationBarItemLabel_chats',
+                  icon: '0xe155')
+            ])
           : AppConfigBottomMenu.fromJson(
               json['bottomMenu'] as Map<String, dynamic>),
     );
@@ -212,7 +249,69 @@ _$AppConfigSettingsImpl _$$AppConfigSettingsImplFromJson(
               ?.map((e) =>
                   AppConfigSettingsSection.fromJson(e as Map<String, dynamic>))
               .toList() ??
-          const [],
+          const [
+            AppConfigSettingsSection(
+                titleL10n: 'settings_ListViewTileTitle_settings',
+                enabled: true,
+                items: [
+                  AppConfigSettingsItem(
+                      enabled: true,
+                      type: 'network',
+                      titleL10n: 'settings_ListViewTileTitle_network',
+                      icon: '0xe424'),
+                  AppConfigSettingsItem(
+                      enabled: true,
+                      type: 'callCodecs',
+                      titleL10n: 'settings_ListViewTileTitle_call_codecs',
+                      icon: '0xf1cf'),
+                  AppConfigSettingsItem(
+                      enabled: true,
+                      type: 'language',
+                      titleL10n: 'settings_ListViewTileTitle_language',
+                      icon: '0xe366'),
+                  AppConfigSettingsItem(
+                      enabled: false,
+                      type: 'help',
+                      titleL10n: 'settings_ListViewTileTitle_help',
+                      icon: '0xe30b'),
+                  AppConfigSettingsItem(
+                      enabled: true,
+                      type: 'terms',
+                      titleL10n: 'settings_ListViewTileTitle_termsConditions',
+                      icon: '0xeedf',
+                      embeddedData: EmbeddedData(
+                          resource:
+                              'https://webtrit-app.web.app/example/example_embedded_call.html',
+                          toolbar: ToolbarConfig(
+                              showToolbar: true,
+                              titleL10n: 'login_requestCredentials_title'))),
+                  AppConfigSettingsItem(
+                      enabled: true,
+                      type: 'about',
+                      titleL10n: 'settings_ListViewTileTitle_about',
+                      icon: '0xe140')
+                ]),
+            AppConfigSettingsSection(
+                titleL10n: 'settings_ListViewTileTitle_toolbox',
+                enabled: true,
+                items: [
+                  AppConfigSettingsItem(
+                      enabled: true,
+                      type: 'log',
+                      titleL10n: 'settings_ListViewTileTitle_logRecordsConsole',
+                      icon: '0xee79'),
+                  AppConfigSettingsItem(
+                      enabled: true,
+                      type: 'selfConfig',
+                      titleL10n: 'settings_ListViewTileTitle_self_config',
+                      icon: '0xef7a'),
+                  AppConfigSettingsItem(
+                      enabled: true,
+                      type: 'deleteAccount',
+                      titleL10n: 'settings_ListViewTileTitle_accountDelete',
+                      icon: '0xe1bb')
+                ])
+          ],
     );
 
 Map<String, dynamic> _$$AppConfigSettingsImplToJson(
@@ -266,7 +365,7 @@ Map<String, dynamic> _$$AppConfigSettingsItemImplToJson(
 _$EmbeddedDataImpl _$$EmbeddedDataImplFromJson(Map<String, dynamic> json) =>
     _$EmbeddedDataImpl(
       id: (json['id'] as num?)?.toInt(),
-      resource: const UriConverter().fromJson(json['resource'] as String),
+      resource: json['resource'] as String,
       attributes: json['attributes'] as Map<String, dynamic>? ?? const {},
       toolbar: json['toolbar'] == null
           ? const ToolbarConfig()
@@ -279,7 +378,7 @@ _$EmbeddedDataImpl _$$EmbeddedDataImplFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$$EmbeddedDataImplToJson(_$EmbeddedDataImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'resource': const UriConverter().toJson(instance.resource),
+      'resource': instance.resource,
       'attributes': instance.attributes,
       'toolbar': instance.toolbar.toJson(),
       'metadata': instance.metadata.toJson(),

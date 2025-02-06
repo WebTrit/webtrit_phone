@@ -415,7 +415,12 @@ class __$$AppConfigLoginImplCopyWithImpl<$Res>
 class _$AppConfigLoginImpl extends _AppConfigLogin {
   const _$AppConfigLoginImpl(
       {this.greetingL10n,
-      final List<AppConfigModeSelectAction> modeSelectActions = const [],
+      final List<AppConfigModeSelectAction> modeSelectActions = const [
+        AppConfigModeSelectAction(
+            enabled: true,
+            type: 'login',
+            titleL10n: 'login_Button_signUpToDemoInstance')
+      ],
       final List<EmbeddedData> embedded = const []})
       : _modeSelectActions = modeSelectActions,
         _embedded = embedded,
@@ -838,7 +843,39 @@ class __$$AppConfigMainImplCopyWithImpl<$Res>
 class _$AppConfigMainImpl extends _AppConfigMain {
   const _$AppConfigMainImpl(
       {this.bottomMenu =
-          const AppConfigBottomMenu(cacheSelectedTab: true, tabs: [])})
+          const AppConfigBottomMenu(cacheSelectedTab: true, tabs: [
+        BaseTabScheme(
+            enabled: true,
+            initial: false,
+            type: BottomMenuTabType.favorites,
+            titleL10n: 'main_BottomNavigationBarItemLabel_favorites',
+            icon: '0xe5fd'),
+        BaseTabScheme(
+            enabled: true,
+            initial: false,
+            type: BottomMenuTabType.recents,
+            titleL10n: 'main_BottomNavigationBarItemLabel_recents',
+            icon: '0xe03a'),
+        ContactsTabScheme(
+            enabled: true,
+            initial: false,
+            type: BottomMenuTabType.contacts,
+            titleL10n: 'main_BottomNavigationBarItemLabel_contacts',
+            icon: '0xee35',
+            contactSourceTypes: ['local', 'external']),
+        BaseTabScheme(
+            enabled: true,
+            initial: true,
+            type: BottomMenuTabType.keypad,
+            titleL10n: 'main_BottomNavigationBarItemLabel_keypad',
+            icon: '0xe1ce'),
+        BaseTabScheme(
+            enabled: false,
+            initial: false,
+            type: BottomMenuTabType.messaging,
+            titleL10n: 'main_BottomNavigationBarItemLabel_chats',
+            icon: '0xe155')
+      ])})
       : super._();
 
   factory _$AppConfigMainImpl.fromJson(Map<String, dynamic> json) =>
@@ -2680,7 +2717,69 @@ class __$$AppConfigSettingsImplCopyWithImpl<$Res>
 @JsonSerializable(explicitToJson: true)
 class _$AppConfigSettingsImpl extends _AppConfigSettings {
   const _$AppConfigSettingsImpl(
-      {final List<AppConfigSettingsSection> sections = const []})
+      {final List<AppConfigSettingsSection> sections = const [
+        AppConfigSettingsSection(
+            titleL10n: 'settings_ListViewTileTitle_settings',
+            enabled: true,
+            items: [
+              AppConfigSettingsItem(
+                  enabled: true,
+                  type: 'network',
+                  titleL10n: 'settings_ListViewTileTitle_network',
+                  icon: '0xe424'),
+              AppConfigSettingsItem(
+                  enabled: true,
+                  type: 'callCodecs',
+                  titleL10n: 'settings_ListViewTileTitle_call_codecs',
+                  icon: '0xf1cf'),
+              AppConfigSettingsItem(
+                  enabled: true,
+                  type: 'language',
+                  titleL10n: 'settings_ListViewTileTitle_language',
+                  icon: '0xe366'),
+              AppConfigSettingsItem(
+                  enabled: false,
+                  type: 'help',
+                  titleL10n: 'settings_ListViewTileTitle_help',
+                  icon: '0xe30b'),
+              AppConfigSettingsItem(
+                  enabled: true,
+                  type: 'terms',
+                  titleL10n: 'settings_ListViewTileTitle_termsConditions',
+                  icon: '0xeedf',
+                  embeddedData: EmbeddedData(
+                      resource:
+                          'https://webtrit-app.web.app/example/example_embedded_call.html',
+                      toolbar: ToolbarConfig(
+                          showToolbar: true,
+                          titleL10n: 'login_requestCredentials_title'))),
+              AppConfigSettingsItem(
+                  enabled: true,
+                  type: 'about',
+                  titleL10n: 'settings_ListViewTileTitle_about',
+                  icon: '0xe140')
+            ]),
+        AppConfigSettingsSection(
+            titleL10n: 'settings_ListViewTileTitle_toolbox',
+            enabled: true,
+            items: [
+              AppConfigSettingsItem(
+                  enabled: true,
+                  type: 'log',
+                  titleL10n: 'settings_ListViewTileTitle_logRecordsConsole',
+                  icon: '0xee79'),
+              AppConfigSettingsItem(
+                  enabled: true,
+                  type: 'selfConfig',
+                  titleL10n: 'settings_ListViewTileTitle_self_config',
+                  icon: '0xef7a'),
+              AppConfigSettingsItem(
+                  enabled: true,
+                  type: 'deleteAccount',
+                  titleL10n: 'settings_ListViewTileTitle_accountDelete',
+                  icon: '0xe1bb')
+            ])
+      ]})
       : _sections = sections,
         super._();
 
@@ -3231,8 +3330,7 @@ EmbeddedData _$EmbeddedDataFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$EmbeddedData {
   int? get id => throw _privateConstructorUsedError;
-  @UriConverter()
-  Uri get resource => throw _privateConstructorUsedError;
+  String get resource => throw _privateConstructorUsedError;
   Map<String, dynamic> get attributes => throw _privateConstructorUsedError;
   ToolbarConfig get toolbar => throw _privateConstructorUsedError;
   Metadata get metadata => throw _privateConstructorUsedError;
@@ -3255,7 +3353,7 @@ abstract class $EmbeddedDataCopyWith<$Res> {
   @useResult
   $Res call(
       {int? id,
-      @UriConverter() Uri resource,
+      String resource,
       Map<String, dynamic> attributes,
       ToolbarConfig toolbar,
       Metadata metadata});
@@ -3293,7 +3391,7 @@ class _$EmbeddedDataCopyWithImpl<$Res, $Val extends EmbeddedData>
       resource: null == resource
           ? _value.resource
           : resource // ignore: cast_nullable_to_non_nullable
-              as Uri,
+              as String,
       attributes: null == attributes
           ? _value.attributes
           : attributes // ignore: cast_nullable_to_non_nullable
@@ -3340,7 +3438,7 @@ abstract class _$$EmbeddedDataImplCopyWith<$Res>
   @useResult
   $Res call(
       {int? id,
-      @UriConverter() Uri resource,
+      String resource,
       Map<String, dynamic> attributes,
       ToolbarConfig toolbar,
       Metadata metadata});
@@ -3378,7 +3476,7 @@ class __$$EmbeddedDataImplCopyWithImpl<$Res>
       resource: null == resource
           ? _value.resource
           : resource // ignore: cast_nullable_to_non_nullable
-              as Uri,
+              as String,
       attributes: null == attributes
           ? _value._attributes
           : attributes // ignore: cast_nullable_to_non_nullable
@@ -3401,7 +3499,7 @@ class __$$EmbeddedDataImplCopyWithImpl<$Res>
 class _$EmbeddedDataImpl extends _EmbeddedData {
   const _$EmbeddedDataImpl(
       {this.id,
-      @UriConverter() required this.resource,
+      required this.resource,
       final Map<String, dynamic> attributes = const {},
       this.toolbar = const ToolbarConfig(),
       this.metadata = const Metadata()})
@@ -3414,8 +3512,7 @@ class _$EmbeddedDataImpl extends _EmbeddedData {
   @override
   final int? id;
   @override
-  @UriConverter()
-  final Uri resource;
+  final String resource;
   final Map<String, dynamic> _attributes;
   @override
   @JsonKey()
@@ -3476,7 +3573,7 @@ class _$EmbeddedDataImpl extends _EmbeddedData {
 abstract class _EmbeddedData extends EmbeddedData {
   const factory _EmbeddedData(
       {final int? id,
-      @UriConverter() required final Uri resource,
+      required final String resource,
       final Map<String, dynamic> attributes,
       final ToolbarConfig toolbar,
       final Metadata metadata}) = _$EmbeddedDataImpl;
@@ -3488,8 +3585,7 @@ abstract class _EmbeddedData extends EmbeddedData {
   @override
   int? get id;
   @override
-  @UriConverter()
-  Uri get resource;
+  String get resource;
   @override
   Map<String, dynamic> get attributes;
   @override

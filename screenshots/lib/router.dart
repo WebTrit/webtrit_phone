@@ -67,6 +67,10 @@ class _IndexInputScreenState extends State<IndexInputScreen> {
       ),
       ScreenshotApp(
         appBloc: appBloc,
+        child: const PrivacyScreenScreenshot(),
+      ),
+      ScreenshotApp(
+        appBloc: appBloc,
         child: const LoginSignUpVerifyScreenshot(),
       ),
       ScreenshotApp(

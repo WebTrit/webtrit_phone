@@ -32,7 +32,14 @@ class AppConfigLogin with _$AppConfigLogin {
   @JsonSerializable(explicitToJson: true)
   const factory AppConfigLogin({
     String? greetingL10n,
-    @Default([]) List<AppConfigModeSelectAction> modeSelectActions,
+    @Default([
+      AppConfigModeSelectAction(
+        enabled: true,
+        type: 'login',
+        titleL10n: 'login_Button_signUpToDemoInstance',
+      )
+    ])
+    List<AppConfigModeSelectAction> modeSelectActions,
     @Default([]) List<EmbeddedData> embedded,
   }) = _AppConfigLogin;
 
@@ -60,7 +67,47 @@ class AppConfigMain with _$AppConfigMain {
 
   @JsonSerializable(explicitToJson: true)
   const factory AppConfigMain({
-    @Default(AppConfigBottomMenu(cacheSelectedTab: true, tabs: [])) AppConfigBottomMenu bottomMenu,
+    @Default(
+      AppConfigBottomMenu(cacheSelectedTab: true, tabs: [
+        BaseTabScheme(
+          enabled: true,
+          initial: false,
+          type: BottomMenuTabType.favorites,
+          titleL10n: 'main_BottomNavigationBarItemLabel_favorites',
+          icon: '0xe5fd',
+        ),
+        BaseTabScheme(
+          enabled: true,
+          initial: false,
+          type: BottomMenuTabType.recents,
+          titleL10n: 'main_BottomNavigationBarItemLabel_recents',
+          icon: '0xe03a',
+        ),
+        ContactsTabScheme(
+          enabled: true,
+          initial: false,
+          type: BottomMenuTabType.contacts,
+          titleL10n: 'main_BottomNavigationBarItemLabel_contacts',
+          icon: '0xee35',
+          contactSourceTypes: ['local', 'external'],
+        ),
+        BaseTabScheme(
+          enabled: true,
+          initial: true,
+          type: BottomMenuTabType.keypad,
+          titleL10n: 'main_BottomNavigationBarItemLabel_keypad',
+          icon: '0xe1ce',
+        ),
+        BaseTabScheme(
+          enabled: false,
+          initial: false,
+          type: BottomMenuTabType.messaging,
+          titleL10n: 'main_BottomNavigationBarItemLabel_chats',
+          icon: '0xe155',
+        )
+      ]),
+    )
+    AppConfigBottomMenu bottomMenu,
   }) = _AppConfigMain;
 
   factory AppConfigMain.fromJson(Map<String, dynamic> json) => _$AppConfigMainFromJson(json);
@@ -89,7 +136,8 @@ class AppConfigCall with _$AppConfigCall {
     @Default(AppConfigTransfer(
       enableBlindTransfer: true,
       enableAttendedTransfer: true,
-    )) AppConfigTransfer transfer,
+    ))
+    AppConfigTransfer transfer,
   }) = _AppConfigCall;
 
   factory AppConfigCall.fromJson(Map<String, dynamic> json) => _$AppConfigCallFromJson(json);
@@ -156,7 +204,82 @@ class AppConfigSettings with _$AppConfigSettings {
 
   @JsonSerializable(explicitToJson: true)
   const factory AppConfigSettings({
-    @Default([]) List<AppConfigSettingsSection> sections,
+    @Default([
+      AppConfigSettingsSection(
+        titleL10n: 'settings_ListViewTileTitle_settings',
+        enabled: true,
+        items: [
+          AppConfigSettingsItem(
+            enabled: true,
+            type: 'network',
+            titleL10n: 'settings_ListViewTileTitle_network',
+            icon: '0xe424',
+          ),
+          AppConfigSettingsItem(
+            enabled: true,
+            type: 'callCodecs',
+            titleL10n: 'settings_ListViewTileTitle_call_codecs',
+            icon: '0xf1cf',
+          ),
+          AppConfigSettingsItem(
+            enabled: true,
+            type: 'language',
+            titleL10n: 'settings_ListViewTileTitle_language',
+            icon: '0xe366',
+          ),
+          AppConfigSettingsItem(
+            enabled: false,
+            type: 'help',
+            titleL10n: 'settings_ListViewTileTitle_help',
+            icon: '0xe30b',
+          ),
+          AppConfigSettingsItem(
+            enabled: true,
+            type: 'terms',
+            titleL10n: 'settings_ListViewTileTitle_termsConditions',
+            icon: '0xeedf',
+            embeddedData: EmbeddedData(
+              resource: 'https://webtrit-app.web.app/example/example_embedded_call.html',
+              toolbar: ToolbarConfig(
+                showToolbar: true,
+                titleL10n: 'login_requestCredentials_title',
+              ),
+            ),
+          ),
+          AppConfigSettingsItem(
+            enabled: true,
+            type: 'about',
+            titleL10n: 'settings_ListViewTileTitle_about',
+            icon: '0xe140',
+          ),
+        ],
+      ),
+      AppConfigSettingsSection(
+        titleL10n: 'settings_ListViewTileTitle_toolbox',
+        enabled: true,
+        items: [
+          AppConfigSettingsItem(
+            enabled: true,
+            type: 'log',
+            titleL10n: 'settings_ListViewTileTitle_logRecordsConsole',
+            icon: '0xee79',
+          ),
+          AppConfigSettingsItem(
+            enabled: true,
+            type: 'selfConfig',
+            titleL10n: 'settings_ListViewTileTitle_self_config',
+            icon: '0xef7a',
+          ),
+          AppConfigSettingsItem(
+            enabled: true,
+            type: 'deleteAccount',
+            titleL10n: 'settings_ListViewTileTitle_accountDelete',
+            icon: '0xe1bb',
+          )
+        ],
+      ),
+    ])
+    List<AppConfigSettingsSection> sections,
   }) = _AppConfigSettings;
 
   factory AppConfigSettings.fromJson(Map<String, dynamic> json) => _$AppConfigSettingsFromJson(json);
@@ -199,13 +322,16 @@ class EmbeddedData with _$EmbeddedData {
   @JsonSerializable(explicitToJson: true)
   const factory EmbeddedData({
     int? id,
-    @UriConverter() required Uri resource,
+    required String resource,
     @Default({}) Map<String, dynamic> attributes,
     @Default(ToolbarConfig()) ToolbarConfig toolbar,
     @Default(Metadata()) Metadata metadata,
   }) = _EmbeddedData;
 
   factory EmbeddedData.fromJson(Map<String, dynamic> json) => _$EmbeddedDataFromJson(json);
+
+  /// Safely parses `resource` to a `uri`, returning `null` if invalid
+  Uri? get uri => Uri.tryParse(resource);
 
   /// A globally consistent metadata key used to associate additional resources
   static const String metadataResourceUrl = 'resourceUrl';
