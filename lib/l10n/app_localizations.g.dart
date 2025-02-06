@@ -91,7 +91,11 @@ abstract class AppLocalizations {
   ];
 
   /// A list of this localizations delegate's supported locales.
-  static const List<Locale> supportedLocales = <Locale>[Locale('en'), Locale('it'), Locale('uk')];
+  static const List<Locale> supportedLocales = <Locale>[
+    Locale('en'),
+    Locale('it'),
+    Locale('uk')
+  ];
 
   /// No description provided for @account_selfCarePasswordExpired_message.
   ///
@@ -596,12 +600,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'SMS conversation not found'**
   String get default_SmsConversationNotFoundMessagingSocketException;
-
-  /// No description provided for @default_SocketExceptionError.
-  ///
-  /// In en, this message translates to:
-  /// **'A network issue occurred'**
-  String get default_SocketExceptionError;
 
   /// No description provided for @default_TimeoutExceptionError.
   ///
@@ -1363,8 +1361,7 @@ abstract class AppLocalizations {
   ///
   /// In en, this message translates to:
   /// **'Incompatible WebTrit Cloud Backend version, please contact the administrator of your system.\n\nInstance version:\n{actual}\n\nSupported version:\n{supportedConstraint}'**
-  String main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError(
-      String actual, String supportedConstraint);
+  String main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError(String actual, String supportedConstraint);
 
   /// No description provided for @main_CompatibilityIssueDialog_title.
   ///
@@ -1414,35 +1411,17 @@ abstract class AppLocalizations {
   /// **'Yes'**
   String get messaging_ConfirmDialog_confirm;
 
-  /// No description provided for @messaging_ConversationBuilders_addUserBtnText.
-  ///
-  /// In en, this message translates to:
-  /// **'Add user'**
-  String get messaging_ConversationBuilders_addUserBtnText;
-
   /// No description provided for @messaging_ConversationBuilders_back.
   ///
   /// In en, this message translates to:
   /// **'Back'**
   String get messaging_ConversationBuilders_back;
 
-  /// No description provided for @messaging_ConversationBuilders_back_action.
-  ///
-  /// In en, this message translates to:
-  /// **'Back'**
-  String get messaging_ConversationBuilders_back_action;
-
   /// No description provided for @messaging_ConversationBuilders_cancel.
   ///
   /// In en, this message translates to:
   /// **'Cancel'**
   String get messaging_ConversationBuilders_cancel;
-
-  /// No description provided for @messaging_ConversationBuilders_connectionError.
-  ///
-  /// In en, this message translates to:
-  /// **'Connection error, please try later'**
-  String get messaging_ConversationBuilders_connectionError;
 
   /// No description provided for @messaging_ConversationBuilders_contactOrNumberSearch_hint.
   ///
@@ -1473,12 +1452,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Cloud PBX contacts'**
   String get messaging_ConversationBuilders_externalContacts_heading;
-
-  /// No description provided for @messaging_ConversationBuilders_groupNameHeadline.
-  ///
-  /// In en, this message translates to:
-  /// **'Group name'**
-  String get messaging_ConversationBuilders_groupNameHeadline;
 
   /// No description provided for @messaging_ConversationBuilders_invalidNumber_message1.
   ///
@@ -1570,18 +1543,6 @@ abstract class AppLocalizations {
   /// **'Phone number format: '**
   String get messaging_ConversationBuilders_numberSearch_errorHint;
 
-  /// No description provided for @messaging_ConversationBuilders_submitBtnText.
-  ///
-  /// In en, this message translates to:
-  /// **'Submit'**
-  String get messaging_ConversationBuilders_submitBtnText;
-
-  /// No description provided for @messaging_ConversationBuilders_submitError.
-  ///
-  /// In en, this message translates to:
-  /// **'Error happened while creating group, please try again'**
-  String get messaging_ConversationBuilders_submitError;
-
   /// No description provided for @messaging_ConversationBuilders_title_group.
   ///
   /// In en, this message translates to:
@@ -1653,12 +1614,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Enter phone number'**
   String get messaging_ConversationsScreen_smssSearch_hint;
-
-  /// No description provided for @messaging_ConversationsScreen_startDialog.
-  ///
-  /// In en, this message translates to:
-  /// **'Start dialog'**
-  String get messaging_ConversationsScreen_startDialog;
 
   /// No description provided for @messaging_ConversationsScreen_unsupported.
   ///
@@ -1798,54 +1753,6 @@ abstract class AppLocalizations {
   /// **'Unmake moderator'**
   String get messaging_GroupInfo_unmakeModeratorBtnText;
 
-  /// No description provided for @messaging_GroupNameDialog_cancelBtnText.
-  ///
-  /// In en, this message translates to:
-  /// **'Cancel'**
-  String get messaging_GroupNameDialog_cancelBtnText;
-
-  /// No description provided for @messaging_GroupNameDialog_fieldHint.
-  ///
-  /// In en, this message translates to:
-  /// **'Enter group name'**
-  String get messaging_GroupNameDialog_fieldHint;
-
-  /// No description provided for @messaging_GroupNameDialog_fieldLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Group name'**
-  String get messaging_GroupNameDialog_fieldLabel;
-
-  /// No description provided for @messaging_GroupNameDialog_fieldValidation_empty.
-  ///
-  /// In en, this message translates to:
-  /// **'Please enter group name'**
-  String get messaging_GroupNameDialog_fieldValidation_empty;
-
-  /// No description provided for @messaging_GroupNameDialog_fieldValidation_short.
-  ///
-  /// In en, this message translates to:
-  /// **'Group name is too short'**
-  String get messaging_GroupNameDialog_fieldValidation_short;
-
-  /// No description provided for @messaging_GroupNameDialog_saveBtnText.
-  ///
-  /// In en, this message translates to:
-  /// **'Save'**
-  String get messaging_GroupNameDialog_saveBtnText;
-
-  /// No description provided for @messaging_GroupNameDialog_title.
-  ///
-  /// In en, this message translates to:
-  /// **'Group name'**
-  String get messaging_GroupNameDialog_title;
-
-  /// No description provided for @messaging_GroupScreen_titlePrefix.
-  ///
-  /// In en, this message translates to:
-  /// **'Group:'**
-  String get messaging_GroupScreen_titlePrefix;
-
   /// No description provided for @messaging_MessageField_hint.
   ///
   /// In en, this message translates to:
@@ -1888,12 +1795,6 @@ abstract class AppLocalizations {
   /// **'Forward'**
   String get messaging_MessageView_forward;
 
-  /// No description provided for @messaging_MessageView_forwarded.
-  ///
-  /// In en, this message translates to:
-  /// **'[forwarded]'**
-  String get messaging_MessageView_forwarded;
-
   /// No description provided for @messaging_MessageView_reply.
   ///
   /// In en, this message translates to:
@@ -1905,18 +1806,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Copy to clipboard'**
   String get messaging_MessageView_textcopy;
-
-  /// No description provided for @messaging_NewConversation_createGroup.
-  ///
-  /// In en, this message translates to:
-  /// **''**
-  String get messaging_NewConversation_createGroup;
-
-  /// No description provided for @messaging_NewConversation_title.
-  ///
-  /// In en, this message translates to:
-  /// **''**
-  String get messaging_NewConversation_title;
 
   /// No description provided for @messaging_ParticipantName_you.
   ///
@@ -3105,18 +2994,19 @@ class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> 
 }
 
 AppLocalizations lookupAppLocalizations(Locale locale) {
+
+
   // Lookup logic when only language code is specified.
   switch (locale.languageCode) {
-    case 'en':
-      return AppLocalizationsEn();
-    case 'it':
-      return AppLocalizationsIt();
-    case 'uk':
-      return AppLocalizationsUk();
+    case 'en': return AppLocalizationsEn();
+    case 'it': return AppLocalizationsIt();
+    case 'uk': return AppLocalizationsUk();
   }
 
-  throw FlutterError('AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
-      'an issue with the localizations generation tool. Please file an issue '
-      'on GitHub with a reproducible sample app and the gen-l10n configuration '
-      'that was used.');
+  throw FlutterError(
+    'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
+    'an issue with the localizations generation tool. Please file an issue '
+    'on GitHub with a reproducible sample app and the gen-l10n configuration '
+    'that was used.'
+  );
 }

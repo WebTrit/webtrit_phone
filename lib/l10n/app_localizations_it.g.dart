@@ -9,8 +9,7 @@ class AppLocalizationsIt extends AppLocalizations {
   AppLocalizationsIt([String locale = 'it']) : super(locale);
 
   @override
-  String get account_selfCarePasswordExpired_message =>
-      'La tua password di self-care è scaduta. Ti preghiamo di aggiornarla utilizzando il self-care.\nFino a quando la password non sarà cambiata, l\'accesso al servizio sarà limitato.';
+  String get account_selfCarePasswordExpired_message => 'La tua password di self-care è scaduta. Ti preghiamo di aggiornarla utilizzando il self-care.\nFino a quando la password non sarà cambiata, l\'accesso al servizio sarà limitato.';
 
   @override
   String get alertDialogActions_no => 'No';
@@ -22,8 +21,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get alertDialogActions_yes => 'Si';
 
   @override
-  String get autoprovision_errorSnackBar_invalidToken =>
-      'Le credenziali di configurazione automatica sono state rifiutate dal server. Richiedi nuovamente le credenziali';
+  String get autoprovision_errorSnackBar_invalidToken => 'Le credenziali di configurazione automatica sono state rifiutate dal server. Richiedi nuovamente le credenziali';
 
   @override
   String get autoprovision_ReloginDialog_confirm => 'Confermare';
@@ -32,15 +30,13 @@ class AppLocalizationsIt extends AppLocalizations {
   String get autoprovision_ReloginDialog_decline => 'Rifiuto';
 
   @override
-  String get autoprovision_ReloginDialog_text =>
-      'Vuoi usare le nuove credenziali di accesso?,  Utilizza il seguente link, verrai automaticamente disconnesso  da questa sessione';
+  String get autoprovision_ReloginDialog_text => 'Vuoi usare le nuove credenziali di accesso?,  Utilizza il seguente link, verrai automaticamente disconnesso  da questa sessione';
 
   @override
   String get autoprovision_ReloginDialog_title => 'Conferma di nuovo accesso';
 
   @override
-  String get autoprovision_successSnackBar_used =>
-      'Le vostre impostazioni sono state recuperate con successo, l\'App è pronta per l\'uso';
+  String get autoprovision_successSnackBar_used => 'Le vostre impostazioni sono state recuperate con successo, l\'App è pronta per l\'uso';
 
   @override
   String get call_CallActionsTooltip_accept => 'Accetta chiamata';
@@ -112,8 +108,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get call_description_incoming => 'Chiamata in arrivo';
 
   @override
-  String get call_description_inviteToAttendedTransfer =>
-      'Sei stato invitato a unirti a una chiamata di trasferimento assistito';
+  String get call_description_inviteToAttendedTransfer => 'Sei stato invitato a unirti a una chiamata di trasferimento assistito';
 
   @override
   String get call_description_outgoing => 'Chiamata in corso';
@@ -155,8 +150,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get call_ThumbnailAvatar_currentlyNoActiveCall => 'Actualmente, no hay ninguna llamada activa';
 
   @override
-  String get common_noInternetConnection_message =>
-      'Sembra che tu non sia connesso a Internet. Controlla la tua connessione e riprova.';
+  String get common_noInternetConnection_message => 'Sembra che tu non sia connesso a Internet. Controlla la tua connessione e riprova.';
 
   @override
   String get common_noInternetConnection_retryButton => 'Riprova';
@@ -195,8 +189,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get contacts_LocalTabText_failure => 'Impossibile ottenere i tuoi contatti telefonici';
 
   @override
-  String get contacts_LocalTabText_permissionFailure =>
-      'Non ci sono i permessi per ottenere i tuoi contatti telefonici';
+  String get contacts_LocalTabText_permissionFailure => 'Non ci sono i permessi per ottenere i tuoi contatti telefonici';
 
   @override
   String get contactsSourceExternal => 'Centralino cloud';
@@ -253,24 +246,19 @@ class AppLocalizationsIt extends AppLocalizations {
   String get default_MessagingSocketException => 'Si è verificato un errore durante la comunicazione con il server';
 
   @override
-  String get default_JoinCrashedMessagingSocketException =>
-      'Si è verificato un errore durante l\'adesione alla conversazione';
+  String get default_JoinCrashedMessagingSocketException => 'Si è verificato un errore durante l\'adesione alla conversazione';
 
   @override
   String get default_RequestFailureError => 'Si è verificato un errore del server';
 
   @override
-  String get default_SelfAuthorityAssignmentForbiddenMessagingSocketException =>
-      'Assegnazione di autorità a se stessi vietata';
+  String get default_SelfAuthorityAssignmentForbiddenMessagingSocketException => 'Assegnazione di autorità a se stessi vietata';
 
   @override
   String get default_SelfRemovalForbiddenMessagingSocketException => 'Rimozione di se stessi vietata';
 
   @override
   String get default_SmsConversationNotFoundMessagingSocketException => 'Conversazione SMS non trovata';
-
-  @override
-  String get default_SocketExceptionError => 'Si è verificato un problema di rete';
 
   @override
   String get default_TimeoutExceptionError => 'Si è verificato un problema di timeout del server';
@@ -305,29 +293,25 @@ class AppLocalizationsIt extends AppLocalizations {
   String get diagnostic_battery_groupTitle => 'Batteria';
 
   @override
-  String get diagnostic_batteryMode_optimized_description =>
-      'L\'attività in background dell\'app è gestita dal sistema per risparmiare batteria. Potrebbe non funzionare correttamente con chiamate in arrivo attivate da notifiche push.';
+  String get diagnostic_batteryMode_optimized_description => 'L\'attività in background dell\'app è gestita dal sistema per risparmiare batteria. Potrebbe non funzionare correttamente con chiamate in arrivo attivate da notifiche push.';
 
   @override
   String get diagnostic_batteryMode_optimized_title => 'Ottimizzato';
 
   @override
-  String get diagnostic_batteryMode_restricted_description =>
-      'L\'attività in background dell\'app è fortemente limitata per conservare la batteria. Potrebbero essere perse chiamate in arrivo.';
+  String get diagnostic_batteryMode_restricted_description => 'L\'attività in background dell\'app è fortemente limitata per conservare la batteria. Potrebbero essere perse chiamate in arrivo.';
 
   @override
   String get diagnostic_batteryMode_restricted_title => 'Limitato';
 
   @override
-  String get diagnostic_batteryMode_unknown_description =>
-      'Lo stato della modalità batteria è sconosciuto. L\'app potrebbe avere un comportamento imprevedibile.';
+  String get diagnostic_batteryMode_unknown_description => 'Lo stato della modalità batteria è sconosciuto. L\'app potrebbe avere un comportamento imprevedibile.';
 
   @override
   String get diagnostic_batteryMode_unknown_title => 'Sconosciuto';
 
   @override
-  String get diagnostic_batteryMode_unrestricted_description =>
-      'L\'app ha pieno accesso per funzionare in background senza restrizioni.';
+  String get diagnostic_batteryMode_unrestricted_description => 'L\'app ha pieno accesso per funzionare in background senza restrizioni.';
 
   @override
   String get diagnostic_batteryMode_unrestricted_title => 'Senza restrizioni';
@@ -339,15 +323,13 @@ class AppLocalizationsIt extends AppLocalizations {
   String get diagnostic_battery_tile_title => 'Modalità batteria';
 
   @override
-  String get diagnostic_permission_camera_description =>
-      'Questa app richiede il permesso di accedere alla fotocamera per effettuare videochiamate.';
+  String get diagnostic_permission_camera_description => 'Questa app richiede il permesso di accedere alla fotocamera per effettuare videochiamate.';
 
   @override
   String get diagnostic_permission_camera_title => 'Fotocamera';
 
   @override
-  String get diagnostic_permission_contacts_description =>
-      'Questa app richiede il permesso di accedere ai contatti per effettuare chiamate dalla tua rubrica.';
+  String get diagnostic_permission_contacts_description => 'Questa app richiede il permesso di accedere ai contatti per effettuare chiamate dalla tua rubrica.';
 
   @override
   String get diagnostic_permission_contacts_title => 'Contatti';
@@ -362,8 +344,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get diagnosticPermissionDetails_title_statusPermission => 'Stato del permesso';
 
   @override
-  String get diagnostic_permission_microphone_description =>
-      'Questa app richiede il permesso di accedere al microfono per effettuare chiamate audio.';
+  String get diagnostic_permission_microphone_description => 'Questa app richiede il permesso di accedere al microfono per effettuare chiamate audio.';
 
   @override
   String get diagnostic_permission_microphone_title => 'Microfono';
@@ -402,24 +383,19 @@ class AppLocalizationsIt extends AppLocalizations {
   String get diagnosticPushDetails_errorMessage_step1 => '1. Assicurati che il telefono sia connesso a Internet.\n';
 
   @override
-  String get diagnosticPushDetails_errorMessage_step2 =>
-      '2. Se connesso, verifica che il telefono possa accedere ai servizi Google visitando un sito web.\n';
+  String get diagnosticPushDetails_errorMessage_step2 => '2. Se connesso, verifica che il telefono possa accedere ai servizi Google visitando un sito web.\n';
 
   @override
-  String get diagnosticPushDetails_errorMessage_step3 =>
-      '3. Aspetta qualche minuto e riprova – i server di messaggistica Firebase potrebbero essere temporaneamente inattivi.\n';
+  String get diagnosticPushDetails_errorMessage_step3 => '3. Aspetta qualche minuto e riprova – i server di messaggistica Firebase potrebbero essere temporaneamente inattivi.\n';
 
   @override
-  String get diagnosticPushDetails_errorMessage_step4 =>
-      '4. Riavvia i servizi di Google Play per assicurarne il corretto funzionamento.\n';
+  String get diagnosticPushDetails_errorMessage_step4 => '4. Riavvia i servizi di Google Play per assicurarne il corretto funzionamento.\n';
 
   @override
-  String get diagnosticPushDetails_errorMessage_step5 =>
-      '5. Verifica che i servizi di Google Play siano installati sul tuo dispositivo.\n';
+  String get diagnosticPushDetails_errorMessage_step5 => '5. Verifica che i servizi di Google Play siano installati sul tuo dispositivo.\n';
 
   @override
-  String get diagnosticPushDetails_successMessage =>
-      'Il servizio di notifica è stato configurato con successo ed è pronto per l’uso per ricevere messaggi e gestire le chiamate in arrivo.';
+  String get diagnosticPushDetails_successMessage => 'Il servizio di notifica è stato configurato con successo ed è pronto per l’uso per ricevere messaggi e gestire le chiamate in arrivo.';
 
   @override
   String get diagnostic_pushTokenStatusType_progress => 'In corso';
@@ -440,12 +416,10 @@ class AppLocalizationsIt extends AppLocalizations {
   String get diagnosticScreen_contacts_agreement_title => 'Accordo sui Contatti';
 
   @override
-  String get diagnosticScreen_contacts_agreement_description =>
-      'Consenti all\'app di accedere ai miei contatti per migliorare la mia esperienza utente.';
+  String get diagnosticScreen_contacts_agreement_description => 'Consenti all\'app di accedere ai miei contatti per migliorare la mia esperienza utente.';
 
   @override
-  String get favorites_BodyCenter_empty =>
-      'Al momento non hai numeri preferiti.\nAggiungi ai preferiti dai Contatti usando l\'icona a stella';
+  String get favorites_BodyCenter_empty => 'Al momento non hai numeri preferiti.\nAggiungi ai preferiti dai Contatti usando l\'icona a stella';
 
   @override
   String get favorites_DeleteConfirmDialog_content => 'Sei sicuro di voler eliminare il contatto preferito?';
@@ -549,12 +523,10 @@ class AppLocalizationsIt extends AppLocalizations {
   String get login_RequestFailurePhoneNotFoundError => 'Numero di telefono non trovato';
 
   @override
-  String get login_RequestFailureUnconfiguredBundleIdError =>
-      'Errore di configurazione del backend dell\'app - avvisare il proprio fornitore di servizi';
+  String get login_RequestFailureUnconfiguredBundleIdError => 'Errore di configurazione del backend dell\'app - avvisare il proprio fornitore di servizi';
 
   @override
-  String get login_SupportedLoginTypeMissedExceptionError =>
-      'L\'attuale Backend Cloud di WebTrit non supporta nessun tipo di accesso compatibile con questa app';
+  String get login_SupportedLoginTypeMissedExceptionError => 'L\'attuale Backend Cloud di WebTrit non supporta nessun tipo di accesso compatibile con questa app';
 
   @override
   String login_Text_coreUrlAssignPostDescription(Object email) {
@@ -562,8 +534,7 @@ class AppLocalizationsIt extends AppLocalizations {
   }
 
   @override
-  String get login_Text_coreUrlAssignPreDescription =>
-      'Per effettuare chiamate tramite il tuo sistema VoIP, inserisci l\'URL di WebTrit Cloud Backend (come fornito dal tuo account manager) di seguito.';
+  String get login_Text_coreUrlAssignPreDescription => 'Per effettuare chiamate tramite il tuo sistema VoIP, inserisci l\'URL di WebTrit Cloud Backend (come fornito dal tuo account manager) di seguito.';
 
   @override
   String get login_TextFieldLabelText_coreUrlAssign => 'Inserisci l\'URL del tuo WebTrit Cloud Backend';
@@ -598,8 +569,7 @@ class AppLocalizationsIt extends AppLocalizations {
   }
 
   @override
-  String get login_Text_otpSigninVerifyPostDescriptionGeneral =>
-      'Se non vedi un\'e-mail con il codice di verifica nella tua casella di posta, controlla la cartella della posta indesiderata.';
+  String get login_Text_otpSigninVerifyPostDescriptionGeneral => 'Se non vedi un\'e-mail con il codice di verifica nella tua casella di posta, controlla la cartella della posta indesiderata.';
 
   @override
   String login_Text_otpSigninVerifyPreDescriptionUserRef(String userRef) {
@@ -616,8 +586,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get login_Text_signupRequestPostDescription => '';
 
   @override
-  String get login_Text_signupRequestPostDescriptionDemo =>
-      'Se non hai ancora un account, questo verrà automaticamente creato';
+  String get login_Text_signupRequestPostDescriptionDemo => 'Se non hai ancora un account, questo verrà automaticamente creato';
 
   @override
   String get login_Text_signupRequestPreDescription => '';
@@ -631,8 +600,7 @@ class AppLocalizationsIt extends AppLocalizations {
   }
 
   @override
-  String get login_Text_signupVerifyPostDescriptionGeneral =>
-      'Se non vedi un\'e-mail con il codice di verifica nella tua casella di posta, controlla la cartella della posta indesiderata.';
+  String get login_Text_signupVerifyPostDescriptionGeneral => 'Se non vedi un\'e-mail con il codice di verifica nella tua casella di posta, controlla la cartella della posta indesiderata.';
 
   @override
   String login_Text_signupVerifyPreDescriptionEmail(String email) {
@@ -691,8 +659,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get main_CompatibilityIssueDialogActions_update => 'Aggiornamento';
 
   @override
-  String main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError(
-      String actual, String supportedConstraint) {
+  String main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError(String actual, String supportedConstraint) {
     return 'Versione di WebTrit Cloud Backend incompatibile, si prega di contattare l\'amministratore del sistema.\n\nVersione dell\'istanza:\n$actual\n\nVersione supportata:\n$supportedConstraint\n';
   }
 
@@ -721,19 +688,10 @@ class AppLocalizationsIt extends AppLocalizations {
   String get messaging_ConfirmDialog_confirm => 'SÌ';
 
   @override
-  String get messaging_ConversationBuilders_addUserBtnText => 'Aggiungi utente';
-
-  @override
   String get messaging_ConversationBuilders_back => 'Dopo';
 
   @override
-  String get messaging_ConversationBuilders_back_action => 'Dopo';
-
-  @override
   String get messaging_ConversationBuilders_cancel => 'Cancellare';
-
-  @override
-  String get messaging_ConversationBuilders_connectionError => 'Errore di connessione, riprova più tardi';
 
   @override
   String get messaging_ConversationBuilders_contactOrNumberSearch_hint => 'Inserisci nome o numero di telefono';
@@ -751,11 +709,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get messaging_ConversationBuilders_externalContacts_heading => 'Contatti Cloud PBX';
 
   @override
-  String get messaging_ConversationBuilders_groupNameHeadline => 'Nome del gruppo';
-
-  @override
-  String get messaging_ConversationBuilders_invalidNumber_message1 =>
-      'Il tsontact ha un numero di telefono non valido. Dovrebbe essere nel formato ';
+  String get messaging_ConversationBuilders_invalidNumber_message1 => 'Il tsontact ha un numero di telefono non valido. Dovrebbe essere nel formato ';
 
   @override
   String get messaging_ConversationBuilders_invalidNumber_message2 => '. Per favore, lo trovi nella nostra rubrica.';
@@ -782,33 +736,22 @@ class AppLocalizationsIt extends AppLocalizations {
   String get messaging_ConversationBuilders_nameFieldLabel => 'Nome del gruppo';
 
   @override
-  String get messaging_ConversationBuilders_nameFieldShort =>
-      'Il nome del gruppo deve essere composto da almeno 3 caratteri';
+  String get messaging_ConversationBuilders_nameFieldShort => 'Il nome del gruppo deve essere composto da almeno 3 caratteri';
 
   @override
   String get messaging_ConversationBuilders_next_action => 'Prossima';
 
   @override
-  String get messaging_ConversationBuilders_noContacts =>
-      'Non ci sono contatti che corrispondono al risultato della ricerca';
+  String get messaging_ConversationBuilders_noContacts => 'Non ci sono contatti che corrispondono al risultato della ricerca';
 
   @override
-  String get messaging_ConversationBuilders_numberFormatExample =>
-      '+ [prefisso nazionale] [prefisso operatore] [numero abbonato]';
+  String get messaging_ConversationBuilders_numberFormatExample => '+ [prefisso nazionale] [prefisso operatore] [numero abbonato]';
 
   @override
-  String get messaging_ConversationBuilders_numberSearch_errorError =>
-      'Il numero di telefono inserito non è valido. Deve essere inserito nel formato: ';
+  String get messaging_ConversationBuilders_numberSearch_errorError => 'Il numero di telefono inserito non è valido. Deve essere inserito nel formato: ';
 
   @override
   String get messaging_ConversationBuilders_numberSearch_errorHint => 'Formato del numero di telefono: ';
-
-  @override
-  String get messaging_ConversationBuilders_submitBtnText => 'Invia';
-
-  @override
-  String get messaging_ConversationBuilders_submitError =>
-      'Si è verificato un errore durante la creazione del gruppo, riprovare.';
 
   @override
   String get messaging_ConversationBuilders_title_group => 'Crea gruppo';
@@ -832,8 +775,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get messaging_ConversationsScreen_messages_title => 'Messaggi';
 
   @override
-  String get messaging_ConversationsScreen_noNumberAlert_text =>
-      'Per inviare messaggi SMS è necessario avere un numero di telefono collegato al tuo account';
+  String get messaging_ConversationsScreen_noNumberAlert_text => 'Per inviare messaggi SMS è necessario avere un numero di telefono collegato al tuo account';
 
   @override
   String get messaging_ConversationsScreen_noNumberAlert_title => 'Nessun numero di telefono';
@@ -848,11 +790,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get messaging_ConversationsScreen_smssSearch_hint => 'Inserisci il numero di telefono';
 
   @override
-  String get messaging_ConversationsScreen_startDialog => 'Avvia dialogo';
-
-  @override
-  String get messaging_ConversationsScreen_unsupported =>
-      'La messaggistica non è supportata dal sistema remoto, contattare l\'amministratore per abilitarla';
+  String get messaging_ConversationsScreen_unsupported => 'La messaggistica non è supportata dal sistema remoto, contattare l\'amministratore per abilitarla';
 
   @override
   String get messaging_Conversations_tile_empty => 'Nessun messaggio ancora';
@@ -921,30 +859,6 @@ class AppLocalizationsIt extends AppLocalizations {
   String get messaging_GroupInfo_unmakeModeratorBtnText => 'Annulla moderatore';
 
   @override
-  String get messaging_GroupNameDialog_cancelBtnText => 'Cancellare';
-
-  @override
-  String get messaging_GroupNameDialog_fieldHint => 'Inserisci il nome del gruppo';
-
-  @override
-  String get messaging_GroupNameDialog_fieldLabel => 'Nome del gruppo';
-
-  @override
-  String get messaging_GroupNameDialog_fieldValidation_empty => 'Per favore, inserisci il nome del gruppo';
-
-  @override
-  String get messaging_GroupNameDialog_fieldValidation_short => 'Il nome del gruppo è troppo corto';
-
-  @override
-  String get messaging_GroupNameDialog_saveBtnText => 'Salva';
-
-  @override
-  String get messaging_GroupNameDialog_title => 'Nome del gruppo';
-
-  @override
-  String get messaging_GroupScreen_titlePrefix => 'Gruppo:';
-
-  @override
   String get messaging_MessageField_hint => 'Scrivi un messaggio';
 
   @override
@@ -966,19 +880,10 @@ class AppLocalizationsIt extends AppLocalizations {
   String get messaging_MessageView_forward => 'Inoltrare';
 
   @override
-  String get messaging_MessageView_forwarded => '[inoltrato]';
-
-  @override
   String get messaging_MessageView_reply => 'Rispondere';
 
   @override
   String get messaging_MessageView_textcopy => 'Copia negli appunti';
-
-  @override
-  String get messaging_NewConversation_createGroup => '';
-
-  @override
-  String get messaging_NewConversation_title => '';
 
   @override
   String get messaging_ParticipantName_you => 'Voi';
@@ -1011,8 +916,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get notifications_errorSnackBarAction_callUserMedia => 'Verifica';
 
   @override
-  String get notifications_errorSnackBar_activeLineBlindTransferWarning =>
-      'Sei già in linea con il destinatario a cui stai cercando di trasferire alla cieca';
+  String get notifications_errorSnackBar_activeLineBlindTransferWarning => 'Sei già in linea con il destinatario a cui stai cercando di trasferire alla cieca';
 
   @override
   String get notifications_messageSnackBar_appOffline => 'La tua apllicazione è offline';
@@ -1021,20 +925,16 @@ class AppLocalizationsIt extends AppLocalizations {
   String get notifications_successSnackBar_appOnline => 'La tua apllicazione è online';
 
   @override
-  String get notifications_errorSnackBar_callWhileUnregistered =>
-      'Siamo spiacenti, la tua applicazione è attualmente disconnessa dai server principali WebTrit e quindi non è possibile chiamare in questo momento. Vai alla pagina delle impostazioni e fai scorrere l\'interruttore dello stato online ( a OFF e poi ancora ad ON) per ristabilire la connessione';
+  String get notifications_errorSnackBar_callWhileUnregistered => 'Siamo spiacenti, la tua applicazione è attualmente disconnessa dai server principali WebTrit e quindi non è possibile chiamare in questo momento. Vai alla pagina delle impostazioni e fai scorrere l\'interruttore dello stato online ( a OFF e poi ancora ad ON) per ristabilire la connessione';
 
   @override
-  String get notifications_errorSnackBar_SignalingConnectFailed =>
-      'Connessione al server non riuscita, tentativo di riconnessione in corso';
+  String get notifications_errorSnackBar_SignalingConnectFailed => 'Connessione al server non riuscita, tentativo di riconnessione in corso';
 
   @override
-  String get notifications_errorSnackBar_callWhileOffline =>
-      'Impossibile eseguire la chiamata, verificare lo stato della connessione';
+  String get notifications_errorSnackBar_callWhileOffline => 'Impossibile eseguire la chiamata, verificare lo stato della connessione';
 
   @override
-  String get notifications_errorSnackBar_SignalingSessionMissed =>
-      'Errore di autenticazione, effettuare nuovamente l\'accesso';
+  String get notifications_errorSnackBar_SignalingSessionMissed => 'Errore di autenticazione, effettuare nuovamente l\'accesso';
 
   @override
   String notifications_errorSnackBar_signalingDisconnectWithSystemReason(String reason) {
@@ -1050,12 +950,10 @@ class AppLocalizationsIt extends AppLocalizations {
   String get notifications_errorSnackBar_callUndefinedLine => 'Nessuna linea disponibile per avviare una chiamata';
 
   @override
-  String get notifications_errorSnackBar_callUserMedia =>
-      'Nessun accesso al server multimediale, controlla le autorizzazioni dell\'app';
+  String get notifications_errorSnackBar_callUserMedia => 'Nessun accesso al server multimediale, controlla le autorizzazioni dell\'app';
 
   @override
-  String get notifications_errorSnackBar_sipRegistrationFailed_Unavailable =>
-      'La registrazione al sistema VoIP remoto non è riuscita, il servizio non è disponibile';
+  String get notifications_errorSnackBar_sipRegistrationFailed_Unavailable => 'La registrazione al sistema VoIP remoto non è riuscita, il servizio non è disponibile';
 
   @override
   String notifications_errorSnackBar_sipRegistrationFailed_WithSystemReason(String reason) {
@@ -1063,8 +961,7 @@ class AppLocalizationsIt extends AppLocalizations {
   }
 
   @override
-  String get notifications_errorSnackBar_sipRegistrationFailed_Unexpected =>
-      'La registrazione con il sistema VoIP remoto non è riuscita a causa di un errore imprevisto';
+  String get notifications_errorSnackBar_sipRegistrationFailed_Unexpected => 'La registrazione con il sistema VoIP remoto non è riuscita a causa di un errore imprevisto';
 
   @override
   String get permission_Button_request => 'Continua';
@@ -1073,20 +970,16 @@ class AppLocalizationsIt extends AppLocalizations {
   String get permission_manageFullScreenNotificationInstructions_step1 => 'Go to your phone\'s Settings.';
 
   @override
-  String get permission_manageFullScreenNotificationInstructions_step2 =>
-      'Navigate to \'Special App Access\' under the \'Apps & notifications\' section.';
+  String get permission_manageFullScreenNotificationInstructions_step2 => 'Navigate to \'Special App Access\' under the \'Apps & notifications\' section.';
 
   @override
-  String get permission_manageFullScreenNotificationInstructions_step3 =>
-      'Find and tap on \'Manage full screen intents\'.';
+  String get permission_manageFullScreenNotificationInstructions_step3 => 'Find and tap on \'Manage full screen intents\'.';
 
   @override
-  String get permission_manageFullScreenNotificationInstructions_step4 =>
-      'Select the app for which you want to manage full-screen notifications.';
+  String get permission_manageFullScreenNotificationInstructions_step4 => 'Select the app for which you want to manage full-screen notifications.';
 
   @override
-  String get permission_manageFullScreenNotificationInstructions_step5 =>
-      'Toggle the permission to enable or disable full-screen notifications for that app.';
+  String get permission_manageFullScreenNotificationInstructions_step5 => 'Toggle the permission to enable or disable full-screen notifications for that app.';
 
   @override
   String get permission_manageFullScreenNotificationPermissions => 'Manage Full-Screen Notification Permissions';
@@ -1098,12 +991,10 @@ class AppLocalizationsIt extends AppLocalizations {
   String get permission_manufacturer_Button_toSettings => 'Apri Impostazioni';
 
   @override
-  String get permission_manufacturer_Text_heading =>
-      'Per garantire la migliore esperienza utente, l\'applicazione deve essere autorizzata manualmente ai seguenti permessi:';
+  String get permission_manufacturer_Text_heading => 'Per garantire la migliore esperienza utente, l\'applicazione deve essere autorizzata manualmente ai seguenti permessi:';
 
   @override
-  String get permission_manufacturer_Text_trailing =>
-      'I permessi potrebbero essere modificati in qualsiasi momento in futuro.';
+  String get permission_manufacturer_Text_trailing => 'I permessi potrebbero essere modificati in qualsiasi momento in futuro.';
 
   @override
   String get permission_manufacturer_Text_xiaomi_tip1 => 'Vai su \"Impostazioni dell\'app\" → \"Notifiche\".';
@@ -1112,8 +1003,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get permission_manufacturer_Text_xiaomi_tip2 => 'Trova e attiva \"Notifiche sulla schermata di blocco\".';
 
   @override
-  String get permission_Text_description =>
-      'Per garantire la migliore esperienza utente, all\'app devono essere concesse le seguenti autorizzazioni: microfono per le chiamate audio, fotocamera per le videochiamate e contatti per semplificare il raggiungimento degli utenti dall\'app.\n\nLe autorizzazioni possono essere modificate in qualsiasi momento anche successivamente.';
+  String get permission_Text_description => 'Per garantire la migliore esperienza utente, all\'app devono essere concesse le seguenti autorizzazioni: microfono per le chiamate audio, fotocamera per le videochiamate e contatti per semplificare il raggiungimento degli utenti dall\'app.\n\nLe autorizzazioni possono essere modificate in qualsiasi momento anche successivamente.';
 
   @override
   String recents_BodyCenter_empty(Object filter) {
@@ -1187,8 +1077,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get request_StatusName => 'Nome dello stato';
 
   @override
-  String get sessionStatus_pushNotificationServiceProblem =>
-      'Problema con la configurazione del servizio di notifiche push';
+  String get sessionStatus_pushNotificationServiceProblem => 'Problema con la configurazione del servizio di notifiche push';
 
   @override
   String get settings_AboutText_AppSessionIdentifier => 'Identificatore della sessione dell\'applicazione';
@@ -1254,8 +1143,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get settings_encoding_Section_bitrate_title => 'Impostazioni della larghezza di banda';
 
   @override
-  String get settings_encoding_Section_bitrate_tooltip =>
-      'Regola le impostazioni del bitrate per i codec audio e video: valori più bassi ridurranno l\'utilizzo della larghezza di banda ma influenzeranno la qualità, mentre valori più alti aumenteranno la qualità ma anche l\'utilizzo della larghezza di banda.';
+  String get settings_encoding_Section_bitrate_tooltip => 'Regola le impostazioni del bitrate per i codec audio e video: valori più bassi ridurranno l\'utilizzo della larghezza di banda ma influenzeranno la qualità, mentre valori più alti aumenteranno la qualità ma anche l\'utilizzo della larghezza di banda.';
 
   @override
   String get settings_encoding_Section_target_audio_bitrate => 'Bitrate di destinazione audio: ';
@@ -1267,8 +1155,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get settings_encoding_Section_packetization_title => 'Pacchettizzazione audio';
 
   @override
-  String get settings_encoding_Section_packetization_tooltip =>
-      'Regola il tempo di pacchettizzazione audio in millisecondi, può essere utilizzato per ridurre la latenza audio o risolvere problemi di dimensione MTU di rete';
+  String get settings_encoding_Section_packetization_tooltip => 'Regola il tempo di pacchettizzazione audio in millisecondi, può essere utilizzato per ridurre la latenza audio o risolvere problemi di dimensione MTU di rete';
 
   @override
   String get settings_encoding_Section_audio_ptime => 'Dimensione del pacchetto audio target: ';
@@ -1280,8 +1167,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get settings_encoding_Section_opus_title => 'Ottimizzazione del codec Opus';
 
   @override
-  String get settings_encoding_Section_opus_tooltip =>
-      'Regola le impostazioni specifiche del codec dell\'opus, può essere utilizzato per ridurre l\'utilizzo della larghezza di banda o migliorare la qualità audio';
+  String get settings_encoding_Section_opus_tooltip => 'Regola le impostazioni specifiche del codec dell\'opus, può essere utilizzato per ridurre l\'utilizzo della larghezza di banda o migliorare la qualità audio';
 
   @override
   String get settings_encoding_Section_opus_bandwidth => 'Ridefinire la gamma di frequenza: ';
@@ -1296,8 +1182,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get settings_encoding_Section_rtp_override_title => 'Estrazione e riordino dei profili RTP';
 
   @override
-  String get settings_encoding_Section_rtp_override_tooltip =>
-      'Può essere utilizzato per sovrascrivere l\'ordine di priorità dei profili audio e video rtp o escludere alcuni profili dall\'elenco di negoziazione SDP, può essere utilizzato per forzare l\'utilizzo di codec specifici o escludere alcuni codec se sono scarsamente supportati dal dispositivo, dalla rete o dal sistema remoto';
+  String get settings_encoding_Section_rtp_override_tooltip => 'Può essere utilizzato per sovrascrivere l\'ordine di priorità dei profili audio e video rtp o escludere alcuni profili dall\'elenco di negoziazione SDP, può essere utilizzato per forzare l\'utilizzo di codec specifici o escludere alcuni codec se sono scarsamente supportati dal dispositivo, dalla rete o dal sistema remoto';
 
   @override
   String get settings_encoding_Section_rtp_override_audio => 'Ridefinire i profili audio';
@@ -1309,8 +1194,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get settings_encoding_Section_rtp_override_warning_title => 'Avvertimento:';
 
   @override
-  String get settings_encoding_Section_rtp_override_warning_message =>
-      'L\'override può influire sulla compatibilità con altri dispositivi o sistemi multimediali e causare errori di chiamata, utilizzare solo se si sa cosa si sta facendo';
+  String get settings_encoding_Section_rtp_override_warning_message => 'L\'override può influire sulla compatibilità con altri dispositivi o sistemi multimediali e causare errori di chiamata, utilizzare solo se si sa cosa si sta facendo';
 
   @override
   String get settings_ListViewTileTitle_about => 'Riguardo a';
@@ -1361,15 +1245,13 @@ class AppLocalizationsIt extends AppLocalizations {
   String get settings_LogoutConfirmDialog_title => 'Confermare la disconnessione';
 
   @override
-  String get settings_network_incomingCallType_pushNotification_description =>
-      'Quando l\'app non è in uso, smette di funzionare e consuma risorse minime, il che aiuta a conservare la durata della batteria. Durante una chiamata in arrivo, il server invia una notifica push al telefono, spingendo il sistema operativo mobile a lanciare l\'app per gestire la chiamata. Tuttavia, questo metodo non garantisce che tutte le chiamate verranno ricevute. Se il telefono è stato inattivo per un periodo prolungato, alcune versioni di Android potrebbero limitare le notifiche push, con il rischio di perdere una chiamata in arrivo.';
+  String get settings_network_incomingCallType_pushNotification_description => 'Quando l\'app non è in uso, smette di funzionare e consuma risorse minime, il che aiuta a conservare la durata della batteria. Durante una chiamata in arrivo, il server invia una notifica push al telefono, spingendo il sistema operativo mobile a lanciare l\'app per gestire la chiamata. Tuttavia, questo metodo non garantisce che tutte le chiamate verranno ricevute. Se il telefono è stato inattivo per un periodo prolungato, alcune versioni di Android potrebbero limitare le notifiche push, con il rischio di perdere una chiamata in arrivo.';
 
   @override
   String get settings_network_incomingCallType_pushNotification_title => 'Notifica Push';
 
   @override
-  String get settings_network_incomingCallType_socket_description =>
-      'L\'app continua a funzionare in background e mantiene sempre una connessione attiva al server. Questo aumenta le probabilità di ricevere una chiamata in arrivo, ma potrebbe scaricare la batteria più rapidamente.';
+  String get settings_network_incomingCallType_socket_description => 'L\'app continua a funzionare in background e mantiene sempre una connessione attiva al server. Questo aumenta le probabilità di ricevere una chiamata in arrivo, ma potrebbe scaricare la batteria più rapidamente.';
 
   @override
   String get settings_network_incomingCallType_socket_title => 'Connessione Persistente al Server';
@@ -1378,16 +1260,13 @@ class AppLocalizationsIt extends AppLocalizations {
   String get settings_network_incomingCallType_title => 'Tipo di chiamata in entrata';
 
   @override
-  String get signalingResponseCode_errorAttachingPlugin =>
-      'Abbiamo avuto problemi a connettere una funzione. Riprova più tardi.';
+  String get signalingResponseCode_errorAttachingPlugin => 'Abbiamo avuto problemi a connettere una funzione. Riprova più tardi.';
 
   @override
-  String get signalingResponseCode_errorDetachingPlugin =>
-      'Abbiamo avuto problemi a disconnettere una funzione. Riprova più tardi.';
+  String get signalingResponseCode_errorDetachingPlugin => 'Abbiamo avuto problemi a disconnettere una funzione. Riprova più tardi.';
 
   @override
-  String get signalingResponseCode_errorSendingMessage =>
-      'Non siamo riusciti a inviare il tuo messaggio. Controlla la rete e riprova.';
+  String get signalingResponseCode_errorSendingMessage => 'Non siamo riusciti a inviare il tuo messaggio. Controlla la rete e riprova.';
 
   @override
   String get signalingResponseCode_handleNotFound => 'Non abbiamo trovato ciò che stavi cercando. Riprova.';
@@ -1396,12 +1275,10 @@ class AppLocalizationsIt extends AppLocalizations {
   String get signalingResponseCode_invalidElementType => 'Qualcosa non va. Riprova.';
 
   @override
-  String get signalingResponseCode_invalidJson =>
-      'Si è verificato un errore nell\'elaborazione dei tuoi dati. Riprova.';
+  String get signalingResponseCode_invalidJson => 'Si è verificato un errore nell\'elaborazione dei tuoi dati. Riprova.';
 
   @override
-  String get signalingResponseCode_invalidJsonObject =>
-      'Alcune delle informazioni fornite non sono valide. Verifica e riprova.';
+  String get signalingResponseCode_invalidJsonObject => 'Alcune delle informazioni fornite non sono valide. Verifica e riprova.';
 
   @override
   String get signalingResponseCode_invalidPath => 'L\'azione richiesta non è disponibile. Prova un\'opzione diversa.';
@@ -1413,19 +1290,16 @@ class AppLocalizationsIt extends AppLocalizations {
   String get signalingResponseCode_invalidStream => 'Lo stream richiesto non è disponibile. Riprova.';
 
   @override
-  String get signalingResponseCode_missingMandatoryElement =>
-      'Mancano informazioni obbligatorie. Compila tutti i campi richiesti.';
+  String get signalingResponseCode_missingMandatoryElement => 'Mancano informazioni obbligatorie. Compila tutti i campi richiesti.';
 
   @override
   String get signalingResponseCode_missingRequest => 'C\'è stato un problema con la tua richiesta. Riprova.';
 
   @override
-  String get signalingResponseCode_notAcceptingNewSessions =>
-      'Non siamo in grado di avviare nuove sessioni al momento. Riprova più tardi.';
+  String get signalingResponseCode_notAcceptingNewSessions => 'Non siamo in grado di avviare nuove sessioni al momento. Riprova più tardi.';
 
   @override
-  String get signalingResponseCode_notFoundRoutesInReplyFromBE =>
-      'Non abbiamo trovato un percorso per completare la tua richiesta. Riprova più tardi.';
+  String get signalingResponseCode_notFoundRoutesInReplyFromBE => 'Non abbiamo trovato un percorso per completare la tua richiesta. Riprova più tardi.';
 
   @override
   String get signalingResponseCode_pluginNotFound => 'Manca un componente necessario. Prova a riavviare l\'app.';
@@ -1434,16 +1308,13 @@ class AppLocalizationsIt extends AppLocalizations {
   String get signalingResponseCode_sessionIdInUse => 'Questa sessione è già attiva. Prova a usarne un\'altra.';
 
   @override
-  String get signalingResponseCode_sessionNotFound =>
-      'Non è stata trovata la tua sessione. Effettua l\'accesso e riprova.';
+  String get signalingResponseCode_sessionNotFound => 'Non è stata trovata la tua sessione. Effettua l\'accesso e riprova.';
 
   @override
-  String get signalingResponseCode_tokenNotFound =>
-      'Il tuo token di accesso è mancante o non valido. Effettua nuovamente l\'accesso.';
+  String get signalingResponseCode_tokenNotFound => 'Il tuo token di accesso è mancante o non valido. Effettua nuovamente l\'accesso.';
 
   @override
-  String get signalingResponseCode_transportSpecificError =>
-      'Si è verificato un problema di connessione. Controlla la tua rete e riprova.';
+  String get signalingResponseCode_transportSpecificError => 'Si è verificato un problema di connessione. Controlla la tua rete e riprova.';
 
   @override
   String get signalingResponseCode_normalUnspecified => 'Si è verificato un errore imprevisto. Riprova più tardi.';
@@ -1458,8 +1329,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get signalingResponseCode_exchangeRoutingError => 'Si è verificato un errore di routing. Riprova.';
 
   @override
-  String get signalingResponseCode_invalidNumberFormat =>
-      'Il numero di telefono inserito non è valido. Deve essere inserito nel formato: ';
+  String get signalingResponseCode_invalidNumberFormat => 'Il numero di telefono inserito non è valido. Deve essere inserito nel formato: ';
 
   @override
   String get signalingResponseCode_ambiguousRequest => 'La tua richiesta non è chiara. Riprova.';
@@ -1471,8 +1341,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get signalingResponseCode_requestTerminated => 'La tua richiesta è stata terminata. Riprova.';
 
   @override
-  String get signalingResponseCode_incompatibleDestination =>
-      'Il destinatario non è compatibile con la tua richiesta. Riprova.';
+  String get signalingResponseCode_incompatibleDestination => 'Il destinatario non è compatibile con la tua richiesta. Riprova.';
 
   @override
   String get signalingResponseCode_busyEverywhere => 'Tutti i destinatari sono occupati. Riprova più tardi.';
@@ -1481,8 +1350,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get signalingResponseCode_declineCall => 'La chiamata è stata rifiutata.';
 
   @override
-  String get signalingResponseCode_userNotExist =>
-      'Il destinatario non esiste. Controlla il numero di telefono e riprova.';
+  String get signalingResponseCode_userNotExist => 'Il destinatario non esiste. Controlla il numero di telefono e riprova.';
 
   @override
   String get signalingResponseCode_notAcceptable => 'La tua richiesta non è accettabile. Riprova.';
@@ -1494,44 +1362,37 @@ class AppLocalizationsIt extends AppLocalizations {
   String get signalingResponseCode_rejected => 'La tua richiesta è stata rifiutata. Riprova.';
 
   @override
-  String get signalingResponseCodeType_plugin =>
-      'Una funzionalità necessaria non sta funzionando correttamente. Prova a riavviare l\'app.';
+  String get signalingResponseCodeType_plugin => 'Una funzionalità necessaria non sta funzionando correttamente. Prova a riavviare l\'app.';
 
   @override
   String get signalingResponseCodeType_request => 'C\'è un problema con la tua richiesta. Riprova.';
 
   @override
-  String get signalingResponseCodeType_session =>
-      'C\'è un problema con la tua sessione. Effettua nuovamente l\'accesso o riavvia l\'app.';
+  String get signalingResponseCodeType_session => 'C\'è un problema con la tua sessione. Effettua nuovamente l\'accesso o riavvia l\'app.';
 
   @override
   String get signalingResponseCodeType_token => 'Il tuo token di accesso non è valido. Effettua nuovamente l\'accesso.';
 
   @override
-  String get signalingResponseCodeType_transport =>
-      'Stiamo riscontrando difficoltà di comunicazione con il server. Controlla la tua connessione e riprova.';
+  String get signalingResponseCodeType_transport => 'Stiamo riscontrando difficoltà di comunicazione con il server. Controlla la tua connessione e riprova.';
 
   @override
-  String get signalingResponseCodeType_unauthorized =>
-      'Non hai l\'autorizzazione necessaria. Effettua l\'accesso o contatta il supporto.';
+  String get signalingResponseCodeType_unauthorized => 'Non hai l\'autorizzazione necessaria. Effettua l\'accesso o contatta il supporto.';
 
   @override
   String get signalingResponseCodeType_unknown => 'Si è verificato un problema imprevisto. Riprova più tardi.';
 
   @override
-  String get signalingResponseCodeType_webrtc =>
-      'C\'è un problema con la connessione della chiamata. Riaggancia e riprova.';
+  String get signalingResponseCodeType_webrtc => 'C\'è un problema con la connessione della chiamata. Riaggancia e riprova.';
 
   @override
   String get signalingResponseCodeType_callHangup => 'La chiamata è stata terminata.';
 
   @override
-  String get signalingResponseCode_unauthorizedAccess =>
-      'Non hai l\'autorizzazione per accedere a questa funzione. Contatta il supporto se pensi che ci sia un errore.';
+  String get signalingResponseCode_unauthorizedAccess => 'Non hai l\'autorizzazione per accedere a questa funzione. Contatta il supporto se pensi che ci sia un errore.';
 
   @override
-  String get signalingResponseCode_unauthorizedRequest =>
-      'La tua richiesta non può essere autorizzata. Prova ad accedere di nuovo.';
+  String get signalingResponseCode_unauthorizedRequest => 'La tua richiesta non può essere autorizzata. Prova ad accedere di nuovo.';
 
   @override
   String get signalingResponseCode_unexpectedAnswer => 'Abbiamo ricevuto una risposta inaspettata. Riprova.';
@@ -1540,16 +1401,13 @@ class AppLocalizationsIt extends AppLocalizations {
   String get signalingResponseCode_unknownError => 'Si è verificato un errore imprevisto. Riprova più tardi.';
 
   @override
-  String get signalingResponseCode_unknownRequest =>
-      'Non abbiamo riconosciuto la tua richiesta. Riprova o contatta il supporto.';
+  String get signalingResponseCode_unknownRequest => 'Non abbiamo riconosciuto la tua richiesta. Riprova o contatta il supporto.';
 
   @override
-  String get signalingResponseCode_unsupportedJsepType =>
-      'Questa azione non è supportata dalla tua configurazione attuale.';
+  String get signalingResponseCode_unsupportedJsepType => 'Questa azione non è supportata dalla tua configurazione attuale.';
 
   @override
-  String get signalingResponseCode_wrongWebrtcState =>
-      'Si è verificato un errore relativo alla chiamata. Riaggancia e riprova.';
+  String get signalingResponseCode_wrongWebrtcState => 'Si è verificato un errore relativo alla chiamata. Riaggancia e riprova.';
 
   @override
   String get themeMode_dark => 'Scuro';
@@ -1586,12 +1444,10 @@ class AppLocalizationsIt extends AppLocalizations {
   String get contacts_agreement_title => 'Data collection';
 
   @override
-  String get contacts_agreement_description =>
-      'This app requires access to your contact list to display your contacts in the app\'s Contacts tab. \n\nThe contact data is temporarily stored locally on your device to enable features like making calls directly from the app. \n\nThis data is not collected, transmitted, or shared outside the app.';
+  String get contacts_agreement_description => 'This app requires access to your contact list to display your contacts in the app\'s Contacts tab. \n\nThe contact data is temporarily stored locally on your device to enable features like making calls directly from the app. \n\nThis data is not collected, transmitted, or shared outside the app.';
 
   @override
-  String get contacts_agreement_checkbox_text =>
-      'I agree to allow the app to access my contacts to enhance my user experience.';
+  String get contacts_agreement_checkbox_text => 'I agree to allow the app to access my contacts to enhance my user experience.';
 
   @override
   String get contacts_agreement_button_text => 'Continue';
@@ -1621,24 +1477,19 @@ class AppLocalizationsIt extends AppLocalizations {
   String get socketError_default => 'Errore di rete';
 
   @override
-  String get socketError_serverUnreachableDescription =>
-      'Il server non è raggiungibile. Questo potrebbe essere dovuto a un\'assenza di connessione a Internet o alla manutenzione del server. Si prega di controllare la connessione a Internet e riprovare.';
+  String get socketError_serverUnreachableDescription => 'Il server non è raggiungibile. Questo potrebbe essere dovuto a un\'assenza di connessione a Internet o alla manutenzione del server. Si prega di controllare la connessione a Internet e riprovare.';
 
   @override
-  String get socketError_networkUnreachableDescription =>
-      'La rete non è raggiungibile. Questo potrebbe essere dovuto a una connessione Internet debole, restrizioni di rete come firewall o impostazioni DNS errate. Se sei su una rete aziendale o con restrizioni, contatta l\'amministratore di rete o prova a utilizzare un\'altra rete.';
+  String get socketError_networkUnreachableDescription => 'La rete non è raggiungibile. Questo potrebbe essere dovuto a una connessione Internet debole, restrizioni di rete come firewall o impostazioni DNS errate. Se sei su una rete aziendale o con restrizioni, contatta l\'amministratore di rete o prova a utilizzare un\'altra rete.';
 
   @override
-  String get socketError_connectionTimedOutDescription =>
-      'La connessione è scaduta. Questo potrebbe accadere a causa di una connessione Internet lenta o instabile. Si prega di controllare la connessione e riprovare.';
+  String get socketError_connectionTimedOutDescription => 'La connessione è scaduta. Questo potrebbe accadere a causa di una connessione Internet lenta o instabile. Si prega di controllare la connessione e riprovare.';
 
   @override
-  String get socketError_connectionRefusedDescription =>
-      'Il server ha rifiutato la connessione. Il server potrebbe essere inattivo o rifiutare le richieste. Si prega di riprovare più tardi.';
+  String get socketError_connectionRefusedDescription => 'Il server ha rifiutato la connessione. Il server potrebbe essere inattivo o rifiutare le richieste. Si prega di riprovare più tardi.';
 
   @override
-  String get socketError_connectionResetDescription =>
-      'La connessione è stata reimpostata dal server. Si prega di riprovare.';
+  String get socketError_connectionResetDescription => 'La connessione è stata reimpostata dal server. Si prega di riprovare.';
 
   @override
   String socketError_defaultDescription(int? errorCode) {
