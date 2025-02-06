@@ -2729,7 +2729,7 @@ class _$AppConfigSettingsImpl extends _AppConfigSettings {
                   icon: '0xe424'),
               AppConfigSettingsItem(
                   enabled: true,
-                  type: 'callCodecs',
+                  type: 'encoding',
                   titleL10n: 'settings_ListViewTileTitle_call_codecs',
                   icon: '0xf1cf'),
               AppConfigSettingsItem(
@@ -2737,11 +2737,6 @@ class _$AppConfigSettingsImpl extends _AppConfigSettings {
                   type: 'language',
                   titleL10n: 'settings_ListViewTileTitle_language',
                   icon: '0xe366'),
-              AppConfigSettingsItem(
-                  enabled: false,
-                  type: 'help',
-                  titleL10n: 'settings_ListViewTileTitle_help',
-                  icon: '0xe30b'),
               AppConfigSettingsItem(
                   enabled: true,
                   type: 'terms',
