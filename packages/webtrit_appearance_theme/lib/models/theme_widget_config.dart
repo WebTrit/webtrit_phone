@@ -151,8 +151,8 @@ class ImageAssetsConfig with _$ImageAssetsConfig {
   const factory ImageAssetsConfig({
     @Default('asset://assets/primary_onboardin_logo.svg') String primaryOnboardingLogo,
     @Default('asset://assets/secondary_onboardin_logo.svg') String secondaryOnboardingLogo,
-    @Default(LogoWidgetConfig()) LogoWidgetConfig onboardingPictureLogo,
-    @Default(LogoWidgetConfig()) LogoWidgetConfig onboardingLogo,
+    @Default(ImageAssetConfig()) ImageAssetConfig onboardingPictureLogo,
+    @Default(ImageAssetConfig()) ImageAssetConfig onboardingLogo,
     @Default(AppIconWidgetConfig()) AppIconWidgetConfig appIcon,
     @Default(Metadata()) Metadata metadata,
   }) = _ImageAssetsConfig;
@@ -167,14 +167,14 @@ class ImageAssetsConfig with _$ImageAssetsConfig {
 }
 
 @Freezed()
-class LogoWidgetConfig with _$LogoWidgetConfig {
+class ImageAssetConfig with _$ImageAssetConfig {
   @JsonSerializable(explicitToJson: true)
-  const factory LogoWidgetConfig({
+  const factory ImageAssetConfig({
     double? scale,
     String? labelColor,
-  }) = _LogoWidgetConfig;
+  }) = _ImageAssetConfig;
 
-  factory LogoWidgetConfig.fromJson(Map<String, dynamic> json) => _$LogoWidgetConfigFromJson(json);
+  factory ImageAssetConfig.fromJson(Map<String, dynamic> json) => _$ImageAssetConfigFromJson(json);
 }
 
 @Freezed()
