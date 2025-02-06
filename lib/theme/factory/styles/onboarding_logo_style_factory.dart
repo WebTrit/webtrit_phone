@@ -14,11 +14,11 @@ class OnboardingLogoStyleFactory implements ThemeStyleFactory<OnboardingLogoStyl
 
   @override
   OnboardingLogoStyles create() {
-    final onboardingLogoConfig = imageAssetsConfig?.onboardingLogo;
+    final onboardingLogoConfig = imageAssetsConfig?.secondaryOnboardingLogo;
     final textStyleColor = onboardingLogoConfig?.labelColor?.toColor() ?? colors.onPrimary;
 
-    final onboardingLogoLoginConfig = loginPageConfig?.picture ?? imageAssetsConfig?.secondaryOnboardingLogo;
-    final scale = loginPageConfig?.scale ?? imageAssetsConfig?.onboardingLogo.scale;
+    final onboardingLogoLoginConfig = loginPageConfig?.picture ?? imageAssetsConfig?.secondaryOnboardingLogo.uri;
+    final scale = loginPageConfig?.scale ?? imageAssetsConfig?.secondaryOnboardingLogo.scale;
     final textStyle = TextStyle(color: textStyleColor, fontWeight: FontWeight.w600);
 
     return OnboardingLogoStyles(

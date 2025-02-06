@@ -149,12 +149,10 @@ class CallActionsWidgetConfig with _$CallActionsWidgetConfig {
 class ImageAssetsConfig with _$ImageAssetsConfig {
   @JsonSerializable(explicitToJson: true)
   const factory ImageAssetsConfig({
-    @Default('asset://assets/primary_onboardin_logo.svg') String primaryOnboardingLogo,
-    @Default('asset://assets/secondary_onboardin_logo.svg') String secondaryOnboardingLogo,
-    @Default(ImageAssetConfig()) ImageAssetConfig onboardingPictureLogo,
-    @Default(ImageAssetConfig()) ImageAssetConfig onboardingLogo,
+    @Default(ImageAssetConfig(uri: 'asset://assets/primary_onboardin_logo.svg')) ImageAssetConfig primaryOnboardingLogo,
+    @Default(ImageAssetConfig(uri: 'asset://assets/secondary_onboardin_logo.svg'))
+    ImageAssetConfig secondaryOnboardingLogo,
     @Default(AppIconWidgetConfig()) AppIconWidgetConfig appIcon,
-    @Default(Metadata()) Metadata metadata,
   }) = _ImageAssetsConfig;
 
   factory ImageAssetsConfig.fromJson(Map<String, dynamic> json) => _$ImageAssetsConfigFromJson(json);
@@ -170,8 +168,10 @@ class ImageAssetsConfig with _$ImageAssetsConfig {
 class ImageAssetConfig with _$ImageAssetConfig {
   @JsonSerializable(explicitToJson: true)
   const factory ImageAssetConfig({
+    required String uri,
     double? scale,
     String? labelColor,
+    @Default(Metadata()) Metadata metadata,
   }) = _ImageAssetConfig;
 
   factory ImageAssetConfig.fromJson(Map<String, dynamic> json) => _$ImageAssetConfigFromJson(json);

@@ -243,50 +243,48 @@ Map<String, dynamic> _$$CallActionsWidgetConfigImplToJson(
 _$ImageAssetsConfigImpl _$$ImageAssetsConfigImplFromJson(
         Map<String, dynamic> json) =>
     _$ImageAssetsConfigImpl(
-      primaryOnboardingLogo: json['primaryOnboardingLogo'] as String? ??
-          'asset://assets/primary_onboardin_logo.svg',
-      secondaryOnboardingLogo: json['secondaryOnboardingLogo'] as String? ??
-          'asset://assets/secondary_onboardin_logo.svg',
-      onboardingPictureLogo: json['onboardingPictureLogo'] == null
-          ? const ImageAssetConfig()
+      primaryOnboardingLogo: json['primaryOnboardingLogo'] == null
+          ? const ImageAssetConfig(
+              uri: 'asset://assets/primary_onboardin_logo.svg')
           : ImageAssetConfig.fromJson(
-              json['onboardingPictureLogo'] as Map<String, dynamic>),
-      onboardingLogo: json['onboardingLogo'] == null
-          ? const ImageAssetConfig()
+              json['primaryOnboardingLogo'] as Map<String, dynamic>),
+      secondaryOnboardingLogo: json['secondaryOnboardingLogo'] == null
+          ? const ImageAssetConfig(
+              uri: 'asset://assets/secondary_onboardin_logo.svg')
           : ImageAssetConfig.fromJson(
-              json['onboardingLogo'] as Map<String, dynamic>),
+              json['secondaryOnboardingLogo'] as Map<String, dynamic>),
       appIcon: json['appIcon'] == null
           ? const AppIconWidgetConfig()
           : AppIconWidgetConfig.fromJson(
               json['appIcon'] as Map<String, dynamic>),
-      metadata: json['metadata'] == null
-          ? const Metadata()
-          : Metadata.fromJson(json['metadata'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$$ImageAssetsConfigImplToJson(
         _$ImageAssetsConfigImpl instance) =>
     <String, dynamic>{
-      'primaryOnboardingLogo': instance.primaryOnboardingLogo,
-      'secondaryOnboardingLogo': instance.secondaryOnboardingLogo,
-      'onboardingPictureLogo': instance.onboardingPictureLogo.toJson(),
-      'onboardingLogo': instance.onboardingLogo.toJson(),
+      'primaryOnboardingLogo': instance.primaryOnboardingLogo.toJson(),
+      'secondaryOnboardingLogo': instance.secondaryOnboardingLogo.toJson(),
       'appIcon': instance.appIcon.toJson(),
-      'metadata': instance.metadata.toJson(),
     };
 
 _$ImageAssetConfigImpl _$$ImageAssetConfigImplFromJson(
         Map<String, dynamic> json) =>
     _$ImageAssetConfigImpl(
+      uri: json['uri'] as String,
       scale: (json['scale'] as num?)?.toDouble(),
       labelColor: json['labelColor'] as String?,
+      metadata: json['metadata'] == null
+          ? const Metadata()
+          : Metadata.fromJson(json['metadata'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$$ImageAssetConfigImplToJson(
         _$ImageAssetConfigImpl instance) =>
     <String, dynamic>{
+      'uri': instance.uri,
       'scale': instance.scale,
       'labelColor': instance.labelColor,
+      'metadata': instance.metadata.toJson(),
     };
 
 _$AppIconWidgetConfigImpl _$$AppIconWidgetConfigImplFromJson(

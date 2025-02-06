@@ -2,9 +2,13 @@
   "fonts": {
     "fontFamily": "Montserrat"
   },
-  "pictureWidgetConfig": {
-    "primaryOnboardingLogo": "asset://assets/primary_onboardin_logo.svg",
-    "secondaryOnboardingLogo": "asset://assets/secondary_onboardin_logo.svg"
+  "imageAssets": {
+    "primaryOnboardingLogo": {
+      "uri": "asset://assets/primary_onboardin_logo.svg"
+    },
+    "secondaryOnboardingLogo": {
+      "uri": "asset://assets/secondary_onboardin_logo.svg"
+    }
   },
   "dialog": {
     "snackBar": {

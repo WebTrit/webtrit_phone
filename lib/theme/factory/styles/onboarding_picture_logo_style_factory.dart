@@ -14,10 +14,10 @@ class OnboardingPictureLogoStyleFactory implements ThemeStyleFactory<OnboardingP
 
   @override
   OnboardingPictureLogoStyles create() {
-    final textStyleColor = imageAssetsConfig?.onboardingPictureLogo.labelColor?.toColor() ?? colors.onPrimary;
+    final textStyleColor = imageAssetsConfig?.primaryOnboardingLogo.labelColor?.toColor() ?? colors.onPrimary;
 
-    final primaryOnboardingLogoPath = loginPageConfig?.picture ?? imageAssetsConfig?.primaryOnboardingLogo;
-    final scale = loginPageConfig?.scale ?? imageAssetsConfig?.onboardingPictureLogo.scale;
+    final primaryOnboardingLogoPath = loginPageConfig?.picture ?? imageAssetsConfig?.primaryOnboardingLogo.uri;
+    final scale = loginPageConfig?.scale ?? imageAssetsConfig?.primaryOnboardingLogo.scale;
 
     final textStyle = TextStyle(color: textStyleColor, fontWeight: FontWeight.w600);
 

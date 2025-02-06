@@ -13,8 +13,8 @@ class LogoAssetsFactory implements ThemeStyleFactory<LogoAssets> {
     final secondaryOnboardingLogoPath = config.secondaryOnboardingLogo;
 
     return LogoAssets(
-      primaryOnboarding: primaryOnboardingLogoPath.toThemeSvgAsset()!,
-      secondaryOnboarding: secondaryOnboardingLogoPath.toThemeSvgAsset()!,
+      primaryOnboarding: primaryOnboardingLogoPath.uri.toThemeSvgAsset()!,
+      secondaryOnboarding: secondaryOnboardingLogoPath.uri.toThemeSvgAsset()!,
     );
   }
 }
