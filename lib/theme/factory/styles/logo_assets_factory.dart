@@ -5,7 +5,7 @@ import '../theme_style_factory.dart';
 class LogoAssetsFactory implements ThemeStyleFactory<LogoAssets> {
   LogoAssetsFactory(this.config);
 
-  final PictureWidgetConfig config;
+  final ImageAssetsConfig config;
 
   @override
   LogoAssets create() {

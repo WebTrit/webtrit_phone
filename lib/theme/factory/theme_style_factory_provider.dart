@@ -24,8 +24,8 @@ class ThemeStyleFactoryProvider {
     final loginPageScheme = pageConfig.login;
 
     // Widget schema
-    final pictureConfig = widgetConfig.picture;
-    final appIconConfig = pictureConfig.appIcon;
+    final imageAssetsConfig = widgetConfig.imageAssets;
+    final appIconConfig = imageAssetsConfig.appIcon;
     final primaryGradientColorsConfig = widgetConfig.decorationConfig.primaryGradientColorsConfig;
     final confirmDialog = widgetConfig.dialog.confirmDialog;
     final snackBar = widgetConfig.dialog.snackBar;
@@ -50,13 +50,14 @@ class ThemeStyleFactoryProvider {
     final textButtonStyleFactory = TextButtonStyleFactory(colorScheme);
     final callActionsStyleFactory = CallActionsStyleFactory(colorScheme, callActions);
     final linkifyStyleFactory = LinkifyStyleFactory(colorScheme, linkify);
-    final logoAssetStyleFactory = LogoAssetsFactory(pictureConfig);
+    final logoAssetStyleFactory = LogoAssetsFactory(imageAssetsConfig);
     final outlinedButtonStyleFactory = OutlinedButtonStyleFactory(colorScheme);
     final registrationStatusStyleFactory = RegisteredStatusStyleFactory(colorScheme, registrationStatuses);
     final snackBarStyleFactory = SnackBarStyleFactory(colorScheme, snackBar);
     final groupTitleListStyleFactory = GroupTitleListStyleFactory(groupTitleListTile);
-    final onPictureLogoStyleFactory = OnboardingPictureLogoStyleFactory(colorScheme, pictureConfig, loginPageScheme);
-    final onLogoStyleFactory = OnboardingLogoStyleFactory(colorScheme, pictureConfig, loginPageScheme);
+    final onPictureLogoStyleFactory =
+        OnboardingPictureLogoStyleFactory(colorScheme, imageAssetsConfig, loginPageScheme);
+    final onLogoStyleFactory = OnboardingLogoStyleFactory(colorScheme, imageAssetsConfig, loginPageScheme);
     final gradientsStyleFactory = GradientsStyleFactory(primaryGradientColorsConfig);
     final aboutScreenStyleFactory = AboutScreenStyleFactory(loginPageScheme);
     final loginModeSelectStyleFactory = LoginModeSelectScreenStyleFactory(loginPageScheme.modeSelect);

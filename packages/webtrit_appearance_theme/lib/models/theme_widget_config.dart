@@ -15,7 +15,7 @@ class ThemeWidgetConfig with _$ThemeWidgetConfig {
     @Default(ButtonWidgetConfig()) ButtonWidgetConfig button,
     @Default(GroupWidgetConfig()) GroupWidgetConfig? group,
     @Default(BarWidgetConfig()) BarWidgetConfig bar,
-    @Default(PictureWidgetConfig()) PictureWidgetConfig picture,
+    @Default(ImageAssetsConfig()) ImageAssetsConfig imageAssets,
     @Default(InputWidgetConfig()) InputWidgetConfig input,
     @Default(TextWidgetConfig()) TextWidgetConfig text,
     @Default(DialogWidgetConfig()) DialogWidgetConfig dialog,
@@ -146,18 +146,18 @@ class CallActionsWidgetConfig with _$CallActionsWidgetConfig {
 }
 
 @Freezed()
-class PictureWidgetConfig with _$PictureWidgetConfig {
+class ImageAssetsConfig with _$ImageAssetsConfig {
   @JsonSerializable(explicitToJson: true)
-  const factory PictureWidgetConfig({
+  const factory ImageAssetsConfig({
     @Default('asset://assets/primary_onboardin_logo.svg') String primaryOnboardingLogo,
     @Default('asset://assets/secondary_onboardin_logo.svg') String secondaryOnboardingLogo,
     @Default(LogoWidgetConfig()) LogoWidgetConfig onboardingPictureLogo,
     @Default(LogoWidgetConfig()) LogoWidgetConfig onboardingLogo,
     @Default(AppIconWidgetConfig()) AppIconWidgetConfig appIcon,
     @Default(Metadata()) Metadata metadata,
-  }) = _PictureWidgetConfig;
+  }) = _ImageAssetsConfig;
 
-  factory PictureWidgetConfig.fromJson(Map<String, dynamic> json) => _$PictureWidgetConfigFromJson(json);
+  factory ImageAssetsConfig.fromJson(Map<String, dynamic> json) => _$ImageAssetsConfigFromJson(json);
 
   /// A globally consistent metadata key used to associate additional resources
   static const String metadataPrimaryOnboardingLogoUrl = 'primaryOnboardingLogoUrl';

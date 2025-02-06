@@ -24,7 +24,7 @@ mixin _$ThemeWidgetConfig {
   ButtonWidgetConfig get button => throw _privateConstructorUsedError;
   GroupWidgetConfig? get group => throw _privateConstructorUsedError;
   BarWidgetConfig get bar => throw _privateConstructorUsedError;
-  PictureWidgetConfig get picture => throw _privateConstructorUsedError;
+  ImageAssetsConfig get imageAssets => throw _privateConstructorUsedError;
   InputWidgetConfig get input => throw _privateConstructorUsedError;
   TextWidgetConfig get text => throw _privateConstructorUsedError;
   DialogWidgetConfig get dialog => throw _privateConstructorUsedError;
@@ -53,7 +53,7 @@ abstract class $ThemeWidgetConfigCopyWith<$Res> {
       ButtonWidgetConfig button,
       GroupWidgetConfig? group,
       BarWidgetConfig bar,
-      PictureWidgetConfig picture,
+      ImageAssetsConfig imageAssets,
       InputWidgetConfig input,
       TextWidgetConfig text,
       DialogWidgetConfig dialog,
@@ -65,7 +65,7 @@ abstract class $ThemeWidgetConfigCopyWith<$Res> {
   $ButtonWidgetConfigCopyWith<$Res> get button;
   $GroupWidgetConfigCopyWith<$Res>? get group;
   $BarWidgetConfigCopyWith<$Res> get bar;
-  $PictureWidgetConfigCopyWith<$Res> get picture;
+  $ImageAssetsConfigCopyWith<$Res> get imageAssets;
   $InputWidgetConfigCopyWith<$Res> get input;
   $TextWidgetConfigCopyWith<$Res> get text;
   $DialogWidgetConfigCopyWith<$Res> get dialog;
@@ -93,7 +93,7 @@ class _$ThemeWidgetConfigCopyWithImpl<$Res, $Val extends ThemeWidgetConfig>
     Object? button = null,
     Object? group = freezed,
     Object? bar = null,
-    Object? picture = null,
+    Object? imageAssets = null,
     Object? input = null,
     Object? text = null,
     Object? dialog = null,
@@ -118,10 +118,10 @@ class _$ThemeWidgetConfigCopyWithImpl<$Res, $Val extends ThemeWidgetConfig>
           ? _value.bar
           : bar // ignore: cast_nullable_to_non_nullable
               as BarWidgetConfig,
-      picture: null == picture
-          ? _value.picture
-          : picture // ignore: cast_nullable_to_non_nullable
-              as PictureWidgetConfig,
+      imageAssets: null == imageAssets
+          ? _value.imageAssets
+          : imageAssets // ignore: cast_nullable_to_non_nullable
+              as ImageAssetsConfig,
       input: null == input
           ? _value.input
           : input // ignore: cast_nullable_to_non_nullable
@@ -197,9 +197,9 @@ class _$ThemeWidgetConfigCopyWithImpl<$Res, $Val extends ThemeWidgetConfig>
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
-  $PictureWidgetConfigCopyWith<$Res> get picture {
-    return $PictureWidgetConfigCopyWith<$Res>(_value.picture, (value) {
-      return _then(_value.copyWith(picture: value) as $Val);
+  $ImageAssetsConfigCopyWith<$Res> get imageAssets {
+    return $ImageAssetsConfigCopyWith<$Res>(_value.imageAssets, (value) {
+      return _then(_value.copyWith(imageAssets: value) as $Val);
     });
   }
 
@@ -277,7 +277,7 @@ abstract class _$$ThemeWidgetConfigImplCopyWith<$Res>
       ButtonWidgetConfig button,
       GroupWidgetConfig? group,
       BarWidgetConfig bar,
-      PictureWidgetConfig picture,
+      ImageAssetsConfig imageAssets,
       InputWidgetConfig input,
       TextWidgetConfig text,
       DialogWidgetConfig dialog,
@@ -294,7 +294,7 @@ abstract class _$$ThemeWidgetConfigImplCopyWith<$Res>
   @override
   $BarWidgetConfigCopyWith<$Res> get bar;
   @override
-  $PictureWidgetConfigCopyWith<$Res> get picture;
+  $ImageAssetsConfigCopyWith<$Res> get imageAssets;
   @override
   $InputWidgetConfigCopyWith<$Res> get input;
   @override
@@ -326,7 +326,7 @@ class __$$ThemeWidgetConfigImplCopyWithImpl<$Res>
     Object? button = null,
     Object? group = freezed,
     Object? bar = null,
-    Object? picture = null,
+    Object? imageAssets = null,
     Object? input = null,
     Object? text = null,
     Object? dialog = null,
@@ -351,10 +351,10 @@ class __$$ThemeWidgetConfigImplCopyWithImpl<$Res>
           ? _value.bar
           : bar // ignore: cast_nullable_to_non_nullable
               as BarWidgetConfig,
-      picture: null == picture
-          ? _value.picture
-          : picture // ignore: cast_nullable_to_non_nullable
-              as PictureWidgetConfig,
+      imageAssets: null == imageAssets
+          ? _value.imageAssets
+          : imageAssets // ignore: cast_nullable_to_non_nullable
+              as ImageAssetsConfig,
       input: null == input
           ? _value.input
           : input // ignore: cast_nullable_to_non_nullable
@@ -392,7 +392,7 @@ class _$ThemeWidgetConfigImpl implements _ThemeWidgetConfig {
       this.button = const ButtonWidgetConfig(),
       this.group = const GroupWidgetConfig(),
       this.bar = const BarWidgetConfig(),
-      this.picture = const PictureWidgetConfig(),
+      this.imageAssets = const ImageAssetsConfig(),
       this.input = const InputWidgetConfig(),
       this.text = const TextWidgetConfig(),
       this.dialog = const DialogWidgetConfig(),
@@ -417,7 +417,7 @@ class _$ThemeWidgetConfigImpl implements _ThemeWidgetConfig {
   final BarWidgetConfig bar;
   @override
   @JsonKey()
-  final PictureWidgetConfig picture;
+  final ImageAssetsConfig imageAssets;
   @override
   @JsonKey()
   final InputWidgetConfig input;
@@ -439,7 +439,7 @@ class _$ThemeWidgetConfigImpl implements _ThemeWidgetConfig {
 
   @override
   String toString() {
-    return 'ThemeWidgetConfig(fonts: $fonts, button: $button, group: $group, bar: $bar, picture: $picture, input: $input, text: $text, dialog: $dialog, actionPad: $actionPad, statuses: $statuses, decorationConfig: $decorationConfig)';
+    return 'ThemeWidgetConfig(fonts: $fonts, button: $button, group: $group, bar: $bar, imageAssets: $imageAssets, input: $input, text: $text, dialog: $dialog, actionPad: $actionPad, statuses: $statuses, decorationConfig: $decorationConfig)';
   }
 
   @override
@@ -451,7 +451,8 @@ class _$ThemeWidgetConfigImpl implements _ThemeWidgetConfig {
             (identical(other.button, button) || other.button == button) &&
             (identical(other.group, group) || other.group == group) &&
             (identical(other.bar, bar) || other.bar == bar) &&
-            (identical(other.picture, picture) || other.picture == picture) &&
+            (identical(other.imageAssets, imageAssets) ||
+                other.imageAssets == imageAssets) &&
             (identical(other.input, input) || other.input == input) &&
             (identical(other.text, text) || other.text == text) &&
             (identical(other.dialog, dialog) || other.dialog == dialog) &&
@@ -466,7 +467,7 @@ class _$ThemeWidgetConfigImpl implements _ThemeWidgetConfig {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, fonts, button, group, bar,
-      picture, input, text, dialog, actionPad, statuses, decorationConfig);
+      imageAssets, input, text, dialog, actionPad, statuses, decorationConfig);
 
   /// Create a copy of ThemeWidgetConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -491,7 +492,7 @@ abstract class _ThemeWidgetConfig implements ThemeWidgetConfig {
       final ButtonWidgetConfig button,
       final GroupWidgetConfig? group,
       final BarWidgetConfig bar,
-      final PictureWidgetConfig picture,
+      final ImageAssetsConfig imageAssets,
       final InputWidgetConfig input,
       final TextWidgetConfig text,
       final DialogWidgetConfig dialog,
@@ -511,7 +512,7 @@ abstract class _ThemeWidgetConfig implements ThemeWidgetConfig {
   @override
   BarWidgetConfig get bar;
   @override
-  PictureWidgetConfig get picture;
+  ImageAssetsConfig get imageAssets;
   @override
   InputWidgetConfig get input;
   @override
@@ -2621,12 +2622,12 @@ abstract class _CallActionsWidgetConfig implements CallActionsWidgetConfig {
       get copyWith => throw _privateConstructorUsedError;
 }
 
-PictureWidgetConfig _$PictureWidgetConfigFromJson(Map<String, dynamic> json) {
-  return _PictureWidgetConfig.fromJson(json);
+ImageAssetsConfig _$ImageAssetsConfigFromJson(Map<String, dynamic> json) {
+  return _ImageAssetsConfig.fromJson(json);
 }
 
 /// @nodoc
-mixin _$PictureWidgetConfig {
+mixin _$ImageAssetsConfig {
   String get primaryOnboardingLogo => throw _privateConstructorUsedError;
   String get secondaryOnboardingLogo => throw _privateConstructorUsedError;
   LogoWidgetConfig get onboardingPictureLogo =>
@@ -2635,21 +2636,21 @@ mixin _$PictureWidgetConfig {
   AppIconWidgetConfig get appIcon => throw _privateConstructorUsedError;
   Metadata get metadata => throw _privateConstructorUsedError;
 
-  /// Serializes this PictureWidgetConfig to a JSON map.
+  /// Serializes this ImageAssetsConfig to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
 
-  /// Create a copy of PictureWidgetConfig
+  /// Create a copy of ImageAssetsConfig
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
-  $PictureWidgetConfigCopyWith<PictureWidgetConfig> get copyWith =>
+  $ImageAssetsConfigCopyWith<ImageAssetsConfig> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $PictureWidgetConfigCopyWith<$Res> {
-  factory $PictureWidgetConfigCopyWith(
-          PictureWidgetConfig value, $Res Function(PictureWidgetConfig) then) =
-      _$PictureWidgetConfigCopyWithImpl<$Res, PictureWidgetConfig>;
+abstract class $ImageAssetsConfigCopyWith<$Res> {
+  factory $ImageAssetsConfigCopyWith(
+          ImageAssetsConfig value, $Res Function(ImageAssetsConfig) then) =
+      _$ImageAssetsConfigCopyWithImpl<$Res, ImageAssetsConfig>;
   @useResult
   $Res call(
       {String primaryOnboardingLogo,
@@ -2666,16 +2667,16 @@ abstract class $PictureWidgetConfigCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$PictureWidgetConfigCopyWithImpl<$Res, $Val extends PictureWidgetConfig>
-    implements $PictureWidgetConfigCopyWith<$Res> {
-  _$PictureWidgetConfigCopyWithImpl(this._value, this._then);
+class _$ImageAssetsConfigCopyWithImpl<$Res, $Val extends ImageAssetsConfig>
+    implements $ImageAssetsConfigCopyWith<$Res> {
+  _$ImageAssetsConfigCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of PictureWidgetConfig
+  /// Create a copy of ImageAssetsConfig
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
@@ -2715,7 +2716,7 @@ class _$PictureWidgetConfigCopyWithImpl<$Res, $Val extends PictureWidgetConfig>
     ) as $Val);
   }
 
-  /// Create a copy of PictureWidgetConfig
+  /// Create a copy of ImageAssetsConfig
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
@@ -2726,7 +2727,7 @@ class _$PictureWidgetConfigCopyWithImpl<$Res, $Val extends PictureWidgetConfig>
     });
   }
 
-  /// Create a copy of PictureWidgetConfig
+  /// Create a copy of ImageAssetsConfig
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
@@ -2736,7 +2737,7 @@ class _$PictureWidgetConfigCopyWithImpl<$Res, $Val extends PictureWidgetConfig>
     });
   }
 
-  /// Create a copy of PictureWidgetConfig
+  /// Create a copy of ImageAssetsConfig
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
@@ -2746,7 +2747,7 @@ class _$PictureWidgetConfigCopyWithImpl<$Res, $Val extends PictureWidgetConfig>
     });
   }
 
-  /// Create a copy of PictureWidgetConfig
+  /// Create a copy of ImageAssetsConfig
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
@@ -2758,11 +2759,11 @@ class _$PictureWidgetConfigCopyWithImpl<$Res, $Val extends PictureWidgetConfig>
 }
 
 /// @nodoc
-abstract class _$$PictureWidgetConfigImplCopyWith<$Res>
-    implements $PictureWidgetConfigCopyWith<$Res> {
-  factory _$$PictureWidgetConfigImplCopyWith(_$PictureWidgetConfigImpl value,
-          $Res Function(_$PictureWidgetConfigImpl) then) =
-      __$$PictureWidgetConfigImplCopyWithImpl<$Res>;
+abstract class _$$ImageAssetsConfigImplCopyWith<$Res>
+    implements $ImageAssetsConfigCopyWith<$Res> {
+  factory _$$ImageAssetsConfigImplCopyWith(_$ImageAssetsConfigImpl value,
+          $Res Function(_$ImageAssetsConfigImpl) then) =
+      __$$ImageAssetsConfigImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -2784,14 +2785,14 @@ abstract class _$$PictureWidgetConfigImplCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$PictureWidgetConfigImplCopyWithImpl<$Res>
-    extends _$PictureWidgetConfigCopyWithImpl<$Res, _$PictureWidgetConfigImpl>
-    implements _$$PictureWidgetConfigImplCopyWith<$Res> {
-  __$$PictureWidgetConfigImplCopyWithImpl(_$PictureWidgetConfigImpl _value,
-      $Res Function(_$PictureWidgetConfigImpl) _then)
+class __$$ImageAssetsConfigImplCopyWithImpl<$Res>
+    extends _$ImageAssetsConfigCopyWithImpl<$Res, _$ImageAssetsConfigImpl>
+    implements _$$ImageAssetsConfigImplCopyWith<$Res> {
+  __$$ImageAssetsConfigImplCopyWithImpl(_$ImageAssetsConfigImpl _value,
+      $Res Function(_$ImageAssetsConfigImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of PictureWidgetConfig
+  /// Create a copy of ImageAssetsConfig
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
@@ -2803,7 +2804,7 @@ class __$$PictureWidgetConfigImplCopyWithImpl<$Res>
     Object? appIcon = null,
     Object? metadata = null,
   }) {
-    return _then(_$PictureWidgetConfigImpl(
+    return _then(_$ImageAssetsConfigImpl(
       primaryOnboardingLogo: null == primaryOnboardingLogo
           ? _value.primaryOnboardingLogo
           : primaryOnboardingLogo // ignore: cast_nullable_to_non_nullable
@@ -2835,8 +2836,8 @@ class __$$PictureWidgetConfigImplCopyWithImpl<$Res>
 /// @nodoc
 
 @JsonSerializable(explicitToJson: true)
-class _$PictureWidgetConfigImpl implements _PictureWidgetConfig {
-  const _$PictureWidgetConfigImpl(
+class _$ImageAssetsConfigImpl implements _ImageAssetsConfig {
+  const _$ImageAssetsConfigImpl(
       {this.primaryOnboardingLogo = 'asset://assets/primary_onboardin_logo.svg',
       this.secondaryOnboardingLogo =
           'asset://assets/secondary_onboardin_logo.svg',
@@ -2845,8 +2846,8 @@ class _$PictureWidgetConfigImpl implements _PictureWidgetConfig {
       this.appIcon = const AppIconWidgetConfig(),
       this.metadata = const Metadata()});
 
-  factory _$PictureWidgetConfigImpl.fromJson(Map<String, dynamic> json) =>
-      _$$PictureWidgetConfigImplFromJson(json);
+  factory _$ImageAssetsConfigImpl.fromJson(Map<String, dynamic> json) =>
+      _$$ImageAssetsConfigImplFromJson(json);
 
   @override
   @JsonKey()
@@ -2869,14 +2870,14 @@ class _$PictureWidgetConfigImpl implements _PictureWidgetConfig {
 
   @override
   String toString() {
-    return 'PictureWidgetConfig(primaryOnboardingLogo: $primaryOnboardingLogo, secondaryOnboardingLogo: $secondaryOnboardingLogo, onboardingPictureLogo: $onboardingPictureLogo, onboardingLogo: $onboardingLogo, appIcon: $appIcon, metadata: $metadata)';
+    return 'ImageAssetsConfig(primaryOnboardingLogo: $primaryOnboardingLogo, secondaryOnboardingLogo: $secondaryOnboardingLogo, onboardingPictureLogo: $onboardingPictureLogo, onboardingLogo: $onboardingLogo, appIcon: $appIcon, metadata: $metadata)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$PictureWidgetConfigImpl &&
+            other is _$ImageAssetsConfigImpl &&
             (identical(other.primaryOnboardingLogo, primaryOnboardingLogo) ||
                 other.primaryOnboardingLogo == primaryOnboardingLogo) &&
             (identical(
@@ -2902,34 +2903,34 @@ class _$PictureWidgetConfigImpl implements _PictureWidgetConfig {
       appIcon,
       metadata);
 
-  /// Create a copy of PictureWidgetConfig
+  /// Create a copy of ImageAssetsConfig
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$PictureWidgetConfigImplCopyWith<_$PictureWidgetConfigImpl> get copyWith =>
-      __$$PictureWidgetConfigImplCopyWithImpl<_$PictureWidgetConfigImpl>(
+  _$$ImageAssetsConfigImplCopyWith<_$ImageAssetsConfigImpl> get copyWith =>
+      __$$ImageAssetsConfigImplCopyWithImpl<_$ImageAssetsConfigImpl>(
           this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$PictureWidgetConfigImplToJson(
+    return _$$ImageAssetsConfigImplToJson(
       this,
     );
   }
 }
 
-abstract class _PictureWidgetConfig implements PictureWidgetConfig {
-  const factory _PictureWidgetConfig(
+abstract class _ImageAssetsConfig implements ImageAssetsConfig {
+  const factory _ImageAssetsConfig(
       {final String primaryOnboardingLogo,
       final String secondaryOnboardingLogo,
       final LogoWidgetConfig onboardingPictureLogo,
       final LogoWidgetConfig onboardingLogo,
       final AppIconWidgetConfig appIcon,
-      final Metadata metadata}) = _$PictureWidgetConfigImpl;
+      final Metadata metadata}) = _$ImageAssetsConfigImpl;
 
-  factory _PictureWidgetConfig.fromJson(Map<String, dynamic> json) =
-      _$PictureWidgetConfigImpl.fromJson;
+  factory _ImageAssetsConfig.fromJson(Map<String, dynamic> json) =
+      _$ImageAssetsConfigImpl.fromJson;
 
   @override
   String get primaryOnboardingLogo;
@@ -2944,11 +2945,11 @@ abstract class _PictureWidgetConfig implements PictureWidgetConfig {
   @override
   Metadata get metadata;
 
-  /// Create a copy of PictureWidgetConfig
+  /// Create a copy of ImageAssetsConfig
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$PictureWidgetConfigImplCopyWith<_$PictureWidgetConfigImpl> get copyWith =>
+  _$$ImageAssetsConfigImplCopyWith<_$ImageAssetsConfigImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 

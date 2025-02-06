@@ -21,10 +21,10 @@ _$ThemeWidgetConfigImpl _$$ThemeWidgetConfigImplFromJson(
       bar: json['bar'] == null
           ? const BarWidgetConfig()
           : BarWidgetConfig.fromJson(json['bar'] as Map<String, dynamic>),
-      picture: json['picture'] == null
-          ? const PictureWidgetConfig()
-          : PictureWidgetConfig.fromJson(
-              json['picture'] as Map<String, dynamic>),
+      imageAssets: json['imageAssets'] == null
+          ? const ImageAssetsConfig()
+          : ImageAssetsConfig.fromJson(
+              json['imageAssets'] as Map<String, dynamic>),
       input: json['input'] == null
           ? const InputWidgetConfig()
           : InputWidgetConfig.fromJson(json['input'] as Map<String, dynamic>),
@@ -55,7 +55,7 @@ Map<String, dynamic> _$$ThemeWidgetConfigImplToJson(
       'button': instance.button.toJson(),
       'group': instance.group?.toJson(),
       'bar': instance.bar.toJson(),
-      'picture': instance.picture.toJson(),
+      'imageAssets': instance.imageAssets.toJson(),
       'input': instance.input.toJson(),
       'text': instance.text.toJson(),
       'dialog': instance.dialog.toJson(),
@@ -240,9 +240,9 @@ Map<String, dynamic> _$$CallActionsWidgetConfigImplToJson(
       'keypadActiveBackgroundColor': instance.keypadActiveBackgroundColor,
     };
 
-_$PictureWidgetConfigImpl _$$PictureWidgetConfigImplFromJson(
+_$ImageAssetsConfigImpl _$$ImageAssetsConfigImplFromJson(
         Map<String, dynamic> json) =>
-    _$PictureWidgetConfigImpl(
+    _$ImageAssetsConfigImpl(
       primaryOnboardingLogo: json['primaryOnboardingLogo'] as String? ??
           'asset://assets/primary_onboardin_logo.svg',
       secondaryOnboardingLogo: json['secondaryOnboardingLogo'] as String? ??
@@ -264,8 +264,8 @@ _$PictureWidgetConfigImpl _$$PictureWidgetConfigImplFromJson(
           : Metadata.fromJson(json['metadata'] as Map<String, dynamic>),
     );
 
-Map<String, dynamic> _$$PictureWidgetConfigImplToJson(
-        _$PictureWidgetConfigImpl instance) =>
+Map<String, dynamic> _$$ImageAssetsConfigImplToJson(
+        _$ImageAssetsConfigImpl instance) =>
     <String, dynamic>{
       'primaryOnboardingLogo': instance.primaryOnboardingLogo,
       'secondaryOnboardingLogo': instance.secondaryOnboardingLogo,
