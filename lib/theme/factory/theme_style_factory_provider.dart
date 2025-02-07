@@ -23,9 +23,13 @@ class ThemeStyleFactoryProvider {
     // Page schema
     final loginPageScheme = pageConfig.login;
 
-    // Widget schema
-    final pictureConfig = widgetConfig.picture;
-    final appIconConfig = pictureConfig.appIcon;
+    // Widget images config
+    final imageAssetsConfig = widgetConfig.imageAssets;
+    final primaryOnboardingLogo = imageAssetsConfig.primaryOnboardingLogo;
+    final secondaryOnboardingLogo = imageAssetsConfig.secondaryOnboardingLogo;
+
+    // Other widgets config
+    final appIconConfig = imageAssetsConfig.appIcon;
     final primaryGradientColorsConfig = widgetConfig.decorationConfig.primaryGradientColorsConfig;
     final confirmDialog = widgetConfig.dialog.confirmDialog;
     final snackBar = widgetConfig.dialog.snackBar;
@@ -50,13 +54,14 @@ class ThemeStyleFactoryProvider {
     final textButtonStyleFactory = TextButtonStyleFactory(colorScheme);
     final callActionsStyleFactory = CallActionsStyleFactory(colorScheme, callActions);
     final linkifyStyleFactory = LinkifyStyleFactory(colorScheme, linkify);
-    final logoAssetStyleFactory = LogoAssetsFactory(pictureConfig);
+    final logoAssetStyleFactory = LogoAssetsFactory(imageAssetsConfig);
     final outlinedButtonStyleFactory = OutlinedButtonStyleFactory(colorScheme);
     final registrationStatusStyleFactory = RegisteredStatusStyleFactory(colorScheme, registrationStatuses);
     final snackBarStyleFactory = SnackBarStyleFactory(colorScheme, snackBar);
     final groupTitleListStyleFactory = GroupTitleListStyleFactory(groupTitleListTile);
-    final onPictureLogoStyleFactory = OnboardingPictureLogoStyleFactory(colorScheme, pictureConfig, loginPageScheme);
-    final onLogoStyleFactory = OnboardingLogoStyleFactory(colorScheme, pictureConfig, loginPageScheme);
+    final onPictureLogoStyleFactory =
+        OnboardingPictureLogoStyleFactory(colorScheme, primaryOnboardingLogo, loginPageScheme);
+    final onLogoStyleFactory = OnboardingLogoStyleFactory(colorScheme, secondaryOnboardingLogo, loginPageScheme);
     final gradientsStyleFactory = GradientsStyleFactory(primaryGradientColorsConfig);
     final aboutScreenStyleFactory = AboutScreenStyleFactory(loginPageScheme);
     final loginModeSelectStyleFactory = LoginModeSelectScreenStyleFactory(loginPageScheme.modeSelect);

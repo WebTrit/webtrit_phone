@@ -26,13 +26,13 @@ class OnboardingPictureLogo extends StatelessWidget {
     final localStyle = style ?? themeData.extension<OnboardingPictureLogoStyles>()?.primary;
 
     final titleStyle = themeData.textTheme.displayMedium!.merge(localStyle?.textStyle);
-    final scale = mediaQueryData.size.width * (localStyle?.scale ?? 0.42);
+    final widthFactor = mediaQueryData.size.width * (localStyle?.widthFactor ?? 1.0);
     final picture = localStyle?.picture;
 
     return WebTritPhonePictureLogo(
       asset: picture,
       text: text,
-      logoWidth: scale,
+      logoWidth: widthFactor,
       dividerHeight: titleStyle.fontSize,
       titleStyle: titleStyle,
     );

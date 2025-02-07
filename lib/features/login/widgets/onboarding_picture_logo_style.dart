@@ -6,12 +6,12 @@ import 'package:webtrit_phone/theme/theme.dart';
 class OnboardingPictureLogoStyle with Diagnosticable {
   OnboardingPictureLogoStyle({
     this.picture,
-    this.scale,
+    this.widthFactor,
     this.textStyle,
   });
 
   final ThemeSvgAsset? picture;
-  final double? scale;
+  final double? widthFactor;
   final TextStyle? textStyle;
 
   static OnboardingPictureLogoStyle? lerp(OnboardingPictureLogoStyle? a, OnboardingPictureLogoStyle? b, double t) {
@@ -20,7 +20,7 @@ class OnboardingPictureLogoStyle with Diagnosticable {
     }
     return OnboardingPictureLogoStyle(
       picture: t < 0.5 ? a?.picture : b?.picture,
-      scale: LerpTools.lerpDouble(a?.scale, b?.scale, t),
+      widthFactor: LerpTools.lerpDouble(a?.widthFactor, b?.widthFactor, t),
       textStyle: TextStyle.lerp(a?.textStyle, b?.textStyle, t),
     );
   }
@@ -29,7 +29,7 @@ class OnboardingPictureLogoStyle with Diagnosticable {
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties.add(DiagnosticsProperty<ThemeSvgAsset?>('picture', picture));
-    properties.add(DiagnosticsProperty<double?>('scale', scale));
+    properties.add(DiagnosticsProperty<double?>('widthFactor', widthFactor));
     properties.add(DiagnosticsProperty<TextStyle?>('textStyle', textStyle));
   }
 }

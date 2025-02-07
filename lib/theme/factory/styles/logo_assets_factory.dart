@@ -5,7 +5,7 @@ import '../theme_style_factory.dart';
 class LogoAssetsFactory implements ThemeStyleFactory<LogoAssets> {
   LogoAssetsFactory(this.config);
 
-  final PictureWidgetConfig config;
+  final ImageAssetsConfig config;
 
   @override
   LogoAssets create() {
@@ -13,8 +13,8 @@ class LogoAssetsFactory implements ThemeStyleFactory<LogoAssets> {
     final secondaryOnboardingLogoPath = config.secondaryOnboardingLogo;
 
     return LogoAssets(
-      primaryOnboarding: primaryOnboardingLogoPath.toThemeSvgAsset()!,
-      secondaryOnboarding: secondaryOnboardingLogoPath.toThemeSvgAsset()!,
+      primaryOnboarding: primaryOnboardingLogoPath.uri.toThemeSvgAsset()!,
+      secondaryOnboarding: secondaryOnboardingLogoPath.uri.toThemeSvgAsset()!,
     );
   }
 }

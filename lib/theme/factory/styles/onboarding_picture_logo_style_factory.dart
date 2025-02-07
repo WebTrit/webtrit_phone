@@ -6,25 +6,25 @@ import 'package:webtrit_phone/theme/theme.dart';
 import '../theme_style_factory.dart';
 
 class OnboardingPictureLogoStyleFactory implements ThemeStyleFactory<OnboardingPictureLogoStyles> {
-  OnboardingPictureLogoStyleFactory(this.colors, this.pictureWidgetConfig, this.loginPageConfig);
+  OnboardingPictureLogoStyleFactory(this.colors, this.imageAssetConfig, this.loginPageConfig);
 
   final ColorScheme colors;
-  final PictureWidgetConfig? pictureWidgetConfig;
+  final ImageAssetConfig? imageAssetConfig;
   final LoginPageConfig? loginPageConfig;
 
   @override
   OnboardingPictureLogoStyles create() {
-    final textStyleColor = pictureWidgetConfig?.onboardingPictureLogo.labelColor?.toColor() ?? colors.onPrimary;
+    final textStyleColor = imageAssetConfig?.labelColor.toColor() ?? colors.onPrimary;
 
-    final primaryOnboardingLogoPath = loginPageConfig?.picture ?? pictureWidgetConfig?.primaryOnboardingLogo;
-    final scale = loginPageConfig?.scale ?? pictureWidgetConfig?.onboardingPictureLogo.scale;
+    final primaryOnboardingLogoPath = loginPageConfig?.picture ?? imageAssetConfig?.uri;
+    final widthFactor = loginPageConfig?.scale ?? imageAssetConfig?.widthFactor;
 
     final textStyle = TextStyle(color: textStyleColor, fontWeight: FontWeight.w600);
 
     return OnboardingPictureLogoStyles(
       primary: OnboardingPictureLogoStyle(
         picture: primaryOnboardingLogoPath?.toThemeSvgAsset(),
-        scale: scale,
+        widthFactor: widthFactor,
         textStyle: textStyle,
       ),
     );

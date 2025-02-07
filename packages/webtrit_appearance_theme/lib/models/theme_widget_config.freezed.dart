@@ -24,7 +24,7 @@ mixin _$ThemeWidgetConfig {
   ButtonWidgetConfig get button => throw _privateConstructorUsedError;
   GroupWidgetConfig? get group => throw _privateConstructorUsedError;
   BarWidgetConfig get bar => throw _privateConstructorUsedError;
-  PictureWidgetConfig get picture => throw _privateConstructorUsedError;
+  ImageAssetsConfig get imageAssets => throw _privateConstructorUsedError;
   InputWidgetConfig get input => throw _privateConstructorUsedError;
   TextWidgetConfig get text => throw _privateConstructorUsedError;
   DialogWidgetConfig get dialog => throw _privateConstructorUsedError;
@@ -53,7 +53,7 @@ abstract class $ThemeWidgetConfigCopyWith<$Res> {
       ButtonWidgetConfig button,
       GroupWidgetConfig? group,
       BarWidgetConfig bar,
-      PictureWidgetConfig picture,
+      ImageAssetsConfig imageAssets,
       InputWidgetConfig input,
       TextWidgetConfig text,
       DialogWidgetConfig dialog,
@@ -65,7 +65,7 @@ abstract class $ThemeWidgetConfigCopyWith<$Res> {
   $ButtonWidgetConfigCopyWith<$Res> get button;
   $GroupWidgetConfigCopyWith<$Res>? get group;
   $BarWidgetConfigCopyWith<$Res> get bar;
-  $PictureWidgetConfigCopyWith<$Res> get picture;
+  $ImageAssetsConfigCopyWith<$Res> get imageAssets;
   $InputWidgetConfigCopyWith<$Res> get input;
   $TextWidgetConfigCopyWith<$Res> get text;
   $DialogWidgetConfigCopyWith<$Res> get dialog;
@@ -93,7 +93,7 @@ class _$ThemeWidgetConfigCopyWithImpl<$Res, $Val extends ThemeWidgetConfig>
     Object? button = null,
     Object? group = freezed,
     Object? bar = null,
-    Object? picture = null,
+    Object? imageAssets = null,
     Object? input = null,
     Object? text = null,
     Object? dialog = null,
@@ -118,10 +118,10 @@ class _$ThemeWidgetConfigCopyWithImpl<$Res, $Val extends ThemeWidgetConfig>
           ? _value.bar
           : bar // ignore: cast_nullable_to_non_nullable
               as BarWidgetConfig,
-      picture: null == picture
-          ? _value.picture
-          : picture // ignore: cast_nullable_to_non_nullable
-              as PictureWidgetConfig,
+      imageAssets: null == imageAssets
+          ? _value.imageAssets
+          : imageAssets // ignore: cast_nullable_to_non_nullable
+              as ImageAssetsConfig,
       input: null == input
           ? _value.input
           : input // ignore: cast_nullable_to_non_nullable
@@ -197,9 +197,9 @@ class _$ThemeWidgetConfigCopyWithImpl<$Res, $Val extends ThemeWidgetConfig>
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
-  $PictureWidgetConfigCopyWith<$Res> get picture {
-    return $PictureWidgetConfigCopyWith<$Res>(_value.picture, (value) {
-      return _then(_value.copyWith(picture: value) as $Val);
+  $ImageAssetsConfigCopyWith<$Res> get imageAssets {
+    return $ImageAssetsConfigCopyWith<$Res>(_value.imageAssets, (value) {
+      return _then(_value.copyWith(imageAssets: value) as $Val);
     });
   }
 
@@ -277,7 +277,7 @@ abstract class _$$ThemeWidgetConfigImplCopyWith<$Res>
       ButtonWidgetConfig button,
       GroupWidgetConfig? group,
       BarWidgetConfig bar,
-      PictureWidgetConfig picture,
+      ImageAssetsConfig imageAssets,
       InputWidgetConfig input,
       TextWidgetConfig text,
       DialogWidgetConfig dialog,
@@ -294,7 +294,7 @@ abstract class _$$ThemeWidgetConfigImplCopyWith<$Res>
   @override
   $BarWidgetConfigCopyWith<$Res> get bar;
   @override
-  $PictureWidgetConfigCopyWith<$Res> get picture;
+  $ImageAssetsConfigCopyWith<$Res> get imageAssets;
   @override
   $InputWidgetConfigCopyWith<$Res> get input;
   @override
@@ -326,7 +326,7 @@ class __$$ThemeWidgetConfigImplCopyWithImpl<$Res>
     Object? button = null,
     Object? group = freezed,
     Object? bar = null,
-    Object? picture = null,
+    Object? imageAssets = null,
     Object? input = null,
     Object? text = null,
     Object? dialog = null,
@@ -351,10 +351,10 @@ class __$$ThemeWidgetConfigImplCopyWithImpl<$Res>
           ? _value.bar
           : bar // ignore: cast_nullable_to_non_nullable
               as BarWidgetConfig,
-      picture: null == picture
-          ? _value.picture
-          : picture // ignore: cast_nullable_to_non_nullable
-              as PictureWidgetConfig,
+      imageAssets: null == imageAssets
+          ? _value.imageAssets
+          : imageAssets // ignore: cast_nullable_to_non_nullable
+              as ImageAssetsConfig,
       input: null == input
           ? _value.input
           : input // ignore: cast_nullable_to_non_nullable
@@ -392,7 +392,7 @@ class _$ThemeWidgetConfigImpl implements _ThemeWidgetConfig {
       this.button = const ButtonWidgetConfig(),
       this.group = const GroupWidgetConfig(),
       this.bar = const BarWidgetConfig(),
-      this.picture = const PictureWidgetConfig(),
+      this.imageAssets = const ImageAssetsConfig(),
       this.input = const InputWidgetConfig(),
       this.text = const TextWidgetConfig(),
       this.dialog = const DialogWidgetConfig(),
@@ -417,7 +417,7 @@ class _$ThemeWidgetConfigImpl implements _ThemeWidgetConfig {
   final BarWidgetConfig bar;
   @override
   @JsonKey()
-  final PictureWidgetConfig picture;
+  final ImageAssetsConfig imageAssets;
   @override
   @JsonKey()
   final InputWidgetConfig input;
@@ -439,7 +439,7 @@ class _$ThemeWidgetConfigImpl implements _ThemeWidgetConfig {
 
   @override
   String toString() {
-    return 'ThemeWidgetConfig(fonts: $fonts, button: $button, group: $group, bar: $bar, picture: $picture, input: $input, text: $text, dialog: $dialog, actionPad: $actionPad, statuses: $statuses, decorationConfig: $decorationConfig)';
+    return 'ThemeWidgetConfig(fonts: $fonts, button: $button, group: $group, bar: $bar, imageAssets: $imageAssets, input: $input, text: $text, dialog: $dialog, actionPad: $actionPad, statuses: $statuses, decorationConfig: $decorationConfig)';
   }
 
   @override
@@ -451,7 +451,8 @@ class _$ThemeWidgetConfigImpl implements _ThemeWidgetConfig {
             (identical(other.button, button) || other.button == button) &&
             (identical(other.group, group) || other.group == group) &&
             (identical(other.bar, bar) || other.bar == bar) &&
-            (identical(other.picture, picture) || other.picture == picture) &&
+            (identical(other.imageAssets, imageAssets) ||
+                other.imageAssets == imageAssets) &&
             (identical(other.input, input) || other.input == input) &&
             (identical(other.text, text) || other.text == text) &&
             (identical(other.dialog, dialog) || other.dialog == dialog) &&
@@ -466,7 +467,7 @@ class _$ThemeWidgetConfigImpl implements _ThemeWidgetConfig {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, fonts, button, group, bar,
-      picture, input, text, dialog, actionPad, statuses, decorationConfig);
+      imageAssets, input, text, dialog, actionPad, statuses, decorationConfig);
 
   /// Create a copy of ThemeWidgetConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -491,7 +492,7 @@ abstract class _ThemeWidgetConfig implements ThemeWidgetConfig {
       final ButtonWidgetConfig button,
       final GroupWidgetConfig? group,
       final BarWidgetConfig bar,
-      final PictureWidgetConfig picture,
+      final ImageAssetsConfig imageAssets,
       final InputWidgetConfig input,
       final TextWidgetConfig text,
       final DialogWidgetConfig dialog,
@@ -511,7 +512,7 @@ abstract class _ThemeWidgetConfig implements ThemeWidgetConfig {
   @override
   BarWidgetConfig get bar;
   @override
-  PictureWidgetConfig get picture;
+  ImageAssetsConfig get imageAssets;
   @override
   InputWidgetConfig get input;
   @override
@@ -2621,122 +2622,102 @@ abstract class _CallActionsWidgetConfig implements CallActionsWidgetConfig {
       get copyWith => throw _privateConstructorUsedError;
 }
 
-PictureWidgetConfig _$PictureWidgetConfigFromJson(Map<String, dynamic> json) {
-  return _PictureWidgetConfig.fromJson(json);
+ImageAssetsConfig _$ImageAssetsConfigFromJson(Map<String, dynamic> json) {
+  return _ImageAssetsConfig.fromJson(json);
 }
 
 /// @nodoc
-mixin _$PictureWidgetConfig {
-  String get primaryOnboardingLogo => throw _privateConstructorUsedError;
-  String get secondaryOnboardingLogo => throw _privateConstructorUsedError;
-  LogoWidgetConfig get onboardingPictureLogo =>
+mixin _$ImageAssetsConfig {
+  ImageAssetConfig get primaryOnboardingLogo =>
       throw _privateConstructorUsedError;
-  LogoWidgetConfig get onboardingLogo => throw _privateConstructorUsedError;
+  ImageAssetConfig get secondaryOnboardingLogo =>
+      throw _privateConstructorUsedError;
   AppIconWidgetConfig get appIcon => throw _privateConstructorUsedError;
-  Metadata get metadata => throw _privateConstructorUsedError;
 
-  /// Serializes this PictureWidgetConfig to a JSON map.
+  /// Serializes this ImageAssetsConfig to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
 
-  /// Create a copy of PictureWidgetConfig
+  /// Create a copy of ImageAssetsConfig
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
-  $PictureWidgetConfigCopyWith<PictureWidgetConfig> get copyWith =>
+  $ImageAssetsConfigCopyWith<ImageAssetsConfig> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $PictureWidgetConfigCopyWith<$Res> {
-  factory $PictureWidgetConfigCopyWith(
-          PictureWidgetConfig value, $Res Function(PictureWidgetConfig) then) =
-      _$PictureWidgetConfigCopyWithImpl<$Res, PictureWidgetConfig>;
+abstract class $ImageAssetsConfigCopyWith<$Res> {
+  factory $ImageAssetsConfigCopyWith(
+          ImageAssetsConfig value, $Res Function(ImageAssetsConfig) then) =
+      _$ImageAssetsConfigCopyWithImpl<$Res, ImageAssetsConfig>;
   @useResult
   $Res call(
-      {String primaryOnboardingLogo,
-      String secondaryOnboardingLogo,
-      LogoWidgetConfig onboardingPictureLogo,
-      LogoWidgetConfig onboardingLogo,
-      AppIconWidgetConfig appIcon,
-      Metadata metadata});
+      {ImageAssetConfig primaryOnboardingLogo,
+      ImageAssetConfig secondaryOnboardingLogo,
+      AppIconWidgetConfig appIcon});
 
-  $LogoWidgetConfigCopyWith<$Res> get onboardingPictureLogo;
-  $LogoWidgetConfigCopyWith<$Res> get onboardingLogo;
+  $ImageAssetConfigCopyWith<$Res> get primaryOnboardingLogo;
+  $ImageAssetConfigCopyWith<$Res> get secondaryOnboardingLogo;
   $AppIconWidgetConfigCopyWith<$Res> get appIcon;
-  $MetadataCopyWith<$Res> get metadata;
 }
 
 /// @nodoc
-class _$PictureWidgetConfigCopyWithImpl<$Res, $Val extends PictureWidgetConfig>
-    implements $PictureWidgetConfigCopyWith<$Res> {
-  _$PictureWidgetConfigCopyWithImpl(this._value, this._then);
+class _$ImageAssetsConfigCopyWithImpl<$Res, $Val extends ImageAssetsConfig>
+    implements $ImageAssetsConfigCopyWith<$Res> {
+  _$ImageAssetsConfigCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of PictureWidgetConfig
+  /// Create a copy of ImageAssetsConfig
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? primaryOnboardingLogo = null,
     Object? secondaryOnboardingLogo = null,
-    Object? onboardingPictureLogo = null,
-    Object? onboardingLogo = null,
     Object? appIcon = null,
-    Object? metadata = null,
   }) {
     return _then(_value.copyWith(
       primaryOnboardingLogo: null == primaryOnboardingLogo
           ? _value.primaryOnboardingLogo
           : primaryOnboardingLogo // ignore: cast_nullable_to_non_nullable
-              as String,
+              as ImageAssetConfig,
       secondaryOnboardingLogo: null == secondaryOnboardingLogo
           ? _value.secondaryOnboardingLogo
           : secondaryOnboardingLogo // ignore: cast_nullable_to_non_nullable
-              as String,
-      onboardingPictureLogo: null == onboardingPictureLogo
-          ? _value.onboardingPictureLogo
-          : onboardingPictureLogo // ignore: cast_nullable_to_non_nullable
-              as LogoWidgetConfig,
-      onboardingLogo: null == onboardingLogo
-          ? _value.onboardingLogo
-          : onboardingLogo // ignore: cast_nullable_to_non_nullable
-              as LogoWidgetConfig,
+              as ImageAssetConfig,
       appIcon: null == appIcon
           ? _value.appIcon
           : appIcon // ignore: cast_nullable_to_non_nullable
               as AppIconWidgetConfig,
-      metadata: null == metadata
-          ? _value.metadata
-          : metadata // ignore: cast_nullable_to_non_nullable
-              as Metadata,
     ) as $Val);
   }
 
-  /// Create a copy of PictureWidgetConfig
+  /// Create a copy of ImageAssetsConfig
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
-  $LogoWidgetConfigCopyWith<$Res> get onboardingPictureLogo {
-    return $LogoWidgetConfigCopyWith<$Res>(_value.onboardingPictureLogo,
+  $ImageAssetConfigCopyWith<$Res> get primaryOnboardingLogo {
+    return $ImageAssetConfigCopyWith<$Res>(_value.primaryOnboardingLogo,
         (value) {
-      return _then(_value.copyWith(onboardingPictureLogo: value) as $Val);
+      return _then(_value.copyWith(primaryOnboardingLogo: value) as $Val);
     });
   }
 
-  /// Create a copy of PictureWidgetConfig
+  /// Create a copy of ImageAssetsConfig
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
-  $LogoWidgetConfigCopyWith<$Res> get onboardingLogo {
-    return $LogoWidgetConfigCopyWith<$Res>(_value.onboardingLogo, (value) {
-      return _then(_value.copyWith(onboardingLogo: value) as $Val);
+  $ImageAssetConfigCopyWith<$Res> get secondaryOnboardingLogo {
+    return $ImageAssetConfigCopyWith<$Res>(_value.secondaryOnboardingLogo,
+        (value) {
+      return _then(_value.copyWith(secondaryOnboardingLogo: value) as $Val);
     });
   }
 
-  /// Create a copy of PictureWidgetConfig
+  /// Create a copy of ImageAssetsConfig
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
@@ -2745,8 +2726,225 @@ class _$PictureWidgetConfigCopyWithImpl<$Res, $Val extends PictureWidgetConfig>
       return _then(_value.copyWith(appIcon: value) as $Val);
     });
   }
+}
 
-  /// Create a copy of PictureWidgetConfig
+/// @nodoc
+abstract class _$$ImageAssetsConfigImplCopyWith<$Res>
+    implements $ImageAssetsConfigCopyWith<$Res> {
+  factory _$$ImageAssetsConfigImplCopyWith(_$ImageAssetsConfigImpl value,
+          $Res Function(_$ImageAssetsConfigImpl) then) =
+      __$$ImageAssetsConfigImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {ImageAssetConfig primaryOnboardingLogo,
+      ImageAssetConfig secondaryOnboardingLogo,
+      AppIconWidgetConfig appIcon});
+
+  @override
+  $ImageAssetConfigCopyWith<$Res> get primaryOnboardingLogo;
+  @override
+  $ImageAssetConfigCopyWith<$Res> get secondaryOnboardingLogo;
+  @override
+  $AppIconWidgetConfigCopyWith<$Res> get appIcon;
+}
+
+/// @nodoc
+class __$$ImageAssetsConfigImplCopyWithImpl<$Res>
+    extends _$ImageAssetsConfigCopyWithImpl<$Res, _$ImageAssetsConfigImpl>
+    implements _$$ImageAssetsConfigImplCopyWith<$Res> {
+  __$$ImageAssetsConfigImplCopyWithImpl(_$ImageAssetsConfigImpl _value,
+      $Res Function(_$ImageAssetsConfigImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of ImageAssetsConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? primaryOnboardingLogo = null,
+    Object? secondaryOnboardingLogo = null,
+    Object? appIcon = null,
+  }) {
+    return _then(_$ImageAssetsConfigImpl(
+      primaryOnboardingLogo: null == primaryOnboardingLogo
+          ? _value.primaryOnboardingLogo
+          : primaryOnboardingLogo // ignore: cast_nullable_to_non_nullable
+              as ImageAssetConfig,
+      secondaryOnboardingLogo: null == secondaryOnboardingLogo
+          ? _value.secondaryOnboardingLogo
+          : secondaryOnboardingLogo // ignore: cast_nullable_to_non_nullable
+              as ImageAssetConfig,
+      appIcon: null == appIcon
+          ? _value.appIcon
+          : appIcon // ignore: cast_nullable_to_non_nullable
+              as AppIconWidgetConfig,
+    ));
+  }
+}
+
+/// @nodoc
+
+@JsonSerializable(explicitToJson: true)
+class _$ImageAssetsConfigImpl implements _ImageAssetsConfig {
+  const _$ImageAssetsConfigImpl(
+      {this.primaryOnboardingLogo = const ImageAssetConfig(
+          uri: 'asset://assets/primary_onboardin_logo.svg'),
+      this.secondaryOnboardingLogo = const ImageAssetConfig(
+          uri: 'asset://assets/secondary_onboardin_logo.svg'),
+      this.appIcon = const AppIconWidgetConfig()});
+
+  factory _$ImageAssetsConfigImpl.fromJson(Map<String, dynamic> json) =>
+      _$$ImageAssetsConfigImplFromJson(json);
+
+  @override
+  @JsonKey()
+  final ImageAssetConfig primaryOnboardingLogo;
+  @override
+  @JsonKey()
+  final ImageAssetConfig secondaryOnboardingLogo;
+  @override
+  @JsonKey()
+  final AppIconWidgetConfig appIcon;
+
+  @override
+  String toString() {
+    return 'ImageAssetsConfig(primaryOnboardingLogo: $primaryOnboardingLogo, secondaryOnboardingLogo: $secondaryOnboardingLogo, appIcon: $appIcon)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$ImageAssetsConfigImpl &&
+            (identical(other.primaryOnboardingLogo, primaryOnboardingLogo) ||
+                other.primaryOnboardingLogo == primaryOnboardingLogo) &&
+            (identical(
+                    other.secondaryOnboardingLogo, secondaryOnboardingLogo) ||
+                other.secondaryOnboardingLogo == secondaryOnboardingLogo) &&
+            (identical(other.appIcon, appIcon) || other.appIcon == appIcon));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(
+      runtimeType, primaryOnboardingLogo, secondaryOnboardingLogo, appIcon);
+
+  /// Create a copy of ImageAssetsConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$ImageAssetsConfigImplCopyWith<_$ImageAssetsConfigImpl> get copyWith =>
+      __$$ImageAssetsConfigImplCopyWithImpl<_$ImageAssetsConfigImpl>(
+          this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$ImageAssetsConfigImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _ImageAssetsConfig implements ImageAssetsConfig {
+  const factory _ImageAssetsConfig(
+      {final ImageAssetConfig primaryOnboardingLogo,
+      final ImageAssetConfig secondaryOnboardingLogo,
+      final AppIconWidgetConfig appIcon}) = _$ImageAssetsConfigImpl;
+
+  factory _ImageAssetsConfig.fromJson(Map<String, dynamic> json) =
+      _$ImageAssetsConfigImpl.fromJson;
+
+  @override
+  ImageAssetConfig get primaryOnboardingLogo;
+  @override
+  ImageAssetConfig get secondaryOnboardingLogo;
+  @override
+  AppIconWidgetConfig get appIcon;
+
+  /// Create a copy of ImageAssetsConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$ImageAssetsConfigImplCopyWith<_$ImageAssetsConfigImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+ImageAssetConfig _$ImageAssetConfigFromJson(Map<String, dynamic> json) {
+  return _ImageAssetConfig.fromJson(json);
+}
+
+/// @nodoc
+mixin _$ImageAssetConfig {
+  String get uri => throw _privateConstructorUsedError;
+  double get widthFactor => throw _privateConstructorUsedError;
+  String get labelColor => throw _privateConstructorUsedError;
+  Metadata get metadata => throw _privateConstructorUsedError;
+
+  /// Serializes this ImageAssetConfig to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of ImageAssetConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $ImageAssetConfigCopyWith<ImageAssetConfig> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $ImageAssetConfigCopyWith<$Res> {
+  factory $ImageAssetConfigCopyWith(
+          ImageAssetConfig value, $Res Function(ImageAssetConfig) then) =
+      _$ImageAssetConfigCopyWithImpl<$Res, ImageAssetConfig>;
+  @useResult
+  $Res call(
+      {String uri, double widthFactor, String labelColor, Metadata metadata});
+
+  $MetadataCopyWith<$Res> get metadata;
+}
+
+/// @nodoc
+class _$ImageAssetConfigCopyWithImpl<$Res, $Val extends ImageAssetConfig>
+    implements $ImageAssetConfigCopyWith<$Res> {
+  _$ImageAssetConfigCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of ImageAssetConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? uri = null,
+    Object? widthFactor = null,
+    Object? labelColor = null,
+    Object? metadata = null,
+  }) {
+    return _then(_value.copyWith(
+      uri: null == uri
+          ? _value.uri
+          : uri // ignore: cast_nullable_to_non_nullable
+              as String,
+      widthFactor: null == widthFactor
+          ? _value.widthFactor
+          : widthFactor // ignore: cast_nullable_to_non_nullable
+              as double,
+      labelColor: null == labelColor
+          ? _value.labelColor
+          : labelColor // ignore: cast_nullable_to_non_nullable
+              as String,
+      metadata: null == metadata
+          ? _value.metadata
+          : metadata // ignore: cast_nullable_to_non_nullable
+              as Metadata,
+    ) as $Val);
+  }
+
+  /// Create a copy of ImageAssetConfig
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
@@ -2758,72 +2956,51 @@ class _$PictureWidgetConfigCopyWithImpl<$Res, $Val extends PictureWidgetConfig>
 }
 
 /// @nodoc
-abstract class _$$PictureWidgetConfigImplCopyWith<$Res>
-    implements $PictureWidgetConfigCopyWith<$Res> {
-  factory _$$PictureWidgetConfigImplCopyWith(_$PictureWidgetConfigImpl value,
-          $Res Function(_$PictureWidgetConfigImpl) then) =
-      __$$PictureWidgetConfigImplCopyWithImpl<$Res>;
+abstract class _$$ImageAssetConfigImplCopyWith<$Res>
+    implements $ImageAssetConfigCopyWith<$Res> {
+  factory _$$ImageAssetConfigImplCopyWith(_$ImageAssetConfigImpl value,
+          $Res Function(_$ImageAssetConfigImpl) then) =
+      __$$ImageAssetConfigImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
-      {String primaryOnboardingLogo,
-      String secondaryOnboardingLogo,
-      LogoWidgetConfig onboardingPictureLogo,
-      LogoWidgetConfig onboardingLogo,
-      AppIconWidgetConfig appIcon,
-      Metadata metadata});
+      {String uri, double widthFactor, String labelColor, Metadata metadata});
 
-  @override
-  $LogoWidgetConfigCopyWith<$Res> get onboardingPictureLogo;
-  @override
-  $LogoWidgetConfigCopyWith<$Res> get onboardingLogo;
-  @override
-  $AppIconWidgetConfigCopyWith<$Res> get appIcon;
   @override
   $MetadataCopyWith<$Res> get metadata;
 }
 
 /// @nodoc
-class __$$PictureWidgetConfigImplCopyWithImpl<$Res>
-    extends _$PictureWidgetConfigCopyWithImpl<$Res, _$PictureWidgetConfigImpl>
-    implements _$$PictureWidgetConfigImplCopyWith<$Res> {
-  __$$PictureWidgetConfigImplCopyWithImpl(_$PictureWidgetConfigImpl _value,
-      $Res Function(_$PictureWidgetConfigImpl) _then)
+class __$$ImageAssetConfigImplCopyWithImpl<$Res>
+    extends _$ImageAssetConfigCopyWithImpl<$Res, _$ImageAssetConfigImpl>
+    implements _$$ImageAssetConfigImplCopyWith<$Res> {
+  __$$ImageAssetConfigImplCopyWithImpl(_$ImageAssetConfigImpl _value,
+      $Res Function(_$ImageAssetConfigImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of PictureWidgetConfig
+  /// Create a copy of ImageAssetConfig
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? primaryOnboardingLogo = null,
-    Object? secondaryOnboardingLogo = null,
-    Object? onboardingPictureLogo = null,
-    Object? onboardingLogo = null,
-    Object? appIcon = null,
+    Object? uri = null,
+    Object? widthFactor = null,
+    Object? labelColor = null,
     Object? metadata = null,
   }) {
-    return _then(_$PictureWidgetConfigImpl(
-      primaryOnboardingLogo: null == primaryOnboardingLogo
-          ? _value.primaryOnboardingLogo
-          : primaryOnboardingLogo // ignore: cast_nullable_to_non_nullable
+    return _then(_$ImageAssetConfigImpl(
+      uri: null == uri
+          ? _value.uri
+          : uri // ignore: cast_nullable_to_non_nullable
               as String,
-      secondaryOnboardingLogo: null == secondaryOnboardingLogo
-          ? _value.secondaryOnboardingLogo
-          : secondaryOnboardingLogo // ignore: cast_nullable_to_non_nullable
+      widthFactor: null == widthFactor
+          ? _value.widthFactor
+          : widthFactor // ignore: cast_nullable_to_non_nullable
+              as double,
+      labelColor: null == labelColor
+          ? _value.labelColor
+          : labelColor // ignore: cast_nullable_to_non_nullable
               as String,
-      onboardingPictureLogo: null == onboardingPictureLogo
-          ? _value.onboardingPictureLogo
-          : onboardingPictureLogo // ignore: cast_nullable_to_non_nullable
-              as LogoWidgetConfig,
-      onboardingLogo: null == onboardingLogo
-          ? _value.onboardingLogo
-          : onboardingLogo // ignore: cast_nullable_to_non_nullable
-              as LogoWidgetConfig,
-      appIcon: null == appIcon
-          ? _value.appIcon
-          : appIcon // ignore: cast_nullable_to_non_nullable
-              as AppIconWidgetConfig,
       metadata: null == metadata
           ? _value.metadata
           : metadata // ignore: cast_nullable_to_non_nullable
@@ -2835,289 +3012,93 @@ class __$$PictureWidgetConfigImplCopyWithImpl<$Res>
 /// @nodoc
 
 @JsonSerializable(explicitToJson: true)
-class _$PictureWidgetConfigImpl implements _PictureWidgetConfig {
-  const _$PictureWidgetConfigImpl(
-      {this.primaryOnboardingLogo = 'asset://assets/primary_onboardin_logo.svg',
-      this.secondaryOnboardingLogo =
-          'asset://assets/secondary_onboardin_logo.svg',
-      this.onboardingPictureLogo = const LogoWidgetConfig(),
-      this.onboardingLogo = const LogoWidgetConfig(),
-      this.appIcon = const AppIconWidgetConfig(),
+class _$ImageAssetConfigImpl implements _ImageAssetConfig {
+  const _$ImageAssetConfigImpl(
+      {required this.uri,
+      this.widthFactor = 1.0,
+      this.labelColor = '#FFFFFF',
       this.metadata = const Metadata()});
 
-  factory _$PictureWidgetConfigImpl.fromJson(Map<String, dynamic> json) =>
-      _$$PictureWidgetConfigImplFromJson(json);
+  factory _$ImageAssetConfigImpl.fromJson(Map<String, dynamic> json) =>
+      _$$ImageAssetConfigImplFromJson(json);
 
   @override
-  @JsonKey()
-  final String primaryOnboardingLogo;
+  final String uri;
   @override
   @JsonKey()
-  final String secondaryOnboardingLogo;
+  final double widthFactor;
   @override
   @JsonKey()
-  final LogoWidgetConfig onboardingPictureLogo;
-  @override
-  @JsonKey()
-  final LogoWidgetConfig onboardingLogo;
-  @override
-  @JsonKey()
-  final AppIconWidgetConfig appIcon;
+  final String labelColor;
   @override
   @JsonKey()
   final Metadata metadata;
 
   @override
   String toString() {
-    return 'PictureWidgetConfig(primaryOnboardingLogo: $primaryOnboardingLogo, secondaryOnboardingLogo: $secondaryOnboardingLogo, onboardingPictureLogo: $onboardingPictureLogo, onboardingLogo: $onboardingLogo, appIcon: $appIcon, metadata: $metadata)';
+    return 'ImageAssetConfig(uri: $uri, widthFactor: $widthFactor, labelColor: $labelColor, metadata: $metadata)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$PictureWidgetConfigImpl &&
-            (identical(other.primaryOnboardingLogo, primaryOnboardingLogo) ||
-                other.primaryOnboardingLogo == primaryOnboardingLogo) &&
-            (identical(
-                    other.secondaryOnboardingLogo, secondaryOnboardingLogo) ||
-                other.secondaryOnboardingLogo == secondaryOnboardingLogo) &&
-            (identical(other.onboardingPictureLogo, onboardingPictureLogo) ||
-                other.onboardingPictureLogo == onboardingPictureLogo) &&
-            (identical(other.onboardingLogo, onboardingLogo) ||
-                other.onboardingLogo == onboardingLogo) &&
-            (identical(other.appIcon, appIcon) || other.appIcon == appIcon) &&
+            other is _$ImageAssetConfigImpl &&
+            (identical(other.uri, uri) || other.uri == uri) &&
+            (identical(other.widthFactor, widthFactor) ||
+                other.widthFactor == widthFactor) &&
+            (identical(other.labelColor, labelColor) ||
+                other.labelColor == labelColor) &&
             (identical(other.metadata, metadata) ||
                 other.metadata == metadata));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      primaryOnboardingLogo,
-      secondaryOnboardingLogo,
-      onboardingPictureLogo,
-      onboardingLogo,
-      appIcon,
-      metadata);
+  int get hashCode =>
+      Object.hash(runtimeType, uri, widthFactor, labelColor, metadata);
 
-  /// Create a copy of PictureWidgetConfig
+  /// Create a copy of ImageAssetConfig
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$PictureWidgetConfigImplCopyWith<_$PictureWidgetConfigImpl> get copyWith =>
-      __$$PictureWidgetConfigImplCopyWithImpl<_$PictureWidgetConfigImpl>(
+  _$$ImageAssetConfigImplCopyWith<_$ImageAssetConfigImpl> get copyWith =>
+      __$$ImageAssetConfigImplCopyWithImpl<_$ImageAssetConfigImpl>(
           this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$PictureWidgetConfigImplToJson(
+    return _$$ImageAssetConfigImplToJson(
       this,
     );
   }
 }
 
-abstract class _PictureWidgetConfig implements PictureWidgetConfig {
-  const factory _PictureWidgetConfig(
-      {final String primaryOnboardingLogo,
-      final String secondaryOnboardingLogo,
-      final LogoWidgetConfig onboardingPictureLogo,
-      final LogoWidgetConfig onboardingLogo,
-      final AppIconWidgetConfig appIcon,
-      final Metadata metadata}) = _$PictureWidgetConfigImpl;
+abstract class _ImageAssetConfig implements ImageAssetConfig {
+  const factory _ImageAssetConfig(
+      {required final String uri,
+      final double widthFactor,
+      final String labelColor,
+      final Metadata metadata}) = _$ImageAssetConfigImpl;
 
-  factory _PictureWidgetConfig.fromJson(Map<String, dynamic> json) =
-      _$PictureWidgetConfigImpl.fromJson;
+  factory _ImageAssetConfig.fromJson(Map<String, dynamic> json) =
+      _$ImageAssetConfigImpl.fromJson;
 
   @override
-  String get primaryOnboardingLogo;
+  String get uri;
   @override
-  String get secondaryOnboardingLogo;
+  double get widthFactor;
   @override
-  LogoWidgetConfig get onboardingPictureLogo;
-  @override
-  LogoWidgetConfig get onboardingLogo;
-  @override
-  AppIconWidgetConfig get appIcon;
+  String get labelColor;
   @override
   Metadata get metadata;
 
-  /// Create a copy of PictureWidgetConfig
+  /// Create a copy of ImageAssetConfig
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$PictureWidgetConfigImplCopyWith<_$PictureWidgetConfigImpl> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-LogoWidgetConfig _$LogoWidgetConfigFromJson(Map<String, dynamic> json) {
-  return _LogoWidgetConfig.fromJson(json);
-}
-
-/// @nodoc
-mixin _$LogoWidgetConfig {
-  double? get scale => throw _privateConstructorUsedError;
-  String? get labelColor => throw _privateConstructorUsedError;
-
-  /// Serializes this LogoWidgetConfig to a JSON map.
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
-  /// Create a copy of LogoWidgetConfig
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  $LogoWidgetConfigCopyWith<LogoWidgetConfig> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class $LogoWidgetConfigCopyWith<$Res> {
-  factory $LogoWidgetConfigCopyWith(
-          LogoWidgetConfig value, $Res Function(LogoWidgetConfig) then) =
-      _$LogoWidgetConfigCopyWithImpl<$Res, LogoWidgetConfig>;
-  @useResult
-  $Res call({double? scale, String? labelColor});
-}
-
-/// @nodoc
-class _$LogoWidgetConfigCopyWithImpl<$Res, $Val extends LogoWidgetConfig>
-    implements $LogoWidgetConfigCopyWith<$Res> {
-  _$LogoWidgetConfigCopyWithImpl(this._value, this._then);
-
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
-
-  /// Create a copy of LogoWidgetConfig
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? scale = freezed,
-    Object? labelColor = freezed,
-  }) {
-    return _then(_value.copyWith(
-      scale: freezed == scale
-          ? _value.scale
-          : scale // ignore: cast_nullable_to_non_nullable
-              as double?,
-      labelColor: freezed == labelColor
-          ? _value.labelColor
-          : labelColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ) as $Val);
-  }
-}
-
-/// @nodoc
-abstract class _$$LogoWidgetConfigImplCopyWith<$Res>
-    implements $LogoWidgetConfigCopyWith<$Res> {
-  factory _$$LogoWidgetConfigImplCopyWith(_$LogoWidgetConfigImpl value,
-          $Res Function(_$LogoWidgetConfigImpl) then) =
-      __$$LogoWidgetConfigImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call({double? scale, String? labelColor});
-}
-
-/// @nodoc
-class __$$LogoWidgetConfigImplCopyWithImpl<$Res>
-    extends _$LogoWidgetConfigCopyWithImpl<$Res, _$LogoWidgetConfigImpl>
-    implements _$$LogoWidgetConfigImplCopyWith<$Res> {
-  __$$LogoWidgetConfigImplCopyWithImpl(_$LogoWidgetConfigImpl _value,
-      $Res Function(_$LogoWidgetConfigImpl) _then)
-      : super(_value, _then);
-
-  /// Create a copy of LogoWidgetConfig
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? scale = freezed,
-    Object? labelColor = freezed,
-  }) {
-    return _then(_$LogoWidgetConfigImpl(
-      scale: freezed == scale
-          ? _value.scale
-          : scale // ignore: cast_nullable_to_non_nullable
-              as double?,
-      labelColor: freezed == labelColor
-          ? _value.labelColor
-          : labelColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ));
-  }
-}
-
-/// @nodoc
-
-@JsonSerializable(explicitToJson: true)
-class _$LogoWidgetConfigImpl implements _LogoWidgetConfig {
-  const _$LogoWidgetConfigImpl({this.scale, this.labelColor});
-
-  factory _$LogoWidgetConfigImpl.fromJson(Map<String, dynamic> json) =>
-      _$$LogoWidgetConfigImplFromJson(json);
-
-  @override
-  final double? scale;
-  @override
-  final String? labelColor;
-
-  @override
-  String toString() {
-    return 'LogoWidgetConfig(scale: $scale, labelColor: $labelColor)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$LogoWidgetConfigImpl &&
-            (identical(other.scale, scale) || other.scale == scale) &&
-            (identical(other.labelColor, labelColor) ||
-                other.labelColor == labelColor));
-  }
-
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  int get hashCode => Object.hash(runtimeType, scale, labelColor);
-
-  /// Create a copy of LogoWidgetConfig
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$LogoWidgetConfigImplCopyWith<_$LogoWidgetConfigImpl> get copyWith =>
-      __$$LogoWidgetConfigImplCopyWithImpl<_$LogoWidgetConfigImpl>(
-          this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$LogoWidgetConfigImplToJson(
-      this,
-    );
-  }
-}
-
-abstract class _LogoWidgetConfig implements LogoWidgetConfig {
-  const factory _LogoWidgetConfig(
-      {final double? scale, final String? labelColor}) = _$LogoWidgetConfigImpl;
-
-  factory _LogoWidgetConfig.fromJson(Map<String, dynamic> json) =
-      _$LogoWidgetConfigImpl.fromJson;
-
-  @override
-  double? get scale;
-  @override
-  String? get labelColor;
-
-  /// Create a copy of LogoWidgetConfig
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$LogoWidgetConfigImplCopyWith<_$LogoWidgetConfigImpl> get copyWith =>
+  _$$ImageAssetConfigImplCopyWith<_$ImageAssetConfigImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 

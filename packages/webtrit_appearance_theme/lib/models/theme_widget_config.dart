@@ -15,7 +15,7 @@ class ThemeWidgetConfig with _$ThemeWidgetConfig {
     @Default(ButtonWidgetConfig()) ButtonWidgetConfig button,
     @Default(GroupWidgetConfig()) GroupWidgetConfig? group,
     @Default(BarWidgetConfig()) BarWidgetConfig bar,
-    @Default(PictureWidgetConfig()) PictureWidgetConfig picture,
+    @Default(ImageAssetsConfig()) ImageAssetsConfig imageAssets,
     @Default(InputWidgetConfig()) InputWidgetConfig input,
     @Default(TextWidgetConfig()) TextWidgetConfig text,
     @Default(DialogWidgetConfig()) DialogWidgetConfig dialog,
@@ -146,18 +146,16 @@ class CallActionsWidgetConfig with _$CallActionsWidgetConfig {
 }
 
 @Freezed()
-class PictureWidgetConfig with _$PictureWidgetConfig {
+class ImageAssetsConfig with _$ImageAssetsConfig {
   @JsonSerializable(explicitToJson: true)
-  const factory PictureWidgetConfig({
-    @Default('asset://assets/primary_onboardin_logo.svg') String primaryOnboardingLogo,
-    @Default('asset://assets/secondary_onboardin_logo.svg') String secondaryOnboardingLogo,
-    @Default(LogoWidgetConfig()) LogoWidgetConfig onboardingPictureLogo,
-    @Default(LogoWidgetConfig()) LogoWidgetConfig onboardingLogo,
+  const factory ImageAssetsConfig({
+    @Default(ImageAssetConfig(uri: 'asset://assets/primary_onboardin_logo.svg')) ImageAssetConfig primaryOnboardingLogo,
+    @Default(ImageAssetConfig(uri: 'asset://assets/secondary_onboardin_logo.svg'))
+    ImageAssetConfig secondaryOnboardingLogo,
     @Default(AppIconWidgetConfig()) AppIconWidgetConfig appIcon,
-    @Default(Metadata()) Metadata metadata,
-  }) = _PictureWidgetConfig;
+  }) = _ImageAssetsConfig;
 
-  factory PictureWidgetConfig.fromJson(Map<String, dynamic> json) => _$PictureWidgetConfigFromJson(json);
+  factory ImageAssetsConfig.fromJson(Map<String, dynamic> json) => _$ImageAssetsConfigFromJson(json);
 
   /// A globally consistent metadata key used to associate additional resources
   static const String metadataPrimaryOnboardingLogoUrl = 'primaryOnboardingLogoUrl';
@@ -167,14 +165,16 @@ class PictureWidgetConfig with _$PictureWidgetConfig {
 }
 
 @Freezed()
-class LogoWidgetConfig with _$LogoWidgetConfig {
+class ImageAssetConfig with _$ImageAssetConfig {
   @JsonSerializable(explicitToJson: true)
-  const factory LogoWidgetConfig({
-    double? scale,
-    String? labelColor,
-  }) = _LogoWidgetConfig;
+  const factory ImageAssetConfig({
+    required String uri,
+    @Default(1.0) double widthFactor,
+    @Default('#FFFFFF') String labelColor,
+    @Default(Metadata()) Metadata metadata,
+  }) = _ImageAssetConfig;
 
-  factory LogoWidgetConfig.fromJson(Map<String, dynamic> json) => _$LogoWidgetConfigFromJson(json);
+  factory ImageAssetConfig.fromJson(Map<String, dynamic> json) => _$ImageAssetConfigFromJson(json);
 }
 
 @Freezed()

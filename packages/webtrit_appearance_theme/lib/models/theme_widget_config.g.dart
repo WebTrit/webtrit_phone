@@ -21,10 +21,10 @@ _$ThemeWidgetConfigImpl _$$ThemeWidgetConfigImplFromJson(
       bar: json['bar'] == null
           ? const BarWidgetConfig()
           : BarWidgetConfig.fromJson(json['bar'] as Map<String, dynamic>),
-      picture: json['picture'] == null
-          ? const PictureWidgetConfig()
-          : PictureWidgetConfig.fromJson(
-              json['picture'] as Map<String, dynamic>),
+      imageAssets: json['imageAssets'] == null
+          ? const ImageAssetsConfig()
+          : ImageAssetsConfig.fromJson(
+              json['imageAssets'] as Map<String, dynamic>),
       input: json['input'] == null
           ? const InputWidgetConfig()
           : InputWidgetConfig.fromJson(json['input'] as Map<String, dynamic>),
@@ -55,7 +55,7 @@ Map<String, dynamic> _$$ThemeWidgetConfigImplToJson(
       'button': instance.button.toJson(),
       'group': instance.group?.toJson(),
       'bar': instance.bar.toJson(),
-      'picture': instance.picture.toJson(),
+      'imageAssets': instance.imageAssets.toJson(),
       'input': instance.input.toJson(),
       'text': instance.text.toJson(),
       'dialog': instance.dialog.toJson(),
@@ -240,53 +240,51 @@ Map<String, dynamic> _$$CallActionsWidgetConfigImplToJson(
       'keypadActiveBackgroundColor': instance.keypadActiveBackgroundColor,
     };
 
-_$PictureWidgetConfigImpl _$$PictureWidgetConfigImplFromJson(
+_$ImageAssetsConfigImpl _$$ImageAssetsConfigImplFromJson(
         Map<String, dynamic> json) =>
-    _$PictureWidgetConfigImpl(
-      primaryOnboardingLogo: json['primaryOnboardingLogo'] as String? ??
-          'asset://assets/primary_onboardin_logo.svg',
-      secondaryOnboardingLogo: json['secondaryOnboardingLogo'] as String? ??
-          'asset://assets/secondary_onboardin_logo.svg',
-      onboardingPictureLogo: json['onboardingPictureLogo'] == null
-          ? const LogoWidgetConfig()
-          : LogoWidgetConfig.fromJson(
-              json['onboardingPictureLogo'] as Map<String, dynamic>),
-      onboardingLogo: json['onboardingLogo'] == null
-          ? const LogoWidgetConfig()
-          : LogoWidgetConfig.fromJson(
-              json['onboardingLogo'] as Map<String, dynamic>),
+    _$ImageAssetsConfigImpl(
+      primaryOnboardingLogo: json['primaryOnboardingLogo'] == null
+          ? const ImageAssetConfig(
+              uri: 'asset://assets/primary_onboardin_logo.svg')
+          : ImageAssetConfig.fromJson(
+              json['primaryOnboardingLogo'] as Map<String, dynamic>),
+      secondaryOnboardingLogo: json['secondaryOnboardingLogo'] == null
+          ? const ImageAssetConfig(
+              uri: 'asset://assets/secondary_onboardin_logo.svg')
+          : ImageAssetConfig.fromJson(
+              json['secondaryOnboardingLogo'] as Map<String, dynamic>),
       appIcon: json['appIcon'] == null
           ? const AppIconWidgetConfig()
           : AppIconWidgetConfig.fromJson(
               json['appIcon'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$$ImageAssetsConfigImplToJson(
+        _$ImageAssetsConfigImpl instance) =>
+    <String, dynamic>{
+      'primaryOnboardingLogo': instance.primaryOnboardingLogo.toJson(),
+      'secondaryOnboardingLogo': instance.secondaryOnboardingLogo.toJson(),
+      'appIcon': instance.appIcon.toJson(),
+    };
+
+_$ImageAssetConfigImpl _$$ImageAssetConfigImplFromJson(
+        Map<String, dynamic> json) =>
+    _$ImageAssetConfigImpl(
+      uri: json['uri'] as String,
+      widthFactor: (json['widthFactor'] as num?)?.toDouble() ?? 1.0,
+      labelColor: json['labelColor'] as String? ?? '#FFFFFF',
       metadata: json['metadata'] == null
           ? const Metadata()
           : Metadata.fromJson(json['metadata'] as Map<String, dynamic>),
     );
 
-Map<String, dynamic> _$$PictureWidgetConfigImplToJson(
-        _$PictureWidgetConfigImpl instance) =>
+Map<String, dynamic> _$$ImageAssetConfigImplToJson(
+        _$ImageAssetConfigImpl instance) =>
     <String, dynamic>{
-      'primaryOnboardingLogo': instance.primaryOnboardingLogo,
-      'secondaryOnboardingLogo': instance.secondaryOnboardingLogo,
-      'onboardingPictureLogo': instance.onboardingPictureLogo.toJson(),
-      'onboardingLogo': instance.onboardingLogo.toJson(),
-      'appIcon': instance.appIcon.toJson(),
-      'metadata': instance.metadata.toJson(),
-    };
-
-_$LogoWidgetConfigImpl _$$LogoWidgetConfigImplFromJson(
-        Map<String, dynamic> json) =>
-    _$LogoWidgetConfigImpl(
-      scale: (json['scale'] as num?)?.toDouble(),
-      labelColor: json['labelColor'] as String?,
-    );
-
-Map<String, dynamic> _$$LogoWidgetConfigImplToJson(
-        _$LogoWidgetConfigImpl instance) =>
-    <String, dynamic>{
-      'scale': instance.scale,
+      'uri': instance.uri,
+      'widthFactor': instance.widthFactor,
       'labelColor': instance.labelColor,
+      'metadata': instance.metadata.toJson(),
     };
 
 _$AppIconWidgetConfigImpl _$$AppIconWidgetConfigImplFromJson(
