@@ -118,19 +118,27 @@ class SDPModBuilder {
     final media = _getMedia(profile.kind);
     if (media == null) return null;
 
-    final rtps = media['rtp'] as List<dynamic>;
-    final fmtps = media['fmtp'] as List<dynamic>;
-    final rtcpFbs = media['rtcpFb'] as List<dynamic>;
+    final originalPayloads = [];
+    final originalRtpMaps = [];
+    final originalFmtps = [];
+    final originalRtcpFbs = [];
 
-    var rtxProfileId = fmtps.firstWhereOrNull((f) => f['config'] == 'apt=$profileId')?['payload'];
+    if (media['payloads'] is String) originalPayloads.addAll((media['payloads'] as String).split(' '));
+    if (media['rtp'] is List<dynamic>) originalRtpMaps.addAll(media['rtp'] as List<dynamic>);
+    if (media['fmtp'] is List<dynamic>) originalFmtps.addAll(media['fmtp'] as List<dynamic>);
+    if (media['rtcpFb'] is List<dynamic>) originalRtcpFbs.addAll(media['rtcpFb'] as List<dynamic>);
 
-    rtps.removeWhere((r) => r['payload'] == profileId || r['payload'] == rtxProfileId);
-    fmtps.removeWhere((f) => f['payload'] == profileId || f['payload'] == rtxProfileId);
-    rtcpFbs.removeWhere((f) => f['payload'] == profileId);
+    var rtxProfileId = originalFmtps.firstWhereOrNull((f) => f['config'] == 'apt=$profileId')?['payload'];
 
-    final payloadsList = (media['payloads'] as String).split(' ');
-    final payloadsFiltered = payloadsList.where((p) => p != profileId.toString() && p != rtxProfileId.toString());
-    media['payloads'] = payloadsFiltered.join(' ');
+    final modedPayloads = originalPayloads.where((p) => p != profileId.toString() && p != rtxProfileId.toString());
+    final modedRtpMaps = originalRtpMaps.where((r) => r['payload'] != profileId && r['payload'] != rtxProfileId);
+    final modedFmtps = originalFmtps.where((f) => f['payload'] != profileId && f['payload'] != rtxProfileId);
+    final modedRtcpFbs = originalRtcpFbs.where((f) => f['payload'] != profileId);
+
+    media['payloads'] = modedPayloads.join(' ');
+    media['rtp'] = modedRtpMaps.toList();
+    media['fmtp'] = modedFmtps.toList();
+    media['rtcpFb'] = modedRtcpFbs.toList();
   }
 
   /// Reorder the media codecs by the given order.
@@ -141,10 +149,15 @@ class SDPModBuilder {
     final media = _getMedia(kind);
 
     if (profiles.isNotEmpty && media != null) {
-      final originalPayloads = (media['payloads'] as String).split(' ');
-      final originalRtpMaps = media['rtp'] as List<dynamic>;
-      final originalFmtps = media['fmtp'] as List<dynamic>;
-      final originalRtcpFbs = media['rtcpFb'] as List<dynamic>;
+      final originalPayloads = [];
+      final originalRtpMaps = [];
+      final originalFmtps = [];
+      final originalRtcpFbs = [];
+
+      if (media['payloads'] is String) originalPayloads.addAll((media['payloads'] as String).split(' '));
+      if (media['rtp'] is List<dynamic>) originalRtpMaps.addAll(media['rtp'] as List<dynamic>);
+      if (media['fmtp'] is List<dynamic>) originalFmtps.addAll(media['fmtp'] as List<dynamic>);
+      if (media['rtcpFb'] is List<dynamic>) originalRtcpFbs.addAll(media['rtcpFb'] as List<dynamic>);
 
       final newPayloads = <String>[];
       final reorderedRtpMaps = [];
