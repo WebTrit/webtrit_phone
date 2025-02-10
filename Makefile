@@ -26,17 +26,17 @@ build:
 
 ## Configure application resources
 configure:
-	$(CONFIGURATOR) configurator-resources --applicationId=$(id) $(KEYSTORES_PATH) --$(BUILD_FLOW)
+	$(CONFIGURATOR) configurator-resources --applicationId=$(id) $(KEYSTORES_PATH) --token=$(token) --$(BUILD_FLOW)
 	$(CONFIGURATOR) configurator-generate
 
 ## Create demo configuration
 configure-demo:
-	$(CONFIGURATOR) configurator-resources --applicationId=$(id) $(KEYSTORES_PATH) --demo
+	$(CONFIGURATOR) configurator-resources --applicationId=$(id) $(KEYSTORES_PATH) --token=$(token) --demo
 	$(CONFIGURATOR) configurator-generate
 
 ## Create classic configuration
 configure-classic:
-	$(CONFIGURATOR) configurator-resources --applicationId=$(id) $(KEYSTORES_PATH) --classic
+	$(CONFIGURATOR) configurator-resources --applicationId=$(id) $(KEYSTORES_PATH) --token=$(token) --classic
 	$(CONFIGURATOR) configurator-generate
 
 ## Create iOS build
