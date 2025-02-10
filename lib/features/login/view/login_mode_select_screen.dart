@@ -15,11 +15,11 @@ export 'login_mode_select_screen_styles.dart';
 class LoginModeSelectScreen extends StatelessWidget {
   const LoginModeSelectScreen({
     super.key,
-    this.appGreeting,
+    this.appGreetingL10n,
     this.style,
   });
 
-  final String? appGreeting;
+  final String? appGreetingL10n;
 
   final LoginModeSelectScreenStyle? style;
 
@@ -65,7 +65,7 @@ class LoginModeSelectScreen extends StatelessWidget {
               children: [
                 const Spacer(),
                 OnboardingPictureLogo(
-                  text: appGreeting,
+                  text: appGreetingL10n != null ? context.parseL10n(appGreetingL10n!) : null,
                 ),
                 const Spacer(),
                 const Spacer(),

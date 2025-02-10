@@ -41,9 +41,7 @@ class _IndexInputScreenState extends State<IndexInputScreen> {
     late final screenshots = [
       ScreenshotApp(
         appBloc: appBloc,
-        child: const LoginModeSelectScreenScreenshot(
-          appGreeting: EnvironmentConfig.APP_GREETING,
-        ),
+        child: const LoginModeSelectScreenScreenshot(),
       ),
       ScreenshotApp(
         appBloc: appBloc,
