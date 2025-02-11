@@ -16,6 +16,8 @@ class EncodingSettings extends Equatable {
     this.opusDtx,
     this.audioProfiles,
     this.videoProfiles,
+    this.iceTransportFilter,
+    this.iceNetworkFilter,
   });
 
   factory EncodingSettings.blank() => const EncodingSettings();
@@ -93,6 +95,12 @@ class EncodingSettings extends Equatable {
     (option: RTPCodecProfile.redVideo, enabled: true),
   ];
 
+  /// Set the transport protocol filtering for ICE candidates.
+  final IceTransportFilter? iceTransportFilter;
+
+  /// Set the network protocol filtering for ICE candidates.
+  final IceNetworkFilter? iceNetworkFilter;
+
   /// For tracking the model schema changes on serializing.
   static int schemaVersion = 1;
 
@@ -107,6 +115,8 @@ class EncodingSettings extends Equatable {
       opusDtx: opusDtx,
       audioProfiles: audioProfiles,
       videoProfiles: videoProfiles,
+      iceTransportFilter: iceTransportFilter,
+      iceNetworkFilter: iceNetworkFilter,
     );
   }
 
@@ -121,6 +131,8 @@ class EncodingSettings extends Equatable {
       opusDtx: opusDtx,
       audioProfiles: audioProfiles,
       videoProfiles: videoProfiles,
+      iceTransportFilter: iceTransportFilter,
+      iceNetworkFilter: iceNetworkFilter,
     );
   }
 
@@ -135,6 +147,8 @@ class EncodingSettings extends Equatable {
       opusDtx: opusDtx,
       audioProfiles: audioProfiles,
       videoProfiles: videoProfiles,
+      iceTransportFilter: iceTransportFilter,
+      iceNetworkFilter: iceNetworkFilter,
     );
   }
 
@@ -149,6 +163,8 @@ class EncodingSettings extends Equatable {
       opusDtx: opusDtx,
       audioProfiles: audioProfiles,
       videoProfiles: videoProfiles,
+      iceTransportFilter: iceTransportFilter,
+      iceNetworkFilter: iceNetworkFilter,
     );
   }
 
@@ -163,6 +179,8 @@ class EncodingSettings extends Equatable {
       opusDtx: opusDtx,
       audioProfiles: audioProfiles,
       videoProfiles: videoProfiles,
+      iceTransportFilter: iceTransportFilter,
+      iceNetworkFilter: iceNetworkFilter,
     );
   }
 
@@ -177,6 +195,8 @@ class EncodingSettings extends Equatable {
       opusDtx: opusDtx,
       audioProfiles: audioProfiles,
       videoProfiles: videoProfiles,
+      iceTransportFilter: iceTransportFilter,
+      iceNetworkFilter: iceNetworkFilter,
     );
   }
 
@@ -191,6 +211,8 @@ class EncodingSettings extends Equatable {
       opusDtx: opusDtx,
       audioProfiles: audioProfiles,
       videoProfiles: videoProfiles,
+      iceTransportFilter: iceTransportFilter,
+      iceNetworkFilter: iceNetworkFilter,
     );
   }
 
@@ -205,6 +227,8 @@ class EncodingSettings extends Equatable {
       opusDtx: opusDtx,
       audioProfiles: audioProfiles,
       videoProfiles: videoProfiles,
+      iceTransportFilter: iceTransportFilter,
+      iceNetworkFilter: iceNetworkFilter,
     );
   }
 
@@ -219,6 +243,40 @@ class EncodingSettings extends Equatable {
       opusDtx: opusDtx,
       audioProfiles: audioProfiles,
       videoProfiles: videoProfiles,
+      iceTransportFilter: iceTransportFilter,
+      iceNetworkFilter: iceNetworkFilter,
+    );
+  }
+
+  EncodingSettings copyWithIceTransportFilter(IceTransportFilter? iceTransportFilter) {
+    return EncodingSettings(
+      audioBitrate: audioBitrate,
+      videoBitrate: videoBitrate,
+      ptime: ptime,
+      maxptime: maxptime,
+      opusBandwidthLimit: opusBandwidthLimit,
+      opusStereo: opusStereo,
+      opusDtx: opusDtx,
+      audioProfiles: audioProfiles,
+      videoProfiles: videoProfiles,
+      iceTransportFilter: iceTransportFilter,
+      iceNetworkFilter: iceNetworkFilter,
+    );
+  }
+
+  EncodingSettings copyWithIceNetworkFilter(IceNetworkFilter? iceNetworkFilter) {
+    return EncodingSettings(
+      audioBitrate: audioBitrate,
+      videoBitrate: videoBitrate,
+      ptime: ptime,
+      maxptime: maxptime,
+      opusBandwidthLimit: opusBandwidthLimit,
+      opusStereo: opusStereo,
+      opusDtx: opusDtx,
+      audioProfiles: audioProfiles,
+      videoProfiles: videoProfiles,
+      iceTransportFilter: iceTransportFilter,
+      iceNetworkFilter: iceNetworkFilter,
     );
   }
 
@@ -233,8 +291,14 @@ class EncodingSettings extends Equatable {
         opusDtx,
         audioProfiles,
         videoProfiles,
+        iceTransportFilter,
+        iceNetworkFilter,
       ];
 
   @override
   bool get stringify => true;
 }
+
+enum IceTransportFilter { udp, tcp }
+
+enum IceNetworkFilter { ipv4, ipv6 }

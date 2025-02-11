@@ -207,6 +207,38 @@ class _EncodingSettingsScreenState extends State<EncodingSettingsScreen> {
                   items: settings.videoProfiles ?? [],
                   onChange: (items) => cubit.setNew(settings.copyWithVideoProfiles(items)),
                 ),
+                const SizedBox(height: 24),
+                HeadingSection(
+                  title: 'Ice candidates filtering',
+                  tooltip: 'Filter ice candidates based on the network preferences may help to avoid network issues',
+                  icon: const Icon(Icons.bubble_chart),
+                ),
+                const SizedBox(height: 16.0),
+                ChoosableSection<IceNetworkFilter>(
+                  title: 'Network protocol',
+                  buildOptionTitle: (option) {
+                    if (option == IceNetworkFilter.ipv4) return Text('Skip IPv4 candidates');
+                    if (option == IceNetworkFilter.ipv6) return Text('Skip IPv6 candidates');
+
+                    return Text('No filtering');
+                  },
+                  options: const [IceNetworkFilter.ipv4, IceNetworkFilter.ipv6],
+                  selected: settings.iceNetworkFilter,
+                  onSelect: (option) => cubit.setNew(settings.copyWithIceNetworkFilter(option)),
+                ),
+                const SizedBox(height: 16.0),
+                ChoosableSection<IceTransportFilter>(
+                  title: 'Transport protocol',
+                  buildOptionTitle: (option) {
+                    if (option == IceTransportFilter.tcp) return Text('Skip TCP candidates');
+                    if (option == IceTransportFilter.udp) return Text('Skip UDP candidates');
+
+                    return Text('No filtering');
+                  },
+                  options: const [IceTransportFilter.tcp, IceTransportFilter.udp],
+                  selected: settings.iceTransportFilter,
+                  onSelect: (option) => cubit.setNew(settings.copyWithIceTransportFilter(option)),
+                ),
                 const SizedBox(height: 16.0),
               ],
             ),

@@ -256,6 +256,7 @@ class _MainShellState extends State<MainShell> {
                 callkeep: _callkeep,
                 callkeepConnections: _callkeepConnections,
                 sdpMunger: ModifyWithEncodingSettings(appPreferences),
+                iceFiler: FilterWithEncodingSettings(appPreferences),
               )..add(const CallStarted());
             },
           ),

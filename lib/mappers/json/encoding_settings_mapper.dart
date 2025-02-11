@@ -24,6 +24,10 @@ mixin EncodingSettingsJsonMapper {
       opusDtx: map['opusDtx'] as bool?,
       audioProfiles: (map['audioProfiles'] as List<dynamic>?)?.map((p) => profileFromMap(p)).toList(),
       videoProfiles: (map['videoProfiles'] as List<dynamic>?)?.map((p) => profileFromMap(p)).toList(),
+      iceTransportFilter:
+          map['iceTransportFilter'] != null ? IceTransportFilter.values.byName(map['iceTransportFilter']) : null,
+      iceNetworkFilter:
+          map['iceNetworkFilter'] != null ? IceNetworkFilter.values.byName(map['iceNetworkFilter']) : null,
     );
   }
 
@@ -38,6 +42,8 @@ mixin EncodingSettingsJsonMapper {
       'opusDtx': settings.opusDtx,
       'audioProfiles': settings.audioProfiles?.map((e) => profileToMap(e)).toList(),
       'videoProfiles': settings.videoProfiles?.map((e) => profileToMap(e)).toList(),
+      'iceTransportFilter': settings.iceTransportFilter?.name,
+      'iceNetworkFilter': settings.iceNetworkFilter?.name,
     };
   }
 

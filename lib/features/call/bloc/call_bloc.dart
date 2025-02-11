@@ -53,6 +53,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   final CallkeepConnections callkeepConnections;
 
   final SDPMunger? sdpMunger;
+  final IceFilter? iceFiler;
 
   StreamSubscription<List<ConnectivityResult>>? _connectivityChangedSubscription;
   StreamSubscription<PendingCall>? _pendingCallHandlerSubscription;
@@ -74,6 +75,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     required this.callkeep,
     required this.callkeepConnections,
     this.sdpMunger,
+    this.iceFiler,
   }) : super(const CallState()) {
     on<CallStarted>(
       _onCallStarted,
@@ -1909,6 +1911,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _PeerConnectionEventIceCandidateIdentified event,
     Emitter<CallState> emit,
   ) async {
+    if (iceFiler?.filter(event.candidate) == true) {
+      _logger.fine('__onPeerConnectionEventIceCandidateIdentified: skip by iceFiler');
+      return;
+    }
+
     try {
       await state.performOnActiveCall(event.callId, (activeCall) {
         if (!activeCall.wasHungUp) {
