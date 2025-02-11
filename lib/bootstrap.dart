@@ -58,7 +58,6 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
       final deviceInfo = await DeviceInfoFactory.init();
       final packageInfo = await PackageInfoFactory.init();
 
-      await AppThemes.init();
       await AppPermissions.init(featureAccess);
       await SecureStorage.init();
       await AppCertificates.init();
