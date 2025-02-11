@@ -15,7 +15,6 @@ class LoginModeSelectScreenScreenshot extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('LoginModeSelectScreenScreenshot: ${ context.read<FeatureAccess?>()?.loginFeature.titleL10n}');
     return BlocProvider<LoginCubit>(
       create: (context) => MockLoginCubit.loginModeSelectScreen(),
       child: LoginModeSelectScreen(

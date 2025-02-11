@@ -262,7 +262,7 @@ _$AppConfigSettingsImpl _$$AppConfigSettingsImplFromJson(
                   AppConfigSettingsItem(
                       enabled: true,
                       type: 'encoding',
-                      titleL10n: 'settings_ListViewTileTitle_call_codecs',
+                      titleL10n: 'settings_ListViewTileTitle_encoding',
                       icon: '0xf1cf'),
                   AppConfigSettingsItem(
                       enabled: true,

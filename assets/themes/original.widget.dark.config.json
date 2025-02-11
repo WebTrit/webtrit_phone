@@ -5,7 +5,7 @@
   "imageAssets": {
     "primaryOnboardingLogo": {
       "uri": "asset://assets/primary_onboardin_logo.svg",
-      "widthFactor": 0.9
+      "widthFactor": 0.45
     },
     "secondaryOnboardingLogo": {
       "uri": "asset://assets/secondary_onboardin_logo.svg",
