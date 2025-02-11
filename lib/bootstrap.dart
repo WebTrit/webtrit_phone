@@ -106,11 +106,17 @@ Future<void> _initCallkeep(AppPreferences appPreferences) async {
   }
 }
 
-@pragma('vm:entry-point')
+/// Initializes Firebase for background services. This initialization must be called in an isolate
+/// when Firebase components are used. For more details, refer to the Firebase documentation:
+/// https://firebase.google.com/docs/cloud-messaging/flutter/receive
 Future<void> _initFirebase() async {
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  try {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+  } catch (e) {
+    Logger('Firebase').severe('Error in _initFirebase', e);
+  }
 }
 
 Future<void> _initFirebaseMessaging() async {
@@ -149,8 +155,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   final remoteCacheConfigService = await DefaultRemoteCacheConfigService.init();
 
   // Initialize the logger for handling Firebase Cloud Messaging (FCM) in the background isolate.
-  await AppInfo.init(const SharedPreferencesAppIdProvider());
-  final appInfo = await AppInfo.init(FirebaseAppIdProvider());
+  final appInfo = await AppInfo.init(const SharedPreferencesAppIdProvider());
   final deviceInfo = await DeviceInfoFactory.init();
   final packageInfo = await PackageInfoFactory.init();
 

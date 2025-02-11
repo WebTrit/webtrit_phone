@@ -9,12 +9,15 @@ const _appIdKey = 'app_id_key';
 
 final Logger _logger = Logger('AppIdProvider');
 
+/// Abstract class for providing app ID. It supports fetching the ID and listening for changes in the ID.
 abstract class AppIdProvider {
   Future<String> getId();
 
   Stream<String> get onIdChange;
 }
 
+/// Implementation of AppIdProvider using Firebase installations service.
+/// This provider retrieves the Firebase installation ID and handles changes in the ID.
 class FirebaseAppIdProvider implements AppIdProvider {
   final _idChangeController = StreamController<String>.broadcast();
 
@@ -69,6 +72,8 @@ class FirebaseAppIdProvider implements AppIdProvider {
   }
 }
 
+/// AppIdProvider implementation using SharedPreferences. This is used when the app ID is already provided
+/// in the main isolate and is shared across other isolates for consistency.
 class SharedPreferencesAppIdProvider implements AppIdProvider {
   const SharedPreferencesAppIdProvider();
 
