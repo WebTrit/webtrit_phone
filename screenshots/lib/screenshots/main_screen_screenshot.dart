@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/features/features.dart';
+import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
@@ -23,7 +24,7 @@ class MainScreenScreenshot extends StatelessWidget {
   Widget build(BuildContext context) {
     // Fetch tabs for the bottom menu using FeatureAccess, which is specifically used in the configurator project.
     // If FeatureAccess is not available, fallback to predefined default tabs.
-    final tabs = context.read<FeatureAccess?>()?.bottomMenuFeature.tabs ?? _defaultTabs();
+    final tabs = context.read<FeatureAccess?>()?.bottomMenuFeature.tabs ?? _defaultTabs(context);
     return MultiBlocProvider(
       providers: _createMockBlocProviders(),
       child: MainScreen(
@@ -42,34 +43,34 @@ class MainScreenScreenshot extends StatelessWidget {
     ];
   }
 
-  List<BottomMenuTab> _defaultTabs() {
+  List<BottomMenuTab> _defaultTabs(BuildContext context) {
     return [
-      const BottomMenuTab(
+      BottomMenuTab(
         enabled: true,
         initial: true,
         flavor: MainFlavor.favorites,
-        titleL10n: 'main_BottomNavigationBarItemLabel_favorites',
+        titleL10n: context.parseL10n('main_BottomNavigationBarItemLabel_favorites'),
         icon: Icons.star,
       ),
-      const BottomMenuTab(
+      BottomMenuTab(
         enabled: true,
         initial: false,
         flavor: MainFlavor.recents,
-        titleL10n: 'main_BottomNavigationBarItemLabel_recents',
+        titleL10n: context.parseL10n('main_BottomNavigationBarItemLabel_recents'),
         icon: Icons.history,
       ),
-      const BottomMenuTab(
+      BottomMenuTab(
         enabled: true,
         initial: false,
         flavor: MainFlavor.contacts,
-        titleL10n: 'main_BottomNavigationBarItemLabel_contacts',
+        titleL10n: context.parseL10n('main_BottomNavigationBarItemLabel_contacts'),
         icon: Icons.people,
       ),
-      const BottomMenuTab(
+      BottomMenuTab(
         enabled: true,
         initial: false,
         flavor: MainFlavor.keypad,
-        titleL10n: 'main_BottomNavigationBarItemLabel_keypad',
+        titleL10n: context.parseL10n('main_BottomNavigationBarItemLabel_keypad'),
         icon: Icons.dialpad,
       ),
     ];
