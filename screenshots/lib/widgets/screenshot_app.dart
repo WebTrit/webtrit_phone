@@ -46,14 +46,14 @@ class ScreenshotApp extends StatelessWidget {
                 localizationsDelegates: AppLocalizations.localizationsDelegates,
                 supportedLocales: AppLocalizations.supportedLocales,
                 title: EnvironmentConfig.APP_NAME,
-                color: themeProvider.light()!.primaryColor,
+                color: themeProvider.light().primaryColor,
                 debugShowCheckedModeBanner: false,
                 routerDelegate: ScreenshotRouterDelegate(child),
                 routeInformationParser: const _NoOpRouteInformationParser(),
                 builder: (context, child) {
                   // Ensure themes are applied to the app
                   return Theme(
-                    data: themeProvider.light()!,
+                    data: themeProvider.light(),
                     child: child!,
                   );
                 },

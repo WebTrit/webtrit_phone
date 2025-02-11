@@ -32,7 +32,7 @@ class LoginSignUpScreenshot extends StatelessWidget {
       create: (context) => MockLoginCubit.loginSwitchScreen(embedded: embedded.customLoginFeature),
       child: LoginSwitchScreen(
         body: LoginSignupEmbeddedRequestScreen(
-          initialUrl: embedded!.customLoginFeature.resource,
+          initialUrl: embedded.customLoginFeature.resource,
         ),
         currentLoginType: LoginType.signup,
         supportedLoginTypes: const [

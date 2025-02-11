@@ -182,7 +182,7 @@ class FeatureAccess {
 
   static LoginEmbedded? _toLoginEmbeddedModel(EmbeddedData? data) {
     return data?.uri != null
-        ? LoginEmbedded(titleL10n: data!.toolbar.titleL10n, showToolbar: data.toolbar.showToolbar, resource: data!.uri!)
+        ? LoginEmbedded(titleL10n: data!.toolbar.titleL10n, showToolbar: data.toolbar.showToolbar, resource: data.uri!)
         : null;
   }
 
