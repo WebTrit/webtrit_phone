@@ -3,7 +3,8 @@ import 'package:clock/clock.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/models/models.dart';
 
-final dRecents = [
+/// 🔹 Mock recent call history data for testing call logs & contact integration
+final dMockRecentCallHistory = [
   Recent(
     callLogEntry: CallLogEntry(
       id: 1,
@@ -70,8 +71,8 @@ final dRecents = [
       id: 4,
       sourceType: ContactSourceType.external,
       sourceId: '4',
-      firstName: 'Stu',
-      lastName: 'Pedaso',
+      firstName: 'Stuart',
+      lastName: 'Peterson',
     ),
   ),
   Recent(
@@ -88,8 +89,8 @@ final dRecents = [
       id: 5,
       sourceType: ContactSourceType.external,
       sourceId: '5',
-      firstName: 'Zeliboba',
-      lastName: 'Sheshera',
+      firstName: 'Alex',
+      lastName: 'Bloom',
     ),
   ),
 ];
