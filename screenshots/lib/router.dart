@@ -94,6 +94,15 @@ class _IndexInputScreenState extends State<IndexInputScreen> {
       ),
       ScreenshotApp(
         appBloc: appBloc,
+        child: Builder(
+          builder: (context) => const MainScreenScreenshot(
+            MainFlavor.messaging,
+            Text(EnvironmentConfig.APP_NAME),
+          ),
+        ),
+      ),
+      ScreenshotApp(
+        appBloc: appBloc,
         child: const SettingScreenScreenshot(),
       ),
       ScreenshotApp(
