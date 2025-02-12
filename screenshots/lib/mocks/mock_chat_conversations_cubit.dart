@@ -1,16 +1,13 @@
 import 'package:bloc_test/bloc_test.dart';
-import 'package:mocktail/mocktail.dart';
 
 import 'package:webtrit_phone/features/features.dart';
 
 import '../data/messaging.dart';
-import 'repository/repository.dart';
 
 class MockChatConversationsCubit extends MockCubit<ChatConversationsState> implements ChatConversationsCubit {
   MockChatConversationsCubit();
 
-  factory MockChatConversationsCubit.initial(
-      MockChatsRepository chatsRepository, MockContactsRepository contactsRepository) {
+  factory MockChatConversationsCubit.initial() {
     final mock = MockChatConversationsCubit();
 
     whenListen(
@@ -24,13 +21,6 @@ class MockChatConversationsCubit extends MockCubit<ChatConversationsState> imple
 
   factory MockChatConversationsCubit.withMockData() {
     final mock = MockChatConversationsCubit();
-
-    when(() => MockChatsRepository().getChatsWithLastMessages()).thenAnswer((_) async {
-      return [
-        (dChatsMockChatsRepository[0], dMessagesMockChatsRepository[0]),
-        (dChatsMockChatsRepository[1], dMessagesMockChatsRepository[1]),
-      ];
-    });
 
     whenListen(
       mock,
@@ -50,11 +40,8 @@ class MockChatConversationsCubit extends MockCubit<ChatConversationsState> imple
     return mock;
   }
 
-  factory MockChatConversationsCubit.empty(
-      MockChatsRepository chatsRepository, MockContactsRepository contactsRepository) {
+  factory MockChatConversationsCubit.empty() {
     final mock = MockChatConversationsCubit();
-
-    when(() => chatsRepository.getChatsWithLastMessages()).thenAnswer((_) async => []);
 
     whenListen(
       mock,
