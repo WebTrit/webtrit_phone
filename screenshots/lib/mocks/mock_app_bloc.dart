@@ -6,6 +6,8 @@ import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/models/agreement_status.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 
+import '../data/data.dart';
+
 class MockAppBloc extends MockBloc<AppEvent, AppState> implements AppBloc {
   MockAppBloc();
 
@@ -19,6 +21,7 @@ class MockAppBloc extends MockBloc<AppEvent, AppState> implements AppBloc {
       mock,
       const Stream<AppState>.empty(),
       initialState: AppState(
+        userId: dSessionUserId,
         themeSettings: themeSettings,
         themeMode: themeMode,
         locale: locale,
