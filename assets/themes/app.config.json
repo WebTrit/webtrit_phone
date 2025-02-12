@@ -1,5 +1,6 @@
 {
   "loginConfig": {
+    "greetingL10n": "WebTrit",
     "modeSelectActions": [
       {
         "enabled": true,
