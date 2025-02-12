@@ -2,10 +2,15 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+// ignore: depend_on_referenced_packages
+import 'package:provider/provider.dart';
+
 import 'package:webtrit_phone/data/data.dart';
+import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 import 'package:screenshots/mocks/mocks.dart';
@@ -24,12 +29,23 @@ class MainScreenScreenshot extends StatelessWidget {
   Widget build(BuildContext context) {
     // Fetch tabs for the bottom menu using FeatureAccess, which is specifically used in the configurator project.
     // If FeatureAccess is not available, fallback to predefined default tabs.
-    final tabs = context.read<FeatureAccess?>()?.bottomMenuFeature.tabs ?? _defaultTabs(context);
-    return MultiBlocProvider(
-      providers: _createMockBlocProviders(),
-      child: MainScreen(
-        body: _buildFlavorWidget(context, flavor),
-        bottomNavigationBar: _buildBottomNavigationBar(tabs),
+    final featureAccess = context.read<FeatureAccess?>();
+    final tabs = featureAccess?.bottomMenuFeature.tabs ?? _defaultTabs(context);
+
+    return MultiProvider(
+      providers: [
+        // TODO(Vladislav): Replace workaround with ContactsRepository in _ContactInfoBuilderState.
+        // The data source should be moved to the BLoC for better architecture.
+        Provider<ContactsRepository>(
+          create: (c) => MockContactsRepository(),
+        )
+      ],
+      child: MultiBlocProvider(
+        providers: _createMockBlocProviders(),
+        child: MainScreen(
+          body: _buildFlavorWidget(context, flavor, featureAccess!),
+          bottomNavigationBar: _buildBottomNavigationBar(tabs),
+        ),
       ),
     );
   }
@@ -73,6 +89,13 @@ class MainScreenScreenshot extends StatelessWidget {
         titleL10n: context.parseL10n('main_BottomNavigationBarItemLabel_keypad'),
         icon: Icons.dialpad,
       ),
+      BottomMenuTab(
+        enabled: true,
+        initial: false,
+        flavor: MainFlavor.messaging,
+        titleL10n: context.parseL10n('main_BottomNavigationBarItemLabel_chats'),
+        icon: Icons.messenger_outline,
+      ),
     ];
   }
 
@@ -88,7 +111,7 @@ class MainScreenScreenshot extends StatelessWidget {
     );
   }
 
-  Widget _buildFlavorWidget(BuildContext context, MainFlavor flavor) {
+  Widget _buildFlavorWidget(BuildContext context, MainFlavor flavor, FeatureAccess featureAccess) {
     switch (flavor) {
       case MainFlavor.favorites:
         return BlocProvider<FavoritesBloc>(
@@ -140,7 +163,19 @@ class MainScreenScreenshot extends StatelessWidget {
           ),
         );
       case MainFlavor.messaging:
-        return const Placeholder();
+        return MultiBlocProvider(
+          providers: [
+            BlocProvider<MessagingBloc>(create: (_) => MockMessagingBloc.initial()),
+            BlocProvider<ChatConversationsCubit>(create: (_) => MockChatConversationsCubit.withMockData()),
+            BlocProvider<SmsConversationsCubit>(create: (_) => MockSmsConversationsCubit.withConversations()),
+            BlocProvider<UnreadCountCubit>(create: (_) => MockUnreadCountCubit.withUnreadMessages()),
+          ],
+          child: const ConversationsScreen(
+            title: Text(
+              EnvironmentConfig.APP_NAME,
+            ),
+          ),
+        );
     }
   }
 
