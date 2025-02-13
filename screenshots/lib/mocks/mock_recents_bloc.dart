@@ -16,7 +16,7 @@ class MockRecentsBloc extends MockBloc<RecentsEvent, RecentsState> implements Re
       mock,
       const Stream<RecentsState>.empty(),
       initialState: RecentsState(
-        recents: dRecents,
+        recents: dMockRecentCallHistory,
         filter: RecentsVisibilityFilter.all,
       ),
     );

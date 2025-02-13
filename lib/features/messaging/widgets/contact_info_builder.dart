@@ -25,6 +25,7 @@ class ContactInfoBuilder extends StatefulWidget {
 }
 
 class _ContactInfoBuilderState extends State<ContactInfoBuilder> {
+  // TODO(Vladislav): Refactor to ensure repository usage is encapsulated within the bloc, eliminating direct access in the view.
   late final contactsRepo = context.read<ContactsRepository>();
   late final StreamSubscription contactSub;
 
