@@ -106,8 +106,7 @@ class CallState with _$CallState {
   }
 
   CallState copyWithPushActiveCall(ActiveCall activeCall) {
-    final activeCalls = List<ActiveCall>.from(this.activeCalls)..add(activeCall);
-    return copyWith(activeCalls: activeCalls);
+    return copyWith(activeCalls: [...activeCalls, activeCall]);
   }
 
   CallState copyWithPopActiveCall(String callId) {
@@ -127,17 +126,16 @@ class ActiveCall with _$ActiveCall {
     required int line,
     required String callId,
     required CallkeepHandle handle,
-    String? displayName,
-    ActiveCallStatus? status,
-
-    /// If the call is result of a refer request, the id should be provided.
-    String? fromReferId,
+    required DateTime createdTime,
     required bool video,
+    required CallProcessingStatus processingStatus,
+    @Default(false) bool incomingOfferHandled,
     @Default(true) bool? frontCamera,
     @Default(false) bool held,
     @Default(false) bool muted,
     @Default(false) bool updating,
-    required DateTime createdTime,
+    String? displayName,
+    String? fromReferId,
     DateTime? acceptedTime,
     DateTime? hungUpTime,
     Transfer? transfer,

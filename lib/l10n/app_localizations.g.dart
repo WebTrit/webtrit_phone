@@ -325,11 +325,47 @@ abstract class AppLocalizations {
   /// **'Failure'**
   String get call_FailureAcknowledgeDialog_title;
 
+  /// No description provided for @callProcessingStatus_ringing.
+  ///
+  /// In en, this message translates to:
+  /// **'Ringing'**
+  String get callProcessingStatus_ringing;
+
+  /// No description provided for @callProcessingStatus_preparing.
+  ///
+  /// In en, this message translates to:
+  /// **'Preparing'**
+  String get callProcessingStatus_preparing;
+
   /// No description provided for @callProcessingStatus_answering.
   ///
   /// In en, this message translates to:
   /// **'Answering the call, please hold on…'**
   String get callProcessingStatus_answering;
+
+  /// No description provided for @callProcessingStatus_signaling_connecting.
+  ///
+  /// In en, this message translates to:
+  /// **'Connecting to remote server'**
+  String get callProcessingStatus_signaling_connecting;
+
+  /// No description provided for @callProcessingStatus_init_media.
+  ///
+  /// In en, this message translates to:
+  /// **'Initializing media devices'**
+  String get callProcessingStatus_init_media;
+
+  /// No description provided for @callProcessingStatus_invite.
+  ///
+  /// In en, this message translates to:
+  /// **'Establishing SIP session'**
+  String get callProcessingStatus_invite;
+
+  /// No description provided for @callProcessingStatus_routing.
+  ///
+  /// In en, this message translates to:
+  /// **'Routing the call'**
+  String get callProcessingStatus_routing;
 
   /// No description provided for @callProcessingStatus_disconnecting.
   ///

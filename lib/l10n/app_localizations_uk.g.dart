@@ -123,7 +123,25 @@ class AppLocalizationsUk extends AppLocalizations {
   String get call_FailureAcknowledgeDialog_title => 'Помилка';
 
   @override
+  String get callProcessingStatus_ringing => 'Виклик';
+
+  @override
+  String get callProcessingStatus_preparing => 'Підготовка';
+
+  @override
   String get callProcessingStatus_answering => 'Прийняття виклику, будь ласка, зачекайте…';
+
+  @override
+  String get callProcessingStatus_signaling_connecting => 'З\'єднання з видаленним сервером';
+
+  @override
+  String get callProcessingStatus_init_media => 'Ініціалізація медіапристроїв';
+
+  @override
+  String get callProcessingStatus_invite => 'Створення SIP-сесії';
+
+  @override
+  String get callProcessingStatus_routing => 'З\'єднання з абонентом';
 
   @override
   String get callProcessingStatus_disconnecting => 'Відключення дзвінка, будь ласка, зачекайте…';

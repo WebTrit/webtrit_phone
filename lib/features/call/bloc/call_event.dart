@@ -282,9 +282,9 @@ class _CallPerformEvent with _$CallPerformEvent implements CallEvent {
 
   Future<bool> get future => _performCompleter.future;
 
-  void fulfill() => _performCompleter.complete(true);
+  void fulfill() => _performCompleter.isCompleted ? null : _performCompleter.complete(true);
 
-  void fail() => _performCompleter.complete(false);
+  void fail() => _performCompleter.isCompleted ? null : _performCompleter.complete(false);
 }
 
 // peer connection events
