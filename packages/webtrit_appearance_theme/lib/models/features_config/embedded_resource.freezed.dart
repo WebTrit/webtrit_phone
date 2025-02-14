@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'embedded_data.dart';
+part of 'embedded_resource.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -14,33 +14,33 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
-EmbeddedData _$EmbeddedDataFromJson(Map<String, dynamic> json) {
-  return _EmbeddedData.fromJson(json);
+EmbeddedResource _$EmbeddedResourceFromJson(Map<String, dynamic> json) {
+  return _EmbeddedResource.fromJson(json);
 }
 
 /// @nodoc
-mixin _$EmbeddedData {
+mixin _$EmbeddedResource {
   int? get id => throw _privateConstructorUsedError;
   String get resource => throw _privateConstructorUsedError;
   Map<String, dynamic> get attributes => throw _privateConstructorUsedError;
   ToolbarConfig get toolbar => throw _privateConstructorUsedError;
   Metadata get metadata => throw _privateConstructorUsedError;
 
-  /// Serializes this EmbeddedData to a JSON map.
+  /// Serializes this EmbeddedResource to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
 
-  /// Create a copy of EmbeddedData
+  /// Create a copy of EmbeddedResource
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
-  $EmbeddedDataCopyWith<EmbeddedData> get copyWith =>
+  $EmbeddedResourceCopyWith<EmbeddedResource> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $EmbeddedDataCopyWith<$Res> {
-  factory $EmbeddedDataCopyWith(
-          EmbeddedData value, $Res Function(EmbeddedData) then) =
-      _$EmbeddedDataCopyWithImpl<$Res, EmbeddedData>;
+abstract class $EmbeddedResourceCopyWith<$Res> {
+  factory $EmbeddedResourceCopyWith(
+          EmbeddedResource value, $Res Function(EmbeddedResource) then) =
+      _$EmbeddedResourceCopyWithImpl<$Res, EmbeddedResource>;
   @useResult
   $Res call(
       {int? id,
@@ -54,16 +54,16 @@ abstract class $EmbeddedDataCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$EmbeddedDataCopyWithImpl<$Res, $Val extends EmbeddedData>
-    implements $EmbeddedDataCopyWith<$Res> {
-  _$EmbeddedDataCopyWithImpl(this._value, this._then);
+class _$EmbeddedResourceCopyWithImpl<$Res, $Val extends EmbeddedResource>
+    implements $EmbeddedResourceCopyWith<$Res> {
+  _$EmbeddedResourceCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of EmbeddedData
+  /// Create a copy of EmbeddedResource
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
@@ -98,7 +98,7 @@ class _$EmbeddedDataCopyWithImpl<$Res, $Val extends EmbeddedData>
     ) as $Val);
   }
 
-  /// Create a copy of EmbeddedData
+  /// Create a copy of EmbeddedResource
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
@@ -108,7 +108,7 @@ class _$EmbeddedDataCopyWithImpl<$Res, $Val extends EmbeddedData>
     });
   }
 
-  /// Create a copy of EmbeddedData
+  /// Create a copy of EmbeddedResource
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
@@ -120,11 +120,11 @@ class _$EmbeddedDataCopyWithImpl<$Res, $Val extends EmbeddedData>
 }
 
 /// @nodoc
-abstract class _$$EmbeddedDataImplCopyWith<$Res>
-    implements $EmbeddedDataCopyWith<$Res> {
-  factory _$$EmbeddedDataImplCopyWith(
-          _$EmbeddedDataImpl value, $Res Function(_$EmbeddedDataImpl) then) =
-      __$$EmbeddedDataImplCopyWithImpl<$Res>;
+abstract class _$$EmbeddedResourceImplCopyWith<$Res>
+    implements $EmbeddedResourceCopyWith<$Res> {
+  factory _$$EmbeddedResourceImplCopyWith(_$EmbeddedResourceImpl value,
+          $Res Function(_$EmbeddedResourceImpl) then) =
+      __$$EmbeddedResourceImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -141,14 +141,14 @@ abstract class _$$EmbeddedDataImplCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$EmbeddedDataImplCopyWithImpl<$Res>
-    extends _$EmbeddedDataCopyWithImpl<$Res, _$EmbeddedDataImpl>
-    implements _$$EmbeddedDataImplCopyWith<$Res> {
-  __$$EmbeddedDataImplCopyWithImpl(
-      _$EmbeddedDataImpl _value, $Res Function(_$EmbeddedDataImpl) _then)
+class __$$EmbeddedResourceImplCopyWithImpl<$Res>
+    extends _$EmbeddedResourceCopyWithImpl<$Res, _$EmbeddedResourceImpl>
+    implements _$$EmbeddedResourceImplCopyWith<$Res> {
+  __$$EmbeddedResourceImplCopyWithImpl(_$EmbeddedResourceImpl _value,
+      $Res Function(_$EmbeddedResourceImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of EmbeddedData
+  /// Create a copy of EmbeddedResource
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
@@ -159,7 +159,7 @@ class __$$EmbeddedDataImplCopyWithImpl<$Res>
     Object? toolbar = null,
     Object? metadata = null,
   }) {
-    return _then(_$EmbeddedDataImpl(
+    return _then(_$EmbeddedResourceImpl(
       id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -187,8 +187,8 @@ class __$$EmbeddedDataImplCopyWithImpl<$Res>
 /// @nodoc
 
 @JsonSerializable(explicitToJson: true)
-class _$EmbeddedDataImpl extends _EmbeddedData {
-  const _$EmbeddedDataImpl(
+class _$EmbeddedResourceImpl extends _EmbeddedResource {
+  const _$EmbeddedResourceImpl(
       {this.id,
       required this.resource,
       final Map<String, dynamic> attributes = const {},
@@ -197,8 +197,8 @@ class _$EmbeddedDataImpl extends _EmbeddedData {
       : _attributes = attributes,
         super._();
 
-  factory _$EmbeddedDataImpl.fromJson(Map<String, dynamic> json) =>
-      _$$EmbeddedDataImplFromJson(json);
+  factory _$EmbeddedResourceImpl.fromJson(Map<String, dynamic> json) =>
+      _$$EmbeddedResourceImplFromJson(json);
 
   @override
   final int? id;
@@ -222,14 +222,14 @@ class _$EmbeddedDataImpl extends _EmbeddedData {
 
   @override
   String toString() {
-    return 'EmbeddedData(id: $id, resource: $resource, attributes: $attributes, toolbar: $toolbar, metadata: $metadata)';
+    return 'EmbeddedResource(id: $id, resource: $resource, attributes: $attributes, toolbar: $toolbar, metadata: $metadata)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$EmbeddedDataImpl &&
+            other is _$EmbeddedResourceImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.resource, resource) ||
                 other.resource == resource) &&
@@ -245,33 +245,34 @@ class _$EmbeddedDataImpl extends _EmbeddedData {
   int get hashCode => Object.hash(runtimeType, id, resource,
       const DeepCollectionEquality().hash(_attributes), toolbar, metadata);
 
-  /// Create a copy of EmbeddedData
+  /// Create a copy of EmbeddedResource
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$EmbeddedDataImplCopyWith<_$EmbeddedDataImpl> get copyWith =>
-      __$$EmbeddedDataImplCopyWithImpl<_$EmbeddedDataImpl>(this, _$identity);
+  _$$EmbeddedResourceImplCopyWith<_$EmbeddedResourceImpl> get copyWith =>
+      __$$EmbeddedResourceImplCopyWithImpl<_$EmbeddedResourceImpl>(
+          this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$EmbeddedDataImplToJson(
+    return _$$EmbeddedResourceImplToJson(
       this,
     );
   }
 }
 
-abstract class _EmbeddedData extends EmbeddedData {
-  const factory _EmbeddedData(
+abstract class _EmbeddedResource extends EmbeddedResource {
+  const factory _EmbeddedResource(
       {final int? id,
       required final String resource,
       final Map<String, dynamic> attributes,
       final ToolbarConfig toolbar,
-      final Metadata metadata}) = _$EmbeddedDataImpl;
-  const _EmbeddedData._() : super._();
+      final Metadata metadata}) = _$EmbeddedResourceImpl;
+  const _EmbeddedResource._() : super._();
 
-  factory _EmbeddedData.fromJson(Map<String, dynamic> json) =
-      _$EmbeddedDataImpl.fromJson;
+  factory _EmbeddedResource.fromJson(Map<String, dynamic> json) =
+      _$EmbeddedResourceImpl.fromJson;
 
   @override
   int? get id;
@@ -284,11 +285,11 @@ abstract class _EmbeddedData extends EmbeddedData {
   @override
   Metadata get metadata;
 
-  /// Create a copy of EmbeddedData
+  /// Create a copy of EmbeddedResource
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$EmbeddedDataImplCopyWith<_$EmbeddedDataImpl> get copyWith =>
+  _$$EmbeddedResourceImplCopyWith<_$EmbeddedResourceImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 

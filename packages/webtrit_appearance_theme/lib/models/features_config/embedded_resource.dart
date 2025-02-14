@@ -2,24 +2,24 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'metadata.dart';
 
-part 'embedded_data.freezed.dart';
+part 'embedded_resource.freezed.dart';
 
-part 'embedded_data.g.dart';
+part 'embedded_resource.g.dart';
 
 @freezed
-class EmbeddedData with _$EmbeddedData {
-  const EmbeddedData._();
+class EmbeddedResource with _$EmbeddedResource {
+  const EmbeddedResource._();
 
   @JsonSerializable(explicitToJson: true)
-  const factory EmbeddedData({
+  const factory EmbeddedResource({
     int? id,
     required String resource,
     @Default({}) Map<String, dynamic> attributes,
     @Default(ToolbarConfig()) ToolbarConfig toolbar,
     @Default(Metadata()) Metadata metadata,
-  }) = _EmbeddedData;
+  }) = _EmbeddedResource;
 
-  factory EmbeddedData.fromJson(Map<String, dynamic> json) => _$EmbeddedDataFromJson(json);
+  factory EmbeddedResource.fromJson(Map<String, dynamic> json) => _$EmbeddedResourceFromJson(json);
 
   /// Safely parses `resource` to a `uri`, returning `null` if invalid
   Uri? get uri => Uri.tryParse(resource);

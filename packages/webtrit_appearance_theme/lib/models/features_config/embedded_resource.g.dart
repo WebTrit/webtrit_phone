@@ -1,13 +1,14 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'embedded_data.dart';
+part of 'embedded_resource.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$EmbeddedDataImpl _$$EmbeddedDataImplFromJson(Map<String, dynamic> json) =>
-    _$EmbeddedDataImpl(
+_$EmbeddedResourceImpl _$$EmbeddedResourceImplFromJson(
+        Map<String, dynamic> json) =>
+    _$EmbeddedResourceImpl(
       id: (json['id'] as num?)?.toInt(),
       resource: json['resource'] as String,
       attributes: json['attributes'] as Map<String, dynamic>? ?? const {},
@@ -19,7 +20,8 @@ _$EmbeddedDataImpl _$$EmbeddedDataImplFromJson(Map<String, dynamic> json) =>
           : Metadata.fromJson(json['metadata'] as Map<String, dynamic>),
     );
 
-Map<String, dynamic> _$$EmbeddedDataImplToJson(_$EmbeddedDataImpl instance) =>
+Map<String, dynamic> _$$EmbeddedResourceImplToJson(
+        _$EmbeddedResourceImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
       'resource': instance.resource,

@@ -180,9 +180,13 @@ class FeatureAccess {
     );
   }
 
-  static LoginEmbedded? _toLoginEmbeddedModel(EmbeddedData? data) {
-    return data?.uri != null
-        ? LoginEmbedded(titleL10n: data!.toolbar.titleL10n, showToolbar: data.toolbar.showToolbar, resource: data.uri!)
+  static LoginEmbedded? _toLoginEmbeddedModel(EmbeddedResource? resource) {
+    return resource?.uri != null
+        ? LoginEmbedded(
+            titleL10n: resource!.toolbar.titleL10n,
+            showToolbar: resource.toolbar.showToolbar,
+            resource: resource.uri!,
+          )
         : null;
   }
 

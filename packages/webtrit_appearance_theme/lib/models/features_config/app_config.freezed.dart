@@ -301,7 +301,7 @@ mixin _$AppConfigLogin {
   String? get greetingL10n => throw _privateConstructorUsedError;
   List<AppConfigModeSelectAction> get modeSelectActions =>
       throw _privateConstructorUsedError;
-  List<EmbeddedData> get embedded => throw _privateConstructorUsedError;
+  List<EmbeddedResource> get embedded => throw _privateConstructorUsedError;
 
   /// Serializes this AppConfigLogin to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -322,7 +322,7 @@ abstract class $AppConfigLoginCopyWith<$Res> {
   $Res call(
       {String? greetingL10n,
       List<AppConfigModeSelectAction> modeSelectActions,
-      List<EmbeddedData> embedded});
+      List<EmbeddedResource> embedded});
 }
 
 /// @nodoc
@@ -356,7 +356,7 @@ class _$AppConfigLoginCopyWithImpl<$Res, $Val extends AppConfigLogin>
       embedded: null == embedded
           ? _value.embedded
           : embedded // ignore: cast_nullable_to_non_nullable
-              as List<EmbeddedData>,
+              as List<EmbeddedResource>,
     ) as $Val);
   }
 }
@@ -372,7 +372,7 @@ abstract class _$$AppConfigLoginImplCopyWith<$Res>
   $Res call(
       {String? greetingL10n,
       List<AppConfigModeSelectAction> modeSelectActions,
-      List<EmbeddedData> embedded});
+      List<EmbeddedResource> embedded});
 }
 
 /// @nodoc
@@ -404,7 +404,7 @@ class __$$AppConfigLoginImplCopyWithImpl<$Res>
       embedded: null == embedded
           ? _value._embedded
           : embedded // ignore: cast_nullable_to_non_nullable
-              as List<EmbeddedData>,
+              as List<EmbeddedResource>,
     ));
   }
 }
@@ -421,7 +421,7 @@ class _$AppConfigLoginImpl extends _AppConfigLogin {
             type: 'login',
             titleL10n: 'login_Button_signUpToDemoInstance')
       ],
-      final List<EmbeddedData> embedded = const []})
+      final List<EmbeddedResource> embedded = const []})
       : _modeSelectActions = modeSelectActions,
         _embedded = embedded,
         super._();
@@ -441,10 +441,10 @@ class _$AppConfigLoginImpl extends _AppConfigLogin {
     return EqualUnmodifiableListView(_modeSelectActions);
   }
 
-  final List<EmbeddedData> _embedded;
+  final List<EmbeddedResource> _embedded;
   @override
   @JsonKey()
-  List<EmbeddedData> get embedded {
+  List<EmbeddedResource> get embedded {
     if (_embedded is EqualUnmodifiableListView) return _embedded;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_embedded);
@@ -496,7 +496,7 @@ abstract class _AppConfigLogin extends AppConfigLogin {
   const factory _AppConfigLogin(
       {final String? greetingL10n,
       final List<AppConfigModeSelectAction> modeSelectActions,
-      final List<EmbeddedData> embedded}) = _$AppConfigLoginImpl;
+      final List<EmbeddedResource> embedded}) = _$AppConfigLoginImpl;
   const _AppConfigLogin._() : super._();
 
   factory _AppConfigLogin.fromJson(Map<String, dynamic> json) =
@@ -507,7 +507,7 @@ abstract class _AppConfigLogin extends AppConfigLogin {
   @override
   List<AppConfigModeSelectAction> get modeSelectActions;
   @override
-  List<EmbeddedData> get embedded;
+  List<EmbeddedResource> get embedded;
 
   /// Create a copy of AppConfigLogin
   /// with the given fields replaced by the non-null parameter values.
@@ -1536,7 +1536,7 @@ mixin _$BottomMenuTabScheme {
             @BottomMenuTabTypeConverter() BottomMenuTabType type,
             String titleL10n,
             String icon,
-            EmbeddedData data)
+            EmbeddedResource data)
         embedded,
   }) =>
       throw _privateConstructorUsedError;
@@ -1563,7 +1563,7 @@ mixin _$BottomMenuTabScheme {
             @BottomMenuTabTypeConverter() BottomMenuTabType type,
             String titleL10n,
             String icon,
-            EmbeddedData data)?
+            EmbeddedResource data)?
         embedded,
   }) =>
       throw _privateConstructorUsedError;
@@ -1590,7 +1590,7 @@ mixin _$BottomMenuTabScheme {
             @BottomMenuTabTypeConverter() BottomMenuTabType type,
             String titleL10n,
             String icon,
-            EmbeddedData data)?
+            EmbeddedResource data)?
         embedded,
     required TResult orElse(),
   }) =>
@@ -1837,7 +1837,7 @@ class _$BaseTabSchemeImpl extends BaseTabScheme {
             @BottomMenuTabTypeConverter() BottomMenuTabType type,
             String titleL10n,
             String icon,
-            EmbeddedData data)
+            EmbeddedResource data)
         embedded,
   }) {
     return base(enabled, initial, type, titleL10n, icon);
@@ -1867,7 +1867,7 @@ class _$BaseTabSchemeImpl extends BaseTabScheme {
             @BottomMenuTabTypeConverter() BottomMenuTabType type,
             String titleL10n,
             String icon,
-            EmbeddedData data)?
+            EmbeddedResource data)?
         embedded,
   }) {
     return base?.call(enabled, initial, type, titleL10n, icon);
@@ -1897,7 +1897,7 @@ class _$BaseTabSchemeImpl extends BaseTabScheme {
             @BottomMenuTabTypeConverter() BottomMenuTabType type,
             String titleL10n,
             String icon,
-            EmbeddedData data)?
+            EmbeddedResource data)?
         embedded,
     required TResult orElse(),
   }) {
@@ -2156,7 +2156,7 @@ class _$ContactsTabSchemeImpl extends ContactsTabScheme {
             @BottomMenuTabTypeConverter() BottomMenuTabType type,
             String titleL10n,
             String icon,
-            EmbeddedData data)
+            EmbeddedResource data)
         embedded,
   }) {
     return contacts(
@@ -2187,7 +2187,7 @@ class _$ContactsTabSchemeImpl extends ContactsTabScheme {
             @BottomMenuTabTypeConverter() BottomMenuTabType type,
             String titleL10n,
             String icon,
-            EmbeddedData data)?
+            EmbeddedResource data)?
         embedded,
   }) {
     return contacts?.call(
@@ -2218,7 +2218,7 @@ class _$ContactsTabSchemeImpl extends ContactsTabScheme {
             @BottomMenuTabTypeConverter() BottomMenuTabType type,
             String titleL10n,
             String icon,
-            EmbeddedData data)?
+            EmbeddedResource data)?
         embedded,
     required TResult orElse(),
   }) {
@@ -2319,9 +2319,9 @@ abstract class _$$EmbededTabSchemeImplCopyWith<$Res>
       @BottomMenuTabTypeConverter() BottomMenuTabType type,
       String titleL10n,
       String icon,
-      EmbeddedData data});
+      EmbeddedResource data});
 
-  $EmbeddedDataCopyWith<$Res> get data;
+  $EmbeddedResourceCopyWith<$Res> get data;
 }
 
 /// @nodoc
@@ -2368,7 +2368,7 @@ class __$$EmbededTabSchemeImplCopyWithImpl<$Res>
       data: null == data
           ? _value.data
           : data // ignore: cast_nullable_to_non_nullable
-              as EmbeddedData,
+              as EmbeddedResource,
     ));
   }
 
@@ -2376,8 +2376,8 @@ class __$$EmbededTabSchemeImplCopyWithImpl<$Res>
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
-  $EmbeddedDataCopyWith<$Res> get data {
-    return $EmbeddedDataCopyWith<$Res>(_value.data, (value) {
+  $EmbeddedResourceCopyWith<$Res> get data {
+    return $EmbeddedResourceCopyWith<$Res>(_value.data, (value) {
       return _then(_value.copyWith(data: value));
     });
   }
@@ -2415,7 +2415,7 @@ class _$EmbededTabSchemeImpl extends EmbededTabScheme {
   @override
   final String icon;
   @override
-  final EmbeddedData data;
+  final EmbeddedResource data;
 
   @JsonKey(name: 'runtimeType')
   final String $type;
@@ -2477,7 +2477,7 @@ class _$EmbededTabSchemeImpl extends EmbededTabScheme {
             @BottomMenuTabTypeConverter() BottomMenuTabType type,
             String titleL10n,
             String icon,
-            EmbeddedData data)
+            EmbeddedResource data)
         embedded,
   }) {
     return embedded(enabled, initial, type, titleL10n, icon, data);
@@ -2507,7 +2507,7 @@ class _$EmbededTabSchemeImpl extends EmbededTabScheme {
             @BottomMenuTabTypeConverter() BottomMenuTabType type,
             String titleL10n,
             String icon,
-            EmbeddedData data)?
+            EmbeddedResource data)?
         embedded,
   }) {
     return embedded?.call(enabled, initial, type, titleL10n, icon, data);
@@ -2537,7 +2537,7 @@ class _$EmbededTabSchemeImpl extends EmbededTabScheme {
             @BottomMenuTabTypeConverter() BottomMenuTabType type,
             String titleL10n,
             String icon,
-            EmbeddedData data)?
+            EmbeddedResource data)?
         embedded,
     required TResult orElse(),
   }) {
@@ -2596,7 +2596,7 @@ abstract class EmbededTabScheme extends BottomMenuTabScheme {
       @BottomMenuTabTypeConverter() required final BottomMenuTabType type,
       required final String titleL10n,
       required final String icon,
-      required final EmbeddedData data}) = _$EmbededTabSchemeImpl;
+      required final EmbeddedResource data}) = _$EmbededTabSchemeImpl;
   const EmbededTabScheme._() : super._();
 
   factory EmbededTabScheme.fromJson(Map<String, dynamic> json) =
@@ -2613,7 +2613,7 @@ abstract class EmbededTabScheme extends BottomMenuTabScheme {
   String get titleL10n;
   @override
   String get icon;
-  EmbeddedData get data;
+  EmbeddedResource get data;
 
   /// Create a copy of BottomMenuTabScheme
   /// with the given fields replaced by the non-null parameter values.
@@ -2742,7 +2742,7 @@ class _$AppConfigSettingsImpl extends _AppConfigSettings {
                   type: 'terms',
                   titleL10n: 'settings_ListViewTileTitle_termsConditions',
                   icon: '0xeedf',
-                  embeddedData: EmbeddedData(
+                  embeddedData: EmbeddedResource(
                       resource:
                           'https://webtrit-app.web.app/example/example_embedded_call.html',
                       toolbar: ToolbarConfig(
@@ -3065,7 +3065,7 @@ mixin _$AppConfigSettingsItem {
   String get titleL10n => throw _privateConstructorUsedError;
   String get type => throw _privateConstructorUsedError;
   String get icon => throw _privateConstructorUsedError;
-  EmbeddedData? get embeddedData => throw _privateConstructorUsedError;
+  EmbeddedResource? get embeddedData => throw _privateConstructorUsedError;
 
   /// Serializes this AppConfigSettingsItem to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -3088,9 +3088,9 @@ abstract class $AppConfigSettingsItemCopyWith<$Res> {
       String titleL10n,
       String type,
       String icon,
-      EmbeddedData? embeddedData});
+      EmbeddedResource? embeddedData});
 
-  $EmbeddedDataCopyWith<$Res>? get embeddedData;
+  $EmbeddedResourceCopyWith<$Res>? get embeddedData;
 }
 
 /// @nodoc
@@ -3135,7 +3135,7 @@ class _$AppConfigSettingsItemCopyWithImpl<$Res,
       embeddedData: freezed == embeddedData
           ? _value.embeddedData
           : embeddedData // ignore: cast_nullable_to_non_nullable
-              as EmbeddedData?,
+              as EmbeddedResource?,
     ) as $Val);
   }
 
@@ -3143,12 +3143,12 @@ class _$AppConfigSettingsItemCopyWithImpl<$Res,
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
-  $EmbeddedDataCopyWith<$Res>? get embeddedData {
+  $EmbeddedResourceCopyWith<$Res>? get embeddedData {
     if (_value.embeddedData == null) {
       return null;
     }
 
-    return $EmbeddedDataCopyWith<$Res>(_value.embeddedData!, (value) {
+    return $EmbeddedResourceCopyWith<$Res>(_value.embeddedData!, (value) {
       return _then(_value.copyWith(embeddedData: value) as $Val);
     });
   }
@@ -3168,10 +3168,10 @@ abstract class _$$AppConfigSettingsItemImplCopyWith<$Res>
       String titleL10n,
       String type,
       String icon,
-      EmbeddedData? embeddedData});
+      EmbeddedResource? embeddedData});
 
   @override
-  $EmbeddedDataCopyWith<$Res>? get embeddedData;
+  $EmbeddedResourceCopyWith<$Res>? get embeddedData;
 }
 
 /// @nodoc
@@ -3214,7 +3214,7 @@ class __$$AppConfigSettingsItemImplCopyWithImpl<$Res>
       embeddedData: freezed == embeddedData
           ? _value.embeddedData
           : embeddedData // ignore: cast_nullable_to_non_nullable
-              as EmbeddedData?,
+              as EmbeddedResource?,
     ));
   }
 }
@@ -3244,7 +3244,7 @@ class _$AppConfigSettingsItemImpl extends _AppConfigSettingsItem {
   @override
   final String icon;
   @override
-  final EmbeddedData? embeddedData;
+  final EmbeddedResource? embeddedData;
 
   @override
   String toString() {
@@ -3293,7 +3293,7 @@ abstract class _AppConfigSettingsItem extends AppConfigSettingsItem {
       required final String titleL10n,
       required final String type,
       required final String icon,
-      final EmbeddedData? embeddedData}) = _$AppConfigSettingsItemImpl;
+      final EmbeddedResource? embeddedData}) = _$AppConfigSettingsItemImpl;
   const _AppConfigSettingsItem._() : super._();
 
   factory _AppConfigSettingsItem.fromJson(Map<String, dynamic> json) =
@@ -3308,7 +3308,7 @@ abstract class _AppConfigSettingsItem extends AppConfigSettingsItem {
   @override
   String get icon;
   @override
-  EmbeddedData? get embeddedData;
+  EmbeddedResource? get embeddedData;
 
   /// Create a copy of AppConfigSettingsItem
   /// with the given fields replaced by the non-null parameter values.

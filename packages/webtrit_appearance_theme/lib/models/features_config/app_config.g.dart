@@ -46,7 +46,7 @@ _$AppConfigLoginImpl _$$AppConfigLoginImplFromJson(Map<String, dynamic> json) =>
                 titleL10n: 'login_Button_signUpToDemoInstance')
           ],
       embedded: (json['embedded'] as List<dynamic>?)
-              ?.map((e) => EmbeddedData.fromJson(e as Map<String, dynamic>))
+              ?.map((e) => EmbeddedResource.fromJson(e as Map<String, dynamic>))
               .toList() ??
           const [],
     );
@@ -226,7 +226,7 @@ _$EmbededTabSchemeImpl _$$EmbededTabSchemeImplFromJson(
       type: const BottomMenuTabTypeConverter().fromJson(json['type'] as String),
       titleL10n: json['titleL10n'] as String,
       icon: json['icon'] as String,
-      data: EmbeddedData.fromJson(json['data'] as Map<String, dynamic>),
+      data: EmbeddedResource.fromJson(json['data'] as Map<String, dynamic>),
       $type: json['runtimeType'] as String?,
     );
 
@@ -274,7 +274,7 @@ _$AppConfigSettingsImpl _$$AppConfigSettingsImplFromJson(
                       type: 'terms',
                       titleL10n: 'settings_ListViewTileTitle_termsConditions',
                       icon: '0xeedf',
-                      embeddedData: EmbeddedData(
+                      embeddedData: EmbeddedResource(
                           resource:
                               'https://webtrit-app.web.app/example/example_embedded_call.html',
                           toolbar: ToolbarConfig(
@@ -344,7 +344,8 @@ _$AppConfigSettingsItemImpl _$$AppConfigSettingsItemImplFromJson(
       icon: json['icon'] as String,
       embeddedData: json['embeddedData'] == null
           ? null
-          : EmbeddedData.fromJson(json['embeddedData'] as Map<String, dynamic>),
+          : EmbeddedResource.fromJson(
+              json['embeddedData'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$$AppConfigSettingsItemImplToJson(

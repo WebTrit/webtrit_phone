@@ -4,7 +4,7 @@ import 'package:webtrit_appearance_theme/converters/converters.dart';
 import 'package:webtrit_appearance_theme/parsers/parsers.dart';
 
 import 'bottom_menu_tab_type.dart';
-import 'embedded_data.dart';
+import 'embedded_resource.dart';
 
 part 'app_config.freezed.dart';
 
@@ -40,7 +40,7 @@ class AppConfigLogin with _$AppConfigLogin {
       )
     ])
     List<AppConfigModeSelectAction> modeSelectActions,
-    @Default([]) List<EmbeddedData> embedded,
+    @Default([]) List<EmbeddedResource> embedded,
   }) = _AppConfigLogin;
 
   factory AppConfigLogin.fromJson(Map<String, dynamic> json) => _$AppConfigLoginFromJson(json);
@@ -189,7 +189,7 @@ class BottomMenuTabScheme with _$BottomMenuTabScheme {
     @BottomMenuTabTypeConverter() required BottomMenuTabType type,
     required String titleL10n,
     required String icon,
-    required EmbeddedData data,
+    required EmbeddedResource data,
   }) = EmbededTabScheme;
 
   factory BottomMenuTabScheme.fromJson(Map<String, dynamic> json) => BottomMenuTabSchemeParser.fromJson(json);
@@ -232,7 +232,7 @@ class AppConfigSettings with _$AppConfigSettings {
             type: 'terms',
             titleL10n: 'settings_ListViewTileTitle_termsConditions',
             icon: '0xeedf',
-            embeddedData: EmbeddedData(
+            embeddedData: EmbeddedResource(
               resource: 'https://webtrit-app.web.app/example/example_embedded_call.html',
               toolbar: ToolbarConfig(
                 showToolbar: true,
@@ -303,7 +303,7 @@ class AppConfigSettingsItem with _$AppConfigSettingsItem {
     required String titleL10n,
     required String type,
     required String icon,
-    EmbeddedData? embeddedData,
+    EmbeddedResource? embeddedData,
   }) = _AppConfigSettingsItem;
 
   factory AppConfigSettingsItem.fromJson(Map<String, dynamic> json) => _$AppConfigSettingsItemFromJson(json);

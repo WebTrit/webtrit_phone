@@ -24,7 +24,7 @@ class BottomMenuTabSchemeParser {
           type: type,
           titleL10n: json['titleL10n'] as String,
           icon: json['icon'] as String,
-          data: EmbeddedData.fromJson(json['data'] as Map<String, dynamic>),
+          data: EmbeddedResource.fromJson(json['data'] as Map<String, dynamic>),
         );
       default:
         return BaseTabScheme(
