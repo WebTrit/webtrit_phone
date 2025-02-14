@@ -1129,6 +1129,7 @@ AppConfigCall _$AppConfigCallFromJson(Map<String, dynamic> json) {
 mixin _$AppConfigCall {
   bool get videoEnabled => throw _privateConstructorUsedError;
   AppConfigTransfer get transfer => throw _privateConstructorUsedError;
+  AppConfigEncoding get encoding => throw _privateConstructorUsedError;
 
   /// Serializes this AppConfigCall to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -1146,9 +1147,13 @@ abstract class $AppConfigCallCopyWith<$Res> {
           AppConfigCall value, $Res Function(AppConfigCall) then) =
       _$AppConfigCallCopyWithImpl<$Res, AppConfigCall>;
   @useResult
-  $Res call({bool videoEnabled, AppConfigTransfer transfer});
+  $Res call(
+      {bool videoEnabled,
+      AppConfigTransfer transfer,
+      AppConfigEncoding encoding});
 
   $AppConfigTransferCopyWith<$Res> get transfer;
+  $AppConfigEncodingCopyWith<$Res> get encoding;
 }
 
 /// @nodoc
@@ -1168,6 +1173,7 @@ class _$AppConfigCallCopyWithImpl<$Res, $Val extends AppConfigCall>
   $Res call({
     Object? videoEnabled = null,
     Object? transfer = null,
+    Object? encoding = null,
   }) {
     return _then(_value.copyWith(
       videoEnabled: null == videoEnabled
@@ -1178,6 +1184,10 @@ class _$AppConfigCallCopyWithImpl<$Res, $Val extends AppConfigCall>
           ? _value.transfer
           : transfer // ignore: cast_nullable_to_non_nullable
               as AppConfigTransfer,
+      encoding: null == encoding
+          ? _value.encoding
+          : encoding // ignore: cast_nullable_to_non_nullable
+              as AppConfigEncoding,
     ) as $Val);
   }
 
@@ -1190,6 +1200,16 @@ class _$AppConfigCallCopyWithImpl<$Res, $Val extends AppConfigCall>
       return _then(_value.copyWith(transfer: value) as $Val);
     });
   }
+
+  /// Create a copy of AppConfigCall
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $AppConfigEncodingCopyWith<$Res> get encoding {
+    return $AppConfigEncodingCopyWith<$Res>(_value.encoding, (value) {
+      return _then(_value.copyWith(encoding: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
@@ -1200,10 +1220,15 @@ abstract class _$$AppConfigCallImplCopyWith<$Res>
       __$$AppConfigCallImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({bool videoEnabled, AppConfigTransfer transfer});
+  $Res call(
+      {bool videoEnabled,
+      AppConfigTransfer transfer,
+      AppConfigEncoding encoding});
 
   @override
   $AppConfigTransferCopyWith<$Res> get transfer;
+  @override
+  $AppConfigEncodingCopyWith<$Res> get encoding;
 }
 
 /// @nodoc
@@ -1221,6 +1246,7 @@ class __$$AppConfigCallImplCopyWithImpl<$Res>
   $Res call({
     Object? videoEnabled = null,
     Object? transfer = null,
+    Object? encoding = null,
   }) {
     return _then(_$AppConfigCallImpl(
       videoEnabled: null == videoEnabled
@@ -1231,6 +1257,10 @@ class __$$AppConfigCallImplCopyWithImpl<$Res>
           ? _value.transfer
           : transfer // ignore: cast_nullable_to_non_nullable
               as AppConfigTransfer,
+      encoding: null == encoding
+          ? _value.encoding
+          : encoding // ignore: cast_nullable_to_non_nullable
+              as AppConfigEncoding,
     ));
   }
 }
@@ -1242,7 +1272,8 @@ class _$AppConfigCallImpl extends _AppConfigCall {
   const _$AppConfigCallImpl(
       {this.videoEnabled = true,
       this.transfer = const AppConfigTransfer(
-          enableBlindTransfer: true, enableAttendedTransfer: true)})
+          enableBlindTransfer: true, enableAttendedTransfer: true),
+      this.encoding = const AppConfigEncoding()})
       : super._();
 
   factory _$AppConfigCallImpl.fromJson(Map<String, dynamic> json) =>
@@ -1254,10 +1285,13 @@ class _$AppConfigCallImpl extends _AppConfigCall {
   @override
   @JsonKey()
   final AppConfigTransfer transfer;
+  @override
+  @JsonKey()
+  final AppConfigEncoding encoding;
 
   @override
   String toString() {
-    return 'AppConfigCall(videoEnabled: $videoEnabled, transfer: $transfer)';
+    return 'AppConfigCall(videoEnabled: $videoEnabled, transfer: $transfer, encoding: $encoding)';
   }
 
   @override
@@ -1268,12 +1302,15 @@ class _$AppConfigCallImpl extends _AppConfigCall {
             (identical(other.videoEnabled, videoEnabled) ||
                 other.videoEnabled == videoEnabled) &&
             (identical(other.transfer, transfer) ||
-                other.transfer == transfer));
+                other.transfer == transfer) &&
+            (identical(other.encoding, encoding) ||
+                other.encoding == encoding));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, videoEnabled, transfer);
+  int get hashCode =>
+      Object.hash(runtimeType, videoEnabled, transfer, encoding);
 
   /// Create a copy of AppConfigCall
   /// with the given fields replaced by the non-null parameter values.
@@ -1294,7 +1331,8 @@ class _$AppConfigCallImpl extends _AppConfigCall {
 abstract class _AppConfigCall extends AppConfigCall {
   const factory _AppConfigCall(
       {final bool videoEnabled,
-      final AppConfigTransfer transfer}) = _$AppConfigCallImpl;
+      final AppConfigTransfer transfer,
+      final AppConfigEncoding encoding}) = _$AppConfigCallImpl;
   const _AppConfigCall._() : super._();
 
   factory _AppConfigCall.fromJson(Map<String, dynamic> json) =
@@ -1304,6 +1342,8 @@ abstract class _AppConfigCall extends AppConfigCall {
   bool get videoEnabled;
   @override
   AppConfigTransfer get transfer;
+  @override
+  AppConfigEncoding get encoding;
 
   /// Create a copy of AppConfigCall
   /// with the given fields replaced by the non-null parameter values.
@@ -1488,6 +1528,499 @@ abstract class _AppConfigTransfer extends AppConfigTransfer {
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$AppConfigTransferImplCopyWith<_$AppConfigTransferImpl> get copyWith =>
       throw _privateConstructorUsedError;
+}
+
+AppConfigEncoding _$AppConfigEncodingFromJson(Map<String, dynamic> json) {
+  return _AppConfigEncoding.fromJson(json);
+}
+
+/// @nodoc
+mixin _$AppConfigEncoding {
+  bool get bypassConfig => throw _privateConstructorUsedError;
+  EncodingDefaultPresetOverride get defaultPresetOverride =>
+      throw _privateConstructorUsedError;
+
+  /// Serializes this AppConfigEncoding to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of AppConfigEncoding
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $AppConfigEncodingCopyWith<AppConfigEncoding> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $AppConfigEncodingCopyWith<$Res> {
+  factory $AppConfigEncodingCopyWith(
+          AppConfigEncoding value, $Res Function(AppConfigEncoding) then) =
+      _$AppConfigEncodingCopyWithImpl<$Res, AppConfigEncoding>;
+  @useResult
+  $Res call(
+      {bool bypassConfig, EncodingDefaultPresetOverride defaultPresetOverride});
+
+  $EncodingDefaultPresetOverrideCopyWith<$Res> get defaultPresetOverride;
+}
+
+/// @nodoc
+class _$AppConfigEncodingCopyWithImpl<$Res, $Val extends AppConfigEncoding>
+    implements $AppConfigEncodingCopyWith<$Res> {
+  _$AppConfigEncodingCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of AppConfigEncoding
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? bypassConfig = null,
+    Object? defaultPresetOverride = null,
+  }) {
+    return _then(_value.copyWith(
+      bypassConfig: null == bypassConfig
+          ? _value.bypassConfig
+          : bypassConfig // ignore: cast_nullable_to_non_nullable
+              as bool,
+      defaultPresetOverride: null == defaultPresetOverride
+          ? _value.defaultPresetOverride
+          : defaultPresetOverride // ignore: cast_nullable_to_non_nullable
+              as EncodingDefaultPresetOverride,
+    ) as $Val);
+  }
+
+  /// Create a copy of AppConfigEncoding
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $EncodingDefaultPresetOverrideCopyWith<$Res> get defaultPresetOverride {
+    return $EncodingDefaultPresetOverrideCopyWith<$Res>(
+        _value.defaultPresetOverride, (value) {
+      return _then(_value.copyWith(defaultPresetOverride: value) as $Val);
+    });
+  }
+}
+
+/// @nodoc
+abstract class _$$AppConfigEncodingImplCopyWith<$Res>
+    implements $AppConfigEncodingCopyWith<$Res> {
+  factory _$$AppConfigEncodingImplCopyWith(_$AppConfigEncodingImpl value,
+          $Res Function(_$AppConfigEncodingImpl) then) =
+      __$$AppConfigEncodingImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {bool bypassConfig, EncodingDefaultPresetOverride defaultPresetOverride});
+
+  @override
+  $EncodingDefaultPresetOverrideCopyWith<$Res> get defaultPresetOverride;
+}
+
+/// @nodoc
+class __$$AppConfigEncodingImplCopyWithImpl<$Res>
+    extends _$AppConfigEncodingCopyWithImpl<$Res, _$AppConfigEncodingImpl>
+    implements _$$AppConfigEncodingImplCopyWith<$Res> {
+  __$$AppConfigEncodingImplCopyWithImpl(_$AppConfigEncodingImpl _value,
+      $Res Function(_$AppConfigEncodingImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of AppConfigEncoding
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? bypassConfig = null,
+    Object? defaultPresetOverride = null,
+  }) {
+    return _then(_$AppConfigEncodingImpl(
+      bypassConfig: null == bypassConfig
+          ? _value.bypassConfig
+          : bypassConfig // ignore: cast_nullable_to_non_nullable
+              as bool,
+      defaultPresetOverride: null == defaultPresetOverride
+          ? _value.defaultPresetOverride
+          : defaultPresetOverride // ignore: cast_nullable_to_non_nullable
+              as EncodingDefaultPresetOverride,
+    ));
+  }
+}
+
+/// @nodoc
+
+@JsonSerializable(explicitToJson: true)
+class _$AppConfigEncodingImpl extends _AppConfigEncoding {
+  const _$AppConfigEncodingImpl(
+      {this.bypassConfig = false,
+      this.defaultPresetOverride = const EncodingDefaultPresetOverride()})
+      : super._();
+
+  factory _$AppConfigEncodingImpl.fromJson(Map<String, dynamic> json) =>
+      _$$AppConfigEncodingImplFromJson(json);
+
+  @override
+  @JsonKey()
+  final bool bypassConfig;
+  @override
+  @JsonKey()
+  final EncodingDefaultPresetOverride defaultPresetOverride;
+
+  @override
+  String toString() {
+    return 'AppConfigEncoding(bypassConfig: $bypassConfig, defaultPresetOverride: $defaultPresetOverride)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$AppConfigEncodingImpl &&
+            (identical(other.bypassConfig, bypassConfig) ||
+                other.bypassConfig == bypassConfig) &&
+            (identical(other.defaultPresetOverride, defaultPresetOverride) ||
+                other.defaultPresetOverride == defaultPresetOverride));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, bypassConfig, defaultPresetOverride);
+
+  /// Create a copy of AppConfigEncoding
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$AppConfigEncodingImplCopyWith<_$AppConfigEncodingImpl> get copyWith =>
+      __$$AppConfigEncodingImplCopyWithImpl<_$AppConfigEncodingImpl>(
+          this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$AppConfigEncodingImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _AppConfigEncoding extends AppConfigEncoding {
+  const factory _AppConfigEncoding(
+          {final bool bypassConfig,
+          final EncodingDefaultPresetOverride defaultPresetOverride}) =
+      _$AppConfigEncodingImpl;
+  const _AppConfigEncoding._() : super._();
+
+  factory _AppConfigEncoding.fromJson(Map<String, dynamic> json) =
+      _$AppConfigEncodingImpl.fromJson;
+
+  @override
+  bool get bypassConfig;
+  @override
+  EncodingDefaultPresetOverride get defaultPresetOverride;
+
+  /// Create a copy of AppConfigEncoding
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$AppConfigEncodingImplCopyWith<_$AppConfigEncodingImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+EncodingDefaultPresetOverride _$EncodingDefaultPresetOverrideFromJson(
+    Map<String, dynamic> json) {
+  return _EncodingDefaultPresetOverride.fromJson(json);
+}
+
+/// @nodoc
+mixin _$EncodingDefaultPresetOverride {
+  int? get audioBitrate => throw _privateConstructorUsedError;
+  int? get videoBitrate => throw _privateConstructorUsedError;
+  int? get ptime => throw _privateConstructorUsedError;
+  int? get maxptime => throw _privateConstructorUsedError;
+  int? get opusBandwidthLimit => throw _privateConstructorUsedError;
+  bool? get opusStereo => throw _privateConstructorUsedError;
+  bool? get opusDtx => throw _privateConstructorUsedError;
+
+  /// Serializes this EncodingDefaultPresetOverride to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of EncodingDefaultPresetOverride
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $EncodingDefaultPresetOverrideCopyWith<EncodingDefaultPresetOverride>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $EncodingDefaultPresetOverrideCopyWith<$Res> {
+  factory $EncodingDefaultPresetOverrideCopyWith(
+          EncodingDefaultPresetOverride value,
+          $Res Function(EncodingDefaultPresetOverride) then) =
+      _$EncodingDefaultPresetOverrideCopyWithImpl<$Res,
+          EncodingDefaultPresetOverride>;
+  @useResult
+  $Res call(
+      {int? audioBitrate,
+      int? videoBitrate,
+      int? ptime,
+      int? maxptime,
+      int? opusBandwidthLimit,
+      bool? opusStereo,
+      bool? opusDtx});
+}
+
+/// @nodoc
+class _$EncodingDefaultPresetOverrideCopyWithImpl<$Res,
+        $Val extends EncodingDefaultPresetOverride>
+    implements $EncodingDefaultPresetOverrideCopyWith<$Res> {
+  _$EncodingDefaultPresetOverrideCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of EncodingDefaultPresetOverride
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? audioBitrate = freezed,
+    Object? videoBitrate = freezed,
+    Object? ptime = freezed,
+    Object? maxptime = freezed,
+    Object? opusBandwidthLimit = freezed,
+    Object? opusStereo = freezed,
+    Object? opusDtx = freezed,
+  }) {
+    return _then(_value.copyWith(
+      audioBitrate: freezed == audioBitrate
+          ? _value.audioBitrate
+          : audioBitrate // ignore: cast_nullable_to_non_nullable
+              as int?,
+      videoBitrate: freezed == videoBitrate
+          ? _value.videoBitrate
+          : videoBitrate // ignore: cast_nullable_to_non_nullable
+              as int?,
+      ptime: freezed == ptime
+          ? _value.ptime
+          : ptime // ignore: cast_nullable_to_non_nullable
+              as int?,
+      maxptime: freezed == maxptime
+          ? _value.maxptime
+          : maxptime // ignore: cast_nullable_to_non_nullable
+              as int?,
+      opusBandwidthLimit: freezed == opusBandwidthLimit
+          ? _value.opusBandwidthLimit
+          : opusBandwidthLimit // ignore: cast_nullable_to_non_nullable
+              as int?,
+      opusStereo: freezed == opusStereo
+          ? _value.opusStereo
+          : opusStereo // ignore: cast_nullable_to_non_nullable
+              as bool?,
+      opusDtx: freezed == opusDtx
+          ? _value.opusDtx
+          : opusDtx // ignore: cast_nullable_to_non_nullable
+              as bool?,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$EncodingDefaultPresetOverrideImplCopyWith<$Res>
+    implements $EncodingDefaultPresetOverrideCopyWith<$Res> {
+  factory _$$EncodingDefaultPresetOverrideImplCopyWith(
+          _$EncodingDefaultPresetOverrideImpl value,
+          $Res Function(_$EncodingDefaultPresetOverrideImpl) then) =
+      __$$EncodingDefaultPresetOverrideImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {int? audioBitrate,
+      int? videoBitrate,
+      int? ptime,
+      int? maxptime,
+      int? opusBandwidthLimit,
+      bool? opusStereo,
+      bool? opusDtx});
+}
+
+/// @nodoc
+class __$$EncodingDefaultPresetOverrideImplCopyWithImpl<$Res>
+    extends _$EncodingDefaultPresetOverrideCopyWithImpl<$Res,
+        _$EncodingDefaultPresetOverrideImpl>
+    implements _$$EncodingDefaultPresetOverrideImplCopyWith<$Res> {
+  __$$EncodingDefaultPresetOverrideImplCopyWithImpl(
+      _$EncodingDefaultPresetOverrideImpl _value,
+      $Res Function(_$EncodingDefaultPresetOverrideImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of EncodingDefaultPresetOverride
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? audioBitrate = freezed,
+    Object? videoBitrate = freezed,
+    Object? ptime = freezed,
+    Object? maxptime = freezed,
+    Object? opusBandwidthLimit = freezed,
+    Object? opusStereo = freezed,
+    Object? opusDtx = freezed,
+  }) {
+    return _then(_$EncodingDefaultPresetOverrideImpl(
+      audioBitrate: freezed == audioBitrate
+          ? _value.audioBitrate
+          : audioBitrate // ignore: cast_nullable_to_non_nullable
+              as int?,
+      videoBitrate: freezed == videoBitrate
+          ? _value.videoBitrate
+          : videoBitrate // ignore: cast_nullable_to_non_nullable
+              as int?,
+      ptime: freezed == ptime
+          ? _value.ptime
+          : ptime // ignore: cast_nullable_to_non_nullable
+              as int?,
+      maxptime: freezed == maxptime
+          ? _value.maxptime
+          : maxptime // ignore: cast_nullable_to_non_nullable
+              as int?,
+      opusBandwidthLimit: freezed == opusBandwidthLimit
+          ? _value.opusBandwidthLimit
+          : opusBandwidthLimit // ignore: cast_nullable_to_non_nullable
+              as int?,
+      opusStereo: freezed == opusStereo
+          ? _value.opusStereo
+          : opusStereo // ignore: cast_nullable_to_non_nullable
+              as bool?,
+      opusDtx: freezed == opusDtx
+          ? _value.opusDtx
+          : opusDtx // ignore: cast_nullable_to_non_nullable
+              as bool?,
+    ));
+  }
+}
+
+/// @nodoc
+
+@JsonSerializable(explicitToJson: true)
+class _$EncodingDefaultPresetOverrideImpl
+    extends _EncodingDefaultPresetOverride {
+  const _$EncodingDefaultPresetOverrideImpl(
+      {this.audioBitrate,
+      this.videoBitrate,
+      this.ptime,
+      this.maxptime,
+      this.opusBandwidthLimit,
+      this.opusStereo,
+      this.opusDtx})
+      : super._();
+
+  factory _$EncodingDefaultPresetOverrideImpl.fromJson(
+          Map<String, dynamic> json) =>
+      _$$EncodingDefaultPresetOverrideImplFromJson(json);
+
+  @override
+  final int? audioBitrate;
+  @override
+  final int? videoBitrate;
+  @override
+  final int? ptime;
+  @override
+  final int? maxptime;
+  @override
+  final int? opusBandwidthLimit;
+  @override
+  final bool? opusStereo;
+  @override
+  final bool? opusDtx;
+
+  @override
+  String toString() {
+    return 'EncodingDefaultPresetOverride(audioBitrate: $audioBitrate, videoBitrate: $videoBitrate, ptime: $ptime, maxptime: $maxptime, opusBandwidthLimit: $opusBandwidthLimit, opusStereo: $opusStereo, opusDtx: $opusDtx)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$EncodingDefaultPresetOverrideImpl &&
+            (identical(other.audioBitrate, audioBitrate) ||
+                other.audioBitrate == audioBitrate) &&
+            (identical(other.videoBitrate, videoBitrate) ||
+                other.videoBitrate == videoBitrate) &&
+            (identical(other.ptime, ptime) || other.ptime == ptime) &&
+            (identical(other.maxptime, maxptime) ||
+                other.maxptime == maxptime) &&
+            (identical(other.opusBandwidthLimit, opusBandwidthLimit) ||
+                other.opusBandwidthLimit == opusBandwidthLimit) &&
+            (identical(other.opusStereo, opusStereo) ||
+                other.opusStereo == opusStereo) &&
+            (identical(other.opusDtx, opusDtx) || other.opusDtx == opusDtx));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(runtimeType, audioBitrate, videoBitrate,
+      ptime, maxptime, opusBandwidthLimit, opusStereo, opusDtx);
+
+  /// Create a copy of EncodingDefaultPresetOverride
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$EncodingDefaultPresetOverrideImplCopyWith<
+          _$EncodingDefaultPresetOverrideImpl>
+      get copyWith => __$$EncodingDefaultPresetOverrideImplCopyWithImpl<
+          _$EncodingDefaultPresetOverrideImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$EncodingDefaultPresetOverrideImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _EncodingDefaultPresetOverride
+    extends EncodingDefaultPresetOverride {
+  const factory _EncodingDefaultPresetOverride(
+      {final int? audioBitrate,
+      final int? videoBitrate,
+      final int? ptime,
+      final int? maxptime,
+      final int? opusBandwidthLimit,
+      final bool? opusStereo,
+      final bool? opusDtx}) = _$EncodingDefaultPresetOverrideImpl;
+  const _EncodingDefaultPresetOverride._() : super._();
+
+  factory _EncodingDefaultPresetOverride.fromJson(Map<String, dynamic> json) =
+      _$EncodingDefaultPresetOverrideImpl.fromJson;
+
+  @override
+  int? get audioBitrate;
+  @override
+  int? get videoBitrate;
+  @override
+  int? get ptime;
+  @override
+  int? get maxptime;
+  @override
+  int? get opusBandwidthLimit;
+  @override
+  bool? get opusStereo;
+  @override
+  bool? get opusDtx;
+
+  /// Create a copy of EncodingDefaultPresetOverride
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$EncodingDefaultPresetOverrideImplCopyWith<
+          _$EncodingDefaultPresetOverrideImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }
 
 BottomMenuTabScheme _$BottomMenuTabSchemeFromJson(Map<String, dynamic> json) {

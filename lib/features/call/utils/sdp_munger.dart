@@ -7,6 +7,7 @@ import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:webtrit_phone/data/app_preferences.dart';
 import 'package:webtrit_phone/features/call/utils/utils.dart';
 import 'package:webtrit_phone/models/encoding_settings.dart';
+import 'package:webtrit_phone/models/feature_access/encoding_config.dart';
 import 'package:webtrit_phone/models/rtp_codec_profile.dart';
 
 final _logger = Logger('SDPMunger');
@@ -25,13 +26,42 @@ abstract class SDPMunger {
 /// can be used to set bitrate, ptime, opus stereo & bandwidth
 /// and audio/video profiles reordering and exclusion by settings.
 class ModifyWithEncodingSettings implements SDPMunger {
-  ModifyWithEncodingSettings(this._prefs);
+  ModifyWithEncodingSettings(this._prefs, this._encodingConfig);
 
   final AppPreferences _prefs;
+  final EncodingConfig _encodingConfig;
+
+  EncodingSettings _makeSettings(EncodingPreset? preset) {
+    final defaultPresetOverride = _encodingConfig.defaultPresetOverride;
+
+    EncodingSettings settings = switch (preset) {
+      null => EncodingSettings.defaultWithOverrides(
+          audioBitrate: defaultPresetOverride.audioBitrate,
+          videoBitrate: defaultPresetOverride.videoBitrate,
+          ptime: defaultPresetOverride.ptime,
+          maxptime: defaultPresetOverride.maxptime,
+          opusBandwidthLimit: defaultPresetOverride.opusBandwidthLimit,
+          opusStereo: defaultPresetOverride.opusStereo,
+          opusDtx: defaultPresetOverride.opusDtx,
+        ),
+      EncodingPreset.eco => EncodingSettings.eco(),
+      EncodingPreset.balance => EncodingSettings.balance(),
+      EncodingPreset.quality => EncodingSettings.quality(),
+      EncodingPreset.fullFlex => EncodingSettings.fullFlex(),
+      EncodingPreset.custom => _prefs.getEncodingSettings(),
+    };
+    return settings;
+  }
 
   @override
   void apply(RTCSessionDescription description) {
-    final settings = _prefs.getEncodingSettings();
+    final bypass = _encodingConfig.bypassConfig;
+    final configurationAllowed = _encodingConfig.configurationAllowed;
+
+    if (bypass) return;
+
+    final preset = configurationAllowed ? _prefs.getEncodingPreset() : null;
+    EncodingSettings settings = _makeSettings(preset);
 
     final sdp = description.sdp;
     if (sdp == null) return;
@@ -40,19 +70,16 @@ class ModifyWithEncodingSettings implements SDPMunger {
     bool modified = false;
 
     if (settings.audioBitrate != null || settings.videoBitrate != null) {
-      _logger.info('Setting bitrate audio:${settings.audioBitrate} video:${settings.videoBitrate}');
       builder.setBitrate(settings.audioBitrate, settings.videoBitrate);
       modified = true;
     }
 
     if (settings.ptime != null || settings.maxptime != null) {
-      _logger.info('Setting audio ptime:${settings.ptime} maxptime:${settings.maxptime}');
       builder.setPtime(settings.ptime, settings.maxptime);
       modified = true;
     }
 
     if (settings.opusBandwidthLimit != null || settings.opusStereo != null || settings.opusDtx != null) {
-      _logger.info('Setting opus params, stereo:${settings.opusStereo} bandwidth:${settings.opusBandwidthLimit}');
       builder.setOpusParams(settings.opusBandwidthLimit, settings.opusStereo, settings.opusDtx);
       modified = true;
     }
@@ -61,9 +88,6 @@ class ModifyWithEncodingSettings implements SDPMunger {
       final profiles = settings.audioProfiles!;
       final toRemove = profiles.where((p) => p.enabled == false).map((e) => e.option).toList();
       final toReorder = profiles.where((p) => p.enabled == true).map((e) => e.option).toList();
-
-      _logger.info('Audio profiles to remove: $toRemove');
-      _logger.info('Audio profiles to reorder: $toReorder');
 
       toRemove.forEach((p) => builder.removeProfile(p));
       builder.reorderProfiles(toReorder, RTPCodecKind.audio);
@@ -74,9 +98,6 @@ class ModifyWithEncodingSettings implements SDPMunger {
       final profiles = settings.videoProfiles!;
       final toRemove = profiles.where((p) => p.enabled == false).map((e) => e.option).toList();
       final toReorder = profiles.where((p) => p.enabled == true).map((e) => e.option).toList();
-
-      _logger.info('Video profiles to remove: $toRemove');
-      _logger.info('Video profiles to reorder: $toReorder');
 
       toRemove.forEach((p) => builder.removeProfile(p));
       builder.reorderProfiles(toReorder, RTPCodecKind.video);

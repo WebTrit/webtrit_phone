@@ -189,12 +189,34 @@ class FeatureAccess {
   static CallFeature _tryConfigureCallFeature(AppConfig appConfig) {
     final callConfig = appConfig.callConfig;
 
+    final transferConfig = appConfig.callConfig.transfer;
+
+    final encodingConfig = appConfig.callConfig.encoding;
+    final defaultPresetOverride = encodingConfig.defaultPresetOverride;
+    final encodingTabEnabled = appConfig.settingsConfig.sections.any((section) {
+      return section.items.any((item) {
+        return item.type == SettingsFlavor.encoding.name && item.enabled;
+      });
+    });
+
     return CallFeature(
       videoEnable: callConfig.videoEnabled,
       transfer: TransferConfig(
-        enableBlindTransfer: callConfig.transfer.enableBlindTransfer,
-        enableAttendedTransfer: callConfig.transfer.enableAttendedTransfer,
+        enableBlindTransfer: transferConfig.enableBlindTransfer,
+        enableAttendedTransfer: transferConfig.enableAttendedTransfer,
       ),
+      encoding: EncodingConfig(
+          bypassConfig: encodingConfig.bypassConfig,
+          configurationAllowed: encodingTabEnabled,
+          defaultPresetOverride: DefaultPresetOverride(
+            audioBitrate: defaultPresetOverride.audioBitrate,
+            videoBitrate: defaultPresetOverride.videoBitrate,
+            ptime: defaultPresetOverride.ptime,
+            maxptime: defaultPresetOverride.maxptime,
+            opusBandwidthLimit: defaultPresetOverride.opusBandwidthLimit,
+            opusStereo: defaultPresetOverride.opusStereo,
+            opusDtx: defaultPresetOverride.opusDtx,
+          )),
     );
   }
 
@@ -280,10 +302,12 @@ class SettingsFeature {
 class CallFeature {
   final bool videoEnable;
   final TransferConfig transfer;
+  final EncodingConfig encoding;
 
   CallFeature({
     required this.videoEnable,
     required this.transfer,
+    required this.encoding,
   });
 }
 

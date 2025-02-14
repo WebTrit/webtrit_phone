@@ -97,8 +97,19 @@ class AppLocalizationsMapper {
           localizations.call_description_transferProcessing,
       'call_FailureAcknowledgeDialog_title':
           localizations.call_FailureAcknowledgeDialog_title,
+      'callProcessingStatus_ringing':
+          localizations.callProcessingStatus_ringing,
+      'callProcessingStatus_preparing':
+          localizations.callProcessingStatus_preparing,
       'callProcessingStatus_answering':
           localizations.callProcessingStatus_answering,
+      'callProcessingStatus_signaling_connecting':
+          localizations.callProcessingStatus_signaling_connecting,
+      'callProcessingStatus_init_media':
+          localizations.callProcessingStatus_init_media,
+      'callProcessingStatus_invite': localizations.callProcessingStatus_invite,
+      'callProcessingStatus_routing':
+          localizations.callProcessingStatus_routing,
       'callProcessingStatus_disconnecting':
           localizations.callProcessingStatus_disconnecting,
       'callStatus_appUnregistered': localizations.callStatus_appUnregistered,
@@ -651,6 +662,24 @@ class AppLocalizationsMapper {
           localizations.settings_AppBarTitle_myAccount,
       'settings_encoding_AppBar_reset_tooltip':
           localizations.settings_encoding_AppBar_reset_tooltip,
+      'settings_encoding_Section_preset_title':
+          localizations.settings_encoding_Section_preset_title,
+      'settings_encoding_Section_preset_tooltip':
+          localizations.settings_encoding_Section_preset_tooltip,
+      'settings_encoding_Section_preset':
+          localizations.settings_encoding_Section_preset,
+      'settings_encoding_Section_preset_default':
+          localizations.settings_encoding_Section_preset_default,
+      'settings_encoding_Section_preset_eco':
+          localizations.settings_encoding_Section_preset_eco,
+      'settings_encoding_Section_preset_balance':
+          localizations.settings_encoding_Section_preset_balance,
+      'settings_encoding_Section_preset_quality':
+          localizations.settings_encoding_Section_preset_quality,
+      'settings_encoding_Section_preset_full_flex':
+          localizations.settings_encoding_Section_preset_full_flex,
+      'settings_encoding_Section_preset_custom':
+          localizations.settings_encoding_Section_preset_custom,
       'settings_encoding_Section_measure_kbps':
           localizations.settings_encoding_Section_measure_kbps,
       'settings_encoding_Section_measure_ms':

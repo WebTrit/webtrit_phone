@@ -30,184 +30,218 @@ class _EncodingSettingsScreenState extends State<EncodingSettingsScreen> {
           IconButton(
             icon: const Icon(Icons.settings_backup_restore),
             tooltip: context.l10n.settings_encoding_AppBar_reset_tooltip,
-            onPressed: () => cubit.setNew(EncodingSettings.blank()),
+            onPressed: () => cubit.reset(),
             color: Theme.of(context).colorScheme.onSurface,
           ),
         ],
       ),
-      body: BlocBuilder<EncodingSettingsCubit, EncodingSettings>(
-        builder: (context, settings) {
+      body: BlocBuilder<EncodingSettingsCubit, EncodingSettingState>(
+        builder: (context, state) {
+          final preset = state.preset;
+          final settings = state.settings;
+
           return SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 HeadingSection(
-                  title: context.l10n.settings_encoding_Section_bitrate_title,
-                  tooltip: context.l10n.settings_encoding_Section_bitrate_tooltip,
-                  icon: const Icon(Icons.one_k_plus_sharp),
+                  title: context.l10n.settings_encoding_Section_preset_title,
+                  tooltip: context.l10n.settings_encoding_Section_preset_tooltip,
+                  icon: const Icon(Icons.segment_outlined),
                 ),
                 const SizedBox(height: 16.0),
-                SlidableSection<int>(
-                  title: context.l10n.settings_encoding_Section_target_audio_bitrate,
-                  optionPrefix: context.l10n.settings_encoding_Section_bitrate_prefix,
-                  buildOptionLabel: (option) {
-                    if (option == null) return context.l10n.settings_encoding_Section_value_auto;
-                    return '$option ${context.l10n.settings_encoding_Section_measure_kbps}';
-                  },
-                  options: EncodingSettings.audioBitrateOptions,
-                  selected: settings.audioBitrate,
-                  onSelect: (option) => cubit.setNew(settings.copyWithAudioBitrate(option)),
-                ),
-                const SizedBox(height: 16.0),
-                SlidableSection<int>(
-                  title: context.l10n.settings_encoding_Section_target_video_bitrate,
-                  optionPrefix: context.l10n.settings_encoding_Section_bitrate_prefix,
-                  buildOptionLabel: (option) {
-                    if (option == null) return context.l10n.settings_encoding_Section_value_auto;
-                    return '$option ${context.l10n.settings_encoding_Section_measure_kbps}';
-                  },
-                  options: EncodingSettings.videoBitrateOptions,
-                  selected: settings.videoBitrate,
-                  onSelect: (option) => cubit.setNew(settings.copyWithVideoBitrate(option)),
-                ),
-                const SizedBox(height: 24),
-                HeadingSection(
-                  title: context.l10n.settings_encoding_Section_packetization_title,
-                  tooltip: context.l10n.settings_encoding_Section_packetization_tooltip,
-                  icon: const Icon(Icons.vertical_split_rounded),
-                ),
-                const SizedBox(height: 16.0),
-                SlidableSection<int>(
-                  title: context.l10n.settings_encoding_Section_audio_ptime,
-                  optionPrefix: context.l10n.settings_encoding_Section_ptime_prefix,
-                  buildOptionLabel: (option) {
-                    if (option == null) return context.l10n.settings_encoding_Section_value_auto;
-                    return '$option ${context.l10n.settings_encoding_Section_measure_ms}';
-                  },
-                  options: EncodingSettings.ptimeOptions,
-                  selected: settings.ptime,
-                  onSelect: (option) {
-                    var newSettings = settings.copyWithPtime(option);
-                    cubit.setNew(newSettings);
-                    if (option != null && settings.maxptime != null && option > settings.maxptime!) {
-                      newSettings = newSettings.copyWithMaxptime(option);
-                      cubit.setNew(newSettings);
-                    }
-                  },
-                ),
-                const SizedBox(height: 16.0),
-                SlidableSection<int>(
-                  title: context.l10n.settings_encoding_Section_audio_ptime_limit,
-                  optionPrefix: context.l10n.settings_encoding_Section_ptime_prefix,
-                  buildOptionLabel: (option) {
-                    if (option == null) return context.l10n.settings_encoding_Section_value_auto;
-                    return '$option ${context.l10n.settings_encoding_Section_measure_ms}';
-                  },
-                  options: EncodingSettings.ptimeOptions,
-                  selected: settings.maxptime,
-                  onSelect: (option) {
-                    var newSettings = settings.copyWithMaxptime(option);
-                    cubit.setNew(newSettings);
-                    if (option != null && settings.ptime != null && option < settings.ptime!) {
-                      newSettings = newSettings.copyWithPtime(option);
-                      cubit.setNew(newSettings);
-                    }
-                  },
-                ),
-                const SizedBox(height: 24),
-                HeadingSection(
-                  title: context.l10n.settings_encoding_Section_opus_title,
-                  tooltip: context.l10n.settings_encoding_Section_opus_tooltip,
-                  icon: const Icon(Icons.settings),
-                ),
-                const SizedBox(height: 16.0),
-                SlidableSection<int>(
-                  title: context.l10n.settings_encoding_Section_opus_bandwidth,
-                  optionPrefix: context.l10n.settings_encoding_Section_bandwidth_prefix,
-                  buildOptionLabel: (option) {
-                    if (option == null) return context.l10n.settings_encoding_Section_value_auto;
-                    return '$option ${context.l10n.settings_encoding_Section_measure_hz}';
-                  },
-                  options: EncodingSettings.opusBandwidthLimitOptions,
-                  selected: settings.opusBandwidthLimit,
-                  onSelect: (option) => cubit.setNew(settings.copyWithOpusBandwidthLimit(option)),
-                ),
-                const SizedBox(height: 16.0),
-                ChoosableSection<bool>(
-                  title: context.l10n.settings_encoding_Section_opus_channels,
+                ChoosableSection<EncodingPreset>(
+                  title: null,
                   buildOptionTitle: (option) {
-                    if (option == true) return Text(context.l10n.settings_encoding_Section_value_stereo);
-                    if (option == false) return Text(context.l10n.settings_encoding_Section_value_mono);
+                    return Text(switch (option) {
+                      null => context.l10n.settings_encoding_Section_preset_default,
+                      EncodingPreset.eco => context.l10n.settings_encoding_Section_preset_eco,
+                      EncodingPreset.balance => context.l10n.settings_encoding_Section_preset_balance,
+                      EncodingPreset.quality => context.l10n.settings_encoding_Section_preset_quality,
+                      EncodingPreset.fullFlex => context.l10n.settings_encoding_Section_preset_full_flex,
+                      EncodingPreset.custom => context.l10n.settings_encoding_Section_preset_custom,
+                    });
+                  },
+                  options: EncodingPreset.values,
+                  selected: preset,
+                  onSelect: (option) => cubit.setPreset(option),
+                ),
+                if (preset == EncodingPreset.custom)
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const SizedBox(height: 24),
+                      const Divider(),
+                      const SizedBox(height: 24),
+                      HeadingSection(
+                        title: context.l10n.settings_encoding_Section_bitrate_title,
+                        tooltip: context.l10n.settings_encoding_Section_bitrate_tooltip,
+                        icon: const Icon(Icons.one_k_plus_sharp),
+                      ),
+                      const SizedBox(height: 16.0),
+                      SlidableSection<int>(
+                        title: context.l10n.settings_encoding_Section_target_audio_bitrate,
+                        optionPrefix: context.l10n.settings_encoding_Section_bitrate_prefix,
+                        buildOptionLabel: (option) {
+                          if (option == null) return context.l10n.settings_encoding_Section_value_auto;
+                          return '$option ${context.l10n.settings_encoding_Section_measure_kbps}';
+                        },
+                        options: EncodingSettings.audioBitrateOptions,
+                        selected: settings.audioBitrate,
+                        onSelect: (option) => cubit.setSettings(settings.copyWithAudioBitrate(option)),
+                      ),
+                      const SizedBox(height: 16.0),
+                      SlidableSection<int>(
+                        title: context.l10n.settings_encoding_Section_target_video_bitrate,
+                        optionPrefix: context.l10n.settings_encoding_Section_bitrate_prefix,
+                        buildOptionLabel: (option) {
+                          if (option == null) return context.l10n.settings_encoding_Section_value_auto;
+                          return '$option ${context.l10n.settings_encoding_Section_measure_kbps}';
+                        },
+                        options: EncodingSettings.videoBitrateOptions,
+                        selected: settings.videoBitrate,
+                        onSelect: (option) => cubit.setSettings(settings.copyWithVideoBitrate(option)),
+                      ),
+                      const SizedBox(height: 24),
+                      HeadingSection(
+                        title: context.l10n.settings_encoding_Section_packetization_title,
+                        tooltip: context.l10n.settings_encoding_Section_packetization_tooltip,
+                        icon: const Icon(Icons.vertical_split_rounded),
+                      ),
+                      const SizedBox(height: 16.0),
+                      SlidableSection<int>(
+                        title: context.l10n.settings_encoding_Section_audio_ptime,
+                        optionPrefix: context.l10n.settings_encoding_Section_ptime_prefix,
+                        buildOptionLabel: (option) {
+                          if (option == null) return context.l10n.settings_encoding_Section_value_auto;
+                          return '$option ${context.l10n.settings_encoding_Section_measure_ms}';
+                        },
+                        options: EncodingSettings.ptimeOptions,
+                        selected: settings.ptime,
+                        onSelect: (option) {
+                          var newSettings = settings.copyWithPtime(option);
+                          cubit.setSettings(newSettings);
+                          if (option != null && settings.maxptime != null && option > settings.maxptime!) {
+                            newSettings = newSettings.copyWithMaxptime(option);
+                            cubit.setSettings(newSettings);
+                          }
+                        },
+                      ),
+                      const SizedBox(height: 16.0),
+                      SlidableSection<int>(
+                        title: context.l10n.settings_encoding_Section_audio_ptime_limit,
+                        optionPrefix: context.l10n.settings_encoding_Section_ptime_prefix,
+                        buildOptionLabel: (option) {
+                          if (option == null) return context.l10n.settings_encoding_Section_value_auto;
+                          return '$option ${context.l10n.settings_encoding_Section_measure_ms}';
+                        },
+                        options: EncodingSettings.ptimeOptions,
+                        selected: settings.maxptime,
+                        onSelect: (option) {
+                          var newSettings = settings.copyWithMaxptime(option);
+                          cubit.setSettings(newSettings);
+                          if (option != null && settings.ptime != null && option < settings.ptime!) {
+                            newSettings = newSettings.copyWithPtime(option);
+                            cubit.setSettings(newSettings);
+                          }
+                        },
+                      ),
+                      const SizedBox(height: 24),
+                      HeadingSection(
+                        title: context.l10n.settings_encoding_Section_opus_title,
+                        tooltip: context.l10n.settings_encoding_Section_opus_tooltip,
+                        icon: const Icon(Icons.settings),
+                      ),
+                      const SizedBox(height: 16.0),
+                      SlidableSection<int>(
+                        title: context.l10n.settings_encoding_Section_opus_bandwidth,
+                        optionPrefix: context.l10n.settings_encoding_Section_bandwidth_prefix,
+                        buildOptionLabel: (option) {
+                          if (option == null) return context.l10n.settings_encoding_Section_value_auto;
+                          return '$option ${context.l10n.settings_encoding_Section_measure_hz}';
+                        },
+                        options: EncodingSettings.opusBandwidthLimitOptions,
+                        selected: settings.opusBandwidthLimit,
+                        onSelect: (option) => cubit.setSettings(settings.copyWithOpusBandwidthLimit(option)),
+                      ),
+                      const SizedBox(height: 16.0),
+                      ChoosableSection<bool>(
+                        title: context.l10n.settings_encoding_Section_opus_channels,
+                        buildOptionTitle: (option) {
+                          if (option == true) return Text(context.l10n.settings_encoding_Section_value_stereo);
+                          if (option == false) return Text(context.l10n.settings_encoding_Section_value_mono);
 
-                    return Text(context.l10n.settings_encoding_Section_value_auto);
-                  },
-                  options: const [true, false],
-                  selected: settings.opusStereo,
-                  onSelect: (option) => cubit.setNew(settings.copyWithOpusStereo(option)),
-                ),
-                const SizedBox(height: 16.0),
-                ChoosableSection<bool>(
-                  title: context.l10n.settings_encoding_Section_opus_dtx,
-                  buildOptionTitle: (option) {
-                    if (option == true) return Text(context.l10n.settings_encoding_Section_value_enable);
-                    if (option == false) return Text(context.l10n.settings_encoding_Section_value_disable);
+                          return Text(context.l10n.settings_encoding_Section_value_auto);
+                        },
+                        options: const [true, false],
+                        selected: settings.opusStereo,
+                        onSelect: (option) => cubit.setSettings(settings.copyWithOpusStereo(option)),
+                      ),
+                      const SizedBox(height: 16.0),
+                      ChoosableSection<bool>(
+                        title: context.l10n.settings_encoding_Section_opus_dtx,
+                        buildOptionTitle: (option) {
+                          if (option == true) return Text(context.l10n.settings_encoding_Section_value_enable);
+                          if (option == false) return Text(context.l10n.settings_encoding_Section_value_disable);
 
-                    return Text(context.l10n.settings_encoding_Section_value_auto);
-                  },
-                  options: const [true, false],
-                  selected: settings.opusDtx,
-                  onSelect: (option) => cubit.setNew(settings.copyWithOpusDtx(option)),
-                ),
-                const SizedBox(height: 24),
-                HeadingSection(
-                  title: context.l10n.settings_encoding_Section_rtp_override_title,
-                  tooltip: context.l10n.settings_encoding_Section_rtp_override_tooltip,
-                  icon: const Icon(Icons.sip),
-                ),
-                const SizedBox(height: 16.0),
-                ReorderableSection<RTPCodecProfile>(
-                  title: context.l10n.settings_encoding_Section_rtp_override_audio,
-                  warningTitle: context.l10n.settings_encoding_Section_rtp_override_warning_title,
-                  warningMessage: context.l10n.settings_encoding_Section_rtp_override_warning_message,
-                  buildOptionTitle: (option) {
-                    if (option == null) return Text(context.l10n.settings_encoding_Section_value_auto);
-                    return Text(option.name);
-                  },
-                  enabled: settings.audioProfiles != null,
-                  onEnable: (enabled) {
-                    if (enabled) {
-                      var profiles = EncodingSettings.defaultAudioProfilesOrder;
-                      cubit.setNew(settings.copyWithAudioProfiles(profiles));
-                    } else {
-                      cubit.setNew(settings.copyWithAudioProfiles(null));
-                    }
-                  },
-                  items: settings.audioProfiles ?? [],
-                  onChange: (items) => cubit.setNew(settings.copyWithAudioProfiles(items)),
-                ),
-                const SizedBox(height: 16.0),
-                ReorderableSection<RTPCodecProfile>(
-                  title: context.l10n.settings_encoding_Section_rtp_override_video,
-                  warningTitle: context.l10n.settings_encoding_Section_rtp_override_warning_title,
-                  warningMessage: context.l10n.settings_encoding_Section_rtp_override_warning_message,
-                  buildOptionTitle: (option) {
-                    if (option == null) return Text(context.l10n.settings_encoding_Section_value_auto);
-                    return Text(option.name);
-                  },
-                  enabled: settings.videoProfiles != null,
-                  onEnable: (enabled) {
-                    if (enabled) {
-                      var profiles = EncodingSettings.defaultVideoProfilesOrder;
-                      cubit.setNew(settings.copyWithVideoProfiles(profiles));
-                    } else {
-                      cubit.setNew(settings.copyWithVideoProfiles(null));
-                    }
-                  },
-                  items: settings.videoProfiles ?? [],
-                  onChange: (items) => cubit.setNew(settings.copyWithVideoProfiles(items)),
-                ),
-                const SizedBox(height: 16.0),
+                          return Text(context.l10n.settings_encoding_Section_value_auto);
+                        },
+                        options: const [true, false],
+                        selected: settings.opusDtx,
+                        onSelect: (option) => cubit.setSettings(settings.copyWithOpusDtx(option)),
+                      ),
+                      const SizedBox(height: 24),
+                      HeadingSection(
+                        title: context.l10n.settings_encoding_Section_rtp_override_title,
+                        tooltip: context.l10n.settings_encoding_Section_rtp_override_tooltip,
+                        icon: const Icon(Icons.sip),
+                      ),
+                      const SizedBox(height: 16.0),
+                      ReorderableSection<RTPCodecProfile>(
+                        title: context.l10n.settings_encoding_Section_rtp_override_audio,
+                        warningTitle: context.l10n.settings_encoding_Section_rtp_override_warning_title,
+                        warningMessage: context.l10n.settings_encoding_Section_rtp_override_warning_message,
+                        buildOptionTitle: (option) {
+                          if (option == null) return Text(context.l10n.settings_encoding_Section_value_auto);
+                          return Text(option.name);
+                        },
+                        enabled: settings.audioProfiles != null,
+                        onEnable: (enabled) {
+                          if (enabled) {
+                            var profiles = EncodingSettings.defaultAudioProfilesOrder;
+                            cubit.setSettings(settings.copyWithAudioProfiles(profiles));
+                          } else {
+                            cubit.setSettings(settings.copyWithAudioProfiles(null));
+                          }
+                        },
+                        items: settings.audioProfiles ?? [],
+                        onChange: (items) => cubit.setSettings(settings.copyWithAudioProfiles(items)),
+                      ),
+                      const SizedBox(height: 16.0),
+                      ReorderableSection<RTPCodecProfile>(
+                        title: context.l10n.settings_encoding_Section_rtp_override_video,
+                        warningTitle: context.l10n.settings_encoding_Section_rtp_override_warning_title,
+                        warningMessage: context.l10n.settings_encoding_Section_rtp_override_warning_message,
+                        buildOptionTitle: (option) {
+                          if (option == null) return Text(context.l10n.settings_encoding_Section_value_auto);
+                          return Text(option.name);
+                        },
+                        enabled: settings.videoProfiles != null,
+                        onEnable: (enabled) {
+                          if (enabled) {
+                            var profiles = EncodingSettings.defaultVideoProfilesOrder;
+                            cubit.setSettings(settings.copyWithVideoProfiles(profiles));
+                          } else {
+                            cubit.setSettings(settings.copyWithVideoProfiles(null));
+                          }
+                        },
+                        items: settings.videoProfiles ?? [],
+                        onChange: (items) => cubit.setSettings(settings.copyWithVideoProfiles(items)),
+                      ),
+                      const SizedBox(height: 16.0),
+                    ],
+                  ),
               ],
             ),
           );
@@ -262,7 +296,7 @@ class ChoosableSection<T> extends StatelessWidget {
     super.key,
   });
 
-  final String title;
+  final String? title;
   final Widget Function(T?) buildOptionTitle;
 
   final List<T> options;
@@ -273,14 +307,16 @@ class ChoosableSection<T> extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Row(
-          children: [
-            const SizedBox(width: 4),
-            Expanded(child: Text(title)),
-            const SizedBox(width: 4),
-          ],
-        ),
-        const SizedBox(height: 8.0),
+        if (title != null) ...[
+          Row(
+            children: [
+              const SizedBox(width: 4),
+              Expanded(child: Text(title!)),
+              const SizedBox(width: 4),
+            ],
+          ),
+          const SizedBox(height: 8.0),
+        ],
         ListTile(
           selected: selected == null,
           title: buildOptionTitle(null),

@@ -1125,6 +1125,33 @@ class AppLocalizationsIt extends AppLocalizations {
   String get settings_encoding_AppBar_reset_tooltip => 'Ripristinare le impostazioni predefinite';
 
   @override
+  String get settings_encoding_Section_preset_title => 'Configurazioni di codifica multimediale';
+
+  @override
+  String get settings_encoding_Section_preset_tooltip => 'Preimpostazioni di regolazione per codec audio e video, valori più bassi ridurranno l\'utilizzo della larghezza di banda ma influenzeranno la qualità, valori più alti aumenteranno la qualità ma anche l\'utilizzo della larghezza di banda. Le impostazioni predefinite predefinite sono quelle consigliate fornite dal tuo fornitore in base alle sue preferenze ambientali.';
+
+  @override
+  String get settings_encoding_Section_preset => 'Preimpostato';
+
+  @override
+  String get settings_encoding_Section_preset_default => 'Predefinito';
+
+  @override
+  String get settings_encoding_Section_preset_eco => 'Eco';
+
+  @override
+  String get settings_encoding_Section_preset_balance => 'Bilancia';
+
+  @override
+  String get settings_encoding_Section_preset_quality => 'Qualità';
+
+  @override
+  String get settings_encoding_Section_preset_full_flex => 'Alta fedeltà';
+
+  @override
+  String get settings_encoding_Section_preset_custom => 'Costume';
+
+  @override
   String get settings_encoding_Section_measure_kbps => 'Kbps';
 
   @override

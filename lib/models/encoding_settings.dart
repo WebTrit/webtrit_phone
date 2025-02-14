@@ -5,6 +5,8 @@ import 'package:equatable/equatable.dart';
 import 'package:webtrit_phone/models/enableble.dart';
 import 'package:webtrit_phone/models/rtp_codec_profile.dart';
 
+enum EncodingPreset { eco, balance, quality, fullFlex, custom }
+
 class EncodingSettings extends Equatable {
   const EncodingSettings({
     this.audioBitrate,
@@ -19,6 +21,74 @@ class EncodingSettings extends Equatable {
   });
 
   factory EncodingSettings.blank() => const EncodingSettings();
+
+  factory EncodingSettings.defaultWithOverrides({
+    int? audioBitrate,
+    int? videoBitrate,
+    int? ptime,
+    int? maxptime,
+    int? opusBandwidthLimit,
+    bool? opusStereo,
+    bool? opusDtx,
+  }) {
+    return EncodingSettings(
+      audioBitrate: audioBitrate ?? 24,
+      videoBitrate: videoBitrate ?? 512,
+      ptime: ptime ?? 20,
+      maxptime: maxptime ?? 80,
+      opusBandwidthLimit: opusBandwidthLimit ?? 16000,
+      opusStereo: opusStereo ?? false,
+      opusDtx: opusDtx ?? true,
+    );
+  }
+
+  factory EncodingSettings.eco() {
+    return const EncodingSettings(
+      audioBitrate: 6,
+      videoBitrate: 128,
+      ptime: 20,
+      maxptime: 80,
+      opusBandwidthLimit: 8000,
+      opusStereo: false,
+      opusDtx: true,
+    );
+  }
+
+  factory EncodingSettings.balance() {
+    return const EncodingSettings(
+      audioBitrate: 24,
+      videoBitrate: 512,
+      ptime: 20,
+      maxptime: 80,
+      opusBandwidthLimit: 16000,
+      opusStereo: false,
+      opusDtx: true,
+    );
+  }
+
+  factory EncodingSettings.quality() {
+    return const EncodingSettings(
+      audioBitrate: 48,
+      videoBitrate: 1024,
+      ptime: 20,
+      maxptime: 80,
+      opusBandwidthLimit: 32000,
+      opusStereo: false,
+      opusDtx: true,
+    );
+  }
+
+  factory EncodingSettings.fullFlex() {
+    return const EncodingSettings(
+      audioBitrate: 256,
+      videoBitrate: 4096,
+      ptime: 40,
+      maxptime: 120,
+      opusBandwidthLimit: 48000,
+      opusStereo: true,
+      opusDtx: false,
+    );
+  }
 
   /// Set the bitrate for audio stream.
   /// In range `8-256kbps` for audio.
@@ -236,5 +306,7 @@ class EncodingSettings extends Equatable {
       ];
 
   @override
-  bool get stringify => true;
+  String toString() {
+    return 'EncodingSettings{audioBitrate: $audioBitrate, videoBitrate: $videoBitrate, ptime: $ptime, maxptime: $maxptime, opusBandwidthLimit: $opusBandwidthLimit, opusStereo: $opusStereo, opusDtx: $opusDtx, audioProfiles: $audioProfiles, videoProfiles: $videoProfiles}';
+  }
 }

@@ -149,12 +149,17 @@ _$AppConfigCallImpl _$$AppConfigCallImplFromJson(Map<String, dynamic> json) =>
               enableBlindTransfer: true, enableAttendedTransfer: true)
           : AppConfigTransfer.fromJson(
               json['transfer'] as Map<String, dynamic>),
+      encoding: json['encoding'] == null
+          ? const AppConfigEncoding()
+          : AppConfigEncoding.fromJson(
+              json['encoding'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$$AppConfigCallImplToJson(_$AppConfigCallImpl instance) =>
     <String, dynamic>{
       'videoEnabled': instance.videoEnabled,
       'transfer': instance.transfer.toJson(),
+      'encoding': instance.encoding.toJson(),
     };
 
 _$AppConfigTransferImpl _$$AppConfigTransferImplFromJson(
@@ -169,6 +174,47 @@ Map<String, dynamic> _$$AppConfigTransferImplToJson(
     <String, dynamic>{
       'enableBlindTransfer': instance.enableBlindTransfer,
       'enableAttendedTransfer': instance.enableAttendedTransfer,
+    };
+
+_$AppConfigEncodingImpl _$$AppConfigEncodingImplFromJson(
+        Map<String, dynamic> json) =>
+    _$AppConfigEncodingImpl(
+      bypassConfig: json['bypassConfig'] as bool? ?? false,
+      defaultPresetOverride: json['defaultPresetOverride'] == null
+          ? const EncodingDefaultPresetOverride()
+          : EncodingDefaultPresetOverride.fromJson(
+              json['defaultPresetOverride'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$$AppConfigEncodingImplToJson(
+        _$AppConfigEncodingImpl instance) =>
+    <String, dynamic>{
+      'bypassConfig': instance.bypassConfig,
+      'defaultPresetOverride': instance.defaultPresetOverride.toJson(),
+    };
+
+_$EncodingDefaultPresetOverrideImpl
+    _$$EncodingDefaultPresetOverrideImplFromJson(Map<String, dynamic> json) =>
+        _$EncodingDefaultPresetOverrideImpl(
+          audioBitrate: (json['audioBitrate'] as num?)?.toInt(),
+          videoBitrate: (json['videoBitrate'] as num?)?.toInt(),
+          ptime: (json['ptime'] as num?)?.toInt(),
+          maxptime: (json['maxptime'] as num?)?.toInt(),
+          opusBandwidthLimit: (json['opusBandwidthLimit'] as num?)?.toInt(),
+          opusStereo: json['opusStereo'] as bool?,
+          opusDtx: json['opusDtx'] as bool?,
+        );
+
+Map<String, dynamic> _$$EncodingDefaultPresetOverrideImplToJson(
+        _$EncodingDefaultPresetOverrideImpl instance) =>
+    <String, dynamic>{
+      'audioBitrate': instance.audioBitrate,
+      'videoBitrate': instance.videoBitrate,
+      'ptime': instance.ptime,
+      'maxptime': instance.maxptime,
+      'opusBandwidthLimit': instance.opusBandwidthLimit,
+      'opusStereo': instance.opusStereo,
+      'opusDtx': instance.opusDtx,
     };
 
 _$BaseTabSchemeImpl _$$BaseTabSchemeImplFromJson(Map<String, dynamic> json) =>
