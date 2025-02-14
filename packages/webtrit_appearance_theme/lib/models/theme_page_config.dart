@@ -1,7 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import 'elevated_button_style_type.dart';
-import 'metadata.dart';
+import 'features_config/elevated_button_style_type.dart';
+import 'features_config/metadata.dart';
 
 part 'theme_page_config.freezed.dart';
 

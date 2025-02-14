@@ -1,7 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../converters/converters.dart';
-import '../parsers/parsers.dart';
+import 'package:webtrit_appearance_theme/converters/converters.dart';
+import 'package:webtrit_appearance_theme/parsers/parsers.dart';
 
 import 'bottom_menu_tab_type.dart';
 import 'metadata.dart';
