@@ -356,37 +356,3 @@ Map<String, dynamic> _$$AppConfigSettingsItemImplToJson(
       'icon': instance.icon,
       'embeddedData': instance.embeddedData?.toJson(),
     };
-
-_$EmbeddedDataImpl _$$EmbeddedDataImplFromJson(Map<String, dynamic> json) =>
-    _$EmbeddedDataImpl(
-      id: (json['id'] as num?)?.toInt(),
-      resource: json['resource'] as String,
-      attributes: json['attributes'] as Map<String, dynamic>? ?? const {},
-      toolbar: json['toolbar'] == null
-          ? const ToolbarConfig()
-          : ToolbarConfig.fromJson(json['toolbar'] as Map<String, dynamic>),
-      metadata: json['metadata'] == null
-          ? const Metadata()
-          : Metadata.fromJson(json['metadata'] as Map<String, dynamic>),
-    );
-
-Map<String, dynamic> _$$EmbeddedDataImplToJson(_$EmbeddedDataImpl instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'resource': instance.resource,
-      'attributes': instance.attributes,
-      'toolbar': instance.toolbar.toJson(),
-      'metadata': instance.metadata.toJson(),
-    };
-
-_$ToolbarConfigImpl _$$ToolbarConfigImplFromJson(Map<String, dynamic> json) =>
-    _$ToolbarConfigImpl(
-      titleL10n: json['titleL10n'] as String?,
-      showToolbar: json['showToolbar'] as bool? ?? false,
-    );
-
-Map<String, dynamic> _$$ToolbarConfigImplToJson(_$ToolbarConfigImpl instance) =>
-    <String, dynamic>{
-      'titleL10n': instance.titleL10n,
-      'showToolbar': instance.showToolbar,
-    };
