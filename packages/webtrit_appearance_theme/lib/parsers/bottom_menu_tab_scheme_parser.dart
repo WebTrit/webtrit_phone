@@ -61,7 +61,7 @@ class BottomMenuTabSchemeParser {
         'titleL10n': titleL10n,
         'icon': icon,
         'data': {
-          'resource': data.resource,
+          'resource': data.uri,
         },
       },
     );

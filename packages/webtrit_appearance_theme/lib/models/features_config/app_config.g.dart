@@ -275,7 +275,8 @@ _$AppConfigSettingsImpl _$$AppConfigSettingsImplFromJson(
                       titleL10n: 'settings_ListViewTileTitle_termsConditions',
                       icon: '0xeedf',
                       embeddedData: EmbeddedResource(
-                          resource:
+                          id: 2,
+                          uri:
                               'https://webtrit-app.web.app/example/example_embedded_call.html',
                           toolbar: ToolbarConfig(
                               showToolbar: true,

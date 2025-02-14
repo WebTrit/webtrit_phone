@@ -118,7 +118,7 @@ class FeatureAccess {
       final items = <SettingItem>[];
 
       for (var item in section.items.where((item) => item.enabled)) {
-        final embeddedDataResourceUrl = item.embeddedData?.uri;
+        final embeddedDataResourceUrl = item.embeddedData?.uriOrNull;
         final data = embeddedDataResourceUrl == null ? null : ConfigData(resource: embeddedDataResourceUrl);
         final flavor = SettingsFlavor.values.byName(item.type);
 
@@ -185,7 +185,7 @@ class FeatureAccess {
         ? LoginEmbedded(
             titleL10n: resource!.toolbar.titleL10n,
             showToolbar: resource.toolbar.showToolbar,
-            resource: resource.uri!,
+            resource: resource.uriOrNull!,
           )
         : null;
   }

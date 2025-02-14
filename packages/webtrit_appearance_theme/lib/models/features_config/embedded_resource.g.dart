@@ -9,8 +9,8 @@ part of 'embedded_resource.dart';
 _$EmbeddedResourceImpl _$$EmbeddedResourceImplFromJson(
         Map<String, dynamic> json) =>
     _$EmbeddedResourceImpl(
-      id: (json['id'] as num?)?.toInt(),
-      resource: json['resource'] as String,
+      id: (json['id'] as num).toInt(),
+      uri: json['uri'] as String,
       attributes: json['attributes'] as Map<String, dynamic>? ?? const {},
       toolbar: json['toolbar'] == null
           ? const ToolbarConfig()
@@ -24,7 +24,7 @@ Map<String, dynamic> _$$EmbeddedResourceImplToJson(
         _$EmbeddedResourceImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'resource': instance.resource,
+      'uri': instance.uri,
       'attributes': instance.attributes,
       'toolbar': instance.toolbar.toJson(),
       'metadata': instance.metadata.toJson(),

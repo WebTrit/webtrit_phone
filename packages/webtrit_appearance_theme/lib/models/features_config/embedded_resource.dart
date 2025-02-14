@@ -12,8 +12,8 @@ class EmbeddedResource with _$EmbeddedResource {
 
   @JsonSerializable(explicitToJson: true)
   const factory EmbeddedResource({
-    int? id,
-    required String resource,
+    required int id,
+    required String uri,
     @Default({}) Map<String, dynamic> attributes,
     @Default(ToolbarConfig()) ToolbarConfig toolbar,
     @Default(Metadata()) Metadata metadata,
@@ -22,7 +22,7 @@ class EmbeddedResource with _$EmbeddedResource {
   factory EmbeddedResource.fromJson(Map<String, dynamic> json) => _$EmbeddedResourceFromJson(json);
 
   /// Safely parses `resource` to a `uri`, returning `null` if invalid
-  Uri? get uri => Uri.tryParse(resource);
+  Uri? get uriOrNull => Uri.tryParse(uri);
 
   /// A globally consistent metadata key used to associate additional resources
   static const String metadataResourceUrl = 'resourceUrl';

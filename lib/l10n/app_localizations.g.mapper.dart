@@ -97,8 +97,19 @@ class AppLocalizationsMapper {
           localizations.call_description_transferProcessing,
       'call_FailureAcknowledgeDialog_title':
           localizations.call_FailureAcknowledgeDialog_title,
+      'callProcessingStatus_ringing':
+          localizations.callProcessingStatus_ringing,
+      'callProcessingStatus_preparing':
+          localizations.callProcessingStatus_preparing,
       'callProcessingStatus_answering':
           localizations.callProcessingStatus_answering,
+      'callProcessingStatus_signaling_connecting':
+          localizations.callProcessingStatus_signaling_connecting,
+      'callProcessingStatus_init_media':
+          localizations.callProcessingStatus_init_media,
+      'callProcessingStatus_invite': localizations.callProcessingStatus_invite,
+      'callProcessingStatus_routing':
+          localizations.callProcessingStatus_routing,
       'callProcessingStatus_disconnecting':
           localizations.callProcessingStatus_disconnecting,
       'callStatus_appUnregistered': localizations.callStatus_appUnregistered,
