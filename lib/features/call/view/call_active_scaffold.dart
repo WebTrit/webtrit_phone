@@ -166,7 +166,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                                         username: activeCall.displayName ?? activeCall.handle.value,
                                         acceptedTime: activeCall.acceptedTime,
                                         color: onTabGradient,
-                                        activeCallStatus: activeCall.status,
+                                        processingStatus: activeCall.processingStatus,
                                         callStatus: widget.callStatus,
                                       ),
                                     if (activeTransfer is AttendedTransferConfirmationRequested)

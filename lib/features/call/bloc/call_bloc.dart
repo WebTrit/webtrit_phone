@@ -40,6 +40,12 @@ const int _kUndefinedLine = -1;
 
 final _logger = Logger('CallBloc');
 
+// TODO(Vlad):
+// - move offer processing and media capturing from [__onCallSignalingEventIncoming] to [__onCallPerformEventAnswered]
+//   to avoid unnecessary media capturing for unwanted calls and race conditions for answering
+//   also avoid flickers with error message for calls that user didnt event want to answer
+//   in case when media permissins are not granted
+
 class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver implements CallkeepDelegate {
   final String coreUrl;
   final String tenantId;
@@ -200,6 +206,14 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       final completer = Completer<RTCPeerConnection>();
       completer.future.ignore(); // prevent escalating possible error that was not awaited to the error zone level
       _peerConnectionCompleters[addUuid] = completer;
+    }
+
+    final currentProcessingStatuses =
+        Set.from(change.currentState.activeCalls.map((e) => '${e.line}:${e.processingStatus.name}')).join(', ');
+    final nextProcessingStatuses =
+        Set.from(change.nextState.activeCalls.map((e) => '${e.line}:${e.processingStatus.name}')).join(', ');
+    if (currentProcessingStatuses != nextProcessingStatuses) {
+      _logger.info(() => 'status transitions: $currentProcessingStatuses -> $nextProcessingStatuses');
     }
   }
 
@@ -447,7 +461,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     try {
       emit(state.copyWithMappedActiveCall(event.callId, (activeCall) {
-        return activeCall.copyWith(status: ActiveCallStatus.disconnecting);
+        return activeCall.copyWith(processingStatus: CallProcessingStatus.disconnecting);
       }));
 
       await state.performOnActiveCall(event.callId, (activeCall) async {
@@ -639,7 +653,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       displayName: event.displayName,
       video: event.video,
       createdTime: clock.now(),
-      status: ActiveCallStatus.incomingPushedFromCallKeep,
+      processingStatus: CallProcessingStatus.incomingFromPush,
     )));
 
     // Function to verify speaker availability for the upcoming event, ensuring the speaker button is correctly enabled or disabled
@@ -693,6 +707,17 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     );
   }
 
+  /// Handles incoming call offer.
+  ///
+  /// - Creates a new full [ActiveCall] with offer and line.
+  /// - Or enriches existing [ActiveCall] with line and offer if
+  /// its placed by push [__onCallPushEventIncoming] before the signaling was initialized.
+  ///
+  /// - continues in  [__onCallControlEventAnswered], [__onCallPerformEventAnswered] or [__onCallControlEventEnded], [__onCallPerformEventEnded]
+  ///
+  /// Be aware the answering intent can be submitted before the full [ActiveCall].
+  /// So the answering method [__onCallPerformEventAnswered] will wait until offer and line is assigned
+  /// to the [ActiveCall] by logic below, do not change status in that case.
   Future<void> __onCallSignalingEventIncoming(
     _CallSignalingEventIncoming event,
     Emitter<CallState> emit,
@@ -732,24 +757,31 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         ? InviteToAttendedTransfer(replaceCallId: event.replaceCallId!, referredBy: event.referredBy!)
         : null;
 
-    final newActiveCall = ActiveCall(
-      direction: CallDirection.incoming,
-      line: event.line,
-      callId: event.callId,
-      handle: handle,
-      displayName: event.callerDisplayName,
-      video: video,
-      createdTime: clock.now(),
-      transfer: transfer,
-    );
+    ActiveCall? activeCall = state.retrieveActiveCall(event.callId);
 
-    if (state.retrieveActiveCall(event.callId) != null) {
-      emit(state.copyWithMappedActiveCall(event.callId, (activeCall) => newActiveCall));
+    if (activeCall != null) {
+      activeCall = activeCall.copyWith(
+        line: event.line,
+        handle: handle,
+        displayName: event.callerDisplayName,
+        video: video,
+        transfer: transfer,
+      );
+      emit(state.copyWithMappedActiveCall(event.callId, (_) => activeCall!));
     } else {
-      emit(state.copyWithPushActiveCall(newActiveCall));
+      activeCall = ActiveCall(
+        direction: CallDirection.incoming,
+        line: event.line,
+        callId: event.callId,
+        handle: handle,
+        displayName: event.callerDisplayName,
+        video: video,
+        createdTime: clock.now(),
+        transfer: transfer,
+        processingStatus: CallProcessingStatus.incomingFromOffer,
+      );
+      emit(state.copyWithPushActiveCall(activeCall));
     }
-
-    final activeCall = state.retrieveActiveCall(event.callId)!;
 
     try {
       final localStream = await _getUserMedia(video: video, frontCamera: activeCall.frontCamera);
@@ -768,7 +800,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       _peerConnectionComplete(event.callId, peerConnection);
 
       emit(state.copyWithMappedActiveCall(event.callId, (activeCall) {
-        return activeCall.copyWith(localStream: localStream, status: ActiveCallStatus.incomingJsepProcessed);
+        return activeCall.copyWith(localStream: localStream, incomingOfferHandled: true);
       }));
 
       // Defer the event execution to the end of the event loop to avoid exceptions like CallkeepCallRequestError.internal.
@@ -776,9 +808,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       // TODO(Serdun): Investigate how it can be improved without using Future.delayed.
       Future.delayed(Duration.zero, () {
         if (callAlreadyAnswered) {
-          add(CallControlEvent.answered(activeCall.callId));
+          add(CallControlEvent.answered(event.callId));
         } else if (callAlreadyTerminated) {
-          add(CallControlEvent.ended(activeCall.callId));
+          add(CallControlEvent.ended(event.callId));
         }
       });
     } catch (e, stackTrace) {
@@ -816,6 +848,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     Emitter<CallState> emit,
   ) async {
     await _playRingbackSound();
+
+    emit(state.copyWithMappedActiveCall(event.callId, (call) {
+      return call.copyWith(processingStatus: CallProcessingStatus.outgoingRinging);
+    }));
   }
 
   // early media - set specified session description
@@ -843,28 +879,29 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _CallSignalingEventAccepted event,
     Emitter<CallState> emit,
   ) async {
-    await _stopRingbackSound();
+    final activeCall = state.retrieveActiveCall(event.callId);
+    if (activeCall == null) return;
 
-    await callkeep.reportConnectedOutgoingCall(event.callId);
+    if (activeCall.direction == CallDirection.outgoing) {
+      await _stopRingbackSound();
+      await callkeep.reportConnectedOutgoingCall(event.callId);
 
-    emit(state.copyWithMappedActiveCall(event.callId, (activeCall) {
-      if (activeCall.acceptedTime == null) {
-        return activeCall.copyWith(acceptedTime: clock.now());
-      } else {
-        return activeCall;
-      }
-    }));
-
-    final jsep = event.jsep;
-    if (jsep != null) {
-      final peerConnection = await _peerConnectionRetrieve(event.callId);
-      if (peerConnection == null) {
-        _logger.warning('__onCallSignalingEventAccepted: peerConnection is null - most likely some permissions issue');
-      } else {
-        final remoteDescription = jsep.toDescription();
-        await peerConnection.setRemoteDescription(remoteDescription);
+      final jsep = event.jsep;
+      if (jsep != null) {
+        final peerConnection = await _peerConnectionRetrieve(event.callId);
+        if (peerConnection == null) {
+          _logger
+              .warning('__onCallSignalingEventAccepted: peerConnection is null - most likely some permissions issue');
+        } else {
+          final remoteDescription = jsep.toDescription();
+          await peerConnection.setRemoteDescription(remoteDescription);
+        }
       }
     }
+
+    emit(state.copyWithMappedActiveCall(event.callId, (call) {
+      return call.copyWith(acceptedTime: clock.now(), processingStatus: CallProcessingStatus.connected);
+    }));
   }
 
   Future<void> __onCallSignalingEventHangup(
@@ -1175,30 +1212,53 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       displayName: event.displayName,
       video: event.video,
       createdTime: clock.now(),
+      processingStatus: CallProcessingStatus.outgoingCreated,
     );
 
     emit(state.copyWithPushActiveCall(newCall).copyWith(minimized: false));
   }
 
+  /// Submitting the answer intent to system when answer button is pressed from app ui
+  ///
+  /// quick shortcut:
+  /// call placed in [__onCallSignalingEventIncoming] or [__onCallPushEventIncoming]
+  /// continues in [__onCallPerformEventAnswered]
   Future<void> __onCallControlEventAnswered(
     _CallControlEventAnswered event,
     Emitter<CallState> emit,
   ) async {
+    final call = state.retrieveActiveCall(event.callId);
+    if (call == null) return;
+
+    // Prevents event doubling and race conditions
+    final canSubmitAnswer = switch (call.processingStatus) {
+      CallProcessingStatus.incomingFromPush => true,
+      CallProcessingStatus.incomingFromOffer => true,
+      _ => false,
+    };
+
+    if (canSubmitAnswer == false) {
+      _logger.info('__onCallControlEventAnswered: skipping due stale status: ${call.processingStatus}');
+      return;
+    }
+
     emit(state.copyWithMappedActiveCall(
       event.callId,
-      (call) => call.copyWith(status: ActiveCallStatus.answering),
+      (call) => call.copyWith(processingStatus: CallProcessingStatus.incomingSubmittedAnswer),
     ));
 
     final error = await callkeep.answerCall(event.callId);
-    if (error != null) {
-      _logger.warning('__onCallControlEventAnswered error: $error');
-    }
+    if (error != null) _logger.warning('__onCallControlEventAnswered error: $error');
   }
 
   Future<void> __onCallControlEventEnded(
     _CallControlEventEnded event,
     Emitter<CallState> emit,
   ) async {
+    emit(state.copyWithMappedActiveCall(event.callId, (activeCall) {
+      return activeCall.copyWith(processingStatus: CallProcessingStatus.disconnecting);
+    }));
+
     final error = await callkeep.endCall(event.callId);
     // Handle the case where the local connection is no longer available,
     // sending the call completion event directly to the signaling.
@@ -1430,6 +1490,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       fromReferId: referId,
       video: false,
       createdTime: clock.now(),
+      processingStatus: CallProcessingStatus.outgoingCreatedFromRefer,
     );
 
     emit(state.copyWithPushActiveCall(newCall).copyWith(minimized: false));
@@ -1502,10 +1563,18 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       return;
     }
 
+    ///
+    /// Ensuring that the signaling client is connected before attempting to make an outgoing call
+    ///
+
     bool signalingConnected = state.signalingClientStatus.isConnect;
 
     // Attempt to wait for the desired signaling client status within the signaling client connection timeout period
     if (signalingConnected == false) {
+      emit(state.copyWithMappedActiveCall(event.callId, (activeCall) {
+        return activeCall.copyWith(processingStatus: CallProcessingStatus.outgoingConnectingToSignaling);
+      }));
+
       final nextStatus = await stream
           .firstWhere((state) => state.signalingClientStatus.isConnect || state.signalingClientStatus.isFailure,
               orElse: () => state)
@@ -1530,12 +1599,25 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       return;
     }
 
+    ///
+    /// Initializing media streams
+    ///
+    ///
+    emit(state.copyWithMappedActiveCall(event.callId, (activeCall) {
+      return activeCall.copyWith(processingStatus: CallProcessingStatus.outgoingInitializingMedia);
+    }));
+
     late final MediaStream localStream;
     try {
       localStream = await _getUserMedia(
         video: event.video,
         frontCamera: state.retrieveActiveCall(event.callId)?.frontCamera,
       );
+      event.fulfill();
+
+      emit(state.copyWithMappedActiveCall(event.callId, (activeCall) {
+        return activeCall.copyWith(localStream: localStream);
+      }));
     } catch (e, stackTrace) {
       _logger.warning('__onCallPerformEventStarted _getUserMedia', e, stackTrace);
 
@@ -1548,18 +1630,20 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       submitNotification(const CallUserMediaErrorNotification());
       return;
     }
-    event.fulfill();
 
+    ///
+    /// Initializing peer connection and sending outgoing offer
+    ///
     emit(state.copyWithMappedActiveCall(event.callId, (activeCall) {
-      return activeCall.copyWith(localStream: localStream);
+      return activeCall.copyWith(processingStatus: CallProcessingStatus.outgoingOfferPreparing);
     }));
 
-    final peerConnection = await _createPeerConnection(event.callId);
-    localStream.getTracks().forEach((track) async {
-      await peerConnection.addTrack(track, localStream);
-    });
-
     try {
+      final peerConnection = await _createPeerConnection(event.callId);
+      localStream.getTracks().forEach((track) async {
+        await peerConnection.addTrack(track, localStream);
+      });
+
       final localDescription = await peerConnection.createOffer({});
       sdpMunger?.apply(localDescription);
 
@@ -1580,6 +1664,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       _peerConnectionComplete(event.callId, peerConnection);
 
       await callkeep.reportConnectingOutgoingCall(event.callId);
+
+      emit(state.copyWithMappedActiveCall(event.callId, (activeCall) {
+        return activeCall.copyWith(processingStatus: CallProcessingStatus.outgoingOfferSent);
+      }));
     } catch (e) {
       // Handles exceptions during the outgoing call perform event, sends a notification, stops the ringtone, and completes the peer connection with an error.
       // The specific error "Error setting ICE locally" indicates an issue with ICE (Interactive Connectivity Establishment) negotiation in the WebRTC signaling process.
@@ -1593,52 +1681,68 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     }
   }
 
-  Future<void> __onCallPerformEventAnswered(
-    _CallPerformEventAnswered event,
-    Emitter<CallState> emit,
-  ) async {
+  /// Performs answer after incoming call accepted by ui call controlls or native controls
+  /// quick shortcuts:
+  /// ui control event - [__onCallControlEventAnswered]
+  /// after success - [__onCallSignalingEventAccepted]
+  /// jsep processing in - [__onCallSignalingEventIncoming]
+  Future<void> __onCallPerformEventAnswered(_CallPerformEventAnswered event, Emitter<CallState> emit) async {
     event.fulfill();
+
+    ActiveCall? call = state.retrieveActiveCall(event.callId);
+    if (call == null) return;
+
+    // Prevent performing double answer and race conditions
+    //
+    // Main case happens when the call is answered from background(ios) or from the lock screen using navite controls
+    // In such case performAnswered called emidiately and after signaling initialized via
+    // [IncomingEvent] + (callAlreadyAnswered == true) > [callControlAnswered] > [performAnswered] called again
+    //
+    final canPerformAnswer = switch (call.processingStatus) {
+      CallProcessingStatus.incomingFromPush => true,
+      CallProcessingStatus.incomingFromOffer => true,
+      CallProcessingStatus.incomingSubmittedAnswer => true,
+      _ => false,
+    };
+
+    if (canPerformAnswer == false) {
+      _logger.info('__onCallPerformEventAnswered: skipping due stale status: ${call.processingStatus}');
+      return;
+    }
+
+    emit(state.copyWithMappedActiveCall(
+      event.callId,
+      (call) => call.copyWith(
+        processingStatus: CallProcessingStatus.incomingPerformingAnswer,
+      ),
+    ));
+
     try {
+      /// Prevent performing answer without offer
+      ///
+      /// Main case happens when the call is answered from push event while signaling is disconnected
+      /// and main [IncomingEvent] with offer wasnt received yet
+      ///
+      final offerHandled = call.incomingOfferHandled;
+
+      if (offerHandled == false) {
+        _logger.info('__onCallPerformEventAnswered: wait for offer');
+
+        await stream.firstWhere((s) {
+          final activeCall = s.retrieveActiveCall(event.callId);
+          return activeCall?.incomingOfferHandled == true;
+        }).timeout(const Duration(seconds: 10), onTimeout: () {
+          throw TimeoutException('Timed out waiting for offer');
+        });
+
+        call = state.retrieveActiveCall(event.callId)!;
+      }
+
+      _logger.info('__onCallPerformEventAnswered: start performing sdp answer');
+
       await _stopRingbackSound();
 
-      // Try to wait until signaling is properly initialized and processed incoming call.
-      //
-      // 1 May occur when the user interacts with a push notification before signaling is properly initialized.
-      // In this case, the CallKeep method "reportNewIncomingCall" may return callIdAlreadyAnswered, and processing can be skipped.
-      //
-      // 2 Or in case when the user answers the call before incoming jsep and offer processed
-      // e.g in race condition between [_CallPerformEventAnswered], [_CallSignalingEventIncoming] and [_CallSignalingEventProgress].
-      //
-      // 3 Or in case when the user answers the call multiple times (coz ui didnt blocked),
-      // the first answer is processed, and the second answer is ignored.
-      //
-      // Reproduce cases -
-      // ios app in foreground + screen locked, answer the call from the lock screen as fast as possible
-      // ios app in terminated state pressing push, but this case cant be debugged.
-      // android app in foreground/background state + screen locked, press button(flutter ui) multiple times to trigger concurrent events
-      final doTime = clock.now();
-      bool canAnswer = false;
-      await Future.doWhile(() async {
-        final call = state.retrieveActiveCall(event.callId);
-        final jsepProcessed =
-            call?.status == ActiveCallStatus.incomingJsepProcessed || call?.status == ActiveCallStatus.answering;
-
-        final pc = await _peerConnectionRetrieve(event.callId);
-        final offerReceived = pc?.signalingState == RTCSignalingState.RTCSignalingStateHaveRemoteOffer;
-
-        final alreadyAnswered = call?.status == ActiveCallStatus.incomingAnswered;
-        final timedOut = clock.now().difference(doTime).inSeconds > 5;
-
-        _logger.fine(
-            '__onCallPerformEventAnswered: jsepProcessed: $jsepProcessed, offerReceived: $offerReceived, alreadyAnswered:$alreadyAnswered , timedOut: $timedOut');
-        canAnswer = jsepProcessed && offerReceived && !alreadyAnswered;
-        if (alreadyAnswered || timedOut || canAnswer) return false;
-        return await Future.delayed(const Duration(milliseconds: 100), () => true);
-      });
-
-      if (canAnswer == false) return;
-      final call = state.retrieveActiveCall(event.callId)!;
-      final peerConnection = (await _peerConnectionRetrieve(call.callId))!;
+      final peerConnection = (await _peerConnectionRetrieve(event.callId))!;
 
       final localDescription = await peerConnection.createAnswer({});
       sdpMunger?.apply(localDescription);
@@ -1650,11 +1754,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         jsep: localDescription.toMap(),
       ));
       await peerConnection.setLocalDescription(localDescription);
-
-      emit(state.copyWithMappedActiveCall(
-        event.callId,
-        (call) => call.copyWith(acceptedTime: clock.now(), status: ActiveCallStatus.incomingAnswered),
-      ));
     } catch (e) {
       _logger.warning('__onCallPerformEventAnswered: $e');
       submitNotification(DefaultErrorNotification(e));

@@ -123,7 +123,25 @@ class AppLocalizationsEn extends AppLocalizations {
   String get call_FailureAcknowledgeDialog_title => 'Failure';
 
   @override
+  String get callProcessingStatus_ringing => 'Ringing';
+
+  @override
+  String get callProcessingStatus_preparing => 'Preparing';
+
+  @override
   String get callProcessingStatus_answering => 'Answering the call, please hold on…';
+
+  @override
+  String get callProcessingStatus_signaling_connecting => 'Connecting to remote server';
+
+  @override
+  String get callProcessingStatus_init_media => 'Initializing media devices';
+
+  @override
+  String get callProcessingStatus_invite => 'Establishing SIP session';
+
+  @override
+  String get callProcessingStatus_routing => 'Routing the call';
 
   @override
   String get callProcessingStatus_disconnecting => 'Disconnecting the call, please hold on…';
