@@ -34,7 +34,7 @@ class FeatureAccess {
 
   static FeatureAccess init(AppConfig appConfig, AppPreferences preferences) {
     try {
-      final customLoginFeature = _tryEnableCustomLoginFeature(appConfig.loginConfig);
+      final customLoginFeature = _tryEnableCustomLoginFeature(appConfig);
       final bottomMenuManager = _tryConfigureBottomMenuFeature(appConfig, preferences);
       final settingsFeature = _tryConfigureSettingsFeature(appConfig, preferences);
       final callFeature = _tryConfigureCallFeature(appConfig);
@@ -118,14 +118,23 @@ class FeatureAccess {
       final items = <SettingItem>[];
 
       for (var item in section.items.where((item) => item.enabled)) {
-        final embeddedDataResourceUrl = item.embeddedData?.uriOrNull;
-        final data = embeddedDataResourceUrl == null ? null : ConfigData(resource: embeddedDataResourceUrl);
         final flavor = SettingsFlavor.values.byName(item.type);
 
         // TODO (Serdun): Move platform-specific configuration to a separate config file.
         // Currently, the settings screen includes this configuration only for Android.
         // For other platforms, this item is hidden. Update the logic to handle configurations for all platforms.
         if (flavor == SettingsFlavor.network && !kIsWeb && !Platform.isAndroid) continue;
+
+        final embeddedDataResourceUrl = appConfig.embeddedResources
+            .firstWhereOrNull((resource) => resource.id == item.embeddedResourceId)
+            ?.uriOrNull;
+
+        final data = embeddedDataResourceUrl != null
+            ? ConfigData(
+                resource: embeddedDataResourceUrl,
+                titleL10n: item.titleL10n,
+              )
+            : null;
 
         final settingItem = SettingItem(
           titleL10n: item.titleL10n,
@@ -148,16 +157,16 @@ class FeatureAccess {
     return SettingsFeature(settingSections);
   }
 
-  static LoginFeature _tryEnableCustomLoginFeature(AppConfigLogin loginConfig) {
+  static LoginFeature _tryEnableCustomLoginFeature(AppConfig appConfig) {
     final buttons = <LoginModeAction>[];
 
     final launchEmbeddedScreen = _toLoginEmbeddedModel(
-      loginConfig.embedded.firstWhereOrNull((embeddedScreen) => embeddedScreen.attributes['launch'] == true),
+      appConfig.embeddedResources.firstWhereOrNull((embeddedScreen) => embeddedScreen.attributes['launch'] == true),
     );
 
-    for (var actions in loginConfig.modeSelectActions.where((button) => button.enabled)) {
+    for (var actions in appConfig.loginConfig.modeSelectActions.where((button) => button.enabled)) {
       final flavor = LoginFlavor.values.byName(actions.type);
-      final loginEmbeddedScreen = loginConfig.embedded.firstWhereOrNull((dto) => dto.id == actions.embeddedId);
+      final loginEmbeddedScreen = appConfig.embeddedResources.firstWhereOrNull((dto) => dto.id == actions.embeddedId);
 
       if (flavor == LoginFlavor.embedded && loginEmbeddedScreen != null) {
         buttons.add(LoginEmbeddedModeButton(
@@ -174,7 +183,7 @@ class FeatureAccess {
     }
 
     return LoginFeature(
-      titleL10n: loginConfig.greetingL10n,
+      titleL10n: appConfig.loginConfig.greetingL10n,
       actions: buttons,
       launchLoginPage: launchEmbeddedScreen,
     );
