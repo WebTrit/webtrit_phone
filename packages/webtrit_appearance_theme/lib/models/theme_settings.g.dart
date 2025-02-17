@@ -32,9 +32,6 @@ _$ThemeSettingsImpl _$$ThemeSettingsImplFromJson(Map<String, dynamic> json) =>
           ? const ThemePageConfig()
           : ThemePageConfig.fromJson(
               json['themePageDarkConfig'] as Map<String, dynamic>),
-      appConfig: json['appConfig'] == null
-          ? null
-          : AppConfig.fromJson(json['appConfig'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$$ThemeSettingsImplToJson(_$ThemeSettingsImpl instance) =>
@@ -45,5 +42,4 @@ Map<String, dynamic> _$$ThemeSettingsImplToJson(_$ThemeSettingsImpl instance) =>
       'themeWidgetDarkConfig': instance.themeWidgetDarkConfig,
       'themePageLightConfig': instance.themePageLightConfig,
       'themePageDarkConfig': instance.themePageDarkConfig,
-      'appConfig': instance.appConfig,
     };

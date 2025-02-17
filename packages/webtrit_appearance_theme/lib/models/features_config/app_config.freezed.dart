@@ -24,6 +24,8 @@ mixin _$AppConfig {
   AppConfigMain get mainConfig => throw _privateConstructorUsedError;
   AppConfigSettings get settingsConfig => throw _privateConstructorUsedError;
   AppConfigCall get callConfig => throw _privateConstructorUsedError;
+  List<EmbeddedResource> get embeddedResources =>
+      throw _privateConstructorUsedError;
 
   /// Serializes this AppConfig to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -44,7 +46,8 @@ abstract class $AppConfigCopyWith<$Res> {
       {AppConfigLogin loginConfig,
       AppConfigMain mainConfig,
       AppConfigSettings settingsConfig,
-      AppConfigCall callConfig});
+      AppConfigCall callConfig,
+      List<EmbeddedResource> embeddedResources});
 
   $AppConfigLoginCopyWith<$Res> get loginConfig;
   $AppConfigMainCopyWith<$Res> get mainConfig;
@@ -71,6 +74,7 @@ class _$AppConfigCopyWithImpl<$Res, $Val extends AppConfig>
     Object? mainConfig = null,
     Object? settingsConfig = null,
     Object? callConfig = null,
+    Object? embeddedResources = null,
   }) {
     return _then(_value.copyWith(
       loginConfig: null == loginConfig
@@ -89,6 +93,10 @@ class _$AppConfigCopyWithImpl<$Res, $Val extends AppConfig>
           ? _value.callConfig
           : callConfig // ignore: cast_nullable_to_non_nullable
               as AppConfigCall,
+      embeddedResources: null == embeddedResources
+          ? _value.embeddedResources
+          : embeddedResources // ignore: cast_nullable_to_non_nullable
+              as List<EmbeddedResource>,
     ) as $Val);
   }
 
@@ -145,7 +153,8 @@ abstract class _$$AppConfigImplCopyWith<$Res>
       {AppConfigLogin loginConfig,
       AppConfigMain mainConfig,
       AppConfigSettings settingsConfig,
-      AppConfigCall callConfig});
+      AppConfigCall callConfig,
+      List<EmbeddedResource> embeddedResources});
 
   @override
   $AppConfigLoginCopyWith<$Res> get loginConfig;
@@ -174,6 +183,7 @@ class __$$AppConfigImplCopyWithImpl<$Res>
     Object? mainConfig = null,
     Object? settingsConfig = null,
     Object? callConfig = null,
+    Object? embeddedResources = null,
   }) {
     return _then(_$AppConfigImpl(
       loginConfig: null == loginConfig
@@ -192,6 +202,10 @@ class __$$AppConfigImplCopyWithImpl<$Res>
           ? _value.callConfig
           : callConfig // ignore: cast_nullable_to_non_nullable
               as AppConfigCall,
+      embeddedResources: null == embeddedResources
+          ? _value._embeddedResources
+          : embeddedResources // ignore: cast_nullable_to_non_nullable
+              as List<EmbeddedResource>,
     ));
   }
 }
@@ -204,8 +218,10 @@ class _$AppConfigImpl extends _AppConfig {
       {this.loginConfig = const AppConfigLogin(),
       this.mainConfig = const AppConfigMain(),
       this.settingsConfig = const AppConfigSettings(),
-      this.callConfig = const AppConfigCall()})
-      : super._();
+      this.callConfig = const AppConfigCall(),
+      final List<EmbeddedResource> embeddedResources = const []})
+      : _embeddedResources = embeddedResources,
+        super._();
 
   factory _$AppConfigImpl.fromJson(Map<String, dynamic> json) =>
       _$$AppConfigImplFromJson(json);
@@ -222,10 +238,19 @@ class _$AppConfigImpl extends _AppConfig {
   @override
   @JsonKey()
   final AppConfigCall callConfig;
+  final List<EmbeddedResource> _embeddedResources;
+  @override
+  @JsonKey()
+  List<EmbeddedResource> get embeddedResources {
+    if (_embeddedResources is EqualUnmodifiableListView)
+      return _embeddedResources;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_embeddedResources);
+  }
 
   @override
   String toString() {
-    return 'AppConfig(loginConfig: $loginConfig, mainConfig: $mainConfig, settingsConfig: $settingsConfig, callConfig: $callConfig)';
+    return 'AppConfig(loginConfig: $loginConfig, mainConfig: $mainConfig, settingsConfig: $settingsConfig, callConfig: $callConfig, embeddedResources: $embeddedResources)';
   }
 
   @override
@@ -240,13 +265,20 @@ class _$AppConfigImpl extends _AppConfig {
             (identical(other.settingsConfig, settingsConfig) ||
                 other.settingsConfig == settingsConfig) &&
             (identical(other.callConfig, callConfig) ||
-                other.callConfig == callConfig));
+                other.callConfig == callConfig) &&
+            const DeepCollectionEquality()
+                .equals(other._embeddedResources, _embeddedResources));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
-      runtimeType, loginConfig, mainConfig, settingsConfig, callConfig);
+      runtimeType,
+      loginConfig,
+      mainConfig,
+      settingsConfig,
+      callConfig,
+      const DeepCollectionEquality().hash(_embeddedResources));
 
   /// Create a copy of AppConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -269,7 +301,8 @@ abstract class _AppConfig extends AppConfig {
       {final AppConfigLogin loginConfig,
       final AppConfigMain mainConfig,
       final AppConfigSettings settingsConfig,
-      final AppConfigCall callConfig}) = _$AppConfigImpl;
+      final AppConfigCall callConfig,
+      final List<EmbeddedResource> embeddedResources}) = _$AppConfigImpl;
   const _AppConfig._() : super._();
 
   factory _AppConfig.fromJson(Map<String, dynamic> json) =
@@ -283,6 +316,8 @@ abstract class _AppConfig extends AppConfig {
   AppConfigSettings get settingsConfig;
   @override
   AppConfigCall get callConfig;
+  @override
+  List<EmbeddedResource> get embeddedResources;
 
   /// Create a copy of AppConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -301,7 +336,6 @@ mixin _$AppConfigLogin {
   String? get greetingL10n => throw _privateConstructorUsedError;
   List<AppConfigModeSelectAction> get modeSelectActions =>
       throw _privateConstructorUsedError;
-  List<EmbeddedData> get embedded => throw _privateConstructorUsedError;
 
   /// Serializes this AppConfigLogin to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -321,8 +355,7 @@ abstract class $AppConfigLoginCopyWith<$Res> {
   @useResult
   $Res call(
       {String? greetingL10n,
-      List<AppConfigModeSelectAction> modeSelectActions,
-      List<EmbeddedData> embedded});
+      List<AppConfigModeSelectAction> modeSelectActions});
 }
 
 /// @nodoc
@@ -342,7 +375,6 @@ class _$AppConfigLoginCopyWithImpl<$Res, $Val extends AppConfigLogin>
   $Res call({
     Object? greetingL10n = freezed,
     Object? modeSelectActions = null,
-    Object? embedded = null,
   }) {
     return _then(_value.copyWith(
       greetingL10n: freezed == greetingL10n
@@ -353,10 +385,6 @@ class _$AppConfigLoginCopyWithImpl<$Res, $Val extends AppConfigLogin>
           ? _value.modeSelectActions
           : modeSelectActions // ignore: cast_nullable_to_non_nullable
               as List<AppConfigModeSelectAction>,
-      embedded: null == embedded
-          ? _value.embedded
-          : embedded // ignore: cast_nullable_to_non_nullable
-              as List<EmbeddedData>,
     ) as $Val);
   }
 }
@@ -371,8 +399,7 @@ abstract class _$$AppConfigLoginImplCopyWith<$Res>
   @useResult
   $Res call(
       {String? greetingL10n,
-      List<AppConfigModeSelectAction> modeSelectActions,
-      List<EmbeddedData> embedded});
+      List<AppConfigModeSelectAction> modeSelectActions});
 }
 
 /// @nodoc
@@ -390,7 +417,6 @@ class __$$AppConfigLoginImplCopyWithImpl<$Res>
   $Res call({
     Object? greetingL10n = freezed,
     Object? modeSelectActions = null,
-    Object? embedded = null,
   }) {
     return _then(_$AppConfigLoginImpl(
       greetingL10n: freezed == greetingL10n
@@ -401,10 +427,6 @@ class __$$AppConfigLoginImplCopyWithImpl<$Res>
           ? _value._modeSelectActions
           : modeSelectActions // ignore: cast_nullable_to_non_nullable
               as List<AppConfigModeSelectAction>,
-      embedded: null == embedded
-          ? _value._embedded
-          : embedded // ignore: cast_nullable_to_non_nullable
-              as List<EmbeddedData>,
     ));
   }
 }
@@ -420,10 +442,8 @@ class _$AppConfigLoginImpl extends _AppConfigLogin {
             enabled: true,
             type: 'login',
             titleL10n: 'login_Button_signUpToDemoInstance')
-      ],
-      final List<EmbeddedData> embedded = const []})
+      ]})
       : _modeSelectActions = modeSelectActions,
-        _embedded = embedded,
         super._();
 
   factory _$AppConfigLoginImpl.fromJson(Map<String, dynamic> json) =>
@@ -441,18 +461,9 @@ class _$AppConfigLoginImpl extends _AppConfigLogin {
     return EqualUnmodifiableListView(_modeSelectActions);
   }
 
-  final List<EmbeddedData> _embedded;
-  @override
-  @JsonKey()
-  List<EmbeddedData> get embedded {
-    if (_embedded is EqualUnmodifiableListView) return _embedded;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_embedded);
-  }
-
   @override
   String toString() {
-    return 'AppConfigLogin(greetingL10n: $greetingL10n, modeSelectActions: $modeSelectActions, embedded: $embedded)';
+    return 'AppConfigLogin(greetingL10n: $greetingL10n, modeSelectActions: $modeSelectActions)';
   }
 
   @override
@@ -463,17 +474,13 @@ class _$AppConfigLoginImpl extends _AppConfigLogin {
             (identical(other.greetingL10n, greetingL10n) ||
                 other.greetingL10n == greetingL10n) &&
             const DeepCollectionEquality()
-                .equals(other._modeSelectActions, _modeSelectActions) &&
-            const DeepCollectionEquality().equals(other._embedded, _embedded));
+                .equals(other._modeSelectActions, _modeSelectActions));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      greetingL10n,
-      const DeepCollectionEquality().hash(_modeSelectActions),
-      const DeepCollectionEquality().hash(_embedded));
+  int get hashCode => Object.hash(runtimeType, greetingL10n,
+      const DeepCollectionEquality().hash(_modeSelectActions));
 
   /// Create a copy of AppConfigLogin
   /// with the given fields replaced by the non-null parameter values.
@@ -494,9 +501,9 @@ class _$AppConfigLoginImpl extends _AppConfigLogin {
 
 abstract class _AppConfigLogin extends AppConfigLogin {
   const factory _AppConfigLogin(
-      {final String? greetingL10n,
-      final List<AppConfigModeSelectAction> modeSelectActions,
-      final List<EmbeddedData> embedded}) = _$AppConfigLoginImpl;
+          {final String? greetingL10n,
+          final List<AppConfigModeSelectAction> modeSelectActions}) =
+      _$AppConfigLoginImpl;
   const _AppConfigLogin._() : super._();
 
   factory _AppConfigLogin.fromJson(Map<String, dynamic> json) =
@@ -506,8 +513,6 @@ abstract class _AppConfigLogin extends AppConfigLogin {
   String? get greetingL10n;
   @override
   List<AppConfigModeSelectAction> get modeSelectActions;
-  @override
-  List<EmbeddedData> get embedded;
 
   /// Create a copy of AppConfigLogin
   /// with the given fields replaced by the non-null parameter values.
@@ -1536,7 +1541,7 @@ mixin _$BottomMenuTabScheme {
             @BottomMenuTabTypeConverter() BottomMenuTabType type,
             String titleL10n,
             String icon,
-            EmbeddedData data)
+            int embeddedResourceId)
         embedded,
   }) =>
       throw _privateConstructorUsedError;
@@ -1563,7 +1568,7 @@ mixin _$BottomMenuTabScheme {
             @BottomMenuTabTypeConverter() BottomMenuTabType type,
             String titleL10n,
             String icon,
-            EmbeddedData data)?
+            int embeddedResourceId)?
         embedded,
   }) =>
       throw _privateConstructorUsedError;
@@ -1590,7 +1595,7 @@ mixin _$BottomMenuTabScheme {
             @BottomMenuTabTypeConverter() BottomMenuTabType type,
             String titleL10n,
             String icon,
-            EmbeddedData data)?
+            int embeddedResourceId)?
         embedded,
     required TResult orElse(),
   }) =>
@@ -1837,7 +1842,7 @@ class _$BaseTabSchemeImpl extends BaseTabScheme {
             @BottomMenuTabTypeConverter() BottomMenuTabType type,
             String titleL10n,
             String icon,
-            EmbeddedData data)
+            int embeddedResourceId)
         embedded,
   }) {
     return base(enabled, initial, type, titleL10n, icon);
@@ -1867,7 +1872,7 @@ class _$BaseTabSchemeImpl extends BaseTabScheme {
             @BottomMenuTabTypeConverter() BottomMenuTabType type,
             String titleL10n,
             String icon,
-            EmbeddedData data)?
+            int embeddedResourceId)?
         embedded,
   }) {
     return base?.call(enabled, initial, type, titleL10n, icon);
@@ -1897,7 +1902,7 @@ class _$BaseTabSchemeImpl extends BaseTabScheme {
             @BottomMenuTabTypeConverter() BottomMenuTabType type,
             String titleL10n,
             String icon,
-            EmbeddedData data)?
+            int embeddedResourceId)?
         embedded,
     required TResult orElse(),
   }) {
@@ -2156,7 +2161,7 @@ class _$ContactsTabSchemeImpl extends ContactsTabScheme {
             @BottomMenuTabTypeConverter() BottomMenuTabType type,
             String titleL10n,
             String icon,
-            EmbeddedData data)
+            int embeddedResourceId)
         embedded,
   }) {
     return contacts(
@@ -2187,7 +2192,7 @@ class _$ContactsTabSchemeImpl extends ContactsTabScheme {
             @BottomMenuTabTypeConverter() BottomMenuTabType type,
             String titleL10n,
             String icon,
-            EmbeddedData data)?
+            int embeddedResourceId)?
         embedded,
   }) {
     return contacts?.call(
@@ -2218,7 +2223,7 @@ class _$ContactsTabSchemeImpl extends ContactsTabScheme {
             @BottomMenuTabTypeConverter() BottomMenuTabType type,
             String titleL10n,
             String icon,
-            EmbeddedData data)?
+            int embeddedResourceId)?
         embedded,
     required TResult orElse(),
   }) {
@@ -2319,9 +2324,7 @@ abstract class _$$EmbededTabSchemeImplCopyWith<$Res>
       @BottomMenuTabTypeConverter() BottomMenuTabType type,
       String titleL10n,
       String icon,
-      EmbeddedData data});
-
-  $EmbeddedDataCopyWith<$Res> get data;
+      int embeddedResourceId});
 }
 
 /// @nodoc
@@ -2342,7 +2345,7 @@ class __$$EmbededTabSchemeImplCopyWithImpl<$Res>
     Object? type = null,
     Object? titleL10n = null,
     Object? icon = null,
-    Object? data = null,
+    Object? embeddedResourceId = null,
   }) {
     return _then(_$EmbededTabSchemeImpl(
       enabled: null == enabled
@@ -2365,21 +2368,11 @@ class __$$EmbededTabSchemeImplCopyWithImpl<$Res>
           ? _value.icon
           : icon // ignore: cast_nullable_to_non_nullable
               as String,
-      data: null == data
-          ? _value.data
-          : data // ignore: cast_nullable_to_non_nullable
-              as EmbeddedData,
+      embeddedResourceId: null == embeddedResourceId
+          ? _value.embeddedResourceId
+          : embeddedResourceId // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
-  }
-
-  /// Create a copy of BottomMenuTabScheme
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $EmbeddedDataCopyWith<$Res> get data {
-    return $EmbeddedDataCopyWith<$Res>(_value.data, (value) {
-      return _then(_value.copyWith(data: value));
-    });
   }
 }
 
@@ -2393,7 +2386,7 @@ class _$EmbededTabSchemeImpl extends EmbededTabScheme {
       @BottomMenuTabTypeConverter() required this.type,
       required this.titleL10n,
       required this.icon,
-      required this.data,
+      required this.embeddedResourceId,
       final String? $type})
       : $type = $type ?? 'embedded',
         super._();
@@ -2415,14 +2408,14 @@ class _$EmbededTabSchemeImpl extends EmbededTabScheme {
   @override
   final String icon;
   @override
-  final EmbeddedData data;
+  final int embeddedResourceId;
 
   @JsonKey(name: 'runtimeType')
   final String $type;
 
   @override
   String toString() {
-    return 'BottomMenuTabScheme.embedded(enabled: $enabled, initial: $initial, type: $type, titleL10n: $titleL10n, icon: $icon, data: $data)';
+    return 'BottomMenuTabScheme.embedded(enabled: $enabled, initial: $initial, type: $type, titleL10n: $titleL10n, icon: $icon, embeddedResourceId: $embeddedResourceId)';
   }
 
   @override
@@ -2436,13 +2429,14 @@ class _$EmbededTabSchemeImpl extends EmbededTabScheme {
             (identical(other.titleL10n, titleL10n) ||
                 other.titleL10n == titleL10n) &&
             (identical(other.icon, icon) || other.icon == icon) &&
-            (identical(other.data, data) || other.data == data));
+            (identical(other.embeddedResourceId, embeddedResourceId) ||
+                other.embeddedResourceId == embeddedResourceId));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, enabled, initial, type, titleL10n, icon, data);
+  int get hashCode => Object.hash(
+      runtimeType, enabled, initial, type, titleL10n, icon, embeddedResourceId);
 
   /// Create a copy of BottomMenuTabScheme
   /// with the given fields replaced by the non-null parameter values.
@@ -2477,10 +2471,11 @@ class _$EmbededTabSchemeImpl extends EmbededTabScheme {
             @BottomMenuTabTypeConverter() BottomMenuTabType type,
             String titleL10n,
             String icon,
-            EmbeddedData data)
+            int embeddedResourceId)
         embedded,
   }) {
-    return embedded(enabled, initial, type, titleL10n, icon, data);
+    return embedded(
+        enabled, initial, type, titleL10n, icon, embeddedResourceId);
   }
 
   @override
@@ -2507,10 +2502,11 @@ class _$EmbededTabSchemeImpl extends EmbededTabScheme {
             @BottomMenuTabTypeConverter() BottomMenuTabType type,
             String titleL10n,
             String icon,
-            EmbeddedData data)?
+            int embeddedResourceId)?
         embedded,
   }) {
-    return embedded?.call(enabled, initial, type, titleL10n, icon, data);
+    return embedded?.call(
+        enabled, initial, type, titleL10n, icon, embeddedResourceId);
   }
 
   @override
@@ -2537,12 +2533,13 @@ class _$EmbededTabSchemeImpl extends EmbededTabScheme {
             @BottomMenuTabTypeConverter() BottomMenuTabType type,
             String titleL10n,
             String icon,
-            EmbeddedData data)?
+            int embeddedResourceId)?
         embedded,
     required TResult orElse(),
   }) {
     if (embedded != null) {
-      return embedded(enabled, initial, type, titleL10n, icon, data);
+      return embedded(
+          enabled, initial, type, titleL10n, icon, embeddedResourceId);
     }
     return orElse();
   }
@@ -2596,7 +2593,7 @@ abstract class EmbededTabScheme extends BottomMenuTabScheme {
       @BottomMenuTabTypeConverter() required final BottomMenuTabType type,
       required final String titleL10n,
       required final String icon,
-      required final EmbeddedData data}) = _$EmbededTabSchemeImpl;
+      required final int embeddedResourceId}) = _$EmbededTabSchemeImpl;
   const EmbededTabScheme._() : super._();
 
   factory EmbededTabScheme.fromJson(Map<String, dynamic> json) =
@@ -2613,7 +2610,7 @@ abstract class EmbededTabScheme extends BottomMenuTabScheme {
   String get titleL10n;
   @override
   String get icon;
-  EmbeddedData get data;
+  int get embeddedResourceId;
 
   /// Create a copy of BottomMenuTabScheme
   /// with the given fields replaced by the non-null parameter values.
@@ -2742,12 +2739,7 @@ class _$AppConfigSettingsImpl extends _AppConfigSettings {
                   type: 'terms',
                   titleL10n: 'settings_ListViewTileTitle_termsConditions',
                   icon: '0xeedf',
-                  embeddedData: EmbeddedData(
-                      resource:
-                          'https://webtrit-app.web.app/example/example_embedded_call.html',
-                      toolbar: ToolbarConfig(
-                          showToolbar: true,
-                          titleL10n: 'login_requestCredentials_title'))),
+                  embeddedResourceId: 0),
               AppConfigSettingsItem(
                   enabled: true,
                   type: 'about',
@@ -3065,7 +3057,7 @@ mixin _$AppConfigSettingsItem {
   String get titleL10n => throw _privateConstructorUsedError;
   String get type => throw _privateConstructorUsedError;
   String get icon => throw _privateConstructorUsedError;
-  EmbeddedData? get embeddedData => throw _privateConstructorUsedError;
+  int? get embeddedResourceId => throw _privateConstructorUsedError;
 
   /// Serializes this AppConfigSettingsItem to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -3088,9 +3080,7 @@ abstract class $AppConfigSettingsItemCopyWith<$Res> {
       String titleL10n,
       String type,
       String icon,
-      EmbeddedData? embeddedData});
-
-  $EmbeddedDataCopyWith<$Res>? get embeddedData;
+      int? embeddedResourceId});
 }
 
 /// @nodoc
@@ -3113,7 +3103,7 @@ class _$AppConfigSettingsItemCopyWithImpl<$Res,
     Object? titleL10n = null,
     Object? type = null,
     Object? icon = null,
-    Object? embeddedData = freezed,
+    Object? embeddedResourceId = freezed,
   }) {
     return _then(_value.copyWith(
       enabled: null == enabled
@@ -3132,25 +3122,11 @@ class _$AppConfigSettingsItemCopyWithImpl<$Res,
           ? _value.icon
           : icon // ignore: cast_nullable_to_non_nullable
               as String,
-      embeddedData: freezed == embeddedData
-          ? _value.embeddedData
-          : embeddedData // ignore: cast_nullable_to_non_nullable
-              as EmbeddedData?,
+      embeddedResourceId: freezed == embeddedResourceId
+          ? _value.embeddedResourceId
+          : embeddedResourceId // ignore: cast_nullable_to_non_nullable
+              as int?,
     ) as $Val);
-  }
-
-  /// Create a copy of AppConfigSettingsItem
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $EmbeddedDataCopyWith<$Res>? get embeddedData {
-    if (_value.embeddedData == null) {
-      return null;
-    }
-
-    return $EmbeddedDataCopyWith<$Res>(_value.embeddedData!, (value) {
-      return _then(_value.copyWith(embeddedData: value) as $Val);
-    });
   }
 }
 
@@ -3168,10 +3144,7 @@ abstract class _$$AppConfigSettingsItemImplCopyWith<$Res>
       String titleL10n,
       String type,
       String icon,
-      EmbeddedData? embeddedData});
-
-  @override
-  $EmbeddedDataCopyWith<$Res>? get embeddedData;
+      int? embeddedResourceId});
 }
 
 /// @nodoc
@@ -3192,7 +3165,7 @@ class __$$AppConfigSettingsItemImplCopyWithImpl<$Res>
     Object? titleL10n = null,
     Object? type = null,
     Object? icon = null,
-    Object? embeddedData = freezed,
+    Object? embeddedResourceId = freezed,
   }) {
     return _then(_$AppConfigSettingsItemImpl(
       enabled: null == enabled
@@ -3211,10 +3184,10 @@ class __$$AppConfigSettingsItemImplCopyWithImpl<$Res>
           ? _value.icon
           : icon // ignore: cast_nullable_to_non_nullable
               as String,
-      embeddedData: freezed == embeddedData
-          ? _value.embeddedData
-          : embeddedData // ignore: cast_nullable_to_non_nullable
-              as EmbeddedData?,
+      embeddedResourceId: freezed == embeddedResourceId
+          ? _value.embeddedResourceId
+          : embeddedResourceId // ignore: cast_nullable_to_non_nullable
+              as int?,
     ));
   }
 }
@@ -3228,7 +3201,7 @@ class _$AppConfigSettingsItemImpl extends _AppConfigSettingsItem {
       required this.titleL10n,
       required this.type,
       required this.icon,
-      this.embeddedData})
+      this.embeddedResourceId})
       : super._();
 
   factory _$AppConfigSettingsItemImpl.fromJson(Map<String, dynamic> json) =>
@@ -3244,11 +3217,11 @@ class _$AppConfigSettingsItemImpl extends _AppConfigSettingsItem {
   @override
   final String icon;
   @override
-  final EmbeddedData? embeddedData;
+  final int? embeddedResourceId;
 
   @override
   String toString() {
-    return 'AppConfigSettingsItem(enabled: $enabled, titleL10n: $titleL10n, type: $type, icon: $icon, embeddedData: $embeddedData)';
+    return 'AppConfigSettingsItem(enabled: $enabled, titleL10n: $titleL10n, type: $type, icon: $icon, embeddedResourceId: $embeddedResourceId)';
   }
 
   @override
@@ -3261,14 +3234,14 @@ class _$AppConfigSettingsItemImpl extends _AppConfigSettingsItem {
                 other.titleL10n == titleL10n) &&
             (identical(other.type, type) || other.type == type) &&
             (identical(other.icon, icon) || other.icon == icon) &&
-            (identical(other.embeddedData, embeddedData) ||
-                other.embeddedData == embeddedData));
+            (identical(other.embeddedResourceId, embeddedResourceId) ||
+                other.embeddedResourceId == embeddedResourceId));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, enabled, titleL10n, type, icon, embeddedData);
+  int get hashCode => Object.hash(
+      runtimeType, enabled, titleL10n, type, icon, embeddedResourceId);
 
   /// Create a copy of AppConfigSettingsItem
   /// with the given fields replaced by the non-null parameter values.
@@ -3293,7 +3266,7 @@ abstract class _AppConfigSettingsItem extends AppConfigSettingsItem {
       required final String titleL10n,
       required final String type,
       required final String icon,
-      final EmbeddedData? embeddedData}) = _$AppConfigSettingsItemImpl;
+      final int? embeddedResourceId}) = _$AppConfigSettingsItemImpl;
   const _AppConfigSettingsItem._() : super._();
 
   factory _AppConfigSettingsItem.fromJson(Map<String, dynamic> json) =
@@ -3308,7 +3281,7 @@ abstract class _AppConfigSettingsItem extends AppConfigSettingsItem {
   @override
   String get icon;
   @override
-  EmbeddedData? get embeddedData;
+  int? get embeddedResourceId;
 
   /// Create a copy of AppConfigSettingsItem
   /// with the given fields replaced by the non-null parameter values.
@@ -3316,452 +3289,4 @@ abstract class _AppConfigSettingsItem extends AppConfigSettingsItem {
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$AppConfigSettingsItemImplCopyWith<_$AppConfigSettingsItemImpl>
       get copyWith => throw _privateConstructorUsedError;
-}
-
-EmbeddedData _$EmbeddedDataFromJson(Map<String, dynamic> json) {
-  return _EmbeddedData.fromJson(json);
-}
-
-/// @nodoc
-mixin _$EmbeddedData {
-  int? get id => throw _privateConstructorUsedError;
-  String get resource => throw _privateConstructorUsedError;
-  Map<String, dynamic> get attributes => throw _privateConstructorUsedError;
-  ToolbarConfig get toolbar => throw _privateConstructorUsedError;
-  Metadata get metadata => throw _privateConstructorUsedError;
-
-  /// Serializes this EmbeddedData to a JSON map.
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
-  /// Create a copy of EmbeddedData
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  $EmbeddedDataCopyWith<EmbeddedData> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class $EmbeddedDataCopyWith<$Res> {
-  factory $EmbeddedDataCopyWith(
-          EmbeddedData value, $Res Function(EmbeddedData) then) =
-      _$EmbeddedDataCopyWithImpl<$Res, EmbeddedData>;
-  @useResult
-  $Res call(
-      {int? id,
-      String resource,
-      Map<String, dynamic> attributes,
-      ToolbarConfig toolbar,
-      Metadata metadata});
-
-  $ToolbarConfigCopyWith<$Res> get toolbar;
-  $MetadataCopyWith<$Res> get metadata;
-}
-
-/// @nodoc
-class _$EmbeddedDataCopyWithImpl<$Res, $Val extends EmbeddedData>
-    implements $EmbeddedDataCopyWith<$Res> {
-  _$EmbeddedDataCopyWithImpl(this._value, this._then);
-
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
-
-  /// Create a copy of EmbeddedData
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? id = freezed,
-    Object? resource = null,
-    Object? attributes = null,
-    Object? toolbar = null,
-    Object? metadata = null,
-  }) {
-    return _then(_value.copyWith(
-      id: freezed == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as int?,
-      resource: null == resource
-          ? _value.resource
-          : resource // ignore: cast_nullable_to_non_nullable
-              as String,
-      attributes: null == attributes
-          ? _value.attributes
-          : attributes // ignore: cast_nullable_to_non_nullable
-              as Map<String, dynamic>,
-      toolbar: null == toolbar
-          ? _value.toolbar
-          : toolbar // ignore: cast_nullable_to_non_nullable
-              as ToolbarConfig,
-      metadata: null == metadata
-          ? _value.metadata
-          : metadata // ignore: cast_nullable_to_non_nullable
-              as Metadata,
-    ) as $Val);
-  }
-
-  /// Create a copy of EmbeddedData
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $ToolbarConfigCopyWith<$Res> get toolbar {
-    return $ToolbarConfigCopyWith<$Res>(_value.toolbar, (value) {
-      return _then(_value.copyWith(toolbar: value) as $Val);
-    });
-  }
-
-  /// Create a copy of EmbeddedData
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $MetadataCopyWith<$Res> get metadata {
-    return $MetadataCopyWith<$Res>(_value.metadata, (value) {
-      return _then(_value.copyWith(metadata: value) as $Val);
-    });
-  }
-}
-
-/// @nodoc
-abstract class _$$EmbeddedDataImplCopyWith<$Res>
-    implements $EmbeddedDataCopyWith<$Res> {
-  factory _$$EmbeddedDataImplCopyWith(
-          _$EmbeddedDataImpl value, $Res Function(_$EmbeddedDataImpl) then) =
-      __$$EmbeddedDataImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call(
-      {int? id,
-      String resource,
-      Map<String, dynamic> attributes,
-      ToolbarConfig toolbar,
-      Metadata metadata});
-
-  @override
-  $ToolbarConfigCopyWith<$Res> get toolbar;
-  @override
-  $MetadataCopyWith<$Res> get metadata;
-}
-
-/// @nodoc
-class __$$EmbeddedDataImplCopyWithImpl<$Res>
-    extends _$EmbeddedDataCopyWithImpl<$Res, _$EmbeddedDataImpl>
-    implements _$$EmbeddedDataImplCopyWith<$Res> {
-  __$$EmbeddedDataImplCopyWithImpl(
-      _$EmbeddedDataImpl _value, $Res Function(_$EmbeddedDataImpl) _then)
-      : super(_value, _then);
-
-  /// Create a copy of EmbeddedData
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? id = freezed,
-    Object? resource = null,
-    Object? attributes = null,
-    Object? toolbar = null,
-    Object? metadata = null,
-  }) {
-    return _then(_$EmbeddedDataImpl(
-      id: freezed == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as int?,
-      resource: null == resource
-          ? _value.resource
-          : resource // ignore: cast_nullable_to_non_nullable
-              as String,
-      attributes: null == attributes
-          ? _value._attributes
-          : attributes // ignore: cast_nullable_to_non_nullable
-              as Map<String, dynamic>,
-      toolbar: null == toolbar
-          ? _value.toolbar
-          : toolbar // ignore: cast_nullable_to_non_nullable
-              as ToolbarConfig,
-      metadata: null == metadata
-          ? _value.metadata
-          : metadata // ignore: cast_nullable_to_non_nullable
-              as Metadata,
-    ));
-  }
-}
-
-/// @nodoc
-
-@JsonSerializable(explicitToJson: true)
-class _$EmbeddedDataImpl extends _EmbeddedData {
-  const _$EmbeddedDataImpl(
-      {this.id,
-      required this.resource,
-      final Map<String, dynamic> attributes = const {},
-      this.toolbar = const ToolbarConfig(),
-      this.metadata = const Metadata()})
-      : _attributes = attributes,
-        super._();
-
-  factory _$EmbeddedDataImpl.fromJson(Map<String, dynamic> json) =>
-      _$$EmbeddedDataImplFromJson(json);
-
-  @override
-  final int? id;
-  @override
-  final String resource;
-  final Map<String, dynamic> _attributes;
-  @override
-  @JsonKey()
-  Map<String, dynamic> get attributes {
-    if (_attributes is EqualUnmodifiableMapView) return _attributes;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableMapView(_attributes);
-  }
-
-  @override
-  @JsonKey()
-  final ToolbarConfig toolbar;
-  @override
-  @JsonKey()
-  final Metadata metadata;
-
-  @override
-  String toString() {
-    return 'EmbeddedData(id: $id, resource: $resource, attributes: $attributes, toolbar: $toolbar, metadata: $metadata)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$EmbeddedDataImpl &&
-            (identical(other.id, id) || other.id == id) &&
-            (identical(other.resource, resource) ||
-                other.resource == resource) &&
-            const DeepCollectionEquality()
-                .equals(other._attributes, _attributes) &&
-            (identical(other.toolbar, toolbar) || other.toolbar == toolbar) &&
-            (identical(other.metadata, metadata) ||
-                other.metadata == metadata));
-  }
-
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  int get hashCode => Object.hash(runtimeType, id, resource,
-      const DeepCollectionEquality().hash(_attributes), toolbar, metadata);
-
-  /// Create a copy of EmbeddedData
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$EmbeddedDataImplCopyWith<_$EmbeddedDataImpl> get copyWith =>
-      __$$EmbeddedDataImplCopyWithImpl<_$EmbeddedDataImpl>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$EmbeddedDataImplToJson(
-      this,
-    );
-  }
-}
-
-abstract class _EmbeddedData extends EmbeddedData {
-  const factory _EmbeddedData(
-      {final int? id,
-      required final String resource,
-      final Map<String, dynamic> attributes,
-      final ToolbarConfig toolbar,
-      final Metadata metadata}) = _$EmbeddedDataImpl;
-  const _EmbeddedData._() : super._();
-
-  factory _EmbeddedData.fromJson(Map<String, dynamic> json) =
-      _$EmbeddedDataImpl.fromJson;
-
-  @override
-  int? get id;
-  @override
-  String get resource;
-  @override
-  Map<String, dynamic> get attributes;
-  @override
-  ToolbarConfig get toolbar;
-  @override
-  Metadata get metadata;
-
-  /// Create a copy of EmbeddedData
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$EmbeddedDataImplCopyWith<_$EmbeddedDataImpl> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-ToolbarConfig _$ToolbarConfigFromJson(Map<String, dynamic> json) {
-  return _ToolbarConfig.fromJson(json);
-}
-
-/// @nodoc
-mixin _$ToolbarConfig {
-  String? get titleL10n => throw _privateConstructorUsedError;
-  bool get showToolbar => throw _privateConstructorUsedError;
-
-  /// Serializes this ToolbarConfig to a JSON map.
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
-  /// Create a copy of ToolbarConfig
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  $ToolbarConfigCopyWith<ToolbarConfig> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class $ToolbarConfigCopyWith<$Res> {
-  factory $ToolbarConfigCopyWith(
-          ToolbarConfig value, $Res Function(ToolbarConfig) then) =
-      _$ToolbarConfigCopyWithImpl<$Res, ToolbarConfig>;
-  @useResult
-  $Res call({String? titleL10n, bool showToolbar});
-}
-
-/// @nodoc
-class _$ToolbarConfigCopyWithImpl<$Res, $Val extends ToolbarConfig>
-    implements $ToolbarConfigCopyWith<$Res> {
-  _$ToolbarConfigCopyWithImpl(this._value, this._then);
-
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
-
-  /// Create a copy of ToolbarConfig
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? titleL10n = freezed,
-    Object? showToolbar = null,
-  }) {
-    return _then(_value.copyWith(
-      titleL10n: freezed == titleL10n
-          ? _value.titleL10n
-          : titleL10n // ignore: cast_nullable_to_non_nullable
-              as String?,
-      showToolbar: null == showToolbar
-          ? _value.showToolbar
-          : showToolbar // ignore: cast_nullable_to_non_nullable
-              as bool,
-    ) as $Val);
-  }
-}
-
-/// @nodoc
-abstract class _$$ToolbarConfigImplCopyWith<$Res>
-    implements $ToolbarConfigCopyWith<$Res> {
-  factory _$$ToolbarConfigImplCopyWith(
-          _$ToolbarConfigImpl value, $Res Function(_$ToolbarConfigImpl) then) =
-      __$$ToolbarConfigImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call({String? titleL10n, bool showToolbar});
-}
-
-/// @nodoc
-class __$$ToolbarConfigImplCopyWithImpl<$Res>
-    extends _$ToolbarConfigCopyWithImpl<$Res, _$ToolbarConfigImpl>
-    implements _$$ToolbarConfigImplCopyWith<$Res> {
-  __$$ToolbarConfigImplCopyWithImpl(
-      _$ToolbarConfigImpl _value, $Res Function(_$ToolbarConfigImpl) _then)
-      : super(_value, _then);
-
-  /// Create a copy of ToolbarConfig
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? titleL10n = freezed,
-    Object? showToolbar = null,
-  }) {
-    return _then(_$ToolbarConfigImpl(
-      titleL10n: freezed == titleL10n
-          ? _value.titleL10n
-          : titleL10n // ignore: cast_nullable_to_non_nullable
-              as String?,
-      showToolbar: null == showToolbar
-          ? _value.showToolbar
-          : showToolbar // ignore: cast_nullable_to_non_nullable
-              as bool,
-    ));
-  }
-}
-
-/// @nodoc
-
-@JsonSerializable(explicitToJson: true)
-class _$ToolbarConfigImpl implements _ToolbarConfig {
-  const _$ToolbarConfigImpl({this.titleL10n, this.showToolbar = false});
-
-  factory _$ToolbarConfigImpl.fromJson(Map<String, dynamic> json) =>
-      _$$ToolbarConfigImplFromJson(json);
-
-  @override
-  final String? titleL10n;
-  @override
-  @JsonKey()
-  final bool showToolbar;
-
-  @override
-  String toString() {
-    return 'ToolbarConfig(titleL10n: $titleL10n, showToolbar: $showToolbar)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$ToolbarConfigImpl &&
-            (identical(other.titleL10n, titleL10n) ||
-                other.titleL10n == titleL10n) &&
-            (identical(other.showToolbar, showToolbar) ||
-                other.showToolbar == showToolbar));
-  }
-
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  int get hashCode => Object.hash(runtimeType, titleL10n, showToolbar);
-
-  /// Create a copy of ToolbarConfig
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$ToolbarConfigImplCopyWith<_$ToolbarConfigImpl> get copyWith =>
-      __$$ToolbarConfigImplCopyWithImpl<_$ToolbarConfigImpl>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$ToolbarConfigImplToJson(
-      this,
-    );
-  }
-}
-
-abstract class _ToolbarConfig implements ToolbarConfig {
-  const factory _ToolbarConfig(
-      {final String? titleL10n, final bool showToolbar}) = _$ToolbarConfigImpl;
-
-  factory _ToolbarConfig.fromJson(Map<String, dynamic> json) =
-      _$ToolbarConfigImpl.fromJson;
-
-  @override
-  String? get titleL10n;
-  @override
-  bool get showToolbar;
-
-  /// Create a copy of ToolbarConfig
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$ToolbarConfigImplCopyWith<_$ToolbarConfigImpl> get copyWith =>
-      throw _privateConstructorUsedError;
 }

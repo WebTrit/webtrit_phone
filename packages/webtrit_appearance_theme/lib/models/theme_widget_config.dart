@@ -1,7 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'custom_color.dart';
-import 'metadata.dart';
+import 'features_config/metadata.dart';
 
 part 'theme_widget_config.freezed.dart';
 
