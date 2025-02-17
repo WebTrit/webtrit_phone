@@ -80,9 +80,7 @@
           "type": "embedded3",
           "titleL10n": "embaded3TitleL10n",
           "icon": "0xe2ce",
-          "data": {
-            "resource": "https://webtrit-app.web.app/example/example_embedded_wallet_balance.html"
-          }
+          "embeddedResourceId": 4
         }
       ]
     }
@@ -119,7 +117,7 @@
           },
           {
             "enabled": true,
-            "type": "terms",
+            "type": "embedded",
             "titleL10n": "settings_ListViewTileTitle_termsConditions",
             "icon": "0xeedf",
             "embeddedResourceId": 4
@@ -195,7 +193,7 @@
   "embeddedResources": [
     {
       "id": 1,
-      "resource": "assets/themes/custom_signup.html",
+      "uri": "assets/themes/custom_signup.html",
       "toolbar": {
         "showToolbar": true,
         "titleL10n": "login_requestCredentials_title"
@@ -203,29 +201,29 @@
     },
     {
       "id": 2,
-      "resource": "https://webtrit-app.web.app/example/example_embedded_advertisement.html",
+      "uri": "https://webtrit-app.web.app/example/example_embedded_advertisement.html",
       "toolbar": {
         "showToolbar": false
       }
     },
     {
       "id": 3,
-      "resource": "https://webtrit-app.web.app/example/example_embedded_call.html",
+      "uri": "https://webtrit-app.web.app/example/example_embedded_call.html",
       "toolbar": {
         "showToolbar": false
       }
     },
     {
       "id": 4,
-      "resource": "https://webtrit.com/legal/privacy-policy-for-webtrit-app/",
+      "uri": "https://webtrit.com/legal/privacy-policy-for-webtrit-app/",
       "toolbar": {
         "showToolbar": true,
-        "titleL10n": "login_requestCredentials_title"
+        "titleL10n": "settings_ListViewTileTitle_termsConditions"
       }
     },
     {
       "id": 5,
-      "resource": "https://webtrit-app.web.app/example/example_embedded_registration.html",
+      "uri": "https://webtrit-app.web.app/example/example_embedded_registration.html",
       "toolbar": {
         "showToolbar": true,
         "titleL10n": "login_requestCredentials_title"
@@ -233,7 +231,7 @@
     },
     {
       "id": 6,
-      "resource": "https://webtrit-app.web.app/example/example_embedded_statistics.html",
+      "uri": "https://webtrit-app.web.app/example/example_embedded_statistics.html",
       "toolbar": {
         "showToolbar": true,
         "titleL10n": "login_requestCredentials_title"
@@ -241,7 +239,7 @@
     },
     {
       "id": 7,
-      "resource": "https://webtrit-app.web.app/example/example_embedded_rating.html",
+      "uri": "https://webtrit-app.web.app/example/example_embedded_rating.html",
       "toolbar": {
         "showToolbar": true,
         "titleL10n": "login_requestCredentials_title"
