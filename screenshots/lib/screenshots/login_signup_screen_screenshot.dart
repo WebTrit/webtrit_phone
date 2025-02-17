@@ -10,7 +10,16 @@ import 'package:webtrit_phone/models/models.dart';
 import 'package:screenshots/mocks/mocks.dart';
 
 class LoginSignUpScreenshot extends StatelessWidget {
-  const LoginSignUpScreenshot({super.key});
+  const LoginSignUpScreenshot({
+    super.key,
+    this.supportedLoginTypes = const [
+      LoginType.otpSignin,
+      LoginType.passwordSignin,
+      LoginType.signup,
+    ],
+  });
+
+  final List<LoginType> supportedLoginTypes;
 
   @override
   Widget build(BuildContext context) {
@@ -35,11 +44,7 @@ class LoginSignUpScreenshot extends StatelessWidget {
           initialUrl: embedded.customLoginFeature.resource,
         ),
         currentLoginType: LoginType.signup,
-        supportedLoginTypes: const [
-          LoginType.otpSignin,
-          LoginType.passwordSignin,
-          LoginType.signup,
-        ],
+        supportedLoginTypes: supportedLoginTypes,
       ),
     );
   }

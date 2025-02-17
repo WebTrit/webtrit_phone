@@ -44,7 +44,7 @@ class MainScreenScreenshot extends StatelessWidget {
         providers: _createMockBlocProviders(),
         child: MainScreen(
           body: _buildFlavorWidget(context, flavor, featureAccess!),
-          bottomNavigationBar: _buildBottomNavigationBar(tabs),
+          bottomNavigationBar: _buildBottomNavigationBar(context, tabs),
         ),
       ),
     );
@@ -61,51 +61,51 @@ class MainScreenScreenshot extends StatelessWidget {
 
   List<BottomMenuTab> _defaultTabs(BuildContext context) {
     return [
-      BottomMenuTab(
+      const BottomMenuTab(
         enabled: true,
         initial: true,
         flavor: MainFlavor.favorites,
-        titleL10n: context.parseL10n('main_BottomNavigationBarItemLabel_favorites'),
+        titleL10n: 'main_BottomNavigationBarItemLabel_favorites',
         icon: Icons.star,
       ),
-      BottomMenuTab(
+      const BottomMenuTab(
         enabled: true,
         initial: false,
         flavor: MainFlavor.recents,
-        titleL10n: context.parseL10n('main_BottomNavigationBarItemLabel_recents'),
+        titleL10n: 'main_BottomNavigationBarItemLabel_recents',
         icon: Icons.history,
       ),
-      BottomMenuTab(
+      const BottomMenuTab(
         enabled: true,
         initial: false,
         flavor: MainFlavor.contacts,
-        titleL10n: context.parseL10n('main_BottomNavigationBarItemLabel_contacts'),
+        titleL10n: 'main_BottomNavigationBarItemLabel_contacts',
         icon: Icons.people,
       ),
-      BottomMenuTab(
+      const BottomMenuTab(
         enabled: true,
         initial: false,
         flavor: MainFlavor.keypad,
-        titleL10n: context.parseL10n('main_BottomNavigationBarItemLabel_keypad'),
+        titleL10n: 'main_BottomNavigationBarItemLabel_keypad',
         icon: Icons.dialpad,
       ),
       BottomMenuTab(
         enabled: true,
         initial: false,
         flavor: MainFlavor.messaging,
-        titleL10n: context.parseL10n('main_BottomNavigationBarItemLabel_chats'),
+        titleL10n: context.l10n.main_BottomNavigationBarItemLabel_chats,
         icon: Icons.messenger_outline,
       ),
     ];
   }
 
-  BottomNavigationBar _buildBottomNavigationBar(List<BottomMenuTab> tabs) {
+  BottomNavigationBar _buildBottomNavigationBar(BuildContext context, List<BottomMenuTab> tabs) {
     return BottomNavigationBar(
       currentIndex: tabs.indexWhere((tab) => tab.flavor == flavor),
       items: tabs
           .map((tab) => BottomNavigationBarItem(
                 icon: Icon(tab.icon),
-                label: tab.titleL10n,
+                label: context.parseL10n(tab.titleL10n),
               ))
           .toList(),
     );

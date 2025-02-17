@@ -9,7 +9,24 @@ import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/models/models.dart';
 
 class MockAppPreferencesService implements AppPreferences {
+  MockAppPreferencesService({
+    this.supportedFeatures = const [
+      'autoProvision',
+      'internalMessaging',
+      'extensions',
+      'signup',
+      'userEvents',
+      kSmsMessagingFeatureFlag,
+      kChatMessagingFeatureFlag
+    ],
+  });
+
   final Map<String, dynamic> _mockData = {};
+  final List<String> supportedFeatures;
+
+  static MockAppPreferencesService create({List<String> features = const []}) {
+    return MockAppPreferencesService(supportedFeatures: features);
+  }
 
   @override
   Future<bool> clear({List<String> exclusion = const []}) async {
@@ -170,15 +187,7 @@ class MockAppPreferencesService implements AppPreferences {
       adapter: AdapterInfo(
         name: 'Demo DB which hosts multiple tenants',
         version: '0.0.11',
-        supported: [
-          'autoProvision',
-          'internalMessaging',
-          'extensions',
-          'signup',
-          'userEvents',
-          kSmsMessagingFeatureFlag,
-          kChatMessagingFeatureFlag
-        ],
+        supported: supportedFeatures,
       ),
       janus: JanusInfo(
         version: '0.0.0',

@@ -1,10 +1,10 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../converters/converters.dart';
-import '../parsers/parsers.dart';
+import 'package:webtrit_appearance_theme/converters/converters.dart';
+import 'package:webtrit_appearance_theme/parsers/parsers.dart';
 
 import 'bottom_menu_tab_type.dart';
-import 'metadata.dart';
+import 'embedded_resource.dart';
 
 part 'app_config.freezed.dart';
 
@@ -20,6 +20,7 @@ class AppConfig with _$AppConfig {
     @Default(AppConfigMain()) AppConfigMain mainConfig,
     @Default(AppConfigSettings()) AppConfigSettings settingsConfig,
     @Default(AppConfigCall()) AppConfigCall callConfig,
+    @Default([]) List<EmbeddedResource> embeddedResources,
   }) = _AppConfig;
 
   factory AppConfig.fromJson(Map<String, dynamic> json) => _$AppConfigFromJson(json);
@@ -40,7 +41,6 @@ class AppConfigLogin with _$AppConfigLogin {
       )
     ])
     List<AppConfigModeSelectAction> modeSelectActions,
-    @Default([]) List<EmbeddedData> embedded,
   }) = _AppConfigLogin;
 
   factory AppConfigLogin.fromJson(Map<String, dynamic> json) => _$AppConfigLoginFromJson(json);
@@ -222,7 +222,7 @@ class BottomMenuTabScheme with _$BottomMenuTabScheme {
     @BottomMenuTabTypeConverter() required BottomMenuTabType type,
     required String titleL10n,
     required String icon,
-    required EmbeddedData data,
+    required int embeddedResourceId,
   }) = EmbededTabScheme;
 
   factory BottomMenuTabScheme.fromJson(Map<String, dynamic> json) => BottomMenuTabSchemeParser.fromJson(json);
@@ -265,13 +265,7 @@ class AppConfigSettings with _$AppConfigSettings {
             type: 'terms',
             titleL10n: 'settings_ListViewTileTitle_termsConditions',
             icon: '0xeedf',
-            embeddedData: EmbeddedData(
-              resource: 'https://webtrit-app.web.app/example/example_embedded_call.html',
-              toolbar: ToolbarConfig(
-                showToolbar: true,
-                titleL10n: 'login_requestCredentials_title',
-              ),
-            ),
+            embeddedResourceId: 0,
           ),
           AppConfigSettingsItem(
             enabled: true,
@@ -336,47 +330,8 @@ class AppConfigSettingsItem with _$AppConfigSettingsItem {
     required String titleL10n,
     required String type,
     required String icon,
-    EmbeddedData? embeddedData,
+    int? embeddedResourceId,
   }) = _AppConfigSettingsItem;
 
   factory AppConfigSettingsItem.fromJson(Map<String, dynamic> json) => _$AppConfigSettingsItemFromJson(json);
-}
-
-@freezed
-class EmbeddedData with _$EmbeddedData {
-  const EmbeddedData._();
-
-  @JsonSerializable(explicitToJson: true)
-  const factory EmbeddedData({
-    int? id,
-    required String resource,
-    @Default({}) Map<String, dynamic> attributes,
-    @Default(ToolbarConfig()) ToolbarConfig toolbar,
-    @Default(Metadata()) Metadata metadata,
-  }) = _EmbeddedData;
-
-  factory EmbeddedData.fromJson(Map<String, dynamic> json) => _$EmbeddedDataFromJson(json);
-
-  /// Safely parses `resource` to a `uri`, returning `null` if invalid
-  Uri? get uri => Uri.tryParse(resource);
-
-  /// A globally consistent metadata key used to associate additional resources
-  static const String metadataResourceUrl = 'resourceUrl';
-
-  /// A globally consistent metadata key used to associate additional resources
-  static const String metadataResourceId = 'resourceId';
-
-  /// A globally consistent metadata key used to associate additional resources
-  static const String metadataResourceURI = 'resourceURI';
-}
-
-@freezed
-class ToolbarConfig with _$ToolbarConfig {
-  @JsonSerializable(explicitToJson: true)
-  const factory ToolbarConfig({
-    String? titleL10n,
-    @Default(false) bool showToolbar,
-  }) = _ToolbarConfig;
-
-  factory ToolbarConfig.fromJson(Map<String, dynamic> json) => _$ToolbarConfigFromJson(json);
 }
