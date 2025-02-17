@@ -7,7 +7,7 @@ final _logger = Logger('StringExtension');
 extension StringExt on String {
   ThemeSvgAsset? toThemeSvgAsset() {
     try {
-      return ThemeSvgAsset.fromJson(this);
+      return ThemeSvgAsset.fromUri(this);
     } catch (e) {
       _logger.warning('Failed to parse ThemeSvgAsset from JSON: $this');
     }
