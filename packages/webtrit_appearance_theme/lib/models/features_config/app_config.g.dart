@@ -22,6 +22,10 @@ _$AppConfigImpl _$$AppConfigImplFromJson(Map<String, dynamic> json) =>
       callConfig: json['callConfig'] == null
           ? const AppConfigCall()
           : AppConfigCall.fromJson(json['callConfig'] as Map<String, dynamic>),
+      embeddedResources: (json['embeddedResources'] as List<dynamic>?)
+              ?.map((e) => EmbeddedResource.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          const [],
     );
 
 Map<String, dynamic> _$$AppConfigImplToJson(_$AppConfigImpl instance) =>
@@ -30,6 +34,8 @@ Map<String, dynamic> _$$AppConfigImplToJson(_$AppConfigImpl instance) =>
       'mainConfig': instance.mainConfig.toJson(),
       'settingsConfig': instance.settingsConfig.toJson(),
       'callConfig': instance.callConfig.toJson(),
+      'embeddedResources':
+          instance.embeddedResources.map((e) => e.toJson()).toList(),
     };
 
 _$AppConfigLoginImpl _$$AppConfigLoginImplFromJson(Map<String, dynamic> json) =>
@@ -45,10 +51,6 @@ _$AppConfigLoginImpl _$$AppConfigLoginImplFromJson(Map<String, dynamic> json) =>
                 type: 'login',
                 titleL10n: 'login_Button_signUpToDemoInstance')
           ],
-      embedded: (json['embedded'] as List<dynamic>?)
-              ?.map((e) => EmbeddedResource.fromJson(e as Map<String, dynamic>))
-              .toList() ??
-          const [],
     );
 
 Map<String, dynamic> _$$AppConfigLoginImplToJson(
@@ -57,7 +59,6 @@ Map<String, dynamic> _$$AppConfigLoginImplToJson(
       'greetingL10n': instance.greetingL10n,
       'modeSelectActions':
           instance.modeSelectActions.map((e) => e.toJson()).toList(),
-      'embedded': instance.embedded.map((e) => e.toJson()).toList(),
     };
 
 _$AppConfigModeSelectActionImpl _$$AppConfigModeSelectActionImplFromJson(
@@ -226,7 +227,7 @@ _$EmbededTabSchemeImpl _$$EmbededTabSchemeImplFromJson(
       type: const BottomMenuTabTypeConverter().fromJson(json['type'] as String),
       titleL10n: json['titleL10n'] as String,
       icon: json['icon'] as String,
-      data: EmbeddedResource.fromJson(json['data'] as Map<String, dynamic>),
+      embeddedResourceId: (json['embeddedResourceId'] as num).toInt(),
       $type: json['runtimeType'] as String?,
     );
 
@@ -238,7 +239,7 @@ Map<String, dynamic> _$$EmbededTabSchemeImplToJson(
       'type': const BottomMenuTabTypeConverter().toJson(instance.type),
       'titleL10n': instance.titleL10n,
       'icon': instance.icon,
-      'data': instance.data.toJson(),
+      'embeddedResourceId': instance.embeddedResourceId,
       'runtimeType': instance.$type,
     };
 
@@ -274,13 +275,7 @@ _$AppConfigSettingsImpl _$$AppConfigSettingsImplFromJson(
                       type: 'terms',
                       titleL10n: 'settings_ListViewTileTitle_termsConditions',
                       icon: '0xeedf',
-                      embeddedData: EmbeddedResource(
-                          id: 2,
-                          uri:
-                              'https://webtrit-app.web.app/example/example_embedded_call.html',
-                          toolbar: ToolbarConfig(
-                              showToolbar: true,
-                              titleL10n: 'login_requestCredentials_title'))),
+                      embeddedResourceId: 0),
                   AppConfigSettingsItem(
                       enabled: true,
                       type: 'about',
@@ -343,10 +338,7 @@ _$AppConfigSettingsItemImpl _$$AppConfigSettingsItemImplFromJson(
       titleL10n: json['titleL10n'] as String,
       type: json['type'] as String,
       icon: json['icon'] as String,
-      embeddedData: json['embeddedData'] == null
-          ? null
-          : EmbeddedResource.fromJson(
-              json['embeddedData'] as Map<String, dynamic>),
+      embeddedResourceId: (json['embeddedResourceId'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$$AppConfigSettingsItemImplToJson(
@@ -356,5 +348,5 @@ Map<String, dynamic> _$$AppConfigSettingsItemImplToJson(
       'titleL10n': instance.titleL10n,
       'type': instance.type,
       'icon': instance.icon,
-      'embeddedData': instance.embeddedData?.toJson(),
+      'embeddedResourceId': instance.embeddedResourceId,
     };

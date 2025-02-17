@@ -20,6 +20,7 @@ class AppConfig with _$AppConfig {
     @Default(AppConfigMain()) AppConfigMain mainConfig,
     @Default(AppConfigSettings()) AppConfigSettings settingsConfig,
     @Default(AppConfigCall()) AppConfigCall callConfig,
+    @Default([]) List<EmbeddedResource> embeddedResources,
   }) = _AppConfig;
 
   factory AppConfig.fromJson(Map<String, dynamic> json) => _$AppConfigFromJson(json);
@@ -40,7 +41,6 @@ class AppConfigLogin with _$AppConfigLogin {
       )
     ])
     List<AppConfigModeSelectAction> modeSelectActions,
-    @Default([]) List<EmbeddedResource> embedded,
   }) = _AppConfigLogin;
 
   factory AppConfigLogin.fromJson(Map<String, dynamic> json) => _$AppConfigLoginFromJson(json);
@@ -189,7 +189,7 @@ class BottomMenuTabScheme with _$BottomMenuTabScheme {
     @BottomMenuTabTypeConverter() required BottomMenuTabType type,
     required String titleL10n,
     required String icon,
-    required EmbeddedResource data,
+    required int embeddedResourceId,
   }) = EmbededTabScheme;
 
   factory BottomMenuTabScheme.fromJson(Map<String, dynamic> json) => BottomMenuTabSchemeParser.fromJson(json);
@@ -232,14 +232,7 @@ class AppConfigSettings with _$AppConfigSettings {
             type: 'terms',
             titleL10n: 'settings_ListViewTileTitle_termsConditions',
             icon: '0xeedf',
-            embeddedData: EmbeddedResource(
-              id: 2,
-              uri: 'https://webtrit-app.web.app/example/example_embedded_call.html',
-              toolbar: ToolbarConfig(
-                showToolbar: true,
-                titleL10n: 'login_requestCredentials_title',
-              ),
-            ),
+            embeddedResourceId: 0,
           ),
           AppConfigSettingsItem(
             enabled: true,
@@ -304,7 +297,7 @@ class AppConfigSettingsItem with _$AppConfigSettingsItem {
     required String titleL10n,
     required String type,
     required String icon,
-    EmbeddedResource? embeddedData,
+    int? embeddedResourceId,
   }) = _AppConfigSettingsItem;
 
   factory AppConfigSettingsItem.fromJson(Map<String, dynamic> json) => _$AppConfigSettingsItemFromJson(json);

@@ -24,7 +24,7 @@ class BottomMenuTabSchemeParser {
           type: type,
           titleL10n: json['titleL10n'] as String,
           icon: json['icon'] as String,
-          data: EmbeddedResource.fromJson(json['data'] as Map<String, dynamic>),
+          embeddedResourceId: json['embeddedResourceId'] as int,
         );
       default:
         return BaseTabScheme(
@@ -54,15 +54,13 @@ class BottomMenuTabSchemeParser {
         'icon': icon,
         'contactSourceTypes': contactSourceTypes,
       },
-      embedded: (enabled, initial, type, titleL10n, icon, data) => {
+      embedded: (enabled, initial, type, titleL10n, icon, embeddedResourceId) => {
         'enabled': enabled,
         'initial': initial,
         'type': type.name,
         'titleL10n': titleL10n,
         'icon': icon,
-        'data': {
-          'resource': data.uri,
-        },
+        'embeddedResourceId': embeddedResourceId,
       },
     );
   }
