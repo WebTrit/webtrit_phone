@@ -2,26 +2,8 @@
 
 WebTrit Phone application.
 
-## Variables
-
-### Dart define
-
-* `WEBTRIT_APP_LINK_DOMAIN` - domain used to set up [Android app links](https://docs.flutter.dev/cookbook/navigation/set-up-app-links) and [iOS universal links](https://docs.flutter.dev/cookbook/navigation/set-up-universal-links) (to generate the required `.well-known` files, use the `assetlinks-generate` command from [webtrit_phone_tools](https://github.com/WebTrit/webtrit_phone_tools)
-* `WEBTRIT_APP_NAME` (_default **WebTrit**_)
-* `WEBTRIT_APP_DESCRIPTION` (_default is empty_)
-* `WEBTRIT_APP_CORE_URL` (_optional_)
-* `WEBTRIT_APP_DEMO_CORE_URL` (_default **http://localhost:4000**_)
-* `WEBTRIT_APP_CORE_VERSION_CONSTRAINT` (_default **">=0.7.0-alpha <2.0.0"**_)
-* `WEBTRIT_APP_PERIODIC_POLLING` (_default **true**_)
-* `WEBTRIT_APP_DEBUG_LEVEL` (_default **INFO**_)
-* `WEBTRIT_APP_DATABASE_LOG_STATEMENTS` (_default **false**_)
-
-Default build variables located in [dart_define.json](dart_define.json) and could be add to `flutter` `run` or `build` with `--dart-define-from-file=dart_define.json` parameter.
-
 ### Environment
-
-* `WEBTRIT_ANDROID_RELEASE_UPLOAD_KEYSTORE_PATH` - path to folder structure created by `keystore-generate` command of [webtrit_phone_tools](https://github.com/WebTrit/webtrit_phone_tools) (KeystoreGenerator)
-
+A detailed description of environment properties can be found in the [Environment](doc/environment.md) documentation.
 
 ### SSL Certificates
 To use SSL certificates, you need to: 
