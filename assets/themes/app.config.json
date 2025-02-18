@@ -193,7 +193,7 @@
   "embeddedResources": [
     {
       "id": 1,
-      "uri": "assets/themes/custom_signup.html",
+      "uri": "asset://assets/themes/custom_signup.html",
       "toolbar": {
         "showToolbar": true,
         "titleL10n": "login_requestCredentials_title"

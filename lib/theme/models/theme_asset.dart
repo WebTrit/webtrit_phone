@@ -1,14 +1,15 @@
-import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 
 import 'package:flutter_svg/svg.dart';
 
+import 'package:webtrit_phone/theme/models/resource_loader.dart';
+
 abstract class ThemeAsset {}
 
-abstract class ThemeSvgAsset extends ThemeAsset {
-  ThemeSvgAsset();
+abstract class ThemeSvgAsset {
+  final ResourceLoader resource;
+
+  ThemeSvgAsset(this.resource);
 
   Widget svg({
     Key? key,
@@ -28,23 +29,18 @@ abstract class ThemeSvgAsset extends ThemeAsset {
     Clip clipBehavior = Clip.hardEdge,
   });
 
-  factory ThemeSvgAsset.fromJson(String value) {
-    if (value.startsWith(ThemeAssetSvgAsset.prefix)) {
-      return ThemeAssetSvgAsset.fromJson(value);
-    } else if (value.startsWith(ThemeMemorySvgAsset.prefix)) {
-      return ThemeMemorySvgAsset.fromJson(value);
-    } else {
-      return ThemeNetworkSvgAsset.fromJson(value);
-    }
+  factory ThemeSvgAsset.fromUri(String value) {
+    final resource = ResourceLoader.fromUri(value);
+    return resource is NetworkResourceLoader
+        ? ThemeNetworkSvgAsset(resource)
+        : resource is AssetResourceLoader
+            ? ThemeAssetSvgAsset(resource)
+            : ThemeMemorySvgAsset(resource as MemoryResourceLoader);
   }
-
-  String toJson();
 }
 
 class ThemeNetworkSvgAsset extends ThemeSvgAsset {
-  ThemeNetworkSvgAsset(this._url);
-
-  final String _url;
+  ThemeNetworkSvgAsset(super.resource);
 
   @override
   Widget svg({
@@ -65,7 +61,7 @@ class ThemeNetworkSvgAsset extends ThemeSvgAsset {
     Clip clipBehavior = Clip.hardEdge,
   }) {
     return SvgPicture.network(
-      _url,
+      resource.resourceUri.toString(),
       key: key,
       matchTextDirection: matchTextDirection,
       width: width,
@@ -81,19 +77,10 @@ class ThemeNetworkSvgAsset extends ThemeSvgAsset {
       clipBehavior: clipBehavior,
     );
   }
-
-  factory ThemeNetworkSvgAsset.fromJson(String value) => ThemeNetworkSvgAsset(value);
-
-  @override
-  String toJson() => _url;
 }
 
 class ThemeAssetSvgAsset extends ThemeSvgAsset {
-  static const prefix = 'asset://';
-
-  ThemeAssetSvgAsset(this._assetName);
-
-  final String _assetName;
+  ThemeAssetSvgAsset(super.resource);
 
   @override
   Widget svg({
@@ -114,7 +101,7 @@ class ThemeAssetSvgAsset extends ThemeSvgAsset {
     Clip clipBehavior = Clip.hardEdge,
   }) {
     return SvgPicture.asset(
-      _assetName,
+      resource.resourceUri.toString(),
       key: key,
       matchTextDirection: matchTextDirection,
       bundle: bundle,
@@ -132,19 +119,10 @@ class ThemeAssetSvgAsset extends ThemeSvgAsset {
       clipBehavior: clipBehavior,
     );
   }
-
-  factory ThemeAssetSvgAsset.fromJson(String value) => ThemeAssetSvgAsset(value.substring(prefix.length));
-
-  @override
-  String toJson() => 'asset://$_assetName';
 }
 
 class ThemeMemorySvgAsset extends ThemeSvgAsset {
-  static const prefix = 'memory://';
-
-  ThemeMemorySvgAsset(this._bytes);
-
-  final Uint8List _bytes;
+  ThemeMemorySvgAsset(super.resource);
 
   @override
   Widget svg({
@@ -165,7 +143,7 @@ class ThemeMemorySvgAsset extends ThemeSvgAsset {
     Clip clipBehavior = Clip.hardEdge,
   }) {
     return SvgPicture.memory(
-      _bytes,
+      (resource as MemoryResourceLoader).bytes,
       key: key,
       matchTextDirection: matchTextDirection,
       width: width,
@@ -181,10 +159,4 @@ class ThemeMemorySvgAsset extends ThemeSvgAsset {
       clipBehavior: clipBehavior,
     );
   }
-
-  factory ThemeMemorySvgAsset.fromJson(String value) =>
-      ThemeMemorySvgAsset(base64Decode(value.substring(prefix.length)));
-
-  @override
-  String toJson() => 'memory://${base64Encode(_bytes)}';
 }
