@@ -1125,6 +1125,33 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings_encoding_AppBar_reset_tooltip => 'Reset to default';
 
   @override
+  String get settings_encoding_Section_preset_title => 'Media encoding configs';
+
+  @override
+  String get settings_encoding_Section_preset_tooltip => 'Adjustment presets for audio and video codecs, lower values will reduce the bandwidth usage but affect the quality, higher values will increase the quality but also the bandwidth usage. Default preset is recommended settings provided by your vendor according to it evnironment preferences.';
+
+  @override
+  String get settings_encoding_Section_preset => 'Preset';
+
+  @override
+  String get settings_encoding_Section_preset_default => 'Default';
+
+  @override
+  String get settings_encoding_Section_preset_eco => 'Eco';
+
+  @override
+  String get settings_encoding_Section_preset_balance => 'Balance';
+
+  @override
+  String get settings_encoding_Section_preset_quality => 'Quality';
+
+  @override
+  String get settings_encoding_Section_preset_full_flex => 'Full Flex';
+
+  @override
+  String get settings_encoding_Section_preset_custom => 'Custom';
+
+  @override
   String get settings_encoding_Section_measure_kbps => 'Kbps';
 
   @override

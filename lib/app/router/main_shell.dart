@@ -245,6 +245,7 @@ class _MainShellState extends State<MainShell> {
               final appPreferences = context.read<AppPreferences>();
               final notificationsBloc = context.read<NotificationsBloc>();
               final appCertificates = AppCertificates();
+              final encodingConfig = context.read<FeatureAccess>().callFeature.encoding;
 
               return CallBloc(
                 coreUrl: appBloc.state.coreUrl!,
@@ -255,7 +256,7 @@ class _MainShellState extends State<MainShell> {
                 submitNotification: (n) => notificationsBloc.add(NotificationsSubmitted(n)),
                 callkeep: _callkeep,
                 callkeepConnections: _callkeepConnections,
-                sdpMunger: ModifyWithEncodingSettings(appPreferences),
+                sdpMunger: ModifyWithEncodingSettings(appPreferences, encodingConfig),
               )..add(const CallStarted());
             },
           ),

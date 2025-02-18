@@ -1125,6 +1125,33 @@ class AppLocalizationsUk extends AppLocalizations {
   String get settings_encoding_AppBar_reset_tooltip => 'Скинути до замовчування';
 
   @override
+  String get settings_encoding_Section_preset_title => 'Конфігурації кодування медіа';
+
+  @override
+  String get settings_encoding_Section_preset_tooltip => 'Попередні налаштування для аудіо- та відеокодеків, нижчі значення зменшать використання смуги пропускання, але вплинуть на якість, вищі значення підвищать якість, а також використання смуги пропускання. Стандартне налаштування — це рекомендовані налаштування, надані вашим постачальником відповідно до його вподобань середовища.';
+
+  @override
+  String get settings_encoding_Section_preset => 'Налаштування';
+
+  @override
+  String get settings_encoding_Section_preset_default => 'Стандарт';
+
+  @override
+  String get settings_encoding_Section_preset_eco => 'Єко';
+
+  @override
+  String get settings_encoding_Section_preset_balance => 'Баланс';
+
+  @override
+  String get settings_encoding_Section_preset_quality => 'Якість';
+
+  @override
+  String get settings_encoding_Section_preset_full_flex => 'Висока точність';
+
+  @override
+  String get settings_encoding_Section_preset_custom => 'Ручна конфігурація';
+
+  @override
   String get settings_encoding_Section_measure_kbps => 'Kbps';
 
   @override

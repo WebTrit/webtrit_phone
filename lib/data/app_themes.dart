@@ -26,8 +26,7 @@ class AppThemes {
 
     final appConfigJson = await _getJson(Assets.themes.appConfig);
 
-
-    final themeColorSchemeLightConfig= ColorSchemeConfig.fromJson(themeColorSchemeLightConfigJson);
+    final themeColorSchemeLightConfig = ColorSchemeConfig.fromJson(themeColorSchemeLightConfigJson);
     final themeColorSchemeDarkConfig = ColorSchemeConfig.fromJson(themeColorSchemeDarkConfigJson);
 
     final themeWidgetLightConfig = ThemeWidgetConfig.fromJson(themeWidgetLightConfigJson);

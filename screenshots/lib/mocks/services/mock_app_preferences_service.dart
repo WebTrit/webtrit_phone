@@ -234,4 +234,14 @@ class MockAppPreferencesService implements AppPreferences {
   Future<void> setEncodingSettings(EncodingSettings settings) {
     return Future.value();
   }
+
+  @override
+  EncodingPreset? getEncodingPreset({EncodingPreset? defaultValue}) {
+    return defaultValue;
+  }
+
+  @override
+  Future<void> setEncodingPreset(EncodingPreset? value) {
+    return Future.value();
+  }
 }

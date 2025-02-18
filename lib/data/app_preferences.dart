@@ -58,6 +58,10 @@ abstract class AppPreferences {
   EncodingSettings getEncodingSettings();
 
   Future<void> setEncodingSettings(EncodingSettings settings);
+
+  EncodingPreset? getEncodingPreset({EncodingPreset? defaultValue});
+
+  Future<void> setEncodingPreset(EncodingPreset? value);
 }
 
 class AppPreferencesFactory {
@@ -84,6 +88,7 @@ class AppPreferencesImpl with SystemInfoJsonMapper, EncodingSettingsJsonMapper i
   static const _kIncomingCallTypeKey = 'call-incoming-type';
   static const _kSystemInfoKey = 'system-info';
   static const _kEncodingSettingsKey = 'encoding-settings';
+  static const _kEncodingPresetKey = 'encoding-preset';
 
   // Please add all new keys here for proper cleaning of preferences
   static const _kPreferencesList = [
@@ -98,6 +103,7 @@ class AppPreferencesImpl with SystemInfoJsonMapper, EncodingSettingsJsonMapper i
     _kIncomingCallTypeKey,
     _kSystemInfoKey,
     _kEncodingSettingsKey,
+    _kEncodingPresetKey,
   ];
 
   // List of preferences keys to exclude by default during clean operation
@@ -305,5 +311,24 @@ class AppPreferencesImpl with SystemInfoJsonMapper, EncodingSettingsJsonMapper i
   @override
   Future<void> setEncodingSettings(EncodingSettings settings) {
     return _sharedPreferences.setString(_kEncodingSettingsKey, encodingSettingsToJson(settings));
+  }
+
+  @override
+  EncodingPreset? getEncodingPreset({EncodingPreset? defaultValue}) {
+    final encodingPresetString = _sharedPreferences.getString(_kEncodingPresetKey);
+    if (encodingPresetString != null) {
+      return EncodingPreset.values.byName(encodingPresetString);
+    } else {
+      return defaultValue;
+    }
+  }
+
+  @override
+  Future<void> setEncodingPreset(EncodingPreset? value) {
+    if (value != null) {
+      return _sharedPreferences.setString(_kEncodingPresetKey, value.name);
+    } else {
+      return _sharedPreferences.remove(_kEncodingPresetKey);
+    }
   }
 }

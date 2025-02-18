@@ -662,6 +662,24 @@ class AppLocalizationsMapper {
           localizations.settings_AppBarTitle_myAccount,
       'settings_encoding_AppBar_reset_tooltip':
           localizations.settings_encoding_AppBar_reset_tooltip,
+      'settings_encoding_Section_preset_title':
+          localizations.settings_encoding_Section_preset_title,
+      'settings_encoding_Section_preset_tooltip':
+          localizations.settings_encoding_Section_preset_tooltip,
+      'settings_encoding_Section_preset':
+          localizations.settings_encoding_Section_preset,
+      'settings_encoding_Section_preset_default':
+          localizations.settings_encoding_Section_preset_default,
+      'settings_encoding_Section_preset_eco':
+          localizations.settings_encoding_Section_preset_eco,
+      'settings_encoding_Section_preset_balance':
+          localizations.settings_encoding_Section_preset_balance,
+      'settings_encoding_Section_preset_quality':
+          localizations.settings_encoding_Section_preset_quality,
+      'settings_encoding_Section_preset_full_flex':
+          localizations.settings_encoding_Section_preset_full_flex,
+      'settings_encoding_Section_preset_custom':
+          localizations.settings_encoding_Section_preset_custom,
       'settings_encoding_Section_measure_kbps':
           localizations.settings_encoding_Section_measure_kbps,
       'settings_encoding_Section_measure_ms':

@@ -2245,6 +2245,60 @@ abstract class AppLocalizations {
   /// **'Reset to default'**
   String get settings_encoding_AppBar_reset_tooltip;
 
+  /// No description provided for @settings_encoding_Section_preset_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Media encoding configs'**
+  String get settings_encoding_Section_preset_title;
+
+  /// No description provided for @settings_encoding_Section_preset_tooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Adjustment presets for audio and video codecs, lower values will reduce the bandwidth usage but affect the quality, higher values will increase the quality but also the bandwidth usage. Default preset is recommended settings provided by your vendor according to it evnironment preferences.'**
+  String get settings_encoding_Section_preset_tooltip;
+
+  /// No description provided for @settings_encoding_Section_preset.
+  ///
+  /// In en, this message translates to:
+  /// **'Preset'**
+  String get settings_encoding_Section_preset;
+
+  /// No description provided for @settings_encoding_Section_preset_default.
+  ///
+  /// In en, this message translates to:
+  /// **'Default'**
+  String get settings_encoding_Section_preset_default;
+
+  /// No description provided for @settings_encoding_Section_preset_eco.
+  ///
+  /// In en, this message translates to:
+  /// **'Eco'**
+  String get settings_encoding_Section_preset_eco;
+
+  /// No description provided for @settings_encoding_Section_preset_balance.
+  ///
+  /// In en, this message translates to:
+  /// **'Balance'**
+  String get settings_encoding_Section_preset_balance;
+
+  /// No description provided for @settings_encoding_Section_preset_quality.
+  ///
+  /// In en, this message translates to:
+  /// **'Quality'**
+  String get settings_encoding_Section_preset_quality;
+
+  /// No description provided for @settings_encoding_Section_preset_full_flex.
+  ///
+  /// In en, this message translates to:
+  /// **'Full Flex'**
+  String get settings_encoding_Section_preset_full_flex;
+
+  /// No description provided for @settings_encoding_Section_preset_custom.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom'**
+  String get settings_encoding_Section_preset_custom;
+
   /// No description provided for @settings_encoding_Section_measure_kbps.
   ///
   /// In en, this message translates to:

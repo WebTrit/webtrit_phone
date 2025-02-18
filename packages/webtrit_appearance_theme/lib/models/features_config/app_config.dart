@@ -138,6 +138,7 @@ class AppConfigCall with _$AppConfigCall {
       enableAttendedTransfer: true,
     ))
     AppConfigTransfer transfer,
+    @Default(AppConfigEncoding()) AppConfigEncoding encoding,
   }) = _AppConfigCall;
 
   factory AppConfigCall.fromJson(Map<String, dynamic> json) => _$AppConfigCallFromJson(json);
@@ -154,6 +155,38 @@ class AppConfigTransfer with _$AppConfigTransfer {
   }) = _AppConfigTransfer;
 
   factory AppConfigTransfer.fromJson(Map<String, dynamic> json) => _$AppConfigTransferFromJson(json);
+}
+
+@freezed
+class AppConfigEncoding with _$AppConfigEncoding {
+  const AppConfigEncoding._();
+
+  @JsonSerializable(explicitToJson: true)
+  const factory AppConfigEncoding({
+    @Default(false) bool bypassConfig,
+    @Default(EncodingDefaultPresetOverride()) EncodingDefaultPresetOverride defaultPresetOverride,
+  }) = _AppConfigEncoding;
+
+  factory AppConfigEncoding.fromJson(Map<String, dynamic> json) => _$AppConfigEncodingFromJson(json);
+}
+
+@freezed
+class EncodingDefaultPresetOverride with _$EncodingDefaultPresetOverride {
+  const EncodingDefaultPresetOverride._();
+
+  @JsonSerializable(explicitToJson: true)
+  const factory EncodingDefaultPresetOverride({
+    int? audioBitrate,
+    int? videoBitrate,
+    int? ptime,
+    int? maxptime,
+    int? opusBandwidthLimit,
+    bool? opusStereo,
+    bool? opusDtx,
+  }) = _EncodingDefaultPresetOverride;
+
+  factory EncodingDefaultPresetOverride.fromJson(Map<String, dynamic> json) =>
+      _$EncodingDefaultPresetOverrideFromJson(json);
 }
 
 @freezed

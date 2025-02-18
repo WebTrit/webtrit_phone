@@ -188,6 +188,18 @@
     "transfer": {
       "enableBlindTransfer": true,
       "enableAttendedTransfer": true
+    },
+    "encoding": {
+      "bypassConfig": false,
+      "__defaultPresetOverride": {
+        "audioBitrate": 64,
+        "videoBitrate": 512,
+        "ptime": 20,
+        "maxptime": 80,
+        "opusBandwidthLimit": 32000,
+        "opusStereo": false,
+        "opusDtx": true
+      }
     }
   },
   "embeddedResources": [
