@@ -42,40 +42,7 @@ dart run tool/extenvsubst.dart dart_define.json build/web/index.html
 To rename the default fields for each platform project within the WebTrit Phone application, the [`package_rename`](https://pub.dev/packages/package_rename) package can be used.
 
 ## Localizely
-
-### Preparation
-
-- Install the [Localizely CLI](https://github.com/localizely/localizely-cli#install).
-
-### Workflow
-
-Follow these steps according to your specific activity to manage the localization of your application efficiently.
-
-#### Developing
-
-1. Add, update, or remove the necessary key(s) in `lib/l10n/arb/app_en.arb`.
-1. Push the key(s) to [Localizely](https://localizely.com) using the command: `localizely-cli push`.
-1. If necessary, translate the key(s) on the [Localizely](https://localizely.com) platform, ensuring to remove helper tags from the key(s).
-1. Pull the key(s) from [Localizely](https://localizely.com) using the command: `localizely-cli pull`.
-1. Generate the localizations with the command: `flutter gen-l10n`.
-1. Commit the changes.
-
-#### Refinement
-
-1. Pull the key(s) from [Localizely](https://localizely.com) using the command: `localizely-cli pull`.
-1. Generate the localizations with the command: `flutter gen-l10n`.
-1. Commit the changes.
-
-#### Adding a New Locale
-
-1. Add the new locale to the `download files` list in `localizely.yml`.
-1. Insert `locale_<locale code>` in `lib/l10n/arb/app_en.arb`.
-1. Push the newly added key to [Localizely](https://localizely.com) using the command: `localizely-cli push`.
-1. Translate the added key on the [Localizely](https://localizely.com) platform, remembering to remove helper tags from the key(s).
-1. Pull the newly added key from [Localizely](https://localizely.com) using the command: `localizely-cli pull`.
-1. Generate the localizations with the command: `flutter gen-l10n`.
-1. Commit the changes.
-
+A detailed description of localizely properties can be found in the [Localizely](doc/localization.md) documentation.
 
 ## Application Configuration
 
