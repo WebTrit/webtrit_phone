@@ -350,11 +350,8 @@ class _CallActionsState extends State<CallActions> {
                 ? context.l10n.call_CallActionsTooltip_disableCamera
                 : context.l10n.call_CallActionsTooltip_enableCamera,
             child: TextButton(
-              onPressed: !widget.video
-                  ? null
-                  : onCameraChanged == null
-                      ? null
-                      : () => onCameraChanged(!widget.cameraValue),
+              // TODO: remake video state handling
+              onPressed: () => onCameraChanged!(!widget.cameraValue),
               style: !widget.cameraValue ? style.cameraActive : style.camera,
               child: Icon(
                 Icons.videocam_off,

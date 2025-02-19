@@ -786,7 +786,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     try {
       final localStream = await _getUserMedia(video: video, frontCamera: activeCall.frontCamera);
 
-      final peerConnection = await _createPeerConnection(event.callId);
+      final peerConnection = await _createPeerConnection(event.callId, event.line);
       localStream.getTracks().forEach((track) async {
         await peerConnection.addTrack(track, localStream);
       });
@@ -875,6 +875,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     }
   }
 
+  /// Capture the event when the call is accepted by any! user or call update request aplied.
   Future<void> __onCallSignalingEventAccepted(
     _CallSignalingEventAccepted event,
     Emitter<CallState> emit,
@@ -885,22 +886,18 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     if (activeCall.direction == CallDirection.outgoing) {
       await _stopRingbackSound();
       await callkeep.reportConnectedOutgoingCall(event.callId);
+    }
 
-      final jsep = event.jsep;
-      if (jsep != null) {
-        final peerConnection = await _peerConnectionRetrieve(event.callId);
-        if (peerConnection == null) {
-          _logger
-              .warning('__onCallSignalingEventAccepted: peerConnection is null - most likely some permissions issue');
-        } else {
-          final remoteDescription = jsep.toDescription();
-          await peerConnection.setRemoteDescription(remoteDescription);
-        }
-      }
+    final jsep = event.jsep;
+    final pc = await _peerConnectionRetrieve(event.callId);
+    if (jsep != null && pc != null) {
+      final remoteDescription = jsep.toDescription();
+      await pc.setRemoteDescription(remoteDescription);
     }
 
     emit(state.copyWithMappedActiveCall(event.callId, (call) {
-      return call.copyWith(acceptedTime: clock.now(), processingStatus: CallProcessingStatus.connected);
+      final acceptedTime = call.acceptedTime ?? clock.now();
+      return call.copyWith(acceptedTime: acceptedTime, processingStatus: CallProcessingStatus.connected);
     }));
   }
 
@@ -1322,12 +1319,37 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _CallControlEventCameraEnabled event,
     Emitter<CallState> emit,
   ) async {
-    await state.performOnActiveCall(event.callId, (activeCall) {
-      final videoTrack = activeCall.localStream?.getVideoTracks()[0];
-      if (videoTrack != null) {
-        videoTrack.enabled = event.enabled;
-      }
-    });
+    final activeCall = state.retrieveActiveCall(event.callId);
+    if (activeCall == null) return;
+
+    final localStream = activeCall.localStream;
+    if (localStream == null) return;
+
+    final localVideoTrack = localStream.getVideoTracks().firstOrNull;
+    if (localVideoTrack != null) {
+      localVideoTrack.enabled = event.enabled;
+      return;
+    }
+
+    final peerConnection = await _peerConnectionRetrieve(event.callId);
+    if (peerConnection == null) return;
+
+    // Get and re-add audio and video together with same stream
+    // to not break time sync between audio and video tracks that captured in sync
+    // not needed to screen cast, if will be implemented later
+    final newLocalStream = await _getUserMedia(video: true);
+    final newAudioTrack = newLocalStream.getAudioTracks().firstOrNull;
+    final newVideoTrack = newLocalStream.getVideoTracks().firstOrNull;
+
+    final senders = await peerConnection.getSenders();
+    await Future.forEach(senders, (sender) => peerConnection.removeTrack(sender..track?.stop()));
+    if (newAudioTrack != null) await peerConnection.addTrack(newAudioTrack, newLocalStream);
+    if (newVideoTrack != null) await peerConnection.addTrack(newVideoTrack, newLocalStream);
+
+    emit(state.copyWithMappedActiveCall(event.callId, (activeCall) {
+      // TODO: handle remote and local video state separately
+      return activeCall.copyWith(localStream: newLocalStream, video: true);
+    }));
   }
 
   Future<void> _onCallControlEventSpeakerEnabled(
@@ -1639,7 +1661,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     }));
 
     try {
-      final peerConnection = await _createPeerConnection(event.callId);
+      final activeCall = state.retrieveActiveCall(event.callId);
+      final peerConnection = await _createPeerConnection(event.callId, activeCall!.line);
       localStream.getTracks().forEach((track) async {
         await peerConnection.addTrack(track, localStream);
       });
@@ -1649,16 +1672,14 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
       // Need to initiate outgoing call before set localDescription to avoid races
       // between [OutgoingCallRequest] and [IceTrickleRequest]s.
-      await state.performOnActiveCall(event.callId, (activeCall) {
-        return _signalingClient?.execute(OutgoingCallRequest(
-          transaction: WebtritSignalingClient.generateTransactionId(),
-          line: activeCall.line,
-          callId: activeCall.callId,
-          number: activeCall.handle.normalizedValue(),
-          jsep: localDescription.toMap(),
-          referId: activeCall.fromReferId,
-        ));
-      });
+      await _signalingClient?.execute(OutgoingCallRequest(
+        transaction: WebtritSignalingClient.generateTransactionId(),
+        line: activeCall.line,
+        callId: activeCall.callId,
+        number: activeCall.handle.normalizedValue(),
+        jsep: localDescription.toMap(),
+        referId: activeCall.fromReferId,
+      ));
       await peerConnection.setLocalDescription(localDescription);
 
       _peerConnectionComplete(event.callId, peerConnection);
@@ -2033,6 +2054,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     Emitter<CallState> emit,
   ) async {
     emit(state.copyWithMappedActiveCall(event.callId, (activeCall) {
+      final prevStream = activeCall.remoteStream;
+      if (prevStream != null) prevStream.dispose();
       return activeCall.copyWith(remoteStream: event.stream);
     }));
   }
@@ -2042,7 +2065,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     Emitter<CallState> emit,
   ) async {
     emit(state.copyWithMappedActiveCall(event.callId, (activeCall) {
-      return activeCall.copyWith(remoteStream: null);
+      final prevStream = activeCall.remoteStream;
+      if (prevStream != null && prevStream.id == event.stream.id) {
+        return activeCall.copyWith(remoteStream: null);
+      }
+      return activeCall;
     }));
   }
 
@@ -2435,7 +2462,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     return localStream;
   }
 
-  Future<RTCPeerConnection> _createPeerConnection(String callId) async {
+  Future<RTCPeerConnection> _createPeerConnection(String callId, int lineId) async {
     final peerConnection = await createPeerConnection(
       {
         'iceServers': [
@@ -2493,8 +2520,23 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       ..onDataChannel = (channel) {
         logger.fine(() => 'onDataChannel channel: $channel');
       }
-      ..onRenegotiationNeeded = () {
-        logger.fine(() => 'onRenegotiationNeeded');
+      ..onRenegotiationNeeded = () async {
+        final pcState = peerConnection.signalingState;
+        logger.fine(() => 'onRenegotiationNeeded signalingState: $pcState');
+        if (pcState != null) {
+          final localDescription = await peerConnection.createOffer({});
+          sdpMunger?.apply(localDescription);
+
+          final updateRequest = UpdateRequest(
+            transaction: WebtritSignalingClient.generateTransactionId(),
+            line: lineId,
+            callId: callId,
+            jsep: localDescription.toMap(),
+          );
+          await _signalingClient?.execute(updateRequest);
+
+          await peerConnection.setLocalDescription(localDescription);
+        }
       }
       ..onTrack = (event) {
         logger.fine(() {
