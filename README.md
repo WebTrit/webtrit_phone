@@ -92,50 +92,7 @@ To configure the pages according to your application’s needs, refer to the [Pa
 To configure the features according to your application’s needs, refer to the [Feature Configuration](doc/feature_configuration.md) guide.
 
 ## Make commands
-* `run` - Run the Flutter application
-  ```bash
-  make run
-  ```
-
-* `build` - Build the Flutter application
-  ```bash
-  make build
-  ```
-
-* `configure` - Configure application resources
-  ```bash
-  make configure id=<application_id>
-  ```
-  
-* `configure-demo` - Create demo configuration
-  ```bash
-  make configure-demo id=<application_id>
-  ```
-
-* `configure-classic` - Create demo configuration
-  ```bash
-  make configure-classic id=<application_id>
-  ```
-
-* `build-ios` - Create iOS build
-  ```bash
-  make build-ios
-  ```
-
-* `build-apk` - Create APK build
-  ```bash
-  make build-apk
-  ```
-
-* `build-appbundle` - Create App Bundle build
-  ```bash
-  make build-appbundle
-  ```
-
-* `clean-git` - Clean git files
-  ```bash
-  make clean-git
-  ```
+A detailed description of make commands can be found in the [Make commands](doc/make_file.md) documentation.
 
 ## Contributing
 
