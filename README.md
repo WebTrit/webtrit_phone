@@ -79,14 +79,17 @@ Follow these steps according to your specific activity to manage the localizatio
 
 ## Application Configuration
 
-### 1. Theme Settings
-For guidance on configuring themes in your application, refer to the [Theme Settings](doc/theme_config/index.md) documentation.
+### 1. Colors scheme configuration
+A detailed description of colors properties can be found in the [Colors scheme](doc/color_scheme.md) documentation.
 
-### 2. Custom Signup Setup
-To learn how to configure and customize the signup process, please consult the [Custom Signup Setup](doc/custom_signup/index.md) guide.
+### 2. Widgets configuration
+To configure the widgets according to your application’s needs, refer to the [Widgets Configuration](doc/widgets_configuration.md) guide.
 
-### 3. Custom Bottom Menu
-To configure the bottom menu according to your application’s needs, refer to the [Bottom Menu Configuration](doc/bottom_menu_config/index.md) guide. 
+### 3. Pages configuration
+To configure the pages according to your application’s needs, refer to the [Pages Configuration](doc/pages_configuration.md) guide.
+
+### 4. Feature configuration
+To configure the features according to your application’s needs, refer to the [Feature Configuration](doc/feature_configuration.md) guide.
 
 ## Make commands
 * `run` - Run the Flutter application
