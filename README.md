@@ -9,6 +9,7 @@ WebTrit Phone is a feature-rich application designed for seamless communication.
   certificate handling.
 - **Build Process**: Learn more about build configurations in the [Build](doc/build.md) documentation.
 - **Application Properties**: Customize properties such as the Bundle ID and App Name in the  [Application Settings](doc/application_properties.md) documentation.
+- **Application Launch Assets**: Configure the application launch assets in the [Launch Assets](doc/launch_assets.md) documentation.
 - **Localization**: For information on localization settings, see [Localizely](doc/localization.md).
 
 ## Application Configuration
