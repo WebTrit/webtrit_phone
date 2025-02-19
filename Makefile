@@ -17,6 +17,18 @@ BUNDLE_ID ?= com.example.newapp
 ANDROID_APP_NAME ?= "New App"
 IOS_APP_NAME ?= "New App"
 
+# Variables for configuration launchers and splash screen
+ADAPTIVE_ICON_BACKGROUND ?= "#123752"
+BACKGROUND_COLOR ?= "#FFFFFF"
+THEME_COLOR ?= "#F3F5F6"
+SPLASH_COLOR ?= "#123752"
+ANDROID_12_SPLASH_COLOR ?= "#123752"
+LAUNCHER_ICON_IMAGE_ANDROID ?= "tool/assets/launcher_icons/android.png"
+LAUNCHER_ICON_IMAGE_IOS ?= "tool/assets/launcher_icons/ios.png"
+LAUNCHER_ICON_IMAGE_WEB ?= "tool/assets/launcher_icons/web.png"
+LAUNCHER_ICON_FOREGROUND ?= "tool/assets/launcher_icons/ic_foreground.png"
+SPLASH_IMAGE ?= "tool/assets/native_splash/image.png"
+
 # Determine Flutter flags based on build type
 ifeq ($(BUILD_TYPE), release)
     FLUTTER_FLAGS = $(DART_DEFINE_FILE) --release  --no-tree-shake-icons
@@ -25,7 +37,7 @@ else
 endif
 
 # Rules
-.PHONY: run build configure configure-clean configure-demo configure-classic build-ios build-apk build-appbundle clean-git generate-package-config rename-package generate-launcher-icons generate-native-splash generate-assets
+.PHONY: run build configure configure-demo configure-classic build-ios build-apk build-appbundle clean-git generate-package-config rename-package generate-launcher-icons generate-native-splash generate-assets
 
 ## Run the Flutter application
 run:
@@ -79,10 +91,35 @@ rename-package: generate-package-config
 	dart pub add package_rename --dev
 	dart run package_rename
 
+
+## Generate flutter_launcher_icons.yaml with custom parameters
+generate-launcher-icons-config:
+	@echo "flutter_launcher_icons:" > $(FLUTTER_LAUNCHER_ICONS_CONFIG)
+	@echo "  android: true" >> $(FLUTTER_LAUNCHER_ICONS_CONFIG)
+	@echo "  image_path_android: \"$${LAUNCHER_ICON_IMAGE_ANDROID:-$(LAUNCHER_ICON_IMAGE_ANDROID)}\"" >> $(FLUTTER_LAUNCHER_ICONS_CONFIG)
+	@echo "  min_sdk_android: 23" >> $(FLUTTER_LAUNCHER_ICONS_CONFIG)
+	@echo "  adaptive_icon_background: \"$${ADAPTIVE_ICON_BACKGROUND:-$(ADAPTIVE_ICON_BACKGROUND)}\"" >> $(FLUTTER_LAUNCHER_ICONS_CONFIG)
+	@echo "  adaptive_icon_foreground: \"$${LAUNCHER_ICON_FOREGROUND:-$(LAUNCHER_ICON_FOREGROUND)}\"" >> $(FLUTTER_LAUNCHER_ICONS_CONFIG)
+	@echo "  ios: true" >> $(FLUTTER_LAUNCHER_ICONS_CONFIG)
+	@echo "  image_path_ios: \"$${LAUNCHER_ICON_IMAGE_IOS:-$(LAUNCHER_ICON_IMAGE_IOS)}\"" >> $(FLUTTER_LAUNCHER_ICONS_CONFIG)
+	@echo "  web:" >> $(FLUTTER_LAUNCHER_ICONS_CONFIG)
+	@echo "    generate: true" >> $(FLUTTER_LAUNCHER_ICONS_CONFIG)
+	@echo "    image_path: \"$${LAUNCHER_ICON_IMAGE_WEB:-$(LAUNCHER_ICON_IMAGE_WEB)}\"" >> $(FLUTTER_LAUNCHER_ICONS_CONFIG)
+	@echo "    background_color: \"$${BACKGROUND_COLOR:-$(BACKGROUND_COLOR)}\"" >> $(FLUTTER_LAUNCHER_ICONS_CONFIG)
+	@echo "    theme_color: \"$${THEME_COLOR:-$(THEME_COLOR)}\"" >> $(FLUTTER_LAUNCHER_ICONS_CONFIG)
+
 ## Generate launcher icons using external config
 generate-launcher-icons:
 	flutter pub add flutter_launcher_icons --dev
 	dart run flutter_launcher_icons  -f $(FLUTTER_LAUNCHER_ICONS_CONFIG)
+
+## Generate flutter_native_splash.yaml with custom parameters
+generate-native-splash-config:
+	@echo "flutter_native_splash:" > $(FLUTTER_NATIVE_SPLASH_CONFIG)
+	@echo "  color: \"$${SPLASH_COLOR:-$(SPLASH_COLOR)}\"" >> $(FLUTTER_NATIVE_SPLASH_CONFIG)
+	@echo "  image: \"$${SPLASH_IMAGE:-$(SPLASH_IMAGE)}\"" >> $(FLUTTER_NATIVE_SPLASH_CONFIG)
+	@echo "  android_12:" >> $(FLUTTER_NATIVE_SPLASH_CONFIG)
+	@echo "    color: \"$${ANDROID_12_SPLASH_COLOR:-$(ANDROID_12_SPLASH_COLOR)}\"" >> $(FLUTTER_NATIVE_SPLASH_CONFIG)
 
 ## Generate native splash screen using external config
 generate-native-splash:
