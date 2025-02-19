@@ -16,32 +16,6 @@
 
 ---
 
-## Setup Environment
-
-Set up `dart_define.json` key-value structure to define the base configuration, including core settings and logging
-credentials.
-
-**Example:**
-
-```json
-{
-  "WEBTRIT_APP_DEBUG_LEVEL": "ALL",
-  "WEBTRIT_APP_DATABASE_LOG_STATEMENTS": false,
-  "WEBTRIT_APP_PERIODIC_POLLING": true,
-  "WEBTRIT_APP_ENABLE_ATTENDED_TRANSFER": true,
-  "WEBTRIT_APP_DEMO_CORE_URL": "http://192.168.10.100:4000",
-  "WEBTRIT_APP_LINK_DOMAIN": "app.webtrit.com",
-  "WEBTRIT_APP_NAME": "WebTrit",
-  "WEBTRIT_APP_DESCRIPTION": "WebTrit application",
-  "WEBTRIT_APP_SALES_EMAIL": "sales@webtrit.com",
-  "_WEBTRIT_APP_REMOTE_LOGZIO_LOGGING_URL": "",
-  "_WEBTRIT_APP_REMOTE_LOGZIO_LOGGING_TOKEN": "",
-  "_WEBTRIT_APP_REMOTE_LOGZIO_LOGGING_BUFFER_SIZE": ""
-}
-```
-
----
-
 ## Setup Widget Configuration
 
 The widget configuration defines various UI components used throughout the application. Below are the different

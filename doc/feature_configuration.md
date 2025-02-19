@@ -2,10 +2,6 @@
 
 ## Table of Contents
 
-- [Login Page](#login-page)
-- [About Page](#about-page)
-- [Setup App Features Scheme](#setup-app-features-scheme)
-- [Setup Login](#setup-login)
 - [Mode Select Actions](#mode-select-actions)
 - [Setup Main Configuration](#setup-main-configuration)
 - [Bottom Menu Configuration](#bottom-menu-configuration)
@@ -17,34 +13,6 @@
 - [Embedded Resources](#embedded-resources)
 
 ---
-
-## Setup Login
-
-The login configuration includes:
-
-- `greetingL10n`: Localized greeting message
-- `modeSelectActions`: Settings for login mode selection buttons
-
-```json
-{
-  "loginConfig": {
-    "greetingL10n": "WebTrit",
-    "modeSelectActions": [
-      {
-        "enabled": true,
-        "type": "login",
-        "titleL10n": "login_Button_signUpToDemoInstance"
-      },
-      {
-        "enabled": false,
-        "embeddedResourceId": 1,
-        "type": "embedded",
-        "titleL10n": "login_Button_signIn"
-      }
-    ]
-  }
-}
-```
 
 ## Mode Select Actions
 
