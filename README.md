@@ -1,46 +1,38 @@
-# webtrit_phone
+# WebTrit Phone
 
-WebTrit Phone application.
+WebTrit Phone is a feature-rich application designed for seamless communication.
 
-### Environment
-A detailed description of environment properties can be found in the [Environment](doc/environment.md) documentation.
+## Documentation Overview
 
-### SSL Certificates
-A detailed description of SSL certificates properties can be found in the [SSL Certificates](doc/certificates.md) documentation.
-
-## Build
-A detailed description of build properties can be found in the [Build](doc/build.md) documentation.
-
-## Configure Application Properties (Bundle ID, App Name.)
-A detailed description of application settings properties can be found in the [Application Settings](doc/application_properties.md) documentation.
-
-## Localizely
-A detailed description of localizely properties can be found in the [Localizely](doc/localization.md) documentation.
+- **Environment**: See the [Environment](doc/environment.md) documentation for details on environment properties.
+- **SSL Certificates**: Refer to the [SSL Certificates](doc/certificates.md) documentation for information on SSL
+  certificate handling.
+- **Build Process**: Learn more about build configurations in the [Build](doc/build.md) documentation.
+- **Application Properties**: Customize properties such as Bundle ID and App Name in
+  the [Application Settings](doc/application_properties.md) documentation.
+- **Localization**: For information on localization settings, see [Localizely](doc/localization.md).
 
 ## Application Configuration
 
-### 1. Colors scheme configuration
-A detailed description of colors properties can be found in the [Colors scheme](doc/color_scheme.md) documentation.
+The application provides extensive configuration options:
 
-### 2. Widgets configuration
-To configure the widgets according to your application’s needs, refer to the [Widgets Configuration](doc/widgets_configuration.md) guide.
+- **[Color Scheme](doc/color_scheme.md)** – Customize the application's color palette.
+- **[Widgets](doc/widgets_configuration.md)** – Configure UI widgets according to your needs.
+- **[Pages](doc/page_configuration.md)** – Customize pages and their layouts.
+- **[Features](doc/feature_configuration.md)** – Enable or disable specific features.
 
-### 3. Pages configuration
-To configure the pages according to your application’s needs, refer to the [Pages Configuration](doc/pages_configuration.md) guide.
+## Development & Build
 
-### 4. Feature configuration
-To configure the features according to your application’s needs, refer to the [Feature Configuration](doc/feature_configuration.md) guide.
-
-## Make commands
-A detailed description of make commands can be found in the [Make commands](doc/make_file.md) documentation.
+- **Make Commands**: See the [Make Commands](doc/make_file.md) documentation for available build and automation
+  commands.
 
 ## Contributing
 
-Contributions are always welcome!
+We welcome contributions from the community! Please follow our contribution guidelines when submitting pull requests.
 
 ## License
 
-[MIT LICENSE](LICENSE)
+This project is licensed under the [MIT License](LICENSE).
 
 ## Acknowledgments
 
