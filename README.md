@@ -6,10 +6,7 @@ WebTrit Phone application.
 A detailed description of environment properties can be found in the [Environment](doc/environment.md) documentation.
 
 ### SSL Certificates
-To use SSL certificates, you need to: 
-1. add the following files to the `assets/certificates` folder
-2. for PKCS12 add passwords to the `assets/certificates/credentials.json` where the key is the file name and the value is the password
-2. run flutter_gen or buid_runner to generate the necessary code
+A detailed description of SSL certificates properties can be found in the [SSL Certificates](doc/certificates.md) documentation.
 
 ## Build
 
