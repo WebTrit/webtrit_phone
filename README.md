@@ -9,34 +9,10 @@ A detailed description of environment properties can be found in the [Environmen
 A detailed description of SSL certificates properties can be found in the [SSL Certificates](doc/certificates.md) documentation.
 
 ## Build
+A detailed description of build properties can be found in the [Build](doc/build.md) documentation.
 
-### Android
-
-Command line example:
-```bash
-WEBTRIT_ANDROID_RELEASE_UPLOAD_KEYSTORE_PATH=<path for KeystoreGenerator created folder structure> && \
-flutter build appbundle --dart-define-from-file=dart_define.json
-```
-
-### iOS
-
-Command line example: 
-```bash
-flutter build ipa --dart-define-from-file=dart_define.json
-```
-
-### Web
-
-Command line example:
-```bash
-flutter build web --dart-define-from-file=dart_define.json
-  
-dart run tool/extenvsubst.dart dart_define.json build/web/index.html
-```
-
-## Renaming
-
-To rename the default fields for each platform project within the WebTrit Phone application, the [`package_rename`](https://pub.dev/packages/package_rename) package can be used.
+## Configure Application Properties (Bundle ID, App Name.)
+A detailed description of application settings properties can be found in the [Application Settings](doc/application_properties.md) documentation.
 
 ## Localizely
 A detailed description of localizely properties can be found in the [Localizely](doc/localization.md) documentation.
