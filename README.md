@@ -8,13 +8,12 @@ WebTrit Phone is a feature-rich application designed for seamless communication.
 - **SSL Certificates**: Refer to the [SSL Certificates](doc/certificates.md) documentation for information on SSL
   certificate handling.
 - **Build Process**: Learn more about build configurations in the [Build](doc/build.md) documentation.
-- **Application Properties**: Customize properties such as Bundle ID and App Name in
-  the [Application Settings](doc/application_properties.md) documentation.
+- **Application Properties**: Customize properties such as the Bundle ID and App Name in the  [Application Settings](doc/application_properties.md) documentation.
 - **Localization**: For information on localization settings, see [Localizely](doc/localization.md).
 
 ## Application Configuration
 
-The application provides extensive configuration options:
+The application offers extensive customization options:
 
 - **[Color Scheme](doc/color_scheme.md)** – Customize the application's color palette.
 - **[Widgets](doc/widgets_configuration.md)** – Configure UI widgets according to your needs.
@@ -23,8 +22,7 @@ The application provides extensive configuration options:
 
 ## Development & Build
 
-- **Make Commands**: See the [Make Commands](doc/make_file.md) documentation for available build and automation
-  commands.
+ - **Make Commands**: See the  [Make Commands](doc/make_file.md) for available build and automation commands.
 
 ## Contributing
 
