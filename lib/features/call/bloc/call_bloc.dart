@@ -2450,45 +2450,45 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     return peerConnection
       ..onSignalingState = (signalingState) {
-        logger.fine(() => 'onSignalingState state: $signalingState');
+        logger.fine(() => 'onSignalingState state: ${signalingState.name}');
 
         add(_PeerConnectionEvent.signalingStateChanged(callId, signalingState));
       }
       ..onConnectionState = (connectionState) {
-        logger.fine(() => 'onConnectionState state: $connectionState');
+        logger.fine(() => 'onConnectionState state: ${connectionState.name}');
 
         add(_PeerConnectionEvent.connectionStateChanged(callId, connectionState));
       }
       ..onIceGatheringState = (iceGatheringState) {
-        logger.fine(() => 'onIceGatheringState state: $iceGatheringState');
+        logger.fine(() => 'onIceGatheringState state: ${iceGatheringState.name}');
 
         add(_PeerConnectionEvent.iceGatheringStateChanged(callId, iceGatheringState));
       }
       ..onIceConnectionState = (iceConnectionState) {
-        logger.fine(() => 'onIceConnectionState state: $iceConnectionState');
+        logger.fine(() => 'onIceConnectionState state: ${iceConnectionState.name}');
 
         add(_PeerConnectionEvent.iceConnectionStateChanged(callId, iceConnectionState));
       }
       ..onIceCandidate = (candidate) {
-        logger.fine(() => 'onIceCandidate candidate: $candidate');
+        logger.fine(() => 'onIceCandidate candidate: ${candidate.str}');
 
         add(_PeerConnectionEvent.iceCandidateIdentified(callId, candidate));
       }
       ..onAddStream = (stream) {
-        logger.fine(() => 'onAddStream stream: $stream');
+        logger.fine(() => 'onAddStream stream: ${stream.str}');
 
         add(_PeerConnectionEvent.streamAdded(callId, stream));
       }
       ..onRemoveStream = (stream) {
-        logger.fine(() => 'onRemoveStream stream: $stream');
+        logger.fine(() => 'onRemoveStream stream: ${stream.str}');
 
         add(_PeerConnectionEvent.streamRemoved(callId, stream));
       }
       ..onAddTrack = (stream, track) {
-        logger.fine(() => 'onAddTrack stream: $stream track: $track');
+        logger.fine(() => 'onAddTrack stream: ${stream.str} track: ${track.str}');
       }
       ..onRemoveTrack = (stream, track) {
-        logger.fine(() => 'onRemoveTrack stream: $stream track: $track');
+        logger.fine(() => 'onRemoveTrack stream: ${stream.str} track: ${track.str}');
       }
       ..onDataChannel = (channel) {
         logger.fine(() => 'onDataChannel channel: $channel');
@@ -2497,22 +2497,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         logger.fine(() => 'onRenegotiationNeeded');
       }
       ..onTrack = (event) {
-        logger.fine(() {
-          final sb = StringBuffer('onTrack');
-          sb.write(' receiver: ${event.receiver}');
-          sb.write(' streams: [');
-          final streamsLength = event.streams.length;
-          for (var i = 0; i < streamsLength; i++) {
-            sb.write('$stream');
-            if (i + 1 < streamsLength) {
-              sb.write(', ');
-            }
-          }
-          sb.write(']');
-          sb.write(' track: ${event.track}');
-          sb.write(' transceiver: ${event.transceiver}');
-          return sb;
-        });
+        logger.fine(() => 'onTrack ${event.str}');
       };
   }
 
