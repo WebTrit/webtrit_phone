@@ -107,8 +107,6 @@ class ModifyWithEncodingSettings implements SDPMunger {
     if (modified) {
       _logger.info('SDP Modified with: $settings');
       final mod = builder.sdp;
-      _logger.finest('Original SDP: $sdp');
-      _logger.finest('Modified SDP: $mod');
       description.sdp = mod;
     }
   }
