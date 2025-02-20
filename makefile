@@ -10,6 +10,7 @@ KEYSTORES_PATH = --keystores-path=../webtrit_phone_keystores
 CONFIGS_PATH = /Users/serdun/Documents/work/webtrit/webtrit_phone/tool/configs
 FLUTTER_LAUNCHER_ICONS_CONFIG = $(CONFIGS_PATH)/flutter_launcher_icons.yaml
 FLUTTER_NATIVE_SPLASH_CONFIG = $(CONFIGS_PATH)/flutter_native_splash.yaml
+FLUTTER_RENAME_PACKAGE_CONFIG = $(CONFIGS_PATH)/package_rename_config.yaml
 
 # Variables for package rename
 PACKAGE_NAME ?= com.example.newapp
@@ -76,20 +77,20 @@ build-appbundle:
 
 ## Generate package_rename_config.yaml for package_rename
 generate-package-config:
-	echo "package_rename_config:" > package_rename_config.yaml
-	echo "  android:" >> package_rename_config.yaml
-	echo "    app_name: $(ANDROID_APP_NAME)" >> package_rename_config.yaml
-	echo "    package_name: $(PACKAGE_NAME)" >> package_rename_config.yaml
-	echo "    override_old_package: com.webtrit.app" >> package_rename_config.yaml
-	echo "    lang: kotlin" >> package_rename_config.yaml
-	echo "  ios:" >> package_rename_config.yaml
-	echo "    app_name: $(IOS_APP_NAME)" >> package_rename_config.yaml
-	echo "    package_name: $(BUNDLE_ID)" >> package_rename_config.yaml
+	@echo "package_rename_config:" > $(FLUTTER_RENAME_PACKAGE_CONFIG)
+	@echo "  android:" >>$(FLUTTER_RENAME_PACKAGE_CONFIG)
+	@echo "    app_name: $(ANDROID_APP_NAME)" >> $(FLUTTER_RENAME_PACKAGE_CONFIG)
+	@echo "    package_name: $(PACKAGE_NAME)" >> $(FLUTTER_RENAME_PACKAGE_CONFIG)
+	@echo "    override_old_package: com.webtrit.app" >> $(FLUTTER_RENAME_PACKAGE_CONFIG)
+	@echo "    lang: kotlin" >> $(FLUTTER_RENAME_PACKAGE_CONFIG)
+	@echo "  ios:" >> $(FLUTTER_RENAME_PACKAGE_CONFIG)
+	@echo "    app_name: $(IOS_APP_NAME)" >> $(FLUTTER_RENAME_PACKAGE_CONFIG)
+	@echo "    package_name: $(BUNDLE_ID)" >>$(FLUTTER_RENAME_PACKAGE_CONFIG)
 
 ## Add package_rename to dev_dependencies and run it
-rename-package: generate-package-config
+rename-package:
 	dart pub add package_rename --dev
-	dart run package_rename
+	dart run package_rename --path=$(FLUTTER_RENAME_PACKAGE_CONFIG)
 
 
 ## Generate flutter_launcher_icons.yaml with custom parameters
