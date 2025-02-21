@@ -32,13 +32,6 @@ class CallActiveScaffold extends StatefulWidget {
 
 class CallActiveScaffoldState extends State<CallActiveScaffold> {
   bool compact = false;
-  late bool cameraEnabled;
-
-  @override
-  void initState() {
-    super.initState();
-    cameraEnabled = widget.activeCalls.current.video;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,14 +41,18 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
 
     final activeTransfer = activeCall.transfer;
 
-    final video = activeCall.video;
-
     final themeData = Theme.of(context);
     final Gradients? gradients = themeData.extension<Gradients>();
     final onTabGradient = themeData.colorScheme.surface;
     final textTheme = themeData.textTheme;
     final switchCameraIconSize = textTheme.titleMedium!.fontSize!;
     final MediaQueryData mediaQueryData = MediaQuery.of(context);
+
+    final remoteStream = activeCall.remoteStream;
+    final remoteVideo = remoteStream?.getVideoTracks().isNotEmpty ?? false;
+    final localStream = activeCall.localStream;
+    final localVideo = localStream?.getVideoTracks().isNotEmpty ?? false;
+    final cameraEnabled = localStream?.getVideoTracks().firstOrNull?.enabled ?? false;
 
     return Scaffold(
       body: OrientationBuilder(
@@ -66,7 +63,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
             ),
             child: Stack(
               children: [
-                if (video)
+                if (remoteVideo)
                   Positioned(
                     left: 0,
                     right: 0,
@@ -85,7 +82,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                       ),
                     ),
                   ),
-                if (video)
+                if (localVideo)
                   AnimatedPositioned(
                     right: 10 + mediaQueryData.padding.right,
                     top: 10 + mediaQueryData.padding.top + (compact ? 0 : 100),
@@ -202,24 +199,24 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                                       cameraValue: cameraEnabled,
                                       inviteToAttendedTransfer: activeTransfer is InviteToAttendedTransfer,
                                       onCameraChanged: (bool value) {
-                                        setState(() {
-                                          cameraEnabled = value;
-                                        });
                                         context
                                             .read<CallBloc>()
                                             .add(CallControlEvent.cameraEnabled(activeCall.callId, value));
+                                        setState(() {});
                                       },
                                       mutedValue: activeCall.muted,
                                       onMutedChanged: (bool value) {
                                         context
                                             .read<CallBloc>()
                                             .add(CallControlEvent.setMuted(activeCall.callId, value));
+                                        setState(() {});
                                       },
                                       speakerValue: widget.speaker,
                                       onSpeakerChanged: (bool value) {
                                         context
                                             .read<CallBloc>()
                                             .add(CallControlEvent.speakerEnabled(activeCall.callId, value));
+                                        setState(() {});
                                       },
                                       transferableCalls: heldCalls,
                                       onBlindTransferInitiated: widget.transferConfig.enableBlindTransfer
