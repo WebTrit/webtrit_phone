@@ -1370,7 +1370,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _CallControlEventBlindTransferInitiated event,
     Emitter<CallState> emit,
   ) async {
-    var newState = state.copyWith(minimized: true);
+    var newState = state.copyWith(
+      minimized: true,
+      speakerOnBeforeMinimize: state.speaker == true,
+    );
     await __onCallControlEventSetHeld(_CallControlEventSetHeld(event.callId, true), emit);
 
     newState = newState.copyWithMappedActiveCall(event.callId, (activeCall) {
@@ -1391,7 +1394,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _CallControlEventAttendedTransferInitiated event,
     Emitter<CallState> emit,
   ) async {
-    emit(state.copyWith(minimized: true));
+    emit(state.copyWith(
+      minimized: true,
+      speakerOnBeforeMinimize: state.speaker == true,
+    ));
     await __onCallControlEventSetHeld(_CallControlEventSetHeld(event.callId, true), emit);
   }
 
@@ -1430,6 +1436,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         state.activeCalls.current.callId,
         proximityEnabled: state.shouldListenToProximity,
       );
+
+      if (state.speakerOnBeforeMinimize == true) {
+        add(_CallControlEventSpeakerEnabled(state.activeCalls.current.callId, true));
+      }
 
       // After request succesfully submitted, transfer flow will continue
       // by TransferringEvent event from anus and handled in [_CallSignalingEventTransferring]
@@ -2097,6 +2107,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         state.activeCalls.current.callId,
         proximityEnabled: state.shouldListenToProximity,
       );
+
+      if (state.speakerOnBeforeMinimize == true) {
+        add(_CallControlEventSpeakerEnabled(state.activeCalls.current.callId, true));
+      }
     } else {
       _logger.warning('__onCallScreenEventDidPush: activeCalls is empty');
     }
@@ -2106,16 +2120,18 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _CallScreenEventDidPop event,
     Emitter<CallState> emit,
   ) async {
-    final hasActiveCalls = state.activeCalls.isNotEmpty;
-    emit(state.copyWith(minimized: hasActiveCalls ? true : null));
+    final shouldMinimize = state.activeCalls.isNotEmpty;
+    _logger.info('__onCallScreenEventDidPop: shouldMinimize: $shouldMinimize');
 
-    if (hasActiveCalls) {
+    if (shouldMinimize) {
+      emit(state.copyWith(
+        minimized: true,
+        speakerOnBeforeMinimize: state.speaker == true,
+      ));
       await callkeep.reportUpdateCall(
         state.activeCalls.current.callId,
         proximityEnabled: state.shouldListenToProximity,
       );
-    } else {
-      _logger.warning('__onCallScreenEventDidPop: activeCalls is empty');
     }
   }
 

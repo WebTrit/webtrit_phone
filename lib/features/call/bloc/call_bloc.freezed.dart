@@ -4067,16 +4067,22 @@ class _$CallSignalingEventNotifyImpl
             (identical(other.line, line) || other.line == line) &&
             (identical(other.callId, callId) || other.callId == callId) &&
             (identical(other.notify, notify) || other.notify == notify) &&
-            (identical(other.subscriptionState, subscriptionState) ||
-                other.subscriptionState == subscriptionState) &&
+            const DeepCollectionEquality()
+                .equals(other.subscriptionState, subscriptionState) &&
             (identical(other.contentType, contentType) ||
                 other.contentType == contentType) &&
             (identical(other.content, content) || other.content == content));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, line, callId, notify,
-      subscriptionState, contentType, content);
+  int get hashCode => Object.hash(
+      runtimeType,
+      line,
+      callId,
+      notify,
+      const DeepCollectionEquality().hash(subscriptionState),
+      contentType,
+      content);
 
   @override
   @optionalTypeArgs
@@ -12438,6 +12444,7 @@ mixin _$CallState {
   int get linesCount => throw _privateConstructorUsedError;
   List<ActiveCall> get activeCalls => throw _privateConstructorUsedError;
   bool? get minimized => throw _privateConstructorUsedError;
+  bool? get speakerOnBeforeMinimize => throw _privateConstructorUsedError;
   bool? get speaker => throw _privateConstructorUsedError;
 
   /// Create a copy of CallState
@@ -12463,6 +12470,7 @@ abstract class $CallStateCopyWith<$Res> {
       int linesCount,
       List<ActiveCall> activeCalls,
       bool? minimized,
+      bool? speakerOnBeforeMinimize,
       bool? speaker});
 }
 
@@ -12491,6 +12499,7 @@ class _$CallStateCopyWithImpl<$Res, $Val extends CallState>
     Object? linesCount = null,
     Object? activeCalls = null,
     Object? minimized = freezed,
+    Object? speakerOnBeforeMinimize = freezed,
     Object? speaker = freezed,
   }) {
     return _then(_value.copyWith(
@@ -12534,6 +12543,10 @@ class _$CallStateCopyWithImpl<$Res, $Val extends CallState>
           ? _value.minimized
           : minimized // ignore: cast_nullable_to_non_nullable
               as bool?,
+      speakerOnBeforeMinimize: freezed == speakerOnBeforeMinimize
+          ? _value.speakerOnBeforeMinimize
+          : speakerOnBeforeMinimize // ignore: cast_nullable_to_non_nullable
+              as bool?,
       speaker: freezed == speaker
           ? _value.speaker
           : speaker // ignore: cast_nullable_to_non_nullable
@@ -12561,6 +12574,7 @@ abstract class _$$CallStateImplCopyWith<$Res>
       int linesCount,
       List<ActiveCall> activeCalls,
       bool? minimized,
+      bool? speakerOnBeforeMinimize,
       bool? speaker});
 }
 
@@ -12587,6 +12601,7 @@ class __$$CallStateImplCopyWithImpl<$Res>
     Object? linesCount = null,
     Object? activeCalls = null,
     Object? minimized = freezed,
+    Object? speakerOnBeforeMinimize = freezed,
     Object? speaker = freezed,
   }) {
     return _then(_$CallStateImpl(
@@ -12630,6 +12645,10 @@ class __$$CallStateImplCopyWithImpl<$Res>
           ? _value.minimized
           : minimized // ignore: cast_nullable_to_non_nullable
               as bool?,
+      speakerOnBeforeMinimize: freezed == speakerOnBeforeMinimize
+          ? _value.speakerOnBeforeMinimize
+          : speakerOnBeforeMinimize // ignore: cast_nullable_to_non_nullable
+              as bool?,
       speaker: freezed == speaker
           ? _value.speaker
           : speaker // ignore: cast_nullable_to_non_nullable
@@ -12652,6 +12671,7 @@ class _$CallStateImpl extends _CallState with DiagnosticableTreeMixin {
       this.linesCount = 0,
       final List<ActiveCall> activeCalls = const [],
       this.minimized,
+      this.speakerOnBeforeMinimize,
       this.speaker})
       : _activeCalls = activeCalls,
         super._();
@@ -12687,11 +12707,13 @@ class _$CallStateImpl extends _CallState with DiagnosticableTreeMixin {
   @override
   final bool? minimized;
   @override
+  final bool? speakerOnBeforeMinimize;
+  @override
   final bool? speaker;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'CallState(currentConnectivityResult: $currentConnectivityResult, currentAppLifecycleState: $currentAppLifecycleState, registrationStatus: $registrationStatus, signalingClientStatus: $signalingClientStatus, lastSignalingClientConnectError: $lastSignalingClientConnectError, lastSignalingClientDisconnectError: $lastSignalingClientDisconnectError, lastSignalingDisconnectCode: $lastSignalingDisconnectCode, linesCount: $linesCount, activeCalls: $activeCalls, minimized: $minimized, speaker: $speaker)';
+    return 'CallState(currentConnectivityResult: $currentConnectivityResult, currentAppLifecycleState: $currentAppLifecycleState, registrationStatus: $registrationStatus, signalingClientStatus: $signalingClientStatus, lastSignalingClientConnectError: $lastSignalingClientConnectError, lastSignalingClientDisconnectError: $lastSignalingClientDisconnectError, lastSignalingDisconnectCode: $lastSignalingDisconnectCode, linesCount: $linesCount, activeCalls: $activeCalls, minimized: $minimized, speakerOnBeforeMinimize: $speakerOnBeforeMinimize, speaker: $speaker)';
   }
 
   @override
@@ -12714,6 +12736,8 @@ class _$CallStateImpl extends _CallState with DiagnosticableTreeMixin {
       ..add(DiagnosticsProperty('linesCount', linesCount))
       ..add(DiagnosticsProperty('activeCalls', activeCalls))
       ..add(DiagnosticsProperty('minimized', minimized))
+      ..add(DiagnosticsProperty(
+          'speakerOnBeforeMinimize', speakerOnBeforeMinimize))
       ..add(DiagnosticsProperty('speaker', speaker));
   }
 
@@ -12748,6 +12772,9 @@ class _$CallStateImpl extends _CallState with DiagnosticableTreeMixin {
                 .equals(other._activeCalls, _activeCalls) &&
             (identical(other.minimized, minimized) ||
                 other.minimized == minimized) &&
+            (identical(
+                    other.speakerOnBeforeMinimize, speakerOnBeforeMinimize) ||
+                other.speakerOnBeforeMinimize == speakerOnBeforeMinimize) &&
             (identical(other.speaker, speaker) || other.speaker == speaker));
   }
 
@@ -12764,6 +12791,7 @@ class _$CallStateImpl extends _CallState with DiagnosticableTreeMixin {
       linesCount,
       const DeepCollectionEquality().hash(_activeCalls),
       minimized,
+      speakerOnBeforeMinimize,
       speaker);
 
   /// Create a copy of CallState
@@ -12787,6 +12815,7 @@ abstract class _CallState extends CallState {
       final int linesCount,
       final List<ActiveCall> activeCalls,
       final bool? minimized,
+      final bool? speakerOnBeforeMinimize,
       final bool? speaker}) = _$CallStateImpl;
   const _CallState._() : super._();
 
@@ -12810,6 +12839,8 @@ abstract class _CallState extends CallState {
   List<ActiveCall> get activeCalls;
   @override
   bool? get minimized;
+  @override
+  bool? get speakerOnBeforeMinimize;
   @override
   bool? get speaker;
 
