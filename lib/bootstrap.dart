@@ -152,6 +152,8 @@ Future<void> _initFirebaseMessaging() async {
 
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  final logger = Logger('_firebaseMessagingBackgroundHandler');
+
   // Cache remote configuration
   final remoteCacheConfigService = await DefaultRemoteCacheConfigService.init();
 
@@ -168,6 +170,8 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   );
 
   final appNotification = AppRemoteNotification.fromFCM(message);
+
+  logger.info('onBackgroundMessage: ${message.toMap()}');
 
   // Type of notification for testing purposes
   _dHandleInspectPushNotification(message.data, true);
