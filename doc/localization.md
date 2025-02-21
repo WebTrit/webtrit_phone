@@ -37,9 +37,9 @@ Follow these structured steps to manage the localization of your application eff
 
 1. Add the new locale to the `download files` list in `localizely.yml`.
 2. Insert `locale_<locale code>` in `lib/l10n/arb/app_en.arb`.
-3. Push the newly added key to [Localizely](https://localizely.com) using the command:
+3. Push the newly added key with the ‘unreviewed’ flag to [Localizely](https://localizely.com) using the command:
    ```sh
-   localizely-cli push --api-token=token
+   localizely-cli --reviewed=false push --api-token=token
    ```
 4. Translate the added key on the [Localizely](https://localizely.com) platform, remembering to remove helper tags from
    the key(s).
