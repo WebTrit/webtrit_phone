@@ -896,8 +896,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     }
 
     emit(state.copyWithMappedActiveCall(event.callId, (call) {
-      final acceptedTime = call.acceptedTime ?? clock.now();
-      return call.copyWith(acceptedTime: acceptedTime, processingStatus: CallProcessingStatus.connected);
+      return call.copyWith(
+        processingStatus: CallProcessingStatus.connected,
+        acceptedTime: call.acceptedTime ?? clock.now(),
+        video: event.jsep?.hasVideo ?? false,
+      );
     }));
   }
 
@@ -1337,12 +1340,12 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     // Get and re-add audio and video together with same stream
     // to not break time sync between audio and video tracks that captured in sync
     // not needed to screen cast, if will be implemented later
-    final newLocalStream = await _getUserMedia(video: true);
+    final newLocalStream = await _getUserMedia(video: true, frontCamera: activeCall.frontCamera);
     final newAudioTrack = newLocalStream.getAudioTracks().firstOrNull;
     final newVideoTrack = newLocalStream.getVideoTracks().firstOrNull;
 
     final senders = await peerConnection.getSenders();
-    await Future.forEach(senders, (sender) => peerConnection.removeTrack(sender..track?.stop()));
+    await Future.forEach(senders, (sender) => sender..track?.stop());
     if (newAudioTrack != null) await peerConnection.addTrack(newAudioTrack, newLocalStream);
     if (newVideoTrack != null) await peerConnection.addTrack(newVideoTrack, newLocalStream);
 
