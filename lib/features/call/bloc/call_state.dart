@@ -15,6 +15,7 @@ class CallState with _$CallState {
     @Default(0) int linesCount,
     @Default([]) List<ActiveCall> activeCalls,
     bool? minimized,
+    bool? speakerOnBeforeMinimize,
     bool? speaker,
   }) = _CallState;
 

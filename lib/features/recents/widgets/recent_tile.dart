@@ -67,32 +67,39 @@ class RecentTile extends StatelessWidget {
           thumbnailUrl: contact?.thumbnailUrl,
           registered: contact?.registered,
         ),
-        trailing: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(dateFormat.format(callLogEntry.createdTime)),
-            const SizedBox(width: 4),
-            InkWell(
-              borderRadius: BorderRadius.circular(24),
-              onTap: onInfoPressed,
-              child: const Padding(
-                padding: EdgeInsets.all(4.0),
-                child: Icon(Icons.info_outlined),
-              ),
-            ),
-            if (chatsEnabled)
-              InkWell(
-                borderRadius: BorderRadius.circular(24),
-                onTap: onMessagePressed,
-                child: Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: Icon(
-                    Icons.messenger_outline,
-                    color: onMessagePressed == null ? Colors.grey : null,
+        trailing: GestureDetector(
+          onTap: () => debugPrint('obsorbt trailing tap'),
+          child: Container(
+            height: double.maxFinite,
+            color: themeData.colorScheme.surfaceBright.withValues(alpha: 0.1),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(dateFormat.format(callLogEntry.createdTime)),
+                const SizedBox(width: 4),
+                InkWell(
+                  borderRadius: BorderRadius.circular(24),
+                  onTap: onInfoPressed,
+                  child: const Padding(
+                    padding: EdgeInsets.all(4.0),
+                    child: Icon(Icons.info_outlined),
                   ),
                 ),
-              )
-          ],
+                if (chatsEnabled)
+                  InkWell(
+                    borderRadius: BorderRadius.circular(24),
+                    onTap: onMessagePressed,
+                    child: Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: Icon(
+                        Icons.messenger_outline,
+                        color: onMessagePressed == null ? Colors.grey : null,
+                      ),
+                    ),
+                  )
+              ],
+            ),
+          ),
         ),
         title: Text(
           recent.name,
