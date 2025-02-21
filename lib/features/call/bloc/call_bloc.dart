@@ -288,6 +288,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _signalingClientReconnectTimer = Timer(delay, () {
       final appActive = state.currentAppLifecycleState == AppLifecycleState.resumed;
       final connectionActive = state.currentConnectivityResult != ConnectivityResult.none;
+      final signalingRemains = _signalingClient != null;
 
       _logger.info(
           '_reconnectInitiated Timer callback after $delay, isClosed: $isClosed, appActive: $appActive, connectionActive: $connectionActive');
@@ -306,6 +307,18 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       // Coz reconnect can be triggered by another action e.g app lifecycle change.
       if (connectionActive == false && force == false) {
         _logger.info('__onSignalingClientEventConnectInitiated: skipped due to connectionActive: $connectionActive');
+        return;
+      }
+
+      // Guard clause to prevent reconnection when the signaling client is already connected.
+      //
+      // Can be triggered by switching from wifi to mobile data.
+      // In this case, the connection is recovers automatically, and signaling wasnt disposed.
+      //
+      // Or if app resumes from background or native call screen durning active call,
+      // in this case signaling wasnt disposed
+      if (signalingRemains == true && force == false) {
+        _logger.info('__onSignalingClientEventConnectInitiated: skipped due signalingRemains: $signalingRemains');
         return;
       }
 
@@ -356,13 +369,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     emit(state.copyWith(currentAppLifecycleState: appLifecycleState));
 
     if (appLifecycleState == AppLifecycleState.paused || appLifecycleState == AppLifecycleState.detached) {
-      if (_signalingClient != null && !state.isActive) {
-        _disconnectInitiated();
-      }
+      if (state.isActive == false) _disconnectInitiated();
     } else if (appLifecycleState == AppLifecycleState.resumed) {
-      if (_signalingClient == null) {
-        _reconnectInitiated();
-      }
+      _reconnectInitiated();
     }
   }
 
@@ -466,6 +475,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
       await state.performOnActiveCall(event.callId, (activeCall) async {
         await (await _peerConnectionRetrieve(activeCall.callId))?.close();
+        await callkeep.reportEndCall(
+          activeCall.callId,
+          activeCall.displayName ?? activeCall.handle.value,
+          CallkeepEndCallReason.remoteEnded,
+        );
         await activeCall.localStream?.dispose();
       });
       emit(state.copyWithPopActiveCall(event.callId));
