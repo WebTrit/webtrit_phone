@@ -130,6 +130,21 @@ generate-native-splash:
 ## Generate both launcher icons and splash screen
 generate-assets: generate-launcher-icons generate-native-splash
 
+## Push localization keys to Localizely
+push-localizations:
+	localizely-cli --api-token=$(token) push
+
+## Pull localization keys from Localizely
+pull-localizations:
+	localizely-cli --api-token=$(token) pull
+
+## Generate Flutter localization files
+generate-localizations:
+	flutter gen-l10n
+
+## Full localization workflow (Push, Pull, Generate)
+localization-workflow: push-localizations pull-localizations generate-localizations
+
 ## Clean git files
 clean-git:
 	git reset --hard HEAD
