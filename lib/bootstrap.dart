@@ -38,9 +38,10 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
         FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(false);
         await FirebaseCrashlytics.instance.deleteUnsentReports();
       }
+
       FlutterError.onError = (details) {
         logger.severe('FlutterError', details.exception, details.stack);
-        if (!kIsWeb) {
+        if (!kIsWeb && !kDebugMode) {
           FirebaseCrashlytics.instance.recordFlutterFatalError(details);
         }
       };
