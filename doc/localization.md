@@ -6,6 +6,7 @@
     1. [Adding, Updating, or Removing Keys](#adding-updating-or-removing-keys)
     2. [Refinement](#refinement)
     3. [Adding a New Locale](#adding-a-new-locale)
+    4. [Full Localization Workflow](#full-localization-workflow)
 
 ### Preparation
 
@@ -49,3 +50,34 @@ Follow these structured steps to manage the localization of your application eff
    ```
 6. Generate the localizations with the command: `flutter gen-l10n`.
 7. Commit the changes.
+
+### Full Localization Workflow
+
+To execute the full localization process, use the following sequence of commands:
+
+#### Push localization keys to Localizely
+
+   ```sh
+    push-localizations:
+    localizely-cli --api-token=$(token) push
+   ```
+
+#### Pull localization keys from Localizely
+
+   ```sh
+    pull-localizations:
+    localizely-cli --api-token=$(token) pull
+   ```
+
+#### Generate Flutter localization files
+
+   ```sh
+generate-localizations:
+    flutter gen-l10n
+   ```
+
+#### Full localization workflow (Push, Pull, Generate)
+
+   ```sh
+localization-workflow: push-localizations pull-localizations generate-localizations
+```
