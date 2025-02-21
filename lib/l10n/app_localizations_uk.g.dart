@@ -123,16 +123,10 @@ class AppLocalizationsUk extends AppLocalizations {
   String get call_FailureAcknowledgeDialog_title => 'Помилка';
 
   @override
-  String get callProcessingStatus_ringing => 'Виклик';
-
-  @override
-  String get callProcessingStatus_preparing => 'Підготовка';
-
-  @override
   String get callProcessingStatus_answering => 'Прийняття виклику, будь ласка, зачекайте…';
 
   @override
-  String get callProcessingStatus_signaling_connecting => 'З\'єднання з видаленним сервером';
+  String get callProcessingStatus_disconnecting => 'Відключення дзвінка, будь ласка, зачекайте…';
 
   @override
   String get callProcessingStatus_init_media => 'Ініціалізація медіапристроїв';
@@ -141,10 +135,16 @@ class AppLocalizationsUk extends AppLocalizations {
   String get callProcessingStatus_invite => 'Створення SIP-сесії';
 
   @override
+  String get callProcessingStatus_preparing => 'Підготовка';
+
+  @override
+  String get callProcessingStatus_ringing => 'Виклик';
+
+  @override
   String get callProcessingStatus_routing => 'З\'єднання з абонентом';
 
   @override
-  String get callProcessingStatus_disconnecting => 'Відключення дзвінка, будь ласка, зачекайте…';
+  String get callProcessingStatus_signaling_connecting => 'З\'єднання з видаленним сервером';
 
   @override
   String get callStatus_appUnregistered => 'Незареєстровано';
@@ -178,6 +178,18 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get common_problemWithLoadingPage => 'Виникла проблема з завантаженням сторінки.';
+
+  @override
+  String get contacts_agreement_button_text => 'Продовжити';
+
+  @override
+  String get contacts_agreement_checkbox_text => 'Я погоджуюсь дозволити додатку доступ до моїх контактів для покращення користувацького досвіду.';
+
+  @override
+  String get contacts_agreement_description => 'Цей додаток потребує доступу до вашого списку контактів, щоб відображати їх у вкладці «Контакти» додатку. \n\nДані контактів тимчасово зберігаються локально на вашому пристрої для забезпечення функцій, таких як здійснення дзвінків прямо з додатку. \n\nЦі дані не збираються, не передаються та не поширюються за межами додатку.';
+
+  @override
+  String get contacts_agreement_title => 'Збір даних';
 
   @override
   String get contacts_ExternalTabButton_refresh => 'Оновити';
@@ -261,10 +273,10 @@ class AppLocalizationsUk extends AppLocalizations {
   String get default_InvalidChatTypeMessagingSocketException => 'Недійсний тип чату';
 
   @override
-  String get default_MessagingSocketException => 'Помилка з\'єднання з сервером';
+  String get default_JoinCrashedMessagingSocketException => 'Під час приєднання до розмови сталася помилка';
 
   @override
-  String get default_JoinCrashedMessagingSocketException => 'Під час приєднання до розмови сталася помилка';
+  String get default_MessagingSocketException => 'Помилка з\'єднання з сервером';
 
   @override
   String get default_RequestFailureError => 'Сталася помилка на сервері';
@@ -297,12 +309,12 @@ class AppLocalizationsUk extends AppLocalizations {
   String get default_UnauthorizedRequestFailureError => 'Сталася помилка несанкціонованого запиту';
 
   @override
-  String get default_UserAlreadyInChatMessagingSocketException => 'Користувач вже в чаті';
-
-  @override
   String default_UnknownExceptionError(String error) {
     return 'Сталася невідома помилка: $error';
   }
+
+  @override
+  String get default_UserAlreadyInChatMessagingSocketException => 'Користувач вже в чаті';
 
   @override
   String get diagnostic_AppBar_title => 'Діагностика';
@@ -422,10 +434,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get diagnostic_pushTokenStatusType_success => 'Служба успішно налаштована ';
 
   @override
-  String get diagnosticScreen_permissionsGroup_title => 'Дозволи';
-
-  @override
-  String get diagnosticScreen_pushNotificationService_title => 'Служба push-сповіщень';
+  String get diagnosticScreen_contacts_agreement_description => 'Дозвольте додатку отримати доступ до ваших контактів для покращення користувацького досвіду.';
 
   @override
   String get diagnosticScreen_contacts_agreement_group_title => 'Угода';
@@ -434,7 +443,10 @@ class AppLocalizationsUk extends AppLocalizations {
   String get diagnosticScreen_contacts_agreement_title => 'Угода про контакти';
 
   @override
-  String get diagnosticScreen_contacts_agreement_description => 'Дозвольте додатку отримати доступ до ваших контактів для покращення користувацького досвіду.';
+  String get diagnosticScreen_permissionsGroup_title => 'Дозволи';
+
+  @override
+  String get diagnosticScreen_pushNotificationService_title => 'Служба push-сповіщень';
 
   @override
   String get favorites_BodyCenter_empty => 'Наразі у вас немає обраних номерів.\nДодайте обрані номери з Контактів, використовуючи іконку зірочки';
@@ -904,10 +916,10 @@ class AppLocalizationsUk extends AppLocalizations {
   String get messaging_MessageView_textcopy => 'Копіювати в буфер обміну';
 
   @override
-  String get messaging_ParticipantName_you => 'Ви';
+  String get messaging_ParticipantName_unknown => 'Невідомий користувач';
 
   @override
-  String get messaging_ParticipantName_unknown => 'Невідомий користувач';
+  String get messaging_ParticipantName_you => 'Ви';
 
   @override
   String get messaging_SmsSendingStatus_delivered => 'доставлено';
@@ -937,32 +949,22 @@ class AppLocalizationsUk extends AppLocalizations {
   String get notifications_errorSnackBar_activeLineBlindTransferWarning => 'Ви вже на лінії з одержувачем, до якого намагаєтеся здійснити безумовний переказ';
 
   @override
-  String get notifications_messageSnackBar_appOffline => 'Ваш додаток зараз офлайн.';
+  String get notifications_errorSnackBar_appOffline => 'Ваш додаток зараз офлайн.';
 
   @override
-  String get notifications_successSnackBar_appOnline => 'Ваш додаток онлайн.';
+  String get notifications_errorSnackBar_appOnline => 'Ваш додаток онлайн.';
 
   @override
-  String get notifications_errorSnackBar_callWhileUnregistered => 'Вибачте, ваш додаток наразі відключений від серверів WebTrit та не може здійснювати запити. Будь ласка, перейдіть на сторінку налаштувань і перемістіть вимикач стану онлайн у вимкнути й увімкнути знову, щоб відновити з\'єднання.';
+  String get notifications_errorSnackBar_appUnregistered => 'Вибачте, ваш додаток наразі відключений від серверів WebTrit та не може здійснювати запити. Будь ласка, перейдіть на сторінку налаштувань і перемістіть вимикач стану онлайн у вимкнути й увімкнути знову, щоб відновити з\'єднання.';
 
   @override
-  String get notifications_errorSnackBar_SignalingConnectFailed => 'Підключення до ядра не вдалося, спроба з\'єднання';
+  String get notifications_errorSnackBar_callConnect => 'Підключення до ядра не вдалося, спроба з\'єднання';
 
   @override
-  String get notifications_errorSnackBar_callWhileOffline => 'Не вдається ініціювати дзвінок, перевірте статус з\'єднання';
+  String get notifications_errorSnackBar_callSignalingClientNotConnect => 'Не вдається ініціювати дзвінок, перевірте статус з\'єднання';
 
   @override
-  String get notifications_errorSnackBar_SignalingSessionMissed => 'Помилка автентифікації, будь ласка увійдіть знову';
-
-  @override
-  String notifications_errorSnackBar_signalingDisconnectWithSystemReason(String reason) {
-    return 'Відключено від ядра з причини: $reason';
-  }
-
-  @override
-  String notifications_errorSnackBar_signalingDisconnectWithCodeName(String codeName) {
-    return 'Від’єднано від ядра за кодом: $codeName';
-  }
+  String get notifications_errorSnackBar_callSignalingClientSessionMissed => 'Помилка автентифікації, будь ласка увійдіть знову';
 
   @override
   String get notifications_errorSnackBar_callUndefinedLine => 'Немає вільних ліній для ініціювання дзвінка';
@@ -971,7 +973,32 @@ class AppLocalizationsUk extends AppLocalizations {
   String get notifications_errorSnackBar_callUserMedia => 'Немає доступу до медіа-входу, будь ласка, перевірте дозволи програми';
 
   @override
+  String get notifications_errorSnackBar_callWhileOffline => 'Не вдається ініціювати дзвінок, перевірте статус з\'єднання';
+
+  @override
+  String get notifications_errorSnackBar_callWhileUnregistered => 'Вибачте, ваш додаток наразі відключений від серверів WebTrit та не може здійснювати запити. Будь ласка, перейдіть на сторінку налаштувань і перемістіть вимикач стану онлайн у вимкнути й увімкнути знову, щоб відновити з\'єднання.';
+
+  @override
+  String get notifications_errorSnackBar_SignalingConnectFailed => 'Підключення до ядра не вдалося, спроба з\'єднання';
+
+  @override
+  String notifications_errorSnackBar_signalingDisconnectWithCodeName(String codeName) {
+    return 'Від’єднано від ядра за кодом: $codeName';
+  }
+
+  @override
+  String notifications_errorSnackBar_signalingDisconnectWithSystemReason(String reason) {
+    return 'Відключено від ядра з причини: $reason';
+  }
+
+  @override
+  String get notifications_errorSnackBar_SignalingSessionMissed => 'Помилка автентифікації, будь ласка увійдіть знову';
+
+  @override
   String get notifications_errorSnackBar_sipRegistrationFailed_Unavailable => 'Помилка реєстрації у віддаленій системі VoIP, послуга недоступна';
+
+  @override
+  String get notifications_errorSnackBar_sipRegistrationFailed_Unexpected => 'Помилка реєстрації у віддаленій системі VoIP через неочікувану помилку';
 
   @override
   String notifications_errorSnackBar_sipRegistrationFailed_WithSystemReason(String reason) {
@@ -979,7 +1006,13 @@ class AppLocalizationsUk extends AppLocalizations {
   }
 
   @override
-  String get notifications_errorSnackBar_sipRegistrationFailed_Unexpected => 'Помилка реєстрації у віддаленій системі VoIP через неочікувану помилку';
+  String get notifications_errorSnackBar_sipServiceUnavailable => 'Помилка аутентифікації з віддаленою VoIP системою';
+
+  @override
+  String get notifications_messageSnackBar_appOffline => 'Ваш додаток зараз офлайн.';
+
+  @override
+  String get notifications_successSnackBar_appOnline => 'Ваш додаток онлайн.';
 
   @override
   String get permission_Button_request => 'Продовжити';
@@ -1122,85 +1155,25 @@ class AppLocalizationsUk extends AppLocalizations {
   String get settings_AppBarTitle_myAccount => 'Мій обліковий запис';
 
   @override
+  String get settings_call_codecs_preferred_audio_default => 'Автоматично';
+
+  @override
+  String get settings_call_codecs_preferred_audio_tip => 'Використовується для аудіодзвінків. Якщо кодек не підтримується пристроєм, дзвінок буде встановлено за допомогою наступного доступного кодеку.';
+
+  @override
+  String get settings_call_codecs_preferred_audio_title => 'Предпочитайомий відеокодек';
+
+  @override
+  String get settings_call_codecs_preferred_video_default => 'Автоматично';
+
+  @override
+  String get settings_call_codecs_preferred_video_tip => 'Використовується для відеодзвінків. Якщо кодек не підтримується пристроєм, дзвінок буде встановлено за допомогою наступного доступного кодеку.';
+
+  @override
+  String get settings_call_codecs_preferred_video_title => 'Предпочитайомий відеокодек';
+
+  @override
   String get settings_encoding_AppBar_reset_tooltip => 'Скинути до замовчування';
-
-  @override
-  String get settings_encoding_Section_preset_title => 'Конфігурації кодування медіа';
-
-  @override
-  String get settings_encoding_Section_preset_tooltip => 'Попередні налаштування для аудіо- та відеокодеків, нижчі значення зменшать використання смуги пропускання, але вплинуть на якість, вищі значення підвищать якість, а також використання смуги пропускання. Стандартне налаштування — це рекомендовані налаштування, надані вашим постачальником відповідно до його вподобань середовища.';
-
-  @override
-  String get settings_encoding_Section_preset => 'Налаштування';
-
-  @override
-  String get settings_encoding_Section_preset_default => 'Стандарт';
-
-  @override
-  String get settings_encoding_Section_preset_eco => 'Єко';
-
-  @override
-  String get settings_encoding_Section_preset_balance => 'Баланс';
-
-  @override
-  String get settings_encoding_Section_preset_quality => 'Якість';
-
-  @override
-  String get settings_encoding_Section_preset_full_flex => 'Висока точність';
-
-  @override
-  String get settings_encoding_Section_preset_custom => 'Ручна конфігурація';
-
-  @override
-  String get settings_encoding_Section_measure_kbps => 'Kbps';
-
-  @override
-  String get settings_encoding_Section_measure_ms => 'ms';
-
-  @override
-  String get settings_encoding_Section_measure_hz => 'Hz';
-
-  @override
-  String get settings_encoding_Section_value_auto => 'Авто';
-
-  @override
-  String get settings_encoding_Section_value_mono => 'Моно';
-
-  @override
-  String get settings_encoding_Section_value_stereo => 'Стерео';
-
-  @override
-  String get settings_encoding_Section_value_enable => 'Увімкнено';
-
-  @override
-  String get settings_encoding_Section_value_disable => 'Вимкнено';
-
-  @override
-  String get settings_encoding_Section_bitrate_prefix => 'Бітрейт: ';
-
-  @override
-  String get settings_encoding_Section_ptime_prefix => 'Розмір: ';
-
-  @override
-  String get settings_encoding_Section_bandwidth_prefix => 'Діапазон: ';
-
-  @override
-  String get settings_encoding_Section_bitrate_title => 'Налаштування пропускної здатності';
-
-  @override
-  String get settings_encoding_Section_bitrate_tooltip => 'Налаштування пропускної здатності для аудіо-відео потоку, нижчі значення зменшать використання трафіку, більші значення покращать якість потоку';
-
-  @override
-  String get settings_encoding_Section_target_audio_bitrate => 'Цільовий бітрейт аудіо: ';
-
-  @override
-  String get settings_encoding_Section_target_video_bitrate => 'Цільовий бітрейт відео: ';
-
-  @override
-  String get settings_encoding_Section_packetization_title => 'Пакетизація аудіо';
-
-  @override
-  String get settings_encoding_Section_packetization_tooltip => 'Налаштування часу пакетування аудіо в мілісекундах, можна використовувати для зменшення затримки аудіо або вирішення проблем із розміром MTU мережі';
 
   @override
   String get settings_encoding_Section_audio_ptime => 'Цільовий розмір аудіо пакета: ';
@@ -1209,10 +1182,25 @@ class AppLocalizationsUk extends AppLocalizations {
   String get settings_encoding_Section_audio_ptime_limit => 'Ліміт розміру аудіо пакета: ';
 
   @override
-  String get settings_encoding_Section_opus_title => 'Налаштування кодека Opus';
+  String get settings_encoding_Section_bandwidth_prefix => 'Діапазон: ';
 
   @override
-  String get settings_encoding_Section_opus_tooltip => 'Налаштування кодека Opus, які можна використовувати для зменшення використання пропускної здатності або покращення якості звуку';
+  String get settings_encoding_Section_bitrate_prefix => 'Бітрейт: ';
+
+  @override
+  String get settings_encoding_Section_bitrate_title => 'Налаштування пропускної здатності';
+
+  @override
+  String get settings_encoding_Section_bitrate_tooltip => 'Налаштування пропускної здатності для аудіо-відео потоку, нижчі значення зменшать використання трафіку, більші значення покращать якість потоку';
+
+  @override
+  String get settings_encoding_Section_measure_hz => 'Hz';
+
+  @override
+  String get settings_encoding_Section_measure_kbps => 'Kbps';
+
+  @override
+  String get settings_encoding_Section_measure_ms => 'ms';
 
   @override
   String get settings_encoding_Section_opus_bandwidth => 'Перевизначення частотного діапазону: ';
@@ -1224,22 +1212,85 @@ class AppLocalizationsUk extends AppLocalizations {
   String get settings_encoding_Section_opus_dtx => 'Перевизначення режиму DTX: ';
 
   @override
+  String get settings_encoding_Section_opus_title => 'Налаштування кодека Opus';
+
+  @override
+  String get settings_encoding_Section_opus_tooltip => 'Налаштування кодека Opus, які можна використовувати для зменшення використання пропускної здатності або покращення якості звуку';
+
+  @override
+  String get settings_encoding_Section_packetization_title => 'Пакетизація аудіо';
+
+  @override
+  String get settings_encoding_Section_packetization_tooltip => 'Налаштування часу пакетування аудіо в мілісекундах, можна використовувати для зменшення затримки аудіо або вирішення проблем із розміром MTU мережі';
+
+  @override
+  String get settings_encoding_Section_preset => 'Налаштування';
+
+  @override
+  String get settings_encoding_Section_preset_balance => 'Баланс';
+
+  @override
+  String get settings_encoding_Section_preset_custom => 'Ручна конфігурація';
+
+  @override
+  String get settings_encoding_Section_preset_default => 'Стандарт';
+
+  @override
+  String get settings_encoding_Section_preset_eco => 'Єко';
+
+  @override
+  String get settings_encoding_Section_preset_full_flex => 'Висока точність';
+
+  @override
+  String get settings_encoding_Section_preset_quality => 'Якість';
+
+  @override
+  String get settings_encoding_Section_preset_title => 'Конфігурації кодування медіа';
+
+  @override
+  String get settings_encoding_Section_preset_tooltip => 'Попередні налаштування для аудіо- та відеокодеків, нижчі значення зменшать використання смуги пропускання, але вплинуть на якість, вищі значення підвищать якість, а також використання смуги пропускання. Стандартне налаштування — це рекомендовані налаштування, надані вашим постачальником відповідно до його вподобань середовища.';
+
+  @override
+  String get settings_encoding_Section_ptime_prefix => 'Розмір: ';
+
+  @override
+  String get settings_encoding_Section_rtp_override_audio => 'Перевизначення аудіо профілів';
+
+  @override
   String get settings_encoding_Section_rtp_override_title => 'Пріоретизація та вилучення профілів RTP';
 
   @override
   String get settings_encoding_Section_rtp_override_tooltip => 'Можна використовувати для зміни порядку пріоритету профілів аудіо та відео rtp або виключення деяких профілів зі списку узгодження SDP, це можна використовувати для примусового використання певних кодеків або виключення деяких кодеків, якщо вони погано підтримуються пристроєм, мережею чи віддаленою системою';
 
   @override
-  String get settings_encoding_Section_rtp_override_audio => 'Перевизначення аудіо профілів';
+  String get settings_encoding_Section_rtp_override_video => 'Перевизначення відео профілів';
 
   @override
-  String get settings_encoding_Section_rtp_override_video => 'Перевизначення відео профілів';
+  String get settings_encoding_Section_rtp_override_warning_message => 'Перевизначення профілів може вплинути на сумісність з іншими пристроями чи медіасистемами та спричинити помилки виклику. Використовуйте, лише якщо знаєте, що робите';
 
   @override
   String get settings_encoding_Section_rtp_override_warning_title => 'Увага';
 
   @override
-  String get settings_encoding_Section_rtp_override_warning_message => 'Перевизначення профілів може вплинути на сумісність з іншими пристроями чи медіасистемами та спричинити помилки виклику. Використовуйте, лише якщо знаєте, що робите';
+  String get settings_encoding_Section_target_audio_bitrate => 'Цільовий бітрейт аудіо: ';
+
+  @override
+  String get settings_encoding_Section_target_video_bitrate => 'Цільовий бітрейт відео: ';
+
+  @override
+  String get settings_encoding_Section_value_auto => 'Авто';
+
+  @override
+  String get settings_encoding_Section_value_disable => 'Вимкнено';
+
+  @override
+  String get settings_encoding_Section_value_enable => 'Увімкнено';
+
+  @override
+  String get settings_encoding_Section_value_mono => 'Моно';
+
+  @override
+  String get settings_encoding_Section_value_stereo => 'Стерео';
 
   @override
   String get settings_ListViewTileTitle_about => 'Про програму';
@@ -1248,10 +1299,10 @@ class AppLocalizationsUk extends AppLocalizations {
   String get settings_ListViewTileTitle_accountDelete => 'Видалити обліковий запис';
 
   @override
-  String get settings_ListViewTileTitle_encoding => 'Кодування медіа';
+  String get settings_ListViewTileTitle_call_codecs => 'Кодеки дзвінка';
 
   @override
-  String get settings_ListViewTileTitle_self_config => 'Сторінка спец-налаштувань';
+  String get settings_ListViewTileTitle_encoding => 'Кодування медіа';
 
   @override
   String get settings_ListViewTileTitle_help => 'Допомога';
@@ -1270,6 +1321,9 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get settings_ListViewTileTitle_registered => 'Зареєстровано';
+
+  @override
+  String get settings_ListViewTileTitle_self_config => 'Сторінка спец-налаштувань';
 
   @override
   String get settings_ListViewTileTitle_settings => 'НАЛАШТУВАННЯ';
@@ -1305,6 +1359,18 @@ class AppLocalizationsUk extends AppLocalizations {
   String get settings_network_incomingCallType_title => 'Тип вхідного дзвінка';
 
   @override
+  String get signalingResponseCode_ambiguousRequest => 'Ваш запит не може бути виконаний. Будь ласка, спробуйте ще раз.';
+
+  @override
+  String get signalingResponseCode_busyEverywhere => 'Всі лінії зайняті. Будь ласка, спробуйте пізніше.';
+
+  @override
+  String get signalingResponseCode_callNotExist => 'Дзвінок не існує.';
+
+  @override
+  String get signalingResponseCode_declineCall => 'Ваш дзвінок було відхилено.';
+
+  @override
   String get signalingResponseCode_errorAttachingPlugin => 'Ми зіткнулися з проблемою підключення функції. Будь ласка, спробуйте пізніше.';
 
   @override
@@ -1314,7 +1380,13 @@ class AppLocalizationsUk extends AppLocalizations {
   String get signalingResponseCode_errorSendingMessage => 'Ми не змогли відправити ваше повідомлення. Перевірте мережу і спробуйте ще раз.';
 
   @override
+  String get signalingResponseCode_exchangeRoutingError => 'Ми не можемо знайти маршрут для виконання вашого запиту. Будь ласка, спробуйте пізніше.';
+
+  @override
   String get signalingResponseCode_handleNotFound => 'Ми не змогли знайти те, що ви шукаєте. Будь ласка, спробуйте ще раз.';
+
+  @override
+  String get signalingResponseCode_incompatibleDestination => 'Ваш запит не може бути виконаний.';
 
   @override
   String get signalingResponseCode_invalidElementType => 'Щось пішло не так. Будь ласка, спробуйте ще раз.';
@@ -1326,6 +1398,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get signalingResponseCode_invalidJsonObject => 'Деяка інформація, яку ви надали, є недійсною. Будь ласка, перевірте і спробуйте ще раз.';
 
   @override
+  String get signalingResponseCode_invalidNumberFormat => 'Невірний формат номера';
+
+  @override
   String get signalingResponseCode_invalidPath => 'Запитувана дія недоступна. Будь ласка, спробуйте інший варіант.';
 
   @override
@@ -1335,10 +1410,19 @@ class AppLocalizationsUk extends AppLocalizations {
   String get signalingResponseCode_invalidStream => 'Запитуваний потік недоступний. Будь ласка, спробуйте ще раз.';
 
   @override
+  String get signalingResponseCode_loopDetected => 'Ми не можемо знайти маршрут для виконання вашого запиту. Будь ласка, спробуйте пізніше.';
+
+  @override
   String get signalingResponseCode_missingMandatoryElement => 'Необхідна інформація відсутня. Будь ласка, заповніть усі обов\'язкові поля.';
 
   @override
   String get signalingResponseCode_missingRequest => 'Щось пішло не так із вашим запитом. Будь ласка, спробуйте ще раз.';
+
+  @override
+  String get signalingResponseCode_normalUnspecified => 'Щось пішло не так. Будь ласка, спробуйте ще раз.';
+
+  @override
+  String get signalingResponseCode_notAcceptable => 'Ваш запит не може бути виконаний. Будь ласка, спробуйте ще раз.';
 
   @override
   String get signalingResponseCode_notAcceptingNewSessions => 'Ми не можемо розпочати нові сесії зараз. Будь ласка, спробуйте пізніше.';
@@ -1348,6 +1432,12 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get signalingResponseCode_pluginNotFound => 'Відсутній необхідний компонент. Спробуйте перезапустити додаток.';
+
+  @override
+  String get signalingResponseCode_rejected => 'Ваш запит було відхилено. Будь ласка, спробуйте ще раз.';
+
+  @override
+  String get signalingResponseCode_requestTerminated => 'Ваш запит було відхилено. Будь ласка, спробуйте ще раз.';
 
   @override
   String get signalingResponseCode_sessionIdInUse => 'Ця сесія вже активна. Спробуйте використовувати іншу сесію.';
@@ -1362,49 +1452,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get signalingResponseCode_transportSpecificError => 'Виникла проблема з підключенням. Перевірте свою мережу і спробуйте знову.';
 
   @override
-  String get signalingResponseCode_normalUnspecified => 'Щось пішло не так. Будь ласка, спробуйте ще раз.';
-
-  @override
-  String get signalingResponseCode_callNotExist => 'Дзвінок не існує.';
-
-  @override
-  String get signalingResponseCode_loopDetected => 'Ми не можемо знайти маршрут для виконання вашого запиту. Будь ласка, спробуйте пізніше.';
-
-  @override
-  String get signalingResponseCode_exchangeRoutingError => 'Ми не можемо знайти маршрут для виконання вашого запиту. Будь ласка, спробуйте пізніше.';
-
-  @override
-  String get signalingResponseCode_invalidNumberFormat => 'Невірний формат номера';
-
-  @override
-  String get signalingResponseCode_ambiguousRequest => 'Ваш запит не може бути виконаний. Будь ласка, спробуйте ще раз.';
-
-  @override
-  String get signalingResponseCode_userBusy => 'Користувач, якого ви намагаєтеся знайти, зайнятий. Будь ласка, спробуйте пізніше.';
-
-  @override
-  String get signalingResponseCode_requestTerminated => 'Ваш запит було відхилено. Будь ласка, спробуйте ще раз.';
-
-  @override
-  String get signalingResponseCode_incompatibleDestination => 'Ваш запит не може бути виконаний.';
-
-  @override
-  String get signalingResponseCode_busyEverywhere => 'Всі лінії зайняті. Будь ласка, спробуйте пізніше.';
-
-  @override
-  String get signalingResponseCode_declineCall => 'Ваш дзвінок було відхилено.';
-
-  @override
-  String get signalingResponseCode_userNotExist => 'Користувача, якого ви намагаєтеся знайти, не існує.';
-
-  @override
-  String get signalingResponseCode_notAcceptable => 'Ваш запит не може бути виконаний. Будь ласка, спробуйте ще раз.';
-
-  @override
-  String get signalingResponseCode_unwanted => 'Ваш запит не може бути виконаний. Будь ласка, спробуйте ще раз.';
-
-  @override
-  String get signalingResponseCode_rejected => 'Ваш запит було відхилено. Будь ласка, спробуйте ще раз.';
+  String get signalingResponseCodeType_callHangup => 'Ваш дзвінок було завершено.';
 
   @override
   String get signalingResponseCodeType_plugin => 'Не працює необхідна функція. Спробуйте перезапустити додаток.';
@@ -1431,9 +1479,6 @@ class AppLocalizationsUk extends AppLocalizations {
   String get signalingResponseCodeType_webrtc => 'Виникла проблема з підключенням дзвінка. Завершіть дзвінок і спробуйте знову.';
 
   @override
-  String get signalingResponseCodeType_callHangup => 'Ваш дзвінок було завершено.';
-
-  @override
   String get signalingResponseCode_unauthorizedAccess => 'У вас немає дозволу на доступ до цієї функції. Зверніться до служби підтримки, якщо вважаєте, що це помилка.';
 
   @override
@@ -1452,7 +1497,54 @@ class AppLocalizationsUk extends AppLocalizations {
   String get signalingResponseCode_unsupportedJsepType => 'Ця дія не підтримується вашими поточними налаштуваннями.';
 
   @override
+  String get signalingResponseCode_unwanted => 'Ваш запит не може бути виконаний. Будь ласка, спробуйте ще раз.';
+
+  @override
+  String get signalingResponseCode_userBusy => 'Користувач, якого ви намагаєтеся знайти, зайнятий. Будь ласка, спробуйте пізніше.';
+
+  @override
+  String get signalingResponseCode_userNotExist => 'Користувача, якого ви намагаєтеся знайти, не існує.';
+
+  @override
   String get signalingResponseCode_wrongWebrtcState => 'Сталася помилка, пов’язана з викликом. Завершіть виклик і спробуйте ще раз.';
+
+  @override
+  String get socketError_connectionRefused => 'З\'єднання відхилено';
+
+  @override
+  String get socketError_connectionRefusedDescription => 'Сервер відхилив з\'єднання. Можливо, сервер недоступний або відхиляє запити. Спробуйте пізніше.';
+
+  @override
+  String get socketError_connectionReset => 'З\'єднання було скинуто';
+
+  @override
+  String get socketError_connectionResetDescription => 'З\'єднання було скинуто сервером. Спробуйте знову.';
+
+  @override
+  String get socketError_connectionTimedOut => 'Час з\'єднання вичерпано';
+
+  @override
+  String get socketError_connectionTimedOutDescription => 'Час з\'єднання вичерпано. Це може статися через повільне або нестабільне інтернет-з\'єднання. Перевірте своє з\'єднання та спробуйте знову.';
+
+  @override
+  String get socketError_default => 'Мережева помилка';
+
+  @override
+  String socketError_defaultDescription(int? errorCode) {
+    return 'Виникла неочікувана мережева помилка (Код помилки: $errorCode). Це може бути спричинено проблемами з мережею або сервером. Спробуйте пізніше.';
+  }
+
+  @override
+  String get socketError_networkUnreachable => 'Мережа недоступна';
+
+  @override
+  String get socketError_networkUnreachableDescription => 'Мережа недоступна. Це може бути спричинено слабким інтернет-з\'єднанням, обмеженнями мережі, такими як фаєрволи, або неправильними налаштуваннями DNS. Якщо ви використовуєте робочу або обмежену мережу, зверніться до адміністратора мережі або спробуйте підключитися до іншої мережі.';
+
+  @override
+  String get socketError_serverUnreachable => 'Сервер недоступний через проблеми з мережею';
+
+  @override
+  String get socketError_serverUnreachableDescription => 'Сервер недоступний. Це може бути спричинено відсутністю інтернет-з\'єднання або технічним обслуговуванням сервера. Перевірте інтернет-з\'єднання та спробуйте знову.';
 
   @override
   String get themeMode_dark => 'Темний';
@@ -1486,58 +1578,8 @@ class AppLocalizationsUk extends AppLocalizations {
   String get webRegistration_ErrorAcknowledgeDialogActions_retry => 'Retry';
 
   @override
-  String get contacts_agreement_title => 'Збір даних';
-
-  @override
-  String get contacts_agreement_description => 'Цей додаток потребує доступу до вашого списку контактів, щоб відображати їх у вкладці «Контакти» додатку. \n\nДані контактів тимчасово зберігаються локально на вашому пристрої для забезпечення функцій, таких як здійснення дзвінків прямо з додатку. \n\nЦі дані не збираються, не передаються та не поширюються за межами додатку.';
-
-  @override
-  String get contacts_agreement_checkbox_text => 'Я погоджуюсь дозволити додатку доступ до моїх контактів для покращення користувацького досвіду.';
-
-  @override
-  String get contacts_agreement_button_text => 'Продовжити';
-
-  @override
   String get webRegistration_ErrorAcknowledgeDialogActions_skip => 'Skip';
 
   @override
   String get webRegistration_ErrorAcknowledgeDialog_title => 'Web resource error';
-
-  @override
-  String get socketError_serverUnreachable => 'Сервер недоступний через проблеми з мережею';
-
-  @override
-  String get socketError_networkUnreachable => 'Мережа недоступна';
-
-  @override
-  String get socketError_connectionTimedOut => 'Час з\'єднання вичерпано';
-
-  @override
-  String get socketError_connectionRefused => 'З\'єднання відхилено';
-
-  @override
-  String get socketError_connectionReset => 'З\'єднання було скинуто';
-
-  @override
-  String get socketError_default => 'Мережева помилка';
-
-  @override
-  String get socketError_serverUnreachableDescription => 'Сервер недоступний. Це може бути спричинено відсутністю інтернет-з\'єднання або технічним обслуговуванням сервера. Перевірте інтернет-з\'єднання та спробуйте знову.';
-
-  @override
-  String get socketError_networkUnreachableDescription => 'Мережа недоступна. Це може бути спричинено слабким інтернет-з\'єднанням, обмеженнями мережі, такими як фаєрволи, або неправильними налаштуваннями DNS. Якщо ви використовуєте робочу або обмежену мережу, зверніться до адміністратора мережі або спробуйте підключитися до іншої мережі.';
-
-  @override
-  String get socketError_connectionTimedOutDescription => 'Час з\'єднання вичерпано. Це може статися через повільне або нестабільне інтернет-з\'єднання. Перевірте своє з\'єднання та спробуйте знову.';
-
-  @override
-  String get socketError_connectionRefusedDescription => 'Сервер відхилив з\'єднання. Можливо, сервер недоступний або відхиляє запити. Спробуйте пізніше.';
-
-  @override
-  String get socketError_connectionResetDescription => 'З\'єднання було скинуто сервером. Спробуйте знову.';
-
-  @override
-  String socketError_defaultDescription(int? errorCode) {
-    return 'Виникла неочікувана мережева помилка (Код помилки: $errorCode). Це може бути спричинено проблемами з мережею або сервером. Спробуйте пізніше.';
-  }
 }
