@@ -5,6 +5,7 @@ flutter_launcher_icons:
   adaptive_icon_background: "#123752"
   adaptive_icon_foreground: "tool/assets/launcher_icons/ic_foreground.png"
   ios: true
+  remove_alpha_ios: true
   image_path_ios: "tool/assets/launcher_icons/ios.png"
   web:
     generate: true

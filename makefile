@@ -102,6 +102,7 @@ generate-launcher-icons-config:
 	@echo "  adaptive_icon_background: \"$${ADAPTIVE_ICON_BACKGROUND:-$(ADAPTIVE_ICON_BACKGROUND)}\"" >> $(FLUTTER_LAUNCHER_ICONS_CONFIG)
 	@echo "  adaptive_icon_foreground: \"$${LAUNCHER_ICON_FOREGROUND:-$(LAUNCHER_ICON_FOREGROUND)}\"" >> $(FLUTTER_LAUNCHER_ICONS_CONFIG)
 	@echo "  ios: true" >> $(FLUTTER_LAUNCHER_ICONS_CONFIG)
+	@echo "  remove_alpha_ios: true" >> $(FLUTTER_LAUNCHER_ICONS_CONFIG)
 	@echo "  image_path_ios: \"$${LAUNCHER_ICON_IMAGE_IOS:-$(LAUNCHER_ICON_IMAGE_IOS)}\"" >> $(FLUTTER_LAUNCHER_ICONS_CONFIG)
 	@echo "  web:" >> $(FLUTTER_LAUNCHER_ICONS_CONFIG)
 	@echo "    generate: true" >> $(FLUTTER_LAUNCHER_ICONS_CONFIG)
