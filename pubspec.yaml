@@ -116,8 +116,7 @@ dev_dependencies:
   bloc_test: ^9.1.7
   build_runner: ^2.4.9
   flutter_gen_runner: ^5.4.0
-  flutter_launcher_icons:
-    git: https://github.com/fluttercommunity/flutter_launcher_icons.git
+  flutter_launcher_icons: ^0.14.3
   flutter_lints: ^4.0.0
   flutter_native_splash: ^2.4.0
   freezed: ^2.5.2
