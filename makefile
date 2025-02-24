@@ -7,7 +7,7 @@ CONFIGURATOR = dart run ../webtrit_phone_tools/bin/webtrit_phone_tools.dart
 KEYSTORES_PATH = --keystores-path=../webtrit_phone_keystores
 
 # Paths to configuration files
-CONFIGS_PATH = /Users/serdun/Documents/work/webtrit/webtrit_phone/tool/configs
+CONFIGS_PATH = $(CURDIR)/tool/configs
 FLUTTER_LAUNCHER_ICONS_CONFIG = $(CONFIGS_PATH)/flutter_launcher_icons.yaml
 FLUTTER_NATIVE_SPLASH_CONFIG = $(CONFIGS_PATH)/flutter_native_splash.yaml
 FLUTTER_RENAME_PACKAGE_CONFIG = $(CONFIGS_PATH)/package_rename_config.yaml
