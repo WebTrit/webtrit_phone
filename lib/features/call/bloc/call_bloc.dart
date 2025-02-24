@@ -611,7 +611,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _signalingClient = null;
 
     Notification? notificationToShow;
-    bool shouldReconnect = true;
 
     if (code == SignalingDisconnectCode.appUnregisteredError) {
       add(const _RegistrationChange(registration: Registration(status: RegistrationStatus.unregistered)));
@@ -622,9 +621,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     } else if (code == SignalingDisconnectCode.sessionMissedError) {
       notificationToShow = const SignalingSessionMissedNotification();
     } else if (code.type == SignalingDisconnectCodeType.auxiliary) {
-      _logger.info('__onSignalingClientEventDisconnected: network goes down');
+      // Be sure to differenciate it from the network disconnect which is handled by the connectivity plugin
+      // This can happen on our server issue, or on fast switching from one network to another (wifi to mobile)
+      // So in this case it should try to reconnect with _reconnectInitiated
+      _logger.info('__onSignalingClientEventDisconnected: socket goes down');
       add(const _RegistrationChange(registration: Registration(status: RegistrationStatus.unregistered)));
-      shouldReconnect = false;
     } else {
       notificationToShow = SignalingDisconnectNotification(
         knownCode: code,
@@ -634,7 +635,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     }
 
     if (notificationToShow != null && !repeated) submitNotification(notificationToShow);
-    if (shouldReconnect) _reconnectInitiated(kSignalingClientReconnectDelay);
+    _reconnectInitiated(kSignalingClientReconnectDelay);
   }
 
   // processing call push events
