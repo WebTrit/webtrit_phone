@@ -125,7 +125,7 @@ class SettingsScreen extends StatelessWidget {
                                       leading: Icon(item.icon),
                                       title: Text(context.parseL10n(item.titleL10n)),
                                       onTap: () => context.router.navigate(
-                                          HelpScreenPageRoute(initialUriQueryParam: item.data!.resource.toString())),
+                                          HelpScreenPageRoute(initialUriQueryParam: item.data!.uri.toString())),
                                     ),
                                     const ListTileSeparator(),
                                   ])

@@ -169,9 +169,7 @@ class FeatureAccess {
     }
 
     // Return a ConfigData instance if a valid resource URL is found, otherwise return null.
-    return embeddedDataResourceUrl != null
-        ? ConfigData(resource: embeddedDataResourceUrl, titleL10n: item.titleL10n)
-        : null;
+    return embeddedDataResourceUrl != null ? ConfigData(uri: embeddedDataResourceUrl, titleL10n: item.titleL10n) : null;
   }
 
   static LoginFeature _tryEnableCustomLoginFeature(AppConfig appConfig) {
@@ -272,7 +270,7 @@ class FeatureAccess {
     _logger.info('Privacy policy resource found: ${termsResource.uriOrNull}');
 
     return TermsFeature(ConfigData(
-      resource: termsResource.uriOrNull!,
+      uri: termsResource.uriOrNull!,
       titleL10n: termsResource.toolbar.titleL10n,
     ));
   }
