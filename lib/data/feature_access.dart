@@ -12,9 +12,39 @@ import 'package:webtrit_phone/theme/theme.dart';
 
 final Logger _logger = Logger('FeatureAccess');
 
-// This class handles more than just data, as it encapsulates logic for configuring features.
-// Consider moving it into dedicated service components to improve separation of concerns
-// and maintainability.
+/// This class encapsulates the logic for configuring and managing various app features,
+/// including login, bottom menu, settings, calls, messaging, and terms.
+/// It initializes these features based on the provided `AppConfig` and `AppPreferences`.
+///
+/// Configuration Overview:
+///
+/// 1. **LoginFeature**: Configures custom login options, including embedded login screens
+///    and available login actions. The login configuration is based on the data in `AppConfig`.
+///
+/// 2. **BottomMenuFeature**: Configures the bottom navigation menu, enabling/disabling specific tabs,
+///    setting the initial tab, and caching the active tab preference. The tab configuration is sourced
+///    from `AppConfig.mainConfig.bottomMenu`.
+///
+/// 3. **SettingsFeature**: Configures the app’s settings screen by defining sections and items
+///    based on the platform and the app configuration. It also handles embedded resources for settings items.
+///    - **Embedded Resources**: Each setting item can either have an embedded resource linked via an `embeddedResourceId`
+///      or by matching the resource’s type. Resources are first searched by ID, and if not found, the class searches
+///      by type (e.g., `terms` for privacy policy).
+///    - **Resource Assignment Priority**:
+///      - **First**, the `embeddedResourceId` within the setting item is checked.
+///      - **Second**, if no `embeddedResourceId` is found, the resource is searched based on its type (e.g., `terms`).
+///    - **Terms Handling**: If a setting item is related to terms (e.g., privacy policy) and no `embeddedResourceId`
+///      is provided, `TermsFeature` is used to assign the appropriate terms resource.
+///
+/// 4. **CallFeature**: Configures call-related settings, including video call support,
+///    and configurations for call transfer and encoding. The call configuration is derived from `AppConfig.callConfig`.
+///
+/// 5. **MessagingFeature**: Configures messaging features, including SMS and internal chat support, based on the
+///    system's capabilities and the app configuration. It determines whether the messaging tab is displayed in the app
+///    and enables corresponding messaging features.
+///
+/// 6. **TermsFeature**: Configures access to privacy policy and terms resources. It retrieves the privacy policy URL
+///    from embedded resources and assigns it to the appropriate settings item when needed.
 class FeatureAccess {
   static late FeatureAccess _instance;
 
@@ -388,6 +418,14 @@ class MessagingFeature {
   bool get chatsPresent => coreChatsSupport && tabEnabled;
 }
 
+/// Represents the configuration of the terms and privacy policy feature in the app.
+/// The `TermsFeature` class is responsible for assigning the correct terms resource, either from
+/// a provided embedded resource ID or by searching for a resource of type `terms`.
+///
+/// Configuration Scheme:
+/// 1. **Embedded Resource**: The `TermsFeature` looks for an embedded resource of type `terms`
+///    to assign the privacy policy. If the embedded resource is not explicitly provided in `AppConfig`,
+///    it will be searched in the embedded resources by type.
 class TermsFeature {
   final ConfigData configData;
 
