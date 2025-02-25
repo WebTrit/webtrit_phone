@@ -134,8 +134,7 @@ class SettingsScreen extends StatelessWidget {
                                     ListTile(
                                       leading: Icon(item.icon),
                                       title: Text(context.parseL10n(item.titleL10n)),
-                                      onTap: () => context.router.navigate(TermsConditionsScreenPageRoute(
-                                          initialUriQueryParam: item.data!.resource.toString())),
+                                      onTap: () => context.router.navigate(EmbeddedScreenPage.route(item.data!)),
                                     ),
                                     const ListTileSeparator(),
                                   ])
