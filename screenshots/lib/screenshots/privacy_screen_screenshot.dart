@@ -10,14 +10,10 @@ class PrivacyScreenScreenshot extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final url = context.read<FeatureAccess>().settingsFeature.termsAndConditions?.data?.resource;
+    final url = context.read<FeatureAccess>().termsFeature.configData.resource;
 
-    if (url != null) {
-      return TermsConditionsScreen(
-        initialUri: context.read<FeatureAccess>().settingsFeature.termsAndConditions!.data!.resource,
-      );
-    } else {
-      return const Placeholder();
-    }
+    return TermsConditionsScreen(
+      initialUri: url,
+    );
   }
 }
