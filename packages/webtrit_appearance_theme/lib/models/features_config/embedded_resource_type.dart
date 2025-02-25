@@ -1,0 +1,1 @@
+enum EmbeddedResourceType { terms, unknown }

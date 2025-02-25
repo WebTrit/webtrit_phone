@@ -11,6 +11,8 @@ _$EmbeddedResourceImpl _$$EmbeddedResourceImplFromJson(
     _$EmbeddedResourceImpl(
       id: (json['id'] as num).toInt(),
       uri: json['uri'] as String,
+      type: $enumDecodeNullable(_$EmbeddedResourceTypeEnumMap, json['type']) ??
+          EmbeddedResourceType.unknown,
       attributes: json['attributes'] as Map<String, dynamic>? ?? const {},
       toolbar: json['toolbar'] == null
           ? const ToolbarConfig()
@@ -25,10 +27,16 @@ Map<String, dynamic> _$$EmbeddedResourceImplToJson(
     <String, dynamic>{
       'id': instance.id,
       'uri': instance.uri,
+      'type': _$EmbeddedResourceTypeEnumMap[instance.type]!,
       'attributes': instance.attributes,
       'toolbar': instance.toolbar.toJson(),
       'metadata': instance.metadata.toJson(),
     };
+
+const _$EmbeddedResourceTypeEnumMap = {
+  EmbeddedResourceType.terms: 'terms',
+  EmbeddedResourceType.unknown: 'unknown',
+};
 
 _$ToolbarConfigImpl _$$ToolbarConfigImplFromJson(Map<String, dynamic> json) =>
     _$ToolbarConfigImpl(
