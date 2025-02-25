@@ -294,7 +294,10 @@ class FeatureAccess {
     // with a direct link to the embedded resource. Implement logic to check if the feature access
     // doesn't have a link, and if not, search the embedded resources by type in the list.
     if (termsResource == null) {
-      throw Exception('Privacy policy resource is missing');
+      throw EmbeddedResourceMissingException(
+        message: 'Terms  resource is missing',
+        embeddedResourceType: EmbeddedResourceType.terms,
+      );
     }
 
     _logger.info('Privacy policy resource found: ${termsResource.uriOrNull}');
