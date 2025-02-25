@@ -18,6 +18,7 @@ export 'contact_phone.dart';
 export 'contact_source_type.dart';
 export 'enableble.dart';
 export 'encoding_settings.dart';
+export 'exceptions/exceptions.dart';
 export 'external_contact.dart';
 export 'failures/failures.dart';
 export 'favorite.dart';

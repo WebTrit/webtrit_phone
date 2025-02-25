@@ -34,14 +34,11 @@ class EmbeddedResource with _$EmbeddedResource {
   /// Safely parses `resource` to a `uri`, returning `null` if invalid
   Uri? get uriOrNull => Uri.tryParse(uri);
 
-  /// A globally consistent metadata key used to associate additional resources
-  static const String metadataResourceUrl = 'resourceUrl';
+  /// A globally consistent metadata key used to associate asset IDs
+  static const String metadataAssetId = 'id';
 
-  /// A globally consistent metadata key used to associate additional resources
-  static const String metadataResourceId = 'resourceId';
-
-  /// A globally consistent metadata key used to associate additional resources
-  static const String metadataResourceURI = 'resourceURI';
+  /// A globally consistent metadata key used to associate asset sources
+  static const String metadataAssetSource = 'source';
 }
 
 /// Configuration for the toolbar associated with an embedded resource.
