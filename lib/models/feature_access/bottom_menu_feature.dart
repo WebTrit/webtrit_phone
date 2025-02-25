@@ -39,5 +39,11 @@ class ContactsBottomMenuTab extends BottomMenuTab {
 }
 
 extension BottomMenuTabExtension on BottomMenuTab {
-  ContactsBottomMenuTab? get toContacts => this as ContactsBottomMenuTab?;
+  ContactsBottomMenuTab? get toContacts {
+    if (this is ContactsBottomMenuTab) {
+      return this as ContactsBottomMenuTab?;
+    } else {
+      return null;
+    }
+  }
 }
