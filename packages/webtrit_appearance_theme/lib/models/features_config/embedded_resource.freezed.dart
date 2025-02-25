@@ -22,6 +22,7 @@ EmbeddedResource _$EmbeddedResourceFromJson(Map<String, dynamic> json) {
 mixin _$EmbeddedResource {
   int get id => throw _privateConstructorUsedError;
   String get uri => throw _privateConstructorUsedError;
+  EmbeddedResourceType get type => throw _privateConstructorUsedError;
   Map<String, dynamic> get attributes => throw _privateConstructorUsedError;
   ToolbarConfig get toolbar => throw _privateConstructorUsedError;
   Metadata get metadata => throw _privateConstructorUsedError;
@@ -45,6 +46,7 @@ abstract class $EmbeddedResourceCopyWith<$Res> {
   $Res call(
       {int id,
       String uri,
+      EmbeddedResourceType type,
       Map<String, dynamic> attributes,
       ToolbarConfig toolbar,
       Metadata metadata});
@@ -70,6 +72,7 @@ class _$EmbeddedResourceCopyWithImpl<$Res, $Val extends EmbeddedResource>
   $Res call({
     Object? id = null,
     Object? uri = null,
+    Object? type = null,
     Object? attributes = null,
     Object? toolbar = null,
     Object? metadata = null,
@@ -83,6 +86,10 @@ class _$EmbeddedResourceCopyWithImpl<$Res, $Val extends EmbeddedResource>
           ? _value.uri
           : uri // ignore: cast_nullable_to_non_nullable
               as String,
+      type: null == type
+          ? _value.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as EmbeddedResourceType,
       attributes: null == attributes
           ? _value.attributes
           : attributes // ignore: cast_nullable_to_non_nullable
@@ -130,6 +137,7 @@ abstract class _$$EmbeddedResourceImplCopyWith<$Res>
   $Res call(
       {int id,
       String uri,
+      EmbeddedResourceType type,
       Map<String, dynamic> attributes,
       ToolbarConfig toolbar,
       Metadata metadata});
@@ -155,6 +163,7 @@ class __$$EmbeddedResourceImplCopyWithImpl<$Res>
   $Res call({
     Object? id = null,
     Object? uri = null,
+    Object? type = null,
     Object? attributes = null,
     Object? toolbar = null,
     Object? metadata = null,
@@ -168,6 +177,10 @@ class __$$EmbeddedResourceImplCopyWithImpl<$Res>
           ? _value.uri
           : uri // ignore: cast_nullable_to_non_nullable
               as String,
+      type: null == type
+          ? _value.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as EmbeddedResourceType,
       attributes: null == attributes
           ? _value._attributes
           : attributes // ignore: cast_nullable_to_non_nullable
@@ -191,6 +204,7 @@ class _$EmbeddedResourceImpl extends _EmbeddedResource {
   const _$EmbeddedResourceImpl(
       {required this.id,
       required this.uri,
+      this.type = EmbeddedResourceType.unknown,
       final Map<String, dynamic> attributes = const {},
       this.toolbar = const ToolbarConfig(),
       this.metadata = const Metadata()})
@@ -204,6 +218,9 @@ class _$EmbeddedResourceImpl extends _EmbeddedResource {
   final int id;
   @override
   final String uri;
+  @override
+  @JsonKey()
+  final EmbeddedResourceType type;
   final Map<String, dynamic> _attributes;
   @override
   @JsonKey()
@@ -222,7 +239,7 @@ class _$EmbeddedResourceImpl extends _EmbeddedResource {
 
   @override
   String toString() {
-    return 'EmbeddedResource(id: $id, uri: $uri, attributes: $attributes, toolbar: $toolbar, metadata: $metadata)';
+    return 'EmbeddedResource(id: $id, uri: $uri, type: $type, attributes: $attributes, toolbar: $toolbar, metadata: $metadata)';
   }
 
   @override
@@ -232,6 +249,7 @@ class _$EmbeddedResourceImpl extends _EmbeddedResource {
             other is _$EmbeddedResourceImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.uri, uri) || other.uri == uri) &&
+            (identical(other.type, type) || other.type == type) &&
             const DeepCollectionEquality()
                 .equals(other._attributes, _attributes) &&
             (identical(other.toolbar, toolbar) || other.toolbar == toolbar) &&
@@ -241,7 +259,7 @@ class _$EmbeddedResourceImpl extends _EmbeddedResource {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, uri,
+  int get hashCode => Object.hash(runtimeType, id, uri, type,
       const DeepCollectionEquality().hash(_attributes), toolbar, metadata);
 
   /// Create a copy of EmbeddedResource
@@ -265,6 +283,7 @@ abstract class _EmbeddedResource extends EmbeddedResource {
   const factory _EmbeddedResource(
       {required final int id,
       required final String uri,
+      final EmbeddedResourceType type,
       final Map<String, dynamic> attributes,
       final ToolbarConfig toolbar,
       final Metadata metadata}) = _$EmbeddedResourceImpl;
@@ -277,6 +296,8 @@ abstract class _EmbeddedResource extends EmbeddedResource {
   int get id;
   @override
   String get uri;
+  @override
+  EmbeddedResourceType get type;
   @override
   Map<String, dynamic> get attributes;
   @override
