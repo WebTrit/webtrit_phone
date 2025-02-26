@@ -58,26 +58,26 @@ To execute the full localization process, use the following sequence of commands
 #### Push localization keys to Localizely
 
    ```sh
-    push-localizations:
+    push-l10n:
     localizely-cli --api-token=$(token) push
    ```
 
 #### Pull localization keys from Localizely
 
    ```sh
-    pull-localizations:
+    pull-l10n:
     localizely-cli --api-token=$(token) pull
    ```
 
 #### Generate Flutter localization files
 
    ```sh
-generate-localizations:
+gen-l10n:
     flutter gen-l10n
    ```
 
-#### Full localization workflow (Push, Pull, Generate)
+## Fetch localization keys from Localizely, pull them and generate localization files
 
    ```sh
-localization-workflow: push-localizations pull-localizations generate-localizations
+fetch-l10n: pull-l10n gen-l10n
 ```
