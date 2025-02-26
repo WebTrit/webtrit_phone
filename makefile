@@ -40,8 +40,6 @@ else
     FLUTTER_FLAGS = $(DART_DEFINE_FILE)  --no-tree-shake-icons
 endif
 
-
-
 # Fetch token from the file if not provided as a parameter
 ifeq ($(token),)
     ifeq ($(wildcard $(TOKEN_FILE)),)
