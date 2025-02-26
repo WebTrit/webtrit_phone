@@ -30,11 +30,25 @@ LAUNCHER_ICON_IMAGE_WEB ?= "tool/assets/launcher_icons/web.png"
 LAUNCHER_ICON_FOREGROUND ?= "tool/assets/launcher_icons/ic_foreground.png"
 SPLASH_IMAGE ?= "tool/assets/native_splash/image.png"
 
+# Path to token file (if token is not passed as a parameter)
+TOKEN_FILE ?= $(CURDIR)/tool/configs/localizely_token.txt
+
 # Determine Flutter flags based on build type
 ifeq ($(BUILD_TYPE), release)
     FLUTTER_FLAGS = $(DART_DEFINE_FILE) --release  --no-tree-shake-icons
 else
     FLUTTER_FLAGS = $(DART_DEFINE_FILE)  --no-tree-shake-icons
+endif
+
+
+
+# Fetch token from the file if not provided as a parameter
+ifeq ($(token),)
+    ifeq ($(wildcard $(TOKEN_FILE)),)
+        $(error Token not provided and file not found: $(TOKEN_FILE))
+    else
+        token := $(shell cat $(TOKEN_FILE))
+    endif
 endif
 
 # Rules
