@@ -1556,7 +1556,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get themeMode_system => 'Системний';
 
   @override
-  String get user_agreement_agrement_link => 'угодою';
+  String get user_agreement_agrement_link => 'Умови договору';
 
   @override
   String get user_agreement_button_text => 'Продовжити';
