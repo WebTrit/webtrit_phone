@@ -698,6 +698,8 @@
   "@notifications_errorSnackBar_callWhileOffline": {},
   "notifications_errorSnackBar_callWhileUnregistered": "Вибачте, ваш додаток наразі відключений від серверів WebTrit, тому не може здійснювати дзвінки. Будь ласка, перейдіть у налаштування та вимкніть/увімкніть онлайн-статус, щоб відновити підключення.",
   "@notifications_errorSnackBar_callWhileUnregistered": {},
+  "notifications_errorSnackBar_callNegotiationTimeout": "Не вдається здійснити виклик, спробуйте пізніше",
+  "@notifications_errorSnackBar_callNegotiationTimeout": {},
   "notifications_errorSnackBar_SignalingConnectFailed": "Підключення до ядра не вдалося, спроба з'єднання",
   "@notifications_errorSnackBar_SignalingConnectFailed": {},
   "notifications_errorSnackBar_signalingDisconnectWithCodeName": "Від’єднано від ядра за кодом: {codeName}",

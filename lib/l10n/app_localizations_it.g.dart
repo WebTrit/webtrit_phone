@@ -979,6 +979,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get notifications_errorSnackBar_callWhileUnregistered => 'Siamo spiacenti, la tua applicazione è attualmente disconnessa dai server principali WebTrit e quindi non è possibile chiamare in questo momento. Vai alla pagina delle impostazioni e fai scorrere l\'interruttore dello stato online ( a OFF e poi ancora ad ON) per ristabilire la connessione';
 
   @override
+  String get notifications_errorSnackBar_callNegotiationTimeout => 'Impossibile stabilire la chiamata, riprovare più tardi';
+
+  @override
   String get notifications_errorSnackBar_SignalingConnectFailed => 'Connessione al server non riuscita, tentativo di riconnessione in corso';
 
   @override

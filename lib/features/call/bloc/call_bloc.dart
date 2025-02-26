@@ -40,12 +40,6 @@ const int _kUndefinedLine = -1;
 
 final _logger = Logger('CallBloc');
 
-// TODO(Vlad):
-// - move offer processing and media capturing from [__onCallSignalingEventIncoming] to [__onCallPerformEventAnswered]
-//   to avoid unnecessary media capturing for unwanted calls and race conditions for answering
-//   also avoid flickers with error message for calls that user didnt event want to answer
-//   in case when media permissins are not granted
-
 class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver implements CallkeepDelegate {
   final String coreUrl;
   final String tenantId;
@@ -780,6 +774,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         displayName: event.callerDisplayName,
         video: video,
         transfer: transfer,
+        incomingOffer: event.jsep,
       );
       emit(state.copyWithMappedActiveCall(event.callId, (_) => activeCall!));
     } else {
@@ -792,68 +787,19 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         video: video,
         createdTime: clock.now(),
         transfer: transfer,
+        incomingOffer: event.jsep,
         processingStatus: CallProcessingStatus.incomingFromOffer,
       );
       emit(state.copyWithPushActiveCall(activeCall));
     }
 
-    try {
-      final localStream = await _getUserMedia(video: video, frontCamera: activeCall.frontCamera);
-
-      final peerConnection = await _createPeerConnection(event.callId);
-      localStream.getTracks().forEach((track) async {
-        await peerConnection.addTrack(track, localStream);
-      });
-
-      final jsep = event.jsep;
-      if (jsep != null) {
-        final remoteDescription = jsep.toDescription();
-        await peerConnection.setRemoteDescription(remoteDescription);
-      }
-
-      _peerConnectionComplete(event.callId, peerConnection);
-
-      emit(state.copyWithMappedActiveCall(event.callId, (activeCall) {
-        return activeCall.copyWith(localStream: localStream, incomingOfferHandled: true);
-      }));
-
-      // Defer the event execution to the end of the event loop to avoid exceptions like CallkeepCallRequestError.internal.
-      // Can occur when the user quickly answers or ends a call.
-      // TODO(Serdun): Investigate how it can be improved without using Future.delayed.
-      Future.delayed(Duration.zero, () {
-        if (callAlreadyAnswered) {
-          add(CallControlEvent.answered(event.callId));
-        } else if (callAlreadyTerminated) {
-          add(CallControlEvent.ended(event.callId));
-        }
-      });
-    } catch (e, stackTrace) {
-      _logger.warning('__onCallSignalingEventIncoming _getUserMedia', e, stackTrace);
-
-      await callkeep.reportEndCall(
-        event.callId,
-        activeCall.displayName ?? activeCall.handle.value,
-        CallkeepEndCallReason.failed,
-      );
-
-      _addToRecents(activeCall.copyWith(hungUpTime: clock.now()));
-
-      _peerConnectionCompleteError(event.callId, e, stackTrace);
-
-      submitNotification(const CallUserMediaErrorNotification());
-
-      emit(state.copyWithPopActiveCall(event.callId));
-
-      var declineRequest = DeclineRequest(
-        transaction: WebtritSignalingClient.generateTransactionId(),
-        line: activeCall.line,
-        callId: activeCall.callId,
-      );
-
-      _signalingClient?.execute(declineRequest).catchError((e) {
-        _logger.warning('__onCallSignalingEventIncoming declineRequest error: $e');
-      });
-    }
+    // Ensure to continue processing call if push action(answer, decline) pressed but app was'nt active at this moment
+    // typically happens on android from terminated or background state,
+    // on ios it produce second call of [__onCallPerformEventAnswered] or [__onCallPerformEventEnded]
+    // so make sure to guard it from race conditions
+    await Future.delayed(Duration.zero); // Defer execution to avoid exceptions like CallkeepCallRequestError.internal.
+    if (callAlreadyAnswered) add(CallControlEvent.answered(event.callId));
+    if (callAlreadyTerminated) add(CallControlEvent.ended(event.callId));
   }
 
   // no early media - play ringtone
@@ -889,6 +835,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     }
   }
 
+  /// Event fired when the call is accepted by any! user or call update request aplied.
+  /// main cases:
+  /// as call connected event after [__onCallPerformEventAnswered] or [__onCallPerformEventStarted]
+  /// or as acknowledge of [UpdateRequest] with new jsep.
   Future<void> __onCallSignalingEventAccepted(
     _CallSignalingEventAccepted event,
     Emitter<CallState> emit,
@@ -899,22 +849,21 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     if (activeCall.direction == CallDirection.outgoing) {
       await _stopRingbackSound();
       await callkeep.reportConnectedOutgoingCall(event.callId);
+    }
 
-      final jsep = event.jsep;
-      if (jsep != null) {
-        final peerConnection = await _peerConnectionRetrieve(event.callId);
-        if (peerConnection == null) {
-          _logger
-              .warning('__onCallSignalingEventAccepted: peerConnection is null - most likely some permissions issue');
-        } else {
-          final remoteDescription = jsep.toDescription();
-          await peerConnection.setRemoteDescription(remoteDescription);
-        }
-      }
+    final jsep = event.jsep;
+    final pc = await _peerConnectionRetrieve(event.callId);
+    if (jsep != null && pc != null) {
+      final remoteDescription = jsep.toDescription();
+      await pc.setRemoteDescription(remoteDescription);
     }
 
     emit(state.copyWithMappedActiveCall(event.callId, (call) {
-      return call.copyWith(acceptedTime: clock.now(), processingStatus: CallProcessingStatus.connected);
+      return call.copyWith(
+        processingStatus: CallProcessingStatus.connected,
+        acceptedTime: call.acceptedTime ?? clock.now(),
+        video: event.jsep?.hasVideo ?? false,
+      );
     }));
   }
 
@@ -1734,12 +1683,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       return;
     }
 
-    emit(state.copyWithMappedActiveCall(
-      event.callId,
-      (call) => call.copyWith(
-        processingStatus: CallProcessingStatus.incomingPerformingAnswer,
-      ),
-    ));
+    emit(state.copyWithMappedActiveCall(event.callId, (call) {
+      return call.copyWith(processingStatus: CallProcessingStatus.incomingPerformingStarted);
+    }));
 
     try {
       /// Prevent performing answer without offer
@@ -1747,27 +1693,34 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       /// Main case happens when the call is answered from push event while signaling is disconnected
       /// and main [IncomingEvent] with offer wasnt received yet
       ///
-      final offerHandled = call.incomingOfferHandled;
-
-      if (offerHandled == false) {
+      if (call.incomingOffer == null) {
         _logger.info('__onCallPerformEventAnswered: wait for offer');
 
         await stream.firstWhere((s) {
           final activeCall = s.retrieveActiveCall(event.callId);
-          return activeCall?.incomingOfferHandled == true;
+          return activeCall?.incomingOffer != null;
         }).timeout(const Duration(seconds: 10), onTimeout: () {
           throw TimeoutException('Timed out waiting for offer');
         });
 
         call = state.retrieveActiveCall(event.callId)!;
       }
+      final offer = call.incomingOffer!;
 
-      _logger.info('__onCallPerformEventAnswered: start performing sdp answer');
+      emit(state.copyWithMappedActiveCall(event.callId, (call) {
+        return call.copyWith(processingStatus: CallProcessingStatus.incomingInitializingMedia);
+      }));
 
-      await _stopRingbackSound();
+      final localStream = await _getUserMedia(video: offer.hasVideo, frontCamera: call.frontCamera);
+      final peerConnection = await _createPeerConnection(event.callId);
+      await Future.forEach(localStream.getTracks(), (t) => peerConnection.addTrack(t, localStream));
 
-      final peerConnection = (await _peerConnectionRetrieve(event.callId))!;
+      emit(state.copyWithMappedActiveCall(event.callId, (call) {
+        return call.copyWith(localStream: localStream, processingStatus: CallProcessingStatus.incomingAnswering);
+      }));
 
+      final remoteDescription = offer.toDescription();
+      await peerConnection.setRemoteDescription(remoteDescription);
       final localDescription = await peerConnection.createAnswer({});
       sdpMunger?.apply(localDescription);
 
@@ -1778,12 +1731,31 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         jsep: localDescription.toMap(),
       ));
       await peerConnection.setLocalDescription(localDescription);
-    } catch (e) {
-      _logger.warning('__onCallPerformEventAnswered: $e');
-      submitNotification(DefaultErrorNotification(e));
+
+      _peerConnectionComplete(event.callId, peerConnection);
+    } catch (e, s) {
+      _logger.warning('__onCallPerformEventAnswered: $e', e, s);
 
       _peerConnectionCompleteError(event.callId, e);
       add(_ResetStateEvent.completeCall(event.callId));
+
+      _addToRecents(call!);
+
+      final declineId = WebtritSignalingClient.generateTransactionId();
+      final declineRequest = DeclineRequest(transaction: declineId, line: call.line, callId: call.callId);
+      _signalingClient?.execute(declineRequest).ignore();
+
+      switch (e) {
+        case UserMediaError _:
+          submitNotification(const CallUserMediaErrorNotification());
+          break;
+        case TimeoutException _:
+          submitNotification(const CallNegotiationTimeoutNotification());
+          break;
+        default:
+          submitNotification(DefaultErrorNotification(e));
+          break;
+      }
     }
   }
 
@@ -2454,7 +2426,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
             }
           : false,
     };
-    final localStream = await navigator.mediaDevices.getUserMedia(mediaConstraints);
+    final localStream = await navigator.mediaDevices.getUserMedia(mediaConstraints).catchError((e) {
+      throw UserMediaError(e.toString());
+    });
+
     if (!kIsWeb) {
       await Helper.setAppleAudioConfiguration(AppleAudioConfiguration(
         appleAudioMode: video ? AppleAudioMode.videoChat : AppleAudioMode.voiceChat,
@@ -2574,4 +2549,13 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       _logger.warning('_signalingDeclineCall hangupRequest error: $e');
     });
   }
+}
+
+class UserMediaError implements Exception {
+  final String message;
+
+  UserMediaError(this.message);
+
+  @override
+  String toString() => 'UserMediaError: $message';
 }
