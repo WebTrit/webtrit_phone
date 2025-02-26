@@ -30,11 +30,23 @@ LAUNCHER_ICON_IMAGE_WEB ?= "tool/assets/launcher_icons/web.png"
 LAUNCHER_ICON_FOREGROUND ?= "tool/assets/launcher_icons/ic_foreground.png"
 SPLASH_IMAGE ?= "tool/assets/native_splash/image.png"
 
+# Path to token file (if token is not passed as a parameter)
+TOKEN_FILE ?= $(CURDIR)/tool/configs/localizely_token.txt
+
 # Determine Flutter flags based on build type
 ifeq ($(BUILD_TYPE), release)
     FLUTTER_FLAGS = $(DART_DEFINE_FILE) --release  --no-tree-shake-icons
 else
     FLUTTER_FLAGS = $(DART_DEFINE_FILE)  --no-tree-shake-icons
+endif
+
+# Fetch token from the file if not provided as a parameter
+ifeq ($(token),)
+    ifeq ($(wildcard $(TOKEN_FILE)),)
+        $(error Token not provided and file not found: $(TOKEN_FILE))
+    else
+        token := $(shell cat $(TOKEN_FILE))
+    endif
 endif
 
 # Rules
@@ -132,19 +144,19 @@ generate-native-splash:
 generate-assets: generate-launcher-icons generate-native-splash
 
 ## Push localization keys to Localizely
-push-localizations:
+push-l10n:
 	localizely-cli --api-token=$(token) push
 
 ## Pull localization keys from Localizely
-pull-localizations:
+pull-l10n:
 	localizely-cli --api-token=$(token) pull
 
 ## Generate Flutter localization files
-generate-localizations:
+gen-l10n:
 	flutter gen-l10n
 
-## Full localization workflow (Push, Pull, Generate)
-localization-workflow: push-localizations pull-localizations generate-localizations
+## Fetch localization keys from Localizely, pull them and generate localization files
+fetch-l10n: pull-l10n gen-l10n
 
 ## Clean git files
 clean-git:
