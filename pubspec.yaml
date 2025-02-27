@@ -48,7 +48,7 @@ dependencies:
   flutter_webrtc:
     git:
       url: https://github.com/WebTrit/flutter-webrtc.git
-      ref: main_ext_rebase_04.02.25
+      ref: main_ext_rebase_27.02.25
   formz: ^0.7.0
   freezed_annotation: ^2.4.1
   google_fonts: ^6.2.1
