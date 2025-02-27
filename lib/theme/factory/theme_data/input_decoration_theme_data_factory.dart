@@ -27,7 +27,7 @@ class InputDecorationThemeDataFactory implements ThemeStyleFactory<InputDecorati
       // TODO: add fill color from widget settings model
       fillColor: colors.surfaceBright,
       labelStyle: TextStyle(color: labelStyleColor),
-      border: MaterialStateOutlineInputBorder.resolveWith((states) {
+      border: WidgetStateInputBorder.resolveWith((states) {
         final bool isError = states.contains(WidgetState.error);
         final Color borderColor;
 
