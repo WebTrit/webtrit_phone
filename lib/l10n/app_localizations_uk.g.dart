@@ -979,6 +979,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get notifications_errorSnackBar_callWhileUnregistered => 'Вибачте, ваш додаток наразі відключений від серверів WebTrit, тому не може здійснювати дзвінки. Будь ласка, перейдіть у налаштування та вимкніть/увімкніть онлайн-статус, щоб відновити підключення.';
 
   @override
+  String get notifications_errorSnackBar_callNegotiationTimeout => 'Не вдається здійснити виклик, спробуйте пізніше';
+
+  @override
   String get notifications_errorSnackBar_SignalingConnectFailed => 'Підключення до ядра не вдалося, спроба з\'єднання';
 
   @override

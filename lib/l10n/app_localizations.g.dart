@@ -1993,6 +1993,12 @@ abstract class AppLocalizations {
   /// **'Sorry, your application is currently disconnected from the WebTrit core servers, so it can\'t call right now. Please go to the settings page and slide the online status toggle switch off and on again to reestablish the connection'**
   String get notifications_errorSnackBar_callWhileUnregistered;
 
+  /// No description provided for @notifications_errorSnackBar_callNegotiationTimeout.
+  ///
+  /// In en, this message translates to:
+  /// **'Cannot establish the call, please try again later'**
+  String get notifications_errorSnackBar_callNegotiationTimeout;
+
   /// No description provided for @notifications_errorSnackBar_SignalingConnectFailed.
   ///
   /// In en, this message translates to:

@@ -4067,22 +4067,16 @@ class _$CallSignalingEventNotifyImpl
             (identical(other.line, line) || other.line == line) &&
             (identical(other.callId, callId) || other.callId == callId) &&
             (identical(other.notify, notify) || other.notify == notify) &&
-            const DeepCollectionEquality()
-                .equals(other.subscriptionState, subscriptionState) &&
+            (identical(other.subscriptionState, subscriptionState) ||
+                other.subscriptionState == subscriptionState) &&
             (identical(other.contentType, contentType) ||
                 other.contentType == contentType) &&
             (identical(other.content, content) || other.content == content));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      line,
-      callId,
-      notify,
-      const DeepCollectionEquality().hash(subscriptionState),
-      contentType,
-      content);
+  int get hashCode => Object.hash(runtimeType, line, callId, notify,
+      subscriptionState, contentType, content);
 
   @override
   @optionalTypeArgs
@@ -12862,11 +12856,11 @@ mixin _$ActiveCall {
   bool get video => throw _privateConstructorUsedError;
   CallProcessingStatus get processingStatus =>
       throw _privateConstructorUsedError;
-  bool get incomingOfferHandled => throw _privateConstructorUsedError;
   bool? get frontCamera => throw _privateConstructorUsedError;
   bool get held => throw _privateConstructorUsedError;
   bool get muted => throw _privateConstructorUsedError;
   bool get updating => throw _privateConstructorUsedError;
+  JsepValue? get incomingOffer => throw _privateConstructorUsedError;
   String? get displayName => throw _privateConstructorUsedError;
   String? get fromReferId => throw _privateConstructorUsedError;
   DateTime? get acceptedTime => throw _privateConstructorUsedError;
@@ -12897,11 +12891,11 @@ abstract class $ActiveCallCopyWith<$Res> {
       DateTime createdTime,
       bool video,
       CallProcessingStatus processingStatus,
-      bool incomingOfferHandled,
       bool? frontCamera,
       bool held,
       bool muted,
       bool updating,
+      JsepValue? incomingOffer,
       String? displayName,
       String? fromReferId,
       DateTime? acceptedTime,
@@ -12936,11 +12930,11 @@ class _$ActiveCallCopyWithImpl<$Res, $Val extends ActiveCall>
     Object? createdTime = null,
     Object? video = null,
     Object? processingStatus = null,
-    Object? incomingOfferHandled = null,
     Object? frontCamera = freezed,
     Object? held = null,
     Object? muted = null,
     Object? updating = null,
+    Object? incomingOffer = freezed,
     Object? displayName = freezed,
     Object? fromReferId = freezed,
     Object? acceptedTime = freezed,
@@ -12979,10 +12973,6 @@ class _$ActiveCallCopyWithImpl<$Res, $Val extends ActiveCall>
           ? _value.processingStatus
           : processingStatus // ignore: cast_nullable_to_non_nullable
               as CallProcessingStatus,
-      incomingOfferHandled: null == incomingOfferHandled
-          ? _value.incomingOfferHandled
-          : incomingOfferHandled // ignore: cast_nullable_to_non_nullable
-              as bool,
       frontCamera: freezed == frontCamera
           ? _value.frontCamera
           : frontCamera // ignore: cast_nullable_to_non_nullable
@@ -12999,6 +12989,10 @@ class _$ActiveCallCopyWithImpl<$Res, $Val extends ActiveCall>
           ? _value.updating
           : updating // ignore: cast_nullable_to_non_nullable
               as bool,
+      incomingOffer: freezed == incomingOffer
+          ? _value.incomingOffer
+          : incomingOffer // ignore: cast_nullable_to_non_nullable
+              as JsepValue?,
       displayName: freezed == displayName
           ? _value.displayName
           : displayName // ignore: cast_nullable_to_non_nullable
@@ -13062,11 +13056,11 @@ abstract class _$$ActiveCallImplCopyWith<$Res>
       DateTime createdTime,
       bool video,
       CallProcessingStatus processingStatus,
-      bool incomingOfferHandled,
       bool? frontCamera,
       bool held,
       bool muted,
       bool updating,
+      JsepValue? incomingOffer,
       String? displayName,
       String? fromReferId,
       DateTime? acceptedTime,
@@ -13100,11 +13094,11 @@ class __$$ActiveCallImplCopyWithImpl<$Res>
     Object? createdTime = null,
     Object? video = null,
     Object? processingStatus = null,
-    Object? incomingOfferHandled = null,
     Object? frontCamera = freezed,
     Object? held = null,
     Object? muted = null,
     Object? updating = null,
+    Object? incomingOffer = freezed,
     Object? displayName = freezed,
     Object? fromReferId = freezed,
     Object? acceptedTime = freezed,
@@ -13143,10 +13137,6 @@ class __$$ActiveCallImplCopyWithImpl<$Res>
           ? _value.processingStatus
           : processingStatus // ignore: cast_nullable_to_non_nullable
               as CallProcessingStatus,
-      incomingOfferHandled: null == incomingOfferHandled
-          ? _value.incomingOfferHandled
-          : incomingOfferHandled // ignore: cast_nullable_to_non_nullable
-              as bool,
       frontCamera: freezed == frontCamera
           ? _value.frontCamera
           : frontCamera // ignore: cast_nullable_to_non_nullable
@@ -13163,6 +13153,10 @@ class __$$ActiveCallImplCopyWithImpl<$Res>
           ? _value.updating
           : updating // ignore: cast_nullable_to_non_nullable
               as bool,
+      incomingOffer: freezed == incomingOffer
+          ? _value.incomingOffer
+          : incomingOffer // ignore: cast_nullable_to_non_nullable
+              as JsepValue?,
       displayName: freezed == displayName
           ? _value.displayName
           : displayName // ignore: cast_nullable_to_non_nullable
@@ -13207,11 +13201,11 @@ class _$ActiveCallImpl extends _ActiveCall with DiagnosticableTreeMixin {
       required this.createdTime,
       required this.video,
       required this.processingStatus,
-      this.incomingOfferHandled = false,
       this.frontCamera = true,
       this.held = false,
       this.muted = false,
       this.updating = false,
+      this.incomingOffer,
       this.displayName,
       this.fromReferId,
       this.acceptedTime,
@@ -13238,9 +13232,6 @@ class _$ActiveCallImpl extends _ActiveCall with DiagnosticableTreeMixin {
   final CallProcessingStatus processingStatus;
   @override
   @JsonKey()
-  final bool incomingOfferHandled;
-  @override
-  @JsonKey()
   final bool? frontCamera;
   @override
   @JsonKey()
@@ -13251,6 +13242,8 @@ class _$ActiveCallImpl extends _ActiveCall with DiagnosticableTreeMixin {
   @override
   @JsonKey()
   final bool updating;
+  @override
+  final JsepValue? incomingOffer;
   @override
   final String? displayName;
   @override
@@ -13270,7 +13263,7 @@ class _$ActiveCallImpl extends _ActiveCall with DiagnosticableTreeMixin {
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'ActiveCall(direction: $direction, line: $line, callId: $callId, handle: $handle, createdTime: $createdTime, video: $video, processingStatus: $processingStatus, incomingOfferHandled: $incomingOfferHandled, frontCamera: $frontCamera, held: $held, muted: $muted, updating: $updating, displayName: $displayName, fromReferId: $fromReferId, acceptedTime: $acceptedTime, hungUpTime: $hungUpTime, transfer: $transfer, failure: $failure, localStream: $localStream, remoteStream: $remoteStream)';
+    return 'ActiveCall(direction: $direction, line: $line, callId: $callId, handle: $handle, createdTime: $createdTime, video: $video, processingStatus: $processingStatus, frontCamera: $frontCamera, held: $held, muted: $muted, updating: $updating, incomingOffer: $incomingOffer, displayName: $displayName, fromReferId: $fromReferId, acceptedTime: $acceptedTime, hungUpTime: $hungUpTime, transfer: $transfer, failure: $failure, localStream: $localStream, remoteStream: $remoteStream)';
   }
 
   @override
@@ -13285,11 +13278,11 @@ class _$ActiveCallImpl extends _ActiveCall with DiagnosticableTreeMixin {
       ..add(DiagnosticsProperty('createdTime', createdTime))
       ..add(DiagnosticsProperty('video', video))
       ..add(DiagnosticsProperty('processingStatus', processingStatus))
-      ..add(DiagnosticsProperty('incomingOfferHandled', incomingOfferHandled))
       ..add(DiagnosticsProperty('frontCamera', frontCamera))
       ..add(DiagnosticsProperty('held', held))
       ..add(DiagnosticsProperty('muted', muted))
       ..add(DiagnosticsProperty('updating', updating))
+      ..add(DiagnosticsProperty('incomingOffer', incomingOffer))
       ..add(DiagnosticsProperty('displayName', displayName))
       ..add(DiagnosticsProperty('fromReferId', fromReferId))
       ..add(DiagnosticsProperty('acceptedTime', acceptedTime))
@@ -13315,14 +13308,14 @@ class _$ActiveCallImpl extends _ActiveCall with DiagnosticableTreeMixin {
             (identical(other.video, video) || other.video == video) &&
             (identical(other.processingStatus, processingStatus) ||
                 other.processingStatus == processingStatus) &&
-            (identical(other.incomingOfferHandled, incomingOfferHandled) ||
-                other.incomingOfferHandled == incomingOfferHandled) &&
             (identical(other.frontCamera, frontCamera) ||
                 other.frontCamera == frontCamera) &&
             (identical(other.held, held) || other.held == held) &&
             (identical(other.muted, muted) || other.muted == muted) &&
             (identical(other.updating, updating) ||
                 other.updating == updating) &&
+            (identical(other.incomingOffer, incomingOffer) ||
+                other.incomingOffer == incomingOffer) &&
             (identical(other.displayName, displayName) ||
                 other.displayName == displayName) &&
             (identical(other.fromReferId, fromReferId) ||
@@ -13350,11 +13343,11 @@ class _$ActiveCallImpl extends _ActiveCall with DiagnosticableTreeMixin {
         createdTime,
         video,
         processingStatus,
-        incomingOfferHandled,
         frontCamera,
         held,
         muted,
         updating,
+        incomingOffer,
         displayName,
         fromReferId,
         acceptedTime,
@@ -13383,11 +13376,11 @@ abstract class _ActiveCall extends ActiveCall {
       required final DateTime createdTime,
       required final bool video,
       required final CallProcessingStatus processingStatus,
-      final bool incomingOfferHandled,
       final bool? frontCamera,
       final bool held,
       final bool muted,
       final bool updating,
+      final JsepValue? incomingOffer,
       final String? displayName,
       final String? fromReferId,
       final DateTime? acceptedTime,
@@ -13413,8 +13406,6 @@ abstract class _ActiveCall extends ActiveCall {
   @override
   CallProcessingStatus get processingStatus;
   @override
-  bool get incomingOfferHandled;
-  @override
   bool? get frontCamera;
   @override
   bool get held;
@@ -13422,6 +13413,8 @@ abstract class _ActiveCall extends ActiveCall {
   bool get muted;
   @override
   bool get updating;
+  @override
+  JsepValue? get incomingOffer;
   @override
   String? get displayName;
   @override

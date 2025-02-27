@@ -9,9 +9,11 @@ extension ProcessingStatusL10n on CallProcessingStatus {
     switch (this) {
       case CallProcessingStatus.incomingFromOffer || CallProcessingStatus.incomingFromPush:
         return context.l10n.callProcessingStatus_ringing;
-      case CallProcessingStatus.incomingSubmittedAnswer:
+      case CallProcessingStatus.incomingSubmittedAnswer || CallProcessingStatus.incomingPerformingStarted:
         return context.l10n.callProcessingStatus_preparing;
-      case CallProcessingStatus.incomingPerformingAnswer:
+      case CallProcessingStatus.incomingInitializingMedia:
+        return context.l10n.callProcessingStatus_init_media;
+      case CallProcessingStatus.incomingAnswering:
         return context.l10n.callProcessingStatus_answering;
 
       case CallProcessingStatus.outgoingCreated || CallProcessingStatus.outgoingCreatedFromRefer:
