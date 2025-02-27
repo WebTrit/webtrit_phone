@@ -4,7 +4,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/blocs/blocs.dart';
-import 'package:webtrit_phone/data/app_info.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/features/features.dart';
