@@ -56,9 +56,7 @@ class BackoffRetries {
       case RetryDelayStrategy.exponential:
         final exponentialDelay = currentDelay * 2;
         return exponentialDelay <= maxDelay ? exponentialDelay : maxDelay;
-      default:
-        return currentDelay;
-    }
+      }
   }
 
   void cancel() {
