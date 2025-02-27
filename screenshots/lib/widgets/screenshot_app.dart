@@ -94,6 +94,7 @@ class ScreenshotRouterDelegate extends RouterDelegate<Object> with ChangeNotifie
           child: child,
         ),
       ],
+      // ignore: deprecated_member_use
       onPopPage: (route, result) {
         if (!route.didPop(result)) {
           return false;
