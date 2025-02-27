@@ -112,14 +112,14 @@ class ChatConversationsCubit extends Cubit<ChatConversationsState> {
   Future<List<Contact>> _evaluateContacts(List<Chat> chats) async {
     final userIds = chats.expand((e) => e.members).map((e) => e.userId).toSet();
     final q = await Future.wait(userIds.map((e) => _contactsRepo.getContactBySource(ContactSourceType.external, e)));
-    return q.whereNotNull().toList();
+    return q.nonNulls.toList();
   }
 
   List<ChatWithMessageAndMemebers> _mergeChatsWithContacts(List<(Chat, ChatMessage?)> chats, List<Contact> contacts) {
     final contactMap = {for (final contact in contacts) contact.sourceId: contact};
     return chats.map((e) {
       final (chat, lastMessage) = e;
-      final chatContacts = chat.members.map((e) => contactMap[e.userId]).whereNotNull().toList();
+      final chatContacts = chat.members.map((e) => contactMap[e.userId]).nonNulls.toList();
       return (chat: chat, message: lastMessage, contacts: chatContacts);
     }).toList();
   }
