@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_web_libraries_in_flutter
 
-import 'dart:html';
+// ignore: depend_on_referenced_packages
+import 'package:web/web.dart';
 
 import 'package:flutter/foundation.dart';
 
