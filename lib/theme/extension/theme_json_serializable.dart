@@ -44,6 +44,6 @@ extension CSSColorStringToColorExtension on String {
 
 extension ColorToCSSColorStringExtension on Color {
   String toCSSColorString() {
-    return '#${value.toRadixString(16).toUpperCase().padLeft(8, '0')}';
+    return '#${toARGB32().toRadixString(16).toUpperCase().padLeft(8, '0')}';
   }
 }

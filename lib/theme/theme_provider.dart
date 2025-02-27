@@ -48,7 +48,7 @@ class ThemeProvider extends InheritedWidget {
   /// Returns a blended color or `seedColor` if no blending is needed.
   Color _blend(Color? target, Color seedColor, {bool harmonize = true}) {
     if (target == null || target == seedColor || !harmonize) return seedColor;
-    return Color(Blend.harmonize(target.value, seedColor.value));
+    return Color(Blend.harmonize(target.toARGB32(), seedColor.toARGB32()));
   }
 
   /// Determines the source color based on the provided target and seed color.

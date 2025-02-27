@@ -9,8 +9,6 @@ extension DirectionConverting on CallDirection {
         return isComplete ? Icons.call_received : Icons.call_missed;
       case CallDirection.outgoing:
         return isComplete ? Icons.call_made : Icons.call_missed_outgoing;
-      default:
-        return Icons.close;
     }
   }
 }
