@@ -3259,8 +3259,8 @@ class _$AppConfigSettingsImpl extends _AppConfigSettings {
                   icon: '0xe424'),
               AppConfigSettingsItem(
                   enabled: true,
-                  type: 'encoding',
-                  titleL10n: 'settings_ListViewTileTitle_encoding',
+                  type: 'mediaSettings',
+                  titleL10n: 'settings_ListViewTileTitle_mediaSettings',
                   icon: '0xf1cf'),
               AppConfigSettingsItem(
                   enabled: true,

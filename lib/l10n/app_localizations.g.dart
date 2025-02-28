@@ -91,11 +91,7 @@ abstract class AppLocalizations {
   ];
 
   /// A list of this localizations delegate's supported locales.
-  static const List<Locale> supportedLocales = <Locale>[
-    Locale('en'),
-    Locale('it'),
-    Locale('uk')
-  ];
+  static const List<Locale> supportedLocales = <Locale>[Locale('en'), Locale('it'), Locale('uk')];
 
   /// No description provided for @account_selfCarePasswordExpired_message.
   ///
@@ -1397,7 +1393,8 @@ abstract class AppLocalizations {
   ///
   /// In en, this message translates to:
   /// **'Incompatible WebTrit Cloud Backend version, please contact the administrator of your system.\n\nInstance version:\n{actual}\n\nSupported version:\n{supportedConstraint}'**
-  String main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError(String actual, String supportedConstraint);
+  String main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError(
+      String actual, String supportedConstraint);
 
   /// No description provided for @main_CompatibilityIssueDialog_title.
   ///
@@ -2491,11 +2488,11 @@ abstract class AppLocalizations {
   /// **'Delete account'**
   String get settings_ListViewTileTitle_accountDelete;
 
-  /// No description provided for @settings_ListViewTileTitle_encoding.
+  /// No description provided for @settings_ListViewTileTitle_mediaSettings.
   ///
   /// In en, this message translates to:
   /// **'Media encoding'**
-  String get settings_ListViewTileTitle_encoding;
+  String get settings_ListViewTileTitle_mediaSettings;
 
   /// No description provided for @settings_ListViewTileTitle_self_config.
   ///
@@ -3084,19 +3081,18 @@ class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> 
 }
 
 AppLocalizations lookupAppLocalizations(Locale locale) {
-
-
   // Lookup logic when only language code is specified.
   switch (locale.languageCode) {
-    case 'en': return AppLocalizationsEn();
-    case 'it': return AppLocalizationsIt();
-    case 'uk': return AppLocalizationsUk();
+    case 'en':
+      return AppLocalizationsEn();
+    case 'it':
+      return AppLocalizationsIt();
+    case 'uk':
+      return AppLocalizationsUk();
   }
 
-  throw FlutterError(
-    'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
-    'an issue with the localizations generation tool. Please file an issue '
-    'on GitHub with a reproducible sample app and the gen-l10n configuration '
-    'that was used.'
-  );
+  throw FlutterError('AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
+      'an issue with the localizations generation tool. Please file an issue '
+      'on GitHub with a reproducible sample app and the gen-l10n configuration '
+      'that was used.');
 }

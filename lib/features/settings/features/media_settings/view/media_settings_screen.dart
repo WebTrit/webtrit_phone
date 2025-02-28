@@ -8,23 +8,23 @@ import 'package:webtrit_phone/models/encoding_settings.dart';
 import 'package:webtrit_phone/models/rtp_codec_profile.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
-import '../encoding.dart';
+import '../media_settings.dart';
 
-class EncodingSettingsScreen extends StatefulWidget {
-  const EncodingSettingsScreen({super.key});
+class MediaSettingsScreen extends StatefulWidget {
+  const MediaSettingsScreen({super.key});
 
   @override
-  State<EncodingSettingsScreen> createState() => _EncodingSettingsScreenState();
+  State<MediaSettingsScreen> createState() => _MediaSettingsScreenState();
 }
 
-class _EncodingSettingsScreenState extends State<EncodingSettingsScreen> {
-  late final cubit = context.read<EncodingSettingsCubit>();
+class _MediaSettingsScreenState extends State<MediaSettingsScreen> {
+  late final cubit = context.read<MediaSettingsCubit>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(context.l10n.settings_ListViewTileTitle_encoding),
+        title: Text(context.l10n.settings_ListViewTileTitle_mediaSettings),
         leading: const ExtBackButton(),
         actions: [
           IconButton(
@@ -35,10 +35,10 @@ class _EncodingSettingsScreenState extends State<EncodingSettingsScreen> {
           ),
         ],
       ),
-      body: BlocBuilder<EncodingSettingsCubit, EncodingSettingState>(
+      body: BlocBuilder<MediaSettingsCubit, MediaSettingsState>(
         builder: (context, state) {
-          final preset = state.preset;
-          final settings = state.settings;
+          final encodingPreset = state.encodingPreset;
+          final encodingSettings = state.encodingSettings;
 
           return SingleChildScrollView(
             padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24),
@@ -64,10 +64,10 @@ class _EncodingSettingsScreenState extends State<EncodingSettingsScreen> {
                     });
                   },
                   options: EncodingPreset.values,
-                  selected: preset,
-                  onSelect: (option) => cubit.setPreset(option),
+                  selected: encodingPreset,
+                  onSelect: (option) => cubit.setEncodingPreset(option),
                 ),
-                if (preset == EncodingPreset.custom)
+                if (encodingPreset == EncodingPreset.custom)
                   Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -88,8 +88,8 @@ class _EncodingSettingsScreenState extends State<EncodingSettingsScreen> {
                           return '$option ${context.l10n.settings_encoding_Section_measure_kbps}';
                         },
                         options: EncodingSettings.audioBitrateOptions,
-                        selected: settings.audioBitrate,
-                        onSelect: (option) => cubit.setSettings(settings.copyWithAudioBitrate(option)),
+                        selected: encodingSettings.audioBitrate,
+                        onSelect: (option) => cubit.setEncodingSettings(encodingSettings.copyWithAudioBitrate(option)),
                       ),
                       const SizedBox(height: 16.0),
                       SlidableSection<int>(
@@ -100,8 +100,8 @@ class _EncodingSettingsScreenState extends State<EncodingSettingsScreen> {
                           return '$option ${context.l10n.settings_encoding_Section_measure_kbps}';
                         },
                         options: EncodingSettings.videoBitrateOptions,
-                        selected: settings.videoBitrate,
-                        onSelect: (option) => cubit.setSettings(settings.copyWithVideoBitrate(option)),
+                        selected: encodingSettings.videoBitrate,
+                        onSelect: (option) => cubit.setEncodingSettings(encodingSettings.copyWithVideoBitrate(option)),
                       ),
                       const SizedBox(height: 24),
                       HeadingSection(
@@ -118,13 +118,15 @@ class _EncodingSettingsScreenState extends State<EncodingSettingsScreen> {
                           return '$option ${context.l10n.settings_encoding_Section_measure_ms}';
                         },
                         options: EncodingSettings.ptimeOptions,
-                        selected: settings.ptime,
+                        selected: encodingSettings.ptime,
                         onSelect: (option) {
-                          var newSettings = settings.copyWithPtime(option);
-                          cubit.setSettings(newSettings);
-                          if (option != null && settings.maxptime != null && option > settings.maxptime!) {
+                          var newSettings = encodingSettings.copyWithPtime(option);
+                          cubit.setEncodingSettings(newSettings);
+                          if (option != null &&
+                              encodingSettings.maxptime != null &&
+                              option > encodingSettings.maxptime!) {
                             newSettings = newSettings.copyWithMaxptime(option);
-                            cubit.setSettings(newSettings);
+                            cubit.setEncodingSettings(newSettings);
                           }
                         },
                       ),
@@ -137,13 +139,13 @@ class _EncodingSettingsScreenState extends State<EncodingSettingsScreen> {
                           return '$option ${context.l10n.settings_encoding_Section_measure_ms}';
                         },
                         options: EncodingSettings.ptimeOptions,
-                        selected: settings.maxptime,
+                        selected: encodingSettings.maxptime,
                         onSelect: (option) {
-                          var newSettings = settings.copyWithMaxptime(option);
-                          cubit.setSettings(newSettings);
-                          if (option != null && settings.ptime != null && option < settings.ptime!) {
+                          var newSettings = encodingSettings.copyWithMaxptime(option);
+                          cubit.setEncodingSettings(newSettings);
+                          if (option != null && encodingSettings.ptime != null && option < encodingSettings.ptime!) {
                             newSettings = newSettings.copyWithPtime(option);
-                            cubit.setSettings(newSettings);
+                            cubit.setEncodingSettings(newSettings);
                           }
                         },
                       ),
@@ -162,8 +164,9 @@ class _EncodingSettingsScreenState extends State<EncodingSettingsScreen> {
                           return '$option ${context.l10n.settings_encoding_Section_measure_hz}';
                         },
                         options: EncodingSettings.opusBandwidthLimitOptions,
-                        selected: settings.opusBandwidthLimit,
-                        onSelect: (option) => cubit.setSettings(settings.copyWithOpusBandwidthLimit(option)),
+                        selected: encodingSettings.opusBandwidthLimit,
+                        onSelect: (option) =>
+                            cubit.setEncodingSettings(encodingSettings.copyWithOpusBandwidthLimit(option)),
                       ),
                       const SizedBox(height: 16.0),
                       ChoosableSection<bool>(
@@ -175,8 +178,8 @@ class _EncodingSettingsScreenState extends State<EncodingSettingsScreen> {
                           return Text(context.l10n.settings_encoding_Section_value_auto);
                         },
                         options: const [true, false],
-                        selected: settings.opusStereo,
-                        onSelect: (option) => cubit.setSettings(settings.copyWithOpusStereo(option)),
+                        selected: encodingSettings.opusStereo,
+                        onSelect: (option) => cubit.setEncodingSettings(encodingSettings.copyWithOpusStereo(option)),
                       ),
                       const SizedBox(height: 16.0),
                       ChoosableSection<bool>(
@@ -188,8 +191,8 @@ class _EncodingSettingsScreenState extends State<EncodingSettingsScreen> {
                           return Text(context.l10n.settings_encoding_Section_value_auto);
                         },
                         options: const [true, false],
-                        selected: settings.opusDtx,
-                        onSelect: (option) => cubit.setSettings(settings.copyWithOpusDtx(option)),
+                        selected: encodingSettings.opusDtx,
+                        onSelect: (option) => cubit.setEncodingSettings(encodingSettings.copyWithOpusDtx(option)),
                       ),
                       const SizedBox(height: 24),
                       HeadingSection(
@@ -206,17 +209,17 @@ class _EncodingSettingsScreenState extends State<EncodingSettingsScreen> {
                           if (option == null) return Text(context.l10n.settings_encoding_Section_value_auto);
                           return Text(option.name);
                         },
-                        enabled: settings.audioProfiles != null,
+                        enabled: encodingSettings.audioProfiles != null,
                         onEnable: (enabled) {
                           if (enabled) {
                             var profiles = EncodingSettings.defaultAudioProfilesOrder;
-                            cubit.setSettings(settings.copyWithAudioProfiles(profiles));
+                            cubit.setEncodingSettings(encodingSettings.copyWithAudioProfiles(profiles));
                           } else {
-                            cubit.setSettings(settings.copyWithAudioProfiles(null));
+                            cubit.setEncodingSettings(encodingSettings.copyWithAudioProfiles(null));
                           }
                         },
-                        items: settings.audioProfiles ?? [],
-                        onChange: (items) => cubit.setSettings(settings.copyWithAudioProfiles(items)),
+                        items: encodingSettings.audioProfiles ?? [],
+                        onChange: (items) => cubit.setEncodingSettings(encodingSettings.copyWithAudioProfiles(items)),
                       ),
                       const SizedBox(height: 16.0),
                       ReorderableSection<RTPCodecProfile>(
@@ -227,17 +230,17 @@ class _EncodingSettingsScreenState extends State<EncodingSettingsScreen> {
                           if (option == null) return Text(context.l10n.settings_encoding_Section_value_auto);
                           return Text(option.name);
                         },
-                        enabled: settings.videoProfiles != null,
+                        enabled: encodingSettings.videoProfiles != null,
                         onEnable: (enabled) {
                           if (enabled) {
                             var profiles = EncodingSettings.defaultVideoProfilesOrder;
-                            cubit.setSettings(settings.copyWithVideoProfiles(profiles));
+                            cubit.setEncodingSettings(encodingSettings.copyWithVideoProfiles(profiles));
                           } else {
-                            cubit.setSettings(settings.copyWithVideoProfiles(null));
+                            cubit.setEncodingSettings(encodingSettings.copyWithVideoProfiles(null));
                           }
                         },
-                        items: settings.videoProfiles ?? [],
-                        onChange: (items) => cubit.setSettings(settings.copyWithVideoProfiles(items)),
+                        items: encodingSettings.videoProfiles ?? [],
+                        onChange: (items) => cubit.setEncodingSettings(encodingSettings.copyWithVideoProfiles(items)),
                       ),
                       const SizedBox(height: 16.0),
                     ],

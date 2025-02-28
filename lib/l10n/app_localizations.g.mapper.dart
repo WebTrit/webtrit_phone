@@ -744,8 +744,8 @@ class AppLocalizationsMapper {
           localizations.settings_ListViewTileTitle_about,
       'settings_ListViewTileTitle_accountDelete':
           localizations.settings_ListViewTileTitle_accountDelete,
-      'settings_ListViewTileTitle_encoding':
-          localizations.settings_ListViewTileTitle_encoding,
+      'settings_ListViewTileTitle_mediaSettings':
+          localizations.settings_ListViewTileTitle_mediaSettings,
       'settings_ListViewTileTitle_self_config':
           localizations.settings_ListViewTileTitle_self_config,
       'settings_ListViewTileTitle_help':

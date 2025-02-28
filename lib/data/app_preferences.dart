@@ -62,6 +62,10 @@ abstract class AppPreferences {
   EncodingPreset? getEncodingPreset({EncodingPreset? defaultValue});
 
   Future<void> setEncodingPreset(EncodingPreset? value);
+
+  AudioProcessingSettings? getAudioProcessingSettings();
+
+  Future<void> setAudioProcessingSettings(AudioProcessingSettings settings);
 }
 
 class AppPreferencesFactory {
@@ -76,7 +80,9 @@ class AppPreferencesFactory {
   static AppPreferences get instance => _instance;
 }
 
-class AppPreferencesImpl with SystemInfoJsonMapper, EncodingSettingsJsonMapper implements AppPreferences {
+class AppPreferencesImpl
+    with SystemInfoJsonMapper, EncodingSettingsJsonMapper, AudioProcessingSettingsJsonMapper
+    implements AppPreferences {
   static const _kRegisterStatusKey = 'register-status';
   static const _kThemeModeKey = 'theme-mode';
   static const _kLocaleLanguageTagKey = 'locale-language-tag';
@@ -89,6 +95,7 @@ class AppPreferencesImpl with SystemInfoJsonMapper, EncodingSettingsJsonMapper i
   static const _kSystemInfoKey = 'system-info';
   static const _kEncodingSettingsKey = 'encoding-settings';
   static const _kEncodingPresetKey = 'encoding-preset';
+  static const _kAudioProcessingSettingsKey = 'audio-processing-settings';
 
   // Please add all new keys here for proper cleaning of preferences
   static const _kPreferencesList = [
@@ -104,6 +111,7 @@ class AppPreferencesImpl with SystemInfoJsonMapper, EncodingSettingsJsonMapper i
     _kSystemInfoKey,
     _kEncodingSettingsKey,
     _kEncodingPresetKey,
+    _kAudioProcessingSettingsKey,
   ];
 
   // List of preferences keys to exclude by default during clean operation
@@ -304,7 +312,7 @@ class AppPreferencesImpl with SystemInfoJsonMapper, EncodingSettingsJsonMapper i
     if (encodingSettingsString != null) {
       return encodingSettingsFromJson(encodingSettingsString);
     } else {
-      return const EncodingSettings();
+      return EncodingSettings.blank();
     }
   }
 
@@ -330,5 +338,20 @@ class AppPreferencesImpl with SystemInfoJsonMapper, EncodingSettingsJsonMapper i
     } else {
       return _sharedPreferences.remove(_kEncodingPresetKey);
     }
+  }
+
+  @override
+  AudioProcessingSettings getAudioProcessingSettings() {
+    final audioProcessingSettingsString = _sharedPreferences.getString(_kAudioProcessingSettingsKey);
+    if (audioProcessingSettingsString != null) {
+      return audioProcessingSettingsFromJson(audioProcessingSettingsString);
+    } else {
+      return AudioProcessingSettings.blank();
+    }
+  }
+
+  @override
+  Future<void> setAudioProcessingSettings(AudioProcessingSettings settings) {
+    return _sharedPreferences.setString(_kAudioProcessingSettingsKey, audioProcessingSettingsToJson(settings));
   }
 }
