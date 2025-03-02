@@ -7,6 +7,7 @@ import 'package:webtrit_phone/models/audio_processing_settings.dart';
 import 'package:webtrit_phone/models/enableble.dart';
 import 'package:webtrit_phone/models/encoding_settings.dart';
 import 'package:webtrit_phone/models/rtp_codec_profile.dart';
+import 'package:webtrit_phone/models/video_capturing_settings.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../media_settings.dart';
@@ -41,6 +42,7 @@ class _MediaSettingsScreenState extends State<MediaSettingsScreen> {
           final encodingPreset = state.encodingPreset;
           final encodingSettings = state.encodingSettings;
           final audioProcessingSettings = state.audioProcessingSettings;
+          final videoCapturingSettings = state.videoCapturingSettings;
 
           return SingleChildScrollView(
             padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24),
@@ -56,6 +58,10 @@ class _MediaSettingsScreenState extends State<MediaSettingsScreen> {
                 const Divider(),
                 const SizedBox(height: 24),
                 audioProcessingContent(context, audioProcessingSettings),
+                const SizedBox(height: 24),
+                const Divider(),
+                const SizedBox(height: 24),
+                videoCapturingContent(context, videoCapturingSettings),
               ],
             ),
           );
@@ -358,6 +364,42 @@ class _MediaSettingsScreenState extends State<MediaSettingsScreen> {
           selected: audioProcessingSettings.audioMirroring,
           onSelect: (option) =>
               cubit.setAudioProcessingSettings(audioProcessingSettings.copyWithAudioMirroring(option)),
+        ),
+      ],
+    );
+  }
+
+  Column videoCapturingContent(BuildContext context, VideoCapturingSettings videoCapturingSettings) {
+    return Column(
+      children: [
+        HeadingSection(
+          title: context.l10n.settings_videoCapturing_Section_title,
+          tooltip: context.l10n.settings_videoCapturing_Section_tooltip,
+          icon: const Icon(Icons.video_settings_rounded),
+        ),
+        const SizedBox(height: 16.0),
+        SlidableSection<Resolution>(
+          title: context.l10n.settings_videoCapturing_Section_resolution_title,
+          optionPrefix: context.l10n.settings_videoCapturing_Section_resolution_prefix,
+          buildOptionLabel: (option) {
+            if (option == null) return context.l10n.settings_encoding_Section_value_auto;
+            return option.str;
+          },
+          options: Resolution.values,
+          selected: videoCapturingSettings.resolution,
+          onSelect: (option) => cubit.setVideoCapturingSettings(videoCapturingSettings.copyWithResolution(option)),
+        ),
+        const SizedBox(height: 16.0),
+        SlidableSection<Framerate>(
+          title: context.l10n.settings_videoCapturing_Section_framerate_title,
+          optionPrefix: context.l10n.settings_videoCapturing_Section_framerate_prefix,
+          buildOptionLabel: (option) {
+            if (option == null) return context.l10n.settings_encoding_Section_value_auto;
+            return option.str;
+          },
+          options: Framerate.values,
+          selected: videoCapturingSettings.framerate,
+          onSelect: (option) => cubit.setVideoCapturingSettings(videoCapturingSettings.copyWithFramerate(option)),
         ),
       ],
     );

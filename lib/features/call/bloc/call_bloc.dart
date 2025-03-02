@@ -60,6 +60,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
   final SDPMunger? sdpMunger;
   final AudioConstraintsBuilder? audioConstraintsBuilder;
+  final VideoConstraintsBuilder? videoConstraintsBuilder;
   final WebrtcOptionsBuilder? webRtcOptionsBuilder;
 
   StreamSubscription<List<ConnectivityResult>>? _connectivityChangedSubscription;
@@ -83,6 +84,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     required this.callkeepConnections,
     this.sdpMunger,
     this.audioConstraintsBuilder,
+    this.videoConstraintsBuilder,
     this.webRtcOptionsBuilder,
   }) : super(const CallState()) {
     on<CallStarted>(
@@ -2422,11 +2424,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       },
       'video': video
           ? {
-              'mandatory': {
-                'minWidth': '640',
-                'minHeight': '480',
-                'minFrameRate': '30',
-              },
+              'mandatory': videoConstraintsBuilder?.build() ?? {},
               if (frontCamera != null) 'facingMode': frontCamera ? 'user' : 'environment',
               'optional': [],
             }

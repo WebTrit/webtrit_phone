@@ -1272,6 +1272,24 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings_audioProcessing_Section_AM_title => 'Audio mirroring';
 
   @override
+  String get settings_videoCapturing_Section_title => 'Video capturing';
+
+  @override
+  String get settings_videoCapturing_Section_tooltip => 'Can be used to tune video quality for specific needs or environments.';
+
+  @override
+  String get settings_videoCapturing_Section_resolution_title => 'Image resolution';
+
+  @override
+  String get settings_videoCapturing_Section_resolution_prefix => 'vertical points: ';
+
+  @override
+  String get settings_videoCapturing_Section_framerate_title => 'Image framerate';
+
+  @override
+  String get settings_videoCapturing_Section_framerate_prefix => 'frames: ';
+
+  @override
   String get settings_ListViewTileTitle_about => 'About';
 
   @override

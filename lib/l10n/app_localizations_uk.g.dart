@@ -1272,6 +1272,24 @@ class AppLocalizationsUk extends AppLocalizations {
   String get settings_audioProcessing_Section_AM_title => 'Віддзеркалення аудіо';
 
   @override
+  String get settings_videoCapturing_Section_title => 'Захват відео';
+
+  @override
+  String get settings_videoCapturing_Section_tooltip => 'Можна використовувати для налаштування якості відео для певних потреб або умов.';
+
+  @override
+  String get settings_videoCapturing_Section_resolution_title => 'Роздільна здатність зображення';
+
+  @override
+  String get settings_videoCapturing_Section_resolution_prefix => 'вертикальних точйок: ';
+
+  @override
+  String get settings_videoCapturing_Section_framerate_title => 'Частота кадрів зображення';
+
+  @override
+  String get settings_videoCapturing_Section_framerate_prefix => 'кадрів: ';
+
+  @override
   String get settings_ListViewTileTitle_about => 'Про програму';
 
   @override

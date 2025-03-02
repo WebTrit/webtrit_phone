@@ -66,6 +66,10 @@ abstract class AppPreferences {
   AudioProcessingSettings getAudioProcessingSettings();
 
   Future<void> setAudioProcessingSettings(AudioProcessingSettings settings);
+
+  VideoCapturingSettings getVideoCapturingSettings();
+
+  Future<void> setVideoCapturingSettings(VideoCapturingSettings settings);
 }
 
 class AppPreferencesFactory {
@@ -81,7 +85,11 @@ class AppPreferencesFactory {
 }
 
 class AppPreferencesImpl
-    with SystemInfoJsonMapper, EncodingSettingsJsonMapper, AudioProcessingSettingsJsonMapper
+    with
+        SystemInfoJsonMapper,
+        EncodingSettingsJsonMapper,
+        AudioProcessingSettingsJsonMapper,
+        VideoCapturingSettingsJsonMapper
     implements AppPreferences {
   static const _kRegisterStatusKey = 'register-status';
   static const _kThemeModeKey = 'theme-mode';
@@ -96,6 +104,7 @@ class AppPreferencesImpl
   static const _kEncodingSettingsKey = 'encoding-settings';
   static const _kEncodingPresetKey = 'encoding-preset';
   static const _kAudioProcessingSettingsKey = 'audio-processing-settings';
+  static const _kVideoCapturingSettingsKey = 'video-capturing-settings';
 
   // Please add all new keys here for proper cleaning of preferences
   static const _kPreferencesList = [
@@ -112,6 +121,7 @@ class AppPreferencesImpl
     _kEncodingSettingsKey,
     _kEncodingPresetKey,
     _kAudioProcessingSettingsKey,
+    _kVideoCapturingSettingsKey,
   ];
 
   // List of preferences keys to exclude by default during clean operation
@@ -353,5 +363,20 @@ class AppPreferencesImpl
   @override
   Future<void> setAudioProcessingSettings(AudioProcessingSettings settings) {
     return _sharedPreferences.setString(_kAudioProcessingSettingsKey, audioProcessingSettingsToJson(settings));
+  }
+
+  @override
+  VideoCapturingSettings getVideoCapturingSettings() {
+    final videoCapturingSettingsString = _sharedPreferences.getString(_kVideoCapturingSettingsKey);
+    if (videoCapturingSettingsString != null) {
+      return videoCapturingSettingsFromJson(videoCapturingSettingsString);
+    } else {
+      return VideoCapturingSettings.blank();
+    }
+  }
+
+  @override
+  Future<void> setVideoCapturingSettings(VideoCapturingSettings settings) {
+    return _sharedPreferences.setString(_kVideoCapturingSettingsKey, videoCapturingSettingsToJson(settings));
   }
 }

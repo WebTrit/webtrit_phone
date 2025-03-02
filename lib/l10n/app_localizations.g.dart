@@ -2539,6 +2539,42 @@ abstract class AppLocalizations {
   /// **'Audio mirroring'**
   String get settings_audioProcessing_Section_AM_title;
 
+  /// No description provided for @settings_videoCapturing_Section_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Video capturing'**
+  String get settings_videoCapturing_Section_title;
+
+  /// No description provided for @settings_videoCapturing_Section_tooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Can be used to tune video quality for specific needs or environments.'**
+  String get settings_videoCapturing_Section_tooltip;
+
+  /// No description provided for @settings_videoCapturing_Section_resolution_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Image resolution'**
+  String get settings_videoCapturing_Section_resolution_title;
+
+  /// No description provided for @settings_videoCapturing_Section_resolution_prefix.
+  ///
+  /// In en, this message translates to:
+  /// **'vertical points: '**
+  String get settings_videoCapturing_Section_resolution_prefix;
+
+  /// No description provided for @settings_videoCapturing_Section_framerate_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Image framerate'**
+  String get settings_videoCapturing_Section_framerate_title;
+
+  /// No description provided for @settings_videoCapturing_Section_framerate_prefix.
+  ///
+  /// In en, this message translates to:
+  /// **'frames: '**
+  String get settings_videoCapturing_Section_framerate_prefix;
+
   /// No description provided for @settings_ListViewTileTitle_about.
   ///
   /// In en, this message translates to:

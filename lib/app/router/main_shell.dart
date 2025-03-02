@@ -258,6 +258,7 @@ class _MainShellState extends State<MainShell> {
                 callkeepConnections: _callkeepConnections,
                 sdpMunger: ModifyWithEncodingSettings(appPreferences, encodingConfig),
                 audioConstraintsBuilder: AudioConstraintsWithAppSettingsBuilder(appPreferences),
+                videoConstraintsBuilder: VideoConstraintsWithAppSettingsBuilder(appPreferences),
                 webRtcOptionsBuilder: WebrtcOptionsWithAppSettingsBuilder(appPreferences),
               )..add(const CallStarted());
             },

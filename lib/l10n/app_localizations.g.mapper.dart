@@ -760,6 +760,18 @@ class AppLocalizationsMapper {
           localizations.settings_audioProcessing_Section_HPF_title,
       'settings_audioProcessing_Section_AM_title':
           localizations.settings_audioProcessing_Section_AM_title,
+      'settings_videoCapturing_Section_title':
+          localizations.settings_videoCapturing_Section_title,
+      'settings_videoCapturing_Section_tooltip':
+          localizations.settings_videoCapturing_Section_tooltip,
+      'settings_videoCapturing_Section_resolution_title':
+          localizations.settings_videoCapturing_Section_resolution_title,
+      'settings_videoCapturing_Section_resolution_prefix':
+          localizations.settings_videoCapturing_Section_resolution_prefix,
+      'settings_videoCapturing_Section_framerate_title':
+          localizations.settings_videoCapturing_Section_framerate_title,
+      'settings_videoCapturing_Section_framerate_prefix':
+          localizations.settings_videoCapturing_Section_framerate_prefix,
       'settings_ListViewTileTitle_about':
           localizations.settings_ListViewTileTitle_about,
       'settings_ListViewTileTitle_accountDelete':
