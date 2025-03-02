@@ -48,7 +48,7 @@ dependencies:
   flutter_webrtc:
     git:
       url: https://github.com/WebTrit/flutter-webrtc.git
-      ref: main_ext_rebase_04.02.25
+      ref: main_ext_rebase_27.02.25
   formz: ^0.7.0
   freezed_annotation: ^2.4.1
   google_fonts: ^6.2.1
@@ -116,8 +116,7 @@ dev_dependencies:
   bloc_test: ^9.1.7
   build_runner: ^2.4.9
   flutter_gen_runner: ^5.4.0
-  flutter_launcher_icons:
-    git: https://github.com/fluttercommunity/flutter_launcher_icons.git
+  flutter_launcher_icons: ^0.14.3
   flutter_lints: ^4.0.0
   flutter_native_splash: ^2.4.0
   freezed: ^2.5.2

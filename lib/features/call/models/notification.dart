@@ -108,6 +108,15 @@ final class CallWhileUnregisteredNotification extends MessageNotification {
   }
 }
 
+final class CallNegotiationTimeoutNotification extends MessageNotification {
+  const CallNegotiationTimeoutNotification();
+
+  @override
+  String l10n(BuildContext context) {
+    return context.l10n.notifications_errorSnackBar_callNegotiationTimeout;
+  }
+}
+
 final class SipRegistrationFailedNotification extends ErrorNotification {
   const SipRegistrationFailedNotification({
     required this.knownCode,

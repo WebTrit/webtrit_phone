@@ -207,20 +207,25 @@ class ChatsDao extends DatabaseAccessor<AppDatabase> with _$ChatsDaoMixin {
   }
 
   Future<Map<int, int>> unreadedCountPerChat(String userId) async {
-    final userReadCursors = await (select(chatMessageReadCursorTable)..where((t) => t.userId.equals(userId))).get();
-    Map<int, int> result = {};
-    for (final cursor in userReadCursors) {
+    final result = <int, int>{};
+
+    for (final chatId in await getChatIds()) {
+      final readCursor = await getChatMessageReadCursor(chatId, userId);
+
       final amount = chatMessagesTable.id.count();
       var q = (selectOnly(chatMessagesTable)..addColumns([amount]));
+
       q.where(
-        chatMessagesTable.chatId.equals(cursor.chatId) &
+        chatMessagesTable.chatId.equals(chatId) &
             chatMessagesTable.senderId.isNotValue(userId) &
             chatMessagesTable.deletedAtRemoteUsec.isNull() &
-            chatMessagesTable.createdAtRemoteUsec.isBiggerThanValue(cursor.timestampUsec),
+            chatMessagesTable.createdAtRemoteUsec.isBiggerThanValue(readCursor?.timestampUsec ?? 0),
       );
+
       final unreadMessages = await q.getSingle().then((data) => data.read(amount) ?? 0);
-      result[cursor.chatId] = unreadMessages;
+      result[chatId] = unreadMessages;
     }
+
     return result;
   }
 

@@ -12438,6 +12438,7 @@ mixin _$CallState {
   int get linesCount => throw _privateConstructorUsedError;
   List<ActiveCall> get activeCalls => throw _privateConstructorUsedError;
   bool? get minimized => throw _privateConstructorUsedError;
+  bool? get speakerOnBeforeMinimize => throw _privateConstructorUsedError;
   bool? get speaker => throw _privateConstructorUsedError;
 
   /// Create a copy of CallState
@@ -12463,6 +12464,7 @@ abstract class $CallStateCopyWith<$Res> {
       int linesCount,
       List<ActiveCall> activeCalls,
       bool? minimized,
+      bool? speakerOnBeforeMinimize,
       bool? speaker});
 }
 
@@ -12491,6 +12493,7 @@ class _$CallStateCopyWithImpl<$Res, $Val extends CallState>
     Object? linesCount = null,
     Object? activeCalls = null,
     Object? minimized = freezed,
+    Object? speakerOnBeforeMinimize = freezed,
     Object? speaker = freezed,
   }) {
     return _then(_value.copyWith(
@@ -12534,6 +12537,10 @@ class _$CallStateCopyWithImpl<$Res, $Val extends CallState>
           ? _value.minimized
           : minimized // ignore: cast_nullable_to_non_nullable
               as bool?,
+      speakerOnBeforeMinimize: freezed == speakerOnBeforeMinimize
+          ? _value.speakerOnBeforeMinimize
+          : speakerOnBeforeMinimize // ignore: cast_nullable_to_non_nullable
+              as bool?,
       speaker: freezed == speaker
           ? _value.speaker
           : speaker // ignore: cast_nullable_to_non_nullable
@@ -12561,6 +12568,7 @@ abstract class _$$CallStateImplCopyWith<$Res>
       int linesCount,
       List<ActiveCall> activeCalls,
       bool? minimized,
+      bool? speakerOnBeforeMinimize,
       bool? speaker});
 }
 
@@ -12587,6 +12595,7 @@ class __$$CallStateImplCopyWithImpl<$Res>
     Object? linesCount = null,
     Object? activeCalls = null,
     Object? minimized = freezed,
+    Object? speakerOnBeforeMinimize = freezed,
     Object? speaker = freezed,
   }) {
     return _then(_$CallStateImpl(
@@ -12630,6 +12639,10 @@ class __$$CallStateImplCopyWithImpl<$Res>
           ? _value.minimized
           : minimized // ignore: cast_nullable_to_non_nullable
               as bool?,
+      speakerOnBeforeMinimize: freezed == speakerOnBeforeMinimize
+          ? _value.speakerOnBeforeMinimize
+          : speakerOnBeforeMinimize // ignore: cast_nullable_to_non_nullable
+              as bool?,
       speaker: freezed == speaker
           ? _value.speaker
           : speaker // ignore: cast_nullable_to_non_nullable
@@ -12652,6 +12665,7 @@ class _$CallStateImpl extends _CallState with DiagnosticableTreeMixin {
       this.linesCount = 0,
       final List<ActiveCall> activeCalls = const [],
       this.minimized,
+      this.speakerOnBeforeMinimize,
       this.speaker})
       : _activeCalls = activeCalls,
         super._();
@@ -12687,11 +12701,13 @@ class _$CallStateImpl extends _CallState with DiagnosticableTreeMixin {
   @override
   final bool? minimized;
   @override
+  final bool? speakerOnBeforeMinimize;
+  @override
   final bool? speaker;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'CallState(currentConnectivityResult: $currentConnectivityResult, currentAppLifecycleState: $currentAppLifecycleState, registrationStatus: $registrationStatus, signalingClientStatus: $signalingClientStatus, lastSignalingClientConnectError: $lastSignalingClientConnectError, lastSignalingClientDisconnectError: $lastSignalingClientDisconnectError, lastSignalingDisconnectCode: $lastSignalingDisconnectCode, linesCount: $linesCount, activeCalls: $activeCalls, minimized: $minimized, speaker: $speaker)';
+    return 'CallState(currentConnectivityResult: $currentConnectivityResult, currentAppLifecycleState: $currentAppLifecycleState, registrationStatus: $registrationStatus, signalingClientStatus: $signalingClientStatus, lastSignalingClientConnectError: $lastSignalingClientConnectError, lastSignalingClientDisconnectError: $lastSignalingClientDisconnectError, lastSignalingDisconnectCode: $lastSignalingDisconnectCode, linesCount: $linesCount, activeCalls: $activeCalls, minimized: $minimized, speakerOnBeforeMinimize: $speakerOnBeforeMinimize, speaker: $speaker)';
   }
 
   @override
@@ -12714,6 +12730,8 @@ class _$CallStateImpl extends _CallState with DiagnosticableTreeMixin {
       ..add(DiagnosticsProperty('linesCount', linesCount))
       ..add(DiagnosticsProperty('activeCalls', activeCalls))
       ..add(DiagnosticsProperty('minimized', minimized))
+      ..add(DiagnosticsProperty(
+          'speakerOnBeforeMinimize', speakerOnBeforeMinimize))
       ..add(DiagnosticsProperty('speaker', speaker));
   }
 
@@ -12748,6 +12766,9 @@ class _$CallStateImpl extends _CallState with DiagnosticableTreeMixin {
                 .equals(other._activeCalls, _activeCalls) &&
             (identical(other.minimized, minimized) ||
                 other.minimized == minimized) &&
+            (identical(
+                    other.speakerOnBeforeMinimize, speakerOnBeforeMinimize) ||
+                other.speakerOnBeforeMinimize == speakerOnBeforeMinimize) &&
             (identical(other.speaker, speaker) || other.speaker == speaker));
   }
 
@@ -12764,6 +12785,7 @@ class _$CallStateImpl extends _CallState with DiagnosticableTreeMixin {
       linesCount,
       const DeepCollectionEquality().hash(_activeCalls),
       minimized,
+      speakerOnBeforeMinimize,
       speaker);
 
   /// Create a copy of CallState
@@ -12787,6 +12809,7 @@ abstract class _CallState extends CallState {
       final int linesCount,
       final List<ActiveCall> activeCalls,
       final bool? minimized,
+      final bool? speakerOnBeforeMinimize,
       final bool? speaker}) = _$CallStateImpl;
   const _CallState._() : super._();
 
@@ -12811,6 +12834,8 @@ abstract class _CallState extends CallState {
   @override
   bool? get minimized;
   @override
+  bool? get speakerOnBeforeMinimize;
+  @override
   bool? get speaker;
 
   /// Create a copy of CallState
@@ -12831,11 +12856,11 @@ mixin _$ActiveCall {
   bool get video => throw _privateConstructorUsedError;
   CallProcessingStatus get processingStatus =>
       throw _privateConstructorUsedError;
-  bool get incomingOfferHandled => throw _privateConstructorUsedError;
   bool? get frontCamera => throw _privateConstructorUsedError;
   bool get held => throw _privateConstructorUsedError;
   bool get muted => throw _privateConstructorUsedError;
   bool get updating => throw _privateConstructorUsedError;
+  JsepValue? get incomingOffer => throw _privateConstructorUsedError;
   String? get displayName => throw _privateConstructorUsedError;
   String? get fromReferId => throw _privateConstructorUsedError;
   DateTime? get acceptedTime => throw _privateConstructorUsedError;
@@ -12866,11 +12891,11 @@ abstract class $ActiveCallCopyWith<$Res> {
       DateTime createdTime,
       bool video,
       CallProcessingStatus processingStatus,
-      bool incomingOfferHandled,
       bool? frontCamera,
       bool held,
       bool muted,
       bool updating,
+      JsepValue? incomingOffer,
       String? displayName,
       String? fromReferId,
       DateTime? acceptedTime,
@@ -12905,11 +12930,11 @@ class _$ActiveCallCopyWithImpl<$Res, $Val extends ActiveCall>
     Object? createdTime = null,
     Object? video = null,
     Object? processingStatus = null,
-    Object? incomingOfferHandled = null,
     Object? frontCamera = freezed,
     Object? held = null,
     Object? muted = null,
     Object? updating = null,
+    Object? incomingOffer = freezed,
     Object? displayName = freezed,
     Object? fromReferId = freezed,
     Object? acceptedTime = freezed,
@@ -12948,10 +12973,6 @@ class _$ActiveCallCopyWithImpl<$Res, $Val extends ActiveCall>
           ? _value.processingStatus
           : processingStatus // ignore: cast_nullable_to_non_nullable
               as CallProcessingStatus,
-      incomingOfferHandled: null == incomingOfferHandled
-          ? _value.incomingOfferHandled
-          : incomingOfferHandled // ignore: cast_nullable_to_non_nullable
-              as bool,
       frontCamera: freezed == frontCamera
           ? _value.frontCamera
           : frontCamera // ignore: cast_nullable_to_non_nullable
@@ -12968,6 +12989,10 @@ class _$ActiveCallCopyWithImpl<$Res, $Val extends ActiveCall>
           ? _value.updating
           : updating // ignore: cast_nullable_to_non_nullable
               as bool,
+      incomingOffer: freezed == incomingOffer
+          ? _value.incomingOffer
+          : incomingOffer // ignore: cast_nullable_to_non_nullable
+              as JsepValue?,
       displayName: freezed == displayName
           ? _value.displayName
           : displayName // ignore: cast_nullable_to_non_nullable
@@ -13031,11 +13056,11 @@ abstract class _$$ActiveCallImplCopyWith<$Res>
       DateTime createdTime,
       bool video,
       CallProcessingStatus processingStatus,
-      bool incomingOfferHandled,
       bool? frontCamera,
       bool held,
       bool muted,
       bool updating,
+      JsepValue? incomingOffer,
       String? displayName,
       String? fromReferId,
       DateTime? acceptedTime,
@@ -13069,11 +13094,11 @@ class __$$ActiveCallImplCopyWithImpl<$Res>
     Object? createdTime = null,
     Object? video = null,
     Object? processingStatus = null,
-    Object? incomingOfferHandled = null,
     Object? frontCamera = freezed,
     Object? held = null,
     Object? muted = null,
     Object? updating = null,
+    Object? incomingOffer = freezed,
     Object? displayName = freezed,
     Object? fromReferId = freezed,
     Object? acceptedTime = freezed,
@@ -13112,10 +13137,6 @@ class __$$ActiveCallImplCopyWithImpl<$Res>
           ? _value.processingStatus
           : processingStatus // ignore: cast_nullable_to_non_nullable
               as CallProcessingStatus,
-      incomingOfferHandled: null == incomingOfferHandled
-          ? _value.incomingOfferHandled
-          : incomingOfferHandled // ignore: cast_nullable_to_non_nullable
-              as bool,
       frontCamera: freezed == frontCamera
           ? _value.frontCamera
           : frontCamera // ignore: cast_nullable_to_non_nullable
@@ -13132,6 +13153,10 @@ class __$$ActiveCallImplCopyWithImpl<$Res>
           ? _value.updating
           : updating // ignore: cast_nullable_to_non_nullable
               as bool,
+      incomingOffer: freezed == incomingOffer
+          ? _value.incomingOffer
+          : incomingOffer // ignore: cast_nullable_to_non_nullable
+              as JsepValue?,
       displayName: freezed == displayName
           ? _value.displayName
           : displayName // ignore: cast_nullable_to_non_nullable
@@ -13176,11 +13201,11 @@ class _$ActiveCallImpl extends _ActiveCall with DiagnosticableTreeMixin {
       required this.createdTime,
       required this.video,
       required this.processingStatus,
-      this.incomingOfferHandled = false,
       this.frontCamera = true,
       this.held = false,
       this.muted = false,
       this.updating = false,
+      this.incomingOffer,
       this.displayName,
       this.fromReferId,
       this.acceptedTime,
@@ -13207,9 +13232,6 @@ class _$ActiveCallImpl extends _ActiveCall with DiagnosticableTreeMixin {
   final CallProcessingStatus processingStatus;
   @override
   @JsonKey()
-  final bool incomingOfferHandled;
-  @override
-  @JsonKey()
   final bool? frontCamera;
   @override
   @JsonKey()
@@ -13220,6 +13242,8 @@ class _$ActiveCallImpl extends _ActiveCall with DiagnosticableTreeMixin {
   @override
   @JsonKey()
   final bool updating;
+  @override
+  final JsepValue? incomingOffer;
   @override
   final String? displayName;
   @override
@@ -13239,7 +13263,7 @@ class _$ActiveCallImpl extends _ActiveCall with DiagnosticableTreeMixin {
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'ActiveCall(direction: $direction, line: $line, callId: $callId, handle: $handle, createdTime: $createdTime, video: $video, processingStatus: $processingStatus, incomingOfferHandled: $incomingOfferHandled, frontCamera: $frontCamera, held: $held, muted: $muted, updating: $updating, displayName: $displayName, fromReferId: $fromReferId, acceptedTime: $acceptedTime, hungUpTime: $hungUpTime, transfer: $transfer, failure: $failure, localStream: $localStream, remoteStream: $remoteStream)';
+    return 'ActiveCall(direction: $direction, line: $line, callId: $callId, handle: $handle, createdTime: $createdTime, video: $video, processingStatus: $processingStatus, frontCamera: $frontCamera, held: $held, muted: $muted, updating: $updating, incomingOffer: $incomingOffer, displayName: $displayName, fromReferId: $fromReferId, acceptedTime: $acceptedTime, hungUpTime: $hungUpTime, transfer: $transfer, failure: $failure, localStream: $localStream, remoteStream: $remoteStream)';
   }
 
   @override
@@ -13254,11 +13278,11 @@ class _$ActiveCallImpl extends _ActiveCall with DiagnosticableTreeMixin {
       ..add(DiagnosticsProperty('createdTime', createdTime))
       ..add(DiagnosticsProperty('video', video))
       ..add(DiagnosticsProperty('processingStatus', processingStatus))
-      ..add(DiagnosticsProperty('incomingOfferHandled', incomingOfferHandled))
       ..add(DiagnosticsProperty('frontCamera', frontCamera))
       ..add(DiagnosticsProperty('held', held))
       ..add(DiagnosticsProperty('muted', muted))
       ..add(DiagnosticsProperty('updating', updating))
+      ..add(DiagnosticsProperty('incomingOffer', incomingOffer))
       ..add(DiagnosticsProperty('displayName', displayName))
       ..add(DiagnosticsProperty('fromReferId', fromReferId))
       ..add(DiagnosticsProperty('acceptedTime', acceptedTime))
@@ -13284,14 +13308,14 @@ class _$ActiveCallImpl extends _ActiveCall with DiagnosticableTreeMixin {
             (identical(other.video, video) || other.video == video) &&
             (identical(other.processingStatus, processingStatus) ||
                 other.processingStatus == processingStatus) &&
-            (identical(other.incomingOfferHandled, incomingOfferHandled) ||
-                other.incomingOfferHandled == incomingOfferHandled) &&
             (identical(other.frontCamera, frontCamera) ||
                 other.frontCamera == frontCamera) &&
             (identical(other.held, held) || other.held == held) &&
             (identical(other.muted, muted) || other.muted == muted) &&
             (identical(other.updating, updating) ||
                 other.updating == updating) &&
+            (identical(other.incomingOffer, incomingOffer) ||
+                other.incomingOffer == incomingOffer) &&
             (identical(other.displayName, displayName) ||
                 other.displayName == displayName) &&
             (identical(other.fromReferId, fromReferId) ||
@@ -13319,11 +13343,11 @@ class _$ActiveCallImpl extends _ActiveCall with DiagnosticableTreeMixin {
         createdTime,
         video,
         processingStatus,
-        incomingOfferHandled,
         frontCamera,
         held,
         muted,
         updating,
+        incomingOffer,
         displayName,
         fromReferId,
         acceptedTime,
@@ -13352,11 +13376,11 @@ abstract class _ActiveCall extends ActiveCall {
       required final DateTime createdTime,
       required final bool video,
       required final CallProcessingStatus processingStatus,
-      final bool incomingOfferHandled,
       final bool? frontCamera,
       final bool held,
       final bool muted,
       final bool updating,
+      final JsepValue? incomingOffer,
       final String? displayName,
       final String? fromReferId,
       final DateTime? acceptedTime,
@@ -13382,8 +13406,6 @@ abstract class _ActiveCall extends ActiveCall {
   @override
   CallProcessingStatus get processingStatus;
   @override
-  bool get incomingOfferHandled;
-  @override
   bool? get frontCamera;
   @override
   bool get held;
@@ -13391,6 +13413,8 @@ abstract class _ActiveCall extends ActiveCall {
   bool get muted;
   @override
   bool get updating;
+  @override
+  JsepValue? get incomingOffer;
   @override
   String? get displayName;
   @override

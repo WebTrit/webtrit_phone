@@ -2,7 +2,9 @@ enum CallProcessingStatus {
   incomingFromPush,
   incomingFromOffer,
   incomingSubmittedAnswer,
-  incomingPerformingAnswer,
+  incomingPerformingStarted,
+  incomingInitializingMedia,
+  incomingAnswering,
 
   outgoingCreated,
   outgoingCreatedFromRefer,

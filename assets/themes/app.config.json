@@ -117,7 +117,7 @@
           },
           {
             "enabled": true,
-            "type": "embedded",
+            "type": "terms",
             "titleL10n": "settings_ListViewTileTitle_termsConditions",
             "icon": "0xeedf",
             "embeddedResourceId": 4
@@ -228,6 +228,7 @@
     {
       "id": 4,
       "uri": "https://webtrit.com/legal/privacy-policy-for-webtrit-app/",
+      "type": "terms",
       "toolbar": {
         "showToolbar": true,
         "titleL10n": "settings_ListViewTileTitle_termsConditions"

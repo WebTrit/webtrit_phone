@@ -12,9 +12,39 @@ import 'package:webtrit_phone/theme/theme.dart';
 
 final Logger _logger = Logger('FeatureAccess');
 
-// This class handles more than just data, as it encapsulates logic for configuring features.
-// Consider moving it into dedicated service components to improve separation of concerns
-// and maintainability.
+/// This class encapsulates the logic for configuring and managing various app features,
+/// including login, bottom menu, settings, calls, messaging, and terms.
+/// It initializes these features based on the provided `AppConfig` and `AppPreferences`.
+///
+/// Configuration Overview:
+///
+/// 1. **LoginFeature**: Configures custom login options, including embedded login screens
+///    and available login actions. The login configuration is based on the data in `AppConfig`.
+///
+/// 2. **BottomMenuFeature**: Configures the bottom navigation menu, enabling/disabling specific tabs,
+///    setting the initial tab, and caching the active tab preference. The tab configuration is sourced
+///    from `AppConfig.mainConfig.bottomMenu`.
+///
+/// 3. **SettingsFeature**: Configures the app’s settings screen by defining sections and items
+///    based on the platform and the app configuration. It also handles embedded resources for settings items.
+///    - **Embedded Resources**: Each setting item can either have an embedded resource linked via an `embeddedResourceId`
+///      or by matching the resource’s type. Resources are first searched by ID, and if not found, the class searches
+///      by type (e.g., `terms` for privacy policy).
+///    - **Resource Assignment Priority**:
+///      - **First**, the `embeddedResourceId` within the setting item is checked.
+///      - **Second**, if no `embeddedResourceId` is found, the resource is searched based on its type (e.g., `terms`).
+///    - **Terms Handling**: If a setting item is related to terms (e.g., privacy policy) and no `embeddedResourceId`
+///      is provided, `TermsFeature` is used to assign the appropriate terms resource.
+///
+/// 4. **CallFeature**: Configures call-related settings, including video call support,
+///    and configurations for call transfer and encoding. The call configuration is derived from `AppConfig.callConfig`.
+///
+/// 5. **MessagingFeature**: Configures messaging features, including SMS and internal chat support, based on the
+///    system's capabilities and the app configuration. It determines whether the messaging tab is displayed in the app
+///    and enables corresponding messaging features.
+///
+/// 6. **TermsFeature**: Configures access to privacy policy and terms resources. It retrieves the privacy policy URL
+///    from embedded resources and assigns it to the appropriate settings item when needed.
 class FeatureAccess {
   static late FeatureAccess _instance;
 
@@ -24,6 +54,7 @@ class FeatureAccess {
     this.settingsFeature,
     this.callFeature,
     this.messagingFeature,
+    this.termsFeature,
   );
 
   final LoginFeature loginFeature;
@@ -31,6 +62,7 @@ class FeatureAccess {
   final SettingsFeature settingsFeature;
   final CallFeature callFeature;
   final MessagingFeature messagingFeature;
+  final TermsFeature termsFeature;
 
   static FeatureAccess init(AppConfig appConfig, AppPreferences preferences) {
     try {
@@ -39,6 +71,7 @@ class FeatureAccess {
       final settingsFeature = _tryConfigureSettingsFeature(appConfig, preferences);
       final callFeature = _tryConfigureCallFeature(appConfig);
       final messagingFeature = _tryConfigureMessagingFeature(appConfig, preferences);
+      final termsFeature = _tryConfigureTermsFeature(appConfig);
 
       _instance = FeatureAccess._(
         customLoginFeature,
@@ -46,6 +79,7 @@ class FeatureAccess {
         settingsFeature,
         callFeature,
         messagingFeature,
+        termsFeature,
       );
     } catch (e, stackTrace) {
       _logger.severe('Failed to initialize FeatureAccess', e, stackTrace);
@@ -120,26 +154,12 @@ class FeatureAccess {
       for (var item in section.items.where((item) => item.enabled)) {
         final flavor = SettingsFlavor.values.byName(item.type);
 
-        // TODO (Serdun): Move platform-specific configuration to a separate config file.
-        // Currently, the settings screen includes this configuration only for Android.
-        // For other platforms, this item is hidden. Update the logic to handle configurations for all platforms.
-        if (flavor == SettingsFlavor.network && !kIsWeb && !Platform.isAndroid) continue;
-
-        final embeddedDataResourceUrl = appConfig.embeddedResources
-            .firstWhereOrNull((resource) => resource.id == item.embeddedResourceId)
-            ?.uriOrNull;
-
-        final data = embeddedDataResourceUrl != null
-            ? ConfigData(
-                resource: embeddedDataResourceUrl,
-                titleL10n: item.titleL10n,
-              )
-            : null;
+        if (!_isSupportedPlatform(flavor)) continue;
 
         final settingItem = SettingItem(
           titleL10n: item.titleL10n,
           icon: item.icon.toIconData(),
-          data: data,
+          data: _getEmbeddedDataResource(appConfig, item, flavor),
           flavor: SettingsFlavor.values.byName(item.type),
         );
 
@@ -155,6 +175,31 @@ class FeatureAccess {
     }
 
     return SettingsFeature(settingSections);
+  }
+
+  // TODO (Serdun): Move platform-specific configuration to a separate config file.
+  // Currently, the settings screen includes this configuration only for Android.
+  // For other platforms, this item is hidden. Update the logic to handle configurations for all platforms.
+  static bool _isSupportedPlatform(SettingsFlavor flavor) {
+    return !(flavor == SettingsFlavor.network && !kIsWeb && !Platform.isAndroid);
+  }
+
+  static ConfigData? _getEmbeddedDataResource(
+    AppConfig appConfig,
+    AppConfigSettingsItem item,
+    SettingsFlavor flavor,
+  ) {
+    // Retrieve the embedded resource URL by matching the provided item ID.
+    var embeddedDataResourceUrl =
+        appConfig.embeddedResources.firstWhereOrNull((resource) => resource.id == item.embeddedResourceId)?.uriOrNull;
+
+    // If no direct match is found and the flavor is 'terms', attempt to fetch the privacy policy resource.
+    if (embeddedDataResourceUrl == null && flavor == SettingsFlavor.terms) {
+      return _tryConfigureTermsFeature(appConfig).configData;
+    }
+
+    // Return a ConfigData instance if a valid resource URL is found, otherwise return null.
+    return embeddedDataResourceUrl != null ? ConfigData(uri: embeddedDataResourceUrl, titleL10n: item.titleL10n) : null;
   }
 
   static LoginFeature _tryEnableCustomLoginFeature(AppConfig appConfig) {
@@ -239,6 +284,29 @@ class FeatureAccess {
     });
     return MessagingFeature(preferences, tabEnabled: tabEnabled);
   }
+
+  static TermsFeature _tryConfigureTermsFeature(AppConfig appConfig) {
+    // Attempt to find the terms resource from the embedded resources list.
+    final termsResource =
+        appConfig.embeddedResources.firstWhereOrNull((resource) => resource.type == EmbeddedResourceType.terms);
+
+    // TODO(Serdun): It would be better to add a separate privacy policy feature in AppConfig,
+    // with a direct link to the embedded resource. Implement logic to check if the feature access
+    // doesn't have a link, and if not, search the embedded resources by type in the list.
+    if (termsResource == null) {
+      throw EmbeddedResourceMissingException(
+        message: 'Terms  resource is missing',
+        embeddedResourceType: EmbeddedResourceType.terms,
+      );
+    }
+
+    _logger.info('Privacy policy resource found: ${termsResource.uriOrNull}');
+
+    return TermsFeature(ConfigData(
+      uri: termsResource.uriOrNull!,
+      titleL10n: termsResource.toolbar.titleL10n,
+    ));
+  }
 }
 
 class LoginFeature {
@@ -301,10 +369,6 @@ class SettingsFeature {
 
   List<SettingsSection> get sections => List.unmodifiable(_sections);
 
-  SettingItem? get termsAndConditions => _sections.expand((section) => section.items).firstWhereOrNull(
-        (item) => item.flavor == SettingsFlavor.terms,
-      );
-
   bool get isSelfConfigEnabled => _sections.any((section) {
         return section.items.any((item) {
           return item.flavor == SettingsFlavor.selfConfig;
@@ -355,4 +419,18 @@ class MessagingFeature {
   /// Check if the internal messaging feature is enabled and supported by remote system.
   /// This is used to determine if internal messaging UI components should be displayed or hidden.
   bool get chatsPresent => coreChatsSupport && tabEnabled;
+}
+
+/// Represents the configuration of the terms and privacy policy feature in the app.
+/// The `TermsFeature` class is responsible for assigning the correct terms resource, either from
+/// a provided embedded resource ID or by searching for a resource of type `terms`.
+///
+/// Configuration Scheme:
+/// 1. **Embedded Resource**: The `TermsFeature` looks for an embedded resource of type `terms`
+///    to assign the privacy policy. If the embedded resource is not explicitly provided in `AppConfig`,
+///    it will be searched in the embedded resources by type.
+class TermsFeature {
+  final ConfigData configData;
+
+  TermsFeature(this.configData);
 }

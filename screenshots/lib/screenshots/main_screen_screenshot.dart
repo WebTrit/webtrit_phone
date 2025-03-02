@@ -100,8 +100,13 @@ class MainScreenScreenshot extends StatelessWidget {
   }
 
   BottomNavigationBar _buildBottomNavigationBar(BuildContext context, List<BottomMenuTab> tabs) {
+    final textTheme = Theme.of(context).textTheme;
+
     return BottomNavigationBar(
       currentIndex: tabs.indexWhere((tab) => tab.flavor == flavor),
+      type: BottomNavigationBarType.fixed,
+      selectedLabelStyle: textTheme.bodySmall,
+      unselectedLabelStyle: textTheme.bodySmall,
       items: tabs
           .map((tab) => BottomNavigationBarItem(
                 icon: Icon(tab.icon),
