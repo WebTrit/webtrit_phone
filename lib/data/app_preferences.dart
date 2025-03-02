@@ -63,7 +63,7 @@ abstract class AppPreferences {
 
   Future<void> setEncodingPreset(EncodingPreset? value);
 
-  AudioProcessingSettings? getAudioProcessingSettings();
+  AudioProcessingSettings getAudioProcessingSettings();
 
   Future<void> setAudioProcessingSettings(AudioProcessingSettings settings);
 }

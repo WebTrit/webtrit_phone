@@ -1,4 +1,5 @@
 export 'active_message_notification.dart';
+export 'audio_processing_settings.dart';
 export 'agreement_status.dart';
 export 'call_log_entry.dart';
 export 'call_to_action.dart';

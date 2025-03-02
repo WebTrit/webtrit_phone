@@ -59,6 +59,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   final CallkeepConnections callkeepConnections;
 
   final SDPMunger? sdpMunger;
+  final AudioConstraintsBuilder? audioConstraintsBuilder;
+  final WebrtcOptionsBuilder? webRtcOptionsBuilder;
 
   StreamSubscription<List<ConnectivityResult>>? _connectivityChangedSubscription;
   StreamSubscription<PendingCall>? _pendingCallHandlerSubscription;
@@ -80,6 +82,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     required this.callkeep,
     required this.callkeepConnections,
     this.sdpMunger,
+    this.audioConstraintsBuilder,
+    this.webRtcOptionsBuilder,
   }) : super(const CallState()) {
     on<CallStarted>(
       _onCallStarted,
@@ -344,6 +348,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     });
 
     _reconnectInitiated(Duration.zero);
+
+    WebRTC.initialize(options: webRtcOptionsBuilder?.build());
   }
 
   Future<void> _onAppLifecycleStateChanged(
@@ -2411,7 +2417,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     bool? frontCamera,
   }) async {
     final Map<String, dynamic> mediaConstraints = {
-      'audio': true,
+      'audio': {
+        'mandatory': audioConstraintsBuilder?.build() ?? {},
+      },
       'video': video
           ? {
               'mandatory': {

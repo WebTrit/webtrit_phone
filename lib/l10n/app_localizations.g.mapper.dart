@@ -696,6 +696,10 @@ class AppLocalizationsMapper {
           localizations.settings_encoding_Section_value_enable,
       'settings_encoding_Section_value_disable':
           localizations.settings_encoding_Section_value_disable,
+      'settings_encoding_Section_value_on':
+          localizations.settings_encoding_Section_value_on,
+      'settings_encoding_Section_value_off':
+          localizations.settings_encoding_Section_value_off,
       'settings_encoding_Section_bitrate_prefix':
           localizations.settings_encoding_Section_bitrate_prefix,
       'settings_encoding_Section_ptime_prefix':
@@ -740,6 +744,22 @@ class AppLocalizationsMapper {
           localizations.settings_encoding_Section_rtp_override_warning_title,
       'settings_encoding_Section_rtp_override_warning_message':
           localizations.settings_encoding_Section_rtp_override_warning_message,
+      'settings_audioProcessing_Section_title':
+          localizations.settings_audioProcessing_Section_title,
+      'settings_audioProcessing_Section_tooltip':
+          localizations.settings_audioProcessing_Section_tooltip,
+      'settings_audioProcessing_Section_VP_title':
+          localizations.settings_audioProcessing_Section_VP_title,
+      'settings_audioProcessing_Section_EC_title':
+          localizations.settings_audioProcessing_Section_EC_title,
+      'settings_audioProcessing_Section_AGC_title':
+          localizations.settings_audioProcessing_Section_AGC_title,
+      'settings_audioProcessing_Section_NS_title':
+          localizations.settings_audioProcessing_Section_NS_title,
+      'settings_audioProcessing_Section_HPF_title':
+          localizations.settings_audioProcessing_Section_HPF_title,
+      'settings_audioProcessing_Section_AM_title':
+          localizations.settings_audioProcessing_Section_AM_title,
       'settings_ListViewTileTitle_about':
           localizations.settings_ListViewTileTitle_about,
       'settings_ListViewTileTitle_accountDelete':
