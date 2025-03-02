@@ -772,6 +772,24 @@ class AppLocalizationsMapper {
           localizations.settings_videoCapturing_Section_framerate_title,
       'settings_videoCapturing_Section_framerate_prefix':
           localizations.settings_videoCapturing_Section_framerate_prefix,
+      'settings_iceSettings_Section_title':
+          localizations.settings_iceSettings_Section_title,
+      'settings_iceSettings_Section_tooltip':
+          localizations.settings_iceSettings_Section_tooltip,
+      'settings_iceSettings_Section_netfilter_title':
+          localizations.settings_iceSettings_Section_netfilter_title,
+      'settings_iceSettings_Section_noskip':
+          localizations.settings_iceSettings_Section_noskip,
+      'settings_iceSettings_Section_netfilter_skipv4':
+          localizations.settings_iceSettings_Section_netfilter_skipv4,
+      'settings_iceSettings_Section_netfilter_skipv6':
+          localizations.settings_iceSettings_Section_netfilter_skipv6,
+      'settings_iceSettings_Section_trfilter_title':
+          localizations.settings_iceSettings_Section_trfilter_title,
+      'settings_iceSettings_Section_trfilter_skipUdp':
+          localizations.settings_iceSettings_Section_trfilter_skipUdp,
+      'settings_iceSettings_Section_trfilter_skipTcp':
+          localizations.settings_iceSettings_Section_trfilter_skipTcp,
       'settings_ListViewTileTitle_about':
           localizations.settings_ListViewTileTitle_about,
       'settings_ListViewTileTitle_accountDelete':

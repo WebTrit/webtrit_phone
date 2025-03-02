@@ -1290,6 +1290,33 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings_videoCapturing_Section_framerate_prefix => 'frames: ';
 
   @override
+  String get settings_iceSettings_Section_title => 'Ice candidates filtering';
+
+  @override
+  String get settings_iceSettings_Section_tooltip => 'Filter ice candidates based on the network preferences may help to avoid network issues';
+
+  @override
+  String get settings_iceSettings_Section_netfilter_title => 'Network protocol';
+
+  @override
+  String get settings_iceSettings_Section_noskip => 'No filtering';
+
+  @override
+  String get settings_iceSettings_Section_netfilter_skipv4 => 'Skip IPv4 candidates';
+
+  @override
+  String get settings_iceSettings_Section_netfilter_skipv6 => 'Skip IPv6 candidates';
+
+  @override
+  String get settings_iceSettings_Section_trfilter_title => 'Transport protocol';
+
+  @override
+  String get settings_iceSettings_Section_trfilter_skipUdp => 'Skip UDP candidates';
+
+  @override
+  String get settings_iceSettings_Section_trfilter_skipTcp => 'Skip TCP candidates';
+
+  @override
   String get settings_ListViewTileTitle_about => 'About';
 
   @override

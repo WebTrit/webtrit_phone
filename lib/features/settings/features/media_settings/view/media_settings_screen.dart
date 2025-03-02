@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/audio_processing_settings.dart';
 import 'package:webtrit_phone/models/encoding_settings.dart';
+import 'package:webtrit_phone/models/ice_settings.dart';
 import 'package:webtrit_phone/models/rtp_codec_profile.dart';
 import 'package:webtrit_phone/models/video_capturing_settings.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
@@ -47,6 +48,7 @@ class _MediaSettingsScreenState extends State<MediaSettingsScreen> {
           final encodingSettings = state.encodingSettings;
           final audioProcessingSettings = state.audioProcessingSettings;
           final videoCapturingSettings = state.videoCapturingSettings;
+          final iceSettings = state.iceSettings;
 
           return SingleChildScrollView(
             padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24),
@@ -66,6 +68,10 @@ class _MediaSettingsScreenState extends State<MediaSettingsScreen> {
                 const Divider(),
                 const SizedBox(height: 24),
                 videoCapturingContent(context, videoCapturingSettings),
+                const SizedBox(height: 24),
+                const Divider(),
+                const SizedBox(height: 24),
+                iceSettingsContent(context, iceSettings),
               ],
             ),
           );
@@ -404,6 +410,52 @@ class _MediaSettingsScreenState extends State<MediaSettingsScreen> {
           options: Framerate.values,
           selected: videoCapturingSettings.framerate,
           onSelect: (option) => cubit.setVideoCapturingSettings(videoCapturingSettings.copyWithFramerate(option)),
+        ),
+      ],
+    );
+  }
+
+  Widget iceSettingsContent(BuildContext context, IceSettings iceSettings) {
+    return Column(
+      children: [
+        HeadingSection(
+          title: context.l10n.settings_iceSettings_Section_title,
+          tooltip: context.l10n.settings_iceSettings_Section_tooltip,
+          icon: const Icon(Icons.bubble_chart),
+        ),
+        const SizedBox(height: 16.0),
+        ChoosableSection<IceNetworkFilter>(
+          title: context.l10n.settings_iceSettings_Section_netfilter_title,
+          buildOptionTitle: (option) {
+            if (option == IceNetworkFilter.ipv4) {
+              return Text(context.l10n.settings_iceSettings_Section_netfilter_skipv4);
+            }
+            if (option == IceNetworkFilter.ipv6) {
+              return Text(context.l10n.settings_iceSettings_Section_netfilter_skipv6);
+            }
+
+            return Text(context.l10n.settings_iceSettings_Section_noskip);
+          },
+          options: const [IceNetworkFilter.ipv4, IceNetworkFilter.ipv6],
+          selected: iceSettings.iceNetworkFilter,
+          onSelect: (option) => cubit.setIceSettings(iceSettings.copyWithNetworkFilter(option)),
+        ),
+        const SizedBox(height: 16.0),
+        ChoosableSection<IceTransportFilter>(
+          title: context.l10n.settings_iceSettings_Section_trfilter_title,
+          buildOptionTitle: (option) {
+            if (option == IceTransportFilter.tcp) {
+              return Text(context.l10n.settings_iceSettings_Section_trfilter_skipTcp);
+            }
+            if (option == IceTransportFilter.udp) {
+              return Text(context.l10n.settings_iceSettings_Section_trfilter_skipUdp);
+            }
+
+            return Text(context.l10n.settings_iceSettings_Section_noskip);
+          },
+          options: const [IceTransportFilter.tcp, IceTransportFilter.udp],
+          selected: iceSettings.iceTransportFilter,
+          onSelect: (option) => cubit.setIceSettings(iceSettings.copyWithTransportFilter(option)),
         ),
       ],
     );

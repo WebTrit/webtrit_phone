@@ -70,6 +70,10 @@ abstract class AppPreferences {
   VideoCapturingSettings getVideoCapturingSettings();
 
   Future<void> setVideoCapturingSettings(VideoCapturingSettings settings);
+
+  IceSettings getIceSettings();
+
+  Future<void> setIceSettings(IceSettings settings);
 }
 
 class AppPreferencesFactory {
@@ -89,7 +93,8 @@ class AppPreferencesImpl
         SystemInfoJsonMapper,
         EncodingSettingsJsonMapper,
         AudioProcessingSettingsJsonMapper,
-        VideoCapturingSettingsJsonMapper
+        VideoCapturingSettingsJsonMapper,
+        IceSettingsJsonMapper
     implements AppPreferences {
   static const _kRegisterStatusKey = 'register-status';
   static const _kThemeModeKey = 'theme-mode';
@@ -105,6 +110,7 @@ class AppPreferencesImpl
   static const _kEncodingPresetKey = 'encoding-preset';
   static const _kAudioProcessingSettingsKey = 'audio-processing-settings';
   static const _kVideoCapturingSettingsKey = 'video-capturing-settings';
+  static const _kIceSettingsKey = 'ice-settings';
 
   // Please add all new keys here for proper cleaning of preferences
   static const _kPreferencesList = [
@@ -122,6 +128,7 @@ class AppPreferencesImpl
     _kEncodingPresetKey,
     _kAudioProcessingSettingsKey,
     _kVideoCapturingSettingsKey,
+    _kIceSettingsKey,
   ];
 
   // List of preferences keys to exclude by default during clean operation
@@ -378,5 +385,20 @@ class AppPreferencesImpl
   @override
   Future<void> setVideoCapturingSettings(VideoCapturingSettings settings) {
     return _sharedPreferences.setString(_kVideoCapturingSettingsKey, videoCapturingSettingsToJson(settings));
+  }
+
+  @override
+  IceSettings getIceSettings() {
+    final iceSettingsString = _sharedPreferences.getString(_kIceSettingsKey);
+    if (iceSettingsString != null) {
+      return iceSettingsFromJson(iceSettingsString);
+    } else {
+      return IceSettings.blank();
+    }
+  }
+
+  @override
+  Future<void> setIceSettings(IceSettings settings) {
+    return _sharedPreferences.setString(_kIceSettingsKey, iceSettingsToJson(settings));
   }
 }

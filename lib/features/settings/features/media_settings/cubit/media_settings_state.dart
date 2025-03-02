@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:webtrit_phone/data/app_preferences.dart';
 import 'package:webtrit_phone/models/audio_processing_settings.dart';
 import 'package:webtrit_phone/models/encoding_settings.dart';
+import 'package:webtrit_phone/models/ice_settings.dart';
 import 'package:webtrit_phone/models/video_capturing_settings.dart';
 
 class MediaSettingsState with EquatableMixin {
@@ -10,12 +11,14 @@ class MediaSettingsState with EquatableMixin {
     required this.encodingPreset,
     required this.audioProcessingSettings,
     required this.videoCapturingSettings,
+    required this.iceSettings,
   });
 
   final EncodingSettings encodingSettings;
   final EncodingPreset? encodingPreset;
   final AudioProcessingSettings audioProcessingSettings;
   final VideoCapturingSettings videoCapturingSettings;
+  final IceSettings iceSettings;
 
   factory MediaSettingsState.fromPrefs(AppPreferences prefs) {
     return MediaSettingsState(
@@ -23,6 +26,7 @@ class MediaSettingsState with EquatableMixin {
       encodingPreset: prefs.getEncodingPreset(),
       audioProcessingSettings: prefs.getAudioProcessingSettings(),
       videoCapturingSettings: prefs.getVideoCapturingSettings(),
+      iceSettings: prefs.getIceSettings(),
     );
   }
 
@@ -32,6 +36,7 @@ class MediaSettingsState with EquatableMixin {
       encodingPreset: preset,
       audioProcessingSettings: audioProcessingSettings,
       videoCapturingSettings: videoCapturingSettings,
+      iceSettings: iceSettings,
     );
   }
 
@@ -41,6 +46,7 @@ class MediaSettingsState with EquatableMixin {
       encodingPreset: encodingPreset,
       audioProcessingSettings: audioProcessingSettings,
       videoCapturingSettings: videoCapturingSettings,
+      iceSettings: iceSettings,
     );
   }
 
@@ -50,6 +56,7 @@ class MediaSettingsState with EquatableMixin {
       encodingPreset: encodingPreset,
       audioProcessingSettings: settings,
       videoCapturingSettings: videoCapturingSettings,
+      iceSettings: iceSettings,
     );
   }
 
@@ -59,6 +66,17 @@ class MediaSettingsState with EquatableMixin {
       encodingPreset: encodingPreset,
       audioProcessingSettings: audioProcessingSettings,
       videoCapturingSettings: settings,
+      iceSettings: iceSettings,
+    );
+  }
+
+  MediaSettingsState copyWithIceSettings(IceSettings settings) {
+    return MediaSettingsState(
+      encodingSettings: encodingSettings,
+      encodingPreset: encodingPreset,
+      audioProcessingSettings: audioProcessingSettings,
+      videoCapturingSettings: videoCapturingSettings,
+      iceSettings: settings,
     );
   }
 
@@ -68,10 +86,15 @@ class MediaSettingsState with EquatableMixin {
         encodingPreset,
         audioProcessingSettings,
         videoCapturingSettings,
+        iceSettings,
       ];
 
   @override
   String toString() {
-    return 'MediaSettingsState{encodingPreset: $encodingPreset, encodingSettings: $encodingSettings} , audioProcessingSettings: $audioProcessingSettings, videoCapturingSettings: $videoCapturingSettings';
+    return 'MediaSettingsState - '
+        'encodingPreset: $encodingPreset,'
+        'encodingSettings: $encodingSettings},'
+        'audioProcessingSettings: $audioProcessingSettings,'
+        'videoCapturingSettings: $videoCapturingSettings';
   }
 }

@@ -23,6 +23,7 @@ export 'external_contact.dart';
 export 'failures/failures.dart';
 export 'favorite.dart';
 export 'feature_access/exports.dart';
+export 'ice_settings.dart';
 export 'incoming_call_type.dart';
 export 'keypad_key.dart';
 export 'local_contact.dart';

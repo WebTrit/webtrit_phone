@@ -1290,6 +1290,33 @@ class AppLocalizationsIt extends AppLocalizations {
   String get settings_videoCapturing_Section_framerate_prefix => 'cornici: ';
 
   @override
+  String get settings_iceSettings_Section_title => 'Filtraggio dei candidati al ghiaccio';
+
+  @override
+  String get settings_iceSettings_Section_tooltip => 'Filtrare i candidati al ghiaccio in base alle preferenze di rete può aiutare a evitare problemi di rete';
+
+  @override
+  String get settings_iceSettings_Section_netfilter_title => 'Protocollo di rete';
+
+  @override
+  String get settings_iceSettings_Section_noskip => 'Nessun filtro';
+
+  @override
+  String get settings_iceSettings_Section_netfilter_skipv4 => 'Salta i candidati IPv4';
+
+  @override
+  String get settings_iceSettings_Section_netfilter_skipv6 => 'Salta i candidati IPv6';
+
+  @override
+  String get settings_iceSettings_Section_trfilter_title => 'Protocollo di trasporto';
+
+  @override
+  String get settings_iceSettings_Section_trfilter_skipUdp => 'Salta i candidati UDP';
+
+  @override
+  String get settings_iceSettings_Section_trfilter_skipTcp => 'Salta i candidati TCP';
+
+  @override
   String get settings_ListViewTileTitle_about => 'Riguardo a';
 
   @override

@@ -2575,6 +2575,60 @@ abstract class AppLocalizations {
   /// **'frames: '**
   String get settings_videoCapturing_Section_framerate_prefix;
 
+  /// No description provided for @settings_iceSettings_Section_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Ice candidates filtering'**
+  String get settings_iceSettings_Section_title;
+
+  /// No description provided for @settings_iceSettings_Section_tooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Filter ice candidates based on the network preferences may help to avoid network issues'**
+  String get settings_iceSettings_Section_tooltip;
+
+  /// No description provided for @settings_iceSettings_Section_netfilter_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Network protocol'**
+  String get settings_iceSettings_Section_netfilter_title;
+
+  /// No description provided for @settings_iceSettings_Section_noskip.
+  ///
+  /// In en, this message translates to:
+  /// **'No filtering'**
+  String get settings_iceSettings_Section_noskip;
+
+  /// No description provided for @settings_iceSettings_Section_netfilter_skipv4.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip IPv4 candidates'**
+  String get settings_iceSettings_Section_netfilter_skipv4;
+
+  /// No description provided for @settings_iceSettings_Section_netfilter_skipv6.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip IPv6 candidates'**
+  String get settings_iceSettings_Section_netfilter_skipv6;
+
+  /// No description provided for @settings_iceSettings_Section_trfilter_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Transport protocol'**
+  String get settings_iceSettings_Section_trfilter_title;
+
+  /// No description provided for @settings_iceSettings_Section_trfilter_skipUdp.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip UDP candidates'**
+  String get settings_iceSettings_Section_trfilter_skipUdp;
+
+  /// No description provided for @settings_iceSettings_Section_trfilter_skipTcp.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip TCP candidates'**
+  String get settings_iceSettings_Section_trfilter_skipTcp;
+
   /// No description provided for @settings_ListViewTileTitle_about.
   ///
   /// In en, this message translates to:

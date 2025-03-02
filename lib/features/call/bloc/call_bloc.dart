@@ -62,6 +62,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   final AudioConstraintsBuilder? audioConstraintsBuilder;
   final VideoConstraintsBuilder? videoConstraintsBuilder;
   final WebrtcOptionsBuilder? webRtcOptionsBuilder;
+  final IceFilter? iceFilter;
 
   StreamSubscription<List<ConnectivityResult>>? _connectivityChangedSubscription;
   StreamSubscription<PendingCall>? _pendingCallHandlerSubscription;
@@ -86,6 +87,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     this.audioConstraintsBuilder,
     this.videoConstraintsBuilder,
     this.webRtcOptionsBuilder,
+    this.iceFilter,
   }) : super(const CallState()) {
     on<CallStarted>(
       _onCallStarted,
@@ -2016,6 +2018,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _PeerConnectionEventIceCandidateIdentified event,
     Emitter<CallState> emit,
   ) async {
+    if (iceFilter?.filter(event.candidate) == true) {
+      _logger.fine('__onPeerConnectionEventIceCandidateIdentified: skip by iceFiler');
+      return;
+    }
+
     try {
       await state.performOnActiveCall(event.callId, (activeCall) {
         if (!activeCall.wasHungUp) {

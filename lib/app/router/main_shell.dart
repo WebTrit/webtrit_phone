@@ -260,6 +260,7 @@ class _MainShellState extends State<MainShell> {
                 audioConstraintsBuilder: AudioConstraintsWithAppSettingsBuilder(appPreferences),
                 videoConstraintsBuilder: VideoConstraintsWithAppSettingsBuilder(appPreferences),
                 webRtcOptionsBuilder: WebrtcOptionsWithAppSettingsBuilder(appPreferences),
+                iceFilter: FilterWithAppSettings(appPreferences),
               )..add(const CallStarted());
             },
           ),

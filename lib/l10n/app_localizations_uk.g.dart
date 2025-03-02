@@ -1290,6 +1290,33 @@ class AppLocalizationsUk extends AppLocalizations {
   String get settings_videoCapturing_Section_framerate_prefix => 'кадрів: ';
 
   @override
+  String get settings_iceSettings_Section_title => 'Фільтрація ice-кандидатів';
+
+  @override
+  String get settings_iceSettings_Section_tooltip => 'Фільтр ice-кандидатів на основі параметрів мережі може допомогти уникнути проблем з мережею';
+
+  @override
+  String get settings_iceSettings_Section_netfilter_title => 'Мережевий протокол';
+
+  @override
+  String get settings_iceSettings_Section_noskip => 'Без фільтрації';
+
+  @override
+  String get settings_iceSettings_Section_netfilter_skipv4 => 'Пропустити IPv4-кандидатів';
+
+  @override
+  String get settings_iceSettings_Section_netfilter_skipv6 => 'Пропустити IPv6-кандидатів';
+
+  @override
+  String get settings_iceSettings_Section_trfilter_title => 'Транспортний протокол';
+
+  @override
+  String get settings_iceSettings_Section_trfilter_skipUdp => 'Пропустити UDP-кандидатів';
+
+  @override
+  String get settings_iceSettings_Section_trfilter_skipTcp => 'Пропустити TCP-кандидатів';
+
+  @override
   String get settings_ListViewTileTitle_about => 'Про програму';
 
   @override

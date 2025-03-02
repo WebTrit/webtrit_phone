@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:webtrit_phone/data/app_preferences.dart';
 import 'package:webtrit_phone/models/audio_processing_settings.dart';
 import 'package:webtrit_phone/models/encoding_settings.dart';
+import 'package:webtrit_phone/models/ice_settings.dart';
 import 'package:webtrit_phone/models/video_capturing_settings.dart';
 
 import 'media_settings_state.dart';
@@ -32,17 +33,24 @@ class MediaSettingsCubit extends Cubit<MediaSettingsState> {
     _prefs.setVideoCapturingSettings(settings);
   }
 
+  void setIceSettings(IceSettings settings) {
+    emit(state.copyWithIceSettings(settings));
+    _prefs.setIceSettings(settings);
+  }
+
   void reset() {
     emit(MediaSettingsState(
       encodingPreset: null,
       encodingSettings: EncodingSettings.blank(),
       audioProcessingSettings: AudioProcessingSettings.blank(),
       videoCapturingSettings: VideoCapturingSettings.blank(),
+      iceSettings: IceSettings.blank(),
     ));
 
     _prefs.setEncodingPreset(null);
     _prefs.setEncodingSettings(EncodingSettings.blank());
     _prefs.setAudioProcessingSettings(AudioProcessingSettings.blank());
     _prefs.setVideoCapturingSettings(VideoCapturingSettings.blank());
+    _prefs.setIceSettings(IceSettings.blank());
   }
 }
