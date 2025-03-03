@@ -244,4 +244,34 @@ class MockAppPreferencesService implements AppPreferences {
   Future<void> setEncodingPreset(EncodingPreset? value) {
     return Future.value();
   }
+
+  @override
+  AudioProcessingSettings getAudioProcessingSettings() {
+    return const AudioProcessingSettings();
+  }
+
+  @override
+  Future<void> setAudioProcessingSettings(AudioProcessingSettings settings) {
+    return Future.value();
+  }
+
+  @override
+  VideoCapturingSettings getVideoCapturingSettings() {
+    return const VideoCapturingSettings();
+  }
+
+  @override
+  Future<void> setVideoCapturingSettings(VideoCapturingSettings settings) {
+    return Future.value();
+  }
+
+  @override
+  IceSettings getIceSettings() {
+    return const IceSettings();
+  }
+
+  @override
+  Future<void> setIceSettings(IceSettings settings) {
+    return Future.value();
+  }
 }

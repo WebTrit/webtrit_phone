@@ -251,9 +251,9 @@ class FeatureAccess {
 
     final encodingConfig = appConfig.callConfig.encoding;
     final defaultPresetOverride = encodingConfig.defaultPresetOverride;
-    final encodingTabEnabled = appConfig.settingsConfig.sections.any((section) {
+    final encodingViewEnabled = appConfig.settingsConfig.sections.any((section) {
       return section.items.any((item) {
-        return item.type == SettingsFlavor.encoding.name && item.enabled;
+        return item.type == SettingsFlavor.mediaSettings.name && item.enabled;
       });
     });
 
@@ -265,7 +265,7 @@ class FeatureAccess {
       ),
       encoding: EncodingConfig(
           bypassConfig: encodingConfig.bypassConfig,
-          configurationAllowed: encodingTabEnabled,
+          configurationAllowed: encodingViewEnabled,
           defaultPresetOverride: DefaultPresetOverride(
             audioBitrate: defaultPresetOverride.audioBitrate,
             videoBitrate: defaultPresetOverride.videoBitrate,

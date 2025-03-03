@@ -2353,29 +2353,137 @@ abstract class AppLocalizations {
   /// **'Reset to default'**
   String get settings_encoding_AppBar_reset_tooltip;
 
-  /// No description provided for @settings_encoding_Section_audio_ptime.
+  /// No description provided for @settings_encoding_Section_preset_title.
   ///
   /// In en, this message translates to:
-  /// **'Audio target ptime: '**
-  String get settings_encoding_Section_audio_ptime;
+  /// **'Media encoding configs'**
+  String get settings_encoding_Section_preset_title;
 
-  /// No description provided for @settings_encoding_Section_audio_ptime_limit.
+  /// No description provided for @settings_encoding_Section_preset_tooltip.
   ///
   /// In en, this message translates to:
-  /// **'Audio ptime limit: '**
-  String get settings_encoding_Section_audio_ptime_limit;
+  /// **'Adjustment presets for audio and video codecs: \n- lower values will reduce the bandwidth usage but affect the quality, \n- higher values will increase the quality but also the bandwidth usage. \nThe default preset has recommended settings provided by your vendor according to their environment preferences.'**
+  String get settings_encoding_Section_preset_tooltip;
 
-  /// No description provided for @settings_encoding_Section_bandwidth_prefix.
+  /// No description provided for @settings_encoding_Section_preset.
   ///
   /// In en, this message translates to:
-  /// **'Bandwidth: '**
-  String get settings_encoding_Section_bandwidth_prefix;
+  /// **'Preset'**
+  String get settings_encoding_Section_preset;
+
+  /// No description provided for @settings_encoding_Section_preset_default.
+  ///
+  /// In en, this message translates to:
+  /// **'Default'**
+  String get settings_encoding_Section_preset_default;
+
+  /// No description provided for @settings_encoding_Section_preset_eco.
+  ///
+  /// In en, this message translates to:
+  /// **'Eco'**
+  String get settings_encoding_Section_preset_eco;
+
+  /// No description provided for @settings_encoding_Section_preset_balance.
+  ///
+  /// In en, this message translates to:
+  /// **'Balance'**
+  String get settings_encoding_Section_preset_balance;
+
+  /// No description provided for @settings_encoding_Section_preset_quality.
+  ///
+  /// In en, this message translates to:
+  /// **'Quality'**
+  String get settings_encoding_Section_preset_quality;
+
+  /// No description provided for @settings_encoding_Section_preset_full_flex.
+  ///
+  /// In en, this message translates to:
+  /// **'Full flex'**
+  String get settings_encoding_Section_preset_full_flex;
+
+  /// No description provided for @settings_encoding_Section_preset_custom.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom'**
+  String get settings_encoding_Section_preset_custom;
+
+  /// No description provided for @settings_encoding_Section_measure_kbps.
+  ///
+  /// In en, this message translates to:
+  /// **'Kbps'**
+  String get settings_encoding_Section_measure_kbps;
+
+  /// No description provided for @settings_encoding_Section_measure_ms.
+  ///
+  /// In en, this message translates to:
+  /// **'ms'**
+  String get settings_encoding_Section_measure_ms;
+
+  /// No description provided for @settings_encoding_Section_measure_hz.
+  ///
+  /// In en, this message translates to:
+  /// **'Hz'**
+  String get settings_encoding_Section_measure_hz;
+
+  /// No description provided for @settings_encoding_Section_value_auto.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto'**
+  String get settings_encoding_Section_value_auto;
+
+  /// No description provided for @settings_encoding_Section_value_mono.
+  ///
+  /// In en, this message translates to:
+  /// **'Mono'**
+  String get settings_encoding_Section_value_mono;
+
+  /// No description provided for @settings_encoding_Section_value_stereo.
+  ///
+  /// In en, this message translates to:
+  /// **'Stereo'**
+  String get settings_encoding_Section_value_stereo;
+
+  /// No description provided for @settings_encoding_Section_value_enable.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable'**
+  String get settings_encoding_Section_value_enable;
+
+  /// No description provided for @settings_encoding_Section_value_disable.
+  ///
+  /// In en, this message translates to:
+  /// **'Disable'**
+  String get settings_encoding_Section_value_disable;
+
+  /// No description provided for @settings_encoding_Section_value_on.
+  ///
+  /// In en, this message translates to:
+  /// **'On'**
+  String get settings_encoding_Section_value_on;
+
+  /// No description provided for @settings_encoding_Section_value_off.
+  ///
+  /// In en, this message translates to:
+  /// **'Off'**
+  String get settings_encoding_Section_value_off;
 
   /// No description provided for @settings_encoding_Section_bitrate_prefix.
   ///
   /// In en, this message translates to:
   /// **'Bitrate: '**
   String get settings_encoding_Section_bitrate_prefix;
+
+  /// No description provided for @settings_encoding_Section_ptime_prefix.
+  ///
+  /// In en, this message translates to:
+  /// **'Ptime: '**
+  String get settings_encoding_Section_ptime_prefix;
+
+  /// No description provided for @settings_encoding_Section_bandwidth_prefix.
+  ///
+  /// In en, this message translates to:
+  /// **'Bandwidth: '**
+  String get settings_encoding_Section_bandwidth_prefix;
 
   /// No description provided for @settings_encoding_Section_bitrate_title.
   ///
@@ -2389,23 +2497,41 @@ abstract class AppLocalizations {
   /// **'Adjust the bitrate settings for audio and video codecs: \n- lower values will reduce the bandwidth usage but affect the quality, \n- higher values will increase the quality but also the bandwidth usage.'**
   String get settings_encoding_Section_bitrate_tooltip;
 
-  /// No description provided for @settings_encoding_Section_measure_hz.
+  /// No description provided for @settings_encoding_Section_target_audio_bitrate.
   ///
   /// In en, this message translates to:
-  /// **'Hz'**
-  String get settings_encoding_Section_measure_hz;
+  /// **'Audio target bitrate: '**
+  String get settings_encoding_Section_target_audio_bitrate;
 
-  /// No description provided for @settings_encoding_Section_measure_kbps.
+  /// No description provided for @settings_encoding_Section_target_video_bitrate.
   ///
   /// In en, this message translates to:
-  /// **'Kbps'**
-  String get settings_encoding_Section_measure_kbps;
+  /// **'Video target bitrate: '**
+  String get settings_encoding_Section_target_video_bitrate;
 
-  /// No description provided for @settings_encoding_Section_measure_ms.
+  /// No description provided for @settings_encoding_Section_packetization_title.
   ///
   /// In en, this message translates to:
-  /// **'ms'**
-  String get settings_encoding_Section_measure_ms;
+  /// **'Audio packetization'**
+  String get settings_encoding_Section_packetization_title;
+
+  /// No description provided for @settings_encoding_Section_packetization_tooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Adjust audio packetization time in milliseconds. Can be used to reduce audio latency or fix Network MTU size issues'**
+  String get settings_encoding_Section_packetization_tooltip;
+
+  /// No description provided for @settings_encoding_Section_audio_ptime.
+  ///
+  /// In en, this message translates to:
+  /// **'Audio target ptime: '**
+  String get settings_encoding_Section_audio_ptime;
+
+  /// No description provided for @settings_encoding_Section_audio_ptime_limit.
+  ///
+  /// In en, this message translates to:
+  /// **'Audio ptime limit: '**
+  String get settings_encoding_Section_audio_ptime_limit;
 
   /// No description provided for @settings_encoding_Section_opus_bandwidth.
   ///
@@ -2437,78 +2563,6 @@ abstract class AppLocalizations {
   /// **'Adjust the opus specific codec settings. Can be used to reduce bandwidth usage or improve audio quality'**
   String get settings_encoding_Section_opus_tooltip;
 
-  /// No description provided for @settings_encoding_Section_packetization_title.
-  ///
-  /// In en, this message translates to:
-  /// **'Audio packetization'**
-  String get settings_encoding_Section_packetization_title;
-
-  /// No description provided for @settings_encoding_Section_packetization_tooltip.
-  ///
-  /// In en, this message translates to:
-  /// **'Adjust audio packetization time in milliseconds. Can be used to reduce audio latency or fix Network MTU size issues'**
-  String get settings_encoding_Section_packetization_tooltip;
-
-  /// No description provided for @settings_encoding_Section_preset.
-  ///
-  /// In en, this message translates to:
-  /// **'Preset'**
-  String get settings_encoding_Section_preset;
-
-  /// No description provided for @settings_encoding_Section_preset_balance.
-  ///
-  /// In en, this message translates to:
-  /// **'Balance'**
-  String get settings_encoding_Section_preset_balance;
-
-  /// No description provided for @settings_encoding_Section_preset_custom.
-  ///
-  /// In en, this message translates to:
-  /// **'Custom'**
-  String get settings_encoding_Section_preset_custom;
-
-  /// No description provided for @settings_encoding_Section_preset_default.
-  ///
-  /// In en, this message translates to:
-  /// **'Default'**
-  String get settings_encoding_Section_preset_default;
-
-  /// No description provided for @settings_encoding_Section_preset_eco.
-  ///
-  /// In en, this message translates to:
-  /// **'Eco'**
-  String get settings_encoding_Section_preset_eco;
-
-  /// No description provided for @settings_encoding_Section_preset_full_flex.
-  ///
-  /// In en, this message translates to:
-  /// **'Full flex'**
-  String get settings_encoding_Section_preset_full_flex;
-
-  /// No description provided for @settings_encoding_Section_preset_quality.
-  ///
-  /// In en, this message translates to:
-  /// **'Quality'**
-  String get settings_encoding_Section_preset_quality;
-
-  /// No description provided for @settings_encoding_Section_preset_title.
-  ///
-  /// In en, this message translates to:
-  /// **'Media encoding configs'**
-  String get settings_encoding_Section_preset_title;
-
-  /// No description provided for @settings_encoding_Section_preset_tooltip.
-  ///
-  /// In en, this message translates to:
-  /// **'Adjustment presets for audio and video codecs: \n- lower values will reduce the bandwidth usage but affect the quality, \n- higher values will increase the quality but also the bandwidth usage. \nThe default preset has recommended settings provided by your vendor according to their environment preferences.'**
-  String get settings_encoding_Section_preset_tooltip;
-
-  /// No description provided for @settings_encoding_Section_ptime_prefix.
-  ///
-  /// In en, this message translates to:
-  /// **'Ptime: '**
-  String get settings_encoding_Section_ptime_prefix;
-
   /// No description provided for @settings_encoding_Section_rtp_override_audio.
   ///
   /// In en, this message translates to:
@@ -2533,59 +2587,155 @@ abstract class AppLocalizations {
   /// **'Video profiles override'**
   String get settings_encoding_Section_rtp_override_video;
 
-  /// No description provided for @settings_encoding_Section_rtp_override_warning_message.
-  ///
-  /// In en, this message translates to:
-  /// **'Overriding the default list may affect the compatibility with other devices or media systems and cause call errors, use only if you know what you are doing.'**
-  String get settings_encoding_Section_rtp_override_warning_message;
-
   /// No description provided for @settings_encoding_Section_rtp_override_warning_title.
   ///
   /// In en, this message translates to:
   /// **'Warning:'**
   String get settings_encoding_Section_rtp_override_warning_title;
 
-  /// No description provided for @settings_encoding_Section_target_audio_bitrate.
+  /// No description provided for @settings_encoding_Section_rtp_override_warning_message.
   ///
   /// In en, this message translates to:
-  /// **'Audio target bitrate: '**
-  String get settings_encoding_Section_target_audio_bitrate;
+  /// **'Overriding may affect the compatibility with other devices or media systems and cause call errors, use only if you know what you are doing.'**
+  String get settings_encoding_Section_rtp_override_warning_message;
 
-  /// No description provided for @settings_encoding_Section_target_video_bitrate.
+  /// No description provided for @settings_audioProcessing_Section_title.
   ///
   /// In en, this message translates to:
-  /// **'Video target bitrate: '**
-  String get settings_encoding_Section_target_video_bitrate;
+  /// **'Audio pre-processing'**
+  String get settings_audioProcessing_Section_title;
 
-  /// No description provided for @settings_encoding_Section_value_auto.
+  /// No description provided for @settings_audioProcessing_Section_tooltip.
   ///
   /// In en, this message translates to:
-  /// **'Auto'**
-  String get settings_encoding_Section_value_auto;
+  /// **'Can be used to tune audio quality for specific needs or environments. Like studio recording, or external microphone. \n\nBypass voice processing - tells system to not apply hardware voice processing (Requires app restart).'**
+  String get settings_audioProcessing_Section_tooltip;
 
-  /// No description provided for @settings_encoding_Section_value_disable.
+  /// No description provided for @settings_audioProcessing_Section_VP_title.
   ///
   /// In en, this message translates to:
-  /// **'Disable'**
-  String get settings_encoding_Section_value_disable;
+  /// **'Bypass voice processing'**
+  String get settings_audioProcessing_Section_VP_title;
 
-  /// No description provided for @settings_encoding_Section_value_enable.
+  /// No description provided for @settings_audioProcessing_Section_EC_title.
   ///
   /// In en, this message translates to:
-  /// **'Enable'**
-  String get settings_encoding_Section_value_enable;
+  /// **'Echo cancellation'**
+  String get settings_audioProcessing_Section_EC_title;
 
-  /// No description provided for @settings_encoding_Section_value_mono.
+  /// No description provided for @settings_audioProcessing_Section_AGC_title.
   ///
   /// In en, this message translates to:
-  /// **'Mono'**
-  String get settings_encoding_Section_value_mono;
+  /// **'Auto gain control'**
+  String get settings_audioProcessing_Section_AGC_title;
 
-  /// No description provided for @settings_encoding_Section_value_stereo.
+  /// No description provided for @settings_audioProcessing_Section_NS_title.
   ///
   /// In en, this message translates to:
-  /// **'Stereo'**
-  String get settings_encoding_Section_value_stereo;
+  /// **'Noise suppression'**
+  String get settings_audioProcessing_Section_NS_title;
+
+  /// No description provided for @settings_audioProcessing_Section_HPF_title.
+  ///
+  /// In en, this message translates to:
+  /// **'High pass filter'**
+  String get settings_audioProcessing_Section_HPF_title;
+
+  /// No description provided for @settings_audioProcessing_Section_AM_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Audio mirroring'**
+  String get settings_audioProcessing_Section_AM_title;
+
+  /// No description provided for @settings_videoCapturing_Section_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Video capturing'**
+  String get settings_videoCapturing_Section_title;
+
+  /// No description provided for @settings_videoCapturing_Section_tooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Can be used to tune video quality for specific needs or environments.'**
+  String get settings_videoCapturing_Section_tooltip;
+
+  /// No description provided for @settings_videoCapturing_Section_resolution_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Image resolution'**
+  String get settings_videoCapturing_Section_resolution_title;
+
+  /// No description provided for @settings_videoCapturing_Section_resolution_prefix.
+  ///
+  /// In en, this message translates to:
+  /// **'vertical points: '**
+  String get settings_videoCapturing_Section_resolution_prefix;
+
+  /// No description provided for @settings_videoCapturing_Section_framerate_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Image framerate'**
+  String get settings_videoCapturing_Section_framerate_title;
+
+  /// No description provided for @settings_videoCapturing_Section_framerate_prefix.
+  ///
+  /// In en, this message translates to:
+  /// **'frames: '**
+  String get settings_videoCapturing_Section_framerate_prefix;
+
+  /// No description provided for @settings_iceSettings_Section_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Ice candidates filtering'**
+  String get settings_iceSettings_Section_title;
+
+  /// No description provided for @settings_iceSettings_Section_tooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Filter ice candidates based on the network preferences may help to avoid network issues'**
+  String get settings_iceSettings_Section_tooltip;
+
+  /// No description provided for @settings_iceSettings_Section_netfilter_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Network protocol'**
+  String get settings_iceSettings_Section_netfilter_title;
+
+  /// No description provided for @settings_iceSettings_Section_noskip.
+  ///
+  /// In en, this message translates to:
+  /// **'No filtering'**
+  String get settings_iceSettings_Section_noskip;
+
+  /// No description provided for @settings_iceSettings_Section_netfilter_skipv4.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip IPv4 candidates'**
+  String get settings_iceSettings_Section_netfilter_skipv4;
+
+  /// No description provided for @settings_iceSettings_Section_netfilter_skipv6.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip IPv6 candidates'**
+  String get settings_iceSettings_Section_netfilter_skipv6;
+
+  /// No description provided for @settings_iceSettings_Section_trfilter_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Transport protocol'**
+  String get settings_iceSettings_Section_trfilter_title;
+
+  /// No description provided for @settings_iceSettings_Section_trfilter_skipUdp.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip UDP candidates'**
+  String get settings_iceSettings_Section_trfilter_skipUdp;
+
+  /// No description provided for @settings_iceSettings_Section_trfilter_skipTcp.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip TCP candidates'**
+  String get settings_iceSettings_Section_trfilter_skipTcp;
 
   /// No description provided for @settings_ListViewTileTitle_about.
   ///
@@ -2599,17 +2749,11 @@ abstract class AppLocalizations {
   /// **'Delete account'**
   String get settings_ListViewTileTitle_accountDelete;
 
-  /// No description provided for @settings_ListViewTileTitle_call_codecs.
+  /// No description provided for @settings_ListViewTileTitle_mediaSettings.
   ///
   /// In en, this message translates to:
-  /// **'Call codecs'**
-  String get settings_ListViewTileTitle_call_codecs;
-
-  /// No description provided for @settings_ListViewTileTitle_encoding.
-  ///
-  /// In en, this message translates to:
-  /// **'Media encoding'**
-  String get settings_ListViewTileTitle_encoding;
+  /// **'Media settings'**
+  String get settings_ListViewTileTitle_mediaSettings;
 
   /// No description provided for @settings_ListViewTileTitle_help.
   ///

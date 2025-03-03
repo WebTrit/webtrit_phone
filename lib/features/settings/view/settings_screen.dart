@@ -174,12 +174,12 @@ class SettingsScreen extends StatelessWidget {
                                     ),
                                     const ListTileSeparator(),
                                   ])
-                                else if (item.flavor == SettingsFlavor.encoding)
+                                else if (item.flavor == SettingsFlavor.mediaSettings)
                                   Column(children: [
                                     ListTile(
                                       leading: Icon(item.icon),
                                       title: Text(context.parseL10n(item.titleL10n)),
-                                      onTap: () => context.router.navigate(const EncodingSettingsScreenPageRoute()),
+                                      onTap: () => context.router.navigate(const MediaSettingsScreenPageRoute()),
                                     ),
                                     const ListTileSeparator(),
                                   ])

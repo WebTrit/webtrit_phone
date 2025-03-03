@@ -123,8 +123,8 @@ The main configuration defines the navigation structure.
           "icon": "0xe424"
         },
         {
-          "type": "encoding",
-          "titleL10n": "settings_ListViewTileTitle_encoding",
+          "type": "mediaSettings",
+          "titleL10n": "settings_ListViewTileTitle_mediaSettings",
           "icon": "0xf1cf"
         },
         {

@@ -62,6 +62,18 @@ abstract class AppPreferences {
   EncodingPreset? getEncodingPreset({EncodingPreset? defaultValue});
 
   Future<void> setEncodingPreset(EncodingPreset? value);
+
+  AudioProcessingSettings getAudioProcessingSettings();
+
+  Future<void> setAudioProcessingSettings(AudioProcessingSettings settings);
+
+  VideoCapturingSettings getVideoCapturingSettings();
+
+  Future<void> setVideoCapturingSettings(VideoCapturingSettings settings);
+
+  IceSettings getIceSettings();
+
+  Future<void> setIceSettings(IceSettings settings);
 }
 
 class AppPreferencesFactory {
@@ -76,7 +88,14 @@ class AppPreferencesFactory {
   static AppPreferences get instance => _instance;
 }
 
-class AppPreferencesImpl with SystemInfoJsonMapper, EncodingSettingsJsonMapper implements AppPreferences {
+class AppPreferencesImpl
+    with
+        SystemInfoJsonMapper,
+        EncodingSettingsJsonMapper,
+        AudioProcessingSettingsJsonMapper,
+        VideoCapturingSettingsJsonMapper,
+        IceSettingsJsonMapper
+    implements AppPreferences {
   static const _kRegisterStatusKey = 'register-status';
   static const _kThemeModeKey = 'theme-mode';
   static const _kLocaleLanguageTagKey = 'locale-language-tag';
@@ -89,6 +108,9 @@ class AppPreferencesImpl with SystemInfoJsonMapper, EncodingSettingsJsonMapper i
   static const _kSystemInfoKey = 'system-info';
   static const _kEncodingSettingsKey = 'encoding-settings';
   static const _kEncodingPresetKey = 'encoding-preset';
+  static const _kAudioProcessingSettingsKey = 'audio-processing-settings';
+  static const _kVideoCapturingSettingsKey = 'video-capturing-settings';
+  static const _kIceSettingsKey = 'ice-settings';
 
   // Please add all new keys here for proper cleaning of preferences
   static const _kPreferencesList = [
@@ -104,6 +126,9 @@ class AppPreferencesImpl with SystemInfoJsonMapper, EncodingSettingsJsonMapper i
     _kSystemInfoKey,
     _kEncodingSettingsKey,
     _kEncodingPresetKey,
+    _kAudioProcessingSettingsKey,
+    _kVideoCapturingSettingsKey,
+    _kIceSettingsKey,
   ];
 
   // List of preferences keys to exclude by default during clean operation
@@ -304,7 +329,7 @@ class AppPreferencesImpl with SystemInfoJsonMapper, EncodingSettingsJsonMapper i
     if (encodingSettingsString != null) {
       return encodingSettingsFromJson(encodingSettingsString);
     } else {
-      return const EncodingSettings();
+      return EncodingSettings.blank();
     }
   }
 
@@ -330,5 +355,50 @@ class AppPreferencesImpl with SystemInfoJsonMapper, EncodingSettingsJsonMapper i
     } else {
       return _sharedPreferences.remove(_kEncodingPresetKey);
     }
+  }
+
+  @override
+  AudioProcessingSettings getAudioProcessingSettings() {
+    final audioProcessingSettingsString = _sharedPreferences.getString(_kAudioProcessingSettingsKey);
+    if (audioProcessingSettingsString != null) {
+      return audioProcessingSettingsFromJson(audioProcessingSettingsString);
+    } else {
+      return AudioProcessingSettings.blank();
+    }
+  }
+
+  @override
+  Future<void> setAudioProcessingSettings(AudioProcessingSettings settings) {
+    return _sharedPreferences.setString(_kAudioProcessingSettingsKey, audioProcessingSettingsToJson(settings));
+  }
+
+  @override
+  VideoCapturingSettings getVideoCapturingSettings() {
+    final videoCapturingSettingsString = _sharedPreferences.getString(_kVideoCapturingSettingsKey);
+    if (videoCapturingSettingsString != null) {
+      return videoCapturingSettingsFromJson(videoCapturingSettingsString);
+    } else {
+      return VideoCapturingSettings.blank();
+    }
+  }
+
+  @override
+  Future<void> setVideoCapturingSettings(VideoCapturingSettings settings) {
+    return _sharedPreferences.setString(_kVideoCapturingSettingsKey, videoCapturingSettingsToJson(settings));
+  }
+
+  @override
+  IceSettings getIceSettings() {
+    final iceSettingsString = _sharedPreferences.getString(_kIceSettingsKey);
+    if (iceSettingsString != null) {
+      return iceSettingsFromJson(iceSettingsString);
+    } else {
+      return IceSettings.blank();
+    }
+  }
+
+  @override
+  Future<void> setIceSettings(IceSettings settings) {
+    return _sharedPreferences.setString(_kIceSettingsKey, iceSettingsToJson(settings));
   }
 }

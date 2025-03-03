@@ -1,5 +1,5 @@
-// ignore: unused_import
 import 'package:intl/intl.dart' as intl;
+
 import 'app_localizations.g.dart';
 
 // ignore_for_file: type=lint
@@ -1179,16 +1179,70 @@ class AppLocalizationsUk extends AppLocalizations {
   String get settings_encoding_AppBar_reset_tooltip => 'Скинути до стандартних налаштувань';
 
   @override
-  String get settings_encoding_Section_audio_ptime => 'Цільовий розмір аудіо пакета: ';
+  String get settings_encoding_Section_preset_title => 'Конфігурації кодування медіа';
 
   @override
-  String get settings_encoding_Section_audio_ptime_limit => 'Ліміт розміру аудіо пакета: ';
+  String get settings_encoding_Section_preset_tooltip => 'Попередні налаштування для аудіо- та відеокодеків, нижчі значення зменшать використання смуги пропускання, але вплинуть на якість, вищі значення підвищать якість, а також використання смуги пропускання. Стандартне налаштування — це рекомендовані налаштування, надані вашим постачальником відповідно до його вподобань середовища.';
 
   @override
-  String get settings_encoding_Section_bandwidth_prefix => 'Діапазон: ';
+  String get settings_encoding_Section_preset => 'Налаштування';
+
+  @override
+  String get settings_encoding_Section_preset_default => 'Стандарт';
+
+  @override
+  String get settings_encoding_Section_preset_eco => 'Еко';
+
+  @override
+  String get settings_encoding_Section_preset_balance => 'Баланс';
+
+  @override
+  String get settings_encoding_Section_preset_quality => 'Якість';
+
+  @override
+  String get settings_encoding_Section_preset_full_flex => 'Висока точність';
+
+  @override
+  String get settings_encoding_Section_preset_custom => 'Ручна конфігурація';
+
+  @override
+  String get settings_encoding_Section_measure_kbps => 'Kbps';
+
+  @override
+  String get settings_encoding_Section_measure_ms => 'ms';
+
+  @override
+  String get settings_encoding_Section_measure_hz => 'Hz';
+
+  @override
+  String get settings_encoding_Section_value_auto => 'Авто';
+
+  @override
+  String get settings_encoding_Section_value_mono => 'Моно';
+
+  @override
+  String get settings_encoding_Section_value_stereo => 'Стерео';
+
+  @override
+  String get settings_encoding_Section_value_enable => 'Увімкнено';
+
+  @override
+  String get settings_encoding_Section_value_disable => 'Вимкнено';
+
+  @override
+  String get settings_encoding_Section_value_on => 'Увімк';
+
+  @override
+  String get settings_encoding_Section_value_off => 'Вимкн';
 
   @override
   String get settings_encoding_Section_bitrate_prefix => 'Бітрейт: ';
+
+  @override
+  String get settings_encoding_Section_ptime_prefix => 'Розмір: ';
+
+  @override
+  String get settings_encoding_Section_bandwidth_prefix => 'Діапазон: ';
 
   @override
   String get settings_encoding_Section_bitrate_title => 'Налаштування пропускної здатності';
@@ -1197,13 +1251,22 @@ class AppLocalizationsUk extends AppLocalizations {
   String get settings_encoding_Section_bitrate_tooltip => 'Налаштування пропускної здатності для аудіо- та відеокодеків. Нижчі значення зменшать використання трафіку, вищі значення покращать якість.';
 
   @override
-  String get settings_encoding_Section_measure_hz => 'Hz';
+  String get settings_encoding_Section_target_audio_bitrate => 'Цільовий бітрейт аудіо: ';
 
   @override
-  String get settings_encoding_Section_measure_kbps => 'Kbps';
+  String get settings_encoding_Section_target_video_bitrate => 'Цільовий бітрейт відео: ';
 
   @override
-  String get settings_encoding_Section_measure_ms => 'ms';
+  String get settings_encoding_Section_packetization_title => 'Пакетизація аудіо';
+
+  @override
+  String get settings_encoding_Section_packetization_tooltip => 'Налаштування часу пакетування аудіо в мілісекундах, можна використовувати для зменшення затримки аудіо або усунення проблем із розміром MTU мережі';
+
+  @override
+  String get settings_encoding_Section_audio_ptime => 'Цільовий розмір аудіо пакета: ';
+
+  @override
+  String get settings_encoding_Section_audio_ptime_limit => 'Ліміт розміру аудіо пакета: ';
 
   @override
   String get settings_encoding_Section_opus_bandwidth => 'Перевизначення частотного діапазону: ';
@@ -1221,42 +1284,6 @@ class AppLocalizationsUk extends AppLocalizations {
   String get settings_encoding_Section_opus_tooltip => 'Налаштування кодека Opus, які можна використовувати для зменшення використання пропускної здатності або покращення якості звуку';
 
   @override
-  String get settings_encoding_Section_packetization_title => 'Пакетизація аудіо';
-
-  @override
-  String get settings_encoding_Section_packetization_tooltip => 'Налаштування часу пакетування аудіо в мілісекундах, можна використовувати для зменшення затримки аудіо або усунення проблем із розміром MTU мережі';
-
-  @override
-  String get settings_encoding_Section_preset => 'Налаштування';
-
-  @override
-  String get settings_encoding_Section_preset_balance => 'Баланс';
-
-  @override
-  String get settings_encoding_Section_preset_custom => 'Ручна конфігурація';
-
-  @override
-  String get settings_encoding_Section_preset_default => 'Стандарт';
-
-  @override
-  String get settings_encoding_Section_preset_eco => 'Еко';
-
-  @override
-  String get settings_encoding_Section_preset_full_flex => 'Висока точність';
-
-  @override
-  String get settings_encoding_Section_preset_quality => 'Якість';
-
-  @override
-  String get settings_encoding_Section_preset_title => 'Конфігурації кодування медіа';
-
-  @override
-  String get settings_encoding_Section_preset_tooltip => 'Попередні налаштування для аудіо- та відеокодеків, нижчі значення зменшать використання смуги пропускання, але вплинуть на якість, вищі значення підвищать якість, а також використання смуги пропускання. Стандартне налаштування — це рекомендовані налаштування, надані вашим постачальником відповідно до його вподобань середовища.';
-
-  @override
-  String get settings_encoding_Section_ptime_prefix => 'Розмір: ';
-
-  @override
   String get settings_encoding_Section_rtp_override_audio => 'Перевизначення аудіо профілів';
 
   @override
@@ -1269,31 +1296,79 @@ class AppLocalizationsUk extends AppLocalizations {
   String get settings_encoding_Section_rtp_override_video => 'Перевизначення відео профілів';
 
   @override
+  String get settings_encoding_Section_rtp_override_warning_title => 'Попередження:';
+
+  @override
   String get settings_encoding_Section_rtp_override_warning_message => 'Перевизначення профілів може вплинути на сумісність з іншими пристроями чи медіасистемами та спричинити помилки виклику. Використовуйте, лише якщо знаєте, що робите';
 
   @override
-  String get settings_encoding_Section_rtp_override_warning_title => 'Увага';
+  String get settings_audioProcessing_Section_title => 'Пре-обробка аудіо';
 
   @override
-  String get settings_encoding_Section_target_audio_bitrate => 'Цільовий бітрейт аудіо: ';
+  String get settings_audioProcessing_Section_tooltip => 'Можна використовувати для налаштування якості аудіо для певних потреб або умов. Як-от студійний запис або зовнішній мікрофон. \n\nОбійти обробку голосу — повідомляє системі не застосовувати апаратну обробку голосу (потрібно перезапустити програму).';
 
   @override
-  String get settings_encoding_Section_target_video_bitrate => 'Цільовий бітрейт відео: ';
+  String get settings_audioProcessing_Section_VP_title => 'Обхід обробки голосу';
 
   @override
-  String get settings_encoding_Section_value_auto => 'Авто';
+  String get settings_audioProcessing_Section_EC_title => 'Ехоподавлення';
 
   @override
-  String get settings_encoding_Section_value_disable => 'Вимкнено';
+  String get settings_audioProcessing_Section_AGC_title => 'Автоматичне регулювання посилення';
 
   @override
-  String get settings_encoding_Section_value_enable => 'Увімкнено';
+  String get settings_audioProcessing_Section_NS_title => 'Придушення шуму';
 
   @override
-  String get settings_encoding_Section_value_mono => 'Моно';
+  String get settings_audioProcessing_Section_HPF_title => 'Фільтр високих частот';
 
   @override
-  String get settings_encoding_Section_value_stereo => 'Стерео';
+  String get settings_audioProcessing_Section_AM_title => 'Віддзеркалення аудіо';
+
+  @override
+  String get settings_videoCapturing_Section_title => 'Захват відео';
+
+  @override
+  String get settings_videoCapturing_Section_tooltip => 'Можна використовувати для налаштування якості відео для певних потреб або умов.';
+
+  @override
+  String get settings_videoCapturing_Section_resolution_title => 'Роздільна здатність зображення';
+
+  @override
+  String get settings_videoCapturing_Section_resolution_prefix => 'вертикальних точйок: ';
+
+  @override
+  String get settings_videoCapturing_Section_framerate_title => 'Частота кадрів зображення';
+
+  @override
+  String get settings_videoCapturing_Section_framerate_prefix => 'кадрів: ';
+
+  @override
+  String get settings_iceSettings_Section_title => 'Фільтрація ice-кандидатів';
+
+  @override
+  String get settings_iceSettings_Section_tooltip => 'Фільтр ice-кандидатів на основі параметрів мережі може допомогти уникнути проблем з мережею';
+
+  @override
+  String get settings_iceSettings_Section_netfilter_title => 'Мережевий протокол';
+
+  @override
+  String get settings_iceSettings_Section_noskip => 'Без фільтрації';
+
+  @override
+  String get settings_iceSettings_Section_netfilter_skipv4 => 'Пропустити IPv4-кандидатів';
+
+  @override
+  String get settings_iceSettings_Section_netfilter_skipv6 => 'Пропустити IPv6-кандидатів';
+
+  @override
+  String get settings_iceSettings_Section_trfilter_title => 'Транспортний протокол';
+
+  @override
+  String get settings_iceSettings_Section_trfilter_skipUdp => 'Пропустити UDP-кандидатів';
+
+  @override
+  String get settings_iceSettings_Section_trfilter_skipTcp => 'Пропустити TCP-кандидатів';
 
   @override
   String get settings_ListViewTileTitle_about => 'Про програму';
@@ -1302,10 +1377,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get settings_ListViewTileTitle_accountDelete => 'Видалити обліковий запис';
 
   @override
-  String get settings_ListViewTileTitle_call_codecs => 'Кодеки дзвінка';
-
-  @override
-  String get settings_ListViewTileTitle_encoding => 'Кодування медіа';
+  String get settings_ListViewTileTitle_mediaSettings => 'Параметри медіа';
 
   @override
   String get settings_ListViewTileTitle_help => 'Допомога';

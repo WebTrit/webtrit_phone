@@ -53,6 +53,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   final CallkeepConnections callkeepConnections;
 
   final SDPMunger? sdpMunger;
+  final AudioConstraintsBuilder? audioConstraintsBuilder;
+  final VideoConstraintsBuilder? videoConstraintsBuilder;
+  final WebrtcOptionsBuilder? webRtcOptionsBuilder;
+  final IceFilter? iceFilter;
 
   StreamSubscription<List<ConnectivityResult>>? _connectivityChangedSubscription;
   StreamSubscription<PendingCall>? _pendingCallHandlerSubscription;
@@ -74,6 +78,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     required this.callkeep,
     required this.callkeepConnections,
     this.sdpMunger,
+    this.audioConstraintsBuilder,
+    this.videoConstraintsBuilder,
+    this.webRtcOptionsBuilder,
+    this.iceFilter,
   }) : super(const CallState()) {
     on<CallStarted>(
       _onCallStarted,
@@ -351,6 +359,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     });
 
     _reconnectInitiated(Duration.zero);
+
+    WebRTC.initialize(options: webRtcOptionsBuilder?.build());
   }
 
   Future<void> _onAppLifecycleStateChanged(
@@ -2005,6 +2015,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _PeerConnectionEventIceCandidateIdentified event,
     Emitter<CallState> emit,
   ) async {
+    if (iceFilter?.filter(event.candidate) == true) {
+      _logger.fine('__onPeerConnectionEventIceCandidateIdentified: skip by iceFiler');
+      return;
+    }
+
     try {
       await state.performOnActiveCall(event.callId, (activeCall) {
         if (!activeCall.wasHungUp) {
@@ -2414,14 +2429,12 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     bool? frontCamera,
   }) async {
     final Map<String, dynamic> mediaConstraints = {
-      'audio': true,
+      'audio': {
+        'mandatory': audioConstraintsBuilder?.build() ?? {},
+      },
       'video': video
           ? {
-              'mandatory': {
-                'minWidth': '640',
-                'minHeight': '480',
-                'minFrameRate': '30',
-              },
+              'mandatory': videoConstraintsBuilder?.build() ?? {},
               if (frontCamera != null) 'facingMode': frontCamera ? 'user' : 'environment',
               'optional': [],
             }

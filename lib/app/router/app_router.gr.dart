@@ -130,12 +130,6 @@ abstract class _$AppRouter extends RootStackRouter {
         child: EmbeddedScreenPage3(args.data),
       );
     },
-    EncodingSettingsScreenPageRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: EncodingSettingsScreenPage(),
-      );
-    },
     ErrorDetailsScreenPageRoute.name: (routeData) {
       final args = routeData.argsAs<ErrorDetailsScreenPageRouteArgs>();
       return AutoRoutePage<dynamic>(
@@ -279,6 +273,12 @@ abstract class _$AppRouter extends RootStackRouter {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const MainShell(),
+      );
+    },
+    MediaSettingsScreenPageRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: MediaSettingsScreenPage(),
       );
     },
     NetworkScreenPageRoute.name: (routeData) {
@@ -745,20 +745,6 @@ class EmbeddedScreenPage3RouteArgs {
 }
 
 /// generated route for
-/// [EncodingSettingsScreenPage]
-class EncodingSettingsScreenPageRoute extends PageRouteInfo<void> {
-  const EncodingSettingsScreenPageRoute({List<PageRouteInfo>? children})
-      : super(
-          EncodingSettingsScreenPageRoute.name,
-          initialChildren: children,
-        );
-
-  static const String name = 'EncodingSettingsScreenPageRoute';
-
-  static const PageInfo<void> page = PageInfo<void>(name);
-}
-
-/// generated route for
 /// [ErrorDetailsScreenPage]
 class ErrorDetailsScreenPageRoute
     extends PageRouteInfo<ErrorDetailsScreenPageRouteArgs> {
@@ -1154,6 +1140,20 @@ class MainShellRoute extends PageRouteInfo<void> {
         );
 
   static const String name = 'MainShellRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [MediaSettingsScreenPage]
+class MediaSettingsScreenPageRoute extends PageRouteInfo<void> {
+  const MediaSettingsScreenPageRoute({List<PageRouteInfo>? children})
+      : super(
+          MediaSettingsScreenPageRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'MediaSettingsScreenPageRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }

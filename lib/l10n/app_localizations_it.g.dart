@@ -1,5 +1,5 @@
-// ignore: unused_import
 import 'package:intl/intl.dart' as intl;
+
 import 'app_localizations.g.dart';
 
 // ignore_for_file: type=lint
@@ -1179,16 +1179,70 @@ class AppLocalizationsIt extends AppLocalizations {
   String get settings_encoding_AppBar_reset_tooltip => 'Ripristinare le impostazioni predefinite';
 
   @override
-  String get settings_encoding_Section_audio_ptime => 'Dimensione del pacchetto audio target: ';
+  String get settings_encoding_Section_preset_title => 'Configurazioni di codifica multimediale';
 
   @override
-  String get settings_encoding_Section_audio_ptime_limit => 'Limite dimensione pacchetto audio: ';
+  String get settings_encoding_Section_preset_tooltip => 'Preimpostazioni di regolazione per codec audio e video, valori più bassi ridurranno l\'utilizzo della larghezza di banda ma influenzeranno la qualità, valori più alti aumenteranno la qualità ma anche l\'utilizzo della larghezza di banda. Le impostazioni predefinite predefinite sono quelle consigliate fornite dal tuo fornitore in base alle sue preferenze ambientali.';
 
   @override
-  String get settings_encoding_Section_bandwidth_prefix => 'Gamma di frequenza: ';
+  String get settings_encoding_Section_preset => 'Preimpostato';
+
+  @override
+  String get settings_encoding_Section_preset_default => 'Predefinito';
+
+  @override
+  String get settings_encoding_Section_preset_eco => 'Eco';
+
+  @override
+  String get settings_encoding_Section_preset_balance => 'Bilancia';
+
+  @override
+  String get settings_encoding_Section_preset_quality => 'Qualità';
+
+  @override
+  String get settings_encoding_Section_preset_full_flex => 'Alta fedeltà';
+
+  @override
+  String get settings_encoding_Section_preset_custom => 'Costume';
+
+  @override
+  String get settings_encoding_Section_measure_kbps => 'Kbps';
+
+  @override
+  String get settings_encoding_Section_measure_ms => 'ms';
+
+  @override
+  String get settings_encoding_Section_measure_hz => 'Hz';
+
+  @override
+  String get settings_encoding_Section_value_auto => 'Auto';
+
+  @override
+  String get settings_encoding_Section_value_mono => 'Mono';
+
+  @override
+  String get settings_encoding_Section_value_stereo => 'Stereo';
+
+  @override
+  String get settings_encoding_Section_value_enable => 'Abilitato';
+
+  @override
+  String get settings_encoding_Section_value_disable => 'Disabilitato';
+
+  @override
+  String get settings_encoding_Section_value_on => 'On';
+
+  @override
+  String get settings_encoding_Section_value_off => 'Off';
 
   @override
   String get settings_encoding_Section_bitrate_prefix => 'Bitrate: ';
+
+  @override
+  String get settings_encoding_Section_ptime_prefix => 'Dimensione: ';
+
+  @override
+  String get settings_encoding_Section_bandwidth_prefix => 'Gamma di frequenza: ';
 
   @override
   String get settings_encoding_Section_bitrate_title => 'Impostazioni della larghezza di banda';
@@ -1197,13 +1251,22 @@ class AppLocalizationsIt extends AppLocalizations {
   String get settings_encoding_Section_bitrate_tooltip => 'Regola le impostazioni del bitrate per i codec audio e video: valori più bassi ridurranno l\'utilizzo della larghezza di banda ma influenzeranno la qualità, mentre valori più alti aumenteranno la qualità ma anche l\'utilizzo della larghezza di banda.';
 
   @override
-  String get settings_encoding_Section_measure_hz => 'Hz';
+  String get settings_encoding_Section_target_audio_bitrate => 'Bitrate di destinazione audio: ';
 
   @override
-  String get settings_encoding_Section_measure_kbps => 'Kbps';
+  String get settings_encoding_Section_target_video_bitrate => 'Bitrate di destinazione video: ';
 
   @override
-  String get settings_encoding_Section_measure_ms => 'ms';
+  String get settings_encoding_Section_packetization_title => 'Pacchettizzazione audio';
+
+  @override
+  String get settings_encoding_Section_packetization_tooltip => 'Regola il tempo di pacchettizzazione audio in millisecondi, può essere utilizzato per ridurre la latenza audio o risolvere problemi di dimensione MTU di rete';
+
+  @override
+  String get settings_encoding_Section_audio_ptime => 'Dimensione del pacchetto audio target: ';
+
+  @override
+  String get settings_encoding_Section_audio_ptime_limit => 'Limite dimensione pacchetto audio: ';
 
   @override
   String get settings_encoding_Section_opus_bandwidth => 'Ridefinire la gamma di frequenza: ';
@@ -1221,42 +1284,6 @@ class AppLocalizationsIt extends AppLocalizations {
   String get settings_encoding_Section_opus_tooltip => 'Regola le impostazioni specifiche del codec dell\'opus, può essere utilizzato per ridurre l\'utilizzo della larghezza di banda o migliorare la qualità audio';
 
   @override
-  String get settings_encoding_Section_packetization_title => 'Pacchettizzazione audio';
-
-  @override
-  String get settings_encoding_Section_packetization_tooltip => 'Regola il tempo di pacchettizzazione audio in millisecondi, può essere utilizzato per ridurre la latenza audio o risolvere problemi di dimensione MTU di rete';
-
-  @override
-  String get settings_encoding_Section_preset => 'Preimpostato';
-
-  @override
-  String get settings_encoding_Section_preset_balance => 'Bilancia';
-
-  @override
-  String get settings_encoding_Section_preset_custom => 'Costume';
-
-  @override
-  String get settings_encoding_Section_preset_default => 'Predefinito';
-
-  @override
-  String get settings_encoding_Section_preset_eco => 'Eco';
-
-  @override
-  String get settings_encoding_Section_preset_full_flex => 'Alta fedeltà';
-
-  @override
-  String get settings_encoding_Section_preset_quality => 'Qualità';
-
-  @override
-  String get settings_encoding_Section_preset_title => 'Configurazioni di codifica multimediale';
-
-  @override
-  String get settings_encoding_Section_preset_tooltip => 'Preimpostazioni di regolazione per codec audio e video, valori più bassi ridurranno l\'utilizzo della larghezza di banda ma influenzeranno la qualità, valori più alti aumenteranno la qualità ma anche l\'utilizzo della larghezza di banda. Le impostazioni predefinite predefinite sono quelle consigliate fornite dal tuo fornitore in base alle sue preferenze ambientali.';
-
-  @override
-  String get settings_encoding_Section_ptime_prefix => 'Dimensione: ';
-
-  @override
   String get settings_encoding_Section_rtp_override_audio => 'Ridefinire i profili audio';
 
   @override
@@ -1269,31 +1296,79 @@ class AppLocalizationsIt extends AppLocalizations {
   String get settings_encoding_Section_rtp_override_video => 'Ridefinire i profili video';
 
   @override
+  String get settings_encoding_Section_rtp_override_warning_title => 'Attenzione:';
+
+  @override
   String get settings_encoding_Section_rtp_override_warning_message => 'L\'override può influire sulla compatibilità con altri dispositivi o sistemi multimediali e causare errori di chiamata, utilizzare solo se si sa cosa si sta facendo';
 
   @override
-  String get settings_encoding_Section_rtp_override_warning_title => 'Avvertimento:';
+  String get settings_audioProcessing_Section_title => 'Pre-elaborazione audio';
 
   @override
-  String get settings_encoding_Section_target_audio_bitrate => 'Bitrate di destinazione audio: ';
+  String get settings_audioProcessing_Section_tooltip => 'Può essere utilizzato per regolare la qualità audio per esigenze o ambienti specifici. Come la registrazione in studio o un microfono esterno. \n\nBypass elaborazione vocale: indica al sistema di non applicare l\'elaborazione vocale hardware (richiede il riavvio dell\'app).';
 
   @override
-  String get settings_encoding_Section_target_video_bitrate => 'Bitrate di destinazione video: ';
+  String get settings_audioProcessing_Section_VP_title => 'Bypassare l\'elaborazione vocale';
 
   @override
-  String get settings_encoding_Section_value_auto => 'Auto';
+  String get settings_audioProcessing_Section_EC_title => 'Cancellazione dell\'eco';
 
   @override
-  String get settings_encoding_Section_value_disable => 'Disabilitato';
+  String get settings_audioProcessing_Section_AGC_title => 'Controllo automatico del guadagno';
 
   @override
-  String get settings_encoding_Section_value_enable => 'Abilitato';
+  String get settings_audioProcessing_Section_NS_title => 'Soppressione del rumore';
 
   @override
-  String get settings_encoding_Section_value_mono => 'Mono';
+  String get settings_audioProcessing_Section_HPF_title => 'Filtro passa-alto';
 
   @override
-  String get settings_encoding_Section_value_stereo => 'Stereo';
+  String get settings_audioProcessing_Section_AM_title => 'Mirroring audio';
+
+  @override
+  String get settings_videoCapturing_Section_title => 'Acquisizione video';
+
+  @override
+  String get settings_videoCapturing_Section_tooltip => 'Può essere utilizzato per adattare la qualità video a esigenze o ambienti specifici.';
+
+  @override
+  String get settings_videoCapturing_Section_resolution_title => 'Risoluzione dell\'immagine';
+
+  @override
+  String get settings_videoCapturing_Section_resolution_prefix => 'punti verticali: ';
+
+  @override
+  String get settings_videoCapturing_Section_framerate_title => 'Frame rate dell\'immagine';
+
+  @override
+  String get settings_videoCapturing_Section_framerate_prefix => 'cornici: ';
+
+  @override
+  String get settings_iceSettings_Section_title => 'Filtraggio dei candidati al ghiaccio';
+
+  @override
+  String get settings_iceSettings_Section_tooltip => 'Filtrare i candidati al ghiaccio in base alle preferenze di rete può aiutare a evitare problemi di rete';
+
+  @override
+  String get settings_iceSettings_Section_netfilter_title => 'Protocollo di rete';
+
+  @override
+  String get settings_iceSettings_Section_noskip => 'Nessun filtro';
+
+  @override
+  String get settings_iceSettings_Section_netfilter_skipv4 => 'Salta i candidati IPv4';
+
+  @override
+  String get settings_iceSettings_Section_netfilter_skipv6 => 'Salta i candidati IPv6';
+
+  @override
+  String get settings_iceSettings_Section_trfilter_title => 'Protocollo di trasporto';
+
+  @override
+  String get settings_iceSettings_Section_trfilter_skipUdp => 'Salta i candidati UDP';
+
+  @override
+  String get settings_iceSettings_Section_trfilter_skipTcp => 'Salta i candidati TCP';
 
   @override
   String get settings_ListViewTileTitle_about => 'Riguardo a';
@@ -1302,10 +1377,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get settings_ListViewTileTitle_accountDelete => 'Elimina account';
 
   @override
-  String get settings_ListViewTileTitle_call_codecs => 'Codec di chiamata';
-
-  @override
-  String get settings_ListViewTileTitle_encoding => 'Codifica multimediale';
+  String get settings_ListViewTileTitle_mediaSettings => 'Impostazioni multimediali';
 
   @override
   String get settings_ListViewTileTitle_help => 'Aiuto';
