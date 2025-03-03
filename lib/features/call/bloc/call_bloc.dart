@@ -436,6 +436,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     }
 
     if (newRegistrationStatus.isFailed) {
+      _logger.severe(
+          '_onRegistrationChange: registration failed with code: ${event.registration.code}, reason: ${event.registration.reason}');
       submitNotification(SipRegistrationFailedNotification(
         knownCode: SignalingRegistrationFailedCode.values.byCode(event.registration.code),
         systemCode: event.registration.code,
