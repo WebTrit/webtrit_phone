@@ -13,4 +13,4 @@ key.properties
 **/*.jks
 
 # CMake build files
-/app/.cxx/Debug/**
+/app/.cxx/**

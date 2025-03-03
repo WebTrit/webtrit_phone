@@ -79,7 +79,7 @@ dependencies:
   collection: ^1.18.0
   quiver: ^3.2.1
   flutter_parsed_text: ^2.2.1
-  flutter_local_notifications: ^17.2.1+2
+  flutter_local_notifications: ^18.0.1
   gravatar_utils: ^1.0.0
   l10n_mapper_generator: ^2.1.2
   dlibphonenumber: ^1.1.22
@@ -118,7 +118,7 @@ dev_dependencies:
   flutter_gen_runner: ^5.4.0
   flutter_launcher_icons: ^0.14.3
   flutter_lints: ^4.0.0
-  flutter_native_splash: ^2.4.0
+  flutter_native_splash: ^2.4.5
   freezed: ^2.5.2
   json_serializable: ^6.7.1
 
