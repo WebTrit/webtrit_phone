@@ -1160,24 +1160,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     final callId = WebtritSignalingClient.generateCallId();
 
-    final callkeepError = await callkeep.startCall(
-      callId,
-      event.handle,
-      displayNameOrContactIdentifier: event.displayName,
-      hasVideo: event.video,
-      proximityEnabled: !event.video,
-    );
-
-    if (callkeepError != null) {
-      if (callkeepError == CallkeepCallRequestError.emergencyNumber) {
-        final Uri telLaunchUri = Uri(scheme: 'tel', path: event.handle.value);
-        launchUrl(telLaunchUri);
-      } else {
-        _logger.warning('__onCallControlEventStarted callkeepError: $callkeepError');
-      }
-      return;
-    }
-
     final newCall = ActiveCall(
       direction: CallDirection.outgoing,
       line: line,
@@ -1190,6 +1172,26 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     );
 
     emit(state.copyWithPushActiveCall(newCall).copyWith(minimized: false));
+
+    final callkeepError = await callkeep.startCall(
+      callId,
+      event.handle,
+      displayNameOrContactIdentifier: event.displayName,
+      hasVideo: event.video,
+      proximityEnabled: !event.video,
+    );
+
+    if (callkeepError != null) {
+      emit(state.copyWithPopActiveCall(callId));
+
+      if (callkeepError == CallkeepCallRequestError.emergencyNumber) {
+        final Uri telLaunchUri = Uri(scheme: 'tel', path: event.handle.value);
+        launchUrl(telLaunchUri);
+      } else {
+        _logger.warning('__onCallControlEventStarted callkeepError: $callkeepError');
+      }
+      return;
+    }
   }
 
   /// Submitting the answer intent to system when answer button is pressed from app ui
