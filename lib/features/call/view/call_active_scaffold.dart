@@ -48,11 +48,9 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
     final switchCameraIconSize = textTheme.titleMedium!.fontSize!;
     final MediaQueryData mediaQueryData = MediaQuery.of(context);
 
-    final remoteStream = activeCall.remoteStream;
-    final remoteVideo = remoteStream?.getVideoTracks().isNotEmpty ?? false;
-    final localStream = activeCall.localStream;
-    final localVideo = localStream?.getVideoTracks().isNotEmpty ?? false;
-    final cameraEnabled = localStream?.getVideoTracks().firstOrNull?.enabled ?? false;
+    final remoteVideo = activeCall.hasRemoteVideo;
+    final localVideo = activeCall.hasLocalVideo;
+    final cameraEnabled = activeCall.cameraEnabled;
 
     return Scaffold(
       body: OrientationBuilder(
@@ -193,7 +191,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                                     CallActions(
                                       enableInteractions: widget.callStatus == CallStatus.ready,
                                       isIncoming: activeCall.isIncoming,
-                                      video: activeCall.video,
+                                      remoteVideo: remoteVideo,
                                       wasAccepted: activeCall.wasAccepted,
                                       wasHungUp: activeCall.wasHungUp,
                                       cameraValue: cameraEnabled,
