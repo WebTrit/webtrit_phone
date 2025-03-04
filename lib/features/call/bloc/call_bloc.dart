@@ -1296,6 +1296,12 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     }));
   }
 
+  /// Enables or disables the camera for the active call, using local track enable state.
+  ///
+  /// If its audiocall, try to upgrade to videocal using renegotiation
+  /// by adding the tracks to the peer connection.
+  /// after succes [_createPeerConnection].onRenegotiationNeeded will fired accordingly to webrtc state
+  /// than [__onCallSignalingEventAccepted] will be called as acknowledge of [UpdateRequest] with new remote jsep.
   Future<void> _onCallControlEventCameraEnabled(
     _CallControlEventCameraEnabled event,
     Emitter<CallState> emit,
@@ -1315,22 +1321,30 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     final peerConnection = await _peerConnectionRetrieve(event.callId);
     if (peerConnection == null) return;
 
-    // Get and re-add audio and video together with same stream
-    // to not break time sync between audio and video tracks that captured in sync
-    // not needed to screen cast, if will be implemented later
-    final newLocalStream = await _getUserMedia(video: true, frontCamera: activeCall.frontCamera);
-    final newAudioTrack = newLocalStream.getAudioTracks().firstOrNull;
-    final newVideoTrack = newLocalStream.getVideoTracks().firstOrNull;
+    try {
+      // Get and re-add audio and video together with same stream
+      // to not break time sync between audio and video tracks that captured in sync
+      // not needed to screen cast, if will be implemented later
+      //
+      // Alternatively, you can use sender.replaceTrack(newAudioTrack) to not create new m-line fo audio
 
-    final senders = await peerConnection.getSenders();
-    await Future.forEach(senders, (sender) => sender..track?.stop());
-    if (newAudioTrack != null) await peerConnection.addTrack(newAudioTrack, newLocalStream);
-    if (newVideoTrack != null) await peerConnection.addTrack(newVideoTrack, newLocalStream);
+      final newLocalStream = await _getUserMedia(video: true, frontCamera: activeCall.frontCamera);
+      final newAudioTrack = newLocalStream.getAudioTracks().firstOrNull;
+      final newVideoTrack = newLocalStream.getVideoTracks().firstOrNull;
 
-    emit(state.copyWithMappedActiveCall(event.callId, (activeCall) {
-      // TODO: handle remote and local video state separately
-      return activeCall.copyWith(localStream: newLocalStream, video: true);
-    }));
+      final senders = await peerConnection.getSenders();
+      await Future.forEach(senders, (sender) => sender..track?.stop());
+      if (newAudioTrack != null) await peerConnection.addTrack(newAudioTrack, newLocalStream);
+      if (newVideoTrack != null) await peerConnection.addTrack(newVideoTrack, newLocalStream);
+
+      emit(state.copyWithMappedActiveCall(event.callId, (activeCall) {
+        // TODO: handle remote and local video state separately
+        return activeCall.copyWith(localStream: newLocalStream, video: true);
+      }));
+    } on UserMediaError catch (e) {
+      _logger.warning('_onCallControlEventCameraEnabled cant enable: $e');
+      submitNotification(const CallUserMediaErrorNotification());
+    }
   }
 
   Future<void> _onCallControlEventSpeakerEnabled(
