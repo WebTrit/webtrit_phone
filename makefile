@@ -6,32 +6,85 @@ DART_DEFINE_FILE = --dart-define-from-file=dart_define.json
 CONFIGURATOR = dart run ../webtrit_phone_tools/bin/webtrit_phone_tools.dart
 KEYSTORES_PATH = --keystores-path=../webtrit_phone_keystores
 
-# Paths to configuration files
+
+# ===========================
+#  Paths to Configuration Files
+# ===========================
+
+# Base directory for storing configuration files
 CONFIGS_PATH = $(CURDIR)/tool/configs
-FLUTTER_LAUNCHER_ICONS_CONFIG = $(CONFIGS_PATH)/flutter_launcher_icons.yaml
-FLUTTER_NATIVE_SPLASH_CONFIG = $(CONFIGS_PATH)/flutter_native_splash.yaml
+
+
+# ===========================
+#  Package Rename Configuration
+# ===========================
+
+# Documentation: https://github.com/OutdatedGuy/package_rename/blob/main/README.md
+# Path to package rename configuration file
 FLUTTER_RENAME_PACKAGE_CONFIG = $(CONFIGS_PATH)/package_rename_config.yaml
 
-# Variables for package rename
+# Application package details
 PACKAGE_NAME ?= com.example.newapp
 BUNDLE_ID ?= com.example.newapp
+
+# Application display names
 ANDROID_APP_NAME ?= "New App"
 IOS_APP_NAME ?= "New App"
 
-# Variables for configuration launchers and splash screen
-ADAPTIVE_ICON_BACKGROUND ?= "#123752"
-BACKGROUND_COLOR ?= "#FFFFFF"
+
+# ===========================
+#  Launcher Icons Configuration
+# ===========================
+
+# Documentation: https://github.com/fluttercommunity/flutter_launcher_icons/blob/master/README.md
+# Path to launcher icons configuration file
+FLUTTER_LAUNCHER_ICONS_CONFIG = $(CONFIGS_PATH)/flutter_launcher_icons.yaml
+
+# Paths to launcher icon images for different platforms
+LAUNCHER_ICON_IMAGE_ANDROID ?= "tool/assets/launcher_icons/android.png"  # Android launcher icon
+LAUNCHER_ICON_FOREGROUND ?= "tool/assets/launcher_icons/ic_foreground.png"  # Foreground image for adaptive Android icons
+LAUNCHER_ICON_IMAGE_IOS ?= "tool/assets/launcher_icons/ios.png"          # iOS launcher icon
+LAUNCHER_ICON_IMAGE_WEB ?= "tool/assets/launcher_icons/web.png"          # Web launcher icon
+
+# Background color for launcher icons (used for Android adaptive icons, iOS background, and Web background)
+ICON_BACKGROUND_COLOR ?= "#123752"
+
+# Theme color for web applications (affects browser UI, such as the address bar)
 THEME_COLOR ?= "#F3F5F6"
+
+
+# ===========================
+#  Splash Screen Configuration
+# ===========================
+
+# Documentation: https://github.com/jonbhanson/flutter_native_splash/blob/master/README.md
+# Path to splash screen configuration file
+FLUTTER_NATIVE_SPLASH_CONFIG = $(CONFIGS_PATH)/flutter_native_splash.yaml
+
+# Splash screen background settings
+#
+# - Either `SPLASH_COLOR` or `SPLASH_IMAGE` is required.
+# - Use `SPLASH_COLOR` for a solid background color.
+# - Use `SPLASH_IMAGE` for a custom background image (useful for gradients).
+# - Only one of them should be set at a time.
 SPLASH_COLOR ?= "#123752"
+
+# Android 12+ splash screen configuration
+#
+# - From Android 12 onwards, splash screens are handled differently.
+# - Visit: https://developer.android.com/guide/topics/ui/splash-screen
 ANDROID_12_SPLASH_COLOR ?= "#123752"
-LAUNCHER_ICON_IMAGE_ANDROID ?= "tool/assets/launcher_icons/android.png"
-LAUNCHER_ICON_IMAGE_IOS ?= "tool/assets/launcher_icons/ios.png"
-LAUNCHER_ICON_IMAGE_WEB ?= "tool/assets/launcher_icons/web.png"
-LAUNCHER_ICON_FOREGROUND ?= "tool/assets/launcher_icons/ic_foreground.png"
+
+# Path to splash screen background image (if used)
 SPLASH_IMAGE ?= "tool/assets/native_splash/image.png"
 
-# Path to token file (if token is not passed as a parameter)
-TOKEN_FILE ?= $(CURDIR)/tool/configs/localizely_token.txt
+
+# ===========================
+#  Localizely Configuration
+# ===========================
+
+# Path to authentication token file (used if the token is not passed as a parameter)
+TOKEN_FILE ?= $(CONFIGS_PATH)/localizely_token.txt
 
 # Determine Flutter flags based on build type
 ifeq ($(BUILD_TYPE), release)
@@ -111,15 +164,16 @@ generate-launcher-icons-config:
 	@echo "  android: true" >> $(FLUTTER_LAUNCHER_ICONS_CONFIG)
 	@echo "  image_path_android: \"$${LAUNCHER_ICON_IMAGE_ANDROID:-$(LAUNCHER_ICON_IMAGE_ANDROID)}\"" >> $(FLUTTER_LAUNCHER_ICONS_CONFIG)
 	@echo "  min_sdk_android: 23" >> $(FLUTTER_LAUNCHER_ICONS_CONFIG)
-	@echo "  adaptive_icon_background: \"$${ADAPTIVE_ICON_BACKGROUND:-$(ADAPTIVE_ICON_BACKGROUND)}\"" >> $(FLUTTER_LAUNCHER_ICONS_CONFIG)
+	@echo "  adaptive_icon_background: \"$${ICON_BACKGROUND_COLOR:-$(ICON_BACKGROUND_COLOR)}\"" >> $(FLUTTER_LAUNCHER_ICONS_CONFIG)
 	@echo "  adaptive_icon_foreground: \"$${LAUNCHER_ICON_FOREGROUND:-$(LAUNCHER_ICON_FOREGROUND)}\"" >> $(FLUTTER_LAUNCHER_ICONS_CONFIG)
 	@echo "  ios: true" >> $(FLUTTER_LAUNCHER_ICONS_CONFIG)
+	@echo "  background_color_ios: \"$${ICON_BACKGROUND_COLOR:-$(ICON_BACKGROUND_COLOR)}\"" >> $(FLUTTER_LAUNCHER_ICONS_CONFIG)
 	@echo "  remove_alpha_ios: true" >> $(FLUTTER_LAUNCHER_ICONS_CONFIG)
 	@echo "  image_path_ios: \"$${LAUNCHER_ICON_IMAGE_IOS:-$(LAUNCHER_ICON_IMAGE_IOS)}\"" >> $(FLUTTER_LAUNCHER_ICONS_CONFIG)
 	@echo "  web:" >> $(FLUTTER_LAUNCHER_ICONS_CONFIG)
 	@echo "    generate: true" >> $(FLUTTER_LAUNCHER_ICONS_CONFIG)
 	@echo "    image_path: \"$${LAUNCHER_ICON_IMAGE_WEB:-$(LAUNCHER_ICON_IMAGE_WEB)}\"" >> $(FLUTTER_LAUNCHER_ICONS_CONFIG)
-	@echo "    background_color: \"$${BACKGROUND_COLOR:-$(BACKGROUND_COLOR)}\"" >> $(FLUTTER_LAUNCHER_ICONS_CONFIG)
+	@echo "    background_color: \"$${ICON_BACKGROUND_COLOR:-$(ICON_BACKGROUND_COLOR)}\"" >> $(FLUTTER_LAUNCHER_ICONS_CONFIG)
 	@echo "    theme_color: \"$${THEME_COLOR:-$(THEME_COLOR)}\"" >> $(FLUTTER_LAUNCHER_ICONS_CONFIG)
 
 ## Generate launcher icons using external config
