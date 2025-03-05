@@ -48,10 +48,6 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
     final switchCameraIconSize = textTheme.titleMedium!.fontSize!;
     final MediaQueryData mediaQueryData = MediaQuery.of(context);
 
-    final remoteVideo = activeCall.hasRemoteVideo;
-    final localVideo = activeCall.hasLocalVideo;
-    final cameraEnabled = activeCall.cameraEnabled;
-
     return Scaffold(
       body: OrientationBuilder(
         builder: (context, orientation) {
@@ -61,7 +57,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
             ),
             child: Stack(
               children: [
-                if (remoteVideo)
+                if (activeCall.remoteVideo)
                   Positioned(
                     left: 0,
                     right: 0,
@@ -80,7 +76,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                       ),
                     ),
                   ),
-                if (localVideo)
+                if (activeCall.localVideo)
                   AnimatedPositioned(
                     right: 10 + mediaQueryData.padding.right,
                     top: 10 + mediaQueryData.padding.top + (compact ? 0 : 100),
@@ -191,10 +187,10 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                                     CallActions(
                                       enableInteractions: widget.callStatus == CallStatus.ready,
                                       isIncoming: activeCall.isIncoming,
-                                      remoteVideo: remoteVideo,
+                                      remoteVideo: activeCall.remoteVideo,
                                       wasAccepted: activeCall.wasAccepted,
                                       wasHungUp: activeCall.wasHungUp,
-                                      cameraValue: cameraEnabled,
+                                      cameraValue: activeCall.cameraEnabled,
                                       inviteToAttendedTransfer: activeTransfer is InviteToAttendedTransfer,
                                       onCameraChanged: (bool value) {
                                         context

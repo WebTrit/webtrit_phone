@@ -12852,10 +12852,8 @@ mixin _$ActiveCall {
   int get line => throw _privateConstructorUsedError;
   String get callId => throw _privateConstructorUsedError;
   CallkeepHandle get handle => throw _privateConstructorUsedError;
-  DateTime get createdTime =>
-      throw _privateConstructorUsedError; // required bool video,
-  bool get hasRemoteVideo => throw _privateConstructorUsedError;
-  bool get hasLocalVideo => throw _privateConstructorUsedError;
+  DateTime get createdTime => throw _privateConstructorUsedError;
+  bool get video => throw _privateConstructorUsedError;
   CallProcessingStatus get processingStatus =>
       throw _privateConstructorUsedError;
   bool? get frontCamera => throw _privateConstructorUsedError;
@@ -12891,8 +12889,7 @@ abstract class $ActiveCallCopyWith<$Res> {
       String callId,
       CallkeepHandle handle,
       DateTime createdTime,
-      bool hasRemoteVideo,
-      bool hasLocalVideo,
+      bool video,
       CallProcessingStatus processingStatus,
       bool? frontCamera,
       bool held,
@@ -12931,8 +12928,7 @@ class _$ActiveCallCopyWithImpl<$Res, $Val extends ActiveCall>
     Object? callId = null,
     Object? handle = null,
     Object? createdTime = null,
-    Object? hasRemoteVideo = null,
-    Object? hasLocalVideo = null,
+    Object? video = null,
     Object? processingStatus = null,
     Object? frontCamera = freezed,
     Object? held = null,
@@ -12969,13 +12965,9 @@ class _$ActiveCallCopyWithImpl<$Res, $Val extends ActiveCall>
           ? _value.createdTime
           : createdTime // ignore: cast_nullable_to_non_nullable
               as DateTime,
-      hasRemoteVideo: null == hasRemoteVideo
-          ? _value.hasRemoteVideo
-          : hasRemoteVideo // ignore: cast_nullable_to_non_nullable
-              as bool,
-      hasLocalVideo: null == hasLocalVideo
-          ? _value.hasLocalVideo
-          : hasLocalVideo // ignore: cast_nullable_to_non_nullable
+      video: null == video
+          ? _value.video
+          : video // ignore: cast_nullable_to_non_nullable
               as bool,
       processingStatus: null == processingStatus
           ? _value.processingStatus
@@ -13062,8 +13054,7 @@ abstract class _$$ActiveCallImplCopyWith<$Res>
       String callId,
       CallkeepHandle handle,
       DateTime createdTime,
-      bool hasRemoteVideo,
-      bool hasLocalVideo,
+      bool video,
       CallProcessingStatus processingStatus,
       bool? frontCamera,
       bool held,
@@ -13101,8 +13092,7 @@ class __$$ActiveCallImplCopyWithImpl<$Res>
     Object? callId = null,
     Object? handle = null,
     Object? createdTime = null,
-    Object? hasRemoteVideo = null,
-    Object? hasLocalVideo = null,
+    Object? video = null,
     Object? processingStatus = null,
     Object? frontCamera = freezed,
     Object? held = null,
@@ -13139,13 +13129,9 @@ class __$$ActiveCallImplCopyWithImpl<$Res>
           ? _value.createdTime
           : createdTime // ignore: cast_nullable_to_non_nullable
               as DateTime,
-      hasRemoteVideo: null == hasRemoteVideo
-          ? _value.hasRemoteVideo
-          : hasRemoteVideo // ignore: cast_nullable_to_non_nullable
-              as bool,
-      hasLocalVideo: null == hasLocalVideo
-          ? _value.hasLocalVideo
-          : hasLocalVideo // ignore: cast_nullable_to_non_nullable
+      video: null == video
+          ? _value.video
+          : video // ignore: cast_nullable_to_non_nullable
               as bool,
       processingStatus: null == processingStatus
           ? _value.processingStatus
@@ -13213,8 +13199,7 @@ class _$ActiveCallImpl extends _ActiveCall with DiagnosticableTreeMixin {
       required this.callId,
       required this.handle,
       required this.createdTime,
-      required this.hasRemoteVideo,
-      required this.hasLocalVideo,
+      required this.video,
       required this.processingStatus,
       this.frontCamera = true,
       this.held = false,
@@ -13241,11 +13226,8 @@ class _$ActiveCallImpl extends _ActiveCall with DiagnosticableTreeMixin {
   final CallkeepHandle handle;
   @override
   final DateTime createdTime;
-// required bool video,
   @override
-  final bool hasRemoteVideo;
-  @override
-  final bool hasLocalVideo;
+  final bool video;
   @override
   final CallProcessingStatus processingStatus;
   @override
@@ -13281,7 +13263,7 @@ class _$ActiveCallImpl extends _ActiveCall with DiagnosticableTreeMixin {
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'ActiveCall(direction: $direction, line: $line, callId: $callId, handle: $handle, createdTime: $createdTime, hasRemoteVideo: $hasRemoteVideo, hasLocalVideo: $hasLocalVideo, processingStatus: $processingStatus, frontCamera: $frontCamera, held: $held, muted: $muted, updating: $updating, incomingOffer: $incomingOffer, displayName: $displayName, fromReferId: $fromReferId, acceptedTime: $acceptedTime, hungUpTime: $hungUpTime, transfer: $transfer, failure: $failure, localStream: $localStream, remoteStream: $remoteStream)';
+    return 'ActiveCall(direction: $direction, line: $line, callId: $callId, handle: $handle, createdTime: $createdTime, video: $video, processingStatus: $processingStatus, frontCamera: $frontCamera, held: $held, muted: $muted, updating: $updating, incomingOffer: $incomingOffer, displayName: $displayName, fromReferId: $fromReferId, acceptedTime: $acceptedTime, hungUpTime: $hungUpTime, transfer: $transfer, failure: $failure, localStream: $localStream, remoteStream: $remoteStream)';
   }
 
   @override
@@ -13294,8 +13276,7 @@ class _$ActiveCallImpl extends _ActiveCall with DiagnosticableTreeMixin {
       ..add(DiagnosticsProperty('callId', callId))
       ..add(DiagnosticsProperty('handle', handle))
       ..add(DiagnosticsProperty('createdTime', createdTime))
-      ..add(DiagnosticsProperty('hasRemoteVideo', hasRemoteVideo))
-      ..add(DiagnosticsProperty('hasLocalVideo', hasLocalVideo))
+      ..add(DiagnosticsProperty('video', video))
       ..add(DiagnosticsProperty('processingStatus', processingStatus))
       ..add(DiagnosticsProperty('frontCamera', frontCamera))
       ..add(DiagnosticsProperty('held', held))
@@ -13324,10 +13305,7 @@ class _$ActiveCallImpl extends _ActiveCall with DiagnosticableTreeMixin {
             (identical(other.handle, handle) || other.handle == handle) &&
             (identical(other.createdTime, createdTime) ||
                 other.createdTime == createdTime) &&
-            (identical(other.hasRemoteVideo, hasRemoteVideo) ||
-                other.hasRemoteVideo == hasRemoteVideo) &&
-            (identical(other.hasLocalVideo, hasLocalVideo) ||
-                other.hasLocalVideo == hasLocalVideo) &&
+            (identical(other.video, video) || other.video == video) &&
             (identical(other.processingStatus, processingStatus) ||
                 other.processingStatus == processingStatus) &&
             (identical(other.frontCamera, frontCamera) ||
@@ -13363,8 +13341,7 @@ class _$ActiveCallImpl extends _ActiveCall with DiagnosticableTreeMixin {
         callId,
         handle,
         createdTime,
-        hasRemoteVideo,
-        hasLocalVideo,
+        video,
         processingStatus,
         frontCamera,
         held,
@@ -13397,8 +13374,7 @@ abstract class _ActiveCall extends ActiveCall {
       required final String callId,
       required final CallkeepHandle handle,
       required final DateTime createdTime,
-      required final bool hasRemoteVideo,
-      required final bool hasLocalVideo,
+      required final bool video,
       required final CallProcessingStatus processingStatus,
       final bool? frontCamera,
       final bool held,
@@ -13424,11 +13400,9 @@ abstract class _ActiveCall extends ActiveCall {
   @override
   CallkeepHandle get handle;
   @override
-  DateTime get createdTime; // required bool video,
+  DateTime get createdTime;
   @override
-  bool get hasRemoteVideo;
-  @override
-  bool get hasLocalVideo;
+  bool get video;
   @override
   CallProcessingStatus get processingStatus;
   @override

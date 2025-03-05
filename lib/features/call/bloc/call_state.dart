@@ -128,8 +128,7 @@ class ActiveCall with _$ActiveCall {
     required String callId,
     required CallkeepHandle handle,
     required DateTime createdTime,
-    required bool hasRemoteVideo,
-    required bool hasLocalVideo,
+    required bool video,
     required CallProcessingStatus processingStatus,
     @Default(true) bool? frontCamera,
     @Default(false) bool held,
@@ -154,9 +153,11 @@ class ActiveCall with _$ActiveCall {
 
   bool get wasHungUp => hungUpTime != null;
 
-  bool get video => hasRemoteVideo || hasLocalVideo;
+  bool get remoteVideo => remoteStream?.getVideoTracks().isNotEmpty ?? false;
 
-  bool get cameraEnabled => hasLocalVideo && localStream?.getVideoTracks().firstOrNull?.enabled == true;
+  bool get localVideo => localStream?.getVideoTracks().isNotEmpty ?? false;
+
+  bool get cameraEnabled => localStream?.getVideoTracks().firstOrNull?.enabled == true;
 }
 
 extension ActiveCallIterableExtension<T extends ActiveCall> on Iterable<T> {

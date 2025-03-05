@@ -672,8 +672,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       callId: event.callId,
       handle: event.handle,
       displayName: event.displayName,
-      hasRemoteVideo: event.video,
-      hasLocalVideo: false,
+      video: event.video,
       createdTime: clock.now(),
       processingStatus: CallProcessingStatus.incomingFromPush,
     )));
@@ -744,7 +743,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _CallSignalingEventIncoming event,
     Emitter<CallState> emit,
   ) async {
-    final hasRemoteVideo = event.jsep?.hasVideo ?? false;
+    final video = event.jsep?.hasVideo ?? false;
 
     final handle = CallkeepHandle.number(event.caller);
 
@@ -752,7 +751,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       event.callId,
       handle,
       displayName: event.callerDisplayName,
-      hasVideo: hasRemoteVideo,
+      hasVideo: video,
     );
 
     // Check if a call instance already exists in the callkeep, which might have been added via push notifications
@@ -786,7 +785,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         line: event.line,
         handle: handle,
         displayName: event.callerDisplayName,
-        hasRemoteVideo: hasRemoteVideo,
+        video: video,
         transfer: transfer,
         incomingOffer: event.jsep,
       );
@@ -798,8 +797,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         callId: event.callId,
         handle: handle,
         displayName: event.callerDisplayName,
-        hasRemoteVideo: hasRemoteVideo,
-        hasLocalVideo: false,
+        video: video,
         createdTime: clock.now(),
         transfer: transfer,
         incomingOffer: event.jsep,
@@ -869,7 +867,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       call = call.copyWith(processingStatus: CallProcessingStatus.connected, acceptedTime: clock.now());
 
       if (outgoing) {
-        call = call.copyWith(hasRemoteVideo: jsep?.hasVideo ?? false);
         await _stopRingbackSound();
         await callkeep.reportConnectedOutgoingCall(event.callId);
       }
@@ -947,7 +944,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       return activeCall.copyWith(
         handle: handle,
         displayName: event.callerDisplayName ?? activeCall.displayName,
-        hasRemoteVideo: event.jsep?.hasVideo ?? activeCall.hasRemoteVideo,
+        video: event.jsep?.hasVideo ?? activeCall.video,
         updating: true,
       );
     }));
@@ -957,7 +954,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     await callkeep.reportUpdateCall(
       event.callId,
       handle: handle,
-      displayName: event.callerDisplayName,
+      displayName: activeCall.displayName,
       hasVideo: activeCall.video,
       proximityEnabled: state.shouldListenToProximity,
     );
@@ -1172,8 +1169,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       callId: callId,
       handle: event.handle,
       displayName: event.displayName,
-      hasRemoteVideo: false,
-      hasLocalVideo: event.video,
+      video: event.video,
       createdTime: clock.now(),
       processingStatus: CallProcessingStatus.outgoingCreated,
     );
@@ -1184,7 +1180,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       callId,
       event.handle,
       displayNameOrContactIdentifier: event.displayName,
-      hasVideo: newCall.video,
+      hasVideo: event.video,
       proximityEnabled: !event.video,
     );
 
@@ -1327,23 +1323,31 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     if (peerConnection == null) return;
 
     try {
-      // Get and re-add audio and video together with same stream
-      // to not break time sync between audio and video tracks that captured in sync
-      // not needed to screen cast, if will be implemented later
-      //
-      // Alternatively, you can use sender.replaceTrack(newAudioTrack) to not create new m-line fo audio
-
+      // Capture new audio and video pair together to avoid time sync issues
+      // and avoid storing separate audio and video tracks to control them on mute, camera switch etc
       final newLocalStream = await _getUserMedia(video: true, frontCamera: activeCall.frontCamera);
-      final newAudioTrack = newLocalStream.getAudioTracks().firstOrNull;
-      final newVideoTrack = newLocalStream.getVideoTracks().firstOrNull;
+      final newAudioTrack = newLocalStream.getAudioTracks().first;
+      final newVideoTrack = newLocalStream.getVideoTracks().first;
 
+      /// Replace audio track using existing sender to avoid adding new mline
+      ///
+      /// Alternatively, you can use (remove || stop) + add tracks flow
+      /// but it has weak support on infrastructure level
+      /// - second audio mline causes problems with call recondings and music on hold
+      /// - second video mline causes empty video stream
+      ///
+      /// so best compatibility is to use existing senders and controll them by .enabled or .replaceTrack properties
       final senders = await peerConnection.getSenders();
-      await Future.forEach(senders, (sender) => sender..track?.stop());
-      if (newAudioTrack != null) await peerConnection.addTrack(newAudioTrack, newLocalStream);
-      if (newVideoTrack != null) await peerConnection.addTrack(newVideoTrack, newLocalStream);
+      for (final sender in senders) {
+        if (sender.track?.kind == 'audio') {
+          await sender.track?.stop();
+          await sender.replaceTrack(newAudioTrack);
+        }
+      }
+      await peerConnection.addTrack(newVideoTrack, newLocalStream);
 
       emit(state.copyWithMappedActiveCall(event.callId, (call) {
-        return call.copyWith(localStream: newLocalStream, hasLocalVideo: true);
+        return call.copyWith(localStream: newLocalStream, video: true);
       }));
 
       await callkeep.reportUpdateCall(event.callId, hasVideo: true);
@@ -1521,8 +1525,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       callId: callId,
       handle: newHandle,
       fromReferId: referId,
-      hasRemoteVideo: false,
-      hasLocalVideo: false,
+      video: false,
       createdTime: clock.now(),
       processingStatus: CallProcessingStatus.outgoingCreatedFromRefer,
     );
@@ -1776,11 +1779,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       await Future.forEach(localStream.getTracks(), (t) => peerConnection.addTrack(t, localStream));
 
       emit(state.copyWithMappedActiveCall(event.callId, (call) {
-        return call.copyWith(
-          localStream: localStream,
-          hasLocalVideo: offer.hasVideo,
-          processingStatus: CallProcessingStatus.incomingAnswering,
-        );
+        return call.copyWith(localStream: localStream, processingStatus: CallProcessingStatus.incomingAnswering);
       }));
 
       final remoteDescription = offer.toDescription();
@@ -2097,9 +2096,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _PeerConnectionEventStreamAdded event,
     Emitter<CallState> emit,
   ) async {
+    // Skip stub stream created by Janus on unidirectional video
+    if (event.stream.id == 'janus') return;
+
     emit(state.copyWithMappedActiveCall(event.callId, (activeCall) {
-      final prevStream = activeCall.remoteStream;
-      if (prevStream != null) prevStream.dispose();
       return activeCall.copyWith(remoteStream: event.stream);
     }));
   }
