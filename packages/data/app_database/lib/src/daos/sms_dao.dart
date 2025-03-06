@@ -122,20 +122,25 @@ class SmsDao extends DatabaseAccessor<AppDatabase> with _$SmsDaoMixin {
 
   Future<Map<int, int>> unreadedCountPerConversation(String userId) async {
     final userNumbers = (await getUserSmsNumbers()).map((e) => e.phoneNumber).toList();
-    final userReadCursors = await (select(smsMessageReadCursorTable)..where((t) => t.userId.equals(userId))).get();
-    Map<int, int> result = {};
-    for (final cursor in userReadCursors) {
+    final result = <int, int>{};
+
+    for (final conversationId in await getConversationIds()) {
+      final readCursor = await getSmsMessageReadCursor(conversationId, userId);
+
       final amount = smsMessagesTable.id.count();
-      var q = (selectOnly(smsMessagesTable)..addColumns([amount]));
+      final q = (selectOnly(smsMessagesTable)..addColumns([amount]));
+
       q.where(
-        smsMessagesTable.conversationId.equals(cursor.conversationId) &
+        smsMessagesTable.conversationId.equals(conversationId) &
             smsMessagesTable.fromPhoneNumber.isNotIn(userNumbers) &
             smsMessagesTable.deletedAtRemoteUsec.isNull() &
-            smsMessagesTable.createdAtRemoteUsec.isBiggerThanValue(cursor.timestampUsec),
+            smsMessagesTable.createdAtRemoteUsec.isBiggerThanValue(readCursor?.timestampUsec ?? 0),
       );
+
       final unreadMessages = await q.getSingle().then((data) => data.read(amount) ?? 0);
-      result[cursor.conversationId] = unreadMessages;
+      result[conversationId] = unreadMessages;
     }
+
     return result;
   }
 

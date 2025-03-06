@@ -15,58 +15,46 @@ class ContactsRepository with ContactsDriftMapper {
   Stream<List<Contact>> watchContacts(String search, [ContactSourceType? sourceType]) {
     final searchBits = search.split(' ').where((value) => value.isNotEmpty);
     if (searchBits.isEmpty) {
-      return _appDatabase.contactsDao.watchAllContactsExt(null, sourceType?.toData()).map(
+      return _appDatabase.contactsDao.watchAllContacts(null, sourceType?.toData()).map(
             ((contactDatas) => contactDatas
-                .map((data) => contactFromDrift(data.contact, phones: data.phones, emails: data.emails))
+                .map((data) =>
+                    contactFromDrift(data.contact, phones: data.phones, emails: data.emails, favorites: data.favorites))
                 .toList()),
           );
     } else {
-      return _appDatabase.contactsDao.watchAllContactsExt(searchBits, sourceType?.toData()).map(
+      return _appDatabase.contactsDao.watchAllContacts(searchBits, sourceType?.toData()).map(
             ((contactDatas) => contactDatas
-                .map((data) => contactFromDrift(data.contact, phones: data.phones, emails: data.emails))
+                .map((data) =>
+                    contactFromDrift(data.contact, phones: data.phones, emails: data.emails, favorites: data.favorites))
                 .toList()),
           );
     }
   }
 
-  Stream<Contact> watchContact(ContactId contactId) {
-    return _appDatabase.contactsDao
-        .watchContact(ContactDataCompanion(
-          id: Value(contactId),
-        ))
-        .map(contactFromDrift);
-  }
-
-  Stream<Contact?> watchContactBySource(ContactSourceType sourceType, String sourceId) {
-    return _appDatabase.contactsDao.watchContactBySource(sourceType.toData(), sourceId).map((c) {
-      if (c == null) return null;
-      return contactFromDrift(c);
+  Stream<Contact?> watchContact(ContactId contactId) {
+    return _appDatabase.contactsDao.watchContact(contactId).map((data) {
+      if (data == null) return null;
+      return contactFromDrift(data.contact, phones: data.phones, emails: data.emails, favorites: data.favorites);
     });
   }
 
   Stream<Contact?> watchContactBySourceWithPhonesAndEmails(ContactSourceType sourceType, String sourceId) {
-    return _appDatabase.contactsDao.watchContactExtBySource(sourceType.toData(), sourceId).map((data) {
+    return _appDatabase.contactsDao.watchContactBySource(sourceType.toData(), sourceId).map((data) {
       if (data == null) return null;
-      return contactFromDrift(data.contact, phones: data.phones, emails: data.emails);
+      return contactFromDrift(data.contact, phones: data.phones, emails: data.emails, favorites: data.favorites);
     });
   }
 
   Future<Contact?> getContactBySource(ContactSourceType sourceType, String sourceId) async {
-    final contactData = await _appDatabase.contactsDao.getContactBySource(sourceType.toData(), sourceId);
-    if (contactData == null) return null;
-    return contactFromDrift(contactData);
+    final data = await _appDatabase.contactsDao.getContactBySource(sourceType.toData(), sourceId);
+    if (data == null) return null;
+    return contactFromDrift(data.contact, phones: data.phones, emails: data.emails, favorites: data.favorites);
   }
 
-  Stream<List<ContactPhone>> watchContactPhones(ContactId contactId) {
-    return _appDatabase.contactPhonesDao
-        .watchContactPhonesExtByContactId(contactId)
-        .map((contactPhoneDatas) => contactPhoneDatas.map(contactPhoneWithFavoriteFromDrift).toList());
-  }
-
-  Stream<List<ContactEmail>> watchContactEmails(ContactId contactId) {
-    return _appDatabase.contactEmailsDao
-        .watchContactEmailsByContactId(contactId)
-        .map((contactEmailDatas) => contactEmailDatas.map(contactEmailFromDrift).toList());
+  Future<Contact?> getContactByPhoneNumber(String number) async {
+    final data = await _appDatabase.contactsDao.getContactByPhoneNumber(number);
+    if (data == null) return null;
+    return contactFromDrift(data.contact, phones: data.phones, emails: data.emails, favorites: data.favorites);
   }
 
   Future<int> addContactPhoneToFavorites(ContactPhone contactPhone) {
@@ -75,10 +63,5 @@ class ContactsRepository with ContactsDriftMapper {
 
   Future<int> removeContactPhoneFromFavorites(ContactPhone contactPhone) {
     return _appDatabase.favoritesDao.deleteByContactPhoneId(contactPhone.id);
-  }
-
-  Future<List<Contact>> getContactByPhoneNumber(String number) async {
-    final contactDataList = await _appDatabase.contactsDao.getContactsByPhoneNumber(number);
-    return contactDataList.map(contactFromDrift).toList();
   }
 }

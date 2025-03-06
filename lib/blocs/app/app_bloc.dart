@@ -37,7 +37,8 @@ class AppBloc extends Bloc<AppEvent, AppState> {
           themeSettings: appThemes.values.first.settings,
           themeMode: appPreferences.getThemeMode(),
           locale: appPreferences.getLocale(),
-          userAgreementAccepted: appPreferences.getUserAgreementAccepted(),
+          userAgreementStatus: appPreferences.getUserAgreementStatus(),
+          contactsAgreementStatus: appPreferences.getContactsAgreementStatus(),
         )) {
     on<AppLogined>(_onLogined, transformer: sequential());
     on<AppLogouted>(_onLogouted, transformer: sequential());
@@ -45,7 +46,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     on<AppThemeSettingsChanged>(_onThemeSettingsChanged, transformer: droppable());
     on<AppThemeModeChanged>(_onThemeModeChanged, transformer: droppable());
     on<AppLocaleChanged>(_onLocaleChanged, transformer: droppable());
-    on<AppUserAgreementAccepted>(_onUserAgreementAccepted, transformer: droppable());
+    on<AppAgreementAccepted>(_onUserAgreementAccepted, transformer: droppable());
   }
 
   final AppPreferences appPreferences;
@@ -149,8 +150,28 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     }
   }
 
-  void _onUserAgreementAccepted(AppUserAgreementAccepted event, Emitter<AppState> emit) async {
-    await appPreferences.setUserAgreementAccepted(true);
-    emit(state.copyWith(userAgreementAccepted: true));
+  Future<void> _onUserAgreementAccepted(
+    AppAgreementAccepted event,
+    Emitter<AppState> emit,
+  ) {
+    return event.map(
+        updateUserAgreement: (event) => __onUpdateUserAgreementStatus(event, emit),
+        updateContactsAgreement: (event) => __onContactsUserAgreementStatus(event, emit));
+  }
+
+  Future<void> __onUpdateUserAgreementStatus(
+    _UserAppAgreementUpdate event,
+    Emitter<AppState> emit,
+  ) async {
+    await appPreferences.setUserAgreementStatus(event.status);
+    emit(state.copyWith(userAgreementStatus: event.status));
+  }
+
+  Future<void> __onContactsUserAgreementStatus(
+    _ContactsAppAgreementUpdate event,
+    Emitter<AppState> emit,
+  ) async {
+    await appPreferences.setContactsAgreementStatus(event.status);
+    emit(state.copyWith(contactsAgreementStatus: event.status));
   }
 }

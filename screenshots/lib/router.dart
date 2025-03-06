@@ -41,9 +41,7 @@ class _IndexInputScreenState extends State<IndexInputScreen> {
     late final screenshots = [
       ScreenshotApp(
         appBloc: appBloc,
-        child: const LoginModeSelectScreenScreenshot(
-          appGreeting: EnvironmentConfig.APP_GREETING,
-        ),
+        child: const LoginModeSelectScreenScreenshot(),
       ),
       ScreenshotApp(
         appBloc: appBloc,
@@ -64,6 +62,10 @@ class _IndexInputScreenState extends State<IndexInputScreen> {
       ScreenshotApp(
         appBloc: appBloc,
         child: const LoginSignUpScreenshot(),
+      ),
+      ScreenshotApp(
+        appBloc: appBloc,
+        child: const PrivacyScreenScreenshot(),
       ),
       ScreenshotApp(
         appBloc: appBloc,
@@ -88,6 +90,15 @@ class _IndexInputScreenState extends State<IndexInputScreen> {
         child: const MainScreenScreenshot(
           MainFlavor.keypad,
           Text(EnvironmentConfig.APP_NAME),
+        ),
+      ),
+      ScreenshotApp(
+        appBloc: appBloc,
+        child: Builder(
+          builder: (context) => const MainScreenScreenshot(
+            MainFlavor.messaging,
+            Text(EnvironmentConfig.APP_NAME),
+          ),
         ),
       ),
       ScreenshotApp(

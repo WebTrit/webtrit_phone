@@ -140,16 +140,8 @@ class WebtritApiClient {
         _logger.severe('${method.toUpperCase()} failed for requestId: $requestId with error: $e');
 
         // Do not retry for valid server responses with a defined HTTP status code.
-        if (e is RequestFailure) rethrow;
+        if (e is RequestFailure || requestAttempt >= options.retries) rethrow;
 
-        if (requestAttempt >= options.retries) {
-          throw RequestFailure(
-            url: tenantUrl,
-            requestId: xRequestId,
-            token: token,
-            error: ErrorResponse(message: e.toString()),
-          );
-        }
         requestAttempt++;
         await Future.delayed(options.retryDelay);
       }
@@ -475,5 +467,20 @@ class WebtritApiClient {
     );
 
     return DemoCallToActionsResponse.fromJson(responseJson);
+  }
+
+  Future<SelfConfigResponse> getSelfConfig(
+    String token, {
+    RequestOptions options = const RequestOptions(),
+  }) async {
+    final responseJson = await _httpClientExecutePost(
+      ['custom', 'private', 'self-config-portal-url'],
+      null,
+      token,
+      {},
+      options: options,
+    );
+
+    return SelfConfigResponse.fromJson(responseJson);
   }
 }

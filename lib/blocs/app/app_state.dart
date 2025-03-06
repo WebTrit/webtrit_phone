@@ -13,10 +13,11 @@ class AppState with _$AppState {
     required ThemeSettings themeSettings,
     required ThemeMode themeMode,
     required Locale locale,
-    required bool userAgreementAccepted,
+    required AgreementStatus userAgreementStatus,
+    required AgreementStatus contactsAgreementStatus,
   }) = _AppState;
 
-  bool get isThemeModeSupported => themeSettings.darkColorSchemeOverride != null;
+  bool get isThemeModeSupported => themeSettings.lightColorSchemeConfig != themeSettings.darkColorSchemeConfig;
 
   ThemeMode get effectiveThemeMode => isThemeModeSupported ? themeMode : ThemeMode.light;
 

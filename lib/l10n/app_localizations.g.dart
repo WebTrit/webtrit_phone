@@ -337,6 +337,42 @@ abstract class AppLocalizations {
   /// **'Disconnecting the call, please hold on…'**
   String get callProcessingStatus_disconnecting;
 
+  /// No description provided for @callProcessingStatus_init_media.
+  ///
+  /// In en, this message translates to:
+  /// **'Initializing media devices'**
+  String get callProcessingStatus_init_media;
+
+  /// No description provided for @callProcessingStatus_invite.
+  ///
+  /// In en, this message translates to:
+  /// **'Establishing the SIP session'**
+  String get callProcessingStatus_invite;
+
+  /// No description provided for @callProcessingStatus_preparing.
+  ///
+  /// In en, this message translates to:
+  /// **'Preparing'**
+  String get callProcessingStatus_preparing;
+
+  /// No description provided for @callProcessingStatus_ringing.
+  ///
+  /// In en, this message translates to:
+  /// **'Ringing'**
+  String get callProcessingStatus_ringing;
+
+  /// No description provided for @callProcessingStatus_routing.
+  ///
+  /// In en, this message translates to:
+  /// **'Routing the call'**
+  String get callProcessingStatus_routing;
+
+  /// No description provided for @callProcessingStatus_signaling_connecting.
+  ///
+  /// In en, this message translates to:
+  /// **'Connecting to the remote server'**
+  String get callProcessingStatus_signaling_connecting;
+
   /// No description provided for @callStatus_appUnregistered.
   ///
   /// In en, this message translates to:
@@ -402,6 +438,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'There was an issue loading the page.'**
   String get common_problemWithLoadingPage;
+
+  /// No description provided for @contacts_agreement_button_text.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get contacts_agreement_button_text;
+
+  /// No description provided for @contacts_agreement_checkbox_text.
+  ///
+  /// In en, this message translates to:
+  /// **'I agree to allow the app to access my contacts to enhance my user experience.'**
+  String get contacts_agreement_checkbox_text;
+
+  /// No description provided for @contacts_agreement_description.
+  ///
+  /// In en, this message translates to:
+  /// **'This app requires access to your contact list to display your contacts in the app\'s Contacts tab. \n\nThe contact data is temporarily stored locally on your device to enable features like making calls directly from the app. \n\nThis data is not collected, transmitted, or shared outside the app.'**
+  String get contacts_agreement_description;
+
+  /// No description provided for @contacts_agreement_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Data collection'**
+  String get contacts_agreement_title;
 
   /// No description provided for @contacts_ExternalTabButton_refresh.
   ///
@@ -565,6 +625,12 @@ abstract class AppLocalizations {
   /// **'Invalid chat type'**
   String get default_InvalidChatTypeMessagingSocketException;
 
+  /// No description provided for @default_JoinCrashedMessagingSocketException.
+  ///
+  /// In en, this message translates to:
+  /// **'Error occurred while joining the conversation'**
+  String get default_JoinCrashedMessagingSocketException;
+
   /// No description provided for @default_MessagingSocketException.
   ///
   /// In en, this message translates to:
@@ -594,12 +660,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'SMS conversation not found'**
   String get default_SmsConversationNotFoundMessagingSocketException;
-
-  /// No description provided for @default_SocketExceptionError.
-  ///
-  /// In en, this message translates to:
-  /// **'A network issue occurred'**
-  String get default_SocketExceptionError;
 
   /// No description provided for @default_TimeoutExceptionError.
   ///
@@ -636,6 +696,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'An unauthorized request failure occurred'**
   String get default_UnauthorizedRequestFailureError;
+
+  /// No description provided for @default_UnknownExceptionError.
+  ///
+  /// In en, this message translates to:
+  /// **'An unknown issue occurred: {error}'**
+  String default_UnknownExceptionError(String error);
 
   /// No description provided for @default_UserAlreadyInChatMessagingSocketException.
   ///
@@ -876,6 +942,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Service successfully configured'**
   String get diagnostic_pushTokenStatusType_success;
+
+  /// No description provided for @diagnosticScreen_contacts_agreement_description.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow the app to access my contacts to enhance my user experience.'**
+  String get diagnosticScreen_contacts_agreement_description;
+
+  /// No description provided for @diagnosticScreen_contacts_agreement_group_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Agreement'**
+  String get diagnosticScreen_contacts_agreement_group_title;
+
+  /// No description provided for @diagnosticScreen_contacts_agreement_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Contacts Agreement'**
+  String get diagnosticScreen_contacts_agreement_title;
 
   /// No description provided for @diagnosticScreen_permissionsGroup_title.
   ///
@@ -1387,35 +1471,17 @@ abstract class AppLocalizations {
   /// **'Yes'**
   String get messaging_ConfirmDialog_confirm;
 
-  /// No description provided for @messaging_ConversationBuilders_addUserBtnText.
-  ///
-  /// In en, this message translates to:
-  /// **'Add user'**
-  String get messaging_ConversationBuilders_addUserBtnText;
-
   /// No description provided for @messaging_ConversationBuilders_back.
   ///
   /// In en, this message translates to:
   /// **'Back'**
   String get messaging_ConversationBuilders_back;
 
-  /// No description provided for @messaging_ConversationBuilders_back_action.
-  ///
-  /// In en, this message translates to:
-  /// **'Back'**
-  String get messaging_ConversationBuilders_back_action;
-
   /// No description provided for @messaging_ConversationBuilders_cancel.
   ///
   /// In en, this message translates to:
   /// **'Cancel'**
   String get messaging_ConversationBuilders_cancel;
-
-  /// No description provided for @messaging_ConversationBuilders_connectionError.
-  ///
-  /// In en, this message translates to:
-  /// **'Connection error, please try later'**
-  String get messaging_ConversationBuilders_connectionError;
 
   /// No description provided for @messaging_ConversationBuilders_contactOrNumberSearch_hint.
   ///
@@ -1446,12 +1512,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Cloud PBX contacts'**
   String get messaging_ConversationBuilders_externalContacts_heading;
-
-  /// No description provided for @messaging_ConversationBuilders_groupNameHeadline.
-  ///
-  /// In en, this message translates to:
-  /// **'Group name'**
-  String get messaging_ConversationBuilders_groupNameHeadline;
 
   /// No description provided for @messaging_ConversationBuilders_invalidNumber_message1.
   ///
@@ -1543,18 +1603,6 @@ abstract class AppLocalizations {
   /// **'Phone number format: '**
   String get messaging_ConversationBuilders_numberSearch_errorHint;
 
-  /// No description provided for @messaging_ConversationBuilders_submitBtnText.
-  ///
-  /// In en, this message translates to:
-  /// **'Submit'**
-  String get messaging_ConversationBuilders_submitBtnText;
-
-  /// No description provided for @messaging_ConversationBuilders_submitError.
-  ///
-  /// In en, this message translates to:
-  /// **'Error happened while creating group, please try again'**
-  String get messaging_ConversationBuilders_submitError;
-
   /// No description provided for @messaging_ConversationBuilders_title_group.
   ///
   /// In en, this message translates to:
@@ -1626,12 +1674,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Enter phone number'**
   String get messaging_ConversationsScreen_smssSearch_hint;
-
-  /// No description provided for @messaging_ConversationsScreen_startDialog.
-  ///
-  /// In en, this message translates to:
-  /// **'Start dialog'**
-  String get messaging_ConversationsScreen_startDialog;
 
   /// No description provided for @messaging_ConversationsScreen_unsupported.
   ///
@@ -1771,54 +1813,6 @@ abstract class AppLocalizations {
   /// **'Unmake moderator'**
   String get messaging_GroupInfo_unmakeModeratorBtnText;
 
-  /// No description provided for @messaging_GroupNameDialog_cancelBtnText.
-  ///
-  /// In en, this message translates to:
-  /// **'Cancel'**
-  String get messaging_GroupNameDialog_cancelBtnText;
-
-  /// No description provided for @messaging_GroupNameDialog_fieldHint.
-  ///
-  /// In en, this message translates to:
-  /// **'Enter group name'**
-  String get messaging_GroupNameDialog_fieldHint;
-
-  /// No description provided for @messaging_GroupNameDialog_fieldLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Group name'**
-  String get messaging_GroupNameDialog_fieldLabel;
-
-  /// No description provided for @messaging_GroupNameDialog_fieldValidation_empty.
-  ///
-  /// In en, this message translates to:
-  /// **'Please enter group name'**
-  String get messaging_GroupNameDialog_fieldValidation_empty;
-
-  /// No description provided for @messaging_GroupNameDialog_fieldValidation_short.
-  ///
-  /// In en, this message translates to:
-  /// **'Group name is too short'**
-  String get messaging_GroupNameDialog_fieldValidation_short;
-
-  /// No description provided for @messaging_GroupNameDialog_saveBtnText.
-  ///
-  /// In en, this message translates to:
-  /// **'Save'**
-  String get messaging_GroupNameDialog_saveBtnText;
-
-  /// No description provided for @messaging_GroupNameDialog_title.
-  ///
-  /// In en, this message translates to:
-  /// **'Group name'**
-  String get messaging_GroupNameDialog_title;
-
-  /// No description provided for @messaging_GroupScreen_titlePrefix.
-  ///
-  /// In en, this message translates to:
-  /// **'Group:'**
-  String get messaging_GroupScreen_titlePrefix;
-
   /// No description provided for @messaging_MessageField_hint.
   ///
   /// In en, this message translates to:
@@ -1861,12 +1855,6 @@ abstract class AppLocalizations {
   /// **'Forward'**
   String get messaging_MessageView_forward;
 
-  /// No description provided for @messaging_MessageView_forwarded.
-  ///
-  /// In en, this message translates to:
-  /// **'[forwarded]'**
-  String get messaging_MessageView_forwarded;
-
   /// No description provided for @messaging_MessageView_reply.
   ///
   /// In en, this message translates to:
@@ -1879,17 +1867,11 @@ abstract class AppLocalizations {
   /// **'Copy to clipboard'**
   String get messaging_MessageView_textcopy;
 
-  /// No description provided for @messaging_NewConversation_createGroup.
+  /// No description provided for @messaging_ParticipantName_unknown.
   ///
   /// In en, this message translates to:
-  /// **''**
-  String get messaging_NewConversation_createGroup;
-
-  /// No description provided for @messaging_NewConversation_title.
-  ///
-  /// In en, this message translates to:
-  /// **''**
-  String get messaging_NewConversation_title;
+  /// **'Unknown user'**
+  String get messaging_ParticipantName_unknown;
 
   /// No description provided for @messaging_ParticipantName_you.
   ///
@@ -1999,11 +1981,83 @@ abstract class AppLocalizations {
   /// **'No access to media input, please check app permissions'**
   String get notifications_errorSnackBar_callUserMedia;
 
+  /// No description provided for @notifications_errorSnackBar_callWhileOffline.
+  ///
+  /// In en, this message translates to:
+  /// **'Cannot initiate the call, please check the connection status'**
+  String get notifications_errorSnackBar_callWhileOffline;
+
+  /// No description provided for @notifications_errorSnackBar_callWhileUnregistered.
+  ///
+  /// In en, this message translates to:
+  /// **'Sorry, your application is currently disconnected from the WebTrit core servers, so it can\'t call right now. Please go to the settings page and slide the online status toggle switch off and on again to reestablish the connection'**
+  String get notifications_errorSnackBar_callWhileUnregistered;
+
+  /// No description provided for @notifications_errorSnackBar_callNegotiationTimeout.
+  ///
+  /// In en, this message translates to:
+  /// **'Cannot establish the call, please try again later'**
+  String get notifications_errorSnackBar_callNegotiationTimeout;
+
+  /// No description provided for @notifications_errorSnackBar_SignalingConnectFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Connecting to the core failed, trying to reconnect'**
+  String get notifications_errorSnackBar_SignalingConnectFailed;
+
+  /// No description provided for @notifications_errorSnackBar_signalingDisconnectWithCodeName.
+  ///
+  /// In en, this message translates to:
+  /// **'Disconnected from the core with the code: {codeName}'**
+  String notifications_errorSnackBar_signalingDisconnectWithCodeName(String codeName);
+
+  /// No description provided for @notifications_errorSnackBar_signalingDisconnectWithSystemReason.
+  ///
+  /// In en, this message translates to:
+  /// **'Disconnected from the core due to the following reason: {reason}'**
+  String notifications_errorSnackBar_signalingDisconnectWithSystemReason(String reason);
+
+  /// No description provided for @notifications_errorSnackBar_SignalingSessionMissed.
+  ///
+  /// In en, this message translates to:
+  /// **'Authentication error, please re-login'**
+  String get notifications_errorSnackBar_SignalingSessionMissed;
+
+  /// No description provided for @notifications_errorSnackBar_sipRegistrationFailed_Unavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Registration with the remote VoIP system failed, the service is unavailable'**
+  String get notifications_errorSnackBar_sipRegistrationFailed_Unavailable;
+
+  /// No description provided for @notifications_errorSnackBar_sipRegistrationFailed_Unexpected.
+  ///
+  /// In en, this message translates to:
+  /// **'Registration with the remote VoIP system failed due to an unexpected error'**
+  String get notifications_errorSnackBar_sipRegistrationFailed_Unexpected;
+
+  /// No description provided for @notifications_errorSnackBar_sipRegistrationFailed_WithSystemReason.
+  ///
+  /// In en, this message translates to:
+  /// **'Registration with the remote VoIP system failed due to the following reason: {reason}'**
+  String notifications_errorSnackBar_sipRegistrationFailed_WithSystemReason(String reason);
+
   /// No description provided for @notifications_errorSnackBar_sipServiceUnavailable.
   ///
   /// In en, this message translates to:
   /// **'Authentication error with the remote VoIP system'**
   String get notifications_errorSnackBar_sipServiceUnavailable;
+
+  /// No description provided for @notifications_messageSnackBar_appOffline.
+  ///
+  /// In en, this message translates to:
+  /// **'Your application is currently offline'**
+  String get notifications_messageSnackBar_appOffline;
+
+  /// No description provided for @notifications_successSnackBar_appOnline.
+  ///
+  /// In en, this message translates to:
+  /// **'Your application is online'**
+  String get notifications_successSnackBar_appOnline;
 
   /// No description provided for @permission_Button_request.
   ///
@@ -2197,6 +2251,12 @@ abstract class AppLocalizations {
   /// **'Status code'**
   String get request_StatusCode;
 
+  /// No description provided for @request_StatusName.
+  ///
+  /// In en, this message translates to:
+  /// **'Status name'**
+  String get request_StatusName;
+
   /// No description provided for @sessionStatus_pushNotificationServiceProblem.
   ///
   /// In en, this message translates to:
@@ -2287,6 +2347,396 @@ abstract class AppLocalizations {
   /// **'Preferred video codec'**
   String get settings_call_codecs_preferred_video_title;
 
+  /// No description provided for @settings_encoding_AppBar_reset_tooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset to default'**
+  String get settings_encoding_AppBar_reset_tooltip;
+
+  /// No description provided for @settings_encoding_Section_preset_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Media encoding configs'**
+  String get settings_encoding_Section_preset_title;
+
+  /// No description provided for @settings_encoding_Section_preset_tooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Adjustment presets for audio and video codecs: \n- lower values will reduce the bandwidth usage but affect the quality, \n- higher values will increase the quality but also the bandwidth usage. \nThe default preset has recommended settings provided by your vendor according to their environment preferences.'**
+  String get settings_encoding_Section_preset_tooltip;
+
+  /// No description provided for @settings_encoding_Section_preset.
+  ///
+  /// In en, this message translates to:
+  /// **'Preset'**
+  String get settings_encoding_Section_preset;
+
+  /// No description provided for @settings_encoding_Section_preset_default.
+  ///
+  /// In en, this message translates to:
+  /// **'Default'**
+  String get settings_encoding_Section_preset_default;
+
+  /// No description provided for @settings_encoding_Section_preset_eco.
+  ///
+  /// In en, this message translates to:
+  /// **'Eco'**
+  String get settings_encoding_Section_preset_eco;
+
+  /// No description provided for @settings_encoding_Section_preset_balance.
+  ///
+  /// In en, this message translates to:
+  /// **'Balance'**
+  String get settings_encoding_Section_preset_balance;
+
+  /// No description provided for @settings_encoding_Section_preset_quality.
+  ///
+  /// In en, this message translates to:
+  /// **'Quality'**
+  String get settings_encoding_Section_preset_quality;
+
+  /// No description provided for @settings_encoding_Section_preset_full_flex.
+  ///
+  /// In en, this message translates to:
+  /// **'Full flex'**
+  String get settings_encoding_Section_preset_full_flex;
+
+  /// No description provided for @settings_encoding_Section_preset_custom.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom'**
+  String get settings_encoding_Section_preset_custom;
+
+  /// No description provided for @settings_encoding_Section_measure_kbps.
+  ///
+  /// In en, this message translates to:
+  /// **'Kbps'**
+  String get settings_encoding_Section_measure_kbps;
+
+  /// No description provided for @settings_encoding_Section_measure_ms.
+  ///
+  /// In en, this message translates to:
+  /// **'ms'**
+  String get settings_encoding_Section_measure_ms;
+
+  /// No description provided for @settings_encoding_Section_measure_hz.
+  ///
+  /// In en, this message translates to:
+  /// **'Hz'**
+  String get settings_encoding_Section_measure_hz;
+
+  /// No description provided for @settings_encoding_Section_value_auto.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto'**
+  String get settings_encoding_Section_value_auto;
+
+  /// No description provided for @settings_encoding_Section_value_mono.
+  ///
+  /// In en, this message translates to:
+  /// **'Mono'**
+  String get settings_encoding_Section_value_mono;
+
+  /// No description provided for @settings_encoding_Section_value_stereo.
+  ///
+  /// In en, this message translates to:
+  /// **'Stereo'**
+  String get settings_encoding_Section_value_stereo;
+
+  /// No description provided for @settings_encoding_Section_value_enable.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable'**
+  String get settings_encoding_Section_value_enable;
+
+  /// No description provided for @settings_encoding_Section_value_disable.
+  ///
+  /// In en, this message translates to:
+  /// **'Disable'**
+  String get settings_encoding_Section_value_disable;
+
+  /// No description provided for @settings_encoding_Section_value_on.
+  ///
+  /// In en, this message translates to:
+  /// **'On'**
+  String get settings_encoding_Section_value_on;
+
+  /// No description provided for @settings_encoding_Section_value_off.
+  ///
+  /// In en, this message translates to:
+  /// **'Off'**
+  String get settings_encoding_Section_value_off;
+
+  /// No description provided for @settings_encoding_Section_bitrate_prefix.
+  ///
+  /// In en, this message translates to:
+  /// **'Bitrate: '**
+  String get settings_encoding_Section_bitrate_prefix;
+
+  /// No description provided for @settings_encoding_Section_ptime_prefix.
+  ///
+  /// In en, this message translates to:
+  /// **'Ptime: '**
+  String get settings_encoding_Section_ptime_prefix;
+
+  /// No description provided for @settings_encoding_Section_bandwidth_prefix.
+  ///
+  /// In en, this message translates to:
+  /// **'Bandwidth: '**
+  String get settings_encoding_Section_bandwidth_prefix;
+
+  /// No description provided for @settings_encoding_Section_bitrate_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Codec bitrate settings'**
+  String get settings_encoding_Section_bitrate_title;
+
+  /// No description provided for @settings_encoding_Section_bitrate_tooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Adjust the bitrate settings for audio and video codecs: \n- lower values will reduce the bandwidth usage but affect the quality, \n- higher values will increase the quality but also the bandwidth usage.'**
+  String get settings_encoding_Section_bitrate_tooltip;
+
+  /// No description provided for @settings_encoding_Section_target_audio_bitrate.
+  ///
+  /// In en, this message translates to:
+  /// **'Audio target bitrate: '**
+  String get settings_encoding_Section_target_audio_bitrate;
+
+  /// No description provided for @settings_encoding_Section_target_video_bitrate.
+  ///
+  /// In en, this message translates to:
+  /// **'Video target bitrate: '**
+  String get settings_encoding_Section_target_video_bitrate;
+
+  /// No description provided for @settings_encoding_Section_packetization_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Audio packetization'**
+  String get settings_encoding_Section_packetization_title;
+
+  /// No description provided for @settings_encoding_Section_packetization_tooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Adjust audio packetization time in milliseconds. Can be used to reduce audio latency or fix Network MTU size issues'**
+  String get settings_encoding_Section_packetization_tooltip;
+
+  /// No description provided for @settings_encoding_Section_audio_ptime.
+  ///
+  /// In en, this message translates to:
+  /// **'Audio target ptime: '**
+  String get settings_encoding_Section_audio_ptime;
+
+  /// No description provided for @settings_encoding_Section_audio_ptime_limit.
+  ///
+  /// In en, this message translates to:
+  /// **'Audio ptime limit: '**
+  String get settings_encoding_Section_audio_ptime_limit;
+
+  /// No description provided for @settings_encoding_Section_opus_bandwidth.
+  ///
+  /// In en, this message translates to:
+  /// **'Bandwidth override: '**
+  String get settings_encoding_Section_opus_bandwidth;
+
+  /// No description provided for @settings_encoding_Section_opus_channels.
+  ///
+  /// In en, this message translates to:
+  /// **'Channels mode override: '**
+  String get settings_encoding_Section_opus_channels;
+
+  /// No description provided for @settings_encoding_Section_opus_dtx.
+  ///
+  /// In en, this message translates to:
+  /// **'DTX mode override: '**
+  String get settings_encoding_Section_opus_dtx;
+
+  /// No description provided for @settings_encoding_Section_opus_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Opus codec tuning'**
+  String get settings_encoding_Section_opus_title;
+
+  /// No description provided for @settings_encoding_Section_opus_tooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Adjust the opus specific codec settings. Can be used to reduce bandwidth usage or improve audio quality'**
+  String get settings_encoding_Section_opus_tooltip;
+
+  /// No description provided for @settings_encoding_Section_rtp_override_audio.
+  ///
+  /// In en, this message translates to:
+  /// **'Audio profiles override'**
+  String get settings_encoding_Section_rtp_override_audio;
+
+  /// No description provided for @settings_encoding_Section_rtp_override_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable/disable and reorder RTP profiles'**
+  String get settings_encoding_Section_rtp_override_title;
+
+  /// No description provided for @settings_encoding_Section_rtp_override_tooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Can be used to override the audio and video rtp profiles priority order or exclude some profiles from the SDP negotiation list. This can be used to force the usage of specific codecs or exclude some codecs if they are poorly supported by the device, the network or the remote system'**
+  String get settings_encoding_Section_rtp_override_tooltip;
+
+  /// No description provided for @settings_encoding_Section_rtp_override_video.
+  ///
+  /// In en, this message translates to:
+  /// **'Video profiles override'**
+  String get settings_encoding_Section_rtp_override_video;
+
+  /// No description provided for @settings_encoding_Section_rtp_override_warning_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Warning:'**
+  String get settings_encoding_Section_rtp_override_warning_title;
+
+  /// No description provided for @settings_encoding_Section_rtp_override_warning_message.
+  ///
+  /// In en, this message translates to:
+  /// **'Overriding may affect the compatibility with other devices or media systems and cause call errors, use only if you know what you are doing.'**
+  String get settings_encoding_Section_rtp_override_warning_message;
+
+  /// No description provided for @settings_audioProcessing_Section_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Audio pre-processing'**
+  String get settings_audioProcessing_Section_title;
+
+  /// No description provided for @settings_audioProcessing_Section_tooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Can be used to tune audio quality for specific needs or environments. Like studio recording, or external microphone. \n\nBypass voice processing - tells system to not apply hardware voice processing (Requires app restart).'**
+  String get settings_audioProcessing_Section_tooltip;
+
+  /// No description provided for @settings_audioProcessing_Section_VP_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Bypass voice processing'**
+  String get settings_audioProcessing_Section_VP_title;
+
+  /// No description provided for @settings_audioProcessing_Section_EC_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Echo cancellation'**
+  String get settings_audioProcessing_Section_EC_title;
+
+  /// No description provided for @settings_audioProcessing_Section_AGC_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto gain control'**
+  String get settings_audioProcessing_Section_AGC_title;
+
+  /// No description provided for @settings_audioProcessing_Section_NS_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Noise suppression'**
+  String get settings_audioProcessing_Section_NS_title;
+
+  /// No description provided for @settings_audioProcessing_Section_HPF_title.
+  ///
+  /// In en, this message translates to:
+  /// **'High pass filter'**
+  String get settings_audioProcessing_Section_HPF_title;
+
+  /// No description provided for @settings_audioProcessing_Section_AM_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Audio mirroring'**
+  String get settings_audioProcessing_Section_AM_title;
+
+  /// No description provided for @settings_videoCapturing_Section_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Video capturing'**
+  String get settings_videoCapturing_Section_title;
+
+  /// No description provided for @settings_videoCapturing_Section_tooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Can be used to tune video quality for specific needs or environments.'**
+  String get settings_videoCapturing_Section_tooltip;
+
+  /// No description provided for @settings_videoCapturing_Section_resolution_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Image resolution'**
+  String get settings_videoCapturing_Section_resolution_title;
+
+  /// No description provided for @settings_videoCapturing_Section_resolution_prefix.
+  ///
+  /// In en, this message translates to:
+  /// **'vertical points: '**
+  String get settings_videoCapturing_Section_resolution_prefix;
+
+  /// No description provided for @settings_videoCapturing_Section_framerate_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Image framerate'**
+  String get settings_videoCapturing_Section_framerate_title;
+
+  /// No description provided for @settings_videoCapturing_Section_framerate_prefix.
+  ///
+  /// In en, this message translates to:
+  /// **'frames: '**
+  String get settings_videoCapturing_Section_framerate_prefix;
+
+  /// No description provided for @settings_iceSettings_Section_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Ice candidates filtering'**
+  String get settings_iceSettings_Section_title;
+
+  /// No description provided for @settings_iceSettings_Section_tooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Filter ice candidates based on the network preferences may help to avoid network issues'**
+  String get settings_iceSettings_Section_tooltip;
+
+  /// No description provided for @settings_iceSettings_Section_netfilter_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Network protocol'**
+  String get settings_iceSettings_Section_netfilter_title;
+
+  /// No description provided for @settings_iceSettings_Section_noskip.
+  ///
+  /// In en, this message translates to:
+  /// **'No filtering'**
+  String get settings_iceSettings_Section_noskip;
+
+  /// No description provided for @settings_iceSettings_Section_netfilter_skipv4.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip IPv4 candidates'**
+  String get settings_iceSettings_Section_netfilter_skipv4;
+
+  /// No description provided for @settings_iceSettings_Section_netfilter_skipv6.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip IPv6 candidates'**
+  String get settings_iceSettings_Section_netfilter_skipv6;
+
+  /// No description provided for @settings_iceSettings_Section_trfilter_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Transport protocol'**
+  String get settings_iceSettings_Section_trfilter_title;
+
+  /// No description provided for @settings_iceSettings_Section_trfilter_skipUdp.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip UDP candidates'**
+  String get settings_iceSettings_Section_trfilter_skipUdp;
+
+  /// No description provided for @settings_iceSettings_Section_trfilter_skipTcp.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip TCP candidates'**
+  String get settings_iceSettings_Section_trfilter_skipTcp;
+
   /// No description provided for @settings_ListViewTileTitle_about.
   ///
   /// In en, this message translates to:
@@ -2299,11 +2749,11 @@ abstract class AppLocalizations {
   /// **'Delete account'**
   String get settings_ListViewTileTitle_accountDelete;
 
-  /// No description provided for @settings_ListViewTileTitle_call_codecs.
+  /// No description provided for @settings_ListViewTileTitle_mediaSettings.
   ///
   /// In en, this message translates to:
-  /// **'Call codecs'**
-  String get settings_ListViewTileTitle_call_codecs;
+  /// **'Media settings'**
+  String get settings_ListViewTileTitle_mediaSettings;
 
   /// No description provided for @settings_ListViewTileTitle_help.
   ///
@@ -2340,6 +2790,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Online'**
   String get settings_ListViewTileTitle_registered;
+
+  /// No description provided for @settings_ListViewTileTitle_self_config.
+  ///
+  /// In en, this message translates to:
+  /// **'Self-config page'**
+  String get settings_ListViewTileTitle_self_config;
 
   /// No description provided for @settings_ListViewTileTitle_settings.
   ///
@@ -2407,6 +2863,30 @@ abstract class AppLocalizations {
   /// **'Incoming Call Type'**
   String get settings_network_incomingCallType_title;
 
+  /// No description provided for @signalingResponseCode_ambiguousRequest.
+  ///
+  /// In en, this message translates to:
+  /// **'We couldn\'t understand your request.'**
+  String get signalingResponseCode_ambiguousRequest;
+
+  /// No description provided for @signalingResponseCode_busyEverywhere.
+  ///
+  /// In en, this message translates to:
+  /// **'The user you\'re trying to reach is busy. Please try again later.'**
+  String get signalingResponseCode_busyEverywhere;
+
+  /// No description provided for @signalingResponseCode_callNotExist.
+  ///
+  /// In en, this message translates to:
+  /// **'The request that does not match any dialog or transaction.\n'**
+  String get signalingResponseCode_callNotExist;
+
+  /// No description provided for @signalingResponseCode_declineCall.
+  ///
+  /// In en, this message translates to:
+  /// **'The call was declined.'**
+  String get signalingResponseCode_declineCall;
+
   /// No description provided for @signalingResponseCode_errorAttachingPlugin.
   ///
   /// In en, this message translates to:
@@ -2425,11 +2905,23 @@ abstract class AppLocalizations {
   /// **'We couldn\'t send your message. Check your network and try again.'**
   String get signalingResponseCode_errorSendingMessage;
 
+  /// No description provided for @signalingResponseCode_exchangeRoutingError.
+  ///
+  /// In en, this message translates to:
+  /// **'We couldn\'t find a route to complete your request. Please try again later.'**
+  String get signalingResponseCode_exchangeRoutingError;
+
   /// No description provided for @signalingResponseCode_handleNotFound.
   ///
   /// In en, this message translates to:
   /// **'We couldn\'t find what you were looking for. Please try again.'**
   String get signalingResponseCode_handleNotFound;
+
+  /// No description provided for @signalingResponseCode_incompatibleDestination.
+  ///
+  /// In en, this message translates to:
+  /// **'The destination you\'re trying to reach is incompatible.'**
+  String get signalingResponseCode_incompatibleDestination;
 
   /// No description provided for @signalingResponseCode_invalidElementType.
   ///
@@ -2449,6 +2941,12 @@ abstract class AppLocalizations {
   /// **'Some of the information provided was not valid. Please double-check and try again.'**
   String get signalingResponseCode_invalidJsonObject;
 
+  /// No description provided for @signalingResponseCode_invalidNumberFormat.
+  ///
+  /// In en, this message translates to:
+  /// **'The number you entered is invalid.'**
+  String get signalingResponseCode_invalidNumberFormat;
+
   /// No description provided for @signalingResponseCode_invalidPath.
   ///
   /// In en, this message translates to:
@@ -2467,6 +2965,12 @@ abstract class AppLocalizations {
   /// **'The requested stream isn\'t available. Please try again.'**
   String get signalingResponseCode_invalidStream;
 
+  /// No description provided for @signalingResponseCode_loopDetected.
+  ///
+  /// In en, this message translates to:
+  /// **'We detected a loop in the call. Please try again.'**
+  String get signalingResponseCode_loopDetected;
+
   /// No description provided for @signalingResponseCode_missingMandatoryElement.
   ///
   /// In en, this message translates to:
@@ -2478,6 +2982,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Something went wrong with your request. Please try again.'**
   String get signalingResponseCode_missingRequest;
+
+  /// No description provided for @signalingResponseCode_normalUnspecified.
+  ///
+  /// In en, this message translates to:
+  /// **'An error occurred. Please try again later.'**
+  String get signalingResponseCode_normalUnspecified;
+
+  /// No description provided for @signalingResponseCode_notAcceptable.
+  ///
+  /// In en, this message translates to:
+  /// **'The call was marked as not acceptable. Please check your outbound routes!'**
+  String get signalingResponseCode_notAcceptable;
 
   /// No description provided for @signalingResponseCode_notAcceptingNewSessions.
   ///
@@ -2496,6 +3012,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'A required component is missing. Please try restarting the app.'**
   String get signalingResponseCode_pluginNotFound;
+
+  /// No description provided for @signalingResponseCode_rejected.
+  ///
+  /// In en, this message translates to:
+  /// **'The call was rejected by a machine or process on the way, without reaching the destination... '**
+  String get signalingResponseCode_rejected;
+
+  /// No description provided for @signalingResponseCode_requestTerminated.
+  ///
+  /// In en, this message translates to:
+  /// **'Your request was terminated. Please try again.'**
+  String get signalingResponseCode_requestTerminated;
 
   /// No description provided for @signalingResponseCode_sessionIdInUse.
   ///
@@ -2520,6 +3048,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'A connection issue occurred. Please check your network and try again.'**
   String get signalingResponseCode_transportSpecificError;
+
+  /// No description provided for @signalingResponseCodeType_callHangup.
+  ///
+  /// In en, this message translates to:
+  /// **'The call was ended.'**
+  String get signalingResponseCodeType_callHangup;
 
   /// No description provided for @signalingResponseCodeType_plugin.
   ///
@@ -2605,11 +3139,101 @@ abstract class AppLocalizations {
   /// **'This action isn\'t supported by your current setup.'**
   String get signalingResponseCode_unsupportedJsepType;
 
+  /// No description provided for @signalingResponseCode_unwanted.
+  ///
+  /// In en, this message translates to:
+  /// **'The recipient marked the call as unwanted.'**
+  String get signalingResponseCode_unwanted;
+
+  /// No description provided for @signalingResponseCode_userBusy.
+  ///
+  /// In en, this message translates to:
+  /// **'The user you\'re trying to reach is busy. Please try again later.'**
+  String get signalingResponseCode_userBusy;
+
+  /// No description provided for @signalingResponseCode_userNotExist.
+  ///
+  /// In en, this message translates to:
+  /// **'The user you\'re trying to reach doesn\'t exist.'**
+  String get signalingResponseCode_userNotExist;
+
   /// No description provided for @signalingResponseCode_wrongWebrtcState.
   ///
   /// In en, this message translates to:
   /// **'A call-related error occurred. Please hang up and try again.'**
   String get signalingResponseCode_wrongWebrtcState;
+
+  /// No description provided for @socketError_connectionRefused.
+  ///
+  /// In en, this message translates to:
+  /// **'Connection Refused'**
+  String get socketError_connectionRefused;
+
+  /// No description provided for @socketError_connectionRefusedDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'The server refused the connection. The server may be down or rejecting requests. Please try again later.'**
+  String get socketError_connectionRefusedDescription;
+
+  /// No description provided for @socketError_connectionReset.
+  ///
+  /// In en, this message translates to:
+  /// **'Connection Reset'**
+  String get socketError_connectionReset;
+
+  /// No description provided for @socketError_connectionResetDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'The connection was reset by the server. Please try again.'**
+  String get socketError_connectionResetDescription;
+
+  /// No description provided for @socketError_connectionTimedOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Connection Timed Out'**
+  String get socketError_connectionTimedOut;
+
+  /// No description provided for @socketError_connectionTimedOutDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'The connection has timed out. This might happen due to a slow or unstable internet connection. Please check your connection and try again.'**
+  String get socketError_connectionTimedOutDescription;
+
+  /// No description provided for @socketError_default.
+  ///
+  /// In en, this message translates to:
+  /// **'Network Error'**
+  String get socketError_default;
+
+  /// No description provided for @socketError_defaultDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'An unexpected network error occurred (Error code: {errorCode}). This might be caused by network issues or server problems. Please try again later.'**
+  String socketError_defaultDescription(int? errorCode);
+
+  /// No description provided for @socketError_networkUnreachable.
+  ///
+  /// In en, this message translates to:
+  /// **'Network Unreachable'**
+  String get socketError_networkUnreachable;
+
+  /// No description provided for @socketError_networkUnreachableDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'The network is unreachable. This could be due to a weak internet connection, network restrictions such as firewalls, or incorrect DNS settings. If you\'re on a work or restricted network, please contact your network administrator or try using a different network.'**
+  String get socketError_networkUnreachableDescription;
+
+  /// No description provided for @socketError_serverUnreachable.
+  ///
+  /// In en, this message translates to:
+  /// **'The server is unreachable due to network issues'**
+  String get socketError_serverUnreachable;
+
+  /// No description provided for @socketError_serverUnreachableDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'The server is unreachable. This could be due to no internet connection or server maintenance. Please check your internet connection and try again.'**
+  String get socketError_serverUnreachableDescription;
 
   /// No description provided for @themeMode_dark.
   ///

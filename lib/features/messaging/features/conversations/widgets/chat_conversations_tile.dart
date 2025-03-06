@@ -54,7 +54,7 @@ class _ChatConversationsTileState extends State<ChatConversationsTile> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       child: Material(
-        color: Theme.of(context).cardColor.withOpacity(0.1),
+        color: Theme.of(context).cardColor.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(16),
         clipBehavior: Clip.antiAlias,
         child: Dismissible(
@@ -188,7 +188,7 @@ class _ChatConversationsTileState extends State<ChatConversationsTile> {
               margin: const EdgeInsets.only(left: 8),
               padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
               decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.secondary.withOpacity(0.5),
+                color: Theme.of(context).colorScheme.secondary.withValues(alpha: 0.5),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Text(

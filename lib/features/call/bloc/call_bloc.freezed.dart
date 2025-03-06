@@ -448,26 +448,23 @@ abstract class _ResetStateEventCompleteCall implements _ResetStateEvent {
 mixin _$SignalingClientEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(bool reconnecting) connectInitiated,
+    required TResult Function() connectInitiated,
     required TResult Function() disconnectInitiated,
-    required TResult Function(int? code, String? reason, bool afterReconnect)
-        disconnected,
+    required TResult Function(int? code, String? reason) disconnected,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(bool reconnecting)? connectInitiated,
+    TResult? Function()? connectInitiated,
     TResult? Function()? disconnectInitiated,
-    TResult? Function(int? code, String? reason, bool afterReconnect)?
-        disconnected,
+    TResult? Function(int? code, String? reason)? disconnected,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(bool reconnecting)? connectInitiated,
+    TResult Function()? connectInitiated,
     TResult Function()? disconnectInitiated,
-    TResult Function(int? code, String? reason, bool afterReconnect)?
-        disconnected,
+    TResult Function(int? code, String? reason)? disconnected,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -507,71 +504,60 @@ mixin _$SignalingClientEvent {
 class _$SignalingClientEventConnectInitiatedImpl
     with DiagnosticableTreeMixin
     implements _SignalingClientEventConnectInitiated {
-  const _$SignalingClientEventConnectInitiatedImpl({this.reconnecting = false});
-
-  @override
-  @JsonKey()
-  final bool reconnecting;
+  const _$SignalingClientEventConnectInitiatedImpl();
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return '_SignalingClientEvent.connectInitiated(reconnecting: $reconnecting)';
+    return '_SignalingClientEvent.connectInitiated()';
   }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties
-      ..add(
-          DiagnosticsProperty('type', '_SignalingClientEvent.connectInitiated'))
-      ..add(DiagnosticsProperty('reconnecting', reconnecting));
+    properties.add(
+        DiagnosticsProperty('type', '_SignalingClientEvent.connectInitiated'));
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$SignalingClientEventConnectInitiatedImpl &&
-            (identical(other.reconnecting, reconnecting) ||
-                other.reconnecting == reconnecting));
+            other is _$SignalingClientEventConnectInitiatedImpl);
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, reconnecting);
+  int get hashCode => runtimeType.hashCode;
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(bool reconnecting) connectInitiated,
+    required TResult Function() connectInitiated,
     required TResult Function() disconnectInitiated,
-    required TResult Function(int? code, String? reason, bool afterReconnect)
-        disconnected,
+    required TResult Function(int? code, String? reason) disconnected,
   }) {
-    return connectInitiated(reconnecting);
+    return connectInitiated();
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(bool reconnecting)? connectInitiated,
+    TResult? Function()? connectInitiated,
     TResult? Function()? disconnectInitiated,
-    TResult? Function(int? code, String? reason, bool afterReconnect)?
-        disconnected,
+    TResult? Function(int? code, String? reason)? disconnected,
   }) {
-    return connectInitiated?.call(reconnecting);
+    return connectInitiated?.call();
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(bool reconnecting)? connectInitiated,
+    TResult Function()? connectInitiated,
     TResult Function()? disconnectInitiated,
-    TResult Function(int? code, String? reason, bool afterReconnect)?
-        disconnected,
+    TResult Function(int? code, String? reason)? disconnected,
     required TResult orElse(),
   }) {
     if (connectInitiated != null) {
-      return connectInitiated(reconnecting);
+      return connectInitiated();
     }
     return orElse();
   }
@@ -620,10 +606,8 @@ class _$SignalingClientEventConnectInitiatedImpl
 
 abstract class _SignalingClientEventConnectInitiated
     implements _SignalingClientEvent {
-  const factory _SignalingClientEventConnectInitiated(
-      {final bool reconnecting}) = _$SignalingClientEventConnectInitiatedImpl;
-
-  bool get reconnecting;
+  const factory _SignalingClientEventConnectInitiated() =
+      _$SignalingClientEventConnectInitiatedImpl;
 }
 
 /// @nodoc
@@ -658,10 +642,9 @@ class _$SignalingClientEventDisconnectInitiatedImpl
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(bool reconnecting) connectInitiated,
+    required TResult Function() connectInitiated,
     required TResult Function() disconnectInitiated,
-    required TResult Function(int? code, String? reason, bool afterReconnect)
-        disconnected,
+    required TResult Function(int? code, String? reason) disconnected,
   }) {
     return disconnectInitiated();
   }
@@ -669,10 +652,9 @@ class _$SignalingClientEventDisconnectInitiatedImpl
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(bool reconnecting)? connectInitiated,
+    TResult? Function()? connectInitiated,
     TResult? Function()? disconnectInitiated,
-    TResult? Function(int? code, String? reason, bool afterReconnect)?
-        disconnected,
+    TResult? Function(int? code, String? reason)? disconnected,
   }) {
     return disconnectInitiated?.call();
   }
@@ -680,10 +662,9 @@ class _$SignalingClientEventDisconnectInitiatedImpl
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(bool reconnecting)? connectInitiated,
+    TResult Function()? connectInitiated,
     TResult Function()? disconnectInitiated,
-    TResult Function(int? code, String? reason, bool afterReconnect)?
-        disconnected,
+    TResult Function(int? code, String? reason)? disconnected,
     required TResult orElse(),
   }) {
     if (disconnectInitiated != null) {
@@ -745,20 +726,16 @@ abstract class _SignalingClientEventDisconnectInitiated
 class _$SignalingClientEventDisconnectedImpl
     with DiagnosticableTreeMixin
     implements _SignalingClientEventDisconnected {
-  const _$SignalingClientEventDisconnectedImpl(this.code, this.reason,
-      {this.afterReconnect = false});
+  const _$SignalingClientEventDisconnectedImpl(this.code, this.reason);
 
   @override
   final int? code;
   @override
   final String? reason;
-  @override
-  @JsonKey()
-  final bool afterReconnect;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return '_SignalingClientEvent.disconnected(code: $code, reason: $reason, afterReconnect: $afterReconnect)';
+    return '_SignalingClientEvent.disconnected(code: $code, reason: $reason)';
   }
 
   @override
@@ -767,8 +744,7 @@ class _$SignalingClientEventDisconnectedImpl
     properties
       ..add(DiagnosticsProperty('type', '_SignalingClientEvent.disconnected'))
       ..add(DiagnosticsProperty('code', code))
-      ..add(DiagnosticsProperty('reason', reason))
-      ..add(DiagnosticsProperty('afterReconnect', afterReconnect));
+      ..add(DiagnosticsProperty('reason', reason));
   }
 
   @override
@@ -777,47 +753,42 @@ class _$SignalingClientEventDisconnectedImpl
         (other.runtimeType == runtimeType &&
             other is _$SignalingClientEventDisconnectedImpl &&
             (identical(other.code, code) || other.code == code) &&
-            (identical(other.reason, reason) || other.reason == reason) &&
-            (identical(other.afterReconnect, afterReconnect) ||
-                other.afterReconnect == afterReconnect));
+            (identical(other.reason, reason) || other.reason == reason));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, code, reason, afterReconnect);
+  int get hashCode => Object.hash(runtimeType, code, reason);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(bool reconnecting) connectInitiated,
+    required TResult Function() connectInitiated,
     required TResult Function() disconnectInitiated,
-    required TResult Function(int? code, String? reason, bool afterReconnect)
-        disconnected,
+    required TResult Function(int? code, String? reason) disconnected,
   }) {
-    return disconnected(code, reason, afterReconnect);
+    return disconnected(code, reason);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(bool reconnecting)? connectInitiated,
+    TResult? Function()? connectInitiated,
     TResult? Function()? disconnectInitiated,
-    TResult? Function(int? code, String? reason, bool afterReconnect)?
-        disconnected,
+    TResult? Function(int? code, String? reason)? disconnected,
   }) {
-    return disconnected?.call(code, reason, afterReconnect);
+    return disconnected?.call(code, reason);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(bool reconnecting)? connectInitiated,
+    TResult Function()? connectInitiated,
     TResult Function()? disconnectInitiated,
-    TResult Function(int? code, String? reason, bool afterReconnect)?
-        disconnected,
+    TResult Function(int? code, String? reason)? disconnected,
     required TResult orElse(),
   }) {
     if (disconnected != null) {
-      return disconnected(code, reason, afterReconnect);
+      return disconnected(code, reason);
     }
     return orElse();
   }
@@ -867,12 +838,11 @@ class _$SignalingClientEventDisconnectedImpl
 abstract class _SignalingClientEventDisconnected
     implements _SignalingClientEvent {
   const factory _SignalingClientEventDisconnected(
-          final int? code, final String? reason, {final bool afterReconnect}) =
+          final int? code, final String? reason) =
       _$SignalingClientEventDisconnectedImpl;
 
   int? get code;
   String? get reason;
-  bool get afterReconnect;
 }
 
 /// @nodoc
@@ -12454,6 +12424,8 @@ abstract class _CallScreenEventDidPop implements CallScreenEvent {
 mixin _$CallState {
   ConnectivityResult? get currentConnectivityResult =>
       throw _privateConstructorUsedError;
+  AppLifecycleState? get currentAppLifecycleState =>
+      throw _privateConstructorUsedError;
   RegistrationStatus get registrationStatus =>
       throw _privateConstructorUsedError;
   SignalingClientStatus get signalingClientStatus =>
@@ -12466,6 +12438,7 @@ mixin _$CallState {
   int get linesCount => throw _privateConstructorUsedError;
   List<ActiveCall> get activeCalls => throw _privateConstructorUsedError;
   bool? get minimized => throw _privateConstructorUsedError;
+  bool? get speakerOnBeforeMinimize => throw _privateConstructorUsedError;
   bool? get speaker => throw _privateConstructorUsedError;
 
   /// Create a copy of CallState
@@ -12482,6 +12455,7 @@ abstract class $CallStateCopyWith<$Res> {
   @useResult
   $Res call(
       {ConnectivityResult? currentConnectivityResult,
+      AppLifecycleState? currentAppLifecycleState,
       RegistrationStatus registrationStatus,
       SignalingClientStatus signalingClientStatus,
       Object? lastSignalingClientConnectError,
@@ -12490,6 +12464,7 @@ abstract class $CallStateCopyWith<$Res> {
       int linesCount,
       List<ActiveCall> activeCalls,
       bool? minimized,
+      bool? speakerOnBeforeMinimize,
       bool? speaker});
 }
 
@@ -12509,6 +12484,7 @@ class _$CallStateCopyWithImpl<$Res, $Val extends CallState>
   @override
   $Res call({
     Object? currentConnectivityResult = freezed,
+    Object? currentAppLifecycleState = freezed,
     Object? registrationStatus = null,
     Object? signalingClientStatus = null,
     Object? lastSignalingClientConnectError = freezed,
@@ -12517,6 +12493,7 @@ class _$CallStateCopyWithImpl<$Res, $Val extends CallState>
     Object? linesCount = null,
     Object? activeCalls = null,
     Object? minimized = freezed,
+    Object? speakerOnBeforeMinimize = freezed,
     Object? speaker = freezed,
   }) {
     return _then(_value.copyWith(
@@ -12524,6 +12501,10 @@ class _$CallStateCopyWithImpl<$Res, $Val extends CallState>
           ? _value.currentConnectivityResult
           : currentConnectivityResult // ignore: cast_nullable_to_non_nullable
               as ConnectivityResult?,
+      currentAppLifecycleState: freezed == currentAppLifecycleState
+          ? _value.currentAppLifecycleState
+          : currentAppLifecycleState // ignore: cast_nullable_to_non_nullable
+              as AppLifecycleState?,
       registrationStatus: null == registrationStatus
           ? _value.registrationStatus
           : registrationStatus // ignore: cast_nullable_to_non_nullable
@@ -12556,6 +12537,10 @@ class _$CallStateCopyWithImpl<$Res, $Val extends CallState>
           ? _value.minimized
           : minimized // ignore: cast_nullable_to_non_nullable
               as bool?,
+      speakerOnBeforeMinimize: freezed == speakerOnBeforeMinimize
+          ? _value.speakerOnBeforeMinimize
+          : speakerOnBeforeMinimize // ignore: cast_nullable_to_non_nullable
+              as bool?,
       speaker: freezed == speaker
           ? _value.speaker
           : speaker // ignore: cast_nullable_to_non_nullable
@@ -12574,6 +12559,7 @@ abstract class _$$CallStateImplCopyWith<$Res>
   @useResult
   $Res call(
       {ConnectivityResult? currentConnectivityResult,
+      AppLifecycleState? currentAppLifecycleState,
       RegistrationStatus registrationStatus,
       SignalingClientStatus signalingClientStatus,
       Object? lastSignalingClientConnectError,
@@ -12582,6 +12568,7 @@ abstract class _$$CallStateImplCopyWith<$Res>
       int linesCount,
       List<ActiveCall> activeCalls,
       bool? minimized,
+      bool? speakerOnBeforeMinimize,
       bool? speaker});
 }
 
@@ -12599,6 +12586,7 @@ class __$$CallStateImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? currentConnectivityResult = freezed,
+    Object? currentAppLifecycleState = freezed,
     Object? registrationStatus = null,
     Object? signalingClientStatus = null,
     Object? lastSignalingClientConnectError = freezed,
@@ -12607,6 +12595,7 @@ class __$$CallStateImplCopyWithImpl<$Res>
     Object? linesCount = null,
     Object? activeCalls = null,
     Object? minimized = freezed,
+    Object? speakerOnBeforeMinimize = freezed,
     Object? speaker = freezed,
   }) {
     return _then(_$CallStateImpl(
@@ -12614,6 +12603,10 @@ class __$$CallStateImplCopyWithImpl<$Res>
           ? _value.currentConnectivityResult
           : currentConnectivityResult // ignore: cast_nullable_to_non_nullable
               as ConnectivityResult?,
+      currentAppLifecycleState: freezed == currentAppLifecycleState
+          ? _value.currentAppLifecycleState
+          : currentAppLifecycleState // ignore: cast_nullable_to_non_nullable
+              as AppLifecycleState?,
       registrationStatus: null == registrationStatus
           ? _value.registrationStatus
           : registrationStatus // ignore: cast_nullable_to_non_nullable
@@ -12646,6 +12639,10 @@ class __$$CallStateImplCopyWithImpl<$Res>
           ? _value.minimized
           : minimized // ignore: cast_nullable_to_non_nullable
               as bool?,
+      speakerOnBeforeMinimize: freezed == speakerOnBeforeMinimize
+          ? _value.speakerOnBeforeMinimize
+          : speakerOnBeforeMinimize // ignore: cast_nullable_to_non_nullable
+              as bool?,
       speaker: freezed == speaker
           ? _value.speaker
           : speaker // ignore: cast_nullable_to_non_nullable
@@ -12659,6 +12656,7 @@ class __$$CallStateImplCopyWithImpl<$Res>
 class _$CallStateImpl extends _CallState with DiagnosticableTreeMixin {
   const _$CallStateImpl(
       {this.currentConnectivityResult,
+      this.currentAppLifecycleState,
       this.registrationStatus = RegistrationStatus.registering,
       this.signalingClientStatus = SignalingClientStatus.disconnect,
       this.lastSignalingClientConnectError,
@@ -12667,12 +12665,15 @@ class _$CallStateImpl extends _CallState with DiagnosticableTreeMixin {
       this.linesCount = 0,
       final List<ActiveCall> activeCalls = const [],
       this.minimized,
+      this.speakerOnBeforeMinimize,
       this.speaker})
       : _activeCalls = activeCalls,
         super._();
 
   @override
   final ConnectivityResult? currentConnectivityResult;
+  @override
+  final AppLifecycleState? currentAppLifecycleState;
   @override
   @JsonKey()
   final RegistrationStatus registrationStatus;
@@ -12700,11 +12701,13 @@ class _$CallStateImpl extends _CallState with DiagnosticableTreeMixin {
   @override
   final bool? minimized;
   @override
+  final bool? speakerOnBeforeMinimize;
+  @override
   final bool? speaker;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'CallState(currentConnectivityResult: $currentConnectivityResult, registrationStatus: $registrationStatus, signalingClientStatus: $signalingClientStatus, lastSignalingClientConnectError: $lastSignalingClientConnectError, lastSignalingClientDisconnectError: $lastSignalingClientDisconnectError, lastSignalingDisconnectCode: $lastSignalingDisconnectCode, linesCount: $linesCount, activeCalls: $activeCalls, minimized: $minimized, speaker: $speaker)';
+    return 'CallState(currentConnectivityResult: $currentConnectivityResult, currentAppLifecycleState: $currentAppLifecycleState, registrationStatus: $registrationStatus, signalingClientStatus: $signalingClientStatus, lastSignalingClientConnectError: $lastSignalingClientConnectError, lastSignalingClientDisconnectError: $lastSignalingClientDisconnectError, lastSignalingDisconnectCode: $lastSignalingDisconnectCode, linesCount: $linesCount, activeCalls: $activeCalls, minimized: $minimized, speakerOnBeforeMinimize: $speakerOnBeforeMinimize, speaker: $speaker)';
   }
 
   @override
@@ -12714,6 +12717,8 @@ class _$CallStateImpl extends _CallState with DiagnosticableTreeMixin {
       ..add(DiagnosticsProperty('type', 'CallState'))
       ..add(DiagnosticsProperty(
           'currentConnectivityResult', currentConnectivityResult))
+      ..add(DiagnosticsProperty(
+          'currentAppLifecycleState', currentAppLifecycleState))
       ..add(DiagnosticsProperty('registrationStatus', registrationStatus))
       ..add(DiagnosticsProperty('signalingClientStatus', signalingClientStatus))
       ..add(DiagnosticsProperty(
@@ -12725,6 +12730,8 @@ class _$CallStateImpl extends _CallState with DiagnosticableTreeMixin {
       ..add(DiagnosticsProperty('linesCount', linesCount))
       ..add(DiagnosticsProperty('activeCalls', activeCalls))
       ..add(DiagnosticsProperty('minimized', minimized))
+      ..add(DiagnosticsProperty(
+          'speakerOnBeforeMinimize', speakerOnBeforeMinimize))
       ..add(DiagnosticsProperty('speaker', speaker));
   }
 
@@ -12736,6 +12743,9 @@ class _$CallStateImpl extends _CallState with DiagnosticableTreeMixin {
             (identical(other.currentConnectivityResult,
                     currentConnectivityResult) ||
                 other.currentConnectivityResult == currentConnectivityResult) &&
+            (identical(
+                    other.currentAppLifecycleState, currentAppLifecycleState) ||
+                other.currentAppLifecycleState == currentAppLifecycleState) &&
             (identical(other.registrationStatus, registrationStatus) ||
                 other.registrationStatus == registrationStatus) &&
             (identical(other.signalingClientStatus, signalingClientStatus) ||
@@ -12756,6 +12766,9 @@ class _$CallStateImpl extends _CallState with DiagnosticableTreeMixin {
                 .equals(other._activeCalls, _activeCalls) &&
             (identical(other.minimized, minimized) ||
                 other.minimized == minimized) &&
+            (identical(
+                    other.speakerOnBeforeMinimize, speakerOnBeforeMinimize) ||
+                other.speakerOnBeforeMinimize == speakerOnBeforeMinimize) &&
             (identical(other.speaker, speaker) || other.speaker == speaker));
   }
 
@@ -12763,6 +12776,7 @@ class _$CallStateImpl extends _CallState with DiagnosticableTreeMixin {
   int get hashCode => Object.hash(
       runtimeType,
       currentConnectivityResult,
+      currentAppLifecycleState,
       registrationStatus,
       signalingClientStatus,
       const DeepCollectionEquality().hash(lastSignalingClientConnectError),
@@ -12771,6 +12785,7 @@ class _$CallStateImpl extends _CallState with DiagnosticableTreeMixin {
       linesCount,
       const DeepCollectionEquality().hash(_activeCalls),
       minimized,
+      speakerOnBeforeMinimize,
       speaker);
 
   /// Create a copy of CallState
@@ -12785,6 +12800,7 @@ class _$CallStateImpl extends _CallState with DiagnosticableTreeMixin {
 abstract class _CallState extends CallState {
   const factory _CallState(
       {final ConnectivityResult? currentConnectivityResult,
+      final AppLifecycleState? currentAppLifecycleState,
       final RegistrationStatus registrationStatus,
       final SignalingClientStatus signalingClientStatus,
       final Object? lastSignalingClientConnectError,
@@ -12793,11 +12809,14 @@ abstract class _CallState extends CallState {
       final int linesCount,
       final List<ActiveCall> activeCalls,
       final bool? minimized,
+      final bool? speakerOnBeforeMinimize,
       final bool? speaker}) = _$CallStateImpl;
   const _CallState._() : super._();
 
   @override
   ConnectivityResult? get currentConnectivityResult;
+  @override
+  AppLifecycleState? get currentAppLifecycleState;
   @override
   RegistrationStatus get registrationStatus;
   @override
@@ -12815,6 +12834,8 @@ abstract class _CallState extends CallState {
   @override
   bool? get minimized;
   @override
+  bool? get speakerOnBeforeMinimize;
+  @override
   bool? get speaker;
 
   /// Create a copy of CallState
@@ -12831,17 +12852,17 @@ mixin _$ActiveCall {
   int get line => throw _privateConstructorUsedError;
   String get callId => throw _privateConstructorUsedError;
   CallkeepHandle get handle => throw _privateConstructorUsedError;
-  String? get displayName => throw _privateConstructorUsedError;
-  ActiveCallStatus? get status => throw _privateConstructorUsedError;
-
-  /// If the call is result of a refer request, the id should be provided.
-  String? get fromReferId => throw _privateConstructorUsedError;
+  DateTime get createdTime => throw _privateConstructorUsedError;
   bool get video => throw _privateConstructorUsedError;
+  CallProcessingStatus get processingStatus =>
+      throw _privateConstructorUsedError;
   bool? get frontCamera => throw _privateConstructorUsedError;
   bool get held => throw _privateConstructorUsedError;
   bool get muted => throw _privateConstructorUsedError;
   bool get updating => throw _privateConstructorUsedError;
-  DateTime get createdTime => throw _privateConstructorUsedError;
+  JsepValue? get incomingOffer => throw _privateConstructorUsedError;
+  String? get displayName => throw _privateConstructorUsedError;
+  String? get fromReferId => throw _privateConstructorUsedError;
   DateTime? get acceptedTime => throw _privateConstructorUsedError;
   DateTime? get hungUpTime => throw _privateConstructorUsedError;
   Transfer? get transfer => throw _privateConstructorUsedError;
@@ -12867,15 +12888,16 @@ abstract class $ActiveCallCopyWith<$Res> {
       int line,
       String callId,
       CallkeepHandle handle,
-      String? displayName,
-      ActiveCallStatus? status,
-      String? fromReferId,
+      DateTime createdTime,
       bool video,
+      CallProcessingStatus processingStatus,
       bool? frontCamera,
       bool held,
       bool muted,
       bool updating,
-      DateTime createdTime,
+      JsepValue? incomingOffer,
+      String? displayName,
+      String? fromReferId,
       DateTime? acceptedTime,
       DateTime? hungUpTime,
       Transfer? transfer,
@@ -12905,15 +12927,16 @@ class _$ActiveCallCopyWithImpl<$Res, $Val extends ActiveCall>
     Object? line = null,
     Object? callId = null,
     Object? handle = null,
-    Object? displayName = freezed,
-    Object? status = freezed,
-    Object? fromReferId = freezed,
+    Object? createdTime = null,
     Object? video = null,
+    Object? processingStatus = null,
     Object? frontCamera = freezed,
     Object? held = null,
     Object? muted = null,
     Object? updating = null,
-    Object? createdTime = null,
+    Object? incomingOffer = freezed,
+    Object? displayName = freezed,
+    Object? fromReferId = freezed,
     Object? acceptedTime = freezed,
     Object? hungUpTime = freezed,
     Object? transfer = freezed,
@@ -12938,22 +12961,18 @@ class _$ActiveCallCopyWithImpl<$Res, $Val extends ActiveCall>
           ? _value.handle
           : handle // ignore: cast_nullable_to_non_nullable
               as CallkeepHandle,
-      displayName: freezed == displayName
-          ? _value.displayName
-          : displayName // ignore: cast_nullable_to_non_nullable
-              as String?,
-      status: freezed == status
-          ? _value.status
-          : status // ignore: cast_nullable_to_non_nullable
-              as ActiveCallStatus?,
-      fromReferId: freezed == fromReferId
-          ? _value.fromReferId
-          : fromReferId // ignore: cast_nullable_to_non_nullable
-              as String?,
+      createdTime: null == createdTime
+          ? _value.createdTime
+          : createdTime // ignore: cast_nullable_to_non_nullable
+              as DateTime,
       video: null == video
           ? _value.video
           : video // ignore: cast_nullable_to_non_nullable
               as bool,
+      processingStatus: null == processingStatus
+          ? _value.processingStatus
+          : processingStatus // ignore: cast_nullable_to_non_nullable
+              as CallProcessingStatus,
       frontCamera: freezed == frontCamera
           ? _value.frontCamera
           : frontCamera // ignore: cast_nullable_to_non_nullable
@@ -12970,10 +12989,18 @@ class _$ActiveCallCopyWithImpl<$Res, $Val extends ActiveCall>
           ? _value.updating
           : updating // ignore: cast_nullable_to_non_nullable
               as bool,
-      createdTime: null == createdTime
-          ? _value.createdTime
-          : createdTime // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+      incomingOffer: freezed == incomingOffer
+          ? _value.incomingOffer
+          : incomingOffer // ignore: cast_nullable_to_non_nullable
+              as JsepValue?,
+      displayName: freezed == displayName
+          ? _value.displayName
+          : displayName // ignore: cast_nullable_to_non_nullable
+              as String?,
+      fromReferId: freezed == fromReferId
+          ? _value.fromReferId
+          : fromReferId // ignore: cast_nullable_to_non_nullable
+              as String?,
       acceptedTime: freezed == acceptedTime
           ? _value.acceptedTime
           : acceptedTime // ignore: cast_nullable_to_non_nullable
@@ -13026,15 +13053,16 @@ abstract class _$$ActiveCallImplCopyWith<$Res>
       int line,
       String callId,
       CallkeepHandle handle,
-      String? displayName,
-      ActiveCallStatus? status,
-      String? fromReferId,
+      DateTime createdTime,
       bool video,
+      CallProcessingStatus processingStatus,
       bool? frontCamera,
       bool held,
       bool muted,
       bool updating,
-      DateTime createdTime,
+      JsepValue? incomingOffer,
+      String? displayName,
+      String? fromReferId,
       DateTime? acceptedTime,
       DateTime? hungUpTime,
       Transfer? transfer,
@@ -13063,15 +13091,16 @@ class __$$ActiveCallImplCopyWithImpl<$Res>
     Object? line = null,
     Object? callId = null,
     Object? handle = null,
-    Object? displayName = freezed,
-    Object? status = freezed,
-    Object? fromReferId = freezed,
+    Object? createdTime = null,
     Object? video = null,
+    Object? processingStatus = null,
     Object? frontCamera = freezed,
     Object? held = null,
     Object? muted = null,
     Object? updating = null,
-    Object? createdTime = null,
+    Object? incomingOffer = freezed,
+    Object? displayName = freezed,
+    Object? fromReferId = freezed,
     Object? acceptedTime = freezed,
     Object? hungUpTime = freezed,
     Object? transfer = freezed,
@@ -13096,22 +13125,18 @@ class __$$ActiveCallImplCopyWithImpl<$Res>
           ? _value.handle
           : handle // ignore: cast_nullable_to_non_nullable
               as CallkeepHandle,
-      displayName: freezed == displayName
-          ? _value.displayName
-          : displayName // ignore: cast_nullable_to_non_nullable
-              as String?,
-      status: freezed == status
-          ? _value.status
-          : status // ignore: cast_nullable_to_non_nullable
-              as ActiveCallStatus?,
-      fromReferId: freezed == fromReferId
-          ? _value.fromReferId
-          : fromReferId // ignore: cast_nullable_to_non_nullable
-              as String?,
+      createdTime: null == createdTime
+          ? _value.createdTime
+          : createdTime // ignore: cast_nullable_to_non_nullable
+              as DateTime,
       video: null == video
           ? _value.video
           : video // ignore: cast_nullable_to_non_nullable
               as bool,
+      processingStatus: null == processingStatus
+          ? _value.processingStatus
+          : processingStatus // ignore: cast_nullable_to_non_nullable
+              as CallProcessingStatus,
       frontCamera: freezed == frontCamera
           ? _value.frontCamera
           : frontCamera // ignore: cast_nullable_to_non_nullable
@@ -13128,10 +13153,18 @@ class __$$ActiveCallImplCopyWithImpl<$Res>
           ? _value.updating
           : updating // ignore: cast_nullable_to_non_nullable
               as bool,
-      createdTime: null == createdTime
-          ? _value.createdTime
-          : createdTime // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+      incomingOffer: freezed == incomingOffer
+          ? _value.incomingOffer
+          : incomingOffer // ignore: cast_nullable_to_non_nullable
+              as JsepValue?,
+      displayName: freezed == displayName
+          ? _value.displayName
+          : displayName // ignore: cast_nullable_to_non_nullable
+              as String?,
+      fromReferId: freezed == fromReferId
+          ? _value.fromReferId
+          : fromReferId // ignore: cast_nullable_to_non_nullable
+              as String?,
       acceptedTime: freezed == acceptedTime
           ? _value.acceptedTime
           : acceptedTime // ignore: cast_nullable_to_non_nullable
@@ -13165,15 +13198,16 @@ class _$ActiveCallImpl extends _ActiveCall with DiagnosticableTreeMixin {
       required this.line,
       required this.callId,
       required this.handle,
-      this.displayName,
-      this.status,
-      this.fromReferId,
+      required this.createdTime,
       required this.video,
+      required this.processingStatus,
       this.frontCamera = true,
       this.held = false,
       this.muted = false,
       this.updating = false,
-      required this.createdTime,
+      this.incomingOffer,
+      this.displayName,
+      this.fromReferId,
       this.acceptedTime,
       this.hungUpTime,
       this.transfer,
@@ -13191,15 +13225,11 @@ class _$ActiveCallImpl extends _ActiveCall with DiagnosticableTreeMixin {
   @override
   final CallkeepHandle handle;
   @override
-  final String? displayName;
-  @override
-  final ActiveCallStatus? status;
-
-  /// If the call is result of a refer request, the id should be provided.
-  @override
-  final String? fromReferId;
+  final DateTime createdTime;
   @override
   final bool video;
+  @override
+  final CallProcessingStatus processingStatus;
   @override
   @JsonKey()
   final bool? frontCamera;
@@ -13213,7 +13243,11 @@ class _$ActiveCallImpl extends _ActiveCall with DiagnosticableTreeMixin {
   @JsonKey()
   final bool updating;
   @override
-  final DateTime createdTime;
+  final JsepValue? incomingOffer;
+  @override
+  final String? displayName;
+  @override
+  final String? fromReferId;
   @override
   final DateTime? acceptedTime;
   @override
@@ -13229,7 +13263,7 @@ class _$ActiveCallImpl extends _ActiveCall with DiagnosticableTreeMixin {
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'ActiveCall(direction: $direction, line: $line, callId: $callId, handle: $handle, displayName: $displayName, status: $status, fromReferId: $fromReferId, video: $video, frontCamera: $frontCamera, held: $held, muted: $muted, updating: $updating, createdTime: $createdTime, acceptedTime: $acceptedTime, hungUpTime: $hungUpTime, transfer: $transfer, failure: $failure, localStream: $localStream, remoteStream: $remoteStream)';
+    return 'ActiveCall(direction: $direction, line: $line, callId: $callId, handle: $handle, createdTime: $createdTime, video: $video, processingStatus: $processingStatus, frontCamera: $frontCamera, held: $held, muted: $muted, updating: $updating, incomingOffer: $incomingOffer, displayName: $displayName, fromReferId: $fromReferId, acceptedTime: $acceptedTime, hungUpTime: $hungUpTime, transfer: $transfer, failure: $failure, localStream: $localStream, remoteStream: $remoteStream)';
   }
 
   @override
@@ -13241,15 +13275,16 @@ class _$ActiveCallImpl extends _ActiveCall with DiagnosticableTreeMixin {
       ..add(DiagnosticsProperty('line', line))
       ..add(DiagnosticsProperty('callId', callId))
       ..add(DiagnosticsProperty('handle', handle))
-      ..add(DiagnosticsProperty('displayName', displayName))
-      ..add(DiagnosticsProperty('status', status))
-      ..add(DiagnosticsProperty('fromReferId', fromReferId))
+      ..add(DiagnosticsProperty('createdTime', createdTime))
       ..add(DiagnosticsProperty('video', video))
+      ..add(DiagnosticsProperty('processingStatus', processingStatus))
       ..add(DiagnosticsProperty('frontCamera', frontCamera))
       ..add(DiagnosticsProperty('held', held))
       ..add(DiagnosticsProperty('muted', muted))
       ..add(DiagnosticsProperty('updating', updating))
-      ..add(DiagnosticsProperty('createdTime', createdTime))
+      ..add(DiagnosticsProperty('incomingOffer', incomingOffer))
+      ..add(DiagnosticsProperty('displayName', displayName))
+      ..add(DiagnosticsProperty('fromReferId', fromReferId))
       ..add(DiagnosticsProperty('acceptedTime', acceptedTime))
       ..add(DiagnosticsProperty('hungUpTime', hungUpTime))
       ..add(DiagnosticsProperty('transfer', transfer))
@@ -13268,20 +13303,23 @@ class _$ActiveCallImpl extends _ActiveCall with DiagnosticableTreeMixin {
             (identical(other.line, line) || other.line == line) &&
             (identical(other.callId, callId) || other.callId == callId) &&
             (identical(other.handle, handle) || other.handle == handle) &&
-            (identical(other.displayName, displayName) ||
-                other.displayName == displayName) &&
-            (identical(other.status, status) || other.status == status) &&
-            (identical(other.fromReferId, fromReferId) ||
-                other.fromReferId == fromReferId) &&
+            (identical(other.createdTime, createdTime) ||
+                other.createdTime == createdTime) &&
             (identical(other.video, video) || other.video == video) &&
+            (identical(other.processingStatus, processingStatus) ||
+                other.processingStatus == processingStatus) &&
             (identical(other.frontCamera, frontCamera) ||
                 other.frontCamera == frontCamera) &&
             (identical(other.held, held) || other.held == held) &&
             (identical(other.muted, muted) || other.muted == muted) &&
             (identical(other.updating, updating) ||
                 other.updating == updating) &&
-            (identical(other.createdTime, createdTime) ||
-                other.createdTime == createdTime) &&
+            (identical(other.incomingOffer, incomingOffer) ||
+                other.incomingOffer == incomingOffer) &&
+            (identical(other.displayName, displayName) ||
+                other.displayName == displayName) &&
+            (identical(other.fromReferId, fromReferId) ||
+                other.fromReferId == fromReferId) &&
             (identical(other.acceptedTime, acceptedTime) ||
                 other.acceptedTime == acceptedTime) &&
             (identical(other.hungUpTime, hungUpTime) ||
@@ -13302,15 +13340,16 @@ class _$ActiveCallImpl extends _ActiveCall with DiagnosticableTreeMixin {
         line,
         callId,
         handle,
-        displayName,
-        status,
-        fromReferId,
+        createdTime,
         video,
+        processingStatus,
         frontCamera,
         held,
         muted,
         updating,
-        createdTime,
+        incomingOffer,
+        displayName,
+        fromReferId,
         acceptedTime,
         hungUpTime,
         transfer,
@@ -13334,15 +13373,16 @@ abstract class _ActiveCall extends ActiveCall {
       required final int line,
       required final String callId,
       required final CallkeepHandle handle,
-      final String? displayName,
-      final ActiveCallStatus? status,
-      final String? fromReferId,
+      required final DateTime createdTime,
       required final bool video,
+      required final CallProcessingStatus processingStatus,
       final bool? frontCamera,
       final bool held,
       final bool muted,
       final bool updating,
-      required final DateTime createdTime,
+      final JsepValue? incomingOffer,
+      final String? displayName,
+      final String? fromReferId,
       final DateTime? acceptedTime,
       final DateTime? hungUpTime,
       final Transfer? transfer,
@@ -13360,15 +13400,11 @@ abstract class _ActiveCall extends ActiveCall {
   @override
   CallkeepHandle get handle;
   @override
-  String? get displayName;
-  @override
-  ActiveCallStatus? get status;
-
-  /// If the call is result of a refer request, the id should be provided.
-  @override
-  String? get fromReferId;
+  DateTime get createdTime;
   @override
   bool get video;
+  @override
+  CallProcessingStatus get processingStatus;
   @override
   bool? get frontCamera;
   @override
@@ -13378,7 +13414,11 @@ abstract class _ActiveCall extends ActiveCall {
   @override
   bool get updating;
   @override
-  DateTime get createdTime;
+  JsepValue? get incomingOffer;
+  @override
+  String? get displayName;
+  @override
+  String? get fromReferId;
   @override
   DateTime? get acceptedTime;
   @override

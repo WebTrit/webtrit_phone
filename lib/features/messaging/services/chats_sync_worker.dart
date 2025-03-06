@@ -31,57 +31,88 @@ final _logger = Logger('ChatsSyncWorker');
 /// syncWorker.init();
 /// ```
 class ChatsSyncWorker {
-  ChatsSyncWorker(this.client, this.chatsRepository, this.submitNotification, {this.pageSize = 50});
+  ChatsSyncWorker(
+    this.client,
+    this.chatsRepository,
+    this.submitNotification, {
+    this.pageSize = 50,
+    this.listThrottle = const Duration(seconds: 1),
+    this.roomThrottle = const Duration(seconds: 5),
+  });
 
   final PhoenixSocket client;
   final ChatsRepository chatsRepository;
   final Function(Notification) submitNotification;
   final int pageSize;
+  final Duration listThrottle;
+  final Duration roomThrottle;
 
-  StreamSubscription? _chatlistSyncSub;
-  final Map<int, StreamSubscription> _chatRoomSyncSubs = {};
+  StreamSubscription? _conversationsSyncSub;
+  final Map<int, StreamSubscription> _conversationSyncSubs = {};
 
   Future init() async {
     _logger.info('Initialising...');
-    await _closeSubs();
-    _chatlistSyncSub = _chatlistSyncStream().listen(
-      (e) => _logger.info('_chatlistSyncStream event: $e'),
+    _closeSubs();
+    _conversationsSyncSub = _conversationsSyncStream().listen(
+      (e) {
+        if (e is (Object, StackTrace)) {
+          _logger.warning('conversations sync error:', e.$1, e.$2);
+          submitNotification(DefaultErrorNotification(e));
+        } else {
+          _logger.info('conversations sync event: $e');
+        }
+      },
     );
   }
 
   Future dispose() async {
     _logger.info('Disposing...');
-    await _closeSubs();
+    _closeSubs();
   }
 
-  Future _chatRoomSubscribe(int chatId) async {
-    _logger.info('Subscribing to chat $chatId');
-    PhoenixChannel? channel = client.getChatChannel(chatId);
+  Future _conversationSubscribe(int id) async {
+    _logger.info('Subscribing to conversation $id');
+
+    PhoenixChannel? channel = client.getChatChannel(id);
+
     if (channel == null) {
-      channel = client.createChatChannel(chatId);
-      await channel.join().future;
+      channel = client.createChatChannel(id);
+      await channel.connect().catchError((e, s) {
+        _logger.warning('Failed to connect to chat conversation $id', e, s);
+        submitNotification(DefaultErrorNotification(e));
+      });
     }
 
-    _chatRoomSyncSubs.putIfAbsent(
-      chatId,
-      () => _chatRoomSyncStream(chatId, channel!).listen(
-        (e) => _logger.info('_chatRoomSyncStream $chatId event: $e'),
+    _conversationSyncSubs.putIfAbsent(
+      id,
+      () => _conversationSyncStream(id, channel!).listen(
+        (e) {
+          if (e is (Object, StackTrace)) {
+            _logger.warning('conversation sync error: $id', e.$1, e.$2);
+            submitNotification(DefaultErrorNotification(e));
+          } else {
+            _logger.info('conversation sync event: $id $e');
+          }
+        },
       ),
     );
   }
 
-  Future _chatRoomUnsubscribe(int chatId) async {
-    _logger.info('Unsubscribing from chat $chatId');
-    _chatRoomSyncSubs.remove(chatId)?.cancel();
-    await client.getChatChannel(chatId)?.leave().future;
+  Future _conversationUnsubscribe(int id) async {
+    _logger.info('Unsubscribing from $id');
+    _conversationSyncSubs.remove(id)?.cancel();
+    await client.getChatChannel(id)?.leave().future;
   }
 
-  Stream<dynamic> _chatlistSyncStream() async* {
+  Stream<dynamic> _conversationsSyncStream() async* {
     while (true) {
       try {
         // Get and wait for user channel to be ready
         final userChannel = client.userChannel;
-        if (userChannel == null || userChannel.state != PhoenixChannelState.joined) throw _Disconnected();
+
+        // Check if connection ready to use
+        final connected = userChannel != null && userChannel.state == PhoenixChannelState.joined;
+        if (!connected) continue;
 
         // Buffer updates that may come in a gap between fetching the actual list
         final eventsStream = userChannel.userEvents.transform(BufferTransformer());
@@ -91,47 +122,44 @@ class ChatsSyncWorker {
 
         // Fetch and process actual user chat conversations
         final actualIds = await userChannel.chatConversationsIds;
-        await Future.forEach(actualIds, (id) => _chatRoomSubscribe(id));
+        await Future.forEach(actualIds, (id) => _conversationSubscribe(id));
         final removeIds = currentChatIds.where((id) => !actualIds.contains(id));
         await Future.forEach(removeIds, (id) async {
-          await _chatRoomUnsubscribe(id);
+          await _conversationUnsubscribe(id);
           await chatsRepository.deleteChatById(id);
         });
         yield {'actualIds': actualIds, 'removeIds': removeIds};
 
         // Process buffered and listen for future events
+        eventsIterator:
         await for (final event in eventsStream) {
+          yield event;
           switch (event) {
-            case ChatConversationJoin chatEvent:
-              await _chatRoomSubscribe(chatEvent.chatId);
-            case ChatConversationLeave chatEvent:
-              await _chatRoomUnsubscribe(chatEvent.chatId);
-              await chatsRepository.deleteChatById(chatEvent.chatId);
+            case ChatConversationJoin _:
+              await _conversationSubscribe(event.chatId);
+            case ChatConversationLeave _:
+              await _conversationUnsubscribe(event.chatId);
+              await chatsRepository.deleteChatById(event.chatId);
             case UserChannelDisconnect _:
-              throw _Disconnected();
+              break eventsIterator;
             default:
           }
-
-          yield event;
         }
       } catch (e, s) {
-        _logger.warning('_chatlistSyncStream error:', e, s);
-        if (e is! _Disconnected) submitNotification(DefaultErrorNotification(e));
+        yield (e, s);
       } finally {
-        _chatRoomSyncSubs.forEach((key, value) => value.cancel());
-        _chatRoomSyncSubs.clear();
-        // Wait a sec before retrying
-        await Future.delayed(const Duration(seconds: 1));
-        yield {'event': 'retry'}; // Do not remove this yield, it's important for break on close stream
+        _closeConversationSubs();
+        yield await Future.delayed(listThrottle, () => _kRetryStub);
       }
     }
   }
 
-  Stream<dynamic> _chatRoomSyncStream(int chatId, PhoenixChannel channel) async* {
+  Stream<dynamic> _conversationSyncStream(int id, PhoenixChannel channel) async* {
     while (true) {
       try {
-        _logger.info('Chat channel state: $chatId ${channel.state}');
-        if (channel.state != PhoenixChannelState.joined) throw _Disconnected();
+        // Check if connection ready to use
+        final connected = (channel.state == PhoenixChannelState.joined);
+        if (!connected) continue;
 
         // Buffer updates that may come in a gap between fetching and subscribing
         final eventsStream = channel.chatEvents.transform(BufferTransformer());
@@ -147,7 +175,7 @@ class ChatsSyncWorker {
         yield cursors;
 
         // Get last update time for sync messages from
-        final newestCursor = await chatsRepository.getChatMessageSyncCursor(chatId, MessageSyncCursorType.newest);
+        final newestCursor = await chatsRepository.getChatMessageSyncCursor(id, MessageSyncCursorType.newest);
 
         /// If no last update, fetch history of last [pageSize] messages for initial state
         if (newestCursor == null) {
@@ -161,12 +189,12 @@ class ChatsSyncWorker {
             // set initial cursors
             // Pay attention, the history is fetched in reverse order
             await chatsRepository.upsertChatMessageSyncCursor(ChatMessageSyncCursor(
-              chatId: chatId,
+              chatId: id,
               cursorType: MessageSyncCursorType.oldest,
               time: messages.last.createdAt,
             ));
             await chatsRepository.upsertChatMessageSyncCursor(ChatMessageSyncCursor(
-              chatId: chatId,
+              chatId: id,
               cursorType: MessageSyncCursorType.newest,
               time: messages.first.updatedAt,
             ));
@@ -189,7 +217,7 @@ class ChatsSyncWorker {
 
               // Update local newest cursor to continue pagination
               pagingCursor = ChatMessageSyncCursor(
-                chatId: chatId,
+                chatId: id,
                 cursorType: MessageSyncCursorType.newest,
                 time: messages.last.updatedAt,
               );
@@ -205,45 +233,46 @@ class ChatsSyncWorker {
         }
 
         // Process buffered and listen for future events
+        eventsIterator:
         await for (final event in eventsStream) {
+          yield event;
           switch (event) {
-            case ChatChannelInfoUpdate e:
+            case ChatChannelInfoUpdate _:
               // Skip upsert for event where user is leaved from chat
-              final shouldSkip = e.chat.members.firstWhereOrNull((m) => m.userId == client.userId) == null;
-              if (!shouldSkip) await chatsRepository.upsertChat(e.chat);
-            case ChatChannelMessageUpdate e:
-              await chatsRepository.upsertMessage(e.message);
+              final shouldSkip = event.chat.members.firstWhereOrNull((m) => m.userId == client.userId) == null;
+              if (!shouldSkip) await chatsRepository.upsertChat(event.chat);
+            case ChatChannelMessageUpdate _:
+              await chatsRepository.upsertMessage(event.message);
               final cursor = ChatMessageSyncCursor(
-                chatId: chatId,
+                chatId: id,
                 cursorType: MessageSyncCursorType.newest,
-                time: e.message.updatedAt,
+                time: event.message.updatedAt,
               );
               await chatsRepository.upsertChatMessageSyncCursor(cursor);
-            case ChatChannelCursorSet e:
-              await chatsRepository.upsertChatMessageReadCursor(e.cursor);
+            case ChatChannelCursorSet _:
+              await chatsRepository.upsertChatMessageReadCursor(event.cursor);
             case ChatChannelDisconnect _:
-              throw _Disconnected();
+              break eventsIterator;
             default:
           }
-
-          yield event;
         }
       } catch (e, s) {
-        _logger.warning('_chatRoomSyncStream $chatId error:', e, s);
-        if (e is! _Disconnected) submitNotification(DefaultErrorNotification(e));
+        yield (e, s);
       } finally {
-        // Wait a sec before retrying
-        await Future.delayed(const Duration(seconds: 1));
-        yield {'event': 'retry'}; // Do not remove this yield, it's important for break on close stream
+        yield await Future.delayed(roomThrottle, () => _kRetryStub);
       }
     }
   }
 
-  Future<void> _closeSubs() async {
-    _chatlistSyncSub?.cancel();
-    _chatRoomSyncSubs.forEach((key, value) => value.cancel());
-    _chatRoomSyncSubs.clear();
+  void _closeSubs() {
+    _conversationsSyncSub?.cancel();
+    _closeConversationSubs();
+  }
+
+  void _closeConversationSubs() {
+    _conversationSyncSubs.forEach((key, value) => value.cancel());
+    _conversationSyncSubs.clear();
   }
 }
 
-class _Disconnected implements Exception {}
+const _kRetryStub = 'retry';

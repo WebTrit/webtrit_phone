@@ -8,6 +8,7 @@ import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 class RecentScreen extends StatelessWidget {
@@ -39,10 +40,8 @@ class RecentScreen extends StatelessWidget {
             final title = contact?.displayTitle ?? logEntry.number;
 
             final themeData = Theme.of(context);
-            final buttonStyle = OutlinedButton.styleFrom(
-              side: BorderSide(color: themeData.colorScheme.surfaceTint),
-              elevation: 0,
-            );
+            final outlinedButtonStyles = themeData.extension<OutlinedButtonStyles>();
+
             return ListView(
               children: [
                 Padding(
@@ -79,7 +78,7 @@ class RecentScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     OutlinedButton(
-                      style: buttonStyle,
+                      style: outlinedButtonStyles?.neutral,
                       child: const AppIcon(Icons.call),
                       onPressed: () => _initiateCall(context, recent, false),
                     ),
@@ -88,7 +87,7 @@ class RecentScreen extends StatelessWidget {
                         width: 16,
                       ),
                       OutlinedButton(
-                        style: buttonStyle,
+                        style: outlinedButtonStyles?.neutral,
                         child: const AppIcon(Icons.videocam),
                         onPressed: () => _initiateCall(context, recent, true),
                       ),

@@ -3,7 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:bloc_test/bloc_test.dart';
 
 import 'package:webtrit_phone/blocs/blocs.dart';
+import 'package:webtrit_phone/models/agreement_status.dart';
 import 'package:webtrit_phone/theme/theme.dart';
+
+import '../data/data.dart';
 
 class MockAppBloc extends MockBloc<AppEvent, AppState> implements AppBloc {
   MockAppBloc();
@@ -18,10 +21,12 @@ class MockAppBloc extends MockBloc<AppEvent, AppState> implements AppBloc {
       mock,
       const Stream<AppState>.empty(),
       initialState: AppState(
+        userId: dSessionUserId,
         themeSettings: themeSettings,
         themeMode: themeMode,
         locale: locale,
-        userAgreementAccepted: false,
+        userAgreementStatus: AgreementStatus.pending,
+        contactsAgreementStatus: AgreementStatus.pending,
       ),
     );
     return mock;

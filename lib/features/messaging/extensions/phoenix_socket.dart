@@ -28,10 +28,10 @@ extension PhoenixSocketExt on PhoenixSocket {
   /// Get user id from connected user channel topic
   String? get userId => userChannel?.topic.split(':').last;
 
-  /// Create channel by [chatId] and connect, if already exists returns it
+  /// Create channel by [chatId], if already exists returns it
   PhoenixChannel createChatChannel(int chatId) => addChannel(topic: 'chat:$chatId');
 
-  /// Create sms conversation channel by [conversationId] and connect, if already exists returns it
+  /// Create sms conversation channel by [conversationId], if already exists returns it
   PhoenixChannel createSmsConversationChannel(int conversationId) => addChannel(topic: 'chat:sms:$conversationId');
 
   /// Get chat channel by [chatId] if exists
@@ -49,20 +49,41 @@ extension PhoenixSocketExt on PhoenixSocket {
 }
 
 extension PhoenixChannelExt on PhoenixChannel {
+  /// A stream of inbound [Message]s objects from the channel.
+  Stream<Message> get incomingMessages => messages.where((m) => m.isReply == false);
+
   /// A stream of [UserChannelEvent] objects derived from the user channel.
   ///
   /// Returns a [Stream] of [UserChannelEvent] objects.
-  Stream<UserChannelEvent> get userEvents => messages.map((e) => UserChannelEvent.fromEvent(e));
+  Stream<UserChannelEvent> get userEvents => incomingMessages.map((m) => UserChannelEvent.fromMessage(m));
 
   /// A stream of [ChatChannelEvent]s derived from the chat conversation channel.
   ///
   /// Returns a [Stream] of [ChatChannelEvent] objects.
-  Stream<ChatChannelEvent> get chatEvents => messages.map((e) => ChatChannelEvent.fromEvent(e));
+  Stream<ChatChannelEvent> get chatEvents => incomingMessages.map((m) => ChatChannelEvent.fromMessage(m));
 
   /// A stream of [SmsChannelEvent]s derived from the sms conversation channel.
   ///
   /// Returns a [Stream] of [SmsChannelEvent] objects.
-  Stream<SmsChannelEvent> get smsEvents => messages.map((e) => SmsChannelEvent.fromEvent(e));
+  Stream<SmsChannelEvent> get smsEvents => incomingMessages.map((m) => SmsChannelEvent.fromMessage(m));
+
+  /// Attempts to connect to the Phoenix socket channel asynchronously.
+  /// It will wait until the connection is successfully established or an error occurs.
+  ///
+  /// Returns a [Future] that completes when the connection is established.
+  /// Throws a [MessagingSocketException] if the connection fails.
+  Future connect() async {
+    final req = await join().future;
+    final response = req.response;
+
+    if (req.isError) {
+      throw MessagingSocketException(
+        'Error joining chat channel',
+        response: response,
+        topic: topic,
+      );
+    }
+  }
 
   /// Asynchronously retrieves a list of chat conversation IDs for the user.
   ///
@@ -120,7 +141,7 @@ extension PhoenixChannelExt on PhoenixChannel {
 
     if (req.isOk && response is Map<String, dynamic>) {
       final smsNumbers = (response['sms_phone_numbers'] as Iterable).cast<String>();
-      return smsNumbers.map((e) => e.e164Phone).whereNotNull();
+      return smsNumbers.map((e) => e.e164Phone).nonNulls;
     }
 
     throw MessagingSocketException(
@@ -528,6 +549,11 @@ extension PhoenixChannelExt on PhoenixChannel {
     push('chat:typing', {});
   }
 
+  /// This function sends a typing event to the SMS conversation channel.
+  void sendSmsTypnig() async {
+    push('sms:conversation:typing', {});
+  }
+
   /// Deletes a chat conversation (group or dialog) from the server.
   ///
   /// This method asynchronously deletes a chat conversation and returns a
@@ -727,16 +753,16 @@ extension PhoenixChannelExt on PhoenixChannel {
 sealed class UserChannelEvent {
   const UserChannelEvent();
 
-  factory UserChannelEvent.fromEvent(Message e) {
-    switch (e.event.value) {
+  factory UserChannelEvent.fromMessage(Message m) {
+    switch (m.event.value) {
       case 'chat_join':
-        return ChatConversationJoin(int.parse(e.payload!['chat_id'].toString()));
+        return ChatConversationJoin(int.parse(m.payload!['chat_id'].toString()));
       case 'chat_left':
-        return ChatConversationLeave(int.parse(e.payload!['chat_id'].toString()));
+        return ChatConversationLeave(int.parse(m.payload!['chat_id'].toString()));
       case 'sms_conversation_join':
-        return SmsConversationJoin(int.parse(e.payload!['conversation_id'].toString()));
+        return SmsConversationJoin(int.parse(m.payload!['conversation_id'].toString()));
       case 'sms_conversation_left':
-        return SmsConversationLeave(int.parse(e.payload!['conversation_id'].toString()));
+        return SmsConversationLeave(int.parse(m.payload!['conversation_id'].toString()));
       case 'phx_error':
         return UserChannelDisconnect();
       default:
@@ -796,20 +822,20 @@ class UserChannelUnknown extends UserChannelEvent {}
 sealed class ChatChannelEvent {
   const ChatChannelEvent();
 
-  factory ChatChannelEvent.fromEvent(Message e) {
-    switch (e.event.value) {
+  factory ChatChannelEvent.fromMessage(Message m) {
+    switch (m.event.value) {
       case 'chat_info_update':
-        return ChatChannelInfoUpdate(Chat.fromMap(e.payload as Map<String, dynamic>));
+        return ChatChannelInfoUpdate(Chat.fromMap(m.payload as Map<String, dynamic>));
       case 'message_update':
-        return ChatChannelMessageUpdate(ChatMessage.fromMap(e.payload as Map<String, dynamic>));
+        return ChatChannelMessageUpdate(ChatMessage.fromMap(m.payload as Map<String, dynamic>));
       case 'chat_cursor_set':
-        return ChatChannelCursorSet(ChatMessageReadCursor.fromMap(e.payload as Map<String, dynamic>));
+        return ChatChannelCursorSet(ChatMessageReadCursor.fromMap(m.payload as Map<String, dynamic>));
       case 'typing':
-        return ChatChannelTyping(e.payload!['user_id'].toString());
+        return ChatChannelTyping(m.payload!['user_id'].toString());
       case 'phx_error':
         return ChatChannelDisconnect();
       default:
-        return ChatChannelUnknown(event: e.event.value);
+        return ChatChannelUnknown(event: m.event.value);
     }
   }
 }
@@ -871,18 +897,18 @@ class ChatChannelUnknown extends ChatChannelEvent {
 sealed class SmsChannelEvent {
   const SmsChannelEvent();
 
-  factory SmsChannelEvent.fromEvent(Message e) {
-    switch (e.event.value) {
+  factory SmsChannelEvent.fromMessage(Message m) {
+    switch (m.event.value) {
       case 'conversation_info_update':
-        return SmsChannelInfoUpdate(SmsConversation.fromMap(e.payload as Map<String, dynamic>));
+        return SmsChannelInfoUpdate(SmsConversation.fromMap(m.payload as Map<String, dynamic>));
       case 'sms_message_update':
-        return SmsChannelMessageUpdate(SmsMessage.fromMap(e.payload as Map<String, dynamic>));
+        return SmsChannelMessageUpdate(SmsMessage.fromMap(m.payload as Map<String, dynamic>));
       case 'sms_conversation_cursor_set':
-        return SmsChannelCursorSet(SmsMessageReadCursor.fromMap(e.payload as Map<String, dynamic>));
+        return SmsChannelCursorSet(SmsMessageReadCursor.fromMap(m.payload as Map<String, dynamic>));
       case 'phx_error':
         return SmsChannelDisconnect();
       default:
-        return SmsChannelUnknown(event: e.event.value);
+        return SmsChannelUnknown(event: m.event.value);
     }
   }
 }
@@ -920,6 +946,17 @@ class SmsChannelCursorSet extends SmsChannelEvent with EquatableMixin {
   bool get stringify => true;
 }
 
+class SmsChannelTyping extends ChatChannelEvent with EquatableMixin {
+  SmsChannelTyping(this.number);
+  final String number;
+
+  @override
+  List<Object> get props => [number];
+
+  @override
+  bool get stringify => true;
+}
+
 class SmsChannelDisconnect extends SmsChannelEvent {}
 
 class SmsChannelUnknown extends SmsChannelEvent {
@@ -944,7 +981,7 @@ class MessagingSocketException with EquatableMixin implements Exception {
   late final Map details = response is Map ? response : {};
 
   /// Server side error code
-  late final code = details['code'] ?? (response is String ? response : null);
+  late final code = details['code'] ?? details['reason'] ?? (response is String ? response : null);
 
   MessagingSocketException(this.message, {this.response, this.topic});
 

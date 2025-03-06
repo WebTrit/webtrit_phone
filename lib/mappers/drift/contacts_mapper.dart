@@ -11,6 +11,7 @@ mixin ContactsDriftMapper {
     ContactData contactData, {
     List<ContactPhoneData> phones = const [],
     List<ContactEmailData> emails = const [],
+    List<FavoriteData> favorites = const [],
   }) {
     final email = emails.firstOrNull?.address;
     final gravatarUrl = gravatarThumbnailUrl(email);
@@ -27,26 +28,30 @@ mixin ContactsDriftMapper {
       aliasName: contactData.aliasName,
       thumbnail: contactData.thumbnail,
       thumbnailUrl: gravatarUrl,
-      phones: phones.map(contactPhoneFromDrift).toList(),
-      emails: emails.map(contactEmailFromDrift).toList(),
+      phones: contactPhonesFromDrift(phones, favorites).toList(),
+      emails: contactEmailsFromDrift(emails).toList(),
     );
   }
 
-  ContactPhone contactPhoneWithFavoriteFromDrift(ContactPhoneDataWithFavoriteData data) {
-    return ContactPhone(
-      id: data.contactPhoneData.id,
-      number: data.contactPhoneData.number,
-      label: data.contactPhoneData.label,
-      favorite: data.favoriteData != null,
+  Iterable<ContactPhone> contactPhonesFromDrift(List<ContactPhoneData> phones, List<FavoriteData> favorites) {
+    return phones.map(
+      (phone) => contactPhoneFromDrift(
+        phone,
+        favorite: favorites.any((favorite) => favorite.contactPhoneId == phone.id),
+      ),
     );
   }
 
-  ContactPhone contactPhoneFromDrift(ContactPhoneData data) {
+  Iterable<ContactEmail> contactEmailsFromDrift(List<ContactEmailData> emails) {
+    return emails.map(contactEmailFromDrift);
+  }
+
+  ContactPhone contactPhoneFromDrift(ContactPhoneData data, {bool favorite = false}) {
     return ContactPhone(
       id: data.id,
       number: data.number,
       label: data.label,
-      favorite: false,
+      favorite: favorite,
     );
   }
 

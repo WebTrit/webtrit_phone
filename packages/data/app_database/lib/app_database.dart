@@ -1,4 +1,4 @@
-library app_database;
+library;
 
 export 'package:drift/drift.dart' show Value;
 

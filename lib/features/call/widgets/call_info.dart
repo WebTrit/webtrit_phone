@@ -21,7 +21,7 @@ class CallInfo extends StatefulWidget {
     required this.username,
     this.acceptedTime,
     this.color,
-    this.activeCallStatus,
+    this.processingStatus,
     required this.callStatus,
   });
 
@@ -33,7 +33,7 @@ class CallInfo extends StatefulWidget {
   final String username;
   final DateTime? acceptedTime;
   final Color? color;
-  final ActiveCallStatus? activeCallStatus;
+  final CallProcessingStatus? processingStatus;
 
 // TODO(Serdun): Rename class to better represent the actual data it holds
   final CallStatus callStatus;
@@ -140,11 +140,11 @@ class _CallInfoState extends State<CallInfo> {
           ),
         ),
         const SizedBox(height: 10),
-        if (widget.activeCallStatus != null)
+        if (widget.processingStatus != null)
           Padding(
             padding: const EdgeInsets.only(top: 8),
             child: Text(
-              widget.activeCallStatus!.l10n(context),
+              widget.processingStatus!.l10n(context),
               style: statusStyle,
               textAlign: TextAlign.center,
             ),

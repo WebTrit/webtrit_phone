@@ -30,149 +30,100 @@ class LeadingAvatar extends StatefulWidget {
 }
 
 class _LeadingAvatarState extends State<LeadingAvatar> {
-  bool _imageLoadFailed = false;
+  late final diameter = widget.radius * 2;
+  late final registeredPosition = Rect.fromLTWH(diameter * 0.8, diameter * 0.8, diameter * 0.2, diameter * 0.2);
+  late final smartPosition = Rect.fromLTWH(diameter * -0.1, diameter * -0.1, diameter * 0.4, diameter * 0.4);
 
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
     final colorScheme = themeData.colorScheme;
 
-    final diameter = widget.radius * 2;
-    final foregroundImage = _getImageProvider();
-
-    final registeredStatusStyle = themeData.extension<RegisteredStatusStyles>()!.primary;
-
-    return SizedBox(
+    return Container(
       width: diameter,
       height: diameter,
-      child: Center(
-        child: Stack(
-          alignment: AlignmentDirectional.center,
-          clipBehavior: Clip.none,
-          children: [
-            CircleAvatar(
-              radius: widget.radius,
-              backgroundColor: colorScheme.secondaryContainer,
-              foregroundColor: colorScheme.onSecondaryContainer,
-              foregroundImage: foregroundImage,
-              // Conditionally set onForegroundImageError
-              onForegroundImageError: foregroundImage != null
-                  ? (_, __) {
-                      setState(() {
-                        _imageLoadFailed = true;
-                      });
-                    }
-                  : null,
-              child: _LeadingForegroundWidget(
-                username: widget.username,
-                foregroundImage: foregroundImage,
-                placeholderIcon: widget.placeholderIcon,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: colorScheme.secondaryContainer,
+      ),
+      child: Stack(
+        alignment: Alignment.center,
+        fit: StackFit.loose,
+        children: [
+          if (widget.thumbnailUrl != null)
+            Positioned.fill(child: ClipOval(child: remoteImage()))
+          else if (widget.thumbnail != null)
+            Positioned.fill(child: ClipOval(child: localImage()))
+          else
+            Positioned.fill(child: placeholder()),
+          if (widget.smart)
+            Positioned.fromRect(rect: smartPosition, child: smartIndicator())
+          else if (widget.registered != null)
+            Positioned.fromRect(rect: registeredPosition, child: registeredIndicator()),
+        ],
+      ),
+    );
+  }
+
+  Widget remoteImage() {
+    return Image.network(
+      widget.thumbnailUrl.toString(),
+      fit: BoxFit.cover,
+      errorBuilder: (context, error, stackTrace) {
+        if (widget.thumbnail != null) return localImage();
+        return placeholder();
+      },
+    );
+  }
+
+  Widget localImage() {
+    return Image.memory(
+      widget.thumbnail!,
+      fit: BoxFit.cover,
+      errorBuilder: (context, error, stackTrace) => placeholder(),
+    );
+  }
+
+  Widget placeholder() {
+    final username = widget.username;
+    final placeholderIcon = widget.placeholderIcon;
+    return username != null
+        ? Center(
+            child: Text(
+              username.initialism,
+              softWrap: false,
+              overflow: TextOverflow.fade,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: diameter * 0.35,
+                fontWeight: FontWeight.bold,
               ),
             ),
-            if (widget.smart) _SmartIndicator(diameter: diameter, colorScheme: colorScheme),
-            if (widget.registered != null)
-              _RegisteredIndicator(
-                diameter: diameter,
-                registered: widget.registered!,
-                registeredStatusStyle: registeredStatusStyle,
-              ),
-          ],
-        ),
+          )
+        : Icon(placeholderIcon, size: diameter * 0.5);
+  }
+
+  Widget registeredIndicator() {
+    final themeData = Theme.of(context);
+    final registeredStatusStyle = themeData.extension<RegisteredStatusStyles>()!.primary;
+
+    final registered = widget.registered!;
+
+    return Container(
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: registered ? registeredStatusStyle.registered : registeredStatusStyle.unregistered,
       ),
     );
   }
 
-  ImageProvider? _getImageProvider() {
-    if (_imageLoadFailed) {
-      return null;
-    }
-    if (widget.thumbnail != null) {
-      return MemoryImage(widget.thumbnail!);
-    } else if (widget.thumbnailUrl != null) {
-      return NetworkImage(widget.thumbnailUrl.toString());
-    }
-    return null;
-  }
-}
+  Widget smartIndicator() {
+    final themeData = Theme.of(context);
+    final colorScheme = themeData.colorScheme;
 
-class _LeadingForegroundWidget extends StatelessWidget {
-  const _LeadingForegroundWidget({
-    required this.username,
-    required this.foregroundImage,
-    required this.placeholderIcon,
-  });
-
-  final String? username;
-  final ImageProvider? foregroundImage;
-  final IconData placeholderIcon;
-
-  @override
-  Widget build(BuildContext context) {
-    if (foregroundImage != null) return const SizedBox.shrink();
-
-    if (username != null) {
-      return Text(
-        username!.initialism,
-        softWrap: false,
-        overflow: TextOverflow.fade,
-      );
-    }
-    return Icon(placeholderIcon);
-  }
-}
-
-class _SmartIndicator extends StatelessWidget {
-  const _SmartIndicator({
-    required this.diameter,
-    required this.colorScheme,
-  });
-
-  final double diameter;
-  final ColorScheme colorScheme;
-
-  @override
-  Widget build(BuildContext context) {
-    return Positioned(
-      left: diameter * -0.1,
-      bottom: diameter * -0.1,
-      width: diameter * 0.4,
-      height: diameter * 0.4,
-      child: CircleAvatar(
-        backgroundColor: colorScheme.surfaceContainerLowest,
-        child: Icon(
-          Icons.person,
-          size: diameter * 0.4 * 0.9,
-        ),
-      ),
-    );
-  }
-}
-
-class _RegisteredIndicator extends StatelessWidget {
-  const _RegisteredIndicator({
-    required this.diameter,
-    required this.registered,
-    required this.registeredStatusStyle,
-  });
-
-  final double diameter;
-  final bool registered;
-
-  final RegisteredStatusStyle registeredStatusStyle;
-
-  @override
-  Widget build(BuildContext context) {
-    return Positioned(
-      right: 0,
-      bottom: 0,
-      width: diameter * 0.2,
-      height: diameter * 0.2,
-      child: Container(
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: registered ? registeredStatusStyle.registered : registeredStatusStyle.unregistered,
-        ),
-      ),
+    return CircleAvatar(
+      backgroundColor: colorScheme.surfaceContainerLowest,
+      child: Icon(Icons.person, size: diameter * 0.4 * 0.9),
     );
   }
 }

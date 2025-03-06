@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:webtrit_phone/utils/utils.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../bloc/embedded_cubit.dart';
@@ -25,6 +26,7 @@ class EmbeddedScreen extends StatelessWidget {
         builder: (context, state) => WebViewScaffold(
           initialUri: initialUri,
           showToolbar: false,
+          userAgent: UserAgent.of(context),
         ),
       ),
     );

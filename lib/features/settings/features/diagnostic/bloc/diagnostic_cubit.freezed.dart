@@ -127,12 +127,13 @@ class __$$InitialImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$InitialImpl implements _Initial {
+class _$InitialImpl extends _Initial {
   const _$InitialImpl(
       {final List<PermissionWithStatus> permissions = const [],
       this.pushTokenStatus = const PushTokenStatus(),
       this.batteryMode = CallkeepAndroidBatteryMode.unknown})
-      : _permissions = permissions;
+      : _permissions = permissions,
+        super._();
 
   final List<PermissionWithStatus> _permissions;
   @override
@@ -184,11 +185,12 @@ class _$InitialImpl implements _Initial {
       __$$InitialImplCopyWithImpl<_$InitialImpl>(this, _$identity);
 }
 
-abstract class _Initial implements DiagnosticState {
+abstract class _Initial extends DiagnosticState {
   const factory _Initial(
       {final List<PermissionWithStatus> permissions,
       final PushTokenStatus pushTokenStatus,
       final CallkeepAndroidBatteryMode batteryMode}) = _$InitialImpl;
+  const _Initial._() : super._();
 
   @override
   List<PermissionWithStatus> get permissions;

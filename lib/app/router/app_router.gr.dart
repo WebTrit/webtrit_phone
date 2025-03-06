@@ -44,12 +44,6 @@ abstract class _$AppRouter extends RootStackRouter {
         ),
       );
     },
-    CallCodecsScreenPageRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: CallCodecsScreenPage(),
-      );
-    },
     CallScreenPageRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -82,6 +76,12 @@ abstract class _$AppRouter extends RootStackRouter {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
         child: ContactScreenPage(args.contactId),
+      );
+    },
+    ContactsAgreementScreenPageRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: ContactsAgreementScreenPage(),
       );
     },
     ContactsRouterPageRoute.name: (routeData) {
@@ -275,6 +275,12 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const MainShell(),
       );
     },
+    MediaSettingsScreenPageRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: MediaSettingsScreenPage(),
+      );
+    },
     NetworkScreenPageRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -307,6 +313,13 @@ abstract class _$AppRouter extends RootStackRouter {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
         child: RecentsScreenPage(),
+      );
+    },
+    SelfConfigScreenPageRoute.name: (routeData) {
+      final args = routeData.argsAs<SelfConfigScreenPageRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: SelfConfigScreenPage(args.url),
       );
     },
     SettingsRouterPageRoute.name: (routeData) {
@@ -443,20 +456,6 @@ class AutoprovisionScreenPageRouteArgs {
 }
 
 /// generated route for
-/// [CallCodecsScreenPage]
-class CallCodecsScreenPageRoute extends PageRouteInfo<void> {
-  const CallCodecsScreenPageRoute({List<PageRouteInfo>? children})
-      : super(
-          CallCodecsScreenPageRoute.name,
-          initialChildren: children,
-        );
-
-  static const String name = 'CallCodecsScreenPageRoute';
-
-  static const PageInfo<void> page = PageInfo<void>(name);
-}
-
-/// generated route for
 /// [CallScreenPage]
 class CallScreenPageRoute extends PageRouteInfo<void> {
   const CallScreenPageRoute({List<PageRouteInfo>? children})
@@ -567,6 +566,20 @@ class ContactScreenPageRouteArgs {
   String toString() {
     return 'ContactScreenPageRouteArgs{contactId: $contactId}';
   }
+}
+
+/// generated route for
+/// [ContactsAgreementScreenPage]
+class ContactsAgreementScreenPageRoute extends PageRouteInfo<void> {
+  const ContactsAgreementScreenPageRoute({List<PageRouteInfo>? children})
+      : super(
+          ContactsAgreementScreenPageRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'ContactsAgreementScreenPageRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
 }
 
 /// generated route for
@@ -1132,6 +1145,20 @@ class MainShellRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [MediaSettingsScreenPage]
+class MediaSettingsScreenPageRoute extends PageRouteInfo<void> {
+  const MediaSettingsScreenPageRoute({List<PageRouteInfo>? children})
+      : super(
+          MediaSettingsScreenPageRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'MediaSettingsScreenPageRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
 /// [NetworkScreenPage]
 class NetworkScreenPageRoute extends PageRouteInfo<void> {
   const NetworkScreenPageRoute({List<PageRouteInfo>? children})
@@ -1215,6 +1242,36 @@ class RecentsScreenPageRoute extends PageRouteInfo<void> {
   static const String name = 'RecentsScreenPageRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [SelfConfigScreenPage]
+class SelfConfigScreenPageRoute
+    extends PageRouteInfo<SelfConfigScreenPageRouteArgs> {
+  SelfConfigScreenPageRoute({
+    required Uri url,
+    List<PageRouteInfo>? children,
+  }) : super(
+          SelfConfigScreenPageRoute.name,
+          args: SelfConfigScreenPageRouteArgs(url: url),
+          initialChildren: children,
+        );
+
+  static const String name = 'SelfConfigScreenPageRoute';
+
+  static const PageInfo<SelfConfigScreenPageRouteArgs> page =
+      PageInfo<SelfConfigScreenPageRouteArgs>(name);
+}
+
+class SelfConfigScreenPageRouteArgs {
+  const SelfConfigScreenPageRouteArgs({required this.url});
+
+  final Uri url;
+
+  @override
+  String toString() {
+    return 'SelfConfigScreenPageRouteArgs{url: $url}';
+  }
 }
 
 /// generated route for

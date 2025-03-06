@@ -84,7 +84,7 @@ class AboutScreen extends StatelessWidget {
                   CopyToClipboard(
                     data: state.appIdentifier,
                     child: Text(
-                      state.appIdentifier ?? '-',
+                      state.appIdentifier,
                       style: themeData.textTheme.labelSmall,
                       textAlign: TextAlign.center,
                       overflow: TextOverflow.ellipsis,

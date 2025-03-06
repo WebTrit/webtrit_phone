@@ -28,14 +28,14 @@ class AppRouter extends _$AppRouter {
     this._appBloc,
     this._appPermissions,
     this._launchLoginEmbedded,
-    this._initialBottomMenuTab,
+    this._bottomMenuFeature,
   );
 
   final AppBloc _appBloc;
   final AppPermissions _appPermissions;
 
   final LoginEmbedded? _launchLoginEmbedded;
-  final BottomMenuTab _initialBottomMenuTab;
+  final BottomMenuFeature _bottomMenuFeature;
 
   String? get coreUrl => _appBloc.state.coreUrl;
 
@@ -45,7 +45,18 @@ class AppRouter extends _$AppRouter {
 
   bool get appPermissionsDenied => _appPermissions.isDenied;
 
-  bool get appUserAgreementUnaccepted => _appBloc.state.userAgreementAccepted != true;
+  /// Indicates whether the user agreement is unaccepted.
+  ///
+  /// Navigates the user to the agreement screen if the agreement status
+  /// is anything other than `accepted`.
+  bool get appUserAgreementUnaccepted => !_appBloc.state.userAgreementStatus.isAccepted;
+
+  /// Indicates whether the contacts agreement is unaccepted.
+  ///
+  /// Navigates the user to the contacts agreement screen only once.
+  /// If the user views the agreement and does not accept it, the status
+  /// is updated to `declined`, ensuring the user does not see the screen again automatically.
+  bool get appContactsAgreementUnaccepted => _appBloc.state.contactsAgreementStatus.isPending;
 
   bool get appLoggedIn => coreUrl != null && token != null && userId != null;
 
@@ -129,6 +140,11 @@ class AppRouter extends _$AppRouter {
               path: 'user-agreement',
             ),
             AutoRoute.guarded(
+              page: ContactsAgreementScreenPageRoute.page,
+              onNavigation: onContactsAgreementScreenPageRouteGuardNavigation,
+              path: 'contacts-agreement',
+            ),
+            AutoRoute.guarded(
               page: AutoprovisionScreenPageRoute.page,
               onNavigation: onAutoprovisionScreenPageRouteGuardNavigation,
               path: 'autoprovision',
@@ -147,14 +163,14 @@ class AppRouter extends _$AppRouter {
                     AutoRouteGuard.redirect(
                       (resolver) => EmbeddedScreenPage.getPageRouteInfo(
                         resolver.route,
-                        _initialBottomMenuTab.data,
+                        _bottomMenuFeature.activeTab.data,
                       ),
                     ),
                   ],
                   children: [
                     RedirectRoute(
                       path: '',
-                      redirectTo: _initialBottomMenuTab.flavor.name,
+                      redirectTo: _bottomMenuFeature.activeTab.flavor.name,
                     ),
                     AutoRoute(
                       page: FavoritesRouterPageRoute.page,
@@ -196,7 +212,7 @@ class AppRouter extends _$AppRouter {
                             AutoRouteGuard.redirect(
                               (resolver) => ContactsScreenPage.getPageRouteInfo(
                                 resolver.route,
-                                () => _initialBottomMenuTab.toContacts.contactSourceTypes,
+                                () => _bottomMenuFeature.activeTab.toContacts?.contactSourceTypes ?? [],
                               ),
                             ),
                           ],
@@ -276,8 +292,12 @@ class AppRouter extends _$AppRouter {
                       path: 'network',
                     ),
                     AutoRoute(
-                      page: CallCodecsScreenPageRoute.page,
-                      path: 'call_codecs',
+                      page: MediaSettingsScreenPageRoute.page,
+                      path: 'media-settings',
+                    ),
+                    AutoRoute(
+                      page: SelfConfigScreenPageRoute.page,
+                      path: 'self_config',
                     ),
                     AutoRoute(
                       page: ThemeModeScreenPageRoute.page,
@@ -342,9 +362,22 @@ class AppRouter extends _$AppRouter {
   }
 
   void onUserAgreementScreenPageRouteGuardNavigation(NavigationResolver resolver, StackRouter router) {
-    _logger.fine(_onNavigationLoggerMessage('onPermissionsScreenPageRouteGuardNavigation', resolver));
+    _logger.fine(_onNavigationLoggerMessage('onUserAgreementScreenPageRouteGuardNavigation', resolver));
 
     if (appUserAgreementUnaccepted) {
+      resolver.next(true);
+    } else {
+      resolver.next(false);
+      router.replaceAll(
+        [const MainShellRoute()],
+      );
+    }
+  }
+
+  void onContactsAgreementScreenPageRouteGuardNavigation(NavigationResolver resolver, StackRouter router) {
+    _logger.fine(_onNavigationLoggerMessage('onContactsAgreementScreenPageRouteGuardNavigation', resolver));
+
+    if (appContactsAgreementUnaccepted) {
       resolver.next(true);
     } else {
       resolver.next(false);
@@ -358,10 +391,18 @@ class AppRouter extends _$AppRouter {
     _logger.fine(_onNavigationLoggerMessage('onMainShellRouteGuardNavigation', resolver));
 
     if (appLoggedIn) {
+      final contactsSourceTypes = _bottomMenuFeature.getTabEnabled(MainFlavor.contacts)?.toContacts?.contactSourceTypes;
+      final localContactsSourceTypeEnabled = contactsSourceTypes?.contains(ContactSourceType.local) == true;
+
       if (appUserAgreementUnaccepted) {
         resolver.next(false);
         router.replaceAll(
           [const UserAgreementScreenPageRoute()],
+        );
+      } else if (appContactsAgreementUnaccepted && localContactsSourceTypeEnabled) {
+        resolver.next(false);
+        router.replaceAll(
+          [const ContactsAgreementScreenPageRoute()],
         );
       } else if (appPermissionsDenied) {
         resolver.next(false);

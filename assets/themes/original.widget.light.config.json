@@ -1,4 +1,17 @@
 {
+  "fonts": {
+    "fontFamily": "Montserrat"
+  },
+  "imageAssets": {
+    "primaryOnboardingLogo": {
+      "uri": "asset://assets/primary_onboardin_logo.svg",
+      "widthFactor": 0.45
+    },
+    "secondaryOnboardingLogo": {
+      "uri": "asset://assets/secondary_onboardin_logo.svg",
+      "widthFactor": 0.25
+    }
+  },
   "dialog": {
     "snackBar": {
       "successBackgroundColor": "#75B943",
@@ -19,6 +32,20 @@
       "connectIssue": "#E74C3C",
       "inProgress": "#123752",
       "ready": "#75B943"
+    }
+  },
+  "decorationConfig": {
+    "primaryGradientColorsConfig": {
+      "colors": [
+        {
+          "color": "#5CACE3",
+          "blend": true
+        },
+        {
+          "color": "#123752",
+          "blend": true
+        }
+      ]
     }
   }
 }

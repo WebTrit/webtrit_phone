@@ -1,12 +1,10 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:webview_flutter/webview_flutter.dart';
 
-import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
@@ -25,6 +23,7 @@ class WebViewScaffold extends StatefulWidget {
     this.errorBuilder,
     this.showToolbar = true,
     this.builder,
+    required this.userAgent,
   });
 
   final Widget? title;
@@ -34,6 +33,7 @@ class WebViewScaffold extends StatefulWidget {
   final bool showToolbar;
   final Widget? Function(BuildContext context, WebResourceError error, WebViewController controller)? errorBuilder;
   final TransitionBuilder? builder;
+  final String userAgent;
 
   @override
   State<WebViewScaffold> createState() => _WebViewScaffoldState();
@@ -67,14 +67,10 @@ class _WebViewScaffoldState extends State<WebViewScaffold> {
     super.initState();
 
     _webViewController = WebViewController();
-
-    final userAgent = '${PackageInfo().appName}/${PackageInfo().version} '
-        '(${Platform.operatingSystem}; ${Platform.operatingSystemVersion})';
-
     () async {
       if (!kIsWeb) {
         await Future.wait([
-          _webViewController.setUserAgent(userAgent),
+          _webViewController.setUserAgent(widget.userAgent),
           _webViewController.enableZoom(false),
           _webViewController.setJavaScriptMode(JavaScriptMode.unrestricted),
           for (var MapEntry(key: name, value: onMessageReceived) in widget.javaScriptChannels.entries)
@@ -111,7 +107,7 @@ class _WebViewScaffoldState extends State<WebViewScaffold> {
 
     final themeData = Theme.of(context);
     final backgroundColor = themeData.colorScheme.surface;
-    if (_backgroundColorCache != backgroundColor) {
+    if (_backgroundColorCache != backgroundColor && !kIsWeb) {
       _backgroundColorCache = backgroundColor;
       _webViewController.setBackgroundColor(backgroundColor);
     }
@@ -138,7 +134,9 @@ class _WebViewScaffoldState extends State<WebViewScaffold> {
   @override
   void dispose() {
     () async {
-      await _webViewController.setNavigationDelegate(NavigationDelegate());
+      if (!kIsWeb) {
+        await _webViewController.setNavigationDelegate(NavigationDelegate());
+      }
       await _webViewController.loadBlank();
       await _progressStreamController.close();
     }();

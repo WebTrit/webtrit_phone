@@ -98,18 +98,31 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                             },
                       child: Stack(
                         children: [
-                          Container(
-                            decoration: BoxDecoration(color: onTabGradient.withOpacity(0.3)),
-                            width: orientation == Orientation.portrait ? 90.0 : 120.0,
-                            height: orientation == Orientation.portrait ? 120.0 : 90.0,
-                            child: activeCall.frontCamera == null
-                                ? null
-                                : RTCStreamView(
-                                    stream: activeCall.localStream,
-                                    mirror: activeCall.frontCamera!,
-                                    placeholderBuilder: widget.localePlaceholderBuilder,
-                                  ),
-                          ),
+                          Builder(builder: (context) {
+                            final videoTrack = activeCall.localStream?.getVideoTracks().first;
+                            final videoWidth = videoTrack?.getSettings()['width'] ?? 1080;
+                            final videoHeight = videoTrack?.getSettings()['height'] ?? 720;
+
+                            final aspectRatio = videoWidth / videoHeight;
+                            const smallerSide = 90.0;
+                            final biggerSide = smallerSide * aspectRatio;
+
+                            final frameWidth = orientation == Orientation.portrait ? smallerSide : biggerSide;
+                            final frameHeight = orientation == Orientation.portrait ? biggerSide : smallerSide;
+
+                            return Container(
+                              decoration: BoxDecoration(color: onTabGradient.withValues(alpha: 0.3)),
+                              width: frameWidth,
+                              height: frameHeight,
+                              child: activeCall.frontCamera == null
+                                  ? null
+                                  : RTCStreamView(
+                                      stream: activeCall.localStream,
+                                      mirror: activeCall.frontCamera!,
+                                      placeholderBuilder: widget.localePlaceholderBuilder,
+                                    ),
+                            );
+                          }),
                           Positioned(
                             left: 0,
                             right: 0,
@@ -166,7 +179,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                                         username: activeCall.displayName ?? activeCall.handle.value,
                                         acceptedTime: activeCall.acceptedTime,
                                         color: onTabGradient,
-                                        activeCallStatus: activeCall.status,
+                                        processingStatus: activeCall.processingStatus,
                                         callStatus: widget.callStatus,
                                       ),
                                     if (activeTransfer is AttendedTransferConfirmationRequested)

@@ -18,13 +18,23 @@ part 'autoprovision_state.dart';
 final _logger = Logger('AutoprovisionCubit');
 
 class AutoprovisionCubit extends Cubit<AutoprovisionState> with SystemInfoApiMapper {
-  AutoprovisionCubit(this.config) : super(AutoprovisionState.initial());
+  AutoprovisionCubit({
+    required this.appInfo,
+    required this.packageInfo,
+    required this.platformInfo,
+    required this.config,
+  }) : super(AutoprovisionState.initial());
 
   final AutoprovisionConfig config;
+  final AppInfo appInfo;
+  final PackageInfo packageInfo;
+  final PlatformInfo platformInfo;
 
-  final _identifier = AppInfo().identifier;
-  final _bundleId = PackageInfo().packageName;
-  final _appType = PlatformInfo().appType;
+  get _identifier => appInfo.identifier;
+
+  get _bundleId => packageInfo.packageName;
+
+  get _appType => platformInfo.appType;
 
   WebtritApiClient _apiClient(String coreUrl, String tenantId) {
     return WebtritApiClient(Uri.parse(coreUrl), tenantId, connectionTimeout: kApiClientConnectionTimeout);

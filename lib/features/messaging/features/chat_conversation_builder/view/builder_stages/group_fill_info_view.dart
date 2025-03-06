@@ -78,7 +78,7 @@ class _GroupFillInfoViewState extends State<GroupFillInfoView> {
                       child: Text(
                         context.l10n.messaging_ConversationBuilders_membersHeadline,
                         textAlign: TextAlign.left,
-                        style: TextStyle(color: colorScheme.secondary.withOpacity(0.7), fontSize: 16),
+                        style: TextStyle(color: colorScheme.secondary.withValues(alpha: 0.7), fontSize: 16),
                       ),
                     ),
                     const SizedBox(height: 16),

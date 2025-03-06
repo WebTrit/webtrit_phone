@@ -6,6 +6,7 @@ class CallState with _$CallState {
 
   const factory CallState({
     ConnectivityResult? currentConnectivityResult,
+    AppLifecycleState? currentAppLifecycleState,
     @Default(RegistrationStatus.registering) RegistrationStatus registrationStatus,
     @Default(SignalingClientStatus.disconnect) SignalingClientStatus signalingClientStatus,
     Object? lastSignalingClientConnectError,
@@ -14,6 +15,7 @@ class CallState with _$CallState {
     @Default(0) int linesCount,
     @Default([]) List<ActiveCall> activeCalls,
     bool? minimized,
+    bool? speakerOnBeforeMinimize,
     bool? speaker,
   }) = _CallState;
 
@@ -105,8 +107,7 @@ class CallState with _$CallState {
   }
 
   CallState copyWithPushActiveCall(ActiveCall activeCall) {
-    final activeCalls = List<ActiveCall>.from(this.activeCalls)..add(activeCall);
-    return copyWith(activeCalls: activeCalls);
+    return copyWith(activeCalls: [...activeCalls, activeCall]);
   }
 
   CallState copyWithPopActiveCall(String callId) {
@@ -126,17 +127,16 @@ class ActiveCall with _$ActiveCall {
     required int line,
     required String callId,
     required CallkeepHandle handle,
-    String? displayName,
-    ActiveCallStatus? status,
-
-    /// If the call is result of a refer request, the id should be provided.
-    String? fromReferId,
+    required DateTime createdTime,
     required bool video,
+    required CallProcessingStatus processingStatus,
     @Default(true) bool? frontCamera,
     @Default(false) bool held,
     @Default(false) bool muted,
     @Default(false) bool updating,
-    required DateTime createdTime,
+    JsepValue? incomingOffer,
+    String? displayName,
+    String? fromReferId,
     DateTime? acceptedTime,
     DateTime? hungUpTime,
     Transfer? transfer,

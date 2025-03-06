@@ -90,7 +90,7 @@ class _DialogInfoState extends State<DialogInfo> {
                             ),
                             const SizedBox(height: 8),
                             Text(
-                              contact?.displayTitle ?? participant,
+                              contact?.displayTitle ?? context.l10n.messaging_ParticipantName_unknown,
                               style: theme.textTheme.headlineSmall?.copyWith(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
@@ -163,7 +163,7 @@ class _DialogInfoState extends State<DialogInfo> {
               ),
               if (state.busy)
                 Container(
-                  color: Colors.black.withOpacity(0.1),
+                  color: Colors.black.withValues(alpha: 0.1),
                   child: BackdropFilter(
                     filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
                     child: const Center(child: CircularProgressIndicator()),

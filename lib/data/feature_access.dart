@@ -1,20 +1,50 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
+
 import 'package:logging/logging.dart';
 
 import 'package:webtrit_phone/data/app_preferences.dart';
-import 'package:webtrit_phone/extensions/iterable.dart';
+import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/models/models.dart';
-import 'package:webtrit_phone/theme/models/models.dart';
-
-import 'app_themes.dart';
+import 'package:webtrit_phone/theme/theme.dart';
 
 final Logger _logger = Logger('FeatureAccess');
 
-// This class handles more than just data, as it encapsulates logic for configuring features.
-// Consider moving it into dedicated service components to improve separation of concerns
-// and maintainability.
+/// This class encapsulates the logic for configuring and managing various app features,
+/// including login, bottom menu, settings, calls, messaging, and terms.
+/// It initializes these features based on the provided `AppConfig` and `AppPreferences`.
+///
+/// Configuration Overview:
+///
+/// 1. **LoginFeature**: Configures custom login options, including embedded login screens
+///    and available login actions. The login configuration is based on the data in `AppConfig`.
+///
+/// 2. **BottomMenuFeature**: Configures the bottom navigation menu, enabling/disabling specific tabs,
+///    setting the initial tab, and caching the active tab preference. The tab configuration is sourced
+///    from `AppConfig.mainConfig.bottomMenu`.
+///
+/// 3. **SettingsFeature**: Configures the app’s settings screen by defining sections and items
+///    based on the platform and the app configuration. It also handles embedded resources for settings items.
+///    - **Embedded Resources**: Each setting item can either have an embedded resource linked via an `embeddedResourceId`
+///      or by matching the resource’s type. Resources are first searched by ID, and if not found, the class searches
+///      by type (e.g., `terms` for privacy policy).
+///    - **Resource Assignment Priority**:
+///      - **First**, the `embeddedResourceId` within the setting item is checked.
+///      - **Second**, if no `embeddedResourceId` is found, the resource is searched based on its type (e.g., `terms`).
+///    - **Terms Handling**: If a setting item is related to terms (e.g., privacy policy) and no `embeddedResourceId`
+///      is provided, `TermsFeature` is used to assign the appropriate terms resource.
+///
+/// 4. **CallFeature**: Configures call-related settings, including video call support,
+///    and configurations for call transfer and encoding. The call configuration is derived from `AppConfig.callConfig`.
+///
+/// 5. **MessagingFeature**: Configures messaging features, including SMS and internal chat support, based on the
+///    system's capabilities and the app configuration. It determines whether the messaging tab is displayed in the app
+///    and enables corresponding messaging features.
+///
+/// 6. **TermsFeature**: Configures access to privacy policy and terms resources. It retrieves the privacy policy URL
+///    from embedded resources and assigns it to the appropriate settings item when needed.
 class FeatureAccess {
   static late FeatureAccess _instance;
 
@@ -24,6 +54,7 @@ class FeatureAccess {
     this.settingsFeature,
     this.callFeature,
     this.messagingFeature,
+    this.termsFeature,
   );
 
   final LoginFeature loginFeature;
@@ -31,19 +62,16 @@ class FeatureAccess {
   final SettingsFeature settingsFeature;
   final CallFeature callFeature;
   final MessagingFeature messagingFeature;
+  final TermsFeature termsFeature;
 
-  static Future<FeatureAccess> init() async {
-    final theme = AppThemes();
-    final preferences = AppPreferences();
-
-    final appConfig = theme.appConfig;
-
+  static FeatureAccess init(AppConfig appConfig, AppPreferences preferences) {
     try {
-      final customLoginFeature = _tryEnableCustomLoginFeature(appConfig.loginConfig);
+      final customLoginFeature = _tryEnableCustomLoginFeature(appConfig);
       final bottomMenuManager = _tryConfigureBottomMenuFeature(appConfig, preferences);
       final settingsFeature = _tryConfigureSettingsFeature(appConfig, preferences);
       final callFeature = _tryConfigureCallFeature(appConfig);
       final messagingFeature = _tryConfigureMessagingFeature(appConfig, preferences);
+      final termsFeature = _tryConfigureTermsFeature(appConfig);
 
       _instance = FeatureAccess._(
         customLoginFeature,
@@ -51,6 +79,7 @@ class FeatureAccess {
         settingsFeature,
         callFeature,
         messagingFeature,
+        termsFeature,
       );
     } catch (e, stackTrace) {
       _logger.severe('Failed to initialize FeatureAccess', e, stackTrace);
@@ -84,34 +113,33 @@ class FeatureAccess {
     );
   }
 
-  static BottomMenuTab _createBottomMenuTab(AppConfigBottomMenuTab tab) {
-    final flavor = MainFlavor.values.byName(tab.type);
-    final resourceString = tab.data[AppConfigBottomMenuTab.dataResource] as String?;
-    final data = resourceString == null ? null : ConfigData(resource: Uri.parse(resourceString));
+  static BottomMenuTab _createBottomMenuTab(BottomMenuTabScheme tab) {
+    final flavor = MainFlavor.values.byName(tab.type.name);
 
-    if (flavor == MainFlavor.contacts) {
-      final sourceTypesList = (tab.data[AppConfigBottomMenuTab.dataContactSourceTypes] as List<dynamic>).cast<String>();
-      final sourceTypes = sourceTypesList.map((type) => ContactSourceType.values.byName(type)).toList();
-
-      return ContactsBottomMenuTab(
+    return tab.when(
+      base: (enabled, initial, type, titleL10n, icon) => BottomMenuTab(
         enabled: tab.enabled,
         initial: tab.initial,
         flavor: flavor,
         titleL10n: tab.titleL10n,
-        icon: tab.icon,
-        data: data,
-        contactSourceTypes: sourceTypes,
-      );
-    } else {
-      return BottomMenuTab(
+        icon: tab.icon.toIconData(),
+      ),
+      contacts: (enabled, initial, type, titleL10n, icon, contactSourceTypes) => ContactsBottomMenuTab(
         enabled: tab.enabled,
         initial: tab.initial,
         flavor: flavor,
         titleL10n: tab.titleL10n,
-        icon: tab.icon,
-        data: data,
-      );
-    }
+        icon: tab.icon.toIconData(),
+        contactSourceTypes: contactSourceTypes.map((type) => ContactSourceType.values.byName(type)).toList(),
+      ),
+      embedded: (enabled, initial, type, titleL10n, icon, data) => BottomMenuTab(
+        enabled: tab.enabled,
+        initial: tab.initial,
+        flavor: flavor,
+        titleL10n: tab.titleL10n,
+        icon: tab.icon.toIconData(),
+      ),
+    );
   }
 
   static SettingsFeature _tryConfigureSettingsFeature(
@@ -120,35 +148,21 @@ class FeatureAccess {
   ) {
     final settingSections = <SettingsSection>[];
 
-    late final Uri termsAndConditions;
-
     for (var section in appConfig.settingsConfig.sections.where((section) => section.enabled)) {
       final items = <SettingItem>[];
 
       for (var item in section.items.where((item) => item.enabled)) {
-        final resourceString = item.data[AppConfigBottomMenuTab.dataResource] as String?;
-        final data = resourceString == null ? null : ConfigData(resource: Uri.parse(resourceString));
         final flavor = SettingsFlavor.values.byName(item.type);
 
-        // TODO (Serdun): Move platform-specific configuration to a separate config file.
-        // Currently, the settings screen includes this configuration only for Android.
-        // For other platforms, this item is hidden. Update the logic to handle configurations for all platforms.
-        if (flavor == SettingsFlavor.network && !Platform.isAndroid) continue;
+        if (!_isSupportedPlatform(flavor)) continue;
 
         final settingItem = SettingItem(
           titleL10n: item.titleL10n,
-          icon: item.icon,
-          data: data,
+          icon: item.icon.toIconData(),
+          data: _getEmbeddedDataResource(appConfig, item, flavor),
           flavor: SettingsFlavor.values.byName(item.type),
         );
 
-        if (settingItem.flavor == SettingsFlavor.terms) {
-          if (settingItem.data?.resource != null) {
-            termsAndConditions = settingItem.data!.resource;
-          } else {
-            throw Exception('Terms and conditions not found');
-          }
-        }
         items.add(settingItem);
       }
 
@@ -160,19 +174,44 @@ class FeatureAccess {
       );
     }
 
-    return SettingsFeature(settingSections, termsAndConditions);
+    return SettingsFeature(settingSections);
   }
 
-  static LoginFeature _tryEnableCustomLoginFeature(AppConfigLogin loginConfig) {
+  // TODO (Serdun): Move platform-specific configuration to a separate config file.
+  // Currently, the settings screen includes this configuration only for Android.
+  // For other platforms, this item is hidden. Update the logic to handle configurations for all platforms.
+  static bool _isSupportedPlatform(SettingsFlavor flavor) {
+    return !(flavor == SettingsFlavor.network && !kIsWeb && !Platform.isAndroid);
+  }
+
+  static ConfigData? _getEmbeddedDataResource(
+    AppConfig appConfig,
+    AppConfigSettingsItem item,
+    SettingsFlavor flavor,
+  ) {
+    // Retrieve the embedded resource URL by matching the provided item ID.
+    var embeddedDataResourceUrl =
+        appConfig.embeddedResources.firstWhereOrNull((resource) => resource.id == item.embeddedResourceId)?.uriOrNull;
+
+    // If no direct match is found and the flavor is 'terms', attempt to fetch the privacy policy resource.
+    if (embeddedDataResourceUrl == null && flavor == SettingsFlavor.terms) {
+      return _tryConfigureTermsFeature(appConfig).configData;
+    }
+
+    // Return a ConfigData instance if a valid resource URL is found, otherwise return null.
+    return embeddedDataResourceUrl != null ? ConfigData(uri: embeddedDataResourceUrl, titleL10n: item.titleL10n) : null;
+  }
+
+  static LoginFeature _tryEnableCustomLoginFeature(AppConfig appConfig) {
     final buttons = <LoginModeAction>[];
 
     final launchEmbeddedScreen = _toLoginEmbeddedModel(
-      loginConfig.embedded.firstWhereOrNull((embeddedScreen) => embeddedScreen.launch),
+      appConfig.embeddedResources.firstWhereOrNull((embeddedScreen) => embeddedScreen.attributes['launch'] == true),
     );
 
-    for (var actions in loginConfig.modeSelectActions.where((button) => button.enabled)) {
+    for (var actions in appConfig.loginConfig.modeSelectActions.where((button) => button.enabled)) {
       final flavor = LoginFlavor.values.byName(actions.type);
-      final loginEmbeddedScreen = loginConfig.embedded.firstWhereOrNull((dto) => dto.id == actions.embeddedId);
+      final loginEmbeddedScreen = appConfig.embeddedResources.firstWhereOrNull((dto) => dto.id == actions.embeddedId);
 
       if (flavor == LoginFlavor.embedded && loginEmbeddedScreen != null) {
         buttons.add(LoginEmbeddedModeButton(
@@ -189,17 +228,18 @@ class FeatureAccess {
     }
 
     return LoginFeature(
+      titleL10n: appConfig.loginConfig.greetingL10n,
       actions: buttons,
       launchLoginPage: launchEmbeddedScreen,
     );
   }
 
-  static LoginEmbedded? _toLoginEmbeddedModel(AppConfigLoginEmbedded? embeddedDTO) {
-    return embeddedDTO != null
+  static LoginEmbedded? _toLoginEmbeddedModel(EmbeddedResource? resource) {
+    return resource?.uri != null
         ? LoginEmbedded(
-            titleL10n: embeddedDTO.titleL10n,
-            resource: Uri.parse(embeddedDTO.resource),
-            showToolbar: embeddedDTO.showToolbar,
+            titleL10n: resource!.toolbar.titleL10n,
+            showToolbar: resource.toolbar.showToolbar,
+            resource: resource.uriOrNull!,
           )
         : null;
   }
@@ -207,31 +247,80 @@ class FeatureAccess {
   static CallFeature _tryConfigureCallFeature(AppConfig appConfig) {
     final callConfig = appConfig.callConfig;
 
+    final transferConfig = appConfig.callConfig.transfer;
+
+    final encodingConfig = appConfig.callConfig.encoding;
+    final defaultPresetOverride = encodingConfig.defaultPresetOverride;
+    final encodingViewEnabled = appConfig.settingsConfig.sections.any((section) {
+      return section.items.any((item) {
+        return item.type == SettingsFlavor.mediaSettings.name && item.enabled;
+      });
+    });
+
     return CallFeature(
       videoEnable: callConfig.videoEnabled,
       transfer: TransferConfig(
-        enableBlindTransfer: callConfig.transfer.enableBlindTransfer,
-        enableAttendedTransfer: callConfig.transfer.enableAttendedTransfer,
+        enableBlindTransfer: transferConfig.enableBlindTransfer,
+        enableAttendedTransfer: transferConfig.enableAttendedTransfer,
       ),
+      encoding: EncodingConfig(
+          bypassConfig: encodingConfig.bypassConfig,
+          configurationAllowed: encodingViewEnabled,
+          defaultPresetOverride: DefaultPresetOverride(
+            audioBitrate: defaultPresetOverride.audioBitrate,
+            videoBitrate: defaultPresetOverride.videoBitrate,
+            ptime: defaultPresetOverride.ptime,
+            maxptime: defaultPresetOverride.maxptime,
+            opusBandwidthLimit: defaultPresetOverride.opusBandwidthLimit,
+            opusStereo: defaultPresetOverride.opusStereo,
+            opusDtx: defaultPresetOverride.opusDtx,
+          )),
     );
   }
 
   static MessagingFeature _tryConfigureMessagingFeature(AppConfig appConfig, AppPreferences preferences) {
     final tabEnabled = appConfig.mainConfig.bottomMenu.tabs.any((tab) {
-      return tab.type == MainFlavor.messaging.name && tab.enabled;
+      return tab.type.name == MainFlavor.messaging.name && tab.enabled;
     });
     return MessagingFeature(preferences, tabEnabled: tabEnabled);
+  }
+
+  static TermsFeature _tryConfigureTermsFeature(AppConfig appConfig) {
+    // Attempt to find the terms resource from the embedded resources list.
+    final termsResource =
+        appConfig.embeddedResources.firstWhereOrNull((resource) => resource.type == EmbeddedResourceType.terms);
+
+    // TODO(Serdun): It would be better to add a separate privacy policy feature in AppConfig,
+    // with a direct link to the embedded resource. Implement logic to check if the feature access
+    // doesn't have a link, and if not, search the embedded resources by type in the list.
+    if (termsResource == null) {
+      throw EmbeddedResourceMissingException(
+        message: 'Terms  resource is missing',
+        embeddedResourceType: EmbeddedResourceType.terms,
+      );
+    }
+
+    _logger.info('Privacy policy resource found: ${termsResource.uriOrNull}');
+
+    return TermsFeature(ConfigData(
+      uri: termsResource.uriOrNull!,
+      titleL10n: termsResource.toolbar.titleL10n,
+    ));
   }
 }
 
 class LoginFeature {
+  final String? titleL10n;
   final List<LoginModeAction> actions;
   final LoginEmbedded? launchLoginPage;
 
   LoginFeature({
+    required this.titleL10n,
     required this.actions,
     required this.launchLoginPage,
   });
+
+  bool get hasEmbeddedPage => actions.any((flavor) => flavor.flavor == LoginFlavor.embedded);
 }
 
 class BottomMenuFeature {
@@ -263,6 +352,10 @@ class BottomMenuFeature {
     return tabs.any((tab) => tab.flavor == flavor && tab.enabled);
   }
 
+  BottomMenuTab? getTabEnabled(MainFlavor flavor) {
+    return tabs.firstWhereOrNull((tab) => tab.flavor == flavor);
+  }
+
   set activeFlavor(BottomMenuTab flavor) {
     _appPreferences.setActiveMainFlavor(flavor.flavor);
     _activeTab = flavor;
@@ -272,20 +365,26 @@ class BottomMenuFeature {
 class SettingsFeature {
   final List<SettingsSection> _sections;
 
-  final Uri termsAndConditions;
-
-  SettingsFeature(this._sections, this.termsAndConditions);
+  SettingsFeature(this._sections);
 
   List<SettingsSection> get sections => List.unmodifiable(_sections);
+
+  bool get isSelfConfigEnabled => _sections.any((section) {
+        return section.items.any((item) {
+          return item.flavor == SettingsFlavor.selfConfig;
+        });
+      });
 }
 
 class CallFeature {
   final bool videoEnable;
   final TransferConfig transfer;
+  final EncodingConfig encoding;
 
   CallFeature({
     required this.videoEnable,
     required this.transfer,
+    required this.encoding,
   });
 }
 
@@ -320,4 +419,18 @@ class MessagingFeature {
   /// Check if the internal messaging feature is enabled and supported by remote system.
   /// This is used to determine if internal messaging UI components should be displayed or hidden.
   bool get chatsPresent => coreChatsSupport && tabEnabled;
+}
+
+/// Represents the configuration of the terms and privacy policy feature in the app.
+/// The `TermsFeature` class is responsible for assigning the correct terms resource, either from
+/// a provided embedded resource ID or by searching for a resource of type `terms`.
+///
+/// Configuration Scheme:
+/// 1. **Embedded Resource**: The `TermsFeature` looks for an embedded resource of type `terms`
+///    to assign the privacy policy. If the embedded resource is not explicitly provided in `AppConfig`,
+///    it will be searched in the embedded resources by type.
+class TermsFeature {
+  final ConfigData configData;
+
+  TermsFeature(this.configData);
 }

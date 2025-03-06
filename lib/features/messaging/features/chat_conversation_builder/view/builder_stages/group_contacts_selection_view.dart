@@ -32,14 +32,14 @@ class GroupContactsSelectionView extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 child: Text(
                   context.l10n.messaging_ConversationBuilders_invite_heading,
-                  style: TextStyle(color: colorScheme.secondary.withOpacity(0.7), fontSize: 16),
+                  style: TextStyle(color: colorScheme.secondary.withValues(alpha: 0.7), fontSize: 16),
                 ),
               ),
               ...state.selectedContacts.map((contact) {
                 return Container(
                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
-                    color: colorScheme.secondary.withOpacity(0.07),
+                    color: colorScheme.secondary.withValues(alpha: 0.07),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Row(

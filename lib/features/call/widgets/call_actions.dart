@@ -168,6 +168,10 @@ class _CallActionsState extends State<CallActions> {
     final onAcceptPressed = widget.onAcceptPressed;
     final onHangupPressed = widget.onHangupPressed;
 
+    // Icons
+    final actionPadIconSize = themeData.textTheme.headlineMedium!.fontSize;
+    final popupMenuIconSize = themeData.textTheme.bodyLarge!.fontSize;
+
     final style = CallActionsStyle.merge(widget.style, Theme.of(context).extension<CallActionsStyles>()?.primary);
 
     final TextButtonsTable buttonsTable;
@@ -183,7 +187,10 @@ class _CallActionsState extends State<CallActions> {
               child: TextButton(
                 onPressed: onHangupPressed,
                 style: style.hangup,
-                child: const Icon(Icons.call_end),
+                child: Icon(
+                  Icons.call_end,
+                  size: actionPadIconSize,
+                ),
               ),
             ),
             const SizedBox(),
@@ -194,7 +201,10 @@ class _CallActionsState extends State<CallActions> {
               child: TextButton(
                 onPressed: onAcceptPressed,
                 style: style.callStart,
-                child: Icon(widget.video ? Icons.videocam : Icons.call),
+                child: Icon(
+                  widget.video ? Icons.videocam : Icons.call,
+                  size: actionPadIconSize,
+                ),
               ),
             ),
           ],
@@ -211,8 +221,14 @@ class _CallActionsState extends State<CallActions> {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Icon(Icons.call_end),
-                    Icon(widget.video ? Icons.videocam : Icons.call),
+                    Icon(
+                      Icons.call_end,
+                      size: actionPadIconSize,
+                    ),
+                    Icon(
+                      widget.video ? Icons.videocam : Icons.call,
+                      size: actionPadIconSize,
+                    ),
                   ],
                 ),
               ),
@@ -222,7 +238,10 @@ class _CallActionsState extends State<CallActions> {
               child: TextButton(
                 onPressed: onHangupPressed,
                 style: style.hangup,
-                child: const Icon(Icons.call_end),
+                child: Icon(
+                  Icons.call_end,
+                  size: actionPadIconSize,
+                ),
               ),
             ),
             Tooltip(
@@ -233,8 +252,14 @@ class _CallActionsState extends State<CallActions> {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Icon(Icons.pause),
-                    Icon(widget.video ? Icons.videocam : Icons.call),
+                    Icon(
+                      Icons.pause,
+                      size: actionPadIconSize,
+                    ),
+                    Icon(
+                      widget.video ? Icons.videocam : Icons.call,
+                      size: actionPadIconSize,
+                    ),
                   ],
                 ),
               ),
@@ -251,7 +276,10 @@ class _CallActionsState extends State<CallActions> {
             child: TextButton(
               onPressed: onDeclineTransferPressed,
               style: style.hangup,
-              child: const Icon(Icons.call_end),
+              child: Icon(
+                Icons.call_end,
+                size: actionPadIconSize,
+              ),
             ),
           ),
           const SizedBox(),
@@ -260,7 +288,10 @@ class _CallActionsState extends State<CallActions> {
             child: TextButton(
               onPressed: onApproveTransferPressed,
               style: style.callStart,
-              child: const Icon(Icons.phone_forwarded),
+              child: Icon(
+                Icons.phone_forwarded,
+                size: actionPadIconSize,
+              ),
             ),
           ),
         ],
@@ -308,7 +339,10 @@ class _CallActionsState extends State<CallActions> {
             child: TextButton(
               onPressed: onMutedChanged == null ? null : () => onMutedChanged(!widget.mutedValue),
               style: widget.mutedValue ? style.mutedActive : style.muted,
-              child: const Icon(Icons.mic_off),
+              child: Icon(
+                Icons.mic_off,
+                size: actionPadIconSize,
+              ),
             ),
           ),
           Tooltip(
@@ -322,7 +356,10 @@ class _CallActionsState extends State<CallActions> {
                       ? null
                       : () => onCameraChanged(!widget.cameraValue),
               style: !widget.cameraValue ? style.cameraActive : style.camera,
-              child: const Icon(Icons.videocam_off),
+              child: Icon(
+                Icons.videocam_off,
+                size: actionPadIconSize,
+              ),
             ),
           ),
           Tooltip(
@@ -333,7 +370,10 @@ class _CallActionsState extends State<CallActions> {
               onPressed:
                   speakerValue == null || onSpeakerChanged == null ? null : () => onSpeakerChanged(!speakerValue),
               style: speakerValue == true ? style.speakerActive : style.speaker,
-              child: const Icon(Icons.volume_up),
+              child: Icon(
+                Icons.volume_up,
+                size: actionPadIconSize,
+              ),
             ),
           ),
           // delimiter
@@ -353,7 +393,7 @@ class _CallActionsState extends State<CallActions> {
                         text: call.displayName ?? call.handle.value,
                         icon: Icon(
                           Icons.phone_paused_outlined,
-                          size: themeData.textTheme.bodyLarge!.fontSize,
+                          size: popupMenuIconSize,
                           color: themeData.textTheme.bodyMedium!.color,
                         ),
                         textStyle: themeData.textTheme.bodyMedium,
@@ -364,7 +404,7 @@ class _CallActionsState extends State<CallActions> {
                       text: context.l10n.call_CallActionsTooltip_transfer_choose,
                       icon: Icon(
                         Icons.phone_forwarded_outlined,
-                        size: themeData.textTheme.bodyLarge!.fontSize,
+                        size: popupMenuIconSize,
                         color: themeData.textTheme.bodyMedium!.color,
                       ),
                       textStyle: themeData.textTheme.bodyMedium,
@@ -374,7 +414,10 @@ class _CallActionsState extends State<CallActions> {
                   child: TextButton(
                     onPressed: () {},
                     style: style.transfer,
-                    child: const Icon(Icons.phone_forwarded),
+                    child: Icon(
+                      Icons.phone_forwarded,
+                      size: actionPadIconSize,
+                    ),
                   ),
                 ),
               ),
@@ -391,7 +434,7 @@ class _CallActionsState extends State<CallActions> {
                       text: context.l10n.call_CallActionsTooltip_unattended_transfer,
                       icon: Icon(
                         Icons.phone_forwarded_outlined,
-                        size: themeData.textTheme.bodyLarge!.fontSize,
+                        size: popupMenuIconSize,
                         color: themeData.textTheme.bodyMedium!.color,
                       ),
                       textStyle: themeData.textTheme.bodyMedium,
@@ -402,7 +445,7 @@ class _CallActionsState extends State<CallActions> {
                       text: context.l10n.call_CallActionsTooltip_attended_transfer,
                       icon: Icon(
                         Icons.phone_forwarded_outlined,
-                        size: themeData.textTheme.bodyLarge!.fontSize,
+                        size: popupMenuIconSize,
                         color: themeData.textTheme.bodyMedium!.color,
                       ),
                       textStyle: themeData.textTheme.bodyMedium,
@@ -412,7 +455,10 @@ class _CallActionsState extends State<CallActions> {
                   child: TextButton(
                     onPressed: onBlindTransferInitiated == null && onAttendedTransferInitiated == null ? null : () {},
                     style: style.transfer,
-                    child: const Icon(Icons.phone_forwarded),
+                    child: Icon(
+                      Icons.phone_forwarded,
+                      size: actionPadIconSize,
+                    ),
                   ),
                 ),
               ),
@@ -425,7 +471,10 @@ class _CallActionsState extends State<CallActions> {
               child: TextButton(
                 onPressed: onHeldChanged == null ? null : () => onHeldChanged(!widget.heldValue),
                 style: widget.heldValue ? style.heldActive : style.held,
-                child: const Icon(Icons.pause),
+                child: Icon(
+                  Icons.pause,
+                  size: actionPadIconSize,
+                ),
               ),
             ),
           if (onSwapPressed != null)
@@ -434,7 +483,10 @@ class _CallActionsState extends State<CallActions> {
               child: TextButton(
                 onPressed: onSwapPressed,
                 style: style.speaker,
-                child: const Icon(Icons.swap_calls),
+                child: Icon(
+                  Icons.swap_calls,
+                  size: actionPadIconSize,
+                ),
               ),
             ),
           Tooltip(
@@ -448,7 +500,10 @@ class _CallActionsState extends State<CallActions> {
                       });
                     },
               style: style.keypad,
-              child: const Icon(Icons.dialpad),
+              child: Icon(
+                Icons.dialpad,
+                size: actionPadIconSize,
+              ),
             ),
           ),
           // hangup delimiter
@@ -471,7 +526,10 @@ class _CallActionsState extends State<CallActions> {
             child: TextButton(
               onPressed: onHangupPressed,
               style: style.hangup,
-              child: const Icon(Icons.call_end),
+              child: Icon(
+                Icons.call_end,
+                size: actionPadIconSize,
+              ),
             ),
           ),
           _keypadShow
@@ -486,7 +544,10 @@ class _CallActionsState extends State<CallActions> {
                       });
                     },
                     style: style.keypadActive,
-                    child: const Icon(Icons.dialpad),
+                    child: Icon(
+                      Icons.dialpad,
+                      size: actionPadIconSize,
+                    ),
                   ),
                 )
               : const SizedBox(),

@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 import 'package:auto_route/auto_route.dart';
 
 import 'package:webtrit_api/webtrit_api.dart';
+
 import 'package:webtrit_phone/features/messaging/messaging.dart';
 import 'package:webtrit_phone/models/failures/failures.dart';
 import 'package:webtrit_signaling/webtrit_signaling.dart';
@@ -10,8 +13,13 @@ import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 
-// Base notifications definitions
+enum NotificationScope {
+  login,
+  main,
+  call;
+}
 
+// Base notifications definitions
 @immutable
 sealed class Notification {
   const Notification();
@@ -19,6 +27,8 @@ sealed class Notification {
   String l10n(BuildContext context);
 
   SnackBarAction? action(BuildContext context) => null;
+
+  List<NotificationScope> scopes() => NotificationScope.values;
 }
 
 abstract class ErrorNotification extends Notification {
@@ -91,6 +101,16 @@ class DefaultErrorNotification extends ErrorNotification {
         },
       );
     } else if (error is MessagingSocketException) {
+      final title = l10n(context);
+      final errorFields = error.errorFields(context);
+
+      return SnackBarAction(
+        label: context.l10n.default_ErrorDetails,
+        onPressed: () {
+          context.router.push(ErrorDetailsScreenPageRoute(title: title, fields: errorFields));
+        },
+      );
+    } else if (error is SocketException) {
       final title = l10n(context);
       final errorFields = error.errorFields(context);
 

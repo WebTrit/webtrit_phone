@@ -76,8 +76,9 @@ class MainScreenPage extends StatelessWidget {
       create: (context) {
         return MainBloc(
           context.read<SystemInfoRepository>(),
-          AppPreferences(),
+          context.read<AppPreferences>(),
           EnvironmentConfig.CORE_VERSION_CONSTRAINT,
+          context.read<PackageInfo>(),
           storeInfoExtractor: StoreInfoExtractor(),
         )..add(const MainBlocInit());
       },
@@ -116,7 +117,7 @@ class MainScreenPage extends StatelessWidget {
           return ContactsRouterPageRoute(
             children: [
               ContactsScreenPageRoute(
-                sourceTypes: tab.toContacts.contactSourceTypes,
+                sourceTypes: tab.toContacts?.contactSourceTypes ?? [],
               )
             ],
           );

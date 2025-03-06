@@ -66,8 +66,13 @@ class $AssetsThemesGen {
   /// File path: assets/themes/custom_signup.html
   String get customSignup => 'assets/themes/custom_signup.html';
 
-  /// File path: assets/themes/original.json
-  String get original => 'assets/themes/original.json';
+  /// File path: assets/themes/original.color_scheme.dark.config.json
+  String get originalColorSchemeDarkConfig =>
+      'assets/themes/original.color_scheme.dark.config.json';
+
+  /// File path: assets/themes/original.color_scheme.light.config.json
+  String get originalColorSchemeLightConfig =>
+      'assets/themes/original.color_scheme.light.config.json';
 
   /// File path: assets/themes/original.page.dark.config.json
   String get originalPageDarkConfig =>
@@ -89,7 +94,8 @@ class $AssetsThemesGen {
   List<String> get values => [
         appConfig,
         customSignup,
-        original,
+        originalColorSchemeDarkConfig,
+        originalColorSchemeLightConfig,
         originalPageDarkConfig,
         originalPageLightConfig,
         originalWidgetDarkConfig,

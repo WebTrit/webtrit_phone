@@ -31,17 +31,15 @@ class _MainShellState extends State<MainShell> {
   late final CallkeepConnections _callkeepConnections = CallkeepConnections();
   late final CallkeepBackgroundService _callkeepBackgroundService = CallkeepBackgroundService();
 
-  late final AppPreferences _appPreferences = AppPreferences();
-
   @override
   void initState() {
     super.initState();
-    final incomingCallType = _appPreferences.getIncomingCallType();
+    final incomingCallType = context.read<AppPreferences>().getIncomingCallType();
 
     _callkeep.setUp(
       CallkeepOptions(
         ios: CallkeepIOSOptions(
-          localizedName: PackageInfo().appName,
+          localizedName: context.read<PackageInfo>().appName,
           ringtoneSound: Assets.ringtones.incomingCall1,
           ringbackSound: Assets.ringtones.outgoingCall1,
           iconTemplateImageAssetName: Assets.callkeep.iosIconTemplateImage.path,
@@ -136,6 +134,12 @@ class _MainShellState extends State<MainShell> {
             context.read<WebtritApiClient>(),
           ),
         ),
+        RepositoryProvider<SelfConfigRepository>(
+          create: (context) => SelfConfigRepository(
+            context.read<WebtritApiClient>(),
+            context.read<AppBloc>().state.token!,
+          ),
+        ),
         RepositoryProvider<AppRepository>(
           create: (context) => AppRepository(
             webtritApiClient: context.read<WebtritApiClient>(),
@@ -211,10 +215,18 @@ class _MainShellState extends State<MainShell> {
           BlocProvider<LocalContactsSyncBloc>(
             lazy: false,
             create: (context) {
-              return LocalContactsSyncBloc(
+              final bloc = LocalContactsSyncBloc(
                 localContactsRepository: context.read<LocalContactsRepository>(),
                 appDatabase: context.read<AppDatabase>(),
-              )..add(const LocalContactsSyncStarted());
+              );
+
+              // TODO(Serdun): Consider moving this logic to the LocalContactBloc and decomposing the LocalContactsRepository.
+              // The repository currently has direct access to the Permissions plugin, which might violate separation of concerns.
+              // If contacts agreement is accepted, initiate the LocalContactsSyncStarted event.
+              if (context.read<AppPreferences>().getContactsAgreementStatus().isAccepted) {
+                bloc.add(const LocalContactsSyncStarted());
+              }
+              return bloc;
             },
           ),
           BlocProvider<ExternalContactsSyncBloc>(
@@ -230,8 +242,10 @@ class _MainShellState extends State<MainShell> {
           BlocProvider<CallBloc>(
             create: (context) {
               final appBloc = context.read<AppBloc>();
+              final appPreferences = context.read<AppPreferences>();
+              final notificationsBloc = context.read<NotificationsBloc>();
               final appCertificates = AppCertificates();
-              final appPreferences = AppPreferences();
+              final encodingConfig = context.read<FeatureAccess>().callFeature.encoding;
 
               return CallBloc(
                 coreUrl: appBloc.state.coreUrl!,
@@ -239,10 +253,14 @@ class _MainShellState extends State<MainShell> {
                 token: appBloc.state.token!,
                 trustedCertificates: appCertificates.trustedCertificates,
                 callLogsRepository: context.read<CallLogsRepository>(),
-                notificationsBloc: context.read<NotificationsBloc>(),
+                submitNotification: (n) => notificationsBloc.add(NotificationsSubmitted(n)),
                 callkeep: _callkeep,
                 callkeepConnections: _callkeepConnections,
-                sdpMunger: ForceCodecsByUserPrefs(appPreferences),
+                sdpMunger: ModifyWithEncodingSettings(appPreferences, encodingConfig),
+                audioConstraintsBuilder: AudioConstraintsWithAppSettingsBuilder(appPreferences),
+                videoConstraintsBuilder: VideoConstraintsWithAppSettingsBuilder(appPreferences),
+                webRtcOptionsBuilder: WebrtcOptionsWithAppSettingsBuilder(appPreferences),
+                iceFilter: FilterWithAppSettings(appPreferences),
               )..add(const CallStarted());
             },
           ),
@@ -282,14 +300,34 @@ class _MainShellState extends State<MainShell> {
             return MultiBlocProvider(
               providers: [
                 BlocProvider(
+                  lazy: false,
                   create: (_) => UserInfoCubit(
                     context.read<UserRepository>(),
                   ),
                 ),
                 BlocProvider(
+                  lazy: false,
+                  create: (_) => SelfConfigCubit(
+                    context.read<SelfConfigRepository>(),
+                    context.read<FeatureAccess>().settingsFeature.isSelfConfigEnabled,
+                  ),
+                ),
+                BlocProvider(
+                  lazy: false,
                   create: (_) => SessionStatusCubit(
                     pushTokensBloc: context.read<PushTokensBloc>(),
                     callBloc: context.read<CallBloc>(),
+                  ),
+                ),
+                BlocProvider(
+                  lazy: false,
+                  create: (_) => RegisterStatusCubit(
+                    context.read<AppRepository>(),
+                    context.read<AppPreferences>(),
+                    handleError: (error, stackTrace) {
+                      context.read<NotificationsBloc>().add(NotificationsSubmitted(DefaultErrorNotification(error)));
+                      context.read<AppBloc>().maybeHandleError(error);
+                    },
                   ),
                 ),
               ],

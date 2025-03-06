@@ -27,9 +27,29 @@ void main() {
 
     return MultiProvider(
       providers: [
+        Provider<AppInfo>(
+          create: (context) {
+            return AppInfo();
+          },
+        ),
+        Provider<PlatformInfo>(
+          create: (context) {
+            return PlatformInfo();
+          },
+        ),
+        Provider<PackageInfo>(
+          create: (context) {
+            return PackageInfoFactory.instance;
+          },
+        ),
+        Provider<DeviceInfo>(
+          create: (context) {
+            return DeviceInfoFactory.instance;
+          },
+        ),
         Provider<AppPreferences>(
           create: (context) {
-            return AppPreferences();
+            return AppPreferencesFactory.instance;
           },
         ),
         Provider<FeatureAccess>(

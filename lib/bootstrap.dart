@@ -38,28 +38,40 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
         FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(false);
         await FirebaseCrashlytics.instance.deleteUnsentReports();
       }
+
       FlutterError.onError = (details) {
         logger.severe('FlutterError', details.exception, details.stack);
-        if (!kIsWeb) {
+        if (!kIsWeb && !kDebugMode) {
           FirebaseCrashlytics.instance.recordFlutterFatalError(details);
         }
       };
 
+      // Remote configuration
+      final remoteCacheConfigService = await DefaultRemoteCacheConfigService.init();
+      final remoteFirebaseConfigService = await FirebaseRemoteConfigService.init(remoteCacheConfigService);
+
       // Initialization order is crucial for proper app setup
-      await AppInfo.init(FirebaseAppIdProvider());
-      await DeviceInfo.init();
-      await PackageInfo.init();
-      await AppLogger.init();
-      await AppThemes.init();
-      await AppPreferences.init();
-      await FeatureAccess.init();
-      await AppPermissions.init();
+
+      final appThemes = await AppThemes.init();
+      final appPreferences = await AppPreferencesFactory.init();
+      final featureAccess = FeatureAccess.init(appThemes.appConfig, appPreferences);
+      final appInfo = await AppInfo.init(FirebaseAppIdProvider());
+      final deviceInfo = await DeviceInfoFactory.init();
+      final packageInfo = await PackageInfoFactory.init();
+
+      await AppPermissions.init(featureAccess);
       await SecureStorage.init();
       await AppCertificates.init();
       await AppTime.init();
       await SessionCleanupWorker.init();
+      await AppLogger.init(
+        remoteConfigService: remoteFirebaseConfigService,
+        packageInfo: packageInfo,
+        deviceInfo: deviceInfo,
+        appInfo: appInfo,
+      );
 
-      await _initCallkeep();
+      await _initCallkeep(appPreferences);
 
       Bloc.observer = AppBlocObserver();
 
@@ -74,10 +86,10 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
   );
 }
 
-Future<void> _initCallkeep() async {
+Future<void> _initCallkeep(AppPreferences appPreferences) async {
   if (!Platform.isAndroid) return;
 
-  final incomingCalType = AppPreferences().getIncomingCallType();
+  final incomingCalType = appPreferences.getIncomingCallType();
   final callkeep = CallkeepBackgroundService();
 
   CallkeepBackgroundService.setUpServiceCallback(
@@ -95,11 +107,17 @@ Future<void> _initCallkeep() async {
   }
 }
 
-@pragma('vm:entry-point')
+/// Initializes Firebase for background services. This initialization must be called in an isolate
+/// when Firebase components are used. For more details, refer to the Firebase documentation:
+/// https://firebase.google.com/docs/cloud-messaging/flutter/receive
 Future<void> _initFirebase() async {
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  try {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+  } catch (e) {
+    Logger('Firebase').severe('Error in _initFirebase', e);
+  }
 }
 
 Future<void> _initFirebaseMessaging() async {
@@ -134,13 +152,26 @@ Future<void> _initFirebaseMessaging() async {
 
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  final logger = Logger('_firebaseMessagingBackgroundHandler');
+
+  // Cache remote configuration
+  final remoteCacheConfigService = await DefaultRemoteCacheConfigService.init();
+
   // Initialize the logger for handling Firebase Cloud Messaging (FCM) in the background isolate.
-  await AppInfo.init(const SharedPreferencesAppIdProvider());
-  await DeviceInfo.init();
-  await PackageInfo.init();
-  await AppLogger.init();
+  final appInfo = await AppInfo.init(const SharedPreferencesAppIdProvider());
+  final deviceInfo = await DeviceInfoFactory.init();
+  final packageInfo = await PackageInfoFactory.init();
+
+  await AppLogger.init(
+    remoteConfigService: remoteCacheConfigService,
+    packageInfo: packageInfo,
+    deviceInfo: deviceInfo,
+    appInfo: appInfo,
+  );
 
   final appNotification = AppRemoteNotification.fromFCM(message);
+
+  logger.info('onBackgroundMessage: ${message.toMap()}');
 
   // Type of notification for testing purposes
   _dHandleInspectPushNotification(message.data, true);

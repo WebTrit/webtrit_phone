@@ -22,7 +22,8 @@ class OnboardingLogo extends StatelessWidget {
     final themeData = Theme.of(context);
     final localStyle = style ?? themeData.extension<OnboardingLogoStyles>()?.primary;
     final titleStyle = themeData.textTheme.headlineSmall!.merge(localStyle?.textStyle);
-    final scale = mediaQueryData.size.height * (localStyle?.scale ?? 0.25);
+    // TODO(Serdun): Add  heightFactor directly to the style
+    final scale = mediaQueryData.size.height * (localStyle?.widthFactor ?? 1.0);
     return SizedBox(
       height: scale,
       child: Align(

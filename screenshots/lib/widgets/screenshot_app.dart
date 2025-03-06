@@ -27,7 +27,7 @@ class ScreenshotApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget materialApp = BlocBuilder<AppBloc, AppState>(
+    Widget widgetsApp = BlocBuilder<AppBloc, AppState>(
       buildWhen: (previous, current) => previous.themeSettings != current.themeSettings,
       builder: (context, state) {
         return ThemeProvider(
@@ -36,20 +36,27 @@ class ScreenshotApp extends StatelessWidget {
           darkDynamic: null,
           child: BlocBuilder<AppBloc, AppState>(
             buildWhen: (previous, current) =>
-                previous.effectiveLocale != current.effectiveLocale ||
+            previous.effectiveLocale != current.effectiveLocale ||
                 previous.effectiveThemeMode != current.effectiveThemeMode,
             builder: (context, state) {
               final themeProvider = ThemeProvider.of(context);
-              return MaterialApp.router(
+
+              return WidgetsApp.router(
                 locale: state.effectiveLocale,
                 localizationsDelegates: AppLocalizations.localizationsDelegates,
                 supportedLocales: AppLocalizations.supportedLocales,
                 title: EnvironmentConfig.APP_NAME,
-                themeMode: state.effectiveThemeMode,
-                theme: themeProvider.light(),
-                darkTheme: themeProvider.dark(),
+                color: themeProvider.light().primaryColor,
                 debugShowCheckedModeBanner: false,
                 routerDelegate: ScreenshotRouterDelegate(child),
+                routeInformationParser: const _NoOpRouteInformationParser(),
+                builder: (context, child) {
+                  // Ensure themes are applied to the app
+                  return Theme(
+                    data: themeProvider.light(),
+                    child: child!,
+                  );
+                },
               );
             },
           ),
@@ -57,8 +64,8 @@ class ScreenshotApp extends StatelessWidget {
       },
     );
 
-    materialApp = IgnorePointer(
-      child: materialApp,
+    widgetsApp = IgnorePointer(
+      child: widgetsApp,
     );
 
     final provider = MultiBlocProvider(
@@ -67,7 +74,7 @@ class ScreenshotApp extends StatelessWidget {
           value: appBloc,
         ),
       ],
-      child: _autoStackRouterWrap(materialApp),
+      child: _autoStackRouterWrap(widgetsApp),
     );
 
     return provider;
@@ -87,17 +94,37 @@ class ScreenshotRouterDelegate extends RouterDelegate<Object> with ChangeNotifie
           child: child,
         ),
       ],
+      // ignore: deprecated_member_use
+      onPopPage: (route, result) {
+        if (!route.didPop(result)) {
+          return false;
+        }
+        // Notify listeners if necessary
+        notifyListeners();
+        return true;
+      },
     );
   }
 
   @override
   Future<void> setNewRoutePath(Object configuration) async {
+    // You can handle any route configuration logic here if needed.
     return;
   }
 
   @override
   Future<bool> popRoute() async {
+    // Prevent navigation stack popping
     return false;
+  }
+}
+
+class _NoOpRouteInformationParser extends RouteInformationParser<Object> {
+  const _NoOpRouteInformationParser();
+
+  @override
+  Future<Object> parseRouteInformation(RouteInformation routeInformation) async {
+    return Object();
   }
 }
 

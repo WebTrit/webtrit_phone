@@ -2,6 +2,8 @@ import 'package:clock/clock.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+// ignore: depend_on_referenced_packages
+import 'package:provider/provider.dart';
 
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/data/data.dart';
@@ -16,8 +18,8 @@ void main() async {
     () async {
       WidgetsFlutterBinding.ensureInitialized();
 
-      await AppThemes.init();
-      final themeSettings = AppThemes().values.first.settings;
+      final appThemes = await AppThemes.init();
+      final themeSettings = appThemes.values.first.settings;
 
       final appBloc = MockAppBloc.allScreen(
         themeSettings: themeSettings,
@@ -25,9 +27,22 @@ void main() async {
         locale: const Locale('en'),
       );
 
-      runApp(ScreenshotsApp(
-        appBloc: appBloc,
-      ));
+      final featureAccess = FeatureAccess.init(
+        appThemes.appConfig,
+        MockAppPreferencesService(),
+      );
+
+      runApp(MultiProvider(
+          providers: [
+            Provider<FeatureAccess>(
+              create: (context) {
+                return featureAccess;
+              },
+            ),
+          ],
+          child: ScreenshotsApp(
+            appBloc: appBloc,
+          )));
     },
   );
 }
