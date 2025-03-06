@@ -346,7 +346,7 @@ class _CallActionsState extends State<CallActions> {
               onPressed: onMutedChanged == null ? null : () => onMutedChanged(!widget.mutedValue),
               style: widget.mutedValue ? style.mutedActive : style.muted,
               child: Icon(
-                Icons.mic_off,
+                widget.mutedValue ? Icons.mic_off : Icons.mic,
                 size: actionPadIconSize,
               ),
             ),
@@ -359,7 +359,7 @@ class _CallActionsState extends State<CallActions> {
               onPressed: () => onCameraChanged?.call(!widget.cameraValue),
               style: !widget.cameraValue ? style.cameraActive : style.camera,
               child: Icon(
-                Icons.videocam_off,
+                widget.cameraValue ? Icons.videocam : Icons.videocam_off,
                 size: actionPadIconSize,
               ),
             ),
@@ -373,7 +373,7 @@ class _CallActionsState extends State<CallActions> {
                   speakerValue == null || onSpeakerChanged == null ? null : () => onSpeakerChanged(!speakerValue),
               style: speakerValue == true ? style.speakerActive : style.speaker,
               child: Icon(
-                Icons.volume_up,
+                speakerValue == true ? Icons.volume_up : Icons.volume_off,
                 size: actionPadIconSize,
               ),
             ),
