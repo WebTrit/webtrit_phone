@@ -32,13 +32,6 @@ class CallActiveScaffold extends StatefulWidget {
 
 class CallActiveScaffoldState extends State<CallActiveScaffold> {
   bool compact = false;
-  late bool cameraEnabled;
-
-  @override
-  void initState() {
-    super.initState();
-    cameraEnabled = widget.activeCalls.current.video;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,8 +40,6 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
     final heldCalls = activeCalls.nonCurrent;
 
     final activeTransfer = activeCall.transfer;
-
-    final video = activeCall.video;
 
     final themeData = Theme.of(context);
     final Gradients? gradients = themeData.extension<Gradients>();
@@ -66,7 +57,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
             ),
             child: Stack(
               children: [
-                if (video)
+                if (activeCall.remoteVideo)
                   Positioned(
                     left: 0,
                     right: 0,
@@ -85,7 +76,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                       ),
                     ),
                   ),
-                if (video)
+                if (activeCall.localVideo)
                   AnimatedPositioned(
                     right: 10 + mediaQueryData.padding.right,
                     top: 10 + mediaQueryData.padding.top + (compact ? 0 : 100),
@@ -196,30 +187,30 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                                     CallActions(
                                       enableInteractions: widget.callStatus == CallStatus.ready,
                                       isIncoming: activeCall.isIncoming,
-                                      video: activeCall.video,
+                                      remoteVideo: activeCall.remoteVideo,
                                       wasAccepted: activeCall.wasAccepted,
                                       wasHungUp: activeCall.wasHungUp,
-                                      cameraValue: cameraEnabled,
+                                      cameraValue: activeCall.cameraEnabled,
                                       inviteToAttendedTransfer: activeTransfer is InviteToAttendedTransfer,
                                       onCameraChanged: (bool value) {
-                                        setState(() {
-                                          cameraEnabled = value;
-                                        });
                                         context
                                             .read<CallBloc>()
                                             .add(CallControlEvent.cameraEnabled(activeCall.callId, value));
+                                        setState(() {});
                                       },
                                       mutedValue: activeCall.muted,
                                       onMutedChanged: (bool value) {
                                         context
                                             .read<CallBloc>()
                                             .add(CallControlEvent.setMuted(activeCall.callId, value));
+                                        setState(() {});
                                       },
                                       speakerValue: widget.speaker,
                                       onSpeakerChanged: (bool value) {
                                         context
                                             .read<CallBloc>()
                                             .add(CallControlEvent.speakerEnabled(activeCall.callId, value));
+                                        setState(() {});
                                       },
                                       transferableCalls: heldCalls,
                                       onBlindTransferInitiated: widget.transferConfig.enableBlindTransfer

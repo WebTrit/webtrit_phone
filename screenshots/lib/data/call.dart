@@ -25,7 +25,7 @@ final dVideoActiveCall = ActiveCall(
     value: 'Thomas Anderson',
   ),
   direction: CallDirection.incoming,
-  video: true,
+  video: false,
   createdTime: clock.ago(minutes: 10),
   acceptedTime: clock.ago(minutes: 9, seconds: 41),
   processingStatus: CallProcessingStatus.connected,

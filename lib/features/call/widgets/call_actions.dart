@@ -16,12 +16,12 @@ class CallActions extends StatefulWidget {
     super.key,
     required this.enableInteractions,
     required this.isIncoming,
-    required this.video,
+    required this.remoteVideo,
     required this.wasAccepted,
     required this.wasHungUp,
     required this.cameraValue,
     required this.inviteToAttendedTransfer,
-    this.onCameraChanged,
+    required this.onCameraChanged,
     required this.mutedValue,
     this.onMutedChanged,
     this.speakerValue,
@@ -45,12 +45,12 @@ class CallActions extends StatefulWidget {
 
   final bool enableInteractions;
   final bool isIncoming;
-  final bool video;
+  final bool remoteVideo;
   final bool wasAccepted;
   final bool wasHungUp;
   final bool cameraValue;
   final bool inviteToAttendedTransfer;
-  final ValueChanged<bool>? onCameraChanged;
+  final ValueChanged<bool> onCameraChanged;
   final bool mutedValue;
   final ValueChanged<bool>? onMutedChanged;
   final bool? speakerValue;
@@ -110,9 +110,18 @@ class _CallActionsState extends State<CallActions> {
   }
 
   @override
+  void didUpdateWidget(covariant CallActions oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.remoteVideo != widget.remoteVideo) computeDimensions();
+  }
+
+  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    computeDimensions();
+  }
 
+  computeDimensions() {
     final themeData = Theme.of(context);
 
     _inputDecorations = themeData.extension<InputDecorations>();
@@ -127,7 +136,7 @@ class _CallActionsState extends State<CallActions> {
     _dimension = min(mediaQueryData.size.width, mediaQueryData.size.height) / 5;
     if (_isOrientationPortrait) {
       _actionsDelimiterDimension = _dimension / 5;
-      if (widget.video) {
+      if (widget.remoteVideo) {
         _hangupDelimiterDimension = _actionsDelimiterDimension;
       } else {
         _hangupDelimiterDimension = _actionsDelimiterDimension * 3 + _dimension * 2;
@@ -137,12 +146,9 @@ class _CallActionsState extends State<CallActions> {
       _actionsDelimiterDimension = _dimension / 9;
       _hangupDelimiterDimension = _actionsDelimiterDimension;
       _horizontalPadding = _dimension * 3;
-      if (_keypadShow) {
-        setState(() {
-          _keypadShow = false;
-        });
-      }
+      if (_keypadShow) _keypadShow = false;
     }
+    if (mounted) setState(() {});
   }
 
   @override
@@ -202,7 +208,7 @@ class _CallActionsState extends State<CallActions> {
                 onPressed: onAcceptPressed,
                 style: style.callStart,
                 child: Icon(
-                  widget.video ? Icons.videocam : Icons.call,
+                  widget.remoteVideo ? Icons.videocam : Icons.call,
                   size: actionPadIconSize,
                 ),
               ),
@@ -226,7 +232,7 @@ class _CallActionsState extends State<CallActions> {
                       size: actionPadIconSize,
                     ),
                     Icon(
-                      widget.video ? Icons.videocam : Icons.call,
+                      widget.remoteVideo ? Icons.videocam : Icons.call,
                       size: actionPadIconSize,
                     ),
                   ],
@@ -257,7 +263,7 @@ class _CallActionsState extends State<CallActions> {
                       size: actionPadIconSize,
                     ),
                     Icon(
-                      widget.video ? Icons.videocam : Icons.call,
+                      widget.remoteVideo ? Icons.videocam : Icons.call,
                       size: actionPadIconSize,
                     ),
                   ],
@@ -350,11 +356,7 @@ class _CallActionsState extends State<CallActions> {
                 ? context.l10n.call_CallActionsTooltip_disableCamera
                 : context.l10n.call_CallActionsTooltip_enableCamera,
             child: TextButton(
-              onPressed: !widget.video
-                  ? null
-                  : onCameraChanged == null
-                      ? null
-                      : () => onCameraChanged(!widget.cameraValue),
+              onPressed: () => onCameraChanged?.call(!widget.cameraValue),
               style: !widget.cameraValue ? style.cameraActive : style.camera,
               child: Icon(
                 Icons.videocam_off,
