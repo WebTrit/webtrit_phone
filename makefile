@@ -1,7 +1,6 @@
 # Variables
 BUILD_TYPE ?= debug
 BUILD_PLATFORM ?= apk
-BUILD_FLOW ?= classic
 DART_DEFINE_FILE = --dart-define-from-file=dart_define.json
 CONFIGURATOR = dart run ../webtrit_phone_tools/bin/webtrit_phone_tools.dart
 KEYSTORES_PATH = --keystores-path=../webtrit_phone_keystores
@@ -115,17 +114,17 @@ build:
 
 ## Configure application resources
 configure:
-	$(CONFIGURATOR) configurator-resources --applicationId=$(id) $(KEYSTORES_PATH) --token=$(token) --$(BUILD_FLOW)
+	$(CONFIGURATOR) configurator-resources --applicationId=$(id) $(KEYSTORES_PATH) --token=$(token)
 	$(CONFIGURATOR) configurator-generate
 
 ## Create demo configuration
 configure-demo:
-	$(CONFIGURATOR) configurator-resources --applicationId=$(id) $(KEYSTORES_PATH) --token=$(token) --demo
+	$(CONFIGURATOR) configurator-resources --applicationId=$(id) $(KEYSTORES_PATH) --token=$(token)
 	$(CONFIGURATOR) configurator-generate
 
 ## Create classic configuration
 configure-classic:
-	$(CONFIGURATOR) configurator-resources --applicationId=$(id) $(KEYSTORES_PATH) --token=$(token) --classic
+	$(CONFIGURATOR) configurator-resources --applicationId=$(id) $(KEYSTORES_PATH) --token=$(token)
 	$(CONFIGURATOR) configurator-generate
 
 ## Create iOS build
