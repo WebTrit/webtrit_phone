@@ -1,14 +1,16 @@
+import 'package:logging/logging.dart';
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 
 import 'package:webtrit_phone/common/common.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
+import 'background_call_event_manager.dart';
 import 'background_call_event_service.dart';
 
 CallkeepBackgroundService? _callkeep;
 CallkeepConnections? _callkeepConnections;
-BackgroundCallEventService? _backgroundCallEventManager;
+BackgroundCallEventManager? _backgroundCallEventManager;
 
 RemoteConfigService? _remoteConfigService;
 
@@ -46,7 +48,7 @@ Future<void> _initializeDependencies() async {
   _callkeep ??= CallkeepBackgroundService();
   _callkeepConnections ??= CallkeepConnections();
 
-  _backgroundCallEventManager ??= BackgroundCallEventService(
+  _backgroundCallEventManager ??= BackgroundCallEventManager(
     callLogsRepository: _callLogsRepository!,
     appPreferences: _appPreferences!,
     callkeep: _callkeep!,
@@ -56,13 +58,32 @@ Future<void> _initializeDependencies() async {
   );
 }
 
+final _logger = Logger('BackgroundCallIsolate');
+
 @pragma('vm:entry-point')
 Future<void> onStart(CallkeepServiceStatus status) async {
   await _initializeDependencies();
-  await _backgroundCallEventManager?.onStart(status);
+  _logger.info('onStart');
+
+  // await _backgroundCallEventManager?.onStart(status);
 }
 
 @pragma('vm:entry-point')
 Future<void> onChangedLifecycle(CallkeepServiceStatus status) async {
-  await _backgroundCallEventManager?.onChangedLifecycle(status);
+  _logger.info('onChangedLifecycle');
+  // _backgroundCallEventManager?.close();
+  // await _backgroundCallEventManager?.onChangedLifecycle(status);
+}
+
+@pragma('vm:entry-point')
+Future<void> onPushNotificationCallback(CallkeepPushNotificationSyncStatus notificationSyncStatus) async {
+  await _initializeDependencies();
+
+  switch (notificationSyncStatus) {
+    case CallkeepPushNotificationSyncStatus.synchronizeCallStatus:
+      await _backgroundCallEventManager?.onStart();
+      throw UnimplementedError();
+    case CallkeepPushNotificationSyncStatus.releaseResources:
+      _backgroundCallEventManager?.close();
+  }
 }

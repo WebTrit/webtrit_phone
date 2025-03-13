@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 import 'package:auto_route/auto_route.dart';
@@ -15,6 +17,8 @@ import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
+
+import 'package:webtrit_phone/features/call/call.dart' as background_call_isolate show onStart, onChangedLifecycle;
 
 @RoutePage()
 class MainShell extends StatefulWidget {
@@ -56,9 +60,32 @@ class _MainShellState extends State<MainShell> {
       ),
     );
 
+    _initCallkeep(context.read<AppPreferences>());
+
     // Launch the service after user authorization if the selected incoming call type is socket-based.
     if (incomingCallType.isSocket) {
       _callkeepBackgroundService.startService();
+    }
+  }
+
+  Future<void> _initCallkeep(AppPreferences appPreferences) async {
+    if (!Platform.isAndroid) return;
+
+    final incomingCalType = appPreferences.getIncomingCallType();
+    final callkeep = CallkeepBackgroundService();
+
+    CallkeepBackgroundService.setUpServiceCallback(
+      onStart: background_call_isolate.onStart,
+      onChangedLifecycle: background_call_isolate.onChangedLifecycle,
+    );
+
+    callkeep.setUp(
+      autoStartOnBoot: incomingCalType.isSocket,
+      autoRestartOnTerminate: incomingCalType.isSocket,
+    );
+
+    if (incomingCalType.isPushNotification) {
+      callkeep.stopService();
     }
   }
 

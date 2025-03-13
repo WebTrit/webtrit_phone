@@ -25,6 +25,7 @@ class AppPermissions {
     final permissions = [
       Permission.microphone,
       Permission.camera,
+      Permission.notification,
       if (localContactsSourceTypeEnabled) Permission.contacts,
     ];
 
