@@ -180,6 +180,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   void onChange(Change<CallState> change) {
     super.onChange(change);
 
+    unawaited(callkeepConnections.setActivitySignalingStatus(state.signalingClientStatus.toCallkeepSignalingStatus()));
+
     // TODO: add detailed explanation of the following code and why it is necessary to initialize signaling client in background
     if (change.currentState.isActive != change.nextState.isActive) {
       final appLifecycleState = change.nextState.currentAppLifecycleState;

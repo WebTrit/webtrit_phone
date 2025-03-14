@@ -48,14 +48,14 @@ class SignalingManager {
 
   final List<Line?> _lines = [];
 
+  final Completer<void> _stateHandshakeCompleter = Completer<void>();
+
   WebtritSignalingClient? _client;
-  StreamSubscription<List<ConnectivityResult>>? _connectivitySubscription;
   bool _isConnected = false;
 
   // Starts the signaling service and monitors connectivity
   void launch() async {
-    await _initializeSignalClient();
-    _monitorConnectivity();
+    return _initializeSignalClient();
   }
 
   // Connects to the signaling serve
@@ -83,41 +83,26 @@ class SignalingManager {
     );
   }
 
-  void _monitorConnectivity() {
-    _connectivitySubscription = Connectivity().onConnectivityChanged.listen((List<ConnectivityResult> result) {
-      if (enableReconnect &&
-          result.isNotEmpty &&
-          result.any((connectivityResult) => connectivityResult != ConnectivityResult.none)) {
-        _reconnect();
-      }
-    });
-  }
-
-  Future<void> _reconnect() async {
-    if (_isConnected) return;
-
-    _logger.info('Reconnecting to signaling client');
-    try {
-      await _initializeSignalClient();
-      _logger.info('Reconnected successfully');
-    } catch (e) {
-      _logger.severe('Reconnection failed', e);
-    }
-  }
-
   void _handleStateHandshake(StateHandshake stateHandshake) async {
     final activeLines = stateHandshake.lines.whereType<Line>().toList();
 
-    _lines.clear();
-    _lines.addAll(activeLines);
+    _lines
+      ..clear()
+      ..addAll(activeLines);
 
     onStateHandshake?.call(activeLines);
+    _logger.info('State handshake: $stateHandshake');
+
+    if (!_stateHandshakeCompleter.isCompleted) {
+      _stateHandshakeCompleter.complete();
+    }
   }
 
   // Sends requests to decline calls.
 
-  Future<void> declineRequest(String callId) async {
-    await _handleRequest(
+  Future<void> declineRequest(String callId) {
+    _logger.info('declineRequest Declining call: $callId line: $_lines is connected: $_isConnected client: $_client');
+    return _handleRequest(
       callId,
       (lineIndex, callId, transaction) => DeclineRequest(
         transaction: transaction,
@@ -140,19 +125,37 @@ class SignalingManager {
 
   Future<void> _handleRequest(
     String callId,
-    dynamic Function(int lineIndex, String callId, String transaction) requestConstructor,
-  ) async {
-    final lineIndex = _lines.indexWhere((line) => line?.callId == callId);
-    if (lineIndex == _kUndefinedLine) {
-      _logger.warning('Call ID not found: $callId');
-      return;
+    dynamic Function(int lineIndex, String callId, String transaction) requestConstructor, {
+    Duration timeout = const Duration(seconds: 5),
+  }) async {
+    try {
+      if (!_stateHandshakeCompleter.isCompleted) {
+        await _stateHandshakeCompleter.future.timeout(
+          timeout,
+          onTimeout: () {
+            throw TimeoutException('Handshake initialization timeout after ${timeout.inSeconds}s');
+          },
+        );
+      }
+
+      final lineIndex = _lines.indexWhere((line) => line?.callId == callId);
+      if (lineIndex == _kUndefinedLine) {
+        _logger.warning('Call ID not found: $callId');
+        return;
+      }
+
+      final line = _lines[lineIndex]!;
+      final transactionId = WebtritSignalingClient.generateTransactionId();
+
+      final request = requestConstructor(lineIndex, line.callId, transactionId);
+      await _client?.execute(request);
+    } on TimeoutException catch (e) {
+      _logger.severe('Timeout during request handling: $e');
+      onError?.call(e, null);
+    } catch (error, stackTrace) {
+      _logger.severe('Unexpected error in request handling', error, stackTrace);
+      onError?.call(error, stackTrace);
     }
-
-    final line = _lines[lineIndex];
-    final transactionId = WebtritSignalingClient.generateTransactionId();
-
-    final request = requestConstructor(lineIndex, line!.callId, transactionId);
-    await _client?.execute(request);
   }
 
   void handleSignalingEvent(Event event) {
@@ -183,13 +186,6 @@ class SignalingManager {
   Future<void> close() async {
     _logger.info('Closing service');
 
-    try {
-      await _client?.disconnect();
-      await _connectivitySubscription?.cancel();
-
-      _isConnected = false;
-    } catch (e) {
-      _logger.severe('Error closing service', e);
-    }
+    return _client?.disconnect();
   }
 }

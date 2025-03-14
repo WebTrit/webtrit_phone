@@ -61,29 +61,15 @@ Future<void> _initializeDependencies() async {
 final _logger = Logger('BackgroundCallIsolate');
 
 @pragma('vm:entry-point')
-Future<void> onStart(CallkeepServiceStatus status) async {
-  await _initializeDependencies();
-  _logger.info('onStart');
-
-  // await _backgroundCallEventManager?.onStart(status);
-}
-
-@pragma('vm:entry-point')
-Future<void> onChangedLifecycle(CallkeepServiceStatus status) async {
-  _logger.info('onChangedLifecycle');
-  // _backgroundCallEventManager?.close();
-  // await _backgroundCallEventManager?.onChangedLifecycle(status);
-}
-
-@pragma('vm:entry-point')
-Future<void> onPushNotificationCallback(CallkeepPushNotificationSyncStatus notificationSyncStatus) async {
+Future<void> onPushNotificationCallback(CallkeepPushNotificationSyncStatus status) async {
   await _initializeDependencies();
 
-  switch (notificationSyncStatus) {
+  _logger.info('onPushNotificationCallback: $status');
+
+  switch (status) {
     case CallkeepPushNotificationSyncStatus.synchronizeCallStatus:
       await _backgroundCallEventManager?.onStart();
-      throw UnimplementedError();
     case CallkeepPushNotificationSyncStatus.releaseResources:
-      _backgroundCallEventManager?.close();
+      await _backgroundCallEventManager?.close();
   }
 }

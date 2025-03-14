@@ -74,10 +74,10 @@ class _MainShellState extends State<MainShell> {
     final incomingCalType = appPreferences.getIncomingCallType();
     final callkeep = CallkeepBackgroundService();
 
-    CallkeepBackgroundService.setUpServiceCallback(
-      onStart: background_call_isolate.onStart,
-      onChangedLifecycle: background_call_isolate.onChangedLifecycle,
-    );
+    // CallkeepBackgroundService.setUpServiceCallback(
+    //   onStart: background_call_isolate.onStart,
+    //   onChangedLifecycle: background_call_isolate.onChangedLifecycle,
+    // );
 
     callkeep.setUp(
       autoStartOnBoot: incomingCalType.isSocket,

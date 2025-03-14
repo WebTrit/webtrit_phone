@@ -20,6 +20,7 @@ typedef EventHandler = void Function(Event event);
 typedef ErrorHandler = void Function(Object error, StackTrace? stackTrace);
 typedef DisconnectHandler = void Function(int? code, String? reason);
 
+
 class WebtritSignalingClient {
   static final _callIdRandom = Random();
   static const _callIdChars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
