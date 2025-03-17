@@ -153,7 +153,7 @@ generate-package-config:
 
 ## Add package_rename to dev_dependencies and run it
 rename-package:
-	dart pub add package_rename --dev
+	dart pub add package_rename:1.8.0 --dev
 	dart run package_rename --path=$(FLUTTER_RENAME_PACKAGE_CONFIG)
 
 
