@@ -20,7 +20,7 @@ import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/push_notification/push_notifications.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
-import 'package:webtrit_phone/features/call/call.dart' as background_call_isolate show onStart, onChangedLifecycle;
+import 'package:webtrit_phone/features/call/call.dart' show onPushNotificationCallback;
 
 import 'firebase_options.dart';
 
@@ -89,22 +89,7 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
 Future<void> _initCallkeep(AppPreferences appPreferences) async {
   if (!Platform.isAndroid) return;
 
-  final incomingCalType = appPreferences.getIncomingCallType();
-  final callkeep = CallkeepBackgroundService();
-
-  CallkeepBackgroundService.setUpServiceCallback(
-    onStart: background_call_isolate.onStart,
-    onChangedLifecycle: background_call_isolate.onChangedLifecycle,
-  );
-
-  callkeep.setUp(
-    autoStartOnBoot: incomingCalType.isSocket,
-    autoRestartOnTerminate: incomingCalType.isSocket,
-  );
-
-  if (incomingCalType.isPushNotification) {
-    callkeep.stopService();
-  }
+  CallkeepBackgroundService.initializePushNotificationCallback(onPushNotificationCallback);
 }
 
 /// Initializes Firebase for background services. This initialization must be called in an isolate
@@ -177,7 +162,12 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   _dHandleInspectPushNotification(message.data, true);
 
   if (appNotification is PendingCallNotification && Platform.isAndroid) {
-    CallkeepBackgroundService().startService(data: message.data);
+    Callkeep().reportNewIncomingCall(
+      appNotification.call.id,
+      CallkeepHandle.number(appNotification.call.handle),
+      displayName: appNotification.call.displayName,
+      hasVideo: appNotification.call.hasVideo,
+    );
   }
 
   if (appNotification is MessageNotification) {

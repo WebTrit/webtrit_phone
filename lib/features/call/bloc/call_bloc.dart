@@ -2239,7 +2239,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       ));
     }
 
-    for (final activeLine in stateHandshake.lines.whereType<Line>()) {
+    final lines = stateHandshake.lines.whereType<Line>();
+    final localConnection = await callkeepConnections.getConnections();
+
+    for (final activeLine in lines) {
       // Get the first call event from the call logs, if any
       final callEvent = activeLine.callLogs.whereType<CallEventLog>().map((log) => log.callEvent).firstOrNull;
 
@@ -2247,6 +2250,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         // Obtain the corresponding Callkeep connection for the line.
         // Callkeep maintains connection states even if the app's lifecycle has ended.
         final connection = await callkeepConnections.getConnection(callEvent.callId);
+
+        _logger.info('Signaling state: $callEvent, Callkeep connection state: ${connection?.state}');
 
         // Check if the Callkeep connection exists and its state is `stateDisconnected`.
         // Indicates that the call has been terminated by the user or system (e.g., due to connectivity issues).
@@ -2272,6 +2277,12 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         if (singleCallLog is CallEventLog && singleCallLog.callEvent is IncomingCallEvent) {
           _onSignalingEvent(singleCallLog.callEvent as IncomingCallEvent);
         }
+      }
+    }
+    for (var connection in localConnection) {
+      if (!lines.map((e) => e.callId).contains(connection.callId)) {
+        _logger.info('Callkeep connection not found in signaling state, ending call: ${connection.callId}');
+        await callkeep.endCall(connection.callId);
       }
     }
   }
