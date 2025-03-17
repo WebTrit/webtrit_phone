@@ -259,27 +259,39 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     }
   }
 
-  Future<RTCPeerConnection?> _peerConnectionRetrieve(String callId) async {
+  Future<RTCPeerConnection?> _peerConnectionRetrieve(String callId, [bool allowWaiting = true]) async {
     final peerConnectionCompleter = _peerConnectionCompleters[callId];
     if (peerConnectionCompleter == null) {
       _logger.finer(() => 'Retrieve peerConnection completer with callId: $callId - null');
       return null;
-    } else {
-      try {
-        _logger.finer(() => 'Retrieve peerConnection completer with callId: $callId - await');
-        // Timeout to handle scenarios where `complete` is never called.
-        // This can occur, for example, when a push is received for an incorrect account
-        // after a forced logout.
-        final peerConnection = await peerConnectionCompleter.future.timeout(
-          kPeerConnectionRetrieveTimeout,
-          onTimeout: () => throw TimeoutException('Timeout while retrieving peer connection for callId: $callId'),
-        );
-        _logger.finer(() => 'Retrieve peerConnection completer with callId: $callId - value');
-        return peerConnection;
-      } catch (e, stackTrace) {
-        _logger.finer(() => 'Retrieve peerConnection completer with uuid: $callId - error', e, stackTrace);
-        return null;
+    }
+
+    try {
+      if (!peerConnectionCompleter.isCompleted) {
+        if (allowWaiting) {
+          _logger.finer(() => 'Retrieve peerConnection completer with callId: $callId - waiting');
+        } else {
+          _logger.finer(() => 'Retrieve peerConnection completer with callId: $callId - cancelling');
+          throw UncompletedPeerConnectionException(
+              'Peer connection completer is not completed and waiting is not allowed');
+        }
       }
+
+      _logger.finer(() => 'Retrieve peerConnection completer with callId: $callId - awaiting with timeout');
+
+      final peerConnection = await peerConnectionCompleter.future.timeout(
+        kPeerConnectionRetrieveTimeout,
+        onTimeout: () => throw TimeoutException('Timeout while retrieving peer connection for callId: $callId'),
+      );
+
+      _logger.finer(() => 'Retrieve peerConnection completer with callId: $callId - value received');
+      return peerConnection;
+    } on UncompletedPeerConnectionException catch (e) {
+      _logger.info('Uncompleted peer connection completer with callId: $callId - error', e);
+      return null;
+    } catch (e, stackTrace) {
+      _logger.finer(() => 'Retrieve peerConnection completer with callId: $callId - error', e, stackTrace);
+      return null;
     }
   }
 
@@ -922,7 +934,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
           if (code == SignalingResponseCode.requestTerminated) endReason = CallkeepEndCallReason.unanswered;
         }
 
-        await (await _peerConnectionRetrieve(event.callId))?.close();
+        await (await _peerConnectionRetrieve(event.callId, false))?.close();
         await call.localStream?.dispose();
 
         emit(state.copyWithPopActiveCall(event.callId));
