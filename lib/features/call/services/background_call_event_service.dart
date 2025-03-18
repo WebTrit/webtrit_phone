@@ -13,8 +13,6 @@ import 'package:webtrit_phone/repositories/repositories.dart';
 
 import '../models/models.dart';
 
-const _noActiveLines = 0;
-
 final _logger = Logger('BackgroundCallEventService');
 
 class BackgroundCallEventService implements CallkeepBackgroundServiceDelegate {
@@ -51,10 +49,10 @@ class BackgroundCallEventService implements CallkeepBackgroundServiceDelegate {
       certificates: certificates,
       onDisconnect: _handleSignalingDisconnect,
       onError: _handleSignalingError,
-      onHangupCallEvent: _handleHangupCall,
-      onIncomingCallEvent: _handleIncomingCall,
-      onUnregisteredEvent: _handleUnregisteredEvent,
-      onStateHandshake: _onStateHandshake,
+      onHangupCall: _handleHangupCall,
+      onIncomingCall: _handleIncomingCall,
+      onUnregistered: _handleUnregisteredEvent,
+      onNoActiveLines: _handleAvoidLines,
     );
   }
 
@@ -74,6 +72,10 @@ class BackgroundCallEventService implements CallkeepBackgroundServiceDelegate {
       // Connects to the signaling serve if not connected yet
       _signalingManager.launch();
     }
+  }
+
+  void _handleAvoidLines() async {
+    await _callkeep.endAllBackgroundCalls();
   }
 
   Future<void> onChangedLifecycle(CallkeepServiceStatus status) async {
@@ -153,62 +155,13 @@ class BackgroundCallEventService implements CallkeepBackgroundServiceDelegate {
     }
   }
 
-  void _onStateHandshake(List<Line> lines) async {
-    try {
-      // If there are no active lines (e.g., the caller canceled the call),
-      // and the call was triggered by a push notification, stop the signaling
-      // and terminate the isolate to free resources.
-      if (lines.length == _noActiveLines && _incomingCallType.isPushNotification) {
-        await _stopIsolate();
-      }
-
-      for (final activeLine in lines.whereType<Line>()) {
-        // Retrieve the most recent call event from the core logs for the current line.
-        final callEvent = activeLine.callLogs.whereType<CallEventLog>().map((log) => log.callEvent).firstOrNull;
-
-        if (callEvent != null) {
-          // Obtain the corresponding Callkeep connection for the line.
-          // Callkeep maintains connection states even if the app's lifecycle has ended.
-          final connection = await _callkeepConnections.getConnection(callEvent.callId);
-
-          // Check if the Callkeep connection exists and its state is `stateDisconnected`.
-          // Indicates that the call has been terminated by the user or system (e.g., due to connectivity issues).
-          // Synchronize the signaling state with the local state for such scenarios.
-          if (connection?.state == CallkeepConnectionState.stateDisconnected) {
-            // Handle outgoing or accepted calls. If the event is `AcceptedEvent` or `ProceedingEvent`,
-            // initiate a hang-up request to align the signaling state.
-            if (callEvent is AcceptedEvent || callEvent is ProceedingEvent) {
-              await _signalingManager.hangUpRequest(callEvent.callId);
-              return;
-            }
-
-            // Handle incoming calls. If the event is `IncomingCallEvent`, send a decline request to update the signaling state accordingly.
-            if (callEvent is IncomingCallEvent) {
-              await _signalingManager.declineRequest(callEvent.callId);
-
-              return;
-            }
-          }
-        }
-
-        // Process all remaining call events for the line, regardless of the connection state.
-        // This includes events where the connection is `stateDisconnected`.
-        for (var event in activeLine.callLogs.whereType<CallEventLog>().map((log) => log.callEvent)) {
-          _signalingManager.handleSignalingEvent(event);
-        }
-      }
-    } catch (e) {
-      _handleExceptions(e);
-    }
-  }
-
   @override
   void performServiceAnswerCall(String callId) {}
 
   @override
   void performServiceEndCall(String callId) async {
     try {
-      await _signalingManager.declineRequest(callId);
+      await _signalingManager.declineCall(callId);
 
       if (_incomingCallType.isPushNotification) {
         await _stopIsolate();
@@ -240,7 +193,7 @@ class BackgroundCallEventService implements CallkeepBackgroundServiceDelegate {
   }
 
   Future<void> _stopIsolate() async {
-    await _signalingManager.close();
+    await _signalingManager.dispose();
     await _callkeep.stopService();
   }
 
