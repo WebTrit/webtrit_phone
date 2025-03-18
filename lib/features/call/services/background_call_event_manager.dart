@@ -1,0 +1,123 @@
+import 'dart:async';
+
+import 'package:logging/logging.dart';
+
+import 'package:ssl_certificates/ssl_certificates.dart';
+import 'package:webtrit_callkeep/webtrit_callkeep.dart';
+import 'package:webtrit_signaling/webtrit_signaling.dart';
+
+import 'package:webtrit_phone/common/common.dart';
+import 'package:webtrit_phone/data/data.dart';
+import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/repositories/repositories.dart';
+
+final _logger = Logger('BackgroundCallEventService');
+
+class BackgroundCallEventManager implements CallkeepBackgroundServiceDelegate {
+  BackgroundCallEventManager({
+    required CallLogsRepository callLogsRepository,
+    required CallkeepBackgroundService callkeep,
+    required SecureStorage storage,
+    required TrustedCertificates certificates,
+  })  : _callLogsRepository = callLogsRepository,
+        _callkeep = callkeep {
+    _initSignalingManager(storage, certificates);
+    _callkeep.setBackgroundServiceDelegate(this);
+  }
+
+  final CallLogsRepository _callLogsRepository;
+  final CallkeepBackgroundService _callkeep;
+
+  late final SignalingManager _signalingManager;
+
+  void _initSignalingManager(SecureStorage storage, TrustedCertificates certificates) {
+    _signalingManager = SignalingManager(
+      coreUrl: storage.readCoreUrl() ?? '',
+      tenantId: storage.readTenantId() ?? '',
+      token: storage.readToken() ?? '',
+      certificates: certificates,
+      onError: _handleSignalingError,
+      onHangupCall: _handleHangupCall,
+      onUnregistered: _handleUnregisteredEvent,
+      onNoActiveLines: _handleAvoidLines,
+    );
+  }
+
+  Future<void> close() async {
+    return _signalingManager.dispose();
+  }
+
+  // Handles the service startup. This can occur under several scenarios:
+  // - Launching from an FCM isolate.
+  // - User enabling the socket type.
+  // - Service being restarted.
+  // - Automatic start during system boot.
+  Future<void> onStart() async {
+    _logger.info('Starting background call event service');
+    return _signalingManager.launch();
+  }
+
+  void _handleHangupCall(HangupEvent event) async {
+    try {
+      _logger.info('Ending call: ${event.callId}');
+      await _callkeep.endBackgroundCall(event.callId);
+    } catch (e) {
+      _handleExceptions(e);
+    }
+  }
+
+  void _handleSignalingError(error, [StackTrace? stackTrace]) async {
+    try {
+      await _callkeep.endAllBackgroundCalls();
+    } catch (e) {
+      _handleExceptions(e);
+    }
+  }
+
+  void _handleAvoidLines() async {
+    await _callkeep.endAllBackgroundCalls();
+  }
+
+  void _handleUnregisteredEvent(UnregisteredEvent event) async {
+    try {
+      await _callkeep.endAllBackgroundCalls();
+    } catch (e) {
+      _handleExceptions(e);
+    }
+  }
+
+  @override
+  void performServiceAnswerCall(String callId) async {
+    return _signalingManager.acceptCall(callId);
+  }
+
+  @override
+  void performServiceEndCall(String callId) async {
+    return _signalingManager.declineCall(callId);
+  }
+
+// TODO (Serdun): Rename this callback to align with naming conventions.
+  @override
+  Future<void> endCallReceived(
+    String callId,
+    String number,
+    DateTime createdTime,
+    DateTime? acceptedTime,
+    DateTime? hungUpTime, {
+    bool video = false,
+  }) async {
+    NewCall call = (
+      direction: CallDirection.incoming,
+      number: number,
+      video: video,
+      createdTime: createdTime,
+      acceptedTime: acceptedTime,
+      hungUpTime: hungUpTime,
+    );
+    await _callLogsRepository.add(call);
+  }
+
+  void _handleExceptions(e) {
+    _logger.severe(e);
+  }
+}
