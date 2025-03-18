@@ -11,10 +11,6 @@ import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
-import '../models/models.dart';
-
-const _noActiveLines = 0;
-
 final _logger = Logger('BackgroundCallEventService');
 
 class BackgroundCallEventManager implements CallkeepBackgroundServiceDelegate {
@@ -92,7 +88,9 @@ class BackgroundCallEventManager implements CallkeepBackgroundServiceDelegate {
   }
 
   @override
-  void performServiceAnswerCall(String callId) {}
+  void performServiceAnswerCall(String callId) async {
+    return _signalingManager.acceptCall(callId);
+  }
 
   @override
   void performServiceEndCall(String callId) async {

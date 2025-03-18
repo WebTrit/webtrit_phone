@@ -205,25 +205,22 @@ class SignalingManager {
   Future<void> hangupCall(String callId) async =>
       _sendRequest(callId, (line, id, tx) => HangupRequest(transaction: tx, line: line, callId: id));
 
+  Future<void> acceptCall(String callId) async =>
+      _sendRequest(callId, (line, id, tx) => AcceptRequest(transaction: tx, line: line, callId: id, jsep: {}));
+
   Future<void> _sendRequest(
     String callId,
     Request Function(int line, String callId, String tx) requestBuilder,
   ) async {
-    try {
-      await _handshakeCompleter.future.timeout(const Duration(seconds: 5));
-      final lineIndex = _lines.indexWhere((line) => line.callId == callId);
-      if (lineIndex == -1) return;
+    final lineIndex = _lines.indexWhere((line) => line.callId == callId);
+    if (lineIndex == -1) return;
 
-      final request = requestBuilder(
-        lineIndex,
-        callId,
-        WebtritSignalingClient.generateTransactionId(),
-      );
-      await _client?.execute(request);
-    } catch (e, stack) {
-      _logger.severe('Request failed', e, stack);
-      onError?.call(e, stack);
-    }
+    final request = requestBuilder(
+      lineIndex,
+      callId,
+      WebtritSignalingClient.generateTransactionId(),
+    );
+    await _client?.execute(request);
   }
 
   void _handleEvent(Event event) {
