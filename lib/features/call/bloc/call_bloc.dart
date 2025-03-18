@@ -2239,7 +2239,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       ));
     }
 
-    for (final activeLine in stateHandshake.lines.whereType<Line>()) {
+    final lines = stateHandshake.lines.whereType<Line>();
+    final localConnections = await callkeepConnections.getConnections();
+
+    for (final activeLine in lines) {
       // Get the first call event from the call logs, if any
       final callEvent = activeLine.callLogs.whereType<CallEventLog>().map((log) => log.callEvent).firstOrNull;
 
@@ -2272,6 +2275,14 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         if (singleCallLog is CallEventLog && singleCallLog.callEvent is IncomingCallEvent) {
           _onSignalingEvent(singleCallLog.callEvent as IncomingCallEvent);
         }
+      }
+    }
+
+    // Synchronize the signaling state with the local state for calls.
+    // If a local connection exists that is not present in the signaling state, end the call to ensure consistency between the local and signaling states.
+    for (var connection in localConnections) {
+      if (!lines.map((e) => e.callId).contains(connection.callId)) {
+        await callkeep.endCall(connection.callId);
       }
     }
   }
