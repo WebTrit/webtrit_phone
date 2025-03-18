@@ -88,7 +88,10 @@ class BackgroundCallEventManager implements CallkeepBackgroundServiceDelegate {
 
   @override
   void performServiceAnswerCall(String callId) async {
-    return _signalingManager.acceptCall(callId);
+    // Check if the device is connected to the network only then proceed
+    if (!(await _signalingManager.hasNetworkConnection())) {
+      throw Exception('Not connected');
+    }
   }
 
   @override
