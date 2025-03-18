@@ -13,8 +13,8 @@ import 'package:webtrit_phone/repositories/repositories.dart';
 
 final _logger = Logger('BackgroundCallEventService');
 
-class BackgroundCallEventManager implements CallkeepBackgroundServiceDelegate {
-  BackgroundCallEventManager({
+class BackgroundIncomingCallEventManager implements CallkeepBackgroundServiceDelegate {
+  BackgroundIncomingCallEventManager({
     required CallLogsRepository callLogsRepository,
     required CallkeepBackgroundService callkeep,
     required SecureStorage storage,
