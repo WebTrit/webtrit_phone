@@ -7,8 +7,6 @@ import 'package:ssl_certificates/ssl_certificates.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 import 'package:webtrit_signaling/webtrit_signaling.dart';
 
-const int _kUndefinedLine = -1;
-
 final _logger = Logger('SignalingManager');
 
 /// The `SignalingManager` class manages signaling communication for real-time calls.
@@ -21,49 +19,46 @@ class SignalingManager {
     required this.coreUrl,
     required this.tenantId,
     required this.token,
-    this.onIncomingCallEvent,
-    this.onHangupCallEvent,
-    this.onUnregisteredEvent,
-    this.onStateHandshake,
+    required TrustedCertificates certificates,
+    this.onIncomingCall,
+    this.onHangupCall,
+    this.onUnregistered,
+    this.onHandshake,
+    this.onNoActiveLines,
     this.onError,
     this.onDisconnect,
     this.enableReconnect = false,
-    required TrustedCertificates certificates,
   }) : _certificates = certificates;
 
   final TrustedCertificates _certificates;
-
   final bool enableReconnect;
-
   final String coreUrl;
   final String tenantId;
   final String token;
 
-  final Function(IncomingCallEvent event)? onIncomingCallEvent;
-  final Function(HangupEvent event)? onHangupCallEvent;
-  final Function(UnregisteredEvent event)? onUnregisteredEvent;
-  final Function(Object error, StackTrace? stackTrace)? onError;
-  final Function(int? code, String? reason)? onDisconnect;
-  final Function(List<Line> lines)? onStateHandshake;
+  final void Function(IncomingCallEvent)? onIncomingCall;
+  final void Function(HangupEvent)? onHangupCall;
+  final void Function(UnregisteredEvent)? onUnregistered;
+  final void Function(List<Line>)? onHandshake;
+  final void Function(Object error, StackTrace? stack)? onError;
+  final void Function()? onNoActiveLines;
+  final void Function(int? code, String? reason)? onDisconnect;
 
-  final List<Line?> _lines = [];
+  final List<Line> _lines = [];
+  final Completer<void> _handshakeCompleter = Completer();
 
   WebtritSignalingClient? _client;
   StreamSubscription<List<ConnectivityResult>>? _connectivitySubscription;
   bool _isConnected = false;
 
-  // Starts the signaling service and monitors connectivity
-  void launch() async {
-    await _initializeSignalClient();
+  Future<void> launch() async {
+    await _connectClient();
     _monitorConnectivity();
   }
 
-  // Connects to the signaling serve
-  Future<void> _initializeSignalClient() async {
-    if (_isConnected) {
-      _logger.info('Already connected. Skipping initialization.');
-      return;
-    }
+  Future<void> _connectClient() async {
+    _logger.info('Connecting to signaling server...');
+    if (_isConnected) return;
 
     _client = await WebtritSignalingClient.connect(
       WebtritSignalingUtils.parseCoreUrlToSignalingUrl(coreUrl),
@@ -76,19 +71,80 @@ class SignalingManager {
     _isConnected = true;
 
     _client?.listen(
-      onStateHandshake: _handleStateHandshake,
-      onEvent: handleSignalingEvent,
-      onError: _handleSignalingError,
-      onDisconnect: _handleSignalingDisconnect,
+      onStateHandshake: _handleHandshake,
+      onEvent: _handleEvent,
+      onError: _handleError,
+      onDisconnect: _handleDisconnect,
     );
   }
 
+  void _handleHandshake(StateHandshake handshake) {
+    _lines
+      ..clear()
+      ..addAll(handshake.lines.whereType<Line>());
+
+    if (_lines.isEmpty) {
+      return onNoActiveLines?.call();
+    }
+
+    try {
+      for (final activeLine in _lines.whereType<Line>()) {
+        // Retrieve the most recent call event from the core logs for the current line.
+        final callEvent = activeLine.callLogs.whereType<CallEventLog>().map((log) => log.callEvent).firstOrNull;
+
+        if (callEvent != null) {
+          if (callEvent is IncomingCallEvent) {
+            onIncomingCall?.call(callEvent);
+            return;
+          }
+        } else {
+          _logger.info('No call event found');
+        }
+      }
+    } catch (e) {
+      _logger.severe('Failed to handle handshake', e);
+    }
+
+    if (!_handshakeCompleter.isCompleted) _handshakeCompleter.complete();
+
+    _logger.info('Handshake completed: $_lines');
+  }
+
   void _monitorConnectivity() {
-    _connectivitySubscription = Connectivity().onConnectivityChanged.listen((List<ConnectivityResult> result) {
-      if (enableReconnect &&
-          result.isNotEmpty &&
-          result.any((connectivityResult) => connectivityResult != ConnectivityResult.none)) {
-        _reconnect();
+    _logger.info('Monitoring connectivity...');
+
+    Timer? connectivityTimeout;
+    int connectivityNoneCounter = 0;
+    const int maxConnectivityNoneRepeats = 3;
+
+    _connectivitySubscription = Connectivity().onConnectivityChanged.listen((results) async {
+      _logger.info('Connectivity changed: $results');
+
+      connectivityTimeout?.cancel();
+
+      if (results.any((r) => r == ConnectivityResult.none)) {
+        connectivityNoneCounter++;
+        _logger.warning('No internet connection detected ($connectivityNoneCounter/$maxConnectivityNoneRepeats)');
+
+        if (connectivityNoneCounter >= maxConnectivityNoneRepeats) {
+          _logger.severe('Max connectivity loss reached');
+          onError?.call('Max connectivity loss reached', null);
+          connectivityNoneCounter = 0;
+          return;
+        }
+
+        connectivityTimeout = Timer(const Duration(seconds: 5), () {
+          if (results.any((r) => r == ConnectivityResult.none)) {
+            _logger.severe('Internet connection not restored within timeout');
+            onError?.call('No internet connection', null);
+          }
+        });
+      } else {
+        connectivityNoneCounter = 0;
+
+        if (enableReconnect) {
+          await _reconnect();
+        }
       }
     });
   }
@@ -96,100 +152,67 @@ class SignalingManager {
   Future<void> _reconnect() async {
     if (_isConnected) return;
 
-    _logger.info('Reconnecting to signaling client');
+    _logger.info('Attempting to reconnect...');
     try {
-      await _initializeSignalClient();
+      await _connectClient();
       _logger.info('Reconnected successfully');
-    } catch (e) {
-      _logger.severe('Reconnection failed', e);
+    } catch (e, stack) {
+      _logger.severe('Failed to reconnect', e, stack);
+      onError?.call(e, stack);
     }
   }
 
-  void _handleStateHandshake(StateHandshake stateHandshake) async {
-    final activeLines = stateHandshake.lines.whereType<Line>().toList();
+  Future<void> declineCall(String callId) async =>
+      _sendRequest(callId, (line, id, tx) => DeclineRequest(transaction: tx, line: line, callId: id));
 
-    _lines.clear();
-    _lines.addAll(activeLines);
+  Future<void> hangupCall(String callId) async =>
+      _sendRequest(callId, (line, id, tx) => HangupRequest(transaction: tx, line: line, callId: id));
 
-    onStateHandshake?.call(activeLines);
-  }
+  Future<void> acceptCall(String callId) async =>
+      _sendRequest(callId, (line, id, tx) => AcceptRequest(transaction: tx, line: line, callId: id, jsep: {}));
 
-  // Sends requests to decline calls.
-
-  Future<void> declineRequest(String callId) async {
-    await _handleRequest(
-      callId,
-      (lineIndex, callId, transaction) => DeclineRequest(
-        transaction: transaction,
-        line: lineIndex,
-        callId: callId,
-      ),
-    );
-  }
-
-  Future<void> hangUpRequest(String callId) async {
-    await _handleRequest(
-      callId,
-      (lineIndex, callId, transaction) => HangupRequest(
-        transaction: transaction,
-        line: lineIndex,
-        callId: callId,
-      ),
-    );
-  }
-
-  Future<void> _handleRequest(
+  Future<void> _sendRequest(
     String callId,
-    dynamic Function(int lineIndex, String callId, String transaction) requestConstructor,
+    Request Function(int line, String callId, String tx) requestBuilder,
   ) async {
-    final lineIndex = _lines.indexWhere((line) => line?.callId == callId);
-    if (lineIndex == _kUndefinedLine) {
-      _logger.warning('Call ID not found: $callId');
-      return;
-    }
+    final lineIndex = _lines.indexWhere((line) => line.callId == callId);
+    if (lineIndex == -1) return;
 
-    final line = _lines[lineIndex];
-    final transactionId = WebtritSignalingClient.generateTransactionId();
-
-    final request = requestConstructor(lineIndex, line!.callId, transactionId);
+    final request = requestBuilder(
+      lineIndex,
+      callId,
+      WebtritSignalingClient.generateTransactionId(),
+    );
     await _client?.execute(request);
   }
 
-  void handleSignalingEvent(Event event) {
-    _logger.info('Handling event: $event');
-
-    if (event is IncomingCallEvent) {
-      onIncomingCallEvent?.call(event);
-    } else if (event is HangupEvent) {
-      onHangupCallEvent?.call(event);
-    } else if (event is UnregisteredEvent) {
-      onUnregisteredEvent?.call(event);
-    } else {
-      _logger.warning('Unhandled event: $event');
+  void _handleEvent(Event event) {
+    switch (event) {
+      case IncomingCallEvent():
+        onIncomingCall?.call(event);
+        break;
+      case HangupEvent _:
+        onHangupCall?.call(event);
+        break;
+      case UnregisteredEvent():
+        onUnregistered?.call(event);
+        break;
     }
   }
 
-  void _handleSignalingError(error, [StackTrace? stackTrace]) {
-    _logger.severe('Signaling error', error, stackTrace);
-    onError?.call(error, stackTrace);
+  void _handleError(Object error, StackTrace? stack) {
+    _logger.severe('Signaling error occurred', error, stack);
+    onError?.call(error, stack);
   }
 
-  void _handleSignalingDisconnect(int? code, String? reason) {
-    onDisconnect?.call(code, reason);
+  void _handleDisconnect(int? code, String? reason) {
     _isConnected = false;
+    onDisconnect?.call(code, reason);
   }
 
-  //  Cleans up resources and disconnects the client.
-  Future<void> close() async {
-    _logger.info('Closing service');
-
-    try {
-      await _client?.disconnect();
-      await _connectivitySubscription?.cancel();
-
-      _isConnected = false;
-    } catch (e) {
-      _logger.severe('Error closing service', e);
-    }
+  Future<void> dispose() async {
+    await _connectivitySubscription?.cancel();
+    await _client?.disconnect();
+    _isConnected = false;
   }
 }
