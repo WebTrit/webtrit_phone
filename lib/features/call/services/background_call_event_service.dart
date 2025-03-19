@@ -62,7 +62,7 @@ class BackgroundCallEventService implements CallkeepBackgroundServiceDelegate {
     _logger.info('onStart: $status');
 
     final isBackground = status.lifecycle == CallkeepLifecycleType.onStop ||
-        status.lifecycle == CallkeepLifecycleType.onAny ||
+        status.lifecycle == CallkeepLifecycleType.onPause ||
         status.lifecycle == CallkeepLifecycleType.onDestroy;
 
     if (isBackground) {
@@ -77,9 +77,7 @@ class BackgroundCallEventService implements CallkeepBackgroundServiceDelegate {
 
   Future<void> onChangedLifecycle(CallkeepServiceStatus status) async {
     try {
-      _logger.info('onChangedLifecycle: $status');
-
-      if (status.lifecycle == CallkeepLifecycleType.onStop && !status.activeCalls) {
+      if (status.lifecycle == CallkeepLifecycleType.onStop) {
         _signalingManager.launch();
       }
     } catch (e) {

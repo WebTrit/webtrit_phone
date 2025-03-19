@@ -187,6 +187,7 @@ class SignalingManager {
   }
 
   void _handleEvent(Event event) {
+    _logger.info('Received event: $event');
     switch (event) {
       case IncomingCallEvent():
         onIncomingCall?.call(event);
@@ -201,11 +202,13 @@ class SignalingManager {
   }
 
   void _handleDisconnect(int? code, String? reason) {
+    _logger.warning('Disconnected from signaling server: $code, $reason');
     _isConnected = false;
     onDisconnect?.call(code, reason);
   }
 
   Future<void> dispose() async {
+    _logger.info('Disposing signaling manager...');
     await _connectivitySubscription?.cancel();
     await _client?.disconnect();
     _isConnected = false;
