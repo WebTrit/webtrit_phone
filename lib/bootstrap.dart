@@ -20,7 +20,7 @@ import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/push_notification/push_notifications.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
-import 'package:webtrit_phone/features/call/call.dart' show onPushNotificationCallback;
+import 'package:webtrit_phone/features/call/call.dart' show onPushNotificationCallback, onStart, onChangedLifecycle;
 
 import 'firebase_options.dart';
 
@@ -89,7 +89,14 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
 Future<void> _initCallkeep(AppPreferences appPreferences) async {
   if (!Platform.isAndroid) return;
 
+  CallkeepBackgroundService.setUpServiceCallback(
+    onStart: onStart,
+    onChangedLifecycle: onChangedLifecycle,
+  );
+
   CallkeepBackgroundService.initializePushNotificationCallback(onPushNotificationCallback);
+
+  CallkeepBackgroundService().setUp(autoStartOnBoot: true, autoRestartOnTerminate: true);
 }
 
 /// Initializes Firebase for background services. This initialization must be called in an isolate

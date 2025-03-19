@@ -30,7 +30,6 @@ class NetworkCubit extends Cubit<NetworkState> {
   }
 
   Future<void> selectIncomingCallType(IncomingCallTypeModel selectedTypeModel) async {
-    await _setUpForegroundServiceConfiguration(selectedTypeModel.incomingCallType);
     await _appPreferences.setIncomingCallType(selectedTypeModel.incomingCallType);
 
     switch (selectedTypeModel.incomingCallType) {
@@ -43,12 +42,5 @@ class NetworkCubit extends Cubit<NetworkState> {
     }
 
     _initializeActiveIncomingType();
-  }
-
-  Future<void> _setUpForegroundServiceConfiguration(IncomingCallType incomingCallType) async {
-    await _callkeepBackgroundService.setUp(
-      autoStartOnBoot: incomingCallType.isSocket,
-      autoRestartOnTerminate: incomingCallType.isSocket,
-    );
   }
 }

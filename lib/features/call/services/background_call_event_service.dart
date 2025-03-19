@@ -38,8 +38,6 @@ class BackgroundCallEventService implements CallkeepBackgroundServiceDelegate {
 
   late final SignalingManager _signalingManager;
 
-  IncomingCallType get _incomingCallType => _appPreferences.getIncomingCallType();
-
   void _initSignalingManager(SecureStorage storage, TrustedCertificates certificates) {
     _signalingManager = SignalingManager(
       coreUrl: storage.readCoreUrl() ?? '',
@@ -57,7 +55,6 @@ class BackgroundCallEventService implements CallkeepBackgroundServiceDelegate {
   }
 
   // Handles the service startup. This can occur under several scenarios:
-  // - Launching from an FCM isolate.
   // - User enabling the socket type.
   // - Service being restarted.
   // - Automatic start during system boot.
@@ -82,16 +79,8 @@ class BackgroundCallEventService implements CallkeepBackgroundServiceDelegate {
     try {
       _logger.info('onChangedLifecycle: $status');
 
-      // [Socket]
-      // If the app is hidden and there are no active calls, launch the signaling manager in the background.
       if (status.lifecycle == CallkeepLifecycleType.onStop && !status.activeCalls) {
         _signalingManager.launch();
-      }
-
-      // [Push Notifications]
-      // Stop the foreground service when the app is resumed. Push notifications will handle incoming calls in the future.
-      if (status.lifecycle == CallkeepLifecycleType.onResume && _incomingCallType.isPushNotification) {
-        await _stopIsolate();
       }
     } catch (e) {
       _handleExceptions(e);
@@ -114,31 +103,19 @@ class BackgroundCallEventService implements CallkeepBackgroundServiceDelegate {
   void _handleHangupCall(HangupEvent event) async {
     try {
       await _callkeep.endBackgroundCall(event.callId);
-
-      if (_incomingCallType.isPushNotification) {
-        await _stopIsolate();
-      }
     } catch (e) {
       _handleExceptions(e);
     }
   }
 
   void _handleSignalingError(error, [StackTrace? stackTrace]) async {
-    try {
-      if (_incomingCallType.isPushNotification) {
-        await _stopIsolate();
-      }
-    } catch (e) {
+    try {} catch (e) {
       _handleExceptions(e);
     }
   }
 
   void _handleSignalingDisconnect(int? code, String? reason) async {
-    try {
-      if (_incomingCallType.isPushNotification) {
-        await _stopIsolate();
-      }
-    } catch (e) {
+    try {} catch (e) {
       _handleExceptions(e);
     }
   }
@@ -146,10 +123,6 @@ class BackgroundCallEventService implements CallkeepBackgroundServiceDelegate {
   void _handleUnregisteredEvent(UnregisteredEvent event) async {
     try {
       await _callkeep.endAllBackgroundCalls();
-
-      if (_incomingCallType.isPushNotification) {
-        await _stopIsolate();
-      }
     } catch (e) {
       _handleExceptions(e);
     }
@@ -162,10 +135,6 @@ class BackgroundCallEventService implements CallkeepBackgroundServiceDelegate {
   void performServiceEndCall(String callId) async {
     try {
       await _signalingManager.declineCall(callId);
-
-      if (_incomingCallType.isPushNotification) {
-        await _stopIsolate();
-      }
     } catch (e) {
       _handleExceptions(e);
     }
@@ -190,11 +159,6 @@ class BackgroundCallEventService implements CallkeepBackgroundServiceDelegate {
       hungUpTime: hungUpTime,
     );
     await _callLogsRepository.add(call);
-  }
-
-  Future<void> _stopIsolate() async {
-    await _signalingManager.dispose();
-    await _callkeep.stopService();
   }
 
   void _handleExceptions(e) {
