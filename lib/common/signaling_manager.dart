@@ -73,7 +73,7 @@ class SignalingManager {
     _client?.listen(
       onStateHandshake: _handleHandshake,
       onEvent: _handleEvent,
-      onError: _handleError,
+      onError: (error, stackTrace) => onError?.call(error, stackTrace),
       onDisconnect: _handleDisconnect,
     );
   }
@@ -87,22 +87,18 @@ class SignalingManager {
       return onNoActiveLines?.call();
     }
 
-    try {
-      for (final activeLine in _lines.whereType<Line>()) {
-        // Retrieve the most recent call event from the core logs for the current line.
-        final callEvent = activeLine.callLogs.whereType<CallEventLog>().map((log) => log.callEvent).firstOrNull;
+    for (final activeLine in _lines.whereType<Line>()) {
+      // Retrieve the most recent call event from the core logs for the current line.
+      final callEvent = activeLine.callLogs.whereType<CallEventLog>().map((log) => log.callEvent).firstOrNull;
 
-        if (callEvent != null) {
-          if (callEvent is IncomingCallEvent) {
-            onIncomingCall?.call(callEvent);
-            return;
-          }
-        } else {
-          _logger.info('No call event found');
+      if (callEvent != null) {
+        if (callEvent is IncomingCallEvent) {
+          onIncomingCall?.call(callEvent);
+          return;
         }
+      } else {
+        _logger.info('No call event found');
       }
-    } catch (e) {
-      _logger.severe('Failed to handle handshake', e);
     }
 
     if (!_handshakeCompleter.isCompleted) _handshakeCompleter.complete();
@@ -162,6 +158,10 @@ class SignalingManager {
     }
   }
 
+  Future<bool> hasNetworkConnection() {
+    return Connectivity().checkConnectivity().then((result) => !result.contains(ConnectivityResult.none));
+  }
+
   Future<void> declineCall(String callId) async =>
       _sendRequest(callId, (line, id, tx) => DeclineRequest(transaction: tx, line: line, callId: id));
 
@@ -187,6 +187,7 @@ class SignalingManager {
   }
 
   void _handleEvent(Event event) {
+    _logger.info('Received event: $event');
     switch (event) {
       case IncomingCallEvent():
         onIncomingCall?.call(event);
@@ -200,17 +201,14 @@ class SignalingManager {
     }
   }
 
-  void _handleError(Object error, StackTrace? stack) {
-    _logger.severe('Signaling error occurred', error, stack);
-    onError?.call(error, stack);
-  }
-
   void _handleDisconnect(int? code, String? reason) {
+    _logger.warning('Disconnected from signaling server: $code, $reason');
     _isConnected = false;
     onDisconnect?.call(code, reason);
   }
 
   Future<void> dispose() async {
+    _logger.info('Disposing signaling manager...');
     await _connectivitySubscription?.cancel();
     await _client?.disconnect();
     _isConnected = false;
