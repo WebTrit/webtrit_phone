@@ -9,6 +9,7 @@ import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/theme/theme.dart';
+import 'package:webtrit_phone/utils/utils.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 class RecentScreen extends StatelessWidget {
@@ -38,18 +39,20 @@ class RecentScreen extends StatelessWidget {
             final callLog = state.callLog;
 
             final title = contact?.displayTitle ?? logEntry.number;
+            final email = contact?.emails.firstOrNull?.address;
 
             final themeData = Theme.of(context);
             final outlinedButtonStyles = themeData.extension<OutlinedButtonStyles>();
 
             return ListView(
               children: [
-                Padding(
+                Container(
                   padding: kAllPadding16,
+                  alignment: Alignment.center,
                   child: LeadingAvatar(
                     username: title,
                     thumbnail: contact?.thumbnail,
-                    thumbnailUrl: contact?.thumbnailUrl,
+                    thumbnailUrl: gravatarThumbnailUrl(email),
                     registered: contact?.registered,
                     radius: 50,
                   ),
