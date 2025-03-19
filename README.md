@@ -20,6 +20,7 @@ The application offers extensive customization options:
 - **[Widgets](doc/widgets_configuration.md)** – Configure UI widgets according to your needs.
 - **[Pages](doc/page_configuration.md)** – Customize pages and their layouts.
 - **[Features](doc/feature_configuration.md)** – Enable or disable specific features.
+  - [Custom Login](doc/custom_login.md) – Implement a custom login page.
 
 ## Development & Build
 
