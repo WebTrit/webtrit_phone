@@ -23,7 +23,6 @@ const kAllPadding16 = EdgeInsets.all(16.0);
 const kBlankUri = 'about:blank';
 
 const initialMainRout = '/main';
-const initialCallRout = '/main/call';
 
 const kAutoprovisionRout = '/autoprovision';
 

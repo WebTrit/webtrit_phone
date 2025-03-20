@@ -89,14 +89,12 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
 Future<void> _initCallkeep(AppPreferences appPreferences) async {
   if (!Platform.isAndroid) return;
 
-  CallkeepBackgroundService.setUpServiceCallback(
+  CallkeepBackgroundService.initializeSignalingServiceCallback(
     onStart: onStart,
     onChangedLifecycle: onChangedLifecycle,
   );
 
   CallkeepBackgroundService.initializePushNotificationCallback(onPushNotificationCallback);
-
-  CallkeepBackgroundService().setUp(autoStartOnBoot: true, autoRestartOnTerminate: true);
 }
 
 /// Initializes Firebase for background services. This initialization must be called in an isolate

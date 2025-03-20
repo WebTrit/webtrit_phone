@@ -16,26 +16,6 @@ abstract class DeepLinkHandler {
   DeepLink? handle();
 }
 
-class HandleAndroidBackgroundIncomingCall implements DeepLinkHandler {
-  HandleAndroidBackgroundIncomingCall(this.deepLink);
-
-  final PlatformDeepLink deepLink;
-
-  @override
-  DeepLink? handle() {
-    if (deepLink.path.startsWith(initialCallRout) && !deepLink.isExternal) {
-      final uri = Uri.parse(deepLink.configuration.url);
-      final pendingCall = PendingCall.fromMap(uri.queryParameters);
-
-      _logger.fine('Pending call deeplink: $pendingCall');
-
-      return deepLink.initial ? DeepLink.defaultPath : DeepLink.none;
-    } else {
-      return null;
-    }
-  }
-}
-
 class HandleReturnToMain implements DeepLinkHandler {
   HandleReturnToMain(this.deepLink);
 

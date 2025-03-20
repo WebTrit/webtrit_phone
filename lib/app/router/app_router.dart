@@ -460,7 +460,6 @@ class AppRouter extends _$AppRouter {
   FutureOr<DeepLink> deepLinkBuilder(PlatformDeepLink deepLink) {
     final handlers = <DeepLinkHandler>[
       // Internal deep-links within the platform
-      HandleAndroidBackgroundIncomingCall(deepLink),
       HandleReturnToMain(deepLink),
       // External deep-links from outside the application
       HandleAutoprovision(deepLink),
