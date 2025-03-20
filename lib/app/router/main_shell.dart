@@ -48,8 +48,6 @@ class _MainShellState extends State<MainShell> {
           supportedHandleTypes: const {CallkeepHandleType.number},
         ),
         android: CallkeepAndroidOptions(
-          incomingPath: initialCallRout,
-          rootPath: initialMainRout,
           ringtoneSound: Assets.ringtones.incomingCall1,
           ringbackSound: Assets.ringtones.outgoingCall1,
         ),
