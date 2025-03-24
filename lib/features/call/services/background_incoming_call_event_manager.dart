@@ -16,7 +16,7 @@ final _logger = Logger('BackgroundCallEventService');
 class BackgroundIncomingCallEventManager implements CallkeepBackgroundServiceDelegate {
   BackgroundIncomingCallEventManager({
     required CallLogsRepository callLogsRepository,
-    required CallkeepBackgroundService callkeep,
+    required BackgroundPushNotificationService callkeep,
     required SecureStorage storage,
     required TrustedCertificates certificates,
   })  : _callLogsRepository = callLogsRepository,
@@ -26,7 +26,7 @@ class BackgroundIncomingCallEventManager implements CallkeepBackgroundServiceDel
   }
 
   final CallLogsRepository _callLogsRepository;
-  final CallkeepBackgroundService _callkeep;
+  final BackgroundPushNotificationService _callkeep;
 
   late final SignalingManager _signalingManager;
 

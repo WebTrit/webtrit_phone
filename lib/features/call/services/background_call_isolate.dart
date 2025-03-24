@@ -6,7 +6,7 @@ import 'package:webtrit_phone/repositories/repositories.dart';
 
 import 'background_call_event_service.dart';
 
-CallkeepBackgroundService? _callkeep;
+BackgroundSignalingService? _callkeep;
 CallkeepConnections? _callkeepConnections;
 BackgroundCallEventService? _backgroundCallEventManager;
 
@@ -43,7 +43,7 @@ Future<void> _initializeDependencies() async {
   _secureStorage = await SecureStorage.init();
 
   _callLogsRepository ??= CallLogsRepository(appDatabase: await IsolateDatabase.create());
-  _callkeep ??= CallkeepBackgroundService();
+  _callkeep ??= BackgroundSignalingService();
   _callkeepConnections ??= CallkeepConnections();
 
   _backgroundCallEventManager ??= BackgroundCallEventService(

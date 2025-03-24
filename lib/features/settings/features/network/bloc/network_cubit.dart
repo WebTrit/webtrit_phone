@@ -20,7 +20,7 @@ class NetworkCubit extends Cubit<NetworkState> {
   }
 
   final AppPreferences _appPreferences;
-  final CallkeepBackgroundService _callkeepBackgroundService;
+  final BackgroundSignalingBootstrapService _callkeepBackgroundService;
 
   void _initializeActiveIncomingType() {
     final currentType = _appPreferences.getIncomingCallType();

@@ -19,7 +19,7 @@ class BackgroundCallEventService implements CallkeepBackgroundServiceDelegate {
   BackgroundCallEventService({
     required CallLogsRepository callLogsRepository,
     required AppPreferences appPreferences,
-    required CallkeepBackgroundService callkeep,
+    required BackgroundSignalingService callkeep,
     required CallkeepConnections callkeepConnections,
     required SecureStorage storage,
     required TrustedCertificates certificates,
@@ -33,7 +33,7 @@ class BackgroundCallEventService implements CallkeepBackgroundServiceDelegate {
 
   final CallLogsRepository _callLogsRepository;
   final AppPreferences _appPreferences;
-  final CallkeepBackgroundService _callkeep;
+  final BackgroundSignalingService _callkeep;
   final CallkeepConnections _callkeepConnections;
 
   late final SignalingManager _signalingManager;
