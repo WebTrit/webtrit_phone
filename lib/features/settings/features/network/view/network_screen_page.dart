@@ -21,7 +21,7 @@ class NetworkScreenPage extends StatelessWidget {
     return BlocProvider(
       create: (context) => NetworkCubit(
         context.read<AppPreferences>(),
-        CallkeepBackgroundService(),
+        BackgroundSignalingBootstrapService(),
       ),
       child: widget,
     );

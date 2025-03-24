@@ -89,12 +89,12 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
 Future<void> _initCallkeep(AppPreferences appPreferences) async {
   if (!Platform.isAndroid) return;
 
-  CallkeepBackgroundService.initializeSignalingServiceCallback(
+  AndroidCallkeepServices.backgroundSignalingBootstrapService.initializeCallback(
     onStart: onStart,
     onChangedLifecycle: onChangedLifecycle,
   );
 
-  CallkeepBackgroundService.initializePushNotificationCallback(onPushNotificationCallback);
+  AndroidCallkeepServices.backgroundPushNotificationBootstrapService.initializeCallback(onPushNotificationCallback);
 }
 
 /// Initializes Firebase for background services. This initialization must be called in an isolate
@@ -167,7 +167,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   _dHandleInspectPushNotification(message.data, true);
 
   if (appNotification is PendingCallNotification && Platform.isAndroid) {
-    Callkeep().reportNewIncomingCall(
+    AndroidCallkeepServices.backgroundPushNotificationBootstrapService.reportNewIncomingCall(
       appNotification.call.id,
       CallkeepHandle.number(appNotification.call.handle),
       displayName: appNotification.call.displayName,
