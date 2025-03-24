@@ -69,21 +69,6 @@ class ModifyWithEncodingSettings implements SDPMunger {
     final builder = SDPModBuilder(sdp: sdp);
     bool modified = false;
 
-    if (settings.audioBitrate != null || settings.videoBitrate != null) {
-      builder.setBitrate(settings.audioBitrate, settings.videoBitrate);
-      modified = true;
-    }
-
-    if (settings.ptime != null || settings.maxptime != null) {
-      builder.setPtime(settings.ptime, settings.maxptime);
-      modified = true;
-    }
-
-    if (settings.opusBandwidthLimit != null || settings.opusStereo != null || settings.opusDtx != null) {
-      builder.setOpusParams(settings.opusBandwidthLimit, settings.opusStereo, settings.opusDtx);
-      modified = true;
-    }
-
     if (settings.audioProfiles != null) {
       final profiles = settings.audioProfiles!;
       final toRemove = profiles.where((p) => p.enabled == false).map((e) => e.option).toList();
@@ -101,6 +86,24 @@ class ModifyWithEncodingSettings implements SDPMunger {
 
       toRemove.forEach((p) => builder.removeProfile(p));
       builder.reorderProfiles(toReorder, RTPCodecKind.video);
+      modified = true;
+    }
+
+    // Make sure to set codec parameters after profiles removing
+    // because some params depends on codecs list
+
+    if (settings.audioBitrate != null || settings.videoBitrate != null) {
+      builder.setBitrate(settings.audioBitrate, settings.videoBitrate);
+      modified = true;
+    }
+
+    if (settings.ptime != null || settings.maxptime != null) {
+      builder.setPtime(settings.ptime, settings.maxptime);
+      modified = true;
+    }
+
+    if (settings.opusBandwidthLimit != null || settings.opusStereo != null || settings.opusDtx != null) {
+      builder.setOpusParams(settings.opusBandwidthLimit, settings.opusStereo, settings.opusDtx);
       modified = true;
     }
 
