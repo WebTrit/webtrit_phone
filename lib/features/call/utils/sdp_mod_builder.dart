@@ -32,10 +32,16 @@ class SDPModBuilder {
   /// Set the bitrate for the video and audio.
   /// [video] and [audio] are in kbps.
   /// Range `32-4000kbps` for video and `8-256kbps` for audio.
+  ///
+  /// If audio not support opus, then lower bitrate will clamped to `64kbps`
+  /// to prevent exception from WebRTC side when setRemoteDescription called.
+  /// and because only opus supports such wide compression level.
+  /// g722 has 48-56kbps but is not worth it to use.
   setBitrate(int? audio, int? video) {
+    final hasOpus = getProfileId(RTPCodecProfile.opus) != null;
     const rtpBitrateOvehead = 1.2;
 
-    if (audio != null) audio = audio.clamp(8, 256);
+    if (audio != null) audio = audio.clamp(hasOpus ? 8 : 64, 256);
     if (video != null) video = video.clamp(32, 4000);
 
     for (final kind in RTPCodecKind.values) {
