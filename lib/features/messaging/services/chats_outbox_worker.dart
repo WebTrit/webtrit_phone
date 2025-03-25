@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:logging/logging.dart';
 import 'package:phoenix_socket/phoenix_socket.dart';
 
-import 'package:webtrit_phone/app/notifications/notifications.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
@@ -16,12 +15,12 @@ final _logger = Logger('ChatsOutboxWorker');
 /// ensuring that they are delivered to their intended recipients. It handles
 /// retries and error management to ensure reliable message delivery.
 class ChatsOutboxWorker {
-  ChatsOutboxWorker(this._client, this._chatsRepository, this._outboxRepository, this._submitNotification);
+  ChatsOutboxWorker(this._client, this._chatsRepository, this._outboxRepository, this._onError);
 
   final PhoenixSocket _client;
   final ChatsRepository _chatsRepository;
   final ChatsOutboxRepository _outboxRepository;
-  final Function(Notification) _submitNotification;
+  final Function(Object) _onError;
 
   bool _disposed = false;
 
@@ -90,7 +89,7 @@ class ChatsOutboxWorker {
       if (outboxEntry.sendAttempts > 5) {
         await _outboxRepository.deleteOutboxMessage(outboxEntry.idKey);
         _logger.warning('Send attempts exceeded for message: ${outboxEntry.idKey}');
-        _submitNotification(DefaultErrorNotification(e));
+        _onError(e);
       } else {
         await _outboxRepository.upsertOutboxMessage(outboxEntry.incAttempt());
       }
@@ -119,7 +118,7 @@ class ChatsOutboxWorker {
       if (messageEdit.sendAttempts > 5) {
         await _outboxRepository.deleteOutboxMessageEdit(messageEdit.id);
         _logger.warning('Send attempts exceeded for edit message: ${messageEdit.idKey}');
-        _submitNotification(DefaultErrorNotification(e));
+        _onError(e);
       } else {
         await _outboxRepository.upsertOutboxMessageEdit(messageEdit.incAttempts());
       }
@@ -148,7 +147,7 @@ class ChatsOutboxWorker {
       if (messageDelete.sendAttempts > 5) {
         await _outboxRepository.deleteOutboxMessageDelete(messageDelete.id);
         _logger.severe('Send attempts exceeded for delete message: ${messageDelete.idKey}');
-        _submitNotification(DefaultErrorNotification(e));
+        _onError(e);
       } else {
         await _outboxRepository.upsertOutboxMessageDelete(messageDelete.incAttempts());
       }
@@ -178,7 +177,7 @@ class ChatsOutboxWorker {
       if (readCursor.sendAttempts > 5) {
         await _outboxRepository.deleteOutboxReadCursor(readCursor.chatId);
         _logger.warning('Send attempts exceeded for read cursor: ${readCursor.chatId}');
-        _submitNotification(DefaultErrorNotification(e));
+        _onError(e);
       } else {
         await _outboxRepository.upsertOutboxReadCursor(readCursor.incAttempts());
       }

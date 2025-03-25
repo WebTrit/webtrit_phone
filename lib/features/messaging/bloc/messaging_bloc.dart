@@ -94,14 +94,13 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
 
       // Init workers
       if (_messagingFeature.coreChatsSupport) {
-        _chatsSyncWorker ??= ChatsSyncWorker(_client, _chatsRepository, _submitNotification)..init();
-        _chatsOutboxWorker ??= ChatsOutboxWorker(_client, _chatsRepository, _chatsOutboxRepository, _submitNotification)
+        _chatsSyncWorker ??= ChatsSyncWorker(_client, _chatsRepository, _onEventError)..init();
+        _chatsOutboxWorker ??= ChatsOutboxWorker(_client, _chatsRepository, _chatsOutboxRepository, _onEventError)
           ..init();
       }
       if (_messagingFeature.coreSmsSupport) {
-        _smsSyncWorker ??= SmsSyncWorker(_client, _smsRepository, _submitNotification)..init();
-        _smsOutboxWorker ??= SmsOutboxWorker(_client, _smsRepository, _smsOutboxRepository, _submitNotification)
-          ..init();
+        _smsSyncWorker ??= SmsSyncWorker(_client, _smsRepository, _onEventError)..init();
+        _smsOutboxWorker ??= SmsOutboxWorker(_client, _smsRepository, _smsOutboxRepository, _onEventError)..init();
       }
 
       emit(state.copyWith(status: ConnectionStatus.connected));
@@ -129,6 +128,14 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
     emit(state.copyWith(status: ConnectionStatus.initial));
   }
 
+  _onEventError(Object error) {
+    if (_errorNotificationFilter(error)) {
+      _submitNotification(DefaultErrorNotification(error));
+    } else {
+      _logger.info('Event error notification filtered out');
+    }
+  }
+
   void _disposeWorkers() {
     _chatsSyncWorker?.dispose();
     _chatsSyncWorker = null;
@@ -146,4 +153,18 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
     _client.dispose();
     return super.close();
   }
+}
+
+/// Filters out specific error notifications based on their type and code.
+/// To skip notification displaying
+bool _errorNotificationFilter(Object error) {
+  if (error is MessagingSocketException) {
+    switch (error.code) {
+      case kPhxSocketClosedCode:
+        return false;
+      case kPhxChannelClosedCode:
+        return false;
+    }
+  }
+  return true;
 }
