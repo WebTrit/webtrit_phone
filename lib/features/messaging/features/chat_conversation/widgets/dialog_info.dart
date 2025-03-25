@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
@@ -33,11 +32,7 @@ class _DialogInfoState extends State<DialogInfo> {
     if (!mounted) return;
     if (askResult != true) return;
 
-    final result = await conversationCubit.deleteChat();
-
-    if (!mounted) return;
-    if (result != true) return;
-    context.router.navigate(const MainScreenPageRoute(children: [ConversationsScreenPageRoute()]));
+    await conversationCubit.deleteChat();
   }
 
   @override
