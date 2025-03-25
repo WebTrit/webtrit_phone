@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/theme/styles/styles.dart';
 
+import 'safe_network_image.dart';
+
 class LeadingAvatar extends StatefulWidget {
   const LeadingAvatar({
     super.key,
@@ -66,10 +68,11 @@ class _LeadingAvatarState extends State<LeadingAvatar> {
   }
 
   Widget remoteImage() {
-    return Image.network(
+    return SafeNetworkImage(
       widget.thumbnailUrl.toString(),
       fit: BoxFit.cover,
-      errorBuilder: (context, error, stackTrace) {
+      placeholderBuilder: placeholder,
+      errorBuilder: () {
         if (widget.thumbnail != null) return localImage();
         return placeholder();
       },
