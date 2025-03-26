@@ -2,10 +2,8 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/features/messaging/messaging.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
@@ -34,9 +32,6 @@ class _GroupInfoState extends State<GroupInfo> {
     if (askResult != true) return;
 
     await conversationCubit.leaveGroup();
-
-    if (!mounted) return;
-    context.router.navigate(const MainScreenPageRoute(children: [ConversationsScreenPageRoute()]));
   }
 
   onDeleteGroup() async {
@@ -49,9 +44,6 @@ class _GroupInfoState extends State<GroupInfo> {
     if (askResult != true) return;
 
     await conversationCubit.deleteChat();
-
-    if (!mounted) return;
-    context.router.navigate(const MainScreenPageRoute(children: [ConversationsScreenPageRoute()]));
   }
 
   onAddUser() async {
