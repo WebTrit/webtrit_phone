@@ -57,12 +57,8 @@ Future<void> _initializeDependencies() async {
 }
 
 @pragma('vm:entry-point')
-Future<void> onStart(CallkeepServiceStatus status) async {
+Future<void> onSync(CallkeepServiceStatus status) async {
   await _initializeDependencies();
-  await _backgroundCallEventManager?.onStart(status);
-}
-
-@pragma('vm:entry-point')
-Future<void> onChangedLifecycle(CallkeepServiceStatus status) async {
-  await _backgroundCallEventManager?.onChangedLifecycle(status);
+  await _backgroundCallEventManager?.sync(status);
+  return;
 }

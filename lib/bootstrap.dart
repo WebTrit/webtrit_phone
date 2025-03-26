@@ -20,7 +20,7 @@ import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/push_notification/push_notifications.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
-import 'package:webtrit_phone/features/call/call.dart' show onPushNotificationCallback, onStart, onChangedLifecycle;
+import 'package:webtrit_phone/features/call/call.dart' show onPushNotificationCallback, onSync;
 
 import 'firebase_options.dart';
 
@@ -89,11 +89,7 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
 Future<void> _initCallkeep(AppPreferences appPreferences) async {
   if (!Platform.isAndroid) return;
 
-  AndroidCallkeepServices.backgroundSignalingBootstrapService.initializeCallback(
-    onStart: onStart,
-    onChangedLifecycle: onChangedLifecycle,
-  );
-
+  AndroidCallkeepServices.backgroundSignalingBootstrapService.initializeCallback(onSync);
   AndroidCallkeepServices.backgroundPushNotificationBootstrapService.initializeCallback(onPushNotificationCallback);
 }
 

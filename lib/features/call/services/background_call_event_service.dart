@@ -58,31 +58,24 @@ class BackgroundCallEventService implements CallkeepBackgroundServiceDelegate {
   // - User enabling the socket type.
   // - Service being restarted.
   // - Automatic start during system boot.
-  Future<void> onStart(CallkeepServiceStatus status) async {
+  Future<void> sync(CallkeepServiceStatus status) async {
     _logger.info('onStart: $status');
 
-    final isBackground = status.lifecycle == CallkeepLifecycleType.onStop ||
-        status.lifecycle == CallkeepLifecycleType.onPause ||
-        status.lifecycle == CallkeepLifecycleType.onDestroy;
+    final mainSignalingStatus = (status.mainSignalingStatus == CallkeepSignalingStatus.connecting ||
+        status.mainSignalingStatus == CallkeepSignalingStatus.connect);
 
-    if (isBackground) {
-      // Connects to the signaling serve if not connected yet
+    final isAppInBackground = (status.lifecycleEvent == CallkeepLifecycleEvent.onStop ||
+        status.lifecycleEvent == CallkeepLifecycleEvent.onDestroy);
+
+    if (isAppInBackground && !mainSignalingStatus) {
       _signalingManager.launch();
+    } else {
+      _signalingManager.dispose();
     }
   }
 
   void _handleAvoidLines() async {
     await _callkeep.endAllBackgroundCalls();
-  }
-
-  Future<void> onChangedLifecycle(CallkeepServiceStatus status) async {
-    try {
-      if (status.lifecycle == CallkeepLifecycleType.onStop) {
-        _signalingManager.launch();
-      }
-    } catch (e) {
-      _handleExceptions(e);
-    }
   }
 
   void _handleIncomingCall(IncomingCallEvent event) {
