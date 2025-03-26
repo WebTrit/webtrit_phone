@@ -5,10 +5,10 @@ import 'package:webtrit_phone/common/common.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
-import 'background_incoming_call_event_manager.dart';
+import 'push_notification_isolate_manager.dart';
 
 BackgroundPushNotificationService? _callkeep;
-BackgroundIncomingCallEventManager? _backgroundCallEventManager;
+PushNotificationIsolateManager? _pushNotificationIsolateManager;
 
 RemoteConfigService? _remoteConfigService;
 
@@ -41,9 +41,9 @@ Future<void> _initializeDependencies() async {
   _secureStorage = await SecureStorage.init();
 
   _callLogsRepository ??= CallLogsRepository(appDatabase: await IsolateDatabase.create());
-  _callkeep ??= BackgroundPushNotificationService ();
+  _callkeep ??= BackgroundPushNotificationService();
 
-  _backgroundCallEventManager ??= BackgroundIncomingCallEventManager(
+  _pushNotificationIsolateManager ??= PushNotificationIsolateManager(
     callLogsRepository: _callLogsRepository!,
     callkeep: _callkeep!,
     storage: _secureStorage!,
@@ -61,8 +61,8 @@ Future<void> onPushNotificationCallback(CallkeepPushNotificationSyncStatus statu
 
   switch (status) {
     case CallkeepPushNotificationSyncStatus.synchronizeCallStatus:
-      await _backgroundCallEventManager?.onStart();
+      await _pushNotificationIsolateManager?.sync();
     case CallkeepPushNotificationSyncStatus.releaseResources:
-      await _backgroundCallEventManager?.close();
+      await _pushNotificationIsolateManager?.close();
   }
 }

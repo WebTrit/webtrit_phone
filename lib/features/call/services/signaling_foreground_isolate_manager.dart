@@ -15,8 +15,8 @@ import '../models/models.dart';
 
 final _logger = Logger('BackgroundCallEventService');
 
-class BackgroundCallEventService implements CallkeepBackgroundServiceDelegate {
-  BackgroundCallEventService({
+class SignalingForegroundIsolateManager implements CallkeepBackgroundServiceDelegate {
+  SignalingForegroundIsolateManager({
     required CallLogsRepository callLogsRepository,
     required AppPreferences appPreferences,
     required BackgroundSignalingService callkeep,

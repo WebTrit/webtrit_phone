@@ -13,8 +13,8 @@ import 'package:webtrit_phone/repositories/repositories.dart';
 
 final _logger = Logger('BackgroundCallEventService');
 
-class BackgroundIncomingCallEventManager implements CallkeepBackgroundServiceDelegate {
-  BackgroundIncomingCallEventManager({
+class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegate {
+  PushNotificationIsolateManager({
     required CallLogsRepository callLogsRepository,
     required BackgroundPushNotificationService callkeep,
     required SecureStorage storage,
@@ -52,7 +52,7 @@ class BackgroundIncomingCallEventManager implements CallkeepBackgroundServiceDel
   // - User enabling the socket type.
   // - Service being restarted.
   // - Automatic start during system boot.
-  Future<void> onStart() async {
+  Future<void> sync() async {
     _logger.info('Starting background call event service');
     return _signalingManager.launch();
   }

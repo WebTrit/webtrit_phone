@@ -4,11 +4,12 @@ import 'package:webtrit_phone/common/common.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
-import 'background_call_event_service.dart';
+import 'signaling_foreground_isolate_manager.dart';
+
 
 BackgroundSignalingService? _callkeep;
 CallkeepConnections? _callkeepConnections;
-BackgroundCallEventService? _backgroundCallEventManager;
+SignalingForegroundIsolateManager? _signalingForegroundIsolateManager;
 
 RemoteConfigService? _remoteConfigService;
 
@@ -46,7 +47,7 @@ Future<void> _initializeDependencies() async {
   _callkeep ??= BackgroundSignalingService();
   _callkeepConnections ??= CallkeepConnections();
 
-  _backgroundCallEventManager ??= BackgroundCallEventService(
+  _signalingForegroundIsolateManager ??= SignalingForegroundIsolateManager(
     callLogsRepository: _callLogsRepository!,
     appPreferences: _appPreferences!,
     callkeep: _callkeep!,
@@ -59,6 +60,6 @@ Future<void> _initializeDependencies() async {
 @pragma('vm:entry-point')
 Future<void> onSync(CallkeepServiceStatus status) async {
   await _initializeDependencies();
-  await _backgroundCallEventManager?.sync(status);
+  await _signalingForegroundIsolateManager?.sync(status);
   return;
 }
