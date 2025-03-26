@@ -69,7 +69,7 @@ class SignalingForegroundIsolateManager implements CallkeepBackgroundServiceDele
   }
 
   void _handleAvoidLines() async {
-    await _callkeep.endAllBackgroundCalls();
+    await _callkeep.endCalls();
   }
 
   void _handleIncomingCall(IncomingCallEvent event) {
@@ -87,7 +87,7 @@ class SignalingForegroundIsolateManager implements CallkeepBackgroundServiceDele
 
   void _handleHangupCall(HangupEvent event) async {
     try {
-      await _callkeep.endBackgroundCall(event.callId);
+      await _callkeep.endCall(event.callId);
     } catch (e) {
       _handleExceptions(e);
     }
@@ -107,7 +107,7 @@ class SignalingForegroundIsolateManager implements CallkeepBackgroundServiceDele
 
   void _handleUnregisteredEvent(UnregisteredEvent event) async {
     try {
-      await _callkeep.endAllBackgroundCalls();
+      await _callkeep.endCalls();
     } catch (e) {
       _handleExceptions(e);
     }

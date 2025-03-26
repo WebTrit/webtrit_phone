@@ -60,7 +60,7 @@ class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegat
   void _handleHangupCall(HangupEvent event) async {
     try {
       _logger.info('Ending call: ${event.callId}');
-      await _callkeep.endBackgroundCall(event.callId);
+      await _callkeep.endCall(event.callId);
     } catch (e) {
       _handleExceptions(e);
     }
@@ -68,19 +68,19 @@ class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegat
 
   void _handleSignalingError(error, [StackTrace? stackTrace]) async {
     try {
-      await _callkeep.endAllBackgroundCalls();
+      await _callkeep.endCalls();
     } catch (e) {
       _handleExceptions(e);
     }
   }
 
   void _handleAvoidLines() async {
-    await _callkeep.endAllBackgroundCalls();
+    await _callkeep.endCalls();
   }
 
   void _handleUnregisteredEvent(UnregisteredEvent event) async {
     try {
-      await _callkeep.endAllBackgroundCalls();
+      await _callkeep.endCalls();
     } catch (e) {
       _handleExceptions(e);
     }
