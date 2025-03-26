@@ -18,23 +18,17 @@ final _logger = Logger('BackgroundCallEventService');
 class SignalingForegroundIsolateManager implements CallkeepBackgroundServiceDelegate {
   SignalingForegroundIsolateManager({
     required CallLogsRepository callLogsRepository,
-    required AppPreferences appPreferences,
     required BackgroundSignalingService callkeep,
-    required CallkeepConnections callkeepConnections,
     required SecureStorage storage,
     required TrustedCertificates certificates,
   })  : _callLogsRepository = callLogsRepository,
-        _appPreferences = appPreferences,
-        _callkeep = callkeep,
-        _callkeepConnections = callkeepConnections {
+        _callkeep = callkeep {
     _initSignalingManager(storage, certificates);
     _callkeep.setBackgroundServiceDelegate(this);
   }
 
   final CallLogsRepository _callLogsRepository;
-  final AppPreferences _appPreferences;
   final BackgroundSignalingService _callkeep;
-  final CallkeepConnections _callkeepConnections;
 
   late final SignalingManager _signalingManager;
 

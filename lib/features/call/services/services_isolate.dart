@@ -3,12 +3,18 @@ import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 
 import 'package:webtrit_phone/common/common.dart';
 import 'package:webtrit_phone/data/data.dart';
+import 'package:webtrit_phone/features/call/services/signaling_foreground_isolate_manager.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
 import 'push_notification_isolate_manager.dart';
 
-BackgroundPushNotificationService? _callkeep;
+// TODO (Serdun): Refactor PushNotificationIsolateManager and SignalingForegroundIsolateManager into a single manager to reduce code duplication.
+
+BackgroundPushNotificationService? _backgroundPushNotificationService;
 PushNotificationIsolateManager? _pushNotificationIsolateManager;
+
+BackgroundSignalingService? _backgroundSignalingService;
+SignalingForegroundIsolateManager? _signalingForegroundIsolateManager;
 
 RemoteConfigService? _remoteConfigService;
 
@@ -41,11 +47,20 @@ Future<void> _initializeDependencies() async {
   _secureStorage = await SecureStorage.init();
 
   _callLogsRepository ??= CallLogsRepository(appDatabase: await IsolateDatabase.create());
-  _callkeep ??= BackgroundPushNotificationService();
+  _backgroundPushNotificationService ??= BackgroundPushNotificationService();
 
   _pushNotificationIsolateManager ??= PushNotificationIsolateManager(
     callLogsRepository: _callLogsRepository!,
-    callkeep: _callkeep!,
+    callkeep: _backgroundPushNotificationService!,
+    storage: _secureStorage!,
+    certificates: _appCertificates!.trustedCertificates,
+  );
+
+  _backgroundSignalingService ??= BackgroundSignalingService();
+
+  _signalingForegroundIsolateManager ??= SignalingForegroundIsolateManager(
+    callLogsRepository: _callLogsRepository!,
+    callkeep: _backgroundSignalingService!,
     storage: _secureStorage!,
     certificates: _appCertificates!.trustedCertificates,
   );
@@ -53,8 +68,9 @@ Future<void> _initializeDependencies() async {
 
 final _logger = Logger('BackgroundCallIsolate');
 
+// Called by the Flutter engine when the signaling service is started.
 @pragma('vm:entry-point')
-Future<void> onPushNotificationCallback(CallkeepPushNotificationSyncStatus status) async {
+Future<void> onPushNotificationSyncCallback(CallkeepPushNotificationSyncStatus status) async {
   await _initializeDependencies();
 
   _logger.info('onPushNotificationCallback: $status');
@@ -65,4 +81,15 @@ Future<void> onPushNotificationCallback(CallkeepPushNotificationSyncStatus statu
     case CallkeepPushNotificationSyncStatus.releaseResources:
       await _pushNotificationIsolateManager?.close();
   }
+}
+
+// Called by the Flutter engine when the signaling service is triggered.
+@pragma('vm:entry-point')
+Future<void> onSignalingSyncCallback(CallkeepServiceStatus status) async {
+  await _initializeDependencies();
+
+  _logger.info('onSignalingSyncCallback: $status');
+
+  await _signalingForegroundIsolateManager?.sync(status);
+  return;
 }
