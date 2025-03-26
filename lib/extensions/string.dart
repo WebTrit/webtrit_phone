@@ -1,6 +1,13 @@
 import 'package:flutter/widgets.dart';
 
 extension StringExtension on String {
+  String limit(int i) {
+    if (length > i) {
+      return '${substring(0, i)}...';
+    }
+    return this;
+  }
+
   String get capitalize {
     if (isEmpty) {
       return this;

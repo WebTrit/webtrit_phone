@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:file_picker/file_picker.dart';
 
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
@@ -66,6 +67,7 @@ class _ChatMessageListViewState extends State<ChatMessageListView> {
   DateTime? computeTime;
   ChatMessage? editingMessage;
   ChatMessage? replyingMessage;
+  List<String> attachments = [];
 
   bool scrolledAway = false;
 
@@ -165,6 +167,14 @@ class _ChatMessageListViewState extends State<ChatMessageListView> {
 
   void handleDelete(ChatMessage message) {
     widget.onDelete(message);
+  }
+
+  void handleAttachment() async {
+    final result = await FilePicker.platform.pickFiles(allowMultiple: true);
+    if (result == null) return;
+
+    final pickedPaths = result.paths.whereType<String>().toList();
+    setState(() => attachments = pickedPaths);
   }
 
   @override
@@ -305,6 +315,16 @@ class _ChatMessageListViewState extends State<ChatMessageListView> {
           );
         }
 
+        if (attachments.isNotEmpty) {
+          exchangeWidget = AttachmentsExchangeBar(
+            attachments: attachments,
+            onCancel: () {
+              setState(() => attachments = []);
+              FocusScope.of(context).unfocus();
+            },
+          );
+        }
+
         return Column(
           children: [
             AnimatedSwitcher(
@@ -324,6 +344,7 @@ class _ChatMessageListViewState extends State<ChatMessageListView> {
                 controller: inputController,
                 onSend: handleSend,
                 onChanged: (value) => context.read<ChatTypingCubit>().sendTyping(),
+                onAddAttachment: handleAttachment,
               )
           ],
         );

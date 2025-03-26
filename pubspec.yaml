@@ -86,6 +86,8 @@ dependencies:
   device_region: ^1.4.0
   html: ^0.15.4
   http: ^1.2.2
+  file_picker: ^9.0.2
+  flutter_image_compress: ^2.4.0
 
   webtrit_api:
     path: ./packages/webtrit_api

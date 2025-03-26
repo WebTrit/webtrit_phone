@@ -6,12 +6,14 @@ class MessageTextField extends StatefulWidget {
     required this.controller,
     required this.onSend,
     this.onChanged,
+    this.onAddAttachment,
     super.key,
   });
 
   final TextEditingController controller;
-  final Function() onSend;
+  final void Function() onSend;
   final void Function(String)? onChanged;
+  final void Function()? onAddAttachment;
 
   @override
   State<MessageTextField> createState() => _MessageTextFieldState();
@@ -32,23 +34,36 @@ class _MessageTextFieldState extends State<MessageTextField> {
         child: Row(
           children: [
             Expanded(
-              child: TextFormField(
-                controller: widget.controller,
-                onFieldSubmitted: (_) {
-                  if (value.isNotEmpty) widget.onSend();
-                },
-                onChanged: (v) {
-                  setState(() => value = v);
-                  widget.onChanged?.call(v);
-                },
-                decoration: InputDecoration(
-                  hintText: context.l10n.messaging_MessageField_hint,
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  isDense: true,
-                  isCollapsed: true,
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide.none,
-                    borderRadius: BorderRadius.circular(16),
+              child: SizedBox(
+                height: 40,
+                child: TextFormField(
+                  controller: widget.controller,
+                  onFieldSubmitted: (_) {
+                    if (value.isNotEmpty) widget.onSend();
+                  },
+                  onChanged: (v) {
+                    setState(() => value = v);
+                    widget.onChanged?.call(v);
+                  },
+                  decoration: InputDecoration(
+                    hintText: context.l10n.messaging_MessageField_hint,
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+                    suffixIconConstraints: const BoxConstraints(minWidth: 0, minHeight: 0, maxWidth: 40, maxHeight: 40),
+                    isDense: false,
+                    isCollapsed: false,
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide.none,
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    suffixIcon: widget.onAddAttachment != null
+                        ? IconButton(
+                            padding: EdgeInsets.zero,
+                            icon: const Icon(Icons.attach_file, size: 16),
+                            onPressed: () {
+                              widget.onAddAttachment?.call();
+                            },
+                          )
+                        : null,
                   ),
                 ),
               ),
