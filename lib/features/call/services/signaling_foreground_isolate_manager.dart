@@ -11,12 +11,14 @@ import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
+import '../models/models.dart';
+
 final _logger = Logger('BackgroundCallEventService');
 
-class BackgroundIncomingCallEventManager implements CallkeepBackgroundServiceDelegate {
-  BackgroundIncomingCallEventManager({
+class SignalingForegroundIsolateManager implements CallkeepBackgroundServiceDelegate {
+  SignalingForegroundIsolateManager({
     required CallLogsRepository callLogsRepository,
-    required BackgroundPushNotificationService callkeep,
+    required BackgroundSignalingService callkeep,
     required SecureStorage storage,
     required TrustedCertificates certificates,
   })  : _callLogsRepository = callLogsRepository,
@@ -26,7 +28,7 @@ class BackgroundIncomingCallEventManager implements CallkeepBackgroundServiceDel
   }
 
   final CallLogsRepository _callLogsRepository;
-  final BackgroundPushNotificationService _callkeep;
+  final BackgroundSignalingService _callkeep;
 
   late final SignalingManager _signalingManager;
 
@@ -35,31 +37,56 @@ class BackgroundIncomingCallEventManager implements CallkeepBackgroundServiceDel
       coreUrl: storage.readCoreUrl() ?? '',
       tenantId: storage.readTenantId() ?? '',
       token: storage.readToken() ?? '',
+      enableReconnect: true,
       certificates: certificates,
+      onDisconnect: _handleSignalingDisconnect,
       onError: _handleSignalingError,
       onHangupCall: _handleHangupCall,
+      onIncomingCall: _handleIncomingCall,
       onUnregistered: _handleUnregisteredEvent,
       onNoActiveLines: _handleAvoidLines,
     );
   }
 
-  Future<void> close() async {
-    return _signalingManager.dispose();
-  }
-
   // Handles the service startup. This can occur under several scenarios:
-  // - Launching from an FCM isolate.
   // - User enabling the socket type.
   // - Service being restarted.
   // - Automatic start during system boot.
-  Future<void> onStart() async {
-    _logger.info('Starting background call event service');
-    return _signalingManager.launch();
+  Future<void> sync(CallkeepServiceStatus status) async {
+    _logger.info('onStart: $status');
+
+    final mainSignalingStatus = (status.mainSignalingStatus == CallkeepSignalingStatus.connecting ||
+        status.mainSignalingStatus == CallkeepSignalingStatus.connect);
+
+    final isAppInBackground = (status.lifecycleEvent == CallkeepLifecycleEvent.onStop ||
+        status.lifecycleEvent == CallkeepLifecycleEvent.onDestroy);
+
+    if (isAppInBackground && !mainSignalingStatus) {
+      _signalingManager.launch();
+    } else {
+      _signalingManager.dispose();
+    }
+  }
+
+  void _handleAvoidLines() async {
+    await _callkeep.endAllBackgroundCalls();
+  }
+
+  void _handleIncomingCall(IncomingCallEvent event) {
+    try {
+      _callkeep.incomingCall(
+        event.callId,
+        CallkeepHandle.number(event.caller),
+        displayName: event.callerDisplayName,
+        hasVideo: JsepValue.fromOptional(event.jsep)?.hasVideo ?? false,
+      );
+    } catch (e) {
+      _handleExceptions(e);
+    }
   }
 
   void _handleHangupCall(HangupEvent event) async {
     try {
-      _logger.info('Ending call: ${event.callId}');
       await _callkeep.endBackgroundCall(event.callId);
     } catch (e) {
       _handleExceptions(e);
@@ -67,15 +94,15 @@ class BackgroundIncomingCallEventManager implements CallkeepBackgroundServiceDel
   }
 
   void _handleSignalingError(error, [StackTrace? stackTrace]) async {
-    try {
-      await _callkeep.endAllBackgroundCalls();
-    } catch (e) {
+    try {} catch (e) {
       _handleExceptions(e);
     }
   }
 
-  void _handleAvoidLines() async {
-    await _callkeep.endAllBackgroundCalls();
+  void _handleSignalingDisconnect(int? code, String? reason) async {
+    try {} catch (e) {
+      _handleExceptions(e);
+    }
   }
 
   void _handleUnregisteredEvent(UnregisteredEvent event) async {
@@ -87,16 +114,15 @@ class BackgroundIncomingCallEventManager implements CallkeepBackgroundServiceDel
   }
 
   @override
-  void performServiceAnswerCall(String callId) async {
-    // Check if the device is connected to the network only then proceed
-    if (!(await _signalingManager.hasNetworkConnection())) {
-      throw Exception('Not connected');
-    }
-  }
+  void performServiceAnswerCall(String callId) {}
 
   @override
   void performServiceEndCall(String callId) async {
-    return _signalingManager.declineCall(callId);
+    try {
+      await _signalingManager.declineCall(callId);
+    } catch (e) {
+      _handleExceptions(e);
+    }
   }
 
 // TODO (Serdun): Rename this callback to align with naming conventions.

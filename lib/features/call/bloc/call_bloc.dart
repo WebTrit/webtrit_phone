@@ -181,7 +181,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     super.onChange(change);
 
     // Update the signaling status in Callkeep to ensure proper call handling when the app is minimized or in the background
-    callkeepConnections.updateActivitySignalingStatus(state.signalingClientStatus.toCallkeepSignalingStatus());
+    callkeepConnections
+        .updateActivitySignalingStatus(change.nextState.signalingClientStatus.toCallkeepSignalingStatus());
 
     // TODO: add detailed explanation of the following code and why it is necessary to initialize signaling client in background
     if (change.currentState.isActive != change.nextState.isActive) {
