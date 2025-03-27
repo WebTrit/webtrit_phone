@@ -13,7 +13,7 @@ import 'package:webtrit_phone/repositories/repositories.dart';
 
 import '../models/models.dart';
 
-final _logger = Logger('BackgroundCallEventService');
+final _logger = Logger('SignalingForegroundIsolateManager');
 
 class SignalingForegroundIsolateManager implements CallkeepBackgroundServiceDelegate {
   SignalingForegroundIsolateManager({

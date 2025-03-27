@@ -10,10 +10,8 @@ import 'push_notification_isolate_manager.dart';
 
 // TODO (Serdun): Refactor PushNotificationIsolateManager and SignalingForegroundIsolateManager into a single manager to reduce code duplication.
 
-BackgroundPushNotificationService? _backgroundPushNotificationService;
 PushNotificationIsolateManager? _pushNotificationIsolateManager;
 
-BackgroundSignalingService? _backgroundSignalingService;
 SignalingForegroundIsolateManager? _signalingForegroundIsolateManager;
 
 RemoteConfigService? _remoteConfigService;
@@ -27,7 +25,7 @@ AppInfo? _appInfo;
 
 CallLogsRepository? _callLogsRepository;
 
-Future<void> _initializeDependencies() async {
+Future<void> _initializeCommonDependencies() async {
   // Cache remote configuration
   _remoteConfigService ??= await DefaultRemoteCacheConfigService.init();
 
@@ -47,20 +45,21 @@ Future<void> _initializeDependencies() async {
   _secureStorage = await SecureStorage.init();
 
   _callLogsRepository ??= CallLogsRepository(appDatabase: await IsolateDatabase.create());
-  _backgroundPushNotificationService ??= BackgroundPushNotificationService();
+}
 
-  _pushNotificationIsolateManager ??= PushNotificationIsolateManager(
+Future<void> _initializeSignalingDependencies() async {
+  _signalingForegroundIsolateManager ??= SignalingForegroundIsolateManager(
     callLogsRepository: _callLogsRepository!,
-    callkeep: _backgroundPushNotificationService!,
+    callkeep: BackgroundSignalingService(),
     storage: _secureStorage!,
     certificates: _appCertificates!.trustedCertificates,
   );
+}
 
-  _backgroundSignalingService ??= BackgroundSignalingService();
-
-  _signalingForegroundIsolateManager ??= SignalingForegroundIsolateManager(
+Future<void> _initializePushNotificationDependencies() async {
+  _pushNotificationIsolateManager ??= PushNotificationIsolateManager(
     callLogsRepository: _callLogsRepository!,
-    callkeep: _backgroundSignalingService!,
+    callkeep: BackgroundPushNotificationService(),
     storage: _secureStorage!,
     certificates: _appCertificates!.trustedCertificates,
   );
@@ -71,7 +70,8 @@ final _logger = Logger('BackgroundCallIsolate');
 // Called by the Flutter engine when the signaling service is started.
 @pragma('vm:entry-point')
 Future<void> onPushNotificationSyncCallback(CallkeepPushNotificationSyncStatus status) async {
-  await _initializeDependencies();
+  await _initializeCommonDependencies();
+  await _initializePushNotificationDependencies();
 
   _logger.info('onPushNotificationCallback: $status');
 
@@ -86,7 +86,8 @@ Future<void> onPushNotificationSyncCallback(CallkeepPushNotificationSyncStatus s
 // Called by the Flutter engine when the signaling service is triggered.
 @pragma('vm:entry-point')
 Future<void> onSignalingSyncCallback(CallkeepServiceStatus status) async {
-  await _initializeDependencies();
+  await _initializeCommonDependencies();
+  await _initializeSignalingDependencies();
 
   _logger.info('onSignalingSyncCallback: $status');
 
