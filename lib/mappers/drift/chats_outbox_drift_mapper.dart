@@ -11,7 +11,9 @@ mixin ChatsOutboxDriftMapper {
       forwardFromId: data.forwardFromId,
       authorId: data.authorId,
       content: data.content,
+      attachments: data.attachments?.split(','),
       sendAttempts: data.sendAttempts,
+      failureCode: data.failureCode,
     );
   }
 
@@ -24,7 +26,9 @@ mixin ChatsOutboxDriftMapper {
       forwardFromId: entry.forwardFromId,
       authorId: entry.authorId,
       content: entry.content,
+      attachments: entry.attachments?.join(','),
       sendAttempts: entry.sendAttempts,
+      failureCode: entry.failureCode,
     );
   }
 

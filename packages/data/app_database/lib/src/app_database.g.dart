@@ -3689,6 +3689,12 @@ class $ChatOutboxMessageTableTable extends ChatOutboxMessageTable
   late final GeneratedColumn<String> content = GeneratedColumn<String>(
       'content', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _attachmentsMeta =
+      const VerificationMeta('attachments');
+  @override
+  late final GeneratedColumn<String> attachments = GeneratedColumn<String>(
+      'attachments', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
   static const VerificationMeta _sendAttemptsMeta =
       const VerificationMeta('sendAttempts');
   @override
@@ -3697,6 +3703,12 @@ class $ChatOutboxMessageTableTable extends ChatOutboxMessageTable
       type: DriftSqlType.int,
       requiredDuringInsert: false,
       defaultValue: const Constant(0));
+  static const VerificationMeta _failureCodeMeta =
+      const VerificationMeta('failureCode');
+  @override
+  late final GeneratedColumn<String> failureCode = GeneratedColumn<String>(
+      'failure_code', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
   @override
   List<GeneratedColumn> get $columns => [
         idKey,
@@ -3706,7 +3718,9 @@ class $ChatOutboxMessageTableTable extends ChatOutboxMessageTable
         forwardFromId,
         authorId,
         content,
-        sendAttempts
+        attachments,
+        sendAttempts,
+        failureCode
       ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -3757,11 +3771,23 @@ class $ChatOutboxMessageTableTable extends ChatOutboxMessageTable
     } else if (isInserting) {
       context.missing(_contentMeta);
     }
+    if (data.containsKey('attachments')) {
+      context.handle(
+          _attachmentsMeta,
+          attachments.isAcceptableOrUnknown(
+              data['attachments']!, _attachmentsMeta));
+    }
     if (data.containsKey('send_attempts')) {
       context.handle(
           _sendAttemptsMeta,
           sendAttempts.isAcceptableOrUnknown(
               data['send_attempts']!, _sendAttemptsMeta));
+    }
+    if (data.containsKey('failure_code')) {
+      context.handle(
+          _failureCodeMeta,
+          failureCode.isAcceptableOrUnknown(
+              data['failure_code']!, _failureCodeMeta));
     }
     return context;
   }
@@ -3786,8 +3812,12 @@ class $ChatOutboxMessageTableTable extends ChatOutboxMessageTable
           .read(DriftSqlType.string, data['${effectivePrefix}author_id']),
       content: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}content'])!,
+      attachments: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}attachments']),
       sendAttempts: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}send_attempts'])!,
+      failureCode: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}failure_code']),
     );
   }
 
@@ -3806,7 +3836,9 @@ class ChatOutboxMessageData extends DataClass
   final int? forwardFromId;
   final String? authorId;
   final String content;
+  final String? attachments;
   final int sendAttempts;
+  final String? failureCode;
   const ChatOutboxMessageData(
       {required this.idKey,
       this.chatId,
@@ -3815,7 +3847,9 @@ class ChatOutboxMessageData extends DataClass
       this.forwardFromId,
       this.authorId,
       required this.content,
-      required this.sendAttempts});
+      this.attachments,
+      required this.sendAttempts,
+      this.failureCode});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -3836,7 +3870,13 @@ class ChatOutboxMessageData extends DataClass
       map['author_id'] = Variable<String>(authorId);
     }
     map['content'] = Variable<String>(content);
+    if (!nullToAbsent || attachments != null) {
+      map['attachments'] = Variable<String>(attachments);
+    }
     map['send_attempts'] = Variable<int>(sendAttempts);
+    if (!nullToAbsent || failureCode != null) {
+      map['failure_code'] = Variable<String>(failureCode);
+    }
     return map;
   }
 
@@ -3858,7 +3898,13 @@ class ChatOutboxMessageData extends DataClass
           ? const Value.absent()
           : Value(authorId),
       content: Value(content),
+      attachments: attachments == null && nullToAbsent
+          ? const Value.absent()
+          : Value(attachments),
       sendAttempts: Value(sendAttempts),
+      failureCode: failureCode == null && nullToAbsent
+          ? const Value.absent()
+          : Value(failureCode),
     );
   }
 
@@ -3873,7 +3919,9 @@ class ChatOutboxMessageData extends DataClass
       forwardFromId: serializer.fromJson<int?>(json['forwardFromId']),
       authorId: serializer.fromJson<String?>(json['authorId']),
       content: serializer.fromJson<String>(json['content']),
+      attachments: serializer.fromJson<String?>(json['attachments']),
       sendAttempts: serializer.fromJson<int>(json['sendAttempts']),
+      failureCode: serializer.fromJson<String?>(json['failureCode']),
     );
   }
   @override
@@ -3887,7 +3935,9 @@ class ChatOutboxMessageData extends DataClass
       'forwardFromId': serializer.toJson<int?>(forwardFromId),
       'authorId': serializer.toJson<String?>(authorId),
       'content': serializer.toJson<String>(content),
+      'attachments': serializer.toJson<String?>(attachments),
       'sendAttempts': serializer.toJson<int>(sendAttempts),
+      'failureCode': serializer.toJson<String?>(failureCode),
     };
   }
 
@@ -3899,7 +3949,9 @@ class ChatOutboxMessageData extends DataClass
           Value<int?> forwardFromId = const Value.absent(),
           Value<String?> authorId = const Value.absent(),
           String? content,
-          int? sendAttempts}) =>
+          Value<String?> attachments = const Value.absent(),
+          int? sendAttempts,
+          Value<String?> failureCode = const Value.absent()}) =>
       ChatOutboxMessageData(
         idKey: idKey ?? this.idKey,
         chatId: chatId.present ? chatId.value : this.chatId,
@@ -3910,7 +3962,9 @@ class ChatOutboxMessageData extends DataClass
             forwardFromId.present ? forwardFromId.value : this.forwardFromId,
         authorId: authorId.present ? authorId.value : this.authorId,
         content: content ?? this.content,
+        attachments: attachments.present ? attachments.value : this.attachments,
         sendAttempts: sendAttempts ?? this.sendAttempts,
+        failureCode: failureCode.present ? failureCode.value : this.failureCode,
       );
   ChatOutboxMessageData copyWithCompanion(ChatOutboxMessageDataCompanion data) {
     return ChatOutboxMessageData(
@@ -3925,9 +3979,13 @@ class ChatOutboxMessageData extends DataClass
           : this.forwardFromId,
       authorId: data.authorId.present ? data.authorId.value : this.authorId,
       content: data.content.present ? data.content.value : this.content,
+      attachments:
+          data.attachments.present ? data.attachments.value : this.attachments,
       sendAttempts: data.sendAttempts.present
           ? data.sendAttempts.value
           : this.sendAttempts,
+      failureCode:
+          data.failureCode.present ? data.failureCode.value : this.failureCode,
     );
   }
 
@@ -3941,14 +3999,16 @@ class ChatOutboxMessageData extends DataClass
           ..write('forwardFromId: $forwardFromId, ')
           ..write('authorId: $authorId, ')
           ..write('content: $content, ')
-          ..write('sendAttempts: $sendAttempts')
+          ..write('attachments: $attachments, ')
+          ..write('sendAttempts: $sendAttempts, ')
+          ..write('failureCode: $failureCode')
           ..write(')'))
         .toString();
   }
 
   @override
   int get hashCode => Object.hash(idKey, chatId, participantId, replyToId,
-      forwardFromId, authorId, content, sendAttempts);
+      forwardFromId, authorId, content, attachments, sendAttempts, failureCode);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -3960,7 +4020,9 @@ class ChatOutboxMessageData extends DataClass
           other.forwardFromId == this.forwardFromId &&
           other.authorId == this.authorId &&
           other.content == this.content &&
-          other.sendAttempts == this.sendAttempts);
+          other.attachments == this.attachments &&
+          other.sendAttempts == this.sendAttempts &&
+          other.failureCode == this.failureCode);
 }
 
 class ChatOutboxMessageDataCompanion
@@ -3972,7 +4034,9 @@ class ChatOutboxMessageDataCompanion
   final Value<int?> forwardFromId;
   final Value<String?> authorId;
   final Value<String> content;
+  final Value<String?> attachments;
   final Value<int> sendAttempts;
+  final Value<String?> failureCode;
   final Value<int> rowid;
   const ChatOutboxMessageDataCompanion({
     this.idKey = const Value.absent(),
@@ -3982,7 +4046,9 @@ class ChatOutboxMessageDataCompanion
     this.forwardFromId = const Value.absent(),
     this.authorId = const Value.absent(),
     this.content = const Value.absent(),
+    this.attachments = const Value.absent(),
     this.sendAttempts = const Value.absent(),
+    this.failureCode = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   ChatOutboxMessageDataCompanion.insert({
@@ -3993,7 +4059,9 @@ class ChatOutboxMessageDataCompanion
     this.forwardFromId = const Value.absent(),
     this.authorId = const Value.absent(),
     required String content,
+    this.attachments = const Value.absent(),
     this.sendAttempts = const Value.absent(),
+    this.failureCode = const Value.absent(),
     this.rowid = const Value.absent(),
   })  : idKey = Value(idKey),
         content = Value(content);
@@ -4005,7 +4073,9 @@ class ChatOutboxMessageDataCompanion
     Expression<int>? forwardFromId,
     Expression<String>? authorId,
     Expression<String>? content,
+    Expression<String>? attachments,
     Expression<int>? sendAttempts,
+    Expression<String>? failureCode,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -4016,7 +4086,9 @@ class ChatOutboxMessageDataCompanion
       if (forwardFromId != null) 'forward_from_id': forwardFromId,
       if (authorId != null) 'author_id': authorId,
       if (content != null) 'content': content,
+      if (attachments != null) 'attachments': attachments,
       if (sendAttempts != null) 'send_attempts': sendAttempts,
+      if (failureCode != null) 'failure_code': failureCode,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -4029,7 +4101,9 @@ class ChatOutboxMessageDataCompanion
       Value<int?>? forwardFromId,
       Value<String?>? authorId,
       Value<String>? content,
+      Value<String?>? attachments,
       Value<int>? sendAttempts,
+      Value<String?>? failureCode,
       Value<int>? rowid}) {
     return ChatOutboxMessageDataCompanion(
       idKey: idKey ?? this.idKey,
@@ -4039,7 +4113,9 @@ class ChatOutboxMessageDataCompanion
       forwardFromId: forwardFromId ?? this.forwardFromId,
       authorId: authorId ?? this.authorId,
       content: content ?? this.content,
+      attachments: attachments ?? this.attachments,
       sendAttempts: sendAttempts ?? this.sendAttempts,
+      failureCode: failureCode ?? this.failureCode,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -4068,8 +4144,14 @@ class ChatOutboxMessageDataCompanion
     if (content.present) {
       map['content'] = Variable<String>(content.value);
     }
+    if (attachments.present) {
+      map['attachments'] = Variable<String>(attachments.value);
+    }
     if (sendAttempts.present) {
       map['send_attempts'] = Variable<int>(sendAttempts.value);
+    }
+    if (failureCode.present) {
+      map['failure_code'] = Variable<String>(failureCode.value);
     }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
@@ -4087,7 +4169,9 @@ class ChatOutboxMessageDataCompanion
           ..write('forwardFromId: $forwardFromId, ')
           ..write('authorId: $authorId, ')
           ..write('content: $content, ')
+          ..write('attachments: $attachments, ')
           ..write('sendAttempts: $sendAttempts, ')
+          ..write('failureCode: $failureCode, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -9819,9 +9903,10 @@ final class $$ChatMembersTableTableReferences extends BaseReferences<
       db.chatsTable.createAlias(
           $_aliasNameGenerator(db.chatMembersTable.chatId, db.chatsTable.id));
 
-  $$ChatsTableTableProcessedTableManager get chatId {
+  $$ChatsTableTableProcessedTableManager? get chatId {
+    if ($_item.chatId == null) return null;
     final manager = $$ChatsTableTableTableManager($_db, $_db.chatsTable)
-        .filter((f) => f.id($_item.chatId));
+        .filter((f) => f.id($_item.chatId!));
     final item = $_typedResult.readTableOrNull(_chatIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -10096,9 +10181,10 @@ final class $$ChatMessagesTableTableReferences extends BaseReferences<
       db.chatsTable.createAlias(
           $_aliasNameGenerator(db.chatMessagesTable.chatId, db.chatsTable.id));
 
-  $$ChatsTableTableProcessedTableManager get chatId {
+  $$ChatsTableTableProcessedTableManager? get chatId {
+    if ($_item.chatId == null) return null;
     final manager = $$ChatsTableTableTableManager($_db, $_db.chatsTable)
-        .filter((f) => f.id($_item.chatId));
+        .filter((f) => f.id($_item.chatId!));
     final item = $_typedResult.readTableOrNull(_chatIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -10466,9 +10552,10 @@ final class $$ChatMessageSyncCursorTableTableReferences extends BaseReferences<
       db.chatsTable.createAlias($_aliasNameGenerator(
           db.chatMessageSyncCursorTable.chatId, db.chatsTable.id));
 
-  $$ChatsTableTableProcessedTableManager get chatId {
+  $$ChatsTableTableProcessedTableManager? get chatId {
+    if ($_item.chatId == null) return null;
     final manager = $$ChatsTableTableTableManager($_db, $_db.chatsTable)
-        .filter((f) => f.id($_item.chatId));
+        .filter((f) => f.id($_item.chatId!));
     final item = $_typedResult.readTableOrNull(_chatIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -10727,9 +10814,10 @@ final class $$ChatMessageReadCursorTableTableReferences extends BaseReferences<
       db.chatsTable.createAlias($_aliasNameGenerator(
           db.chatMessageReadCursorTable.chatId, db.chatsTable.id));
 
-  $$ChatsTableTableProcessedTableManager get chatId {
+  $$ChatsTableTableProcessedTableManager? get chatId {
+    if ($_item.chatId == null) return null;
     final manager = $$ChatsTableTableTableManager($_db, $_db.chatsTable)
-        .filter((f) => f.id($_item.chatId));
+        .filter((f) => f.id($_item.chatId!));
     final item = $_typedResult.readTableOrNull(_chatIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -10967,7 +11055,9 @@ typedef $$ChatOutboxMessageTableTableCreateCompanionBuilder
   Value<int?> forwardFromId,
   Value<String?> authorId,
   required String content,
+  Value<String?> attachments,
   Value<int> sendAttempts,
+  Value<String?> failureCode,
   Value<int> rowid,
 });
 typedef $$ChatOutboxMessageTableTableUpdateCompanionBuilder
@@ -10979,7 +11069,9 @@ typedef $$ChatOutboxMessageTableTableUpdateCompanionBuilder
   Value<int?> forwardFromId,
   Value<String?> authorId,
   Value<String> content,
+  Value<String?> attachments,
   Value<int> sendAttempts,
+  Value<String?> failureCode,
   Value<int> rowid,
 });
 
@@ -11030,8 +11122,14 @@ class $$ChatOutboxMessageTableTableFilterComposer
   ColumnFilters<String> get content => $composableBuilder(
       column: $table.content, builder: (column) => ColumnFilters(column));
 
+  ColumnFilters<String> get attachments => $composableBuilder(
+      column: $table.attachments, builder: (column) => ColumnFilters(column));
+
   ColumnFilters<int> get sendAttempts => $composableBuilder(
       column: $table.sendAttempts, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get failureCode => $composableBuilder(
+      column: $table.failureCode, builder: (column) => ColumnFilters(column));
 
   $$ChatsTableTableFilterComposer get chatId {
     final $$ChatsTableTableFilterComposer composer = $composerBuilder(
@@ -11083,9 +11181,15 @@ class $$ChatOutboxMessageTableTableOrderingComposer
   ColumnOrderings<String> get content => $composableBuilder(
       column: $table.content, builder: (column) => ColumnOrderings(column));
 
+  ColumnOrderings<String> get attachments => $composableBuilder(
+      column: $table.attachments, builder: (column) => ColumnOrderings(column));
+
   ColumnOrderings<int> get sendAttempts => $composableBuilder(
       column: $table.sendAttempts,
       builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get failureCode => $composableBuilder(
+      column: $table.failureCode, builder: (column) => ColumnOrderings(column));
 
   $$ChatsTableTableOrderingComposer get chatId {
     final $$ChatsTableTableOrderingComposer composer = $composerBuilder(
@@ -11135,8 +11239,14 @@ class $$ChatOutboxMessageTableTableAnnotationComposer
   GeneratedColumn<String> get content =>
       $composableBuilder(column: $table.content, builder: (column) => column);
 
+  GeneratedColumn<String> get attachments => $composableBuilder(
+      column: $table.attachments, builder: (column) => column);
+
   GeneratedColumn<int> get sendAttempts => $composableBuilder(
       column: $table.sendAttempts, builder: (column) => column);
+
+  GeneratedColumn<String> get failureCode => $composableBuilder(
+      column: $table.failureCode, builder: (column) => column);
 
   $$ChatsTableTableAnnotationComposer get chatId {
     final $$ChatsTableTableAnnotationComposer composer = $composerBuilder(
@@ -11193,7 +11303,9 @@ class $$ChatOutboxMessageTableTableTableManager extends RootTableManager<
             Value<int?> forwardFromId = const Value.absent(),
             Value<String?> authorId = const Value.absent(),
             Value<String> content = const Value.absent(),
+            Value<String?> attachments = const Value.absent(),
             Value<int> sendAttempts = const Value.absent(),
+            Value<String?> failureCode = const Value.absent(),
             Value<int> rowid = const Value.absent(),
           }) =>
               ChatOutboxMessageDataCompanion(
@@ -11204,7 +11316,9 @@ class $$ChatOutboxMessageTableTableTableManager extends RootTableManager<
             forwardFromId: forwardFromId,
             authorId: authorId,
             content: content,
+            attachments: attachments,
             sendAttempts: sendAttempts,
+            failureCode: failureCode,
             rowid: rowid,
           ),
           createCompanionCallback: ({
@@ -11215,7 +11329,9 @@ class $$ChatOutboxMessageTableTableTableManager extends RootTableManager<
             Value<int?> forwardFromId = const Value.absent(),
             Value<String?> authorId = const Value.absent(),
             required String content,
+            Value<String?> attachments = const Value.absent(),
             Value<int> sendAttempts = const Value.absent(),
+            Value<String?> failureCode = const Value.absent(),
             Value<int> rowid = const Value.absent(),
           }) =>
               ChatOutboxMessageDataCompanion.insert(
@@ -11226,7 +11342,9 @@ class $$ChatOutboxMessageTableTableTableManager extends RootTableManager<
             forwardFromId: forwardFromId,
             authorId: authorId,
             content: content,
+            attachments: attachments,
             sendAttempts: sendAttempts,
+            failureCode: failureCode,
             rowid: rowid,
           ),
           withReferenceMapper: (p0) => p0
@@ -11315,9 +11433,10 @@ final class $$ChatOutboxMessageEditTableTableReferences extends BaseReferences<
       db.chatsTable.createAlias($_aliasNameGenerator(
           db.chatOutboxMessageEditTable.chatId, db.chatsTable.id));
 
-  $$ChatsTableTableProcessedTableManager get chatId {
+  $$ChatsTableTableProcessedTableManager? get chatId {
+    if ($_item.chatId == null) return null;
     final manager = $$ChatsTableTableTableManager($_db, $_db.chatsTable)
-        .filter((f) => f.id($_item.chatId));
+        .filter((f) => f.id($_item.chatId!));
     final item = $_typedResult.readTableOrNull(_chatIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -11593,9 +11712,10 @@ final class $$ChatOutboxMessageDeleteTableTableReferences
       db.chatsTable.createAlias($_aliasNameGenerator(
           db.chatOutboxMessageDeleteTable.chatId, db.chatsTable.id));
 
-  $$ChatsTableTableProcessedTableManager get chatId {
+  $$ChatsTableTableProcessedTableManager? get chatId {
+    if ($_item.chatId == null) return null;
     final manager = $$ChatsTableTableTableManager($_db, $_db.chatsTable)
-        .filter((f) => f.id($_item.chatId));
+        .filter((f) => f.id($_item.chatId!));
     final item = $_typedResult.readTableOrNull(_chatIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -11859,9 +11979,10 @@ final class $$ChatOutboxReadCursorsTableTableReferences extends BaseReferences<
       db.chatsTable.createAlias($_aliasNameGenerator(
           db.chatOutboxReadCursorsTable.chatId, db.chatsTable.id));
 
-  $$ChatsTableTableProcessedTableManager get chatId {
+  $$ChatsTableTableProcessedTableManager? get chatId {
+    if ($_item.chatId == null) return null;
     final manager = $$ChatsTableTableTableManager($_db, $_db.chatsTable)
-        .filter((f) => f.id($_item.chatId));
+        .filter((f) => f.id($_item.chatId!));
     final item = $_typedResult.readTableOrNull(_chatIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -12811,10 +12932,11 @@ final class $$SmsMessagesTableTableReferences extends BaseReferences<
       db.smsConversationsTable.createAlias($_aliasNameGenerator(
           db.smsMessagesTable.conversationId, db.smsConversationsTable.id));
 
-  $$SmsConversationsTableTableProcessedTableManager get conversationId {
+  $$SmsConversationsTableTableProcessedTableManager? get conversationId {
+    if ($_item.conversationId == null) return null;
     final manager = $$SmsConversationsTableTableTableManager(
             $_db, $_db.smsConversationsTable)
-        .filter((f) => f.id($_item.conversationId));
+        .filter((f) => f.id($_item.conversationId!));
     final item = $_typedResult.readTableOrNull(_conversationIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -13176,10 +13298,11 @@ final class $$SmsMessageSyncCursorTableTableReferences extends BaseReferences<
           db.smsMessageSyncCursorTable.conversationId,
           db.smsConversationsTable.id));
 
-  $$SmsConversationsTableTableProcessedTableManager get conversationId {
+  $$SmsConversationsTableTableProcessedTableManager? get conversationId {
+    if ($_item.conversationId == null) return null;
     final manager = $$SmsConversationsTableTableTableManager(
             $_db, $_db.smsConversationsTable)
-        .filter((f) => f.id($_item.conversationId));
+        .filter((f) => f.id($_item.conversationId!));
     final item = $_typedResult.readTableOrNull(_conversationIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -13436,10 +13559,11 @@ final class $$SmsMessageReadCursorTableTableReferences extends BaseReferences<
           db.smsMessageReadCursorTable.conversationId,
           db.smsConversationsTable.id));
 
-  $$SmsConversationsTableTableProcessedTableManager get conversationId {
+  $$SmsConversationsTableTableProcessedTableManager? get conversationId {
+    if ($_item.conversationId == null) return null;
     final manager = $$SmsConversationsTableTableTableManager(
             $_db, $_db.smsConversationsTable)
-        .filter((f) => f.id($_item.conversationId));
+        .filter((f) => f.id($_item.conversationId!));
     final item = $_typedResult.readTableOrNull(_conversationIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -14014,10 +14138,11 @@ final class $$SmsOutboxMessageDeleteTableTableReferences extends BaseReferences<
           db.smsOutboxMessageDeleteTable.conversationId,
           db.smsConversationsTable.id));
 
-  $$SmsConversationsTableTableProcessedTableManager get conversationId {
+  $$SmsConversationsTableTableProcessedTableManager? get conversationId {
+    if ($_item.conversationId == null) return null;
     final manager = $$SmsConversationsTableTableTableManager(
             $_db, $_db.smsConversationsTable)
-        .filter((f) => f.id($_item.conversationId));
+        .filter((f) => f.id($_item.conversationId!));
     final item = $_typedResult.readTableOrNull(_conversationIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -14282,10 +14407,11 @@ final class $$SmsOutboxReadCursorsTableTableReferences extends BaseReferences<
           db.smsOutboxReadCursorsTable.conversationId,
           db.smsConversationsTable.id));
 
-  $$SmsConversationsTableTableProcessedTableManager get conversationId {
+  $$SmsConversationsTableTableProcessedTableManager? get conversationId {
+    if ($_item.conversationId == null) return null;
     final manager = $$SmsConversationsTableTableTableManager(
             $_db, $_db.smsConversationsTable)
-        .filter((f) => f.id($_item.conversationId));
+        .filter((f) => f.id($_item.conversationId!));
     final item = $_typedResult.readTableOrNull(_conversationIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
