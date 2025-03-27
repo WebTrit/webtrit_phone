@@ -35,6 +35,11 @@ class MessageBody extends StatefulWidget {
 }
 
 class _MessageBodyState extends State<MessageBody> {
+  late final horizontalSpace = MediaQuery.of(context).size.width - (widget.isMine ? 82 : 82 + 48);
+
+  late final mediaAttachments = widget.attachments.where((p) => p.isImagePath).toList();
+  late final fileAttachments = widget.attachments.where((p) => !p.isImagePath).toList();
+
   static final previewsCache = LruMap<String, OgPreview>(maximumSize: 100);
   OgPreview? preview;
 
@@ -48,18 +53,6 @@ class _MessageBodyState extends State<MessageBody> {
   void didUpdateWidget(covariant MessageBody oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.text != widget.text) findLink(widget.text);
-  }
-
-  List<String> get attachments {
-    return widget.attachments;
-  }
-
-  List<String> get mediaAttachments {
-    return attachments.where((attachment) => attachment.isImagePath).toList();
-  }
-
-  List<String> get fileAttachments {
-    return attachments.where((attachment) => !attachment.isImagePath).toList();
   }
 
   findLink(String text) {
@@ -89,54 +82,30 @@ class _MessageBodyState extends State<MessageBody> {
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
+      spacing: 8,
       children: [
         if (mediaAttachments.isNotEmpty) ...[
           MediaStaggerWrap(
             buildElement: (index, size) => imagePreview(mediaAttachments[index], size: size),
             count: mediaAttachments.length,
-            space: MediaQuery.of(context).size.width - (widget.isMine ? 82 : 82 + 48),
+            space: horizontalSpace,
           ),
-          const SizedBox(height: 8),
         ],
         if (fileAttachments.isNotEmpty) ...[
           Wrap(
             spacing: 8,
             runSpacing: 8,
-            children: fileAttachments.map((attachment) {
-              return filePreview(attachment.split('/').last);
-            }).toList(),
+            children: fileAttachments.map((attachment) => filePreview(attachment.split('/').last)).toList(),
           ),
-          const SizedBox(height: 8),
         ],
-        AnimatedCrossFade(
-          duration: const Duration(milliseconds: 600),
-          sizeCurve: Curves.elasticOut,
-          firstCurve: Curves.easeInExpo,
-          alignment: Alignment.center,
-          firstChild: Container(
+        if (preview != null)
+          Container(
             decoration: previewDecoration,
             padding: const EdgeInsets.all(8),
-            margin: const EdgeInsets.only(bottom: 8),
             child: Column(
               spacing: 8,
               children: [
-                if (preview?.imageUrl != null) ...[
-                  Container(
-                    clipBehavior: Clip.antiAlias,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(4),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.1),
-                          blurRadius: 4,
-                          spreadRadius: 2,
-                          offset: const Offset(0, 2),
-                        ),
-                      ],
-                    ),
-                    child: Image.network(preview!.imageUrl!),
-                  ),
-                ],
+                if (preview?.imageUrl != null) ...[imagePreview(preview!.imageUrl!, size: horizontalSpace)],
                 if ((preview?.title) != null)
                   Row(
                     children: [
@@ -176,9 +145,6 @@ class _MessageBodyState extends State<MessageBody> {
               ],
             ),
           ),
-          secondChild: const SizedBox(),
-          crossFadeState: preview != null ? CrossFadeState.showFirst : CrossFadeState.showSecond,
-        ),
         ParsedText(
           parse: [
             _mailToMatcher(style: style.copyWith(decoration: TextDecoration.underline)),
