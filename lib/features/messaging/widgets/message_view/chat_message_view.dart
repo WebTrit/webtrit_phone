@@ -120,6 +120,9 @@ class _ChatMessageViewState extends State<ChatMessageView> {
     if (isSended && membersReadedUntil != null) isViewedByMembers = !message.createdAt.isAfter(membersReadedUntil);
     if (isSended && userReadedUntil != null) isViewedByUser = !message.createdAt.isAfter(userReadedUntil);
 
+    // final attachments = message?.attachments ?? outboxMessage?.attachments ?? [];
+    final attachments = outboxMessage?.attachments ?? [];
+
     final popupItems = [
       if (hasContent)
         PopupMenuItem(
@@ -215,7 +218,7 @@ class _ChatMessageViewState extends State<ChatMessageView> {
                 child: IntrinsicWidth(
                   child: Column(
                     key: bodyKey,
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       ParticipantName(
                         senderId: senderId,
@@ -232,7 +235,7 @@ class _ChatMessageViewState extends State<ChatMessageView> {
                         ForwartQuote(context: context, userId: widget.userId, msg: message!, isMine: isMine),
                       ],
                       if (!isForward && !isDeleted) ...[
-                        MessageBody(text: content, isMine: isMine, style: theme.contentStyle),
+                        MessageBody(text: content, attachments: attachments, isMine: isMine, style: theme.contentStyle),
                       ],
                       if (isEdited && !isDeleted) ...[
                         const SizedBox(height: 4),
@@ -246,7 +249,6 @@ class _ChatMessageViewState extends State<ChatMessageView> {
                       ],
                       const SizedBox(height: 4),
                       Row(
-                        mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           if (isMine && isSended == false)
@@ -257,7 +259,7 @@ class _ChatMessageViewState extends State<ChatMessageView> {
                           const SizedBox(width: 2),
                           if (message?.createdAt != null) Text(message!.createdAt.toHHmm, style: theme.subContentStyle)
                         ],
-                      ),
+                      )
                     ],
                   ),
                 ),
