@@ -11,7 +11,7 @@ import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
-final _logger = Logger('BackgroundCallEventService');
+final _logger = Logger('PushNotificationIsolateManager');
 
 class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegate {
   PushNotificationIsolateManager({
@@ -117,7 +117,15 @@ class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegat
       acceptedTime: acceptedTime,
       hungUpTime: hungUpTime,
     );
-    await _callLogsRepository.add(call);
+    try {
+      _logger.info('End call received save: $call');
+      await _callLogsRepository.add(call);
+      _logger.info('End call received saved: $call');
+    } catch (e) {
+      _logger.info("End call received save logs: $e");
+    }
+
+    return;
   }
 
   void _handleExceptions(e) {
