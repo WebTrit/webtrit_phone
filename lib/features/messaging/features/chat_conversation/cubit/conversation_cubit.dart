@@ -38,7 +38,7 @@ class ConversationCubit extends Cubit<ConversationState> {
   StreamSubscription? _outboxMessageDeletesSub;
   StreamSubscription? _readCursorsSub;
 
-  Future sendMessage(String content) async {
+  Future sendMessage(String content, List<String> attachments) async {
     final (:chatId, :participantId) = state.credentials;
 
     final outboxEntry = ChatOutboxMessageEntry(
@@ -46,11 +46,12 @@ class ConversationCubit extends Cubit<ConversationState> {
       chatId: chatId,
       participantId: participantId,
       content: content,
+      attachments: attachments,
     );
     _outboxRepository.upsertOutboxMessage(outboxEntry);
   }
 
-  Future sendReply(String content, ChatMessage refMessage) async {
+  Future sendReply(String content, List<String> attachments, ChatMessage refMessage) async {
     final (:chatId, :participantId) = state.credentials;
 
     final outboxEntry = ChatOutboxMessageEntry(
@@ -59,6 +60,7 @@ class ConversationCubit extends Cubit<ConversationState> {
       participantId: participantId,
       replyToId: refMessage.id,
       content: content,
+      attachments: attachments,
     );
     _outboxRepository.upsertOutboxMessage(outboxEntry);
   }
@@ -491,7 +493,7 @@ class ConversationCubit extends Cubit<ConversationState> {
   // ignore: unused_element
   Future<void> _fillHistory({int index = 0}) async {
     if (isClosed) return;
-    await sendMessage('Hello, I am a bot. I am here to help you. \n $index');
+    await sendMessage('Hello, I am a bot. I am here to help you. \n $index', []);
     if (index < 100) {
       await Future.delayed(const Duration(seconds: 2));
       await _fillHistory(index: index + 1);

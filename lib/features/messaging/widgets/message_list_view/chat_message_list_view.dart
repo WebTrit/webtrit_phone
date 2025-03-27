@@ -46,9 +46,9 @@ class ChatMessageListView extends StatefulWidget {
   final List<ChatMessageReadCursor> readCursors;
   final bool fetchingHistory;
   final bool historyEndReached;
-  final Function(String content) onSendMessage;
-  final Function(String content, ChatMessage refMessage) onSendReply;
-  final Function(String content, ChatMessage refMessage) onSendForward;
+  final Function(String content, List<String> attachments) onSendMessage;
+  final Function(String content, List<String> attachments, ChatMessage refMessage) onSendReply;
+  final Function(ChatMessage refMessage) onSendForward;
   final Function(String content, ChatMessage refMessage) onSendEdit;
   final Function(ChatMessage refMessage) onDelete;
   final Function(DateTime until) userReadedUntilUpdate;
@@ -127,26 +127,29 @@ class _ChatMessageListViewState extends State<ChatMessageListView> {
     if (content.isEmpty) return;
 
     if (messageForForward != null) {
-      widget.onSendForward(content, messageForForward);
-      chatsForwardingCubit.clear();
+      widget.onSendForward(messageForForward);
     } else if (replyingMessage != null) {
-      widget.onSendReply(content, replyingMessage!);
-      setState(() => replyingMessage = null);
+      widget.onSendReply(content, attachments, replyingMessage!);
     } else if (editingMessage != null) {
       widget.onSendEdit(content, editingMessage!);
-      setState(() => editingMessage = null);
     } else {
-      widget.onSendMessage(content);
+      widget.onSendMessage(content, attachments);
     }
 
+    attachments = [];
+    replyingMessage = null;
+    editingMessage = null;
     inputController.text = '';
+    chatsForwardingCubit.clear();
+
     scrollToBottom();
   }
 
   void handleSetForReply(ChatMessage message) {
     chatsForwardingCubit.clear();
-    setState(() => editingMessage = null);
-    setState(() => replyingMessage = message);
+    editingMessage = null;
+    replyingMessage = message;
+    setState(() {});
   }
 
   void handleSetForForward(ChatMessage message) async {
@@ -160,8 +163,10 @@ class _ChatMessageListViewState extends State<ChatMessageListView> {
 
   void handleSetForEdit(ChatMessage message) {
     chatsForwardingCubit.clear();
-    setState(() => replyingMessage = null);
-    setState(() => editingMessage = message);
+    replyingMessage = null;
+    editingMessage = message;
+    attachments = [];
+    setState(() {});
     inputController.text = message.content;
   }
 
@@ -279,6 +284,8 @@ class _ChatMessageListViewState extends State<ChatMessageListView> {
       builder: (context, state) {
         final messageForForward = state;
 
+        final canAddAttachments = attachments.isEmpty && messageForForward == null && editingMessage == null;
+
         Widget? exchangeWidget;
         if (messageForForward != null) {
           exchangeWidget = ExchangeBar(
@@ -286,7 +293,7 @@ class _ChatMessageListViewState extends State<ChatMessageListView> {
             icon: Icons.forward,
             onCancel: chatsForwardingCubit.clear,
             onConfirm: () {
-              widget.onSendForward(messageForForward.content, messageForForward);
+              widget.onSendForward(messageForForward);
               chatsForwardingCubit.clear();
             },
           );
@@ -315,16 +322,6 @@ class _ChatMessageListViewState extends State<ChatMessageListView> {
           );
         }
 
-        if (attachments.isNotEmpty) {
-          exchangeWidget = AttachmentsExchangeBar(
-            attachments: attachments,
-            onCancel: () {
-              setState(() => attachments = []);
-              FocusScope.of(context).unfocus();
-            },
-          );
-        }
-
         return Column(
           children: [
             AnimatedSwitcher(
@@ -339,12 +336,20 @@ class _ChatMessageListViewState extends State<ChatMessageListView> {
               switchOutCurve: Curves.easeOut,
               child: exchangeWidget ?? const SizedBox(),
             ),
+            if (attachments.isNotEmpty)
+              AttachmentsExchangeBar(
+                attachments: attachments,
+                onCancel: () {
+                  setState(() => attachments = []);
+                  FocusScope.of(context).unfocus();
+                },
+              ),
             if (messageForForward == null)
               MessageTextField(
                 controller: inputController,
                 onSend: handleSend,
                 onChanged: (value) => context.read<ChatTypingCubit>().sendTyping(),
-                onAddAttachment: handleAttachment,
+                onAddAttachment: canAddAttachments ? handleAttachment : null,
               )
           ],
         );
