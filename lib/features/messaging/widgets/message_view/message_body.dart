@@ -5,10 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:quiver/collection.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_parsed_text/flutter_parsed_text.dart';
-import 'package:webtrit_phone/extensions/string.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
+import 'package:webtrit_phone/extensions/string.dart';
 import 'package:webtrit_phone/features/messaging/messaging.dart';
 import 'package:webtrit_phone/utils/utils.dart';
+import 'package:webtrit_phone/widgets/widgets.dart';
 
 import 'media_stagger_wrap.dart';
 
@@ -220,35 +222,36 @@ class _MessageBodyState extends State<MessageBody> {
   }
 
   Widget imagePreview(String path, {double size = 64}) {
-    Widget frameBuilder(_, Widget child, frame, wasSynchronouslyLoaded) {
-      if (wasSynchronouslyLoaded) return child;
-
-      return SizedBox(
+    Widget placeholderBuilder() {
+      return Container(
         height: size,
         width: size,
-        child: AnimatedCrossFade(
-          duration: const Duration(milliseconds: 300),
-          firstCurve: Curves.easeIn,
-          secondCurve: Curves.easeOut,
-          firstChild: Container(
-            height: size,
-            width: size,
-            alignment: Alignment.center,
-            color: Colors.blueGrey.shade600,
-            child: Icon(
-              Icons.image,
-              size: size / 2,
-              color: Colors.white,
-            ),
-          ),
-          secondChild: child,
-          crossFadeState: frame == null ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+        alignment: Alignment.center,
+        child: Icon(
+          Icons.image,
+          size: size / 2,
+          color: Colors.white,
         ),
       );
     }
 
-    Widget errorBuilder(_, __, ___) {
-      return Icon(Icons.error, size: size);
+    Widget errorBuilder() {
+      return Container(
+        height: size,
+        width: size,
+        alignment: Alignment.center,
+        child: Icon(
+          Icons.error,
+          size: size / 2,
+          color: Colors.white,
+        ),
+      );
+    }
+
+    Widget frameBuilder(Widget child, int? frame, bool syncLoaded) {
+      if (syncLoaded) return child;
+      if (frame == null) return placeholderBuilder();
+      return FadeIn(child: child);
     }
 
     return SizedBox(
@@ -258,6 +261,7 @@ class _MessageBodyState extends State<MessageBody> {
         margin: const EdgeInsets.all(2),
         clipBehavior: Clip.antiAlias,
         decoration: BoxDecoration(
+          color: Colors.blueGrey.shade600,
           borderRadius: BorderRadius.circular(4),
           boxShadow: [
             BoxShadow(
@@ -268,24 +272,21 @@ class _MessageBodyState extends State<MessageBody> {
             ),
           ],
         ),
-        child: path.isLocalPath
-            ? Image.file(
-                File(path),
+        child: FutureBuilder(
+            future: path.isLocalPath ? Future.value(File(path)) : DefaultCacheManager().getSingleFile(path),
+            builder: (_, snapshot) {
+              final data = snapshot.data;
+              if (snapshot.hasError) return errorBuilder();
+              if (data == null) return placeholderBuilder();
+              return Image.file(
+                data,
                 height: size,
                 width: size,
                 fit: BoxFit.cover,
-                errorBuilder: errorBuilder,
-                frameBuilder: frameBuilder,
-              )
-            : Image.network(
-                path,
-                height: size,
-                width: size,
-                fit: BoxFit.cover,
-                errorBuilder: errorBuilder,
-                frameBuilder: frameBuilder,
-                // loadingBuilder: loadingBuilder,
-              ),
+                frameBuilder: (_, child, frame, syncLoaded) => frameBuilder(child, frame, syncLoaded),
+                errorBuilder: (_, __, ___) => errorBuilder(),
+              );
+            }),
       ),
     );
   }
