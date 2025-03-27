@@ -152,6 +152,12 @@ class ActiveCall with _$ActiveCall {
   bool get wasAccepted => acceptedTime != null;
 
   bool get wasHungUp => hungUpTime != null;
+
+  bool get remoteVideo => remoteStream?.getVideoTracks().isNotEmpty ?? false;
+
+  bool get localVideo => localStream?.getVideoTracks().isNotEmpty ?? false;
+
+  bool get cameraEnabled => localStream?.getVideoTracks().firstOrNull?.enabled == true;
 }
 
 extension ActiveCallIterableExtension<T extends ActiveCall> on Iterable<T> {

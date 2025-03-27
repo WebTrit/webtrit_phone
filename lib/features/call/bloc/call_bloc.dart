@@ -259,27 +259,39 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     }
   }
 
-  Future<RTCPeerConnection?> _peerConnectionRetrieve(String callId) async {
+  Future<RTCPeerConnection?> _peerConnectionRetrieve(String callId, [bool allowWaiting = true]) async {
     final peerConnectionCompleter = _peerConnectionCompleters[callId];
     if (peerConnectionCompleter == null) {
       _logger.finer(() => 'Retrieve peerConnection completer with callId: $callId - null');
       return null;
-    } else {
-      try {
-        _logger.finer(() => 'Retrieve peerConnection completer with callId: $callId - await');
-        // Timeout to handle scenarios where `complete` is never called.
-        // This can occur, for example, when a push is received for an incorrect account
-        // after a forced logout.
-        final peerConnection = await peerConnectionCompleter.future.timeout(
-          kPeerConnectionRetrieveTimeout,
-          onTimeout: () => throw TimeoutException('Timeout while retrieving peer connection for callId: $callId'),
-        );
-        _logger.finer(() => 'Retrieve peerConnection completer with callId: $callId - value');
-        return peerConnection;
-      } catch (e, stackTrace) {
-        _logger.finer(() => 'Retrieve peerConnection completer with uuid: $callId - error', e, stackTrace);
-        return null;
+    }
+
+    try {
+      if (!peerConnectionCompleter.isCompleted) {
+        if (allowWaiting) {
+          _logger.finer(() => 'Retrieve peerConnection completer with callId: $callId - waiting');
+        } else {
+          _logger.finer(() => 'Retrieve peerConnection completer with callId: $callId - cancelling');
+          throw UncompletedPeerConnectionException(
+              'Peer connection completer is not completed and waiting is not allowed');
+        }
       }
+
+      _logger.finer(() => 'Retrieve peerConnection completer with callId: $callId - awaiting with timeout');
+
+      final peerConnection = await peerConnectionCompleter.future.timeout(
+        kPeerConnectionRetrieveTimeout,
+        onTimeout: () => throw TimeoutException('Timeout while retrieving peer connection for callId: $callId'),
+      );
+
+      _logger.finer(() => 'Retrieve peerConnection completer with callId: $callId - value received');
+      return peerConnection;
+    } on UncompletedPeerConnectionException catch (e) {
+      _logger.info('Uncompleted peer connection completer with callId: $callId - error', e);
+      return null;
+    } catch (e, stackTrace) {
+      _logger.finer(() => 'Retrieve peerConnection completer with callId: $callId - error', e, stackTrace);
+      return null;
     }
   }
 
@@ -856,28 +868,29 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _CallSignalingEventAccepted event,
     Emitter<CallState> emit,
   ) async {
-    final activeCall = state.retrieveActiveCall(event.callId);
-    if (activeCall == null) return;
+    ActiveCall? call = state.retrieveActiveCall(event.callId);
+    if (call == null) return;
 
-    if (activeCall.direction == CallDirection.outgoing) {
-      await _stopRingbackSound();
-      await callkeep.reportConnectedOutgoingCall(event.callId);
+    final initialAccept = call.acceptedTime == null;
+    final outgoing = call.direction == CallDirection.outgoing;
+    final jsep = event.jsep;
+
+    if (initialAccept) {
+      call = call.copyWith(processingStatus: CallProcessingStatus.connected, acceptedTime: clock.now());
+
+      if (outgoing) {
+        await _stopRingbackSound();
+        await callkeep.reportConnectedOutgoingCall(event.callId);
+      }
     }
 
-    final jsep = event.jsep;
+    emit(state.copyWithMappedActiveCall(event.callId, (_) => call!));
+
     final pc = await _peerConnectionRetrieve(event.callId);
     if (jsep != null && pc != null) {
       final remoteDescription = jsep.toDescription();
       await pc.setRemoteDescription(remoteDescription);
     }
-
-    emit(state.copyWithMappedActiveCall(event.callId, (call) {
-      return call.copyWith(
-        processingStatus: CallProcessingStatus.connected,
-        acceptedTime: call.acceptedTime ?? clock.now(),
-        video: event.jsep?.hasVideo ?? false,
-      );
-    }));
   }
 
   Future<void> __onCallSignalingEventHangup(
@@ -921,7 +934,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
           if (code == SignalingResponseCode.requestTerminated) endReason = CallkeepEndCallReason.unanswered;
         }
 
-        await (await _peerConnectionRetrieve(event.callId))?.close();
+        await (await _peerConnectionRetrieve(event.callId, false))?.close();
         await call.localStream?.dispose();
 
         emit(state.copyWithPopActiveCall(event.callId));
@@ -937,24 +950,24 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _CallSignalingEventUpdating event,
     Emitter<CallState> emit,
   ) async {
-    final video = event.jsep?.hasVideo ?? false;
-
     final handle = CallkeepHandle.number(event.caller);
 
     emit(state.copyWithMappedActiveCall(event.callId, (activeCall) {
       return activeCall.copyWith(
         handle: handle,
-        displayName: event.callerDisplayName,
-        video: video,
+        displayName: event.callerDisplayName ?? activeCall.displayName,
+        video: event.jsep?.hasVideo ?? activeCall.video,
         updating: true,
       );
     }));
 
+    final activeCall = state.retrieveActiveCall(event.callId)!;
+
     await callkeep.reportUpdateCall(
       event.callId,
       handle: handle,
-      displayName: event.callerDisplayName,
-      hasVideo: video,
+      displayName: activeCall.displayName,
+      hasVideo: activeCall.video,
       proximityEnabled: state.shouldListenToProximity,
     );
 
@@ -1296,16 +1309,64 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     }));
   }
 
+  /// Enables or disables the camera for the active call, using local track enable state.
+  ///
+  /// If its audiocall, try to upgrade to videocal using renegotiation
+  /// by adding the tracks to the peer connection.
+  /// after succes [_createPeerConnection].onRenegotiationNeeded will fired accordingly to webrtc state
+  /// than [__onCallSignalingEventAccepted] will be called as acknowledge of [UpdateRequest] with new remote jsep.
   Future<void> _onCallControlEventCameraEnabled(
     _CallControlEventCameraEnabled event,
     Emitter<CallState> emit,
   ) async {
-    await state.performOnActiveCall(event.callId, (activeCall) {
-      final videoTrack = activeCall.localStream?.getVideoTracks()[0];
-      if (videoTrack != null) {
-        videoTrack.enabled = event.enabled;
+    final activeCall = state.retrieveActiveCall(event.callId);
+    if (activeCall == null) return;
+
+    final localStream = activeCall.localStream;
+    if (localStream == null) return;
+
+    final localVideoTrack = localStream.getVideoTracks().firstOrNull;
+    if (localVideoTrack != null) {
+      localVideoTrack.enabled = event.enabled;
+      return;
+    }
+
+    final peerConnection = await _peerConnectionRetrieve(event.callId);
+    if (peerConnection == null) return;
+
+    try {
+      // Capture new audio and video pair together to avoid time sync issues
+      // and avoid storing separate audio and video tracks to control them on mute, camera switch etc
+      final newLocalStream = await _getUserMedia(video: true, frontCamera: activeCall.frontCamera);
+      final newAudioTrack = newLocalStream.getAudioTracks().first;
+      final newVideoTrack = newLocalStream.getVideoTracks().first;
+
+      /// Replace audio track using existing sender to avoid adding new mline
+      ///
+      /// Alternatively, you can use (remove || stop) + add tracks flow
+      /// but it has weak support on infrastructure level
+      /// - second audio mline causes problems with call recondings and music on hold
+      /// - second video mline causes empty video stream
+      ///
+      /// so best compatibility is to use existing senders and controll them by .enabled or .replaceTrack properties
+      final senders = await peerConnection.getSenders();
+      for (final sender in senders) {
+        if (sender.track?.kind == 'audio') {
+          await sender.track?.stop();
+          await sender.replaceTrack(newAudioTrack);
+        }
       }
-    });
+      await peerConnection.addTrack(newVideoTrack, newLocalStream);
+
+      emit(state.copyWithMappedActiveCall(event.callId, (call) {
+        return call.copyWith(localStream: newLocalStream, video: true);
+      }));
+
+      await callkeep.reportUpdateCall(event.callId, hasVideo: true);
+    } on UserMediaError catch (e) {
+      _logger.warning('_onCallControlEventCameraEnabled cant enable: $e');
+      submitNotification(const CallUserMediaErrorNotification());
+    }
   }
 
   Future<void> _onCallControlEventSpeakerEnabled(
@@ -1627,7 +1688,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     }));
 
     try {
-      final peerConnection = await _createPeerConnection(event.callId);
+      final activeCall = state.retrieveActiveCall(event.callId);
+      final peerConnection = await _createPeerConnection(event.callId, activeCall!.line);
       localStream.getTracks().forEach((track) async {
         await peerConnection.addTrack(track, localStream);
       });
@@ -1637,16 +1699,14 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
       // Need to initiate outgoing call before set localDescription to avoid races
       // between [OutgoingCallRequest] and [IceTrickleRequest]s.
-      await state.performOnActiveCall(event.callId, (activeCall) {
-        return _signalingClient?.execute(OutgoingCallRequest(
-          transaction: WebtritSignalingClient.generateTransactionId(),
-          line: activeCall.line,
-          callId: activeCall.callId,
-          number: activeCall.handle.normalizedValue(),
-          jsep: localDescription.toMap(),
-          referId: activeCall.fromReferId,
-        ));
-      });
+      await _signalingClient?.execute(OutgoingCallRequest(
+        transaction: WebtritSignalingClient.generateTransactionId(),
+        line: activeCall.line,
+        callId: activeCall.callId,
+        number: activeCall.handle.normalizedValue(),
+        jsep: localDescription.toMap(),
+        referId: activeCall.fromReferId,
+      ));
       await peerConnection.setLocalDescription(localDescription);
 
       _peerConnectionComplete(event.callId, peerConnection);
@@ -1727,7 +1787,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       }));
 
       final localStream = await _getUserMedia(video: offer.hasVideo, frontCamera: call.frontCamera);
-      final peerConnection = await _createPeerConnection(event.callId);
+      final peerConnection = await _createPeerConnection(event.callId, call.line);
       await Future.forEach(localStream.getTracks(), (t) => peerConnection.addTrack(t, localStream));
 
       emit(state.copyWithMappedActiveCall(event.callId, (call) {
@@ -2048,6 +2108,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _PeerConnectionEventStreamAdded event,
     Emitter<CallState> emit,
   ) async {
+    // Skip stub stream created by Janus on unidirectional video
+    if (event.stream.id == 'janus') return;
+
     emit(state.copyWithMappedActiveCall(event.callId, (activeCall) {
       return activeCall.copyWith(remoteStream: event.stream);
     }));
@@ -2058,7 +2121,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     Emitter<CallState> emit,
   ) async {
     emit(state.copyWithMappedActiveCall(event.callId, (activeCall) {
-      return activeCall.copyWith(remoteStream: null);
+      final prevStream = activeCall.remoteStream;
+      if (prevStream != null && prevStream.id == event.stream.id) {
+        return activeCall.copyWith(remoteStream: null);
+      }
+      return activeCall;
     }));
   }
 
@@ -2458,7 +2525,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     return localStream;
   }
 
-  Future<RTCPeerConnection> _createPeerConnection(String callId) async {
+  Future<RTCPeerConnection> _createPeerConnection(String callId, int lineId) async {
     final peerConnection = await createPeerConnection(
       {
         'iceServers': [
@@ -2516,8 +2583,23 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       ..onDataChannel = (channel) {
         logger.fine(() => 'onDataChannel channel: $channel');
       }
-      ..onRenegotiationNeeded = () {
-        logger.fine(() => 'onRenegotiationNeeded');
+      ..onRenegotiationNeeded = () async {
+        final pcState = peerConnection.signalingState;
+        logger.fine(() => 'onRenegotiationNeeded signalingState: $pcState');
+        if (pcState != null) {
+          final localDescription = await peerConnection.createOffer({});
+          sdpMunger?.apply(localDescription);
+
+          final updateRequest = UpdateRequest(
+            transaction: WebtritSignalingClient.generateTransactionId(),
+            line: lineId,
+            callId: callId,
+            jsep: localDescription.toMap(),
+          );
+          await _signalingClient?.execute(updateRequest);
+
+          await peerConnection.setLocalDescription(localDescription);
+        }
       }
       ..onTrack = (event) {
         logger.fine(() => 'onTrack ${event.str}');
