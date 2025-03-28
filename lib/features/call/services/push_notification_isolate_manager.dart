@@ -118,13 +118,11 @@ class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegat
       hungUpTime: hungUpTime,
     );
     try {
-      _logger.info('End call received save: $call');
+      _logger.info('Adding call log: $callId');
       await _callLogsRepository.add(call);
-      _logger.info('End call received saved: $call');
     } catch (e) {
-      _logger.info("End call received save logs: $e");
+      _logger.severe('Failed to add call log', e);
     }
-
     return;
   }
 
