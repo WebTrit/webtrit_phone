@@ -46,10 +46,13 @@ class SignalingManager {
 
   final List<Line> _lines = [];
   final Completer<void> _handshakeCompleter = Completer();
+  Completer<void>? _connectCompleter;
 
   WebtritSignalingClient? _client;
   StreamSubscription<List<ConnectivityResult>>? _connectivitySubscription;
   bool _isConnected = false;
+
+  final List<_PendingRequest> _pendingRequests = [];
 
   Future<void> launch() async {
     await _connectClient();
@@ -60,15 +63,24 @@ class SignalingManager {
     _logger.info('Connecting to signaling server...');
     if (_isConnected) return;
 
-    _client = await WebtritSignalingClient.connect(
-      WebtritSignalingUtils.parseCoreUrlToSignalingUrl(coreUrl),
-      tenantId,
-      token,
-      true,
-      certs: _certificates,
-    );
-
-    _isConnected = true;
+    _connectCompleter = Completer<void>();
+    try {
+      _client = await WebtritSignalingClient.connect(
+        WebtritSignalingUtils.parseCoreUrlToSignalingUrl(coreUrl),
+        tenantId,
+        token,
+        true,
+        certs: _certificates,
+      );
+      _isConnected = true;
+      if (!(_connectCompleter?.isCompleted ?? true)) {
+        _connectCompleter?.complete();
+      }
+    } catch (e) {
+      if (!(_connectCompleter?.isCompleted ?? true)) {
+        _connectCompleter?.completeError(e);
+      }
+    }
 
     _client?.listen(
       onStateHandshake: _handleHandshake,
@@ -76,6 +88,8 @@ class SignalingManager {
       onError: (error, stackTrace) => onError?.call(error, stackTrace),
       onDisconnect: _handleDisconnect,
     );
+
+    _executePendingRequests();
   }
 
   void _handleHandshake(StateHandshake handshake) {
@@ -88,7 +102,6 @@ class SignalingManager {
     }
 
     for (final activeLine in _lines.whereType<Line>()) {
-      // Retrieve the most recent call event from the core logs for the current line.
       final callEvent = activeLine.callLogs.whereType<CallEventLog>().map((log) => log.callEvent).firstOrNull;
 
       if (callEvent != null) {
@@ -175,6 +188,29 @@ class SignalingManager {
     String callId,
     Request Function(int line, String callId, String tx) requestBuilder,
   ) async {
+    if (!_isConnected) {
+      _logger.warning('Not connected. Queueing request for $callId');
+
+      final completer = Completer<void>();
+      final timeoutTimer = Timer(const Duration(seconds: 10), () {
+        if (!completer.isCompleted) {
+          completer.completeError(TimeoutException('Request timed out for $callId'));
+          _pendingRequests.removeWhere((r) => r.completer == completer);
+        }
+      });
+
+      _pendingRequests.add(
+        _PendingRequest(
+          callId: callId,
+          requestBuilder: requestBuilder,
+          completer: completer,
+          timeoutTimer: timeoutTimer,
+        ),
+      );
+
+      return completer.future;
+    }
+
     final lineIndex = _lines.indexWhere((line) => line.callId == callId);
     if (lineIndex == -1) return;
 
@@ -183,7 +219,36 @@ class SignalingManager {
       callId,
       WebtritSignalingClient.generateTransactionId(),
     );
+
     await _client?.execute(request);
+  }
+
+  void _executePendingRequests() {
+    _logger.info('Executing ${_pendingRequests.length} pending requests...');
+    for (final pending in List<_PendingRequest>.from(_pendingRequests)) {
+      final lineIndex = _lines.indexWhere((line) => line.callId == pending.callId);
+      if (lineIndex == -1) {
+        pending.completer.completeError('Line not found for callId: ${pending.callId}');
+        pending.timeoutTimer.cancel();
+        _pendingRequests.remove(pending);
+        continue;
+      }
+
+      final request = pending.requestBuilder(
+        lineIndex,
+        pending.callId,
+        WebtritSignalingClient.generateTransactionId(),
+      );
+
+      _client?.execute(request).then((_) {
+        pending.completer.complete();
+      }).catchError((e, s) {
+        pending.completer.completeError(e, s);
+      }).whenComplete(() {
+        pending.timeoutTimer.cancel();
+        _pendingRequests.remove(pending);
+      });
+    }
   }
 
   void _handleEvent(Event event) {
@@ -208,9 +273,31 @@ class SignalingManager {
   }
 
   Future<void> dispose() async {
-    _logger.info('Disposing signaling manager...');
-    await _connectivitySubscription?.cancel();
+    if (_connectCompleter != null && !_connectCompleter!.isCompleted) {
+      try {
+        await _connectCompleter!.future.timeout(const Duration(seconds: 5));
+      } catch (e, stack) {
+        _logger.warning('Dispose timeout waiting for connectCompleter', e, stack);
+      }
+    }
+
     await _client?.disconnect();
+    await _connectivitySubscription?.cancel();
     _isConnected = false;
+    _pendingRequests.clear();
   }
+}
+
+class _PendingRequest {
+  final String callId;
+  final Request Function(int line, String callId, String tx) requestBuilder;
+  final Completer<void> completer;
+  final Timer timeoutTimer;
+
+  _PendingRequest({
+    required this.callId,
+    required this.requestBuilder,
+    required this.completer,
+    required this.timeoutTimer,
+  });
 }
