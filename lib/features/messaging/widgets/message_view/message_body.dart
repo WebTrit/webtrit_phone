@@ -1,16 +1,18 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
 import 'package:quiver/collection.dart';
+import 'package:open_file/open_file.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_parsed_text/flutter_parsed_text.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
 import 'package:webtrit_phone/extensions/string.dart';
 import 'package:webtrit_phone/features/messaging/messaging.dart';
+import 'package:webtrit_phone/features/messaging/widgets/message_view/media_view_page.dart';
+import 'package:webtrit_phone/features/messaging/widgets/message_view/multisource_image_view.dart';
 import 'package:webtrit_phone/utils/utils.dart';
-import 'package:webtrit_phone/widgets/widgets.dart';
 
 import 'media_stagger_wrap.dart';
 
@@ -86,7 +88,29 @@ class _MessageBodyState extends State<MessageBody> {
       children: [
         if (mediaAttachments.isNotEmpty) ...[
           MediaStaggerWrap(
-            buildElement: (index, size) => imagePreview(mediaAttachments[index], size: size),
+            buildElement: (index, size) => GestureDetector(
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => MediaViewPage(attachments: mediaAttachments, initialIndex: index),
+                  ),
+                );
+              },
+              child: Container(
+                height: size,
+                width: size,
+                padding: const EdgeInsets.all(2),
+                child: Container(
+                  clipBehavior: Clip.antiAlias,
+                  decoration: BoxDecoration(
+                    color: Colors.blueGrey.shade600,
+                    borderRadius: BorderRadius.circular(4),
+                    boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.1), blurRadius: 2)],
+                  ),
+                  child: MultisourceImageView(mediaAttachments[index]),
+                ),
+              ),
+            ),
             count: mediaAttachments.length,
             space: horizontalSpace,
           ),
@@ -95,7 +119,22 @@ class _MessageBodyState extends State<MessageBody> {
           Wrap(
             spacing: 8,
             runSpacing: 8,
-            children: fileAttachments.map((attachment) => filePreview(attachment.split('/').last)).toList(),
+            children: fileAttachments.map(
+              (attachment) {
+                return GestureDetector(
+                  onTap: () async {
+                    final file = attachment.isLocalPath
+                        ? File(attachment)
+                        : await DefaultCacheManager().getSingleFile(attachment);
+                    OpenFile.open(file.path);
+                  },
+                  onLongPress: () {
+                    // TODO: download, share popupmenu
+                  },
+                  child: filePreview(attachment.split('/').last),
+                );
+              },
+            ).toList(),
           ),
         ],
         if (preview != null)
@@ -105,7 +144,9 @@ class _MessageBodyState extends State<MessageBody> {
             child: Column(
               spacing: 8,
               children: [
-                if (preview?.imageUrl != null) ...[imagePreview(preview!.imageUrl!, size: horizontalSpace)],
+                if (preview?.imageUrl != null) ...[
+                  MultisourceImageView(preview!.imageUrl!),
+                ],
                 if ((preview?.title) != null)
                   Row(
                     children: [
@@ -183,76 +224,6 @@ class _MessageBodyState extends State<MessageBody> {
             style: const TextStyle(color: Colors.black, fontSize: 10, fontWeight: FontWeight.w700),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget imagePreview(String path, {double size = 64}) {
-    Widget placeholderBuilder() {
-      return Container(
-        height: size,
-        width: size,
-        alignment: Alignment.center,
-        child: Icon(
-          Icons.image,
-          size: size / 2,
-          color: Colors.white,
-        ),
-      );
-    }
-
-    Widget errorBuilder() {
-      return Container(
-        height: size,
-        width: size,
-        alignment: Alignment.center,
-        child: Icon(
-          Icons.error,
-          size: size / 2,
-          color: Colors.white,
-        ),
-      );
-    }
-
-    Widget frameBuilder(Widget child, int? frame, bool syncLoaded) {
-      if (syncLoaded) return child;
-      if (frame == null) return placeholderBuilder();
-      return FadeIn(child: child);
-    }
-
-    return SizedBox(
-      height: size,
-      width: size,
-      child: Container(
-        margin: const EdgeInsets.all(2),
-        clipBehavior: Clip.antiAlias,
-        decoration: BoxDecoration(
-          color: Colors.blueGrey.shade600,
-          borderRadius: BorderRadius.circular(4),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.1),
-              blurRadius: 4,
-              spreadRadius: 2,
-              offset: const Offset(0, 2),
-            ),
-          ],
-        ),
-        child: FutureBuilder(
-            future: path.isLocalPath ? Future.value(File(path)) : DefaultCacheManager().getSingleFile(path),
-            builder: (_, snapshot) {
-              final data = snapshot.data;
-              if (snapshot.hasError) return errorBuilder();
-              if (data == null) return placeholderBuilder();
-              return Image.file(
-                data,
-                height: size,
-                width: size,
-                fit: BoxFit.cover,
-                frameBuilder: (_, child, frame, syncLoaded) => frameBuilder(child, frame, syncLoaded),
-                errorBuilder: (_, __, ___) => errorBuilder(),
-              );
-            }),
       ),
     );
   }
