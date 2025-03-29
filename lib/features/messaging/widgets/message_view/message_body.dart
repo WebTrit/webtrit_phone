@@ -12,6 +12,7 @@ import 'package:webtrit_phone/extensions/string.dart';
 import 'package:webtrit_phone/features/messaging/messaging.dart';
 import 'package:webtrit_phone/features/messaging/widgets/message_view/media_view_page.dart';
 import 'package:webtrit_phone/features/messaging/widgets/message_view/multisource_image_view.dart';
+import 'package:webtrit_phone/features/messaging/widgets/message_view/video_thumbnail_builder.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 
 import 'media_stagger_wrap.dart';
@@ -39,8 +40,11 @@ class MessageBody extends StatefulWidget {
 class _MessageBodyState extends State<MessageBody> {
   late final horizontalSpace = MediaQuery.of(context).size.width - (widget.isMine ? 82 : 82 + 48);
 
-  late final mediaAttachments = widget.attachments.where((p) => p.isImagePath).toList();
-  late final fileAttachments = widget.attachments.where((p) => !p.isImagePath).toList();
+  late final attachments = widget.attachments;
+  late final mediaAttachments =
+      attachments.where((attachment) => attachment.isImagePath || attachment.isVideoPath).toList();
+  late final fileAttachments =
+      attachments.where((attachment) => !attachment.isImagePath && !attachment.isVideoPath).toList();
 
   static final previewsCache = LruMap<String, OgPreview>(maximumSize: 100);
   OgPreview? preview;
@@ -107,7 +111,36 @@ class _MessageBodyState extends State<MessageBody> {
                     borderRadius: BorderRadius.circular(4),
                     boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.1), blurRadius: 2)],
                   ),
-                  child: MultisourceImageView(mediaAttachments[index]),
+                  child: Builder(builder: (context) {
+                    final att = mediaAttachments[index];
+                    if (att.isImagePath) {
+                      return MultisourceImageView(att);
+                    }
+                    if (att.isVideoPath) {
+                      return VideoThumbnailBuilder(
+                        att,
+                        (File? file) {
+                          return Stack(
+                            children: [
+                              if (file != null)
+                                Positioned.fill(child: MultisourceImageView(file.path, fit: BoxFit.cover)),
+                              Center(
+                                child: Container(
+                                  padding: const EdgeInsets.all(8),
+                                  decoration: BoxDecoration(
+                                    color: Colors.black.withValues(alpha: 0.5),
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: const Icon(Icons.play_arrow_outlined, color: Colors.white),
+                                ),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    }
+                    return const SizedBox();
+                  }),
                 ),
               ),
             ),

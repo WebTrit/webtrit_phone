@@ -9,7 +9,7 @@ environment:
 dependencies:
   # stick to specific version, because following version move to incompatible with current implementation pkg:web
   # (https://pub.dev/packages/web_socket_channel/changelog#241)
-  web_socket_channel: 2.4.0
+  web_socket_channel: ^3.0.1
 
   ssl_certificates:
     path: ../ssl_certificates

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -9,6 +10,7 @@ import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/messaging/extensions/extensions.dart';
+import 'package:webtrit_phone/features/messaging/widgets/message_view/video_view.dart';
 
 import 'multisource_image_view.dart';
 
@@ -33,11 +35,33 @@ class _MediaViewPageState extends State<MediaViewPage> {
 
   int get currentIndex => pageController.page?.round() ?? 0;
   String get currentAttachment => widget.attachments[currentIndex];
+
   Future<File> get currentFile async {
     final file = currentAttachment.isLocalPath
         ? File(currentAttachment)
         : await DefaultCacheManager().getSingleFile(currentAttachment);
     return file;
+  }
+
+  void onSaveToGallery() async {
+    final file = await currentFile;
+    await Gal.putImage(file.path);
+
+    if (!mounted) return;
+    context.showSuccessSnackBar(
+      'Image saved to gallery',
+      action: SnackBarAction(label: 'Open', onPressed: () => Gal.open()),
+    );
+  }
+
+  void onOpenWith() async {
+    final file = await currentFile;
+    OpenFile.open(file.path);
+  }
+
+  void onShare() async {
+    final file = await currentFile;
+    Share.shareXFiles([XFile(file.path)]);
   }
 
   @override
@@ -48,18 +72,9 @@ class _MediaViewPageState extends State<MediaViewPage> {
         actions: [
           PopupMenuButton(
             itemBuilder: (_) => [
-              if (currentAttachment.isImagePath && !currentAttachment.isLocalPath)
+              if ((currentAttachment.isImagePath || currentAttachment.isVideoPath) && !currentAttachment.isLocalPath)
                 PopupMenuItem(
-                  onTap: () async {
-                    final file = await currentFile;
-                    await Gal.putImage(file.path);
-
-                    if (!mounted) return;
-                    this.context.showSuccessSnackBar(
-                          'Image saved to gallery',
-                          action: SnackBarAction(label: 'Open', onPressed: () => Gal.open()),
-                        );
-                  },
+                  onTap: onSaveToGallery,
                   child: const ListTile(
                     title: Text('Save to gallery'),
                     leading: Icon(Icons.download),
@@ -67,10 +82,7 @@ class _MediaViewPageState extends State<MediaViewPage> {
                   ),
                 ),
               PopupMenuItem(
-                onTap: () async {
-                  final file = await currentFile;
-                  OpenFile.open(file.path);
-                },
+                onTap: onOpenWith,
                 child: const ListTile(
                   title: Text('Open with'),
                   leading: Icon(Icons.open_in_new),
@@ -78,10 +90,7 @@ class _MediaViewPageState extends State<MediaViewPage> {
                 ),
               ),
               PopupMenuItem(
-                onTap: () async {
-                  final file = await currentFile;
-                  Share.shareXFiles([XFile(file.path)]);
-                },
+                onTap: onShare,
                 child: const ListTile(
                   title: Text('Share'),
                   leading: Icon(Icons.share),
@@ -105,11 +114,16 @@ class _MediaViewPageState extends State<MediaViewPage> {
 
           Widget content;
           if (attachment.isImagePath) {
-            content = MultisourceImageView(
-              attachment,
-              fit: BoxFit.contain,
-              iconsColor: Colors.white,
+            content = InteractiveViewer(
+              maxScale: 10,
+              child: MultisourceImageView(
+                attachment,
+                fit: BoxFit.contain,
+                iconsColor: Colors.white,
+              ),
             );
+          } else if (attachment.isVideoPath) {
+            content = VideoView(attachment);
           } else {
             content = Center(
               child: Text(
@@ -121,12 +135,7 @@ class _MediaViewPageState extends State<MediaViewPage> {
 
           return Stack(
             children: [
-              Positioned.fill(
-                child: InteractiveViewer(
-                  maxScale: 10,
-                  child: content,
-                ),
-              ),
+              Positioned.fill(child: content),
               if (!isLast)
                 Positioned(
                   right: 0,
@@ -159,15 +168,15 @@ class _MediaViewPageState extends State<MediaViewPage> {
                       color: Colors.transparent,
                       alignment: Alignment.center,
                       child: Container(
-                        height: 80,
-                        width: 80,
+                        height: 40,
+                        width: 40,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(40),
                           color: Colors.black.withValues(alpha: prevRightScroll.clamp(0, 0.5)),
                         ),
                         child: Icon(
                           Icons.chevron_right_rounded,
-                          size: 64,
+                          size: 32,
                           color: Colors.white.withValues(alpha: prevRightScroll),
                         ),
                       ),
@@ -206,15 +215,15 @@ class _MediaViewPageState extends State<MediaViewPage> {
                       color: Colors.transparent,
                       alignment: Alignment.center,
                       child: Container(
-                        height: 80,
-                        width: 80,
+                        height: 40,
+                        width: 40,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(40),
                           color: Colors.black.withValues(alpha: prevLeftScroll.clamp(0, 0.5)),
                         ),
                         child: Icon(
                           Icons.chevron_left_rounded,
-                          size: 64,
+                          size: 32,
                           color: Colors.white.withValues(alpha: prevLeftScroll),
                         ),
                       ),
