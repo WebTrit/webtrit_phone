@@ -91,6 +91,7 @@ dependencies:
   flutter_cache_manager: ^3.4.1
   open_file: ^3.5.10
   gal: ^2.3.1
+  video_player: ^2.9.5
 
   webtrit_api:
     path: ./packages/webtrit_api

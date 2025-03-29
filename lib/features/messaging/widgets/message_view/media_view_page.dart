@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -9,6 +10,7 @@ import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/messaging/extensions/extensions.dart';
+import 'package:webtrit_phone/features/messaging/widgets/message_view/video_view.dart';
 
 import 'multisource_image_view.dart';
 
@@ -105,11 +107,17 @@ class _MediaViewPageState extends State<MediaViewPage> {
 
           Widget content;
           if (attachment.isImagePath) {
-            content = MultisourceImageView(
-              attachment,
-              fit: BoxFit.contain,
-              iconsColor: Colors.white,
+            content = InteractiveViewer(
+              maxScale: 10,
+              child: MultisourceImageView(
+                attachment,
+                fit: BoxFit.contain,
+                iconsColor: Colors.white,
+              ),
             );
+          }
+          if (attachment.isVideoPath) {
+            content = VideoView(attachment);
           } else {
             content = Center(
               child: Text(
@@ -121,12 +129,7 @@ class _MediaViewPageState extends State<MediaViewPage> {
 
           return Stack(
             children: [
-              Positioned.fill(
-                child: InteractiveViewer(
-                  maxScale: 10,
-                  child: content,
-                ),
-              ),
+              Positioned.fill(child: content),
               if (!isLast)
                 Positioned(
                   right: 0,
