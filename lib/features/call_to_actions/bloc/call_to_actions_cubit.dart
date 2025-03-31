@@ -43,7 +43,7 @@ class CallToActionsCubit extends Cubit<CallToActionsCubitState> {
 
   Future<void> getActions(MainFlavor flavor) async {
     if (state.flavor == flavor) {
-      _logger.fine('Flavor $flavor is already set.');
+      _logger.finest('Flavor $flavor is already set.');
       return;
     }
 
@@ -53,7 +53,7 @@ class CallToActionsCubit extends Cubit<CallToActionsCubitState> {
     if (state.actions[flavor] == null) {
       await _loadFlavorActions(flavor, state.locale);
     } else {
-      _logger.fine('Actions for flavor $flavor already loaded.');
+      _logger.finest('Actions for flavor $flavor already loaded.');
     }
   }
 
