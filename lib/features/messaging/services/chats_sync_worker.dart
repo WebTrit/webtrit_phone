@@ -50,7 +50,7 @@ class ChatsSyncWorker {
   final Map<int, StreamSubscription> _conversationSyncSubs = {};
 
   Future init() async {
-    _logger.info('Initialising...');
+    _logger.fine('Initialising...');
     _closeSubs();
     _conversationsSyncSub = _conversationsSyncStream().listen(
       (e) {
@@ -59,19 +59,19 @@ class ChatsSyncWorker {
           _logger.warning('conversations sync error:', error, stackTrace);
           onError(error);
         } else {
-          _logger.info('conversations sync event: $e');
+          _logger.fine('conversations sync event: $e');
         }
       },
     );
   }
 
   Future dispose() async {
-    _logger.info('Disposing...');
+    _logger.fine('Disposing...');
     _closeSubs();
   }
 
   Future _conversationSubscribe(int id) async {
-    _logger.info('Subscribing to conversation $id');
+    _logger.fine('Subscribing to conversation $id');
 
     PhoenixChannel? channel = client.getChatChannel(id);
 
@@ -92,7 +92,7 @@ class ChatsSyncWorker {
             _logger.warning('conversation sync error: $id', error, stackTrace);
             onError(error);
           } else {
-            _logger.info('conversation sync event: $id $e');
+            _logger.fine('conversation sync event: $id $e');
           }
         },
       ),
@@ -100,7 +100,7 @@ class ChatsSyncWorker {
   }
 
   Future _conversationUnsubscribe(int id) async {
-    _logger.info('Unsubscribing from $id');
+    _logger.fine('Unsubscribing from $id');
     _conversationSyncSubs.remove(id)?.cancel();
     await client.getChatChannel(id)?.leave().future;
   }
