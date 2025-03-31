@@ -85,91 +85,85 @@ class VideoViewState extends State<VideoView> {
     final colorScheme = theme.colorScheme;
 
     if (_controller.value.isInitialized == false) {
-      return Container(
-        color: Colors.black,
-        child: VideoThumbnailBuilder(
-          widget.path,
-          (File? file) {
-            return Stack(
-              children: [
-                if (file != null) Positioned.fill(child: MultisourceImageView(file.path, fit: BoxFit.contain)),
-                const Center(child: CircularProgressIndicator()),
-              ],
-            );
-          },
-        ),
+      return VideoThumbnailBuilder(
+        widget.path,
+        (File? file) {
+          return Stack(
+            children: [
+              if (file != null) Positioned.fill(child: MultisourceImageView(file.path, fit: BoxFit.contain)),
+              const Center(child: CircularProgressIndicator()),
+            ],
+          );
+        },
       );
     }
 
-    return Container(
-      color: Colors.black,
-      child: GestureDetector(
-        onTap: onTap,
-        child: Stack(
-          children: [
-            Center(child: AspectRatio(aspectRatio: _controller.value.aspectRatio, child: VideoPlayer(_controller))),
-            if (seeking)
-              Center(
-                child: CircularProgressIndicator(
-                  color: colorScheme.primary,
-                ),
+    return GestureDetector(
+      onTap: onTap,
+      child: Stack(
+        children: [
+          Center(child: AspectRatio(aspectRatio: _controller.value.aspectRatio, child: VideoPlayer(_controller))),
+          if (seeking)
+            Center(
+              child: CircularProgressIndicator(
+                color: colorScheme.primary,
               ),
-            if (!seeking)
-              Center(
-                child: AnimatedOpacity(
-                  duration: const Duration(milliseconds: 300),
-                  opacity: showControls ? 1 : 0,
-                  child: IconButton(
-                    onPressed: onPlayPause,
-                    icon: Container(
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: colorScheme.secondary.withValues(alpha: 0.5),
-                        shape: BoxShape.circle,
-                      ),
-                      child: Icon(
-                        _controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
-                        color: colorScheme.onSecondary,
-                      ),
+            ),
+          if (!seeking)
+            Center(
+              child: AnimatedOpacity(
+                duration: const Duration(milliseconds: 300),
+                opacity: showControls ? 1 : 0,
+                child: IconButton(
+                  onPressed: onPlayPause,
+                  icon: Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: colorScheme.secondary.withValues(alpha: 0.5),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(
+                      _controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
+                      color: colorScheme.onSecondary,
                     ),
                   ),
                 ),
               ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: AnimatedOpacity(
-                duration: const Duration(milliseconds: 300),
-                opacity: showControls ? 1 : 0,
-                child: Container(
-                  height: 64,
-                  width: double.infinity,
-                  color: colorScheme.secondary.withValues(alpha: 0.5),
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Slider(
-                          padding: EdgeInsets.zero,
-                          value: _controller.value.position.inSeconds.toDouble(),
-                          min: 0,
-                          max: _controller.value.duration.inSeconds.toDouble(),
-                          onChanged: onSeek,
-                        ),
+            ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: AnimatedOpacity(
+              duration: const Duration(milliseconds: 300),
+              opacity: showControls ? 1 : 0,
+              child: Container(
+                height: 64,
+                width: double.infinity,
+                color: colorScheme.secondary.withValues(alpha: 0.5),
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Slider(
+                        padding: EdgeInsets.zero,
+                        value: _controller.value.position.inSeconds.toDouble(),
+                        min: 0,
+                        max: _controller.value.duration.inSeconds.toDouble(),
+                        onChanged: onSeek,
                       ),
-                      const SizedBox(width: 8),
-                      Text(
-                        '${_controller.value.position.format()} / ${_controller.value.duration.format()}',
-                        style: theme.textTheme.bodySmall?.copyWith(
-                          color: colorScheme.onSecondary,
-                        ),
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      '${_controller.value.position.format()} / ${_controller.value.duration.format()}',
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: colorScheme.onSecondary,
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

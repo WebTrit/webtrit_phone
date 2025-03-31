@@ -11,6 +11,7 @@ import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/messaging/extensions/extensions.dart';
 import 'package:webtrit_phone/features/messaging/widgets/message_view/video_view.dart';
+import 'package:webtrit_phone/theme/styles/styles.dart';
 
 import 'multisource_image_view.dart';
 
@@ -66,11 +67,23 @@ class _MediaViewPageState extends State<MediaViewPage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
     return Scaffold(
+      backgroundColor: Colors.black,
       appBar: AppBar(
-        title: const Text('Media'),
+        backgroundColor: colorScheme.secondary,
+        title: const Text('Media', style: TextStyle(color: Colors.white)),
+        leading: IconButton(
+          icon: const Icon(Icons.close, color: Colors.white),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        systemOverlayStyle: kSystemThemeDark,
         actions: [
           PopupMenuButton(
+            color: Colors.white,
+            iconColor: Colors.white,
             itemBuilder: (_) => [
               if ((currentAttachment.isImagePath || currentAttachment.isVideoPath) && !currentAttachment.isLocalPath)
                 PopupMenuItem(
