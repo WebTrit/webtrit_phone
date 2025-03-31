@@ -38,7 +38,8 @@ class _SafeNetworkImageState extends State<SafeNetworkImage> {
               if (mounted) setState(() => _isLoaded = true);
             },
             onError: (error, stackTrace) {
-              _logger.warning('Error loading image: $error', error);
+              // Log the error for debugging purposes
+              _logger.finest('Error loading image: $error', error);
               if (mounted) setState(() => _hasError = true);
             },
           ),
