@@ -8,27 +8,21 @@ class MultisourceImageView extends StatelessWidget {
   const MultisourceImageView(
     this.path, {
     this.fit = BoxFit.cover,
-    this.iconsColor = Colors.white,
+    this.placeholder = const Icon(Icons.image),
+    this.error = const Icon(Icons.error),
     super.key,
   });
 
   final String path;
   final BoxFit fit;
-  final Color iconsColor;
+  final Widget placeholder;
+  final Widget error;
 
   @override
   Widget build(BuildContext context) {
-    Widget placeholderBuilder() {
-      return Center(child: Icon(Icons.image, color: iconsColor));
-    }
-
-    Widget errorBuilder() {
-      return Center(child: Icon(Icons.error, color: iconsColor));
-    }
-
     Widget frameBuilder(Widget child, int? frame, bool syncLoaded) {
       if (syncLoaded) return child;
-      if (frame == null) return placeholderBuilder();
+      if (frame == null) return Center(child: placeholder);
       return FadeIn(child: child);
     }
 
@@ -36,13 +30,13 @@ class MultisourceImageView extends StatelessWidget {
         future: path.isLocalPath ? Future.value(File(path)) : DefaultCacheManager().getSingleFile(path),
         builder: (_, snapshot) {
           final data = snapshot.data;
-          if (snapshot.hasError) return errorBuilder();
-          if (data == null) return placeholderBuilder();
+          if (snapshot.hasError) return Center(child: error);
+          if (data == null) return Center(child: placeholder);
           return Image.file(
             data,
             fit: fit,
             frameBuilder: (_, child, frame, syncLoaded) => frameBuilder(child, frame, syncLoaded),
-            errorBuilder: (_, __, ___) => errorBuilder(),
+            errorBuilder: (_, __, ___) => Center(child: error),
           );
         });
   }

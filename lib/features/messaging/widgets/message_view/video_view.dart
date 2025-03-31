@@ -90,7 +90,14 @@ class VideoViewState extends State<VideoView> {
         (File? file) {
           return Stack(
             children: [
-              if (file != null) Positioned.fill(child: MultisourceImageView(file.path, fit: BoxFit.contain)),
+              if (file != null)
+                Positioned.fill(
+                    child: MultisourceImageView(
+                  file.path,
+                  fit: BoxFit.contain,
+                  placeholder: const SizedBox(),
+                  error: const SizedBox(),
+                )),
               const Center(child: CircularProgressIndicator()),
             ],
           );

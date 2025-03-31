@@ -82,6 +82,7 @@ class _MessageBodyState extends State<MessageBody> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
 
     final style = widget.style ?? theme.contentStyle;
     final previewDecoration = widget.previewDecoration ?? theme.quoteDecoration(widget.isMine);
@@ -107,14 +108,17 @@ class _MessageBodyState extends State<MessageBody> {
                 child: Container(
                   clipBehavior: Clip.antiAlias,
                   decoration: BoxDecoration(
-                    color: Colors.blueGrey.shade600,
                     borderRadius: BorderRadius.circular(4),
                     boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.1), blurRadius: 2)],
                   ),
                   child: Builder(builder: (context) {
                     final att = mediaAttachments[index];
                     if (att.isImagePath) {
-                      return MultisourceImageView(att);
+                      return MultisourceImageView(
+                        att,
+                        placeholder: Icon(Icons.image, color: colorScheme.secondary, size: 64),
+                        error: Icon(Icons.error, color: colorScheme.secondary, size: 64),
+                      );
                     }
                     if (att.isVideoPath) {
                       return VideoThumbnailBuilder(
@@ -123,7 +127,13 @@ class _MessageBodyState extends State<MessageBody> {
                           return Stack(
                             children: [
                               if (file != null)
-                                Positioned.fill(child: MultisourceImageView(file.path, fit: BoxFit.cover)),
+                                Positioned.fill(
+                                    child: MultisourceImageView(
+                                  file.path,
+                                  fit: BoxFit.cover,
+                                  placeholder: const SizedBox(),
+                                  error: const SizedBox(),
+                                )),
                               Center(
                                 child: Container(
                                   padding: const EdgeInsets.all(8),

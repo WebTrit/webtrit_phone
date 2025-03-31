@@ -74,7 +74,7 @@ class _MediaViewPageState extends State<MediaViewPage> {
       backgroundColor: Colors.black,
       appBar: AppBar(
         backgroundColor: colorScheme.secondary,
-        title: const Text('Media', style: TextStyle(color: Colors.white)),
+        title: const Text('Media', style: TextStyle(color: Color.fromARGB(255, 71, 62, 62))),
         leading: IconButton(
           icon: const Icon(Icons.close, color: Colors.white),
           onPressed: () => Navigator.of(context).pop(),
@@ -132,7 +132,8 @@ class _MediaViewPageState extends State<MediaViewPage> {
               child: MultisourceImageView(
                 attachment,
                 fit: BoxFit.contain,
-                iconsColor: Colors.white,
+                placeholder: const Icon(Icons.image, color: Colors.white, size: 64),
+                error: const Icon(Icons.error, color: Colors.white, size: 64),
               ),
             );
           } else if (attachment.isVideoPath) {
