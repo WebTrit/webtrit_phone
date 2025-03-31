@@ -5,6 +5,8 @@ import 'filtered_logz_io_appender.dart';
 import 'remote_formatter.dart';
 import 'remote_logging_service.dart';
 
+final _logger = Logger('LogzioLoggingService');
+
 class LogzioLoggingService implements RemoteLoggingService {
   LogzioLoggingService({
     required this.url,
@@ -20,6 +22,7 @@ class LogzioLoggingService implements RemoteLoggingService {
 
   @override
   void initialize(Map<String, String> labels) {
+    _logger.finest('Initializing with url: $url, token: $token, bufferSize: $bufferSize labels: $labels');
     final remoteFormatter = AnonymizingFormatter(
       anonymizationTypes: AnonymizationType.full,
       wrappedFormatter: const RemoteFormatter(),
