@@ -85,6 +85,11 @@ void main() {
             return AppPermissions();
           },
         ),
+        Provider<AppLogger>(
+          create: (context) {
+            return AppLogger();
+          },
+        ),
       ],
       child: MultiRepositoryProvider(
         providers: [

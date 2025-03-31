@@ -33,16 +33,15 @@ Future<void> _initializeCommonDependencies() async {
   _appInfo ??= await AppInfo.init(const SharedPreferencesAppIdProvider());
   _deviceInfo ??= await DeviceInfoFactory.init();
   _packageInfo ??= await PackageInfoFactory.init();
+  _secureStorage = await SecureStorage.init();
   _appLogger ??= await AppLogger.init(
     remoteConfigService: _remoteConfigService!,
     packageInfo: _packageInfo!,
     deviceInfo: _deviceInfo!,
     appInfo: _appInfo!,
+    secureStorage: _secureStorage!,
   );
   _appCertificates ??= await AppCertificates.init();
-
-  // Always create a new instance to avoid caching issues
-  _secureStorage = await SecureStorage.init();
 
   _callLogsRepository ??= CallLogsRepository(appDatabase: await IsolateDatabase.create());
 }

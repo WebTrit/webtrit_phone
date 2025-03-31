@@ -50,6 +50,9 @@ class _MainShellState extends State<MainShell> {
         ),
       ),
     );
+
+    // After authentication, regenerate the labels to include core URL and tenant ID in remote logging labels
+    context.read<AppLogger>().regenerateRemoteLabels();
   }
 
   @override
