@@ -8,11 +8,11 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_parsed_text/flutter_parsed_text.dart';
 
-import 'package:webtrit_phone/extensions/string.dart';
 import 'package:webtrit_phone/features/messaging/messaging.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 
 import 'audio_view.dart';
+import 'file_view.dart';
 import 'media_stagger_wrap.dart';
 import 'media_view_page.dart';
 import 'multisource_image_view.dart';
@@ -183,7 +183,7 @@ class _MessageBodyState extends State<MessageBody> {
                   onLongPress: () {
                     // TODO: download, share popupmenu
                   },
-                  child: filePreview(attachment.split('/').last),
+                  child: FileView(attachment),
                 );
               },
             ).toList(),
@@ -253,30 +253,6 @@ class _MessageBodyState extends State<MessageBody> {
           textWidthBasis: TextWidthBasis.longestLine,
         ),
       ],
-    );
-  }
-
-  Widget filePreview(String path) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(4),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            path.fileName.limit(20),
-            style: const TextStyle(color: Colors.black, fontSize: 10, fontWeight: FontWeight.w700),
-            overflow: TextOverflow.ellipsis,
-          ),
-          Text(
-            '.${path.fileExtension}',
-            style: const TextStyle(color: Colors.black, fontSize: 10, fontWeight: FontWeight.w700),
-          ),
-        ],
-      ),
     );
   }
 }
