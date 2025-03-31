@@ -157,7 +157,7 @@ class WebtritSignalingClient {
   //
 
   void _wscStreamOnData(dynamic data) {
-    _logger.finer('_wsOnData: $data');
+    _logger.fine('_wsOnData: $data');
 
     final Map<String, dynamic> messageJson = jsonDecode(data);
     _onMessage(messageJson);
@@ -278,7 +278,7 @@ class WebtritSignalingClient {
   }
 
   void _addData(dynamic data) {
-    _logger.finer(() => '_addData add: $data');
+    _logger.fine(() => '_addData add: $data');
 
     _wsc.sink.add(data);
   }
