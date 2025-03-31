@@ -25,7 +25,7 @@ class ChatsOutboxWorker {
   bool _disposed = false;
 
   init() {
-    _logger.info('Initialising...');
+    _logger.fine('Initialising...');
 
     /// Continuously processes messages, edits, deletes, and read cursors from the outbox repository
     /// until the worker is disposed. The loop runs every second.
@@ -49,7 +49,7 @@ class ChatsOutboxWorker {
   }
 
   dispose() {
-    _logger.info('Disposing...');
+    _logger.fine('Disposing...');
     _disposed = true;
   }
 
@@ -83,7 +83,7 @@ class ChatsOutboxWorker {
       if (chat != null) await _chatsRepository.upsertChat(chat);
       await _chatsRepository.upsertMessage(message);
       await _outboxRepository.deleteOutboxMessage(outboxEntry.idKey);
-      _logger.info('Processed new message: ${message.id}');
+      _logger.fine('Processed new message: ${message.id}');
     } catch (e, s) {
       _logger.severe('Error processing new message, attempt: ${outboxEntry.sendAttempts}', e, s);
       if (outboxEntry.sendAttempts > 5) {
@@ -112,7 +112,7 @@ class ChatsOutboxWorker {
       final message = await channel.editChatMessage(messageEdit);
       await _chatsRepository.upsertMessage(message);
       await _outboxRepository.deleteOutboxMessageEdit(messageEdit.id);
-      _logger.info('Processed edit message: ${message.id}');
+      _logger.fine('Processed edit message: ${message.id}');
     } catch (e, s) {
       _logger.severe('Error processing message edit, attempt: ${messageEdit.sendAttempts}', e, s);
       if (messageEdit.sendAttempts > 5) {
@@ -141,7 +141,7 @@ class ChatsOutboxWorker {
       final message = await channel.deleteChatMessage(messageDelete);
       await _chatsRepository.upsertMessage(message);
       await _outboxRepository.deleteOutboxMessageDelete(messageDelete.id);
-      _logger.info('Processed delete message: ${message.id}');
+      _logger.fine('Processed delete message: ${message.id}');
     } catch (e, s) {
       _logger.severe('Error processing message delete, attempt: ${messageDelete.sendAttempts}', e, s);
       if (messageDelete.sendAttempts > 5) {
@@ -171,7 +171,7 @@ class ChatsOutboxWorker {
       final cursor = await channel.setChatReadCursor(readCursor);
       await _chatsRepository.upsertChatMessageReadCursor(cursor);
       await _outboxRepository.deleteOutboxReadCursor(readCursor.chatId);
-      _logger.info('Processed read cursor: ${readCursor.chatId}');
+      _logger.fine('Processed read cursor: ${readCursor.chatId}');
     } catch (e, s) {
       _logger.severe('Error processing read cursor, attempt: ${readCursor.sendAttempts}', e, s);
       if (readCursor.sendAttempts > 5) {

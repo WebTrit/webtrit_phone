@@ -33,7 +33,7 @@ class LocalContactsSyncBloc extends Bloc<LocalContactsSyncEvent, LocalContactsSy
 
   @override
   Future<void> close() async {
-    _logger.info('close');
+    _logger.finer('close');
 
     WidgetsBinding.instance.removeObserver(this);
     await super.close();
@@ -41,7 +41,7 @@ class LocalContactsSyncBloc extends Bloc<LocalContactsSyncEvent, LocalContactsSy
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    _logger.info('didChangeAppLifecycleState: $state');
+    _logger.finer('didChangeAppLifecycleState: $state');
 
     if (PlatformInfo().isAndroid) {
       if (state == AppLifecycleState.resumed && this.state is LocalContactsSyncPermissionFailure) {
@@ -51,7 +51,7 @@ class LocalContactsSyncBloc extends Bloc<LocalContactsSyncEvent, LocalContactsSy
   }
 
   void _onStarted(LocalContactsSyncStarted event, Emitter<LocalContactsSyncState> emit) async {
-    _logger.info('_onStarted');
+    _logger.finer('_onStarted');
 
     if (!await localContactsRepository.requestPermission()) {
       _logger.warning('_onStarted permission failure');
@@ -70,7 +70,7 @@ class LocalContactsSyncBloc extends Bloc<LocalContactsSyncEvent, LocalContactsSy
   }
 
   void _onRefreshed(LocalContactsSyncRefreshed event, Emitter<LocalContactsSyncState> emit) async {
-    _logger.info('_onRefreshed');
+    _logger.finer('_onRefreshed');
 
     emit(const LocalContactsSyncRefreshInProgress());
     try {
@@ -82,7 +82,7 @@ class LocalContactsSyncBloc extends Bloc<LocalContactsSyncEvent, LocalContactsSy
   }
 
   Future _onUpdated(_LocalContactsSyncUpdated event, Emitter<LocalContactsSyncState> emit, {int retryCount = 0}) async {
-    _logger.info('_onUpdated contacts count:${event.contacts.length}');
+    _logger.finer('_onUpdated contacts count:${event.contacts.length}');
 
     try {
       await appDatabase.transaction(() async {

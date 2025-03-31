@@ -13,14 +13,14 @@ class MainScreenNavigatorObserver extends AutoRouterObserver {
 
   @override
   void didInitTabRoute(TabPageRoute route, TabPageRoute? previousRoute) {
-    _logger.info('didInitTabRoute: ${route.routeInfo.name}');
+    _logger.finest('didInitTabRoute: ${route.routeInfo.name}');
     _mainScreenRouteStateRepository.setActiveTabPage(route.routeInfo.name);
     super.didInitTabRoute(route, previousRoute);
   }
 
   @override
   void didChangeTabRoute(TabPageRoute route, TabPageRoute previousRoute) {
-    _logger.info('didchangeTabRoute: ${route.routeInfo.name}');
+    _logger.finest('didChangeTabRoute: ${route.routeInfo.name}');
     _mainScreenRouteStateRepository.setActiveTabPage(route.routeInfo.name);
     super.didChangeTabRoute(route, previousRoute);
   }
@@ -28,7 +28,7 @@ class MainScreenNavigatorObserver extends AutoRouterObserver {
   @override
   void didPush(Route route, Route? previousRoute) {
     final args = route.data?.route.args;
-    _logger.info('didPush: ${route.settings.name}');
+    _logger.finest('didPush: ${route.settings.name}');
     _mainScreenRouteStateRepository.setLastRouteArgs(args);
     super.didPush(route, previousRoute);
   }
@@ -36,7 +36,7 @@ class MainScreenNavigatorObserver extends AutoRouterObserver {
   @override
   void didPop(Route route, Route? previousRoute) {
     final args = previousRoute?.data?.route.args;
-    _logger.info('didPop: ${route.settings.name}');
+    _logger.finest('didPop: ${route.settings.name}');
     _mainScreenRouteStateRepository.setLastRouteArgs(args);
     super.didPop(route, previousRoute);
   }

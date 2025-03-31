@@ -31,7 +31,7 @@ class ExternalContactsSyncBloc extends Bloc<ExternalContactsSyncEvent, ExternalC
   final AppDatabase appDatabase;
 
   void _onStarted(ExternalContactsSyncStarted event, Emitter<ExternalContactsSyncState> emit) async {
-    _logger.info('_onStarted');
+    _logger.finer('_onStarted');
 
     final externalContactsForEachFuture = emit.onEach<List<ExternalContact>>(
       externalContactsRepository.contacts(),
@@ -45,7 +45,7 @@ class ExternalContactsSyncBloc extends Bloc<ExternalContactsSyncEvent, ExternalC
   }
 
   void _onRefreshed(ExternalContactsSyncRefreshed event, Emitter<ExternalContactsSyncState> emit) async {
-    _logger.info('_onRefreshed');
+    _logger.finer('_onRefreshed');
 
     emit(const ExternalContactsSyncRefreshInProgress());
     try {
@@ -62,7 +62,7 @@ class ExternalContactsSyncBloc extends Bloc<ExternalContactsSyncEvent, ExternalC
     int retryCount = 0,
     UserInfo? userInfo,
   }) async {
-    _logger.info('_onUpdated contacts count:${event.contacts.length}');
+    _logger.finer('_onUpdated contacts count:${event.contacts.length}');
 
     try {
       userInfo ??= await userRepository.getInfo();

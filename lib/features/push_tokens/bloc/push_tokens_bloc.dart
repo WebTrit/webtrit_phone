@@ -73,7 +73,7 @@ class PushTokensBloc extends Bloc<PushTokensEvent, PushTokensState> implements P
 
     final fcmToken = await _backoffRetries.execute<String?>(
       (attempt) async {
-        _logger.info('_retrieveAndStoreFcmToken attempt $attempt');
+        _logger.fine('_retrieveAndStoreFcmToken attempt $attempt');
         return await firebaseMessaging.getToken(vapidKey: vapidKey);
       },
       shouldRetry: (e, attempt) {
@@ -92,7 +92,7 @@ class PushTokensBloc extends Bloc<PushTokensEvent, PushTokensState> implements P
   Future<void> _retrieveAndStoreApnsToken() async {
     final apnsToken = await _backoffRetries.execute<String?>(
       (attempt) async {
-        _logger.info('_retrieveAndStoreApnsToken attempt $attempt');
+        _logger.fine('_retrieveAndStoreApnsToken attempt $attempt');
         return await firebaseMessaging.getAPNSToken();
       },
       shouldRetry: (e, attempt) {
@@ -112,7 +112,7 @@ class PushTokensBloc extends Bloc<PushTokensEvent, PushTokensState> implements P
     try {
       await _backoffRetries.execute<void>(
         (attempt) async {
-          _logger.info('_onInsertedOrUpdated attempt $attempt');
+          _logger.fine('_onInsertedOrUpdated attempt $attempt');
           await pushTokensRepository.insertOrUpdatePushToken(event.type, event.value);
         },
         shouldRetry: (e, attempt) {
@@ -127,7 +127,7 @@ class PushTokensBloc extends Bloc<PushTokensEvent, PushTokensState> implements P
         secureStorage.writeFCMPushToken(event.value);
       }
 
-      _logger.info('Push token inserted or updated: ${event.type} ${event.value}');
+      _logger.fine('Push token inserted or updated: ${event.type} ${event.value}');
     } catch (e, stackTrace) {
       _logger.warning('_onInsertedOrUpdated', e, stackTrace);
     }

@@ -41,7 +41,7 @@ class SessionStatusCubit extends Cubit<SessionStatusState> {
   }
 
   void _emitCombinedStatus([PushTokensState? initialPushTokens, CallState? initialCall]) {
-    _logger.info('emitCombinedStatus: $_lastPushTokensState, $_lastCallState');
+    _logger.finest('emitCombinedStatus: $_lastPushTokensState, $_lastCallState');
 
     final pushTokens = initialPushTokens ?? _lastPushTokensState;
     final call = initialCall ?? _lastCallState;
