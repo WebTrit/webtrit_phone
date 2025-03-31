@@ -11,6 +11,11 @@ extension PathUtilExtension on String {
     return ['mp4', 'mov', 'avi', 'mkv', 'flv', 'm3u8'].contains(ext);
   }
 
+  bool get isAudioPath {
+    final ext = toUri.path.split('.').last;
+    return ['mp3', 'wav', 'aac', 'flac', 'ogg'].contains(ext);
+  }
+
   bool get isLocalPath => toUri.host.isEmpty && toUri.path.isNotEmpty;
 
   String get fileName {

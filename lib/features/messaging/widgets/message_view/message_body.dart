@@ -1,21 +1,22 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
 import 'package:quiver/collection.dart';
 import 'package:open_file/open_file.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_parsed_text/flutter_parsed_text.dart';
 
 import 'package:webtrit_phone/extensions/string.dart';
 import 'package:webtrit_phone/features/messaging/messaging.dart';
-import 'package:webtrit_phone/features/messaging/widgets/message_view/media_view_page.dart';
-import 'package:webtrit_phone/features/messaging/widgets/message_view/multisource_image_view.dart';
-import 'package:webtrit_phone/features/messaging/widgets/message_view/video_thumbnail_builder.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 
+import 'audio_view.dart';
 import 'media_stagger_wrap.dart';
+import 'media_view_page.dart';
+import 'multisource_image_view.dart';
+import 'video_thumbnail_builder.dart';
 
 class MessageBody extends StatefulWidget {
   const MessageBody({
@@ -41,10 +42,9 @@ class _MessageBodyState extends State<MessageBody> {
   late final horizontalSpace = MediaQuery.of(context).size.width - (widget.isMine ? 82 : 82 + 48);
 
   late final attachments = widget.attachments;
-  late final mediaAttachments =
-      attachments.where((attachment) => attachment.isImagePath || attachment.isVideoPath).toList();
-  late final fileAttachments =
-      attachments.where((attachment) => !attachment.isImagePath && !attachment.isVideoPath).toList();
+  late final viewableAttachments = attachments.where((a) => a.isImagePath || a.isVideoPath).toList();
+  late final audioAttachments = attachments.where((a) => a.isAudioPath).toList();
+  late final otherAttachments = attachments.where((a) => !a.isImagePath && !a.isVideoPath && !a.isAudioPath).toList();
 
   static final previewsCache = LruMap<String, OgPreview>(maximumSize: 100);
   OgPreview? preview;
@@ -91,13 +91,13 @@ class _MessageBodyState extends State<MessageBody> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       spacing: 8,
       children: [
-        if (mediaAttachments.isNotEmpty) ...[
+        if (viewableAttachments.isNotEmpty) ...[
           MediaStaggerWrap(
             buildElement: (index, size) => GestureDetector(
               onTap: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (context) => MediaViewPage(attachments: mediaAttachments, initialIndex: index),
+                    builder: (context) => MediaViewPage(attachments: viewableAttachments, initialIndex: index),
                   ),
                 );
               },
@@ -112,7 +112,7 @@ class _MessageBodyState extends State<MessageBody> {
                     boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.1), blurRadius: 2)],
                   ),
                   child: Builder(builder: (context) {
-                    final att = mediaAttachments[index];
+                    final att = viewableAttachments[index];
                     if (att.isImagePath) {
                       return MultisourceImageView(
                         att,
@@ -154,15 +154,24 @@ class _MessageBodyState extends State<MessageBody> {
                 ),
               ),
             ),
-            count: mediaAttachments.length,
+            count: viewableAttachments.length,
             space: horizontalSpace,
           ),
         ],
-        if (fileAttachments.isNotEmpty) ...[
+        if (audioAttachments.isNotEmpty) ...[
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            spacing: 8,
+            children: [
+              for (final path in audioAttachments) AudioView(path),
+            ],
+          ),
+        ],
+        if (otherAttachments.isNotEmpty) ...[
           Wrap(
             spacing: 8,
             runSpacing: 8,
-            children: fileAttachments.map(
+            children: otherAttachments.map(
               (attachment) {
                 return GestureDetector(
                   onTap: () async {

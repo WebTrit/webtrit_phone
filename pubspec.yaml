@@ -94,7 +94,8 @@ dependencies:
   video_player: ^2.9.5
   http_cache_stream: ^0.0.1
   get_thumbnail_video: ^0.7.2
-
+  audio_session: ^0.1.25
+  
   webtrit_api:
     path: ./packages/webtrit_api
   webtrit_phone_number:
