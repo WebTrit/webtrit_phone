@@ -58,9 +58,9 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
       final appInfo = await AppInfo.init(FirebaseAppIdProvider());
       final deviceInfo = await DeviceInfoFactory.init();
       final packageInfo = await PackageInfoFactory.init();
+      final secureStorage = await SecureStorage.init();
 
       await AppPermissions.init(featureAccess);
-      await SecureStorage.init();
       await AppCertificates.init();
       await AppTime.init();
       await SessionCleanupWorker.init();
@@ -69,6 +69,7 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
         packageInfo: packageInfo,
         deviceInfo: deviceInfo,
         appInfo: appInfo,
+        secureStorage: secureStorage,
       );
 
       await _initCallkeep(appPreferences);
@@ -147,12 +148,14 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   final appInfo = await AppInfo.init(const SharedPreferencesAppIdProvider());
   final deviceInfo = await DeviceInfoFactory.init();
   final packageInfo = await PackageInfoFactory.init();
+  final secureStorage = await SecureStorage.init();
 
   await AppLogger.init(
     remoteConfigService: remoteCacheConfigService,
     packageInfo: packageInfo,
     deviceInfo: deviceInfo,
     appInfo: appInfo,
+    secureStorage: secureStorage,
   );
 
   final appNotification = AppRemoteNotification.fromFCM(message);

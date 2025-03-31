@@ -15,6 +15,7 @@ class AppLogger {
     required PackageInfo packageInfo,
     required DeviceInfo deviceInfo,
     required AppInfo appInfo,
+    required SecureStorage secureStorage,
   }) async {
     hierarchicalLoggingEnabled = true;
 
@@ -30,33 +31,40 @@ class AppLogger {
     // Configure remote logging for Logz.io with an anonymizing formatter.
     // If additional logging services are added in the future, consider extracting these settings
     // into a dedicated logging configuration module to improve maintainability and separation of concerns.
-    final remoteLoggingServices = <RemoteLoggingService>[];
+    final remoteLoggingServices = _createRemoteLoggingServices(remoteConfigService);
+
+    for (var it in remoteLoggingServices) {
+      it.initialize(await _prepareRemoteLabels(packageInfo, deviceInfo, appInfo, secureStorage));
+    }
+
+    _instance = AppLogger._(remoteLoggingServices, packageInfo, deviceInfo, appInfo, secureStorage);
+    return _instance;
+  }
+
+  static List<RemoteLoggingService> _createRemoteLoggingServices(RemoteConfigService configService) {
+    final isEnabled = configService.getBool('firebaseRemoteLogging') ?? false;
 
     const logzioUrl = EnvironmentConfig.REMOTE_LOGZIO_LOGGING_URL;
     const logzioToken = EnvironmentConfig.REMOTE_LOGZIO_LOGGING_TOKEN;
     final logzioBufferSize = EnvironmentConfig.REMOTE_LOGZIO_LOGGING_BUFFER_SIZE;
 
-    if (logzioUrl != null && logzioToken != null) {
-      remoteLoggingServices.add(LogzioLoggingService(url: logzioUrl, token: logzioToken, bufferSize: logzioBufferSize));
+    if (logzioUrl != null && logzioToken != null && isEnabled) {
+      return [LogzioLoggingService(url: logzioUrl, token: logzioToken, bufferSize: logzioBufferSize)];
     }
 
-    final isRemoteLoggingEnabled = remoteConfigService.getBool('firebaseRemoteLogging') ?? false;
-
-    if (isRemoteLoggingEnabled) {
-      for (var it in remoteLoggingServices) {
-        it.initialize(await _prepareRemoteLabels(packageInfo, deviceInfo, appInfo));
-      }
-    }
-
-    _instance = AppLogger._();
-    return _instance;
+    return [];
   }
 
   static Future<Map<String, String>> _prepareRemoteLabels(
     PackageInfo packageInfo,
     DeviceInfo deviceInfo,
     AppInfo appInfo,
+    SecureStorage secureStorage,
   ) async {
+    final token = secureStorage.readToken();
+    final coreUrl = secureStorage.readCoreUrl();
+    final tenantId = secureStorage.readTenantId();
+
     return <String, String>{
       'app': packageInfo.appName,
       'appVersion': appInfo.version,
@@ -68,6 +76,9 @@ class AppLogger {
       'model': deviceInfo.model,
       'os': deviceInfo.systemName,
       'osVersion': deviceInfo.systemVersion,
+      'authorization': token != null ? 'authorized' : 'unauthorized',
+      if (coreUrl != null) 'coreUrl': coreUrl,
+      if (tenantId != null) 'tenantId': tenantId,
     };
   }
 
@@ -75,5 +86,20 @@ class AppLogger {
     return _instance;
   }
 
-  AppLogger._();
+  AppLogger._(this._remoteLoggingServices, this._packageInfo, this._deviceInfo, this._appInfo, this._secureStorage);
+
+  final PackageInfo _packageInfo;
+  final DeviceInfo _deviceInfo;
+  final AppInfo _appInfo;
+  final SecureStorage _secureStorage;
+
+  final List<RemoteLoggingService> _remoteLoggingServices;
+
+  /// Allows regenerating labels when coreUrl and tenantId are available.
+  Future<void> regenerateRemoteLabels() async {
+    final labels = await _prepareRemoteLabels(_packageInfo, _deviceInfo, _appInfo, _secureStorage);
+    for (var it in _remoteLoggingServices) {
+      it.initialize(labels);
+    }
+  }
 }
