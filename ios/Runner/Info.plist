@@ -82,5 +82,10 @@
 		<string>We need add only access to save medias to gallery</string>
 		<key>NSPhotoLibraryUsageDescription</key>
 		<string>We need access to save medias to gallery</string>
+		<key>NSAppTransportSecurity</key>
+		<dict>
+			<key>NSAllowsArbitraryLoads</key>
+			<true/>
+		</dict>
 	</dict>
 </plist>
