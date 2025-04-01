@@ -13,3 +13,4 @@ export 'widgets/widgets.dart';
 // TODO:
 // - Refactor orientations bloc to acquire-release flow for locking/unlocking orientation
 // main case is open media view and call conucurently
+// - add bloc for setSystemUIOverlayStyle and setEnabledSystemUIMode same as orientations or combine them as systemUI bloc

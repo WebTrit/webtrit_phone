@@ -9,10 +9,10 @@ const kSystemThemeLight = SystemUiOverlayStyle(
   systemNavigationBarDividerColor: Colors.white,
 );
 
-const kSystemThemeDark = SystemUiOverlayStyle(
-  systemNavigationBarColor: Colors.black,
-  statusBarColor: Colors.black,
+const kSystemThemeDarkTransparent = SystemUiOverlayStyle(
+  systemNavigationBarColor: Colors.transparent,
+  statusBarColor: Colors.transparent,
   systemNavigationBarIconBrightness: Brightness.light,
   statusBarIconBrightness: Brightness.light,
-  systemNavigationBarDividerColor: Colors.black,
+  systemNavigationBarDividerColor: Colors.transparent,
 );

@@ -12,9 +12,14 @@ import 'package:webtrit_phone/features/messaging/widgets/message_view/multisourc
 import 'package:webtrit_phone/features/messaging/widgets/message_view/video_thumbnail_builder.dart';
 
 class VideoView extends StatefulWidget {
-  const VideoView(this.path, {super.key});
+  const VideoView(
+    this.path, {
+    super.key,
+    this.onControlsDisplayChanged,
+  });
 
   final String path;
+  final Function(bool value)? onControlsDisplayChanged;
 
   @override
   VideoViewState createState() => VideoViewState();
@@ -45,6 +50,7 @@ class VideoViewState extends State<VideoView> {
     super.initState();
     _controller.initialize().then((_) {
       setState(() {});
+      notifyControlsDisplayChanged();
       _controller.addListener(() => setState(() {}));
     });
   }
@@ -61,6 +67,8 @@ class VideoViewState extends State<VideoView> {
     final duration = Duration(seconds: value.toInt());
     if (_controller.value.isPlaying == true) _seekTo = duration;
     setState(() {});
+    notifyControlsDisplayChanged();
+
     await _controller.seekTo(duration);
   }
 
@@ -68,15 +76,23 @@ class VideoViewState extends State<VideoView> {
     if (showControls == false) return;
     _controller.value.isPlaying ? _controller.pause() : _controller.play();
     setState(() {});
+    notifyControlsDisplayChanged();
   }
 
   void onTap() {
     _showControls = true;
     _hideControlsTimer?.cancel();
+    setState(() {});
+    notifyControlsDisplayChanged();
+
     _hideControlsTimer = Timer(const Duration(seconds: 3), () {
       if (mounted) setState(() => _showControls = false);
+      notifyControlsDisplayChanged();
     });
-    setState(() {});
+  }
+
+  void notifyControlsDisplayChanged() {
+    widget.onControlsDisplayChanged?.call(showControls);
   }
 
   @override
@@ -146,7 +162,7 @@ class VideoViewState extends State<VideoView> {
                 height: 64,
                 width: double.infinity,
                 color: colorScheme.secondary.withValues(alpha: 0.5),
-                padding: const EdgeInsets.symmetric(horizontal: 16),
+                padding: const EdgeInsets.only(left: 24, right: 24, bottom: 16),
                 child: Row(
                   children: [
                     Expanded(
@@ -158,7 +174,7 @@ class VideoViewState extends State<VideoView> {
                         onChanged: onSeek,
                       ),
                     ),
-                    const SizedBox(width: 8),
+                    const SizedBox(width: 16),
                     Text(
                       '${_controller.value.position.format()} / ${_controller.value.duration.format()}',
                       style: theme.textTheme.bodySmall?.copyWith(
