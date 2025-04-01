@@ -87,7 +87,7 @@ class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegat
   }
 
   @override
-  void performServiceAnswerCall(String callId) async {
+  void performAnswerCall(String callId) async {
     // Check if the device is connected to the network only then proceed
     if (!(await _signalingManager.hasNetworkConnection())) {
       throw Exception('Not connected');
@@ -95,13 +95,13 @@ class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegat
   }
 
   @override
-  void performServiceEndCall(String callId) async {
+  void performEndCall(String callId) async {
     return _signalingManager.declineCall(callId);
   }
 
 // TODO (Serdun): Rename this callback to align with naming conventions.
   @override
-  Future<void> endCallReceived(
+  Future<void> performReceivedCall(
     String callId,
     String number,
     DateTime createdTime,
