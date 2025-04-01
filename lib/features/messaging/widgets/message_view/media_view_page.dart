@@ -1,11 +1,15 @@
+// ignore_for_file: avoid_print
+
 import 'dart:async';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:gal/gal.dart';
 import 'package:open_file/open_file.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
@@ -151,6 +155,34 @@ class _MediaViewPageState extends State<MediaViewPage> {
                 dense: true,
               ),
             ),
+            if (kDebugMode)
+              PopupMenuItem(
+                onTap: () async {
+                  final directory = await getTemporaryDirectory();
+
+                  Future enumerateDir(Directory dir) async {
+                    final list = dir.listSync();
+                    for (var entity in list) {
+                      if (entity is Directory) {
+                        print('directory: ${entity.path}');
+                        await enumerateDir(entity);
+                      }
+                      if (entity is File) {
+                        final stat = await entity.stat();
+                        print('file: ${entity.path}');
+                        print('size: ${stat.size / 1024 / 1024} MB');
+                      }
+                    }
+                  }
+
+                  await enumerateDir(directory);
+                },
+                child: const ListTile(
+                  title: Text('Enumerate cache'),
+                  leading: Icon(Icons.file_copy),
+                  dense: true,
+                ),
+              ),
           ],
         ),
       ],
