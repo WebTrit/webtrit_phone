@@ -78,5 +78,9 @@
 		<true/>
 		<key>ITSAppUsesNonExemptEncryption</key>
         <false/>
+		<key>NSPhotoLibraryAddUsageDescription</key>
+		<string>We need add only access to save medias to gallery</string>
+		<key>NSPhotoLibraryUsageDescription</key>
+		<string>We need access to save medias to gallery</string>
 	</dict>
 </plist>
