@@ -107,7 +107,7 @@ class _AppState extends State<App> {
       providers: [
         BlocProvider<OrientationsBloc>(
           lazy: false,
-          create: (context) => OrientationsBloc()..add(const OrientationsChanged(PreferredOrientation.regular)),
+          create: (context) => OrientationsBloc()..add(const OrientationsChanged(PreferredOrientation.upDown)),
         ),
         BlocProvider<NotificationsBloc>(
           create: (context) => NotificationsBloc(),

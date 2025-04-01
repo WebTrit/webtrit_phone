@@ -5,12 +5,15 @@ import 'package:flutter/material.dart';
 
 import 'package:gal/gal.dart';
 import 'package:open_file/open_file.dart';
+import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/messaging/extensions/extensions.dart';
 import 'package:webtrit_phone/features/messaging/widgets/message_view/video_view.dart';
+import 'package:webtrit_phone/features/orientations/bloc/orientations_bloc.dart';
+import 'package:webtrit_phone/features/orientations/models/preferred_orientation.dart';
 import 'package:webtrit_phone/theme/styles/styles.dart';
 
 import 'multisource_image_view.dart';
@@ -30,6 +33,7 @@ class MediaViewPage extends StatefulWidget {
 }
 
 class _MediaViewPageState extends State<MediaViewPage> {
+  late final orientationsBloc = context.read<OrientationsBloc>();
   late final pageController = PageController(initialPage: widget.initialIndex);
   double prevRightScroll = 0;
   double prevLeftScroll = 0;
@@ -63,6 +67,18 @@ class _MediaViewPageState extends State<MediaViewPage> {
   void onShare() async {
     final file = await currentFile;
     Share.shareXFiles([XFile(file.path)]);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    orientationsBloc.add(const OrientationsChanged(PreferredOrientation.full));
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    orientationsBloc.add(const OrientationsChanged(PreferredOrientation.upDown));
   }
 
   @override

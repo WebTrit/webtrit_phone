@@ -68,9 +68,9 @@ class _CallShellState extends State<CallShell> {
 
         final orientationsBloc = context.read<OrientationsBloc>();
         if (state.display == CallDisplay.screen) {
-          orientationsBloc.add(const OrientationsChanged(PreferredOrientation.call));
+          orientationsBloc.add(const OrientationsChanged(PreferredOrientation.full));
         } else {
-          orientationsBloc.add(const OrientationsChanged(PreferredOrientation.regular));
+          orientationsBloc.add(const OrientationsChanged(PreferredOrientation.upDown));
         }
 
         final callScreenActive = router.isRouteActive(CallScreenPageRoute.name);

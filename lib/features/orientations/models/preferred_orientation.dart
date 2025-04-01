@@ -1,4 +1,1 @@
-enum PreferredOrientation {
-  regular,
-  call,
-}
+enum PreferredOrientation { upDown, full }

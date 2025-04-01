@@ -8,3 +8,8 @@ export 'features/sms_conversation_builder/sms_conversation_builder.dart';
 export 'cubits/cubits.dart';
 export 'services/services.dart';
 export 'widgets/widgets.dart';
+
+
+// TODO:
+// - Refactor orientations bloc to acquire-release flow for locking/unlocking orientation
+// main case is open media view and call conucurently

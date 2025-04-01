@@ -21,11 +21,11 @@ class OrientationsBloc extends Bloc<OrientationsEvent, OrientationsState> {
     if (state.lastOrientation == event.orientation) return;
 
     switch (event.orientation) {
-      case PreferredOrientation.regular:
-        await setRegularPreferredOrientations();
+      case PreferredOrientation.upDown:
+        await setUpDownPreferredOrientations();
         break;
-      case PreferredOrientation.call:
-        await setCallPreferredOrientations();
+      case PreferredOrientation.full:
+        await setFullPreferredOrientations();
         break;
     }
 
