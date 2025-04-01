@@ -7,8 +7,10 @@ import 'package:open_file/open_file.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_parsed_text/flutter_parsed_text.dart';
+import 'package:webtrit_phone/extensions/iterable.dart';
 
 import 'package:webtrit_phone/features/messaging/messaging.dart';
+import 'package:webtrit_phone/models/chat_outbox_message_entry.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 
 import 'audio_view.dart';
@@ -22,7 +24,7 @@ class MessageBody extends StatefulWidget {
   const MessageBody({
     required this.text,
     required this.isMine,
-    this.attachments = const [],
+    this.outgoingAttachments = const [],
     this.style,
     this.previewDecoration,
     super.key,
@@ -30,7 +32,7 @@ class MessageBody extends StatefulWidget {
 
   final String text;
   final bool isMine;
-  final List<String> attachments;
+  final List<OutgoingAttachment> outgoingAttachments;
   final TextStyle? style;
   final BoxDecoration? previewDecoration;
 
@@ -41,10 +43,14 @@ class MessageBody extends StatefulWidget {
 class _MessageBodyState extends State<MessageBody> {
   late final horizontalSpace = MediaQuery.of(context).size.width - (widget.isMine ? 82 : 82 + 48);
 
-  late final attachments = widget.attachments;
+  late final attachments = widget.outgoingAttachments.map((e) => e.pickedPath);
   late final viewableAttachments = attachments.where((a) => a.isImagePath || a.isVideoPath).toList();
   late final audioAttachments = attachments.where((a) => a.isAudioPath).toList();
   late final otherAttachments = attachments.where((a) => !a.isImagePath && !a.isVideoPath && !a.isAudioPath).toList();
+
+  OutgoingAttachment? outgoingAttachment(String path) {
+    return widget.outgoingAttachments.firstWhereOrNull((e) => e.pickedPath == path);
+  }
 
   static final previewsCache = LruMap<String, OgPreview>(maximumSize: 100);
   OgPreview? preview;
@@ -93,67 +99,84 @@ class _MessageBodyState extends State<MessageBody> {
       children: [
         if (viewableAttachments.isNotEmpty) ...[
           MediaStaggerWrap(
-            buildElement: (index, size) => GestureDetector(
-              onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => MediaViewPage(attachments: viewableAttachments, initialIndex: index),
-                  ),
-                );
-              },
-              child: Container(
-                height: size,
-                width: size,
-                padding: const EdgeInsets.all(2),
+            buildElement: (index, size) {
+              final att = viewableAttachments[index];
+              final outgoingAtt = outgoingAttachment(att);
+
+              return GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => MediaViewPage(attachments: viewableAttachments, initialIndex: index),
+                    ),
+                  );
+                },
                 child: Container(
-                  clipBehavior: Clip.antiAlias,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(4),
-                    boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.1), blurRadius: 2)],
+                  height: size,
+                  width: size,
+                  padding: const EdgeInsets.all(2),
+                  child: Container(
+                    clipBehavior: Clip.antiAlias,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(4),
+                      boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.1), blurRadius: 2)],
+                    ),
+                    child: Stack(
+                      fit: StackFit.loose,
+                      children: [
+                        Positioned.fill(
+                          child: Builder(builder: (context) {
+                            if (att.isImagePath) {
+                              return MultisourceImageView(
+                                att,
+                                placeholder: Icon(Icons.image, color: colorScheme.secondary, size: 64),
+                                error: Icon(Icons.error, color: colorScheme.secondary, size: 64),
+                              );
+                            }
+                            if (att.isVideoPath) {
+                              return VideoThumbnailBuilder(
+                                att,
+                                (File? file) {
+                                  return Stack(
+                                    children: [
+                                      if (file != null)
+                                        Positioned.fill(
+                                            child: MultisourceImageView(
+                                          file.path,
+                                          fit: BoxFit.cover,
+                                          placeholder: const SizedBox(),
+                                          error: const SizedBox(),
+                                        )),
+                                      Center(
+                                        child: Container(
+                                          padding: const EdgeInsets.all(8),
+                                          decoration: BoxDecoration(
+                                            color: Colors.black.withValues(alpha: 0.5),
+                                            shape: BoxShape.circle,
+                                          ),
+                                          child: const Icon(Icons.play_arrow_outlined, color: Colors.white),
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            }
+                            return const SizedBox();
+                          }),
+                        ),
+                        if (outgoingAtt != null)
+                          LinearProgressIndicator(
+                            value: outgoingAtt.progress,
+                            color: colorScheme.primary,
+                            backgroundColor: colorScheme.primary.withValues(alpha: 0.2),
+                          ),
+                      ],
+                    ),
                   ),
-                  child: Builder(builder: (context) {
-                    final att = viewableAttachments[index];
-                    if (att.isImagePath) {
-                      return MultisourceImageView(
-                        att,
-                        placeholder: Icon(Icons.image, color: colorScheme.secondary, size: 64),
-                        error: Icon(Icons.error, color: colorScheme.secondary, size: 64),
-                      );
-                    }
-                    if (att.isVideoPath) {
-                      return VideoThumbnailBuilder(
-                        att,
-                        (File? file) {
-                          return Stack(
-                            children: [
-                              if (file != null)
-                                Positioned.fill(
-                                    child: MultisourceImageView(
-                                  file.path,
-                                  fit: BoxFit.cover,
-                                  placeholder: const SizedBox(),
-                                  error: const SizedBox(),
-                                )),
-                              Center(
-                                child: Container(
-                                  padding: const EdgeInsets.all(8),
-                                  decoration: BoxDecoration(
-                                    color: Colors.black.withValues(alpha: 0.5),
-                                    shape: BoxShape.circle,
-                                  ),
-                                  child: const Icon(Icons.play_arrow_outlined, color: Colors.white),
-                                ),
-                              ),
-                            ],
-                          );
-                        },
-                      );
-                    }
-                    return const SizedBox();
-                  }),
                 ),
-              ),
-            ),
+              );
+            },
             count: viewableAttachments.length,
             space: horizontalSpace,
           ),
@@ -162,9 +185,27 @@ class _MessageBodyState extends State<MessageBody> {
           Column(
             mainAxisSize: MainAxisSize.min,
             spacing: 8,
-            children: [
-              for (final path in audioAttachments) AudioView(path),
-            ],
+            children: audioAttachments.map(
+              (path) {
+                final outgoingAtt = outgoingAttachment(path);
+                return Stack(
+                  children: [
+                    AudioView(path),
+                    if (outgoingAtt != null)
+                      Positioned(
+                        bottom: 0,
+                        left: 0,
+                        right: 0,
+                        child: LinearProgressIndicator(
+                          value: outgoingAtt.progress,
+                          color: theme.colorScheme.primary,
+                          backgroundColor: theme.colorScheme.primary.withValues(alpha: 0.2),
+                        ),
+                      ),
+                  ],
+                );
+              },
+            ).toList(),
           ),
         ],
         if (otherAttachments.isNotEmpty) ...[
@@ -173,6 +214,7 @@ class _MessageBodyState extends State<MessageBody> {
             runSpacing: 8,
             children: otherAttachments.map(
               (attachment) {
+                final outgoingAtt = outgoingAttachment(attachment);
                 return GestureDetector(
                   onTap: () async {
                     final file = attachment.isLocalPath
@@ -183,7 +225,22 @@ class _MessageBodyState extends State<MessageBody> {
                   onLongPress: () {
                     // TODO: download, share popupmenu
                   },
-                  child: FileView(attachment),
+                  child: Stack(
+                    children: [
+                      FileView(attachment),
+                      if (outgoingAtt != null)
+                        Positioned(
+                          bottom: 0,
+                          left: 0,
+                          right: 0,
+                          child: LinearProgressIndicator(
+                            value: outgoingAtt.progress,
+                            color: theme.colorScheme.primary,
+                            backgroundColor: theme.colorScheme.primary.withValues(alpha: 0.2),
+                          ),
+                        ),
+                    ],
+                  ),
                 );
               },
             ).toList(),

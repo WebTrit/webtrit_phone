@@ -46,7 +46,7 @@ class ConversationCubit extends Cubit<ConversationState> {
       chatId: chatId,
       participantId: participantId,
       content: content,
-      attachments: attachments,
+      attachments: attachments.map((p) => OutgoingAttachment(pickedPath: p)).toList(),
     );
     _outboxRepository.upsertOutboxMessage(outboxEntry);
   }
@@ -60,7 +60,7 @@ class ConversationCubit extends Cubit<ConversationState> {
       participantId: participantId,
       replyToId: refMessage.id,
       content: content,
-      attachments: attachments,
+      attachments: attachments.map((p) => OutgoingAttachment(pickedPath: p)).toList(),
     );
     _outboxRepository.upsertOutboxMessage(outboxEntry);
   }

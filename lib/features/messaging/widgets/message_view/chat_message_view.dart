@@ -120,8 +120,7 @@ class _ChatMessageViewState extends State<ChatMessageView> {
     if (isSended && membersReadedUntil != null) isViewedByMembers = !message.createdAt.isAfter(membersReadedUntil);
     if (isSended && userReadedUntil != null) isViewedByUser = !message.createdAt.isAfter(userReadedUntil);
 
-    // final attachments = message?.attachments ?? outboxMessage?.attachments ?? [];
-    final attachments = outboxMessage?.attachments ?? [];
+    final outgoingAttachments = outboxMessage?.attachments ?? [];
 
     final popupItems = [
       if (hasContent)
@@ -235,7 +234,12 @@ class _ChatMessageViewState extends State<ChatMessageView> {
                         ForwartQuote(context: context, userId: widget.userId, msg: message!, isMine: isMine),
                       ],
                       if (!isForward && !isDeleted) ...[
-                        MessageBody(text: content, attachments: attachments, isMine: isMine, style: theme.contentStyle),
+                        MessageBody(
+                          text: content,
+                          isMine: isMine,
+                          outgoingAttachments: outgoingAttachments,
+                          style: theme.contentStyle,
+                        ),
                       ],
                       if (isEdited && !isDeleted) ...[
                         const SizedBox(height: 4),

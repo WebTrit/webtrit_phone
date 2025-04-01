@@ -1,7 +1,16 @@
 import 'dart:async';
+import 'dart:io';
 
+import 'package:flutter/rendering.dart';
+
+import 'package:blurhash_ffi/blurhash.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:logging/logging.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:phoenix_socket/phoenix_socket.dart';
+import 'package:uuid/uuid.dart';
+import 'package:video_compress/video_compress.dart';
 
 import 'package:webtrit_phone/app/notifications/notifications.dart';
 import 'package:webtrit_phone/features/features.dart';
@@ -80,11 +89,231 @@ class ChatsOutboxWorker {
       if (channel == null) return;
       if (channel.state != PhoenixChannelState.joined) return;
 
-      final (message, chat) = await channel.newChatMessage(outboxEntry);
-      if (chat != null) await _chatsRepository.upsertChat(chat);
-      await _chatsRepository.upsertMessage(message);
-      await _outboxRepository.deleteOutboxMessage(outboxEntry.idKey);
-      _logger.info('Processed new message: ${message.id}');
+      List<OutgoingAttachment> attachments = outboxEntry.attachments;
+
+      for (OutgoingAttachment att in attachments) {
+        final pickedPath = att.pickedPath;
+        final fileName = pickedPath.fileName;
+        final fileExtension = pickedPath.fileExtension;
+        String? encodedPath = att.encodedPath;
+        AttachmentMetadata? metadata = att.metadata;
+        String? uploadId = att.uploadId;
+
+        // TODO: test api28 and below
+        // final str = await Permission.storage.request();
+        // final str2 = await Permission.manageExternalStorage.request();
+        // print('storage: $str, manageExternalStorage: $str2');
+
+        final dir = await getTemporaryDirectory();
+        final encodedDir = Directory('${dir.path}/encoded');
+        if (!encodedDir.existsSync()) encodedDir.createSync(recursive: true);
+
+        if (pickedPath.isImagePath && !pickedPath.isGifImagePath) {
+          _logger.info('Starting image processing: $fileName.$fileExtension');
+
+          if (encodedPath == null) {
+            _logger.info('Encoding image: $fileName.$fileExtension');
+            final encodedResult = await FlutterImageCompress.compressAndGetFile(
+              pickedPath,
+              '${dir.path}/encoded/ff$fileName.jpg',
+              minWidth: 2048,
+              minHeight: 2048,
+              quality: 70,
+              format: CompressFormat.jpeg,
+              keepExif: false,
+            );
+
+            if (encodedResult == null) throw Exception('Failed to encode image: $pickedPath');
+            encodedPath = encodedResult.path;
+
+            final newAttachments = attachments.map((e) {
+              if (e.pickedPath != pickedPath) return e;
+              return e.copyWith(encodedPath: encodedPath);
+            }).toList();
+
+            final updatedMessage = outboxEntry.copyWith(attachments: newAttachments);
+            await _outboxRepository.upsertOutboxMessage(updatedMessage);
+            attachments = newAttachments;
+            _logger.info('Encoded image: $encodedPath');
+          }
+
+          if (metadata == null) {
+            _logger.info('Genereting image metadata: $fileName.$fileExtension');
+            final encodedFile = File(encodedPath);
+            final size = await encodedFile.length();
+            final blurHash = await BlurhashFFI.encode(FileImage(encodedFile), componentX: 8, componentY: 8);
+
+            metadata = AttachmentMetadata(fileName: fileName, extension: 'jpg', size: size, blurHash: blurHash);
+
+            final newAttachments = attachments.map((e) {
+              if (e.pickedPath != pickedPath) return e;
+              return e.copyWith(metadata: metadata);
+            }).toList();
+
+            final updatedMessage = outboxEntry.copyWith(attachments: newAttachments);
+            await _outboxRepository.upsertOutboxMessage(updatedMessage);
+            attachments = newAttachments;
+            _logger.info('Generated image metadata: $metadata');
+          }
+        } else if (pickedPath.isGifImagePath) {
+          _logger.info('Starting gif processing: $fileName.$fileExtension');
+          if (metadata == null) {
+            _logger.info('Generating gif metadata: $fileName.$fileExtension');
+            final dir = await getTemporaryDirectory();
+
+            final encodedResult = await FlutterImageCompress.compressAndGetFile(
+              pickedPath,
+              '${dir.path}/encoded/ff$fileName.jpg',
+              minWidth: 64,
+              minHeight: 64,
+              quality: 70,
+              format: CompressFormat.jpeg,
+              keepExif: false,
+            );
+            if (encodedResult == null) throw Exception('Failed to encode gif image: $pickedPath');
+
+            final size = await encodedResult.length();
+            final file = File(encodedResult.path);
+            final blurHash = await BlurhashFFI.encode(FileImage(file), componentX: 8, componentY: 8);
+
+            metadata = AttachmentMetadata(fileName: fileName, extension: 'gif', size: size, blurHash: blurHash);
+            final newAttachments = attachments.map((e) {
+              if (e.pickedPath != pickedPath) return e;
+              return e.copyWith(metadata: metadata);
+            }).toList();
+
+            final updatedMessage = outboxEntry.copyWith(attachments: newAttachments);
+            await _outboxRepository.upsertOutboxMessage(updatedMessage);
+            attachments = newAttachments;
+            _logger.info('Generated gif metadata: $metadata');
+          }
+        } else if (pickedPath.isVideoPath) {
+          _logger.info('Starting video processing: $fileName.$fileExtension');
+          if (encodedPath == null) {
+            _logger.info('Encoding video: $fileName.$fileExtension');
+            final encodedResult = await VideoCompress.compressVideo(
+              pickedPath,
+              quality: VideoQuality.DefaultQuality,
+              deleteOrigin: false, // It's false by default
+            );
+
+            if (encodedResult == null) throw Exception('Failed to encode video: $pickedPath');
+            encodedPath = encodedResult.path;
+
+            final newAttachments = attachments.map((e) {
+              if (e.pickedPath != pickedPath) return e;
+              return e.copyWith(encodedPath: encodedPath);
+            }).toList();
+
+            final updatedMessage = outboxEntry.copyWith(attachments: newAttachments);
+            await _outboxRepository.upsertOutboxMessage(updatedMessage);
+            attachments = newAttachments;
+            _logger.info('Encoded video: $encodedPath');
+          }
+
+          if (metadata == null) {
+            _logger.info('Generating video metadata: $fileName.$fileExtension');
+            final encodedFile = File(encodedPath!);
+            final size = await encodedFile.length();
+            final mediaInfo = await VideoCompress.getMediaInfo(encodedPath);
+            final duration = Duration(milliseconds: mediaInfo.duration?.toInt() ?? 0);
+            final thumbnailFile = await VideoCompress.getFileThumbnail(encodedPath, quality: 50);
+            final blurHash = await BlurhashFFI.encode(FileImage(thumbnailFile), componentX: 8, componentY: 8);
+
+            metadata = AttachmentMetadata(
+              fileName: fileName,
+              extension: 'mp4',
+              size: size,
+              blurHash: blurHash,
+              duration: duration,
+            );
+
+            final newAttachments = attachments.map((e) {
+              if (e.pickedPath != pickedPath) return e;
+              return e.copyWith(metadata: metadata);
+            }).toList();
+
+            final updatedMessage = outboxEntry.copyWith(attachments: newAttachments);
+            await _outboxRepository.upsertOutboxMessage(updatedMessage);
+            attachments = newAttachments;
+            _logger.info('Generated video metadata: $metadata');
+          }
+        } else if (pickedPath.isAudioPath) {
+          _logger.info('Starting audio processing: $fileName.$fileExtension');
+          if (metadata == null) {
+            _logger.info('Generating audio metadata: $fileName.$fileExtension');
+            final pickedFile = File(pickedPath);
+            final size = await pickedFile.length();
+            final player = AudioPlayer();
+            final duration = await player.setUrl(pickedPath);
+
+            metadata = AttachmentMetadata(
+              fileName: fileName,
+              extension: fileExtension,
+              size: size,
+              duration: duration,
+            );
+
+            player.dispose();
+
+            final newAttachments = attachments.map((e) {
+              if (e.pickedPath != pickedPath) return e;
+              return e.copyWith(metadata: metadata);
+            }).toList();
+
+            final updatedMessage = outboxEntry.copyWith(attachments: newAttachments);
+            await _outboxRepository.upsertOutboxMessage(updatedMessage);
+            attachments = newAttachments;
+            _logger.info('Generated audio metadata: $metadata');
+          }
+        } else {
+          _logger.info('Starting file processing: $fileName.$fileExtension');
+          if (metadata == null) {
+            _logger.info('Generating file metadata: $fileName.$fileExtension');
+            final pickedFile = File(pickedPath);
+            final size = await pickedFile.length();
+
+            metadata = AttachmentMetadata(
+              fileName: fileName,
+              extension: fileExtension,
+              size: size,
+            );
+
+            final newAttachments = attachments.map((e) {
+              if (e.pickedPath != pickedPath) return e;
+
+              return e.copyWith(metadata: metadata);
+            }).toList();
+
+            final updatedMessage = outboxEntry.copyWith(attachments: newAttachments);
+            await _outboxRepository.upsertOutboxMessage(updatedMessage);
+            attachments = newAttachments;
+            _logger.info('Generated file metadata: $metadata');
+          }
+        }
+
+        if (uploadId == null) {
+          _logger.info('Starting upload $fileName.$fileExtension');
+          await Future.delayed(const Duration(seconds: 1));
+          uploadId = const Uuid().v4();
+          final newAttachments = attachments.map((e) {
+            if (e.pickedPath != pickedPath) return e;
+            return e.copyWith(uploadId: uploadId);
+          }).toList();
+          final updatedMessage = outboxEntry.copyWith(attachments: newAttachments);
+          await _outboxRepository.upsertOutboxMessage(updatedMessage);
+          attachments = newAttachments;
+          _logger.info('Uploaded file id: $uploadId');
+        }
+
+        _logger.info('Finished processing $fileName.$fileExtension');
+      }
+
+      // final (message, chat) = await channel.newChatMessage(outboxEntry);
+      // if (chat != null) await _chatsRepository.upsertChat(chat);
+      // await _chatsRepository.upsertMessage(message);
+      // await _outboxRepository.deleteOutboxMessage(outboxEntry.idKey);
+      // _logger.info('Processed new message: ${message.id}');
     } catch (e, s) {
       _logger.severe('Error processing new message, attempt: ${outboxEntry.sendAttempts}', e, s);
       if (outboxEntry.sendAttempts > 5) {

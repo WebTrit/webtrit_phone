@@ -6,6 +6,11 @@ extension PathUtilExtension on String {
     return ['jpg', 'jpeg', 'png', 'gif', 'webp', 'heic'].contains(ext);
   }
 
+  bool get isGifImagePath {
+    final ext = toUri.path.split('.').last;
+    return ['gif'].contains(ext);
+  }
+
   bool get isVideoPath {
     final ext = toUri.path.split('.').last;
     return ['mp4', 'mov', 'avi', 'mkv', 'flv', 'm3u8'].contains(ext);

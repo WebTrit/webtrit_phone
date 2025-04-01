@@ -3689,12 +3689,12 @@ class $ChatOutboxMessageTableTable extends ChatOutboxMessageTable
   late final GeneratedColumn<String> content = GeneratedColumn<String>(
       'content', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _attachmentsMeta =
-      const VerificationMeta('attachments');
+  static const VerificationMeta _attachmentsJsonMeta =
+      const VerificationMeta('attachmentsJson');
   @override
-  late final GeneratedColumn<String> attachments = GeneratedColumn<String>(
-      'attachments', aliasedName, true,
-      type: DriftSqlType.string, requiredDuringInsert: false);
+  late final GeneratedColumn<String> attachmentsJson = GeneratedColumn<String>(
+      'attachments_json', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
   static const VerificationMeta _sendAttemptsMeta =
       const VerificationMeta('sendAttempts');
   @override
@@ -3718,7 +3718,7 @@ class $ChatOutboxMessageTableTable extends ChatOutboxMessageTable
         forwardFromId,
         authorId,
         content,
-        attachments,
+        attachmentsJson,
         sendAttempts,
         failureCode
       ];
@@ -3771,11 +3771,13 @@ class $ChatOutboxMessageTableTable extends ChatOutboxMessageTable
     } else if (isInserting) {
       context.missing(_contentMeta);
     }
-    if (data.containsKey('attachments')) {
+    if (data.containsKey('attachments_json')) {
       context.handle(
-          _attachmentsMeta,
-          attachments.isAcceptableOrUnknown(
-              data['attachments']!, _attachmentsMeta));
+          _attachmentsJsonMeta,
+          attachmentsJson.isAcceptableOrUnknown(
+              data['attachments_json']!, _attachmentsJsonMeta));
+    } else if (isInserting) {
+      context.missing(_attachmentsJsonMeta);
     }
     if (data.containsKey('send_attempts')) {
       context.handle(
@@ -3812,8 +3814,8 @@ class $ChatOutboxMessageTableTable extends ChatOutboxMessageTable
           .read(DriftSqlType.string, data['${effectivePrefix}author_id']),
       content: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}content'])!,
-      attachments: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}attachments']),
+      attachmentsJson: attachedDatabase.typeMapping.read(
+          DriftSqlType.string, data['${effectivePrefix}attachments_json'])!,
       sendAttempts: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}send_attempts'])!,
       failureCode: attachedDatabase.typeMapping
@@ -3836,7 +3838,7 @@ class ChatOutboxMessageData extends DataClass
   final int? forwardFromId;
   final String? authorId;
   final String content;
-  final String? attachments;
+  final String attachmentsJson;
   final int sendAttempts;
   final String? failureCode;
   const ChatOutboxMessageData(
@@ -3847,7 +3849,7 @@ class ChatOutboxMessageData extends DataClass
       this.forwardFromId,
       this.authorId,
       required this.content,
-      this.attachments,
+      required this.attachmentsJson,
       required this.sendAttempts,
       this.failureCode});
   @override
@@ -3870,9 +3872,7 @@ class ChatOutboxMessageData extends DataClass
       map['author_id'] = Variable<String>(authorId);
     }
     map['content'] = Variable<String>(content);
-    if (!nullToAbsent || attachments != null) {
-      map['attachments'] = Variable<String>(attachments);
-    }
+    map['attachments_json'] = Variable<String>(attachmentsJson);
     map['send_attempts'] = Variable<int>(sendAttempts);
     if (!nullToAbsent || failureCode != null) {
       map['failure_code'] = Variable<String>(failureCode);
@@ -3898,9 +3898,7 @@ class ChatOutboxMessageData extends DataClass
           ? const Value.absent()
           : Value(authorId),
       content: Value(content),
-      attachments: attachments == null && nullToAbsent
-          ? const Value.absent()
-          : Value(attachments),
+      attachmentsJson: Value(attachmentsJson),
       sendAttempts: Value(sendAttempts),
       failureCode: failureCode == null && nullToAbsent
           ? const Value.absent()
@@ -3919,7 +3917,7 @@ class ChatOutboxMessageData extends DataClass
       forwardFromId: serializer.fromJson<int?>(json['forwardFromId']),
       authorId: serializer.fromJson<String?>(json['authorId']),
       content: serializer.fromJson<String>(json['content']),
-      attachments: serializer.fromJson<String?>(json['attachments']),
+      attachmentsJson: serializer.fromJson<String>(json['attachmentsJson']),
       sendAttempts: serializer.fromJson<int>(json['sendAttempts']),
       failureCode: serializer.fromJson<String?>(json['failureCode']),
     );
@@ -3935,7 +3933,7 @@ class ChatOutboxMessageData extends DataClass
       'forwardFromId': serializer.toJson<int?>(forwardFromId),
       'authorId': serializer.toJson<String?>(authorId),
       'content': serializer.toJson<String>(content),
-      'attachments': serializer.toJson<String?>(attachments),
+      'attachmentsJson': serializer.toJson<String>(attachmentsJson),
       'sendAttempts': serializer.toJson<int>(sendAttempts),
       'failureCode': serializer.toJson<String?>(failureCode),
     };
@@ -3949,7 +3947,7 @@ class ChatOutboxMessageData extends DataClass
           Value<int?> forwardFromId = const Value.absent(),
           Value<String?> authorId = const Value.absent(),
           String? content,
-          Value<String?> attachments = const Value.absent(),
+          String? attachmentsJson,
           int? sendAttempts,
           Value<String?> failureCode = const Value.absent()}) =>
       ChatOutboxMessageData(
@@ -3962,7 +3960,7 @@ class ChatOutboxMessageData extends DataClass
             forwardFromId.present ? forwardFromId.value : this.forwardFromId,
         authorId: authorId.present ? authorId.value : this.authorId,
         content: content ?? this.content,
-        attachments: attachments.present ? attachments.value : this.attachments,
+        attachmentsJson: attachmentsJson ?? this.attachmentsJson,
         sendAttempts: sendAttempts ?? this.sendAttempts,
         failureCode: failureCode.present ? failureCode.value : this.failureCode,
       );
@@ -3979,8 +3977,9 @@ class ChatOutboxMessageData extends DataClass
           : this.forwardFromId,
       authorId: data.authorId.present ? data.authorId.value : this.authorId,
       content: data.content.present ? data.content.value : this.content,
-      attachments:
-          data.attachments.present ? data.attachments.value : this.attachments,
+      attachmentsJson: data.attachmentsJson.present
+          ? data.attachmentsJson.value
+          : this.attachmentsJson,
       sendAttempts: data.sendAttempts.present
           ? data.sendAttempts.value
           : this.sendAttempts,
@@ -3999,7 +3998,7 @@ class ChatOutboxMessageData extends DataClass
           ..write('forwardFromId: $forwardFromId, ')
           ..write('authorId: $authorId, ')
           ..write('content: $content, ')
-          ..write('attachments: $attachments, ')
+          ..write('attachmentsJson: $attachmentsJson, ')
           ..write('sendAttempts: $sendAttempts, ')
           ..write('failureCode: $failureCode')
           ..write(')'))
@@ -4007,8 +4006,17 @@ class ChatOutboxMessageData extends DataClass
   }
 
   @override
-  int get hashCode => Object.hash(idKey, chatId, participantId, replyToId,
-      forwardFromId, authorId, content, attachments, sendAttempts, failureCode);
+  int get hashCode => Object.hash(
+      idKey,
+      chatId,
+      participantId,
+      replyToId,
+      forwardFromId,
+      authorId,
+      content,
+      attachmentsJson,
+      sendAttempts,
+      failureCode);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -4020,7 +4028,7 @@ class ChatOutboxMessageData extends DataClass
           other.forwardFromId == this.forwardFromId &&
           other.authorId == this.authorId &&
           other.content == this.content &&
-          other.attachments == this.attachments &&
+          other.attachmentsJson == this.attachmentsJson &&
           other.sendAttempts == this.sendAttempts &&
           other.failureCode == this.failureCode);
 }
@@ -4034,7 +4042,7 @@ class ChatOutboxMessageDataCompanion
   final Value<int?> forwardFromId;
   final Value<String?> authorId;
   final Value<String> content;
-  final Value<String?> attachments;
+  final Value<String> attachmentsJson;
   final Value<int> sendAttempts;
   final Value<String?> failureCode;
   final Value<int> rowid;
@@ -4046,7 +4054,7 @@ class ChatOutboxMessageDataCompanion
     this.forwardFromId = const Value.absent(),
     this.authorId = const Value.absent(),
     this.content = const Value.absent(),
-    this.attachments = const Value.absent(),
+    this.attachmentsJson = const Value.absent(),
     this.sendAttempts = const Value.absent(),
     this.failureCode = const Value.absent(),
     this.rowid = const Value.absent(),
@@ -4059,12 +4067,13 @@ class ChatOutboxMessageDataCompanion
     this.forwardFromId = const Value.absent(),
     this.authorId = const Value.absent(),
     required String content,
-    this.attachments = const Value.absent(),
+    required String attachmentsJson,
     this.sendAttempts = const Value.absent(),
     this.failureCode = const Value.absent(),
     this.rowid = const Value.absent(),
   })  : idKey = Value(idKey),
-        content = Value(content);
+        content = Value(content),
+        attachmentsJson = Value(attachmentsJson);
   static Insertable<ChatOutboxMessageData> custom({
     Expression<String>? idKey,
     Expression<int>? chatId,
@@ -4073,7 +4082,7 @@ class ChatOutboxMessageDataCompanion
     Expression<int>? forwardFromId,
     Expression<String>? authorId,
     Expression<String>? content,
-    Expression<String>? attachments,
+    Expression<String>? attachmentsJson,
     Expression<int>? sendAttempts,
     Expression<String>? failureCode,
     Expression<int>? rowid,
@@ -4086,7 +4095,7 @@ class ChatOutboxMessageDataCompanion
       if (forwardFromId != null) 'forward_from_id': forwardFromId,
       if (authorId != null) 'author_id': authorId,
       if (content != null) 'content': content,
-      if (attachments != null) 'attachments': attachments,
+      if (attachmentsJson != null) 'attachments_json': attachmentsJson,
       if (sendAttempts != null) 'send_attempts': sendAttempts,
       if (failureCode != null) 'failure_code': failureCode,
       if (rowid != null) 'rowid': rowid,
@@ -4101,7 +4110,7 @@ class ChatOutboxMessageDataCompanion
       Value<int?>? forwardFromId,
       Value<String?>? authorId,
       Value<String>? content,
-      Value<String?>? attachments,
+      Value<String>? attachmentsJson,
       Value<int>? sendAttempts,
       Value<String?>? failureCode,
       Value<int>? rowid}) {
@@ -4113,7 +4122,7 @@ class ChatOutboxMessageDataCompanion
       forwardFromId: forwardFromId ?? this.forwardFromId,
       authorId: authorId ?? this.authorId,
       content: content ?? this.content,
-      attachments: attachments ?? this.attachments,
+      attachmentsJson: attachmentsJson ?? this.attachmentsJson,
       sendAttempts: sendAttempts ?? this.sendAttempts,
       failureCode: failureCode ?? this.failureCode,
       rowid: rowid ?? this.rowid,
@@ -4144,8 +4153,8 @@ class ChatOutboxMessageDataCompanion
     if (content.present) {
       map['content'] = Variable<String>(content.value);
     }
-    if (attachments.present) {
-      map['attachments'] = Variable<String>(attachments.value);
+    if (attachmentsJson.present) {
+      map['attachments_json'] = Variable<String>(attachmentsJson.value);
     }
     if (sendAttempts.present) {
       map['send_attempts'] = Variable<int>(sendAttempts.value);
@@ -4169,7 +4178,7 @@ class ChatOutboxMessageDataCompanion
           ..write('forwardFromId: $forwardFromId, ')
           ..write('authorId: $authorId, ')
           ..write('content: $content, ')
-          ..write('attachments: $attachments, ')
+          ..write('attachmentsJson: $attachmentsJson, ')
           ..write('sendAttempts: $sendAttempts, ')
           ..write('failureCode: $failureCode, ')
           ..write('rowid: $rowid')
@@ -11055,7 +11064,7 @@ typedef $$ChatOutboxMessageTableTableCreateCompanionBuilder
   Value<int?> forwardFromId,
   Value<String?> authorId,
   required String content,
-  Value<String?> attachments,
+  required String attachmentsJson,
   Value<int> sendAttempts,
   Value<String?> failureCode,
   Value<int> rowid,
@@ -11069,7 +11078,7 @@ typedef $$ChatOutboxMessageTableTableUpdateCompanionBuilder
   Value<int?> forwardFromId,
   Value<String?> authorId,
   Value<String> content,
-  Value<String?> attachments,
+  Value<String> attachmentsJson,
   Value<int> sendAttempts,
   Value<String?> failureCode,
   Value<int> rowid,
@@ -11122,8 +11131,9 @@ class $$ChatOutboxMessageTableTableFilterComposer
   ColumnFilters<String> get content => $composableBuilder(
       column: $table.content, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get attachments => $composableBuilder(
-      column: $table.attachments, builder: (column) => ColumnFilters(column));
+  ColumnFilters<String> get attachmentsJson => $composableBuilder(
+      column: $table.attachmentsJson,
+      builder: (column) => ColumnFilters(column));
 
   ColumnFilters<int> get sendAttempts => $composableBuilder(
       column: $table.sendAttempts, builder: (column) => ColumnFilters(column));
@@ -11181,8 +11191,9 @@ class $$ChatOutboxMessageTableTableOrderingComposer
   ColumnOrderings<String> get content => $composableBuilder(
       column: $table.content, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get attachments => $composableBuilder(
-      column: $table.attachments, builder: (column) => ColumnOrderings(column));
+  ColumnOrderings<String> get attachmentsJson => $composableBuilder(
+      column: $table.attachmentsJson,
+      builder: (column) => ColumnOrderings(column));
 
   ColumnOrderings<int> get sendAttempts => $composableBuilder(
       column: $table.sendAttempts,
@@ -11239,8 +11250,8 @@ class $$ChatOutboxMessageTableTableAnnotationComposer
   GeneratedColumn<String> get content =>
       $composableBuilder(column: $table.content, builder: (column) => column);
 
-  GeneratedColumn<String> get attachments => $composableBuilder(
-      column: $table.attachments, builder: (column) => column);
+  GeneratedColumn<String> get attachmentsJson => $composableBuilder(
+      column: $table.attachmentsJson, builder: (column) => column);
 
   GeneratedColumn<int> get sendAttempts => $composableBuilder(
       column: $table.sendAttempts, builder: (column) => column);
@@ -11303,7 +11314,7 @@ class $$ChatOutboxMessageTableTableTableManager extends RootTableManager<
             Value<int?> forwardFromId = const Value.absent(),
             Value<String?> authorId = const Value.absent(),
             Value<String> content = const Value.absent(),
-            Value<String?> attachments = const Value.absent(),
+            Value<String> attachmentsJson = const Value.absent(),
             Value<int> sendAttempts = const Value.absent(),
             Value<String?> failureCode = const Value.absent(),
             Value<int> rowid = const Value.absent(),
@@ -11316,7 +11327,7 @@ class $$ChatOutboxMessageTableTableTableManager extends RootTableManager<
             forwardFromId: forwardFromId,
             authorId: authorId,
             content: content,
-            attachments: attachments,
+            attachmentsJson: attachmentsJson,
             sendAttempts: sendAttempts,
             failureCode: failureCode,
             rowid: rowid,
@@ -11329,7 +11340,7 @@ class $$ChatOutboxMessageTableTableTableManager extends RootTableManager<
             Value<int?> forwardFromId = const Value.absent(),
             Value<String?> authorId = const Value.absent(),
             required String content,
-            Value<String?> attachments = const Value.absent(),
+            required String attachmentsJson,
             Value<int> sendAttempts = const Value.absent(),
             Value<String?> failureCode = const Value.absent(),
             Value<int> rowid = const Value.absent(),
@@ -11342,7 +11353,7 @@ class $$ChatOutboxMessageTableTableTableManager extends RootTableManager<
             forwardFromId: forwardFromId,
             authorId: authorId,
             content: content,
-            attachments: attachments,
+            attachmentsJson: attachmentsJson,
             sendAttempts: sendAttempts,
             failureCode: failureCode,
             rowid: rowid,

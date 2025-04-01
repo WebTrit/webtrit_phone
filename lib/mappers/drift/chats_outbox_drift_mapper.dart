@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/models/models.dart';
 
@@ -11,7 +13,7 @@ mixin ChatsOutboxDriftMapper {
       forwardFromId: data.forwardFromId,
       authorId: data.authorId,
       content: data.content,
-      attachments: data.attachments?.split(','),
+      attachments: (jsonDecode(data.attachmentsJson) as List).map((e) => OutgoingAttachment.fromMap(e)).toList(),
       sendAttempts: data.sendAttempts,
       failureCode: data.failureCode,
     );
@@ -26,7 +28,7 @@ mixin ChatsOutboxDriftMapper {
       forwardFromId: entry.forwardFromId,
       authorId: entry.authorId,
       content: entry.content,
-      attachments: entry.attachments?.join(','),
+      attachmentsJson: jsonEncode(entry.attachments.map((e) => e.toMap()).toList()),
       sendAttempts: entry.sendAttempts,
       failureCode: entry.failureCode,
     );

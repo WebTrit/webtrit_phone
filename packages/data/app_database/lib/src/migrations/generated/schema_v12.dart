@@ -695,8 +695,8 @@ class ChatOutboxMessages extends Table with TableInfo {
       type: DriftSqlType.string,
       requiredDuringInsert: true,
       $customConstraints: 'NOT NULL');
-  late final GeneratedColumn<String> mediaPaths = GeneratedColumn<String>(
-      'media_paths', aliasedName, false,
+  late final GeneratedColumn<String> attachmentsJson = GeneratedColumn<String>(
+      'attachments_json', aliasedName, false,
       type: DriftSqlType.string,
       requiredDuringInsert: true,
       $customConstraints: 'NOT NULL');
@@ -707,10 +707,10 @@ class ChatOutboxMessages extends Table with TableInfo {
       $customConstraints: 'NOT NULL DEFAULT 0',
       defaultValue: const CustomExpression('0'));
   late final GeneratedColumn<String> failureCode = GeneratedColumn<String>(
-      'failure_code', aliasedName, false,
+      'failure_code', aliasedName, true,
       type: DriftSqlType.string,
-      requiredDuringInsert: true,
-      $customConstraints: 'NOT NULL');
+      requiredDuringInsert: false,
+      $customConstraints: 'NULL');
   @override
   List<GeneratedColumn> get $columns => [
         idKey,
@@ -720,7 +720,7 @@ class ChatOutboxMessages extends Table with TableInfo {
         forwardFromId,
         authorId,
         content,
-        mediaPaths,
+        attachmentsJson,
         sendAttempts,
         failureCode
       ];
