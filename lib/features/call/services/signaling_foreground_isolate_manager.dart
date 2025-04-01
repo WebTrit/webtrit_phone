@@ -114,10 +114,10 @@ class SignalingForegroundIsolateManager implements CallkeepBackgroundServiceDele
   }
 
   @override
-  void performServiceAnswerCall(String callId) {}
+  void performAnswerCall(String callId) {}
 
   @override
-  void performServiceEndCall(String callId) async {
+  void performEndCall(String callId) async {
     try {
       await _signalingManager.declineCall(callId);
     } catch (e) {
@@ -125,9 +125,8 @@ class SignalingForegroundIsolateManager implements CallkeepBackgroundServiceDele
     }
   }
 
-// TODO (Serdun): Rename this callback to align with naming conventions.
   @override
-  Future<void> endCallReceived(
+  Future<void> performReceivedCall(
     String callId,
     String number,
     DateTime createdTime,
