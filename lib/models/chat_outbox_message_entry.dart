@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:equatable/equatable.dart';
+import 'package:webtrit_phone/models/mediafile_metadata.dart';
 
 class ChatOutboxMessageEntry extends Equatable {
   final String idKey;
@@ -127,7 +128,7 @@ class OutgoingAttachment extends Equatable {
 
   final String pickedPath;
   final String? encodedPath;
-  final AttachmentMetadata? metadata;
+  final MediaFileMetadata? metadata;
   final String? uploadId;
 
   @override
@@ -148,7 +149,7 @@ class OutgoingAttachment extends Equatable {
   OutgoingAttachment copyWith({
     String? pickedPath,
     String? encodedPath,
-    AttachmentMetadata? metadata,
+    MediaFileMetadata? metadata,
     String? uploadId,
   }) {
     return OutgoingAttachment(
@@ -172,7 +173,7 @@ class OutgoingAttachment extends Equatable {
     return OutgoingAttachment(
       pickedPath: map['pickedPath'] as String,
       encodedPath: map['encodedPath'] != null ? map['encodedPath'] as String : null,
-      metadata: map['metadata'] != null ? AttachmentMetadata.fromMap(map['metadata'] as Map<String, dynamic>) : null,
+      metadata: map['metadata'] != null ? MediaFileMetadata.fromMap(map['metadata'] as Map<String, dynamic>) : null,
       uploadId: map['uploadId'] != null ? map['uploadId'] as String : null,
     );
   }
@@ -181,65 +182,4 @@ class OutgoingAttachment extends Equatable {
 
   factory OutgoingAttachment.fromJson(String source) =>
       OutgoingAttachment.fromMap(json.decode(source) as Map<String, dynamic>);
-}
-
-class AttachmentMetadata extends Equatable {
-  const AttachmentMetadata(
-      {required this.fileName, required this.extension, required this.size, this.blurHash, this.duration});
-  final String fileName;
-  final String extension;
-  final int size;
-  final String? blurHash;
-  final Duration? duration;
-
-  AttachmentMetadata copyWith({
-    String? fileName,
-    String? extension,
-    int? size,
-    String? blurHash,
-    Duration? duration,
-  }) {
-    return AttachmentMetadata(
-      fileName: fileName ?? this.fileName,
-      extension: extension ?? this.extension,
-      size: size ?? this.size,
-      blurHash: blurHash ?? this.blurHash,
-      duration: duration ?? this.duration,
-    );
-  }
-
-  Map<String, dynamic> toMap() {
-    return <String, dynamic>{
-      'fileName': fileName,
-      'extension': extension,
-      'size': size.toString(),
-      'blurHash': blurHash,
-      'duration': duration?.inMilliseconds.toString(),
-    };
-  }
-
-  factory AttachmentMetadata.fromMap(Map<String, dynamic> map) {
-    return AttachmentMetadata(
-      fileName: map['fileName'] as String,
-      extension: map['extension'] as String,
-      size: int.parse(map['size']),
-      blurHash: map['blurHash'] != null ? map['blurHash'] as String : null,
-      duration: map['duration'] != null ? Duration(milliseconds: int.parse(map['duration'])) : null,
-    );
-  }
-
-  String toJson() => json.encode(toMap());
-
-  factory AttachmentMetadata.fromJson(String source) =>
-      AttachmentMetadata.fromMap(json.decode(source) as Map<String, dynamic>);
-
-  @override
-  String toString() {
-    return 'AttachmentMetadata(fileName: $fileName, extension: $extension, size: ${size / 1024} KB, blurHash: $blurHash, duration: $duration)';
-  }
-
-  @override
-  List<Object> get props {
-    return [fileName, extension, size, blurHash ?? '', duration ?? Duration.zero];
-  }
 }
