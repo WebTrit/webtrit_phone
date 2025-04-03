@@ -15,7 +15,7 @@ final _logger = Logger('SDPMunger');
 /// Modifies the SDP of a [RTCSessionDescription] object.
 /// Used to change outgoing SDP before sending it to the server to change some specific parameters of negotiation.
 abstract class SDPMunger {
-  void apply(RTCSessionDescription description);
+  void apply(RTCSessionDescription description, [RTCSessionDescription negotiatedRemoteSdp]);
 }
 
 /// A class that modifies SDP (Session Description Protocol) with encoding settings.
@@ -54,7 +54,7 @@ class ModifyWithEncodingSettings implements SDPMunger {
   }
 
   @override
-  void apply(RTCSessionDescription description) {
+  void apply(RTCSessionDescription description, [RTCSessionDescription? negotiatedRemoteSdp]) {
     final bypass = _encodingConfig.bypassConfig;
     final configurationAllowed = _encodingConfig.configurationAllowed;
 
@@ -68,6 +68,26 @@ class ModifyWithEncodingSettings implements SDPMunger {
 
     final builder = SDPModBuilder(sdp: sdp);
     bool modified = false;
+
+    // If a previously negotiated remote SDP is available, extract the list of audio codecs
+    // that are *not* present (i.e., unsupported by the remote party) and remove them from
+    // the local offer to avoid SDP negotiation errors (e.g., caused by including opus when
+    // it was not previously agreed upon).
+    if (negotiatedRemoteSdp?.sdp case final remoteSdp?) {
+      final unsupportedCodecs = builder.getUnsupportedCodecsFromSdp(remoteSdp, RTPCodecKind.audio);
+
+      if (unsupportedCodecs.isNotEmpty) {
+        _logger.info('SDP will remove unsupported codecs: $unsupportedCodecs');
+
+        for (final profile in RTPCodecProfile.values) {
+          final codecKey = profile.codec.sdpKey.toLowerCase();
+          if (profile.kind == RTPCodecKind.audio && unsupportedCodecs.contains(codecKey)) {
+            builder.removeProfile(profile);
+            modified = true;
+          }
+        }
+      }
+    }
 
     if (settings.audioProfiles != null) {
       final profiles = settings.audioProfiles!;
