@@ -99,8 +99,13 @@ Future<String?> encodeVideo(String path, EncodePreset preset) async {
     deleteOrigin: false,
     includeAudio: true,
   );
-
   return encodedResult?.path;
+}
+
+Future<String?> createVideoThumbnail(String path, EncodePreset preset) async {
+  if (path.isVideoPath == false) return null;
+  final thumbnailFile = await VideoCompress.getFileThumbnail(path, quality: 100);
+  return encodeImage(thumbnailFile.path, preset);
 }
 
 enum EncodePreset { chat, mms }

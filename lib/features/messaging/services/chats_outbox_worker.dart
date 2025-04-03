@@ -100,6 +100,7 @@ class ChatsOutboxWorker {
         final fileName = pickedPath.fileName;
         final fileExtension = pickedPath.fileExtension;
         String? encodedPath = att.encodedPath;
+        String? thumbnailPath = att.thumbnailPath;
         MediaFileMetadata? metadata = att.metadata;
         String? uploadId = att.uploadId;
 
@@ -128,11 +129,13 @@ class ChatsOutboxWorker {
 
           encodedPath = await encodeVideo(pickedPath, EncodePreset.chat);
           if (encodedPath == null) throw Exception('Failed to encode video: $pickedPath');
+          thumbnailPath = await createVideoThumbnail(encodedPath, EncodePreset.chat);
+          if (thumbnailPath == null) throw Exception('Failed to create thumbnail for video: $encodedPath');
 
           aquireAttLock();
           final newAttachments = attachments.map((e) {
             if (e.pickedPath != pickedPath) return e;
-            return e.copyWith(encodedPath: encodedPath);
+            return e.copyWith(encodedPath: encodedPath, thumbnailPath: thumbnailPath);
           }).toList();
 
           final updatedMessage = outboxEntry.copyWith(attachments: newAttachments);

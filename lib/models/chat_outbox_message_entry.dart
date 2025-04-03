@@ -1,5 +1,8 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
+
 import 'package:equatable/equatable.dart';
+
 import 'package:webtrit_phone/models/mediafile_metadata.dart';
 
 class ChatOutboxMessageEntry extends Equatable {
@@ -122,26 +125,29 @@ class OutgoingAttachment extends Equatable {
   const OutgoingAttachment({
     required this.pickedPath,
     this.encodedPath,
+    this.thumbnailPath,
     this.metadata,
     this.uploadId,
   });
 
   final String pickedPath;
   final String? encodedPath;
+  final String? thumbnailPath;
   final MediaFileMetadata? metadata;
   final String? uploadId;
 
   @override
-  List<Object?> get props => [pickedPath, encodedPath, metadata, uploadId];
+  List<Object?> get props => [pickedPath, encodedPath, thumbnailPath, metadata, uploadId];
 
   @override
   String toString() {
-    return 'OutgoingAttachment{pickedPath: $pickedPath, encodedPath: $encodedPath, metadata: $metadata, uploadId: $uploadId}';
+    return 'OutgoingAttachment{pickedPath: $pickedPath, encodedPath: $encodedPath, thumbnailPath: $thumbnailPath, metadata: $metadata, uploadId: $uploadId}';
   }
 
   double get progress {
     if (uploadId != null) return 1;
     if (metadata != null) return 0.75;
+    if (thumbnailPath != null) return 0.6;
     if (encodedPath != null) return 0.5;
     return 0.2;
   }
@@ -149,12 +155,14 @@ class OutgoingAttachment extends Equatable {
   OutgoingAttachment copyWith({
     String? pickedPath,
     String? encodedPath,
+    String? thumbnailPath,
     MediaFileMetadata? metadata,
     String? uploadId,
   }) {
     return OutgoingAttachment(
       pickedPath: pickedPath ?? this.pickedPath,
       encodedPath: encodedPath ?? this.encodedPath,
+      thumbnailPath: thumbnailPath ?? this.thumbnailPath,
       metadata: metadata ?? this.metadata,
       uploadId: uploadId ?? this.uploadId,
     );
@@ -164,6 +172,7 @@ class OutgoingAttachment extends Equatable {
     return <String, dynamic>{
       'pickedPath': pickedPath,
       'encodedPath': encodedPath,
+      'thumbnailPath': thumbnailPath,
       'metadata': metadata?.toMap(),
       'uploadId': uploadId,
     };
@@ -173,6 +182,7 @@ class OutgoingAttachment extends Equatable {
     return OutgoingAttachment(
       pickedPath: map['pickedPath'] as String,
       encodedPath: map['encodedPath'] != null ? map['encodedPath'] as String : null,
+      thumbnailPath: map['thumbnailPath'] != null ? map['thumbnailPath'] as String : null,
       metadata: map['metadata'] != null ? MediaFileMetadata.fromMap(map['metadata'] as Map<String, dynamic>) : null,
       uploadId: map['uploadId'] != null ? map['uploadId'] as String : null,
     );
