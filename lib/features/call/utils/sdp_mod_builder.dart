@@ -260,6 +260,38 @@ class SDPModBuilder {
   Map<String, dynamic>? _getMedia(RTPCodecKind kind) {
     return (data['media'] as List<dynamic>).firstWhereOrNull((m) => m['type'] == kind.name);
   }
+
+  /// Returns a set of codec identifiers (e.g., 'opus', 'g722') that are **not supported**
+  /// in the given SDP for a specific media kind (audio or video).
+  ///
+  /// This method parses the SDP and compares the codecs advertised in the SDP against
+  /// the full list of known codecs for the specified [RTPCodecKind].
+  ///
+  /// - [remoteSdp]: The SDP string to parse and analyze. If null, an empty set is returned.
+  /// - [kind]: The media kind (audio or video) to analyze within the SDP.
+  ///
+  /// Returns a set of codec keys (lowercase strings) that are not present in the SDP for the given kind.
+  Set<String> getUnsupportedCodecsFromSdp(String? remoteSdp, RTPCodecKind kind) {
+    if (remoteSdp == null) return {};
+
+    final parsed = sdp_transform.parse(remoteSdp);
+    final supported = <String>{};
+
+    for (final media in parsed['media']) {
+      if (media['type'] != kind.name) continue;
+      final rtpList = media['rtp'] as List<dynamic>? ?? [];
+
+      for (final rtp in rtpList) {
+        final codec = rtp['codec']?.toString().toLowerCase();
+        if (codec != null) supported.add(codec);
+      }
+    }
+
+    final allCodecs =
+        RTPCodecProfile.values.where((p) => p.kind == kind).map((p) => p.codec.sdpKey.toLowerCase()).toSet();
+
+    return allCodecs.difference(supported);
+  }
 }
 
 // Example of SDPs
