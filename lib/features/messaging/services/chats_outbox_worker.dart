@@ -83,19 +83,8 @@ class ChatsOutboxWorker {
       if (channel.state != PhoenixChannelState.joined) return;
 
       List<OutgoingAttachment> attachments = outboxEntry.attachments;
-      bool attachmentsLocked = false;
-      Future<void> aquireAttLock() async {
-        await Future.doWhile(() async {
-          if (attachmentsLocked == false) {
-            attachmentsLocked = true;
-            return false;
-          }
-          await Future.delayed(const Duration(milliseconds: 100));
-          return true;
-        });
-      }
 
-      final jobs = attachments.map((att) async {
+      for (final att in attachments) {
         final pickedPath = att.pickedPath;
         final fileName = pickedPath.fileName;
         final fileExtension = pickedPath.fileExtension;
@@ -112,16 +101,14 @@ class ChatsOutboxWorker {
           final encodedPath = await MediaStorageService.encodeImage(pickedPath, EncodePreset.chat);
           if (encodedPath == null) throw Exception('Failed to encode image: $pickedPath');
 
-          await aquireAttLock();
-          final newAttachments = attachments.map((e) {
+          attachments = attachments.map((e) {
             if (e.pickedPath != pickedPath) return e;
             return e.copyWith(encodedPath: encodedPath);
           }).toList();
 
-          final updatedMessage = outboxEntry.copyWith(attachments: newAttachments);
+          final updatedMessage = outboxEntry.copyWith(attachments: attachments);
           await _outboxRepository.upsertOutboxMessage(updatedMessage);
-          attachments = newAttachments;
-          attachmentsLocked = false;
+
           _logger.info('Encoded image: $encodedPath');
         }
         if (pickedPath.isVideoPath && encodedPath == null) {
@@ -132,30 +119,27 @@ class ChatsOutboxWorker {
           thumbnailPath = await MediaStorageService.createVideoThumbnail(encodedPath, EncodePreset.chat);
           if (thumbnailPath == null) throw Exception('Failed to create thumbnail for video: $encodedPath');
 
-          aquireAttLock();
-          final newAttachments = attachments.map((e) {
+          attachments = attachments.map((e) {
             if (e.pickedPath != pickedPath) return e;
             return e.copyWith(encodedPath: encodedPath, thumbnailPath: thumbnailPath);
           }).toList();
 
-          final updatedMessage = outboxEntry.copyWith(attachments: newAttachments);
+          final updatedMessage = outboxEntry.copyWith(attachments: attachments);
           await _outboxRepository.upsertOutboxMessage(updatedMessage);
-          attachments = newAttachments;
-          attachmentsLocked = false;
+
           _logger.info('Encoded video: $encodedPath');
         }
 
         if (metadata == null) {
           metadata = await MediaStorageService.createMetadata(path: encodedPath ?? pickedPath);
-          await aquireAttLock();
-          final newAttachments = attachments.map((e) {
+
+          attachments = attachments.map((e) {
             if (e.pickedPath != pickedPath) return e;
             return e.copyWith(metadata: metadata);
           }).toList();
-          final updatedMessage = outboxEntry.copyWith(attachments: newAttachments);
+          final updatedMessage = outboxEntry.copyWith(attachments: attachments);
           await _outboxRepository.upsertOutboxMessage(updatedMessage);
-          attachments = newAttachments;
-          attachmentsLocked = false;
+
           _logger.info('Created metadata: $metadata');
         }
 
@@ -164,22 +148,17 @@ class ChatsOutboxWorker {
           await Future.delayed(const Duration(seconds: 1));
           uploadId = const Uuid().v4();
 
-          await aquireAttLock();
-          final newAttachments = attachments.map((e) {
+          attachments = attachments.map((e) {
             if (e.pickedPath != pickedPath) return e;
             return e.copyWith(uploadId: uploadId);
           }).toList();
-          final updatedMessage = outboxEntry.copyWith(attachments: newAttachments);
+          final updatedMessage = outboxEntry.copyWith(attachments: attachments);
           await _outboxRepository.upsertOutboxMessage(updatedMessage);
-          attachments = newAttachments;
-          attachmentsLocked = false;
           _logger.info('Uploaded file id: $uploadId');
         }
 
         _logger.info('Finished processing $fileName.$fileExtension');
-      });
-
-      await Future.wait(jobs);
+      }
 
       // final (message, chat) = await channel.newChatMessage(outboxEntry);
       // if (chat != null) await _chatsRepository.upsertChat(chat);
