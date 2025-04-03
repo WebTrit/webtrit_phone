@@ -53,6 +53,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   final CallkeepConnections callkeepConnections;
 
   final SDPMunger? sdpMunger;
+  final SdpSanitizer? sdpSanitizer;
+
   final AudioConstraintsBuilder? audioConstraintsBuilder;
   final VideoConstraintsBuilder? videoConstraintsBuilder;
   final WebrtcOptionsBuilder? webRtcOptionsBuilder;
@@ -78,6 +80,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     required this.callkeep,
     required this.callkeepConnections,
     this.sdpMunger,
+    this.sdpSanitizer,
     this.audioConstraintsBuilder,
     this.videoConstraintsBuilder,
     this.webRtcOptionsBuilder,
@@ -857,6 +860,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         _logger.warning('__onCallSignalingEventProgress: peerConnection is null - most likely some permissions issue');
       } else {
         final remoteDescription = jsep.toDescription();
+        sdpSanitizer?.apply(remoteDescription);
         await peerConnection.setRemoteDescription(remoteDescription);
       }
     } else {
@@ -893,6 +897,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     final pc = await _peerConnectionRetrieve(event.callId);
     if (jsep != null && pc != null) {
       final remoteDescription = jsep.toDescription();
+      sdpSanitizer?.apply(remoteDescription);
       await pc.setRemoteDescription(remoteDescription);
     }
   }
@@ -984,6 +989,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
           if (peerConnection == null) {
             _logger.warning('__onCallSignalingEventUpdating: peerConnection is null - most likely some state issue');
           } else {
+            sdpSanitizer?.apply(remoteDescription);
             await peerConnection.setRemoteDescription(remoteDescription);
             final localDescription = await peerConnection.createAnswer({});
             sdpMunger?.apply(localDescription);
@@ -1799,6 +1805,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       }));
 
       final remoteDescription = offer.toDescription();
+      sdpSanitizer?.apply(remoteDescription);
       await peerConnection.setRemoteDescription(remoteDescription);
       final localDescription = await peerConnection.createAnswer({});
       sdpMunger?.apply(localDescription);
