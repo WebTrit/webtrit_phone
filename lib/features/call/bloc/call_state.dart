@@ -153,7 +153,7 @@ class ActiveCall with _$ActiveCall {
 
   bool get wasHungUp => hungUpTime != null;
 
-  bool get remoteVideo => remoteStream?.getVideoTracks().isNotEmpty ?? false;
+  bool get remoteVideo => remoteStream?.getVideoTracks().isNotEmpty ?? video;
 
   bool get localVideo => localStream?.getVideoTracks().isNotEmpty ?? false;
 
