@@ -2602,8 +2602,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         final pcState = peerConnection.signalingState;
         logger.fine(() => 'onRenegotiationNeeded signalingState: $pcState');
         if (pcState != null) {
+          final negotiatedRemoteSdp = (await peerConnection.getRemoteDescription())!;
           final localDescription = await peerConnection.createOffer({});
-          sdpMunger?.apply(localDescription);
+          // Munges SDP to remove unsupported codecs from local offer
+          // based on the last negotiated remote SDP.
+          sdpMunger?.apply(localDescription, negotiatedRemoteSdp);
 
           final updateRequest = UpdateRequest(
             transaction: WebtritSignalingClient.generateTransactionId(),
