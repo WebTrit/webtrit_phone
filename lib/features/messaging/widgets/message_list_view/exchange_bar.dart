@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:webtrit_phone/extensions/string.dart';
@@ -23,24 +24,29 @@ class ExchangeBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return Container(
-      color: theme.primaryColor,
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      child: Row(
-        children: [
-          const SizedBox(width: 8),
-          Icon(icon, color: Colors.white),
-          const SizedBox(width: 8),
-          Expanded(child: Text(text, style: const TextStyle(color: Colors.white))),
-          if (onConfirm != null) ...[
-            const SizedBox(width: 8),
-            IconButton(icon: const Icon(Icons.check), onPressed: onConfirm, color: Colors.white),
-          ],
-          if (onCancel != null) ...[
-            const SizedBox(width: 8),
-            IconButton(icon: const Icon(Icons.close), onPressed: onCancel, color: Colors.white),
-          ]
-        ],
+    return ClipRRect(
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+        child: Container(
+          color: theme.primaryColor.withAlpha(200),
+          padding: const EdgeInsets.symmetric(vertical: 8),
+          child: Row(
+            children: [
+              const SizedBox(width: 8),
+              Icon(icon, color: Colors.white),
+              const SizedBox(width: 8),
+              Expanded(child: Text(text, style: const TextStyle(color: Colors.white))),
+              if (onConfirm != null) ...[
+                const SizedBox(width: 8),
+                IconButton(icon: const Icon(Icons.check), onPressed: onConfirm, color: Colors.white),
+              ],
+              if (onCancel != null) ...[
+                const SizedBox(width: 8),
+                IconButton(icon: const Icon(Icons.close), onPressed: onCancel, color: Colors.white),
+              ]
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -63,46 +69,51 @@ class AttachmentsExchangeBar extends StatelessWidget {
     final theme = Theme.of(context);
     final colorScheme = Theme.of(context).colorScheme;
 
-    return Container(
-      color: theme.primaryColor,
-      padding: const EdgeInsets.symmetric(vertical: 4),
-      child: Row(
-        children: [
-          const SizedBox(width: 8),
-          Stack(
-            clipBehavior: Clip.none,
+    return ClipRRect(
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+        child: Container(
+          color: theme.primaryColor.withAlpha(200),
+          padding: const EdgeInsets.symmetric(vertical: 4),
+          child: Row(
             children: [
-              Icon(icon, color: Colors.white),
-              if (attachments.isNotEmpty)
-                Positioned(
-                  right: -2,
-                  bottom: -6,
-                  child: Container(
-                    padding: const EdgeInsets.all(4),
-                    decoration: BoxDecoration(color: colorScheme.tertiary, shape: BoxShape.circle),
-                    child: Text(
-                      attachments.length.toString(),
-                      style: const TextStyle(color: Colors.white, fontSize: 8, fontWeight: FontWeight.w900),
+              const SizedBox(width: 8),
+              Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  Icon(icon, color: Colors.white),
+                  if (attachments.isNotEmpty)
+                    Positioned(
+                      right: -2,
+                      bottom: -6,
+                      child: Container(
+                        padding: const EdgeInsets.all(4),
+                        decoration: BoxDecoration(color: colorScheme.tertiary, shape: BoxShape.circle),
+                        child: Text(
+                          attachments.length.toString(),
+                          style: const TextStyle(color: Colors.white, fontSize: 8, fontWeight: FontWeight.w900),
+                        ),
+                      ),
                     ),
-                  ),
-                ),
+                ],
+              ),
+              const SizedBox(width: 8),
+              Expanded(child: Builder(builder: (context) {
+                return Wrap(
+                  spacing: 6,
+                  runSpacing: 4,
+                  children: attachments.map((attachment) {
+                    if (attachment.isImagePath) return imagePreview(attachment);
+                    return filePreview(attachment.split('/').last);
+                  }).toList(),
+                );
+              })),
+              if (onCancel != null) ...[
+                IconButton(icon: const Icon(Icons.close), onPressed: onCancel, color: Colors.white),
+              ]
             ],
           ),
-          const SizedBox(width: 8),
-          Expanded(child: Builder(builder: (context) {
-            return Wrap(
-              spacing: 6,
-              runSpacing: 4,
-              children: attachments.map((attachment) {
-                if (attachment.isImagePath) return imagePreview(attachment);
-                return filePreview(attachment.split('/').last);
-              }).toList(),
-            );
-          })),
-          if (onCancel != null) ...[
-            IconButton(icon: const Icon(Icons.close), onPressed: onCancel, color: Colors.white),
-          ]
-        ],
+        ),
       ),
     );
   }

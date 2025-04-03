@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
@@ -18,19 +20,26 @@ class StateBar extends StatelessWidget {
     if (status == ConnectionStatus.error) text = context.l10n.messaging_StateBar_error;
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       margin: const EdgeInsets.all(8),
-      width: double.infinity,
-      decoration: BoxDecoration(
-        color: colorScheme.surface,
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Row(
-        children: [
-          const SizedBox(width: 16, height: 16, child: CircularProgressIndicator()),
-          const SizedBox(width: 8),
-          Text(text, style: TextStyle(fontSize: 10, color: colorScheme.onSurface)),
-        ],
+      child: ClipRRect(
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: colorScheme.surface.withAlpha(200),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Row(
+              children: [
+                const SizedBox(width: 16, height: 16, child: CircularProgressIndicator()),
+                const SizedBox(width: 8),
+                Text(text, style: TextStyle(fontSize: 10, color: colorScheme.onSurface)),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }

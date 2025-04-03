@@ -13,8 +13,8 @@ class MessagingStateWrapper extends StatelessWidget {
     final messagingFeature = FeatureAccess().messagingFeature;
 
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
-        Expanded(child: child),
         if (messagingFeature.anyMessagingEnabled)
           BlocBuilder<MessagingBloc, MessagingState>(
             buildWhen: (previous, current) => previous.status != current.status,
@@ -26,6 +26,7 @@ class MessagingStateWrapper extends StatelessWidget {
               }
             },
           ),
+        Flexible(child: child),
       ],
     );
   }

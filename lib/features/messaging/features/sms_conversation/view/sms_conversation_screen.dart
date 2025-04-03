@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 
@@ -41,6 +43,8 @@ class _SmsConversationScreenState extends State<SmsConversationScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return BlocProvider(
       create: (context) => SmsTypingCubit(messagingBloc.state.client),
       child: BlocConsumer<SmsConversationCubit, SmsConversationState>(
@@ -64,7 +68,15 @@ class _SmsConversationScreenState extends State<SmsConversationScreen> {
             if (loading) return const SizedBox();
 
             return Scaffold(
+              extendBodyBehindAppBar: true,
               appBar: AppBar(
+                backgroundColor: theme.canvasColor.withAlpha(150),
+                flexibleSpace: ClipRect(
+                  child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                    child: Container(color: theme.canvasColor.withAlpha(150)),
+                  ),
+                ),
                 title: Builder(
                   builder: (context) {
                     if (recipientNumber != null) {

@@ -184,9 +184,20 @@ class _ChatMessageListViewState extends State<ChatMessageListView> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
-      Expanded(child: MessagingStateWrapper(child: list())),
-      field(),
+    return Stack(children: [
+      list(),
+      const Positioned(
+        top: 0,
+        left: 0,
+        right: 0,
+        child: SafeArea(child: MessagingStateWrapper(child: SizedBox())),
+      ),
+      Positioned(
+        bottom: 0,
+        left: 0,
+        right: 0,
+        child: field(),
+      ),
     ]);
   }
 
@@ -202,7 +213,7 @@ class _ChatMessageListViewState extends State<ChatMessageListView> {
             Colors.transparent,
             Colors.black,
           ],
-          stops: [0.0, 0.025, 0.975, 1.0],
+          stops: [0.0, 0.1, 0.95, 1.0],
         ).createShader(rect);
       },
       blendMode: BlendMode.dstOut,
@@ -215,7 +226,7 @@ class _ChatMessageListViewState extends State<ChatMessageListView> {
             controller: scrollController,
             reverse: true,
             cacheExtent: 500,
-            padding: const EdgeInsets.symmetric(vertical: 16),
+            padding: const EdgeInsets.only(top: 16, bottom: 64),
             itemCount: viewEntries.length + 2,
             itemBuilder: (context, index) {
               if (index == 0) {
