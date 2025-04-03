@@ -9,7 +9,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:http_cache_stream/http_cache_stream.dart';
 import 'package:logging/logging.dart';
 
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
@@ -60,9 +59,9 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
       final deviceInfo = await DeviceInfoFactory.init();
       final packageInfo = await PackageInfoFactory.init();
 
-      await HttpCacheManager.init(); // TODO: specify dir for future cleanup
       await AppPermissions.init(featureAccess);
       await SecureStorage.init();
+      await MediaStorageService.init();
       await AppCertificates.init();
       await AppTime.init();
       await SessionCleanupWorker.init();

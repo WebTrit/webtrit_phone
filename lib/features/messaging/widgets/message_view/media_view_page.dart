@@ -9,12 +9,11 @@ import 'package:flutter/services.dart';
 
 import 'package:gal/gal.dart';
 import 'package:open_file/open_file.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
 import 'package:webtrit_phone/extensions/extensions.dart';
+import 'package:webtrit_phone/common/media_storage_service.dart';
 import 'package:webtrit_phone/features/messaging/extensions/extensions.dart';
 import 'package:webtrit_phone/features/messaging/widgets/message_view/video_view.dart';
 import 'package:webtrit_phone/features/orientations/bloc/orientations_bloc.dart';
@@ -50,10 +49,9 @@ class _MediaViewPageState extends State<MediaViewPage> {
   bool hideAppBar = false;
 
   Future<File> get currentFile async {
-    final file = currentAttachment.isLocalPath
+    return currentAttachment.isLocalPath
         ? File(currentAttachment)
-        : await DefaultCacheManager().getSingleFile(currentAttachment);
-    return file;
+        : await MediaStorageService.getFile(currentAttachment);
   }
 
   void onSaveToGallery() async {
@@ -158,24 +156,7 @@ class _MediaViewPageState extends State<MediaViewPage> {
             if (kDebugMode)
               PopupMenuItem(
                 onTap: () async {
-                  final directory = await getTemporaryDirectory();
-
-                  Future enumerateDir(Directory dir) async {
-                    final list = dir.listSync();
-                    for (var entity in list) {
-                      if (entity is Directory) {
-                        print('directory: ${entity.path}');
-                        await enumerateDir(entity);
-                      }
-                      if (entity is File) {
-                        final stat = await entity.stat();
-                        print('file: ${entity.path}');
-                        print('size: ${stat.size / 1024 / 1024} MB');
-                      }
-                    }
-                  }
-
-                  await enumerateDir(directory);
+                  MediaStorageService.enumerateMediaCache();
                 },
                 child: const ListTile(
                   title: Text('Enumerate cache'),

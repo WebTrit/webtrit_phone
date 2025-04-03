@@ -21,6 +21,11 @@ extension PathUtilExtension on String {
     return ['mp3', 'wav', 'aac', 'flac', 'ogg'].contains(ext);
   }
 
+  bool get isDocumentPath {
+    final ext = toUri.path.split('.').last;
+    return ['pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx'].contains(ext);
+  }
+
   bool get isLocalPath => toUri.host.isEmpty && toUri.path.isNotEmpty;
 
   String get fileName {

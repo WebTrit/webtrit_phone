@@ -5,10 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:quiver/collection.dart';
 import 'package:open_file/open_file.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_parsed_text/flutter_parsed_text.dart';
-import 'package:webtrit_phone/extensions/iterable.dart';
 
+import 'package:webtrit_phone/common/media_storage_service.dart';
+import 'package:webtrit_phone/extensions/iterable.dart';
 import 'package:webtrit_phone/features/messaging/messaging.dart';
 import 'package:webtrit_phone/models/chat_outbox_message_entry.dart';
 import 'package:webtrit_phone/utils/utils.dart';
@@ -44,6 +44,15 @@ class _MessageBodyState extends State<MessageBody> {
   late final horizontalSpace = MediaQuery.of(context).size.width - (widget.isMine ? 82 : 82 + 48);
 
   late final attachments = widget.outgoingAttachments.map((e) => e.pickedPath);
+  // late final attachments = <String>[
+  //   'https://prx3-cogent.ukrtelcdn.net/s__green/6677346d73fc23e3a17f06e1b9a171e8:2025040410:a200RnowN20xU1EwNTZFTVo3bTAyOThLWjMrT09UZjF4V0FTVWVrTnAyQm9TcEVUSnpwNXZzQ2k5b3RWcUw5emR3WjBYRTdtUU9Sd0ZaTWd2TzBYNFE9PQ==/1/2/4/9/9/5/1/vh2e9.mp4',
+  //   'https://fastly.picsum.photos/id/10/2500/1667.jpg?hmac=J04WWC_ebchx3WwzbM-Z4_KC_LeLBWr5LZMaAkWkF68',
+  //   'https://fastly.picsum.photos/id/14/2500/1667.jpg?hmac=ssQyTcZRRumHXVbQAVlXTx-MGBxm6NHWD3SryQ48G-o',
+  //   'https://miyzvuk.net/uploads/public_files/2023-12/haddaway-what-is-love.mp3',
+  //   'https://miyzvuk.net/uploads/public_files/2025-03/atlxs-mxzi-feat_-itamar-mc-montagem-ladrao-slowed.mp3',
+  //   'https://prx-cogent.ukrtelcdn.net/s__ozzy/1a45473d7dc05bc308adf47232e28f7a:2025040411:a200RnowN20xU1EwNTZFTVo3bTAyOThLWjMrT09UZjF4V0FTVWVrTnAyQm9TcEVUSnpwNXZzQ2k5b3RWcUw5emp4OVRxQkxNOVFiSVJacjloVm9SWmc9PQ==/7/5/9/5/4/ulbzk.mp4'
+  // ];
+
   late final viewableAttachments = attachments.where((a) => a.isImagePath || a.isVideoPath).toList();
   late final audioAttachments = attachments.where((a) => a.isAudioPath).toList();
   late final otherAttachments = attachments.where((a) => !a.isImagePath && !a.isVideoPath && !a.isAudioPath).toList();
@@ -217,9 +226,8 @@ class _MessageBodyState extends State<MessageBody> {
                 final outgoingAtt = outgoingAttachment(attachment);
                 return GestureDetector(
                   onTap: () async {
-                    final file = attachment.isLocalPath
-                        ? File(attachment)
-                        : await DefaultCacheManager().getSingleFile(attachment);
+                    final file =
+                        attachment.isLocalPath ? File(attachment) : await MediaStorageService.getFile(attachment);
                     OpenFile.open(file.path);
                   },
                   onLongPress: () {

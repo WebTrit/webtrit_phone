@@ -5,10 +5,10 @@ import 'package:phoenix_socket/phoenix_socket.dart';
 import 'package:uuid/uuid.dart';
 
 import 'package:webtrit_phone/app/notifications/notifications.dart';
+import 'package:webtrit_phone/common/media_storage_service.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
-import 'package:webtrit_phone/utils/mediafile_utils.dart';
 
 final _logger = Logger('ChatsOutboxWorker');
 
@@ -109,7 +109,7 @@ class ChatsOutboxWorker {
         if (pickedPath.isImagePath && !pickedPath.isGifImagePath && encodedPath == null) {
           _logger.info('Encoding image: $fileName.$fileExtension');
 
-          final encodedPath = await encodeImage(pickedPath, EncodePreset.chat);
+          final encodedPath = await MediaStorageService.encodeImage(pickedPath, EncodePreset.chat);
           if (encodedPath == null) throw Exception('Failed to encode image: $pickedPath');
 
           await aquireAttLock();
@@ -127,9 +127,9 @@ class ChatsOutboxWorker {
         if (pickedPath.isVideoPath && encodedPath == null) {
           _logger.info('Encoding video: $fileName.$fileExtension');
 
-          encodedPath = await encodeVideo(pickedPath, EncodePreset.chat);
+          encodedPath = await MediaStorageService.encodeVideo(pickedPath, EncodePreset.chat);
           if (encodedPath == null) throw Exception('Failed to encode video: $pickedPath');
-          thumbnailPath = await createVideoThumbnail(encodedPath, EncodePreset.chat);
+          thumbnailPath = await MediaStorageService.createVideoThumbnail(encodedPath, EncodePreset.chat);
           if (thumbnailPath == null) throw Exception('Failed to create thumbnail for video: $encodedPath');
 
           aquireAttLock();
@@ -146,7 +146,7 @@ class ChatsOutboxWorker {
         }
 
         if (metadata == null) {
-          metadata = await createMediaFileMetadata(path: encodedPath ?? pickedPath);
+          metadata = await MediaStorageService.createMetadata(path: encodedPath ?? pickedPath);
           await aquireAttLock();
           final newAttachments = attachments.map((e) {
             if (e.pickedPath != pickedPath) return e;

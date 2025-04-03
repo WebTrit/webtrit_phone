@@ -5,7 +5,6 @@ export 'gravatar.dart';
 export 'og_preview.dart';
 export 'orientations.dart';
 export 'path_provider/path_provider.dart';
-export 'mediafile_utils.dart';
 export 'regexes.dart';
 export 'user_agent.dart';
 export 'webtrit_api_client.dart';

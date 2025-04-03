@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+
+import 'package:webtrit_phone/common/media_storage_service.dart';
 import 'package:webtrit_phone/features/messaging/messaging.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
@@ -27,7 +28,7 @@ class MultisourceImageView extends StatelessWidget {
     }
 
     return FutureBuilder(
-        future: path.isLocalPath ? Future.value(File(path)) : DefaultCacheManager().getSingleFile(path),
+        future: path.isLocalPath ? Future.value(File(path)) : MediaStorageService.getFile(path),
         builder: (_, snapshot) {
           final data = snapshot.data;
           if (snapshot.hasError) return Center(child: error);
