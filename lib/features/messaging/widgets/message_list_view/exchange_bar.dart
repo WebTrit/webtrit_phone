@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:webtrit_phone/extensions/string.dart';
 
 import 'package:webtrit_phone/features/messaging/extensions/string_path_utils.dart';
+import 'package:webtrit_phone/features/messaging/widgets/message_view/video_thumbnail_builder.dart';
 
 class ExchangeBar extends StatelessWidget {
   const ExchangeBar({
@@ -104,7 +105,10 @@ class AttachmentsExchangeBar extends StatelessWidget {
                   runSpacing: 4,
                   children: attachments.map((attachment) {
                     if (attachment.isImagePath) return imagePreview(attachment);
-                    return filePreview(attachment.split('/').last);
+                    if (attachment.isVideoPath) return videoPreview(attachment);
+                    if (attachment.isAudioPath) return audioPreview(attachment);
+                    if (attachment.isDocumentPath) return docPreview(attachment);
+                    return filePreview(attachment);
                   }).toList(),
                 );
               })),
@@ -118,7 +122,7 @@ class AttachmentsExchangeBar extends StatelessWidget {
     );
   }
 
-  Widget filePreview(String fileName) {
+  Widget filePreview(String path) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
       decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(4)),
@@ -126,14 +130,62 @@ class AttachmentsExchangeBar extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            fileName.split('.').first.limit(10),
+            path.fileName.limit(12),
             style: const TextStyle(color: Colors.black, fontSize: 10, fontWeight: FontWeight.w700),
             overflow: TextOverflow.ellipsis,
           ),
           Text(
-            '.${fileName.split('.').last}',
+            path.fileExtension,
             style: const TextStyle(color: Colors.black, fontSize: 10, fontWeight: FontWeight.w700),
           ),
+          const SizedBox(width: 4),
+          const Icon(Icons.attach_file_rounded, color: Colors.black, size: 12),
+        ],
+      ),
+    );
+  }
+
+  Widget audioPreview(String path) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(4)),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            path.fileName.limit(12),
+            style: const TextStyle(color: Colors.black, fontSize: 10, fontWeight: FontWeight.w700),
+            overflow: TextOverflow.ellipsis,
+          ),
+          Text(
+            path.fileExtension,
+            style: const TextStyle(color: Colors.black, fontSize: 10, fontWeight: FontWeight.w700),
+          ),
+          const SizedBox(width: 4),
+          const Icon(Icons.audiotrack_rounded, color: Colors.black, size: 12),
+        ],
+      ),
+    );
+  }
+
+  Widget docPreview(String path) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(4)),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            path.fileName.limit(12),
+            style: const TextStyle(color: Colors.black, fontSize: 10, fontWeight: FontWeight.w700),
+            overflow: TextOverflow.ellipsis,
+          ),
+          Text(
+            path.fileExtension,
+            style: const TextStyle(color: Colors.black, fontSize: 10, fontWeight: FontWeight.w700),
+          ),
+          const SizedBox(width: 4),
+          const Icon(Icons.description_rounded, color: Colors.black, size: 12),
         ],
       ),
     );
@@ -145,10 +197,71 @@ class AttachmentsExchangeBar extends StatelessWidget {
       width: 40,
       height: 40,
       decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(4)),
-      child: Image.file(
-        File(path),
-        fit: BoxFit.cover,
-        errorBuilder: (_, __, ___) => const Icon(Icons.error, size: 32),
+      child: Stack(
+        children: [
+          Positioned.fill(
+            child: Image.file(
+              File(path),
+              fit: BoxFit.cover,
+              errorBuilder: (_, __, ___) => const Icon(Icons.error, size: 32),
+            ),
+          ),
+          Positioned(
+            bottom: 0,
+            right: 0,
+            child: Container(
+              padding: const EdgeInsets.all(2),
+              decoration: BoxDecoration(
+                color: Colors.black.withAlpha(150),
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(
+                Icons.image_rounded,
+                color: Colors.white,
+                size: 12,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget videoPreview(String path) {
+    return Container(
+      clipBehavior: Clip.antiAlias,
+      width: 40,
+      height: 40,
+      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(4)),
+      child: VideoThumbnailBuilder(
+        path,
+        (File? file) {
+          return Stack(
+            children: [
+              Positioned.fill(child: Container(color: Colors.black)),
+              if (file != null)
+                Positioned.fill(
+                  child: Image.file(file, fit: BoxFit.cover, errorBuilder: (_, __, ___) => const SizedBox()),
+                ),
+              Positioned(
+                bottom: 0,
+                right: 0,
+                child: Container(
+                  padding: const EdgeInsets.all(2),
+                  decoration: BoxDecoration(
+                    color: Colors.black.withAlpha(150),
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(
+                    Icons.videocam_rounded,
+                    color: Colors.white,
+                    size: 12,
+                  ),
+                ),
+              ),
+            ],
+          );
+        },
       ),
     );
   }
