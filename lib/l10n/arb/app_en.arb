@@ -1028,6 +1028,8 @@
   "@settings_ListViewTileTitle_accountDelete": {},
   "settings_ListViewTileTitle_mediaSettings": "Media settings",
   "@settings_ListViewTileTitle_mediaSettings": {},
+  "settings_ListViewTileTitle_storage": "Storage settings",
+  "@settings_ListViewTileTitle_storage": {},
   "settings_ListViewTileTitle_help": "Help",
   "@settings_ListViewTileTitle_help": {},
   "settings_ListViewTileTitle_language": "Language",

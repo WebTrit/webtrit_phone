@@ -74,6 +74,14 @@ abstract class AppPreferences {
   IceSettings getIceSettings();
 
   Future<void> setIceSettings(IceSettings settings);
+
+  bool getStorageAutoDownload({bool defaultValue});
+
+  Future<void> setStorageAutoDownload(bool value);
+
+  Duration getStorageAutoClearDuration({Duration defaultValue});
+
+  Future<void> setStorageAutoClearDuration(Duration value);
 }
 
 class AppPreferencesFactory {
@@ -111,6 +119,8 @@ class AppPreferencesImpl
   static const _kAudioProcessingSettingsKey = 'audio-processing-settings';
   static const _kVideoCapturingSettingsKey = 'video-capturing-settings';
   static const _kIceSettingsKey = 'ice-settings';
+  static const _kStorageAutoDownloadKey = 'storage-auto-download';
+  static const _kStorageAutoClearDurationKey = 'storage-auto-clear-duration';
 
   // Please add all new keys here for proper cleaning of preferences
   static const _kPreferencesList = [
@@ -129,6 +139,8 @@ class AppPreferencesImpl
     _kAudioProcessingSettingsKey,
     _kVideoCapturingSettingsKey,
     _kIceSettingsKey,
+    _kStorageAutoDownloadKey,
+    _kStorageAutoClearDurationKey,
   ];
 
   // List of preferences keys to exclude by default during clean operation
@@ -400,5 +412,28 @@ class AppPreferencesImpl
   @override
   Future<void> setIceSettings(IceSettings settings) {
     return _sharedPreferences.setString(_kIceSettingsKey, iceSettingsToJson(settings));
+  }
+
+  @override
+  bool getStorageAutoDownload({bool defaultValue = true}) {
+    return _sharedPreferences.getBool(_kStorageAutoDownloadKey) ?? defaultValue;
+  }
+
+  @override
+  Future<void> setStorageAutoDownload(bool value) => _sharedPreferences.setBool(_kStorageAutoDownloadKey, value);
+
+  @override
+  Duration getStorageAutoClearDuration({Duration defaultValue = const Duration(days: 7)}) {
+    final durationMs = _sharedPreferences.getInt(_kStorageAutoClearDurationKey);
+    if (durationMs != null) {
+      return Duration(milliseconds: durationMs);
+    } else {
+      return defaultValue;
+    }
+  }
+
+  @override
+  Future<void> setStorageAutoClearDuration(Duration value) {
+    return _sharedPreferences.setInt(_kStorageAutoClearDurationKey, value.inMilliseconds);
   }
 }

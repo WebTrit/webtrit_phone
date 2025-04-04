@@ -1380,6 +1380,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get settings_ListViewTileTitle_mediaSettings => 'Impostazioni multimediali';
 
   @override
+  String get settings_ListViewTileTitle_storage => 'Impostazioni di archiviazione';
+
+  @override
   String get settings_ListViewTileTitle_help => 'Aiuto';
 
   @override

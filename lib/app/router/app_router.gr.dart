@@ -345,6 +345,12 @@ abstract class _$AppRouter extends RootStackRouter {
         ),
       );
     },
+    StorageScreenPageRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const StorageScreenPage(),
+      );
+    },
     TermsConditionsScreenPageRoute.name: (routeData) {
       final queryParams = routeData.queryParams;
       final args = routeData.argsAs<TermsConditionsScreenPageRouteArgs>(
@@ -1344,6 +1350,20 @@ class SmsConversationScreenPageRouteArgs {
   String toString() {
     return 'SmsConversationScreenPageRouteArgs{firstNumber: $firstNumber, secondNumber: $secondNumber, recipientId: $recipientId}';
   }
+}
+
+/// generated route for
+/// [StorageScreenPage]
+class StorageScreenPageRoute extends PageRouteInfo<void> {
+  const StorageScreenPageRoute({List<PageRouteInfo>? children})
+      : super(
+          StorageScreenPageRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'StorageScreenPageRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
 }
 
 /// generated route for

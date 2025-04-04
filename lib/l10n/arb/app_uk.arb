@@ -1028,6 +1028,8 @@
   "@settings_ListViewTileTitle_accountDelete": {},
   "settings_ListViewTileTitle_mediaSettings": "Параметри медіа",
   "@settings_ListViewTileTitle_mediaSettings": {},
+  "settings_ListViewTileTitle_storage": "Параметри сховища",
+  "@settings_ListViewTileTitle_storage": {},
   "settings_ListViewTileTitle_help": "Допомога",
   "@settings_ListViewTileTitle_help": {},
   "settings_ListViewTileTitle_language": "Мова",

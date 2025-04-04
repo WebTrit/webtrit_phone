@@ -15,3 +15,4 @@ export 'widgets/widgets.dart';
 // main case is open media view and call conucurently
 // - add bloc for setSystemUIOverlayStyle and setEnabledSystemUIMode same as orientations or combine them as systemUI bloc
 // - table for outgoig attachment, mediafile metadata and remove in-model to/from json
+// - localize storage settings

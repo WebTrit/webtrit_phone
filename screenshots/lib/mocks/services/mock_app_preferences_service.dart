@@ -274,4 +274,24 @@ class MockAppPreferencesService implements AppPreferences {
   Future<void> setIceSettings(IceSettings settings) {
     return Future.value();
   }
+
+  @override
+  Duration getStorageAutoClearDuration({Duration defaultValue = const Duration(days: 7)}) {
+    return defaultValue;
+  }
+
+  @override
+  Future<void> setStorageAutoClearDuration(Duration value) {
+    return Future.value();
+  }
+
+  @override
+  bool getStorageAutoDownload({bool defaultValue = false}) {
+    return defaultValue;
+  }
+
+  @override
+  Future<void> setStorageAutoDownload(bool value) {
+    return Future.value();
+  }
 }

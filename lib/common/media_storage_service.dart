@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/painting.dart';
 
 import 'package:blurhash_ffi/blurhash.dart';
@@ -82,25 +81,36 @@ class MediaStorageService {
   /// The method will enumerate the directories and calculate the size of each file
   /// and sum them up by extension.
   /// The method will also print the size of each file in the console.
-  static Future<Map<String, double>> enumerateMediaCache() async {
+  static Future<Map<FileKind, double>> enumerateMediaCache() async {
     final directory = await getTemporaryDirectory();
 
-    Map<String, double> extToMb = {};
+    Map<FileKind, double> extToMb = {};
 
     Future enumerateDir(Directory dir) async {
+      if (await dir.exists() == false) return;
       final list = dir.listSync();
       for (var entity in list) {
         if (entity is Directory) await enumerateDir(entity);
 
         if (entity is File) {
+          print('File: ${entity.path}');
           final stat = await entity.stat();
-          final ext = entity.path.fileExtension;
           final mb = stat.size / 1024 / 1024;
 
-          extToMb[ext] = (extToMb[ext] ?? 0) + mb;
+          FileKind kind;
+          if (entity.path.isImagePath) {
+            kind = FileKind.image;
+          } else if (entity.path.isVideoPath || entity.path.isVideoPartPath) {
+            kind = FileKind.video;
+          } else if (entity.path.isAudioPath || entity.path.isAudioPartPath) {
+            kind = FileKind.audio;
+          } else if (entity.path.isDocumentPath) {
+            kind = FileKind.document;
+          } else {
+            kind = FileKind.other;
+          }
 
-          debugPrint('file: ${entity.path}');
-          debugPrint('size: $mb MB');
+          extToMb[kind] = (extToMb[kind] ?? 0) + mb;
         }
       }
     }
@@ -108,7 +118,16 @@ class MediaStorageService {
     await enumerateDir(Directory('${directory.path}/$mediaCachePath'));
     await enumerateDir(Directory('${directory.path}/$audioPlaybackCachePath'));
     await enumerateDir(Directory('${directory.path}/$videoPlaybackCachePath'));
-    debugPrint('Total size: ${extToMb.entries.map((e) => '${e.key}: ${e.value} MB').join(', ')}');
+
+    // Sort the map by value
+    extToMb = Map.fromEntries(
+      extToMb.entries.toList()..sort((a, b) => b.value.compareTo(a.value)),
+    );
+
+    print('Sorted media cache:');
+    extToMb.forEach((key, value) {
+      print('${key.name}: ${value.toStringAsFixed(2)} MB');
+    });
     return extToMb;
   }
 
@@ -118,18 +137,15 @@ class MediaStorageService {
     final directory = await getTemporaryDirectory();
 
     Future enumerateDir(Directory dir) async {
+      if (await dir.exists() == false) return;
       final list = dir.listSync();
       for (var entity in list) {
         if (entity is Directory) await enumerateDir(entity);
 
         if (entity is File) {
-          debugPrint('file: ${entity.path}');
           final stat = await entity.stat();
           final lastAccessed = stat.accessed;
-          if (lastAccessed.isBefore(date)) {
-            await entity.delete();
-            debugPrint('deleted coze: $lastAccessed < $date');
-          }
+          if (lastAccessed.isBefore(date)) await entity.delete();
         }
       }
     }
@@ -145,18 +161,15 @@ class MediaStorageService {
     final directory = await getTemporaryDirectory();
 
     Future enumerateDir(Directory dir) async {
+      if (await dir.exists() == false) return;
       final list = dir.listSync();
       for (var entity in list) {
         if (entity is Directory) await enumerateDir(entity);
 
         if (entity is File) {
-          debugPrint('file: ${entity.path}');
           final stat = await entity.stat();
           final lastAccessed = stat.accessed;
-          if (lastAccessed.isBefore(date)) {
-            await entity.delete();
-            debugPrint('deleted coze: $lastAccessed < $date');
-          }
+          if (lastAccessed.isBefore(date)) await entity.delete();
         }
       }
     }
@@ -166,7 +179,7 @@ class MediaStorageService {
     await enumerateDir(Directory('${directory.path}/$encodedImagePath'));
   }
 
-  Future cleanMediaCache() async {
+  static Future clearMediaCache() async {
     final directory = await getTemporaryDirectory();
     final cacheDir = Directory('${directory.path}/$mediaCachePath');
     if (await cacheDir.exists()) {
@@ -183,7 +196,7 @@ class MediaStorageService {
   }
 
   /// Make sure to use this method when all uploads are done
-  Future cleanUploadTemps() async {
+  static Future clearUploadTemps() async {
     final directory = await getTemporaryDirectory();
     final filePickerDir = Directory('${directory.path}/$filePickerPath');
     if (await filePickerDir.exists()) {
@@ -294,3 +307,5 @@ class MediaStorageService {
 }
 
 enum EncodePreset { chat, mms }
+
+enum FileKind { image, video, audio, document, other }

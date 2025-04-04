@@ -6,3 +6,4 @@ export 'language/language.dart';
 export 'network/network.dart';
 export 'theme_mode/theme_mode.dart';
 export 'self_config/self_config.dart';
+export 'storage/storage.dart';

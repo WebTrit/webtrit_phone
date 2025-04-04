@@ -1380,6 +1380,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings_ListViewTileTitle_mediaSettings => 'Media settings';
 
   @override
+  String get settings_ListViewTileTitle_storage => 'Storage settings';
+
+  @override
   String get settings_ListViewTileTitle_help => 'Help';
 
   @override

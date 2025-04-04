@@ -296,6 +296,10 @@ class AppRouter extends _$AppRouter {
                       path: 'media-settings',
                     ),
                     AutoRoute(
+                      page: StorageScreenPageRoute.page,
+                      path: 'storage',
+                    ),
+                    AutoRoute(
                       page: SelfConfigScreenPageRoute.page,
                       path: 'self_config',
                     ),

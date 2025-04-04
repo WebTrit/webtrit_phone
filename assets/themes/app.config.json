@@ -105,6 +105,12 @@
           },
           {
             "enabled": true,
+            "type": "storage",
+            "titleL10n": "settings_ListViewTileTitle_storage",
+            "icon": "0xe609"
+          },
+          {
+            "enabled": true,
             "type": "language",
             "titleL10n": "settings_ListViewTileTitle_language",
             "icon": "0xe366"

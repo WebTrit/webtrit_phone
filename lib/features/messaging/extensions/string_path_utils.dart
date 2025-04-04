@@ -1,32 +1,32 @@
 extension PathUtilExtension on String {
   Uri get toUri => Uri.parse(this);
 
-  bool get isImagePath {
-    final ext = toUri.path.split('.').last;
-    return ['jpg', 'jpeg', 'png', 'gif', 'webp', 'heic'].contains(ext);
-  }
-
-  bool get isGifImagePath {
-    final ext = toUri.path.split('.').last;
-    return ['gif'].contains(ext);
-  }
-
-  bool get isVideoPath {
-    final ext = toUri.path.split('.').last;
-    return ['mp4', 'mov', 'avi', 'mkv', 'flv', 'm3u8'].contains(ext);
-  }
-
-  bool get isAudioPath {
-    final ext = toUri.path.split('.').last;
-    return ['mp3', 'wav', 'aac', 'flac', 'ogg'].contains(ext);
-  }
-
-  bool get isDocumentPath {
-    final ext = toUri.path.split('.').last;
-    return ['pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx'].contains(ext);
-  }
-
   bool get isLocalPath => toUri.host.isEmpty && toUri.path.isNotEmpty;
+  bool get isPartPath => toUri.path.endsWith('.part');
+
+  bool get isImagePath => imageExts.contains(fileExtension);
+  bool get isGifImagePath => gifExts.contains(fileExtension);
+  bool get isVideoPath => videoExts.contains(fileExtension);
+  bool get isAudioPath => audioExts.contains(fileExtension);
+  bool get isDocumentPath => documentExts.contains(fileExtension);
+
+  bool get isVideoPartPath {
+    if (isPartPath) {
+      final pathWithoutPart = toUri.path.replaceAll('.part', '');
+      final ext = pathWithoutPart.split('.').last;
+      return videoExts.contains(ext);
+    }
+    return false;
+  }
+
+  bool get isAudioPartPath {
+    if (isPartPath) {
+      final pathWithoutPart = toUri.path.replaceAll('.part', '');
+      final ext = pathWithoutPart.split('.').last;
+      return audioExts.contains(ext);
+    }
+    return false;
+  }
 
   String get fileName {
     final segments = toUri.pathSegments;
@@ -40,3 +40,11 @@ extension PathUtilExtension on String {
     return segments.last.split('.').last;
   }
 }
+
+const imageExts = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'heic'];
+const gifExts = ['gif'];
+const videoExts = ['mp4', 'mov', 'avi', 'mkv', 'flv', 'm3u8'];
+const audioExts = ['mp3', 'wav', 'aac', 'flac', 'ogg'];
+const documentExts = ['pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx'];
+const archiveExts = ['zip', 'rar', '7z', 'tar', 'gz'];
+const executableExts = ['exe', 'msi', 'apk', 'bat', 'sh'];

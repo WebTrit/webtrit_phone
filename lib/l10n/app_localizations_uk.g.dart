@@ -1380,6 +1380,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get settings_ListViewTileTitle_mediaSettings => 'Параметри медіа';
 
   @override
+  String get settings_ListViewTileTitle_storage => 'Параметри сховища';
+
+  @override
   String get settings_ListViewTileTitle_help => 'Допомога';
 
   @override

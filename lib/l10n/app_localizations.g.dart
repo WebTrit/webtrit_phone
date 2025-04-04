@@ -2755,6 +2755,12 @@ abstract class AppLocalizations {
   /// **'Media settings'**
   String get settings_ListViewTileTitle_mediaSettings;
 
+  /// No description provided for @settings_ListViewTileTitle_storage.
+  ///
+  /// In en, this message translates to:
+  /// **'Storage settings'**
+  String get settings_ListViewTileTitle_storage;
+
   /// No description provided for @settings_ListViewTileTitle_help.
   ///
   /// In en, this message translates to:
