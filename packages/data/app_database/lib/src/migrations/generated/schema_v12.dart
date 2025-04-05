@@ -1431,11 +1431,18 @@ class OutboxAttachments extends Table with TableInfo {
       type: DriftSqlType.string,
       requiredDuringInsert: true,
       $customConstraints: 'NOT NULL');
-  late final GeneratedColumn<String> messageIdKey = GeneratedColumn<String>(
-      'message_id_key', aliasedName, false,
-      type: DriftSqlType.string,
-      requiredDuringInsert: true,
-      $customConstraints: 'NOT NULL');
+  late final GeneratedColumn<String> chatsOutboxMessageIdKey =
+      GeneratedColumn<String>('chats_outbox_message_id_key', aliasedName, true,
+          type: DriftSqlType.string,
+          requiredDuringInsert: false,
+          $customConstraints:
+              'NULL REFERENCES chat_outbox_messages(id_key)ON DELETE CASCADE');
+  late final GeneratedColumn<String> smsOutboxMessageIdKey =
+      GeneratedColumn<String>('sms_outbox_message_id_key', aliasedName, true,
+          type: DriftSqlType.string,
+          requiredDuringInsert: false,
+          $customConstraints:
+              'NULL REFERENCES sms_outbox_messages(id_key)ON DELETE CASCADE');
   late final GeneratedColumn<String> pickedPath = GeneratedColumn<String>(
       'picked_path', aliasedName, false,
       type: DriftSqlType.string,
@@ -1452,8 +1459,14 @@ class OutboxAttachments extends Table with TableInfo {
       requiredDuringInsert: false,
       $customConstraints: 'NULL');
   @override
-  List<GeneratedColumn> get $columns =>
-      [idKey, messageIdKey, pickedPath, encodedPath, uploadedPath];
+  List<GeneratedColumn> get $columns => [
+        idKey,
+        chatsOutboxMessageIdKey,
+        smsOutboxMessageIdKey,
+        pickedPath,
+        encodedPath,
+        uploadedPath
+      ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override

@@ -240,7 +240,7 @@ class ChatsDao extends DatabaseAccessor<AppDatabase> with _$ChatsDaoMixin {
         .join([
           leftOuterJoin(
             outboxAttachmentTable,
-            outboxAttachmentTable.messageIdKey.equalsExp(chatOutboxMessageTable.idKey),
+            outboxAttachmentTable.chatsOutboxMessageIdKey.equalsExp(chatOutboxMessageTable.idKey),
           ),
         ])
         .get()
@@ -255,7 +255,7 @@ class ChatsDao extends DatabaseAccessor<AppDatabase> with _$ChatsDaoMixin {
             if (attachment != null) attachments.add(attachment);
           }
           return messages.map((message) {
-            return (message, attachments.where((a) => a.messageIdKey == message.idKey).toList());
+            return (message, attachments.where((a) => a.chatsOutboxMessageIdKey == message.idKey).toList());
           }).toList();
         });
   }
@@ -265,7 +265,7 @@ class ChatsDao extends DatabaseAccessor<AppDatabase> with _$ChatsDaoMixin {
         .join([
           leftOuterJoin(
             outboxAttachmentTable,
-            outboxAttachmentTable.messageIdKey.equalsExp(chatOutboxMessageTable.idKey),
+            outboxAttachmentTable.chatsOutboxMessageIdKey.equalsExp(chatOutboxMessageTable.idKey),
           ),
         ])
         .watch()
@@ -280,7 +280,7 @@ class ChatsDao extends DatabaseAccessor<AppDatabase> with _$ChatsDaoMixin {
             if (attachment != null) attachments.add(attachment);
           }
           return messages.map((message) {
-            return (message, attachments.where((a) => a.messageIdKey == message.idKey).toList());
+            return (message, attachments.where((a) => a.chatsOutboxMessageIdKey == message.idKey).toList());
           }).toList();
         }));
   }
@@ -296,7 +296,7 @@ class ChatsDao extends DatabaseAccessor<AppDatabase> with _$ChatsDaoMixin {
   Future deleteChatOutboxMessage(String idKey) async {
     await batch((batch) {
       batch.deleteWhere(chatOutboxMessageTable, (t) => t.idKey.equals(idKey));
-      batch.deleteWhere(outboxAttachmentTable, (t) => t.messageIdKey.equals(idKey));
+      batch.deleteWhere(outboxAttachmentTable, (t) => t.chatsOutboxMessageIdKey.equals(idKey));
     });
   }
 

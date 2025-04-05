@@ -7831,12 +7831,24 @@ class $OutboxAttachmentTableTable extends OutboxAttachmentTable
   late final GeneratedColumn<String> idKey = GeneratedColumn<String>(
       'id_key', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _messageIdKeyMeta =
-      const VerificationMeta('messageIdKey');
+  static const VerificationMeta _chatsOutboxMessageIdKeyMeta =
+      const VerificationMeta('chatsOutboxMessageIdKey');
   @override
-  late final GeneratedColumn<String> messageIdKey = GeneratedColumn<String>(
-      'message_id_key', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
+  late final GeneratedColumn<String> chatsOutboxMessageIdKey =
+      GeneratedColumn<String>('chats_outbox_message_id_key', aliasedName, true,
+          type: DriftSqlType.string,
+          requiredDuringInsert: false,
+          defaultConstraints: GeneratedColumn.constraintIsAlways(
+              'REFERENCES chat_outbox_messages (id_key) ON DELETE CASCADE'));
+  static const VerificationMeta _smsOutboxMessageIdKeyMeta =
+      const VerificationMeta('smsOutboxMessageIdKey');
+  @override
+  late final GeneratedColumn<String> smsOutboxMessageIdKey =
+      GeneratedColumn<String>('sms_outbox_message_id_key', aliasedName, true,
+          type: DriftSqlType.string,
+          requiredDuringInsert: false,
+          defaultConstraints: GeneratedColumn.constraintIsAlways(
+              'REFERENCES sms_outbox_messages (id_key) ON DELETE CASCADE'));
   static const VerificationMeta _pickedPathMeta =
       const VerificationMeta('pickedPath');
   @override
@@ -7856,8 +7868,14 @@ class $OutboxAttachmentTableTable extends OutboxAttachmentTable
       'uploaded_path', aliasedName, true,
       type: DriftSqlType.string, requiredDuringInsert: false);
   @override
-  List<GeneratedColumn> get $columns =>
-      [idKey, messageIdKey, pickedPath, encodedPath, uploadedPath];
+  List<GeneratedColumn> get $columns => [
+        idKey,
+        chatsOutboxMessageIdKey,
+        smsOutboxMessageIdKey,
+        pickedPath,
+        encodedPath,
+        uploadedPath
+      ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -7875,13 +7893,18 @@ class $OutboxAttachmentTableTable extends OutboxAttachmentTable
     } else if (isInserting) {
       context.missing(_idKeyMeta);
     }
-    if (data.containsKey('message_id_key')) {
+    if (data.containsKey('chats_outbox_message_id_key')) {
       context.handle(
-          _messageIdKeyMeta,
-          messageIdKey.isAcceptableOrUnknown(
-              data['message_id_key']!, _messageIdKeyMeta));
-    } else if (isInserting) {
-      context.missing(_messageIdKeyMeta);
+          _chatsOutboxMessageIdKeyMeta,
+          chatsOutboxMessageIdKey.isAcceptableOrUnknown(
+              data['chats_outbox_message_id_key']!,
+              _chatsOutboxMessageIdKeyMeta));
+    }
+    if (data.containsKey('sms_outbox_message_id_key')) {
+      context.handle(
+          _smsOutboxMessageIdKeyMeta,
+          smsOutboxMessageIdKey.isAcceptableOrUnknown(
+              data['sms_outbox_message_id_key']!, _smsOutboxMessageIdKeyMeta));
     }
     if (data.containsKey('picked_path')) {
       context.handle(
@@ -7914,8 +7937,12 @@ class $OutboxAttachmentTableTable extends OutboxAttachmentTable
     return OutboxAttachmentData(
       idKey: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}id_key'])!,
-      messageIdKey: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}message_id_key'])!,
+      chatsOutboxMessageIdKey: attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}chats_outbox_message_id_key']),
+      smsOutboxMessageIdKey: attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}sms_outbox_message_id_key']),
       pickedPath: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}picked_path'])!,
       encodedPath: attachedDatabase.typeMapping
@@ -7934,13 +7961,15 @@ class $OutboxAttachmentTableTable extends OutboxAttachmentTable
 class OutboxAttachmentData extends DataClass
     implements Insertable<OutboxAttachmentData> {
   final String idKey;
-  final String messageIdKey;
+  final String? chatsOutboxMessageIdKey;
+  final String? smsOutboxMessageIdKey;
   final String pickedPath;
   final String? encodedPath;
   final String? uploadedPath;
   const OutboxAttachmentData(
       {required this.idKey,
-      required this.messageIdKey,
+      this.chatsOutboxMessageIdKey,
+      this.smsOutboxMessageIdKey,
       required this.pickedPath,
       this.encodedPath,
       this.uploadedPath});
@@ -7948,7 +7977,14 @@ class OutboxAttachmentData extends DataClass
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id_key'] = Variable<String>(idKey);
-    map['message_id_key'] = Variable<String>(messageIdKey);
+    if (!nullToAbsent || chatsOutboxMessageIdKey != null) {
+      map['chats_outbox_message_id_key'] =
+          Variable<String>(chatsOutboxMessageIdKey);
+    }
+    if (!nullToAbsent || smsOutboxMessageIdKey != null) {
+      map['sms_outbox_message_id_key'] =
+          Variable<String>(smsOutboxMessageIdKey);
+    }
     map['picked_path'] = Variable<String>(pickedPath);
     if (!nullToAbsent || encodedPath != null) {
       map['encoded_path'] = Variable<String>(encodedPath);
@@ -7962,7 +7998,12 @@ class OutboxAttachmentData extends DataClass
   OutboxAttachmentDataCompanion toCompanion(bool nullToAbsent) {
     return OutboxAttachmentDataCompanion(
       idKey: Value(idKey),
-      messageIdKey: Value(messageIdKey),
+      chatsOutboxMessageIdKey: chatsOutboxMessageIdKey == null && nullToAbsent
+          ? const Value.absent()
+          : Value(chatsOutboxMessageIdKey),
+      smsOutboxMessageIdKey: smsOutboxMessageIdKey == null && nullToAbsent
+          ? const Value.absent()
+          : Value(smsOutboxMessageIdKey),
       pickedPath: Value(pickedPath),
       encodedPath: encodedPath == null && nullToAbsent
           ? const Value.absent()
@@ -7978,7 +8019,10 @@ class OutboxAttachmentData extends DataClass
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return OutboxAttachmentData(
       idKey: serializer.fromJson<String>(json['idKey']),
-      messageIdKey: serializer.fromJson<String>(json['messageIdKey']),
+      chatsOutboxMessageIdKey:
+          serializer.fromJson<String?>(json['chatsOutboxMessageIdKey']),
+      smsOutboxMessageIdKey:
+          serializer.fromJson<String?>(json['smsOutboxMessageIdKey']),
       pickedPath: serializer.fromJson<String>(json['pickedPath']),
       encodedPath: serializer.fromJson<String?>(json['encodedPath']),
       uploadedPath: serializer.fromJson<String?>(json['uploadedPath']),
@@ -7989,7 +8033,10 @@ class OutboxAttachmentData extends DataClass
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'idKey': serializer.toJson<String>(idKey),
-      'messageIdKey': serializer.toJson<String>(messageIdKey),
+      'chatsOutboxMessageIdKey':
+          serializer.toJson<String?>(chatsOutboxMessageIdKey),
+      'smsOutboxMessageIdKey':
+          serializer.toJson<String?>(smsOutboxMessageIdKey),
       'pickedPath': serializer.toJson<String>(pickedPath),
       'encodedPath': serializer.toJson<String?>(encodedPath),
       'uploadedPath': serializer.toJson<String?>(uploadedPath),
@@ -7998,13 +8045,19 @@ class OutboxAttachmentData extends DataClass
 
   OutboxAttachmentData copyWith(
           {String? idKey,
-          String? messageIdKey,
+          Value<String?> chatsOutboxMessageIdKey = const Value.absent(),
+          Value<String?> smsOutboxMessageIdKey = const Value.absent(),
           String? pickedPath,
           Value<String?> encodedPath = const Value.absent(),
           Value<String?> uploadedPath = const Value.absent()}) =>
       OutboxAttachmentData(
         idKey: idKey ?? this.idKey,
-        messageIdKey: messageIdKey ?? this.messageIdKey,
+        chatsOutboxMessageIdKey: chatsOutboxMessageIdKey.present
+            ? chatsOutboxMessageIdKey.value
+            : this.chatsOutboxMessageIdKey,
+        smsOutboxMessageIdKey: smsOutboxMessageIdKey.present
+            ? smsOutboxMessageIdKey.value
+            : this.smsOutboxMessageIdKey,
         pickedPath: pickedPath ?? this.pickedPath,
         encodedPath: encodedPath.present ? encodedPath.value : this.encodedPath,
         uploadedPath:
@@ -8013,9 +8066,12 @@ class OutboxAttachmentData extends DataClass
   OutboxAttachmentData copyWithCompanion(OutboxAttachmentDataCompanion data) {
     return OutboxAttachmentData(
       idKey: data.idKey.present ? data.idKey.value : this.idKey,
-      messageIdKey: data.messageIdKey.present
-          ? data.messageIdKey.value
-          : this.messageIdKey,
+      chatsOutboxMessageIdKey: data.chatsOutboxMessageIdKey.present
+          ? data.chatsOutboxMessageIdKey.value
+          : this.chatsOutboxMessageIdKey,
+      smsOutboxMessageIdKey: data.smsOutboxMessageIdKey.present
+          ? data.smsOutboxMessageIdKey.value
+          : this.smsOutboxMessageIdKey,
       pickedPath:
           data.pickedPath.present ? data.pickedPath.value : this.pickedPath,
       encodedPath:
@@ -8030,7 +8086,8 @@ class OutboxAttachmentData extends DataClass
   String toString() {
     return (StringBuffer('OutboxAttachmentData(')
           ..write('idKey: $idKey, ')
-          ..write('messageIdKey: $messageIdKey, ')
+          ..write('chatsOutboxMessageIdKey: $chatsOutboxMessageIdKey, ')
+          ..write('smsOutboxMessageIdKey: $smsOutboxMessageIdKey, ')
           ..write('pickedPath: $pickedPath, ')
           ..write('encodedPath: $encodedPath, ')
           ..write('uploadedPath: $uploadedPath')
@@ -8039,14 +8096,15 @@ class OutboxAttachmentData extends DataClass
   }
 
   @override
-  int get hashCode =>
-      Object.hash(idKey, messageIdKey, pickedPath, encodedPath, uploadedPath);
+  int get hashCode => Object.hash(idKey, chatsOutboxMessageIdKey,
+      smsOutboxMessageIdKey, pickedPath, encodedPath, uploadedPath);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is OutboxAttachmentData &&
           other.idKey == this.idKey &&
-          other.messageIdKey == this.messageIdKey &&
+          other.chatsOutboxMessageIdKey == this.chatsOutboxMessageIdKey &&
+          other.smsOutboxMessageIdKey == this.smsOutboxMessageIdKey &&
           other.pickedPath == this.pickedPath &&
           other.encodedPath == this.encodedPath &&
           other.uploadedPath == this.uploadedPath);
@@ -8055,14 +8113,16 @@ class OutboxAttachmentData extends DataClass
 class OutboxAttachmentDataCompanion
     extends UpdateCompanion<OutboxAttachmentData> {
   final Value<String> idKey;
-  final Value<String> messageIdKey;
+  final Value<String?> chatsOutboxMessageIdKey;
+  final Value<String?> smsOutboxMessageIdKey;
   final Value<String> pickedPath;
   final Value<String?> encodedPath;
   final Value<String?> uploadedPath;
   final Value<int> rowid;
   const OutboxAttachmentDataCompanion({
     this.idKey = const Value.absent(),
-    this.messageIdKey = const Value.absent(),
+    this.chatsOutboxMessageIdKey = const Value.absent(),
+    this.smsOutboxMessageIdKey = const Value.absent(),
     this.pickedPath = const Value.absent(),
     this.encodedPath = const Value.absent(),
     this.uploadedPath = const Value.absent(),
@@ -8070,17 +8130,18 @@ class OutboxAttachmentDataCompanion
   });
   OutboxAttachmentDataCompanion.insert({
     required String idKey,
-    required String messageIdKey,
+    this.chatsOutboxMessageIdKey = const Value.absent(),
+    this.smsOutboxMessageIdKey = const Value.absent(),
     required String pickedPath,
     this.encodedPath = const Value.absent(),
     this.uploadedPath = const Value.absent(),
     this.rowid = const Value.absent(),
   })  : idKey = Value(idKey),
-        messageIdKey = Value(messageIdKey),
         pickedPath = Value(pickedPath);
   static Insertable<OutboxAttachmentData> custom({
     Expression<String>? idKey,
-    Expression<String>? messageIdKey,
+    Expression<String>? chatsOutboxMessageIdKey,
+    Expression<String>? smsOutboxMessageIdKey,
     Expression<String>? pickedPath,
     Expression<String>? encodedPath,
     Expression<String>? uploadedPath,
@@ -8088,7 +8149,10 @@ class OutboxAttachmentDataCompanion
   }) {
     return RawValuesInsertable({
       if (idKey != null) 'id_key': idKey,
-      if (messageIdKey != null) 'message_id_key': messageIdKey,
+      if (chatsOutboxMessageIdKey != null)
+        'chats_outbox_message_id_key': chatsOutboxMessageIdKey,
+      if (smsOutboxMessageIdKey != null)
+        'sms_outbox_message_id_key': smsOutboxMessageIdKey,
       if (pickedPath != null) 'picked_path': pickedPath,
       if (encodedPath != null) 'encoded_path': encodedPath,
       if (uploadedPath != null) 'uploaded_path': uploadedPath,
@@ -8098,14 +8162,18 @@ class OutboxAttachmentDataCompanion
 
   OutboxAttachmentDataCompanion copyWith(
       {Value<String>? idKey,
-      Value<String>? messageIdKey,
+      Value<String?>? chatsOutboxMessageIdKey,
+      Value<String?>? smsOutboxMessageIdKey,
       Value<String>? pickedPath,
       Value<String?>? encodedPath,
       Value<String?>? uploadedPath,
       Value<int>? rowid}) {
     return OutboxAttachmentDataCompanion(
       idKey: idKey ?? this.idKey,
-      messageIdKey: messageIdKey ?? this.messageIdKey,
+      chatsOutboxMessageIdKey:
+          chatsOutboxMessageIdKey ?? this.chatsOutboxMessageIdKey,
+      smsOutboxMessageIdKey:
+          smsOutboxMessageIdKey ?? this.smsOutboxMessageIdKey,
       pickedPath: pickedPath ?? this.pickedPath,
       encodedPath: encodedPath ?? this.encodedPath,
       uploadedPath: uploadedPath ?? this.uploadedPath,
@@ -8119,8 +8187,13 @@ class OutboxAttachmentDataCompanion
     if (idKey.present) {
       map['id_key'] = Variable<String>(idKey.value);
     }
-    if (messageIdKey.present) {
-      map['message_id_key'] = Variable<String>(messageIdKey.value);
+    if (chatsOutboxMessageIdKey.present) {
+      map['chats_outbox_message_id_key'] =
+          Variable<String>(chatsOutboxMessageIdKey.value);
+    }
+    if (smsOutboxMessageIdKey.present) {
+      map['sms_outbox_message_id_key'] =
+          Variable<String>(smsOutboxMessageIdKey.value);
     }
     if (pickedPath.present) {
       map['picked_path'] = Variable<String>(pickedPath.value);
@@ -8141,7 +8214,8 @@ class OutboxAttachmentDataCompanion
   String toString() {
     return (StringBuffer('OutboxAttachmentDataCompanion(')
           ..write('idKey: $idKey, ')
-          ..write('messageIdKey: $messageIdKey, ')
+          ..write('chatsOutboxMessageIdKey: $chatsOutboxMessageIdKey, ')
+          ..write('smsOutboxMessageIdKey: $smsOutboxMessageIdKey, ')
           ..write('pickedPath: $pickedPath, ')
           ..write('encodedPath: $encodedPath, ')
           ..write('uploadedPath: $uploadedPath, ')
@@ -8342,6 +8416,20 @@ abstract class _$AppDatabase extends GeneratedDatabase {
                 limitUpdateKind: UpdateKind.delete),
             result: [
               TableUpdate('sms_outbox_read_cursors', kind: UpdateKind.delete),
+            ],
+          ),
+          WritePropagation(
+            on: TableUpdateQuery.onTableName('chat_outbox_messages',
+                limitUpdateKind: UpdateKind.delete),
+            result: [
+              TableUpdate('outbox_attachments', kind: UpdateKind.delete),
+            ],
+          ),
+          WritePropagation(
+            on: TableUpdateQuery.onTableName('sms_outbox_messages',
+                limitUpdateKind: UpdateKind.delete),
+            result: [
+              TableUpdate('outbox_attachments', kind: UpdateKind.delete),
             ],
           ),
         ],
@@ -11383,6 +11471,25 @@ final class $$ChatOutboxMessageTableTableReferences extends BaseReferences<
     return ProcessedTableManager(
         manager.$state.copyWith(prefetchedData: [item]));
   }
+
+  static MultiTypedResultKey<$OutboxAttachmentTableTable,
+      List<OutboxAttachmentData>> _outboxAttachmentTableRefsTable(
+          _$AppDatabase db) =>
+      MultiTypedResultKey.fromTable(db.outboxAttachmentTable,
+          aliasName: $_aliasNameGenerator(db.chatOutboxMessageTable.idKey,
+              db.outboxAttachmentTable.chatsOutboxMessageIdKey));
+
+  $$OutboxAttachmentTableTableProcessedTableManager
+      get outboxAttachmentTableRefs {
+    final manager = $$OutboxAttachmentTableTableTableManager(
+            $_db, $_db.outboxAttachmentTable)
+        .filter((f) => f.chatsOutboxMessageIdKey.idKey($_item.idKey));
+
+    final cache =
+        $_typedResult.readTableOrNull(_outboxAttachmentTableRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
 }
 
 class $$ChatOutboxMessageTableTableFilterComposer
@@ -11436,6 +11543,29 @@ class $$ChatOutboxMessageTableTableFilterComposer
                   $removeJoinBuilderFromRootComposer,
             ));
     return composer;
+  }
+
+  Expression<bool> outboxAttachmentTableRefs(
+      Expression<bool> Function($$OutboxAttachmentTableTableFilterComposer f)
+          f) {
+    final $$OutboxAttachmentTableTableFilterComposer composer =
+        $composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.idKey,
+            referencedTable: $db.outboxAttachmentTable,
+            getReferencedColumn: (t) => t.chatsOutboxMessageIdKey,
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$OutboxAttachmentTableTableFilterComposer(
+                  $db: $db,
+                  $table: $db.outboxAttachmentTable,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
+    return f(composer);
   }
 }
 
@@ -11548,6 +11678,29 @@ class $$ChatOutboxMessageTableTableAnnotationComposer
             ));
     return composer;
   }
+
+  Expression<T> outboxAttachmentTableRefs<T extends Object>(
+      Expression<T> Function($$OutboxAttachmentTableTableAnnotationComposer a)
+          f) {
+    final $$OutboxAttachmentTableTableAnnotationComposer composer =
+        $composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.idKey,
+            referencedTable: $db.outboxAttachmentTable,
+            getReferencedColumn: (t) => t.chatsOutboxMessageIdKey,
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$OutboxAttachmentTableTableAnnotationComposer(
+                  $db: $db,
+                  $table: $db.outboxAttachmentTable,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
+    return f(composer);
+  }
 }
 
 class $$ChatOutboxMessageTableTableTableManager extends RootTableManager<
@@ -11561,7 +11714,7 @@ class $$ChatOutboxMessageTableTableTableManager extends RootTableManager<
     $$ChatOutboxMessageTableTableUpdateCompanionBuilder,
     (ChatOutboxMessageData, $$ChatOutboxMessageTableTableReferences),
     ChatOutboxMessageData,
-    PrefetchHooks Function({bool chatId})> {
+    PrefetchHooks Function({bool chatId, bool outboxAttachmentTableRefs})> {
   $$ChatOutboxMessageTableTableTableManager(
       _$AppDatabase db, $ChatOutboxMessageTableTable table)
       : super(TableManagerState(
@@ -11630,10 +11783,13 @@ class $$ChatOutboxMessageTableTableTableManager extends RootTableManager<
                     $$ChatOutboxMessageTableTableReferences(db, table, e)
                   ))
               .toList(),
-          prefetchHooksCallback: ({chatId = false}) {
+          prefetchHooksCallback: (
+              {chatId = false, outboxAttachmentTableRefs = false}) {
             return PrefetchHooks(
               db: db,
-              explicitlyWatchedTables: [],
+              explicitlyWatchedTables: [
+                if (outboxAttachmentTableRefs) db.outboxAttachmentTable
+              ],
               addJoins: <
                   T extends TableManagerState<
                       dynamic,
@@ -11662,7 +11818,21 @@ class $$ChatOutboxMessageTableTableTableManager extends RootTableManager<
                 return state;
               },
               getPrefetchedDataCallback: (items) async {
-                return [];
+                return [
+                  if (outboxAttachmentTableRefs)
+                    await $_getPrefetchedData(
+                        currentTable: table,
+                        referencedTable: $$ChatOutboxMessageTableTableReferences
+                            ._outboxAttachmentTableRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$ChatOutboxMessageTableTableReferences(
+                                    db, table, p0)
+                                .outboxAttachmentTableRefs,
+                        referencedItemsForCurrentItem:
+                            (item, referencedItems) => referencedItems.where(
+                                (e) => e.chatsOutboxMessageIdKey == item.idKey),
+                        typedResults: items)
+                ];
               },
             );
           },
@@ -11681,7 +11851,7 @@ typedef $$ChatOutboxMessageTableTableProcessedTableManager
         $$ChatOutboxMessageTableTableUpdateCompanionBuilder,
         (ChatOutboxMessageData, $$ChatOutboxMessageTableTableReferences),
         ChatOutboxMessageData,
-        PrefetchHooks Function({bool chatId})>;
+        PrefetchHooks Function({bool chatId, bool outboxAttachmentTableRefs})>;
 typedef $$ChatOutboxMessageEditTableTableCreateCompanionBuilder
     = ChatOutboxMessageEditDataCompanion Function({
   Value<int> id,
@@ -14111,6 +14281,25 @@ final class $$SmsOutboxMessagesTableTableReferences extends BaseReferences<
     return ProcessedTableManager(
         manager.$state.copyWith(prefetchedData: [item]));
   }
+
+  static MultiTypedResultKey<$OutboxAttachmentTableTable,
+      List<OutboxAttachmentData>> _outboxAttachmentTableRefsTable(
+          _$AppDatabase db) =>
+      MultiTypedResultKey.fromTable(db.outboxAttachmentTable,
+          aliasName: $_aliasNameGenerator(db.smsOutboxMessagesTable.idKey,
+              db.outboxAttachmentTable.smsOutboxMessageIdKey));
+
+  $$OutboxAttachmentTableTableProcessedTableManager
+      get outboxAttachmentTableRefs {
+    final manager = $$OutboxAttachmentTableTableTableManager(
+            $_db, $_db.outboxAttachmentTable)
+        .filter((f) => f.smsOutboxMessageIdKey.idKey($_item.idKey));
+
+    final cache =
+        $_typedResult.readTableOrNull(_outboxAttachmentTableRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
 }
 
 class $$SmsOutboxMessagesTableTableFilterComposer
@@ -14160,6 +14349,29 @@ class $$SmsOutboxMessagesTableTableFilterComposer
                       $removeJoinBuilderFromRootComposer,
                 ));
     return composer;
+  }
+
+  Expression<bool> outboxAttachmentTableRefs(
+      Expression<bool> Function($$OutboxAttachmentTableTableFilterComposer f)
+          f) {
+    final $$OutboxAttachmentTableTableFilterComposer composer =
+        $composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.idKey,
+            referencedTable: $db.outboxAttachmentTable,
+            getReferencedColumn: (t) => t.smsOutboxMessageIdKey,
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$OutboxAttachmentTableTableFilterComposer(
+                  $db: $db,
+                  $table: $db.outboxAttachmentTable,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
+    return f(composer);
   }
 }
 
@@ -14262,6 +14474,29 @@ class $$SmsOutboxMessagesTableTableAnnotationComposer
                 ));
     return composer;
   }
+
+  Expression<T> outboxAttachmentTableRefs<T extends Object>(
+      Expression<T> Function($$OutboxAttachmentTableTableAnnotationComposer a)
+          f) {
+    final $$OutboxAttachmentTableTableAnnotationComposer composer =
+        $composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.idKey,
+            referencedTable: $db.outboxAttachmentTable,
+            getReferencedColumn: (t) => t.smsOutboxMessageIdKey,
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$OutboxAttachmentTableTableAnnotationComposer(
+                  $db: $db,
+                  $table: $db.outboxAttachmentTable,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
+    return f(composer);
+  }
 }
 
 class $$SmsOutboxMessagesTableTableTableManager extends RootTableManager<
@@ -14275,7 +14510,8 @@ class $$SmsOutboxMessagesTableTableTableManager extends RootTableManager<
     $$SmsOutboxMessagesTableTableUpdateCompanionBuilder,
     (SmsOutboxMessageData, $$SmsOutboxMessagesTableTableReferences),
     SmsOutboxMessageData,
-    PrefetchHooks Function({bool conversationId})> {
+    PrefetchHooks Function(
+        {bool conversationId, bool outboxAttachmentTableRefs})> {
   $$SmsOutboxMessagesTableTableTableManager(
       _$AppDatabase db, $SmsOutboxMessagesTableTable table)
       : super(TableManagerState(
@@ -14336,10 +14572,13 @@ class $$SmsOutboxMessagesTableTableTableManager extends RootTableManager<
                     $$SmsOutboxMessagesTableTableReferences(db, table, e)
                   ))
               .toList(),
-          prefetchHooksCallback: ({conversationId = false}) {
+          prefetchHooksCallback: (
+              {conversationId = false, outboxAttachmentTableRefs = false}) {
             return PrefetchHooks(
               db: db,
-              explicitlyWatchedTables: [],
+              explicitlyWatchedTables: [
+                if (outboxAttachmentTableRefs) db.outboxAttachmentTable
+              ],
               addJoins: <
                   T extends TableManagerState<
                       dynamic,
@@ -14368,7 +14607,21 @@ class $$SmsOutboxMessagesTableTableTableManager extends RootTableManager<
                 return state;
               },
               getPrefetchedDataCallback: (items) async {
-                return [];
+                return [
+                  if (outboxAttachmentTableRefs)
+                    await $_getPrefetchedData(
+                        currentTable: table,
+                        referencedTable: $$SmsOutboxMessagesTableTableReferences
+                            ._outboxAttachmentTableRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$SmsOutboxMessagesTableTableReferences(
+                                    db, table, p0)
+                                .outboxAttachmentTableRefs,
+                        referencedItemsForCurrentItem:
+                            (item, referencedItems) => referencedItems.where(
+                                (e) => e.smsOutboxMessageIdKey == item.idKey),
+                        typedResults: items)
+                ];
               },
             );
           },
@@ -14387,7 +14640,8 @@ typedef $$SmsOutboxMessagesTableTableProcessedTableManager
         $$SmsOutboxMessagesTableTableUpdateCompanionBuilder,
         (SmsOutboxMessageData, $$SmsOutboxMessagesTableTableReferences),
         SmsOutboxMessageData,
-        PrefetchHooks Function({bool conversationId})>;
+        PrefetchHooks Function(
+            {bool conversationId, bool outboxAttachmentTableRefs})>;
 typedef $$SmsOutboxMessageDeleteTableTableCreateCompanionBuilder
     = SmsOutboxMessageDeleteDataCompanion Function({
   Value<int> id,
@@ -15234,7 +15488,8 @@ typedef $$ActiveMessageNotificationsTableTableProcessedTableManager
 typedef $$OutboxAttachmentTableTableCreateCompanionBuilder
     = OutboxAttachmentDataCompanion Function({
   required String idKey,
-  required String messageIdKey,
+  Value<String?> chatsOutboxMessageIdKey,
+  Value<String?> smsOutboxMessageIdKey,
   required String pickedPath,
   Value<String?> encodedPath,
   Value<String?> uploadedPath,
@@ -15243,12 +15498,57 @@ typedef $$OutboxAttachmentTableTableCreateCompanionBuilder
 typedef $$OutboxAttachmentTableTableUpdateCompanionBuilder
     = OutboxAttachmentDataCompanion Function({
   Value<String> idKey,
-  Value<String> messageIdKey,
+  Value<String?> chatsOutboxMessageIdKey,
+  Value<String?> smsOutboxMessageIdKey,
   Value<String> pickedPath,
   Value<String?> encodedPath,
   Value<String?> uploadedPath,
   Value<int> rowid,
 });
+
+final class $$OutboxAttachmentTableTableReferences extends BaseReferences<
+    _$AppDatabase, $OutboxAttachmentTableTable, OutboxAttachmentData> {
+  $$OutboxAttachmentTableTableReferences(
+      super.$_db, super.$_table, super.$_typedResult);
+
+  static $ChatOutboxMessageTableTable _chatsOutboxMessageIdKeyTable(
+          _$AppDatabase db) =>
+      db.chatOutboxMessageTable.createAlias($_aliasNameGenerator(
+          db.outboxAttachmentTable.chatsOutboxMessageIdKey,
+          db.chatOutboxMessageTable.idKey));
+
+  $$ChatOutboxMessageTableTableProcessedTableManager?
+      get chatsOutboxMessageIdKey {
+    if ($_item.chatsOutboxMessageIdKey == null) return null;
+    final manager = $$ChatOutboxMessageTableTableTableManager(
+            $_db, $_db.chatOutboxMessageTable)
+        .filter((f) => f.idKey($_item.chatsOutboxMessageIdKey!));
+    final item =
+        $_typedResult.readTableOrNull(_chatsOutboxMessageIdKeyTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+
+  static $SmsOutboxMessagesTableTable _smsOutboxMessageIdKeyTable(
+          _$AppDatabase db) =>
+      db.smsOutboxMessagesTable.createAlias($_aliasNameGenerator(
+          db.outboxAttachmentTable.smsOutboxMessageIdKey,
+          db.smsOutboxMessagesTable.idKey));
+
+  $$SmsOutboxMessagesTableTableProcessedTableManager?
+      get smsOutboxMessageIdKey {
+    if ($_item.smsOutboxMessageIdKey == null) return null;
+    final manager = $$SmsOutboxMessagesTableTableTableManager(
+            $_db, $_db.smsOutboxMessagesTable)
+        .filter((f) => f.idKey($_item.smsOutboxMessageIdKey!));
+    final item =
+        $_typedResult.readTableOrNull(_smsOutboxMessageIdKeyTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+}
 
 class $$OutboxAttachmentTableTableFilterComposer
     extends Composer<_$AppDatabase, $OutboxAttachmentTableTable> {
@@ -15262,9 +15562,6 @@ class $$OutboxAttachmentTableTableFilterComposer
   ColumnFilters<String> get idKey => $composableBuilder(
       column: $table.idKey, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get messageIdKey => $composableBuilder(
-      column: $table.messageIdKey, builder: (column) => ColumnFilters(column));
-
   ColumnFilters<String> get pickedPath => $composableBuilder(
       column: $table.pickedPath, builder: (column) => ColumnFilters(column));
 
@@ -15273,6 +15570,48 @@ class $$OutboxAttachmentTableTableFilterComposer
 
   ColumnFilters<String> get uploadedPath => $composableBuilder(
       column: $table.uploadedPath, builder: (column) => ColumnFilters(column));
+
+  $$ChatOutboxMessageTableTableFilterComposer get chatsOutboxMessageIdKey {
+    final $$ChatOutboxMessageTableTableFilterComposer composer =
+        $composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.chatsOutboxMessageIdKey,
+            referencedTable: $db.chatOutboxMessageTable,
+            getReferencedColumn: (t) => t.idKey,
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$ChatOutboxMessageTableTableFilterComposer(
+                  $db: $db,
+                  $table: $db.chatOutboxMessageTable,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
+    return composer;
+  }
+
+  $$SmsOutboxMessagesTableTableFilterComposer get smsOutboxMessageIdKey {
+    final $$SmsOutboxMessagesTableTableFilterComposer composer =
+        $composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.smsOutboxMessageIdKey,
+            referencedTable: $db.smsOutboxMessagesTable,
+            getReferencedColumn: (t) => t.idKey,
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$SmsOutboxMessagesTableTableFilterComposer(
+                  $db: $db,
+                  $table: $db.smsOutboxMessagesTable,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
+    return composer;
+  }
 }
 
 class $$OutboxAttachmentTableTableOrderingComposer
@@ -15287,10 +15626,6 @@ class $$OutboxAttachmentTableTableOrderingComposer
   ColumnOrderings<String> get idKey => $composableBuilder(
       column: $table.idKey, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get messageIdKey => $composableBuilder(
-      column: $table.messageIdKey,
-      builder: (column) => ColumnOrderings(column));
-
   ColumnOrderings<String> get pickedPath => $composableBuilder(
       column: $table.pickedPath, builder: (column) => ColumnOrderings(column));
 
@@ -15300,6 +15635,48 @@ class $$OutboxAttachmentTableTableOrderingComposer
   ColumnOrderings<String> get uploadedPath => $composableBuilder(
       column: $table.uploadedPath,
       builder: (column) => ColumnOrderings(column));
+
+  $$ChatOutboxMessageTableTableOrderingComposer get chatsOutboxMessageIdKey {
+    final $$ChatOutboxMessageTableTableOrderingComposer composer =
+        $composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.chatsOutboxMessageIdKey,
+            referencedTable: $db.chatOutboxMessageTable,
+            getReferencedColumn: (t) => t.idKey,
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$ChatOutboxMessageTableTableOrderingComposer(
+                  $db: $db,
+                  $table: $db.chatOutboxMessageTable,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
+    return composer;
+  }
+
+  $$SmsOutboxMessagesTableTableOrderingComposer get smsOutboxMessageIdKey {
+    final $$SmsOutboxMessagesTableTableOrderingComposer composer =
+        $composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.smsOutboxMessageIdKey,
+            referencedTable: $db.smsOutboxMessagesTable,
+            getReferencedColumn: (t) => t.idKey,
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$SmsOutboxMessagesTableTableOrderingComposer(
+                  $db: $db,
+                  $table: $db.smsOutboxMessagesTable,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
+    return composer;
+  }
 }
 
 class $$OutboxAttachmentTableTableAnnotationComposer
@@ -15314,9 +15691,6 @@ class $$OutboxAttachmentTableTableAnnotationComposer
   GeneratedColumn<String> get idKey =>
       $composableBuilder(column: $table.idKey, builder: (column) => column);
 
-  GeneratedColumn<String> get messageIdKey => $composableBuilder(
-      column: $table.messageIdKey, builder: (column) => column);
-
   GeneratedColumn<String> get pickedPath => $composableBuilder(
       column: $table.pickedPath, builder: (column) => column);
 
@@ -15325,6 +15699,48 @@ class $$OutboxAttachmentTableTableAnnotationComposer
 
   GeneratedColumn<String> get uploadedPath => $composableBuilder(
       column: $table.uploadedPath, builder: (column) => column);
+
+  $$ChatOutboxMessageTableTableAnnotationComposer get chatsOutboxMessageIdKey {
+    final $$ChatOutboxMessageTableTableAnnotationComposer composer =
+        $composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.chatsOutboxMessageIdKey,
+            referencedTable: $db.chatOutboxMessageTable,
+            getReferencedColumn: (t) => t.idKey,
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$ChatOutboxMessageTableTableAnnotationComposer(
+                  $db: $db,
+                  $table: $db.chatOutboxMessageTable,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
+    return composer;
+  }
+
+  $$SmsOutboxMessagesTableTableAnnotationComposer get smsOutboxMessageIdKey {
+    final $$SmsOutboxMessagesTableTableAnnotationComposer composer =
+        $composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.smsOutboxMessageIdKey,
+            referencedTable: $db.smsOutboxMessagesTable,
+            getReferencedColumn: (t) => t.idKey,
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$SmsOutboxMessagesTableTableAnnotationComposer(
+                  $db: $db,
+                  $table: $db.smsOutboxMessagesTable,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
+    return composer;
+  }
 }
 
 class $$OutboxAttachmentTableTableTableManager extends RootTableManager<
@@ -15336,13 +15752,10 @@ class $$OutboxAttachmentTableTableTableManager extends RootTableManager<
     $$OutboxAttachmentTableTableAnnotationComposer,
     $$OutboxAttachmentTableTableCreateCompanionBuilder,
     $$OutboxAttachmentTableTableUpdateCompanionBuilder,
-    (
-      OutboxAttachmentData,
-      BaseReferences<_$AppDatabase, $OutboxAttachmentTableTable,
-          OutboxAttachmentData>
-    ),
+    (OutboxAttachmentData, $$OutboxAttachmentTableTableReferences),
     OutboxAttachmentData,
-    PrefetchHooks Function()> {
+    PrefetchHooks Function(
+        {bool chatsOutboxMessageIdKey, bool smsOutboxMessageIdKey})> {
   $$OutboxAttachmentTableTableTableManager(
       _$AppDatabase db, $OutboxAttachmentTableTable table)
       : super(TableManagerState(
@@ -15359,7 +15772,8 @@ class $$OutboxAttachmentTableTableTableManager extends RootTableManager<
                   $db: db, $table: table),
           updateCompanionCallback: ({
             Value<String> idKey = const Value.absent(),
-            Value<String> messageIdKey = const Value.absent(),
+            Value<String?> chatsOutboxMessageIdKey = const Value.absent(),
+            Value<String?> smsOutboxMessageIdKey = const Value.absent(),
             Value<String> pickedPath = const Value.absent(),
             Value<String?> encodedPath = const Value.absent(),
             Value<String?> uploadedPath = const Value.absent(),
@@ -15367,7 +15781,8 @@ class $$OutboxAttachmentTableTableTableManager extends RootTableManager<
           }) =>
               OutboxAttachmentDataCompanion(
             idKey: idKey,
-            messageIdKey: messageIdKey,
+            chatsOutboxMessageIdKey: chatsOutboxMessageIdKey,
+            smsOutboxMessageIdKey: smsOutboxMessageIdKey,
             pickedPath: pickedPath,
             encodedPath: encodedPath,
             uploadedPath: uploadedPath,
@@ -15375,7 +15790,8 @@ class $$OutboxAttachmentTableTableTableManager extends RootTableManager<
           ),
           createCompanionCallback: ({
             required String idKey,
-            required String messageIdKey,
+            Value<String?> chatsOutboxMessageIdKey = const Value.absent(),
+            Value<String?> smsOutboxMessageIdKey = const Value.absent(),
             required String pickedPath,
             Value<String?> encodedPath = const Value.absent(),
             Value<String?> uploadedPath = const Value.absent(),
@@ -15383,16 +15799,68 @@ class $$OutboxAttachmentTableTableTableManager extends RootTableManager<
           }) =>
               OutboxAttachmentDataCompanion.insert(
             idKey: idKey,
-            messageIdKey: messageIdKey,
+            chatsOutboxMessageIdKey: chatsOutboxMessageIdKey,
+            smsOutboxMessageIdKey: smsOutboxMessageIdKey,
             pickedPath: pickedPath,
             encodedPath: encodedPath,
             uploadedPath: uploadedPath,
             rowid: rowid,
           ),
           withReferenceMapper: (p0) => p0
-              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .map((e) => (
+                    e.readTable(table),
+                    $$OutboxAttachmentTableTableReferences(db, table, e)
+                  ))
               .toList(),
-          prefetchHooksCallback: null,
+          prefetchHooksCallback: (
+              {chatsOutboxMessageIdKey = false,
+              smsOutboxMessageIdKey = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins: <
+                  T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic>>(state) {
+                if (chatsOutboxMessageIdKey) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.chatsOutboxMessageIdKey,
+                    referencedTable: $$OutboxAttachmentTableTableReferences
+                        ._chatsOutboxMessageIdKeyTable(db),
+                    referencedColumn: $$OutboxAttachmentTableTableReferences
+                        ._chatsOutboxMessageIdKeyTable(db)
+                        .idKey,
+                  ) as T;
+                }
+                if (smsOutboxMessageIdKey) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.smsOutboxMessageIdKey,
+                    referencedTable: $$OutboxAttachmentTableTableReferences
+                        ._smsOutboxMessageIdKeyTable(db),
+                    referencedColumn: $$OutboxAttachmentTableTableReferences
+                        ._smsOutboxMessageIdKeyTable(db)
+                        .idKey,
+                  ) as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
         ));
 }
 
@@ -15406,13 +15874,10 @@ typedef $$OutboxAttachmentTableTableProcessedTableManager
         $$OutboxAttachmentTableTableAnnotationComposer,
         $$OutboxAttachmentTableTableCreateCompanionBuilder,
         $$OutboxAttachmentTableTableUpdateCompanionBuilder,
-        (
-          OutboxAttachmentData,
-          BaseReferences<_$AppDatabase, $OutboxAttachmentTableTable,
-              OutboxAttachmentData>
-        ),
+        (OutboxAttachmentData, $$OutboxAttachmentTableTableReferences),
         OutboxAttachmentData,
-        PrefetchHooks Function()>;
+        PrefetchHooks Function(
+            {bool chatsOutboxMessageIdKey, bool smsOutboxMessageIdKey})>;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;

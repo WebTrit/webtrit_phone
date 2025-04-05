@@ -32,7 +32,7 @@ mixin ChatsOutboxDriftMapper {
   OutboxAttachmentData outboxAttachmentToDrift(String msgId, OutboxAttachment attachment) {
     return OutboxAttachmentData(
       idKey: attachment.id,
-      messageIdKey: msgId,
+      chatsOutboxMessageIdKey: msgId,
       pickedPath: attachment.pickedPath,
       encodedPath: attachment.encodedPath,
       uploadedPath: attachment.uploadedPath,
