@@ -18,6 +18,7 @@ import 'file_view.dart';
 import 'media_stagger_wrap.dart';
 import 'media_view_page.dart';
 import 'multisource_image_view.dart';
+import 'outbox_upload_progress_wrapper.dart';
 import 'video_thumbnail_builder.dart';
 
 class MessageBody extends StatefulWidget {
@@ -130,57 +131,49 @@ class _MessageBodyState extends State<MessageBody> {
                       borderRadius: BorderRadius.circular(4),
                       boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.1), blurRadius: 2)],
                     ),
-                    child: Stack(
-                      fit: StackFit.loose,
-                      children: [
-                        Positioned.fill(
-                          child: Builder(builder: (context) {
-                            if (att.isImagePath) {
-                              return MultisourceImageView(
-                                att,
-                                placeholder: Icon(Icons.image, color: colorScheme.secondary, size: 64),
-                                error: Icon(Icons.error, color: colorScheme.secondary, size: 64),
-                              );
-                            }
-                            if (att.isVideoPath) {
-                              return VideoThumbnailBuilder(
-                                att,
-                                (File? file) {
-                                  return Stack(
-                                    children: [
-                                      if (file != null)
-                                        Positioned.fill(
-                                            child: MultisourceImageView(
-                                          file.path,
-                                          fit: BoxFit.cover,
-                                          placeholder: const SizedBox(),
-                                          error: const SizedBox(),
-                                        )),
-                                      Center(
-                                        child: Container(
-                                          padding: const EdgeInsets.all(8),
-                                          decoration: BoxDecoration(
-                                            color: Colors.black.withValues(alpha: 0.5),
-                                            shape: BoxShape.circle,
-                                          ),
-                                          child: const Icon(Icons.play_arrow_outlined, color: Colors.white),
-                                        ),
+                    child: OutboxUploadProgressWrapper(
+                      attachment: outgoingAtt,
+                      fill: true,
+                      child: Builder(builder: (context) {
+                        if (att.isImagePath) {
+                          return MultisourceImageView(
+                            att,
+                            placeholder: Icon(Icons.image, color: colorScheme.secondary, size: 64),
+                            error: Icon(Icons.error, color: colorScheme.secondary, size: 64),
+                          );
+                        }
+                        if (att.isVideoPath) {
+                          return VideoThumbnailBuilder(
+                            att,
+                            (File? file) {
+                              return Stack(
+                                children: [
+                                  if (file != null)
+                                    Positioned.fill(
+                                      child: MultisourceImageView(
+                                        file.path,
+                                        fit: BoxFit.cover,
+                                        placeholder: const SizedBox(),
+                                        error: const SizedBox(),
                                       ),
-                                    ],
-                                  );
-                                },
+                                    ),
+                                  Center(
+                                    child: Container(
+                                      padding: const EdgeInsets.all(8),
+                                      decoration: BoxDecoration(
+                                        color: Colors.black.withValues(alpha: 0.5),
+                                        shape: BoxShape.circle,
+                                      ),
+                                      child: const Icon(Icons.play_arrow_outlined, color: Colors.white),
+                                    ),
+                                  ),
+                                ],
                               );
-                            }
-                            return const SizedBox();
-                          }),
-                        ),
-                        if (outgoingAtt != null)
-                          LinearProgressIndicator(
-                            value: outgoingAtt.progress,
-                            color: colorScheme.primary,
-                            backgroundColor: colorScheme.primary.withValues(alpha: 0.2),
-                          ),
-                      ],
+                            },
+                          );
+                        }
+                        return const SizedBox();
+                      }),
                     ),
                   ),
                 ),
@@ -197,21 +190,9 @@ class _MessageBodyState extends State<MessageBody> {
             children: audioAttachments.map(
               (path) {
                 final outgoingAtt = outgoingAttachment(path);
-                return Stack(
-                  children: [
-                    AudioView(path),
-                    if (outgoingAtt != null)
-                      Positioned(
-                        bottom: 0,
-                        left: 0,
-                        right: 0,
-                        child: LinearProgressIndicator(
-                          value: outgoingAtt.progress,
-                          color: theme.colorScheme.primary,
-                          backgroundColor: theme.colorScheme.primary.withValues(alpha: 0.2),
-                        ),
-                      ),
-                  ],
+                return OutboxUploadProgressWrapper(
+                  attachment: outgoingAtt,
+                  child: AudioView(path),
                 );
               },
             ).toList(),
@@ -233,21 +214,9 @@ class _MessageBodyState extends State<MessageBody> {
                   onLongPress: () {
                     // TODO: download, share popupmenu
                   },
-                  child: Stack(
-                    children: [
-                      FileView(attachment),
-                      if (outgoingAtt != null)
-                        Positioned(
-                          bottom: 0,
-                          left: 0,
-                          right: 0,
-                          child: LinearProgressIndicator(
-                            value: outgoingAtt.progress,
-                            color: theme.colorScheme.primary,
-                            backgroundColor: theme.colorScheme.primary.withValues(alpha: 0.2),
-                          ),
-                        ),
-                    ],
+                  child: OutboxUploadProgressWrapper(
+                    attachment: outgoingAtt,
+                    child: FileView(attachment),
                   ),
                 );
               },
