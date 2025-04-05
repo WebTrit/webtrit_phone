@@ -9,12 +9,10 @@ import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:get_thumbnail_video/index.dart';
 import 'package:get_thumbnail_video/video_thumbnail.dart';
 import 'package:http_cache_stream/http_cache_stream.dart';
-import 'package:just_audio/just_audio.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:video_compress/video_compress.dart';
 
 import 'package:webtrit_phone/features/messaging/messaging.dart';
-import 'package:webtrit_phone/models/mediafile_metadata.dart';
 
 class MediaStorageService {
   // Upload temps directories
@@ -210,42 +208,6 @@ class MediaStorageService {
     if (await encodedImageDir.exists()) {
       await encodedImageDir.delete(recursive: true);
     }
-  }
-
-  static Future<MediaFileMetadata> createMetadata({required String path}) async {
-    final fileName = path.fileName;
-    final extension = path.fileExtension;
-
-    final file = File(path);
-    final size = await file.length();
-    Duration? duration;
-    String? blurHash;
-
-    if (path.isAudioPath) {
-      final player = AudioPlayer();
-      duration = await player.setUrl(path);
-      player.dispose();
-    }
-
-    if (path.isVideoPath) {
-      final mediaInfo = await VideoCompress.getMediaInfo(path);
-      if (mediaInfo.duration != null) duration = Duration(milliseconds: mediaInfo.duration!.toInt());
-
-      final thumbnailFile = await VideoCompress.getFileThumbnail(path, quality: 10);
-      blurHash = await createBlurHash(thumbnailFile.path);
-    }
-
-    if (path.isImagePath) {
-      blurHash = await createBlurHash(path);
-    }
-
-    return MediaFileMetadata(
-      fileName: fileName,
-      extension: extension,
-      size: size,
-      blurHash: blurHash,
-      duration: duration,
-    );
   }
 
   static Future<String?> encodeImage(String path, EncodePreset preset) async {

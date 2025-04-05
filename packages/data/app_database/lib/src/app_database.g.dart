@@ -3689,12 +3689,6 @@ class $ChatOutboxMessageTableTable extends ChatOutboxMessageTable
   late final GeneratedColumn<String> content = GeneratedColumn<String>(
       'content', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _attachmentsJsonMeta =
-      const VerificationMeta('attachmentsJson');
-  @override
-  late final GeneratedColumn<String> attachmentsJson = GeneratedColumn<String>(
-      'attachments_json', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
   static const VerificationMeta _sendAttemptsMeta =
       const VerificationMeta('sendAttempts');
   @override
@@ -3718,7 +3712,6 @@ class $ChatOutboxMessageTableTable extends ChatOutboxMessageTable
         forwardFromId,
         authorId,
         content,
-        attachmentsJson,
         sendAttempts,
         failureCode
       ];
@@ -3771,14 +3764,6 @@ class $ChatOutboxMessageTableTable extends ChatOutboxMessageTable
     } else if (isInserting) {
       context.missing(_contentMeta);
     }
-    if (data.containsKey('attachments_json')) {
-      context.handle(
-          _attachmentsJsonMeta,
-          attachmentsJson.isAcceptableOrUnknown(
-              data['attachments_json']!, _attachmentsJsonMeta));
-    } else if (isInserting) {
-      context.missing(_attachmentsJsonMeta);
-    }
     if (data.containsKey('send_attempts')) {
       context.handle(
           _sendAttemptsMeta,
@@ -3814,8 +3799,6 @@ class $ChatOutboxMessageTableTable extends ChatOutboxMessageTable
           .read(DriftSqlType.string, data['${effectivePrefix}author_id']),
       content: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}content'])!,
-      attachmentsJson: attachedDatabase.typeMapping.read(
-          DriftSqlType.string, data['${effectivePrefix}attachments_json'])!,
       sendAttempts: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}send_attempts'])!,
       failureCode: attachedDatabase.typeMapping
@@ -3838,7 +3821,6 @@ class ChatOutboxMessageData extends DataClass
   final int? forwardFromId;
   final String? authorId;
   final String content;
-  final String attachmentsJson;
   final int sendAttempts;
   final String? failureCode;
   const ChatOutboxMessageData(
@@ -3849,7 +3831,6 @@ class ChatOutboxMessageData extends DataClass
       this.forwardFromId,
       this.authorId,
       required this.content,
-      required this.attachmentsJson,
       required this.sendAttempts,
       this.failureCode});
   @override
@@ -3872,7 +3853,6 @@ class ChatOutboxMessageData extends DataClass
       map['author_id'] = Variable<String>(authorId);
     }
     map['content'] = Variable<String>(content);
-    map['attachments_json'] = Variable<String>(attachmentsJson);
     map['send_attempts'] = Variable<int>(sendAttempts);
     if (!nullToAbsent || failureCode != null) {
       map['failure_code'] = Variable<String>(failureCode);
@@ -3898,7 +3878,6 @@ class ChatOutboxMessageData extends DataClass
           ? const Value.absent()
           : Value(authorId),
       content: Value(content),
-      attachmentsJson: Value(attachmentsJson),
       sendAttempts: Value(sendAttempts),
       failureCode: failureCode == null && nullToAbsent
           ? const Value.absent()
@@ -3917,7 +3896,6 @@ class ChatOutboxMessageData extends DataClass
       forwardFromId: serializer.fromJson<int?>(json['forwardFromId']),
       authorId: serializer.fromJson<String?>(json['authorId']),
       content: serializer.fromJson<String>(json['content']),
-      attachmentsJson: serializer.fromJson<String>(json['attachmentsJson']),
       sendAttempts: serializer.fromJson<int>(json['sendAttempts']),
       failureCode: serializer.fromJson<String?>(json['failureCode']),
     );
@@ -3933,7 +3911,6 @@ class ChatOutboxMessageData extends DataClass
       'forwardFromId': serializer.toJson<int?>(forwardFromId),
       'authorId': serializer.toJson<String?>(authorId),
       'content': serializer.toJson<String>(content),
-      'attachmentsJson': serializer.toJson<String>(attachmentsJson),
       'sendAttempts': serializer.toJson<int>(sendAttempts),
       'failureCode': serializer.toJson<String?>(failureCode),
     };
@@ -3947,7 +3924,6 @@ class ChatOutboxMessageData extends DataClass
           Value<int?> forwardFromId = const Value.absent(),
           Value<String?> authorId = const Value.absent(),
           String? content,
-          String? attachmentsJson,
           int? sendAttempts,
           Value<String?> failureCode = const Value.absent()}) =>
       ChatOutboxMessageData(
@@ -3960,7 +3936,6 @@ class ChatOutboxMessageData extends DataClass
             forwardFromId.present ? forwardFromId.value : this.forwardFromId,
         authorId: authorId.present ? authorId.value : this.authorId,
         content: content ?? this.content,
-        attachmentsJson: attachmentsJson ?? this.attachmentsJson,
         sendAttempts: sendAttempts ?? this.sendAttempts,
         failureCode: failureCode.present ? failureCode.value : this.failureCode,
       );
@@ -3977,9 +3952,6 @@ class ChatOutboxMessageData extends DataClass
           : this.forwardFromId,
       authorId: data.authorId.present ? data.authorId.value : this.authorId,
       content: data.content.present ? data.content.value : this.content,
-      attachmentsJson: data.attachmentsJson.present
-          ? data.attachmentsJson.value
-          : this.attachmentsJson,
       sendAttempts: data.sendAttempts.present
           ? data.sendAttempts.value
           : this.sendAttempts,
@@ -3998,7 +3970,6 @@ class ChatOutboxMessageData extends DataClass
           ..write('forwardFromId: $forwardFromId, ')
           ..write('authorId: $authorId, ')
           ..write('content: $content, ')
-          ..write('attachmentsJson: $attachmentsJson, ')
           ..write('sendAttempts: $sendAttempts, ')
           ..write('failureCode: $failureCode')
           ..write(')'))
@@ -4006,17 +3977,8 @@ class ChatOutboxMessageData extends DataClass
   }
 
   @override
-  int get hashCode => Object.hash(
-      idKey,
-      chatId,
-      participantId,
-      replyToId,
-      forwardFromId,
-      authorId,
-      content,
-      attachmentsJson,
-      sendAttempts,
-      failureCode);
+  int get hashCode => Object.hash(idKey, chatId, participantId, replyToId,
+      forwardFromId, authorId, content, sendAttempts, failureCode);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -4028,7 +3990,6 @@ class ChatOutboxMessageData extends DataClass
           other.forwardFromId == this.forwardFromId &&
           other.authorId == this.authorId &&
           other.content == this.content &&
-          other.attachmentsJson == this.attachmentsJson &&
           other.sendAttempts == this.sendAttempts &&
           other.failureCode == this.failureCode);
 }
@@ -4042,7 +4003,6 @@ class ChatOutboxMessageDataCompanion
   final Value<int?> forwardFromId;
   final Value<String?> authorId;
   final Value<String> content;
-  final Value<String> attachmentsJson;
   final Value<int> sendAttempts;
   final Value<String?> failureCode;
   final Value<int> rowid;
@@ -4054,7 +4014,6 @@ class ChatOutboxMessageDataCompanion
     this.forwardFromId = const Value.absent(),
     this.authorId = const Value.absent(),
     this.content = const Value.absent(),
-    this.attachmentsJson = const Value.absent(),
     this.sendAttempts = const Value.absent(),
     this.failureCode = const Value.absent(),
     this.rowid = const Value.absent(),
@@ -4067,13 +4026,11 @@ class ChatOutboxMessageDataCompanion
     this.forwardFromId = const Value.absent(),
     this.authorId = const Value.absent(),
     required String content,
-    required String attachmentsJson,
     this.sendAttempts = const Value.absent(),
     this.failureCode = const Value.absent(),
     this.rowid = const Value.absent(),
   })  : idKey = Value(idKey),
-        content = Value(content),
-        attachmentsJson = Value(attachmentsJson);
+        content = Value(content);
   static Insertable<ChatOutboxMessageData> custom({
     Expression<String>? idKey,
     Expression<int>? chatId,
@@ -4082,7 +4039,6 @@ class ChatOutboxMessageDataCompanion
     Expression<int>? forwardFromId,
     Expression<String>? authorId,
     Expression<String>? content,
-    Expression<String>? attachmentsJson,
     Expression<int>? sendAttempts,
     Expression<String>? failureCode,
     Expression<int>? rowid,
@@ -4095,7 +4051,6 @@ class ChatOutboxMessageDataCompanion
       if (forwardFromId != null) 'forward_from_id': forwardFromId,
       if (authorId != null) 'author_id': authorId,
       if (content != null) 'content': content,
-      if (attachmentsJson != null) 'attachments_json': attachmentsJson,
       if (sendAttempts != null) 'send_attempts': sendAttempts,
       if (failureCode != null) 'failure_code': failureCode,
       if (rowid != null) 'rowid': rowid,
@@ -4110,7 +4065,6 @@ class ChatOutboxMessageDataCompanion
       Value<int?>? forwardFromId,
       Value<String?>? authorId,
       Value<String>? content,
-      Value<String>? attachmentsJson,
       Value<int>? sendAttempts,
       Value<String?>? failureCode,
       Value<int>? rowid}) {
@@ -4122,7 +4076,6 @@ class ChatOutboxMessageDataCompanion
       forwardFromId: forwardFromId ?? this.forwardFromId,
       authorId: authorId ?? this.authorId,
       content: content ?? this.content,
-      attachmentsJson: attachmentsJson ?? this.attachmentsJson,
       sendAttempts: sendAttempts ?? this.sendAttempts,
       failureCode: failureCode ?? this.failureCode,
       rowid: rowid ?? this.rowid,
@@ -4153,9 +4106,6 @@ class ChatOutboxMessageDataCompanion
     if (content.present) {
       map['content'] = Variable<String>(content.value);
     }
-    if (attachmentsJson.present) {
-      map['attachments_json'] = Variable<String>(attachmentsJson.value);
-    }
     if (sendAttempts.present) {
       map['send_attempts'] = Variable<int>(sendAttempts.value);
     }
@@ -4178,7 +4128,6 @@ class ChatOutboxMessageDataCompanion
           ..write('forwardFromId: $forwardFromId, ')
           ..write('authorId: $authorId, ')
           ..write('content: $content, ')
-          ..write('attachmentsJson: $attachmentsJson, ')
           ..write('sendAttempts: $sendAttempts, ')
           ..write('failureCode: $failureCode, ')
           ..write('rowid: $rowid')
@@ -7871,6 +7820,337 @@ class ActiveMessageNotificationDataCompanion
   }
 }
 
+class $OutboxAttachmentTableTable extends OutboxAttachmentTable
+    with TableInfo<$OutboxAttachmentTableTable, OutboxAttachmentData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $OutboxAttachmentTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idKeyMeta = const VerificationMeta('idKey');
+  @override
+  late final GeneratedColumn<String> idKey = GeneratedColumn<String>(
+      'id_key', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _messageIdKeyMeta =
+      const VerificationMeta('messageIdKey');
+  @override
+  late final GeneratedColumn<String> messageIdKey = GeneratedColumn<String>(
+      'message_id_key', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _pickedPathMeta =
+      const VerificationMeta('pickedPath');
+  @override
+  late final GeneratedColumn<String> pickedPath = GeneratedColumn<String>(
+      'picked_path', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _encodedPathMeta =
+      const VerificationMeta('encodedPath');
+  @override
+  late final GeneratedColumn<String> encodedPath = GeneratedColumn<String>(
+      'encoded_path', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _uploadedPathMeta =
+      const VerificationMeta('uploadedPath');
+  @override
+  late final GeneratedColumn<String> uploadedPath = GeneratedColumn<String>(
+      'uploaded_path', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  @override
+  List<GeneratedColumn> get $columns =>
+      [idKey, messageIdKey, pickedPath, encodedPath, uploadedPath];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'outbox_attachments';
+  @override
+  VerificationContext validateIntegrity(
+      Insertable<OutboxAttachmentData> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id_key')) {
+      context.handle(
+          _idKeyMeta, idKey.isAcceptableOrUnknown(data['id_key']!, _idKeyMeta));
+    } else if (isInserting) {
+      context.missing(_idKeyMeta);
+    }
+    if (data.containsKey('message_id_key')) {
+      context.handle(
+          _messageIdKeyMeta,
+          messageIdKey.isAcceptableOrUnknown(
+              data['message_id_key']!, _messageIdKeyMeta));
+    } else if (isInserting) {
+      context.missing(_messageIdKeyMeta);
+    }
+    if (data.containsKey('picked_path')) {
+      context.handle(
+          _pickedPathMeta,
+          pickedPath.isAcceptableOrUnknown(
+              data['picked_path']!, _pickedPathMeta));
+    } else if (isInserting) {
+      context.missing(_pickedPathMeta);
+    }
+    if (data.containsKey('encoded_path')) {
+      context.handle(
+          _encodedPathMeta,
+          encodedPath.isAcceptableOrUnknown(
+              data['encoded_path']!, _encodedPathMeta));
+    }
+    if (data.containsKey('uploaded_path')) {
+      context.handle(
+          _uploadedPathMeta,
+          uploadedPath.isAcceptableOrUnknown(
+              data['uploaded_path']!, _uploadedPathMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {idKey};
+  @override
+  OutboxAttachmentData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return OutboxAttachmentData(
+      idKey: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}id_key'])!,
+      messageIdKey: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}message_id_key'])!,
+      pickedPath: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}picked_path'])!,
+      encodedPath: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}encoded_path']),
+      uploadedPath: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}uploaded_path']),
+    );
+  }
+
+  @override
+  $OutboxAttachmentTableTable createAlias(String alias) {
+    return $OutboxAttachmentTableTable(attachedDatabase, alias);
+  }
+}
+
+class OutboxAttachmentData extends DataClass
+    implements Insertable<OutboxAttachmentData> {
+  final String idKey;
+  final String messageIdKey;
+  final String pickedPath;
+  final String? encodedPath;
+  final String? uploadedPath;
+  const OutboxAttachmentData(
+      {required this.idKey,
+      required this.messageIdKey,
+      required this.pickedPath,
+      this.encodedPath,
+      this.uploadedPath});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id_key'] = Variable<String>(idKey);
+    map['message_id_key'] = Variable<String>(messageIdKey);
+    map['picked_path'] = Variable<String>(pickedPath);
+    if (!nullToAbsent || encodedPath != null) {
+      map['encoded_path'] = Variable<String>(encodedPath);
+    }
+    if (!nullToAbsent || uploadedPath != null) {
+      map['uploaded_path'] = Variable<String>(uploadedPath);
+    }
+    return map;
+  }
+
+  OutboxAttachmentDataCompanion toCompanion(bool nullToAbsent) {
+    return OutboxAttachmentDataCompanion(
+      idKey: Value(idKey),
+      messageIdKey: Value(messageIdKey),
+      pickedPath: Value(pickedPath),
+      encodedPath: encodedPath == null && nullToAbsent
+          ? const Value.absent()
+          : Value(encodedPath),
+      uploadedPath: uploadedPath == null && nullToAbsent
+          ? const Value.absent()
+          : Value(uploadedPath),
+    );
+  }
+
+  factory OutboxAttachmentData.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return OutboxAttachmentData(
+      idKey: serializer.fromJson<String>(json['idKey']),
+      messageIdKey: serializer.fromJson<String>(json['messageIdKey']),
+      pickedPath: serializer.fromJson<String>(json['pickedPath']),
+      encodedPath: serializer.fromJson<String?>(json['encodedPath']),
+      uploadedPath: serializer.fromJson<String?>(json['uploadedPath']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'idKey': serializer.toJson<String>(idKey),
+      'messageIdKey': serializer.toJson<String>(messageIdKey),
+      'pickedPath': serializer.toJson<String>(pickedPath),
+      'encodedPath': serializer.toJson<String?>(encodedPath),
+      'uploadedPath': serializer.toJson<String?>(uploadedPath),
+    };
+  }
+
+  OutboxAttachmentData copyWith(
+          {String? idKey,
+          String? messageIdKey,
+          String? pickedPath,
+          Value<String?> encodedPath = const Value.absent(),
+          Value<String?> uploadedPath = const Value.absent()}) =>
+      OutboxAttachmentData(
+        idKey: idKey ?? this.idKey,
+        messageIdKey: messageIdKey ?? this.messageIdKey,
+        pickedPath: pickedPath ?? this.pickedPath,
+        encodedPath: encodedPath.present ? encodedPath.value : this.encodedPath,
+        uploadedPath:
+            uploadedPath.present ? uploadedPath.value : this.uploadedPath,
+      );
+  OutboxAttachmentData copyWithCompanion(OutboxAttachmentDataCompanion data) {
+    return OutboxAttachmentData(
+      idKey: data.idKey.present ? data.idKey.value : this.idKey,
+      messageIdKey: data.messageIdKey.present
+          ? data.messageIdKey.value
+          : this.messageIdKey,
+      pickedPath:
+          data.pickedPath.present ? data.pickedPath.value : this.pickedPath,
+      encodedPath:
+          data.encodedPath.present ? data.encodedPath.value : this.encodedPath,
+      uploadedPath: data.uploadedPath.present
+          ? data.uploadedPath.value
+          : this.uploadedPath,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('OutboxAttachmentData(')
+          ..write('idKey: $idKey, ')
+          ..write('messageIdKey: $messageIdKey, ')
+          ..write('pickedPath: $pickedPath, ')
+          ..write('encodedPath: $encodedPath, ')
+          ..write('uploadedPath: $uploadedPath')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(idKey, messageIdKey, pickedPath, encodedPath, uploadedPath);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is OutboxAttachmentData &&
+          other.idKey == this.idKey &&
+          other.messageIdKey == this.messageIdKey &&
+          other.pickedPath == this.pickedPath &&
+          other.encodedPath == this.encodedPath &&
+          other.uploadedPath == this.uploadedPath);
+}
+
+class OutboxAttachmentDataCompanion
+    extends UpdateCompanion<OutboxAttachmentData> {
+  final Value<String> idKey;
+  final Value<String> messageIdKey;
+  final Value<String> pickedPath;
+  final Value<String?> encodedPath;
+  final Value<String?> uploadedPath;
+  final Value<int> rowid;
+  const OutboxAttachmentDataCompanion({
+    this.idKey = const Value.absent(),
+    this.messageIdKey = const Value.absent(),
+    this.pickedPath = const Value.absent(),
+    this.encodedPath = const Value.absent(),
+    this.uploadedPath = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  OutboxAttachmentDataCompanion.insert({
+    required String idKey,
+    required String messageIdKey,
+    required String pickedPath,
+    this.encodedPath = const Value.absent(),
+    this.uploadedPath = const Value.absent(),
+    this.rowid = const Value.absent(),
+  })  : idKey = Value(idKey),
+        messageIdKey = Value(messageIdKey),
+        pickedPath = Value(pickedPath);
+  static Insertable<OutboxAttachmentData> custom({
+    Expression<String>? idKey,
+    Expression<String>? messageIdKey,
+    Expression<String>? pickedPath,
+    Expression<String>? encodedPath,
+    Expression<String>? uploadedPath,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (idKey != null) 'id_key': idKey,
+      if (messageIdKey != null) 'message_id_key': messageIdKey,
+      if (pickedPath != null) 'picked_path': pickedPath,
+      if (encodedPath != null) 'encoded_path': encodedPath,
+      if (uploadedPath != null) 'uploaded_path': uploadedPath,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  OutboxAttachmentDataCompanion copyWith(
+      {Value<String>? idKey,
+      Value<String>? messageIdKey,
+      Value<String>? pickedPath,
+      Value<String?>? encodedPath,
+      Value<String?>? uploadedPath,
+      Value<int>? rowid}) {
+    return OutboxAttachmentDataCompanion(
+      idKey: idKey ?? this.idKey,
+      messageIdKey: messageIdKey ?? this.messageIdKey,
+      pickedPath: pickedPath ?? this.pickedPath,
+      encodedPath: encodedPath ?? this.encodedPath,
+      uploadedPath: uploadedPath ?? this.uploadedPath,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (idKey.present) {
+      map['id_key'] = Variable<String>(idKey.value);
+    }
+    if (messageIdKey.present) {
+      map['message_id_key'] = Variable<String>(messageIdKey.value);
+    }
+    if (pickedPath.present) {
+      map['picked_path'] = Variable<String>(pickedPath.value);
+    }
+    if (encodedPath.present) {
+      map['encoded_path'] = Variable<String>(encodedPath.value);
+    }
+    if (uploadedPath.present) {
+      map['uploaded_path'] = Variable<String>(uploadedPath.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('OutboxAttachmentDataCompanion(')
+          ..write('idKey: $idKey, ')
+          ..write('messageIdKey: $messageIdKey, ')
+          ..write('pickedPath: $pickedPath, ')
+          ..write('encodedPath: $encodedPath, ')
+          ..write('uploadedPath: $uploadedPath, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -7917,6 +8197,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $ActiveMessageNotificationsTableTable
       activeMessageNotificationsTable =
       $ActiveMessageNotificationsTableTable(this);
+  late final $OutboxAttachmentTableTable outboxAttachmentTable =
+      $OutboxAttachmentTableTable(this);
   late final ContactsDao contactsDao = ContactsDao(this as AppDatabase);
   late final ContactPhonesDao contactPhonesDao =
       ContactPhonesDao(this as AppDatabase);
@@ -7956,7 +8238,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
         smsOutboxMessageDeleteTable,
         smsOutboxReadCursorsTable,
         userSmsNumbersTable,
-        activeMessageNotificationsTable
+        activeMessageNotificationsTable,
+        outboxAttachmentTable
       ];
   @override
   StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules(
@@ -11064,7 +11347,6 @@ typedef $$ChatOutboxMessageTableTableCreateCompanionBuilder
   Value<int?> forwardFromId,
   Value<String?> authorId,
   required String content,
-  required String attachmentsJson,
   Value<int> sendAttempts,
   Value<String?> failureCode,
   Value<int> rowid,
@@ -11078,7 +11360,6 @@ typedef $$ChatOutboxMessageTableTableUpdateCompanionBuilder
   Value<int?> forwardFromId,
   Value<String?> authorId,
   Value<String> content,
-  Value<String> attachmentsJson,
   Value<int> sendAttempts,
   Value<String?> failureCode,
   Value<int> rowid,
@@ -11130,10 +11411,6 @@ class $$ChatOutboxMessageTableTableFilterComposer
 
   ColumnFilters<String> get content => $composableBuilder(
       column: $table.content, builder: (column) => ColumnFilters(column));
-
-  ColumnFilters<String> get attachmentsJson => $composableBuilder(
-      column: $table.attachmentsJson,
-      builder: (column) => ColumnFilters(column));
 
   ColumnFilters<int> get sendAttempts => $composableBuilder(
       column: $table.sendAttempts, builder: (column) => ColumnFilters(column));
@@ -11191,10 +11468,6 @@ class $$ChatOutboxMessageTableTableOrderingComposer
   ColumnOrderings<String> get content => $composableBuilder(
       column: $table.content, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get attachmentsJson => $composableBuilder(
-      column: $table.attachmentsJson,
-      builder: (column) => ColumnOrderings(column));
-
   ColumnOrderings<int> get sendAttempts => $composableBuilder(
       column: $table.sendAttempts,
       builder: (column) => ColumnOrderings(column));
@@ -11249,9 +11522,6 @@ class $$ChatOutboxMessageTableTableAnnotationComposer
 
   GeneratedColumn<String> get content =>
       $composableBuilder(column: $table.content, builder: (column) => column);
-
-  GeneratedColumn<String> get attachmentsJson => $composableBuilder(
-      column: $table.attachmentsJson, builder: (column) => column);
 
   GeneratedColumn<int> get sendAttempts => $composableBuilder(
       column: $table.sendAttempts, builder: (column) => column);
@@ -11314,7 +11584,6 @@ class $$ChatOutboxMessageTableTableTableManager extends RootTableManager<
             Value<int?> forwardFromId = const Value.absent(),
             Value<String?> authorId = const Value.absent(),
             Value<String> content = const Value.absent(),
-            Value<String> attachmentsJson = const Value.absent(),
             Value<int> sendAttempts = const Value.absent(),
             Value<String?> failureCode = const Value.absent(),
             Value<int> rowid = const Value.absent(),
@@ -11327,7 +11596,6 @@ class $$ChatOutboxMessageTableTableTableManager extends RootTableManager<
             forwardFromId: forwardFromId,
             authorId: authorId,
             content: content,
-            attachmentsJson: attachmentsJson,
             sendAttempts: sendAttempts,
             failureCode: failureCode,
             rowid: rowid,
@@ -11340,7 +11608,6 @@ class $$ChatOutboxMessageTableTableTableManager extends RootTableManager<
             Value<int?> forwardFromId = const Value.absent(),
             Value<String?> authorId = const Value.absent(),
             required String content,
-            required String attachmentsJson,
             Value<int> sendAttempts = const Value.absent(),
             Value<String?> failureCode = const Value.absent(),
             Value<int> rowid = const Value.absent(),
@@ -11353,7 +11620,6 @@ class $$ChatOutboxMessageTableTableTableManager extends RootTableManager<
             forwardFromId: forwardFromId,
             authorId: authorId,
             content: content,
-            attachmentsJson: attachmentsJson,
             sendAttempts: sendAttempts,
             failureCode: failureCode,
             rowid: rowid,
@@ -14965,6 +15231,188 @@ typedef $$ActiveMessageNotificationsTableTableProcessedTableManager
         ),
         ActiveMessageNotificationData,
         PrefetchHooks Function()>;
+typedef $$OutboxAttachmentTableTableCreateCompanionBuilder
+    = OutboxAttachmentDataCompanion Function({
+  required String idKey,
+  required String messageIdKey,
+  required String pickedPath,
+  Value<String?> encodedPath,
+  Value<String?> uploadedPath,
+  Value<int> rowid,
+});
+typedef $$OutboxAttachmentTableTableUpdateCompanionBuilder
+    = OutboxAttachmentDataCompanion Function({
+  Value<String> idKey,
+  Value<String> messageIdKey,
+  Value<String> pickedPath,
+  Value<String?> encodedPath,
+  Value<String?> uploadedPath,
+  Value<int> rowid,
+});
+
+class $$OutboxAttachmentTableTableFilterComposer
+    extends Composer<_$AppDatabase, $OutboxAttachmentTableTable> {
+  $$OutboxAttachmentTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get idKey => $composableBuilder(
+      column: $table.idKey, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get messageIdKey => $composableBuilder(
+      column: $table.messageIdKey, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get pickedPath => $composableBuilder(
+      column: $table.pickedPath, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get encodedPath => $composableBuilder(
+      column: $table.encodedPath, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get uploadedPath => $composableBuilder(
+      column: $table.uploadedPath, builder: (column) => ColumnFilters(column));
+}
+
+class $$OutboxAttachmentTableTableOrderingComposer
+    extends Composer<_$AppDatabase, $OutboxAttachmentTableTable> {
+  $$OutboxAttachmentTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get idKey => $composableBuilder(
+      column: $table.idKey, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get messageIdKey => $composableBuilder(
+      column: $table.messageIdKey,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get pickedPath => $composableBuilder(
+      column: $table.pickedPath, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get encodedPath => $composableBuilder(
+      column: $table.encodedPath, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get uploadedPath => $composableBuilder(
+      column: $table.uploadedPath,
+      builder: (column) => ColumnOrderings(column));
+}
+
+class $$OutboxAttachmentTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $OutboxAttachmentTableTable> {
+  $$OutboxAttachmentTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get idKey =>
+      $composableBuilder(column: $table.idKey, builder: (column) => column);
+
+  GeneratedColumn<String> get messageIdKey => $composableBuilder(
+      column: $table.messageIdKey, builder: (column) => column);
+
+  GeneratedColumn<String> get pickedPath => $composableBuilder(
+      column: $table.pickedPath, builder: (column) => column);
+
+  GeneratedColumn<String> get encodedPath => $composableBuilder(
+      column: $table.encodedPath, builder: (column) => column);
+
+  GeneratedColumn<String> get uploadedPath => $composableBuilder(
+      column: $table.uploadedPath, builder: (column) => column);
+}
+
+class $$OutboxAttachmentTableTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $OutboxAttachmentTableTable,
+    OutboxAttachmentData,
+    $$OutboxAttachmentTableTableFilterComposer,
+    $$OutboxAttachmentTableTableOrderingComposer,
+    $$OutboxAttachmentTableTableAnnotationComposer,
+    $$OutboxAttachmentTableTableCreateCompanionBuilder,
+    $$OutboxAttachmentTableTableUpdateCompanionBuilder,
+    (
+      OutboxAttachmentData,
+      BaseReferences<_$AppDatabase, $OutboxAttachmentTableTable,
+          OutboxAttachmentData>
+    ),
+    OutboxAttachmentData,
+    PrefetchHooks Function()> {
+  $$OutboxAttachmentTableTableTableManager(
+      _$AppDatabase db, $OutboxAttachmentTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$OutboxAttachmentTableTableFilterComposer(
+                  $db: db, $table: table),
+          createOrderingComposer: () =>
+              $$OutboxAttachmentTableTableOrderingComposer(
+                  $db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$OutboxAttachmentTableTableAnnotationComposer(
+                  $db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<String> idKey = const Value.absent(),
+            Value<String> messageIdKey = const Value.absent(),
+            Value<String> pickedPath = const Value.absent(),
+            Value<String?> encodedPath = const Value.absent(),
+            Value<String?> uploadedPath = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              OutboxAttachmentDataCompanion(
+            idKey: idKey,
+            messageIdKey: messageIdKey,
+            pickedPath: pickedPath,
+            encodedPath: encodedPath,
+            uploadedPath: uploadedPath,
+            rowid: rowid,
+          ),
+          createCompanionCallback: ({
+            required String idKey,
+            required String messageIdKey,
+            required String pickedPath,
+            Value<String?> encodedPath = const Value.absent(),
+            Value<String?> uploadedPath = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              OutboxAttachmentDataCompanion.insert(
+            idKey: idKey,
+            messageIdKey: messageIdKey,
+            pickedPath: pickedPath,
+            encodedPath: encodedPath,
+            uploadedPath: uploadedPath,
+            rowid: rowid,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$OutboxAttachmentTableTableProcessedTableManager
+    = ProcessedTableManager<
+        _$AppDatabase,
+        $OutboxAttachmentTableTable,
+        OutboxAttachmentData,
+        $$OutboxAttachmentTableTableFilterComposer,
+        $$OutboxAttachmentTableTableOrderingComposer,
+        $$OutboxAttachmentTableTableAnnotationComposer,
+        $$OutboxAttachmentTableTableCreateCompanionBuilder,
+        $$OutboxAttachmentTableTableUpdateCompanionBuilder,
+        (
+          OutboxAttachmentData,
+          BaseReferences<_$AppDatabase, $OutboxAttachmentTableTable,
+              OutboxAttachmentData>
+        ),
+        OutboxAttachmentData,
+        PrefetchHooks Function()>;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -15034,4 +15482,6 @@ class $AppDatabaseManager {
       get activeMessageNotificationsTable =>
           $$ActiveMessageNotificationsTableTableTableManager(
               _db, _db.activeMessageNotificationsTable);
+  $$OutboxAttachmentTableTableTableManager get outboxAttachmentTable =>
+      $$OutboxAttachmentTableTableTableManager(_db, _db.outboxAttachmentTable);
 }

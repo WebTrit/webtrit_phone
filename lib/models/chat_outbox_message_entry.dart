@@ -1,14 +1,10 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'dart:convert';
-
 import 'package:equatable/equatable.dart';
-
-import 'package:webtrit_phone/models/mediafile_metadata.dart';
+import 'package:webtrit_phone/models/outbox_attachment.dart';
 
 class ChatOutboxMessageEntry extends Equatable {
   final String idKey;
   final String content;
-  final List<OutgoingAttachment> attachments;
+  final List<OutboxAttachment> attachments;
   final int? chatId;
   final String? participantId;
   final int? replyToId;
@@ -52,7 +48,7 @@ class ChatOutboxMessageEntry extends Equatable {
   ChatOutboxMessageEntry copyWith({
     String? idKey,
     String? content,
-    List<OutgoingAttachment>? attachments,
+    List<OutboxAttachment>? attachments,
     int? chatId,
     String? participantId,
     int? replyToId,
@@ -119,77 +115,4 @@ class ChatOutboxMessageEntry extends Equatable {
       failureCode: null,
     );
   }
-}
-
-class OutgoingAttachment extends Equatable {
-  const OutgoingAttachment({
-    required this.pickedPath,
-    this.encodedPath,
-    this.thumbnailPath,
-    this.metadata,
-    this.uploadId,
-  });
-
-  final String pickedPath;
-  final String? encodedPath;
-  final String? thumbnailPath;
-  final MediaFileMetadata? metadata;
-  final String? uploadId;
-
-  @override
-  List<Object?> get props => [pickedPath, encodedPath, thumbnailPath, metadata, uploadId];
-
-  @override
-  String toString() {
-    return 'OutgoingAttachment{pickedPath: $pickedPath, encodedPath: $encodedPath, thumbnailPath: $thumbnailPath, metadata: $metadata, uploadId: $uploadId}';
-  }
-
-  double get progress {
-    if (uploadId != null) return 1;
-    if (metadata != null) return 0.75;
-    if (thumbnailPath != null) return 0.6;
-    if (encodedPath != null) return 0.5;
-    return 0.2;
-  }
-
-  OutgoingAttachment copyWith({
-    String? pickedPath,
-    String? encodedPath,
-    String? thumbnailPath,
-    MediaFileMetadata? metadata,
-    String? uploadId,
-  }) {
-    return OutgoingAttachment(
-      pickedPath: pickedPath ?? this.pickedPath,
-      encodedPath: encodedPath ?? this.encodedPath,
-      thumbnailPath: thumbnailPath ?? this.thumbnailPath,
-      metadata: metadata ?? this.metadata,
-      uploadId: uploadId ?? this.uploadId,
-    );
-  }
-
-  Map<String, dynamic> toMap() {
-    return <String, dynamic>{
-      'pickedPath': pickedPath,
-      'encodedPath': encodedPath,
-      'thumbnailPath': thumbnailPath,
-      'metadata': metadata?.toMap(),
-      'uploadId': uploadId,
-    };
-  }
-
-  factory OutgoingAttachment.fromMap(Map<String, dynamic> map) {
-    return OutgoingAttachment(
-      pickedPath: map['pickedPath'] as String,
-      encodedPath: map['encodedPath'] != null ? map['encodedPath'] as String : null,
-      thumbnailPath: map['thumbnailPath'] != null ? map['thumbnailPath'] as String : null,
-      metadata: map['metadata'] != null ? MediaFileMetadata.fromMap(map['metadata'] as Map<String, dynamic>) : null,
-      uploadId: map['uploadId'] != null ? map['uploadId'] as String : null,
-    );
-  }
-
-  String toJson() => json.encode(toMap());
-
-  factory OutgoingAttachment.fromJson(String source) =>
-      OutgoingAttachment.fromMap(json.decode(source) as Map<String, dynamic>);
 }

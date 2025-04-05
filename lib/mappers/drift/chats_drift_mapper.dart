@@ -4,17 +4,15 @@ import 'package:webtrit_phone/models/models.dart';
 typedef ChatWithLastMessage = (Chat, ChatMessage?);
 
 mixin ChatsDriftMapper {
-  Chat chatFromDrift(ChatDataWithMembers data) {
-    final chatData = data.chatData;
-    final chatMembers = data.members;
-
+  Chat chatFromDrift((ChatData, List<ChatMemberData>) data) {
+    final (chat, members) = data;
     return Chat(
-      id: chatData.id,
-      type: ChatType.values.byName(chatData.type.name),
-      name: chatData.name,
-      createdAt: chatData.createdAtRemote,
-      updatedAt: chatData.updatedAtRemote,
-      members: chatMembers
+      id: chat.id,
+      type: ChatType.values.byName(chat.type.name),
+      name: chat.name,
+      createdAt: chat.createdAtRemote,
+      updatedAt: chat.updatedAtRemote,
+      members: members
           .map(
             (e) => ChatMember(
               id: e.id,
@@ -28,9 +26,9 @@ mixin ChatsDriftMapper {
     );
   }
 
-  ChatWithLastMessage chatWithLastMessageFromDrift((ChatDataWithMembers, ChatMessageData?) data) {
-    final lastMessageData = data.$2;
-    return (chatFromDrift(data.$1), lastMessageData != null ? messageFromDrift(lastMessageData) : null);
+  ChatWithLastMessage chatWithLastMessageFromDrift((ChatData, List<ChatMemberData>, ChatMessageData?) data) {
+    final (chat, members, message) = data;
+    return (chatFromDrift((chat, members)), message != null ? messageFromDrift(message) : null);
   }
 
   ChatData chatToDrift(Chat chat) {

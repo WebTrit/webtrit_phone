@@ -695,11 +695,6 @@ class ChatOutboxMessages extends Table with TableInfo {
       type: DriftSqlType.string,
       requiredDuringInsert: true,
       $customConstraints: 'NOT NULL');
-  late final GeneratedColumn<String> attachmentsJson = GeneratedColumn<String>(
-      'attachments_json', aliasedName, false,
-      type: DriftSqlType.string,
-      requiredDuringInsert: true,
-      $customConstraints: 'NOT NULL');
   late final GeneratedColumn<int> sendAttempts = GeneratedColumn<int>(
       'send_attempts', aliasedName, false,
       type: DriftSqlType.int,
@@ -720,7 +715,6 @@ class ChatOutboxMessages extends Table with TableInfo {
         forwardFromId,
         authorId,
         content,
-        attachmentsJson,
         sendAttempts,
         failureCode
       ];
@@ -1427,6 +1421,62 @@ class ActiveMessagingNotifications extends Table with TableInfo {
   bool get dontWriteConstraints => true;
 }
 
+class OutboxAttachments extends Table with TableInfo {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  OutboxAttachments(this.attachedDatabase, [this._alias]);
+  late final GeneratedColumn<String> idKey = GeneratedColumn<String>(
+      'id_key', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: true,
+      $customConstraints: 'NOT NULL');
+  late final GeneratedColumn<String> messageIdKey = GeneratedColumn<String>(
+      'message_id_key', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: true,
+      $customConstraints: 'NOT NULL');
+  late final GeneratedColumn<String> pickedPath = GeneratedColumn<String>(
+      'picked_path', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: true,
+      $customConstraints: 'NOT NULL');
+  late final GeneratedColumn<String> encodedPath = GeneratedColumn<String>(
+      'encoded_path', aliasedName, true,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      $customConstraints: 'NULL');
+  late final GeneratedColumn<String> uploadedPath = GeneratedColumn<String>(
+      'uploaded_path', aliasedName, true,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      $customConstraints: 'NULL');
+  @override
+  List<GeneratedColumn> get $columns =>
+      [idKey, messageIdKey, pickedPath, encodedPath, uploadedPath];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'outbox_attachments';
+  @override
+  Set<GeneratedColumn> get $primaryKey => {idKey};
+  @override
+  Never map(Map<String, dynamic> data, {String? tablePrefix}) {
+    throw UnsupportedError('TableInfo.map in schema verification code');
+  }
+
+  @override
+  OutboxAttachments createAlias(String alias) {
+    return OutboxAttachments(attachedDatabase, alias);
+  }
+
+  @override
+  List<String> get customConstraints => const ['PRIMARY KEY(id_key)'];
+  @override
+  bool get dontWriteConstraints => true;
+}
+
 class DatabaseAtV12 extends GeneratedDatabase {
   DatabaseAtV12(QueryExecutor e) : super(e);
   late final Contacts contacts = Contacts(this);
@@ -1462,6 +1512,7 @@ class DatabaseAtV12 extends GeneratedDatabase {
   late final UserSmsNumbers userSmsNumbers = UserSmsNumbers(this);
   late final ActiveMessagingNotifications activeMessagingNotifications =
       ActiveMessagingNotifications(this);
+  late final OutboxAttachments outboxAttachments = OutboxAttachments(this);
   late final Trigger contactsAfterInsertTrigger = Trigger(
       'CREATE TRIGGER contacts_after_insert_trigger AFTER INSERT ON contacts BEGIN UPDATE contacts SET inserted_at = STRFTIME(\'%s\', \'NOW\') WHERE id = NEW.id AND inserted_at IS NULL;UPDATE contacts SET updated_at = STRFTIME(\'%s\', \'NOW\') WHERE id = NEW.id;END',
       'contacts_after_insert_trigger');
@@ -1508,6 +1559,7 @@ class DatabaseAtV12 extends GeneratedDatabase {
         smsOutboxReadCursors,
         userSmsNumbers,
         activeMessagingNotifications,
+        outboxAttachments,
         contactsAfterInsertTrigger,
         contactsAfterUpdateTrigger,
         contactPhonesAfterInsertTrigger,

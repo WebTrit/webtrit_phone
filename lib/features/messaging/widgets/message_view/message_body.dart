@@ -10,7 +10,7 @@ import 'package:flutter_parsed_text/flutter_parsed_text.dart';
 import 'package:webtrit_phone/common/media_storage_service.dart';
 import 'package:webtrit_phone/extensions/iterable.dart';
 import 'package:webtrit_phone/features/messaging/messaging.dart';
-import 'package:webtrit_phone/models/chat_outbox_message_entry.dart';
+import 'package:webtrit_phone/models/outbox_attachment.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 
 import 'audio_view.dart';
@@ -32,7 +32,7 @@ class MessageBody extends StatefulWidget {
 
   final String text;
   final bool isMine;
-  final List<OutgoingAttachment> outgoingAttachments;
+  final List<OutboxAttachment> outgoingAttachments;
   final TextStyle? style;
   final BoxDecoration? previewDecoration;
 
@@ -57,7 +57,7 @@ class _MessageBodyState extends State<MessageBody> {
   late final audioAttachments = attachments.where((a) => a.isAudioPath).toList();
   late final otherAttachments = attachments.where((a) => !a.isImagePath && !a.isVideoPath && !a.isAudioPath).toList();
 
-  OutgoingAttachment? outgoingAttachment(String path) {
+  OutboxAttachment? outgoingAttachment(String path) {
     return widget.outgoingAttachments.firstWhereOrNull((e) => e.pickedPath == path);
   }
 

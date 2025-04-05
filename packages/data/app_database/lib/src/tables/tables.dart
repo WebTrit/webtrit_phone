@@ -21,3 +21,4 @@ export 'sms_outbox_message_delete_table.dart';
 export 'sms_outbox_messages_table.dart';
 export 'sms_outbox_read_cursors_table.dart';
 export 'user_sms_numbers_table.dart';
+export 'outbox_attachment_table.dart';

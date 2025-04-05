@@ -21,12 +21,12 @@ class ChatsOutboxRepository with ChatsOutboxDriftMapper {
     });
   }
 
-  Future<int> upsertOutboxMessage(ChatOutboxMessageEntry entry) {
+  Future upsertOutboxMessage(ChatOutboxMessageEntry entry) {
     final entryData = outboxMessageEntryToDrift(entry);
     return _chatsDao.upsertChatOutboxMessage(entryData);
   }
 
-  Future<int> deleteOutboxMessage(String idKey) {
+  Future deleteOutboxMessage(String idKey) {
     return _chatsDao.deleteChatOutboxMessage(idKey);
   }
 

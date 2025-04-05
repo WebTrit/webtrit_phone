@@ -41,12 +41,13 @@ class ConversationCubit extends Cubit<ConversationState> {
   Future sendMessage(String content, List<String> attachments) async {
     final (:chatId, :participantId) = state.credentials;
 
+    final outAttachments = attachments.map((p) => OutboxAttachment(id: (const Uuid()).v4(), pickedPath: p));
     final outboxEntry = ChatOutboxMessageEntry(
       idKey: (const Uuid()).v4(),
       chatId: chatId,
       participantId: participantId,
       content: content,
-      attachments: attachments.map((p) => OutgoingAttachment(pickedPath: p)).toList(),
+      attachments: outAttachments.toList(),
     );
     _outboxRepository.upsertOutboxMessage(outboxEntry);
   }
@@ -54,13 +55,14 @@ class ConversationCubit extends Cubit<ConversationState> {
   Future sendReply(String content, List<String> attachments, ChatMessage refMessage) async {
     final (:chatId, :participantId) = state.credentials;
 
+    final outAttachments = attachments.map((p) => OutboxAttachment(id: (const Uuid()).v4(), pickedPath: p));
     final outboxEntry = ChatOutboxMessageEntry(
       idKey: (const Uuid()).v4(),
       chatId: chatId,
       participantId: participantId,
       replyToId: refMessage.id,
       content: content,
-      attachments: attachments.map((p) => OutgoingAttachment(pickedPath: p)).toList(),
+      attachments: outAttachments.toList(),
     );
     _outboxRepository.upsertOutboxMessage(outboxEntry);
   }

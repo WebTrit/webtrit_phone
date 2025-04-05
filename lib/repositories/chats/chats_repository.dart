@@ -41,8 +41,7 @@ class ChatsRepository with ChatsDriftMapper {
   Future<void> upsertChat(Chat chat) async {
     final chatData = chatToDrift(chat);
     final membersData = chat.members.map(chatMemberToDrift).toList();
-    final chatDataWithMembers = ChatDataWithMembers(chatData, membersData);
-    _chatsDao.upsertChatWithMembers(chatDataWithMembers);
+    _chatsDao.upsertChatWithMembers(chatData, membersData);
     _addEvent(ChatUpdate(chat));
   }
 

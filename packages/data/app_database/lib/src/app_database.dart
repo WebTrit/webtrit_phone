@@ -34,6 +34,7 @@ part 'app_database.g.dart';
     SmsOutboxReadCursorsTable,
     UserSmsNumbersTable,
     ActiveMessageNotificationsTable,
+    OutboxAttachmentTable,
   ],
   daos: [
     ContactsDao,

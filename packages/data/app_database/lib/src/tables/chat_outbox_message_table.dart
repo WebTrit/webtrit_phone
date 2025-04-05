@@ -23,8 +23,6 @@ class ChatOutboxMessageTable extends Table {
 
   TextColumn get content => text()();
 
-  TextColumn get attachmentsJson => text()();
-
   IntColumn get sendAttempts => integer().withDefault(const Constant(0))();
 
   TextColumn get failureCode => text().nullable()();

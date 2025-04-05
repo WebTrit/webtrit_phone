@@ -82,16 +82,14 @@ class ChatsOutboxWorker {
       if (channel == null) return;
       if (channel.state != PhoenixChannelState.joined) return;
 
-      List<OutgoingAttachment> attachments = outboxEntry.attachments;
+      List<OutboxAttachment> attachments = outboxEntry.attachments;
 
       for (final att in attachments) {
         final pickedPath = att.pickedPath;
         final fileName = pickedPath.fileName;
         final fileExtension = pickedPath.fileExtension;
         String? encodedPath = att.encodedPath;
-        String? thumbnailPath = att.thumbnailPath;
-        MediaFileMetadata? metadata = att.metadata;
-        String? uploadId = att.uploadId;
+        String? uploadedPath = att.uploadedPath;
 
         _logger.info('Started processing $fileName.$fileExtension');
 
@@ -116,12 +114,10 @@ class ChatsOutboxWorker {
 
           encodedPath = await MediaStorageService.encodeVideo(pickedPath, EncodePreset.chat);
           if (encodedPath == null) throw Exception('Failed to encode video: $pickedPath');
-          thumbnailPath = await MediaStorageService.createVideoThumbnail(encodedPath, EncodePreset.chat);
-          if (thumbnailPath == null) throw Exception('Failed to create thumbnail for video: $encodedPath');
 
           attachments = attachments.map((e) {
             if (e.pickedPath != pickedPath) return e;
-            return e.copyWith(encodedPath: encodedPath, thumbnailPath: thumbnailPath);
+            return e.copyWith(encodedPath: encodedPath);
           }).toList();
 
           final updatedMessage = outboxEntry.copyWith(attachments: attachments);
@@ -130,31 +126,18 @@ class ChatsOutboxWorker {
           _logger.info('Encoded video: $encodedPath');
         }
 
-        if (metadata == null) {
-          metadata = await MediaStorageService.createMetadata(path: encodedPath ?? pickedPath);
-
-          attachments = attachments.map((e) {
-            if (e.pickedPath != pickedPath) return e;
-            return e.copyWith(metadata: metadata);
-          }).toList();
-          final updatedMessage = outboxEntry.copyWith(attachments: attachments);
-          await _outboxRepository.upsertOutboxMessage(updatedMessage);
-
-          _logger.info('Created metadata: $metadata');
-        }
-
-        if (uploadId == null) {
+        if (uploadedPath == null) {
           _logger.info('Starting upload $fileName.$fileExtension');
           await Future.delayed(const Duration(seconds: 1));
-          uploadId = const Uuid().v4();
+          uploadedPath = const Uuid().v4();
 
           attachments = attachments.map((e) {
             if (e.pickedPath != pickedPath) return e;
-            return e.copyWith(uploadId: uploadId);
+            return e.copyWith(uploadedPath: uploadedPath);
           }).toList();
           final updatedMessage = outboxEntry.copyWith(attachments: attachments);
           await _outboxRepository.upsertOutboxMessage(updatedMessage);
-          _logger.info('Uploaded file id: $uploadId');
+          _logger.info('Uploaded file path: $uploadedPath');
         }
 
         _logger.info('Finished processing $fileName.$fileExtension');

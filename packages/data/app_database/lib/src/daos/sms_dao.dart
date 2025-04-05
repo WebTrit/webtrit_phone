@@ -31,9 +31,9 @@ class SmsDao extends DatabaseAccessor<AppDatabase> with _$SmsDaoMixin {
     return q.get().then((rows) => rows.map((row) => row.data['id'] as int).toList());
   }
 
-  Future<List<ConversationDataWithLastMessage>> getConversationsWithLastMessage() async {
+  Future<List<(SmsConversationData, SmsMessageData?)>> getConversationsWithLastMessage() async {
     final conversations = await getAllConversations();
-    final result = <ConversationDataWithLastMessage>[];
+    final result = <(SmsConversationData, SmsMessageData?)>[];
 
     for (final conversation in conversations) {
       final lastMsgs = await getMessageHistory(conversation.id, limit: 1, skipDeleted: true);

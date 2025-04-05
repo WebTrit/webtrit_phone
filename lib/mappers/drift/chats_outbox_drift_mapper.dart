@@ -1,26 +1,46 @@
-import 'dart:convert';
-
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/models/models.dart';
 
 mixin ChatsOutboxDriftMapper {
-  ChatOutboxMessageEntry outboxMessageEntryFromDrift(ChatOutboxMessageData data) {
+  ChatOutboxMessageEntry outboxMessageEntryFromDrift(
+    (ChatOutboxMessageData, List<OutboxAttachmentData>) data,
+  ) {
+    final (message, attachments) = data;
     return ChatOutboxMessageEntry(
-      idKey: data.idKey,
-      chatId: data.chatId,
-      participantId: data.participantId,
-      replyToId: data.replyToId,
-      forwardFromId: data.forwardFromId,
-      authorId: data.authorId,
-      content: data.content,
-      attachments: (jsonDecode(data.attachmentsJson) as List).map((e) => OutgoingAttachment.fromMap(e)).toList(),
-      sendAttempts: data.sendAttempts,
-      failureCode: data.failureCode,
+      idKey: message.idKey,
+      chatId: message.chatId,
+      participantId: message.participantId,
+      replyToId: message.replyToId,
+      forwardFromId: message.forwardFromId,
+      authorId: message.authorId,
+      content: message.content,
+      attachments: attachments.map(outboxAttachmentFromDrift).toList(),
+      sendAttempts: message.sendAttempts,
+      failureCode: message.failureCode,
     );
   }
 
-  ChatOutboxMessageData outboxMessageEntryToDrift(ChatOutboxMessageEntry entry) {
-    return ChatOutboxMessageData(
+  OutboxAttachment outboxAttachmentFromDrift(OutboxAttachmentData attachment) {
+    return OutboxAttachment(
+      id: attachment.idKey,
+      pickedPath: attachment.pickedPath,
+      encodedPath: attachment.encodedPath,
+      uploadedPath: attachment.uploadedPath,
+    );
+  }
+
+  OutboxAttachmentData outboxAttachmentToDrift(String msgId, OutboxAttachment attachment) {
+    return OutboxAttachmentData(
+      idKey: attachment.id,
+      messageIdKey: msgId,
+      pickedPath: attachment.pickedPath,
+      encodedPath: attachment.encodedPath,
+      uploadedPath: attachment.uploadedPath,
+    );
+  }
+
+  (ChatOutboxMessageData, List<OutboxAttachmentData>) outboxMessageEntryToDrift(ChatOutboxMessageEntry entry) {
+    final chatOutboxMessageData = ChatOutboxMessageData(
       idKey: entry.idKey,
       chatId: entry.chatId,
       participantId: entry.participantId,
@@ -28,10 +48,15 @@ mixin ChatsOutboxDriftMapper {
       forwardFromId: entry.forwardFromId,
       authorId: entry.authorId,
       content: entry.content,
-      attachmentsJson: jsonEncode(entry.attachments.map((e) => e.toMap()).toList()),
       sendAttempts: entry.sendAttempts,
       failureCode: entry.failureCode,
     );
+
+    final attachmentsData = entry.attachments.map((attachment) {
+      return outboxAttachmentToDrift(entry.idKey, attachment);
+    }).toList();
+
+    return (chatOutboxMessageData, attachmentsData);
   }
 
   ChatOutboxMessageEditEntry outboxMessageEditEntryFromDrift(ChatOutboxMessageEditData data) {

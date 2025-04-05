@@ -4,15 +4,6 @@ import 'package:drift/drift.dart';
 
 part 'chats_dao.g.dart';
 
-typedef ConversationDataWithLastMessage = (SmsConversationData conversation, SmsMessageData? lastMsg);
-
-class ChatDataWithMembers {
-  ChatDataWithMembers(this.chatData, this.members);
-
-  final ChatData chatData;
-  final List<ChatMemberData> members;
-}
-
 @DriftAccessor(tables: [
   ChatsTable,
   ChatMembersTable,
@@ -23,6 +14,7 @@ class ChatDataWithMembers {
   ChatOutboxMessageEditTable,
   ChatOutboxMessageDeleteTable,
   ChatOutboxReadCursorsTable,
+  OutboxAttachmentTable,
 ])
 class ChatsDao extends DatabaseAccessor<AppDatabase> with _$ChatsDaoMixin {
   ChatsDao(super.db);
@@ -81,7 +73,7 @@ class ChatsDao extends DatabaseAccessor<AppDatabase> with _$ChatsDaoMixin {
   }
 
   // ChatDataWithMembers
-  Future<List<ChatDataWithMembers>> getAllChatsWithMembers() {
+  Future<List<(ChatData, List<ChatMemberData>)>> getAllChatsWithMembers() {
     final q = select(chatsTable).join([
       leftOuterJoin(chatMembersTable, chatMembersTable.chatId.equalsExp(chatsTable.id)),
     ])
@@ -98,24 +90,24 @@ class ChatsDao extends DatabaseAccessor<AppDatabase> with _$ChatsDaoMixin {
         if (member != null) members.add(member);
       }
       return chatData.map((chat) {
-        return ChatDataWithMembers(chat, members.where((m) => m.chatId == chat.id).toList());
+        return (chat, members.where((m) => m.chatId == chat.id).toList());
       }).toList();
     });
   }
 
-  Future<List<(ChatDataWithMembers chatdata, ChatMessageData? lastMsg)>> getAllChatsWithMembersAndLastMessage() async {
-    final chatsData = await getAllChatsWithMembers();
-    final result = <(ChatDataWithMembers chatdata, ChatMessageData? lastMsg)>[];
+  Future<List<(ChatData, List<ChatMemberData>, ChatMessageData?)>> getAllChatsWithMembersAndLastMessage() async {
+    final chats = await getAllChatsWithMembers();
+    final result = <(ChatData, List<ChatMemberData>, ChatMessageData?)>[];
 
-    for (final chatData in chatsData) {
-      final lastMsgs = await getMessageHistory(chatData.chatData.id, limit: 1, skipDeleted: true);
-      result.add((chatData, lastMsgs.firstOrNull));
+    for (final (chat, members) in chats) {
+      final lastMsgs = await getMessageHistory(chat.id, limit: 1, skipDeleted: true);
+      result.add((chat, members, lastMsgs.firstOrNull));
     }
 
     return result;
   }
 
-  Future<ChatDataWithMembers?> getChatWithMembers(int chatId) {
+  Future<(ChatData, List<ChatMemberData>)?> getChatWithMembers(int chatId) {
     final q = select(chatsTable).join([
       leftOuterJoin(chatMembersTable, chatMembersTable.chatId.equalsExp(chatsTable.id)),
     ]);
@@ -132,17 +124,17 @@ class ChatsDao extends DatabaseAccessor<AppDatabase> with _$ChatsDaoMixin {
       }
 
       if (chatData == null) return null;
-      return ChatDataWithMembers(chatData, members);
+      return (chatData, members);
     });
   }
 
-  Future upsertChatWithMembers(ChatDataWithMembers data) async {
+  Future upsertChatWithMembers(ChatData chat, List<ChatMemberData> members) async {
     // Todo: replace with batch
     await transaction(() async {
-      final currentChatMembers = await getChatMembersByChatId(data.chatData.id);
-      final membersToDelete = currentChatMembers.where((m) => !data.members.any((newM) => newM.userId == m.userId));
-      final membersToUpsert = data.members;
-      await upsertChat(data.chatData);
+      final currentChatMembers = await getChatMembersByChatId(chat.id);
+      final membersToDelete = currentChatMembers.where((m) => !members.any((newM) => newM.userId == m.userId));
+      final membersToUpsert = members;
+      await upsertChat(chat);
       for (final member in membersToDelete) {
         await deleteChatMember(member);
       }
@@ -243,20 +235,69 @@ class ChatsDao extends DatabaseAccessor<AppDatabase> with _$ChatsDaoMixin {
 
   // Messages outbox
 
-  Future<List<ChatOutboxMessageData>> getChatOutboxMessages() {
-    return select(chatOutboxMessageTable).get();
+  Future<List<(ChatOutboxMessageData, List<OutboxAttachmentData>)>> getChatOutboxMessages() {
+    return (select(chatOutboxMessageTable))
+        .join([
+          leftOuterJoin(
+            outboxAttachmentTable,
+            outboxAttachmentTable.messageIdKey.equalsExp(chatOutboxMessageTable.idKey),
+          ),
+        ])
+        .get()
+        .then((rows) {
+          final messages = <ChatOutboxMessageData>[];
+          final attachments = <OutboxAttachmentData>[];
+          for (final row in rows) {
+            final message = row.readTable(chatOutboxMessageTable);
+            if (!messages.contains(message)) messages.add(message);
+
+            final attachment = row.readTableOrNull(outboxAttachmentTable);
+            if (attachment != null) attachments.add(attachment);
+          }
+          return messages.map((message) {
+            return (message, attachments.where((a) => a.messageIdKey == message.idKey).toList());
+          }).toList();
+        });
   }
 
-  Stream<List<ChatOutboxMessageData>> watchChatOutboxMessages() {
-    return select(chatOutboxMessageTable).watch();
+  Stream<List<(ChatOutboxMessageData, List<OutboxAttachmentData>)>> watchChatOutboxMessages() {
+    return (select(chatOutboxMessageTable)
+        .join([
+          leftOuterJoin(
+            outboxAttachmentTable,
+            outboxAttachmentTable.messageIdKey.equalsExp(chatOutboxMessageTable.idKey),
+          ),
+        ])
+        .watch()
+        .map((rows) {
+          final messages = <ChatOutboxMessageData>[];
+          final attachments = <OutboxAttachmentData>[];
+          for (final row in rows) {
+            final message = row.readTable(chatOutboxMessageTable);
+            if (!messages.contains(message)) messages.add(message);
+
+            final attachment = row.readTableOrNull(outboxAttachmentTable);
+            if (attachment != null) attachments.add(attachment);
+          }
+          return messages.map((message) {
+            return (message, attachments.where((a) => a.messageIdKey == message.idKey).toList());
+          }).toList();
+        }));
   }
 
-  Future<int> upsertChatOutboxMessage(Insertable<ChatOutboxMessageData> chatOutboxMessage) {
-    return into(chatOutboxMessageTable).insertOnConflictUpdate(chatOutboxMessage);
+  Future upsertChatOutboxMessage((ChatOutboxMessageData, List<OutboxAttachmentData>) data) async {
+    final (chatOutboxMessage, attachments) = data;
+    await batch((batch) {
+      batch.insertAllOnConflictUpdate(chatOutboxMessageTable, [chatOutboxMessage]);
+      batch.insertAllOnConflictUpdate(outboxAttachmentTable, attachments);
+    });
   }
 
-  Future<int> deleteChatOutboxMessage(String idKey) {
-    return (delete(chatOutboxMessageTable)..where((t) => t.idKey.equals(idKey))).go();
+  Future deleteChatOutboxMessage(String idKey) async {
+    await batch((batch) {
+      batch.deleteWhere(chatOutboxMessageTable, (t) => t.idKey.equals(idKey));
+      batch.deleteWhere(outboxAttachmentTable, (t) => t.messageIdKey.equals(idKey));
+    });
   }
 
   // Message edits outbox
