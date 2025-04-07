@@ -15,6 +15,7 @@ part 'chats_dao.g.dart';
   ChatOutboxMessageDeleteTable,
   ChatOutboxReadCursorsTable,
   OutboxAttachmentTable,
+  MessageAttachmentTable,
 ])
 class ChatsDao extends DatabaseAccessor<AppDatabase> with _$ChatsDaoMixin {
   ChatsDao(super.db);
@@ -95,9 +96,10 @@ class ChatsDao extends DatabaseAccessor<AppDatabase> with _$ChatsDaoMixin {
     });
   }
 
-  Future<List<(ChatData, List<ChatMemberData>, ChatMessageData?)>> getAllChatsWithMembersAndLastMessage() async {
+  Future<List<(ChatData, List<ChatMemberData>, (ChatMessageData, List<MessageAttachmentData>)?)>>
+      getAllChatsWithMembersAndLastMessage() async {
     final chats = await getAllChatsWithMembers();
-    final result = <(ChatData, List<ChatMemberData>, ChatMessageData?)>[];
+    final result = <(ChatData, List<ChatMemberData>, (ChatMessageData, List<MessageAttachmentData>)?)>[];
 
     for (final (chat, members) in chats) {
       final lastMsgs = await getMessageHistory(chat.id, limit: 1, skipDeleted: true);
@@ -146,33 +148,86 @@ class ChatsDao extends DatabaseAccessor<AppDatabase> with _$ChatsDaoMixin {
 
   // ChatMessages
 
-  Future<ChatMessageData?> getMessageById(int id) {
-    return (select(chatMessagesTable)..where((t) => t.id.equals(id))).getSingleOrNull();
+  Future<(ChatMessageData, List<MessageAttachmentData>)?> getMessageById(int id) {
+    final q = select(chatMessagesTable).join([
+      leftOuterJoin(messageAttachmentTable, messageAttachmentTable.chatsMessageId.equalsExp(chatMessagesTable.id)),
+    ]);
+    q.where(chatMessagesTable.id.equals(id));
+    return q.get().then((rows) {
+      if (rows.isEmpty) return null;
+      final message = rows.first.readTable(chatMessagesTable);
+      final attachments = rows
+          .map((row) {
+            return row.readTableOrNull(messageAttachmentTable);
+          })
+          .whereType<MessageAttachmentData>()
+          .toList();
+      return (message, attachments);
+    });
   }
 
-  Future<List<ChatMessageData>> getMessageHistory(
+  Future<List<(ChatMessageData, List<MessageAttachmentData>)>> getMessageHistory(
     int chatId, {
     DateTime? from,
     DateTime? to,
     required int limit,
     skipDeleted = false,
   }) async {
-    final q = select(chatMessagesTable);
-    q.where((t) => t.chatId.equals(chatId));
-    if (skipDeleted) q.where((t) => t.deletedAtRemoteUsec.isNull());
-    if (from != null) q.where((t) => t.createdAtRemoteUsec.isSmallerThanValue(from.microsecondsSinceEpoch));
-    if (to != null) q.where((t) => t.createdAtRemoteUsec.isBiggerOrEqualValue(to.microsecondsSinceEpoch));
-    q.orderBy([(t) => OrderingTerm.desc(t.createdAtRemoteUsec), (t) => OrderingTerm.desc(t.id)]);
+    final q = select(chatMessagesTable).join([
+      leftOuterJoin(messageAttachmentTable, messageAttachmentTable.chatsMessageId.equalsExp(chatMessagesTable.id)),
+    ]);
+
+    q.where(chatMessagesTable.chatId.equals(chatId));
+    if (skipDeleted) q.where(chatMessagesTable.deletedAtRemoteUsec.isNull());
+    if (from != null) q.where(chatMessagesTable.createdAtRemoteUsec.isSmallerThanValue(from.microsecondsSinceEpoch));
+    if (to != null) q.where(chatMessagesTable.createdAtRemoteUsec.isBiggerOrEqualValue(to.microsecondsSinceEpoch));
+    q.orderBy([
+      OrderingTerm.desc(chatMessagesTable.createdAtRemoteUsec),
+      OrderingTerm.desc(chatMessagesTable.id),
+    ]);
     q.limit(limit);
-    return q.get();
+
+    return q.get().then((rows) {
+      final messages = <ChatMessageData>[];
+      final attachments = <MessageAttachmentData>[];
+      for (final row in rows) {
+        final message = row.readTable(chatMessagesTable);
+        if (!messages.contains(message)) messages.add(message);
+
+        final attachment = row.readTableOrNull(messageAttachmentTable);
+        if (attachment != null) attachments.add(attachment);
+      }
+      return messages.map((message) {
+        return (message, attachments.where((a) => a.chatsMessageId == message.id).toList());
+      }).toList();
+    });
   }
 
-  Future<int?> upsertChatMessage(ChatMessageData chatMessage) async {
-    return into(chatMessagesTable).insertOnConflictUpdate(chatMessage);
+  Future upsertChatMessage((ChatMessageData, List<MessageAttachmentData>) data) async {
+    final (message, attachments) = data;
+    await batch(
+      (batch) {
+        batch.insertAllOnConflictUpdate(chatMessagesTable, [message]);
+        batch.deleteWhere(
+          messageAttachmentTable,
+          (t) => t.chatsMessageId.equals(message.id) & t.id.isNotIn(attachments.map((e) => e.id)),
+        );
+        batch.insertAllOnConflictUpdate(messageAttachmentTable, attachments);
+      },
+    );
   }
 
-  Future upsertChatMessages(Iterable<ChatMessageData> chatMessages) async {
-    await batch((batch) => batch.insertAllOnConflictUpdate(chatMessagesTable, chatMessages));
+  Future upsertChatMessages(Iterable<(ChatMessageData, List<MessageAttachmentData>)> data) async {
+    await batch((batch) {
+      for (final (message, attachments) in data) {
+        batch.insertAllOnConflictUpdate(chatMessagesTable, [message]);
+        batch.deleteWhere(
+          messageAttachmentTable,
+          (t) => t.chatsMessageId.equals(message.id) & t.id.isNotIn(attachments.map((e) => e.id)),
+        );
+        batch.insertAllOnConflictUpdate(messageAttachmentTable, attachments);
+      }
+    });
   }
 
   // Message read cursors

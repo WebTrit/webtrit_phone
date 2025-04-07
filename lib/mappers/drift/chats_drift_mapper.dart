@@ -26,7 +26,8 @@ mixin ChatsDriftMapper {
     );
   }
 
-  ChatWithLastMessage chatWithLastMessageFromDrift((ChatData, List<ChatMemberData>, ChatMessageData?) data) {
+  ChatWithLastMessage chatWithLastMessageFromDrift(
+      (ChatData, List<ChatMemberData>, (ChatMessageData, List<MessageAttachmentData>)?) data) {
     final (chat, members, message) = data;
     return (chatFromDrift((chat, members)), message != null ? messageFromDrift(message) : null);
   }
@@ -52,26 +53,14 @@ mixin ChatsDriftMapper {
     );
   }
 
-  ChatMessage messageFromDrift(ChatMessageData data) {
-    return ChatMessage(
-      id: data.id,
-      idKey: data.idKey,
-      senderId: data.senderId,
-      chatId: data.chatId,
-      replyToId: data.replyToId,
-      forwardFromId: data.forwardFromId,
-      authorId: data.authorId,
-      content: data.content,
-      createdAt: DateTime.fromMicrosecondsSinceEpoch(data.createdAtRemoteUsec),
-      updatedAt: DateTime.fromMicrosecondsSinceEpoch(data.updatedAtRemoteUsec),
-      editedAt: data.editedAtRemoteUsec != null ? DateTime.fromMicrosecondsSinceEpoch(data.editedAtRemoteUsec!) : null,
-      deletedAt:
-          data.deletedAtRemoteUsec != null ? DateTime.fromMicrosecondsSinceEpoch(data.deletedAtRemoteUsec!) : null,
-    );
+  MessageAttachment attachmentFromDrift(MessageAttachmentData att) {
+    return MessageAttachment(id: att.id, fileName: att.fileName, filePath: att.filePath);
   }
 
-  ChatMessageData messageToDrift(ChatMessage message) {
-    return ChatMessageData(
+  ChatMessage messageFromDrift((ChatMessageData, List<MessageAttachmentData>) data) {
+    final (message, attachments) = data;
+
+    return ChatMessage(
       id: message.id,
       idKey: message.idKey,
       senderId: message.senderId,
@@ -80,10 +69,38 @@ mixin ChatsDriftMapper {
       forwardFromId: message.forwardFromId,
       authorId: message.authorId,
       content: message.content,
-      createdAtRemoteUsec: message.createdAt.microsecondsSinceEpoch,
-      updatedAtRemoteUsec: message.updatedAt.microsecondsSinceEpoch,
-      editedAtRemoteUsec: message.editedAt?.microsecondsSinceEpoch,
-      deletedAtRemoteUsec: message.deletedAt?.microsecondsSinceEpoch,
+      attachments: attachments.map(attachmentFromDrift).toList(),
+      createdAt: DateTime.fromMicrosecondsSinceEpoch(message.createdAtRemoteUsec),
+      updatedAt: DateTime.fromMicrosecondsSinceEpoch(message.updatedAtRemoteUsec),
+      editedAt:
+          message.editedAtRemoteUsec != null ? DateTime.fromMicrosecondsSinceEpoch(message.editedAtRemoteUsec!) : null,
+      deletedAt: message.deletedAtRemoteUsec != null
+          ? DateTime.fromMicrosecondsSinceEpoch(message.deletedAtRemoteUsec!)
+          : null,
+    );
+  }
+
+  MessageAttachmentData attachmentToDrift(MessageAttachment att) {
+    return MessageAttachmentData(id: att.id, fileName: att.fileName, filePath: att.filePath);
+  }
+
+  (ChatMessageData, List<MessageAttachmentData>) messageToDrift(ChatMessage message) {
+    return (
+      ChatMessageData(
+        id: message.id,
+        idKey: message.idKey,
+        senderId: message.senderId,
+        chatId: message.chatId,
+        replyToId: message.replyToId,
+        forwardFromId: message.forwardFromId,
+        authorId: message.authorId,
+        content: message.content,
+        createdAtRemoteUsec: message.createdAt.microsecondsSinceEpoch,
+        updatedAtRemoteUsec: message.updatedAt.microsecondsSinceEpoch,
+        editedAtRemoteUsec: message.editedAt?.microsecondsSinceEpoch,
+        deletedAtRemoteUsec: message.deletedAt?.microsecondsSinceEpoch,
+      ),
+      message.attachments.map(attachmentToDrift).toList()
     );
   }
 

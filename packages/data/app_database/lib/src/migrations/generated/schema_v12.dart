@@ -1490,6 +1490,62 @@ class OutboxAttachments extends Table with TableInfo {
   bool get dontWriteConstraints => true;
 }
 
+class MessageAttachments extends Table with TableInfo {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  MessageAttachments(this.attachedDatabase, [this._alias]);
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      $customConstraints: 'NOT NULL');
+  late final GeneratedColumn<int> chatsMessageId = GeneratedColumn<int>(
+      'chats_message_id', aliasedName, true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      $customConstraints: 'NULL REFERENCES chat_messages(id)ON DELETE CASCADE');
+  late final GeneratedColumn<int> smsMessageId = GeneratedColumn<int>(
+      'sms_message_id', aliasedName, true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      $customConstraints: 'NULL REFERENCES sms_messages(id)ON DELETE CASCADE');
+  late final GeneratedColumn<String> fileName = GeneratedColumn<String>(
+      'file_name', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: true,
+      $customConstraints: 'NOT NULL');
+  late final GeneratedColumn<String> filePath = GeneratedColumn<String>(
+      'file_path', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: true,
+      $customConstraints: 'NOT NULL');
+  @override
+  List<GeneratedColumn> get $columns =>
+      [id, chatsMessageId, smsMessageId, fileName, filePath];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'message_attachments';
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  Never map(Map<String, dynamic> data, {String? tablePrefix}) {
+    throw UnsupportedError('TableInfo.map in schema verification code');
+  }
+
+  @override
+  MessageAttachments createAlias(String alias) {
+    return MessageAttachments(attachedDatabase, alias);
+  }
+
+  @override
+  List<String> get customConstraints => const ['PRIMARY KEY(id)'];
+  @override
+  bool get dontWriteConstraints => true;
+}
+
 class DatabaseAtV12 extends GeneratedDatabase {
   DatabaseAtV12(QueryExecutor e) : super(e);
   late final Contacts contacts = Contacts(this);
@@ -1526,6 +1582,7 @@ class DatabaseAtV12 extends GeneratedDatabase {
   late final ActiveMessagingNotifications activeMessagingNotifications =
       ActiveMessagingNotifications(this);
   late final OutboxAttachments outboxAttachments = OutboxAttachments(this);
+  late final MessageAttachments messageAttachments = MessageAttachments(this);
   late final Trigger contactsAfterInsertTrigger = Trigger(
       'CREATE TRIGGER contacts_after_insert_trigger AFTER INSERT ON contacts BEGIN UPDATE contacts SET inserted_at = STRFTIME(\'%s\', \'NOW\') WHERE id = NEW.id AND inserted_at IS NULL;UPDATE contacts SET updated_at = STRFTIME(\'%s\', \'NOW\') WHERE id = NEW.id;END',
       'contacts_after_insert_trigger');
@@ -1573,6 +1630,7 @@ class DatabaseAtV12 extends GeneratedDatabase {
         userSmsNumbers,
         activeMessagingNotifications,
         outboxAttachments,
+        messageAttachments,
         contactsAfterInsertTrigger,
         contactsAfterUpdateTrigger,
         contactPhonesAfterInsertTrigger,

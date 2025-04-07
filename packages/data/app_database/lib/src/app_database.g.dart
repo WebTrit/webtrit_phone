@@ -8225,6 +8225,323 @@ class OutboxAttachmentDataCompanion
   }
 }
 
+class $MessageAttachmentTableTable extends MessageAttachmentTable
+    with TableInfo<$MessageAttachmentTableTable, MessageAttachmentData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $MessageAttachmentTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: false);
+  static const VerificationMeta _chatsMessageIdMeta =
+      const VerificationMeta('chatsMessageId');
+  @override
+  late final GeneratedColumn<int> chatsMessageId = GeneratedColumn<int>(
+      'chats_message_id', aliasedName, true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'REFERENCES chat_messages (id) ON DELETE CASCADE'));
+  static const VerificationMeta _smsMessageIdMeta =
+      const VerificationMeta('smsMessageId');
+  @override
+  late final GeneratedColumn<int> smsMessageId = GeneratedColumn<int>(
+      'sms_message_id', aliasedName, true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'REFERENCES sms_messages (id) ON DELETE CASCADE'));
+  static const VerificationMeta _fileNameMeta =
+      const VerificationMeta('fileName');
+  @override
+  late final GeneratedColumn<String> fileName = GeneratedColumn<String>(
+      'file_name', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _filePathMeta =
+      const VerificationMeta('filePath');
+  @override
+  late final GeneratedColumn<String> filePath = GeneratedColumn<String>(
+      'file_path', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns =>
+      [id, chatsMessageId, smsMessageId, fileName, filePath];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'message_attachments';
+  @override
+  VerificationContext validateIntegrity(
+      Insertable<MessageAttachmentData> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('chats_message_id')) {
+      context.handle(
+          _chatsMessageIdMeta,
+          chatsMessageId.isAcceptableOrUnknown(
+              data['chats_message_id']!, _chatsMessageIdMeta));
+    }
+    if (data.containsKey('sms_message_id')) {
+      context.handle(
+          _smsMessageIdMeta,
+          smsMessageId.isAcceptableOrUnknown(
+              data['sms_message_id']!, _smsMessageIdMeta));
+    }
+    if (data.containsKey('file_name')) {
+      context.handle(_fileNameMeta,
+          fileName.isAcceptableOrUnknown(data['file_name']!, _fileNameMeta));
+    } else if (isInserting) {
+      context.missing(_fileNameMeta);
+    }
+    if (data.containsKey('file_path')) {
+      context.handle(_filePathMeta,
+          filePath.isAcceptableOrUnknown(data['file_path']!, _filePathMeta));
+    } else if (isInserting) {
+      context.missing(_filePathMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  MessageAttachmentData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return MessageAttachmentData(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      chatsMessageId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}chats_message_id']),
+      smsMessageId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}sms_message_id']),
+      fileName: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}file_name'])!,
+      filePath: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}file_path'])!,
+    );
+  }
+
+  @override
+  $MessageAttachmentTableTable createAlias(String alias) {
+    return $MessageAttachmentTableTable(attachedDatabase, alias);
+  }
+}
+
+class MessageAttachmentData extends DataClass
+    implements Insertable<MessageAttachmentData> {
+  final int id;
+  final int? chatsMessageId;
+  final int? smsMessageId;
+  final String fileName;
+  final String filePath;
+  const MessageAttachmentData(
+      {required this.id,
+      this.chatsMessageId,
+      this.smsMessageId,
+      required this.fileName,
+      required this.filePath});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    if (!nullToAbsent || chatsMessageId != null) {
+      map['chats_message_id'] = Variable<int>(chatsMessageId);
+    }
+    if (!nullToAbsent || smsMessageId != null) {
+      map['sms_message_id'] = Variable<int>(smsMessageId);
+    }
+    map['file_name'] = Variable<String>(fileName);
+    map['file_path'] = Variable<String>(filePath);
+    return map;
+  }
+
+  MessageAttachmentDataCompanion toCompanion(bool nullToAbsent) {
+    return MessageAttachmentDataCompanion(
+      id: Value(id),
+      chatsMessageId: chatsMessageId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(chatsMessageId),
+      smsMessageId: smsMessageId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(smsMessageId),
+      fileName: Value(fileName),
+      filePath: Value(filePath),
+    );
+  }
+
+  factory MessageAttachmentData.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return MessageAttachmentData(
+      id: serializer.fromJson<int>(json['id']),
+      chatsMessageId: serializer.fromJson<int?>(json['chatsMessageId']),
+      smsMessageId: serializer.fromJson<int?>(json['smsMessageId']),
+      fileName: serializer.fromJson<String>(json['fileName']),
+      filePath: serializer.fromJson<String>(json['filePath']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'chatsMessageId': serializer.toJson<int?>(chatsMessageId),
+      'smsMessageId': serializer.toJson<int?>(smsMessageId),
+      'fileName': serializer.toJson<String>(fileName),
+      'filePath': serializer.toJson<String>(filePath),
+    };
+  }
+
+  MessageAttachmentData copyWith(
+          {int? id,
+          Value<int?> chatsMessageId = const Value.absent(),
+          Value<int?> smsMessageId = const Value.absent(),
+          String? fileName,
+          String? filePath}) =>
+      MessageAttachmentData(
+        id: id ?? this.id,
+        chatsMessageId:
+            chatsMessageId.present ? chatsMessageId.value : this.chatsMessageId,
+        smsMessageId:
+            smsMessageId.present ? smsMessageId.value : this.smsMessageId,
+        fileName: fileName ?? this.fileName,
+        filePath: filePath ?? this.filePath,
+      );
+  MessageAttachmentData copyWithCompanion(MessageAttachmentDataCompanion data) {
+    return MessageAttachmentData(
+      id: data.id.present ? data.id.value : this.id,
+      chatsMessageId: data.chatsMessageId.present
+          ? data.chatsMessageId.value
+          : this.chatsMessageId,
+      smsMessageId: data.smsMessageId.present
+          ? data.smsMessageId.value
+          : this.smsMessageId,
+      fileName: data.fileName.present ? data.fileName.value : this.fileName,
+      filePath: data.filePath.present ? data.filePath.value : this.filePath,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('MessageAttachmentData(')
+          ..write('id: $id, ')
+          ..write('chatsMessageId: $chatsMessageId, ')
+          ..write('smsMessageId: $smsMessageId, ')
+          ..write('fileName: $fileName, ')
+          ..write('filePath: $filePath')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(id, chatsMessageId, smsMessageId, fileName, filePath);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is MessageAttachmentData &&
+          other.id == this.id &&
+          other.chatsMessageId == this.chatsMessageId &&
+          other.smsMessageId == this.smsMessageId &&
+          other.fileName == this.fileName &&
+          other.filePath == this.filePath);
+}
+
+class MessageAttachmentDataCompanion
+    extends UpdateCompanion<MessageAttachmentData> {
+  final Value<int> id;
+  final Value<int?> chatsMessageId;
+  final Value<int?> smsMessageId;
+  final Value<String> fileName;
+  final Value<String> filePath;
+  const MessageAttachmentDataCompanion({
+    this.id = const Value.absent(),
+    this.chatsMessageId = const Value.absent(),
+    this.smsMessageId = const Value.absent(),
+    this.fileName = const Value.absent(),
+    this.filePath = const Value.absent(),
+  });
+  MessageAttachmentDataCompanion.insert({
+    this.id = const Value.absent(),
+    this.chatsMessageId = const Value.absent(),
+    this.smsMessageId = const Value.absent(),
+    required String fileName,
+    required String filePath,
+  })  : fileName = Value(fileName),
+        filePath = Value(filePath);
+  static Insertable<MessageAttachmentData> custom({
+    Expression<int>? id,
+    Expression<int>? chatsMessageId,
+    Expression<int>? smsMessageId,
+    Expression<String>? fileName,
+    Expression<String>? filePath,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (chatsMessageId != null) 'chats_message_id': chatsMessageId,
+      if (smsMessageId != null) 'sms_message_id': smsMessageId,
+      if (fileName != null) 'file_name': fileName,
+      if (filePath != null) 'file_path': filePath,
+    });
+  }
+
+  MessageAttachmentDataCompanion copyWith(
+      {Value<int>? id,
+      Value<int?>? chatsMessageId,
+      Value<int?>? smsMessageId,
+      Value<String>? fileName,
+      Value<String>? filePath}) {
+    return MessageAttachmentDataCompanion(
+      id: id ?? this.id,
+      chatsMessageId: chatsMessageId ?? this.chatsMessageId,
+      smsMessageId: smsMessageId ?? this.smsMessageId,
+      fileName: fileName ?? this.fileName,
+      filePath: filePath ?? this.filePath,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (chatsMessageId.present) {
+      map['chats_message_id'] = Variable<int>(chatsMessageId.value);
+    }
+    if (smsMessageId.present) {
+      map['sms_message_id'] = Variable<int>(smsMessageId.value);
+    }
+    if (fileName.present) {
+      map['file_name'] = Variable<String>(fileName.value);
+    }
+    if (filePath.present) {
+      map['file_path'] = Variable<String>(filePath.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('MessageAttachmentDataCompanion(')
+          ..write('id: $id, ')
+          ..write('chatsMessageId: $chatsMessageId, ')
+          ..write('smsMessageId: $smsMessageId, ')
+          ..write('fileName: $fileName, ')
+          ..write('filePath: $filePath')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -8273,6 +8590,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
       $ActiveMessageNotificationsTableTable(this);
   late final $OutboxAttachmentTableTable outboxAttachmentTable =
       $OutboxAttachmentTableTable(this);
+  late final $MessageAttachmentTableTable messageAttachmentTable =
+      $MessageAttachmentTableTable(this);
   late final ContactsDao contactsDao = ContactsDao(this as AppDatabase);
   late final ContactPhonesDao contactPhonesDao =
       ContactPhonesDao(this as AppDatabase);
@@ -8313,7 +8632,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
         smsOutboxReadCursorsTable,
         userSmsNumbersTable,
         activeMessageNotificationsTable,
-        outboxAttachmentTable
+        outboxAttachmentTable,
+        messageAttachmentTable
       ];
   @override
   StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules(
@@ -8430,6 +8750,20 @@ abstract class _$AppDatabase extends GeneratedDatabase {
                 limitUpdateKind: UpdateKind.delete),
             result: [
               TableUpdate('outbox_attachments', kind: UpdateKind.delete),
+            ],
+          ),
+          WritePropagation(
+            on: TableUpdateQuery.onTableName('chat_messages',
+                limitUpdateKind: UpdateKind.delete),
+            result: [
+              TableUpdate('message_attachments', kind: UpdateKind.delete),
+            ],
+          ),
+          WritePropagation(
+            on: TableUpdateQuery.onTableName('sms_messages',
+                limitUpdateKind: UpdateKind.delete),
+            result: [
+              TableUpdate('message_attachments', kind: UpdateKind.delete),
             ],
           ),
         ],
@@ -10570,6 +10904,25 @@ final class $$ChatMessagesTableTableReferences extends BaseReferences<
     return ProcessedTableManager(
         manager.$state.copyWith(prefetchedData: [item]));
   }
+
+  static MultiTypedResultKey<$MessageAttachmentTableTable,
+      List<MessageAttachmentData>> _messageAttachmentTableRefsTable(
+          _$AppDatabase db) =>
+      MultiTypedResultKey.fromTable(db.messageAttachmentTable,
+          aliasName: $_aliasNameGenerator(db.chatMessagesTable.id,
+              db.messageAttachmentTable.chatsMessageId));
+
+  $$MessageAttachmentTableTableProcessedTableManager
+      get messageAttachmentTableRefs {
+    final manager = $$MessageAttachmentTableTableTableManager(
+            $_db, $_db.messageAttachmentTable)
+        .filter((f) => f.chatsMessageId.id($_item.id));
+
+    final cache =
+        $_typedResult.readTableOrNull(_messageAttachmentTableRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
 }
 
 class $$ChatMessagesTableTableFilterComposer
@@ -10636,6 +10989,29 @@ class $$ChatMessagesTableTableFilterComposer
                   $removeJoinBuilderFromRootComposer,
             ));
     return composer;
+  }
+
+  Expression<bool> messageAttachmentTableRefs(
+      Expression<bool> Function($$MessageAttachmentTableTableFilterComposer f)
+          f) {
+    final $$MessageAttachmentTableTableFilterComposer composer =
+        $composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.id,
+            referencedTable: $db.messageAttachmentTable,
+            getReferencedColumn: (t) => t.chatsMessageId,
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$MessageAttachmentTableTableFilterComposer(
+                  $db: $db,
+                  $table: $db.messageAttachmentTable,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
+    return f(composer);
   }
 }
 
@@ -10768,6 +11144,29 @@ class $$ChatMessagesTableTableAnnotationComposer
             ));
     return composer;
   }
+
+  Expression<T> messageAttachmentTableRefs<T extends Object>(
+      Expression<T> Function($$MessageAttachmentTableTableAnnotationComposer a)
+          f) {
+    final $$MessageAttachmentTableTableAnnotationComposer composer =
+        $composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.id,
+            referencedTable: $db.messageAttachmentTable,
+            getReferencedColumn: (t) => t.chatsMessageId,
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$MessageAttachmentTableTableAnnotationComposer(
+                  $db: $db,
+                  $table: $db.messageAttachmentTable,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
+    return f(composer);
+  }
 }
 
 class $$ChatMessagesTableTableTableManager extends RootTableManager<
@@ -10781,7 +11180,7 @@ class $$ChatMessagesTableTableTableManager extends RootTableManager<
     $$ChatMessagesTableTableUpdateCompanionBuilder,
     (ChatMessageData, $$ChatMessagesTableTableReferences),
     ChatMessageData,
-    PrefetchHooks Function({bool chatId})> {
+    PrefetchHooks Function({bool chatId, bool messageAttachmentTableRefs})> {
   $$ChatMessagesTableTableTableManager(
       _$AppDatabase db, $ChatMessagesTableTable table)
       : super(TableManagerState(
@@ -10856,10 +11255,13 @@ class $$ChatMessagesTableTableTableManager extends RootTableManager<
                     $$ChatMessagesTableTableReferences(db, table, e)
                   ))
               .toList(),
-          prefetchHooksCallback: ({chatId = false}) {
+          prefetchHooksCallback: (
+              {chatId = false, messageAttachmentTableRefs = false}) {
             return PrefetchHooks(
               db: db,
-              explicitlyWatchedTables: [],
+              explicitlyWatchedTables: [
+                if (messageAttachmentTableRefs) db.messageAttachmentTable
+              ],
               addJoins: <
                   T extends TableManagerState<
                       dynamic,
@@ -10887,7 +11289,20 @@ class $$ChatMessagesTableTableTableManager extends RootTableManager<
                 return state;
               },
               getPrefetchedDataCallback: (items) async {
-                return [];
+                return [
+                  if (messageAttachmentTableRefs)
+                    await $_getPrefetchedData(
+                        currentTable: table,
+                        referencedTable: $$ChatMessagesTableTableReferences
+                            ._messageAttachmentTableRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$ChatMessagesTableTableReferences(db, table, p0)
+                                .messageAttachmentTableRefs,
+                        referencedItemsForCurrentItem:
+                            (item, referencedItems) => referencedItems
+                                .where((e) => e.chatsMessageId == item.id),
+                        typedResults: items)
+                ];
               },
             );
           },
@@ -10905,7 +11320,7 @@ typedef $$ChatMessagesTableTableProcessedTableManager = ProcessedTableManager<
     $$ChatMessagesTableTableUpdateCompanionBuilder,
     (ChatMessageData, $$ChatMessagesTableTableReferences),
     ChatMessageData,
-    PrefetchHooks Function({bool chatId})>;
+    PrefetchHooks Function({bool chatId, bool messageAttachmentTableRefs})>;
 typedef $$ChatMessageSyncCursorTableTableCreateCompanionBuilder
     = ChatMessageSyncCursorDataCompanion Function({
   required int chatId,
@@ -13389,6 +13804,25 @@ final class $$SmsMessagesTableTableReferences extends BaseReferences<
     return ProcessedTableManager(
         manager.$state.copyWith(prefetchedData: [item]));
   }
+
+  static MultiTypedResultKey<$MessageAttachmentTableTable,
+      List<MessageAttachmentData>> _messageAttachmentTableRefsTable(
+          _$AppDatabase db) =>
+      MultiTypedResultKey.fromTable(db.messageAttachmentTable,
+          aliasName: $_aliasNameGenerator(
+              db.smsMessagesTable.id, db.messageAttachmentTable.smsMessageId));
+
+  $$MessageAttachmentTableTableProcessedTableManager
+      get messageAttachmentTableRefs {
+    final manager = $$MessageAttachmentTableTableTableManager(
+            $_db, $_db.messageAttachmentTable)
+        .filter((f) => f.smsMessageId.id($_item.id));
+
+    final cache =
+        $_typedResult.readTableOrNull(_messageAttachmentTableRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
 }
 
 class $$SmsMessagesTableTableFilterComposer
@@ -13456,6 +13890,29 @@ class $$SmsMessagesTableTableFilterComposer
                       $removeJoinBuilderFromRootComposer,
                 ));
     return composer;
+  }
+
+  Expression<bool> messageAttachmentTableRefs(
+      Expression<bool> Function($$MessageAttachmentTableTableFilterComposer f)
+          f) {
+    final $$MessageAttachmentTableTableFilterComposer composer =
+        $composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.id,
+            referencedTable: $db.messageAttachmentTable,
+            getReferencedColumn: (t) => t.smsMessageId,
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$MessageAttachmentTableTableFilterComposer(
+                  $db: $db,
+                  $table: $db.messageAttachmentTable,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
+    return f(composer);
   }
 }
 
@@ -13586,6 +14043,29 @@ class $$SmsMessagesTableTableAnnotationComposer
                 ));
     return composer;
   }
+
+  Expression<T> messageAttachmentTableRefs<T extends Object>(
+      Expression<T> Function($$MessageAttachmentTableTableAnnotationComposer a)
+          f) {
+    final $$MessageAttachmentTableTableAnnotationComposer composer =
+        $composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.id,
+            referencedTable: $db.messageAttachmentTable,
+            getReferencedColumn: (t) => t.smsMessageId,
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$MessageAttachmentTableTableAnnotationComposer(
+                  $db: $db,
+                  $table: $db.messageAttachmentTable,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
+    return f(composer);
+  }
 }
 
 class $$SmsMessagesTableTableTableManager extends RootTableManager<
@@ -13599,7 +14079,8 @@ class $$SmsMessagesTableTableTableManager extends RootTableManager<
     $$SmsMessagesTableTableUpdateCompanionBuilder,
     (SmsMessageData, $$SmsMessagesTableTableReferences),
     SmsMessageData,
-    PrefetchHooks Function({bool conversationId})> {
+    PrefetchHooks Function(
+        {bool conversationId, bool messageAttachmentTableRefs})> {
   $$SmsMessagesTableTableTableManager(
       _$AppDatabase db, $SmsMessagesTableTable table)
       : super(TableManagerState(
@@ -13669,10 +14150,13 @@ class $$SmsMessagesTableTableTableManager extends RootTableManager<
                     $$SmsMessagesTableTableReferences(db, table, e)
                   ))
               .toList(),
-          prefetchHooksCallback: ({conversationId = false}) {
+          prefetchHooksCallback: (
+              {conversationId = false, messageAttachmentTableRefs = false}) {
             return PrefetchHooks(
               db: db,
-              explicitlyWatchedTables: [],
+              explicitlyWatchedTables: [
+                if (messageAttachmentTableRefs) db.messageAttachmentTable
+              ],
               addJoins: <
                   T extends TableManagerState<
                       dynamic,
@@ -13701,7 +14185,20 @@ class $$SmsMessagesTableTableTableManager extends RootTableManager<
                 return state;
               },
               getPrefetchedDataCallback: (items) async {
-                return [];
+                return [
+                  if (messageAttachmentTableRefs)
+                    await $_getPrefetchedData(
+                        currentTable: table,
+                        referencedTable: $$SmsMessagesTableTableReferences
+                            ._messageAttachmentTableRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$SmsMessagesTableTableReferences(db, table, p0)
+                                .messageAttachmentTableRefs,
+                        referencedItemsForCurrentItem:
+                            (item, referencedItems) => referencedItems
+                                .where((e) => e.smsMessageId == item.id),
+                        typedResults: items)
+                ];
               },
             );
           },
@@ -13719,7 +14216,8 @@ typedef $$SmsMessagesTableTableProcessedTableManager = ProcessedTableManager<
     $$SmsMessagesTableTableUpdateCompanionBuilder,
     (SmsMessageData, $$SmsMessagesTableTableReferences),
     SmsMessageData,
-    PrefetchHooks Function({bool conversationId})>;
+    PrefetchHooks Function(
+        {bool conversationId, bool messageAttachmentTableRefs})>;
 typedef $$SmsMessageSyncCursorTableTableCreateCompanionBuilder
     = SmsMessageSyncCursorDataCompanion Function({
   required int conversationId,
@@ -15878,6 +16376,361 @@ typedef $$OutboxAttachmentTableTableProcessedTableManager
         OutboxAttachmentData,
         PrefetchHooks Function(
             {bool chatsOutboxMessageIdKey, bool smsOutboxMessageIdKey})>;
+typedef $$MessageAttachmentTableTableCreateCompanionBuilder
+    = MessageAttachmentDataCompanion Function({
+  Value<int> id,
+  Value<int?> chatsMessageId,
+  Value<int?> smsMessageId,
+  required String fileName,
+  required String filePath,
+});
+typedef $$MessageAttachmentTableTableUpdateCompanionBuilder
+    = MessageAttachmentDataCompanion Function({
+  Value<int> id,
+  Value<int?> chatsMessageId,
+  Value<int?> smsMessageId,
+  Value<String> fileName,
+  Value<String> filePath,
+});
+
+final class $$MessageAttachmentTableTableReferences extends BaseReferences<
+    _$AppDatabase, $MessageAttachmentTableTable, MessageAttachmentData> {
+  $$MessageAttachmentTableTableReferences(
+      super.$_db, super.$_table, super.$_typedResult);
+
+  static $ChatMessagesTableTable _chatsMessageIdTable(_$AppDatabase db) =>
+      db.chatMessagesTable.createAlias($_aliasNameGenerator(
+          db.messageAttachmentTable.chatsMessageId, db.chatMessagesTable.id));
+
+  $$ChatMessagesTableTableProcessedTableManager? get chatsMessageId {
+    if ($_item.chatsMessageId == null) return null;
+    final manager =
+        $$ChatMessagesTableTableTableManager($_db, $_db.chatMessagesTable)
+            .filter((f) => f.id($_item.chatsMessageId!));
+    final item = $_typedResult.readTableOrNull(_chatsMessageIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+
+  static $SmsMessagesTableTable _smsMessageIdTable(_$AppDatabase db) =>
+      db.smsMessagesTable.createAlias($_aliasNameGenerator(
+          db.messageAttachmentTable.smsMessageId, db.smsMessagesTable.id));
+
+  $$SmsMessagesTableTableProcessedTableManager? get smsMessageId {
+    if ($_item.smsMessageId == null) return null;
+    final manager =
+        $$SmsMessagesTableTableTableManager($_db, $_db.smsMessagesTable)
+            .filter((f) => f.id($_item.smsMessageId!));
+    final item = $_typedResult.readTableOrNull(_smsMessageIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+}
+
+class $$MessageAttachmentTableTableFilterComposer
+    extends Composer<_$AppDatabase, $MessageAttachmentTableTable> {
+  $$MessageAttachmentTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get fileName => $composableBuilder(
+      column: $table.fileName, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get filePath => $composableBuilder(
+      column: $table.filePath, builder: (column) => ColumnFilters(column));
+
+  $$ChatMessagesTableTableFilterComposer get chatsMessageId {
+    final $$ChatMessagesTableTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.chatsMessageId,
+        referencedTable: $db.chatMessagesTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ChatMessagesTableTableFilterComposer(
+              $db: $db,
+              $table: $db.chatMessagesTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$SmsMessagesTableTableFilterComposer get smsMessageId {
+    final $$SmsMessagesTableTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.smsMessageId,
+        referencedTable: $db.smsMessagesTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$SmsMessagesTableTableFilterComposer(
+              $db: $db,
+              $table: $db.smsMessagesTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$MessageAttachmentTableTableOrderingComposer
+    extends Composer<_$AppDatabase, $MessageAttachmentTableTable> {
+  $$MessageAttachmentTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get fileName => $composableBuilder(
+      column: $table.fileName, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get filePath => $composableBuilder(
+      column: $table.filePath, builder: (column) => ColumnOrderings(column));
+
+  $$ChatMessagesTableTableOrderingComposer get chatsMessageId {
+    final $$ChatMessagesTableTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.chatsMessageId,
+        referencedTable: $db.chatMessagesTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ChatMessagesTableTableOrderingComposer(
+              $db: $db,
+              $table: $db.chatMessagesTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$SmsMessagesTableTableOrderingComposer get smsMessageId {
+    final $$SmsMessagesTableTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.smsMessageId,
+        referencedTable: $db.smsMessagesTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$SmsMessagesTableTableOrderingComposer(
+              $db: $db,
+              $table: $db.smsMessagesTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$MessageAttachmentTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $MessageAttachmentTableTable> {
+  $$MessageAttachmentTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get fileName =>
+      $composableBuilder(column: $table.fileName, builder: (column) => column);
+
+  GeneratedColumn<String> get filePath =>
+      $composableBuilder(column: $table.filePath, builder: (column) => column);
+
+  $$ChatMessagesTableTableAnnotationComposer get chatsMessageId {
+    final $$ChatMessagesTableTableAnnotationComposer composer =
+        $composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.chatsMessageId,
+            referencedTable: $db.chatMessagesTable,
+            getReferencedColumn: (t) => t.id,
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$ChatMessagesTableTableAnnotationComposer(
+                  $db: $db,
+                  $table: $db.chatMessagesTable,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
+    return composer;
+  }
+
+  $$SmsMessagesTableTableAnnotationComposer get smsMessageId {
+    final $$SmsMessagesTableTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.smsMessageId,
+        referencedTable: $db.smsMessagesTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$SmsMessagesTableTableAnnotationComposer(
+              $db: $db,
+              $table: $db.smsMessagesTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$MessageAttachmentTableTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $MessageAttachmentTableTable,
+    MessageAttachmentData,
+    $$MessageAttachmentTableTableFilterComposer,
+    $$MessageAttachmentTableTableOrderingComposer,
+    $$MessageAttachmentTableTableAnnotationComposer,
+    $$MessageAttachmentTableTableCreateCompanionBuilder,
+    $$MessageAttachmentTableTableUpdateCompanionBuilder,
+    (MessageAttachmentData, $$MessageAttachmentTableTableReferences),
+    MessageAttachmentData,
+    PrefetchHooks Function({bool chatsMessageId, bool smsMessageId})> {
+  $$MessageAttachmentTableTableTableManager(
+      _$AppDatabase db, $MessageAttachmentTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$MessageAttachmentTableTableFilterComposer(
+                  $db: db, $table: table),
+          createOrderingComposer: () =>
+              $$MessageAttachmentTableTableOrderingComposer(
+                  $db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$MessageAttachmentTableTableAnnotationComposer(
+                  $db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<int?> chatsMessageId = const Value.absent(),
+            Value<int?> smsMessageId = const Value.absent(),
+            Value<String> fileName = const Value.absent(),
+            Value<String> filePath = const Value.absent(),
+          }) =>
+              MessageAttachmentDataCompanion(
+            id: id,
+            chatsMessageId: chatsMessageId,
+            smsMessageId: smsMessageId,
+            fileName: fileName,
+            filePath: filePath,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<int?> chatsMessageId = const Value.absent(),
+            Value<int?> smsMessageId = const Value.absent(),
+            required String fileName,
+            required String filePath,
+          }) =>
+              MessageAttachmentDataCompanion.insert(
+            id: id,
+            chatsMessageId: chatsMessageId,
+            smsMessageId: smsMessageId,
+            fileName: fileName,
+            filePath: filePath,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (
+                    e.readTable(table),
+                    $$MessageAttachmentTableTableReferences(db, table, e)
+                  ))
+              .toList(),
+          prefetchHooksCallback: (
+              {chatsMessageId = false, smsMessageId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins: <
+                  T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic>>(state) {
+                if (chatsMessageId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.chatsMessageId,
+                    referencedTable: $$MessageAttachmentTableTableReferences
+                        ._chatsMessageIdTable(db),
+                    referencedColumn: $$MessageAttachmentTableTableReferences
+                        ._chatsMessageIdTable(db)
+                        .id,
+                  ) as T;
+                }
+                if (smsMessageId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.smsMessageId,
+                    referencedTable: $$MessageAttachmentTableTableReferences
+                        ._smsMessageIdTable(db),
+                    referencedColumn: $$MessageAttachmentTableTableReferences
+                        ._smsMessageIdTable(db)
+                        .id,
+                  ) as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ));
+}
+
+typedef $$MessageAttachmentTableTableProcessedTableManager
+    = ProcessedTableManager<
+        _$AppDatabase,
+        $MessageAttachmentTableTable,
+        MessageAttachmentData,
+        $$MessageAttachmentTableTableFilterComposer,
+        $$MessageAttachmentTableTableOrderingComposer,
+        $$MessageAttachmentTableTableAnnotationComposer,
+        $$MessageAttachmentTableTableCreateCompanionBuilder,
+        $$MessageAttachmentTableTableUpdateCompanionBuilder,
+        (MessageAttachmentData, $$MessageAttachmentTableTableReferences),
+        MessageAttachmentData,
+        PrefetchHooks Function({bool chatsMessageId, bool smsMessageId})>;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -15949,4 +16802,7 @@ class $AppDatabaseManager {
               _db, _db.activeMessageNotificationsTable);
   $$OutboxAttachmentTableTableTableManager get outboxAttachmentTable =>
       $$OutboxAttachmentTableTableTableManager(_db, _db.outboxAttachmentTable);
+  $$MessageAttachmentTableTableTableManager get messageAttachmentTable =>
+      $$MessageAttachmentTableTableTableManager(
+          _db, _db.messageAttachmentTable);
 }

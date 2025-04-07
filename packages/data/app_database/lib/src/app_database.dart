@@ -35,6 +35,7 @@ part 'app_database.g.dart';
     UserSmsNumbersTable,
     ActiveMessageNotificationsTable,
     OutboxAttachmentTable,
+    MessageAttachmentTable,
   ],
   daos: [
     ContactsDao,

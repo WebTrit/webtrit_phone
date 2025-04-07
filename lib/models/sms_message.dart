@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'package:equatable/equatable.dart';
 
+import 'package:webtrit_phone/models/message_attachment.dart';
+
 enum SmsSendingStatus { waiting, sent, failed, delivered }
 
 class SmsMessage extends Equatable {
@@ -12,6 +14,7 @@ class SmsMessage extends Equatable {
   final String toPhoneNumber;
   final SmsSendingStatus sendingStatus;
   final String content;
+  final List<MessageAttachment> attachments;
   final DateTime createdAt;
   final DateTime updatedAt;
   final DateTime? deletedAt;
@@ -25,6 +28,7 @@ class SmsMessage extends Equatable {
     required this.toPhoneNumber,
     required this.sendingStatus,
     required this.content,
+    required this.attachments,
     required this.createdAt,
     required this.updatedAt,
     required this.deletedAt,
@@ -40,6 +44,7 @@ class SmsMessage extends Equatable {
         toPhoneNumber,
         sendingStatus,
         content,
+        attachments,
         createdAt,
         updatedAt,
         deletedAt,
@@ -58,6 +63,7 @@ class SmsMessage extends Equatable {
       'to_phone_number': toPhoneNumber,
       'sending_status': sendingStatus.name,
       'content': content,
+      'attachments': attachments.map((x) => x.toMap()).toList(),
       'inserted_at': createdAt.toIso8601String(),
       'updated_at': updatedAt.toIso8601String(),
       'deleted_at': deletedAt?.toIso8601String(),
@@ -74,6 +80,12 @@ class SmsMessage extends Equatable {
       toPhoneNumber: map['to_phone_number'] as String,
       sendingStatus: SmsSendingStatus.values.byName(map['sending_status'] as String),
       content: map['content'] as String,
+      attachments: map['attachments'] != null
+          ? List<MessageAttachment>.from(
+              (map['attachments'] as List<dynamic>)
+                  .map<MessageAttachment>((x) => MessageAttachment.fromMap(x as Map<String, dynamic>)),
+            )
+          : <MessageAttachment>[],
       createdAt: DateTime.parse(map['inserted_at'] as String),
       updatedAt: DateTime.parse(map['updated_at'] as String),
       deletedAt: map['deleted_at'] != null ? DateTime.parse(map['deleted_at'] as String) : null,

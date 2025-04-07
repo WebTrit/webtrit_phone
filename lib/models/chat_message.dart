@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'package:equatable/equatable.dart';
 
+import 'package:webtrit_phone/models/message_attachment.dart';
+
 class ChatMessage extends Equatable {
   final int id;
   final String idKey;
@@ -10,6 +12,7 @@ class ChatMessage extends Equatable {
   final int? forwardFromId;
   final String? authorId;
   final String content;
+  final List<MessageAttachment> attachments;
   final DateTime createdAt;
   final DateTime updatedAt;
   final DateTime? editedAt;
@@ -24,6 +27,7 @@ class ChatMessage extends Equatable {
     required this.forwardFromId,
     required this.authorId,
     required this.content,
+    required this.attachments,
     required this.createdAt,
     required this.updatedAt,
     required this.editedAt,
@@ -40,6 +44,7 @@ class ChatMessage extends Equatable {
         forwardFromId,
         authorId,
         content,
+        attachments,
         createdAt,
         updatedAt,
         editedAt,
@@ -59,6 +64,7 @@ class ChatMessage extends Equatable {
       'forwarded_from_id': forwardFromId,
       'author_id': authorId,
       'content': content,
+      'attachments': attachments.map((x) => x.toMap()).toList(),
       'created_at': createdAt.toIso8601String(),
       'updated_at': updatedAt.toIso8601String(),
       'edited_at': editedAt?.toIso8601String(),
@@ -76,6 +82,12 @@ class ChatMessage extends Equatable {
       forwardFromId: map['forwarded_from_id'] != null ? map['forwarded_from_id'] as int : null,
       authorId: map['author_id'] != null ? map['author_id'] as String : null,
       content: map['content'] as String,
+      attachments: map['attachments'] != null
+          ? List<MessageAttachment>.from(
+              (map['attachments'] as List<dynamic>)
+                  .map<MessageAttachment>((x) => MessageAttachment.fromMap(x as Map<String, dynamic>)),
+            )
+          : <MessageAttachment>[],
       createdAt: DateTime.parse(map['created_at'] as String),
       updatedAt: DateTime.parse(map['updated_at'] as String),
       editedAt: map['edited_at'] != null ? DateTime.parse(map['edited_at'] as String) : null,

@@ -14,7 +14,8 @@ mixin SmsDriftMapper {
     );
   }
 
-  ConversationWithLastMessage conversationWithLastMessageFromDrift((SmsConversationData, SmsMessageData?) data) {
+  ConversationWithLastMessage conversationWithLastMessageFromDrift(
+      (SmsConversationData, (SmsMessageData, List<MessageAttachmentData>)?) data) {
     final lastMessageData = data.$2;
     return (conversationFromDrift(data.$1), lastMessageData != null ? messageFromDrift(lastMessageData) : null);
   }
@@ -29,36 +30,50 @@ mixin SmsDriftMapper {
     );
   }
 
-  SmsMessage messageFromDrift(SmsMessageData data) {
-    return SmsMessage(
-      id: data.id,
-      idKey: data.idKey,
-      externalId: data.externalId,
-      conversationId: data.conversationId,
-      fromPhoneNumber: data.fromPhoneNumber,
-      toPhoneNumber: data.toPhoneNumber,
-      sendingStatus: SmsSendingStatus.values.byName(data.sendingStatus.name),
-      content: data.content,
-      createdAt: DateTime.fromMicrosecondsSinceEpoch(data.createdAtRemoteUsec),
-      updatedAt: DateTime.fromMicrosecondsSinceEpoch(data.updatedAtRemoteUsec),
-      deletedAt:
-          data.deletedAtRemoteUsec != null ? DateTime.fromMicrosecondsSinceEpoch(data.deletedAtRemoteUsec!) : null,
-    );
+  MessageAttachment attachmentFromDrift(MessageAttachmentData att) {
+    return MessageAttachment(id: att.id, fileName: att.fileName, filePath: att.filePath);
   }
 
-  SmsMessageData messageToDrift(SmsMessage message) {
-    return SmsMessageData(
+  SmsMessage messageFromDrift((SmsMessageData, List<MessageAttachmentData>) data) {
+    final (message, attachments) = data;
+    return SmsMessage(
       id: message.id,
       idKey: message.idKey,
       externalId: message.externalId,
       conversationId: message.conversationId,
       fromPhoneNumber: message.fromPhoneNumber,
       toPhoneNumber: message.toPhoneNumber,
-      sendingStatus: SmsSendingStatusEnum.values.byName(message.sendingStatus.name),
+      sendingStatus: SmsSendingStatus.values.byName(message.sendingStatus.name),
       content: message.content,
-      createdAtRemoteUsec: message.createdAt.microsecondsSinceEpoch,
-      updatedAtRemoteUsec: message.updatedAt.microsecondsSinceEpoch,
-      deletedAtRemoteUsec: message.deletedAt?.microsecondsSinceEpoch,
+      attachments: attachments.map(attachmentFromDrift).toList(),
+      createdAt: DateTime.fromMicrosecondsSinceEpoch(message.createdAtRemoteUsec),
+      updatedAt: DateTime.fromMicrosecondsSinceEpoch(message.updatedAtRemoteUsec),
+      deletedAt: message.deletedAtRemoteUsec != null
+          ? DateTime.fromMicrosecondsSinceEpoch(message.deletedAtRemoteUsec!)
+          : null,
+    );
+  }
+
+  MessageAttachmentData attachmentToDrift(MessageAttachment att) {
+    return MessageAttachmentData(id: att.id, fileName: att.fileName, filePath: att.filePath);
+  }
+
+  (SmsMessageData, List<MessageAttachmentData>) messageToDrift(SmsMessage message) {
+    return (
+      SmsMessageData(
+        id: message.id,
+        idKey: message.idKey,
+        externalId: message.externalId,
+        conversationId: message.conversationId,
+        fromPhoneNumber: message.fromPhoneNumber,
+        toPhoneNumber: message.toPhoneNumber,
+        sendingStatus: SmsSendingStatusEnum.values.byName(message.sendingStatus.name),
+        content: message.content,
+        createdAtRemoteUsec: message.createdAt.microsecondsSinceEpoch,
+        updatedAtRemoteUsec: message.updatedAt.microsecondsSinceEpoch,
+        deletedAtRemoteUsec: message.deletedAt?.microsecondsSinceEpoch,
+      ),
+      message.attachments.map(attachmentToDrift).toList()
     );
   }
 

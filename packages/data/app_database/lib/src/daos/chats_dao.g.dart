@@ -27,4 +27,8 @@ mixin _$ChatsDaoMixin on DatabaseAccessor<AppDatabase> {
       attachedDatabase.smsOutboxMessagesTable;
   $OutboxAttachmentTableTable get outboxAttachmentTable =>
       attachedDatabase.outboxAttachmentTable;
+  $SmsMessagesTableTable get smsMessagesTable =>
+      attachedDatabase.smsMessagesTable;
+  $MessageAttachmentTableTable get messageAttachmentTable =>
+      attachedDatabase.messageAttachmentTable;
 }

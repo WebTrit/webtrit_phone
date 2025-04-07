@@ -16,3 +16,4 @@ export 'widgets/widgets.dart';
 // - localize storage settings, media view
 // - skip image compression if already jpeg and size
 // - limit file size on picker
+// - chats and messages json serialization extract, move models to folder

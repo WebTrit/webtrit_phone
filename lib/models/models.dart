@@ -48,3 +48,4 @@ export 'sms_outbox_read_cursor_entry.dart';
 export 'system_info/system_info.dart';
 export 'video_capturing_settings.dart';
 export 'outbox_attachment.dart';
+export 'message_attachment.dart';
