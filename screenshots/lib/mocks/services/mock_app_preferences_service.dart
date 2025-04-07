@@ -286,12 +286,22 @@ class MockAppPreferencesService implements AppPreferences {
   }
 
   @override
-  bool getStorageAutoDownload({bool defaultValue = false}) {
+  bool getAutoDownloadOnCellular({bool defaultValue = false}) {
     return defaultValue;
   }
 
   @override
-  Future<void> setStorageAutoDownload(bool value) {
+  bool getAutoDownloadOnWifi({bool defaultValue = false}) {
+    return defaultValue;
+  }
+
+  @override
+  Future<void> setAutoDownloadOnCellular(bool value) {
+    return Future.value();
+  }
+
+  @override
+  Future<void> setAutoDownloadOnWifi(bool value) {
     return Future.value();
   }
 }

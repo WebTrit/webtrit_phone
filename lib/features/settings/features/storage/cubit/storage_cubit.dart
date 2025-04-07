@@ -26,10 +26,16 @@ class StorageCubit extends Cubit<StorageState> {
     _appPreferences.setStorageAutoClearDuration(duration);
   }
 
-  void setAutoDownloadEnabled(bool isEnabled) {
-    final newState = state.copyWith(isAutoDownloadEnabled: isEnabled);
+  void setAutoDownloadOnWifiEnabled(bool isEnabled) {
+    final newState = state.copyWith(isAutoDownloadOnWifiEnabled: isEnabled);
     emit(newState);
-    _appPreferences.setStorageAutoDownload(isEnabled);
+    _appPreferences.setAutoDownloadOnWifi(isEnabled);
+  }
+
+  void setAutoDownloadOnCellularEnabled(bool isEnabled) {
+    final newState = state.copyWith(isAutoDownloadOnCellularEnabled: isEnabled);
+    emit(newState);
+    _appPreferences.setAutoDownloadOnCellular(isEnabled);
   }
 
   Future<void> clearCache() async {

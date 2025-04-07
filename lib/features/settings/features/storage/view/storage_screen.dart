@@ -40,6 +40,7 @@ class _StorageScreenState extends State<StorageScreen> {
                     style: Theme.of(context).textTheme.headlineMedium,
                     textAlign: TextAlign.center,
                   ),
+                  const SizedBox(height: 32),
                   for (final entry in storageInfo.entries) ...[
                     Column(
                       children: [
@@ -52,36 +53,53 @@ class _StorageScreenState extends State<StorageScreen> {
                           ],
                         ),
                         const SizedBox(height: 2),
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(4),
-                          child: Stack(
-                            children: [
-                              Container(
-                                height: 4,
-                                width: double.infinity,
-                                color: Theme.of(context).colorScheme.primary.withAlpha(50),
-                              ),
-                              AnimatedContainer(
-                                duration: const Duration(milliseconds: 300),
-                                height: 4,
-                                width: entry.value / totalSize * 100,
-                                color: Theme.of(context).colorScheme.primary,
-                              ),
-                            ],
-                          ),
-                        ),
+                        LayoutBuilder(builder: (context, constraints) {
+                          return ClipRRect(
+                            borderRadius: BorderRadius.circular(4),
+                            child: Stack(
+                              children: [
+                                Container(
+                                  height: 4,
+                                  width: double.infinity,
+                                  color: Theme.of(context).colorScheme.primary.withAlpha(50),
+                                ),
+                                AnimatedContainer(
+                                  duration: const Duration(milliseconds: 300),
+                                  height: 4,
+                                  width: entry.value / totalSize * constraints.maxWidth,
+                                  color: Theme.of(context).colorScheme.primary,
+                                ),
+                              ],
+                            ),
+                          );
+                        }),
                       ],
                     ),
                   ],
+                  const SizedBox(height: 32),
+                  const Divider(),
                   const SizedBox(height: 16),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text('Auto download media'),
+                      const Text('Auto download media on Wi-Fi'),
                       Switch(
-                        value: state.isAutoDownloadEnabled,
+                        value: state.isAutoDownloadOnWifiEnabled,
                         onChanged: (value) {
-                          _storageCubit.setAutoDownloadEnabled(value);
+                          _storageCubit.setAutoDownloadOnWifiEnabled(value);
+                        },
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text('Auto download media on cellular'),
+                      Switch(
+                        value: state.isAutoDownloadOnCellularEnabled,
+                        onChanged: (value) {
+                          _storageCubit.setAutoDownloadOnCellularEnabled(value);
                         },
                       ),
                     ],

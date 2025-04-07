@@ -75,9 +75,13 @@ abstract class AppPreferences {
 
   Future<void> setIceSettings(IceSettings settings);
 
-  bool getStorageAutoDownload({bool defaultValue});
+  bool getAutoDownloadOnWifi({bool defaultValue});
 
-  Future<void> setStorageAutoDownload(bool value);
+  Future<void> setAutoDownloadOnWifi(bool value);
+
+  bool getAutoDownloadOnCellular({bool defaultValue});
+
+  Future<void> setAutoDownloadOnCellular(bool value);
 
   Duration getStorageAutoClearDuration({Duration defaultValue});
 
@@ -119,7 +123,8 @@ class AppPreferencesImpl
   static const _kAudioProcessingSettingsKey = 'audio-processing-settings';
   static const _kVideoCapturingSettingsKey = 'video-capturing-settings';
   static const _kIceSettingsKey = 'ice-settings';
-  static const _kStorageAutoDownloadKey = 'storage-auto-download';
+  static const _kStorageAutoDownloadWifiKey = 'storage-auto-download-wifi';
+  static const _kStorageAutoDownloadCellularKey = 'storage-auto-download-cellular';
   static const _kStorageAutoClearDurationKey = 'storage-auto-clear-duration';
 
   // Please add all new keys here for proper cleaning of preferences
@@ -139,7 +144,8 @@ class AppPreferencesImpl
     _kAudioProcessingSettingsKey,
     _kVideoCapturingSettingsKey,
     _kIceSettingsKey,
-    _kStorageAutoDownloadKey,
+    _kStorageAutoDownloadWifiKey,
+    _kStorageAutoDownloadCellularKey,
     _kStorageAutoClearDurationKey,
   ];
 
@@ -415,12 +421,21 @@ class AppPreferencesImpl
   }
 
   @override
-  bool getStorageAutoDownload({bool defaultValue = true}) {
-    return _sharedPreferences.getBool(_kStorageAutoDownloadKey) ?? defaultValue;
+  bool getAutoDownloadOnWifi({bool defaultValue = true}) {
+    return _sharedPreferences.getBool(_kStorageAutoDownloadWifiKey) ?? defaultValue;
   }
 
   @override
-  Future<void> setStorageAutoDownload(bool value) => _sharedPreferences.setBool(_kStorageAutoDownloadKey, value);
+  Future<void> setAutoDownloadOnWifi(bool value) => _sharedPreferences.setBool(_kStorageAutoDownloadWifiKey, value);
+
+  @override
+  bool getAutoDownloadOnCellular({bool defaultValue = true}) {
+    return _sharedPreferences.getBool(_kStorageAutoDownloadCellularKey) ?? defaultValue;
+  }
+
+  @override
+  Future<void> setAutoDownloadOnCellular(bool value) =>
+      _sharedPreferences.setBool(_kStorageAutoDownloadCellularKey, value);
 
   @override
   Duration getStorageAutoClearDuration({Duration defaultValue = const Duration(days: 7)}) {
