@@ -54,6 +54,31 @@ class _MessageBodyState extends State<MessageBody> {
         remote: widget.attachments,
         remoteBase: context.read<AppBloc>().state.coreUrl!,
       );
+
+  // List<AttachmentView> attViews = [
+  //   (
+  //     path:
+  //         'https://prx-cogent.ukrtelcdn.net/s__secret/d12f9da9feb299864f2a3df30b651768:2025040815:a200RnowN20xU1EwNTZFTVo3bTAyOThLWjMrT09UZjF4V0FTVWVrTnAyQm9TcEVUSnpwNXZzQ2k5b3RWcUw5ejNYazJ3WjlZc3IrRXV2cHVoYXBiZFE9PQ==/7/5/9/3/5/x86rv.mp4',
+  //     fileNameExt: 'video.mp4',
+  //     uploadProgress: null,
+  //     isViewable: true,
+  //     isHearable: false
+  //   ),
+  //   (
+  //     path: 'https://fastly.picsum.photos/id/1/5000/3333.jpg?hmac=Asv2DU3rA_5D1xSe22xZK47WEAN0wjWeFOhzd13ujW4',
+  //     fileNameExt: 'video.jpg',
+  //     uploadProgress: null,
+  //     isViewable: true,
+  //     isHearable: false
+  //   ),
+  //   (
+  //     path: 'https://miyzvuk.net/uploads/public_files/2023-12/haddaway-what-is-love.mp3',
+  //     fileNameExt: '123haddaway-what-is-love.mp3',
+  //     uploadProgress: null,
+  //     isViewable: false,
+  //     isHearable: true
+  //   ),
+  // ];
   List<AttachmentView> get viewableAttachments => attViews.where((a) => a.isViewable).toList();
   List<AttachmentView> get audioAttachments => attViews.where((a) => a.isHearable).toList();
   List<AttachmentView> get otherAttachments => attViews.where((a) => !a.isViewable && !a.isHearable).toList();
@@ -203,7 +228,8 @@ class _MessageBodyState extends State<MessageBody> {
               (att) {
                 return GestureDetector(
                   onTap: () async {
-                    final file = att.path.isLocalPath ? File(att.path) : await MediaStorageService.getFile(att.path);
+                    final file =
+                        att.path.isLocalPath ? File(att.path) : await MediaStorageService.downloadOrGetFile(att.path);
                     OpenFile.open(file.path);
                   },
                   onLongPress: () {

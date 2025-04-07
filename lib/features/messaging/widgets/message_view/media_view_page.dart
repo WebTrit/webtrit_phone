@@ -52,7 +52,7 @@ class _MediaViewPageState extends State<MediaViewPage> {
   Future<File> get currentFile async {
     return currentAttachment.path.isLocalPath
         ? File(currentAttachment.path)
-        : await MediaStorageService.getFile(currentAttachment.path);
+        : await MediaStorageService.downloadOrGetFile(currentAttachment.path);
   }
 
   bool get canSaveToGallery {

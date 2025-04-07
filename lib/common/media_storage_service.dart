@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/painting.dart';
 
 import 'package:blurhash_ffi/blurhash.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:get_thumbnail_video/index.dart';
 import 'package:get_thumbnail_video/video_thumbnail.dart';
@@ -23,22 +23,13 @@ class MediaStorageService {
 
   // Media cache directories
   static const mediaCachePath = 'media_cache';
-  static const audioPlaybackCachePath = 'just_audio_cache';
-  static const videoPlaybackCachePath = 'http_cache_stream';
 
-  static late final CacheManager _cacheManager;
+  static late final Directory _directory;
+  static late final HttpClient _httpClient;
 
   static Future init() async {
-    _cacheManager = CacheManager(
-      Config(
-        mediaCachePath,
-        stalePeriod: const Duration(days: 1337), // coz we'll use our cleanup logic
-        maxNrOfCacheObjects: 1337, // coz we'll use our cleanup logic
-        repo: JsonCacheInfoRepository(databaseName: mediaCachePath),
-        fileSystem: IOFileSystem(mediaCachePath),
-        fileService: HttpFileService(),
-      ),
-    );
+    _httpClient = HttpClient();
+    _directory = await getTemporaryDirectory();
 
     await HttpCacheManager.init();
     HttpCacheManager.instance.config.rangeRequestSplitThreshold = 5 * 1024 * 1024;
@@ -54,19 +45,66 @@ class MediaStorageService {
   }
 
   /// Get file from cache if it exists
+  static File? getFileIfExist(String url) {
+    final uri = Uri.parse(url);
+    final cachepath = _directory.path;
+    final file = File('$cachepath/$mediaCachePath${uri.path}');
+
+    final exist = file.existsSync();
+    if (exist) return file;
+
+    return null;
+  }
+
+  /// Get file from cache if it exists
   /// If the file is not in the cache, it will be downloaded and saved to the cache
-  static Future<File> getFile(String url) async {
-    return _cacheManager.getSingleFile(url);
+  static Future<File> downloadOrGetFile(String url) async {
+    final uri = Uri.parse(url);
+    final cachepath = _directory.path;
+    final file = File('$cachepath/$mediaCachePath${uri.path}');
+    if (await file.exists()) return file;
+
+    var request = await _httpClient.getUrl(uri);
+    var response = await request.close();
+    var bytes = await consolidateHttpClientResponseBytes(response);
+    await file.create(recursive: true);
+    await file.writeAsBytes(bytes);
+    return file;
+  }
+
+  /// Get cachable stream uri for video/audio that can be used to play the file while it is downloading
+  /// as regular network stream with range requests support(seeking)
+  ///
+  /// When fully downloaded, the file will be saved to the cache as regular file
+  /// and can be accessed by getFileIfExist method
+  ///
+  static Uri getCacheStreamUrl(String url) {
+    final uri = Uri.parse(url);
+    final cachepath = _directory.path;
+
+    final file = File('$cachepath/$mediaCachePath${uri.path}');
+
+    final cacheStream = HttpCacheManager.instance.createStream(uri, file: file);
+    return cacheStream.cacheUrl;
   }
 
   /// Get thumbnail for video by remote or local path
   /// If the thumbnail is not in the cache, it will be generated and saved to the cache
   static Future<File> getVideoThumbnail(String url) async {
-    final exitst = await _cacheManager.getFileFromCache('${url}thumb');
-    if (exitst != null) return exitst.file;
+    final uri = Uri.parse(url);
+    final cachepath = _directory.path;
+    final file = File('$cachepath/$mediaCachePath/thumbs${uri.path}.jpg');
+    if (await file.exists()) return file;
 
-    final data = await VideoThumbnail.thumbnailData(video: url, imageFormat: ImageFormat.JPEG, maxHeight: 1080);
-    return await _cacheManager.putFile('${url}thumb', data, fileExtension: 'jpg');
+    final thumb = await VideoThumbnail.thumbnailData(
+      video: url,
+      imageFormat: ImageFormat.JPEG,
+      maxHeight: 1080,
+      quality: 95,
+    );
+    await file.create(recursive: true);
+    await file.writeAsBytes(thumb);
+    return file;
   }
 
   /// Returns ext/MB count for all files in the media cache directories
@@ -81,8 +119,6 @@ class MediaStorageService {
   /// and sum them up by extension.
   /// The method will also print the size of each file in the console.
   static Future<Map<FileKind, double>> enumerateMediaCache() async {
-    final directory = await getTemporaryDirectory();
-
     Map<FileKind, double> extToMb = {};
 
     Future enumerateDir(Directory dir) async {
@@ -95,6 +131,7 @@ class MediaStorageService {
           print('File: ${entity.path}');
           final stat = await entity.stat();
           final mb = stat.size / 1024 / 1024;
+          print('Size:${mb}MB');
 
           FileKind kind;
           if (entity.path.isImagePath) {
@@ -114,9 +151,7 @@ class MediaStorageService {
       }
     }
 
-    await enumerateDir(Directory('${directory.path}/$mediaCachePath'));
-    await enumerateDir(Directory('${directory.path}/$audioPlaybackCachePath'));
-    await enumerateDir(Directory('${directory.path}/$videoPlaybackCachePath'));
+    await enumerateDir(Directory('${_directory.path}/$mediaCachePath'));
 
     // Sort the map by value
     extToMb = Map.fromEntries(
@@ -133,8 +168,6 @@ class MediaStorageService {
   /// Clean media cache by removing files that were last accessed before the given date
   /// The method will enumerate the directories and delete the files that were last accessed before the given date
   static Future cleanStaleMediaCache(DateTime date) async {
-    final directory = await getTemporaryDirectory();
-
     Future enumerateDir(Directory dir) async {
       if (await dir.exists() == false) return;
       final list = dir.listSync();
@@ -149,16 +182,12 @@ class MediaStorageService {
       }
     }
 
-    await enumerateDir(Directory('${directory.path}/$mediaCachePath'));
-    await enumerateDir(Directory('${directory.path}/$audioPlaybackCachePath'));
-    await enumerateDir(Directory('${directory.path}/$videoPlaybackCachePath'));
+    await enumerateDir(Directory('${_directory.path}/$mediaCachePath'));
   }
 
   /// Clean upload temps by removing files that were last accessed before the given date
   /// The method will enumerate the directories and delete the files that were last accessed before the given date
   static Future cleanStaleUploadTemps(DateTime date) async {
-    final directory = await getTemporaryDirectory();
-
     Future enumerateDir(Directory dir) async {
       if (await dir.exists() == false) return;
       final list = dir.listSync();
@@ -173,39 +202,29 @@ class MediaStorageService {
       }
     }
 
-    await enumerateDir(Directory('${directory.path}/$filePickerPath'));
-    await enumerateDir(Directory('${directory.path}/$encodedVideoPath'));
-    await enumerateDir(Directory('${directory.path}/$encodedImagePath'));
+    await enumerateDir(Directory('${_directory.path}/$filePickerPath'));
+    await enumerateDir(Directory('${_directory.path}/$encodedVideoPath'));
+    await enumerateDir(Directory('${_directory.path}/$encodedImagePath'));
   }
 
   static Future clearMediaCache() async {
-    final directory = await getTemporaryDirectory();
-    final cacheDir = Directory('${directory.path}/$mediaCachePath');
+    final cacheDir = Directory('${_directory.path}/$mediaCachePath');
     if (await cacheDir.exists()) {
       await cacheDir.delete(recursive: true);
-    }
-    final audioPlaybackDir = Directory('${directory.path}/$audioPlaybackCachePath');
-    if (await audioPlaybackDir.exists()) {
-      await audioPlaybackDir.delete(recursive: true);
-    }
-    final videoPlaybackDir = Directory('${directory.path}/$videoPlaybackCachePath');
-    if (await videoPlaybackDir.exists()) {
-      await videoPlaybackDir.delete(recursive: true);
     }
   }
 
   /// Make sure to use this method when all uploads are done
   static Future clearUploadTemps() async {
-    final directory = await getTemporaryDirectory();
-    final filePickerDir = Directory('${directory.path}/$filePickerPath');
+    final filePickerDir = Directory('${_directory.path}/$filePickerPath');
     if (await filePickerDir.exists()) {
       await filePickerDir.delete(recursive: true);
     }
-    final encodedVideoDir = Directory('${directory.path}/$encodedVideoPath');
+    final encodedVideoDir = Directory('${_directory.path}/$encodedVideoPath');
     if (await encodedVideoDir.exists()) {
       await encodedVideoDir.delete(recursive: true);
     }
-    final encodedImageDir = Directory('${directory.path}/$encodedImagePath');
+    final encodedImageDir = Directory('${_directory.path}/$encodedImagePath');
     if (await encodedImageDir.exists()) {
       await encodedImageDir.delete(recursive: true);
     }
@@ -215,8 +234,7 @@ class MediaStorageService {
     if (path.isImagePath == false) return null;
 
     final fileName = path.fileName;
-    final dir = await getTemporaryDirectory();
-    final encodedDir = Directory('${dir.path}/$encodedImagePath');
+    final encodedDir = Directory('${_directory.path}/$encodedImagePath');
     if (!encodedDir.existsSync()) encodedDir.createSync(recursive: true);
     final targetPath = '${encodedDir.path}/$fileName.jpg';
 

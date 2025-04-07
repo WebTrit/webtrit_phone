@@ -3,8 +3,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 
-import 'package:http_cache_stream/http_cache_stream.dart';
 import 'package:video_player/video_player.dart';
+import 'package:webtrit_phone/common/media_storage_service.dart';
 
 import 'package:webtrit_phone/extensions/duration.dart';
 import 'package:webtrit_phone/features/messaging/extensions/string_path_utils.dart';
@@ -26,10 +26,7 @@ class VideoView extends StatefulWidget {
 }
 
 class VideoViewState extends State<VideoView> {
-  late final _cacheStream = HttpCacheManager.instance.createStream(Uri.parse(widget.path));
-  late final _controller = widget.path.isLocalPath
-      ? VideoPlayerController.file(File(widget.path))
-      : VideoPlayerController.networkUrl(_cacheStream.cacheUrl);
+  late final VideoPlayerController _controller;
 
   bool _showControls = false;
   Timer? _hideControlsTimer;
@@ -48,6 +45,28 @@ class VideoViewState extends State<VideoView> {
   @override
   void initState() {
     super.initState();
+    init();
+  }
+
+  @override
+  dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  init() async {
+    if (widget.path.isLocalPath) {
+      _controller = VideoPlayerController.file(File(widget.path));
+    } else {
+      final cachedFile = MediaStorageService.getFileIfExist(widget.path);
+      if (cachedFile != null) {
+        _controller = VideoPlayerController.file(cachedFile);
+      } else {
+        final cacheStreamUri = MediaStorageService.getCacheStreamUrl(widget.path);
+        _controller = VideoPlayerController.networkUrl(cacheStreamUri);
+      }
+    }
+
     _controller.initialize().then((_) {
       _controller.setLooping(true);
       _controller.play();
@@ -55,13 +74,6 @@ class VideoViewState extends State<VideoView> {
       notifyControlsDisplayChanged();
       _controller.addListener(() => setState(() {}));
     });
-  }
-
-  @override
-  dispose() {
-    _controller.dispose();
-    _cacheStream.dispose();
-    super.dispose();
   }
 
   Future<void> onSeek(double value) async {

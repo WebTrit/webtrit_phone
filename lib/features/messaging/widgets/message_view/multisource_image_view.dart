@@ -28,7 +28,7 @@ class MultisourceImageView extends StatelessWidget {
     }
 
     return FutureBuilder(
-        future: path.isLocalPath ? Future.value(File(path)) : MediaStorageService.getFile(path),
+        future: path.isLocalPath ? Future.value(File(path)) : MediaStorageService.downloadOrGetFile(path),
         builder: (_, snapshot) {
           final data = snapshot.data;
           if (snapshot.hasError) return Center(child: error);

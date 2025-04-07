@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:just_audio/just_audio.dart';
 import 'package:audio_session/audio_session.dart';
+import 'package:webtrit_phone/common/media_storage_service.dart';
 
 import 'package:webtrit_phone/features/messaging/messaging.dart';
 
@@ -32,10 +33,18 @@ class _AudioViewState extends State<AudioView> with WidgetsBindingObserver {
     final session = await AudioSession.instance;
     await session.configure(const AudioSessionConfiguration.speech());
 
-    final pathUri = Uri.parse(widget.path);
-    final audioSource = widget.path.isLocalPath ? AudioSource.uri(pathUri) : LockCachingAudioSource(pathUri);
+    if (widget.path.isLocalPath) {
+      await _player.setAudioSource(AudioSource.file(widget.path));
+    } else {
+      final cachedFile = MediaStorageService.getFileIfExist(widget.path);
+      if (cachedFile != null) {
+        await _player.setAudioSource(AudioSource.file(cachedFile.path));
+      } else {
+        final cacheStreamUri = MediaStorageService.getCacheStreamUrl(widget.path);
+        await _player.setAudioSource(AudioSource.uri(cacheStreamUri));
+      }
+    }
 
-    await _player.setAudioSource(audioSource);
     _playbackSub = _player.playbackEventStream.listen((_) {
       if (mounted) setState(() {});
     });
