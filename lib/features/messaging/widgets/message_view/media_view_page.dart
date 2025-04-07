@@ -3,7 +3,6 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -22,6 +21,8 @@ import 'package:webtrit_phone/theme/styles/styles.dart';
 
 import 'multisource_image_view.dart';
 
+typedef AttPathAndFilename = ({String path, String filename});
+
 class MediaViewPage extends StatefulWidget {
   const MediaViewPage({
     required this.attachments,
@@ -29,7 +30,7 @@ class MediaViewPage extends StatefulWidget {
     super.key,
   });
 
-  final List<String> attachments;
+  final List<AttPathAndFilename> attachments;
   final int initialIndex;
 
   @override
@@ -41,7 +42,7 @@ class _MediaViewPageState extends State<MediaViewPage> {
   late final pageController = PageController(initialPage: widget.initialIndex);
 
   late int currentIndex = widget.initialIndex;
-  String get currentAttachment => widget.attachments[currentIndex];
+  AttPathAndFilename get currentAttachment => widget.attachments[currentIndex];
 
   double prevRightScroll = 0;
   double prevLeftScroll = 0;
@@ -49,14 +50,26 @@ class _MediaViewPageState extends State<MediaViewPage> {
   bool hideAppBar = false;
 
   Future<File> get currentFile async {
-    return currentAttachment.isLocalPath
-        ? File(currentAttachment)
-        : await MediaStorageService.getFile(currentAttachment);
+    return currentAttachment.path.isLocalPath
+        ? File(currentAttachment.path)
+        : await MediaStorageService.getFile(currentAttachment.path);
+  }
+
+  bool get canSaveToGallery {
+    if (currentAttachment.path.isLocalPath) return false;
+    if (currentAttachment.path.isImagePath) return true;
+    if (currentAttachment.path.isVideoPath) return true;
+    return false;
   }
 
   void onSaveToGallery() async {
     final file = await currentFile;
-    await Gal.putImage(file.path);
+    if (currentAttachment.path.isImagePath) {
+      await Gal.putImage(file.path, album: 'Webtrit');
+    }
+    if (currentAttachment.path.isVideoPath) {
+      await Gal.putVideo(file.path, album: 'Webtrit');
+    }
 
     if (!mounted) return;
     context.showSuccessSnackBar(
@@ -72,7 +85,8 @@ class _MediaViewPageState extends State<MediaViewPage> {
 
   void onShare() async {
     final file = await currentFile;
-    Share.shareXFiles([XFile(file.path)]);
+    final filename = currentAttachment.filename;
+    Share.shareXFiles([XFile(file.path)], fileNameOverrides: [filename]);
   }
 
   @override
@@ -128,7 +142,7 @@ class _MediaViewPageState extends State<MediaViewPage> {
           color: Colors.white,
           iconColor: Colors.white,
           itemBuilder: (_) => [
-            if ((currentAttachment.isImagePath || currentAttachment.isVideoPath) && !currentAttachment.isLocalPath)
+            if (canSaveToGallery)
               PopupMenuItem(
                 onTap: onSaveToGallery,
                 child: const ListTile(
@@ -153,17 +167,6 @@ class _MediaViewPageState extends State<MediaViewPage> {
                 dense: true,
               ),
             ),
-            if (kDebugMode)
-              PopupMenuItem(
-                onTap: () async {
-                  MediaStorageService.enumerateMediaCache();
-                },
-                child: const ListTile(
-                  title: Text('Enumerate cache'),
-                  leading: Icon(Icons.file_copy),
-                  dense: true,
-                ),
-              ),
           ],
         ),
       ],
@@ -183,19 +186,19 @@ class _MediaViewPageState extends State<MediaViewPage> {
         final isLast = index == widget.attachments.length - 1;
 
         Widget content;
-        if (attachment.isImagePath) {
+        if (attachment.path.isImagePath) {
           content = InteractiveViewer(
             maxScale: 10,
             child: MultisourceImageView(
-              attachment,
+              attachment.path,
               fit: BoxFit.contain,
               placeholder: const Icon(Icons.image, color: Colors.white, size: 64),
               error: const Icon(Icons.error, color: Colors.white, size: 64),
             ),
           );
-        } else if (attachment.isVideoPath) {
+        } else if (attachment.path.isVideoPath) {
           content = VideoView(
-            attachment,
+            attachment.path,
             onControlsDisplayChanged: (show) {
               if (!mounted) return;
               setState(() => hideAppBar = !show);
@@ -204,7 +207,7 @@ class _MediaViewPageState extends State<MediaViewPage> {
         } else {
           content = Center(
             child: Text(
-              'File: ${attachment.split('/').last}',
+              'File: ${attachment.filename}',
               style: const TextStyle(fontSize: 24),
             ),
           );

@@ -39,6 +39,12 @@ extension PathUtilExtension on String {
     if (segments.isEmpty) return '';
     return segments.last.split('.').last;
   }
+
+  String get fileNameWithExtension {
+    final segments = toUri.pathSegments;
+    if (segments.isEmpty) return '';
+    return segments.last;
+  }
 }
 
 const imageExts = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'heic'];

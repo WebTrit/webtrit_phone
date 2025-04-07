@@ -13,6 +13,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:video_compress/video_compress.dart';
 
 import 'package:webtrit_phone/features/messaging/messaging.dart';
+import 'package:webtrit_phone/models/file_kind.dart';
 
 class MediaStorageService {
   // Upload temps directories
@@ -269,5 +270,3 @@ class MediaStorageService {
 }
 
 enum EncodePreset { chat, mms }
-
-enum FileKind { image, video, audio, document, other }

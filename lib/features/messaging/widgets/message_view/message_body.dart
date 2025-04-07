@@ -1,15 +1,17 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'package:quiver/collection.dart';
 import 'package:open_file/open_file.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_parsed_text/flutter_parsed_text.dart';
+import 'package:webtrit_phone/blocs/app/app_bloc.dart';
 
 import 'package:webtrit_phone/common/media_storage_service.dart';
-import 'package:webtrit_phone/extensions/iterable.dart';
 import 'package:webtrit_phone/features/messaging/messaging.dart';
+import 'package:webtrit_phone/models/message_attachment.dart';
 import 'package:webtrit_phone/models/outbox_attachment.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 
@@ -25,6 +27,7 @@ class MessageBody extends StatefulWidget {
   const MessageBody({
     required this.text,
     required this.isMine,
+    this.attachments = const [],
     this.outgoingAttachments = const [],
     this.style,
     this.previewDecoration,
@@ -33,7 +36,9 @@ class MessageBody extends StatefulWidget {
 
   final String text;
   final bool isMine;
+  final List<MessageAttachment> attachments;
   final List<OutboxAttachment> outgoingAttachments;
+
   final TextStyle? style;
   final BoxDecoration? previewDecoration;
 
@@ -44,23 +49,14 @@ class MessageBody extends StatefulWidget {
 class _MessageBodyState extends State<MessageBody> {
   late final horizontalSpace = MediaQuery.of(context).size.width - (widget.isMine ? 82 : 82 + 48);
 
-  late final attachments = widget.outgoingAttachments.map((e) => e.pickedPath);
-  // late final attachments = <String>[
-  //   'https://prx3-cogent.ukrtelcdn.net/s__green/6677346d73fc23e3a17f06e1b9a171e8:2025040410:a200RnowN20xU1EwNTZFTVo3bTAyOThLWjMrT09UZjF4V0FTVWVrTnAyQm9TcEVUSnpwNXZzQ2k5b3RWcUw5emR3WjBYRTdtUU9Sd0ZaTWd2TzBYNFE9PQ==/1/2/4/9/9/5/1/vh2e9.mp4',
-  //   'https://fastly.picsum.photos/id/10/2500/1667.jpg?hmac=J04WWC_ebchx3WwzbM-Z4_KC_LeLBWr5LZMaAkWkF68',
-  //   'https://fastly.picsum.photos/id/14/2500/1667.jpg?hmac=ssQyTcZRRumHXVbQAVlXTx-MGBxm6NHWD3SryQ48G-o',
-  //   'https://miyzvuk.net/uploads/public_files/2023-12/haddaway-what-is-love.mp3',
-  //   'https://miyzvuk.net/uploads/public_files/2025-03/atlxs-mxzi-feat_-itamar-mc-montagem-ladrao-slowed.mp3',
-  //   'https://prx-cogent.ukrtelcdn.net/s__ozzy/1a45473d7dc05bc308adf47232e28f7a:2025040411:a200RnowN20xU1EwNTZFTVo3bTAyOThLWjMrT09UZjF4V0FTVWVrTnAyQm9TcEVUSnpwNXZzQ2k5b3RWcUw5emp4OVRxQkxNOVFiSVJacjloVm9SWmc9PQ==/7/5/9/5/4/ulbzk.mp4'
-  // ];
-
-  late final viewableAttachments = attachments.where((a) => a.isImagePath || a.isVideoPath).toList();
-  late final audioAttachments = attachments.where((a) => a.isAudioPath).toList();
-  late final otherAttachments = attachments.where((a) => !a.isImagePath && !a.isVideoPath && !a.isAudioPath).toList();
-
-  OutboxAttachment? outgoingAttachment(String path) {
-    return widget.outgoingAttachments.firstWhereOrNull((e) => e.pickedPath == path);
-  }
+  List<AttachmentView> get attViews => mapAttachmentView(
+        outgoing: widget.outgoingAttachments,
+        remote: widget.attachments,
+        remoteBase: context.read<AppBloc>().state.coreUrl!,
+      );
+  List<AttachmentView> get viewableAttachments => attViews.where((a) => a.isViewable).toList();
+  List<AttachmentView> get audioAttachments => attViews.where((a) => a.isHearable).toList();
+  List<AttachmentView> get otherAttachments => attViews.where((a) => !a.isViewable && !a.isHearable).toList();
 
   static final previewsCache = LruMap<String, OgPreview>(maximumSize: 100);
   OgPreview? preview;
@@ -111,13 +107,15 @@ class _MessageBodyState extends State<MessageBody> {
           MediaStaggerWrap(
             buildElement: (index, size) {
               final att = viewableAttachments[index];
-              final outgoingAtt = outgoingAttachment(att);
 
               return GestureDetector(
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (context) => MediaViewPage(attachments: viewableAttachments, initialIndex: index),
+                      builder: (context) => MediaViewPage(
+                        attachments: viewableAttachments.map((e) => (path: e.path, filename: e.fileNameExt)).toList(),
+                        initialIndex: index,
+                      ),
                     ),
                   );
                 },
@@ -132,19 +130,19 @@ class _MessageBodyState extends State<MessageBody> {
                       boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.1), blurRadius: 2)],
                     ),
                     child: OutboxUploadProgressWrapper(
-                      attachment: outgoingAtt,
+                      uploadProgress: att.uploadProgress,
                       fill: true,
                       child: Builder(builder: (context) {
-                        if (att.isImagePath) {
+                        if (att.path.isImagePath) {
                           return MultisourceImageView(
-                            att,
+                            att.path,
                             placeholder: Icon(Icons.image, color: colorScheme.secondary, size: 64),
                             error: Icon(Icons.error, color: colorScheme.secondary, size: 64),
                           );
                         }
-                        if (att.isVideoPath) {
+                        if (att.path.isVideoPath) {
                           return VideoThumbnailBuilder(
-                            att,
+                            att.path,
                             (File? file) {
                               return Stack(
                                 children: [
@@ -188,11 +186,10 @@ class _MessageBodyState extends State<MessageBody> {
             mainAxisSize: MainAxisSize.min,
             spacing: 8,
             children: audioAttachments.map(
-              (path) {
-                final outgoingAtt = outgoingAttachment(path);
+              (att) {
                 return OutboxUploadProgressWrapper(
-                  attachment: outgoingAtt,
-                  child: AudioView(path),
+                  uploadProgress: att.uploadProgress,
+                  child: AudioView(att.path, att.fileNameExt),
                 );
               },
             ).toList(),
@@ -203,20 +200,18 @@ class _MessageBodyState extends State<MessageBody> {
             spacing: 8,
             runSpacing: 8,
             children: otherAttachments.map(
-              (attachment) {
-                final outgoingAtt = outgoingAttachment(attachment);
+              (att) {
                 return GestureDetector(
                   onTap: () async {
-                    final file =
-                        attachment.isLocalPath ? File(attachment) : await MediaStorageService.getFile(attachment);
+                    final file = att.path.isLocalPath ? File(att.path) : await MediaStorageService.getFile(att.path);
                     OpenFile.open(file.path);
                   },
                   onLongPress: () {
                     // TODO: download, share popupmenu
                   },
                   child: OutboxUploadProgressWrapper(
-                    attachment: outgoingAtt,
-                    child: FileView(attachment),
+                    uploadProgress: att.uploadProgress,
+                    child: FileView(att.fileNameExt),
                   ),
                 );
               },
@@ -367,4 +362,47 @@ MatchText _codeMatcher({final TextStyle? style}) {
       return {'display': str.replaceAll('`', '')};
     },
   );
+}
+
+typedef AttachmentView = ({
+  String path,
+  String fileNameExt,
+  double? uploadProgress,
+  bool isViewable,
+  bool isHearable,
+});
+
+List<AttachmentView> mapAttachmentView({
+  required List<OutboxAttachment> outgoing,
+  required List<MessageAttachment> remote,
+  required String remoteBase,
+}) {
+  List<AttachmentView> attachments = [];
+
+  for (final att in outgoing) {
+    attachments.add(
+      (
+        fileNameExt: att.pickedPath.fileNameWithExtension,
+        path: att.pickedPath,
+        uploadProgress: att.progress,
+        isViewable: att.pickedPath.isImagePath || att.pickedPath.isVideoPath,
+        isHearable: att.pickedPath.isAudioPath,
+      ),
+    );
+  }
+
+  for (final att in remote) {
+    final fullPath = '$remoteBase/${att.filePath}';
+    attachments.add(
+      (
+        fileNameExt: att.fileName,
+        path: fullPath,
+        uploadProgress: null,
+        isViewable: fullPath.isImagePath || fullPath.isVideoPath,
+        isHearable: fullPath.isAudioPath,
+      ),
+    );
+  }
+
+  return attachments;
 }

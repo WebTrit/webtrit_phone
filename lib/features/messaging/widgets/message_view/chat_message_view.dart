@@ -120,8 +120,6 @@ class _ChatMessageViewState extends State<ChatMessageView> {
     if (isSended && membersReadedUntil != null) isViewedByMembers = !message.createdAt.isAfter(membersReadedUntil);
     if (isSended && userReadedUntil != null) isViewedByUser = !message.createdAt.isAfter(userReadedUntil);
 
-    final outgoingAttachments = outboxMessage?.attachments ?? [];
-
     final popupItems = [
       if (hasContent)
         PopupMenuItem(
@@ -237,7 +235,8 @@ class _ChatMessageViewState extends State<ChatMessageView> {
                         MessageBody(
                           text: content,
                           isMine: isMine,
-                          outgoingAttachments: outgoingAttachments,
+                          attachments: message?.attachments ?? [],
+                          outgoingAttachments: outboxMessage?.attachments ?? [],
                           style: theme.contentStyle,
                         ),
                       ],

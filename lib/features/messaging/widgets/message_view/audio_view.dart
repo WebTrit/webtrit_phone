@@ -8,9 +8,10 @@ import 'package:audio_session/audio_session.dart';
 import 'package:webtrit_phone/features/messaging/messaging.dart';
 
 class AudioView extends StatefulWidget {
-  const AudioView(this.path, {super.key});
+  const AudioView(this.path, this.fileName, {super.key});
 
   final String path;
+  final String fileName;
 
   @override
   State<AudioView> createState() => _AudioViewState();
@@ -66,7 +67,7 @@ class _AudioViewState extends State<AudioView> with WidgetsBindingObserver {
             children: [
               Expanded(
                 child: Text(
-                  widget.path.fileName,
+                  widget.fileName,
                   style: const TextStyle(color: Colors.black, fontSize: 10, fontWeight: FontWeight.w700),
                   overflow: TextOverflow.ellipsis,
                 ),

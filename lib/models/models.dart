@@ -49,3 +49,4 @@ export 'system_info/system_info.dart';
 export 'video_capturing_settings.dart';
 export 'outbox_attachment.dart';
 export 'message_attachment.dart';
+export 'file_kind.dart';

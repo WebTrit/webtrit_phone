@@ -162,7 +162,13 @@ class _SmsMessageViewState extends State<SmsMessageView> {
                       Text(senderNumber ?? '', style: theme.userNameStyle),
                       const SizedBox(height: 4),
                       if (!isDeleted) ...[
-                        MessageBody(text: content, isMine: isMine, style: theme.contentStyle),
+                        MessageBody(
+                          text: content,
+                          isMine: isMine,
+                          attachments: message?.attachments ?? [],
+                          outgoingAttachments: outboxMessage?.attachments ?? [],
+                          style: theme.contentStyle,
+                        ),
                       ],
                       if (isDeleted) ...[
                         Text(context.l10n.messaging_MessageView_deleted, style: theme.subContentStyle),

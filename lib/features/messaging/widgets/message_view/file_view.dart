@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:webtrit_phone/extensions/string.dart';
-import 'package:webtrit_phone/features/messaging/messaging.dart';
 
 class FileView extends StatelessWidget {
-  const FileView(this.path, {super.key});
+  const FileView(this.fileNameWithExtension, {super.key});
 
-  final String path;
+  final String fileNameWithExtension;
 
   @override
   Widget build(BuildContext context) {
+    final fileName = fileNameWithExtension.split('.').first;
+    final fileExtension = fileNameWithExtension.split('.').last;
+
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
       decoration: BoxDecoration(
@@ -25,12 +27,12 @@ class FileView extends StatelessWidget {
           ),
           const SizedBox(width: 4),
           Text(
-            path.fileName.limit(20),
+            fileName.limit(20),
             style: const TextStyle(color: Colors.black, fontSize: 10, fontWeight: FontWeight.w700),
             overflow: TextOverflow.ellipsis,
           ),
           Text(
-            '.${path.fileExtension}',
+            '.$fileExtension',
             style: const TextStyle(color: Colors.black, fontSize: 10, fontWeight: FontWeight.w700),
           ),
         ],

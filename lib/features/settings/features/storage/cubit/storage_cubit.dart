@@ -1,8 +1,9 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:webtrit_phone/common/media_storage_service.dart';
 
+import 'package:webtrit_phone/common/media_storage_service.dart';
 import 'package:webtrit_phone/data/app_preferences.dart';
+import 'package:webtrit_phone/models/file_kind.dart';
 
 part 'storage_state.dart';
 
