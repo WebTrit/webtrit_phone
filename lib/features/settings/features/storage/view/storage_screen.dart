@@ -82,7 +82,7 @@ class _StorageScreenState extends State<StorageScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text('Auto download media on Wi-Fi'),
+                      const Expanded(child: Text('Auto download media on Wi-Fi')),
                       Switch(
                         value: state.isAutoDownloadOnWifiEnabled,
                         onChanged: (value) {
@@ -95,7 +95,7 @@ class _StorageScreenState extends State<StorageScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text('Auto download media on cellular'),
+                      const Expanded(child: Text('Auto download media on cellular')),
                       Switch(
                         value: state.isAutoDownloadOnCellularEnabled,
                         onChanged: (value) {
@@ -126,8 +126,8 @@ class _StorageScreenState extends State<StorageScreen> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            const Text('Clear unused media after:'),
-                            const Spacer(),
+                            const Expanded(child: Text('Clear unused media after:')),
+                            const SizedBox(width: 8),
                             Text(divisionsToLabel[divisionsToDays.entries
                                     .firstWhere((entry) => entry.value == state.autoClearDuration.inDays)
                                     .key] ??

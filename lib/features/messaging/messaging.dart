@@ -9,9 +9,10 @@ export 'cubits/cubits.dart';
 export 'services/services.dart';
 export 'widgets/widgets.dart';
 
-
 // TODO:
 // - Refactor orientations bloc to acquire-release flow for locking/unlocking orientation
 // main case is open media view and call conucurently
 // - add bloc for setSystemUIOverlayStyle and setEnabledSystemUIMode same as orientations or combine them as systemUI bloc
-// - localize storage settings
+// - localize storage settings, media view
+// - skip image compression if already jpeg and size
+// - limit file size on picker
