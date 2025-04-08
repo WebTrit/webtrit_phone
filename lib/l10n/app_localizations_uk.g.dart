@@ -1371,6 +1371,24 @@ class AppLocalizationsUk extends AppLocalizations {
   String get settings_iceSettings_Section_trfilter_skipTcp => 'Пропустити TCP-кандидатів';
 
   @override
+  String get settings_connectionSection_title => 'Поведінка з’єднання та викликів';
+
+  @override
+  String get settings_connectionSection_tooltip => 'Налаштуйте, як ваш пристрій обробляє встановлення зʼєднання, узгодження медіа та оновлення дзвінків під час однорангового звʼязку.';
+
+  @override
+  String get settings_videoOffer_title => 'Визначте, як цей пристрій реагує на пропозицію, що містить відео.';
+
+  @override
+  String get settings_videoOffer_option_includeInactive => 'Включити неактивний відеотрек\nЗабезпечує сумісність із відеопропозиціями для майбутньої активації.';
+
+  @override
+  String get settings_videoOffer_option_ignore => 'Відповідати без відео\nТрек не буде додано, якщо це не буде узгоджено пізніше.';
+
+  @override
+  String get call_settings_additional_options => 'Додаткові параметри';
+
+  @override
   String get settings_ListViewTileTitle_about => 'Про програму';
 
   @override
