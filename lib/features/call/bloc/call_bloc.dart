@@ -1339,9 +1339,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     final localStream = activeCall.localStream;
     if (localStream == null) return;
 
-    final localVideoTrack = localStream.getVideoTracks().firstOrNull;
-    if (localVideoTrack != null) {
-      localVideoTrack.enabled = event.enabled;
+    final currentVideoTrack = localStream.getVideoTracks().firstOrNull;
+    if (currentVideoTrack != null) {
+      currentVideoTrack.enabled = event.enabled;
       return;
     }
 
@@ -1351,30 +1351,44 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     try {
       // Capture new audio and video pair together to avoid time sync issues
       // and avoid storing separate audio and video tracks to control them on mute, camera switch etc
-      final newLocalStream = await userMediaBuilder.build(video: true, frontCamera: activeCall.frontCamera);
-      final newAudioTrack = newLocalStream.getAudioTracks().first;
-      final newVideoTrack = newLocalStream.getVideoTracks().first;
+      final newLocalStream = await userMediaBuilder.build(
+        video: true,
+        frontCamera: activeCall.frontCamera,
+      );
 
-      /// Replace audio track using existing sender to avoid adding new mline
+      final newAudioTrack = newLocalStream.getAudioTracks().firstOrNull;
+      final newVideoTrack = newLocalStream.getVideoTracks().firstOrNull;
+
+      final senders = await peerConnection.getSenders();
+      final audioSender = senders.firstWhereOrNull((s) => s.track?.kind == 'audio');
+      final videoSender = senders.firstWhereOrNull((s) => s.track?.kind == 'video');
+
+      /// Replace audio/video tracks using existing senders to avoid adding new m= lines
       ///
       /// Alternatively, you can use (remove || stop) + add tracks flow
-      /// but it has weak support on infrastructure level
-      /// - second audio mline causes problems with call recondings and music on hold
-      /// - second video mline causes empty video stream
+      /// but it has weak support on infrastructure level:
+      /// - second audio m= line causes problems with call recordings and music on hold
+      /// - second video m= line causes empty video stream
       ///
-      /// so best compatibility is to use existing senders and controll them by .enabled or .replaceTrack properties
-      final senders = await peerConnection.getSenders();
-      for (final sender in senders) {
-        if (sender.track?.kind == 'audio') {
-          await sender.track?.stop();
-          await sender.replaceTrack(newAudioTrack);
-        }
+      /// So for best compatibility, use existing senders and control them via .enabled or .replaceTrack
+      if (audioSender != null && newAudioTrack != null) {
+        await audioSender.track?.stop();
+        await audioSender.replaceTrack(newAudioTrack);
+      } else if (newAudioTrack != null) {
+        await peerConnection.addTrack(newAudioTrack, newLocalStream);
       }
-      await peerConnection.addTrack(newVideoTrack, newLocalStream);
 
-      emit(state.copyWithMappedActiveCall(event.callId, (call) {
-        return call.copyWith(localStream: newLocalStream, video: true);
-      }));
+      if (videoSender != null && newVideoTrack != null) {
+        await videoSender.track?.stop();
+        await videoSender.replaceTrack(newVideoTrack);
+      } else if (newVideoTrack != null) {
+        await peerConnection.addTrack(newVideoTrack, newLocalStream);
+      }
+
+      emit(state.copyWithMappedActiveCall(
+        event.callId,
+        (call) => call.copyWith(localStream: newLocalStream, video: true),
+      ));
 
       await callkeep.reportUpdateCall(event.callId, hasVideo: true);
     } on UserMediaError catch (e) {
