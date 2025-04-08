@@ -239,6 +239,10 @@ class _MainShellState extends State<MainShell> {
               final notificationsBloc = context.read<NotificationsBloc>();
               final appCertificates = AppCertificates();
               final encodingConfig = context.read<FeatureAccess>().callFeature.encoding;
+              final userMediaBuilder = DefaultUserMediaBuilder(
+                audioConstraintsBuilder: AudioConstraintsWithAppSettingsBuilder(appPreferences),
+                videoConstraintsBuilder: VideoConstraintsWithAppSettingsBuilder(appPreferences),
+              );
 
               return CallBloc(
                 coreUrl: appBloc.state.coreUrl!,
@@ -251,9 +255,8 @@ class _MainShellState extends State<MainShell> {
                 callkeepConnections: _callkeepConnections,
                 sdpMunger: ModifyWithEncodingSettings(appPreferences, encodingConfig),
                 sdpSanitizer: RemoteSdpSanitizer(),
-                audioConstraintsBuilder: AudioConstraintsWithAppSettingsBuilder(appPreferences),
-                videoConstraintsBuilder: VideoConstraintsWithAppSettingsBuilder(appPreferences),
                 webRtcOptionsBuilder: WebrtcOptionsWithAppSettingsBuilder(appPreferences),
+                userMediaBuilder: userMediaBuilder,
                 iceFilter: FilterWithAppSettings(appPreferences),
               )..add(const CallStarted());
             },

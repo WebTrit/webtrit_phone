@@ -55,10 +55,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   final SDPMunger? sdpMunger;
   final SdpSanitizer? sdpSanitizer;
 
-  final AudioConstraintsBuilder? audioConstraintsBuilder;
-  final VideoConstraintsBuilder? videoConstraintsBuilder;
   final WebrtcOptionsBuilder? webRtcOptionsBuilder;
   final IceFilter? iceFilter;
+  final UserMediaBuilder userMediaBuilder;
 
   StreamSubscription<List<ConnectivityResult>>? _connectivityChangedSubscription;
   StreamSubscription<PendingCall>? _pendingCallHandlerSubscription;
@@ -79,10 +78,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     required this.submitNotification,
     required this.callkeep,
     required this.callkeepConnections,
+    required this.userMediaBuilder,
     this.sdpMunger,
     this.sdpSanitizer,
-    this.audioConstraintsBuilder,
-    this.videoConstraintsBuilder,
     this.webRtcOptionsBuilder,
     this.iceFilter,
   }) : super(const CallState()) {
@@ -1350,7 +1348,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     try {
       // Capture new audio and video pair together to avoid time sync issues
       // and avoid storing separate audio and video tracks to control them on mute, camera switch etc
-      final newLocalStream = await _getUserMedia(video: true, frontCamera: activeCall.frontCamera);
+      final newLocalStream = await userMediaBuilder.build(video: true, frontCamera: activeCall.frontCamera);
       final newAudioTrack = newLocalStream.getAudioTracks().first;
       final newVideoTrack = newLocalStream.getVideoTracks().first;
 
@@ -1671,7 +1669,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     late final MediaStream localStream;
     try {
-      localStream = await _getUserMedia(
+      localStream = await userMediaBuilder.build(
         video: event.video,
         frontCamera: state.retrieveActiveCall(event.callId)?.frontCamera,
       );
@@ -1801,7 +1799,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         return call.copyWith(processingStatus: CallProcessingStatus.incomingInitializingMedia);
       }));
 
-      final localStream = await _getUserMedia(video: offer.hasVideo, frontCamera: call.frontCamera);
+      final localStream = await userMediaBuilder.build(video: offer.hasVideo, frontCamera: call.frontCamera);
       final peerConnection = await _createPeerConnection(event.callId, call.line);
       await Future.forEach(localStream.getTracks(), (t) => peerConnection.addTrack(t, localStream));
 
@@ -2527,36 +2525,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     return callPerformEvent.future;
   }
 
-  Future<MediaStream> _getUserMedia({
-    required bool video,
-    bool? frontCamera,
-  }) async {
-    final Map<String, dynamic> mediaConstraints = {
-      'audio': {
-        'mandatory': audioConstraintsBuilder?.build() ?? {},
-      },
-      'video': video
-          ? {
-              'mandatory': videoConstraintsBuilder?.build() ?? {},
-              if (frontCamera != null) 'facingMode': frontCamera ? 'user' : 'environment',
-              'optional': [],
-            }
-          : false,
-    };
-    final localStream = await navigator.mediaDevices.getUserMedia(mediaConstraints).catchError((e) {
-      throw UserMediaError(e.toString());
-    });
-
-    if (!kIsWeb) {
-      await Helper.setAppleAudioConfiguration(AppleAudioConfiguration(
-        appleAudioMode: video ? AppleAudioMode.videoChat : AppleAudioMode.voiceChat,
-      ));
-      await Helper.setSpeakerphoneOn(video);
-    }
-
-    return localStream;
-  }
-
   Future<RTCPeerConnection> _createPeerConnection(String callId, int lineId) async {
     final peerConnection = await createPeerConnection(
       {
@@ -2683,13 +2651,4 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       _logger.warning('_signalingDeclineCall hangupRequest error: $e');
     });
   }
-}
-
-class UserMediaError implements Exception {
-  final String message;
-
-  UserMediaError(this.message);
-
-  @override
-  String toString() => 'UserMediaError: $message';
 }
