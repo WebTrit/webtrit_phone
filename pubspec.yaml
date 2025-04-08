@@ -88,15 +88,14 @@ dependencies:
   http: ^1.2.2
   file_picker: ^9.0.2
   flutter_image_compress: ^2.4.0
-  flutter_cache_manager: ^3.4.1
   open_file: ^3.5.10
   gal: ^2.3.1
   video_player: ^2.9.5
   http_cache_stream: ^0.0.1
   get_thumbnail_video: ^0.7.2
   audio_session: ^0.1.25
-  blurhash_ffi: ^1.2.7
   video_compress: ^3.1.4
+  record: ^6.0.0
   
   webtrit_api:
     path: ./packages/webtrit_api
