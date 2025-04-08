@@ -994,13 +994,16 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
             final localDescription = await peerConnection.createAnswer({});
             sdpMunger?.apply(localDescription);
 
+            // According to RFC 8829 §5.6 (https://datatracker.ietf.org/doc/html/rfc8829#section-5.6),
+            // localDescription should be set before sending the answer to transition into stable state.
+            await peerConnection.setLocalDescription(localDescription);
+
             await _signalingClient?.execute(UpdateRequest(
               transaction: WebtritSignalingClient.generateTransactionId(),
               line: activeCall.line,
               callId: activeCall.callId,
               jsep: localDescription.toMap(),
             ));
-            await peerConnection.setLocalDescription(localDescription);
           }
         });
       }
@@ -1717,6 +1720,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         jsep: localDescription.toMap(),
         referId: activeCall.fromReferId,
       ));
+
+      // In other cases setLocalDescription is called first; here it's delayed to avoid ICE race
       await peerConnection.setLocalDescription(localDescription);
 
       _peerConnectionComplete(event.callId, peerConnection);
@@ -1810,13 +1815,16 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       final localDescription = await peerConnection.createAnswer({});
       sdpMunger?.apply(localDescription);
 
+      // According to RFC 8829 §5.6 (https://datatracker.ietf.org/doc/html/rfc8829#section-5.6),
+      // localDescription should be set before sending the answer to transition into stable state.
+      await peerConnection.setLocalDescription(localDescription);
+
       await _signalingClient?.execute(AcceptRequest(
         transaction: WebtritSignalingClient.generateTransactionId(),
         line: call.line,
         callId: call.callId,
         jsep: localDescription.toMap(),
       ));
-      await peerConnection.setLocalDescription(localDescription);
 
       _peerConnectionComplete(event.callId, peerConnection);
     } catch (e, s) {
@@ -2065,6 +2073,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
             final localDescription = await peerConnection.createOffer({});
             sdpMunger?.apply(localDescription);
 
+            // According to RFC 8829 §5.6 (https://datatracker.ietf.org/doc/html/rfc8829#section-5.6),
+            // localDescription should be set before sending the answer to transition into stable state.
             await peerConnection.setLocalDescription(localDescription);
 
             final updateRequest = UpdateRequest(
@@ -2612,6 +2622,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
           final localDescription = await peerConnection.createOffer({});
           sdpMunger?.apply(localDescription);
 
+          // According to RFC 8829 §5.6 (https://datatracker.ietf.org/doc/html/rfc8829#section-5.6),
+          // localDescription should be set before sending the offer to transition into have-local-offer state.
+          await peerConnection.setLocalDescription(localDescription);
+
           final updateRequest = UpdateRequest(
             transaction: WebtritSignalingClient.generateTransactionId(),
             line: lineId,
@@ -2619,8 +2633,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
             jsep: localDescription.toMap(),
           );
           await _signalingClient?.execute(updateRequest);
-
-          await peerConnection.setLocalDescription(localDescription);
         }
       }
       ..onTrack = (event) {
