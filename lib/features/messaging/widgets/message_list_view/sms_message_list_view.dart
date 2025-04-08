@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/extensions/extensions.dart';
@@ -8,6 +9,7 @@ import 'package:webtrit_phone/features/messaging/messaging.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
+import 'exchange_bar.dart';
 import 'history_fetch_indicator.dart';
 import 'message_text_field.dart';
 import 'scroll_to_bottom.dart';
@@ -38,7 +40,7 @@ class SmsMessageListView extends StatefulWidget {
   final List<SmsMessageReadCursor> readCursors;
   final bool fetchingHistory;
   final bool historyEndReached;
-  final Function(String content) onSendMessage;
+  final Function(String content, List<String> attachments) onSendMessage;
   final Function(SmsMessage refMessage) onDelete;
   final Function(DateTime until) userReadedUntilUpdate;
   final Future Function() onFetchHistory;
@@ -53,6 +55,7 @@ class _SmsMessageListViewState extends State<SmsMessageListView> {
 
   List<_SmsMessageListViewEntry> viewEntries = [];
   DateTime? computeTime;
+  List<String> attachments = [];
 
   bool scrolledAway = false;
 
@@ -111,14 +114,24 @@ class _SmsMessageListViewState extends State<SmsMessageListView> {
     final content = inputController.text.trim();
     if (content.isEmpty) return;
 
-    widget.onSendMessage(content);
+    widget.onSendMessage(content, attachments);
 
+    attachments = [];
+    setState(() {});
     inputController.text = '';
     scrollToBottom();
   }
 
   void handleDelete(SmsMessage message) {
     widget.onDelete(message);
+  }
+
+  void handleAttachment() async {
+    final result = await FilePicker.platform.pickFiles(allowMultiple: true);
+    if (result == null) return;
+
+    final pickedPaths = result.paths.whereType<String>().toList();
+    setState(() => attachments = pickedPaths);
   }
 
   @override
@@ -218,10 +231,25 @@ class _SmsMessageListViewState extends State<SmsMessageListView> {
   }
 
   Widget field() {
-    return MessageTextField(
-      controller: inputController,
-      onSend: handleSend,
-      onChanged: (value) => context.read<SmsTypingCubit>().sendTyping(),
+    final canAddAttachments = attachments.isEmpty;
+
+    return Column(
+      children: [
+        if (attachments.isNotEmpty)
+          AttachmentsExchangeBar(
+            attachments: attachments,
+            onCancel: () {
+              setState(() => attachments = []);
+              FocusScope.of(context).unfocus();
+            },
+          ),
+        MessageTextField(
+          controller: inputController,
+          onSend: handleSend,
+          onChanged: (value) => context.read<SmsTypingCubit>().sendTyping(),
+          onAddAttachment: canAddAttachments ? handleAttachment : null,
+        ),
+      ],
     );
   }
 }

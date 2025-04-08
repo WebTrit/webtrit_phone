@@ -139,9 +139,9 @@ class _ChatMessageListViewState extends State<ChatMessageListView> {
     attachments = [];
     replyingMessage = null;
     editingMessage = null;
+    setState(() {});
     inputController.text = '';
     chatsForwardingCubit.clear();
-
     scrollToBottom();
   }
 

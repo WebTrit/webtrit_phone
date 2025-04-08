@@ -140,9 +140,9 @@ class _SmsConversationScreenState extends State<SmsConversationScreen> {
                       readCursors: state.readCursors,
                       fetchingHistory: state.fetchingHistory,
                       historyEndReached: state.historyEndReached,
-                      onSendMessage: (content) => conversationCubit.sendMessage(content),
-                      onDelete: (refMessage) => conversationCubit.deleteMessage(refMessage),
-                      userReadedUntilUpdate: (date) => conversationCubit.userReadedUntilUpdate(date),
+                      onSendMessage: conversationCubit.sendMessage,
+                      onDelete: conversationCubit.deleteMessage,
+                      userReadedUntilUpdate: conversationCubit.userReadedUntilUpdate,
                       onFetchHistory: conversationCubit.fetchHistory,
                     );
                   }

@@ -49,11 +49,13 @@ class SmsConversationCubit extends Cubit<SmsConversationState> {
     _init();
   }
 
-  Future sendMessage(String content) async {
+  Future sendMessage(String content, List<String> attachments) async {
     final userNumbers = await _repository.getUserSmsNumbers();
     final userNumber = userNumbers.firstWhereOrNull((e) => e == _creds.firstNumber || e == _creds.secondNumber);
     if (userNumber == null) return;
     final recipientNumber = _creds.firstNumber == userNumber ? _creds.secondNumber : _creds.firstNumber;
+
+    final outAttachments = attachments.map((p) => OutboxAttachment(id: (const Uuid()).v4(), pickedPath: p));
 
     final outboxEntry = SmsOutboxMessageEntry(
       idKey: (const Uuid()).v4(),
@@ -61,6 +63,7 @@ class SmsConversationCubit extends Cubit<SmsConversationState> {
       toPhoneNumber: recipientNumber,
       recepientId: _creds.recipientId,
       content: content,
+      attachments: outAttachments.toList(),
     );
     _outboxRepository.upsertOutboxMessage(outboxEntry);
   }
@@ -339,7 +342,7 @@ class SmsConversationCubit extends Cubit<SmsConversationState> {
   // ignore: unused_element
   Future<void> _fillHistory({int index = 0}) async {
     if (isClosed) return;
-    await sendMessage('Hello, I am a bot. I am here to help you. \n $index');
+    await sendMessage('Hello, I am a bot. I am here to help you. \n $index', []);
     if (index < 100) {
       await Future.delayed(const Duration(seconds: 2));
       await _fillHistory(index: index + 1);
