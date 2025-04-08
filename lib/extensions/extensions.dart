@@ -21,3 +21,4 @@ export 'theme_mode.dart';
 export 'uri_extension.dart';
 export 'user_info.dart';
 export 'web_view_controller.dart';
+export 'file_kind.dart';

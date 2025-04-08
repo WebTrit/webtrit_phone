@@ -943,6 +943,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get messaging_StateBar_initializing => 'INITIALIZING';
 
   @override
+  String get messaging_MediaView_saveToGallery => 'Save to gallery';
+
+  @override
+  String get messaging_MediaView_saveToGallery_success => 'Saved to gallery';
+
+  @override
+  String get messaging_MediaView_saveToGallery_open => 'Open';
+
+  @override
+  String get messaging_MediaView_share => 'Share';
+
+  @override
+  String get messaging_MediaView_open => 'Open with';
+
+  @override
   String get notifications_errorSnackBarAction_callUserMedia => 'Check';
 
   @override
@@ -1437,6 +1452,39 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings_network_incomingCallType_title => 'Incoming Call Type';
 
   @override
+  String get settings_storage_downloadOverWifi => 'Auto download media on Wi-Fi';
+
+  @override
+  String get settings_storage_downloadOverCellular => 'Auto download media on cellular';
+
+  @override
+  String get settings_storage_autoClear => 'Clear unused media after:';
+
+  @override
+  String get settings_storage_autoClear_week => 'Week';
+
+  @override
+  String get settings_storage_autoClear_month => 'Month';
+
+  @override
+  String get settings_storage_autoClear_3month => '3 months';
+
+  @override
+  String get settings_storage_autoClear_6month => '6 months';
+
+  @override
+  String get settings_storage_autoClear_year => 'Year';
+
+  @override
+  String get settings_storage_clear => 'Clear cache';
+
+  @override
+  String get settings_storage_clear_success => 'Cache cleared';
+
+  @override
+  String get settings_storage_total => 'Total';
+
+  @override
   String get signalingResponseCode_ambiguousRequest => 'We couldn\'t understand your request.';
 
   @override
@@ -1660,4 +1708,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get webRegistration_ErrorAcknowledgeDialog_title => 'Web resource error';
+
+  @override
+  String get file_kind_image => 'Image';
+
+  @override
+  String get file_kind_video => 'Video';
+
+  @override
+  String get file_kind_audio => 'Audio';
+
+  @override
+  String get file_kind_document => 'Document';
+
+  @override
+  String get file_kind_other => 'Other';
 }

@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/widgets/back_button.dart';
+import 'package:webtrit_phone/extensions/file_kind.dart';
 import 'package:webtrit_phone/features/settings/features/storage/storage.dart';
 
 class StorageScreen extends StatefulWidget {
@@ -36,7 +37,7 @@ class _StorageScreenState extends State<StorageScreen> {
               child: Column(
                 children: [
                   Text(
-                    'Total: ${totalSize.toStringAsFixed(2)} MB',
+                    '${context.l10n.settings_storage_total}: ${totalSize.toStringAsFixed(2)} MB',
                     style: Theme.of(context).textTheme.headlineMedium,
                     textAlign: TextAlign.center,
                   ),
@@ -47,7 +48,7 @@ class _StorageScreenState extends State<StorageScreen> {
                         const SizedBox(height: 8),
                         Row(
                           children: [
-                            Text(entry.key.name),
+                            Text(entry.key.l10n(context)),
                             const Spacer(),
                             Text('${entry.value.toStringAsFixed(3)} MB'),
                           ],
@@ -82,7 +83,7 @@ class _StorageScreenState extends State<StorageScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Expanded(child: Text('Auto download media on Wi-Fi')),
+                      Expanded(child: Text(context.l10n.settings_storage_downloadOverWifi)),
                       Switch(
                         value: state.isAutoDownloadOnWifiEnabled,
                         onChanged: (value) {
@@ -95,7 +96,7 @@ class _StorageScreenState extends State<StorageScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Expanded(child: Text('Auto download media on cellular')),
+                      Expanded(child: Text(context.l10n.settings_storage_downloadOverCellular)),
                       Switch(
                         value: state.isAutoDownloadOnCellularEnabled,
                         onChanged: (value) {
@@ -107,12 +108,13 @@ class _StorageScreenState extends State<StorageScreen> {
                   const SizedBox(height: 16),
                   Builder(builder: (context) {
                     final Map<int, String> divisionsToLabel = {
-                      0: 'Week',
-                      1: 'Month',
-                      2: '3 months',
-                      3: '6 months',
-                      4: 'Year',
+                      0: context.l10n.settings_storage_autoClear_week,
+                      1: context.l10n.settings_storage_autoClear_month,
+                      2: context.l10n.settings_storage_autoClear_3month,
+                      3: context.l10n.settings_storage_autoClear_6month,
+                      4: context.l10n.settings_storage_autoClear_year,
                     };
+
                     final Map<int, int> divisionsToDays = {
                       0: 7,
                       1: 30,
@@ -121,33 +123,29 @@ class _StorageScreenState extends State<StorageScreen> {
                       4: 365,
                     };
 
+                    final currentValue = divisionsToDays.entries
+                        .firstWhere((entry) => entry.value == state.autoClearDuration.inDays)
+                        .key;
+                    final currentLabel = divisionsToLabel[currentValue]!;
+
                     return Column(
                       children: [
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            const Expanded(child: Text('Clear unused media after:')),
+                            Expanded(child: Text(context.l10n.settings_storage_autoClear)),
                             const SizedBox(width: 8),
-                            Text(divisionsToLabel[divisionsToDays.entries
-                                    .firstWhere((entry) => entry.value == state.autoClearDuration.inDays)
-                                    .key] ??
-                                'Week'),
+                            Text(currentLabel),
                           ],
                         ),
                         const SizedBox(height: 8),
                         Slider(
                           padding: const EdgeInsets.symmetric(horizontal: 8),
-                          value: divisionsToDays.entries
-                              .firstWhere((entry) => entry.value == state.autoClearDuration.inDays)
-                              .key
-                              .toDouble(),
+                          value: currentValue.toDouble(),
                           min: 0,
                           max: 4,
                           divisions: 4,
-                          label: divisionsToLabel[divisionsToDays.entries
-                                  .firstWhere((entry) => entry.value == state.autoClearDuration.inDays)
-                                  .key] ??
-                              'Week',
+                          label: currentLabel,
                           onChanged: (value) {
                             final days = divisionsToDays[value.toInt()] ?? 7;
                             _storageCubit.setAutoClearDuration(Duration(days: days));
@@ -162,14 +160,14 @@ class _StorageScreenState extends State<StorageScreen> {
                       await _storageCubit.clearCache();
                       if (!mounted) return;
                       ScaffoldMessenger.of(this.context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Cache cleared'),
-                          duration: Duration(seconds: 2),
+                        SnackBar(
+                          content: Text(this.context.l10n.settings_storage_clear_success),
+                          duration: const Duration(seconds: 2),
                         ),
                       );
                     },
                     child: Text(
-                      'Clear cache',
+                      context.l10n.settings_storage_clear,
                       style: TextStyle(fontSize: 16, color: colorScheme.secondary),
                     ),
                   ),

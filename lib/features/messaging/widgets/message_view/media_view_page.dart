@@ -17,6 +17,7 @@ import 'package:webtrit_phone/features/messaging/extensions/extensions.dart';
 import 'package:webtrit_phone/features/messaging/widgets/message_view/video_view.dart';
 import 'package:webtrit_phone/features/orientations/bloc/orientations_bloc.dart';
 import 'package:webtrit_phone/features/orientations/models/preferred_orientation.dart';
+import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/theme/styles/styles.dart';
 
 import 'multisource_image_view.dart';
@@ -73,8 +74,11 @@ class _MediaViewPageState extends State<MediaViewPage> {
 
     if (!mounted) return;
     context.showSuccessSnackBar(
-      'Image saved to gallery',
-      action: SnackBarAction(label: 'Open', onPressed: () => Gal.open()),
+      context.l10n.messaging_MediaView_saveToGallery_success,
+      action: SnackBarAction(
+        label: context.l10n.messaging_MediaView_saveToGallery_open,
+        onPressed: () => Gal.open(),
+      ),
     );
   }
 
@@ -145,25 +149,25 @@ class _MediaViewPageState extends State<MediaViewPage> {
             if (canSaveToGallery)
               PopupMenuItem(
                 onTap: onSaveToGallery,
-                child: const ListTile(
-                  title: Text('Save to gallery'),
-                  leading: Icon(Icons.download),
+                child: ListTile(
+                  title: Text(context.l10n.messaging_MediaView_saveToGallery),
+                  leading: const Icon(Icons.download),
                   dense: true,
                 ),
               ),
             PopupMenuItem(
               onTap: onOpenWith,
-              child: const ListTile(
-                title: Text('Open with'),
-                leading: Icon(Icons.open_in_new),
+              child: ListTile(
+                title: Text(context.l10n.messaging_MediaView_open),
+                leading: const Icon(Icons.open_in_new),
                 dense: true,
               ),
             ),
             PopupMenuItem(
               onTap: onShare,
-              child: const ListTile(
-                title: Text('Share'),
-                leading: Icon(Icons.share),
+              child: ListTile(
+                title: Text(context.l10n.messaging_MediaView_share),
+                leading: const Icon(Icons.share),
                 dense: true,
               ),
             ),

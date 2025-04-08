@@ -570,6 +570,14 @@ class AppLocalizationsMapper {
       'messaging_StateBar_error': localizations.messaging_StateBar_error,
       'messaging_StateBar_initializing':
           localizations.messaging_StateBar_initializing,
+      'messaging_MediaView_saveToGallery':
+          localizations.messaging_MediaView_saveToGallery,
+      'messaging_MediaView_saveToGallery_success':
+          localizations.messaging_MediaView_saveToGallery_success,
+      'messaging_MediaView_saveToGallery_open':
+          localizations.messaging_MediaView_saveToGallery_open,
+      'messaging_MediaView_share': localizations.messaging_MediaView_share,
+      'messaging_MediaView_open': localizations.messaging_MediaView_open,
       'notifications_errorSnackBarAction_callUserMedia':
           localizations.notifications_errorSnackBarAction_callUserMedia,
       'notifications_errorSnackBar_activeLineBlindTransferWarning':
@@ -871,6 +879,25 @@ class AppLocalizationsMapper {
           localizations.settings_network_incomingCallType_socket_title,
       'settings_network_incomingCallType_title':
           localizations.settings_network_incomingCallType_title,
+      'settings_storage_downloadOverWifi':
+          localizations.settings_storage_downloadOverWifi,
+      'settings_storage_downloadOverCellular':
+          localizations.settings_storage_downloadOverCellular,
+      'settings_storage_autoClear': localizations.settings_storage_autoClear,
+      'settings_storage_autoClear_week':
+          localizations.settings_storage_autoClear_week,
+      'settings_storage_autoClear_month':
+          localizations.settings_storage_autoClear_month,
+      'settings_storage_autoClear_3month':
+          localizations.settings_storage_autoClear_3month,
+      'settings_storage_autoClear_6month':
+          localizations.settings_storage_autoClear_6month,
+      'settings_storage_autoClear_year':
+          localizations.settings_storage_autoClear_year,
+      'settings_storage_clear': localizations.settings_storage_clear,
+      'settings_storage_clear_success':
+          localizations.settings_storage_clear_success,
+      'settings_storage_total': localizations.settings_storage_total,
       'signalingResponseCode_ambiguousRequest':
           localizations.signalingResponseCode_ambiguousRequest,
       'signalingResponseCode_busyEverywhere':
@@ -1004,6 +1031,11 @@ class AppLocalizationsMapper {
           localizations.webRegistration_ErrorAcknowledgeDialogActions_skip,
       'webRegistration_ErrorAcknowledgeDialog_title':
           localizations.webRegistration_ErrorAcknowledgeDialog_title,
+      'file_kind_image': localizations.file_kind_image,
+      'file_kind_video': localizations.file_kind_video,
+      'file_kind_audio': localizations.file_kind_audio,
+      'file_kind_document': localizations.file_kind_document,
+      'file_kind_other': localizations.file_kind_other,
       'default_UnknownExceptionError': (error) =>
           localizations.default_UnknownExceptionError(error),
       'favorites_SnackBar_deleted': (name) =>

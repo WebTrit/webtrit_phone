@@ -943,6 +943,21 @@ class AppLocalizationsIt extends AppLocalizations {
   String get messaging_StateBar_initializing => 'INIZIALIZZAZIONE';
 
   @override
+  String get messaging_MediaView_saveToGallery => 'Salva nella galleria';
+
+  @override
+  String get messaging_MediaView_saveToGallery_success => 'Salvato nella galleria';
+
+  @override
+  String get messaging_MediaView_saveToGallery_open => 'Aprire';
+
+  @override
+  String get messaging_MediaView_share => 'Condividere';
+
+  @override
+  String get messaging_MediaView_open => 'Apri con';
+
+  @override
   String get notifications_errorSnackBarAction_callUserMedia => 'Verifica';
 
   @override
@@ -1437,6 +1452,39 @@ class AppLocalizationsIt extends AppLocalizations {
   String get settings_network_incomingCallType_title => 'Tipo di chiamata in entrata';
 
   @override
+  String get settings_storage_downloadOverWifi => 'Scaricamento automatico dei contenuti multimediali tramite Wi-Fi';
+
+  @override
+  String get settings_storage_downloadOverCellular => 'Scaricamento automatico dei contenuti multimediali sul cellulare';
+
+  @override
+  String get settings_storage_autoClear => 'Elimina i supporti non utilizzati dopo:';
+
+  @override
+  String get settings_storage_autoClear_week => 'Settimana';
+
+  @override
+  String get settings_storage_autoClear_month => 'Mese';
+
+  @override
+  String get settings_storage_autoClear_3month => '3 mesi';
+
+  @override
+  String get settings_storage_autoClear_6month => '6 mesi';
+
+  @override
+  String get settings_storage_autoClear_year => 'Anno';
+
+  @override
+  String get settings_storage_clear => 'Cancella cache';
+
+  @override
+  String get settings_storage_clear_success => 'Cache cancellata';
+
+  @override
+  String get settings_storage_total => 'Totale';
+
+  @override
   String get signalingResponseCode_ambiguousRequest => 'La tua richiesta non è chiara. Riprova.';
 
   @override
@@ -1660,4 +1708,19 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get webRegistration_ErrorAcknowledgeDialog_title => 'Web resource error';
+
+  @override
+  String get file_kind_image => 'Immagine';
+
+  @override
+  String get file_kind_video => 'Video';
+
+  @override
+  String get file_kind_audio => 'Audio';
+
+  @override
+  String get file_kind_document => 'Documento';
+
+  @override
+  String get file_kind_other => 'Altro';
 }

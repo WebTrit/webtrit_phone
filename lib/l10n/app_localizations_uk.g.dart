@@ -943,6 +943,21 @@ class AppLocalizationsUk extends AppLocalizations {
   String get messaging_StateBar_initializing => 'ІНІЦІАЛІЗАЦІЯ';
 
   @override
+  String get messaging_MediaView_saveToGallery => 'Зберегти в галерею';
+
+  @override
+  String get messaging_MediaView_saveToGallery_success => 'Збережено в галерею';
+
+  @override
+  String get messaging_MediaView_saveToGallery_open => 'Відкрити';
+
+  @override
+  String get messaging_MediaView_share => 'Поділіться';
+
+  @override
+  String get messaging_MediaView_open => 'Відкрити за допомогою';
+
+  @override
   String get notifications_errorSnackBarAction_callUserMedia => 'Перевірити';
 
   @override
@@ -1437,6 +1452,39 @@ class AppLocalizationsUk extends AppLocalizations {
   String get settings_network_incomingCallType_title => 'Тип вхідного дзвінка';
 
   @override
+  String get settings_storage_downloadOverWifi => 'Автоматичне завантаження медіа через Wi-Fi';
+
+  @override
+  String get settings_storage_downloadOverCellular => 'Автоматичне завантаження медіа на стільниковий зв’язок';
+
+  @override
+  String get settings_storage_autoClear => 'Очистіть невикористані носії після:';
+
+  @override
+  String get settings_storage_autoClear_week => 'Тиждень';
+
+  @override
+  String get settings_storage_autoClear_month => 'Місяць';
+
+  @override
+  String get settings_storage_autoClear_3month => '3 місяці';
+
+  @override
+  String get settings_storage_autoClear_6month => '6 місяців';
+
+  @override
+  String get settings_storage_autoClear_year => 'Рік';
+
+  @override
+  String get settings_storage_clear => 'Очистити кеш';
+
+  @override
+  String get settings_storage_clear_success => 'Кеш очищено';
+
+  @override
+  String get settings_storage_total => 'Всього';
+
+  @override
   String get signalingResponseCode_ambiguousRequest => 'Ваш запит не може бути виконаний. Будь ласка, спробуйте ще раз.';
 
   @override
@@ -1660,4 +1708,19 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get webRegistration_ErrorAcknowledgeDialog_title => 'Web resource error';
+
+  @override
+  String get file_kind_image => 'Зображення';
+
+  @override
+  String get file_kind_video => 'Відео';
+
+  @override
+  String get file_kind_audio => 'Аудіо';
+
+  @override
+  String get file_kind_document => 'Документи';
+
+  @override
+  String get file_kind_other => 'Інше';
 }

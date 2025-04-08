@@ -1921,6 +1921,36 @@ abstract class AppLocalizations {
   /// **'INITIALIZING'**
   String get messaging_StateBar_initializing;
 
+  /// No description provided for @messaging_MediaView_saveToGallery.
+  ///
+  /// In en, this message translates to:
+  /// **'Save to gallery'**
+  String get messaging_MediaView_saveToGallery;
+
+  /// No description provided for @messaging_MediaView_saveToGallery_success.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved to gallery'**
+  String get messaging_MediaView_saveToGallery_success;
+
+  /// No description provided for @messaging_MediaView_saveToGallery_open.
+  ///
+  /// In en, this message translates to:
+  /// **'Open'**
+  String get messaging_MediaView_saveToGallery_open;
+
+  /// No description provided for @messaging_MediaView_share.
+  ///
+  /// In en, this message translates to:
+  /// **'Share'**
+  String get messaging_MediaView_share;
+
+  /// No description provided for @messaging_MediaView_open.
+  ///
+  /// In en, this message translates to:
+  /// **'Open with'**
+  String get messaging_MediaView_open;
+
   /// No description provided for @notifications_errorSnackBarAction_callUserMedia.
   ///
   /// In en, this message translates to:
@@ -2869,6 +2899,72 @@ abstract class AppLocalizations {
   /// **'Incoming Call Type'**
   String get settings_network_incomingCallType_title;
 
+  /// No description provided for @settings_storage_downloadOverWifi.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto download media on Wi-Fi'**
+  String get settings_storage_downloadOverWifi;
+
+  /// No description provided for @settings_storage_downloadOverCellular.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto download media on cellular'**
+  String get settings_storage_downloadOverCellular;
+
+  /// No description provided for @settings_storage_autoClear.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear unused media after:'**
+  String get settings_storage_autoClear;
+
+  /// No description provided for @settings_storage_autoClear_week.
+  ///
+  /// In en, this message translates to:
+  /// **'Week'**
+  String get settings_storage_autoClear_week;
+
+  /// No description provided for @settings_storage_autoClear_month.
+  ///
+  /// In en, this message translates to:
+  /// **'Month'**
+  String get settings_storage_autoClear_month;
+
+  /// No description provided for @settings_storage_autoClear_3month.
+  ///
+  /// In en, this message translates to:
+  /// **'3 months'**
+  String get settings_storage_autoClear_3month;
+
+  /// No description provided for @settings_storage_autoClear_6month.
+  ///
+  /// In en, this message translates to:
+  /// **'6 months'**
+  String get settings_storage_autoClear_6month;
+
+  /// No description provided for @settings_storage_autoClear_year.
+  ///
+  /// In en, this message translates to:
+  /// **'Year'**
+  String get settings_storage_autoClear_year;
+
+  /// No description provided for @settings_storage_clear.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear cache'**
+  String get settings_storage_clear;
+
+  /// No description provided for @settings_storage_clear_success.
+  ///
+  /// In en, this message translates to:
+  /// **'Cache cleared'**
+  String get settings_storage_clear_success;
+
+  /// No description provided for @settings_storage_total.
+  ///
+  /// In en, this message translates to:
+  /// **'Total'**
+  String get settings_storage_total;
+
   /// No description provided for @signalingResponseCode_ambiguousRequest.
   ///
   /// In en, this message translates to:
@@ -3306,6 +3402,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Web resource error'**
   String get webRegistration_ErrorAcknowledgeDialog_title;
+
+  /// No description provided for @file_kind_image.
+  ///
+  /// In en, this message translates to:
+  /// **'Image'**
+  String get file_kind_image;
+
+  /// No description provided for @file_kind_video.
+  ///
+  /// In en, this message translates to:
+  /// **'Video'**
+  String get file_kind_video;
+
+  /// No description provided for @file_kind_audio.
+  ///
+  /// In en, this message translates to:
+  /// **'Audio'**
+  String get file_kind_audio;
+
+  /// No description provided for @file_kind_document.
+  ///
+  /// In en, this message translates to:
+  /// **'Document'**
+  String get file_kind_document;
+
+  /// No description provided for @file_kind_other.
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get file_kind_other;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
