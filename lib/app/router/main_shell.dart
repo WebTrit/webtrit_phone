@@ -258,6 +258,10 @@ class _MainShellState extends State<MainShell> {
                 webRtcOptionsBuilder: WebrtcOptionsWithAppSettingsBuilder(appPreferences),
                 userMediaBuilder: userMediaBuilder,
                 iceFilter: FilterWithAppSettings(appPreferences),
+                peerConnectionPolicyApplier: ModifyWithSettingsPeerConnectionPolicyApplier(
+                  prefs: appPreferences,
+                  userMediaBuilder: userMediaBuilder,
+                ),
               )..add(const CallStarted());
             },
           ),

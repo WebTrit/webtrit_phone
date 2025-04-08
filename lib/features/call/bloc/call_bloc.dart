@@ -58,6 +58,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   final WebrtcOptionsBuilder? webRtcOptionsBuilder;
   final IceFilter? iceFilter;
   final UserMediaBuilder userMediaBuilder;
+  final PeerConnectionPolicyApplier? peerConnectionPolicyApplier;
 
   StreamSubscription<List<ConnectivityResult>>? _connectivityChangedSubscription;
   StreamSubscription<PendingCall>? _pendingCallHandlerSubscription;
@@ -83,6 +84,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     this.sdpSanitizer,
     this.webRtcOptionsBuilder,
     this.iceFilter,
+    this.peerConnectionPolicyApplier,
   }) : super(const CallState()) {
     on<CallStarted>(
       _onCallStarted,
@@ -988,6 +990,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
             _logger.warning('__onCallSignalingEventUpdating: peerConnection is null - most likely some state issue');
           } else {
             sdpSanitizer?.apply(remoteDescription);
+            await peerConnectionPolicyApplier?.apply(peerConnection, hasRemoteVideo: jsep.hasVideo);
             await peerConnection.setRemoteDescription(remoteDescription);
             final localDescription = await peerConnection.createAnswer({});
             sdpMunger?.apply(localDescription);
