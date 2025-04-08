@@ -15,7 +15,9 @@ import 'components/heading_section.dart';
 import 'components/inline_choosable_section.dart';
 import 'components/reorderable_section.dart';
 import 'components/slidable_section.dart';
+
 import '../media_settings.dart';
+import '../widgets/widgets.dart';
 
 class MediaSettingsScreen extends StatefulWidget {
   const MediaSettingsScreen({super.key});
@@ -55,6 +57,13 @@ class _MediaSettingsScreenState extends State<MediaSettingsScreen> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
+                PeerConnectionSettingsSection(
+                  peerConnectionSettings: state.pearConnectionSettings,
+                  onSettingsChanged: cubit.setPeerConnectionSettings,
+                ),
+                const SizedBox(height: 24),
+                const Divider(),
+                const SizedBox(height: 24),
                 encodingPresetContent(context, encodingPreset),
                 if (encodingPreset == EncodingPreset.custom) ...[
                   const SizedBox(height: 24),

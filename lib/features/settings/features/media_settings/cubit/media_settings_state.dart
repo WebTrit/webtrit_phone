@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:webtrit_phone/data/app_preferences.dart';
 import 'package:webtrit_phone/models/models.dart';
 
+// TODO(Serdun): Maybe better to use Freezed for avoid a lot of copyWith methods.
 class MediaSettingsState with EquatableMixin {
   MediaSettingsState({
     required this.encodingSettings,
@@ -85,6 +86,17 @@ class MediaSettingsState with EquatableMixin {
       videoCapturingSettings: videoCapturingSettings,
       iceSettings: settings,
       pearConnectionSettings: pearConnectionSettings,
+    );
+  }
+
+  MediaSettingsState copyWithPeerConnectionSettings(PeerConnectionSettings settings) {
+    return MediaSettingsState(
+      encodingSettings: encodingSettings,
+      encodingPreset: encodingPreset,
+      audioProcessingSettings: audioProcessingSettings,
+      videoCapturingSettings: videoCapturingSettings,
+      iceSettings: iceSettings,
+      pearConnectionSettings: settings,
     );
   }
 

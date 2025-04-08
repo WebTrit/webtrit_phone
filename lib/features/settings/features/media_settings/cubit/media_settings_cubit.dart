@@ -35,6 +35,11 @@ class MediaSettingsCubit extends Cubit<MediaSettingsState> {
     _prefs.setIceSettings(settings);
   }
 
+  void setPeerConnectionSettings(PeerConnectionSettings settings) {
+    emit(state.copyWithPeerConnectionSettings(settings));
+    _prefs.setPearConnectionSettings(settings);
+  }
+
   void reset() {
     emit(MediaSettingsState(
       encodingPreset: null,
