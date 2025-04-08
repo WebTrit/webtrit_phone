@@ -61,7 +61,7 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
 
       await AppPermissions.init(featureAccess);
       await SecureStorage.init();
-      await MediaStorageService.init();
+      await MediaStorageService.init(appPreferences);
       await AppCertificates.init();
       await AppTime.init();
       await SessionCleanupWorker.init();
