@@ -41,7 +41,9 @@ class SmsOutboxMessageEntry extends Equatable {
       ];
 
   @override
-  bool get stringify => true;
+  String toString() {
+    return 'SmsOutboxMessageEntry{idKey: $idKey, fromPhoneNumber: $fromPhoneNumber, toPhoneNumber: $toPhoneNumber, content: $content, attachments: $attachments, recepientId: $recepientId, conversationId: $conversationId, sendAttempts: $sendAttempts, failureCode: $failureCode}';
+  }
 
   SmsOutboxMessageEntry copyWith({
     String? idKey,
@@ -69,5 +71,33 @@ class SmsOutboxMessageEntry extends Equatable {
 
   SmsOutboxMessageEntry incAttempt() {
     return copyWith(sendAttempts: sendAttempts + 1);
+  }
+
+  SmsOutboxMessageEntry setFailureCode(String code) {
+    return SmsOutboxMessageEntry(
+      idKey: idKey,
+      fromPhoneNumber: fromPhoneNumber,
+      toPhoneNumber: toPhoneNumber,
+      content: content,
+      recepientId: recepientId,
+      attachments: attachments,
+      conversationId: conversationId,
+      sendAttempts: sendAttempts,
+      failureCode: code,
+    );
+  }
+
+  SmsOutboxMessageEntry resetFailure() {
+    return SmsOutboxMessageEntry(
+      idKey: idKey,
+      fromPhoneNumber: fromPhoneNumber,
+      toPhoneNumber: toPhoneNumber,
+      content: content,
+      recepientId: recepientId,
+      attachments: attachments,
+      conversationId: conversationId,
+      sendAttempts: sendAttempts,
+      failureCode: null,
+    );
   }
 }

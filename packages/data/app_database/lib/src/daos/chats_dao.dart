@@ -300,11 +300,11 @@ class ChatsDao extends DatabaseAccessor<AppDatabase> with _$ChatsDaoMixin {
         ])
         .get()
         .then((rows) {
-          final messages = <ChatOutboxMessageData>[];
-          final attachments = <OutboxAttachmentData>[];
+          final messages = <ChatOutboxMessageData>{};
+          final attachments = <OutboxAttachmentData>{};
           for (final row in rows) {
             final message = row.readTable(chatOutboxMessageTable);
-            if (!messages.contains(message)) messages.add(message);
+            messages.add(message);
 
             final attachment = row.readTableOrNull(outboxAttachmentTable);
             if (attachment != null) attachments.add(attachment);
@@ -341,9 +341,9 @@ class ChatsDao extends DatabaseAccessor<AppDatabase> with _$ChatsDaoMixin {
   }
 
   Future upsertChatOutboxMessage((ChatOutboxMessageData, List<OutboxAttachmentData>) data) async {
-    final (chatOutboxMessage, attachments) = data;
+    final (message, attachments) = data;
     await batch((batch) {
-      batch.insertAllOnConflictUpdate(chatOutboxMessageTable, [chatOutboxMessage]);
+      batch.insertAllOnConflictUpdate(chatOutboxMessageTable, [message]);
       batch.insertAllOnConflictUpdate(outboxAttachmentTable, attachments);
     });
   }

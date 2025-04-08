@@ -6419,6 +6419,12 @@ class $SmsOutboxMessagesTableTable extends SmsOutboxMessagesTable
       type: DriftSqlType.int,
       requiredDuringInsert: false,
       defaultValue: const Constant(0));
+  static const VerificationMeta _failureCodeMeta =
+      const VerificationMeta('failureCode');
+  @override
+  late final GeneratedColumn<String> failureCode = GeneratedColumn<String>(
+      'failure_code', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
   @override
   List<GeneratedColumn> get $columns => [
         idKey,
@@ -6427,7 +6433,8 @@ class $SmsOutboxMessagesTableTable extends SmsOutboxMessagesTable
         toPhoneNumber,
         recepientId,
         content,
-        sendAttempts
+        sendAttempts,
+        failureCode
       ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -6486,6 +6493,12 @@ class $SmsOutboxMessagesTableTable extends SmsOutboxMessagesTable
           sendAttempts.isAcceptableOrUnknown(
               data['send_attempts']!, _sendAttemptsMeta));
     }
+    if (data.containsKey('failure_code')) {
+      context.handle(
+          _failureCodeMeta,
+          failureCode.isAcceptableOrUnknown(
+              data['failure_code']!, _failureCodeMeta));
+    }
     return context;
   }
 
@@ -6509,6 +6522,8 @@ class $SmsOutboxMessagesTableTable extends SmsOutboxMessagesTable
           .read(DriftSqlType.string, data['${effectivePrefix}content'])!,
       sendAttempts: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}send_attempts'])!,
+      failureCode: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}failure_code']),
     );
   }
 
@@ -6527,6 +6542,7 @@ class SmsOutboxMessageData extends DataClass
   final String? recepientId;
   final String content;
   final int sendAttempts;
+  final String? failureCode;
   const SmsOutboxMessageData(
       {required this.idKey,
       this.conversationId,
@@ -6534,7 +6550,8 @@ class SmsOutboxMessageData extends DataClass
       required this.toPhoneNumber,
       this.recepientId,
       required this.content,
-      required this.sendAttempts});
+      required this.sendAttempts,
+      this.failureCode});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -6549,6 +6566,9 @@ class SmsOutboxMessageData extends DataClass
     }
     map['content'] = Variable<String>(content);
     map['send_attempts'] = Variable<int>(sendAttempts);
+    if (!nullToAbsent || failureCode != null) {
+      map['failure_code'] = Variable<String>(failureCode);
+    }
     return map;
   }
 
@@ -6565,6 +6585,9 @@ class SmsOutboxMessageData extends DataClass
           : Value(recepientId),
       content: Value(content),
       sendAttempts: Value(sendAttempts),
+      failureCode: failureCode == null && nullToAbsent
+          ? const Value.absent()
+          : Value(failureCode),
     );
   }
 
@@ -6579,6 +6602,7 @@ class SmsOutboxMessageData extends DataClass
       recepientId: serializer.fromJson<String?>(json['recepientId']),
       content: serializer.fromJson<String>(json['content']),
       sendAttempts: serializer.fromJson<int>(json['sendAttempts']),
+      failureCode: serializer.fromJson<String?>(json['failureCode']),
     );
   }
   @override
@@ -6592,6 +6616,7 @@ class SmsOutboxMessageData extends DataClass
       'recepientId': serializer.toJson<String?>(recepientId),
       'content': serializer.toJson<String>(content),
       'sendAttempts': serializer.toJson<int>(sendAttempts),
+      'failureCode': serializer.toJson<String?>(failureCode),
     };
   }
 
@@ -6602,7 +6627,8 @@ class SmsOutboxMessageData extends DataClass
           String? toPhoneNumber,
           Value<String?> recepientId = const Value.absent(),
           String? content,
-          int? sendAttempts}) =>
+          int? sendAttempts,
+          Value<String?> failureCode = const Value.absent()}) =>
       SmsOutboxMessageData(
         idKey: idKey ?? this.idKey,
         conversationId:
@@ -6612,6 +6638,7 @@ class SmsOutboxMessageData extends DataClass
         recepientId: recepientId.present ? recepientId.value : this.recepientId,
         content: content ?? this.content,
         sendAttempts: sendAttempts ?? this.sendAttempts,
+        failureCode: failureCode.present ? failureCode.value : this.failureCode,
       );
   SmsOutboxMessageData copyWithCompanion(SmsOutboxMessageDataCompanion data) {
     return SmsOutboxMessageData(
@@ -6631,6 +6658,8 @@ class SmsOutboxMessageData extends DataClass
       sendAttempts: data.sendAttempts.present
           ? data.sendAttempts.value
           : this.sendAttempts,
+      failureCode:
+          data.failureCode.present ? data.failureCode.value : this.failureCode,
     );
   }
 
@@ -6643,14 +6672,15 @@ class SmsOutboxMessageData extends DataClass
           ..write('toPhoneNumber: $toPhoneNumber, ')
           ..write('recepientId: $recepientId, ')
           ..write('content: $content, ')
-          ..write('sendAttempts: $sendAttempts')
+          ..write('sendAttempts: $sendAttempts, ')
+          ..write('failureCode: $failureCode')
           ..write(')'))
         .toString();
   }
 
   @override
   int get hashCode => Object.hash(idKey, conversationId, fromPhoneNumber,
-      toPhoneNumber, recepientId, content, sendAttempts);
+      toPhoneNumber, recepientId, content, sendAttempts, failureCode);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -6661,7 +6691,8 @@ class SmsOutboxMessageData extends DataClass
           other.toPhoneNumber == this.toPhoneNumber &&
           other.recepientId == this.recepientId &&
           other.content == this.content &&
-          other.sendAttempts == this.sendAttempts);
+          other.sendAttempts == this.sendAttempts &&
+          other.failureCode == this.failureCode);
 }
 
 class SmsOutboxMessageDataCompanion
@@ -6673,6 +6704,7 @@ class SmsOutboxMessageDataCompanion
   final Value<String?> recepientId;
   final Value<String> content;
   final Value<int> sendAttempts;
+  final Value<String?> failureCode;
   final Value<int> rowid;
   const SmsOutboxMessageDataCompanion({
     this.idKey = const Value.absent(),
@@ -6682,6 +6714,7 @@ class SmsOutboxMessageDataCompanion
     this.recepientId = const Value.absent(),
     this.content = const Value.absent(),
     this.sendAttempts = const Value.absent(),
+    this.failureCode = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   SmsOutboxMessageDataCompanion.insert({
@@ -6692,6 +6725,7 @@ class SmsOutboxMessageDataCompanion
     this.recepientId = const Value.absent(),
     required String content,
     this.sendAttempts = const Value.absent(),
+    this.failureCode = const Value.absent(),
     this.rowid = const Value.absent(),
   })  : idKey = Value(idKey),
         fromPhoneNumber = Value(fromPhoneNumber),
@@ -6705,6 +6739,7 @@ class SmsOutboxMessageDataCompanion
     Expression<String>? recepientId,
     Expression<String>? content,
     Expression<int>? sendAttempts,
+    Expression<String>? failureCode,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -6715,6 +6750,7 @@ class SmsOutboxMessageDataCompanion
       if (recepientId != null) 'recepient_id': recepientId,
       if (content != null) 'content': content,
       if (sendAttempts != null) 'send_attempts': sendAttempts,
+      if (failureCode != null) 'failure_code': failureCode,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -6727,6 +6763,7 @@ class SmsOutboxMessageDataCompanion
       Value<String?>? recepientId,
       Value<String>? content,
       Value<int>? sendAttempts,
+      Value<String?>? failureCode,
       Value<int>? rowid}) {
     return SmsOutboxMessageDataCompanion(
       idKey: idKey ?? this.idKey,
@@ -6736,6 +6773,7 @@ class SmsOutboxMessageDataCompanion
       recepientId: recepientId ?? this.recepientId,
       content: content ?? this.content,
       sendAttempts: sendAttempts ?? this.sendAttempts,
+      failureCode: failureCode ?? this.failureCode,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -6764,6 +6802,9 @@ class SmsOutboxMessageDataCompanion
     if (sendAttempts.present) {
       map['send_attempts'] = Variable<int>(sendAttempts.value);
     }
+    if (failureCode.present) {
+      map['failure_code'] = Variable<String>(failureCode.value);
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -6780,6 +6821,7 @@ class SmsOutboxMessageDataCompanion
           ..write('recepientId: $recepientId, ')
           ..write('content: $content, ')
           ..write('sendAttempts: $sendAttempts, ')
+          ..write('failureCode: $failureCode, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -14745,6 +14787,7 @@ typedef $$SmsOutboxMessagesTableTableCreateCompanionBuilder
   Value<String?> recepientId,
   required String content,
   Value<int> sendAttempts,
+  Value<String?> failureCode,
   Value<int> rowid,
 });
 typedef $$SmsOutboxMessagesTableTableUpdateCompanionBuilder
@@ -14756,6 +14799,7 @@ typedef $$SmsOutboxMessagesTableTableUpdateCompanionBuilder
   Value<String?> recepientId,
   Value<String> content,
   Value<int> sendAttempts,
+  Value<String?> failureCode,
   Value<int> rowid,
 });
 
@@ -14827,6 +14871,9 @@ class $$SmsOutboxMessagesTableTableFilterComposer
 
   ColumnFilters<int> get sendAttempts => $composableBuilder(
       column: $table.sendAttempts, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get failureCode => $composableBuilder(
+      column: $table.failureCode, builder: (column) => ColumnFilters(column));
 
   $$SmsConversationsTableTableFilterComposer get conversationId {
     final $$SmsConversationsTableTableFilterComposer composer =
@@ -14903,6 +14950,9 @@ class $$SmsOutboxMessagesTableTableOrderingComposer
       column: $table.sendAttempts,
       builder: (column) => ColumnOrderings(column));
 
+  ColumnOrderings<String> get failureCode => $composableBuilder(
+      column: $table.failureCode, builder: (column) => ColumnOrderings(column));
+
   $$SmsConversationsTableTableOrderingComposer get conversationId {
     final $$SmsConversationsTableTableOrderingComposer composer =
         $composerBuilder(
@@ -14951,6 +15001,9 @@ class $$SmsOutboxMessagesTableTableAnnotationComposer
 
   GeneratedColumn<int> get sendAttempts => $composableBuilder(
       column: $table.sendAttempts, builder: (column) => column);
+
+  GeneratedColumn<String> get failureCode => $composableBuilder(
+      column: $table.failureCode, builder: (column) => column);
 
   $$SmsConversationsTableTableAnnotationComposer get conversationId {
     final $$SmsConversationsTableTableAnnotationComposer composer =
@@ -15032,6 +15085,7 @@ class $$SmsOutboxMessagesTableTableTableManager extends RootTableManager<
             Value<String?> recepientId = const Value.absent(),
             Value<String> content = const Value.absent(),
             Value<int> sendAttempts = const Value.absent(),
+            Value<String?> failureCode = const Value.absent(),
             Value<int> rowid = const Value.absent(),
           }) =>
               SmsOutboxMessageDataCompanion(
@@ -15042,6 +15096,7 @@ class $$SmsOutboxMessagesTableTableTableManager extends RootTableManager<
             recepientId: recepientId,
             content: content,
             sendAttempts: sendAttempts,
+            failureCode: failureCode,
             rowid: rowid,
           ),
           createCompanionCallback: ({
@@ -15052,6 +15107,7 @@ class $$SmsOutboxMessagesTableTableTableManager extends RootTableManager<
             Value<String?> recepientId = const Value.absent(),
             required String content,
             Value<int> sendAttempts = const Value.absent(),
+            Value<String?> failureCode = const Value.absent(),
             Value<int> rowid = const Value.absent(),
           }) =>
               SmsOutboxMessageDataCompanion.insert(
@@ -15062,6 +15118,7 @@ class $$SmsOutboxMessagesTableTableTableManager extends RootTableManager<
             recepientId: recepientId,
             content: content,
             sendAttempts: sendAttempts,
+            failureCode: failureCode,
             rowid: rowid,
           ),
           withReferenceMapper: (p0) => p0

@@ -23,4 +23,6 @@ class SmsOutboxMessagesTable extends Table {
   TextColumn get content => text()();
 
   IntColumn get sendAttempts => integer().withDefault(const Constant(0))();
+
+  TextColumn get failureCode => text().nullable()();
 }

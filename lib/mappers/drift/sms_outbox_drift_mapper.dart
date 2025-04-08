@@ -2,20 +2,43 @@ import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/models/models.dart';
 
 mixin SmsOutboxDriftMapper {
-  SmsOutboxMessageEntry smsOutboxMessageEntryFromDrift(SmsOutboxMessageData data) {
+  SmsOutboxMessageEntry smsOutboxMessageEntryFromDrift((SmsOutboxMessageData, List<OutboxAttachmentData>) data) {
+    final (message, attachments) = data;
+
     return SmsOutboxMessageEntry(
-      idKey: data.idKey,
-      fromPhoneNumber: data.fromPhoneNumber,
-      toPhoneNumber: data.toPhoneNumber,
-      content: data.content,
-      conversationId: data.conversationId,
-      recepientId: data.recepientId,
-      sendAttempts: data.sendAttempts,
+      idKey: message.idKey,
+      conversationId: message.conversationId,
+      fromPhoneNumber: message.fromPhoneNumber,
+      toPhoneNumber: message.toPhoneNumber,
+      recepientId: message.recepientId,
+      content: message.content,
+      attachments: attachments.map(outboxAttachmentFromDrift).toList(),
+      sendAttempts: message.sendAttempts,
+      failureCode: message.failureCode,
     );
   }
 
-  SmsOutboxMessageData smsOutboxMessageDataFromEntry(SmsOutboxMessageEntry entry) {
-    return SmsOutboxMessageData(
+  OutboxAttachment outboxAttachmentFromDrift(OutboxAttachmentData attachment) {
+    return OutboxAttachment(
+      id: attachment.idKey,
+      pickedPath: attachment.pickedPath,
+      encodedPath: attachment.encodedPath,
+      uploadedPath: attachment.uploadedPath,
+    );
+  }
+
+  OutboxAttachmentData outboxAttachmentToDrift(String msgId, OutboxAttachment attachment) {
+    return OutboxAttachmentData(
+      idKey: attachment.id,
+      smsOutboxMessageIdKey: msgId,
+      pickedPath: attachment.pickedPath,
+      encodedPath: attachment.encodedPath,
+      uploadedPath: attachment.uploadedPath,
+    );
+  }
+
+  (SmsOutboxMessageData, List<OutboxAttachmentData>) smsOutboxMessageDataFromEntry(SmsOutboxMessageEntry entry) {
+    final message = SmsOutboxMessageData(
       idKey: entry.idKey,
       fromPhoneNumber: entry.fromPhoneNumber,
       toPhoneNumber: entry.toPhoneNumber,
@@ -23,7 +46,14 @@ mixin SmsOutboxDriftMapper {
       conversationId: entry.conversationId,
       recepientId: entry.recepientId,
       sendAttempts: entry.sendAttempts,
+      failureCode: entry.failureCode,
     );
+
+    final attachments = entry.attachments.map((attachment) {
+      return outboxAttachmentToDrift(entry.idKey, attachment);
+    }).toList();
+
+    return (message, attachments);
   }
 
   SmsOutboxMessageDeleteEntry smsOutboxMessageDeleteEntryFromDrift(SmsOutboxMessageDeleteData data) {

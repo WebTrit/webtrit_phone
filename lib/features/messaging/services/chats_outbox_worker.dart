@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:logging/logging.dart';
 import 'package:phoenix_socket/phoenix_socket.dart';
-import 'package:uuid/uuid.dart';
 
 import 'package:webtrit_phone/app/notifications/notifications.dart';
 import 'package:webtrit_phone/common/media_storage_service.dart';
@@ -65,97 +64,49 @@ class ChatsOutboxWorker {
   /// [outboxEntry] The entry of the message in the chat outbox that needs to be processed.
   ///
   /// Returns a [Future] that completes when the message processing is done.
-  Future _processNewMessage(ChatOutboxMessageEntry outboxEntry) async {
+  Future _processNewMessage(ChatOutboxMessageEntry entry) async {
     try {
+      // Prepare attachments if any
+      final prepStream = OutboxAttachmentService.prepareAttachments(entry.attachments, EncodePreset.chat);
+      await for (final attachments in prepStream) {
+        entry = entry.copyWith(attachments: attachments);
+        await _outboxRepository.upsertOutboxMessage(entry);
+      }
+
       final PhoenixChannel? channel;
       // Check if it's message for existed chat or for virtual dialog with designated participant
-      if (outboxEntry.chatId != null) {
-        channel = _client.getChatChannel(outboxEntry.chatId!);
+      if (entry.chatId != null) {
+        channel = _client.getChatChannel(entry.chatId!);
       } else {
         // Check if dialog with participant already created, if so use it
         // Can happen when user wrore many messages to the same new participant being offline
         // and after first message the dialog was created rest of the messages can go to the new dialog
-        final chatId = await _chatsRepository.findDialogId(outboxEntry.participantId!);
+        final chatId = await _chatsRepository.findDialogId(entry.participantId!);
         chatId != null ? channel = _client.getChatChannel(chatId) : channel = _client.userChannel;
       }
 
       if (channel == null) return;
       if (channel.state != PhoenixChannelState.joined) return;
 
-      List<OutboxAttachment> attachments = outboxEntry.attachments;
-
-      for (final att in attachments) {
-        final pickedPath = att.pickedPath;
-        final fileName = pickedPath.fileName;
-        final fileExtension = pickedPath.fileExtension;
-        String? encodedPath = att.encodedPath;
-        String? uploadedPath = att.uploadedPath;
-
-        _logger.info('Started processing $fileName.$fileExtension');
-
-        if (pickedPath.isImagePath && !pickedPath.isGifImagePath && encodedPath == null) {
-          _logger.info('Encoding image: $fileName.$fileExtension');
-
-          final encodedPath = await MediaStorageService.encodeImage(pickedPath, EncodePreset.chat);
-          if (encodedPath == null) throw Exception('Failed to encode image: $pickedPath');
-
-          attachments = attachments.map((e) {
-            if (e.pickedPath != pickedPath) return e;
-            return e.copyWith(encodedPath: encodedPath);
-          }).toList();
-
-          final updatedMessage = outboxEntry.copyWith(attachments: attachments);
-          await _outboxRepository.upsertOutboxMessage(updatedMessage);
-
-          _logger.info('Encoded image: $encodedPath');
-        }
-        if (pickedPath.isVideoPath && encodedPath == null) {
-          _logger.info('Encoding video: $fileName.$fileExtension');
-
-          encodedPath = await MediaStorageService.encodeVideo(pickedPath, EncodePreset.chat);
-          if (encodedPath == null) throw Exception('Failed to encode video: $pickedPath');
-
-          attachments = attachments.map((e) {
-            if (e.pickedPath != pickedPath) return e;
-            return e.copyWith(encodedPath: encodedPath);
-          }).toList();
-
-          final updatedMessage = outboxEntry.copyWith(attachments: attachments);
-          await _outboxRepository.upsertOutboxMessage(updatedMessage);
-
-          _logger.info('Encoded video: $encodedPath');
-        }
-
-        if (uploadedPath == null) {
-          _logger.info('Starting upload $fileName.$fileExtension');
-          await Future.delayed(const Duration(seconds: 1));
-          uploadedPath = const Uuid().v4();
-
-          attachments = attachments.map((e) {
-            if (e.pickedPath != pickedPath) return e;
-            return e.copyWith(uploadedPath: uploadedPath);
-          }).toList();
-          final updatedMessage = outboxEntry.copyWith(attachments: attachments);
-          await _outboxRepository.upsertOutboxMessage(updatedMessage);
-          _logger.info('Uploaded file path: $uploadedPath');
-        }
-
-        _logger.info('Finished processing $fileName.$fileExtension');
-      }
-
       // final (message, chat) = await channel.newChatMessage(outboxEntry);
       // if (chat != null) await _chatsRepository.upsertChat(chat);
       // await _chatsRepository.upsertMessage(message);
       // await _outboxRepository.deleteOutboxMessage(outboxEntry.idKey);
       // _logger.info('Processed new message: ${message.id}');
+    } on EncodeException catch (e, s) {
+      _logger.severe('Error processing new message, attempt: ${entry.sendAttempts}', e, s);
+      await _outboxRepository.upsertOutboxMessage(entry.setFailureCode('media_encode_error'));
+    } on UploadException catch (e, s) {
+      _logger.severe('Error processing new message, attempt: ${entry.sendAttempts}', e, s);
+      await _outboxRepository.upsertOutboxMessage(entry.setFailureCode('media_upload_error'));
     } catch (e, s) {
-      _logger.severe('Error processing new message, attempt: ${outboxEntry.sendAttempts}', e, s);
-      if (outboxEntry.sendAttempts > 5) {
-        await _outboxRepository.deleteOutboxMessage(outboxEntry.idKey);
-        _logger.warning('Send attempts exceeded for message: ${outboxEntry.idKey}');
+      _logger.severe('Error processing new message, attempt: ${entry.sendAttempts}', e, s);
+      if (entry.sendAttempts > 5) {
+        await _outboxRepository.deleteOutboxMessage(entry.idKey);
+        _logger.warning('Send attempts exceeded for message: ${entry.idKey}');
         _submitNotification(DefaultErrorNotification(e));
       } else {
-        await _outboxRepository.upsertOutboxMessage(outboxEntry.incAttempt());
+        await _outboxRepository.upsertOutboxMessage(entry.incAttempt());
       }
     }
   }

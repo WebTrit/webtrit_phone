@@ -40,7 +40,7 @@ mixin ChatsOutboxDriftMapper {
   }
 
   (ChatOutboxMessageData, List<OutboxAttachmentData>) outboxMessageEntryToDrift(ChatOutboxMessageEntry entry) {
-    final chatOutboxMessageData = ChatOutboxMessageData(
+    final message = ChatOutboxMessageData(
       idKey: entry.idKey,
       chatId: entry.chatId,
       participantId: entry.participantId,
@@ -52,11 +52,11 @@ mixin ChatsOutboxDriftMapper {
       failureCode: entry.failureCode,
     );
 
-    final attachmentsData = entry.attachments.map((attachment) {
+    final attachments = entry.attachments.map((attachment) {
       return outboxAttachmentToDrift(entry.idKey, attachment);
     }).toList();
 
-    return (chatOutboxMessageData, attachmentsData);
+    return (message, attachments);
   }
 
   ChatOutboxMessageEditEntry outboxMessageEditEntryFromDrift(ChatOutboxMessageEditData data) {

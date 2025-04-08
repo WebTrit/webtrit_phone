@@ -13,6 +13,7 @@ part 'sms_dao.g.dart';
   SmsOutboxReadCursorsTable,
   UserSmsNumbersTable,
   MessageAttachmentTable,
+  OutboxAttachmentTable,
 ])
 class SmsDao extends DatabaseAccessor<AppDatabase> with _$SmsDaoMixin {
   SmsDao(super.db);
@@ -210,20 +211,69 @@ class SmsDao extends DatabaseAccessor<AppDatabase> with _$SmsDaoMixin {
 
   // Outbox messages
 
-  Future<List<SmsOutboxMessageData>> getOutboxMessages() {
-    return select(smsOutboxMessagesTable).get();
+  Future<List<(SmsOutboxMessageData, List<OutboxAttachmentData>)>> getOutboxMessages() {
+    return select(smsOutboxMessagesTable)
+        .join([
+          leftOuterJoin(
+            outboxAttachmentTable,
+            outboxAttachmentTable.smsOutboxMessageIdKey.equalsExp(smsOutboxMessagesTable.idKey),
+          ),
+        ])
+        .get()
+        .then((rows) {
+          final messages = <SmsOutboxMessageData>{};
+          final attachments = <OutboxAttachmentData>{};
+          for (final row in rows) {
+            final message = row.readTable(smsOutboxMessagesTable);
+            messages.add(message);
+
+            final attachment = row.readTableOrNull(outboxAttachmentTable);
+            if (attachment != null) attachments.add(attachment);
+          }
+          return messages.map((message) {
+            return (message, attachments.where((e) => e.smsOutboxMessageIdKey == message.idKey).toList());
+          }).toList();
+        });
   }
 
-  Stream<List<SmsOutboxMessageData>> watchOutboxMessages() {
-    return select(smsOutboxMessagesTable).watch();
+  Stream<List<(SmsOutboxMessageData, List<OutboxAttachmentData>)>> watchOutboxMessages() {
+    return select(smsOutboxMessagesTable)
+        .join([
+          leftOuterJoin(
+            outboxAttachmentTable,
+            outboxAttachmentTable.smsOutboxMessageIdKey.equalsExp(smsOutboxMessagesTable.idKey),
+          ),
+        ])
+        .watch()
+        .map((rows) {
+          final messages = <SmsOutboxMessageData>{};
+          final attachments = <OutboxAttachmentData>{};
+          for (final row in rows) {
+            final message = row.readTable(smsOutboxMessagesTable);
+            messages.add(message);
+
+            final attachment = row.readTableOrNull(outboxAttachmentTable);
+            if (attachment != null) attachments.add(attachment);
+          }
+          return messages.map((message) {
+            return (message, attachments.where((e) => e.smsOutboxMessageIdKey == message.idKey).toList());
+          }).toList();
+        });
   }
 
-  Future<int> upsertOutboxMessage(Insertable<SmsOutboxMessageData> smsOutboxMessage) {
-    return into(smsOutboxMessagesTable).insertOnConflictUpdate(smsOutboxMessage);
+  Future upsertOutboxMessage((SmsOutboxMessageData, List<OutboxAttachmentData>) data) {
+    final (message, attachments) = data;
+    return batch((batch) {
+      batch.insertAllOnConflictUpdate(smsOutboxMessagesTable, [message]);
+      batch.insertAllOnConflictUpdate(outboxAttachmentTable, attachments);
+    });
   }
 
-  Future<int> deleteOutboxMessage(String idKey) {
-    return (delete(smsOutboxMessagesTable)..where((t) => t.idKey.equals(idKey))).go();
+  Future deleteOutboxMessage(String idKey) async {
+    await batch((batch) {
+      batch.deleteWhere(smsOutboxMessagesTable, (t) => t.idKey.equals(idKey));
+      batch.deleteWhere(outboxAttachmentTable, (t) => t.smsOutboxMessageIdKey.equals(idKey));
+    });
   }
 
   // Outbox message deletes

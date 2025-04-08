@@ -19,12 +19,12 @@ class SmsOutboxRepository with SmsOutboxDriftMapper {
     });
   }
 
-  Future<int> upsertOutboxMessage(SmsOutboxMessageEntry entry) {
+  Future upsertOutboxMessage(SmsOutboxMessageEntry entry) {
     final entryData = smsOutboxMessageDataFromEntry(entry);
     return _smsDao.upsertOutboxMessage(entryData);
   }
 
-  Future<int> deleteOutboxMessage(String idKey) {
+  Future deleteOutboxMessage(String idKey) {
     return _smsDao.deleteOutboxMessage(idKey);
   }
 

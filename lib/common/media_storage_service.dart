@@ -113,7 +113,7 @@ class MediaStorageService {
       video: url,
       imageFormat: ImageFormat.JPEG,
       maxHeight: 1080,
-      quality: 95,
+      quality: 90,
     );
     await file.create(recursive: true);
     await file.writeAsBytes(thumb);
@@ -256,7 +256,7 @@ class MediaStorageService {
       targetPath,
       minWidth: switch (preset) { EncodePreset.chat => 2000, EncodePreset.mms => 500 },
       minHeight: switch (preset) { EncodePreset.chat => 2000, EncodePreset.mms => 500 },
-      quality: switch (preset) { EncodePreset.chat => 80, EncodePreset.mms => 50 },
+      quality: switch (preset) { EncodePreset.chat => 90, EncodePreset.mms => 70 },
       format: CompressFormat.jpeg,
       keepExif: false,
     );

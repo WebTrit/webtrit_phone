@@ -1191,6 +1191,11 @@ class SmsOutboxMessages extends Table with TableInfo {
       requiredDuringInsert: false,
       $customConstraints: 'NOT NULL DEFAULT 0',
       defaultValue: const CustomExpression('0'));
+  late final GeneratedColumn<String> failureCode = GeneratedColumn<String>(
+      'failure_code', aliasedName, true,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      $customConstraints: 'NULL');
   @override
   List<GeneratedColumn> get $columns => [
         idKey,
@@ -1199,7 +1204,8 @@ class SmsOutboxMessages extends Table with TableInfo {
         toPhoneNumber,
         recepientId,
         content,
-        sendAttempts
+        sendAttempts,
+        failureCode
       ];
   @override
   String get aliasedName => _alias ?? actualTableName;

@@ -4,6 +4,7 @@ import 'package:logging/logging.dart';
 import 'package:phoenix_socket/phoenix_socket.dart';
 
 import 'package:webtrit_phone/app/notifications/notifications.dart';
+import 'package:webtrit_phone/common/media_storage_service.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
@@ -60,6 +61,13 @@ class SmsOutboxWorker {
   /// Returns a [Future] that completes when the processing is done.
   Future _processNewMessage(SmsOutboxMessageEntry entry) async {
     try {
+      // Prepare attachments if any
+      final prepStream = OutboxAttachmentService.prepareAttachments(entry.attachments, EncodePreset.mms);
+      await for (final attachments in prepStream) {
+        entry = entry.copyWith(attachments: attachments);
+        await _outboxRepository.upsertOutboxMessage(entry);
+      }
+
       final PhoenixChannel? channel;
       // Check if it's message for existed or for virtual dialog with designated participant
       if (entry.conversationId != null) {
@@ -74,11 +82,17 @@ class SmsOutboxWorker {
       if (channel == null) return;
       if (channel.state != PhoenixChannelState.joined) return;
 
-      final (message, conversation) = await channel.newSmsMessage(entry);
-      if (conversation != null) await _smsRepository.upsertConversation(conversation);
-      await _smsRepository.upsertMessage(message);
-      await _outboxRepository.deleteOutboxMessage(entry.idKey);
-      _logger.info('Processed new message: ${message.id}');
+      // final (message, conversation) = await channel.newSmsMessage(entry);
+      // if (conversation != null) await _smsRepository.upsertConversation(conversation);
+      // await _smsRepository.upsertMessage(message);
+      // await _outboxRepository.deleteOutboxMessage(entry.idKey);
+      // _logger.info('Processed new message: ${message.id}');
+    } on EncodeException catch (e, s) {
+      _logger.severe('Error processing new message, attempt: ${entry.sendAttempts}', e, s);
+      await _outboxRepository.upsertOutboxMessage(entry.setFailureCode('media_encode_error'));
+    } on UploadException catch (e, s) {
+      _logger.severe('Error processing new message, attempt: ${entry.sendAttempts}', e, s);
+      await _outboxRepository.upsertOutboxMessage(entry.setFailureCode('media_upload_error'));
     } catch (e, s) {
       _logger.severe('Error processing new dialog message, attempt: ${entry.sendAttempts}', e, s);
       if (entry.sendAttempts > 5) {
