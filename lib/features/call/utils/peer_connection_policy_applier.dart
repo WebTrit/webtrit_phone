@@ -33,15 +33,15 @@ abstract class PeerConnectionPolicyApplier {
 /// - The added video track is explicitly disabled (`enabled = false`) to avoid rendering
 ///   or sending video until explicitly activated by the user.
 class ModifyWithSettingsPeerConnectionPolicyApplier implements PeerConnectionPolicyApplier {
-  ModifyWithSettingsPeerConnectionPolicyApplier({
-    required AppPreferences prefs,
-    required this.userMediaBuilder,
-  }) : _prefs = prefs;
+  ModifyWithSettingsPeerConnectionPolicyApplier(
+      this._prefs, this._defaultPeerConnectionSettings, this._userMediaBuilder);
 
   final AppPreferences _prefs;
-  final UserMediaBuilder userMediaBuilder;
+  final PeerConnectionSettings _defaultPeerConnectionSettings;
+  final UserMediaBuilder _userMediaBuilder;
 
-  NegotiationSettings get _negotiationSettings => _prefs.getPeerConnectionSettings().negotiationSettings;
+  NegotiationSettings get _negotiationSettings =>
+      _prefs.getPeerConnectionSettings(defaultValue: _defaultPeerConnectionSettings).negotiationSettings;
 
   @override
   Future<void> apply(RTCPeerConnection peerConnection, {required bool hasRemoteVideo}) async {
@@ -49,7 +49,7 @@ class ModifyWithSettingsPeerConnectionPolicyApplier implements PeerConnectionPol
     if (_negotiationSettings.calleeVideoOfferPolicy == CalleeVideoOfferPolicy.includeInactiveTrack) {
       if (hasRemoteVideo) {
         // Acquire a local stream with video
-        final localStream = await userMediaBuilder.build(video: true);
+        final localStream = await _userMediaBuilder.build(video: true);
         final localVideoTrack = localStream.getVideoTracks().firstOrNull;
 
         // Add the video track to the peer connection, disabled initially

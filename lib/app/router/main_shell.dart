@@ -246,6 +246,7 @@ class _MainShellState extends State<MainShell> {
               final notificationsBloc = context.read<NotificationsBloc>();
               final appCertificates = AppCertificates();
               final encodingConfig = context.read<FeatureAccess>().callFeature.encoding;
+              final peerConnectionConfig = context.read<FeatureAccess>().callFeature.peerConnection;
               final userMediaBuilder = DefaultUserMediaBuilder(
                 audioConstraintsBuilder: AudioConstraintsWithAppSettingsBuilder(appPreferences),
                 videoConstraintsBuilder: VideoConstraintsWithAppSettingsBuilder(appPreferences),
@@ -266,8 +267,9 @@ class _MainShellState extends State<MainShell> {
                 userMediaBuilder: userMediaBuilder,
                 iceFilter: FilterWithAppSettings(appPreferences),
                 peerConnectionPolicyApplier: ModifyWithSettingsPeerConnectionPolicyApplier(
-                  prefs: appPreferences,
-                  userMediaBuilder: userMediaBuilder,
+                  appPreferences,
+                  peerConnectionConfig,
+                  userMediaBuilder,
                 ),
               )..add(const CallStarted());
             },

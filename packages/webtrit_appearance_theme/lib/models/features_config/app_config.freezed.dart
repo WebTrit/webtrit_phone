@@ -1135,6 +1135,8 @@ mixin _$AppConfigCall {
   bool get videoEnabled => throw _privateConstructorUsedError;
   AppConfigTransfer get transfer => throw _privateConstructorUsedError;
   AppConfigEncoding get encoding => throw _privateConstructorUsedError;
+  AppConfigPeerConnection get peerConnection =>
+      throw _privateConstructorUsedError;
 
   /// Serializes this AppConfigCall to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -1155,10 +1157,12 @@ abstract class $AppConfigCallCopyWith<$Res> {
   $Res call(
       {bool videoEnabled,
       AppConfigTransfer transfer,
-      AppConfigEncoding encoding});
+      AppConfigEncoding encoding,
+      AppConfigPeerConnection peerConnection});
 
   $AppConfigTransferCopyWith<$Res> get transfer;
   $AppConfigEncodingCopyWith<$Res> get encoding;
+  $AppConfigPeerConnectionCopyWith<$Res> get peerConnection;
 }
 
 /// @nodoc
@@ -1179,6 +1183,7 @@ class _$AppConfigCallCopyWithImpl<$Res, $Val extends AppConfigCall>
     Object? videoEnabled = null,
     Object? transfer = null,
     Object? encoding = null,
+    Object? peerConnection = null,
   }) {
     return _then(_value.copyWith(
       videoEnabled: null == videoEnabled
@@ -1193,6 +1198,10 @@ class _$AppConfigCallCopyWithImpl<$Res, $Val extends AppConfigCall>
           ? _value.encoding
           : encoding // ignore: cast_nullable_to_non_nullable
               as AppConfigEncoding,
+      peerConnection: null == peerConnection
+          ? _value.peerConnection
+          : peerConnection // ignore: cast_nullable_to_non_nullable
+              as AppConfigPeerConnection,
     ) as $Val);
   }
 
@@ -1215,6 +1224,17 @@ class _$AppConfigCallCopyWithImpl<$Res, $Val extends AppConfigCall>
       return _then(_value.copyWith(encoding: value) as $Val);
     });
   }
+
+  /// Create a copy of AppConfigCall
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $AppConfigPeerConnectionCopyWith<$Res> get peerConnection {
+    return $AppConfigPeerConnectionCopyWith<$Res>(_value.peerConnection,
+        (value) {
+      return _then(_value.copyWith(peerConnection: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
@@ -1228,12 +1248,15 @@ abstract class _$$AppConfigCallImplCopyWith<$Res>
   $Res call(
       {bool videoEnabled,
       AppConfigTransfer transfer,
-      AppConfigEncoding encoding});
+      AppConfigEncoding encoding,
+      AppConfigPeerConnection peerConnection});
 
   @override
   $AppConfigTransferCopyWith<$Res> get transfer;
   @override
   $AppConfigEncodingCopyWith<$Res> get encoding;
+  @override
+  $AppConfigPeerConnectionCopyWith<$Res> get peerConnection;
 }
 
 /// @nodoc
@@ -1252,6 +1275,7 @@ class __$$AppConfigCallImplCopyWithImpl<$Res>
     Object? videoEnabled = null,
     Object? transfer = null,
     Object? encoding = null,
+    Object? peerConnection = null,
   }) {
     return _then(_$AppConfigCallImpl(
       videoEnabled: null == videoEnabled
@@ -1266,6 +1290,10 @@ class __$$AppConfigCallImplCopyWithImpl<$Res>
           ? _value.encoding
           : encoding // ignore: cast_nullable_to_non_nullable
               as AppConfigEncoding,
+      peerConnection: null == peerConnection
+          ? _value.peerConnection
+          : peerConnection // ignore: cast_nullable_to_non_nullable
+              as AppConfigPeerConnection,
     ));
   }
 }
@@ -1278,7 +1306,8 @@ class _$AppConfigCallImpl extends _AppConfigCall {
       {this.videoEnabled = true,
       this.transfer = const AppConfigTransfer(
           enableBlindTransfer: true, enableAttendedTransfer: true),
-      this.encoding = const AppConfigEncoding()})
+      this.encoding = const AppConfigEncoding(),
+      this.peerConnection = const AppConfigPeerConnection()})
       : super._();
 
   factory _$AppConfigCallImpl.fromJson(Map<String, dynamic> json) =>
@@ -1293,10 +1322,13 @@ class _$AppConfigCallImpl extends _AppConfigCall {
   @override
   @JsonKey()
   final AppConfigEncoding encoding;
+  @override
+  @JsonKey()
+  final AppConfigPeerConnection peerConnection;
 
   @override
   String toString() {
-    return 'AppConfigCall(videoEnabled: $videoEnabled, transfer: $transfer, encoding: $encoding)';
+    return 'AppConfigCall(videoEnabled: $videoEnabled, transfer: $transfer, encoding: $encoding, peerConnection: $peerConnection)';
   }
 
   @override
@@ -1309,13 +1341,15 @@ class _$AppConfigCallImpl extends _AppConfigCall {
             (identical(other.transfer, transfer) ||
                 other.transfer == transfer) &&
             (identical(other.encoding, encoding) ||
-                other.encoding == encoding));
+                other.encoding == encoding) &&
+            (identical(other.peerConnection, peerConnection) ||
+                other.peerConnection == peerConnection));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, videoEnabled, transfer, encoding);
+  int get hashCode => Object.hash(
+      runtimeType, videoEnabled, transfer, encoding, peerConnection);
 
   /// Create a copy of AppConfigCall
   /// with the given fields replaced by the non-null parameter values.
@@ -1337,7 +1371,8 @@ abstract class _AppConfigCall extends AppConfigCall {
   const factory _AppConfigCall(
       {final bool videoEnabled,
       final AppConfigTransfer transfer,
-      final AppConfigEncoding encoding}) = _$AppConfigCallImpl;
+      final AppConfigEncoding encoding,
+      final AppConfigPeerConnection peerConnection}) = _$AppConfigCallImpl;
   const _AppConfigCall._() : super._();
 
   factory _AppConfigCall.fromJson(Map<String, dynamic> json) =
@@ -1349,6 +1384,8 @@ abstract class _AppConfigCall extends AppConfigCall {
   AppConfigTransfer get transfer;
   @override
   AppConfigEncoding get encoding;
+  @override
+  AppConfigPeerConnection get peerConnection;
 
   /// Create a copy of AppConfigCall
   /// with the given fields replaced by the non-null parameter values.
@@ -1731,6 +1768,357 @@ abstract class _AppConfigEncoding extends AppConfigEncoding {
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$AppConfigEncodingImplCopyWith<_$AppConfigEncodingImpl> get copyWith =>
       throw _privateConstructorUsedError;
+}
+
+AppConfigPeerConnection _$AppConfigPeerConnectionFromJson(
+    Map<String, dynamic> json) {
+  return _AppConfigPeerConnection.fromJson(json);
+}
+
+/// @nodoc
+mixin _$AppConfigPeerConnection {
+  AppConfigNegotiationSettingsOverride get negotiation =>
+      throw _privateConstructorUsedError;
+
+  /// Serializes this AppConfigPeerConnection to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of AppConfigPeerConnection
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $AppConfigPeerConnectionCopyWith<AppConfigPeerConnection> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $AppConfigPeerConnectionCopyWith<$Res> {
+  factory $AppConfigPeerConnectionCopyWith(AppConfigPeerConnection value,
+          $Res Function(AppConfigPeerConnection) then) =
+      _$AppConfigPeerConnectionCopyWithImpl<$Res, AppConfigPeerConnection>;
+  @useResult
+  $Res call({AppConfigNegotiationSettingsOverride negotiation});
+
+  $AppConfigNegotiationSettingsOverrideCopyWith<$Res> get negotiation;
+}
+
+/// @nodoc
+class _$AppConfigPeerConnectionCopyWithImpl<$Res,
+        $Val extends AppConfigPeerConnection>
+    implements $AppConfigPeerConnectionCopyWith<$Res> {
+  _$AppConfigPeerConnectionCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of AppConfigPeerConnection
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? negotiation = null,
+  }) {
+    return _then(_value.copyWith(
+      negotiation: null == negotiation
+          ? _value.negotiation
+          : negotiation // ignore: cast_nullable_to_non_nullable
+              as AppConfigNegotiationSettingsOverride,
+    ) as $Val);
+  }
+
+  /// Create a copy of AppConfigPeerConnection
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $AppConfigNegotiationSettingsOverrideCopyWith<$Res> get negotiation {
+    return $AppConfigNegotiationSettingsOverrideCopyWith<$Res>(
+        _value.negotiation, (value) {
+      return _then(_value.copyWith(negotiation: value) as $Val);
+    });
+  }
+}
+
+/// @nodoc
+abstract class _$$AppConfigPeerConnectionImplCopyWith<$Res>
+    implements $AppConfigPeerConnectionCopyWith<$Res> {
+  factory _$$AppConfigPeerConnectionImplCopyWith(
+          _$AppConfigPeerConnectionImpl value,
+          $Res Function(_$AppConfigPeerConnectionImpl) then) =
+      __$$AppConfigPeerConnectionImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({AppConfigNegotiationSettingsOverride negotiation});
+
+  @override
+  $AppConfigNegotiationSettingsOverrideCopyWith<$Res> get negotiation;
+}
+
+/// @nodoc
+class __$$AppConfigPeerConnectionImplCopyWithImpl<$Res>
+    extends _$AppConfigPeerConnectionCopyWithImpl<$Res,
+        _$AppConfigPeerConnectionImpl>
+    implements _$$AppConfigPeerConnectionImplCopyWith<$Res> {
+  __$$AppConfigPeerConnectionImplCopyWithImpl(
+      _$AppConfigPeerConnectionImpl _value,
+      $Res Function(_$AppConfigPeerConnectionImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of AppConfigPeerConnection
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? negotiation = null,
+  }) {
+    return _then(_$AppConfigPeerConnectionImpl(
+      negotiation: null == negotiation
+          ? _value.negotiation
+          : negotiation // ignore: cast_nullable_to_non_nullable
+              as AppConfigNegotiationSettingsOverride,
+    ));
+  }
+}
+
+/// @nodoc
+
+@JsonSerializable(explicitToJson: true)
+class _$AppConfigPeerConnectionImpl extends _AppConfigPeerConnection {
+  const _$AppConfigPeerConnectionImpl(
+      {this.negotiation = const AppConfigNegotiationSettingsOverride()})
+      : super._();
+
+  factory _$AppConfigPeerConnectionImpl.fromJson(Map<String, dynamic> json) =>
+      _$$AppConfigPeerConnectionImplFromJson(json);
+
+  @override
+  @JsonKey()
+  final AppConfigNegotiationSettingsOverride negotiation;
+
+  @override
+  String toString() {
+    return 'AppConfigPeerConnection(negotiation: $negotiation)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$AppConfigPeerConnectionImpl &&
+            (identical(other.negotiation, negotiation) ||
+                other.negotiation == negotiation));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(runtimeType, negotiation);
+
+  /// Create a copy of AppConfigPeerConnection
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$AppConfigPeerConnectionImplCopyWith<_$AppConfigPeerConnectionImpl>
+      get copyWith => __$$AppConfigPeerConnectionImplCopyWithImpl<
+          _$AppConfigPeerConnectionImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$AppConfigPeerConnectionImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _AppConfigPeerConnection extends AppConfigPeerConnection {
+  const factory _AppConfigPeerConnection(
+          {final AppConfigNegotiationSettingsOverride negotiation}) =
+      _$AppConfigPeerConnectionImpl;
+  const _AppConfigPeerConnection._() : super._();
+
+  factory _AppConfigPeerConnection.fromJson(Map<String, dynamic> json) =
+      _$AppConfigPeerConnectionImpl.fromJson;
+
+  @override
+  AppConfigNegotiationSettingsOverride get negotiation;
+
+  /// Create a copy of AppConfigPeerConnection
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$AppConfigPeerConnectionImplCopyWith<_$AppConfigPeerConnectionImpl>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+AppConfigNegotiationSettingsOverride
+    _$AppConfigNegotiationSettingsOverrideFromJson(Map<String, dynamic> json) {
+  return _AppConfigNegotiationSettingsOverride.fromJson(json);
+}
+
+/// @nodoc
+mixin _$AppConfigNegotiationSettingsOverride {
+  String? get calleeVideoOfferPolicy => throw _privateConstructorUsedError;
+
+  /// Serializes this AppConfigNegotiationSettingsOverride to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of AppConfigNegotiationSettingsOverride
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $AppConfigNegotiationSettingsOverrideCopyWith<
+          AppConfigNegotiationSettingsOverride>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $AppConfigNegotiationSettingsOverrideCopyWith<$Res> {
+  factory $AppConfigNegotiationSettingsOverrideCopyWith(
+          AppConfigNegotiationSettingsOverride value,
+          $Res Function(AppConfigNegotiationSettingsOverride) then) =
+      _$AppConfigNegotiationSettingsOverrideCopyWithImpl<$Res,
+          AppConfigNegotiationSettingsOverride>;
+  @useResult
+  $Res call({String? calleeVideoOfferPolicy});
+}
+
+/// @nodoc
+class _$AppConfigNegotiationSettingsOverrideCopyWithImpl<$Res,
+        $Val extends AppConfigNegotiationSettingsOverride>
+    implements $AppConfigNegotiationSettingsOverrideCopyWith<$Res> {
+  _$AppConfigNegotiationSettingsOverrideCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of AppConfigNegotiationSettingsOverride
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? calleeVideoOfferPolicy = freezed,
+  }) {
+    return _then(_value.copyWith(
+      calleeVideoOfferPolicy: freezed == calleeVideoOfferPolicy
+          ? _value.calleeVideoOfferPolicy
+          : calleeVideoOfferPolicy // ignore: cast_nullable_to_non_nullable
+              as String?,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$AppConfigNegotiationSettingsOverrideImplCopyWith<$Res>
+    implements $AppConfigNegotiationSettingsOverrideCopyWith<$Res> {
+  factory _$$AppConfigNegotiationSettingsOverrideImplCopyWith(
+          _$AppConfigNegotiationSettingsOverrideImpl value,
+          $Res Function(_$AppConfigNegotiationSettingsOverrideImpl) then) =
+      __$$AppConfigNegotiationSettingsOverrideImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({String? calleeVideoOfferPolicy});
+}
+
+/// @nodoc
+class __$$AppConfigNegotiationSettingsOverrideImplCopyWithImpl<$Res>
+    extends _$AppConfigNegotiationSettingsOverrideCopyWithImpl<$Res,
+        _$AppConfigNegotiationSettingsOverrideImpl>
+    implements _$$AppConfigNegotiationSettingsOverrideImplCopyWith<$Res> {
+  __$$AppConfigNegotiationSettingsOverrideImplCopyWithImpl(
+      _$AppConfigNegotiationSettingsOverrideImpl _value,
+      $Res Function(_$AppConfigNegotiationSettingsOverrideImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of AppConfigNegotiationSettingsOverride
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? calleeVideoOfferPolicy = freezed,
+  }) {
+    return _then(_$AppConfigNegotiationSettingsOverrideImpl(
+      calleeVideoOfferPolicy: freezed == calleeVideoOfferPolicy
+          ? _value.calleeVideoOfferPolicy
+          : calleeVideoOfferPolicy // ignore: cast_nullable_to_non_nullable
+              as String?,
+    ));
+  }
+}
+
+/// @nodoc
+
+@JsonSerializable(explicitToJson: true)
+class _$AppConfigNegotiationSettingsOverrideImpl
+    extends _AppConfigNegotiationSettingsOverride {
+  const _$AppConfigNegotiationSettingsOverrideImpl(
+      {this.calleeVideoOfferPolicy})
+      : super._();
+
+  factory _$AppConfigNegotiationSettingsOverrideImpl.fromJson(
+          Map<String, dynamic> json) =>
+      _$$AppConfigNegotiationSettingsOverrideImplFromJson(json);
+
+  @override
+  final String? calleeVideoOfferPolicy;
+
+  @override
+  String toString() {
+    return 'AppConfigNegotiationSettingsOverride(calleeVideoOfferPolicy: $calleeVideoOfferPolicy)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$AppConfigNegotiationSettingsOverrideImpl &&
+            (identical(other.calleeVideoOfferPolicy, calleeVideoOfferPolicy) ||
+                other.calleeVideoOfferPolicy == calleeVideoOfferPolicy));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(runtimeType, calleeVideoOfferPolicy);
+
+  /// Create a copy of AppConfigNegotiationSettingsOverride
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$AppConfigNegotiationSettingsOverrideImplCopyWith<
+          _$AppConfigNegotiationSettingsOverrideImpl>
+      get copyWith => __$$AppConfigNegotiationSettingsOverrideImplCopyWithImpl<
+          _$AppConfigNegotiationSettingsOverrideImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$AppConfigNegotiationSettingsOverrideImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _AppConfigNegotiationSettingsOverride
+    extends AppConfigNegotiationSettingsOverride {
+  const factory _AppConfigNegotiationSettingsOverride(
+          {final String? calleeVideoOfferPolicy}) =
+      _$AppConfigNegotiationSettingsOverrideImpl;
+  const _AppConfigNegotiationSettingsOverride._() : super._();
+
+  factory _AppConfigNegotiationSettingsOverride.fromJson(
+          Map<String, dynamic> json) =
+      _$AppConfigNegotiationSettingsOverrideImpl.fromJson;
+
+  @override
+  String? get calleeVideoOfferPolicy;
+
+  /// Create a copy of AppConfigNegotiationSettingsOverride
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$AppConfigNegotiationSettingsOverrideImplCopyWith<
+          _$AppConfigNegotiationSettingsOverrideImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }
 
 EncodingDefaultPresetOverride _$EncodingDefaultPresetOverrideFromJson(

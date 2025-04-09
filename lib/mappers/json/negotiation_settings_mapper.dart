@@ -17,13 +17,13 @@ mixin NegotiationSettingsJsonMapper {
     return NegotiationSettings(
       calleeVideoOfferPolicy: map[_kCalleeVideoOfferPolicyKey] != null
           ? CalleeVideoOfferPolicy.values.byName(map[_kCalleeVideoOfferPolicyKey])
-          : CalleeVideoOfferPolicy.ignore,
+          : null,
     );
   }
 
   Map<String, dynamic> negotiationSettingsToMap(NegotiationSettings settings) {
     return {
-      _kCalleeVideoOfferPolicyKey: settings.calleeVideoOfferPolicy.name,
+      _kCalleeVideoOfferPolicyKey: settings.calleeVideoOfferPolicy?.name,
     };
   }
 }

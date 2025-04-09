@@ -12,12 +12,10 @@ import 'package:equatable/equatable.dart';
 /// Without including the video track in the response, the offer/answer negotiation may fail
 /// or lead to a one-way media issue (e.g., the caller sends video, but the callee does not properly receive or acknowledge it).
 class NegotiationSettings extends Equatable {
-  const NegotiationSettings({
-    this.calleeVideoOfferPolicy = CalleeVideoOfferPolicy.ignore,
-  });
+  const NegotiationSettings({this.calleeVideoOfferPolicy});
 
   /// Determines how the callee should respond to an offer with video.
-  final CalleeVideoOfferPolicy calleeVideoOfferPolicy;
+  final CalleeVideoOfferPolicy? calleeVideoOfferPolicy;
 
   factory NegotiationSettings.blank() => const NegotiationSettings();
 
@@ -46,9 +44,6 @@ class NegotiationSettings extends Equatable {
 ///   even if the callee does not immediately intend to send media. It also helps avoid errors like
 ///   "setRemoteDescription failed" or "no matching media section found" on the caller side.
 enum CalleeVideoOfferPolicy {
-  /// Ignore  video offer, do not attach any video track.
-  ignore,
-
   /// Attach a full but inactive video track in response to video offer.
   includeInactiveTrack,
 }

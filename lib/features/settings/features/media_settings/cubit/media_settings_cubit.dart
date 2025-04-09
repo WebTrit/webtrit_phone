@@ -6,9 +6,11 @@ import 'package:webtrit_phone/models/models.dart';
 import 'media_settings_state.dart';
 
 class MediaSettingsCubit extends Cubit<MediaSettingsState> {
-  MediaSettingsCubit(this._prefs) : super(MediaSettingsState.fromPrefs(_prefs));
+  MediaSettingsCubit(this._prefs, this._defaultPeerConnectionSettings)
+      : super(MediaSettingsState.fromPrefs(_prefs, _defaultPeerConnectionSettings));
 
   final AppPreferences _prefs;
+  final PeerConnectionSettings _defaultPeerConnectionSettings;
 
   void setEncodingSettings(EncodingSettings settings) {
     emit(state.copyWithEncodingSettings(settings));
@@ -47,7 +49,7 @@ class MediaSettingsCubit extends Cubit<MediaSettingsState> {
       audioProcessingSettings: AudioProcessingSettings.blank(),
       videoCapturingSettings: VideoCapturingSettings.blank(),
       iceSettings: IceSettings.blank(),
-      pearConnectionSettings: PeerConnectionSettings.blank(),
+      pearConnectionSettings: _defaultPeerConnectionSettings,
     ));
 
     _prefs.setEncodingPreset(null);
@@ -55,5 +57,6 @@ class MediaSettingsCubit extends Cubit<MediaSettingsState> {
     _prefs.setAudioProcessingSettings(AudioProcessingSettings.blank());
     _prefs.setVideoCapturingSettings(VideoCapturingSettings.blank());
     _prefs.setIceSettings(IceSettings.blank());
+    _prefs.setPearConnectionSettings(_defaultPeerConnectionSettings);
   }
 }

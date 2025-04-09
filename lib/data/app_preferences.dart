@@ -75,7 +75,7 @@ abstract class AppPreferences {
 
   Future<void> setIceSettings(IceSettings settings);
 
-  PeerConnectionSettings getPeerConnectionSettings();
+  PeerConnectionSettings getPeerConnectionSettings({PeerConnectionSettings? defaultValue});
 
   Future<void> setPearConnectionSettings(PeerConnectionSettings settings);
 }
@@ -409,9 +409,12 @@ class AppPreferencesImpl
   }
 
   @override
-  PeerConnectionSettings getPeerConnectionSettings() {
+  PeerConnectionSettings getPeerConnectionSettings({PeerConnectionSettings? defaultValue}) {
+    final negotiationSettings = _getNegotiationSettings();
     return PeerConnectionSettings(
-      negotiationSettings: _getNegotiationSettings(),
+      negotiationSettings: negotiationSettings.calleeVideoOfferPolicy == null
+          ? defaultValue?.negotiationSettings ?? NegotiationSettings.blank()
+          : negotiationSettings,
     );
   }
 
