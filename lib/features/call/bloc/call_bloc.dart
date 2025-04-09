@@ -2601,6 +2601,23 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         logger.fine(() => 'onDataChannel channel: $channel');
       }
       ..onRenegotiationNeeded = () async {
+        // TODO(Serdun): Handle renegotiation needed
+        // This implementation does not handle all possible signaling states.
+        // Specifically, if the current state is `have-remote-offer`, calling
+        // setLocalDescription with an offer will throw:
+        //   WEBRTC_SET_LOCAL_DESCRIPTION_ERROR: Failed to set local offer sdp: Called in wrong state: have-remote-offer
+        //
+        // Known case: when CalleeVideoOfferPolicy.includeInactiveTrack is used,
+        // the callee may trigger onRenegotiationNeeded before the current remote offer is processed.
+        // This causes a race where the local peer is still in 'have-remote-offer' state,
+        // leading to the above error. Currently this does not severely affect behavior,
+        // since the offer includes only an inactive track, but it should still be handled correctly.
+        //
+        // Proper handling should include:
+        // - Waiting until the signaling state becomes 'stable' before creating and setting a new offer
+        // - Avoiding renegotiation if a remote offer is currently being processed
+        // - Ensuring renegotiation is coordinated and state-aware
+
         final pcState = peerConnection.signalingState;
         logger.fine(() => 'onRenegotiationNeeded signalingState: $pcState');
         if (pcState != null) {
