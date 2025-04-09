@@ -49,13 +49,14 @@ class SmsConversationCubit extends Cubit<SmsConversationState> {
     _init();
   }
 
-  Future sendMessage(String content, List<String> attachments) async {
+  Future sendMessage(String content, List<String> attachmentPaths) async {
     final userNumbers = await _repository.getUserSmsNumbers();
     final userNumber = userNumbers.firstWhereOrNull((e) => e == _creds.firstNumber || e == _creds.secondNumber);
     if (userNumber == null) return;
     final recipientNumber = _creds.firstNumber == userNumber ? _creds.secondNumber : _creds.firstNumber;
 
-    final outAttachments = attachments.map((p) => OutboxAttachment(id: (const Uuid()).v4(), pickedPath: p));
+    const attachmentsPerMessage = 10;
+    final attachments = attachmentPaths.map((p) => OutboxAttachment(id: (const Uuid()).v4(), pickedPath: p));
 
     final outboxEntry = SmsOutboxMessageEntry(
       idKey: (const Uuid()).v4(),
@@ -63,9 +64,25 @@ class SmsConversationCubit extends Cubit<SmsConversationState> {
       toPhoneNumber: recipientNumber,
       recepientId: _creds.recipientId,
       content: content,
-      attachments: outAttachments.toList(),
+      attachments: attachments.take(attachmentsPerMessage).toList(),
     );
-    _outboxRepository.upsertOutboxMessage(outboxEntry);
+    await _outboxRepository.upsertOutboxMessage(outboxEntry);
+
+    if (attachments.length > attachmentsPerMessage) {
+      final chunks = (attachments.length / attachmentsPerMessage).ceil();
+      for (var i = 1; i < chunks; i++) {
+        final chunk = attachments.skip(i * attachmentsPerMessage).take(attachmentsPerMessage).toList();
+        final outboxEntry = SmsOutboxMessageEntry(
+          idKey: (const Uuid()).v4(),
+          fromPhoneNumber: userNumber,
+          toPhoneNumber: recipientNumber,
+          recepientId: _creds.recipientId,
+          content: '',
+          attachments: chunk,
+        );
+        await _outboxRepository.upsertOutboxMessage(outboxEntry);
+      }
+    }
   }
 
   Future deleteMessage(SmsMessage message) async {

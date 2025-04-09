@@ -47,7 +47,7 @@ class ChatMessageListView extends StatefulWidget {
   final bool fetchingHistory;
   final bool historyEndReached;
   final Function(String content, List<String> attachments) onSendMessage;
-  final Function(String content, List<String> attachments, ChatMessage refMessage) onSendReply;
+  final Function(String content, ChatMessage refMessage) onSendReply;
   final Function(ChatMessage refMessage) onSendForward;
   final Function(String content, ChatMessage refMessage) onSendEdit;
   final Function(ChatMessage refMessage) onDelete;
@@ -129,7 +129,7 @@ class _ChatMessageListViewState extends State<ChatMessageListView> {
     if (messageForForward != null) {
       widget.onSendForward(messageForForward);
     } else if (replyingMessage != null) {
-      widget.onSendReply(content, attachments, replyingMessage!);
+      widget.onSendReply(content, replyingMessage!);
     } else if (editingMessage != null) {
       widget.onSendEdit(content, editingMessage!);
     } else {
@@ -149,6 +149,7 @@ class _ChatMessageListViewState extends State<ChatMessageListView> {
     chatsForwardingCubit.clear();
     editingMessage = null;
     replyingMessage = message;
+    attachments = [];
     setState(() {});
   }
 
@@ -287,7 +288,8 @@ class _ChatMessageListViewState extends State<ChatMessageListView> {
       builder: (context, state) {
         final messageForForward = state;
 
-        final canAddAttachments = attachments.isEmpty && messageForForward == null && editingMessage == null;
+        final canAddAttachments =
+            attachments.isEmpty && messageForForward == null && editingMessage == null && replyingMessage == null;
 
         Widget? exchangeWidget;
         if (messageForForward != null) {

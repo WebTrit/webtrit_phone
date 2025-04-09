@@ -38,31 +38,45 @@ class ConversationCubit extends Cubit<ConversationState> {
   StreamSubscription? _outboxMessageDeletesSub;
   StreamSubscription? _readCursorsSub;
 
-  Future sendMessage(String content, List<String> attachments) async {
+  Future sendMessage(String content, List<String> attachmentPaths) async {
     final (:chatId, :participantId) = state.credentials;
 
-    final outAttachments = attachments.map((p) => OutboxAttachment(id: (const Uuid()).v4(), pickedPath: p));
+    const attachmentsPerMessage = 10;
+    final attachments = attachmentPaths.map((p) => OutboxAttachment(id: (const Uuid()).v4(), pickedPath: p));
     final outboxEntry = ChatOutboxMessageEntry(
       idKey: (const Uuid()).v4(),
       chatId: chatId,
       participantId: participantId,
       content: content,
-      attachments: outAttachments.toList(),
+      attachments: attachments.take(attachmentsPerMessage).toList(),
     );
-    _outboxRepository.upsertOutboxMessage(outboxEntry);
+    await _outboxRepository.upsertOutboxMessage(outboxEntry);
+
+    if (attachments.length > attachmentsPerMessage) {
+      final chunks = (attachments.length / attachmentsPerMessage).ceil();
+      for (var i = 1; i < chunks; i++) {
+        final chunk = attachments.skip(i * attachmentsPerMessage).take(attachmentsPerMessage).toList();
+        final outboxEntry = ChatOutboxMessageEntry(
+          idKey: (const Uuid()).v4(),
+          chatId: chatId,
+          participantId: participantId,
+          content: '',
+          attachments: chunk,
+        );
+        await _outboxRepository.upsertOutboxMessage(outboxEntry);
+      }
+    }
   }
 
-  Future sendReply(String content, List<String> attachments, ChatMessage refMessage) async {
+  Future sendReply(String content, ChatMessage refMessage) async {
     final (:chatId, :participantId) = state.credentials;
 
-    final outAttachments = attachments.map((p) => OutboxAttachment(id: (const Uuid()).v4(), pickedPath: p));
     final outboxEntry = ChatOutboxMessageEntry(
       idKey: (const Uuid()).v4(),
       chatId: chatId,
       participantId: participantId,
       replyToId: refMessage.id,
       content: content,
-      attachments: outAttachments.toList(),
     );
     _outboxRepository.upsertOutboxMessage(outboxEntry);
   }
