@@ -37,6 +37,10 @@
 		<string>This app requires permission to access contacts to make calls within your address book</string>
 		<key>NSMicrophoneUsageDescription</key>
 		<string>This app requires permission to access the microphone to make audio calls</string>
+		<key>NSPhotoLibraryUsageDescription</key>
+		<string>This app requires permission to access the photo library to send and receive photos</string>
+		<key>NSAppleMusicUsageDescription</key>
+		<string>This app requires permission to access Apple Music to send and receive audio</string>
 		<key>UIBackgroundModes</key>
 		<array>
 			<string>fetch</string>
