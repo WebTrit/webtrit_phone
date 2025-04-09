@@ -23,14 +23,14 @@ class MediaSettingsState with EquatableMixin {
   final IceSettings iceSettings;
   final PeerConnectionSettings pearConnectionSettings;
 
-  factory MediaSettingsState.fromPrefs(AppPreferences prefs) {
+  factory MediaSettingsState.fromPrefs(AppPreferences prefs, PeerConnectionSettings defaultPeerConnectionSettings) {
     return MediaSettingsState(
       encodingSettings: prefs.getEncodingSettings(),
       encodingPreset: prefs.getEncodingPreset(),
       audioProcessingSettings: prefs.getAudioProcessingSettings(),
       videoCapturingSettings: prefs.getVideoCapturingSettings(),
       iceSettings: prefs.getIceSettings(),
-      pearConnectionSettings: prefs.getPeerConnectionSettings(),
+      pearConnectionSettings: prefs.getPeerConnectionSettings(defaultValue: defaultPeerConnectionSettings),
     );
   }
 

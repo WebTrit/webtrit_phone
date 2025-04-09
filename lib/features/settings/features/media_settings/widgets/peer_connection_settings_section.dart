@@ -17,11 +17,7 @@ class PeerConnectionSettingsSection extends StatelessWidget {
   final ValueChanged<PeerConnectionSettings> onSettingsChanged;
 
   void _onCalleeVideoOfferPolicyChanged(CalleeVideoOfferPolicy? policy) {
-    onSettingsChanged(PeerConnectionSettings(
-      negotiationSettings: peerConnectionSettings.negotiationSettings.copyWith(
-        calleeVideoOfferPolicy: policy,
-      ),
-    ));
+    onSettingsChanged(PeerConnectionSettings(negotiationSettings: NegotiationSettings(calleeVideoOfferPolicy: policy)));
   }
 
   @override
@@ -35,7 +31,6 @@ class PeerConnectionSettingsSection extends StatelessWidget {
         ),
         const SizedBox(height: 16.0),
         ChoosableSection<CalleeVideoOfferPolicy>(
-          allowNoSelection: false,
           title: context.l10n.settings_videoOffer_title,
           buildOptionTitle: (option) {
             if (option == CalleeVideoOfferPolicy.includeInactiveTrack) {

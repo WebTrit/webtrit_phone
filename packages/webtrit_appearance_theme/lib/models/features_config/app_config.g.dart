@@ -154,6 +154,10 @@ _$AppConfigCallImpl _$$AppConfigCallImplFromJson(Map<String, dynamic> json) =>
           ? const AppConfigEncoding()
           : AppConfigEncoding.fromJson(
               json['encoding'] as Map<String, dynamic>),
+      peerConnection: json['peerConnection'] == null
+          ? const AppConfigPeerConnection()
+          : AppConfigPeerConnection.fromJson(
+              json['peerConnection'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$$AppConfigCallImplToJson(_$AppConfigCallImpl instance) =>
@@ -161,6 +165,7 @@ Map<String, dynamic> _$$AppConfigCallImplToJson(_$AppConfigCallImpl instance) =>
       'videoEnabled': instance.videoEnabled,
       'transfer': instance.transfer.toJson(),
       'encoding': instance.encoding.toJson(),
+      'peerConnection': instance.peerConnection.toJson(),
     };
 
 _$AppConfigTransferImpl _$$AppConfigTransferImplFromJson(
@@ -192,6 +197,34 @@ Map<String, dynamic> _$$AppConfigEncodingImplToJson(
     <String, dynamic>{
       'bypassConfig': instance.bypassConfig,
       'defaultPresetOverride': instance.defaultPresetOverride.toJson(),
+    };
+
+_$AppConfigPeerConnectionImpl _$$AppConfigPeerConnectionImplFromJson(
+        Map<String, dynamic> json) =>
+    _$AppConfigPeerConnectionImpl(
+      negotiation: json['negotiation'] == null
+          ? const AppConfigNegotiationSettingsOverride()
+          : AppConfigNegotiationSettingsOverride.fromJson(
+              json['negotiation'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$$AppConfigPeerConnectionImplToJson(
+        _$AppConfigPeerConnectionImpl instance) =>
+    <String, dynamic>{
+      'negotiation': instance.negotiation.toJson(),
+    };
+
+_$AppConfigNegotiationSettingsOverrideImpl
+    _$$AppConfigNegotiationSettingsOverrideImplFromJson(
+            Map<String, dynamic> json) =>
+        _$AppConfigNegotiationSettingsOverrideImpl(
+          calleeVideoOfferPolicy: json['calleeVideoOfferPolicy'] as String?,
+        );
+
+Map<String, dynamic> _$$AppConfigNegotiationSettingsOverrideImplToJson(
+        _$AppConfigNegotiationSettingsOverrideImpl instance) =>
+    <String, dynamic>{
+      'calleeVideoOfferPolicy': instance.calleeVideoOfferPolicy,
     };
 
 _$EncodingDefaultPresetOverrideImpl
