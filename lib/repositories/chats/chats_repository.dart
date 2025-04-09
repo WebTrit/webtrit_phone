@@ -110,6 +110,11 @@ class ChatsRepository with ChatsDriftMapper {
     return _chatsDao.unreadedCountPerChat(userId);
   }
 
+  Future<List<MessageAttachment>> getAttachmentsForLastMessages(int chatId, {int msgLimit = 10}) async {
+    final messagesData = await _chatsDao.getAttachmentsForLastMessages(chatId, msgLimit);
+    return messagesData.map(attachmentFromDrift).toList();
+  }
+
   Future<void> wipeStaleDeletedData() async {
     await _chatsDao.wipeStaleDeletedChatMessagesData();
   }

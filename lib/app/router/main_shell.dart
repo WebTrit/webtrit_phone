@@ -268,6 +268,8 @@ class _MainShellState extends State<MainShell> {
                 context.read<ChatsOutboxRepository>(),
                 context.read<SmsRepository>(),
                 context.read<SmsOutboxRepository>(),
+                context.read<AppPreferences>(),
+                context.read<SecureStorage>(),
                 (n) => context.read<NotificationsBloc>().add(NotificationsSubmitted(n)),
               );
             },

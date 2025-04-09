@@ -4,7 +4,9 @@ import 'package:logging/logging.dart';
 import 'package:phoenix_socket/phoenix_socket.dart';
 
 import 'package:webtrit_phone/app/notifications/notifications.dart';
+import 'package:webtrit_phone/data/app_preferences.dart';
 import 'package:webtrit_phone/data/feature_access.dart';
+import 'package:webtrit_phone/data/secure_storage.dart';
 import 'package:webtrit_phone/features/messaging/extensions/phoenix_socket.dart';
 import 'package:webtrit_phone/features/messaging/services/services.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
@@ -30,6 +32,8 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
     this._chatsOutboxRepository,
     this._smsRepository,
     this._smsOutboxRepository,
+    this._prefs,
+    this._secureStorage,
     this._submitNotification,
   ) : super(MessagingState.initial(_client)) {
     on<Connect>(_connect);
@@ -56,12 +60,15 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
   final ChatsOutboxRepository _chatsOutboxRepository;
   final SmsRepository _smsRepository;
   final SmsOutboxRepository _smsOutboxRepository;
+  final AppPreferences _prefs;
+  final SecureStorage _secureStorage;
   final Function(Notification) _submitNotification;
 
   ChatsSyncWorker? _chatsSyncWorker;
   ChatsOutboxWorker? _chatsOutboxWorker;
   SmsSyncWorker? _smsSyncWorker;
   SmsOutboxWorker? _smsOutboxWorker;
+  AttachmentsPreloadWorker? _attachmentsPreloadWorker;
 
   void _connect(Connect event, Emitter<MessagingState> emit) async {
     if (_messagingFeature.anyMessagingEnabled == false) return;
@@ -104,6 +111,11 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
           ..init();
       }
 
+      if (_messagingFeature.anyMessagingEnabled) {
+        _attachmentsPreloadWorker ??= AttachmentsPreloadWorker(_chatsRepository, _smsRepository, _prefs, _secureStorage)
+          ..init();
+      }
+
       emit(state.copyWith(status: ConnectionStatus.connected));
     } on Exception catch (e, s) {
       _client.dispose();
@@ -138,6 +150,8 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
     _smsSyncWorker = null;
     _smsOutboxWorker?.dispose();
     _smsOutboxWorker = null;
+    _attachmentsPreloadWorker?.dispose();
+    _attachmentsPreloadWorker = null;
   }
 
   @override

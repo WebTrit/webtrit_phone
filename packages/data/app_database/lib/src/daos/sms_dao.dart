@@ -329,6 +329,27 @@ class SmsDao extends DatabaseAccessor<AppDatabase> with _$SmsDaoMixin {
     return (delete(smsOutboxReadCursorsTable)..where((t) => t.conversationId.equals(conversationId))).go();
   }
 
+  // Message attachments
+
+  Future<List<OutboxAttachmentData>> getOutboxAttachmentsByMessageId(String messageId) {
+    return (select(outboxAttachmentTable)..where((t) => t.smsOutboxMessageIdKey.equals(messageId))).get();
+  }
+
+  Future<List<MessageAttachmentData>> getAttachmentsForLastMessages(int chatId, int msgLimit) {
+    final q = select(messageAttachmentTable)
+      ..where((t) => t.smsMessageId.isInQuery(
+            selectOnly(smsMessagesTable)
+              ..addColumns([smsMessagesTable.id])
+              ..where(smsMessagesTable.conversationId.equals(chatId))
+              ..orderBy([
+                OrderingTerm.desc(smsMessagesTable.createdAtRemoteUsec),
+                OrderingTerm.desc(smsMessagesTable.id),
+              ])
+              ..limit(msgLimit),
+          ));
+    return q.get();
+  }
+
   // User sms numbers
 
   Future<List<UserSmsNumberData>> getUserSmsNumbers() {

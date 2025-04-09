@@ -425,6 +425,27 @@ class ChatsDao extends DatabaseAccessor<AppDatabase> with _$ChatsDaoMixin {
     return (delete(chatOutboxReadCursorsTable)..where((t) => t.chatId.equals(chatId))).go();
   }
 
+  // Message attachments
+
+  Future<List<OutboxAttachmentData>> getOutboxAttachmentsByMessageId(String messageId) {
+    return (select(outboxAttachmentTable)..where((t) => t.chatsOutboxMessageIdKey.equals(messageId))).get();
+  }
+
+  Future<List<MessageAttachmentData>> getAttachmentsForLastMessages(int chatId, int msgLimit) {
+    final q = select(messageAttachmentTable)
+      ..where((t) => t.chatsMessageId.isInQuery(
+            selectOnly(chatMessagesTable)
+              ..addColumns([chatMessagesTable.id])
+              ..where(chatMessagesTable.chatId.equals(chatId))
+              ..orderBy([
+                OrderingTerm.desc(chatMessagesTable.createdAtRemoteUsec),
+                OrderingTerm.desc(chatMessagesTable.id),
+              ])
+              ..limit(msgLimit),
+          ));
+    return q.get();
+  }
+
   // Service
 
   Future<void> wipeStaleDeletedChatMessagesData({int ttlSeconds = 60 * 60 * 24}) async {

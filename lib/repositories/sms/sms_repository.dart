@@ -133,6 +133,11 @@ class SmsRepository with SmsDriftMapper {
     return _smsDao.unreadedCountPerConversation(userId);
   }
 
+  Future<List<MessageAttachment>> getAttachmentsForLastMessages(int chatId, {int msgLimit = 10}) async {
+    final messagesData = await _smsDao.getAttachmentsForLastMessages(chatId, msgLimit);
+    return messagesData.map(attachmentFromDrift).toList();
+  }
+
   Future<void> wipeData() async {
     await _smsDao.wipeData();
   }
