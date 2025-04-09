@@ -4,11 +4,11 @@ extension PathUtilExtension on String {
   bool get isLocalPath => toUri.host.isEmpty && toUri.path.isNotEmpty;
   bool get isPartPath => toUri.path.endsWith('.part');
 
-  bool get isImagePath => imageExts.contains(fileExtension);
-  bool get isGifImagePath => gifExts.contains(fileExtension);
-  bool get isVideoPath => videoExts.contains(fileExtension);
-  bool get isAudioPath => audioExts.contains(fileExtension);
-  bool get isDocumentPath => documentExts.contains(fileExtension);
+  bool get isImagePath => imageExts.contains(fileExtension.toLowerCase());
+  bool get isGifImagePath => gifExts.contains(fileExtension.toLowerCase());
+  bool get isVideoPath => videoExts.contains(fileExtension.toLowerCase());
+  bool get isAudioPath => audioExts.contains(fileExtension.toLowerCase());
+  bool get isDocumentPath => documentExts.contains(fileExtension.toLowerCase());
 
   bool get isVideoPartPath {
     if (isPartPath) {
