@@ -69,7 +69,7 @@ class FeatureAccess {
       final customLoginFeature = _tryEnableCustomLoginFeature(appConfig);
       final bottomMenuManager = _tryConfigureBottomMenuFeature(appConfig, preferences);
       final settingsFeature = _tryConfigureSettingsFeature(appConfig, preferences);
-      final callFeature = _tryConfigureCallFeature(appConfig);
+      final callFeature = _tryConfigureCallFeature(appConfig, preferences);
       final messagingFeature = _tryConfigureMessagingFeature(appConfig, preferences);
       final termsFeature = _tryConfigureTermsFeature(appConfig);
 
@@ -244,7 +244,7 @@ class FeatureAccess {
         : null;
   }
 
-  static CallFeature _tryConfigureCallFeature(AppConfig appConfig) {
+  static CallFeature _tryConfigureCallFeature(AppConfig appConfig, AppPreferences preferences) {
     final callConfig = appConfig.callConfig;
 
     final transferConfig = appConfig.callConfig.transfer;
@@ -256,6 +256,8 @@ class FeatureAccess {
         return item.type == SettingsFlavor.mediaSettings.name && item.enabled;
       });
     });
+
+    final peerConnectionConfig = appConfig.callConfig.peerConnection;
 
     return CallFeature(
       videoEnable: callConfig.videoEnabled,
@@ -275,6 +277,13 @@ class FeatureAccess {
             opusStereo: defaultPresetOverride.opusStereo,
             opusDtx: defaultPresetOverride.opusDtx,
           )),
+      peerConnection: PeerConnectionSettings(
+        negotiationSettings: NegotiationSettings(
+          calleeVideoOfferPolicy: CalleeVideoOfferPolicy.values.firstWhereOrNull(
+            (it) => it.name == peerConnectionConfig.negotiation.calleeVideoOfferPolicy,
+          ),
+        ),
+      ),
     );
   }
 
@@ -380,11 +389,13 @@ class CallFeature {
   final bool videoEnable;
   final TransferConfig transfer;
   final EncodingConfig encoding;
+  final PeerConnectionSettings peerConnection;
 
   CallFeature({
     required this.videoEnable,
     required this.transfer,
     required this.encoding,
+    required this.peerConnection,
   });
 }
 

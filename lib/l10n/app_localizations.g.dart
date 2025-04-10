@@ -2737,6 +2737,42 @@ abstract class AppLocalizations {
   /// **'Skip TCP candidates'**
   String get settings_iceSettings_Section_trfilter_skipTcp;
 
+  /// No description provided for @settings_connectionSection_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Connection and call behavior'**
+  String get settings_connectionSection_title;
+
+  /// No description provided for @settings_connectionSection_tooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Configure how your device handles connection setup, media negotiation, and call updates during peer-to-peer communication.'**
+  String get settings_connectionSection_tooltip;
+
+  /// No description provided for @settings_videoOffer_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Determine how this device responds to an offer that includes video.'**
+  String get settings_videoOffer_title;
+
+  /// No description provided for @settings_videoOffer_option_includeInactive.
+  ///
+  /// In en, this message translates to:
+  /// **'Include inactive video track\nEnsures compatibility with video offers for future activation.'**
+  String get settings_videoOffer_option_includeInactive;
+
+  /// No description provided for @settings_videoOffer_option_ignore.
+  ///
+  /// In en, this message translates to:
+  /// **'Respond without video\nNo track will be added unless negotiated later.'**
+  String get settings_videoOffer_option_ignore;
+
+  /// No description provided for @call_settings_additional_options.
+  ///
+  /// In en, this message translates to:
+  /// **'Additional options'**
+  String get call_settings_additional_options;
+
   /// No description provided for @settings_ListViewTileTitle_about.
   ///
   /// In en, this message translates to:

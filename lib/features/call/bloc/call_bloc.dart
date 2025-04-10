@@ -55,10 +55,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   final SDPMunger? sdpMunger;
   final SdpSanitizer? sdpSanitizer;
 
-  final AudioConstraintsBuilder? audioConstraintsBuilder;
-  final VideoConstraintsBuilder? videoConstraintsBuilder;
   final WebrtcOptionsBuilder? webRtcOptionsBuilder;
   final IceFilter? iceFilter;
+  final UserMediaBuilder userMediaBuilder;
+  final PeerConnectionPolicyApplier? peerConnectionPolicyApplier;
 
   StreamSubscription<List<ConnectivityResult>>? _connectivityChangedSubscription;
   StreamSubscription<PendingCall>? _pendingCallHandlerSubscription;
@@ -79,12 +79,12 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     required this.submitNotification,
     required this.callkeep,
     required this.callkeepConnections,
+    required this.userMediaBuilder,
     this.sdpMunger,
     this.sdpSanitizer,
-    this.audioConstraintsBuilder,
-    this.videoConstraintsBuilder,
     this.webRtcOptionsBuilder,
     this.iceFilter,
+    this.peerConnectionPolicyApplier,
   }) : super(const CallState()) {
     on<CallStarted>(
       _onCallStarted,
@@ -990,9 +990,14 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
             _logger.warning('__onCallSignalingEventUpdating: peerConnection is null - most likely some state issue');
           } else {
             sdpSanitizer?.apply(remoteDescription);
+            await peerConnectionPolicyApplier?.apply(peerConnection, hasRemoteVideo: jsep.hasVideo);
             await peerConnection.setRemoteDescription(remoteDescription);
             final localDescription = await peerConnection.createAnswer({});
             sdpMunger?.apply(localDescription);
+
+            // According to RFC 8829 §5.6 (https://datatracker.ietf.org/doc/html/rfc8829#section-5.6),
+            // localDescription should be set before sending the answer to transition into stable state.
+            await peerConnection.setLocalDescription(localDescription);
 
             await _signalingClient?.execute(UpdateRequest(
               transaction: WebtritSignalingClient.generateTransactionId(),
@@ -1000,7 +1005,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
               callId: activeCall.callId,
               jsep: localDescription.toMap(),
             ));
-            await peerConnection.setLocalDescription(localDescription);
           }
         });
       }
@@ -1335,9 +1339,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     final localStream = activeCall.localStream;
     if (localStream == null) return;
 
-    final localVideoTrack = localStream.getVideoTracks().firstOrNull;
-    if (localVideoTrack != null) {
-      localVideoTrack.enabled = event.enabled;
+    final currentVideoTrack = localStream.getVideoTracks().firstOrNull;
+    if (currentVideoTrack != null) {
+      currentVideoTrack.enabled = event.enabled;
       return;
     }
 
@@ -1347,30 +1351,44 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     try {
       // Capture new audio and video pair together to avoid time sync issues
       // and avoid storing separate audio and video tracks to control them on mute, camera switch etc
-      final newLocalStream = await _getUserMedia(video: true, frontCamera: activeCall.frontCamera);
-      final newAudioTrack = newLocalStream.getAudioTracks().first;
-      final newVideoTrack = newLocalStream.getVideoTracks().first;
+      final newLocalStream = await userMediaBuilder.build(
+        video: true,
+        frontCamera: activeCall.frontCamera,
+      );
 
-      /// Replace audio track using existing sender to avoid adding new mline
+      final newAudioTrack = newLocalStream.getAudioTracks().firstOrNull;
+      final newVideoTrack = newLocalStream.getVideoTracks().firstOrNull;
+
+      final senders = await peerConnection.getSenders();
+      final audioSender = senders.firstWhereOrNull((s) => s.track?.kind == 'audio');
+      final videoSender = senders.firstWhereOrNull((s) => s.track?.kind == 'video');
+
+      /// Replace audio/video tracks using existing senders to avoid adding new m= lines
       ///
       /// Alternatively, you can use (remove || stop) + add tracks flow
-      /// but it has weak support on infrastructure level
-      /// - second audio mline causes problems with call recondings and music on hold
-      /// - second video mline causes empty video stream
+      /// but it has weak support on infrastructure level:
+      /// - second audio m= line causes problems with call recordings and music on hold
+      /// - second video m= line causes empty video stream
       ///
-      /// so best compatibility is to use existing senders and controll them by .enabled or .replaceTrack properties
-      final senders = await peerConnection.getSenders();
-      for (final sender in senders) {
-        if (sender.track?.kind == 'audio') {
-          await sender.track?.stop();
-          await sender.replaceTrack(newAudioTrack);
-        }
+      /// So for best compatibility, use existing senders and control them via .enabled or .replaceTrack
+      if (audioSender != null && newAudioTrack != null) {
+        await audioSender.track?.stop();
+        await audioSender.replaceTrack(newAudioTrack);
+      } else if (newAudioTrack != null) {
+        await peerConnection.addTrack(newAudioTrack, newLocalStream);
       }
-      await peerConnection.addTrack(newVideoTrack, newLocalStream);
 
-      emit(state.copyWithMappedActiveCall(event.callId, (call) {
-        return call.copyWith(localStream: newLocalStream, video: true);
-      }));
+      if (videoSender != null && newVideoTrack != null) {
+        await videoSender.track?.stop();
+        await videoSender.replaceTrack(newVideoTrack);
+      } else if (newVideoTrack != null) {
+        await peerConnection.addTrack(newVideoTrack, newLocalStream);
+      }
+
+      emit(state.copyWithMappedActiveCall(
+        event.callId,
+        (call) => call.copyWith(localStream: newLocalStream, video: true),
+      ));
 
       await callkeep.reportUpdateCall(event.callId, hasVideo: true);
     } on UserMediaError catch (e) {
@@ -1668,7 +1686,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     late final MediaStream localStream;
     try {
-      localStream = await _getUserMedia(
+      localStream = await userMediaBuilder.build(
         video: event.video,
         frontCamera: state.retrieveActiveCall(event.callId)?.frontCamera,
       );
@@ -1717,6 +1735,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         jsep: localDescription.toMap(),
         referId: activeCall.fromReferId,
       ));
+
+      // In other cases setLocalDescription is called first; here it's delayed to avoid ICE race
       await peerConnection.setLocalDescription(localDescription);
 
       _peerConnectionComplete(event.callId, peerConnection);
@@ -1796,7 +1816,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         return call.copyWith(processingStatus: CallProcessingStatus.incomingInitializingMedia);
       }));
 
-      final localStream = await _getUserMedia(video: offer.hasVideo, frontCamera: call.frontCamera);
+      final localStream = await userMediaBuilder.build(video: offer.hasVideo, frontCamera: call.frontCamera);
       final peerConnection = await _createPeerConnection(event.callId, call.line);
       await Future.forEach(localStream.getTracks(), (t) => peerConnection.addTrack(t, localStream));
 
@@ -1810,13 +1830,16 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       final localDescription = await peerConnection.createAnswer({});
       sdpMunger?.apply(localDescription);
 
+      // According to RFC 8829 §5.6 (https://datatracker.ietf.org/doc/html/rfc8829#section-5.6),
+      // localDescription should be set before sending the answer to transition into stable state.
+      await peerConnection.setLocalDescription(localDescription);
+
       await _signalingClient?.execute(AcceptRequest(
         transaction: WebtritSignalingClient.generateTransactionId(),
         line: call.line,
         callId: call.callId,
         jsep: localDescription.toMap(),
       ));
-      await peerConnection.setLocalDescription(localDescription);
 
       _peerConnectionComplete(event.callId, peerConnection);
     } catch (e, s) {
@@ -2065,6 +2088,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
             final localDescription = await peerConnection.createOffer({});
             sdpMunger?.apply(localDescription);
 
+            // According to RFC 8829 §5.6 (https://datatracker.ietf.org/doc/html/rfc8829#section-5.6),
+            // localDescription should be set before sending the answer to transition into stable state.
             await peerConnection.setLocalDescription(localDescription);
 
             final updateRequest = UpdateRequest(
@@ -2517,36 +2542,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     return callPerformEvent.future;
   }
 
-  Future<MediaStream> _getUserMedia({
-    required bool video,
-    bool? frontCamera,
-  }) async {
-    final Map<String, dynamic> mediaConstraints = {
-      'audio': {
-        'mandatory': audioConstraintsBuilder?.build() ?? {},
-      },
-      'video': video
-          ? {
-              'mandatory': videoConstraintsBuilder?.build() ?? {},
-              if (frontCamera != null) 'facingMode': frontCamera ? 'user' : 'environment',
-              'optional': [],
-            }
-          : false,
-    };
-    final localStream = await navigator.mediaDevices.getUserMedia(mediaConstraints).catchError((e) {
-      throw UserMediaError(e.toString());
-    });
-
-    if (!kIsWeb) {
-      await Helper.setAppleAudioConfiguration(AppleAudioConfiguration(
-        appleAudioMode: video ? AppleAudioMode.videoChat : AppleAudioMode.voiceChat,
-      ));
-      await Helper.setSpeakerphoneOn(video);
-    }
-
-    return localStream;
-  }
-
   Future<RTCPeerConnection> _createPeerConnection(String callId, int lineId) async {
     final peerConnection = await createPeerConnection(
       {
@@ -2606,11 +2601,32 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         logger.fine(() => 'onDataChannel channel: $channel');
       }
       ..onRenegotiationNeeded = () async {
+        // TODO(Serdun): Handle renegotiation needed
+        // This implementation does not handle all possible signaling states.
+        // Specifically, if the current state is `have-remote-offer`, calling
+        // setLocalDescription with an offer will throw:
+        //   WEBRTC_SET_LOCAL_DESCRIPTION_ERROR: Failed to set local offer sdp: Called in wrong state: have-remote-offer
+        //
+        // Known case: when CalleeVideoOfferPolicy.includeInactiveTrack is used,
+        // the callee may trigger onRenegotiationNeeded before the current remote offer is processed.
+        // This causes a race where the local peer is still in 'have-remote-offer' state,
+        // leading to the above error. Currently this does not severely affect behavior,
+        // since the offer includes only an inactive track, but it should still be handled correctly.
+        //
+        // Proper handling should include:
+        // - Waiting until the signaling state becomes 'stable' before creating and setting a new offer
+        // - Avoiding renegotiation if a remote offer is currently being processed
+        // - Ensuring renegotiation is coordinated and state-aware
+
         final pcState = peerConnection.signalingState;
         logger.fine(() => 'onRenegotiationNeeded signalingState: $pcState');
         if (pcState != null) {
           final localDescription = await peerConnection.createOffer({});
           sdpMunger?.apply(localDescription);
+
+          // According to RFC 8829 §5.6 (https://datatracker.ietf.org/doc/html/rfc8829#section-5.6),
+          // localDescription should be set before sending the offer to transition into have-local-offer state.
+          await peerConnection.setLocalDescription(localDescription);
 
           final updateRequest = UpdateRequest(
             transaction: WebtritSignalingClient.generateTransactionId(),
@@ -2619,8 +2635,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
             jsep: localDescription.toMap(),
           );
           await _signalingClient?.execute(updateRequest);
-
-          await peerConnection.setLocalDescription(localDescription);
         }
       }
       ..onTrack = (event) {
@@ -2671,13 +2685,4 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       _logger.warning('_signalingDeclineCall hangupRequest error: $e');
     });
   }
-}
-
-class UserMediaError implements Exception {
-  final String message;
-
-  UserMediaError(this.message);
-
-  @override
-  String toString() => 'UserMediaError: $message';
 }

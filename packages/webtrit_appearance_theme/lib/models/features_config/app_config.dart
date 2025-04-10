@@ -139,6 +139,7 @@ class AppConfigCall with _$AppConfigCall {
     ))
     AppConfigTransfer transfer,
     @Default(AppConfigEncoding()) AppConfigEncoding encoding,
+    @Default(AppConfigPeerConnection()) AppConfigPeerConnection peerConnection,
   }) = _AppConfigCall;
 
   factory AppConfigCall.fromJson(Map<String, dynamic> json) => _$AppConfigCallFromJson(json);
@@ -168,6 +169,31 @@ class AppConfigEncoding with _$AppConfigEncoding {
   }) = _AppConfigEncoding;
 
   factory AppConfigEncoding.fromJson(Map<String, dynamic> json) => _$AppConfigEncodingFromJson(json);
+}
+
+@freezed
+class AppConfigPeerConnection with _$AppConfigPeerConnection {
+  const AppConfigPeerConnection._();
+
+  @JsonSerializable(explicitToJson: true)
+  const factory AppConfigPeerConnection({
+    @Default(AppConfigNegotiationSettingsOverride()) AppConfigNegotiationSettingsOverride negotiation,
+  }) = _AppConfigPeerConnection;
+
+  factory AppConfigPeerConnection.fromJson(Map<String, dynamic> json) => _$AppConfigPeerConnectionFromJson(json);
+}
+
+@freezed
+class AppConfigNegotiationSettingsOverride with _$AppConfigNegotiationSettingsOverride {
+  const AppConfigNegotiationSettingsOverride._();
+
+  @JsonSerializable(explicitToJson: true)
+  const factory AppConfigNegotiationSettingsOverride({
+    String? calleeVideoOfferPolicy,
+  }) = _AppConfigNegotiationSettingsOverride;
+
+  factory AppConfigNegotiationSettingsOverride.fromJson(Map<String, dynamic> json) =>
+      _$AppConfigNegotiationSettingsOverrideFromJson(json);
 }
 
 @freezed
