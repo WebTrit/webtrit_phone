@@ -65,6 +65,18 @@ class AttachmentsExchangeBar extends StatelessWidget {
   final IconData icon;
   final Function()? onCancel;
 
+  List<String> get viewableAttachments {
+    return attachments.where((attachment) {
+      return attachment.isImagePath || attachment.isVideoPath;
+    }).toList();
+  }
+
+  List<String> get nonViewableAttachments {
+    return attachments.where((attachment) {
+      return !attachment.isImagePath && !attachment.isVideoPath;
+    }).toList();
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -75,7 +87,7 @@ class AttachmentsExchangeBar extends StatelessWidget {
         filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
         child: Container(
           color: theme.primaryColor.withAlpha(200),
-          padding: const EdgeInsets.symmetric(vertical: 4),
+          padding: const EdgeInsets.symmetric(vertical: 8),
           child: Row(
             children: [
               const SizedBox(width: 8),
@@ -100,16 +112,31 @@ class AttachmentsExchangeBar extends StatelessWidget {
               ),
               const SizedBox(width: 8),
               Expanded(child: Builder(builder: (context) {
-                return Wrap(
-                  spacing: 6,
-                  runSpacing: 4,
-                  children: attachments.map((attachment) {
-                    if (attachment.isImagePath) return imagePreview(attachment);
-                    if (attachment.isVideoPath) return videoPreview(attachment);
-                    if (attachment.isAudioPath) return audioPreview(attachment);
-                    if (attachment.isDocumentPath) return docPreview(attachment);
-                    return filePreview(attachment);
-                  }).toList(),
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  spacing: 4,
+                  children: [
+                    if (viewableAttachments.isNotEmpty)
+                      Wrap(
+                        spacing: 6,
+                        runSpacing: 4,
+                        children: viewableAttachments.map((attachment) {
+                          if (attachment.isImagePath) return imagePreview(attachment);
+                          if (attachment.isVideoPath) return videoPreview(attachment);
+                          return const SizedBox();
+                        }).toList(),
+                      ),
+                    if (nonViewableAttachments.isNotEmpty)
+                      Wrap(
+                        spacing: 6,
+                        runSpacing: 4,
+                        children: nonViewableAttachments.map((attachment) {
+                          if (attachment.isAudioPath) return audioPreview(attachment);
+                          if (attachment.isDocumentPath) return docPreview(attachment);
+                          return filePreview(attachment);
+                        }).toList(),
+                      ),
+                  ],
                 );
               })),
               if (onCancel != null) ...[
@@ -130,12 +157,12 @@ class AttachmentsExchangeBar extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            path.fileName.limit(12),
+            path.fileName.limit(20),
             style: const TextStyle(color: Colors.black, fontSize: 10, fontWeight: FontWeight.w700),
             overflow: TextOverflow.ellipsis,
           ),
           Text(
-            path.fileExtension,
+            '.${path.fileExtension}',
             style: const TextStyle(color: Colors.black, fontSize: 10, fontWeight: FontWeight.w700),
           ),
           const SizedBox(width: 4),
@@ -153,12 +180,12 @@ class AttachmentsExchangeBar extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            path.fileName.limit(12),
+            path.fileName.limit(20),
             style: const TextStyle(color: Colors.black, fontSize: 10, fontWeight: FontWeight.w700),
             overflow: TextOverflow.ellipsis,
           ),
           Text(
-            path.fileExtension,
+            '.${path.fileExtension}',
             style: const TextStyle(color: Colors.black, fontSize: 10, fontWeight: FontWeight.w700),
           ),
           const SizedBox(width: 4),
@@ -176,12 +203,12 @@ class AttachmentsExchangeBar extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            path.fileName.limit(12),
+            path.fileName.limit(20),
             style: const TextStyle(color: Colors.black, fontSize: 10, fontWeight: FontWeight.w700),
             overflow: TextOverflow.ellipsis,
           ),
           Text(
-            path.fileExtension,
+            '.${path.fileExtension}',
             style: const TextStyle(color: Colors.black, fontSize: 10, fontWeight: FontWeight.w700),
           ),
           const SizedBox(width: 4),
