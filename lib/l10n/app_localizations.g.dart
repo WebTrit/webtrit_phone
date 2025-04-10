@@ -1819,6 +1819,24 @@ abstract class AppLocalizations {
   /// **'Type a message'**
   String get messaging_MessageField_hint;
 
+  /// No description provided for @messaging_MessageField_pick_gallery.
+  ///
+  /// In en, this message translates to:
+  /// **'Gallery'**
+  String get messaging_MessageField_pick_gallery;
+
+  /// No description provided for @messaging_MessageField_pick_audio.
+  ///
+  /// In en, this message translates to:
+  /// **'Audio'**
+  String get messaging_MessageField_pick_audio;
+
+  /// No description provided for @messaging_MessageField_pick_files.
+  ///
+  /// In en, this message translates to:
+  /// **'Files'**
+  String get messaging_MessageField_pick_files;
+
   /// No description provided for @messaging_MessageListView_typingTrail.
   ///
   /// In en, this message translates to:

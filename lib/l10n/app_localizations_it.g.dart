@@ -892,6 +892,15 @@ class AppLocalizationsIt extends AppLocalizations {
   String get messaging_MessageField_hint => 'Scrivi un messaggio';
 
   @override
+  String get messaging_MessageField_pick_gallery => 'Galleria';
+
+  @override
+  String get messaging_MessageField_pick_audio => 'Audio';
+
+  @override
+  String get messaging_MessageField_pick_files => 'File';
+
+  @override
   String get messaging_MessageListView_typingTrail => 'stampe...';
 
   @override

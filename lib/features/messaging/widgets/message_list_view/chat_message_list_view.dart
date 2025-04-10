@@ -1,9 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:auto_route/auto_route.dart';
-import 'package:file_picker/file_picker.dart';
 
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
@@ -175,12 +176,18 @@ class _ChatMessageListViewState extends State<ChatMessageListView> {
     widget.onDelete(message);
   }
 
-  void handleAttachment() async {
-    final result = await FilePicker.platform.pickFiles(allowMultiple: true);
-    if (result == null) return;
+  void handleAttachment(List<String> newAttachments) {
+    final currentFilenames = attachments.map((e) => e.fileName).toList();
+    final toAdd = newAttachments.where((element) => !currentFilenames.contains(element.fileName)).toList();
+    attachments = [...attachments, ...toAdd];
+    setState(() {});
+    FocusScope.of(context).unfocus();
+  }
 
-    final pickedPaths = result.paths.whereType<String>().toList();
-    setState(() => attachments = pickedPaths);
+  void handleRecording(String recording) {
+    attachments = [...attachments, recording];
+    setState(() {});
+    FocusScope.of(context).unfocus();
   }
 
   @override
@@ -288,8 +295,7 @@ class _ChatMessageListViewState extends State<ChatMessageListView> {
       builder: (context, state) {
         final messageForForward = state;
 
-        final canAddAttachments =
-            attachments.isEmpty && messageForForward == null && editingMessage == null && replyingMessage == null;
+        final canAddAttachments = messageForForward == null && editingMessage == null && replyingMessage == null;
 
         Widget? exchangeWidget;
         if (messageForForward != null) {
@@ -355,6 +361,7 @@ class _ChatMessageListViewState extends State<ChatMessageListView> {
                 onSend: handleSend,
                 onChanged: (value) => context.read<ChatTypingCubit>().sendTyping(),
                 onAddAttachment: canAddAttachments ? handleAttachment : null,
+                onAddRecording: canAddAttachments ? handleRecording : null,
               )
           ],
         );

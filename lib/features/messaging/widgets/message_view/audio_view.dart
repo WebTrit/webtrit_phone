@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:audio_session/audio_session.dart';
 import 'package:webtrit_phone/common/media_storage_service.dart';
+import 'package:webtrit_phone/extensions/duration.dart';
 
 import 'package:webtrit_phone/features/messaging/messaging.dart';
 
@@ -18,14 +19,15 @@ class AudioView extends StatefulWidget {
   State<AudioView> createState() => _AudioViewState();
 }
 
-class _AudioViewState extends State<AudioView> with WidgetsBindingObserver {
+class _AudioViewState extends State<AudioView> with WidgetsBindingObserver, SingleTickerProviderStateMixin {
   final _player = AudioPlayer();
-  late final StreamSubscription _playbackSub;
+  late final _refreshTicker = createTicker((_) => setState(() {}));
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    _refreshTicker.start();
     _init();
   }
 
@@ -44,16 +46,13 @@ class _AudioViewState extends State<AudioView> with WidgetsBindingObserver {
         await _player.setAudioSource(AudioSource.uri(cacheStreamUri));
       }
     }
-
-    _playbackSub = _player.playbackEventStream.listen((_) {
-      if (mounted) setState(() {});
-    });
   }
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    _refreshTicker.dispose();
     _player.dispose();
-    _playbackSub.cancel();
     super.dispose();
   }
 
@@ -82,6 +81,11 @@ class _AudioViewState extends State<AudioView> with WidgetsBindingObserver {
                 ),
               ),
               const SizedBox(width: 8),
+              Text(
+                _player.duration?.format() ?? '00:00',
+                style: const TextStyle(color: Colors.black, fontSize: 10, fontWeight: FontWeight.w700),
+              ),
+              const SizedBox(width: 8),
               Icon(Icons.audiotrack, size: 16, color: Colors.grey.shade600),
             ],
           ),
@@ -90,22 +94,28 @@ class _AudioViewState extends State<AudioView> with WidgetsBindingObserver {
             child: Row(
               children: [
                 if (_player.playing)
-                  IconButton(
-                    padding: EdgeInsets.zero,
-                    icon: const Icon(Icons.pause),
-                    onPressed: () async {
-                      await _player.pause();
-                    },
+                  SizedBox(
+                    width: 24,
+                    child: IconButton(
+                      padding: EdgeInsets.zero,
+                      icon: const Icon(Icons.pause),
+                      onPressed: () async {
+                        await _player.pause();
+                      },
+                    ),
                   )
                 else
-                  IconButton(
-                    padding: EdgeInsets.zero,
-                    icon: const Icon(Icons.play_arrow),
-                    onPressed: () async {
-                      await _player.play();
-                    },
+                  SizedBox(
+                    width: 24,
+                    child: IconButton(
+                      padding: EdgeInsets.zero,
+                      icon: const Icon(Icons.play_arrow),
+                      onPressed: () async {
+                        await _player.play();
+                      },
+                    ),
                   ),
-                const SizedBox(width: 8),
+                const SizedBox(width: 12),
                 Expanded(
                   child: Slider(
                     padding: EdgeInsets.zero,

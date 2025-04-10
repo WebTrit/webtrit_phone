@@ -50,7 +50,7 @@ extension PathUtilExtension on String {
 const imageExts = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'heic'];
 const gifExts = ['gif'];
 const videoExts = ['mp4', 'mov', 'avi', 'mkv', 'flv', 'm3u8'];
-const audioExts = ['mp3', 'wav', 'aac', 'flac', 'ogg'];
+const audioExts = ['mp3', 'wav', 'aac', 'flac', 'ogg', 'm4a'];
 const documentExts = ['pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx'];
 const archiveExts = ['zip', 'rar', '7z', 'tar', 'gz'];
 const executableExts = ['exe', 'msi', 'apk', 'bat', 'sh'];

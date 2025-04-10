@@ -892,6 +892,15 @@ class AppLocalizationsUk extends AppLocalizations {
   String get messaging_MessageField_hint => 'Введіть повідомлення';
 
   @override
+  String get messaging_MessageField_pick_gallery => 'Галерея';
+
+  @override
+  String get messaging_MessageField_pick_audio => 'Аудіо';
+
+  @override
+  String get messaging_MessageField_pick_files => 'Файли';
+
+  @override
   String get messaging_MessageListView_typingTrail => 'друкує...';
 
   @override

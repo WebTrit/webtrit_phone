@@ -539,6 +539,12 @@ class AppLocalizationsMapper {
       'messaging_GroupInfo_unmakeModeratorBtnText':
           localizations.messaging_GroupInfo_unmakeModeratorBtnText,
       'messaging_MessageField_hint': localizations.messaging_MessageField_hint,
+      'messaging_MessageField_pick_gallery':
+          localizations.messaging_MessageField_pick_gallery,
+      'messaging_MessageField_pick_audio':
+          localizations.messaging_MessageField_pick_audio,
+      'messaging_MessageField_pick_files':
+          localizations.messaging_MessageField_pick_files,
       'messaging_MessageListView_typingTrail':
           localizations.messaging_MessageListView_typingTrail,
       'messaging_MessageView_delete':
