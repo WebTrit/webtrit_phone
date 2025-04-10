@@ -36,9 +36,6 @@ class NegotiationSettings extends Equatable {
 
 /// Defines how the callee responds to a renegotiation offer that includes a video section.
 ///
-/// - [ignore]: The callee does not attach any video track. This may lead to incomplete negotiation,
-///   especially with certain signaling servers or peers that require symmetric media lines.
-///
 /// - [includeInactiveTrack]: The callee adds a full but inactive video track to the peer connection
 ///   and includes it in the SDP answer. This allows the caller to successfully negotiate video,
 ///   even if the callee does not immediately intend to send media. It also helps avoid errors like
