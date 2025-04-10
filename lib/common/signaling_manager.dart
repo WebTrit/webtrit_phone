@@ -182,7 +182,7 @@ class SignalingManager {
       _sendRequest(callId, (line, id, tx) => HangupRequest(transaction: tx, line: line, callId: id));
 
   Future<void> acceptCall(String callId) async =>
-      _sendRequest(callId, (line, id, tx) => AcceptRequest(transaction: tx, line: line, callId: id, jsep: {}));
+      _sendRequest(callId, (line, id, tx) => AcceptRequest(transaction: tx, line: line, callId: id, jsep: const {}));
 
   Future<void> _sendRequest(
     String callId,
