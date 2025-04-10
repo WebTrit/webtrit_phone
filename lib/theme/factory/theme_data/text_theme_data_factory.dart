@@ -17,6 +17,6 @@ class TextThemeDataFactory implements ThemeStyleFactory<TextTheme> {
     final fontFamily = config.fontFamily;
     final baseTextTheme = themeData.textTheme;
 
-    return GoogleFonts.getTextTheme(fontFamily, baseTextTheme);
+    return fontFamily == null ? themeData.textTheme : GoogleFonts.getTextTheme(fontFamily, baseTextTheme);
   }
 }
