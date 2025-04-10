@@ -540,7 +540,7 @@ FontsConfig _$FontsConfigFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$FontsConfig {
-  String get fontFamily => throw _privateConstructorUsedError;
+  String? get fontFamily => throw _privateConstructorUsedError;
 
   /// Serializes this FontsConfig to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -558,7 +558,7 @@ abstract class $FontsConfigCopyWith<$Res> {
           FontsConfig value, $Res Function(FontsConfig) then) =
       _$FontsConfigCopyWithImpl<$Res, FontsConfig>;
   @useResult
-  $Res call({String fontFamily});
+  $Res call({String? fontFamily});
 }
 
 /// @nodoc
@@ -576,13 +576,13 @@ class _$FontsConfigCopyWithImpl<$Res, $Val extends FontsConfig>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? fontFamily = null,
+    Object? fontFamily = freezed,
   }) {
     return _then(_value.copyWith(
-      fontFamily: null == fontFamily
+      fontFamily: freezed == fontFamily
           ? _value.fontFamily
           : fontFamily // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
     ) as $Val);
   }
 }
@@ -595,7 +595,7 @@ abstract class _$$FontsConfigImplCopyWith<$Res>
       __$$FontsConfigImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String fontFamily});
+  $Res call({String? fontFamily});
 }
 
 /// @nodoc
@@ -611,13 +611,13 @@ class __$$FontsConfigImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? fontFamily = null,
+    Object? fontFamily = freezed,
   }) {
     return _then(_$FontsConfigImpl(
-      fontFamily: null == fontFamily
+      fontFamily: freezed == fontFamily
           ? _value.fontFamily
           : fontFamily // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
     ));
   }
 }
@@ -626,14 +626,13 @@ class __$$FontsConfigImplCopyWithImpl<$Res>
 
 @JsonSerializable(explicitToJson: true)
 class _$FontsConfigImpl implements _FontsConfig {
-  const _$FontsConfigImpl({this.fontFamily = 'Montserrat'});
+  const _$FontsConfigImpl({this.fontFamily});
 
   factory _$FontsConfigImpl.fromJson(Map<String, dynamic> json) =>
       _$$FontsConfigImplFromJson(json);
 
   @override
-  @JsonKey()
-  final String fontFamily;
+  final String? fontFamily;
 
   @override
   String toString() {
@@ -670,13 +669,13 @@ class _$FontsConfigImpl implements _FontsConfig {
 }
 
 abstract class _FontsConfig implements FontsConfig {
-  const factory _FontsConfig({final String fontFamily}) = _$FontsConfigImpl;
+  const factory _FontsConfig({final String? fontFamily}) = _$FontsConfigImpl;
 
   factory _FontsConfig.fromJson(Map<String, dynamic> json) =
       _$FontsConfigImpl.fromJson;
 
   @override
-  String get fontFamily;
+  String? get fontFamily;
 
   /// Create a copy of FontsConfig
   /// with the given fields replaced by the non-null parameter values.

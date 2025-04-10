@@ -31,7 +31,7 @@ class ThemeWidgetConfig with _$ThemeWidgetConfig {
 class FontsConfig with _$FontsConfig {
   @JsonSerializable(explicitToJson: true)
   const factory FontsConfig({
-    @Default('Montserrat') String fontFamily,
+    String? fontFamily,
   }) = _FontsConfig;
 
   factory FontsConfig.fromJson(Map<String, dynamic> json) => _$FontsConfigFromJson(json);

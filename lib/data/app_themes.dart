@@ -49,10 +49,13 @@ class AppThemes {
     final themes = [AppTheme(settings: settings)];
 
     try {
+      final lightFontFamily = themeWidgetLightConfig.fonts.fontFamily;
+      final darkFontFamily = themeWidgetDarkConfig.fonts.fontFamily;
+
       // Preload Google Fonts for preventing flickering during the first render
       await GoogleFonts.pendingFonts([
-        GoogleFonts.getFont((themeWidgetLightConfig.fonts.fontFamily)),
-        GoogleFonts.getFont((themeWidgetDarkConfig.fonts.fontFamily)),
+        if (lightFontFamily != null) GoogleFonts.getFont(lightFontFamily),
+        if (darkFontFamily != null) GoogleFonts.getFont(darkFontFamily),
       ]);
     } catch (e) {
       _logger.warning('Failed to preload Google Fonts: $e');
