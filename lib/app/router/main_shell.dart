@@ -237,12 +237,24 @@ class _MainShellState extends State<MainShell> {
               final appBloc = context.read<AppBloc>();
               final appPreferences = context.read<AppPreferences>();
               final notificationsBloc = context.read<NotificationsBloc>();
+              // TODO(Serdun): Refactor into an inherited widget for better code consistency and reusability
               final appCertificates = AppCertificates();
-              final encodingConfig = context.read<FeatureAccess>().callFeature.encoding;
-              final peerConnectionConfig = context.read<FeatureAccess>().callFeature.peerConnection;
+              final featureAccess = context.read<FeatureAccess>();
+
+              final encodingConfig = featureAccess.callFeature.encoding;
+              final peerConnectionConfig = featureAccess.callFeature.peerConnection;
+
+              // Initialize media builder with app-configured audio/video constraints
+              // Used to capture synchronized MediaStream (audio+video) for WebRTC track addition.
               final userMediaBuilder = DefaultUserMediaBuilder(
                 audioConstraintsBuilder: AudioConstraintsWithAppSettingsBuilder(appPreferences),
                 videoConstraintsBuilder: VideoConstraintsWithAppSettingsBuilder(appPreferences),
+              );
+              // Initialize peer connection policy applier with app-specific negotiation rules
+              final pearConnectionPolicyApplier = ModifyWithSettingsPeerConnectionPolicyApplier(
+                appPreferences,
+                peerConnectionConfig,
+                userMediaBuilder,
               );
 
               return CallBloc(
@@ -259,11 +271,7 @@ class _MainShellState extends State<MainShell> {
                 webRtcOptionsBuilder: WebrtcOptionsWithAppSettingsBuilder(appPreferences),
                 userMediaBuilder: userMediaBuilder,
                 iceFilter: FilterWithAppSettings(appPreferences),
-                peerConnectionPolicyApplier: ModifyWithSettingsPeerConnectionPolicyApplier(
-                  appPreferences,
-                  peerConnectionConfig,
-                  userMediaBuilder,
-                ),
+                peerConnectionPolicyApplier: pearConnectionPolicyApplier,
               )..add(const CallStarted());
             },
           ),
