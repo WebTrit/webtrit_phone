@@ -1,17 +1,16 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/data/app_preferences.dart';
-import 'package:webtrit_phone/models/audio_processing_settings.dart';
-import 'package:webtrit_phone/models/encoding_settings.dart';
-import 'package:webtrit_phone/models/ice_settings.dart';
-import 'package:webtrit_phone/models/video_capturing_settings.dart';
+import 'package:webtrit_phone/models/models.dart';
 
 import 'media_settings_state.dart';
 
 class MediaSettingsCubit extends Cubit<MediaSettingsState> {
-  MediaSettingsCubit(this._prefs) : super(MediaSettingsState.fromPrefs(_prefs));
+  MediaSettingsCubit(this._prefs, this._defaultPeerConnectionSettings)
+      : super(MediaSettingsState.fromPrefs(_prefs, _defaultPeerConnectionSettings));
 
   final AppPreferences _prefs;
+  final PeerConnectionSettings _defaultPeerConnectionSettings;
 
   void setEncodingSettings(EncodingSettings settings) {
     emit(state.copyWithEncodingSettings(settings));
@@ -38,6 +37,11 @@ class MediaSettingsCubit extends Cubit<MediaSettingsState> {
     _prefs.setIceSettings(settings);
   }
 
+  void setPeerConnectionSettings(PeerConnectionSettings settings) {
+    emit(state.copyWithPeerConnectionSettings(settings));
+    _prefs.setPearConnectionSettings(settings);
+  }
+
   void reset() {
     emit(MediaSettingsState(
       encodingPreset: null,
@@ -45,6 +49,7 @@ class MediaSettingsCubit extends Cubit<MediaSettingsState> {
       audioProcessingSettings: AudioProcessingSettings.blank(),
       videoCapturingSettings: VideoCapturingSettings.blank(),
       iceSettings: IceSettings.blank(),
+      pearConnectionSettings: _defaultPeerConnectionSettings,
     ));
 
     _prefs.setEncodingPreset(null);
@@ -52,5 +57,6 @@ class MediaSettingsCubit extends Cubit<MediaSettingsState> {
     _prefs.setAudioProcessingSettings(AudioProcessingSettings.blank());
     _prefs.setVideoCapturingSettings(VideoCapturingSettings.blank());
     _prefs.setIceSettings(IceSettings.blank());
+    _prefs.setPearConnectionSettings(_defaultPeerConnectionSettings);
   }
 }

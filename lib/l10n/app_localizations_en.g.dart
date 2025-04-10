@@ -1371,6 +1371,24 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings_iceSettings_Section_trfilter_skipTcp => 'Skip TCP candidates';
 
   @override
+  String get settings_connectionSection_title => 'Connection and call behavior';
+
+  @override
+  String get settings_connectionSection_tooltip => 'Configure how your device handles connection setup, media negotiation, and call updates during peer-to-peer communication.';
+
+  @override
+  String get settings_videoOffer_title => 'Determine how this device responds to an offer that includes video.';
+
+  @override
+  String get settings_videoOffer_option_includeInactive => 'Include inactive video track\nEnsures compatibility with video offers for future activation.';
+
+  @override
+  String get settings_videoOffer_option_ignore => 'Respond without video\nNo track will be added unless negotiated later.';
+
+  @override
+  String get call_settings_additional_options => 'Additional options';
+
+  @override
   String get settings_ListViewTileTitle_about => 'About';
 
   @override

@@ -14,8 +14,9 @@ class MediaSettingsScreenPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final defaultPeerConnectionSettings = context.read<FeatureAccess>().callFeature.peerConnection;
     return BlocProvider(
-      create: (context) => MediaSettingsCubit(context.read<AppPreferences>()),
+      create: (context) => MediaSettingsCubit(context.read<AppPreferences>(), defaultPeerConnectionSettings),
       child: const MediaSettingsScreen(),
     );
   }

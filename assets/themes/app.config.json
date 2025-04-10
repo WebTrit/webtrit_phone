@@ -200,6 +200,11 @@
         "opusStereo": false,
         "opusDtx": true
       }
+    },
+    "peerConnection": {
+      "negotiation": {
+        "calleeVideoOfferPolicy": null
+      }
     }
   },
   "embeddedResources": [

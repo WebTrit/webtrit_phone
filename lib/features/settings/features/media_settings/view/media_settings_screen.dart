@@ -15,7 +15,9 @@ import 'components/heading_section.dart';
 import 'components/inline_choosable_section.dart';
 import 'components/reorderable_section.dart';
 import 'components/slidable_section.dart';
+
 import '../media_settings.dart';
+import '../widgets/widgets.dart';
 
 class MediaSettingsScreen extends StatefulWidget {
   const MediaSettingsScreen({super.key});
@@ -69,9 +71,21 @@ class _MediaSettingsScreenState extends State<MediaSettingsScreen> {
                 const SizedBox(height: 24),
                 videoCapturingContent(context, videoCapturingSettings),
                 const SizedBox(height: 24),
-                const Divider(),
-                const SizedBox(height: 24),
-                iceSettingsContent(context, iceSettings),
+                ExpansionTile(
+                  tilePadding: EdgeInsets.zero,
+                  title: Text(context.l10n.call_settings_additional_options),
+                  children: [
+                    const SizedBox(height: 24),
+                    iceSettingsContent(context, iceSettings),
+                    const SizedBox(height: 24),
+                    const Divider(),
+                    const SizedBox(height: 24),
+                    PeerConnectionSettingsSection(
+                      peerConnectionSettings: state.pearConnectionSettings,
+                      onSettingsChanged: cubit.setPeerConnectionSettings,
+                    ),
+                  ],
+                ),
               ],
             ),
           );

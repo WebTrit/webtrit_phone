@@ -1,10 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:webtrit_phone/data/app_preferences.dart';
-import 'package:webtrit_phone/models/audio_processing_settings.dart';
-import 'package:webtrit_phone/models/encoding_settings.dart';
-import 'package:webtrit_phone/models/ice_settings.dart';
-import 'package:webtrit_phone/models/video_capturing_settings.dart';
+import 'package:webtrit_phone/models/models.dart';
 
+// TODO(Serdun): Maybe better to use Freezed for avoid a lot of copyWith methods.
 class MediaSettingsState with EquatableMixin {
   MediaSettingsState({
     required this.encodingSettings,
@@ -12,21 +10,27 @@ class MediaSettingsState with EquatableMixin {
     required this.audioProcessingSettings,
     required this.videoCapturingSettings,
     required this.iceSettings,
+    required this.pearConnectionSettings,
   });
 
   final EncodingSettings encodingSettings;
   final EncodingPreset? encodingPreset;
   final AudioProcessingSettings audioProcessingSettings;
   final VideoCapturingSettings videoCapturingSettings;
-  final IceSettings iceSettings;
 
-  factory MediaSettingsState.fromPrefs(AppPreferences prefs) {
+  // TODO: Move [iceSettings] to [PeerConnectionSettings] since it relates to WebRTC session-level configuration,
+// such as ICE servers, transport policy, and connection establishment behavior.
+  final IceSettings iceSettings;
+  final PeerConnectionSettings pearConnectionSettings;
+
+  factory MediaSettingsState.fromPrefs(AppPreferences prefs, PeerConnectionSettings defaultPeerConnectionSettings) {
     return MediaSettingsState(
       encodingSettings: prefs.getEncodingSettings(),
       encodingPreset: prefs.getEncodingPreset(),
       audioProcessingSettings: prefs.getAudioProcessingSettings(),
       videoCapturingSettings: prefs.getVideoCapturingSettings(),
       iceSettings: prefs.getIceSettings(),
+      pearConnectionSettings: prefs.getPeerConnectionSettings(defaultValue: defaultPeerConnectionSettings),
     );
   }
 
@@ -37,6 +41,7 @@ class MediaSettingsState with EquatableMixin {
       audioProcessingSettings: audioProcessingSettings,
       videoCapturingSettings: videoCapturingSettings,
       iceSettings: iceSettings,
+      pearConnectionSettings: pearConnectionSettings,
     );
   }
 
@@ -47,6 +52,7 @@ class MediaSettingsState with EquatableMixin {
       audioProcessingSettings: audioProcessingSettings,
       videoCapturingSettings: videoCapturingSettings,
       iceSettings: iceSettings,
+      pearConnectionSettings: pearConnectionSettings,
     );
   }
 
@@ -57,6 +63,7 @@ class MediaSettingsState with EquatableMixin {
       audioProcessingSettings: settings,
       videoCapturingSettings: videoCapturingSettings,
       iceSettings: iceSettings,
+      pearConnectionSettings: pearConnectionSettings,
     );
   }
 
@@ -67,6 +74,7 @@ class MediaSettingsState with EquatableMixin {
       audioProcessingSettings: audioProcessingSettings,
       videoCapturingSettings: settings,
       iceSettings: iceSettings,
+      pearConnectionSettings: pearConnectionSettings,
     );
   }
 
@@ -77,6 +85,18 @@ class MediaSettingsState with EquatableMixin {
       audioProcessingSettings: audioProcessingSettings,
       videoCapturingSettings: videoCapturingSettings,
       iceSettings: settings,
+      pearConnectionSettings: pearConnectionSettings,
+    );
+  }
+
+  MediaSettingsState copyWithPeerConnectionSettings(PeerConnectionSettings settings) {
+    return MediaSettingsState(
+      encodingSettings: encodingSettings,
+      encodingPreset: encodingPreset,
+      audioProcessingSettings: audioProcessingSettings,
+      videoCapturingSettings: videoCapturingSettings,
+      iceSettings: iceSettings,
+      pearConnectionSettings: settings,
     );
   }
 
@@ -87,6 +107,7 @@ class MediaSettingsState with EquatableMixin {
         audioProcessingSettings,
         videoCapturingSettings,
         iceSettings,
+        pearConnectionSettings,
       ];
 
   @override
@@ -95,6 +116,8 @@ class MediaSettingsState with EquatableMixin {
         'encodingPreset: $encodingPreset,'
         'encodingSettings: $encodingSettings},'
         'audioProcessingSettings: $audioProcessingSettings,'
-        'videoCapturingSettings: $videoCapturingSettings';
+        'videoCapturingSettings: $videoCapturingSettings,'
+        'iceSettings: $iceSettings,'
+        'pearConnectionSettings: $pearConnectionSettings';
   }
 }
