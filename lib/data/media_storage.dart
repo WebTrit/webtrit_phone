@@ -280,6 +280,7 @@ class MediaStorage {
       },
       deleteOrigin: false,
       includeAudio: true,
+      duration: const Duration(minutes: 10).inSeconds,
     );
     return encodedResult?.path;
   }
