@@ -9,7 +9,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_parsed_text/flutter_parsed_text.dart';
 import 'package:webtrit_phone/blocs/app/app_bloc.dart';
 
-import 'package:webtrit_phone/common/media_storage_service.dart';
+import 'package:webtrit_phone/data/media_storage.dart';
 import 'package:webtrit_phone/features/messaging/messaging.dart';
 import 'package:webtrit_phone/models/message_attachment.dart';
 import 'package:webtrit_phone/models/outbox_attachment.dart';
@@ -229,7 +229,7 @@ class _MessageBodyState extends State<MessageBody> {
                 return GestureDetector(
                   onTap: () async {
                     final file =
-                        att.path.isLocalPath ? File(att.path) : await MediaStorageService.downloadOrGetFile(att.path);
+                        att.path.isLocalPath ? File(att.path) : await MediaStorage().downloadOrGetFile(att.path);
                     OpenFile.open(file.path);
                   },
                   onLongPress: () {
@@ -249,10 +249,19 @@ class _MessageBodyState extends State<MessageBody> {
             decoration: previewDecoration,
             padding: const EdgeInsets.all(8),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               spacing: 8,
               children: [
                 if (preview?.imageUrl != null) ...[
-                  MultisourceImageView(preview!.imageUrl!),
+                  Container(
+                    clipBehavior: Clip.antiAlias,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    height: preview?.imageSize?.height,
+                    width: preview?.imageSize?.width,
+                    child: MultisourceImageView(preview!.imageUrl!),
+                  ),
                 ],
                 if ((preview?.title) != null)
                   Row(

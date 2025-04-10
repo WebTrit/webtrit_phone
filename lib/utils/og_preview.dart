@@ -1,24 +1,26 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:equatable/equatable.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' hide Element;
 import 'package:html/dom.dart' show Document, Element;
 import 'package:html/parser.dart' as parser show parse;
 import 'package:http/http.dart' as http show get;
 import 'package:logging/logging.dart';
+import 'package:webtrit_phone/data/media_storage.dart';
 
 final _logger = Logger('get_og_preview');
 
 /// Represents an Open Graph like preview data for a given url
 /// can be used to display social media link previews or regular web image previews
 class OgPreview with EquatableMixin {
-  const OgPreview._({this.title, this.description, this.imageUrl});
+  const OgPreview._({this.title, this.description, this.imageUrl, this.imageSize});
 
   final String? title;
   final String? description;
   final String? imageUrl;
+  final Size? imageSize;
 
   @override
   List<Object> get props => [description ?? '', imageUrl ?? '', title ?? ''];
@@ -26,19 +28,14 @@ class OgPreview with EquatableMixin {
   @override
   bool get stringify => true;
 
-  static Future<OgPreview?> get(String url, {bool useIsolate = true}) {
-    if (useIsolate) {
-      return compute(_getOgPreview, url);
-    } else {
-      return _getOgPreview(url);
-    }
-  }
+  static Future<OgPreview?> get(String url) => _getOgPreview(url);
 }
 
 Future<OgPreview?> _getOgPreview(String url) async {
   String? title;
   String? description;
   String? imageUrl;
+  Size? size;
 
   try {
     // Add https if not present
@@ -46,7 +43,9 @@ Future<OgPreview?> _getOgPreview(String url) async {
 
     // Check if the url is an image file
     if (RegExp(r'\.(png|jpe?g|gif|svg|webp)').hasMatch(url)) {
-      return OgPreview._(imageUrl: url);
+      final imageFile = await MediaStorage().downloadOrGetFile(url);
+      final size = await _getImageSize(imageFile);
+      return OgPreview._(imageUrl: url, imageSize: size);
     }
 
     // Get the website content
@@ -55,7 +54,9 @@ Future<OgPreview?> _getOgPreview(String url) async {
 
     // Check if the content is an image and return the image url
     if (RegExp(r'image\/*').hasMatch(resp.headers['content-type'] ?? '')) {
-      return OgPreview._(imageUrl: url);
+      final imageFile = await MediaStorage().downloadOrGetFile(url);
+      final size = await _getImageSize(imageFile);
+      return OgPreview._(imageUrl: url, imageSize: size);
     }
 
     // Parse the documents contect
@@ -63,6 +64,10 @@ Future<OgPreview?> _getOgPreview(String url) async {
     description = _getDescription(doc)?.trim();
     final imageUrls = _getImageUrls(doc, url);
     if (imageUrls.isNotEmpty) imageUrl = await _selectBiggestImage(imageUrls);
+    if (imageUrl != null) {
+      final imageFile = await MediaStorage().downloadOrGetFile(url);
+      size = await _getImageSize(imageFile);
+    }
   } catch (e) {
     _logger.info('Failed to get Open grapg preview for $url', e);
   }
@@ -72,7 +77,7 @@ Future<OgPreview?> _getOgPreview(String url) async {
   final hasImageUrl = imageUrl?.isNotEmpty ?? false;
 
   if (hasTitle || hasDescription || hasImageUrl) {
-    return OgPreview._(title: title, description: description, imageUrl: imageUrl);
+    return OgPreview._(title: title, description: description, imageUrl: imageUrl, imageSize: size);
   }
 
   return null;
@@ -141,9 +146,9 @@ String? _tryGetImageUrl(String baseUrl, String? imageUrl) {
   return imageUrl;
 }
 
-Future<Size> _getImageSize(String url) {
+Future<Size> _getImageSize(File file) async {
   final completer = Completer<Size>();
-  final stream = Image.network(url).image.resolve(ImageConfiguration.empty);
+  final stream = Image.file(file).image.resolve(ImageConfiguration.empty);
   late ImageStreamListener streamListener;
 
   void onError(Object error, StackTrace? stackTrace) {
@@ -153,7 +158,7 @@ Future<Size> _getImageSize(String url) {
   void listener(ImageInfo info, bool _) {
     if (!completer.isCompleted) {
       completer.complete(
-        Size(info.image.height.toDouble(), info.image.width.toDouble()),
+        Size(info.image.width.toDouble(), info.image.height.toDouble()),
       );
     }
     stream.removeListener(streamListener);
@@ -172,9 +177,10 @@ Future<String> _selectBiggestImage(List<String> imageUrls) async {
   var lastSize = 0.0;
 
   for (var url in imageUrls) {
-    final size = await _getImageSize(url);
+    final imageFile = await MediaStorage().downloadOrGetFile(url);
+    final size = await _getImageSize(imageFile);
     if (size.width * size.height > lastSize) {
-      lastSize = size.width * size.height;
+      lastSize = size.width.toDouble() * size.height.toDouble();
       lastUrl = url;
     }
   }

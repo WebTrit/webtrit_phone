@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
-import 'package:webtrit_phone/common/media_storage_service.dart';
+import 'package:webtrit_phone/data/media_storage.dart';
 import 'package:webtrit_phone/data/app_preferences.dart';
 import 'package:webtrit_phone/models/file_kind.dart';
 
@@ -15,7 +15,7 @@ class StorageCubit extends Cubit<StorageState> {
   final AppPreferences _appPreferences;
 
   Future<void> _enumerateMediaCache() async {
-    final mediaCache = await MediaStorageService.enumerateMediaCache();
+    final mediaCache = await MediaStorage().enumerateMediaCache();
     final newState = state.copyWith(storageInfo: mediaCache);
     if (isClosed) return;
     emit(newState);
@@ -40,7 +40,7 @@ class StorageCubit extends Cubit<StorageState> {
   }
 
   Future<void> clearCache() async {
-    await MediaStorageService.clearMediaCache();
+    await MediaStorage().clearMediaCache();
     final newState = state.copyWith(storageInfo: const {});
     emit(newState);
   }

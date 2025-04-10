@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:just_audio/just_audio.dart';
 import 'package:audio_session/audio_session.dart';
-import 'package:webtrit_phone/common/media_storage_service.dart';
+import 'package:webtrit_phone/data/media_storage.dart';
 import 'package:webtrit_phone/extensions/duration.dart';
 
 import 'package:webtrit_phone/features/messaging/messaging.dart';
@@ -38,11 +38,11 @@ class _AudioViewState extends State<AudioView> with WidgetsBindingObserver, Sing
     if (widget.path.isLocalPath) {
       await _player.setAudioSource(AudioSource.file(widget.path));
     } else {
-      final cachedFile = MediaStorageService.getFileIfExist(widget.path);
+      final cachedFile = MediaStorage().getFileIfExist(widget.path);
       if (cachedFile != null) {
         await _player.setAudioSource(AudioSource.file(cachedFile.path));
       } else {
-        final cacheStreamUri = MediaStorageService.getCacheStreamUrl(widget.path);
+        final cacheStreamUri = MediaStorage().getCacheStreamUrl(widget.path);
         await _player.setAudioSource(AudioSource.uri(cacheStreamUri));
       }
     }

@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:webtrit_phone/common/media_storage_service.dart';
+import 'package:webtrit_phone/data/media_storage.dart';
 
 class VideoThumbnailBuilder extends StatefulWidget {
   const VideoThumbnailBuilder(this.path, this.builder, {super.key});
@@ -28,7 +28,7 @@ class _VideoThumbnailBuilderState extends State<VideoThumbnailBuilder> {
     await Future.doWhile(() async {
       try {
         final path = widget.path;
-        final thumb = await MediaStorageService.getVideoThumbnail(path);
+        final thumb = await MediaStorage().getVideoThumbnail(path);
         if (!mounted) return false;
         setState(() => file = thumb);
         return false;

@@ -1,7 +1,7 @@
 import 'package:logging/logging.dart';
 import 'package:uuid/uuid.dart';
 
-import 'package:webtrit_phone/common/media_storage_service.dart';
+import 'package:webtrit_phone/data/media_storage.dart';
 import 'package:webtrit_phone/features/messaging/extensions/string_path_utils.dart';
 import 'package:webtrit_phone/models/outbox_attachment.dart';
 
@@ -27,7 +27,7 @@ class OutboxAttachmentService {
         try {
           _logger.info('Encoding image: $pickedPath');
 
-          encodedPath = await MediaStorageService.encodeImage(pickedPath, encodePreset);
+          encodedPath = await MediaStorage().encodeImage(pickedPath, encodePreset);
           if (encodedPath == null) throw Exception('Failed to encode image: $pickedPath');
 
           attachments = attachments.map((e) {
@@ -47,7 +47,7 @@ class OutboxAttachmentService {
         try {
           _logger.info('Encoding video: $pickedPath');
 
-          encodedPath = await MediaStorageService.encodeVideo(pickedPath, encodePreset);
+          encodedPath = await MediaStorage().encodeVideo(pickedPath, encodePreset);
           if (encodedPath == null) throw Exception('Failed to encode video: $pickedPath');
 
           attachments = attachments.map((e) {

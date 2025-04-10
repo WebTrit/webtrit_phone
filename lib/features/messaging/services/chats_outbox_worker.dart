@@ -4,7 +4,7 @@ import 'package:logging/logging.dart';
 import 'package:phoenix_socket/phoenix_socket.dart';
 
 import 'package:webtrit_phone/app/notifications/notifications.dart';
-import 'package:webtrit_phone/common/media_storage_service.dart';
+import 'package:webtrit_phone/data/media_storage.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';

@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 
 import 'package:video_player/video_player.dart';
-import 'package:webtrit_phone/common/media_storage_service.dart';
+import 'package:webtrit_phone/data/media_storage.dart';
 
 import 'package:webtrit_phone/extensions/duration.dart';
 import 'package:webtrit_phone/features/messaging/extensions/string_path_utils.dart';
@@ -58,11 +58,11 @@ class VideoViewState extends State<VideoView> {
     if (widget.path.isLocalPath) {
       _controller = VideoPlayerController.file(File(widget.path));
     } else {
-      final cachedFile = MediaStorageService.getFileIfExist(widget.path);
+      final cachedFile = MediaStorage().getFileIfExist(widget.path);
       if (cachedFile != null) {
         _controller = VideoPlayerController.file(cachedFile);
       } else {
-        final cacheStreamUri = MediaStorageService.getCacheStreamUrl(widget.path);
+        final cacheStreamUri = MediaStorage().getCacheStreamUrl(widget.path);
         _controller = VideoPlayerController.networkUrl(cacheStreamUri);
       }
     }

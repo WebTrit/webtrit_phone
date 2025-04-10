@@ -12,7 +12,7 @@ import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 
 import 'package:webtrit_phone/extensions/extensions.dart';
-import 'package:webtrit_phone/common/media_storage_service.dart';
+import 'package:webtrit_phone/data/media_storage.dart';
 import 'package:webtrit_phone/features/messaging/extensions/extensions.dart';
 import 'package:webtrit_phone/features/messaging/widgets/message_view/video_view.dart';
 import 'package:webtrit_phone/features/orientations/bloc/orientations_bloc.dart';
@@ -53,7 +53,7 @@ class _MediaViewPageState extends State<MediaViewPage> {
   Future<File> get currentFile async {
     return currentAttachment.path.isLocalPath
         ? File(currentAttachment.path)
-        : await MediaStorageService.downloadOrGetFile(currentAttachment.path);
+        : await MediaStorage().downloadOrGetFile(currentAttachment.path);
   }
 
   bool get canSaveToGallery {

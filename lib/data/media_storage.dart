@@ -14,7 +14,20 @@ import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/features/messaging/messaging.dart';
 import 'package:webtrit_phone/models/file_kind.dart';
 
-class MediaStorageService {
+class MediaStorage {
+  MediaStorage._(this._directory, this._httpClient, this._prefs) {
+    Timer.periodic(const Duration(minutes: 5), (timer) async {
+      final autoClearDuration = _prefs.getStorageAutoClearDuration();
+      cleanStaleMediaCache(DateTime.now().subtract(autoClearDuration));
+
+      // Use anough time to not delete temp files that are in use
+      // One week probably should be enough
+      cleanStaleUploadTemps(DateTime.now().subtract(const Duration(days: 7)));
+    });
+  }
+  factory MediaStorage() => _instance;
+  static late MediaStorage _instance;
+
   // Upload temps directories
   static const _filePickerPath = 'file_picker'; // Ensure kept in sync with used picker package
   static const _encodedVideoPath = 'video_compress'; // Ensure kept in sync with used video compress package
@@ -23,28 +36,20 @@ class MediaStorageService {
   // Media cache directories
   static const _mediaCachePath = 'media_cache';
 
-  static late final Directory _directory;
-  static late final HttpClient _httpClient;
+  final Directory _directory;
+  final HttpClient _httpClient;
+  final AppPreferences _prefs;
 
-  static Future init(AppPreferences prefs, {HttpClient? httpClient}) async {
-    _httpClient = httpClient ?? HttpClient();
-    _directory = await getTemporaryDirectory();
-
+  static Future<MediaStorage> init(AppPreferences prefs, {HttpClient? httpClient}) async {
     await HttpCacheManager.init();
     HttpCacheManager.instance.config.rangeRequestSplitThreshold = 5 * 1024 * 1024;
 
-    Timer.periodic(const Duration(minutes: 5), (timer) async {
-      final autoClearDuration = prefs.getStorageAutoClearDuration();
-      cleanStaleMediaCache(DateTime.now().subtract(autoClearDuration));
-
-      // Use anough time to not delete temp files that are in use
-      // One week probably should be enough
-      cleanStaleUploadTemps(DateTime.now().subtract(const Duration(days: 7)));
-    });
+    _instance = MediaStorage._(await getTemporaryDirectory(), httpClient ?? HttpClient(), prefs);
+    return _instance;
   }
 
   /// Get file from cache if it exists
-  static File? getFileIfExist(String url) {
+  File? getFileIfExist(String url) {
     final uri = Uri.parse(url);
     final file = File('${_directory.path}/$_mediaCachePath${uri.path}');
 
@@ -56,7 +61,7 @@ class MediaStorageService {
 
   /// Get file from cache if it exists
   /// If the file is not in the cache, it will be downloaded and saved to the cache
-  static Future<File> downloadOrGetFile(String url) async {
+  Future<File> downloadOrGetFile(String url) async {
     final uri = Uri.parse(url);
     final file = File('${_directory.path}/$_mediaCachePath${uri.path}');
     if (await file.exists()) return file;
@@ -71,7 +76,7 @@ class MediaStorageService {
 
   /// Preload file to cache if it is smaller than maxSize and not already in the cache
   /// The file will be downloaded and saved to the cache
-  static Future preloadIf({required String url, required int maxSize}) async {
+  Future preloadIf({required String url, required int maxSize}) async {
     final uri = Uri.parse(url);
     final file = File('${_directory.path}/$_mediaCachePath${uri.path}');
     if (await file.exists()) return;
@@ -94,7 +99,7 @@ class MediaStorageService {
   /// When fully downloaded, the file will be saved to the cache as regular file
   /// and can be accessed by getFileIfExist method
   ///
-  static Uri getCacheStreamUrl(String url) {
+  Uri getCacheStreamUrl(String url) {
     final uri = Uri.parse(url);
     final file = File('${_directory.path}/$_mediaCachePath${uri.path}');
 
@@ -104,7 +109,7 @@ class MediaStorageService {
 
   /// Get thumbnail for video by remote or local path
   /// If the thumbnail is not in the cache, it will be generated and saved to the cache
-  static Future<File> getVideoThumbnail(String url) async {
+  Future<File> getVideoThumbnail(String url) async {
     final uri = Uri.parse(url);
     final file = File('${_directory.path}/$_mediaCachePath/thumbs${uri.path}.jpg');
     if (await file.exists()) return file;
@@ -131,7 +136,7 @@ class MediaStorageService {
   /// The method will enumerate the directories and calculate the size of each file
   /// and sum them up by extension.
   /// The method will also print the size of each file in the console.
-  static Future<Map<FileKind, double>> enumerateMediaCache() async {
+  Future<Map<FileKind, double>> enumerateMediaCache() async {
     Map<FileKind, double> extToMb = {};
 
     Future enumerateDir(Directory dir) async {
@@ -180,7 +185,7 @@ class MediaStorageService {
 
   /// Clean media cache by removing files that were last accessed before the given date
   /// The method will enumerate the directories and delete the files that were last accessed before the given date
-  static Future cleanStaleMediaCache(DateTime date) async {
+  Future cleanStaleMediaCache(DateTime date) async {
     Future enumerateDir(Directory dir) async {
       if (await dir.exists() == false) return;
       final list = dir.listSync();
@@ -200,7 +205,7 @@ class MediaStorageService {
 
   /// Clean upload temps by removing files that were last accessed before the given date
   /// The method will enumerate the directories and delete the files that were last accessed before the given date
-  static Future cleanStaleUploadTemps(DateTime date) async {
+  Future cleanStaleUploadTemps(DateTime date) async {
     Future enumerateDir(Directory dir) async {
       if (await dir.exists() == false) return;
       final list = dir.listSync();
@@ -220,7 +225,7 @@ class MediaStorageService {
     await enumerateDir(Directory('${_directory.path}/$_encodedImagePath'));
   }
 
-  static Future clearMediaCache() async {
+  Future clearMediaCache() async {
     final cacheDir = Directory('${_directory.path}/$_mediaCachePath');
     if (await cacheDir.exists()) {
       await cacheDir.delete(recursive: true);
@@ -228,7 +233,7 @@ class MediaStorageService {
   }
 
   /// Make sure to use this method when all uploads are done
-  static Future clearUploadTemps() async {
+  Future clearUploadTemps() async {
     final filePickerDir = Directory('${_directory.path}/$_filePickerPath');
     if (await filePickerDir.exists()) {
       await filePickerDir.delete(recursive: true);
@@ -243,7 +248,7 @@ class MediaStorageService {
     }
   }
 
-  static Future<String?> encodeImage(String path, EncodePreset preset) async {
+  Future<String?> encodeImage(String path, EncodePreset preset) async {
     if (path.isImagePath == false) return null;
 
     final fileName = path.fileName;
@@ -264,7 +269,7 @@ class MediaStorageService {
     return encodedResult?.path;
   }
 
-  static Future<String?> encodeVideo(String path, EncodePreset preset) async {
+  Future<String?> encodeVideo(String path, EncodePreset preset) async {
     if (path.isVideoPath == false) return null;
 
     final encodedResult = await VideoCompress.compressVideo(
@@ -279,7 +284,7 @@ class MediaStorageService {
     return encodedResult?.path;
   }
 
-  static Future<String?> createVideoThumbnail(String path, EncodePreset preset) async {
+  Future<String?> createVideoThumbnail(String path, EncodePreset preset) async {
     if (path.isVideoPath == false) return null;
     final thumbnailFile = await VideoCompress.getFileThumbnail(path, quality: 100);
     return encodeImage(thumbnailFile.path, preset);

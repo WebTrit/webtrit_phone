@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:logging/logging.dart';
-import 'package:webtrit_phone/common/media_storage_service.dart';
 import 'package:webtrit_phone/data/app_preferences.dart';
+import 'package:webtrit_phone/data/media_storage.dart';
 import 'package:webtrit_phone/data/secure_storage.dart';
 import 'package:webtrit_phone/models/message_attachment.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
@@ -83,7 +83,7 @@ class AttachmentsPreloadWorker {
       for (final attachment in attachments) {
         _logger.info('Preloading started: ${attachment.filePath}');
         final url = coreUrl + attachment.filePath;
-        await MediaStorageService.preloadIf(url: url, maxSize: maxSize);
+        await MediaStorage().preloadIf(url: url, maxSize: maxSize);
         _logger.info('Preloading done: ${attachment.filePath}');
       }
     } catch (e, s) {
