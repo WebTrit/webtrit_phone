@@ -1,9 +1,12 @@
 import 'package:flutter_webrtc/flutter_webrtc.dart';
+import 'package:logging/logging.dart';
 
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/models/models.dart';
 
 import 'user_media_builder.dart';
+
+final _logger = Logger('PeerConnectionPolicyApplier');
 
 /// An abstract interface that defines how to apply specific policies
 /// to an existing [RTCPeerConnection] instance.
@@ -34,7 +37,10 @@ abstract class PeerConnectionPolicyApplier {
 ///   or sending video until explicitly activated by the user.
 class ModifyWithSettingsPeerConnectionPolicyApplier implements PeerConnectionPolicyApplier {
   ModifyWithSettingsPeerConnectionPolicyApplier(
-      this._prefs, this._defaultPeerConnectionSettings, this._userMediaBuilder);
+    this._prefs,
+    this._defaultPeerConnectionSettings,
+    this._userMediaBuilder,
+  );
 
   final AppPreferences _prefs;
   final PeerConnectionSettings _defaultPeerConnectionSettings;
@@ -45,6 +51,7 @@ class ModifyWithSettingsPeerConnectionPolicyApplier implements PeerConnectionPol
 
   @override
   Future<void> apply(RTCPeerConnection peerConnection, {required bool hasRemoteVideo}) async {
+    _logger.fine('Applying peer connection policies with settings: $_negotiationSettings');
     // Check if the policy requires inserting an inactive video track for negotiation purposes
     if (_negotiationSettings.calleeVideoOfferPolicy == CalleeVideoOfferPolicy.includeInactiveTrack) {
       if (hasRemoteVideo) {
