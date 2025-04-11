@@ -201,7 +201,7 @@ class _ChatMessageListViewState extends State<ChatMessageListView> {
         child: const MessagingStateBar(),
       ),
       Positioned(
-        bottom: 0,
+        bottom: MediaQuery.of(context).padding.bottom,
         left: 0,
         right: 0,
         child: Column(

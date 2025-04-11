@@ -150,7 +150,7 @@ class _SmsMessageListViewState extends State<SmsMessageListView> {
         child: const MessagingStateBar(),
       ),
       Positioned(
-        bottom: 0,
+        bottom: MediaQuery.of(context).padding.bottom,
         left: 0,
         right: 0,
         child: Column(

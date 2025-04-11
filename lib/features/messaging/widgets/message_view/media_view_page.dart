@@ -1,5 +1,3 @@
-// ignore_for_file: avoid_print
-
 import 'dart:async';
 import 'dart:io';
 
@@ -45,8 +43,9 @@ class _MediaViewPageState extends State<MediaViewPage> {
   late int currentIndex = widget.initialIndex;
   AttPathAndFilename get currentAttachment => widget.attachments[currentIndex];
 
-  double prevRightScroll = 0;
-  double prevLeftScroll = 0;
+  int touchPointersCount = 0;
+  double scale = 1.0;
+  double interactionScale = 1.0;
 
   bool hideAppBar = false;
 
@@ -98,7 +97,7 @@ class _MediaViewPageState extends State<MediaViewPage> {
     super.initState();
     orientationsBloc.add(const OrientationsChanged(PreferredOrientation.full));
     SystemChrome.setSystemUIOverlayStyle(kSystemThemeDarkTransparent);
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky, overlays: [SystemUiOverlay.top]);
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive, overlays: [SystemUiOverlay.top]);
   }
 
   @override
@@ -133,8 +132,14 @@ class _MediaViewPageState extends State<MediaViewPage> {
     return AppBar(
       backgroundColor: colorScheme.secondary.withValues(alpha: 0.25),
       title: Text(
+        '${currentAttachment.filename.limit(30)}\n'
         '${currentIndex + 1} / ${widget.attachments.length}',
-        style: const TextStyle(color: Colors.white, fontSize: 16),
+        style: const TextStyle(
+          color: Colors.white,
+          fontSize: 12,
+        ),
+        textAlign: TextAlign.center,
+        maxLines: 2,
       ),
       leading: IconButton(
         icon: const Icon(Icons.close, color: Colors.white),
@@ -178,147 +183,55 @@ class _MediaViewPageState extends State<MediaViewPage> {
   }
 
   Widget body() {
-    return PageView.builder(
-      pageSnapping: false,
-      controller: pageController,
-      physics: const NeverScrollableScrollPhysics(),
-      itemCount: widget.attachments.length,
-      hitTestBehavior: HitTestBehavior.translucent,
-      itemBuilder: (context, index) {
-        final attachment = widget.attachments[index];
-        final isFirst = index == 0;
-        final isLast = index == widget.attachments.length - 1;
+    return Listener(
+      onPointerDown: (_) => setState(() => touchPointersCount++),
+      onPointerUp: (_) => setState(() => touchPointersCount--),
+      child: PageView.builder(
+        onPageChanged: (value) => setState(() => currentIndex = value),
+        controller: pageController,
+        physics: (touchPointersCount == 2 || scale >= 1.1)
+            ? const NeverScrollableScrollPhysics()
+            : const BouncingScrollPhysics(),
+        itemCount: widget.attachments.length,
+        hitTestBehavior: HitTestBehavior.translucent,
+        itemBuilder: (context, index) {
+          final attachment = widget.attachments[index];
 
-        Widget content;
-        if (attachment.path.isImagePath) {
-          content = InteractiveViewer(
-            maxScale: 10,
-            child: MultisourceImageView(
+          if (attachment.path.isImagePath) {
+            return InteractiveViewer(
+              maxScale: 10,
+              onInteractionUpdate: (details) {
+                interactionScale = details.scale;
+              },
+              onInteractionEnd: (details) {
+                scale = (scale * interactionScale).clamp(1.0, 10.0);
+                setState(() {});
+              },
+              child: MultisourceImageView(
+                attachment.path,
+                fit: BoxFit.contain,
+                placeholder: const Icon(Icons.image, color: Colors.white, size: 64),
+                error: const Icon(Icons.error, color: Colors.white, size: 64),
+              ),
+            );
+          } else if (attachment.path.isVideoPath) {
+            return VideoView(
               attachment.path,
-              fit: BoxFit.contain,
-              placeholder: const Icon(Icons.image, color: Colors.white, size: 64),
-              error: const Icon(Icons.error, color: Colors.white, size: 64),
-            ),
-          );
-        } else if (attachment.path.isVideoPath) {
-          content = VideoView(
-            attachment.path,
-            onControlsDisplayChanged: (show) {
-              if (!mounted) return;
-              setState(() => hideAppBar = !show);
-            },
-          );
-        } else {
-          content = Center(
-            child: Text(
-              'File: ${attachment.filename}',
-              style: const TextStyle(fontSize: 24),
-            ),
-          );
-        }
-
-        return Stack(
-          children: [
-            Positioned.fill(child: content),
-            if (!isLast)
-              Positioned(
-                right: 0,
-                child: Dismissible(
-                  key: const ValueKey('right_swipe'),
-                  direction: DismissDirection.endToStart,
-                  movementDuration: const Duration(milliseconds: 0),
-                  dismissThresholds: const {DismissDirection.endToStart: 0.95},
-                  onUpdate: (details) {
-                    if (details.reached == false && details.previousReached == false) {
-                      pageController.jumpTo(
-                        pageController.offset +
-                            (details.progress - prevRightScroll) * MediaQuery.of(context).size.width / 10,
-                      );
-                    }
-                    prevRightScroll = details.progress;
-                    setState(() {});
-                  },
-                  confirmDismiss: (direction) {
-                    if (direction == DismissDirection.endToStart) {
-                      pageController.nextPage(
-                        duration: const Duration(milliseconds: 500),
-                        curve: Curves.easeOutExpo,
-                      );
-                      setState(() => currentIndex += 1);
-                    }
-                    return Future.value(false);
-                  },
-                  child: Container(
-                    height: MediaQuery.of(context).size.height,
-                    color: Colors.transparent,
-                    alignment: Alignment.center,
-                    child: Container(
-                      height: 40,
-                      width: 40,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(40),
-                        color: Colors.black.withValues(alpha: prevRightScroll.clamp(0, 0.5)),
-                      ),
-                      child: Icon(
-                        Icons.chevron_right_rounded,
-                        size: 32,
-                        color: Colors.white.withValues(alpha: prevRightScroll),
-                      ),
-                    ),
-                  ),
-                ),
+              onControlsDisplayChanged: (show) {
+                if (!mounted) return;
+                setState(() => hideAppBar = !show);
+              },
+            );
+          } else {
+            return Center(
+              child: Text(
+                'File: ${attachment.filename}',
+                style: const TextStyle(fontSize: 24),
               ),
-            if (!isFirst)
-              Positioned(
-                left: 0,
-                child: Dismissible(
-                  key: const ValueKey('left_swipe'),
-                  direction: DismissDirection.startToEnd,
-                  movementDuration: const Duration(milliseconds: 0),
-                  dismissThresholds: const {DismissDirection.startToEnd: 0.95},
-                  onUpdate: (details) {
-                    if (details.reached == false && details.previousReached == false) {
-                      pageController.jumpTo(
-                        pageController.offset -
-                            (details.progress - prevLeftScroll) * MediaQuery.of(context).size.width / 10,
-                      );
-                    }
-                    prevLeftScroll = details.progress;
-                    setState(() {});
-                  },
-                  confirmDismiss: (direction) {
-                    if (direction == DismissDirection.startToEnd) {
-                      pageController.previousPage(
-                        duration: const Duration(milliseconds: 500),
-                        curve: Curves.easeOutExpo,
-                      );
-                      setState(() => currentIndex -= 1);
-                    }
-                    return Future.value(false);
-                  },
-                  child: Container(
-                    height: MediaQuery.of(context).size.height,
-                    color: Colors.transparent,
-                    alignment: Alignment.center,
-                    child: Container(
-                      height: 40,
-                      width: 40,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(40),
-                        color: Colors.black.withValues(alpha: prevLeftScroll.clamp(0, 0.5)),
-                      ),
-                      child: Icon(
-                        Icons.chevron_left_rounded,
-                        size: 32,
-                        color: Colors.white.withValues(alpha: prevLeftScroll),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-          ],
-        );
-      },
+            );
+          }
+        },
+      ),
     );
   }
 }
