@@ -1957,7 +1957,8 @@ AppConfigNegotiationSettingsOverride
 
 /// @nodoc
 mixin _$AppConfigNegotiationSettingsOverride {
-  String? get calleeVideoOfferPolicy => throw _privateConstructorUsedError;
+  bool get includeInactiveVideoInOfferAnswer =>
+      throw _privateConstructorUsedError;
 
   /// Serializes this AppConfigNegotiationSettingsOverride to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -1978,7 +1979,7 @@ abstract class $AppConfigNegotiationSettingsOverrideCopyWith<$Res> {
       _$AppConfigNegotiationSettingsOverrideCopyWithImpl<$Res,
           AppConfigNegotiationSettingsOverride>;
   @useResult
-  $Res call({String? calleeVideoOfferPolicy});
+  $Res call({bool includeInactiveVideoInOfferAnswer});
 }
 
 /// @nodoc
@@ -1997,13 +1998,14 @@ class _$AppConfigNegotiationSettingsOverrideCopyWithImpl<$Res,
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? calleeVideoOfferPolicy = freezed,
+    Object? includeInactiveVideoInOfferAnswer = null,
   }) {
     return _then(_value.copyWith(
-      calleeVideoOfferPolicy: freezed == calleeVideoOfferPolicy
-          ? _value.calleeVideoOfferPolicy
-          : calleeVideoOfferPolicy // ignore: cast_nullable_to_non_nullable
-              as String?,
+      includeInactiveVideoInOfferAnswer: null ==
+              includeInactiveVideoInOfferAnswer
+          ? _value.includeInactiveVideoInOfferAnswer
+          : includeInactiveVideoInOfferAnswer // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 }
@@ -2017,7 +2019,7 @@ abstract class _$$AppConfigNegotiationSettingsOverrideImplCopyWith<$Res>
       __$$AppConfigNegotiationSettingsOverrideImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String? calleeVideoOfferPolicy});
+  $Res call({bool includeInactiveVideoInOfferAnswer});
 }
 
 /// @nodoc
@@ -2035,13 +2037,14 @@ class __$$AppConfigNegotiationSettingsOverrideImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? calleeVideoOfferPolicy = freezed,
+    Object? includeInactiveVideoInOfferAnswer = null,
   }) {
     return _then(_$AppConfigNegotiationSettingsOverrideImpl(
-      calleeVideoOfferPolicy: freezed == calleeVideoOfferPolicy
-          ? _value.calleeVideoOfferPolicy
-          : calleeVideoOfferPolicy // ignore: cast_nullable_to_non_nullable
-              as String?,
+      includeInactiveVideoInOfferAnswer: null ==
+              includeInactiveVideoInOfferAnswer
+          ? _value.includeInactiveVideoInOfferAnswer
+          : includeInactiveVideoInOfferAnswer // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -2052,7 +2055,7 @@ class __$$AppConfigNegotiationSettingsOverrideImplCopyWithImpl<$Res>
 class _$AppConfigNegotiationSettingsOverrideImpl
     extends _AppConfigNegotiationSettingsOverride {
   const _$AppConfigNegotiationSettingsOverrideImpl(
-      {this.calleeVideoOfferPolicy})
+      {this.includeInactiveVideoInOfferAnswer = false})
       : super._();
 
   factory _$AppConfigNegotiationSettingsOverrideImpl.fromJson(
@@ -2060,11 +2063,12 @@ class _$AppConfigNegotiationSettingsOverrideImpl
       _$$AppConfigNegotiationSettingsOverrideImplFromJson(json);
 
   @override
-  final String? calleeVideoOfferPolicy;
+  @JsonKey()
+  final bool includeInactiveVideoInOfferAnswer;
 
   @override
   String toString() {
-    return 'AppConfigNegotiationSettingsOverride(calleeVideoOfferPolicy: $calleeVideoOfferPolicy)';
+    return 'AppConfigNegotiationSettingsOverride(includeInactiveVideoInOfferAnswer: $includeInactiveVideoInOfferAnswer)';
   }
 
   @override
@@ -2072,13 +2076,16 @@ class _$AppConfigNegotiationSettingsOverrideImpl
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$AppConfigNegotiationSettingsOverrideImpl &&
-            (identical(other.calleeVideoOfferPolicy, calleeVideoOfferPolicy) ||
-                other.calleeVideoOfferPolicy == calleeVideoOfferPolicy));
+            (identical(other.includeInactiveVideoInOfferAnswer,
+                    includeInactiveVideoInOfferAnswer) ||
+                other.includeInactiveVideoInOfferAnswer ==
+                    includeInactiveVideoInOfferAnswer));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, calleeVideoOfferPolicy);
+  int get hashCode =>
+      Object.hash(runtimeType, includeInactiveVideoInOfferAnswer);
 
   /// Create a copy of AppConfigNegotiationSettingsOverride
   /// with the given fields replaced by the non-null parameter values.
@@ -2101,7 +2108,7 @@ class _$AppConfigNegotiationSettingsOverrideImpl
 abstract class _AppConfigNegotiationSettingsOverride
     extends AppConfigNegotiationSettingsOverride {
   const factory _AppConfigNegotiationSettingsOverride(
-          {final String? calleeVideoOfferPolicy}) =
+          {final bool includeInactiveVideoInOfferAnswer}) =
       _$AppConfigNegotiationSettingsOverrideImpl;
   const _AppConfigNegotiationSettingsOverride._() : super._();
 
@@ -2110,7 +2117,7 @@ abstract class _AppConfigNegotiationSettingsOverride
       _$AppConfigNegotiationSettingsOverrideImpl.fromJson;
 
   @override
-  String? get calleeVideoOfferPolicy;
+  bool get includeInactiveVideoInOfferAnswer;
 
   /// Create a copy of AppConfigNegotiationSettingsOverride
   /// with the given fields replaced by the non-null parameter values.

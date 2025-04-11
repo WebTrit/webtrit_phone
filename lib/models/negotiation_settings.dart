@@ -12,35 +12,24 @@ import 'package:equatable/equatable.dart';
 /// Without including the video track in the response, the offer/answer negotiation may fail
 /// or lead to a one-way media issue (e.g., the caller sends video, but the callee does not properly receive or acknowledge it).
 class NegotiationSettings extends Equatable {
-  const NegotiationSettings({this.calleeVideoOfferPolicy});
+  const NegotiationSettings({this.includeInactiveVideoInOfferAnswer = false});
 
-  /// Determines how the callee should respond to an offer with video.
-  final CalleeVideoOfferPolicy? calleeVideoOfferPolicy;
+  /// Whether the callee should include an inactive video track in the answer SDP.
+  final bool includeInactiveVideoInOfferAnswer;
 
   factory NegotiationSettings.blank() => const NegotiationSettings();
 
   NegotiationSettings copyWith({
-    CalleeVideoOfferPolicy? calleeVideoOfferPolicy,
+    bool? includeInactiveVideoInOfferAnswer,
   }) {
     return NegotiationSettings(
-      calleeVideoOfferPolicy: calleeVideoOfferPolicy ?? this.calleeVideoOfferPolicy,
+      includeInactiveVideoInOfferAnswer: includeInactiveVideoInOfferAnswer ?? this.includeInactiveVideoInOfferAnswer,
     );
   }
 
   @override
-  List<Object?> get props => [calleeVideoOfferPolicy];
+  List<Object?> get props => [includeInactiveVideoInOfferAnswer];
 
   @override
-  String toString() => 'NegotiationSettings(calleeVideoOfferPolicy: $calleeVideoOfferPolicy)';
-}
-
-/// Defines how the callee responds to a renegotiation offer that includes a video section.
-///
-/// - [includeInactiveTrack]: The callee adds a full but inactive video track to the peer connection
-///   and includes it in the SDP answer. This allows the caller to successfully negotiate video,
-///   even if the callee does not immediately intend to send media. It also helps avoid errors like
-///   "setRemoteDescription failed" or "no matching media section found" on the caller side.
-enum CalleeVideoOfferPolicy {
-  /// Attach a full but inactive video track in response to video offer.
-  includeInactiveTrack,
+  String toString() => 'NegotiationSettings(includeInactiveTrack: $includeInactiveVideoInOfferAnswer)';
 }

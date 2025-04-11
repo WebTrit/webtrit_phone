@@ -410,11 +410,13 @@ class AppPreferencesImpl
 
   @override
   PeerConnectionSettings getPeerConnectionSettings({PeerConnectionSettings? defaultValue}) {
-    final negotiationSettings = _getNegotiationSettings();
-    return PeerConnectionSettings(
-      negotiationSettings: negotiationSettings.calleeVideoOfferPolicy == null
-          ? defaultValue?.negotiationSettings ?? NegotiationSettings.blank()
-          : negotiationSettings,
+    final defaultPeerConnectionSettings = defaultValue ?? PeerConnectionSettings.blank();
+    final localNegotiationSettings = _getNegotiationSettings();
+
+    return defaultPeerConnectionSettings.copyWith(
+      negotiationSettings: defaultPeerConnectionSettings.negotiationSettings.copyWith(
+        includeInactiveVideoInOfferAnswer: localNegotiationSettings.includeInactiveVideoInOfferAnswer,
+      ),
     );
   }
 
