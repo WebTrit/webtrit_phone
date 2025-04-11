@@ -189,7 +189,7 @@ class AppConfigNegotiationSettingsOverride with _$AppConfigNegotiationSettingsOv
 
   @JsonSerializable(explicitToJson: true)
   const factory AppConfigNegotiationSettingsOverride({
-    String? calleeVideoOfferPolicy,
+    @Default(false) bool includeInactiveVideoInOfferAnswer,
   }) = _AppConfigNegotiationSettingsOverride;
 
   factory AppConfigNegotiationSettingsOverride.fromJson(Map<String, dynamic> json) =>

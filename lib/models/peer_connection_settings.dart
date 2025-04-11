@@ -29,6 +29,14 @@ class PeerConnectionSettings extends Equatable {
   /// Defines how the callee responds to an incoming SDP offer with video media.
   final NegotiationSettings negotiationSettings;
 
+  PeerConnectionSettings copyWith({
+    NegotiationSettings? negotiationSettings,
+  }) {
+    return PeerConnectionSettings(
+      negotiationSettings: negotiationSettings ?? this.negotiationSettings,
+    );
+  }
+
   @override
   List<Object?> get props => [
         negotiationSettings,
