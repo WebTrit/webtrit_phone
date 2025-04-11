@@ -415,17 +415,17 @@ class AppPreferencesImpl
 
     return defaultPeerConnectionSettings.copyWith(
       negotiationSettings: defaultPeerConnectionSettings.negotiationSettings.copyWith(
-        includeInactiveVideoInOfferAnswer: localNegotiationSettings.includeInactiveVideoInOfferAnswer,
+        includeInactiveVideoInOfferAnswer: localNegotiationSettings?.includeInactiveVideoInOfferAnswer,
       ),
     );
   }
 
-  NegotiationSettings _getNegotiationSettings() {
+  NegotiationSettings? _getNegotiationSettings() {
     final negotiationSettingsString = _sharedPreferences.getString(_kNegotiationSettings);
     if (negotiationSettingsString != null) {
       return negotiationSettingsFromJson(negotiationSettingsString);
     } else {
-      return NegotiationSettings.blank();
+      return null;
     }
   }
 
