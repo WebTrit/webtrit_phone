@@ -54,6 +54,15 @@ class ModifyWithSettingsPeerConnectionPolicyApplier implements PeerConnectionPol
     _logger.fine('Applying peer connection policies with settings: $_negotiationSettings');
     // Check if the policy requires inserting an inactive video track for negotiation purposes
     if (_negotiationSettings.includeInactiveVideoInOfferAnswer && hasRemoteVideo) {
+      // Check if a video track is already added to the peer connection
+      final senders = await peerConnection.getSenders();
+      final alreadyHasVideo = senders.any((sender) => sender.track != null && sender.track!.kind == 'video');
+
+      if (alreadyHasVideo) {
+        _logger.fine('Video track already added to the peer connection, skipping');
+        return;
+      }
+
       // Acquire a local stream with video
       final localStream = await _userMediaBuilder.build(video: true);
       final localVideoTrack = localStream.getVideoTracks().firstOrNull;
@@ -62,6 +71,7 @@ class ModifyWithSettingsPeerConnectionPolicyApplier implements PeerConnectionPol
       if (localVideoTrack != null) {
         localVideoTrack.enabled = false;
         peerConnection.addTrack(localVideoTrack, localStream);
+        _logger.fine('Added inactive local video track to peer connection');
       }
     }
   }
