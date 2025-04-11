@@ -269,8 +269,16 @@ class MediaStorage {
     return encodedResult?.path;
   }
 
-  Future<String?> encodeVideo(String path, EncodePreset preset) async {
+  Future<String?> encodeVideo(
+    String path,
+    EncodePreset preset, {
+    Duration maxDuration = const Duration(minutes: 10),
+  }) async {
     if (path.isVideoPath == false) return null;
+
+    final videoInfo = await VideoCompress.getMediaInfo(path);
+    final duration = videoInfo.duration ?? 0;
+    final shouldTrim = duration > maxDuration.inSeconds;
 
     final encodedResult = await VideoCompress.compressVideo(
       path,
@@ -280,7 +288,7 @@ class MediaStorage {
       },
       deleteOrigin: false,
       includeAudio: true,
-      duration: const Duration(minutes: 10).inSeconds,
+      duration: shouldTrim ? maxDuration.inSeconds : null,
     );
     return encodedResult?.path;
   }
