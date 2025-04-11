@@ -218,13 +218,15 @@ _$AppConfigNegotiationSettingsOverrideImpl
     _$$AppConfigNegotiationSettingsOverrideImplFromJson(
             Map<String, dynamic> json) =>
         _$AppConfigNegotiationSettingsOverrideImpl(
-          calleeVideoOfferPolicy: json['calleeVideoOfferPolicy'] as String?,
+          includeInactiveVideoInOfferAnswer:
+              json['includeInactiveVideoInOfferAnswer'] as bool? ?? false,
         );
 
 Map<String, dynamic> _$$AppConfigNegotiationSettingsOverrideImplToJson(
         _$AppConfigNegotiationSettingsOverrideImpl instance) =>
     <String, dynamic>{
-      'calleeVideoOfferPolicy': instance.calleeVideoOfferPolicy,
+      'includeInactiveVideoInOfferAnswer':
+          instance.includeInactiveVideoInOfferAnswer,
     };
 
 _$EncodingDefaultPresetOverrideImpl

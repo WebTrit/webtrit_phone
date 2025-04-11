@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 
-import '../view/components/choosable_section.dart';
 import '../view/components/heading_section.dart';
 
 class PeerConnectionSettingsSection extends StatelessWidget {
@@ -16,8 +15,14 @@ class PeerConnectionSettingsSection extends StatelessWidget {
   final PeerConnectionSettings peerConnectionSettings;
   final ValueChanged<PeerConnectionSettings> onSettingsChanged;
 
-  void _onCalleeVideoOfferPolicyChanged(CalleeVideoOfferPolicy? policy) {
-    onSettingsChanged(PeerConnectionSettings(negotiationSettings: NegotiationSettings(calleeVideoOfferPolicy: policy)));
+  void _onIncludeInactiveTrack(bool? includeInactiveVideoInOfferAnswer) {
+    onSettingsChanged(
+      peerConnectionSettings.copyWith(
+        negotiationSettings: peerConnectionSettings.negotiationSettings.copyWith(
+          includeInactiveVideoInOfferAnswer: includeInactiveVideoInOfferAnswer ?? false,
+        ),
+      ),
+    );
   }
 
   @override
@@ -30,18 +35,13 @@ class PeerConnectionSettingsSection extends StatelessWidget {
           icon: const Icon(Icons.sync_alt),
         ),
         const SizedBox(height: 16.0),
-        ChoosableSection<CalleeVideoOfferPolicy>(
-          title: context.l10n.settings_videoOffer_title,
-          buildOptionTitle: (option) {
-            if (option == CalleeVideoOfferPolicy.includeInactiveTrack) {
-              return Text(context.l10n.settings_videoOffer_option_includeInactive);
-            }
-            return Text(context.l10n.settings_videoOffer_option_ignore);
-          },
-          options: CalleeVideoOfferPolicy.values,
-          selected: peerConnectionSettings.negotiationSettings.calleeVideoOfferPolicy,
-          onSelect: _onCalleeVideoOfferPolicyChanged,
+        CheckboxListTile(
+          value: peerConnectionSettings.negotiationSettings.includeInactiveVideoInOfferAnswer,
+          onChanged: _onIncludeInactiveTrack,
+          visualDensity: VisualDensity.compact,
+          title: Text(context.l10n.settings_videoOffer_option_includeInactive),
         ),
+        const SizedBox(height: 24.0),
       ],
     );
   }

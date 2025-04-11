@@ -53,17 +53,15 @@ class ModifyWithSettingsPeerConnectionPolicyApplier implements PeerConnectionPol
   Future<void> apply(RTCPeerConnection peerConnection, {required bool hasRemoteVideo}) async {
     _logger.fine('Applying peer connection policies with settings: $_negotiationSettings');
     // Check if the policy requires inserting an inactive video track for negotiation purposes
-    if (_negotiationSettings.calleeVideoOfferPolicy == CalleeVideoOfferPolicy.includeInactiveTrack) {
-      if (hasRemoteVideo) {
-        // Acquire a local stream with video
-        final localStream = await _userMediaBuilder.build(video: true);
-        final localVideoTrack = localStream.getVideoTracks().firstOrNull;
+    if (_negotiationSettings.includeInactiveVideoInOfferAnswer && hasRemoteVideo) {
+      // Acquire a local stream with video
+      final localStream = await _userMediaBuilder.build(video: true);
+      final localVideoTrack = localStream.getVideoTracks().firstOrNull;
 
-        // Add the video track to the peer connection, disabled initially
-        if (localVideoTrack != null) {
-          localVideoTrack.enabled = false;
-          peerConnection.addTrack(localVideoTrack, localStream);
-        }
+      // Add the video track to the peer connection, disabled initially
+      if (localVideoTrack != null) {
+        localVideoTrack.enabled = false;
+        peerConnection.addTrack(localVideoTrack, localStream);
       }
     }
   }

@@ -279,9 +279,7 @@ class FeatureAccess {
           )),
       peerConnection: PeerConnectionSettings(
         negotiationSettings: NegotiationSettings(
-          calleeVideoOfferPolicy: CalleeVideoOfferPolicy.values.firstWhereOrNull(
-            (it) => it.name == peerConnectionConfig.negotiation.calleeVideoOfferPolicy,
-          ),
+          includeInactiveVideoInOfferAnswer: peerConnectionConfig.negotiation.includeInactiveVideoInOfferAnswer,
         ),
       ),
     );

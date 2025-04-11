@@ -203,7 +203,7 @@
     },
     "peerConnection": {
       "negotiation": {
-        "calleeVideoOfferPolicy": null
+        "includeInactiveVideoInOfferAnswer": false
       }
     }
   },

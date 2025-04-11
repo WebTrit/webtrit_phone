@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:webtrit_phone/models/models.dart';
 
-const _kCalleeVideoOfferPolicyKey = 'calleeVideoOfferPolicy';
+const _kIncludeInactiveVideoInOfferAnswerKey = 'includeInactiveVideoInOfferAnswer';
 
 mixin NegotiationSettingsJsonMapper {
   NegotiationSettings negotiationSettingsFromJson(String json) {
@@ -15,15 +15,13 @@ mixin NegotiationSettingsJsonMapper {
 
   NegotiationSettings negotiationSettingsFromMap(Map<String, dynamic> map) {
     return NegotiationSettings(
-      calleeVideoOfferPolicy: map[_kCalleeVideoOfferPolicyKey] != null
-          ? CalleeVideoOfferPolicy.values.byName(map[_kCalleeVideoOfferPolicyKey])
-          : null,
+      includeInactiveVideoInOfferAnswer: map[_kIncludeInactiveVideoInOfferAnswerKey] ?? false,
     );
   }
 
   Map<String, dynamic> negotiationSettingsToMap(NegotiationSettings settings) {
     return {
-      _kCalleeVideoOfferPolicyKey: settings.calleeVideoOfferPolicy?.name,
+      _kIncludeInactiveVideoInOfferAnswerKey: settings.includeInactiveVideoInOfferAnswer,
     };
   }
 }
