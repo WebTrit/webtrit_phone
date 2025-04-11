@@ -45,16 +45,6 @@ class VideoViewState extends State<VideoView> {
   @override
   void initState() {
     super.initState();
-    init();
-  }
-
-  @override
-  dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  init() async {
     if (widget.path.isLocalPath) {
       _controller = VideoPlayerController.file(File(widget.path));
     } else {
@@ -74,6 +64,12 @@ class VideoViewState extends State<VideoView> {
       notifyControlsDisplayChanged();
       _controller.addListener(() => setState(() {}));
     });
+  }
+
+  @override
+  dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   Future<void> onSeek(double value) async {
@@ -169,8 +165,10 @@ class VideoViewState extends State<VideoView> {
                   ),
                 ),
               ),
-            Align(
-              alignment: Alignment.bottomCenter,
+            Positioned(
+              bottom: MediaQuery.of(context).padding.bottom,
+              left: 0,
+              right: 0,
               child: AnimatedOpacity(
                 duration: const Duration(milliseconds: 300),
                 opacity: showControls ? 1 : 0,
