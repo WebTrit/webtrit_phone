@@ -100,7 +100,10 @@ class FeatureAccess {
       throw Exception('Bottom menu configuration is missing or empty');
     }
 
-    final bottomMenuTabs = bottomMenu.tabs.where((tab) => tab.enabled).map((tab) => _createBottomMenuTab(tab)).toList();
+    final bottomMenuTabs = bottomMenu.tabs
+        .where((tab) => tab.enabled)
+        .map((tab) => _createBottomMenuTab(tab, appConfig.embeddedResources))
+        .toList();
 
     if (bottomMenuTabs.isEmpty) {
       throw Exception('No enabled tabs found in bottom menu configuration');
@@ -113,7 +116,7 @@ class FeatureAccess {
     );
   }
 
-  static BottomMenuTab _createBottomMenuTab(BottomMenuTabScheme tab) {
+  static BottomMenuTab _createBottomMenuTab(BottomMenuTabScheme tab, List<EmbeddedResource> embeddedResources) {
     final flavor = MainFlavor.values.byName(tab.type.name);
 
     return tab.when(
@@ -132,13 +135,17 @@ class FeatureAccess {
         icon: tab.icon.toIconData(),
         contactSourceTypes: contactSourceTypes.map((type) => ContactSourceType.values.byName(type)).toList(),
       ),
-      embedded: (enabled, initial, type, titleL10n, icon, data) => BottomMenuTab(
-        enabled: tab.enabled,
-        initial: tab.initial,
-        flavor: flavor,
-        titleL10n: tab.titleL10n,
-        icon: tab.icon.toIconData(),
-      ),
+      embedded: (enabled, initial, type, titleL10n, icon, embeddedId) {
+        final embeddedResource = embeddedResources.firstWhereOrNull((resource) => resource.id == embeddedId);
+        return BottomMenuTab(
+          enabled: tab.enabled,
+          initial: tab.initial,
+          flavor: flavor,
+          titleL10n: tab.titleL10n,
+          icon: tab.icon.toIconData(),
+          data: ConfigData(uri: Uri.parse(embeddedResource?.uri ?? '')),
+        );
+      },
     );
   }
 
