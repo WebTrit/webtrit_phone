@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:auto_route/auto_route.dart';
 
-import 'package:webtrit_phone/models/feature_access/exports.dart';
+import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/theme/models/models.dart';
 
 import 'login_signup_embedded_request_screen.dart';

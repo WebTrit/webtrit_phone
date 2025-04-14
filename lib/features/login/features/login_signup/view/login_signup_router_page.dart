@@ -9,8 +9,7 @@ import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/data/data.dart';
 
 import 'package:webtrit_phone/features/features.dart';
-import 'package:webtrit_phone/models/feature_access/exports.dart';
-import 'package:webtrit_phone/models/login_flavor.dart';
+import 'package:webtrit_phone/models/models.dart';
 
 bool whenLoginSignupRouterPageChange(LoginState previous, LoginState current) {
   return previous.signupSessionOtpProvisionalWithDateTime != current.signupSessionOtpProvisionalWithDateTime;
