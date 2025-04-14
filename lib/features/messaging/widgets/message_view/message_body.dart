@@ -11,8 +11,7 @@ import 'package:webtrit_phone/blocs/app/app_bloc.dart';
 
 import 'package:webtrit_phone/data/media_storage.dart';
 import 'package:webtrit_phone/features/messaging/messaging.dart';
-import 'package:webtrit_phone/models/message_attachment.dart';
-import 'package:webtrit_phone/models/outbox_attachment.dart';
+import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 
 import 'audio_view.dart';

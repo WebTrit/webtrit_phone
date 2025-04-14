@@ -14,4 +14,3 @@ export 'widgets/widgets.dart';
 //   main case is open media view and call conucurently
 // - add bloc for setSystemUIOverlayStyle and setEnabledSystemUIMode same as orientations or combine them as systemUI bloc
 // - abstract away from Phoenix socket, channels, and events
-// - chats and messages json serialization extract, move models to folder

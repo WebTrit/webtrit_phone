@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:webtrit_phone/models/outbox_attachment.dart';
+import 'package:webtrit_phone/models/messaging/messaging.dart';
 
 class SmsOutboxMessageEntry extends Equatable {
   final String idKey;

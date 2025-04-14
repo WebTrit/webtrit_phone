@@ -3,7 +3,7 @@ import 'package:uuid/uuid.dart';
 
 import 'package:webtrit_phone/data/media_storage.dart';
 import 'package:webtrit_phone/features/messaging/extensions/string_path_utils.dart';
-import 'package:webtrit_phone/models/outbox_attachment.dart';
+import 'package:webtrit_phone/models/messaging/messaging.dart';
 
 final _logger = Logger('OutboxAttachmentService');
 

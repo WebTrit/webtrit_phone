@@ -1,7 +1,6 @@
-import 'dart:convert';
 import 'package:equatable/equatable.dart';
 
-import 'package:webtrit_phone/models/message_attachment.dart';
+import 'package:webtrit_phone/models/models.dart';
 
 class ChatMessage extends Equatable {
   final int id;
@@ -53,51 +52,6 @@ class ChatMessage extends Equatable {
 
   @override
   bool get stringify => true;
-
-  Map<String, dynamic> toMap() {
-    return <String, dynamic>{
-      'id': id,
-      'idempotency_key': idKey,
-      'sender_id': senderId,
-      'chat_id': chatId,
-      'reply_to_id': replyToId,
-      'forwarded_from_id': forwardFromId,
-      'author_id': authorId,
-      'content': content,
-      'attachments': attachments.map((x) => x.toMap()).toList(),
-      'created_at': createdAt.toIso8601String(),
-      'updated_at': updatedAt.toIso8601String(),
-      'edited_at': editedAt?.toIso8601String(),
-      'deleted_at': deletedAt?.toIso8601String(),
-    };
-  }
-
-  factory ChatMessage.fromMap(Map<String, dynamic> map) {
-    return ChatMessage(
-      id: map['id'] as int,
-      idKey: map['idempotency_key'] as String,
-      senderId: map['sender_id'] as String,
-      chatId: map['chat_id'] as int,
-      replyToId: map['reply_to_id'] != null ? map['reply_to_id'] as int : null,
-      forwardFromId: map['forwarded_from_id'] != null ? map['forwarded_from_id'] as int : null,
-      authorId: map['author_id'] != null ? map['author_id'] as String : null,
-      content: map['content'] as String,
-      attachments: map['attachments'] != null
-          ? List<MessageAttachment>.from(
-              (map['attachments'] as List<dynamic>)
-                  .map<MessageAttachment>((x) => MessageAttachment.fromMap(x as Map<String, dynamic>)),
-            )
-          : <MessageAttachment>[],
-      createdAt: DateTime.parse(map['created_at'] as String),
-      updatedAt: DateTime.parse(map['updated_at'] as String),
-      editedAt: map['edited_at'] != null ? DateTime.parse(map['edited_at'] as String) : null,
-      deletedAt: map['deleted_at'] != null ? DateTime.parse(map['deleted_at'] as String) : null,
-    );
-  }
-
-  String toJson() => json.encode(toMap());
-
-  factory ChatMessage.fromJson(String source) => ChatMessage.fromMap(json.decode(source) as Map<String, dynamic>);
 }
 
 extension MessagesListExtension<T extends ChatMessage> on List<T> {

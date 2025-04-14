@@ -4,6 +4,7 @@ import 'package:equatable/equatable.dart';
 import 'package:phoenix_socket/phoenix_socket.dart';
 
 import 'package:webtrit_phone/features/messaging/messaging.dart';
+import 'package:webtrit_phone/mappers/mappers.dart';
 import 'package:webtrit_phone/models/models.dart';
 
 PhoenixSocket createMessagingSocket(String coreUrl, String token, String tenantId) {
@@ -161,7 +162,7 @@ extension PhoenixChannelExt on PhoenixChannel {
     final response = req.response;
 
     if (req.isOk && response is Map<String, dynamic>) {
-      return Chat.fromMap(response);
+      return ChatConversationJsonMapper.fromMap(response);
     }
 
     throw MessagingSocketException(
@@ -181,7 +182,7 @@ extension PhoenixChannelExt on PhoenixChannel {
     final response = req.response;
 
     if (req.isOk && response is Map<String, dynamic>) {
-      return SmsConversation.fromMap(response);
+      return SmsConversationJsonMapper.fromMap(response);
     }
 
     throw MessagingSocketException(
@@ -203,7 +204,7 @@ extension PhoenixChannelExt on PhoenixChannel {
     final response = req.response;
 
     if (req.isOk && response is Iterable) {
-      return response.map((e) => ChatMessageReadCursor.fromMap(e));
+      return response.map((e) => ChatMessageReadCursorJsonMapper.fromMap(e));
     }
 
     throw MessagingSocketException(
@@ -225,7 +226,7 @@ extension PhoenixChannelExt on PhoenixChannel {
     final response = req.response;
 
     if (req.isOk && response is Iterable) {
-      return response.map((e) => SmsMessageReadCursor.fromMap(e));
+      return response.map((e) => SmsMessageReadCursorJsonMapper.fromMap(e));
     }
 
     throw MessagingSocketException(
@@ -248,7 +249,7 @@ extension PhoenixChannelExt on PhoenixChannel {
   Future<ChatMessage?> getChatMessage(int messageId) async {
     final p = push('message:get:$messageId', {});
     final req = await p.future.catchError(_mapPhxError);
-    return req.isOk ? ChatMessage.fromMap(req.response as Map<String, dynamic>) : null;
+    return req.isOk ? ChatMessageJsonMapper.fromMap(req.response as Map<String, dynamic>) : null;
   }
 
   /// Retrieves the chat message history.
@@ -270,7 +271,7 @@ extension PhoenixChannelExt on PhoenixChannel {
     final response = req.response;
 
     if (req.isOk && response is Map<String, dynamic>) {
-      return (req.response['data'] as Iterable).map((e) => ChatMessage.fromMap(e)).toList();
+      return (req.response['data'] as Iterable).map((e) => ChatMessageJsonMapper.fromMap(e)).toList();
     }
 
     throw MessagingSocketException(
@@ -298,7 +299,7 @@ extension PhoenixChannelExt on PhoenixChannel {
     final response = req.response;
 
     if (req.isOk && response is Map<String, dynamic>) {
-      return (req.response['data'] as Iterable).map((e) => SmsMessage.fromMap(e)).toList();
+      return (req.response['data'] as Iterable).map((e) => SmsMessageJsonMapper.fromMap(e)).toList();
     }
 
     throw MessagingSocketException(
@@ -324,7 +325,7 @@ extension PhoenixChannelExt on PhoenixChannel {
     final response = req.response;
 
     if (req.isOk && response is Map<String, dynamic>) {
-      return (req.response['data'] as Iterable).map((e) => ChatMessage.fromMap(e)).toList();
+      return (req.response['data'] as Iterable).map((e) => ChatMessageJsonMapper.fromMap(e)).toList();
     }
 
     throw MessagingSocketException(
@@ -351,7 +352,7 @@ extension PhoenixChannelExt on PhoenixChannel {
     final response = req.response;
 
     if (req.isOk && response is Map<String, dynamic>) {
-      return (req.response['data'] as Iterable).map((e) => SmsMessage.fromMap(e)).toList();
+      return (req.response['data'] as Iterable).map((e) => SmsMessageJsonMapper.fromMap(e)).toList();
     }
 
     throw MessagingSocketException(
@@ -383,13 +384,13 @@ extension PhoenixChannelExt on PhoenixChannel {
 
     if (req.isOk && response is Map<String, dynamic>) {
       if (response.containsKey('chat') && response.containsKey('message')) {
-        chat = Chat.fromMap(response['chat']);
-        message = ChatMessage.fromMap(response['message']);
+        chat = ChatConversationJsonMapper.fromMap(response['chat']);
+        message = ChatMessageJsonMapper.fromMap(response['message']);
         return (message, chat);
       }
 
       if (response.containsKey('id')) {
-        message = ChatMessage.fromMap(response);
+        message = ChatMessageJsonMapper.fromMap(response);
         return (message, chat);
       }
     }
@@ -412,7 +413,7 @@ extension PhoenixChannelExt on PhoenixChannel {
     final response = req.response;
 
     if (req.isOk && response is Map<String, dynamic>) {
-      return ChatMessage.fromMap(response);
+      return ChatMessageJsonMapper.fromMap(response);
     }
 
     throw MessagingSocketException(
@@ -432,7 +433,7 @@ extension PhoenixChannelExt on PhoenixChannel {
     final response = req.response;
 
     if (req.isOk && response is Map<String, dynamic>) {
-      return ChatMessage.fromMap(response);
+      return ChatMessageJsonMapper.fromMap(response);
     }
 
     throw MessagingSocketException(
@@ -484,13 +485,13 @@ extension PhoenixChannelExt on PhoenixChannel {
 
     if (req.isOk && response is Map<String, dynamic>) {
       if (response.containsKey('conversation') && response.containsKey('message')) {
-        smsConversation = SmsConversation.fromMap(response['conversation']);
-        smsMessage = SmsMessage.fromMap(response['message']);
+        smsConversation = SmsConversationJsonMapper.fromMap(response['conversation']);
+        smsMessage = SmsMessageJsonMapper.fromMap(response['message']);
         return (smsMessage, smsConversation);
       }
 
       if (response.containsKey('id')) {
-        smsMessage = SmsMessage.fromMap(response);
+        smsMessage = SmsMessageJsonMapper.fromMap(response);
         return (smsMessage, smsConversation);
       }
     }
@@ -512,7 +513,7 @@ extension PhoenixChannelExt on PhoenixChannel {
     final response = req.response;
 
     if (req.isOk && response is Map<String, dynamic>) {
-      return SmsMessage.fromMap(response);
+      return SmsMessageJsonMapper.fromMap(response);
     }
 
     throw MessagingSocketException(
@@ -610,7 +611,7 @@ extension PhoenixChannelExt on PhoenixChannel {
     final response = req.response;
 
     if (req.isOk && response is Map<String, dynamic>) {
-      return Chat.fromMap(response);
+      return ChatConversationJsonMapper.fromMap(response);
     }
 
     throw MessagingSocketException(
@@ -825,11 +826,11 @@ sealed class ChatChannelEvent {
   factory ChatChannelEvent.fromMessage(Message m) {
     switch (m.event.value) {
       case 'chat_info_update':
-        return ChatChannelInfoUpdate(Chat.fromMap(m.payload as Map<String, dynamic>));
+        return ChatChannelInfoUpdate(ChatConversationJsonMapper.fromMap(m.payload as Map<String, dynamic>));
       case 'message_update':
-        return ChatChannelMessageUpdate(ChatMessage.fromMap(m.payload as Map<String, dynamic>));
+        return ChatChannelMessageUpdate(ChatMessageJsonMapper.fromMap(m.payload as Map<String, dynamic>));
       case 'chat_cursor_set':
-        return ChatChannelCursorSet(ChatMessageReadCursor.fromMap(m.payload as Map<String, dynamic>));
+        return ChatChannelCursorSet(ChatMessageReadCursorJsonMapper.fromMap(m.payload as Map<String, dynamic>));
       case 'typing':
         return ChatChannelTyping(m.payload!['user_id'].toString());
       case 'phx_error':
@@ -900,11 +901,11 @@ sealed class SmsChannelEvent {
   factory SmsChannelEvent.fromMessage(Message m) {
     switch (m.event.value) {
       case 'conversation_info_update':
-        return SmsChannelInfoUpdate(SmsConversation.fromMap(m.payload as Map<String, dynamic>));
+        return SmsChannelInfoUpdate(SmsConversationJsonMapper.fromMap(m.payload as Map<String, dynamic>));
       case 'sms_message_update':
-        return SmsChannelMessageUpdate(SmsMessage.fromMap(m.payload as Map<String, dynamic>));
+        return SmsChannelMessageUpdate(SmsMessageJsonMapper.fromMap(m.payload as Map<String, dynamic>));
       case 'sms_conversation_cursor_set':
-        return SmsChannelCursorSet(SmsMessageReadCursor.fromMap(m.payload as Map<String, dynamic>));
+        return SmsChannelCursorSet(SmsMessageReadCursorJsonMapper.fromMap(m.payload as Map<String, dynamic>));
       case 'phx_error':
         return SmsChannelDisconnect();
       default:

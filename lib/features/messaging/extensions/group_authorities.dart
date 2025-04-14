@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:webtrit_phone/l10n/l10n.dart';
-import 'package:webtrit_phone/models/chat_member.dart';
+import 'package:webtrit_phone/models/models.dart';
 
 extension GroupAuthoritiesL10n on GroupAuthorities {
   String nameL10n(BuildContext context) {

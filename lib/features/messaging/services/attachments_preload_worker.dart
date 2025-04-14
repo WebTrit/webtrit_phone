@@ -5,7 +5,7 @@ import 'package:logging/logging.dart';
 import 'package:webtrit_phone/data/app_preferences.dart';
 import 'package:webtrit_phone/data/media_storage.dart';
 import 'package:webtrit_phone/data/secure_storage.dart';
-import 'package:webtrit_phone/models/message_attachment.dart';
+import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
 final _logger = Logger('AttachmentsPreloadWorker');
