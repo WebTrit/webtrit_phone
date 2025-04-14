@@ -65,22 +65,6 @@
           "titleL10n": "embaded1TitleL10n",
           "icon": "0xe2ce",
           "embeddedResourceId": 2
-        },
-        {
-          "enabled": true,
-          "initial": false,
-          "type": "embedded",
-          "titleL10n": "embaded2TitleL10n",
-          "icon": "0xe2ce",
-          "embeddedResourceId": 3
-        },
-        {
-          "enabled": false,
-          "initial": false,
-          "type": "embedded",
-          "titleL10n": "embaded3TitleL10n",
-          "icon": "0xe2ce",
-          "embeddedResourceId": 4
         }
       ]
     }
