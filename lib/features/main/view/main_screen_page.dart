@@ -126,11 +126,7 @@ class MainScreenPage extends StatelessWidget {
         case MainFlavor.messaging:
           return const ConversationsScreenPageRoute();
         default:
-          final embedded = EmbeddedScreenPage.getPageRoute(tab.flavor, tab.data!);
-          if (embedded != null) {
-            return embedded;
-          }
-          throw Exception('Unknown flavor type: ${tab.flavor}');
+          return EmbeddedScreenPageRoute(id: tab.toEmbedded!.id);
       }
     }).toList();
   }

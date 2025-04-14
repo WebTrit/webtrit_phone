@@ -155,9 +155,7 @@ class MainScreenScreenshot extends StatelessWidget {
             videoVisible: true,
           ),
         );
-      case MainFlavor.embedded1:
-      case MainFlavor.embedded2:
-      case MainFlavor.embedded3:
+      case MainFlavor.embedded:
         return BlocProvider<EmbeddedCubit>(
           create: (_) => MockEmbeddedCubit.mainScreen(),
           child: EmbeddedScreen(

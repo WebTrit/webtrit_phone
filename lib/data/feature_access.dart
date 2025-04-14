@@ -137,7 +137,8 @@ class FeatureAccess {
       ),
       embedded: (enabled, initial, type, titleL10n, icon, embeddedId) {
         final embeddedResource = embeddedResources.firstWhereOrNull((resource) => resource.id == embeddedId);
-        return BottomMenuTab(
+        return EmbeddedBottomMenuTab(
+          id: embeddedId,
           enabled: tab.enabled,
           initial: tab.initial,
           flavor: flavor,
@@ -338,41 +339,42 @@ class LoginFeature {
 }
 
 class BottomMenuFeature {
+  BottomMenuFeature(
+    List<BottomMenuTab> tabs,
+    this._appPreferences, {
+    bool cacheSelectedTab = true,
+  }) : _tabs = List.unmodifiable(tabs) {
+    final savedFlavor = cacheSelectedTab ? _appPreferences.getActiveMainFlavor() : null;
+    _activeTab = _findInitialTab(savedFlavor);
+  }
+
   final List<BottomMenuTab> _tabs;
-  late BottomMenuTab _activeTab;
-
   final AppPreferences _appPreferences;
+  late final BottomMenuTab _activeTab;
 
-  List<BottomMenuTab> get tabs => List.unmodifiable(_tabs);
+  List<BottomMenuTab> get tabs => _tabs;
+
+  List<EmbeddedBottomMenuTab> get embeddedTabs => _tabs.whereType<EmbeddedBottomMenuTab>().toList(growable: false);
 
   BottomMenuTab get activeTab => _activeTab;
 
-  int get activeIndex => tabs.indexOf(_activeTab);
+  int get activeIndex => _tabs.indexOf(_activeTab);
 
-  BottomMenuFeature(
-    this._tabs,
-    this._appPreferences, {
-    bool cacheSelectedTab = true,
-  }) {
-    final preferencesPath = cacheSelectedTab ? _appPreferences.getActiveMainFlavor() : null;
-    _activeTab = (preferencesPath != null && tabs.any((tab) => tab.flavor == preferencesPath)
-        ? tabs.firstWhereOrNull((tab) => tab.flavor == preferencesPath)
-        : tabs.firstWhereOrNull((tab) => tab.initial) ?? _tabs.first)!;
+  bool isTabEnabled(MainFlavor flavor) => _tabs.any((tab) => tab.flavor == flavor && tab.enabled);
 
-    _logger.info('Active tab: ${_activeTab.flavor}');
+  BottomMenuTab? getTabEnabled(MainFlavor flavor) => _tabs.firstWhereOrNull((tab) => tab.flavor == flavor);
+
+  EmbeddedBottomMenuTab getEmbeddedTabById(int id) => embeddedTabs.firstWhere((tab) => tab.id == id);
+
+  set activeFlavor(BottomMenuTab newTab) {
+    _activeTab = newTab;
+    _appPreferences.setActiveMainFlavor(newTab.flavor);
   }
 
-  bool isTabEnabled(MainFlavor flavor) {
-    return tabs.any((tab) => tab.flavor == flavor && tab.enabled);
-  }
-
-  BottomMenuTab? getTabEnabled(MainFlavor flavor) {
-    return tabs.firstWhereOrNull((tab) => tab.flavor == flavor);
-  }
-
-  set activeFlavor(BottomMenuTab flavor) {
-    _appPreferences.setActiveMainFlavor(flavor.flavor);
-    _activeTab = flavor;
+  BottomMenuTab _findInitialTab(MainFlavor? savedFlavor) {
+    return _tabs.firstWhereOrNull((tab) => tab.flavor == savedFlavor) ??
+        _tabs.firstWhereOrNull((tab) => tab.initial) ??
+        _tabs.first;
   }
 }
 

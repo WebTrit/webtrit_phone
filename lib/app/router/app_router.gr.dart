@@ -346,107 +346,39 @@ class DiagnosticScreenPageRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [EmbeddedScreenPage1]
-class EmbeddedScreenPage1Route
-    extends PageRouteInfo<EmbeddedScreenPage1RouteArgs> {
-  EmbeddedScreenPage1Route({
-    required ConfigData data,
-    List<PageRouteInfo>? children,
-  }) : super(
-         EmbeddedScreenPage1Route.name,
-         args: EmbeddedScreenPage1RouteArgs(data: data),
-         initialChildren: children,
-       );
+/// [EmbeddedScreenPage]
+class EmbeddedScreenPageRoute
+    extends PageRouteInfo<EmbeddedScreenPageRouteArgs> {
+  EmbeddedScreenPageRoute({required int id, List<PageRouteInfo>? children})
+    : super(
+        EmbeddedScreenPageRoute.name,
+        args: EmbeddedScreenPageRouteArgs(id: id),
+        rawPathParams: {'id': id},
+        initialChildren: children,
+      );
 
-  static const String name = 'EmbeddedScreenPage1Route';
-
-  static PageInfo page = PageInfo(
-    name,
-    builder: (data) {
-      final args = data.argsAs<EmbeddedScreenPage1RouteArgs>();
-      return EmbeddedScreenPage1(args.data);
-    },
-  );
-}
-
-class EmbeddedScreenPage1RouteArgs {
-  const EmbeddedScreenPage1RouteArgs({required this.data});
-
-  final ConfigData data;
-
-  @override
-  String toString() {
-    return 'EmbeddedScreenPage1RouteArgs{data: $data}';
-  }
-}
-
-/// generated route for
-/// [EmbeddedScreenPage2]
-class EmbeddedScreenPage2Route
-    extends PageRouteInfo<EmbeddedScreenPage2RouteArgs> {
-  EmbeddedScreenPage2Route({
-    required ConfigData data,
-    List<PageRouteInfo>? children,
-  }) : super(
-         EmbeddedScreenPage2Route.name,
-         args: EmbeddedScreenPage2RouteArgs(data: data),
-         initialChildren: children,
-       );
-
-  static const String name = 'EmbeddedScreenPage2Route';
+  static const String name = 'EmbeddedScreenPageRoute';
 
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      final args = data.argsAs<EmbeddedScreenPage2RouteArgs>();
-      return EmbeddedScreenPage2(args.data);
+      final pathParams = data.inheritedPathParams;
+      final args = data.argsAs<EmbeddedScreenPageRouteArgs>(
+        orElse: () => EmbeddedScreenPageRouteArgs(id: pathParams.getInt('id')),
+      );
+      return EmbeddedScreenPage(id: args.id);
     },
   );
 }
 
-class EmbeddedScreenPage2RouteArgs {
-  const EmbeddedScreenPage2RouteArgs({required this.data});
+class EmbeddedScreenPageRouteArgs {
+  const EmbeddedScreenPageRouteArgs({required this.id});
 
-  final ConfigData data;
-
-  @override
-  String toString() {
-    return 'EmbeddedScreenPage2RouteArgs{data: $data}';
-  }
-}
-
-/// generated route for
-/// [EmbeddedScreenPage3]
-class EmbeddedScreenPage3Route
-    extends PageRouteInfo<EmbeddedScreenPage3RouteArgs> {
-  EmbeddedScreenPage3Route({
-    required ConfigData data,
-    List<PageRouteInfo>? children,
-  }) : super(
-         EmbeddedScreenPage3Route.name,
-         args: EmbeddedScreenPage3RouteArgs(data: data),
-         initialChildren: children,
-       );
-
-  static const String name = 'EmbeddedScreenPage3Route';
-
-  static PageInfo page = PageInfo(
-    name,
-    builder: (data) {
-      final args = data.argsAs<EmbeddedScreenPage3RouteArgs>();
-      return EmbeddedScreenPage3(args.data);
-    },
-  );
-}
-
-class EmbeddedScreenPage3RouteArgs {
-  const EmbeddedScreenPage3RouteArgs({required this.data});
-
-  final ConfigData data;
+  final int id;
 
   @override
   String toString() {
-    return 'EmbeddedScreenPage3RouteArgs{data: $data}';
+    return 'EmbeddedScreenPageRouteArgs{id: $id}';
   }
 }
 
