@@ -1,3 +1,4 @@
+// dart format width=80
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
 // **************************************************************************
@@ -7,13 +8,28 @@
 import 'package:webtrit_phone/l10n/app_localizations.g.dart';
 import 'package:flutter/widgets.dart';
 
-extension AppLocalizationsExtension on BuildContext {
+extension BuildContextExtension on BuildContext {
   AppLocalizations get _localizations => AppLocalizations.of(this)!;
   AppLocalizations get l10n => _localizations;
   Locale get locale => Localizations.localeOf(this);
   String? parseL10n(String translationKey, {List<Object>? arguments}) {
+    final localizations = AppLocalizations.of(this)!;
+    return L10nHelper.parseL10n(localizations, translationKey,
+        arguments: arguments);
+  }
+}
+
+extension AppLocalizationsExtension on AppLocalizations {
+  String? parseL10n(String translationKey, {List<Object>? arguments}) {
+    return L10nHelper.parseL10n(this, translationKey, arguments: arguments);
+  }
+}
+
+class L10nHelper {
+  static String parseL10n(AppLocalizations localizations, String translationKey,
+      {List<Object>? arguments}) {
     const mapper = AppLocalizationsMapper();
-    final object = mapper.toLocalizationMap(this)[translationKey];
+    final object = mapper.toLocalizationMap(localizations)[translationKey];
     if (object is String || object == null) return object;
     assert(arguments != null, 'Arguments should not be null!');
     assert(arguments!.isNotEmpty, 'Arguments should not be empty!');
@@ -23,8 +39,7 @@ extension AppLocalizationsExtension on BuildContext {
 
 class AppLocalizationsMapper {
   const AppLocalizationsMapper();
-  Map<String, dynamic> toLocalizationMap(BuildContext context) {
-    final localizations = AppLocalizations.of(context)!;
+  Map<String, dynamic> toLocalizationMap(AppLocalizations localizations) {
     return {
       'localeName': localizations.localeName,
       'account_selfCarePasswordExpired_message':
@@ -826,6 +841,17 @@ class AppLocalizationsMapper {
           localizations.settings_iceSettings_Section_trfilter_skipUdp,
       'settings_iceSettings_Section_trfilter_skipTcp':
           localizations.settings_iceSettings_Section_trfilter_skipTcp,
+      'settings_connectionSection_title':
+          localizations.settings_connectionSection_title,
+      'settings_connectionSection_tooltip':
+          localizations.settings_connectionSection_tooltip,
+      'settings_videoOffer_title': localizations.settings_videoOffer_title,
+      'settings_videoOffer_option_includeInactive':
+          localizations.settings_videoOffer_option_includeInactive,
+      'settings_videoOffer_option_ignore':
+          localizations.settings_videoOffer_option_ignore,
+      'call_settings_additional_options':
+          localizations.call_settings_additional_options,
       'settings_ListViewTileTitle_about':
           localizations.settings_ListViewTileTitle_about,
       'settings_ListViewTileTitle_accountDelete':

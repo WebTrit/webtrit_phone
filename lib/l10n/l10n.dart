@@ -11,6 +11,11 @@ extension AppLocalizationsX on BuildContext {
   AppLocalizations get l10n => AppLocalizations.of(this)!;
 
   String parseL10n(String translationKey, {List<Object>? arguments}) {
-    return AppLocalizationsExtension(this).parseL10n(translationKey, arguments: arguments) ?? translationKey;
+    try {
+      final value = l10n.parseL10n(translationKey, arguments: arguments);
+      return value ?? translationKey;
+    } catch (_) {
+      return translationKey;
+    }
   }
 }

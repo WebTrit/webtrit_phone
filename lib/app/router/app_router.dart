@@ -23,7 +23,7 @@ final _logger = Logger('AppRouter');
 @AutoRouterConfig(
   replaceInRouteName: null,
 )
-class AppRouter extends _$AppRouter {
+class AppRouter extends RootStackRouter {
   AppRouter(
     this._appBloc,
     this._appPermissions,

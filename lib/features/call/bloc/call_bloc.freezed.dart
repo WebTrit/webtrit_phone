@@ -129,7 +129,8 @@ class _$_NavigatorMediaDevicesChangeImpl
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties.add(DiagnosticsProperty('type', '_NavigatorMediaDevicesChange'));
+    properties
+      ..add(DiagnosticsProperty('type', '_NavigatorMediaDevicesChange'));
   }
 
   @override
@@ -257,7 +258,7 @@ class _$ResetStateEventCompleteCallsImpl
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties
-        .add(DiagnosticsProperty('type', '_ResetStateEvent.completeCalls'));
+      ..add(DiagnosticsProperty('type', '_ResetStateEvent.completeCalls'));
   }
 
   @override
@@ -514,8 +515,9 @@ class _$SignalingClientEventConnectInitiatedImpl
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties.add(
-        DiagnosticsProperty('type', '_SignalingClientEvent.connectInitiated'));
+    properties
+      ..add(DiagnosticsProperty(
+          'type', '_SignalingClientEvent.connectInitiated'));
   }
 
   @override
@@ -625,8 +627,9 @@ class _$SignalingClientEventDisconnectInitiatedImpl
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties.add(DiagnosticsProperty(
-        'type', '_SignalingClientEvent.disconnectInitiated'));
+    properties
+      ..add(DiagnosticsProperty(
+          'type', '_SignalingClientEvent.disconnectInitiated'));
   }
 
   @override
@@ -4357,7 +4360,7 @@ class _$CallSignalingEventRegisteringImpl
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties
-        .add(DiagnosticsProperty('type', '_CallSignalingEvent.registering'));
+      ..add(DiagnosticsProperty('type', '_CallSignalingEvent.registering'));
   }
 
   @override
@@ -4634,7 +4637,7 @@ class _$CallSignalingEventRegisteredImpl
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties
-        .add(DiagnosticsProperty('type', '_CallSignalingEvent.registered'));
+      ..add(DiagnosticsProperty('type', '_CallSignalingEvent.registered'));
   }
 
   @override
@@ -5203,7 +5206,7 @@ class _$CallSignalingEventUnregisteringImpl
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties
-        .add(DiagnosticsProperty('type', '_CallSignalingEvent.unregistering'));
+      ..add(DiagnosticsProperty('type', '_CallSignalingEvent.unregistering'));
   }
 
   @override
@@ -5480,7 +5483,7 @@ class _$CallSignalingEventUnregisteredImpl
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties
-        .add(DiagnosticsProperty('type', '_CallSignalingEvent.unregistered'));
+      ..add(DiagnosticsProperty('type', '_CallSignalingEvent.unregistered'));
   }
 
   @override
@@ -12245,7 +12248,7 @@ class _$CallScreenEventDidPushImpl
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties.add(DiagnosticsProperty('type', 'CallScreenEvent.didPush'));
+    properties..add(DiagnosticsProperty('type', 'CallScreenEvent.didPush'));
   }
 
   @override
@@ -12340,7 +12343,7 @@ class _$CallScreenEventDidPopImpl
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties.add(DiagnosticsProperty('type', 'CallScreenEvent.didPop'));
+    properties..add(DiagnosticsProperty('type', 'CallScreenEvent.didPop'));
   }
 
   @override
