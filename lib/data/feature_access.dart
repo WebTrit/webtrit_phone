@@ -207,7 +207,9 @@ class FeatureAccess {
     }
 
     // Return a ConfigData instance if a valid resource URL is found, otherwise return null.
-    return embeddedDataResourceUrl != null ? EmbeddedData(uri: embeddedDataResourceUrl, titleL10n: item.titleL10n) : null;
+    return embeddedDataResourceUrl != null
+        ? EmbeddedData(uri: embeddedDataResourceUrl, titleL10n: item.titleL10n)
+        : null;
   }
 
   static LoginFeature _tryEnableCustomLoginFeature(AppConfig appConfig) {
@@ -350,7 +352,7 @@ class BottomMenuFeature {
 
   final List<BottomMenuTab> _tabs;
   final AppPreferences _appPreferences;
-  late final BottomMenuTab _activeTab;
+  late BottomMenuTab _activeTab;
 
   List<BottomMenuTab> get tabs => _tabs;
 
