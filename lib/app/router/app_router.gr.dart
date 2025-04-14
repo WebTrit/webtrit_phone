@@ -350,7 +350,7 @@ class DiagnosticScreenPageRoute extends PageRouteInfo<void> {
 class EmbeddedScreenPageRoute
     extends PageRouteInfo<EmbeddedScreenPageRouteArgs> {
   EmbeddedScreenPageRoute({
-    required ConfigData data,
+    required EmbeddedData data,
     List<PageRouteInfo>? children,
   }) : super(
          EmbeddedScreenPageRoute.name,
@@ -372,7 +372,7 @@ class EmbeddedScreenPageRoute
 class EmbeddedScreenPageRouteArgs {
   const EmbeddedScreenPageRouteArgs({required this.data});
 
-  final ConfigData data;
+  final EmbeddedData data;
 
   @override
   String toString() {

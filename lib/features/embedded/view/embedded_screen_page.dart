@@ -17,7 +17,7 @@ class EmbeddedScreenPage extends StatelessWidget {
     required this.data,
   });
 
-  final ConfigData data;
+  final EmbeddedData data;
 
   @override
   Widget build(BuildContext context) {

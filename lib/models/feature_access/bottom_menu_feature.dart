@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 import '../contact_source_type.dart';
 import '../main_flavor.dart';
 
-import 'config_data.dart';
+import 'embedded_data.dart';
 
 @immutable
 class BottomMenuTab {
@@ -12,7 +12,7 @@ class BottomMenuTab {
   final MainFlavor flavor;
   final String titleL10n;
   final IconData icon;
-  final ConfigData? data;
+  final EmbeddedData? data;
 
   const BottomMenuTab({
     required this.enabled,

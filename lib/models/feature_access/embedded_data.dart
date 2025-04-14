@@ -1,5 +1,5 @@
-class ConfigData {
-  ConfigData({
+class EmbeddedData {
+  EmbeddedData({
     required this.uri,
     this.titleL10n,
   });

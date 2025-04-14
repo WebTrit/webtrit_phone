@@ -144,7 +144,7 @@ class FeatureAccess {
           flavor: flavor,
           titleL10n: tab.titleL10n,
           icon: tab.icon.toIconData(),
-          data: ConfigData(uri: Uri.parse(embeddedResource?.uri ?? '')),
+          data: EmbeddedData(uri: Uri.parse(embeddedResource?.uri ?? '')),
         );
       },
     );
@@ -192,7 +192,7 @@ class FeatureAccess {
     return !(flavor == SettingsFlavor.network && !kIsWeb && !Platform.isAndroid);
   }
 
-  static ConfigData? _getEmbeddedDataResource(
+  static EmbeddedData? _getEmbeddedDataResource(
     AppConfig appConfig,
     AppConfigSettingsItem item,
     SettingsFlavor flavor,
@@ -207,7 +207,7 @@ class FeatureAccess {
     }
 
     // Return a ConfigData instance if a valid resource URL is found, otherwise return null.
-    return embeddedDataResourceUrl != null ? ConfigData(uri: embeddedDataResourceUrl, titleL10n: item.titleL10n) : null;
+    return embeddedDataResourceUrl != null ? EmbeddedData(uri: embeddedDataResourceUrl, titleL10n: item.titleL10n) : null;
   }
 
   static LoginFeature _tryEnableCustomLoginFeature(AppConfig appConfig) {
@@ -317,7 +317,7 @@ class FeatureAccess {
 
     _logger.info('Privacy policy resource found: ${termsResource.uriOrNull}');
 
-    return TermsFeature(ConfigData(
+    return TermsFeature(EmbeddedData(
       uri: termsResource.uriOrNull!,
       titleL10n: termsResource.toolbar.titleL10n,
     ));
@@ -448,7 +448,7 @@ class MessagingFeature {
 ///    to assign the privacy policy. If the embedded resource is not explicitly provided in `AppConfig`,
 ///    it will be searched in the embedded resources by type.
 class TermsFeature {
-  final ConfigData configData;
+  final EmbeddedData configData;
 
   TermsFeature(this.configData);
 }
