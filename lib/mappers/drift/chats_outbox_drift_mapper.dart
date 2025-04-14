@@ -16,7 +16,7 @@ mixin ChatsOutboxDriftMapper {
       content: message.content,
       attachments: attachments.map(outboxAttachmentFromDrift).toList(),
       sendAttempts: message.sendAttempts,
-      failureCode: message.failureCode,
+      failureCode: message.failureCode != null ? OutboxMessageFailure.values.byName(message.failureCode!) : null,
     );
   }
 
@@ -49,7 +49,7 @@ mixin ChatsOutboxDriftMapper {
       authorId: entry.authorId,
       content: entry.content,
       sendAttempts: entry.sendAttempts,
-      failureCode: entry.failureCode,
+      failureCode: entry.failureCode?.name,
     );
 
     final attachments = entry.attachments.map((attachment) {

@@ -11,7 +11,7 @@ class ChatOutboxMessageEntry extends Equatable {
   final int? forwardFromId;
   final String? authorId;
   final int sendAttempts;
-  final String? failureCode;
+  final OutboxMessageFailure? failureCode;
 
   const ChatOutboxMessageEntry({
     required this.idKey,
@@ -55,7 +55,7 @@ class ChatOutboxMessageEntry extends Equatable {
     int? forwardFromId,
     String? authorId,
     int? sendAttempts,
-    String? failureCode,
+    OutboxMessageFailure? failureCode,
   }) {
     return ChatOutboxMessageEntry(
       idKey: idKey ?? this.idKey,
@@ -86,7 +86,7 @@ class ChatOutboxMessageEntry extends Equatable {
     );
   }
 
-  ChatOutboxMessageEntry setFailureCode(String code) {
+  ChatOutboxMessageEntry setFailureCode(OutboxMessageFailure code) {
     return ChatOutboxMessageEntry(
       idKey: idKey,
       content: content,

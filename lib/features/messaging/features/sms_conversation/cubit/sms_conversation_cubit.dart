@@ -100,6 +100,15 @@ class SmsConversationCubit extends Cubit<SmsConversationState> {
     _outboxRepository.upsertOutboxMessageDelete(outboxEntry);
   }
 
+  Future resendOutboxMessage(SmsOutboxMessageEntry message) async {
+    final updatedMessage = message.resetFailure();
+    _outboxRepository.upsertOutboxMessage(updatedMessage);
+  }
+
+  Future deleteOutboxMessage(SmsOutboxMessageEntry message) async {
+    _outboxRepository.deleteOutboxMessage(message.idKey);
+  }
+
   Future userReadedUntilUpdate(DateTime time) async {
     final state = this.state;
     if (state is! SCSReady || state.busy) return false;

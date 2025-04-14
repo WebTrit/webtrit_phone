@@ -264,8 +264,8 @@ class SmsDao extends DatabaseAccessor<AppDatabase> with _$SmsDaoMixin {
   Future upsertOutboxMessage((SmsOutboxMessageData, List<OutboxAttachmentData>) data) {
     final (message, attachments) = data;
     return batch((batch) {
-      batch.insertAllOnConflictUpdate(smsOutboxMessagesTable, [message]);
-      batch.insertAllOnConflictUpdate(outboxAttachmentTable, attachments);
+      batch.insertAll(smsOutboxMessagesTable, [message], mode: InsertMode.insertOrReplace);
+      batch.insertAll(outboxAttachmentTable, attachments, mode: InsertMode.insertOrReplace);
     });
   }
 

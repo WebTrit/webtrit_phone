@@ -34,6 +34,8 @@ class ChatMessageListView extends StatefulWidget {
     required this.onSendForward,
     required this.onSendEdit,
     required this.onDelete,
+    required this.onResend,
+    required this.onDeleteOutboxMessage,
     required this.userReadedUntilUpdate,
     required this.onFetchHistory,
     super.key,
@@ -52,6 +54,8 @@ class ChatMessageListView extends StatefulWidget {
   final Function(ChatMessage refMessage) onSendForward;
   final Function(String content, ChatMessage refMessage) onSendEdit;
   final Function(ChatMessage refMessage) onDelete;
+  final Function(ChatOutboxMessageEntry refMessage) onResend;
+  final Function(ChatOutboxMessageEntry refMessage) onDeleteOutboxMessage;
   final Function(DateTime until) userReadedUntilUpdate;
   final Future Function() onFetchHistory;
 
@@ -176,6 +180,14 @@ class _ChatMessageListViewState extends State<ChatMessageListView> {
     widget.onDelete(message);
   }
 
+  void handleResend(ChatOutboxMessageEntry message) {
+    widget.onResend(message);
+  }
+
+  void handleDeleteOutboxMessage(ChatOutboxMessageEntry message) {
+    widget.onDeleteOutboxMessage(message);
+  }
+
   void handleAttachment(List<String> newAttachments) {
     final currentFilenames = attachments.map((e) => e.fileName).toList();
     final toAdd = newAttachments.where((element) => !currentFilenames.contains(element.fileName)).toList();
@@ -257,6 +269,8 @@ class _ChatMessageListViewState extends State<ChatMessageListView> {
                 handleSetForForward: handleSetForForward,
                 handleSetForEdit: handleSetForEdit,
                 handleDelete: handleDelete,
+                handleResend: handleResend,
+                handleDeleteOutboxMessage: handleDeleteOutboxMessage,
                 onRendered: () {
                   final message = entry.message;
                   if (message == null) return;

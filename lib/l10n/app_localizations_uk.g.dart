@@ -907,6 +907,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get messaging_MessageView_delete => 'Видалити';
 
   @override
+  String get messaging_MessageView_resend => 'Повторити спробу';
+
+  @override
   String get messaging_MessageView_deleted => '[видалено]';
 
   @override
@@ -923,6 +926,12 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get messaging_MessageView_textcopy => 'Копіювати в буфер обміну';
+
+  @override
+  String get outboxMessageFailureMediaError => 'Помилка медіа';
+
+  @override
+  String get outboxMessageFailureUploadError => 'Помилка завантаження';
 
   @override
   String get messaging_ParticipantName_unknown => 'Невідомий користувач';

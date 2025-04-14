@@ -32,7 +32,7 @@ class ChatsOutboxWorker {
     /// Continuously processes messages, edits, deletes, and read cursors from the outbox repository
     /// until the worker is disposed. The loop runs every second.
     Future.doWhile(() async {
-      final messages = await _outboxRepository.getChatOutboxMessages();
+      final messages = (await _outboxRepository.getChatOutboxMessages()).where((entry) => entry.failureCode == null);
       await Future.forEach(messages, (entry) => _processNewMessage(entry));
 
       final edits = await _outboxRepository.getChatOutboxMessageEdits();
@@ -95,10 +95,10 @@ class ChatsOutboxWorker {
       // _logger.info('Processed new message: ${message.id}');
     } on EncodeException catch (e, s) {
       _logger.severe('Error processing new message, attempt: ${entry.sendAttempts}', e, s);
-      await _outboxRepository.upsertOutboxMessage(entry.setFailureCode('media_encode_error'));
+      await _outboxRepository.upsertOutboxMessage(entry.setFailureCode(OutboxMessageFailure.mediaError));
     } on UploadException catch (e, s) {
       _logger.severe('Error processing new message, attempt: ${entry.sendAttempts}', e, s);
-      await _outboxRepository.upsertOutboxMessage(entry.setFailureCode('media_upload_error'));
+      await _outboxRepository.upsertOutboxMessage(entry.setFailureCode(OutboxMessageFailure.uploadError));
     } catch (e, s) {
       _logger.severe('Error processing new message, attempt: ${entry.sendAttempts}', e, s);
       if (entry.sendAttempts > 5) {

@@ -120,6 +120,15 @@ class ConversationCubit extends Cubit<ConversationState> {
     _outboxRepository.upsertOutboxMessageDelete(outboxEntry);
   }
 
+  Future resendOutboxMessage(ChatOutboxMessageEntry message) async {
+    final updatedMessage = message.resetFailure();
+    _outboxRepository.upsertOutboxMessage(updatedMessage);
+  }
+
+  Future deleteOutboxMessage(ChatOutboxMessageEntry message) async {
+    _outboxRepository.deleteOutboxMessage(message.idKey);
+  }
+
   Future userReadedUntilUpdate(DateTime time) async {
     final (:chatId, :participantId) = state.credentials;
     if (chatId == null) return;

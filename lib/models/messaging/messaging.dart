@@ -19,3 +19,4 @@ export 'sms/sms_outbox_read_cursor_entry.dart';
 export 'message_attachment.dart';
 export 'outbox_attachment.dart';
 export 'active_message_notification.dart';
+export 'outbox_message_failure.dart';

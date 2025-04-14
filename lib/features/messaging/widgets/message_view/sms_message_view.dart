@@ -19,6 +19,8 @@ class SmsMessageView extends StatefulWidget {
     this.userReadedUntil,
     this.membersReadedUntil,
     required this.handleDelete,
+    required this.handleResend,
+    required this.handleDeleteOutboxMessage,
     this.onRendered,
   });
 
@@ -37,6 +39,12 @@ class SmsMessageView extends StatefulWidget {
 
   /// Callback function on popup menu delete item selected
   final Function(SmsMessage refMessage) handleDelete;
+
+  /// Callback function on popup menu resend item selected
+  final Function(SmsOutboxMessageEntry refMessage) handleResend;
+
+  /// Callback function on popup menu delete item selected
+  final Function(SmsOutboxMessageEntry refMessage) handleDeleteOutboxMessage;
 
   /// Callback function that is called when the message is mounted by flutter framework
   /// using [PostFrameCallback] to ensure that the message is rendered before calling the function
@@ -90,6 +98,7 @@ class _SmsMessageViewState extends State<SmsMessageView> {
     final senderNumber = message?.fromPhoneNumber ?? widget.userNumber;
     final isMine = senderNumber == widget.userNumber;
     final isSended = message != null;
+    final sendingFailure = outboxMessage?.failureCode;
     final isDeleted = outboxDeleteEntry != null || message?.deletedAt != null;
 
     var isViewedByMembers = false;
@@ -117,6 +126,24 @@ class _SmsMessageViewState extends State<SmsMessageView> {
             dense: true,
           ),
         ),
+      if (sendingFailure != null) ...[
+        PopupMenuItem(
+          onTap: () => widget.handleResend(outboxMessage!),
+          child: ListTile(
+            title: Text(context.l10n.messaging_MessageView_resend),
+            leading: const Icon(Icons.refresh_rounded),
+            dense: true,
+          ),
+        ),
+        PopupMenuItem(
+          onTap: () => widget.handleDeleteOutboxMessage(outboxMessage!),
+          child: ListTile(
+            title: Text(context.l10n.messaging_MessageView_delete),
+            leading: const Icon(Icons.remove),
+            dense: true,
+          ),
+        ),
+      ]
     ];
 
     return GestureDetector(
@@ -183,7 +210,16 @@ class _SmsMessageViewState extends State<SmsMessageView> {
                             const SizedBox(width: 2),
                           ],
                           if (isMine && !isSended)
-                            CircularProgressTemplate(color: colorScheme.onSurface, size: 12, width: 1),
+                            if (sendingFailure != null)
+                              Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(sendingFailure.l10n(context), style: theme.subContentStyle),
+                                  Icon(Icons.warning_rounded, color: colorScheme.error, size: 12),
+                                ],
+                              )
+                            else
+                              CircularProgressTemplate(color: colorScheme.onSurface, size: 12, width: 1),
                           if (isMine && isSended && !isViewedByMembers)
                             Icon(Icons.done, color: colorScheme.tertiary, size: 12),
                           if (isMine && isViewedByMembers) Icon(Icons.done_all, color: colorScheme.tertiary, size: 12),

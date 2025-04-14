@@ -343,8 +343,8 @@ class ChatsDao extends DatabaseAccessor<AppDatabase> with _$ChatsDaoMixin {
   Future upsertChatOutboxMessage((ChatOutboxMessageData, List<OutboxAttachmentData>) data) async {
     final (message, attachments) = data;
     await batch((batch) {
-      batch.insertAllOnConflictUpdate(chatOutboxMessageTable, [message]);
-      batch.insertAllOnConflictUpdate(outboxAttachmentTable, attachments);
+      batch.insertAll(chatOutboxMessageTable, [message], mode: InsertMode.insertOrReplace);
+      batch.insertAll(outboxAttachmentTable, attachments, mode: InsertMode.insertOrReplace);
     });
   }
 

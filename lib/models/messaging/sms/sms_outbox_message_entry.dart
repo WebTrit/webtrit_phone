@@ -13,7 +13,7 @@ class SmsOutboxMessageEntry extends Equatable {
   final String? recepientId;
   final int? conversationId;
   final int sendAttempts;
-  final String? failureCode;
+  final OutboxMessageFailure? failureCode;
 
   const SmsOutboxMessageEntry({
     required this.idKey,
@@ -54,7 +54,7 @@ class SmsOutboxMessageEntry extends Equatable {
     String? recepientId,
     int? conversationId,
     int? sendAttempts,
-    String? failureCode,
+    OutboxMessageFailure? failureCode,
   }) {
     return SmsOutboxMessageEntry(
       idKey: idKey ?? this.idKey,
@@ -73,7 +73,7 @@ class SmsOutboxMessageEntry extends Equatable {
     return copyWith(sendAttempts: sendAttempts + 1);
   }
 
-  SmsOutboxMessageEntry setFailureCode(String code) {
+  SmsOutboxMessageEntry setFailureCode(OutboxMessageFailure code) {
     return SmsOutboxMessageEntry(
       idKey: idKey,
       fromPhoneNumber: fromPhoneNumber,

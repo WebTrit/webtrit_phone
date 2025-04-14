@@ -124,6 +124,8 @@ class _ChatConversationScreenState extends State<ChatConversationScreen> {
                     onSendForward: conversationCubit.sendForward,
                     onSendEdit: conversationCubit.sendEdit,
                     onDelete: conversationCubit.deleteMessage,
+                    onResend: conversationCubit.resendOutboxMessage,
+                    onDeleteOutboxMessage: conversationCubit.deleteOutboxMessage,
                     userReadedUntilUpdate: conversationCubit.userReadedUntilUpdate,
                     onFetchHistory: conversationCubit.fetchHistory,
                   );

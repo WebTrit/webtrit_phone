@@ -27,6 +27,8 @@ class SmsMessageListView extends StatefulWidget {
     required this.historyEndReached,
     required this.onSendMessage,
     required this.onDelete,
+    required this.onResend,
+    required this.onDeleteOutboxMessage,
     required this.userReadedUntilUpdate,
     required this.onFetchHistory,
     super.key,
@@ -41,6 +43,8 @@ class SmsMessageListView extends StatefulWidget {
   final bool historyEndReached;
   final Function(String content, List<String> attachments) onSendMessage;
   final Function(SmsMessage refMessage) onDelete;
+  final Function(SmsOutboxMessageEntry refMessage) onResend;
+  final Function(SmsOutboxMessageEntry refMessage) onDeleteOutboxMessage;
   final Function(DateTime until) userReadedUntilUpdate;
   final Future Function() onFetchHistory;
 
@@ -125,6 +129,14 @@ class _SmsMessageListViewState extends State<SmsMessageListView> {
     widget.onDelete(message);
   }
 
+  void handleResend(SmsOutboxMessageEntry message) {
+    widget.onResend(message);
+  }
+
+  void handleDeleteOutboxMessage(SmsOutboxMessageEntry message) {
+    widget.onDeleteOutboxMessage(message);
+  }
+
   void handleAttachment(List<String> newAttachments) {
     final currentFilenames = attachments.map((e) => e.fileName).toList();
     final toAdd = newAttachments.where((element) => !currentFilenames.contains(element.fileName)).toList();
@@ -202,6 +214,8 @@ class _SmsMessageListViewState extends State<SmsMessageListView> {
                 userReadedUntil: entry.userReadedUntil,
                 membersReadedUntil: entry.membersReadedUntil,
                 handleDelete: handleDelete,
+                handleResend: handleResend,
+                handleDeleteOutboxMessage: handleDeleteOutboxMessage,
                 onRendered: () {
                   final message = entry.message;
                   if (message == null) return;

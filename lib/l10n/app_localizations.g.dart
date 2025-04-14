@@ -1849,6 +1849,12 @@ abstract class AppLocalizations {
   /// **'Delete'**
   String get messaging_MessageView_delete;
 
+  /// No description provided for @messaging_MessageView_resend.
+  ///
+  /// In en, this message translates to:
+  /// **'Resend'**
+  String get messaging_MessageView_resend;
+
   /// No description provided for @messaging_MessageView_deleted.
   ///
   /// In en, this message translates to:
@@ -1884,6 +1890,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Copy to clipboard'**
   String get messaging_MessageView_textcopy;
+
+  /// No description provided for @outboxMessageFailureMediaError.
+  ///
+  /// In en, this message translates to:
+  /// **'Media error'**
+  String get outboxMessageFailureMediaError;
+
+  /// No description provided for @outboxMessageFailureUploadError.
+  ///
+  /// In en, this message translates to:
+  /// **'Upload error'**
+  String get outboxMessageFailureUploadError;
 
   /// No description provided for @messaging_ParticipantName_unknown.
   ///

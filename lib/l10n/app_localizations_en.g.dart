@@ -907,6 +907,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get messaging_MessageView_delete => 'Delete';
 
   @override
+  String get messaging_MessageView_resend => 'Resend';
+
+  @override
   String get messaging_MessageView_deleted => '[deleted]';
 
   @override
@@ -923,6 +926,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get messaging_MessageView_textcopy => 'Copy to clipboard';
+
+  @override
+  String get outboxMessageFailureMediaError => 'Media error';
+
+  @override
+  String get outboxMessageFailureUploadError => 'Upload error';
 
   @override
   String get messaging_ParticipantName_unknown => 'Unknown user';

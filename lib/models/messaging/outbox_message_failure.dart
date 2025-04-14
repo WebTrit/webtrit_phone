@@ -1,0 +1,1 @@
+enum OutboxMessageFailure { mediaError, uploadError }
