@@ -349,36 +349,70 @@ class DiagnosticScreenPageRoute extends PageRouteInfo<void> {
 /// [EmbeddedScreenPage]
 class EmbeddedScreenPageRoute
     extends PageRouteInfo<EmbeddedScreenPageRouteArgs> {
-  EmbeddedScreenPageRoute({required int id, List<PageRouteInfo>? children})
-    : super(
-        EmbeddedScreenPageRoute.name,
-        args: EmbeddedScreenPageRouteArgs(id: id),
-        rawPathParams: {'id': id},
-        initialChildren: children,
-      );
+  EmbeddedScreenPageRoute({
+    required ConfigData data,
+    List<PageRouteInfo>? children,
+  }) : super(
+         EmbeddedScreenPageRoute.name,
+         args: EmbeddedScreenPageRouteArgs(data: data),
+         initialChildren: children,
+       );
 
   static const String name = 'EmbeddedScreenPageRoute';
 
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      final pathParams = data.inheritedPathParams;
-      final args = data.argsAs<EmbeddedScreenPageRouteArgs>(
-        orElse: () => EmbeddedScreenPageRouteArgs(id: pathParams.getInt('id')),
-      );
-      return EmbeddedScreenPage(id: args.id);
+      final args = data.argsAs<EmbeddedScreenPageRouteArgs>();
+      return EmbeddedScreenPage(data: args.data);
     },
   );
 }
 
 class EmbeddedScreenPageRouteArgs {
-  const EmbeddedScreenPageRouteArgs({required this.id});
+  const EmbeddedScreenPageRouteArgs({required this.data});
+
+  final ConfigData data;
+
+  @override
+  String toString() {
+    return 'EmbeddedScreenPageRouteArgs{data: $data}';
+  }
+}
+
+/// generated route for
+/// [EmbeddedTabPage]
+class EmbeddedTabPageRoute extends PageRouteInfo<EmbeddedTabPageRouteArgs> {
+  EmbeddedTabPageRoute({required int id, List<PageRouteInfo>? children})
+    : super(
+        EmbeddedTabPageRoute.name,
+        args: EmbeddedTabPageRouteArgs(id: id),
+        rawPathParams: {'id': id},
+        initialChildren: children,
+      );
+
+  static const String name = 'EmbeddedTabPageRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final pathParams = data.inheritedPathParams;
+      final args = data.argsAs<EmbeddedTabPageRouteArgs>(
+        orElse: () => EmbeddedTabPageRouteArgs(id: pathParams.getInt('id')),
+      );
+      return EmbeddedTabPage(id: args.id);
+    },
+  );
+}
+
+class EmbeddedTabPageRouteArgs {
+  const EmbeddedTabPageRouteArgs({required this.id});
 
   final int id;
 
   @override
   String toString() {
-    return 'EmbeddedScreenPageRouteArgs{id: $id}';
+    return 'EmbeddedTabPageRouteArgs{id: $id}';
   }
 }
 

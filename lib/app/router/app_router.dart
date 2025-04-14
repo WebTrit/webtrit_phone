@@ -226,7 +226,7 @@ class AppRouter extends RootStackRouter {
                     ),
                     // Embedded flavors
                     AutoRoute(
-                      page: EmbeddedScreenPageRoute.page,
+                      page: EmbeddedTabPageRoute.page,
                       path: 'embedded/:id',
                       usesPathAsKey: true,
                     ),

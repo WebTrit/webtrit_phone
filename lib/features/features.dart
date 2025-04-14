@@ -4,7 +4,7 @@ export 'call_to_actions/call_to_actions.dart';
 export 'contact/contact.dart';
 export 'contacts/contacts.dart';
 export 'contacts_agreement/contacts_agreement.dart';
-export 'embedded/exports.dart';
+export 'embedded/embedded.dart';
 export 'favorites/favorites.dart';
 export 'keypad/keypad.dart';
 export 'log_records_console/log_records_console.dart';
