@@ -151,8 +151,10 @@ class _CallShellState extends State<CallShell> {
   /// On iOS, using popUntil doesn't work when the app is collapsed because pushing routes isn’t allowed until the app resumes.
   /// As a result, popUntil is called too early, leaving the route not yet present in the stack once the app reopens.
   /// Using navigate with a path-based approach fixes this issue by properly restoring state and avoiding the redirect bug.
+  ///
+  /// MainShellRoute uses MainShellRoute.name as its path.
   void _backToMainScreen(StackRouter router) {
-    router.navigateNamed(MainShellRoute.name);
+    router.navigatePath(MainShellRoute.name);
   }
 }
 
