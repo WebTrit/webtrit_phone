@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:async/async.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:logging/logging.dart';
@@ -21,14 +22,16 @@ class UnreadCountCubit extends Cubit<UnreadCountState> {
   final ChatsRepository chatsRepository;
   final SmsRepository smsRepository;
   final Duration updateDebounce;
-  StreamSubscription? _chatsUpdatesSub;
-  StreamSubscription? _smsUpdatesSub;
+  StreamSubscription? _updatesSub;
 
   void init() {
     _logger.fine('Initializing');
     _updateUnreadCount();
-    _chatsUpdatesSub = chatsRepository.eventBus.debounce(updateDebounce).listen((_) => _updateUnreadCount());
-    _smsUpdatesSub = smsRepository.eventBus.debounce(updateDebounce).listen((_) => _updateUnreadCount());
+
+    _updatesSub = StreamGroup.merge([
+      chatsRepository.eventBus,
+      smsRepository.eventBus,
+    ]).debounce(updateDebounce).listen((_) => _updateUnreadCount());
   }
 
   void _updateUnreadCount() async {
@@ -44,8 +47,7 @@ class UnreadCountCubit extends Cubit<UnreadCountState> {
   @override
   Future<void> close() {
     _logger.fine('Closing');
-    _chatsUpdatesSub?.cancel();
-    _smsUpdatesSub?.cancel();
+    _updatesSub?.cancel();
     return super.close();
   }
 }

@@ -40,14 +40,12 @@ class ChatTypingCubit extends Cubit<TypingUsers> {
     if (_chatId == null) return;
     if (_lastTypingSent != null && DateTime.now().difference(_lastTypingSent!) < typeThrottle) return;
 
-    try {
-      final channel = client.getChatChannel(_chatId!);
-      if (channel == null || channel.state != PhoenixChannelState.joined) throw Exception('Channel not ready yet');
-      channel.sendChatTyping();
-      _lastTypingSent = DateTime.now();
-    } catch (e) {
-      _logger.warning('Failed to send typing event: $e');
-    }
+    final channel = client.getChatChannel(_chatId!);
+    if (channel == null) return;
+    if (channel.state != PhoenixChannelState.joined) return;
+
+    channel.sendChatTyping();
+    _lastTypingSent = DateTime.now();
   }
 
   _addTypingUser(String userId) {

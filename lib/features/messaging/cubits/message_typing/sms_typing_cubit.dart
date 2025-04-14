@@ -40,14 +40,12 @@ class SmsTypingCubit extends Cubit<TypingNumbers> {
     if (_conversationId == null) return;
     if (_lastTypingSent != null && DateTime.now().difference(_lastTypingSent!) < typeThrottle) return;
 
-    try {
-      final channel = client.getSmsConversationChannel(_conversationId!);
-      if (channel == null || channel.state != PhoenixChannelState.joined) throw Exception('Channel not ready yet');
-      channel.sendSmsTypnig();
-      _lastTypingSent = DateTime.now();
-    } catch (e) {
-      _logger.warning('Failed to send typing event: $e');
-    }
+    final channel = client.getSmsConversationChannel(_conversationId!);
+    if (channel == null) return;
+    if (channel.state != PhoenixChannelState.joined) return;
+
+    channel.sendSmsTypnig();
+    _lastTypingSent = DateTime.now();
   }
 
   _addTypingNumber(String number) {
