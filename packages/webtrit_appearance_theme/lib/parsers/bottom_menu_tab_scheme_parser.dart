@@ -15,9 +15,7 @@ class BottomMenuTabSchemeParser {
           icon: json['icon'] as String,
           contactSourceTypes: (json['contactSourceTypes'] as List<dynamic>).map((e) => e as String).toList(),
         );
-      case BottomMenuTabType.embedded1:
-      case BottomMenuTabType.embedded2:
-      case BottomMenuTabType.embedded3:
+      case BottomMenuTabType.embedded:
         return EmbededTabScheme(
           enabled: json['enabled'] as bool? ?? true,
           initial: json['initial'] as bool? ?? false,

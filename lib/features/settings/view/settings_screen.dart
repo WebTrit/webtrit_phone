@@ -4,7 +4,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/app/router/app_router.dart';
-import 'package:webtrit_phone/features/embedded/exports.dart';
 import 'package:webtrit_phone/features/register_status/register_status.dart';
 import 'package:webtrit_phone/features/self_config/self_config.dart';
 import 'package:webtrit_phone/features/user_info/user_info.dart';
@@ -134,7 +133,7 @@ class SettingsScreen extends StatelessWidget {
                                     ListTile(
                                       leading: Icon(item.icon),
                                       title: Text(context.parseL10n(item.titleL10n)),
-                                      onTap: () => context.router.navigate(EmbeddedScreenPage.route(item.data!)),
+                                      onTap: () => context.router.navigate(EmbeddedScreenPageRoute(data: item.data!)),
                                     ),
                                     const ListTileSeparator(),
                                   ])
@@ -170,7 +169,7 @@ class SettingsScreen extends StatelessWidget {
                                     ListTile(
                                       leading: Icon(item.icon),
                                       title: Text(context.parseL10n(item.titleL10n)),
-                                      onTap: () => context.router.navigate(EmbeddedScreenPage.route(item.data!)),
+                                      onTap: () => context.router.navigate(EmbeddedScreenPageRoute(data: item.data!)),
                                     ),
                                     const ListTileSeparator(),
                                   ])

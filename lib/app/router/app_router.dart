@@ -60,6 +60,11 @@ class AppRouter extends RootStackRouter {
 
   bool get appLoggedIn => coreUrl != null && token != null && userId != null;
 
+  /// Retrieves the initial tab path for the main screen.
+  ///
+  /// This getter determines the initial tab to display on the main screen
+  String? get _mainInitialTabPath => _bottomMenuFeature.activeTab.path();
+
   @override
   List<AutoRoute> get routes => [
         AutoRoute.guarded(
@@ -157,21 +162,12 @@ class AppRouter extends RootStackRouter {
                 AutoRoute(
                   page: MainScreenPageRoute.page,
                   path: '',
-                  guards: [
-                    // Redirects to the appropriate screen if required parameters are missing
-                    // This ensures that necessary data is passed to the  screen when the initial route is loaded.
-                    AutoRouteGuard.redirect(
-                      (resolver) => EmbeddedScreenPage.getPageRouteInfo(
-                        resolver.route,
-                        _bottomMenuFeature.activeTab.data,
-                      ),
-                    ),
-                  ],
                   children: [
-                    RedirectRoute(
-                      path: '',
-                      redirectTo: _bottomMenuFeature.activeTab.flavor.name,
-                    ),
+                    if (_mainInitialTabPath != null)
+                      RedirectRoute(
+                        path: '',
+                        redirectTo: _mainInitialTabPath!,
+                      ),
                     AutoRoute(
                       page: FavoritesRouterPageRoute.page,
                       path: MainFlavor.favorites.name,
@@ -230,16 +226,9 @@ class AppRouter extends RootStackRouter {
                     ),
                     // Embedded flavors
                     AutoRoute(
-                      page: EmbeddedScreenPage1Route.page,
-                      path: MainFlavor.embedded1.name,
-                    ),
-                    AutoRoute(
-                      page: EmbeddedScreenPage2Route.page,
-                      path: MainFlavor.embedded2.name,
-                    ),
-                    AutoRoute(
-                      page: EmbeddedScreenPage3Route.page,
-                      path: MainFlavor.embedded3.name,
+                      page: EmbeddedTabPageRoute.page,
+                      path: 'embedded/:id',
+                      usesPathAsKey: true,
                     ),
                     AutoRoute(
                       page: ConversationsScreenPageRoute.page,
@@ -328,7 +317,7 @@ class AppRouter extends RootStackRouter {
               path: 'undefined',
             ),
             AutoRoute(
-              page: EmbeddedScreenPage1Route.page,
+              page: EmbeddedScreenPageRoute.page,
               path: 'embedded',
             ),
           ],

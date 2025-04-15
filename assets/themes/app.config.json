@@ -61,26 +61,10 @@
         {
           "enabled": false,
           "initial": false,
-          "type": "embedded1",
+          "type": "embedded",
           "titleL10n": "embaded1TitleL10n",
           "icon": "0xe2ce",
           "embeddedResourceId": 2
-        },
-        {
-          "enabled": false,
-          "initial": false,
-          "type": "embedded2",
-          "titleL10n": "embaded2TitleL10n",
-          "icon": "0xe2ce",
-          "embeddedResourceId": 3
-        },
-        {
-          "enabled": false,
-          "initial": false,
-          "type": "embedded3",
-          "titleL10n": "embaded3TitleL10n",
-          "icon": "0xe2ce",
-          "embeddedResourceId": 4
         }
       ]
     }

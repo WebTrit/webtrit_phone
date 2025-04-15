@@ -100,7 +100,10 @@ class FeatureAccess {
       throw Exception('Bottom menu configuration is missing or empty');
     }
 
-    final bottomMenuTabs = bottomMenu.tabs.where((tab) => tab.enabled).map((tab) => _createBottomMenuTab(tab)).toList();
+    final bottomMenuTabs = bottomMenu.tabs
+        .where((tab) => tab.enabled)
+        .map((tab) => _createBottomMenuTab(tab, appConfig.embeddedResources))
+        .toList();
 
     if (bottomMenuTabs.isEmpty) {
       throw Exception('No enabled tabs found in bottom menu configuration');
@@ -113,7 +116,7 @@ class FeatureAccess {
     );
   }
 
-  static BottomMenuTab _createBottomMenuTab(BottomMenuTabScheme tab) {
+  static BottomMenuTab _createBottomMenuTab(BottomMenuTabScheme tab, List<EmbeddedResource> embeddedResources) {
     final flavor = MainFlavor.values.byName(tab.type.name);
 
     return tab.when(
@@ -132,13 +135,18 @@ class FeatureAccess {
         icon: tab.icon.toIconData(),
         contactSourceTypes: contactSourceTypes.map((type) => ContactSourceType.values.byName(type)).toList(),
       ),
-      embedded: (enabled, initial, type, titleL10n, icon, data) => BottomMenuTab(
-        enabled: tab.enabled,
-        initial: tab.initial,
-        flavor: flavor,
-        titleL10n: tab.titleL10n,
-        icon: tab.icon.toIconData(),
-      ),
+      embedded: (enabled, initial, type, titleL10n, icon, embeddedId) {
+        final embeddedResource = embeddedResources.firstWhereOrNull((resource) => resource.id == embeddedId);
+        return EmbeddedBottomMenuTab(
+          id: embeddedId,
+          enabled: tab.enabled,
+          initial: tab.initial,
+          flavor: flavor,
+          titleL10n: tab.titleL10n,
+          icon: tab.icon.toIconData(),
+          data: EmbeddedData(uri: Uri.parse(embeddedResource?.uri ?? '')),
+        );
+      },
     );
   }
 
@@ -184,7 +192,7 @@ class FeatureAccess {
     return !(flavor == SettingsFlavor.network && !kIsWeb && !Platform.isAndroid);
   }
 
-  static ConfigData? _getEmbeddedDataResource(
+  static EmbeddedData? _getEmbeddedDataResource(
     AppConfig appConfig,
     AppConfigSettingsItem item,
     SettingsFlavor flavor,
@@ -199,7 +207,9 @@ class FeatureAccess {
     }
 
     // Return a ConfigData instance if a valid resource URL is found, otherwise return null.
-    return embeddedDataResourceUrl != null ? ConfigData(uri: embeddedDataResourceUrl, titleL10n: item.titleL10n) : null;
+    return embeddedDataResourceUrl != null
+        ? EmbeddedData(uri: embeddedDataResourceUrl, titleL10n: item.titleL10n)
+        : null;
   }
 
   static LoginFeature _tryEnableCustomLoginFeature(AppConfig appConfig) {
@@ -309,7 +319,7 @@ class FeatureAccess {
 
     _logger.info('Privacy policy resource found: ${termsResource.uriOrNull}');
 
-    return TermsFeature(ConfigData(
+    return TermsFeature(EmbeddedData(
       uri: termsResource.uriOrNull!,
       titleL10n: termsResource.toolbar.titleL10n,
     ));
@@ -331,41 +341,42 @@ class LoginFeature {
 }
 
 class BottomMenuFeature {
+  BottomMenuFeature(
+    List<BottomMenuTab> tabs,
+    this._appPreferences, {
+    bool cacheSelectedTab = true,
+  }) : _tabs = List.unmodifiable(tabs) {
+    final savedFlavor = cacheSelectedTab ? _appPreferences.getActiveMainFlavor() : null;
+    _activeTab = _findInitialTab(savedFlavor);
+  }
+
   final List<BottomMenuTab> _tabs;
+  final AppPreferences _appPreferences;
   late BottomMenuTab _activeTab;
 
-  final AppPreferences _appPreferences;
+  List<BottomMenuTab> get tabs => _tabs;
 
-  List<BottomMenuTab> get tabs => List.unmodifiable(_tabs);
+  List<EmbeddedBottomMenuTab> get embeddedTabs => _tabs.whereType<EmbeddedBottomMenuTab>().toList(growable: false);
 
   BottomMenuTab get activeTab => _activeTab;
 
-  int get activeIndex => tabs.indexOf(_activeTab);
+  int get activeIndex => _tabs.indexOf(_activeTab);
 
-  BottomMenuFeature(
-    this._tabs,
-    this._appPreferences, {
-    bool cacheSelectedTab = true,
-  }) {
-    final preferencesPath = cacheSelectedTab ? _appPreferences.getActiveMainFlavor() : null;
-    _activeTab = (preferencesPath != null && tabs.any((tab) => tab.flavor == preferencesPath)
-        ? tabs.firstWhereOrNull((tab) => tab.flavor == preferencesPath)
-        : tabs.firstWhereOrNull((tab) => tab.initial) ?? _tabs.first)!;
+  bool isTabEnabled(MainFlavor flavor) => _tabs.any((tab) => tab.flavor == flavor && tab.enabled);
 
-    _logger.info('Active tab: ${_activeTab.flavor}');
+  BottomMenuTab? getTabEnabled(MainFlavor flavor) => _tabs.firstWhereOrNull((tab) => tab.flavor == flavor);
+
+  EmbeddedBottomMenuTab getEmbeddedTabById(int id) => embeddedTabs.firstWhere((tab) => tab.id == id);
+
+  set activeFlavor(BottomMenuTab newTab) {
+    _activeTab = newTab;
+    _appPreferences.setActiveMainFlavor(newTab.flavor);
   }
 
-  bool isTabEnabled(MainFlavor flavor) {
-    return tabs.any((tab) => tab.flavor == flavor && tab.enabled);
-  }
-
-  BottomMenuTab? getTabEnabled(MainFlavor flavor) {
-    return tabs.firstWhereOrNull((tab) => tab.flavor == flavor);
-  }
-
-  set activeFlavor(BottomMenuTab flavor) {
-    _appPreferences.setActiveMainFlavor(flavor.flavor);
-    _activeTab = flavor;
+  BottomMenuTab _findInitialTab(MainFlavor? savedFlavor) {
+    return _tabs.firstWhereOrNull((tab) => tab.flavor == savedFlavor) ??
+        _tabs.firstWhereOrNull((tab) => tab.initial) ??
+        _tabs.first;
   }
 }
 
@@ -439,7 +450,7 @@ class MessagingFeature {
 ///    to assign the privacy policy. If the embedded resource is not explicitly provided in `AppConfig`,
 ///    it will be searched in the embedded resources by type.
 class TermsFeature {
-  final ConfigData configData;
+  final EmbeddedData configData;
 
   TermsFeature(this.configData);
 }
