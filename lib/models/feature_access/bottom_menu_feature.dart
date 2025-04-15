@@ -54,7 +54,7 @@ class EmbeddedBottomMenuTab extends BottomMenuTab {
   final int id;
 
   @override
-  String path() => '${MainFlavor.embedded}/$id';
+  String path() => '${MainFlavor.embedded.name}/$id';
 }
 
 extension BottomMenuTabExtension on BottomMenuTab {
