@@ -62,7 +62,7 @@ class SmsOutboxWorker {
   Future _processNewMessage(SmsOutboxMessageEntry entry) async {
     try {
       // Prepare attachments if any
-      final prepStream = OutboxAttachmentService.prepareAttachments(entry.attachments, EncodePreset.mms);
+      final prepStream = OutboxAttachmentService.prepareAttachments(entry.attachments, DestinationPreset.mms);
       await for (final attachments in prepStream) {
         entry = entry.copyWith(attachments: attachments);
         await _outboxRepository.upsertOutboxMessage(entry);

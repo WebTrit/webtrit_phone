@@ -539,6 +539,8 @@ class AppLocalizationsMapper {
       'messaging_GroupInfo_unmakeModeratorBtnText':
           localizations.messaging_GroupInfo_unmakeModeratorBtnText,
       'messaging_MessageField_hint': localizations.messaging_MessageField_hint,
+      'pickFileWarningTooShort': localizations.pickFileWarningTooShort,
+      'pickFileWarningNotSupported': localizations.pickFileWarningNotSupported,
       'messaging_MessageField_pick_gallery':
           localizations.messaging_MessageField_pick_gallery,
       'messaging_MessageField_pick_audio':
@@ -549,6 +551,8 @@ class AppLocalizationsMapper {
           localizations.messaging_MessageListView_typingTrail,
       'messaging_MessageView_delete':
           localizations.messaging_MessageView_delete,
+      'messaging_MessageView_resend':
+          localizations.messaging_MessageView_resend,
       'messaging_MessageView_deleted':
           localizations.messaging_MessageView_deleted,
       'messaging_MessageView_edit': localizations.messaging_MessageView_edit,
@@ -559,6 +563,10 @@ class AppLocalizationsMapper {
       'messaging_MessageView_reply': localizations.messaging_MessageView_reply,
       'messaging_MessageView_textcopy':
           localizations.messaging_MessageView_textcopy,
+      'outboxMessageFailureMediaError':
+          localizations.outboxMessageFailureMediaError,
+      'outboxMessageFailureUploadError':
+          localizations.outboxMessageFailureUploadError,
       'messaging_ParticipantName_unknown':
           localizations.messaging_ParticipantName_unknown,
       'messaging_ParticipantName_you':
@@ -1070,6 +1078,10 @@ class AppLocalizationsMapper {
           (actual, supportedConstraint) => localizations
               .main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError(
                   actual, supportedConstraint),
+      'pickFileWarningTooBig': (maxMB) =>
+          localizations.pickFileWarningTooBig(maxMB),
+      'pickFileWarningTooLong': (maxLength) =>
+          localizations.pickFileWarningTooLong(maxLength),
       'notifications_errorSnackBar_signalingDisconnectWithCodeName':
           (codeName) => localizations
               .notifications_errorSnackBar_signalingDisconnectWithCodeName(

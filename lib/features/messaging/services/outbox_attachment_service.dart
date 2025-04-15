@@ -14,7 +14,7 @@ class OutboxAttachmentService {
   /// if necessary, and uploading them to the server.
   static Stream<List<OutboxAttachment>> prepareAttachments(
     List<OutboxAttachment> attachments,
-    EncodePreset encodePreset,
+    DestinationPreset eestinationPreset,
   ) async* {
     for (final att in attachments) {
       final pickedPath = att.pickedPath;
@@ -27,7 +27,7 @@ class OutboxAttachmentService {
         try {
           _logger.info('Encoding image: $pickedPath');
 
-          encodedPath = await MediaStorage().encodeImage(pickedPath, encodePreset);
+          encodedPath = await MediaStorage().encodeImage(pickedPath, eestinationPreset);
           if (encodedPath == null) throw Exception('Failed to encode image: $pickedPath');
 
           attachments = attachments.map((e) {
@@ -47,7 +47,7 @@ class OutboxAttachmentService {
         try {
           _logger.info('Encoding video: $pickedPath');
 
-          encodedPath = await MediaStorage().encodeVideo(pickedPath, encodePreset);
+          encodedPath = await MediaStorage().encodeVideo(pickedPath, eestinationPreset);
           if (encodedPath == null) throw Exception('Failed to encode video: $pickedPath');
 
           attachments = attachments.map((e) {

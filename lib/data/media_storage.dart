@@ -1,12 +1,14 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:get_thumbnail_video/index.dart';
 import 'package:get_thumbnail_video/video_thumbnail.dart';
 import 'package:http_cache_stream/http_cache_stream.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:video_compress/video_compress.dart';
 import 'package:webtrit_phone/data/data.dart';
@@ -225,6 +227,7 @@ class MediaStorage {
     await enumerateDir(Directory('${_directory.path}/$_encodedImagePath'));
   }
 
+  /// Clear all media cache
   Future clearMediaCache() async {
     final cacheDir = Directory('${_directory.path}/$_mediaCachePath');
     if (await cacheDir.exists()) {
@@ -248,7 +251,8 @@ class MediaStorage {
     }
   }
 
-  Future<String?> encodeImage(String path, EncodePreset preset) async {
+  /// Encode image to a smaller size if needed
+  Future<String?> encodeImage(String path, DestinationPreset preset) async {
     if (path.isImagePath == false) return null;
 
     final fileName = path.fileName;
@@ -259,9 +263,9 @@ class MediaStorage {
     final encodedResult = await FlutterImageCompress.compressAndGetFile(
       path,
       targetPath,
-      minWidth: switch (preset) { EncodePreset.chat => 2000, EncodePreset.mms => 500 },
-      minHeight: switch (preset) { EncodePreset.chat => 2000, EncodePreset.mms => 500 },
-      quality: switch (preset) { EncodePreset.chat => 90, EncodePreset.mms => 70 },
+      minWidth: switch (preset) { DestinationPreset.chat => 2000, DestinationPreset.mms => 500 },
+      minHeight: switch (preset) { DestinationPreset.chat => 2000, DestinationPreset.mms => 500 },
+      quality: switch (preset) { DestinationPreset.chat => 90, DestinationPreset.mms => 70 },
       format: CompressFormat.jpeg,
       keepExif: false,
     );
@@ -269,35 +273,145 @@ class MediaStorage {
     return encodedResult?.path;
   }
 
+  /// Encode video to a smaller size if needed
   Future<String?> encodeVideo(
     String path,
-    EncodePreset preset, {
+    DestinationPreset preset, {
     Duration maxDuration = const Duration(minutes: 10),
   }) async {
     if (path.isVideoPath == false) return null;
 
-    final videoInfo = await VideoCompress.getMediaInfo(path);
-    final duration = videoInfo.duration ?? 0;
-    final shouldTrim = duration > maxDuration.inSeconds;
-
     final encodedResult = await VideoCompress.compressVideo(
       path,
       quality: switch (preset) {
-        EncodePreset.chat => VideoQuality.Res1280x720Quality,
-        EncodePreset.mms => VideoQuality.Res640x480Quality,
+        DestinationPreset.chat => VideoQuality.Res1280x720Quality,
+        DestinationPreset.mms => VideoQuality.Res640x480Quality,
       },
       deleteOrigin: false,
       includeAudio: true,
-      duration: shouldTrim ? maxDuration.inSeconds : null,
     );
     return encodedResult?.path;
   }
 
-  Future<String?> createVideoThumbnail(String path, EncodePreset preset) async {
+  /// Create a thumbnail image for the video
+  Future<String?> createVideoThumbnail(String path, DestinationPreset preset) async {
     if (path.isVideoPath == false) return null;
     final thumbnailFile = await VideoCompress.getFileThumbnail(path, quality: 100);
     return encodeImage(thumbnailFile.path, preset);
   }
+
+  /// Get the duration of the video
+  Future<Duration> getVideoDuration(String path) async {
+    final videoInfo = await VideoCompress.getMediaInfo(path);
+    return Duration(milliseconds: videoInfo.duration?.toInt() ?? 0);
+  }
+
+  /// Get the duration of the audio
+  Future<Duration> getAudioDuration(String path) async {
+    final player = AudioPlayer();
+    final duration = await player.setUrl(path);
+    player.dispose();
+    return duration ?? Duration.zero;
+  }
+
+  /// Check if the media is valid for pickup
+  /// or if it is too big/long/short
+  /// Returns a list of warnings for each file and the valid paths list
+  /// The warnings are:
+  /// - too big
+  /// - too long
+  /// - too short
+  /// - not supported
+  Future<PickResult> checkMediaForPickup(List<String> paths, DestinationPreset preset) async {
+    List<PickWarning> warnings = [];
+    List<String> validPaths = [];
+
+    for (final path in paths) {
+      if (path.isVideoPath) {
+        final duration = await getVideoDuration(path);
+        if (duration > videoDurationLimit(preset)) {
+          warnings.add((path, PickWarningType.tooLong));
+          continue;
+        }
+        if (duration.inSeconds < 1) {
+          warnings.add((path, PickWarningType.tooShort));
+          continue;
+        }
+      } else if (path.isAudioPath) {
+        final duration = await getAudioDuration(path);
+        if (duration > audioDurationLimit(preset)) {
+          warnings.add((path, PickWarningType.tooLong));
+          continue;
+        }
+        if (duration.inSeconds < 1) {
+          warnings.add((path, PickWarningType.tooShort));
+          continue;
+        }
+      } else {
+        final file = File(path);
+        final stat = await file.stat();
+        final size = stat.size;
+        if (size > fileSizeLimit(preset)) {
+          warnings.add((path, PickWarningType.tooBig));
+          continue;
+        }
+      }
+      validPaths.add(path);
+    }
+
+    return (validPaths, warnings);
+  }
+
+  /// Pick files from the file picker
+  /// The files will be checked for validity and the warnings will be returned
+  /// The valid paths will be returned as well
+  Future<PickResult> pickFiles(PickerType type, DestinationPreset preset) async {
+    final result = await FilePicker.platform.pickFiles(
+      allowMultiple: true,
+      type: switch (type) {
+        PickerType.media => FileType.media,
+        PickerType.audio => FileType.audio,
+        PickerType.any => FileType.any,
+      },
+    );
+
+    final pickedPaths = result?.paths.whereType<String>().toList() ?? [];
+
+    final pickResult = await checkMediaForPickup(pickedPaths, preset);
+    return pickResult;
+  }
+
+  /// Get the file size limit for the given preset in bytes
+  int fileSizeLimit(DestinationPreset preset) {
+    return switch (preset) {
+      DestinationPreset.chat => 100 * 1024 * 1024, // 100MB
+      DestinationPreset.mms => 2 * 1024 * 1024, // 2MB
+    };
+  }
+
+  /// Get the video duration limit for the given preset
+  Duration videoDurationLimit(DestinationPreset preset) {
+    return switch (preset) {
+      DestinationPreset.chat => const Duration(minutes: 10),
+      DestinationPreset.mms => const Duration(seconds: 60),
+    };
+  }
+
+  /// Get the audio duration limit for the given preset
+  Duration audioDurationLimit(DestinationPreset preset) {
+    return switch (preset) {
+      DestinationPreset.chat => const Duration(minutes: 30),
+      DestinationPreset.mms => const Duration(minutes: 10),
+    };
+  }
 }
 
-enum EncodePreset { chat, mms }
+enum DestinationPreset { chat, mms }
+
+enum PickWarningType { tooBig, tooLong, tooShort, notSupported }
+
+typedef PickWarning = (String path, PickWarningType type);
+
+typedef PickResult = (List<String> validPaths, List<PickWarning> warnings);
+
+enum PickerType { media, audio, any }

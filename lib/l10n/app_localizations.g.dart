@@ -1819,6 +1819,30 @@ abstract class AppLocalizations {
   /// **'Type a message'**
   String get messaging_MessageField_hint;
 
+  /// No description provided for @pickFileWarningTooBig.
+  ///
+  /// In en, this message translates to:
+  /// **'File size exceeds the limit of {maxMB} MB'**
+  String pickFileWarningTooBig(int maxMB);
+
+  /// No description provided for @pickFileWarningTooLong.
+  ///
+  /// In en, this message translates to:
+  /// **'Mediafile exceeds the duration limit of {maxLength}'**
+  String pickFileWarningTooLong(String maxLength);
+
+  /// No description provided for @pickFileWarningTooShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Mediafile duration is too short'**
+  String get pickFileWarningTooShort;
+
+  /// No description provided for @pickFileWarningNotSupported.
+  ///
+  /// In en, this message translates to:
+  /// **'Unsupported file type'**
+  String get pickFileWarningNotSupported;
+
   /// No description provided for @messaging_MessageField_pick_gallery.
   ///
   /// In en, this message translates to:

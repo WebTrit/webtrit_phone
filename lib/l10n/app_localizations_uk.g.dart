@@ -892,6 +892,22 @@ class AppLocalizationsUk extends AppLocalizations {
   String get messaging_MessageField_hint => 'Введіть повідомлення';
 
   @override
+  String pickFileWarningTooBig(int maxMB) {
+    return 'Розмір файлу перевищує ліміт $maxMB MB';
+  }
+
+  @override
+  String pickFileWarningTooLong(String maxLength) {
+    return 'Медіафайл перевищує обмеження тривалості $maxLength';
+  }
+
+  @override
+  String get pickFileWarningTooShort => 'Тривалість медіафайлу закоротка';
+
+  @override
+  String get pickFileWarningNotSupported => 'Непідтримуваний тип файлу';
+
+  @override
   String get messaging_MessageField_pick_gallery => 'Галерея';
 
   @override

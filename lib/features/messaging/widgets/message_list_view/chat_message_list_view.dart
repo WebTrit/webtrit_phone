@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:auto_route/auto_route.dart';
 
 import 'package:webtrit_phone/app/router/app_router.dart';
+import 'package:webtrit_phone/data/media_storage.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/messaging/messaging.dart';
 import 'package:webtrit_phone/models/models.dart';
@@ -373,6 +374,7 @@ class _ChatMessageListViewState extends State<ChatMessageListView> {
               MessageTextField(
                 controller: inputController,
                 onSend: handleSend,
+                destinationPreset: DestinationPreset.chat,
                 onChanged: (value) => context.read<ChatTypingCubit>().sendTyping(),
                 onAddAttachment: canAddAttachments ? handleAttachment : null,
                 onAddRecording: canAddAttachments ? handleRecording : null,

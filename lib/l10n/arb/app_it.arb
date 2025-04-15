@@ -640,6 +640,26 @@
   "@messaging_GroupInfo_unmakeModeratorBtnText": {},
   "messaging_MessageField_hint": "Scrivi un messaggio",
   "@messaging_MessageField_hint": {},
+  "pickFileWarningTooBig": "La dimensione del file supera il limite di{maxMB} MB",
+  "@pickFileWarningTooBig": {
+    "placeholders": {
+      "maxMB": {
+        "type": "int"
+      }
+    }
+  },
+  "pickFileWarningTooLong": "Il file multimediale supera il limite di durata di {maxLength}",
+  "@pickFileWarningTooLong": {
+    "placeholders": {
+      "maxLength": {
+        "type": "String"
+      }
+    }
+  },
+  "pickFileWarningTooShort": "La durata del file multimediale è troppo breve",
+  "@pickFileWarningTooShort": {},
+  "pickFileWarningNotSupported": "Tipo di file non supportato",
+  "@pickFileWarningNotSupported": {},
   "messaging_MessageField_pick_gallery": "Galleria",
   "@messaging_MessageField_pick_gallery": {},
   "messaging_MessageField_pick_audio": "Audio",

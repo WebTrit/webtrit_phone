@@ -640,6 +640,26 @@
   "@messaging_GroupInfo_unmakeModeratorBtnText": {},
   "messaging_MessageField_hint": "Введіть повідомлення",
   "@messaging_MessageField_hint": {},
+  "pickFileWarningTooBig": "Розмір файлу перевищує ліміт {maxMB} MB",
+  "@pickFileWarningTooBig": {
+    "placeholders": {
+      "maxMB": {
+        "type": "int"
+      }
+    }
+  },
+  "pickFileWarningTooLong": "Медіафайл перевищує обмеження тривалості {maxLength}",
+  "@pickFileWarningTooLong": {
+    "placeholders": {
+      "maxLength": {
+        "type": "String"
+      }
+    }
+  },
+  "pickFileWarningTooShort": "Тривалість медіафайлу закоротка",
+  "@pickFileWarningTooShort": {},
+  "pickFileWarningNotSupported": "Непідтримуваний тип файлу",
+  "@pickFileWarningNotSupported": {},
   "messaging_MessageField_pick_gallery": "Галерея",
   "@messaging_MessageField_pick_gallery": {},
   "messaging_MessageField_pick_audio": "Аудіо",

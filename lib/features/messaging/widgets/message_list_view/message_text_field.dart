@@ -5,8 +5,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:auto_route/auto_route.dart';
-import 'package:file_picker/file_picker.dart';
-
+import 'package:webtrit_phone/data/media_storage.dart';
+import 'package:webtrit_phone/extensions/extensions.dart';
+import 'package:webtrit_phone/features/messaging/extensions/extensions.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 
 import 'audio_recorder_bottom_sheet.dart';
@@ -15,6 +16,7 @@ class MessageTextField extends StatefulWidget {
   const MessageTextField({
     required this.controller,
     required this.onSend,
+    required this.destinationPreset,
     this.onChanged,
     this.onAddAttachment,
     this.onAddRecording,
@@ -23,6 +25,7 @@ class MessageTextField extends StatefulWidget {
 
   final TextEditingController controller;
   final void Function() onSend;
+  final DestinationPreset destinationPreset;
   final void Function(String)? onChanged;
   final void Function(List<String>)? onAddAttachment;
   final void Function(String)? onAddRecording;
@@ -127,65 +130,65 @@ class _MessageTextFieldState extends State<MessageTextField> {
   }
 
   void pickAttachment() async {
-    if (Platform.isAndroid) {
-      final result = await FilePicker.platform.pickFiles(
-        allowMultiple: true,
-        type: FileType.any,
-      );
-      if (result == null) return;
+    PickerType? pickerType;
 
-      final pickedPaths = result.paths.whereType<String>().toList();
-      widget.onAddAttachment?.call(pickedPaths);
+    if (Platform.isAndroid) {
+      pickerType = PickerType.any;
     } else if (Platform.isIOS) {
-      final result = await showCupertinoModalPopup<List<String>>(
+      pickerType = await showCupertinoModalPopup<PickerType>(
           context: context,
           builder: (popupCtx) {
             return CupertinoActionSheet(
               actions: [
                 CupertinoActionSheetAction(
-                  onPressed: () async {
-                    final result = await FilePicker.platform.pickFiles(
-                      allowMultiple: true,
-                      type: FileType.media,
-                    );
-                    if (!popupCtx.mounted) return;
-                    final paths = result?.paths.whereType<String>().toList() ?? [];
-                    popupCtx.router.maybePop(paths);
-                  },
+                  onPressed: () => popupCtx.router.maybePop(PickerType.media),
                   child: Text(context.l10n.messaging_MessageField_pick_gallery),
                 ),
                 CupertinoActionSheetAction(
-                  onPressed: () async {
-                    final result = await FilePicker.platform.pickFiles(
-                      allowMultiple: true,
-                      type: FileType.audio,
-                    );
-                    if (!popupCtx.mounted) return;
-                    final paths = result?.paths.whereType<String>().toList() ?? [];
-                    popupCtx.router.maybePop(paths);
-                  },
+                  onPressed: () => popupCtx.router.maybePop(PickerType.audio),
                   child: Text(context.l10n.messaging_MessageField_pick_audio),
                 ),
                 CupertinoActionSheetAction(
-                  onPressed: () async {
-                    final result = await FilePicker.platform.pickFiles(
-                      allowMultiple: true,
-                      type: FileType.any,
-                    );
-                    if (!popupCtx.mounted) return;
-                    final paths = result?.paths.whereType<String>().toList() ?? [];
-                    popupCtx.router.maybePop(paths);
-                  },
+                  onPressed: () => popupCtx.router.maybePop(PickerType.any),
                   child: Text(context.l10n.messaging_MessageField_pick_files),
                 ),
               ],
             );
           });
-
-      if (result == null || result.isEmpty) return;
-      if (mounted == false) return;
-      widget.onAddAttachment?.call(result);
     }
+
+    if (pickerType == null) return;
+
+    final result = await MediaStorage().pickFiles(pickerType, widget.destinationPreset);
+    final (validPaths, warnings) = result;
+    for (final warning in warnings) {
+      if (mounted == false) return;
+
+      final (path, type) = warning;
+      final filename = path.fileName;
+
+      final reason = switch (type) {
+        PickWarningType.tooBig => context.l10n.pickFileWarningTooBig(
+            (MediaStorage().fileSizeLimit(widget.destinationPreset) / 1024 / 1024).toInt(),
+          ),
+        PickWarningType.tooLong => context.l10n.pickFileWarningTooLong(
+            (path.isVideoPath
+                    ? MediaStorage().videoDurationLimit(widget.destinationPreset)
+                    : MediaStorage().audioDurationLimit(widget.destinationPreset))
+                .toHMS(),
+          ),
+        PickWarningType.tooShort => context.l10n.pickFileWarningTooShort,
+        PickWarningType.notSupported => context.l10n.pickFileWarningNotSupported,
+      };
+
+      final isLast = warnings.last == warning;
+      final showDuration = Duration(seconds: isLast ? 3 : 1);
+
+      final sn = context.showFloatingSnackBar('$filename\n$reason', duration: showDuration);
+      await sn.closed;
+    }
+
+    widget.onAddAttachment?.call(validPaths);
   }
 
   recordAudio() async {

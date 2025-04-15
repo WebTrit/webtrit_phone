@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/messaging/messaging.dart';
+import 'package:webtrit_phone/data/media_storage.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
@@ -263,6 +264,7 @@ class _SmsMessageListViewState extends State<SmsMessageListView> {
         MessageTextField(
           controller: inputController,
           onSend: handleSend,
+          destinationPreset: DestinationPreset.mms,
           onChanged: (value) => context.read<SmsTypingCubit>().sendTyping(),
           onAddAttachment: handleAttachment,
           onAddRecording: handleRecording,

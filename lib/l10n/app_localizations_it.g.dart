@@ -892,6 +892,22 @@ class AppLocalizationsIt extends AppLocalizations {
   String get messaging_MessageField_hint => 'Scrivi un messaggio';
 
   @override
+  String pickFileWarningTooBig(int maxMB) {
+    return 'La dimensione del file supera il limite di$maxMB MB';
+  }
+
+  @override
+  String pickFileWarningTooLong(String maxLength) {
+    return 'Il file multimediale supera il limite di durata di $maxLength';
+  }
+
+  @override
+  String get pickFileWarningTooShort => 'La durata del file multimediale è troppo breve';
+
+  @override
+  String get pickFileWarningNotSupported => 'Tipo di file non supportato';
+
+  @override
   String get messaging_MessageField_pick_gallery => 'Galleria';
 
   @override
