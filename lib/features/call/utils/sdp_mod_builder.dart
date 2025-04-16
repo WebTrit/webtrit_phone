@@ -245,7 +245,7 @@ class SDPModBuilder {
     return (data['media'] as List<dynamic>).firstWhereOrNull((m) => m['type'] == kind.name);
   }
 
-  /// Cleans and validates the parsed SDP by applying default corrections.
+  /// Applies default corrections to inbound SDP to ensure compatibility.
   ///
   /// Currently, this method ensures that the audio bitrate is not set below
   /// the minimum threshold required by the active audio codecs (e.g., Opus, G722).
@@ -256,7 +256,7 @@ class SDPModBuilder {
     _fixInvalidAudioBitrate();
   }
 
-  /// Validates and enforces a minimum audio bitrate to ensure SDP compatibility.
+  /// Validates and enforces a minimum audio bitrate to ensure inbound SDP  compatibility.
   ///
   /// This method checks whether the audio media section exists and applies a safe minimum bitrate
   /// required for stable WebRTC negotiation based on available codecs:
@@ -274,8 +274,24 @@ class SDPModBuilder {
     final media = _getMedia(RTPCodecKind.audio);
     if (media == null) return;
 
+    // Extract the original 'b=AS' bandwidth value, if present
+    final originalBandwidth = media['bandwidth'] as List<dynamic>? ?? [];
+    final originalAsLimitRaw = originalBandwidth.firstWhereOrNull((bw) => bw['type'] == 'AS')?['limit'];
+    final originalAsLimit = parseBandwidthLimit(originalAsLimitRaw);
+
+    // If the bandwidth is explicitly set to 0, treat it as a disabled stream and do not override
+    if (originalAsLimit == 0) return;
+
+    // Convert AS value (which includes RTP overhead) to approximate clean media bitrate (TIAS-equivalent)
+    final originalBitrateKbps = (originalAsLimit / 1.2).round();
+
+    // Get the minimum required bitrate based on active codecs (e.g., 8 kbps if Opus is present, 64 kbps otherwise)
     final minAudioBitrate = getMinBitrate(RTPCodecKind.audio);
-    _setBandwidth(media, minAudioBitrate);
+
+    // If the original bitrate is below the codec's minimum, increase it; otherwise, keep as is
+    final finalBitrateKbps = originalBitrateKbps >= minAudioBitrate ? originalBitrateKbps : minAudioBitrate;
+
+    _setBandwidth(media, finalBitrateKbps);
   }
 
   /// Returns the minimum allowed bitrate (in kbps) for the given media kind,
@@ -337,6 +353,12 @@ class SDPModBuilder {
       {'type': 'AS', 'limit': as},
       {'type': 'TIAS', 'limit': tias}
     ];
+  }
+
+  int parseBandwidthLimit(dynamic value, [int defaultValue = 0]) {
+    if (value is int) return value;
+    if (value is String) return int.tryParse(value) ?? defaultValue;
+    return defaultValue;
   }
 }
 
