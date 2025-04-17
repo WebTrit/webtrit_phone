@@ -127,10 +127,10 @@ class VoicemailRepositoryImpl implements VoicemailRepository {
 
     print('file: ${file.path}');
 
-    // // ✅ якщо файл уже є — просто повертаємо шлях
-    // if (await file.exists()) {
-    //   return file.path;
-    // }
+    // ✅ якщо файл уже є — просто повертаємо шлях
+    if (await file.exists()) {
+      return file.path;
+    }
 
     // ⬇️ якщо немає — робимо запит і зберігаємо
 
