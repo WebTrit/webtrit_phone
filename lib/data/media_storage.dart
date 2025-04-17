@@ -327,25 +327,29 @@ class MediaStorage {
     List<String> validPaths = [];
 
     for (final path in paths) {
-      if (path.isVideoPath) {
+      if (path.isImagePath && !path.isGifImagePath) {
+        // No need to check images because they'll be encoded same way
+        // and the size will be reduced
+        //
+        // Except GIFs that will be checked as regular files in 'else' block
+        validPaths.add(path);
+      } else if (path.isVideoPath) {
         final duration = await getVideoDuration(path);
         if (duration > videoDurationLimit(preset)) {
           warnings.add((path, PickWarningType.tooLong));
-          continue;
-        }
-        if (duration.inSeconds < 1) {
+        } else if (duration.inSeconds < 1) {
           warnings.add((path, PickWarningType.tooShort));
-          continue;
+        } else {
+          validPaths.add(path);
         }
       } else if (path.isAudioPath) {
         final duration = await getAudioDuration(path);
         if (duration > audioDurationLimit(preset)) {
           warnings.add((path, PickWarningType.tooLong));
-          continue;
-        }
-        if (duration.inSeconds < 1) {
+        } else if (duration.inSeconds < 1) {
           warnings.add((path, PickWarningType.tooShort));
-          continue;
+        } else {
+          validPaths.add(path);
         }
       } else {
         final file = File(path);
@@ -353,10 +357,10 @@ class MediaStorage {
         final size = stat.size;
         if (size > fileSizeLimit(preset)) {
           warnings.add((path, PickWarningType.tooBig));
-          continue;
+        } else {
+          validPaths.add(path);
         }
       }
-      validPaths.add(path);
     }
 
     return (validPaths, warnings);
@@ -393,15 +397,15 @@ class MediaStorage {
   Duration videoDurationLimit(DestinationPreset preset) {
     return switch (preset) {
       DestinationPreset.chat => const Duration(minutes: 10),
-      DestinationPreset.mms => const Duration(seconds: 60),
+      DestinationPreset.mms => const Duration(minutes: 1),
     };
   }
 
   /// Get the audio duration limit for the given preset
   Duration audioDurationLimit(DestinationPreset preset) {
     return switch (preset) {
-      DestinationPreset.chat => const Duration(minutes: 30),
-      DestinationPreset.mms => const Duration(minutes: 10),
+      DestinationPreset.chat => const Duration(minutes: 20),
+      DestinationPreset.mms => const Duration(minutes: 5),
     };
   }
 }
