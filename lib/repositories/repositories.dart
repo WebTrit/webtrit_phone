@@ -15,6 +15,7 @@ export 'notifications/remote_notifications_repository.dart';
 export 'push_tokens/push_tokens_repository.dart';
 export 'recents/recents_repository.dart';
 export 'route_state/route_state.dart';
+export 'self_config/self_config_repository.dart';
 export 'sms/sms.dart';
 export 'system_info/system_info_repository.dart';
-export 'self_config/self_config_repository.dart';
+export 'voicemail/voicemail.dart';
