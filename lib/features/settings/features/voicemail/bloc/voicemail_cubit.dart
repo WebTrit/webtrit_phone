@@ -26,4 +26,14 @@ class VoicemailCubit extends Cubit<VoicemailState> {
       // emit(VoicemailState.error(e.toString()));
     }
   }
+
+  Future<void> getVoicemail(String messageId) async {
+    try {
+      final voicemail = await _repository.getVoicemail(messageId, Locale.fromSubtags(languageCode: "en"));
+      final attachment = await _repository.getVoicemailAttachment(messageId);
+      print(voicemail);
+    } catch (e) {
+      // emit(VoicemailState.error(e.toString()));
+    }
+  }
 }

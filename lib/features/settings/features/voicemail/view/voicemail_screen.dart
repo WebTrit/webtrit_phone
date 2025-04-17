@@ -38,6 +38,7 @@ class VoicemailScreen extends StatelessWidget {
           subtitle: Text('${item.date} • ${item.duration.toStringAsFixed(1)} sec'),
           trailing: Icon(item.seen ? Icons.mark_email_read : Icons.mark_email_unread),
           onTap: () {
+            context.read<VoicemailCubit>().getVoicemail(item.id);
             // TODO: show details or play
           },
         );
