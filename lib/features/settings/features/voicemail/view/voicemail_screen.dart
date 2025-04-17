@@ -5,6 +5,7 @@ import 'package:webtrit_phone/models/models.dart';
 
 import '../../../../../widgets/audio_view.dart';
 import '../bloc/voicemail_cubit.dart';
+import '../widgets/voicemail_tile.dart';
 
 class VoicemailScreen extends StatelessWidget {
   const VoicemailScreen({super.key});
@@ -32,21 +33,9 @@ class VoicemailScreen extends StatelessWidget {
       separatorBuilder: (_, __) => const SizedBox(height: 8),
       itemBuilder: (context, index) {
         final item = items[index];
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ListTile(
-              title: Text('Voicemail from ${item.sender}'),
-              subtitle: Text('${item.date} • ${item.duration.toStringAsFixed(1)} sec'),
-              onTap: () {
-                context.read<VoicemailCubit>().loadVoicemailDetail(item.id);
-              },
-            ),
-            AudioView(
-              item.attachments.first,
-            ),
-          ],
+        return VoicemailTile(
+          voicemail: item,
+          onDeleted: (it) => context.read<VoicemailCubit>().deleteVoicemail(it.id),
         );
       },
     );

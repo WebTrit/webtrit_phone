@@ -7,7 +7,7 @@ class SmsOutboxMessageDeleteTable extends Table {
   String get tableName => 'sms_outbox_message_deletes';
 
   @override
-  Set<Column> get primaryKey => {id};
+  List<String> get customConstraints => ['PRIMARY KEY (id)'];
 
   IntColumn get id => integer()();
 

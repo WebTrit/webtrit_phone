@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui';
@@ -6,12 +5,11 @@ import 'dart:ui';
 import 'package:path_provider/path_provider.dart';
 import 'package:webtrit_api/webtrit_api.dart';
 import 'package:webtrit_phone/models/models.dart';
-import 'package:webtrit_phone/mappers/mappers.dart';
+
+import '../../data/data.dart';
 
 abstract class VoicemailRepository {
   Future<List<Voicemail>> getVoicemailList(Locale locale);
-
-  // Future<UserVoicemail> getVoicemail(String messageId, Locale locale);
 
   Future<void> deleteVoicemail(String messageId, Locale locale);
 
@@ -20,56 +18,93 @@ abstract class VoicemailRepository {
   Future<Uint8List> getVoicemailAttachment(String messageId, {String? fileFormat, Locale? locale});
 
   Future<String> getOrSaveVoicemailAttachmentFile(String messageId);
+
+  Stream<List<Voicemail>> watchVoicemails();
 }
 
 class VoicemailRepositoryImpl implements VoicemailRepository {
   VoicemailRepositoryImpl({
     required WebtritApiClient webtritApiClient,
     required String token,
+    required AppDatabase appDatabase,
   })  : _webtritApiClient = webtritApiClient,
-        _token = token;
+        _token = token,
+        _appDatabase = appDatabase;
 
   final WebtritApiClient _webtritApiClient;
   final String _token;
-
-  // @override
-  // Future<List<UserVoicemailItem>> getVoicemailList(Locale locale) async {
-  //   final response = await _webtritApiClient.getUserVoicemailList(
-  //     _token,
-  //     locale: locale.toString(),
-  //     options: RequestOptions.withNoRetries(),
-  //   );
-  //   return response.items;
-  // }
-  //
-  // @override
-  // Future<UserVoicemail> getVoicemail(String messageId, Locale locale) {
-  //   return _webtritApiClient.getUserVoicemail(
-  //     _token,
-  //     messageId,
-  //     locale: locale.toString(),
-  //     options: RequestOptions.withNoRetries(),
-  //   );
-  // }
+  final AppDatabase _appDatabase;
 
   @override
-  Future<void> deleteVoicemail(String messageId, Locale locale) {
-    return _webtritApiClient.deleteUserVoicemail(
+  Future<List<Voicemail>> getVoicemailList(Locale locale) async {
+    final remoteItems = await _webtritApiClient.getUserVoicemailList(
+      _token,
+      locale: locale.toString(),
+      options: RequestOptions.withNoRetries(),
+    );
+
+    final result = <Voicemail>[];
+
+    for (final item in remoteItems.items) {
+      final details = await _webtritApiClient.getUserVoicemail(
+        _token,
+        item.id,
+        locale: locale.toString(),
+        options: RequestOptions.withNoRetries(),
+      );
+
+      final path = await getOrSaveVoicemailAttachmentFile(item.id);
+
+      final voicemail = VoicemailData(
+        id: item.id,
+        date: item.date,
+        duration: item.duration,
+        sender: details.sender,
+        receiver: details.receiver,
+        seen: item.seen,
+        size: item.size,
+        type: item.type,
+        attachmentPath: path,
+      );
+
+      try {
+        await _appDatabase.voicemailDao.insertOrUpdateVoicemail(voicemail).timeout(const Duration(seconds: 5));
+        print("✅ inserted or updated");
+      } catch (e, s) {
+        print("❌ insertOrUpdateVoicemail failed: $e\n$s");
+      }
+    }
+
+    return result;
+  }
+
+  @override
+  Future<void> deleteVoicemail(String messageId, Locale locale) async {
+    await _webtritApiClient.deleteUserVoicemail(
       _token,
       messageId,
       locale: locale.toString(),
       options: RequestOptions.withNoRetries(),
     );
+
+    await _appDatabase.voicemailDao.deleteVoicemailById(messageId);
   }
 
   @override
-  Future<void> updateVoicemailSeen(String messageId, bool seen, Locale locale) {
-    return _webtritApiClient.updateUserVoicemail(
+  Future<void> updateVoicemailSeen(String messageId, bool seen, Locale locale) async {
+    await _webtritApiClient.updateUserVoicemail(
       _token,
       messageId,
       seen: seen,
       locale: locale.toString(),
       options: RequestOptions.withNoRetries(),
+    );
+
+    await _appDatabase.voicemailDao.updateVoicemail(
+      VoicemailDataCompanion(
+        id: Value(messageId),
+        seen: Value(seen),
+      ),
     );
   }
 
@@ -89,57 +124,40 @@ class VoicemailRepositoryImpl implements VoicemailRepository {
   }
 
   @override
-  Future<List<Voicemail>> getVoicemailList(Locale locale) async {
-    final voicmailLis = await _webtritApiClient.getUserVoicemailList(
-      _token,
-      locale: locale.toString(),
-      options: RequestOptions.withNoRetries(),
-    );
-
-    final voicemailFutures = voicmailLis.items.map((item) async {
-      final details = await _webtritApiClient.getUserVoicemail(_token, item.id);
-      print('details: $details');
-
-      final path = await getOrSaveVoicemailAttachmentFile(item.id);
-      print('converted to path: $path');
-      return Voicemail(
-        item.id,
-        item.date,
-        item.duration,
-        details.sender,
-        details.receiver,
-        item.seen,
-        item.size,
-        item.type,
-        [path],
-      );
-    }).toList();
-
-    return Future.wait(voicemailFutures);
+  Future<String> getOrSaveVoicemailAttachmentFile(String messageId) async {
+    return "test";
+    // final filename = 'voicemail_$messageId.wav';
+    // final dir = await getTemporaryDirectory();
+    // final file = File('${dir.path}/$filename');
+    //
+    // if (await file.exists()) {
+    //   return file.path;
+    // }
+    //
+    // final rawBytes = await getVoicemailAttachment(messageId);
+    // await file.writeAsBytes(rawBytes, flush: true);
+    //
+    // return file.path;
   }
 
   @override
-  Future<String> getOrSaveVoicemailAttachmentFile(String messageId) async {
-    final filename = 'voicemail_$messageId.wav';
-    print('getOrSaveVoicemailAttachmentFile: $filename');
-    final dir = await getTemporaryDirectory();
-    final file = File('${dir.path}/$filename');
-
-    print('file: ${file.path}');
-
-    // ✅ якщо файл уже є — просто повертаємо шлях
-    if (await file.exists()) {
-      return file.path;
-    }
-
-    // ⬇️ якщо немає — робимо запит і зберігаємо
-
-
-    final rawBytes = await getVoicemailAttachment(messageId); // має повертати Uint8List
-    print('rawBytes: $rawBytes');
-    await file.writeAsBytes(rawBytes, flush: true); // 👈 flush for safety
-    print('file: ${file.path}');
-
-    return file.path;
+  Stream<List<Voicemail>> watchVoicemails() {
+    return _appDatabase.voicemailDao.watchAllVoicemails().map(
+          (dataList) => dataList
+              .map(
+                (data) => Voicemail(
+                  data.id,
+                  data.date,
+                  data.duration,
+                  data.sender,
+                  data.receiver,
+                  data.seen,
+                  data.size,
+                  data.type,
+                  [data.attachmentPath],
+                ),
+              )
+              .toList(),
+        );
   }
 }

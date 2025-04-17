@@ -137,6 +137,7 @@ class _MainShellState extends State<MainShell> {
           create: (context) => VoicemailRepositoryImpl(
             webtritApiClient: context.read<WebtritApiClient>(),
             token: context.read<AppBloc>().state.token!,
+            appDatabase: context.read<AppDatabase>(),
           ),
         ),
         RepositoryProvider<AppRepository>(
