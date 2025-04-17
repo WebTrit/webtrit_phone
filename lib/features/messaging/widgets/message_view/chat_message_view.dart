@@ -175,7 +175,7 @@ class _ChatMessageViewState extends State<ChatMessageView> {
             dense: true,
           ),
         ),
-      if (sendingFailure != null) ...[
+      if (sendingFailure != null)
         PopupMenuItem(
           onTap: () => widget.handleResend(outboxMessage!),
           child: ListTile(
@@ -184,6 +184,7 @@ class _ChatMessageViewState extends State<ChatMessageView> {
             dense: true,
           ),
         ),
+      if (isMine && isSended == false)
         PopupMenuItem(
           onTap: () => widget.handleDeleteOutboxMessage(outboxMessage!),
           child: ListTile(
@@ -192,7 +193,6 @@ class _ChatMessageViewState extends State<ChatMessageView> {
             dense: true,
           ),
         ),
-      ]
     ];
 
     return GestureDetector(

@@ -126,7 +126,7 @@ class _SmsMessageViewState extends State<SmsMessageView> {
             dense: true,
           ),
         ),
-      if (sendingFailure != null) ...[
+      if (sendingFailure != null)
         PopupMenuItem(
           onTap: () => widget.handleResend(outboxMessage!),
           child: ListTile(
@@ -135,6 +135,7 @@ class _SmsMessageViewState extends State<SmsMessageView> {
             dense: true,
           ),
         ),
+      if (isMine && isSended == false)
         PopupMenuItem(
           onTap: () => widget.handleDeleteOutboxMessage(outboxMessage!),
           child: ListTile(
@@ -143,7 +144,6 @@ class _SmsMessageViewState extends State<SmsMessageView> {
             dense: true,
           ),
         ),
-      ]
     ];
 
     return GestureDetector(
