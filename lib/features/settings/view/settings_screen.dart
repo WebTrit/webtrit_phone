@@ -36,7 +36,8 @@ class SettingsScreen extends StatelessWidget {
               Icons.refresh,
             ),
             onPressed: () {
-              context.read<RegisterStatusCubit>().fetchStatus();
+              context.router.navigate(const VoicemailScreenPageRoute());
+              // context.read<RegisterStatusCubit>().fetchStatus();
             },
           ),
         ],

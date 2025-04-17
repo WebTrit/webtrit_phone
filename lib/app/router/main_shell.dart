@@ -133,6 +133,12 @@ class _MainShellState extends State<MainShell> {
             context.read<AppBloc>().state.token!,
           ),
         ),
+        RepositoryProvider<VoicemailRepository>(
+          create: (context) => VoicemailRepositoryImpl(
+            webtritApiClient: context.read<WebtritApiClient>(),
+            token: context.read<AppBloc>().state.token!,
+          ),
+        ),
         RepositoryProvider<AppRepository>(
           create: (context) => AppRepository(
             webtritApiClient: context.read<WebtritApiClient>(),
