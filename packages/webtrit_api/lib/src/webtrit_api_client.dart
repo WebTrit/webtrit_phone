@@ -483,4 +483,107 @@ class WebtritApiClient {
 
     return SelfConfigResponse.fromJson(responseJson);
   }
+
+  Future<UserVoicemailListResponse> getUserVoicemailList(
+    String token, {
+    String? locale,
+    RequestOptions options = const RequestOptions(),
+  }) async {
+    final responseJson = await _httpClientExecuteGet(
+      ['user', 'voicemails'],
+      locale != null ? {'Accept-Language': locale} : null,
+      token,
+      options: options,
+    );
+
+    return UserVoicemailListResponse.fromJson(responseJson);
+  }
+
+  Future<UserVoicemail> getUserVoicemail(
+    String token,
+    String messageId, {
+    String? locale,
+    RequestOptions options = const RequestOptions(),
+  }) async {
+    final responseJson = await _httpClientExecuteGet(
+      ['user', 'voicemails', messageId],
+      locale != null ? {'Accept-Language': locale} : null,
+      token,
+      options: options,
+    );
+
+    return UserVoicemail.fromJson(responseJson);
+  }
+
+  Future<void> deleteUserVoicemail(
+    String token,
+    String messageId, {
+    String? locale,
+    RequestOptions options = const RequestOptions(),
+  }) async {
+    await _httpClientExecuteDelete(
+      ['user', 'voicemails', messageId],
+      locale != null ? {'Accept-Language': locale} : null,
+      token,
+      options: options,
+    );
+  }
+
+  Future<void> updateUserVoicemail(
+    String token,
+    String messageId, {
+    required bool seen,
+    String? locale,
+    RequestOptions options = const RequestOptions(),
+  }) async {
+    final requestJson = {'seen': seen};
+
+    await _httpClientExecutePatch(
+      ['user', 'voicemails', messageId],
+      locale != null ? {'Accept-Language': locale} : null,
+      token,
+      requestJson,
+      options: options,
+    );
+  }
+
+  Future<String> getUserVoicemailAttachment(
+    String token,
+    String messageId, {
+    String? locale,
+    String? fileFormat,
+    RequestOptions options = const RequestOptions(),
+  }) async {
+    final uri = tenantUrl.replace(
+      pathSegments: [
+        ...tenantUrl.pathSegments.where((s) => s.isNotEmpty),
+        'api',
+        'v1',
+        'user',
+        'voicemails',
+        messageId,
+        'attachment',
+      ],
+      queryParameters: fileFormat != null ? {'file_format': fileFormat} : null,
+    );
+
+    final headers = {
+      'accept': 'application/json',
+      if (token.isNotEmpty) 'authorization': 'Bearer $token',
+      if (locale != null) 'Accept-Language': locale,
+    };
+
+    final response = await _httpClient.get(uri, headers: headers);
+    if (response.statusCode != 200) {
+      throw RequestFailure(
+        url: uri,
+        statusCode: response.statusCode,
+        requestId: _generateRequestId(),
+        token: token,
+        error: ErrorResponse.fromJson(jsonDecode(response.body)),
+      );
+    }
+
+    return response.body;
+  }
 }
