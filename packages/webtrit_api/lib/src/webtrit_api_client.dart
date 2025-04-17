@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
+import 'dart:typed_data';
 
 import 'package:http/http.dart' as http;
 import 'package:logging/logging.dart';
@@ -547,13 +548,13 @@ class WebtritApiClient {
     );
   }
 
-  Future<String> getUserVoicemailAttachment(
-    String token,
-    String messageId, {
-    String? locale,
-    String? fileFormat,
-    RequestOptions options = const RequestOptions(),
-  }) async {
+  Future<Uint8List> getUserVoicemailAttachment(
+      String token,
+      String messageId, {
+        String? locale,
+        String? fileFormat,
+        RequestOptions options = const RequestOptions(),
+      }) async {
     final uri = tenantUrl.replace(
       pathSegments: [
         ...tenantUrl.pathSegments.where((s) => s.isNotEmpty),
@@ -568,7 +569,6 @@ class WebtritApiClient {
     );
 
     final headers = {
-      'accept': 'application/json',
       if (token.isNotEmpty) 'authorization': 'Bearer $token',
       if (locale != null) 'Accept-Language': locale,
     };
@@ -584,6 +584,6 @@ class WebtritApiClient {
       );
     }
 
-    return response.body;
+    return response.bodyBytes;
   }
 }

@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:webtrit_api/webtrit_api.dart';
 import 'package:webtrit_phone/models/models.dart';
 
+import '../../../../../widgets/audio_view.dart';
 import '../bloc/voicemail_cubit.dart';
 
 class VoicemailScreen extends StatelessWidget {
@@ -22,7 +21,7 @@ class VoicemailScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildList(List<UserVoicemailItem> items) {
+  Widget _buildList(List<Voicemail> items) {
     if (items.isEmpty) {
       return const Center(child: Text('No voicemails'));
     }
@@ -33,14 +32,21 @@ class VoicemailScreen extends StatelessWidget {
       separatorBuilder: (_, __) => const SizedBox(height: 8),
       itemBuilder: (context, index) {
         final item = items[index];
-        return ListTile(
-          title: Text('Voicemail from ${item.id}'),
-          subtitle: Text('${item.date} • ${item.duration.toStringAsFixed(1)} sec'),
-          trailing: Icon(item.seen ? Icons.mark_email_read : Icons.mark_email_unread),
-          onTap: () {
-            context.read<VoicemailCubit>().getVoicemail(item.id);
-            // TODO: show details or play
-          },
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ListTile(
+              title: Text('Voicemail from ${item.sender}'),
+              subtitle: Text('${item.date} • ${item.duration.toStringAsFixed(1)} sec'),
+              onTap: () {
+                context.read<VoicemailCubit>().loadVoicemailDetail(item.id);
+              },
+            ),
+            AudioView(
+              item.attachments.first,
+            ),
+          ],
         );
       },
     );

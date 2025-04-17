@@ -16,7 +16,7 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$VoicemailState {
-  List<UserVoicemailItem> get items => throw _privateConstructorUsedError;
+  List<Voicemail> get items => throw _privateConstructorUsedError;
 
   /// Create a copy of VoicemailState
   /// with the given fields replaced by the non-null parameter values.
@@ -31,7 +31,7 @@ abstract class $VoicemailStateCopyWith<$Res> {
           VoicemailState value, $Res Function(VoicemailState) then) =
       _$VoicemailStateCopyWithImpl<$Res, VoicemailState>;
   @useResult
-  $Res call({List<UserVoicemailItem> items});
+  $Res call({List<Voicemail> items});
 }
 
 /// @nodoc
@@ -55,7 +55,7 @@ class _$VoicemailStateCopyWithImpl<$Res, $Val extends VoicemailState>
       items: null == items
           ? _value.items
           : items // ignore: cast_nullable_to_non_nullable
-              as List<UserVoicemailItem>,
+              as List<Voicemail>,
     ) as $Val);
   }
 }
@@ -68,7 +68,7 @@ abstract class _$$VoicemailStateImplCopyWith<$Res>
       __$$VoicemailStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({List<UserVoicemailItem> items});
+  $Res call({List<Voicemail> items});
 }
 
 /// @nodoc
@@ -90,7 +90,7 @@ class __$$VoicemailStateImplCopyWithImpl<$Res>
       items: null == items
           ? _value._items
           : items // ignore: cast_nullable_to_non_nullable
-              as List<UserVoicemailItem>,
+              as List<Voicemail>,
     ));
   }
 }
@@ -98,13 +98,13 @@ class __$$VoicemailStateImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$VoicemailStateImpl implements _VoicemailState {
-  const _$VoicemailStateImpl({final List<UserVoicemailItem> items = const []})
+  const _$VoicemailStateImpl({final List<Voicemail> items = const []})
       : _items = items;
 
-  final List<UserVoicemailItem> _items;
+  final List<Voicemail> _items;
   @override
   @JsonKey()
-  List<UserVoicemailItem> get items {
+  List<Voicemail> get items {
     if (_items is EqualUnmodifiableListView) return _items;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_items);
@@ -138,11 +138,11 @@ class _$VoicemailStateImpl implements _VoicemailState {
 }
 
 abstract class _VoicemailState implements VoicemailState {
-  const factory _VoicemailState({final List<UserVoicemailItem> items}) =
+  const factory _VoicemailState({final List<Voicemail> items}) =
       _$VoicemailStateImpl;
 
   @override
-  List<UserVoicemailItem> get items;
+  List<Voicemail> get items;
 
   /// Create a copy of VoicemailState
   /// with the given fields replaced by the non-null parameter values.

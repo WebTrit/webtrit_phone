@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:webtrit_api/webtrit_api.dart';
 
+import '../../../../../models/voicemail/user_voicemail.dart';
 import '../../../../../repositories/voicemail/voice_mail_repository.dart';
 
 part 'voicemail_state.dart';
@@ -27,13 +28,28 @@ class VoicemailCubit extends Cubit<VoicemailState> {
     }
   }
 
-  Future<void> getVoicemail(String messageId) async {
-    try {
-      final voicemail = await _repository.getVoicemail(messageId, Locale.fromSubtags(languageCode: "en"));
-      final attachment = await _repository.getVoicemailAttachment(messageId);
-      print(voicemail);
-    } catch (e) {
-      // emit(VoicemailState.error(e.toString()));
-    }
+  Future<void> loadVoicemailDetail(String messageId) async {
+    // if (state.detailedMap.containsKey(messageId)) return;
+    //
+    // try {
+    //   final voicemail = await _repository.getVoicemail(messageId, Locale.fromSubtags(languageCode: "en"));
+    //   final updatedMap = Map<String, UserVoicemail>.from(state.detailedMap)..[messageId] = voicemail;
+    //   emit(state.copyWith(detailedMap: updatedMap));
+    //   getAttachementVoicemail(messageId);
+    // } catch (e) {
+    //   // handle error
+    // }
+  }
+  Future<void> getAttachementVoicemail(String messageId) async {
+    // if (state.attachmentMap.containsKey(messageId)) return;
+    //
+    // try {
+    //   final attachment = await _repository.getVoicemailAttachment(messageId);
+    //   final updatedMap = Map<String, String>.from(state.attachmentMap)..[messageId] = attachment;
+    //   emit(state.copyWith(attachmentMap: updatedMap));
+    //
+    // } catch (e) {
+    //   // emit(VoicemailState.error(e.toString()));
+    // }
   }
 }

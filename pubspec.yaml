@@ -86,7 +86,8 @@ dependencies:
   device_region: ^1.4.0
   html: ^0.15.4
   http: ^1.2.2
-
+  audio_session: ^0.1.25
+  
   webtrit_api:
     path: ./packages/webtrit_api
   webtrit_phone_number:

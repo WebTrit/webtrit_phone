@@ -49,3 +49,4 @@ export 'sms_outbox_message_entry.dart';
 export 'sms_outbox_read_cursor_entry.dart';
 export 'system_info/system_info.dart';
 export 'video_capturing_settings.dart';
+export 'voicemail/voicemail.dart';

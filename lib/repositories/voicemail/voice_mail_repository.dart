@@ -1,19 +1,25 @@
+import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
 import 'dart:ui';
 
+import 'package:path_provider/path_provider.dart';
 import 'package:webtrit_api/webtrit_api.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/mappers/mappers.dart';
 
 abstract class VoicemailRepository {
-  Future<List<UserVoicemailItem>> getVoicemailList(Locale locale);
+  Future<List<Voicemail>> getVoicemailList(Locale locale);
 
-  Future<UserVoicemail> getVoicemail(String messageId, Locale locale);
+  // Future<UserVoicemail> getVoicemail(String messageId, Locale locale);
 
   Future<void> deleteVoicemail(String messageId, Locale locale);
 
   Future<void> updateVoicemailSeen(String messageId, bool seen, Locale locale);
 
-  Future<String> getVoicemailAttachment(String messageId, {String? fileFormat, Locale? locale});
+  Future<Uint8List> getVoicemailAttachment(String messageId, {String? fileFormat, Locale? locale});
+
+  Future<String> getOrSaveVoicemailAttachmentFile(String messageId);
 }
 
 class VoicemailRepositoryImpl implements VoicemailRepository {
@@ -26,25 +32,25 @@ class VoicemailRepositoryImpl implements VoicemailRepository {
   final WebtritApiClient _webtritApiClient;
   final String _token;
 
-  @override
-  Future<List<UserVoicemailItem>> getVoicemailList(Locale locale) async {
-    final response = await _webtritApiClient.getUserVoicemailList(
-      _token,
-      locale: locale.toString(),
-      options: RequestOptions.withNoRetries(),
-    );
-    return response.items;
-  }
-
-  @override
-  Future<UserVoicemail> getVoicemail(String messageId, Locale locale) {
-    return _webtritApiClient.getUserVoicemail(
-      _token,
-      messageId,
-      locale: locale.toString(),
-      options: RequestOptions.withNoRetries(),
-    );
-  }
+  // @override
+  // Future<List<UserVoicemailItem>> getVoicemailList(Locale locale) async {
+  //   final response = await _webtritApiClient.getUserVoicemailList(
+  //     _token,
+  //     locale: locale.toString(),
+  //     options: RequestOptions.withNoRetries(),
+  //   );
+  //   return response.items;
+  // }
+  //
+  // @override
+  // Future<UserVoicemail> getVoicemail(String messageId, Locale locale) {
+  //   return _webtritApiClient.getUserVoicemail(
+  //     _token,
+  //     messageId,
+  //     locale: locale.toString(),
+  //     options: RequestOptions.withNoRetries(),
+  //   );
+  // }
 
   @override
   Future<void> deleteVoicemail(String messageId, Locale locale) {
@@ -68,7 +74,7 @@ class VoicemailRepositoryImpl implements VoicemailRepository {
   }
 
   @override
-  Future<String> getVoicemailAttachment(
+  Future<Uint8List> getVoicemailAttachment(
     String messageId, {
     String? fileFormat,
     Locale? locale,
@@ -80,5 +86,60 @@ class VoicemailRepositoryImpl implements VoicemailRepository {
       locale: locale?.toString(),
       options: RequestOptions.withNoRetries(),
     );
+  }
+
+  @override
+  Future<List<Voicemail>> getVoicemailList(Locale locale) async {
+    final voicmailLis = await _webtritApiClient.getUserVoicemailList(
+      _token,
+      locale: locale.toString(),
+      options: RequestOptions.withNoRetries(),
+    );
+
+    final voicemailFutures = voicmailLis.items.map((item) async {
+      final details = await _webtritApiClient.getUserVoicemail(_token, item.id);
+      print('details: $details');
+
+      final path = await getOrSaveVoicemailAttachmentFile(item.id);
+      print('converted to path: $path');
+      return Voicemail(
+        item.id,
+        item.date,
+        item.duration,
+        details.sender,
+        details.receiver,
+        item.seen,
+        item.size,
+        item.type,
+        [path],
+      );
+    }).toList();
+
+    return Future.wait(voicemailFutures);
+  }
+
+  @override
+  Future<String> getOrSaveVoicemailAttachmentFile(String messageId) async {
+    final filename = 'voicemail_$messageId.wav';
+    print('getOrSaveVoicemailAttachmentFile: $filename');
+    final dir = await getTemporaryDirectory();
+    final file = File('${dir.path}/$filename');
+
+    print('file: ${file.path}');
+
+    // // ✅ якщо файл уже є — просто повертаємо шлях
+    // if (await file.exists()) {
+    //   return file.path;
+    // }
+
+    // ⬇️ якщо немає — робимо запит і зберігаємо
+
+
+    final rawBytes = await getVoicemailAttachment(messageId); // має повертати Uint8List
+    print('rawBytes: $rawBytes');
+    await file.writeAsBytes(rawBytes, flush: true); // 👈 flush for safety
+    print('file: ${file.path}');
+
+    return file.path;
   }
 }
