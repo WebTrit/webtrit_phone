@@ -5,7 +5,10 @@ class VoicemailTable extends Table {
   @override
   String get tableName => 'voicemails';
 
-  TextColumn get id => text()();
+  @override
+  Set<Column> get primaryKey => {id};
+
+  IntColumn get id => integer()();
 
   TextColumn get date => text()();
 

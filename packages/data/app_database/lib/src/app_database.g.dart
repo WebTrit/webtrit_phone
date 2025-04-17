@@ -7780,9 +7780,9 @@ class $VoicemailTableTable extends VoicemailTable
   $VoicemailTableTable(this.attachedDatabase, [this._alias]);
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
-  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
       'id', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
+      type: DriftSqlType.int, requiredDuringInsert: false);
   static const VerificationMeta _dateMeta = const VerificationMeta('date');
   @override
   late final GeneratedColumn<String> date = GeneratedColumn<String>(
@@ -7845,8 +7845,6 @@ class $VoicemailTableTable extends VoicemailTable
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
-    } else if (isInserting) {
-      context.missing(_idMeta);
     }
     if (data.containsKey('date')) {
       context.handle(
@@ -7900,13 +7898,13 @@ class $VoicemailTableTable extends VoicemailTable
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => const {};
+  Set<GeneratedColumn> get $primaryKey => {id};
   @override
   VoicemailData map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return VoicemailData(
       id: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
       date: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}date'])!,
       duration: attachedDatabase.typeMapping
@@ -7933,7 +7931,7 @@ class $VoicemailTableTable extends VoicemailTable
 }
 
 class VoicemailData extends DataClass implements Insertable<VoicemailData> {
-  final String id;
+  final int id;
   final String date;
   final double duration;
   final String sender;
@@ -7955,7 +7953,7 @@ class VoicemailData extends DataClass implements Insertable<VoicemailData> {
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    map['id'] = Variable<String>(id);
+    map['id'] = Variable<int>(id);
     map['date'] = Variable<String>(date);
     map['duration'] = Variable<double>(duration);
     map['sender'] = Variable<String>(sender);
@@ -7985,7 +7983,7 @@ class VoicemailData extends DataClass implements Insertable<VoicemailData> {
       {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return VoicemailData(
-      id: serializer.fromJson<String>(json['id']),
+      id: serializer.fromJson<int>(json['id']),
       date: serializer.fromJson<String>(json['date']),
       duration: serializer.fromJson<double>(json['duration']),
       sender: serializer.fromJson<String>(json['sender']),
@@ -8000,7 +7998,7 @@ class VoicemailData extends DataClass implements Insertable<VoicemailData> {
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
-      'id': serializer.toJson<String>(id),
+      'id': serializer.toJson<int>(id),
       'date': serializer.toJson<String>(date),
       'duration': serializer.toJson<double>(duration),
       'sender': serializer.toJson<String>(sender),
@@ -8013,7 +8011,7 @@ class VoicemailData extends DataClass implements Insertable<VoicemailData> {
   }
 
   VoicemailData copyWith(
-          {String? id,
+          {int? id,
           String? date,
           double? duration,
           String? sender,
@@ -8084,7 +8082,7 @@ class VoicemailData extends DataClass implements Insertable<VoicemailData> {
 }
 
 class VoicemailDataCompanion extends UpdateCompanion<VoicemailData> {
-  final Value<String> id;
+  final Value<int> id;
   final Value<String> date;
   final Value<double> duration;
   final Value<String> sender;
@@ -8093,7 +8091,6 @@ class VoicemailDataCompanion extends UpdateCompanion<VoicemailData> {
   final Value<int> size;
   final Value<String> type;
   final Value<String> attachmentPath;
-  final Value<int> rowid;
   const VoicemailDataCompanion({
     this.id = const Value.absent(),
     this.date = const Value.absent(),
@@ -8104,10 +8101,9 @@ class VoicemailDataCompanion extends UpdateCompanion<VoicemailData> {
     this.size = const Value.absent(),
     this.type = const Value.absent(),
     this.attachmentPath = const Value.absent(),
-    this.rowid = const Value.absent(),
   });
   VoicemailDataCompanion.insert({
-    required String id,
+    this.id = const Value.absent(),
     required String date,
     required double duration,
     required String sender,
@@ -8116,9 +8112,7 @@ class VoicemailDataCompanion extends UpdateCompanion<VoicemailData> {
     required int size,
     required String type,
     required String attachmentPath,
-    this.rowid = const Value.absent(),
-  })  : id = Value(id),
-        date = Value(date),
+  })  : date = Value(date),
         duration = Value(duration),
         sender = Value(sender),
         receiver = Value(receiver),
@@ -8126,7 +8120,7 @@ class VoicemailDataCompanion extends UpdateCompanion<VoicemailData> {
         type = Value(type),
         attachmentPath = Value(attachmentPath);
   static Insertable<VoicemailData> custom({
-    Expression<String>? id,
+    Expression<int>? id,
     Expression<String>? date,
     Expression<double>? duration,
     Expression<String>? sender,
@@ -8135,7 +8129,6 @@ class VoicemailDataCompanion extends UpdateCompanion<VoicemailData> {
     Expression<int>? size,
     Expression<String>? type,
     Expression<String>? attachmentPath,
-    Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -8147,12 +8140,11 @@ class VoicemailDataCompanion extends UpdateCompanion<VoicemailData> {
       if (size != null) 'size': size,
       if (type != null) 'type': type,
       if (attachmentPath != null) 'attachment_path': attachmentPath,
-      if (rowid != null) 'rowid': rowid,
     });
   }
 
   VoicemailDataCompanion copyWith(
-      {Value<String>? id,
+      {Value<int>? id,
       Value<String>? date,
       Value<double>? duration,
       Value<String>? sender,
@@ -8160,8 +8152,7 @@ class VoicemailDataCompanion extends UpdateCompanion<VoicemailData> {
       Value<bool>? seen,
       Value<int>? size,
       Value<String>? type,
-      Value<String>? attachmentPath,
-      Value<int>? rowid}) {
+      Value<String>? attachmentPath}) {
     return VoicemailDataCompanion(
       id: id ?? this.id,
       date: date ?? this.date,
@@ -8172,7 +8163,6 @@ class VoicemailDataCompanion extends UpdateCompanion<VoicemailData> {
       size: size ?? this.size,
       type: type ?? this.type,
       attachmentPath: attachmentPath ?? this.attachmentPath,
-      rowid: rowid ?? this.rowid,
     );
   }
 
@@ -8180,7 +8170,7 @@ class VoicemailDataCompanion extends UpdateCompanion<VoicemailData> {
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     if (id.present) {
-      map['id'] = Variable<String>(id.value);
+      map['id'] = Variable<int>(id.value);
     }
     if (date.present) {
       map['date'] = Variable<String>(date.value);
@@ -8206,9 +8196,6 @@ class VoicemailDataCompanion extends UpdateCompanion<VoicemailData> {
     if (attachmentPath.present) {
       map['attachment_path'] = Variable<String>(attachmentPath.value);
     }
-    if (rowid.present) {
-      map['rowid'] = Variable<int>(rowid.value);
-    }
     return map;
   }
 
@@ -8223,8 +8210,7 @@ class VoicemailDataCompanion extends UpdateCompanion<VoicemailData> {
           ..write('seen: $seen, ')
           ..write('size: $size, ')
           ..write('type: $type, ')
-          ..write('attachmentPath: $attachmentPath, ')
-          ..write('rowid: $rowid')
+          ..write('attachmentPath: $attachmentPath')
           ..write(')'))
         .toString();
   }
@@ -15338,7 +15324,7 @@ typedef $$ActiveMessageNotificationsTableTableProcessedTableManager
         PrefetchHooks Function()>;
 typedef $$VoicemailTableTableCreateCompanionBuilder = VoicemailDataCompanion
     Function({
-  required String id,
+  Value<int> id,
   required String date,
   required double duration,
   required String sender,
@@ -15347,11 +15333,10 @@ typedef $$VoicemailTableTableCreateCompanionBuilder = VoicemailDataCompanion
   required int size,
   required String type,
   required String attachmentPath,
-  Value<int> rowid,
 });
 typedef $$VoicemailTableTableUpdateCompanionBuilder = VoicemailDataCompanion
     Function({
-  Value<String> id,
+  Value<int> id,
   Value<String> date,
   Value<double> duration,
   Value<String> sender,
@@ -15360,7 +15345,6 @@ typedef $$VoicemailTableTableUpdateCompanionBuilder = VoicemailDataCompanion
   Value<int> size,
   Value<String> type,
   Value<String> attachmentPath,
-  Value<int> rowid,
 });
 
 class $$VoicemailTableTableFilterComposer
@@ -15372,7 +15356,7 @@ class $$VoicemailTableTableFilterComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  ColumnFilters<String> get id => $composableBuilder(
+  ColumnFilters<int> get id => $composableBuilder(
       column: $table.id, builder: (column) => ColumnFilters(column));
 
   ColumnFilters<String> get date => $composableBuilder(
@@ -15410,7 +15394,7 @@ class $$VoicemailTableTableOrderingComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  ColumnOrderings<String> get id => $composableBuilder(
+  ColumnOrderings<int> get id => $composableBuilder(
       column: $table.id, builder: (column) => ColumnOrderings(column));
 
   ColumnOrderings<String> get date => $composableBuilder(
@@ -15448,7 +15432,7 @@ class $$VoicemailTableTableAnnotationComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  GeneratedColumn<String> get id =>
+  GeneratedColumn<int> get id =>
       $composableBuilder(column: $table.id, builder: (column) => column);
 
   GeneratedColumn<String> get date =>
@@ -15503,7 +15487,7 @@ class $$VoicemailTableTableTableManager extends RootTableManager<
           createComputedFieldComposer: () =>
               $$VoicemailTableTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback: ({
-            Value<String> id = const Value.absent(),
+            Value<int> id = const Value.absent(),
             Value<String> date = const Value.absent(),
             Value<double> duration = const Value.absent(),
             Value<String> sender = const Value.absent(),
@@ -15512,7 +15496,6 @@ class $$VoicemailTableTableTableManager extends RootTableManager<
             Value<int> size = const Value.absent(),
             Value<String> type = const Value.absent(),
             Value<String> attachmentPath = const Value.absent(),
-            Value<int> rowid = const Value.absent(),
           }) =>
               VoicemailDataCompanion(
             id: id,
@@ -15524,10 +15507,9 @@ class $$VoicemailTableTableTableManager extends RootTableManager<
             size: size,
             type: type,
             attachmentPath: attachmentPath,
-            rowid: rowid,
           ),
           createCompanionCallback: ({
-            required String id,
+            Value<int> id = const Value.absent(),
             required String date,
             required double duration,
             required String sender,
@@ -15536,7 +15518,6 @@ class $$VoicemailTableTableTableManager extends RootTableManager<
             required int size,
             required String type,
             required String attachmentPath,
-            Value<int> rowid = const Value.absent(),
           }) =>
               VoicemailDataCompanion.insert(
             id: id,
@@ -15548,7 +15529,6 @@ class $$VoicemailTableTableTableManager extends RootTableManager<
             size: size,
             type: type,
             attachmentPath: attachmentPath,
-            rowid: rowid,
           ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))

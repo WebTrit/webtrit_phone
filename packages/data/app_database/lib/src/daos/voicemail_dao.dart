@@ -11,7 +11,7 @@ class VoicemailDao extends DatabaseAccessor<AppDatabase> with _$VoicemailDaoMixi
 
   Future<List<VoicemailData>> getAllVoicemails() => select(voicemailTable).get();
 
-  Future<VoicemailData?> getVoicemailById(String id) {
+  Future<VoicemailData?> getVoicemailById(int id) {
     return (select(voicemailTable)..where((tbl) => tbl.id.equals(id))).getSingleOrNull();
   }
 
@@ -24,7 +24,7 @@ class VoicemailDao extends DatabaseAccessor<AppDatabase> with _$VoicemailDaoMixi
 
   Future<int> deleteVoicemail(Insertable<VoicemailData> voicemail) => delete(voicemailTable).delete(voicemail);
 
-  Future<int> deleteVoicemailById(String id) {
+  Future<int> deleteVoicemailById(int id) {
     return (delete(voicemailTable)..where((tbl) => tbl.id.equals(id))).go();
   }
 
@@ -32,7 +32,7 @@ class VoicemailDao extends DatabaseAccessor<AppDatabase> with _$VoicemailDaoMixi
 
   Stream<List<VoicemailData>> watchAllVoicemails() => select(voicemailTable).watch();
 
-  Stream<VoicemailData?> watchVoicemailById(String id) {
+  Stream<VoicemailData?> watchVoicemailById(int id) {
     return (select(voicemailTable)..where((tbl) => tbl.id.equals(id))).watchSingleOrNull();
   }
 }

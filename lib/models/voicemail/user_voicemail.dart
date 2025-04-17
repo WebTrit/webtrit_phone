@@ -12,7 +12,7 @@ class Voicemail {
     this.attachments,
   );
 
-  final String id;
+  final int id;
   final String date;
   final double duration;
   final String sender;

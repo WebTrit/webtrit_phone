@@ -35,7 +35,7 @@ class VoicemailScreen extends StatelessWidget {
         final item = items[index];
         return VoicemailTile(
           voicemail: item,
-          onDeleted: (it) => context.read<VoicemailCubit>().deleteVoicemail(it.id),
+          onDeleted: (it) => context.read<VoicemailCubit>().deleteVoicemail(it.id.toString()),
         );
       },
     );

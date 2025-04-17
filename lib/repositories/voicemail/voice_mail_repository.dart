@@ -56,7 +56,7 @@ class VoicemailRepositoryImpl implements VoicemailRepository {
       final path = await getOrSaveVoicemailAttachmentFile(item.id);
 
       final voicemail = VoicemailData(
-        id: item.id,
+        id: int.parse(item.id),
         date: item.date,
         duration: item.duration,
         sender: details.sender,
@@ -87,7 +87,7 @@ class VoicemailRepositoryImpl implements VoicemailRepository {
       options: RequestOptions.withNoRetries(),
     );
 
-    await _appDatabase.voicemailDao.deleteVoicemailById(messageId);
+    await _appDatabase.voicemailDao.deleteVoicemailById(int.parse(messageId));
   }
 
   @override
@@ -102,7 +102,7 @@ class VoicemailRepositoryImpl implements VoicemailRepository {
 
     await _appDatabase.voicemailDao.updateVoicemail(
       VoicemailDataCompanion(
-        id: Value(messageId),
+        id: Value(int.parse(messageId)),
         seen: Value(seen),
       ),
     );
