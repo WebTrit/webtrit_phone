@@ -7828,8 +7828,8 @@ class $VoicemailTableTable extends VoicemailTable
       const VerificationMeta('attachmentPath');
   @override
   late final GeneratedColumn<String> attachmentPath = GeneratedColumn<String>(
-      'attachment_path', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
+      'attachment_path', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
   @override
   List<GeneratedColumn> get $columns =>
       [id, date, duration, sender, receiver, seen, size, type, attachmentPath];
@@ -7891,8 +7891,6 @@ class $VoicemailTableTable extends VoicemailTable
           _attachmentPathMeta,
           attachmentPath.isAcceptableOrUnknown(
               data['attachment_path']!, _attachmentPathMeta));
-    } else if (isInserting) {
-      context.missing(_attachmentPathMeta);
     }
     return context;
   }
@@ -7919,8 +7917,8 @@ class $VoicemailTableTable extends VoicemailTable
           .read(DriftSqlType.int, data['${effectivePrefix}size'])!,
       type: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}type'])!,
-      attachmentPath: attachedDatabase.typeMapping.read(
-          DriftSqlType.string, data['${effectivePrefix}attachment_path'])!,
+      attachmentPath: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}attachment_path']),
     );
   }
 
@@ -7939,7 +7937,7 @@ class VoicemailData extends DataClass implements Insertable<VoicemailData> {
   final bool seen;
   final int size;
   final String type;
-  final String attachmentPath;
+  final String? attachmentPath;
   const VoicemailData(
       {required this.id,
       required this.date,
@@ -7949,7 +7947,7 @@ class VoicemailData extends DataClass implements Insertable<VoicemailData> {
       required this.seen,
       required this.size,
       required this.type,
-      required this.attachmentPath});
+      this.attachmentPath});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -7961,7 +7959,9 @@ class VoicemailData extends DataClass implements Insertable<VoicemailData> {
     map['seen'] = Variable<bool>(seen);
     map['size'] = Variable<int>(size);
     map['type'] = Variable<String>(type);
-    map['attachment_path'] = Variable<String>(attachmentPath);
+    if (!nullToAbsent || attachmentPath != null) {
+      map['attachment_path'] = Variable<String>(attachmentPath);
+    }
     return map;
   }
 
@@ -7975,7 +7975,9 @@ class VoicemailData extends DataClass implements Insertable<VoicemailData> {
       seen: Value(seen),
       size: Value(size),
       type: Value(type),
-      attachmentPath: Value(attachmentPath),
+      attachmentPath: attachmentPath == null && nullToAbsent
+          ? const Value.absent()
+          : Value(attachmentPath),
     );
   }
 
@@ -7991,7 +7993,7 @@ class VoicemailData extends DataClass implements Insertable<VoicemailData> {
       seen: serializer.fromJson<bool>(json['seen']),
       size: serializer.fromJson<int>(json['size']),
       type: serializer.fromJson<String>(json['type']),
-      attachmentPath: serializer.fromJson<String>(json['attachmentPath']),
+      attachmentPath: serializer.fromJson<String?>(json['attachmentPath']),
     );
   }
   @override
@@ -8006,7 +8008,7 @@ class VoicemailData extends DataClass implements Insertable<VoicemailData> {
       'seen': serializer.toJson<bool>(seen),
       'size': serializer.toJson<int>(size),
       'type': serializer.toJson<String>(type),
-      'attachmentPath': serializer.toJson<String>(attachmentPath),
+      'attachmentPath': serializer.toJson<String?>(attachmentPath),
     };
   }
 
@@ -8019,7 +8021,7 @@ class VoicemailData extends DataClass implements Insertable<VoicemailData> {
           bool? seen,
           int? size,
           String? type,
-          String? attachmentPath}) =>
+          Value<String?> attachmentPath = const Value.absent()}) =>
       VoicemailData(
         id: id ?? this.id,
         date: date ?? this.date,
@@ -8029,7 +8031,8 @@ class VoicemailData extends DataClass implements Insertable<VoicemailData> {
         seen: seen ?? this.seen,
         size: size ?? this.size,
         type: type ?? this.type,
-        attachmentPath: attachmentPath ?? this.attachmentPath,
+        attachmentPath:
+            attachmentPath.present ? attachmentPath.value : this.attachmentPath,
       );
   VoicemailData copyWithCompanion(VoicemailDataCompanion data) {
     return VoicemailData(
@@ -8090,7 +8093,7 @@ class VoicemailDataCompanion extends UpdateCompanion<VoicemailData> {
   final Value<bool> seen;
   final Value<int> size;
   final Value<String> type;
-  final Value<String> attachmentPath;
+  final Value<String?> attachmentPath;
   const VoicemailDataCompanion({
     this.id = const Value.absent(),
     this.date = const Value.absent(),
@@ -8111,14 +8114,13 @@ class VoicemailDataCompanion extends UpdateCompanion<VoicemailData> {
     this.seen = const Value.absent(),
     required int size,
     required String type,
-    required String attachmentPath,
+    this.attachmentPath = const Value.absent(),
   })  : date = Value(date),
         duration = Value(duration),
         sender = Value(sender),
         receiver = Value(receiver),
         size = Value(size),
-        type = Value(type),
-        attachmentPath = Value(attachmentPath);
+        type = Value(type);
   static Insertable<VoicemailData> custom({
     Expression<int>? id,
     Expression<String>? date,
@@ -8152,7 +8154,7 @@ class VoicemailDataCompanion extends UpdateCompanion<VoicemailData> {
       Value<bool>? seen,
       Value<int>? size,
       Value<String>? type,
-      Value<String>? attachmentPath}) {
+      Value<String?>? attachmentPath}) {
     return VoicemailDataCompanion(
       id: id ?? this.id,
       date: date ?? this.date,
@@ -15332,7 +15334,7 @@ typedef $$VoicemailTableTableCreateCompanionBuilder = VoicemailDataCompanion
   Value<bool> seen,
   required int size,
   required String type,
-  required String attachmentPath,
+  Value<String?> attachmentPath,
 });
 typedef $$VoicemailTableTableUpdateCompanionBuilder = VoicemailDataCompanion
     Function({
@@ -15344,7 +15346,7 @@ typedef $$VoicemailTableTableUpdateCompanionBuilder = VoicemailDataCompanion
   Value<bool> seen,
   Value<int> size,
   Value<String> type,
-  Value<String> attachmentPath,
+  Value<String?> attachmentPath,
 });
 
 class $$VoicemailTableTableFilterComposer
@@ -15495,7 +15497,7 @@ class $$VoicemailTableTableTableManager extends RootTableManager<
             Value<bool> seen = const Value.absent(),
             Value<int> size = const Value.absent(),
             Value<String> type = const Value.absent(),
-            Value<String> attachmentPath = const Value.absent(),
+            Value<String?> attachmentPath = const Value.absent(),
           }) =>
               VoicemailDataCompanion(
             id: id,
@@ -15517,7 +15519,7 @@ class $$VoicemailTableTableTableManager extends RootTableManager<
             Value<bool> seen = const Value.absent(),
             required int size,
             required String type,
-            required String attachmentPath,
+            Value<String?> attachmentPath = const Value.absent(),
           }) =>
               VoicemailDataCompanion.insert(
             id: id,

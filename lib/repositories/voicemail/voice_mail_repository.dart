@@ -7,22 +7,23 @@ import 'package:webtrit_api/webtrit_api.dart';
 import 'package:webtrit_phone/models/models.dart';
 
 import '../../data/data.dart';
+import '../../mappers/drift/contacts_mapper.dart';
 
 abstract class VoicemailRepository {
   Future<List<Voicemail>> getVoicemailList(Locale locale);
 
   Future<void> deleteVoicemail(String messageId, Locale locale);
 
+  Future<void> delete();
+
   Future<void> updateVoicemailSeen(String messageId, bool seen, Locale locale);
 
   Future<Uint8List> getVoicemailAttachment(String messageId, {String? fileFormat, Locale? locale});
 
-  Future<String> getOrSaveVoicemailAttachmentFile(String messageId);
-
   Stream<List<Voicemail>> watchVoicemails();
 }
 
-class VoicemailRepositoryImpl implements VoicemailRepository {
+class VoicemailRepositoryImpl with ContactsDriftMapper implements VoicemailRepository {
   VoicemailRepositoryImpl({
     required WebtritApiClient webtritApiClient,
     required String token,
@@ -53,8 +54,7 @@ class VoicemailRepositoryImpl implements VoicemailRepository {
         options: RequestOptions.withNoRetries(),
       );
 
-      final path = await getOrSaveVoicemailAttachmentFile(item.id);
-
+      // https://core1.demo.webtrit.com/api/v1/user/voicemails/2066/attachment?file_format=mp3
       final voicemail = VoicemailData(
         id: int.parse(item.id),
         date: item.date,
@@ -64,7 +64,8 @@ class VoicemailRepositoryImpl implements VoicemailRepository {
         seen: item.seen,
         size: item.size,
         type: item.type,
-        attachmentPath: path,
+        // TODO(Serdun):
+        attachmentPath: "https://core1.demo.webtrit.com/api/v1/user/voicemails/${item.id}/attachment?file_format=mp3",
       );
 
       try {
@@ -123,41 +124,31 @@ class VoicemailRepositoryImpl implements VoicemailRepository {
     );
   }
 
-  @override
-  Future<String> getOrSaveVoicemailAttachmentFile(String messageId) async {
-    return "test";
-    // final filename = 'voicemail_$messageId.wav';
-    // final dir = await getTemporaryDirectory();
-    // final file = File('${dir.path}/$filename');
-    //
-    // if (await file.exists()) {
-    //   return file.path;
-    // }
-    //
-    // final rawBytes = await getVoicemailAttachment(messageId);
-    // await file.writeAsBytes(rawBytes, flush: true);
-    //
-    // return file.path;
-  }
-
+  // data.contact
   @override
   Stream<List<Voicemail>> watchVoicemails() {
-    return _appDatabase.voicemailDao.watchAllVoicemails().map(
+    return _appDatabase.voicemailDao.watchVoicemailsWithContacts().map(
           (dataList) => dataList
               .map(
                 (data) => Voicemail(
-                  data.id,
-                  data.date,
-                  data.duration,
-                  data.sender,
-                  data.receiver,
-                  data.seen,
-                  data.size,
-                  data.type,
-                  [data.attachmentPath],
+                  data.voicemail.id,
+                  data.voicemail.date,
+                  data.voicemail.duration,
+                  data.voicemail.sender,
+                  data.voicemail.receiver,
+                  (data.contact != null ? contactFromDrift(data.contact!).maybeName : null) ?? data.voicemail.receiver,
+                  data.voicemail.seen,
+                  data.voicemail.size,
+                  data.voicemail.type,
+                  data.voicemail.attachmentPath,
                 ),
               )
               .toList(),
         );
+  }
+
+  @override
+  Future<void> delete() {
+    return _appDatabase.voicemailDao.deleteAllVoicemails();
   }
 }

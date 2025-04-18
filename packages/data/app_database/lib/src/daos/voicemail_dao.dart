@@ -5,6 +5,7 @@ part 'voicemail_dao.g.dart';
 
 @DriftAccessor(tables: [
   VoicemailTable,
+  ContactsTable,
 ])
 class VoicemailDao extends DatabaseAccessor<AppDatabase> with _$VoicemailDaoMixin {
   VoicemailDao(super.db);
@@ -35,4 +36,39 @@ class VoicemailDao extends DatabaseAccessor<AppDatabase> with _$VoicemailDaoMixi
   Stream<VoicemailData?> watchVoicemailById(int id) {
     return (select(voicemailTable)..where((tbl) => tbl.id.equals(id))).watchSingleOrNull();
   }
+
+  Future<List<TypedResult>> getVoicemailsWithContacts() {
+    final voicemail = voicemailTable;
+    final contacts = db.contactsTable;
+
+    final query = select(voicemail).join([leftOuterJoin(contacts, contacts.sourceId.equalsExp(voicemail.sender))]);
+    return query.get();
+  }
+
+  Stream<List<VoicemailWithContact>> watchVoicemailsWithContacts() {
+    final voicemail = voicemailTable;
+    final contacts = db.contactsTable;
+
+    final query = select(voicemail).join([
+      leftOuterJoin(
+        contacts,
+        contacts.sourceId.equalsExp(voicemail.sender),
+      ),
+    ]);
+
+    return query.watch().map((rows) {
+      return rows.map((row) {
+        final voicemail = row.readTable(voicemailTable);
+        final contact = row.readTableOrNull(contacts);
+        return VoicemailWithContact(voicemail: voicemail, contact: contact);
+      }).toList();
+    });
+  }
+}
+
+class VoicemailWithContact {
+  final VoicemailData voicemail;
+  final ContactData? contact;
+
+  VoicemailWithContact({required this.voicemail, this.contact});
 }

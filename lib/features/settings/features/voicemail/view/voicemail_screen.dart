@@ -15,7 +15,12 @@ class VoicemailScreen extends StatelessWidget {
     return BlocBuilder<VoicemailCubit, VoicemailState>(
       builder: (context, state) {
         return Scaffold(
-          appBar: AppBar(title: const Text('Voicemail')),
+          appBar: AppBar(title: const Text('Voicemail'), actions: [
+            IconButton(
+              icon: const Icon(Icons.delete),
+              onPressed: () => context.read<VoicemailCubit>().cleanDb(),
+            ),
+          ]),
           body: _buildList(state.items),
         );
       },
@@ -35,7 +40,8 @@ class VoicemailScreen extends StatelessWidget {
         final item = items[index];
         return VoicemailTile(
           voicemail: item,
-          onDeleted: (it) => context.read<VoicemailCubit>().deleteVoicemail(it.id.toString()),
+          mediaHeaders: context.read<VoicemailCubit>().state.mediaHeaders,
+          onDeleted: (it) => context.read<VoicemailCubit>().deleteVoicemail(it.id.toString()), displayName: item.sender, smart: false,
         );
       },
     );

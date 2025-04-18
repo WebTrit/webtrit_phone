@@ -16,6 +16,7 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$VoicemailState {
+  Map<String, String> get mediaHeaders => throw _privateConstructorUsedError;
   List<Voicemail> get items => throw _privateConstructorUsedError;
 
   /// Create a copy of VoicemailState
@@ -31,7 +32,7 @@ abstract class $VoicemailStateCopyWith<$Res> {
           VoicemailState value, $Res Function(VoicemailState) then) =
       _$VoicemailStateCopyWithImpl<$Res, VoicemailState>;
   @useResult
-  $Res call({List<Voicemail> items});
+  $Res call({Map<String, String> mediaHeaders, List<Voicemail> items});
 }
 
 /// @nodoc
@@ -49,9 +50,14 @@ class _$VoicemailStateCopyWithImpl<$Res, $Val extends VoicemailState>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? mediaHeaders = null,
     Object? items = null,
   }) {
     return _then(_value.copyWith(
+      mediaHeaders: null == mediaHeaders
+          ? _value.mediaHeaders
+          : mediaHeaders // ignore: cast_nullable_to_non_nullable
+              as Map<String, String>,
       items: null == items
           ? _value.items
           : items // ignore: cast_nullable_to_non_nullable
@@ -68,7 +74,7 @@ abstract class _$$VoicemailStateImplCopyWith<$Res>
       __$$VoicemailStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({List<Voicemail> items});
+  $Res call({Map<String, String> mediaHeaders, List<Voicemail> items});
 }
 
 /// @nodoc
@@ -84,9 +90,14 @@ class __$$VoicemailStateImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? mediaHeaders = null,
     Object? items = null,
   }) {
     return _then(_$VoicemailStateImpl(
+      mediaHeaders: null == mediaHeaders
+          ? _value._mediaHeaders
+          : mediaHeaders // ignore: cast_nullable_to_non_nullable
+              as Map<String, String>,
       items: null == items
           ? _value._items
           : items // ignore: cast_nullable_to_non_nullable
@@ -98,8 +109,19 @@ class __$$VoicemailStateImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$VoicemailStateImpl implements _VoicemailState {
-  const _$VoicemailStateImpl({final List<Voicemail> items = const []})
-      : _items = items;
+  const _$VoicemailStateImpl(
+      {required final Map<String, String> mediaHeaders,
+      final List<Voicemail> items = const []})
+      : _mediaHeaders = mediaHeaders,
+        _items = items;
+
+  final Map<String, String> _mediaHeaders;
+  @override
+  Map<String, String> get mediaHeaders {
+    if (_mediaHeaders is EqualUnmodifiableMapView) return _mediaHeaders;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableMapView(_mediaHeaders);
+  }
 
   final List<Voicemail> _items;
   @override
@@ -112,7 +134,7 @@ class _$VoicemailStateImpl implements _VoicemailState {
 
   @override
   String toString() {
-    return 'VoicemailState(items: $items)';
+    return 'VoicemailState(mediaHeaders: $mediaHeaders, items: $items)';
   }
 
   @override
@@ -120,12 +142,16 @@ class _$VoicemailStateImpl implements _VoicemailState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$VoicemailStateImpl &&
+            const DeepCollectionEquality()
+                .equals(other._mediaHeaders, _mediaHeaders) &&
             const DeepCollectionEquality().equals(other._items, _items));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(_items));
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(_mediaHeaders),
+      const DeepCollectionEquality().hash(_items));
 
   /// Create a copy of VoicemailState
   /// with the given fields replaced by the non-null parameter values.
@@ -138,9 +164,12 @@ class _$VoicemailStateImpl implements _VoicemailState {
 }
 
 abstract class _VoicemailState implements VoicemailState {
-  const factory _VoicemailState({final List<Voicemail> items}) =
-      _$VoicemailStateImpl;
+  const factory _VoicemailState(
+      {required final Map<String, String> mediaHeaders,
+      final List<Voicemail> items}) = _$VoicemailStateImpl;
 
+  @override
+  Map<String, String> get mediaHeaders;
   @override
   List<Voicemail> get items;
 

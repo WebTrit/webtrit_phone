@@ -1,55 +1,130 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/widgets/audio_view.dart';
+
+import '../../../../../widgets/leading_avatar.dart';
 
 class VoicemailTile extends StatelessWidget {
   const VoicemailTile({
     super.key,
     required this.voicemail,
     this.onDeleted,
+    required this.mediaHeaders,
     this.onTap,
+    required this.displayName,
+    this.thumbnail,
+    this.thumbnailUrl,
+    this.registered,
+    required this.smart,
   });
 
   final Voicemail voicemail;
+  final Map<String, String> mediaHeaders;
   final VoidCallback? onTap;
   final void Function(Voicemail)? onDeleted;
+  final String displayName;
+  final Uint8List? thumbnail;
+  final Uri? thumbnailUrl;
+  final bool? registered;
+  final bool smart;
 
   @override
   Widget build(BuildContext context) {
-    return Dismissible(
-      key: ObjectKey(voicemail.id),
-      direction: DismissDirection.endToStart,
-      background: Container(
-        color: Theme.of(context).colorScheme.error,
-        alignment: Alignment.centerRight,
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: const Icon(Icons.delete_outline, color: Colors.white),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+      ListTile(
+      contentPadding: EdgeInsets.zero,
+      leading: LeadingAvatar(
+        username: displayName,
+        thumbnail: thumbnail,
+        thumbnailUrl: thumbnailUrl,
+        registered: registered,
+        smart: smart,
       ),
-      confirmDismiss: (direction) async {
-        return await showDialog<bool>(
-          context: context,
-          builder: (context) => AlertDialog(
-            title: const Text('Delete Voicemail?'),
-            content: Text('Are you sure you want to delete voicemail from ${voicemail.sender}?'),
-            actions: [
-              TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Cancel')),
-              TextButton(onPressed: () => Navigator.pop(context, true), child: const Text('Delete')),
-            ],
-          ),
-        );
+      title: Text(voicemail.displaySender),
+      subtitle: Text(DateFormat('d MMMM yyyy').format(DateTime.parse(voicemail.date))),
+      onTap: onTap,
+      trailing: PopupMenuButton<_VoicemailMenuAction>(
+        child: Icon(
+        Icons.more_vert,
+        color: Theme.of(context).colorScheme.onSurface,
+      ),
+      padding: EdgeInsets.zero,
+      position: PopupMenuPosition.under,
+      onSelected: (action) {
+        switch (action) {
+          case _VoicemailMenuAction.call:
+          // TODO: реалізуй дзвінок
+            break;
+          case _VoicemailMenuAction.message:
+          // TODO: реалізуй повідомлення
+            break;
+          case _VoicemailMenuAction.markAsNew:
+          // TODO: реалізуй логіку "позначити як нове"
+            break;
+          case _VoicemailMenuAction.delete:
+            if (onDeleted != null) {
+              onDeleted!(voicemail);
+            }
+            break;
+        }
       },
-      onDismissed: onDeleted == null ? null : (_) => onDeleted!(voicemail),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ListTile(
-            title: Text('Voicemail from ${voicemail.sender}'),
-            subtitle: Text('${voicemail.date} • ${voicemail.duration.toStringAsFixed(1)} sec'),
-            onTap: onTap,
+      itemBuilder: (context) =>
+      [
+        PopupMenuItem(
+          value: _VoicemailMenuAction.call,
+          child: ListTile(
+            leading: Icon(Icons.call),
+            title: Text('Call'),
           ),
-          // AudioView(voicemail.attachments.first),
-        ],
-      ),
+        ),
+        PopupMenuItem(
+          value: _VoicemailMenuAction.message,
+          child: ListTile(
+            leading: Icon(Icons.message),
+            title: Text('Message'),
+          ),
+        ),
+        PopupMenuItem(
+          value: _VoicemailMenuAction.markAsNew,
+          child: ListTile(
+            leading: Icon(Icons.mark_email_unread),
+            title: Row(
+              children: [
+                Icon(Icons.circle, size: 8, color: Colors.green),
+                SizedBox(width: 4),
+                Text('Mark as new'),
+              ],
+            ),
+          ),
+        ),
+        PopupMenuItem(
+          value: _VoicemailMenuAction.delete,
+          child: ListTile(
+            leading: Icon(Icons.delete),
+            title: Text('Delete'),
+          ),
+        ),
+      ],
+    ),
+    ),
+    AudioView(
+    voicemail.url!,
+    header: mediaHeaders,
+    ),
+    ],
     );
-  }
+    }
+}
+
+enum _VoicemailMenuAction {
+  call,
+  message,
+  markAsNew,
+  delete,
 }

@@ -12,15 +12,20 @@ part 'voicemail_state.dart';
 part 'voicemail_cubit.freezed.dart';
 
 class VoicemailCubit extends Cubit<VoicemailState> {
-  VoicemailCubit(this._repository) : super(const VoicemailState()) {
+  VoicemailCubit(this._repository, Map<String, String> mediaHeaders)
+      : super(VoicemailState(mediaHeaders: mediaHeaders)) {
     _subscription = _repository.watchVoicemails().listen((items) {
-      emit(VoicemailState(items: items));
+      emit(VoicemailState(items: items, mediaHeaders: state.mediaHeaders));
     });
     loadVoicemails();
   }
 
   final VoicemailRepository _repository;
   late final StreamSubscription<List<Voicemail>> _subscription;
+
+  void cleanDb() {
+    _repository.delete();
+  }
 
   Future<void> loadVoicemails() async {
     try {

@@ -24,5 +24,5 @@ class VoicemailTable extends Table {
 
   TextColumn get type => text()();
 
-  TextColumn get attachmentPath => text()();
+  TextColumn get attachmentPath => text().nullable()();
 }
