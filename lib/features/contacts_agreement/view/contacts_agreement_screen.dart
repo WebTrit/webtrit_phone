@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/app/constants.dart';
+import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/agreement_status.dart';
@@ -56,12 +57,14 @@ class _ContactsAgreementScreenState extends State<ContactsAgreementScreen> {
                           const Spacer(),
                           const SizedBox(height: kInset),
                           AgreementCheckbox(
+                            key: contactsAgreementCheckboxKey,
                             agreementAccepted: agreementStatus.isAccepted,
                             onChanged: _handleAgreementStatusChange,
                             text: context.l10n.contacts_agreement_checkbox_text,
                           ),
                           const SizedBox(height: kInset / 2),
                           OutlinedButton(
+                            key: contactsAgreementAcceptButtonKey,
                             onPressed: _submitAgreement,
                             style: elevatedButtonStyles?.primary,
                             child: Text(context.l10n.contacts_agreement_button_text),

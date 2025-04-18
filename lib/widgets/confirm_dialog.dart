@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:webtrit_phone/app/keys.dart';
 
 import 'package:webtrit_phone/l10n/l10n.dart';
 
@@ -68,11 +69,13 @@ class ConfirmDialog extends StatelessWidget {
       content: Text(content),
       actions: [
         TextButton(
+          key: confirmDialogNoButtonKey,
           onPressed: () => Navigator.of(context).pop(false),
           style: localStyle.activeButtonStyle1,
           child: Text(context.l10n.alertDialogActions_no),
         ),
         TextButton(
+          key: confirmDialogYesButtonKey,
           onPressed: () => Navigator.of(context).pop(true),
           style: dangerous ? localStyle.activeButtonStyle2 : localStyle.defaultButtonStyle,
           child: Text(context.l10n.alertDialogActions_yes),

@@ -30,6 +30,8 @@ class SmsOutboxWorker {
     /// Continuously processes messages, edits, deletes, and read cursors from the outbox repository
     /// until the worker is disposed. The loop runs every second.
     Future.doWhile(() async {
+      if (_disposed) return false;
+
       final messages = await _outboxRepository.getOutboxMessages();
       await Future.forEach(messages, (entry) => _processNewMessage(entry));
 
@@ -39,7 +41,6 @@ class SmsOutboxWorker {
       final cursors = await _outboxRepository.getOutboxReadCursors();
       await Future.forEach(cursors, (entry) => _processReadCursor(entry));
 
-      if (_disposed) return false;
       await Future.delayed(const Duration(seconds: 1));
       return true;
     });

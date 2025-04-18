@@ -30,8 +30,8 @@ class _MessagingShellState extends State<MessagingShell> {
 
     /// Init messaging feature watcher
     Future.doWhile(() async {
-      syncMessaging();
       if (!mounted) return false;
+      syncMessaging();
       return await Future.delayed(const Duration(seconds: 5), () => true);
     });
   }

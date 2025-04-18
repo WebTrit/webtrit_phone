@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:webtrit_phone/app/constants.dart';
+import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 
@@ -82,6 +83,7 @@ class PermissionTips extends StatelessWidget {
           ),
           const SizedBox(height: kInset / 4),
           OutlinedButton(
+            key: permissionTipsButtonKey,
             onPressed: () => Navigator.of(context).pop(),
             style: elevatedButtonStyles?.primary,
             child: Text(context.l10n.permission_manufacturer_Button_gotIt),
