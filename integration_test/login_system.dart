@@ -32,23 +32,20 @@ main() {
     await secureStorage.deleteToken();
   });
 
-  const emailCredential = IntegrationTestEnvironmentConfig.LOGIN_TEST_EMAIL_CREDENTIAL;
-  const emailVerifyCredential = IntegrationTestEnvironmentConfig.LOGIN_TEST_EMAIL_VERIFY_CREDENTIAL;
-  final hasEmailCredentials = (emailCredential != null && emailCredential.isNotEmpty) &&
-      (emailVerifyCredential != null && emailVerifyCredential.isNotEmpty);
+  const emailCredential = IntegrationTestEnvironmentConfig.EMAIL_CREDENTIAL;
+  const emailVerifyCredential = IntegrationTestEnvironmentConfig.EMAIL_VERIFY_CREDENTIAL;
+  final hasEmailCredentials = emailCredential.isNotEmpty && emailVerifyCredential.isNotEmpty;
 
-  const otpCredential = IntegrationTestEnvironmentConfig.LOGIN_TEST_OTP_CREDENTIAL;
-  const otpVerifyCredential = IntegrationTestEnvironmentConfig.LOGIN_TEST_OTP_VERIFY_CREDENTIAL;
-  final hasOtpCredentials = (otpCredential != null && otpCredential.isNotEmpty) &&
-      (otpVerifyCredential != null && otpVerifyCredential.isNotEmpty);
+  const otpCredential = IntegrationTestEnvironmentConfig.OTP_CREDENTIAL;
+  const otpVerifyCredential = IntegrationTestEnvironmentConfig.OTP_VERIFY_CREDENTIAL;
+  final hasOtpCredentials = otpCredential.isNotEmpty && otpVerifyCredential.isNotEmpty;
 
-  const passwordUserCredential = IntegrationTestEnvironmentConfig.LOGIN_TEST_PASSWORD_USER_CREDENTIAL;
-  const passwordPasswordCredential = IntegrationTestEnvironmentConfig.LOGIN_TEST_PASSWORD_PASSWORD_CREDENTIAL;
-  final hasPasswordCredentials = (passwordUserCredential != null && passwordUserCredential.isNotEmpty) &&
-      (passwordPasswordCredential != null && passwordPasswordCredential.isNotEmpty);
+  const passwordUserCredential = IntegrationTestEnvironmentConfig.PASSWORD_USER_CREDENTIAL;
+  const passwordPasswordCredential = IntegrationTestEnvironmentConfig.PASSWORD_PASSWORD_CREDENTIAL;
+  final hasPasswordCredentials = passwordUserCredential.isNotEmpty && passwordPasswordCredential.isNotEmpty;
 
-  const customCoreUrl = IntegrationTestEnvironmentConfig.LOGIN_TEST_CUSTOM_CORE_URL;
-  final hasCustomCoreUrl = customCoreUrl != null && customCoreUrl.isNotEmpty;
+  const customCoreUrl = IntegrationTestEnvironmentConfig.CUSTOM_CORE_URL;
+  final hasCustomCoreUrl = customCoreUrl.isNotEmpty;
 
   if (hasEmailCredentials) {
     testWidgets(

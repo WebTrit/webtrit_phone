@@ -6,7 +6,7 @@ Future<void> customCoreSignInProceed(WidgetTester tester) async {
   final urlButton = find.byKey(loginModeScreenUrlButtonKey);
   final coreUrlInput = find.byKey(coreUrlInputKey);
   final coreUrlButton = find.byKey(coreUrlButtonKey);
-  final testCoreUrl = IntegrationTestEnvironmentConfig.LOGIN_TEST_CUSTOM_CORE_URL!;
+  const testCoreUrl = IntegrationTestEnvironmentConfig.CUSTOM_CORE_URL;
 
   await tester.tap(urlButton, warnIfMissed: true);
   await tester.pumpAndSettle();
