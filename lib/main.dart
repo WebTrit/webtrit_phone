@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -7,21 +10,52 @@ import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
 
 import 'package:webtrit_phone/app/app.dart';
+import 'package:webtrit_phone/app/app_bloc_observer.dart';
 import 'package:webtrit_phone/bootstrap.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
-import 'package:webtrit_phone/utils/utils.dart';
 
 void main() {
-  bootstrap(() async {
-    final rootLogger = Logger.root;
-    final logRecordsRepository = LogRecordsRepository()..attachToLogger(rootLogger);
-    final appAnalyticsRepository = AppAnalyticsRepository(instance: FirebaseAnalytics.instance);
-    rootLogger.onRecord.listen((record) => FirebaseCrashlytics.instance.log(record.toString()));
+  final logger = Logger('run_app');
 
-    final applicationDocumentsPath = await getApplicationDocumentsPath();
+  runZonedGuarded(
+    () async {
+      WidgetsFlutterBinding.ensureInitialized();
 
+      await bootstrap();
+
+      if (!kIsWeb && kDebugMode) {
+        FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(false);
+        await FirebaseCrashlytics.instance.deleteUnsentReports();
+      }
+
+      FlutterError.onError = (details) {
+        logger.severe('FlutterError', details.exception, details.stack);
+        if (!kIsWeb && !kDebugMode) {
+          FirebaseCrashlytics.instance.recordFlutterFatalError(details);
+        }
+      };
+
+      Logger.root.onRecord.listen((record) => FirebaseCrashlytics.instance.log(record.toString()));
+
+      Bloc.observer = AppBlocObserver();
+      runApp(const RootApp());
+    },
+    (error, stackTrace) {
+      logger.severe('runZonedGuarded', error, stackTrace);
+      if (!kIsWeb) {
+        FirebaseCrashlytics.instance.recordError(error, stackTrace, fatal: true);
+      }
+    },
+  );
+}
+
+class RootApp extends StatelessWidget {
+  const RootApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
         Provider<AppInfo>(
@@ -63,7 +97,7 @@ void main() {
           create: (context) {
             final appDatabase = _AppDatabaseWithAppLifecycleStateObserver(
               createAppDatabaseConnection(
-                applicationDocumentsPath,
+                AppPath().applicationDocumentsPath,
                 'db.sqlite',
                 logStatements: EnvironmentConfig.DATABASE_LOG_STATEMENTS,
               ),
@@ -90,8 +124,8 @@ void main() {
       ],
       child: MultiRepositoryProvider(
         providers: [
-          RepositoryProvider.value(value: logRecordsRepository),
-          RepositoryProvider.value(value: appAnalyticsRepository),
+          RepositoryProvider.value(value: LogRecordsRepository()..attachToLogger(Logger.root)),
+          RepositoryProvider.value(value: AppAnalyticsRepository(instance: FirebaseAnalytics.instance)),
         ],
         child: Builder(
           builder: (context) {
@@ -106,7 +140,7 @@ void main() {
         ),
       ),
     );
-  });
+  }
 }
 
 class _AppDatabaseWithAppLifecycleStateObserver extends AppDatabase with WidgetsBindingObserver {

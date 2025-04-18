@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/app/constants.dart';
+import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
@@ -44,6 +45,7 @@ class LoginModeSelectScreen extends StatelessWidget {
             actions: isDemoModeEnabled
                 ? [
                     IconButton(
+                      key: loginModeScreenUrlButtonKey,
                       icon: Icon(
                         Icons.link,
                         // color set here because of https://github.com/flutter/flutter/issues/110878
@@ -70,6 +72,7 @@ class LoginModeSelectScreen extends StatelessWidget {
                 const Spacer(),
                 const Spacer(),
                 ElevatedButton(
+                  key: loginModeScreenSignUpButtonKey,
                   onPressed: state.processing ? null : () => _onActionPressed(context, isDemoModeEnabled),
                   style: elevatedButtonStyles?.getStyle(localStyle?.signUpTypeButton),
                   child: !state.processing

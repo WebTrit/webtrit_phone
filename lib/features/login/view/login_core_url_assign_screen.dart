@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/app/constants.dart';
+import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/theme/theme.dart';
@@ -52,6 +53,7 @@ class LoginCoreUrlAssignScreen extends StatelessWidget {
                         const SizedBox(height: kInset / 2),
                       ],
                       TextFormField(
+                        key: coreUrlInputKey,
                         enabled: !state.processing,
                         initialValue: state.coreUrlInput.value,
                         decoration: InputDecoration(
@@ -76,6 +78,7 @@ class LoginCoreUrlAssignScreen extends StatelessWidget {
                       const Spacer(),
                       const SizedBox(height: kInset),
                       ElevatedButton(
+                        key: coreUrlButtonKey,
                         onPressed: state.processing || !state.coreUrlInput.isValid
                             ? null
                             : () => _onCoreUrlAssignSubmitted(context),

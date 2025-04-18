@@ -6,7 +6,7 @@ import 'package:logging/logging.dart';
 
 import 'package:webtrit_phone/utils/utils.dart';
 
-final logger = Logger('SessionCleanupWorker');
+final _logger = Logger('SessionCleanupWorker');
 
 class SessionCleanupWorker {
   static late SessionCleanupWorker _instance;
@@ -44,9 +44,9 @@ class SessionCleanupWorker {
   }
 
   Future<void> retryFailedSessions() async {
-    logger.info('Retrying failed sessions');
+    _logger.info('Retrying failed sessions');
     final keys = await _requestStorage.getRequestKeys();
-    logger.info('Found ${keys.length} failed sessions');
+    _logger.info('Found ${keys.length} failed sessions');
 
     for (final key in keys) {
       await _processFailedSession(key);
@@ -75,7 +75,7 @@ class SessionCleanupWorker {
       await defaultCreateWebtritApiClient(uri.toString(), '').deleteSession(token);
       await _requestStorage.removeFailedSession(key);
     } catch (e) {
-      logger.severe('Session retry failed: $e');
+      _logger.severe('Session retry failed: $e');
       sessionData[RequestStorage.attemptsKey] = (sessionData[RequestStorage.attemptsKey] as int) + 1;
       await _requestStorage.updateFailedSession(key, sessionData);
     }

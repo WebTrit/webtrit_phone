@@ -13,3 +13,4 @@ export 'package_info.dart';
 export 'platform_info.dart';
 export 'secure_storage.dart';
 export 'session_cleanup_worker.dart';
+export 'app_path.dart';
