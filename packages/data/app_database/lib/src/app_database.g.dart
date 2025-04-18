@@ -18,8 +18,6 @@ class $ContactsTableTable extends ContactsTable
       requiredDuringInsert: false,
       defaultConstraints:
           GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
-  static const VerificationMeta _sourceTypeMeta =
-      const VerificationMeta('sourceType');
   @override
   late final GeneratedColumnWithTypeConverter<ContactSourceTypeEnum, int>
       sourceType = GeneratedColumn<int>('source_type', aliasedName, false,
@@ -123,7 +121,6 @@ class $ContactsTableTable extends ContactsTable
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
-    context.handle(_sourceTypeMeta, const VerificationResult.success());
     if (data.containsKey('source_id')) {
       context.handle(_sourceIdMeta,
           sourceId.isAcceptableOrUnknown(data['source_id']!, _sourceIdMeta));
@@ -1331,8 +1328,6 @@ class $CallLogsTableTable extends CallLogsTable
       requiredDuringInsert: false,
       defaultConstraints:
           GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
-  static const VerificationMeta _directionMeta =
-      const VerificationMeta('direction');
   @override
   late final GeneratedColumnWithTypeConverter<CallLogDirectionEnum, int>
       direction = GeneratedColumn<int>('direction', aliasedName, false,
@@ -1389,7 +1384,6 @@ class $CallLogsTableTable extends CallLogsTable
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
-    context.handle(_directionMeta, const VerificationResult.success());
     if (data.containsKey('number')) {
       context.handle(_numberMeta,
           number.isAcceptableOrUnknown(data['number']!, _numberMeta));
@@ -1942,7 +1936,6 @@ class $ChatsTableTable extends ChatsTable
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
       'id', aliasedName, false,
       type: DriftSqlType.int, requiredDuringInsert: false);
-  static const VerificationMeta _typeMeta = const VerificationMeta('type');
   @override
   late final GeneratedColumnWithTypeConverter<ChatTypeEnum, String> type =
       GeneratedColumn<String>('type', aliasedName, false,
@@ -1981,7 +1974,6 @@ class $ChatsTableTable extends ChatsTable
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
-    context.handle(_typeMeta, const VerificationResult.success());
     if (data.containsKey('name')) {
       context.handle(
           _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
@@ -2261,8 +2253,6 @@ class $ChatMembersTableTable extends ChatMembersTable
   late final GeneratedColumn<String> userId = GeneratedColumn<String>(
       'user_id', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _groupAuthoritiesMeta =
-      const VerificationMeta('groupAuthorities');
   @override
   late final GeneratedColumnWithTypeConverter<GroupAuthoritiesEnum?, String>
       groupAuthorities = GeneratedColumn<String>(
@@ -2297,7 +2287,6 @@ class $ChatMembersTableTable extends ChatMembersTable
     } else if (isInserting) {
       context.missing(_userIdMeta);
     }
-    context.handle(_groupAuthoritiesMeta, const VerificationResult.success());
     return context;
   }
 
@@ -3150,8 +3139,6 @@ class $ChatMessageSyncCursorTableTable extends ChatMessageSyncCursorTable
       requiredDuringInsert: true,
       defaultConstraints: GeneratedColumn.constraintIsAlways(
           'REFERENCES chats (id) ON DELETE CASCADE'));
-  static const VerificationMeta _cursorTypeMeta =
-      const VerificationMeta('cursorType');
   @override
   late final GeneratedColumnWithTypeConverter<MessageSyncCursorTypeEnum, String>
       cursorType = GeneratedColumn<String>('cursor_type', aliasedName, false,
@@ -3183,7 +3170,6 @@ class $ChatMessageSyncCursorTableTable extends ChatMessageSyncCursorTable
     } else if (isInserting) {
       context.missing(_chatIdMeta);
     }
-    context.handle(_cursorTypeMeta, const VerificationResult.success());
     if (data.containsKey('timestamp_usec')) {
       context.handle(
           _timestampUsecMeta,
@@ -5264,8 +5250,6 @@ class $SmsMessagesTableTable extends SmsMessagesTable
   late final GeneratedColumn<String> toPhoneNumber = GeneratedColumn<String>(
       'to_phone_number', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _sendingStatusMeta =
-      const VerificationMeta('sendingStatus');
   @override
   late final GeneratedColumnWithTypeConverter<SmsSendingStatusEnum, String>
       sendingStatus = GeneratedColumn<String>(
@@ -5360,7 +5344,6 @@ class $SmsMessagesTableTable extends SmsMessagesTable
     } else if (isInserting) {
       context.missing(_toPhoneNumberMeta);
     }
-    context.handle(_sendingStatusMeta, const VerificationResult.success());
     if (data.containsKey('content')) {
       context.handle(_contentMeta,
           content.isAcceptableOrUnknown(data['content']!, _contentMeta));
@@ -5826,8 +5809,6 @@ class $SmsMessageSyncCursorTableTable extends SmsMessageSyncCursorTable
       requiredDuringInsert: true,
       defaultConstraints: GeneratedColumn.constraintIsAlways(
           'REFERENCES sms_conversations (id) ON DELETE CASCADE'));
-  static const VerificationMeta _cursorTypeMeta =
-      const VerificationMeta('cursorType');
   @override
   late final GeneratedColumnWithTypeConverter<SmsSyncCursorTypeEnum, String>
       cursorType = GeneratedColumn<String>('cursor_type', aliasedName, false,
@@ -5862,7 +5843,6 @@ class $SmsMessageSyncCursorTableTable extends SmsMessageSyncCursorTable
     } else if (isInserting) {
       context.missing(_conversationIdMeta);
     }
-    context.handle(_cursorTypeMeta, const VerificationResult.success());
     if (data.containsKey('timestamp_usec')) {
       context.handle(
           _timestampUsecMeta,
@@ -8987,7 +8967,7 @@ final class $$ChatsTableTableReferences
   $$ChatMembersTableTableProcessedTableManager get chatMembersTableRefs {
     final manager =
         $$ChatMembersTableTableTableManager($_db, $_db.chatMembersTable)
-            .filter((f) => f.chatId.id($_item.id));
+            .filter((f) => f.chatId.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache =
         $_typedResult.readTableOrNull(_chatMembersTableRefsTable($_db));
@@ -9004,7 +8984,7 @@ final class $$ChatsTableTableReferences
   $$ChatMessagesTableTableProcessedTableManager get chatMessagesTableRefs {
     final manager =
         $$ChatMessagesTableTableTableManager($_db, $_db.chatMessagesTable)
-            .filter((f) => f.chatId.id($_item.id));
+            .filter((f) => f.chatId.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache =
         $_typedResult.readTableOrNull(_chatMessagesTableRefsTable($_db));
@@ -9023,7 +9003,7 @@ final class $$ChatsTableTableReferences
       get chatMessageSyncCursorTableRefs {
     final manager = $$ChatMessageSyncCursorTableTableTableManager(
             $_db, $_db.chatMessageSyncCursorTable)
-        .filter((f) => f.chatId.id($_item.id));
+        .filter((f) => f.chatId.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache = $_typedResult
         .readTableOrNull(_chatMessageSyncCursorTableRefsTable($_db));
@@ -9042,7 +9022,7 @@ final class $$ChatsTableTableReferences
       get chatMessageReadCursorTableRefs {
     final manager = $$ChatMessageReadCursorTableTableTableManager(
             $_db, $_db.chatMessageReadCursorTable)
-        .filter((f) => f.chatId.id($_item.id));
+        .filter((f) => f.chatId.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache = $_typedResult
         .readTableOrNull(_chatMessageReadCursorTableRefsTable($_db));
@@ -9061,7 +9041,7 @@ final class $$ChatsTableTableReferences
       get chatOutboxMessageTableRefs {
     final manager = $$ChatOutboxMessageTableTableTableManager(
             $_db, $_db.chatOutboxMessageTable)
-        .filter((f) => f.chatId.id($_item.id));
+        .filter((f) => f.chatId.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache =
         $_typedResult.readTableOrNull(_chatOutboxMessageTableRefsTable($_db));
@@ -9080,7 +9060,7 @@ final class $$ChatsTableTableReferences
       get chatOutboxMessageEditTableRefs {
     final manager = $$ChatOutboxMessageEditTableTableTableManager(
             $_db, $_db.chatOutboxMessageEditTable)
-        .filter((f) => f.chatId.id($_item.id));
+        .filter((f) => f.chatId.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache = $_typedResult
         .readTableOrNull(_chatOutboxMessageEditTableRefsTable($_db));
@@ -9099,7 +9079,7 @@ final class $$ChatsTableTableReferences
       get chatOutboxMessageDeleteTableRefs {
     final manager = $$ChatOutboxMessageDeleteTableTableTableManager(
             $_db, $_db.chatOutboxMessageDeleteTable)
-        .filter((f) => f.chatId.id($_item.id));
+        .filter((f) => f.chatId.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache = $_typedResult
         .readTableOrNull(_chatOutboxMessageDeleteTableRefsTable($_db));
@@ -9118,7 +9098,7 @@ final class $$ChatsTableTableReferences
       get chatOutboxReadCursorsTableRefs {
     final manager = $$ChatOutboxReadCursorsTableTableTableManager(
             $_db, $_db.chatOutboxReadCursorsTable)
-        .filter((f) => f.chatId.id($_item.id));
+        .filter((f) => f.chatId.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache = $_typedResult
         .readTableOrNull(_chatOutboxReadCursorsTableRefsTable($_db));
@@ -9673,7 +9653,8 @@ class $$ChatsTableTableTableManager extends RootTableManager<
               getPrefetchedDataCallback: (items) async {
                 return [
                   if (chatMembersTableRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<ChatData, $ChatsTableTable,
+                            ChatMemberData>(
                         currentTable: table,
                         referencedTable: $$ChatsTableTableReferences
                             ._chatMembersTableRefsTable(db),
@@ -9685,7 +9666,8 @@ class $$ChatsTableTableTableManager extends RootTableManager<
                             referencedItems.where((e) => e.chatId == item.id),
                         typedResults: items),
                   if (chatMessagesTableRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<ChatData, $ChatsTableTable,
+                            ChatMessageData>(
                         currentTable: table,
                         referencedTable: $$ChatsTableTableReferences
                             ._chatMessagesTableRefsTable(db),
@@ -9697,7 +9679,8 @@ class $$ChatsTableTableTableManager extends RootTableManager<
                             referencedItems.where((e) => e.chatId == item.id),
                         typedResults: items),
                   if (chatMessageSyncCursorTableRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<ChatData, $ChatsTableTable,
+                            ChatMessageSyncCursorData>(
                         currentTable: table,
                         referencedTable: $$ChatsTableTableReferences
                             ._chatMessageSyncCursorTableRefsTable(db),
@@ -9709,7 +9692,8 @@ class $$ChatsTableTableTableManager extends RootTableManager<
                             referencedItems.where((e) => e.chatId == item.id),
                         typedResults: items),
                   if (chatMessageReadCursorTableRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<ChatData, $ChatsTableTable,
+                            ChatMessageReadCursorData>(
                         currentTable: table,
                         referencedTable: $$ChatsTableTableReferences
                             ._chatMessageReadCursorTableRefsTable(db),
@@ -9721,7 +9705,7 @@ class $$ChatsTableTableTableManager extends RootTableManager<
                             referencedItems.where((e) => e.chatId == item.id),
                         typedResults: items),
                   if (chatOutboxMessageTableRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<ChatData, $ChatsTableTable, ChatOutboxMessageData>(
                         currentTable: table,
                         referencedTable: $$ChatsTableTableReferences
                             ._chatOutboxMessageTableRefsTable(db),
@@ -9733,7 +9717,8 @@ class $$ChatsTableTableTableManager extends RootTableManager<
                             referencedItems.where((e) => e.chatId == item.id),
                         typedResults: items),
                   if (chatOutboxMessageEditTableRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<ChatData, $ChatsTableTable,
+                            ChatOutboxMessageEditData>(
                         currentTable: table,
                         referencedTable: $$ChatsTableTableReferences
                             ._chatOutboxMessageEditTableRefsTable(db),
@@ -9745,7 +9730,8 @@ class $$ChatsTableTableTableManager extends RootTableManager<
                             referencedItems.where((e) => e.chatId == item.id),
                         typedResults: items),
                   if (chatOutboxMessageDeleteTableRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<ChatData, $ChatsTableTable,
+                            ChatOutboxMessageDeleteData>(
                         currentTable: table,
                         referencedTable: $$ChatsTableTableReferences
                             ._chatOutboxMessageDeleteTableRefsTable(db),
@@ -9757,7 +9743,8 @@ class $$ChatsTableTableTableManager extends RootTableManager<
                             referencedItems.where((e) => e.chatId == item.id),
                         typedResults: items),
                   if (chatOutboxReadCursorsTableRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<ChatData, $ChatsTableTable,
+                            ChatOutboxReadCursorData>(
                         currentTable: table,
                         referencedTable: $$ChatsTableTableReferences
                             ._chatOutboxReadCursorsTableRefsTable(db),
@@ -9820,8 +9807,10 @@ final class $$ChatMembersTableTableReferences extends BaseReferences<
           $_aliasNameGenerator(db.chatMembersTable.chatId, db.chatsTable.id));
 
   $$ChatsTableTableProcessedTableManager get chatId {
+    final $_column = $_itemColumn<int>('chat_id')!;
+
     final manager = $$ChatsTableTableTableManager($_db, $_db.chatsTable)
-        .filter((f) => f.id($_item.chatId));
+        .filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_chatIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -10097,8 +10086,10 @@ final class $$ChatMessagesTableTableReferences extends BaseReferences<
           $_aliasNameGenerator(db.chatMessagesTable.chatId, db.chatsTable.id));
 
   $$ChatsTableTableProcessedTableManager get chatId {
+    final $_column = $_itemColumn<int>('chat_id')!;
+
     final manager = $$ChatsTableTableTableManager($_db, $_db.chatsTable)
-        .filter((f) => f.id($_item.chatId));
+        .filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_chatIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -10467,8 +10458,10 @@ final class $$ChatMessageSyncCursorTableTableReferences extends BaseReferences<
           db.chatMessageSyncCursorTable.chatId, db.chatsTable.id));
 
   $$ChatsTableTableProcessedTableManager get chatId {
+    final $_column = $_itemColumn<int>('chat_id')!;
+
     final manager = $$ChatsTableTableTableManager($_db, $_db.chatsTable)
-        .filter((f) => f.id($_item.chatId));
+        .filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_chatIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -10728,8 +10721,10 @@ final class $$ChatMessageReadCursorTableTableReferences extends BaseReferences<
           db.chatMessageReadCursorTable.chatId, db.chatsTable.id));
 
   $$ChatsTableTableProcessedTableManager get chatId {
+    final $_column = $_itemColumn<int>('chat_id')!;
+
     final manager = $$ChatsTableTableTableManager($_db, $_db.chatsTable)
-        .filter((f) => f.id($_item.chatId));
+        .filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_chatIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -10993,9 +10988,10 @@ final class $$ChatOutboxMessageTableTableReferences extends BaseReferences<
           db.chatOutboxMessageTable.chatId, db.chatsTable.id));
 
   $$ChatsTableTableProcessedTableManager? get chatId {
-    if ($_item.chatId == null) return null;
+    final $_column = $_itemColumn<int>('chat_id');
+    if ($_column == null) return null;
     final manager = $$ChatsTableTableTableManager($_db, $_db.chatsTable)
-        .filter((f) => f.id($_item.chatId!));
+        .filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_chatIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -11316,8 +11312,10 @@ final class $$ChatOutboxMessageEditTableTableReferences extends BaseReferences<
           db.chatOutboxMessageEditTable.chatId, db.chatsTable.id));
 
   $$ChatsTableTableProcessedTableManager get chatId {
+    final $_column = $_itemColumn<int>('chat_id')!;
+
     final manager = $$ChatsTableTableTableManager($_db, $_db.chatsTable)
-        .filter((f) => f.id($_item.chatId));
+        .filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_chatIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -11594,8 +11592,10 @@ final class $$ChatOutboxMessageDeleteTableTableReferences
           db.chatOutboxMessageDeleteTable.chatId, db.chatsTable.id));
 
   $$ChatsTableTableProcessedTableManager get chatId {
+    final $_column = $_itemColumn<int>('chat_id')!;
+
     final manager = $$ChatsTableTableTableManager($_db, $_db.chatsTable)
-        .filter((f) => f.id($_item.chatId));
+        .filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_chatIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -11860,8 +11860,10 @@ final class $$ChatOutboxReadCursorsTableTableReferences extends BaseReferences<
           db.chatOutboxReadCursorsTable.chatId, db.chatsTable.id));
 
   $$ChatsTableTableProcessedTableManager get chatId {
+    final $_column = $_itemColumn<int>('chat_id')!;
+
     final manager = $$ChatsTableTableTableManager($_db, $_db.chatsTable)
-        .filter((f) => f.id($_item.chatId));
+        .filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_chatIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -12113,9 +12115,9 @@ final class $$SmsConversationsTableTableReferences extends BaseReferences<
                   db.smsMessagesTable.conversationId));
 
   $$SmsMessagesTableTableProcessedTableManager get smsMessagesTableRefs {
-    final manager =
-        $$SmsMessagesTableTableTableManager($_db, $_db.smsMessagesTable)
-            .filter((f) => f.conversationId.id($_item.id));
+    final manager = $$SmsMessagesTableTableTableManager(
+            $_db, $_db.smsMessagesTable)
+        .filter((f) => f.conversationId.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache =
         $_typedResult.readTableOrNull(_smsMessagesTableRefsTable($_db));
@@ -12134,7 +12136,7 @@ final class $$SmsConversationsTableTableReferences extends BaseReferences<
       get smsMessageSyncCursorTableRefs {
     final manager = $$SmsMessageSyncCursorTableTableTableManager(
             $_db, $_db.smsMessageSyncCursorTable)
-        .filter((f) => f.conversationId.id($_item.id));
+        .filter((f) => f.conversationId.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache = $_typedResult
         .readTableOrNull(_smsMessageSyncCursorTableRefsTable($_db));
@@ -12153,7 +12155,7 @@ final class $$SmsConversationsTableTableReferences extends BaseReferences<
       get smsMessageReadCursorTableRefs {
     final manager = $$SmsMessageReadCursorTableTableTableManager(
             $_db, $_db.smsMessageReadCursorTable)
-        .filter((f) => f.conversationId.id($_item.id));
+        .filter((f) => f.conversationId.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache = $_typedResult
         .readTableOrNull(_smsMessageReadCursorTableRefsTable($_db));
@@ -12172,7 +12174,7 @@ final class $$SmsConversationsTableTableReferences extends BaseReferences<
       get smsOutboxMessagesTableRefs {
     final manager = $$SmsOutboxMessagesTableTableTableManager(
             $_db, $_db.smsOutboxMessagesTable)
-        .filter((f) => f.conversationId.id($_item.id));
+        .filter((f) => f.conversationId.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache =
         $_typedResult.readTableOrNull(_smsOutboxMessagesTableRefsTable($_db));
@@ -12191,7 +12193,7 @@ final class $$SmsConversationsTableTableReferences extends BaseReferences<
       get smsOutboxMessageDeleteTableRefs {
     final manager = $$SmsOutboxMessageDeleteTableTableTableManager(
             $_db, $_db.smsOutboxMessageDeleteTable)
-        .filter((f) => f.conversationId.id($_item.id));
+        .filter((f) => f.conversationId.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache = $_typedResult
         .readTableOrNull(_smsOutboxMessageDeleteTableRefsTable($_db));
@@ -12210,7 +12212,7 @@ final class $$SmsConversationsTableTableReferences extends BaseReferences<
       get smsOutboxReadCursorsTableRefs {
     final manager = $$SmsOutboxReadCursorsTableTableTableManager(
             $_db, $_db.smsOutboxReadCursorsTable)
-        .filter((f) => f.conversationId.id($_item.id));
+        .filter((f) => f.conversationId.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache = $_typedResult
         .readTableOrNull(_smsOutboxReadCursorsTableRefsTable($_db));
@@ -12670,7 +12672,8 @@ class $$SmsConversationsTableTableTableManager extends RootTableManager<
               getPrefetchedDataCallback: (items) async {
                 return [
                   if (smsMessagesTableRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<SmsConversationData,
+                            $SmsConversationsTableTable, SmsMessageData>(
                         currentTable: table,
                         referencedTable: $$SmsConversationsTableTableReferences
                             ._smsMessagesTableRefsTable(db),
@@ -12683,7 +12686,10 @@ class $$SmsConversationsTableTableTableManager extends RootTableManager<
                                 .where((e) => e.conversationId == item.id),
                         typedResults: items),
                   if (smsMessageSyncCursorTableRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<
+                            SmsConversationData,
+                            $SmsConversationsTableTable,
+                            SmsMessageSyncCursorData>(
                         currentTable: table,
                         referencedTable: $$SmsConversationsTableTableReferences
                             ._smsMessageSyncCursorTableRefsTable(db),
@@ -12696,7 +12702,10 @@ class $$SmsConversationsTableTableTableManager extends RootTableManager<
                                 .where((e) => e.conversationId == item.id),
                         typedResults: items),
                   if (smsMessageReadCursorTableRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<
+                            SmsConversationData,
+                            $SmsConversationsTableTable,
+                            SmsMessageReadCursorData>(
                         currentTable: table,
                         referencedTable: $$SmsConversationsTableTableReferences
                             ._smsMessageReadCursorTableRefsTable(db),
@@ -12709,7 +12718,8 @@ class $$SmsConversationsTableTableTableManager extends RootTableManager<
                                 .where((e) => e.conversationId == item.id),
                         typedResults: items),
                   if (smsOutboxMessagesTableRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<SmsConversationData,
+                            $SmsConversationsTableTable, SmsOutboxMessageData>(
                         currentTable: table,
                         referencedTable: $$SmsConversationsTableTableReferences
                             ._smsOutboxMessagesTableRefsTable(db),
@@ -12722,7 +12732,10 @@ class $$SmsConversationsTableTableTableManager extends RootTableManager<
                                 .where((e) => e.conversationId == item.id),
                         typedResults: items),
                   if (smsOutboxMessageDeleteTableRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<
+                            SmsConversationData,
+                            $SmsConversationsTableTable,
+                            SmsOutboxMessageDeleteData>(
                         currentTable: table,
                         referencedTable: $$SmsConversationsTableTableReferences
                             ._smsOutboxMessageDeleteTableRefsTable(db),
@@ -12735,7 +12748,10 @@ class $$SmsConversationsTableTableTableManager extends RootTableManager<
                                 .where((e) => e.conversationId == item.id),
                         typedResults: items),
                   if (smsOutboxReadCursorsTableRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<
+                            SmsConversationData,
+                            $SmsConversationsTableTable,
+                            SmsOutboxReadCursorData>(
                         currentTable: table,
                         referencedTable: $$SmsConversationsTableTableReferences
                             ._smsOutboxReadCursorsTableRefsTable(db),
@@ -12812,9 +12828,11 @@ final class $$SmsMessagesTableTableReferences extends BaseReferences<
           db.smsMessagesTable.conversationId, db.smsConversationsTable.id));
 
   $$SmsConversationsTableTableProcessedTableManager get conversationId {
+    final $_column = $_itemColumn<int>('conversation_id')!;
+
     final manager = $$SmsConversationsTableTableTableManager(
             $_db, $_db.smsConversationsTable)
-        .filter((f) => f.id($_item.conversationId));
+        .filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_conversationIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -13177,9 +13195,11 @@ final class $$SmsMessageSyncCursorTableTableReferences extends BaseReferences<
           db.smsConversationsTable.id));
 
   $$SmsConversationsTableTableProcessedTableManager get conversationId {
+    final $_column = $_itemColumn<int>('conversation_id')!;
+
     final manager = $$SmsConversationsTableTableTableManager(
             $_db, $_db.smsConversationsTable)
-        .filter((f) => f.id($_item.conversationId));
+        .filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_conversationIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -13437,9 +13457,11 @@ final class $$SmsMessageReadCursorTableTableReferences extends BaseReferences<
           db.smsConversationsTable.id));
 
   $$SmsConversationsTableTableProcessedTableManager get conversationId {
+    final $_column = $_itemColumn<int>('conversation_id')!;
+
     final manager = $$SmsConversationsTableTableTableManager(
             $_db, $_db.smsConversationsTable)
-        .filter((f) => f.id($_item.conversationId));
+        .filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_conversationIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -13701,10 +13723,11 @@ final class $$SmsOutboxMessagesTableTableReferences extends BaseReferences<
           db.smsConversationsTable.id));
 
   $$SmsConversationsTableTableProcessedTableManager? get conversationId {
-    if ($_item.conversationId == null) return null;
+    final $_column = $_itemColumn<int>('conversation_id');
+    if ($_column == null) return null;
     final manager = $$SmsConversationsTableTableTableManager(
             $_db, $_db.smsConversationsTable)
-        .filter((f) => f.id($_item.conversationId!));
+        .filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_conversationIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -14015,9 +14038,11 @@ final class $$SmsOutboxMessageDeleteTableTableReferences extends BaseReferences<
           db.smsConversationsTable.id));
 
   $$SmsConversationsTableTableProcessedTableManager get conversationId {
+    final $_column = $_itemColumn<int>('conversation_id')!;
+
     final manager = $$SmsConversationsTableTableTableManager(
             $_db, $_db.smsConversationsTable)
-        .filter((f) => f.id($_item.conversationId));
+        .filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_conversationIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -14283,9 +14308,11 @@ final class $$SmsOutboxReadCursorsTableTableReferences extends BaseReferences<
           db.smsConversationsTable.id));
 
   $$SmsConversationsTableTableProcessedTableManager get conversationId {
+    final $_column = $_itemColumn<int>('conversation_id')!;
+
     final manager = $$SmsConversationsTableTableTableManager(
             $_db, $_db.smsConversationsTable)
-        .filter((f) => f.id($_item.conversationId));
+        .filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_conversationIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
