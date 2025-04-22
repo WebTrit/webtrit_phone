@@ -5,8 +5,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
+import 'package:webtrit_phone/repositories/repositories.dart';
 
+import '../utils/utils.dart';
 import '../bloc/embedded_cubit.dart';
+
 import 'embedded_screen.dart';
 
 @RoutePage()
@@ -23,8 +26,17 @@ class EmbeddedTabPage extends StatelessWidget {
     final bottomMenuManager = context.read<FeatureAccess>().bottomMenuFeature;
     final data = bottomMenuManager.getEmbeddedTabById(id);
 
+    final selfConfigRepository = context.read<SelfConfigRepository>();
+    final secureStorage = context.read<SecureStorage>();
+
+    final embeddedPayloadBuilder = EmbeddedPayloadBuilder(secureStorage);
+
     return BlocProvider(
-      create: (context) => EmbeddedCubit(),
+      create: (context) => EmbeddedCubit(
+        payload: data.data!.payload,
+        selfConfigRepository: selfConfigRepository,
+        embeddedPayloadBuilder: embeddedPayloadBuilder,
+      ),
       child: EmbeddedScreen(
         initialUri: data.data!.uri,
         appBar: AppBar(
