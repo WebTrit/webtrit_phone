@@ -4,6 +4,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/app/constants.dart';
+import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/features/user_agreement/widgets/widgets.dart';
@@ -66,6 +67,7 @@ class _UserAgreementScreenState extends State<UserAgreementScreen> {
                     ),
                     const SizedBox(height: kInset / 2),
                     OutlinedButton(
+                      key: userAgreementAcceptButtonKey,
                       onPressed: agreementStatus.isAccepted ? _submitAgreement : null,
                       style: elevatedButtonStyles?.primary,
                       child: Text(context.l10n.user_agreement_button_text),

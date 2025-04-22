@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 
 import 'package:webtrit_phone/app/constants.dart';
+import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
@@ -63,6 +64,7 @@ class PermissionsScreen extends StatelessWidget {
                 const SizedBox(height: kInset),
                 switch (state) {
                   PermissionsStateInitial() => OutlinedButton(
+                      key: permissionsInitButtonKey,
                       onPressed: () => context.read<PermissionsCubit>().requestPermissions(),
                       style: elevatedButtonStyles?.primary,
                       child: Text(context.l10n.permission_Button_request),

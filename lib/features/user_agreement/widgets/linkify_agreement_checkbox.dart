@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
@@ -26,6 +27,7 @@ class LinkifyAgreementCheckbox extends StatelessWidget {
         Transform.translate(
           offset: const Offset(-8, 0),
           child: Checkbox(
+            key: userAgreementCheckboxKey,
             value: userAgreementAccepted,
             onChanged: (value) => onChanged(value ?? false),
             materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,

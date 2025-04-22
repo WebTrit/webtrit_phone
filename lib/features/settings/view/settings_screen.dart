@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/features/register_status/register_status.dart';
 import 'package:webtrit_phone/features/self_config/self_config.dart';
@@ -76,6 +77,7 @@ class SettingsScreen extends StatelessWidget {
                   ),
                   const ListTileSeparator(),
                   ListTile(
+                    key: settingsLogoutButtonKey,
                     leading: const Icon(Icons.logout),
                     title: Text(context.l10n.settings_ListViewTileTitle_logout),
                     onTap: () async {
