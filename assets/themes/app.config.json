@@ -202,7 +202,7 @@
     },
     {
       "id": 2,
-      "uri": "https://webtrit-app.web.app/example/example_embedded_advertisement.html",
+      "uri": "https://webtrit-app.web.app/example/example_embedded_payload_data.html",
       "toolbar": {
         "showToolbar": false
       }

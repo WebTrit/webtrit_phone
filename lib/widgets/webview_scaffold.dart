@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:webview_flutter/webview_flutter.dart';
+import 'package:logging/logging.dart';
 
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
@@ -12,6 +13,8 @@ import 'package:webtrit_phone/widgets/widgets.dart';
 import 'webview_progress_indicator.dart';
 
 export 'package:webview_flutter/webview_flutter.dart' show JavaScriptMessage;
+
+final _logger = Logger('WebViewScaffold');
 
 class WebViewScaffold extends StatefulWidget {
   const WebViewScaffold({
@@ -24,6 +27,7 @@ class WebViewScaffold extends StatefulWidget {
     this.showToolbar = true,
     this.builder,
     required this.userAgent,
+    this.injectedScriptBuilder,
   });
 
   final Widget? title;
@@ -34,6 +38,14 @@ class WebViewScaffold extends StatefulWidget {
   final Widget? Function(BuildContext context, WebResourceError error, WebViewController controller)? errorBuilder;
   final TransitionBuilder? builder;
   final String userAgent;
+
+  /// Optional builder that returns a JavaScript snippet to be injected into the WebView
+  /// after the page has finished loading or when the widget is updated.
+  ///
+  /// Use this to dynamically provide runtime data (e.g., auth tokens, user session info)
+  /// to the embedded page via JavaScript. The builder is re-evaluated on reloads and updates,
+  /// and the script will only be injected if it has changed since the last injection.
+  final FutureOr<String>? Function()? injectedScriptBuilder;
 
   @override
   State<WebViewScaffold> createState() => _WebViewScaffoldState();
@@ -48,6 +60,8 @@ class _WebViewScaffoldState extends State<WebViewScaffold> {
 
   WebResourceError? _latestError;
   WebResourceError? _currentError;
+
+  String? _injectedScript;
 
   Uri _composeEffectiveInitialUrl() {
     if (!widget.addLocaleNameToQueryParameters) {
@@ -68,6 +82,9 @@ class _WebViewScaffoldState extends State<WebViewScaffold> {
 
     _webViewController = WebViewController();
     () async {
+      // Retrieve and store the initial injected script, if provided, for use after the page loads
+      final injectedScript = await widget.injectedScriptBuilder?.call();
+
       if (!kIsWeb) {
         await Future.wait([
           _webViewController.setUserAgent(widget.userAgent),
@@ -84,6 +101,8 @@ class _WebViewScaffoldState extends State<WebViewScaffold> {
                 setState(() {
                   _currentError = null; // Always reset the current error after page finishes loading
                 });
+
+                unawaited(_injectScriptIfAvailable(injectedScript));
               },
               onProgress: (progress) {
                 _progressStreamController.add(progress);
@@ -129,6 +148,13 @@ class _WebViewScaffoldState extends State<WebViewScaffold> {
       _effectiveInitialUrlCache = effectiveInitialUrl;
       _webViewController.loadRequest(effectiveInitialUrl);
     }
+
+    // Rebuild case: check if a new script is available from the builder,
+    // and inject it into the WebView if it differs from the last injected one.
+    () async {
+      final injectedScript = await widget.injectedScriptBuilder?.call();
+      unawaited(_injectScriptIfAvailable(injectedScript));
+    }();
   }
 
   @override
@@ -182,5 +208,20 @@ class _WebViewScaffoldState extends State<WebViewScaffold> {
         },
       ),
     );
+  }
+
+  // TODO: consider encrypting the injected script to protect sensitive data
+  Future<void> _injectScriptIfAvailable(String? script) async {
+    if (script != null && script.trim().isNotEmpty && script != _injectedScript) {
+      try {
+        await _webViewController.runJavaScript(script);
+        _injectedScript = script;
+        _logger.finest('injected script: $script');
+      } catch (e, st) {
+        _logger.severe('failed to inject script: $e\n$st');
+      }
+    } else {
+      _logger.finest('script unchanged or empty, skipping injection');
+    }
   }
 }

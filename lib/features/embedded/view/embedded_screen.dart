@@ -27,8 +27,13 @@ class EmbeddedScreen extends StatelessWidget {
           initialUri: initialUri,
           showToolbar: false,
           userAgent: UserAgent.of(context),
+          injectedScriptBuilder: () => _buildInjectedScript({}),
         ),
       ),
     );
+  }
+
+  Future<String> _buildInjectedScript(Map<String, dynamic> data) async {
+    return '';
   }
 }
