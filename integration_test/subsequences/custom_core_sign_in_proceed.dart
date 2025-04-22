@@ -1,5 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
+
 import 'package:webtrit_phone/app/keys.dart';
+
 import '../components/integration_test_environment_config.dart';
 
 Future<void> customCoreSignInProceed(WidgetTester tester) async {
