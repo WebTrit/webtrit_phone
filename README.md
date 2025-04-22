@@ -39,7 +39,11 @@ The application offers extensive customization options:
   ```
 * Run specific integration test
   ```bash
-  flutter drive --driver=test_driver/integration_test.dart --target=integration_test/login_system.dart --dart-define-from-file=../dart_define.json --dart-define-from-file=dart_define.integration_test.json 
+  flutter test integration_test/login_system_test.dart --dart-define-from-file=../dart_define.json --dart-define-from-file=dart_define.integration_test.json 
+  ```
+* Or alternatively using specified driver
+  ```bash
+  flutter drive --driver=test_driver/integration_test.dart --target=integration_test/login_system_test.dart --dart-define-from-file=../dart_define.json --dart-define-from-file=dart_define.integration_test.json 
   ```
 
 ### Test variables
