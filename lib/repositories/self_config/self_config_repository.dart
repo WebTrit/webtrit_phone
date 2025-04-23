@@ -28,8 +28,8 @@ class SelfConfigRepository with SelfConfigApiMapper {
 
   Timer? _refreshTimer;
 
-  bool _isFetchingToken = false;
-  bool _isEndpointUnsupported = false;
+  bool _isFetchingExternalPageToken = false;
+  bool _isUnsupportedExternalPageTokenEndpoint = false;
 
   final _externalPageTokenController = StreamController<ExpiringToken>.broadcast();
 
@@ -54,8 +54,8 @@ class SelfConfigRepository with SelfConfigApiMapper {
   }
 
   Future<void> fetchExternalPageToken() async {
-    if (!_isFetchingToken || !_isEndpointUnsupported) {
-      _isFetchingToken = true;
+    if (!_isFetchingExternalPageToken || !_isUnsupportedExternalPageTokenEndpoint) {
+      _isFetchingExternalPageToken = true;
 
       try {
         final requestOptions = RequestOptions.withExtraRetries();
@@ -71,7 +71,7 @@ class SelfConfigRepository with SelfConfigApiMapper {
         _externalPageTokenController.add(externalPageToken);
       } on EndpointNotSupportedException catch (_) {
         // Endpoint is not supported, stop fetching the token
-        _isEndpointUnsupported = true;
+        _isUnsupportedExternalPageTokenEndpoint = true;
         _externalPageTokenController.close();
         _refreshTimer?.cancel();
       } catch (e, st) {
@@ -80,7 +80,7 @@ class SelfConfigRepository with SelfConfigApiMapper {
         _refreshTimer?.cancel();
         _refreshTimer = Timer(const Duration(minutes: 1), fetchExternalPageToken);
       } finally {
-        _isFetchingToken = false;
+        _isFetchingExternalPageToken = false;
         _scheduleTokenRefresh();
       }
     }
@@ -94,7 +94,7 @@ class SelfConfigRepository with SelfConfigApiMapper {
   Future<void> _scheduleTokenRefresh() async {
     // Proceed with scheduling only if the endpoint is known to be unsupported
     // and the stream controller is still open (i.e., not disposed).
-    final schedulerReady = _isEndpointUnsupported && !_externalPageTokenController.isClosed;
+    final schedulerReady = _isUnsupportedExternalPageTokenEndpoint && !_externalPageTokenController.isClosed;
     if (!schedulerReady) return;
 
     // Read the last saved external page token from secure storage.
@@ -117,7 +117,7 @@ class SelfConfigRepository with SelfConfigApiMapper {
   void dispose() {
     _refreshTimer?.cancel();
     _externalPageTokenController.close();
-    _isFetchingToken = false;
+    _isFetchingExternalPageToken = false;
   }
 }
 
