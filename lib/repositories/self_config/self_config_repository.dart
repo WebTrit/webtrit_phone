@@ -11,7 +11,8 @@ import 'package:webtrit_phone/models/self_config.dart';
 
 final _logger = Logger('SelfConfigRepository');
 
-// TODO(Serdun): Handle each error case properly.
+// TODO(Serdun): This repository primarily encapsulates private API methods.
+// Consider renaming it to better reflect its specialized purpose (e.g., PrivateApiRepository).
 class SelfConfigRepository with SelfConfigApiMapper {
   SelfConfigRepository(
     this._webtritApiClient,
