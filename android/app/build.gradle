@@ -32,13 +32,17 @@ if (project.hasProperty('dart-defines')) {
     projectPropertyDartDefines += project.property('dart-defines')
             .split(',')
             .collectEntries { entry ->
-                def pair = new String(entry.decodeBase64(), 'UTF-8').split('=')
+                def decoded = new String(entry.decodeBase64(), 'UTF-8')
+                def pair = decoded.split('=')
+                println("Dart define pair: $pair")
                 if (pair.size() > 1) {
                     [(pair.first()): pair.last()]
                 } else {
                     [(pair.first()): '']
                 }
             }
+} else {
+    println("No dart defines proovided")
 }
 
 def dartDefine = [
@@ -105,6 +109,7 @@ android {
 
         resValue "string", "APP_LINK_DOMAIN", dartDefine.WEBTRIT_APP_LINK_DOMAIN
         resValue "string", "APP_NAME", dartDefine.WEBTRIT_APP_NAME
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     signingConfigs {
@@ -120,6 +125,9 @@ android {
             signingConfig signingConfigs.release
         }
     }
+    buildFeatures {
+        buildConfig = true
+    }
 }
 
 flutter {
@@ -127,5 +135,9 @@ flutter {
 }
 
 dependencies {
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test:runner:1.2.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.2.2'
 }

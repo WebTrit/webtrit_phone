@@ -20,7 +20,7 @@ Future<void> logout(WidgetTester tester) async {
   debugPrint('Logout button tapped');
 
   await tester.tap(confirmButton, warnIfMissed: true);
-  await tester.pumpAndSettle();
+  await tester.pumpAndSettle(const Duration(seconds: 1));
   debugPrint('Confirm dialog button tapped');
 
   expect(find.byType(LoginModeSelectScreen), findsOneWidget);
