@@ -37,8 +37,8 @@ class EmbeddedCubit extends Cubit<EmbeddedState> {
   }
 
   Future<void> _handleTokenRequirement() async {
-    if (!selfConfigRepository.isExternalPageTokenAvailable()) {
-      await selfConfigRepository.getExternalPageToken();
+    if (!(await selfConfigRepository.isExternalPageTokenAvailable())) {
+      await selfConfigRepository.fetchExternalPageToken();
     }
 
     // Subscribes to token updates and rebuilds the payload when a new token is issued.
