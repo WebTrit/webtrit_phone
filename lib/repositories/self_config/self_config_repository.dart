@@ -39,11 +39,8 @@ class SelfConfigRepository with SelfConfigApiMapper {
     try {
       final response = await _webtritApiClient.getSelfConfig(_token);
       return selfConfigFromApi(response);
-    } on RequestFailure catch (e) {
-      if (e.statusCode == 404 || e.statusCode == 501) {
-        return SelfConfig.unsupported();
-      }
-      rethrow;
+    } on EndpointNotSupportedException catch (_) {
+      return SelfConfig.unsupported();
     }
   }
 
