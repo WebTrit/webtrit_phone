@@ -35,5 +35,7 @@ class EndpointNotSupportedException extends RequestFailure {
   EndpointNotSupportedException({
     required super.url,
     required super.requestId,
-  }) : super(statusCode: 404);
+    required super.statusCode,
+    required List<String> recognizedNotSupportedCodes,
+  }) : super();
 }

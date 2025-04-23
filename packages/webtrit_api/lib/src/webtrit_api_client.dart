@@ -136,6 +136,8 @@ class WebtritApiClient {
             throw EndpointNotSupportedException(
               url: tenantUrl,
               requestId: xRequestId,
+              statusCode: httpResponse.statusCode,
+              recognizedNotSupportedCodes: ['404', '501'],
             );
           }
 
