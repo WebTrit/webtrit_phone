@@ -30,3 +30,10 @@ class RequestFailure implements Exception {
     }
   }
 }
+
+class EndpointNotSupportedException extends RequestFailure {
+  EndpointNotSupportedException({
+    required super.url,
+    required super.requestId,
+  }) : super(statusCode: 404);
+}

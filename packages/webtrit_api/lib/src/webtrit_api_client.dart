@@ -128,6 +128,17 @@ class WebtritApiClient {
             {'errors': {'detail': _}} => null,
             _ => ErrorResponse.fromJson(responseDataJson),
           };
+
+          // If the server responds with 404 or 501, it may indicate that a specific private endpoint
+          // is not implemented by the current adapter (e.g., tenant-specific or backend version mismatch).
+          // In such case, throw a dedicated exception to handle unsupported endpoint scenarios gracefully.
+          if (httpResponse.statusCode == 404 || httpResponse.statusCode == 501) {
+            throw EndpointNotSupportedException(
+              url: tenantUrl,
+              requestId: xRequestId,
+            );
+          }
+
           throw RequestFailure(
             url: tenantUrl,
             statusCode: httpResponse.statusCode,
