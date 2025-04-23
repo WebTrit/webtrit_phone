@@ -1,6 +1,7 @@
 export 'active_message_notification.dart';
 export 'agreement_status.dart';
 export 'audio_processing_settings.dart';
+export 'auth/auth.dart';
 export 'call_log_entry.dart';
 export 'call_to_action.dart';
 export 'chat.dart';
@@ -17,6 +18,7 @@ export 'contact.dart';
 export 'contact_email.dart';
 export 'contact_phone.dart';
 export 'contact_source_type.dart';
+export 'embedded/embedded.dart';
 export 'enableble.dart';
 export 'encoding_settings.dart';
 export 'exceptions/exceptions.dart';

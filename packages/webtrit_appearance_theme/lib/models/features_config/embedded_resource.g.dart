@@ -20,6 +20,10 @@ _$EmbeddedResourceImpl _$$EmbeddedResourceImplFromJson(
       metadata: json['metadata'] == null
           ? const Metadata()
           : Metadata.fromJson(json['metadata'] as Map<String, dynamic>),
+      payload: (json['payload'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          const [],
     );
 
 Map<String, dynamic> _$$EmbeddedResourceImplToJson(
@@ -31,6 +35,7 @@ Map<String, dynamic> _$$EmbeddedResourceImplToJson(
       'attributes': instance.attributes,
       'toolbar': instance.toolbar.toJson(),
       'metadata': instance.metadata.toJson(),
+      'payload': instance.payload,
     };
 
 const _$EmbeddedResourceTypeEnumMap = {

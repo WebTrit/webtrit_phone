@@ -102,6 +102,10 @@ class _WebViewScaffoldState extends State<WebViewScaffold> {
                   _currentError = null; // Always reset the current error after page finishes loading
                 });
 
+                // Inject the script after the page has loaded,onPageFinished can be called multiple times so need clear the injected script for correct injection
+                _injectedScript = null;
+
+                // Inject the script if available
                 unawaited(_injectScriptIfAvailable(injectedScript));
               },
               onProgress: (progress) {

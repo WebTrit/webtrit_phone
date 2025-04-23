@@ -1,8 +1,7 @@
 import 'package:flutter/widgets.dart';
 
 import '../settings_flavor.dart';
-
-import 'embedded_data.dart';
+import '../embedded/embedded.dart';
 
 class SettingsSection {
   final String titleL10n;

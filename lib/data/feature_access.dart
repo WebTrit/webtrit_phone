@@ -45,10 +45,13 @@ final Logger _logger = Logger('FeatureAccess');
 ///
 /// 6. **TermsFeature**: Configures access to privacy policy and terms resources. It retrieves the privacy policy URL
 ///    from embedded resources and assigns it to the appropriate settings item when needed.
+
+// TODO(Serdun): Replace direct usage of AppConfig.embeddedResources with EmbeddedFeature.embeddedResources
 class FeatureAccess {
   static late FeatureAccess _instance;
 
   FeatureAccess._(
+    this.embeddedFeature,
     this.loginFeature,
     this.bottomMenuFeature,
     this.settingsFeature,
@@ -57,6 +60,7 @@ class FeatureAccess {
     this.termsFeature,
   );
 
+  final EmbeddedFeature embeddedFeature;
   final LoginFeature loginFeature;
   final BottomMenuFeature bottomMenuFeature;
   final SettingsFeature settingsFeature;
@@ -66,14 +70,16 @@ class FeatureAccess {
 
   static FeatureAccess init(AppConfig appConfig, AppPreferences preferences) {
     try {
+      final embeddedFeature = _tryConfigureEmbeddedFeature(appConfig);
       final customLoginFeature = _tryEnableCustomLoginFeature(appConfig);
-      final bottomMenuManager = _tryConfigureBottomMenuFeature(appConfig, preferences);
+      final bottomMenuManager = _tryConfigureBottomMenuFeature(appConfig, preferences, embeddedFeature);
       final settingsFeature = _tryConfigureSettingsFeature(appConfig, preferences);
       final callFeature = _tryConfigureCallFeature(appConfig, preferences);
       final messagingFeature = _tryConfigureMessagingFeature(appConfig, preferences);
       final termsFeature = _tryConfigureTermsFeature(appConfig);
 
       _instance = FeatureAccess._(
+        embeddedFeature,
         customLoginFeature,
         bottomMenuManager,
         settingsFeature,
@@ -93,6 +99,7 @@ class FeatureAccess {
   static BottomMenuFeature _tryConfigureBottomMenuFeature(
     AppConfig appConfig,
     AppPreferences preferences,
+    EmbeddedFeature embeddedFeature,
   ) {
     final bottomMenu = appConfig.mainConfig.bottomMenu;
 
@@ -102,7 +109,7 @@ class FeatureAccess {
 
     final bottomMenuTabs = bottomMenu.tabs
         .where((tab) => tab.enabled)
-        .map((tab) => _createBottomMenuTab(tab, appConfig.embeddedResources))
+        .map((tab) => _createBottomMenuTab(tab, embeddedFeature.embeddedResources))
         .toList();
 
     if (bottomMenuTabs.isEmpty) {
@@ -116,7 +123,7 @@ class FeatureAccess {
     );
   }
 
-  static BottomMenuTab _createBottomMenuTab(BottomMenuTabScheme tab, List<EmbeddedResource> embeddedResources) {
+  static BottomMenuTab _createBottomMenuTab(BottomMenuTabScheme tab, List<EmbeddedData> embeddedResources) {
     final flavor = MainFlavor.values.byName(tab.type.name);
 
     return tab.when(
@@ -144,7 +151,7 @@ class FeatureAccess {
           flavor: flavor,
           titleL10n: tab.titleL10n,
           icon: tab.icon.toIconData(),
-          data: EmbeddedData(uri: Uri.parse(embeddedResource?.uri ?? '')),
+          data: embeddedResource,
         );
       },
     );
@@ -198,17 +205,17 @@ class FeatureAccess {
     SettingsFlavor flavor,
   ) {
     // Retrieve the embedded resource URL by matching the provided item ID.
-    var embeddedDataResourceUrl =
-        appConfig.embeddedResources.firstWhereOrNull((resource) => resource.id == item.embeddedResourceId)?.uriOrNull;
+    var embeddedDataResource =
+        appConfig.embeddedResources.firstWhereOrNull((resource) => resource.id == item.embeddedResourceId);
 
     // If no direct match is found and the flavor is 'terms', attempt to fetch the privacy policy resource.
-    if (embeddedDataResourceUrl == null && flavor == SettingsFlavor.terms) {
+    if (embeddedDataResource?.uriOrNull == null && flavor == SettingsFlavor.terms) {
       return _tryConfigureTermsFeature(appConfig).configData;
     }
 
     // Return a ConfigData instance if a valid resource URL is found, otherwise return null.
-    return embeddedDataResourceUrl != null
-        ? EmbeddedData(uri: embeddedDataResourceUrl, titleL10n: item.titleL10n)
+    return embeddedDataResource?.uriOrNull != null
+        ? EmbeddedData(id: embeddedDataResource!.id, uri: embeddedDataResource.uriOrNull!, titleL10n: item.titleL10n)
         : null;
   }
 
@@ -320,9 +327,22 @@ class FeatureAccess {
     _logger.info('Privacy policy resource found: ${termsResource.uriOrNull}');
 
     return TermsFeature(EmbeddedData(
+      id: termsResource.id,
       uri: termsResource.uriOrNull!,
       titleL10n: termsResource.toolbar.titleL10n,
     ));
+  }
+
+  static EmbeddedFeature _tryConfigureEmbeddedFeature(AppConfig appConfig) {
+    final embeddedResources = appConfig.embeddedResources.map((resource) {
+      return EmbeddedData(
+        id: resource.id,
+        uri: Uri.parse(resource.uri ?? ''),
+        payload: resource.payload.map((it) => EmbeddedPayloadData.values.byName(it)).toList(),
+      );
+    }).toList();
+
+    return EmbeddedFeature(embeddedResources);
   }
 }
 
@@ -453,4 +473,10 @@ class TermsFeature {
   final EmbeddedData configData;
 
   TermsFeature(this.configData);
+}
+
+class EmbeddedFeature {
+  final List<EmbeddedData> embeddedResources;
+
+  EmbeddedFeature(this.embeddedResources);
 }

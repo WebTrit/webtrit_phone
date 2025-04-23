@@ -483,4 +483,19 @@ class WebtritApiClient {
 
     return SelfConfigResponse.fromJson(responseJson);
   }
+
+  Future<ExternalPageAccessToken> getExternalPageAccessToken(
+    String token, {
+    RequestOptions options = const RequestOptions(),
+  }) async {
+    final responseJson = await _httpClientExecutePost(
+      ['custom', 'private', 'external-page-access-token'],
+      null,
+      token,
+      {},
+      options: options,
+    );
+
+    return ExternalPageAccessToken.fromJson(responseJson);
+  }
 }
