@@ -1,11 +1,15 @@
 import 'dart:async';
 
+import 'package:logging/logging.dart';
+
 import 'package:webtrit_api/webtrit_api.dart';
 
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/mappers/api/self_config_mapper.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/models/self_config.dart';
+
+final _logger = Logger('SelfConfigRepository');
 
 // TODO(Serdun): Handle each error case properly.
 class SelfConfigRepository with SelfConfigApiMapper {
@@ -25,7 +29,9 @@ class SelfConfigRepository with SelfConfigApiMapper {
 
   ExpiringToken? externalPageToken;
   Timer? _refreshTimer;
+
   bool _isFetchingToken = false;
+  bool _isEndpointUnsupported = false;
 
   final _externalPageTokenController = StreamController<ExpiringToken>.broadcast();
 
@@ -58,7 +64,7 @@ class SelfConfigRepository with SelfConfigApiMapper {
   }
 
   Future<void> fetchExternalPageToken() async {
-    if (_isFetchingToken) return;
+    if (_isFetchingToken || _isEndpointUnsupported) return;
 
     _isFetchingToken = true;
     try {
@@ -70,18 +76,34 @@ class SelfConfigRepository with SelfConfigApiMapper {
         return;
       }
 
-      final newToken = await _webtritApiClient.getExternalPageAccessToken(_token);
+      final newToken = await _webtritApiClient.getExternalPageAccessToken(
+        _token,
+        options: RequestOptions.withExtraRetries(),
+      );
       await _writeTokenToCache(newToken);
 
       externalPageToken = externalPageTokenFromApi(newToken);
       _externalPageTokenController.add(externalPageToken!);
+    } on EndpointNotSupportedException catch (_) {
+      _isEndpointUnsupported = true;
+      _externalPageTokenController.close();
+      _refreshTimer?.cancel();
+      externalPageToken = null;
+    } catch (e, st) {
+      _logger.warning('Failed to fetch external page token: $e', e, st);
+      _refreshTimer?.cancel();
+      _refreshTimer = Timer(const Duration(minutes: 1), fetchExternalPageToken);
     } finally {
       _isFetchingToken = false;
-      _scheduleTokenRefresh();
+      if (!_isEndpointUnsupported && !_externalPageTokenController.isClosed) {
+        _scheduleTokenRefresh();
+      }
     }
   }
 
   Future<String?> getExternalPageToken() async {
+    if (_isEndpointUnsupported) return null;
+
     if (_isTokenStillValid()) {
       return externalPageToken!.token;
     }
