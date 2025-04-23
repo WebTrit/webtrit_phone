@@ -43,10 +43,9 @@ class EmbeddedScreen extends StatelessWidget {
   Future<String> _buildInjectedScript(Map<String, dynamic> data) async {
     final jsonString = const JsonEncoder().convert(data);
     return '''
-      window.__PAYLOAD_DATA__ = $jsonString;
-      if (typeof window.onPayloadDataReady === 'function') {
-        window.onPayloadDataReady();
-      }
-    ''';
+    if (typeof window.onPayloadDataReady === 'function') {
+      window.onPayloadDataReady($jsonString);
+    }
+  ''';
   }
 }
