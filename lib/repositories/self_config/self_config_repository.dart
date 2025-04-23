@@ -81,7 +81,7 @@ class SelfConfigRepository with SelfConfigApiMapper {
         _refreshTimer = Timer(const Duration(minutes: 1), fetchExternalPageToken);
       } finally {
         _isFetchingExternalPageToken = false;
-        _scheduleTokenRefresh();
+        _tryScheduleTokenRefresh();
       }
     }
   }
@@ -91,7 +91,7 @@ class SelfConfigRepository with SelfConfigApiMapper {
     return token != null && token.isValid;
   }
 
-  Future<void> _scheduleTokenRefresh() async {
+  Future<void> _tryScheduleTokenRefresh() async {
     // Proceed with scheduling only if the endpoint is known to be unsupported
     // and the stream controller is still open (i.e., not disposed).
     final schedulerReady = _isUnsupportedExternalPageTokenEndpoint && !_externalPageTokenController.isClosed;
