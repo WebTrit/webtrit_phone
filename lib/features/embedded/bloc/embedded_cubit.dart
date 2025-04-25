@@ -21,22 +21,26 @@ class EmbeddedCubit extends Cubit<EmbeddedState> {
     _init();
   }
 
-  final SelfConfigRepository selfConfigRepository;
+  // May be null if the embedded page is launched outside the main app routes.
+  final SelfConfigRepository? selfConfigRepository;
   final EmbeddedPayloadBuilder embeddedPayloadBuilder;
   final List<EmbeddedPayloadData> payload;
 
   StreamSubscription? _tokenSubscription;
 
-  Future<void> _init() async {
-    if (payload.contains(EmbeddedPayloadData.externalPageToken)) {
-      await _handleTokenRequirement();
-    }
+  // True if the payload requires an externalPageToken and a valid SelfConfigRepository is available for the route.
+  bool get isExternalPageTokenRequired =>
+      payload.contains(EmbeddedPayloadData.externalPageToken) && selfConfigRepository != null;
 
+  Future<void> _init() async {
+    if (isExternalPageTokenRequired) {
+      await _tryFetchExternalPageToken(selfConfigRepository!);
+    }
     // Fetches the self-config and builds the payload.
     _updatePayload();
   }
 
-  Future<void> _handleTokenRequirement() async {
+  Future<void> _tryFetchExternalPageToken(SelfConfigRepository selfConfigRepository) async {
     if (!(await selfConfigRepository.isExternalPageTokenAvailable())) {
       await selfConfigRepository.fetchExternalPageToken();
     }
