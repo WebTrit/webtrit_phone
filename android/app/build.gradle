@@ -109,7 +109,8 @@ android {
 
         resValue "string", "APP_LINK_DOMAIN", dartDefine.WEBTRIT_APP_LINK_DOMAIN
         resValue "string", "APP_NAME", dartDefine.WEBTRIT_APP_NAME
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "pl.leancode.patrol.PatrolJUnitRunner"
+        testInstrumentationRunnerArguments clearPackageData: "true"
     }
 
     signingConfigs {
@@ -128,6 +129,9 @@ android {
     buildFeatures {
         buildConfig = true
     }
+    testOptions {
+        execution = "ANDROIDX_TEST_ORCHESTRATOR"
+    }
 }
 
 flutter {
@@ -135,9 +139,6 @@ flutter {
 }
 
 dependencies {
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:runner:1.2.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-
+    androidTestUtil "androidx.test:orchestrator:1.5.1"
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.2.2'
 }

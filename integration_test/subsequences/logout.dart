@@ -1,27 +1,23 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:patrol/patrol.dart';
 
 import 'package:webtrit_phone/app/keys.dart';
-import 'package:webtrit_phone/features/features.dart';
+import 'package:webtrit_phone/features/login/view/login_mode_select_screen.dart';
+import 'package:webtrit_phone/features/settings/view/settings_screen.dart';
+import 'package:webtrit_phone/widgets/confirm_dialog.dart';
 
-Future<void> logout(WidgetTester tester) async {
-  final appBar = find.byKey(mainAppBarKey);
-  final logoutButton = find.byKey(settingsLogoutButtonKey);
-  final confirmButton = find.byKey(confirmDialogYesButtonKey);
+Future<void> logout(PatrolIntegrationTester $) async {
+  final appBar = $(mainAppBarKey);
+  final logoutButton = $(settingsLogoutButtonKey);
+  final confirmButton = $(confirmDialogYesButtonKey);
+  final settingsScreen = $(SettingsScreen);
+  final confirmDialog = $(ConfirmDialog);
+  final loginModeSelectScreen = $(LoginModeSelectScreen);
 
-  await tester.tap(appBar, warnIfMissed: true);
-  await tester.pumpAndSettle();
-  debugPrint('Main app bar tapped');
-
-  expect(find.byType(SettingsScreen), findsOneWidget);
-
-  await tester.tap(logoutButton, warnIfMissed: true);
-  await tester.pumpAndSettle();
-  debugPrint('Logout button tapped');
-
-  await tester.tap(confirmButton, warnIfMissed: true);
-  await tester.pumpAndSettle(const Duration(seconds: 1));
-  debugPrint('Confirm dialog button tapped');
-
-  expect(find.byType(LoginModeSelectScreen), findsOneWidget);
+  await appBar.tap();
+  await settingsScreen.waitUntilVisible();
+  await logoutButton.tap();
+  await confirmDialog.waitUntilVisible();
+  await confirmButton.tap();
+  await loginModeSelectScreen.waitUntilVisible();
 }

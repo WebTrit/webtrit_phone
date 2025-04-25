@@ -1,41 +1,14 @@
-dartDefinesToPdartDefines(){
-    json=$(jq . $1)
-    jsonKeys=$(echo $json | jq -r 'keys[]')
 
-    comaSeparatedBase64Encoded=""
-
-    for key in $jsonKeys; do
-    value=$(echo $json | jq ".\"$key\"" | tr -d '"')
-    kv="$key=$value"
-
-    base64Encoded=$(echo $kv | tr -d \\n | base64)
-        if [ -z "$comaSeparatedBase64Encoded" ]; then
-            comaSeparatedBase64Encoded="$base64Encoded"
-        else
-            comaSeparatedBase64Encoded="$comaSeparatedBase64Encoded,$base64Encoded"
-        fi
-    done
-
-    echo $comaSeparatedBase64Encoded
-}
-
-# Encode the contents of the JSON files into android specific format e.g [base64(key=value),base64(key=value)]
-encodedDefines=$(dartDefinesToPdartDefines ../dart_define.json),$(dartDefinesToPdartDefines dart_define.integration_test.json)
-
-# Assign the first argument as testFile, or use a default value if not provided
-targetTest=$(pwd)/integration_test/${1:-just_run_test.dart}
-echo "start assemble test: $targetTest"
-
-# Flush flutter the build cache
-flutter clean
-flutter pub get
+testfile=$1
+if [ -z "$testfile" ]; then
+    echo "No test file provided, building all tests."
+    patrol build android --dart-define-from-file=../dart_define.json --dart-define-from-file=dart_define.integration_test.json
+else
+    echo "Building target test file: $testfile"
+    patrol build android -t integration_test/$testfile --dart-define-from-file=../dart_define.json --dart-define-from-file=dart_define.integration_test.json
+fi
 
 pushd android
-# run assembling main and test package
-./gradlew app:assembleAndroidTest -Pdart-defines="$encodedDefines"
-./gradlew app:assembleDebug -Ptarget=$targetTest -Pdart-defines="$encodedDefines"
-
-# run test deployment
 keystorePath=$(jq .WEBTRIT_ANDROID_RELEASE_UPLOAD_KEYSTORE_PATH ../../dart_define.json | tr -d '"')
 serviceAccountPath=$keystorePath/google-play-service-account.json
 echo "service account path: $serviceAccountPath"
@@ -43,8 +16,12 @@ projectId=$(jq .project_id $serviceAccountPath | tr -d '"')
 echo "project id: $projectId"
 gcloud auth activate-service-account --key-file=$serviceAccountPath
 gcloud --quiet config set project $projectId
-gcloud firebase test android run --type instrumentation \
-  --app ../build/app/outputs/apk/debug/app-debug.apk \
-  --test ../build/app/outputs/apk/androidTest/debug/app-debug-androidTest.apk\
-  --timeout 2m
+gcloud firebase test android run \
+    --type instrumentation \
+    --use-orchestrator \
+    --app ../build/app/outputs/apk/debug/app-debug.apk \
+    --test ../build/app/outputs/apk/androidTest/debug/app-debug-androidTest.apk \
+    --timeout 5m \
+    --record-video \
+    --environment-variables clearPackageData=true
 popd
