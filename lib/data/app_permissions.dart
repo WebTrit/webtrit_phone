@@ -1,3 +1,4 @@
+import 'package:logging/logging.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
@@ -6,6 +7,8 @@ import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/models/models.dart';
 
 export 'package:permission_handler/permission_handler.dart' show Permission, PermissionStatus;
+
+final _logger = Logger('AppPermissions');
 
 class AppPermissions {
   static const _specialPermissions = [
@@ -62,15 +65,24 @@ class AppPermissions {
       return exclude == null || !exclude.contains(permission);
     }).toList();
 
+    _logger.info('Requesting permissions: $_permissions');
+
     // Request statuses for the filtered permissions
     final statusesPerRequestedPermission = await filteredPermissions.request();
+    _logger.info('Requested permissions statuses: $statusesPerRequestedPermission');
 
     // Get statuses for special permissions
+    _logger.info('Requesting special permissions: $_specialPermissions');
     final specialStatuses = await Future.wait(_specialPermissions.map((permission) => permission.status()));
+    _logger.info('Special permissions statuses: $specialStatuses');
 
     // Update the denied status flag based on the remaining permissions
-    _isDenied = statusesPerRequestedPermission.values.every((status) => status.isDenied) ||
-        specialStatuses.every((status) => status.isDenied);
+    final isDeniedRequestedPermission = statusesPerRequestedPermission.values.every((status) => status.isDenied);
+    final isDeniedSpecialPermissions = specialStatuses.every((status) => status.isDenied);
+    _logger.info(
+        'Checking if permissions are denied - requested: $isDeniedRequestedPermission, special: $isDeniedSpecialPermissions');
+    _isDenied = isDeniedRequestedPermission || isDeniedSpecialPermissions;
+    _logger.info('Updated denied status: $_isDenied');
 
     return statusesPerRequestedPermission;
   }
