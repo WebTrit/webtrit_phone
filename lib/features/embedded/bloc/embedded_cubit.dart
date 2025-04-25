@@ -33,13 +33,14 @@ class EmbeddedCubit extends Cubit<EmbeddedState> {
       payload.contains(EmbeddedPayloadData.externalPageToken) && selfConfigRepository != null;
 
   Future<void> _init() async {
-    if (isExternalPageTokenRequired) await _handleTokenRequirement(selfConfigRepository!);
-
+    if (isExternalPageTokenRequired) {
+      await _tryFetchExternalPageToken(selfConfigRepository!);
+    }
     // Fetches the self-config and builds the payload.
     _updatePayload();
   }
 
-  Future<void> _handleTokenRequirement(SelfConfigRepository selfConfigRepository) async {
+  Future<void> _tryFetchExternalPageToken(SelfConfigRepository selfConfigRepository) async {
     if (!(await selfConfigRepository.isExternalPageTokenAvailable())) {
       await selfConfigRepository.fetchExternalPageToken();
     }
