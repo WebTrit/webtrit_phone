@@ -13,16 +13,15 @@ abstract class ResourceLoader {
   factory ResourceLoader.fromUri(String value) {
     final uri = Uri.parse(value);
 
-    switch (uri.scheme) {
-      case NetworkResourceLoader.scheme:
-        return NetworkResourceLoader(uri);
-      case AssetResourceLoader.scheme:
-        return AssetResourceLoader(uri);
-      case MemoryResourceLoader.scheme:
-        return MemoryResourceLoader(uri);
-      default:
-        throw ArgumentError('Unsupported resource scheme: ${uri.scheme}');
+    if (NetworkResourceLoader.supportedSchemes.contains(uri.scheme)) {
+      return NetworkResourceLoader(uri);
+    } else if (AssetResourceLoader.supportedSchemes.contains(uri.scheme)) {
+      return AssetResourceLoader(uri);
+    } else if (MemoryResourceLoader.supportedSchemes.contains(uri.scheme)) {
+      return MemoryResourceLoader(uri);
     }
+
+    throw ArgumentError('Unsupported resource scheme: ${uri.scheme}');
   }
 
   /// Loads the content of the resource (network, asset, or memory).
@@ -30,7 +29,7 @@ abstract class ResourceLoader {
 }
 
 class NetworkResourceLoader extends ResourceLoader {
-  static const scheme = 'https';
+  static const supportedSchemes = ['https', 'http'];
 
   NetworkResourceLoader(super.resourceUri);
 
@@ -42,7 +41,7 @@ class NetworkResourceLoader extends ResourceLoader {
 }
 
 class AssetResourceLoader extends ResourceLoader {
-  static const scheme = 'asset';
+  static const supportedSchemes = ['asset'];
 
   AssetResourceLoader(Uri resourceUri) : super(resourceUri.removeScheme());
 
@@ -57,7 +56,7 @@ class AssetResourceLoader extends ResourceLoader {
 }
 
 class MemoryResourceLoader extends ResourceLoader {
-  static const scheme = 'memory';
+  static const supportedSchemes = ['memory'];
 
   final Uint8List bytes;
 
