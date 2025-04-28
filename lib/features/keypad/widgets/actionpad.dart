@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
+import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 import 'actionpad_style.dart';
@@ -51,6 +52,7 @@ class Actionpad extends StatelessWidget {
           child: Transform.scale(
             scale: .75,
             child: TextButton(
+              key: actionPadVideoCallKey,
               onPressed: onVideoCallPressed,
               style: localStyle?.callStart,
               child: Icon(
@@ -61,6 +63,7 @@ class Actionpad extends StatelessWidget {
           ),
         ),
         TextButton(
+          key: actionPadStartKey,
           onPressed: transfer ? onTransferPressed : onAudioCallPressed,
           style: transfer ? localStyle?.callTransfer : localStyle?.callStart,
           child: Icon(
@@ -69,6 +72,7 @@ class Actionpad extends StatelessWidget {
           ),
         ),
         TextButton(
+          key: actionPadBackspaceKey,
           onPressed: onBackspacePressed,
           onLongPress: onBackspaceLongPress,
           style: localStyle?.backspacePressed,

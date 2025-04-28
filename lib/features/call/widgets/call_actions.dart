@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:webtrit_phone/app/keys.dart';
 
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
@@ -191,6 +192,7 @@ class _CallActionsState extends State<CallActions> {
                   ? context.l10n.call_CallActionsTooltip_decline_inviteToAttendedTransfer
                   : context.l10n.call_CallActionsTooltip_hangup,
               child: TextButton(
+                key: callActionsHangupKey,
                 onPressed: onHangupPressed,
                 style: style.hangup,
                 child: Icon(
@@ -242,6 +244,7 @@ class _CallActionsState extends State<CallActions> {
             Tooltip(
               message: context.l10n.call_CallActionsTooltip_hangup,
               child: TextButton(
+                key: callActionsHangupKey,
                 onPressed: onHangupPressed,
                 style: style.hangup,
                 child: Icon(
@@ -526,6 +529,7 @@ class _CallActionsState extends State<CallActions> {
           Tooltip(
             message: context.l10n.call_CallActionsTooltip_hangup,
             child: TextButton(
+              key: callActionsHangupKey,
               onPressed: onHangupPressed,
               style: style.hangup,
               child: Icon(

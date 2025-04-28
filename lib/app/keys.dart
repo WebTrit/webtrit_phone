@@ -34,3 +34,9 @@ const settingsLogoutButtonKey = Key('settingsLogoutButton');
 
 const confirmDialogYesButtonKey = Key('confirmDialogYesButton');
 const confirmDialogNoButtonKey = Key('confirmDialogNoButton');
+
+const actionPadStartKey = Key('actionPadStart');
+const actionPadVideoCallKey = Key('actionPadVideoCall');
+const actionPadBackspaceKey = Key('actionPadBackspace');
+
+const callActionsHangupKey = Key('callActionsHangup');

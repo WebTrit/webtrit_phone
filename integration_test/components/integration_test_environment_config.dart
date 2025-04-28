@@ -28,6 +28,9 @@ class IntegrationTestEnvironmentConfig {
   static LoginMethod DEFAULT_LOGIN_METHOD = LoginMethod.values.byName(
     const String.fromEnvironment(DEFAULT_LOGIN_METHOD__NAME),
   );
+
+  static const SIMPLE_CALL_DESTINATION__NAME = 'WEBTRIT_APP_TEST_SIMPLE_CALL_DESTINATION';
+  static const SIMPLE_CALL_DESTINATION = String.fromEnvironment(SIMPLE_CALL_DESTINATION__NAME);
 }
 
 enum LoginMethod { email, otp, password }
