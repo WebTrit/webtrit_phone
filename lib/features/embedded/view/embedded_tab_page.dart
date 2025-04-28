@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
+import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../utils/utils.dart';
 import '../bloc/embedded_cubit.dart';
@@ -39,8 +40,7 @@ class EmbeddedTabPage extends StatelessWidget {
       ),
       child: EmbeddedScreen(
         initialUri: data.data!.uri,
-        appBar: AppBar(
-          leading: const AutoLeadingButton(),
+        appBar: MainAppBar(
           title: Text(context.parseL10n(data.titleL10n)),
         ),
       ),
