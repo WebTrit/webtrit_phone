@@ -3,14 +3,9 @@ import 'package:patrol/patrol.dart';
 import 'package:webtrit_phone/bootstrap.dart';
 
 import 'components/integration_test_environment_config.dart';
-import 'subsequences/accept_agrements_until_main_shell.dart';
-import 'subsequences/custom_core_sign_in_proceed.dart';
-import 'subsequences/login_by_email.dart';
-import 'subsequences/login_by_otp.dart';
-import 'subsequences/login_by_password.dart';
+import 'subsequences/login_by_method.dart';
 import 'subsequences/logout.dart';
 import 'subsequences/pump_root_and_wait_until_visible.dart';
-import 'subsequences/regular_sign_in_proceed.dart';
 
 main() {
   const emailCredential = IntegrationTestEnvironmentConfig.EMAIL_CREDENTIAL;
@@ -25,17 +20,12 @@ main() {
   const passwordPasswordCredential = IntegrationTestEnvironmentConfig.PASSWORD_PASSWORD_CREDENTIAL;
   final hasPasswordCredentials = passwordUserCredential.isNotEmpty && passwordPasswordCredential.isNotEmpty;
 
-  const customCoreUrl = IntegrationTestEnvironmentConfig.CUSTOM_CORE_URL;
-  final hasCustomCoreUrl = customCoreUrl.isNotEmpty;
-
   patrolTest(
     'should login by email credentials',
     ($) async {
       await bootstrap();
       await pumpRootAndWaitUntilVisible($);
-      hasCustomCoreUrl ? await customCoreSignInProceed($) : await regularSignInProceed($);
-      await loginByEmail($, emailCredential, emailVerifyCredential);
-      await acceptAgrementsUntilMainShell($);
+      await loginByMethod($, LoginMethod.email);
       await Future.delayed(const Duration(seconds: 5));
       await logout($);
     },
@@ -47,9 +37,7 @@ main() {
     ($) async {
       await bootstrap();
       await pumpRootAndWaitUntilVisible($);
-      hasCustomCoreUrl ? await customCoreSignInProceed($) : await regularSignInProceed($);
-      await loginByOtp($, otpCredential, otpVerifyCredential);
-      await acceptAgrementsUntilMainShell($);
+      await loginByMethod($, LoginMethod.otp);
       await Future.delayed(const Duration(seconds: 5));
       await logout($);
     },
@@ -61,9 +49,7 @@ main() {
     ($) async {
       await bootstrap();
       await pumpRootAndWaitUntilVisible($);
-      hasCustomCoreUrl ? await customCoreSignInProceed($) : await regularSignInProceed($);
-      await loginByPassword(($), passwordUserCredential, passwordPasswordCredential);
-      await acceptAgrementsUntilMainShell(($));
+      await loginByMethod($, LoginMethod.password);
       await Future.delayed(const Duration(seconds: 5));
       await logout($);
     },
