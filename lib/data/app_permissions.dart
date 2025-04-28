@@ -1,3 +1,4 @@
+import 'package:logging/logging.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
@@ -6,6 +7,8 @@ import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/models/models.dart';
 
 export 'package:permission_handler/permission_handler.dart' show Permission, PermissionStatus;
+
+final _logger = Logger('AppPermissions');
 
 class AppPermissions {
   static const _specialPermissions = [
@@ -62,17 +65,26 @@ class AppPermissions {
       return exclude == null || !exclude.contains(permission);
     }).toList();
 
+    _logger.info('Requesting permissions: $_permissions');
+
     // Request statuses for the filtered permissions
-    final statusesPerRequestedPermission = await filteredPermissions.request();
+    final permissionStatuses = await filteredPermissions.request();
+    _logger.info('Requested permissions statuses: $permissionStatuses');
 
     // Get statuses for special permissions
-    final specialStatuses = await Future.wait(_specialPermissions.map((permission) => permission.status()));
+    _logger.info('Requesting special permissions: $_specialPermissions');
+    final specialPermissionStatuses = await Future.wait(_specialPermissions.map((permission) => permission.status()));
+    _logger.info('Special permissions statuses: $specialPermissionStatuses');
 
     // Update the denied status flag based on the remaining permissions
-    _isDenied = statusesPerRequestedPermission.values.every((status) => status.isDenied) ||
-        specialStatuses.every((status) => status.isDenied);
+    final isDeniedPermissions = permissionStatuses.values.every((status) => status.isDenied);
+    final isDeniedSpecialPermissions = specialPermissionStatuses.every((status) => status.isDenied);
+    _logger.info(
+        'Checking if permissions are denied - requested: $isDeniedPermissions, special: $isDeniedSpecialPermissions');
+    _isDenied = isDeniedPermissions || isDeniedSpecialPermissions;
+    _logger.info('Updated denied status: $_isDenied');
 
-    return statusesPerRequestedPermission;
+    return permissionStatuses;
   }
 
   /// Opens the app settings page.
