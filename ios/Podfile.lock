@@ -1,6 +1,7 @@
 PODS:
   - audio_session (0.0.1):
     - Flutter
+  - CocoaAsyncSocket (7.6.5)
   - connectivity_plus (0.0.1):
     - Flutter
     - FlutterMacOS
@@ -186,6 +187,7 @@ PODS:
     - Flutter
   - just_audio (0.0.1):
     - Flutter
+    - FlutterMacOS
   - nanopb (3.30910.0):
     - nanopb/decode (= 3.30910.0)
     - nanopb/encode (= 3.30910.0)
@@ -194,6 +196,10 @@ PODS:
   - package_info_plus (0.4.5):
     - Flutter
   - path_provider_foundation (0.0.1):
+    - Flutter
+    - FlutterMacOS
+  - patrol (0.0.1):
+    - CocoaAsyncSocket (~> 7.6)
     - Flutter
     - FlutterMacOS
   - permission_handler_apple (9.3.0):
@@ -251,9 +257,10 @@ DEPENDENCIES:
   - flutter_secure_storage (from `.symlinks/plugins/flutter_secure_storage/ios`)
   - flutter_webrtc (from `.symlinks/plugins/flutter_webrtc/ios`)
   - integration_test (from `.symlinks/plugins/integration_test/ios`)
-  - just_audio (from `.symlinks/plugins/just_audio/ios`)
+  - just_audio (from `.symlinks/plugins/just_audio/darwin`)
   - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
+  - patrol (from `.symlinks/plugins/patrol/darwin`)
   - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
   - share_plus (from `.symlinks/plugins/share_plus/ios`)
   - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
@@ -264,6 +271,7 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - CocoaAsyncSocket
     - Firebase
     - FirebaseABTesting
     - FirebaseAnalytics
@@ -322,11 +330,13 @@ EXTERNAL SOURCES:
   integration_test:
     :path: ".symlinks/plugins/integration_test/ios"
   just_audio:
-    :path: ".symlinks/plugins/just_audio/ios"
+    :path: ".symlinks/plugins/just_audio/darwin"
   package_info_plus:
     :path: ".symlinks/plugins/package_info_plus/ios"
   path_provider_foundation:
     :path: ".symlinks/plugins/path_provider_foundation/darwin"
+  patrol:
+    :path: ".symlinks/plugins/patrol/darwin"
   permission_handler_apple:
     :path: ".symlinks/plugins/permission_handler_apple/ios"
   share_plus:
@@ -343,7 +353,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/webview_flutter_wkwebview/darwin"
 
 SPEC CHECKSUMS:
-  audio_session: 088d2483ebd1dc43f51d253d4a1c517d9a2e7207
+  audio_session: 19e9480dbdd4e5f6c4543826b2e8b0e4ab6145fe
+  CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
   connectivity_plus: ddd7f30999e1faaef5967c23d5b6d503d10434db
   device_info_plus: 97af1d7e84681a90d0693e63169a5d50e0839a0d
   device_region: 896a80820f38a841066c458ac96ad821c1e259d3
@@ -376,10 +387,11 @@ SPEC CHECKSUMS:
   GoogleDataTransport: aae35b7ea0c09004c3797d53c8c41f66f219d6a7
   GoogleUtilities: 26a3abef001b6533cf678d3eb38fd3f614b7872d
   integration_test: 252f60fa39af5e17c3aa9899d35d908a0721b573
-  just_audio: baa7252489dbcf47a4c7cc9ca663e9661c99aafa
+  just_audio: a42c63806f16995daf5b219ae1d679deb76e6a79
   nanopb: fad817b59e0457d11a5dfbde799381cd727c1275
   package_info_plus: 58f0028419748fad15bf008b270aaa8e54380b1c
   path_provider_foundation: 2b6b4c569c0fb62ec74538f866245ac84301af46
+  patrol: cf2cd48c7f3e5171610111994f7b466cd76d1f57
   permission_handler_apple: 9878588469a2b0d0fc1e048d9f43605f92e6cec2
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
   PromisesSwift: 9d77319bbe72ebf6d872900551f7eeba9bce2851
@@ -392,6 +404,6 @@ SPEC CHECKSUMS:
   webtrit_callkeep_ios: 2f4975de04cbcdb1ed49b170396ae52aa75e6d1c
   webview_flutter_wkwebview: 0982481e3d9c78fd5c6f62a002fcd24fc791f1e4
 
-PODFILE CHECKSUM: ebe4f3071dffa7821ce71e55ae2ff72234a231e0
+PODFILE CHECKSUM: c241efdc2ea6f1d5c15a6cde2b8e92e0c3d38823
 
-COCOAPODS: 1.15.2
+COCOAPODS: 1.16.2
