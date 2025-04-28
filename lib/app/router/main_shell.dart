@@ -127,8 +127,8 @@ class _MainShellState extends State<MainShell> {
             context.read<WebtritApiClient>(),
           ),
         ),
-        RepositoryProvider<SelfConfigRepository>(
-          create: (context) => SelfConfigRepository(
+        RepositoryProvider<CustomPrivateGatewayRepository>(
+          create: (context) => CustomPrivateGatewayRepository(
             context.read<WebtritApiClient>(),
             context.read<SecureStorage>(),
             context.read<AppBloc>().state.token!,
@@ -320,7 +320,7 @@ class _MainShellState extends State<MainShell> {
                 BlocProvider(
                   lazy: false,
                   create: (_) => SelfConfigCubit(
-                    context.read<SelfConfigRepository>(),
+                    context.read<CustomPrivateGatewayRepository>(),
                     context.read<FeatureAccess>().settingsFeature.isSelfConfigEnabled,
                   ),
                 ),

@@ -21,7 +21,11 @@ ExternalPageAccessToken _$ExternalPageAccessTokenFromJson(
 
 /// @nodoc
 mixin _$ExternalPageAccessToken {
-  String get token => throw _privateConstructorUsedError;
+  @JsonKey(name: 'access_token')
+  String get accessToken => throw _privateConstructorUsedError;
+  @JsonKey(name: 'refresh_token')
+  String get refreshToken => throw _privateConstructorUsedError;
+  @JsonKey(name: 'expires_at')
   DateTime get expiresAt => throw _privateConstructorUsedError;
 
   /// Serializes this ExternalPageAccessToken to a JSON map.
@@ -40,7 +44,10 @@ abstract class $ExternalPageAccessTokenCopyWith<$Res> {
           $Res Function(ExternalPageAccessToken) then) =
       _$ExternalPageAccessTokenCopyWithImpl<$Res, ExternalPageAccessToken>;
   @useResult
-  $Res call({String token, DateTime expiresAt});
+  $Res call(
+      {@JsonKey(name: 'access_token') String accessToken,
+      @JsonKey(name: 'refresh_token') String refreshToken,
+      @JsonKey(name: 'expires_at') DateTime expiresAt});
 }
 
 /// @nodoc
@@ -59,13 +66,18 @@ class _$ExternalPageAccessTokenCopyWithImpl<$Res,
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? token = null,
+    Object? accessToken = null,
+    Object? refreshToken = null,
     Object? expiresAt = null,
   }) {
     return _then(_value.copyWith(
-      token: null == token
-          ? _value.token
-          : token // ignore: cast_nullable_to_non_nullable
+      accessToken: null == accessToken
+          ? _value.accessToken
+          : accessToken // ignore: cast_nullable_to_non_nullable
+              as String,
+      refreshToken: null == refreshToken
+          ? _value.refreshToken
+          : refreshToken // ignore: cast_nullable_to_non_nullable
               as String,
       expiresAt: null == expiresAt
           ? _value.expiresAt
@@ -84,7 +96,10 @@ abstract class _$$ExternalPageAccessTokenImplCopyWith<$Res>
       __$$ExternalPageAccessTokenImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String token, DateTime expiresAt});
+  $Res call(
+      {@JsonKey(name: 'access_token') String accessToken,
+      @JsonKey(name: 'refresh_token') String refreshToken,
+      @JsonKey(name: 'expires_at') DateTime expiresAt});
 }
 
 /// @nodoc
@@ -102,13 +117,18 @@ class __$$ExternalPageAccessTokenImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? token = null,
+    Object? accessToken = null,
+    Object? refreshToken = null,
     Object? expiresAt = null,
   }) {
     return _then(_$ExternalPageAccessTokenImpl(
-      token: null == token
-          ? _value.token
-          : token // ignore: cast_nullable_to_non_nullable
+      accessToken: null == accessToken
+          ? _value.accessToken
+          : accessToken // ignore: cast_nullable_to_non_nullable
+              as String,
+      refreshToken: null == refreshToken
+          ? _value.refreshToken
+          : refreshToken // ignore: cast_nullable_to_non_nullable
               as String,
       expiresAt: null == expiresAt
           ? _value.expiresAt
@@ -123,19 +143,26 @@ class __$$ExternalPageAccessTokenImplCopyWithImpl<$Res>
 @JsonSerializable(fieldRename: FieldRename.snake)
 class _$ExternalPageAccessTokenImpl implements _ExternalPageAccessToken {
   const _$ExternalPageAccessTokenImpl(
-      {required this.token, required this.expiresAt});
+      {@JsonKey(name: 'access_token') required this.accessToken,
+      @JsonKey(name: 'refresh_token') required this.refreshToken,
+      @JsonKey(name: 'expires_at') required this.expiresAt});
 
   factory _$ExternalPageAccessTokenImpl.fromJson(Map<String, dynamic> json) =>
       _$$ExternalPageAccessTokenImplFromJson(json);
 
   @override
-  final String token;
+  @JsonKey(name: 'access_token')
+  final String accessToken;
   @override
+  @JsonKey(name: 'refresh_token')
+  final String refreshToken;
+  @override
+  @JsonKey(name: 'expires_at')
   final DateTime expiresAt;
 
   @override
   String toString() {
-    return 'ExternalPageAccessToken(token: $token, expiresAt: $expiresAt)';
+    return 'ExternalPageAccessToken(accessToken: $accessToken, refreshToken: $refreshToken, expiresAt: $expiresAt)';
   }
 
   @override
@@ -143,14 +170,18 @@ class _$ExternalPageAccessTokenImpl implements _ExternalPageAccessToken {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$ExternalPageAccessTokenImpl &&
-            (identical(other.token, token) || other.token == token) &&
+            (identical(other.accessToken, accessToken) ||
+                other.accessToken == accessToken) &&
+            (identical(other.refreshToken, refreshToken) ||
+                other.refreshToken == refreshToken) &&
             (identical(other.expiresAt, expiresAt) ||
                 other.expiresAt == expiresAt));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, token, expiresAt);
+  int get hashCode =>
+      Object.hash(runtimeType, accessToken, refreshToken, expiresAt);
 
   /// Create a copy of ExternalPageAccessToken
   /// with the given fields replaced by the non-null parameter values.
@@ -171,15 +202,22 @@ class _$ExternalPageAccessTokenImpl implements _ExternalPageAccessToken {
 
 abstract class _ExternalPageAccessToken implements ExternalPageAccessToken {
   const factory _ExternalPageAccessToken(
-      {required final String token,
-      required final DateTime expiresAt}) = _$ExternalPageAccessTokenImpl;
+          {@JsonKey(name: 'access_token') required final String accessToken,
+          @JsonKey(name: 'refresh_token') required final String refreshToken,
+          @JsonKey(name: 'expires_at') required final DateTime expiresAt}) =
+      _$ExternalPageAccessTokenImpl;
 
   factory _ExternalPageAccessToken.fromJson(Map<String, dynamic> json) =
       _$ExternalPageAccessTokenImpl.fromJson;
 
   @override
-  String get token;
+  @JsonKey(name: 'access_token')
+  String get accessToken;
   @override
+  @JsonKey(name: 'refresh_token')
+  String get refreshToken;
+  @override
+  @JsonKey(name: 'expires_at')
   DateTime get expiresAt;
 
   /// Create a copy of ExternalPageAccessToken

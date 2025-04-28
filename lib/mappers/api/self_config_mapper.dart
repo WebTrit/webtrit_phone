@@ -8,7 +8,7 @@ mixin SelfConfigApiMapper {
     return SelfConfig.supported(url: data.url, expiresAt: data.expiresAt);
   }
 
-  ExpiringToken externalPageTokenFromApi(api.ExternalPageAccessToken data) {
-    return ExpiringToken(data.token, data.expiresAt);
+  ExternalPageToken externalPageTokenFromApi(api.ExternalPageAccessToken data) {
+    return ExternalPageToken(data.accessToken, data.refreshToken, data.expiresAt);
   }
 }

@@ -61,7 +61,8 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     await secureStorage.deleteTenantId();
     await secureStorage.deleteToken();
     await secureStorage.deleteUserId();
-    await secureStorage.deleteExternalPageToken();
+    await secureStorage.deleteExternalPageAccessToken();
+    await secureStorage.deleteExternalPageRefreshToken();
     await secureStorage.deleteExternalPageTokenExpires();
 
     await appDatabase.deleteEverything();

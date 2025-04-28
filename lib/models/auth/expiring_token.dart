@@ -1,8 +1,11 @@
-class ExpiringToken {
-  const ExpiringToken(this.token, this.expiration);
+class ExternalPageToken {
+  const ExternalPageToken(this.accessToken, this.refreshToken, this.expiration);
 
-  final String token;
+  final String accessToken;
+  final String refreshToken;
   final DateTime expiration;
 
-  bool get isValid => DateTime.now().isBefore(expiration);
+  static const Duration _expirationBuffer = Duration(minutes: 5);
+
+  bool get isValid => DateTime.now().isBefore(expiration.subtract(_expirationBuffer));
 }

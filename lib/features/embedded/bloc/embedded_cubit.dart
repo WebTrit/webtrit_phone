@@ -15,51 +15,41 @@ part 'embedded_cubit.freezed.dart';
 class EmbeddedCubit extends Cubit<EmbeddedState> {
   EmbeddedCubit({
     required this.payload,
-    required this.selfConfigRepository,
+    required CustomPrivateGatewayRepository? customPrivateGatewayRepository,
     required this.embeddedPayloadBuilder,
-  }) : super(const EmbeddedState()) {
+  }) : _customPrivateGatewayRepository = customPrivateGatewayRepository, super(const EmbeddedState()) {
     _init();
   }
 
   // May be null if the embedded page is launched outside the main app routes.
-  final SelfConfigRepository? selfConfigRepository;
+  final CustomPrivateGatewayRepository? _customPrivateGatewayRepository;
   final EmbeddedPayloadBuilder embeddedPayloadBuilder;
   final List<EmbeddedPayloadData> payload;
 
-  StreamSubscription? _tokenSubscription;
-
   // True if the payload requires an externalPageToken and a valid SelfConfigRepository is available for the route.
   bool get isExternalPageTokenRequired =>
-      payload.contains(EmbeddedPayloadData.externalPageToken) && selfConfigRepository != null;
+      payload.contains(EmbeddedPayloadData.externalPageToken) && _customPrivateGatewayRepository != null;
 
   Future<void> _init() async {
     if (isExternalPageTokenRequired) {
-      await _tryFetchExternalPageToken(selfConfigRepository!);
+      await _tryFetchExternalPageToken(_customPrivateGatewayRepository!);
     }
     // Fetches the self-config and builds the payload.
     _updatePayload();
   }
 
-  Future<void> _tryFetchExternalPageToken(SelfConfigRepository selfConfigRepository) async {
-    if (!(await selfConfigRepository.isExternalPageTokenAvailable())) {
-      await selfConfigRepository.fetchExternalPageToken();
-    }
+  Future<void> _tryFetchExternalPageToken(CustomPrivateGatewayRepository customPrivateGatewayRepository) async {
+    // Check if the external page token is already stored in secure storage or still not expired.
+    final isExternalPageTokenAvailable = await customPrivateGatewayRepository.isExternalPageTokenAvailable();
 
-    // Subscribes to token updates and rebuilds the payload when a new token is issued.
-    _tokenSubscription = selfConfigRepository.externalPageTokenStream.listen((_) {
-      _updatePayload();
-    });
+    if (!isExternalPageTokenAvailable) {
+      await customPrivateGatewayRepository.fetchExternalPageToken();
+    }
   }
 
   void _updatePayload() {
     final payloadData = embeddedPayloadBuilder.build(payload);
     emit(state.copyWith(status: EmbeddedStateStatus.initial));
     emit(state.copyWith(payload: payloadData, status: EmbeddedStateStatus.ready));
-  }
-
-  @override
-  Future<void> close() async {
-    await _tokenSubscription?.cancel();
-    return super.close();
   }
 }

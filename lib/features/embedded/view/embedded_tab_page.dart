@@ -26,7 +26,7 @@ class EmbeddedTabPage extends StatelessWidget {
     final bottomMenuManager = context.read<FeatureAccess>().bottomMenuFeature;
     final data = bottomMenuManager.getEmbeddedTabById(id);
 
-    final selfConfigRepository = context.read<SelfConfigRepository>();
+    final customPrivateGatewayRepository = context.read<CustomPrivateGatewayRepository>();
     final secureStorage = context.read<SecureStorage>();
 
     final embeddedPayloadBuilder = EmbeddedPayloadBuilder(secureStorage);
@@ -34,7 +34,7 @@ class EmbeddedTabPage extends StatelessWidget {
     return BlocProvider(
       create: (context) => EmbeddedCubit(
         payload: data.data!.payload,
-        selfConfigRepository: selfConfigRepository,
+        customPrivateGatewayRepository: customPrivateGatewayRepository,
         embeddedPayloadBuilder: embeddedPayloadBuilder,
       ),
       child: EmbeddedScreen(
