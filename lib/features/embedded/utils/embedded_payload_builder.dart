@@ -20,8 +20,17 @@ class EmbeddedPayloadBuilder {
           payload['coreToken'] = _secureStorage.readToken();
           break;
         case EmbeddedPayloadData.externalPageToken:
-          final token = _secureStorage.readExternalPageAccessToken();
-          if (token != null) payload['externalPageToken'] = token;
+          final accessToken = _secureStorage.readExternalPageAccessToken() ?? '';
+          final refreshToken = _secureStorage.readExternalPageRefreshToken() ?? '';
+          final expiresAt = _secureStorage.readExternalPageTokenExpires() ?? '';
+
+          if (accessToken.isNotEmpty && refreshToken.isNotEmpty && expiresAt.isNotEmpty) {
+            payload['externalPageToken'] = {
+              'accessToken': accessToken,
+              'refreshToken': refreshToken,
+              'expiresAt': expiresAt,
+            };
+          }
           break;
       }
     }
