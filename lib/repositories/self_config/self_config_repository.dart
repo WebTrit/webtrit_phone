@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:logging/logging.dart';
 
-import 'package:webtrit_api/webtrit_api.dart';
+import 'package:webtrit_api/webtrit_api.dart' as api;
 
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/mappers/api/self_config_mapper.dart';
@@ -20,7 +20,7 @@ class SelfConfigRepository with SelfConfigApiMapper {
     this._token,
   );
 
-  final WebtritApiClient _webtritApiClient;
+  final api.WebtritApiClient _webtritApiClient;
   final SecureStorage _secureStorage;
   final String _token;
 
@@ -31,15 +31,15 @@ class SelfConfigRepository with SelfConfigApiMapper {
   bool _isFetchingExternalPageToken = false;
   bool _isUnsupportedExternalPageTokenEndpoint = false;
 
-  final _externalPageTokenController = StreamController<ExpiringToken>.broadcast();
+  final _externalPageTokenController = StreamController<ExternalPageToken>.broadcast();
 
-  Stream<ExpiringToken> get externalPageTokenStream => _externalPageTokenController.stream;
+  Stream<ExternalPageToken> get externalPageTokenStream => _externalPageTokenController.stream;
 
   Future<SelfConfig> _getSelfConfigRemote() async {
     try {
       final response = await _webtritApiClient.getSelfConfig(_token);
       return selfConfigFromApi(response);
-    } on EndpointNotSupportedException catch (_) {
+    } on api.EndpointNotSupportedException catch (_) {
       return SelfConfig.unsupported();
     }
   }
@@ -58,7 +58,7 @@ class SelfConfigRepository with SelfConfigApiMapper {
       _isFetchingExternalPageToken = true;
 
       try {
-        final requestOptions = RequestOptions.withExtraRetries();
+        final requestOptions = api.RequestOptions.withExtraRetries();
         final newToken = await _webtritApiClient.getExternalPageAccessToken(_token, options: requestOptions);
 
         // Convert the API response to an ExpiringToken
@@ -69,7 +69,7 @@ class SelfConfigRepository with SelfConfigApiMapper {
 
         // Notify all subscribers with the newly fetched external page token used for case when token is expired
         _externalPageTokenController.add(externalPageToken);
-      } on EndpointNotSupportedException catch (_) {
+      } on api.EndpointNotSupportedException catch (_) {
         // Endpoint is not supported, stop fetching the token
         _isUnsupportedExternalPageTokenEndpoint = true;
         _externalPageTokenController.close();
@@ -122,20 +122,20 @@ class SelfConfigRepository with SelfConfigApiMapper {
 }
 
 extension SecureStorageExtension on SecureStorage {
-  Future<void> writeExternalPageTokenExt(ExpiringToken token) async {
-    await writeExternalPageAccessToken(token.token);
+  Future<void> writeExternalPageTokenExt(ExternalPageToken token) async {
+    await writeExternalPageAccessToken(token.accessToken);
     await writeExternalPageRefreshToken(token.refreshToken);
     await writeExternalPageTokenExpires(token.expiration.toIso8601String());
   }
 
-  Future<ExpiringToken?> readExternalPageTokenExt() async {
+  Future<ExternalPageToken?> readExternalPageTokenExt() async {
     final accessToken = readExternalPageAccessToken();
     final refreshToken = readExternalPageRefreshToken();
     final expires = readExternalPageTokenExpires();
 
     final expiresAt = DateTime.tryParse(expires ?? '');
     if (accessToken != null && refreshToken != null && expiresAt != null) {
-      return ExpiringToken(accessToken, refreshToken, expiresAt);
+      return ExternalPageToken(accessToken, refreshToken, expiresAt);
     }
     return null;
   }
