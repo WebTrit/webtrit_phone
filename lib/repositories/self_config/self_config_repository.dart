@@ -123,17 +123,19 @@ class SelfConfigRepository with SelfConfigApiMapper {
 
 extension SecureStorageExtension on SecureStorage {
   Future<void> writeExternalPageTokenExt(ExpiringToken token) async {
-    await writeExternalPageToken(token.token);
+    await writeExternalPageAccessToken(token.token);
+    await writeExternalPageRefreshToken(token.refreshToken);
     await writeExternalPageTokenExpires(token.expiration.toIso8601String());
   }
 
   Future<ExpiringToken?> readExternalPageTokenExt() async {
-    final token = readExternalPageToken();
+    final accessToken = readExternalPageAccessToken();
+    final refreshToken = readExternalPageRefreshToken();
     final expires = readExternalPageTokenExpires();
 
     final expiresAt = DateTime.tryParse(expires ?? '');
-    if (token != null && expiresAt != null) {
-      return ExpiringToken(token, expiresAt);
+    if (accessToken != null && refreshToken != null && expiresAt != null) {
+      return ExpiringToken(accessToken, refreshToken, expiresAt);
     }
     return null;
   }

@@ -20,7 +20,7 @@ class EmbeddedPayloadBuilder {
           payload['coreToken'] = _secureStorage.readToken();
           break;
         case EmbeddedPayloadData.externalPageToken:
-          final token = _secureStorage.readExternalPageToken();
+          final token = _secureStorage.readExternalPageAccessToken();
           if (token != null) payload['externalPageToken'] = token;
           break;
       }
