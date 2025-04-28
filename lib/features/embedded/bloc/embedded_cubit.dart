@@ -26,8 +26,6 @@ class EmbeddedCubit extends Cubit<EmbeddedState> {
   final EmbeddedPayloadBuilder embeddedPayloadBuilder;
   final List<EmbeddedPayloadData> payload;
 
-  StreamSubscription? _tokenSubscription;
-
   // True if the payload requires an externalPageToken and a valid SelfConfigRepository is available for the route.
   bool get isExternalPageTokenRequired =>
       payload.contains(EmbeddedPayloadData.externalPageToken) && selfConfigRepository != null;
@@ -41,25 +39,17 @@ class EmbeddedCubit extends Cubit<EmbeddedState> {
   }
 
   Future<void> _tryFetchExternalPageToken(SelfConfigRepository selfConfigRepository) async {
-    if (!(await selfConfigRepository.isExternalPageTokenAvailable())) {
+    // Check if the external page token is already stored in secure storage or still not expired.
+    final isExternalPageTokenAvailable = await selfConfigRepository.isExternalPageTokenAvailable();
+
+    if (!isExternalPageTokenAvailable) {
       await selfConfigRepository.fetchExternalPageToken();
     }
-
-    // Subscribes to token updates and rebuilds the payload when a new token is issued.
-    _tokenSubscription = selfConfigRepository.externalPageTokenStream.listen((_) {
-      _updatePayload();
-    });
   }
 
   void _updatePayload() {
     final payloadData = embeddedPayloadBuilder.build(payload);
     emit(state.copyWith(status: EmbeddedStateStatus.initial));
     emit(state.copyWith(payload: payloadData, status: EmbeddedStateStatus.ready));
-  }
-
-  @override
-  Future<void> close() async {
-    await _tokenSubscription?.cancel();
-    return super.close();
   }
 }
