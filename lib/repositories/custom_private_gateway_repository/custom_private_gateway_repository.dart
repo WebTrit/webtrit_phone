@@ -21,10 +21,8 @@ final _logger = Logger('SelfConfigRepository');
 /// Flutter is only responsible for the initial token validation and injection.
 /// All subsequent lifecycle management of the token is delegated to the embedded WebView.
 
-// TODO(Serdun): This repository primarily encapsulates private API methods.
-// Consider renaming it to better reflect its specialized purpose (e.g., PrivateApiRepository).
-class SelfConfigRepository with SelfConfigApiMapper {
-  SelfConfigRepository(
+class CustomPrivateGatewayRepository with SelfConfigApiMapper {
+  CustomPrivateGatewayRepository(
     this._webtritApiClient,
     this._secureStorage,
     this._token,

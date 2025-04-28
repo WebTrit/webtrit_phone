@@ -12,13 +12,13 @@ final _logger = Logger('SelfConfigCubit');
 
 /// A simple cubit that prefetches selfconfig and store data during the user's session.
 class SelfConfigCubit extends Cubit<SelfConfigState> {
-  SelfConfigCubit(this._selfConfigRepository, this._enabled) : super(SelfConfigState()) {
+  SelfConfigCubit(this._customPrivateGatewayRepository, this._enabled) : super(SelfConfigState()) {
     if (!_enabled) return;
     fetchSelfConfig();
     _connectivitySub = Connectivity().onConnectivityChanged.listen(_handleConnectivity);
   }
 
-  final SelfConfigRepository _selfConfigRepository;
+  final CustomPrivateGatewayRepository _customPrivateGatewayRepository;
   final bool _enabled;
   StreamSubscription? _connectivitySub;
 
@@ -28,7 +28,7 @@ class SelfConfigCubit extends Cubit<SelfConfigState> {
 
   Future<void> fetchSelfConfig() async {
     try {
-      final selfConfig = await _selfConfigRepository.getSelfConfig();
+      final selfConfig = await _customPrivateGatewayRepository.getSelfConfig();
       emit(SelfConfigState(selfConfig: selfConfig));
     } catch (e, s) {
       _logger.warning('Failed to get self config', e, s);

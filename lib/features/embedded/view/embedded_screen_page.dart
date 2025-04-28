@@ -28,7 +28,7 @@ class EmbeddedScreenPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final selfConfigRepository = context.readOrNull<SelfConfigRepository>();
+    final selfConfigRepository = context.readOrNull<CustomPrivateGatewayRepository>();
     final secureStorage = context.read<SecureStorage>();
 
     if (selfConfigRepository == null) {
@@ -40,7 +40,7 @@ class EmbeddedScreenPage extends StatelessWidget {
 
     return BlocProvider(
       create: (context) => EmbeddedCubit(
-        selfConfigRepository: selfConfigRepository,
+        customPrivateGatewayRepository: selfConfigRepository,
         embeddedPayloadBuilder: embeddedPayloadBuilder,
         payload: data.payload,
       ),
