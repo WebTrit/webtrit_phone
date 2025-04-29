@@ -88,6 +88,21 @@ class VoicemailRepositoryImpl with ContactsDriftMapper, VoicemailMapper implemen
   }
 
   @override
+  Future<void> removeAllVoicemails() async {
+    final allVoicemails = await _appDatabase.voicemailDao.getAllVoicemails();
+
+    for (final voicemail in allVoicemails) {
+      try {
+        await removeVoicemail(voicemail.id);
+      } catch (e, st) {
+        _logger.warning('Failed to remove voicemail with id ${voicemail.id}', e, st);
+      }
+    }
+
+    await _appDatabase.voicemailDao.deleteAllVoicemails();
+  }
+
+  @override
   Future<void> updateVoicemailSeenStatus(String messageId, bool seen, {String? localeCode}) async {
     await _webtritApiClient.updateUserVoicemail(
       _token,
@@ -129,11 +144,6 @@ class VoicemailRepositoryImpl with ContactsDriftMapper, VoicemailMapper implemen
   Stream<List<Voicemail>> watchVoicemails() {
     final voicemails = _appDatabase.voicemailDao.watchVoicemailsWithContacts();
     return voicemails.map((it) => it.map(_voicemailFromDriftWithContact).toList());
-  }
-
-  @override
-  Future<void> removeAllVoicemails() {
-    return _appDatabase.voicemailDao.deleteAllVoicemails();
   }
 
   Voicemail _voicemailFromDriftWithContact(VoicemailWithContact data) {
