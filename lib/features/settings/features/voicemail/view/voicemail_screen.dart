@@ -43,7 +43,7 @@ class VoicemailScreen extends StatelessWidget {
           mediaHeaders: context.read<VoicemailCubit>().state.mediaHeaders,
           onDeleted: (it) => context.read<VoicemailCubit>().deleteVoicemail(it.id.toString()),
           onToggleSeenStatus: (it) => context.read<VoicemailCubit>().toggleSeenStatus(it),
-          displayName: item.sender,
+          displayName: item.displaySender,
           smart: false,
           onCall: (Voicemail) {},
           onMessage: (Voicemail) {},

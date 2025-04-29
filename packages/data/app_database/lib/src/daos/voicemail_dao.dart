@@ -49,12 +49,17 @@ class VoicemailDao extends DatabaseAccessor<AppDatabase> with _$VoicemailDaoMixi
 
   Stream<List<VoicemailWithContact>> watchVoicemailsWithContacts() {
     final voicemail = voicemailTable;
+    final contactPhones = db.contactPhonesTable;
     final contacts = db.contactsTable;
 
     final query = select(voicemail).join([
       leftOuterJoin(
+        contactPhones,
+        contactPhones.number.equalsExp(voicemail.sender),
+      ),
+      leftOuterJoin(
         contacts,
-        contacts.sourceId.equalsExp(voicemail.sender),
+        contacts.id.equalsExp(contactPhones.contactId),
       ),
     ]);
 
