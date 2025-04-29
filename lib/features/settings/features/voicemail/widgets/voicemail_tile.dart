@@ -14,30 +14,28 @@ class VoicemailTile extends StatelessWidget {
   const VoicemailTile({
     super.key,
     required this.voicemail,
-    required this.onDeleted,
     required this.mediaHeaders,
-    this.onTap,
     required this.displayName,
+    required this.onCall,
+    required this.onDeleted,
+    required this.onToggleSeenStatus,
     this.thumbnail,
     this.thumbnailUrl,
     this.registered,
-    required this.smart,
-    required this.onToggleSeenStatus,
-    required this.onCall,
+    this.smart = false,
   });
 
   final Voicemail voicemail;
   final Map<String, String> mediaHeaders;
-  final VoidCallback? onTap;
   final String displayName;
   final Uint8List? thumbnail;
   final Uri? thumbnailUrl;
   final bool? registered;
   final bool smart;
 
+  final void Function(Voicemail) onCall;
   final void Function(Voicemail) onDeleted;
   final void Function(Voicemail) onToggleSeenStatus;
-  final void Function(Voicemail) onCall;
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +69,6 @@ class VoicemailTile extends StatelessWidget {
               Text(DateFormat('d MMMM yyyy').format(DateTime.parse(voicemail.date))),
             ],
           ),
-          onTap: onTap,
           trailing: PopupMenuButton<_VoicemailMenuAction>(
             padding: EdgeInsets.zero,
             position: PopupMenuPosition.under,

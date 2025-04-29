@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/models/voicemail/user_voicemail.dart';
-import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../bloc/voicemail_cubit.dart';
 import '../widgets/widgets.dart';
@@ -71,10 +70,9 @@ class VoicemailListView extends StatelessWidget {
         return VoicemailTile(
           voicemail: item,
           mediaHeaders: mediaHeaders,
+          displayName: item.displaySender,
           onDeleted: (it) => cubit.deleteVoicemail(it.id.toString()),
           onToggleSeenStatus: (it) => cubit.toggleSeenStatus(it),
-          displayName: item.displaySender,
-          smart: false,
           onCall: (it) => cubit.startCall(it),
         );
       },
