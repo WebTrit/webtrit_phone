@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:webtrit_phone/features/call/bloc/call_bloc.dart';
 
 import 'package:webtrit_phone/models/models.dart';
 
@@ -45,8 +46,8 @@ class VoicemailScreen extends StatelessWidget {
           onToggleSeenStatus: (it) => context.read<VoicemailCubit>().toggleSeenStatus(it),
           displayName: item.displaySender,
           smart: false,
-          onCall: (Voicemail) {},
-          onMessage: (Voicemail) {},
+          onMessage: (it) => context.read<VoicemailCubit>().message,
+          onCall: (it) => context.read<VoicemailCubit>().startCall,
         );
       },
     );

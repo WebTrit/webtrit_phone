@@ -1,7 +1,8 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
+
 import 'package:bloc/bloc.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'package:webtrit_phone/models/models.dart';
@@ -12,15 +13,17 @@ part 'voicemail_state.dart';
 part 'voicemail_cubit.freezed.dart';
 
 class VoicemailCubit extends Cubit<VoicemailState> {
-  VoicemailCubit(this._repository, Map<String, String> mediaHeaders)
-      : super(VoicemailState(mediaHeaders: mediaHeaders)) {
-    _subscription = _repository.watchVoicemails().listen((items) {
-      emit(VoicemailState(items: items, mediaHeaders: state.mediaHeaders));
-    });
+  VoicemailCubit({
+    required VoicemailRepository repository,
+    required Map<String, String> mediaHeaders,
+    required this.onCallStarted,
+  })  : _repository = repository,
+        super(VoicemailState(mediaHeaders: mediaHeaders)) {
     loadVoicemails();
   }
 
   final VoicemailRepository _repository;
+  final ValueChanged<String> onCallStarted;
   late final StreamSubscription<List<Voicemail>> _subscription;
 
   void cleanDb() {
@@ -45,13 +48,19 @@ class VoicemailCubit extends Cubit<VoicemailState> {
     }
   }
 
+  void toggleSeenStatus(Voicemail voicemail) {
+    _repository.updateVoicemailSeenStatus(voicemail.id.toString(), !voicemail.seen);
+  }
+
+  void startCall(Voicemail voicemail) {
+    onCallStarted(voicemail.sender);
+  }
+
+  void message(Voicemail voicemail) {}
+
   @override
   Future<void> close() {
     _subscription.cancel();
     return super.close();
-  }
-
-  void toggleSeenStatus(Voicemail voicemail) {
-    _repository.updateVoicemailSeenStatus(voicemail.id.toString(), !voicemail.seen);
   }
 }

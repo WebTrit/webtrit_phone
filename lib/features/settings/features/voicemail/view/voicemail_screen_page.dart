@@ -4,6 +4,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/data/data.dart';
+import 'package:webtrit_phone/features/call/bloc/call_bloc.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
 import '../bloc/voicemail_cubit.dart';
@@ -25,7 +26,11 @@ class VoicemailScreenPage extends StatelessWidget {
     };
 
     return BlocProvider(
-      create: (context) => VoicemailCubit(context.read<VoicemailRepository>(), mediaHeaders),
+      create: (context) => VoicemailCubit(
+        repository: context.read<VoicemailRepository>(),
+        mediaHeaders: mediaHeaders,
+        onCallStarted: (number) => context.read<CallBloc>().add(CallControlEvent.started(number: number, video: false)),
+      ),
       child: widget,
     );
   }

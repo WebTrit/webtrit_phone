@@ -110,7 +110,7 @@ class VoicemailTile extends StatelessWidget {
                 value: _VoicemailMenuAction.delete,
                 child: ListTile(
                   leading: Icon(Icons.delete, color: colorScheme.error),
-                  title: Text('Delete'),
+                  title: const Text('Delete'),
                 ),
               ),
             ],
