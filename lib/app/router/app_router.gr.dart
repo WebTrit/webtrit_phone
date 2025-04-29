@@ -1238,3 +1238,19 @@ class UserAgreementScreenPageRoute extends PageRouteInfo<void> {
     },
   );
 }
+
+/// generated route for
+/// [VoicemailScreenPage]
+class VoicemailScreenPageRoute extends PageRouteInfo<void> {
+  const VoicemailScreenPageRoute({List<PageRouteInfo>? children})
+    : super(VoicemailScreenPageRoute.name, initialChildren: children);
+
+  static const String name = 'VoicemailScreenPageRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return VoicemailScreenPage();
+    },
+  );
+}

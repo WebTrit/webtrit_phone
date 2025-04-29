@@ -296,6 +296,10 @@ class AppRouter extends RootStackRouter {
                       page: DiagnosticScreenPageRoute.page,
                       path: 'diagnostic',
                     ),
+                    AutoRoute(
+                      page: VoicemailScreenPageRoute.page,
+                      path: 'voicemail',
+                    ),
                   ],
                 ),
               ],
