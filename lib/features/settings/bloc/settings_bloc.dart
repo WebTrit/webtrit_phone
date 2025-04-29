@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
-import 'package:equatable/equatable.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:logging/logging.dart';
 
 import 'package:webtrit_phone/app/notifications/notifications.dart';
@@ -13,6 +13,8 @@ part 'settings_event.dart';
 
 part 'settings_state.dart';
 
+part 'settings_bloc.freezed.dart';
+
 final _logger = Logger('SettingsBloc');
 
 class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
@@ -20,7 +22,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     required this.notificationsBloc,
     required this.appBloc,
     required this.userRepository,
-  }) : super(SettingsState(progress: false)) {
+  }) : super(const SettingsState(progress: false)) {
     on<SettingsLogouted>(_onLogouted, transformer: droppable());
     on<SettingsAccountDeleted>(_onAccountDeleted, transformer: droppable());
   }
