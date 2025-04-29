@@ -19,12 +19,20 @@ class VoicemailCubit extends Cubit<VoicemailState> {
     required this.onCallStarted,
   })  : _repository = repository,
         super(VoicemailState(mediaHeaders: mediaHeaders)) {
-    loadVoicemails();
+    _initialize();
   }
 
   final VoicemailRepository _repository;
   final ValueChanged<String> onCallStarted;
   late final StreamSubscription<List<Voicemail>> _subscription;
+
+  void _initialize() {
+    _subscription = _repository.watchVoicemails().listen((items) {
+      emit(VoicemailState(items: items, mediaHeaders: state.mediaHeaders));
+    });
+
+    _repository.fetchVoicemails();
+  }
 
   void cleanDb() {
     _repository.removeAllVoicemails();
@@ -42,14 +50,18 @@ class VoicemailCubit extends Cubit<VoicemailState> {
 
   void deleteVoicemail(String messageId) async {
     try {
+      emit(state.copyWith(status: VoicemailStatus.loading));
       await _repository.removeVoicemail(messageId);
+      emit(state.copyWith(status: VoicemailStatus.loaded));
     } catch (e) {
       // TODO(Serdun): Handle error
     }
   }
 
-  void toggleSeenStatus(Voicemail voicemail) {
-    _repository.updateVoicemailSeenStatus(voicemail.id.toString(), !voicemail.seen);
+  void toggleSeenStatus(Voicemail voicemail) async {
+    emit(state.copyWith(status: VoicemailStatus.loading));
+    await _repository.updateVoicemailSeenStatus(voicemail.id.toString(), !voicemail.seen);
+    emit(state.copyWith(status: VoicemailStatus.loaded));
   }
 
   void startCall(Voicemail voicemail) {

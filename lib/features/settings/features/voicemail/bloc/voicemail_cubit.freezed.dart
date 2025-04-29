@@ -16,6 +16,7 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$VoicemailState {
+  VoicemailStatus get status => throw _privateConstructorUsedError;
   Map<String, String> get mediaHeaders => throw _privateConstructorUsedError;
   List<Voicemail> get items => throw _privateConstructorUsedError;
 
@@ -32,7 +33,10 @@ abstract class $VoicemailStateCopyWith<$Res> {
           VoicemailState value, $Res Function(VoicemailState) then) =
       _$VoicemailStateCopyWithImpl<$Res, VoicemailState>;
   @useResult
-  $Res call({Map<String, String> mediaHeaders, List<Voicemail> items});
+  $Res call(
+      {VoicemailStatus status,
+      Map<String, String> mediaHeaders,
+      List<Voicemail> items});
 }
 
 /// @nodoc
@@ -50,10 +54,15 @@ class _$VoicemailStateCopyWithImpl<$Res, $Val extends VoicemailState>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? status = null,
     Object? mediaHeaders = null,
     Object? items = null,
   }) {
     return _then(_value.copyWith(
+      status: null == status
+          ? _value.status
+          : status // ignore: cast_nullable_to_non_nullable
+              as VoicemailStatus,
       mediaHeaders: null == mediaHeaders
           ? _value.mediaHeaders
           : mediaHeaders // ignore: cast_nullable_to_non_nullable
@@ -74,7 +83,10 @@ abstract class _$$VoicemailStateImplCopyWith<$Res>
       __$$VoicemailStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({Map<String, String> mediaHeaders, List<Voicemail> items});
+  $Res call(
+      {VoicemailStatus status,
+      Map<String, String> mediaHeaders,
+      List<Voicemail> items});
 }
 
 /// @nodoc
@@ -90,10 +102,15 @@ class __$$VoicemailStateImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? status = null,
     Object? mediaHeaders = null,
     Object? items = null,
   }) {
     return _then(_$VoicemailStateImpl(
+      status: null == status
+          ? _value.status
+          : status // ignore: cast_nullable_to_non_nullable
+              as VoicemailStatus,
       mediaHeaders: null == mediaHeaders
           ? _value._mediaHeaders
           : mediaHeaders // ignore: cast_nullable_to_non_nullable
@@ -108,13 +125,19 @@ class __$$VoicemailStateImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$VoicemailStateImpl implements _VoicemailState {
+class _$VoicemailStateImpl
+    with DiagnosticableTreeMixin
+    implements _VoicemailState {
   const _$VoicemailStateImpl(
-      {required final Map<String, String> mediaHeaders,
+      {this.status = VoicemailStatus.initial,
+      required final Map<String, String> mediaHeaders,
       final List<Voicemail> items = const []})
       : _mediaHeaders = mediaHeaders,
         _items = items;
 
+  @override
+  @JsonKey()
+  final VoicemailStatus status;
   final Map<String, String> _mediaHeaders;
   @override
   Map<String, String> get mediaHeaders {
@@ -133,8 +156,18 @@ class _$VoicemailStateImpl implements _VoicemailState {
   }
 
   @override
-  String toString() {
-    return 'VoicemailState(mediaHeaders: $mediaHeaders, items: $items)';
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'VoicemailState(status: $status, mediaHeaders: $mediaHeaders, items: $items)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('type', 'VoicemailState'))
+      ..add(DiagnosticsProperty('status', status))
+      ..add(DiagnosticsProperty('mediaHeaders', mediaHeaders))
+      ..add(DiagnosticsProperty('items', items));
   }
 
   @override
@@ -142,6 +175,7 @@ class _$VoicemailStateImpl implements _VoicemailState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$VoicemailStateImpl &&
+            (identical(other.status, status) || other.status == status) &&
             const DeepCollectionEquality()
                 .equals(other._mediaHeaders, _mediaHeaders) &&
             const DeepCollectionEquality().equals(other._items, _items));
@@ -150,6 +184,7 @@ class _$VoicemailStateImpl implements _VoicemailState {
   @override
   int get hashCode => Object.hash(
       runtimeType,
+      status,
       const DeepCollectionEquality().hash(_mediaHeaders),
       const DeepCollectionEquality().hash(_items));
 
@@ -165,9 +200,12 @@ class _$VoicemailStateImpl implements _VoicemailState {
 
 abstract class _VoicemailState implements VoicemailState {
   const factory _VoicemailState(
-      {required final Map<String, String> mediaHeaders,
+      {final VoicemailStatus status,
+      required final Map<String, String> mediaHeaders,
       final List<Voicemail> items}) = _$VoicemailStateImpl;
 
+  @override
+  VoicemailStatus get status;
   @override
   Map<String, String> get mediaHeaders;
   @override

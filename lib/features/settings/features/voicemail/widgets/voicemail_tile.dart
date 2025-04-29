@@ -24,7 +24,6 @@ class VoicemailTile extends StatelessWidget {
     required this.smart,
     required this.onToggleSeenStatus,
     required this.onCall,
-    this.onMessage,
   });
 
   final Voicemail voicemail;
@@ -39,7 +38,6 @@ class VoicemailTile extends StatelessWidget {
   final void Function(Voicemail) onDeleted;
   final void Function(Voicemail) onToggleSeenStatus;
   final void Function(Voicemail) onCall;
-  final void Function(Voicemail)? onMessage;
 
   @override
   Widget build(BuildContext context) {
@@ -84,13 +82,6 @@ class VoicemailTile extends StatelessWidget {
                 child: ListTile(
                   leading: Icon(Icons.call),
                   title: Text('Call'),
-                ),
-              ),
-              const PopupMenuItem(
-                value: _VoicemailMenuAction.message,
-                child: ListTile(
-                  leading: Icon(Icons.message),
-                  title: Text('Message'),
                 ),
               ),
               PopupMenuItem(
@@ -140,9 +131,6 @@ class VoicemailTile extends StatelessWidget {
       case _VoicemailMenuAction.call:
         onCall(voicemail);
         break;
-      case _VoicemailMenuAction.message:
-        onMessage?.call(voicemail);
-        break;
       case _VoicemailMenuAction.toggleSeenStatus:
         onToggleSeenStatus(voicemail);
         break;
@@ -155,7 +143,6 @@ class VoicemailTile extends StatelessWidget {
 
 enum _VoicemailMenuAction {
   call,
-  message,
   toggleSeenStatus,
   delete,
 }

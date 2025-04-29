@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:webtrit_phone/features/call/bloc/call_bloc.dart';
 
-import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/models/voicemail/user_voicemail.dart';
+import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../bloc/voicemail_cubit.dart';
 import '../widgets/widgets.dart';
@@ -15,24 +15,50 @@ class VoicemailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<VoicemailCubit, VoicemailState>(
       builder: (context, state) {
+        final cubit = context.read<VoicemailCubit>();
+
         return Scaffold(
-          appBar: AppBar(title: const Text('Voicemail'), actions: [
-            IconButton(
-              icon: const Icon(Icons.delete),
-              onPressed: () => context.read<VoicemailCubit>().cleanDb(),
-            ),
-          ]),
-          body: _buildList(state.items),
+          appBar: AppBar(
+            title: const Text('Voicemail'),
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.delete),
+                onPressed: cubit.cleanDb,
+              ),
+            ],
+          ),
+          body: Stack(
+            children: [
+              if (state.status == VoicemailStatus.loading && state.items.isEmpty)
+                const Center(child: SizedCircularProgressIndicator(size: 16, strokeWidth: 2)),
+              if (state.status == VoicemailStatus.loading && state.items.isNotEmpty)
+                const LinearProgressIndicator(minHeight: 2),
+              if (state.status == VoicemailStatus.loaded && state.items.isEmpty)
+                const Center(child: Text('No voicemails')),
+              if (state.items.isNotEmpty)
+                VoicemailListView(items: state.items, mediaHeaders: state.mediaHeaders, cubit: cubit),
+            ],
+          ),
         );
       },
     );
   }
+}
 
-  Widget _buildList(List<Voicemail> items) {
-    if (items.isEmpty) {
-      return const Center(child: Text('No voicemails'));
-    }
+class VoicemailListView extends StatelessWidget {
+  const VoicemailListView({
+    super.key,
+    required this.items,
+    required this.mediaHeaders,
+    required this.cubit,
+  });
 
+  final List<Voicemail> items;
+  final Map<String, String> mediaHeaders;
+  final VoicemailCubit cubit;
+
+  @override
+  Widget build(BuildContext context) {
     return ListView.separated(
       padding: const EdgeInsets.all(16),
       itemCount: items.length,
@@ -41,13 +67,12 @@ class VoicemailScreen extends StatelessWidget {
         final item = items[index];
         return VoicemailTile(
           voicemail: item,
-          mediaHeaders: context.read<VoicemailCubit>().state.mediaHeaders,
-          onDeleted: (it) => context.read<VoicemailCubit>().deleteVoicemail(it.id.toString()),
-          onToggleSeenStatus: (it) => context.read<VoicemailCubit>().toggleSeenStatus(it),
+          mediaHeaders: mediaHeaders,
+          onDeleted: (it) => cubit.deleteVoicemail(it.id.toString()),
+          onToggleSeenStatus: (it) => cubit.toggleSeenStatus(it),
           displayName: item.displaySender,
           smart: false,
-          onMessage: (it) => context.read<VoicemailCubit>().message,
-          onCall: (it) => context.read<VoicemailCubit>().startCall,
+          onCall: (it) => cubit.startCall(it),
         );
       },
     );
