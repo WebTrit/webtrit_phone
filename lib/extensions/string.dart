@@ -18,6 +18,10 @@ extension StringExtension on String {
     }
   }
 
+  Uri get toUri => Uri.parse(this);
+
+  bool get isLocalPath => toUri.host.isEmpty && toUri.path.isNotEmpty;
+
   /// Converts a hex string (e.g., "0xf1cf") to an [IconData].
   /// Defaults to the MaterialIcons font family.
   IconData toIconData({String fontFamily = 'MaterialIcons'}) {
