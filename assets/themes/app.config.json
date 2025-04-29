@@ -89,6 +89,12 @@
           },
           {
             "enabled": true,
+            "type": "voicemail",
+            "titleL10n": "settings_ListViewTileTitle_voicemail",
+            "icon": "0xe6c1"
+          },
+          {
+            "enabled": true,
             "type": "language",
             "titleL10n": "settings_ListViewTileTitle_language",
             "icon": "0xe366"
