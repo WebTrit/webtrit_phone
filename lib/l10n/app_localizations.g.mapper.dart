@@ -862,6 +862,8 @@ class AppLocalizationsMapper {
           localizations.settings_ListViewTileTitle_help,
       'settings_ListViewTileTitle_language':
           localizations.settings_ListViewTileTitle_language,
+      'settings_ListViewTileTitle_voicemail':
+          localizations.settings_ListViewTileTitle_voicemail,
       'settings_ListViewTileTitle_logout':
           localizations.settings_ListViewTileTitle_logout,
       'settings_ListViewTileTitle_logRecordsConsole':

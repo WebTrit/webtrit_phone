@@ -1404,6 +1404,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get settings_ListViewTileTitle_language => 'Linguaggio';
 
   @override
+  String get settings_ListViewTileTitle_voicemail => 'Segreteria telefonica';
+
+  @override
   String get settings_ListViewTileTitle_logout => 'Esci';
 
   @override

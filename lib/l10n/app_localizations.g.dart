@@ -2803,6 +2803,12 @@ abstract class AppLocalizations {
   /// **'Language'**
   String get settings_ListViewTileTitle_language;
 
+  /// No description provided for @settings_ListViewTileTitle_voicemail.
+  ///
+  /// In en, this message translates to:
+  /// **'Voicemail'**
+  String get settings_ListViewTileTitle_voicemail;
+
   /// No description provided for @settings_ListViewTileTitle_logout.
   ///
   /// In en, this message translates to:

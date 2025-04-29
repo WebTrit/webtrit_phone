@@ -1044,6 +1044,8 @@
   "@settings_ListViewTileTitle_help": {},
   "settings_ListViewTileTitle_language": "Мова",
   "@settings_ListViewTileTitle_language": {},
+  "settings_ListViewTileTitle_voicemail": "Голосова пошта",
+  "@settings_ListViewTileTitle_voicemail": {},
   "settings_ListViewTileTitle_logout": "Вийти",
   "@settings_ListViewTileTitle_logout": {},
   "settings_ListViewTileTitle_logRecordsConsole": "Консоль записів журналу",

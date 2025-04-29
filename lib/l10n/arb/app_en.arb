@@ -1044,6 +1044,8 @@
   "@settings_ListViewTileTitle_help": {},
   "settings_ListViewTileTitle_language": "Language",
   "@settings_ListViewTileTitle_language": {},
+  "settings_ListViewTileTitle_voicemail": "Voicemail",
+  "@settings_ListViewTileTitle_voicemail": {},
   "settings_ListViewTileTitle_logout": "Logout",
   "@settings_ListViewTileTitle_logout": {},
   "settings_ListViewTileTitle_logRecordsConsole": "Log records console",

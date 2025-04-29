@@ -1404,6 +1404,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get settings_ListViewTileTitle_language => 'Мова';
 
   @override
+  String get settings_ListViewTileTitle_voicemail => 'Голосова пошта';
+
+  @override
   String get settings_ListViewTileTitle_logout => 'Вийти';
 
   @override
