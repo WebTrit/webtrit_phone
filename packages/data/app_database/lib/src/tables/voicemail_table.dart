@@ -8,7 +8,7 @@ class VoicemailTable extends Table {
   @override
   Set<Column> get primaryKey => {id};
 
-  IntColumn get id => integer()();
+  TextColumn get id => text()();
 
   TextColumn get date => text()();
 

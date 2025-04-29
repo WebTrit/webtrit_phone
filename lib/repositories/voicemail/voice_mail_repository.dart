@@ -69,7 +69,7 @@ class VoicemailRepositoryImpl with ContactsDriftMapper implements VoicemailRepos
 
       // https://core1.demo.webtrit.com/api/v1/user/voicemails/2066/attachment?file_format=mp3
       final voicemail = VoicemailData(
-        id: int.parse(item.id),
+        id: item.id,
         date: item.date,
         duration: item.duration,
         sender: details.sender,
@@ -101,7 +101,7 @@ class VoicemailRepositoryImpl with ContactsDriftMapper implements VoicemailRepos
       options: RequestOptions.withNoRetries(),
     );
 
-    await _appDatabase.voicemailDao.deleteVoicemailById(int.parse(messageId));
+    await _appDatabase.voicemailDao.deleteVoicemailById(messageId);
   }
 
   @override
@@ -118,7 +118,7 @@ class VoicemailRepositoryImpl with ContactsDriftMapper implements VoicemailRepos
 
     await _appDatabase.voicemailDao.updateVoicemail(
       VoicemailDataCompanion(
-        id: Value(int.parse(messageId)),
+        id: Value(messageId),
         seen: Value(seen),
       ),
     );

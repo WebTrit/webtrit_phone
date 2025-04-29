@@ -6736,7 +6736,7 @@ class $SmsOutboxMessageDeleteTableTable extends SmsOutboxMessageDeleteTable
   @override
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
       'id', aliasedName, false,
-      type: DriftSqlType.int, requiredDuringInsert: true);
+      type: DriftSqlType.int, requiredDuringInsert: false);
   static const VerificationMeta _idKeyMeta = const VerificationMeta('idKey');
   @override
   late final GeneratedColumn<String> idKey = GeneratedColumn<String>(
@@ -6775,8 +6775,6 @@ class $SmsOutboxMessageDeleteTableTable extends SmsOutboxMessageDeleteTable
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
-    } else if (isInserting) {
-      context.missing(_idMeta);
     }
     if (data.containsKey('id_key')) {
       context.handle(
@@ -6802,7 +6800,7 @@ class $SmsOutboxMessageDeleteTableTable extends SmsOutboxMessageDeleteTable
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => const {};
+  Set<GeneratedColumn> get $primaryKey => {id};
   @override
   SmsOutboxMessageDeleteData map(Map<String, dynamic> data,
       {String? tablePrefix}) {
@@ -6927,36 +6925,30 @@ class SmsOutboxMessageDeleteDataCompanion
   final Value<String> idKey;
   final Value<int> conversationId;
   final Value<int> sendAttempts;
-  final Value<int> rowid;
   const SmsOutboxMessageDeleteDataCompanion({
     this.id = const Value.absent(),
     this.idKey = const Value.absent(),
     this.conversationId = const Value.absent(),
     this.sendAttempts = const Value.absent(),
-    this.rowid = const Value.absent(),
   });
   SmsOutboxMessageDeleteDataCompanion.insert({
-    required int id,
+    this.id = const Value.absent(),
     required String idKey,
     required int conversationId,
     this.sendAttempts = const Value.absent(),
-    this.rowid = const Value.absent(),
-  })  : id = Value(id),
-        idKey = Value(idKey),
+  })  : idKey = Value(idKey),
         conversationId = Value(conversationId);
   static Insertable<SmsOutboxMessageDeleteData> custom({
     Expression<int>? id,
     Expression<String>? idKey,
     Expression<int>? conversationId,
     Expression<int>? sendAttempts,
-    Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (idKey != null) 'id_key': idKey,
       if (conversationId != null) 'conversation_id': conversationId,
       if (sendAttempts != null) 'send_attempts': sendAttempts,
-      if (rowid != null) 'rowid': rowid,
     });
   }
 
@@ -6964,14 +6956,12 @@ class SmsOutboxMessageDeleteDataCompanion
       {Value<int>? id,
       Value<String>? idKey,
       Value<int>? conversationId,
-      Value<int>? sendAttempts,
-      Value<int>? rowid}) {
+      Value<int>? sendAttempts}) {
     return SmsOutboxMessageDeleteDataCompanion(
       id: id ?? this.id,
       idKey: idKey ?? this.idKey,
       conversationId: conversationId ?? this.conversationId,
       sendAttempts: sendAttempts ?? this.sendAttempts,
-      rowid: rowid ?? this.rowid,
     );
   }
 
@@ -6990,9 +6980,6 @@ class SmsOutboxMessageDeleteDataCompanion
     if (sendAttempts.present) {
       map['send_attempts'] = Variable<int>(sendAttempts.value);
     }
-    if (rowid.present) {
-      map['rowid'] = Variable<int>(rowid.value);
-    }
     return map;
   }
 
@@ -7002,8 +6989,7 @@ class SmsOutboxMessageDeleteDataCompanion
           ..write('id: $id, ')
           ..write('idKey: $idKey, ')
           ..write('conversationId: $conversationId, ')
-          ..write('sendAttempts: $sendAttempts, ')
-          ..write('rowid: $rowid')
+          ..write('sendAttempts: $sendAttempts')
           ..write(')'))
         .toString();
   }
@@ -7780,9 +7766,9 @@ class $VoicemailTableTable extends VoicemailTable
   $VoicemailTableTable(this.attachedDatabase, [this._alias]);
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
-  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
       'id', aliasedName, false,
-      type: DriftSqlType.int, requiredDuringInsert: false);
+      type: DriftSqlType.string, requiredDuringInsert: true);
   static const VerificationMeta _dateMeta = const VerificationMeta('date');
   @override
   late final GeneratedColumn<String> date = GeneratedColumn<String>(
@@ -7845,6 +7831,8 @@ class $VoicemailTableTable extends VoicemailTable
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
     }
     if (data.containsKey('date')) {
       context.handle(
@@ -7902,7 +7890,7 @@ class $VoicemailTableTable extends VoicemailTable
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return VoicemailData(
       id: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+          .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
       date: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}date'])!,
       duration: attachedDatabase.typeMapping
@@ -7929,7 +7917,7 @@ class $VoicemailTableTable extends VoicemailTable
 }
 
 class VoicemailData extends DataClass implements Insertable<VoicemailData> {
-  final int id;
+  final String id;
   final String date;
   final double duration;
   final String sender;
@@ -7951,7 +7939,7 @@ class VoicemailData extends DataClass implements Insertable<VoicemailData> {
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    map['id'] = Variable<int>(id);
+    map['id'] = Variable<String>(id);
     map['date'] = Variable<String>(date);
     map['duration'] = Variable<double>(duration);
     map['sender'] = Variable<String>(sender);
@@ -7985,7 +7973,7 @@ class VoicemailData extends DataClass implements Insertable<VoicemailData> {
       {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return VoicemailData(
-      id: serializer.fromJson<int>(json['id']),
+      id: serializer.fromJson<String>(json['id']),
       date: serializer.fromJson<String>(json['date']),
       duration: serializer.fromJson<double>(json['duration']),
       sender: serializer.fromJson<String>(json['sender']),
@@ -8000,7 +7988,7 @@ class VoicemailData extends DataClass implements Insertable<VoicemailData> {
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
-      'id': serializer.toJson<int>(id),
+      'id': serializer.toJson<String>(id),
       'date': serializer.toJson<String>(date),
       'duration': serializer.toJson<double>(duration),
       'sender': serializer.toJson<String>(sender),
@@ -8013,7 +8001,7 @@ class VoicemailData extends DataClass implements Insertable<VoicemailData> {
   }
 
   VoicemailData copyWith(
-          {int? id,
+          {String? id,
           String? date,
           double? duration,
           String? sender,
@@ -8085,7 +8073,7 @@ class VoicemailData extends DataClass implements Insertable<VoicemailData> {
 }
 
 class VoicemailDataCompanion extends UpdateCompanion<VoicemailData> {
-  final Value<int> id;
+  final Value<String> id;
   final Value<String> date;
   final Value<double> duration;
   final Value<String> sender;
@@ -8094,6 +8082,7 @@ class VoicemailDataCompanion extends UpdateCompanion<VoicemailData> {
   final Value<int> size;
   final Value<String> type;
   final Value<String?> attachmentPath;
+  final Value<int> rowid;
   const VoicemailDataCompanion({
     this.id = const Value.absent(),
     this.date = const Value.absent(),
@@ -8104,9 +8093,10 @@ class VoicemailDataCompanion extends UpdateCompanion<VoicemailData> {
     this.size = const Value.absent(),
     this.type = const Value.absent(),
     this.attachmentPath = const Value.absent(),
+    this.rowid = const Value.absent(),
   });
   VoicemailDataCompanion.insert({
-    this.id = const Value.absent(),
+    required String id,
     required String date,
     required double duration,
     required String sender,
@@ -8115,14 +8105,16 @@ class VoicemailDataCompanion extends UpdateCompanion<VoicemailData> {
     required int size,
     required String type,
     this.attachmentPath = const Value.absent(),
-  })  : date = Value(date),
+    this.rowid = const Value.absent(),
+  })  : id = Value(id),
+        date = Value(date),
         duration = Value(duration),
         sender = Value(sender),
         receiver = Value(receiver),
         size = Value(size),
         type = Value(type);
   static Insertable<VoicemailData> custom({
-    Expression<int>? id,
+    Expression<String>? id,
     Expression<String>? date,
     Expression<double>? duration,
     Expression<String>? sender,
@@ -8131,6 +8123,7 @@ class VoicemailDataCompanion extends UpdateCompanion<VoicemailData> {
     Expression<int>? size,
     Expression<String>? type,
     Expression<String>? attachmentPath,
+    Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -8142,11 +8135,12 @@ class VoicemailDataCompanion extends UpdateCompanion<VoicemailData> {
       if (size != null) 'size': size,
       if (type != null) 'type': type,
       if (attachmentPath != null) 'attachment_path': attachmentPath,
+      if (rowid != null) 'rowid': rowid,
     });
   }
 
   VoicemailDataCompanion copyWith(
-      {Value<int>? id,
+      {Value<String>? id,
       Value<String>? date,
       Value<double>? duration,
       Value<String>? sender,
@@ -8154,7 +8148,8 @@ class VoicemailDataCompanion extends UpdateCompanion<VoicemailData> {
       Value<bool>? seen,
       Value<int>? size,
       Value<String>? type,
-      Value<String?>? attachmentPath}) {
+      Value<String?>? attachmentPath,
+      Value<int>? rowid}) {
     return VoicemailDataCompanion(
       id: id ?? this.id,
       date: date ?? this.date,
@@ -8165,6 +8160,7 @@ class VoicemailDataCompanion extends UpdateCompanion<VoicemailData> {
       size: size ?? this.size,
       type: type ?? this.type,
       attachmentPath: attachmentPath ?? this.attachmentPath,
+      rowid: rowid ?? this.rowid,
     );
   }
 
@@ -8172,7 +8168,7 @@ class VoicemailDataCompanion extends UpdateCompanion<VoicemailData> {
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     if (id.present) {
-      map['id'] = Variable<int>(id.value);
+      map['id'] = Variable<String>(id.value);
     }
     if (date.present) {
       map['date'] = Variable<String>(date.value);
@@ -8198,6 +8194,9 @@ class VoicemailDataCompanion extends UpdateCompanion<VoicemailData> {
     if (attachmentPath.present) {
       map['attachment_path'] = Variable<String>(attachmentPath.value);
     }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
     return map;
   }
 
@@ -8212,7 +8211,8 @@ class VoicemailDataCompanion extends UpdateCompanion<VoicemailData> {
           ..write('seen: $seen, ')
           ..write('size: $size, ')
           ..write('type: $type, ')
-          ..write('attachmentPath: $attachmentPath')
+          ..write('attachmentPath: $attachmentPath, ')
+          ..write('rowid: $rowid')
           ..write(')'))
         .toString();
   }
@@ -14475,11 +14475,10 @@ typedef $$SmsOutboxMessagesTableTableProcessedTableManager
         PrefetchHooks Function({bool conversationId})>;
 typedef $$SmsOutboxMessageDeleteTableTableCreateCompanionBuilder
     = SmsOutboxMessageDeleteDataCompanion Function({
-  required int id,
+  Value<int> id,
   required String idKey,
   required int conversationId,
   Value<int> sendAttempts,
-  Value<int> rowid,
 });
 typedef $$SmsOutboxMessageDeleteTableTableUpdateCompanionBuilder
     = SmsOutboxMessageDeleteDataCompanion Function({
@@ -14487,7 +14486,6 @@ typedef $$SmsOutboxMessageDeleteTableTableUpdateCompanionBuilder
   Value<String> idKey,
   Value<int> conversationId,
   Value<int> sendAttempts,
-  Value<int> rowid,
 });
 
 final class $$SmsOutboxMessageDeleteTableTableReferences extends BaseReferences<
@@ -14667,28 +14665,24 @@ class $$SmsOutboxMessageDeleteTableTableTableManager extends RootTableManager<
             Value<String> idKey = const Value.absent(),
             Value<int> conversationId = const Value.absent(),
             Value<int> sendAttempts = const Value.absent(),
-            Value<int> rowid = const Value.absent(),
           }) =>
               SmsOutboxMessageDeleteDataCompanion(
             id: id,
             idKey: idKey,
             conversationId: conversationId,
             sendAttempts: sendAttempts,
-            rowid: rowid,
           ),
           createCompanionCallback: ({
-            required int id,
+            Value<int> id = const Value.absent(),
             required String idKey,
             required int conversationId,
             Value<int> sendAttempts = const Value.absent(),
-            Value<int> rowid = const Value.absent(),
           }) =>
               SmsOutboxMessageDeleteDataCompanion.insert(
             id: id,
             idKey: idKey,
             conversationId: conversationId,
             sendAttempts: sendAttempts,
-            rowid: rowid,
           ),
           withReferenceMapper: (p0) => p0
               .map((e) => (
@@ -15326,7 +15320,7 @@ typedef $$ActiveMessageNotificationsTableTableProcessedTableManager
         PrefetchHooks Function()>;
 typedef $$VoicemailTableTableCreateCompanionBuilder = VoicemailDataCompanion
     Function({
-  Value<int> id,
+  required String id,
   required String date,
   required double duration,
   required String sender,
@@ -15335,10 +15329,11 @@ typedef $$VoicemailTableTableCreateCompanionBuilder = VoicemailDataCompanion
   required int size,
   required String type,
   Value<String?> attachmentPath,
+  Value<int> rowid,
 });
 typedef $$VoicemailTableTableUpdateCompanionBuilder = VoicemailDataCompanion
     Function({
-  Value<int> id,
+  Value<String> id,
   Value<String> date,
   Value<double> duration,
   Value<String> sender,
@@ -15347,6 +15342,7 @@ typedef $$VoicemailTableTableUpdateCompanionBuilder = VoicemailDataCompanion
   Value<int> size,
   Value<String> type,
   Value<String?> attachmentPath,
+  Value<int> rowid,
 });
 
 class $$VoicemailTableTableFilterComposer
@@ -15358,7 +15354,7 @@ class $$VoicemailTableTableFilterComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  ColumnFilters<int> get id => $composableBuilder(
+  ColumnFilters<String> get id => $composableBuilder(
       column: $table.id, builder: (column) => ColumnFilters(column));
 
   ColumnFilters<String> get date => $composableBuilder(
@@ -15396,7 +15392,7 @@ class $$VoicemailTableTableOrderingComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  ColumnOrderings<int> get id => $composableBuilder(
+  ColumnOrderings<String> get id => $composableBuilder(
       column: $table.id, builder: (column) => ColumnOrderings(column));
 
   ColumnOrderings<String> get date => $composableBuilder(
@@ -15434,7 +15430,7 @@ class $$VoicemailTableTableAnnotationComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  GeneratedColumn<int> get id =>
+  GeneratedColumn<String> get id =>
       $composableBuilder(column: $table.id, builder: (column) => column);
 
   GeneratedColumn<String> get date =>
@@ -15489,7 +15485,7 @@ class $$VoicemailTableTableTableManager extends RootTableManager<
           createComputedFieldComposer: () =>
               $$VoicemailTableTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback: ({
-            Value<int> id = const Value.absent(),
+            Value<String> id = const Value.absent(),
             Value<String> date = const Value.absent(),
             Value<double> duration = const Value.absent(),
             Value<String> sender = const Value.absent(),
@@ -15498,6 +15494,7 @@ class $$VoicemailTableTableTableManager extends RootTableManager<
             Value<int> size = const Value.absent(),
             Value<String> type = const Value.absent(),
             Value<String?> attachmentPath = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
           }) =>
               VoicemailDataCompanion(
             id: id,
@@ -15509,9 +15506,10 @@ class $$VoicemailTableTableTableManager extends RootTableManager<
             size: size,
             type: type,
             attachmentPath: attachmentPath,
+            rowid: rowid,
           ),
           createCompanionCallback: ({
-            Value<int> id = const Value.absent(),
+            required String id,
             required String date,
             required double duration,
             required String sender,
@@ -15520,6 +15518,7 @@ class $$VoicemailTableTableTableManager extends RootTableManager<
             required int size,
             required String type,
             Value<String?> attachmentPath = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
           }) =>
               VoicemailDataCompanion.insert(
             id: id,
@@ -15531,6 +15530,7 @@ class $$VoicemailTableTableTableManager extends RootTableManager<
             size: size,
             type: type,
             attachmentPath: attachmentPath,
+            rowid: rowid,
           ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))

@@ -12,7 +12,7 @@ class Voicemail {
     this.url,
   );
 
-  final int id;
+  final String id;
   final String date;
   final double duration;
   final String sender;
