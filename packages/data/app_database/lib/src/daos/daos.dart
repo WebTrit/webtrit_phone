@@ -7,3 +7,4 @@ export 'contacts_dao.dart';
 export 'favorites_dao.dart';
 export 'sms_dao.dart';
 export 'recents_dao.dart';
+export 'voicemail_dao.dart';

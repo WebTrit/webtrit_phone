@@ -18,8 +18,6 @@ class $ContactsTableTable extends ContactsTable
       requiredDuringInsert: false,
       defaultConstraints:
           GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
-  static const VerificationMeta _sourceTypeMeta =
-      const VerificationMeta('sourceType');
   @override
   late final GeneratedColumnWithTypeConverter<ContactSourceTypeEnum, int>
       sourceType = GeneratedColumn<int>('source_type', aliasedName, false,
@@ -123,7 +121,6 @@ class $ContactsTableTable extends ContactsTable
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
-    context.handle(_sourceTypeMeta, const VerificationResult.success());
     if (data.containsKey('source_id')) {
       context.handle(_sourceIdMeta,
           sourceId.isAcceptableOrUnknown(data['source_id']!, _sourceIdMeta));
@@ -1331,8 +1328,6 @@ class $CallLogsTableTable extends CallLogsTable
       requiredDuringInsert: false,
       defaultConstraints:
           GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
-  static const VerificationMeta _directionMeta =
-      const VerificationMeta('direction');
   @override
   late final GeneratedColumnWithTypeConverter<CallLogDirectionEnum, int>
       direction = GeneratedColumn<int>('direction', aliasedName, false,
@@ -1389,7 +1384,6 @@ class $CallLogsTableTable extends CallLogsTable
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
-    context.handle(_directionMeta, const VerificationResult.success());
     if (data.containsKey('number')) {
       context.handle(_numberMeta,
           number.isAcceptableOrUnknown(data['number']!, _numberMeta));
@@ -1942,7 +1936,6 @@ class $ChatsTableTable extends ChatsTable
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
       'id', aliasedName, false,
       type: DriftSqlType.int, requiredDuringInsert: false);
-  static const VerificationMeta _typeMeta = const VerificationMeta('type');
   @override
   late final GeneratedColumnWithTypeConverter<ChatTypeEnum, String> type =
       GeneratedColumn<String>('type', aliasedName, false,
@@ -1981,7 +1974,6 @@ class $ChatsTableTable extends ChatsTable
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
-    context.handle(_typeMeta, const VerificationResult.success());
     if (data.containsKey('name')) {
       context.handle(
           _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
@@ -2261,8 +2253,6 @@ class $ChatMembersTableTable extends ChatMembersTable
   late final GeneratedColumn<String> userId = GeneratedColumn<String>(
       'user_id', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _groupAuthoritiesMeta =
-      const VerificationMeta('groupAuthorities');
   @override
   late final GeneratedColumnWithTypeConverter<GroupAuthoritiesEnum?, String>
       groupAuthorities = GeneratedColumn<String>(
@@ -2297,7 +2287,6 @@ class $ChatMembersTableTable extends ChatMembersTable
     } else if (isInserting) {
       context.missing(_userIdMeta);
     }
-    context.handle(_groupAuthoritiesMeta, const VerificationResult.success());
     return context;
   }
 
@@ -3150,8 +3139,6 @@ class $ChatMessageSyncCursorTableTable extends ChatMessageSyncCursorTable
       requiredDuringInsert: true,
       defaultConstraints: GeneratedColumn.constraintIsAlways(
           'REFERENCES chats (id) ON DELETE CASCADE'));
-  static const VerificationMeta _cursorTypeMeta =
-      const VerificationMeta('cursorType');
   @override
   late final GeneratedColumnWithTypeConverter<MessageSyncCursorTypeEnum, String>
       cursorType = GeneratedColumn<String>('cursor_type', aliasedName, false,
@@ -3183,7 +3170,6 @@ class $ChatMessageSyncCursorTableTable extends ChatMessageSyncCursorTable
     } else if (isInserting) {
       context.missing(_chatIdMeta);
     }
-    context.handle(_cursorTypeMeta, const VerificationResult.success());
     if (data.containsKey('timestamp_usec')) {
       context.handle(
           _timestampUsecMeta,
@@ -5264,8 +5250,6 @@ class $SmsMessagesTableTable extends SmsMessagesTable
   late final GeneratedColumn<String> toPhoneNumber = GeneratedColumn<String>(
       'to_phone_number', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _sendingStatusMeta =
-      const VerificationMeta('sendingStatus');
   @override
   late final GeneratedColumnWithTypeConverter<SmsSendingStatusEnum, String>
       sendingStatus = GeneratedColumn<String>(
@@ -5360,7 +5344,6 @@ class $SmsMessagesTableTable extends SmsMessagesTable
     } else if (isInserting) {
       context.missing(_toPhoneNumberMeta);
     }
-    context.handle(_sendingStatusMeta, const VerificationResult.success());
     if (data.containsKey('content')) {
       context.handle(_contentMeta,
           content.isAcceptableOrUnknown(data['content']!, _contentMeta));
@@ -5826,8 +5809,6 @@ class $SmsMessageSyncCursorTableTable extends SmsMessageSyncCursorTable
       requiredDuringInsert: true,
       defaultConstraints: GeneratedColumn.constraintIsAlways(
           'REFERENCES sms_conversations (id) ON DELETE CASCADE'));
-  static const VerificationMeta _cursorTypeMeta =
-      const VerificationMeta('cursorType');
   @override
   late final GeneratedColumnWithTypeConverter<SmsSyncCursorTypeEnum, String>
       cursorType = GeneratedColumn<String>('cursor_type', aliasedName, false,
@@ -5862,7 +5843,6 @@ class $SmsMessageSyncCursorTableTable extends SmsMessageSyncCursorTable
     } else if (isInserting) {
       context.missing(_conversationIdMeta);
     }
-    context.handle(_cursorTypeMeta, const VerificationResult.success());
     if (data.containsKey('timestamp_usec')) {
       context.handle(
           _timestampUsecMeta,
@@ -6756,7 +6736,7 @@ class $SmsOutboxMessageDeleteTableTable extends SmsOutboxMessageDeleteTable
   @override
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
       'id', aliasedName, false,
-      type: DriftSqlType.int, requiredDuringInsert: false);
+      type: DriftSqlType.int, requiredDuringInsert: true);
   static const VerificationMeta _idKeyMeta = const VerificationMeta('idKey');
   @override
   late final GeneratedColumn<String> idKey = GeneratedColumn<String>(
@@ -6795,6 +6775,8 @@ class $SmsOutboxMessageDeleteTableTable extends SmsOutboxMessageDeleteTable
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
     }
     if (data.containsKey('id_key')) {
       context.handle(
@@ -6820,7 +6802,7 @@ class $SmsOutboxMessageDeleteTableTable extends SmsOutboxMessageDeleteTable
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => {id};
+  Set<GeneratedColumn> get $primaryKey => const {};
   @override
   SmsOutboxMessageDeleteData map(Map<String, dynamic> data,
       {String? tablePrefix}) {
@@ -6945,30 +6927,36 @@ class SmsOutboxMessageDeleteDataCompanion
   final Value<String> idKey;
   final Value<int> conversationId;
   final Value<int> sendAttempts;
+  final Value<int> rowid;
   const SmsOutboxMessageDeleteDataCompanion({
     this.id = const Value.absent(),
     this.idKey = const Value.absent(),
     this.conversationId = const Value.absent(),
     this.sendAttempts = const Value.absent(),
+    this.rowid = const Value.absent(),
   });
   SmsOutboxMessageDeleteDataCompanion.insert({
-    this.id = const Value.absent(),
+    required int id,
     required String idKey,
     required int conversationId,
     this.sendAttempts = const Value.absent(),
-  })  : idKey = Value(idKey),
+    this.rowid = const Value.absent(),
+  })  : id = Value(id),
+        idKey = Value(idKey),
         conversationId = Value(conversationId);
   static Insertable<SmsOutboxMessageDeleteData> custom({
     Expression<int>? id,
     Expression<String>? idKey,
     Expression<int>? conversationId,
     Expression<int>? sendAttempts,
+    Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (idKey != null) 'id_key': idKey,
       if (conversationId != null) 'conversation_id': conversationId,
       if (sendAttempts != null) 'send_attempts': sendAttempts,
+      if (rowid != null) 'rowid': rowid,
     });
   }
 
@@ -6976,12 +6964,14 @@ class SmsOutboxMessageDeleteDataCompanion
       {Value<int>? id,
       Value<String>? idKey,
       Value<int>? conversationId,
-      Value<int>? sendAttempts}) {
+      Value<int>? sendAttempts,
+      Value<int>? rowid}) {
     return SmsOutboxMessageDeleteDataCompanion(
       id: id ?? this.id,
       idKey: idKey ?? this.idKey,
       conversationId: conversationId ?? this.conversationId,
       sendAttempts: sendAttempts ?? this.sendAttempts,
+      rowid: rowid ?? this.rowid,
     );
   }
 
@@ -7000,6 +6990,9 @@ class SmsOutboxMessageDeleteDataCompanion
     if (sendAttempts.present) {
       map['send_attempts'] = Variable<int>(sendAttempts.value);
     }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
     return map;
   }
 
@@ -7009,7 +7002,8 @@ class SmsOutboxMessageDeleteDataCompanion
           ..write('id: $id, ')
           ..write('idKey: $idKey, ')
           ..write('conversationId: $conversationId, ')
-          ..write('sendAttempts: $sendAttempts')
+          ..write('sendAttempts: $sendAttempts, ')
+          ..write('rowid: $rowid')
           ..write(')'))
         .toString();
   }
@@ -7778,6 +7772,452 @@ class ActiveMessageNotificationDataCompanion
   }
 }
 
+class $VoicemailTableTable extends VoicemailTable
+    with TableInfo<$VoicemailTableTable, VoicemailData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $VoicemailTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: false);
+  static const VerificationMeta _dateMeta = const VerificationMeta('date');
+  @override
+  late final GeneratedColumn<String> date = GeneratedColumn<String>(
+      'date', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _durationMeta =
+      const VerificationMeta('duration');
+  @override
+  late final GeneratedColumn<double> duration = GeneratedColumn<double>(
+      'duration', aliasedName, false,
+      type: DriftSqlType.double, requiredDuringInsert: true);
+  static const VerificationMeta _senderMeta = const VerificationMeta('sender');
+  @override
+  late final GeneratedColumn<String> sender = GeneratedColumn<String>(
+      'sender', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _receiverMeta =
+      const VerificationMeta('receiver');
+  @override
+  late final GeneratedColumn<String> receiver = GeneratedColumn<String>(
+      'receiver', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _seenMeta = const VerificationMeta('seen');
+  @override
+  late final GeneratedColumn<bool> seen = GeneratedColumn<bool>(
+      'seen', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("seen" IN (0, 1))'),
+      defaultValue: const Constant(false));
+  static const VerificationMeta _sizeMeta = const VerificationMeta('size');
+  @override
+  late final GeneratedColumn<int> size = GeneratedColumn<int>(
+      'size', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _typeMeta = const VerificationMeta('type');
+  @override
+  late final GeneratedColumn<String> type = GeneratedColumn<String>(
+      'type', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _attachmentPathMeta =
+      const VerificationMeta('attachmentPath');
+  @override
+  late final GeneratedColumn<String> attachmentPath = GeneratedColumn<String>(
+      'attachment_path', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  @override
+  List<GeneratedColumn> get $columns =>
+      [id, date, duration, sender, receiver, seen, size, type, attachmentPath];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'voicemails';
+  @override
+  VerificationContext validateIntegrity(Insertable<VoicemailData> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('date')) {
+      context.handle(
+          _dateMeta, date.isAcceptableOrUnknown(data['date']!, _dateMeta));
+    } else if (isInserting) {
+      context.missing(_dateMeta);
+    }
+    if (data.containsKey('duration')) {
+      context.handle(_durationMeta,
+          duration.isAcceptableOrUnknown(data['duration']!, _durationMeta));
+    } else if (isInserting) {
+      context.missing(_durationMeta);
+    }
+    if (data.containsKey('sender')) {
+      context.handle(_senderMeta,
+          sender.isAcceptableOrUnknown(data['sender']!, _senderMeta));
+    } else if (isInserting) {
+      context.missing(_senderMeta);
+    }
+    if (data.containsKey('receiver')) {
+      context.handle(_receiverMeta,
+          receiver.isAcceptableOrUnknown(data['receiver']!, _receiverMeta));
+    } else if (isInserting) {
+      context.missing(_receiverMeta);
+    }
+    if (data.containsKey('seen')) {
+      context.handle(
+          _seenMeta, seen.isAcceptableOrUnknown(data['seen']!, _seenMeta));
+    }
+    if (data.containsKey('size')) {
+      context.handle(
+          _sizeMeta, size.isAcceptableOrUnknown(data['size']!, _sizeMeta));
+    } else if (isInserting) {
+      context.missing(_sizeMeta);
+    }
+    if (data.containsKey('type')) {
+      context.handle(
+          _typeMeta, type.isAcceptableOrUnknown(data['type']!, _typeMeta));
+    } else if (isInserting) {
+      context.missing(_typeMeta);
+    }
+    if (data.containsKey('attachment_path')) {
+      context.handle(
+          _attachmentPathMeta,
+          attachmentPath.isAcceptableOrUnknown(
+              data['attachment_path']!, _attachmentPathMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  VoicemailData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return VoicemailData(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      date: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}date'])!,
+      duration: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}duration'])!,
+      sender: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}sender'])!,
+      receiver: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}receiver'])!,
+      seen: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}seen'])!,
+      size: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}size'])!,
+      type: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}type'])!,
+      attachmentPath: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}attachment_path']),
+    );
+  }
+
+  @override
+  $VoicemailTableTable createAlias(String alias) {
+    return $VoicemailTableTable(attachedDatabase, alias);
+  }
+}
+
+class VoicemailData extends DataClass implements Insertable<VoicemailData> {
+  final int id;
+  final String date;
+  final double duration;
+  final String sender;
+  final String receiver;
+  final bool seen;
+  final int size;
+  final String type;
+  final String? attachmentPath;
+  const VoicemailData(
+      {required this.id,
+      required this.date,
+      required this.duration,
+      required this.sender,
+      required this.receiver,
+      required this.seen,
+      required this.size,
+      required this.type,
+      this.attachmentPath});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['date'] = Variable<String>(date);
+    map['duration'] = Variable<double>(duration);
+    map['sender'] = Variable<String>(sender);
+    map['receiver'] = Variable<String>(receiver);
+    map['seen'] = Variable<bool>(seen);
+    map['size'] = Variable<int>(size);
+    map['type'] = Variable<String>(type);
+    if (!nullToAbsent || attachmentPath != null) {
+      map['attachment_path'] = Variable<String>(attachmentPath);
+    }
+    return map;
+  }
+
+  VoicemailDataCompanion toCompanion(bool nullToAbsent) {
+    return VoicemailDataCompanion(
+      id: Value(id),
+      date: Value(date),
+      duration: Value(duration),
+      sender: Value(sender),
+      receiver: Value(receiver),
+      seen: Value(seen),
+      size: Value(size),
+      type: Value(type),
+      attachmentPath: attachmentPath == null && nullToAbsent
+          ? const Value.absent()
+          : Value(attachmentPath),
+    );
+  }
+
+  factory VoicemailData.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return VoicemailData(
+      id: serializer.fromJson<int>(json['id']),
+      date: serializer.fromJson<String>(json['date']),
+      duration: serializer.fromJson<double>(json['duration']),
+      sender: serializer.fromJson<String>(json['sender']),
+      receiver: serializer.fromJson<String>(json['receiver']),
+      seen: serializer.fromJson<bool>(json['seen']),
+      size: serializer.fromJson<int>(json['size']),
+      type: serializer.fromJson<String>(json['type']),
+      attachmentPath: serializer.fromJson<String?>(json['attachmentPath']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'date': serializer.toJson<String>(date),
+      'duration': serializer.toJson<double>(duration),
+      'sender': serializer.toJson<String>(sender),
+      'receiver': serializer.toJson<String>(receiver),
+      'seen': serializer.toJson<bool>(seen),
+      'size': serializer.toJson<int>(size),
+      'type': serializer.toJson<String>(type),
+      'attachmentPath': serializer.toJson<String?>(attachmentPath),
+    };
+  }
+
+  VoicemailData copyWith(
+          {int? id,
+          String? date,
+          double? duration,
+          String? sender,
+          String? receiver,
+          bool? seen,
+          int? size,
+          String? type,
+          Value<String?> attachmentPath = const Value.absent()}) =>
+      VoicemailData(
+        id: id ?? this.id,
+        date: date ?? this.date,
+        duration: duration ?? this.duration,
+        sender: sender ?? this.sender,
+        receiver: receiver ?? this.receiver,
+        seen: seen ?? this.seen,
+        size: size ?? this.size,
+        type: type ?? this.type,
+        attachmentPath:
+            attachmentPath.present ? attachmentPath.value : this.attachmentPath,
+      );
+  VoicemailData copyWithCompanion(VoicemailDataCompanion data) {
+    return VoicemailData(
+      id: data.id.present ? data.id.value : this.id,
+      date: data.date.present ? data.date.value : this.date,
+      duration: data.duration.present ? data.duration.value : this.duration,
+      sender: data.sender.present ? data.sender.value : this.sender,
+      receiver: data.receiver.present ? data.receiver.value : this.receiver,
+      seen: data.seen.present ? data.seen.value : this.seen,
+      size: data.size.present ? data.size.value : this.size,
+      type: data.type.present ? data.type.value : this.type,
+      attachmentPath: data.attachmentPath.present
+          ? data.attachmentPath.value
+          : this.attachmentPath,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('VoicemailData(')
+          ..write('id: $id, ')
+          ..write('date: $date, ')
+          ..write('duration: $duration, ')
+          ..write('sender: $sender, ')
+          ..write('receiver: $receiver, ')
+          ..write('seen: $seen, ')
+          ..write('size: $size, ')
+          ..write('type: $type, ')
+          ..write('attachmentPath: $attachmentPath')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      id, date, duration, sender, receiver, seen, size, type, attachmentPath);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is VoicemailData &&
+          other.id == this.id &&
+          other.date == this.date &&
+          other.duration == this.duration &&
+          other.sender == this.sender &&
+          other.receiver == this.receiver &&
+          other.seen == this.seen &&
+          other.size == this.size &&
+          other.type == this.type &&
+          other.attachmentPath == this.attachmentPath);
+}
+
+class VoicemailDataCompanion extends UpdateCompanion<VoicemailData> {
+  final Value<int> id;
+  final Value<String> date;
+  final Value<double> duration;
+  final Value<String> sender;
+  final Value<String> receiver;
+  final Value<bool> seen;
+  final Value<int> size;
+  final Value<String> type;
+  final Value<String?> attachmentPath;
+  const VoicemailDataCompanion({
+    this.id = const Value.absent(),
+    this.date = const Value.absent(),
+    this.duration = const Value.absent(),
+    this.sender = const Value.absent(),
+    this.receiver = const Value.absent(),
+    this.seen = const Value.absent(),
+    this.size = const Value.absent(),
+    this.type = const Value.absent(),
+    this.attachmentPath = const Value.absent(),
+  });
+  VoicemailDataCompanion.insert({
+    this.id = const Value.absent(),
+    required String date,
+    required double duration,
+    required String sender,
+    required String receiver,
+    this.seen = const Value.absent(),
+    required int size,
+    required String type,
+    this.attachmentPath = const Value.absent(),
+  })  : date = Value(date),
+        duration = Value(duration),
+        sender = Value(sender),
+        receiver = Value(receiver),
+        size = Value(size),
+        type = Value(type);
+  static Insertable<VoicemailData> custom({
+    Expression<int>? id,
+    Expression<String>? date,
+    Expression<double>? duration,
+    Expression<String>? sender,
+    Expression<String>? receiver,
+    Expression<bool>? seen,
+    Expression<int>? size,
+    Expression<String>? type,
+    Expression<String>? attachmentPath,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (date != null) 'date': date,
+      if (duration != null) 'duration': duration,
+      if (sender != null) 'sender': sender,
+      if (receiver != null) 'receiver': receiver,
+      if (seen != null) 'seen': seen,
+      if (size != null) 'size': size,
+      if (type != null) 'type': type,
+      if (attachmentPath != null) 'attachment_path': attachmentPath,
+    });
+  }
+
+  VoicemailDataCompanion copyWith(
+      {Value<int>? id,
+      Value<String>? date,
+      Value<double>? duration,
+      Value<String>? sender,
+      Value<String>? receiver,
+      Value<bool>? seen,
+      Value<int>? size,
+      Value<String>? type,
+      Value<String?>? attachmentPath}) {
+    return VoicemailDataCompanion(
+      id: id ?? this.id,
+      date: date ?? this.date,
+      duration: duration ?? this.duration,
+      sender: sender ?? this.sender,
+      receiver: receiver ?? this.receiver,
+      seen: seen ?? this.seen,
+      size: size ?? this.size,
+      type: type ?? this.type,
+      attachmentPath: attachmentPath ?? this.attachmentPath,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (date.present) {
+      map['date'] = Variable<String>(date.value);
+    }
+    if (duration.present) {
+      map['duration'] = Variable<double>(duration.value);
+    }
+    if (sender.present) {
+      map['sender'] = Variable<String>(sender.value);
+    }
+    if (receiver.present) {
+      map['receiver'] = Variable<String>(receiver.value);
+    }
+    if (seen.present) {
+      map['seen'] = Variable<bool>(seen.value);
+    }
+    if (size.present) {
+      map['size'] = Variable<int>(size.value);
+    }
+    if (type.present) {
+      map['type'] = Variable<String>(type.value);
+    }
+    if (attachmentPath.present) {
+      map['attachment_path'] = Variable<String>(attachmentPath.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('VoicemailDataCompanion(')
+          ..write('id: $id, ')
+          ..write('date: $date, ')
+          ..write('duration: $duration, ')
+          ..write('sender: $sender, ')
+          ..write('receiver: $receiver, ')
+          ..write('seen: $seen, ')
+          ..write('size: $size, ')
+          ..write('type: $type, ')
+          ..write('attachmentPath: $attachmentPath')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -7824,6 +8264,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $ActiveMessageNotificationsTableTable
       activeMessageNotificationsTable =
       $ActiveMessageNotificationsTableTable(this);
+  late final $VoicemailTableTable voicemailTable = $VoicemailTableTable(this);
   late final ContactsDao contactsDao = ContactsDao(this as AppDatabase);
   late final ContactPhonesDao contactPhonesDao =
       ContactPhonesDao(this as AppDatabase);
@@ -7836,6 +8277,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final SmsDao smsDao = SmsDao(this as AppDatabase);
   late final ActiveMessageNotificationsDao activeMessageNotificationsDao =
       ActiveMessageNotificationsDao(this as AppDatabase);
+  late final VoicemailDao voicemailDao = VoicemailDao(this as AppDatabase);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -7863,7 +8305,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
         smsOutboxMessageDeleteTable,
         smsOutboxReadCursorsTable,
         userSmsNumbersTable,
-        activeMessageNotificationsTable
+        activeMessageNotificationsTable,
+        voicemailTable
       ];
   @override
   StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules(
@@ -8987,7 +9430,7 @@ final class $$ChatsTableTableReferences
   $$ChatMembersTableTableProcessedTableManager get chatMembersTableRefs {
     final manager =
         $$ChatMembersTableTableTableManager($_db, $_db.chatMembersTable)
-            .filter((f) => f.chatId.id($_item.id));
+            .filter((f) => f.chatId.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache =
         $_typedResult.readTableOrNull(_chatMembersTableRefsTable($_db));
@@ -9004,7 +9447,7 @@ final class $$ChatsTableTableReferences
   $$ChatMessagesTableTableProcessedTableManager get chatMessagesTableRefs {
     final manager =
         $$ChatMessagesTableTableTableManager($_db, $_db.chatMessagesTable)
-            .filter((f) => f.chatId.id($_item.id));
+            .filter((f) => f.chatId.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache =
         $_typedResult.readTableOrNull(_chatMessagesTableRefsTable($_db));
@@ -9023,7 +9466,7 @@ final class $$ChatsTableTableReferences
       get chatMessageSyncCursorTableRefs {
     final manager = $$ChatMessageSyncCursorTableTableTableManager(
             $_db, $_db.chatMessageSyncCursorTable)
-        .filter((f) => f.chatId.id($_item.id));
+        .filter((f) => f.chatId.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache = $_typedResult
         .readTableOrNull(_chatMessageSyncCursorTableRefsTable($_db));
@@ -9042,7 +9485,7 @@ final class $$ChatsTableTableReferences
       get chatMessageReadCursorTableRefs {
     final manager = $$ChatMessageReadCursorTableTableTableManager(
             $_db, $_db.chatMessageReadCursorTable)
-        .filter((f) => f.chatId.id($_item.id));
+        .filter((f) => f.chatId.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache = $_typedResult
         .readTableOrNull(_chatMessageReadCursorTableRefsTable($_db));
@@ -9061,7 +9504,7 @@ final class $$ChatsTableTableReferences
       get chatOutboxMessageTableRefs {
     final manager = $$ChatOutboxMessageTableTableTableManager(
             $_db, $_db.chatOutboxMessageTable)
-        .filter((f) => f.chatId.id($_item.id));
+        .filter((f) => f.chatId.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache =
         $_typedResult.readTableOrNull(_chatOutboxMessageTableRefsTable($_db));
@@ -9080,7 +9523,7 @@ final class $$ChatsTableTableReferences
       get chatOutboxMessageEditTableRefs {
     final manager = $$ChatOutboxMessageEditTableTableTableManager(
             $_db, $_db.chatOutboxMessageEditTable)
-        .filter((f) => f.chatId.id($_item.id));
+        .filter((f) => f.chatId.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache = $_typedResult
         .readTableOrNull(_chatOutboxMessageEditTableRefsTable($_db));
@@ -9099,7 +9542,7 @@ final class $$ChatsTableTableReferences
       get chatOutboxMessageDeleteTableRefs {
     final manager = $$ChatOutboxMessageDeleteTableTableTableManager(
             $_db, $_db.chatOutboxMessageDeleteTable)
-        .filter((f) => f.chatId.id($_item.id));
+        .filter((f) => f.chatId.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache = $_typedResult
         .readTableOrNull(_chatOutboxMessageDeleteTableRefsTable($_db));
@@ -9118,7 +9561,7 @@ final class $$ChatsTableTableReferences
       get chatOutboxReadCursorsTableRefs {
     final manager = $$ChatOutboxReadCursorsTableTableTableManager(
             $_db, $_db.chatOutboxReadCursorsTable)
-        .filter((f) => f.chatId.id($_item.id));
+        .filter((f) => f.chatId.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache = $_typedResult
         .readTableOrNull(_chatOutboxReadCursorsTableRefsTable($_db));
@@ -9673,7 +10116,8 @@ class $$ChatsTableTableTableManager extends RootTableManager<
               getPrefetchedDataCallback: (items) async {
                 return [
                   if (chatMembersTableRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<ChatData, $ChatsTableTable,
+                            ChatMemberData>(
                         currentTable: table,
                         referencedTable: $$ChatsTableTableReferences
                             ._chatMembersTableRefsTable(db),
@@ -9685,7 +10129,8 @@ class $$ChatsTableTableTableManager extends RootTableManager<
                             referencedItems.where((e) => e.chatId == item.id),
                         typedResults: items),
                   if (chatMessagesTableRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<ChatData, $ChatsTableTable,
+                            ChatMessageData>(
                         currentTable: table,
                         referencedTable: $$ChatsTableTableReferences
                             ._chatMessagesTableRefsTable(db),
@@ -9697,7 +10142,8 @@ class $$ChatsTableTableTableManager extends RootTableManager<
                             referencedItems.where((e) => e.chatId == item.id),
                         typedResults: items),
                   if (chatMessageSyncCursorTableRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<ChatData, $ChatsTableTable,
+                            ChatMessageSyncCursorData>(
                         currentTable: table,
                         referencedTable: $$ChatsTableTableReferences
                             ._chatMessageSyncCursorTableRefsTable(db),
@@ -9709,7 +10155,8 @@ class $$ChatsTableTableTableManager extends RootTableManager<
                             referencedItems.where((e) => e.chatId == item.id),
                         typedResults: items),
                   if (chatMessageReadCursorTableRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<ChatData, $ChatsTableTable,
+                            ChatMessageReadCursorData>(
                         currentTable: table,
                         referencedTable: $$ChatsTableTableReferences
                             ._chatMessageReadCursorTableRefsTable(db),
@@ -9721,7 +10168,7 @@ class $$ChatsTableTableTableManager extends RootTableManager<
                             referencedItems.where((e) => e.chatId == item.id),
                         typedResults: items),
                   if (chatOutboxMessageTableRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<ChatData, $ChatsTableTable, ChatOutboxMessageData>(
                         currentTable: table,
                         referencedTable: $$ChatsTableTableReferences
                             ._chatOutboxMessageTableRefsTable(db),
@@ -9733,7 +10180,8 @@ class $$ChatsTableTableTableManager extends RootTableManager<
                             referencedItems.where((e) => e.chatId == item.id),
                         typedResults: items),
                   if (chatOutboxMessageEditTableRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<ChatData, $ChatsTableTable,
+                            ChatOutboxMessageEditData>(
                         currentTable: table,
                         referencedTable: $$ChatsTableTableReferences
                             ._chatOutboxMessageEditTableRefsTable(db),
@@ -9745,7 +10193,8 @@ class $$ChatsTableTableTableManager extends RootTableManager<
                             referencedItems.where((e) => e.chatId == item.id),
                         typedResults: items),
                   if (chatOutboxMessageDeleteTableRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<ChatData, $ChatsTableTable,
+                            ChatOutboxMessageDeleteData>(
                         currentTable: table,
                         referencedTable: $$ChatsTableTableReferences
                             ._chatOutboxMessageDeleteTableRefsTable(db),
@@ -9757,7 +10206,8 @@ class $$ChatsTableTableTableManager extends RootTableManager<
                             referencedItems.where((e) => e.chatId == item.id),
                         typedResults: items),
                   if (chatOutboxReadCursorsTableRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<ChatData, $ChatsTableTable,
+                            ChatOutboxReadCursorData>(
                         currentTable: table,
                         referencedTable: $$ChatsTableTableReferences
                             ._chatOutboxReadCursorsTableRefsTable(db),
@@ -9820,8 +10270,10 @@ final class $$ChatMembersTableTableReferences extends BaseReferences<
           $_aliasNameGenerator(db.chatMembersTable.chatId, db.chatsTable.id));
 
   $$ChatsTableTableProcessedTableManager get chatId {
+    final $_column = $_itemColumn<int>('chat_id')!;
+
     final manager = $$ChatsTableTableTableManager($_db, $_db.chatsTable)
-        .filter((f) => f.id($_item.chatId));
+        .filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_chatIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -10097,8 +10549,10 @@ final class $$ChatMessagesTableTableReferences extends BaseReferences<
           $_aliasNameGenerator(db.chatMessagesTable.chatId, db.chatsTable.id));
 
   $$ChatsTableTableProcessedTableManager get chatId {
+    final $_column = $_itemColumn<int>('chat_id')!;
+
     final manager = $$ChatsTableTableTableManager($_db, $_db.chatsTable)
-        .filter((f) => f.id($_item.chatId));
+        .filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_chatIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -10467,8 +10921,10 @@ final class $$ChatMessageSyncCursorTableTableReferences extends BaseReferences<
           db.chatMessageSyncCursorTable.chatId, db.chatsTable.id));
 
   $$ChatsTableTableProcessedTableManager get chatId {
+    final $_column = $_itemColumn<int>('chat_id')!;
+
     final manager = $$ChatsTableTableTableManager($_db, $_db.chatsTable)
-        .filter((f) => f.id($_item.chatId));
+        .filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_chatIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -10728,8 +11184,10 @@ final class $$ChatMessageReadCursorTableTableReferences extends BaseReferences<
           db.chatMessageReadCursorTable.chatId, db.chatsTable.id));
 
   $$ChatsTableTableProcessedTableManager get chatId {
+    final $_column = $_itemColumn<int>('chat_id')!;
+
     final manager = $$ChatsTableTableTableManager($_db, $_db.chatsTable)
-        .filter((f) => f.id($_item.chatId));
+        .filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_chatIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -10993,9 +11451,10 @@ final class $$ChatOutboxMessageTableTableReferences extends BaseReferences<
           db.chatOutboxMessageTable.chatId, db.chatsTable.id));
 
   $$ChatsTableTableProcessedTableManager? get chatId {
-    if ($_item.chatId == null) return null;
+    final $_column = $_itemColumn<int>('chat_id');
+    if ($_column == null) return null;
     final manager = $$ChatsTableTableTableManager($_db, $_db.chatsTable)
-        .filter((f) => f.id($_item.chatId!));
+        .filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_chatIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -11316,8 +11775,10 @@ final class $$ChatOutboxMessageEditTableTableReferences extends BaseReferences<
           db.chatOutboxMessageEditTable.chatId, db.chatsTable.id));
 
   $$ChatsTableTableProcessedTableManager get chatId {
+    final $_column = $_itemColumn<int>('chat_id')!;
+
     final manager = $$ChatsTableTableTableManager($_db, $_db.chatsTable)
-        .filter((f) => f.id($_item.chatId));
+        .filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_chatIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -11594,8 +12055,10 @@ final class $$ChatOutboxMessageDeleteTableTableReferences
           db.chatOutboxMessageDeleteTable.chatId, db.chatsTable.id));
 
   $$ChatsTableTableProcessedTableManager get chatId {
+    final $_column = $_itemColumn<int>('chat_id')!;
+
     final manager = $$ChatsTableTableTableManager($_db, $_db.chatsTable)
-        .filter((f) => f.id($_item.chatId));
+        .filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_chatIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -11860,8 +12323,10 @@ final class $$ChatOutboxReadCursorsTableTableReferences extends BaseReferences<
           db.chatOutboxReadCursorsTable.chatId, db.chatsTable.id));
 
   $$ChatsTableTableProcessedTableManager get chatId {
+    final $_column = $_itemColumn<int>('chat_id')!;
+
     final manager = $$ChatsTableTableTableManager($_db, $_db.chatsTable)
-        .filter((f) => f.id($_item.chatId));
+        .filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_chatIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -12113,9 +12578,9 @@ final class $$SmsConversationsTableTableReferences extends BaseReferences<
                   db.smsMessagesTable.conversationId));
 
   $$SmsMessagesTableTableProcessedTableManager get smsMessagesTableRefs {
-    final manager =
-        $$SmsMessagesTableTableTableManager($_db, $_db.smsMessagesTable)
-            .filter((f) => f.conversationId.id($_item.id));
+    final manager = $$SmsMessagesTableTableTableManager(
+            $_db, $_db.smsMessagesTable)
+        .filter((f) => f.conversationId.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache =
         $_typedResult.readTableOrNull(_smsMessagesTableRefsTable($_db));
@@ -12134,7 +12599,7 @@ final class $$SmsConversationsTableTableReferences extends BaseReferences<
       get smsMessageSyncCursorTableRefs {
     final manager = $$SmsMessageSyncCursorTableTableTableManager(
             $_db, $_db.smsMessageSyncCursorTable)
-        .filter((f) => f.conversationId.id($_item.id));
+        .filter((f) => f.conversationId.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache = $_typedResult
         .readTableOrNull(_smsMessageSyncCursorTableRefsTable($_db));
@@ -12153,7 +12618,7 @@ final class $$SmsConversationsTableTableReferences extends BaseReferences<
       get smsMessageReadCursorTableRefs {
     final manager = $$SmsMessageReadCursorTableTableTableManager(
             $_db, $_db.smsMessageReadCursorTable)
-        .filter((f) => f.conversationId.id($_item.id));
+        .filter((f) => f.conversationId.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache = $_typedResult
         .readTableOrNull(_smsMessageReadCursorTableRefsTable($_db));
@@ -12172,7 +12637,7 @@ final class $$SmsConversationsTableTableReferences extends BaseReferences<
       get smsOutboxMessagesTableRefs {
     final manager = $$SmsOutboxMessagesTableTableTableManager(
             $_db, $_db.smsOutboxMessagesTable)
-        .filter((f) => f.conversationId.id($_item.id));
+        .filter((f) => f.conversationId.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache =
         $_typedResult.readTableOrNull(_smsOutboxMessagesTableRefsTable($_db));
@@ -12191,7 +12656,7 @@ final class $$SmsConversationsTableTableReferences extends BaseReferences<
       get smsOutboxMessageDeleteTableRefs {
     final manager = $$SmsOutboxMessageDeleteTableTableTableManager(
             $_db, $_db.smsOutboxMessageDeleteTable)
-        .filter((f) => f.conversationId.id($_item.id));
+        .filter((f) => f.conversationId.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache = $_typedResult
         .readTableOrNull(_smsOutboxMessageDeleteTableRefsTable($_db));
@@ -12210,7 +12675,7 @@ final class $$SmsConversationsTableTableReferences extends BaseReferences<
       get smsOutboxReadCursorsTableRefs {
     final manager = $$SmsOutboxReadCursorsTableTableTableManager(
             $_db, $_db.smsOutboxReadCursorsTable)
-        .filter((f) => f.conversationId.id($_item.id));
+        .filter((f) => f.conversationId.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache = $_typedResult
         .readTableOrNull(_smsOutboxReadCursorsTableRefsTable($_db));
@@ -12670,7 +13135,8 @@ class $$SmsConversationsTableTableTableManager extends RootTableManager<
               getPrefetchedDataCallback: (items) async {
                 return [
                   if (smsMessagesTableRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<SmsConversationData,
+                            $SmsConversationsTableTable, SmsMessageData>(
                         currentTable: table,
                         referencedTable: $$SmsConversationsTableTableReferences
                             ._smsMessagesTableRefsTable(db),
@@ -12683,7 +13149,10 @@ class $$SmsConversationsTableTableTableManager extends RootTableManager<
                                 .where((e) => e.conversationId == item.id),
                         typedResults: items),
                   if (smsMessageSyncCursorTableRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<
+                            SmsConversationData,
+                            $SmsConversationsTableTable,
+                            SmsMessageSyncCursorData>(
                         currentTable: table,
                         referencedTable: $$SmsConversationsTableTableReferences
                             ._smsMessageSyncCursorTableRefsTable(db),
@@ -12696,7 +13165,10 @@ class $$SmsConversationsTableTableTableManager extends RootTableManager<
                                 .where((e) => e.conversationId == item.id),
                         typedResults: items),
                   if (smsMessageReadCursorTableRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<
+                            SmsConversationData,
+                            $SmsConversationsTableTable,
+                            SmsMessageReadCursorData>(
                         currentTable: table,
                         referencedTable: $$SmsConversationsTableTableReferences
                             ._smsMessageReadCursorTableRefsTable(db),
@@ -12709,7 +13181,8 @@ class $$SmsConversationsTableTableTableManager extends RootTableManager<
                                 .where((e) => e.conversationId == item.id),
                         typedResults: items),
                   if (smsOutboxMessagesTableRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<SmsConversationData,
+                            $SmsConversationsTableTable, SmsOutboxMessageData>(
                         currentTable: table,
                         referencedTable: $$SmsConversationsTableTableReferences
                             ._smsOutboxMessagesTableRefsTable(db),
@@ -12722,7 +13195,10 @@ class $$SmsConversationsTableTableTableManager extends RootTableManager<
                                 .where((e) => e.conversationId == item.id),
                         typedResults: items),
                   if (smsOutboxMessageDeleteTableRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<
+                            SmsConversationData,
+                            $SmsConversationsTableTable,
+                            SmsOutboxMessageDeleteData>(
                         currentTable: table,
                         referencedTable: $$SmsConversationsTableTableReferences
                             ._smsOutboxMessageDeleteTableRefsTable(db),
@@ -12735,7 +13211,10 @@ class $$SmsConversationsTableTableTableManager extends RootTableManager<
                                 .where((e) => e.conversationId == item.id),
                         typedResults: items),
                   if (smsOutboxReadCursorsTableRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<
+                            SmsConversationData,
+                            $SmsConversationsTableTable,
+                            SmsOutboxReadCursorData>(
                         currentTable: table,
                         referencedTable: $$SmsConversationsTableTableReferences
                             ._smsOutboxReadCursorsTableRefsTable(db),
@@ -12812,9 +13291,11 @@ final class $$SmsMessagesTableTableReferences extends BaseReferences<
           db.smsMessagesTable.conversationId, db.smsConversationsTable.id));
 
   $$SmsConversationsTableTableProcessedTableManager get conversationId {
+    final $_column = $_itemColumn<int>('conversation_id')!;
+
     final manager = $$SmsConversationsTableTableTableManager(
             $_db, $_db.smsConversationsTable)
-        .filter((f) => f.id($_item.conversationId));
+        .filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_conversationIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -13177,9 +13658,11 @@ final class $$SmsMessageSyncCursorTableTableReferences extends BaseReferences<
           db.smsConversationsTable.id));
 
   $$SmsConversationsTableTableProcessedTableManager get conversationId {
+    final $_column = $_itemColumn<int>('conversation_id')!;
+
     final manager = $$SmsConversationsTableTableTableManager(
             $_db, $_db.smsConversationsTable)
-        .filter((f) => f.id($_item.conversationId));
+        .filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_conversationIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -13437,9 +13920,11 @@ final class $$SmsMessageReadCursorTableTableReferences extends BaseReferences<
           db.smsConversationsTable.id));
 
   $$SmsConversationsTableTableProcessedTableManager get conversationId {
+    final $_column = $_itemColumn<int>('conversation_id')!;
+
     final manager = $$SmsConversationsTableTableTableManager(
             $_db, $_db.smsConversationsTable)
-        .filter((f) => f.id($_item.conversationId));
+        .filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_conversationIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -13701,10 +14186,11 @@ final class $$SmsOutboxMessagesTableTableReferences extends BaseReferences<
           db.smsConversationsTable.id));
 
   $$SmsConversationsTableTableProcessedTableManager? get conversationId {
-    if ($_item.conversationId == null) return null;
+    final $_column = $_itemColumn<int>('conversation_id');
+    if ($_column == null) return null;
     final manager = $$SmsConversationsTableTableTableManager(
             $_db, $_db.smsConversationsTable)
-        .filter((f) => f.id($_item.conversationId!));
+        .filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_conversationIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -13989,10 +14475,11 @@ typedef $$SmsOutboxMessagesTableTableProcessedTableManager
         PrefetchHooks Function({bool conversationId})>;
 typedef $$SmsOutboxMessageDeleteTableTableCreateCompanionBuilder
     = SmsOutboxMessageDeleteDataCompanion Function({
-  Value<int> id,
+  required int id,
   required String idKey,
   required int conversationId,
   Value<int> sendAttempts,
+  Value<int> rowid,
 });
 typedef $$SmsOutboxMessageDeleteTableTableUpdateCompanionBuilder
     = SmsOutboxMessageDeleteDataCompanion Function({
@@ -14000,6 +14487,7 @@ typedef $$SmsOutboxMessageDeleteTableTableUpdateCompanionBuilder
   Value<String> idKey,
   Value<int> conversationId,
   Value<int> sendAttempts,
+  Value<int> rowid,
 });
 
 final class $$SmsOutboxMessageDeleteTableTableReferences extends BaseReferences<
@@ -14015,9 +14503,11 @@ final class $$SmsOutboxMessageDeleteTableTableReferences extends BaseReferences<
           db.smsConversationsTable.id));
 
   $$SmsConversationsTableTableProcessedTableManager get conversationId {
+    final $_column = $_itemColumn<int>('conversation_id')!;
+
     final manager = $$SmsConversationsTableTableTableManager(
             $_db, $_db.smsConversationsTable)
-        .filter((f) => f.id($_item.conversationId));
+        .filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_conversationIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -14177,24 +14667,28 @@ class $$SmsOutboxMessageDeleteTableTableTableManager extends RootTableManager<
             Value<String> idKey = const Value.absent(),
             Value<int> conversationId = const Value.absent(),
             Value<int> sendAttempts = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
           }) =>
               SmsOutboxMessageDeleteDataCompanion(
             id: id,
             idKey: idKey,
             conversationId: conversationId,
             sendAttempts: sendAttempts,
+            rowid: rowid,
           ),
           createCompanionCallback: ({
-            Value<int> id = const Value.absent(),
+            required int id,
             required String idKey,
             required int conversationId,
             Value<int> sendAttempts = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
           }) =>
               SmsOutboxMessageDeleteDataCompanion.insert(
             id: id,
             idKey: idKey,
             conversationId: conversationId,
             sendAttempts: sendAttempts,
+            rowid: rowid,
           ),
           withReferenceMapper: (p0) => p0
               .map((e) => (
@@ -14283,9 +14777,11 @@ final class $$SmsOutboxReadCursorsTableTableReferences extends BaseReferences<
           db.smsConversationsTable.id));
 
   $$SmsConversationsTableTableProcessedTableManager get conversationId {
+    final $_column = $_itemColumn<int>('conversation_id')!;
+
     final manager = $$SmsConversationsTableTableTableManager(
             $_db, $_db.smsConversationsTable)
-        .filter((f) => f.id($_item.conversationId));
+        .filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_conversationIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -14828,6 +15324,236 @@ typedef $$ActiveMessageNotificationsTableTableProcessedTableManager
         ),
         ActiveMessageNotificationData,
         PrefetchHooks Function()>;
+typedef $$VoicemailTableTableCreateCompanionBuilder = VoicemailDataCompanion
+    Function({
+  Value<int> id,
+  required String date,
+  required double duration,
+  required String sender,
+  required String receiver,
+  Value<bool> seen,
+  required int size,
+  required String type,
+  Value<String?> attachmentPath,
+});
+typedef $$VoicemailTableTableUpdateCompanionBuilder = VoicemailDataCompanion
+    Function({
+  Value<int> id,
+  Value<String> date,
+  Value<double> duration,
+  Value<String> sender,
+  Value<String> receiver,
+  Value<bool> seen,
+  Value<int> size,
+  Value<String> type,
+  Value<String?> attachmentPath,
+});
+
+class $$VoicemailTableTableFilterComposer
+    extends Composer<_$AppDatabase, $VoicemailTableTable> {
+  $$VoicemailTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get date => $composableBuilder(
+      column: $table.date, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<double> get duration => $composableBuilder(
+      column: $table.duration, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get sender => $composableBuilder(
+      column: $table.sender, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get receiver => $composableBuilder(
+      column: $table.receiver, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get seen => $composableBuilder(
+      column: $table.seen, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get size => $composableBuilder(
+      column: $table.size, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get type => $composableBuilder(
+      column: $table.type, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get attachmentPath => $composableBuilder(
+      column: $table.attachmentPath,
+      builder: (column) => ColumnFilters(column));
+}
+
+class $$VoicemailTableTableOrderingComposer
+    extends Composer<_$AppDatabase, $VoicemailTableTable> {
+  $$VoicemailTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get date => $composableBuilder(
+      column: $table.date, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<double> get duration => $composableBuilder(
+      column: $table.duration, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get sender => $composableBuilder(
+      column: $table.sender, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get receiver => $composableBuilder(
+      column: $table.receiver, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get seen => $composableBuilder(
+      column: $table.seen, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get size => $composableBuilder(
+      column: $table.size, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get type => $composableBuilder(
+      column: $table.type, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get attachmentPath => $composableBuilder(
+      column: $table.attachmentPath,
+      builder: (column) => ColumnOrderings(column));
+}
+
+class $$VoicemailTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $VoicemailTableTable> {
+  $$VoicemailTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get date =>
+      $composableBuilder(column: $table.date, builder: (column) => column);
+
+  GeneratedColumn<double> get duration =>
+      $composableBuilder(column: $table.duration, builder: (column) => column);
+
+  GeneratedColumn<String> get sender =>
+      $composableBuilder(column: $table.sender, builder: (column) => column);
+
+  GeneratedColumn<String> get receiver =>
+      $composableBuilder(column: $table.receiver, builder: (column) => column);
+
+  GeneratedColumn<bool> get seen =>
+      $composableBuilder(column: $table.seen, builder: (column) => column);
+
+  GeneratedColumn<int> get size =>
+      $composableBuilder(column: $table.size, builder: (column) => column);
+
+  GeneratedColumn<String> get type =>
+      $composableBuilder(column: $table.type, builder: (column) => column);
+
+  GeneratedColumn<String> get attachmentPath => $composableBuilder(
+      column: $table.attachmentPath, builder: (column) => column);
+}
+
+class $$VoicemailTableTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $VoicemailTableTable,
+    VoicemailData,
+    $$VoicemailTableTableFilterComposer,
+    $$VoicemailTableTableOrderingComposer,
+    $$VoicemailTableTableAnnotationComposer,
+    $$VoicemailTableTableCreateCompanionBuilder,
+    $$VoicemailTableTableUpdateCompanionBuilder,
+    (
+      VoicemailData,
+      BaseReferences<_$AppDatabase, $VoicemailTableTable, VoicemailData>
+    ),
+    VoicemailData,
+    PrefetchHooks Function()> {
+  $$VoicemailTableTableTableManager(
+      _$AppDatabase db, $VoicemailTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$VoicemailTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$VoicemailTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$VoicemailTableTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<String> date = const Value.absent(),
+            Value<double> duration = const Value.absent(),
+            Value<String> sender = const Value.absent(),
+            Value<String> receiver = const Value.absent(),
+            Value<bool> seen = const Value.absent(),
+            Value<int> size = const Value.absent(),
+            Value<String> type = const Value.absent(),
+            Value<String?> attachmentPath = const Value.absent(),
+          }) =>
+              VoicemailDataCompanion(
+            id: id,
+            date: date,
+            duration: duration,
+            sender: sender,
+            receiver: receiver,
+            seen: seen,
+            size: size,
+            type: type,
+            attachmentPath: attachmentPath,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            required String date,
+            required double duration,
+            required String sender,
+            required String receiver,
+            Value<bool> seen = const Value.absent(),
+            required int size,
+            required String type,
+            Value<String?> attachmentPath = const Value.absent(),
+          }) =>
+              VoicemailDataCompanion.insert(
+            id: id,
+            date: date,
+            duration: duration,
+            sender: sender,
+            receiver: receiver,
+            seen: seen,
+            size: size,
+            type: type,
+            attachmentPath: attachmentPath,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$VoicemailTableTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $VoicemailTableTable,
+    VoicemailData,
+    $$VoicemailTableTableFilterComposer,
+    $$VoicemailTableTableOrderingComposer,
+    $$VoicemailTableTableAnnotationComposer,
+    $$VoicemailTableTableCreateCompanionBuilder,
+    $$VoicemailTableTableUpdateCompanionBuilder,
+    (
+      VoicemailData,
+      BaseReferences<_$AppDatabase, $VoicemailTableTable, VoicemailData>
+    ),
+    VoicemailData,
+    PrefetchHooks Function()>;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -14897,4 +15623,6 @@ class $AppDatabaseManager {
       get activeMessageNotificationsTable =>
           $$ActiveMessageNotificationsTableTableTableManager(
               _db, _db.activeMessageNotificationsTable);
+  $$VoicemailTableTableTableManager get voicemailTable =>
+      $$VoicemailTableTableTableManager(_db, _db.voicemailTable);
 }
