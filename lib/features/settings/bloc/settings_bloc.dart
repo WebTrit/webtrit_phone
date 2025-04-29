@@ -22,14 +22,31 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     required this.notificationsBloc,
     required this.appBloc,
     required this.userRepository,
+    required this.voicemailRepository,
   }) : super(const SettingsState(progress: false)) {
     on<SettingsLogouted>(_onLogouted, transformer: droppable());
     on<SettingsAccountDeleted>(_onAccountDeleted, transformer: droppable());
+    on<SettingsUnreadVoicemailCountChanged>(_onVoicemailCountChanged);
+
+    _unreadVoicemailsSub = voicemailRepository.watchUnreadVoicemailsCount().listen((count) {
+      add(SettingsUnreadVoicemailCountChanged(count));
+    });
   }
 
   final NotificationsBloc notificationsBloc;
   final AppBloc appBloc;
   final UserRepository userRepository;
+  final VoicemailRepository voicemailRepository;
+
+  late final StreamSubscription<int> _unreadVoicemailsSub;
+
+  FutureOr<void> _onVoicemailCountChanged(
+    SettingsUnreadVoicemailCountChanged event,
+    Emitter<SettingsState> emit,
+  ) {
+    _logger.fine('Voicemail count changed: ${event.count}');
+    if (state.unreadVoicemailCount != event.count) emit(state.copyWith(unreadVoicemailCount: event.count));
+  }
 
   FutureOr<void> _onLogouted(SettingsLogouted event, Emitter<SettingsState> emit) async {
     // No need to wait any results here to not stop user from logging out.
@@ -62,5 +79,11 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
 
       emit(state.copyWith(progress: false));
     }
+  }
+
+  @override
+  Future<void> close() {
+    _unreadVoicemailsSub.cancel();
+    return super.close();
   }
 }

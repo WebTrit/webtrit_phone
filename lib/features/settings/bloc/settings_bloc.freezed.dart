@@ -17,6 +17,7 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$SettingsState {
   bool get progress => throw _privateConstructorUsedError;
+  int get unreadVoicemailCount => throw _privateConstructorUsedError;
 
   /// Create a copy of SettingsState
   /// with the given fields replaced by the non-null parameter values.
@@ -31,7 +32,7 @@ abstract class $SettingsStateCopyWith<$Res> {
           SettingsState value, $Res Function(SettingsState) then) =
       _$SettingsStateCopyWithImpl<$Res, SettingsState>;
   @useResult
-  $Res call({bool progress});
+  $Res call({bool progress, int unreadVoicemailCount});
 }
 
 /// @nodoc
@@ -50,12 +51,17 @@ class _$SettingsStateCopyWithImpl<$Res, $Val extends SettingsState>
   @override
   $Res call({
     Object? progress = null,
+    Object? unreadVoicemailCount = null,
   }) {
     return _then(_value.copyWith(
       progress: null == progress
           ? _value.progress
           : progress // ignore: cast_nullable_to_non_nullable
               as bool,
+      unreadVoicemailCount: null == unreadVoicemailCount
+          ? _value.unreadVoicemailCount
+          : unreadVoicemailCount // ignore: cast_nullable_to_non_nullable
+              as int,
     ) as $Val);
   }
 }
@@ -68,7 +74,7 @@ abstract class _$$SettingsStateImplCopyWith<$Res>
       __$$SettingsStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({bool progress});
+  $Res call({bool progress, int unreadVoicemailCount});
 }
 
 /// @nodoc
@@ -85,27 +91,37 @@ class __$$SettingsStateImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? progress = null,
+    Object? unreadVoicemailCount = null,
   }) {
     return _then(_$SettingsStateImpl(
       progress: null == progress
           ? _value.progress
           : progress // ignore: cast_nullable_to_non_nullable
               as bool,
+      unreadVoicemailCount: null == unreadVoicemailCount
+          ? _value.unreadVoicemailCount
+          : unreadVoicemailCount // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
 
 /// @nodoc
 
-class _$SettingsStateImpl implements _SettingsState {
-  const _$SettingsStateImpl({required this.progress});
+class _$SettingsStateImpl extends _SettingsState {
+  const _$SettingsStateImpl(
+      {required this.progress, this.unreadVoicemailCount = 0})
+      : super._();
 
   @override
   final bool progress;
+  @override
+  @JsonKey()
+  final int unreadVoicemailCount;
 
   @override
   String toString() {
-    return 'SettingsState(progress: $progress)';
+    return 'SettingsState(progress: $progress, unreadVoicemailCount: $unreadVoicemailCount)';
   }
 
   @override
@@ -114,11 +130,13 @@ class _$SettingsStateImpl implements _SettingsState {
         (other.runtimeType == runtimeType &&
             other is _$SettingsStateImpl &&
             (identical(other.progress, progress) ||
-                other.progress == progress));
+                other.progress == progress) &&
+            (identical(other.unreadVoicemailCount, unreadVoicemailCount) ||
+                other.unreadVoicemailCount == unreadVoicemailCount));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, progress);
+  int get hashCode => Object.hash(runtimeType, progress, unreadVoicemailCount);
 
   /// Create a copy of SettingsState
   /// with the given fields replaced by the non-null parameter values.
@@ -129,12 +147,16 @@ class _$SettingsStateImpl implements _SettingsState {
       __$$SettingsStateImplCopyWithImpl<_$SettingsStateImpl>(this, _$identity);
 }
 
-abstract class _SettingsState implements SettingsState {
-  const factory _SettingsState({required final bool progress}) =
-      _$SettingsStateImpl;
+abstract class _SettingsState extends SettingsState {
+  const factory _SettingsState(
+      {required final bool progress,
+      final int unreadVoicemailCount}) = _$SettingsStateImpl;
+  const _SettingsState._() : super._();
 
   @override
   bool get progress;
+  @override
+  int get unreadVoicemailCount;
 
   /// Create a copy of SettingsState
   /// with the given fields replaced by the non-null parameter values.

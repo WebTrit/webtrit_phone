@@ -43,7 +43,6 @@ class SettingsScreen extends StatelessWidget {
         ],
       ),
       body: BlocBuilder<SettingsBloc, SettingsState>(
-        buildWhen: (previous, current) => previous.progress != current.progress,
         builder: (context, state) {
           return Stack(
             children: [
@@ -209,6 +208,7 @@ class SettingsScreen extends StatelessWidget {
                                     children: [
                                       ListTile(
                                         leading: Icon(item.icon),
+                                        trailing: UnreadBadge(count: state.unreadVoicemailCount),
                                         title: Text(context.parseL10n(item.titleL10n)),
                                         onTap: () => context.router.navigate(const VoicemailScreenPageRoute()),
                                       ),
