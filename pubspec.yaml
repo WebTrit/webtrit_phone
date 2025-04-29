@@ -54,7 +54,7 @@ dependencies:
   google_fonts: ^6.2.1
   intl: any
   json_annotation: ^4.8.1
-  just_audio: ^0.9.37
+  just_audio: ^0.10.1
   linkify: ^5.0.0
   logging: ^1.2.0
   logging_appenders: ^1.2.0
@@ -86,7 +86,8 @@ dependencies:
   device_region: ^1.4.0
   html: ^0.15.4
   http: ^1.2.2
-
+  audio_session: ^0.2.1
+  
   webtrit_api:
     path: ./packages/webtrit_api
   webtrit_phone_number:
