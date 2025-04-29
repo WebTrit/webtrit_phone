@@ -24,26 +24,20 @@ class VoicemailCubit extends Cubit<VoicemailState> {
 
   final VoicemailRepository _repository;
   final ValueChanged<String> onCallStarted;
+
   late final StreamSubscription<List<Voicemail>> _subscription;
 
-  void _initialize() {
+  void _initialize() async {
     _subscription = _repository.watchVoicemails().listen((items) {
-      emit(VoicemailState(items: items, mediaHeaders: state.mediaHeaders));
+      emit(state.copyWith(items: items, mediaHeaders: state.mediaHeaders));
     });
 
-    _repository.fetchVoicemails();
+    await _repository.fetchVoicemails();
+    emit(state.copyWith(status: VoicemailStatus.loaded));
   }
 
   void cleanDb() {
     _repository.removeAllVoicemails();
-  }
-
-  Future<void> loadVoicemails() async {
-    try {
-      await _repository.fetchVoicemails();
-    } catch (e) {
-      // TODO(Serdun): Handle error
-    }
   }
 
   Future<void> loadVoicemailDetail(String messageId) async {}

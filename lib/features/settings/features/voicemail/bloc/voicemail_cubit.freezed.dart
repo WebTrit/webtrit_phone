@@ -129,7 +129,7 @@ class _$VoicemailStateImpl
     with DiagnosticableTreeMixin
     implements _VoicemailState {
   const _$VoicemailStateImpl(
-      {this.status = VoicemailStatus.initial,
+      {this.status = VoicemailStatus.loading,
       required final Map<String, String> mediaHeaders,
       final List<Voicemail> items = const []})
       : _mediaHeaders = mediaHeaders,

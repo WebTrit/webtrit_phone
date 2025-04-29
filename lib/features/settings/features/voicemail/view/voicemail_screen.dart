@@ -29,14 +29,17 @@ class VoicemailScreen extends StatelessWidget {
           ),
           body: Stack(
             children: [
-              if (state.status == VoicemailStatus.loading && state.items.isEmpty)
-                const Center(child: SizedCircularProgressIndicator(size: 16, strokeWidth: 2)),
+              // Show loading indicator when updating the items  available and updating item ot deleting
               if (state.status == VoicemailStatus.loading && state.items.isNotEmpty)
                 const LinearProgressIndicator(minHeight: 2),
+              // Show loading indicator when loading the items
+              if (state.status == VoicemailStatus.loading && state.items.isEmpty)
+                const Center(child: CircularProgressIndicator(strokeWidth: 2)),
+              // Show Placeholder when no items available
               if (state.status == VoicemailStatus.loaded && state.items.isEmpty)
                 const Center(child: Text('No voicemails')),
-              if (state.items.isNotEmpty)
-                VoicemailListView(items: state.items, mediaHeaders: state.mediaHeaders, cubit: cubit),
+              // Show the list of voicemails
+              VoicemailListView(items: state.items, mediaHeaders: state.mediaHeaders, cubit: cubit),
             ],
           ),
         );
