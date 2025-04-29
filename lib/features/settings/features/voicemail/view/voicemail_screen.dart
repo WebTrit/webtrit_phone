@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/models/voicemail/user_voicemail.dart';
+import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../bloc/voicemail_cubit.dart';
 import '../widgets/widgets.dart';
@@ -14,15 +15,13 @@ class VoicemailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<VoicemailCubit, VoicemailState>(
       builder: (context, state) {
-        final cubit = context.read<VoicemailCubit>();
-
         return Scaffold(
           appBar: AppBar(
             title: const Text('Voicemail'),
             actions: [
               IconButton(
                 icon: const Icon(Icons.delete),
-                onPressed: cubit.cleanDb,
+                onPressed: state.items.isNotEmpty ? () => _onDeleteAllVoicemails(context) : null,
               ),
             ],
           ),
@@ -38,12 +37,25 @@ class VoicemailScreen extends StatelessWidget {
               if (state.status == VoicemailStatus.loaded && state.items.isEmpty)
                 const Center(child: Text('No voicemails')),
               // Show the list of voicemails
-              VoicemailListView(items: state.items, mediaHeaders: state.mediaHeaders, cubit: cubit),
+              VoicemailListView(items: state.items, mediaHeaders: state.mediaHeaders),
             ],
           ),
         );
       },
     );
+  }
+
+  void _onDeleteAllVoicemails(BuildContext context) async {
+    final confirmed = (await ConfirmDialog.showDangerous(
+          context,
+          title: 'Delete all voicemails?',
+          content: 'This action will permanently delete all your voicemails. This cannot be undone.',
+        )) ??
+        false;
+
+    if (confirmed && context.mounted) {
+      context.read<VoicemailCubit>().removeAllVoicemails();
+    }
   }
 }
 
@@ -52,15 +64,15 @@ class VoicemailListView extends StatelessWidget {
     super.key,
     required this.items,
     required this.mediaHeaders,
-    required this.cubit,
   });
 
   final List<Voicemail> items;
   final Map<String, String> mediaHeaders;
-  final VoicemailCubit cubit;
 
   @override
   Widget build(BuildContext context) {
+    final cubit = context.read<VoicemailCubit>();
+
     return ListView.separated(
       padding: const EdgeInsets.all(16),
       itemCount: items.length,
@@ -71,11 +83,26 @@ class VoicemailListView extends StatelessWidget {
           voicemail: item,
           mediaHeaders: mediaHeaders,
           displayName: item.displaySender,
-          onDeleted: (it) => cubit.deleteVoicemail(it.id.toString()),
+          onDeleted: (it) => _onDeleteVoicemail(context, it),
           onToggleSeenStatus: (it) => cubit.toggleSeenStatus(it),
           onCall: (it) => cubit.startCall(it),
         );
       },
     );
+  }
+
+  void _onDeleteVoicemail(BuildContext context, Voicemail voicemail) async {
+    final cubit = context.read<VoicemailCubit>();
+
+    final confirmed = (await ConfirmDialog.showDangerous(
+          context,
+          title: 'Delete voicemail?',
+          content: 'This voicemail will be permanently deleted. Do you want to continue?',
+        )) ??
+        false;
+
+    if (confirmed) {
+      cubit.deleteVoicemail(voicemail.id.toString());
+    }
   }
 }

@@ -36,7 +36,7 @@ class VoicemailCubit extends Cubit<VoicemailState> {
     emit(state.copyWith(status: VoicemailStatus.loaded));
   }
 
-  void cleanDb() {
+  void removeAllVoicemails() {
     _repository.removeAllVoicemails();
   }
 
