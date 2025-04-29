@@ -18,6 +18,8 @@ class WebtritApiClient {
 
   final Logger _logger;
 
+  final _apiBasePathSegments = ['api', 'v1'];
+
   @visibleForTesting
   static Uri buildTenantUrl(Uri baseUrl, String tenantId) {
     if (tenantId.isEmpty) {
@@ -79,8 +81,7 @@ class WebtritApiClient {
     final url = tenantUrl.replace(
       pathSegments: [
         ...tenantUrl.pathSegments.where((segment) => segment.isNotEmpty),
-        'api',
-        'v1',
+        ..._apiBasePathSegments,
         ...pathSegments,
       ],
     );
@@ -577,12 +578,12 @@ class WebtritApiClient {
   }
 
   Future<Uint8List> getUserVoicemailAttachment(
-      String token,
-      String messageId, {
-        String? locale,
-        String? fileFormat,
-        RequestOptions options = const RequestOptions(),
-      }) async {
+    String token,
+    String messageId, {
+    String? locale,
+    String? fileFormat,
+    RequestOptions options = const RequestOptions(),
+  }) async {
     final uri = tenantUrl.replace(
       pathSegments: [
         ...tenantUrl.pathSegments.where((s) => s.isNotEmpty),
@@ -613,5 +614,17 @@ class WebtritApiClient {
     }
 
     return response.bodyBytes;
+  }
+
+  String getVoicemailAttachmentUrl(String voicemailId, {String fileFormat = 'mp3'}) {
+    final url = tenantUrl.replace(
+      pathSegments: [
+        ...tenantUrl.pathSegments.where((segment) => segment.isNotEmpty),
+        ..._apiBasePathSegments,
+        ...['user', 'voicemails', voicemailId, 'attachment'],
+      ],
+      queryParameters: fileFormat.isNotEmpty ? {'file_format': fileFormat} : null,
+    );
+    return url.toString();
   }
 }

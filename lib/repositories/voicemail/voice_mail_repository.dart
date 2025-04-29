@@ -67,7 +67,6 @@ class VoicemailRepositoryImpl with ContactsDriftMapper implements VoicemailRepos
         options: RequestOptions.withNoRetries(),
       );
 
-      // https://core1.demo.webtrit.com/api/v1/user/voicemails/2066/attachment?file_format=mp3
       final voicemail = VoicemailData(
         id: item.id,
         date: item.date,
@@ -77,8 +76,7 @@ class VoicemailRepositoryImpl with ContactsDriftMapper implements VoicemailRepos
         seen: item.seen,
         size: item.size,
         type: item.type,
-        // TODO(Serdun): Move to constants
-        attachmentPath: 'https://core1.demo.webtrit.com/api/v1/user/voicemails/${item.id}/attachment?file_format=mp3',
+        attachmentPath: _webtritApiClient.getVoicemailAttachmentUrl(item.id),
       );
 
       try {
