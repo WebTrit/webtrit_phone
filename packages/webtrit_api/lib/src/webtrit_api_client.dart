@@ -11,8 +11,10 @@ import 'package:_http_client/_http_client.dart';
 
 import 'exceptions.dart';
 import 'webtrit_api_request_options.dart';
+import 'webtrit_api_response_options.dart';
 import 'models/models.dart';
 
+// TODO(Serdun): Use correct naming for request and response options
 class WebtritApiClient {
   static final _requestIdRandom = Random();
 
@@ -77,6 +79,7 @@ class WebtritApiClient {
     String? requestId,
     Map<String, String>? headers,
     RequestOptions options = const RequestOptions(),
+    ResponseOptions responseOptions = const ResponseOptions(),
   }) async {
     final url = tenantUrl.replace(
       pathSegments: [
@@ -123,7 +126,15 @@ class WebtritApiClient {
             '${method.toUpperCase()} response with status code: ${httpResponse.statusCode} for requestId: $xRequestId, response body: ${httpResponse.body}');
 
         if (httpResponse.statusCode == 200 || httpResponse.statusCode == 204) {
-          return responseDataJson;
+          // Return response in the requested format depending on the response type:
+          // - JSON-decoded map for API data responses
+          // - Raw bytes for binary downloads (e.g., files)
+          // - Full http.Response object for advanced access (headers, status, etc.)
+          return switch (responseOptions.responseType) {
+            ResponseType.json => responseDataJson,
+            ResponseType.bytes => httpResponse.bodyBytes,
+            ResponseType.raw => httpResponse,
+          };
         } else {
           final error = switch (responseDataJson) {
             Map(isEmpty: true) => null,
@@ -171,14 +182,15 @@ class WebtritApiClient {
     List<String> pathSegments,
     Map<String, String>? headers,
     String? token, {
-    RequestOptions options = const RequestOptions(),
+    RequestOptions requestOptions = const RequestOptions(),
+    ResponseOptions responseOptions = const ResponseOptions(),
   }) {
     return _httpClientExecute(
       'get',
       pathSegments,
       token,
       null,
-      options: options,
+      options: requestOptions,
     );
   }
 
@@ -237,7 +249,7 @@ class WebtritApiClient {
       ['system-info'],
       null,
       null,
-      options: options,
+      requestOptions: options,
     );
 
     return SystemInfo.fromJson(responseJson);
@@ -355,7 +367,7 @@ class WebtritApiClient {
       ['user'],
       null,
       token,
-      options: options,
+      requestOptions: options,
     );
 
     return UserInfo.fromJson(responseJson);
@@ -369,7 +381,7 @@ class WebtritApiClient {
       ['user', 'contacts'],
       null,
       token,
-      options: options,
+      requestOptions: options,
     );
 
     return (responseJson['items'] as List<dynamic>).map((e) {
@@ -397,7 +409,7 @@ class WebtritApiClient {
       ['app', 'status'],
       null,
       token,
-      options: options,
+      requestOptions: options,
     );
 
     return AppStatus.fromJson(responseJson);
@@ -443,7 +455,7 @@ class WebtritApiClient {
       ['app', 'contacts', 'smart'],
       null,
       token,
-      options: options,
+      requestOptions: options,
     );
 
     return (responseJson as List<dynamic>).map((e) => AppSmartContact.fromJson(e as Map<String, dynamic>)).toList();
@@ -523,7 +535,7 @@ class WebtritApiClient {
       ['user', 'voicemails'],
       locale != null ? {'Accept-Language': locale} : null,
       token,
-      options: options,
+      requestOptions: options,
     );
 
     return UserVoicemailListResponse.fromJson(responseJson);
@@ -539,7 +551,7 @@ class WebtritApiClient {
       ['user', 'voicemails', messageId],
       locale != null ? {'Accept-Language': locale} : null,
       token,
-      options: options,
+      requestOptions: options,
     );
 
     return UserVoicemail.fromJson(responseJson);
@@ -584,36 +596,15 @@ class WebtritApiClient {
     String? fileFormat,
     RequestOptions options = const RequestOptions(),
   }) async {
-    final uri = tenantUrl.replace(
-      pathSegments: [
-        ...tenantUrl.pathSegments.where((s) => s.isNotEmpty),
-        'api',
-        'v1',
-        'user',
-        'voicemails',
-        messageId,
-        'attachment',
-      ],
-      queryParameters: fileFormat != null ? {'file_format': fileFormat} : null,
+    final responseJson = await _httpClientExecuteGet(
+      ['user', 'voicemails', messageId, 'attachment'],
+      locale != null ? {'Accept-Language': locale} : null,
+      token,
+      requestOptions: options,
+      responseOptions: ResponseOptions(responseType: ResponseType.bytes),
     );
 
-    final headers = {
-      if (token.isNotEmpty) 'authorization': 'Bearer $token',
-      if (locale != null) 'Accept-Language': locale,
-    };
-
-    final response = await _httpClient.get(uri, headers: headers);
-    if (response.statusCode != 200) {
-      throw RequestFailure(
-        url: uri,
-        statusCode: response.statusCode,
-        requestId: _generateRequestId(),
-        token: token,
-        error: ErrorResponse.fromJson(jsonDecode(response.body)),
-      );
-    }
-
-    return response.bodyBytes;
+    return responseJson;
   }
 
   String getVoicemailAttachmentUrl(String voicemailId, {String fileFormat = 'mp3'}) {
