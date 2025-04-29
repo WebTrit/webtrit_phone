@@ -6,3 +6,4 @@ export 'favorites_mapper.dart';
 export 'recents_mapper.dart';
 export 'sms_drift_mapper.dart';
 export 'sms_outbox_drift_mapper.dart';
+export 'voicemail_mapper.dart';

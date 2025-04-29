@@ -28,7 +28,7 @@ abstract class VoicemailRepository {
 
 final _logger = Logger('VoicemailRepository');
 
-class VoicemailRepositoryImpl with ContactsDriftMapper implements VoicemailRepository {
+class VoicemailRepositoryImpl with ContactsDriftMapper, VoicemailMapper implements VoicemailRepository {
   VoicemailRepositoryImpl({
     required WebtritApiClient webtritApiClient,
     required String token,
@@ -54,37 +54,22 @@ class VoicemailRepositoryImpl with ContactsDriftMapper implements VoicemailRepos
     final remoteItems = await _webtritApiClient.getUserVoicemailList(
       _token,
       locale: localeCode,
-      options: RequestOptions.withNoRetries(),
     );
 
     final result = <Voicemail>[];
 
-    for (final item in remoteItems.items) {
-      final details = await _webtritApiClient.getUserVoicemail(
+    for (final userVoicemailItem in remoteItems.items) {
+      final userVoicemailDetails = await _webtritApiClient.getUserVoicemail(
         _token,
-        item.id,
+        userVoicemailItem.id,
         locale: localeCode,
-        options: RequestOptions.withNoRetries(),
       );
 
-      final voicemail = VoicemailData(
-        id: item.id,
-        date: item.date,
-        duration: item.duration,
-        sender: details.sender,
-        receiver: details.receiver,
-        seen: item.seen,
-        size: item.size,
-        type: item.type,
-        attachmentPath: _webtritApiClient.getVoicemailAttachmentUrl(item.id),
-      );
-
-      try {
-        await _appDatabase.voicemailDao.insertOrUpdateVoicemail(voicemail).timeout(const Duration(seconds: 5));
-        _logger.info('Voicemail ${item.id} inserted/updated');
-      } catch (e, s) {
-        _logger.warning('insertOrUpdateVoicemail failed: $e\n$s');
-      }
+      await _appDatabase.voicemailDao.insertOrUpdateVoicemail(voicemailToDrift(
+        userVoicemailItem,
+        userVoicemailDetails,
+        _webtritApiClient.getVoicemailAttachmentUrl(userVoicemailItem.id),
+      ));
     }
 
     return result;
@@ -104,8 +89,6 @@ class VoicemailRepositoryImpl with ContactsDriftMapper implements VoicemailRepos
 
   @override
   Future<void> updateVoicemailSeenStatus(String messageId, bool seen, {String? localeCode}) async {
-    _logger.info('updateVoicemailSeenStatus: $messageId, seen: $seen');
-
     await _webtritApiClient.updateUserVoicemail(
       _token,
       messageId,
@@ -142,31 +125,23 @@ class VoicemailRepositoryImpl with ContactsDriftMapper implements VoicemailRepos
     );
   }
 
-  // data.contact
   @override
   Stream<List<Voicemail>> watchVoicemails() {
-    return _appDatabase.voicemailDao.watchVoicemailsWithContacts().map(
-          (dataList) => dataList
-              .map(
-                (data) => Voicemail(
-                  data.voicemail.id,
-                  data.voicemail.date,
-                  data.voicemail.duration,
-                  data.voicemail.sender,
-                  (data.contact != null ? contactFromDrift(data.contact!).maybeName : null) ?? data.voicemail.sender,
-                  data.voicemail.receiver,
-                  data.voicemail.seen,
-                  data.voicemail.size,
-                  data.voicemail.type,
-                  data.voicemail.attachmentPath,
-                ),
-              )
-              .toList(),
-        );
+    final voicemails = _appDatabase.voicemailDao.watchVoicemailsWithContacts();
+    return voicemails.map((it) => it.map(_voicemailFromDriftWithContact).toList());
   }
 
   @override
   Future<void> removeAllVoicemails() {
     return _appDatabase.voicemailDao.deleteAllVoicemails();
+  }
+
+  Voicemail _voicemailFromDriftWithContact(VoicemailWithContact data) {
+    final displayName = data.contact != null ? contactFromDrift(data.contact!).maybeName : null;
+
+    return voicemailFromDrift(
+      data.voicemail,
+      displayName ?? data.voicemail.sender,
+    );
   }
 }
