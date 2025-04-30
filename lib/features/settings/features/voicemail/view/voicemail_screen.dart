@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:webtrit_phone/l10n/app_localizations.g.mapper.dart';
 import 'package:webtrit_phone/models/voicemail/user_voicemail.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
@@ -22,7 +23,7 @@ class _VoicemailScreenState extends State<VoicemailScreen> {
       builder: (context, state) {
         return Scaffold(
           appBar: AppBar(
-            title: const Text('Voicemail'),
+            title: Text(context.l10n.voicemail_Widget_screenTitle),
             actions: [
               IconButton(
                 icon: const Icon(Icons.delete),
@@ -34,7 +35,7 @@ class _VoicemailScreenState extends State<VoicemailScreen> {
             children: [
               if (state.isRefreshing) const LinearProgressIndicator(minHeight: 2),
               if (state.isInitializing) const Center(child: CircularProgressIndicator(strokeWidth: 2)),
-              if (state.isLoadedWithEmptyResult) const Center(child: Text('No voicemails')),
+              if (state.isLoadedWithEmptyResult) Center(child: Text(context.l10n.voicemail_Label_empty)),
               if (state.isLoadedWithError) FailureRetryView(errorNotification: state.error!, onRetry: _onRetryFetch),
               if (state.isVoicemailsExists) VoicemailListView(items: state.items, mediaHeaders: state.mediaHeaders),
             ],
@@ -51,8 +52,8 @@ class _VoicemailScreenState extends State<VoicemailScreen> {
   void _onDeleteAllVoicemails() async {
     final confirmed = (await ConfirmDialog.showDangerous(
           context,
-          title: 'Delete all voicemails?',
-          content: 'This action will permanently delete all your voicemails. This cannot be undone.',
+          title: context.l10n.voicemail_Label_deleteAll,
+          content: context.l10n.voicemail_Label_deleteAllDescription,
         )) ??
         false;
 
@@ -99,8 +100,8 @@ class VoicemailListView extends StatelessWidget {
 
     final confirmed = (await ConfirmDialog.showDangerous(
           context,
-          title: 'Delete voicemail?',
-          content: 'This voicemail will be permanently deleted. Do you want to continue?',
+          title: context.l10n.voicemail_Dialog_deleteSingleTitle,
+          content: context.l10n.voicemail_Dialog_deleteSingleContent,
         )) ??
         false;
 

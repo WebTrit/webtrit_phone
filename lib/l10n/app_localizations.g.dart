@@ -1921,6 +1921,72 @@ abstract class AppLocalizations {
   /// **'INITIALIZING'**
   String get messaging_StateBar_initializing;
 
+  /// No description provided for @voicemail_Widget_screenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Voicemail'**
+  String get voicemail_Widget_screenTitle;
+
+  /// No description provided for @voicemail_Label_deleteAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete all voicemails?'**
+  String get voicemail_Label_deleteAll;
+
+  /// No description provided for @voicemail_Label_deleteAllDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'This action will permanently delete all your voicemails. This cannot be undone.'**
+  String get voicemail_Label_deleteAllDescription;
+
+  /// No description provided for @voicemail_Label_empty.
+  ///
+  /// In en, this message translates to:
+  /// **'No voicemails'**
+  String get voicemail_Label_empty;
+
+  /// No description provided for @voicemail_Label_retry.
+  ///
+  /// In en, this message translates to:
+  /// **'Try again'**
+  String get voicemail_Label_retry;
+
+  /// No description provided for @voicemail_Label_call.
+  ///
+  /// In en, this message translates to:
+  /// **'Call'**
+  String get voicemail_Label_call;
+
+  /// No description provided for @voicemail_Label_markAsHeard.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark as heard'**
+  String get voicemail_Label_markAsHeard;
+
+  /// No description provided for @voicemail_Label_markAsNew.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark as new'**
+  String get voicemail_Label_markAsNew;
+
+  /// No description provided for @voicemail_Label_delete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get voicemail_Label_delete;
+
+  /// No description provided for @voicemail_Dialog_deleteSingleTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete voicemail?'**
+  String get voicemail_Dialog_deleteSingleTitle;
+
+  /// No description provided for @voicemail_Dialog_deleteSingleContent.
+  ///
+  /// In en, this message translates to:
+  /// **'This voicemail will be permanently deleted. Do you want to continue?'**
+  String get voicemail_Dialog_deleteSingleContent;
+
   /// No description provided for @notifications_errorSnackBarAction_callUserMedia.
   ///
   /// In en, this message translates to:

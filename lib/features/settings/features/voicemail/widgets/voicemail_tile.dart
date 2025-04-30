@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 
 import 'package:intl/intl.dart';
+import 'package:webtrit_phone/l10n/l10n.dart';
 
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
@@ -74,11 +75,11 @@ class VoicemailTile extends StatelessWidget {
             position: PopupMenuPosition.under,
             onSelected: _onPopupMenuSelected,
             itemBuilder: (context) => [
-              const PopupMenuItem(
+              PopupMenuItem(
                 value: _VoicemailMenuAction.call,
                 child: ListTile(
-                  leading: Icon(Icons.call),
-                  title: Text('Call'),
+                  leading: const Icon(Icons.call),
+                  title: Text(context.l10n.voicemail_Label_call),
                 ),
               ),
               PopupMenuItem(
@@ -89,7 +90,11 @@ class VoicemailTile extends StatelessWidget {
                     children: [
                       if (voicemail.seen) Icon(Icons.circle, size: 8, color: colorScheme.tertiary),
                       const SizedBox(width: 4),
-                      Text(voicemail.seen ? 'Mark as new' : 'Mark as heard'),
+                      Text(
+                        voicemail.seen
+                            ? context.l10n.voicemail_Label_markAsNew
+                            : context.l10n.voicemail_Label_markAsHeard,
+                      ),
                     ],
                   ),
                 ),
@@ -98,7 +103,7 @@ class VoicemailTile extends StatelessWidget {
                 value: _VoicemailMenuAction.delete,
                 child: ListTile(
                   leading: Icon(Icons.delete, color: colorScheme.error),
-                  title: const Text('Delete'),
+                  title: Text(context.l10n.voicemail_Label_delete),
                 ),
               ),
             ],

@@ -943,6 +943,39 @@ class AppLocalizationsEn extends AppLocalizations {
   String get messaging_StateBar_initializing => 'INITIALIZING';
 
   @override
+  String get voicemail_Widget_screenTitle => 'Voicemail';
+
+  @override
+  String get voicemail_Label_deleteAll => 'Delete all voicemails?';
+
+  @override
+  String get voicemail_Label_deleteAllDescription => 'This action will permanently delete all your voicemails. This cannot be undone.';
+
+  @override
+  String get voicemail_Label_empty => 'No voicemails';
+
+  @override
+  String get voicemail_Label_retry => 'Try again';
+
+  @override
+  String get voicemail_Label_call => 'Call';
+
+  @override
+  String get voicemail_Label_markAsHeard => 'Mark as heard';
+
+  @override
+  String get voicemail_Label_markAsNew => 'Mark as new';
+
+  @override
+  String get voicemail_Label_delete => 'Delete';
+
+  @override
+  String get voicemail_Dialog_deleteSingleTitle => 'Delete voicemail?';
+
+  @override
+  String get voicemail_Dialog_deleteSingleContent => 'This voicemail will be permanently deleted. Do you want to continue?';
+
+  @override
   String get notifications_errorSnackBarAction_callUserMedia => 'Check';
 
   @override

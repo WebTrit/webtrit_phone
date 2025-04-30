@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:webtrit_phone/app/notifications/models/notification.dart';
+import 'package:webtrit_phone/l10n/l10n.dart';
 
 class FailureRetryView extends StatelessWidget {
   final DefaultErrorNotification errorNotification;
@@ -25,7 +26,7 @@ class FailureRetryView extends StatelessWidget {
           const SizedBox(height: 16),
           ElevatedButton(
             onPressed: onRetry,
-            child: const Text('Try again'),
+            child: Text(context.l10n.voicemail_Label_retry),
           ),
         ],
       ),
