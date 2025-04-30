@@ -33,6 +33,8 @@ class VoicemailRepositoryImpl with ContactsDriftMapper, VoicemailMapper implemen
     required WebtritApiClient webtritApiClient,
     required String token,
     required AppDatabase appDatabase,
+    this.polling = true,
+    this.pollPeriod = const Duration(minutes: 5),
   })  : _webtritApiClient = webtritApiClient,
         _token = token,
         _appDatabase = appDatabase {
@@ -42,13 +44,53 @@ class VoicemailRepositoryImpl with ContactsDriftMapper, VoicemailMapper implemen
   final WebtritApiClient _webtritApiClient;
   final String _token;
   final AppDatabase _appDatabase;
+  final bool polling;
+  final Duration pollPeriod;
 
-  // Try actualize voicemail list on app start
+  late final StreamController<List<Voicemail>> _updatesController;
+  StreamSubscription? _databaseSubscription;
+  Timer? _pollTimer;
+
+  Stream<List<Voicemail>> get voicemailUpdates => _updatesController.stream;
+
   void _initialize() {
-    _logger.info('VoicemailRepository initialized, fetching voicemails');
+    _updatesController = StreamController<List<Voicemail>>.broadcast(
+      onListen: _onListen,
+      onCancel: _onCancel,
+    );
+
     unawaited(fetchVoicemails());
   }
 
+  // Listener for the database changes and add them to the stream
+  void _onListen() {
+    _databaseSubscription = _appDatabase.voicemailDao.watchVoicemailsWithContacts().listen((dataList) {
+      final items = dataList.map(_voicemailFromDriftWithContact).toList();
+      _updatesController.add(items);
+    });
+
+    // If polling is enabled, start the timer to fetch voicemails periodically
+    if (polling) {
+      _pollTimer = Timer.periodic(pollPeriod, (_) => _fetchFromServer().ignore());
+    }
+  }
+
+  // Fetch voicemails from the server and add them to database
+  Future<void> _fetchFromServer() async {
+    try {
+      await fetchVoicemails();
+    } catch (e, st) {
+      _updatesController.addError(e, st);
+    }
+  }
+
+// Cancel the database subscription and the timer when there are no listeners
+  void _onCancel() {
+    _databaseSubscription?.cancel();
+    _pollTimer?.cancel();
+  }
+
+  // Fetch voicemails from the server and add them to the database
   @override
   Future<List<Voicemail>> fetchVoicemails({String? localeCode}) async {
     final remoteItems = await _webtritApiClient.getUserVoicemailList(
@@ -142,8 +184,7 @@ class VoicemailRepositoryImpl with ContactsDriftMapper, VoicemailMapper implemen
 
   @override
   Stream<List<Voicemail>> watchVoicemails() {
-    final voicemails = _appDatabase.voicemailDao.watchVoicemailsWithContacts();
-    return voicemails.map((it) => it.map(_voicemailFromDriftWithContact).toList());
+    return voicemailUpdates;
   }
 
   Voicemail _voicemailFromDriftWithContact(VoicemailWithContact data) {
