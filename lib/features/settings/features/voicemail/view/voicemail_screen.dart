@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 
 import 'package:webtrit_phone/l10n/app_localizations.g.mapper.dart';
 import 'package:webtrit_phone/models/voicemail/user_voicemail.dart';
@@ -10,7 +11,12 @@ import '../bloc/voicemail_cubit.dart';
 import '../widgets/widgets.dart';
 
 class VoicemailScreen extends StatefulWidget {
-  const VoicemailScreen({super.key});
+  final DateFormat dateFormat;
+
+  const VoicemailScreen({
+    super.key,
+    required this.dateFormat,
+  });
 
   @override
   State<VoicemailScreen> createState() => _VoicemailScreenState();
@@ -37,7 +43,8 @@ class _VoicemailScreenState extends State<VoicemailScreen> {
               if (state.isInitializing) const Center(child: CircularProgressIndicator(strokeWidth: 2)),
               if (state.isLoadedWithEmptyResult) Center(child: Text(context.l10n.voicemail_Label_empty)),
               if (state.isLoadedWithError) FailureRetryView(errorNotification: state.error!, onRetry: _onRetryFetch),
-              if (state.isVoicemailsExists) VoicemailListView(items: state.items, mediaHeaders: state.mediaHeaders),
+              if (state.isVoicemailsExists)
+                VoicemailListView(items: state.items, mediaHeaders: state.mediaHeaders, dateFormat: widget.dateFormat),
             ],
           ),
         );
@@ -68,10 +75,12 @@ class VoicemailListView extends StatelessWidget {
     super.key,
     required this.items,
     required this.mediaHeaders,
+    required this.dateFormat,
   });
 
   final List<Voicemail> items;
   final Map<String, String> mediaHeaders;
+  final DateFormat dateFormat;
 
   @override
   Widget build(BuildContext context) {
@@ -87,6 +96,7 @@ class VoicemailListView extends StatelessWidget {
           voicemail: item,
           mediaHeaders: mediaHeaders,
           displayName: item.displaySender,
+          dateFormat: dateFormat,
           onDeleted: (it) => _onDeleteVoicemail(context, it),
           onToggleSeenStatus: (it) => cubit.toggleSeenStatus(it),
           onCall: (it) => cubit.startCall(it),

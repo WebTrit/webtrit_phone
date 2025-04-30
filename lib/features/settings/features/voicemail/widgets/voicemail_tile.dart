@@ -20,10 +20,9 @@ class VoicemailTile extends StatelessWidget {
     required this.onCall,
     required this.onDeleted,
     required this.onToggleSeenStatus,
+    required this.dateFormat,
     this.thumbnail,
     this.thumbnailUrl,
-    this.registered,
-    this.smart = false,
   });
 
   final Voicemail voicemail;
@@ -31,8 +30,7 @@ class VoicemailTile extends StatelessWidget {
   final String displayName;
   final Uint8List? thumbnail;
   final Uri? thumbnailUrl;
-  final bool? registered;
-  final bool smart;
+  final DateFormat dateFormat;
 
   final void Function(Voicemail) onCall;
   final void Function(Voicemail) onDeleted;
@@ -52,8 +50,6 @@ class VoicemailTile extends StatelessWidget {
             username: displayName,
             thumbnail: thumbnail,
             thumbnailUrl: thumbnailUrl,
-            registered: registered,
-            smart: smart,
           ),
           title: Text(voicemail.displaySender),
           subtitle: Row(
@@ -67,7 +63,7 @@ class VoicemailTile extends StatelessWidget {
                   ),
                 ),
               ),
-              Text(DateFormat('d MMMM yyyy').format(DateTime.parse(voicemail.date))),
+              Text(dateFormat.format(DateTime.parse(voicemail.date))),
             ],
           ),
           trailing: PopupMenuButton<_VoicemailMenuAction>(

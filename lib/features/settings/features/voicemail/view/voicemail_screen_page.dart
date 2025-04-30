@@ -18,7 +18,6 @@ class VoicemailScreenPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const widget = VoicemailScreen();
     final secureStorage = context.read<SecureStorage>();
     final notificationsBloc = context.read<NotificationsBloc>();
 
@@ -34,7 +33,9 @@ class VoicemailScreenPage extends StatelessWidget {
         onCallStarted: (number) => context.read<CallBloc>().add(CallControlEvent.started(number: number, video: false)),
         onSubmitNotification: (n) => notificationsBloc.add(NotificationsSubmitted(n)),
       ),
-      child: widget,
+      child: VoicemailScreen(
+        dateFormat: AppTime().formatDateTime(true),
+      ),
     );
   }
 }
