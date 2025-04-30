@@ -171,22 +171,24 @@ class VoicemailRepositoryImpl with ContactsDriftMapper, VoicemailMapper implemen
     await _appDatabase.voicemailDao.deleteAllVoicemails();
   }
 
+  /// Optimistically updates the voicemail `seen` status in the local database,
+  /// then attempts to sync this change with the remote server.
+  ///
+  /// If the remote update fails, the local change is rolled back to preserve consistency.
   @override
   Future<void> updateVoicemailSeenStatus(String messageId, bool seen, {String? localeCode}) async {
-    await _webtritApiClient.updateUserVoicemail(
-      _token,
-      messageId,
-      seen: seen,
-      locale: localeCode,
-      options: RequestOptions.withNoRetries(),
-    );
+    final previous = await _appDatabase.voicemailDao.getVoicemailById((messageId));
+    if (previous == null) return;
 
-    await _appDatabase.voicemailDao.updateVoicemail(
-      VoicemailDataCompanion(
-        id: Value(messageId),
-        seen: Value(seen),
-      ),
-    );
+    final previousVoicemail = VoicemailDataCompanion(id: Value(previous.id), seen: Value(seen));
+    await _appDatabase.voicemailDao.updateVoicemail(previousVoicemail);
+
+    try {
+      await _webtritApiClient.updateUserVoicemail(_token, messageId, seen: seen, locale: localeCode);
+    } catch (e) {
+      await _appDatabase.voicemailDao.updateVoicemail(previousVoicemail);
+      rethrow;
+    }
   }
 
   @override
