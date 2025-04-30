@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import 'package:webtrit_phone/app/notifications/models/notification.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
@@ -17,6 +18,7 @@ class VoicemailCubit extends Cubit<VoicemailState> {
     required VoicemailRepository repository,
     required Map<String, String> mediaHeaders,
     required this.onCallStarted,
+    required this.onSubmitNotification,
   })  : _repository = repository,
         super(VoicemailState(mediaHeaders: mediaHeaders)) {
     _initialize();
@@ -24,6 +26,7 @@ class VoicemailCubit extends Cubit<VoicemailState> {
 
   final VoicemailRepository _repository;
   final ValueChanged<String> onCallStarted;
+  final ValueChanged<Notification> onSubmitNotification;
 
   late final StreamSubscription<List<Voicemail>> _subscription;
 
@@ -32,15 +35,24 @@ class VoicemailCubit extends Cubit<VoicemailState> {
       emit(state.copyWith(items: items, mediaHeaders: state.mediaHeaders));
     });
 
-    await _repository.fetchVoicemails();
-    emit(state.copyWith(status: VoicemailStatus.loaded));
+    fetchVoicemails();
+  }
+
+  void fetchVoicemails() async {
+    try {
+      emit(state.copyWith(status: VoicemailStatus.loading, error: null));
+      await _repository.fetchVoicemails();
+      emit(state.copyWith(status: VoicemailStatus.loaded));
+    } catch (e) {
+      final error = DefaultErrorNotification(e);
+      emit(state.copyWith(status: VoicemailStatus.loaded, error: error));
+      onSubmitNotification(error);
+    }
   }
 
   void removeAllVoicemails() {
     _repository.removeAllVoicemails();
   }
-
-  Future<void> loadVoicemailDetail(String messageId) async {}
 
   void deleteVoicemail(String messageId) async {
     try {
@@ -48,21 +60,23 @@ class VoicemailCubit extends Cubit<VoicemailState> {
       await _repository.removeVoicemail(messageId);
       emit(state.copyWith(status: VoicemailStatus.loaded));
     } catch (e) {
-      // TODO(Serdun): Handle error
+      onSubmitNotification(DefaultErrorNotification(e));
     }
   }
 
   void toggleSeenStatus(Voicemail voicemail) async {
-    emit(state.copyWith(status: VoicemailStatus.loading));
-    await _repository.updateVoicemailSeenStatus(voicemail.id.toString(), !voicemail.seen);
-    emit(state.copyWith(status: VoicemailStatus.loaded));
+    try {
+      emit(state.copyWith(status: VoicemailStatus.loading));
+      await _repository.updateVoicemailSeenStatus(voicemail.id.toString(), !voicemail.seen);
+      emit(state.copyWith(status: VoicemailStatus.loaded));
+    } catch (e) {
+      onSubmitNotification(DefaultErrorNotification(e));
+    }
   }
 
   void startCall(Voicemail voicemail) {
     onCallStarted(voicemail.sender);
   }
-
-  void message(Voicemail voicemail) {}
 
   @override
   Future<void> close() {

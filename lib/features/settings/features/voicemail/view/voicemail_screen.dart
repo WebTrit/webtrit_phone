@@ -8,9 +8,14 @@ import 'package:webtrit_phone/widgets/widgets.dart';
 import '../bloc/voicemail_cubit.dart';
 import '../widgets/widgets.dart';
 
-class VoicemailScreen extends StatelessWidget {
+class VoicemailScreen extends StatefulWidget {
   const VoicemailScreen({super.key});
 
+  @override
+  State<VoicemailScreen> createState() => _VoicemailScreenState();
+}
+
+class _VoicemailScreenState extends State<VoicemailScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<VoicemailCubit, VoicemailState>(
@@ -21,23 +26,17 @@ class VoicemailScreen extends StatelessWidget {
             actions: [
               IconButton(
                 icon: const Icon(Icons.delete),
-                onPressed: state.items.isNotEmpty ? () => _onDeleteAllVoicemails(context) : null,
+                onPressed: state.items.isNotEmpty ? () => _onDeleteAllVoicemails() : null,
               ),
             ],
           ),
           body: Stack(
             children: [
-              // Show loading indicator when updating the items  available and updating item ot deleting
-              if (state.status == VoicemailStatus.loading && state.items.isNotEmpty)
-                const LinearProgressIndicator(minHeight: 2),
-              // Show loading indicator when loading the items
-              if (state.status == VoicemailStatus.loading && state.items.isEmpty)
-                const Center(child: CircularProgressIndicator(strokeWidth: 2)),
-              // Show Placeholder when no items available
-              if (state.status == VoicemailStatus.loaded && state.items.isEmpty)
-                const Center(child: Text('No voicemails')),
-              // Show the list of voicemails
-              VoicemailListView(items: state.items, mediaHeaders: state.mediaHeaders),
+              if (state.isRefreshing) const LinearProgressIndicator(minHeight: 2),
+              if (state.isInitializing) const Center(child: CircularProgressIndicator(strokeWidth: 2)),
+              if (state.isLoadedWithEmptyResult) const Center(child: Text('No voicemails')),
+              if (state.isLoadedWithError) FailureRetryView(errorNotification: state.error!, onRetry: _onRetryFetch),
+              if (state.isLoadedSuccessfully) VoicemailListView(items: state.items, mediaHeaders: state.mediaHeaders),
             ],
           ),
         );
@@ -45,7 +44,11 @@ class VoicemailScreen extends StatelessWidget {
     );
   }
 
-  void _onDeleteAllVoicemails(BuildContext context) async {
+  void _onRetryFetch() {
+    context.read<VoicemailCubit>().fetchVoicemails();
+  }
+
+  void _onDeleteAllVoicemails() async {
     final confirmed = (await ConfirmDialog.showDangerous(
           context,
           title: 'Delete all voicemails?',
@@ -53,7 +56,7 @@ class VoicemailScreen extends StatelessWidget {
         )) ??
         false;
 
-    if (confirmed && context.mounted) {
+    if (confirmed && mounted) {
       context.read<VoicemailCubit>().removeAllVoicemails();
     }
   }
