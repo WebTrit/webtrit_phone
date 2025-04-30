@@ -33,7 +33,7 @@ class _VoicemailScreenState extends State<VoicemailScreen> {
           ),
           body: Stack(
             children: [
-              if (state.isRefreshing) const LinearProgressIndicator(minHeight: 2),
+              if (state.isRefreshing) const LinearProgressIndicator(minHeight: 1),
               if (state.isInitializing) const Center(child: CircularProgressIndicator(strokeWidth: 2)),
               if (state.isLoadedWithEmptyResult) Center(child: Text(context.l10n.voicemail_Label_empty)),
               if (state.isLoadedWithError) FailureRetryView(errorNotification: state.error!, onRetry: _onRetryFetch),

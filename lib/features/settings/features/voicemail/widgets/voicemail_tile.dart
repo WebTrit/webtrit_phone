@@ -85,7 +85,7 @@ class VoicemailTile extends StatelessWidget {
               PopupMenuItem(
                 value: _VoicemailMenuAction.toggleSeenStatus,
                 child: ListTile(
-                  leading: Icon(voicemail.seen ? Icons.mark_email_read : Icons.mark_email_unread),
+                  leading: const Icon(Icons.voicemail),
                   title: Row(
                     children: [
                       if (voicemail.seen) Icon(Icons.circle, size: 8, color: colorScheme.tertiary),
