@@ -50,10 +50,10 @@ class VoicemailCubit extends Cubit<VoicemailState> {
     }
   }
 
-  void removeAllVoicemails() {
+  void removeAllVoicemails() async {
     try {
       emit(state.copyWith(status: VoicemailStatus.loading));
-      _repository.removeAllVoicemails();
+      await _repository.removeAllVoicemails();
       emit(state.copyWith(status: VoicemailStatus.loaded));
     } catch (e) {
       onSubmitNotification(DefaultErrorNotification(e));
