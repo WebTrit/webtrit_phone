@@ -600,6 +600,10 @@ class AppLocalizationsMapper {
           localizations.voicemail_Dialog_deleteSingleTitle,
       'voicemail_Dialog_deleteSingleContent':
           localizations.voicemail_Dialog_deleteSingleContent,
+      'voicemail_Title_notSupported':
+          localizations.voicemail_Title_notSupported,
+      'voicemail_Description_notSupported':
+          localizations.voicemail_Description_notSupported,
       'notifications_errorSnackBarAction_callUserMedia':
           localizations.notifications_errorSnackBarAction_callUserMedia,
       'notifications_errorSnackBar_activeLineBlindTransferWarning':

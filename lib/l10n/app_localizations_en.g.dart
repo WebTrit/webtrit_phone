@@ -976,6 +976,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get voicemail_Dialog_deleteSingleContent => 'This voicemail will be permanently deleted. Do you want to continue?';
 
   @override
+  String get voicemail_Title_notSupported => 'Feature not supported';
+
+  @override
+  String get voicemail_Description_notSupported => 'Voicemail feature are not supported in your core. Please contact your administrator for more information.';
+
+  @override
   String get notifications_errorSnackBarAction_callUserMedia => 'Check';
 
   @override

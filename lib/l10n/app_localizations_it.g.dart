@@ -976,6 +976,12 @@ class AppLocalizationsIt extends AppLocalizations {
   String get voicemail_Dialog_deleteSingleContent => 'Questo messaggio vocale verrà eliminato definitivamente. Vuoi continuare?';
 
   @override
+  String get voicemail_Title_notSupported => 'Funzionalità non supportata';
+
+  @override
+  String get voicemail_Description_notSupported => 'La funzione di segreteria telefonica non è supportata nel tuo sistema. Contatta l\'amministratore per maggiori informazioni.';
+
+  @override
   String get notifications_errorSnackBarAction_callUserMedia => 'Verifica';
 
   @override

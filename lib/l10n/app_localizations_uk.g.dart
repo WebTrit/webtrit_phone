@@ -976,6 +976,12 @@ class AppLocalizationsUk extends AppLocalizations {
   String get voicemail_Dialog_deleteSingleContent => 'Це голосове повідомлення буде остаточно видалено. Бажаєте продовжити?';
 
   @override
+  String get voicemail_Title_notSupported => 'Функція не підтримується';
+
+  @override
+  String get voicemail_Description_notSupported => 'Функція голосової пошти не підтримується у вашій системі. Зверніться до адміністратора для отримання додаткової інформації.';
+
+  @override
   String get notifications_errorSnackBarAction_callUserMedia => 'Перевірити';
 
   @override

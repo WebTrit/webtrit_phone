@@ -176,6 +176,7 @@ class VoicemailRepositoryImpl with ContactsDriftMapper, VoicemailMapper implemen
 
       _fetchingCompleter?.complete();
     } catch (e, st) {
+      _logger.warning('Failed to fetch voicemails', e, st);
       _fetchingCompleter?.completeError(e, st);
       rethrow;
     } finally {

@@ -1987,6 +1987,18 @@ abstract class AppLocalizations {
   /// **'This voicemail will be permanently deleted. Do you want to continue?'**
   String get voicemail_Dialog_deleteSingleContent;
 
+  /// No description provided for @voicemail_Title_notSupported.
+  ///
+  /// In en, this message translates to:
+  /// **'Feature not supported'**
+  String get voicemail_Title_notSupported;
+
+  /// No description provided for @voicemail_Description_notSupported.
+  ///
+  /// In en, this message translates to:
+  /// **'Voicemail feature are not supported in your core. Please contact your administrator for more information.'**
+  String get voicemail_Description_notSupported;
+
   /// No description provided for @notifications_errorSnackBarAction_callUserMedia.
   ///
   /// In en, this message translates to:

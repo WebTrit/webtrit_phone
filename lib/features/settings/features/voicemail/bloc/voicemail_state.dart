@@ -3,6 +3,7 @@ part of 'voicemail_cubit.dart';
 enum VoicemailStatus {
   loading,
   loaded,
+  featureNotSupported,
 }
 
 @freezed
@@ -26,6 +27,9 @@ class VoicemailState with _$VoicemailState {
 
   /// Status to show when the user is loading the list of voicemails and there is an error.
   bool get isLoadedWithError => status == VoicemailStatus.loaded && error != null && items.isEmpty;
+
+  /// Status show when feature is not supported, adapter not supported.
+  bool get isFeatureNotSupported => status == VoicemailStatus.featureNotSupported;
 
   /// Status to show when the user is loading the list of voicemails and there are items available.
   bool get isVoicemailsExists => items.isNotEmpty;

@@ -5,6 +5,8 @@ import 'package:flutter/foundation.dart';
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import 'package:webtrit_api/webtrit_api.dart';
+
 import 'package:webtrit_phone/app/notifications/models/notification.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
@@ -39,9 +41,12 @@ class VoicemailCubit extends Cubit<VoicemailState> {
 
   void fetchVoicemails() async {
     try {
-      emit(state.copyWith(status: VoicemailStatus.loading));
+      emit(state.copyWith(status: VoicemailStatus.loading, error: null));
       await _repository.fetchVoicemails();
       emit(state.copyWith(status: VoicemailStatus.loaded));
+    } on EndpointNotSupportedException catch (e) {
+      final error = DefaultErrorNotification(e);
+      emit(state.copyWith(status: VoicemailStatus.featureNotSupported, error: error));
     } catch (e) {
       final error = DefaultErrorNotification(e);
       emit(state.copyWith(status: VoicemailStatus.loaded, error: error));

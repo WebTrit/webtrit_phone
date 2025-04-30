@@ -22,25 +22,47 @@ class _VoicemailScreenState extends State<VoicemailScreen> {
     return BlocBuilder<VoicemailCubit, VoicemailState>(
       builder: (context, state) {
         return Scaffold(
-          appBar: AppBar(
-            title: Text(context.l10n.voicemail_Widget_screenTitle),
-            actions: [
-              IconButton(
-                icon: const Icon(Icons.delete),
-                onPressed: state.items.isNotEmpty ? () => _onDeleteAllVoicemails() : null,
-              ),
-            ],
-          ),
-          body: Stack(
-            children: [
-              if (state.isRefreshing) const LinearProgressIndicator(minHeight: 1),
-              if (state.isInitializing) const Center(child: CircularProgressIndicator(strokeWidth: 2)),
-              if (state.isLoadedWithEmptyResult) Center(child: Text(context.l10n.voicemail_Label_empty)),
-              if (state.isLoadedWithError) FailureRetryView(errorNotification: state.error!, onRetry: _onRetryFetch),
-              if (state.isVoicemailsExists) VoicemailListView(items: state.items),
-            ],
-          ),
-        );
+            appBar: AppBar(
+              title: Text(context.l10n.voicemail_Widget_screenTitle),
+              actions: [
+                IconButton(
+                  icon: const Icon(Icons.delete),
+                  onPressed: state.items.isNotEmpty ? () => _onDeleteAllVoicemails() : null,
+                ),
+              ],
+            ),
+            body: Builder(builder: (context) {
+              // Check if the feature is not supported
+              if (state.isFeatureNotSupported) {
+                return const FeatureNotSupportedView();
+              }
+              // Check if the user is loading the list of voicemails
+              if (state.isInitializing) {
+                return const Center(
+                  child: CircularProgressIndicator(strokeWidth: 2),
+                );
+              }
+              // Check if the user is loading the list of voicemails and there are no items available
+              if (state.isLoadedWithEmptyResult) {
+                return Center(
+                  child: Text(context.l10n.voicemail_Label_empty),
+                );
+              }
+              // Check if the user is loading the list of voicemails and there is an error
+              if (state.isLoadedWithError) {
+                return FailureRetryView(
+                  errorNotification: state.error!,
+                  onRetry: _onRetryFetch,
+                );
+              }
+              // Check if the user is loading the list of voicemails and there are items available
+              return Stack(
+                children: [
+                  if (state.isRefreshing) const LinearProgressIndicator(minHeight: 1),
+                  if (state.isVoicemailsExists) VoicemailListView(items: state.items),
+                ],
+              );
+            }));
       },
     );
   }
