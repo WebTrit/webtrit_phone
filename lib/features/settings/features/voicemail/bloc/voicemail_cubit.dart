@@ -31,7 +31,7 @@ class VoicemailCubit extends Cubit<VoicemailState> {
 
   void _initialize() async {
     _subscription = _repository.watchVoicemails().listen((items) {
-      emit(state.copyWith(items: items));
+      emit(state.copyWith(items: items, error: null, status: VoicemailStatus.loaded));
     });
 
     fetchVoicemails();
@@ -39,7 +39,7 @@ class VoicemailCubit extends Cubit<VoicemailState> {
 
   void fetchVoicemails() async {
     try {
-      emit(state.copyWith(status: VoicemailStatus.loading, error: null));
+      emit(state.copyWith(status: VoicemailStatus.loading));
       await _repository.fetchVoicemails();
       emit(state.copyWith(status: VoicemailStatus.loaded));
     } catch (e) {
@@ -56,6 +56,7 @@ class VoicemailCubit extends Cubit<VoicemailState> {
       emit(state.copyWith(status: VoicemailStatus.loaded));
     } catch (e) {
       onSubmitNotification(DefaultErrorNotification(e));
+      emit(state.copyWith(status: VoicemailStatus.loaded));
     }
   }
 
@@ -66,6 +67,7 @@ class VoicemailCubit extends Cubit<VoicemailState> {
       emit(state.copyWith(status: VoicemailStatus.loaded));
     } catch (e) {
       onSubmitNotification(DefaultErrorNotification(e));
+      emit(state.copyWith(status: VoicemailStatus.loaded));
     }
   }
 
@@ -76,6 +78,7 @@ class VoicemailCubit extends Cubit<VoicemailState> {
       emit(state.copyWith(status: VoicemailStatus.loaded));
     } catch (e) {
       onSubmitNotification(DefaultErrorNotification(e));
+      emit(state.copyWith(status: VoicemailStatus.loaded));
     }
   }
 
