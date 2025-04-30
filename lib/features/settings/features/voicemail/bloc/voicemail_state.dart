@@ -10,7 +10,6 @@ class VoicemailState with _$VoicemailState {
   const VoicemailState._();
 
   const factory VoicemailState({
-    required Map<String, String> mediaHeaders,
     @Default(VoicemailStatus.loading) VoicemailStatus status,
     @Default([]) List<Voicemail> items,
     DefaultErrorNotification? error,

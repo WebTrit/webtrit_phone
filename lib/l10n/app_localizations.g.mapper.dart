@@ -585,6 +585,21 @@ class AppLocalizationsMapper {
       'messaging_StateBar_error': localizations.messaging_StateBar_error,
       'messaging_StateBar_initializing':
           localizations.messaging_StateBar_initializing,
+      'voicemail_Widget_screenTitle':
+          localizations.voicemail_Widget_screenTitle,
+      'voicemail_Label_deleteAll': localizations.voicemail_Label_deleteAll,
+      'voicemail_Label_deleteAllDescription':
+          localizations.voicemail_Label_deleteAllDescription,
+      'voicemail_Label_empty': localizations.voicemail_Label_empty,
+      'voicemail_Label_retry': localizations.voicemail_Label_retry,
+      'voicemail_Label_call': localizations.voicemail_Label_call,
+      'voicemail_Label_markAsHeard': localizations.voicemail_Label_markAsHeard,
+      'voicemail_Label_markAsNew': localizations.voicemail_Label_markAsNew,
+      'voicemail_Label_delete': localizations.voicemail_Label_delete,
+      'voicemail_Dialog_deleteSingleTitle':
+          localizations.voicemail_Dialog_deleteSingleTitle,
+      'voicemail_Dialog_deleteSingleContent':
+          localizations.voicemail_Dialog_deleteSingleContent,
       'notifications_errorSnackBarAction_callUserMedia':
           localizations.notifications_errorSnackBarAction_callUserMedia,
       'notifications_errorSnackBar_activeLineBlindTransferWarning':

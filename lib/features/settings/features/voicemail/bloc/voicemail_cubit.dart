@@ -16,11 +16,10 @@ part 'voicemail_cubit.freezed.dart';
 class VoicemailCubit extends Cubit<VoicemailState> {
   VoicemailCubit({
     required VoicemailRepository repository,
-    required Map<String, String> mediaHeaders,
     required this.onCallStarted,
     required this.onSubmitNotification,
   })  : _repository = repository,
-        super(VoicemailState(mediaHeaders: mediaHeaders)) {
+        super(const VoicemailState()) {
     _initialize();
   }
 
@@ -32,7 +31,7 @@ class VoicemailCubit extends Cubit<VoicemailState> {
 
   void _initialize() async {
     _subscription = _repository.watchVoicemails().listen((items) {
-      emit(state.copyWith(items: items, mediaHeaders: state.mediaHeaders));
+      emit(state.copyWith(items: items));
     });
 
     fetchVoicemails();

@@ -15,12 +15,10 @@ class AudioView extends StatefulWidget {
   const AudioView({
     super.key,
     required this.path,
-    this.header,
     this.onPlaybackStarted,
   });
 
   final String path;
-  final Map<String, String>? header;
 
   // Callback triggered when playback starts, useful for marking the audio as seen
   final VoidCallback? onPlaybackStarted;
@@ -34,6 +32,7 @@ class _AudioViewState extends State<AudioView> with WidgetsBindingObserver {
 
   late final StreamSubscription _playbackSub;
   late final String _cachePath;
+  late final Map<String, String>? _headers;
   late final Uri _uri;
 
   Future<void> _setupAudioSession() async {
@@ -52,7 +51,7 @@ class _AudioViewState extends State<AudioView> with WidgetsBindingObserver {
     } else {
       return LockCachingAudioSource(
         _uri,
-        headers: widget.header,
+        headers: _headers,
         cacheFile: _cacheFile(),
       );
     }
@@ -63,12 +62,13 @@ class _AudioViewState extends State<AudioView> with WidgetsBindingObserver {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     _cachePath = context.read<VoicemailScreenContext>().mediaCacheBasePath;
+    _headers = context.read<VoicemailScreenContext>().mediaHeaders;
     _uri = Uri.parse(widget.path);
-    _init();
+    _initialize();
   }
 
   // TODO(Serdun): Sync with Vladislav manager
-  Future<void> _init() async {
+  Future<void> _initialize() async {
     await _setupAudioSession();
     await _player.setAudioSource(_audioSource());
 

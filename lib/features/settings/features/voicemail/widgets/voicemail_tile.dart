@@ -17,7 +17,6 @@ class VoicemailTile extends StatelessWidget {
   const VoicemailTile({
     super.key,
     required this.voicemail,
-    required this.mediaHeaders,
     required this.displayName,
     required this.onCall,
     required this.onDeleted,
@@ -27,7 +26,6 @@ class VoicemailTile extends StatelessWidget {
   });
 
   final Voicemail voicemail;
-  final Map<String, String> mediaHeaders;
   final String displayName;
   final Uint8List? thumbnail;
   final Uri? thumbnailUrl;
@@ -112,7 +110,6 @@ class VoicemailTile extends StatelessWidget {
         ),
         AudioView(
           path: voicemail.url!,
-          header: mediaHeaders,
           onPlaybackStarted: _onPlaybackStarted,
         ),
       ],
