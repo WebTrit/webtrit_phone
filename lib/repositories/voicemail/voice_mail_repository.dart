@@ -75,6 +75,18 @@ class VoicemailRepositoryImpl with ContactsDriftMapper, VoicemailMapper implemen
   StreamSubscription? _databaseSubscription;
   Timer? _pollTimer;
 
+  /// A [Completer] used to coordinate access to the ongoing [fetchVoicemails] operation.
+  ///
+  /// When [fetchVoicemails] is in progress, this completer is non-null and its [future]
+  /// can be awaited to ensure that no other operations (such as updating or deleting voicemails)
+  /// interfere with the fetch process.
+  ///
+  /// Once the fetch completes—successfully or with an error—the completer is completed
+  /// and reset to `null`.
+  ///
+  /// This mechanism helps to enforce sequential consistency across local/remote voicemail state updates.
+  Completer<void>? _fetchingCompleter;
+
   void _initialize() {
     if (repositoryOptions.shouldOperate) {
       _updatesController = StreamController<List<Voicemail>>.broadcast(
@@ -116,36 +128,80 @@ class VoicemailRepositoryImpl with ContactsDriftMapper, VoicemailMapper implemen
     _pollTimer?.cancel();
   }
 
-  // Fetch voicemails from the server and add them to the database
+  /// Fetches the latest voicemails from the remote server and synchronizes them with the local database.
+  ///
+  /// If a fetch is already in progress, this method returns the same [Future] to avoid duplicate requests
+  /// and ensure data consistency. This is coordinated using an internal [_fetchingCompleter].
+  ///
+  /// ## Behavior:
+  /// - Immediately emits any cached voicemails from the local database to [watchVoicemails] listeners.
+  /// - Then fetches the voicemail list from the remote server using [getUserVoicemailList].
+  /// - For each remote item, retrieves detailed metadata using [getUserVoicemail],
+  ///   and stores it in the local database via [insertOrUpdateVoicemail].
+  ///
+  /// On completion, listeners subscribed to [watchVoicemails] will receive updated data.
+  /// If an error occurs during remote fetching, the [_fetchingCompleter] completes with error
+  /// and the exception is rethrown to the caller.
+  ///
+  /// [localeCode] – optional locale parameter to localize API responses.
+  ///
+  /// Throws an exception if the remote request fails.
   @override
   Future<void> fetchVoicemails({String? localeCode}) async {
-    final cachedVoicemails = await _getCachedVoicemails(localeCode: localeCode);
-    if (cachedVoicemails.isNotEmpty) {
-      _updatesController?.add(cachedVoicemails);
+    if (_fetchingCompleter?.isCompleted == false) {
+      return _fetchingCompleter!.future;
     }
 
-    final remoteItems = await _webtritApiClient.getUserVoicemailList(
-      _token,
-      locale: localeCode,
-    );
+    _fetchingCompleter = Completer<void>();
 
-    for (final userVoicemailItem in remoteItems.items) {
-      final userVoicemailDetails = await _webtritApiClient.getUserVoicemail(
-        _token,
-        userVoicemailItem.id,
-        locale: localeCode,
-      );
+    try {
+      final cachedVoicemails = await _appDatabase.voicemailDao.getVoicemailsWithContacts().then((dataList) {
+        return dataList.map(_voicemailFromDriftWithContact).toList();
+      });
 
-      await _appDatabase.voicemailDao.insertOrUpdateVoicemail(voicemailToDrift(
-        userVoicemailItem,
-        userVoicemailDetails,
-        _webtritApiClient.getVoicemailAttachmentUrl(userVoicemailItem.id),
-      ));
+      if (cachedVoicemails.isNotEmpty) {
+        _updatesController?.add(cachedVoicemails);
+      }
+
+      final remoteItems = await _webtritApiClient.getUserVoicemailList(_token, locale: localeCode);
+
+      for (final item in remoteItems.items) {
+        final details = await _webtritApiClient.getUserVoicemail(_token, item.id, locale: localeCode);
+
+        await _appDatabase.voicemailDao.insertOrUpdateVoicemail(voicemailToDrift(
+          item,
+          details,
+          _webtritApiClient.getVoicemailAttachmentUrl(item.id),
+        ));
+      }
+
+      _fetchingCompleter?.complete();
+    } catch (e, st) {
+      _fetchingCompleter?.completeError(e, st);
+      rethrow;
+    } finally {
+      _fetchingCompleter = null;
     }
   }
 
+  /// Removes a specific voicemail from both the remote server and the local database.
+  ///
+  /// If a [fetchVoicemails] operation is currently active, this method waits for it to complete
+  /// before proceeding, ensuring no concurrent modifications to the same data set.
+  ///
+  /// The voicemail is first deleted from the remote server. If that succeeds,
+  /// it is then removed from the local database.
+  ///
+  /// Throws an error if the remote deletion fails. The local record remains untouched in that case.
+  ///
+  /// [messageId] – the ID of the voicemail to remove.
+  /// [localeCode] – optional locale code for the API request.
   @override
   Future<void> removeVoicemail(String messageId, {String? localeCode}) async {
+    if (_fetchingCompleter != null) {
+      await _fetchingCompleter!.future;
+    }
+
     await _webtritApiClient.deleteUserVoicemail(
       _token,
       messageId,
@@ -156,27 +212,58 @@ class VoicemailRepositoryImpl with ContactsDriftMapper, VoicemailMapper implemen
     await _appDatabase.voicemailDao.deleteVoicemailById(messageId);
   }
 
+  /// Removes all voicemails from both the remote server and the local database.
+  ///
+  /// If a [fetchVoicemails] operation is currently in progress, this method waits for it
+  /// to complete before proceeding to avoid inconsistencies during concurrent data sync.
+  ///
+  /// For each voicemail:
+  /// - Attempts to delete it remotely via [removeVoicemail].
+  /// - Logs a warning if the remote deletion fails.
+  ///
+  /// After attempting remote deletions, forcibly clears all local voicemail records
+  /// regardless of remote operation results.
+  ///
+  /// This approach guarantees that local state is reset even if remote sync is partially successful.
   @override
   Future<void> removeAllVoicemails() async {
+    if (_fetchingCompleter != null) {
+      await _fetchingCompleter!.future;
+    }
+
     final allVoicemails = await _appDatabase.voicemailDao.getAllVoicemails();
 
     for (final voicemail in allVoicemails) {
       try {
         await removeVoicemail(voicemail.id);
+        await _appDatabase.voicemailDao.deleteVoicemailById(voicemail.id);
       } catch (e, st) {
         _logger.warning('Failed to remove voicemail with id ${voicemail.id}', e, st);
+        rethrow;
       }
     }
-
-    await _appDatabase.voicemailDao.deleteAllVoicemails();
   }
 
-  /// Optimistically updates the voicemail `seen` status in the local database,
-  /// then attempts to sync this change with the remote server.
+  /// Updates the `seen` status of a voicemail, ensuring consistency with any ongoing fetch operation.
   ///
-  /// If the remote update fails, the local change is rolled back to preserve consistency.
+  /// If [fetchVoicemails] is currently in progress, this method waits for it to complete
+  /// before proceeding. This guarantees sequential consistency and avoids conflicts
+  /// between reading/updating local voicemail state during synchronization.
+  ///
+  /// The update is applied optimistically to the local database first, and then propagated
+  /// to the remote server. If the remote update fails, the local change is reverted to preserve integrity.
+  ///
+  /// Throws an error if the remote update fails after the optimistic local update.
+  ///
+  /// [messageId] – the ID of the voicemail to update.
+  /// [seen] – the new seen status to apply.
+  /// [localeCode] – optional locale code for the API request.
   @override
   Future<void> updateVoicemailSeenStatus(String messageId, bool seen, {String? localeCode}) async {
+    if (_fetchingCompleter != null) {
+      await _fetchingCompleter!.future;
+    }
+
     final previous = await _appDatabase.voicemailDao.getVoicemailById((messageId));
     if (previous == null) return;
 
@@ -191,11 +278,30 @@ class VoicemailRepositoryImpl with ContactsDriftMapper, VoicemailMapper implemen
     }
   }
 
+  /// Watches the number of voicemails that are currently marked as unread.
+  ///
+  /// This stream emits a new integer value every time the underlying voicemail list changes,
+  /// including changes to the `seen` status of individual voicemails.
+  ///
+  /// It internally depends on [watchVoicemails], and transforms the emitted list into a count
+  /// of voicemails where `seen == false`.
+  ///
+  /// Returns a broadcast [Stream<int>] that can be safely listened to by multiple subscribers.
   @override
   Stream<int> watchUnreadVoicemailsCount() {
     return watchVoicemails().map((list) => list.where((v) => !v.seen).length);
   }
 
+  /// Watches the list of voicemails currently stored in the local database.
+  ///
+  /// Emits the full list of [Voicemail] objects whenever:
+  /// - the database content changes (insert/update/delete),
+  /// - or the repository pushes cached/remote updates.
+  ///
+  /// If the repository is disabled (e.g. due to feature flag or configuration),
+  /// returns an empty stream that never emits values.
+  ///
+  /// Returns a broadcast [Stream<List<Voicemail>>], or an empty stream if disabled.
   @override
   Stream<List<Voicemail>> watchVoicemails() {
     return _updatesController?.stream ?? const Stream.empty();
@@ -208,11 +314,5 @@ class VoicemailRepositoryImpl with ContactsDriftMapper, VoicemailMapper implemen
       data.voicemail,
       displayName ?? data.voicemail.sender,
     );
-  }
-
-  Future<List<Voicemail>> _getCachedVoicemails({String? localeCode}) {
-    return _appDatabase.voicemailDao.getVoicemailsWithContacts().then((dataList) {
-      return dataList.map(_voicemailFromDriftWithContact).toList();
-    });
   }
 }
