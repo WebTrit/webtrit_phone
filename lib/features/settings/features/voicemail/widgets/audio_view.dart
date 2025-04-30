@@ -1,9 +1,11 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 
 import 'package:just_audio/just_audio.dart';
 import 'package:audio_session/audio_session.dart';
+import 'package:path_provider/path_provider.dart';
 
 import 'package:webtrit_phone/extensions/extensions.dart';
 
@@ -36,14 +38,28 @@ class _AudioViewState extends State<AudioView> with WidgetsBindingObserver {
     _init();
   }
 
+  // TODO(Serdun): Sync with Vladislav manager
   Future<void> _init() async {
     try {
       final session = await AudioSession.instance;
       await session.configure(const AudioSessionConfiguration.speech());
 
       final pathUri = Uri.parse(widget.path);
-      final audioSource =
-          widget.path.isLocalPath ? AudioSource.uri(pathUri) : LockCachingAudioSource(pathUri, headers: widget.header);
+
+      File? cacheFile;
+      if (!widget.path.isLocalPath) {
+        final tempDir = await getTemporaryDirectory();
+        final cachePath = '${tempDir.path}/media_cache${pathUri.path}';
+        cacheFile = File(cachePath);
+      }
+
+      final audioSource = widget.path.isLocalPath
+          ? AudioSource.uri(pathUri)
+          : LockCachingAudioSource(
+              pathUri,
+              headers: widget.header,
+              cacheFile: cacheFile,
+            );
 
       await _player.setAudioSource(audioSource);
 
