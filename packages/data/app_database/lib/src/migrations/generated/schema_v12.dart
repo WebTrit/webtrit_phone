@@ -1415,8 +1415,85 @@ class ActiveMessagingNotifications extends Table with TableInfo {
   bool get dontWriteConstraints => true;
 }
 
-class DatabaseAtV11 extends GeneratedDatabase {
-  DatabaseAtV11(QueryExecutor e) : super(e);
+class Voicemails extends Table with TableInfo {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  Voicemails(this.attachedDatabase, [this._alias]);
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+      'id', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: true,
+      $customConstraints: 'NOT NULL');
+  late final GeneratedColumn<String> date = GeneratedColumn<String>(
+      'date', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: true,
+      $customConstraints: 'NOT NULL');
+  late final GeneratedColumn<double> duration = GeneratedColumn<double>(
+      'duration', aliasedName, false,
+      type: DriftSqlType.double,
+      requiredDuringInsert: true,
+      $customConstraints: 'NOT NULL');
+  late final GeneratedColumn<String> sender = GeneratedColumn<String>(
+      'sender', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: true,
+      $customConstraints: 'NOT NULL');
+  late final GeneratedColumn<String> receiver = GeneratedColumn<String>(
+      'receiver', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: true,
+      $customConstraints: 'NOT NULL');
+  late final GeneratedColumn<int> seen = GeneratedColumn<int>(
+      'seen', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      $customConstraints: 'NOT NULL DEFAULT 0 CHECK (seen IN (0, 1))',
+      defaultValue: const CustomExpression('0'));
+  late final GeneratedColumn<int> size = GeneratedColumn<int>(
+      'size', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      $customConstraints: 'NOT NULL');
+  late final GeneratedColumn<String> type = GeneratedColumn<String>(
+      'type', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: true,
+      $customConstraints: 'NOT NULL');
+  late final GeneratedColumn<String> attachmentPath = GeneratedColumn<String>(
+      'attachment_path', aliasedName, true,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      $customConstraints: 'NULL');
+  @override
+  List<GeneratedColumn> get $columns =>
+      [id, date, duration, sender, receiver, seen, size, type, attachmentPath];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'voicemails';
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  Never map(Map<String, dynamic> data, {String? tablePrefix}) {
+    throw UnsupportedError('TableInfo.map in schema verification code');
+  }
+
+  @override
+  Voicemails createAlias(String alias) {
+    return Voicemails(attachedDatabase, alias);
+  }
+
+  @override
+  List<String> get customConstraints => const ['PRIMARY KEY(id)'];
+  @override
+  bool get dontWriteConstraints => true;
+}
+
+class DatabaseAtV12 extends GeneratedDatabase {
+  DatabaseAtV12(QueryExecutor e) : super(e);
   late final Contacts contacts = Contacts(this);
   late final ContactPhones contactPhones = ContactPhones(this);
   late final ContactEmails contactEmails = ContactEmails(this);
@@ -1450,6 +1527,7 @@ class DatabaseAtV11 extends GeneratedDatabase {
   late final UserSmsNumbers userSmsNumbers = UserSmsNumbers(this);
   late final ActiveMessagingNotifications activeMessagingNotifications =
       ActiveMessagingNotifications(this);
+  late final Voicemails voicemails = Voicemails(this);
   late final Trigger contactsAfterInsertTrigger = Trigger(
       'CREATE TRIGGER contacts_after_insert_trigger AFTER INSERT ON contacts BEGIN UPDATE contacts SET inserted_at = STRFTIME(\'%s\', \'NOW\') WHERE id = NEW.id AND inserted_at IS NULL;UPDATE contacts SET updated_at = STRFTIME(\'%s\', \'NOW\') WHERE id = NEW.id;END',
       'contacts_after_insert_trigger');
@@ -1496,6 +1574,7 @@ class DatabaseAtV11 extends GeneratedDatabase {
         smsOutboxReadCursors,
         userSmsNumbers,
         activeMessagingNotifications,
+        voicemails,
         contactsAfterInsertTrigger,
         contactsAfterUpdateTrigger,
         contactPhonesAfterInsertTrigger,
@@ -1539,5 +1618,5 @@ class DatabaseAtV11 extends GeneratedDatabase {
         ],
       );
   @override
-  int get schemaVersion => 11;
+  int get schemaVersion => 12;
 }
