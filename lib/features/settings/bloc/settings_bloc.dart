@@ -28,9 +28,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     on<SettingsAccountDeleted>(_onAccountDeleted, transformer: droppable());
     on<SettingsUnreadVoicemailCountChanged>(_onVoicemailCountChanged);
 
-    _unreadVoicemailsSub = voicemailRepository.watchUnreadVoicemailsCount().listen((count) {
-      add(SettingsUnreadVoicemailCountChanged(count));
-    });
+    _initializeVoicemailCountBadge();
   }
 
   final NotificationsBloc notificationsBloc;
@@ -39,6 +37,13 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   final VoicemailRepository voicemailRepository;
 
   late final StreamSubscription<int> _unreadVoicemailsSub;
+
+  void _initializeVoicemailCountBadge() {
+    voicemailRepository.fetchVoicemails();
+    _unreadVoicemailsSub = voicemailRepository.watchUnreadVoicemailsCount().listen((count) {
+      add(SettingsUnreadVoicemailCountChanged(count));
+    });
+  }
 
   FutureOr<void> _onVoicemailCountChanged(
     SettingsUnreadVoicemailCountChanged event,
