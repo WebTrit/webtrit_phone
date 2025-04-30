@@ -2,11 +2,13 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 
-import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
+
+import '../models/models.dart';
 
 import 'audio_view.dart';
 import 'circle_indicator.dart';
@@ -20,7 +22,6 @@ class VoicemailTile extends StatelessWidget {
     required this.onCall,
     required this.onDeleted,
     required this.onToggleSeenStatus,
-    required this.dateFormat,
     this.thumbnail,
     this.thumbnailUrl,
   });
@@ -30,7 +31,6 @@ class VoicemailTile extends StatelessWidget {
   final String displayName;
   final Uint8List? thumbnail;
   final Uri? thumbnailUrl;
-  final DateFormat dateFormat;
 
   final void Function(Voicemail) onCall;
   final void Function(Voicemail) onDeleted;
@@ -39,6 +39,7 @@ class VoicemailTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final dateFormat = context.read<VoicemailScreenContext>().dateFormat;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

@@ -5,9 +5,11 @@ import 'package:flutter/material.dart';
 
 import 'package:just_audio/just_audio.dart';
 import 'package:audio_session/audio_session.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:provider/provider.dart';
 
 import 'package:webtrit_phone/extensions/extensions.dart';
+
+import '../models/models.dart';
 
 class AudioView extends StatefulWidget {
   const AudioView({
@@ -29,47 +31,50 @@ class AudioView extends StatefulWidget {
 
 class _AudioViewState extends State<AudioView> with WidgetsBindingObserver {
   final _player = AudioPlayer();
+
   late final StreamSubscription _playbackSub;
+  late final String _cachePath;
+  late final Uri _uri;
+
+  Future<void> _setupAudioSession() async {
+    final session = await AudioSession.instance;
+    await session.configure(const AudioSessionConfiguration.speech());
+  }
+
+  File? _cacheFile() {
+    if (widget.path.isLocalPath) return null;
+    return File('$_cachePath${_uri.path}');
+  }
+
+  AudioSource _audioSource() {
+    if (widget.path.isLocalPath) {
+      return AudioSource.uri(_uri);
+    } else {
+      return LockCachingAudioSource(
+        _uri,
+        headers: widget.header,
+        cacheFile: _cacheFile(),
+      );
+    }
+  }
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    _cachePath = context.read<VoicemailScreenContext>().mediaCacheBasePath;
+    _uri = Uri.parse(widget.path);
     _init();
   }
 
   // TODO(Serdun): Sync with Vladislav manager
   Future<void> _init() async {
-    try {
-      final session = await AudioSession.instance;
-      await session.configure(const AudioSessionConfiguration.speech());
+    await _setupAudioSession();
+    await _player.setAudioSource(_audioSource());
 
-      final pathUri = Uri.parse(widget.path);
-
-      File? cacheFile;
-      if (!widget.path.isLocalPath) {
-        final tempDir = await getTemporaryDirectory();
-        final cachePath = '${tempDir.path}/media_cache${pathUri.path}';
-        cacheFile = File(cachePath);
-      }
-
-      final audioSource = widget.path.isLocalPath
-          ? AudioSource.uri(pathUri)
-          : LockCachingAudioSource(
-              pathUri,
-              headers: widget.header,
-              cacheFile: cacheFile,
-            );
-
-      await _player.setAudioSource(audioSource);
-
-      _playbackSub = _player.playbackEventStream.listen((_) {
-        if (mounted) setState(() {});
-      });
-    } catch (e, stackTrace) {
-      debugPrint('Failed to initialize audio: $e');
-      debugPrint('$stackTrace');
-    }
+    _playbackSub = _player.playbackEventStream.listen((_) {
+      if (mounted) setState(() {});
+    });
   }
 
   @override
