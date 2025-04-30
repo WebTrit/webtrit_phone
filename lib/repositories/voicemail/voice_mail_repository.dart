@@ -11,18 +11,42 @@ import 'package:webtrit_phone/mappers/mappers.dart';
 import 'package:webtrit_phone/models/models.dart';
 
 abstract class VoicemailRepository {
-  Future<List<Voicemail>> fetchVoicemails({String? localeCode});
+  /// Fetches voicemails from the remote server and updates the local database.
+  ///
+  /// If [localeCode] is provided, it will be used to localize the request.
+  /// This method does not return the fetched data directly. Instead, updates are
+  /// reflected in [watchVoicemails].
+  ///
+  /// Additionally, any existing cached voicemails are immediately emitted to the stream,
+  /// triggering all active [watchVoicemails] listeners before the remote fetch completes.
+  Future<void> fetchVoicemails({String? localeCode});
 
+  /// Removes a voicemail with the specified [messageId] from both the remote server and the local database.
+  ///
+  /// If [localeCode] is provided, it will be used in the API request.
+  /// Throws an error if the deletion fails on the remote server.
   Future<void> removeVoicemail(String messageId, {String? localeCode});
 
+  /// Removes all voicemails from both the remote server and the local database.
+  ///
+  /// Any errors that occur during remote deletions are logged but do not interrupt the process.
   Future<void> removeAllVoicemails();
 
+  /// Updates the seen status of the voicemail with the given [messageId].
+  ///
+  /// The new [seen] value will be sent to the remote server and applied to the local database.
+  /// If [localeCode] is provided, it will be used for the API request.
   Future<void> updateVoicemailSeenStatus(String messageId, bool seen, {String? localeCode});
 
+  /// Watches the count of unread voicemails in the local database.
+  ///
+  /// Emits a new value whenever the underlying data changes.
   Stream<int> watchUnreadVoicemailsCount();
 
-  Future<Uint8List> fetchVoicemailAttachment(String messageId, {String? fileFormat, String? localeCode});
-
+  /// Watches the list of voicemails from the local database.
+  ///
+  /// Emits updates whenever the voicemail list changes.
+  /// If the repository is disabled, an empty stream is returned.
   Stream<List<Voicemail>> watchVoicemails();
 }
 
@@ -94,13 +118,16 @@ class VoicemailRepositoryImpl with ContactsDriftMapper, VoicemailMapper implemen
 
   // Fetch voicemails from the server and add them to the database
   @override
-  Future<List<Voicemail>> fetchVoicemails({String? localeCode}) async {
+  Future<void> fetchVoicemails({String? localeCode}) async {
+    final cachedVoicemails = await _getCachedVoicemails(localeCode: localeCode);
+    if (cachedVoicemails.isNotEmpty) {
+      _updatesController?.add(cachedVoicemails);
+    }
+
     final remoteItems = await _webtritApiClient.getUserVoicemailList(
       _token,
       locale: localeCode,
     );
-
-    final result = <Voicemail>[];
 
     for (final userVoicemailItem in remoteItems.items) {
       final userVoicemailDetails = await _webtritApiClient.getUserVoicemail(
@@ -115,8 +142,6 @@ class VoicemailRepositoryImpl with ContactsDriftMapper, VoicemailMapper implemen
         _webtritApiClient.getVoicemailAttachmentUrl(userVoicemailItem.id),
       ));
     }
-
-    return result;
   }
 
   @override
@@ -170,21 +195,6 @@ class VoicemailRepositoryImpl with ContactsDriftMapper, VoicemailMapper implemen
   }
 
   @override
-  Future<Uint8List> fetchVoicemailAttachment(
-    String messageId, {
-    String? fileFormat,
-    String? localeCode,
-  }) {
-    return _webtritApiClient.getUserVoicemailAttachment(
-      _token,
-      messageId,
-      fileFormat: fileFormat,
-      locale: localeCode,
-      options: RequestOptions.withNoRetries(),
-    );
-  }
-
-  @override
   Stream<List<Voicemail>> watchVoicemails() {
     return _updatesController?.stream ?? const Stream.empty();
   }
@@ -196,5 +206,11 @@ class VoicemailRepositoryImpl with ContactsDriftMapper, VoicemailMapper implemen
       data.voicemail,
       displayName ?? data.voicemail.sender,
     );
+  }
+
+  Future<List<Voicemail>> _getCachedVoicemails({String? localeCode}) {
+    return _appDatabase.voicemailDao.getVoicemailsWithContacts().then((dataList) {
+      return dataList.map(_voicemailFromDriftWithContact).toList();
+    });
   }
 }

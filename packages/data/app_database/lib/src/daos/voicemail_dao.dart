@@ -39,12 +39,29 @@ class VoicemailDao extends DatabaseAccessor<AppDatabase> with _$VoicemailDaoMixi
     return (select(voicemailTable)..where((tbl) => tbl.id.equals(id))).watchSingleOrNull();
   }
 
-  Future<List<TypedResult>> getVoicemailsWithContacts() {
+  Future<List<VoicemailWithContact>> getVoicemailsWithContacts() async {
     final voicemail = voicemailTable;
+    final contactPhones = db.contactPhonesTable;
     final contacts = db.contactsTable;
 
-    final query = select(voicemail).join([leftOuterJoin(contacts, contacts.sourceId.equalsExp(voicemail.sender))]);
-    return query.get();
+    final query = select(voicemail).join([
+      leftOuterJoin(
+        contactPhones,
+        contactPhones.number.equalsExp(voicemail.sender),
+      ),
+      leftOuterJoin(
+        contacts,
+        contacts.id.equalsExp(contactPhones.contactId),
+      ),
+    ]);
+
+    final rows = await query.get();
+
+    return rows.map((row) {
+      final voicemail = row.readTable(voicemailTable);
+      final contact = row.readTableOrNull(contacts);
+      return VoicemailWithContact(voicemail: voicemail, contact: contact);
+    }).toList();
   }
 
   Stream<List<VoicemailWithContact>> watchVoicemailsWithContacts() {
