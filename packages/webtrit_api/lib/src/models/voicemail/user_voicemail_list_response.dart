@@ -1,6 +1,9 @@
+// ignore_for_file: invalid_annotation_target
+
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'user_voicemail_list_response.freezed.dart';
+
 part 'user_voicemail_list_response.g.dart';
 
 @freezed
@@ -10,8 +13,7 @@ class UserVoicemailListResponse with _$UserVoicemailListResponse {
     required List<UserVoicemailItem> items,
   }) = _UserVoicemailListResponse;
 
-  factory UserVoicemailListResponse.fromJson(Map<String, dynamic> json) =>
-      _$UserVoicemailListResponseFromJson(json);
+  factory UserVoicemailListResponse.fromJson(Map<String, dynamic> json) => _$UserVoicemailListResponseFromJson(json);
 }
 
 @freezed
@@ -25,6 +27,5 @@ class UserVoicemailItem with _$UserVoicemailItem {
     required String type,
   }) = _UserVoicemailItem;
 
-  factory UserVoicemailItem.fromJson(Map<String, dynamic> json) =>
-      _$UserVoicemailItemFromJson(json);
+  factory UserVoicemailItem.fromJson(Map<String, dynamic> json) => _$UserVoicemailItemFromJson(json);
 }
