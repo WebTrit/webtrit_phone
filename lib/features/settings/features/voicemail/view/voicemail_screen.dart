@@ -36,7 +36,7 @@ class _VoicemailScreenState extends State<VoicemailScreen> {
               if (state.isInitializing) const Center(child: CircularProgressIndicator(strokeWidth: 2)),
               if (state.isLoadedWithEmptyResult) const Center(child: Text('No voicemails')),
               if (state.isLoadedWithError) FailureRetryView(errorNotification: state.error!, onRetry: _onRetryFetch),
-              if (state.isLoadedSuccessfully) VoicemailListView(items: state.items, mediaHeaders: state.mediaHeaders),
+              if (state.isVoicemailsExists) VoicemailListView(items: state.items, mediaHeaders: state.mediaHeaders),
             ],
           ),
         );
@@ -105,7 +105,7 @@ class VoicemailListView extends StatelessWidget {
         false;
 
     if (confirmed) {
-      cubit.deleteVoicemail(voicemail.id.toString());
+      cubit.removeVoicemail(voicemail.id.toString());
     }
   }
 }
