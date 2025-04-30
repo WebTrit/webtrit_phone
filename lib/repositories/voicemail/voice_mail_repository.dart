@@ -33,8 +33,7 @@ class VoicemailRepositoryImpl with ContactsDriftMapper, VoicemailMapper implemen
     required WebtritApiClient webtritApiClient,
     required String token,
     required AppDatabase appDatabase,
-    this.polling = true,
-    this.pollPeriod = const Duration(minutes: 5),
+    this.repositoryOptions = const RepositoryOptions(),
   })  : _webtritApiClient = webtritApiClient,
         _token = token,
         _appDatabase = appDatabase {
@@ -44,34 +43,37 @@ class VoicemailRepositoryImpl with ContactsDriftMapper, VoicemailMapper implemen
   final WebtritApiClient _webtritApiClient;
   final String _token;
   final AppDatabase _appDatabase;
-  final bool polling;
-  final Duration pollPeriod;
+  final RepositoryOptions repositoryOptions;
 
-  late final StreamController<List<Voicemail>> _updatesController;
+  // If the repository is disabled, the stream controller is not initialized.
+  // In such cases, subscribers will receive an empty stream instead.
+  StreamController<List<Voicemail>>? _updatesController;
   StreamSubscription? _databaseSubscription;
   Timer? _pollTimer;
 
-  Stream<List<Voicemail>> get voicemailUpdates => _updatesController.stream;
-
   void _initialize() {
-    _updatesController = StreamController<List<Voicemail>>.broadcast(
-      onListen: _onListen,
-      onCancel: _onCancel,
-    );
+    if (repositoryOptions.shouldOperate) {
+      _updatesController = StreamController<List<Voicemail>>.broadcast(
+        onListen: _onListen,
+        onCancel: _onCancel,
+      );
 
-    unawaited(fetchVoicemails());
+      unawaited(fetchVoicemails());
+    } else {
+      _logger.warning('Voicemail repository is not active');
+    }
   }
 
   // Listener for the database changes and add them to the stream
   void _onListen() {
     _databaseSubscription = _appDatabase.voicemailDao.watchVoicemailsWithContacts().listen((dataList) {
       final items = dataList.map(_voicemailFromDriftWithContact).toList();
-      _updatesController.add(items);
+      _updatesController?.add(items);
     });
 
     // If polling is enabled, start the timer to fetch voicemails periodically
-    if (polling) {
-      _pollTimer = Timer.periodic(pollPeriod, (_) => _fetchFromServer().ignore());
+    if (repositoryOptions.polling) {
+      _pollTimer = Timer.periodic(repositoryOptions.pollPeriod, (_) => _fetchFromServer().ignore());
     }
   }
 
@@ -80,7 +82,7 @@ class VoicemailRepositoryImpl with ContactsDriftMapper, VoicemailMapper implemen
     try {
       await fetchVoicemails();
     } catch (e, st) {
-      _updatesController.addError(e, st);
+      _updatesController?.addError(e, st);
     }
   }
 
@@ -184,7 +186,7 @@ class VoicemailRepositoryImpl with ContactsDriftMapper, VoicemailMapper implemen
 
   @override
   Stream<List<Voicemail>> watchVoicemails() {
-    return voicemailUpdates;
+    return _updatesController?.stream ?? const Stream.empty();
   }
 
   Voicemail _voicemailFromDriftWithContact(VoicemailWithContact data) {

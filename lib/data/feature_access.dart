@@ -412,6 +412,12 @@ class SettingsFeature {
           return item.flavor == SettingsFlavor.selfConfig;
         });
       });
+
+  bool get isVoicemailsEnabled => _sections.any((section) {
+        return section.items.any((item) {
+          return item.flavor == SettingsFlavor.voicemail;
+        });
+      });
 }
 
 class CallFeature {
