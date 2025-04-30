@@ -29,5 +29,5 @@ class VoicemailState with _$VoicemailState {
   bool get isLoadedWithError => status == VoicemailStatus.loaded && error != null && items.isEmpty;
 
   /// Status to show when the user is loading the list of voicemails and there are items available.
-  bool get isVoicemailsExists => error == null && items.isNotEmpty;
+  bool get isVoicemailsExists => items.isNotEmpty;
 }
