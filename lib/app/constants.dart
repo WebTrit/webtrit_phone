@@ -28,3 +28,4 @@ const kAutoprovisionRout = '/autoprovision';
 
 const kSmsMessagingFeatureFlag = 'smsMessaging';
 const kChatMessagingFeatureFlag = 'internalMessaging';
+const kVoicemailFeatureFlag = 'voicemail';

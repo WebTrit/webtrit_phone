@@ -170,6 +170,7 @@ class FeatureAccess {
         final flavor = SettingsFlavor.values.byName(item.type);
 
         if (!_isSupportedPlatform(flavor)) continue;
+        if (!_isSupportedCore(flavor, preferences)) continue;
 
         final settingItem = SettingItem(
           titleL10n: item.titleL10n,
@@ -189,7 +190,7 @@ class FeatureAccess {
       );
     }
 
-    return SettingsFeature(settingSections);
+    return SettingsFeature(settingSections, preferences);
   }
 
   // TODO (Serdun): Move platform-specific configuration to a separate config file.
@@ -197,6 +198,11 @@ class FeatureAccess {
   // For other platforms, this item is hidden. Update the logic to handle configurations for all platforms.
   static bool _isSupportedPlatform(SettingsFlavor flavor) {
     return !(flavor == SettingsFlavor.network && !kIsWeb && !Platform.isAndroid);
+  }
+
+  static bool _isSupportedCore(SettingsFlavor flavor, AppPreferences preferences) {
+    if (flavor != SettingsFlavor.voicemail) return true;
+    return preferences.getSystemInfo()?.adapter?.supported?.contains(kVoicemailFeatureFlag) ?? false;
   }
 
   static EmbeddedData? _getEmbeddedDataResource(
@@ -401,11 +407,20 @@ class BottomMenuFeature {
 }
 
 class SettingsFeature {
-  final List<SettingsSection> _sections;
+  SettingsFeature(this._sections, this._appPreferences);
 
-  SettingsFeature(this._sections);
+  final List<SettingsSection> _sections;
+  final AppPreferences _appPreferences;
 
   List<SettingsSection> get sections => List.unmodifiable(_sections);
+
+  // TODO(Serdun): Remove duplicate code
+  List<String> get _coreSupportedFeatures {
+    final systemInfo = _appPreferences.getSystemInfo();
+    return systemInfo?.adapter?.supported ?? [];
+  }
+
+  bool get coreVoicemailSupport => _coreSupportedFeatures.contains(kVoicemailFeatureFlag);
 
   bool get isSelfConfigEnabled => _sections.any((section) {
         return section.items.any((item) {
@@ -415,7 +430,7 @@ class SettingsFeature {
 
   bool get isVoicemailsEnabled => _sections.any((section) {
         return section.items.any((item) {
-          return item.flavor == SettingsFlavor.voicemail;
+          return item.flavor == SettingsFlavor.voicemail && coreVoicemailSupport;
         });
       });
 }
