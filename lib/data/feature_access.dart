@@ -182,12 +182,15 @@ class FeatureAccess {
         items.add(settingItem);
       }
 
-      settingSections.add(
-        SettingsSection(
-          titleL10n: section.titleL10n,
-          items: items,
-        ),
-      );
+      // Skip empty sections
+      if (items.isNotEmpty) {
+        settingSections.add(
+          SettingsSection(
+            titleL10n: section.titleL10n,
+            items: items,
+          ),
+        );
+      }
     }
 
     return SettingsFeature(settingSections, preferences);

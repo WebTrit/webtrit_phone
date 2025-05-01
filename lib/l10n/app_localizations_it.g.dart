@@ -1464,6 +1464,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get settings_ListViewTileTitle_settings => 'IMPOSTAZIONI';
 
   @override
+  String get settings_ListViewTileTitle_features => 'SERVIZI';
+
+  @override
   String get settings_ListViewTileTitle_termsConditions => 'Termini e condizioni';
 
   @override

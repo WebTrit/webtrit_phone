@@ -72,6 +72,18 @@
   "settingsConfig": {
     "sections": [
       {
+        "titleL10n": "settings_ListViewTileTitle_features",
+        "enabled": false,
+        "items": [
+          {
+            "enabled": false,
+            "type": "voicemail",
+            "titleL10n": "settings_ListViewTileTitle_voicemail",
+            "icon": "0xe6c1"
+          }
+        ]
+      },
+      {
         "titleL10n": "settings_ListViewTileTitle_settings",
         "enabled": true,
         "items": [
@@ -86,12 +98,6 @@
             "type": "mediaSettings",
             "titleL10n": "settings_ListViewTileTitle_mediaSettings",
             "icon": "0xf1cf"
-          },
-          {
-            "enabled": true,
-            "type": "voicemail",
-            "titleL10n": "settings_ListViewTileTitle_voicemail",
-            "icon": "0xe6c1"
           },
           {
             "enabled": true,
