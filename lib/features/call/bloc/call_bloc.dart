@@ -431,27 +431,13 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   ) async {
     final newRegistrationStatus = event.registration.status;
     final previousRegistrationStatus = state.registrationStatus;
+    if (newRegistrationStatus == previousRegistrationStatus) return;
 
-    if (newRegistrationStatus != previousRegistrationStatus) {
-      _logger.fine('_onRegistrationChange: $previousRegistrationStatus to $newRegistrationStatus');
-      emit(state.copyWith(registrationStatus: newRegistrationStatus));
-    } else {
-      _logger.fine('_onRegistrationChange: no change in status ($newRegistrationStatus)');
-      return;
-    }
-
-    if (newRegistrationStatus.isRegistered) {
-      submitNotification(AppOnlineNotification());
-      return;
-    }
+    _logger.fine('_onRegistrationChange: $previousRegistrationStatus to $newRegistrationStatus');
+    emit(state.copyWith(registrationStatus: newRegistrationStatus));
 
     if (newRegistrationStatus.isRegistering || newRegistrationStatus.isFailed || newRegistrationStatus.isUnregistered) {
       add(const _ResetStateEvent.completeCalls());
-    }
-
-    if (newRegistrationStatus.isUnregistered) {
-      submitNotification(AppOfflineNotification());
-      return;
     }
 
     if (newRegistrationStatus.isFailed) {
@@ -574,6 +560,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         lastSignalingClientConnectError: null,
         lastSignalingDisconnectCode: null,
       ));
+      submitNotification(AppOnlineNotification());
     } catch (e, s) {
       if (emit.isDone) return;
       _logger.warning('__onSignalingClientEventConnectInitiated: $e', s);
@@ -612,6 +599,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         lastSignalingClientDisconnectError: null,
         lastSignalingDisconnectCode: null,
       ));
+      submitNotification(AppOfflineNotification());
     } catch (e) {
       if (emit.isDone) return;
 
@@ -646,11 +634,13 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     } else if (code == SignalingDisconnectCode.sessionMissedError) {
       notificationToShow = const SignalingSessionMissedNotification();
     } else if (code.type == SignalingDisconnectCodeType.auxiliary) {
-      // Be sure to differenciate it from the network disconnect which is handled by the connectivity plugin
-      // This can happen on our server issue, or on fast switching from one network to another (wifi to mobile)
-      // So in this case it should try to reconnect with _reconnectInitiated
+      /// Fun facts
+      /// - in case of network disconnection on android this section is evaluating faster than [_onConnectivityResultChanged].
+      /// - also in case of network disconnection error code is protocolError.
+      /// so we cant differentiate reason between network disconnection and real errors so lets just live with it
+      /// and show app offline notification instead of meaningful error
       _logger.info('__onSignalingClientEventDisconnected: socket goes down');
-      add(const _RegistrationChange(registration: Registration(status: RegistrationStatus.unregistered)));
+      notificationToShow = AppOfflineNotification();
     } else {
       notificationToShow = SignalingDisconnectNotification(
         knownCode: code,
