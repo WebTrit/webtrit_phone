@@ -2923,6 +2923,12 @@ abstract class AppLocalizations {
   /// **'SETTINGS'**
   String get settings_ListViewTileTitle_settings;
 
+  /// No description provided for @settings_ListViewTileTitle_features.
+  ///
+  /// In en, this message translates to:
+  /// **'SERVICES'**
+  String get settings_ListViewTileTitle_features;
+
   /// No description provided for @settings_ListViewTileTitle_termsConditions.
   ///
   /// In en, this message translates to:

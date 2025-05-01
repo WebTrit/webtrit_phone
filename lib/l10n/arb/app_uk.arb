@@ -1084,6 +1084,8 @@
   "@settings_ListViewTileTitle_self_config": {},
   "settings_ListViewTileTitle_settings": "НАЛАШТУВАННЯ",
   "@settings_ListViewTileTitle_settings": {},
+  "settings_ListViewTileTitle_features": "СЕРВІСИ",
+  "@settings_ListViewTileTitle_features": {},
   "settings_ListViewTileTitle_termsConditions": "Умови та положення",
   "@settings_ListViewTileTitle_termsConditions": {},
   "settings_ListViewTileTitle_themeMode": "Режим теми",

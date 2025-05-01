@@ -1464,6 +1464,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get settings_ListViewTileTitle_settings => 'НАЛАШТУВАННЯ';
 
   @override
+  String get settings_ListViewTileTitle_features => 'СЕРВІСИ';
+
+  @override
   String get settings_ListViewTileTitle_termsConditions => 'Умови та положення';
 
   @override

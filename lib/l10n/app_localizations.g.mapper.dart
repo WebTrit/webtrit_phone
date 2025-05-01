@@ -895,6 +895,8 @@ class AppLocalizationsMapper {
           localizations.settings_ListViewTileTitle_self_config,
       'settings_ListViewTileTitle_settings':
           localizations.settings_ListViewTileTitle_settings,
+      'settings_ListViewTileTitle_features':
+          localizations.settings_ListViewTileTitle_features,
       'settings_ListViewTileTitle_termsConditions':
           localizations.settings_ListViewTileTitle_termsConditions,
       'settings_ListViewTileTitle_themeMode':
