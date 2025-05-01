@@ -12429,8 +12429,7 @@ mixin _$CallState {
       throw _privateConstructorUsedError;
   AppLifecycleState? get currentAppLifecycleState =>
       throw _privateConstructorUsedError;
-  RegistrationStatus get registrationStatus =>
-      throw _privateConstructorUsedError;
+  Registration get registration => throw _privateConstructorUsedError;
   SignalingClientStatus get signalingClientStatus =>
       throw _privateConstructorUsedError;
   Object? get lastSignalingClientConnectError =>
@@ -12459,7 +12458,7 @@ abstract class $CallStateCopyWith<$Res> {
   $Res call(
       {ConnectivityResult? currentConnectivityResult,
       AppLifecycleState? currentAppLifecycleState,
-      RegistrationStatus registrationStatus,
+      Registration registration,
       SignalingClientStatus signalingClientStatus,
       Object? lastSignalingClientConnectError,
       Object? lastSignalingClientDisconnectError,
@@ -12488,7 +12487,7 @@ class _$CallStateCopyWithImpl<$Res, $Val extends CallState>
   $Res call({
     Object? currentConnectivityResult = freezed,
     Object? currentAppLifecycleState = freezed,
-    Object? registrationStatus = null,
+    Object? registration = null,
     Object? signalingClientStatus = null,
     Object? lastSignalingClientConnectError = freezed,
     Object? lastSignalingClientDisconnectError = freezed,
@@ -12508,10 +12507,10 @@ class _$CallStateCopyWithImpl<$Res, $Val extends CallState>
           ? _value.currentAppLifecycleState
           : currentAppLifecycleState // ignore: cast_nullable_to_non_nullable
               as AppLifecycleState?,
-      registrationStatus: null == registrationStatus
-          ? _value.registrationStatus
-          : registrationStatus // ignore: cast_nullable_to_non_nullable
-              as RegistrationStatus,
+      registration: null == registration
+          ? _value.registration
+          : registration // ignore: cast_nullable_to_non_nullable
+              as Registration,
       signalingClientStatus: null == signalingClientStatus
           ? _value.signalingClientStatus
           : signalingClientStatus // ignore: cast_nullable_to_non_nullable
@@ -12563,7 +12562,7 @@ abstract class _$$CallStateImplCopyWith<$Res>
   $Res call(
       {ConnectivityResult? currentConnectivityResult,
       AppLifecycleState? currentAppLifecycleState,
-      RegistrationStatus registrationStatus,
+      Registration registration,
       SignalingClientStatus signalingClientStatus,
       Object? lastSignalingClientConnectError,
       Object? lastSignalingClientDisconnectError,
@@ -12590,7 +12589,7 @@ class __$$CallStateImplCopyWithImpl<$Res>
   $Res call({
     Object? currentConnectivityResult = freezed,
     Object? currentAppLifecycleState = freezed,
-    Object? registrationStatus = null,
+    Object? registration = null,
     Object? signalingClientStatus = null,
     Object? lastSignalingClientConnectError = freezed,
     Object? lastSignalingClientDisconnectError = freezed,
@@ -12610,10 +12609,10 @@ class __$$CallStateImplCopyWithImpl<$Res>
           ? _value.currentAppLifecycleState
           : currentAppLifecycleState // ignore: cast_nullable_to_non_nullable
               as AppLifecycleState?,
-      registrationStatus: null == registrationStatus
-          ? _value.registrationStatus
-          : registrationStatus // ignore: cast_nullable_to_non_nullable
-              as RegistrationStatus,
+      registration: null == registration
+          ? _value.registration
+          : registration // ignore: cast_nullable_to_non_nullable
+              as Registration,
       signalingClientStatus: null == signalingClientStatus
           ? _value.signalingClientStatus
           : signalingClientStatus // ignore: cast_nullable_to_non_nullable
@@ -12660,7 +12659,8 @@ class _$CallStateImpl extends _CallState with DiagnosticableTreeMixin {
   const _$CallStateImpl(
       {this.currentConnectivityResult,
       this.currentAppLifecycleState,
-      this.registrationStatus = RegistrationStatus.registering,
+      this.registration =
+          const Registration(status: RegistrationStatus.registering),
       this.signalingClientStatus = SignalingClientStatus.disconnect,
       this.lastSignalingClientConnectError,
       this.lastSignalingClientDisconnectError,
@@ -12679,7 +12679,7 @@ class _$CallStateImpl extends _CallState with DiagnosticableTreeMixin {
   final AppLifecycleState? currentAppLifecycleState;
   @override
   @JsonKey()
-  final RegistrationStatus registrationStatus;
+  final Registration registration;
   @override
   @JsonKey()
   final SignalingClientStatus signalingClientStatus;
@@ -12710,7 +12710,7 @@ class _$CallStateImpl extends _CallState with DiagnosticableTreeMixin {
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'CallState(currentConnectivityResult: $currentConnectivityResult, currentAppLifecycleState: $currentAppLifecycleState, registrationStatus: $registrationStatus, signalingClientStatus: $signalingClientStatus, lastSignalingClientConnectError: $lastSignalingClientConnectError, lastSignalingClientDisconnectError: $lastSignalingClientDisconnectError, lastSignalingDisconnectCode: $lastSignalingDisconnectCode, linesCount: $linesCount, activeCalls: $activeCalls, minimized: $minimized, speakerOnBeforeMinimize: $speakerOnBeforeMinimize, speaker: $speaker)';
+    return 'CallState(currentConnectivityResult: $currentConnectivityResult, currentAppLifecycleState: $currentAppLifecycleState, registration: $registration, signalingClientStatus: $signalingClientStatus, lastSignalingClientConnectError: $lastSignalingClientConnectError, lastSignalingClientDisconnectError: $lastSignalingClientDisconnectError, lastSignalingDisconnectCode: $lastSignalingDisconnectCode, linesCount: $linesCount, activeCalls: $activeCalls, minimized: $minimized, speakerOnBeforeMinimize: $speakerOnBeforeMinimize, speaker: $speaker)';
   }
 
   @override
@@ -12722,7 +12722,7 @@ class _$CallStateImpl extends _CallState with DiagnosticableTreeMixin {
           'currentConnectivityResult', currentConnectivityResult))
       ..add(DiagnosticsProperty(
           'currentAppLifecycleState', currentAppLifecycleState))
-      ..add(DiagnosticsProperty('registrationStatus', registrationStatus))
+      ..add(DiagnosticsProperty('registration', registration))
       ..add(DiagnosticsProperty('signalingClientStatus', signalingClientStatus))
       ..add(DiagnosticsProperty(
           'lastSignalingClientConnectError', lastSignalingClientConnectError))
@@ -12749,8 +12749,8 @@ class _$CallStateImpl extends _CallState with DiagnosticableTreeMixin {
             (identical(
                     other.currentAppLifecycleState, currentAppLifecycleState) ||
                 other.currentAppLifecycleState == currentAppLifecycleState) &&
-            (identical(other.registrationStatus, registrationStatus) ||
-                other.registrationStatus == registrationStatus) &&
+            (identical(other.registration, registration) ||
+                other.registration == registration) &&
             (identical(other.signalingClientStatus, signalingClientStatus) ||
                 other.signalingClientStatus == signalingClientStatus) &&
             const DeepCollectionEquality().equals(
@@ -12780,7 +12780,7 @@ class _$CallStateImpl extends _CallState with DiagnosticableTreeMixin {
       runtimeType,
       currentConnectivityResult,
       currentAppLifecycleState,
-      registrationStatus,
+      registration,
       signalingClientStatus,
       const DeepCollectionEquality().hash(lastSignalingClientConnectError),
       const DeepCollectionEquality().hash(lastSignalingClientDisconnectError),
@@ -12804,7 +12804,7 @@ abstract class _CallState extends CallState {
   const factory _CallState(
       {final ConnectivityResult? currentConnectivityResult,
       final AppLifecycleState? currentAppLifecycleState,
-      final RegistrationStatus registrationStatus,
+      final Registration registration,
       final SignalingClientStatus signalingClientStatus,
       final Object? lastSignalingClientConnectError,
       final Object? lastSignalingClientDisconnectError,
@@ -12821,7 +12821,7 @@ abstract class _CallState extends CallState {
   @override
   AppLifecycleState? get currentAppLifecycleState;
   @override
-  RegistrationStatus get registrationStatus;
+  Registration get registration;
   @override
   SignalingClientStatus get signalingClientStatus;
   @override

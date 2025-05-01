@@ -7,7 +7,7 @@ class CallState with _$CallState {
   const factory CallState({
     ConnectivityResult? currentConnectivityResult,
     AppLifecycleState? currentAppLifecycleState,
-    @Default(RegistrationStatus.registering) RegistrationStatus registrationStatus,
+    @Default(Registration(status: RegistrationStatus.registering)) Registration registration,
     @Default(SignalingClientStatus.disconnect) SignalingClientStatus signalingClientStatus,
     Object? lastSignalingClientConnectError,
     Object? lastSignalingClientDisconnectError,
@@ -26,13 +26,13 @@ class CallState with _$CallState {
       return CallStatus.connectivityNone;
     } else if (lastSignalingClientConnectError != null) {
       return CallStatus.connectError;
-    } else if (registrationStatus.isUnregistered) {
+    } else if (registration.status.isUnregistered) {
       return CallStatus.appUnregistered;
-    } else if (registrationStatus.isFailed) {
+    } else if (registration.status.isFailed) {
       return CallStatus.connectIssue;
     } else if (lastSignalingDisconnectCode != null) {
       return CallStatus.connectIssue;
-    } else if (signalingClientStatus.isConnect && registrationStatus.isRegistered) {
+    } else if (signalingClientStatus.isConnect && registration.status.isRegistered) {
       return CallStatus.ready;
     } else {
       return CallStatus.inProgress;
