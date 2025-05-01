@@ -943,6 +943,45 @@ class AppLocalizationsIt extends AppLocalizations {
   String get messaging_StateBar_initializing => 'INIZIALIZZAZIONE';
 
   @override
+  String get voicemail_Widget_screenTitle => 'Segreteria telefonica';
+
+  @override
+  String get voicemail_Label_deleteAll => 'Eliminare tutti i messaggi vocali?';
+
+  @override
+  String get voicemail_Label_deleteAllDescription => 'Questa azione eliminerà definitivamente tutti i messaggi vocali. Non potrà essere annullata.';
+
+  @override
+  String get voicemail_Label_empty => 'Nessun messaggio vocale';
+
+  @override
+  String get voicemail_Label_retry => 'Riprova';
+
+  @override
+  String get voicemail_Label_call => 'Chiama';
+
+  @override
+  String get voicemail_Label_markAsHeard => 'Segna come ascoltato';
+
+  @override
+  String get voicemail_Label_markAsNew => 'Segna come nuovo';
+
+  @override
+  String get voicemail_Label_delete => 'Elimina';
+
+  @override
+  String get voicemail_Dialog_deleteSingleTitle => 'Eliminare il messaggio vocale?';
+
+  @override
+  String get voicemail_Dialog_deleteSingleContent => 'Questo messaggio vocale verrà eliminato definitivamente. Vuoi continuare?';
+
+  @override
+  String get voicemail_Title_notSupported => 'Funzionalità non supportata';
+
+  @override
+  String get voicemail_Description_notSupported => 'La funzione di segreteria telefonica non è supportata nel tuo sistema. Contatta l\'amministratore per maggiori informazioni.';
+
+  @override
   String get notifications_errorSnackBarAction_callUserMedia => 'Verifica';
 
   @override
@@ -1402,6 +1441,9 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get settings_ListViewTileTitle_language => 'Linguaggio';
+
+  @override
+  String get settings_ListViewTileTitle_voicemail => 'Segreteria telefonica';
 
   @override
   String get settings_ListViewTileTitle_logout => 'Esci';

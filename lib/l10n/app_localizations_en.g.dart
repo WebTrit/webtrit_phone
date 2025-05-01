@@ -943,6 +943,45 @@ class AppLocalizationsEn extends AppLocalizations {
   String get messaging_StateBar_initializing => 'INITIALIZING';
 
   @override
+  String get voicemail_Widget_screenTitle => 'Voicemail';
+
+  @override
+  String get voicemail_Label_deleteAll => 'Delete all voicemails?';
+
+  @override
+  String get voicemail_Label_deleteAllDescription => 'This action will permanently delete all your voicemails. This cannot be undone.';
+
+  @override
+  String get voicemail_Label_empty => 'No voicemails';
+
+  @override
+  String get voicemail_Label_retry => 'Try again';
+
+  @override
+  String get voicemail_Label_call => 'Call';
+
+  @override
+  String get voicemail_Label_markAsHeard => 'Mark as heard';
+
+  @override
+  String get voicemail_Label_markAsNew => 'Mark as new';
+
+  @override
+  String get voicemail_Label_delete => 'Delete';
+
+  @override
+  String get voicemail_Dialog_deleteSingleTitle => 'Delete voicemail?';
+
+  @override
+  String get voicemail_Dialog_deleteSingleContent => 'This voicemail will be permanently deleted. Do you want to continue?';
+
+  @override
+  String get voicemail_Title_notSupported => 'Feature not supported';
+
+  @override
+  String get voicemail_Description_notSupported => 'Voicemail feature are not supported in your core. Please contact your administrator for more information.';
+
+  @override
   String get notifications_errorSnackBarAction_callUserMedia => 'Check';
 
   @override
@@ -1402,6 +1441,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settings_ListViewTileTitle_language => 'Language';
+
+  @override
+  String get settings_ListViewTileTitle_voicemail => 'Voicemail';
 
   @override
   String get settings_ListViewTileTitle_logout => 'Logout';

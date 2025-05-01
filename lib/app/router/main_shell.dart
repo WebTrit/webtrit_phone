@@ -14,6 +14,7 @@ import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/features/features.dart';
+import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
 @RoutePage()
@@ -133,6 +134,22 @@ class _MainShellState extends State<MainShell> {
             context.read<SecureStorage>(),
             context.read<AppBloc>().state.token!,
           ),
+        ),
+        RepositoryProvider<VoicemailRepository>(
+          create: (context) {
+            final featureAccess = context.read<FeatureAccess>();
+
+            return VoicemailRepositoryImpl(
+              webtritApiClient: context.read<WebtritApiClient>(),
+              token: context.read<AppBloc>().state.token!,
+              appDatabase: context.read<AppDatabase>(),
+              repositoryOptions: RepositoryOptions(
+                shouldOperate: featureAccess.settingsFeature.isVoicemailsEnabled,
+                polling: EnvironmentConfig.PERIODIC_POLLING,
+                pollPeriod: const Duration(minutes: 5),
+              ),
+            );
+          },
         ),
         RepositoryProvider<AppRepository>(
           create: (context) => AppRepository(

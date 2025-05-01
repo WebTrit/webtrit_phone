@@ -943,6 +943,45 @@ class AppLocalizationsUk extends AppLocalizations {
   String get messaging_StateBar_initializing => 'ІНІЦІАЛІЗАЦІЯ';
 
   @override
+  String get voicemail_Widget_screenTitle => 'Голосова пошта';
+
+  @override
+  String get voicemail_Label_deleteAll => 'Видалити всю голосову пошту?';
+
+  @override
+  String get voicemail_Label_deleteAllDescription => 'Цю дію не можна скасувати: всі голосові повідомлення буде остаточно видалено.';
+
+  @override
+  String get voicemail_Label_empty => 'Немає голосових повідомлень';
+
+  @override
+  String get voicemail_Label_retry => 'Спробувати ще раз';
+
+  @override
+  String get voicemail_Label_call => 'Дзвінок';
+
+  @override
+  String get voicemail_Label_markAsHeard => 'Позначити як прослухане';
+
+  @override
+  String get voicemail_Label_markAsNew => 'Позначити як нове';
+
+  @override
+  String get voicemail_Label_delete => 'Видалити';
+
+  @override
+  String get voicemail_Dialog_deleteSingleTitle => 'Видалити голосове повідомлення?';
+
+  @override
+  String get voicemail_Dialog_deleteSingleContent => 'Це голосове повідомлення буде остаточно видалено. Бажаєте продовжити?';
+
+  @override
+  String get voicemail_Title_notSupported => 'Функція не підтримується';
+
+  @override
+  String get voicemail_Description_notSupported => 'Функція голосової пошти не підтримується у вашій системі. Зверніться до адміністратора для отримання додаткової інформації.';
+
+  @override
   String get notifications_errorSnackBarAction_callUserMedia => 'Перевірити';
 
   @override
@@ -1402,6 +1441,9 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get settings_ListViewTileTitle_language => 'Мова';
+
+  @override
+  String get settings_ListViewTileTitle_voicemail => 'Голосова пошта';
 
   @override
   String get settings_ListViewTileTitle_logout => 'Вийти';
