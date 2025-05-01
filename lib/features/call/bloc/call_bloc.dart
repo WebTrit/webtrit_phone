@@ -224,6 +224,34 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     if (currentProcessingStatuses != nextProcessingStatuses) {
       _logger.info(() => 'status transitions: $currentProcessingStatuses -> $nextProcessingStatuses');
     }
+
+    final newRegistration = change.nextState.registration;
+    final previousRegistration = change.currentState.registration;
+    if (newRegistration != previousRegistration) {
+      _logger.fine('_onRegistrationChange: $newRegistration to $previousRegistration');
+      final newRegistrationStatus = newRegistration.status;
+      final previousRegistrationStatus = previousRegistration.status;
+
+      if (newRegistrationStatus.isRegistered && !previousRegistrationStatus.isRegistered) {
+        submitNotification(AppOnlineNotification());
+      }
+
+      if (!newRegistrationStatus.isRegistered && previousRegistrationStatus.isRegistered) {
+        submitNotification(AppOfflineNotification());
+      }
+
+      if (newRegistrationStatus.isFailed || newRegistrationStatus.isUnregistered) {
+        add(const _ResetStateEvent.completeCalls());
+      }
+
+      if (newRegistrationStatus.isFailed) {
+        submitNotification(SipRegistrationFailedNotification(
+          knownCode: SignalingRegistrationFailedCode.values.byCode(newRegistration.code),
+          systemCode: newRegistration.code,
+          systemReason: newRegistration.reason,
+        ));
+      }
+    }
   }
 
   //
@@ -429,40 +457,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _RegistrationChange event,
     Emitter<CallState> emit,
   ) async {
-    final newRegistrationStatus = event.registration.status;
-    final previousRegistrationStatus = state.registrationStatus;
-
-    if (newRegistrationStatus != previousRegistrationStatus) {
-      _logger.fine('_onRegistrationChange: $previousRegistrationStatus to $newRegistrationStatus');
-      emit(state.copyWith(registrationStatus: newRegistrationStatus));
-    } else {
-      _logger.fine('_onRegistrationChange: no change in status ($newRegistrationStatus)');
-      return;
-    }
-
-    if (newRegistrationStatus.isRegistered) {
-      submitNotification(AppOnlineNotification());
-      return;
-    }
-
-    if (newRegistrationStatus.isRegistering || newRegistrationStatus.isFailed || newRegistrationStatus.isUnregistered) {
-      add(const _ResetStateEvent.completeCalls());
-    }
-
-    if (newRegistrationStatus.isUnregistered) {
-      submitNotification(AppOfflineNotification());
-      return;
-    }
-
-    if (newRegistrationStatus.isFailed) {
-      _logger.severe(
-          '_onRegistrationChange: registration failed with code: ${event.registration.code}, reason: ${event.registration.reason}');
-      submitNotification(SipRegistrationFailedNotification(
-        knownCode: SignalingRegistrationFailedCode.values.byCode(event.registration.code),
-        systemCode: event.registration.code,
-        systemReason: event.registration.reason,
-      ));
-    }
+    emit(state.copyWith(registration: event.registration));
   }
 
   // processing the handling of the app state
@@ -609,6 +604,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
       emit(state.copyWith(
         signalingClientStatus: SignalingClientStatus.disconnect,
+        registration: const Registration(status: RegistrationStatus.registering),
         lastSignalingClientDisconnectError: null,
         lastSignalingDisconnectCode: null,
       ));
@@ -629,16 +625,16 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     final code = SignalingDisconnectCode.values.byCode(event.code ?? -1);
     final repeated = event.code == state.lastSignalingDisconnectCode;
 
-    emit(state.copyWith(
+    CallState newState = state.copyWith(
+      registration: const Registration(status: RegistrationStatus.registering),
       signalingClientStatus: SignalingClientStatus.disconnect,
       lastSignalingDisconnectCode: event.code,
-    ));
-    _signalingClient = null;
-
+    );
     Notification? notificationToShow;
+    bool shouldReconnect = true;
 
     if (code == SignalingDisconnectCode.appUnregisteredError) {
-      add(const _RegistrationChange(registration: Registration(status: RegistrationStatus.unregistered)));
+      newState = newState.copyWith(registration: const Registration(status: RegistrationStatus.unregistered));
     } else if (code == SignalingDisconnectCode.requestCallIdError) {
       state.activeCalls.where((e) => e.wasHungUp).forEach((e) => add(_ResetStateEvent.completeCall(e.callId)));
     } else if (code == SignalingDisconnectCode.controllerExitError) {
@@ -646,11 +642,21 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     } else if (code == SignalingDisconnectCode.sessionMissedError) {
       notificationToShow = const SignalingSessionMissedNotification();
     } else if (code.type == SignalingDisconnectCodeType.auxiliary) {
-      // Be sure to differenciate it from the network disconnect which is handled by the connectivity plugin
-      // This can happen on our server issue, or on fast switching from one network to another (wifi to mobile)
-      // So in this case it should try to reconnect with _reconnectInitiated
       _logger.info('__onSignalingClientEventDisconnected: socket goes down');
-      add(const _RegistrationChange(registration: Registration(status: RegistrationStatus.unregistered)));
+
+      /// Fun facts
+      /// - in case of network disconnection on android this section is evaluating faster than [_onConnectivityResultChanged].
+      /// - also in case of network disconnection error code is protocolError instead of normalClosure by unknown reason
+      /// so we need to handle it here as regular disconnection
+      if (code == SignalingDisconnectCode.protocolError) {
+        shouldReconnect = false;
+      } else {
+        notificationToShow = SignalingDisconnectNotification(
+          knownCode: code,
+          systemCode: event.code,
+          systemReason: event.reason,
+        );
+      }
     } else {
       notificationToShow = SignalingDisconnectNotification(
         knownCode: code,
@@ -658,9 +664,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         systemReason: event.reason,
       );
     }
-
+    emit(newState);
+    _signalingClient = null;
     if (notificationToShow != null && !repeated) submitNotification(notificationToShow);
-    _reconnectInitiated(kSignalingClientReconnectDelay);
+    if (shouldReconnect) _reconnectInitiated(kSignalingClientReconnectDelay);
   }
 
   // processing call push events
@@ -1167,7 +1174,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _CallControlEventStarted event,
     Emitter<CallState> emit,
   ) async {
-    if (!state.registrationStatus.isRegistered) {
+    if (!state.registration.status.isRegistered) {
       _logger.info('__onCallControlEventStarted account is not registered');
       submitNotification(CallWhileUnregisteredNotification());
       return;
@@ -1623,7 +1630,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _CallPerformEventStarted event,
     Emitter<CallState> emit,
   ) async {
-    if (!state.registrationStatus.isRegistered) {
+    if (!state.registration.status.isRegistered) {
       _logger.info('__onCallPerformEventStarted account is not registered');
       submitNotification(CallWhileUnregisteredNotification());
 
