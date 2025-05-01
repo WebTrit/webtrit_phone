@@ -87,7 +87,8 @@ dependencies:
   html: ^0.15.4
   http: ^1.2.2
   audio_session: ^0.2.1
-  
+  bloc_test: ^9.1.7
+
   webtrit_api:
     path: ./packages/webtrit_api
   webtrit_phone_number:
@@ -114,7 +115,6 @@ dev_dependencies:
     sdk: flutter
 
   auto_route_generator: ^10.0.1
-  bloc_test: ^9.1.7
   build_runner: ^2.4.15
   flutter_gen_runner: ^5.10.0
   flutter_launcher_icons: ^0.14.3

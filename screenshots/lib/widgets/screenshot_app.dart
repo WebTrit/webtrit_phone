@@ -6,10 +6,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:mocktail/mocktail.dart';
 
-// TODO(ScreenshotApp): Remove this import after fixing this bug https://github.com/Milad-Akarie/auto_route_library/issues/1806
-// ignore: implementation_imports, depend_on_referenced_packages
-import 'package:auto_route/src/router/controller/pageless_routes_observer.dart';
-
 import 'package:webtrit_phone/blocs/app/app_bloc.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
@@ -36,7 +32,7 @@ class ScreenshotApp extends StatelessWidget {
           darkDynamic: null,
           child: BlocBuilder<AppBloc, AppState>(
             buildWhen: (previous, current) =>
-            previous.effectiveLocale != current.effectiveLocale ||
+                previous.effectiveLocale != current.effectiveLocale ||
                 previous.effectiveThemeMode != current.effectiveThemeMode,
             builder: (context, state) {
               final themeProvider = ThemeProvider.of(context);
@@ -128,8 +124,9 @@ class _NoOpRouteInformationParser extends RouteInformationParser<Object> {
   }
 }
 
-//  Mock auto_route router stack
-//  Needed for invocation AutoRoute.of and other platform dependent code inside test widget
+// Mock implementation of auto_route's StackRouter
+// Used to support AutoRoute.of and other platform-dependent code in widget tests
+// Required for proper rendering of the AppBar's leading widget
 class _AutoStackRouter extends Mock implements StackRouter {
   @override
   PagelessRoutesObserver pagelessRoutesObserver = PagelessRoutesObserver();
