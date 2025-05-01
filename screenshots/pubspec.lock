@@ -95,7 +95,7 @@ packages:
     source: hosted
     version: "0.2.5"
   bloc_test:
-    dependency: "direct dev"
+    dependency: transitive
     description:
       name: bloc_test
       sha256: "165a6ec950d9252ebe36dc5335f2e6eb13055f33d56db0eeb7642768849b43d2"
