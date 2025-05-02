@@ -78,6 +78,26 @@ abstract class AppPreferences {
   PeerConnectionSettings getPeerConnectionSettings({PeerConnectionSettings? defaultValue});
 
   Future<void> setPearConnectionSettings(PeerConnectionSettings settings);
+
+  /// Sets the caller ID visibility.
+  /// `true` means that the call ID will be shown default or overrided one.
+  /// `false` means that anonymous call ID will be used.
+  ///  according to https://datatracker.ietf.org/doc/html/rfc3323#section-4.1.1.3
+  Future<void> setShowCallerID(bool value);
+
+  /// Gets the caller ID visibility.
+  /// `true` means that the call ID will be shown default or overrided one.
+  /// `false` means that anonymous call ID will be used.
+  ///  according to https://datatracker.ietf.org/doc/html/rfc3323#section-4.1.1.3
+  bool getShowCallerID();
+
+  /// Sets the selected caller ID to override the default one.
+  /// `null` means that the default call ID will be used.
+  Future<void> setSelectedCallerID(String? value);
+
+  /// Gets the selected caller ID to override the default one.
+  /// `null` means that the default call ID will be used.
+  String? getSelectedCallerID();
 }
 
 class AppPreferencesFactory {
@@ -117,6 +137,8 @@ class AppPreferencesImpl
   static const _kVideoCapturingSettingsKey = 'video-capturing-settings';
   static const _kIceSettingsKey = 'ice-settings';
   static const _kNegotiationSettings = 'negotiation-settings';
+  static const _kCallerIDShowKey = 'caller_id_show';
+  static const _kCallerIDSelectedKey = 'caller_id_selected';
 
   // Please add all new keys here for proper cleaning of preferences
   static const _kPreferencesList = [
@@ -135,6 +157,8 @@ class AppPreferencesImpl
     _kAudioProcessingSettingsKey,
     _kVideoCapturingSettingsKey,
     _kIceSettingsKey,
+    _kCallerIDShowKey,
+    _kCallerIDSelectedKey,
   ];
 
   // List of preferences keys to exclude by default during clean operation
@@ -436,5 +460,30 @@ class AppPreferencesImpl
 
   Future<void> _setNegotiationSettings(NegotiationSettings settings) {
     return _sharedPreferences.setString(_kNegotiationSettings, negotiationSettingsToJson(settings));
+  }
+
+  @override
+  Future<void> setShowCallerID(bool value) {
+    return _sharedPreferences.setBool(_kCallerIDShowKey, value);
+  }
+
+  @override
+  bool getShowCallerID() {
+    return _sharedPreferences.getBool(_kCallerIDShowKey) ?? true;
+  }
+
+  @override
+  Future<void> setSelectedCallerID(String? value) {
+    return _sharedPreferences.setString(_kCallerIDSelectedKey, value ?? '');
+  }
+
+  @override
+  String? getSelectedCallerID() {
+    final selectedCallerID = _sharedPreferences.getString(_kCallerIDSelectedKey);
+    if (selectedCallerID != null && selectedCallerID.isNotEmpty) {
+      return selectedCallerID;
+    } else {
+      return null;
+    }
   }
 }
