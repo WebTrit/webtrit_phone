@@ -160,6 +160,22 @@ class CallToActionsWebPageRouteArgs {
 }
 
 /// generated route for
+/// [CallerIDSettingsScreenPage]
+class CallerIDSettingsScreenPageRoute extends PageRouteInfo<void> {
+  const CallerIDSettingsScreenPageRoute({List<PageRouteInfo>? children})
+    : super(CallerIDSettingsScreenPageRoute.name, initialChildren: children);
+
+  static const String name = 'CallerIDSettingsScreenPageRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return CallerIDSettingsScreenPage();
+    },
+  );
+}
+
+/// generated route for
 /// [ChatConversationScreenPage]
 class ChatConversationScreenPageRoute
     extends PageRouteInfo<ChatConversationScreenPageRouteArgs> {
