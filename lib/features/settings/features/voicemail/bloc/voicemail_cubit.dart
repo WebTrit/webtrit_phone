@@ -33,7 +33,7 @@ class VoicemailCubit extends Cubit<VoicemailState> {
 
   void _initialize() async {
     _subscription = _repository.watchVoicemails().listen((items) {
-      emit(state.copyWith(items: items, error: null, status: VoicemailStatus.loaded));
+      _safeEmit(state.copyWith(items: items, error: null, status: VoicemailStatus.loaded));
     });
 
     fetchVoicemails();
@@ -41,24 +41,24 @@ class VoicemailCubit extends Cubit<VoicemailState> {
 
   void fetchVoicemails() async {
     try {
-      emit(state.copyWith(status: VoicemailStatus.loading, error: null));
+      _safeEmit(state.copyWith(status: VoicemailStatus.loading, error: null));
       await _repository.fetchVoicemails();
-      emit(state.copyWith(status: VoicemailStatus.loaded));
+      _safeEmit(state.copyWith(status: VoicemailStatus.loaded));
     } on EndpointNotSupportedException catch (e) {
       final error = DefaultErrorNotification(e);
-      emit(state.copyWith(status: VoicemailStatus.featureNotSupported, error: error));
+      _safeEmit(state.copyWith(status: VoicemailStatus.featureNotSupported, error: error));
     } catch (e) {
       final error = DefaultErrorNotification(e);
-      emit(state.copyWith(status: VoicemailStatus.loaded, error: error));
+      _safeEmit(state.copyWith(status: VoicemailStatus.loaded, error: error));
       onSubmitNotification(error);
     }
   }
 
   void removeAllVoicemails() async {
     try {
-      emit(state.copyWith(status: VoicemailStatus.loading));
+      _safeEmit(state.copyWith(status: VoicemailStatus.loading));
       await _repository.removeAllVoicemails();
-      emit(state.copyWith(status: VoicemailStatus.loaded));
+      _safeEmit(state.copyWith(status: VoicemailStatus.loaded));
     } catch (e) {
       onSubmitNotification(DefaultErrorNotification(e));
       emit(state.copyWith(status: VoicemailStatus.loaded));
@@ -67,28 +67,37 @@ class VoicemailCubit extends Cubit<VoicemailState> {
 
   void removeVoicemail(String messageId) async {
     try {
-      emit(state.copyWith(status: VoicemailStatus.loading));
+      _safeEmit(state.copyWith(status: VoicemailStatus.loading));
       await _repository.removeVoicemail(messageId);
-      emit(state.copyWith(status: VoicemailStatus.loaded));
+      _safeEmit(state.copyWith(status: VoicemailStatus.loaded));
     } catch (e) {
       onSubmitNotification(DefaultErrorNotification(e));
-      emit(state.copyWith(status: VoicemailStatus.loaded));
+      _safeEmit(state.copyWith(status: VoicemailStatus.loaded));
     }
   }
 
   void toggleSeenStatus(Voicemail voicemail) async {
     try {
-      emit(state.copyWith(status: VoicemailStatus.loading));
+      _safeEmit(state.copyWith(status: VoicemailStatus.loading));
       await _repository.updateVoicemailSeenStatus(voicemail.id.toString(), !voicemail.seen);
-      emit(state.copyWith(status: VoicemailStatus.loaded));
+      _safeEmit(state.copyWith(status: VoicemailStatus.loaded));
     } catch (e) {
       onSubmitNotification(DefaultErrorNotification(e));
-      emit(state.copyWith(status: VoicemailStatus.loaded));
+      _safeEmit(state.copyWith(status: VoicemailStatus.loaded));
     }
   }
 
   void startCall(Voicemail voicemail) {
     onCallStarted(voicemail.sender);
+  }
+
+  /// Safely emits a new state if the cubit is not closed.
+  ///
+  /// This prevents the "Bad state: Cannot emit new states after calling close"
+  /// error, which can occur when asynchronous operations complete after
+  /// the cubit has been closed (e.g., when a screen is disposed).
+  void _safeEmit(VoicemailState newState) {
+    if (!isClosed) emit(newState);
   }
 
   @override
