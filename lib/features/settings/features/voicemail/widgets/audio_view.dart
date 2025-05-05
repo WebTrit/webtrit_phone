@@ -82,6 +82,7 @@ class _AudioViewState extends State<AudioView> with WidgetsBindingObserver {
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     _playbackSub.cancel();
     _player.dispose();
     super.dispose();
