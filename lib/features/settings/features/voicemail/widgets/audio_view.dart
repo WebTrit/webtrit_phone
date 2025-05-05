@@ -41,7 +41,10 @@ class _AudioViewState extends State<AudioView> with WidgetsBindingObserver {
   }
 
   File? _cacheFile() {
-    if (widget.path.isLocalPath) return null;
+    // Do not provide a custom cacheFile on iOS:
+    // just_audio internally handles caching on iOS, and supplying a custom file
+    // may lead to PlayerException (-11828) if the file is not yet created or invalid.
+    if (widget.path.isLocalPath || Platform.isIOS) return null;
     return File('$_cachePath${_uri.path}');
   }
 
@@ -79,8 +82,9 @@ class _AudioViewState extends State<AudioView> with WidgetsBindingObserver {
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     _playbackSub.cancel();
-    _player.dispose();
+    _player.stopAndDispose();
     super.dispose();
   }
 
