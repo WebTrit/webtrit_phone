@@ -45,12 +45,12 @@ def dartDefine = [WEBTRIT_APP_LINK_DOMAIN: projectPropertyDartDefines['WEBTRIT_A
                   WEBTRIT_APP_NAME       : projectPropertyDartDefines['WEBTRIT_APP_NAME'] ?: 'WebTrit',]
 
 def envDefine = [WEBTRIT_ANDROID_RELEASE_UPLOAD_KEYSTORE_PATH: projectPropertyDartDefines['WEBTRIT_ANDROID_RELEASE_UPLOAD_KEYSTORE_PATH'] ?: '',
-                 WEBTRIT_ANDROID_HTTP_ALLOWED_DOMAINS        : projectPropertyDartDefines['WEBTRIT_ANDROID_HTTP_ALLOWED_DOMAINS'] ?: '',]
+                 WEBTRIT_HTTP_ALLOWED_DOMAINS        : projectPropertyDartDefines['WEBTRIT_HTTP_ALLOWED_DOMAINS'] ?: '',]
 
 def generateNetworkSecurityConfig = tasks.register("generateNetworkSecurityConfig") {
     doLast {
         // Parse and validate domain definitions passed from dart-define; reject any malformed entries
-        def rawDomainDefs = (envDefine['WEBTRIT_ANDROID_HTTP_ALLOWED_DOMAINS'] ?: '').split(';')
+        def rawDomainDefs = (envDefine['WEBTRIT_HTTP_ALLOWED_DOMAINS'] ?: '').split(';')
 
         def invalidDomains = []
         // Transform raw semicolon-separated input into a list of [domain, includeSubdomains] entries,

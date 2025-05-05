@@ -15,6 +15,6 @@
   "_WEBTRIT_APP_REMOTE_LOGZIO_LOGGING_BUFFER_SIZE": "",
   "_WEBTRIT_ANDROID_RELEASE_UPLOAD_KEYSTORE_PATH": "",
   "_WEBTRIT_ANDROID_RELEASE_UPLOAD_KEYSTORE_PATH_DESCRIPTION": "Optional path to directory containing upload-keystore-metadata.json and keystore file. Used to configure Android release signing automatically. If not provided, fallback to key.properties will be used.",
-  "WEBTRIT_ANDROID_HTTP_ALLOWED_DOMAINS": "127.0.0.1",
-  "_WEBTRIT_ANDROID_HTTP_ALLOWED_DOMAINS_DESCRIPTION": "List of HTTP domains allowed for cleartext (non-HTTPS) traffic on Android. Use format: 'domain,includeSubdomains' (optional), separated by semicolons. Example: '127.0.0.1,false;dev.api.com,true;local.test'. If 'includeSubdomains' is omitted, it defaults to false. '127.0.0.1' is required for just_audio to enable local proxy features like headers and caching."
+  "WEBTRIT_HTTP_ALLOWED_DOMAINS": "127.0.0.1",
+  "_WEBTRIT_HTTP_ALLOWED_DOMAINS_DESCRIPTION": "List of HTTP domains allowed for cleartext (non-HTTPS) traffic. Use format: 'domain,includeSubdomains' (optional), separated by semicolons. Example: '127.0.0.1,false;dev.api.com,true;local.test'. If 'includeSubdomains' is omitted, it defaults to false. '127.0.0.1' is required for just_audio to enable local proxy features like headers and caching."
 }
