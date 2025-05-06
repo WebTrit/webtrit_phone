@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:patrol/patrol.dart';
 
@@ -12,13 +13,14 @@ import 'package:webtrit_phone/widgets/keypad_key_button.dart';
 
 import 'components/integration_test_environment_config.dart';
 import 'subsequences/login_by_method.dart';
+import 'subsequences/pump_for.dart';
 import 'subsequences/pump_root_and_wait_until_visible.dart';
 
 main() {
   final defaultLoginMethod = IntegrationTestEnvironmentConfig.DEFAULT_LOGIN_METHOD;
 
   patrolTest(
-    'Should make simple call and hangup it',
+    'Should make simple call and check recents function',
     ($) async {
       await bootstrap();
       await pumpRootAndWaitUntilVisible($);
@@ -27,7 +29,7 @@ main() {
       if ($(LoginModeSelectScreen).visible) {
         await loginByMethod($, defaultLoginMethod);
         // Wait some time for components loading and session establishment.
-        await Future.delayed(const Duration(seconds: 5), () => $.pumpAndTrySettle());
+        await pumpFor(const Duration(seconds: 5), $);
       }
 
       // Go to the dialer tab.
@@ -40,23 +42,24 @@ main() {
         await $(KeypadKeyButton).at(KeypadKey.numbers.indexOf(key)).tap();
       }
 
-      // Start the call.
+      // Start the call and talk for a while.
       await $(actionPadStartKey).tap();
       await $(CallActiveScaffold).waitUntilVisible();
-
-      // Let them talk for a while.
-      await Future.delayed(const Duration(seconds: 5));
-      await $.pumpAndTrySettle();
-
-      // Check if the call is active based on counter presence.
-      expect(find.textContaining('00:0'), findsOneWidget);
+      await pumpFor(const Duration(seconds: 5), $);
+      expect(find.textContaining('00:0'), findsOneWidget, reason: 'Call should be active');
 
       // End the call.
       await $(callActionsHangupKey).tap();
-      await Future.delayed(const Duration(seconds: 2));
-      await $.pumpAndTrySettle();
+      await pumpFor(const Duration(seconds: 2), $);
+      expect($(CallActiveScaffold).visible, false, reason: 'Call should be ended');
 
-      expect($(CallActiveScaffold).visible, false);
+      // Check if the call is in the recents list.
+      await $(MainFlavor.recents.toNavBarKey()).tap();
+      await $.pumpAndTrySettle();
+      final recentNumbr = $(recentsTileKey).$(Row).$(dialNumber);
+      expect(recentNumbr, findsOneWidget, reason: 'Should contain number in recents list');
+      final recentIcon = $(recentsTileKey).$(Row).$(Icons.call_made);
+      expect(recentIcon, findsOneWidget, reason: 'Should contain succesfull outgoing call icon');
     },
   );
 }

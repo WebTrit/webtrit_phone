@@ -4,6 +4,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/app/constants.dart';
+import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/messaging/messaging.dart';
@@ -121,6 +122,7 @@ class _RecentsScreenState extends State<RecentsScreen> with SingleTickerProvider
                       final contact = recent.contact;
                       final contactSourceId = contact?.sourceId;
                       return RecentTile(
+                        key: recentsTileKey,
                         recent: recent,
                         chatsEnabled: widget.chatsEnabled,
                         dateFormat: context.read<RecentsBloc>().dateFormat,

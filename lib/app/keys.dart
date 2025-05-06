@@ -51,3 +51,5 @@ const contactPhoneTileKey = Key('contactPhoneTile');
 const contactPhoneTileFavIconKey = Key('contactPhoneTileFavIcon');
 
 const favoriteTileKey = Key('favoriteTile');
+
+const recentsTileKey = Key('recentsTile');

@@ -9,6 +9,7 @@ import 'package:webtrit_phone/models/main_flavor.dart';
 
 import 'components/integration_test_environment_config.dart';
 import 'subsequences/login_by_method.dart';
+import 'subsequences/pump_for.dart';
 import 'subsequences/pump_root_and_wait_until_visible.dart';
 
 main() {
@@ -24,7 +25,7 @@ main() {
       if ($(LoginModeSelectScreen).visible) {
         await loginByMethod($, defaultLoginMethod);
         // Wait some time for components loading and session establishment.
-        await Future.delayed(const Duration(seconds: 5), () => $.pumpAndTrySettle());
+        await pumpFor(const Duration(seconds: 5), $);
       }
 
       // Go to the contacts tab.
@@ -45,14 +46,14 @@ main() {
 
       // Check if search of contactA works.
       await $(contactsSerchInputKey).enterText(contactA);
-      await Future.delayed(const Duration(seconds: 1), () => $.pumpAndTrySettle());
+      await pumpFor(const Duration(seconds: 1), $);
       expect($(contactsExtContactTileKey).containing(contactA), findsOneWidget, reason: '$contactA should present');
       expect($(contactsExtContactTileKey).containing(contactB), findsNothing, reason: '$contactB shouldnt present');
       await $(contactsSerchInputClearKey).tap();
 
       // Check if search of contactB works.
       await $(contactsSerchInputKey).enterText(contactB);
-      await Future.delayed(const Duration(seconds: 1), () => $.pumpAndTrySettle());
+      await pumpFor(const Duration(seconds: 1), $);
       expect($(contactsExtContactTileKey).containing(contactB), findsOneWidget, reason: '$contactB should present');
       expect($(contactsExtContactTileKey).containing(contactA), findsNothing, reason: '$contactA shouldnt present');
       await $(contactsSerchInputClearKey).tap();
@@ -72,7 +73,7 @@ main() {
       await $(MainFlavor.favorites.toNavBarKey()).tap();
       expect($(favoriteTileKey).containing(contactA), findsOneWidget, reason: '$contactB should favorited');
       expect($(favoriteTileKey).containing(contactB), findsOneWidget, reason: '$contactA should favorited');
-      await Future.delayed(const Duration(seconds: 1), () => $.pumpAndTrySettle());
+      await pumpFor(const Duration(seconds: 1), $);
     },
   );
 }
