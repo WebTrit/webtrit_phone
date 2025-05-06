@@ -18,6 +18,7 @@ import 'subsequences/pump_root_and_wait_until_visible.dart';
 
 main() {
   final defaultLoginMethod = IntegrationTestEnvironmentConfig.DEFAULT_LOGIN_METHOD;
+  const dialNumber = IntegrationTestEnvironmentConfig.SIMPLE_CALL_DESTINATION;
 
   patrolTest(
     'Should make simple call and check recents function',
@@ -36,7 +37,6 @@ main() {
       await $(MainFlavor.keypad.toNavBarKey()).tap();
 
       // Enter the number to dial.
-      const dialNumber = IntegrationTestEnvironmentConfig.SIMPLE_CALL_DESTINATION;
       for (var i = 0; i < dialNumber.length; i++) {
         final key = KeypadKey.numbers.firstWhere((element) => element.text == dialNumber[i]);
         await $(KeypadKeyButton).at(KeypadKey.numbers.indexOf(key)).tap();

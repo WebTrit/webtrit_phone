@@ -14,6 +14,10 @@ import 'subsequences/pump_root_and_wait_until_visible.dart';
 
 main() {
   final defaultLoginMethod = IntegrationTestEnvironmentConfig.DEFAULT_LOGIN_METHOD;
+  const contactA = IntegrationTestEnvironmentConfig.EXT_CONTACT_A;
+  const contactANumber = IntegrationTestEnvironmentConfig.EXT_CONTACT_A_NUMBER;
+  const contactB = IntegrationTestEnvironmentConfig.EXT_CONTACT_B;
+  const contactBNumber = IntegrationTestEnvironmentConfig.EXT_CONTACT_B_NUMBER;
 
   patrolTest(
     'Should show contacts list, search it and add to favorites',
@@ -38,11 +42,6 @@ main() {
       // Check if has some external contacts.
       await $(contactsTabExtKey).tap().then((e) => $.pumpAndTrySettle());
       expect($(contactsExtContactTileKey), findsAny, reason: 'External contacts should be');
-
-      const contactA = IntegrationTestEnvironmentConfig.WEBTRIT_APP_TEST_EXT_CONTACT_A;
-      const contactANumber = IntegrationTestEnvironmentConfig.WEBTRIT_APP_TEST_EXT_CONTACT_A_NUMBER;
-      const contactB = IntegrationTestEnvironmentConfig.WEBTRIT_APP_TEST_EXT_CONTACT_B;
-      const contactBNumber = IntegrationTestEnvironmentConfig.WEBTRIT_APP_TEST_EXT_CONTACT_B_NUMBER;
 
       // Check if search of contactA works.
       await $(contactsSerchInputKey).enterText(contactA);
