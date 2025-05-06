@@ -28,6 +28,7 @@ class WebViewScaffold extends StatefulWidget {
     this.builder,
     required this.userAgent,
     this.injectedScriptBuilder,
+    this.webViewController,
   });
 
   final Widget? title;
@@ -38,6 +39,7 @@ class WebViewScaffold extends StatefulWidget {
   final Widget? Function(BuildContext context, WebResourceError error, WebViewController controller)? errorBuilder;
   final TransitionBuilder? builder;
   final String userAgent;
+  final WebViewController? webViewController;
 
   /// Optional builder that returns a JavaScript snippet to be injected into the WebView
   /// after the page has finished loading or when the widget is updated.
@@ -80,7 +82,7 @@ class _WebViewScaffoldState extends State<WebViewScaffold> {
   void initState() {
     super.initState();
 
-    _webViewController = WebViewController();
+    _webViewController = widget.webViewController ?? WebViewController();
     () async {
       // Retrieve and store the initial injected script, if provided, for use after the page loads
       final injectedScript = await widget.injectedScriptBuilder?.call();
