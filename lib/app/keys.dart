@@ -40,3 +40,14 @@ const actionPadVideoCallKey = Key('actionPadVideoCall');
 const actionPadBackspaceKey = Key('actionPadBackspace');
 
 const callActionsHangupKey = Key('callActionsHangup');
+
+const contactsExtContactTileKey = Key('contactsExtContactTile');
+const contactsLocalContactTileKey = Key('contactsLocalContactTile');
+const contactsTabExtKey = Key('contactsTabExt');
+const contactsTabLocalKey = Key('contactsTabLocal');
+const contactsSerchInputKey = Key('contactsSearchInput');
+const contactsSerchInputClearKey = Key('contactsSearchInputClear');
+const contactPhoneTileKey = Key('contactPhoneTile');
+const contactPhoneTileFavIconKey = Key('contactPhoneTileFavIcon');
+
+const favoriteTileKey = Key('favoriteTile');

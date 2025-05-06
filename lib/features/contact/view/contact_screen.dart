@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:auto_route/auto_route.dart';
 
 import 'package:webtrit_phone/app/constants.dart';
+import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/features/call/call.dart';
 import 'package:webtrit_phone/utils/utils.dart';
@@ -74,6 +75,7 @@ class ContactScreen extends StatelessWidget {
                   ),
                   for (final contactPhone in contact.phones)
                     ContactPhoneTile(
+                      key: contactPhoneTileKey,
                       number: contactPhone.number,
                       label: contactPhone.label,
                       favoriteVisible: favoriteVisible,

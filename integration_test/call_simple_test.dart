@@ -1,10 +1,11 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:patrol/patrol.dart';
-import 'package:webtrit_phone/app/keys.dart';
 
+import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/bootstrap.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/call/view/call_active_scaffold.dart';
+import 'package:webtrit_phone/features/login/view/login_mode_select_screen.dart';
 import 'package:webtrit_phone/models/keypad_key.dart';
 import 'package:webtrit_phone/models/main_flavor.dart';
 import 'package:webtrit_phone/widgets/keypad_key_button.dart';
@@ -19,13 +20,15 @@ main() {
   patrolTest(
     'Should make simple call and hangup it',
     ($) async {
-      // Set up and login
       await bootstrap();
       await pumpRootAndWaitUntilVisible($);
-      await loginByMethod($, defaultLoginMethod);
 
-      // Wait some time for components loading and session establishment.
-      await Future.delayed(const Duration(seconds: 5));
+      // Login if not.
+      if ($(LoginModeSelectScreen).visible) {
+        await loginByMethod($, defaultLoginMethod);
+        // Wait some time for components loading and session establishment.
+        await Future.delayed(const Duration(seconds: 5), () => $.pumpAndTrySettle());
+      }
 
       // Go to the dialer tab.
       await $(MainFlavor.keypad.toNavBarKey()).tap();

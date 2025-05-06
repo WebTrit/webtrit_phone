@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 
 class ClearedTextField extends StatefulWidget {
@@ -56,6 +57,7 @@ class ClearedTextFieldState extends State<ClearedTextField> {
           suffixIcon: _isEmpty
               ? null
               : IconButton(
+                  key: contactsSerchInputClearKey,
                   icon: const Icon(Icons.close),
                   onPressed: () {
                     setState(() {

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/app/constants.dart';
+import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
@@ -76,9 +77,17 @@ class _ContactsScreenState extends State<ContactsScreen> with SingleTickerProvid
               controller: _tabController,
               width: mediaQueryData.size.width * 0.75,
               height: kMainAppBarBottomTabHeight - kMainAppBarBottomPaddingGap,
-              tabs: [
-                for (final sourceType in widget.sourceTypes) Tab(text: sourceType.l10n(context)),
-              ],
+              tabs: widget.sourceTypes.map(
+                (sourceType) {
+                  return Tab(
+                    key: switch (sourceType) {
+                      ContactSourceType.local => contactsTabLocalKey,
+                      ContactSourceType.external => contactsTabExtKey,
+                    },
+                    text: sourceType.l10n(context),
+                  );
+                },
+              ).toList(),
             ),
           );
 
@@ -93,6 +102,7 @@ class _ContactsScreenState extends State<ContactsScreen> with SingleTickerProvid
           builder: (context, state) {
             final contactsSearchBloc = context.read<ContactsBloc>();
             return ClearedTextField(
+              key: contactsSerchInputKey,
               initialValue: state.search,
               onChanged: (value) => contactsSearchBloc.add(ContactsSearchChanged(value)),
               onSubmitted: (value) => contactsSearchBloc.add(ContactsSearchSubmitted(value)),
