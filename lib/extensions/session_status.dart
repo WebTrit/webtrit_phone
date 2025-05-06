@@ -50,3 +50,24 @@ extension SessionStatusColor on SessionStatus {
     }
   }
 }
+
+extension SessionStatusKey on SessionStatus {
+  Key get key {
+    switch (this) {
+      case SessionStatus.connectivityNone:
+        return const Key('session_status_connectivityNone');
+      case SessionStatus.connectError:
+        return const Key('session_status_connectError');
+      case SessionStatus.appUnregistered:
+        return const Key('session_status_appUnregistered');
+      case SessionStatus.connectIssue:
+        return const Key('session_status_connectIssue');
+      case SessionStatus.inProgress:
+        return const Key('session_status_inProgress');
+      case SessionStatus.ready:
+        return const Key('session_status_ready');
+      case SessionStatus.pushTokenError:
+        return const Key('session_status_pushTokenError');
+    }
+  }
+}
