@@ -27,7 +27,9 @@ class WebViewScaffold extends StatefulWidget {
     this.showToolbar = true,
     this.builder,
     required this.userAgent,
-    this.injectedScriptBuilder,
+    this.webViewController,
+    this.onPageLoadedSuccess,
+    this.onPageLoadedFailed,
   });
 
   final Widget? title;
@@ -38,14 +40,10 @@ class WebViewScaffold extends StatefulWidget {
   final Widget? Function(BuildContext context, WebResourceError error, WebViewController controller)? errorBuilder;
   final TransitionBuilder? builder;
   final String userAgent;
+  final WebViewController? webViewController;
 
-  /// Optional builder that returns a JavaScript snippet to be injected into the WebView
-  /// after the page has finished loading or when the widget is updated.
-  ///
-  /// Use this to dynamically provide runtime data (e.g., auth tokens, user session info)
-  /// to the embedded page via JavaScript. The builder is re-evaluated on reloads and updates,
-  /// and the script will only be injected if it has changed since the last injection.
-  final FutureOr<String>? Function()? injectedScriptBuilder;
+  final void Function()? onPageLoadedSuccess;
+  final void Function(WebResourceError error)? onPageLoadedFailed;
 
   @override
   State<WebViewScaffold> createState() => _WebViewScaffoldState();
@@ -61,7 +59,28 @@ class _WebViewScaffoldState extends State<WebViewScaffold> {
   WebResourceError? _latestError;
   WebResourceError? _currentError;
 
-  String? _injectedScript;
+  /// Indicates whether a page is currently in the process of loading.
+  ///
+  /// This flag is set to `true` when [onProgress] reports progress < 100,
+  /// and reset to `false` once the page is fully loaded ([onPageFinished] called).
+  ///
+  /// It is used to coordinate the timing of JavaScript injection or
+  /// signaling that the page has finished loading in a stable state.
+  bool _isPageLoading = false;
+
+  /// A debounce timer used to determine when the page has truly finished loading.
+  ///
+  /// This timer is started after [onPageFinished] is triggered, with a delay
+  /// (e.g., 500ms) to ensure no further progress updates follow. If no additional
+  /// loading activity occurs during this period, [onPageLoadedSuccess] is invoked.
+  ///
+  /// If [onProgress] reports further activity before the timer fires, the timer is cancelled.
+  /// This prevents race conditions where the DOM might not be ready for JavaScript injection.
+  Timer? _finalLoadTimer;
+
+  /// Debounce duration after page finishes loading.
+  /// Used to delay success callback to ensure loading is truly complete.
+  static const Duration _finalLoadDebounceDuration = Duration(milliseconds: 500);
 
   Uri _composeEffectiveInitialUrl() {
     if (!widget.addLocaleNameToQueryParameters) {
@@ -80,11 +99,8 @@ class _WebViewScaffoldState extends State<WebViewScaffold> {
   void initState() {
     super.initState();
 
-    _webViewController = WebViewController();
+    _webViewController = widget.webViewController ?? WebViewController();
     () async {
-      // Retrieve and store the initial injected script, if provided, for use after the page loads
-      final injectedScript = await widget.injectedScriptBuilder?.call();
-
       if (!kIsWeb) {
         await Future.wait([
           _webViewController.setUserAgent(widget.userAgent),
@@ -96,25 +112,45 @@ class _WebViewScaffoldState extends State<WebViewScaffold> {
             NavigationDelegate(
               onPageFinished: (url) {
                 if (_currentError == null) {
-                  _latestError = null; // Reset the error only if the page loaded successfully
+                  // Reset the error only if the page loaded successfully
+                  _latestError = null;
+                } else {
+                  _logger.warning('Page finished with error: $_currentError');
+                  widget.onPageLoadedFailed?.call(_currentError!);
                 }
+
                 setState(() {
-                  _currentError = null; // Always reset the current error after page finishes loading
+                  // Always reset the current error after page finishes loading
+                  _currentError = null;
                 });
 
-                // Inject the script after the page has loaded,onPageFinished can be called multiple times so need clear the injected script for correct injection
-                _injectedScript = null;
+                _isPageLoading = false;
 
-                // Inject the script if available
-                unawaited(_injectScriptIfAvailable(injectedScript));
+                _finalLoadTimer?.cancel();
+                _finalLoadTimer = Timer(_finalLoadDebounceDuration, () {
+                  if (!_isPageLoading) {
+                    widget.onPageLoadedSuccess?.call();
+                  } else {
+                    _logger.fine('Skipped injection, page loading resumed');
+                  }
+                });
               },
               onProgress: (progress) {
+                _isPageLoading = progress < 100;
                 _progressStreamController.add(progress);
+
+                if (_isPageLoading) {
+                  _finalLoadTimer?.cancel();
+                }
               },
               onWebResourceError: (error) {
+                _logger.warning('WebView error: $error');
+
                 setState(() {
-                  _currentError = error; // Capture the current error
-                  _latestError = error; // Store the error for future reference or display
+                  // Capture the current error
+                  _currentError = error;
+                  // Store the error for future reference or display
+                  _latestError = error;
                 });
               },
             ),
@@ -152,13 +188,6 @@ class _WebViewScaffoldState extends State<WebViewScaffold> {
       _effectiveInitialUrlCache = effectiveInitialUrl;
       _webViewController.loadRequest(effectiveInitialUrl);
     }
-
-    // Rebuild case: check if a new script is available from the builder,
-    // and inject it into the WebView if it differs from the last injected one.
-    () async {
-      final injectedScript = await widget.injectedScriptBuilder?.call();
-      unawaited(_injectScriptIfAvailable(injectedScript));
-    }();
   }
 
   @override
@@ -167,6 +196,8 @@ class _WebViewScaffoldState extends State<WebViewScaffold> {
       if (!kIsWeb) {
         await _webViewController.setNavigationDelegate(NavigationDelegate());
       }
+
+      _finalLoadTimer?.cancel();
       await _webViewController.loadBlank();
       await _progressStreamController.close();
     }();
@@ -212,20 +243,5 @@ class _WebViewScaffoldState extends State<WebViewScaffold> {
         },
       ),
     );
-  }
-
-  // TODO: consider encrypting the injected script to protect sensitive data
-  Future<void> _injectScriptIfAvailable(String? script) async {
-    if (script != null && script.trim().isNotEmpty && script != _injectedScript) {
-      try {
-        await _webViewController.runJavaScript(script);
-        _injectedScript = script;
-        _logger.finest('injected script: $script');
-      } catch (e, st) {
-        _logger.severe('failed to inject script: $e\n$st');
-      }
-    } else {
-      _logger.finest('script unchanged or empty, skipping injection');
-    }
   }
 }
