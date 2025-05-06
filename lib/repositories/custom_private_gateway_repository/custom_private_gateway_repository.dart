@@ -5,8 +5,8 @@ import 'package:logging/logging.dart';
 import 'package:webtrit_api/webtrit_api.dart' as api;
 
 import 'package:webtrit_phone/data/data.dart';
+import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/mappers/api/self_config_mapper.dart';
-import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/models/self_config.dart';
 
 final _logger = Logger('SelfConfigRepository');
@@ -69,7 +69,7 @@ class CustomPrivateGatewayRepository with SelfConfigApiMapper {
         final externalPageToken = externalPageTokenFromApi(newToken);
 
         // Store the latest external page access token received from the server in secure storage
-        await _secureStorage.writeExternalPageTokenExt(externalPageToken);
+        await _secureStorage.writeExternalPageToken(externalPageToken);
       } on api.EndpointNotSupportedException catch (_) {
         // Endpoint is not supported, stop fetching the token
         _isUnsupportedExternalPageTokenEndpoint = true;
@@ -87,7 +87,7 @@ class CustomPrivateGatewayRepository with SelfConfigApiMapper {
   }
 
   Future<bool> isExternalPageTokenAvailable() async {
-    final token = await _secureStorage.readExternalPageTokenExt();
+    final token = _secureStorage.readExternalPageToken();
     return token != null && token.isValid;
   }
 
@@ -97,7 +97,7 @@ class CustomPrivateGatewayRepository with SelfConfigApiMapper {
 
     // Read the last saved external page token from secure storage.
     // If the token is missing or expired/invalid, skip scheduling.
-    final token = await _secureStorage.readExternalPageTokenExt();
+    final token = _secureStorage.readExternalPageToken();
     if (token == null || !token.isValid) return;
 
     _refreshTimer?.cancel();
@@ -115,26 +115,5 @@ class CustomPrivateGatewayRepository with SelfConfigApiMapper {
   void dispose() {
     _refreshTimer?.cancel();
     _isFetchingExternalPageToken = false;
-  }
-}
-
-extension SecureStorageExtension on SecureStorage {
-  Future<void> writeExternalPageTokenExt(ExternalPageToken token) async {
-    await writeExternalPageAccessToken(token.accessToken);
-    await writeExternalPageRefreshToken(token.refreshToken);
-    await writeExternalPageTokenExpires(token.expiration.toIso8601String());
-  }
-
-  Future<ExternalPageToken?> readExternalPageTokenExt() async {
-    final accessToken = readExternalPageAccessToken();
-    final refreshToken = readExternalPageRefreshToken();
-    final expires = readExternalPageTokenExpires();
-
-    final expiresAt = DateTime.tryParse(expires ?? '');
-
-    if (accessToken != null && refreshToken != null && expiresAt != null) {
-      return ExternalPageToken(accessToken, refreshToken, expiresAt);
-    }
-    return null;
   }
 }
