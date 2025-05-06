@@ -59,8 +59,28 @@ class _WebViewScaffoldState extends State<WebViewScaffold> {
   WebResourceError? _latestError;
   WebResourceError? _currentError;
 
+  /// Indicates whether a page is currently in the process of loading.
+  ///
+  /// This flag is set to `true` when [onProgress] reports progress < 100,
+  /// and reset to `false` once the page is fully loaded ([onPageFinished] called).
+  ///
+  /// It is used to coordinate the timing of JavaScript injection or
+  /// signaling that the page has finished loading in a stable state.
   bool _isPageLoading = false;
+
+  /// A debounce timer used to determine when the page has truly finished loading.
+  ///
+  /// This timer is started after [onPageFinished] is triggered, with a delay
+  /// (e.g., 500ms) to ensure no further progress updates follow. If no additional
+  /// loading activity occurs during this period, [onPageLoadedSuccess] is invoked.
+  ///
+  /// If [onProgress] reports further activity before the timer fires, the timer is cancelled.
+  /// This prevents race conditions where the DOM might not be ready for JavaScript injection.
   Timer? _finalLoadTimer;
+
+  /// Debounce duration after page finishes loading.
+  /// Used to delay success callback to ensure loading is truly complete.
+  static const Duration _finalLoadDebounceDuration = Duration(milliseconds: 500);
 
   Uri _composeEffectiveInitialUrl() {
     if (!widget.addLocaleNameToQueryParameters) {
@@ -92,21 +112,22 @@ class _WebViewScaffoldState extends State<WebViewScaffold> {
             NavigationDelegate(
               onPageFinished: (url) {
                 if (_currentError == null) {
-                  _latestError = null; // Reset the error only if the page loaded successfully
-                }else {
+                  // Reset the error only if the page loaded successfully
+                  _latestError = null;
+                } else {
                   _logger.warning('Page finished with error: $_currentError');
                   widget.onPageLoadedFailed?.call(_currentError!);
                 }
 
                 setState(() {
-                  _currentError = null; // Always reset the current error after page finishes loading
+                  // Always reset the current error after page finishes loading
+                  _currentError = null;
                 });
-
 
                 _isPageLoading = false;
 
                 _finalLoadTimer?.cancel();
-                _finalLoadTimer = Timer(const Duration(milliseconds: 500), () {
+                _finalLoadTimer = Timer(_finalLoadDebounceDuration, () {
                   if (!_isPageLoading) {
                     widget.onPageLoadedSuccess?.call();
                   } else {
@@ -126,8 +147,10 @@ class _WebViewScaffoldState extends State<WebViewScaffold> {
                 _logger.warning('WebView error: $error');
 
                 setState(() {
-                  _currentError = error; // Capture the current error
-                  _latestError = error; // Store the error for future reference or display
+                  // Capture the current error
+                  _currentError = error;
+                  // Store the error for future reference or display
+                  _latestError = error;
                 });
               },
             ),
