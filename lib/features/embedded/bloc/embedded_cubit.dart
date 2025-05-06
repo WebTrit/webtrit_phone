@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:logging/logging.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -26,6 +27,8 @@ class EmbeddedCubit extends Cubit<EmbeddedState> {
     _init();
   }
 
+  StreamSubscription<List<ConnectivityResult>>? _connectivitySub;
+
   // May be null if the embedded page is launched outside the main app routes.
   final CustomPrivateGatewayRepository? _customPrivateGatewayRepository;
   final EmbeddedPayloadBuilder embeddedPayloadBuilder;
@@ -36,11 +39,34 @@ class EmbeddedCubit extends Cubit<EmbeddedState> {
       payload.contains(EmbeddedPayloadData.externalPageToken) && _customPrivateGatewayRepository != null;
 
   Future<void> _init() async {
+    _connectivitySub = Connectivity().onConnectivityChanged.listen(_handleConnectivity);
+    await _loadPayload();
+  }
+
+  Future<void> _loadPayload() async {
     if (isExternalPageTokenRequired) {
       await _tryFetchExternalPageToken(_customPrivateGatewayRepository!);
     }
     // Fetches the self-config and builds the payload.
     _updatePayload();
+  }
+
+  Future<void> _handleConnectivity(List<ConnectivityResult> result) async {
+    // Check if the connectivity result is not empty and not none
+    if (result.first == ConnectivityResult.none) return;
+
+    // if payload is collected and page loaded successfully, skip connectivity check
+    if (state.isReadyToInjectedScript) return;
+
+    // If page not loaded yet or error present try to reload
+    if (!state.webViewReady) {
+      emit(state.copyWith(intent: EmbeddedIntents.reloadWebView));
+      emit(state.copyWith(intent: null));
+    }
+
+    if (!state.payloadReady) {
+      _loadPayload();
+    }
   }
 
   Future<void> _tryFetchExternalPageToken(CustomPrivateGatewayRepository customPrivateGatewayRepository) async {
@@ -68,5 +94,11 @@ class EmbeddedCubit extends Cubit<EmbeddedState> {
   void onPageLoadedFailed(WebResourceError error) {
     _logger.warning('Page loaded with error');
     emit(state.copyWith(webViewReady: false, webResourceError: error));
+  }
+
+  @override
+  Future<Function> close() async {
+    _connectivitySub?.cancel();
+    return super.close;
   }
 }

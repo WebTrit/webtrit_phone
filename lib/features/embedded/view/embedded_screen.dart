@@ -57,6 +57,7 @@ class _EmbeddedScreenState extends State<EmbeddedScreen> {
     _logger.info('onBlocStateChanged: $state');
 
     if (state.isReadyToInjectedScript) _webViewController.runJavaScript(_buildInjectedScript(state.payload));
+    if (state.isReloadWebView) _webViewController.reload();
   }
 
   String _buildInjectedScript(Map<String, dynamic> data) {

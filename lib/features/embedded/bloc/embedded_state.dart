@@ -1,5 +1,9 @@
 part of 'embedded_cubit.dart';
 
+enum EmbeddedIntents {
+  reloadWebView,
+}
+
 @freezed
 class EmbeddedState with _$EmbeddedState {
   const EmbeddedState._();
@@ -9,7 +13,10 @@ class EmbeddedState with _$EmbeddedState {
     @Default(false) bool payloadReady,
     @Default(false) bool webViewReady,
     WebResourceError? webResourceError,
+    EmbeddedIntents? intent,
   }) = _Initial;
 
   bool get isReadyToInjectedScript => payloadReady && webViewReady;
+
+  bool get isReloadWebView => intent == EmbeddedIntents.reloadWebView;
 }
