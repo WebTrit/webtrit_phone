@@ -18,6 +18,8 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$EmbeddedState {
   EmbeddedStateStatus get status => throw _privateConstructorUsedError;
   Map<String, dynamic> get payload => throw _privateConstructorUsedError;
+  bool get payloadReady => throw _privateConstructorUsedError;
+  bool get webViewReady => throw _privateConstructorUsedError;
 
   /// Create a copy of EmbeddedState
   /// with the given fields replaced by the non-null parameter values.
@@ -32,7 +34,11 @@ abstract class $EmbeddedStateCopyWith<$Res> {
           EmbeddedState value, $Res Function(EmbeddedState) then) =
       _$EmbeddedStateCopyWithImpl<$Res, EmbeddedState>;
   @useResult
-  $Res call({EmbeddedStateStatus status, Map<String, dynamic> payload});
+  $Res call(
+      {EmbeddedStateStatus status,
+      Map<String, dynamic> payload,
+      bool payloadReady,
+      bool webViewReady});
 }
 
 /// @nodoc
@@ -52,6 +58,8 @@ class _$EmbeddedStateCopyWithImpl<$Res, $Val extends EmbeddedState>
   $Res call({
     Object? status = null,
     Object? payload = null,
+    Object? payloadReady = null,
+    Object? webViewReady = null,
   }) {
     return _then(_value.copyWith(
       status: null == status
@@ -62,6 +70,14 @@ class _$EmbeddedStateCopyWithImpl<$Res, $Val extends EmbeddedState>
           ? _value.payload
           : payload // ignore: cast_nullable_to_non_nullable
               as Map<String, dynamic>,
+      payloadReady: null == payloadReady
+          ? _value.payloadReady
+          : payloadReady // ignore: cast_nullable_to_non_nullable
+              as bool,
+      webViewReady: null == webViewReady
+          ? _value.webViewReady
+          : webViewReady // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 }
@@ -74,7 +90,11 @@ abstract class _$$InitialImplCopyWith<$Res>
       __$$InitialImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({EmbeddedStateStatus status, Map<String, dynamic> payload});
+  $Res call(
+      {EmbeddedStateStatus status,
+      Map<String, dynamic> payload,
+      bool payloadReady,
+      bool webViewReady});
 }
 
 /// @nodoc
@@ -92,6 +112,8 @@ class __$$InitialImplCopyWithImpl<$Res>
   $Res call({
     Object? status = null,
     Object? payload = null,
+    Object? payloadReady = null,
+    Object? webViewReady = null,
   }) {
     return _then(_$InitialImpl(
       status: null == status
@@ -102,17 +124,28 @@ class __$$InitialImplCopyWithImpl<$Res>
           ? _value._payload
           : payload // ignore: cast_nullable_to_non_nullable
               as Map<String, dynamic>,
+      payloadReady: null == payloadReady
+          ? _value.payloadReady
+          : payloadReady // ignore: cast_nullable_to_non_nullable
+              as bool,
+      webViewReady: null == webViewReady
+          ? _value.webViewReady
+          : webViewReady // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
 
 /// @nodoc
 
-class _$InitialImpl implements _Initial {
+class _$InitialImpl extends _Initial {
   const _$InitialImpl(
       {this.status = EmbeddedStateStatus.initial,
-      final Map<String, dynamic> payload = const {}})
-      : _payload = payload;
+      final Map<String, dynamic> payload = const {},
+      this.payloadReady = false,
+      this.webViewReady = false})
+      : _payload = payload,
+        super._();
 
   @override
   @JsonKey()
@@ -127,8 +160,15 @@ class _$InitialImpl implements _Initial {
   }
 
   @override
+  @JsonKey()
+  final bool payloadReady;
+  @override
+  @JsonKey()
+  final bool webViewReady;
+
+  @override
   String toString() {
-    return 'EmbeddedState(status: $status, payload: $payload)';
+    return 'EmbeddedState(status: $status, payload: $payload, payloadReady: $payloadReady, webViewReady: $webViewReady)';
   }
 
   @override
@@ -137,12 +177,20 @@ class _$InitialImpl implements _Initial {
         (other.runtimeType == runtimeType &&
             other is _$InitialImpl &&
             (identical(other.status, status) || other.status == status) &&
-            const DeepCollectionEquality().equals(other._payload, _payload));
+            const DeepCollectionEquality().equals(other._payload, _payload) &&
+            (identical(other.payloadReady, payloadReady) ||
+                other.payloadReady == payloadReady) &&
+            (identical(other.webViewReady, webViewReady) ||
+                other.webViewReady == webViewReady));
   }
 
   @override
   int get hashCode => Object.hash(
-      runtimeType, status, const DeepCollectionEquality().hash(_payload));
+      runtimeType,
+      status,
+      const DeepCollectionEquality().hash(_payload),
+      payloadReady,
+      webViewReady);
 
   /// Create a copy of EmbeddedState
   /// with the given fields replaced by the non-null parameter values.
@@ -153,15 +201,22 @@ class _$InitialImpl implements _Initial {
       __$$InitialImplCopyWithImpl<_$InitialImpl>(this, _$identity);
 }
 
-abstract class _Initial implements EmbeddedState {
+abstract class _Initial extends EmbeddedState {
   const factory _Initial(
       {final EmbeddedStateStatus status,
-      final Map<String, dynamic> payload}) = _$InitialImpl;
+      final Map<String, dynamic> payload,
+      final bool payloadReady,
+      final bool webViewReady}) = _$InitialImpl;
+  const _Initial._() : super._();
 
   @override
   EmbeddedStateStatus get status;
   @override
   Map<String, dynamic> get payload;
+  @override
+  bool get payloadReady;
+  @override
+  bool get webViewReady;
 
   /// Create a copy of EmbeddedState
   /// with the given fields replaced by the non-null parameter values.
