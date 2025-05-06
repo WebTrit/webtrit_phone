@@ -29,6 +29,7 @@ class WebViewScaffold extends StatefulWidget {
     required this.userAgent,
     this.injectedScriptBuilder,
     this.webViewController,
+    this.onPageLoadedSuccess,
   });
 
   final Widget? title;
@@ -40,6 +41,8 @@ class WebViewScaffold extends StatefulWidget {
   final TransitionBuilder? builder;
   final String userAgent;
   final WebViewController? webViewController;
+
+  final void Function()? onPageLoadedSuccess;
 
   /// Optional builder that returns a JavaScript snippet to be injected into the WebView
   /// after the page has finished loading or when the widget is updated.
@@ -64,6 +67,9 @@ class _WebViewScaffoldState extends State<WebViewScaffold> {
   WebResourceError? _currentError;
 
   String? _injectedScript;
+
+  bool _isPageLoading = false;
+  Timer? _finalLoadTimer;
 
   Uri _composeEffectiveInitialUrl() {
     if (!widget.addLocaleNameToQueryParameters) {
@@ -107,11 +113,26 @@ class _WebViewScaffoldState extends State<WebViewScaffold> {
                 // Inject the script after the page has loaded,onPageFinished can be called multiple times so need clear the injected script for correct injection
                 _injectedScript = null;
 
-                // Inject the script if available
+                _isPageLoading = false;
+
+                _finalLoadTimer?.cancel();
+                _finalLoadTimer = Timer(const Duration(milliseconds: 500), () {
+                  if (!_isPageLoading) {
+                    widget.onPageLoadedSuccess?.call();
+                  } else {
+                    _logger.fine('Skipped injection, page loading resumed');
+                  }
+                });
+
                 unawaited(_injectScriptIfAvailable(injectedScript));
               },
               onProgress: (progress) {
+                _isPageLoading = progress < 100;
                 _progressStreamController.add(progress);
+
+                if (_isPageLoading) {
+                  _finalLoadTimer?.cancel();
+                }
               },
               onWebResourceError: (error) {
                 setState(() {
@@ -169,6 +190,8 @@ class _WebViewScaffoldState extends State<WebViewScaffold> {
       if (!kIsWeb) {
         await _webViewController.setNavigationDelegate(NavigationDelegate());
       }
+
+      _finalLoadTimer?.cancel();
       await _webViewController.loadBlank();
       await _progressStreamController.close();
     }();
