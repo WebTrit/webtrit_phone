@@ -6,6 +6,7 @@ import 'package:logging/logging.dart';
 
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 import '../utils/utils.dart';
 
@@ -63,5 +64,11 @@ class EmbeddedCubit extends Cubit<EmbeddedState> {
   void onPageLoadedSuccess() {
     _logger.info('Page loaded successfully');
     emit(state.copyWith(webViewReady: true));
+  }
+
+  /// Called when the page fails to load.
+  void onPageLoadedFailed(WebResourceError error) {
+    _logger.warning('Page loaded with error');
+    emit(state.copyWith(webViewReady: false, webResourceError: error));
   }
 }

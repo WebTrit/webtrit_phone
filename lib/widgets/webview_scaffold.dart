@@ -29,6 +29,7 @@ class WebViewScaffold extends StatefulWidget {
     required this.userAgent,
     this.webViewController,
     this.onPageLoadedSuccess,
+    this.onPageLoadedFailed,
   });
 
   final Widget? title;
@@ -42,6 +43,7 @@ class WebViewScaffold extends StatefulWidget {
   final WebViewController? webViewController;
 
   final void Function()? onPageLoadedSuccess;
+  final void Function(WebResourceError error)? onPageLoadedFailed;
 
   @override
   State<WebViewScaffold> createState() => _WebViewScaffoldState();
@@ -91,10 +93,15 @@ class _WebViewScaffoldState extends State<WebViewScaffold> {
               onPageFinished: (url) {
                 if (_currentError == null) {
                   _latestError = null; // Reset the error only if the page loaded successfully
+                }else {
+                  _logger.warning('Page finished with error: $_currentError');
+                  widget.onPageLoadedFailed?.call(_currentError!);
                 }
+
                 setState(() {
                   _currentError = null; // Always reset the current error after page finishes loading
                 });
+
 
                 _isPageLoading = false;
 
@@ -116,6 +123,8 @@ class _WebViewScaffoldState extends State<WebViewScaffold> {
                 }
               },
               onWebResourceError: (error) {
+                _logger.warning('WebView error: $error');
+
                 setState(() {
                   _currentError = error; // Capture the current error
                   _latestError = error; // Store the error for future reference or display

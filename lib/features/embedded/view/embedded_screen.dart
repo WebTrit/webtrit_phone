@@ -44,6 +44,7 @@ class _EmbeddedScreenState extends State<EmbeddedScreen> {
               showToolbar: false,
               userAgent: UserAgent.of(context),
               onPageLoadedSuccess: context.read<EmbeddedCubit>().onPageLoadedSuccess,
+              onPageLoadedFailed: context.read<EmbeddedCubit>().onPageLoadedFailed,
             )
           ],
         ),

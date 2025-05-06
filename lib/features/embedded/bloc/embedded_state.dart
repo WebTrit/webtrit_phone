@@ -17,6 +17,7 @@ class EmbeddedState with _$EmbeddedState {
     @Default({}) Map<String, dynamic> payload,
     @Default(false) bool payloadReady,
     @Default(false) bool webViewReady,
+    WebResourceError? webResourceError,
   }) = _Initial;
 
   bool get isReadyToInjectedScript => payloadReady && webViewReady;

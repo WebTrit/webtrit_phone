@@ -20,6 +20,7 @@ mixin _$EmbeddedState {
   Map<String, dynamic> get payload => throw _privateConstructorUsedError;
   bool get payloadReady => throw _privateConstructorUsedError;
   bool get webViewReady => throw _privateConstructorUsedError;
+  WebResourceError? get webResourceError => throw _privateConstructorUsedError;
 
   /// Create a copy of EmbeddedState
   /// with the given fields replaced by the non-null parameter values.
@@ -38,7 +39,8 @@ abstract class $EmbeddedStateCopyWith<$Res> {
       {EmbeddedStateStatus status,
       Map<String, dynamic> payload,
       bool payloadReady,
-      bool webViewReady});
+      bool webViewReady,
+      WebResourceError? webResourceError});
 }
 
 /// @nodoc
@@ -60,6 +62,7 @@ class _$EmbeddedStateCopyWithImpl<$Res, $Val extends EmbeddedState>
     Object? payload = null,
     Object? payloadReady = null,
     Object? webViewReady = null,
+    Object? webResourceError = freezed,
   }) {
     return _then(_value.copyWith(
       status: null == status
@@ -78,6 +81,10 @@ class _$EmbeddedStateCopyWithImpl<$Res, $Val extends EmbeddedState>
           ? _value.webViewReady
           : webViewReady // ignore: cast_nullable_to_non_nullable
               as bool,
+      webResourceError: freezed == webResourceError
+          ? _value.webResourceError
+          : webResourceError // ignore: cast_nullable_to_non_nullable
+              as WebResourceError?,
     ) as $Val);
   }
 }
@@ -94,7 +101,8 @@ abstract class _$$InitialImplCopyWith<$Res>
       {EmbeddedStateStatus status,
       Map<String, dynamic> payload,
       bool payloadReady,
-      bool webViewReady});
+      bool webViewReady,
+      WebResourceError? webResourceError});
 }
 
 /// @nodoc
@@ -114,6 +122,7 @@ class __$$InitialImplCopyWithImpl<$Res>
     Object? payload = null,
     Object? payloadReady = null,
     Object? webViewReady = null,
+    Object? webResourceError = freezed,
   }) {
     return _then(_$InitialImpl(
       status: null == status
@@ -132,6 +141,10 @@ class __$$InitialImplCopyWithImpl<$Res>
           ? _value.webViewReady
           : webViewReady // ignore: cast_nullable_to_non_nullable
               as bool,
+      webResourceError: freezed == webResourceError
+          ? _value.webResourceError
+          : webResourceError // ignore: cast_nullable_to_non_nullable
+              as WebResourceError?,
     ));
   }
 }
@@ -143,7 +156,8 @@ class _$InitialImpl extends _Initial {
       {this.status = EmbeddedStateStatus.initial,
       final Map<String, dynamic> payload = const {},
       this.payloadReady = false,
-      this.webViewReady = false})
+      this.webViewReady = false,
+      this.webResourceError})
       : _payload = payload,
         super._();
 
@@ -165,10 +179,12 @@ class _$InitialImpl extends _Initial {
   @override
   @JsonKey()
   final bool webViewReady;
+  @override
+  final WebResourceError? webResourceError;
 
   @override
   String toString() {
-    return 'EmbeddedState(status: $status, payload: $payload, payloadReady: $payloadReady, webViewReady: $webViewReady)';
+    return 'EmbeddedState(status: $status, payload: $payload, payloadReady: $payloadReady, webViewReady: $webViewReady, webResourceError: $webResourceError)';
   }
 
   @override
@@ -181,7 +197,9 @@ class _$InitialImpl extends _Initial {
             (identical(other.payloadReady, payloadReady) ||
                 other.payloadReady == payloadReady) &&
             (identical(other.webViewReady, webViewReady) ||
-                other.webViewReady == webViewReady));
+                other.webViewReady == webViewReady) &&
+            (identical(other.webResourceError, webResourceError) ||
+                other.webResourceError == webResourceError));
   }
 
   @override
@@ -190,7 +208,8 @@ class _$InitialImpl extends _Initial {
       status,
       const DeepCollectionEquality().hash(_payload),
       payloadReady,
-      webViewReady);
+      webViewReady,
+      webResourceError);
 
   /// Create a copy of EmbeddedState
   /// with the given fields replaced by the non-null parameter values.
@@ -206,7 +225,8 @@ abstract class _Initial extends EmbeddedState {
       {final EmbeddedStateStatus status,
       final Map<String, dynamic> payload,
       final bool payloadReady,
-      final bool webViewReady}) = _$InitialImpl;
+      final bool webViewReady,
+      final WebResourceError? webResourceError}) = _$InitialImpl;
   const _Initial._() : super._();
 
   @override
@@ -217,6 +237,8 @@ abstract class _Initial extends EmbeddedState {
   bool get payloadReady;
   @override
   bool get webViewReady;
+  @override
+  WebResourceError? get webResourceError;
 
   /// Create a copy of EmbeddedState
   /// with the given fields replaced by the non-null parameter values.
