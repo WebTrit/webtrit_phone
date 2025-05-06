@@ -36,8 +36,6 @@ class EmbeddedCubit extends Cubit<EmbeddedState> {
       payload.contains(EmbeddedPayloadData.externalPageToken) && _customPrivateGatewayRepository != null;
 
   Future<void> _init() async {
-    emit(state.copyWith(status: EmbeddedStateStatus.initial));
-
     if (isExternalPageTokenRequired) {
       await _tryFetchExternalPageToken(_customPrivateGatewayRepository!);
     }
