@@ -21,6 +21,6 @@ gcloud firebase test android run \
     --use-orchestrator \
     --app build/app/outputs/apk/debug/app-debug.apk \
     --test build/app/outputs/apk/androidTest/debug/app-debug-androidTest.apk \
-    --timeout 5m \
+    --timeout 10m \
     --record-video \
     --environment-variables clearPackageData=true

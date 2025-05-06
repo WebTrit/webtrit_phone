@@ -24,4 +24,4 @@ gcloud --quiet config set project $projectId
 gcloud firebase test ios run \
   --test "build/ios_integ/Build/Products/ios_tests.zip" \
   --device model=iphone13pro,version=16.6,locale=en_US,orientation=portrait \
-  --timeout 5m
+  --timeout 10m
