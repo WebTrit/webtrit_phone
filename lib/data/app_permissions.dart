@@ -96,7 +96,7 @@ class AppPermissions {
   /// on the current Android version or fails to open, it falls back to opening
   /// the general app settings screen instead. This is useful for permissions that
   /// are typically located outside the standard app settings.
-  Future<void> toSpecialPermissionAppSettings(CallkeepSpecialPermissions permission) async {
+  Future<void> toSpecialPermissionsSetting(CallkeepSpecialPermissions permission) async {
     final callkeepPermission = WebtritCallkeepPermissions();
 
     try {
