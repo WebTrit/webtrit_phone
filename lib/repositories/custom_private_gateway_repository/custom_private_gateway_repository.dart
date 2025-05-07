@@ -39,6 +39,8 @@ class CustomPrivateGatewayRepository with SelfConfigApiMapper {
   bool _isFetchingExternalPageToken = false;
   bool _isUnsupportedExternalPageTokenEndpoint = false;
 
+  bool get isSupportedExternalPageTokenEndpoint => !_isUnsupportedExternalPageTokenEndpoint;
+
   Future<SelfConfig> _getSelfConfigRemote() async {
     try {
       final response = await _webtritApiClient.getSelfConfig(_token);
@@ -58,7 +60,12 @@ class CustomPrivateGatewayRepository with SelfConfigApiMapper {
   }
 
   Future<void> fetchExternalPageToken() async {
-    if (!_isFetchingExternalPageToken || !_isUnsupportedExternalPageTokenEndpoint) {
+    if (_isUnsupportedExternalPageTokenEndpoint) {
+      _logger.warning('External page token endpoint is not supported. Skipping token fetch.');
+      return;
+    }
+
+    if (!_isFetchingExternalPageToken) {
       _isFetchingExternalPageToken = true;
 
       try {

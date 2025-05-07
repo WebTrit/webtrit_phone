@@ -10,6 +10,7 @@ import 'package:webtrit_phone/widgets/widgets.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 import '../bloc/embedded_cubit.dart';
+import '../widgets/embedded_request_error.dart';
 
 final _logger = Logger('EmbeddedScreen');
 
@@ -31,6 +32,8 @@ class EmbeddedScreen extends StatefulWidget {
 class _EmbeddedScreenState extends State<EmbeddedScreen> {
   final WebViewController _webViewController = WebViewController();
 
+  EmbeddedCubit get _bloc => context.read<EmbeddedCubit>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,8 +46,11 @@ class _EmbeddedScreenState extends State<EmbeddedScreen> {
               webViewController: _webViewController,
               showToolbar: false,
               userAgent: UserAgent.of(context),
-              onPageLoadedSuccess: context.read<EmbeddedCubit>().onPageLoadedSuccess,
-              onPageLoadedFailed: context.read<EmbeddedCubit>().onPageLoadedFailed,
+              onPageLoadedSuccess: _bloc.onPageLoadedSuccess,
+              onPageLoadedFailed: _bloc.onPageLoadedFailed,
+              errorBuilder: (context, error, controller) {
+                return EmbeddedRequestError(error: error, onPressed: () => _bloc.reload());
+              },
             )
           ],
         ),

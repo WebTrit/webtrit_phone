@@ -129,7 +129,11 @@ class _WebViewScaffoldState extends State<WebViewScaffold> {
                 _finalLoadTimer?.cancel();
                 _finalLoadTimer = Timer(_finalLoadDebounceDuration, () {
                   if (!_isPageLoading) {
-                    widget.onPageLoadedSuccess?.call();
+                    if (_latestError == null) {
+                      widget.onPageLoadedSuccess?.call();
+                    } else {
+                      _logger.warning('Skipped injection, page loading failed');
+                    }
                   } else {
                     _logger.fine('Skipped injection, page loading resumed');
                   }
