@@ -90,11 +90,23 @@ class AppPermissions {
   /// Opens the app settings page.
   Future<void> toAppSettings() => openAppSettings();
 
-  Future<void> toSpecialPermissionAppSettings(CallkeepSpecialPermissions? permission) {
-    if (permission == CallkeepSpecialPermissions.fullScreenIntent) {
-      return WebtritCallkeepPermissions().openFullScreenIntentSettings();
-    }
+  /// Attempts to open the settings screen for the given special permission.
+  ///
+  /// If the specific permission screen (e.g., full screen intent) is not supported
+  /// on the current Android version or fails to open, it falls back to opening
+  /// the general app settings screen instead. This is useful for permissions that
+  /// are typically located outside the standard app settings.
+  Future<void> toSpecialPermissionAppSettings(CallkeepSpecialPermissions permission) async {
+    final callkeepPermission = WebtritCallkeepPermissions();
 
-    return openAppSettings();
+    try {
+      if (permission == CallkeepSpecialPermissions.fullScreenIntent) {
+        await callkeepPermission.openFullScreenIntentSettings();
+      } else {
+        await callkeepPermission.openSettings();
+      }
+    } catch (e) {
+      await callkeepPermission.openSettings();
+    }
   }
 }
