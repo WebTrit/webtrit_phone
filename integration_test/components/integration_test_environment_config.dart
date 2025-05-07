@@ -29,9 +29,6 @@ class IntegrationTestEnvironmentConfig {
     const String.fromEnvironment(DEFAULT_LOGIN_METHOD__NAME),
   );
 
-  static const SIMPLE_CALL_DESTINATION__NAME = 'WEBTRIT_APP_TEST_SIMPLE_CALL_DESTINATION';
-  static const SIMPLE_CALL_DESTINATION = String.fromEnvironment(SIMPLE_CALL_DESTINATION__NAME);
-
   static const EXT_CONTACT_A__NAME = 'WEBTRIT_APP_TEST_EXT_CONTACT_A';
   static const EXT_CONTACT_A = String.fromEnvironment(EXT_CONTACT_A__NAME);
 
@@ -49,6 +46,15 @@ class IntegrationTestEnvironmentConfig {
 
   static const ACCOUNT_MAIN_NUMBER__NAME = 'WEBTRIT_APP_TEST_ACCOUNT_MAIN_NUMBER';
   static const ACCOUNT_MAIN_NUMBER = String.fromEnvironment(ACCOUNT_MAIN_NUMBER__NAME);
+
+  static const CALL_NUMBER_A__NAME = 'WEBTRIT_APP_TEST_CALL_NUMBER_A';
+  static const CALL_NUMBER_A = String.fromEnvironment(CALL_NUMBER_A__NAME);
+
+  static const CALL_NUMBER_B__NAME = 'WEBTRIT_APP_TEST_CALL_NUMBER_B';
+  static const CALL_NUMBER_B = String.fromEnvironment(CALL_NUMBER_B__NAME);
+
+  static const CROSS_CALL_SLEEP_SECONDS__NAME = 'WEBTRIT_APP_TEST_CROSS_CALL_SLEEP_SECONDS';
+  static const CROSS_CALL_SLEEP_SECONDS = int.fromEnvironment(CROSS_CALL_SLEEP_SECONDS__NAME, defaultValue: 10);
 }
 
 enum LoginMethod { email, otp, password }
