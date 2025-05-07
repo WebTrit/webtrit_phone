@@ -4,9 +4,8 @@ import 'package:webview_flutter/webview_flutter.dart';
 
 import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
-import 'package:webtrit_phone/theme/extension/extension.dart';
-
-import '../extension/extensions.dart';
+import 'package:webtrit_phone/theme/theme.dart';
+import 'package:webtrit_phone/extensions/extensions.dart';
 
 class EmbeddedRequestError extends StatelessWidget {
   const EmbeddedRequestError({

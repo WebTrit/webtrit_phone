@@ -10,7 +10,6 @@ import 'package:webtrit_phone/widgets/widgets.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 import '../bloc/embedded_cubit.dart';
-import '../widgets/embedded_request_error.dart';
 
 final _logger = Logger('EmbeddedScreen');
 

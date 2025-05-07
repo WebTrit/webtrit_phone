@@ -10,8 +10,7 @@ import 'package:webview_flutter/webview_flutter.dart';
 
 import 'package:webtrit_phone/widgets/webview_progress_indicator.dart';
 import 'package:webtrit_phone/features/features.dart';
-
-import '../widgets/embedded_request_error.dart';
+import 'package:webtrit_phone/widgets/widgets.dart';
 
 const _loginJavascriptChannelName = 'WebtritLoginChannel';
 

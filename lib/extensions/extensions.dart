@@ -22,4 +22,5 @@ export 'string.dart';
 export 'theme_mode.dart';
 export 'uri_extension.dart';
 export 'user_info.dart';
+export 'web_resource_error.dart';
 export 'web_view_controller.dart';
