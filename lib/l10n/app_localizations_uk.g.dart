@@ -1437,6 +1437,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get settings_ListViewTileTitle_mediaSettings => 'Параметри медіа';
 
   @override
+  String get settings_ListViewTileTitle_caller_id => 'Ідентифікатор абонента';
+
+  @override
   String get settings_ListViewTileTitle_help => 'Допомога';
 
   @override
@@ -1495,6 +1498,12 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get settings_network_incomingCallType_title => 'Тип вхідного дзвінка';
+
+  @override
+  String get settings_caller_id_show => 'Показати мій номер абонента';
+
+  @override
+  String get settings_caller_id_default => 'За замовчуванням';
 
   @override
   String get signalingResponseCode_ambiguousRequest => 'Ваш запит не може бути виконаний. Будь ласка, спробуйте ще раз.';

@@ -285,6 +285,10 @@ class AppRouter extends RootStackRouter {
                       path: 'media-settings',
                     ),
                     AutoRoute(
+                      page: CallerIDSettingsScreenPageRoute.page,
+                      path: 'call_id',
+                    ),
+                    AutoRoute(
                       page: SelfConfigScreenPageRoute.page,
                       path: 'self_config',
                     ),

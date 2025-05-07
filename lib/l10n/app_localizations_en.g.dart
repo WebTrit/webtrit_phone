@@ -1437,6 +1437,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings_ListViewTileTitle_mediaSettings => 'Media settings';
 
   @override
+  String get settings_ListViewTileTitle_caller_id => 'Caller ID';
+
+  @override
   String get settings_ListViewTileTitle_help => 'Help';
 
   @override
@@ -1495,6 +1498,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settings_network_incomingCallType_title => 'Incoming Call Type';
+
+  @override
+  String get settings_caller_id_show => 'Show my caller ID';
+
+  @override
+  String get settings_caller_id_default => 'Default';
 
   @override
   String get signalingResponseCode_ambiguousRequest => 'We couldn\'t understand your request.';
