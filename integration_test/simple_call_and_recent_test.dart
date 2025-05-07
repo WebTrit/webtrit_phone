@@ -18,7 +18,7 @@ import 'subsequences/pump_root_and_wait_until_visible.dart';
 
 main() {
   final defaultLoginMethod = IntegrationTestEnvironmentConfig.DEFAULT_LOGIN_METHOD;
-  const dialNumber = IntegrationTestEnvironmentConfig.SIMPLE_CALL_DESTINATION;
+  const callNumberA = IntegrationTestEnvironmentConfig.CALL_NUMBER_A;
 
   patrolTest(
     'Should make simple call and check recents function',
@@ -37,8 +37,8 @@ main() {
       await $(MainFlavor.keypad.toNavBarKey()).tap();
 
       // Enter the number to dial.
-      for (var i = 0; i < dialNumber.length; i++) {
-        final key = KeypadKey.numbers.firstWhere((element) => element.text == dialNumber[i]);
+      for (var i = 0; i < callNumberA.length; i++) {
+        final key = KeypadKey.numbers.firstWhere((element) => element.text == callNumberA[i]);
         await $(KeypadKeyButton).at(KeypadKey.numbers.indexOf(key)).tap();
       }
 
@@ -56,7 +56,7 @@ main() {
       // Check if the call is in the recents list.
       await $(MainFlavor.recents.toNavBarKey()).tap();
       await $.pumpAndTrySettle();
-      final recentNumbr = $(recentsTileKey).$(Row).$(dialNumber);
+      final recentNumbr = $(recentsTileKey).$(Row).$(callNumberA);
       expect(recentNumbr, findsOneWidget, reason: 'Should contain number in recents list');
       final recentIcon = $(recentsTileKey).$(Row).$(Icons.call_made);
       expect(recentIcon, findsOneWidget, reason: 'Should contain succesfull outgoing call icon');
