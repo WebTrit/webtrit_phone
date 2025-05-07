@@ -39,10 +39,17 @@ const actionPadStartKey = Key('actionPadStart');
 const actionPadVideoCallKey = Key('actionPadVideoCall');
 const actionPadBackspaceKey = Key('actionPadBackspace');
 
+const callActionsMuteKey = Key('callActionsMute');
+const callActionsVideoCallKey = Key('callActionsVideoCall');
+const callActionsSpeakerKey = Key('callActionsSpeaker');
+const callActionsHoldKey = Key('callActionsHold');
+const callActionsSwapKey = Key('callActionsSwap');
+const callActionsKeypadKey = Key('callActionsKeypad');
 const callActionsHangupKey = Key('callActionsHangup');
 const callActionsTransferMenuKey = Key('callActionsTransferMenu');
 const callActionsTransferMenuBlindInitKey = Key('callActionsTransferMenuBlindInit');
 const callActionsTransferMenuNumberKey = Key('callActionsTransferAttendedNumber');
+const callFrontCameraPreviewKey = Key('callFrontCameraPreview');
 
 const contactsExtContactTileKey = Key('contactsExtContactTile');
 const contactsLocalContactTileKey = Key('contactsLocalContactTile');

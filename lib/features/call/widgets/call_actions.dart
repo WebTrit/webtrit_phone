@@ -346,6 +346,7 @@ class _CallActionsState extends State<CallActions> {
                 ? context.l10n.call_CallActionsTooltip_unmute
                 : context.l10n.call_CallActionsTooltip_mute,
             child: TextButton(
+              key: callActionsMuteKey,
               onPressed: onMutedChanged == null ? null : () => onMutedChanged(!widget.mutedValue),
               style: widget.mutedValue ? style.mutedActive : style.muted,
               child: Icon(
@@ -355,6 +356,7 @@ class _CallActionsState extends State<CallActions> {
             ),
           ),
           Tooltip(
+            key: callActionsVideoCallKey,
             message: widget.cameraValue
                 ? context.l10n.call_CallActionsTooltip_disableCamera
                 : context.l10n.call_CallActionsTooltip_enableCamera,
@@ -368,6 +370,7 @@ class _CallActionsState extends State<CallActions> {
             ),
           ),
           Tooltip(
+            key: callActionsSpeakerKey,
             message: speakerValue == true
                 ? context.l10n.call_CallActionsTooltip_disableSpeaker
                 : context.l10n.call_CallActionsTooltip_enableSpeaker,
@@ -473,6 +476,7 @@ class _CallActionsState extends State<CallActions> {
             ),
           if (onSwapPressed == null)
             Tooltip(
+              key: callActionsHoldKey,
               message: widget.heldValue
                   ? context.l10n.call_CallActionsTooltip_unhold
                   : context.l10n.call_CallActionsTooltip_hold,
@@ -487,6 +491,7 @@ class _CallActionsState extends State<CallActions> {
             ),
           if (onSwapPressed != null)
             Tooltip(
+              key: callActionsSwapKey,
               message: context.l10n.call_CallActionsTooltip_swap,
               child: TextButton(
                 onPressed: onSwapPressed,
@@ -498,6 +503,7 @@ class _CallActionsState extends State<CallActions> {
               ),
             ),
           Tooltip(
+            key: callActionsKeypadKey,
             message: context.l10n.call_CallActionsTooltip_showKeypad,
             child: TextButton(
               onPressed: onKeyPressed == null || !_isOrientationPortrait
