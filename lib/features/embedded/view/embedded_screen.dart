@@ -31,6 +31,8 @@ class EmbeddedScreen extends StatefulWidget {
 class _EmbeddedScreenState extends State<EmbeddedScreen> {
   final WebViewController _webViewController = WebViewController();
 
+  EmbeddedCubit get _bloc => context.read<EmbeddedCubit>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,8 +45,11 @@ class _EmbeddedScreenState extends State<EmbeddedScreen> {
               webViewController: _webViewController,
               showToolbar: false,
               userAgent: UserAgent.of(context),
-              onPageLoadedSuccess: context.read<EmbeddedCubit>().onPageLoadedSuccess,
-              onPageLoadedFailed: context.read<EmbeddedCubit>().onPageLoadedFailed,
+              onPageLoadedSuccess: _bloc.onPageLoadedSuccess,
+              onPageLoadedFailed: _bloc.onPageLoadedFailed,
+              errorBuilder: (context, error, controller) {
+                return EmbeddedRequestError(error: error, onPressed: () => _bloc.reload());
+              },
             )
           ],
         ),
@@ -57,6 +62,7 @@ class _EmbeddedScreenState extends State<EmbeddedScreen> {
     _logger.info('onBlocStateChanged: $state');
 
     if (state.isReadyToInjectedScript) _webViewController.runJavaScript(_buildInjectedScript(state.payload));
+    if (state.isReloadWebView) _webViewController.reload();
   }
 
   String _buildInjectedScript(Map<String, dynamic> data) {

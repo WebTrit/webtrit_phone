@@ -20,6 +20,7 @@ mixin _$EmbeddedState {
   bool get payloadReady => throw _privateConstructorUsedError;
   bool get webViewReady => throw _privateConstructorUsedError;
   WebResourceError? get webResourceError => throw _privateConstructorUsedError;
+  EmbeddedIntents? get intent => throw _privateConstructorUsedError;
 
   /// Create a copy of EmbeddedState
   /// with the given fields replaced by the non-null parameter values.
@@ -38,7 +39,8 @@ abstract class $EmbeddedStateCopyWith<$Res> {
       {Map<String, dynamic> payload,
       bool payloadReady,
       bool webViewReady,
-      WebResourceError? webResourceError});
+      WebResourceError? webResourceError,
+      EmbeddedIntents? intent});
 }
 
 /// @nodoc
@@ -60,6 +62,7 @@ class _$EmbeddedStateCopyWithImpl<$Res, $Val extends EmbeddedState>
     Object? payloadReady = null,
     Object? webViewReady = null,
     Object? webResourceError = freezed,
+    Object? intent = freezed,
   }) {
     return _then(_value.copyWith(
       payload: null == payload
@@ -78,6 +81,10 @@ class _$EmbeddedStateCopyWithImpl<$Res, $Val extends EmbeddedState>
           ? _value.webResourceError
           : webResourceError // ignore: cast_nullable_to_non_nullable
               as WebResourceError?,
+      intent: freezed == intent
+          ? _value.intent
+          : intent // ignore: cast_nullable_to_non_nullable
+              as EmbeddedIntents?,
     ) as $Val);
   }
 }
@@ -94,7 +101,8 @@ abstract class _$$InitialImplCopyWith<$Res>
       {Map<String, dynamic> payload,
       bool payloadReady,
       bool webViewReady,
-      WebResourceError? webResourceError});
+      WebResourceError? webResourceError,
+      EmbeddedIntents? intent});
 }
 
 /// @nodoc
@@ -114,6 +122,7 @@ class __$$InitialImplCopyWithImpl<$Res>
     Object? payloadReady = null,
     Object? webViewReady = null,
     Object? webResourceError = freezed,
+    Object? intent = freezed,
   }) {
     return _then(_$InitialImpl(
       payload: null == payload
@@ -132,6 +141,10 @@ class __$$InitialImplCopyWithImpl<$Res>
           ? _value.webResourceError
           : webResourceError // ignore: cast_nullable_to_non_nullable
               as WebResourceError?,
+      intent: freezed == intent
+          ? _value.intent
+          : intent // ignore: cast_nullable_to_non_nullable
+              as EmbeddedIntents?,
     ));
   }
 }
@@ -143,7 +156,8 @@ class _$InitialImpl extends _Initial {
       {final Map<String, dynamic> payload = const {},
       this.payloadReady = false,
       this.webViewReady = false,
-      this.webResourceError})
+      this.webResourceError,
+      this.intent})
       : _payload = payload,
         super._();
 
@@ -164,10 +178,12 @@ class _$InitialImpl extends _Initial {
   final bool webViewReady;
   @override
   final WebResourceError? webResourceError;
+  @override
+  final EmbeddedIntents? intent;
 
   @override
   String toString() {
-    return 'EmbeddedState(payload: $payload, payloadReady: $payloadReady, webViewReady: $webViewReady, webResourceError: $webResourceError)';
+    return 'EmbeddedState(payload: $payload, payloadReady: $payloadReady, webViewReady: $webViewReady, webResourceError: $webResourceError, intent: $intent)';
   }
 
   @override
@@ -181,7 +197,8 @@ class _$InitialImpl extends _Initial {
             (identical(other.webViewReady, webViewReady) ||
                 other.webViewReady == webViewReady) &&
             (identical(other.webResourceError, webResourceError) ||
-                other.webResourceError == webResourceError));
+                other.webResourceError == webResourceError) &&
+            (identical(other.intent, intent) || other.intent == intent));
   }
 
   @override
@@ -190,7 +207,8 @@ class _$InitialImpl extends _Initial {
       const DeepCollectionEquality().hash(_payload),
       payloadReady,
       webViewReady,
-      webResourceError);
+      webResourceError,
+      intent);
 
   /// Create a copy of EmbeddedState
   /// with the given fields replaced by the non-null parameter values.
@@ -206,7 +224,8 @@ abstract class _Initial extends EmbeddedState {
       {final Map<String, dynamic> payload,
       final bool payloadReady,
       final bool webViewReady,
-      final WebResourceError? webResourceError}) = _$InitialImpl;
+      final WebResourceError? webResourceError,
+      final EmbeddedIntents? intent}) = _$InitialImpl;
   const _Initial._() : super._();
 
   @override
@@ -217,6 +236,8 @@ abstract class _Initial extends EmbeddedState {
   bool get webViewReady;
   @override
   WebResourceError? get webResourceError;
+  @override
+  EmbeddedIntents? get intent;
 
   /// Create a copy of EmbeddedState
   /// with the given fields replaced by the non-null parameter values.
