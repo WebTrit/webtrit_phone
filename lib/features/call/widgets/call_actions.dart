@@ -21,7 +21,7 @@ class CallActions extends StatefulWidget {
     required this.wasHungUp,
     required this.cameraValue,
     required this.inviteToAttendedTransfer,
-    required this.onCameraChanged,
+    this.onCameraChanged,
     required this.mutedValue,
     this.onMutedChanged,
     this.speakerValue,
@@ -50,7 +50,7 @@ class CallActions extends StatefulWidget {
   final bool wasHungUp;
   final bool cameraValue;
   final bool inviteToAttendedTransfer;
-  final ValueChanged<bool> onCameraChanged;
+  final ValueChanged<bool>? onCameraChanged;
   final bool mutedValue;
   final ValueChanged<bool>? onMutedChanged;
   final bool? speakerValue;

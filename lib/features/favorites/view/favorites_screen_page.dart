@@ -19,7 +19,7 @@ class FavoritesScreenPage extends StatelessWidget {
 
     final widget = FavoritesScreen(
       title: const Text(EnvironmentConfig.APP_NAME),
-      videoCallEnable: featureAccess.callFeature.videoEnable,
+      videoCallEnable: featureAccess.callFeature.callConfig.isVideoCallEnabled,
     );
     final provider = BlocProvider(
       create: (context) => FavoritesBloc(

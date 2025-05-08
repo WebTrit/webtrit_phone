@@ -21,8 +21,8 @@ class ContactScreenPage extends StatelessWidget {
 
     final widget = ContactScreen(
       favoriteVisible: featureAccess.bottomMenuFeature.isTabEnabled(MainFlavor.favorites),
-      transferVisible: featureAccess.callFeature.transfer.enableBlindTransfer,
-      videoVisible: featureAccess.callFeature.videoEnable,
+      transferVisible: featureAccess.callFeature.callConfig.isBlindTransferEnabled,
+      videoVisible: featureAccess.callFeature.callConfig.isVideoCallEnabled,
       chatsEnabled: featureAccess.messagingFeature.chatsPresent,
     );
     final provider = BlocProvider(
