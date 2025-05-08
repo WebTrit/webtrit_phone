@@ -346,7 +346,7 @@ class FeatureAccess {
     final embeddedResources = appConfig.embeddedResources.map((resource) {
       return EmbeddedData(
         id: resource.id,
-        uri: Uri.parse(resource.uri ?? ''),
+        uri: Uri.parse(resource.uri),
         payload: resource.payload.map((it) => EmbeddedPayloadData.values.byName(it)).toList(),
       );
     }).toList();
