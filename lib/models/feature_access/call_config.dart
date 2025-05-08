@@ -1,3 +1,10 @@
+/// UI-level configuration for call features.
+///
+/// Controls visibility of call-related UI elements (e.g., video toggle, transfer buttons).
+/// Does **not** enforce restrictions at signaling or SDP level.
+///
+/// Note: Incoming video calls or feature negotiation (e.g., via SDP) are not affected.
+/// To apply restrictions on protocol level, integrate with `SDPMunger` or similar logic.
 class CallConfig {
   const CallConfig({
     this.isVideoCallEnabled = true,

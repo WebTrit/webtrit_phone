@@ -192,12 +192,14 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                                       wasHungUp: activeCall.wasHungUp,
                                       cameraValue: activeCall.cameraEnabled,
                                       inviteToAttendedTransfer: activeTransfer is InviteToAttendedTransfer,
-                                      onCameraChanged: (bool value) {
-                                        context
-                                            .read<CallBloc>()
-                                            .add(CallControlEvent.cameraEnabled(activeCall.callId, value));
-                                        setState(() {});
-                                      },
+                                      onCameraChanged: widget.callConfig.isVideoCallEnabled
+                                          ? (bool value) {
+                                              context
+                                                  .read<CallBloc>()
+                                                  .add(CallControlEvent.cameraEnabled(activeCall.callId, value));
+                                              setState(() {});
+                                            }
+                                          : null,
                                       mutedValue: activeCall.muted,
                                       onMutedChanged: (bool value) {
                                         context
