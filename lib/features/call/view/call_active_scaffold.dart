@@ -14,7 +14,7 @@ class CallActiveScaffold extends StatefulWidget {
     required this.speaker,
     required this.callStatus,
     required this.activeCalls,
-    required this.transferConfig,
+    required this.callConfig,
     required this.localePlaceholderBuilder,
     required this.remotePlaceholderBuilder,
   });
@@ -22,7 +22,7 @@ class CallActiveScaffold extends StatefulWidget {
   final bool? speaker;
   final CallStatus callStatus;
   final List<ActiveCall> activeCalls;
-  final CallConfig transferConfig;
+  final CallConfig callConfig;
   final WidgetBuilder? localePlaceholderBuilder;
   final WidgetBuilder? remotePlaceholderBuilder;
 
@@ -213,7 +213,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                                         setState(() {});
                                       },
                                       transferableCalls: heldCalls,
-                                      onBlindTransferInitiated: widget.transferConfig.isBlindTransferEnabled
+                                      onBlindTransferInitiated: widget.callConfig.isBlindTransferEnabled
                                           ? (!activeCall.wasAccepted || activeTransfer != null
                                               ? null
                                               : () {
@@ -223,7 +223,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                                                 })
                                           : null,
                                       // TODO (Serdun): Simplify complex condition in the widget tree.
-                                      onAttendedTransferInitiated: widget.transferConfig.isAttendedTransferEnabled
+                                      onAttendedTransferInitiated: widget.callConfig.isAttendedTransferEnabled
                                           ? (!activeCall.wasAccepted || activeTransfer != null
                                               ? null
                                               : () {
@@ -232,7 +232,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                                                 })
                                           : null,
                                       // TODO (Serdun): Simplify complex condition in the widget tree.
-                                      onAttendedTransferSubmitted: widget.transferConfig.isAttendedTransferEnabled
+                                      onAttendedTransferSubmitted: widget.callConfig.isAttendedTransferEnabled
                                           ? (!activeCall.wasAccepted || activeTransfer != null
                                               ? null
                                               : (ActiveCall referorCall) {
