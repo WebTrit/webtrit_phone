@@ -17,13 +17,14 @@ class CallScreen extends StatefulWidget {
     super.key,
     this.localePlaceholderBuilder,
     this.remotePlaceholderBuilder,
-    this.transferConfig = const TransferConfig(
+    this.transferConfig = const CallConfig(
+      videoEnable: true,
       enableBlindTransfer: true,
       enableAttendedTransfer: true,
     ),
   });
 
-  final TransferConfig transferConfig;
+  final CallConfig transferConfig;
 
   final WidgetBuilder? localePlaceholderBuilder;
   final WidgetBuilder? remotePlaceholderBuilder;

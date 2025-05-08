@@ -22,7 +22,7 @@ class CallActiveScaffold extends StatefulWidget {
   final bool? speaker;
   final CallStatus callStatus;
   final List<ActiveCall> activeCalls;
-  final TransferConfig transferConfig;
+  final CallConfig transferConfig;
   final WidgetBuilder? localePlaceholderBuilder;
   final WidgetBuilder? remotePlaceholderBuilder;
 

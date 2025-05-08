@@ -286,8 +286,8 @@ class FeatureAccess {
     final peerConnectionConfig = appConfig.callConfig.peerConnection;
 
     return CallFeature(
-      videoEnable: callConfig.videoEnabled,
-      transfer: TransferConfig(
+      callConfig: CallConfig(
+        videoEnable: callConfig.videoEnabled,
         enableBlindTransfer: transferConfig.enableBlindTransfer,
         enableAttendedTransfer: transferConfig.enableAttendedTransfer,
       ),
@@ -439,14 +439,12 @@ class SettingsFeature {
 }
 
 class CallFeature {
-  final bool videoEnable;
-  final TransferConfig transfer;
+  final CallConfig callConfig;
   final EncodingConfig encoding;
   final PeerConnectionSettings peerConnection;
 
   CallFeature({
-    required this.videoEnable,
-    required this.transfer,
+    required this.callConfig,
     required this.encoding,
     required this.peerConnection,
   });
