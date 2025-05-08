@@ -213,7 +213,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                                         setState(() {});
                                       },
                                       transferableCalls: heldCalls,
-                                      onBlindTransferInitiated: widget.transferConfig.enableBlindTransfer
+                                      onBlindTransferInitiated: widget.transferConfig.isBlindTransferEnabled
                                           ? (!activeCall.wasAccepted || activeTransfer != null
                                               ? null
                                               : () {
@@ -223,7 +223,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                                                 })
                                           : null,
                                       // TODO (Serdun): Simplify complex condition in the widget tree.
-                                      onAttendedTransferInitiated: widget.transferConfig.enableAttendedTransfer
+                                      onAttendedTransferInitiated: widget.transferConfig.isAttendedTransferEnabled
                                           ? (!activeCall.wasAccepted || activeTransfer != null
                                               ? null
                                               : () {
@@ -232,7 +232,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                                                 })
                                           : null,
                                       // TODO (Serdun): Simplify complex condition in the widget tree.
-                                      onAttendedTransferSubmitted: widget.transferConfig.enableAttendedTransfer
+                                      onAttendedTransferSubmitted: widget.transferConfig.isAttendedTransferEnabled
                                           ? (!activeCall.wasAccepted || activeTransfer != null
                                               ? null
                                               : (ActiveCall referorCall) {

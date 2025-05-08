@@ -19,7 +19,7 @@ class RecentScreenPage extends StatelessWidget {
     final featureAccess = context.read<FeatureAccess>();
 
     final widget = RecentScreen(
-      videoVisible: featureAccess.callFeature.callConfig.videoEnable,
+      videoVisible: featureAccess.callFeature.callConfig.isVideoCallEnabled,
     );
     var provider = BlocProvider(
       create: (context) {

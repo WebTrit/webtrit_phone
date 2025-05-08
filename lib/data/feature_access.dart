@@ -287,9 +287,9 @@ class FeatureAccess {
 
     return CallFeature(
       callConfig: CallConfig(
-        videoEnable: callConfig.videoEnabled,
-        enableBlindTransfer: transferConfig.enableBlindTransfer,
-        enableAttendedTransfer: transferConfig.enableAttendedTransfer,
+        isVideoCallEnabled: callConfig.videoEnabled,
+        isBlindTransferEnabled: transferConfig.enableBlindTransfer,
+        isAttendedTransferEnabled: transferConfig.enableAttendedTransfer,
       ),
       encoding: EncodingConfig(
           bypassConfig: encodingConfig.bypassConfig,
