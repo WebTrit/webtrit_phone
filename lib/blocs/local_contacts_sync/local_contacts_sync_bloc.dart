@@ -20,6 +20,7 @@ class LocalContactsSyncBloc extends Bloc<LocalContactsSyncEvent, LocalContactsSy
   LocalContactsSyncBloc({
     required this.localContactsRepository,
     required this.appDatabase,
+    required this.appPreferences,
   }) : super(const LocalContactsSyncInitial()) {
     on<LocalContactsSyncStarted>(_onStarted, transformer: restartable());
     on<LocalContactsSyncRefreshed>(_onRefreshed, transformer: droppable());
@@ -30,6 +31,9 @@ class LocalContactsSyncBloc extends Bloc<LocalContactsSyncEvent, LocalContactsSy
 
   final LocalContactsRepository localContactsRepository;
   final AppDatabase appDatabase;
+  final AppPreferences appPreferences;
+
+  bool get _isContactsAgreementAccepted => appPreferences.getContactsAgreementStatus().isAccepted;
 
   @override
   Future<void> close() async {
@@ -52,6 +56,12 @@ class LocalContactsSyncBloc extends Bloc<LocalContactsSyncEvent, LocalContactsSy
 
   void _onStarted(LocalContactsSyncStarted event, Emitter<LocalContactsSyncState> emit) async {
     _logger.finer('_onStarted');
+
+    if (!_isContactsAgreementAccepted) {
+      _logger.warning('_onStarted contacts agreement not accepted');
+      emit(const LocalContactsSyncPermissionFailure());
+      return;
+    }
 
     if (!await localContactsRepository.requestPermission()) {
       _logger.warning('_onStarted permission failure');

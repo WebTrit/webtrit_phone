@@ -229,14 +229,13 @@ class _MainShellState extends State<MainShell> {
               final bloc = LocalContactsSyncBloc(
                 localContactsRepository: context.read<LocalContactsRepository>(),
                 appDatabase: context.read<AppDatabase>(),
+                appPreferences: context.read<AppPreferences>(),
               );
 
               // TODO(Serdun): Consider moving this logic to the LocalContactBloc and decomposing the LocalContactsRepository.
               // The repository currently has direct access to the Permissions plugin, which might violate separation of concerns.
               // If contacts agreement is accepted, initiate the LocalContactsSyncStarted event.
-              if (context.read<AppPreferences>().getContactsAgreementStatus().isAccepted) {
-                bloc.add(const LocalContactsSyncStarted());
-              }
+              bloc.add(const LocalContactsSyncStarted());
               return bloc;
             },
           ),
