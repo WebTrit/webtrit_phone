@@ -103,6 +103,7 @@ class PermissionsScreen extends StatelessWidget {
     await context.router.pushWidget(view, transitionBuilder: TransitionsBuilders.slideLeftWithFade);
 
     permissionCubit.dismissTip();
+    permissionCubit.requestPermissions();
   }
 
   Future _showSpecialPermissionTips(BuildContext context, CallkeepSpecialPermissions permission) async {
