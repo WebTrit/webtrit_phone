@@ -29,6 +29,9 @@ class PermissionsCubit extends Cubit<PermissionsState> {
   void requestPermissions() async {
     _logger.info('Requesting permissions');
 
+    //  Skp pending special permissions if user try to request permissions again
+    emit(state.copyWith(hasRequestedPermissions: false, pendingSpecialPermissions: []));
+
     try {
       // Prepare the exclude list based on the contacts agreement status
       final excludePermissions = _buildExcludedPermissions();
@@ -72,7 +75,7 @@ class PermissionsCubit extends Cubit<PermissionsState> {
       pendingSpecialPermissions: specialPermissions,
       manufacturerTip: tip,
     ));
-    }
+  }
 
   List<Permission> _buildExcludedPermissions() {
     final contactsAgreementStatus = appPreferences.getContactsAgreementStatus();
