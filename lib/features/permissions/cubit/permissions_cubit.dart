@@ -52,7 +52,7 @@ class PermissionsCubit extends Cubit<PermissionsState> {
       _handleSpecialPermission(manufacturer, specialPermissions);
     } catch (e, st) {
       _logger.severe('Permission request failed', e, st);
-      emit(state.copyWith(status: PermissionsStatus.failure, error: e));
+      emit(state.copyWith(error: e));
     }
   }
 
@@ -65,7 +65,7 @@ class PermissionsCubit extends Cubit<PermissionsState> {
     final currentTip = state.manufacturerTip;
 
     // Determine if we need to set or keep the manufacturer tip
-    final tip = currentTip ?? (hasManufacturer ? ManufacturerTip(manufacturer: manufacturer!) : null);
+    final tip = currentTip ?? (hasManufacturer ? ManufacturerTip(manufacturer: manufacturer) : null);
     final isTipShown = tip?.shown == true;
 
     // Determine if the process can be considered successful

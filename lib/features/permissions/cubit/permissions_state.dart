@@ -4,7 +4,6 @@ enum PermissionsStatus {
   initial,
   inProgress,
   success,
-  failure,
 }
 
 @freezed
