@@ -47,3 +47,10 @@ class LocalContactsSyncPermissionFailure extends LocalContactsSyncFailure {
 class LocalContactsSyncUpdateFailure extends LocalContactsSyncFailure {
   const LocalContactsSyncUpdateFailure();
 }
+
+class LocalContactsSyncNotAllowedException extends LocalContactsSyncFailure {
+  const LocalContactsSyncNotAllowedException();
+
+  @override
+  String toString() => 'Local contacts sync is not allowed due to settings or permissions';
+}

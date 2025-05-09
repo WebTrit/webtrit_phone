@@ -226,15 +226,25 @@ class _MainShellState extends State<MainShell> {
           BlocProvider<LocalContactsSyncBloc>(
             lazy: false,
             create: (context) {
+              final localContactsRepository = context.read<LocalContactsRepository>();
+              final appDatabase = context.read<AppDatabase>();
+              final appPreferences = context.read<AppPreferences>();
+              final featureAccess = context.read<FeatureAccess>();
+
+              final contactTab = featureAccess.bottomMenuFeature.getTabEnabled(MainFlavor.contacts)?.toContacts;
+              final contactSourceTypes = contactTab?.contactSourceTypes ?? [];
+
+              final contactsAgreementStatus = appPreferences.getContactsAgreementStatus();
+              final canSyncLocalContacts =
+                  contactSourceTypes.contains(ContactSourceType.local) && contactsAgreementStatus.isAccepted;
+
               final bloc = LocalContactsSyncBloc(
-                localContactsRepository: context.read<LocalContactsRepository>(),
-                appDatabase: context.read<AppDatabase>(),
-                appPreferences: context.read<AppPreferences>(),
+                localContactsRepository: localContactsRepository,
+                appDatabase: appDatabase,
+                appPreferences: appPreferences,
+                canSyncLocalContacts: canSyncLocalContacts,
               );
 
-              // TODO(Serdun): Consider moving this logic to the LocalContactBloc and decomposing the LocalContactsRepository.
-              // The repository currently has direct access to the Permissions plugin, which might violate separation of concerns.
-              // If contacts agreement is accepted, initiate the LocalContactsSyncStarted event.
               bloc.add(const LocalContactsSyncStarted());
               return bloc;
             },
