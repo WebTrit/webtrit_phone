@@ -30,13 +30,6 @@ class PermissionsScreen extends StatelessWidget {
       body: BlocConsumer<PermissionsCubit, PermissionsState>(
         listener: (context, state) {
           switch (state.status) {
-            case PermissionsStatus.permissionFullScreenIntentNeeded:
-              final permission = state.permission;
-              if (permission != null) {
-                _showSpecialPermissionTips(context, permission);
-              }
-              break;
-
             case PermissionsStatus.success:
               context.router.replaceAll([const MainShellRoute()]);
               break;
@@ -53,6 +46,12 @@ class PermissionsScreen extends StatelessWidget {
               if (state.isManufacturerTipNeeded) {
                 final manufacturer = state.manufacturerTip!.manufacturer;
                 _showManufacturerTips(context, manufacturer);
+                return;
+              }
+
+              if (state.isSpecialPermissionNeeded) {
+                _showSpecialPermissionTips(context, state.requiredSpecialPermissions.first);
+                return;
               }
               break;
           }

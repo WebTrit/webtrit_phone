@@ -3,7 +3,6 @@ part of 'permissions_cubit.dart';
 enum PermissionsStatus {
   initial,
   inProgress,
-  permissionFullScreenIntentNeeded,
   success,
   failure,
 }
@@ -14,7 +13,7 @@ class PermissionsState with _$PermissionsState {
 
   const factory PermissionsState({
     @Default(PermissionsStatus.initial) PermissionsStatus status,
-    CallkeepSpecialPermissions? permission,
+    @Default([]) List<CallkeepSpecialPermissions> requiredSpecialPermissions,
     ManufacturerTip? manufacturerTip,
     Object? error,
   }) = _PermissionsState;
@@ -23,8 +22,7 @@ class PermissionsState with _$PermissionsState {
 
   bool get isInProgress => status == PermissionsStatus.inProgress;
 
-  bool get isFullScreenPermissionNeeded =>
-      status == PermissionsStatus.permissionFullScreenIntentNeeded && permission != null;
+  bool get isSpecialPermissionNeeded => requiredSpecialPermissions.isNotEmpty;
 
   bool get isManufacturerTipNeeded => manufacturerTip != null && manufacturerTip!.shown == false;
 

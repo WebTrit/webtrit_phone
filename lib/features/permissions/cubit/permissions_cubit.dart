@@ -63,15 +63,9 @@ class PermissionsCubit extends Cubit<PermissionsState> {
     if (currentManufacturerTip?.shown == true && specialPermissions.isEmpty) {
       emit(state.copyWith(status: PermissionsStatus.success));
     } else if (manufacturer != null) {
-      emit(state.copyWith(
-        manufacturerTip: currentManufacturerTip ?? ManufacturerTip(manufacturer: manufacturer),
-      ));
-    } else if (specialPermissions.isNotEmpty) {
-      emit(state.copyWith(
-        status: PermissionsStatus.permissionFullScreenIntentNeeded,
-        permission: specialPermissions.first,
-      ));
+      emit(state.copyWith(manufacturerTip: currentManufacturerTip ?? ManufacturerTip(manufacturer: manufacturer)));
     }
+    emit(state.copyWith(requiredSpecialPermissions: specialPermissions));
   }
 
   List<Permission> _buildExcludedPermissions() {

@@ -17,7 +17,7 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$PermissionsState {
   PermissionsStatus get status => throw _privateConstructorUsedError;
-  CallkeepSpecialPermissions? get permission =>
+  List<CallkeepSpecialPermissions> get requiredSpecialPermissions =>
       throw _privateConstructorUsedError;
   ManufacturerTip? get manufacturerTip => throw _privateConstructorUsedError;
   Object? get error => throw _privateConstructorUsedError;
@@ -37,7 +37,7 @@ abstract class $PermissionsStateCopyWith<$Res> {
   @useResult
   $Res call(
       {PermissionsStatus status,
-      CallkeepSpecialPermissions? permission,
+      List<CallkeepSpecialPermissions> requiredSpecialPermissions,
       ManufacturerTip? manufacturerTip,
       Object? error});
 
@@ -60,7 +60,7 @@ class _$PermissionsStateCopyWithImpl<$Res, $Val extends PermissionsState>
   @override
   $Res call({
     Object? status = null,
-    Object? permission = freezed,
+    Object? requiredSpecialPermissions = null,
     Object? manufacturerTip = freezed,
     Object? error = freezed,
   }) {
@@ -69,10 +69,10 @@ class _$PermissionsStateCopyWithImpl<$Res, $Val extends PermissionsState>
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
               as PermissionsStatus,
-      permission: freezed == permission
-          ? _value.permission
-          : permission // ignore: cast_nullable_to_non_nullable
-              as CallkeepSpecialPermissions?,
+      requiredSpecialPermissions: null == requiredSpecialPermissions
+          ? _value.requiredSpecialPermissions
+          : requiredSpecialPermissions // ignore: cast_nullable_to_non_nullable
+              as List<CallkeepSpecialPermissions>,
       manufacturerTip: freezed == manufacturerTip
           ? _value.manufacturerTip
           : manufacturerTip // ignore: cast_nullable_to_non_nullable
@@ -106,7 +106,7 @@ abstract class _$$PermissionsStateImplCopyWith<$Res>
   @useResult
   $Res call(
       {PermissionsStatus status,
-      CallkeepSpecialPermissions? permission,
+      List<CallkeepSpecialPermissions> requiredSpecialPermissions,
       ManufacturerTip? manufacturerTip,
       Object? error});
 
@@ -128,7 +128,7 @@ class __$$PermissionsStateImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? status = null,
-    Object? permission = freezed,
+    Object? requiredSpecialPermissions = null,
     Object? manufacturerTip = freezed,
     Object? error = freezed,
   }) {
@@ -137,10 +137,10 @@ class __$$PermissionsStateImplCopyWithImpl<$Res>
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
               as PermissionsStatus,
-      permission: freezed == permission
-          ? _value.permission
-          : permission // ignore: cast_nullable_to_non_nullable
-              as CallkeepSpecialPermissions?,
+      requiredSpecialPermissions: null == requiredSpecialPermissions
+          ? _value._requiredSpecialPermissions
+          : requiredSpecialPermissions // ignore: cast_nullable_to_non_nullable
+              as List<CallkeepSpecialPermissions>,
       manufacturerTip: freezed == manufacturerTip
           ? _value.manufacturerTip
           : manufacturerTip // ignore: cast_nullable_to_non_nullable
@@ -155,16 +155,26 @@ class __$$PermissionsStateImplCopyWithImpl<$Res>
 class _$PermissionsStateImpl extends _PermissionsState {
   const _$PermissionsStateImpl(
       {this.status = PermissionsStatus.initial,
-      this.permission,
+      final List<CallkeepSpecialPermissions> requiredSpecialPermissions =
+          const [],
       this.manufacturerTip,
       this.error})
-      : super._();
+      : _requiredSpecialPermissions = requiredSpecialPermissions,
+        super._();
 
   @override
   @JsonKey()
   final PermissionsStatus status;
+  final List<CallkeepSpecialPermissions> _requiredSpecialPermissions;
   @override
-  final CallkeepSpecialPermissions? permission;
+  @JsonKey()
+  List<CallkeepSpecialPermissions> get requiredSpecialPermissions {
+    if (_requiredSpecialPermissions is EqualUnmodifiableListView)
+      return _requiredSpecialPermissions;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_requiredSpecialPermissions);
+  }
+
   @override
   final ManufacturerTip? manufacturerTip;
   @override
@@ -172,7 +182,7 @@ class _$PermissionsStateImpl extends _PermissionsState {
 
   @override
   String toString() {
-    return 'PermissionsState(status: $status, permission: $permission, manufacturerTip: $manufacturerTip, error: $error)';
+    return 'PermissionsState(status: $status, requiredSpecialPermissions: $requiredSpecialPermissions, manufacturerTip: $manufacturerTip, error: $error)';
   }
 
   @override
@@ -181,16 +191,21 @@ class _$PermissionsStateImpl extends _PermissionsState {
         (other.runtimeType == runtimeType &&
             other is _$PermissionsStateImpl &&
             (identical(other.status, status) || other.status == status) &&
-            (identical(other.permission, permission) ||
-                other.permission == permission) &&
+            const DeepCollectionEquality().equals(
+                other._requiredSpecialPermissions,
+                _requiredSpecialPermissions) &&
             (identical(other.manufacturerTip, manufacturerTip) ||
                 other.manufacturerTip == manufacturerTip) &&
             const DeepCollectionEquality().equals(other.error, error));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, status, permission,
-      manufacturerTip, const DeepCollectionEquality().hash(error));
+  int get hashCode => Object.hash(
+      runtimeType,
+      status,
+      const DeepCollectionEquality().hash(_requiredSpecialPermissions),
+      manufacturerTip,
+      const DeepCollectionEquality().hash(error));
 
   /// Create a copy of PermissionsState
   /// with the given fields replaced by the non-null parameter values.
@@ -205,7 +220,7 @@ class _$PermissionsStateImpl extends _PermissionsState {
 abstract class _PermissionsState extends PermissionsState {
   const factory _PermissionsState(
       {final PermissionsStatus status,
-      final CallkeepSpecialPermissions? permission,
+      final List<CallkeepSpecialPermissions> requiredSpecialPermissions,
       final ManufacturerTip? manufacturerTip,
       final Object? error}) = _$PermissionsStateImpl;
   const _PermissionsState._() : super._();
@@ -213,7 +228,7 @@ abstract class _PermissionsState extends PermissionsState {
   @override
   PermissionsStatus get status;
   @override
-  CallkeepSpecialPermissions? get permission;
+  List<CallkeepSpecialPermissions> get requiredSpecialPermissions;
   @override
   ManufacturerTip? get manufacturerTip;
   @override
@@ -229,7 +244,8 @@ abstract class _PermissionsState extends PermissionsState {
 
 /// @nodoc
 mixin _$ManufacturerTip {
-  Manufacturer get manufacturer => throw _privateConstructorUsedError;
+  Manufacturer get manufacturer =>
+      throw _privateConstructorUsedError; // Indicates whether the tip has been shown to the user
   bool get shown => throw _privateConstructorUsedError;
 
   /// Create a copy of ManufacturerTip
@@ -326,6 +342,7 @@ class _$ManufacturerTipImpl implements _ManufacturerTip {
 
   @override
   final Manufacturer manufacturer;
+// Indicates whether the tip has been shown to the user
   @override
   @JsonKey()
   final bool shown;
@@ -364,7 +381,8 @@ abstract class _ManufacturerTip implements ManufacturerTip {
       final bool shown}) = _$ManufacturerTipImpl;
 
   @override
-  Manufacturer get manufacturer;
+  Manufacturer
+      get manufacturer; // Indicates whether the tip has been shown to the user
   @override
   bool get shown;
 
