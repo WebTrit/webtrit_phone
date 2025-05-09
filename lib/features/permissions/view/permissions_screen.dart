@@ -29,26 +29,15 @@ class PermissionsScreen extends StatelessWidget {
     return Scaffold(
       body: BlocConsumer<PermissionsCubit, PermissionsState>(
         listener: (context, state) {
-          if (state.isSuccess) {
-            context.router.replaceAll([const MainShellRoute()]);
-            return;
-          }
-
-          if (state.isFailure) {
+          if (state.isManufacturerTipNeeded) {
+            _showManufacturerTips(context, state.manufacturerTip!.manufacturer);
+          } else if (state.isSpecialPermissionNeeded) {
+            _showSpecialPermissionTips(context, state.pendingSpecialPermissions.first);
+          } else if (state.isFailure) {
             context.showErrorSnackBar(state.failure.toString());
             context.read<PermissionsCubit>().dismissError();
-            return;
-          }
-
-          if (state.isManufacturerTipNeeded) {
-            final manufacturer = state.manufacturerTip!.manufacturer;
-            _showManufacturerTips(context, manufacturer);
-            return;
-          }
-
-          if (state.isSpecialPermissionNeeded) {
-            _showSpecialPermissionTips(context, state.pendingSpecialPermissions.first);
-            return;
+          } else if (state.isSuccess) {
+            context.router.replaceAll([const MainShellRoute()]);
           }
         },
         builder: (context, state) {
@@ -106,23 +95,25 @@ class PermissionsScreen extends StatelessWidget {
 
   Future _showManufacturerTips(BuildContext context, Manufacturer manufacturer) async {
     final permissionCubit = context.read<PermissionsCubit>();
-
-    await context.router.pushWidget(ManufacturerPermission(
-      onGoToAppSettings: permissionCubit.openAppSettings,
+    final view = ManufacturerPermission(
       manufacturer: manufacturer,
-    ));
+      onGoToAppSettings: permissionCubit.openAppSettings,
+      onPop: () => context.maybePop(),
+    );
+    await context.router.pushWidget(view, transitionBuilder: TransitionsBuilders.slideLeftWithFade);
 
     permissionCubit.dismissTip();
   }
 
   Future _showSpecialPermissionTips(BuildContext context, CallkeepSpecialPermissions permission) async {
     final permissionCubit = context.read<PermissionsCubit>();
-    final specialPermissionView = SpecialPermission(
-      onGoToAppSettings: () => permissionCubit.openAppSpecialPermissionSettings(permission),
+    final view = SpecialPermission(
       specialPermissions: permission,
+      onGoToAppSettings: () => permissionCubit.openAppSpecialPermissionSettings(permission),
+      onPop: () => context.maybePop(),
     );
 
-    await context.router.pushWidget(specialPermissionView, transitionBuilder: TransitionsBuilders.slideLeftWithFade);
+    await context.router.pushWidget(view, transitionBuilder: TransitionsBuilders.slideLeftWithFade);
 
     permissionCubit.dismissTip();
     permissionCubit.requestPermissions();

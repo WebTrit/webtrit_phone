@@ -29,9 +29,6 @@ class PermissionsCubit extends Cubit<PermissionsState> {
   void requestPermissions() async {
     _logger.info('Requesting permissions');
 
-    //  Skp pending special permissions if user try to request permissions again
-    emit(state.copyWith(hasRequestedPermissions: false, pendingSpecialPermissions: []));
-
     try {
       // Prepare the exclude list based on the contacts agreement status
       final excludePermissions = _buildExcludedPermissions();
@@ -43,9 +40,6 @@ class PermissionsCubit extends Cubit<PermissionsState> {
       await _requestFirebaseMessagingPermission();
       _logger.info('Firebase messaging permission requested');
 
-      // Update the state to indicate that permissions have been requested
-      emit(state.copyWith(hasRequestedPermissions: true));
-
       // Handle special permissions
       final specialPermissions = await appPermissions.deniedSpecialPermissions();
       _logger.info('Denied special permissions: $specialPermissions');
@@ -54,14 +48,23 @@ class PermissionsCubit extends Cubit<PermissionsState> {
       final manufacturer = _checkManufacturer();
       _logger.info('Manufacturer: $manufacturer');
 
-      _handleSpecialPermission(manufacturer, specialPermissions);
+      final manufacturerTip = _getManufacturerTIp(manufacturer, specialPermissions);
+      _logger.info('Manufacturer tip: $manufacturerTip');
+
+      // Emit state at the end to ensure all dependent UI elements are initialized.
+      // If emitted earlier, state listeners might trigger navigation before the widget tree is ready.
+      emit(state.copyWith(
+        hasRequestedPermissions: true,
+        manufacturerTip: manufacturerTip,
+        pendingSpecialPermissions: specialPermissions,
+      ));
     } catch (e, st) {
       _logger.severe('Permission request failed', e, st);
       emit(state.copyWith(failure: e));
     }
   }
 
-  void _handleSpecialPermission(
+  ManufacturerTip? _getManufacturerTIp(
     Manufacturer? manufacturer,
     List<CallkeepSpecialPermissions> specialPermissions,
   ) {
@@ -69,12 +72,7 @@ class PermissionsCubit extends Cubit<PermissionsState> {
     final currentTip = state.manufacturerTip;
 
     // Determine if we need to set or keep the manufacturer tip
-    final tip = currentTip ?? (hasManufacturer ? ManufacturerTip(manufacturer: manufacturer) : null);
-
-    emit(state.copyWith(
-      pendingSpecialPermissions: specialPermissions,
-      manufacturerTip: tip,
-    ));
+    return currentTip ?? (hasManufacturer ? ManufacturerTip(manufacturer: manufacturer) : null);
   }
 
   List<Permission> _buildExcludedPermissions() {
@@ -105,12 +103,14 @@ class PermissionsCubit extends Cubit<PermissionsState> {
   }
 
   void dismissError() {
-    emit(const PermissionsState());
+    emit(state.copyWith(failure: null));
   }
 
   void dismissTip() {
     emit(state.copyWith(
+      hasRequestedPermissions: false,
       manufacturerTip: state.manufacturerTip?.copyWith(shown: true),
+      pendingSpecialPermissions: [],
     ));
   }
 
