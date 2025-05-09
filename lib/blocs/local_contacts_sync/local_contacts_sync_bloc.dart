@@ -20,6 +20,8 @@ class LocalContactsSyncBloc extends Bloc<LocalContactsSyncEvent, LocalContactsSy
   LocalContactsSyncBloc({
     required this.localContactsRepository,
     required this.appDatabase,
+    required this.appPreferences,
+    required this.canSyncLocalContacts,
   }) : super(const LocalContactsSyncInitial()) {
     on<LocalContactsSyncStarted>(_onStarted, transformer: restartable());
     on<LocalContactsSyncRefreshed>(_onRefreshed, transformer: droppable());
@@ -30,6 +32,8 @@ class LocalContactsSyncBloc extends Bloc<LocalContactsSyncEvent, LocalContactsSy
 
   final LocalContactsRepository localContactsRepository;
   final AppDatabase appDatabase;
+  final AppPreferences appPreferences;
+  final bool canSyncLocalContacts;
 
   @override
   Future<void> close() async {
@@ -53,6 +57,8 @@ class LocalContactsSyncBloc extends Bloc<LocalContactsSyncEvent, LocalContactsSy
   void _onStarted(LocalContactsSyncStarted event, Emitter<LocalContactsSyncState> emit) async {
     _logger.finer('_onStarted');
 
+    if (!_validateSyncAllowed(emit, contextLabel: '_onStarted')) return;
+
     if (!await localContactsRepository.requestPermission()) {
       _logger.warning('_onStarted permission failure');
       emit(const LocalContactsSyncPermissionFailure());
@@ -72,6 +78,8 @@ class LocalContactsSyncBloc extends Bloc<LocalContactsSyncEvent, LocalContactsSy
   void _onRefreshed(LocalContactsSyncRefreshed event, Emitter<LocalContactsSyncState> emit) async {
     _logger.finer('_onRefreshed');
 
+    if (!_validateSyncAllowed(emit, contextLabel: '_onRefreshed')) return;
+
     emit(const LocalContactsSyncRefreshInProgress());
     try {
       await localContactsRepository.load();
@@ -83,6 +91,8 @@ class LocalContactsSyncBloc extends Bloc<LocalContactsSyncEvent, LocalContactsSy
 
   Future _onUpdated(_LocalContactsSyncUpdated event, Emitter<LocalContactsSyncState> emit, {int retryCount = 0}) async {
     _logger.finer('_onUpdated contacts count:${event.contacts.length}');
+
+    if (!_validateSyncAllowed(emit, contextLabel: '_onUpdated')) return;
 
     try {
       await appDatabase.transaction(() async {
@@ -144,5 +154,14 @@ class LocalContactsSyncBloc extends Bloc<LocalContactsSyncEvent, LocalContactsSy
         emit(const LocalContactsSyncUpdateFailure());
       }
     }
+  }
+
+  bool _validateSyncAllowed(Emitter<LocalContactsSyncState> emit, {required String contextLabel}) {
+    if (!canSyncLocalContacts) {
+      _logger.fine('$contextLabel, local contact sync is disabled by configuration or user has not accepted the terms');
+      emit(const LocalContactsSyncNotAllowedException());
+      return false;
+    }
+    return true;
   }
 }
