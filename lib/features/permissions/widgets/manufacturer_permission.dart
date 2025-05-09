@@ -12,10 +12,12 @@ class ManufacturerPermission extends StatelessWidget {
     super.key,
     required this.manufacturer,
     required this.onGoToAppSettings,
+    required this.onPop,
   });
 
   final Manufacturer manufacturer;
   final VoidCallback onGoToAppSettings;
+  final VoidCallback onPop;
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +27,7 @@ class ManufacturerPermission extends StatelessWidget {
           title: context.l10n.permission_manufacturer_Text_heading,
           instruction: manufacturer.tips(context),
           onGoToAppSettings: onGoToAppSettings,
+          onPop: onPop,
         );
     }
   }

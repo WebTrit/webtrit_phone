@@ -11,11 +11,13 @@ class PermissionTips extends StatelessWidget {
     required this.title,
     required this.instruction,
     required this.onGoToAppSettings,
+    required this.onPop,
   });
 
   final String title;
   final List<String> instruction;
   final VoidCallback onGoToAppSettings;
+  final VoidCallback onPop;
 
   @override
   Widget build(BuildContext context) {
@@ -84,7 +86,7 @@ class PermissionTips extends StatelessWidget {
           const SizedBox(height: kInset / 4),
           OutlinedButton(
             key: permissionTipsButtonKey,
-            onPressed: () => Navigator.of(context).pop(),
+            onPressed: onPop,
             style: elevatedButtonStyles?.primary,
             child: Text(context.l10n.permission_manufacturer_Button_gotIt),
           ),

@@ -2,15 +2,30 @@ part of 'permissions_cubit.dart';
 
 @freezed
 class PermissionsState with _$PermissionsState {
-  const factory PermissionsState.initial() = PermissionsStateInitial;
+  const PermissionsState._();
 
-  const factory PermissionsState.inProgress() = PermissionsStateInProgress;
+  const factory PermissionsState({
+    @Default(false) bool hasRequestedPermissions,
+    @Default([]) List<CallkeepSpecialPermissions> pendingSpecialPermissions,
+    ManufacturerTip? manufacturerTip,
+    Object? failure,
+  }) = _PermissionsState;
 
-  const factory PermissionsState.permissionFullScreenIntentNeeded(CallkeepSpecialPermissions permission) = PermissionFullScreenIntentNeeded;
+  bool get isInitial => !hasRequestedPermissions;
 
-  const factory PermissionsState.manufacturerTipNeeded(Manufacturer manufacturer) = PermissionsManufacturerTipNeeded;
+  bool get isSpecialPermissionNeeded => pendingSpecialPermissions.isNotEmpty;
 
-  const factory PermissionsState.success() = PermissionsStateSuccess;
+  bool get isManufacturerTipNeeded => manufacturerTip != null && manufacturerTip!.shown == false;
 
-  const factory PermissionsState.failure(Object error) = PermissionsStateFailure;
+  bool get isSuccess => hasRequestedPermissions && !isFailure && !isSpecialPermissionNeeded && !isManufacturerTipNeeded;
+
+  bool get isFailure => failure != null;
+}
+
+@freezed
+class ManufacturerTip with _$ManufacturerTip {
+  const factory ManufacturerTip({
+    required Manufacturer manufacturer,
+    @Default(false) bool shown,
+  }) = _ManufacturerTip;
 }
