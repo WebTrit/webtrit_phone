@@ -29,31 +29,26 @@ class PermissionsScreen extends StatelessWidget {
     return Scaffold(
       body: BlocConsumer<PermissionsCubit, PermissionsState>(
         listener: (context, state) {
-          switch (state.status) {
-            case PermissionsStatus.success:
-              context.router.replaceAll([const MainShellRoute()]);
-              break;
+          if (state.isSuccess) {
+            context.router.replaceAll([const MainShellRoute()]);
+            return;
+          }
 
-            case PermissionsStatus.failure:
-              final error = state.error;
-              if (error != null) {
-                context.showErrorSnackBar(error.toString());
-                context.read<PermissionsCubit>().dismissError();
-              }
-              break;
+          if (state.isFailure) {
+            context.showErrorSnackBar(state.error.toString());
+            context.read<PermissionsCubit>().dismissError();
+            return;
+          }
 
-            default:
-              if (state.isManufacturerTipNeeded) {
-                final manufacturer = state.manufacturerTip!.manufacturer;
-                _showManufacturerTips(context, manufacturer);
-                return;
-              }
+          if (state.isManufacturerTipNeeded) {
+            final manufacturer = state.manufacturerTip!.manufacturer;
+            _showManufacturerTips(context, manufacturer);
+            return;
+          }
 
-              if (state.isSpecialPermissionNeeded) {
-                _showSpecialPermissionTips(context, state.requiredSpecialPermissions.first);
-                return;
-              }
-              break;
+          if (state.isSpecialPermissionNeeded) {
+            _showSpecialPermissionTips(context, state.requiredSpecialPermissions.first);
+            return;
           }
         },
         builder: (context, state) {

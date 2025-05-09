@@ -56,16 +56,26 @@ class PermissionsCubit extends Cubit<PermissionsState> {
     }
   }
 
-  // Handle special permissions and manufacturer-specific tips
-  void _handleSpecialPermission(Manufacturer? manufacturer, List<CallkeepSpecialPermissions> specialPermissions) {
-    final currentManufacturerTip = state.manufacturerTip;
+  void _handleSpecialPermission(
+    Manufacturer? manufacturer,
+    List<CallkeepSpecialPermissions> specialPermissions,
+  ) {
+    final hasSpecialPermissions = specialPermissions.isNotEmpty;
+    final hasManufacturer = manufacturer != null;
+    final currentTip = state.manufacturerTip;
 
-    if (currentManufacturerTip?.shown == true && specialPermissions.isEmpty) {
-      emit(state.copyWith(status: PermissionsStatus.success));
-    } else if (manufacturer != null) {
-      emit(state.copyWith(manufacturerTip: currentManufacturerTip ?? ManufacturerTip(manufacturer: manufacturer)));
-    }
-    emit(state.copyWith(requiredSpecialPermissions: specialPermissions));
+    // Determine if we need to set or keep the manufacturer tip
+    final tip = currentTip ?? (hasManufacturer ? ManufacturerTip(manufacturer: manufacturer!) : null);
+    final isTipShown = tip?.shown == true;
+
+    // Determine if the process can be considered successful
+    final isSuccess = !hasSpecialPermissions && (tip == null || isTipShown);
+
+    emit(state.copyWith(
+      status: isSuccess ? PermissionsStatus.success : state.status,
+      requiredSpecialPermissions: specialPermissions,
+      manufacturerTip: tip,
+    ));
   }
 
   List<Permission> _buildExcludedPermissions() {

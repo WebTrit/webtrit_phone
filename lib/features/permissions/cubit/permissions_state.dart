@@ -28,7 +28,7 @@ class PermissionsState with _$PermissionsState {
 
   bool get isSuccess => status == PermissionsStatus.success;
 
-  bool get isFailure => status == PermissionsStatus.failure && error != null;
+  bool get isFailure => error != null;
 }
 
 @freezed
