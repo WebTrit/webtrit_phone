@@ -62,19 +62,17 @@ class PermissionsCubit extends Cubit<PermissionsState> {
     Manufacturer? manufacturer,
     List<CallkeepSpecialPermissions> specialPermissions,
   ) {
-    final hasSpecialPermissions = specialPermissions.isNotEmpty;
     final hasManufacturer = manufacturer != null;
     final currentTip = state.manufacturerTip;
 
     // Determine if we need to set or keep the manufacturer tip
     final tip = currentTip ?? (hasManufacturer ? ManufacturerTip(manufacturer: manufacturer) : null);
-    final isTipShown = tip?.shown == true;
 
     emit(state.copyWith(
       pendingSpecialPermissions: specialPermissions,
       manufacturerTip: tip,
     ));
-  }
+    }
 
   List<Permission> _buildExcludedPermissions() {
     final contactsAgreementStatus = appPreferences.getContactsAgreementStatus();
@@ -100,9 +98,7 @@ class PermissionsCubit extends Cubit<PermissionsState> {
   }
 
   Manufacturer? _checkManufacturer() {
-    return Manufacturer.xiaomi;
-    // return Manufacturer.values.asNameMap()[deviceInfo.manufacturer.toLowerCase()];
-    // return Manufacturer.values.asNameMap()[deviceInfo.manufacturer.toLowerCase()];
+    return Manufacturer.values.asNameMap()[deviceInfo.manufacturer.toLowerCase()];
   }
 
   void dismissError() {
