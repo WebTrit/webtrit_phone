@@ -29,7 +29,6 @@ class PermissionsCubit extends Cubit<PermissionsState> {
   void requestPermissions() async {
     _logger.info('Requesting permissions');
 
-    emit(state.copyWith(status: PermissionsStatus.inProgress));
     try {
       // Prepare the exclude list based on the contacts agreement status
       final excludePermissions = _buildExcludedPermissions();
@@ -40,6 +39,9 @@ class PermissionsCubit extends Cubit<PermissionsState> {
 
       await _requestFirebaseMessagingPermission();
       _logger.info('Firebase messaging permission requested');
+
+      // Update the state to indicate that permissions have been requested
+      emit(state.copyWith(hasRequestedPermissions: true));
 
       // Handle special permissions
       final specialPermissions = await appPermissions.deniedSpecialPermissions();
@@ -52,7 +54,7 @@ class PermissionsCubit extends Cubit<PermissionsState> {
       _handleSpecialPermission(manufacturer, specialPermissions);
     } catch (e, st) {
       _logger.severe('Permission request failed', e, st);
-      emit(state.copyWith(error: e));
+      emit(state.copyWith(failure: e));
     }
   }
 
@@ -68,12 +70,8 @@ class PermissionsCubit extends Cubit<PermissionsState> {
     final tip = currentTip ?? (hasManufacturer ? ManufacturerTip(manufacturer: manufacturer) : null);
     final isTipShown = tip?.shown == true;
 
-    // Determine if the process can be considered successful
-    final isSuccess = !hasSpecialPermissions && (tip == null || isTipShown);
-
     emit(state.copyWith(
-      status: isSuccess ? PermissionsStatus.success : state.status,
-      requiredSpecialPermissions: specialPermissions,
+      pendingSpecialPermissions: specialPermissions,
       manufacturerTip: tip,
     ));
   }
@@ -113,7 +111,6 @@ class PermissionsCubit extends Cubit<PermissionsState> {
 
   void dismissTip() {
     emit(state.copyWith(
-      status: PermissionsStatus.initial,
       manufacturerTip: state.manufacturerTip?.copyWith(shown: true),
     ));
   }

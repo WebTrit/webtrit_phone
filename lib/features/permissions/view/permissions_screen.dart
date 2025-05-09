@@ -35,7 +35,7 @@ class PermissionsScreen extends StatelessWidget {
           }
 
           if (state.isFailure) {
-            context.showErrorSnackBar(state.error.toString());
+            context.showErrorSnackBar(state.failure.toString());
             context.read<PermissionsCubit>().dismissError();
             return;
           }
@@ -47,7 +47,7 @@ class PermissionsScreen extends StatelessWidget {
           }
 
           if (state.isSpecialPermissionNeeded) {
-            _showSpecialPermissionTips(context, state.requiredSpecialPermissions.first);
+            _showSpecialPermissionTips(context, state.pendingSpecialPermissions.first);
             return;
           }
         },
@@ -70,23 +70,18 @@ class PermissionsScreen extends StatelessWidget {
                 ),
                 const Spacer(),
                 const SizedBox(height: kInset),
-                if (state.status == PermissionsStatus.initial)
-                  OutlinedButton(
-                    key: permissionsInitButtonKey,
-                    onPressed: () => context.read<PermissionsCubit>().requestPermissions(),
-                    style: elevatedButtonStyles?.primary,
-                    child: Text(context.l10n.permission_Button_request),
-                  ),
-                if (state.status != PermissionsStatus.initial)
-                  OutlinedButton(
-                    onPressed: null,
-                    style: elevatedButtonStyles?.primary,
-                    child: SizedCircularProgressIndicator(
-                      size: 16,
-                      strokeWidth: 2,
-                      color: elevatedButtonStyles?.primary?.foregroundColor?.resolve({}),
-                    ),
-                  )
+                OutlinedButton(
+                  key: state.isInitial ? permissionsInitButtonKey : null,
+                  onPressed: state.isInitial ? () => context.read<PermissionsCubit>().requestPermissions() : null,
+                  style: elevatedButtonStyles?.primary,
+                  child: state.isInitial
+                      ? Text(context.l10n.permission_Button_request)
+                      : SizedCircularProgressIndicator(
+                          size: 16,
+                          strokeWidth: 2,
+                          color: elevatedButtonStyles?.primary?.foregroundColor?.resolve({}),
+                        ),
+                )
               ],
             ),
           );
