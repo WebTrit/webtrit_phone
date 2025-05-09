@@ -29,18 +29,32 @@ class PermissionsScreen extends StatelessWidget {
     return Scaffold(
       body: BlocConsumer<PermissionsCubit, PermissionsState>(
         listener: (context, state) {
-          switch (state) {
-            // Shows additional screen for specific sub-platform if needed
-            case PermissionsManufacturerTipNeeded(:final manufacturer):
-              _showManufacturerTips(context, manufacturer);
-            // Shows additional screen for specific sub-platform if needed
-            case PermissionFullScreenIntentNeeded(:final permission):
-              _showSpecialPermissionTips(context, permission);
-            case PermissionsStateSuccess():
+          switch (state.status) {
+            case PermissionsStatus.permissionFullScreenIntentNeeded:
+              final permission = state.permission;
+              if (permission != null) {
+                _showSpecialPermissionTips(context, permission);
+              }
+              break;
+
+            case PermissionsStatus.success:
               context.router.replaceAll([const MainShellRoute()]);
-            case PermissionsStateFailure(:final error):
-              context.showErrorSnackBar(error.toString());
-              context.read<PermissionsCubit>().dismissError();
+              break;
+
+            case PermissionsStatus.failure:
+              final error = state.error;
+              if (error != null) {
+                context.showErrorSnackBar(error.toString());
+                context.read<PermissionsCubit>().dismissError();
+              }
+              break;
+
+            default:
+              if (state.isManufacturerTipNeeded) {
+                final manufacturer = state.manufacturerTip!.manufacturer;
+                _showManufacturerTips(context, manufacturer);
+              }
+              break;
           }
         },
         builder: (context, state) {
@@ -62,23 +76,23 @@ class PermissionsScreen extends StatelessWidget {
                 ),
                 const Spacer(),
                 const SizedBox(height: kInset),
-                switch (state) {
-                  PermissionsStateInitial() => OutlinedButton(
-                      key: permissionsInitButtonKey,
-                      onPressed: () => context.read<PermissionsCubit>().requestPermissions(),
-                      style: elevatedButtonStyles?.primary,
-                      child: Text(context.l10n.permission_Button_request),
+                if (state.status == PermissionsStatus.initial)
+                  OutlinedButton(
+                    key: permissionsInitButtonKey,
+                    onPressed: () => context.read<PermissionsCubit>().requestPermissions(),
+                    style: elevatedButtonStyles?.primary,
+                    child: Text(context.l10n.permission_Button_request),
+                  ),
+                if (state.status != PermissionsStatus.initial)
+                  OutlinedButton(
+                    onPressed: null,
+                    style: elevatedButtonStyles?.primary,
+                    child: SizedCircularProgressIndicator(
+                      size: 16,
+                      strokeWidth: 2,
+                      color: elevatedButtonStyles?.primary?.foregroundColor?.resolve({}),
                     ),
-                  _ => OutlinedButton(
-                      onPressed: null,
-                      style: elevatedButtonStyles?.primary,
-                      child: SizedCircularProgressIndicator(
-                        size: 16,
-                        strokeWidth: 2,
-                        color: elevatedButtonStyles?.primary?.foregroundColor?.resolve({}),
-                      ),
-                    ),
-                },
+                  )
               ],
             ),
           );

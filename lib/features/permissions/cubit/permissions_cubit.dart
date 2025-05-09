@@ -20,7 +20,7 @@ class PermissionsCubit extends Cubit<PermissionsState> {
     required this.appPreferences,
     required this.appPermissions,
     required this.deviceInfo,
-  }) : super(const PermissionsState.initial());
+  }) : super(const PermissionsState());
 
   final AppPreferences appPreferences;
   final AppPermissions appPermissions;
@@ -29,22 +29,16 @@ class PermissionsCubit extends Cubit<PermissionsState> {
   void requestPermissions() async {
     _logger.info('Requesting permissions');
 
-    emit(const PermissionsState.inProgress());
+    emit(state.copyWith(status: PermissionsStatus.inProgress));
     try {
-      // Check if the contacts agreement is accepted
-      final contactsAgreementStatus = appPreferences.getContactsAgreementStatus();
-      _logger.info('Contacts agreement status: ${contactsAgreementStatus.isAccepted}');
-
       // Prepare the exclude list based on the contacts agreement status
-      final excludePermissions = <Permission>[
-        if (!contactsAgreementStatus.isAccepted) Permission.contacts,
-      ];
-      _logger.info('Excluding permissions: $excludePermissions');
+      final excludePermissions = _buildExcludedPermissions();
 
       // Request permissions, excluding the specified ones
       await appPermissions.request(exclude: excludePermissions);
       _logger.info('Permissions requested');
-      await requestFirebaseMessagingPermission();
+
+      await _requestFirebaseMessagingPermission();
       _logger.info('Firebase messaging permission requested');
 
       // Handle special permissions
@@ -55,24 +49,69 @@ class PermissionsCubit extends Cubit<PermissionsState> {
       final manufacturer = _checkManufacturer();
       _logger.info('Manufacturer: $manufacturer');
 
-      if (manufacturer == null && specialPermissions.isEmpty) {
-        emit(const PermissionsState.success());
-      } else if (manufacturer != null) {
-        emit(PermissionsState.manufacturerTipNeeded(manufacturer));
-      } else if (specialPermissions.isNotEmpty) {
-        emit(PermissionsState.permissionFullScreenIntentNeeded(specialPermissions.first));
-      }
-    } catch (e) {
-      emit(PermissionsState.failure(e));
+      _handleSpecialPermission(manufacturer, specialPermissions);
+    } catch (e, st) {
+      _logger.severe('Permission request failed', e, st);
+      emit(state.copyWith(status: PermissionsStatus.failure, error: e));
     }
   }
 
+  // Handle special permissions and manufacturer-specific tips
+  void _handleSpecialPermission(Manufacturer? manufacturer, List<CallkeepSpecialPermissions> specialPermissions) {
+    final currentManufacturerTip = state.manufacturerTip;
+
+    if (currentManufacturerTip?.shown == true && specialPermissions.isEmpty) {
+      emit(state.copyWith(status: PermissionsStatus.success));
+    } else if (manufacturer != null) {
+      emit(state.copyWith(
+        manufacturerTip: currentManufacturerTip ?? ManufacturerTip(manufacturer: manufacturer),
+      ));
+    } else if (specialPermissions.isNotEmpty) {
+      emit(state.copyWith(
+        status: PermissionsStatus.permissionFullScreenIntentNeeded,
+        permission: specialPermissions.first,
+      ));
+    }
+  }
+
+  List<Permission> _buildExcludedPermissions() {
+    final contactsAgreementStatus = appPreferences.getContactsAgreementStatus();
+    _logger.info('Contacts agreement status: ${contactsAgreementStatus.isAccepted}');
+
+    final exclude = <Permission>[
+      if (!contactsAgreementStatus.isAccepted) Permission.contacts,
+    ];
+
+    _logger.info('Excluding permissions: $exclude');
+    return exclude;
+  }
+
+  Future<void> _requestFirebaseMessagingPermission() async {
+    final notificationSettings = await FirebaseMessaging.instance.requestPermission();
+    if (notificationSettings.authorizationStatus == AuthorizationStatus.authorized) {
+      _logger.info('User granted firebase permission');
+    } else if (notificationSettings.authorizationStatus == AuthorizationStatus.provisional) {
+      _logger.info('User granted  firebase provisional permission');
+    } else {
+      _logger.info('User declined or has not accepted firebase permission');
+    }
+  }
+
+  Manufacturer? _checkManufacturer() {
+    return Manufacturer.xiaomi;
+    // return Manufacturer.values.asNameMap()[deviceInfo.manufacturer.toLowerCase()];
+    // return Manufacturer.values.asNameMap()[deviceInfo.manufacturer.toLowerCase()];
+  }
+
   void dismissError() {
-    emit(const PermissionsState.initial());
+    emit(const PermissionsState());
   }
 
   void dismissTip() {
-    emit(const PermissionsState.success());
+    emit(state.copyWith(
+      status: PermissionsStatus.initial,
+      manufacturerTip: state.manufacturerTip?.copyWith(shown: true),
+    ));
   }
 
   void openAppSettings() {
@@ -81,22 +120,5 @@ class PermissionsCubit extends Cubit<PermissionsState> {
 
   void openAppSpecialPermissionSettings(CallkeepSpecialPermissions permission) {
     appPermissions.toSpecialPermissionsSetting(permission);
-  }
-
-  Future<void> requestFirebaseMessagingPermission() async {
-    final logger = Logger('FirebaseMessaging');
-
-    final notificationSettings = await FirebaseMessaging.instance.requestPermission();
-    if (notificationSettings.authorizationStatus == AuthorizationStatus.authorized) {
-      logger.info('User granted permission');
-    } else if (notificationSettings.authorizationStatus == AuthorizationStatus.provisional) {
-      logger.info('User granted provisional permission');
-    } else {
-      logger.info('User declined or has not accepted permission');
-    }
-  }
-
-  Manufacturer? _checkManufacturer() {
-    return Manufacturer.values.asNameMap()[deviceInfo.manufacturer.toLowerCase()];
   }
 }
