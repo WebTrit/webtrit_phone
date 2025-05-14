@@ -160,7 +160,11 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 Future _initLocalNotifications() async {
   await FlutterLocalNotificationsPlugin().initialize(
     const InitializationSettings(
-      iOS: DarwinInitializationSettings(),
+      iOS: DarwinInitializationSettings(
+        requestAlertPermission: false,
+        requestBadgePermission: false,
+        requestSoundPermission: false,
+      ),
       android: AndroidInitializationSettings('@mipmap/ic_launcher'),
     ),
     onDidReceiveNotificationResponse: LocalNotificationsBroker.handleActionReceived,
