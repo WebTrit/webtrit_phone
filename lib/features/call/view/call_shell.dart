@@ -154,7 +154,7 @@ class _CallShellState extends State<CallShell> {
   ///
   /// MainShellRoute uses MainShellRoute.name as its path.
   void _backToMainScreen(StackRouter router) {
-    router.navigatePath(MainShellRoute.name);
+    router.navigateNamed(MainShellRoute.name);
   }
 }
 
