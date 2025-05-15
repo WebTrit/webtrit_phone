@@ -115,25 +115,31 @@ class _DiagnosticScreenState extends State<DiagnosticScreen> with WidgetsBinding
                     ),
                   ),
                 ),
-                GroupTitleListTile(titleData: context.l10n.diagnosticScreen_contacts_agreement_group_title),
-                DiagnosticAgreementItem(
-                  title: context.l10n.diagnosticScreen_contacts_agreement_title,
-                  description: context.l10n.diagnosticScreen_contacts_agreement_description,
-                  status: contactsAgreementStatus,
-                  onTap: () {
-                    showModalBottomSheet(
-                      context: context,
-                      builder: (BuildContext context) => DiagnosticAgreementDetails(
-                        title: context.l10n.diagnosticScreen_contacts_agreement_title,
-                        description: context.l10n.contacts_agreement_description,
-                        status: contactsAgreementStatus,
-                        onApply: (AgreementStatus value) {
-                          context.read<AppBloc>().add(AppAgreementAccepted.updateContactsAgreement(value));
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                    );
-                  },
+                Visibility(
+                  visible: context.read<DiagnosticScreenContext>().isLocalContactsFeatureEnabled,
+                  child: GroupTitleListTile(titleData: context.l10n.diagnosticScreen_contacts_agreement_group_title),
+                ),
+                Visibility(
+                  visible: context.read<DiagnosticScreenContext>().isLocalContactsFeatureEnabled,
+                  child: DiagnosticAgreementItem(
+                    title: context.l10n.diagnosticScreen_contacts_agreement_title,
+                    description: context.l10n.diagnosticScreen_contacts_agreement_description,
+                    status: contactsAgreementStatus,
+                    onTap: () {
+                      showModalBottomSheet(
+                        context: context,
+                        builder: (BuildContext context) => DiagnosticAgreementDetails(
+                          title: context.l10n.diagnosticScreen_contacts_agreement_title,
+                          description: context.l10n.contacts_agreement_description,
+                          status: contactsAgreementStatus,
+                          onApply: (AgreementStatus value) {
+                            context.read<AppBloc>().add(AppAgreementAccepted.updateContactsAgreement(value));
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      );
+                    },
+                  ),
                 )
               ],
             ),
