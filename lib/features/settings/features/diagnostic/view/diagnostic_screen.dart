@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:auto_route/auto_route.dart';
 
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/data/data.dart';
@@ -52,6 +53,7 @@ class _DiagnosticScreenState extends State<DiagnosticScreen> with WidgetsBinding
       builder: (context, state) {
         return Scaffold(
           appBar: AppBar(
+            leading: const AutoLeadingButton(),
             title: Text(context.l10n.diagnostic_AppBar_title),
           ),
           body: SingleChildScrollView(
