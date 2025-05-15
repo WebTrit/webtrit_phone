@@ -2673,6 +2673,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       direction: activeCall.direction,
       number: activeCall.handle.value,
       video: activeCall.video,
+      username: activeCall.displayName,
       createdTime: activeCall.createdTime,
       acceptedTime: activeCall.acceptedTime,
       hungUpTime: activeCall.hungUpTime,

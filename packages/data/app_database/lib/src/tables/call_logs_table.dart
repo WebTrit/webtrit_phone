@@ -14,6 +14,8 @@ class CallLogsTable extends Table {
   TextColumn get number =>
       text().customConstraint('NOT NULL CONSTRAINT "call_logs.number not_empty" CHECK (length(number) > 0)')();
 
+  TextColumn get username => text().nullable()();
+
   BoolColumn get video => boolean()();
 
   DateTimeColumn get createdAt => dateTime()();

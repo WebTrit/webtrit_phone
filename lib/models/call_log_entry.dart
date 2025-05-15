@@ -8,6 +8,7 @@ class CallLogEntry extends Equatable {
   final String number;
   final bool video;
   final DateTime createdTime;
+  final String? username;
   final DateTime? acceptedTime;
   final DateTime? hungUpTime;
 
@@ -17,6 +18,7 @@ class CallLogEntry extends Equatable {
     required this.number,
     required this.video,
     required this.createdTime,
+    this.username,
     this.acceptedTime,
     this.hungUpTime,
   });
@@ -35,9 +37,9 @@ class CallLogEntry extends Equatable {
 
   @override
   String toString() {
-    return 'CallLogEntry{direction: id: $id, $direction, number: $number, video: $video, createdTime: $createdTime, acceptedTime: $acceptedTime, hungUpTime: $hungUpTime}';
+    return 'CallLogEntry{direction: id: $id, $direction, number: $number, video: $video, username: $username, createdTime: $createdTime, acceptedTime: $acceptedTime, hungUpTime: $hungUpTime}';
   }
 
   @override
-  List<Object?> get props => [id, direction, number, video, createdTime, acceptedTime, hungUpTime];
+  List<Object?> get props => [id, direction, number, video, createdTime, username, acceptedTime, hungUpTime];
 }

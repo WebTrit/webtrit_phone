@@ -105,6 +105,7 @@ class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegat
     String callId,
     String number,
     DateTime createdTime,
+    String? displayName,
     DateTime? acceptedTime,
     DateTime? hungUpTime, {
     bool video = false,
@@ -113,6 +114,7 @@ class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegat
       direction: CallDirection.incoming,
       number: number,
       video: video,
+      username: displayName,
       createdTime: createdTime,
       acceptedTime: acceptedTime,
       hungUpTime: hungUpTime,

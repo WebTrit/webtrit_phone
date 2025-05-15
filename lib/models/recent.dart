@@ -8,7 +8,7 @@ class Recent extends Equatable {
 
   const Recent({required this.callLogEntry, required this.contact});
 
-  String get name => contact?.maybeName ?? callLogEntry.number;
+  String get name => contact?.maybeName ?? callLogEntry.username ?? callLogEntry.number;
 
   @override
   String toString() {
