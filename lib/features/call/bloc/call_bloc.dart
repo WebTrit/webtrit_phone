@@ -59,6 +59,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   final IceFilter? iceFilter;
   final UserMediaBuilder userMediaBuilder;
   final PeerConnectionPolicyApplier? peerConnectionPolicyApplier;
+  final ContactNameResolver contactNameResolver;
 
   StreamSubscription<List<ConnectivityResult>>? _connectivityChangedSubscription;
   StreamSubscription<PendingCall>? _pendingCallHandlerSubscription;
@@ -80,6 +81,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     required this.callkeep,
     required this.callkeepConnections,
     required this.userMediaBuilder,
+    required this.contactNameResolver,
     this.sdpMunger,
     this.sdpSanitizer,
     this.webRtcOptionsBuilder,
@@ -692,16 +694,28 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       return;
     }
 
+    final contactName = await contactNameResolver.resolveWithNumber(event.handle.value);
+    final displayName = contactName ?? event.displayName;
+
     emit(state.copyWithPushActiveCall(ActiveCall(
       direction: CallDirection.incoming,
       line: _kUndefinedLine,
       callId: event.callId,
       handle: event.handle,
-      displayName: event.displayName,
+      displayName: displayName,
       video: event.video,
       createdTime: clock.now(),
       processingStatus: CallProcessingStatus.incomingFromPush,
     )));
+
+    // Replace the display name in Callkeep if it differs from the one in the event
+    // mostly needed for ios, coz android can do it on background fcm isolate directly before push
+    // TODO:
+    // - do it on backend side same as for messaging
+    //   currently push notification contain display name from sip header
+    if (displayName != event.displayName) {
+      await callkeep.reportUpdateCall(event.callId, displayName: displayName);
+    }
 
     // Function to verify speaker availability for the upcoming event, ensuring the speaker button is correctly enabled or disabled
     add(const _NavigatorMediaDevicesChange());
@@ -770,13 +784,14 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     Emitter<CallState> emit,
   ) async {
     final video = event.jsep?.hasVideo ?? false;
-
     final handle = CallkeepHandle.number(event.caller);
+    final contactName = await contactNameResolver.resolveWithNumber(handle.value);
+    final displayName = contactName ?? event.callerDisplayName;
 
     final error = await callkeep.reportNewIncomingCall(
       event.callId,
       handle,
-      displayName: event.callerDisplayName,
+      displayName: displayName,
       hasVideo: video,
     );
 
@@ -810,7 +825,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       activeCall = activeCall.copyWith(
         line: event.line,
         handle: handle,
-        displayName: event.callerDisplayName,
+        displayName: displayName,
         video: video,
         transfer: transfer,
         incomingOffer: event.jsep,
@@ -822,7 +837,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         line: event.line,
         callId: event.callId,
         handle: handle,
-        displayName: event.callerDisplayName,
+        displayName: displayName,
         video: video,
         createdTime: clock.now(),
         transfer: transfer,
@@ -967,11 +982,13 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     Emitter<CallState> emit,
   ) async {
     final handle = CallkeepHandle.number(event.caller);
+    final contactName = await contactNameResolver.resolveWithNumber(handle.value);
+    final displayName = contactName ?? event.callerDisplayName;
 
     emit(state.copyWithMappedActiveCall(event.callId, (activeCall) {
       return activeCall.copyWith(
         handle: handle,
-        displayName: event.callerDisplayName ?? activeCall.displayName,
+        displayName: displayName ?? activeCall.displayName,
         video: event.jsep?.hasVideo ?? activeCall.video,
         updating: true,
       );
@@ -1195,13 +1212,15 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     });
 
     final callId = WebtritSignalingClient.generateCallId();
+    final contactName = await contactNameResolver.resolveWithNumber(event.handle.value);
+    final displayName = contactName ?? event.displayName;
 
     final newCall = ActiveCall(
       direction: CallDirection.outgoing,
       line: line,
       callId: callId,
       handle: event.handle,
-      displayName: event.displayName,
+      displayName: displayName,
       video: event.video,
       createdTime: clock.now(),
       processingStatus: CallProcessingStatus.outgoingCreated,
@@ -1212,7 +1231,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     final callkeepError = await callkeep.startCall(
       callId,
       event.handle,
-      displayNameOrContactIdentifier: event.displayName,
+      displayNameOrContactIdentifier: displayName,
       hasVideo: event.video,
       proximityEnabled: !event.video,
     );

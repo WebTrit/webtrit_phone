@@ -1,4 +1,5 @@
 export 'audio_constraints_builder.dart';
+export 'contact_name_resolver.dart';
 export 'ice_filter.dart';
 export 'peer_connection_policy_applier.dart';
 export 'sdp_mod_builder.dart';

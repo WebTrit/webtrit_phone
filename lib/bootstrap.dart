@@ -133,10 +133,16 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   _dHandleInspectPushNotification(message.data, true);
 
   if (appNotification is PendingCallNotification && Platform.isAndroid) {
+    final appDatabase = await IsolateDatabase.create();
+    final contactsRepository = ContactsRepository(appDatabase: appDatabase);
+
+    final contact = await contactsRepository.getContactByPhoneNumber(appNotification.call.handle);
+    final displayName = contact?.maybeName ?? appNotification.call.displayName;
+
     AndroidCallkeepServices.backgroundPushNotificationBootstrapService.reportNewIncomingCall(
       appNotification.call.id,
       CallkeepHandle.number(appNotification.call.handle),
-      displayName: appNotification.call.displayName,
+      displayName: displayName,
       hasVideo: appNotification.call.hasVideo,
     );
   }

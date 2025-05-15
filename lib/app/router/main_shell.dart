@@ -291,6 +291,11 @@ class _MainShellState extends State<MainShell> {
                 peerConnectionConfig,
                 userMediaBuilder,
               );
+              // Initialize contact name resolver with app-specific contact repository
+              // Used to display contact name of caller
+              final contactNameResolver = DefaultContactNameResolver(
+                contactRepository: context.read<ContactsRepository>(),
+              );
 
               return CallBloc(
                 coreUrl: appBloc.state.coreUrl!,
@@ -305,6 +310,7 @@ class _MainShellState extends State<MainShell> {
                 sdpSanitizer: RemoteSdpSanitizer(),
                 webRtcOptionsBuilder: WebrtcOptionsWithAppSettingsBuilder(appPreferences),
                 userMediaBuilder: userMediaBuilder,
+                contactNameResolver: contactNameResolver,
                 iceFilter: FilterWithAppSettings(appPreferences),
                 peerConnectionPolicyApplier: pearConnectionPolicyApplier,
               )..add(const CallStarted());
