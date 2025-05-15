@@ -169,6 +169,10 @@ class AppLocalizationsMapper {
           localizations.contacts_LocalTabText_failure,
       'contacts_LocalTabText_permissionFailure':
           localizations.contacts_LocalTabText_permissionFailure,
+      'contacts_LocalTabText_contactsAgreementFailure':
+          localizations.contacts_LocalTabText_contactsAgreementFailure,
+      'contacts_LocalTabButton_contactsAgreement':
+          localizations.contacts_LocalTabButton_contactsAgreement,
       'contactsSourceExternal': localizations.contactsSourceExternal,
       'contactsSourceLocal': localizations.contactsSourceLocal,
       'contacts_Text_blingTransferInitiated':

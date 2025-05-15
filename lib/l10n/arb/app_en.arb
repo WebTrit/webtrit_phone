@@ -142,6 +142,8 @@
   "@contacts_LocalTabText_failure": {},
   "contacts_LocalTabText_permissionFailure": "There are no permissions to get your phone contacts",
   "@contacts_LocalTabText_permissionFailure": {},
+  "contacts_LocalTabText_contactsAgreementFailure": "To sync your local contacts, you must accept the agreement in Settings.",
+  "contacts_LocalTabButton_contactsAgreement": "Open Settings",
   "contactsSourceExternal": "Cloud PBX",
   "@contactsSourceExternal": {},
   "contactsSourceLocal": "Your phone",

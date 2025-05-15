@@ -69,6 +69,8 @@ class ContactsLocalTabBloc extends Bloc<ContactsLocalTabEvent, ContactsLocalTabS
       return ContactsLocalTabStatus.success;
     } else if (localContactsSyncState is LocalContactsSyncPermissionFailure) {
       return ContactsLocalTabStatus.permissionFailure;
+    } else if (localContactsSyncState is ContactsAgreementMissingException) {
+      return ContactsLocalTabStatus.contactsAgreementFailure;
     } else {
       return ContactsLocalTabStatus.failure;
     }

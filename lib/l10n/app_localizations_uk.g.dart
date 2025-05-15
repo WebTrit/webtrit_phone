@@ -222,6 +222,12 @@ class AppLocalizationsUk extends AppLocalizations {
   String get contacts_LocalTabText_permissionFailure => 'Відсутні дозволи для доступу до контактів вашого телефону';
 
   @override
+  String get contacts_LocalTabText_contactsAgreementFailure => 'Щоб синхронізувати локальні контакти, потрібно прийняти угоду в Налаштуваннях.';
+
+  @override
+  String get contacts_LocalTabButton_contactsAgreement => 'Відкрити Налаштування';
+
+  @override
   String get contactsSourceExternal => 'Хмарний PBX';
 
   @override

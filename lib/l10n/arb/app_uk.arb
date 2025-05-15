@@ -142,6 +142,8 @@
   "@contacts_LocalTabText_failure": {},
   "contacts_LocalTabText_permissionFailure": "Відсутні дозволи для доступу до контактів вашого телефону",
   "@contacts_LocalTabText_permissionFailure": {},
+  "contacts_LocalTabText_contactsAgreementFailure": "Щоб синхронізувати локальні контакти, потрібно прийняти угоду в Налаштуваннях.",
+  "contacts_LocalTabButton_contactsAgreement": "Відкрити Налаштування",
   "contactsSourceExternal": "Хмарний PBX",
   "@contactsSourceExternal": {},
   "contactsSourceLocal": "Ваш телефон",

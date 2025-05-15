@@ -109,4 +109,18 @@ class AppPermissions {
       await callkeepPermission.openSettings();
     }
   }
+
+  Future<bool> isPermissionGranted(Permission permission) async {
+    final status = await permission.status;
+    return status.isGranted;
+  }
+
+  Future<bool> isContactPermissionGranted() async {
+    return isPermissionGranted(Permission.contacts);
+  }
+
+  Future<bool> requestContactPermission() async {
+    final status = await Permission.contacts.request();
+    return status.isGranted;
+  }
 }

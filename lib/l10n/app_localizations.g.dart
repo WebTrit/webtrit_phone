@@ -523,6 +523,18 @@ abstract class AppLocalizations {
   /// **'There are no permissions to get your phone contacts'**
   String get contacts_LocalTabText_permissionFailure;
 
+  /// No description provided for @contacts_LocalTabText_contactsAgreementFailure.
+  ///
+  /// In en, this message translates to:
+  /// **'To sync your local contacts, you must accept the agreement in Settings.'**
+  String get contacts_LocalTabText_contactsAgreementFailure;
+
+  /// No description provided for @contacts_LocalTabButton_contactsAgreement.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Settings'**
+  String get contacts_LocalTabButton_contactsAgreement;
+
   /// No description provided for @contactsSourceExternal.
   ///
   /// In en, this message translates to:
