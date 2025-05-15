@@ -71,6 +71,11 @@ class UserRepository {
 
   Stream<UserInfo> infoUpdates() => _updatesController.stream;
 
+  Stream<UserInfo> getInfoAndListen() async* {
+    yield _lastInfo ?? await _gatherUserInfo();
+    yield* _updatesController.stream;
+  }
+
   Future<void> logout() async {
     try {
       await webtritApiClient.deleteSession(token, options: RequestOptions.withExtraRetries());

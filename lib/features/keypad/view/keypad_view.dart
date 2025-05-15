@@ -5,6 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 
+// TODO: l10n
+
 class KeypadView extends StatefulWidget {
   const KeypadView({
     super.key,
@@ -87,20 +89,86 @@ class KeypadViewState extends State<KeypadView> {
         ValueListenableBuilder(
           valueListenable: _controller,
           builder: (BuildContext context, TextEditingValue value, Widget? child) {
-            return BlocBuilder<KeypadCubit, KeypadState>(
-              builder: (context, state) {
-                return BlocBuilder<CallBloc, CallState>(
-                  buildWhen: (previous, current) =>
-                      previous.isBlingTransferInitiated != current.isBlingTransferInitiated,
-                  builder: (context, callState) {
-                    return Actionpad(
-                      transfer: callState.isBlingTransferInitiated,
-                      videoVisible: widget.videoVisible,
-                      onAudioCallPressed: value.text.isEmpty ? null : () => _onCallPressed(false),
-                      onVideoCallPressed: value.text.isEmpty ? null : () => _onCallPressed(true),
-                      onTransferPressed: _onTransferPressed,
-                      onBackspacePressed: value.text.isEmpty ? null : _onBackspacePressed,
-                      onBackspaceLongPress: value.text.isEmpty ? null : _onBackspaceLongPress,
+            return BlocBuilder<CallBloc, CallState>(
+              buildWhen: (previous, current) => previous.isBlingTransferInitiated != current.isBlingTransferInitiated,
+              builder: (context, callState) {
+                return BlocBuilder<CallRoutingCubit, CallRoutingState?>(
+                  builder: (context, callRoutingState) {
+                    bool canCall = true;
+
+                    if (value.text.isEmpty) {
+                      canCall = false;
+                    } else if (callRoutingState != null) {
+                      if (callRoutingState.callAsSupports &&
+                          callRoutingState.useAdditionalNumber != null &&
+                          !callRoutingState.canCallAs) {
+                        canCall = false;
+                      }
+                      if ((callRoutingState.callAsSupports == false || callRoutingState.useAdditionalNumber == null) &&
+                          !callRoutingState.canCallWithMainNumber) {
+                        canCall = false;
+                      }
+                    }
+
+                    return Column(
+                      children: [
+                        if (callRoutingState != null && callRoutingState.callAsSupports) ...[
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            spacing: 16,
+                            children: [
+                              Text(
+                                'Call as',
+                                style: themeData.textTheme.bodyMedium,
+                              ),
+                              DropdownButton<String?>(
+                                value: callRoutingState.useAdditionalNumber,
+                                items: [
+                                  DropdownMenuItem(
+                                    value: null,
+                                    child: Row(
+                                      spacing: 4,
+                                      children: [
+                                        const Icon(Icons.phone_outlined, size: 16),
+                                        Text(
+                                          callRoutingState.mainNumber +
+                                              (callRoutingState.canCallWithMainNumber ? '' : ' (busy line)'),
+                                          style: themeData.textTheme.bodyMedium,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  for (final number in callRoutingState.additionalNumbers)
+                                    DropdownMenuItem(
+                                      value: number,
+                                      child: Row(
+                                        spacing: 4,
+                                        children: [
+                                          const Icon(Icons.phone_forwarded_outlined, size: 16),
+                                          Text(
+                                            number + (callRoutingState.canCallAs ? '' : ' (busy line)'),
+                                            style: themeData.textTheme.bodyMedium,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                ],
+                                onChanged: context.read<CallRoutingCubit>().setAdditionalNumberToUse,
+                              ),
+                            ],
+                          ),
+                        ],
+                        SizedBox(height: scaledInset),
+                        Actionpad(
+                          transfer: callState.isBlingTransferInitiated,
+                          videoVisible: widget.videoVisible,
+                          onBackspacePressed: canCall ? _onBackspacePressed : null,
+                          onBackspaceLongPress: canCall ? _onBackspaceLongPress : null,
+                          onAudioCallPressed: canCall ? () => _onCallPressed(false) : null,
+                          onVideoCallPressed: canCall ? () => _onCallPressed(true) : null,
+                          onTransferPressed: _onTransferPressed,
+                        ),
+                      ],
                     );
                   },
                 );

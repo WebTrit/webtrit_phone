@@ -47,6 +47,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   final TrustedCertificates trustedCertificates;
 
   final CallLogsRepository callLogsRepository;
+  final LinesStateRepository linesStateRepository;
   final Function(Notification) submitNotification;
 
   final Callkeep callkeep;
@@ -75,6 +76,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     required this.token,
     required this.trustedCertificates,
     required this.callLogsRepository,
+    required this.linesStateRepository,
     required this.submitNotification,
     required this.callkeep,
     required this.callkeepConnections,
@@ -251,6 +253,21 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         ));
       }
     }
+
+    final linesCount = change.nextState.linesCount;
+    final activeCalls = change.nextState.activeCalls;
+    final List<LineState> mainLinesState = [];
+    for (var i = 0; i < linesCount; i++) {
+      final inUse = activeCalls.any((e) => e.line == i);
+      mainLinesState.add(inUse ? LineState.inUse : LineState.idle);
+    }
+
+    // TODO: active call refactor to support guest line
+    // ignore: unnecessary_null_comparison
+    final guestLineInUse = activeCalls.any((e) => e.line == null);
+    final guestLineState = guestLineInUse ? LineState.inUse : LineState.idle;
+
+    linesStateRepository.setState(LinesState(mainLines: mainLinesState, guestLine: guestLineState));
   }
 
   //
