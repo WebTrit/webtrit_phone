@@ -16,29 +16,36 @@ class ContactsExternalTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Future routeToContactScreen(int contactId) async {
+      context.router.navigate(ContactScreenPageRoute(contactId: contactId));
+    }
+
+    Future refreshContacts() async {
+      final tabBloc = context.read<ContactsExternalTabBloc>();
+      tabBloc.add(const ContactsExternalTabRefreshed());
+      await tabBloc.stream.firstWhere((state) => state.status != ContactsExternalTabStatus.inProgress);
+    }
+
     return BlocBuilder<ContactsExternalTabBloc, ContactsExternalTabState>(
       builder: (context, state) {
-        if (state.status == ContactsExternalTabStatus.initial || state.status == ContactsExternalTabStatus.inProgress) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
+        if (state.status == ContactsExternalTabStatus.initial) {
+          return const Center(child: CircularProgressIndicator());
         } else if (state.contacts.isNotEmpty) {
-          return ListView.builder(
-            itemCount: state.contacts.length,
-            itemBuilder: (context, index) {
-              final contact = state.contacts[index];
-              return ContactTile(
-                displayName: contact.displayTitle,
-                thumbnail: contact.thumbnail,
-                thumbnailUrl: contact.thumbnailUrl,
-                registered: contact.registered,
-                onTap: () {
-                  context.router.navigate(ContactScreenPageRoute(
-                    contactId: contact.id,
-                  ));
-                },
-              );
-            },
+          return RefreshIndicator(
+            onRefresh: refreshContacts,
+            child: ListView.builder(
+              itemCount: state.contacts.length,
+              itemBuilder: (context, index) {
+                final contact = state.contacts[index];
+                return ContactTile(
+                  displayName: contact.displayTitle,
+                  thumbnail: contact.thumbnail,
+                  thumbnailUrl: contact.thumbnailUrl,
+                  registered: contact.registered,
+                  onTap: () => routeToContactScreen(contact.id),
+                );
+              },
+            ),
           );
         } else {
           if (state.status == ContactsExternalTabStatus.failure) {
@@ -55,7 +62,7 @@ class ContactsExternalTab extends StatelessWidget {
                 content: Text(context.l10n.contacts_ExternalTabText_empty),
                 actions: [
                   TextButton(
-                    onPressed: () => context.read<ContactsExternalTabBloc>().add(const ContactsExternalTabRefreshed()),
+                    onPressed: refreshContacts,
                     child: Text(context.l10n.contacts_ExternalTabButton_refresh),
                   )
                 ],
