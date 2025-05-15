@@ -230,19 +230,27 @@ class _MainShellState extends State<MainShell> {
               final appDatabase = context.read<AppDatabase>();
               final appPreferences = context.read<AppPreferences>();
               final featureAccess = context.read<FeatureAccess>();
+              final appPermissions = context.read<AppPermissions>();
 
-              final contactTab = featureAccess.bottomMenuFeature.getTabEnabled(MainFlavor.contacts)?.toContacts;
-              final contactSourceTypes = contactTab?.contactSourceTypes ?? [];
+              Future<bool> isFutureEnabled() async {
+                final contactTab = featureAccess.bottomMenuFeature.getTabEnabled(MainFlavor.contacts)?.toContacts;
+                final contactSourceTypes = contactTab?.contactSourceTypes ?? [];
+                return contactSourceTypes.contains(ContactSourceType.local);
+              }
 
-              final contactsAgreementStatus = appPreferences.getContactsAgreementStatus();
-              final canSyncLocalContacts =
-                  contactSourceTypes.contains(ContactSourceType.local) && contactsAgreementStatus.isAccepted;
+              Future<bool> isAgreementAccepted() async {
+                final contactsAgreementStatus = appPreferences.getContactsAgreementStatus();
+                return contactsAgreementStatus.isAccepted;
+              }
 
               final bloc = LocalContactsSyncBloc(
                 localContactsRepository: localContactsRepository,
                 appDatabase: appDatabase,
                 appPreferences: appPreferences,
-                canSyncLocalContacts: canSyncLocalContacts,
+                isFeatureEnabled: isFutureEnabled,
+                isAgreementAccepted: isAgreementAccepted,
+                isContactsPermissionGranted: () => appPermissions.isContactPermissionGranted(),
+                requestContactPermission: () => appPermissions.requestContactPermission(),
               );
 
               bloc.add(const LocalContactsSyncStarted());

@@ -6,6 +6,7 @@ import 'package:permission_handler/permission_handler.dart';
 
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
+import 'package:webtrit_phone/theme/extension/elevated_button_styles.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../../../contacts.dart';
@@ -17,6 +18,9 @@ class ContactsLocalTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final elevatedButtonStyles = theme.extension<ElevatedButtonStyles>();
+
     return BlocBuilder<ContactsLocalTabBloc, ContactsLocalTabState>(
       builder: (context, state) {
         if (state.status == ContactsLocalTabStatus.initial || state.status == ContactsLocalTabStatus.inProgress) {
@@ -57,6 +61,27 @@ class ContactsLocalTab extends StatelessWidget {
           if (state.status == ContactsLocalTabStatus.failure) {
             return NoDataPlaceholder(
               content: Text(context.l10n.contacts_LocalTabText_failure),
+            );
+          }
+          if (state.status == ContactsLocalTabStatus.contactsAgreementFailure) {
+            return NoDataPlaceholder(
+              content: Column(
+                children: [
+                  Text(context.l10n.contacts_LocalTabText_contactsAgreementFailure),
+                  const SizedBox(height: 16),
+                  TextButton(
+                    onPressed: () =>
+                        context.router.push(const SettingsRouterPageRoute(children: [DiagnosticScreenPageRoute()])),
+                    style: elevatedButtonStyles?.neutral,
+                    child: Text(context.l10n.contacts_LocalTabButton_contactsAgreement),
+                  ),
+                  TextButton(
+                    onPressed: () => context.read<ContactsLocalTabBloc>().add(const ContactsLocalTabRefreshed()),
+                    style: elevatedButtonStyles?.neutral,
+                    child: Text(context.l10n.contacts_LocalTabButton_refresh),
+                  ),
+                ],
+              ),
             );
           } else {
             if (state.searching) {
