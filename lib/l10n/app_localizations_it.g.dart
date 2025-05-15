@@ -222,6 +222,12 @@ class AppLocalizationsIt extends AppLocalizations {
   String get contacts_LocalTabText_permissionFailure => 'Non ci sono i permessi per ottenere i tuoi contatti telefonici';
 
   @override
+  String get contacts_LocalTabText_contactsAgreementFailure => 'Per sincronizzare i contatti locali, è necessario accettare l\'accordo nelle Impostazioni.';
+
+  @override
+  String get contacts_LocalTabButton_contactsAgreement => 'Apri Impostazioni';
+
+  @override
   String get contactsSourceExternal => 'Centralino cloud';
 
   @override

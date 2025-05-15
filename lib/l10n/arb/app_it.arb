@@ -142,6 +142,8 @@
   "@contacts_LocalTabText_failure": {},
   "contacts_LocalTabText_permissionFailure": "Non ci sono i permessi per ottenere i tuoi contatti telefonici",
   "@contacts_LocalTabText_permissionFailure": {},
+  "contacts_LocalTabText_contactsAgreementFailure": "Per sincronizzare i contatti locali, è necessario accettare l'accordo nelle Impostazioni.",
+  "contacts_LocalTabButton_contactsAgreement": "Apri Impostazioni",
   "contactsSourceExternal": "Centralino cloud",
   "@contactsSourceExternal": {},
   "contactsSourceLocal": "Il tuo telefono",

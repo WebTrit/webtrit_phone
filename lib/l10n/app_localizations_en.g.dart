@@ -222,6 +222,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get contacts_LocalTabText_permissionFailure => 'There are no permissions to get your phone contacts';
 
   @override
+  String get contacts_LocalTabText_contactsAgreementFailure => 'To sync your local contacts, you must accept the agreement in Settings.';
+
+  @override
+  String get contacts_LocalTabButton_contactsAgreement => 'Open Settings';
+
+  @override
   String get contactsSourceExternal => 'Cloud PBX';
 
   @override
