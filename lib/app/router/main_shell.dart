@@ -178,7 +178,7 @@ class _MainShellState extends State<MainShell> {
           ),
         ),
         RepositoryProvider<MainScreenRouteStateRepository>(
-          create: (context) => MainScreenRouteStateRepositoryAutoRouteImpl(),
+          create: (context) => MainScreenRouteStateRepositoryDefaultImpl(),
         ),
         RepositoryProvider<MainShellRouteStateRepository>(
           create: (context) => MainShellRouteStateRepositoryAutoRouteImpl(),
