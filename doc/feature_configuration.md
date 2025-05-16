@@ -10,6 +10,7 @@
 - [Setup Settings Configuration](#setup-settings-configuration)
 - [Settings Sections](#settings-sections)
 - [Settings Items](#settings-items)
+- [Embedded pages](#embedded-pages)
 - [Embedded Resources](#embedded-resources)
 
 ---
@@ -29,7 +30,8 @@ Settings for selecting the login mode, between native and custom login.
 - `type`: Action type (login, embedded).
 - `titleL10n`: Localized button title.
 
-If `embeddedResourceId` is provided, the section is enabled, and the type is `embedded`, it will display a custom login page for this button on the welcome screen.
+If `embeddedResourceId` is provided, the section is enabled, and the type is `embedded`, it will display a custom login
+page for this button on the welcome screen.
 
 **Example Configuration for Custom Login:**
 
@@ -59,7 +61,6 @@ If `embeddedResourceId` is provided, the section is enabled, and the type is `em
 }
 
 ```
-
 
 ## Setup Main Configuration
 
@@ -189,9 +190,17 @@ Each settings item includes:
 - `titleL10n`: Localized name
 - `icon`: Item icon
 
+## Embedded pages
+
+Embedded pages allow extending the WebTrit app with custom web content. These pages can be integrated either as a bottom
+menu tab or as a settings item.
+[Embedded configuration](embedded_pages.md)
+
 ## Embedded Resources
 
-The `embeddedResources` section defines the resources that can be embedded within the application. Each resource can either be a local file or a URL to an external page. If using a local file, ensure it is placed in the `assets` directory and provide the correct path.
+The `embeddedResources` section defines the resources that can be embedded within the application. Each resource can
+either be a local file or a URL to an external page. If using a local file, ensure it is placed in the `assets`
+directory and provide the correct path.
 
 ```json
 {
@@ -219,5 +228,5 @@ The `embeddedResources` section defines the resources that can be embedded withi
 - `id`: Unique resource identifier.
 - `uri`: URL or resource path.
 - `toolbar`: Toolbar settings for the embedded page.
-  - `showToolbar`: Boolean to show or hide the toolbar.
-  - `titleL10n`: Localized title for the toolbar.
+    - `showToolbar`: Boolean to show or hide the toolbar.
+    - `titleL10n`: Localized title for the toolbar.

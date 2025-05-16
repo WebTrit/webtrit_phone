@@ -21,6 +21,7 @@ The application offers extensive customization options:
 - **[Pages](doc/page_configuration.md)** – Customize pages and their layouts.
 - **[Features](doc/feature_configuration.md)** – Enable or disable specific features.
   - [Custom Login](doc/custom_login.md) – Implement a custom login page.
+  - [Embedded pages](doc/embedded_pages.md) –  Implements embedded pages that extend the WebTrit app with custom web content.
 
 ## Development & Build
 
