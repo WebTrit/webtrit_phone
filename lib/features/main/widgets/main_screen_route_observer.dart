@@ -27,17 +27,13 @@ class MainScreenNavigatorObserver extends AutoRouterObserver {
 
   @override
   void didPush(Route route, Route? previousRoute) {
-    final args = route.data?.route.args;
     _logger.finest('didPush: ${route.settings.name}');
-    _mainScreenRouteStateRepository.setLastRouteArgs(args);
     super.didPush(route, previousRoute);
   }
 
   @override
   void didPop(Route route, Route? previousRoute) {
-    final args = previousRoute?.data?.route.args;
     _logger.finest('didPop: ${route.settings.name}');
-    _mainScreenRouteStateRepository.setLastRouteArgs(args);
     super.didPop(route, previousRoute);
   }
 }

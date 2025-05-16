@@ -1,29 +1,59 @@
+import 'dart:async';
+
 import 'package:webtrit_phone/app/router/app_router.dart';
+import 'package:webtrit_phone/models/main_flavor.dart';
 
 abstract class MainScreenRouteStateRepository {
   String get activeTabPage;
-  dynamic get lastRouteArgs;
 
   void setActiveTabPage(String activeTabPage);
-  void setLastRouteArgs(dynamic lastRouteArgs);
 
-  bool isMessagingTabActive();
+  /// Returns the active flavor tab based on the current active tab page.
+  MainFlavor? get activeFlavorTab;
+
+  /// Returns a stream of the active flavor tab.
+  /// First value is the current active flavor tab.
+  Stream<MainFlavor?> get activeFlavorTabStream;
 }
 
 class MainScreenRouteStateRepositoryAutoRouteImpl implements MainScreenRouteStateRepository {
   String _activeTabPage = '';
-  dynamic _lastRouteArgs;
+  final _activeTabPageController = StreamController<String>.broadcast();
 
   @override
   String get activeTabPage => _activeTabPage;
-  @override
-  dynamic get lastRouteArgs => _lastRouteArgs;
 
   @override
-  void setActiveTabPage(String activeTabPage) => _activeTabPage = activeTabPage;
-  @override
-  void setLastRouteArgs(dynamic lastRouteArgs) => _lastRouteArgs = lastRouteArgs;
+  void setActiveTabPage(String activeTabPage) {
+    _activeTabPage = activeTabPage;
+    _activeTabPageController.add(activeTabPage);
+  }
 
   @override
-  bool isMessagingTabActive() => _activeTabPage == ConversationsScreenPageRoute.name;
+  MainFlavor? get activeFlavorTab => _mapActiveTabPageToFlavor(_activeTabPage);
+
+  @override
+  Stream<MainFlavor?> get activeFlavorTabStream async* {
+    yield _mapActiveTabPageToFlavor(_activeTabPage);
+    yield* _activeTabPageController.stream.map(_mapActiveTabPageToFlavor);
+  }
+
+  MainFlavor? _mapActiveTabPageToFlavor(String activeTabPage) {
+    switch (activeTabPage) {
+      case FavoritesRouterPageRoute.name:
+        return MainFlavor.favorites;
+      case RecentsRouterPageRoute.name:
+        return MainFlavor.recents;
+      case ContactsRouterPageRoute.name:
+        return MainFlavor.contacts;
+      case KeypadScreenPageRoute.name:
+        return MainFlavor.keypad;
+      case ConversationsScreenPageRoute.name:
+        return MainFlavor.messaging;
+      case EmbeddedTabPageRoute.name:
+        return MainFlavor.embedded;
+      default:
+        return null;
+    }
+  }
 }

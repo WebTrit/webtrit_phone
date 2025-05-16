@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -7,7 +8,9 @@ import 'package:logging/logging.dart';
 
 import 'package:webtrit_phone/utils/utils.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
+import 'package:webtrit_phone/models/main_flavor.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'package:webtrit_phone/repositories/route_state/main_screen_route_state_repository.dart';
 
 import '../bloc/embedded_cubit.dart';
 
@@ -29,30 +32,61 @@ class EmbeddedScreen extends StatefulWidget {
 }
 
 class _EmbeddedScreenState extends State<EmbeddedScreen> {
-  final WebViewController _webViewController = WebViewController();
+  late final _webViewController = WebViewController();
+  late final _bloc = context.read<EmbeddedCubit>();
+  StreamSubscription? _tabSub;
 
-  EmbeddedCubit get _bloc => context.read<EmbeddedCubit>();
+  bool _canGoBack = false;
+  bool _isTabActive = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabSub = context.read<MainScreenRouteStateRepository>().activeFlavorTabStream.listen((flavor) {
+      if (mounted) setState(() => _isTabActive = flavor == MainFlavor.embedded);
+    });
+  }
+
+  @override
+  void dispose() {
+    _tabSub?.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: widget.appBar,
       body: BlocConsumer<EmbeddedCubit, EmbeddedState>(
-        builder: (context, state) => Stack(
-          children: [
-            WebViewScaffold(
+        builder: (context, state) {
+          return PopScope(
+            onPopInvokedWithResult: (didPop, result) async {
+              if (_isTabActive && _canGoBack) _webViewController.goBack();
+            },
+            canPop: _canGoBack && _isTabActive ? false : true,
+            child: WebViewScaffold(
               initialUri: widget.initialUri,
               webViewController: _webViewController,
               showToolbar: false,
               userAgent: UserAgent.of(context),
-              onPageLoadedSuccess: _bloc.onPageLoadedSuccess,
-              onPageLoadedFailed: _bloc.onPageLoadedFailed,
+              onPageLoadedSuccess: () {
+                _bloc.onPageLoadedSuccess;
+                _webViewController.canGoBack().then((v) {
+                  if (mounted) setState(() => _canGoBack = v);
+                });
+              },
+              onPageLoadedFailed: (x) {
+                _bloc.onPageLoadedFailed(x);
+                _webViewController.canGoBack().then((v) {
+                  if (mounted) setState(() => _canGoBack = v);
+                });
+              },
               errorBuilder: (context, error, controller) {
                 return EmbeddedRequestError(error: error, onPressed: () => _bloc.reload());
               },
-            )
-          ],
-        ),
+            ),
+          );
+        },
         listener: _onBlocStateChanged,
       ),
     );
