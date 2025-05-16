@@ -1347,6 +1347,12 @@ class $CallLogsTableTable extends CallLogsTable
       requiredDuringInsert: true,
       $customConstraints:
           'NOT NULL CONSTRAINT "call_logs.number not_empty" CHECK (length(number) > 0)');
+  static const VerificationMeta _usernameMeta =
+      const VerificationMeta('username');
+  @override
+  late final GeneratedColumn<String> username = GeneratedColumn<String>(
+      'username', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
   static const VerificationMeta _videoMeta = const VerificationMeta('video');
   @override
   late final GeneratedColumn<bool> video = GeneratedColumn<bool>(
@@ -1375,7 +1381,7 @@ class $CallLogsTableTable extends CallLogsTable
       type: DriftSqlType.dateTime, requiredDuringInsert: false);
   @override
   List<GeneratedColumn> get $columns =>
-      [id, direction, number, video, createdAt, acceptedAt, hungUpAt];
+      [id, direction, number, username, video, createdAt, acceptedAt, hungUpAt];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -1395,6 +1401,10 @@ class $CallLogsTableTable extends CallLogsTable
           number.isAcceptableOrUnknown(data['number']!, _numberMeta));
     } else if (isInserting) {
       context.missing(_numberMeta);
+    }
+    if (data.containsKey('username')) {
+      context.handle(_usernameMeta,
+          username.isAcceptableOrUnknown(data['username']!, _usernameMeta));
     }
     if (data.containsKey('video')) {
       context.handle(
@@ -1434,6 +1444,8 @@ class $CallLogsTableTable extends CallLogsTable
               .read(DriftSqlType.int, data['${effectivePrefix}direction'])!),
       number: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}number'])!,
+      username: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}username']),
       video: attachedDatabase.typeMapping
           .read(DriftSqlType.bool, data['${effectivePrefix}video'])!,
       createdAt: attachedDatabase.typeMapping
@@ -1459,6 +1471,7 @@ class CallLogData extends DataClass implements Insertable<CallLogData> {
   final int id;
   final CallLogDirectionEnum direction;
   final String number;
+  final String? username;
   final bool video;
   final DateTime createdAt;
   final DateTime? acceptedAt;
@@ -1467,6 +1480,7 @@ class CallLogData extends DataClass implements Insertable<CallLogData> {
       {required this.id,
       required this.direction,
       required this.number,
+      this.username,
       required this.video,
       required this.createdAt,
       this.acceptedAt,
@@ -1480,6 +1494,9 @@ class CallLogData extends DataClass implements Insertable<CallLogData> {
           $CallLogsTableTable.$converterdirection.toSql(direction));
     }
     map['number'] = Variable<String>(number);
+    if (!nullToAbsent || username != null) {
+      map['username'] = Variable<String>(username);
+    }
     map['video'] = Variable<bool>(video);
     map['created_at'] = Variable<DateTime>(createdAt);
     if (!nullToAbsent || acceptedAt != null) {
@@ -1496,6 +1513,9 @@ class CallLogData extends DataClass implements Insertable<CallLogData> {
       id: Value(id),
       direction: Value(direction),
       number: Value(number),
+      username: username == null && nullToAbsent
+          ? const Value.absent()
+          : Value(username),
       video: Value(video),
       createdAt: Value(createdAt),
       acceptedAt: acceptedAt == null && nullToAbsent
@@ -1515,6 +1535,7 @@ class CallLogData extends DataClass implements Insertable<CallLogData> {
       direction: $CallLogsTableTable.$converterdirection
           .fromJson(serializer.fromJson<int>(json['direction'])),
       number: serializer.fromJson<String>(json['number']),
+      username: serializer.fromJson<String?>(json['username']),
       video: serializer.fromJson<bool>(json['video']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
       acceptedAt: serializer.fromJson<DateTime?>(json['acceptedAt']),
@@ -1529,6 +1550,7 @@ class CallLogData extends DataClass implements Insertable<CallLogData> {
       'direction': serializer.toJson<int>(
           $CallLogsTableTable.$converterdirection.toJson(direction)),
       'number': serializer.toJson<String>(number),
+      'username': serializer.toJson<String?>(username),
       'video': serializer.toJson<bool>(video),
       'createdAt': serializer.toJson<DateTime>(createdAt),
       'acceptedAt': serializer.toJson<DateTime?>(acceptedAt),
@@ -1540,6 +1562,7 @@ class CallLogData extends DataClass implements Insertable<CallLogData> {
           {int? id,
           CallLogDirectionEnum? direction,
           String? number,
+          Value<String?> username = const Value.absent(),
           bool? video,
           DateTime? createdAt,
           Value<DateTime?> acceptedAt = const Value.absent(),
@@ -1548,6 +1571,7 @@ class CallLogData extends DataClass implements Insertable<CallLogData> {
         id: id ?? this.id,
         direction: direction ?? this.direction,
         number: number ?? this.number,
+        username: username.present ? username.value : this.username,
         video: video ?? this.video,
         createdAt: createdAt ?? this.createdAt,
         acceptedAt: acceptedAt.present ? acceptedAt.value : this.acceptedAt,
@@ -1558,6 +1582,7 @@ class CallLogData extends DataClass implements Insertable<CallLogData> {
       id: data.id.present ? data.id.value : this.id,
       direction: data.direction.present ? data.direction.value : this.direction,
       number: data.number.present ? data.number.value : this.number,
+      username: data.username.present ? data.username.value : this.username,
       video: data.video.present ? data.video.value : this.video,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
       acceptedAt:
@@ -1572,6 +1597,7 @@ class CallLogData extends DataClass implements Insertable<CallLogData> {
           ..write('id: $id, ')
           ..write('direction: $direction, ')
           ..write('number: $number, ')
+          ..write('username: $username, ')
           ..write('video: $video, ')
           ..write('createdAt: $createdAt, ')
           ..write('acceptedAt: $acceptedAt, ')
@@ -1582,7 +1608,7 @@ class CallLogData extends DataClass implements Insertable<CallLogData> {
 
   @override
   int get hashCode => Object.hash(
-      id, direction, number, video, createdAt, acceptedAt, hungUpAt);
+      id, direction, number, username, video, createdAt, acceptedAt, hungUpAt);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -1590,6 +1616,7 @@ class CallLogData extends DataClass implements Insertable<CallLogData> {
           other.id == this.id &&
           other.direction == this.direction &&
           other.number == this.number &&
+          other.username == this.username &&
           other.video == this.video &&
           other.createdAt == this.createdAt &&
           other.acceptedAt == this.acceptedAt &&
@@ -1600,6 +1627,7 @@ class CallLogDataCompanion extends UpdateCompanion<CallLogData> {
   final Value<int> id;
   final Value<CallLogDirectionEnum> direction;
   final Value<String> number;
+  final Value<String?> username;
   final Value<bool> video;
   final Value<DateTime> createdAt;
   final Value<DateTime?> acceptedAt;
@@ -1608,6 +1636,7 @@ class CallLogDataCompanion extends UpdateCompanion<CallLogData> {
     this.id = const Value.absent(),
     this.direction = const Value.absent(),
     this.number = const Value.absent(),
+    this.username = const Value.absent(),
     this.video = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.acceptedAt = const Value.absent(),
@@ -1617,6 +1646,7 @@ class CallLogDataCompanion extends UpdateCompanion<CallLogData> {
     this.id = const Value.absent(),
     required CallLogDirectionEnum direction,
     required String number,
+    this.username = const Value.absent(),
     required bool video,
     required DateTime createdAt,
     this.acceptedAt = const Value.absent(),
@@ -1629,6 +1659,7 @@ class CallLogDataCompanion extends UpdateCompanion<CallLogData> {
     Expression<int>? id,
     Expression<int>? direction,
     Expression<String>? number,
+    Expression<String>? username,
     Expression<bool>? video,
     Expression<DateTime>? createdAt,
     Expression<DateTime>? acceptedAt,
@@ -1638,6 +1669,7 @@ class CallLogDataCompanion extends UpdateCompanion<CallLogData> {
       if (id != null) 'id': id,
       if (direction != null) 'direction': direction,
       if (number != null) 'number': number,
+      if (username != null) 'username': username,
       if (video != null) 'video': video,
       if (createdAt != null) 'created_at': createdAt,
       if (acceptedAt != null) 'accepted_at': acceptedAt,
@@ -1649,6 +1681,7 @@ class CallLogDataCompanion extends UpdateCompanion<CallLogData> {
       {Value<int>? id,
       Value<CallLogDirectionEnum>? direction,
       Value<String>? number,
+      Value<String?>? username,
       Value<bool>? video,
       Value<DateTime>? createdAt,
       Value<DateTime?>? acceptedAt,
@@ -1657,6 +1690,7 @@ class CallLogDataCompanion extends UpdateCompanion<CallLogData> {
       id: id ?? this.id,
       direction: direction ?? this.direction,
       number: number ?? this.number,
+      username: username ?? this.username,
       video: video ?? this.video,
       createdAt: createdAt ?? this.createdAt,
       acceptedAt: acceptedAt ?? this.acceptedAt,
@@ -1676,6 +1710,9 @@ class CallLogDataCompanion extends UpdateCompanion<CallLogData> {
     }
     if (number.present) {
       map['number'] = Variable<String>(number.value);
+    }
+    if (username.present) {
+      map['username'] = Variable<String>(username.value);
     }
     if (video.present) {
       map['video'] = Variable<bool>(video.value);
@@ -1698,6 +1735,7 @@ class CallLogDataCompanion extends UpdateCompanion<CallLogData> {
           ..write('id: $id, ')
           ..write('direction: $direction, ')
           ..write('number: $number, ')
+          ..write('username: $username, ')
           ..write('video: $video, ')
           ..write('createdAt: $createdAt, ')
           ..write('acceptedAt: $acceptedAt, ')
@@ -9087,6 +9125,7 @@ typedef $$CallLogsTableTableCreateCompanionBuilder = CallLogDataCompanion
   Value<int> id,
   required CallLogDirectionEnum direction,
   required String number,
+  Value<String?> username,
   required bool video,
   required DateTime createdAt,
   Value<DateTime?> acceptedAt,
@@ -9097,6 +9136,7 @@ typedef $$CallLogsTableTableUpdateCompanionBuilder = CallLogDataCompanion
   Value<int> id,
   Value<CallLogDirectionEnum> direction,
   Value<String> number,
+  Value<String?> username,
   Value<bool> video,
   Value<DateTime> createdAt,
   Value<DateTime?> acceptedAt,
@@ -9123,6 +9163,9 @@ class $$CallLogsTableTableFilterComposer
 
   ColumnFilters<String> get number => $composableBuilder(
       column: $table.number, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get username => $composableBuilder(
+      column: $table.username, builder: (column) => ColumnFilters(column));
 
   ColumnFilters<bool> get video => $composableBuilder(
       column: $table.video, builder: (column) => ColumnFilters(column));
@@ -9155,6 +9198,9 @@ class $$CallLogsTableTableOrderingComposer
   ColumnOrderings<String> get number => $composableBuilder(
       column: $table.number, builder: (column) => ColumnOrderings(column));
 
+  ColumnOrderings<String> get username => $composableBuilder(
+      column: $table.username, builder: (column) => ColumnOrderings(column));
+
   ColumnOrderings<bool> get video => $composableBuilder(
       column: $table.video, builder: (column) => ColumnOrderings(column));
 
@@ -9185,6 +9231,9 @@ class $$CallLogsTableTableAnnotationComposer
 
   GeneratedColumn<String> get number =>
       $composableBuilder(column: $table.number, builder: (column) => column);
+
+  GeneratedColumn<String> get username =>
+      $composableBuilder(column: $table.username, builder: (column) => column);
 
   GeneratedColumn<bool> get video =>
       $composableBuilder(column: $table.video, builder: (column) => column);
@@ -9228,6 +9277,7 @@ class $$CallLogsTableTableTableManager extends RootTableManager<
             Value<int> id = const Value.absent(),
             Value<CallLogDirectionEnum> direction = const Value.absent(),
             Value<String> number = const Value.absent(),
+            Value<String?> username = const Value.absent(),
             Value<bool> video = const Value.absent(),
             Value<DateTime> createdAt = const Value.absent(),
             Value<DateTime?> acceptedAt = const Value.absent(),
@@ -9237,6 +9287,7 @@ class $$CallLogsTableTableTableManager extends RootTableManager<
             id: id,
             direction: direction,
             number: number,
+            username: username,
             video: video,
             createdAt: createdAt,
             acceptedAt: acceptedAt,
@@ -9246,6 +9297,7 @@ class $$CallLogsTableTableTableManager extends RootTableManager<
             Value<int> id = const Value.absent(),
             required CallLogDirectionEnum direction,
             required String number,
+            Value<String?> username = const Value.absent(),
             required bool video,
             required DateTime createdAt,
             Value<DateTime?> acceptedAt = const Value.absent(),
@@ -9255,6 +9307,7 @@ class $$CallLogsTableTableTableManager extends RootTableManager<
             id: id,
             direction: direction,
             number: number,
+            username: username,
             video: video,
             createdAt: createdAt,
             acceptedAt: acceptedAt,

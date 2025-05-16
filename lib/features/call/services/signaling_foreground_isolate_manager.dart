@@ -130,6 +130,7 @@ class SignalingForegroundIsolateManager implements CallkeepBackgroundServiceDele
     String callId,
     String number,
     DateTime createdTime,
+    String? displayName,
     DateTime? acceptedTime,
     DateTime? hungUpTime, {
     bool video = false,
@@ -138,6 +139,7 @@ class SignalingForegroundIsolateManager implements CallkeepBackgroundServiceDele
       direction: CallDirection.incoming,
       number: number,
       video: video,
+      username: displayName,
       createdTime: createdTime,
       acceptedTime: acceptedTime,
       hungUpTime: hungUpTime,
