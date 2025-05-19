@@ -11,7 +11,7 @@ import 'package:webtrit_phone/widgets/widgets.dart';
 import '../utils/utils.dart';
 import '../bloc/embedded_cubit.dart';
 
-import 'embedded_screen.dart';
+import 'embedded_tab_screen.dart';
 
 @RoutePage()
 class EmbeddedTabPage extends StatelessWidget {
@@ -38,7 +38,7 @@ class EmbeddedTabPage extends StatelessWidget {
         customPrivateGatewayRepository: customPrivateGatewayRepository,
         embeddedPayloadBuilder: embeddedPayloadBuilder,
       ),
-      child: EmbeddedScreen(
+      child: EmbeddedTabScreen(
         initialUri: data.data!.uri,
         appBar: MainAppBar(
           title: Text(context.parseL10n(data.titleL10n)),

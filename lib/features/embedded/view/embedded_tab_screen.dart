@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -7,14 +8,16 @@ import 'package:logging/logging.dart';
 
 import 'package:webtrit_phone/utils/utils.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
+import 'package:webtrit_phone/models/main_flavor.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'package:webtrit_phone/repositories/route_state/main_screen_route_state_repository.dart';
 
 import '../bloc/embedded_cubit.dart';
 
-final _logger = Logger('EmbeddedScreen');
+final _logger = Logger('EmbeddedTabScreen');
 
-class EmbeddedScreen extends StatefulWidget {
-  const EmbeddedScreen({
+class EmbeddedTabScreen extends StatefulWidget {
+  const EmbeddedTabScreen({
     super.key,
     required this.initialUri,
     required this.appBar,
@@ -25,12 +28,28 @@ class EmbeddedScreen extends StatefulWidget {
   final PreferredSizeWidget appBar;
 
   @override
-  State<EmbeddedScreen> createState() => _EmbeddedScreenState();
+  State<EmbeddedTabScreen> createState() => _EmbeddedTabScreenState();
 }
 
-class _EmbeddedScreenState extends State<EmbeddedScreen> {
+class _EmbeddedTabScreenState extends State<EmbeddedTabScreen> {
   late final _webViewController = WebViewController();
   late final _bloc = context.read<EmbeddedCubit>();
+  StreamSubscription? _tabSub;
+  bool _isTabActive = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabSub = context.read<MainScreenRouteStateRepository>().activeFlavorTabStream.listen((flavor) {
+      if (mounted) setState(() => _isTabActive = flavor == MainFlavor.embedded);
+    });
+  }
+
+  @override
+  void dispose() {
+    _tabSub?.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,9 +60,9 @@ class _EmbeddedScreenState extends State<EmbeddedScreen> {
           final canGoBack = state.canGoBack;
           return PopScope(
             onPopInvokedWithResult: (didPop, result) async {
-              if (canGoBack) _webViewController.goBack();
+              if (_isTabActive && canGoBack) _webViewController.goBack();
             },
-            canPop: canGoBack ? false : true,
+            canPop: canGoBack && _isTabActive ? false : true,
             child: WebViewScaffold(
               initialUri: widget.initialUri,
               webViewController: _webViewController,
