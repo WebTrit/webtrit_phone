@@ -15,14 +15,17 @@ final _logger = Logger('EmbeddedScreen');
 
 class EmbeddedScreen extends StatefulWidget {
   const EmbeddedScreen({
-    super.key,
     required this.initialUri,
     required this.appBar,
+    this.shouldForwardPop = true,
+    super.key,
   });
 
   final Uri initialUri;
-
   final PreferredSizeWidget appBar;
+
+  /// If true, the pop action will be forwarded to the WebView if backstack is available.
+  final bool shouldForwardPop;
 
   @override
   State<EmbeddedScreen> createState() => _EmbeddedScreenState();
@@ -38,12 +41,11 @@ class _EmbeddedScreenState extends State<EmbeddedScreen> {
       appBar: widget.appBar,
       body: BlocConsumer<EmbeddedCubit, EmbeddedState>(
         builder: (context, state) {
-          final canGoBack = state.canGoBack;
+          final forwardPop = widget.shouldForwardPop && state.canGoBack;
+
           return PopScope(
-            onPopInvokedWithResult: (didPop, result) async {
-              if (canGoBack) _webViewController.goBack();
-            },
-            canPop: canGoBack ? false : true,
+            onPopInvokedWithResult: (_, __) => _webViewController.goBack(),
+            canPop: forwardPop == false,
             child: WebViewScaffold(
               initialUri: widget.initialUri,
               webViewController: _webViewController,
