@@ -8,6 +8,9 @@ abstract class LocalNotificationRepository {
   /// Stream of messaging notification actions that were tapped or dismissed
   Stream<AppLocalNotificationAction> get messagingActions;
 
+  /// Stream of system notification actions that were tapped or dismissed
+  Stream<AppLocalNotificationAction> get systemActions;
+
   /// Display a local push notification
   Future<void> displayNotification(AppLocalNotification notification);
 
@@ -24,6 +27,18 @@ class LocalNotificationRepositoryFLNImpl implements LocalNotificationRepository 
   @override
   Stream<AppLocalNotificationAction> get messagingActions {
     return LocalNotificationsBroker.messagingActions.map((action) {
+      final payload = action.payload;
+      return AppLocalNotificationAction(
+        id: action.id ?? -1,
+        payload: payload != null ? json.decode(payload) : {},
+        type: LocalNotificationActionType.tap,
+      );
+    });
+  }
+
+  @override
+  Stream<AppLocalNotificationAction> get systemActions {
+    return LocalNotificationsBroker.systemActions.map((action) {
       final payload = action.payload;
       return AppLocalNotificationAction(
         id: action.id ?? -1,

@@ -11,16 +11,25 @@ class LocalNotificationsBroker {
   static final _msgActsController = StreamController<NotificationResponse>();
   static final _msgActsBroadcastStream = _msgActsController.stream.asBroadcastStream();
 
+  static final _systemActsController = StreamController<NotificationResponse>();
+  static final _systemActsBroadcastStream = _systemActsController.stream.asBroadcastStream();
+
   /// Stream of messaging local notification actions
   /// e.g tap dismiss etc.
   /// The stream is broadcasted so it can be listened by multiple components
   static Stream<NotificationResponse> get messagingActions => _msgActsBroadcastStream;
+
+  /// Stream of system local notification actions
+  /// e.g tap dismiss etc.
+  /// The stream is broadcasted so it can be listened by multiple components
+  static Stream<NotificationResponse> get systemActions => _systemActsBroadcastStream;
 
   /// Handles the local notification action
   /// and routes it to the apropriate stream
   @pragma('vm:entry-point')
   static Future handleActionReceived(NotificationResponse response) async {
     if (_isMessagingAction(response)) _msgActsController.add(response);
+    if (_isSystemNotificationAction(response)) _systemActsController.add(response);
   }
 
   static bool _isMessagingAction(NotificationResponse response) {
@@ -28,5 +37,12 @@ class LocalNotificationsBroker {
     if (payload == null) return false;
     final payloadData = json.decode(payload);
     return payloadData['chatId'] != null || payloadData['smsConversationId'] != null;
+  }
+
+  static bool _isSystemNotificationAction(NotificationResponse response) {
+    final payload = response.payload;
+    if (payload == null) return false;
+    final payloadData = json.decode(payload);
+    return payloadData['system_id'] != null;
   }
 }

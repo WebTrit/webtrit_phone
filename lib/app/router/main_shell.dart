@@ -10,6 +10,7 @@ import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 import 'package:webtrit_phone/app/assets.gen.dart';
 import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/app/notifications/notifications.dart';
+import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';
@@ -380,6 +381,13 @@ class _MainShellState extends State<MainShell> {
                       context.read<NotificationsBloc>().add(NotificationsSubmitted(DefaultErrorNotification(error)));
                       context.read<AppBloc>().maybeHandleError(error);
                     },
+                  ),
+                ),
+                BlocProvider(
+                  lazy: false,
+                  create: (_) => SystemNotificationsCubit(
+                    context.read<LocalNotificationRepository>(),
+                    onOpenNotifications: () => context.router.push(const SystemNotificationsPageRoute()),
                   ),
                 ),
               ],

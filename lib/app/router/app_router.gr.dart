@@ -1127,6 +1127,22 @@ class SmsConversationScreenPageRouteArgs {
 }
 
 /// generated route for
+/// [SystemNotificationsPage]
+class SystemNotificationsPageRoute extends PageRouteInfo<void> {
+  const SystemNotificationsPageRoute({List<PageRouteInfo>? children})
+    : super(SystemNotificationsPageRoute.name, initialChildren: children);
+
+  static const String name = 'SystemNotificationsPageRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const SystemNotificationsPage();
+    },
+  );
+}
+
+/// generated route for
 /// [TermsConditionsScreenPage]
 class TermsConditionsScreenPageRoute
     extends PageRouteInfo<TermsConditionsScreenPageRouteArgs> {
