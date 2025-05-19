@@ -14,11 +14,11 @@ import 'package:webtrit_phone/models/models.dart';
 bool whenLoginRouterPageChange(LoginState previous, LoginState current) {
   return (previous.mode != current.mode) ||
       (previous.coreUrl != current.coreUrl || previous.supportedLoginTypes != current.supportedLoginTypes) ||
-      previous.embedded != current.embedded;
+      previous.launchEmbedded != current.launchEmbedded;
 }
 
 bool whenLoginEmbeddedScreenPageActive(LoginState state) {
-  return state.embedded != null;
+  return state.launchEmbedded != null;
 }
 
 bool whenLoginCoreUrlAssignScreenPageActive(LoginState state) {
@@ -70,7 +70,7 @@ class LoginRouterPage extends StatelessWidget {
               if (!isLaunchLoginEmbedded) const LoginModeSelectScreenPageRoute(),
               if (whenLoginCoreUrlAssignScreenPageActive(state)) const LoginCoreUrlAssignScreenPageRoute(),
               if (whenLoginEmbeddedScreenPageActive(state))
-                LoginEmbeddedScreenPageRoute(loginEmbedded: state.embedded!),
+                LoginEmbeddedScreenPageRoute(loginEmbedded: state.launchEmbedded!),
               if (whenLoginSwitchScreenPageActive(state)) const LoginSwitchScreenPageRoute(),
             ];
           },
@@ -98,7 +98,7 @@ class LoginRouterPage extends StatelessWidget {
       platformInfo: context.read<PlatformInfo>(),
     );
     if (_launchLoginEmbedded != null) {
-      login.setCustomLogin(_launchLoginEmbedded);
+      login.setLaunchEmbedded(_launchLoginEmbedded);
     }
     final provider = BlocProvider(
       create: (context) => login,

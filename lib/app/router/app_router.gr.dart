@@ -760,7 +760,7 @@ class LoginRouterPageRouteArgs {
 class LoginSignupEmbeddedRequestScreenPageRoute
     extends PageRouteInfo<LoginSignupEmbeddedRequestScreenPageRouteArgs> {
   LoginSignupEmbeddedRequestScreenPageRoute({
-    required LoginEmbeddedModeButton embeddedData,
+    required LoginEmbedded embeddedData,
     List<PageRouteInfo>? children,
   }) : super(
          LoginSignupEmbeddedRequestScreenPageRoute.name,
@@ -786,7 +786,7 @@ class LoginSignupEmbeddedRequestScreenPageRouteArgs {
     required this.embeddedData,
   });
 
-  final LoginEmbeddedModeButton embeddedData;
+  final LoginEmbedded embeddedData;
 
   @override
   String toString() {
