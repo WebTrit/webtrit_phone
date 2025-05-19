@@ -239,16 +239,23 @@ class FeatureAccess {
       final flavor = LoginFlavor.values.byName(actions.type);
       final loginEmbeddedScreen = appConfig.embeddedResources.firstWhereOrNull((dto) => dto.id == actions.embeddedId);
 
-      if (flavor == LoginFlavor.embedded && loginEmbeddedScreen != null) {
+      var isLaunchButtonVisible = actions.isLaunchButtonVisible;
+      var isEmbeddedConfigurationValid = flavor == LoginFlavor.embedded && loginEmbeddedScreen != null;
+      var isLaunchScreen = isEmbeddedConfigurationValid && !isLaunchButtonVisible && actions.isLaunchScreen;
+
+      if (isEmbeddedConfigurationValid) {
         buttons.add(LoginEmbeddedModeButton(
           titleL10n: actions.titleL10n,
           flavor: flavor,
           customLoginFeature: _toLoginEmbeddedModel(loginEmbeddedScreen)!,
+          isLaunchButtonVisible: isLaunchButtonVisible,
+          isLaunchScreen: isLaunchScreen,
         ));
       } else if (flavor == LoginFlavor.login) {
         buttons.add(LoginModeAction(
           titleL10n: actions.titleL10n,
           flavor: flavor,
+          isLaunchButtonVisible: isLaunchButtonVisible,
         ));
       }
     }
@@ -366,7 +373,14 @@ class LoginFeature {
     required this.launchLoginPage,
   });
 
-  bool get hasEmbeddedPage => actions.any((flavor) => flavor.flavor == LoginFlavor.embedded);
+  List<LoginEmbeddedModeButton> get embeddedConfigurations => actions.whereType<LoginEmbeddedModeButton>().toList();
+
+  LoginEmbeddedModeButton? get embeddedLaunchConfiguration =>
+      embeddedConfigurations.firstWhereOrNull((action) => action.isLaunchScreen);
+
+  bool get hasEmbeddedPage => embeddedConfigurations.isNotEmpty;
+
+  List<LoginModeAction> get launchButtons => actions.where((action) => action.isLaunchButtonVisible).toList();
 }
 
 class BottomMenuFeature {
