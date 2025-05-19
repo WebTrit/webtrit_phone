@@ -68,6 +68,8 @@ _$AppConfigModeSelectActionImpl _$$AppConfigModeSelectActionImplFromJson(
       embeddedId: (json['embeddedId'] as num?)?.toInt(),
       type: json['type'] as String,
       titleL10n: json['titleL10n'] as String,
+      isLaunchButtonVisible: json['isLaunchButtonVisible'] as bool? ?? false,
+      isLaunchScreen: json['isLaunchScreen'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$$AppConfigModeSelectActionImplToJson(
@@ -77,6 +79,8 @@ Map<String, dynamic> _$$AppConfigModeSelectActionImplToJson(
       'embeddedId': instance.embeddedId,
       'type': instance.type,
       'titleL10n': instance.titleL10n,
+      'isLaunchButtonVisible': instance.isLaunchButtonVisible,
+      'isLaunchScreen': instance.isLaunchScreen,
     };
 
 _$AppConfigMainImpl _$$AppConfigMainImplFromJson(Map<String, dynamic> json) =>
