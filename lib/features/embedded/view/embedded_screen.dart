@@ -70,7 +70,7 @@ class _EmbeddedScreenState extends State<EmbeddedScreen> {
               showToolbar: false,
               userAgent: UserAgent.of(context),
               onPageLoadedSuccess: () {
-                _bloc.onPageLoadedSuccess;
+                _bloc.onPageLoadedSuccess();
                 _webViewController.canGoBack().then((v) {
                   if (mounted) setState(() => _canGoBack = v);
                 });
