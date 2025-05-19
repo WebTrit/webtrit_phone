@@ -10,6 +10,8 @@ class EmbeddedState with _$EmbeddedState {
 
   const factory EmbeddedState({
     @Default({}) Map<String, dynamic> payload,
+    @Default('') String currentUrl,
+    @Default(false) bool canGoBack,
     @Default(false) bool payloadReady,
     @Default(false) bool webViewReady,
     WebResourceError? webResourceError,

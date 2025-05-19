@@ -35,8 +35,6 @@ class _EmbeddedScreenState extends State<EmbeddedScreen> {
   late final _webViewController = WebViewController();
   late final _bloc = context.read<EmbeddedCubit>();
   StreamSubscription? _tabSub;
-
-  bool _canGoBack = false;
   bool _isTabActive = false;
 
   @override
@@ -59,27 +57,23 @@ class _EmbeddedScreenState extends State<EmbeddedScreen> {
       appBar: widget.appBar,
       body: BlocConsumer<EmbeddedCubit, EmbeddedState>(
         builder: (context, state) {
+          final canGoBack = state.canGoBack;
           return PopScope(
             onPopInvokedWithResult: (didPop, result) async {
-              if (_isTabActive && _canGoBack) _webViewController.goBack();
+              if (_isTabActive && canGoBack) _webViewController.goBack();
             },
-            canPop: _canGoBack && _isTabActive ? false : true,
+            canPop: canGoBack && _isTabActive ? false : true,
             child: WebViewScaffold(
               initialUri: widget.initialUri,
               webViewController: _webViewController,
               showToolbar: false,
               userAgent: UserAgent.of(context),
-              onPageLoadedSuccess: () {
-                _bloc.onPageLoadedSuccess();
-                _webViewController.canGoBack().then((v) {
-                  if (mounted) setState(() => _canGoBack = v);
-                });
-              },
-              onPageLoadedFailed: (x) {
-                _bloc.onPageLoadedFailed(x);
-                _webViewController.canGoBack().then((v) {
-                  if (mounted) setState(() => _canGoBack = v);
-                });
+              onPageLoadedSuccess: _bloc.onPageLoadedSuccess,
+              onPageLoadedFailed: _bloc.onPageLoadedFailed,
+              onUrlChange: (url) async {
+                _bloc.onUrlChange(url ?? '');
+                final canGoBack = await _webViewController.canGoBack();
+                if (mounted) _bloc.onCanGoBackChange(canGoBack);
               },
               errorBuilder: (context, error, controller) {
                 return EmbeddedRequestError(error: error, onPressed: () => _bloc.reload());

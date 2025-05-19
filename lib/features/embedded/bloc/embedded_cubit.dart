@@ -144,6 +144,18 @@ class EmbeddedCubit extends Cubit<EmbeddedState> {
     emit(state.copyWith(webViewReady: false, webResourceError: error));
   }
 
+  /// Called when the URL changes in the WebView.
+  void onUrlChange(String url) {
+    _logger.info('URL changed: $url');
+    emit(state.copyWith(currentUrl: url));
+  }
+
+  /// Called when the WebView's back navigation state changes.
+  void onCanGoBackChange(bool canGoBack) {
+    _logger.info('Can go back changed: $canGoBack');
+    emit(state.copyWith(canGoBack: canGoBack));
+  }
+
   @override
   Future<void> close() async {
     _connectivityDebounceTimer?.cancel();
