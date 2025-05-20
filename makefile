@@ -93,16 +93,18 @@ else
 endif
 
 # Fetch token from the file if not provided as a parameter
-ifeq ($(token),)
-    ifeq ($(wildcard $(TOKEN_FILE)),)
-        $(error Token not provided and file not found: $(TOKEN_FILE))
-    else
-        token := $(shell cat $(TOKEN_FILE))
-    endif
-endif
+define verify_token
+	ifeq ($(token),)
+		ifeq ($(wildcard $(TOKEN_FILE)),)
+			$(error Token not provided and file not found: $(TOKEN_FILE))
+		else
+			token := $(shell cat $(TOKEN_FILE))
+		endif
+	endif
+endef
 
 # Rules
-.PHONY: run build configure configure-demo configure-classic build-ios build-apk build-appbundle clean-git generate-package-config rename-package generate-launcher-icons generate-native-splash generate-assets
+.PHONY: run build configure configure-demo configure-classic build-ios build-apk build-appbundle clean-git generate-package-config rename-package generate-launcher-icons generate-native-splash generate-assets push-l10n pull-l10n gen-l10n fetch-l10n
 
 ## Run the Flutter application
 run:
@@ -114,11 +116,13 @@ build:
 
 ## Configure application resources
 configure:
+	$(call verify_token)
 	$(CONFIGURATOR) configurator-resources --applicationId=$(id) $(KEYSTORES_PATH) --token=$(token)
 	$(CONFIGURATOR) configurator-generate
 
 ## Create demo configuration
 configure-demo:
+	$(call verify_token)
 	$(CONFIGURATOR) configurator-resources --applicationId=$(id) $(KEYSTORES_PATH) --token=$(token)
 	$(CONFIGURATOR) configurator-generate
 
@@ -127,12 +131,17 @@ configure-classic:
 	$(CONFIGURATOR) configurator-resources --applicationId=$(id) $(KEYSTORES_PATH) --token=$(token)
 	$(CONFIGURATOR) configurator-generate
 
+## Prebuild iOS configuration
+build-ios-config-only:
+	flutter build ios $(FLUTTER_FLAGS) --config-only
+
 ## Create iOS build
 build-ios:
 	flutter build ios $(FLUTTER_FLAGS)
 
-build-ios-config-only:
-	flutter build ios $(FLUTTER_FLAGS) --config-only
+## Create iOS build with archive and ipa
+build-ipa:
+	flutter build ipa $(FLUTTER_FLAGS)
 
 ## Create APK build
 build-apk:
@@ -201,10 +210,12 @@ generate-assets: generate-launcher-icons generate-native-splash
 
 ## Push localization keys to Localizely
 push-l10n:
+	$(call verify_token)
 	localizely-cli --api-token=$(token) push
 
 ## Pull localization keys from Localizely
 pull-l10n:
+	$(call verify_token)
 	localizely-cli --api-token=$(token) pull
 
 ## Generate Flutter localization files
