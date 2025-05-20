@@ -125,9 +125,16 @@ class LoginCubit extends Cubit<LoginState> with SystemInfoApiMapper {
     if (coreUrl != null) await _processSystemInfo(coreUrl, defaultTenantId, demo);
   }
 
-  void setCustomLogin(LoginEmbedded login) {
+  void setLaunchEmbedded(LoginEmbedded embedded) {
     emit(state.copyWith(
-      embedded: login,
+      launchEmbedded: embedded,
+      coreUrl: isDemoModeEnabled ? demoCoreUrlFromEnvironment : coreUrlFromEnvironment,
+    ));
+  }
+
+  void setSwitchEmbedded(LoginEmbedded embedded) {
+    emit(state.copyWith(
+      switchEmbedded: embedded,
       coreUrl: isDemoModeEnabled ? demoCoreUrlFromEnvironment : coreUrlFromEnvironment,
     ));
   }
@@ -168,7 +175,7 @@ class LoginCubit extends Cubit<LoginState> with SystemInfoApiMapper {
 
   void embeddedPageAssignBack() async {
     emit(state.copyWith(
-      embedded: null,
+      switchEmbedded: null,
     ));
   }
 
@@ -180,6 +187,7 @@ class LoginCubit extends Cubit<LoginState> with SystemInfoApiMapper {
       coreUrl: null,
       tenantId: null,
       supportedLoginTypes: null,
+      switchEmbedded: null,
       otpSigninSessionOtpProvisionalWithDateTime: null,
       passwordSigninPasswordInputObscureText: true,
       signupSessionOtpProvisionalWithDateTime: null,

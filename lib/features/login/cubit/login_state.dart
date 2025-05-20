@@ -16,7 +16,10 @@ class LoginState with _$LoginState {
     SessionOtpProvisionalWithDateTime? signupSessionOtpProvisionalWithDateTime,
     String? token,
     String? userId,
-    LoginEmbedded? embedded,
+    // If provided, this parameter will be used to build the launch screen instead of the native welcome screen
+    LoginEmbedded? launchEmbedded,
+    // If provided, this parameter will determine the active login tab or fallback to a single login type if others are disabled
+    LoginEmbedded? switchEmbedded,
     @Default(UrlInput.pure()) UrlInput coreUrlInput,
     @Default(UserRefInput.pure()) UserRefInput otpSigninUserRefInput,
     @Default(CodeInput.pure()) CodeInput otpSigninCodeInput,

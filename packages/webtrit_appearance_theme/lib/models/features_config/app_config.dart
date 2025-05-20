@@ -56,6 +56,8 @@ class AppConfigModeSelectAction with _$AppConfigModeSelectAction {
     int? embeddedId,
     required String type,
     required String titleL10n,
+    @Default(false) bool isLaunchButtonVisible,
+    @Default(false) bool isLaunchScreen,
   }) = _AppConfigModeSelectAction;
 
   factory AppConfigModeSelectAction.fromJson(Map<String, dynamic> json) => _$AppConfigModeSelectActionFromJson(json);

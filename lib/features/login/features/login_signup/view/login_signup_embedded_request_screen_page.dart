@@ -14,13 +14,13 @@ class LoginSignupEmbeddedRequestScreenPage extends StatelessWidget {
   // ignore: use_key_in_widget_constructors
   const LoginSignupEmbeddedRequestScreenPage(this.embeddedData);
 
-  final LoginEmbeddedModeButton embeddedData;
+  final LoginEmbedded embeddedData;
 
   @override
   Widget build(BuildContext context) {
     // TODO(Serdun): Implement directly in LoginEmbedded
     final resource = ResourceLoader.fromUri(
-      embeddedData.customLoginFeature.resource.toString(),
+      embeddedData.resource.toString(),
     );
 
     return FutureBuilder<String>(

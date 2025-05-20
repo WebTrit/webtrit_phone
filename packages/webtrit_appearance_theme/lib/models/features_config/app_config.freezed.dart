@@ -533,6 +533,8 @@ mixin _$AppConfigModeSelectAction {
   int? get embeddedId => throw _privateConstructorUsedError;
   String get type => throw _privateConstructorUsedError;
   String get titleL10n => throw _privateConstructorUsedError;
+  bool get isLaunchButtonVisible => throw _privateConstructorUsedError;
+  bool get isLaunchScreen => throw _privateConstructorUsedError;
 
   /// Serializes this AppConfigModeSelectAction to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -550,7 +552,13 @@ abstract class $AppConfigModeSelectActionCopyWith<$Res> {
           $Res Function(AppConfigModeSelectAction) then) =
       _$AppConfigModeSelectActionCopyWithImpl<$Res, AppConfigModeSelectAction>;
   @useResult
-  $Res call({bool enabled, int? embeddedId, String type, String titleL10n});
+  $Res call(
+      {bool enabled,
+      int? embeddedId,
+      String type,
+      String titleL10n,
+      bool isLaunchButtonVisible,
+      bool isLaunchScreen});
 }
 
 /// @nodoc
@@ -573,6 +581,8 @@ class _$AppConfigModeSelectActionCopyWithImpl<$Res,
     Object? embeddedId = freezed,
     Object? type = null,
     Object? titleL10n = null,
+    Object? isLaunchButtonVisible = null,
+    Object? isLaunchScreen = null,
   }) {
     return _then(_value.copyWith(
       enabled: null == enabled
@@ -591,6 +601,14 @@ class _$AppConfigModeSelectActionCopyWithImpl<$Res,
           ? _value.titleL10n
           : titleL10n // ignore: cast_nullable_to_non_nullable
               as String,
+      isLaunchButtonVisible: null == isLaunchButtonVisible
+          ? _value.isLaunchButtonVisible
+          : isLaunchButtonVisible // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isLaunchScreen: null == isLaunchScreen
+          ? _value.isLaunchScreen
+          : isLaunchScreen // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 }
@@ -604,7 +622,13 @@ abstract class _$$AppConfigModeSelectActionImplCopyWith<$Res>
       __$$AppConfigModeSelectActionImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({bool enabled, int? embeddedId, String type, String titleL10n});
+  $Res call(
+      {bool enabled,
+      int? embeddedId,
+      String type,
+      String titleL10n,
+      bool isLaunchButtonVisible,
+      bool isLaunchScreen});
 }
 
 /// @nodoc
@@ -626,6 +650,8 @@ class __$$AppConfigModeSelectActionImplCopyWithImpl<$Res>
     Object? embeddedId = freezed,
     Object? type = null,
     Object? titleL10n = null,
+    Object? isLaunchButtonVisible = null,
+    Object? isLaunchScreen = null,
   }) {
     return _then(_$AppConfigModeSelectActionImpl(
       enabled: null == enabled
@@ -644,6 +670,14 @@ class __$$AppConfigModeSelectActionImplCopyWithImpl<$Res>
           ? _value.titleL10n
           : titleL10n // ignore: cast_nullable_to_non_nullable
               as String,
+      isLaunchButtonVisible: null == isLaunchButtonVisible
+          ? _value.isLaunchButtonVisible
+          : isLaunchButtonVisible // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isLaunchScreen: null == isLaunchScreen
+          ? _value.isLaunchScreen
+          : isLaunchScreen // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -656,7 +690,9 @@ class _$AppConfigModeSelectActionImpl extends _AppConfigModeSelectAction {
       {required this.enabled,
       this.embeddedId,
       required this.type,
-      required this.titleL10n})
+      required this.titleL10n,
+      this.isLaunchButtonVisible = false,
+      this.isLaunchScreen = false})
       : super._();
 
   factory _$AppConfigModeSelectActionImpl.fromJson(Map<String, dynamic> json) =>
@@ -670,10 +706,16 @@ class _$AppConfigModeSelectActionImpl extends _AppConfigModeSelectAction {
   final String type;
   @override
   final String titleL10n;
+  @override
+  @JsonKey()
+  final bool isLaunchButtonVisible;
+  @override
+  @JsonKey()
+  final bool isLaunchScreen;
 
   @override
   String toString() {
-    return 'AppConfigModeSelectAction(enabled: $enabled, embeddedId: $embeddedId, type: $type, titleL10n: $titleL10n)';
+    return 'AppConfigModeSelectAction(enabled: $enabled, embeddedId: $embeddedId, type: $type, titleL10n: $titleL10n, isLaunchButtonVisible: $isLaunchButtonVisible, isLaunchScreen: $isLaunchScreen)';
   }
 
   @override
@@ -686,13 +728,17 @@ class _$AppConfigModeSelectActionImpl extends _AppConfigModeSelectAction {
                 other.embeddedId == embeddedId) &&
             (identical(other.type, type) || other.type == type) &&
             (identical(other.titleL10n, titleL10n) ||
-                other.titleL10n == titleL10n));
+                other.titleL10n == titleL10n) &&
+            (identical(other.isLaunchButtonVisible, isLaunchButtonVisible) ||
+                other.isLaunchButtonVisible == isLaunchButtonVisible) &&
+            (identical(other.isLaunchScreen, isLaunchScreen) ||
+                other.isLaunchScreen == isLaunchScreen));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, enabled, embeddedId, type, titleL10n);
+  int get hashCode => Object.hash(runtimeType, enabled, embeddedId, type,
+      titleL10n, isLaunchButtonVisible, isLaunchScreen);
 
   /// Create a copy of AppConfigModeSelectAction
   /// with the given fields replaced by the non-null parameter values.
@@ -716,7 +762,9 @@ abstract class _AppConfigModeSelectAction extends AppConfigModeSelectAction {
       {required final bool enabled,
       final int? embeddedId,
       required final String type,
-      required final String titleL10n}) = _$AppConfigModeSelectActionImpl;
+      required final String titleL10n,
+      final bool isLaunchButtonVisible,
+      final bool isLaunchScreen}) = _$AppConfigModeSelectActionImpl;
   const _AppConfigModeSelectAction._() : super._();
 
   factory _AppConfigModeSelectAction.fromJson(Map<String, dynamic> json) =
@@ -730,6 +778,10 @@ abstract class _AppConfigModeSelectAction extends AppConfigModeSelectAction {
   String get type;
   @override
   String get titleL10n;
+  @override
+  bool get isLaunchButtonVisible;
+  @override
+  bool get isLaunchScreen;
 
   /// Create a copy of AppConfigModeSelectAction
   /// with the given fields replaced by the non-null parameter values.

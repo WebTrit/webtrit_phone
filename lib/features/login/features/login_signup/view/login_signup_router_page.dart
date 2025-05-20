@@ -19,6 +19,12 @@ bool whenLoginSignupVerifyScreenPageActive(LoginState state) {
   return state.signupSessionOtpProvisionalWithDateTime != null;
 }
 
+/// Represents  signup route.
+///
+/// If no `switchEmbedded` is provided, it uses the standard UI with
+/// [LoginSignupRequestScreenPageRoute] (e.g., email signup).
+///
+/// If `switchEmbedded` is provided, it uses [LoginSignupEmbeddedRequestScreenPageRoute] instead.
 @RoutePage()
 class LoginSignupRouterPage extends StatelessWidget {
   // ignore: use_key_in_widget_constructors
@@ -26,20 +32,15 @@ class LoginSignupRouterPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final signUpActions = FeatureAccess().loginFeature.actions;
-
-    final defaultEmailSignUp = signUpActions.firstWhereOrNull((it) => it.flavor == LoginFlavor.login);
-    final embeddedSignUp = signUpActions.firstWhereOrNull((it) => it.flavor == LoginFlavor.embedded);
-
     return BlocBuilder<LoginCubit, LoginState>(
       buildWhen: whenLoginSignupRouterPageChange,
       builder: (context, state) {
+        final embedded = state.switchEmbedded;
         return AutoRouter.declarative(
           routes: (handler) {
             return [
-              if (defaultEmailSignUp != null) const LoginSignupRequestScreenPageRoute(),
-              if (embeddedSignUp != null)
-                LoginSignupEmbeddedRequestScreenPageRoute(embeddedData: embeddedSignUp as LoginEmbeddedModeButton),
+              if (embedded == null) const LoginSignupRequestScreenPageRoute(),
+              if (embedded != null) LoginSignupEmbeddedRequestScreenPageRoute(embeddedData: embedded),
               if (whenLoginSignupVerifyScreenPageActive(state)) const LoginSignupVerifyScreenPageRoute(),
             ];
           },

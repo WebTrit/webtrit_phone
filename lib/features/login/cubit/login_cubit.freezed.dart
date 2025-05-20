@@ -36,8 +36,11 @@ mixin _$LoginState {
   )? get signupSessionOtpProvisionalWithDateTime =>
       throw _privateConstructorUsedError;
   String? get token => throw _privateConstructorUsedError;
-  String? get userId => throw _privateConstructorUsedError;
-  LoginEmbedded? get embedded => throw _privateConstructorUsedError;
+  String? get userId =>
+      throw _privateConstructorUsedError; // If provided, this parameter will be used to build the launch screen instead of the native welcome screen
+  LoginEmbedded? get launchEmbedded =>
+      throw _privateConstructorUsedError; // If provided, this parameter will determine the active login tab or fallback to a single login type if others are disabled
+  LoginEmbedded? get switchEmbedded => throw _privateConstructorUsedError;
   UrlInput get coreUrlInput => throw _privateConstructorUsedError;
   UserRefInput get otpSigninUserRefInput => throw _privateConstructorUsedError;
   CodeInput get otpSigninCodeInput => throw _privateConstructorUsedError;
@@ -79,7 +82,8 @@ abstract class $LoginStateCopyWith<$Res> {
       )? signupSessionOtpProvisionalWithDateTime,
       String? token,
       String? userId,
-      LoginEmbedded? embedded,
+      LoginEmbedded? launchEmbedded,
+      LoginEmbedded? switchEmbedded,
       UrlInput coreUrlInput,
       UserRefInput otpSigninUserRefInput,
       CodeInput otpSigninCodeInput,
@@ -115,7 +119,8 @@ class _$LoginStateCopyWithImpl<$Res, $Val extends LoginState>
     Object? signupSessionOtpProvisionalWithDateTime = freezed,
     Object? token = freezed,
     Object? userId = freezed,
-    Object? embedded = freezed,
+    Object? launchEmbedded = freezed,
+    Object? switchEmbedded = freezed,
     Object? coreUrlInput = null,
     Object? otpSigninUserRefInput = null,
     Object? otpSigninCodeInput = null,
@@ -172,9 +177,13 @@ class _$LoginStateCopyWithImpl<$Res, $Val extends LoginState>
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
               as String?,
-      embedded: freezed == embedded
-          ? _value.embedded
-          : embedded // ignore: cast_nullable_to_non_nullable
+      launchEmbedded: freezed == launchEmbedded
+          ? _value.launchEmbedded
+          : launchEmbedded // ignore: cast_nullable_to_non_nullable
+              as LoginEmbedded?,
+      switchEmbedded: freezed == switchEmbedded
+          ? _value.switchEmbedded
+          : switchEmbedded // ignore: cast_nullable_to_non_nullable
               as LoginEmbedded?,
       coreUrlInput: null == coreUrlInput
           ? _value.coreUrlInput
@@ -234,7 +243,8 @@ abstract class _$$LoginStateImplCopyWith<$Res>
       )? signupSessionOtpProvisionalWithDateTime,
       String? token,
       String? userId,
-      LoginEmbedded? embedded,
+      LoginEmbedded? launchEmbedded,
+      LoginEmbedded? switchEmbedded,
       UrlInput coreUrlInput,
       UserRefInput otpSigninUserRefInput,
       CodeInput otpSigninCodeInput,
@@ -268,7 +278,8 @@ class __$$LoginStateImplCopyWithImpl<$Res>
     Object? signupSessionOtpProvisionalWithDateTime = freezed,
     Object? token = freezed,
     Object? userId = freezed,
-    Object? embedded = freezed,
+    Object? launchEmbedded = freezed,
+    Object? switchEmbedded = freezed,
     Object? coreUrlInput = null,
     Object? otpSigninUserRefInput = null,
     Object? otpSigninCodeInput = null,
@@ -325,9 +336,13 @@ class __$$LoginStateImplCopyWithImpl<$Res>
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
               as String?,
-      embedded: freezed == embedded
-          ? _value.embedded
-          : embedded // ignore: cast_nullable_to_non_nullable
+      launchEmbedded: freezed == launchEmbedded
+          ? _value.launchEmbedded
+          : launchEmbedded // ignore: cast_nullable_to_non_nullable
+              as LoginEmbedded?,
+      switchEmbedded: freezed == switchEmbedded
+          ? _value.switchEmbedded
+          : switchEmbedded // ignore: cast_nullable_to_non_nullable
               as LoginEmbedded?,
       coreUrlInput: null == coreUrlInput
           ? _value.coreUrlInput
@@ -376,7 +391,8 @@ class _$LoginStateImpl implements _LoginState {
       this.signupSessionOtpProvisionalWithDateTime,
       this.token,
       this.userId,
-      this.embedded,
+      this.launchEmbedded,
+      this.switchEmbedded,
       this.coreUrlInput = const UrlInput.pure(),
       this.otpSigninUserRefInput = const UserRefInput.pure(),
       this.otpSigninCodeInput = const CodeInput.pure(),
@@ -425,8 +441,12 @@ class _$LoginStateImpl implements _LoginState {
   final String? token;
   @override
   final String? userId;
+// If provided, this parameter will be used to build the launch screen instead of the native welcome screen
   @override
-  final LoginEmbedded? embedded;
+  final LoginEmbedded? launchEmbedded;
+// If provided, this parameter will determine the active login tab or fallback to a single login type if others are disabled
+  @override
+  final LoginEmbedded? switchEmbedded;
   @override
   @JsonKey()
   final UrlInput coreUrlInput;
@@ -451,7 +471,7 @@ class _$LoginStateImpl implements _LoginState {
 
   @override
   String toString() {
-    return 'LoginState(processing: $processing, mode: $mode, coreUrl: $coreUrl, tenantId: $tenantId, systemInfo: $systemInfo, supportedLoginTypes: $supportedLoginTypes, otpSigninSessionOtpProvisionalWithDateTime: $otpSigninSessionOtpProvisionalWithDateTime, passwordSigninPasswordInputObscureText: $passwordSigninPasswordInputObscureText, signupSessionOtpProvisionalWithDateTime: $signupSessionOtpProvisionalWithDateTime, token: $token, userId: $userId, embedded: $embedded, coreUrlInput: $coreUrlInput, otpSigninUserRefInput: $otpSigninUserRefInput, otpSigninCodeInput: $otpSigninCodeInput, passwordSigninUserRefInput: $passwordSigninUserRefInput, passwordSigninPasswordInput: $passwordSigninPasswordInput, signupEmailInput: $signupEmailInput, signupCodeInput: $signupCodeInput)';
+    return 'LoginState(processing: $processing, mode: $mode, coreUrl: $coreUrl, tenantId: $tenantId, systemInfo: $systemInfo, supportedLoginTypes: $supportedLoginTypes, otpSigninSessionOtpProvisionalWithDateTime: $otpSigninSessionOtpProvisionalWithDateTime, passwordSigninPasswordInputObscureText: $passwordSigninPasswordInputObscureText, signupSessionOtpProvisionalWithDateTime: $signupSessionOtpProvisionalWithDateTime, token: $token, userId: $userId, launchEmbedded: $launchEmbedded, switchEmbedded: $switchEmbedded, coreUrlInput: $coreUrlInput, otpSigninUserRefInput: $otpSigninUserRefInput, otpSigninCodeInput: $otpSigninCodeInput, passwordSigninUserRefInput: $passwordSigninUserRefInput, passwordSigninPasswordInput: $passwordSigninPasswordInput, signupEmailInput: $signupEmailInput, signupCodeInput: $signupCodeInput)';
   }
 
   @override
@@ -482,8 +502,10 @@ class _$LoginStateImpl implements _LoginState {
                     signupSessionOtpProvisionalWithDateTime) &&
             (identical(other.token, token) || other.token == token) &&
             (identical(other.userId, userId) || other.userId == userId) &&
-            (identical(other.embedded, embedded) ||
-                other.embedded == embedded) &&
+            (identical(other.launchEmbedded, launchEmbedded) ||
+                other.launchEmbedded == launchEmbedded) &&
+            (identical(other.switchEmbedded, switchEmbedded) ||
+                other.switchEmbedded == switchEmbedded) &&
             (identical(other.coreUrlInput, coreUrlInput) ||
                 other.coreUrlInput == coreUrlInput) &&
             (identical(other.otpSigninUserRefInput, otpSigninUserRefInput) ||
@@ -516,7 +538,8 @@ class _$LoginStateImpl implements _LoginState {
         signupSessionOtpProvisionalWithDateTime,
         token,
         userId,
-        embedded,
+        launchEmbedded,
+        switchEmbedded,
         coreUrlInput,
         otpSigninUserRefInput,
         otpSigninCodeInput,
@@ -554,7 +577,8 @@ abstract class _LoginState implements LoginState {
       )? signupSessionOtpProvisionalWithDateTime,
       final String? token,
       final String? userId,
-      final LoginEmbedded? embedded,
+      final LoginEmbedded? launchEmbedded,
+      final LoginEmbedded? switchEmbedded,
       final UrlInput coreUrlInput,
       final UserRefInput otpSigninUserRefInput,
       final CodeInput otpSigninCodeInput,
@@ -586,9 +610,13 @@ abstract class _LoginState implements LoginState {
   @override
   String? get token;
   @override
-  String? get userId;
+  String?
+      get userId; // If provided, this parameter will be used to build the launch screen instead of the native welcome screen
   @override
-  LoginEmbedded? get embedded;
+  LoginEmbedded?
+      get launchEmbedded; // If provided, this parameter will determine the active login tab or fallback to a single login type if others are disabled
+  @override
+  LoginEmbedded? get switchEmbedded;
   @override
   UrlInput get coreUrlInput;
   @override
