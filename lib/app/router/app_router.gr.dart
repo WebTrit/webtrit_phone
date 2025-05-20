@@ -597,41 +597,6 @@ class LoginCoreUrlAssignScreenPageRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [LoginEmbeddedScreenPage]
-class LoginEmbeddedScreenPageRoute
-    extends PageRouteInfo<LoginEmbeddedScreenPageRouteArgs> {
-  LoginEmbeddedScreenPageRoute({
-    required LoginEmbedded loginEmbedded,
-    List<PageRouteInfo>? children,
-  }) : super(
-         LoginEmbeddedScreenPageRoute.name,
-         args: LoginEmbeddedScreenPageRouteArgs(loginEmbedded: loginEmbedded),
-         initialChildren: children,
-       );
-
-  static const String name = 'LoginEmbeddedScreenPageRoute';
-
-  static PageInfo page = PageInfo(
-    name,
-    builder: (data) {
-      final args = data.argsAs<LoginEmbeddedScreenPageRouteArgs>();
-      return LoginEmbeddedScreenPage(loginEmbedded: args.loginEmbedded);
-    },
-  );
-}
-
-class LoginEmbeddedScreenPageRouteArgs {
-  const LoginEmbeddedScreenPageRouteArgs({required this.loginEmbedded});
-
-  final LoginEmbedded loginEmbedded;
-
-  @override
-  String toString() {
-    return 'LoginEmbeddedScreenPageRouteArgs{loginEmbedded: $loginEmbedded}';
-  }
-}
-
-/// generated route for
 /// [LoginModeSelectScreenPage]
 class LoginModeSelectScreenPageRoute extends PageRouteInfo<void> {
   const LoginModeSelectScreenPageRoute({List<PageRouteInfo>? children})
