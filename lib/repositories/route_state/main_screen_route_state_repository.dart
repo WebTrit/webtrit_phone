@@ -1,29 +1,35 @@
-import 'package:webtrit_phone/app/router/app_router.dart';
+import 'dart:async';
+
+import 'package:webtrit_phone/models/main_flavor.dart';
 
 abstract class MainScreenRouteStateRepository {
-  String get activeTabPage;
-  dynamic get lastRouteArgs;
+  /// Sets the active flavor tab based on the current active tab page.
+  void setActiveTab(MainFlavor? activeTabFlavor);
 
-  void setActiveTabPage(String activeTabPage);
-  void setLastRouteArgs(dynamic lastRouteArgs);
+  /// Returns the active flavor tab based on the current active tab page.
+  MainFlavor? get activeTab;
 
-  bool isMessagingTabActive();
+  /// Returns a stream of the active flavor tab.
+  /// First value is the current active flavor tab.
+  Stream<MainFlavor?> get activeFlavorTabStream;
 }
 
-class MainScreenRouteStateRepositoryAutoRouteImpl implements MainScreenRouteStateRepository {
-  String _activeTabPage = '';
-  dynamic _lastRouteArgs;
+class MainScreenRouteStateRepositoryDefaultImpl implements MainScreenRouteStateRepository {
+  MainFlavor? _activeTab;
+  final _activeTabController = StreamController<MainFlavor?>.broadcast();
 
   @override
-  String get activeTabPage => _activeTabPage;
-  @override
-  dynamic get lastRouteArgs => _lastRouteArgs;
+  MainFlavor? get activeTab => _activeTab;
 
   @override
-  void setActiveTabPage(String activeTabPage) => _activeTabPage = activeTabPage;
-  @override
-  void setLastRouteArgs(dynamic lastRouteArgs) => _lastRouteArgs = lastRouteArgs;
+  void setActiveTab(MainFlavor? activeTabFlavor) {
+    _activeTab = activeTabFlavor;
+    _activeTabController.add(activeTabFlavor);
+  }
 
   @override
-  bool isMessagingTabActive() => _activeTabPage == ConversationsScreenPageRoute.name;
+  Stream<MainFlavor?> get activeFlavorTabStream async* {
+    yield _activeTab;
+    yield* _activeTabController.stream;
+  }
 }

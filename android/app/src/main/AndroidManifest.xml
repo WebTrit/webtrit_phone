@@ -58,6 +58,7 @@
             android:windowSoftInputMode="adjustResize"
             android:relinquishTaskIdentity="true"
             android:showWhenLocked="true"
+            android:enableOnBackInvokedCallback="false"
             android:turnScreenOn="true">
             <!-- Specifies an Android theme to apply to this Activity as soon as
                  the Android process has started. This theme is visible to the user

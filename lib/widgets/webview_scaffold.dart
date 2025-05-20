@@ -30,6 +30,7 @@ class WebViewScaffold extends StatefulWidget {
     this.webViewController,
     this.onPageLoadedSuccess,
     this.onPageLoadedFailed,
+    this.onUrlChange,
   });
 
   final Widget? title;
@@ -44,6 +45,7 @@ class WebViewScaffold extends StatefulWidget {
 
   final void Function()? onPageLoadedSuccess;
   final void Function(WebResourceError error)? onPageLoadedFailed;
+  final void Function(String? url)? onUrlChange;
 
   @override
   State<WebViewScaffold> createState() => _WebViewScaffoldState();
@@ -110,6 +112,9 @@ class _WebViewScaffoldState extends State<WebViewScaffold> {
             _webViewController.addJavaScriptChannel(name, onMessageReceived: onMessageReceived),
           _webViewController.setNavigationDelegate(
             NavigationDelegate(
+              onUrlChange: (url) {
+                widget.onUrlChange?.call(url.url);
+              },
               onPageFinished: (url) {
                 if (_currentError == null) {
                   // Reset the error only if the page loaded successfully

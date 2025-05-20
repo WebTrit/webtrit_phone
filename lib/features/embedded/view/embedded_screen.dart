@@ -15,44 +15,55 @@ final _logger = Logger('EmbeddedScreen');
 
 class EmbeddedScreen extends StatefulWidget {
   const EmbeddedScreen({
-    super.key,
     required this.initialUri,
     required this.appBar,
+    this.shouldForwardPop = true,
+    super.key,
   });
 
   final Uri initialUri;
-
   final PreferredSizeWidget appBar;
+
+  /// If true, the pop action will be forwarded to the WebView if backstack is available.
+  final bool shouldForwardPop;
 
   @override
   State<EmbeddedScreen> createState() => _EmbeddedScreenState();
 }
 
 class _EmbeddedScreenState extends State<EmbeddedScreen> {
-  final WebViewController _webViewController = WebViewController();
-
-  EmbeddedCubit get _bloc => context.read<EmbeddedCubit>();
+  late final _webViewController = WebViewController();
+  late final _bloc = context.read<EmbeddedCubit>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: widget.appBar,
       body: BlocConsumer<EmbeddedCubit, EmbeddedState>(
-        builder: (context, state) => Stack(
-          children: [
-            WebViewScaffold(
+        builder: (context, state) {
+          final forwardPop = widget.shouldForwardPop && state.canGoBack;
+
+          return PopScope(
+            onPopInvokedWithResult: (_, __) => _webViewController.goBack(),
+            canPop: forwardPop == false,
+            child: WebViewScaffold(
               initialUri: widget.initialUri,
               webViewController: _webViewController,
               showToolbar: false,
               userAgent: UserAgent.of(context),
               onPageLoadedSuccess: _bloc.onPageLoadedSuccess,
               onPageLoadedFailed: _bloc.onPageLoadedFailed,
+              onUrlChange: (url) async {
+                _bloc.onUrlChange(url ?? '');
+                final canGoBack = await _webViewController.canGoBack();
+                if (mounted) _bloc.onCanGoBackChange(canGoBack);
+              },
               errorBuilder: (context, error, controller) {
                 return EmbeddedRequestError(error: error, onPressed: () => _bloc.reload());
               },
-            )
-          ],
-        ),
+            ),
+          );
+        },
         listener: _onBlocStateChanged,
       ),
     );

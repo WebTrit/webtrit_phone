@@ -32,17 +32,27 @@ class EmbeddedTabPage extends StatelessWidget {
 
     final embeddedPayloadBuilder = EmbeddedPayloadBuilder(secureStorage);
 
+    final tabsRouter = AutoTabsRouter.of(context);
+
     return BlocProvider(
       create: (context) => EmbeddedCubit(
         payload: data.data!.payload,
         customPrivateGatewayRepository: customPrivateGatewayRepository,
         embeddedPayloadBuilder: embeddedPayloadBuilder,
       ),
-      child: EmbeddedScreen(
-        initialUri: data.data!.uri,
-        appBar: MainAppBar(
-          title: Text(context.parseL10n(data.titleL10n)),
-        ),
+      child: AnimatedBuilder(
+        animation: tabsRouter,
+        builder: (context, child) {
+          final tabActive = tabsRouter.isRouteDataActive(RouteData.of(context));
+
+          return EmbeddedScreen(
+            initialUri: data.data!.uri,
+            appBar: MainAppBar(
+              title: Text(context.parseL10n(data.titleL10n)),
+            ),
+            shouldForwardPop: tabActive,
+          );
+        },
       ),
     );
   }
