@@ -68,6 +68,10 @@ class LoginRouterPage extends StatelessWidget {
               // Embedded page was not provided as launch, so use the native UI.
               if (_launchEmbedded == null) const LoginModeSelectScreenPageRoute(),
 
+              // Open the core URL assignment screen (used in demo mode).
+              // Note: this should be refactored to rely on a dedicated flag instead of demo mode.
+              if (whenLoginCoreUrlAssignScreenPageActive(state)) const LoginCoreUrlAssignScreenPageRoute(),
+
               // After receiving server-provided login types (triggered from LoginModeSelectScreenPageRoute),
               // open the login switch screen.
               if (_launchEmbedded == null && whenLoginSwitchScreenPageActive(state)) LoginSwitchScreenPageRoute(),
@@ -80,10 +84,6 @@ class LoginRouterPage extends StatelessWidget {
                   forceLoginTypes: const [LoginType.signup],
                   isLogoVisible: false,
                 ),
-
-              // Open the core URL assignment screen (used in demo mode).
-              // Note: this should be refactored to rely on a dedicated flag instead of demo mode.
-              if (whenLoginCoreUrlAssignScreenPageActive(state)) const LoginCoreUrlAssignScreenPageRoute(),
             ];
           },
           onPopRoute: (route, results) {
