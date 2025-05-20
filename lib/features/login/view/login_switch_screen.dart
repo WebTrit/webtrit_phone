@@ -39,8 +39,10 @@ class LoginSwitchScreen extends StatelessWidget {
           ),
           body: Column(
             children: [
-              if (isLogoVisible) const OnboardingLogo(),
-              if (isLogoVisible) const SizedBox(height: kInset),
+              if (isLogoVisible) ...[
+                const OnboardingLogo(),
+                const SizedBox(height: kInset),
+              ],
               if (supportedLoginTypes.length > 1) ...[
                 SegmentedButton<LoginType>(
                   segments: supportedLoginTypes
