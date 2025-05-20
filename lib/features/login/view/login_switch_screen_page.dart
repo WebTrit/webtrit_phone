@@ -8,29 +8,44 @@ import 'package:webtrit_phone/features/features.dart';
 @RoutePage()
 class LoginSwitchScreenPage extends StatelessWidget {
   // ignore: use_key_in_widget_constructors
-  const LoginSwitchScreenPage();
+  const LoginSwitchScreenPage({
+    this.forceLoginTypes = const [],
+    this.isLogoVisible = true,
+  });
+
+  final List<LoginType> forceLoginTypes;
+  final bool isLogoVisible;
 
   @override
   Widget build(BuildContext context) {
+    if (forceLoginTypes.isNotEmpty) {
+      return _buildTabs(forceLoginTypes);
+    }
+
     return BlocBuilder<LoginCubit, LoginState>(
       buildWhen: (previous, current) =>
-          whenLoginSwitchScreenPageActive(current) && (previous.supportedLoginTypes != current.supportedLoginTypes),
+      whenLoginSwitchScreenPageActive(current) && previous.supportedLoginTypes != current.supportedLoginTypes,
       builder: (context, state) {
         final supportedLoginTypes = state.supportedLoginTypes!;
-        return AutoTabsRouter(
-          routes: supportedLoginTypes.map((loginType) => loginType.toPageRouteInfo()).toList(growable: false),
-          duration: Duration.zero,
-          builder: (context, child) {
-            final tabsRouter = AutoTabsRouter.of(context);
-            return LoginSwitchScreen(
-              body: child,
-              currentLoginType: supportedLoginTypes[tabsRouter.activeIndex],
-              supportedLoginTypes: supportedLoginTypes,
-              onLoginTypeChanged: (loginType) {
-                tabsRouter.setActiveIndex(supportedLoginTypes.indexOf(loginType));
-              },
-            );
+        return _buildTabs(supportedLoginTypes);
+      },
+    );
+  }
+
+  Widget _buildTabs(List<LoginType> types) {
+    return AutoTabsRouter(
+      routes: types.map((e) => e.toPageRouteInfo()).toList(growable: false),
+      duration: Duration.zero,
+      builder: (context, child) {
+        final tabsRouter = AutoTabsRouter.of(context);
+        return LoginSwitchScreen(
+          body: child,
+          currentLoginType: types[tabsRouter.activeIndex],
+          supportedLoginTypes: types,
+          onLoginTypeChanged: (loginType) {
+            tabsRouter.setActiveIndex(types.indexOf(loginType));
           },
+          isLogoVisible: isLogoVisible,
         );
       },
     );
