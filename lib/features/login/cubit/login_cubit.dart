@@ -63,24 +63,11 @@ class LoginCubit extends Cubit<LoginState> with SystemInfoApiMapper {
   }
 
   Future<void> _processSystemInfo(String coreUrl, String tenantId, [bool demo = false]) async {
-    emit(state.copyWith(
-      processing: true,
-    ));
+    emit(state.copyWith(processing: true));
 
     try {
-      final client = createWebtritApiClient(coreUrl, tenantId);
-      final systemInfo = await _retrieveSystemInfo(client);
-
-      final coreInfo = systemInfo.core;
-
-      final isCoreSupported = coreInfo.verifyVersionStr(coreVersionConstraint);
-      if (isCoreSupported == false) {
-        var coreUnsupportedNotification = CoreVersionUnsupportedErrorNotification(
-          coreInfo.version.toString(),
-          coreVersionConstraint,
-        );
-        notificationsBloc.add(NotificationsSubmitted(coreUnsupportedNotification));
-
+      final systemInfo = await _loadAndValidateSystemInfo(coreUrl, tenantId, demo);
+      if (systemInfo == null) {
         emit(state.copyWith(processing: false));
         return;
       }
@@ -110,6 +97,25 @@ class LoginCubit extends Cubit<LoginState> with SystemInfoApiMapper {
 
       emit(state.copyWith(processing: false));
     }
+  }
+
+  Future<WebtritSystemInfo?> _loadAndValidateSystemInfo(String coreUrl, String tenantId, bool demo) async {
+    final client = createWebtritApiClient(coreUrl, tenantId);
+    final systemInfo = await _retrieveSystemInfo(client);
+
+    final coreInfo = systemInfo.core;
+    final isCoreSupported = coreInfo.verifyVersionStr(coreVersionConstraint);
+
+    if (!isCoreSupported) {
+      final notification = CoreVersionUnsupportedErrorNotification(
+        coreInfo.version.toString(),
+        coreVersionConstraint,
+      );
+      notificationsBloc.add(NotificationsSubmitted(notification));
+      return null;
+    }
+
+    return systemInfo;
   }
 
   // LoginModeSelect
