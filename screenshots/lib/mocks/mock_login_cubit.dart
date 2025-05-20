@@ -39,7 +39,7 @@ class MockLoginCubit extends MockCubit<LoginState> implements LoginCubit {
       mock,
       const Stream<LoginState>.empty(),
       initialState: LoginState(
-        switchEmbedded: embedded,
+        embedded: embedded,
         processing: false,
         mode: LoginMode.demoCore,
         coreUrl: '_',
