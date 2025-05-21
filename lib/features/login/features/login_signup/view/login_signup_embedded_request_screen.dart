@@ -1,11 +1,12 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logging/logging.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-import 'package:webtrit_phone/features/login/cubit/login_cubit.dart';
+import 'package:webtrit_phone/features/login/login.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 
@@ -26,7 +27,6 @@ class LoginSignupEmbeddedRequestScreen extends StatefulWidget {
 class _LoginSignupEmbeddedRequestScreenState extends State<LoginSignupEmbeddedRequestScreen> {
   final WebViewController _webViewController = WebViewController();
 
-  bool _shouldReload = false;
   bool _canGoBack = false;
 
   static const _jsChannelName = 'WebtritLoginChannel';
@@ -35,9 +35,7 @@ class _LoginSignupEmbeddedRequestScreenState extends State<LoginSignupEmbeddedRe
   Widget build(BuildContext context) {
     return PopScope(
       canPop: !_canGoBack,
-      onPopInvokedWithResult: (_, __) {
-        _webViewController.goBack();
-      },
+      onPopInvokedWithResult: (_, __) => _webViewController.goBack(),
       child: WebViewScaffold(
         initialUri: widget.initialUrl,
         webViewController: _webViewController,
@@ -48,22 +46,11 @@ class _LoginSignupEmbeddedRequestScreenState extends State<LoginSignupEmbeddedRe
         },
         onPageLoadedSuccess: _onPageLoadedSuccess,
         onPageLoadedFailed: _onPageLoadedFailed,
-        onUrlChange: (url) async {
-          final canGoBack = await _webViewController.canGoBack();
-          if (mounted) {
-            setState(() {
-              _canGoBack = canGoBack;
-            });
-          }
-        },
-        errorBuilder: (context, error, controller) {
-          return EmbeddedRequestError(
-            error: error,
-            onPressed: () {
-              _webViewController.reload();
-            },
-          );
-        },
+        onUrlChange: _onUrlChange,
+        errorBuilder: (context, error, controller) => EmbeddedRequestError(
+          error: error,
+          onPressed: () => _webViewController.reload(),
+        ),
       ),
     );
   }
@@ -80,14 +67,19 @@ class _LoginSignupEmbeddedRequestScreenState extends State<LoginSignupEmbeddedRe
     ''';
 
     _webViewController.runJavaScript(script);
-
-    if (_shouldReload) {
-      setState(() => _shouldReload = false);
-    }
   }
 
   void _onPageLoadedFailed(WebResourceError error) {
     _logger.warning('Failed to load page: $error');
+  }
+
+  void _onUrlChange(String? url) async {
+    final canGoBack = await _webViewController.canGoBack();
+    if (mounted) {
+      setState(() {
+        _canGoBack = canGoBack;
+      });
+    }
   }
 
   void _onJavaScriptMessageReceived(JavaScriptMessage message) {
