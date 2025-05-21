@@ -208,7 +208,8 @@ class EncodingDefaultPresetOverride with _$EncodingDefaultPresetOverride {
     int? videoBitrate,
     int? ptime,
     int? maxptime,
-    int? opusBandwidthLimit,
+    int? opusSamplingRate,
+    int? opusBitrate,
     bool? opusStereo,
     bool? opusDtx,
   }) = _EncodingDefaultPresetOverride;

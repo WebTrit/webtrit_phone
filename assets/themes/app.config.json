@@ -189,11 +189,12 @@
     "encoding": {
       "bypassConfig": false,
       "__defaultPresetOverride": {
-        "audioBitrate": 64,
+        "audioBitrate": 56,
         "videoBitrate": 512,
         "ptime": 20,
         "maxptime": 80,
-        "opusBandwidthLimit": 32000,
+        "opusSamplingRate": 24000,
+        "opusBitrate": 16,
         "opusStereo": false,
         "opusDtx": true
       }

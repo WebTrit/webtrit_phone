@@ -240,7 +240,8 @@ _$EncodingDefaultPresetOverrideImpl
           videoBitrate: (json['videoBitrate'] as num?)?.toInt(),
           ptime: (json['ptime'] as num?)?.toInt(),
           maxptime: (json['maxptime'] as num?)?.toInt(),
-          opusBandwidthLimit: (json['opusBandwidthLimit'] as num?)?.toInt(),
+          opusSamplingRate: (json['opusSamplingRate'] as num?)?.toInt(),
+          opusBitrate: (json['opusBitrate'] as num?)?.toInt(),
           opusStereo: json['opusStereo'] as bool?,
           opusDtx: json['opusDtx'] as bool?,
         );
@@ -252,7 +253,8 @@ Map<String, dynamic> _$$EncodingDefaultPresetOverrideImplToJson(
       'videoBitrate': instance.videoBitrate,
       'ptime': instance.ptime,
       'maxptime': instance.maxptime,
-      'opusBandwidthLimit': instance.opusBandwidthLimit,
+      'opusSamplingRate': instance.opusSamplingRate,
+      'opusBitrate': instance.opusBitrate,
       'opusStereo': instance.opusStereo,
       'opusDtx': instance.opusDtx,
     };

@@ -1,90 +1,102 @@
-import 'dart:collection';
-
 import 'package:equatable/equatable.dart';
 
 import 'package:webtrit_phone/models/enableble.dart';
 import 'package:webtrit_phone/models/rtp_codec_profile.dart';
 
-enum EncodingPreset { eco, balance, quality, fullFlex, custom }
+/// TODO:
+/// global audio bitrate is commented out temporarily
+/// because of flutter webrtc issue
+/// when set lower bitrate than g722 pcma pcmu supports it throws exception on set answer sdp
+/// for now only opus level bitrate will be used, and ilbc as second priority for traffic reduction
+/// uncomment this when issue is fixed
+
+enum EncodingPreset { bypass, eco, balance, quality, fullFlex, custom }
 
 class EncodingSettings extends Equatable {
-  const EncodingSettings({
+  EncodingSettings({
     this.audioBitrate,
     this.videoBitrate,
     this.ptime,
     this.maxptime,
-    this.opusBandwidthLimit,
+    this.opusSamplingRate,
+    this.opusBitrate,
     this.opusStereo,
     this.opusDtx,
     this.audioProfiles,
     this.videoProfiles,
   });
 
-  factory EncodingSettings.blank() => const EncodingSettings();
+  factory EncodingSettings.blank() => EncodingSettings();
 
   factory EncodingSettings.defaultWithOverrides({
     int? audioBitrate,
     int? videoBitrate,
     int? ptime,
     int? maxptime,
-    int? opusBandwidthLimit,
+    int? opusSamplingRate,
+    int? opusBitrate,
     bool? opusStereo,
     bool? opusDtx,
   }) {
     return EncodingSettings(
-      audioBitrate: audioBitrate ?? 24,
+      // audioBitrate: audioBitrate ?? 56,
       videoBitrate: videoBitrate ?? 512,
-      ptime: ptime ?? 20,
-      maxptime: maxptime ?? 80,
-      opusBandwidthLimit: opusBandwidthLimit ?? 16000,
+      ptime: ptime,
+      maxptime: maxptime,
+      opusSamplingRate: opusSamplingRate ?? 24000,
+      opusBitrate: opusBitrate ?? 16,
       opusStereo: opusStereo ?? false,
       opusDtx: opusDtx ?? true,
+      audioProfiles: defaultAudioProfilesOrder,
+      videoProfiles: defaultVideoProfilesOrder,
     );
   }
 
   factory EncodingSettings.eco() {
-    return const EncodingSettings(
-      audioBitrate: 6,
+    return EncodingSettings(
+      // audioBitrate: 48,
       videoBitrate: 128,
-      ptime: 20,
-      maxptime: 80,
-      opusBandwidthLimit: 8000,
+      opusSamplingRate: 12000,
+      opusBitrate: 8,
       opusStereo: false,
       opusDtx: true,
+      audioProfiles: defaultAudioProfilesOrder,
+      videoProfiles: defaultVideoProfilesOrder,
     );
   }
 
   factory EncodingSettings.balance() {
-    return const EncodingSettings(
-      audioBitrate: 24,
+    return EncodingSettings(
+      // audioBitrate: 56,
       videoBitrate: 512,
-      ptime: 20,
-      maxptime: 80,
-      opusBandwidthLimit: 16000,
+      opusSamplingRate: 24000,
+      opusBitrate: 16,
       opusStereo: false,
       opusDtx: true,
+      audioProfiles: defaultAudioProfilesOrder,
+      videoProfiles: defaultVideoProfilesOrder,
     );
   }
 
   factory EncodingSettings.quality() {
-    return const EncodingSettings(
-      audioBitrate: 48,
+    return EncodingSettings(
+      // audioBitrate: 64,
       videoBitrate: 1024,
-      ptime: 20,
-      maxptime: 80,
-      opusBandwidthLimit: 32000,
+      opusSamplingRate: 32000,
+      opusBitrate: 24,
       opusStereo: false,
       opusDtx: true,
+      audioProfiles: defaultAudioProfilesOrder,
+      videoProfiles: defaultVideoProfilesOrder,
     );
   }
 
   factory EncodingSettings.fullFlex() {
-    return const EncodingSettings(
-      audioBitrate: 256,
+    return EncodingSettings(
+      // audioBitrate: 128,
       videoBitrate: 4096,
-      ptime: 40,
-      maxptime: 120,
-      opusBandwidthLimit: 48000,
+      opusSamplingRate: 48000,
+      opusBitrate: 128,
       opusStereo: true,
       opusDtx: false,
     );
@@ -94,7 +106,7 @@ class EncodingSettings extends Equatable {
   /// In range `8-256kbps` for audio.
   /// `null` means not set and use automatic mode.
   final int? audioBitrate;
-  static List<int> audioBitrateOptions = UnmodifiableListView([8, 16, 32, 64, 128, 256]);
+  static List<int> audioBitrateOptions = [8, 16, 32, 48, 56, 64, 128, 256];
 
   /// Set the bitrate for video stream.
   /// In range `32-4000kbps` for video.
@@ -117,10 +129,16 @@ class EncodingSettings extends Equatable {
   final int? maxptime;
 
   /// Set opus specific bandwidth parameter.
-  /// [opusBandwidthLimit] limit maximum bandwidth in hz, range `8000-48000`.
+  /// [opusSamplingRate] limit maximum bandwidth in hz, range `8000-48000`.
   /// `null` means not set and use automatic mode.
-  final int? opusBandwidthLimit;
-  static List<int> opusBandwidthLimitOptions = [8000, 12000, 16000, 24000, 48000];
+  final int? opusSamplingRate;
+  static List<int> opusSamplingRateOptions = [8000, 12000, 16000, 24000, 48000];
+
+  /// Set opus specific bitrate limit parameter.
+  /// [opusBitrate] limit maximum bitrate in kbps, range `8-256`.
+  /// `null` means not set and use automatic mode.
+  final int? opusBitrate;
+  static List<int> opusBitrateOptions = [8, 16, 32, 64, 128, 256, 500];
 
   /// Set opus specific stereo parameter.
   /// [opusStereo] stereo support on/off.
@@ -138,14 +156,17 @@ class EncodingSettings extends Equatable {
   final List<Enableble<RTPCodecProfile>>? audioProfiles;
   static List<Enableble<RTPCodecProfile>> defaultAudioProfilesOrder = [
     (option: RTPCodecProfile.opus, enabled: true),
-    (option: RTPCodecProfile.redAudio, enabled: true),
-    (option: RTPCodecProfile.g722, enabled: true),
     (option: RTPCodecProfile.ilbc, enabled: true),
+    (option: RTPCodecProfile.g722, enabled: true),
     (option: RTPCodecProfile.pcmu, enabled: true),
     (option: RTPCodecProfile.pcma, enabled: true),
-    (option: RTPCodecProfile.cn, enabled: true),
-    (option: RTPCodecProfile.telephoneEvent8, enabled: true),
-    (option: RTPCodecProfile.telephoneEvent48, enabled: true),
+    (option: RTPCodecProfile.comfortNoise_32k, enabled: true),
+    (option: RTPCodecProfile.comfortNoise_16k, enabled: true),
+    (option: RTPCodecProfile.comfortNoise_8k, enabled: true),
+    (option: RTPCodecProfile.telephoneEvent_48k, enabled: true),
+    (option: RTPCodecProfile.telephoneEvent_16k, enabled: true),
+    (option: RTPCodecProfile.telephoneEvent_8k, enabled: true),
+    (option: RTPCodecProfile.redundancy_audio, enabled: true),
   ];
 
   /// Ordered list of video codec profiles to be used.
@@ -160,7 +181,7 @@ class EncodingSettings extends Equatable {
     (option: RTPCodecProfile.vp8, enabled: true),
     (option: RTPCodecProfile.vp9, enabled: true),
     (option: RTPCodecProfile.av1, enabled: true),
-    (option: RTPCodecProfile.redVideo, enabled: true),
+    (option: RTPCodecProfile.redundancy_video, enabled: true),
   ];
 
   /// For tracking the model schema changes on serializing.
@@ -172,7 +193,8 @@ class EncodingSettings extends Equatable {
       videoBitrate: videoBitrate,
       ptime: ptime,
       maxptime: maxptime,
-      opusBandwidthLimit: opusBandwidthLimit,
+      opusSamplingRate: opusSamplingRate,
+      opusBitrate: opusBitrate,
       opusStereo: opusStereo,
       opusDtx: opusDtx,
       audioProfiles: audioProfiles,
@@ -186,7 +208,8 @@ class EncodingSettings extends Equatable {
       videoBitrate: videoBitrate,
       ptime: ptime,
       maxptime: maxptime,
-      opusBandwidthLimit: opusBandwidthLimit,
+      opusSamplingRate: opusSamplingRate,
+      opusBitrate: opusBitrate,
       opusStereo: opusStereo,
       opusDtx: opusDtx,
       audioProfiles: audioProfiles,
@@ -200,7 +223,8 @@ class EncodingSettings extends Equatable {
       videoBitrate: videoBitrate,
       ptime: ptime,
       maxptime: maxptime,
-      opusBandwidthLimit: opusBandwidthLimit,
+      opusSamplingRate: opusSamplingRate,
+      opusBitrate: opusBitrate,
       opusStereo: opusStereo,
       opusDtx: opusDtx,
       audioProfiles: audioProfiles,
@@ -214,7 +238,7 @@ class EncodingSettings extends Equatable {
       videoBitrate: videoBitrate,
       ptime: ptime,
       maxptime: maxptime,
-      opusBandwidthLimit: opusBandwidthLimit,
+      opusSamplingRate: opusSamplingRate,
       opusStereo: opusStereo,
       opusDtx: opusDtx,
       audioProfiles: audioProfiles,
@@ -222,13 +246,29 @@ class EncodingSettings extends Equatable {
     );
   }
 
-  EncodingSettings copyWithOpusBandwidthLimit(int? opusBandwidthLimit) {
+  EncodingSettings copyWithOpusSamplingRate(int? opusSamplingRate) {
     return EncodingSettings(
       audioBitrate: audioBitrate,
       videoBitrate: videoBitrate,
       ptime: ptime,
       maxptime: maxptime,
-      opusBandwidthLimit: opusBandwidthLimit,
+      opusSamplingRate: opusSamplingRate,
+      opusBitrate: opusBitrate,
+      opusStereo: opusStereo,
+      opusDtx: opusDtx,
+      audioProfiles: audioProfiles,
+      videoProfiles: videoProfiles,
+    );
+  }
+
+  EncodingSettings copyWithOpusBitrate(int? opusBitrate) {
+    return EncodingSettings(
+      audioBitrate: audioBitrate,
+      videoBitrate: videoBitrate,
+      ptime: ptime,
+      maxptime: maxptime,
+      opusSamplingRate: opusSamplingRate,
+      opusBitrate: opusBitrate,
       opusStereo: opusStereo,
       opusDtx: opusDtx,
       audioProfiles: audioProfiles,
@@ -242,7 +282,8 @@ class EncodingSettings extends Equatable {
       videoBitrate: videoBitrate,
       ptime: ptime,
       maxptime: maxptime,
-      opusBandwidthLimit: opusBandwidthLimit,
+      opusSamplingRate: opusSamplingRate,
+      opusBitrate: opusBitrate,
       opusStereo: opusStereo,
       opusDtx: opusDtx,
       audioProfiles: audioProfiles,
@@ -256,7 +297,8 @@ class EncodingSettings extends Equatable {
       videoBitrate: videoBitrate,
       ptime: ptime,
       maxptime: maxptime,
-      opusBandwidthLimit: opusBandwidthLimit,
+      opusSamplingRate: opusSamplingRate,
+      opusBitrate: opusBitrate,
       opusStereo: opusStereo,
       opusDtx: opusDtx,
       audioProfiles: audioProfiles,
@@ -270,7 +312,8 @@ class EncodingSettings extends Equatable {
       videoBitrate: videoBitrate,
       ptime: ptime,
       maxptime: maxptime,
-      opusBandwidthLimit: opusBandwidthLimit,
+      opusSamplingRate: opusSamplingRate,
+      opusBitrate: opusBitrate,
       opusStereo: opusStereo,
       opusDtx: opusDtx,
       audioProfiles: audioProfiles,
@@ -284,7 +327,8 @@ class EncodingSettings extends Equatable {
       videoBitrate: videoBitrate,
       ptime: ptime,
       maxptime: maxptime,
-      opusBandwidthLimit: opusBandwidthLimit,
+      opusSamplingRate: opusSamplingRate,
+      opusBitrate: opusBitrate,
       opusStereo: opusStereo,
       opusDtx: opusDtx,
       audioProfiles: audioProfiles,
@@ -292,13 +336,27 @@ class EncodingSettings extends Equatable {
     );
   }
 
+  late final asRecord = (
+    audioBitrate,
+    videoBitrate,
+    ptime,
+    maxptime,
+    opusSamplingRate,
+    opusBitrate,
+    opusStereo,
+    opusDtx,
+    audioProfiles,
+    videoProfiles,
+  );
+
   @override
   List<Object?> get props => [
         audioBitrate,
         videoBitrate,
         ptime,
         maxptime,
-        opusBandwidthLimit,
+        opusSamplingRate,
+        opusBitrate,
         opusStereo,
         opusDtx,
         audioProfiles,
@@ -307,6 +365,6 @@ class EncodingSettings extends Equatable {
 
   @override
   String toString() {
-    return 'EncodingSettings{audioBitrate: $audioBitrate, videoBitrate: $videoBitrate, ptime: $ptime, maxptime: $maxptime, opusBandwidthLimit: $opusBandwidthLimit, opusStereo: $opusStereo, opusDtx: $opusDtx, audioProfiles: $audioProfiles, videoProfiles: $videoProfiles}';
+    return 'EncodingSettings{audioBitrate: $audioBitrate, videoBitrate: $videoBitrate, ptime: $ptime, maxptime: $maxptime, opusSamplingRate: $opusSamplingRate, opusBitrate: $opusBitrate, opusStereo: $opusStereo, opusDtx: $opusDtx, audioProfiles: $audioProfiles, videoProfiles: $videoProfiles}';
   }
 }
