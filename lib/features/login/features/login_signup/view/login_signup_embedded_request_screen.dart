@@ -27,29 +27,44 @@ class _LoginSignupEmbeddedRequestScreenState extends State<LoginSignupEmbeddedRe
   final WebViewController _webViewController = WebViewController();
 
   bool _shouldReload = false;
+  bool _canGoBack = false;
 
   static const _jsChannelName = 'WebtritLoginChannel';
 
   @override
   Widget build(BuildContext context) {
-    return WebViewScaffold(
-      initialUri: widget.initialUrl,
-      webViewController: _webViewController,
-      showToolbar: false,
-      userAgent: UserAgent.of(context),
-      javaScriptChannels: {
-        _jsChannelName: _onJavaScriptMessageReceived,
+    return PopScope(
+      canPop: !_canGoBack,
+      onPopInvokedWithResult: (_, __) {
+        _webViewController.goBack();
       },
-      onPageLoadedSuccess: _onPageLoadedSuccess,
-      onPageLoadedFailed: _onPageLoadedFailed,
-      errorBuilder: (context, error, controller) {
-        return EmbeddedRequestError(
-          error: error,
-          onPressed: () {
-            _webViewController.reload();
-          },
-        );
-      },
+      child: WebViewScaffold(
+        initialUri: widget.initialUrl,
+        webViewController: _webViewController,
+        showToolbar: false,
+        userAgent: UserAgent.of(context),
+        javaScriptChannels: {
+          _jsChannelName: _onJavaScriptMessageReceived,
+        },
+        onPageLoadedSuccess: _onPageLoadedSuccess,
+        onPageLoadedFailed: _onPageLoadedFailed,
+        onUrlChange: (url) async {
+          final canGoBack = await _webViewController.canGoBack();
+          if (mounted) {
+            setState(() {
+              _canGoBack = canGoBack;
+            });
+          }
+        },
+        errorBuilder: (context, error, controller) {
+          return EmbeddedRequestError(
+            error: error,
+            onPressed: () {
+              _webViewController.reload();
+            },
+          );
+        },
+      ),
     );
   }
 
