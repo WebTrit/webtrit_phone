@@ -10,9 +10,10 @@
       },
       {
         "enabled": false,
-        "embeddedResourceId": 1,
+        "embeddedId": 1,
         "type": "embedded",
-        "titleL10n": "login_Button_signIn"
+        "titleL10n": "login_Button_signIn",
+        "isLaunchButtonVisible": false
       }
     ]
   },
@@ -207,7 +208,7 @@
   "embeddedResources": [
     {
       "id": 1,
-      "uri": "asset://assets/themes/custom_signup.html",
+      "uri": "https://webtrit-app.web.app/example/example_embedded_login.html",
       "toolbar": {
         "showToolbar": true,
         "titleL10n": "login_requestCredentials_title"

@@ -85,10 +85,6 @@ class AppRouter extends RootStackRouter {
                   page: LoginModeSelectScreenPageRoute.page,
                 ),
                 AutoRoute(
-                  page: LoginEmbeddedScreenPageRoute.page,
-                  maintainState: false,
-                ),
-                AutoRoute(
                   page: LoginCoreUrlAssignScreenPageRoute.page,
                 ),
                 AutoRoute(

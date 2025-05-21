@@ -597,41 +597,6 @@ class LoginCoreUrlAssignScreenPageRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [LoginEmbeddedScreenPage]
-class LoginEmbeddedScreenPageRoute
-    extends PageRouteInfo<LoginEmbeddedScreenPageRouteArgs> {
-  LoginEmbeddedScreenPageRoute({
-    required LoginEmbedded loginEmbedded,
-    List<PageRouteInfo>? children,
-  }) : super(
-         LoginEmbeddedScreenPageRoute.name,
-         args: LoginEmbeddedScreenPageRouteArgs(loginEmbedded: loginEmbedded),
-         initialChildren: children,
-       );
-
-  static const String name = 'LoginEmbeddedScreenPageRoute';
-
-  static PageInfo page = PageInfo(
-    name,
-    builder: (data) {
-      final args = data.argsAs<LoginEmbeddedScreenPageRouteArgs>();
-      return LoginEmbeddedScreenPage(loginEmbedded: args.loginEmbedded);
-    },
-  );
-}
-
-class LoginEmbeddedScreenPageRouteArgs {
-  const LoginEmbeddedScreenPageRouteArgs({required this.loginEmbedded});
-
-  final LoginEmbedded loginEmbedded;
-
-  @override
-  String toString() {
-    return 'LoginEmbeddedScreenPageRouteArgs{loginEmbedded: $loginEmbedded}';
-  }
-}
-
-/// generated route for
 /// [LoginModeSelectScreenPage]
 class LoginModeSelectScreenPageRoute extends PageRouteInfo<void> {
   const LoginModeSelectScreenPageRoute({List<PageRouteInfo>? children})
@@ -844,18 +809,51 @@ class LoginSignupVerifyScreenPageRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [LoginSwitchScreenPage]
-class LoginSwitchScreenPageRoute extends PageRouteInfo<void> {
-  const LoginSwitchScreenPageRoute({List<PageRouteInfo>? children})
-    : super(LoginSwitchScreenPageRoute.name, initialChildren: children);
+class LoginSwitchScreenPageRoute
+    extends PageRouteInfo<LoginSwitchScreenPageRouteArgs> {
+  LoginSwitchScreenPageRoute({
+    List<LoginType> forceLoginTypes = const [],
+    bool isLogoVisible = true,
+    List<PageRouteInfo>? children,
+  }) : super(
+         LoginSwitchScreenPageRoute.name,
+         args: LoginSwitchScreenPageRouteArgs(
+           forceLoginTypes: forceLoginTypes,
+           isLogoVisible: isLogoVisible,
+         ),
+         initialChildren: children,
+       );
 
   static const String name = 'LoginSwitchScreenPageRoute';
 
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      return LoginSwitchScreenPage();
+      final args = data.argsAs<LoginSwitchScreenPageRouteArgs>(
+        orElse: () => const LoginSwitchScreenPageRouteArgs(),
+      );
+      return LoginSwitchScreenPage(
+        forceLoginTypes: args.forceLoginTypes,
+        isLogoVisible: args.isLogoVisible,
+      );
     },
   );
+}
+
+class LoginSwitchScreenPageRouteArgs {
+  const LoginSwitchScreenPageRouteArgs({
+    this.forceLoginTypes = const [],
+    this.isLogoVisible = true,
+  });
+
+  final List<LoginType> forceLoginTypes;
+
+  final bool isLogoVisible;
+
+  @override
+  String toString() {
+    return 'LoginSwitchScreenPageRouteArgs{forceLoginTypes: $forceLoginTypes, isLogoVisible: $isLogoVisible}';
+  }
 }
 
 /// generated route for

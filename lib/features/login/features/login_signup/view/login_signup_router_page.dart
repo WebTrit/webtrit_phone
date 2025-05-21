@@ -35,7 +35,7 @@ class LoginSignupRouterPage extends StatelessWidget {
     return BlocBuilder<LoginCubit, LoginState>(
       buildWhen: whenLoginSignupRouterPageChange,
       builder: (context, state) {
-        final embedded = state.switchEmbedded;
+        final embedded = state.embedded;
         return AutoRouter.declarative(
           routes: (handler) {
             return [

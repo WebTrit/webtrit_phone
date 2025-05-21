@@ -82,8 +82,8 @@ class LoginModeSelectScreen extends StatelessWidget {
                   //   - For non-embedded buttons: show loading only when no embedded switch is active
                   //   - For embedded buttons: show loading only if the active embedded config matches this button
                   final processing = shouldProcess &&
-                      ((!isEmbedded && state.switchEmbedded == null) ||
-                          (isEmbedded && state.switchEmbedded == button.toEmbedded?.customLoginFeature));
+                      ((!isEmbedded && state.embedded == null) ||
+                          (isEmbedded && state.embedded == button.toEmbedded?.customLoginFeature));
 
                   return LoginModeActionButton(
                     processing: processing,
@@ -106,7 +106,7 @@ class LoginModeSelectScreen extends StatelessWidget {
     final mode = cubit.isDemoModeEnabled ? LoginMode.demoCore : LoginMode.core;
 
     if (action.flavor == LoginFlavor.embedded) {
-      cubit.setSwitchEmbedded(action.toEmbedded!.customLoginFeature);
+      cubit.setEmbedded(action.toEmbedded!.customLoginFeature);
     }
 
     cubit.loginModeSelectSubmitted(mode);

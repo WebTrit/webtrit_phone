@@ -63,24 +63,11 @@ class LoginCubit extends Cubit<LoginState> with SystemInfoApiMapper {
   }
 
   Future<void> _processSystemInfo(String coreUrl, String tenantId, [bool demo = false]) async {
-    emit(state.copyWith(
-      processing: true,
-    ));
+    emit(state.copyWith(processing: true));
 
     try {
-      final client = createWebtritApiClient(coreUrl, tenantId);
-      final systemInfo = await _retrieveSystemInfo(client);
-
-      final coreInfo = systemInfo.core;
-
-      final isCoreSupported = coreInfo.verifyVersionStr(coreVersionConstraint);
-      if (isCoreSupported == false) {
-        var coreUnsupportedNotification = CoreVersionUnsupportedErrorNotification(
-          coreInfo.version.toString(),
-          coreVersionConstraint,
-        );
-        notificationsBloc.add(NotificationsSubmitted(coreUnsupportedNotification));
-
+      final systemInfo = await _loadAndValidateSystemInfo(coreUrl, tenantId, demo);
+      if (systemInfo == null) {
         emit(state.copyWith(processing: false));
         return;
       }
@@ -112,6 +99,25 @@ class LoginCubit extends Cubit<LoginState> with SystemInfoApiMapper {
     }
   }
 
+  Future<WebtritSystemInfo?> _loadAndValidateSystemInfo(String coreUrl, String tenantId, bool demo) async {
+    final client = createWebtritApiClient(coreUrl, tenantId);
+    final systemInfo = await _retrieveSystemInfo(client);
+
+    final coreInfo = systemInfo.core;
+    final isCoreSupported = coreInfo.verifyVersionStr(coreVersionConstraint);
+
+    if (!isCoreSupported) {
+      final notification = CoreVersionUnsupportedErrorNotification(
+        coreInfo.version.toString(),
+        coreVersionConstraint,
+      );
+      notificationsBloc.add(NotificationsSubmitted(notification));
+      return null;
+    }
+
+    return systemInfo;
+  }
+
   // LoginModeSelect
 
   void loginModeSelectSubmitted(LoginMode mode) async {
@@ -125,16 +131,9 @@ class LoginCubit extends Cubit<LoginState> with SystemInfoApiMapper {
     if (coreUrl != null) await _processSystemInfo(coreUrl, defaultTenantId, demo);
   }
 
-  void setLaunchEmbedded(LoginEmbedded embedded) {
+  void setEmbedded(LoginEmbedded embedded) {
     emit(state.copyWith(
-      launchEmbedded: embedded,
-      coreUrl: isDemoModeEnabled ? demoCoreUrlFromEnvironment : coreUrlFromEnvironment,
-    ));
-  }
-
-  void setSwitchEmbedded(LoginEmbedded embedded) {
-    emit(state.copyWith(
-      switchEmbedded: embedded,
+      embedded: embedded,
       coreUrl: isDemoModeEnabled ? demoCoreUrlFromEnvironment : coreUrlFromEnvironment,
     ));
   }
@@ -175,7 +174,7 @@ class LoginCubit extends Cubit<LoginState> with SystemInfoApiMapper {
 
   void embeddedPageAssignBack() async {
     emit(state.copyWith(
-      switchEmbedded: null,
+      embedded: null,
     ));
   }
 
@@ -187,7 +186,7 @@ class LoginCubit extends Cubit<LoginState> with SystemInfoApiMapper {
       coreUrl: null,
       tenantId: null,
       supportedLoginTypes: null,
-      switchEmbedded: null,
+      embedded: null,
       otpSigninSessionOtpProvisionalWithDateTime: null,
       passwordSigninPasswordInputObscureText: true,
       signupSessionOtpProvisionalWithDateTime: null,
@@ -355,6 +354,15 @@ class LoginCubit extends Cubit<LoginState> with SystemInfoApiMapper {
       final client = createWebtritApiClient(state.coreUrl!, tenantId);
       final result = await _createUserRequest(client: client, extraPayload: extras);
 
+      // In cases where the embedded page acts as the launch welcome screen,
+      // the systemInfo might not be loaded yet. Perform an additional check
+      // and attempt to load it if necessary.
+      if (state.systemInfo == null) {
+        emit(state.copyWith(processing: true));
+        final systemInfo = await _loadAndValidateSystemInfo(state.coreUrl!, tenantId, isDemoModeEnabled);
+        emit(state.copyWith(systemInfo: systemInfo, processing: false));
+      }
+
       _handleLoginResult(result);
     } catch (e) {
       notificationsBloc.add(NotificationsSubmitted(LoginErrorNotification(e)));
@@ -393,7 +401,7 @@ class LoginCubit extends Cubit<LoginState> with SystemInfoApiMapper {
     } else if (result is SessionToken) {
       // Maintain processing state during navigation
       emit(state.copyWith(
-        tenantId: result.tenantId ?? state.tenantId!,
+        tenantId: result.tenantId ?? state.tenantId ?? defaultTenantId,
         token: result.token,
         userId: result.userId ?? '', // Fallback for outdated core versions
       ));

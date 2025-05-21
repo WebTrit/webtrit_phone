@@ -14,11 +14,11 @@ import 'package:webtrit_phone/models/models.dart';
 bool whenLoginRouterPageChange(LoginState previous, LoginState current) {
   return (previous.mode != current.mode) ||
       (previous.coreUrl != current.coreUrl || previous.supportedLoginTypes != current.supportedLoginTypes) ||
-      previous.launchEmbedded != current.launchEmbedded;
+      previous.embedded != current.embedded;
 }
 
 bool whenLoginEmbeddedScreenPageActive(LoginState state) {
-  return state.launchEmbedded != null;
+  return state.embedded != null;
 }
 
 bool whenLoginCoreUrlAssignScreenPageActive(LoginState state) {
@@ -34,11 +34,9 @@ class LoginRouterPage extends StatelessWidget {
   // ignore: use_key_in_widget_constructors
   const LoginRouterPage({
     LoginEmbedded? launchLoginEmbedded,
-  }) : _launchLoginEmbedded = launchLoginEmbedded;
+  }) : _launchEmbedded = launchLoginEmbedded;
 
-  final LoginEmbedded? _launchLoginEmbedded;
-
-  bool get isLaunchLoginEmbedded => _launchLoginEmbedded != null;
+  final LoginEmbedded? _launchEmbedded;
 
   @override
   Widget build(BuildContext context) {
@@ -67,11 +65,25 @@ class LoginRouterPage extends StatelessWidget {
           navigatorObservers: () => [_HideCurrentSnackBarNavigatorObserver(context)],
           routes: (handler) {
             return [
-              if (!isLaunchLoginEmbedded) const LoginModeSelectScreenPageRoute(),
+              // Embedded page was not provided as launch, so use the native UI.
+              if (_launchEmbedded == null) const LoginModeSelectScreenPageRoute(),
+
+              // Open the core URL assignment screen (used in demo mode).
+              // Note: this should be refactored to rely on a dedicated flag instead of demo mode.
               if (whenLoginCoreUrlAssignScreenPageActive(state)) const LoginCoreUrlAssignScreenPageRoute(),
-              if (whenLoginEmbeddedScreenPageActive(state))
-                LoginEmbeddedScreenPageRoute(loginEmbedded: state.launchEmbedded!),
-              if (whenLoginSwitchScreenPageActive(state)) const LoginSwitchScreenPageRoute(),
+
+              // After receiving server-provided login types (triggered from LoginModeSelectScreenPageRoute),
+              // open the login switch screen.
+              if (_launchEmbedded == null && whenLoginSwitchScreenPageActive(state)) LoginSwitchScreenPageRoute(),
+
+              // Embedded page was provided, so use the embedded UI via LoginSwitchScreenPageRoute.
+              // Force a single login type to disable rendering of other tabs.
+              // Also hide the native logo if the server provides multiple login types.
+              if (_launchEmbedded != null)
+                LoginSwitchScreenPageRoute(
+                  forceLoginTypes: const [LoginType.signup],
+                  isLogoVisible: false,
+                ),
             ];
           },
           onPopRoute: (route, results) {
@@ -79,7 +91,7 @@ class LoginRouterPage extends StatelessWidget {
               case LoginCoreUrlAssignScreenPageRoute.name:
                 _onCoreUrlAssignBack(context);
                 break;
-              case LoginEmbeddedScreenPageRoute.name:
+              case LoginSignupEmbeddedRequestScreenPageRoute.name:
                 _onEmbeddedPageAssignBackAssignBack(context);
                 break;
               case LoginSwitchScreenPageRoute.name:
@@ -97,8 +109,8 @@ class LoginRouterPage extends StatelessWidget {
       appInfo: context.read<AppInfo>(),
       platformInfo: context.read<PlatformInfo>(),
     );
-    if (_launchLoginEmbedded != null) {
-      login.setLaunchEmbedded(_launchLoginEmbedded);
+    if (_launchEmbedded != null) {
+      login.setEmbedded(_launchEmbedded);
     }
     final provider = BlocProvider(
       create: (context) => login,
