@@ -26,11 +26,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
 
-  # TODO(Serdun): Upgrade to a version higher than auto_route 10.0.1 once available.
-  # Be sure to test nested routing with ReevaluateListenable — currently, in 10.0.1,
-  # changing the language causes the navigation stack to break after reevaluation.
-  # Temporarily using auto_route 9.3.0+1 due to this issue.
-  auto_route: 9.3.0+1
+  auto_route: ^10.0.1
   bloc: ^8.1.4
   bloc_concurrency: ^0.2.5
   characters: ^1.3.0
@@ -118,8 +114,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  # Using auto_route_generator 9.3.1 to match auto_route 9.3.0+1 due to routing issues in 10.0.1+
-  auto_route_generator: 9.3.1
+  auto_route_generator: ^10.0.1
   build_runner: ^2.4.15
   flutter_gen_runner: ^5.10.0
   flutter_launcher_icons: ^0.14.3
