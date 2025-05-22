@@ -67,9 +67,8 @@ class AppRouter extends RootStackRouter {
 
   @override
   List<AutoRoute> get routes => [
-        AutoRoute.guarded(
+        AutoRoute(
           page: AppShellRoute.page,
-          onNavigation: onAppShellRouteGuardNavigation,
           path: '/',
           children: [
             RedirectRoute(
@@ -410,20 +409,6 @@ class AppRouter extends RootStackRouter {
           )
         ],
       );
-    }
-  }
-
-  void onAppShellRouteGuardNavigation(NavigationResolver resolver, StackRouter router) {
-    _logger.fine(_onNavigationLoggerMessage('onAppShellRouteGuardNavigation', resolver));
-
-    resolver.next(true);
-
-    // Since reevaluateListenable triggers reevaluation only on the root router,
-    // explicit reevaluation on the app shell router is necessary to ensure
-    // proper handling of login/logout functionality.
-    if (resolver.isReevaluating) {
-      final innerRouter = router.innerRouterOf<StackRouter>(AppShellRoute.name);
-      innerRouter?.reevaluateGuards();
     }
   }
 
