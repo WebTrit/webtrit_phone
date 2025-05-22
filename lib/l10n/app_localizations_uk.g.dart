@@ -1203,24 +1203,6 @@ class AppLocalizationsUk extends AppLocalizations {
   String get settings_AppBarTitle_myAccount => 'Мій обліковий запис';
 
   @override
-  String get settings_call_codecs_preferred_audio_default => 'Автоматично';
-
-  @override
-  String get settings_call_codecs_preferred_audio_tip => 'Використовується для аудіодзвінків. Якщо кодек не підтримується пристроєм, дзвінок буде встановлено за допомогою наступного доступного кодеку.';
-
-  @override
-  String get settings_call_codecs_preferred_audio_title => 'Бажаний аудіокодек';
-
-  @override
-  String get settings_call_codecs_preferred_video_default => 'Автоматично';
-
-  @override
-  String get settings_call_codecs_preferred_video_tip => 'Використовується для відеодзвінків. Якщо кодек не підтримується пристроєм, дзвінок буде встановлено за допомогою наступного доступного кодеку.';
-
-  @override
-  String get settings_call_codecs_preferred_video_title => 'Бажаний відеокодек';
-
-  @override
   String get settings_encoding_AppBar_reset_tooltip => 'Скинути до стандартних налаштувань';
 
   @override
@@ -1236,7 +1218,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get settings_encoding_Section_preset_default => 'Стандарт';
 
   @override
-  String get settings_encoding_Section_preset_eco => 'Еко';
+  String get settings_encoding_Section_preset_eco => 'Єко';
 
   @override
   String get settings_encoding_Section_preset_balance => 'Баланс';
@@ -1245,10 +1227,13 @@ class AppLocalizationsUk extends AppLocalizations {
   String get settings_encoding_Section_preset_quality => 'Якість';
 
   @override
-  String get settings_encoding_Section_preset_full_flex => 'Висока точність';
+  String get settings_encoding_Section_preset_full_flex => 'Максимум';
 
   @override
   String get settings_encoding_Section_preset_custom => 'Ручна конфігурація';
+
+  @override
+  String get settings_encoding_Section_preset_bypass => 'Без втручання';
 
   @override
   String get settings_encoding_Section_measure_kbps => 'Kbps';
@@ -1287,13 +1272,13 @@ class AppLocalizationsUk extends AppLocalizations {
   String get settings_encoding_Section_ptime_prefix => 'Розмір: ';
 
   @override
-  String get settings_encoding_Section_bandwidth_prefix => 'Діапазон: ';
+  String get settings_encoding_Section_bandwidth_prefix => 'Частота дискретизації:';
 
   @override
   String get settings_encoding_Section_bitrate_title => 'Налаштування пропускної здатності';
 
   @override
-  String get settings_encoding_Section_bitrate_tooltip => 'Налаштування пропускної здатності для аудіо- та відеокодеків. Нижчі значення зменшать використання трафіку, вищі значення покращать якість.';
+  String get settings_encoding_Section_bitrate_tooltip => 'Налаштування пропускної здатності для аудіо-відео потоку, нижчі значення зменшать використання трафіку, більші значення покращать якість потоку';
 
   @override
   String get settings_encoding_Section_target_audio_bitrate => 'Цільовий бітрейт аудіо: ';
@@ -1305,7 +1290,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get settings_encoding_Section_packetization_title => 'Пакетизація аудіо';
 
   @override
-  String get settings_encoding_Section_packetization_tooltip => 'Налаштування часу пакетування аудіо в мілісекундах, можна використовувати для зменшення затримки аудіо або усунення проблем із розміром MTU мережі';
+  String get settings_encoding_Section_packetization_tooltip => 'Налаштування часу пакетування аудіо в мілісекундах, можна використовувати для зменшення затримки аудіо або вирішення проблем із розміром MTU мережі';
 
   @override
   String get settings_encoding_Section_audio_ptime => 'Цільовий розмір аудіо пакета: ';
@@ -1314,7 +1299,10 @@ class AppLocalizationsUk extends AppLocalizations {
   String get settings_encoding_Section_audio_ptime_limit => 'Ліміт розміру аудіо пакета: ';
 
   @override
-  String get settings_encoding_Section_opus_bandwidth => 'Перевизначення частотного діапазону: ';
+  String get settings_encoding_Section_opus_samplingRate => 'Перевизначення частоти дискретизації: ';
+
+  @override
+  String get settings_encoding_Section_opus_bitrate => 'Перевизначення бітрейту: ';
 
   @override
   String get settings_encoding_Section_opus_channels => 'Перевизначення режиму каналів: ';

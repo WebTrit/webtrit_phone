@@ -2191,7 +2191,8 @@ mixin _$EncodingDefaultPresetOverride {
   int? get videoBitrate => throw _privateConstructorUsedError;
   int? get ptime => throw _privateConstructorUsedError;
   int? get maxptime => throw _privateConstructorUsedError;
-  int? get opusBandwidthLimit => throw _privateConstructorUsedError;
+  int? get opusSamplingRate => throw _privateConstructorUsedError;
+  int? get opusBitrate => throw _privateConstructorUsedError;
   bool? get opusStereo => throw _privateConstructorUsedError;
   bool? get opusDtx => throw _privateConstructorUsedError;
 
@@ -2218,7 +2219,8 @@ abstract class $EncodingDefaultPresetOverrideCopyWith<$Res> {
       int? videoBitrate,
       int? ptime,
       int? maxptime,
-      int? opusBandwidthLimit,
+      int? opusSamplingRate,
+      int? opusBitrate,
       bool? opusStereo,
       bool? opusDtx});
 }
@@ -2243,7 +2245,8 @@ class _$EncodingDefaultPresetOverrideCopyWithImpl<$Res,
     Object? videoBitrate = freezed,
     Object? ptime = freezed,
     Object? maxptime = freezed,
-    Object? opusBandwidthLimit = freezed,
+    Object? opusSamplingRate = freezed,
+    Object? opusBitrate = freezed,
     Object? opusStereo = freezed,
     Object? opusDtx = freezed,
   }) {
@@ -2264,9 +2267,13 @@ class _$EncodingDefaultPresetOverrideCopyWithImpl<$Res,
           ? _value.maxptime
           : maxptime // ignore: cast_nullable_to_non_nullable
               as int?,
-      opusBandwidthLimit: freezed == opusBandwidthLimit
-          ? _value.opusBandwidthLimit
-          : opusBandwidthLimit // ignore: cast_nullable_to_non_nullable
+      opusSamplingRate: freezed == opusSamplingRate
+          ? _value.opusSamplingRate
+          : opusSamplingRate // ignore: cast_nullable_to_non_nullable
+              as int?,
+      opusBitrate: freezed == opusBitrate
+          ? _value.opusBitrate
+          : opusBitrate // ignore: cast_nullable_to_non_nullable
               as int?,
       opusStereo: freezed == opusStereo
           ? _value.opusStereo
@@ -2294,7 +2301,8 @@ abstract class _$$EncodingDefaultPresetOverrideImplCopyWith<$Res>
       int? videoBitrate,
       int? ptime,
       int? maxptime,
-      int? opusBandwidthLimit,
+      int? opusSamplingRate,
+      int? opusBitrate,
       bool? opusStereo,
       bool? opusDtx});
 }
@@ -2318,7 +2326,8 @@ class __$$EncodingDefaultPresetOverrideImplCopyWithImpl<$Res>
     Object? videoBitrate = freezed,
     Object? ptime = freezed,
     Object? maxptime = freezed,
-    Object? opusBandwidthLimit = freezed,
+    Object? opusSamplingRate = freezed,
+    Object? opusBitrate = freezed,
     Object? opusStereo = freezed,
     Object? opusDtx = freezed,
   }) {
@@ -2339,9 +2348,13 @@ class __$$EncodingDefaultPresetOverrideImplCopyWithImpl<$Res>
           ? _value.maxptime
           : maxptime // ignore: cast_nullable_to_non_nullable
               as int?,
-      opusBandwidthLimit: freezed == opusBandwidthLimit
-          ? _value.opusBandwidthLimit
-          : opusBandwidthLimit // ignore: cast_nullable_to_non_nullable
+      opusSamplingRate: freezed == opusSamplingRate
+          ? _value.opusSamplingRate
+          : opusSamplingRate // ignore: cast_nullable_to_non_nullable
+              as int?,
+      opusBitrate: freezed == opusBitrate
+          ? _value.opusBitrate
+          : opusBitrate // ignore: cast_nullable_to_non_nullable
               as int?,
       opusStereo: freezed == opusStereo
           ? _value.opusStereo
@@ -2365,7 +2378,8 @@ class _$EncodingDefaultPresetOverrideImpl
       this.videoBitrate,
       this.ptime,
       this.maxptime,
-      this.opusBandwidthLimit,
+      this.opusSamplingRate,
+      this.opusBitrate,
       this.opusStereo,
       this.opusDtx})
       : super._();
@@ -2383,7 +2397,9 @@ class _$EncodingDefaultPresetOverrideImpl
   @override
   final int? maxptime;
   @override
-  final int? opusBandwidthLimit;
+  final int? opusSamplingRate;
+  @override
+  final int? opusBitrate;
   @override
   final bool? opusStereo;
   @override
@@ -2391,7 +2407,7 @@ class _$EncodingDefaultPresetOverrideImpl
 
   @override
   String toString() {
-    return 'EncodingDefaultPresetOverride(audioBitrate: $audioBitrate, videoBitrate: $videoBitrate, ptime: $ptime, maxptime: $maxptime, opusBandwidthLimit: $opusBandwidthLimit, opusStereo: $opusStereo, opusDtx: $opusDtx)';
+    return 'EncodingDefaultPresetOverride(audioBitrate: $audioBitrate, videoBitrate: $videoBitrate, ptime: $ptime, maxptime: $maxptime, opusSamplingRate: $opusSamplingRate, opusBitrate: $opusBitrate, opusStereo: $opusStereo, opusDtx: $opusDtx)';
   }
 
   @override
@@ -2406,8 +2422,10 @@ class _$EncodingDefaultPresetOverrideImpl
             (identical(other.ptime, ptime) || other.ptime == ptime) &&
             (identical(other.maxptime, maxptime) ||
                 other.maxptime == maxptime) &&
-            (identical(other.opusBandwidthLimit, opusBandwidthLimit) ||
-                other.opusBandwidthLimit == opusBandwidthLimit) &&
+            (identical(other.opusSamplingRate, opusSamplingRate) ||
+                other.opusSamplingRate == opusSamplingRate) &&
+            (identical(other.opusBitrate, opusBitrate) ||
+                other.opusBitrate == opusBitrate) &&
             (identical(other.opusStereo, opusStereo) ||
                 other.opusStereo == opusStereo) &&
             (identical(other.opusDtx, opusDtx) || other.opusDtx == opusDtx));
@@ -2416,7 +2434,7 @@ class _$EncodingDefaultPresetOverrideImpl
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, audioBitrate, videoBitrate,
-      ptime, maxptime, opusBandwidthLimit, opusStereo, opusDtx);
+      ptime, maxptime, opusSamplingRate, opusBitrate, opusStereo, opusDtx);
 
   /// Create a copy of EncodingDefaultPresetOverride
   /// with the given fields replaced by the non-null parameter values.
@@ -2443,7 +2461,8 @@ abstract class _EncodingDefaultPresetOverride
       final int? videoBitrate,
       final int? ptime,
       final int? maxptime,
-      final int? opusBandwidthLimit,
+      final int? opusSamplingRate,
+      final int? opusBitrate,
       final bool? opusStereo,
       final bool? opusDtx}) = _$EncodingDefaultPresetOverrideImpl;
   const _EncodingDefaultPresetOverride._() : super._();
@@ -2460,7 +2479,9 @@ abstract class _EncodingDefaultPresetOverride
   @override
   int? get maxptime;
   @override
-  int? get opusBandwidthLimit;
+  int? get opusSamplingRate;
+  @override
+  int? get opusBitrate;
   @override
   bool? get opusStereo;
   @override

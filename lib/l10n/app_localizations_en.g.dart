@@ -1203,31 +1203,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings_AppBarTitle_myAccount => 'My account';
 
   @override
-  String get settings_call_codecs_preferred_audio_default => 'Auto';
-
-  @override
-  String get settings_call_codecs_preferred_audio_tip => 'The preferred audio codec is used for audio calls. If the codec is not supported by the device, the call will be established using the next available codec.';
-
-  @override
-  String get settings_call_codecs_preferred_audio_title => 'Preferred audio codec';
-
-  @override
-  String get settings_call_codecs_preferred_video_default => 'Auto';
-
-  @override
-  String get settings_call_codecs_preferred_video_tip => 'The preferred video codec is used for video calls. If the codec is not supported by the device, the call will be established using the next available codec.';
-
-  @override
-  String get settings_call_codecs_preferred_video_title => 'Preferred video codec';
-
-  @override
   String get settings_encoding_AppBar_reset_tooltip => 'Reset to default';
 
   @override
   String get settings_encoding_Section_preset_title => 'Media encoding configs';
 
   @override
-  String get settings_encoding_Section_preset_tooltip => 'Adjustment presets for audio and video codecs: \n- lower values will reduce the bandwidth usage but affect the quality, \n- higher values will increase the quality but also the bandwidth usage. \nThe default preset has recommended settings provided by your vendor according to their environment preferences.';
+  String get settings_encoding_Section_preset_tooltip => 'Adjustment presets for audio and video codecs, lower values will reduce the bandwidth usage but affect the quality, higher values will increase the quality but also the bandwidth usage. Default preset is recommended settings provided by your vendor according to it evnironment preferences.';
 
   @override
   String get settings_encoding_Section_preset => 'Preset';
@@ -1245,10 +1227,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings_encoding_Section_preset_quality => 'Quality';
 
   @override
-  String get settings_encoding_Section_preset_full_flex => 'Full flex';
+  String get settings_encoding_Section_preset_full_flex => 'Full Flex';
 
   @override
   String get settings_encoding_Section_preset_custom => 'Custom';
+
+  @override
+  String get settings_encoding_Section_preset_bypass => 'Bypass';
 
   @override
   String get settings_encoding_Section_measure_kbps => 'Kbps';
@@ -1287,13 +1272,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings_encoding_Section_ptime_prefix => 'Ptime: ';
 
   @override
-  String get settings_encoding_Section_bandwidth_prefix => 'Bandwidth: ';
+  String get settings_encoding_Section_bandwidth_prefix => 'Sampling rate: ';
 
   @override
   String get settings_encoding_Section_bitrate_title => 'Codec bitrate settings';
 
   @override
-  String get settings_encoding_Section_bitrate_tooltip => 'Adjust the bitrate settings for audio and video codecs: \n- lower values will reduce the bandwidth usage but affect the quality, \n- higher values will increase the quality but also the bandwidth usage.';
+  String get settings_encoding_Section_bitrate_tooltip => 'Adjust the bitrate settings for audio and video codecs, lower values will reduce the bandwidth usage but affect the quality, higher values will increase the quality but also the bandwidth usage.';
 
   @override
   String get settings_encoding_Section_target_audio_bitrate => 'Audio target bitrate: ';
@@ -1305,7 +1290,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings_encoding_Section_packetization_title => 'Audio packetization';
 
   @override
-  String get settings_encoding_Section_packetization_tooltip => 'Adjust audio packetization time in milliseconds. Can be used to reduce audio latency or fix Network MTU size issues';
+  String get settings_encoding_Section_packetization_tooltip => 'Adjust audio packetization-time in milliseconds, can be used to reduce audio latency or fix Network MTU size issues';
 
   @override
   String get settings_encoding_Section_audio_ptime => 'Audio target ptime: ';
@@ -1314,7 +1299,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings_encoding_Section_audio_ptime_limit => 'Audio ptime limit: ';
 
   @override
-  String get settings_encoding_Section_opus_bandwidth => 'Bandwidth override: ';
+  String get settings_encoding_Section_opus_samplingRate => 'Sampling rate override: ';
+
+  @override
+  String get settings_encoding_Section_opus_bitrate => 'Bitrate override: ';
 
   @override
   String get settings_encoding_Section_opus_channels => 'Channels mode override: ';
