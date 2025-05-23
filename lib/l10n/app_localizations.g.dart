@@ -1087,10 +1087,10 @@ abstract class AppLocalizations {
   /// **'Proceed'**
   String get login_Button_signupRequestProceed;
 
-  /// No description provided for @login_Button_signUpToDemoInstance.
+  /// Button that allows the user to sign up or sign in to a demo environment. Note: for non-demo installations, use the 'loginType_signup' key instead.
   ///
   /// In en, this message translates to:
-  /// **'Sign up'**
+  /// **'Sign up / sign in'**
   String get login_Button_signUpToDemoInstance;
 
   /// No description provided for @login_Button_signupVerifyProceed.

@@ -510,7 +510,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get login_Button_signupRequestProceed => 'Procedi';
 
   @override
-  String get login_Button_signUpToDemoInstance => 'Iscrizione';
+  String get login_Button_signUpToDemoInstance => 'Registrati / Accedi';
 
   @override
   String get login_Button_signupVerifyProceed => 'Verifica';

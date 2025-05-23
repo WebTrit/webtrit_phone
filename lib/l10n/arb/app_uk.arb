@@ -346,8 +346,10 @@
   "@login_Button_signIn": {},
   "login_Button_signupRequestProceed": "Продовжити",
   "@login_Button_signupRequestProceed": {},
-  "login_Button_signUpToDemoInstance": "Зареєструватися",
-  "@login_Button_signUpToDemoInstance": {},
+  "login_Button_signUpToDemoInstance": "Зареєструватися / Увійти",
+  "@login_Button_signUpToDemoInstance": {
+      "description": "Button that allows the user to sign up or sign in to a demo environment. Note: for non-demo installations, use the 'loginType_signup' key instead."
+  },
   "login_Button_signupVerifyProceed": "Перевірити",
   "@login_Button_signupVerifyProceed": {},
   "login_Button_signupVerifyRepeat": "Повторно надіслати код",
