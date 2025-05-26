@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class LoginScaffold extends StatelessWidget {
   const LoginScaffold({
@@ -15,19 +16,22 @@ class LoginScaffold extends StatelessWidget {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: appBar,
-      body: LayoutBuilder(
-        builder: (context, viewportConstraints) {
-          return SingleChildScrollView(
-            child: ConstrainedBox(
-              constraints: BoxConstraints(
-                minHeight: viewportConstraints.maxHeight,
+      body: AnnotatedRegion<SystemUiOverlayStyle>(
+        value: SystemUiOverlayStyle.dark,
+        child: LayoutBuilder(
+          builder: (context, viewportConstraints) {
+            return SingleChildScrollView(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  minHeight: viewportConstraints.maxHeight,
+                ),
+                child: IntrinsicHeight(
+                  child: body,
+                ),
               ),
-              child: IntrinsicHeight(
-                child: body,
-              ),
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }

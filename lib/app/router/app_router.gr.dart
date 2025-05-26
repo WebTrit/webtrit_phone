@@ -812,14 +812,16 @@ class LoginSignupVerifyScreenPageRoute extends PageRouteInfo<void> {
 class LoginSwitchScreenPageRoute
     extends PageRouteInfo<LoginSwitchScreenPageRouteArgs> {
   LoginSwitchScreenPageRoute({
-    List<LoginType> forceLoginTypes = const [],
+    List<LoginType>? forceLoginTypes,
     bool isLogoVisible = true,
+    bool isAppBarVisible = true,
     List<PageRouteInfo>? children,
   }) : super(
          LoginSwitchScreenPageRoute.name,
          args: LoginSwitchScreenPageRouteArgs(
            forceLoginTypes: forceLoginTypes,
            isLogoVisible: isLogoVisible,
+           isAppBarVisible: isAppBarVisible,
          ),
          initialChildren: children,
        );
@@ -835,6 +837,7 @@ class LoginSwitchScreenPageRoute
       return LoginSwitchScreenPage(
         forceLoginTypes: args.forceLoginTypes,
         isLogoVisible: args.isLogoVisible,
+        isAppBarVisible: args.isAppBarVisible,
       );
     },
   );
@@ -842,17 +845,20 @@ class LoginSwitchScreenPageRoute
 
 class LoginSwitchScreenPageRouteArgs {
   const LoginSwitchScreenPageRouteArgs({
-    this.forceLoginTypes = const [],
+    this.forceLoginTypes,
     this.isLogoVisible = true,
+    this.isAppBarVisible = true,
   });
 
-  final List<LoginType> forceLoginTypes;
+  final List<LoginType>? forceLoginTypes;
 
   final bool isLogoVisible;
 
+  final bool isAppBarVisible;
+
   @override
   String toString() {
-    return 'LoginSwitchScreenPageRouteArgs{forceLoginTypes: $forceLoginTypes, isLogoVisible: $isLogoVisible}';
+    return 'LoginSwitchScreenPageRouteArgs{forceLoginTypes: $forceLoginTypes, isLogoVisible: $isLogoVisible, isAppBarVisible: $isAppBarVisible}';
   }
 }
 

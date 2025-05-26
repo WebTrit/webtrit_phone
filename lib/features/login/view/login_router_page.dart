@@ -83,6 +83,7 @@ class LoginRouterPage extends StatelessWidget {
                 LoginSwitchScreenPageRoute(
                   forceLoginTypes: const [LoginType.signup],
                   isLogoVisible: false,
+                  isAppBarVisible: false,
                 ),
             ];
           },
