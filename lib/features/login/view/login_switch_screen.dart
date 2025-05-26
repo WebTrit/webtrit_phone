@@ -7,19 +7,19 @@ class LoginSwitchScreen extends StatelessWidget {
   const LoginSwitchScreen({
     super.key,
     required this.appBar,
+    required this.header,
     required this.body,
     required this.currentLoginType,
     required this.supportedLoginTypes,
     this.onLoginTypeChanged,
-    this.isLogoVisible = true,
   });
 
   final PreferredSizeWidget? appBar;
+  final Widget? header;
   final Widget body;
   final LoginType currentLoginType;
   final List<LoginType> supportedLoginTypes;
   final ValueChanged<LoginType>? onLoginTypeChanged;
-  final bool isLogoVisible;
 
   @override
   Widget build(BuildContext context) {
@@ -28,10 +28,7 @@ class LoginSwitchScreen extends StatelessWidget {
       appBar: appBar,
       body: Column(
         children: [
-          if (isLogoVisible) ...[
-            const OnboardingLogo(),
-            const SizedBox(height: kInset),
-          ],
+          if (header != null) header!,
           if (supportedLoginTypes.length > 1) ...[
             SegmentedButton<LoginType>(
               segments: supportedLoginTypes

@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
+import 'package:webtrit_phone/app/constants.dart';
 
 @RoutePage()
 class LoginSwitchScreenPage extends StatelessWidget {
@@ -38,11 +39,18 @@ class LoginSwitchScreenPage extends StatelessWidget {
                       backgroundColor: Colors.transparent,
                     )
                   : null,
+              header: isLogoVisible
+                  ? const Column(
+                      children: [
+                        OnboardingLogo(),
+                        SizedBox(height: kInset),
+                      ],
+                    )
+                  : null,
               body: child,
               currentLoginType: supportedLoginTypes[tabsRouter.activeIndex],
               supportedLoginTypes: supportedLoginTypes,
               onLoginTypeChanged: (loginType) => tabsRouter.setActiveIndex(supportedLoginTypes.indexOf(loginType)),
-              isLogoVisible: isLogoVisible,
             );
           },
         );
