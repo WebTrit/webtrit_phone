@@ -54,3 +54,5 @@ export 'system_info/system_info.dart';
 export 'video_capturing_settings.dart';
 export 'voicemail/voicemail.dart';
 export 'system_notification.dart';
+export 'system_notification_outbox_entry.dart';
+export 'system_notification_event.dart';

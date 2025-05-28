@@ -20,55 +20,7 @@ class MainAppBar extends AppBar {
   }) : super(
           centerTitle: false,
           actions: [
-            BlocBuilder<SystemNotificationsCubit, SystemNotificationState>(
-              builder: (context, notificationState) {
-                final theme = Theme.of(context);
-                final colorScheme = theme.colorScheme;
-                final unreadCount = notificationState.unreadCount;
-                final hasUnread = unreadCount > 0;
-
-                return SizedBox(
-                  width: kMinInteractiveDimension,
-                  height: kMinInteractiveDimension,
-                  child: ClipOval(
-                    child: Material(
-                      child: InkWell(
-                        onTap: () {
-                          context.router.push(const SystemNotificationsPageRoute());
-                        },
-                        onLongPress: () {
-                          context.read<SystemNotificationsCubit>().rotateNotifications();
-                        },
-                        child: SizedBox(
-                          child: Stack(
-                            children: [
-                              Center(
-                                child: Icon(
-                                  hasUnread ? Icons.notifications : Icons.notifications_outlined,
-                                  color: hasUnread ? colorScheme.tertiary : colorScheme.secondary,
-                                ),
-                              ),
-                              if (notificationState.unreadCount > 0)
-                                Center(
-                                  child: Text(
-                                    notificationState.unreadCount.toString(),
-                                    style: TextStyle(
-                                      color: colorScheme.onPrimary,
-                                      fontSize: 10,
-                                      fontWeight: FontWeight.bold,
-                                      height: 1,
-                                    ),
-                                  ),
-                                )
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                );
-              },
-            ),
+            SystemNotificationsBadge(),
             BlocBuilder<SessionStatusCubit, SessionStatusState>(
               builder: (context, sessionState) {
                 return Ink(

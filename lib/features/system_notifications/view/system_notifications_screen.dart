@@ -15,7 +15,7 @@ class SystemNotificationsScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('System Notifications'),
       ),
-      body: BlocBuilder<SystemNotificationsCubit, SystemNotificationState>(
+      body: BlocBuilder<SystemNotificationsScreenCubit, SystemNotificationScreenState>(
         builder: (context, state) {
           if (state.isLoading) {
             return const Center(child: CircularProgressIndicator());
@@ -31,10 +31,10 @@ class SystemNotificationsScreen extends StatelessWidget {
             itemBuilder: (context, index) {
               final notification = state.notifications[index];
               return SystemNotificationTile(
-                notification: notification,
+                notification: notification.notification,
                 onRender: () {
-                  if (notification.readAt == null) {
-                    context.read<SystemNotificationsCubit>().markAsRead(notification);
+                  if (notification.seen == false) {
+                    context.read<SystemNotificationsScreenCubit>().markAsSeen(notification.notification);
                   }
                 },
               );
@@ -73,7 +73,7 @@ class _SystemNotificationTileState extends State<SystemNotificationTile> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-    final readed = widget.notification.readAt != null;
+    final seen = widget.notification.seen;
 
     return AnimatedContainer(
       duration: const Duration(seconds: 1),
@@ -81,7 +81,7 @@ class _SystemNotificationTileState extends State<SystemNotificationTile> {
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
-        color: readed ? colorScheme.secondaryContainer : colorScheme.tertiaryContainer,
+        color: seen ? colorScheme.secondaryContainer : colorScheme.tertiaryContainer,
       ),
       child: ListTile(
         minLeadingWidth: 20,
@@ -91,11 +91,11 @@ class _SystemNotificationTileState extends State<SystemNotificationTile> {
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         subtitle: Text(
-          widget.notification.body,
+          widget.notification.content,
           style: const TextStyle(fontSize: 14),
         ),
         trailing: Text(
-          widget.notification.dateTime.timeOrDate,
+          widget.notification.createdAt.timeOrDate,
           style: const TextStyle(fontSize: 10),
         ),
       ),

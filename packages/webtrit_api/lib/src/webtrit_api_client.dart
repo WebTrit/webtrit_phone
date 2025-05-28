@@ -618,4 +618,60 @@ class WebtritApiClient {
     );
     return url.toString();
   }
+
+  Future<SystemNotificationResponce> getSystemNotificationsHistory(
+    String token, {
+    DateTime? since,
+    int? limit,
+    RequestOptions options = const RequestOptions(),
+  }) async {
+    final responseJson = await _httpClientExecuteGet(
+      ['user', 'notifications'],
+      {
+        if (since != null) 'from_created_at': since.toIso8601String(),
+        if (limit != null) 'limit': limit.toString(),
+      },
+      token,
+      requestOptions: options,
+    );
+
+    return SystemNotificationResponce.fromJson(responseJson as Map<String, dynamic>);
+  }
+
+  Future<SystemNotificationResponce> getSystemNotificationsUpdates(
+    String token, {
+    required DateTime since,
+    int? limit,
+    RequestOptions options = const RequestOptions(),
+  }) async {
+    final responseJson = await _httpClientExecuteGet(
+      ['user', 'notifications', 'updates'],
+      {
+        'from_updated_at': since.toIso8601String(),
+        if (limit != null) 'limit': limit.toString(),
+      },
+      token,
+      requestOptions: options,
+    );
+
+    return SystemNotificationResponce.fromJson(responseJson as Map<String, dynamic>);
+  }
+
+  Future<SystemNotification> markSystemNotificationAsSeen(
+    String token,
+    int notificationId, {
+    RequestOptions options = const RequestOptions(),
+  }) async {
+    final requestJson = {'seen': true};
+
+    final responce = await _httpClientExecutePatch(
+      ['user', 'notifications', notificationId.toString()],
+      {},
+      token,
+      requestJson,
+      options: options,
+    );
+
+    return SystemNotification.fromJson(responce);
+  }
 }

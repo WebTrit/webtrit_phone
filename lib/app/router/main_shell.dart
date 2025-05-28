@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 
 import 'package:webtrit_api/webtrit_api.dart';
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
@@ -15,8 +16,11 @@ import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/features/features.dart';
+import 'package:webtrit_phone/features/system_notifications/services/system_notifications_outbox_worker.dart';
+import 'package:webtrit_phone/features/system_notifications/services/system_notifications_sync_worker.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
+import 'package:webtrit_phone/repositories/system_notifications/system_notifications_local_repository.dart';
 
 @RoutePage()
 class MainShell extends StatefulWidget {
@@ -201,6 +205,17 @@ class _MainShellState extends State<MainShell> {
             token: context.read<AppBloc>().state.token!,
           ),
         ),
+        RepositoryProvider<SystemNotificationsLocalRepository>(
+          create: (context) => SystemNotificationsLocalRepositoryDriftImpl(
+            context.read<AppDatabase>(),
+          ),
+        ),
+        RepositoryProvider<SystemNotificationsRemoteRepository>(
+          create: (context) => SystemNotificationsRemoteRepositoryApiImpl(
+            context.read<WebtritApiClient>(),
+            context.read<AppBloc>().state.token!,
+          ),
+        ),
       ],
       child: MultiBlocProvider(
         providers: [
@@ -346,7 +361,21 @@ class _MainShellState extends State<MainShell> {
           ),
           BlocProvider(
             create: (_) => ChatsForwardingCubit(),
-          )
+          ),
+          InheritedProvider(
+            create: (context) => SystemNotificationsSyncWorker(
+              context.read<SystemNotificationsLocalRepository>(),
+              context.read<SystemNotificationsRemoteRepository>(),
+            ),
+            dispose: (context, worker) => worker.dispose(),
+          ),
+          InheritedProvider(
+            create: (context) => SystemNotificationsOutboxWorker(
+              context.read<SystemNotificationsLocalRepository>(),
+              context.read<SystemNotificationsRemoteRepository>(),
+            ),
+            dispose: (context, worker) => worker.dispose(),
+          ),
         ],
         child: Builder(
           builder: (context) {
@@ -385,8 +414,9 @@ class _MainShellState extends State<MainShell> {
                 ),
                 BlocProvider(
                   lazy: false,
-                  create: (_) => SystemNotificationsCubit(
-                    context.read<LocalNotificationRepository>(),
+                  create: (_) => SystemNotificationsScreenCubit(
+                    context.read<SystemNotificationsLocalRepository>(),
+                    context.read<SystemNotificationsRemoteRepository>(),
                     onOpenNotifications: () => context.router.push(const SystemNotificationsPageRoute()),
                   ),
                 ),
