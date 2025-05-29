@@ -9,6 +9,7 @@ mixin SystemNotificationApiMapper {
       title: systemInfo.title,
       content: systemInfo.content,
       seen: systemInfo.seen,
+      type: SystemNotificationType.values.byName(systemInfo.type.name),
       createdAt: systemInfo.createdAt,
       updatedAt: systemInfo.updatedAt,
     );

@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-class ActiveMessageNotification extends Equatable {
+class ActiveMessagePush extends Equatable {
   final String notificationId;
   final int messageId;
   final int conversationId;
@@ -8,7 +8,7 @@ class ActiveMessageNotification extends Equatable {
   final String body;
   final DateTime time;
 
-  const ActiveMessageNotification({
+  const ActiveMessagePush({
     required this.notificationId,
     required this.messageId,
     required this.conversationId,

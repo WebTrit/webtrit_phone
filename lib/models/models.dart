@@ -1,4 +1,4 @@
-export 'active_message_notification.dart';
+export 'active_message_push.dart';
 export 'agreement_status.dart';
 export 'audio_processing_settings.dart';
 export 'auth/auth.dart';

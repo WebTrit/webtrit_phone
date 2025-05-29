@@ -1,9 +1,9 @@
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/models/models.dart';
 
-mixin ActiveMessageNotificationDriftMapper {
-  ActiveMessageNotification notificationFromDrift(ActiveMessageNotificationData data) {
-    return ActiveMessageNotification(
+mixin ActiveMessagePushDriftMapper {
+  ActiveMessagePush notificationFromDrift(ActiveMessageNotificationData data) {
+    return ActiveMessagePush(
       notificationId: data.notificationId,
       messageId: data.messageId,
       conversationId: data.conversationId,
@@ -13,7 +13,7 @@ mixin ActiveMessageNotificationDriftMapper {
     );
   }
 
-  ActiveMessageNotificationData notificationToDrift(ActiveMessageNotification notification) {
+  ActiveMessageNotificationData notificationToDrift(ActiveMessagePush notification) {
     return ActiveMessageNotificationData(
       notificationId: notification.notificationId,
       messageId: notification.messageId,

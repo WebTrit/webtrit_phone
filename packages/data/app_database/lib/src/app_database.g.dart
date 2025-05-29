@@ -8298,6 +8298,13 @@ class $SystemNotificationsTableTable extends SystemNotificationsTable
   late final GeneratedColumn<String> content = GeneratedColumn<String>(
       'content', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _typeMeta = const VerificationMeta('type');
+  @override
+  late final GeneratedColumnWithTypeConverter<SystemNotificationType, String>
+      type = GeneratedColumn<String>('type', aliasedName, false,
+              type: DriftSqlType.string, requiredDuringInsert: true)
+          .withConverter<SystemNotificationType>(
+              $SystemNotificationsTableTable.$convertertype);
   static const VerificationMeta _seenMeta = const VerificationMeta('seen');
   @override
   late final GeneratedColumn<bool> seen = GeneratedColumn<bool>(
@@ -8319,8 +8326,15 @@ class $SystemNotificationsTableTable extends SystemNotificationsTable
       'updated_at_remote_usec', aliasedName, false,
       type: DriftSqlType.int, requiredDuringInsert: true);
   @override
-  List<GeneratedColumn> get $columns =>
-      [id, title, content, seen, createdAtRemoteUsec, updatedAtRemoteUsec];
+  List<GeneratedColumn> get $columns => [
+        id,
+        title,
+        content,
+        type,
+        seen,
+        createdAtRemoteUsec,
+        updatedAtRemoteUsec
+      ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -8347,6 +8361,7 @@ class $SystemNotificationsTableTable extends SystemNotificationsTable
     } else if (isInserting) {
       context.missing(_contentMeta);
     }
+    context.handle(_typeMeta, const VerificationResult.success());
     if (data.containsKey('seen')) {
       context.handle(
           _seenMeta, seen.isAcceptableOrUnknown(data['seen']!, _seenMeta));
@@ -8384,6 +8399,9 @@ class $SystemNotificationsTableTable extends SystemNotificationsTable
           .read(DriftSqlType.string, data['${effectivePrefix}title'])!,
       content: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}content'])!,
+      type: $SystemNotificationsTableTable.$convertertype.fromSql(
+          attachedDatabase.typeMapping
+              .read(DriftSqlType.string, data['${effectivePrefix}type'])!),
       seen: attachedDatabase.typeMapping
           .read(DriftSqlType.bool, data['${effectivePrefix}seen'])!,
       createdAtRemoteUsec: attachedDatabase.typeMapping.read(
@@ -8397,6 +8415,10 @@ class $SystemNotificationsTableTable extends SystemNotificationsTable
   $SystemNotificationsTableTable createAlias(String alias) {
     return $SystemNotificationsTableTable(attachedDatabase, alias);
   }
+
+  static JsonTypeConverter2<SystemNotificationType, String, String>
+      $convertertype = const EnumNameConverter<SystemNotificationType>(
+          SystemNotificationType.values);
 }
 
 class SystemNotificationData extends DataClass
@@ -8404,6 +8426,7 @@ class SystemNotificationData extends DataClass
   final int id;
   final String title;
   final String content;
+  final SystemNotificationType type;
   final bool seen;
   final int createdAtRemoteUsec;
   final int updatedAtRemoteUsec;
@@ -8411,6 +8434,7 @@ class SystemNotificationData extends DataClass
       {required this.id,
       required this.title,
       required this.content,
+      required this.type,
       required this.seen,
       required this.createdAtRemoteUsec,
       required this.updatedAtRemoteUsec});
@@ -8420,6 +8444,10 @@ class SystemNotificationData extends DataClass
     map['id'] = Variable<int>(id);
     map['title'] = Variable<String>(title);
     map['content'] = Variable<String>(content);
+    {
+      map['type'] = Variable<String>(
+          $SystemNotificationsTableTable.$convertertype.toSql(type));
+    }
     map['seen'] = Variable<bool>(seen);
     map['created_at_remote_usec'] = Variable<int>(createdAtRemoteUsec);
     map['updated_at_remote_usec'] = Variable<int>(updatedAtRemoteUsec);
@@ -8431,6 +8459,7 @@ class SystemNotificationData extends DataClass
       id: Value(id),
       title: Value(title),
       content: Value(content),
+      type: Value(type),
       seen: Value(seen),
       createdAtRemoteUsec: Value(createdAtRemoteUsec),
       updatedAtRemoteUsec: Value(updatedAtRemoteUsec),
@@ -8444,6 +8473,8 @@ class SystemNotificationData extends DataClass
       id: serializer.fromJson<int>(json['id']),
       title: serializer.fromJson<String>(json['title']),
       content: serializer.fromJson<String>(json['content']),
+      type: $SystemNotificationsTableTable.$convertertype
+          .fromJson(serializer.fromJson<String>(json['type'])),
       seen: serializer.fromJson<bool>(json['seen']),
       createdAtRemoteUsec:
           serializer.fromJson<int>(json['createdAtRemoteUsec']),
@@ -8458,6 +8489,8 @@ class SystemNotificationData extends DataClass
       'id': serializer.toJson<int>(id),
       'title': serializer.toJson<String>(title),
       'content': serializer.toJson<String>(content),
+      'type': serializer.toJson<String>(
+          $SystemNotificationsTableTable.$convertertype.toJson(type)),
       'seen': serializer.toJson<bool>(seen),
       'createdAtRemoteUsec': serializer.toJson<int>(createdAtRemoteUsec),
       'updatedAtRemoteUsec': serializer.toJson<int>(updatedAtRemoteUsec),
@@ -8468,6 +8501,7 @@ class SystemNotificationData extends DataClass
           {int? id,
           String? title,
           String? content,
+          SystemNotificationType? type,
           bool? seen,
           int? createdAtRemoteUsec,
           int? updatedAtRemoteUsec}) =>
@@ -8475,6 +8509,7 @@ class SystemNotificationData extends DataClass
         id: id ?? this.id,
         title: title ?? this.title,
         content: content ?? this.content,
+        type: type ?? this.type,
         seen: seen ?? this.seen,
         createdAtRemoteUsec: createdAtRemoteUsec ?? this.createdAtRemoteUsec,
         updatedAtRemoteUsec: updatedAtRemoteUsec ?? this.updatedAtRemoteUsec,
@@ -8485,6 +8520,7 @@ class SystemNotificationData extends DataClass
       id: data.id.present ? data.id.value : this.id,
       title: data.title.present ? data.title.value : this.title,
       content: data.content.present ? data.content.value : this.content,
+      type: data.type.present ? data.type.value : this.type,
       seen: data.seen.present ? data.seen.value : this.seen,
       createdAtRemoteUsec: data.createdAtRemoteUsec.present
           ? data.createdAtRemoteUsec.value
@@ -8501,6 +8537,7 @@ class SystemNotificationData extends DataClass
           ..write('id: $id, ')
           ..write('title: $title, ')
           ..write('content: $content, ')
+          ..write('type: $type, ')
           ..write('seen: $seen, ')
           ..write('createdAtRemoteUsec: $createdAtRemoteUsec, ')
           ..write('updatedAtRemoteUsec: $updatedAtRemoteUsec')
@@ -8510,7 +8547,7 @@ class SystemNotificationData extends DataClass
 
   @override
   int get hashCode => Object.hash(
-      id, title, content, seen, createdAtRemoteUsec, updatedAtRemoteUsec);
+      id, title, content, type, seen, createdAtRemoteUsec, updatedAtRemoteUsec);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -8518,6 +8555,7 @@ class SystemNotificationData extends DataClass
           other.id == this.id &&
           other.title == this.title &&
           other.content == this.content &&
+          other.type == this.type &&
           other.seen == this.seen &&
           other.createdAtRemoteUsec == this.createdAtRemoteUsec &&
           other.updatedAtRemoteUsec == this.updatedAtRemoteUsec);
@@ -8528,6 +8566,7 @@ class SystemNotificationDataCompanion
   final Value<int> id;
   final Value<String> title;
   final Value<String> content;
+  final Value<SystemNotificationType> type;
   final Value<bool> seen;
   final Value<int> createdAtRemoteUsec;
   final Value<int> updatedAtRemoteUsec;
@@ -8535,6 +8574,7 @@ class SystemNotificationDataCompanion
     this.id = const Value.absent(),
     this.title = const Value.absent(),
     this.content = const Value.absent(),
+    this.type = const Value.absent(),
     this.seen = const Value.absent(),
     this.createdAtRemoteUsec = const Value.absent(),
     this.updatedAtRemoteUsec = const Value.absent(),
@@ -8543,11 +8583,13 @@ class SystemNotificationDataCompanion
     this.id = const Value.absent(),
     required String title,
     required String content,
+    required SystemNotificationType type,
     required bool seen,
     required int createdAtRemoteUsec,
     required int updatedAtRemoteUsec,
   })  : title = Value(title),
         content = Value(content),
+        type = Value(type),
         seen = Value(seen),
         createdAtRemoteUsec = Value(createdAtRemoteUsec),
         updatedAtRemoteUsec = Value(updatedAtRemoteUsec);
@@ -8555,6 +8597,7 @@ class SystemNotificationDataCompanion
     Expression<int>? id,
     Expression<String>? title,
     Expression<String>? content,
+    Expression<String>? type,
     Expression<bool>? seen,
     Expression<int>? createdAtRemoteUsec,
     Expression<int>? updatedAtRemoteUsec,
@@ -8563,6 +8606,7 @@ class SystemNotificationDataCompanion
       if (id != null) 'id': id,
       if (title != null) 'title': title,
       if (content != null) 'content': content,
+      if (type != null) 'type': type,
       if (seen != null) 'seen': seen,
       if (createdAtRemoteUsec != null)
         'created_at_remote_usec': createdAtRemoteUsec,
@@ -8575,6 +8619,7 @@ class SystemNotificationDataCompanion
       {Value<int>? id,
       Value<String>? title,
       Value<String>? content,
+      Value<SystemNotificationType>? type,
       Value<bool>? seen,
       Value<int>? createdAtRemoteUsec,
       Value<int>? updatedAtRemoteUsec}) {
@@ -8582,6 +8627,7 @@ class SystemNotificationDataCompanion
       id: id ?? this.id,
       title: title ?? this.title,
       content: content ?? this.content,
+      type: type ?? this.type,
       seen: seen ?? this.seen,
       createdAtRemoteUsec: createdAtRemoteUsec ?? this.createdAtRemoteUsec,
       updatedAtRemoteUsec: updatedAtRemoteUsec ?? this.updatedAtRemoteUsec,
@@ -8599,6 +8645,10 @@ class SystemNotificationDataCompanion
     }
     if (content.present) {
       map['content'] = Variable<String>(content.value);
+    }
+    if (type.present) {
+      map['type'] = Variable<String>(
+          $SystemNotificationsTableTable.$convertertype.toSql(type.value));
     }
     if (seen.present) {
       map['seen'] = Variable<bool>(seen.value);
@@ -8618,6 +8668,7 @@ class SystemNotificationDataCompanion
           ..write('id: $id, ')
           ..write('title: $title, ')
           ..write('content: $content, ')
+          ..write('type: $type, ')
           ..write('seen: $seen, ')
           ..write('createdAtRemoteUsec: $createdAtRemoteUsec, ')
           ..write('updatedAtRemoteUsec: $updatedAtRemoteUsec')
@@ -16275,6 +16326,7 @@ typedef $$SystemNotificationsTableTableCreateCompanionBuilder
   Value<int> id,
   required String title,
   required String content,
+  required SystemNotificationType type,
   required bool seen,
   required int createdAtRemoteUsec,
   required int updatedAtRemoteUsec,
@@ -16284,6 +16336,7 @@ typedef $$SystemNotificationsTableTableUpdateCompanionBuilder
   Value<int> id,
   Value<String> title,
   Value<String> content,
+  Value<SystemNotificationType> type,
   Value<bool> seen,
   Value<int> createdAtRemoteUsec,
   Value<int> updatedAtRemoteUsec,
@@ -16331,6 +16384,12 @@ class $$SystemNotificationsTableTableFilterComposer
 
   ColumnFilters<String> get content => $composableBuilder(
       column: $table.content, builder: (column) => ColumnFilters(column));
+
+  ColumnWithTypeConverterFilters<SystemNotificationType, SystemNotificationType,
+          String>
+      get type => $composableBuilder(
+          column: $table.type,
+          builder: (column) => ColumnWithTypeConverterFilters(column));
 
   ColumnFilters<bool> get seen => $composableBuilder(
       column: $table.seen, builder: (column) => ColumnFilters(column));
@@ -16386,6 +16445,9 @@ class $$SystemNotificationsTableTableOrderingComposer
   ColumnOrderings<String> get content => $composableBuilder(
       column: $table.content, builder: (column) => ColumnOrderings(column));
 
+  ColumnOrderings<String> get type => $composableBuilder(
+      column: $table.type, builder: (column) => ColumnOrderings(column));
+
   ColumnOrderings<bool> get seen => $composableBuilder(
       column: $table.seen, builder: (column) => ColumnOrderings(column));
 
@@ -16415,6 +16477,9 @@ class $$SystemNotificationsTableTableAnnotationComposer
 
   GeneratedColumn<String> get content =>
       $composableBuilder(column: $table.content, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<SystemNotificationType, String> get type =>
+      $composableBuilder(column: $table.type, builder: (column) => column);
 
   GeneratedColumn<bool> get seen =>
       $composableBuilder(column: $table.seen, builder: (column) => column);
@@ -16480,6 +16545,7 @@ class $$SystemNotificationsTableTableTableManager extends RootTableManager<
             Value<int> id = const Value.absent(),
             Value<String> title = const Value.absent(),
             Value<String> content = const Value.absent(),
+            Value<SystemNotificationType> type = const Value.absent(),
             Value<bool> seen = const Value.absent(),
             Value<int> createdAtRemoteUsec = const Value.absent(),
             Value<int> updatedAtRemoteUsec = const Value.absent(),
@@ -16488,6 +16554,7 @@ class $$SystemNotificationsTableTableTableManager extends RootTableManager<
             id: id,
             title: title,
             content: content,
+            type: type,
             seen: seen,
             createdAtRemoteUsec: createdAtRemoteUsec,
             updatedAtRemoteUsec: updatedAtRemoteUsec,
@@ -16496,6 +16563,7 @@ class $$SystemNotificationsTableTableTableManager extends RootTableManager<
             Value<int> id = const Value.absent(),
             required String title,
             required String content,
+            required SystemNotificationType type,
             required bool seen,
             required int createdAtRemoteUsec,
             required int updatedAtRemoteUsec,
@@ -16504,6 +16572,7 @@ class $$SystemNotificationsTableTableTableManager extends RootTableManager<
             id: id,
             title: title,
             content: content,
+            type: type,
             seen: seen,
             createdAtRemoteUsec: createdAtRemoteUsec,
             updatedAtRemoteUsec: updatedAtRemoteUsec,

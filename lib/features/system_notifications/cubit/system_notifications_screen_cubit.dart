@@ -78,9 +78,8 @@ class SystemNotificationScreenState extends Equatable {
 class SystemNotificationsScreenCubit extends Cubit<SystemNotificationScreenState> {
   SystemNotificationsScreenCubit(
     this._systemNotificationsLocalRepository,
-    this._systemNotificationsRemoteRepository, {
-    Function()? onOpenNotifications,
-  }) : super(const SystemNotificationScreenState(notifications: [], isLoading: true)) {
+    this._systemNotificationsRemoteRepository,
+  ) : super(const SystemNotificationScreenState(notifications: [], isLoading: true)) {
     _init();
   }
 

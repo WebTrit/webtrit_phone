@@ -21,7 +21,7 @@ import 'firebase_options.dart';
 Future<void> bootstrap() async {
   await _initFirebase();
   await _initFirebaseMessaging();
-  await _initLocalNotifications();
+  await _initLocalPushs();
 
   // Remote configuration
   final remoteCacheConfigService = await DefaultRemoteCacheConfigService.init();
@@ -83,22 +83,22 @@ Future<void> _initFirebaseMessaging() async {
 
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
     logger.info('onMessage: ${message.toMap()}');
-    final appNotification = AppRemoteNotification.fromFCM(message);
-    RemoteNotificationsBroker.handleForegroundNotification(appNotification);
+    final appPush = AppRemotePush.fromFCM(message);
+    RemotePushBroker.handleForegroundPush(appPush);
 
     // Type of notification for testing purposes
-    _dHandleInspectPushNotification(message.data, false);
+    _dHandleInspectPush(message.data, false);
   });
   FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
     logger.info('onMessageOpenedApp: ${message.toMap()}');
-    final appNotification = AppRemoteNotification.fromFCM(message);
-    RemoteNotificationsBroker.handleOpenedNotification(appNotification);
+    final appPush = AppRemotePush.fromFCM(message);
+    RemotePushBroker.handleOpenedPush(appPush);
   });
   final initialMessage = await FirebaseMessaging.instance.getInitialMessage();
   if (initialMessage != null) {
     logger.info('initialMessage: ${initialMessage.toMap()}');
-    final appNotification = AppRemoteNotification.fromFCM(initialMessage);
-    RemoteNotificationsBroker.handleOpenedNotification(appNotification);
+    final appPush = AppRemotePush.fromFCM(initialMessage);
+    RemotePushBroker.handleOpenedPush(appPush);
   }
 
   // actual FirebaseMessaging permission request executed in [PermissionsCubit]
@@ -125,45 +125,45 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
     secureStorage: secureStorage,
   );
 
-  final appNotification = AppRemoteNotification.fromFCM(message);
+  final appPush = AppRemotePush.fromFCM(message);
 
   logger.info('onBackgroundMessage: ${message.toMap()}');
 
   // Type of notification for testing purposes
-  _dHandleInspectPushNotification(message.data, true);
+  _dHandleInspectPush(message.data, true);
 
-  if (appNotification is PendingCallNotification && Platform.isAndroid) {
+  if (appPush is PendingCallPush && Platform.isAndroid) {
     final appDatabase = await IsolateDatabase.create();
     final contactsRepository = ContactsRepository(appDatabase: appDatabase);
 
-    final contact = await contactsRepository.getContactByPhoneNumber(appNotification.call.handle);
-    final displayName = contact?.maybeName ?? appNotification.call.displayName;
+    final contact = await contactsRepository.getContactByPhoneNumber(appPush.call.handle);
+    final displayName = contact?.maybeName ?? appPush.call.displayName;
 
     AndroidCallkeepServices.backgroundPushNotificationBootstrapService.reportNewIncomingCall(
-      appNotification.call.id,
-      CallkeepHandle.number(appNotification.call.handle),
+      appPush.call.id,
+      CallkeepHandle.number(appPush.call.handle),
       displayName: displayName,
-      hasVideo: appNotification.call.hasVideo,
+      hasVideo: appPush.call.hasVideo,
     );
   }
 
-  if (appNotification is MessageNotification) {
+  if (appPush is MessagePush) {
     final appDatabase = await IsolateDatabase.create();
-    final repo = ActiveMessageNotificationsRepositoryDriftImpl(appDatabase: appDatabase);
+    final repo = ActiveMessagePushsRepositoryDriftImpl(appDatabase: appDatabase);
 
-    final activeMessageNotification = ActiveMessageNotification(
-      notificationId: appNotification.id,
-      messageId: appNotification.messageId,
-      conversationId: appNotification.conversationId,
-      title: appNotification.title ?? '',
-      body: appNotification.body ?? '',
+    final activeMessagePush = ActiveMessagePush(
+      notificationId: appPush.id,
+      messageId: appPush.messageId,
+      conversationId: appPush.conversationId,
+      title: appPush.title ?? '',
+      body: appPush.body ?? '',
       time: DateTime.now(),
     );
-    await repo.set(activeMessageNotification);
+    await repo.set(activeMessagePush);
   }
 }
 
-Future _initLocalNotifications() async {
+Future _initLocalPushs() async {
   await FlutterLocalNotificationsPlugin().initialize(
     const InitializationSettings(
       iOS: DarwinInitializationSettings(
@@ -173,28 +173,28 @@ Future _initLocalNotifications() async {
       ),
       android: AndroidInitializationSettings('@mipmap/ic_launcher'),
     ),
-    onDidReceiveNotificationResponse: LocalNotificationsBroker.handleActionReceived,
-    onDidReceiveBackgroundNotificationResponse: LocalNotificationsBroker.handleActionReceived,
+    onDidReceiveNotificationResponse: LocalPushsBroker.handleActionReceived,
+    onDidReceiveBackgroundNotificationResponse: LocalPushsBroker.handleActionReceived,
   );
 
   final launchDetails = await FlutterLocalNotificationsPlugin().getNotificationAppLaunchDetails();
   final data = launchDetails?.notificationResponse;
-  if (data != null) LocalNotificationsBroker.handleActionReceived(data);
+  if (data != null) LocalPushsBroker.handleActionReceived(data);
 }
 
 // Debugging push notifications
-void _dHandleInspectPushNotification(Map<String, dynamic> data, bool background) {
+void _dHandleInspectPush(Map<String, dynamic> data, bool background) {
   if (data.containsKey('type') && data['type'] == 'inspect-push') {
-    final title = data['title'] ?? 'Inspect Notification';
+    final title = data['title'] ?? 'Inspect Push';
     final body =
         "${data['body'] ?? 'This is a local notification for testing notifications'} ${background ? 'Background' : 'Foreground'}";
 
-    _dShowInspectLocalNotification(title: title, body: body);
+    _dShowInspectLocalPush(title: title, body: body);
   }
 }
 
 // Debugging push notifications
-Future<void> _dShowInspectLocalNotification({
+Future<void> _dShowInspectLocalPush({
   required String title,
   required String body,
 }) async {

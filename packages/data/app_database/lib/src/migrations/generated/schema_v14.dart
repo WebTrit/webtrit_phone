@@ -1517,6 +1517,11 @@ class SystemNotifications extends Table with TableInfo {
       type: DriftSqlType.string,
       requiredDuringInsert: true,
       $customConstraints: 'NOT NULL');
+  late final GeneratedColumn<String> type = GeneratedColumn<String>(
+      'type', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: true,
+      $customConstraints: 'NOT NULL');
   late final GeneratedColumn<int> seen = GeneratedColumn<int>(
       'seen', aliasedName, false,
       type: DriftSqlType.int,
@@ -1533,8 +1538,15 @@ class SystemNotifications extends Table with TableInfo {
       requiredDuringInsert: true,
       $customConstraints: 'NOT NULL');
   @override
-  List<GeneratedColumn> get $columns =>
-      [id, title, content, seen, createdAtRemoteUsec, updatedAtRemoteUsec];
+  List<GeneratedColumn> get $columns => [
+        id,
+        title,
+        content,
+        type,
+        seen,
+        createdAtRemoteUsec,
+        updatedAtRemoteUsec
+      ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override

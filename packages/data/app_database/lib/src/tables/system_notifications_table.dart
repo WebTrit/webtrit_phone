@@ -1,5 +1,7 @@
 import 'package:drift/drift.dart';
 
+enum SystemNotificationType { announcement, info }
+
 @DataClassName('SystemNotificationData')
 class SystemNotificationsTable extends Table {
   @override
@@ -13,6 +15,8 @@ class SystemNotificationsTable extends Table {
   TextColumn get title => text()();
 
   TextColumn get content => text()();
+
+  TextColumn get type => textEnum<SystemNotificationType>()();
 
   BoolColumn get seen => boolean()();
 

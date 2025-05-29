@@ -14,9 +14,7 @@ class SystemNotificationsSyncWorker {
     this.remoteRepo, {
     this.pollingInterval = const Duration(seconds: 2),
     this.pageSize = 50,
-  }) {
-    _syncSub = _syncStream().listen(_handleSync);
-  }
+  });
 
   final SystemNotificationsLocalRepository localRepo;
   final SystemNotificationsRemoteRepository remoteRepo;
@@ -25,6 +23,11 @@ class SystemNotificationsSyncWorker {
   final Duration pollingInterval;
   final int pageSize;
   late final StreamSubscription _syncSub;
+
+  void init() {
+    _logger.info('Initializing');
+    _syncSub = _syncStream().listen(_handleSync);
+  }
 
   Stream<dynamic> _syncStream() async* {
     while (!_disposed) {
@@ -79,6 +82,7 @@ class SystemNotificationsSyncWorker {
   bool _disposed = false;
 
   Future dispose() async {
+    _logger.info('Disposing');
     await _syncSub.cancel();
     _disposed = true;
   }

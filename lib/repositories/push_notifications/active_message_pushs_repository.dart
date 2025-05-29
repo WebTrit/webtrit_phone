@@ -1,15 +1,14 @@
 import 'package:app_database/app_database.dart';
 
+import 'package:webtrit_phone/mappers/mappers.dart';
 import 'package:webtrit_phone/models/models.dart';
 
-import 'components/active_message_notifications_drift_mapper.dart';
-
-abstract class ActiveMessageNotificationsRepository {
+abstract class ActiveMessagePushsRepository {
   /// Get all active message notifications for given conversation
-  Future<List<ActiveMessageNotification>> getAllByConversation(int conversationId);
+  Future<List<ActiveMessagePush>> getAllByConversation(int conversationId);
 
   /// Set active message notification
-  Future<void> set(ActiveMessageNotification notification);
+  Future<void> set(ActiveMessagePush notification);
 
   /// Delete active message notifications by push-notification id
   Future<void> deleteByNotification(String notificationId);
@@ -22,22 +21,20 @@ abstract class ActiveMessageNotificationsRepository {
 }
 
 /// Active message notifications repository implementation using Drift database
-class ActiveMessageNotificationsRepositoryDriftImpl
-    with ActiveMessageNotificationDriftMapper
-    implements ActiveMessageNotificationsRepository {
-  ActiveMessageNotificationsRepositoryDriftImpl({required AppDatabase appDatabase}) : _appDatabase = appDatabase;
+class ActiveMessagePushsRepositoryDriftImpl with ActiveMessagePushDriftMapper implements ActiveMessagePushsRepository {
+  ActiveMessagePushsRepositoryDriftImpl({required AppDatabase appDatabase}) : _appDatabase = appDatabase;
 
   final AppDatabase _appDatabase;
   ActiveMessageNotificationsDao get _dao => _appDatabase.activeMessageNotificationsDao;
 
   @override
-  Future<List<ActiveMessageNotification>> getAllByConversation(int conversationId) async {
+  Future<List<ActiveMessagePush>> getAllByConversation(int conversationId) async {
     final notificationsData = await _dao.getAllByConversation(conversationId);
     return notificationsData.map(notificationFromDrift).toList();
   }
 
   @override
-  Future<void> set(ActiveMessageNotification notification) async {
+  Future<void> set(ActiveMessagePush notification) async {
     await _dao.set(notificationToDrift(notification));
   }
 

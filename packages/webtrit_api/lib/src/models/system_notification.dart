@@ -4,6 +4,8 @@ part 'system_notification.freezed.dart';
 
 part 'system_notification.g.dart';
 
+enum SystemNotificationType { announcement, info }
+
 @freezed
 class SystemNotification with _$SystemNotification {
   // ignore: invalid_annotation_target
@@ -13,6 +15,7 @@ class SystemNotification with _$SystemNotification {
     required String title,
     required String content,
     required bool seen,
+    required SystemNotificationType type,
     required DateTime createdAt,
     required DateTime updatedAt,
     DateTime? readAt,
@@ -26,8 +29,8 @@ class SystemNotificationResponce with _$SystemNotificationResponce {
   // ignore: invalid_annotation_target
   @JsonSerializable(fieldRename: FieldRename.snake)
   const factory SystemNotificationResponce({
-    required List<SystemNotification> notifications,
-    required int total,
+    required List<SystemNotification> items,
+    required int unseen_count,
   }) = _SystemNotificationResponce;
 
   factory SystemNotificationResponce.fromJson(Map<String, Object?> json) => _$SystemNotificationResponceFromJson(json);

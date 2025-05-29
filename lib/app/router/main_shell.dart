@@ -11,16 +11,12 @@ import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 import 'package:webtrit_phone/app/assets.gen.dart';
 import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/app/notifications/notifications.dart';
-import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/features/features.dart';
-import 'package:webtrit_phone/features/system_notifications/services/system_notifications_outbox_worker.dart';
-import 'package:webtrit_phone/features/system_notifications/services/system_notifications_sync_worker.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
-import 'package:webtrit_phone/repositories/system_notifications/system_notifications_local_repository.dart';
 
 @RoutePage()
 class MainShell extends StatefulWidget {
@@ -188,14 +184,14 @@ class _MainShellState extends State<MainShell> {
         RepositoryProvider<MainShellRouteStateRepository>(
           create: (context) => MainShellRouteStateRepositoryAutoRouteImpl(),
         ),
-        RepositoryProvider<RemoteNotificationRepository>(
-          create: (context) => RemoteNotificationRepositoryBrokerImpl(),
+        RepositoryProvider<RemotePushRepository>(
+          create: (context) => RemotePushRepositoryBrokerImpl(),
         ),
-        RepositoryProvider<LocalNotificationRepository>(
-          create: (context) => LocalNotificationRepositoryFLNImpl(),
+        RepositoryProvider<LocalPushRepository>(
+          create: (context) => LocalPushRepositoryFLNImpl(),
         ),
-        RepositoryProvider<ActiveMessageNotificationsRepository>(
-          create: (context) => ActiveMessageNotificationsRepositoryDriftImpl(
+        RepositoryProvider<ActiveMessagePushsRepository>(
+          create: (context) => ActiveMessagePushsRepositoryDriftImpl(
             appDatabase: context.read<AppDatabase>(),
           ),
         ),
@@ -414,23 +410,25 @@ class _MainShellState extends State<MainShell> {
                 ),
                 BlocProvider(
                   lazy: false,
-                  create: (_) => SystemNotificationsScreenCubit(
+                  create: (_) => SystemNotificationsCounterCubit(
                     context.read<SystemNotificationsLocalRepository>(),
-                    context.read<SystemNotificationsRemoteRepository>(),
-                    onOpenNotifications: () => context.router.push(const SystemNotificationsPageRoute()),
                   ),
                 ),
               ],
               child: Builder(
-                builder: (context) => CallShell(
-                  child: MessagingShell(
-                    child: AutoRouter(
-                      navigatorObservers: () => [
-                        MainShellNavigatorObserver(context.read<MainShellRouteStateRepository>()),
-                      ],
+                builder: (context) {
+                  return CallShell(
+                    child: MessagingShell(
+                      child: SystemNotificationsShell(
+                        child: AutoRouter(
+                          navigatorObservers: () => [
+                            MainShellNavigatorObserver(context.read<MainShellRouteStateRepository>()),
+                          ],
+                        ),
+                      ),
                     ),
-                  ),
-                ),
+                  );
+                },
               ),
             );
           },

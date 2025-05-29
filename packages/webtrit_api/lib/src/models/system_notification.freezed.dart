@@ -24,6 +24,7 @@ mixin _$SystemNotification {
   String get title => throw _privateConstructorUsedError;
   String get content => throw _privateConstructorUsedError;
   bool get seen => throw _privateConstructorUsedError;
+  SystemNotificationType get type => throw _privateConstructorUsedError;
   DateTime get createdAt => throw _privateConstructorUsedError;
   DateTime get updatedAt => throw _privateConstructorUsedError;
   DateTime? get readAt => throw _privateConstructorUsedError;
@@ -49,6 +50,7 @@ abstract class $SystemNotificationCopyWith<$Res> {
       String title,
       String content,
       bool seen,
+      SystemNotificationType type,
       DateTime createdAt,
       DateTime updatedAt,
       DateTime? readAt});
@@ -73,6 +75,7 @@ class _$SystemNotificationCopyWithImpl<$Res, $Val extends SystemNotification>
     Object? title = null,
     Object? content = null,
     Object? seen = null,
+    Object? type = null,
     Object? createdAt = null,
     Object? updatedAt = null,
     Object? readAt = freezed,
@@ -94,6 +97,10 @@ class _$SystemNotificationCopyWithImpl<$Res, $Val extends SystemNotification>
           ? _value.seen
           : seen // ignore: cast_nullable_to_non_nullable
               as bool,
+      type: null == type
+          ? _value.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as SystemNotificationType,
       createdAt: null == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
@@ -123,6 +130,7 @@ abstract class _$$SystemNotificationImplCopyWith<$Res>
       String title,
       String content,
       bool seen,
+      SystemNotificationType type,
       DateTime createdAt,
       DateTime updatedAt,
       DateTime? readAt});
@@ -145,6 +153,7 @@ class __$$SystemNotificationImplCopyWithImpl<$Res>
     Object? title = null,
     Object? content = null,
     Object? seen = null,
+    Object? type = null,
     Object? createdAt = null,
     Object? updatedAt = null,
     Object? readAt = freezed,
@@ -166,6 +175,10 @@ class __$$SystemNotificationImplCopyWithImpl<$Res>
           ? _value.seen
           : seen // ignore: cast_nullable_to_non_nullable
               as bool,
+      type: null == type
+          ? _value.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as SystemNotificationType,
       createdAt: null == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
@@ -191,6 +204,7 @@ class _$SystemNotificationImpl implements _SystemNotification {
       required this.title,
       required this.content,
       required this.seen,
+      required this.type,
       required this.createdAt,
       required this.updatedAt,
       this.readAt});
@@ -207,6 +221,8 @@ class _$SystemNotificationImpl implements _SystemNotification {
   @override
   final bool seen;
   @override
+  final SystemNotificationType type;
+  @override
   final DateTime createdAt;
   @override
   final DateTime updatedAt;
@@ -215,7 +231,7 @@ class _$SystemNotificationImpl implements _SystemNotification {
 
   @override
   String toString() {
-    return 'SystemNotification(id: $id, title: $title, content: $content, seen: $seen, createdAt: $createdAt, updatedAt: $updatedAt, readAt: $readAt)';
+    return 'SystemNotification(id: $id, title: $title, content: $content, seen: $seen, type: $type, createdAt: $createdAt, updatedAt: $updatedAt, readAt: $readAt)';
   }
 
   @override
@@ -227,6 +243,7 @@ class _$SystemNotificationImpl implements _SystemNotification {
             (identical(other.title, title) || other.title == title) &&
             (identical(other.content, content) || other.content == content) &&
             (identical(other.seen, seen) || other.seen == seen) &&
+            (identical(other.type, type) || other.type == type) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
             (identical(other.updatedAt, updatedAt) ||
@@ -236,8 +253,8 @@ class _$SystemNotificationImpl implements _SystemNotification {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(
-      runtimeType, id, title, content, seen, createdAt, updatedAt, readAt);
+  int get hashCode => Object.hash(runtimeType, id, title, content, seen, type,
+      createdAt, updatedAt, readAt);
 
   /// Create a copy of SystemNotification
   /// with the given fields replaced by the non-null parameter values.
@@ -262,6 +279,7 @@ abstract class _SystemNotification implements SystemNotification {
       required final String title,
       required final String content,
       required final bool seen,
+      required final SystemNotificationType type,
       required final DateTime createdAt,
       required final DateTime updatedAt,
       final DateTime? readAt}) = _$SystemNotificationImpl;
@@ -277,6 +295,8 @@ abstract class _SystemNotification implements SystemNotification {
   String get content;
   @override
   bool get seen;
+  @override
+  SystemNotificationType get type;
   @override
   DateTime get createdAt;
   @override
@@ -299,9 +319,8 @@ SystemNotificationResponce _$SystemNotificationResponceFromJson(
 
 /// @nodoc
 mixin _$SystemNotificationResponce {
-  List<SystemNotification> get notifications =>
-      throw _privateConstructorUsedError;
-  int get total => throw _privateConstructorUsedError;
+  List<SystemNotification> get items => throw _privateConstructorUsedError;
+  int get unseen_count => throw _privateConstructorUsedError;
 
   /// Serializes this SystemNotificationResponce to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -320,7 +339,7 @@ abstract class $SystemNotificationResponceCopyWith<$Res> {
       _$SystemNotificationResponceCopyWithImpl<$Res,
           SystemNotificationResponce>;
   @useResult
-  $Res call({List<SystemNotification> notifications, int total});
+  $Res call({List<SystemNotification> items, int unseen_count});
 }
 
 /// @nodoc
@@ -339,17 +358,17 @@ class _$SystemNotificationResponceCopyWithImpl<$Res,
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? notifications = null,
-    Object? total = null,
+    Object? items = null,
+    Object? unseen_count = null,
   }) {
     return _then(_value.copyWith(
-      notifications: null == notifications
-          ? _value.notifications
-          : notifications // ignore: cast_nullable_to_non_nullable
+      items: null == items
+          ? _value.items
+          : items // ignore: cast_nullable_to_non_nullable
               as List<SystemNotification>,
-      total: null == total
-          ? _value.total
-          : total // ignore: cast_nullable_to_non_nullable
+      unseen_count: null == unseen_count
+          ? _value.unseen_count
+          : unseen_count // ignore: cast_nullable_to_non_nullable
               as int,
     ) as $Val);
   }
@@ -364,7 +383,7 @@ abstract class _$$SystemNotificationResponceImplCopyWith<$Res>
       __$$SystemNotificationResponceImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({List<SystemNotification> notifications, int total});
+  $Res call({List<SystemNotification> items, int unseen_count});
 }
 
 /// @nodoc
@@ -382,17 +401,17 @@ class __$$SystemNotificationResponceImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? notifications = null,
-    Object? total = null,
+    Object? items = null,
+    Object? unseen_count = null,
   }) {
     return _then(_$SystemNotificationResponceImpl(
-      notifications: null == notifications
-          ? _value._notifications
-          : notifications // ignore: cast_nullable_to_non_nullable
+      items: null == items
+          ? _value._items
+          : items // ignore: cast_nullable_to_non_nullable
               as List<SystemNotification>,
-      total: null == total
-          ? _value.total
-          : total // ignore: cast_nullable_to_non_nullable
+      unseen_count: null == unseen_count
+          ? _value.unseen_count
+          : unseen_count // ignore: cast_nullable_to_non_nullable
               as int,
     ));
   }
@@ -403,28 +422,28 @@ class __$$SystemNotificationResponceImplCopyWithImpl<$Res>
 @JsonSerializable(fieldRename: FieldRename.snake)
 class _$SystemNotificationResponceImpl implements _SystemNotificationResponce {
   const _$SystemNotificationResponceImpl(
-      {required final List<SystemNotification> notifications,
-      required this.total})
-      : _notifications = notifications;
+      {required final List<SystemNotification> items,
+      required this.unseen_count})
+      : _items = items;
 
   factory _$SystemNotificationResponceImpl.fromJson(
           Map<String, dynamic> json) =>
       _$$SystemNotificationResponceImplFromJson(json);
 
-  final List<SystemNotification> _notifications;
+  final List<SystemNotification> _items;
   @override
-  List<SystemNotification> get notifications {
-    if (_notifications is EqualUnmodifiableListView) return _notifications;
+  List<SystemNotification> get items {
+    if (_items is EqualUnmodifiableListView) return _items;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_notifications);
+    return EqualUnmodifiableListView(_items);
   }
 
   @override
-  final int total;
+  final int unseen_count;
 
   @override
   String toString() {
-    return 'SystemNotificationResponce(notifications: $notifications, total: $total)';
+    return 'SystemNotificationResponce(items: $items, unseen_count: $unseen_count)';
   }
 
   @override
@@ -432,15 +451,15 @@ class _$SystemNotificationResponceImpl implements _SystemNotificationResponce {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$SystemNotificationResponceImpl &&
-            const DeepCollectionEquality()
-                .equals(other._notifications, _notifications) &&
-            (identical(other.total, total) || other.total == total));
+            const DeepCollectionEquality().equals(other._items, _items) &&
+            (identical(other.unseen_count, unseen_count) ||
+                other.unseen_count == unseen_count));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
-      runtimeType, const DeepCollectionEquality().hash(_notifications), total);
+      runtimeType, const DeepCollectionEquality().hash(_items), unseen_count);
 
   /// Create a copy of SystemNotificationResponce
   /// with the given fields replaced by the non-null parameter values.
@@ -462,16 +481,16 @@ class _$SystemNotificationResponceImpl implements _SystemNotificationResponce {
 abstract class _SystemNotificationResponce
     implements SystemNotificationResponce {
   const factory _SystemNotificationResponce(
-      {required final List<SystemNotification> notifications,
-      required final int total}) = _$SystemNotificationResponceImpl;
+      {required final List<SystemNotification> items,
+      required final int unseen_count}) = _$SystemNotificationResponceImpl;
 
   factory _SystemNotificationResponce.fromJson(Map<String, dynamic> json) =
       _$SystemNotificationResponceImpl.fromJson;
 
   @override
-  List<SystemNotification> get notifications;
+  List<SystemNotification> get items;
   @override
-  int get total;
+  int get unseen_count;
 
   /// Create a copy of SystemNotificationResponce
   /// with the given fields replaced by the non-null parameter values.

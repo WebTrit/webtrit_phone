@@ -14,10 +14,7 @@ class SystemNotificationsOutboxWorker {
     this.localRepo,
     this.remoteRepo, {
     this.pollingInterval = const Duration(seconds: 2),
-  }) {
-    _processingSub = _processingStream().listen(_handleProcessing);
-    _localEventSub = localRepo.eventBus.listen(_handleLocalEvent);
-  }
+  });
 
   final SystemNotificationsLocalRepository localRepo;
   final SystemNotificationsRemoteRepository remoteRepo;
@@ -26,6 +23,12 @@ class SystemNotificationsOutboxWorker {
   final Duration pollingInterval;
   late final StreamSubscription _processingSub;
   late final StreamSubscription _localEventSub;
+
+  void init() {
+    _logger.info('Initializing');
+    _processingSub = _processingStream().listen(_handleProcessing);
+    _localEventSub = localRepo.eventBus.listen(_handleLocalEvent);
+  }
 
   Stream<dynamic> _processingStream() async* {
     while (!_disposed) {
@@ -87,6 +90,7 @@ class SystemNotificationsOutboxWorker {
   bool _disposed = false;
 
   Future dispose() async {
+    _logger.info('Disposing');
     await Future.wait([
       _processingSub.cancel(),
       _localEventSub.cancel(),

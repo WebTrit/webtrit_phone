@@ -10,15 +10,15 @@ import 'package:webtrit_phone/repositories/repositories.dart';
 
 final _logger = Logger('MessagingNotificationsService');
 
-class MessagingNotificationsService {
-  MessagingNotificationsService(
+class MessagingPushService {
+  MessagingPushService(
     this.userId,
     this.chatsRepository,
     this.smsRepository,
     this.contactsRepository,
-    this.remoteNotificationRepository,
-    this.localNotificationRepository,
-    this.activeMessageNotificationsRepository,
+    this.remotePushRepository,
+    this.localPushRepository,
+    this.activeMessagePushsRepository,
     this.mainScreenRouteStateRepository,
     this.mainShellRouteStateRepository,
     this.openChatList,
@@ -31,9 +31,9 @@ class MessagingNotificationsService {
   final ChatsRepository chatsRepository;
   final SmsRepository smsRepository;
   final ContactsRepository contactsRepository;
-  final RemoteNotificationRepository remoteNotificationRepository;
-  final LocalNotificationRepository localNotificationRepository;
-  final ActiveMessageNotificationsRepository activeMessageNotificationsRepository;
+  final RemotePushRepository remotePushRepository;
+  final LocalPushRepository localPushRepository;
+  final ActiveMessagePushsRepository activeMessagePushsRepository;
   final MainScreenRouteStateRepository mainScreenRouteStateRepository;
   final MainShellRouteStateRepository mainShellRouteStateRepository;
 
@@ -48,26 +48,26 @@ class MessagingNotificationsService {
     _logger.info('Initialising...');
     _subs.add(chatsRepository.eventBus.listen(_handleMessagingChatsEvents));
     _subs.add(smsRepository.eventBus.listen(_handleMessagingSmsEvents));
-    _subs.add(localNotificationRepository.messagingActions.listen(_localActionHandler));
-    _subs.add(remoteNotificationRepository.messagingOpenedNotifications.listen(_handleOpenedNotification));
-    _subs.add(remoteNotificationRepository.messagingForegroundNotifications.listen(_handleForegroundNotification));
+    _subs.add(localPushRepository.messagingActions.listen(_localActionHandler));
+    _subs.add(remotePushRepository.messagingOpenedPushs.listen(_handleOpenedPush));
+    _subs.add(remotePushRepository.messagingForegroundPushs.listen(_handleForegroundPush));
   }
 
   Future<void> _handleMessagingChatsEvents(ChatsEvent e) async {
-    final notifications = await activeMessageNotificationsRepository.getAllByConversation(e.chatId);
+    final notifications = await activeMessagePushsRepository.getAllByConversation(e.chatId);
 
     // Dismiss notifications if message was deleted
     if (e is ChatMessageUpdate && e.message.deletedAt != null) {
       final notification = notifications.firstWhereOrNull((n) => n.messageId == e.message.id);
       if (notification != null) {
-        await activeMessageNotificationsRepository.deleteByMessage(e.message.id);
+        await activeMessagePushsRepository.deleteByMessage(e.message.id);
         await _dismissByContent(notification.title, notification.body);
       }
     }
 
     // Dismiss all notifications if chat was removed
     if (e is ChatRemove) {
-      await activeMessageNotificationsRepository.deleteByConversation(e.chatId);
+      await activeMessagePushsRepository.deleteByConversation(e.chatId);
       for (final notification in notifications) {
         await _dismissByContent(notification.title, notification.body);
       }
@@ -76,7 +76,7 @@ class MessagingNotificationsService {
     // Dismiss notifications if user readed all messages in given chat
     // independant of from what device he did it
     if (e is ChatReadCursorUpdate && e.cursor.userId == userId) {
-      await activeMessageNotificationsRepository.deleteByConversation(e.chatId);
+      await activeMessagePushsRepository.deleteByConversation(e.chatId);
       for (final notification in notifications) {
         await _dismissByContent(notification.title, notification.body);
       }
@@ -84,20 +84,20 @@ class MessagingNotificationsService {
   }
 
   Future<void> _handleMessagingSmsEvents(SmsEvent e) async {
-    final notifications = await activeMessageNotificationsRepository.getAllByConversation(e.conversationId);
+    final notifications = await activeMessagePushsRepository.getAllByConversation(e.conversationId);
 
     // Dismiss notifications if message was deleted
     if (e is SmsMessageUpdate && e.message.deletedAt != null) {
       final notification = notifications.firstWhereOrNull((n) => n.messageId == e.message.id);
       if (notification != null) {
-        await activeMessageNotificationsRepository.deleteByMessage(e.message.id);
+        await activeMessagePushsRepository.deleteByMessage(e.message.id);
         await _dismissByContent(notification.title, notification.body);
       }
     }
 
     // Dismiss all notifications if conversation was removed
     if (e is SmsConversationRemove) {
-      await activeMessageNotificationsRepository.deleteByConversation(e.conversationId);
+      await activeMessagePushsRepository.deleteByConversation(e.conversationId);
       for (final notification in notifications) {
         await _dismissByContent(notification.title, notification.body);
       }
@@ -106,14 +106,14 @@ class MessagingNotificationsService {
     // Dismiss notifications if user readed all messages in given conversation
     // independant of from what device he did it
     if (e is SmsReadCursorUpdate && e.cursor.userId == userId) {
-      await activeMessageNotificationsRepository.deleteByConversation(e.conversationId);
+      await activeMessagePushsRepository.deleteByConversation(e.conversationId);
       for (final notification in notifications) {
         await _dismissByContent(notification.title, notification.body);
       }
     }
   }
 
-  Future<void> _localActionHandler(AppLocalNotificationAction action) async {
+  Future<void> _localActionHandler(AppLocalPushAction action) async {
     _logger.info('onActionReceivedMethod');
     try {
       final chatId = int.tryParse(action.payload['chatId'] ?? '');
@@ -128,24 +128,24 @@ class MessagingNotificationsService {
     }
   }
 
-  Future<void> _handleForegroundNotification(AppRemoteNotification notification) async {
+  Future<void> _handleForegroundPush(AppRemotePush notification) async {
     _logger.info('onMessageReceivedMethod');
     try {
       if (notification.title == null || notification.body == null) return;
 
-      if (notification is ChatsMessageNotification) {
+      if (notification is ChatsMessagePush) {
         final chat = await _tryGetChat(notification.conversationId);
-        if (chat != null && _shouldSkipChatNotification(chat)) return;
+        if (chat != null && _shouldSkipChatPush(chat)) return;
 
-        final localNotification = AppLocalNotification(
+        final localPush = AppLocalPush(
           notification.messageId,
           notification.title!,
           notification.body!,
           payload: {'chatId': notification.conversationId.toString()},
         );
-        localNotificationRepository.displayNotification(localNotification);
+        localPushRepository.displayPush(localPush);
 
-        final activeMessageNotification = ActiveMessageNotification(
+        final activeMessagePush = ActiveMessagePush(
           notificationId: notification.id,
           messageId: notification.messageId,
           conversationId: notification.conversationId,
@@ -153,22 +153,22 @@ class MessagingNotificationsService {
           body: notification.body!,
           time: DateTime.now(),
         );
-        activeMessageNotificationsRepository.set(activeMessageNotification);
+        activeMessagePushsRepository.set(activeMessagePush);
       }
 
-      if (notification is SmsMessageNotification) {
+      if (notification is SmsMessagePush) {
         final conversation = await _tryGetSmsConversation(notification.conversationId);
-        if (conversation != null && _shouldSkipSmsNotification(conversation)) return;
+        if (conversation != null && _shouldSkipSmsPush(conversation)) return;
 
-        final localNotification = AppLocalNotification(
+        final localPush = AppLocalPush(
           notification.messageId,
           notification.title!,
           notification.body!,
           payload: {'smsConversationId': notification.conversationId.toString()},
         );
-        localNotificationRepository.displayNotification(localNotification);
+        localPushRepository.displayPush(localPush);
 
-        final activeMessageNotification = ActiveMessageNotification(
+        final activeMessagePush = ActiveMessagePush(
           notificationId: notification.id,
           messageId: notification.messageId,
           conversationId: notification.conversationId,
@@ -177,18 +177,18 @@ class MessagingNotificationsService {
           time: DateTime.now(),
         );
 
-        activeMessageNotificationsRepository.set(activeMessageNotification);
+        activeMessagePushsRepository.set(activeMessagePush);
       }
     } on Exception catch (e) {
       _logger.severe('Error handling foreground remote message: $e');
     }
   }
 
-  Future<void> _handleOpenedNotification(AppRemoteNotification notification) async {
+  Future<void> _handleOpenedPush(AppRemotePush notification) async {
     _logger.info('onMessageReceivedMethod');
     try {
-      if (notification is ChatsMessageNotification) await _routeToChat(notification.conversationId);
-      if (notification is SmsMessageNotification) await _routeToSmsConversation(notification.conversationId);
+      if (notification is ChatsMessagePush) await _routeToChat(notification.conversationId);
+      if (notification is SmsMessagePush) await _routeToSmsConversation(notification.conversationId);
     } on Exception catch (e) {
       _logger.severe('Error handling foreground remote message: $e');
     }
@@ -224,10 +224,10 @@ class MessagingNotificationsService {
     openSmsConversation(firstNumber, secondNumber);
   }
 
-  bool _shouldSkipChatNotification(Chat chat) {
+  bool _shouldSkipChatPush(Chat chat) {
     final chatType = chat.type;
     final chatId = chat.id;
-    _logger.info('_shouldSkipChatNotification chat: $chatId type: $chatType');
+    _logger.info('_shouldSkipChatPush chat: $chatId type: $chatType');
 
     String? participantId;
     if (chatType == ChatType.direct) {
@@ -241,10 +241,10 @@ class MessagingNotificationsService {
     return false;
   }
 
-  bool _shouldSkipSmsNotification(SmsConversation conversation) {
+  bool _shouldSkipSmsPush(SmsConversation conversation) {
     final firstNumber = conversation.firstPhoneNumber;
     final secondNumber = conversation.secondPhoneNumber;
-    _logger.info('_shouldSkipSmsNotification firstNumber: $firstNumber second: $secondNumber');
+    _logger.info('_shouldSkipSmsPush firstNumber: $firstNumber second: $secondNumber');
 
     final smsConversationScreenActive =
         mainShellRouteStateRepository.isSmsConversationScreenActive(firstNumber, secondNumber);
@@ -255,11 +255,11 @@ class MessagingNotificationsService {
   }
 
   Future _dismissById(int messageId) async {
-    await localNotificationRepository.dissmissById(messageId);
+    await localPushRepository.dissmissById(messageId);
   }
 
   Future _dismissByContent(String title, String body) async {
-    await localNotificationRepository.dismissByContent(title, body);
+    await localPushRepository.dismissByContent(title, body);
   }
 
   Future<Chat?> _tryGetChat(int chatId) async {
