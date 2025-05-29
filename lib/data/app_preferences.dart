@@ -74,6 +74,10 @@ abstract class AppPreferences {
   IceSettings getIceSettings();
 
   Future<void> setIceSettings(IceSettings settings);
+
+  PeerConnectionSettings getPeerConnectionSettings({PeerConnectionSettings? defaultValue});
+
+  Future<void> setPearConnectionSettings(PeerConnectionSettings settings);
 }
 
 class AppPreferencesFactory {
@@ -94,7 +98,8 @@ class AppPreferencesImpl
         EncodingSettingsJsonMapper,
         AudioProcessingSettingsJsonMapper,
         VideoCapturingSettingsJsonMapper,
-        IceSettingsJsonMapper
+        IceSettingsJsonMapper,
+        NegotiationSettingsJsonMapper
     implements AppPreferences {
   static const _kRegisterStatusKey = 'register-status';
   static const _kThemeModeKey = 'theme-mode';
@@ -111,6 +116,7 @@ class AppPreferencesImpl
   static const _kAudioProcessingSettingsKey = 'audio-processing-settings';
   static const _kVideoCapturingSettingsKey = 'video-capturing-settings';
   static const _kIceSettingsKey = 'ice-settings';
+  static const _kNegotiationSettings = 'negotiation-settings';
 
   // Please add all new keys here for proper cleaning of preferences
   static const _kPreferencesList = [
@@ -400,5 +406,35 @@ class AppPreferencesImpl
   @override
   Future<void> setIceSettings(IceSettings settings) {
     return _sharedPreferences.setString(_kIceSettingsKey, iceSettingsToJson(settings));
+  }
+
+  @override
+  PeerConnectionSettings getPeerConnectionSettings({PeerConnectionSettings? defaultValue}) {
+    final defaultPeerConnectionSettings = defaultValue ?? PeerConnectionSettings.blank();
+    final localNegotiationSettings = _getNegotiationSettings();
+
+    return defaultPeerConnectionSettings.copyWith(
+      negotiationSettings: defaultPeerConnectionSettings.negotiationSettings.copyWith(
+        includeInactiveVideoInOfferAnswer: localNegotiationSettings?.includeInactiveVideoInOfferAnswer,
+      ),
+    );
+  }
+
+  NegotiationSettings? _getNegotiationSettings() {
+    final negotiationSettingsString = _sharedPreferences.getString(_kNegotiationSettings);
+    if (negotiationSettingsString != null) {
+      return negotiationSettingsFromJson(negotiationSettingsString);
+    } else {
+      return null;
+    }
+  }
+
+  @override
+  Future<void> setPearConnectionSettings(PeerConnectionSettings settings) async {
+    await _setNegotiationSettings(settings.negotiationSettings);
+  }
+
+  Future<void> _setNegotiationSettings(NegotiationSettings settings) {
+    return _sharedPreferences.setString(_kNegotiationSettings, negotiationSettingsToJson(settings));
   }
 }

@@ -1347,6 +1347,12 @@ class $CallLogsTableTable extends CallLogsTable
       requiredDuringInsert: true,
       $customConstraints:
           'NOT NULL CONSTRAINT "call_logs.number not_empty" CHECK (length(number) > 0)');
+  static const VerificationMeta _usernameMeta =
+      const VerificationMeta('username');
+  @override
+  late final GeneratedColumn<String> username = GeneratedColumn<String>(
+      'username', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
   static const VerificationMeta _videoMeta = const VerificationMeta('video');
   @override
   late final GeneratedColumn<bool> video = GeneratedColumn<bool>(
@@ -1375,7 +1381,7 @@ class $CallLogsTableTable extends CallLogsTable
       type: DriftSqlType.dateTime, requiredDuringInsert: false);
   @override
   List<GeneratedColumn> get $columns =>
-      [id, direction, number, video, createdAt, acceptedAt, hungUpAt];
+      [id, direction, number, username, video, createdAt, acceptedAt, hungUpAt];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -1395,6 +1401,10 @@ class $CallLogsTableTable extends CallLogsTable
           number.isAcceptableOrUnknown(data['number']!, _numberMeta));
     } else if (isInserting) {
       context.missing(_numberMeta);
+    }
+    if (data.containsKey('username')) {
+      context.handle(_usernameMeta,
+          username.isAcceptableOrUnknown(data['username']!, _usernameMeta));
     }
     if (data.containsKey('video')) {
       context.handle(
@@ -1434,6 +1444,8 @@ class $CallLogsTableTable extends CallLogsTable
               .read(DriftSqlType.int, data['${effectivePrefix}direction'])!),
       number: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}number'])!,
+      username: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}username']),
       video: attachedDatabase.typeMapping
           .read(DriftSqlType.bool, data['${effectivePrefix}video'])!,
       createdAt: attachedDatabase.typeMapping
@@ -1459,6 +1471,7 @@ class CallLogData extends DataClass implements Insertable<CallLogData> {
   final int id;
   final CallLogDirectionEnum direction;
   final String number;
+  final String? username;
   final bool video;
   final DateTime createdAt;
   final DateTime? acceptedAt;
@@ -1467,6 +1480,7 @@ class CallLogData extends DataClass implements Insertable<CallLogData> {
       {required this.id,
       required this.direction,
       required this.number,
+      this.username,
       required this.video,
       required this.createdAt,
       this.acceptedAt,
@@ -1480,6 +1494,9 @@ class CallLogData extends DataClass implements Insertable<CallLogData> {
           $CallLogsTableTable.$converterdirection.toSql(direction));
     }
     map['number'] = Variable<String>(number);
+    if (!nullToAbsent || username != null) {
+      map['username'] = Variable<String>(username);
+    }
     map['video'] = Variable<bool>(video);
     map['created_at'] = Variable<DateTime>(createdAt);
     if (!nullToAbsent || acceptedAt != null) {
@@ -1496,6 +1513,9 @@ class CallLogData extends DataClass implements Insertable<CallLogData> {
       id: Value(id),
       direction: Value(direction),
       number: Value(number),
+      username: username == null && nullToAbsent
+          ? const Value.absent()
+          : Value(username),
       video: Value(video),
       createdAt: Value(createdAt),
       acceptedAt: acceptedAt == null && nullToAbsent
@@ -1515,6 +1535,7 @@ class CallLogData extends DataClass implements Insertable<CallLogData> {
       direction: $CallLogsTableTable.$converterdirection
           .fromJson(serializer.fromJson<int>(json['direction'])),
       number: serializer.fromJson<String>(json['number']),
+      username: serializer.fromJson<String?>(json['username']),
       video: serializer.fromJson<bool>(json['video']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
       acceptedAt: serializer.fromJson<DateTime?>(json['acceptedAt']),
@@ -1529,6 +1550,7 @@ class CallLogData extends DataClass implements Insertable<CallLogData> {
       'direction': serializer.toJson<int>(
           $CallLogsTableTable.$converterdirection.toJson(direction)),
       'number': serializer.toJson<String>(number),
+      'username': serializer.toJson<String?>(username),
       'video': serializer.toJson<bool>(video),
       'createdAt': serializer.toJson<DateTime>(createdAt),
       'acceptedAt': serializer.toJson<DateTime?>(acceptedAt),
@@ -1540,6 +1562,7 @@ class CallLogData extends DataClass implements Insertable<CallLogData> {
           {int? id,
           CallLogDirectionEnum? direction,
           String? number,
+          Value<String?> username = const Value.absent(),
           bool? video,
           DateTime? createdAt,
           Value<DateTime?> acceptedAt = const Value.absent(),
@@ -1548,6 +1571,7 @@ class CallLogData extends DataClass implements Insertable<CallLogData> {
         id: id ?? this.id,
         direction: direction ?? this.direction,
         number: number ?? this.number,
+        username: username.present ? username.value : this.username,
         video: video ?? this.video,
         createdAt: createdAt ?? this.createdAt,
         acceptedAt: acceptedAt.present ? acceptedAt.value : this.acceptedAt,
@@ -1558,6 +1582,7 @@ class CallLogData extends DataClass implements Insertable<CallLogData> {
       id: data.id.present ? data.id.value : this.id,
       direction: data.direction.present ? data.direction.value : this.direction,
       number: data.number.present ? data.number.value : this.number,
+      username: data.username.present ? data.username.value : this.username,
       video: data.video.present ? data.video.value : this.video,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
       acceptedAt:
@@ -1572,6 +1597,7 @@ class CallLogData extends DataClass implements Insertable<CallLogData> {
           ..write('id: $id, ')
           ..write('direction: $direction, ')
           ..write('number: $number, ')
+          ..write('username: $username, ')
           ..write('video: $video, ')
           ..write('createdAt: $createdAt, ')
           ..write('acceptedAt: $acceptedAt, ')
@@ -1582,7 +1608,7 @@ class CallLogData extends DataClass implements Insertable<CallLogData> {
 
   @override
   int get hashCode => Object.hash(
-      id, direction, number, video, createdAt, acceptedAt, hungUpAt);
+      id, direction, number, username, video, createdAt, acceptedAt, hungUpAt);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -1590,6 +1616,7 @@ class CallLogData extends DataClass implements Insertable<CallLogData> {
           other.id == this.id &&
           other.direction == this.direction &&
           other.number == this.number &&
+          other.username == this.username &&
           other.video == this.video &&
           other.createdAt == this.createdAt &&
           other.acceptedAt == this.acceptedAt &&
@@ -1600,6 +1627,7 @@ class CallLogDataCompanion extends UpdateCompanion<CallLogData> {
   final Value<int> id;
   final Value<CallLogDirectionEnum> direction;
   final Value<String> number;
+  final Value<String?> username;
   final Value<bool> video;
   final Value<DateTime> createdAt;
   final Value<DateTime?> acceptedAt;
@@ -1608,6 +1636,7 @@ class CallLogDataCompanion extends UpdateCompanion<CallLogData> {
     this.id = const Value.absent(),
     this.direction = const Value.absent(),
     this.number = const Value.absent(),
+    this.username = const Value.absent(),
     this.video = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.acceptedAt = const Value.absent(),
@@ -1617,6 +1646,7 @@ class CallLogDataCompanion extends UpdateCompanion<CallLogData> {
     this.id = const Value.absent(),
     required CallLogDirectionEnum direction,
     required String number,
+    this.username = const Value.absent(),
     required bool video,
     required DateTime createdAt,
     this.acceptedAt = const Value.absent(),
@@ -1629,6 +1659,7 @@ class CallLogDataCompanion extends UpdateCompanion<CallLogData> {
     Expression<int>? id,
     Expression<int>? direction,
     Expression<String>? number,
+    Expression<String>? username,
     Expression<bool>? video,
     Expression<DateTime>? createdAt,
     Expression<DateTime>? acceptedAt,
@@ -1638,6 +1669,7 @@ class CallLogDataCompanion extends UpdateCompanion<CallLogData> {
       if (id != null) 'id': id,
       if (direction != null) 'direction': direction,
       if (number != null) 'number': number,
+      if (username != null) 'username': username,
       if (video != null) 'video': video,
       if (createdAt != null) 'created_at': createdAt,
       if (acceptedAt != null) 'accepted_at': acceptedAt,
@@ -1649,6 +1681,7 @@ class CallLogDataCompanion extends UpdateCompanion<CallLogData> {
       {Value<int>? id,
       Value<CallLogDirectionEnum>? direction,
       Value<String>? number,
+      Value<String?>? username,
       Value<bool>? video,
       Value<DateTime>? createdAt,
       Value<DateTime?>? acceptedAt,
@@ -1657,6 +1690,7 @@ class CallLogDataCompanion extends UpdateCompanion<CallLogData> {
       id: id ?? this.id,
       direction: direction ?? this.direction,
       number: number ?? this.number,
+      username: username ?? this.username,
       video: video ?? this.video,
       createdAt: createdAt ?? this.createdAt,
       acceptedAt: acceptedAt ?? this.acceptedAt,
@@ -1676,6 +1710,9 @@ class CallLogDataCompanion extends UpdateCompanion<CallLogData> {
     }
     if (number.present) {
       map['number'] = Variable<String>(number.value);
+    }
+    if (username.present) {
+      map['username'] = Variable<String>(username.value);
     }
     if (video.present) {
       map['video'] = Variable<bool>(video.value);
@@ -1698,6 +1735,7 @@ class CallLogDataCompanion extends UpdateCompanion<CallLogData> {
           ..write('id: $id, ')
           ..write('direction: $direction, ')
           ..write('number: $number, ')
+          ..write('username: $username, ')
           ..write('video: $video, ')
           ..write('createdAt: $createdAt, ')
           ..write('acceptedAt: $acceptedAt, ')
@@ -7778,6 +7816,466 @@ class ActiveMessageNotificationDataCompanion
   }
 }
 
+class $VoicemailTableTable extends VoicemailTable
+    with TableInfo<$VoicemailTableTable, VoicemailData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $VoicemailTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+      'id', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _dateMeta = const VerificationMeta('date');
+  @override
+  late final GeneratedColumn<String> date = GeneratedColumn<String>(
+      'date', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _durationMeta =
+      const VerificationMeta('duration');
+  @override
+  late final GeneratedColumn<double> duration = GeneratedColumn<double>(
+      'duration', aliasedName, false,
+      type: DriftSqlType.double, requiredDuringInsert: true);
+  static const VerificationMeta _senderMeta = const VerificationMeta('sender');
+  @override
+  late final GeneratedColumn<String> sender = GeneratedColumn<String>(
+      'sender', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _receiverMeta =
+      const VerificationMeta('receiver');
+  @override
+  late final GeneratedColumn<String> receiver = GeneratedColumn<String>(
+      'receiver', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _seenMeta = const VerificationMeta('seen');
+  @override
+  late final GeneratedColumn<bool> seen = GeneratedColumn<bool>(
+      'seen', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("seen" IN (0, 1))'),
+      defaultValue: const Constant(false));
+  static const VerificationMeta _sizeMeta = const VerificationMeta('size');
+  @override
+  late final GeneratedColumn<int> size = GeneratedColumn<int>(
+      'size', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _typeMeta = const VerificationMeta('type');
+  @override
+  late final GeneratedColumn<String> type = GeneratedColumn<String>(
+      'type', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _attachmentPathMeta =
+      const VerificationMeta('attachmentPath');
+  @override
+  late final GeneratedColumn<String> attachmentPath = GeneratedColumn<String>(
+      'attachment_path', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  @override
+  List<GeneratedColumn> get $columns =>
+      [id, date, duration, sender, receiver, seen, size, type, attachmentPath];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'voicemails';
+  @override
+  VerificationContext validateIntegrity(Insertable<VoicemailData> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('date')) {
+      context.handle(
+          _dateMeta, date.isAcceptableOrUnknown(data['date']!, _dateMeta));
+    } else if (isInserting) {
+      context.missing(_dateMeta);
+    }
+    if (data.containsKey('duration')) {
+      context.handle(_durationMeta,
+          duration.isAcceptableOrUnknown(data['duration']!, _durationMeta));
+    } else if (isInserting) {
+      context.missing(_durationMeta);
+    }
+    if (data.containsKey('sender')) {
+      context.handle(_senderMeta,
+          sender.isAcceptableOrUnknown(data['sender']!, _senderMeta));
+    } else if (isInserting) {
+      context.missing(_senderMeta);
+    }
+    if (data.containsKey('receiver')) {
+      context.handle(_receiverMeta,
+          receiver.isAcceptableOrUnknown(data['receiver']!, _receiverMeta));
+    } else if (isInserting) {
+      context.missing(_receiverMeta);
+    }
+    if (data.containsKey('seen')) {
+      context.handle(
+          _seenMeta, seen.isAcceptableOrUnknown(data['seen']!, _seenMeta));
+    }
+    if (data.containsKey('size')) {
+      context.handle(
+          _sizeMeta, size.isAcceptableOrUnknown(data['size']!, _sizeMeta));
+    } else if (isInserting) {
+      context.missing(_sizeMeta);
+    }
+    if (data.containsKey('type')) {
+      context.handle(
+          _typeMeta, type.isAcceptableOrUnknown(data['type']!, _typeMeta));
+    } else if (isInserting) {
+      context.missing(_typeMeta);
+    }
+    if (data.containsKey('attachment_path')) {
+      context.handle(
+          _attachmentPathMeta,
+          attachmentPath.isAcceptableOrUnknown(
+              data['attachment_path']!, _attachmentPathMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  VoicemailData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return VoicemailData(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
+      date: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}date'])!,
+      duration: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}duration'])!,
+      sender: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}sender'])!,
+      receiver: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}receiver'])!,
+      seen: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}seen'])!,
+      size: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}size'])!,
+      type: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}type'])!,
+      attachmentPath: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}attachment_path']),
+    );
+  }
+
+  @override
+  $VoicemailTableTable createAlias(String alias) {
+    return $VoicemailTableTable(attachedDatabase, alias);
+  }
+}
+
+class VoicemailData extends DataClass implements Insertable<VoicemailData> {
+  final String id;
+  final String date;
+  final double duration;
+  final String sender;
+  final String receiver;
+  final bool seen;
+  final int size;
+  final String type;
+  final String? attachmentPath;
+  const VoicemailData(
+      {required this.id,
+      required this.date,
+      required this.duration,
+      required this.sender,
+      required this.receiver,
+      required this.seen,
+      required this.size,
+      required this.type,
+      this.attachmentPath});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['date'] = Variable<String>(date);
+    map['duration'] = Variable<double>(duration);
+    map['sender'] = Variable<String>(sender);
+    map['receiver'] = Variable<String>(receiver);
+    map['seen'] = Variable<bool>(seen);
+    map['size'] = Variable<int>(size);
+    map['type'] = Variable<String>(type);
+    if (!nullToAbsent || attachmentPath != null) {
+      map['attachment_path'] = Variable<String>(attachmentPath);
+    }
+    return map;
+  }
+
+  VoicemailDataCompanion toCompanion(bool nullToAbsent) {
+    return VoicemailDataCompanion(
+      id: Value(id),
+      date: Value(date),
+      duration: Value(duration),
+      sender: Value(sender),
+      receiver: Value(receiver),
+      seen: Value(seen),
+      size: Value(size),
+      type: Value(type),
+      attachmentPath: attachmentPath == null && nullToAbsent
+          ? const Value.absent()
+          : Value(attachmentPath),
+    );
+  }
+
+  factory VoicemailData.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return VoicemailData(
+      id: serializer.fromJson<String>(json['id']),
+      date: serializer.fromJson<String>(json['date']),
+      duration: serializer.fromJson<double>(json['duration']),
+      sender: serializer.fromJson<String>(json['sender']),
+      receiver: serializer.fromJson<String>(json['receiver']),
+      seen: serializer.fromJson<bool>(json['seen']),
+      size: serializer.fromJson<int>(json['size']),
+      type: serializer.fromJson<String>(json['type']),
+      attachmentPath: serializer.fromJson<String?>(json['attachmentPath']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'date': serializer.toJson<String>(date),
+      'duration': serializer.toJson<double>(duration),
+      'sender': serializer.toJson<String>(sender),
+      'receiver': serializer.toJson<String>(receiver),
+      'seen': serializer.toJson<bool>(seen),
+      'size': serializer.toJson<int>(size),
+      'type': serializer.toJson<String>(type),
+      'attachmentPath': serializer.toJson<String?>(attachmentPath),
+    };
+  }
+
+  VoicemailData copyWith(
+          {String? id,
+          String? date,
+          double? duration,
+          String? sender,
+          String? receiver,
+          bool? seen,
+          int? size,
+          String? type,
+          Value<String?> attachmentPath = const Value.absent()}) =>
+      VoicemailData(
+        id: id ?? this.id,
+        date: date ?? this.date,
+        duration: duration ?? this.duration,
+        sender: sender ?? this.sender,
+        receiver: receiver ?? this.receiver,
+        seen: seen ?? this.seen,
+        size: size ?? this.size,
+        type: type ?? this.type,
+        attachmentPath:
+            attachmentPath.present ? attachmentPath.value : this.attachmentPath,
+      );
+  VoicemailData copyWithCompanion(VoicemailDataCompanion data) {
+    return VoicemailData(
+      id: data.id.present ? data.id.value : this.id,
+      date: data.date.present ? data.date.value : this.date,
+      duration: data.duration.present ? data.duration.value : this.duration,
+      sender: data.sender.present ? data.sender.value : this.sender,
+      receiver: data.receiver.present ? data.receiver.value : this.receiver,
+      seen: data.seen.present ? data.seen.value : this.seen,
+      size: data.size.present ? data.size.value : this.size,
+      type: data.type.present ? data.type.value : this.type,
+      attachmentPath: data.attachmentPath.present
+          ? data.attachmentPath.value
+          : this.attachmentPath,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('VoicemailData(')
+          ..write('id: $id, ')
+          ..write('date: $date, ')
+          ..write('duration: $duration, ')
+          ..write('sender: $sender, ')
+          ..write('receiver: $receiver, ')
+          ..write('seen: $seen, ')
+          ..write('size: $size, ')
+          ..write('type: $type, ')
+          ..write('attachmentPath: $attachmentPath')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      id, date, duration, sender, receiver, seen, size, type, attachmentPath);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is VoicemailData &&
+          other.id == this.id &&
+          other.date == this.date &&
+          other.duration == this.duration &&
+          other.sender == this.sender &&
+          other.receiver == this.receiver &&
+          other.seen == this.seen &&
+          other.size == this.size &&
+          other.type == this.type &&
+          other.attachmentPath == this.attachmentPath);
+}
+
+class VoicemailDataCompanion extends UpdateCompanion<VoicemailData> {
+  final Value<String> id;
+  final Value<String> date;
+  final Value<double> duration;
+  final Value<String> sender;
+  final Value<String> receiver;
+  final Value<bool> seen;
+  final Value<int> size;
+  final Value<String> type;
+  final Value<String?> attachmentPath;
+  final Value<int> rowid;
+  const VoicemailDataCompanion({
+    this.id = const Value.absent(),
+    this.date = const Value.absent(),
+    this.duration = const Value.absent(),
+    this.sender = const Value.absent(),
+    this.receiver = const Value.absent(),
+    this.seen = const Value.absent(),
+    this.size = const Value.absent(),
+    this.type = const Value.absent(),
+    this.attachmentPath = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  VoicemailDataCompanion.insert({
+    required String id,
+    required String date,
+    required double duration,
+    required String sender,
+    required String receiver,
+    this.seen = const Value.absent(),
+    required int size,
+    required String type,
+    this.attachmentPath = const Value.absent(),
+    this.rowid = const Value.absent(),
+  })  : id = Value(id),
+        date = Value(date),
+        duration = Value(duration),
+        sender = Value(sender),
+        receiver = Value(receiver),
+        size = Value(size),
+        type = Value(type);
+  static Insertable<VoicemailData> custom({
+    Expression<String>? id,
+    Expression<String>? date,
+    Expression<double>? duration,
+    Expression<String>? sender,
+    Expression<String>? receiver,
+    Expression<bool>? seen,
+    Expression<int>? size,
+    Expression<String>? type,
+    Expression<String>? attachmentPath,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (date != null) 'date': date,
+      if (duration != null) 'duration': duration,
+      if (sender != null) 'sender': sender,
+      if (receiver != null) 'receiver': receiver,
+      if (seen != null) 'seen': seen,
+      if (size != null) 'size': size,
+      if (type != null) 'type': type,
+      if (attachmentPath != null) 'attachment_path': attachmentPath,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  VoicemailDataCompanion copyWith(
+      {Value<String>? id,
+      Value<String>? date,
+      Value<double>? duration,
+      Value<String>? sender,
+      Value<String>? receiver,
+      Value<bool>? seen,
+      Value<int>? size,
+      Value<String>? type,
+      Value<String?>? attachmentPath,
+      Value<int>? rowid}) {
+    return VoicemailDataCompanion(
+      id: id ?? this.id,
+      date: date ?? this.date,
+      duration: duration ?? this.duration,
+      sender: sender ?? this.sender,
+      receiver: receiver ?? this.receiver,
+      seen: seen ?? this.seen,
+      size: size ?? this.size,
+      type: type ?? this.type,
+      attachmentPath: attachmentPath ?? this.attachmentPath,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (date.present) {
+      map['date'] = Variable<String>(date.value);
+    }
+    if (duration.present) {
+      map['duration'] = Variable<double>(duration.value);
+    }
+    if (sender.present) {
+      map['sender'] = Variable<String>(sender.value);
+    }
+    if (receiver.present) {
+      map['receiver'] = Variable<String>(receiver.value);
+    }
+    if (seen.present) {
+      map['seen'] = Variable<bool>(seen.value);
+    }
+    if (size.present) {
+      map['size'] = Variable<int>(size.value);
+    }
+    if (type.present) {
+      map['type'] = Variable<String>(type.value);
+    }
+    if (attachmentPath.present) {
+      map['attachment_path'] = Variable<String>(attachmentPath.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('VoicemailDataCompanion(')
+          ..write('id: $id, ')
+          ..write('date: $date, ')
+          ..write('duration: $duration, ')
+          ..write('sender: $sender, ')
+          ..write('receiver: $receiver, ')
+          ..write('seen: $seen, ')
+          ..write('size: $size, ')
+          ..write('type: $type, ')
+          ..write('attachmentPath: $attachmentPath, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -7824,6 +8322,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $ActiveMessageNotificationsTableTable
       activeMessageNotificationsTable =
       $ActiveMessageNotificationsTableTable(this);
+  late final $VoicemailTableTable voicemailTable = $VoicemailTableTable(this);
   late final ContactsDao contactsDao = ContactsDao(this as AppDatabase);
   late final ContactPhonesDao contactPhonesDao =
       ContactPhonesDao(this as AppDatabase);
@@ -7836,6 +8335,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final SmsDao smsDao = SmsDao(this as AppDatabase);
   late final ActiveMessageNotificationsDao activeMessageNotificationsDao =
       ActiveMessageNotificationsDao(this as AppDatabase);
+  late final VoicemailDao voicemailDao = VoicemailDao(this as AppDatabase);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -7863,7 +8363,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
         smsOutboxMessageDeleteTable,
         smsOutboxReadCursorsTable,
         userSmsNumbersTable,
-        activeMessageNotificationsTable
+        activeMessageNotificationsTable,
+        voicemailTable
       ];
   @override
   StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules(
@@ -8624,6 +9125,7 @@ typedef $$CallLogsTableTableCreateCompanionBuilder = CallLogDataCompanion
   Value<int> id,
   required CallLogDirectionEnum direction,
   required String number,
+  Value<String?> username,
   required bool video,
   required DateTime createdAt,
   Value<DateTime?> acceptedAt,
@@ -8634,6 +9136,7 @@ typedef $$CallLogsTableTableUpdateCompanionBuilder = CallLogDataCompanion
   Value<int> id,
   Value<CallLogDirectionEnum> direction,
   Value<String> number,
+  Value<String?> username,
   Value<bool> video,
   Value<DateTime> createdAt,
   Value<DateTime?> acceptedAt,
@@ -8660,6 +9163,9 @@ class $$CallLogsTableTableFilterComposer
 
   ColumnFilters<String> get number => $composableBuilder(
       column: $table.number, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get username => $composableBuilder(
+      column: $table.username, builder: (column) => ColumnFilters(column));
 
   ColumnFilters<bool> get video => $composableBuilder(
       column: $table.video, builder: (column) => ColumnFilters(column));
@@ -8692,6 +9198,9 @@ class $$CallLogsTableTableOrderingComposer
   ColumnOrderings<String> get number => $composableBuilder(
       column: $table.number, builder: (column) => ColumnOrderings(column));
 
+  ColumnOrderings<String> get username => $composableBuilder(
+      column: $table.username, builder: (column) => ColumnOrderings(column));
+
   ColumnOrderings<bool> get video => $composableBuilder(
       column: $table.video, builder: (column) => ColumnOrderings(column));
 
@@ -8722,6 +9231,9 @@ class $$CallLogsTableTableAnnotationComposer
 
   GeneratedColumn<String> get number =>
       $composableBuilder(column: $table.number, builder: (column) => column);
+
+  GeneratedColumn<String> get username =>
+      $composableBuilder(column: $table.username, builder: (column) => column);
 
   GeneratedColumn<bool> get video =>
       $composableBuilder(column: $table.video, builder: (column) => column);
@@ -8765,6 +9277,7 @@ class $$CallLogsTableTableTableManager extends RootTableManager<
             Value<int> id = const Value.absent(),
             Value<CallLogDirectionEnum> direction = const Value.absent(),
             Value<String> number = const Value.absent(),
+            Value<String?> username = const Value.absent(),
             Value<bool> video = const Value.absent(),
             Value<DateTime> createdAt = const Value.absent(),
             Value<DateTime?> acceptedAt = const Value.absent(),
@@ -8774,6 +9287,7 @@ class $$CallLogsTableTableTableManager extends RootTableManager<
             id: id,
             direction: direction,
             number: number,
+            username: username,
             video: video,
             createdAt: createdAt,
             acceptedAt: acceptedAt,
@@ -8783,6 +9297,7 @@ class $$CallLogsTableTableTableManager extends RootTableManager<
             Value<int> id = const Value.absent(),
             required CallLogDirectionEnum direction,
             required String number,
+            Value<String?> username = const Value.absent(),
             required bool video,
             required DateTime createdAt,
             Value<DateTime?> acceptedAt = const Value.absent(),
@@ -8792,6 +9307,7 @@ class $$CallLogsTableTableTableManager extends RootTableManager<
             id: id,
             direction: direction,
             number: number,
+            username: username,
             video: video,
             createdAt: createdAt,
             acceptedAt: acceptedAt,
@@ -9819,9 +10335,10 @@ final class $$ChatMembersTableTableReferences extends BaseReferences<
       db.chatsTable.createAlias(
           $_aliasNameGenerator(db.chatMembersTable.chatId, db.chatsTable.id));
 
-  $$ChatsTableTableProcessedTableManager get chatId {
+  $$ChatsTableTableProcessedTableManager? get chatId {
+    if ($_item.chatId == null) return null;
     final manager = $$ChatsTableTableTableManager($_db, $_db.chatsTable)
-        .filter((f) => f.id($_item.chatId));
+        .filter((f) => f.id($_item.chatId!));
     final item = $_typedResult.readTableOrNull(_chatIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -10096,9 +10613,10 @@ final class $$ChatMessagesTableTableReferences extends BaseReferences<
       db.chatsTable.createAlias(
           $_aliasNameGenerator(db.chatMessagesTable.chatId, db.chatsTable.id));
 
-  $$ChatsTableTableProcessedTableManager get chatId {
+  $$ChatsTableTableProcessedTableManager? get chatId {
+    if ($_item.chatId == null) return null;
     final manager = $$ChatsTableTableTableManager($_db, $_db.chatsTable)
-        .filter((f) => f.id($_item.chatId));
+        .filter((f) => f.id($_item.chatId!));
     final item = $_typedResult.readTableOrNull(_chatIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -10466,9 +10984,10 @@ final class $$ChatMessageSyncCursorTableTableReferences extends BaseReferences<
       db.chatsTable.createAlias($_aliasNameGenerator(
           db.chatMessageSyncCursorTable.chatId, db.chatsTable.id));
 
-  $$ChatsTableTableProcessedTableManager get chatId {
+  $$ChatsTableTableProcessedTableManager? get chatId {
+    if ($_item.chatId == null) return null;
     final manager = $$ChatsTableTableTableManager($_db, $_db.chatsTable)
-        .filter((f) => f.id($_item.chatId));
+        .filter((f) => f.id($_item.chatId!));
     final item = $_typedResult.readTableOrNull(_chatIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -10727,9 +11246,10 @@ final class $$ChatMessageReadCursorTableTableReferences extends BaseReferences<
       db.chatsTable.createAlias($_aliasNameGenerator(
           db.chatMessageReadCursorTable.chatId, db.chatsTable.id));
 
-  $$ChatsTableTableProcessedTableManager get chatId {
+  $$ChatsTableTableProcessedTableManager? get chatId {
+    if ($_item.chatId == null) return null;
     final manager = $$ChatsTableTableTableManager($_db, $_db.chatsTable)
-        .filter((f) => f.id($_item.chatId));
+        .filter((f) => f.id($_item.chatId!));
     final item = $_typedResult.readTableOrNull(_chatIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -11315,9 +11835,10 @@ final class $$ChatOutboxMessageEditTableTableReferences extends BaseReferences<
       db.chatsTable.createAlias($_aliasNameGenerator(
           db.chatOutboxMessageEditTable.chatId, db.chatsTable.id));
 
-  $$ChatsTableTableProcessedTableManager get chatId {
+  $$ChatsTableTableProcessedTableManager? get chatId {
+    if ($_item.chatId == null) return null;
     final manager = $$ChatsTableTableTableManager($_db, $_db.chatsTable)
-        .filter((f) => f.id($_item.chatId));
+        .filter((f) => f.id($_item.chatId!));
     final item = $_typedResult.readTableOrNull(_chatIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -11593,9 +12114,10 @@ final class $$ChatOutboxMessageDeleteTableTableReferences
       db.chatsTable.createAlias($_aliasNameGenerator(
           db.chatOutboxMessageDeleteTable.chatId, db.chatsTable.id));
 
-  $$ChatsTableTableProcessedTableManager get chatId {
+  $$ChatsTableTableProcessedTableManager? get chatId {
+    if ($_item.chatId == null) return null;
     final manager = $$ChatsTableTableTableManager($_db, $_db.chatsTable)
-        .filter((f) => f.id($_item.chatId));
+        .filter((f) => f.id($_item.chatId!));
     final item = $_typedResult.readTableOrNull(_chatIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -11859,9 +12381,10 @@ final class $$ChatOutboxReadCursorsTableTableReferences extends BaseReferences<
       db.chatsTable.createAlias($_aliasNameGenerator(
           db.chatOutboxReadCursorsTable.chatId, db.chatsTable.id));
 
-  $$ChatsTableTableProcessedTableManager get chatId {
+  $$ChatsTableTableProcessedTableManager? get chatId {
+    if ($_item.chatId == null) return null;
     final manager = $$ChatsTableTableTableManager($_db, $_db.chatsTable)
-        .filter((f) => f.id($_item.chatId));
+        .filter((f) => f.id($_item.chatId!));
     final item = $_typedResult.readTableOrNull(_chatIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -12811,10 +13334,11 @@ final class $$SmsMessagesTableTableReferences extends BaseReferences<
       db.smsConversationsTable.createAlias($_aliasNameGenerator(
           db.smsMessagesTable.conversationId, db.smsConversationsTable.id));
 
-  $$SmsConversationsTableTableProcessedTableManager get conversationId {
+  $$SmsConversationsTableTableProcessedTableManager? get conversationId {
+    if ($_item.conversationId == null) return null;
     final manager = $$SmsConversationsTableTableTableManager(
             $_db, $_db.smsConversationsTable)
-        .filter((f) => f.id($_item.conversationId));
+        .filter((f) => f.id($_item.conversationId!));
     final item = $_typedResult.readTableOrNull(_conversationIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -13176,10 +13700,11 @@ final class $$SmsMessageSyncCursorTableTableReferences extends BaseReferences<
           db.smsMessageSyncCursorTable.conversationId,
           db.smsConversationsTable.id));
 
-  $$SmsConversationsTableTableProcessedTableManager get conversationId {
+  $$SmsConversationsTableTableProcessedTableManager? get conversationId {
+    if ($_item.conversationId == null) return null;
     final manager = $$SmsConversationsTableTableTableManager(
             $_db, $_db.smsConversationsTable)
-        .filter((f) => f.id($_item.conversationId));
+        .filter((f) => f.id($_item.conversationId!));
     final item = $_typedResult.readTableOrNull(_conversationIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -13436,10 +13961,11 @@ final class $$SmsMessageReadCursorTableTableReferences extends BaseReferences<
           db.smsMessageReadCursorTable.conversationId,
           db.smsConversationsTable.id));
 
-  $$SmsConversationsTableTableProcessedTableManager get conversationId {
+  $$SmsConversationsTableTableProcessedTableManager? get conversationId {
+    if ($_item.conversationId == null) return null;
     final manager = $$SmsConversationsTableTableTableManager(
             $_db, $_db.smsConversationsTable)
-        .filter((f) => f.id($_item.conversationId));
+        .filter((f) => f.id($_item.conversationId!));
     final item = $_typedResult.readTableOrNull(_conversationIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -14014,10 +14540,11 @@ final class $$SmsOutboxMessageDeleteTableTableReferences extends BaseReferences<
           db.smsOutboxMessageDeleteTable.conversationId,
           db.smsConversationsTable.id));
 
-  $$SmsConversationsTableTableProcessedTableManager get conversationId {
+  $$SmsConversationsTableTableProcessedTableManager? get conversationId {
+    if ($_item.conversationId == null) return null;
     final manager = $$SmsConversationsTableTableTableManager(
             $_db, $_db.smsConversationsTable)
-        .filter((f) => f.id($_item.conversationId));
+        .filter((f) => f.id($_item.conversationId!));
     final item = $_typedResult.readTableOrNull(_conversationIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -14282,10 +14809,11 @@ final class $$SmsOutboxReadCursorsTableTableReferences extends BaseReferences<
           db.smsOutboxReadCursorsTable.conversationId,
           db.smsConversationsTable.id));
 
-  $$SmsConversationsTableTableProcessedTableManager get conversationId {
+  $$SmsConversationsTableTableProcessedTableManager? get conversationId {
+    if ($_item.conversationId == null) return null;
     final manager = $$SmsConversationsTableTableTableManager(
             $_db, $_db.smsConversationsTable)
-        .filter((f) => f.id($_item.conversationId));
+        .filter((f) => f.id($_item.conversationId!));
     final item = $_typedResult.readTableOrNull(_conversationIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -14828,6 +15356,242 @@ typedef $$ActiveMessageNotificationsTableTableProcessedTableManager
         ),
         ActiveMessageNotificationData,
         PrefetchHooks Function()>;
+typedef $$VoicemailTableTableCreateCompanionBuilder = VoicemailDataCompanion
+    Function({
+  required String id,
+  required String date,
+  required double duration,
+  required String sender,
+  required String receiver,
+  Value<bool> seen,
+  required int size,
+  required String type,
+  Value<String?> attachmentPath,
+  Value<int> rowid,
+});
+typedef $$VoicemailTableTableUpdateCompanionBuilder = VoicemailDataCompanion
+    Function({
+  Value<String> id,
+  Value<String> date,
+  Value<double> duration,
+  Value<String> sender,
+  Value<String> receiver,
+  Value<bool> seen,
+  Value<int> size,
+  Value<String> type,
+  Value<String?> attachmentPath,
+  Value<int> rowid,
+});
+
+class $$VoicemailTableTableFilterComposer
+    extends Composer<_$AppDatabase, $VoicemailTableTable> {
+  $$VoicemailTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get date => $composableBuilder(
+      column: $table.date, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<double> get duration => $composableBuilder(
+      column: $table.duration, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get sender => $composableBuilder(
+      column: $table.sender, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get receiver => $composableBuilder(
+      column: $table.receiver, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get seen => $composableBuilder(
+      column: $table.seen, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get size => $composableBuilder(
+      column: $table.size, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get type => $composableBuilder(
+      column: $table.type, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get attachmentPath => $composableBuilder(
+      column: $table.attachmentPath,
+      builder: (column) => ColumnFilters(column));
+}
+
+class $$VoicemailTableTableOrderingComposer
+    extends Composer<_$AppDatabase, $VoicemailTableTable> {
+  $$VoicemailTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get date => $composableBuilder(
+      column: $table.date, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<double> get duration => $composableBuilder(
+      column: $table.duration, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get sender => $composableBuilder(
+      column: $table.sender, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get receiver => $composableBuilder(
+      column: $table.receiver, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get seen => $composableBuilder(
+      column: $table.seen, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get size => $composableBuilder(
+      column: $table.size, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get type => $composableBuilder(
+      column: $table.type, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get attachmentPath => $composableBuilder(
+      column: $table.attachmentPath,
+      builder: (column) => ColumnOrderings(column));
+}
+
+class $$VoicemailTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $VoicemailTableTable> {
+  $$VoicemailTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get date =>
+      $composableBuilder(column: $table.date, builder: (column) => column);
+
+  GeneratedColumn<double> get duration =>
+      $composableBuilder(column: $table.duration, builder: (column) => column);
+
+  GeneratedColumn<String> get sender =>
+      $composableBuilder(column: $table.sender, builder: (column) => column);
+
+  GeneratedColumn<String> get receiver =>
+      $composableBuilder(column: $table.receiver, builder: (column) => column);
+
+  GeneratedColumn<bool> get seen =>
+      $composableBuilder(column: $table.seen, builder: (column) => column);
+
+  GeneratedColumn<int> get size =>
+      $composableBuilder(column: $table.size, builder: (column) => column);
+
+  GeneratedColumn<String> get type =>
+      $composableBuilder(column: $table.type, builder: (column) => column);
+
+  GeneratedColumn<String> get attachmentPath => $composableBuilder(
+      column: $table.attachmentPath, builder: (column) => column);
+}
+
+class $$VoicemailTableTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $VoicemailTableTable,
+    VoicemailData,
+    $$VoicemailTableTableFilterComposer,
+    $$VoicemailTableTableOrderingComposer,
+    $$VoicemailTableTableAnnotationComposer,
+    $$VoicemailTableTableCreateCompanionBuilder,
+    $$VoicemailTableTableUpdateCompanionBuilder,
+    (
+      VoicemailData,
+      BaseReferences<_$AppDatabase, $VoicemailTableTable, VoicemailData>
+    ),
+    VoicemailData,
+    PrefetchHooks Function()> {
+  $$VoicemailTableTableTableManager(
+      _$AppDatabase db, $VoicemailTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$VoicemailTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$VoicemailTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$VoicemailTableTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<String> id = const Value.absent(),
+            Value<String> date = const Value.absent(),
+            Value<double> duration = const Value.absent(),
+            Value<String> sender = const Value.absent(),
+            Value<String> receiver = const Value.absent(),
+            Value<bool> seen = const Value.absent(),
+            Value<int> size = const Value.absent(),
+            Value<String> type = const Value.absent(),
+            Value<String?> attachmentPath = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              VoicemailDataCompanion(
+            id: id,
+            date: date,
+            duration: duration,
+            sender: sender,
+            receiver: receiver,
+            seen: seen,
+            size: size,
+            type: type,
+            attachmentPath: attachmentPath,
+            rowid: rowid,
+          ),
+          createCompanionCallback: ({
+            required String id,
+            required String date,
+            required double duration,
+            required String sender,
+            required String receiver,
+            Value<bool> seen = const Value.absent(),
+            required int size,
+            required String type,
+            Value<String?> attachmentPath = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              VoicemailDataCompanion.insert(
+            id: id,
+            date: date,
+            duration: duration,
+            sender: sender,
+            receiver: receiver,
+            seen: seen,
+            size: size,
+            type: type,
+            attachmentPath: attachmentPath,
+            rowid: rowid,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$VoicemailTableTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $VoicemailTableTable,
+    VoicemailData,
+    $$VoicemailTableTableFilterComposer,
+    $$VoicemailTableTableOrderingComposer,
+    $$VoicemailTableTableAnnotationComposer,
+    $$VoicemailTableTableCreateCompanionBuilder,
+    $$VoicemailTableTableUpdateCompanionBuilder,
+    (
+      VoicemailData,
+      BaseReferences<_$AppDatabase, $VoicemailTableTable, VoicemailData>
+    ),
+    VoicemailData,
+    PrefetchHooks Function()>;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -14897,4 +15661,6 @@ class $AppDatabaseManager {
       get activeMessageNotificationsTable =>
           $$ActiveMessageNotificationsTableTableTableManager(
               _db, _db.activeMessageNotificationsTable);
+  $$VoicemailTableTableTableManager get voicemailTable =>
+      $$VoicemailTableTableTableManager(_db, _db.voicemailTable);
 }

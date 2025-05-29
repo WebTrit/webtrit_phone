@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:auto_route/auto_route.dart';
 
-import 'package:webtrit_phone/models/feature_access/exports.dart';
+import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/theme/models/models.dart';
 
 import 'login_signup_embedded_request_screen.dart';
@@ -14,13 +14,13 @@ class LoginSignupEmbeddedRequestScreenPage extends StatelessWidget {
   // ignore: use_key_in_widget_constructors
   const LoginSignupEmbeddedRequestScreenPage(this.embeddedData);
 
-  final LoginEmbeddedModeButton embeddedData;
+  final LoginEmbedded embeddedData;
 
   @override
   Widget build(BuildContext context) {
     // TODO(Serdun): Implement directly in LoginEmbedded
     final resource = ResourceLoader.fromUri(
-      embeddedData.customLoginFeature.resource.toString(),
+      embeddedData.resource.toString(),
     );
 
     return FutureBuilder<String>(

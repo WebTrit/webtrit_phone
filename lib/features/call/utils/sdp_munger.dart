@@ -40,7 +40,7 @@ class ModifyWithEncodingSettings implements SDPMunger {
           videoBitrate: defaultPresetOverride.videoBitrate,
           ptime: defaultPresetOverride.ptime,
           maxptime: defaultPresetOverride.maxptime,
-          opusBandwidthLimit: defaultPresetOverride.opusBandwidthLimit,
+          opusSamplingRate: defaultPresetOverride.opusSamplingRate,
           opusStereo: defaultPresetOverride.opusStereo,
           opusDtx: defaultPresetOverride.opusDtx,
         ),
@@ -49,6 +49,7 @@ class ModifyWithEncodingSettings implements SDPMunger {
       EncodingPreset.quality => EncodingSettings.quality(),
       EncodingPreset.fullFlex => EncodingSettings.fullFlex(),
       EncodingPreset.custom => _prefs.getEncodingSettings(),
+      EncodingPreset.bypass => EncodingSettings.blank(),
     };
     return settings;
   }
@@ -62,6 +63,18 @@ class ModifyWithEncodingSettings implements SDPMunger {
 
     final preset = configurationAllowed ? _prefs.getEncodingPreset() : null;
     EncodingSettings settings = _makeSettings(preset);
+    final (
+      audioBitrate,
+      videoBitrate,
+      ptime,
+      maxptime,
+      opusSamplingRate,
+      opusBitrate,
+      opusStereo,
+      opusDtx,
+      audioProfiles,
+      videoProfiles,
+    ) = settings.asRecord;
 
     final sdp = description.sdp;
     if (sdp == null) return;
@@ -69,8 +82,8 @@ class ModifyWithEncodingSettings implements SDPMunger {
     final builder = SDPModBuilder(sdp: sdp);
     bool modified = false;
 
-    if (settings.audioProfiles != null) {
-      final profiles = settings.audioProfiles!;
+    if (audioProfiles != null) {
+      final profiles = audioProfiles;
       final toRemove = profiles.where((p) => p.enabled == false).map((e) => e.option).toList();
       final toReorder = profiles.where((p) => p.enabled == true).map((e) => e.option).toList();
 
@@ -79,8 +92,8 @@ class ModifyWithEncodingSettings implements SDPMunger {
       modified = true;
     }
 
-    if (settings.videoProfiles != null) {
-      final profiles = settings.videoProfiles!;
+    if (videoProfiles != null) {
+      final profiles = videoProfiles;
       final toRemove = profiles.where((p) => p.enabled == false).map((e) => e.option).toList();
       final toReorder = profiles.where((p) => p.enabled == true).map((e) => e.option).toList();
 
@@ -89,21 +102,18 @@ class ModifyWithEncodingSettings implements SDPMunger {
       modified = true;
     }
 
-    // Make sure to set codec parameters after profiles removing
-    // because some params depends on codecs list
-
-    if (settings.audioBitrate != null || settings.videoBitrate != null) {
-      builder.setBitrate(settings.audioBitrate, settings.videoBitrate);
+    if (audioBitrate != null || videoBitrate != null) {
+      builder.setBitrate(audioBitrate, videoBitrate);
       modified = true;
     }
 
-    if (settings.ptime != null || settings.maxptime != null) {
-      builder.setPtime(settings.ptime, settings.maxptime);
+    if (ptime != null || maxptime != null) {
+      builder.setPtime(ptime, maxptime);
       modified = true;
     }
 
-    if (settings.opusBandwidthLimit != null || settings.opusStereo != null || settings.opusDtx != null) {
-      builder.setOpusParams(settings.opusBandwidthLimit, settings.opusStereo, settings.opusDtx);
+    if (opusSamplingRate != null || opusBitrate != null || opusStereo != null || opusDtx != null) {
+      builder.setOpusParams(opusSamplingRate, opusBitrate, opusStereo, opusDtx);
       modified = true;
     }
 

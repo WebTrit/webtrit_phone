@@ -68,6 +68,8 @@ _$AppConfigModeSelectActionImpl _$$AppConfigModeSelectActionImplFromJson(
       embeddedId: (json['embeddedId'] as num?)?.toInt(),
       type: json['type'] as String,
       titleL10n: json['titleL10n'] as String,
+      isLaunchButtonVisible: json['isLaunchButtonVisible'] as bool? ?? false,
+      isLaunchScreen: json['isLaunchScreen'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$$AppConfigModeSelectActionImplToJson(
@@ -77,6 +79,8 @@ Map<String, dynamic> _$$AppConfigModeSelectActionImplToJson(
       'embeddedId': instance.embeddedId,
       'type': instance.type,
       'titleL10n': instance.titleL10n,
+      'isLaunchButtonVisible': instance.isLaunchButtonVisible,
+      'isLaunchScreen': instance.isLaunchScreen,
     };
 
 _$AppConfigMainImpl _$$AppConfigMainImplFromJson(Map<String, dynamic> json) =>
@@ -154,6 +158,10 @@ _$AppConfigCallImpl _$$AppConfigCallImplFromJson(Map<String, dynamic> json) =>
           ? const AppConfigEncoding()
           : AppConfigEncoding.fromJson(
               json['encoding'] as Map<String, dynamic>),
+      peerConnection: json['peerConnection'] == null
+          ? const AppConfigPeerConnection()
+          : AppConfigPeerConnection.fromJson(
+              json['peerConnection'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$$AppConfigCallImplToJson(_$AppConfigCallImpl instance) =>
@@ -161,6 +169,7 @@ Map<String, dynamic> _$$AppConfigCallImplToJson(_$AppConfigCallImpl instance) =>
       'videoEnabled': instance.videoEnabled,
       'transfer': instance.transfer.toJson(),
       'encoding': instance.encoding.toJson(),
+      'peerConnection': instance.peerConnection.toJson(),
     };
 
 _$AppConfigTransferImpl _$$AppConfigTransferImplFromJson(
@@ -194,6 +203,36 @@ Map<String, dynamic> _$$AppConfigEncodingImplToJson(
       'defaultPresetOverride': instance.defaultPresetOverride.toJson(),
     };
 
+_$AppConfigPeerConnectionImpl _$$AppConfigPeerConnectionImplFromJson(
+        Map<String, dynamic> json) =>
+    _$AppConfigPeerConnectionImpl(
+      negotiation: json['negotiation'] == null
+          ? const AppConfigNegotiationSettingsOverride()
+          : AppConfigNegotiationSettingsOverride.fromJson(
+              json['negotiation'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$$AppConfigPeerConnectionImplToJson(
+        _$AppConfigPeerConnectionImpl instance) =>
+    <String, dynamic>{
+      'negotiation': instance.negotiation.toJson(),
+    };
+
+_$AppConfigNegotiationSettingsOverrideImpl
+    _$$AppConfigNegotiationSettingsOverrideImplFromJson(
+            Map<String, dynamic> json) =>
+        _$AppConfigNegotiationSettingsOverrideImpl(
+          includeInactiveVideoInOfferAnswer:
+              json['includeInactiveVideoInOfferAnswer'] as bool? ?? false,
+        );
+
+Map<String, dynamic> _$$AppConfigNegotiationSettingsOverrideImplToJson(
+        _$AppConfigNegotiationSettingsOverrideImpl instance) =>
+    <String, dynamic>{
+      'includeInactiveVideoInOfferAnswer':
+          instance.includeInactiveVideoInOfferAnswer,
+    };
+
 _$EncodingDefaultPresetOverrideImpl
     _$$EncodingDefaultPresetOverrideImplFromJson(Map<String, dynamic> json) =>
         _$EncodingDefaultPresetOverrideImpl(
@@ -201,7 +240,8 @@ _$EncodingDefaultPresetOverrideImpl
           videoBitrate: (json['videoBitrate'] as num?)?.toInt(),
           ptime: (json['ptime'] as num?)?.toInt(),
           maxptime: (json['maxptime'] as num?)?.toInt(),
-          opusBandwidthLimit: (json['opusBandwidthLimit'] as num?)?.toInt(),
+          opusSamplingRate: (json['opusSamplingRate'] as num?)?.toInt(),
+          opusBitrate: (json['opusBitrate'] as num?)?.toInt(),
           opusStereo: json['opusStereo'] as bool?,
           opusDtx: json['opusDtx'] as bool?,
         );
@@ -213,7 +253,8 @@ Map<String, dynamic> _$$EncodingDefaultPresetOverrideImplToJson(
       'videoBitrate': instance.videoBitrate,
       'ptime': instance.ptime,
       'maxptime': instance.maxptime,
-      'opusBandwidthLimit': instance.opusBandwidthLimit,
+      'opusSamplingRate': instance.opusSamplingRate,
+      'opusBitrate': instance.opusBitrate,
       'opusStereo': instance.opusStereo,
       'opusDtx': instance.opusDtx,
     };

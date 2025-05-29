@@ -222,6 +222,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get contacts_LocalTabText_permissionFailure => 'There are no permissions to get your phone contacts';
 
   @override
+  String get contacts_LocalTabText_contactsAgreementFailure => 'To sync your local contacts, you must accept the agreement in Settings.';
+
+  @override
+  String get contacts_LocalTabButton_contactsAgreement => 'Open Settings';
+
+  @override
   String get contactsSourceExternal => 'Cloud PBX';
 
   @override
@@ -504,7 +510,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get login_Button_signupRequestProceed => 'Proceed';
 
   @override
-  String get login_Button_signUpToDemoInstance => 'Sign up';
+  String get login_Button_signUpToDemoInstance => 'Sign up / sign in';
 
   @override
   String get login_Button_signupVerifyProceed => 'Verify';
@@ -943,6 +949,45 @@ class AppLocalizationsEn extends AppLocalizations {
   String get messaging_StateBar_initializing => 'INITIALIZING';
 
   @override
+  String get voicemail_Widget_screenTitle => 'Voicemail';
+
+  @override
+  String get voicemail_Label_deleteAll => 'Delete all voicemails?';
+
+  @override
+  String get voicemail_Label_deleteAllDescription => 'This action will permanently delete all your voicemails. This cannot be undone.';
+
+  @override
+  String get voicemail_Label_empty => 'No voicemails';
+
+  @override
+  String get voicemail_Label_retry => 'Try again';
+
+  @override
+  String get voicemail_Label_call => 'Call';
+
+  @override
+  String get voicemail_Label_markAsHeard => 'Mark as heard';
+
+  @override
+  String get voicemail_Label_markAsNew => 'Mark as new';
+
+  @override
+  String get voicemail_Label_delete => 'Delete';
+
+  @override
+  String get voicemail_Dialog_deleteSingleTitle => 'Delete voicemail?';
+
+  @override
+  String get voicemail_Dialog_deleteSingleContent => 'This voicemail will be permanently deleted. Do you want to continue?';
+
+  @override
+  String get voicemail_Title_notSupported => 'Feature not supported';
+
+  @override
+  String get voicemail_Description_notSupported => 'Voicemail feature are not supported in your core. Please contact your administrator for more information.';
+
+  @override
   String get notifications_errorSnackBarAction_callUserMedia => 'Check';
 
   @override
@@ -1158,31 +1203,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings_AppBarTitle_myAccount => 'My account';
 
   @override
-  String get settings_call_codecs_preferred_audio_default => 'Auto';
-
-  @override
-  String get settings_call_codecs_preferred_audio_tip => 'The preferred audio codec is used for audio calls. If the codec is not supported by the device, the call will be established using the next available codec.';
-
-  @override
-  String get settings_call_codecs_preferred_audio_title => 'Preferred audio codec';
-
-  @override
-  String get settings_call_codecs_preferred_video_default => 'Auto';
-
-  @override
-  String get settings_call_codecs_preferred_video_tip => 'The preferred video codec is used for video calls. If the codec is not supported by the device, the call will be established using the next available codec.';
-
-  @override
-  String get settings_call_codecs_preferred_video_title => 'Preferred video codec';
-
-  @override
   String get settings_encoding_AppBar_reset_tooltip => 'Reset to default';
 
   @override
   String get settings_encoding_Section_preset_title => 'Media encoding configs';
 
   @override
-  String get settings_encoding_Section_preset_tooltip => 'Adjustment presets for audio and video codecs: \n- lower values will reduce the bandwidth usage but affect the quality, \n- higher values will increase the quality but also the bandwidth usage. \nThe default preset has recommended settings provided by your vendor according to their environment preferences.';
+  String get settings_encoding_Section_preset_tooltip => 'Adjustment presets for audio and video codecs, lower values will reduce the bandwidth usage but affect the quality, higher values will increase the quality but also the bandwidth usage. Default preset is recommended settings provided by your vendor according to it evnironment preferences.';
 
   @override
   String get settings_encoding_Section_preset => 'Preset';
@@ -1200,10 +1227,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings_encoding_Section_preset_quality => 'Quality';
 
   @override
-  String get settings_encoding_Section_preset_full_flex => 'Full flex';
+  String get settings_encoding_Section_preset_full_flex => 'Full Flex';
 
   @override
   String get settings_encoding_Section_preset_custom => 'Custom';
+
+  @override
+  String get settings_encoding_Section_preset_bypass => 'Bypass';
 
   @override
   String get settings_encoding_Section_measure_kbps => 'Kbps';
@@ -1242,13 +1272,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings_encoding_Section_ptime_prefix => 'Ptime: ';
 
   @override
-  String get settings_encoding_Section_bandwidth_prefix => 'Bandwidth: ';
+  String get settings_encoding_Section_bandwidth_prefix => 'Sampling rate: ';
 
   @override
   String get settings_encoding_Section_bitrate_title => 'Codec bitrate settings';
 
   @override
-  String get settings_encoding_Section_bitrate_tooltip => 'Adjust the bitrate settings for audio and video codecs: \n- lower values will reduce the bandwidth usage but affect the quality, \n- higher values will increase the quality but also the bandwidth usage.';
+  String get settings_encoding_Section_bitrate_tooltip => 'Adjust the bitrate settings for audio and video codecs, lower values will reduce the bandwidth usage but affect the quality, higher values will increase the quality but also the bandwidth usage.';
 
   @override
   String get settings_encoding_Section_target_audio_bitrate => 'Audio target bitrate: ';
@@ -1260,7 +1290,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings_encoding_Section_packetization_title => 'Audio packetization';
 
   @override
-  String get settings_encoding_Section_packetization_tooltip => 'Adjust audio packetization time in milliseconds. Can be used to reduce audio latency or fix Network MTU size issues';
+  String get settings_encoding_Section_packetization_tooltip => 'Adjust audio packetization-time in milliseconds, can be used to reduce audio latency or fix Network MTU size issues';
 
   @override
   String get settings_encoding_Section_audio_ptime => 'Audio target ptime: ';
@@ -1269,7 +1299,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings_encoding_Section_audio_ptime_limit => 'Audio ptime limit: ';
 
   @override
-  String get settings_encoding_Section_opus_bandwidth => 'Bandwidth override: ';
+  String get settings_encoding_Section_opus_samplingRate => 'Sampling rate override: ';
+
+  @override
+  String get settings_encoding_Section_opus_bitrate => 'Bitrate override: ';
 
   @override
   String get settings_encoding_Section_opus_channels => 'Channels mode override: ';
@@ -1371,6 +1404,24 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings_iceSettings_Section_trfilter_skipTcp => 'Skip TCP candidates';
 
   @override
+  String get settings_connectionSection_title => 'Connection and call behavior';
+
+  @override
+  String get settings_connectionSection_tooltip => 'Configure how your device handles connection setup, media negotiation, and call updates during peer-to-peer communication.';
+
+  @override
+  String get settings_videoOffer_title => 'Determine how this device responds to an offer that includes video.';
+
+  @override
+  String get settings_videoOffer_option_includeInactive => 'Include inactive video track\nEnsures compatibility with video offers for future activation.';
+
+  @override
+  String get settings_videoOffer_option_ignore => 'Respond without video\nNo track will be added unless negotiated later.';
+
+  @override
+  String get call_settings_additional_options => 'Additional options';
+
+  @override
   String get settings_ListViewTileTitle_about => 'About';
 
   @override
@@ -1384,6 +1435,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settings_ListViewTileTitle_language => 'Language';
+
+  @override
+  String get settings_ListViewTileTitle_voicemail => 'Voicemail';
 
   @override
   String get settings_ListViewTileTitle_logout => 'Logout';
@@ -1402,6 +1456,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settings_ListViewTileTitle_settings => 'SETTINGS';
+
+  @override
+  String get settings_ListViewTileTitle_features => 'SERVICES';
 
   @override
   String get settings_ListViewTileTitle_termsConditions => 'Terms and conditions';

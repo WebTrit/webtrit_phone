@@ -1,3 +1,4 @@
+// dart format width=80
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
 // **************************************************************************
@@ -7,13 +8,28 @@
 import 'package:webtrit_phone/l10n/app_localizations.g.dart';
 import 'package:flutter/widgets.dart';
 
-extension AppLocalizationsExtension on BuildContext {
+extension BuildContextExtension on BuildContext {
   AppLocalizations get _localizations => AppLocalizations.of(this)!;
   AppLocalizations get l10n => _localizations;
   Locale get locale => Localizations.localeOf(this);
   String? parseL10n(String translationKey, {List<Object>? arguments}) {
+    final localizations = AppLocalizations.of(this)!;
+    return L10nHelper.parseL10n(localizations, translationKey,
+        arguments: arguments);
+  }
+}
+
+extension AppLocalizationsExtension on AppLocalizations {
+  String? parseL10n(String translationKey, {List<Object>? arguments}) {
+    return L10nHelper.parseL10n(this, translationKey, arguments: arguments);
+  }
+}
+
+class L10nHelper {
+  static String parseL10n(AppLocalizations localizations, String translationKey,
+      {List<Object>? arguments}) {
     const mapper = AppLocalizationsMapper();
-    final object = mapper.toLocalizationMap(this)[translationKey];
+    final object = mapper.toLocalizationMap(localizations)[translationKey];
     if (object is String || object == null) return object;
     assert(arguments != null, 'Arguments should not be null!');
     assert(arguments!.isNotEmpty, 'Arguments should not be empty!');
@@ -23,8 +39,7 @@ extension AppLocalizationsExtension on BuildContext {
 
 class AppLocalizationsMapper {
   const AppLocalizationsMapper();
-  Map<String, dynamic> toLocalizationMap(BuildContext context) {
-    final localizations = AppLocalizations.of(context)!;
+  Map<String, dynamic> toLocalizationMap(AppLocalizations localizations) {
     return {
       'localeName': localizations.localeName,
       'account_selfCarePasswordExpired_message':
@@ -154,6 +169,10 @@ class AppLocalizationsMapper {
           localizations.contacts_LocalTabText_failure,
       'contacts_LocalTabText_permissionFailure':
           localizations.contacts_LocalTabText_permissionFailure,
+      'contacts_LocalTabText_contactsAgreementFailure':
+          localizations.contacts_LocalTabText_contactsAgreementFailure,
+      'contacts_LocalTabButton_contactsAgreement':
+          localizations.contacts_LocalTabButton_contactsAgreement,
       'contactsSourceExternal': localizations.contactsSourceExternal,
       'contactsSourceLocal': localizations.contactsSourceLocal,
       'contacts_Text_blingTransferInitiated':
@@ -570,6 +589,25 @@ class AppLocalizationsMapper {
       'messaging_StateBar_error': localizations.messaging_StateBar_error,
       'messaging_StateBar_initializing':
           localizations.messaging_StateBar_initializing,
+      'voicemail_Widget_screenTitle':
+          localizations.voicemail_Widget_screenTitle,
+      'voicemail_Label_deleteAll': localizations.voicemail_Label_deleteAll,
+      'voicemail_Label_deleteAllDescription':
+          localizations.voicemail_Label_deleteAllDescription,
+      'voicemail_Label_empty': localizations.voicemail_Label_empty,
+      'voicemail_Label_retry': localizations.voicemail_Label_retry,
+      'voicemail_Label_call': localizations.voicemail_Label_call,
+      'voicemail_Label_markAsHeard': localizations.voicemail_Label_markAsHeard,
+      'voicemail_Label_markAsNew': localizations.voicemail_Label_markAsNew,
+      'voicemail_Label_delete': localizations.voicemail_Label_delete,
+      'voicemail_Dialog_deleteSingleTitle':
+          localizations.voicemail_Dialog_deleteSingleTitle,
+      'voicemail_Dialog_deleteSingleContent':
+          localizations.voicemail_Dialog_deleteSingleContent,
+      'voicemail_Title_notSupported':
+          localizations.voicemail_Title_notSupported,
+      'voicemail_Description_notSupported':
+          localizations.voicemail_Description_notSupported,
       'notifications_errorSnackBarAction_callUserMedia':
           localizations.notifications_errorSnackBarAction_callUserMedia,
       'notifications_errorSnackBar_activeLineBlindTransferWarning':
@@ -684,18 +722,6 @@ class AppLocalizationsMapper {
           localizations.settings_AccountDeleteConfirmDialog_title,
       'settings_AppBarTitle_myAccount':
           localizations.settings_AppBarTitle_myAccount,
-      'settings_call_codecs_preferred_audio_default':
-          localizations.settings_call_codecs_preferred_audio_default,
-      'settings_call_codecs_preferred_audio_tip':
-          localizations.settings_call_codecs_preferred_audio_tip,
-      'settings_call_codecs_preferred_audio_title':
-          localizations.settings_call_codecs_preferred_audio_title,
-      'settings_call_codecs_preferred_video_default':
-          localizations.settings_call_codecs_preferred_video_default,
-      'settings_call_codecs_preferred_video_tip':
-          localizations.settings_call_codecs_preferred_video_tip,
-      'settings_call_codecs_preferred_video_title':
-          localizations.settings_call_codecs_preferred_video_title,
       'settings_encoding_AppBar_reset_tooltip':
           localizations.settings_encoding_AppBar_reset_tooltip,
       'settings_encoding_Section_preset_title':
@@ -716,6 +742,8 @@ class AppLocalizationsMapper {
           localizations.settings_encoding_Section_preset_full_flex,
       'settings_encoding_Section_preset_custom':
           localizations.settings_encoding_Section_preset_custom,
+      'settings_encoding_Section_preset_bypass':
+          localizations.settings_encoding_Section_preset_bypass,
       'settings_encoding_Section_measure_kbps':
           localizations.settings_encoding_Section_measure_kbps,
       'settings_encoding_Section_measure_ms':
@@ -758,8 +786,10 @@ class AppLocalizationsMapper {
           localizations.settings_encoding_Section_audio_ptime,
       'settings_encoding_Section_audio_ptime_limit':
           localizations.settings_encoding_Section_audio_ptime_limit,
-      'settings_encoding_Section_opus_bandwidth':
-          localizations.settings_encoding_Section_opus_bandwidth,
+      'settings_encoding_Section_opus_samplingRate':
+          localizations.settings_encoding_Section_opus_samplingRate,
+      'settings_encoding_Section_opus_bitrate':
+          localizations.settings_encoding_Section_opus_bitrate,
       'settings_encoding_Section_opus_channels':
           localizations.settings_encoding_Section_opus_channels,
       'settings_encoding_Section_opus_dtx':
@@ -826,6 +856,17 @@ class AppLocalizationsMapper {
           localizations.settings_iceSettings_Section_trfilter_skipUdp,
       'settings_iceSettings_Section_trfilter_skipTcp':
           localizations.settings_iceSettings_Section_trfilter_skipTcp,
+      'settings_connectionSection_title':
+          localizations.settings_connectionSection_title,
+      'settings_connectionSection_tooltip':
+          localizations.settings_connectionSection_tooltip,
+      'settings_videoOffer_title': localizations.settings_videoOffer_title,
+      'settings_videoOffer_option_includeInactive':
+          localizations.settings_videoOffer_option_includeInactive,
+      'settings_videoOffer_option_ignore':
+          localizations.settings_videoOffer_option_ignore,
+      'call_settings_additional_options':
+          localizations.call_settings_additional_options,
       'settings_ListViewTileTitle_about':
           localizations.settings_ListViewTileTitle_about,
       'settings_ListViewTileTitle_accountDelete':
@@ -836,6 +877,8 @@ class AppLocalizationsMapper {
           localizations.settings_ListViewTileTitle_help,
       'settings_ListViewTileTitle_language':
           localizations.settings_ListViewTileTitle_language,
+      'settings_ListViewTileTitle_voicemail':
+          localizations.settings_ListViewTileTitle_voicemail,
       'settings_ListViewTileTitle_logout':
           localizations.settings_ListViewTileTitle_logout,
       'settings_ListViewTileTitle_logRecordsConsole':
@@ -848,6 +891,8 @@ class AppLocalizationsMapper {
           localizations.settings_ListViewTileTitle_self_config,
       'settings_ListViewTileTitle_settings':
           localizations.settings_ListViewTileTitle_settings,
+      'settings_ListViewTileTitle_features':
+          localizations.settings_ListViewTileTitle_features,
       'settings_ListViewTileTitle_termsConditions':
           localizations.settings_ListViewTileTitle_termsConditions,
       'settings_ListViewTileTitle_themeMode':

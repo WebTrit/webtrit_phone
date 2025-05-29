@@ -533,6 +533,8 @@ mixin _$AppConfigModeSelectAction {
   int? get embeddedId => throw _privateConstructorUsedError;
   String get type => throw _privateConstructorUsedError;
   String get titleL10n => throw _privateConstructorUsedError;
+  bool get isLaunchButtonVisible => throw _privateConstructorUsedError;
+  bool get isLaunchScreen => throw _privateConstructorUsedError;
 
   /// Serializes this AppConfigModeSelectAction to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -550,7 +552,13 @@ abstract class $AppConfigModeSelectActionCopyWith<$Res> {
           $Res Function(AppConfigModeSelectAction) then) =
       _$AppConfigModeSelectActionCopyWithImpl<$Res, AppConfigModeSelectAction>;
   @useResult
-  $Res call({bool enabled, int? embeddedId, String type, String titleL10n});
+  $Res call(
+      {bool enabled,
+      int? embeddedId,
+      String type,
+      String titleL10n,
+      bool isLaunchButtonVisible,
+      bool isLaunchScreen});
 }
 
 /// @nodoc
@@ -573,6 +581,8 @@ class _$AppConfigModeSelectActionCopyWithImpl<$Res,
     Object? embeddedId = freezed,
     Object? type = null,
     Object? titleL10n = null,
+    Object? isLaunchButtonVisible = null,
+    Object? isLaunchScreen = null,
   }) {
     return _then(_value.copyWith(
       enabled: null == enabled
@@ -591,6 +601,14 @@ class _$AppConfigModeSelectActionCopyWithImpl<$Res,
           ? _value.titleL10n
           : titleL10n // ignore: cast_nullable_to_non_nullable
               as String,
+      isLaunchButtonVisible: null == isLaunchButtonVisible
+          ? _value.isLaunchButtonVisible
+          : isLaunchButtonVisible // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isLaunchScreen: null == isLaunchScreen
+          ? _value.isLaunchScreen
+          : isLaunchScreen // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 }
@@ -604,7 +622,13 @@ abstract class _$$AppConfigModeSelectActionImplCopyWith<$Res>
       __$$AppConfigModeSelectActionImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({bool enabled, int? embeddedId, String type, String titleL10n});
+  $Res call(
+      {bool enabled,
+      int? embeddedId,
+      String type,
+      String titleL10n,
+      bool isLaunchButtonVisible,
+      bool isLaunchScreen});
 }
 
 /// @nodoc
@@ -626,6 +650,8 @@ class __$$AppConfigModeSelectActionImplCopyWithImpl<$Res>
     Object? embeddedId = freezed,
     Object? type = null,
     Object? titleL10n = null,
+    Object? isLaunchButtonVisible = null,
+    Object? isLaunchScreen = null,
   }) {
     return _then(_$AppConfigModeSelectActionImpl(
       enabled: null == enabled
@@ -644,6 +670,14 @@ class __$$AppConfigModeSelectActionImplCopyWithImpl<$Res>
           ? _value.titleL10n
           : titleL10n // ignore: cast_nullable_to_non_nullable
               as String,
+      isLaunchButtonVisible: null == isLaunchButtonVisible
+          ? _value.isLaunchButtonVisible
+          : isLaunchButtonVisible // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isLaunchScreen: null == isLaunchScreen
+          ? _value.isLaunchScreen
+          : isLaunchScreen // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -656,7 +690,9 @@ class _$AppConfigModeSelectActionImpl extends _AppConfigModeSelectAction {
       {required this.enabled,
       this.embeddedId,
       required this.type,
-      required this.titleL10n})
+      required this.titleL10n,
+      this.isLaunchButtonVisible = false,
+      this.isLaunchScreen = false})
       : super._();
 
   factory _$AppConfigModeSelectActionImpl.fromJson(Map<String, dynamic> json) =>
@@ -670,10 +706,16 @@ class _$AppConfigModeSelectActionImpl extends _AppConfigModeSelectAction {
   final String type;
   @override
   final String titleL10n;
+  @override
+  @JsonKey()
+  final bool isLaunchButtonVisible;
+  @override
+  @JsonKey()
+  final bool isLaunchScreen;
 
   @override
   String toString() {
-    return 'AppConfigModeSelectAction(enabled: $enabled, embeddedId: $embeddedId, type: $type, titleL10n: $titleL10n)';
+    return 'AppConfigModeSelectAction(enabled: $enabled, embeddedId: $embeddedId, type: $type, titleL10n: $titleL10n, isLaunchButtonVisible: $isLaunchButtonVisible, isLaunchScreen: $isLaunchScreen)';
   }
 
   @override
@@ -686,13 +728,17 @@ class _$AppConfigModeSelectActionImpl extends _AppConfigModeSelectAction {
                 other.embeddedId == embeddedId) &&
             (identical(other.type, type) || other.type == type) &&
             (identical(other.titleL10n, titleL10n) ||
-                other.titleL10n == titleL10n));
+                other.titleL10n == titleL10n) &&
+            (identical(other.isLaunchButtonVisible, isLaunchButtonVisible) ||
+                other.isLaunchButtonVisible == isLaunchButtonVisible) &&
+            (identical(other.isLaunchScreen, isLaunchScreen) ||
+                other.isLaunchScreen == isLaunchScreen));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, enabled, embeddedId, type, titleL10n);
+  int get hashCode => Object.hash(runtimeType, enabled, embeddedId, type,
+      titleL10n, isLaunchButtonVisible, isLaunchScreen);
 
   /// Create a copy of AppConfigModeSelectAction
   /// with the given fields replaced by the non-null parameter values.
@@ -716,7 +762,9 @@ abstract class _AppConfigModeSelectAction extends AppConfigModeSelectAction {
       {required final bool enabled,
       final int? embeddedId,
       required final String type,
-      required final String titleL10n}) = _$AppConfigModeSelectActionImpl;
+      required final String titleL10n,
+      final bool isLaunchButtonVisible,
+      final bool isLaunchScreen}) = _$AppConfigModeSelectActionImpl;
   const _AppConfigModeSelectAction._() : super._();
 
   factory _AppConfigModeSelectAction.fromJson(Map<String, dynamic> json) =
@@ -730,6 +778,10 @@ abstract class _AppConfigModeSelectAction extends AppConfigModeSelectAction {
   String get type;
   @override
   String get titleL10n;
+  @override
+  bool get isLaunchButtonVisible;
+  @override
+  bool get isLaunchScreen;
 
   /// Create a copy of AppConfigModeSelectAction
   /// with the given fields replaced by the non-null parameter values.
@@ -1135,6 +1187,8 @@ mixin _$AppConfigCall {
   bool get videoEnabled => throw _privateConstructorUsedError;
   AppConfigTransfer get transfer => throw _privateConstructorUsedError;
   AppConfigEncoding get encoding => throw _privateConstructorUsedError;
+  AppConfigPeerConnection get peerConnection =>
+      throw _privateConstructorUsedError;
 
   /// Serializes this AppConfigCall to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -1155,10 +1209,12 @@ abstract class $AppConfigCallCopyWith<$Res> {
   $Res call(
       {bool videoEnabled,
       AppConfigTransfer transfer,
-      AppConfigEncoding encoding});
+      AppConfigEncoding encoding,
+      AppConfigPeerConnection peerConnection});
 
   $AppConfigTransferCopyWith<$Res> get transfer;
   $AppConfigEncodingCopyWith<$Res> get encoding;
+  $AppConfigPeerConnectionCopyWith<$Res> get peerConnection;
 }
 
 /// @nodoc
@@ -1179,6 +1235,7 @@ class _$AppConfigCallCopyWithImpl<$Res, $Val extends AppConfigCall>
     Object? videoEnabled = null,
     Object? transfer = null,
     Object? encoding = null,
+    Object? peerConnection = null,
   }) {
     return _then(_value.copyWith(
       videoEnabled: null == videoEnabled
@@ -1193,6 +1250,10 @@ class _$AppConfigCallCopyWithImpl<$Res, $Val extends AppConfigCall>
           ? _value.encoding
           : encoding // ignore: cast_nullable_to_non_nullable
               as AppConfigEncoding,
+      peerConnection: null == peerConnection
+          ? _value.peerConnection
+          : peerConnection // ignore: cast_nullable_to_non_nullable
+              as AppConfigPeerConnection,
     ) as $Val);
   }
 
@@ -1215,6 +1276,17 @@ class _$AppConfigCallCopyWithImpl<$Res, $Val extends AppConfigCall>
       return _then(_value.copyWith(encoding: value) as $Val);
     });
   }
+
+  /// Create a copy of AppConfigCall
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $AppConfigPeerConnectionCopyWith<$Res> get peerConnection {
+    return $AppConfigPeerConnectionCopyWith<$Res>(_value.peerConnection,
+        (value) {
+      return _then(_value.copyWith(peerConnection: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
@@ -1228,12 +1300,15 @@ abstract class _$$AppConfigCallImplCopyWith<$Res>
   $Res call(
       {bool videoEnabled,
       AppConfigTransfer transfer,
-      AppConfigEncoding encoding});
+      AppConfigEncoding encoding,
+      AppConfigPeerConnection peerConnection});
 
   @override
   $AppConfigTransferCopyWith<$Res> get transfer;
   @override
   $AppConfigEncodingCopyWith<$Res> get encoding;
+  @override
+  $AppConfigPeerConnectionCopyWith<$Res> get peerConnection;
 }
 
 /// @nodoc
@@ -1252,6 +1327,7 @@ class __$$AppConfigCallImplCopyWithImpl<$Res>
     Object? videoEnabled = null,
     Object? transfer = null,
     Object? encoding = null,
+    Object? peerConnection = null,
   }) {
     return _then(_$AppConfigCallImpl(
       videoEnabled: null == videoEnabled
@@ -1266,6 +1342,10 @@ class __$$AppConfigCallImplCopyWithImpl<$Res>
           ? _value.encoding
           : encoding // ignore: cast_nullable_to_non_nullable
               as AppConfigEncoding,
+      peerConnection: null == peerConnection
+          ? _value.peerConnection
+          : peerConnection // ignore: cast_nullable_to_non_nullable
+              as AppConfigPeerConnection,
     ));
   }
 }
@@ -1278,7 +1358,8 @@ class _$AppConfigCallImpl extends _AppConfigCall {
       {this.videoEnabled = true,
       this.transfer = const AppConfigTransfer(
           enableBlindTransfer: true, enableAttendedTransfer: true),
-      this.encoding = const AppConfigEncoding()})
+      this.encoding = const AppConfigEncoding(),
+      this.peerConnection = const AppConfigPeerConnection()})
       : super._();
 
   factory _$AppConfigCallImpl.fromJson(Map<String, dynamic> json) =>
@@ -1293,10 +1374,13 @@ class _$AppConfigCallImpl extends _AppConfigCall {
   @override
   @JsonKey()
   final AppConfigEncoding encoding;
+  @override
+  @JsonKey()
+  final AppConfigPeerConnection peerConnection;
 
   @override
   String toString() {
-    return 'AppConfigCall(videoEnabled: $videoEnabled, transfer: $transfer, encoding: $encoding)';
+    return 'AppConfigCall(videoEnabled: $videoEnabled, transfer: $transfer, encoding: $encoding, peerConnection: $peerConnection)';
   }
 
   @override
@@ -1309,13 +1393,15 @@ class _$AppConfigCallImpl extends _AppConfigCall {
             (identical(other.transfer, transfer) ||
                 other.transfer == transfer) &&
             (identical(other.encoding, encoding) ||
-                other.encoding == encoding));
+                other.encoding == encoding) &&
+            (identical(other.peerConnection, peerConnection) ||
+                other.peerConnection == peerConnection));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, videoEnabled, transfer, encoding);
+  int get hashCode => Object.hash(
+      runtimeType, videoEnabled, transfer, encoding, peerConnection);
 
   /// Create a copy of AppConfigCall
   /// with the given fields replaced by the non-null parameter values.
@@ -1337,7 +1423,8 @@ abstract class _AppConfigCall extends AppConfigCall {
   const factory _AppConfigCall(
       {final bool videoEnabled,
       final AppConfigTransfer transfer,
-      final AppConfigEncoding encoding}) = _$AppConfigCallImpl;
+      final AppConfigEncoding encoding,
+      final AppConfigPeerConnection peerConnection}) = _$AppConfigCallImpl;
   const _AppConfigCall._() : super._();
 
   factory _AppConfigCall.fromJson(Map<String, dynamic> json) =
@@ -1349,6 +1436,8 @@ abstract class _AppConfigCall extends AppConfigCall {
   AppConfigTransfer get transfer;
   @override
   AppConfigEncoding get encoding;
+  @override
+  AppConfigPeerConnection get peerConnection;
 
   /// Create a copy of AppConfigCall
   /// with the given fields replaced by the non-null parameter values.
@@ -1733,6 +1822,364 @@ abstract class _AppConfigEncoding extends AppConfigEncoding {
       throw _privateConstructorUsedError;
 }
 
+AppConfigPeerConnection _$AppConfigPeerConnectionFromJson(
+    Map<String, dynamic> json) {
+  return _AppConfigPeerConnection.fromJson(json);
+}
+
+/// @nodoc
+mixin _$AppConfigPeerConnection {
+  AppConfigNegotiationSettingsOverride get negotiation =>
+      throw _privateConstructorUsedError;
+
+  /// Serializes this AppConfigPeerConnection to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of AppConfigPeerConnection
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $AppConfigPeerConnectionCopyWith<AppConfigPeerConnection> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $AppConfigPeerConnectionCopyWith<$Res> {
+  factory $AppConfigPeerConnectionCopyWith(AppConfigPeerConnection value,
+          $Res Function(AppConfigPeerConnection) then) =
+      _$AppConfigPeerConnectionCopyWithImpl<$Res, AppConfigPeerConnection>;
+  @useResult
+  $Res call({AppConfigNegotiationSettingsOverride negotiation});
+
+  $AppConfigNegotiationSettingsOverrideCopyWith<$Res> get negotiation;
+}
+
+/// @nodoc
+class _$AppConfigPeerConnectionCopyWithImpl<$Res,
+        $Val extends AppConfigPeerConnection>
+    implements $AppConfigPeerConnectionCopyWith<$Res> {
+  _$AppConfigPeerConnectionCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of AppConfigPeerConnection
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? negotiation = null,
+  }) {
+    return _then(_value.copyWith(
+      negotiation: null == negotiation
+          ? _value.negotiation
+          : negotiation // ignore: cast_nullable_to_non_nullable
+              as AppConfigNegotiationSettingsOverride,
+    ) as $Val);
+  }
+
+  /// Create a copy of AppConfigPeerConnection
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $AppConfigNegotiationSettingsOverrideCopyWith<$Res> get negotiation {
+    return $AppConfigNegotiationSettingsOverrideCopyWith<$Res>(
+        _value.negotiation, (value) {
+      return _then(_value.copyWith(negotiation: value) as $Val);
+    });
+  }
+}
+
+/// @nodoc
+abstract class _$$AppConfigPeerConnectionImplCopyWith<$Res>
+    implements $AppConfigPeerConnectionCopyWith<$Res> {
+  factory _$$AppConfigPeerConnectionImplCopyWith(
+          _$AppConfigPeerConnectionImpl value,
+          $Res Function(_$AppConfigPeerConnectionImpl) then) =
+      __$$AppConfigPeerConnectionImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({AppConfigNegotiationSettingsOverride negotiation});
+
+  @override
+  $AppConfigNegotiationSettingsOverrideCopyWith<$Res> get negotiation;
+}
+
+/// @nodoc
+class __$$AppConfigPeerConnectionImplCopyWithImpl<$Res>
+    extends _$AppConfigPeerConnectionCopyWithImpl<$Res,
+        _$AppConfigPeerConnectionImpl>
+    implements _$$AppConfigPeerConnectionImplCopyWith<$Res> {
+  __$$AppConfigPeerConnectionImplCopyWithImpl(
+      _$AppConfigPeerConnectionImpl _value,
+      $Res Function(_$AppConfigPeerConnectionImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of AppConfigPeerConnection
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? negotiation = null,
+  }) {
+    return _then(_$AppConfigPeerConnectionImpl(
+      negotiation: null == negotiation
+          ? _value.negotiation
+          : negotiation // ignore: cast_nullable_to_non_nullable
+              as AppConfigNegotiationSettingsOverride,
+    ));
+  }
+}
+
+/// @nodoc
+
+@JsonSerializable(explicitToJson: true)
+class _$AppConfigPeerConnectionImpl extends _AppConfigPeerConnection {
+  const _$AppConfigPeerConnectionImpl(
+      {this.negotiation = const AppConfigNegotiationSettingsOverride()})
+      : super._();
+
+  factory _$AppConfigPeerConnectionImpl.fromJson(Map<String, dynamic> json) =>
+      _$$AppConfigPeerConnectionImplFromJson(json);
+
+  @override
+  @JsonKey()
+  final AppConfigNegotiationSettingsOverride negotiation;
+
+  @override
+  String toString() {
+    return 'AppConfigPeerConnection(negotiation: $negotiation)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$AppConfigPeerConnectionImpl &&
+            (identical(other.negotiation, negotiation) ||
+                other.negotiation == negotiation));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(runtimeType, negotiation);
+
+  /// Create a copy of AppConfigPeerConnection
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$AppConfigPeerConnectionImplCopyWith<_$AppConfigPeerConnectionImpl>
+      get copyWith => __$$AppConfigPeerConnectionImplCopyWithImpl<
+          _$AppConfigPeerConnectionImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$AppConfigPeerConnectionImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _AppConfigPeerConnection extends AppConfigPeerConnection {
+  const factory _AppConfigPeerConnection(
+          {final AppConfigNegotiationSettingsOverride negotiation}) =
+      _$AppConfigPeerConnectionImpl;
+  const _AppConfigPeerConnection._() : super._();
+
+  factory _AppConfigPeerConnection.fromJson(Map<String, dynamic> json) =
+      _$AppConfigPeerConnectionImpl.fromJson;
+
+  @override
+  AppConfigNegotiationSettingsOverride get negotiation;
+
+  /// Create a copy of AppConfigPeerConnection
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$AppConfigPeerConnectionImplCopyWith<_$AppConfigPeerConnectionImpl>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+AppConfigNegotiationSettingsOverride
+    _$AppConfigNegotiationSettingsOverrideFromJson(Map<String, dynamic> json) {
+  return _AppConfigNegotiationSettingsOverride.fromJson(json);
+}
+
+/// @nodoc
+mixin _$AppConfigNegotiationSettingsOverride {
+  bool get includeInactiveVideoInOfferAnswer =>
+      throw _privateConstructorUsedError;
+
+  /// Serializes this AppConfigNegotiationSettingsOverride to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of AppConfigNegotiationSettingsOverride
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $AppConfigNegotiationSettingsOverrideCopyWith<
+          AppConfigNegotiationSettingsOverride>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $AppConfigNegotiationSettingsOverrideCopyWith<$Res> {
+  factory $AppConfigNegotiationSettingsOverrideCopyWith(
+          AppConfigNegotiationSettingsOverride value,
+          $Res Function(AppConfigNegotiationSettingsOverride) then) =
+      _$AppConfigNegotiationSettingsOverrideCopyWithImpl<$Res,
+          AppConfigNegotiationSettingsOverride>;
+  @useResult
+  $Res call({bool includeInactiveVideoInOfferAnswer});
+}
+
+/// @nodoc
+class _$AppConfigNegotiationSettingsOverrideCopyWithImpl<$Res,
+        $Val extends AppConfigNegotiationSettingsOverride>
+    implements $AppConfigNegotiationSettingsOverrideCopyWith<$Res> {
+  _$AppConfigNegotiationSettingsOverrideCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of AppConfigNegotiationSettingsOverride
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? includeInactiveVideoInOfferAnswer = null,
+  }) {
+    return _then(_value.copyWith(
+      includeInactiveVideoInOfferAnswer: null ==
+              includeInactiveVideoInOfferAnswer
+          ? _value.includeInactiveVideoInOfferAnswer
+          : includeInactiveVideoInOfferAnswer // ignore: cast_nullable_to_non_nullable
+              as bool,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$AppConfigNegotiationSettingsOverrideImplCopyWith<$Res>
+    implements $AppConfigNegotiationSettingsOverrideCopyWith<$Res> {
+  factory _$$AppConfigNegotiationSettingsOverrideImplCopyWith(
+          _$AppConfigNegotiationSettingsOverrideImpl value,
+          $Res Function(_$AppConfigNegotiationSettingsOverrideImpl) then) =
+      __$$AppConfigNegotiationSettingsOverrideImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({bool includeInactiveVideoInOfferAnswer});
+}
+
+/// @nodoc
+class __$$AppConfigNegotiationSettingsOverrideImplCopyWithImpl<$Res>
+    extends _$AppConfigNegotiationSettingsOverrideCopyWithImpl<$Res,
+        _$AppConfigNegotiationSettingsOverrideImpl>
+    implements _$$AppConfigNegotiationSettingsOverrideImplCopyWith<$Res> {
+  __$$AppConfigNegotiationSettingsOverrideImplCopyWithImpl(
+      _$AppConfigNegotiationSettingsOverrideImpl _value,
+      $Res Function(_$AppConfigNegotiationSettingsOverrideImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of AppConfigNegotiationSettingsOverride
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? includeInactiveVideoInOfferAnswer = null,
+  }) {
+    return _then(_$AppConfigNegotiationSettingsOverrideImpl(
+      includeInactiveVideoInOfferAnswer: null ==
+              includeInactiveVideoInOfferAnswer
+          ? _value.includeInactiveVideoInOfferAnswer
+          : includeInactiveVideoInOfferAnswer // ignore: cast_nullable_to_non_nullable
+              as bool,
+    ));
+  }
+}
+
+/// @nodoc
+
+@JsonSerializable(explicitToJson: true)
+class _$AppConfigNegotiationSettingsOverrideImpl
+    extends _AppConfigNegotiationSettingsOverride {
+  const _$AppConfigNegotiationSettingsOverrideImpl(
+      {this.includeInactiveVideoInOfferAnswer = false})
+      : super._();
+
+  factory _$AppConfigNegotiationSettingsOverrideImpl.fromJson(
+          Map<String, dynamic> json) =>
+      _$$AppConfigNegotiationSettingsOverrideImplFromJson(json);
+
+  @override
+  @JsonKey()
+  final bool includeInactiveVideoInOfferAnswer;
+
+  @override
+  String toString() {
+    return 'AppConfigNegotiationSettingsOverride(includeInactiveVideoInOfferAnswer: $includeInactiveVideoInOfferAnswer)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$AppConfigNegotiationSettingsOverrideImpl &&
+            (identical(other.includeInactiveVideoInOfferAnswer,
+                    includeInactiveVideoInOfferAnswer) ||
+                other.includeInactiveVideoInOfferAnswer ==
+                    includeInactiveVideoInOfferAnswer));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, includeInactiveVideoInOfferAnswer);
+
+  /// Create a copy of AppConfigNegotiationSettingsOverride
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$AppConfigNegotiationSettingsOverrideImplCopyWith<
+          _$AppConfigNegotiationSettingsOverrideImpl>
+      get copyWith => __$$AppConfigNegotiationSettingsOverrideImplCopyWithImpl<
+          _$AppConfigNegotiationSettingsOverrideImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$AppConfigNegotiationSettingsOverrideImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _AppConfigNegotiationSettingsOverride
+    extends AppConfigNegotiationSettingsOverride {
+  const factory _AppConfigNegotiationSettingsOverride(
+          {final bool includeInactiveVideoInOfferAnswer}) =
+      _$AppConfigNegotiationSettingsOverrideImpl;
+  const _AppConfigNegotiationSettingsOverride._() : super._();
+
+  factory _AppConfigNegotiationSettingsOverride.fromJson(
+          Map<String, dynamic> json) =
+      _$AppConfigNegotiationSettingsOverrideImpl.fromJson;
+
+  @override
+  bool get includeInactiveVideoInOfferAnswer;
+
+  /// Create a copy of AppConfigNegotiationSettingsOverride
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$AppConfigNegotiationSettingsOverrideImplCopyWith<
+          _$AppConfigNegotiationSettingsOverrideImpl>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
 EncodingDefaultPresetOverride _$EncodingDefaultPresetOverrideFromJson(
     Map<String, dynamic> json) {
   return _EncodingDefaultPresetOverride.fromJson(json);
@@ -1744,7 +2191,8 @@ mixin _$EncodingDefaultPresetOverride {
   int? get videoBitrate => throw _privateConstructorUsedError;
   int? get ptime => throw _privateConstructorUsedError;
   int? get maxptime => throw _privateConstructorUsedError;
-  int? get opusBandwidthLimit => throw _privateConstructorUsedError;
+  int? get opusSamplingRate => throw _privateConstructorUsedError;
+  int? get opusBitrate => throw _privateConstructorUsedError;
   bool? get opusStereo => throw _privateConstructorUsedError;
   bool? get opusDtx => throw _privateConstructorUsedError;
 
@@ -1771,7 +2219,8 @@ abstract class $EncodingDefaultPresetOverrideCopyWith<$Res> {
       int? videoBitrate,
       int? ptime,
       int? maxptime,
-      int? opusBandwidthLimit,
+      int? opusSamplingRate,
+      int? opusBitrate,
       bool? opusStereo,
       bool? opusDtx});
 }
@@ -1796,7 +2245,8 @@ class _$EncodingDefaultPresetOverrideCopyWithImpl<$Res,
     Object? videoBitrate = freezed,
     Object? ptime = freezed,
     Object? maxptime = freezed,
-    Object? opusBandwidthLimit = freezed,
+    Object? opusSamplingRate = freezed,
+    Object? opusBitrate = freezed,
     Object? opusStereo = freezed,
     Object? opusDtx = freezed,
   }) {
@@ -1817,9 +2267,13 @@ class _$EncodingDefaultPresetOverrideCopyWithImpl<$Res,
           ? _value.maxptime
           : maxptime // ignore: cast_nullable_to_non_nullable
               as int?,
-      opusBandwidthLimit: freezed == opusBandwidthLimit
-          ? _value.opusBandwidthLimit
-          : opusBandwidthLimit // ignore: cast_nullable_to_non_nullable
+      opusSamplingRate: freezed == opusSamplingRate
+          ? _value.opusSamplingRate
+          : opusSamplingRate // ignore: cast_nullable_to_non_nullable
+              as int?,
+      opusBitrate: freezed == opusBitrate
+          ? _value.opusBitrate
+          : opusBitrate // ignore: cast_nullable_to_non_nullable
               as int?,
       opusStereo: freezed == opusStereo
           ? _value.opusStereo
@@ -1847,7 +2301,8 @@ abstract class _$$EncodingDefaultPresetOverrideImplCopyWith<$Res>
       int? videoBitrate,
       int? ptime,
       int? maxptime,
-      int? opusBandwidthLimit,
+      int? opusSamplingRate,
+      int? opusBitrate,
       bool? opusStereo,
       bool? opusDtx});
 }
@@ -1871,7 +2326,8 @@ class __$$EncodingDefaultPresetOverrideImplCopyWithImpl<$Res>
     Object? videoBitrate = freezed,
     Object? ptime = freezed,
     Object? maxptime = freezed,
-    Object? opusBandwidthLimit = freezed,
+    Object? opusSamplingRate = freezed,
+    Object? opusBitrate = freezed,
     Object? opusStereo = freezed,
     Object? opusDtx = freezed,
   }) {
@@ -1892,9 +2348,13 @@ class __$$EncodingDefaultPresetOverrideImplCopyWithImpl<$Res>
           ? _value.maxptime
           : maxptime // ignore: cast_nullable_to_non_nullable
               as int?,
-      opusBandwidthLimit: freezed == opusBandwidthLimit
-          ? _value.opusBandwidthLimit
-          : opusBandwidthLimit // ignore: cast_nullable_to_non_nullable
+      opusSamplingRate: freezed == opusSamplingRate
+          ? _value.opusSamplingRate
+          : opusSamplingRate // ignore: cast_nullable_to_non_nullable
+              as int?,
+      opusBitrate: freezed == opusBitrate
+          ? _value.opusBitrate
+          : opusBitrate // ignore: cast_nullable_to_non_nullable
               as int?,
       opusStereo: freezed == opusStereo
           ? _value.opusStereo
@@ -1918,7 +2378,8 @@ class _$EncodingDefaultPresetOverrideImpl
       this.videoBitrate,
       this.ptime,
       this.maxptime,
-      this.opusBandwidthLimit,
+      this.opusSamplingRate,
+      this.opusBitrate,
       this.opusStereo,
       this.opusDtx})
       : super._();
@@ -1936,7 +2397,9 @@ class _$EncodingDefaultPresetOverrideImpl
   @override
   final int? maxptime;
   @override
-  final int? opusBandwidthLimit;
+  final int? opusSamplingRate;
+  @override
+  final int? opusBitrate;
   @override
   final bool? opusStereo;
   @override
@@ -1944,7 +2407,7 @@ class _$EncodingDefaultPresetOverrideImpl
 
   @override
   String toString() {
-    return 'EncodingDefaultPresetOverride(audioBitrate: $audioBitrate, videoBitrate: $videoBitrate, ptime: $ptime, maxptime: $maxptime, opusBandwidthLimit: $opusBandwidthLimit, opusStereo: $opusStereo, opusDtx: $opusDtx)';
+    return 'EncodingDefaultPresetOverride(audioBitrate: $audioBitrate, videoBitrate: $videoBitrate, ptime: $ptime, maxptime: $maxptime, opusSamplingRate: $opusSamplingRate, opusBitrate: $opusBitrate, opusStereo: $opusStereo, opusDtx: $opusDtx)';
   }
 
   @override
@@ -1959,8 +2422,10 @@ class _$EncodingDefaultPresetOverrideImpl
             (identical(other.ptime, ptime) || other.ptime == ptime) &&
             (identical(other.maxptime, maxptime) ||
                 other.maxptime == maxptime) &&
-            (identical(other.opusBandwidthLimit, opusBandwidthLimit) ||
-                other.opusBandwidthLimit == opusBandwidthLimit) &&
+            (identical(other.opusSamplingRate, opusSamplingRate) ||
+                other.opusSamplingRate == opusSamplingRate) &&
+            (identical(other.opusBitrate, opusBitrate) ||
+                other.opusBitrate == opusBitrate) &&
             (identical(other.opusStereo, opusStereo) ||
                 other.opusStereo == opusStereo) &&
             (identical(other.opusDtx, opusDtx) || other.opusDtx == opusDtx));
@@ -1969,7 +2434,7 @@ class _$EncodingDefaultPresetOverrideImpl
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, audioBitrate, videoBitrate,
-      ptime, maxptime, opusBandwidthLimit, opusStereo, opusDtx);
+      ptime, maxptime, opusSamplingRate, opusBitrate, opusStereo, opusDtx);
 
   /// Create a copy of EncodingDefaultPresetOverride
   /// with the given fields replaced by the non-null parameter values.
@@ -1996,7 +2461,8 @@ abstract class _EncodingDefaultPresetOverride
       final int? videoBitrate,
       final int? ptime,
       final int? maxptime,
-      final int? opusBandwidthLimit,
+      final int? opusSamplingRate,
+      final int? opusBitrate,
       final bool? opusStereo,
       final bool? opusDtx}) = _$EncodingDefaultPresetOverrideImpl;
   const _EncodingDefaultPresetOverride._() : super._();
@@ -2013,7 +2479,9 @@ abstract class _EncodingDefaultPresetOverride
   @override
   int? get maxptime;
   @override
-  int? get opusBandwidthLimit;
+  int? get opusSamplingRate;
+  @override
+  int? get opusBitrate;
   @override
   bool? get opusStereo;
   @override

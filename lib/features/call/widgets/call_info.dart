@@ -18,7 +18,8 @@ class CallInfo extends StatefulWidget {
     required this.inviteToAttendedTransfer,
     required this.isIncoming,
     required this.held,
-    required this.username,
+    required this.number,
+    this.username,
     this.acceptedTime,
     this.color,
     this.processingStatus,
@@ -30,7 +31,8 @@ class CallInfo extends StatefulWidget {
   final bool inviteToAttendedTransfer;
   final bool isIncoming;
   final bool held;
-  final String username;
+  final String number;
+  final String? username;
   final DateTime? acceptedTime;
   final Color? color;
   final CallProcessingStatus? processingStatus;
@@ -123,13 +125,31 @@ class _CallInfoState extends State<CallInfo> {
 
     return Column(
       children: [
-        Text(
-          widget.username,
-          style: textTheme.displaySmall!.copyWith(color: widget.color),
-          textAlign: TextAlign.center,
-          maxLines: 2,
-          overflow: TextOverflow.ellipsis,
-        ),
+        if (widget.username != null) ...[
+          Text(
+            widget.username!,
+            style: textTheme.displaySmall!.copyWith(color: widget.color),
+            textAlign: TextAlign.center,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
+          Text(
+            widget.number,
+            style: textTheme.bodyLarge!.copyWith(color: widget.color),
+            textAlign: TextAlign.center,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ],
+        if (widget.username == null)
+          Text(
+            widget.number,
+            style: textTheme.displaySmall!.copyWith(color: widget.color),
+            textAlign: TextAlign.center,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
+        const SizedBox(height: 10),
         Text(
           statusMessage,
           style: textTheme.bodyMedium!.copyWith(

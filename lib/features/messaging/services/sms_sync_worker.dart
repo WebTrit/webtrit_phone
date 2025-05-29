@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:logging/logging.dart';
 import 'package:phoenix_socket/phoenix_socket.dart';
 
-import 'package:webtrit_phone/app/notifications/notifications.dart';
 import 'package:webtrit_phone/features/messaging/messaging.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
@@ -30,7 +29,7 @@ class SmsSyncWorker {
   SmsSyncWorker(
     this.client,
     this.smsRepository,
-    this.submitNotification, {
+    this.onError, {
     this.pageSize = 50,
     this.listThrottle = const Duration(seconds: 1),
     this.roomThrottle = const Duration(seconds: 5),
@@ -38,7 +37,7 @@ class SmsSyncWorker {
 
   final PhoenixSocket client;
   final SmsRepository smsRepository;
-  final Function(Notification) submitNotification;
+  final Function(Object) onError;
   final int pageSize;
   final Duration listThrottle;
   final Duration roomThrottle;
@@ -52,8 +51,9 @@ class SmsSyncWorker {
     _conversationsSyncSub = _conversationsSyncStream().listen(
       (e) {
         if (e is (Object, StackTrace)) {
-          _logger.warning('conversations sync error:', e.$1, e.$2);
-          submitNotification(DefaultErrorNotification(e));
+          final (error, stackTrace) = e;
+          _logger.warning('conversations sync error:', error, stackTrace);
+          onError(error);
         } else {
           _logger.info('conversations sync event: $e');
         }
@@ -75,7 +75,7 @@ class SmsSyncWorker {
       channel = client.createSmsConversationChannel(id);
       await channel.connect().catchError((e, s) {
         _logger.warning('Failed to connect to sms conversation $id', e, s);
-        submitNotification(DefaultErrorNotification(e));
+        onError(e);
       });
     }
 
@@ -84,8 +84,9 @@ class SmsSyncWorker {
       () => _conversationSyncStream(id, channel!).listen(
         (e) {
           if (e is (Object, StackTrace)) {
-            _logger.warning('conversation sync error: $id', e.$1, e.$2);
-            submitNotification(DefaultErrorNotification(e));
+            final (error, stackTrace) = e;
+            _logger.warning('conversation sync error: $id', error, stackTrace);
+            onError(error);
           } else {
             _logger.info('conversation sync event: $id $e');
           }

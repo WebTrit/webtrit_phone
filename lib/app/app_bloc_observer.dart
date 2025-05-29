@@ -7,25 +7,25 @@ class AppBlocObserver extends BlocObserver {
   @override
   void onCreate(BlocBase bloc) {
     super.onCreate(bloc);
-    _logger.fine('onCreate $bloc');
+    _logger.finest('onCreate $bloc');
   }
 
   @override
   void onEvent(Bloc bloc, Object? event) {
     super.onEvent(bloc, event);
-    _logger.fine('onEvent $bloc: $event');
+    _logger.finest('onEvent $bloc: $event');
   }
 
   @override
   void onChange(BlocBase bloc, Change change) {
     super.onChange(bloc, change);
-    _logger.fine('onChange $bloc: $change');
+    _logger.finest('onChange $bloc: $change');
   }
 
   @override
   onTransition(Bloc bloc, Transition transition) {
     super.onTransition(bloc, transition);
-    _logger.fine('onTransition $bloc: $transition');
+    _logger.finest('onTransition $bloc: $transition');
   }
 
   @override
@@ -37,6 +37,6 @@ class AppBlocObserver extends BlocObserver {
   @override
   void onClose(BlocBase bloc) {
     super.onClose(bloc);
-    _logger.fine('onClose $bloc');
+    _logger.finest('onClose $bloc');
   }
 }

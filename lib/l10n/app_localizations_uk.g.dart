@@ -222,6 +222,12 @@ class AppLocalizationsUk extends AppLocalizations {
   String get contacts_LocalTabText_permissionFailure => 'Відсутні дозволи для доступу до контактів вашого телефону';
 
   @override
+  String get contacts_LocalTabText_contactsAgreementFailure => 'Щоб синхронізувати локальні контакти, потрібно прийняти угоду в Налаштуваннях.';
+
+  @override
+  String get contacts_LocalTabButton_contactsAgreement => 'Відкрити Налаштування';
+
+  @override
   String get contactsSourceExternal => 'Хмарний PBX';
 
   @override
@@ -504,7 +510,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get login_Button_signupRequestProceed => 'Продовжити';
 
   @override
-  String get login_Button_signUpToDemoInstance => 'Зареєструватися';
+  String get login_Button_signUpToDemoInstance => 'Зареєструватися / Увійти';
 
   @override
   String get login_Button_signupVerifyProceed => 'Перевірити';
@@ -943,6 +949,45 @@ class AppLocalizationsUk extends AppLocalizations {
   String get messaging_StateBar_initializing => 'ІНІЦІАЛІЗАЦІЯ';
 
   @override
+  String get voicemail_Widget_screenTitle => 'Голосова пошта';
+
+  @override
+  String get voicemail_Label_deleteAll => 'Видалити всю голосову пошту?';
+
+  @override
+  String get voicemail_Label_deleteAllDescription => 'Цю дію не можна скасувати: всі голосові повідомлення буде остаточно видалено.';
+
+  @override
+  String get voicemail_Label_empty => 'Немає голосових повідомлень';
+
+  @override
+  String get voicemail_Label_retry => 'Спробувати ще раз';
+
+  @override
+  String get voicemail_Label_call => 'Дзвінок';
+
+  @override
+  String get voicemail_Label_markAsHeard => 'Позначити як прослухане';
+
+  @override
+  String get voicemail_Label_markAsNew => 'Позначити як нове';
+
+  @override
+  String get voicemail_Label_delete => 'Видалити';
+
+  @override
+  String get voicemail_Dialog_deleteSingleTitle => 'Видалити голосове повідомлення?';
+
+  @override
+  String get voicemail_Dialog_deleteSingleContent => 'Це голосове повідомлення буде остаточно видалено. Бажаєте продовжити?';
+
+  @override
+  String get voicemail_Title_notSupported => 'Функція не підтримується';
+
+  @override
+  String get voicemail_Description_notSupported => 'Функція голосової пошти не підтримується у вашій системі. Зверніться до адміністратора для отримання додаткової інформації.';
+
+  @override
   String get notifications_errorSnackBarAction_callUserMedia => 'Перевірити';
 
   @override
@@ -1158,24 +1203,6 @@ class AppLocalizationsUk extends AppLocalizations {
   String get settings_AppBarTitle_myAccount => 'Мій обліковий запис';
 
   @override
-  String get settings_call_codecs_preferred_audio_default => 'Автоматично';
-
-  @override
-  String get settings_call_codecs_preferred_audio_tip => 'Використовується для аудіодзвінків. Якщо кодек не підтримується пристроєм, дзвінок буде встановлено за допомогою наступного доступного кодеку.';
-
-  @override
-  String get settings_call_codecs_preferred_audio_title => 'Бажаний аудіокодек';
-
-  @override
-  String get settings_call_codecs_preferred_video_default => 'Автоматично';
-
-  @override
-  String get settings_call_codecs_preferred_video_tip => 'Використовується для відеодзвінків. Якщо кодек не підтримується пристроєм, дзвінок буде встановлено за допомогою наступного доступного кодеку.';
-
-  @override
-  String get settings_call_codecs_preferred_video_title => 'Бажаний відеокодек';
-
-  @override
   String get settings_encoding_AppBar_reset_tooltip => 'Скинути до стандартних налаштувань';
 
   @override
@@ -1191,7 +1218,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get settings_encoding_Section_preset_default => 'Стандарт';
 
   @override
-  String get settings_encoding_Section_preset_eco => 'Еко';
+  String get settings_encoding_Section_preset_eco => 'Єко';
 
   @override
   String get settings_encoding_Section_preset_balance => 'Баланс';
@@ -1200,10 +1227,13 @@ class AppLocalizationsUk extends AppLocalizations {
   String get settings_encoding_Section_preset_quality => 'Якість';
 
   @override
-  String get settings_encoding_Section_preset_full_flex => 'Висока точність';
+  String get settings_encoding_Section_preset_full_flex => 'Максимум';
 
   @override
   String get settings_encoding_Section_preset_custom => 'Ручна конфігурація';
+
+  @override
+  String get settings_encoding_Section_preset_bypass => 'Без втручання';
 
   @override
   String get settings_encoding_Section_measure_kbps => 'Kbps';
@@ -1242,13 +1272,13 @@ class AppLocalizationsUk extends AppLocalizations {
   String get settings_encoding_Section_ptime_prefix => 'Розмір: ';
 
   @override
-  String get settings_encoding_Section_bandwidth_prefix => 'Діапазон: ';
+  String get settings_encoding_Section_bandwidth_prefix => 'Частота дискретизації:';
 
   @override
   String get settings_encoding_Section_bitrate_title => 'Налаштування пропускної здатності';
 
   @override
-  String get settings_encoding_Section_bitrate_tooltip => 'Налаштування пропускної здатності для аудіо- та відеокодеків. Нижчі значення зменшать використання трафіку, вищі значення покращать якість.';
+  String get settings_encoding_Section_bitrate_tooltip => 'Налаштування пропускної здатності для аудіо-відео потоку, нижчі значення зменшать використання трафіку, більші значення покращать якість потоку';
 
   @override
   String get settings_encoding_Section_target_audio_bitrate => 'Цільовий бітрейт аудіо: ';
@@ -1260,7 +1290,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get settings_encoding_Section_packetization_title => 'Пакетизація аудіо';
 
   @override
-  String get settings_encoding_Section_packetization_tooltip => 'Налаштування часу пакетування аудіо в мілісекундах, можна використовувати для зменшення затримки аудіо або усунення проблем із розміром MTU мережі';
+  String get settings_encoding_Section_packetization_tooltip => 'Налаштування часу пакетування аудіо в мілісекундах, можна використовувати для зменшення затримки аудіо або вирішення проблем із розміром MTU мережі';
 
   @override
   String get settings_encoding_Section_audio_ptime => 'Цільовий розмір аудіо пакета: ';
@@ -1269,7 +1299,10 @@ class AppLocalizationsUk extends AppLocalizations {
   String get settings_encoding_Section_audio_ptime_limit => 'Ліміт розміру аудіо пакета: ';
 
   @override
-  String get settings_encoding_Section_opus_bandwidth => 'Перевизначення частотного діапазону: ';
+  String get settings_encoding_Section_opus_samplingRate => 'Перевизначення частоти дискретизації: ';
+
+  @override
+  String get settings_encoding_Section_opus_bitrate => 'Перевизначення бітрейту: ';
 
   @override
   String get settings_encoding_Section_opus_channels => 'Перевизначення режиму каналів: ';
@@ -1371,6 +1404,24 @@ class AppLocalizationsUk extends AppLocalizations {
   String get settings_iceSettings_Section_trfilter_skipTcp => 'Пропустити TCP-кандидатів';
 
   @override
+  String get settings_connectionSection_title => 'Поведінка з’єднання та викликів';
+
+  @override
+  String get settings_connectionSection_tooltip => 'Налаштуйте, як ваш пристрій обробляє встановлення зʼєднання, узгодження медіа та оновлення дзвінків під час однорангового звʼязку.';
+
+  @override
+  String get settings_videoOffer_title => 'Визначте, як цей пристрій реагує на пропозицію, що містить відео.';
+
+  @override
+  String get settings_videoOffer_option_includeInactive => 'Включити неактивний відеотрек\nЗабезпечує сумісність із відеопропозиціями для майбутньої активації.';
+
+  @override
+  String get settings_videoOffer_option_ignore => 'Відповідати без відео\nТрек не буде додано, якщо це не буде узгоджено пізніше.';
+
+  @override
+  String get call_settings_additional_options => 'Додаткові параметри';
+
+  @override
   String get settings_ListViewTileTitle_about => 'Про програму';
 
   @override
@@ -1384,6 +1435,9 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get settings_ListViewTileTitle_language => 'Мова';
+
+  @override
+  String get settings_ListViewTileTitle_voicemail => 'Голосова пошта';
 
   @override
   String get settings_ListViewTileTitle_logout => 'Вийти';
@@ -1402,6 +1456,9 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get settings_ListViewTileTitle_settings => 'НАЛАШТУВАННЯ';
+
+  @override
+  String get settings_ListViewTileTitle_features => 'СЕРВІСИ';
 
   @override
   String get settings_ListViewTileTitle_termsConditions => 'Умови та положення';

@@ -29,47 +29,30 @@ class SDPModBuilder {
     }
   }
 
-  /// Set the bitrate for the video and audio.
-  /// [video] and [audio] are in kbps.
-  /// Range `32-4000kbps` for video and `8-256kbps` for audio.
-  ///
-  /// If audio not support opus, then lower bitrate will clamped to `64kbps`
-  /// to prevent exception from WebRTC side when setRemoteDescription called.
-  /// and because only opus supports such wide compression level.
-  /// g722 has 48-56kbps but is not worth it to use.
-  setBitrate(int? audio, int? video) {
-    final hasOpus = getProfileId(RTPCodecProfile.opus) != null;
-    const rtpBitrateOvehead = 1.2;
+  /// Sets the target bitrate for audio and video media sections in the SDP (in kbps).
+  /// [audio] in range of `8-256` kbps.
+  /// [video] in range of `32-4000` kbps.
+  /// Pass `null` to skip setting bitrate for either media kind.
+  void setBitrate(int? audio, int? video) {
+    if (audio != null) {
+      audio = audio.clamp(8, 256);
+      final media = _getMedia(RTPCodecKind.audio);
+      if (media != null) _setBandwidth(media, audio);
+    }
 
-    if (audio != null) audio = audio.clamp(hasOpus ? 8 : 64, 256);
-    if (video != null) video = video.clamp(32, 4000);
-
-    for (final kind in RTPCodecKind.values) {
-      if (kind == RTPCodecKind.audio && audio == null) continue;
-      if (kind == RTPCodecKind.video && video == null) continue;
-
-      final bitrate = switch (kind) {
-        RTPCodecKind.audio => audio!,
-        RTPCodecKind.video => video!,
-      };
-
-      String as = (bitrate * rtpBitrateOvehead).toStringAsFixed(0);
-      String tias = (bitrate * 1000).toStringAsFixed(0);
-
-      final media = _getMedia(kind);
-
-      media?['bandwidth'] = [
-        {'type': 'AS', 'limit': as},
-        {'type': 'TIAS', 'limit': tias}
-      ];
+    if (video != null) {
+      video = video.clamp(32, 4000);
+      final media = _getMedia(RTPCodecKind.video);
+      if (media != null) _setBandwidth(media, video);
     }
   }
 
   /// Set opus specific parameters
   /// [bandWidthLimit] limit maximum bandwidth in hz, range `8000-48000`.
+  /// [bitrateLimit] limit maximum bitrate in kbps, range `6-500`.
   /// [stereo] stereo support on/off.
   /// [dtx] DTX support on/off.
-  setOpusParams(int? bandWidthLimit, bool? stereo, bool? dtx) {
+  setOpusParams(int? bandWidthLimit, int? bitrateLimit, bool? stereo, bool? dtx) {
     final profileId = getProfileId(RTPCodecProfile.opus);
     if (profileId == null) return;
 
@@ -99,6 +82,11 @@ class SDPModBuilder {
           bandWidthLimit = bandWidthLimit.clamp(8000, 48000);
           configMap['maxplaybackrate'] = bandWidthLimit.toStringAsFixed(0);
           configMap['sprop-maxcapturerate'] = bandWidthLimit.toStringAsFixed(0);
+        }
+
+        if (bitrateLimit != null) {
+          bitrateLimit = bitrateLimit.clamp(6, 500);
+          configMap['maxaveragebitrate'] = (bitrateLimit * 1000).toStringAsFixed(0);
         }
 
         if (dtx != null) {
@@ -259,6 +247,35 @@ class SDPModBuilder {
 
   Map<String, dynamic>? _getMedia(RTPCodecKind kind) {
     return (data['media'] as List<dynamic>).firstWhereOrNull((m) => m['type'] == kind.name);
+  }
+
+  /// Sets the bandwidth information (`AS` and `TIAS`) for the given media section.
+  ///
+  /// This method calculates two bandwidth values based on the provided bitrate:
+  /// - `AS` (Application Specific): includes RTP overhead, calculated as `bitrate * 1.2`
+  /// - `TIAS` (Transport Independent Application Specific): exact bitrate in bits per second
+  ///
+  /// These values help browsers and endpoints interpret media constraints more accurately,
+  /// and are particularly useful to avoid excessive or insufficient resource allocation.
+  ///
+  /// [media] is the media section (`audio` or `video`) to update in the parsed SDP map.
+  /// [bitrateKbps] is the desired bitrate in kilobits per second (kbps).
+  void _setBandwidth(Map<String, dynamic> media, int bitrateKbps) {
+    const rtpBitrateOverhead = 1.2;
+
+    final as = (bitrateKbps * rtpBitrateOverhead).toStringAsFixed(0);
+    final tias = (bitrateKbps * 1000).toStringAsFixed(0);
+
+    media['bandwidth'] = [
+      {'type': 'AS', 'limit': as},
+      {'type': 'TIAS', 'limit': tias}
+    ];
+  }
+
+  int parseBandwidthLimit(dynamic value, [int defaultValue = 0]) {
+    if (value is int) return value;
+    if (value is String) return int.tryParse(value) ?? defaultValue;
+    return defaultValue;
   }
 }
 

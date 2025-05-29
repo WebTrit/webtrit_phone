@@ -131,6 +131,9 @@ configure-classic:
 build-ios:
 	flutter build ios $(FLUTTER_FLAGS)
 
+build-ios-config-only:
+	flutter build ios $(FLUTTER_FLAGS) --config-only
+
 ## Create APK build
 build-apk:
 	flutter build apk $(FLUTTER_FLAGS)

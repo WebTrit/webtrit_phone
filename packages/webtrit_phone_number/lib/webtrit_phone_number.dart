@@ -1,3 +1,3 @@
-library webtrit_phone_number;
+library;
 
 export 'src/phone_parser.dart';

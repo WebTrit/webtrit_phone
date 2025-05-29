@@ -27,6 +27,7 @@ class EmbeddedResource with _$EmbeddedResource {
     @Default({}) Map<String, dynamic> attributes,
     @Default(ToolbarConfig()) ToolbarConfig toolbar,
     @Default(Metadata()) Metadata metadata,
+    @Default([]) List<String> payload,
   }) = _EmbeddedResource;
 
   factory EmbeddedResource.fromJson(Map<String, dynamic> json) => _$EmbeddedResourceFromJson(json);

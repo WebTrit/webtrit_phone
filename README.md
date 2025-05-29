@@ -20,10 +20,47 @@ The application offers extensive customization options:
 - **[Widgets](doc/widgets_configuration.md)** – Configure UI widgets according to your needs.
 - **[Pages](doc/page_configuration.md)** – Customize pages and their layouts.
 - **[Features](doc/feature_configuration.md)** – Enable or disable specific features.
+  - [Custom Login](doc/custom_login.md) – Implement a custom login page.
+  - [Embedded pages](doc/embedded_pages.md) –  Implements embedded pages that extend the WebTrit app with custom web content.
 
 ## Development & Build
 
  - **Make Commands**: See the  [Make Commands](doc/make_file.md) for available build and automation commands.
+
+# Testing
+
+## Test commands
+* Run unit and widget tests
+  ```bash
+  flutter test
+  ```
+* Run integration tests
+  ```bash
+  flutter test integration_test --dart-define-from-file=../dart_define.json --dart-define-from-file=dart_define.integration_test.json 
+  ```
+* Run specific integration test
+  ```bash
+  flutter test integration_test/login_system_test.dart --dart-define-from-file=../dart_define.json --dart-define-from-file=dart_define.integration_test.json 
+  ```
+* Or alternatively using specified driver
+  ```bash
+  flutter drive --driver=test_driver/integration_test.dart --target=integration_test/login_system_test.dart --dart-define-from-file=../dart_define.json --dart-define-from-file=dart_define.integration_test.json 
+  ```
+
+### Test variables
+
+* `WEBTRIT_APP_TEST_CUSTOM_CORE_URL` (_example **http://localhost:4000\/tenant\/123123**_)
+* `WEBTRIT_APP_TEST_EMAIL_CREDENTIAL` (_example mail@mail.com_)
+* `WEBTRIT_APP_TEST_EMAIL_VERIFY_CREDENTIAL` (_example 123456_)
+* `WEBTRIT_APP_TEST_OTP_CREDENTIAL` (_example +1234566789_)
+* `WEBTRIT_APP_TEST_OTP_VERIFY_CREDENTIAL` (_example 123456_)
+* `WEBTRIT_APP_TEST_PASSWORD_USER_CREDENTIAL`  (_example username_)
+* `WEBTRIT_APP_TEST_PASSWORD_PASSWORD_CREDENTIAL` (_example 123456_)
+* `WEBTRIT_APP_TEST_DEFAULT_LOGIN_METHOD` (_email_ | _password_ | _otp_)
+
+
+Default test variables located in `dart_define.integration_test.json` and could be add to flutter drive or test with `--dart-define-from-file=dart_define.integration_test.json` parameter.
+Also can be used multiple times to combine with regular `dart_define.json` file as on example above.
 
 ## Contributing
 

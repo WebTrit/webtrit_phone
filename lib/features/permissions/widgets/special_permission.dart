@@ -13,10 +13,13 @@ class SpecialPermission extends StatelessWidget {
     super.key,
     required this.specialPermissions,
     required this.onGoToAppSettings,
+    required this.onPop,
   });
 
   final CallkeepSpecialPermissions specialPermissions;
+
   final VoidCallback onGoToAppSettings;
+  final VoidCallback onPop;
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +29,7 @@ class SpecialPermission extends StatelessWidget {
           title: context.l10n.permission_manageFullScreenNotificationPermissions,
           instruction: specialPermissions.tips(context),
           onGoToAppSettings: onGoToAppSettings,
+          onPop: onPop,
         );
     }
   }

@@ -66,7 +66,7 @@ Map<String, dynamic> _$$ThemeWidgetConfigImplToJson(
 
 _$FontsConfigImpl _$$FontsConfigImplFromJson(Map<String, dynamic> json) =>
     _$FontsConfigImpl(
-      fontFamily: json['fontFamily'] as String? ?? 'Montserrat',
+      fontFamily: json['fontFamily'] as String?,
     );
 
 Map<String, dynamic> _$$FontsConfigImplToJson(_$FontsConfigImpl instance) =>

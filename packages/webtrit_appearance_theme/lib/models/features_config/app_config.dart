@@ -56,6 +56,8 @@ class AppConfigModeSelectAction with _$AppConfigModeSelectAction {
     int? embeddedId,
     required String type,
     required String titleL10n,
+    @Default(false) bool isLaunchButtonVisible,
+    @Default(false) bool isLaunchScreen,
   }) = _AppConfigModeSelectAction;
 
   factory AppConfigModeSelectAction.fromJson(Map<String, dynamic> json) => _$AppConfigModeSelectActionFromJson(json);
@@ -139,6 +141,7 @@ class AppConfigCall with _$AppConfigCall {
     ))
     AppConfigTransfer transfer,
     @Default(AppConfigEncoding()) AppConfigEncoding encoding,
+    @Default(AppConfigPeerConnection()) AppConfigPeerConnection peerConnection,
   }) = _AppConfigCall;
 
   factory AppConfigCall.fromJson(Map<String, dynamic> json) => _$AppConfigCallFromJson(json);
@@ -171,6 +174,31 @@ class AppConfigEncoding with _$AppConfigEncoding {
 }
 
 @freezed
+class AppConfigPeerConnection with _$AppConfigPeerConnection {
+  const AppConfigPeerConnection._();
+
+  @JsonSerializable(explicitToJson: true)
+  const factory AppConfigPeerConnection({
+    @Default(AppConfigNegotiationSettingsOverride()) AppConfigNegotiationSettingsOverride negotiation,
+  }) = _AppConfigPeerConnection;
+
+  factory AppConfigPeerConnection.fromJson(Map<String, dynamic> json) => _$AppConfigPeerConnectionFromJson(json);
+}
+
+@freezed
+class AppConfigNegotiationSettingsOverride with _$AppConfigNegotiationSettingsOverride {
+  const AppConfigNegotiationSettingsOverride._();
+
+  @JsonSerializable(explicitToJson: true)
+  const factory AppConfigNegotiationSettingsOverride({
+    @Default(false) bool includeInactiveVideoInOfferAnswer,
+  }) = _AppConfigNegotiationSettingsOverride;
+
+  factory AppConfigNegotiationSettingsOverride.fromJson(Map<String, dynamic> json) =>
+      _$AppConfigNegotiationSettingsOverrideFromJson(json);
+}
+
+@freezed
 class EncodingDefaultPresetOverride with _$EncodingDefaultPresetOverride {
   const EncodingDefaultPresetOverride._();
 
@@ -180,7 +208,8 @@ class EncodingDefaultPresetOverride with _$EncodingDefaultPresetOverride {
     int? videoBitrate,
     int? ptime,
     int? maxptime,
-    int? opusBandwidthLimit,
+    int? opusSamplingRate,
+    int? opusBitrate,
     bool? opusStereo,
     bool? opusDtx,
   }) = _EncodingDefaultPresetOverride;

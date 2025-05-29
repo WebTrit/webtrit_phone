@@ -17,13 +17,10 @@ class CallScreen extends StatefulWidget {
     super.key,
     this.localePlaceholderBuilder,
     this.remotePlaceholderBuilder,
-    this.transferConfig = const TransferConfig(
-      enableBlindTransfer: true,
-      enableAttendedTransfer: true,
-    ),
+    this.callConfig = const CallConfig(),
   });
 
-  final TransferConfig transferConfig;
+  final CallConfig callConfig;
 
   final WidgetBuilder? localePlaceholderBuilder;
   final WidgetBuilder? remotePlaceholderBuilder;
@@ -69,7 +66,7 @@ class _CallScreenState extends State<CallScreen> with AutoRouteAwareStateMixin {
             speaker: state.speaker,
             callStatus: state.status,
             activeCalls: state.activeCalls,
-            transferConfig: widget.transferConfig,
+            callConfig: widget.callConfig,
             localePlaceholderBuilder: widget.localePlaceholderBuilder,
             remotePlaceholderBuilder: widget.remotePlaceholderBuilder,
           );

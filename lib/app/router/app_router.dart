@@ -23,7 +23,7 @@ final _logger = Logger('AppRouter');
 @AutoRouterConfig(
   replaceInRouteName: null,
 )
-class AppRouter extends _$AppRouter {
+class AppRouter extends RootStackRouter {
   AppRouter(
     this._appBloc,
     this._appPermissions,
@@ -60,11 +60,15 @@ class AppRouter extends _$AppRouter {
 
   bool get appLoggedIn => coreUrl != null && token != null && userId != null;
 
+  /// Retrieves the initial tab  for the main screen.
+  ///
+  /// This getter determines the initial tab to display on the main screen
+  BottomMenuTab get _mainInitialTab => _bottomMenuFeature.activeTab;
+
   @override
   List<AutoRoute> get routes => [
-        AutoRoute.guarded(
+        AutoRoute(
           page: AppShellRoute.page,
-          onNavigation: onAppShellRouteGuardNavigation,
           path: '/',
           children: [
             RedirectRoute(
@@ -78,10 +82,6 @@ class AppRouter extends _$AppRouter {
               children: [
                 AutoRoute(
                   page: LoginModeSelectScreenPageRoute.page,
-                ),
-                AutoRoute(
-                  page: LoginEmbeddedScreenPageRoute.page,
-                  maintainState: false,
                 ),
                 AutoRoute(
                   page: LoginCoreUrlAssignScreenPageRoute.page,
@@ -157,21 +157,7 @@ class AppRouter extends _$AppRouter {
                 AutoRoute(
                   page: MainScreenPageRoute.page,
                   path: '',
-                  guards: [
-                    // Redirects to the appropriate screen if required parameters are missing
-                    // This ensures that necessary data is passed to the  screen when the initial route is loaded.
-                    AutoRouteGuard.redirect(
-                      (resolver) => EmbeddedScreenPage.getPageRouteInfo(
-                        resolver.route,
-                        _bottomMenuFeature.activeTab.data,
-                      ),
-                    ),
-                  ],
                   children: [
-                    RedirectRoute(
-                      path: '',
-                      redirectTo: _bottomMenuFeature.activeTab.flavor.name,
-                    ),
                     AutoRoute(
                       page: FavoritesRouterPageRoute.page,
                       path: MainFlavor.favorites.name,
@@ -230,16 +216,9 @@ class AppRouter extends _$AppRouter {
                     ),
                     // Embedded flavors
                     AutoRoute(
-                      page: EmbeddedScreenPage1Route.page,
-                      path: MainFlavor.embedded1.name,
-                    ),
-                    AutoRoute(
-                      page: EmbeddedScreenPage2Route.page,
-                      path: MainFlavor.embedded2.name,
-                    ),
-                    AutoRoute(
-                      page: EmbeddedScreenPage3Route.page,
-                      path: MainFlavor.embedded3.name,
+                      page: EmbeddedTabPageRoute.page,
+                      path: 'embedded/:id',
+                      usesPathAsKey: true,
                     ),
                     AutoRoute(
                       page: ConversationsScreenPageRoute.page,
@@ -307,6 +286,10 @@ class AppRouter extends _$AppRouter {
                       page: DiagnosticScreenPageRoute.page,
                       path: 'diagnostic',
                     ),
+                    AutoRoute(
+                      page: VoicemailScreenPageRoute.page,
+                      path: 'voicemail',
+                    ),
                   ],
                 ),
               ],
@@ -328,7 +311,7 @@ class AppRouter extends _$AppRouter {
               path: 'undefined',
             ),
             AutoRoute(
-              page: EmbeddedScreenPage1Route.page,
+              page: EmbeddedScreenPageRoute.page,
               path: 'embedded',
             ),
           ],
@@ -410,7 +393,18 @@ class AppRouter extends _$AppRouter {
           [const PermissionsScreenPageRoute()],
         );
       } else {
-        resolver.next(true);
+        resolver.overrideNext(children: [
+          MainScreenPageRoute(children: [
+            switch (_mainInitialTab.flavor) {
+              MainFlavor.favorites => const FavoritesRouterPageRoute(),
+              MainFlavor.recents => const RecentsRouterPageRoute(),
+              MainFlavor.contacts => const ContactsRouterPageRoute(),
+              MainFlavor.keypad => const KeypadScreenPageRoute(),
+              MainFlavor.embedded => EmbeddedTabPageRoute(id: _mainInitialTab.toEmbedded!.id),
+              MainFlavor.messaging => const ConversationsScreenPageRoute(),
+            },
+          ])
+        ]);
       }
     } else {
       resolver.next(false);
@@ -421,20 +415,6 @@ class AppRouter extends _$AppRouter {
           )
         ],
       );
-    }
-  }
-
-  void onAppShellRouteGuardNavigation(NavigationResolver resolver, StackRouter router) {
-    _logger.fine(_onNavigationLoggerMessage('onAppShellRouteGuardNavigation', resolver));
-
-    resolver.next(true);
-
-    // Since reevaluateListenable triggers reevaluation only on the root router,
-    // explicit reevaluation on the app shell router is necessary to ensure
-    // proper handling of login/logout functionality.
-    if (resolver.isReevaluating) {
-      final innerRouter = router.innerRouterOf<StackRouter>(AppShellRoute.name);
-      innerRouter?.reevaluateGuards();
     }
   }
 
@@ -460,7 +440,6 @@ class AppRouter extends _$AppRouter {
   FutureOr<DeepLink> deepLinkBuilder(PlatformDeepLink deepLink) {
     final handlers = <DeepLinkHandler>[
       // Internal deep-links within the platform
-      HandleAndroidBackgroundIncomingCall(deepLink),
       HandleReturnToMain(deepLink),
       // External deep-links from outside the application
       HandleAutoprovision(deepLink),

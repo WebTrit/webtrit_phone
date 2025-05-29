@@ -1,110 +1,64 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-
-import 'package:bloc/bloc.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:logging/logging.dart';
 
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 
-import 'package:webtrit_phone/app/app_bloc_observer.dart';
 import 'package:webtrit_phone/common/common.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/push_notification/push_notifications.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
-import 'package:webtrit_phone/features/call/call.dart' as background_call_isolate show onStart, onChangedLifecycle;
+import 'package:webtrit_phone/features/call/call.dart' show onPushNotificationSyncCallback, onSignalingSyncCallback;
 
 import 'firebase_options.dart';
 
-Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
-  final logger = Logger('bootstrap');
-  await runZonedGuarded(
-    () async {
-      WidgetsFlutterBinding.ensureInitialized();
+Future<void> bootstrap() async {
+  await _initFirebase();
+  await _initFirebaseMessaging();
+  await _initLocalNotifications();
 
-      await _initFirebase();
-      await _initFirebaseMessaging();
-      await _initLocalNotifications();
+  // Remote configuration
+  final remoteCacheConfigService = await DefaultRemoteCacheConfigService.init();
+  final remoteFirebaseConfigService = await FirebaseRemoteConfigService.init(remoteCacheConfigService);
 
-      if (!kIsWeb && kDebugMode) {
-        FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(false);
-        await FirebaseCrashlytics.instance.deleteUnsentReports();
-      }
+  // Initialization order is crucial for proper app setup
 
-      FlutterError.onError = (details) {
-        logger.severe('FlutterError', details.exception, details.stack);
-        if (!kIsWeb && !kDebugMode) {
-          FirebaseCrashlytics.instance.recordFlutterFatalError(details);
-        }
-      };
+  final appThemes = await AppThemes.init();
 
-      // Remote configuration
-      final remoteCacheConfigService = await DefaultRemoteCacheConfigService.init();
-      final remoteFirebaseConfigService = await FirebaseRemoteConfigService.init(remoteCacheConfigService);
+  final appPreferences = await AppPreferencesFactory.init();
+  final featureAccess = FeatureAccess.init(appThemes.appConfig, appPreferences);
+  final appInfo = await AppInfo.init(FirebaseAppIdProvider());
+  final deviceInfo = await DeviceInfoFactory.init();
+  final packageInfo = await PackageInfoFactory.init();
+  final secureStorage = await SecureStorage.init();
 
-      // Initialization order is crucial for proper app setup
-
-      final appThemes = await AppThemes.init();
-      final appPreferences = await AppPreferencesFactory.init();
-      final featureAccess = FeatureAccess.init(appThemes.appConfig, appPreferences);
-      final appInfo = await AppInfo.init(FirebaseAppIdProvider());
-      final deviceInfo = await DeviceInfoFactory.init();
-      final packageInfo = await PackageInfoFactory.init();
-
-      await AppPermissions.init(featureAccess);
-      await SecureStorage.init();
-      await AppCertificates.init();
-      await AppTime.init();
-      await SessionCleanupWorker.init();
-      await AppLogger.init(
-        remoteConfigService: remoteFirebaseConfigService,
-        packageInfo: packageInfo,
-        deviceInfo: deviceInfo,
-        appInfo: appInfo,
-      );
-
-      await _initCallkeep(appPreferences);
-
-      Bloc.observer = AppBlocObserver();
-
-      runApp(await builder());
-    },
-    (error, stackTrace) {
-      logger.severe('runZonedGuarded', error, stackTrace);
-      if (!kIsWeb) {
-        FirebaseCrashlytics.instance.recordError(error, stackTrace, fatal: true);
-      }
-    },
+  await AppPath.init();
+  await AppPermissions.init(featureAccess);
+  await AppCertificates.init();
+  await AppTime.init();
+  await SessionCleanupWorker.init();
+  await AppLogger.init(
+    remoteConfigService: remoteFirebaseConfigService,
+    packageInfo: packageInfo,
+    deviceInfo: deviceInfo,
+    appInfo: appInfo,
+    secureStorage: secureStorage,
   );
+
+  await _initCallkeep(appPreferences);
 }
 
 Future<void> _initCallkeep(AppPreferences appPreferences) async {
   if (!Platform.isAndroid) return;
 
-  final incomingCalType = appPreferences.getIncomingCallType();
-  final callkeep = CallkeepBackgroundService();
-
-  CallkeepBackgroundService.setUpServiceCallback(
-    onStart: background_call_isolate.onStart,
-    onChangedLifecycle: background_call_isolate.onChangedLifecycle,
-  );
-
-  callkeep.setUp(
-    autoStartOnBoot: incomingCalType.isSocket,
-    autoRestartOnTerminate: incomingCalType.isSocket,
-  );
-
-  if (incomingCalType.isPushNotification) {
-    callkeep.stopService();
-  }
+  AndroidCallkeepServices.backgroundSignalingBootstrapService.initializeCallback(onSignalingSyncCallback);
+  AndroidCallkeepServices.backgroundPushNotificationBootstrapService.initializeCallback(onPushNotificationSyncCallback);
 }
 
 /// Initializes Firebase for background services. This initialization must be called in an isolate
@@ -161,12 +115,14 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   final appInfo = await AppInfo.init(const SharedPreferencesAppIdProvider());
   final deviceInfo = await DeviceInfoFactory.init();
   final packageInfo = await PackageInfoFactory.init();
+  final secureStorage = await SecureStorage.init();
 
   await AppLogger.init(
     remoteConfigService: remoteCacheConfigService,
     packageInfo: packageInfo,
     deviceInfo: deviceInfo,
     appInfo: appInfo,
+    secureStorage: secureStorage,
   );
 
   final appNotification = AppRemoteNotification.fromFCM(message);
@@ -177,7 +133,18 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   _dHandleInspectPushNotification(message.data, true);
 
   if (appNotification is PendingCallNotification && Platform.isAndroid) {
-    CallkeepBackgroundService().startService(data: message.data);
+    final appDatabase = await IsolateDatabase.create();
+    final contactsRepository = ContactsRepository(appDatabase: appDatabase);
+
+    final contact = await contactsRepository.getContactByPhoneNumber(appNotification.call.handle);
+    final displayName = contact?.maybeName ?? appNotification.call.displayName;
+
+    AndroidCallkeepServices.backgroundPushNotificationBootstrapService.reportNewIncomingCall(
+      appNotification.call.id,
+      CallkeepHandle.number(appNotification.call.handle),
+      displayName: displayName,
+      hasVideo: appNotification.call.hasVideo,
+    );
   }
 
   if (appNotification is MessageNotification) {
@@ -199,7 +166,11 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 Future _initLocalNotifications() async {
   await FlutterLocalNotificationsPlugin().initialize(
     const InitializationSettings(
-      iOS: DarwinInitializationSettings(),
+      iOS: DarwinInitializationSettings(
+        requestAlertPermission: false,
+        requestBadgePermission: false,
+        requestSoundPermission: false,
+      ),
       android: AndroidInitializationSettings('@mipmap/ic_launcher'),
     ),
     onDidReceiveNotificationResponse: LocalNotificationsBroker.handleActionReceived,

@@ -1,3 +1,4 @@
+import 'package:logging/logging.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
@@ -6,6 +7,8 @@ import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/models/models.dart';
 
 export 'package:permission_handler/permission_handler.dart' show Permission, PermissionStatus;
+
+final _logger = Logger('AppPermissions');
 
 class AppPermissions {
   static const _specialPermissions = [
@@ -62,27 +65,62 @@ class AppPermissions {
       return exclude == null || !exclude.contains(permission);
     }).toList();
 
+    _logger.info('Requesting permissions: $_permissions');
+
     // Request statuses for the filtered permissions
-    final statusesPerRequestedPermission = await filteredPermissions.request();
+    final permissionStatuses = await filteredPermissions.request();
+    _logger.info('Requested permissions statuses: $permissionStatuses');
 
     // Get statuses for special permissions
-    final specialStatuses = await Future.wait(_specialPermissions.map((permission) => permission.status()));
+    _logger.info('Requesting special permissions: $_specialPermissions');
+    final specialPermissionStatuses = await Future.wait(_specialPermissions.map((permission) => permission.status()));
+    _logger.info('Special permissions statuses: $specialPermissionStatuses');
 
     // Update the denied status flag based on the remaining permissions
-    _isDenied = statusesPerRequestedPermission.values.every((status) => status.isDenied) ||
-        specialStatuses.every((status) => status.isDenied);
+    final isDeniedPermissions = permissionStatuses.values.every((status) => status.isDenied);
+    final isDeniedSpecialPermissions = specialPermissionStatuses.every((status) => status.isDenied);
+    _logger.info(
+        'Checking if permissions are denied - requested: $isDeniedPermissions, special: $isDeniedSpecialPermissions');
+    _isDenied = isDeniedPermissions || isDeniedSpecialPermissions;
+    _logger.info('Updated denied status: $_isDenied');
 
-    return statusesPerRequestedPermission;
+    return permissionStatuses;
   }
 
   /// Opens the app settings page.
-  Future<bool> toAppSettings() => openAppSettings();
+  Future<void> toAppSettings() => openAppSettings();
 
-  Future<bool> toSpecialPermissionAppSettings(CallkeepSpecialPermissions? permission) {
-    if (permission == CallkeepSpecialPermissions.fullScreenIntent) {
-      return WebtritCallkeepPermissions().openFullScreenIntentSettings();
+  /// Attempts to open the settings screen for the given special permission.
+  ///
+  /// If the specific permission screen (e.g., full screen intent) is not supported
+  /// on the current Android version or fails to open, it falls back to opening
+  /// the general app settings screen instead. This is useful for permissions that
+  /// are typically located outside the standard app settings.
+  Future<void> toSpecialPermissionsSetting(CallkeepSpecialPermissions permission) async {
+    final callkeepPermission = WebtritCallkeepPermissions();
+
+    try {
+      if (permission == CallkeepSpecialPermissions.fullScreenIntent) {
+        await callkeepPermission.openFullScreenIntentSettings();
+      } else {
+        await callkeepPermission.openSettings();
+      }
+    } catch (e) {
+      await callkeepPermission.openSettings();
     }
+  }
 
-    return openAppSettings();
+  Future<bool> isPermissionGranted(Permission permission) async {
+    final status = await permission.status;
+    return status.isGranted;
+  }
+
+  Future<bool> isContactPermissionGranted() async {
+    return isPermissionGranted(Permission.contacts);
+  }
+
+  Future<bool> requestContactPermission() async {
+    final status = await Permission.contacts.request();
+    return status.isGranted;
   }
 }

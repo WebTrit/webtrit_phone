@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:logging/logging.dart';
 import 'package:phoenix_socket/phoenix_socket.dart';
 
-import 'package:webtrit_phone/app/notifications/notifications.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
@@ -16,21 +15,23 @@ final _logger = Logger('ChatsOutboxWorker');
 /// ensuring that they are delivered to their intended recipients. It handles
 /// retries and error management to ensure reliable message delivery.
 class ChatsOutboxWorker {
-  ChatsOutboxWorker(this._client, this._chatsRepository, this._outboxRepository, this._submitNotification);
+  ChatsOutboxWorker(this._client, this._chatsRepository, this._outboxRepository, this._onError);
 
   final PhoenixSocket _client;
   final ChatsRepository _chatsRepository;
   final ChatsOutboxRepository _outboxRepository;
-  final Function(Notification) _submitNotification;
+  final Function(Object) _onError;
 
   bool _disposed = false;
 
   init() {
-    _logger.info('Initialising...');
+    _logger.fine('Initialising...');
 
     /// Continuously processes messages, edits, deletes, and read cursors from the outbox repository
     /// until the worker is disposed. The loop runs every second.
     Future.doWhile(() async {
+      if (_disposed) return false;
+
       final messages = await _outboxRepository.getChatOutboxMessages();
       await Future.forEach(messages, (entry) => _processNewMessage(entry));
 
@@ -43,14 +44,13 @@ class ChatsOutboxWorker {
       final cursors = await _outboxRepository.getOutboxReadCursors();
       await Future.forEach(cursors, (entry) => _processReadCursor(entry));
 
-      if (_disposed) return false;
       await Future.delayed(const Duration(seconds: 1));
       return true;
     });
   }
 
   dispose() {
-    _logger.info('Disposing...');
+    _logger.fine('Disposing...');
     _disposed = true;
   }
 
@@ -84,13 +84,13 @@ class ChatsOutboxWorker {
       if (chat != null) await _chatsRepository.upsertChat(chat);
       await _chatsRepository.upsertMessage(message);
       await _outboxRepository.deleteOutboxMessage(outboxEntry.idKey);
-      _logger.info('Processed new message: ${message.id}');
+      _logger.fine('Processed new message: ${message.id}');
     } catch (e, s) {
       _logger.severe('Error processing new message, attempt: ${outboxEntry.sendAttempts}', e, s);
       if (outboxEntry.sendAttempts > 5) {
         await _outboxRepository.deleteOutboxMessage(outboxEntry.idKey);
         _logger.warning('Send attempts exceeded for message: ${outboxEntry.idKey}');
-        _submitNotification(DefaultErrorNotification(e));
+        _onError(e);
       } else {
         await _outboxRepository.upsertOutboxMessage(outboxEntry.incAttempt());
       }
@@ -113,13 +113,13 @@ class ChatsOutboxWorker {
       final message = await channel.editChatMessage(messageEdit);
       await _chatsRepository.upsertMessage(message);
       await _outboxRepository.deleteOutboxMessageEdit(messageEdit.id);
-      _logger.info('Processed edit message: ${message.id}');
+      _logger.fine('Processed edit message: ${message.id}');
     } catch (e, s) {
       _logger.severe('Error processing message edit, attempt: ${messageEdit.sendAttempts}', e, s);
       if (messageEdit.sendAttempts > 5) {
         await _outboxRepository.deleteOutboxMessageEdit(messageEdit.id);
         _logger.warning('Send attempts exceeded for edit message: ${messageEdit.idKey}');
-        _submitNotification(DefaultErrorNotification(e));
+        _onError(e);
       } else {
         await _outboxRepository.upsertOutboxMessageEdit(messageEdit.incAttempts());
       }
@@ -142,13 +142,13 @@ class ChatsOutboxWorker {
       final message = await channel.deleteChatMessage(messageDelete);
       await _chatsRepository.upsertMessage(message);
       await _outboxRepository.deleteOutboxMessageDelete(messageDelete.id);
-      _logger.info('Processed delete message: ${message.id}');
+      _logger.fine('Processed delete message: ${message.id}');
     } catch (e, s) {
       _logger.severe('Error processing message delete, attempt: ${messageDelete.sendAttempts}', e, s);
       if (messageDelete.sendAttempts > 5) {
         await _outboxRepository.deleteOutboxMessageDelete(messageDelete.id);
         _logger.severe('Send attempts exceeded for delete message: ${messageDelete.idKey}');
-        _submitNotification(DefaultErrorNotification(e));
+        _onError(e);
       } else {
         await _outboxRepository.upsertOutboxMessageDelete(messageDelete.incAttempts());
       }
@@ -172,13 +172,13 @@ class ChatsOutboxWorker {
       final cursor = await channel.setChatReadCursor(readCursor);
       await _chatsRepository.upsertChatMessageReadCursor(cursor);
       await _outboxRepository.deleteOutboxReadCursor(readCursor.chatId);
-      _logger.info('Processed read cursor: ${readCursor.chatId}');
+      _logger.fine('Processed read cursor: ${readCursor.chatId}');
     } catch (e, s) {
       _logger.severe('Error processing read cursor, attempt: ${readCursor.sendAttempts}', e, s);
       if (readCursor.sendAttempts > 5) {
         await _outboxRepository.deleteOutboxReadCursor(readCursor.chatId);
         _logger.warning('Send attempts exceeded for read cursor: ${readCursor.chatId}');
-        _submitNotification(DefaultErrorNotification(e));
+        _onError(e);
       } else {
         await _outboxRepository.upsertOutboxReadCursor(readCursor.incAttempts());
       }

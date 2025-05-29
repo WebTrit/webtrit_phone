@@ -1,19 +1,14 @@
-import 'dart:async';
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logging/logging.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-import 'package:webtrit_phone/widgets/webview_progress_indicator.dart';
-import 'package:webtrit_phone/features/features.dart';
-
-import '../widgets/embedded_request_error.dart';
-
-const _loginJavascriptChannelName = 'WebtritLoginChannel';
+import 'package:webtrit_phone/features/login/login.dart';
+import 'package:webtrit_phone/widgets/widgets.dart';
+import 'package:webtrit_phone/utils/utils.dart';
 
 final _logger = Logger('LoginSignupEmbeddedRequestScreen');
 
@@ -30,110 +25,75 @@ class LoginSignupEmbeddedRequestScreen extends StatefulWidget {
 }
 
 class _LoginSignupEmbeddedRequestScreenState extends State<LoginSignupEmbeddedRequestScreen> {
-  final _webViewController = WebViewController();
-  final _progressStreamController = StreamController<int>.broadcast();
+  final WebViewController _webViewController = WebViewController();
 
-  WebResourceError? _latestError;
-  WebResourceError? _currentError;
+  bool _canGoBack = false;
 
-  @override
-  void initState() {
-    super.initState();
-    if (!kIsWeb) {
-      _webViewController.setJavaScriptMode(JavaScriptMode.unrestricted);
-
-      _webViewController.addJavaScriptChannel(
-        _loginJavascriptChannelName,
-        onMessageReceived: _onJavaScriptMessageReceived,
-      );
-
-      // Ensure NavigationDelegate callbacks are only triggered if the widget is still mounted.
-      // This prevents potential errors caused by invoking callbacks after the widget has been disposed.
-      _webViewController.setNavigationDelegate(NavigationDelegate(
-        onPageFinished: (_) => mounted ? _onPageFinishedNavigationDelegate() : null,
-        onProgress: (progress) => mounted ? _onProgressNavigationDelegate(progress) : null,
-        onWebResourceError: (error) => mounted ? _onWebResourceErrorNavigationDelegate(error) : null,
-      ));
-    }
-
-    _webViewController.loadRequest(Uri.parse(widget.initialUrl.toString()));
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    if (!kIsWeb) {
-      _webViewController.setBackgroundColor(Colors.transparent);
-    }
-  }
-
-  @override
-  void dispose() {
-    _progressStreamController.close();
-    super.dispose();
-  }
+  static const _jsChannelName = 'WebtritLoginChannel';
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<LoginCubit, LoginState>(
-      buildWhen: (previous, current) => previous.processing != current.processing,
-      builder: (context, state) {
-        final hasWebViewError = _latestError != null;
-
-        return Stack(alignment: AlignmentDirectional.topCenter, children: [
-          if (hasWebViewError)
-            EmbeddedRequestError(error: _latestError!)
-          else
-            WebViewWidget(controller: _webViewController),
-          WebViewProgressIndicator(stream: _progressStreamController.stream),
-        ]);
-      },
-      listener: (BuildContext context, LoginState state) {
-        if (state.processing) {
-          _webViewController.runJavaScript('showProgress();');
-        } else {
-          _webViewController.runJavaScript('hideProgress();');
-        }
-      },
+    return PopScope(
+      canPop: !_canGoBack,
+      onPopInvokedWithResult: (_, __) => _webViewController.goBack(),
+      child: WebViewScaffold(
+        initialUri: widget.initialUrl,
+        webViewController: _webViewController,
+        showToolbar: false,
+        userAgent: UserAgent.of(context),
+        javaScriptChannels: {
+          _jsChannelName: _onJavaScriptMessageReceived,
+        },
+        onPageLoadedSuccess: _onPageLoadedSuccess,
+        onPageLoadedFailed: _onPageLoadedFailed,
+        onUrlChange: _onUrlChange,
+        errorBuilder: (context, error, controller) => EmbeddedRequestError(
+          error: error,
+          onPressed: () => _webViewController.reload(),
+        ),
+      ),
     );
   }
 
-  // WebView navigation delegates
-  void _onPageFinishedNavigationDelegate() {
-    final currentLocale = Localizations.localeOf(context);
-    _webViewController.runJavaScript('setLocale("${currentLocale.languageCode}");');
+  void _onPageLoadedSuccess() {
+    _logger.fine('Web page loaded successfully');
 
-    if (_currentError == null) _latestError = null;
-    setState(() {
-      _currentError = null;
-    });
+    final locale = Localizations.localeOf(context).languageCode;
+
+    final script = '''
+      if (typeof window.setLocale === 'function') {
+        window.setLocale("$locale");
+      }
+    ''';
+
+    _webViewController.runJavaScript(script);
   }
 
-  void _onProgressNavigationDelegate(int progress) {
-    if (!_progressStreamController.isClosed) {
-      _progressStreamController.add(progress);
+  void _onPageLoadedFailed(WebResourceError error) {
+    _logger.warning('Failed to load page: $error');
+  }
+
+  void _onUrlChange(String? url) async {
+    final canGoBack = await _webViewController.canGoBack();
+    if (mounted) {
+      setState(() {
+        _canGoBack = canGoBack;
+      });
     }
-  }
-
-  void _onWebResourceErrorNavigationDelegate(WebResourceError error) {
-    setState(() {
-      _currentError = error;
-      _latestError = error;
-    });
   }
 
   void _onJavaScriptMessageReceived(JavaScriptMessage message) {
     try {
-      final decodedMessage = jsonDecode(message.message);
-      final event = decodedMessage['event'];
-      final data = decodedMessage['data'];
+      final decoded = jsonDecode(message.message);
+      final event = decoded['event'];
+      final data = decoded['data'];
 
       if (event == 'signup') {
         _webViewController.runJavaScript('showProgress();');
         context.read<LoginCubit>().loginCustomSignupRequest(data);
       }
-    } catch (e) {
-      _logger.severe('Error decoding message', e);
+    } catch (e, st) {
+      _logger.severe('Error decoding message', e, st);
     }
   }
 }

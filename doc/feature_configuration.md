@@ -2,7 +2,7 @@
 
 ## Table of Contents
 
-- [Mode Select Actions](#mode-select-actions)
+- [Login Screen Configuration](#login-screen-configuration)
 - [Setup Main Configuration](#setup-main-configuration)
 - [Bottom Menu Configuration](#bottom-menu-configuration)
 - [Setup Call Configuration](#setup-call-configuration)
@@ -10,18 +10,57 @@
 - [Setup Settings Configuration](#setup-settings-configuration)
 - [Settings Sections](#settings-sections)
 - [Settings Items](#settings-items)
+- [Embedded pages](#embedded-pages)
 - [Embedded Resources](#embedded-resources)
 
 ---
 
-## Mode Select Actions
+## Login Screen Configuration
 
-Settings for login mode selection buttons:
+**Configuration Key:** `mode-select-actions`
 
-- `enabled`: Determines if the button is active
-- `embeddedResourceId`: ID of the resource for the embedded page (if applicable)
-- `type`: Action type (login, embedded)
-- `titleL10n`: Localized button title
+For more details, refer to the [Embedded Resources](#embedded-resources) section.
+
+Settings for selecting the login mode, between native and custom login.
+
+**Fields:**
+
+- `enabled`: Determines if the button is active.
+- `embeddedResourceId`: ID of the resource for the embedded page (if applicable).
+- `type`: Action type (login, embedded).
+- `titleL10n`: Localized button title.
+
+If `embeddedResourceId` is provided, the section is enabled, and the type is `embedded`, it will display a custom login
+page for this button on the welcome screen.
+
+**Example Configuration for Custom Login:**
+
+```json
+{
+  "loginConfig": {
+    "greetingL10n": "WebTrit",
+    "modeSelectActions": [
+      {
+        "enabled": false,
+        "embeddedResourceId": 1,
+        "type": "embedded",
+        "titleL10n": "login_Button_signIn"
+      }
+    ]
+  },
+  "embeddedResources": [
+    {
+      "id": 1,
+      "uri": "asset://assets/themes/custom_signup.html",
+      "toolbar": {
+        "showToolbar": true,
+        "titleL10n": "login_requestCredentials_title"
+      }
+    }
+  ]
+}
+
+```
 
 ## Setup Main Configuration
 
@@ -151,7 +190,17 @@ Each settings item includes:
 - `titleL10n`: Localized name
 - `icon`: Item icon
 
+## Embedded pages
+
+Embedded pages allow extending the WebTrit app with custom web content. These pages can be integrated either as a bottom
+menu tab or as a settings item.
+[Embedded configuration](embedded_pages.md)
+
 ## Embedded Resources
+
+The `embeddedResources` section defines the resources that can be embedded within the application. Each resource can
+either be a local file or a URL to an external page. If using a local file, ensure it is placed in the `assets`
+directory and provide the correct path.
 
 ```json
 {
@@ -176,7 +225,8 @@ Each settings item includes:
 }
 ```
 
-- `id`: Unique resource identifier
-- `uri`: URL or resource path
-- `toolbar`: Toolbar settings for the embedded page
-
+- `id`: Unique resource identifier.
+- `uri`: URL or resource path.
+- `toolbar`: Toolbar settings for the embedded page.
+    - `showToolbar`: Boolean to show or hide the toolbar.
+    - `titleL10n`: Localized title for the toolbar.

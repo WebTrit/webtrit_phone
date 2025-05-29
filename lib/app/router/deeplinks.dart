@@ -2,8 +2,6 @@ import 'package:auto_route/auto_route.dart';
 
 import 'package:logging/logging.dart';
 
-import 'package:webtrit_callkeep/webtrit_callkeep.dart';
-
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/undefined/undefined.dart';
@@ -14,26 +12,6 @@ final _logger = Logger('DeepLinkHandler');
 
 abstract class DeepLinkHandler {
   DeepLink? handle();
-}
-
-class HandleAndroidBackgroundIncomingCall implements DeepLinkHandler {
-  HandleAndroidBackgroundIncomingCall(this.deepLink);
-
-  final PlatformDeepLink deepLink;
-
-  @override
-  DeepLink? handle() {
-    if (deepLink.path.startsWith(initialCallRout) && !deepLink.isExternal) {
-      final uri = Uri.parse(deepLink.configuration.url);
-      final pendingCall = PendingCall.fromMap(uri.queryParameters);
-
-      _logger.fine('Pending call deeplink: $pendingCall');
-
-      return deepLink.initial ? DeepLink.defaultPath : DeepLink.none;
-    } else {
-      return null;
-    }
-  }
 }
 
 class HandleReturnToMain implements DeepLinkHandler {
@@ -55,7 +33,11 @@ class HandleAutoprovision implements DeepLinkHandler {
   final PlatformDeepLink deepLink;
 
   @override
-  DeepLink? handle() => _isAutoprovision ? deepLink : null;
+  DeepLink? handle() {
+    _logger.fine('HandleAutoprovision: ${deepLink.path}');
+
+    return _isAutoprovision ? deepLink : null;
+  }
 
   bool get _isAutoprovision => deepLink.path.startsWith(kAutoprovisionRout);
 }
@@ -68,6 +50,8 @@ class HandleNotDefinedPath implements DeepLinkHandler {
 
   @override
   DeepLink? handle() {
+    _logger.fine('HandleNotDefinedPath: ${deepLink.path}');
+
     if (!_isDeeplinkExternal) return null;
     if (!_isInitial && _isInvalidScreenActive) return DeepLink.none;
 

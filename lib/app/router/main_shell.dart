@@ -14,6 +14,7 @@ import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/features/features.dart';
+import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
 @RoutePage()
@@ -29,13 +30,10 @@ class MainShell extends StatefulWidget {
 class _MainShellState extends State<MainShell> {
   late final Callkeep _callkeep = Callkeep();
   late final CallkeepConnections _callkeepConnections = CallkeepConnections();
-  late final CallkeepBackgroundService _callkeepBackgroundService = CallkeepBackgroundService();
 
   @override
   void initState() {
     super.initState();
-    final incomingCallType = context.read<AppPreferences>().getIncomingCallType();
-
     _callkeep.setUp(
       CallkeepOptions(
         ios: CallkeepIOSOptions(
@@ -48,18 +46,14 @@ class _MainShellState extends State<MainShell> {
           supportedHandleTypes: const {CallkeepHandleType.number},
         ),
         android: CallkeepAndroidOptions(
-          incomingPath: initialCallRout,
-          rootPath: initialMainRout,
           ringtoneSound: Assets.ringtones.incomingCall1,
           ringbackSound: Assets.ringtones.outgoingCall1,
         ),
       ),
     );
 
-    // Launch the service after user authorization if the selected incoming call type is socket-based.
-    if (incomingCallType.isSocket) {
-      _callkeepBackgroundService.startService();
-    }
+    // After authentication, regenerate the labels to include core URL and tenant ID in remote logging labels
+    context.read<AppLogger>().regenerateRemoteLabels();
   }
 
   @override
@@ -134,11 +128,28 @@ class _MainShellState extends State<MainShell> {
             context.read<WebtritApiClient>(),
           ),
         ),
-        RepositoryProvider<SelfConfigRepository>(
-          create: (context) => SelfConfigRepository(
+        RepositoryProvider<CustomPrivateGatewayRepository>(
+          create: (context) => CustomPrivateGatewayRepository(
             context.read<WebtritApiClient>(),
+            context.read<SecureStorage>(),
             context.read<AppBloc>().state.token!,
           ),
+        ),
+        RepositoryProvider<VoicemailRepository>(
+          create: (context) {
+            final featureAccess = context.read<FeatureAccess>();
+
+            return VoicemailRepositoryImpl(
+              webtritApiClient: context.read<WebtritApiClient>(),
+              token: context.read<AppBloc>().state.token!,
+              appDatabase: context.read<AppDatabase>(),
+              repositoryOptions: RepositoryOptions(
+                shouldOperate: featureAccess.settingsFeature.isVoicemailsEnabled,
+                polling: EnvironmentConfig.PERIODIC_POLLING,
+                pollPeriod: const Duration(minutes: 5),
+              ),
+            );
+          },
         ),
         RepositoryProvider<AppRepository>(
           create: (context) => AppRepository(
@@ -167,7 +178,7 @@ class _MainShellState extends State<MainShell> {
           ),
         ),
         RepositoryProvider<MainScreenRouteStateRepository>(
-          create: (context) => MainScreenRouteStateRepositoryAutoRouteImpl(),
+          create: (context) => MainScreenRouteStateRepositoryDefaultImpl(),
         ),
         RepositoryProvider<MainShellRouteStateRepository>(
           create: (context) => MainShellRouteStateRepositoryAutoRouteImpl(),
@@ -215,17 +226,34 @@ class _MainShellState extends State<MainShell> {
           BlocProvider<LocalContactsSyncBloc>(
             lazy: false,
             create: (context) {
+              final localContactsRepository = context.read<LocalContactsRepository>();
+              final appDatabase = context.read<AppDatabase>();
+              final appPreferences = context.read<AppPreferences>();
+              final featureAccess = context.read<FeatureAccess>();
+              final appPermissions = context.read<AppPermissions>();
+
+              Future<bool> isFutureEnabled() async {
+                final contactTab = featureAccess.bottomMenuFeature.getTabEnabled(MainFlavor.contacts)?.toContacts;
+                final contactSourceTypes = contactTab?.contactSourceTypes ?? [];
+                return contactSourceTypes.contains(ContactSourceType.local);
+              }
+
+              Future<bool> isAgreementAccepted() async {
+                final contactsAgreementStatus = appPreferences.getContactsAgreementStatus();
+                return contactsAgreementStatus.isAccepted;
+              }
+
               final bloc = LocalContactsSyncBloc(
-                localContactsRepository: context.read<LocalContactsRepository>(),
-                appDatabase: context.read<AppDatabase>(),
+                localContactsRepository: localContactsRepository,
+                appDatabase: appDatabase,
+                appPreferences: appPreferences,
+                isFeatureEnabled: isFutureEnabled,
+                isAgreementAccepted: isAgreementAccepted,
+                isContactsPermissionGranted: () => appPermissions.isContactPermissionGranted(),
+                requestContactPermission: () => appPermissions.requestContactPermission(),
               );
 
-              // TODO(Serdun): Consider moving this logic to the LocalContactBloc and decomposing the LocalContactsRepository.
-              // The repository currently has direct access to the Permissions plugin, which might violate separation of concerns.
-              // If contacts agreement is accepted, initiate the LocalContactsSyncStarted event.
-              if (context.read<AppPreferences>().getContactsAgreementStatus().isAccepted) {
-                bloc.add(const LocalContactsSyncStarted());
-              }
+              bloc.add(const LocalContactsSyncStarted());
               return bloc;
             },
           ),
@@ -244,8 +272,30 @@ class _MainShellState extends State<MainShell> {
               final appBloc = context.read<AppBloc>();
               final appPreferences = context.read<AppPreferences>();
               final notificationsBloc = context.read<NotificationsBloc>();
+              // TODO(Serdun): Refactor into an inherited widget for better code consistency and reusability
               final appCertificates = AppCertificates();
-              final encodingConfig = context.read<FeatureAccess>().callFeature.encoding;
+              final featureAccess = context.read<FeatureAccess>();
+
+              final encodingConfig = featureAccess.callFeature.encoding;
+              final peerConnectionConfig = featureAccess.callFeature.peerConnection;
+
+              // Initialize media builder with app-configured audio/video constraints
+              // Used to capture synchronized MediaStream (audio+video) for WebRTC track addition.
+              final userMediaBuilder = DefaultUserMediaBuilder(
+                audioConstraintsBuilder: AudioConstraintsWithAppSettingsBuilder(appPreferences),
+                videoConstraintsBuilder: VideoConstraintsWithAppSettingsBuilder(appPreferences),
+              );
+              // Initialize peer connection policy applier with app-specific negotiation rules
+              final pearConnectionPolicyApplier = ModifyWithSettingsPeerConnectionPolicyApplier(
+                appPreferences,
+                peerConnectionConfig,
+                userMediaBuilder,
+              );
+              // Initialize contact name resolver with app-specific contact repository
+              // Used to display contact name of caller
+              final contactNameResolver = DefaultContactNameResolver(
+                contactRepository: context.read<ContactsRepository>(),
+              );
 
               return CallBloc(
                 coreUrl: appBloc.state.coreUrl!,
@@ -257,10 +307,11 @@ class _MainShellState extends State<MainShell> {
                 callkeep: _callkeep,
                 callkeepConnections: _callkeepConnections,
                 sdpMunger: ModifyWithEncodingSettings(appPreferences, encodingConfig),
-                audioConstraintsBuilder: AudioConstraintsWithAppSettingsBuilder(appPreferences),
-                videoConstraintsBuilder: VideoConstraintsWithAppSettingsBuilder(appPreferences),
                 webRtcOptionsBuilder: WebrtcOptionsWithAppSettingsBuilder(appPreferences),
+                userMediaBuilder: userMediaBuilder,
+                contactNameResolver: contactNameResolver,
                 iceFilter: FilterWithAppSettings(appPreferences),
+                peerConnectionPolicyApplier: pearConnectionPolicyApplier,
               )..add(const CallStarted());
             },
           ),
@@ -308,7 +359,7 @@ class _MainShellState extends State<MainShell> {
                 BlocProvider(
                   lazy: false,
                   create: (_) => SelfConfigCubit(
-                    context.read<SelfConfigRepository>(),
+                    context.read<CustomPrivateGatewayRepository>(),
                     context.read<FeatureAccess>().settingsFeature.isSelfConfigEnabled,
                   ),
                 ),

@@ -5,6 +5,7 @@ export 'back_button.dart';
 export 'circular_progress_template.dart';
 export 'confirm_dialog.dart';
 export 'copy_to_clipboard.dart';
+export 'embedded_request_error.dart';
 export 'fade_id.dart';
 export 'keypad_key_button.dart';
 export 'leading_avatar.dart';

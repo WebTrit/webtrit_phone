@@ -227,7 +227,7 @@ class MockAppPreferencesService implements AppPreferences {
 
   @override
   EncodingSettings getEncodingSettings() {
-    return const EncodingSettings();
+    return EncodingSettings();
   }
 
   @override
@@ -272,6 +272,16 @@ class MockAppPreferencesService implements AppPreferences {
 
   @override
   Future<void> setIceSettings(IceSettings settings) {
+    return Future.value();
+  }
+
+  @override
+  PeerConnectionSettings getPeerConnectionSettings({PeerConnectionSettings? defaultValue}) {
+    return PeerConnectionSettings.blank();
+  }
+
+  @override
+  Future<void> setPearConnectionSettings(PeerConnectionSettings settings) {
     return Future.value();
   }
 }

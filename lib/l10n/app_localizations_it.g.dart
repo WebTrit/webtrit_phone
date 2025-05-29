@@ -222,6 +222,12 @@ class AppLocalizationsIt extends AppLocalizations {
   String get contacts_LocalTabText_permissionFailure => 'Non ci sono i permessi per ottenere i tuoi contatti telefonici';
 
   @override
+  String get contacts_LocalTabText_contactsAgreementFailure => 'Per sincronizzare i contatti locali, è necessario accettare l\'accordo nelle Impostazioni.';
+
+  @override
+  String get contacts_LocalTabButton_contactsAgreement => 'Apri Impostazioni';
+
+  @override
   String get contactsSourceExternal => 'Centralino cloud';
 
   @override
@@ -504,7 +510,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get login_Button_signupRequestProceed => 'Procedi';
 
   @override
-  String get login_Button_signUpToDemoInstance => 'Iscrizione';
+  String get login_Button_signUpToDemoInstance => 'Registrati / Accedi';
 
   @override
   String get login_Button_signupVerifyProceed => 'Verifica';
@@ -943,6 +949,45 @@ class AppLocalizationsIt extends AppLocalizations {
   String get messaging_StateBar_initializing => 'INIZIALIZZAZIONE';
 
   @override
+  String get voicemail_Widget_screenTitle => 'Segreteria telefonica';
+
+  @override
+  String get voicemail_Label_deleteAll => 'Eliminare tutti i messaggi vocali?';
+
+  @override
+  String get voicemail_Label_deleteAllDescription => 'Questa azione eliminerà definitivamente tutti i messaggi vocali. Non potrà essere annullata.';
+
+  @override
+  String get voicemail_Label_empty => 'Nessun messaggio vocale';
+
+  @override
+  String get voicemail_Label_retry => 'Riprova';
+
+  @override
+  String get voicemail_Label_call => 'Chiama';
+
+  @override
+  String get voicemail_Label_markAsHeard => 'Segna come ascoltato';
+
+  @override
+  String get voicemail_Label_markAsNew => 'Segna come nuovo';
+
+  @override
+  String get voicemail_Label_delete => 'Elimina';
+
+  @override
+  String get voicemail_Dialog_deleteSingleTitle => 'Eliminare il messaggio vocale?';
+
+  @override
+  String get voicemail_Dialog_deleteSingleContent => 'Questo messaggio vocale verrà eliminato definitivamente. Vuoi continuare?';
+
+  @override
+  String get voicemail_Title_notSupported => 'Funzionalità non supportata';
+
+  @override
+  String get voicemail_Description_notSupported => 'La funzione di segreteria telefonica non è supportata nel tuo sistema. Contatta l\'amministratore per maggiori informazioni.';
+
+  @override
   String get notifications_errorSnackBarAction_callUserMedia => 'Verifica';
 
   @override
@@ -1158,24 +1203,6 @@ class AppLocalizationsIt extends AppLocalizations {
   String get settings_AppBarTitle_myAccount => 'Il mio account';
 
   @override
-  String get settings_call_codecs_preferred_audio_default => 'Predefinito';
-
-  @override
-  String get settings_call_codecs_preferred_audio_tip => 'Il codec audio preferito viene utilizzato per le chiamate audio. Se il codec non è supportato dal dispositivo, la chiamata verrà stabilita utilizzando il codec successivo disponibile.';
-
-  @override
-  String get settings_call_codecs_preferred_audio_title => 'Codec audio preferito';
-
-  @override
-  String get settings_call_codecs_preferred_video_default => 'Predefinito';
-
-  @override
-  String get settings_call_codecs_preferred_video_tip => 'Il codec video preferito viene utilizzato per le chiamate video. Se il codec non è supportato dal dispositivo, la chiamata verrà stabilita utilizzando il codec successivo disponibile.';
-
-  @override
-  String get settings_call_codecs_preferred_video_title => 'Codec video preferito';
-
-  @override
   String get settings_encoding_AppBar_reset_tooltip => 'Ripristinare le impostazioni predefinite';
 
   @override
@@ -1204,6 +1231,9 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get settings_encoding_Section_preset_custom => 'Costume';
+
+  @override
+  String get settings_encoding_Section_preset_bypass => 'Bypass';
 
   @override
   String get settings_encoding_Section_measure_kbps => 'Kbps';
@@ -1242,7 +1272,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get settings_encoding_Section_ptime_prefix => 'Dimensione: ';
 
   @override
-  String get settings_encoding_Section_bandwidth_prefix => 'Gamma di frequenza: ';
+  String get settings_encoding_Section_bandwidth_prefix => 'Frequenza di campionamento: ';
 
   @override
   String get settings_encoding_Section_bitrate_title => 'Impostazioni della larghezza di banda';
@@ -1269,7 +1299,10 @@ class AppLocalizationsIt extends AppLocalizations {
   String get settings_encoding_Section_audio_ptime_limit => 'Limite dimensione pacchetto audio: ';
 
   @override
-  String get settings_encoding_Section_opus_bandwidth => 'Ridefinire la gamma di frequenza: ';
+  String get settings_encoding_Section_opus_samplingRate => 'Override della frequenza di campionamento: ';
+
+  @override
+  String get settings_encoding_Section_opus_bitrate => 'Sostituzione del bitrate:';
 
   @override
   String get settings_encoding_Section_opus_channels => 'Ridefinire dei modalità canale: ';
@@ -1371,6 +1404,24 @@ class AppLocalizationsIt extends AppLocalizations {
   String get settings_iceSettings_Section_trfilter_skipTcp => 'Salta i candidati TCP';
 
   @override
+  String get settings_connectionSection_title => 'Comportamento della connessione e delle chiamate';
+
+  @override
+  String get settings_connectionSection_tooltip => 'Configura come il dispositivo gestisce l\'avvio della connessione, la negoziazione dei media e gli aggiornamenti delle chiamate durante la comunicazione peer-to-peer.';
+
+  @override
+  String get settings_videoOffer_title => 'Determina come questo dispositivo risponde a un\'offerta che include il video.';
+
+  @override
+  String get settings_videoOffer_option_includeInactive => 'Includi traccia video inattiva\nGarantisce la compatibilità con offerte video per attivazione futura.';
+
+  @override
+  String get settings_videoOffer_option_ignore => 'Rispondi senza video\nNessuna traccia verrà aggiunta a meno che non venga negoziata in seguito.';
+
+  @override
+  String get call_settings_additional_options => 'Opzioni aggiuntive';
+
+  @override
   String get settings_ListViewTileTitle_about => 'Riguardo a';
 
   @override
@@ -1384,6 +1435,9 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get settings_ListViewTileTitle_language => 'Linguaggio';
+
+  @override
+  String get settings_ListViewTileTitle_voicemail => 'Segreteria telefonica';
 
   @override
   String get settings_ListViewTileTitle_logout => 'Esci';
@@ -1402,6 +1456,9 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get settings_ListViewTileTitle_settings => 'IMPOSTAZIONI';
+
+  @override
+  String get settings_ListViewTileTitle_features => 'SERVIZI';
 
   @override
   String get settings_ListViewTileTitle_termsConditions => 'Termini e condizioni';

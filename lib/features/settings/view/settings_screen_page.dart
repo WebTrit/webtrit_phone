@@ -26,6 +26,7 @@ class SettingsScreenPage extends StatelessWidget {
           notificationsBloc: context.read<NotificationsBloc>(),
           appBloc: context.read<AppBloc>(),
           userRepository: context.read<UserRepository>(),
+          voicemailRepository: context.read<VoicemailRepository>(),
         );
       },
       child: widget,

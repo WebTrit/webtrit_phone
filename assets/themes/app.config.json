@@ -5,13 +5,15 @@
       {
         "enabled": true,
         "type": "login",
-        "titleL10n": "login_Button_signUpToDemoInstance"
+        "titleL10n": "login_Button_signUpToDemoInstance",
+        "isLaunchButtonVisible": true
       },
       {
         "enabled": false,
-        "embeddedResourceId": 1,
+        "embeddedId": 1,
         "type": "embedded",
-        "titleL10n": "login_Button_signIn"
+        "titleL10n": "login_Button_signIn",
+        "isLaunchButtonVisible": false
       }
     ]
   },
@@ -61,32 +63,28 @@
         {
           "enabled": false,
           "initial": false,
-          "type": "embedded1",
+          "type": "embedded",
           "titleL10n": "embaded1TitleL10n",
           "icon": "0xe2ce",
           "embeddedResourceId": 2
-        },
-        {
-          "enabled": false,
-          "initial": false,
-          "type": "embedded2",
-          "titleL10n": "embaded2TitleL10n",
-          "icon": "0xe2ce",
-          "embeddedResourceId": 3
-        },
-        {
-          "enabled": false,
-          "initial": false,
-          "type": "embedded3",
-          "titleL10n": "embaded3TitleL10n",
-          "icon": "0xe2ce",
-          "embeddedResourceId": 4
         }
       ]
     }
   },
   "settingsConfig": {
     "sections": [
+      {
+        "titleL10n": "settings_ListViewTileTitle_features",
+        "enabled": false,
+        "items": [
+          {
+            "enabled": false,
+            "type": "voicemail",
+            "titleL10n": "settings_ListViewTileTitle_voicemail",
+            "icon": "0xe6c1"
+          }
+        ]
+      },
       {
         "titleL10n": "settings_ListViewTileTitle_settings",
         "enabled": true,
@@ -192,20 +190,26 @@
     "encoding": {
       "bypassConfig": false,
       "__defaultPresetOverride": {
-        "audioBitrate": 64,
+        "audioBitrate": 56,
         "videoBitrate": 512,
         "ptime": 20,
         "maxptime": 80,
-        "opusBandwidthLimit": 32000,
+        "opusSamplingRate": 24000,
+        "opusBitrate": 16,
         "opusStereo": false,
         "opusDtx": true
+      }
+    },
+    "peerConnection": {
+      "negotiation": {
+        "includeInactiveVideoInOfferAnswer": false
       }
     }
   },
   "embeddedResources": [
     {
       "id": 1,
-      "uri": "asset://assets/themes/custom_signup.html",
+      "uri": "https://webtrit-app.web.app/example/example_embedded_login.html",
       "toolbar": {
         "showToolbar": true,
         "titleL10n": "login_requestCredentials_title"
@@ -213,7 +217,10 @@
     },
     {
       "id": 2,
-      "uri": "https://webtrit-app.web.app/example/example_embedded_advertisement.html",
+      "uri": "https://webtrit-app.web.app/example/example_embedded_payload_data.html",
+      "payload": [
+        "coreToken"
+      ],
       "toolbar": {
         "showToolbar": false
       }

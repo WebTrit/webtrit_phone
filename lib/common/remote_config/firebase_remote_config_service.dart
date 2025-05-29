@@ -1,6 +1,9 @@
+import 'package:logging/logging.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 
 import 'remote_config_service.dart';
+
+final _logger = Logger('FirebaseRemoteConfigService');
 
 class FirebaseRemoteConfigService implements RemoteConfigService {
   FirebaseRemoteConfigService(this._cacheService, this._remoteConfig);
@@ -18,7 +21,10 @@ class FirebaseRemoteConfigService implements RemoteConfigService {
       ),
     );
 
-    await remoteConfig.fetchAndActivate();
+    await remoteConfig.fetchAndActivate().catchError((error) {
+      _logger.severe('Error fetching remote config: $error');
+      return false;
+    });
 
     return FirebaseRemoteConfigService(cache, remoteConfig);
   }

@@ -6,6 +6,7 @@ enum ContactsLocalTabStatus {
   success,
   failure,
   permissionFailure,
+  contactsAgreementFailure,
 }
 
 class ContactsLocalTabState extends Equatable {
