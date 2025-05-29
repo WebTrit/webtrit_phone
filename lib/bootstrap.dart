@@ -1,10 +1,12 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:logging/logging.dart';
+import 'package:webtrit_api/webtrit_api.dart';
 
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 
@@ -15,7 +17,9 @@ import 'package:webtrit_phone/push_notification/push_notifications.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
 import 'package:webtrit_phone/features/call/call.dart' show onPushNotificationSyncCallback, onSignalingSyncCallback;
+import 'package:workmanager/workmanager.dart';
 
+import 'features/system_notifications/services/system_notifications_background_worker.dart';
 import 'firebase_options.dart';
 
 Future<void> bootstrap() async {
@@ -50,8 +54,10 @@ Future<void> bootstrap() async {
     appInfo: appInfo,
     secureStorage: secureStorage,
   );
+  await AppLifecycle.initMaster();
 
   await _initCallkeep(appPreferences);
+  await _initWorkManager();
 }
 
 Future<void> _initCallkeep(AppPreferences appPreferences) async {
@@ -212,4 +218,63 @@ Future<void> _dShowInspectLocalPush({
       ),
     ),
   );
+}
+
+Future<void> _initWorkManager() async {
+  Workmanager().initialize(workManagerDispatcher, isInDebugMode: true);
+  Workmanager().registerPeriodicTask(
+    _kSystemNotificationsTaskId,
+    _kSystemNotificationsTask,
+    constraints: Constraints(networkType: NetworkType.connected),
+    existingWorkPolicy: ExistingWorkPolicy.replace,
+    backoffPolicy: BackoffPolicy.linear,
+    frequency: const Duration(minutes: 5),
+    initialDelay: const Duration(seconds: 30),
+  );
+}
+
+const _kSystemNotificationsTask = 'systemNotificationsTask';
+const _kSystemNotificationsTaskId = 'systemNotificationsTask-id';
+
+@pragma('vm:entry-point')
+void workManagerDispatcher() {
+  final logger = Logger('WorkManagerCallbackDispatcher');
+
+  Workmanager().executeTask((task, inputData) async {
+    logger.info('Native called background task: $task');
+
+    if (task == _kSystemNotificationsTask) {
+      final appLifecycle = await AppLifecycle.initSlave();
+      final appCerts = await AppCertificates.init();
+      final appSecureStorage = await SecureStorage.init();
+
+      final currentState = appLifecycle.getLifecycleState();
+      if (currentState == AppLifecycleState.resumed) return Future.value(true);
+
+      final coreUrl = appSecureStorage.readCoreUrl();
+      final tenantId = appSecureStorage.readTenantId();
+      final token = appSecureStorage.readToken();
+      if (coreUrl == null || tenantId == null || token == null) return Future.value(true);
+
+      final appDatabase = await IsolateDatabase.create();
+      final localRepo = SystemNotificationsLocalRepositoryDriftImpl(appDatabase);
+      final api = WebtritApiClient(Uri.parse(coreUrl), tenantId, certs: appCerts.trustedCertificates);
+      final remoteRepo = SystemNotificationsRemoteRepositoryApiImpl(api, token);
+      final localPushRepo = LocalPushRepositoryFLNImpl();
+
+      const pushNewNotifications = true; // TODO: integrate feature access
+      final worker = SystemNotificationBackgroundWorker(
+        secureStorage: appSecureStorage,
+        localRepo: localRepo,
+        remoteRepo: remoteRepo,
+        pushRepo: localPushRepo,
+        pushNewNotifications: pushNewNotifications,
+      );
+
+      final result = await worker.execute();
+      logger.info('SystemNotificationBackgroundWorker executed with result: $result');
+      return result;
+    }
+    return true;
+  });
 }
