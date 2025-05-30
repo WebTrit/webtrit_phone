@@ -64,36 +64,39 @@ class LoginModeSelectScreen extends StatelessWidget {
             decoration: BoxDecoration(
               gradient: gradients?.tab,
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                const Spacer(),
-                OnboardingPictureLogo(
-                  text: appGreetingL10n != null ? context.parseL10n(appGreetingL10n!) : null,
-                ),
-                const Spacer(),
-                const Spacer(),
-                ...launchButtons.map<Widget>((button) {
-                  final isEmbedded = button.isEmbeddedModeButton;
-                  final shouldProcess = state.processing;
+            child: SafeArea(
+              top: false,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const Spacer(),
+                  OnboardingPictureLogo(
+                    text: appGreetingL10n != null ? context.parseL10n(appGreetingL10n!) : null,
+                  ),
+                  const Spacer(),
+                  const Spacer(),
+                  ...launchButtons.map<Widget>((button) {
+                    final isEmbedded = button.isEmbeddedModeButton;
+                    final shouldProcess = state.processing;
 
-                  // Determine if the button should show a loading state:
-                  // - If the app is processing:
-                  //   - For non-embedded buttons: show loading only when no embedded switch is active
-                  //   - For embedded buttons: show loading only if the active embedded config matches this button
-                  final processing = shouldProcess &&
-                      ((!isEmbedded && state.embedded == null) ||
-                          (isEmbedded && state.embedded == button.toEmbedded?.customLoginFeature));
+                    // Determine if the button should show a loading state:
+                    // - If the app is processing:
+                    //   - For non-embedded buttons: show loading only when no embedded switch is active
+                    //   - For embedded buttons: show loading only if the active embedded config matches this button
+                    final processing = shouldProcess &&
+                        ((!isEmbedded && state.embedded == null) ||
+                            (isEmbedded && state.embedded == button.toEmbedded?.customLoginFeature));
 
-                  return LoginModeActionButton(
-                    processing: processing,
-                    isDemoModeEnabled: isDemoModeEnabled,
-                    onPressed: shouldProcess ? null : () => _onActionPressed(context, button),
-                    style: elevatedButtonStyles?.getStyle(localStyle?.signUpTypeButton),
-                    title: context.parseL10n(button.titleL10n),
-                  );
-                }),
-              ],
+                    return LoginModeActionButton(
+                      processing: processing,
+                      isDemoModeEnabled: isDemoModeEnabled,
+                      onPressed: shouldProcess ? null : () => _onActionPressed(context, button),
+                      style: elevatedButtonStyles?.getStyle(localStyle?.signUpTypeButton),
+                      title: context.parseL10n(button.titleL10n),
+                    );
+                  }),
+                ],
+              ),
             ),
           ),
         );
