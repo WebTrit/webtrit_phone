@@ -58,7 +58,7 @@ Future<void> bootstrap() async {
   await AppLifecycle.initMaster();
 
   await _initCallkeep(appPreferences);
-  await _initWorkManager(featureAccess);
+  await _initWorkManager();
 }
 
 Future<void> _initCallkeep(AppPreferences appPreferences) async {
@@ -221,8 +221,8 @@ Future<void> _dShowInspectLocalPush({
   );
 }
 
-Future<void> _initWorkManager(FeatureAccess featureAccess) async {
-  Workmanager().initialize(workManagerDispatcher, isInDebugMode: true);
+Future<void> _initWorkManager() async {
+  Workmanager().initialize(workManagerDispatcher);
 }
 
 @pragma('vm:entry-point')
@@ -234,11 +234,11 @@ void workManagerDispatcher() {
 
     if (task == kSystemNotificationsTask) {
       final appLifecycle = await AppLifecycle.initSlave();
-      final appCerts = await AppCertificates.init();
-      final appSecureStorage = await SecureStorage.init();
-
       final currentState = appLifecycle.getLifecycleState();
       if (currentState == AppLifecycleState.resumed) return Future.value(true);
+
+      final appCerts = await AppCertificates.init();
+      final appSecureStorage = await SecureStorage.init();
 
       final coreUrl = appSecureStorage.readCoreUrl();
       final tenantId = appSecureStorage.readTenantId();

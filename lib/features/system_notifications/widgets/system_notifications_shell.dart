@@ -76,7 +76,6 @@ class _SystemNotificationsShellState extends State<SystemNotificationsShell> {
           constraints: Constraints(networkType: NetworkType.connected),
           existingWorkPolicy: ExistingWorkPolicy.keep,
           backoffPolicy: BackoffPolicy.linear,
-          frequency: const Duration(minutes: 1),
           initialDelay: const Duration(seconds: 30),
         );
 
