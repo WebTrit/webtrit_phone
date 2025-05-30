@@ -17,10 +17,11 @@ class MainAppBar extends AppBar {
     super.key,
     super.title,
     super.bottom,
+    required BuildContext context,
   }) : super(
           centerTitle: false,
           actions: [
-            SystemNotificationsBadge(),
+            if (AppBarParams.of(context).systemNotificationsEnabled) SystemNotificationsBadge(),
             BlocBuilder<SessionStatusCubit, SessionStatusState>(
               builder: (context, sessionState) {
                 return Ink(
@@ -60,4 +61,26 @@ class MainAppBar extends AppBar {
             ),
           ],
         );
+}
+
+class AppBarParams extends InheritedWidget {
+  const AppBarParams({
+    required this.systemNotificationsEnabled,
+    required super.child,
+    super.key,
+  });
+
+  final bool systemNotificationsEnabled;
+  static AppBarParams of(BuildContext context) {
+    final result = context.dependOnInheritedWidgetOfExactType<AppBarParams>();
+    if (result == null) {
+      throw Exception('AppBarParams not found in context');
+    }
+    return result;
+  }
+
+  @override
+  bool updateShouldNotify(AppBarParams oldWidget) {
+    return systemNotificationsEnabled != oldWidget.systemNotificationsEnabled;
+  }
 }

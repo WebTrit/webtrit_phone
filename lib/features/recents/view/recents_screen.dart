@@ -88,6 +88,7 @@ class _RecentsScreenState extends State<RecentsScreen> with SingleTickerProvider
             ),
           ),
         ),
+        context: context,
       ),
       body: BlocBuilder<RecentsBloc, RecentsState>(
         builder: (context, state) {

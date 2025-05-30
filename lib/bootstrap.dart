@@ -10,6 +10,7 @@ import 'package:webtrit_api/webtrit_api.dart';
 
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 
+import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/common/common.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/models/models.dart';
@@ -57,7 +58,7 @@ Future<void> bootstrap() async {
   await AppLifecycle.initMaster();
 
   await _initCallkeep(appPreferences);
-  await _initWorkManager();
+  await _initWorkManager(featureAccess);
 }
 
 Future<void> _initCallkeep(AppPreferences appPreferences) async {
@@ -220,21 +221,9 @@ Future<void> _dShowInspectLocalPush({
   );
 }
 
-Future<void> _initWorkManager() async {
+Future<void> _initWorkManager(FeatureAccess featureAccess) async {
   Workmanager().initialize(workManagerDispatcher, isInDebugMode: true);
-  Workmanager().registerPeriodicTask(
-    _kSystemNotificationsTaskId,
-    _kSystemNotificationsTask,
-    constraints: Constraints(networkType: NetworkType.connected),
-    existingWorkPolicy: ExistingWorkPolicy.replace,
-    backoffPolicy: BackoffPolicy.linear,
-    frequency: const Duration(minutes: 5),
-    initialDelay: const Duration(seconds: 30),
-  );
 }
-
-const _kSystemNotificationsTask = 'systemNotificationsTask';
-const _kSystemNotificationsTaskId = 'systemNotificationsTask-id';
 
 @pragma('vm:entry-point')
 void workManagerDispatcher() {
@@ -243,7 +232,7 @@ void workManagerDispatcher() {
   Workmanager().executeTask((task, inputData) async {
     logger.info('Native called background task: $task');
 
-    if (task == _kSystemNotificationsTask) {
+    if (task == kSystemNotificationsTask) {
       final appLifecycle = await AppLifecycle.initSlave();
       final appCerts = await AppCertificates.init();
       final appSecureStorage = await SecureStorage.init();
@@ -262,13 +251,11 @@ void workManagerDispatcher() {
       final remoteRepo = SystemNotificationsRemoteRepositoryApiImpl(api, token);
       final localPushRepo = LocalPushRepositoryFLNImpl();
 
-      const pushNewNotifications = true; // TODO: integrate feature access
       final worker = SystemNotificationBackgroundWorker(
         secureStorage: appSecureStorage,
         localRepo: localRepo,
         remoteRepo: remoteRepo,
         pushRepo: localPushRepo,
-        pushNewNotifications: pushNewNotifications,
       );
 
       final result = await worker.execute();

@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:workmanager/workmanager.dart';
 
+import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/data/app_lifecycle.dart';
 import 'package:webtrit_phone/data/feature_access.dart';
@@ -20,6 +22,7 @@ class SystemNotificationsShell extends StatefulWidget {
 
 class _SystemNotificationsShellState extends State<SystemNotificationsShell> {
   late final featureAceess = FeatureAccess();
+  late final feature = featureAceess.systemNotificationsFeature;
   late final appLifecycle = AppLifecycle();
 
   SystemNotificationsPushService? pushService;
@@ -39,7 +42,8 @@ class _SystemNotificationsShellState extends State<SystemNotificationsShell> {
   }
 
   upsertServices() {
-    const featureEnabled = true; // TODO: integrate feature access
+    final featureEnabled = feature.systemNotificationsSupport;
+    final pushSupported = feature.systemNotificationsPushSupport;
     final appState = appLifecycle.getLifecycleState();
 
     if (featureEnabled == true) {
@@ -50,9 +54,8 @@ class _SystemNotificationsShellState extends State<SystemNotificationsShell> {
         openNotifications: openNotificationsScreen,
       )..init();
 
-      // Initialize data sync workers only in foreground
-      // If app is in background, [SystemNotificationBackgroundWorker] will be used instead
-      if (appState == AppLifecycleState.resumed) {
+      /// If push supported, init sync and outbox workers as normal
+      if (pushSupported == true) {
         syncWorker ??= SystemNotificationsSyncWorker(
           context.read<SystemNotificationsLocalRepository>(),
           context.read<SystemNotificationsRemoteRepository>(),
@@ -62,12 +65,43 @@ class _SystemNotificationsShellState extends State<SystemNotificationsShell> {
           context.read<SystemNotificationsLocalRepository>(),
           context.read<SystemNotificationsRemoteRepository>(),
         )..init();
-      } else {
-        syncWorker?.dispose();
-        syncWorker = null;
+      }
 
-        outboxWorker?.dispose();
-        outboxWorker = null;
+      /// If push not supported, register background worker
+      /// that will fetch and produces push for new system notifications in background
+      if (pushSupported == false) {
+        Workmanager().registerPeriodicTask(
+          kSystemNotificationsTaskId,
+          kSystemNotificationsTask,
+          constraints: Constraints(networkType: NetworkType.connected),
+          existingWorkPolicy: ExistingWorkPolicy.keep,
+          backoffPolicy: BackoffPolicy.linear,
+          frequency: const Duration(minutes: 1),
+          initialDelay: const Duration(seconds: 30),
+        );
+
+        /// Actively suspend/resume sync workers on app lifecycle changes
+        /// To avoid inconsistency beetween foreground - background workers
+        ///
+        /// Background worker will also suspended itself but
+        /// on task execution level, so no need to dispose it actively
+        if (appState == AppLifecycleState.resumed) {
+          syncWorker ??= SystemNotificationsSyncWorker(
+            context.read<SystemNotificationsLocalRepository>(),
+            context.read<SystemNotificationsRemoteRepository>(),
+          )..init();
+
+          outboxWorker ??= SystemNotificationsOutboxWorker(
+            context.read<SystemNotificationsLocalRepository>(),
+            context.read<SystemNotificationsRemoteRepository>(),
+          )..init();
+        } else {
+          syncWorker?.dispose();
+          syncWorker = null;
+
+          outboxWorker?.dispose();
+          outboxWorker = null;
+        }
       }
     } else {
       pushService?.dispose();
@@ -78,6 +112,8 @@ class _SystemNotificationsShellState extends State<SystemNotificationsShell> {
 
       outboxWorker?.dispose();
       outboxWorker = null;
+
+      Workmanager().cancelByUniqueName(kSystemNotificationsTask);
     }
   }
 

@@ -67,7 +67,8 @@
           "embeddedResourceId": 2
         }
       ]
-    }
+    },
+    "systemNotificationsEnabled": true
   },
   "settingsConfig": {
     "sections": [

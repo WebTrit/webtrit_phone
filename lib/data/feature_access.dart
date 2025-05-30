@@ -58,6 +58,7 @@ class FeatureAccess {
     this.callFeature,
     this.messagingFeature,
     this.termsFeature,
+    this.systemNotificationsFeature,
   );
 
   final EmbeddedFeature embeddedFeature;
@@ -67,6 +68,7 @@ class FeatureAccess {
   final CallFeature callFeature;
   final MessagingFeature messagingFeature;
   final TermsFeature termsFeature;
+  final SystemNotificationsFeature systemNotificationsFeature;
 
   static FeatureAccess init(AppConfig appConfig, AppPreferences preferences) {
     try {
@@ -77,6 +79,7 @@ class FeatureAccess {
       final callFeature = _tryConfigureCallFeature(appConfig, preferences);
       final messagingFeature = _tryConfigureMessagingFeature(appConfig, preferences);
       final termsFeature = _tryConfigureTermsFeature(appConfig);
+      final systemNotificationsFeature = _tryConfigureSystemNotificationsFeature(preferences, appConfig);
 
       _instance = FeatureAccess._(
         embeddedFeature,
@@ -86,6 +89,7 @@ class FeatureAccess {
         callFeature,
         messagingFeature,
         termsFeature,
+        systemNotificationsFeature,
       );
     } catch (e, stackTrace) {
       _logger.severe('Failed to initialize FeatureAccess', e, stackTrace);
@@ -353,6 +357,14 @@ class FeatureAccess {
 
     return EmbeddedFeature(embeddedResources);
   }
+
+  static SystemNotificationsFeature _tryConfigureSystemNotificationsFeature(
+    AppPreferences preferences,
+    AppConfig appConfig,
+  ) {
+    final enabled = appConfig.mainConfig.systemNotificationsEnabled;
+    return SystemNotificationsFeature(preferences, enabled);
+  }
 }
 
 class LoginFeature {
@@ -501,4 +513,30 @@ class EmbeddedFeature {
   final List<EmbeddedData> embeddedResources;
 
   EmbeddedFeature(this.embeddedResources);
+}
+
+class SystemNotificationsFeature {
+  SystemNotificationsFeature(this._appPreferences, this.enabled);
+
+  final bool enabled;
+  final AppPreferences _appPreferences;
+
+  List<String> get _coreSupportedFeatures {
+    final systemInfo = _appPreferences.getSystemInfo();
+    return systemInfo?.adapter?.supported ?? [];
+  }
+
+  // Check if the core system supports system notifications and push sending.
+  // bool get coreSystemSupport => _coreSupportedFeatures.contains(kSystemNotificationsFeatureFlag);
+  // bool get coreSystemPushSupport => _coreSupportedFeatures.contains(kSystemNotificationsPushFeatureFlag);
+
+  // TODO: replace when core integration be ready
+  bool get coreSystemSupport => true;
+  bool get coreSystemPushSupport => true;
+
+  /// Check if the system notifications feature is enabled and supported by the remote system.
+  bool get systemNotificationsSupport => enabled && coreSystemSupport;
+
+  /// Check if the system notifications push feature is enabled and supported by the remote system.
+  bool get systemNotificationsPushSupport => enabled && coreSystemPushSupport;
 }

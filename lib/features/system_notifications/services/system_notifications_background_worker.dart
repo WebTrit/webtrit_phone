@@ -12,12 +12,10 @@ class SystemNotificationBackgroundWorker {
     required SystemNotificationsLocalRepository localRepo,
     required SystemNotificationsRemoteRepository remoteRepo,
     required LocalPushRepository pushRepo,
-    bool pushNewNotifications = true,
   })  : _secureStorage = secureStorage,
         _localRepo = localRepo,
         _remoteRepo = remoteRepo,
-        _pushRepo = pushRepo,
-        _pushNewNotifications = pushNewNotifications {
+        _pushRepo = pushRepo {
     _logger.info('SystemNotificationBackgroundWorker initialized');
   }
 
@@ -25,7 +23,6 @@ class SystemNotificationBackgroundWorker {
   final SystemNotificationsLocalRepository _localRepo;
   final SystemNotificationsRemoteRepository _remoteRepo;
   final LocalPushRepository _pushRepo;
-  final bool _pushNewNotifications;
 
   Future<bool> execute() async {
     try {
@@ -52,12 +49,11 @@ class SystemNotificationBackgroundWorker {
       _logger.info('Fetched ${newNotifications.length} new notifications');
       await _localRepo.upsertNotifications(newNotifications);
 
-      if (_pushNewNotifications) {
-        for (final notification in newNotifications) {
-          final push = AppLocalPush(notification.id, notification.title, notification.content);
-          await _pushRepo.displayPush(push);
-        }
+      for (final notification in newNotifications) {
+        final push = AppLocalPush(notification.id, notification.title, notification.content);
+        await _pushRepo.displayPush(push);
       }
+
       return true;
     } catch (e, stackTrace) {
       _logger.severe('Unexpected error in SystemNotificationBackgroundWorker', e, stackTrace);

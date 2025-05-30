@@ -26,6 +26,7 @@ class FavoritesScreen extends StatelessWidget {
     return Scaffold(
       appBar: MainAppBar(
         title: title,
+        context: context,
       ),
       body: BlocBuilder<FavoritesBloc, FavoritesState>(
         builder: (context, state) {

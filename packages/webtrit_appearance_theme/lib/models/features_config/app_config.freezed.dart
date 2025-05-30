@@ -746,6 +746,7 @@ AppConfigMain _$AppConfigMainFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$AppConfigMain {
   AppConfigBottomMenu get bottomMenu => throw _privateConstructorUsedError;
+  bool get systemNotificationsEnabled => throw _privateConstructorUsedError;
 
   /// Serializes this AppConfigMain to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -763,7 +764,7 @@ abstract class $AppConfigMainCopyWith<$Res> {
           AppConfigMain value, $Res Function(AppConfigMain) then) =
       _$AppConfigMainCopyWithImpl<$Res, AppConfigMain>;
   @useResult
-  $Res call({AppConfigBottomMenu bottomMenu});
+  $Res call({AppConfigBottomMenu bottomMenu, bool systemNotificationsEnabled});
 
   $AppConfigBottomMenuCopyWith<$Res> get bottomMenu;
 }
@@ -784,12 +785,17 @@ class _$AppConfigMainCopyWithImpl<$Res, $Val extends AppConfigMain>
   @override
   $Res call({
     Object? bottomMenu = null,
+    Object? systemNotificationsEnabled = null,
   }) {
     return _then(_value.copyWith(
       bottomMenu: null == bottomMenu
           ? _value.bottomMenu
           : bottomMenu // ignore: cast_nullable_to_non_nullable
               as AppConfigBottomMenu,
+      systemNotificationsEnabled: null == systemNotificationsEnabled
+          ? _value.systemNotificationsEnabled
+          : systemNotificationsEnabled // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 
@@ -812,7 +818,7 @@ abstract class _$$AppConfigMainImplCopyWith<$Res>
       __$$AppConfigMainImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({AppConfigBottomMenu bottomMenu});
+  $Res call({AppConfigBottomMenu bottomMenu, bool systemNotificationsEnabled});
 
   @override
   $AppConfigBottomMenuCopyWith<$Res> get bottomMenu;
@@ -832,12 +838,17 @@ class __$$AppConfigMainImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? bottomMenu = null,
+    Object? systemNotificationsEnabled = null,
   }) {
     return _then(_$AppConfigMainImpl(
       bottomMenu: null == bottomMenu
           ? _value.bottomMenu
           : bottomMenu // ignore: cast_nullable_to_non_nullable
               as AppConfigBottomMenu,
+      systemNotificationsEnabled: null == systemNotificationsEnabled
+          ? _value.systemNotificationsEnabled
+          : systemNotificationsEnabled // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -880,7 +891,8 @@ class _$AppConfigMainImpl extends _AppConfigMain {
             type: BottomMenuTabType.messaging,
             titleL10n: 'main_BottomNavigationBarItemLabel_chats',
             icon: '0xe155')
-      ])})
+      ]),
+      this.systemNotificationsEnabled = true})
       : super._();
 
   factory _$AppConfigMainImpl.fromJson(Map<String, dynamic> json) =>
@@ -889,10 +901,13 @@ class _$AppConfigMainImpl extends _AppConfigMain {
   @override
   @JsonKey()
   final AppConfigBottomMenu bottomMenu;
+  @override
+  @JsonKey()
+  final bool systemNotificationsEnabled;
 
   @override
   String toString() {
-    return 'AppConfigMain(bottomMenu: $bottomMenu)';
+    return 'AppConfigMain(bottomMenu: $bottomMenu, systemNotificationsEnabled: $systemNotificationsEnabled)';
   }
 
   @override
@@ -901,12 +916,17 @@ class _$AppConfigMainImpl extends _AppConfigMain {
         (other.runtimeType == runtimeType &&
             other is _$AppConfigMainImpl &&
             (identical(other.bottomMenu, bottomMenu) ||
-                other.bottomMenu == bottomMenu));
+                other.bottomMenu == bottomMenu) &&
+            (identical(other.systemNotificationsEnabled,
+                    systemNotificationsEnabled) ||
+                other.systemNotificationsEnabled ==
+                    systemNotificationsEnabled));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, bottomMenu);
+  int get hashCode =>
+      Object.hash(runtimeType, bottomMenu, systemNotificationsEnabled);
 
   /// Create a copy of AppConfigMain
   /// with the given fields replaced by the non-null parameter values.
@@ -925,8 +945,9 @@ class _$AppConfigMainImpl extends _AppConfigMain {
 }
 
 abstract class _AppConfigMain extends AppConfigMain {
-  const factory _AppConfigMain({final AppConfigBottomMenu bottomMenu}) =
-      _$AppConfigMainImpl;
+  const factory _AppConfigMain(
+      {final AppConfigBottomMenu bottomMenu,
+      final bool systemNotificationsEnabled}) = _$AppConfigMainImpl;
   const _AppConfigMain._() : super._();
 
   factory _AppConfigMain.fromJson(Map<String, dynamic> json) =
@@ -934,6 +955,8 @@ abstract class _AppConfigMain extends AppConfigMain {
 
   @override
   AppConfigBottomMenu get bottomMenu;
+  @override
+  bool get systemNotificationsEnabled;
 
   /// Create a copy of AppConfigMain
   /// with the given fields replaced by the non-null parameter values.
