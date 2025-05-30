@@ -37,68 +37,65 @@ class LoginCoreUrlAssignScreen extends StatelessWidget {
             backgroundColor: Colors.transparent,
             systemOverlayStyle: SystemUiOverlayStyle.dark,
           ),
-          body: SafeArea(
-            top: false,
-            child: Column(
-              children: [
-                const OnboardingLogo(),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(kInset, kInset / 2, kInset, kInset),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        if (coreUrlAssignPreDescriptionText.isNotEmpty) ...[
-                          Description(
-                            text: coreUrlAssignPreDescriptionText,
-                          ),
-                          const SizedBox(height: kInset / 2),
-                        ],
-                        TextFormField(
-                          key: coreUrlInputKey,
-                          enabled: !state.processing,
-                          initialValue: state.coreUrlInput.value,
-                          decoration: InputDecoration(
-                            labelText: context.l10n.login_TextFieldLabelText_coreUrlAssign,
-                            helperText: '', // reserve space for validator message
-                            errorText: state.coreUrlInput.displayError?.l10n(context),
-                            errorMaxLines: 3,
-                          ),
-                          keyboardType: TextInputType.url,
-                          autocorrect: false,
-                          onChanged: context.read<LoginCubit>().coreUrlInputChanged,
-                          onFieldSubmitted:
-                              !state.coreUrlInput.isValid ? null : (_) => _onCoreUrlAssignSubmitted(context),
+          body: Column(
+            children: [
+              const OnboardingLogo(),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(kInset, kInset / 2, kInset, kInset),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      if (coreUrlAssignPreDescriptionText.isNotEmpty) ...[
+                        Description(
+                          text: coreUrlAssignPreDescriptionText,
                         ),
-                        if (coreUrlAssignPostDescriptionText.isNotEmpty) ...[
-                          const SizedBox(height: kInset / 8),
-                          Description(
-                            text: coreUrlAssignPostDescriptionText,
-                            launchLinkableElement: true,
-                          ),
-                        ],
-                        const Spacer(),
-                        const SizedBox(height: kInset),
-                        ElevatedButton(
-                          key: coreUrlButtonKey,
-                          onPressed: state.processing || !state.coreUrlInput.isValid
-                              ? null
-                              : () => _onCoreUrlAssignSubmitted(context),
-                          style: elevatedButtonStyles?.primary,
-                          child: !state.processing
-                              ? Text(context.l10n.login_Button_coreUrlAssignProceed)
-                              : SizedCircularProgressIndicator(
-                                  size: 16,
-                                  strokeWidth: 2,
-                                  color: elevatedButtonStyles?.primary?.foregroundColor?.resolve({}),
-                                ),
+                        const SizedBox(height: kInset / 2),
+                      ],
+                      TextFormField(
+                        key: coreUrlInputKey,
+                        enabled: !state.processing,
+                        initialValue: state.coreUrlInput.value,
+                        decoration: InputDecoration(
+                          labelText: context.l10n.login_TextFieldLabelText_coreUrlAssign,
+                          helperText: '', // reserve space for validator message
+                          errorText: state.coreUrlInput.displayError?.l10n(context),
+                          errorMaxLines: 3,
+                        ),
+                        keyboardType: TextInputType.url,
+                        autocorrect: false,
+                        onChanged: context.read<LoginCubit>().coreUrlInputChanged,
+                        onFieldSubmitted:
+                            !state.coreUrlInput.isValid ? null : (_) => _onCoreUrlAssignSubmitted(context),
+                      ),
+                      if (coreUrlAssignPostDescriptionText.isNotEmpty) ...[
+                        const SizedBox(height: kInset / 8),
+                        Description(
+                          text: coreUrlAssignPostDescriptionText,
+                          launchLinkableElement: true,
                         ),
                       ],
-                    ),
+                      const Spacer(),
+                      const SizedBox(height: kInset),
+                      ElevatedButton(
+                        key: coreUrlButtonKey,
+                        onPressed: state.processing || !state.coreUrlInput.isValid
+                            ? null
+                            : () => _onCoreUrlAssignSubmitted(context),
+                        style: elevatedButtonStyles?.primary,
+                        child: !state.processing
+                            ? Text(context.l10n.login_Button_coreUrlAssignProceed)
+                            : SizedCircularProgressIndicator(
+                                size: 16,
+                                strokeWidth: 2,
+                                color: elevatedButtonStyles?.primary?.foregroundColor?.resolve({}),
+                              ),
+                      ),
+                    ],
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         );
       },
