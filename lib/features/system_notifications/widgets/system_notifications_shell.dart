@@ -21,6 +21,11 @@ class SystemNotificationsShell extends StatefulWidget {
 }
 
 class _SystemNotificationsShellState extends State<SystemNotificationsShell> {
+  late final localRepository = context.read<SystemNotificationsLocalRepository>();
+  late final remoteRepository = context.read<SystemNotificationsRemoteRepository>();
+  late final remotePushRepository = context.read<RemotePushRepository>();
+  late final localPushRepository = context.read<LocalPushRepository>();
+
   late final featureAceess = FeatureAccess();
   late final feature = featureAceess.systemNotificationsFeature;
   late final appLifecycle = AppLifecycle();
@@ -48,23 +53,16 @@ class _SystemNotificationsShellState extends State<SystemNotificationsShell> {
 
     if (featureEnabled == true) {
       pushService ??= SystemNotificationsPushService(
-        context.read<RemotePushRepository>(),
-        context.read<LocalPushRepository>(),
-        context.read<SystemNotificationsLocalRepository>(),
+        remotePushRepository,
+        localPushRepository,
+        localRepository,
         openNotifications: openNotificationsScreen,
       )..init();
 
       /// If push supported, init sync and outbox workers as normal
       if (pushSupported == true) {
-        syncWorker ??= SystemNotificationsSyncWorker(
-          context.read<SystemNotificationsLocalRepository>(),
-          context.read<SystemNotificationsRemoteRepository>(),
-        )..init();
-
-        outboxWorker ??= SystemNotificationsOutboxWorker(
-          context.read<SystemNotificationsLocalRepository>(),
-          context.read<SystemNotificationsRemoteRepository>(),
-        )..init();
+        syncWorker ??= SystemNotificationsSyncWorker(localRepository, remoteRepository)..init();
+        outboxWorker ??= SystemNotificationsOutboxWorker(localRepository, remoteRepository)..init();
       }
 
       /// If push not supported, register background worker
@@ -85,15 +83,8 @@ class _SystemNotificationsShellState extends State<SystemNotificationsShell> {
         /// Background worker will also suspended itself but
         /// on task execution level, so no need to dispose it actively
         if (appState == AppLifecycleState.resumed) {
-          syncWorker ??= SystemNotificationsSyncWorker(
-            context.read<SystemNotificationsLocalRepository>(),
-            context.read<SystemNotificationsRemoteRepository>(),
-          )..init();
-
-          outboxWorker ??= SystemNotificationsOutboxWorker(
-            context.read<SystemNotificationsLocalRepository>(),
-            context.read<SystemNotificationsRemoteRepository>(),
-          )..init();
+          syncWorker ??= SystemNotificationsSyncWorker(localRepository, remoteRepository)..init();
+          outboxWorker ??= SystemNotificationsOutboxWorker(localRepository, remoteRepository)..init();
         } else {
           syncWorker?.dispose();
           syncWorker = null;
