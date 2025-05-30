@@ -1,4 +1,5 @@
 import 'package:app_database/app_database.dart' as db;
+
 import 'package:webtrit_phone/models/system_notification.dart';
 
 mixin SystemNotificationDriftMapper {

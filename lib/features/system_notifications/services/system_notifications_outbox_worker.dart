@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:logging/logging.dart';
+
 import 'package:webtrit_phone/models/system_notification_event.dart';
 import 'package:webtrit_phone/models/system_notification_outbox_entry.dart';
 import 'package:webtrit_phone/repositories/system_notifications/system_notifications_local_repository.dart';

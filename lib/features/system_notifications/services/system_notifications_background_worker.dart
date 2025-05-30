@@ -1,4 +1,5 @@
 import 'package:logging/logging.dart';
+
 import 'package:webtrit_phone/data/secure_storage.dart';
 import 'package:webtrit_phone/models/system_notification.dart';
 import 'package:webtrit_phone/push_notification/app_local_push.dart';

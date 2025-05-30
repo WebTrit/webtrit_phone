@@ -1,4 +1,5 @@
 import 'package:app_database/app_database.dart';
+
 import 'package:webtrit_phone/models/models.dart';
 
 mixin SystemNotificationOutboxDriftMapper {

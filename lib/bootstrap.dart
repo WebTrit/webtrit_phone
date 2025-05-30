@@ -2,25 +2,25 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:ui';
 
+import 'package:logging/logging.dart';
+import 'package:workmanager/workmanager.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:logging/logging.dart';
-import 'package:webtrit_api/webtrit_api.dart';
 
+import 'package:webtrit_api/webtrit_api.dart';
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 
-import 'package:webtrit_phone/app/constants.dart';
-import 'package:webtrit_phone/common/common.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/models/models.dart';
-import 'package:webtrit_phone/push_notification/push_notifications.dart';
+import 'package:webtrit_phone/app/constants.dart';
+import 'package:webtrit_phone/common/common.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
+import 'package:webtrit_phone/push_notification/push_notifications.dart';
+import 'package:webtrit_phone/features/system_notifications/services/services.dart';
 
 import 'package:webtrit_phone/features/call/call.dart' show onPushNotificationSyncCallback, onSignalingSyncCallback;
-import 'package:workmanager/workmanager.dart';
 
-import 'features/system_notifications/services/system_notifications_background_worker.dart';
 import 'firebase_options.dart';
 
 Future<void> bootstrap() async {
