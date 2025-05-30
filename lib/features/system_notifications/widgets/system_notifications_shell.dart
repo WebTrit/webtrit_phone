@@ -125,6 +125,9 @@ class _SystemNotificationsShellState extends State<SystemNotificationsShell> {
   @override
   void dispose() {
     pushService?.dispose();
+    syncWorker?.dispose();
+    outboxWorker?.dispose();
+    Workmanager().cancelByUniqueName(kSystemNotificationsTask);
     super.dispose();
   }
 
