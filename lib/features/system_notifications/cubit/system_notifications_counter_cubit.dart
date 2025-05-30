@@ -5,16 +5,33 @@ import 'package:webtrit_phone/models/system_notification_event.dart';
 import 'package:webtrit_phone/models/system_notification_outbox_entry.dart';
 import 'package:webtrit_phone/repositories/system_notifications/system_notifications_local_repository.dart';
 
-class SystemNotificationsCounterCubit extends Cubit<int> {
-  SystemNotificationsCounterCubit(this._localRepository) : super(0) {
-    _init();
+abstract class SystemNotificationsCounterCubit extends Cubit<int> {
+  SystemNotificationsCounterCubit(super.initialState);
+}
+
+class SystemNotificationsCounterCubitRecordsBasedImpl extends SystemNotificationsCounterCubit {
+  SystemNotificationsCounterCubitRecordsBasedImpl(this._localRepository) : super(0) {
+    _countSub = _localRepository.unseenCountByRecords().listen(emit);
   }
+
+  final SystemNotificationsLocalRepository _localRepository;
+  late final StreamSubscription _countSub;
+
+  @override
+  Future<void> close() {
+    _countSub.cancel();
+    return super.close();
+  }
+}
+
+class SystemNotificationsCounterCubitRemoteBasedImpl extends SystemNotificationsCounterCubit {
+  SystemNotificationsCounterCubitRemoteBasedImpl(this._localRepository) : super(0);
 
   final SystemNotificationsLocalRepository _localRepository;
   late final StreamSubscription _eventsSub;
   Set<int> _pendingSeenIDs = {};
 
-  Future<void> _init() async {
+  Future<void> init() async {
     final seenOutoxEntries = await _localRepository.getOutboxNotifications(SnOutboxActionType.seen);
     _pendingSeenIDs = seenOutoxEntries.map((entry) => entry.notificationId).toSet();
     _eventsSub = _localRepository.eventBus.listen(_onEvent);

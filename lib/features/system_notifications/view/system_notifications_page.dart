@@ -17,7 +17,7 @@ class SystemNotificationsPage extends StatelessWidget {
       create: (context) => SystemNotificationsScreenCubit(
         context.read<SystemNotificationsLocalRepository>(),
         context.read<SystemNotificationsRemoteRepository>(),
-      ),
+      )..init(),
       child: const SystemNotificationsScreen(),
     );
   }

@@ -35,6 +35,27 @@ class SystemNotificationsDao extends DatabaseAccessor<AppDatabase> with _$System
         : null;
   }
 
+  Stream<int> unseenCount() {
+    final query = selectOnly(systemNotificationsTable).join(
+      [
+        leftOuterJoin(
+          systemNotificationsOutboxTable,
+          systemNotificationsOutboxTable.notificationId.equalsExp(systemNotificationsTable.id),
+        ),
+      ],
+    )
+      ..addColumns([
+        systemNotificationsTable.id,
+        systemNotificationsTable.seen,
+        systemNotificationsOutboxTable.notificationId,
+        systemNotificationsOutboxTable.actionType,
+      ])
+      ..where(systemNotificationsTable.seen.equals(false))
+      ..where(systemNotificationsOutboxTable.actionType.isNotIn([SnOutboxDataActionType.seen.name]));
+
+    return query.watch().asyncMap((rows) => rows.length);
+  }
+
   Future<void> upsertNotification(SystemNotificationData notification) {
     return into(systemNotificationsTable).insertOnConflictUpdate(notification);
   }

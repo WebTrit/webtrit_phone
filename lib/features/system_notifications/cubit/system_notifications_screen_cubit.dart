@@ -79,9 +79,7 @@ class SystemNotificationsScreenCubit extends Cubit<SystemNotificationScreenState
   SystemNotificationsScreenCubit(
     this._systemNotificationsLocalRepository,
     this._systemNotificationsRemoteRepository,
-  ) : super(const SystemNotificationScreenState(notifications: [], isLoading: true)) {
-    _init();
-  }
+  ) : super(const SystemNotificationScreenState(notifications: [], isLoading: true));
 
   final SystemNotificationsLocalRepository _systemNotificationsLocalRepository;
   final SystemNotificationsRemoteRepository _systemNotificationsRemoteRepository;
@@ -127,7 +125,7 @@ class SystemNotificationsScreenCubit extends Cubit<SystemNotificationScreenState
     }
   }
 
-  _init() async {
+  init() async {
     final outboxSeenEntries = await _systemNotificationsLocalRepository.getOutboxNotifications(SnOutboxActionType.seen);
     _pendingSeenIDs = outboxSeenEntries.map((e) => e.notificationId).toSet();
 

@@ -408,9 +408,9 @@ class _MainShellState extends State<MainShell> {
                     },
                   ),
                 ),
-                BlocProvider(
+                BlocProvider<SystemNotificationsCounterCubit>(
                   lazy: false,
-                  create: (_) => SystemNotificationsCounterCubit(
+                  create: (_) => SystemNotificationsCounterCubitRecordsBasedImpl(
                     context.read<SystemNotificationsLocalRepository>(),
                   ),
                 ),

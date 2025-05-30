@@ -16,6 +16,7 @@ abstract class SystemNotificationsLocalRepository {
   Future<List<SystemNotification>> getNotifications({DateTime? from, DateTime? to, int limit = 50});
   Future<SystemNotification?> getNotificationById(int id);
   Future<DateTime?> getLastUpdate();
+  Stream<int> unseenCountByRecords();
 
   Future<void> upsertNotification(SystemNotification notification, {bool silent = false});
   Future<void> upsertNotifications(List<SystemNotification> notifications, {bool silent = false});
@@ -65,6 +66,11 @@ class SystemNotificationsLocalRepositoryDriftImpl
   @override
   Future<DateTime?> getLastUpdate() async {
     return await _dao.getLastUpdate();
+  }
+
+  @override
+  Stream<int> unseenCountByRecords() {
+    return _dao.unseenCount();
   }
 
   @override
