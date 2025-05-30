@@ -139,6 +139,83 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
+    flavorDimensions "deeplinks"
+
+    productFlavors {
+        // Flavor with deep link support enabled
+        // This flavor defines the APP_LINK_DOMAIN string resource,
+        // which is used for configuring app links and intent filters.
+        // The value is injected from Dart's --dart-define at build time.
+        deeplinks {
+            dimension "deeplinks"
+            resValue "string", "APP_LINK_DOMAIN", dartDefine.WEBTRIT_APP_LINK_DOMAIN
+        }
+
+        // Flavor with deep link support disabled
+        // No APP_LINK_DOMAIN is defined here, so deep link functionality
+        // can be excluded from the AndroidManifest or handled differently.
+        deeplinksDisabled {
+            dimension "deeplinks"
+        }
+    }
+
+    // Task to normalize APK and AAB output file paths and names for CI/CD
+    tasks.register("normalizeReleaseOutputs") {
+        doLast {
+            // Locate directory where Flutter outputs APKs
+            def flutterApk = layout.buildDirectory.dir("outputs/flutter-apk").get().asFile
+            // Define standard destination path for CI to pick up the APK
+            def fixedApkDest = layout.buildDirectory.dir("outputs/apk/release").get().asFile
+            def foundApk = false
+
+            if (flutterApk.exists()) {
+                flutterApk.eachFile { f ->
+                    if (f.name.endsWith(".apk")) {
+                        // Copy and rename to a standardized filename
+                        copy {
+                            from f
+                            into fixedApkDest
+                            rename { "app-release.apk" }
+                        }
+                        println "Copied APK → ${fixedApkDest}/app-release.apk"
+                        foundApk = true
+                    }
+                }
+            }
+
+            // Locate directory that contains flavor-specific AAB build outputs
+            def bundleDir = layout.buildDirectory.dir("outputs/bundle").get().asFile
+            // Define standard destination path for CI to pick up the AAB
+            def fixedBundleDest = layout.buildDirectory.dir("outputs/bundle/release").get().asFile
+            def foundAab = false
+
+            if (bundleDir.exists()) {
+                bundleDir.eachDir { flavorDir ->
+                    flavorDir.eachFile { f ->
+                        if (f.name.endsWith(".aab")) {
+                            copy {
+                                from f
+                                into fixedBundleDest
+                                rename { "app-release.aab" }
+                            }
+                            println "Copied AAB → ${fixedBundleDest}/app-release.aab"
+                            foundAab = true
+                        }
+                    }
+                }
+            }
+
+            if (!foundApk) println "No .apk found in flutter-apk/"
+            if (!foundAab) println "No .aab found in bundle/*/release/"
+        }
+    }
+
+    tasks.configureEach { task ->
+        if (task.name ==~ /bundle.*Release/ || task.name ==~ /assemble.*Release/) {
+            task.finalizedBy("normalizeReleaseOutputs")
+        }
+    }
+
     kotlinOptions {
         jvmTarget = '1.8'
     }
@@ -154,7 +231,6 @@ android {
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
 
-        resValue "string", "APP_LINK_DOMAIN", dartDefine.WEBTRIT_APP_LINK_DOMAIN
         resValue "string", "APP_NAME", dartDefine.WEBTRIT_APP_NAME
     }
 

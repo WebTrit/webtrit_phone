@@ -65,6 +65,8 @@ class _AppState extends State<App> {
 
   @override
   Widget build(BuildContext context) {
+    final isDeepLinkEnabled = EnvironmentConfig.APP_LINK_DOMAIN.isNotEmpty;
+
     final materialApp = BlocBuilder<AppBloc, AppState>(
       buildWhen: (previous, current) => previous.themeSettings != current.themeSettings,
       builder: (context, state) {
@@ -88,7 +90,7 @@ class _AppState extends State<App> {
                 theme: themeProvider.light(),
                 darkTheme: themeProvider.dark(),
                 routerConfig: _appRouter.config(
-                  deepLinkBuilder: _appRouter.deepLinkBuilder,
+                  deepLinkBuilder: isDeepLinkEnabled ? _appRouter.deepLinkBuilder : null,
                   navigatorObservers: () => [
                     AppRouterObserver(),
                     context.read<AppAnalyticsRepository>().createObserver(),
