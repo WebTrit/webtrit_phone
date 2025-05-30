@@ -357,20 +357,6 @@ class _MainShellState extends State<MainShell> {
           BlocProvider(
             create: (_) => ChatsForwardingCubit(),
           ),
-          InheritedProvider(
-            create: (context) => SystemNotificationsSyncWorker(
-              context.read<SystemNotificationsLocalRepository>(),
-              context.read<SystemNotificationsRemoteRepository>(),
-            ),
-            dispose: (context, worker) => worker.dispose(),
-          ),
-          InheritedProvider(
-            create: (context) => SystemNotificationsOutboxWorker(
-              context.read<SystemNotificationsLocalRepository>(),
-              context.read<SystemNotificationsRemoteRepository>(),
-            ),
-            dispose: (context, worker) => worker.dispose(),
-          ),
         ],
         child: Builder(
           builder: (context) {
