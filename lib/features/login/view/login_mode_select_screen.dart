@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
@@ -71,9 +69,7 @@ class LoginModeSelectScreen extends StatelessWidget {
                 children: [
                   const Spacer(),
                   OnboardingPictureLogo(
-                    text: appGreetingL10n != null
-                        ? context.parseL10n(appGreetingL10n!)
-                        : null,
+                    text: appGreetingL10n != null ? context.parseL10n(appGreetingL10n!) : null,
                   ),
                   const Spacer(),
                   const Spacer(),
@@ -87,19 +83,16 @@ class LoginModeSelectScreen extends StatelessWidget {
                     //   - For embedded buttons: show loading only if the active embedded config matches this button
                     final processing = shouldProcess &&
                         ((!isEmbedded && state.embedded == null) ||
-                            (isEmbedded &&
-                                state.embedded ==
-                                    button.toEmbedded?.customLoginFeature));
+                            (isEmbedded && state.embedded == button.toEmbedded?.customLoginFeature));
 
-                    return LoginModeActionButton(
-                      processing: processing,
-                      isDemoModeEnabled: isDemoModeEnabled,
-                      onPressed: shouldProcess
-                          ? null
-                          : () => _onActionPressed(context, button),
-                      style: elevatedButtonStyles
-                          ?.getStyle(localStyle?.signUpTypeButton),
-                      title: context.parseL10n(button.titleL10n),
+                    return SafeArea(
+                      child: LoginModeActionButton(
+                        processing: processing,
+                        isDemoModeEnabled: isDemoModeEnabled,
+                        onPressed: shouldProcess ? null : () => _onActionPressed(context, button),
+                        style: elevatedButtonStyles?.getStyle(localStyle?.signUpTypeButton),
+                        title: context.parseL10n(button.titleL10n),
+                      ),
                     );
                   }),
                 ],
