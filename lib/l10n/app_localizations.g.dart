@@ -3438,6 +3438,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Web resource error'**
   String get webRegistration_ErrorAcknowledgeDialog_title;
+
+  /// No description provided for @system_notifications_screen_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications'**
+  String get system_notifications_screen_title;
+
+  /// No description provided for @system_notifications_screen_list_empty.
+  ///
+  /// In en, this message translates to:
+  /// **'No notifications yet'**
+  String get system_notifications_screen_list_empty;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

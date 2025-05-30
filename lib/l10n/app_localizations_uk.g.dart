@@ -1726,4 +1726,10 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get webRegistration_ErrorAcknowledgeDialog_title => 'Web resource error';
+
+  @override
+  String get system_notifications_screen_title => 'Сповіщення';
+
+  @override
+  String get system_notifications_screen_list_empty => 'Немає сповіщень';
 }
