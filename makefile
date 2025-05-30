@@ -1,10 +1,19 @@
+# ===========================
+# Include Shared Makefile Logic
+# ===========================
+
+TOOLS_MAKEFILE := makefile.shared
+
+ifeq (,$(wildcard $(TOOLS_MAKEFILE)))
+$(shell curl -sSL https://raw.githubusercontent.com/WebTrit/webtrit_phone_tools/refs/heads/main/Makefile.shared -o $(TOOLS_MAKEFILE))
+endif
+
+include $(TOOLS_MAKEFILE)
+
 # Variables
-BUILD_TYPE ?= debug
-BUILD_PLATFORM ?= apk
 DART_DEFINE_FILE = --dart-define-from-file=dart_define.json
 CONFIGURATOR = dart run ../webtrit_phone_tools/bin/webtrit_phone_tools.dart
 KEYSTORES_PATH = --keystores-path=../webtrit_phone_keystores
-
 
 # ===========================
 #  Paths to Configuration Files
@@ -30,7 +39,6 @@ BUNDLE_ID ?= com.example.newapp
 ANDROID_APP_NAME ?= "New App"
 IOS_APP_NAME ?= "New App"
 
-
 # ===========================
 #  Launcher Icons Configuration
 # ===========================
@@ -50,7 +58,6 @@ ICON_BACKGROUND_COLOR ?= "#123752"
 
 # Theme color for web applications (affects browser UI, such as the address bar)
 THEME_COLOR ?= "#F3F5F6"
-
 
 # ===========================
 #  Splash Screen Configuration
@@ -85,13 +92,6 @@ SPLASH_IMAGE ?= "tool/assets/native_splash/image.png"
 # Path to authentication token file (used if the token is not passed as a parameter)
 TOKEN_FILE ?= $(CONFIGS_PATH)/localizely_token.txt
 
-# Determine Flutter flags based on build type
-ifeq ($(BUILD_TYPE), release)
-    FLUTTER_FLAGS = $(DART_DEFINE_FILE) --release  --no-tree-shake-icons
-else
-    FLUTTER_FLAGS = $(DART_DEFINE_FILE)  --no-tree-shake-icons
-endif
-
 # Fetch token from the file if not provided as a parameter
 ifeq ($(token),)
     ifeq ($(wildcard $(TOKEN_FILE)),)
@@ -103,14 +103,6 @@ endif
 
 # Rules
 .PHONY: run build configure configure-demo configure-classic build-ios build-apk build-appbundle clean-git generate-package-config rename-package generate-launcher-icons generate-native-splash generate-assets
-
-## Run the Flutter application
-run:
-	flutter run $(FLUTTER_FLAGS)
-
-## Build the Flutter application
-build:
-	flutter build $(BUILD_PLATFORM) $(FLUTTER_FLAGS)
 
 ## Configure application resources
 configure:
@@ -126,21 +118,6 @@ configure-demo:
 configure-classic:
 	$(CONFIGURATOR) configurator-resources --applicationId=$(id) $(KEYSTORES_PATH) --token=$(token)
 	$(CONFIGURATOR) configurator-generate
-
-## Create iOS build
-build-ios:
-	flutter build ios $(FLUTTER_FLAGS)
-
-build-ios-config-only:
-	flutter build ios $(FLUTTER_FLAGS) --config-only
-
-## Create APK build
-build-apk:
-	flutter build apk $(FLUTTER_FLAGS)
-
-## Create App Bundle build
-build-appbundle:
-	flutter build appbundle $(FLUTTER_FLAGS)
 
 ## Generate package_rename_config.yaml for package_rename
 generate-package-config:
@@ -158,7 +135,6 @@ generate-package-config:
 rename-package:
 	dart pub add package_rename:1.8.0 --dev
 	dart run package_rename --path=$(FLUTTER_RENAME_PACKAGE_CONFIG)
-
 
 ## Generate flutter_launcher_icons.yaml with custom parameters
 generate-launcher-icons-config:
