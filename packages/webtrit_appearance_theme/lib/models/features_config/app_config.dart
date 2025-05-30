@@ -56,6 +56,8 @@ class AppConfigModeSelectAction with _$AppConfigModeSelectAction {
     int? embeddedId,
     required String type,
     required String titleL10n,
+    @Default(false) bool isLaunchButtonVisible,
+    @Default(false) bool isLaunchScreen,
   }) = _AppConfigModeSelectAction;
 
   factory AppConfigModeSelectAction.fromJson(Map<String, dynamic> json) => _$AppConfigModeSelectActionFromJson(json);
@@ -207,7 +209,8 @@ class EncodingDefaultPresetOverride with _$EncodingDefaultPresetOverride {
     int? videoBitrate,
     int? ptime,
     int? maxptime,
-    int? opusBandwidthLimit,
+    int? opusSamplingRate,
+    int? opusBitrate,
     bool? opusStereo,
     bool? opusDtx,
   }) = _EncodingDefaultPresetOverride;

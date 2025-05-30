@@ -52,7 +52,7 @@ class _AppState extends State<App> {
     _appRouter = AppRouter(
       appBloc,
       widget.appPermissions,
-      featureAccess.loginFeature.launchLoginPage,
+      featureAccess.loginFeature.embeddedLaunchConfiguration?.customLoginFeature,
       featureAccess.bottomMenuFeature,
     );
   }

@@ -21,19 +21,25 @@
 
 For more details, refer to the [Embedded Resources](#embedded-resources) section.
 
-Settings for selecting the login mode, between native and custom login.
+Settings for selecting the login mode, such as native login, custom embedded screens, or fully web-driven onboarding.
 
 **Fields:**
 
-- `enabled`: Determines if the button is active.
+- `enabled`: Determines if the action is active.
 - `embeddedResourceId`: ID of the resource for the embedded page (if applicable).
-- `type`: Action type (login, embedded).
-- `titleL10n`: Localized button title.
+- `type`: Action type (`login` or `embedded`).
+- `titleL10n`: Localized title of the button.
+- `isLaunchButtonVisible`: *(bool)* Whether this configuration should be shown as a button on the native welcome screen.
+- `isLaunchScreen`: *(bool, embedded only)* Whether this embedded configuration should be launched directly as the welcome screen, bypassing the native one.
+
 
 If `embeddedResourceId` is provided, the section is enabled, and the type is `embedded`, it will display a custom login
 page for this button on the welcome screen.
 
-**Example Configuration for Custom Login:**
+If `isLaunchScreen` is `true`, and the type is `embedded`, the native welcome screen is skipped and the embedded page is shown as the entry point. 
+This embedded screen is responsible for user onboarding and must communicate with Flutter through JSChannel and use the `/api/signup` endpoint to pass collected data to the adapter.
+
+**Example Configuration for Custom Login with Launch Button:
 
 ```json
 {
@@ -41,17 +47,19 @@ page for this button on the welcome screen.
     "greetingL10n": "WebTrit",
     "modeSelectActions": [
       {
-        "enabled": false,
+        "enabled": true,
         "embeddedResourceId": 1,
         "type": "embedded",
-        "titleL10n": "login_Button_signIn"
+        "titleL10n": "login_Button_signIn",
+        "isLaunchButtonVisible": true,
+        "isLaunchScreen": false
       }
     ]
   },
   "embeddedResources": [
     {
       "id": 1,
-      "uri": "asset://assets/themes/custom_signup.html",
+      "uri": "https://webtrit-app.web.app/example/example_embedded_login.html",
       "toolbar": {
         "showToolbar": true,
         "titleL10n": "login_requestCredentials_title"
@@ -59,7 +67,6 @@ page for this button on the welcome screen.
     }
   ]
 }
-
 ```
 
 ## Setup Main Configuration
@@ -207,7 +214,7 @@ directory and provide the correct path.
   "embeddedResources": [
     {
       "id": 1,
-      "uri": "asset://assets/themes/custom_signup.html",
+      "uri": "https://webtrit-app.web.app/example/example_embedded_login.html",
       "toolbar": {
         "showToolbar": true,
         "titleL10n": "login_requestCredentials_title"

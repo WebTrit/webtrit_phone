@@ -36,7 +36,8 @@ mixin _$LoginState {
   )? get signupSessionOtpProvisionalWithDateTime =>
       throw _privateConstructorUsedError;
   String? get token => throw _privateConstructorUsedError;
-  String? get userId => throw _privateConstructorUsedError;
+  String? get userId =>
+      throw _privateConstructorUsedError; // Used to represent an embedded launch page or a login type within tabbed navigation
   LoginEmbedded? get embedded => throw _privateConstructorUsedError;
   UrlInput get coreUrlInput => throw _privateConstructorUsedError;
   UserRefInput get otpSigninUserRefInput => throw _privateConstructorUsedError;
@@ -425,6 +426,7 @@ class _$LoginStateImpl implements _LoginState {
   final String? token;
   @override
   final String? userId;
+// Used to represent an embedded launch page or a login type within tabbed navigation
   @override
   final LoginEmbedded? embedded;
   @override
@@ -586,7 +588,8 @@ abstract class _LoginState implements LoginState {
   @override
   String? get token;
   @override
-  String? get userId;
+  String?
+      get userId; // Used to represent an embedded launch page or a login type within tabbed navigation
   @override
   LoginEmbedded? get embedded;
   @override

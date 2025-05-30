@@ -19,6 +19,7 @@ class LoginModeSelectScreenScreenshot extends StatelessWidget {
       create: (context) => MockLoginCubit.loginModeSelectScreen(),
       child: LoginModeSelectScreen(
         appGreetingL10n: context.read<FeatureAccess?>()?.loginFeature.titleL10n,
+        launchButtons: [],
       ),
     );
   }

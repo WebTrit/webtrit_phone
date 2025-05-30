@@ -510,7 +510,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get login_Button_signupRequestProceed => 'Procedi';
 
   @override
-  String get login_Button_signUpToDemoInstance => 'Iscrizione';
+  String get login_Button_signUpToDemoInstance => 'Registrati / Accedi';
 
   @override
   String get login_Button_signupVerifyProceed => 'Verifica';
@@ -1203,24 +1203,6 @@ class AppLocalizationsIt extends AppLocalizations {
   String get settings_AppBarTitle_myAccount => 'Il mio account';
 
   @override
-  String get settings_call_codecs_preferred_audio_default => 'Predefinito';
-
-  @override
-  String get settings_call_codecs_preferred_audio_tip => 'Il codec audio preferito viene utilizzato per le chiamate audio. Se il codec non è supportato dal dispositivo, la chiamata verrà stabilita utilizzando il codec successivo disponibile.';
-
-  @override
-  String get settings_call_codecs_preferred_audio_title => 'Codec audio preferito';
-
-  @override
-  String get settings_call_codecs_preferred_video_default => 'Predefinito';
-
-  @override
-  String get settings_call_codecs_preferred_video_tip => 'Il codec video preferito viene utilizzato per le chiamate video. Se il codec non è supportato dal dispositivo, la chiamata verrà stabilita utilizzando il codec successivo disponibile.';
-
-  @override
-  String get settings_call_codecs_preferred_video_title => 'Codec video preferito';
-
-  @override
   String get settings_encoding_AppBar_reset_tooltip => 'Ripristinare le impostazioni predefinite';
 
   @override
@@ -1249,6 +1231,9 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get settings_encoding_Section_preset_custom => 'Costume';
+
+  @override
+  String get settings_encoding_Section_preset_bypass => 'Bypass';
 
   @override
   String get settings_encoding_Section_measure_kbps => 'Kbps';
@@ -1287,7 +1272,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get settings_encoding_Section_ptime_prefix => 'Dimensione: ';
 
   @override
-  String get settings_encoding_Section_bandwidth_prefix => 'Gamma di frequenza: ';
+  String get settings_encoding_Section_bandwidth_prefix => 'Frequenza di campionamento: ';
 
   @override
   String get settings_encoding_Section_bitrate_title => 'Impostazioni della larghezza di banda';
@@ -1314,7 +1299,10 @@ class AppLocalizationsIt extends AppLocalizations {
   String get settings_encoding_Section_audio_ptime_limit => 'Limite dimensione pacchetto audio: ';
 
   @override
-  String get settings_encoding_Section_opus_bandwidth => 'Ridefinire la gamma di frequenza: ';
+  String get settings_encoding_Section_opus_samplingRate => 'Override della frequenza di campionamento: ';
+
+  @override
+  String get settings_encoding_Section_opus_bitrate => 'Sostituzione del bitrate:';
 
   @override
   String get settings_encoding_Section_opus_channels => 'Ridefinire dei modalità canale: ';

@@ -722,18 +722,6 @@ class AppLocalizationsMapper {
           localizations.settings_AccountDeleteConfirmDialog_title,
       'settings_AppBarTitle_myAccount':
           localizations.settings_AppBarTitle_myAccount,
-      'settings_call_codecs_preferred_audio_default':
-          localizations.settings_call_codecs_preferred_audio_default,
-      'settings_call_codecs_preferred_audio_tip':
-          localizations.settings_call_codecs_preferred_audio_tip,
-      'settings_call_codecs_preferred_audio_title':
-          localizations.settings_call_codecs_preferred_audio_title,
-      'settings_call_codecs_preferred_video_default':
-          localizations.settings_call_codecs_preferred_video_default,
-      'settings_call_codecs_preferred_video_tip':
-          localizations.settings_call_codecs_preferred_video_tip,
-      'settings_call_codecs_preferred_video_title':
-          localizations.settings_call_codecs_preferred_video_title,
       'settings_encoding_AppBar_reset_tooltip':
           localizations.settings_encoding_AppBar_reset_tooltip,
       'settings_encoding_Section_preset_title':
@@ -754,6 +742,8 @@ class AppLocalizationsMapper {
           localizations.settings_encoding_Section_preset_full_flex,
       'settings_encoding_Section_preset_custom':
           localizations.settings_encoding_Section_preset_custom,
+      'settings_encoding_Section_preset_bypass':
+          localizations.settings_encoding_Section_preset_bypass,
       'settings_encoding_Section_measure_kbps':
           localizations.settings_encoding_Section_measure_kbps,
       'settings_encoding_Section_measure_ms':
@@ -796,8 +786,10 @@ class AppLocalizationsMapper {
           localizations.settings_encoding_Section_audio_ptime,
       'settings_encoding_Section_audio_ptime_limit':
           localizations.settings_encoding_Section_audio_ptime_limit,
-      'settings_encoding_Section_opus_bandwidth':
-          localizations.settings_encoding_Section_opus_bandwidth,
+      'settings_encoding_Section_opus_samplingRate':
+          localizations.settings_encoding_Section_opus_samplingRate,
+      'settings_encoding_Section_opus_bitrate':
+          localizations.settings_encoding_Section_opus_bitrate,
       'settings_encoding_Section_opus_channels':
           localizations.settings_encoding_Section_opus_channels,
       'settings_encoding_Section_opus_dtx':

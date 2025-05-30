@@ -5,13 +5,15 @@
       {
         "enabled": true,
         "type": "login",
-        "titleL10n": "login_Button_signUpToDemoInstance"
+        "titleL10n": "login_Button_signUpToDemoInstance",
+        "isLaunchButtonVisible": true
       },
       {
         "enabled": false,
-        "embeddedResourceId": 1,
+        "embeddedId": 1,
         "type": "embedded",
-        "titleL10n": "login_Button_signIn"
+        "titleL10n": "login_Button_signIn",
+        "isLaunchButtonVisible": false
       }
     ]
   },
@@ -189,11 +191,12 @@
     "encoding": {
       "bypassConfig": false,
       "__defaultPresetOverride": {
-        "audioBitrate": 64,
+        "audioBitrate": 56,
         "videoBitrate": 512,
         "ptime": 20,
         "maxptime": 80,
-        "opusBandwidthLimit": 32000,
+        "opusSamplingRate": 24000,
+        "opusBitrate": 16,
         "opusStereo": false,
         "opusDtx": true
       }
@@ -207,7 +210,7 @@
   "embeddedResources": [
     {
       "id": 1,
-      "uri": "asset://assets/themes/custom_signup.html",
+      "uri": "https://webtrit-app.web.app/example/example_embedded_login.html",
       "toolbar": {
         "showToolbar": true,
         "titleL10n": "login_requestCredentials_title"

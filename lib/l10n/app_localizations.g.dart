@@ -1087,10 +1087,10 @@ abstract class AppLocalizations {
   /// **'Proceed'**
   String get login_Button_signupRequestProceed;
 
-  /// No description provided for @login_Button_signUpToDemoInstance.
+  /// Button that allows the user to sign up or sign in to a demo environment. Note: for non-demo installations, use the 'loginType_signup' key instead.
   ///
   /// In en, this message translates to:
-  /// **'Sign up'**
+  /// **'Sign up / sign in'**
   String get login_Button_signUpToDemoInstance;
 
   /// No description provided for @login_Button_signupVerifyProceed.
@@ -2401,42 +2401,6 @@ abstract class AppLocalizations {
   /// **'My account'**
   String get settings_AppBarTitle_myAccount;
 
-  /// No description provided for @settings_call_codecs_preferred_audio_default.
-  ///
-  /// In en, this message translates to:
-  /// **'Auto'**
-  String get settings_call_codecs_preferred_audio_default;
-
-  /// No description provided for @settings_call_codecs_preferred_audio_tip.
-  ///
-  /// In en, this message translates to:
-  /// **'The preferred audio codec is used for audio calls. If the codec is not supported by the device, the call will be established using the next available codec.'**
-  String get settings_call_codecs_preferred_audio_tip;
-
-  /// No description provided for @settings_call_codecs_preferred_audio_title.
-  ///
-  /// In en, this message translates to:
-  /// **'Preferred audio codec'**
-  String get settings_call_codecs_preferred_audio_title;
-
-  /// No description provided for @settings_call_codecs_preferred_video_default.
-  ///
-  /// In en, this message translates to:
-  /// **'Auto'**
-  String get settings_call_codecs_preferred_video_default;
-
-  /// No description provided for @settings_call_codecs_preferred_video_tip.
-  ///
-  /// In en, this message translates to:
-  /// **'The preferred video codec is used for video calls. If the codec is not supported by the device, the call will be established using the next available codec.'**
-  String get settings_call_codecs_preferred_video_tip;
-
-  /// No description provided for @settings_call_codecs_preferred_video_title.
-  ///
-  /// In en, this message translates to:
-  /// **'Preferred video codec'**
-  String get settings_call_codecs_preferred_video_title;
-
   /// No description provided for @settings_encoding_AppBar_reset_tooltip.
   ///
   /// In en, this message translates to:
@@ -2452,7 +2416,7 @@ abstract class AppLocalizations {
   /// No description provided for @settings_encoding_Section_preset_tooltip.
   ///
   /// In en, this message translates to:
-  /// **'Adjustment presets for audio and video codecs: \n- lower values will reduce the bandwidth usage but affect the quality, \n- higher values will increase the quality but also the bandwidth usage. \nThe default preset has recommended settings provided by your vendor according to their environment preferences.'**
+  /// **'Adjustment presets for audio and video codecs, lower values will reduce the bandwidth usage but affect the quality, higher values will increase the quality but also the bandwidth usage. Default preset is recommended settings provided by your vendor according to it evnironment preferences.'**
   String get settings_encoding_Section_preset_tooltip;
 
   /// No description provided for @settings_encoding_Section_preset.
@@ -2488,7 +2452,7 @@ abstract class AppLocalizations {
   /// No description provided for @settings_encoding_Section_preset_full_flex.
   ///
   /// In en, this message translates to:
-  /// **'Full flex'**
+  /// **'Full Flex'**
   String get settings_encoding_Section_preset_full_flex;
 
   /// No description provided for @settings_encoding_Section_preset_custom.
@@ -2496,6 +2460,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Custom'**
   String get settings_encoding_Section_preset_custom;
+
+  /// No description provided for @settings_encoding_Section_preset_bypass.
+  ///
+  /// In en, this message translates to:
+  /// **'Bypass'**
+  String get settings_encoding_Section_preset_bypass;
 
   /// No description provided for @settings_encoding_Section_measure_kbps.
   ///
@@ -2572,7 +2542,7 @@ abstract class AppLocalizations {
   /// No description provided for @settings_encoding_Section_bandwidth_prefix.
   ///
   /// In en, this message translates to:
-  /// **'Bandwidth: '**
+  /// **'Sampling rate: '**
   String get settings_encoding_Section_bandwidth_prefix;
 
   /// No description provided for @settings_encoding_Section_bitrate_title.
@@ -2584,7 +2554,7 @@ abstract class AppLocalizations {
   /// No description provided for @settings_encoding_Section_bitrate_tooltip.
   ///
   /// In en, this message translates to:
-  /// **'Adjust the bitrate settings for audio and video codecs: \n- lower values will reduce the bandwidth usage but affect the quality, \n- higher values will increase the quality but also the bandwidth usage.'**
+  /// **'Adjust the bitrate settings for audio and video codecs, lower values will reduce the bandwidth usage but affect the quality, higher values will increase the quality but also the bandwidth usage.'**
   String get settings_encoding_Section_bitrate_tooltip;
 
   /// No description provided for @settings_encoding_Section_target_audio_bitrate.
@@ -2608,7 +2578,7 @@ abstract class AppLocalizations {
   /// No description provided for @settings_encoding_Section_packetization_tooltip.
   ///
   /// In en, this message translates to:
-  /// **'Adjust audio packetization time in milliseconds. Can be used to reduce audio latency or fix Network MTU size issues'**
+  /// **'Adjust audio packetization-time in milliseconds, can be used to reduce audio latency or fix Network MTU size issues'**
   String get settings_encoding_Section_packetization_tooltip;
 
   /// No description provided for @settings_encoding_Section_audio_ptime.
@@ -2623,11 +2593,17 @@ abstract class AppLocalizations {
   /// **'Audio ptime limit: '**
   String get settings_encoding_Section_audio_ptime_limit;
 
-  /// No description provided for @settings_encoding_Section_opus_bandwidth.
+  /// No description provided for @settings_encoding_Section_opus_samplingRate.
   ///
   /// In en, this message translates to:
-  /// **'Bandwidth override: '**
-  String get settings_encoding_Section_opus_bandwidth;
+  /// **'Sampling rate override: '**
+  String get settings_encoding_Section_opus_samplingRate;
+
+  /// No description provided for @settings_encoding_Section_opus_bitrate.
+  ///
+  /// In en, this message translates to:
+  /// **'Bitrate override: '**
+  String get settings_encoding_Section_opus_bitrate;
 
   /// No description provided for @settings_encoding_Section_opus_channels.
   ///

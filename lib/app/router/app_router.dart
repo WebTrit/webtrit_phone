@@ -60,16 +60,15 @@ class AppRouter extends RootStackRouter {
 
   bool get appLoggedIn => coreUrl != null && token != null && userId != null;
 
-  /// Retrieves the initial tab path for the main screen.
+  /// Retrieves the initial tab  for the main screen.
   ///
   /// This getter determines the initial tab to display on the main screen
-  String? get _mainInitialTabPath => _bottomMenuFeature.activeTab.path();
+  BottomMenuTab get _mainInitialTab => _bottomMenuFeature.activeTab;
 
   @override
   List<AutoRoute> get routes => [
-        AutoRoute.guarded(
+        AutoRoute(
           page: AppShellRoute.page,
-          onNavigation: onAppShellRouteGuardNavigation,
           path: '/',
           children: [
             RedirectRoute(
@@ -83,10 +82,6 @@ class AppRouter extends RootStackRouter {
               children: [
                 AutoRoute(
                   page: LoginModeSelectScreenPageRoute.page,
-                ),
-                AutoRoute(
-                  page: LoginEmbeddedScreenPageRoute.page,
-                  maintainState: false,
                 ),
                 AutoRoute(
                   page: LoginCoreUrlAssignScreenPageRoute.page,
@@ -163,11 +158,6 @@ class AppRouter extends RootStackRouter {
                   page: MainScreenPageRoute.page,
                   path: '',
                   children: [
-                    if (_mainInitialTabPath != null)
-                      RedirectRoute(
-                        path: '',
-                        redirectTo: _mainInitialTabPath!,
-                      ),
                     AutoRoute(
                       page: FavoritesRouterPageRoute.page,
                       path: MainFlavor.favorites.name,
@@ -408,7 +398,18 @@ class AppRouter extends RootStackRouter {
           [const PermissionsScreenPageRoute()],
         );
       } else {
-        resolver.next(true);
+        resolver.overrideNext(children: [
+          MainScreenPageRoute(children: [
+            switch (_mainInitialTab.flavor) {
+              MainFlavor.favorites => const FavoritesRouterPageRoute(),
+              MainFlavor.recents => const RecentsRouterPageRoute(),
+              MainFlavor.contacts => const ContactsRouterPageRoute(),
+              MainFlavor.keypad => const KeypadScreenPageRoute(),
+              MainFlavor.embedded => EmbeddedTabPageRoute(id: _mainInitialTab.toEmbedded!.id),
+              MainFlavor.messaging => const ConversationsScreenPageRoute(),
+            },
+          ])
+        ]);
       }
     } else {
       resolver.next(false);
@@ -419,20 +420,6 @@ class AppRouter extends RootStackRouter {
           )
         ],
       );
-    }
-  }
-
-  void onAppShellRouteGuardNavigation(NavigationResolver resolver, StackRouter router) {
-    _logger.fine(_onNavigationLoggerMessage('onAppShellRouteGuardNavigation', resolver));
-
-    resolver.next(true);
-
-    // Since reevaluateListenable triggers reevaluation only on the root router,
-    // explicit reevaluation on the app shell router is necessary to ensure
-    // proper handling of login/logout functionality.
-    if (resolver.isReevaluating) {
-      final innerRouter = router.innerRouterOf<StackRouter>(AppShellRoute.name);
-      innerRouter?.reevaluateGuards();
     }
   }
 

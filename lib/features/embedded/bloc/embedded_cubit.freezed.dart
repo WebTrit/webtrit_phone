@@ -17,6 +17,8 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$EmbeddedState {
   Map<String, dynamic> get payload => throw _privateConstructorUsedError;
+  String get currentUrl => throw _privateConstructorUsedError;
+  bool get canGoBack => throw _privateConstructorUsedError;
   bool get payloadReady => throw _privateConstructorUsedError;
   bool get webViewReady => throw _privateConstructorUsedError;
   WebResourceError? get webResourceError => throw _privateConstructorUsedError;
@@ -37,6 +39,8 @@ abstract class $EmbeddedStateCopyWith<$Res> {
   @useResult
   $Res call(
       {Map<String, dynamic> payload,
+      String currentUrl,
+      bool canGoBack,
       bool payloadReady,
       bool webViewReady,
       WebResourceError? webResourceError,
@@ -59,6 +63,8 @@ class _$EmbeddedStateCopyWithImpl<$Res, $Val extends EmbeddedState>
   @override
   $Res call({
     Object? payload = null,
+    Object? currentUrl = null,
+    Object? canGoBack = null,
     Object? payloadReady = null,
     Object? webViewReady = null,
     Object? webResourceError = freezed,
@@ -69,6 +75,14 @@ class _$EmbeddedStateCopyWithImpl<$Res, $Val extends EmbeddedState>
           ? _value.payload
           : payload // ignore: cast_nullable_to_non_nullable
               as Map<String, dynamic>,
+      currentUrl: null == currentUrl
+          ? _value.currentUrl
+          : currentUrl // ignore: cast_nullable_to_non_nullable
+              as String,
+      canGoBack: null == canGoBack
+          ? _value.canGoBack
+          : canGoBack // ignore: cast_nullable_to_non_nullable
+              as bool,
       payloadReady: null == payloadReady
           ? _value.payloadReady
           : payloadReady // ignore: cast_nullable_to_non_nullable
@@ -99,6 +113,8 @@ abstract class _$$InitialImplCopyWith<$Res>
   @useResult
   $Res call(
       {Map<String, dynamic> payload,
+      String currentUrl,
+      bool canGoBack,
       bool payloadReady,
       bool webViewReady,
       WebResourceError? webResourceError,
@@ -119,6 +135,8 @@ class __$$InitialImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? payload = null,
+    Object? currentUrl = null,
+    Object? canGoBack = null,
     Object? payloadReady = null,
     Object? webViewReady = null,
     Object? webResourceError = freezed,
@@ -129,6 +147,14 @@ class __$$InitialImplCopyWithImpl<$Res>
           ? _value._payload
           : payload // ignore: cast_nullable_to_non_nullable
               as Map<String, dynamic>,
+      currentUrl: null == currentUrl
+          ? _value.currentUrl
+          : currentUrl // ignore: cast_nullable_to_non_nullable
+              as String,
+      canGoBack: null == canGoBack
+          ? _value.canGoBack
+          : canGoBack // ignore: cast_nullable_to_non_nullable
+              as bool,
       payloadReady: null == payloadReady
           ? _value.payloadReady
           : payloadReady // ignore: cast_nullable_to_non_nullable
@@ -154,6 +180,8 @@ class __$$InitialImplCopyWithImpl<$Res>
 class _$InitialImpl extends _Initial {
   const _$InitialImpl(
       {final Map<String, dynamic> payload = const {},
+      this.currentUrl = '',
+      this.canGoBack = false,
       this.payloadReady = false,
       this.webViewReady = false,
       this.webResourceError,
@@ -172,6 +200,12 @@ class _$InitialImpl extends _Initial {
 
   @override
   @JsonKey()
+  final String currentUrl;
+  @override
+  @JsonKey()
+  final bool canGoBack;
+  @override
+  @JsonKey()
   final bool payloadReady;
   @override
   @JsonKey()
@@ -183,7 +217,7 @@ class _$InitialImpl extends _Initial {
 
   @override
   String toString() {
-    return 'EmbeddedState(payload: $payload, payloadReady: $payloadReady, webViewReady: $webViewReady, webResourceError: $webResourceError, intent: $intent)';
+    return 'EmbeddedState(payload: $payload, currentUrl: $currentUrl, canGoBack: $canGoBack, payloadReady: $payloadReady, webViewReady: $webViewReady, webResourceError: $webResourceError, intent: $intent)';
   }
 
   @override
@@ -192,6 +226,10 @@ class _$InitialImpl extends _Initial {
         (other.runtimeType == runtimeType &&
             other is _$InitialImpl &&
             const DeepCollectionEquality().equals(other._payload, _payload) &&
+            (identical(other.currentUrl, currentUrl) ||
+                other.currentUrl == currentUrl) &&
+            (identical(other.canGoBack, canGoBack) ||
+                other.canGoBack == canGoBack) &&
             (identical(other.payloadReady, payloadReady) ||
                 other.payloadReady == payloadReady) &&
             (identical(other.webViewReady, webViewReady) ||
@@ -205,6 +243,8 @@ class _$InitialImpl extends _Initial {
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(_payload),
+      currentUrl,
+      canGoBack,
       payloadReady,
       webViewReady,
       webResourceError,
@@ -222,6 +262,8 @@ class _$InitialImpl extends _Initial {
 abstract class _Initial extends EmbeddedState {
   const factory _Initial(
       {final Map<String, dynamic> payload,
+      final String currentUrl,
+      final bool canGoBack,
       final bool payloadReady,
       final bool webViewReady,
       final WebResourceError? webResourceError,
@@ -230,6 +272,10 @@ abstract class _Initial extends EmbeddedState {
 
   @override
   Map<String, dynamic> get payload;
+  @override
+  String get currentUrl;
+  @override
+  bool get canGoBack;
   @override
   bool get payloadReady;
   @override

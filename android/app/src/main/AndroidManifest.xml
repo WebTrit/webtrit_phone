@@ -2,7 +2,10 @@
     <uses-permission android:name="android.permission.INTERNET"/>
     <!-- Permissions options for the `webrtc` group -->
     <uses-feature android:name="android.hardware.camera"/>
-    <uses-feature android:name="android.hardware.camera.autofocus"/>
+    <!-- Mark autofocus as optional to allow compatibility with low-end devices like Mobicel PX12 (MX2),
+     which have a camera but do not support autofocus. This ensures the app remains available in Play Store
+     for devices running Android Go or with fixed-focus cameras. -->
+    <uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
     <uses-permission android:name="android.permission.CAMERA"/>
     <uses-permission android:name="android.permission.RECORD_AUDIO"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
@@ -58,6 +61,7 @@
             android:windowSoftInputMode="adjustResize"
             android:relinquishTaskIdentity="true"
             android:showWhenLocked="true"
+            android:enableOnBackInvokedCallback="false"
             android:turnScreenOn="true">
             <!-- Specifies an Android theme to apply to this Activity as soon as
                  the Android process has started. This theme is visible to the user

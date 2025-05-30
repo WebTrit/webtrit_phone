@@ -147,6 +147,8 @@ class VoicemailRepositoryImpl with ContactsDriftMapper, VoicemailMapper implemen
   /// Throws an exception if the remote request fails.
   @override
   Future<void> fetchVoicemails({String? localeCode}) async {
+    if (!repositoryOptions.shouldOperate) return;
+
     if (_fetchingCompleter?.isCompleted == false) {
       return _fetchingCompleter!.future;
     }
