@@ -4,7 +4,7 @@ part 'system_notification.freezed.dart';
 
 part 'system_notification.g.dart';
 
-enum SystemNotificationType { announcement, info }
+enum SystemNotificationType { announcement, promotion, security, system }
 
 @freezed
 class SystemNotification with _$SystemNotification {
@@ -30,7 +30,7 @@ class SystemNotificationResponce with _$SystemNotificationResponce {
   @JsonSerializable(fieldRename: FieldRename.snake)
   const factory SystemNotificationResponce({
     required List<SystemNotification> items,
-    required int unseen_count,
+    @Default(0) int unseenCount,
   }) = _SystemNotificationResponce;
 
   factory SystemNotificationResponce.fromJson(Map<String, Object?> json) => _$SystemNotificationResponceFromJson(json);

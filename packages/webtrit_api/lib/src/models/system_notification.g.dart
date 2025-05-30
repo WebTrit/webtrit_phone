@@ -36,7 +36,9 @@ Map<String, dynamic> _$$SystemNotificationImplToJson(
 
 const _$SystemNotificationTypeEnumMap = {
   SystemNotificationType.announcement: 'announcement',
-  SystemNotificationType.info: 'info',
+  SystemNotificationType.promotion: 'promotion',
+  SystemNotificationType.security: 'security',
+  SystemNotificationType.system: 'system',
 };
 
 _$SystemNotificationResponceImpl _$$SystemNotificationResponceImplFromJson(
@@ -45,12 +47,12 @@ _$SystemNotificationResponceImpl _$$SystemNotificationResponceImplFromJson(
       items: (json['items'] as List<dynamic>)
           .map((e) => SystemNotification.fromJson(e as Map<String, dynamic>))
           .toList(),
-      unseen_count: (json['unseen_count'] as num).toInt(),
+      unseenCount: (json['unseen_count'] as num?)?.toInt() ?? 0,
     );
 
 Map<String, dynamic> _$$SystemNotificationResponceImplToJson(
         _$SystemNotificationResponceImpl instance) =>
     <String, dynamic>{
       'items': instance.items,
-      'unseen_count': instance.unseen_count,
+      'unseen_count': instance.unseenCount,
     };

@@ -1,6 +1,6 @@
 import 'package:drift/drift.dart';
 
-enum SystemNotificationType { announcement, info }
+enum SystemNotificationType { announcement, promotion, security, system }
 
 @DataClassName('SystemNotificationData')
 class SystemNotificationsTable extends Table {

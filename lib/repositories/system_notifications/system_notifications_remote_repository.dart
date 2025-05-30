@@ -32,14 +32,14 @@ class SystemNotificationsRemoteRepositoryApiImpl
   Future<SystemNotificationsWithUnseen> getHistory({DateTime? since, int limit = 20}) async {
     final response = await _webtritApiClient.getSystemNotificationsHistory(_token, since: since, limit: limit);
     final notifications = response.items.map(systemNotificationFromApi).toList();
-    return (notifications, response.unseen_count);
+    return (notifications, response.unseenCount);
   }
 
   @override
   Future<SystemNotificationsWithUnseen> getUpdates({required DateTime since, int limit = 20}) async {
     final response = await _webtritApiClient.getSystemNotificationsUpdates(_token, since: since, limit: limit);
     final notifications = response.items.map(systemNotificationFromApi).toList();
-    return (notifications, response.unseen_count);
+    return (notifications, response.unseenCount);
   }
 
   @override

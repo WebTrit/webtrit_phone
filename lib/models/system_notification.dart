@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-enum SystemNotificationType { announcement, info }
+enum SystemNotificationType { announcement, promotion, security, system }
 
 class SystemNotification extends Equatable {
   const SystemNotification({
