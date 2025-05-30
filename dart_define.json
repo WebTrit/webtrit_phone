@@ -6,6 +6,7 @@
   "WEBTRIT_APP_DEMO_CORE_URL": "http://192.168.10.100:4000",
   "_WEBTRIT_APP_CORE_VERSION_CONSTRAINT": "",
   "WEBTRIT_APP_LINK_DOMAIN": "app.webtrit.com",
+  "_WEBTRIT_APP_LINK_DOMAIN_DESCRIPTION": "If provided, enables Android App Links integration via intent-filter. Must match assetlinks.json configuration on the target domain. This functionality is configured via Android flavors — if the value is non-empty, the 'deeplinks' flavor is selected automatically.",
   "WEBTRIT_APP_NAME": "WebTrit",
   "_WEBTRIT_APP_ABOUT_URL": "",
   "WEBTRIT_APP_SALES_EMAIL": "sales@webtrit.com",
