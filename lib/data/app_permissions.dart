@@ -20,7 +20,9 @@ class AppPermissions {
   static Future<AppPermissions> init(FeatureAccess featureAccess) async {
     final bottomMenuFeature = featureAccess.bottomMenuFeature;
     final contactsSourceTypes = bottomMenuFeature.getTabEnabled(MainFlavor.contacts)?.toContacts?.contactSourceTypes;
-    final localContactsSourceTypeEnabled = contactsSourceTypes?.contains(ContactSourceType.local) == true;
+
+    final isRequestContactsPermissions = contactsSourceTypes?.contains(ContactSourceType.local) == true;
+    final isRequestSmsPermissions = featureAccess.callFeature.callTriggerConfig.smsFallback.enabled;
 
     final specialStatuses = await Future.wait(_specialPermissions.map((permission) => permission.status()));
 
@@ -28,7 +30,8 @@ class AppPermissions {
     final permissions = [
       Permission.microphone,
       Permission.camera,
-      if (localContactsSourceTypeEnabled) Permission.contacts,
+      if (isRequestContactsPermissions) Permission.contacts,
+      if (isRequestSmsPermissions) Permission.sms,
     ];
 
     final statuses = await Future.wait(permissions.map((permission) => permission.status));
