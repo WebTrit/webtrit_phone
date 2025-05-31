@@ -114,4 +114,12 @@ class EnvironmentConfig {
   static final REMOTE_LOGZIO_LOGGING_BUFFER_SIZE =
       int.tryParse(const String.fromEnvironment(REMOTE_LOGZIO_LOGGING_BUFFER_SIZE__NAME)) ??
           _REMOTE_LOGZIO_LOGGING_BUFFER_SIZE__KB;
+
+  // SMS-based incoming call trigger mechanism (fallback).
+  // If enabled, the app listens for specially formatted incoming SMS messages to trigger incoming calls.
+  static const CALL_TRIGGER_MECHANISM_SMS__NAME = 'WEBTRIT_CALL_TRIGGER_MECHANISM_SMS';
+  static const CALL_TRIGGER_MECHANISM_SMS = bool.fromEnvironment(
+    CALL_TRIGGER_MECHANISM_SMS__NAME,
+    defaultValue: false,
+  );
 }

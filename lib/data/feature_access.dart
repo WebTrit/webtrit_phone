@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:logging/logging.dart';
 
 import 'package:webtrit_phone/data/app_preferences.dart';
+import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/models/models.dart';
@@ -298,6 +299,12 @@ class FeatureAccess {
         isBlindTransferEnabled: transferConfig.enableBlindTransfer,
         isAttendedTransferEnabled: transferConfig.enableAttendedTransfer,
       ),
+      callTriggerConfig: const CallTriggerConfig(
+        smsFallback: SmsFallbackTriggerConfig(
+          enabled: EnvironmentConfig.CALL_TRIGGER_MECHANISM_SMS,
+          available: EnvironmentConfig.CALL_TRIGGER_MECHANISM_SMS,
+        ),
+      ),
       encoding: EncodingConfig(
           bypassConfig: encodingConfig.bypassConfig,
           configurationAllowed: encodingViewEnabled,
@@ -454,15 +461,25 @@ class SettingsFeature {
 }
 
 class CallFeature {
-  final CallConfig callConfig;
-  final EncodingConfig encoding;
-  final PeerConnectionSettings peerConnection;
-
   CallFeature({
     required this.callConfig,
     required this.encoding,
     required this.peerConnection,
+    required this.callTriggerConfig,
   });
+
+  final CallConfig callConfig;
+  final EncodingConfig encoding;
+  final PeerConnectionSettings peerConnection;
+
+  /// Configuration for how incoming calls are triggered.
+  ///
+  /// This controls which triggering mechanisms are available and which one is currently active.
+  /// It also defines fallback behavior via SMS if supported.
+  ///
+  /// Note: This setting affects **UI-level visibility and selection** of triggering methods,
+  /// not the underlying signaling implementation.
+  final CallTriggerConfig callTriggerConfig;
 }
 
 class MessagingFeature {
