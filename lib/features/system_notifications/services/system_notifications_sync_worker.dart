@@ -8,11 +8,19 @@ import 'package:webtrit_phone/repositories/system_notifications/system_notificat
 
 final _logger = Logger('SystemNotificationsSyncWorker');
 
+/// A worker class responsible for synchronizing system notifications.
+///
+/// This class handles the logic required to keep system notifications up-to-date,
+/// ensuring that any changes or updates are properly managed and reflected within
+/// the application.
+///
+/// Fetches notifications sequentially, starting with the initial history
+/// and then fetching updates based on the last update time using updatedAt property.
 class SystemNotificationsSyncWorker {
   SystemNotificationsSyncWorker(
     this.localRepo,
     this.remoteRepo, {
-    this.pollingInterval = const Duration(seconds: 2),
+    this.pollingInterval = const Duration(seconds: 10),
     this.pageSize = 50,
   });
 
@@ -30,6 +38,7 @@ class SystemNotificationsSyncWorker {
   }
 
   Stream<dynamic> _syncStream() async* {
+    int successIterations = 0;
     while (!_disposed) {
       try {
         // Check connectivity before processing
@@ -45,9 +54,9 @@ class SystemNotificationsSyncWorker {
 
         // If no last update, fetch initial history
         if (lastUpdate == null) {
-          final (notifications, unseen) = await remoteRepo.getHistory(limit: pageSize);
-          await Future.forEach(notifications, (n) => localRepo.upsertNotification(n));
-          localRepo.setUnseenCount(unseen);
+          final (notifications, _) = await remoteRepo.getHistory(limit: pageSize);
+          final isInitialData = successIterations == 0;
+          await localRepo.upsertNotifications(notifications, initialData: isInitialData);
           yield 'Initial notifications fetched: ${notifications.length}';
         }
 
@@ -55,13 +64,13 @@ class SystemNotificationsSyncWorker {
         // since last update
         if (lastUpdate != null) {
           while (true) {
-            final (updates, unseen) = await remoteRepo.getUpdates(since: lastUpdate, limit: pageSize);
-            await Future.forEach(updates, (n) => localRepo.upsertNotification(n));
-            localRepo.setUnseenCount(unseen);
+            final (updates, _) = await remoteRepo.getUpdates(since: lastUpdate, limit: pageSize);
+            await localRepo.upsertNotifications(updates);
             yield 'Updated notifications: ${updates.length}';
             if (updates.length < pageSize) break;
           }
         }
+        successIterations++;
       } catch (e, s) {
         yield (e, s);
       } finally {
@@ -74,6 +83,8 @@ class SystemNotificationsSyncWorker {
     if (event is (Object, StackTrace)) {
       final (error, stackTrace) = event;
       _logger.warning(error, stackTrace);
+    } else if (event == _kRetryEventStub) {
+      return;
     } else {
       _logger.fine(event);
     }

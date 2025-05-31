@@ -4,6 +4,7 @@ import 'dart:async';
 import 'package:collection/collection.dart';
 import 'package:logging/logging.dart';
 
+import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/push_notification/push_notifications.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
@@ -141,7 +142,10 @@ class MessagingPushService {
           notification.messageId,
           notification.title!,
           notification.body!,
-          payload: {'chatId': notification.conversationId.toString()},
+          payload: {
+            'source': kLocalPushSourceSystemNotification,
+            'chatId': notification.conversationId.toString(),
+          },
         );
         localPushRepository.displayPush(localPush);
 
@@ -164,7 +168,10 @@ class MessagingPushService {
           notification.messageId,
           notification.title!,
           notification.body!,
-          payload: {'smsConversationId': notification.conversationId.toString()},
+          payload: {
+            'source': kLocalPushSourceSystemNotification,
+            'smsConversationId': notification.conversationId.toString(),
+          },
         );
         localPushRepository.displayPush(localPush);
 

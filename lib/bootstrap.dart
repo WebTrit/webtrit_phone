@@ -227,39 +227,33 @@ Future<void> _initWorkManager() async {
 
 @pragma('vm:entry-point')
 void workManagerDispatcher() {
-  final logger = Logger('WorkManagerCallbackDispatcher');
+  final logger = Logger('WorkManagerDispatcher');
 
-  Workmanager().executeTask((task, inputData) async {
-    logger.info('Native called background task: $task');
+  Workmanager().executeTask((task, _) async {
+    logger.info('Task execution started: $task');
 
-    if (task == kSystemNotificationsTask) {
+    if (task == kSystemNotificationsTask || task == kSystemNotificationsTaskId) {
+      // Skip execution if the app is in the foreground
       final appLifecycle = await AppLifecycle.initSlave();
       final currentState = appLifecycle.getLifecycleState();
       if (currentState == AppLifecycleState.resumed) return Future.value(true);
 
-      final appCerts = await AppCertificates.init();
-      final appSecureStorage = await SecureStorage.init();
-
-      final coreUrl = appSecureStorage.readCoreUrl();
-      final tenantId = appSecureStorage.readTenantId();
-      final token = appSecureStorage.readToken();
+      // Init api and remote repository
+      final storage = await SecureStorage.init();
+      final (coreUrl, tenantId, token) = (storage.readCoreUrl(), storage.readTenantId(), storage.readToken());
       if (coreUrl == null || tenantId == null || token == null) return Future.value(true);
+      final api = WebtritApiClient(Uri.parse(coreUrl), tenantId);
+      final remoteRepo = SystemNotificationsRemoteRepositoryApiImpl(api, token);
 
+      // Init local database and repository
       final appDatabase = await IsolateDatabase.create();
       final localRepo = SystemNotificationsLocalRepositoryDriftImpl(appDatabase);
-      final api = WebtritApiClient(Uri.parse(coreUrl), tenantId, certs: appCerts.trustedCertificates);
-      final remoteRepo = SystemNotificationsRemoteRepositoryApiImpl(api, token);
       final localPushRepo = LocalPushRepositoryFLNImpl();
 
-      final worker = SystemNotificationBackgroundWorker(
-        secureStorage: appSecureStorage,
-        localRepo: localRepo,
-        remoteRepo: remoteRepo,
-        pushRepo: localPushRepo,
-      );
-
+      // Initialize the background worker and execute task
+      final worker = SystemNotificationBackgroundWorker(localRepo, remoteRepo, localPushRepo);
       final result = await worker.execute();
-      logger.info('SystemNotificationBackgroundWorker executed with result: $result');
+      logger.info('Task result: $result');
       return result;
     }
     return true;

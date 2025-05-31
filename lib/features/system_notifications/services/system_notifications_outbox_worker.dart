@@ -10,11 +10,15 @@ import 'package:webtrit_phone/repositories/system_notifications/system_notificat
 
 final _logger = Logger('SystemNotificationsOutboxWorker');
 
+/// A worker class responsible for handling the outbox of async operations
+/// related to system notifications. This may include queuing,
+/// sending, and managing notifications that need to be delivered
+/// by the system.
 class SystemNotificationsOutboxWorker {
   SystemNotificationsOutboxWorker(
     this.localRepo,
     this.remoteRepo, {
-    this.pollingInterval = const Duration(seconds: 2),
+    this.pollingInterval = const Duration(seconds: 1),
   });
 
   final SystemNotificationsLocalRepository localRepo;
@@ -44,24 +48,26 @@ class SystemNotificationsOutboxWorker {
 
         // Process pending outbox notifications
         final seenEntries = await localRepo.getOutboxNotifications(
-          SnOutboxActionType.seen,
+          actionType: SnOutboxActionType.seen,
           states: [SnOutboxState.pending],
         );
-        yield 'Pending seen entries: ${seenEntries.length}';
 
-        for (final entry in seenEntries) {
-          try {
-            await remoteRepo.markSystemNotificationAsSeen(entry.notificationId);
-            await localRepo.upsertOutboxNotification(entry.toSent());
-            yield 'Seen notification sent: ${entry.notificationId}';
-          } catch (e, s) {
-            yield (e, s);
-            if (entry.sendAttempts > 5) {
-              await localRepo.upsertOutboxNotification(entry.toFailed());
-              yield 'Failed to send seen notification after 3 attempts: ${entry.notificationId}';
-            } else {
-              await localRepo.upsertOutboxNotification(entry.incAttempts());
-              yield 'Retrying seen notification: ${entry.notificationId}, attempt: ${entry.sendAttempts}';
+        if (seenEntries.isNotEmpty) {
+          yield 'Pending seen entries: ${seenEntries.length}';
+          for (final entry in seenEntries) {
+            try {
+              await remoteRepo.markSystemNotificationAsSeen(entry.notificationId);
+              await localRepo.upsertOutboxNotification(entry.toSent());
+              yield 'Seen notification sent: ${entry.notificationId}';
+            } catch (e, s) {
+              yield (e, s);
+              if (entry.sendAttempts > 5) {
+                await localRepo.upsertOutboxNotification(entry.toFailed());
+                yield 'Failed to send seen notification after 3 attempts: ${entry.notificationId}';
+              } else {
+                await localRepo.upsertOutboxNotification(entry.incAttempts());
+                yield 'Retrying seen notification: ${entry.notificationId}, attempt: ${entry.sendAttempts}';
+              }
             }
           }
         }
@@ -77,6 +83,8 @@ class SystemNotificationsOutboxWorker {
     if (event is (Object, StackTrace)) {
       final (error, stackTrace) = event;
       _logger.warning(error, stackTrace);
+    } else if (event == _kRetryEventStub) {
+      return;
     } else {
       _logger.fine(event);
     }

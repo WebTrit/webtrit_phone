@@ -3,6 +3,8 @@ import 'dart:convert';
 
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
+import 'package:webtrit_phone/app/constants.dart';
+
 /// This class is used to handle local notifications actions from global context
 ///
 /// Routes the actions to the apropriate streams and holds them in a stream controller buffer
@@ -36,13 +38,13 @@ class LocalPushsBroker {
     final payload = response.payload;
     if (payload == null) return false;
     final payloadData = json.decode(payload);
-    return payloadData['chatId'] != null || payloadData['smsConversationId'] != null;
+    return payloadData['source'] == kLocalPushSourceMessaging;
   }
 
   static bool _isSystemPushAction(NotificationResponse response) {
     final payload = response.payload;
     if (payload == null) return false;
     final payloadData = json.decode(payload);
-    return payloadData['system_id'] != null;
+    return payloadData['source'] == kLocalPushSourceSystemNotification;
   }
 }

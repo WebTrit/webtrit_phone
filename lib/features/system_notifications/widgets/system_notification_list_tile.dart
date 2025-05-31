@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
+
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/models/system_notification.dart';
 
-import '../system_notifications.dart';
-
 class SystemNotificationListTile extends StatefulWidget {
-  const SystemNotificationListTile(this.entry, {this.onRender, super.key});
+  const SystemNotificationListTile(
+    this.notification, {
+    this.seenPending = false,
+    this.onRender,
+    super.key,
+  });
 
-  final SystemNotificationViewEntry entry;
+  final SystemNotification notification;
+  final bool seenPending;
   final VoidCallback? onRender;
 
   @override
@@ -25,7 +30,7 @@ class _SystemNotificationListTileState extends State<SystemNotificationListTile>
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-    final seen = widget.entry.seen;
+    final seen = widget.notification.seen || widget.seenPending;
 
     return AnimatedContainer(
       duration: const Duration(seconds: 1),
@@ -37,22 +42,22 @@ class _SystemNotificationListTileState extends State<SystemNotificationListTile>
       ),
       child: ListTile(
         minLeadingWidth: 20,
-        leading: switch (widget.entry.type) {
+        leading: switch (widget.notification.type) {
           SystemNotificationType.announcement => const Icon(Icons.announcement_outlined, size: 20),
           SystemNotificationType.promotion => const Icon(Icons.local_offer_outlined, size: 20),
           SystemNotificationType.security => const Icon(Icons.security_outlined, size: 20),
           SystemNotificationType.system => const Icon(Icons.settings_outlined, size: 20),
         },
         title: Text(
-          widget.entry.title,
+          widget.notification.title,
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         subtitle: Text(
-          widget.entry.content,
+          widget.notification.content,
           style: const TextStyle(fontSize: 14),
         ),
         trailing: Text(
-          widget.entry.date.timeOrDate,
+          widget.notification.createdAt.timeOrDate,
           style: const TextStyle(fontSize: 10),
         ),
       ),

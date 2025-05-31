@@ -8,9 +8,7 @@ import 'package:webtrit_phone/features/messaging/messaging.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
-import 'history_fetch_indicator.dart';
 import 'message_text_field.dart';
-import 'scroll_to_bottom.dart';
 import 'typing_indicator.dart';
 import '../message_view/sms_message_view.dart';
 

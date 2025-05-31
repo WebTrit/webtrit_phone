@@ -49,3 +49,18 @@ class SystemNotification extends Equatable {
     );
   }
 }
+
+extension SystemNotificationIterableExtension on Iterable<SystemNotification> {
+  Iterable<SystemNotification> mergeWithUpdate(SystemNotification notification) {
+    final isNew = !any((n) => n.id == notification.id);
+    if (isNew) {
+      return [notification, ...this];
+    } else {
+      return map((n) => n.id == notification.id ? notification : n);
+    }
+  }
+
+  Iterable<SystemNotification> mergeWithRemove(int id) {
+    return where((n) => n.id != id);
+  }
+}

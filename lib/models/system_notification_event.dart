@@ -6,17 +6,18 @@ import 'package:webtrit_phone/models/system_notification_outbox_entry.dart';
 sealed class SystemNotificationEvent {
   const SystemNotificationEvent();
 
-  factory SystemNotificationEvent.update(SystemNotification notification) => SystemNotificationUpdate(notification);
+  factory SystemNotificationEvent.update(SystemNotification n) => SystemNotificationUpdate(n);
   factory SystemNotificationEvent.remove(int id) => SystemNotificationRemove(id);
-  factory SystemNotificationEvent.outboxUpdate(SystemNotificationOutboxEntry entry) =>
-      SystemNotificationOutboxUpdate(entry);
-  factory SystemNotificationEvent.outboxRemove(int id) => SystemNotificationOutboxRemove(id);
-  factory SystemNotificationEvent.unseenCountUpdate(int count) => SystemNotificationUnseenCountUpdate(count);
+  factory SystemNotificationEvent.outboxUpdate(SystemNotificationOutboxEntry e) => SystemNotificationOutboxUpdate(e);
+  factory SystemNotificationEvent.outboxRemove(int id, SnOutboxActionType actionType) =>
+      SystemNotificationOutboxRemove(id, actionType);
 }
 
 final class SystemNotificationUpdate extends SystemNotificationEvent with EquatableMixin {
-  SystemNotificationUpdate(this.notification);
+  SystemNotificationUpdate(this.notification, {this.initialData = false});
   final SystemNotification notification;
+  final bool initialData;
+
   int get id => notification.id;
 
   @override
@@ -50,22 +51,12 @@ final class SystemNotificationOutboxUpdate extends SystemNotificationEvent with 
 }
 
 final class SystemNotificationOutboxRemove extends SystemNotificationEvent with EquatableMixin {
-  SystemNotificationOutboxRemove(this.id);
+  SystemNotificationOutboxRemove(this.id, this.actionType);
   final int id;
+  final SnOutboxActionType actionType;
 
   @override
-  List<Object?> get props => [id];
-
-  @override
-  bool get stringify => true;
-}
-
-final class SystemNotificationUnseenCountUpdate extends SystemNotificationEvent with EquatableMixin {
-  SystemNotificationUnseenCountUpdate(this.count);
-  final int count;
-
-  @override
-  List<Object?> get props => [count];
+  List<Object?> get props => [id, actionType];
 
   @override
   bool get stringify => true;

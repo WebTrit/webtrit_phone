@@ -22,7 +22,6 @@ class SystemNotificationsScreenCubit extends Cubit<SystemNotificationScreenState
   final SystemNotificationsLocalRepository _systemNotificationsLocalRepository;
   final SystemNotificationsRemoteRepository _systemNotificationsRemoteRepository;
   late final StreamSubscription _eventsSub;
-  Set<int> _pendingSeenIDs = {};
 
   Future<void> markAsSeen(SystemNotification notification) async {
     final seenOutboxEntry = SystemNotificationOutboxEntry(
@@ -37,7 +36,7 @@ class SystemNotificationsScreenCubit extends Cubit<SystemNotificationScreenState
 
     emit(state.copyWith(fetchingHistory: true));
     try {
-      final oldestDate = state.notifications.last.date;
+      final oldestDate = state.notifications.last.createdAt;
       var history = await _systemNotificationsLocalRepository.getNotifications(from: oldestDate, limit: 50);
       if (history.isEmpty) {
         (history, _) = await _systemNotificationsRemoteRepository.getHistory(since: oldestDate, limit: 50);
@@ -46,16 +45,8 @@ class SystemNotificationsScreenCubit extends Cubit<SystemNotificationScreenState
       if (history.isEmpty) {
         emit(state.copyWith(fetchingHistory: false, historyEndReached: true));
       } else {
-        final newEntries = history.map((n) {
-          final seenPending = _pendingSeenIDs.contains(n.id);
-          return SystemNotificationViewEntry(notification: n, seenPending: seenPending);
-        }).toList();
-
-        emit(state.copyWith(
-          notifications: [...state.notifications, ...newEntries],
-          fetchingHistory: false,
-          historyEndReached: false,
-        ));
+        final notifications = [...state.notifications, ...history];
+        emit(state.copyWith(notifications: notifications, fetchingHistory: false, historyEndReached: false));
       }
     } catch (e) {
       _logger.severe('Failed to load notifications', e);
@@ -64,19 +55,9 @@ class SystemNotificationsScreenCubit extends Cubit<SystemNotificationScreenState
   }
 
   init() async {
-    final outboxSeenEntries = await _systemNotificationsLocalRepository.getOutboxNotifications(SnOutboxActionType.seen);
-    _pendingSeenIDs = outboxSeenEntries.map((e) => e.notificationId).toSet();
-
-    final systemNotifications = await _systemNotificationsLocalRepository.getNotifications(limit: 50);
-
-    emit(state.copyWith(
-      notifications: systemNotifications.map((n) {
-        final seenPending = _pendingSeenIDs.contains(n.id);
-        return SystemNotificationViewEntry(notification: n, seenPending: seenPending);
-      }).toList(),
-      isLoading: false,
-    ));
-
+    final outboxEntries = await _systemNotificationsLocalRepository.getOutboxNotifications();
+    final notifications = await _systemNotificationsLocalRepository.getNotifications(limit: 50);
+    emit(state.copyWith(notifications: notifications, outboxEntries: outboxEntries, isLoading: false));
     _eventsSub = _systemNotificationsLocalRepository.eventBus.listen(_handleLocalEvent);
   }
 
@@ -86,58 +67,36 @@ class SystemNotificationsScreenCubit extends Cubit<SystemNotificationScreenState
       SystemNotificationRemove() => _onSystemNotificationRemove(event),
       SystemNotificationOutboxUpdate() => _onSystemNotificationOutboxUpdate(event),
       SystemNotificationOutboxRemove() => _onSystemNotificationOutboxRemove(event),
-      SystemNotificationUnseenCountUpdate() => {},
     };
   }
 
   void _onSystemNotificationUpdate(SystemNotificationUpdate update) {
-    _logger.info('SystemNotificationUpdate: ${update.notification}');
-    final isNew = !state.notifications.any((n) => n.id == update.id);
-    if (isNew) {
-      final seenPending = _pendingSeenIDs.contains(update.notification.id);
-      final newEntry = SystemNotificationViewEntry(notification: update.notification, seenPending: seenPending);
-      emit(state.copyWith(notifications: [...state.notifications, newEntry]));
-    } else {
-      final updatedNotifications = state.notifications
-          .map((n) => (n.id == update.id) ? n.copyWith(notification: update.notification) : n)
-          .toList();
-      emit(state.copyWith(notifications: updatedNotifications));
-    }
+    final notification = update.notification;
+    _logger.info('SystemNotificationUpdate: $notification');
+    final updatedNotifications = state.notifications.mergeWithUpdate(notification);
+    emit(state.copyWith(notifications: updatedNotifications.toList()));
   }
 
   void _onSystemNotificationRemove(SystemNotificationRemove remove) {
-    _logger.info('SystemNotificationRemove: ${remove.id}');
-    final updatedNotifications = state.notifications.where((n) => n.id != remove.id).toList();
-    emit(state.copyWith(notifications: updatedNotifications));
+    final id = remove.id;
+    _logger.info('SystemNotificationRemove: $id');
+    final updatedNotifications = state.notifications.mergeWithRemove(id);
+    emit(state.copyWith(notifications: updatedNotifications.toList()));
   }
 
   void _onSystemNotificationOutboxUpdate(SystemNotificationOutboxUpdate outboxUpdate) {
     final outboxEntry = outboxUpdate.entry;
     _logger.info('SystemNotificationOutboxUpdate: $outboxEntry');
-    _pendingSeenIDs.add(outboxEntry.notificationId);
-
-    final updatedNotifications = state.notifications.map((n) {
-      if (n.id == outboxUpdate.id) {
-        final seenPending = _pendingSeenIDs.contains(n.id);
-        return n.copyWith(seenPending: seenPending);
-      }
-      return n;
-    }).toList();
-    emit(state.copyWith(notifications: updatedNotifications));
+    final updatedOutboxEntries = state.outboxEntries.mergeWithUpdate(outboxEntry);
+    emit(state.copyWith(outboxEntries: updatedOutboxEntries.toList()));
   }
 
   void _onSystemNotificationOutboxRemove(SystemNotificationOutboxRemove outboxRemove) {
-    _logger.info('SystemNotificationOutboxRemove: ${outboxRemove.id}');
-    _pendingSeenIDs.remove(outboxRemove.id);
-
-    final updatedNotifications = state.notifications.map((n) {
-      if (n.id == outboxRemove.id) {
-        final seenPending = _pendingSeenIDs.contains(n.id);
-        return n.copyWith(seenPending: seenPending);
-      }
-      return n;
-    }).toList();
-    emit(state.copyWith(notifications: updatedNotifications));
+    final id = outboxRemove.id;
+    var actionType = outboxRemove.actionType;
+    _logger.info('SystemNotificationOutboxRemove: $id $actionType');
+    final updatedOutboxEntries = state.outboxEntries.mergeWithRemove(id, actionType);
+    emit(state.copyWith(outboxEntries: updatedOutboxEntries.toList()));
   }
 
   @override

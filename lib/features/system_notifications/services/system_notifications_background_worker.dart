@@ -1,64 +1,102 @@
 import 'package:logging/logging.dart';
+import 'package:workmanager/workmanager.dart';
 
-import 'package:webtrit_phone/data/secure_storage.dart';
+import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/models/system_notification.dart';
 import 'package:webtrit_phone/push_notification/app_local_push.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
 final _logger = Logger('SystemNotificationBackgroundWorker');
 
+/// A worker responsible for handling system notifications in background.
+///
+/// This class fetches new system notifications from the remote repository,
+/// updates the local repository, and displays useen's as local push notifications.
+/// It uses the Workmanager package to schedule periodic tasks.
+///
+/// Main purpose is to support clients that can't rely on remote push services
+/// by some reason like nation firewall or security policies.
 class SystemNotificationBackgroundWorker {
-  SystemNotificationBackgroundWorker({
-    required SecureStorage secureStorage,
-    required SystemNotificationsLocalRepository localRepo,
-    required SystemNotificationsRemoteRepository remoteRepo,
-    required LocalPushRepository pushRepo,
-  })  : _secureStorage = secureStorage,
-        _localRepo = localRepo,
-        _remoteRepo = remoteRepo,
-        _pushRepo = pushRepo {
+  SystemNotificationBackgroundWorker(this._localRepo, this._remoteRepo, this._pushRepo) {
     _logger.info('SystemNotificationBackgroundWorker initialized');
   }
 
-  final SecureStorage _secureStorage;
   final SystemNotificationsLocalRepository _localRepo;
   final SystemNotificationsRemoteRepository _remoteRepo;
   final LocalPushRepository _pushRepo;
 
+  /// Executes the background worker task.
+  ///
+  /// Returns a [Future] that completes with `true` if the execution was successful,
+  /// or `false` otherwise.
   Future<bool> execute() async {
     try {
-      final coreUrl = _secureStorage.readCoreUrl();
-      final tenantId = _secureStorage.readTenantId();
-      final token = _secureStorage.readToken();
-      if (coreUrl == null || tenantId == null || token == null) {
-        _logger.info('Core URL, Tenant ID, or Token is not set. Skipping API client initialization.');
-        return true;
-      }
-
       final lastUpdate = await _localRepo.getLastUpdate();
       _logger.info('Last update: $lastUpdate');
 
-      List<SystemNotification> newNotifications;
+      List<SystemNotification> notifications;
       if (lastUpdate == null) {
         final result = await _remoteRepo.getHistory();
-        (newNotifications, _) = result;
+        (notifications, _) = result;
       } else {
         final result = await _remoteRepo.getUpdates(since: lastUpdate);
-        (newNotifications, _) = result;
+        (notifications, _) = result;
       }
 
-      _logger.info('Fetched ${newNotifications.length} new notifications');
-      await _localRepo.upsertNotifications(newNotifications);
+      _logger.info('Fetched ${notifications.length} new notifications');
+      await _localRepo.upsertNotifications(notifications);
 
-      for (final notification in newNotifications) {
-        final push = AppLocalPush(notification.id, notification.title, notification.content);
-        await _pushRepo.displayPush(push);
-      }
+      final unseenNotifications = notifications.where((n) => n.seen == false).toList();
+      await Future.forEach(unseenNotifications, (n) => _displayPush(n));
 
       return true;
-    } catch (e, stackTrace) {
-      _logger.severe('Unexpected error in SystemNotificationBackgroundWorker', e, stackTrace);
+    } catch (e, s) {
+      _logger.severe('Unexpected error', e, s);
       return false;
     }
   }
+
+  Future<void> _displayPush(SystemNotification notification) async {
+    final push = AppLocalPush(
+      notification.id,
+      notification.title,
+      notification.content,
+      payload: {'source': kLocalPushSourceSystemNotification},
+    );
+    await _pushRepo.displayPush(push);
+  }
+
+  /// Dispatches a background task related to system notifications.
+  ///
+  /// This static method is responsible for initiating or scheduling
+  /// a task to handle system notifications in the background.
+  ///
+  /// Typically used to ensure notifications are processed even when
+  /// the app is not in the foreground.
+  static dispatchTask() {
+    if (_taskRegistered) return;
+    Workmanager().registerPeriodicTask(
+      kSystemNotificationsTaskId,
+      kSystemNotificationsTask,
+      constraints: Constraints(networkType: NetworkType.connected),
+      backoffPolicy: BackoffPolicy.linear,
+      existingWorkPolicy: ExistingWorkPolicy.replace,
+      initialDelay: const Duration(minutes: 1),
+    );
+    _taskRegistered = true;
+    _logger.info('System notifications background task registered');
+  }
+
+  /// Cancels the scheduled background task for system notifications.
+  ///
+  /// This method should be called to stop any ongoing or future background
+  /// work related to system notifications.
+  static void cancelTask() {
+    if (!_taskRegistered) return;
+    Workmanager().cancelByUniqueName(kSystemNotificationsTaskId);
+    _taskRegistered = false;
+    _logger.info('System notifications background task cancelled');
+  }
+
+  static bool _taskRegistered = false;
 }

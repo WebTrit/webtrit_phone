@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/models/system_notification_event.dart';
 import 'package:webtrit_phone/models/system_notification_outbox_entry.dart';
 import 'package:webtrit_phone/push_notification/app_local_push.dart';
@@ -7,18 +8,29 @@ import 'package:webtrit_phone/push_notification/app_local_push_action.dart';
 import 'package:webtrit_phone/push_notification/app_remote_push.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
+/// A service responsible for handling push notifications related to system notifications.
+///
+/// This class provides methods to manage the delivery, reception, and processing
+/// of push notifications within the application.
+///
+/// Main usecases:
+///   - Displaying local push notifications when a system notification is received. (For push-less clients)
+///   - Handling user actions on push notifications, such as tapping to open the notifications screen.
+///   - Dismissing push notifications when a system notification is marked as seen.
 class SystemNotificationsPushService {
   SystemNotificationsPushService(
     this.remotePushRepository,
     this.localPushRepository,
     this.systemNotificationsLocalRepository, {
     required this.openNotifications,
+    required this.producePush,
   });
 
   final RemotePushRepository remotePushRepository;
   final LocalPushRepository localPushRepository;
   final SystemNotificationsLocalRepository systemNotificationsLocalRepository;
   final Function() openNotifications;
+  final bool producePush;
 
   final List<StreamSubscription> _subs = [];
 
@@ -36,6 +48,9 @@ class SystemNotificationsPushService {
         if (notification.seen == true) {
           localPushRepository.dismissByContent(notification.title, notification.content);
         }
+        if (event.initialData == false && notification.seen == false && producePush) {
+          _displayPush(notification.id, notification.title, notification.content);
+        }
       case SystemNotificationOutboxUpdate _:
         final entry = event.entry;
         if (entry.actionType == SnOutboxActionType.seen) {
@@ -50,9 +65,7 @@ class SystemNotificationsPushService {
   }
 
   void _onLocalPushAction(AppLocalPushAction action) {
-    if (action.type == LocalPushActionType.tap) {
-      openNotifications();
-    }
+    if (action.type == LocalPushActionType.tap) openNotifications();
   }
 
   void _onOpenPush(SystemNotificationPush notification) {
@@ -60,7 +73,13 @@ class SystemNotificationsPushService {
   }
 
   void _onForegroundPush(SystemNotificationPush notification) {
-    final push = AppLocalPush(notification.systemNotificationId, notification.title!, notification.body!);
+    final (title, body) = (notification.title, notification.body);
+    if (title == null || body == null) return;
+    _displayPush(notification.systemNotificationId, title, body);
+  }
+
+  void _displayPush(int id, String title, String body) {
+    final push = AppLocalPush(id, title, body, payload: {'source': kLocalPushSourceSystemNotification});
     localPushRepository.displayPush(push);
   }
 

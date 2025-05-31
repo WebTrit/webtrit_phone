@@ -3,10 +3,10 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:webtrit_phone/features/messaging/widgets/message_list_view/history_fetch_indicator.dart';
-import 'package:webtrit_phone/features/messaging/widgets/message_list_view/scroll_to_bottom.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
-import 'package:webtrit_phone/widgets/fade_id.dart';
+import 'package:webtrit_phone/models/system_notification.dart';
+import 'package:webtrit_phone/models/system_notification_outbox_entry.dart';
+import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../system_notifications.dart';
 
@@ -46,10 +46,8 @@ class _SystemNotificationsScreenState extends State<SystemNotificationsScreen> {
     scrollController.animateTo(0, duration: const Duration(milliseconds: 600), curve: Curves.easeInOutExpo);
   }
 
-  void onRender(SystemNotificationViewEntry e) {
-    if (e.seen == false) {
-      cubit.markAsSeen(e.notification);
-    }
+  void markAsSeen(SystemNotification notification) {
+    cubit.markAsSeen(notification);
   }
 
   @override
@@ -89,12 +87,17 @@ class _SystemNotificationsScreenState extends State<SystemNotificationsScreen> {
               itemCount: state.notifications.length + 1,
               itemBuilder: (context, index) {
                 if (index == 0) return HistoryFetchIndicator(state.fetchingHistory);
-                final entry = state.notifications[index - 1];
+                final notifiaction = state.notifications[index - 1];
+                final pendingSeen = state.outboxEntries.hasSeen(notifiaction.id);
 
                 return FadeIn(
                   child: SystemNotificationListTile(
-                    entry,
-                    onRender: () => onRender(entry),
+                    key: Key(notifiaction.id.toString()),
+                    notifiaction,
+                    seenPending: pendingSeen,
+                    onRender: () {
+                      if (!notifiaction.seen && !pendingSeen) markAsSeen(notifiaction);
+                    },
                   ),
                 );
               },

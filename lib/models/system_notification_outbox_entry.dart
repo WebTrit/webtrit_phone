@@ -50,10 +50,27 @@ class SystemNotificationOutboxEntry extends Equatable {
   SystemNotificationOutboxEntry toFailed() {
     return copyWith(state: SnOutboxState.failed);
   }
+
+  bool sameEntry(SystemNotificationOutboxEntry entry) {
+    return notificationId == entry.notificationId && actionType == entry.actionType;
+  }
 }
 
-extension SystemNotificationOutboxEntryExtension on Iterable<SystemNotificationOutboxEntry> {
+extension SystemNotificationOutboxEntryIterableExtension on Iterable<SystemNotificationOutboxEntry> {
   bool hasSeen(int id) {
     return any((entry) => entry.notificationId == id && entry.actionType == SnOutboxActionType.seen);
+  }
+
+  Iterable<SystemNotificationOutboxEntry> mergeWithUpdate(SystemNotificationOutboxEntry entry) {
+    final isNew = !any((e) => e.sameEntry(entry));
+    if (isNew) {
+      return [entry, ...this];
+    } else {
+      return map((e) => e.sameEntry(entry) ? entry : e);
+    }
+  }
+
+  Iterable<SystemNotificationOutboxEntry> mergeWithRemove(int notificationId, SnOutboxActionType actionType) {
+    return where((e) => !(e.notificationId == notificationId && e.actionType == actionType));
   }
 }

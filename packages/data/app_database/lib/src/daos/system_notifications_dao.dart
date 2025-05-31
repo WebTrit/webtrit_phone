@@ -40,30 +40,19 @@ class SystemNotificationsDao extends DatabaseAccessor<AppDatabase> with _$System
       [
         leftOuterJoin(
           systemNotificationsOutboxTable,
-          systemNotificationsOutboxTable.notificationId.equalsExp(systemNotificationsTable.id),
+          systemNotificationsOutboxTable.notificationId.equalsExp(systemNotificationsTable.id) &
+              systemNotificationsOutboxTable.actionType.equals(SnOutboxDataActionType.seen.name),
         ),
       ],
     )
-      ..addColumns([
-        systemNotificationsTable.id,
-        systemNotificationsTable.seen,
-        systemNotificationsOutboxTable.notificationId,
-        systemNotificationsOutboxTable.actionType,
-      ])
-      ..where(systemNotificationsTable.seen.equals(false))
-      ..where(systemNotificationsOutboxTable.actionType.isNotIn([SnOutboxDataActionType.seen.name]));
+      ..addColumns([countAll()])
+      ..where(systemNotificationsTable.seen.equals(false) & systemNotificationsOutboxTable.notificationId.isNull());
 
-    return query.watch().asyncMap((rows) => rows.length);
-  }
-
-  Future<void> upsertNotification(SystemNotificationData notification) {
-    return into(systemNotificationsTable).insertOnConflictUpdate(notification);
+    return query.map((row) => row.read(countAll()) ?? 0).watchSingle();
   }
 
   Future<void> upsertNotifications(List<SystemNotificationData> notifications) {
-    return batch((batch) {
-      batch.insertAllOnConflictUpdate(systemNotificationsTable, notifications);
-    });
+    return batch((batch) => batch.insertAllOnConflictUpdate(systemNotificationsTable, notifications));
   }
 
   Future<int> deleteNotification(int id) {
@@ -74,11 +63,11 @@ class SystemNotificationsDao extends DatabaseAccessor<AppDatabase> with _$System
   // Outbox section
   //
   Future<List<SystemNotificationOutboxEntryData>> getOutboxNotifications(
-    SnOutboxDataActionType actionType, {
+    SnOutboxDataActionType? actionType, {
     List<SnOutboxDataState> states = SnOutboxDataState.values,
   }) {
     final query = select(systemNotificationsOutboxTable);
-    query.where((tbl) => tbl.actionType.equals(actionType.name));
+    if (actionType != null) query.where((tbl) => tbl.actionType.equals(actionType.name));
     query.where((tbl) => tbl.state.isIn(states.map((e) => e.name).toList()));
     return query.get();
   }

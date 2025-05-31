@@ -16,21 +16,21 @@ abstract class SystemNotificationsLocalRepository {
   Future<List<SystemNotification>> getNotifications({DateTime? from, DateTime? to, int limit = 50});
   Future<SystemNotification?> getNotificationById(int id);
   Future<DateTime?> getLastUpdate();
-  Stream<int> unseenCountByRecords();
+  Stream<int> unseenCount();
 
-  Future<void> upsertNotification(SystemNotification notification, {bool silent = false});
-  Future<void> upsertNotifications(List<SystemNotification> notifications, {bool silent = false});
+  Future<void> upsertNotifications(
+    List<SystemNotification> notifications, {
+    bool silent = false,
+    bool initialData = false,
+  });
   Future<void> deleteNotification(int id);
 
-  Future<List<SystemNotificationOutboxEntry>> getOutboxNotifications(
-    SnOutboxActionType actionType, {
+  Future<List<SystemNotificationOutboxEntry>> getOutboxNotifications({
+    SnOutboxActionType? actionType,
     List<SnOutboxState> states = SnOutboxState.values,
   });
   Future<void> upsertOutboxNotification(SystemNotificationOutboxEntry entry);
   Future<void> deleteOutboxNotification(int notificationId, SnOutboxActionType actionType);
-
-  int? get unseenCount;
-  void setUnseenCount(int count);
 
   Future<void> wipeData();
 }
@@ -45,8 +45,6 @@ class SystemNotificationsLocalRepositoryDriftImpl
 
   final StreamController<SystemNotificationEvent> _eventBus = StreamController.broadcast();
   _addEvent(SystemNotificationEvent event) => _eventBus.add(event);
-
-  int? _unseenCount = 0;
 
   @override
   Stream<SystemNotificationEvent> get eventBus => _eventBus.stream;
@@ -69,22 +67,23 @@ class SystemNotificationsLocalRepositoryDriftImpl
   }
 
   @override
-  Stream<int> unseenCountByRecords() {
+  Stream<int> unseenCount() {
     return _dao.unseenCount();
   }
 
   @override
-  Future<void> upsertNotification(SystemNotification notification, {bool silent = false}) async {
-    final data = systemNotificationToDrift(notification);
-    await _dao.upsertNotification(data);
-    if (!silent) _addEvent(SystemNotificationUpdate(notification));
-  }
-
-  @override
-  Future<void> upsertNotifications(List<SystemNotification> notifications, {bool silent = false}) async {
+  Future<void> upsertNotifications(
+    List<SystemNotification> notifications, {
+    bool silent = false,
+    bool initialData = false,
+  }) async {
     final data = notifications.map(systemNotificationToDrift).toList();
     await _dao.upsertNotifications(data);
-    if (!silent) notifications.forEach((n) => _addEvent(SystemNotificationUpdate(n)));
+    if (silent == false) {
+      notifications.forEach(
+        (n) => _addEvent(SystemNotificationUpdate(n, initialData: initialData)),
+      );
+    }
   }
 
   @override
@@ -94,11 +93,11 @@ class SystemNotificationsLocalRepositoryDriftImpl
   }
 
   @override
-  Future<List<SystemNotificationOutboxEntry>> getOutboxNotifications(
-    SnOutboxActionType actionType, {
+  Future<List<SystemNotificationOutboxEntry>> getOutboxNotifications({
+    SnOutboxActionType? actionType,
     List<SnOutboxState> states = SnOutboxState.values,
   }) async {
-    final actionTypeData = actionTypeToDrift(actionType);
+    final actionTypeData = actionType != null ? actionTypeToDrift(actionType) : null;
     final statesData = states.map(stateToDrift).toSet().toList();
     final data = await _dao.getOutboxNotifications(actionTypeData, states: statesData);
     return data.map(notificationOutboxEntryFromDrift).toList();
@@ -115,16 +114,7 @@ class SystemNotificationsLocalRepositoryDriftImpl
   Future<void> deleteOutboxNotification(int notificationId, SnOutboxActionType actionType) async {
     final actionTypeData = actionTypeToDrift(actionType);
     await _dao.deleteOutboxNotification(notificationId, actionTypeData);
-    _addEvent(SystemNotificationOutboxRemove(notificationId));
-  }
-
-  @override
-  int? get unseenCount => _unseenCount;
-
-  @override
-  void setUnseenCount(int count) {
-    _unseenCount = count;
-    _addEvent(SystemNotificationUnseenCountUpdate(count));
+    _addEvent(SystemNotificationOutboxRemove(notificationId, actionType));
   }
 
   @override

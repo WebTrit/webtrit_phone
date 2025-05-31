@@ -34,3 +34,6 @@ const kSystemNotificationsPushFeatureFlag = 'system_notification_push_supports';
 
 const kSystemNotificationsTask = 'systemNotificationsTask';
 const kSystemNotificationsTaskId = 'systemNotificationsTask-id';
+
+const kLocalPushSourceSystemNotification = 'system-notification';
+const kLocalPushSourceMessaging = 'messaging';

@@ -393,9 +393,9 @@ class _MainShellState extends State<MainShell> {
                     },
                   ),
                 ),
-                BlocProvider<SystemNotificationsCounterCubit>(
+                BlocProvider(
                   lazy: false,
-                  create: (_) => SystemNotificationsCounterCubitRecordsBasedImpl(
+                  create: (_) => SystemNotificationsCounterCubit(
                     context.read<SystemNotificationsLocalRepository>(),
                   ),
                 ),
