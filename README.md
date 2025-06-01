@@ -24,7 +24,8 @@ The application offers extensive customization options:
   - [Embedded pages](docs/embedded_pages.md) –  Implements embedded pages that extend the WebTrit app with custom web content.
 
 ## Development & Build
-
+ - **Build and run**: See the [Build and Run](docs/build.md) documentation for details on how to build and run the application.
+ - **Flavors**: See the [Build Flavors](docs/flavors.md) documentation for details on how to configure and use build flavors.
  - **Make Commands**: See the  [Make Commands](docs/make_file.md) for available build and automation commands.
 
 # Testing
