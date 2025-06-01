@@ -4,28 +4,28 @@ WebTrit Phone is a feature-rich application designed for seamless communication.
 
 ## Documentation Overview
 
-- **Environment**: See the [Environment](doc/environment.md) documentation for details on environment properties.
-- **SSL Certificates**: Refer to the [SSL Certificates](doc/certificates.md) documentation for information on SSL
+- **Environment**: See the [Environment](docs/environment.md) documentation for details on environment properties.
+- **SSL Certificates**: Refer to the [SSL Certificates](docs/certificates.md) documentation for information on SSL
   certificate handling.
-- **Build Process**: Learn more about build configurations in the [Build](doc/build.md) documentation.
-- **Application Properties**: Customize properties such as the Bundle ID and App Name in the  [Application Settings](doc/application_properties.md) documentation.
-- **Application Launch Assets**: Configure the application launch assets in the [Launch Assets](doc/launch_assets.md) documentation.
-- **Localization**: For information on localization settings, see [Localizely](doc/localization.md).
+- **Build Process**: Learn more about build configurations in the [Build](docs/build.md) documentation.
+- **Application Properties**: Customize properties such as the Bundle ID and App Name in the  [Application Settings](docs/application_properties.md) documentation.
+- **Application Launch Assets**: Configure the application launch assets in the [Launch Assets](docs/launch_assets.md) documentation.
+- **Localization**: For information on localization settings, see [Localizely](docs/localization.md).
 
 ## Application Configuration
 
 The application offers extensive customization options:
 
-- **[Color Scheme](doc/color_scheme.md)** – Customize the application's color palette.
-- **[Widgets](doc/widgets_configuration.md)** – Configure UI widgets according to your needs.
-- **[Pages](doc/page_configuration.md)** – Customize pages and their layouts.
-- **[Features](doc/feature_configuration.md)** – Enable or disable specific features.
-  - [Custom Login](doc/custom_login.md) – Implement a custom login page.
-  - [Embedded pages](doc/embedded_pages.md) –  Implements embedded pages that extend the WebTrit app with custom web content.
+- **[Color Scheme](docs/color_scheme.md)** – Customize the application's color palette.
+- **[Widgets](docs/widgets_configuration.md)** – Configure UI widgets according to your needs.
+- **[Pages](docs/page_configuration.md)** – Customize pages and their layouts.
+- **[Features](docs/feature_configuration.md)** – Enable or disable specific features.
+  - [Custom Login](docs/custom_login.md) – Implement a custom login page.
+  - [Embedded pages](docs/embedded_pages.md) –  Implements embedded pages that extend the WebTrit app with custom web content.
 
 ## Development & Build
 
- - **Make Commands**: See the  [Make Commands](doc/make_file.md) for available build and automation commands.
+ - **Make Commands**: See the  [Make Commands](docs/make_file.md) for available build and automation commands.
 
 # Testing
 
