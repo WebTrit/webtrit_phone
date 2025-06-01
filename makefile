@@ -89,15 +89,16 @@ SPLASH_IMAGE ?= "tool/assets/native_splash/image.png"
 #  Localizely Configuration
 # ===========================
 
-# Path to authentication token file (used if the token is not passed as a parameter)
-TOKEN_FILE ?= $(CONFIGS_PATH)/localizely_token.txt
+ENV_FILE ?= .env
 
-# Fetch token from the file if not provided as a parameter
 ifeq ($(token),)
-    ifeq ($(wildcard $(TOKEN_FILE)),)
-        $(error Token not provided and file not found: $(TOKEN_FILE))
+    ifeq ($(wildcard $(ENV_FILE)),)
+        $(error Token not provided and .env file not found: $(ENV_FILE))
     else
-        token := $(shell cat $(TOKEN_FILE))
+        token := $(shell grep '^LOCALIZELY_TOKEN=' $(ENV_FILE) | cut -d '=' -f2)
+        ifeq ($(strip $(token)),)
+            $(error LOCALIZELY_TOKEN is empty in $(ENV_FILE))
+        endif
     endif
 endif
 
