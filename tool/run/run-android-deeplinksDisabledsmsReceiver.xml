@@ -1,0 +1,11 @@
+<component name="ProjectRunConfigurationManager">
+    <configuration name="run-android-deeplinksDisabledsmsReceiver" default="false" factoryName="Flutter"
+        type="FlutterRunConfigurationType">
+        <option name="buildFlavor" value="deeplinksDisabledsmsReceiver" />
+        <option name="filePath" value="$PROJECT_DIR$/lib/main.dart" />
+        <option name="entryFile" value="lib/main.dart" />
+        <option name="additionalArgs" value="--dart-define-from-file=dart_define.json" />
+        <option name="devicePlatform" value="android" />
+        <method v="2" />
+    </configuration>
+</component>
