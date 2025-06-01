@@ -1064,6 +1064,18 @@
   "@settings_network_incomingCallType_socket_title": {},
   "settings_network_incomingCallType_title": "Incoming Call Type",
   "@settings_network_incomingCallType_title": {},
+  "settings_network_fallbackCalls_title": "Fallback Incoming Calls",
+  "@settings_network_fallbackCalls_title": {
+    "description": "Title for fallback incoming calls section"
+  },
+  "settings_network_fallbackCalls_description": "Enable fallback incoming call triggering via specially formatted SMS",
+  "@settings_network_fallbackCalls_description": {
+    "description": "Tooltip description for fallback SMS-based call trigger"
+  },
+  "settings_network_smsFallback_toggle": "SMS Fallback",
+  "@settings_network_smsFallback_toggle": {
+    "description": "Toggle label for enabling SMS fallback"
+  },
   "signalingResponseCode_ambiguousRequest": "We couldn't understand your request.",
   "@signalingResponseCode_ambiguousRequest": {},
   "signalingResponseCode_busyEverywhere": "The user you're trying to reach is busy. Please try again later.",

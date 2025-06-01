@@ -7,6 +7,7 @@ import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../extensions/extensions.dart';
 import '../bloc/network_cubit.dart';
+import '../widgets/widgets.dart';
 
 class NetworkScreen extends StatelessWidget {
   const NetworkScreen({
@@ -15,6 +16,8 @@ class NetworkScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final block = context.read<NetworkCubit>();
+
     return Scaffold(
       appBar: AppBar(
         title: Text(context.l10n.settings_ListViewTileTitle_network),
@@ -57,6 +60,25 @@ class NetworkScreen extends StatelessWidget {
                     );
                   },
                 ),
+                ListTile(
+                  title: Text(
+                    context.l10n.settings_network_fallbackCalls_title,
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                  trailing: InfoTooltip(
+                    message: context.l10n.settings_network_fallbackCalls_description,
+                  ),
+                ),
+                ListTile(
+                  leading: Check(
+                    selected: state.smsFallbackEnabled,
+                    enabled: block.smsFallbackAvailable,
+                  ),
+                  title: Text(
+                    context.l10n.settings_network_smsFallback_toggle,
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                )
               ],
             ),
           );
