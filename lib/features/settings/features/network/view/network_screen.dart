@@ -31,9 +31,8 @@ class NetworkScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Text(
+                ListTile(
+                  title: Text(
                     context.l10n.settings_network_incomingCallType_title,
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
@@ -47,15 +46,10 @@ class NetworkScreen extends StatelessWidget {
                     return ListTile(
                       selected: item.selected,
                       title: Text(item.incomingCallType.titleL10n(context)),
-                      trailing: IconButton(
-                          icon: const Icon(Icons.info_outline),
-                          onPressed: () => AcknowledgeDialog.show(
-                                context,
-                                title: item.incomingCallType.titleL10n(context),
-                                content: item.incomingCallType.descriptionL10n(context),
-                              )),
-                      leading:
-                          item.selected ? const Icon(Icons.check_circle_sharp) : const Icon(Icons.check_circle_outline),
+                      trailing: InfoTooltip(
+                        message: item.incomingCallType.descriptionL10n(context),
+                      ),
+                      leading: Check(selected: item.selected),
                       onTap: () => context.read<NetworkCubit>().selectIncomingCallType(item),
                     );
                   },
