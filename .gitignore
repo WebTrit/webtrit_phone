@@ -47,3 +47,4 @@ app.*.map.json
 # Configuration files for project environment
 /tool/configs/localizely_token.txt
 makefile.shared
+.env
