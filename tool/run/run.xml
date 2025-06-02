@@ -1,0 +1,8 @@
+<component name="ProjectRunConfigurationManager">
+    <configuration name="run" default="false" factoryName="Flutter" type="FlutterRunConfigurationType">
+        <option name="additionalArgs" value="--dart-define-from-file=dart_define.json" />
+        <option name="filePath" value="$PROJECT_DIR$/lib/main.dart" />
+        <option name="buildTarget" value="ios" />
+        <method v="2" />
+    </configuration>
+</component>

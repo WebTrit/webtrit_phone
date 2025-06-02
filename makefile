@@ -195,3 +195,10 @@ fetch-l10n: pull-l10n gen-l10n
 clean-git:
 	git reset --hard HEAD
 	git clean -df
+
+sync-run-configs:
+	mkdir -p .idea/runConfigurations
+	cp tool/run/*.xml .idea/runConfigurations/
+
+run-core:
+	$(MAKE) -f makefile.shared run
