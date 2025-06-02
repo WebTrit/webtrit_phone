@@ -10,6 +10,7 @@ import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 
 import 'package:webtrit_phone/common/common.dart';
 import 'package:webtrit_phone/data/data.dart';
+import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/push_notification/push_notifications.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
@@ -51,14 +52,25 @@ Future<void> bootstrap() async {
     secureStorage: secureStorage,
   );
 
-  await _initCallkeep(appPreferences);
+  await _initCallkeep(appPreferences, featureAccess);
 }
 
-Future<void> _initCallkeep(AppPreferences appPreferences) async {
+Future<void> _initCallkeep(AppPreferences appPreferences, FeatureAccess featureAccess) async {
   if (!Platform.isAndroid) return;
 
   AndroidCallkeepServices.backgroundSignalingBootstrapService.initializeCallback(onSignalingSyncCallback);
   AndroidCallkeepServices.backgroundPushNotificationBootstrapService.initializeCallback(onPushNotificationSyncCallback);
+
+// If the fallback incoming call trigger via SMS is enabled in the feature access config
+  if (featureAccess.callFeature.callTriggerConfig.smsFallback.enabled) {
+    // Configure Android CallKeep to process incoming SMS messages
+    // - prefix: filters SMS messages by required prefix
+    // - regexPattern: extracts callId, handle, displayName, and hasVideo from the SMS body
+    await AndroidCallkeepServices.smsReceptionConfig.configureReceivedSms(
+      prefix: EnvironmentConfig.CALL_TRIGGER_MECHANISM_SMS_PREFIX,
+      regexPattern: EnvironmentConfig.CALL_TRIGGER_MECHANISM_SMS_REGEX_PATTERN,
+    );
+  }
 }
 
 /// Initializes Firebase for background services. This initialization must be called in an isolate

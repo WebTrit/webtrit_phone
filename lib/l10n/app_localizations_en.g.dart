@@ -1491,6 +1491,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings_network_incomingCallType_title => 'Incoming Call Type';
 
   @override
+  String get settings_network_fallbackCalls_title => 'Fallback Incoming Calls';
+
+  @override
+  String get settings_network_fallbackCalls_description => 'Enable fallback incoming call triggering via specially formatted SMS';
+
+  @override
+  String get settings_network_smsFallback_toggle => 'SMS Fallback';
+
+  @override
   String get signalingResponseCode_ambiguousRequest => 'We couldn\'t understand your request.';
 
   @override

@@ -114,4 +114,28 @@ class EnvironmentConfig {
   static final REMOTE_LOGZIO_LOGGING_BUFFER_SIZE =
       int.tryParse(const String.fromEnvironment(REMOTE_LOGZIO_LOGGING_BUFFER_SIZE__NAME)) ??
           _REMOTE_LOGZIO_LOGGING_BUFFER_SIZE__KB;
+
+  // SMS-based incoming call trigger mechanism (fallback).
+  // If enabled, the app listens for specially formatted incoming SMS messages to trigger incoming calls.
+  static const CALL_TRIGGER_MECHANISM_SMS__NAME = 'WEBTRIT_CALL_TRIGGER_MECHANISM_SMS';
+  static const CALL_TRIGGER_MECHANISM_SMS = bool.fromEnvironment(
+    CALL_TRIGGER_MECHANISM_SMS__NAME,
+    defaultValue: false,
+  );
+
+  // SMS-based incoming call trigger prefix.
+  // Used to filter incoming SMS messages. Only messages starting with this prefix are processed.
+  static const CALL_TRIGGER_MECHANISM_SMS_PREFIX__NAME = 'WEBTRIT_CALL_TRIGGER_MECHANISM_SMS_PREFIX';
+  static const CALL_TRIGGER_MECHANISM_SMS_PREFIX = String.fromEnvironment(
+    CALL_TRIGGER_MECHANISM_SMS_PREFIX__NAME,
+    defaultValue: '<#> WEBTRIT:',
+  );
+
+  // ICU regex pattern to extract callId, handle, displayName and hasVideo from SMS body.
+  static const CALL_TRIGGER_MECHANISM_SMS_REGEX_PATTERN__NAME = 'WEBTRIT_CALL_TRIGGER_MECHANISM_SMS_REGEX_PATTERN';
+  static const CALL_TRIGGER_MECHANISM_SMS_REGEX_PATTERN = String.fromEnvironment(
+    CALL_TRIGGER_MECHANISM_SMS_REGEX_PATTERN__NAME,
+    defaultValue:
+        r'https://app\.webtrit\.com/call\?callId=([^&]+)&handle=([^&]+)&displayName=([^&]+)&hasVideo=(true|false)',
+  );
 }

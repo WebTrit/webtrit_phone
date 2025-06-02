@@ -18,8 +18,11 @@ class NetworkScreenPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const widget = NetworkScreen();
+    final featureAccess = context.read<FeatureAccess>();
+
     return BlocProvider(
       create: (context) => NetworkCubit(
+        featureAccess.callFeature.callTriggerConfig,
         context.read<AppPreferences>(),
         BackgroundSignalingBootstrapService(),
       ),

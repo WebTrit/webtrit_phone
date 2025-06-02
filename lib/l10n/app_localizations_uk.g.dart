@@ -1491,6 +1491,15 @@ class AppLocalizationsUk extends AppLocalizations {
   String get settings_network_incomingCallType_title => 'Тип вхідного дзвінка';
 
   @override
+  String get settings_network_fallbackCalls_title => 'Резервні вхідні дзвінки';
+
+  @override
+  String get settings_network_fallbackCalls_description => 'Увімкніть резервний виклик через спеціально сформатоване SMS';
+
+  @override
+  String get settings_network_smsFallback_toggle => 'Резерв через SMS';
+
+  @override
   String get signalingResponseCode_ambiguousRequest => 'Ваш запит не може бути виконаний. Будь ласка, спробуйте ще раз.';
 
   @override

@@ -139,7 +139,7 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
-    flavorDimensions "deeplinks"
+    flavorDimensions "deeplinks", "smsReceiver"
 
     productFlavors {
         // Flavor with deep link support enabled
@@ -156,6 +156,20 @@ android {
         // can be excluded from the AndroidManifest or handled differently.
         deeplinksDisabled {
             dimension "deeplinks"
+        }
+
+        // Flavor with SMS trigger for incoming calls enabled
+        // This flavor enables support for receiving special SMS messages
+        // that can trigger incoming calls via background services.
+        smsReceiver {
+            dimension "smsReceiver"
+        }
+
+        // Flavor with SMS trigger for incoming calls disabled
+        // No related permissions or receivers will be declared in this flavor,
+        // ensuring the feature is fully excluded from the build.
+        smsReceiverDisabled {
+            dimension "smsReceiver"
         }
     }
 

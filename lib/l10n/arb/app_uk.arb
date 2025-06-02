@@ -1064,6 +1064,18 @@
   "@settings_network_incomingCallType_socket_title": {},
   "settings_network_incomingCallType_title": "Тип вхідного дзвінка",
   "@settings_network_incomingCallType_title": {},
+  "settings_network_fallbackCalls_title": "Резервні вхідні дзвінки",
+  "@settings_network_fallbackCalls_title": {
+    "description": "Title for fallback incoming calls section"
+  },
+  "settings_network_fallbackCalls_description": "Увімкніть резервний виклик через спеціально сформатоване SMS",
+  "@settings_network_fallbackCalls_description": {
+    "description": "Tooltip description for fallback SMS-based call trigger"
+  },
+  "settings_network_smsFallback_toggle": "Резерв через SMS",
+  "@settings_network_smsFallback_toggle": {
+    "description": "Toggle label for enabling SMS fallback"
+  },
   "signalingResponseCode_ambiguousRequest": "Ваш запит не може бути виконаний. Будь ласка, спробуйте ще раз.",
   "@signalingResponseCode_ambiguousRequest": {},
   "signalingResponseCode_busyEverywhere": "Всі лінії зайняті. Будь ласка, спробуйте пізніше.",
