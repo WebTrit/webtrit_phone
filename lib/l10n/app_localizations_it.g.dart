@@ -1491,6 +1491,15 @@ class AppLocalizationsIt extends AppLocalizations {
   String get settings_network_incomingCallType_title => 'Tipo di chiamata in entrata';
 
   @override
+  String get settings_network_fallbackCalls_title => 'Chiamate in entrata di riserva';
+
+  @override
+  String get settings_network_fallbackCalls_description => 'Abilita l\'attivazione delle chiamate in entrata di riserva tramite SMS formattati appositamente';
+
+  @override
+  String get settings_network_smsFallback_toggle => 'Riserva tramite SMS';
+
+  @override
   String get signalingResponseCode_ambiguousRequest => 'La tua richiesta non è chiara. Riprova.';
 
   @override

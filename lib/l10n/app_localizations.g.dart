@@ -2977,6 +2977,24 @@ abstract class AppLocalizations {
   /// **'Incoming Call Type'**
   String get settings_network_incomingCallType_title;
 
+  /// Title for fallback incoming calls section
+  ///
+  /// In en, this message translates to:
+  /// **'Fallback Incoming Calls'**
+  String get settings_network_fallbackCalls_title;
+
+  /// Tooltip description for fallback SMS-based call trigger
+  ///
+  /// In en, this message translates to:
+  /// **'Enable fallback incoming call triggering via specially formatted SMS'**
+  String get settings_network_fallbackCalls_description;
+
+  /// Toggle label for enabling SMS fallback
+  ///
+  /// In en, this message translates to:
+  /// **'SMS Fallback'**
+  String get settings_network_smsFallback_toggle;
+
   /// No description provided for @signalingResponseCode_ambiguousRequest.
   ///
   /// In en, this message translates to:
