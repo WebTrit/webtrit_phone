@@ -29,8 +29,8 @@ const kAutoprovisionRout = '/autoprovision';
 const kSmsMessagingFeatureFlag = 'smsMessaging';
 const kChatMessagingFeatureFlag = 'internalMessaging';
 const kVoicemailFeatureFlag = 'voicemail';
-const kSystemNotificationsFeatureFlag = 'system_notification_supports';
-const kSystemNotificationsPushFeatureFlag = 'system_notification_push_supports';
+const kSystemNotificationsFeatureFlag = 'notifications';
+const kSystemNotificationsPushFeatureFlag = 'notificationsPush';
 
 const kSystemNotificationsTask = 'systemNotificationsTask';
 const kSystemNotificationsTaskId = 'systemNotificationsTask-id';

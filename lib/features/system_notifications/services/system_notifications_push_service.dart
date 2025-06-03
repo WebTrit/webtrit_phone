@@ -55,9 +55,7 @@ class SystemNotificationsPushService {
         final entry = event.entry;
         if (entry.actionType == SnOutboxActionType.seen) {
           final notification = await systemNotificationsLocalRepository.getNotificationById(entry.notificationId);
-          if (notification != null) {
-            localPushRepository.dismissByContent(notification.title, notification.content);
-          }
+          if (notification != null) localPushRepository.dismissByContent(notification.title, notification.content);
         }
       default:
         break;
@@ -75,7 +73,7 @@ class SystemNotificationsPushService {
   void _onForegroundPush(SystemNotificationPush notification) {
     final (title, body) = (notification.title, notification.body);
     if (title == null || body == null) return;
-    _displayPush(notification.systemNotificationId, title, body);
+    _displayPush(notification.notificationId, title, body);
   }
 
   void _displayPush(int id, String title, String body) {

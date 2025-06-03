@@ -34,14 +34,10 @@ class SystemNotificationBackgroundWorker {
       final lastUpdate = await _localRepo.getLastUpdate();
       _logger.info('Last update: $lastUpdate');
 
-      List<SystemNotification> notifications;
-      if (lastUpdate == null) {
-        final result = await _remoteRepo.getHistory();
-        (notifications, _) = result;
-      } else {
-        final result = await _remoteRepo.getUpdates(since: lastUpdate);
-        (notifications, _) = result;
-      }
+      List<SystemNotification> notifications = switch (lastUpdate) {
+        null => await _remoteRepo.getHistory(),
+        DateTime() => await _remoteRepo.getUpdates(since: lastUpdate),
+      };
 
       _logger.info('Fetched ${notifications.length} new notifications');
       await _localRepo.upsertNotifications(notifications);

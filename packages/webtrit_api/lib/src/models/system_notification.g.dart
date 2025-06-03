@@ -47,12 +47,10 @@ _$SystemNotificationResponceImpl _$$SystemNotificationResponceImplFromJson(
       items: (json['items'] as List<dynamic>)
           .map((e) => SystemNotification.fromJson(e as Map<String, dynamic>))
           .toList(),
-      unseenCount: (json['unseen_count'] as num?)?.toInt() ?? 0,
     );
 
 Map<String, dynamic> _$$SystemNotificationResponceImplToJson(
         _$SystemNotificationResponceImpl instance) =>
     <String, dynamic>{
       'items': instance.items,
-      'unseen_count': instance.unseenCount,
     };

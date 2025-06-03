@@ -63,4 +63,8 @@ extension SystemNotificationIterableExtension on Iterable<SystemNotification> {
   Iterable<SystemNotification> mergeWithRemove(int id) {
     return where((n) => n.id != id);
   }
+
+  Iterable<SystemNotification> mergeWithHistory(Iterable<SystemNotification> history) {
+    return [...this, ...history];
+  }
 }

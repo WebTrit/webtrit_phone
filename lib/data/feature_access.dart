@@ -559,12 +559,8 @@ class SystemNotificationsFeature {
   }
 
   // Check if the core system supports system notifications and push sending.
-  // bool get coreSystemSupport => _coreSupportedFeatures.contains(kSystemNotificationsFeatureFlag);
-  // bool get coreSystemPushSupport => _coreSupportedFeatures.contains(kSystemNotificationsPushFeatureFlag);
-
-  // TODO: replace when core integration be ready
-  bool get coreSystemSupport => true;
-  bool get coreSystemPushSupport => true;
+  bool get coreSystemSupport => _coreSupportedFeatures.contains(kSystemNotificationsFeatureFlag);
+  bool get coreSystemPushSupport => _coreSupportedFeatures.contains(kSystemNotificationsPushFeatureFlag);
 
   /// Check if the system notifications feature is enabled and supported by the remote system.
   bool get systemNotificationsSupport => enabled && coreSystemSupport;

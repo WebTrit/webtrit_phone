@@ -21,7 +21,7 @@ sealed class AppRemotePush {
     if (data.containsKey('sms_conversation_id')) {
       return SmsMessagePush.fromFCM(message);
     }
-    if (data.containsKey('system_notification_id')) {
+    if (data.containsKey('notification_id')) {
       return SystemNotificationPush.fromFCM(message);
     }
     return UnknownPush.fromFCM(message);
@@ -91,13 +91,15 @@ final class SmsMessagePush extends MessagePush {
 }
 
 final class SystemNotificationPush extends AppRemotePush {
-  SystemNotificationPush(super.id, this.systemNotificationId, {super.title, super.body});
-  final int systemNotificationId;
+  SystemNotificationPush(super.id, this.notificationId, this.notificationType, {super.title, super.body});
+  final int notificationId;
+  final String? notificationType;
 
   factory SystemNotificationPush.fromFCM(RemoteMessage message) {
     return SystemNotificationPush(
       message.messageId ?? '_',
-      int.parse(message.data['system_notification_id']),
+      int.parse(message.data['notification_id']),
+      message.data['notification_type'],
       title: message.notification?.title,
       body: message.notification?.body,
     );

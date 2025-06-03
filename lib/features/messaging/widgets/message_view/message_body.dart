@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:quiver/collection.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_parsed_text/flutter_parsed_text.dart';
 
 import 'package:webtrit_phone/features/messaging/messaging.dart';
@@ -98,14 +97,7 @@ class _MessageBodyState extends State<MessageBody> {
           crossFadeState: preview != null ? CrossFadeState.showFirst : CrossFadeState.showSecond,
         ),
         ParsedText(
-          parse: [
-            _mailToMatcher(style: style.copyWith(decoration: TextDecoration.underline)),
-            _urlMatcher(style: style.copyWith(decoration: TextDecoration.underline)),
-            _boldMatcher(style: style.copyWith(fontWeight: FontWeight.bold)),
-            _italicMatcher(style: style.copyWith(fontStyle: FontStyle.italic)),
-            _lineThroughMatcher(style: style.copyWith(decoration: TextDecoration.lineThrough)),
-            _codeMatcher(style: style.copyWith(fontFamily: 'Courier')),
-          ],
+          parse: TextMatchers.matchers(style),
           regexOptions: const RegexOptions(multiLine: true, dotAll: true),
           style: style.copyWith(fontFamily: theme.textTheme.bodyMedium?.fontFamily),
           text: widget.text,
@@ -114,82 +106,4 @@ class _MessageBodyState extends State<MessageBody> {
       ],
     );
   }
-}
-
-MatchText _mailToMatcher({final TextStyle? style}) {
-  return MatchText(
-    onTap: (mail) async {
-      final url = Uri(scheme: 'mailto', path: mail);
-      if (await canLaunchUrl(url)) await launchUrl(url);
-    },
-    pattern: emailRegex,
-    style: style,
-  );
-}
-
-MatchText _urlMatcher({final TextStyle? style, final Function(String url)? onLinkPressed}) {
-  return MatchText(
-    onTap: (urlText) async {
-      final protocolIdentifierRegex = RegExp(
-        r'^((http|ftp|https):\/\/)',
-        caseSensitive: false,
-      );
-      if (!urlText.startsWith(protocolIdentifierRegex)) {
-        urlText = 'https://$urlText';
-      }
-      if (onLinkPressed != null) {
-        onLinkPressed(urlText);
-      } else {
-        final url = Uri.tryParse(urlText);
-        if (url != null && await canLaunchUrl(url)) {
-          await launchUrl(
-            url,
-            mode: LaunchMode.externalApplication,
-          );
-        }
-      }
-    },
-    pattern: linkRegex,
-    style: style,
-  );
-}
-
-MatchText _boldMatcher({final TextStyle? style}) {
-  return MatchText(
-    pattern: r'\*[^*]+\*',
-    style: style,
-    renderText: ({required String str, required String pattern}) {
-      return {'display': str.replaceAll('*', '')};
-    },
-  );
-}
-
-MatchText _italicMatcher({final TextStyle? style}) {
-  return MatchText(
-    pattern: r'_[^_]+_',
-    style: style,
-    renderText: ({required String str, required String pattern}) {
-      return {'display': str.replaceAll('_', '')};
-    },
-  );
-}
-
-MatchText _lineThroughMatcher({final TextStyle? style}) {
-  return MatchText(
-    pattern: r'~[^~]+~',
-    style: style,
-    renderText: ({required String str, required String pattern}) {
-      return {'display': str.replaceAll('~', '')};
-    },
-  );
-}
-
-MatchText _codeMatcher({final TextStyle? style}) {
-  return MatchText(
-    pattern: r'`[^`]+`',
-    style: style,
-    renderText: ({required String str, required String pattern}) {
-      return {'display': str.replaceAll('`', '')};
-    },
-  );
 }

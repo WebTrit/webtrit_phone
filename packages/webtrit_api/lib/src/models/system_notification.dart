@@ -28,10 +28,7 @@ class SystemNotification with _$SystemNotification {
 class SystemNotificationResponce with _$SystemNotificationResponce {
   // ignore: invalid_annotation_target
   @JsonSerializable(fieldRename: FieldRename.snake)
-  const factory SystemNotificationResponce({
-    required List<SystemNotification> items,
-    @Default(0) int unseenCount,
-  }) = _SystemNotificationResponce;
+  const factory SystemNotificationResponce({required List<SystemNotification> items}) = _SystemNotificationResponce;
 
   factory SystemNotificationResponce.fromJson(Map<String, Object?> json) => _$SystemNotificationResponceFromJson(json);
 }

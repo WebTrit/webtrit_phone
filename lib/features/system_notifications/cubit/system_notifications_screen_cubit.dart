@@ -16,11 +16,13 @@ final _logger = Logger('SystemNotificationsCubit');
 class SystemNotificationsScreenCubit extends Cubit<SystemNotificationScreenState> {
   SystemNotificationsScreenCubit(
     this._systemNotificationsLocalRepository,
-    this._systemNotificationsRemoteRepository,
-  ) : super(const SystemNotificationScreenState(notifications: [], isLoading: true));
+    this._systemNotificationsRemoteRepository, {
+    this.pageSize = 50,
+  }) : super(const SystemNotificationScreenState(notifications: [], isLoading: true));
 
   final SystemNotificationsLocalRepository _systemNotificationsLocalRepository;
   final SystemNotificationsRemoteRepository _systemNotificationsRemoteRepository;
+  final int pageSize;
   late final StreamSubscription _eventsSub;
 
   Future<void> markAsSeen(SystemNotification notification) async {
@@ -37,15 +39,15 @@ class SystemNotificationsScreenCubit extends Cubit<SystemNotificationScreenState
     emit(state.copyWith(fetchingHistory: true));
     try {
       final oldestDate = state.notifications.last.createdAt;
-      var history = await _systemNotificationsLocalRepository.getNotifications(from: oldestDate, limit: 50);
+      var history = await _systemNotificationsLocalRepository.getNotifications(from: oldestDate, limit: pageSize);
       if (history.isEmpty) {
-        (history, _) = await _systemNotificationsRemoteRepository.getHistory(since: oldestDate, limit: 50);
+        history = await _systemNotificationsRemoteRepository.getHistory(since: oldestDate, limit: pageSize);
         await _systemNotificationsLocalRepository.upsertNotifications(history, silent: true);
       }
       if (history.isEmpty) {
         emit(state.copyWith(fetchingHistory: false, historyEndReached: true));
       } else {
-        final notifications = [...state.notifications, ...history];
+        final notifications = state.notifications.mergeWithHistory(history).toList();
         emit(state.copyWith(notifications: notifications, fetchingHistory: false, historyEndReached: false));
       }
     } catch (e) {
@@ -56,12 +58,13 @@ class SystemNotificationsScreenCubit extends Cubit<SystemNotificationScreenState
 
   init() async {
     final outboxEntries = await _systemNotificationsLocalRepository.getOutboxNotifications();
-    final notifications = await _systemNotificationsLocalRepository.getNotifications(limit: 50);
+    final notifications = await _systemNotificationsLocalRepository.getNotifications(limit: pageSize);
     emit(state.copyWith(notifications: notifications, outboxEntries: outboxEntries, isLoading: false));
     _eventsSub = _systemNotificationsLocalRepository.eventBus.listen(_handleLocalEvent);
   }
 
   void _handleLocalEvent(SystemNotificationEvent event) {
+    _logger.info('Received event: $event');
     final _ = switch (event) {
       SystemNotificationUpdate() => _onSystemNotificationUpdate(event),
       SystemNotificationRemove() => _onSystemNotificationRemove(event),
@@ -72,31 +75,27 @@ class SystemNotificationsScreenCubit extends Cubit<SystemNotificationScreenState
 
   void _onSystemNotificationUpdate(SystemNotificationUpdate update) {
     final notification = update.notification;
-    _logger.info('SystemNotificationUpdate: $notification');
-    final updatedNotifications = state.notifications.mergeWithUpdate(notification);
-    emit(state.copyWith(notifications: updatedNotifications.toList()));
+    final notifications = state.notifications.mergeWithUpdate(notification);
+    emit(state.copyWith(notifications: notifications.toList()));
   }
 
   void _onSystemNotificationRemove(SystemNotificationRemove remove) {
     final id = remove.id;
-    _logger.info('SystemNotificationRemove: $id');
-    final updatedNotifications = state.notifications.mergeWithRemove(id);
-    emit(state.copyWith(notifications: updatedNotifications.toList()));
+    final notifications = state.notifications.mergeWithRemove(id);
+    emit(state.copyWith(notifications: notifications.toList()));
   }
 
   void _onSystemNotificationOutboxUpdate(SystemNotificationOutboxUpdate outboxUpdate) {
     final outboxEntry = outboxUpdate.entry;
-    _logger.info('SystemNotificationOutboxUpdate: $outboxEntry');
-    final updatedOutboxEntries = state.outboxEntries.mergeWithUpdate(outboxEntry);
-    emit(state.copyWith(outboxEntries: updatedOutboxEntries.toList()));
+    final notifications = state.outboxEntries.mergeWithUpdate(outboxEntry);
+    emit(state.copyWith(outboxEntries: notifications.toList()));
   }
 
   void _onSystemNotificationOutboxRemove(SystemNotificationOutboxRemove outboxRemove) {
     final id = outboxRemove.id;
     var actionType = outboxRemove.actionType;
-    _logger.info('SystemNotificationOutboxRemove: $id $actionType');
-    final updatedOutboxEntries = state.outboxEntries.mergeWithRemove(id, actionType);
-    emit(state.copyWith(outboxEntries: updatedOutboxEntries.toList()));
+    final notifications = state.outboxEntries.mergeWithRemove(id, actionType);
+    emit(state.copyWith(outboxEntries: notifications.toList()));
   }
 
   @override

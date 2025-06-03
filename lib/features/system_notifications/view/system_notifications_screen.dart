@@ -83,21 +83,23 @@ class _SystemNotificationsScreenState extends State<SystemNotificationsScreen> {
               controller: scrollController,
               reverse: true,
               cacheExtent: 500,
-              padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top, bottom: 16),
+              shrinkWrap: true,
+              padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top + 16, bottom: 16),
               itemCount: state.notifications.length + 1,
               itemBuilder: (context, index) {
-                if (index == 0) return HistoryFetchIndicator(state.fetchingHistory);
-                final notifiaction = state.notifications[index - 1];
+                final historyIndicatorPosition = state.notifications.length;
+                if (index == historyIndicatorPosition) return HistoryFetchIndicator(state.fetchingHistory);
+                final notifiaction = state.notifications[index];
                 final pendingSeen = state.outboxEntries.hasSeen(notifiaction.id);
 
                 return FadeIn(
-                  child: SystemNotificationListTile(
+                  child: SizedBox(
                     key: Key(notifiaction.id.toString()),
-                    notifiaction,
-                    seenPending: pendingSeen,
-                    onRender: () {
-                      if (!notifiaction.seen && !pendingSeen) markAsSeen(notifiaction);
-                    },
+                    child: SystemNotificationListTile(
+                      notifiaction,
+                      seenPending: pendingSeen,
+                      onSeen: () => markAsSeen(notifiaction),
+                    ),
                   ),
                 );
               },

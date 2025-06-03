@@ -320,7 +320,6 @@ SystemNotificationResponce _$SystemNotificationResponceFromJson(
 /// @nodoc
 mixin _$SystemNotificationResponce {
   List<SystemNotification> get items => throw _privateConstructorUsedError;
-  int get unseenCount => throw _privateConstructorUsedError;
 
   /// Serializes this SystemNotificationResponce to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -339,7 +338,7 @@ abstract class $SystemNotificationResponceCopyWith<$Res> {
       _$SystemNotificationResponceCopyWithImpl<$Res,
           SystemNotificationResponce>;
   @useResult
-  $Res call({List<SystemNotification> items, int unseenCount});
+  $Res call({List<SystemNotification> items});
 }
 
 /// @nodoc
@@ -359,17 +358,12 @@ class _$SystemNotificationResponceCopyWithImpl<$Res,
   @override
   $Res call({
     Object? items = null,
-    Object? unseenCount = null,
   }) {
     return _then(_value.copyWith(
       items: null == items
           ? _value.items
           : items // ignore: cast_nullable_to_non_nullable
               as List<SystemNotification>,
-      unseenCount: null == unseenCount
-          ? _value.unseenCount
-          : unseenCount // ignore: cast_nullable_to_non_nullable
-              as int,
     ) as $Val);
   }
 }
@@ -383,7 +377,7 @@ abstract class _$$SystemNotificationResponceImplCopyWith<$Res>
       __$$SystemNotificationResponceImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({List<SystemNotification> items, int unseenCount});
+  $Res call({List<SystemNotification> items});
 }
 
 /// @nodoc
@@ -402,17 +396,12 @@ class __$$SystemNotificationResponceImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? items = null,
-    Object? unseenCount = null,
   }) {
     return _then(_$SystemNotificationResponceImpl(
       items: null == items
           ? _value._items
           : items // ignore: cast_nullable_to_non_nullable
               as List<SystemNotification>,
-      unseenCount: null == unseenCount
-          ? _value.unseenCount
-          : unseenCount // ignore: cast_nullable_to_non_nullable
-              as int,
     ));
   }
 }
@@ -422,7 +411,7 @@ class __$$SystemNotificationResponceImplCopyWithImpl<$Res>
 @JsonSerializable(fieldRename: FieldRename.snake)
 class _$SystemNotificationResponceImpl implements _SystemNotificationResponce {
   const _$SystemNotificationResponceImpl(
-      {required final List<SystemNotification> items, this.unseenCount = 0})
+      {required final List<SystemNotification> items})
       : _items = items;
 
   factory _$SystemNotificationResponceImpl.fromJson(
@@ -438,12 +427,8 @@ class _$SystemNotificationResponceImpl implements _SystemNotificationResponce {
   }
 
   @override
-  @JsonKey()
-  final int unseenCount;
-
-  @override
   String toString() {
-    return 'SystemNotificationResponce(items: $items, unseenCount: $unseenCount)';
+    return 'SystemNotificationResponce(items: $items)';
   }
 
   @override
@@ -451,15 +436,13 @@ class _$SystemNotificationResponceImpl implements _SystemNotificationResponce {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$SystemNotificationResponceImpl &&
-            const DeepCollectionEquality().equals(other._items, _items) &&
-            (identical(other.unseenCount, unseenCount) ||
-                other.unseenCount == unseenCount));
+            const DeepCollectionEquality().equals(other._items, _items));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(
-      runtimeType, const DeepCollectionEquality().hash(_items), unseenCount);
+  int get hashCode =>
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(_items));
 
   /// Create a copy of SystemNotificationResponce
   /// with the given fields replaced by the non-null parameter values.
@@ -481,16 +464,14 @@ class _$SystemNotificationResponceImpl implements _SystemNotificationResponce {
 abstract class _SystemNotificationResponce
     implements SystemNotificationResponce {
   const factory _SystemNotificationResponce(
-      {required final List<SystemNotification> items,
-      final int unseenCount}) = _$SystemNotificationResponceImpl;
+          {required final List<SystemNotification> items}) =
+      _$SystemNotificationResponceImpl;
 
   factory _SystemNotificationResponce.fromJson(Map<String, dynamic> json) =
       _$SystemNotificationResponceImpl.fromJson;
 
   @override
   List<SystemNotification> get items;
-  @override
-  int get unseenCount;
 
   /// Create a copy of SystemNotificationResponce
   /// with the given fields replaced by the non-null parameter values.

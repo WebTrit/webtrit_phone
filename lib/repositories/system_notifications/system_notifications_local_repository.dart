@@ -113,8 +113,8 @@ class SystemNotificationsLocalRepositoryDriftImpl
   @override
   Future<void> deleteOutboxNotification(int notificationId, SnOutboxActionType actionType) async {
     final actionTypeData = actionTypeToDrift(actionType);
-    await _dao.deleteOutboxNotification(notificationId, actionTypeData);
-    _addEvent(SystemNotificationOutboxRemove(notificationId, actionType));
+    final count = await _dao.deleteOutboxNotification(notificationId, actionTypeData);
+    if (count > 0) _addEvent(SystemNotificationOutboxRemove(notificationId, actionType));
   }
 
   @override

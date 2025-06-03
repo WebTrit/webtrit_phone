@@ -31,20 +31,18 @@ class SystemNotificationsOutboxWorker {
 
   void init() {
     _logger.info('Initializing');
-    _processingSub = _processingStream().listen(_handleProcessing);
+    _processingSub = _processingStream().listen(_handleProcessingEvent);
     _localEventSub = localRepo.eventBus.listen(_handleLocalEvent);
   }
 
+  /// Creates continuous cancellable sequence of system notifications outbox processing.
+  /// Returns a [Stream] of logs and errors that occur during the process.
   Stream<dynamic> _processingStream() async* {
     while (!_disposed) {
       try {
         // Check connectivity before processing
         final connectivityResult = await connectivity.checkConnectivity();
-        if (connectivityResult.every((r) => r == ConnectivityResult.none)) {
-          yield 'No internet connection, skipping processing';
-          yield await Future.delayed(pollingInterval, () => _kRetryEventStub);
-          continue;
-        }
+        if (connectivityResult.every((r) => r == ConnectivityResult.none)) continue;
 
         // Process pending outbox notifications
         final seenEntries = await localRepo.getOutboxNotifications(
@@ -63,7 +61,7 @@ class SystemNotificationsOutboxWorker {
               yield (e, s);
               if (entry.sendAttempts > 5) {
                 await localRepo.upsertOutboxNotification(entry.toFailed());
-                yield 'Failed to send seen notification after 3 attempts: ${entry.notificationId}';
+                yield 'Failed to send seen notification after 5 attempts: ${entry.notificationId}';
               } else {
                 await localRepo.upsertOutboxNotification(entry.incAttempts());
                 yield 'Retrying seen notification: ${entry.notificationId}, attempt: ${entry.sendAttempts}';
@@ -79,7 +77,7 @@ class SystemNotificationsOutboxWorker {
     }
   }
 
-  void _handleProcessing(event) {
+  void _handleProcessingEvent(event) {
     if (event is (Object, StackTrace)) {
       final (error, stackTrace) = event;
       _logger.warning(error, stackTrace);
@@ -91,6 +89,7 @@ class SystemNotificationsOutboxWorker {
   }
 
   void _handleLocalEvent(SystemNotificationEvent event) {
+    /// Delete seen outbox records that successfully aplied to system notification
     if (event is SystemNotificationUpdate && event.notification.seen) {
       localRepo.deleteOutboxNotification(event.notification.id, SnOutboxActionType.seen);
     }

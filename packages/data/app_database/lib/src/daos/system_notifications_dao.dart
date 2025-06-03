@@ -14,8 +14,8 @@ class SystemNotificationsDao extends DatabaseAccessor<AppDatabase> with _$System
     final query = select(systemNotificationsTable);
     query.orderBy([(t) => OrderingTerm.desc(t.createdAtRemoteUsec)]);
 
-    if (from != null) query.where((tbl) => tbl.createdAtRemoteUsec.isBiggerThanValue(from.microsecondsSinceEpoch));
-    if (to != null) query.where((tbl) => tbl.createdAtRemoteUsec.isSmallerThanValue(to.microsecondsSinceEpoch));
+    if (from != null) query.where((tbl) => tbl.createdAtRemoteUsec.isSmallerThanValue(from.microsecondsSinceEpoch));
+    if (to != null) query.where((tbl) => tbl.createdAtRemoteUsec.isBiggerThanValue(to.microsecondsSinceEpoch));
     if (limit != null) query.limit(limit);
 
     return query.get();

@@ -42,6 +42,8 @@ class _SystemNotificationsShellState extends State<SystemNotificationsShell> {
     });
   }
 
+  /// Actively checks the system notificaitons feature flags
+  /// and init or dispose them on the fly accordingly to configuration
   upsertServices() {
     final featureEnabled = feature.systemNotificationsSupport;
     final pushSupported = feature.systemNotificationsPushSupport;
@@ -75,9 +77,7 @@ class _SystemNotificationsShellState extends State<SystemNotificationsShell> {
   }
 
   openNotificationsScreen() {
-    final alreadyOpened = context.router.topRoute is SystemNotificationsPageRoute;
-    if (alreadyOpened) return;
-    context.router.push(const SystemNotificationsPageRoute());
+    context.router.navigate(const SystemNotificationsPageRoute());
   }
 
   @override

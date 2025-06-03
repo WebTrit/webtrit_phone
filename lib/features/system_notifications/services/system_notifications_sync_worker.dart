@@ -34,39 +34,37 @@ class SystemNotificationsSyncWorker {
 
   void init() {
     _logger.info('Initializing');
-    _syncSub = _syncStream().listen(_handleSync);
+    _syncSub = _syncStream().listen(_handleSyncEvent);
   }
 
+  /// Creates continuous cancellable sequence of system notifications sync process.
+  /// Returns a [Stream] of logs and errors that occur during the sync.
   Stream<dynamic> _syncStream() async* {
     int successIterations = 0;
     while (!_disposed) {
       try {
         // Check connectivity before processing
         final connectivityResult = await connectivity.checkConnectivity();
-        if (connectivityResult.every((r) => r == ConnectivityResult.none)) {
-          yield 'No internet connection, skipping processing';
-          yield await Future.delayed(pollingInterval, () => _kRetryEventStub);
-          continue;
-        }
+        if (connectivityResult.every((r) => r == ConnectivityResult.none)) continue;
 
         // Fetch last sync time
         final lastUpdate = await localRepo.getLastUpdate();
 
         // If no last update, fetch initial history
         if (lastUpdate == null) {
-          final (notifications, _) = await remoteRepo.getHistory(limit: pageSize);
-          final isInitialData = successIterations == 0;
-          await localRepo.upsertNotifications(notifications, initialData: isInitialData);
+          final notifications = await remoteRepo.getHistory(limit: pageSize);
           yield 'Initial notifications fetched: ${notifications.length}';
+          final isInitialData = successIterations == 0;
+          await localRepo.upsertNotifications(notifications.reversed.toList(), initialData: isInitialData);
         }
 
         // Fetch updates sequence e.g new notifications or updates(seen,delete)
         // since last update
         if (lastUpdate != null) {
           while (true) {
-            final (updates, _) = await remoteRepo.getUpdates(since: lastUpdate, limit: pageSize);
-            await localRepo.upsertNotifications(updates);
+            final updates = await remoteRepo.getUpdates(since: lastUpdate, limit: pageSize);
             yield 'Updated notifications: ${updates.length}';
+            await localRepo.upsertNotifications(updates);
             if (updates.length < pageSize) break;
           }
         }
@@ -79,7 +77,7 @@ class SystemNotificationsSyncWorker {
     }
   }
 
-  void _handleSync(event) {
+  void _handleSyncEvent(event) {
     if (event is (Object, StackTrace)) {
       final (error, stackTrace) = event;
       _logger.warning(error, stackTrace);
