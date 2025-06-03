@@ -261,9 +261,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       final inUse = activeCalls.any((e) => e.line == i);
       mainLinesState.add(inUse ? LineState.inUse : LineState.idle);
     }
-
-    // TODO: active call refactor to support guest line
-    // ignore: unnecessary_null_comparison
     final guestLineInUse = activeCalls.any((e) => e.line == null);
     final guestLineState = guestLineInUse ? LineState.inUse : LineState.idle;
 
@@ -2581,7 +2578,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     return callPerformEvent.future;
   }
 
-  Future<RTCPeerConnection> _createPeerConnection(String callId, int lineId) async {
+  Future<RTCPeerConnection> _createPeerConnection(String callId, int? lineId) async {
     final peerConnection = await createPeerConnection(
       {
         'iceServers': [
@@ -2701,7 +2698,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   // Signaling base requests
 
   // TODO(Serdun): Replace other hangup request calls with this method for consistency.
-  Future<void> _signalingHungUpCall(int line, String callId) async {
+  Future<void> _signalingHungUpCall(int? line, String callId) async {
     final hangupRequest = HangupRequest(
       transaction: WebtritSignalingClient.generateTransactionId(),
       line: line,
@@ -2714,7 +2711,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   }
 
   // TODO(Serdun): Replace other decline request calls with this method for consistency.
-  Future<void> _signalingDeclineCall(int line, String callId) async {
+  Future<void> _signalingDeclineCall(int? line, String callId) async {
     final hangupRequest = DeclineRequest(
       transaction: WebtritSignalingClient.generateTransactionId(),
       line: line,

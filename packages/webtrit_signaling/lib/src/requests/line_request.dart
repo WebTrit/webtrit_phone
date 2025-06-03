@@ -7,7 +7,7 @@ abstract class LineRequest extends SessionRequest {
     required this.line,
   });
 
-  final int line;
+  final int? line;
 
   @override
   List<Object?> get props => [
