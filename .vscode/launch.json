@@ -1,0 +1,43 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "WebTrit (debug)",
+            "request": "launch",
+            "type": "dart",
+            "args": [
+                "--dart-define-from-file=dart_define.json",
+                "--flavor=deeplinkssmsReceiver",
+                // "--flavor=deeplinksDisabledsmsReceiverDisabled",
+                // "--flavor=deeplinksDisabledsmsReceiver",
+                // "--flavor=deeplinkssmsReceiverDisabled",
+            ]
+        },
+        {
+            "name": "WebTrit (profile)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile",
+            "args": [
+                "--dart-define-from-file=dart_define.json",
+                "--flavor=deeplinkssmsReceiver",
+                // "--flavor=deeplinksDisabledsmsReceiverDisabled",
+                // "--flavor=deeplinksDisabledsmsReceiver",
+                // "--flavor=deeplinkssmsReceiverDisabled",
+            ]
+        },
+        {
+            "name": "WebTrit (release)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release",
+            "args": [
+                "--dart-define-from-file=dart_define.json",
+                "--flavor=deeplinkssmsReceiver",
+                // "--flavor=deeplinksDisabledsmsReceiverDisabled",
+                // "--flavor=deeplinksDisabledsmsReceiver",
+                // "--flavor=deeplinkssmsReceiverDisabled",
+            ]
+        },
+    ]
+}
