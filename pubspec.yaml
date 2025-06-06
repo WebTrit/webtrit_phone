@@ -88,6 +88,10 @@ dependencies:
   http: ^1.2.2
   audio_session: ^0.2.1
   bloc_test: ^9.1.7
+  workmanager:
+    git:
+      url: https://github.com/aldisa546/flutter_workmanager.git
+      ref: upgrade/flutter-3.29
 
   webtrit_api:
     path: ./packages/webtrit_api

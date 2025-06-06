@@ -110,6 +110,7 @@ class AppConfigMain with _$AppConfigMain {
       ]),
     )
     AppConfigBottomMenu bottomMenu,
+    @Default(true) bool systemNotificationsEnabled,
   }) = _AppConfigMain;
 
   factory AppConfigMain.fromJson(Map<String, dynamic> json) => _$AppConfigMainFromJson(json);

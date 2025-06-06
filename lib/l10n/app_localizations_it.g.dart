@@ -1723,4 +1723,10 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get webRegistration_ErrorAcknowledgeDialog_title => 'Web resource error';
+
+  @override
+  String get system_notifications_screen_title => 'Notifiche';
+
+  @override
+  String get system_notifications_screen_list_empty => 'Non ci sono notifiche';
 }

@@ -127,7 +127,10 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
     final colorScheme = theme.colorScheme;
 
     return Scaffold(
-      appBar: MainAppBar(title: widget.title),
+      appBar: MainAppBar(
+        title: widget.title,
+        context: context,
+      ),
       body: MessagingStateWrapper(
         child: Column(
           children: [

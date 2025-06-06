@@ -162,6 +162,7 @@ class MainScreenScreenshot extends StatelessWidget {
             initialUri: Uri.parse('https://example.com'),
             appBar: MainAppBar(
               title: const Text('Embedded'),
+              context: context,
             ),
           ),
         );

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 
 import 'package:webtrit_api/webtrit_api.dart';
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
@@ -183,14 +184,14 @@ class _MainShellState extends State<MainShell> {
         RepositoryProvider<MainShellRouteStateRepository>(
           create: (context) => MainShellRouteStateRepositoryAutoRouteImpl(),
         ),
-        RepositoryProvider<RemoteNotificationRepository>(
-          create: (context) => RemoteNotificationRepositoryBrokerImpl(),
+        RepositoryProvider<RemotePushRepository>(
+          create: (context) => RemotePushRepositoryBrokerImpl(),
         ),
-        RepositoryProvider<LocalNotificationRepository>(
-          create: (context) => LocalNotificationRepositoryFLNImpl(),
+        RepositoryProvider<LocalPushRepository>(
+          create: (context) => LocalPushRepositoryFLNImpl(),
         ),
-        RepositoryProvider<ActiveMessageNotificationsRepository>(
-          create: (context) => ActiveMessageNotificationsRepositoryDriftImpl(
+        RepositoryProvider<ActiveMessagePushsRepository>(
+          create: (context) => ActiveMessagePushsRepositoryDriftImpl(
             appDatabase: context.read<AppDatabase>(),
           ),
         ),
@@ -198,6 +199,17 @@ class _MainShellState extends State<MainShell> {
           create: (context) => CallToActionsRepositoryImpl(
             webtritApiClient: context.read<WebtritApiClient>(),
             token: context.read<AppBloc>().state.token!,
+          ),
+        ),
+        RepositoryProvider<SystemNotificationsLocalRepository>(
+          create: (context) => SystemNotificationsLocalRepositoryDriftImpl(
+            context.read<AppDatabase>(),
+          ),
+        ),
+        RepositoryProvider<SystemNotificationsRemoteRepository>(
+          create: (context) => SystemNotificationsRemoteRepositoryApiImpl(
+            context.read<WebtritApiClient>(),
+            context.read<AppBloc>().state.token!,
           ),
         ),
       ],
@@ -344,7 +356,7 @@ class _MainShellState extends State<MainShell> {
           ),
           BlocProvider(
             create: (_) => ChatsForwardingCubit(),
-          )
+          ),
         ],
         child: Builder(
           builder: (context) {
@@ -381,17 +393,27 @@ class _MainShellState extends State<MainShell> {
                     },
                   ),
                 ),
-              ],
-              child: Builder(
-                builder: (context) => CallShell(
-                  child: MessagingShell(
-                    child: AutoRouter(
-                      navigatorObservers: () => [
-                        MainShellNavigatorObserver(context.read<MainShellRouteStateRepository>()),
-                      ],
-                    ),
+                BlocProvider(
+                  lazy: false,
+                  create: (_) => SystemNotificationsCounterCubit(
+                    context.read<SystemNotificationsLocalRepository>(),
                   ),
                 ),
+              ],
+              child: Builder(
+                builder: (context) {
+                  return CallShell(
+                    child: MessagingShell(
+                      child: SystemNotificationsShell(
+                        child: AutoRouter(
+                          navigatorObservers: () => [
+                            MainShellNavigatorObserver(context.read<MainShellRouteStateRepository>()),
+                          ],
+                        ),
+                      ),
+                    ),
+                  );
+                },
               ),
             );
           },

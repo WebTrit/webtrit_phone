@@ -19,6 +19,7 @@ class KeypadScreen extends StatelessWidget {
     return Scaffold(
       appBar: MainAppBar(
         title: title,
+        context: context,
       ),
       body: KeypadView(
         videoVisible: videoVisible,

@@ -245,6 +245,11 @@ class AppRouter extends RootStackRouter {
                   transitionsBuilder: TransitionsBuilders.fadeIn,
                 ),
                 AutoRoute(
+                  page: SystemNotificationsPageRoute.page,
+                  path: 'system-notifications',
+                  fullscreenDialog: true,
+                ),
+                AutoRoute(
                   page: SettingsRouterPageRoute.page,
                   path: 'settings',
                   fullscreenDialog: true,

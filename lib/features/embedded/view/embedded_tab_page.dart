@@ -49,6 +49,7 @@ class EmbeddedTabPage extends StatelessWidget {
             initialUri: data.data!.uri,
             appBar: MainAppBar(
               title: Text(context.parseL10n(data.titleL10n)),
+              context: context,
             ),
             shouldForwardPop: tabActive,
           );

@@ -8276,6 +8276,718 @@ class VoicemailDataCompanion extends UpdateCompanion<VoicemailData> {
   }
 }
 
+class $SystemNotificationsTableTable extends SystemNotificationsTable
+    with TableInfo<$SystemNotificationsTableTable, SystemNotificationData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $SystemNotificationsTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: false);
+  static const VerificationMeta _titleMeta = const VerificationMeta('title');
+  @override
+  late final GeneratedColumn<String> title = GeneratedColumn<String>(
+      'title', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _contentMeta =
+      const VerificationMeta('content');
+  @override
+  late final GeneratedColumn<String> content = GeneratedColumn<String>(
+      'content', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _typeMeta = const VerificationMeta('type');
+  @override
+  late final GeneratedColumnWithTypeConverter<SystemNotificationType, String>
+      type = GeneratedColumn<String>('type', aliasedName, false,
+              type: DriftSqlType.string, requiredDuringInsert: true)
+          .withConverter<SystemNotificationType>(
+              $SystemNotificationsTableTable.$convertertype);
+  static const VerificationMeta _seenMeta = const VerificationMeta('seen');
+  @override
+  late final GeneratedColumn<bool> seen = GeneratedColumn<bool>(
+      'seen', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: true,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("seen" IN (0, 1))'));
+  static const VerificationMeta _createdAtRemoteUsecMeta =
+      const VerificationMeta('createdAtRemoteUsec');
+  @override
+  late final GeneratedColumn<int> createdAtRemoteUsec = GeneratedColumn<int>(
+      'created_at_remote_usec', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _updatedAtRemoteUsecMeta =
+      const VerificationMeta('updatedAtRemoteUsec');
+  @override
+  late final GeneratedColumn<int> updatedAtRemoteUsec = GeneratedColumn<int>(
+      'updated_at_remote_usec', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns => [
+        id,
+        title,
+        content,
+        type,
+        seen,
+        createdAtRemoteUsec,
+        updatedAtRemoteUsec
+      ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'system_notifications';
+  @override
+  VerificationContext validateIntegrity(
+      Insertable<SystemNotificationData> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('title')) {
+      context.handle(
+          _titleMeta, title.isAcceptableOrUnknown(data['title']!, _titleMeta));
+    } else if (isInserting) {
+      context.missing(_titleMeta);
+    }
+    if (data.containsKey('content')) {
+      context.handle(_contentMeta,
+          content.isAcceptableOrUnknown(data['content']!, _contentMeta));
+    } else if (isInserting) {
+      context.missing(_contentMeta);
+    }
+    context.handle(_typeMeta, const VerificationResult.success());
+    if (data.containsKey('seen')) {
+      context.handle(
+          _seenMeta, seen.isAcceptableOrUnknown(data['seen']!, _seenMeta));
+    } else if (isInserting) {
+      context.missing(_seenMeta);
+    }
+    if (data.containsKey('created_at_remote_usec')) {
+      context.handle(
+          _createdAtRemoteUsecMeta,
+          createdAtRemoteUsec.isAcceptableOrUnknown(
+              data['created_at_remote_usec']!, _createdAtRemoteUsecMeta));
+    } else if (isInserting) {
+      context.missing(_createdAtRemoteUsecMeta);
+    }
+    if (data.containsKey('updated_at_remote_usec')) {
+      context.handle(
+          _updatedAtRemoteUsecMeta,
+          updatedAtRemoteUsec.isAcceptableOrUnknown(
+              data['updated_at_remote_usec']!, _updatedAtRemoteUsecMeta));
+    } else if (isInserting) {
+      context.missing(_updatedAtRemoteUsecMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  SystemNotificationData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return SystemNotificationData(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      title: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}title'])!,
+      content: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}content'])!,
+      type: $SystemNotificationsTableTable.$convertertype.fromSql(
+          attachedDatabase.typeMapping
+              .read(DriftSqlType.string, data['${effectivePrefix}type'])!),
+      seen: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}seen'])!,
+      createdAtRemoteUsec: attachedDatabase.typeMapping.read(
+          DriftSqlType.int, data['${effectivePrefix}created_at_remote_usec'])!,
+      updatedAtRemoteUsec: attachedDatabase.typeMapping.read(
+          DriftSqlType.int, data['${effectivePrefix}updated_at_remote_usec'])!,
+    );
+  }
+
+  @override
+  $SystemNotificationsTableTable createAlias(String alias) {
+    return $SystemNotificationsTableTable(attachedDatabase, alias);
+  }
+
+  static JsonTypeConverter2<SystemNotificationType, String, String>
+      $convertertype = const EnumNameConverter<SystemNotificationType>(
+          SystemNotificationType.values);
+}
+
+class SystemNotificationData extends DataClass
+    implements Insertable<SystemNotificationData> {
+  final int id;
+  final String title;
+  final String content;
+  final SystemNotificationType type;
+  final bool seen;
+  final int createdAtRemoteUsec;
+  final int updatedAtRemoteUsec;
+  const SystemNotificationData(
+      {required this.id,
+      required this.title,
+      required this.content,
+      required this.type,
+      required this.seen,
+      required this.createdAtRemoteUsec,
+      required this.updatedAtRemoteUsec});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['title'] = Variable<String>(title);
+    map['content'] = Variable<String>(content);
+    {
+      map['type'] = Variable<String>(
+          $SystemNotificationsTableTable.$convertertype.toSql(type));
+    }
+    map['seen'] = Variable<bool>(seen);
+    map['created_at_remote_usec'] = Variable<int>(createdAtRemoteUsec);
+    map['updated_at_remote_usec'] = Variable<int>(updatedAtRemoteUsec);
+    return map;
+  }
+
+  SystemNotificationDataCompanion toCompanion(bool nullToAbsent) {
+    return SystemNotificationDataCompanion(
+      id: Value(id),
+      title: Value(title),
+      content: Value(content),
+      type: Value(type),
+      seen: Value(seen),
+      createdAtRemoteUsec: Value(createdAtRemoteUsec),
+      updatedAtRemoteUsec: Value(updatedAtRemoteUsec),
+    );
+  }
+
+  factory SystemNotificationData.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return SystemNotificationData(
+      id: serializer.fromJson<int>(json['id']),
+      title: serializer.fromJson<String>(json['title']),
+      content: serializer.fromJson<String>(json['content']),
+      type: $SystemNotificationsTableTable.$convertertype
+          .fromJson(serializer.fromJson<String>(json['type'])),
+      seen: serializer.fromJson<bool>(json['seen']),
+      createdAtRemoteUsec:
+          serializer.fromJson<int>(json['createdAtRemoteUsec']),
+      updatedAtRemoteUsec:
+          serializer.fromJson<int>(json['updatedAtRemoteUsec']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'title': serializer.toJson<String>(title),
+      'content': serializer.toJson<String>(content),
+      'type': serializer.toJson<String>(
+          $SystemNotificationsTableTable.$convertertype.toJson(type)),
+      'seen': serializer.toJson<bool>(seen),
+      'createdAtRemoteUsec': serializer.toJson<int>(createdAtRemoteUsec),
+      'updatedAtRemoteUsec': serializer.toJson<int>(updatedAtRemoteUsec),
+    };
+  }
+
+  SystemNotificationData copyWith(
+          {int? id,
+          String? title,
+          String? content,
+          SystemNotificationType? type,
+          bool? seen,
+          int? createdAtRemoteUsec,
+          int? updatedAtRemoteUsec}) =>
+      SystemNotificationData(
+        id: id ?? this.id,
+        title: title ?? this.title,
+        content: content ?? this.content,
+        type: type ?? this.type,
+        seen: seen ?? this.seen,
+        createdAtRemoteUsec: createdAtRemoteUsec ?? this.createdAtRemoteUsec,
+        updatedAtRemoteUsec: updatedAtRemoteUsec ?? this.updatedAtRemoteUsec,
+      );
+  SystemNotificationData copyWithCompanion(
+      SystemNotificationDataCompanion data) {
+    return SystemNotificationData(
+      id: data.id.present ? data.id.value : this.id,
+      title: data.title.present ? data.title.value : this.title,
+      content: data.content.present ? data.content.value : this.content,
+      type: data.type.present ? data.type.value : this.type,
+      seen: data.seen.present ? data.seen.value : this.seen,
+      createdAtRemoteUsec: data.createdAtRemoteUsec.present
+          ? data.createdAtRemoteUsec.value
+          : this.createdAtRemoteUsec,
+      updatedAtRemoteUsec: data.updatedAtRemoteUsec.present
+          ? data.updatedAtRemoteUsec.value
+          : this.updatedAtRemoteUsec,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('SystemNotificationData(')
+          ..write('id: $id, ')
+          ..write('title: $title, ')
+          ..write('content: $content, ')
+          ..write('type: $type, ')
+          ..write('seen: $seen, ')
+          ..write('createdAtRemoteUsec: $createdAtRemoteUsec, ')
+          ..write('updatedAtRemoteUsec: $updatedAtRemoteUsec')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      id, title, content, type, seen, createdAtRemoteUsec, updatedAtRemoteUsec);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is SystemNotificationData &&
+          other.id == this.id &&
+          other.title == this.title &&
+          other.content == this.content &&
+          other.type == this.type &&
+          other.seen == this.seen &&
+          other.createdAtRemoteUsec == this.createdAtRemoteUsec &&
+          other.updatedAtRemoteUsec == this.updatedAtRemoteUsec);
+}
+
+class SystemNotificationDataCompanion
+    extends UpdateCompanion<SystemNotificationData> {
+  final Value<int> id;
+  final Value<String> title;
+  final Value<String> content;
+  final Value<SystemNotificationType> type;
+  final Value<bool> seen;
+  final Value<int> createdAtRemoteUsec;
+  final Value<int> updatedAtRemoteUsec;
+  const SystemNotificationDataCompanion({
+    this.id = const Value.absent(),
+    this.title = const Value.absent(),
+    this.content = const Value.absent(),
+    this.type = const Value.absent(),
+    this.seen = const Value.absent(),
+    this.createdAtRemoteUsec = const Value.absent(),
+    this.updatedAtRemoteUsec = const Value.absent(),
+  });
+  SystemNotificationDataCompanion.insert({
+    this.id = const Value.absent(),
+    required String title,
+    required String content,
+    required SystemNotificationType type,
+    required bool seen,
+    required int createdAtRemoteUsec,
+    required int updatedAtRemoteUsec,
+  })  : title = Value(title),
+        content = Value(content),
+        type = Value(type),
+        seen = Value(seen),
+        createdAtRemoteUsec = Value(createdAtRemoteUsec),
+        updatedAtRemoteUsec = Value(updatedAtRemoteUsec);
+  static Insertable<SystemNotificationData> custom({
+    Expression<int>? id,
+    Expression<String>? title,
+    Expression<String>? content,
+    Expression<String>? type,
+    Expression<bool>? seen,
+    Expression<int>? createdAtRemoteUsec,
+    Expression<int>? updatedAtRemoteUsec,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (title != null) 'title': title,
+      if (content != null) 'content': content,
+      if (type != null) 'type': type,
+      if (seen != null) 'seen': seen,
+      if (createdAtRemoteUsec != null)
+        'created_at_remote_usec': createdAtRemoteUsec,
+      if (updatedAtRemoteUsec != null)
+        'updated_at_remote_usec': updatedAtRemoteUsec,
+    });
+  }
+
+  SystemNotificationDataCompanion copyWith(
+      {Value<int>? id,
+      Value<String>? title,
+      Value<String>? content,
+      Value<SystemNotificationType>? type,
+      Value<bool>? seen,
+      Value<int>? createdAtRemoteUsec,
+      Value<int>? updatedAtRemoteUsec}) {
+    return SystemNotificationDataCompanion(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      content: content ?? this.content,
+      type: type ?? this.type,
+      seen: seen ?? this.seen,
+      createdAtRemoteUsec: createdAtRemoteUsec ?? this.createdAtRemoteUsec,
+      updatedAtRemoteUsec: updatedAtRemoteUsec ?? this.updatedAtRemoteUsec,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (title.present) {
+      map['title'] = Variable<String>(title.value);
+    }
+    if (content.present) {
+      map['content'] = Variable<String>(content.value);
+    }
+    if (type.present) {
+      map['type'] = Variable<String>(
+          $SystemNotificationsTableTable.$convertertype.toSql(type.value));
+    }
+    if (seen.present) {
+      map['seen'] = Variable<bool>(seen.value);
+    }
+    if (createdAtRemoteUsec.present) {
+      map['created_at_remote_usec'] = Variable<int>(createdAtRemoteUsec.value);
+    }
+    if (updatedAtRemoteUsec.present) {
+      map['updated_at_remote_usec'] = Variable<int>(updatedAtRemoteUsec.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('SystemNotificationDataCompanion(')
+          ..write('id: $id, ')
+          ..write('title: $title, ')
+          ..write('content: $content, ')
+          ..write('type: $type, ')
+          ..write('seen: $seen, ')
+          ..write('createdAtRemoteUsec: $createdAtRemoteUsec, ')
+          ..write('updatedAtRemoteUsec: $updatedAtRemoteUsec')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $SystemNotificationsOutboxTableTable
+    extends SystemNotificationsOutboxTable
+    with
+        TableInfo<$SystemNotificationsOutboxTableTable,
+            SystemNotificationOutboxEntryData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $SystemNotificationsOutboxTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _notificationIdMeta =
+      const VerificationMeta('notificationId');
+  @override
+  late final GeneratedColumn<int> notificationId = GeneratedColumn<int>(
+      'notification_id', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'REFERENCES system_notifications (id) ON DELETE CASCADE'));
+  static const VerificationMeta _actionTypeMeta =
+      const VerificationMeta('actionType');
+  @override
+  late final GeneratedColumnWithTypeConverter<SnOutboxDataActionType, String>
+      actionType = GeneratedColumn<String>('action_type', aliasedName, false,
+              type: DriftSqlType.string, requiredDuringInsert: true)
+          .withConverter<SnOutboxDataActionType>(
+              $SystemNotificationsOutboxTableTable.$converteractionType);
+  static const VerificationMeta _stateMeta = const VerificationMeta('state');
+  @override
+  late final GeneratedColumnWithTypeConverter<SnOutboxDataState, String> state =
+      GeneratedColumn<String>('state', aliasedName, false,
+              type: DriftSqlType.string, requiredDuringInsert: true)
+          .withConverter<SnOutboxDataState>(
+              $SystemNotificationsOutboxTableTable.$converterstate);
+  static const VerificationMeta _sendAttemptsMeta =
+      const VerificationMeta('sendAttempts');
+  @override
+  late final GeneratedColumn<int> sendAttempts = GeneratedColumn<int>(
+      'send_attempts', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(0));
+  @override
+  List<GeneratedColumn> get $columns =>
+      [notificationId, actionType, state, sendAttempts];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'system_notifications_outbox';
+  @override
+  VerificationContext validateIntegrity(
+      Insertable<SystemNotificationOutboxEntryData> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('notification_id')) {
+      context.handle(
+          _notificationIdMeta,
+          notificationId.isAcceptableOrUnknown(
+              data['notification_id']!, _notificationIdMeta));
+    } else if (isInserting) {
+      context.missing(_notificationIdMeta);
+    }
+    context.handle(_actionTypeMeta, const VerificationResult.success());
+    context.handle(_stateMeta, const VerificationResult.success());
+    if (data.containsKey('send_attempts')) {
+      context.handle(
+          _sendAttemptsMeta,
+          sendAttempts.isAcceptableOrUnknown(
+              data['send_attempts']!, _sendAttemptsMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {notificationId, actionType};
+  @override
+  SystemNotificationOutboxEntryData map(Map<String, dynamic> data,
+      {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return SystemNotificationOutboxEntryData(
+      notificationId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}notification_id'])!,
+      actionType: $SystemNotificationsOutboxTableTable.$converteractionType
+          .fromSql(attachedDatabase.typeMapping.read(
+              DriftSqlType.string, data['${effectivePrefix}action_type'])!),
+      state: $SystemNotificationsOutboxTableTable.$converterstate.fromSql(
+          attachedDatabase.typeMapping
+              .read(DriftSqlType.string, data['${effectivePrefix}state'])!),
+      sendAttempts: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}send_attempts'])!,
+    );
+  }
+
+  @override
+  $SystemNotificationsOutboxTableTable createAlias(String alias) {
+    return $SystemNotificationsOutboxTableTable(attachedDatabase, alias);
+  }
+
+  static JsonTypeConverter2<SnOutboxDataActionType, String, String>
+      $converteractionType = const EnumNameConverter<SnOutboxDataActionType>(
+          SnOutboxDataActionType.values);
+  static JsonTypeConverter2<SnOutboxDataState, String, String> $converterstate =
+      const EnumNameConverter<SnOutboxDataState>(SnOutboxDataState.values);
+}
+
+class SystemNotificationOutboxEntryData extends DataClass
+    implements Insertable<SystemNotificationOutboxEntryData> {
+  final int notificationId;
+  final SnOutboxDataActionType actionType;
+  final SnOutboxDataState state;
+  final int sendAttempts;
+  const SystemNotificationOutboxEntryData(
+      {required this.notificationId,
+      required this.actionType,
+      required this.state,
+      required this.sendAttempts});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['notification_id'] = Variable<int>(notificationId);
+    {
+      map['action_type'] = Variable<String>($SystemNotificationsOutboxTableTable
+          .$converteractionType
+          .toSql(actionType));
+    }
+    {
+      map['state'] = Variable<String>(
+          $SystemNotificationsOutboxTableTable.$converterstate.toSql(state));
+    }
+    map['send_attempts'] = Variable<int>(sendAttempts);
+    return map;
+  }
+
+  SystemNotificationOutboxEntryDataCompanion toCompanion(bool nullToAbsent) {
+    return SystemNotificationOutboxEntryDataCompanion(
+      notificationId: Value(notificationId),
+      actionType: Value(actionType),
+      state: Value(state),
+      sendAttempts: Value(sendAttempts),
+    );
+  }
+
+  factory SystemNotificationOutboxEntryData.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return SystemNotificationOutboxEntryData(
+      notificationId: serializer.fromJson<int>(json['notificationId']),
+      actionType: $SystemNotificationsOutboxTableTable.$converteractionType
+          .fromJson(serializer.fromJson<String>(json['actionType'])),
+      state: $SystemNotificationsOutboxTableTable.$converterstate
+          .fromJson(serializer.fromJson<String>(json['state'])),
+      sendAttempts: serializer.fromJson<int>(json['sendAttempts']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'notificationId': serializer.toJson<int>(notificationId),
+      'actionType': serializer.toJson<String>(
+          $SystemNotificationsOutboxTableTable.$converteractionType
+              .toJson(actionType)),
+      'state': serializer.toJson<String>(
+          $SystemNotificationsOutboxTableTable.$converterstate.toJson(state)),
+      'sendAttempts': serializer.toJson<int>(sendAttempts),
+    };
+  }
+
+  SystemNotificationOutboxEntryData copyWith(
+          {int? notificationId,
+          SnOutboxDataActionType? actionType,
+          SnOutboxDataState? state,
+          int? sendAttempts}) =>
+      SystemNotificationOutboxEntryData(
+        notificationId: notificationId ?? this.notificationId,
+        actionType: actionType ?? this.actionType,
+        state: state ?? this.state,
+        sendAttempts: sendAttempts ?? this.sendAttempts,
+      );
+  SystemNotificationOutboxEntryData copyWithCompanion(
+      SystemNotificationOutboxEntryDataCompanion data) {
+    return SystemNotificationOutboxEntryData(
+      notificationId: data.notificationId.present
+          ? data.notificationId.value
+          : this.notificationId,
+      actionType:
+          data.actionType.present ? data.actionType.value : this.actionType,
+      state: data.state.present ? data.state.value : this.state,
+      sendAttempts: data.sendAttempts.present
+          ? data.sendAttempts.value
+          : this.sendAttempts,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('SystemNotificationOutboxEntryData(')
+          ..write('notificationId: $notificationId, ')
+          ..write('actionType: $actionType, ')
+          ..write('state: $state, ')
+          ..write('sendAttempts: $sendAttempts')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(notificationId, actionType, state, sendAttempts);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is SystemNotificationOutboxEntryData &&
+          other.notificationId == this.notificationId &&
+          other.actionType == this.actionType &&
+          other.state == this.state &&
+          other.sendAttempts == this.sendAttempts);
+}
+
+class SystemNotificationOutboxEntryDataCompanion
+    extends UpdateCompanion<SystemNotificationOutboxEntryData> {
+  final Value<int> notificationId;
+  final Value<SnOutboxDataActionType> actionType;
+  final Value<SnOutboxDataState> state;
+  final Value<int> sendAttempts;
+  final Value<int> rowid;
+  const SystemNotificationOutboxEntryDataCompanion({
+    this.notificationId = const Value.absent(),
+    this.actionType = const Value.absent(),
+    this.state = const Value.absent(),
+    this.sendAttempts = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  SystemNotificationOutboxEntryDataCompanion.insert({
+    required int notificationId,
+    required SnOutboxDataActionType actionType,
+    required SnOutboxDataState state,
+    this.sendAttempts = const Value.absent(),
+    this.rowid = const Value.absent(),
+  })  : notificationId = Value(notificationId),
+        actionType = Value(actionType),
+        state = Value(state);
+  static Insertable<SystemNotificationOutboxEntryData> custom({
+    Expression<int>? notificationId,
+    Expression<String>? actionType,
+    Expression<String>? state,
+    Expression<int>? sendAttempts,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (notificationId != null) 'notification_id': notificationId,
+      if (actionType != null) 'action_type': actionType,
+      if (state != null) 'state': state,
+      if (sendAttempts != null) 'send_attempts': sendAttempts,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  SystemNotificationOutboxEntryDataCompanion copyWith(
+      {Value<int>? notificationId,
+      Value<SnOutboxDataActionType>? actionType,
+      Value<SnOutboxDataState>? state,
+      Value<int>? sendAttempts,
+      Value<int>? rowid}) {
+    return SystemNotificationOutboxEntryDataCompanion(
+      notificationId: notificationId ?? this.notificationId,
+      actionType: actionType ?? this.actionType,
+      state: state ?? this.state,
+      sendAttempts: sendAttempts ?? this.sendAttempts,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (notificationId.present) {
+      map['notification_id'] = Variable<int>(notificationId.value);
+    }
+    if (actionType.present) {
+      map['action_type'] = Variable<String>($SystemNotificationsOutboxTableTable
+          .$converteractionType
+          .toSql(actionType.value));
+    }
+    if (state.present) {
+      map['state'] = Variable<String>($SystemNotificationsOutboxTableTable
+          .$converterstate
+          .toSql(state.value));
+    }
+    if (sendAttempts.present) {
+      map['send_attempts'] = Variable<int>(sendAttempts.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('SystemNotificationOutboxEntryDataCompanion(')
+          ..write('notificationId: $notificationId, ')
+          ..write('actionType: $actionType, ')
+          ..write('state: $state, ')
+          ..write('sendAttempts: $sendAttempts, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -8323,6 +9035,11 @@ abstract class _$AppDatabase extends GeneratedDatabase {
       activeMessageNotificationsTable =
       $ActiveMessageNotificationsTableTable(this);
   late final $VoicemailTableTable voicemailTable = $VoicemailTableTable(this);
+  late final $SystemNotificationsTableTable systemNotificationsTable =
+      $SystemNotificationsTableTable(this);
+  late final $SystemNotificationsOutboxTableTable
+      systemNotificationsOutboxTable =
+      $SystemNotificationsOutboxTableTable(this);
   late final ContactsDao contactsDao = ContactsDao(this as AppDatabase);
   late final ContactPhonesDao contactPhonesDao =
       ContactPhonesDao(this as AppDatabase);
@@ -8336,6 +9053,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final ActiveMessageNotificationsDao activeMessageNotificationsDao =
       ActiveMessageNotificationsDao(this as AppDatabase);
   late final VoicemailDao voicemailDao = VoicemailDao(this as AppDatabase);
+  late final SystemNotificationsDao systemNotificationsDao =
+      SystemNotificationsDao(this as AppDatabase);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -8364,7 +9083,9 @@ abstract class _$AppDatabase extends GeneratedDatabase {
         smsOutboxReadCursorsTable,
         userSmsNumbersTable,
         activeMessageNotificationsTable,
-        voicemailTable
+        voicemailTable,
+        systemNotificationsTable,
+        systemNotificationsOutboxTable
       ];
   @override
   StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules(
@@ -8467,6 +9188,14 @@ abstract class _$AppDatabase extends GeneratedDatabase {
                 limitUpdateKind: UpdateKind.delete),
             result: [
               TableUpdate('sms_outbox_read_cursors', kind: UpdateKind.delete),
+            ],
+          ),
+          WritePropagation(
+            on: TableUpdateQuery.onTableName('system_notifications',
+                limitUpdateKind: UpdateKind.delete),
+            result: [
+              TableUpdate('system_notifications_outbox',
+                  kind: UpdateKind.delete),
             ],
           ),
         ],
@@ -15592,6 +16321,603 @@ typedef $$VoicemailTableTableProcessedTableManager = ProcessedTableManager<
     ),
     VoicemailData,
     PrefetchHooks Function()>;
+typedef $$SystemNotificationsTableTableCreateCompanionBuilder
+    = SystemNotificationDataCompanion Function({
+  Value<int> id,
+  required String title,
+  required String content,
+  required SystemNotificationType type,
+  required bool seen,
+  required int createdAtRemoteUsec,
+  required int updatedAtRemoteUsec,
+});
+typedef $$SystemNotificationsTableTableUpdateCompanionBuilder
+    = SystemNotificationDataCompanion Function({
+  Value<int> id,
+  Value<String> title,
+  Value<String> content,
+  Value<SystemNotificationType> type,
+  Value<bool> seen,
+  Value<int> createdAtRemoteUsec,
+  Value<int> updatedAtRemoteUsec,
+});
+
+final class $$SystemNotificationsTableTableReferences extends BaseReferences<
+    _$AppDatabase, $SystemNotificationsTableTable, SystemNotificationData> {
+  $$SystemNotificationsTableTableReferences(
+      super.$_db, super.$_table, super.$_typedResult);
+
+  static MultiTypedResultKey<$SystemNotificationsOutboxTableTable,
+          List<SystemNotificationOutboxEntryData>>
+      _systemNotificationsOutboxTableRefsTable(_$AppDatabase db) =>
+          MultiTypedResultKey.fromTable(db.systemNotificationsOutboxTable,
+              aliasName: $_aliasNameGenerator(db.systemNotificationsTable.id,
+                  db.systemNotificationsOutboxTable.notificationId));
+
+  $$SystemNotificationsOutboxTableTableProcessedTableManager
+      get systemNotificationsOutboxTableRefs {
+    final manager = $$SystemNotificationsOutboxTableTableTableManager(
+            $_db, $_db.systemNotificationsOutboxTable)
+        .filter((f) => f.notificationId.id($_item.id));
+
+    final cache = $_typedResult
+        .readTableOrNull(_systemNotificationsOutboxTableRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+}
+
+class $$SystemNotificationsTableTableFilterComposer
+    extends Composer<_$AppDatabase, $SystemNotificationsTableTable> {
+  $$SystemNotificationsTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get title => $composableBuilder(
+      column: $table.title, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get content => $composableBuilder(
+      column: $table.content, builder: (column) => ColumnFilters(column));
+
+  ColumnWithTypeConverterFilters<SystemNotificationType, SystemNotificationType,
+          String>
+      get type => $composableBuilder(
+          column: $table.type,
+          builder: (column) => ColumnWithTypeConverterFilters(column));
+
+  ColumnFilters<bool> get seen => $composableBuilder(
+      column: $table.seen, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get createdAtRemoteUsec => $composableBuilder(
+      column: $table.createdAtRemoteUsec,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get updatedAtRemoteUsec => $composableBuilder(
+      column: $table.updatedAtRemoteUsec,
+      builder: (column) => ColumnFilters(column));
+
+  Expression<bool> systemNotificationsOutboxTableRefs(
+      Expression<bool> Function(
+              $$SystemNotificationsOutboxTableTableFilterComposer f)
+          f) {
+    final $$SystemNotificationsOutboxTableTableFilterComposer composer =
+        $composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.id,
+            referencedTable: $db.systemNotificationsOutboxTable,
+            getReferencedColumn: (t) => t.notificationId,
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$SystemNotificationsOutboxTableTableFilterComposer(
+                  $db: $db,
+                  $table: $db.systemNotificationsOutboxTable,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
+    return f(composer);
+  }
+}
+
+class $$SystemNotificationsTableTableOrderingComposer
+    extends Composer<_$AppDatabase, $SystemNotificationsTableTable> {
+  $$SystemNotificationsTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get title => $composableBuilder(
+      column: $table.title, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get content => $composableBuilder(
+      column: $table.content, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get type => $composableBuilder(
+      column: $table.type, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get seen => $composableBuilder(
+      column: $table.seen, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get createdAtRemoteUsec => $composableBuilder(
+      column: $table.createdAtRemoteUsec,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get updatedAtRemoteUsec => $composableBuilder(
+      column: $table.updatedAtRemoteUsec,
+      builder: (column) => ColumnOrderings(column));
+}
+
+class $$SystemNotificationsTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $SystemNotificationsTableTable> {
+  $$SystemNotificationsTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get title =>
+      $composableBuilder(column: $table.title, builder: (column) => column);
+
+  GeneratedColumn<String> get content =>
+      $composableBuilder(column: $table.content, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<SystemNotificationType, String> get type =>
+      $composableBuilder(column: $table.type, builder: (column) => column);
+
+  GeneratedColumn<bool> get seen =>
+      $composableBuilder(column: $table.seen, builder: (column) => column);
+
+  GeneratedColumn<int> get createdAtRemoteUsec => $composableBuilder(
+      column: $table.createdAtRemoteUsec, builder: (column) => column);
+
+  GeneratedColumn<int> get updatedAtRemoteUsec => $composableBuilder(
+      column: $table.updatedAtRemoteUsec, builder: (column) => column);
+
+  Expression<T> systemNotificationsOutboxTableRefs<T extends Object>(
+      Expression<T> Function(
+              $$SystemNotificationsOutboxTableTableAnnotationComposer a)
+          f) {
+    final $$SystemNotificationsOutboxTableTableAnnotationComposer composer =
+        $composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.id,
+            referencedTable: $db.systemNotificationsOutboxTable,
+            getReferencedColumn: (t) => t.notificationId,
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$SystemNotificationsOutboxTableTableAnnotationComposer(
+                  $db: $db,
+                  $table: $db.systemNotificationsOutboxTable,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
+    return f(composer);
+  }
+}
+
+class $$SystemNotificationsTableTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $SystemNotificationsTableTable,
+    SystemNotificationData,
+    $$SystemNotificationsTableTableFilterComposer,
+    $$SystemNotificationsTableTableOrderingComposer,
+    $$SystemNotificationsTableTableAnnotationComposer,
+    $$SystemNotificationsTableTableCreateCompanionBuilder,
+    $$SystemNotificationsTableTableUpdateCompanionBuilder,
+    (SystemNotificationData, $$SystemNotificationsTableTableReferences),
+    SystemNotificationData,
+    PrefetchHooks Function({bool systemNotificationsOutboxTableRefs})> {
+  $$SystemNotificationsTableTableTableManager(
+      _$AppDatabase db, $SystemNotificationsTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$SystemNotificationsTableTableFilterComposer(
+                  $db: db, $table: table),
+          createOrderingComposer: () =>
+              $$SystemNotificationsTableTableOrderingComposer(
+                  $db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$SystemNotificationsTableTableAnnotationComposer(
+                  $db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<String> title = const Value.absent(),
+            Value<String> content = const Value.absent(),
+            Value<SystemNotificationType> type = const Value.absent(),
+            Value<bool> seen = const Value.absent(),
+            Value<int> createdAtRemoteUsec = const Value.absent(),
+            Value<int> updatedAtRemoteUsec = const Value.absent(),
+          }) =>
+              SystemNotificationDataCompanion(
+            id: id,
+            title: title,
+            content: content,
+            type: type,
+            seen: seen,
+            createdAtRemoteUsec: createdAtRemoteUsec,
+            updatedAtRemoteUsec: updatedAtRemoteUsec,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            required String title,
+            required String content,
+            required SystemNotificationType type,
+            required bool seen,
+            required int createdAtRemoteUsec,
+            required int updatedAtRemoteUsec,
+          }) =>
+              SystemNotificationDataCompanion.insert(
+            id: id,
+            title: title,
+            content: content,
+            type: type,
+            seen: seen,
+            createdAtRemoteUsec: createdAtRemoteUsec,
+            updatedAtRemoteUsec: updatedAtRemoteUsec,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (
+                    e.readTable(table),
+                    $$SystemNotificationsTableTableReferences(db, table, e)
+                  ))
+              .toList(),
+          prefetchHooksCallback: (
+              {systemNotificationsOutboxTableRefs = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [
+                if (systemNotificationsOutboxTableRefs)
+                  db.systemNotificationsOutboxTable
+              ],
+              addJoins: null,
+              getPrefetchedDataCallback: (items) async {
+                return [
+                  if (systemNotificationsOutboxTableRefs)
+                    await $_getPrefetchedData(
+                        currentTable: table,
+                        referencedTable:
+                            $$SystemNotificationsTableTableReferences
+                                ._systemNotificationsOutboxTableRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$SystemNotificationsTableTableReferences(
+                                    db, table, p0)
+                                .systemNotificationsOutboxTableRefs,
+                        referencedItemsForCurrentItem:
+                            (item, referencedItems) => referencedItems
+                                .where((e) => e.notificationId == item.id),
+                        typedResults: items)
+                ];
+              },
+            );
+          },
+        ));
+}
+
+typedef $$SystemNotificationsTableTableProcessedTableManager
+    = ProcessedTableManager<
+        _$AppDatabase,
+        $SystemNotificationsTableTable,
+        SystemNotificationData,
+        $$SystemNotificationsTableTableFilterComposer,
+        $$SystemNotificationsTableTableOrderingComposer,
+        $$SystemNotificationsTableTableAnnotationComposer,
+        $$SystemNotificationsTableTableCreateCompanionBuilder,
+        $$SystemNotificationsTableTableUpdateCompanionBuilder,
+        (SystemNotificationData, $$SystemNotificationsTableTableReferences),
+        SystemNotificationData,
+        PrefetchHooks Function({bool systemNotificationsOutboxTableRefs})>;
+typedef $$SystemNotificationsOutboxTableTableCreateCompanionBuilder
+    = SystemNotificationOutboxEntryDataCompanion Function({
+  required int notificationId,
+  required SnOutboxDataActionType actionType,
+  required SnOutboxDataState state,
+  Value<int> sendAttempts,
+  Value<int> rowid,
+});
+typedef $$SystemNotificationsOutboxTableTableUpdateCompanionBuilder
+    = SystemNotificationOutboxEntryDataCompanion Function({
+  Value<int> notificationId,
+  Value<SnOutboxDataActionType> actionType,
+  Value<SnOutboxDataState> state,
+  Value<int> sendAttempts,
+  Value<int> rowid,
+});
+
+final class $$SystemNotificationsOutboxTableTableReferences
+    extends BaseReferences<_$AppDatabase, $SystemNotificationsOutboxTableTable,
+        SystemNotificationOutboxEntryData> {
+  $$SystemNotificationsOutboxTableTableReferences(
+      super.$_db, super.$_table, super.$_typedResult);
+
+  static $SystemNotificationsTableTable _notificationIdTable(
+          _$AppDatabase db) =>
+      db.systemNotificationsTable.createAlias($_aliasNameGenerator(
+          db.systemNotificationsOutboxTable.notificationId,
+          db.systemNotificationsTable.id));
+
+  $$SystemNotificationsTableTableProcessedTableManager? get notificationId {
+    if ($_item.notificationId == null) return null;
+    final manager = $$SystemNotificationsTableTableTableManager(
+            $_db, $_db.systemNotificationsTable)
+        .filter((f) => f.id($_item.notificationId!));
+    final item = $_typedResult.readTableOrNull(_notificationIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+}
+
+class $$SystemNotificationsOutboxTableTableFilterComposer
+    extends Composer<_$AppDatabase, $SystemNotificationsOutboxTableTable> {
+  $$SystemNotificationsOutboxTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnWithTypeConverterFilters<SnOutboxDataActionType, SnOutboxDataActionType,
+          String>
+      get actionType => $composableBuilder(
+          column: $table.actionType,
+          builder: (column) => ColumnWithTypeConverterFilters(column));
+
+  ColumnWithTypeConverterFilters<SnOutboxDataState, SnOutboxDataState, String>
+      get state => $composableBuilder(
+          column: $table.state,
+          builder: (column) => ColumnWithTypeConverterFilters(column));
+
+  ColumnFilters<int> get sendAttempts => $composableBuilder(
+      column: $table.sendAttempts, builder: (column) => ColumnFilters(column));
+
+  $$SystemNotificationsTableTableFilterComposer get notificationId {
+    final $$SystemNotificationsTableTableFilterComposer composer =
+        $composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.notificationId,
+            referencedTable: $db.systemNotificationsTable,
+            getReferencedColumn: (t) => t.id,
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$SystemNotificationsTableTableFilterComposer(
+                  $db: $db,
+                  $table: $db.systemNotificationsTable,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
+    return composer;
+  }
+}
+
+class $$SystemNotificationsOutboxTableTableOrderingComposer
+    extends Composer<_$AppDatabase, $SystemNotificationsOutboxTableTable> {
+  $$SystemNotificationsOutboxTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get actionType => $composableBuilder(
+      column: $table.actionType, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get state => $composableBuilder(
+      column: $table.state, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get sendAttempts => $composableBuilder(
+      column: $table.sendAttempts,
+      builder: (column) => ColumnOrderings(column));
+
+  $$SystemNotificationsTableTableOrderingComposer get notificationId {
+    final $$SystemNotificationsTableTableOrderingComposer composer =
+        $composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.notificationId,
+            referencedTable: $db.systemNotificationsTable,
+            getReferencedColumn: (t) => t.id,
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$SystemNotificationsTableTableOrderingComposer(
+                  $db: $db,
+                  $table: $db.systemNotificationsTable,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
+    return composer;
+  }
+}
+
+class $$SystemNotificationsOutboxTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $SystemNotificationsOutboxTableTable> {
+  $$SystemNotificationsOutboxTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumnWithTypeConverter<SnOutboxDataActionType, String>
+      get actionType => $composableBuilder(
+          column: $table.actionType, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<SnOutboxDataState, String> get state =>
+      $composableBuilder(column: $table.state, builder: (column) => column);
+
+  GeneratedColumn<int> get sendAttempts => $composableBuilder(
+      column: $table.sendAttempts, builder: (column) => column);
+
+  $$SystemNotificationsTableTableAnnotationComposer get notificationId {
+    final $$SystemNotificationsTableTableAnnotationComposer composer =
+        $composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.notificationId,
+            referencedTable: $db.systemNotificationsTable,
+            getReferencedColumn: (t) => t.id,
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$SystemNotificationsTableTableAnnotationComposer(
+                  $db: $db,
+                  $table: $db.systemNotificationsTable,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
+    return composer;
+  }
+}
+
+class $$SystemNotificationsOutboxTableTableTableManager
+    extends RootTableManager<
+        _$AppDatabase,
+        $SystemNotificationsOutboxTableTable,
+        SystemNotificationOutboxEntryData,
+        $$SystemNotificationsOutboxTableTableFilterComposer,
+        $$SystemNotificationsOutboxTableTableOrderingComposer,
+        $$SystemNotificationsOutboxTableTableAnnotationComposer,
+        $$SystemNotificationsOutboxTableTableCreateCompanionBuilder,
+        $$SystemNotificationsOutboxTableTableUpdateCompanionBuilder,
+        (
+          SystemNotificationOutboxEntryData,
+          $$SystemNotificationsOutboxTableTableReferences
+        ),
+        SystemNotificationOutboxEntryData,
+        PrefetchHooks Function({bool notificationId})> {
+  $$SystemNotificationsOutboxTableTableTableManager(
+      _$AppDatabase db, $SystemNotificationsOutboxTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$SystemNotificationsOutboxTableTableFilterComposer(
+                  $db: db, $table: table),
+          createOrderingComposer: () =>
+              $$SystemNotificationsOutboxTableTableOrderingComposer(
+                  $db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$SystemNotificationsOutboxTableTableAnnotationComposer(
+                  $db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<int> notificationId = const Value.absent(),
+            Value<SnOutboxDataActionType> actionType = const Value.absent(),
+            Value<SnOutboxDataState> state = const Value.absent(),
+            Value<int> sendAttempts = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              SystemNotificationOutboxEntryDataCompanion(
+            notificationId: notificationId,
+            actionType: actionType,
+            state: state,
+            sendAttempts: sendAttempts,
+            rowid: rowid,
+          ),
+          createCompanionCallback: ({
+            required int notificationId,
+            required SnOutboxDataActionType actionType,
+            required SnOutboxDataState state,
+            Value<int> sendAttempts = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              SystemNotificationOutboxEntryDataCompanion.insert(
+            notificationId: notificationId,
+            actionType: actionType,
+            state: state,
+            sendAttempts: sendAttempts,
+            rowid: rowid,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (
+                    e.readTable(table),
+                    $$SystemNotificationsOutboxTableTableReferences(
+                        db, table, e)
+                  ))
+              .toList(),
+          prefetchHooksCallback: ({notificationId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins: <
+                  T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic>>(state) {
+                if (notificationId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.notificationId,
+                    referencedTable:
+                        $$SystemNotificationsOutboxTableTableReferences
+                            ._notificationIdTable(db),
+                    referencedColumn:
+                        $$SystemNotificationsOutboxTableTableReferences
+                            ._notificationIdTable(db)
+                            .id,
+                  ) as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ));
+}
+
+typedef $$SystemNotificationsOutboxTableTableProcessedTableManager
+    = ProcessedTableManager<
+        _$AppDatabase,
+        $SystemNotificationsOutboxTableTable,
+        SystemNotificationOutboxEntryData,
+        $$SystemNotificationsOutboxTableTableFilterComposer,
+        $$SystemNotificationsOutboxTableTableOrderingComposer,
+        $$SystemNotificationsOutboxTableTableAnnotationComposer,
+        $$SystemNotificationsOutboxTableTableCreateCompanionBuilder,
+        $$SystemNotificationsOutboxTableTableUpdateCompanionBuilder,
+        (
+          SystemNotificationOutboxEntryData,
+          $$SystemNotificationsOutboxTableTableReferences
+        ),
+        SystemNotificationOutboxEntryData,
+        PrefetchHooks Function({bool notificationId})>;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -15663,4 +16989,11 @@ class $AppDatabaseManager {
               _db, _db.activeMessageNotificationsTable);
   $$VoicemailTableTableTableManager get voicemailTable =>
       $$VoicemailTableTableTableManager(_db, _db.voicemailTable);
+  $$SystemNotificationsTableTableTableManager get systemNotificationsTable =>
+      $$SystemNotificationsTableTableTableManager(
+          _db, _db.systemNotificationsTable);
+  $$SystemNotificationsOutboxTableTableTableManager
+      get systemNotificationsOutboxTable =>
+          $$SystemNotificationsOutboxTableTableTableManager(
+              _db, _db.systemNotificationsOutboxTable);
 }

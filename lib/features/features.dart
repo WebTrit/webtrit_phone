@@ -20,6 +20,7 @@ export 'register_status/register_status.dart';
 export 'self_config/self_config.dart';
 export 'session_status/session_status.dart';
 export 'settings/settings.dart';
+export 'system_notifications/system_notifications.dart';
 export 'terms_conditions/terms_conditions.dart';
 export 'undefined/undefined.dart';
 export 'user_agreement/user_agreement.dart';

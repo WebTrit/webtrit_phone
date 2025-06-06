@@ -4,12 +4,15 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import 'package:webtrit_phone/push_notification/push_notifications.dart';
 
-abstract class LocalNotificationRepository {
+abstract class LocalPushRepository {
   /// Stream of messaging notification actions that were tapped or dismissed
-  Stream<AppLocalNotificationAction> get messagingActions;
+  Stream<AppLocalPushAction> get messagingActions;
+
+  /// Stream of system notification actions that were tapped or dismissed
+  Stream<AppLocalPushAction> get systemNotificationsActions;
 
   /// Display a local push notification
-  Future<void> displayNotification(AppLocalNotification notification);
+  Future<void> displayPush(AppLocalPush notification);
 
   /// Dismiss a local push notification by its id (if it exists)
   Future<void> dissmissById(int id);
@@ -19,22 +22,34 @@ abstract class LocalNotificationRepository {
   Future<void> dismissByContent(String title, String body);
 }
 
-/// This class is used to handle local notifications user Flutter Local Notifications plugin
-class LocalNotificationRepositoryFLNImpl implements LocalNotificationRepository {
+/// This class is used to handle local notifications user Flutter Local Pushs plugin
+class LocalPushRepositoryFLNImpl implements LocalPushRepository {
   @override
-  Stream<AppLocalNotificationAction> get messagingActions {
-    return LocalNotificationsBroker.messagingActions.map((action) {
+  Stream<AppLocalPushAction> get messagingActions {
+    return LocalPushsBroker.messagingActions.map((action) {
       final payload = action.payload;
-      return AppLocalNotificationAction(
+      return AppLocalPushAction(
         id: action.id ?? -1,
         payload: payload != null ? json.decode(payload) : {},
-        type: LocalNotificationActionType.tap,
+        type: LocalPushActionType.tap,
       );
     });
   }
 
   @override
-  Future<void> displayNotification(AppLocalNotification notification) async {
+  Stream<AppLocalPushAction> get systemNotificationsActions {
+    return LocalPushsBroker.systemNotificationsActions.map((action) {
+      final payload = action.payload;
+      return AppLocalPushAction(
+        id: action.id ?? -1,
+        payload: payload != null ? json.decode(payload) : {},
+        type: LocalPushActionType.tap,
+      );
+    });
+  }
+
+  @override
+  Future<void> displayPush(AppLocalPush notification) async {
     FlutterLocalNotificationsPlugin().show(
       notification.id,
       notification.title,

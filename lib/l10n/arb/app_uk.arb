@@ -1227,5 +1227,9 @@
   "webRegistration_ErrorAcknowledgeDialogActions_skip": "Skip",
   "@webRegistration_ErrorAcknowledgeDialogActions_skip": {},
   "webRegistration_ErrorAcknowledgeDialog_title": "Web resource error",
-  "@webRegistration_ErrorAcknowledgeDialog_title": {}
+  "@webRegistration_ErrorAcknowledgeDialog_title": {},
+  "system_notifications_screen_title": "Сповіщення",
+  "@system_notifications_screen_title": {},
+  "system_notifications_screen_list_empty": "Немає сповіщень",
+  "@system_notifications_screen_list_empty": {}
 }

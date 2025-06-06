@@ -1047,6 +1047,10 @@ class AppLocalizationsMapper {
           localizations.webRegistration_ErrorAcknowledgeDialogActions_skip,
       'webRegistration_ErrorAcknowledgeDialog_title':
           localizations.webRegistration_ErrorAcknowledgeDialog_title,
+      'system_notifications_screen_title':
+          localizations.system_notifications_screen_title,
+      'system_notifications_screen_list_empty':
+          localizations.system_notifications_screen_list_empty,
       'default_UnknownExceptionError': (error) =>
           localizations.default_UnknownExceptionError(error),
       'favorites_SnackBar_deleted': (name) =>

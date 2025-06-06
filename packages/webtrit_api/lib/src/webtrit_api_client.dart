@@ -78,6 +78,7 @@ class WebtritApiClient {
     Object? requestDataJson, {
     String? requestId,
     Map<String, String>? headers,
+    Map<String, String>? queryParameters,
     RequestOptions options = const RequestOptions(),
     ResponseOptions responseOptions = const ResponseOptions(),
   }) async {
@@ -87,6 +88,7 @@ class WebtritApiClient {
         ..._apiBasePathSegments,
         ...pathSegments,
       ],
+      queryParameters: queryParameters,
     );
 
     final xRequestId = requestId ?? _generateRequestId();
@@ -182,6 +184,7 @@ class WebtritApiClient {
     List<String> pathSegments,
     Map<String, String>? headers,
     String? token, {
+    Map<String, String>? queryParameters,
     RequestOptions requestOptions = const RequestOptions(),
     ResponseOptions responseOptions = const ResponseOptions(),
   }) {
@@ -191,6 +194,7 @@ class WebtritApiClient {
       token,
       null,
       options: requestOptions,
+      queryParameters: queryParameters,
     );
   }
 
@@ -199,6 +203,7 @@ class WebtritApiClient {
     Map<String, String>? headers,
     String? token,
     Object? requestDataJson, {
+    Map<String, String>? queryParameters,
     RequestOptions options = const RequestOptions(),
   }) {
     return _httpClientExecute(
@@ -208,6 +213,7 @@ class WebtritApiClient {
       requestDataJson,
       headers: headers,
       options: options,
+      queryParameters: queryParameters,
     );
   }
 
@@ -617,5 +623,64 @@ class WebtritApiClient {
       queryParameters: fileFormat.isNotEmpty ? {'file_format': fileFormat} : null,
     );
     return url.toString();
+  }
+
+  Future<SystemNotificationResponce> getSystemNotificationsHistory(
+    String token, {
+    DateTime? since,
+    int? limit,
+    String? locale,
+    RequestOptions options = const RequestOptions(),
+  }) async {
+    final responseJson = await _httpClientExecuteGet(
+      ['user', 'notifications'],
+      locale != null ? {'Accept-Language': locale} : null,
+      token,
+      requestOptions: options,
+      queryParameters: {
+        if (since != null) 'created_before': since.toUtc().toIso8601String(),
+        if (limit != null) 'limit': limit.toString(),
+      },
+    );
+
+    return SystemNotificationResponce.fromJson(responseJson as Map<String, dynamic>);
+  }
+
+  Future<SystemNotificationResponce> getSystemNotificationsUpdates(
+    String token, {
+    required DateTime since,
+    int? limit,
+    String? locale,
+    RequestOptions options = const RequestOptions(),
+  }) async {
+    final responseJson = await _httpClientExecuteGet(
+      ['user', 'notifications', 'updates'],
+      locale != null ? {'Accept-Language': locale} : null,
+      token,
+      requestOptions: options,
+      queryParameters: {
+        'updated_after': since.toUtc().toIso8601String(),
+        if (limit != null) 'limit': limit.toString(),
+      },
+    );
+    print('Response JSON: $responseJson');
+
+    return SystemNotificationResponce.fromJson(responseJson as Map<String, dynamic>);
+  }
+
+  Future<void> markSystemNotificationAsSeen(
+    String token,
+    int notificationId, {
+    RequestOptions options = const RequestOptions(),
+  }) async {
+    final requestJson = {'seen': true};
+
+    await _httpClientExecutePatch(
+      ['user', 'notifications', notificationId.toString()],
+      {},
+      token,
+      requestJson,
+      options: options,
+    );
   }
 }

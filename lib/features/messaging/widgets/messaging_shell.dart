@@ -22,7 +22,7 @@ class _MessagingShellState extends State<MessagingShell> {
   late final messagingBloc = context.read<MessagingBloc>();
   late final messagingFeature = FeatureAccess().messagingFeature;
 
-  MessagingNotificationsService? notificationsService;
+  MessagingPushService? pushService;
 
   @override
   void initState() {
@@ -47,14 +47,14 @@ class _MessagingShellState extends State<MessagingShell> {
       final connectionStatus = messagingBloc.state.status;
       if (connectionStatus == ConnectionStatus.initial) messagingBloc.add(const Connect());
 
-      notificationsService ??= MessagingNotificationsService(
+      pushService ??= MessagingPushService(
         context.read<AppBloc>().state.userId!,
         context.read<ChatsRepository>(),
         context.read<SmsRepository>(),
         context.read<ContactsRepository>(),
-        context.read<RemoteNotificationRepository>(),
-        context.read<LocalNotificationRepository>(),
-        context.read<ActiveMessageNotificationsRepository>(),
+        context.read<RemotePushRepository>(),
+        context.read<LocalPushRepository>(),
+        context.read<ActiveMessagePushsRepository>(),
         context.read<MainScreenRouteStateRepository>(),
         context.read<MainShellRouteStateRepository>(),
         onOpenChatList,
@@ -68,14 +68,14 @@ class _MessagingShellState extends State<MessagingShell> {
       final connectionStatus = messagingBloc.state.status;
       if (connectionStatus != ConnectionStatus.initial) messagingBloc.add(const Disconnect());
 
-      notificationsService?.dispose();
-      notificationsService = null;
+      pushService?.dispose();
+      pushService = null;
     }
   }
 
   @override
   void dispose() {
-    notificationsService?.dispose();
+    pushService?.dispose();
     super.dispose();
   }
 

@@ -9,3 +9,4 @@ export 'regexes.dart';
 export 'user_agent.dart';
 export 'webtrit_api_client.dart';
 export 'webtrit_signaling_utils.dart';
+export 'text_matchers.dart';
