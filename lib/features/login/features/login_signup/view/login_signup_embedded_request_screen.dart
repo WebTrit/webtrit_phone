@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logging/logging.dart';
+import 'package:webtrit_phone/widgets/web_view_container.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 import 'package:webtrit_phone/features/login/login.dart';
@@ -36,7 +37,7 @@ class _LoginSignupEmbeddedRequestScreenState extends State<LoginSignupEmbeddedRe
     return PopScope(
       canPop: !_canGoBack,
       onPopInvokedWithResult: (_, __) => _webViewController.goBack(),
-      child: WebViewScaffold(
+      child: WebViewContainer(
         initialUri: widget.initialUrl,
         webViewController: _webViewController,
         showToolbar: false,

@@ -35,6 +35,8 @@ class _EmbeddedScreenState extends State<EmbeddedScreen> {
   late final _webViewController = WebViewController();
   late final _bloc = context.read<EmbeddedCubit>();
 
+  // TODO(JohnBorys): Replace WebViewScaffold with WebViewController after testing is complete
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
