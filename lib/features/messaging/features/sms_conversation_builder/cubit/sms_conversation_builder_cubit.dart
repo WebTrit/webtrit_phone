@@ -11,7 +11,7 @@ import 'package:webtrit_phone/features/messaging/extensions/extensions.dart';
 import 'package:webtrit_phone/models/contact.dart';
 import 'package:webtrit_phone/models/contact_source_type.dart';
 import 'package:webtrit_phone/repositories/contacts/contacts_repository.dart';
-import 'package:webtrit_phone/repositories/sms/sms_repository.dart';
+import 'package:webtrit_phone/repositories/messaging/messaging.dart';
 
 part 'sms_conversation_builder_state.dart';
 
