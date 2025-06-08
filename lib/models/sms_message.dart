@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:equatable/equatable.dart';
 
 enum SmsSendingStatus { waiting, sent, failed, delivered }
@@ -46,43 +45,9 @@ class SmsMessage extends Equatable {
       ];
 
   @override
-  bool get stringify => true;
-
-  Map<String, dynamic> toMap() {
-    return <String, dynamic>{
-      'id': id,
-      'idempotency_key': idKey,
-      'external_id': externalId,
-      'sms_conversation_id': conversationId,
-      'from_phone_number': fromPhoneNumber,
-      'to_phone_number': toPhoneNumber,
-      'sending_status': sendingStatus.name,
-      'content': content,
-      'inserted_at': createdAt.toIso8601String(),
-      'updated_at': updatedAt.toIso8601String(),
-      'deleted_at': deletedAt?.toIso8601String(),
-    };
+  String toString() {
+    return 'SmsMessage(id: $id, idKey: $idKey, externalId: $externalId, conversationId: $conversationId, fromPhoneNumber: $fromPhoneNumber, toPhoneNumber: $toPhoneNumber, sendingStatus: $sendingStatus, content: $content, createdAt: $createdAt, updatedAt: $updatedAt, deletedAt: $deletedAt)';
   }
-
-  factory SmsMessage.fromMap(Map<String, dynamic> map) {
-    return SmsMessage(
-      id: map['id'] as int,
-      idKey: map['idempotency_key'] as String,
-      externalId: map['external_id'] != null ? map['external_id'] as String : null,
-      conversationId: map['sms_conversation_id'] as int,
-      fromPhoneNumber: map['from_phone_number'] as String,
-      toPhoneNumber: map['to_phone_number'] as String,
-      sendingStatus: SmsSendingStatus.values.byName(map['sending_status'] as String),
-      content: map['content'] as String,
-      createdAt: DateTime.parse(map['inserted_at'] as String),
-      updatedAt: DateTime.parse(map['updated_at'] as String),
-      deletedAt: map['deleted_at'] != null ? DateTime.parse(map['deleted_at'] as String) : null,
-    );
-  }
-
-  String toJson() => json.encode(toMap());
-
-  factory SmsMessage.fromJson(String source) => SmsMessage.fromMap(json.decode(source) as Map<String, dynamic>);
 }
 
 extension SmsMessageListExtension<T extends SmsMessage> on List<T> {

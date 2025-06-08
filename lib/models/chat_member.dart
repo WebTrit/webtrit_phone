@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:equatable/equatable.dart';
 
 class ChatMember extends Equatable {
@@ -18,30 +17,9 @@ class ChatMember extends Equatable {
   List<Object?> get props => [id, chatId, userId, groupAuthorities];
 
   @override
-  bool get stringify => true;
-
-  Map<String, dynamic> toMap() {
-    return <String, dynamic>{
-      'id': id,
-      'chat_id': chatId,
-      'user_id': userId,
-      'group_authorities': groupAuthorities?.name,
-    };
+  String toString() {
+    return 'ChatMember(id: $id, chatId: $chatId, userId: $userId, groupAuthorities: $groupAuthorities)';
   }
-
-  factory ChatMember.fromMap(Map<String, dynamic> map) {
-    return ChatMember(
-      id: map['id'] as int,
-      chatId: map['chat_id'] as int,
-      userId: map['user_id'] as String,
-      groupAuthorities:
-          map['group_authorities'] == null ? null : GroupAuthorities.values.byName(map['group_authorities'] as String),
-    );
-  }
-
-  String toJson() => json.encode(toMap());
-
-  factory ChatMember.fromJson(String source) => ChatMember.fromMap(json.decode(source) as Map<String, dynamic>);
 }
 
 extension ChatMembersIterableExtension<T extends ChatMember> on Iterable<T> {
