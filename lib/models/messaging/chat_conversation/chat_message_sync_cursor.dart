@@ -17,5 +17,7 @@ class ChatMessageSyncCursor extends Equatable {
   List<Object?> get props => [chatId, cursorType, time];
 
   @override
-  bool get stringify => true;
+  String toString() {
+    return 'ChatMessageSyncCursor(chatId: $chatId, cursorType: $cursorType, time: $time)';
+  }
 }

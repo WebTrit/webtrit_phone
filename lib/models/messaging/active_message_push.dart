@@ -21,5 +21,7 @@ class ActiveMessagePush extends Equatable {
   List<Object?> get props => [notificationId, messageId, conversationId, title, body, time];
 
   @override
-  bool get stringify => true;
+  String toString() {
+    return 'ActiveMessagePush(notificationId: $notificationId, messageId: $messageId, conversationId: $conversationId, title: $title, body: $body, time: $time)';
+  }
 }

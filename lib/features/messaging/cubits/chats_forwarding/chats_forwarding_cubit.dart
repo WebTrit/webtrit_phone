@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:webtrit_phone/models/chat_message.dart';
+import 'package:webtrit_phone/models/messaging/messaging.dart';
 
 class ChatsForwardingCubit extends Cubit<ChatMessage?> {
   ChatsForwardingCubit() : super(null);

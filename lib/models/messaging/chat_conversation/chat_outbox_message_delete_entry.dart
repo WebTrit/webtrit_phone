@@ -36,4 +36,9 @@ class ChatOutboxMessageDeleteEntry extends Equatable {
   ChatOutboxMessageDeleteEntry incAttempts() {
     return copyWith(sendAttempts: sendAttempts + 1);
   }
+
+  @override
+  String toString() {
+    return 'ChatOutboxMessageDeleteEntry(id: $id, idKey: $idKey, chatId: $chatId, sendAttempts: $sendAttempts)';
+  }
 }

@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
-import 'package:webtrit_phone/models/models.dart';
+
+import 'chats.dart';
 
 sealed class ChatsEvent {
   int get chatId;

@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:equatable/equatable.dart';
 
 import 'chat_member.dart';
@@ -28,7 +27,9 @@ class Chat extends Equatable {
   List<Object?> get props => [id, type, name, createdAt, updatedAt, members];
 
   @override
-  bool get stringify => true;
+  String toString() {
+    return 'Chat(id: $id, type: $type, name: $name, createdAt: $createdAt, updatedAt: $updatedAt, members: $members)';
+  }
 
   Chat copyWith({
     int? id,
@@ -48,40 +49,6 @@ class Chat extends Equatable {
       members: members ?? this.members,
     );
   }
-
-  Map<String, dynamic> toMap() {
-    return <String, dynamic>{
-      'id': id,
-      'type': type.name,
-      'name': name,
-      'inserted_at': createdAt.toIso8601String(),
-      'updated_at': updatedAt.toIso8601String(),
-      'members': members.map((x) => x.toMap()).toList(),
-    };
-  }
-
-  factory Chat.fromMap(Map<String, dynamic> map) {
-    // Backward compatibility for the old 'dialog' type
-    // TODO: Remove someday
-    if (map['type'] == 'dialog') map['type'] = 'direct';
-
-    return Chat(
-      id: map['id'] as int,
-      type: ChatType.values.byName(map['type']),
-      name: map['name'] != null ? map['name'] as String : null,
-      createdAt: DateTime.parse(map['inserted_at']),
-      updatedAt: DateTime.parse(map['updated_at']),
-      members: List<ChatMember>.from(
-        (map['members'] as List<dynamic>).map<ChatMember>(
-          (x) => ChatMember.fromMap(x as Map<String, dynamic>),
-        ),
-      ),
-    );
-  }
-
-  String toJson() => json.encode(toMap());
-
-  factory Chat.fromJson(String source) => Chat.fromMap(json.decode(source) as Map<String, dynamic>);
 }
 
 enum ChatType { direct, group }

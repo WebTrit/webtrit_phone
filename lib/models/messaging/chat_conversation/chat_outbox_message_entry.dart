@@ -61,4 +61,9 @@ class ChatOutboxMessageEntry extends Equatable {
   ChatOutboxMessageEntry incAttempt() {
     return copyWith(sendAttempts: sendAttempts + 1);
   }
+
+  @override
+  String toString() {
+    return 'ChatOutboxMessageEntry(idKey: $idKey, content: $content, chatId: $chatId, participantId: $participantId, replyToId: $replyToId, forwardFromId: $forwardFromId, authorId: $authorId, sendAttempts: $sendAttempts)';
+  }
 }
