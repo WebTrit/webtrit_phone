@@ -7,6 +7,11 @@ import 'package:webtrit_phone/features/messaging/messaging.dart';
 import 'package:webtrit_phone/mappers/phoenix/phoenix.dart';
 import 'package:webtrit_phone/models/models.dart';
 
+// TODO(Vlad):
+// - create separate "MessagingClient" and all nessacery entities(channels, states, transactions)
+//   to abstract away from PhoenixSocket completely
+// - pure reconnection support see [messaging_bloc.dart] todo
+
 PhoenixSocket createMessagingSocket(String coreUrl, String token, String tenantId) {
   String baseUrl = coreUrl;
   baseUrl = baseUrl.replaceFirst('http://', 'ws://');
