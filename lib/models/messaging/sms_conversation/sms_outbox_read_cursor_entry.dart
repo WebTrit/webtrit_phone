@@ -25,4 +25,9 @@ class SmsOutboxReadCursorEntry extends Equatable {
 
   @override
   List<Object> get props => [conversationId, time, sendAttempts];
+
+  @override
+  String toString() {
+    return 'SmsOutboxReadCursorEntry(conversationId: $conversationId, time: $time, sendAttempts: $sendAttempts)';
+  }
 }

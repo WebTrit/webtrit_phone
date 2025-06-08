@@ -1,4 +1,4 @@
-import 'package:webtrit_phone/models/sms_message_read_cursor.dart';
+import 'package:webtrit_phone/models/messaging/sms_conversation/sms_message_read_cursor.dart';
 
 class SmsMessageReadCursorPhxMapper {
   static SmsMessageReadCursor fromMap(Map<String, dynamic> map) {

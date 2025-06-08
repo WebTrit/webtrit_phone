@@ -1,4 +1,4 @@
-import 'package:webtrit_phone/models/chat_member.dart';
+import 'package:webtrit_phone/models/messaging/chat_conversation/chat_member.dart';
 
 class ChatMemberPhxMapper {
   static ChatMember fromMap(Map<String, dynamic> map) {

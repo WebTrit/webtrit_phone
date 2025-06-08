@@ -1,4 +1,4 @@
-import 'package:webtrit_phone/models/sms_conversation.dart';
+import 'package:webtrit_phone/models/messaging/sms_conversation/sms_conversation.dart';
 
 class SmsConversationPhxMapper {
   static SmsConversation fromMap(Map<String, dynamic> map) {

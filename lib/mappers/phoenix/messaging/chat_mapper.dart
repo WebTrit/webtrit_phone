@@ -1,5 +1,5 @@
-import 'package:webtrit_phone/models/chat.dart';
-import 'package:webtrit_phone/models/chat_member.dart';
+import 'package:webtrit_phone/models/messaging/chat_conversation/chat.dart';
+import 'package:webtrit_phone/models/messaging/chat_conversation/chat_member.dart';
 
 import 'chat_member_mapper.dart';
 

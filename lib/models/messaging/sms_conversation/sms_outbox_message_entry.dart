@@ -59,4 +59,9 @@ class SmsOutboxMessageEntry extends Equatable {
   SmsOutboxMessageEntry incAttempt() {
     return copyWith(sendAttempts: sendAttempts + 1);
   }
+
+  @override
+  String toString() {
+    return 'SmsOutboxMessageEntry(idKey: $idKey, fromPhoneNumber: $fromPhoneNumber, toPhoneNumber: $toPhoneNumber, content: $content, recepientId: $recepientId, conversationId: $conversationId, sendAttempts: $sendAttempts)';
+  }
 }

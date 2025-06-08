@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
-import 'package:webtrit_phone/models/models.dart';
+
+import 'smss.dart';
 
 sealed class SmsEvent {
   int get conversationId;

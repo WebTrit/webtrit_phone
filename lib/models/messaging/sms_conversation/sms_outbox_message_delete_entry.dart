@@ -36,4 +36,9 @@ class SmsOutboxMessageDeleteEntry extends Equatable {
   SmsOutboxMessageDeleteEntry incAttempts() {
     return copyWith(sendAttempts: sendAttempts + 1);
   }
+
+  @override
+  String toString() {
+    return 'SmsOutboxMessageDeleteEntry(id: $id, idKey: $idKey, conversationId: $conversationId, sendAttempts: $sendAttempts)';
+  }
 }

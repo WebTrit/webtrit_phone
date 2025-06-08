@@ -17,5 +17,7 @@ class SmsMessageSyncCursor extends Equatable {
   List<Object?> get props => [conversationId, cursorType, time];
 
   @override
-  bool get stringify => true;
+  String toString() {
+    return 'SmsMessageSyncCursor(conversationId: $conversationId, cursorType: $cursorType, time: $time)';
+  }
 }

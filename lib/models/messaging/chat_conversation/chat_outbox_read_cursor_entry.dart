@@ -25,4 +25,9 @@ class ChatOutboxReadCursorEntry extends Equatable {
 
   @override
   List<Object> get props => [chatId, time, sendAttempts];
+
+  @override
+  String toString() {
+    return 'ChatOutboxReadCursorEntry(chatId: $chatId, time: $time, sendAttempts: $sendAttempts)';
+  }
 }
