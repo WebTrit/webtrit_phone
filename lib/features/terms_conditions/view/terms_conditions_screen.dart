@@ -11,11 +11,9 @@ class TermsConditionsScreen extends StatelessWidget {
 
   final Uri initialUri;
 
-  // TODO(JohnBorys): Replace WebViewScaffold with WebViewContainer after testing is complete
-
   @override
   Widget build(BuildContext context) {
-    return WebViewScaffold(
+    return WebViewContainer(
       initialUri: initialUri,
       userAgent: UserAgent.of(context),
     );

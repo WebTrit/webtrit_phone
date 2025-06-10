@@ -18,11 +18,9 @@ class WebAboutScreen extends StatelessWidget {
   final PackageInfo packageInfo;
   final SystemInfoRepository infoRepository;
 
-  // TODO(JohnBorys): Replace WebViewScaffold with WebViewContainer after testing is complete
-
   @override
   Widget build(BuildContext context) {
-    return WebViewScaffold(
+    return WebViewContainer(
       title: Text(context.l10n.settings_ListViewTileTitle_about),
       initialUri: baseAppAboutUrl.replace(queryParameters: {
         'appName': packageInfo.appName,

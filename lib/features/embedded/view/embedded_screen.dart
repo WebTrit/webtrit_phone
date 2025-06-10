@@ -35,8 +35,6 @@ class _EmbeddedScreenState extends State<EmbeddedScreen> {
   late final _webViewController = WebViewController();
   late final _bloc = context.read<EmbeddedCubit>();
 
-  // TODO(JohnBorys): Replace WebViewScaffold with WebViewContainer after testing is complete
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,7 +46,7 @@ class _EmbeddedScreenState extends State<EmbeddedScreen> {
           return PopScope(
             onPopInvokedWithResult: (_, __) => _webViewController.goBack(),
             canPop: forwardPop == false,
-            child: WebViewScaffold(
+            child: WebViewContainer(
               initialUri: widget.initialUri,
               webViewController: _webViewController,
               showToolbar: false,
