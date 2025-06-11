@@ -1729,4 +1729,31 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get system_notifications_screen_list_empty => 'No notifications yet';
+
+  @override
+  String get numberActions_audioCall => 'Make audio call';
+
+  @override
+  String get numberActions_videoCall => 'Make video call';
+
+  @override
+  String get numberActions_transfer => 'Transfer current call';
+
+  @override
+  String get numberActions_chat => 'Send chat message';
+
+  @override
+  String get numberActions_sendSms => 'Send sms message';
+
+  @override
+  String get numberActions_viewContact => 'View Contact';
+
+  @override
+  String get numberActions_callLog => 'View call history';
+
+  @override
+  String get numberActions_copyNumber => 'Copy number';
+
+  @override
+  String get numberActions_delete => 'Delete';
 }

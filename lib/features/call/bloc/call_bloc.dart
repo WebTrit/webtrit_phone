@@ -1479,7 +1479,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     Emitter<CallState> emit,
   ) async {
     final activeCallBlindTransferInitiated = state.activeCalls.blindTransferInitiated;
-    if (activeCallBlindTransferInitiated == null) return;
+    final currentCall = state.activeCalls.current;
+
+    final line = activeCallBlindTransferInitiated?.line ?? currentCall.line;
+    final callId = activeCallBlindTransferInitiated?.callId ?? currentCall.callId;
 
     // Check if the number is already in active calls
     final isNumberAlreadyConnected = state.activeCalls.any((call) => call.handle.value == event.number);
@@ -1491,15 +1494,15 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     try {
       final transferRequest = TransferRequest(
         transaction: WebtritSignalingClient.generateTransactionId(),
-        line: activeCallBlindTransferInitiated.line,
-        callId: activeCallBlindTransferInitiated.callId,
+        line: line,
+        callId: callId,
         number: event.number,
       );
 
       await _signalingClient?.execute(transferRequest);
 
       var newState = state.copyWith(minimized: false);
-      newState = newState.copyWithMappedActiveCall(activeCallBlindTransferInitiated.callId, (activeCall) {
+      newState = newState.copyWithMappedActiveCall(callId, (activeCall) {
         final transfer = Transfer.blindTransferTransferSubmitted(toNumber: event.number);
         return activeCall.copyWith(transfer: transfer);
       });

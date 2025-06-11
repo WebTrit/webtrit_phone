@@ -1,4 +1,7 @@
+// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:intl/intl.dart';
 
@@ -8,48 +11,126 @@ import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../recents.dart';
 
-class RecentTile extends StatelessWidget {
+class RecentTile extends StatefulWidget {
   const RecentTile({
     super.key,
     required this.recent,
-    required this.chatsEnabled,
     this.dateFormat,
     this.onTap,
-    this.onLongPress,
-    this.onInfoPressed,
-    this.onMessagePressed,
-    this.onDeleted,
+    this.onAudioCallPressed,
+    this.onVideoCallPressed,
+    this.onTransferPressed,
+    this.onChatPressed,
+    this.onSendSmsPressed,
+    this.onViewContactPressed,
+    this.onCallLogPressed,
+    this.onDelete,
   });
 
   final Recent recent;
-  final bool chatsEnabled;
   final DateFormat? dateFormat;
 
-  final GestureTapCallback? onTap;
-  final GestureLongPressCallback? onLongPress;
-  final GestureTapCallback? onInfoPressed;
-  final GestureTapCallback? onMessagePressed;
-  final void Function(Recent)? onDeleted;
+  final Function()? onTap;
+  final Function()? onAudioCallPressed;
+  final Function()? onVideoCallPressed;
+  final Function()? onTransferPressed;
+  final Function()? onChatPressed;
+  final Function()? onSendSmsPressed;
+  final Function()? onViewContactPressed;
+  final Function()? onCallLogPressed;
+  final Function()? onDelete;
+
+  @override
+  State<RecentTile> createState() => _RecentTileState();
+}
+
+class _RecentTileState extends State<RecentTile> {
+  late final tileKey = GlobalKey();
+  late final dateFormat = widget.dateFormat ?? DateFormat();
+  late final callLogEntry = widget.recent.callLogEntry;
+  late final contact = widget.recent.contact;
+  late final callNumber = callLogEntry.number;
+
+  List<PopupMenuEntry> get actions => [
+        if (widget.onAudioCallPressed != null)
+          PopupMenuItem(
+            onTap: widget.onAudioCallPressed,
+            child: Text(context.l10n.numberActions_audioCall),
+          ),
+        if (widget.onVideoCallPressed != null)
+          PopupMenuItem(
+            onTap: widget.onVideoCallPressed,
+            child: Text(context.l10n.numberActions_videoCall),
+          ),
+        if (widget.onTransferPressed != null)
+          PopupMenuItem(
+            onTap: widget.onTransferPressed,
+            child: Text(context.l10n.numberActions_transfer),
+          ),
+        if (widget.onChatPressed != null)
+          PopupMenuItem(
+            onTap: widget.onChatPressed,
+            child: Text(context.l10n.numberActions_chat),
+          ),
+        if (widget.onSendSmsPressed != null)
+          PopupMenuItem(
+            onTap: widget.onSendSmsPressed,
+            child: Text(context.l10n.numberActions_sendSms),
+          ),
+        if (widget.onViewContactPressed != null)
+          PopupMenuItem(
+            onTap: widget.onViewContactPressed,
+            child: Text(context.l10n.numberActions_viewContact),
+          ),
+        if (widget.onCallLogPressed != null)
+          PopupMenuItem(
+            onTap: widget.onCallLogPressed,
+            child: Text(context.l10n.numberActions_callLog),
+          ),
+        PopupMenuItem(
+          onTap: () {
+            Clipboard.setData(ClipboardData(text: callNumber));
+          },
+          child: Text(context.l10n.numberActions_copyNumber),
+        ),
+        if (widget.onDelete != null)
+          PopupMenuItem(
+            onTap: widget.onDelete,
+            child: Text(context.l10n.numberActions_delete),
+          ),
+      ];
+
+  void onLongPress() {
+    final position = getPosition();
+    showMenu(context: context, position: position, items: actions);
+  }
+
+  RelativeRect getPosition() {
+    final RenderBox renderBox = tileKey.currentContext!.findRenderObject()! as RenderBox;
+    final RenderBox overlay = Navigator.of(context).overlay!.context.findRenderObject()! as RenderBox;
+    final screenSize = MediaQuery.of(context).size;
+    late Offset offset = Offset(screenSize.width - 16, 16);
+    return RelativeRect.fromRect(
+      Rect.fromPoints(
+        renderBox.localToGlobal(offset, ancestor: overlay),
+        renderBox.localToGlobal(renderBox.size.bottomLeft(Offset.zero) + offset, ancestor: overlay),
+      ),
+      Offset.zero & overlay.size,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
-    final onDeleted = this.onDeleted;
-    final dateFormat = this.dateFormat ?? DateFormat();
-
-    final callLogEntry = recent.callLogEntry;
-    final contact = recent.contact;
 
     return Dismissible(
-      key: ObjectKey(recent),
+      key: ObjectKey(widget.recent),
       background: Container(
         color: themeData.colorScheme.error,
         padding: const EdgeInsets.only(right: 16),
         child: const Align(
           alignment: Alignment.centerRight,
-          child: Icon(
-            Icons.delete_outline,
-          ),
+          child: Icon(Icons.delete_outline),
         ),
       ),
       confirmDismiss: (direction) => ConfirmDialog.showDangerous(
@@ -57,52 +138,23 @@ class RecentTile extends StatelessWidget {
         title: context.l10n.recents_DeleteConfirmDialog_title,
         content: context.l10n.recents_DeleteConfirmDialog_content,
       ),
-      onDismissed: onDeleted == null ? null : (direction) => onDeleted(recent),
+      onDismissed: widget.onDelete == null ? null : (direction) => widget.onDelete!(),
       direction: DismissDirection.endToStart,
       child: ListTile(
-        contentPadding: const EdgeInsets.only(left: 16, right: 8),
+        key: tileKey,
+        contentPadding: const EdgeInsets.only(left: 16, right: 16),
         leading: LeadingAvatar(
-          username: recent.name,
+          username: widget.recent.name,
           thumbnail: contact?.thumbnail,
           thumbnailUrl: contact?.thumbnailUrl,
           registered: contact?.registered,
         ),
-        trailing: GestureDetector(
-          onTap: () => debugPrint('obsorbt trailing tap'),
-          child: Container(
-            height: double.maxFinite,
-            color: themeData.colorScheme.surfaceBright.withValues(alpha: 0.1),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(dateFormat.format(callLogEntry.createdTime)),
-                const SizedBox(width: 4),
-                InkWell(
-                  borderRadius: BorderRadius.circular(24),
-                  onTap: onInfoPressed,
-                  child: const Padding(
-                    padding: EdgeInsets.all(4.0),
-                    child: Icon(Icons.info_outlined),
-                  ),
-                ),
-                if (chatsEnabled)
-                  InkWell(
-                    borderRadius: BorderRadius.circular(24),
-                    onTap: onMessagePressed,
-                    child: Padding(
-                      padding: const EdgeInsets.all(4.0),
-                      child: Icon(
-                        Icons.messenger_outline,
-                        color: onMessagePressed == null ? Colors.grey : null,
-                      ),
-                    ),
-                  )
-              ],
-            ),
-          ),
+        trailing: Text(
+          dateFormat.format(callLogEntry.createdTime),
+          style: themeData.textTheme.bodySmall,
         ),
         title: Text(
-          recent.name,
+          widget.recent.name,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
         ),
@@ -124,14 +176,14 @@ class RecentTile extends StatelessWidget {
             const Text(' '),
             Flexible(
               child: Text(
-                callLogEntry.number,
+                callNumber,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
             ),
           ],
         ),
-        onTap: onTap,
+        onTap: widget.onTap,
         onLongPress: onLongPress,
       ),
     );

@@ -914,6 +914,12 @@ class AppLocalizationsMapper {
           localizations.settings_network_incomingCallType_socket_title,
       'settings_network_incomingCallType_title':
           localizations.settings_network_incomingCallType_title,
+      'settings_network_fallbackCalls_title':
+          localizations.settings_network_fallbackCalls_title,
+      'settings_network_fallbackCalls_description':
+          localizations.settings_network_fallbackCalls_description,
+      'settings_network_smsFallback_toggle':
+          localizations.settings_network_smsFallback_toggle,
       'signalingResponseCode_ambiguousRequest':
           localizations.signalingResponseCode_ambiguousRequest,
       'signalingResponseCode_busyEverywhere':
@@ -1051,6 +1057,15 @@ class AppLocalizationsMapper {
           localizations.system_notifications_screen_title,
       'system_notifications_screen_list_empty':
           localizations.system_notifications_screen_list_empty,
+      'numberActions_audioCall': localizations.numberActions_audioCall,
+      'numberActions_videoCall': localizations.numberActions_videoCall,
+      'numberActions_transfer': localizations.numberActions_transfer,
+      'numberActions_chat': localizations.numberActions_chat,
+      'numberActions_sendSms': localizations.numberActions_sendSms,
+      'numberActions_viewContact': localizations.numberActions_viewContact,
+      'numberActions_callLog': localizations.numberActions_callLog,
+      'numberActions_copyNumber': localizations.numberActions_copyNumber,
+      'numberActions_delete': localizations.numberActions_delete,
       'default_UnknownExceptionError': (error) =>
           localizations.default_UnknownExceptionError(error),
       'favorites_SnackBar_deleted': (name) =>

@@ -5,10 +5,10 @@ import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
-import '../recent.dart';
+import '../call_log.dart';
 
-class RecentHistoryTile extends StatelessWidget {
-  const RecentHistoryTile({
+class CallLogHistoryTile extends StatelessWidget {
+  const CallLogHistoryTile({
     super.key,
     required this.callLogEntry,
     this.dateFormat,

@@ -8,27 +8,28 @@ import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
 @RoutePage()
-class RecentScreenPage extends StatelessWidget {
+class CallLogScreenPage extends StatelessWidget {
   // ignore: use_key_in_widget_constructors
-  const RecentScreenPage(@pathParam this.callId);
+  const CallLogScreenPage(@pathParam this.number);
 
-  final int callId;
+  final String number;
 
   @override
   Widget build(BuildContext context) {
     final featureAccess = context.read<FeatureAccess>();
 
-    final widget = RecentScreen(
+    final widget = CallLogScreen(
       videoVisible: featureAccess.callFeature.callConfig.isVideoCallEnabled,
     );
     var provider = BlocProvider(
       create: (context) {
-        return RecentBloc(
-          callId,
+        return CallLogBloc(
+          number,
           callLogsRepository: context.read<CallLogsRepository>(),
           recentsRepository: context.read<RecentsRepository>(),
+          contactRepository: context.read<ContactsRepository>(),
           dateFormat: AppTime().formatDateTime(true),
-        )..add(const RecentStarted());
+        )..add(const CallLogStarted());
       },
       child: widget,
     );

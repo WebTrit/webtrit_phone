@@ -109,6 +109,47 @@ class AutoprovisionScreenPageRouteArgs {
 }
 
 /// generated route for
+/// [CallLogScreenPage]
+class CallLogScreenPageRoute extends PageRouteInfo<CallLogScreenPageRouteArgs> {
+  CallLogScreenPageRoute({
+    required String number,
+    List<PageRouteInfo>? children,
+  }) : super(
+         CallLogScreenPageRoute.name,
+         args: CallLogScreenPageRouteArgs(number: number),
+         rawPathParams: {'number': number},
+         initialChildren: children,
+       );
+
+  static const String name = 'CallLogScreenPageRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final pathParams = data.inheritedPathParams;
+      final args = data.argsAs<CallLogScreenPageRouteArgs>(
+        orElse:
+            () => CallLogScreenPageRouteArgs(
+              number: pathParams.getString('number'),
+            ),
+      );
+      return CallLogScreenPage(args.number);
+    },
+  );
+}
+
+class CallLogScreenPageRouteArgs {
+  const CallLogScreenPageRouteArgs({required this.number});
+
+  final String number;
+
+  @override
+  String toString() {
+    return 'CallLogScreenPageRouteArgs{number: $number}';
+  }
+}
+
+/// generated route for
 /// [CallScreenPage]
 class CallScreenPageRoute extends PageRouteInfo<void> {
   const CallScreenPageRoute({List<PageRouteInfo>? children})
@@ -940,44 +981,6 @@ class PermissionsScreenPageRoute extends PageRouteInfo<void> {
       return PermissionsScreenPage();
     },
   );
-}
-
-/// generated route for
-/// [RecentScreenPage]
-class RecentScreenPageRoute extends PageRouteInfo<RecentScreenPageRouteArgs> {
-  RecentScreenPageRoute({required int callId, List<PageRouteInfo>? children})
-    : super(
-        RecentScreenPageRoute.name,
-        args: RecentScreenPageRouteArgs(callId: callId),
-        rawPathParams: {'callId': callId},
-        initialChildren: children,
-      );
-
-  static const String name = 'RecentScreenPageRoute';
-
-  static PageInfo page = PageInfo(
-    name,
-    builder: (data) {
-      final pathParams = data.inheritedPathParams;
-      final args = data.argsAs<RecentScreenPageRouteArgs>(
-        orElse:
-            () =>
-                RecentScreenPageRouteArgs(callId: pathParams.getInt('callId')),
-      );
-      return RecentScreenPage(args.callId);
-    },
-  );
-}
-
-class RecentScreenPageRouteArgs {
-  const RecentScreenPageRouteArgs({required this.callId});
-
-  final int callId;
-
-  @override
-  String toString() {
-    return 'RecentScreenPageRouteArgs{callId: $callId}';
-  }
 }
 
 /// generated route for

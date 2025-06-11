@@ -18,8 +18,10 @@ class RecentsScreenPage extends StatelessWidget {
 
     final widget = RecentsScreen(
       title: const Text(EnvironmentConfig.APP_NAME),
-      videoCallEnable: featureAccess.callFeature.callConfig.isVideoCallEnabled,
+      transferEnabled: featureAccess.callFeature.callConfig.isBlindTransferEnabled,
+      videoEnabled: featureAccess.callFeature.callConfig.isVideoCallEnabled,
       chatsEnabled: featureAccess.messagingFeature.chatsPresent,
+      smssEnabled: featureAccess.messagingFeature.smsPresent,
     );
     return widget;
   }
