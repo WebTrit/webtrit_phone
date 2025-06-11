@@ -1729,4 +1729,31 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get system_notifications_screen_list_empty => 'Немає сповіщень';
+
+  @override
+  String get numberActions_audioCall => 'Зробити аудіо дзвінок';
+
+  @override
+  String get numberActions_videoCall => 'Зробити відео дзвінок';
+
+  @override
+  String get numberActions_transfer => 'Переадресувати поточній дзвінок';
+
+  @override
+  String get numberActions_chat => 'Надіслати повідомлення в чаті';
+
+  @override
+  String get numberActions_sendSms => 'Надіслати SMS повідомлення';
+
+  @override
+  String get numberActions_viewContact => 'Переглянути контакт';
+
+  @override
+  String get numberActions_callLog => 'Переглянути історію дзвінків';
+
+  @override
+  String get numberActions_copyNumber => 'Скопіювати номер';
+
+  @override
+  String get numberActions_delete => 'Видалити';
 }

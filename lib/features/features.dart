@@ -14,7 +14,7 @@ export 'messaging/messaging.dart';
 export 'orientations/orientations.dart';
 export 'permissions/permissions.dart';
 export 'push_tokens/push_token.dart';
-export 'recent/recent.dart';
+export 'call_log/call_log.dart';
 export 'recents/recents.dart';
 export 'register_status/register_status.dart';
 export 'self_config/self_config.dart';

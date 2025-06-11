@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'recent_bloc.dart';
+part of 'call_log_bloc.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -54,49 +54,55 @@ abstract class _CallLogEntryDeleted implements CallLogEntryDeleted {
 }
 
 /// @nodoc
-mixin _$RecentState {
-  Recent? get recent => throw _privateConstructorUsedError;
+mixin _$CallLogState {
+  String get number => throw _privateConstructorUsedError;
+  Contact? get contact => throw _privateConstructorUsedError;
   List<CallLogEntry>? get callLog => throw _privateConstructorUsedError;
 
-  /// Create a copy of RecentState
+  /// Create a copy of CallLogState
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
-  $RecentStateCopyWith<RecentState> get copyWith =>
+  $CallLogStateCopyWith<CallLogState> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $RecentStateCopyWith<$Res> {
-  factory $RecentStateCopyWith(
-          RecentState value, $Res Function(RecentState) then) =
-      _$RecentStateCopyWithImpl<$Res, RecentState>;
+abstract class $CallLogStateCopyWith<$Res> {
+  factory $CallLogStateCopyWith(
+          CallLogState value, $Res Function(CallLogState) then) =
+      _$CallLogStateCopyWithImpl<$Res, CallLogState>;
   @useResult
-  $Res call({Recent? recent, List<CallLogEntry>? callLog});
+  $Res call({String number, Contact? contact, List<CallLogEntry>? callLog});
 }
 
 /// @nodoc
-class _$RecentStateCopyWithImpl<$Res, $Val extends RecentState>
-    implements $RecentStateCopyWith<$Res> {
-  _$RecentStateCopyWithImpl(this._value, this._then);
+class _$CallLogStateCopyWithImpl<$Res, $Val extends CallLogState>
+    implements $CallLogStateCopyWith<$Res> {
+  _$CallLogStateCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of RecentState
+  /// Create a copy of CallLogState
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? recent = freezed,
+    Object? number = null,
+    Object? contact = freezed,
     Object? callLog = freezed,
   }) {
     return _then(_value.copyWith(
-      recent: freezed == recent
-          ? _value.recent
-          : recent // ignore: cast_nullable_to_non_nullable
-              as Recent?,
+      number: null == number
+          ? _value.number
+          : number // ignore: cast_nullable_to_non_nullable
+              as String,
+      contact: freezed == contact
+          ? _value.contact
+          : contact // ignore: cast_nullable_to_non_nullable
+              as Contact?,
       callLog: freezed == callLog
           ? _value.callLog
           : callLog // ignore: cast_nullable_to_non_nullable
@@ -106,37 +112,42 @@ class _$RecentStateCopyWithImpl<$Res, $Val extends RecentState>
 }
 
 /// @nodoc
-abstract class _$$RecentStateImplCopyWith<$Res>
-    implements $RecentStateCopyWith<$Res> {
-  factory _$$RecentStateImplCopyWith(
-          _$RecentStateImpl value, $Res Function(_$RecentStateImpl) then) =
-      __$$RecentStateImplCopyWithImpl<$Res>;
+abstract class _$$CallLogStateImplCopyWith<$Res>
+    implements $CallLogStateCopyWith<$Res> {
+  factory _$$CallLogStateImplCopyWith(
+          _$CallLogStateImpl value, $Res Function(_$CallLogStateImpl) then) =
+      __$$CallLogStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({Recent? recent, List<CallLogEntry>? callLog});
+  $Res call({String number, Contact? contact, List<CallLogEntry>? callLog});
 }
 
 /// @nodoc
-class __$$RecentStateImplCopyWithImpl<$Res>
-    extends _$RecentStateCopyWithImpl<$Res, _$RecentStateImpl>
-    implements _$$RecentStateImplCopyWith<$Res> {
-  __$$RecentStateImplCopyWithImpl(
-      _$RecentStateImpl _value, $Res Function(_$RecentStateImpl) _then)
+class __$$CallLogStateImplCopyWithImpl<$Res>
+    extends _$CallLogStateCopyWithImpl<$Res, _$CallLogStateImpl>
+    implements _$$CallLogStateImplCopyWith<$Res> {
+  __$$CallLogStateImplCopyWithImpl(
+      _$CallLogStateImpl _value, $Res Function(_$CallLogStateImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of RecentState
+  /// Create a copy of CallLogState
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? recent = freezed,
+    Object? number = null,
+    Object? contact = freezed,
     Object? callLog = freezed,
   }) {
-    return _then(_$RecentStateImpl(
-      recent: freezed == recent
-          ? _value.recent
-          : recent // ignore: cast_nullable_to_non_nullable
-              as Recent?,
+    return _then(_$CallLogStateImpl(
+      number: null == number
+          ? _value.number
+          : number // ignore: cast_nullable_to_non_nullable
+              as String,
+      contact: freezed == contact
+          ? _value.contact
+          : contact // ignore: cast_nullable_to_non_nullable
+              as Contact?,
       callLog: freezed == callLog
           ? _value._callLog
           : callLog // ignore: cast_nullable_to_non_nullable
@@ -147,12 +158,15 @@ class __$$RecentStateImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$RecentStateImpl implements _RecentState {
-  const _$RecentStateImpl({this.recent, final List<CallLogEntry>? callLog})
+class _$CallLogStateImpl implements _CallLogState {
+  const _$CallLogStateImpl(
+      {required this.number, this.contact, final List<CallLogEntry>? callLog})
       : _callLog = callLog;
 
   @override
-  final Recent? recent;
+  final String number;
+  @override
+  final Contact? contact;
   final List<CallLogEntry>? _callLog;
   @override
   List<CallLogEntry>? get callLog {
@@ -167,38 +181,42 @@ class _$RecentStateImpl implements _RecentState {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$RecentStateImpl &&
-            (identical(other.recent, recent) || other.recent == recent) &&
+            other is _$CallLogStateImpl &&
+            (identical(other.number, number) || other.number == number) &&
+            (identical(other.contact, contact) || other.contact == contact) &&
             const DeepCollectionEquality().equals(other._callLog, _callLog));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType, recent, const DeepCollectionEquality().hash(_callLog));
+  int get hashCode => Object.hash(runtimeType, number, contact,
+      const DeepCollectionEquality().hash(_callLog));
 
-  /// Create a copy of RecentState
+  /// Create a copy of CallLogState
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$RecentStateImplCopyWith<_$RecentStateImpl> get copyWith =>
-      __$$RecentStateImplCopyWithImpl<_$RecentStateImpl>(this, _$identity);
+  _$$CallLogStateImplCopyWith<_$CallLogStateImpl> get copyWith =>
+      __$$CallLogStateImplCopyWithImpl<_$CallLogStateImpl>(this, _$identity);
 }
 
-abstract class _RecentState implements RecentState {
-  const factory _RecentState(
-      {final Recent? recent,
-      final List<CallLogEntry>? callLog}) = _$RecentStateImpl;
+abstract class _CallLogState implements CallLogState {
+  const factory _CallLogState(
+      {required final String number,
+      final Contact? contact,
+      final List<CallLogEntry>? callLog}) = _$CallLogStateImpl;
 
   @override
-  Recent? get recent;
+  String get number;
+  @override
+  Contact? get contact;
   @override
   List<CallLogEntry>? get callLog;
 
-  /// Create a copy of RecentState
+  /// Create a copy of CallLogState
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$RecentStateImplCopyWith<_$RecentStateImpl> get copyWith =>
+  _$$CallLogStateImplCopyWith<_$CallLogStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

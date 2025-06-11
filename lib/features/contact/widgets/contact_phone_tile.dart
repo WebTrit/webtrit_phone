@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
-import 'package:webtrit_phone/widgets/widgets.dart';
+import 'package:webtrit_phone/l10n/l10n.dart';
 
 // Follow naming conventions as outlined in https://api.flutter.dev/flutter/widgets/Visibility-class.html
 class ContactPhoneTile extends StatelessWidget {
@@ -8,82 +9,100 @@ class ContactPhoneTile extends StatelessWidget {
     super.key,
     required this.number,
     required this.label,
-    required this.favoriteVisible,
-    required this.transferVisible,
-    required this.videoVisible,
     required this.favorite,
-    required this.transfer,
     this.onTap,
-    this.onLongPress,
     this.onFavoriteChanged,
     this.onAudioPressed,
     this.onVideoPressed,
     this.onTransferPressed,
+    this.onInitiatedTransferPressed,
     this.onMessagePressed,
+    this.onSendSmsPressed,
+    this.onCallLogPressed,
   });
 
   final String number;
   final String label;
-  final bool favoriteVisible;
-  final bool transferVisible;
-  final bool videoVisible;
   final bool favorite;
-  final bool transfer;
   final GestureTapCallback? onTap;
-  final GestureLongPressCallback? onLongPress;
   final ValueChanged<bool>? onFavoriteChanged;
   final VoidCallback? onAudioPressed;
   final VoidCallback? onVideoPressed;
   final VoidCallback? onTransferPressed;
+  final VoidCallback? onInitiatedTransferPressed;
   final GestureTapCallback? onMessagePressed;
+  final VoidCallback? onSendSmsPressed;
+  final VoidCallback? onCallLogPressed;
 
   @override
   Widget build(BuildContext context) {
+    final List<PopupMenuEntry> actions = [
+      if (onAudioPressed != null)
+        PopupMenuItem(
+          onTap: onAudioPressed,
+          child: Text(context.l10n.numberActions_audioCall),
+        ),
+      if (onVideoPressed != null)
+        PopupMenuItem(
+          onTap: onVideoPressed,
+          child: Text(context.l10n.numberActions_videoCall),
+        ),
+      if (onTransferPressed != null)
+        PopupMenuItem(
+          onTap: onTransferPressed,
+          child: Text(context.l10n.numberActions_transfer),
+        ),
+      if (onSendSmsPressed != null)
+        PopupMenuItem(
+          onTap: onSendSmsPressed,
+          child: Text(context.l10n.numberActions_sendSms),
+        ),
+      if (onCallLogPressed != null)
+        PopupMenuItem(
+          onTap: onCallLogPressed,
+          child: Text(context.l10n.numberActions_callLog),
+        ),
+      PopupMenuItem(
+        onTap: () {
+          Clipboard.setData(ClipboardData(text: number));
+        },
+        child: Text(context.l10n.numberActions_copyNumber),
+      ),
+    ];
+
     return ListTile(
       contentPadding: const EdgeInsets.only(left: 16.0),
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          if (favoriteVisible)
+          if (onFavoriteChanged != null)
             IconButton(
               splashRadius: 24,
               icon: favorite ? const Icon(Icons.star) : const Icon(Icons.star_border),
-              onPressed: onFavoriteChanged == null ? null : () => onFavoriteChanged!(!favorite),
+              onPressed: () => onFavoriteChanged!(!favorite),
             ),
-          if (transfer && transferVisible)
+          if (onInitiatedTransferPressed != null)
             IconButton(
               splashRadius: 24,
               icon: const Icon(Icons.phone_forwarded),
-              onPressed: onTransferPressed,
-            )
-          else ...[
-            IconButton(
-              splashRadius: 24,
-              icon: const Icon(Icons.call),
-              onPressed: onAudioPressed,
+              onPressed: onInitiatedTransferPressed,
             ),
-            if (videoVisible)
-              IconButton(
-                splashRadius: 24,
-                icon: const Icon(Icons.videocam),
-                onPressed: onVideoPressed,
-              ),
-          ],
           if (onMessagePressed != null)
             IconButton(
               splashRadius: 24,
               icon: const Icon(Icons.messenger),
               onPressed: onMessagePressed,
             ),
+          PopupMenuButton(
+            itemBuilder: (context) {
+              return actions;
+            },
+          ),
         ],
       ),
-      title: CopyToClipboard(
-        data: number,
-        child: Text(number),
-      ),
+      title: Text(number),
       subtitle: Text(label),
       onTap: onTap,
-      onLongPress: onLongPress,
     );
   }
 }

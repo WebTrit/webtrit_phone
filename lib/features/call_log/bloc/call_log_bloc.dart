@@ -8,39 +8,41 @@ import 'package:intl/intl.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
-part 'recent_bloc.freezed.dart';
+part 'call_log_bloc.freezed.dart';
 
-part 'recent_event.dart';
+part 'call_log_event.dart';
 
-part 'recent_state.dart';
+part 'call_log_state.dart';
 
-class RecentBloc extends Bloc<RecentEvent, RecentState> {
-  RecentBloc(
-    this.callId, {
+class CallLogBloc extends Bloc<CallLogEvent, CallLogState> {
+  CallLogBloc(
+    this.number, {
     required this.callLogsRepository,
     required this.recentsRepository,
+    required this.contactRepository,
     required this.dateFormat,
-  }) : super(const RecentState()) {
-    on<RecentStarted>(_onStarted, transformer: restartable());
+  }) : super(CallLogState(number: number)) {
+    on<CallLogStarted>(_onStarted, transformer: restartable());
     on<CallLogEntryDeleted>(_onCallLogEntryDeleted);
   }
 
-  final int callId;
+  final String number;
   final CallLogsRepository callLogsRepository;
   final RecentsRepository recentsRepository;
+  final ContactsRepository contactRepository;
   final DateFormat dateFormat;
 
-  FutureOr<void> _onStarted(RecentStarted event, Emitter<RecentState> emit) async {
-    final recent = await recentsRepository.getRecentByCallId(callId);
-    emit(state.copyWith(recent: recent));
+  FutureOr<void> _onStarted(CallLogStarted event, Emitter<CallLogState> emit) async {
+    final contact = await contactRepository.getContactByPhoneNumber(number);
+    emit(state.copyWith(contact: contact));
 
     await emit.forEach(
-      callLogsRepository.watchHistoryByNumber(recent.callLogEntry.number),
+      callLogsRepository.watchHistoryByNumber(number),
       onData: (recents) => state.copyWith(callLog: recents),
     );
   }
 
-  FutureOr<void> _onCallLogEntryDeleted(CallLogEntryDeleted event, Emitter<RecentState> emit) async {
+  FutureOr<void> _onCallLogEntryDeleted(CallLogEntryDeleted event, Emitter<CallLogState> emit) async {
     await recentsRepository.deleteByCallId(event.callLogEntry.id);
   }
 }

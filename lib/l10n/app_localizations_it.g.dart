@@ -1729,4 +1729,31 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get system_notifications_screen_list_empty => 'Non ci sono notifiche';
+
+  @override
+  String get numberActions_audioCall => 'Chiamata audio';
+
+  @override
+  String get numberActions_videoCall => 'Videochiamata';
+
+  @override
+  String get numberActions_transfer => 'Trasferisci la chiamata corrente';
+
+  @override
+  String get numberActions_chat => 'Invia messaggio di chat';
+
+  @override
+  String get numberActions_sendSms => 'Invia messaggio SMS';
+
+  @override
+  String get numberActions_viewContact => 'Visualizza contatto';
+
+  @override
+  String get numberActions_callLog => 'Cronologia delle chiamate';
+
+  @override
+  String get numberActions_copyNumber => 'Numero di copie';
+
+  @override
+  String get numberActions_delete => 'Elimina';
 }

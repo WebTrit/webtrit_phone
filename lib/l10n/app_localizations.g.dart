@@ -3444,6 +3444,60 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No notifications yet'**
   String get system_notifications_screen_list_empty;
+
+  /// No description provided for @numberActions_audioCall.
+  ///
+  /// In en, this message translates to:
+  /// **'Make audio call'**
+  String get numberActions_audioCall;
+
+  /// No description provided for @numberActions_videoCall.
+  ///
+  /// In en, this message translates to:
+  /// **'Make video call'**
+  String get numberActions_videoCall;
+
+  /// No description provided for @numberActions_transfer.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer current call'**
+  String get numberActions_transfer;
+
+  /// No description provided for @numberActions_chat.
+  ///
+  /// In en, this message translates to:
+  /// **'Send chat message'**
+  String get numberActions_chat;
+
+  /// No description provided for @numberActions_sendSms.
+  ///
+  /// In en, this message translates to:
+  /// **'Send sms message'**
+  String get numberActions_sendSms;
+
+  /// No description provided for @numberActions_viewContact.
+  ///
+  /// In en, this message translates to:
+  /// **'View Contact'**
+  String get numberActions_viewContact;
+
+  /// No description provided for @numberActions_callLog.
+  ///
+  /// In en, this message translates to:
+  /// **'View call history'**
+  String get numberActions_callLog;
+
+  /// No description provided for @numberActions_copyNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy number'**
+  String get numberActions_copyNumber;
+
+  /// No description provided for @numberActions_delete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get numberActions_delete;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

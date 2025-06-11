@@ -123,7 +123,10 @@ class MainScreenScreenshot extends StatelessWidget {
           create: (_) => MockFavoritesBloc.mainScreen(),
           child: FavoritesScreen(
             title: title,
-            videoCallEnable: true,
+            transferEnabled: false,
+            videoEnabled: true,
+            chatsEnabled: false,
+            smssEnabled: false,
           ),
         );
       case MainFlavor.recents:
@@ -131,8 +134,10 @@ class MainScreenScreenshot extends StatelessWidget {
           create: (_) => MockRecentsBloc.mainScreen(),
           child: RecentsScreen(
             title: title,
-            videoCallEnable: true,
+            transferEnabled: false,
+            videoEnabled: true,
             chatsEnabled: false,
+            smssEnabled: false,
           ),
         );
       case MainFlavor.contacts:
