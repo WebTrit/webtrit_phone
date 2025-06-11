@@ -20,7 +20,7 @@ class WebAboutScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return WebViewScaffold(
+    return WebViewContainer(
       title: Text(context.l10n.settings_ListViewTileTitle_about),
       initialUri: baseAppAboutUrl.replace(queryParameters: {
         'appName': packageInfo.appName,

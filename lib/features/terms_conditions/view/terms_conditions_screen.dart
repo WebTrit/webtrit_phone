@@ -13,7 +13,7 @@ class TermsConditionsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return WebViewScaffold(
+    return WebViewContainer(
       initialUri: initialUri,
       userAgent: UserAgent.of(context),
     );
