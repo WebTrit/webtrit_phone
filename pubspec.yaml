@@ -74,7 +74,7 @@ dependencies:
   url_launcher: ^6.2.6
   uuid: ^4.2.2
   validators: ^3.0.0
-  webview_flutter: ^4.7.0
+  webview_flutter: ^4.13.0
   webview_flutter_web: ^0.2.2+4
   collection: ^1.18.0
   quiver: ^3.2.1
