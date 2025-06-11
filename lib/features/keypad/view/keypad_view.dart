@@ -10,10 +10,12 @@ import 'package:webtrit_phone/theme/theme.dart';
 class KeypadView extends StatefulWidget {
   const KeypadView({
     super.key,
-    required this.videoVisible,
+    required this.videoEnabled,
+    required this.transferEnabled,
   });
 
-  final bool videoVisible;
+  final bool videoEnabled;
+  final bool transferEnabled;
 
   @override
   KeypadViewState createState() => KeypadViewState();
@@ -80,96 +82,33 @@ class KeypadViewState extends State<KeypadView> {
             ),
           ),
         ),
-        Keypad(
-          onKeypadPressed: _onKeypadPressed,
-        ),
-        SizedBox(
-          height: scaledInset,
-        ),
+        Keypad(onKeypadPressed: _addChar),
+        SizedBox(height: scaledInset),
         ValueListenableBuilder(
           valueListenable: _controller,
           builder: (BuildContext context, TextEditingValue value, Widget? child) {
             return BlocBuilder<CallBloc, CallState>(
-              buildWhen: (previous, current) => previous.isBlingTransferInitiated != current.isBlingTransferInitiated,
+              buildWhen: (previous, current) =>
+                  previous.isBlingTransferInitiated != current.isBlingTransferInitiated ||
+                  previous.activeCalls != current.activeCalls,
               builder: (context, callState) {
+                final activeCalls = callState.activeCalls;
+                final transferInitiated = callState.isBlingTransferInitiated;
+
                 return BlocBuilder<CallRoutingCubit, CallRoutingState?>(
                   builder: (context, callRoutingState) {
-                    String? fromNumber = callRoutingState?.useAdditionalNumber;
-                    bool canCall = true;
+                    bool canCall = value.text.isNotEmpty;
 
-                    if (value.text.isEmpty) {
-                      canCall = false;
-                    } else if (callRoutingState != null) {
-                      if (callRoutingState.callAsSupports &&
-                          callRoutingState.useAdditionalNumber != null &&
-                          !callRoutingState.canCallAs) {
-                        canCall = false;
-                      }
-                      if ((callRoutingState.callAsSupports == false || callRoutingState.useAdditionalNumber == null) &&
-                          !callRoutingState.canCallWithMainNumber) {
-                        canCall = false;
-                      }
-                    }
-
-                    return Column(
-                      children: [
-                        if (callRoutingState != null && callRoutingState.callAsSupports) ...[
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            spacing: 16,
-                            children: [
-                              Text(
-                                'Call as',
-                                style: themeData.textTheme.bodyMedium,
-                              ),
-                              DropdownButton<String?>(
-                                value: callRoutingState.useAdditionalNumber,
-                                items: [
-                                  DropdownMenuItem(
-                                    value: null,
-                                    child: Row(
-                                      spacing: 4,
-                                      children: [
-                                        const Icon(Icons.phone_outlined, size: 16),
-                                        Text(
-                                          callRoutingState.mainNumber +
-                                              (callRoutingState.canCallWithMainNumber ? '' : ' (busy line)'),
-                                          style: themeData.textTheme.bodyMedium,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  for (final number in callRoutingState.additionalNumbers)
-                                    DropdownMenuItem(
-                                      value: number,
-                                      child: Row(
-                                        spacing: 4,
-                                        children: [
-                                          const Icon(Icons.phone_forwarded_outlined, size: 16),
-                                          Text(
-                                            number + (callRoutingState.canCallAs ? '' : ' (busy line)'),
-                                            style: themeData.textTheme.bodyMedium,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                ],
-                                onChanged: context.read<CallRoutingCubit>().setAdditionalNumberToUse,
-                              ),
-                            ],
-                          ),
-                        ],
-                        SizedBox(height: scaledInset),
-                        Actionpad(
-                          transfer: callState.isBlingTransferInitiated,
-                          videoVisible: widget.videoVisible,
-                          onBackspacePressed: canCall ? _onBackspacePressed : null,
-                          onBackspaceLongPress: canCall ? _onBackspaceLongPress : null,
-                          onAudioCallPressed: canCall ? () => _onCallPressed(false, fromNumber) : null,
-                          onVideoCallPressed: canCall ? () => _onCallPressed(true, fromNumber) : null,
-                          onTransferPressed: _onTransferPressed,
-                        ),
-                      ],
+                    return Actionpad(
+                      actionsEnabled: canCall,
+                      onBackspacePressed: _removeLastChar,
+                      onBackspaceLongPress: _cleanInput,
+                      onAudioCallPressed: () => _createCall(),
+                      onVideoCallPressed: widget.videoEnabled ? () => _createCall(video: true) : null,
+                      onTransferPressed: widget.transferEnabled && activeCalls.isNotEmpty ? _transferCall : null,
+                      onInitiatedTransferPressed: widget.transferEnabled && transferInitiated ? _transferCall : null,
+                      callNumbers: callRoutingState?.allNumbers ?? [],
+                      onCallFrom: (number) => _createCall(from: number),
                     );
                   },
                 );
@@ -190,21 +129,30 @@ class KeypadViewState extends State<KeypadView> {
     return number;
   }
 
-  void _onCallPressed(bool video, String? fromNumber) {
+  void _createCall({bool video = false, String? from}) {
     _focusNode.unfocus();
 
     final displayName = context.read<KeypadCubit>().state.contact?.maybeName;
-
+    final callRoutingState = context.read<CallRoutingCubit>().state;
     final callBloc = context.read<CallBloc>();
-    callBloc.add(CallControlEvent.started(
-      number: _popNumber(),
-      video: video,
-      displayName: displayName,
-      fromNumber: fromNumber,
-    ));
+
+    if (callRoutingState?.additionalNumbers.contains(from) ?? false) {
+      callBloc.add(CallControlEvent.started(
+        number: _popNumber(),
+        video: video,
+        displayName: displayName,
+        fromNumber: from,
+      ));
+    } else {
+      callBloc.add(CallControlEvent.started(
+        number: _popNumber(),
+        video: video,
+        displayName: displayName,
+      ));
+    }
   }
 
-  void _onTransferPressed() {
+  void _transferCall() {
     _focusNode.unfocus();
 
     final callBloc = context.read<CallBloc>();
@@ -213,7 +161,7 @@ class KeypadViewState extends State<KeypadView> {
     ));
   }
 
-  void _onKeypadPressed(keyText) {
+  void _addChar(keyText) {
     if (!_controller.selection.isValid) {
       _controller.selection = TextSelection.collapsed(offset: _controller.text.length);
     }
@@ -232,7 +180,7 @@ class KeypadViewState extends State<KeypadView> {
     _keypadTextFieldEditableTextState?.hideToolbar();
   }
 
-  void _onBackspacePressed() {
+  void _removeLastChar() {
     if (!_controller.selection.isValid) {
       _controller.selection = TextSelection.collapsed(offset: _controller.text.length);
     }
@@ -260,7 +208,7 @@ class KeypadViewState extends State<KeypadView> {
     _keypadTextFieldEditableTextState?.hideToolbar();
   }
 
-  void _onBackspaceLongPress() {
+  void _cleanInput() {
     if (!_controller.selection.isValid) {
       _controller.selection = TextSelection.collapsed(offset: _controller.text.length);
     }

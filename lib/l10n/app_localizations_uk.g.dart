@@ -1731,10 +1731,10 @@ class AppLocalizationsUk extends AppLocalizations {
   String get system_notifications_screen_list_empty => 'Немає сповіщень';
 
   @override
-  String get numberActions_audioCall => 'Зробити аудіо дзвінок';
+  String get numberActions_audioCall => 'Aудіо дзвінок';
 
   @override
-  String get numberActions_videoCall => 'Зробити відео дзвінок';
+  String get numberActions_videoCall => 'Відео дзвінок';
 
   @override
   String get numberActions_transfer => 'Переадресувати поточній дзвінок';
@@ -1756,4 +1756,9 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get numberActions_delete => 'Видалити';
+
+  @override
+  String numberActions_callFrom(String number) {
+    return 'Дзвінок від $number';
+  }
 }

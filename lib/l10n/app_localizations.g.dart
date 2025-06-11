@@ -3448,13 +3448,13 @@ abstract class AppLocalizations {
   /// No description provided for @numberActions_audioCall.
   ///
   /// In en, this message translates to:
-  /// **'Make audio call'**
+  /// **'Audio call'**
   String get numberActions_audioCall;
 
   /// No description provided for @numberActions_videoCall.
   ///
   /// In en, this message translates to:
-  /// **'Make video call'**
+  /// **'Video call'**
   String get numberActions_videoCall;
 
   /// No description provided for @numberActions_transfer.
@@ -3498,6 +3498,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Delete'**
   String get numberActions_delete;
+
+  /// No description provided for @numberActions_callFrom.
+  ///
+  /// In en, this message translates to:
+  /// **'Call from {number}'**
+  String numberActions_callFrom(String number);
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

@@ -1731,13 +1731,13 @@ class AppLocalizationsIt extends AppLocalizations {
   String get system_notifications_screen_list_empty => 'Non ci sono notifiche';
 
   @override
-  String get numberActions_audioCall => 'Chiamata audio';
+  String get numberActions_audioCall => 'Audiochiamata';
 
   @override
   String get numberActions_videoCall => 'Videochiamata';
 
   @override
-  String get numberActions_transfer => 'Trasferisci la chiamata corrente';
+  String get numberActions_transfer => 'Trasferisci la chiamata';
 
   @override
   String get numberActions_chat => 'Invia messaggio di chat';
@@ -1756,4 +1756,9 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get numberActions_delete => 'Elimina';
+
+  @override
+  String numberActions_callFrom(String number) {
+    return 'Chiama da $number';
+  }
 }

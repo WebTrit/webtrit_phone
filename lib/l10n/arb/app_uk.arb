@@ -1232,9 +1232,9 @@
   "@system_notifications_screen_title": {},
   "system_notifications_screen_list_empty": "Немає сповіщень",
   "@system_notifications_screen_list_empty": {},
-  "numberActions_audioCall": "Зробити аудіо дзвінок",
+  "numberActions_audioCall": "Aудіо дзвінок",
   "@numberActions_audioCall": {},
-  "numberActions_videoCall": "Зробити відео дзвінок",
+  "numberActions_videoCall": "Відео дзвінок",
   "@numberActions_videoCall": {},
   "numberActions_transfer": "Переадресувати поточній дзвінок",
   "@numberActions_transfer": {},
@@ -1249,5 +1249,13 @@
   "numberActions_copyNumber": "Скопіювати номер",
   "@numberActions_copyNumber": {},
   "numberActions_delete": "Видалити",
-  "@numberActions_delete": {}
+  "@numberActions_delete": {},
+  "numberActions_callFrom": "Дзвінок від {number}",
+  "@numberActions_callFrom": {
+    "placeholders": {
+      "number": {
+        "type": "String"
+      }
+    }
+  }
 }

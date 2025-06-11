@@ -1232,9 +1232,9 @@
   "@system_notifications_screen_title": {},
   "system_notifications_screen_list_empty": "No notifications yet",
   "@system_notifications_screen_list_empty": {},
-  "numberActions_audioCall": "Make audio call",
+  "numberActions_audioCall": "Audio call",
   "@numberActions_audioCall": {},
-  "numberActions_videoCall": "Make video call",
+  "numberActions_videoCall": "Video call",
   "@numberActions_videoCall": {},
   "numberActions_transfer": "Transfer current call",
   "@numberActions_transfer": {},
@@ -1249,5 +1249,13 @@
   "numberActions_copyNumber": "Copy number",
   "@numberActions_copyNumber": {},
   "numberActions_delete": "Delete",
-  "@numberActions_delete": {}
+  "@numberActions_delete": {},
+  "numberActions_callFrom": "Call from {number}",
+  "@numberActions_callFrom": {
+    "placeholders": {
+      "number": {
+        "type": "String"
+      }
+    }
+  }
 }

@@ -44,6 +44,9 @@ class CallRoutingState extends Equatable {
   /// Returns boolean indicating if the user can make calls using main number.
   late final canCallWithMainNumber = mainLinesState.any((lineState) => lineState == LineState.idle);
 
+  /// Returns true if the user can make calls using any of the numbers.
+  late final allNumbers = <String>[mainNumber, ...additionalNumbers];
+
   @override
   List<Object?> get props => [mainNumber, additionalNumbers, mainLinesState, guestLineState, useAdditionalNumber];
 

@@ -1731,10 +1731,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get system_notifications_screen_list_empty => 'No notifications yet';
 
   @override
-  String get numberActions_audioCall => 'Make audio call';
+  String get numberActions_audioCall => 'Audio call';
 
   @override
-  String get numberActions_videoCall => 'Make video call';
+  String get numberActions_videoCall => 'Video call';
 
   @override
   String get numberActions_transfer => 'Transfer current call';
@@ -1756,4 +1756,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get numberActions_delete => 'Delete';
+
+  @override
+  String numberActions_callFrom(String number) {
+    return 'Call from $number';
+  }
 }

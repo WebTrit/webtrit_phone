@@ -1120,6 +1120,8 @@ class AppLocalizationsMapper {
           localizations.user_agreement_checkbox_text(url),
       'user_agreement_description': (appName) =>
           localizations.user_agreement_description(appName),
+      'numberActions_callFrom': (number) =>
+          localizations.numberActions_callFrom(number),
     };
   }
 }

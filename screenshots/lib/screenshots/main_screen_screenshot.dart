@@ -157,7 +157,8 @@ class MainScreenScreenshot extends StatelessWidget {
           create: (_) => MockKeypadCubit.mainScreen(),
           child: KeypadScreen(
             title: title,
-            videoVisible: true,
+            videoEnabled: true,
+            transferEnabled: false,
           ),
         );
       case MainFlavor.embedded:
