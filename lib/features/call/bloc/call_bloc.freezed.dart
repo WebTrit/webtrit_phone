@@ -5968,7 +5968,7 @@ mixin _$CallControlEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(int? line, String? generic, String? number,
-            String? email, String? displayName, bool video)
+            String? email, String? displayName, String? fromNumber, bool video)
         started,
     required TResult Function(String callId) answered,
     required TResult Function(String callId) ended,
@@ -5993,7 +5993,7 @@ mixin _$CallControlEvent {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(int? line, String? generic, String? number, String? email,
-            String? displayName, bool video)?
+            String? displayName, String? fromNumber, bool video)?
         started,
     TResult? Function(String callId)? answered,
     TResult? Function(String callId)? ended,
@@ -6016,7 +6016,7 @@ mixin _$CallControlEvent {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(int? line, String? generic, String? number, String? email,
-            String? displayName, bool video)?
+            String? displayName, String? fromNumber, bool video)?
         started,
     TResult Function(String callId)? answered,
     TResult Function(String callId)? ended,
@@ -6133,6 +6133,7 @@ class _$CallControlEventStartedImpl
       this.number,
       this.email,
       this.displayName,
+      this.fromNumber,
       required this.video})
       : assert(!(generic == null && number == null && email == null),
             'one of generic, number or email parameters must be assign'),
@@ -6153,11 +6154,13 @@ class _$CallControlEventStartedImpl
   @override
   final String? displayName;
   @override
+  final String? fromNumber;
+  @override
   final bool video;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'CallControlEvent.started(line: $line, generic: $generic, number: $number, email: $email, displayName: $displayName, video: $video)';
+    return 'CallControlEvent.started(line: $line, generic: $generic, number: $number, email: $email, displayName: $displayName, fromNumber: $fromNumber, video: $video)';
   }
 
   @override
@@ -6170,6 +6173,7 @@ class _$CallControlEventStartedImpl
       ..add(DiagnosticsProperty('number', number))
       ..add(DiagnosticsProperty('email', email))
       ..add(DiagnosticsProperty('displayName', displayName))
+      ..add(DiagnosticsProperty('fromNumber', fromNumber))
       ..add(DiagnosticsProperty('video', video));
   }
 
@@ -6184,18 +6188,20 @@ class _$CallControlEventStartedImpl
             (identical(other.email, email) || other.email == email) &&
             (identical(other.displayName, displayName) ||
                 other.displayName == displayName) &&
+            (identical(other.fromNumber, fromNumber) ||
+                other.fromNumber == fromNumber) &&
             (identical(other.video, video) || other.video == video));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType, line, generic, number, email, displayName, video);
+  int get hashCode => Object.hash(runtimeType, line, generic, number, email,
+      displayName, fromNumber, video);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(int? line, String? generic, String? number,
-            String? email, String? displayName, bool video)
+            String? email, String? displayName, String? fromNumber, bool video)
         started,
     required TResult Function(String callId) answered,
     required TResult Function(String callId) ended,
@@ -6216,14 +6222,15 @@ class _$CallControlEventStartedImpl
     required TResult Function(String referId, String referTo)
         attendedRequestApproved,
   }) {
-    return started(line, generic, number, email, displayName, video);
+    return started(
+        line, generic, number, email, displayName, fromNumber, video);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(int? line, String? generic, String? number, String? email,
-            String? displayName, bool video)?
+            String? displayName, String? fromNumber, bool video)?
         started,
     TResult? Function(String callId)? answered,
     TResult? Function(String callId)? ended,
@@ -6242,14 +6249,15 @@ class _$CallControlEventStartedImpl
     TResult? Function(String callId, String referId)? attendedRequestDeclined,
     TResult? Function(String referId, String referTo)? attendedRequestApproved,
   }) {
-    return started?.call(line, generic, number, email, displayName, video);
+    return started?.call(
+        line, generic, number, email, displayName, fromNumber, video);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(int? line, String? generic, String? number, String? email,
-            String? displayName, bool video)?
+            String? displayName, String? fromNumber, bool video)?
         started,
     TResult Function(String callId)? answered,
     TResult Function(String callId)? ended,
@@ -6270,7 +6278,8 @@ class _$CallControlEventStartedImpl
     required TResult orElse(),
   }) {
     if (started != null) {
-      return started(line, generic, number, email, displayName, video);
+      return started(
+          line, generic, number, email, displayName, fromNumber, video);
     }
     return orElse();
   }
@@ -6379,6 +6388,7 @@ abstract class _CallControlEventStarted
       final String? number,
       final String? email,
       final String? displayName,
+      final String? fromNumber,
       required final bool video}) = _$CallControlEventStartedImpl;
 
   int? get line;
@@ -6386,6 +6396,7 @@ abstract class _CallControlEventStarted
   String? get number;
   String? get email;
   String? get displayName;
+  String? get fromNumber;
   bool get video;
 }
 
@@ -6427,7 +6438,7 @@ class _$CallControlEventAnsweredImpl
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(int? line, String? generic, String? number,
-            String? email, String? displayName, bool video)
+            String? email, String? displayName, String? fromNumber, bool video)
         started,
     required TResult Function(String callId) answered,
     required TResult Function(String callId) ended,
@@ -6455,7 +6466,7 @@ class _$CallControlEventAnsweredImpl
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(int? line, String? generic, String? number, String? email,
-            String? displayName, bool video)?
+            String? displayName, String? fromNumber, bool video)?
         started,
     TResult? Function(String callId)? answered,
     TResult? Function(String callId)? ended,
@@ -6481,7 +6492,7 @@ class _$CallControlEventAnsweredImpl
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(int? line, String? generic, String? number, String? email,
-            String? displayName, bool video)?
+            String? displayName, String? fromNumber, bool video)?
         started,
     TResult Function(String callId)? answered,
     TResult Function(String callId)? ended,
@@ -6648,7 +6659,7 @@ class _$CallControlEventEndedImpl
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(int? line, String? generic, String? number,
-            String? email, String? displayName, bool video)
+            String? email, String? displayName, String? fromNumber, bool video)
         started,
     required TResult Function(String callId) answered,
     required TResult Function(String callId) ended,
@@ -6676,7 +6687,7 @@ class _$CallControlEventEndedImpl
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(int? line, String? generic, String? number, String? email,
-            String? displayName, bool video)?
+            String? displayName, String? fromNumber, bool video)?
         started,
     TResult? Function(String callId)? answered,
     TResult? Function(String callId)? ended,
@@ -6702,7 +6713,7 @@ class _$CallControlEventEndedImpl
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(int? line, String? generic, String? number, String? email,
-            String? displayName, bool video)?
+            String? displayName, String? fromNumber, bool video)?
         started,
     TResult Function(String callId)? answered,
     TResult Function(String callId)? ended,
@@ -6873,7 +6884,7 @@ class _$CallControlEventSetHeldImpl
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(int? line, String? generic, String? number,
-            String? email, String? displayName, bool video)
+            String? email, String? displayName, String? fromNumber, bool video)
         started,
     required TResult Function(String callId) answered,
     required TResult Function(String callId) ended,
@@ -6901,7 +6912,7 @@ class _$CallControlEventSetHeldImpl
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(int? line, String? generic, String? number, String? email,
-            String? displayName, bool video)?
+            String? displayName, String? fromNumber, bool video)?
         started,
     TResult? Function(String callId)? answered,
     TResult? Function(String callId)? ended,
@@ -6927,7 +6938,7 @@ class _$CallControlEventSetHeldImpl
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(int? line, String? generic, String? number, String? email,
-            String? displayName, bool video)?
+            String? displayName, String? fromNumber, bool video)?
         started,
     TResult Function(String callId)? answered,
     TResult Function(String callId)? ended,
@@ -7099,7 +7110,7 @@ class _$CallControlEventSetMutedImpl
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(int? line, String? generic, String? number,
-            String? email, String? displayName, bool video)
+            String? email, String? displayName, String? fromNumber, bool video)
         started,
     required TResult Function(String callId) answered,
     required TResult Function(String callId) ended,
@@ -7127,7 +7138,7 @@ class _$CallControlEventSetMutedImpl
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(int? line, String? generic, String? number, String? email,
-            String? displayName, bool video)?
+            String? displayName, String? fromNumber, bool video)?
         started,
     TResult? Function(String callId)? answered,
     TResult? Function(String callId)? ended,
@@ -7153,7 +7164,7 @@ class _$CallControlEventSetMutedImpl
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(int? line, String? generic, String? number, String? email,
-            String? displayName, bool video)?
+            String? displayName, String? fromNumber, bool video)?
         started,
     TResult Function(String callId)? answered,
     TResult Function(String callId)? ended,
@@ -7325,7 +7336,7 @@ class _$CallControlEventSentDTMFImpl
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(int? line, String? generic, String? number,
-            String? email, String? displayName, bool video)
+            String? email, String? displayName, String? fromNumber, bool video)
         started,
     required TResult Function(String callId) answered,
     required TResult Function(String callId) ended,
@@ -7353,7 +7364,7 @@ class _$CallControlEventSentDTMFImpl
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(int? line, String? generic, String? number, String? email,
-            String? displayName, bool video)?
+            String? displayName, String? fromNumber, bool video)?
         started,
     TResult? Function(String callId)? answered,
     TResult? Function(String callId)? ended,
@@ -7379,7 +7390,7 @@ class _$CallControlEventSentDTMFImpl
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(int? line, String? generic, String? number, String? email,
-            String? displayName, bool video)?
+            String? displayName, String? fromNumber, bool video)?
         started,
     TResult Function(String callId)? answered,
     TResult Function(String callId)? ended,
@@ -7547,7 +7558,7 @@ class _$CallControlEventCameraSwitchedImpl
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(int? line, String? generic, String? number,
-            String? email, String? displayName, bool video)
+            String? email, String? displayName, String? fromNumber, bool video)
         started,
     required TResult Function(String callId) answered,
     required TResult Function(String callId) ended,
@@ -7575,7 +7586,7 @@ class _$CallControlEventCameraSwitchedImpl
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(int? line, String? generic, String? number, String? email,
-            String? displayName, bool video)?
+            String? displayName, String? fromNumber, bool video)?
         started,
     TResult? Function(String callId)? answered,
     TResult? Function(String callId)? ended,
@@ -7601,7 +7612,7 @@ class _$CallControlEventCameraSwitchedImpl
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(int? line, String? generic, String? number, String? email,
-            String? displayName, bool video)?
+            String? displayName, String? fromNumber, bool video)?
         started,
     TResult Function(String callId)? answered,
     TResult Function(String callId)? ended,
@@ -7772,7 +7783,7 @@ class _$CallControlEventCameraEnabledImpl
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(int? line, String? generic, String? number,
-            String? email, String? displayName, bool video)
+            String? email, String? displayName, String? fromNumber, bool video)
         started,
     required TResult Function(String callId) answered,
     required TResult Function(String callId) ended,
@@ -7800,7 +7811,7 @@ class _$CallControlEventCameraEnabledImpl
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(int? line, String? generic, String? number, String? email,
-            String? displayName, bool video)?
+            String? displayName, String? fromNumber, bool video)?
         started,
     TResult? Function(String callId)? answered,
     TResult? Function(String callId)? ended,
@@ -7826,7 +7837,7 @@ class _$CallControlEventCameraEnabledImpl
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(int? line, String? generic, String? number, String? email,
-            String? displayName, bool video)?
+            String? displayName, String? fromNumber, bool video)?
         started,
     TResult Function(String callId)? answered,
     TResult Function(String callId)? ended,
@@ -7999,7 +8010,7 @@ class _$CallControlEventSpeakerEnabledImpl
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(int? line, String? generic, String? number,
-            String? email, String? displayName, bool video)
+            String? email, String? displayName, String? fromNumber, bool video)
         started,
     required TResult Function(String callId) answered,
     required TResult Function(String callId) ended,
@@ -8027,7 +8038,7 @@ class _$CallControlEventSpeakerEnabledImpl
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(int? line, String? generic, String? number, String? email,
-            String? displayName, bool video)?
+            String? displayName, String? fromNumber, bool video)?
         started,
     TResult? Function(String callId)? answered,
     TResult? Function(String callId)? ended,
@@ -8053,7 +8064,7 @@ class _$CallControlEventSpeakerEnabledImpl
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(int? line, String? generic, String? number, String? email,
-            String? displayName, bool video)?
+            String? displayName, String? fromNumber, bool video)?
         started,
     TResult Function(String callId)? answered,
     TResult Function(String callId)? ended,
@@ -8222,7 +8233,7 @@ class _$CallControlEventFailureApprovedImpl
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(int? line, String? generic, String? number,
-            String? email, String? displayName, bool video)
+            String? email, String? displayName, String? fromNumber, bool video)
         started,
     required TResult Function(String callId) answered,
     required TResult Function(String callId) ended,
@@ -8250,7 +8261,7 @@ class _$CallControlEventFailureApprovedImpl
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(int? line, String? generic, String? number, String? email,
-            String? displayName, bool video)?
+            String? displayName, String? fromNumber, bool video)?
         started,
     TResult? Function(String callId)? answered,
     TResult? Function(String callId)? ended,
@@ -8276,7 +8287,7 @@ class _$CallControlEventFailureApprovedImpl
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(int? line, String? generic, String? number, String? email,
-            String? displayName, bool video)?
+            String? displayName, String? fromNumber, bool video)?
         started,
     TResult Function(String callId)? answered,
     TResult Function(String callId)? ended,
@@ -8444,7 +8455,7 @@ class _$CallControlEventBlindTransferInitiatedImpl
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(int? line, String? generic, String? number,
-            String? email, String? displayName, bool video)
+            String? email, String? displayName, String? fromNumber, bool video)
         started,
     required TResult Function(String callId) answered,
     required TResult Function(String callId) ended,
@@ -8472,7 +8483,7 @@ class _$CallControlEventBlindTransferInitiatedImpl
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(int? line, String? generic, String? number, String? email,
-            String? displayName, bool video)?
+            String? displayName, String? fromNumber, bool video)?
         started,
     TResult? Function(String callId)? answered,
     TResult? Function(String callId)? ended,
@@ -8498,7 +8509,7 @@ class _$CallControlEventBlindTransferInitiatedImpl
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(int? line, String? generic, String? number, String? email,
-            String? displayName, bool video)?
+            String? displayName, String? fromNumber, bool video)?
         started,
     TResult Function(String callId)? answered,
     TResult Function(String callId)? ended,
@@ -8667,7 +8678,7 @@ class _$CallControlEventAttendedTransferInitiatedImpl
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(int? line, String? generic, String? number,
-            String? email, String? displayName, bool video)
+            String? email, String? displayName, String? fromNumber, bool video)
         started,
     required TResult Function(String callId) answered,
     required TResult Function(String callId) ended,
@@ -8695,7 +8706,7 @@ class _$CallControlEventAttendedTransferInitiatedImpl
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(int? line, String? generic, String? number, String? email,
-            String? displayName, bool video)?
+            String? displayName, String? fromNumber, bool video)?
         started,
     TResult? Function(String callId)? answered,
     TResult? Function(String callId)? ended,
@@ -8721,7 +8732,7 @@ class _$CallControlEventAttendedTransferInitiatedImpl
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(int? line, String? generic, String? number, String? email,
-            String? displayName, bool video)?
+            String? displayName, String? fromNumber, bool video)?
         started,
     TResult Function(String callId)? answered,
     TResult Function(String callId)? ended,
@@ -8890,7 +8901,7 @@ class _$CallControlEventBlindTransferSubmittedImpl
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(int? line, String? generic, String? number,
-            String? email, String? displayName, bool video)
+            String? email, String? displayName, String? fromNumber, bool video)
         started,
     required TResult Function(String callId) answered,
     required TResult Function(String callId) ended,
@@ -8918,7 +8929,7 @@ class _$CallControlEventBlindTransferSubmittedImpl
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(int? line, String? generic, String? number, String? email,
-            String? displayName, bool video)?
+            String? displayName, String? fromNumber, bool video)?
         started,
     TResult? Function(String callId)? answered,
     TResult? Function(String callId)? ended,
@@ -8944,7 +8955,7 @@ class _$CallControlEventBlindTransferSubmittedImpl
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(int? line, String? generic, String? number, String? email,
-            String? displayName, bool video)?
+            String? displayName, String? fromNumber, bool video)?
         started,
     TResult Function(String callId)? answered,
     TResult Function(String callId)? ended,
@@ -9121,7 +9132,7 @@ class _$CallControlEventAttendedTransferSubmittedImpl
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(int? line, String? generic, String? number,
-            String? email, String? displayName, bool video)
+            String? email, String? displayName, String? fromNumber, bool video)
         started,
     required TResult Function(String callId) answered,
     required TResult Function(String callId) ended,
@@ -9149,7 +9160,7 @@ class _$CallControlEventAttendedTransferSubmittedImpl
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(int? line, String? generic, String? number, String? email,
-            String? displayName, bool video)?
+            String? displayName, String? fromNumber, bool video)?
         started,
     TResult? Function(String callId)? answered,
     TResult? Function(String callId)? ended,
@@ -9175,7 +9186,7 @@ class _$CallControlEventAttendedTransferSubmittedImpl
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(int? line, String? generic, String? number, String? email,
-            String? displayName, bool video)?
+            String? displayName, String? fromNumber, bool video)?
         started,
     TResult Function(String callId)? answered,
     TResult Function(String callId)? ended,
@@ -9352,7 +9363,7 @@ class _$CallControlEventAttendedRequestDeclinedImpl
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(int? line, String? generic, String? number,
-            String? email, String? displayName, bool video)
+            String? email, String? displayName, String? fromNumber, bool video)
         started,
     required TResult Function(String callId) answered,
     required TResult Function(String callId) ended,
@@ -9380,7 +9391,7 @@ class _$CallControlEventAttendedRequestDeclinedImpl
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(int? line, String? generic, String? number, String? email,
-            String? displayName, bool video)?
+            String? displayName, String? fromNumber, bool video)?
         started,
     TResult? Function(String callId)? answered,
     TResult? Function(String callId)? ended,
@@ -9406,7 +9417,7 @@ class _$CallControlEventAttendedRequestDeclinedImpl
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(int? line, String? generic, String? number, String? email,
-            String? displayName, bool video)?
+            String? displayName, String? fromNumber, bool video)?
         started,
     TResult Function(String callId)? answered,
     TResult Function(String callId)? ended,
@@ -9582,7 +9593,7 @@ class _$CallControlEventAttendedRequestApprovedImpl
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(int? line, String? generic, String? number,
-            String? email, String? displayName, bool video)
+            String? email, String? displayName, String? fromNumber, bool video)
         started,
     required TResult Function(String callId) answered,
     required TResult Function(String callId) ended,
@@ -9610,7 +9621,7 @@ class _$CallControlEventAttendedRequestApprovedImpl
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(int? line, String? generic, String? number, String? email,
-            String? displayName, bool video)?
+            String? displayName, String? fromNumber, bool video)?
         started,
     TResult? Function(String callId)? answered,
     TResult? Function(String callId)? ended,
@@ -9636,7 +9647,7 @@ class _$CallControlEventAttendedRequestApprovedImpl
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(int? line, String? generic, String? number, String? email,
-            String? displayName, bool video)?
+            String? displayName, String? fromNumber, bool video)?
         started,
     TResult Function(String callId)? answered,
     TResult Function(String callId)? ended,
@@ -12898,6 +12909,7 @@ mixin _$ActiveCall {
   JsepValue? get incomingOffer => throw _privateConstructorUsedError;
   String? get displayName => throw _privateConstructorUsedError;
   String? get fromReferId => throw _privateConstructorUsedError;
+  String? get fromNumber => throw _privateConstructorUsedError;
   DateTime? get acceptedTime => throw _privateConstructorUsedError;
   DateTime? get hungUpTime => throw _privateConstructorUsedError;
   Transfer? get transfer => throw _privateConstructorUsedError;
@@ -12933,6 +12945,7 @@ abstract class $ActiveCallCopyWith<$Res> {
       JsepValue? incomingOffer,
       String? displayName,
       String? fromReferId,
+      String? fromNumber,
       DateTime? acceptedTime,
       DateTime? hungUpTime,
       Transfer? transfer,
@@ -12972,6 +12985,7 @@ class _$ActiveCallCopyWithImpl<$Res, $Val extends ActiveCall>
     Object? incomingOffer = freezed,
     Object? displayName = freezed,
     Object? fromReferId = freezed,
+    Object? fromNumber = freezed,
     Object? acceptedTime = freezed,
     Object? hungUpTime = freezed,
     Object? transfer = freezed,
@@ -13036,6 +13050,10 @@ class _$ActiveCallCopyWithImpl<$Res, $Val extends ActiveCall>
           ? _value.fromReferId
           : fromReferId // ignore: cast_nullable_to_non_nullable
               as String?,
+      fromNumber: freezed == fromNumber
+          ? _value.fromNumber
+          : fromNumber // ignore: cast_nullable_to_non_nullable
+              as String?,
       acceptedTime: freezed == acceptedTime
           ? _value.acceptedTime
           : acceptedTime // ignore: cast_nullable_to_non_nullable
@@ -13098,6 +13116,7 @@ abstract class _$$ActiveCallImplCopyWith<$Res>
       JsepValue? incomingOffer,
       String? displayName,
       String? fromReferId,
+      String? fromNumber,
       DateTime? acceptedTime,
       DateTime? hungUpTime,
       Transfer? transfer,
@@ -13136,6 +13155,7 @@ class __$$ActiveCallImplCopyWithImpl<$Res>
     Object? incomingOffer = freezed,
     Object? displayName = freezed,
     Object? fromReferId = freezed,
+    Object? fromNumber = freezed,
     Object? acceptedTime = freezed,
     Object? hungUpTime = freezed,
     Object? transfer = freezed,
@@ -13200,6 +13220,10 @@ class __$$ActiveCallImplCopyWithImpl<$Res>
           ? _value.fromReferId
           : fromReferId // ignore: cast_nullable_to_non_nullable
               as String?,
+      fromNumber: freezed == fromNumber
+          ? _value.fromNumber
+          : fromNumber // ignore: cast_nullable_to_non_nullable
+              as String?,
       acceptedTime: freezed == acceptedTime
           ? _value.acceptedTime
           : acceptedTime // ignore: cast_nullable_to_non_nullable
@@ -13243,6 +13267,7 @@ class _$ActiveCallImpl extends _ActiveCall with DiagnosticableTreeMixin {
       this.incomingOffer,
       this.displayName,
       this.fromReferId,
+      this.fromNumber,
       this.acceptedTime,
       this.hungUpTime,
       this.transfer,
@@ -13284,6 +13309,8 @@ class _$ActiveCallImpl extends _ActiveCall with DiagnosticableTreeMixin {
   @override
   final String? fromReferId;
   @override
+  final String? fromNumber;
+  @override
   final DateTime? acceptedTime;
   @override
   final DateTime? hungUpTime;
@@ -13298,7 +13325,7 @@ class _$ActiveCallImpl extends _ActiveCall with DiagnosticableTreeMixin {
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'ActiveCall(direction: $direction, line: $line, callId: $callId, handle: $handle, createdTime: $createdTime, video: $video, processingStatus: $processingStatus, frontCamera: $frontCamera, held: $held, muted: $muted, updating: $updating, incomingOffer: $incomingOffer, displayName: $displayName, fromReferId: $fromReferId, acceptedTime: $acceptedTime, hungUpTime: $hungUpTime, transfer: $transfer, failure: $failure, localStream: $localStream, remoteStream: $remoteStream)';
+    return 'ActiveCall(direction: $direction, line: $line, callId: $callId, handle: $handle, createdTime: $createdTime, video: $video, processingStatus: $processingStatus, frontCamera: $frontCamera, held: $held, muted: $muted, updating: $updating, incomingOffer: $incomingOffer, displayName: $displayName, fromReferId: $fromReferId, fromNumber: $fromNumber, acceptedTime: $acceptedTime, hungUpTime: $hungUpTime, transfer: $transfer, failure: $failure, localStream: $localStream, remoteStream: $remoteStream)';
   }
 
   @override
@@ -13320,6 +13347,7 @@ class _$ActiveCallImpl extends _ActiveCall with DiagnosticableTreeMixin {
       ..add(DiagnosticsProperty('incomingOffer', incomingOffer))
       ..add(DiagnosticsProperty('displayName', displayName))
       ..add(DiagnosticsProperty('fromReferId', fromReferId))
+      ..add(DiagnosticsProperty('fromNumber', fromNumber))
       ..add(DiagnosticsProperty('acceptedTime', acceptedTime))
       ..add(DiagnosticsProperty('hungUpTime', hungUpTime))
       ..add(DiagnosticsProperty('transfer', transfer))
@@ -13355,6 +13383,8 @@ class _$ActiveCallImpl extends _ActiveCall with DiagnosticableTreeMixin {
                 other.displayName == displayName) &&
             (identical(other.fromReferId, fromReferId) ||
                 other.fromReferId == fromReferId) &&
+            (identical(other.fromNumber, fromNumber) ||
+                other.fromNumber == fromNumber) &&
             (identical(other.acceptedTime, acceptedTime) ||
                 other.acceptedTime == acceptedTime) &&
             (identical(other.hungUpTime, hungUpTime) ||
@@ -13385,6 +13415,7 @@ class _$ActiveCallImpl extends _ActiveCall with DiagnosticableTreeMixin {
         incomingOffer,
         displayName,
         fromReferId,
+        fromNumber,
         acceptedTime,
         hungUpTime,
         transfer,
@@ -13418,6 +13449,7 @@ abstract class _ActiveCall extends ActiveCall {
       final JsepValue? incomingOffer,
       final String? displayName,
       final String? fromReferId,
+      final String? fromNumber,
       final DateTime? acceptedTime,
       final DateTime? hungUpTime,
       final Transfer? transfer,
@@ -13454,6 +13486,8 @@ abstract class _ActiveCall extends ActiveCall {
   String? get displayName;
   @override
   String? get fromReferId;
+  @override
+  String? get fromNumber;
   @override
   DateTime? get acceptedTime;
   @override

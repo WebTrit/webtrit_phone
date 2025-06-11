@@ -188,6 +188,7 @@ class CallControlEvent with _$CallControlEvent implements CallEvent {
     String? number,
     String? email,
     String? displayName,
+    String? fromNumber,
     required bool video,
   }) = _CallControlEventStarted;
 

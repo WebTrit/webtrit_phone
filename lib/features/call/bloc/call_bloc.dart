@@ -1205,11 +1205,16 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       return;
     }
 
-    final line = state.retrieveIdleLine();
-    if (line == null) {
-      _logger.info('__onCallControlEventStarted no idle line');
-      submitNotification(const CallUndefinedLineNotification());
-      return;
+    int? line;
+    if (event.fromNumber != null) {
+      line = null;
+    } else {
+      line = state.retrieveIdleLine();
+      if (line == null) {
+        _logger.info('__onCallControlEventStarted no idle line');
+        submitNotification(const CallUndefinedLineNotification());
+        return;
+      }
     }
 
     /// If there is an active call, the call should be put on hold before making a new call.
@@ -1232,6 +1237,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       video: event.video,
       createdTime: clock.now(),
       processingStatus: CallProcessingStatus.outgoingCreated,
+      fromNumber: event.fromNumber,
     );
 
     emit(state.copyWithPushActiveCall(newCall).copyWith(minimized: false));
@@ -1767,6 +1773,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       await _signalingClient?.execute(OutgoingCallRequest(
         transaction: WebtritSignalingClient.generateTransactionId(),
         line: activeCall.line,
+        from: activeCall.fromNumber,
         callId: activeCall.callId,
         number: activeCall.handle.normalizedValue(),
         jsep: localDescription.toMap(),
@@ -2274,29 +2281,30 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       linesCount: stateHandshake.lines.length,
     ));
 
-    activeCallsLoop:
+    // TODO: restore this logic with guest line support
+    // activeCallsLoop:
     for (final activeCall in state.activeCalls) {
-      if (activeCall.line == _kUndefinedLine) {
-        for (final line in stateHandshake.lines) {
-          if (line != null && line.callId == activeCall.callId) {
-            continue activeCallsLoop;
-          }
-        }
-      } else if (activeCall.line < stateHandshake.lines.length) {
-        final line = stateHandshake.lines[activeCall.line];
-        if (line != null && line.callId == activeCall.callId) {
-          continue activeCallsLoop;
-        }
-      }
-      if (activeCall.direction == CallDirection.outgoing &&
-          activeCall.acceptedTime == null &&
-          activeCall.hungUpTime == null) {
-        // Handles an outgoing active call that has not yet started, typically initiated
-        // by the `continueStartCallIntent` callback of `CallkeepDelegate`.
-        // TODO: Implement a dedicated flag to confirm successful execution of
-        // OutgoingCallRequest, ensuring reliable outgoing active call state tracking.
-        continue activeCallsLoop;
-      }
+      // if (activeCall.line == _kUndefinedLine) {
+      //   for (final line in stateHandshake.lines) {
+      //     if (line != null && line.callId == activeCall.callId) {
+      //       continue activeCallsLoop;
+      //     }
+      //   }
+      // } else if (activeCall.line < stateHandshake.lines.length) {
+      //   final line = stateHandshake.lines[activeCall.line];
+      //   if (line != null && line.callId == activeCall.callId) {
+      //     continue activeCallsLoop;
+      //   }
+      // }
+      // if (activeCall.direction == CallDirection.outgoing &&
+      //     activeCall.acceptedTime == null &&
+      //     activeCall.hungUpTime == null) {
+      //   // Handles an outgoing active call that has not yet started, typically initiated
+      //   // by the `continueStartCallIntent` callback of `CallkeepDelegate`.
+      //   // TODO: Implement a dedicated flag to confirm successful execution of
+      //   // OutgoingCallRequest, ensuring reliable outgoing active call state tracking.
+      //   continue activeCallsLoop;
+      // }
 
       _peerConnectionConditionalCompleteError(activeCall.callId, 'Active call Request Terminated');
 

@@ -94,6 +94,7 @@ class KeypadViewState extends State<KeypadView> {
               builder: (context, callState) {
                 return BlocBuilder<CallRoutingCubit, CallRoutingState?>(
                   builder: (context, callRoutingState) {
+                    String? fromNumber = callRoutingState?.useAdditionalNumber;
                     bool canCall = true;
 
                     if (value.text.isEmpty) {
@@ -164,8 +165,8 @@ class KeypadViewState extends State<KeypadView> {
                           videoVisible: widget.videoVisible,
                           onBackspacePressed: canCall ? _onBackspacePressed : null,
                           onBackspaceLongPress: canCall ? _onBackspaceLongPress : null,
-                          onAudioCallPressed: canCall ? () => _onCallPressed(false) : null,
-                          onVideoCallPressed: canCall ? () => _onCallPressed(true) : null,
+                          onAudioCallPressed: canCall ? () => _onCallPressed(false, fromNumber) : null,
+                          onVideoCallPressed: canCall ? () => _onCallPressed(true, fromNumber) : null,
                           onTransferPressed: _onTransferPressed,
                         ),
                       ],
@@ -189,7 +190,7 @@ class KeypadViewState extends State<KeypadView> {
     return number;
   }
 
-  void _onCallPressed(bool video) {
+  void _onCallPressed(bool video, String? fromNumber) {
     _focusNode.unfocus();
 
     final displayName = context.read<KeypadCubit>().state.contact?.maybeName;
@@ -199,6 +200,7 @@ class KeypadViewState extends State<KeypadView> {
       number: _popNumber(),
       video: video,
       displayName: displayName,
+      fromNumber: fromNumber,
     ));
   }
 
