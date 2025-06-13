@@ -1024,6 +1024,8 @@
   "@settings_ListViewTileTitle_accountDelete": {},
   "settings_ListViewTileTitle_mediaSettings": "Impostazioni multimediali",
   "@settings_ListViewTileTitle_mediaSettings": {},
+  "settings_ListViewTileTitle_callerId": "ID chiamante",
+  "@settings_ListViewTileTitle_callerId": {},
   "settings_ListViewTileTitle_help": "Aiuto",
   "@settings_ListViewTileTitle_help": {},
   "settings_ListViewTileTitle_language": "Linguaggio",

@@ -1024,6 +1024,8 @@
   "@settings_ListViewTileTitle_accountDelete": {},
   "settings_ListViewTileTitle_mediaSettings": "Параметри медіа",
   "@settings_ListViewTileTitle_mediaSettings": {},
+  "settings_ListViewTileTitle_callerId": "Ідентифікатор абонента",
+  "@settings_ListViewTileTitle_callerId": {},
   "settings_ListViewTileTitle_help": "Допомога",
   "@settings_ListViewTileTitle_help": {},
   "settings_ListViewTileTitle_language": "Мова",

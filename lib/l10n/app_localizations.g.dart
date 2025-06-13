@@ -2857,6 +2857,12 @@ abstract class AppLocalizations {
   /// **'Media settings'**
   String get settings_ListViewTileTitle_mediaSettings;
 
+  /// No description provided for @settings_ListViewTileTitle_callerId.
+  ///
+  /// In en, this message translates to:
+  /// **'Caller ID'**
+  String get settings_ListViewTileTitle_callerId;
+
   /// No description provided for @settings_ListViewTileTitle_help.
   ///
   /// In en, this message translates to:
@@ -2994,6 +3000,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'SMS Fallback'**
   String get settings_network_smsFallback_toggle;
+
+  /// No description provided for @settings_callerId_defaultTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Default Caller ID'**
+  String get settings_callerId_defaultTitle;
+
+  /// No description provided for @settings_callerId_dialCodeMatching_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Dial code matching'**
+  String get settings_callerId_dialCodeMatching_title;
+
+  /// No description provided for @settings_callerId_dialcode.
+  ///
+  /// In en, this message translates to:
+  /// **'Dial code:'**
+  String get settings_callerId_dialcode;
+
+  /// No description provided for @settings_callerId_number.
+  ///
+  /// In en, this message translates to:
+  /// **'Number:'**
+  String get settings_callerId_number;
+
+  /// No description provided for @settings_callerId_number_hint.
+  ///
+  /// In en, this message translates to:
+  /// **'Select a number'**
+  String get settings_callerId_number_hint;
+
+  /// No description provided for @settings_callerId_duplicate_dialcode_error.
+  ///
+  /// In en, this message translates to:
+  /// **'Please choose a different dial code, this one is already in use.'**
+  String get settings_callerId_duplicate_dialcode_error;
+
+  /// No description provided for @settings_callerId_save_button.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get settings_callerId_save_button;
+
+  /// No description provided for @settings_callerId_cancel_button.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get settings_callerId_cancel_button;
 
   /// No description provided for @signalingResponseCode_ambiguousRequest.
   ///

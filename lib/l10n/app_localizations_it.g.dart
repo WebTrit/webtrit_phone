@@ -1431,6 +1431,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get settings_ListViewTileTitle_mediaSettings => 'Impostazioni multimediali';
 
   @override
+  String get settings_ListViewTileTitle_callerId => 'ID chiamante';
+
+  @override
   String get settings_ListViewTileTitle_help => 'Aiuto';
 
   @override
@@ -1498,6 +1501,30 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get settings_network_smsFallback_toggle => 'Riserva tramite SMS';
+
+  @override
+  String get settings_callerId_defaultTitle => 'Default Caller ID';
+
+  @override
+  String get settings_callerId_dialCodeMatching_title => 'Dial code matching';
+
+  @override
+  String get settings_callerId_dialcode => 'Dial code:';
+
+  @override
+  String get settings_callerId_number => 'Number:';
+
+  @override
+  String get settings_callerId_number_hint => 'Select a number';
+
+  @override
+  String get settings_callerId_duplicate_dialcode_error => 'Please choose a different dial code, this one is already in use.';
+
+  @override
+  String get settings_callerId_save_button => 'Save';
+
+  @override
+  String get settings_callerId_cancel_button => 'Cancel';
 
   @override
   String get signalingResponseCode_ambiguousRequest => 'La tua richiesta non è chiara. Riprova.';

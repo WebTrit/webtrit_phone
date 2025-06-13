@@ -303,6 +303,10 @@ class AppRouter extends RootStackRouter {
                       page: VoicemailScreenPageRoute.page,
                       path: 'voicemail',
                     ),
+                    AutoRoute(
+                      page: CallerIdSettingsScreenPageRoute.page,
+                      path: 'caller-id',
+                    ),
                   ],
                 ),
               ],

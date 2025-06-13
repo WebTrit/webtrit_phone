@@ -4,6 +4,7 @@ export 'auth/auth.dart';
 export 'call/call.dart';
 export 'call_log_entry.dart';
 export 'call_to_action.dart';
+export 'caller_id_settings.dart';
 export 'contact.dart';
 export 'contact_email.dart';
 export 'contact_phone.dart';

@@ -873,6 +873,8 @@ class AppLocalizationsMapper {
           localizations.settings_ListViewTileTitle_accountDelete,
       'settings_ListViewTileTitle_mediaSettings':
           localizations.settings_ListViewTileTitle_mediaSettings,
+      'settings_ListViewTileTitle_callerId':
+          localizations.settings_ListViewTileTitle_callerId,
       'settings_ListViewTileTitle_help':
           localizations.settings_ListViewTileTitle_help,
       'settings_ListViewTileTitle_language':
