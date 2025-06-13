@@ -132,22 +132,27 @@ class KeypadViewState extends State<KeypadView> {
   void _createCall({bool video = false, String? from}) {
     _focusNode.unfocus();
 
-    final displayName = context.read<KeypadCubit>().state.contact?.maybeName;
-    final callRoutingState = context.read<CallRoutingCubit>().state;
+    final callRoutingCubit = context.read<CallRoutingCubit>();
     final callBloc = context.read<CallBloc>();
+    final callRoutingState = callRoutingCubit.state;
+    final displayName = context.read<KeypadCubit>().state.contact?.maybeName;
+    final destination = _popNumber();
 
     if (callRoutingState?.additionalNumbers.contains(from) ?? false) {
       callBloc.add(CallControlEvent.started(
-        number: _popNumber(),
+        number: destination,
         video: video,
         displayName: displayName,
         fromNumber: from,
       ));
     } else {
+      final settingsFrom = callRoutingCubit.getFromNumber(destination);
+
       callBloc.add(CallControlEvent.started(
-        number: _popNumber(),
+        number: destination,
         video: video,
         displayName: displayName,
+        fromNumber: settingsFrom,
       ));
     }
   }

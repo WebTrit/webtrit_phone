@@ -407,6 +407,7 @@ class _MainShellState extends State<MainShell> {
                   create: (_) => CallRoutingCubit(
                     context.read<UserRepository>(),
                     context.read<LinesStateRepository>(),
+                    context.read<AppPreferences>(),
                   ),
                 ),
               ],

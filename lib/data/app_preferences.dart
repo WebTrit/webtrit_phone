@@ -79,7 +79,7 @@ abstract class AppPreferences {
 
   Future<void> setPearConnectionSettings(PeerConnectionSettings settings);
 
-  CallerIdSettings? getCallerIdSettings();
+  CallerIdSettings getCallerIdSettings();
 
   Future<void> setCallerIdSettings(CallerIdSettings settings);
 }
@@ -446,9 +446,9 @@ class AppPreferencesImpl
   }
 
   @override
-  CallerIdSettings? getCallerIdSettings() {
+  CallerIdSettings getCallerIdSettings() {
     final callerIdSettingsString = _sharedPreferences.getString(_kCallerIdSettingsKey);
-    if (callerIdSettingsString == null) return null;
+    if (callerIdSettingsString == null) return const CallerIdSettings();
     return callerIdSettingsFromJson(callerIdSettingsString);
   }
 

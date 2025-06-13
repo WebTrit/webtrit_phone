@@ -54,7 +54,7 @@ class CallerIdSettingsCubit extends Cubit<CallerIdSettingsState?> {
     final additionalNumbers = userInfo.numbers.additional?.nonNulls.toList() ?? <String>[];
 
     emit(CallerIdSettingsState(
-      settings: settings ?? const CallerIdSettings(),
+      settings: settings,
       mainNumber: mainNumber,
       additionalNumbers: additionalNumbers,
     ));
@@ -64,7 +64,7 @@ class CallerIdSettingsCubit extends Cubit<CallerIdSettingsState?> {
     final state = this.state;
     if (state == null) return;
 
-    final settings = state.settings.copyWith(defaultNumber: number);
+    final settings = state.settings.copyWithDefaultNumber(number);
     _appPreferences.setCallerIdSettings(settings);
     emit(state.copyWith(settings: settings));
   }
@@ -74,7 +74,7 @@ class CallerIdSettingsCubit extends Cubit<CallerIdSettingsState?> {
     if (state == null) return;
 
     final matcher = PrefixMatcher(prefix, number);
-    final settings = state.settings.copyWith(matchers: [...state.settings.matchers, matcher]);
+    final settings = state.settings.copyWithMatchers([...state.settings.matchers, matcher]);
     _appPreferences.setCallerIdSettings(settings);
     emit(state.copyWith(settings: settings));
   }
@@ -84,7 +84,7 @@ class CallerIdSettingsCubit extends Cubit<CallerIdSettingsState?> {
     if (state == null) return;
 
     final matchers = state.settings.matchers.whereNot((m) => m is PrefixMatcher && m.prefix == prefix).toList();
-    final settings = state.settings.copyWith(matchers: matchers);
+    final settings = state.settings.copyWithMatchers(matchers);
     _appPreferences.setCallerIdSettings(settings);
     emit(state.copyWith(settings: settings));
   }

@@ -3,10 +3,9 @@ import 'dart:async';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:stream_transform/stream_transform.dart';
+import 'package:webtrit_phone/data/app_preferences.dart';
 
 import 'package:webtrit_phone/repositories/repositories.dart';
-
-// TODO: rename to call lines cubit
 
 class CallRoutingState extends Equatable {
   CallRoutingState._(
@@ -14,7 +13,6 @@ class CallRoutingState extends Equatable {
     this.additionalNumbers,
     this.mainLinesState,
     this.guestLineState,
-    this.useAdditionalNumber,
   );
 
   /// The main number of the user. From which the user makees calls regularly.
@@ -32,36 +30,24 @@ class CallRoutingState extends Equatable {
   /// `null` means that guest line is not supported.
   final LineState? guestLineState;
 
-  /// The number from which the user prefer make calls using guest line.
-  final String? useAdditionalNumber;
-
-  /// Return true if the user supports make calls using guest line with additional numbers.
-  late final callAsSupports = guestLineState != null && additionalNumbers.isNotEmpty;
-
-  /// Returns true if the user can make calls using guest line with additional numbers.
-  late final canCallAs = guestLineState == LineState.idle && additionalNumbers.isNotEmpty;
-
-  /// Returns boolean indicating if the user can make calls using main number.
-  late final canCallWithMainNumber = mainLinesState.any((lineState) => lineState == LineState.idle);
-
   /// Returns true if the user can make calls using any of the numbers.
   late final allNumbers = <String>[mainNumber, ...additionalNumbers];
 
   @override
-  List<Object?> get props => [mainNumber, additionalNumbers, mainLinesState, guestLineState, useAdditionalNumber];
+  List<Object?> get props => [mainNumber, additionalNumbers, mainLinesState, guestLineState];
 
   @override
   String toString() {
-    return 'CallRoutingState{mainNumber: $mainNumber, additionalNumbers: $additionalNumbers, mainLinesState: $mainLinesState, guestLineState: $guestLineState, useAdditionalNumber: $useAdditionalNumber}';
-  }
-
-  CallRoutingState copyWithUseAdditionalNumber(String? number) {
-    return CallRoutingState._(mainNumber, additionalNumbers, mainLinesState, guestLineState, number);
+    return 'CallRoutingState{mainNumber: $mainNumber, additionalNumbers: $additionalNumbers, mainLinesState: $mainLinesState, guestLineState: $guestLineState}';
   }
 }
 
 class CallRoutingCubit extends Cubit<CallRoutingState?> {
-  CallRoutingCubit(this._userRepository, this._linesStateRepository) : super(null) {
+  CallRoutingCubit(
+    this._userRepository,
+    this._linesStateRepository,
+    this._appPreferences,
+  ) : super(null) {
     _infoSub = _userRepository
         .getInfoAndListen()
         .combineLatest(_linesStateRepository.getStateAndListen(), _combineInfo)
@@ -70,6 +56,7 @@ class CallRoutingCubit extends Cubit<CallRoutingState?> {
 
   final LinesStateRepository _linesStateRepository;
   final UserRepository _userRepository;
+  final AppPreferences _appPreferences;
   late final StreamSubscription _infoSub;
 
   CallRoutingState _combineInfo(UserInfo userInfo, LinesState linesState) {
@@ -78,15 +65,39 @@ class CallRoutingCubit extends Cubit<CallRoutingState?> {
     final mainLinesState = linesState.mainLines;
     final guestLineState = linesState.guestLine;
 
-    // Remove selected number if its not available after update or keep it if its available
-    final oldUseNumber = state?.useAdditionalNumber;
-    final useAdditionalNumber = additionalNumbers.contains(oldUseNumber) ? oldUseNumber : null;
+    final callerIdSettings = _appPreferences.getCallerIdSettings();
+    final matchers = callerIdSettings.matchers;
+    final defaultNumber = callerIdSettings.defaultNumber;
 
-    return CallRoutingState._(mainNumber, additionalNumbers, mainLinesState, guestLineState, useAdditionalNumber);
+    // Reset cli settings if additional number removed from user
+    if (defaultNumber != null && !additionalNumbers.contains(defaultNumber)) {
+      _appPreferences.setCallerIdSettings(callerIdSettings.copyWithDefaultNumber(null));
+      additionalNumbers.add(defaultNumber);
+    }
+    for (final matcher in matchers) {
+      if (!additionalNumbers.contains(matcher.number)) {
+        final filteredMatchers = matchers.where((m) => m.number != matcher.number).toList();
+        _appPreferences.setCallerIdSettings(callerIdSettings.copyWithMatchers(filteredMatchers));
+      }
+    }
+
+    return CallRoutingState._(mainNumber, additionalNumbers, mainLinesState, guestLineState);
   }
 
-  void setAdditionalNumberToUse(String? number) {
-    emit(state!.copyWithUseAdditionalNumber(number));
+  String? getFromNumber(String destination) {
+    final callerIdSettings = _appPreferences.getCallerIdSettings();
+    final matchers = callerIdSettings.matchers;
+    final defaultNumber = callerIdSettings.defaultNumber;
+
+    final matched = matchers.where((m) => m.match(destination)).toList();
+    if (matched.isNotEmpty) {
+      // Sort by match index to find the longest match
+      // e.g +126812345678 will match +1268 against +1
+      matched.sort((a, b) => b.matchIndex.compareTo(a.matchIndex));
+      return matched.first.number;
+    }
+
+    return defaultNumber;
   }
 
   @override

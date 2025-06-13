@@ -17,27 +17,33 @@ class CallerIdSettings extends Equatable {
     return 'CallerIdSettings(defaultNumber: $defaultNumber, matchers: $matchers)';
   }
 
-  CallerIdSettings copyWith({String? defaultNumber, List<NumberMatcher>? matchers}) {
-    return CallerIdSettings(defaultNumber: defaultNumber ?? this.defaultNumber, matchers: matchers ?? this.matchers);
+  CallerIdSettings copyWithDefaultNumber(String? defaultNumber) {
+    return CallerIdSettings(defaultNumber: defaultNumber, matchers: matchers);
+  }
+
+  CallerIdSettings copyWithMatchers(List<NumberMatcher> matchers) {
+    return CallerIdSettings(defaultNumber: defaultNumber, matchers: matchers);
   }
 }
 
 sealed class NumberMatcher {
-  String? match(String destinationNumber);
+  bool match(String destinationNumber);
+  String get number;
+  int get matchIndex;
 }
 
 final class PrefixMatcher extends NumberMatcher with EquatableMixin {
   PrefixMatcher(this.prefix, this.number);
   final String prefix;
+
+  @override
   final String number;
 
   @override
-  String? match(String destinationNumber) {
-    if (destinationNumber.startsWith(prefix)) {
-      return destinationNumber.substring(prefix.length);
-    }
-    return null;
-  }
+  bool match(String destinationNumber) => destinationNumber.startsWith(prefix);
+
+  @override
+  int get matchIndex => prefix.length;
 
   @override
   String toString() => 'PrefixMatcher(prefix: $prefix, number: $number)';
