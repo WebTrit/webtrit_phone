@@ -2281,30 +2281,32 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       linesCount: stateHandshake.lines.length,
     ));
 
-    // TODO: restore this logic with guest line support
-    // activeCallsLoop:
+    // Hang up all active calls that are not associated with any line
+    // or guest line, indicating that they are no longer valid.
+    //
+    // This is needed to drop or retain calls after reconnecting to the signaling server
+    activeCallsLoop:
     for (final activeCall in state.activeCalls) {
-      // if (activeCall.line == _kUndefinedLine) {
-      //   for (final line in stateHandshake.lines) {
-      //     if (line != null && line.callId == activeCall.callId) {
-      //       continue activeCallsLoop;
-      //     }
-      //   }
-      // } else if (activeCall.line < stateHandshake.lines.length) {
-      //   final line = stateHandshake.lines[activeCall.line];
-      //   if (line != null && line.callId == activeCall.callId) {
-      //     continue activeCallsLoop;
-      //   }
-      // }
-      // if (activeCall.direction == CallDirection.outgoing &&
-      //     activeCall.acceptedTime == null &&
-      //     activeCall.hungUpTime == null) {
-      //   // Handles an outgoing active call that has not yet started, typically initiated
-      //   // by the `continueStartCallIntent` callback of `CallkeepDelegate`.
-      //   // TODO: Implement a dedicated flag to confirm successful execution of
-      //   // OutgoingCallRequest, ensuring reliable outgoing active call state tracking.
-      //   continue activeCallsLoop;
-      // }
+      // Ignore active calls that are already associated with a line or guest line
+      //
+      // If you have troubles with line position mismatch replace this with
+      // following code that deal with it: https://gist.github.com/digiboridev/f7f1020731e8f247b5891983433bd159
+      for (final line in [...stateHandshake.lines, stateHandshake.guestLine]) {
+        if (line != null && line.callId == activeCall.callId) {
+          continue activeCallsLoop;
+        }
+      }
+
+      // Handles an outgoing active call that has not yet started, typically initiated
+      // by the `continueStartCallIntent` callback of `CallkeepDelegate`.
+      //
+      // TODO: Implement a dedicated flag to confirm successful execution of
+      // OutgoingCallRequest, ensuring reliable outgoing active call state tracking.
+      if (activeCall.direction == CallDirection.outgoing &&
+          activeCall.acceptedTime == null &&
+          activeCall.hungUpTime == null) {
+        continue activeCallsLoop;
+      }
 
       _peerConnectionConditionalCompleteError(activeCall.callId, 'Active call Request Terminated');
 
@@ -2316,7 +2318,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       ));
     }
 
-    final lines = stateHandshake.lines.whereType<Line>();
+    final lines = [...stateHandshake.lines, stateHandshake.guestLine].whereType<Line>();
     final localConnections = await callkeepConnections.getConnections();
 
     for (final activeLine in lines) {

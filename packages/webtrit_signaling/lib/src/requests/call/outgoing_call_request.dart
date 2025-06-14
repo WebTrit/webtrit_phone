@@ -38,9 +38,9 @@ class OutgoingCallRequest extends CallRequest {
       line: json['line'],
       callId: json['call_id'],
       number: json['number'],
-      jsep: json['jsep'],
       referId: json['refer_id'],
       from: json['from'],
+      jsep: json['jsep'],
     );
   }
 
@@ -52,9 +52,9 @@ class OutgoingCallRequest extends CallRequest {
       'line': line,
       'call_id': callId,
       'number': number,
-      'jsep': jsep,
       'refer_id': referId,
       'from': from,
+      'jsep': jsep,
     };
   }
 }
