@@ -20,6 +20,7 @@ export 'feature_access/feature_access.dart';
 export 'ice_settings.dart';
 export 'incoming_call_type.dart';
 export 'keypad_key.dart';
+export 'lines_state.dart';
 export 'local_contact.dart';
 export 'local_contact_email.dart';
 export 'local_contact_phone.dart';

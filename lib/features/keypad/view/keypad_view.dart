@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/theme/theme.dart';
-
-// TODO: l10n
+import 'package:webtrit_phone/features/features.dart';
+import 'package:webtrit_phone/app/notifications/notifications.dart';
 
 class KeypadView extends StatefulWidget {
   const KeypadView({
@@ -108,7 +107,7 @@ class KeypadViewState extends State<KeypadView> {
                       onTransferPressed: widget.transferEnabled && activeCalls.isNotEmpty ? _transferCall : null,
                       onInitiatedTransferPressed: widget.transferEnabled && transferInitiated ? _transferCall : null,
                       callNumbers: callRoutingState?.allNumbers ?? [],
-                      onCallFrom: (number) => _createCall(from: number),
+                      onCallFrom: (number) => _createCall(fromNumber: number),
                     );
                   },
                 );
@@ -129,32 +128,41 @@ class KeypadViewState extends State<KeypadView> {
     return number;
   }
 
-  void _createCall({bool video = false, String? from}) {
+  void _createCall({bool video = false, String? fromNumber}) {
     _focusNode.unfocus();
-
-    final callRoutingCubit = context.read<CallRoutingCubit>();
-    final callBloc = context.read<CallBloc>();
-    final callRoutingState = callRoutingCubit.state;
-    final displayName = context.read<KeypadCubit>().state.contact?.maybeName;
     final destination = _popNumber();
 
-    if (callRoutingState?.additionalNumbers.contains(from) ?? false) {
-      callBloc.add(CallControlEvent.started(
-        number: destination,
-        video: video,
-        displayName: displayName,
-        fromNumber: from,
-      ));
-    } else {
-      final settingsFrom = callRoutingCubit.getFromNumber(destination);
+    final callRoutingCubit = context.read<CallRoutingCubit>();
+    final callRoutingState = callRoutingCubit.state;
+    if (callRoutingState == null) return;
 
-      callBloc.add(CallControlEvent.started(
-        number: destination,
-        video: video,
-        displayName: displayName,
-        fromNumber: settingsFrom,
-      ));
+    /// For cases when user sets additional number for outgoing calls by default
+    /// and wants to call from main number explicitly using dropdown menu.
+    final shouldUseMainLine = fromNumber == callRoutingState.mainNumber;
+    if (shouldUseMainLine) {
+      fromNumber = null;
+    } else {
+      // Apply caller ID settings to determine the `from` number if not specified.
+      fromNumber ??= callRoutingCubit.getFromNumber(destination);
     }
+
+    final hasIdleMainLine = callRoutingState.hasIdleMainLine;
+    final hasIdleGuestLine = callRoutingState.hasIdleGuestLine;
+    if ((fromNumber == null && !hasIdleMainLine) || (fromNumber != null && !hasIdleGuestLine)) {
+      final notificationsBloc = context.read<NotificationsBloc>();
+      const notification = CallUndefinedLineNotification();
+      notificationsBloc.add(const NotificationsSubmitted(notification));
+      return;
+    }
+
+    final callBloc = context.read<CallBloc>();
+    final displayName = context.read<KeypadCubit>().state.contact?.maybeName;
+    callBloc.add(CallControlEvent.started(
+      number: destination,
+      video: video,
+      displayName: displayName,
+      fromNumber: fromNumber,
+    ));
   }
 
   void _transferCall() {
