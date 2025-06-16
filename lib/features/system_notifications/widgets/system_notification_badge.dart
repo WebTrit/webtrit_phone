@@ -54,6 +54,7 @@ class _SystemNotificationsBadgeState extends State<SystemNotificationsBadge> wit
             height: kMinInteractiveDimension,
             child: ClipOval(
               child: Material(
+                color: Colors.transparent,
                 child: InkWell(
                   onTap: () {
                     context.router.navigate(const SystemNotificationsPageRoute());
