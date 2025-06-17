@@ -23,6 +23,7 @@ part 'login_state.dart';
 class LoginCubit extends Cubit<LoginState> with SystemInfoApiMapper {
   LoginCubit({
     @visibleForTesting this.createWebtritApiClient = defaultCreateWebtritApiClient,
+    @visibleForTesting this.createHttpRequestExecutor = defaultCreateHttpRequestExecutor,
     required this.notificationsBloc,
     required this.packageInfo,
     required this.appInfo,
@@ -30,6 +31,7 @@ class LoginCubit extends Cubit<LoginState> with SystemInfoApiMapper {
   }) : super(const LoginState());
 
   final WebtritApiClientFactory createWebtritApiClient;
+  final HttpRequestExecutorFactory createHttpRequestExecutor;
   final NotificationsBloc notificationsBloc;
   final PlatformInfo platformInfo;
   final PackageInfo packageInfo;
@@ -344,7 +346,7 @@ class LoginCubit extends Cubit<LoginState> with SystemInfoApiMapper {
     ));
   }
 
-  void loginCustomSignupRequest(Map<String, dynamic>? extras) async {
+  void loginCustomSignupRequest(Map<String, dynamic>? extras, Map<String, dynamic>? embeddedCallbackData) async {
     emit(state.copyWith(
       processing: true,
     ));
@@ -363,7 +365,10 @@ class LoginCubit extends Cubit<LoginState> with SystemInfoApiMapper {
         emit(state.copyWith(systemInfo: systemInfo, processing: false));
       }
 
-      _handleLoginResult(result);
+      _handleLoginResult(
+        result,
+        embeddedCallbackData != null ? EmbeddedUrlCallbackModel.fromJson(embeddedCallbackData) : null,
+      );
     } catch (e) {
       notificationsBloc.add(NotificationsSubmitted(LoginErrorNotification(e)));
 
@@ -392,7 +397,18 @@ class LoginCubit extends Cubit<LoginState> with SystemInfoApiMapper {
     }
   }
 
-  void _handleLoginResult(SessionResult result) {
+  void _handleLoginResult(SessionResult result, [EmbeddedUrlCallbackModel? callbackModel]) {
+    _handleLoginSideEffects(result, callbackModel);
+    _applyLoginResult(result);
+  }
+
+  void _handleLoginSideEffects(SessionResult result, EmbeddedUrlCallbackModel? callbackModel) {
+    if (result is SessionToken && callbackModel != null) {
+      unawaited(createHttpRequestExecutor(callbackModel));
+    }
+  }
+
+  void _applyLoginResult(SessionResult result) {
     if (result is SessionOtpProvisional) {
       emit(state.copyWith(
         processing: false,

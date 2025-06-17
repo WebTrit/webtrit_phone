@@ -87,10 +87,11 @@ class _LoginSignupEmbeddedRequestScreenState extends State<LoginSignupEmbeddedRe
       final decoded = jsonDecode(message.message);
       final event = decoded['event'];
       final data = decoded['data'];
+      final embeddedCallbackData = decoded['callback'];
 
       if (event == 'signup') {
         _webViewController.runJavaScript('showProgress();');
-        context.read<LoginCubit>().loginCustomSignupRequest(data);
+        context.read<LoginCubit>().loginCustomSignupRequest(data, embeddedCallbackData);
       }
     } catch (e, st) {
       _logger.severe('Error decoding message', e, st);
