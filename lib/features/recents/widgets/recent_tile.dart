@@ -15,6 +15,7 @@ class RecentTile extends StatefulWidget {
   const RecentTile({
     super.key,
     required this.recent,
+    required this.callNumbers,
     this.dateFormat,
     this.onTap,
     this.onAudioCallPressed,
@@ -25,11 +26,12 @@ class RecentTile extends StatefulWidget {
     this.onViewContactPressed,
     this.onCallLogPressed,
     this.onDelete,
+    this.onCallFrom,
   });
 
   final Recent recent;
+  final List<String> callNumbers;
   final DateFormat? dateFormat;
-
   final Function()? onTap;
   final Function()? onAudioCallPressed;
   final Function()? onVideoCallPressed;
@@ -39,6 +41,7 @@ class RecentTile extends StatefulWidget {
   final Function()? onViewContactPressed;
   final Function()? onCallLogPressed;
   final Function()? onDelete;
+  final Function(String)? onCallFrom;
 
   @override
   State<RecentTile> createState() => _RecentTileState();
@@ -61,6 +64,11 @@ class _RecentTileState extends State<RecentTile> {
           PopupMenuItem(
             onTap: widget.onVideoCallPressed,
             child: Text(context.l10n.numberActions_videoCall),
+          ),
+        for (final number in widget.callNumbers)
+          PopupMenuItem(
+            onTap: () => widget.onCallFrom?.call(number),
+            child: Text(context.l10n.numberActions_callFrom(number)),
           ),
         if (widget.onTransferPressed != null)
           PopupMenuItem(

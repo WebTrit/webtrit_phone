@@ -10,6 +10,7 @@ class FavoriteTile extends StatefulWidget {
   const FavoriteTile({
     super.key,
     required this.favorite,
+    required this.callNumbers,
     this.onTap,
     this.onAudioCallPressed,
     this.onVideoCallPressed,
@@ -19,9 +20,11 @@ class FavoriteTile extends StatefulWidget {
     this.onViewContactPressed,
     this.onCallLogPressed,
     this.onDelete,
+    this.onCallFrom,
   });
 
   final Favorite favorite;
+  final List<String> callNumbers;
   final Function()? onTap;
   final Function()? onAudioCallPressed;
   final Function()? onVideoCallPressed;
@@ -31,6 +34,7 @@ class FavoriteTile extends StatefulWidget {
   final Function()? onViewContactPressed;
   final Function()? onCallLogPressed;
   final Function()? onDelete;
+  final Function(String)? onCallFrom;
 
   @override
   State<FavoriteTile> createState() => _FavoriteTileState();
@@ -50,6 +54,11 @@ class _FavoriteTileState extends State<FavoriteTile> {
           PopupMenuItem(
             onTap: widget.onVideoCallPressed,
             child: Text(context.l10n.numberActions_videoCall),
+          ),
+        for (final callNumber in widget.callNumbers)
+          PopupMenuItem(
+            onTap: () => widget.onCallFrom?.call(callNumber),
+            child: Text(context.l10n.numberActions_callFrom(callNumber)),
           ),
         if (widget.onTransferPressed != null)
           PopupMenuItem(
