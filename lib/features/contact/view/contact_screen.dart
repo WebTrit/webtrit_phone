@@ -32,6 +32,7 @@ class ContactScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
+    final colorScheme = themeData.colorScheme;
 
     return BlocBuilder<UserInfoCubit, UserInfoState>(
       builder: (context, userInfoState) {
@@ -57,7 +58,10 @@ class ContactScreen extends StatelessWidget {
                     actions: [
                       if (chatsEnabled && contact.canMessage)
                         IconButton(
-                          icon: const Icon(Icons.message),
+                          icon: Icon(
+                            Icons.message,
+                            color: colorScheme.onSurface,
+                          ),
                           onPressed: () {
                             context.router.navigate(ChatConversationScreenPageRoute(participantId: contact.sourceId));
                           },

@@ -37,16 +37,6 @@ class ContactPhoneTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List<PopupMenuEntry> actions = [
-      if (onAudioPressed != null)
-        PopupMenuItem(
-          onTap: onAudioPressed,
-          child: Text(context.l10n.numberActions_audioCall),
-        ),
-      if (onVideoPressed != null)
-        PopupMenuItem(
-          onTap: onVideoPressed,
-          child: Text(context.l10n.numberActions_videoCall),
-        ),
       if (onTransferPressed != null)
         PopupMenuItem(
           onTap: onTransferPressed,
@@ -86,7 +76,20 @@ class ContactPhoneTile extends StatelessWidget {
               splashRadius: 24,
               icon: const Icon(Icons.phone_forwarded),
               onPressed: onInitiatedTransferPressed,
+            )
+          else ...[
+            IconButton(
+              splashRadius: 24,
+              icon: const Icon(Icons.call),
+              onPressed: onAudioPressed,
             ),
+            if (onVideoPressed != null)
+              IconButton(
+                splashRadius: 24,
+                icon: const Icon(Icons.videocam),
+                onPressed: onVideoPressed,
+              ),
+          ],
           if (onMessagePressed != null)
             IconButton(
               splashRadius: 24,
@@ -94,6 +97,7 @@ class ContactPhoneTile extends StatelessWidget {
               onPressed: onMessagePressed,
             ),
           PopupMenuButton(
+            icon: const Icon(Icons.more_vert),
             itemBuilder: (context) {
               return actions;
             },
