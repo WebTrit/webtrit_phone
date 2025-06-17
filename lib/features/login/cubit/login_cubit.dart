@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:linkify/linkify.dart';
+import 'package:logging/logging.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:webtrit_api/webtrit_api.dart';
@@ -19,6 +20,8 @@ import '../login.dart';
 part 'login_cubit.freezed.dart';
 
 part 'login_state.dart';
+
+final _logger = Logger('LoginCubit');
 
 class LoginCubit extends Cubit<LoginState> with SystemInfoApiMapper {
   LoginCubit({
@@ -411,14 +414,18 @@ class LoginCubit extends Cubit<LoginState> with SystemInfoApiMapper {
   /// Note: This logic is currently tied to the login flow,
   /// but may be reused in other contexts. If that happens,
   /// consider moving it to a separate feature/module and injecting it via the widget tree.
-  void _handleLoginSideEffects(SessionResult result, RawHttpRequest? request) {
+  Future<void> _handleLoginSideEffects(SessionResult result, RawHttpRequest? request) async {
     if (result is SessionToken && request != null) {
-      unawaited(createHttpRequestExecutor().execute(
-        method: request.method,
-        url: request.url,
-        headers: request.headers,
-        data: request.data,
-      ));
+      try {
+        await createHttpRequestExecutor().execute(
+          method: request.method,
+          url: request.url,
+          headers: request.headers,
+          data: request.data,
+        );
+      } catch (e) {
+        _logger.warning(e);
+      }
     }
   }
 
