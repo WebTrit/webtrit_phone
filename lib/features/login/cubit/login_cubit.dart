@@ -402,6 +402,12 @@ class LoginCubit extends Cubit<LoginState> with SystemInfoApiMapper {
     _applyLoginResult(result);
   }
 
+  /// Triggers a follow-up request after session creation,
+  /// if callback data (e.g. from an embedded page or external configuration) is provided.
+  ///
+  /// Note: This logic is currently tied to the login flow,
+  /// but may be reused in other contexts. If that happens,
+  /// consider moving it to a separate feature/module and injecting it via the widget tree.
   void _handleLoginSideEffects(SessionResult result, RawHttpRequest? callbackModel) {
     if (result is SessionToken && callbackModel != null) {
       unawaited(createHttpRequestExecutor(callbackModel));

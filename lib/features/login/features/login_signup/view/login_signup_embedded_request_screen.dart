@@ -85,8 +85,11 @@ class _LoginSignupEmbeddedRequestScreenState extends State<LoginSignupEmbeddedRe
   void _onJavaScriptMessageReceived(JavaScriptMessage message) {
     try {
       final decoded = jsonDecode(message.message);
+      // Type of event sent from the embedded page (e.g. 'signup').
       final event = decoded['event'];
+      // Payload associated with the event, typically containing user or signup data.
       final data = decoded['data'];
+      // Optional callback data that may contain instructions for an additional HTTP request.
       final embeddedCallbackData = decoded['callback'];
 
       if (event == 'signup') {
