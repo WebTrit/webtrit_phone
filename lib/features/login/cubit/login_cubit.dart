@@ -397,8 +397,8 @@ class LoginCubit extends Cubit<LoginState> with SystemInfoApiMapper {
     }
   }
 
-  void _handleLoginResult(SessionResult result, [RawHttpRequest? callbackModel]) {
-    _handleLoginSideEffects(result, callbackModel);
+  void _handleLoginResult(SessionResult result, [RawHttpRequest? request]) {
+    _handleLoginSideEffects(result, request);
     _applyLoginResult(result);
   }
 
@@ -408,9 +408,9 @@ class LoginCubit extends Cubit<LoginState> with SystemInfoApiMapper {
   /// Note: This logic is currently tied to the login flow,
   /// but may be reused in other contexts. If that happens,
   /// consider moving it to a separate feature/module and injecting it via the widget tree.
-  void _handleLoginSideEffects(SessionResult result, RawHttpRequest? callbackModel) {
-    if (result is SessionToken && callbackModel != null) {
-      unawaited(createHttpRequestExecutor(callbackModel));
+  void _handleLoginSideEffects(SessionResult result, RawHttpRequest? request) {
+    if (result is SessionToken && request != null) {
+      unawaited(createHttpRequestExecutor(request));
     }
   }
 
