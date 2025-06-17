@@ -4,7 +4,7 @@ import 'package:webtrit_phone/models/models.dart';
 
 typedef HttpRequestExecutorFactory = Future<void> Function(RawHttpRequest request);
 
-Future<void> defaultCreateHttpRequestExecutor(RawHttpRequest request) {
+Future<dynamic> defaultCreateHttpRequestExecutor(RawHttpRequest request) {
   final executor = HttpRequestExecutor();
   return executor.execute(
     method: request.method,
