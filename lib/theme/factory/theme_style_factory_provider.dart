@@ -114,7 +114,7 @@ class ThemeStyleFactoryProvider {
     return BottomNavigationBarThemeDataFactory(colorScheme, widgetConfig.bar.bottomNavigationBar).create();
   }
 
-  TabBarTheme createTabBarTheme() {
+  TabBarThemeData createTabBarTheme() {
     return TabBarThemeDataFactory(colorScheme, widgetConfig.bar.extTabBar).create();
   }
 
