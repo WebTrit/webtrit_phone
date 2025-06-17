@@ -40,7 +40,11 @@ final class PrefixMatcher extends NumberMatcher with EquatableMixin {
   final String number;
 
   @override
-  bool match(String destinationNumber) => destinationNumber.startsWith(prefix);
+  bool match(String destinationNumber) {
+    final prefixTrim = prefix.startsWith('+') ? prefix.substring(1) : prefix;
+    final destTrim = destinationNumber.startsWith('+') ? destinationNumber.substring(1) : destinationNumber;
+    return destTrim.startsWith(prefixTrim);
+  }
 
   @override
   int get matchIndex => prefix.length;
