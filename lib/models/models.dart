@@ -18,6 +18,7 @@ export 'favorite.dart';
 export 'feature_access/feature_access.dart';
 export 'ice_settings.dart';
 export 'incoming_call_type.dart';
+export 'integration/integration.dart';
 export 'keypad_key.dart';
 export 'local_contact.dart';
 export 'local_contact_email.dart';

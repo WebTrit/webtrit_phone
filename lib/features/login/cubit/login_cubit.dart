@@ -367,7 +367,7 @@ class LoginCubit extends Cubit<LoginState> with SystemInfoApiMapper {
 
       _handleLoginResult(
         result,
-        embeddedCallbackData != null ? EmbeddedUrlCallbackModel.fromJson(embeddedCallbackData) : null,
+        embeddedCallbackData != null ? RawHttpRequest.fromJson(embeddedCallbackData) : null,
       );
     } catch (e) {
       notificationsBloc.add(NotificationsSubmitted(LoginErrorNotification(e)));
@@ -397,12 +397,12 @@ class LoginCubit extends Cubit<LoginState> with SystemInfoApiMapper {
     }
   }
 
-  void _handleLoginResult(SessionResult result, [EmbeddedUrlCallbackModel? callbackModel]) {
+  void _handleLoginResult(SessionResult result, [RawHttpRequest? callbackModel]) {
     _handleLoginSideEffects(result, callbackModel);
     _applyLoginResult(result);
   }
 
-  void _handleLoginSideEffects(SessionResult result, EmbeddedUrlCallbackModel? callbackModel) {
+  void _handleLoginSideEffects(SessionResult result, RawHttpRequest? callbackModel) {
     if (result is SessionToken && callbackModel != null) {
       unawaited(createHttpRequestExecutor(callbackModel));
     }
