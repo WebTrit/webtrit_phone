@@ -413,7 +413,12 @@ class LoginCubit extends Cubit<LoginState> with SystemInfoApiMapper {
   /// consider moving it to a separate feature/module and injecting it via the widget tree.
   void _handleLoginSideEffects(SessionResult result, RawHttpRequest? request) {
     if (result is SessionToken && request != null) {
-      unawaited(createHttpRequestExecutor(request));
+      unawaited(createHttpRequestExecutor().execute(
+        method: request.method,
+        url: request.url,
+        headers: request.headers,
+        data: request.data,
+      ));
     }
   }
 
