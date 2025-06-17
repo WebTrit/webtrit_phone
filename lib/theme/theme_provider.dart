@@ -114,7 +114,6 @@ class ThemeProvider extends InheritedWidget {
       primaryColorDark: colorScheme.onSecondaryContainer,
       scaffoldBackgroundColor: colorScheme.surfaceBright,
       unselectedWidgetColor: colorScheme.onSurface,
-      indicatorColor: colorScheme.primary,
       appBarTheme: style.createAppBarTheme(),
       tabBarTheme: style.createTabBarTheme(),
       bottomNavigationBarTheme: style.createBottomNavigationBarThemeData(),
