@@ -31,6 +31,8 @@ class _LoginSignupEmbeddedRequestScreenState extends State<LoginSignupEmbeddedRe
 
   static const _jsChannelName = 'WebtritLoginChannel';
 
+  LoginCubit get _loginCubit => context.read<LoginCubit>();
+
   @override
   Widget build(BuildContext context) {
     return PopScope(
@@ -92,9 +94,9 @@ class _LoginSignupEmbeddedRequestScreenState extends State<LoginSignupEmbeddedRe
       // Optional callback data that may contain instructions for an additional HTTP request.
       final embeddedCallbackData = decoded['callback'];
 
-      if (event == 'signup') {
+      if (event == 'signup' && context.mounted) {
         _webViewController.runJavaScript('showProgress();');
-        context.read<LoginCubit>().loginCustomSignupRequest(data, embeddedCallbackData);
+        _loginCubit.loginCustomSignupRequest(data, embeddedCallbackData);
       }
     } catch (e, st) {
       _logger.severe('Error decoding message', e, st);

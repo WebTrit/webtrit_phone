@@ -346,7 +346,10 @@ class LoginCubit extends Cubit<LoginState> with SystemInfoApiMapper {
     ));
   }
 
-  void loginCustomSignupRequest(Map<String, dynamic>? extras, Map<String, dynamic>? embeddedCallbackData) async {
+  Future<void> loginCustomSignupRequest(
+    Map<String, dynamic>? extras,
+    Map<String, dynamic>? embeddedCallbackData,
+  ) async {
     emit(state.copyWith(
       processing: true,
     ));
