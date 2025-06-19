@@ -65,7 +65,7 @@ class UserRepository {
     }
   }
 
-  Future<UserInfo> getInfo([bool force = false]) {
+  Future<UserInfo?> getInfo([bool force = false]) {
     if (force == false && _lastInfo != null) {
       return Future.value(_lastInfo);
     } else {

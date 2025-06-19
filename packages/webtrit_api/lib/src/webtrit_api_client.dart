@@ -373,7 +373,6 @@ class WebtritApiClient {
       return UserInfo.fromJson(responseJson);
     } on RequestFailure catch (e) {
       if (e.statusCode == 404) {
-        _logger.warning('User not found (404): throwing UserNotFoundException');
         throw UserNotFoundException(
           url: e.url,
           requestId: e.requestId,
