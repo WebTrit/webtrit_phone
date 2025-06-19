@@ -21,7 +21,7 @@ class UserInfoCubit extends Cubit<UserInfoState> {
   late final StreamSubscription _userInfoSub;
   late final StreamSubscription _connectivitySub;
 
-  void _handleUserInfo(UserInfo userInfo) async {
+  void _handleUserInfo(UserInfo? userInfo) async {
     emit(UserInfoState(userInfo: userInfo));
   }
 

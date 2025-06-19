@@ -39,3 +39,14 @@ class EndpointNotSupportedException extends RequestFailure {
     required List<String> recognizedNotSupportedCodes,
   }) : super();
 }
+
+class UserNotFoundException extends RequestFailure {
+  UserNotFoundException({
+    required super.url,
+    required super.requestId,
+    required super.statusCode,
+  });
+
+  @override
+  String toString() => 'UserNotFoundException($statusCode, $url)';
+}
