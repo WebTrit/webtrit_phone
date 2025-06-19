@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:http/http.dart' as http;
@@ -10,14 +9,13 @@ import 'package:meta/meta.dart';
 import 'package:_http_client/_http_client.dart';
 
 import 'exceptions.dart';
+import 'utils/request_utils.dart';
 import 'webtrit_api_request_options.dart';
 import 'webtrit_api_response_options.dart';
 import 'models/models.dart';
 
 // TODO(Serdun): Use correct naming for request and response options
 class WebtritApiClient {
-  static final _requestIdRandom = Random();
-
   final Logger _logger;
 
   final _apiBasePathSegments = ['api', 'v1'];
@@ -91,7 +89,7 @@ class WebtritApiClient {
       queryParameters: queryParameters,
     );
 
-    final xRequestId = requestId ?? _generateRequestId();
+    final xRequestId = requestId ?? RequestUtil.generate();
 
     final requestHeaders = {
       'content-type': 'application/json; charset=utf-8',
@@ -174,10 +172,6 @@ class WebtritApiClient {
         await Future.delayed(options.retryDelay);
       }
     }
-  }
-
-  String _generateRequestId([int length = 32]) {
-    return String.fromCharCodes(List.generate(length, (index) => _requestIdRandom.nextInt(26) + 97));
   }
 
   Future<dynamic> _httpClientExecuteGet(
