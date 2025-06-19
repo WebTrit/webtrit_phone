@@ -363,14 +363,24 @@ class WebtritApiClient {
     String token, {
     RequestOptions options = const RequestOptions(),
   }) async {
-    final responseJson = await _httpClientExecuteGet(
-      ['user'],
-      null,
-      token,
-      requestOptions: options,
-    );
-
-    return UserInfo.fromJson(responseJson);
+    try {
+      final responseJson = await _httpClientExecuteGet(
+        ['user'],
+        null,
+        token,
+        requestOptions: options,
+      );
+      return UserInfo.fromJson(responseJson);
+    } on RequestFailure catch (e) {
+      if (e.statusCode == 404) {
+        throw UserNotFoundException(
+          url: e.url,
+          requestId: e.requestId,
+          statusCode: e.statusCode!,
+        );
+      }
+      rethrow;
+    }
   }
 
   Future<List<UserContact>> getUserContactList(
