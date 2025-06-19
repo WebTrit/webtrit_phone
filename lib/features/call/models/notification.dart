@@ -83,6 +83,15 @@ final class CallUserMediaErrorNotification extends ErrorNotification {
   }
 }
 
+final class CallSdpConfigurationErrorNotification extends ErrorNotification {
+  const CallSdpConfigurationErrorNotification();
+
+  @override
+  String l10n(BuildContext context) {
+    return context.l10n.notifications_errorSnackBarAction_callSdpConfiguration;
+  }
+}
+
 final class CallUndefinedLineNotification extends ErrorNotification {
   const CallUndefinedLineNotification();
 
