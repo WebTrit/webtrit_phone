@@ -1854,7 +1854,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
       // According to RFC 8829 §5.6 (https://datatracker.ietf.org/doc/html/rfc8829#section-5.6),
       // localDescription should be set before sending the answer to transition into stable state.
-      await peerConnection.setLocalDescription(localDescription);
+      await peerConnection.setLocalDescription(localDescription).catchError((e) => throw SDPConfigurationError(e));
 
       await _signalingClient?.execute(AcceptRequest(
         transaction: WebtritSignalingClient.generateTransactionId(),
@@ -1879,6 +1879,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       switch (e) {
         case UserMediaError _:
           submitNotification(const CallUserMediaErrorNotification());
+          break;
+        case SDPConfigurationError _:
+          submitNotification(const CallSdpConfigurationErrorNotification());
           break;
         case TimeoutException _:
           submitNotification(const CallNegotiationTimeoutNotification());

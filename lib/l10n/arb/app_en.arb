@@ -706,6 +706,8 @@
   "@voicemail_Description_notSupported": {},
   "notifications_errorSnackBarAction_callUserMedia": "Check",
   "@notifications_errorSnackBarAction_callUserMedia": {},
+  "notifications_errorSnackBarAction_callSdpConfiguration": "Invalid SDP configuration",
+  "@notifications_errorSnackBarAction_callSdpConfiguration": {},
   "notifications_errorSnackBar_activeLineBlindTransferWarning": "You are already on the line with the recipient you are trying to blind transfer to",
   "@notifications_errorSnackBar_activeLineBlindTransferWarning": {},
   "notifications_errorSnackBar_appOffline": "Your application is currently offline",

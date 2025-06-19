@@ -63,7 +63,8 @@ import 'app_localizations_uk.g.dart';
 /// be consistent with the languages listed in the AppLocalizations.supportedLocales
 /// property.
 abstract class AppLocalizations {
-  AppLocalizations(String locale) : localeName = intl.Intl.canonicalizedLocale(locale.toString());
+  AppLocalizations(String locale)
+      : localeName = intl.Intl.canonicalizedLocale(locale.toString());
 
   final String localeName;
 
@@ -71,7 +72,8 @@ abstract class AppLocalizations {
     return Localizations.of<AppLocalizations>(context, AppLocalizations);
   }
 
-  static const LocalizationsDelegate<AppLocalizations> delegate = _AppLocalizationsDelegate();
+  static const LocalizationsDelegate<AppLocalizations> delegate =
+      _AppLocalizationsDelegate();
 
   /// A list of this localizations delegate along with the default localizations
   /// delegates.
@@ -83,7 +85,8 @@ abstract class AppLocalizations {
   /// Additional delegates can be added by appending to this list in
   /// MaterialApp. This list does not have to be used at all if a custom list
   /// of delegates is preferred or required.
-  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates = <LocalizationsDelegate<dynamic>>[
+  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates =
+      <LocalizationsDelegate<dynamic>>[
     delegate,
     GlobalMaterialLocalizations.delegate,
     GlobalCupertinoLocalizations.delegate,
@@ -1121,7 +1124,8 @@ abstract class AppLocalizations {
   ///
   /// In en, this message translates to:
   /// **'An incompatible instance version provided, please contact the administrator of your system (actual: {actual}, supported: {supportedConstraint})'**
-  String login_CoreVersionUnsupportedExceptionError(String actual, String supportedConstraint);
+  String login_CoreVersionUnsupportedExceptionError(
+      String actual, String supportedConstraint);
 
   /// No description provided for @login_RequestFailureEmptyEmailError.
   ///
@@ -1433,7 +1437,9 @@ abstract class AppLocalizations {
   ///
   /// In en, this message translates to:
   /// **'Incompatible WebTrit Cloud Backend version, please contact the administrator of your system.\n\nInstance version:\n{actual}\n\nSupported version:\n{supportedConstraint}'**
-  String main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError(String actual, String supportedConstraint);
+  String
+      main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError(
+          String actual, String supportedConstraint);
 
   /// No description provided for @main_CompatibilityIssueDialog_title.
   ///
@@ -2017,6 +2023,12 @@ abstract class AppLocalizations {
   /// **'Check'**
   String get notifications_errorSnackBarAction_callUserMedia;
 
+  /// No description provided for @notifications_errorSnackBarAction_callSdpConfiguration.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid SDP configuration'**
+  String get notifications_errorSnackBarAction_callSdpConfiguration;
+
   /// No description provided for @notifications_errorSnackBar_activeLineBlindTransferWarning.
   ///
   /// In en, this message translates to:
@@ -2099,13 +2111,15 @@ abstract class AppLocalizations {
   ///
   /// In en, this message translates to:
   /// **'Disconnected from the core with the code: {codeName}'**
-  String notifications_errorSnackBar_signalingDisconnectWithCodeName(String codeName);
+  String notifications_errorSnackBar_signalingDisconnectWithCodeName(
+      String codeName);
 
   /// No description provided for @notifications_errorSnackBar_signalingDisconnectWithSystemReason.
   ///
   /// In en, this message translates to:
   /// **'Disconnected from the core due to the following reason: {reason}'**
-  String notifications_errorSnackBar_signalingDisconnectWithSystemReason(String reason);
+  String notifications_errorSnackBar_signalingDisconnectWithSystemReason(
+      String reason);
 
   /// No description provided for @notifications_errorSnackBar_SignalingSessionMissed.
   ///
@@ -2129,7 +2143,8 @@ abstract class AppLocalizations {
   ///
   /// In en, this message translates to:
   /// **'Registration with the remote VoIP system failed due to the following reason: {reason}'**
-  String notifications_errorSnackBar_sipRegistrationFailed_WithSystemReason(String reason);
+  String notifications_errorSnackBar_sipRegistrationFailed_WithSystemReason(
+      String reason);
 
   /// No description provided for @notifications_errorSnackBar_sipServiceUnavailable.
   ///
@@ -3500,7 +3515,8 @@ abstract class AppLocalizations {
   String get numberActions_delete;
 }
 
-class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
+class _AppLocalizationsDelegate
+    extends LocalizationsDelegate<AppLocalizations> {
   const _AppLocalizationsDelegate();
 
   @override
@@ -3509,26 +3525,27 @@ class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> 
   }
 
   @override
-  bool isSupported(Locale locale) => <String>['en', 'it', 'uk'].contains(locale.languageCode);
+  bool isSupported(Locale locale) =>
+      <String>['en', 'it', 'uk'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
 }
 
 AppLocalizations lookupAppLocalizations(Locale locale) {
-
-
   // Lookup logic when only language code is specified.
   switch (locale.languageCode) {
-    case 'en': return AppLocalizationsEn();
-    case 'it': return AppLocalizationsIt();
-    case 'uk': return AppLocalizationsUk();
+    case 'en':
+      return AppLocalizationsEn();
+    case 'it':
+      return AppLocalizationsIt();
+    case 'uk':
+      return AppLocalizationsUk();
   }
 
   throw FlutterError(
-    'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
-    'an issue with the localizations generation tool. Please file an issue '
-    'on GitHub with a reproducible sample app and the gen-l10n configuration '
-    'that was used.'
-  );
+      'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
+      'an issue with the localizations generation tool. Please file an issue '
+      'on GitHub with a reproducible sample app and the gen-l10n configuration '
+      'that was used.');
 }
