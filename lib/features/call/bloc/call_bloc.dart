@@ -14,6 +14,7 @@ import 'package:logging/logging.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
+import 'package:webtrit_phone/extensions/rtc_peer_connection_extension.dart';
 import 'package:webtrit_signaling/webtrit_signaling.dart';
 import 'package:ssl_certificates/ssl_certificates.dart';
 
@@ -1395,14 +1396,14 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         await audioSender.track?.stop();
         await audioSender.replaceTrack(newAudioTrack);
       } else if (newAudioTrack != null) {
-        await peerConnection.addTrack(newAudioTrack, newLocalStream);
+        await peerConnection.safeAddTrack(newAudioTrack, newLocalStream);
       }
 
       if (videoSender != null && newVideoTrack != null) {
         await videoSender.track?.stop();
         await videoSender.replaceTrack(newVideoTrack);
       } else if (newVideoTrack != null) {
-        await peerConnection.addTrack(newVideoTrack, newLocalStream);
+        await peerConnection.safeAddTrack(newVideoTrack, newLocalStream);
       }
 
       emit(state.copyWithMappedActiveCall(
