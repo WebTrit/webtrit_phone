@@ -21,9 +21,6 @@ class TextThemeDataFactory implements ThemeStyleFactory<TextTheme> {
     try {
       return GoogleFonts.getTextTheme(fontFamily, baseTextTheme);
     } catch (e) {
-      if (fontFamily.toLowerCase() == 'montserrat') {
-        return baseTextTheme.apply(fontFamily: 'Montserrat');
-      }
       return baseTextTheme;
     }
   }
