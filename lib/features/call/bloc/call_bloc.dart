@@ -14,7 +14,7 @@ import 'package:logging/logging.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
-import 'package:webtrit_phone/extensions/rtc_peer_connection_extension.dart';
+
 import 'package:webtrit_signaling/webtrit_signaling.dart';
 import 'package:ssl_certificates/ssl_certificates.dart';
 
