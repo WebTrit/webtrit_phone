@@ -24,3 +24,4 @@ export 'uri_extension.dart';
 export 'user_info.dart';
 export 'web_resource_error.dart';
 export 'web_view_controller.dart';
+export 'rtc_peer_connection_extension.dart';
