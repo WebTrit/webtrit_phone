@@ -10,7 +10,7 @@
   "WEBTRIT_APP_NAME": "WebTrit",
   "_WEBTRIT_APP_ABOUT_URL": "",
   "WEBTRIT_APP_SALES_EMAIL": "sales@webtrit.com",
-  "WEBTRIT_APP_FCM_VAPID_KEY": "BPBbn4Fc-PNQA5_mSj623NYDEGa5lqFLKVZ9qcfLPp2zrot2Vb5GzCx-3IbhKi1EsFuzgHY11BOpkXvZqXq-5w4",
+  "WEBTRIT_APP_FCM_VAPID_KEY": "",
   "_WEBTRIT_APP_REMOTE_LOGZIO_LOGGING_URL": "",
   "_WEBTRIT_APP_REMOTE_LOGZIO_LOGGING_TOKEN": "",
   "_WEBTRIT_APP_REMOTE_LOGZIO_LOGGING_BUFFER_SIZE": "",
@@ -20,7 +20,7 @@
   "_WEBTRIT_HTTP_ALLOW ED_DOMAINS_DESCRIPTION": "List of HTTP domains allowed for cleartext (non-HTTPS) traffic. Use format: 'domain,includeSubdomains' (optional), separated by semicolons. Example: '127.0.0.1,false;dev.api.com,true;local.test'. If 'includeSubdomains' is omitted, it defaults to false. '127.0.0.1' is required for just_audio to enable local proxy features like headers and caching.",
   "WEBTRIT_CALL_TRIGGER_MECHANISM_SMS": false,
   "_WEBTRIT_CALL_TRIGGER_MECHANISM_SMS_DESCRIPTION": "Enable fallback incoming call triggering via specially formatted SMS (see CallKeep README for format and setup",
-    "WEBTRIT_CALL_TRIGGER_MECHANISM_SMS_PREFIX": "<#> WEBTRIT:",
+  "WEBTRIT_CALL_TRIGGER_MECHANISM_SMS_PREFIX": "<#> WEBTRIT:",
   "_WEBTRIT_CALL_TRIGGER_MECHANISM_SMS_PREFIX_DESCRIPTION": "SMS prefix used to filter relevant messages for fallback incoming call triggering",
   "WEBTRIT_CALL_TRIGGER_MECHANISM_SMS_REGEX_PATTERN": "https://app\\.webtrit\\.com/call\\?callId=([^&]+)&handle=([^&]+)&displayName=([^&]+)&hasVideo=(true|false)",
   "_WEBTRIT_CALL_TRIGGER_MECHANISM_SMS_REGEX_PATTERN_DESCRIPTION": "ICU-compatible regex pattern to extract callId, handle, displayName and hasVideo from the SMS body"
