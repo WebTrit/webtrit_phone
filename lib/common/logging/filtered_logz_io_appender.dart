@@ -29,7 +29,7 @@ class FilteredLogzIoAppender extends LogzIoApiAppender {
       if (RemoteLogFilter._shouldIgnoreDioError(e)) {
         _logger.info('Ignoring LogzIO DioException: $e');
       } else {
-        rethrow;
+        _logger.warning('LogzIO DioException (not ignored): $e');
       }
     }
   }
