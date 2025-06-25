@@ -18,7 +18,7 @@
   "_WEBTRIT_ANDROID_RELEASE_UPLOAD_KEYSTORE_PATH": "",
   "__WEBTRIT_ANDROID_RELEASE_UPLOAD_KEYSTORE_PATH_DESCRIPTION": "Optional path to directory containing upload-keystore-metadata.json and keystore file. Used to configure Android release signing automatically. If not provided, fallback to key.properties will be used.",
   "WEBTRIT_HTTP_ALLOWED_DOMAINS": "127.0.0.1",
-  "__WEBTRIT_HTTP_ALLOW ED_DOMAINS_DESCRIPTION": "List of HTTP domains allowed for cleartext (non-HTTPS) traffic. Use format: 'domain,includeSubdomains' (optional), separated by semicolons. Example: '127.0.0.1,false;dev.api.com,true;local.test'. If 'includeSubdomains' is omitted, it defaults to false. '127.0.0.1' is required for just_audio to enable local proxy features like headers and caching.",
+  "__WEBTRIT_HTTP_ALLOWED_DOMAINS_DESCRIPTION": "List of HTTP domains allowed for cleartext (non-HTTPS) traffic. Use format: 'domain,includeSubdomains' (optional), separated by semicolons. Example: '127.0.0.1,false;dev.api.com,true;local.test'. If 'includeSubdomains' is omitted, it defaults to false. '127.0.0.1' is required for just_audio to enable local proxy features like headers and caching.",
   "WEBTRIT_CALL_TRIGGER_MECHANISM_SMS": false,
   "__WEBTRIT_CALL_TRIGGER_MECHANISM_SMS_DESCRIPTION": "Enable fallback incoming call triggering via specially formatted SMS (see CallKeep README for format and setup",
   "WEBTRIT_CALL_TRIGGER_MECHANISM_SMS_PREFIX": "<#> WEBTRIT:",
