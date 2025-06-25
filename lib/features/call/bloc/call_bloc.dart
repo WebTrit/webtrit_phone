@@ -1,28 +1,26 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
-import 'package:flutter/widgets.dart' hide Notification;
-
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:clock/clock.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart' hide Notification;
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:logging/logging.dart';
+import 'package:ssl_certificates/ssl_certificates.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 import 'package:webtrit_signaling/webtrit_signaling.dart';
-import 'package:ssl_certificates/ssl_certificates.dart';
 
-import 'package:webtrit_phone/utils/utils.dart';
 import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/app/notifications/notifications.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
-import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/repositories/repositories.dart';
+import 'package:webtrit_phone/utils/utils.dart';
 
 import '../extensions/extensions.dart';
 import '../models/models.dart';
@@ -31,9 +29,7 @@ import '../utils/utils.dart';
 export 'package:webtrit_callkeep/webtrit_callkeep.dart' show CallkeepHandle, CallkeepHandleType;
 
 part 'call_bloc.freezed.dart';
-
 part 'call_event.dart';
-
 part 'call_state.dart';
 
 const int _kUndefinedLine = -1;
@@ -47,6 +43,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   final TrustedCertificates trustedCertificates;
 
   final CallLogsRepository callLogsRepository;
+  final CallPullDialogRepository callPullDialogRepository;
   final Function(Notification) submitNotification;
 
   final Callkeep callkeep;
@@ -75,6 +72,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     required this.token,
     required this.trustedCertificates,
     required this.callLogsRepository,
+    required this.callPullDialogRepository,
     required this.submitNotification,
     required this.callkeep,
     required this.callkeepConnections,
@@ -756,7 +754,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       updated: (event) => __onCallSignalingEventUpdated(event, emit),
       transfer: (value) => __onCallSignalingEventTransfer(value, emit),
       transferring: (value) => __onCallSignalingEventTransfering(value, emit),
-      notify: (value) => __onCallSignalingEventNotify(value, emit),
+      notifyDialogs: (value) => __onCallSignalingEventNotifyDialogs(value, emit),
+      notifyRefer: (value) => __onCallSignalingEventNotifyRefer(value, emit),
+      notifyUnknown: (value) => __onCallSignalingEventNotifyUnknown(value, emit),
       registering: (event) => __onCallSignalingEventRegistering(event, emit),
       registered: (event) => __onCallSignalingEventRegistered(event, emit),
       registrationFailed: (event) => __onCallSignalingEventRegistrationFailed(event, emit),
@@ -1087,31 +1087,48 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     emit(state.copyWithMappedActiveCall(event.callId, (_) => callUpdate));
   }
 
-  Future<void> __onCallSignalingEventNotify(
-    _CallSignalingEventNotify event,
+  Future<void> __onCallSignalingEventNotifyDialogs(
+    _CallSignalingEventNotifyDialogs event,
     Emitter<CallState> emit,
   ) async {
-    _logger.fine('__onCallSignalingEventNotify: $event');
+    _logger.fine('_CallSignalingEventNotifyDialogs: $event');
 
-    _handleSignalingEventCompleteTransferNotification(event);
-  }
+    List<CallPullDialog> remoteDialogs = [];
 
-  // Handles NOTIFY events indicating the completion of a call transfer.
-  // Triggered when a 'refer' NOTIFY message with 'SIP/2.0 200 OK' content and
-  // 'terminated' subscription state is received, indicating a successful transfer.
-  // This was the original call (call A) that was transferred. Notify events indicate
-  // the transfer status ('100 Trying', '200 OK'), but the call may not close
-  // automatically as it could be transferred to another session or line.
-  void _handleSignalingEventCompleteTransferNotification(_CallSignalingEventNotify event) {
-    if (event.notify == NotifyType.refer &&
-        event.contentType == NotifyContentType.messageSipfrag &&
-        NotifyContent.match200OK(event.content) &&
-        event.subscriptionState == SubscriptionState.terminated) {
-      // Verifies if the original call line is currently active in the state
-      if (state.activeCalls.any((it) => it.callId == event.callId)) {
-        add(CallControlEvent.ended(event.callId));
+    for (final dialog in event.dialogs) {
+      // Skip dialogs that are already active
+      if (state.activeCalls.any((call) => call.callId == dialog.callId)) continue;
+
+      // Resolve contact name for the dialog's remote number
+      final contactName = await contactNameResolver.resolveWithNumber(dialog.remoteNumber);
+      if (contactName != null) {
+        final dialogWithName = dialog.copyWith(remoteDisplayName: contactName);
+        remoteDialogs.add(dialogWithName);
+      } else {
+        remoteDialogs.add(dialog);
       }
     }
+
+    callPullDialogRepository.setDialogs(remoteDialogs.toList());
+  }
+
+  Future<void> __onCallSignalingEventNotifyRefer(
+    _CallSignalingEventNotifyRefer event,
+    Emitter<CallState> emit,
+  ) async {
+    _logger.fine('_CallSignalingEventNotifyRefer: $event');
+    if (event.subscriptionState != SubscriptionState.terminated) return;
+    if (event.state != ReferState.ok) return;
+
+    // Verifies if the original call line is currently active in the state
+    if (state.activeCalls.any((it) => it.callId == event.callId)) add(CallControlEvent.ended(event.callId));
+  }
+
+  Future<void> __onCallSignalingEventNotifyUnknown(
+    _CallSignalingEventNotifyUnknown event,
+    Emitter<CallState> emit,
+  ) async {
+    _logger.fine('_CallSignalingEventNotifyUnknown: $event');
   }
 
   Future<void> __onCallSignalingEventRegistering(
@@ -1218,6 +1235,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       video: event.video,
       createdTime: clock.now(),
       processingStatus: CallProcessingStatus.outgoingCreated,
+      fromReplaces: event.replaces,
     );
 
     emit(state.copyWithPushActiveCall(newCall).copyWith(minimized: false));
@@ -1757,6 +1775,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         number: activeCall.handle.normalizedValue(),
         jsep: localDescription.toMap(),
         referId: activeCall.fromReferId,
+        replaces: activeCall.fromReplaces,
       ));
 
       // In other cases setLocalDescription is called first; here it's delayed to avoid ICE race
@@ -2410,14 +2429,41 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         replaceCallId: event.replaceCallId,
       ));
     } else if (event is NotifyEvent) {
-      add(_CallSignalingEvent.notify(
-        line: event.line,
-        callId: event.callId,
-        notify: event.notify,
-        subscriptionState: event.subscriptionState,
-        contentType: event.contentType,
-        content: event.content,
-      ));
+      add(switch (event) {
+        DialogNotifyEvent event => _CallSignalingEvent.notifyDialogs(
+            line: event.line,
+            callId: event.callId,
+            notify: event.notify,
+            subscriptionState: event.subscriptionState,
+            dialogs: event.dialogs
+                .map((d) => CallPullDialog(
+                      id: d.id,
+                      state: d.state,
+                      direction: CallPullDialogDirection.values.byName(d.direction.name),
+                      callId: d.callId,
+                      localTag: d.localTag,
+                      remoteTag: d.remoteTag,
+                      remoteNumber: d.remoteNumber,
+                      remoteDisplayName: d.remoteDisplayName,
+                    ))
+                .toList(),
+          ),
+        ReferNotifyEvent event => _CallSignalingEvent.notifyRefer(
+            line: event.line,
+            callId: event.callId,
+            notify: event.notify,
+            subscriptionState: event.subscriptionState,
+            state: ReferState.values.byName(event.state.name),
+          ),
+        UnknownNotifyEvent event => _CallSignalingEvent.notifyUnknown(
+            line: event.line,
+            callId: event.callId,
+            notify: event.notify,
+            subscriptionState: event.subscriptionState,
+            contentType: event.contentType,
+            content: event.content,
+          ),
+      });
     } else if (event is RegisteringEvent) {
       add(const _CallSignalingEvent.registering());
     } else if (event is RegisteredEvent) {

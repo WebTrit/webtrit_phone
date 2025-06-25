@@ -211,6 +211,9 @@ class _MainShellState extends State<MainShell> {
             context.read<AppBloc>().state.token!,
           ),
         ),
+        RepositoryProvider<CallPullDialogRepository>(
+          create: (context) => CallPullDialogRepositoryMemoryImpl(),
+        ),
       ],
       child: MultiBlocProvider(
         providers: [
@@ -314,6 +317,7 @@ class _MainShellState extends State<MainShell> {
                 token: appBloc.state.token!,
                 trustedCertificates: appCertificates.trustedCertificates,
                 callLogsRepository: context.read<CallLogsRepository>(),
+                callPullDialogRepository: context.read<CallPullDialogRepository>(),
                 submitNotification: (n) => notificationsBloc.add(NotificationsSubmitted(n)),
                 callkeep: _callkeep,
                 callkeepConnections: _callkeepConnections,
@@ -396,6 +400,12 @@ class _MainShellState extends State<MainShell> {
                   lazy: false,
                   create: (_) => SystemNotificationsCounterCubit(
                     context.read<SystemNotificationsLocalRepository>(),
+                  ),
+                ),
+                BlocProvider(
+                  lazy: false,
+                  create: (_) => CallPullCubit(
+                    context.read<CallPullDialogRepository>(),
                   ),
                 ),
               ],

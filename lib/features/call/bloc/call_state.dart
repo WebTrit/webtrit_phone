@@ -137,6 +137,7 @@ class ActiveCall with _$ActiveCall {
     JsepValue? incomingOffer,
     String? displayName,
     String? fromReferId,
+    String? fromReplaces,
     DateTime? acceptedTime,
     DateTime? hungUpTime,
     Transfer? transfer,
