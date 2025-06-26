@@ -113,12 +113,14 @@ class StateHandshake extends Handshake {
     required this.timestamp,
     required this.registration,
     required this.lines,
+    required this.dialogs,
   }) : super();
 
   final Duration keepaliveInterval;
   final int timestamp;
   final Registration registration;
   final List<Line?> lines;
+  final List<DialogInfo> dialogs;
 
   @override
   List<Object?> get props => [
@@ -126,6 +128,7 @@ class StateHandshake extends Handshake {
         timestamp,
         registration,
         lines,
+        dialogs,
       ];
 
   static const typeValue = 'state';
@@ -186,11 +189,15 @@ class StateHandshake extends Handshake {
       );
     }).toList(growable: false);
 
+    final dialogsJson = json['user_dialogs'] as List<dynamic>? ?? <dynamic>[];
+    final dialogs = dialogsJson.map((e) => DialogInfo.fromJson(e)).toList();
+
     return StateHandshake(
       keepaliveInterval: keepaliveInterval,
       timestamp: timestamp,
       registration: registration,
       lines: lines,
+      dialogs: dialogs,
     );
   }
 }

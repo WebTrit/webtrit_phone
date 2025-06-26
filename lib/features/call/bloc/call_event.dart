@@ -139,7 +139,7 @@ class _CallSignalingEvent with _$CallSignalingEvent implements CallEvent {
     required String callId,
     required String? notify,
     required SubscriptionState? subscriptionState,
-    required List<CallPullDialog> dialogs,
+    required List<DialogInfo> dialogs,
   }) = _CallSignalingEventNotifyDialogs;
 
   const factory _CallSignalingEvent.notifyRefer({
@@ -147,7 +147,7 @@ class _CallSignalingEvent with _$CallSignalingEvent implements CallEvent {
     required String callId,
     required String? notify,
     required SubscriptionState? subscriptionState,
-    required ReferState state,
+    required ReferNotifyState state,
   }) = _CallSignalingEventNotifyRefer;
 
   const factory _CallSignalingEvent.notifyUnknown({
@@ -337,5 +337,3 @@ class CallScreenEvent with _$CallScreenEvent implements CallEvent {
 
   factory CallScreenEvent.didPop() = _CallScreenEventDidPop;
 }
-
-enum ReferState { trying, ok, unknown }

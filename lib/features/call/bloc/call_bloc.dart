@@ -1,12 +1,13 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart' hide Notification;
+
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:clock/clock.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/widgets.dart' hide Notification;
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:logging/logging.dart';
@@ -1092,24 +1093,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     Emitter<CallState> emit,
   ) async {
     _logger.fine('_CallSignalingEventNotifyDialogs: $event');
-
-    List<CallPullDialog> remoteDialogs = [];
-
-    for (final dialog in event.dialogs) {
-      // Skip dialogs that are already active
-      if (state.activeCalls.any((call) => call.callId == dialog.callId)) continue;
-
-      // Resolve contact name for the dialog's remote number
-      final contactName = await contactNameResolver.resolveWithNumber(dialog.remoteNumber);
-      if (contactName != null) {
-        final dialogWithName = dialog.copyWith(remoteDisplayName: contactName);
-        remoteDialogs.add(dialogWithName);
-      } else {
-        remoteDialogs.add(dialog);
-      }
-    }
-
-    callPullDialogRepository.setDialogs(remoteDialogs.toList());
+    await _assingDialogs(event.dialogs);
   }
 
   Future<void> __onCallSignalingEventNotifyRefer(
@@ -1118,7 +1102,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   ) async {
     _logger.fine('_CallSignalingEventNotifyRefer: $event');
     if (event.subscriptionState != SubscriptionState.terminated) return;
-    if (event.state != ReferState.ok) return;
+    if (event.state != ReferNotifyState.ok) return;
 
     // Verifies if the original call line is currently active in the state
     if (state.activeCalls.any((it) => it.callId == event.callId)) add(CallControlEvent.ended(event.callId));
@@ -2282,6 +2266,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       linesCount: stateHandshake.lines.length,
     ));
 
+    _assingDialogs(stateHandshake.dialogs);
+
     activeCallsLoop:
     for (final activeCall in state.activeCalls) {
       if (activeCall.line == _kUndefinedLine) {
@@ -2435,25 +2421,14 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
             callId: event.callId,
             notify: event.notify,
             subscriptionState: event.subscriptionState,
-            dialogs: event.dialogs
-                .map((d) => CallPullDialog(
-                      id: d.id,
-                      state: d.state,
-                      direction: CallPullDialogDirection.values.byName(d.direction.name),
-                      callId: d.callId,
-                      localTag: d.localTag,
-                      remoteTag: d.remoteTag,
-                      remoteNumber: d.remoteNumber,
-                      remoteDisplayName: d.remoteDisplayName,
-                    ))
-                .toList(),
+            dialogs: event.dialogs,
           ),
         ReferNotifyEvent event => _CallSignalingEvent.notifyRefer(
             line: event.line,
             callId: event.callId,
             notify: event.notify,
             subscriptionState: event.subscriptionState,
-            state: ReferState.values.byName(event.state.name),
+            state: event.state,
           ),
         UnknownNotifyEvent event => _CallSignalingEvent.notifyUnknown(
             line: event.line,
@@ -2756,5 +2731,40 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     await _signalingClient?.execute(hangupRequest).catchError((e) {
       _logger.warning('_signalingDeclineCall hangupRequest error: $e');
     });
+  }
+
+  Future<void> _assingDialogs(List<DialogInfo> dialogs) async {
+    final callPullDialogs = dialogs
+        .map(
+          (dialog) => CallPullDialog(
+            id: dialog.id,
+            state: dialog.state,
+            callId: dialog.callId,
+            localTag: dialog.localTag,
+            remoteTag: dialog.remoteTag,
+            remoteNumber: dialog.remoteNumber,
+            remoteDisplayName: dialog.remoteDisplayName,
+            direction: CallPullDialogDirection.values.byName(dialog.direction.name),
+          ),
+        )
+        .toList();
+
+    List<CallPullDialog> dialogsToSet = [];
+
+    for (final dialog in callPullDialogs) {
+      // Skip dialogs that are already active
+      if (state.activeCalls.any((call) => call.callId == dialog.callId)) continue;
+
+      // Resolve contact name for the dialog's remote number
+      final contactName = await contactNameResolver.resolveWithNumber(dialog.remoteNumber);
+      if (contactName != null) {
+        final dialogWithName = dialog.copyWith(remoteDisplayName: contactName);
+        dialogsToSet.add(dialogWithName);
+      } else {
+        dialogsToSet.add(dialog);
+      }
+    }
+
+    callPullDialogRepository.setDialogs(dialogsToSet);
   }
 }

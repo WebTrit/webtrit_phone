@@ -1037,10 +1037,10 @@ mixin _$CallSignalingEvent {
         transfer,
     required TResult Function(int line, String callId) transferring,
     required TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<CallPullDialog> dialogs)
+            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)
         notifyDialogs,
     required TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferState state)
+            SubscriptionState? subscriptionState, ReferNotifyState state)
         notifyRefer,
     required TResult Function(
             int line,
@@ -1093,10 +1093,10 @@ mixin _$CallSignalingEvent {
         transfer,
     TResult? Function(int line, String callId)? transferring,
     TResult? Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<CallPullDialog> dialogs)?
+            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)?
         notifyDialogs,
     TResult? Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferState state)?
+            SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
     TResult? Function(
             int line,
@@ -1149,10 +1149,10 @@ mixin _$CallSignalingEvent {
         transfer,
     TResult Function(int line, String callId)? transferring,
     TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<CallPullDialog> dialogs)?
+            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)?
         notifyDialogs,
     TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferState state)?
+            SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
     TResult Function(
             int line,
@@ -1363,10 +1363,10 @@ class _$CallSignalingEventIncomingImpl
         transfer,
     required TResult Function(int line, String callId) transferring,
     required TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<CallPullDialog> dialogs)
+            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)
         notifyDialogs,
     required TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferState state)
+            SubscriptionState? subscriptionState, ReferNotifyState state)
         notifyRefer,
     required TResult Function(
             int line,
@@ -1423,10 +1423,10 @@ class _$CallSignalingEventIncomingImpl
         transfer,
     TResult? Function(int line, String callId)? transferring,
     TResult? Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<CallPullDialog> dialogs)?
+            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)?
         notifyDialogs,
     TResult? Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferState state)?
+            SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
     TResult? Function(
             int line,
@@ -1483,10 +1483,10 @@ class _$CallSignalingEventIncomingImpl
         transfer,
     TResult Function(int line, String callId)? transferring,
     TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<CallPullDialog> dialogs)?
+            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)?
         notifyDialogs,
     TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferState state)?
+            SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
     TResult Function(
             int line,
@@ -1697,10 +1697,10 @@ class _$CallSignalingEventRingingImpl
         transfer,
     required TResult Function(int line, String callId) transferring,
     required TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<CallPullDialog> dialogs)
+            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)
         notifyDialogs,
     required TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferState state)
+            SubscriptionState? subscriptionState, ReferNotifyState state)
         notifyRefer,
     required TResult Function(
             int line,
@@ -1756,10 +1756,10 @@ class _$CallSignalingEventRingingImpl
         transfer,
     TResult? Function(int line, String callId)? transferring,
     TResult? Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<CallPullDialog> dialogs)?
+            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)?
         notifyDialogs,
     TResult? Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferState state)?
+            SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
     TResult? Function(
             int line,
@@ -1815,10 +1815,10 @@ class _$CallSignalingEventRingingImpl
         transfer,
     TResult Function(int line, String callId)? transferring,
     TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<CallPullDialog> dialogs)?
+            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)?
         notifyDialogs,
     TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferState state)?
+            SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
     TResult Function(
             int line,
@@ -2025,10 +2025,10 @@ class _$CallSignalingEventProgressImpl
         transfer,
     required TResult Function(int line, String callId) transferring,
     required TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<CallPullDialog> dialogs)
+            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)
         notifyDialogs,
     required TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferState state)
+            SubscriptionState? subscriptionState, ReferNotifyState state)
         notifyRefer,
     required TResult Function(
             int line,
@@ -2084,10 +2084,10 @@ class _$CallSignalingEventProgressImpl
         transfer,
     TResult? Function(int line, String callId)? transferring,
     TResult? Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<CallPullDialog> dialogs)?
+            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)?
         notifyDialogs,
     TResult? Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferState state)?
+            SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
     TResult? Function(
             int line,
@@ -2143,10 +2143,10 @@ class _$CallSignalingEventProgressImpl
         transfer,
     TResult Function(int line, String callId)? transferring,
     TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<CallPullDialog> dialogs)?
+            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)?
         notifyDialogs,
     TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferState state)?
+            SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
     TResult Function(
             int line,
@@ -2354,10 +2354,10 @@ class _$CallSignalingEventAcceptedImpl
         transfer,
     required TResult Function(int line, String callId) transferring,
     required TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<CallPullDialog> dialogs)
+            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)
         notifyDialogs,
     required TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferState state)
+            SubscriptionState? subscriptionState, ReferNotifyState state)
         notifyRefer,
     required TResult Function(
             int line,
@@ -2413,10 +2413,10 @@ class _$CallSignalingEventAcceptedImpl
         transfer,
     TResult? Function(int line, String callId)? transferring,
     TResult? Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<CallPullDialog> dialogs)?
+            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)?
         notifyDialogs,
     TResult? Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferState state)?
+            SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
     TResult? Function(
             int line,
@@ -2472,10 +2472,10 @@ class _$CallSignalingEventAcceptedImpl
         transfer,
     TResult Function(int line, String callId)? transferring,
     TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<CallPullDialog> dialogs)?
+            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)?
         notifyDialogs,
     TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferState state)?
+            SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
     TResult Function(
             int line,
@@ -2686,10 +2686,10 @@ class _$CallSignalingEventHangupImpl
         transfer,
     required TResult Function(int line, String callId) transferring,
     required TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<CallPullDialog> dialogs)
+            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)
         notifyDialogs,
     required TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferState state)
+            SubscriptionState? subscriptionState, ReferNotifyState state)
         notifyRefer,
     required TResult Function(
             int line,
@@ -2745,10 +2745,10 @@ class _$CallSignalingEventHangupImpl
         transfer,
     TResult? Function(int line, String callId)? transferring,
     TResult? Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<CallPullDialog> dialogs)?
+            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)?
         notifyDialogs,
     TResult? Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferState state)?
+            SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
     TResult? Function(
             int line,
@@ -2804,10 +2804,10 @@ class _$CallSignalingEventHangupImpl
         transfer,
     TResult Function(int line, String callId)? transferring,
     TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<CallPullDialog> dialogs)?
+            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)?
         notifyDialogs,
     TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferState state)?
+            SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
     TResult Function(
             int line,
@@ -3047,10 +3047,10 @@ class _$CallSignalingEventUpdatingImpl
         transfer,
     required TResult Function(int line, String callId) transferring,
     required TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<CallPullDialog> dialogs)
+            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)
         notifyDialogs,
     required TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferState state)
+            SubscriptionState? subscriptionState, ReferNotifyState state)
         notifyRefer,
     required TResult Function(
             int line,
@@ -3107,10 +3107,10 @@ class _$CallSignalingEventUpdatingImpl
         transfer,
     TResult? Function(int line, String callId)? transferring,
     TResult? Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<CallPullDialog> dialogs)?
+            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)?
         notifyDialogs,
     TResult? Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferState state)?
+            SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
     TResult? Function(
             int line,
@@ -3167,10 +3167,10 @@ class _$CallSignalingEventUpdatingImpl
         transfer,
     TResult Function(int line, String callId)? transferring,
     TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<CallPullDialog> dialogs)?
+            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)?
         notifyDialogs,
     TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferState state)?
+            SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
     TResult Function(
             int line,
@@ -3381,10 +3381,10 @@ class _$CallSignalingEventUpdatedImpl
         transfer,
     required TResult Function(int line, String callId) transferring,
     required TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<CallPullDialog> dialogs)
+            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)
         notifyDialogs,
     required TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferState state)
+            SubscriptionState? subscriptionState, ReferNotifyState state)
         notifyRefer,
     required TResult Function(
             int line,
@@ -3440,10 +3440,10 @@ class _$CallSignalingEventUpdatedImpl
         transfer,
     TResult? Function(int line, String callId)? transferring,
     TResult? Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<CallPullDialog> dialogs)?
+            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)?
         notifyDialogs,
     TResult? Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferState state)?
+            SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
     TResult? Function(
             int line,
@@ -3499,10 +3499,10 @@ class _$CallSignalingEventUpdatedImpl
         transfer,
     TResult Function(int line, String callId)? transferring,
     TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<CallPullDialog> dialogs)?
+            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)?
         notifyDialogs,
     TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferState state)?
+            SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
     TResult Function(
             int line,
@@ -3717,10 +3717,10 @@ class _$CallSignalingEventTransferImpl
         transfer,
     required TResult Function(int line, String callId) transferring,
     required TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<CallPullDialog> dialogs)
+            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)
         notifyDialogs,
     required TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferState state)
+            SubscriptionState? subscriptionState, ReferNotifyState state)
         notifyRefer,
     required TResult Function(
             int line,
@@ -3776,10 +3776,10 @@ class _$CallSignalingEventTransferImpl
         transfer,
     TResult? Function(int line, String callId)? transferring,
     TResult? Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<CallPullDialog> dialogs)?
+            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)?
         notifyDialogs,
     TResult? Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferState state)?
+            SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
     TResult? Function(
             int line,
@@ -3835,10 +3835,10 @@ class _$CallSignalingEventTransferImpl
         transfer,
     TResult Function(int line, String callId)? transferring,
     TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<CallPullDialog> dialogs)?
+            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)?
         notifyDialogs,
     TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferState state)?
+            SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
     TResult Function(
             int line,
@@ -4040,10 +4040,10 @@ class _$CallSignalingEventTransferringImpl
         transfer,
     required TResult Function(int line, String callId) transferring,
     required TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<CallPullDialog> dialogs)
+            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)
         notifyDialogs,
     required TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferState state)
+            SubscriptionState? subscriptionState, ReferNotifyState state)
         notifyRefer,
     required TResult Function(
             int line,
@@ -4099,10 +4099,10 @@ class _$CallSignalingEventTransferringImpl
         transfer,
     TResult? Function(int line, String callId)? transferring,
     TResult? Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<CallPullDialog> dialogs)?
+            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)?
         notifyDialogs,
     TResult? Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferState state)?
+            SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
     TResult? Function(
             int line,
@@ -4158,10 +4158,10 @@ class _$CallSignalingEventTransferringImpl
         transfer,
     TResult Function(int line, String callId)? transferring,
     TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<CallPullDialog> dialogs)?
+            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)?
         notifyDialogs,
     TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferState state)?
+            SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
     TResult Function(
             int line,
@@ -4288,7 +4288,7 @@ class _$CallSignalingEventNotifyDialogsImpl
       required this.callId,
       required this.notify,
       required this.subscriptionState,
-      required final List<CallPullDialog> dialogs})
+      required final List<DialogInfo> dialogs})
       : _dialogs = dialogs;
 
   @override
@@ -4299,9 +4299,9 @@ class _$CallSignalingEventNotifyDialogsImpl
   final String? notify;
   @override
   final SubscriptionState? subscriptionState;
-  final List<CallPullDialog> _dialogs;
+  final List<DialogInfo> _dialogs;
   @override
-  List<CallPullDialog> get dialogs {
+  List<DialogInfo> get dialogs {
     if (_dialogs is EqualUnmodifiableListView) return _dialogs;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_dialogs);
@@ -4381,10 +4381,10 @@ class _$CallSignalingEventNotifyDialogsImpl
         transfer,
     required TResult Function(int line, String callId) transferring,
     required TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<CallPullDialog> dialogs)
+            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)
         notifyDialogs,
     required TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferState state)
+            SubscriptionState? subscriptionState, ReferNotifyState state)
         notifyRefer,
     required TResult Function(
             int line,
@@ -4440,10 +4440,10 @@ class _$CallSignalingEventNotifyDialogsImpl
         transfer,
     TResult? Function(int line, String callId)? transferring,
     TResult? Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<CallPullDialog> dialogs)?
+            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)?
         notifyDialogs,
     TResult? Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferState state)?
+            SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
     TResult? Function(
             int line,
@@ -4500,10 +4500,10 @@ class _$CallSignalingEventNotifyDialogsImpl
         transfer,
     TResult Function(int line, String callId)? transferring,
     TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<CallPullDialog> dialogs)?
+            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)?
         notifyDialogs,
     TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferState state)?
+            SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
     TResult Function(
             int line,
@@ -4617,14 +4617,14 @@ abstract class _CallSignalingEventNotifyDialogs implements _CallSignalingEvent {
           required final String callId,
           required final String? notify,
           required final SubscriptionState? subscriptionState,
-          required final List<CallPullDialog> dialogs}) =
+          required final List<DialogInfo> dialogs}) =
       _$CallSignalingEventNotifyDialogsImpl;
 
   int get line;
   String get callId;
   String? get notify;
   SubscriptionState? get subscriptionState;
-  List<CallPullDialog> get dialogs;
+  List<DialogInfo> get dialogs;
 }
 
 /// @nodoc
@@ -4648,7 +4648,7 @@ class _$CallSignalingEventNotifyReferImpl
   @override
   final SubscriptionState? subscriptionState;
   @override
-  final ReferState state;
+  final ReferNotifyState state;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
@@ -4724,10 +4724,10 @@ class _$CallSignalingEventNotifyReferImpl
         transfer,
     required TResult Function(int line, String callId) transferring,
     required TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<CallPullDialog> dialogs)
+            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)
         notifyDialogs,
     required TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferState state)
+            SubscriptionState? subscriptionState, ReferNotifyState state)
         notifyRefer,
     required TResult Function(
             int line,
@@ -4783,10 +4783,10 @@ class _$CallSignalingEventNotifyReferImpl
         transfer,
     TResult? Function(int line, String callId)? transferring,
     TResult? Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<CallPullDialog> dialogs)?
+            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)?
         notifyDialogs,
     TResult? Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferState state)?
+            SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
     TResult? Function(
             int line,
@@ -4842,10 +4842,10 @@ class _$CallSignalingEventNotifyReferImpl
         transfer,
     TResult Function(int line, String callId)? transferring,
     TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<CallPullDialog> dialogs)?
+            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)?
         notifyDialogs,
     TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferState state)?
+            SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
     TResult Function(
             int line,
@@ -4955,17 +4955,18 @@ class _$CallSignalingEventNotifyReferImpl
 
 abstract class _CallSignalingEventNotifyRefer implements _CallSignalingEvent {
   const factory _CallSignalingEventNotifyRefer(
-      {required final int line,
-      required final String callId,
-      required final String? notify,
-      required final SubscriptionState? subscriptionState,
-      required final ReferState state}) = _$CallSignalingEventNotifyReferImpl;
+          {required final int line,
+          required final String callId,
+          required final String? notify,
+          required final SubscriptionState? subscriptionState,
+          required final ReferNotifyState state}) =
+      _$CallSignalingEventNotifyReferImpl;
 
   int get line;
   String get callId;
   String? get notify;
   SubscriptionState? get subscriptionState;
-  ReferState get state;
+  ReferNotifyState get state;
 }
 
 /// @nodoc
@@ -5071,10 +5072,10 @@ class _$CallSignalingEventNotifyUnknownImpl
         transfer,
     required TResult Function(int line, String callId) transferring,
     required TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<CallPullDialog> dialogs)
+            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)
         notifyDialogs,
     required TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferState state)
+            SubscriptionState? subscriptionState, ReferNotifyState state)
         notifyRefer,
     required TResult Function(
             int line,
@@ -5131,10 +5132,10 @@ class _$CallSignalingEventNotifyUnknownImpl
         transfer,
     TResult? Function(int line, String callId)? transferring,
     TResult? Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<CallPullDialog> dialogs)?
+            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)?
         notifyDialogs,
     TResult? Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferState state)?
+            SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
     TResult? Function(
             int line,
@@ -5191,10 +5192,10 @@ class _$CallSignalingEventNotifyUnknownImpl
         transfer,
     TResult Function(int line, String callId)? transferring,
     TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<CallPullDialog> dialogs)?
+            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)?
         notifyDialogs,
     TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferState state)?
+            SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
     TResult Function(
             int line,
@@ -5389,10 +5390,10 @@ class _$CallSignalingEventRegisteringImpl
         transfer,
     required TResult Function(int line, String callId) transferring,
     required TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<CallPullDialog> dialogs)
+            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)
         notifyDialogs,
     required TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferState state)
+            SubscriptionState? subscriptionState, ReferNotifyState state)
         notifyRefer,
     required TResult Function(
             int line,
@@ -5448,10 +5449,10 @@ class _$CallSignalingEventRegisteringImpl
         transfer,
     TResult? Function(int line, String callId)? transferring,
     TResult? Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<CallPullDialog> dialogs)?
+            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)?
         notifyDialogs,
     TResult? Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferState state)?
+            SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
     TResult? Function(
             int line,
@@ -5507,10 +5508,10 @@ class _$CallSignalingEventRegisteringImpl
         transfer,
     TResult Function(int line, String callId)? transferring,
     TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<CallPullDialog> dialogs)?
+            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)?
         notifyDialogs,
     TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferState state)?
+            SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
     TResult Function(
             int line,
@@ -5692,10 +5693,10 @@ class _$CallSignalingEventRegisteredImpl
         transfer,
     required TResult Function(int line, String callId) transferring,
     required TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<CallPullDialog> dialogs)
+            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)
         notifyDialogs,
     required TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferState state)
+            SubscriptionState? subscriptionState, ReferNotifyState state)
         notifyRefer,
     required TResult Function(
             int line,
@@ -5751,10 +5752,10 @@ class _$CallSignalingEventRegisteredImpl
         transfer,
     TResult? Function(int line, String callId)? transferring,
     TResult? Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<CallPullDialog> dialogs)?
+            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)?
         notifyDialogs,
     TResult? Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferState state)?
+            SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
     TResult? Function(
             int line,
@@ -5810,10 +5811,10 @@ class _$CallSignalingEventRegisteredImpl
         transfer,
     TResult Function(int line, String callId)? transferring,
     TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<CallPullDialog> dialogs)?
+            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)?
         notifyDialogs,
     TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferState state)?
+            SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
     TResult Function(
             int line,
@@ -6005,10 +6006,10 @@ class _$CallSignalingEventRegisterationFailedImpl
         transfer,
     required TResult Function(int line, String callId) transferring,
     required TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<CallPullDialog> dialogs)
+            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)
         notifyDialogs,
     required TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferState state)
+            SubscriptionState? subscriptionState, ReferNotifyState state)
         notifyRefer,
     required TResult Function(
             int line,
@@ -6064,10 +6065,10 @@ class _$CallSignalingEventRegisterationFailedImpl
         transfer,
     TResult? Function(int line, String callId)? transferring,
     TResult? Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<CallPullDialog> dialogs)?
+            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)?
         notifyDialogs,
     TResult? Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferState state)?
+            SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
     TResult? Function(
             int line,
@@ -6123,10 +6124,10 @@ class _$CallSignalingEventRegisterationFailedImpl
         transfer,
     TResult Function(int line, String callId)? transferring,
     TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<CallPullDialog> dialogs)?
+            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)?
         notifyDialogs,
     TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferState state)?
+            SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
     TResult Function(
             int line,
@@ -6313,10 +6314,10 @@ class _$CallSignalingEventUnregisteringImpl
         transfer,
     required TResult Function(int line, String callId) transferring,
     required TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<CallPullDialog> dialogs)
+            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)
         notifyDialogs,
     required TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferState state)
+            SubscriptionState? subscriptionState, ReferNotifyState state)
         notifyRefer,
     required TResult Function(
             int line,
@@ -6372,10 +6373,10 @@ class _$CallSignalingEventUnregisteringImpl
         transfer,
     TResult? Function(int line, String callId)? transferring,
     TResult? Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<CallPullDialog> dialogs)?
+            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)?
         notifyDialogs,
     TResult? Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferState state)?
+            SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
     TResult? Function(
             int line,
@@ -6431,10 +6432,10 @@ class _$CallSignalingEventUnregisteringImpl
         transfer,
     TResult Function(int line, String callId)? transferring,
     TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<CallPullDialog> dialogs)?
+            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)?
         notifyDialogs,
     TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferState state)?
+            SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
     TResult Function(
             int line,
@@ -6616,10 +6617,10 @@ class _$CallSignalingEventUnregisteredImpl
         transfer,
     required TResult Function(int line, String callId) transferring,
     required TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<CallPullDialog> dialogs)
+            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)
         notifyDialogs,
     required TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferState state)
+            SubscriptionState? subscriptionState, ReferNotifyState state)
         notifyRefer,
     required TResult Function(
             int line,
@@ -6675,10 +6676,10 @@ class _$CallSignalingEventUnregisteredImpl
         transfer,
     TResult? Function(int line, String callId)? transferring,
     TResult? Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<CallPullDialog> dialogs)?
+            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)?
         notifyDialogs,
     TResult? Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferState state)?
+            SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
     TResult? Function(
             int line,
@@ -6734,10 +6735,10 @@ class _$CallSignalingEventUnregisteredImpl
         transfer,
     TResult Function(int line, String callId)? transferring,
     TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<CallPullDialog> dialogs)?
+            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)?
         notifyDialogs,
     TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferState state)?
+            SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
     TResult Function(
             int line,
