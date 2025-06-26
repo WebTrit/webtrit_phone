@@ -242,7 +242,7 @@ class _WebViewContainerState extends State<WebViewContainer> with WidgetStateMix
     if (isExternalBrowserRequest) {
       final targetUrl = uri?.queryParameters[_kNavigationRequestParamUrl];
       if (targetUrl?.isEmpty ?? true) {
-        _logger.warning('Missing or empty external URL');
+        _logger.warning('Missing or empty external URL in request: ${request.url}');
         return NavigationDecision.prevent;
       }
 
