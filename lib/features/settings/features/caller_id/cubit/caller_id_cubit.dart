@@ -49,7 +49,7 @@ class CallerIdSettingsCubit extends Cubit<CallerIdSettingsState?> {
 
   void init() async {
     final settings = _appPreferences.getCallerIdSettings();
-    final userInfo = await _userRepository.getInfo();
+    final userInfo = (await _userRepository.getInfo())!;
     final mainNumber = userInfo.numbers.main;
     final additionalNumbers = userInfo.numbers.additional?.nonNulls.toList() ?? <String>[];
 

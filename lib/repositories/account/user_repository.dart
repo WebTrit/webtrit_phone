@@ -76,7 +76,8 @@ class UserRepository {
   Stream<UserInfo> infoUpdates() => _updatesController.stream;
 
   Stream<UserInfo> getInfoAndListen() async* {
-    yield _lastInfo ?? await _gatherUserInfo();
+    final info = _lastInfo ?? await _gatherUserInfo();
+    if (info != null) yield info;
     yield* _updatesController.stream;
   }
 
