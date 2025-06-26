@@ -33,9 +33,11 @@ class _CallerIdSettingsScreenState extends State<CallerIdSettingsScreen> {
           if (state == null) return const Center(child: CircularProgressIndicator());
 
           return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
             child: SingleChildScrollView(
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                spacing: 16,
                 children: [
                   Text(
                     l10n.settings_callerId_defaultTitle,
@@ -44,12 +46,7 @@ class _CallerIdSettingsScreenState extends State<CallerIdSettingsScreen> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const SizedBox(height: 16),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-                    child: DefaultNumberForm(state: state),
-                  ),
-                  const SizedBox(height: 16),
+                  DefaultNumberForm(state: state),
                   Text(
                     l10n.settings_callerId_dialCodeMatching_title,
                     style: theme.textTheme.titleMedium?.copyWith(
@@ -57,32 +54,27 @@ class _CallerIdSettingsScreenState extends State<CallerIdSettingsScreen> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const SizedBox(height: 8),
                   for (final matcher in state.settings.matchers) ...[
-                    if (matcher is PrefixMatcher)
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-                        child: MatcherTile(matcher: matcher),
-                      ),
+                    if (matcher is PrefixMatcher) MatcherTile(matcher: matcher),
                   ],
-                  const SizedBox(height: 16),
                   if (showMatcherForm == false)
-                    IconButton(
-                      onPressed: () => setState(() => showMatcherForm = true),
-                      icon: const Icon(Icons.add),
+                    Center(
+                      child: SizedBox(
+                        child: IconButton(
+                          onPressed: () => setState(() => showMatcherForm = true),
+                          icon: const Icon(Icons.add),
+                        ),
+                      ),
                     )
                   else
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-                      child: MatcherAddingForm(
-                        numbers: state.additionalNumbers,
-                        addedPrefixes: state.settings.matchers.whereType<PrefixMatcher>().map((e) => e.prefix).toList(),
-                        onSave: (prefix, number) {
-                          context.read<CallerIdSettingsCubit>().addPrefixMatcher(prefix, number);
-                          setState(() => showMatcherForm = false);
-                        },
-                        onCancel: () => setState(() => showMatcherForm = false),
-                      ),
+                    MatcherAddingForm(
+                      numbers: state.additionalNumbers,
+                      addedPrefixes: state.settings.matchers.whereType<PrefixMatcher>().map((e) => e.prefix).toList(),
+                      onSave: (prefix, number) {
+                        context.read<CallerIdSettingsCubit>().addPrefixMatcher(prefix, number);
+                        setState(() => showMatcherForm = false);
+                      },
+                      onCancel: () => setState(() => showMatcherForm = false),
                     ),
                   const SizedBox(height: 16),
                 ],

@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
+import 'package:webtrit_phone/features/call_routing/cubit/call_routing_cubit.dart';
 import 'package:webtrit_phone/features/register_status/register_status.dart';
 import 'package:webtrit_phone/features/self_config/self_config.dart';
 import 'package:webtrit_phone/features/user_info/user_info.dart';
@@ -216,15 +217,22 @@ class SettingsScreen extends StatelessWidget {
                                     ],
                                   )
                                 else if (item.flavor == SettingsFlavor.callerId)
-                                  Column(
-                                    children: [
-                                      ListTile(
-                                        leading: Icon(item.icon),
-                                        title: Text(context.parseL10n(item.titleL10n)),
-                                        onTap: () => context.router.navigate(const CallerIdSettingsScreenPageRoute()),
-                                      ),
-                                      const ListTileSeparator(),
-                                    ],
+                                  BlocBuilder<CallRoutingCubit, CallRoutingState?>(
+                                    builder: (context, state) {
+                                      if (state == null || state.additionalNumbers.isEmpty) return const SizedBox();
+
+                                      return Column(
+                                        children: [
+                                          ListTile(
+                                            leading: Icon(item.icon),
+                                            title: Text(context.parseL10n(item.titleL10n)),
+                                            onTap: () =>
+                                                context.router.navigate(const CallerIdSettingsScreenPageRoute()),
+                                          ),
+                                          const ListTileSeparator(),
+                                        ],
+                                      );
+                                    },
                                   )
                             ],
                           ],

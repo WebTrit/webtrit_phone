@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
+import 'package:country_code_picker/country_code_picker.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/caller_id_settings.dart';
 import 'package:webtrit_phone/features/settings/features/caller_id/caller_id.dart';
 
@@ -15,9 +16,9 @@ class MatcherTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-    final l10n = context.l10n;
 
     return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
@@ -29,15 +30,27 @@ class MatcherTile extends StatelessWidget {
           ),
         ],
       ),
-      child: ListTile(
-        title: Text('${l10n.settings_callerId_dialcode} ${matcher.prefix}'),
-        subtitle: Text('${l10n.settings_callerId_number} ${matcher.number}'),
-        trailing: IconButton(
-          icon: const Icon(Icons.delete_outline_sharp),
-          onPressed: () {
-            context.read<CallerIdSettingsCubit>().removePrefixMatcher(matcher.prefix);
-          },
-        ),
+      child: Row(
+        children: [
+          CountryCodePicker(
+            initialSelection: matcher.prefix,
+            showFlag: true,
+            showFlagDialog: true,
+            showCountryOnly: false,
+            showOnlyCountryWhenClosed: false,
+            onChanged: (code) {},
+            enabled: false,
+            padding: EdgeInsets.zero,
+          ),
+          Text('=>  ${matcher.number}'),
+          const Spacer(),
+          IconButton(
+            icon: const Icon(Icons.close),
+            onPressed: () {
+              context.read<CallerIdSettingsCubit>().removePrefixMatcher(matcher.prefix);
+            },
+          ),
+        ],
       ),
     );
   }

@@ -108,7 +108,7 @@ class _MatcherAddingFormState extends State<MatcherAddingForm> {
               ),
             ),
           Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               ElevatedButton(
                 onPressed: isValid
