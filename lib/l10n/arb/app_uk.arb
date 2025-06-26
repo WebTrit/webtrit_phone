@@ -706,6 +706,8 @@
   "@voicemail_Description_notSupported": {},
   "notifications_errorSnackBarAction_callUserMedia": "Перевірити",
   "@notifications_errorSnackBarAction_callUserMedia": {},
+  "notifications_errorSnackBarAction_callSdpConfiguration": "Неправильна конфігурація SDP",
+  "@notifications_errorSnackBarAction_callSdpConfiguration": {},
   "notifications_errorSnackBar_activeLineBlindTransferWarning": "Ви вже на лінії з одержувачем, до якого намагаєтеся здійснити безумовний переказ",
   "@notifications_errorSnackBar_activeLineBlindTransferWarning": {},
   "notifications_errorSnackBar_appOffline": "Ваш додаток зараз офлайн.",

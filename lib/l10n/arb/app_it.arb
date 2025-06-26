@@ -706,6 +706,8 @@
   "@voicemail_Description_notSupported": {},
   "notifications_errorSnackBarAction_callUserMedia": "Verifica",
   "@notifications_errorSnackBarAction_callUserMedia": {},
+  "notifications_errorSnackBarAction_callSdpConfiguration": "Configurazione SDP non valida",
+  "@notifications_errorSnackBarAction_callSdpConfiguration": {},
   "notifications_errorSnackBar_activeLineBlindTransferWarning": "Sei già in linea con il destinatario a cui stai cercando di trasferire alla cieca",
   "@notifications_errorSnackBar_activeLineBlindTransferWarning": {},
   "notifications_errorSnackBar_appOffline": "La tua apllicazione è offline",

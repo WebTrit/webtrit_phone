@@ -16,6 +16,7 @@ export 'mock_self_config_cubit.dart';
 export 'mock_session_status_cubit.dart';
 export 'mock_settings_bloc.dart';
 export 'mock_sms_conversations_cubit.dart';
+export 'mock_system_notifications_counter_cubit.dart';
 export 'mock_unread_count_cubit.dart';
 export 'mock_user_info_cubit.dart';
 export 'repository/repository.dart';

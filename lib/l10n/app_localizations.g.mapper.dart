@@ -610,6 +610,8 @@ class AppLocalizationsMapper {
           localizations.voicemail_Description_notSupported,
       'notifications_errorSnackBarAction_callUserMedia':
           localizations.notifications_errorSnackBarAction_callUserMedia,
+      'notifications_errorSnackBarAction_callSdpConfiguration':
+          localizations.notifications_errorSnackBarAction_callSdpConfiguration,
       'notifications_errorSnackBar_activeLineBlindTransferWarning':
           localizations
               .notifications_errorSnackBar_activeLineBlindTransferWarning,

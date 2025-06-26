@@ -14,6 +14,7 @@ import 'package:logging/logging.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
+
 import 'package:webtrit_signaling/webtrit_signaling.dart';
 import 'package:ssl_certificates/ssl_certificates.dart';
 
@@ -1415,14 +1416,16 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         await audioSender.track?.stop();
         await audioSender.replaceTrack(newAudioTrack);
       } else if (newAudioTrack != null) {
-        await peerConnection.addTrack(newAudioTrack, newLocalStream);
+        final audioSenderResult = await peerConnection.safeAddTrack(newAudioTrack, newLocalStream);
+        _checkSenderResult(audioSenderResult, 'audio');
       }
 
       if (videoSender != null && newVideoTrack != null) {
         await videoSender.track?.stop();
         await videoSender.replaceTrack(newVideoTrack);
       } else if (newVideoTrack != null) {
-        await peerConnection.addTrack(newVideoTrack, newLocalStream);
+        final videoSenderResult = await peerConnection.safeAddTrack(newVideoTrack, newLocalStream);
+        _checkSenderResult(videoSenderResult, 'video');
       }
 
       emit(state.copyWithMappedActiveCall(
@@ -1875,7 +1878,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
       // According to RFC 8829 §5.6 (https://datatracker.ietf.org/doc/html/rfc8829#section-5.6),
       // localDescription should be set before sending the answer to transition into stable state.
-      await peerConnection.setLocalDescription(localDescription);
+      await peerConnection.setLocalDescription(localDescription).catchError((e) => throw SDPConfigurationError(e));
 
       await _signalingClient?.execute(AcceptRequest(
         transaction: WebtritSignalingClient.generateTransactionId(),
@@ -1900,6 +1903,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       switch (e) {
         case UserMediaError _:
           submitNotification(const CallUserMediaErrorNotification());
+          break;
+        case SDPConfigurationError _:
+          submitNotification(const CallSdpConfigurationErrorNotification());
           break;
         case TimeoutException _:
           submitNotification(const CallNegotiationTimeoutNotification());
@@ -2731,5 +2737,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     await _signalingClient?.execute(hangupRequest).catchError((e) {
       _logger.warning('_signalingDeclineCall hangupRequest error: $e');
     });
+  }
+
+  void _checkSenderResult(RTCRtpSender? senderResult, String kind) {
+    if (senderResult == null) {
+      _logger.warning('safeAddTrack for $kind returned null: track not added, possibly due to closed connection');
+    }
   }
 }

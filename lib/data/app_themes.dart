@@ -58,7 +58,7 @@ class AppThemes {
         if (darkFontFamily != null) GoogleFonts.getFont(darkFontFamily),
       ]);
     } catch (e) {
-      _logger.warning('Failed to preload Google Fonts: $e');
+      _logger.finest('Failed to preload Google Fonts: $e');
     }
 
     _instance = AppThemes._(themes, appConfig);
