@@ -2,18 +2,23 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+
+import 'package:url_launcher/url_launcher.dart';
+import 'package:webview_flutter/webview_flutter.dart';
+import 'package:logging/logging.dart';
+export 'package:webview_flutter/webview_flutter.dart' show JavaScriptMessage;
+
 import 'package:webtrit_phone/core/mixins/widget_state_mixin.dart';
 import 'package:webtrit_phone/widgets/web_view_content.dart';
 import 'package:webtrit_phone/widgets/web_view_toolbar.dart';
 
-import 'package:webview_flutter/webview_flutter.dart';
-import 'package:logging/logging.dart';
-
 import 'package:webtrit_phone/l10n/l10n.dart';
 
-export 'package:webview_flutter/webview_flutter.dart' show JavaScriptMessage;
-
 final _logger = Logger('WebViewContainer');
+
+const _kNavigationRequestScheme = 'app';
+const _kNavigationRequestHostExternalBrowser = 'openInExternalBrowser';
+const _kNavigationRequestParamUrl = 'url';
 
 class WebViewContainer extends StatefulWidget {
   const WebViewContainer({
@@ -182,6 +187,29 @@ class _WebViewContainerState extends State<WebViewContainer> with WidgetStateMix
       },
       onPageFinished: _onPageFinished,
       onProgress: _onProgress,
+      onNavigationRequest: (NavigationRequest request) async {
+        final uri = Uri.tryParse(request.url);
+
+        final isExternalBrowserRequest =
+            uri?.scheme == _kNavigationRequestScheme && uri?.host == _kNavigationRequestHostExternalBrowser;
+
+        if (isExternalBrowserRequest) {
+          final targetUrl = uri?.queryParameters[_kNavigationRequestParamUrl];
+          final targetUri = Uri.tryParse(targetUrl ?? '');
+
+          if (targetUri != null) {
+            _logger.info('Opening URL in external browser: $targetUrl');
+            await launchUrl(targetUri, mode: LaunchMode.externalApplication);
+          } else {
+            _logger.warning('Invalid URL for external browser: $targetUrl');
+          }
+
+          return NavigationDecision.prevent;
+        }
+
+        _logger.fine('Navigation request: ${request.url}');
+        return NavigationDecision.navigate;
+      },
       onWebResourceError: _onWebResourceError,
     );
 
