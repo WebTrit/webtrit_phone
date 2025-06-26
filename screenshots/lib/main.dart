@@ -20,6 +20,9 @@ void main() async {
       WidgetsFlutterBinding.ensureInitialized();
 
       final appThemes = await AppThemes.init();
+      final packageInfo = await PackageInfoFactory.init();
+      final deviceInfo = await DeviceInfoFactory.init();
+
       final themeSettings = appThemes.values.first.settings;
 
       final appBloc = MockAppBloc.allScreen(
@@ -36,9 +39,13 @@ void main() async {
       runApp(MultiProvider(
           providers: [
             Provider<FeatureAccess>(
-              create: (context) {
-                return featureAccess;
-              },
+              create: (context) => featureAccess,
+            ),
+            Provider<PackageInfo>(
+              create: (context) => packageInfo,
+            ),
+            Provider<DeviceInfo>(
+              create: (context) => deviceInfo,
             ),
           ],
           child: ScreenshotsApp(

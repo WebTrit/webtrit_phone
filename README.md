@@ -2,6 +2,15 @@
 
 WebTrit Phone is a feature-rich application designed for seamless communication.
 
+## Flutter Project Environment Setup
+
+Use the following setup to ensure compatibility with this branch:
+
+- **Flutter**: 3.32.4 (stable channel)
+- **Android SDK**: 35.0.1
+
+Please align your local environment with these versions for consistent behavior across development and testing workflows.
+
 ## Documentation Overview
 
 - **Environment**: See the [Environment](docs/environment.md) documentation for details on environment properties.

@@ -14,6 +14,7 @@ import 'package:logging/logging.dart';
 import 'package:ssl_certificates/ssl_certificates.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
+
 import 'package:webtrit_signaling/webtrit_signaling.dart';
 
 import 'package:webtrit_phone/app/constants.dart';
@@ -1397,14 +1398,16 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         await audioSender.track?.stop();
         await audioSender.replaceTrack(newAudioTrack);
       } else if (newAudioTrack != null) {
-        await peerConnection.addTrack(newAudioTrack, newLocalStream);
+        final audioSenderResult = await peerConnection.safeAddTrack(newAudioTrack, newLocalStream);
+        _checkSenderResult(audioSenderResult, 'audio');
       }
 
       if (videoSender != null && newVideoTrack != null) {
         await videoSender.track?.stop();
         await videoSender.replaceTrack(newVideoTrack);
       } else if (newVideoTrack != null) {
-        await peerConnection.addTrack(newVideoTrack, newLocalStream);
+        final videoSenderResult = await peerConnection.safeAddTrack(newVideoTrack, newLocalStream);
+        _checkSenderResult(videoSenderResult, 'video');
       }
 
       emit(state.copyWithMappedActiveCall(
@@ -2766,5 +2769,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     }
 
     callPullDialogRepository.setDialogs(dialogsToSet);
+  }
+
+  void _checkSenderResult(RTCRtpSender? senderResult, String kind) {
+    if (senderResult == null) {
+      _logger.warning('safeAddTrack for $kind returned null: track not added, possibly due to closed connection');
+    }
   }
 }
