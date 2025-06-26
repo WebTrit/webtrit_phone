@@ -195,13 +195,24 @@ class _WebViewContainerState extends State<WebViewContainer> with WidgetStateMix
 
         if (isExternalBrowserRequest) {
           final targetUrl = uri?.queryParameters[_kNavigationRequestParamUrl];
-          final targetUri = Uri.tryParse(targetUrl ?? '');
+          if (targetUrl?.isEmpty ?? true) {
+            _logger.warning('Missing or empty external URL');
+            return NavigationDecision.prevent;
+          }
 
-          if (targetUri != null) {
-            _logger.info('Opening URL in external browser: $targetUrl');
-            await launchUrl(targetUri, mode: LaunchMode.externalApplication);
-          } else {
-            _logger.warning('Invalid URL for external browser: $targetUrl');
+          final targetUri = Uri.tryParse(targetUrl!);
+          if (targetUri == null) {
+            _logger.warning('Invalid external URL: $targetUrl');
+            return NavigationDecision.prevent;
+          }
+
+          if (!await canLaunchUrl(targetUri)) {
+            _logger.warning('Cannot launch URL: $targetUri');
+            return NavigationDecision.prevent;
+          }
+
+          if (!await launchUrl(targetUri, mode: LaunchMode.externalApplication)) {
+            _logger.severe('Failed to launch external URL: $targetUri');
           }
 
           return NavigationDecision.prevent;
