@@ -41,11 +41,12 @@ class ContactPhoneTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List<PopupMenuEntry> actions = [
-      for (final number in callNumbers)
-        PopupMenuItem(
-          onTap: () => onCallFrom?.call(number),
-          child: Text(context.l10n.numberActions_callFrom(number)),
-        ),
+      if (callNumbers.length > 1)
+        for (final number in callNumbers)
+          PopupMenuItem(
+            onTap: () => onCallFrom?.call(number),
+            child: Text(context.l10n.numberActions_callFrom(number)),
+          ),
       if (onTransferPressed != null)
         PopupMenuItem(
           onTap: onTransferPressed,

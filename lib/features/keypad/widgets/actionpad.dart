@@ -74,11 +74,12 @@ class Actionpad extends StatelessWidget {
                           onTap: onTransferPressed,
                           child: Text(context.l10n.numberActions_transfer),
                         ),
-                      for (final number in callNumbers)
-                        PopupMenuItem(
-                          onTap: () => onCallFrom?.call(number),
-                          child: Text(context.l10n.numberActions_callFrom(number)),
-                        ),
+                      if (callNumbers.length > 1)
+                        for (final number in callNumbers)
+                          PopupMenuItem(
+                            onTap: () => onCallFrom?.call(number),
+                            child: Text(context.l10n.numberActions_callFrom(number)),
+                          ),
                     ];
                   },
                 ),

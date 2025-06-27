@@ -55,11 +55,12 @@ class _FavoriteTileState extends State<FavoriteTile> {
             onTap: widget.onVideoCallPressed,
             child: Text(context.l10n.numberActions_videoCall),
           ),
-        for (final callNumber in widget.callNumbers)
-          PopupMenuItem(
-            onTap: () => widget.onCallFrom?.call(callNumber),
-            child: Text(context.l10n.numberActions_callFrom(callNumber)),
-          ),
+        if (widget.callNumbers.length > 1)
+          for (final callNumber in widget.callNumbers)
+            PopupMenuItem(
+              onTap: () => widget.onCallFrom?.call(callNumber),
+              child: Text(context.l10n.numberActions_callFrom(callNumber)),
+            ),
         if (widget.onTransferPressed != null)
           PopupMenuItem(
             onTap: widget.onTransferPressed,

@@ -65,11 +65,12 @@ class _RecentTileState extends State<RecentTile> {
             onTap: widget.onVideoCallPressed,
             child: Text(context.l10n.numberActions_videoCall),
           ),
-        for (final number in widget.callNumbers)
-          PopupMenuItem(
-            onTap: () => widget.onCallFrom?.call(number),
-            child: Text(context.l10n.numberActions_callFrom(number)),
-          ),
+        if (widget.callNumbers.length > 1)
+          for (final number in widget.callNumbers)
+            PopupMenuItem(
+              onTap: () => widget.onCallFrom?.call(number),
+              child: Text(context.l10n.numberActions_callFrom(number)),
+            ),
         if (widget.onTransferPressed != null)
           PopupMenuItem(
             onTap: widget.onTransferPressed,
