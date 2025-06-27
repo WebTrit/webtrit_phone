@@ -2,18 +2,23 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+
+import 'package:url_launcher/url_launcher.dart';
+import 'package:webview_flutter/webview_flutter.dart';
+import 'package:logging/logging.dart';
+export 'package:webview_flutter/webview_flutter.dart' show JavaScriptMessage;
+
 import 'package:webtrit_phone/core/mixins/widget_state_mixin.dart';
 import 'package:webtrit_phone/widgets/web_view_content.dart';
 import 'package:webtrit_phone/widgets/web_view_toolbar.dart';
 
-import 'package:webview_flutter/webview_flutter.dart';
-import 'package:logging/logging.dart';
-
 import 'package:webtrit_phone/l10n/l10n.dart';
 
-export 'package:webview_flutter/webview_flutter.dart' show JavaScriptMessage;
-
 final _logger = Logger('WebViewContainer');
+
+const _kNavigationRequestScheme = 'app';
+const _kNavigationRequestHostExternalBrowser = 'openInExternalBrowser';
+const _kNavigationRequestParamUrl = 'url';
 
 class WebViewContainer extends StatefulWidget {
   const WebViewContainer({
@@ -177,11 +182,10 @@ class _WebViewContainerState extends State<WebViewContainer> with WidgetStateMix
 
   void _initializeWebViewController() {
     final navigationDelegate = NavigationDelegate(
-      onUrlChange: (url) {
-        widget.onUrlChange?.call(url.url);
-      },
+      onUrlChange: (url) => widget.onUrlChange?.call(url.url),
       onPageFinished: _onPageFinished,
       onProgress: _onProgress,
+      onNavigationRequest: _onNavigationRequest,
       onWebResourceError: _onWebResourceError,
     );
 
@@ -227,6 +231,41 @@ class _WebViewContainerState extends State<WebViewContainer> with WidgetStateMix
     if (_isPageLoading) {
       _finalLoadTimer?.cancel();
     }
+  }
+
+  FutureOr<NavigationDecision> _onNavigationRequest(NavigationRequest request) async {
+    final uri = Uri.tryParse(request.url);
+
+    final isExternalBrowserRequest =
+        uri?.scheme == _kNavigationRequestScheme && uri?.host == _kNavigationRequestHostExternalBrowser;
+
+    if (isExternalBrowserRequest) {
+      final targetUrl = uri?.queryParameters[_kNavigationRequestParamUrl];
+      if (targetUrl?.isEmpty ?? true) {
+        _logger.warning('Missing or empty external URL in request: ${request.url}');
+        return NavigationDecision.prevent;
+      }
+
+      final targetUri = Uri.tryParse(targetUrl!);
+      if (targetUri == null) {
+        _logger.warning('Invalid external URL: $targetUrl');
+        return NavigationDecision.prevent;
+      }
+
+      if (!await canLaunchUrl(targetUri)) {
+        _logger.warning('Cannot launch URL: $targetUri');
+        return NavigationDecision.prevent;
+      }
+
+      if (!await launchUrl(targetUri, mode: LaunchMode.externalApplication)) {
+        _logger.severe('Failed to launch external URL: $targetUri');
+      }
+
+      return NavigationDecision.prevent;
+    }
+
+    _logger.fine('Navigation request: ${request.url}');
+    return NavigationDecision.navigate;
   }
 
   void _onWebResourceError(WebResourceError error) {
