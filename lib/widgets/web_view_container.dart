@@ -16,10 +16,6 @@ import 'package:webtrit_phone/l10n/l10n.dart';
 
 final _logger = Logger('WebViewContainer');
 
-const _kNavigationRequestScheme = 'app';
-const _kNavigationRequestHostExternalBrowser = 'openInExternalBrowser';
-const _kNavigationRequestParamUrl = 'url';
-
 class WebViewContainer extends StatefulWidget {
   const WebViewContainer({
     super.key,
@@ -57,6 +53,7 @@ class WebViewContainer extends StatefulWidget {
 
 class _WebViewContainerState extends State<WebViewContainer> with WidgetStateMixin {
   late final WebViewController _webViewController;
+  late final NavigationRequestHandler _navigationRequestHandler;
   final _progressStreamController = StreamController<int>.broadcast();
 
   Color? _backgroundColorCache;
@@ -104,6 +101,7 @@ class _WebViewContainerState extends State<WebViewContainer> with WidgetStateMix
   @override
   void initState() {
     super.initState();
+    _initializeHandlers();
     _initializeWebViewController();
   }
 
@@ -180,12 +178,19 @@ class _WebViewContainerState extends State<WebViewContainer> with WidgetStateMix
     super.dispose();
   }
 
+  void _initializeHandlers() {
+    _navigationRequestHandler = NavigationRequestHandler(
+      canLaunchUrlFn: canLaunchUrl,
+      launchUrlFn: launchUrl,
+    );
+  }
+
   void _initializeWebViewController() {
     final navigationDelegate = NavigationDelegate(
       onUrlChange: (url) => widget.onUrlChange?.call(url.url),
       onPageFinished: _onPageFinished,
       onProgress: _onProgress,
-      onNavigationRequest: _onNavigationRequest,
+      onNavigationRequest: _navigationRequestHandler.handle,
       onWebResourceError: _onWebResourceError,
     );
 
@@ -233,46 +238,99 @@ class _WebViewContainerState extends State<WebViewContainer> with WidgetStateMix
     }
   }
 
-  FutureOr<NavigationDecision> _onNavigationRequest(NavigationRequest request) async {
-    final uri = Uri.tryParse(request.url);
-
-    final isExternalBrowserRequest =
-        uri?.scheme == _kNavigationRequestScheme && uri?.host == _kNavigationRequestHostExternalBrowser;
-
-    if (isExternalBrowserRequest) {
-      final targetUrl = uri?.queryParameters[_kNavigationRequestParamUrl];
-      if (targetUrl?.isEmpty ?? true) {
-        _logger.warning('Missing or empty external URL in request: ${request.url}');
-        return NavigationDecision.prevent;
-      }
-
-      final targetUri = Uri.tryParse(targetUrl!);
-      if (targetUri == null) {
-        _logger.warning('Invalid external URL: $targetUrl');
-        return NavigationDecision.prevent;
-      }
-
-      if (!await canLaunchUrl(targetUri)) {
-        _logger.warning('Cannot launch URL: $targetUri');
-        return NavigationDecision.prevent;
-      }
-
-      if (!await launchUrl(targetUri, mode: LaunchMode.externalApplication)) {
-        _logger.severe('Failed to launch external URL: $targetUri');
-      }
-
-      return NavigationDecision.prevent;
-    }
-
-    _logger.fine('Navigation request: ${request.url}');
-    return NavigationDecision.navigate;
-  }
-
   void _onWebResourceError(WebResourceError error) {
     _logger.warning('WebView error: $error');
     safeSetState(() {
       _currentError = error;
       _latestError = error;
     });
+  }
+}
+
+class NavigationRequestHandler {
+  NavigationRequestHandler({
+    required this.canLaunchUrlFn,
+    required this.launchUrlFn,
+  });
+
+  final Future<bool> Function(Uri) canLaunchUrlFn;
+  final Future<bool> Function(Uri, {LaunchMode mode}) launchUrlFn;
+
+  static const _kNavigationRequestScheme = 'app';
+  static const _kNavigationRequestHostExternalBrowser = 'openinexternalbrowser';
+  static const _kNavigationRequestParamUrl = 'url';
+
+  /// Handles a navigation request and determines whether to allow it in the WebView.
+  ///
+  /// - HTTP/HTTPS requests are allowed.
+  /// - Requests to `app://openinexternalbrowser?url=...` are launched in an external browser.
+  /// - All other schemes are blocked.
+  ///
+  /// Returns [NavigationDecision.navigate] to allow loading in WebView,
+  /// or [NavigationDecision.prevent] to block the navigation.
+  Future<NavigationDecision> handle(NavigationRequest request) async {
+    _logger.fine('Handling navigation request: ${request.url}');
+
+    final uri = Uri.tryParse(request.url);
+    if (uri == null) {
+      return NavigationDecision.prevent;
+    }
+
+    final scheme = uri.scheme.toLowerCase();
+    final host = uri.host.toLowerCase();
+
+    if (_isExternalBrowserRequest(scheme, host)) {
+      return _handleExternalBrowserRequest(uri);
+    }
+
+    if (_isInternalHttpRequest(scheme)) {
+      return NavigationDecision.navigate;
+    }
+
+    return NavigationDecision.prevent;
+  }
+
+  /// Returns `true` if the given scheme represents an internal WebView-supported
+  /// HTTP or HTTPS request.
+  bool _isInternalHttpRequest(String scheme) {
+    return scheme == 'http' || scheme == 'https';
+  }
+
+  /// Returns `true` if the request is targeting the app-defined URL scheme for
+  /// opening links in an external browser.
+  ///
+  /// Specifically checks for:
+  /// `app://openinexternalbrowser?url=https://example.com`
+  bool _isExternalBrowserRequest(String scheme, String host) {
+    return scheme == _kNavigationRequestScheme && host == _kNavigationRequestHostExternalBrowser;
+  }
+
+  /// Handles a request to open an external browser via the custom app URL scheme.
+  ///
+  /// Validates that the `url` query parameter exists and is a valid URI,
+  /// and attempts to launch it using [launchUrlFn].
+  ///
+  /// Returns [NavigationDecision.prevent] in all cases to block WebView navigation.
+  /// If launch fails, navigation is still blocked.
+  Future<NavigationDecision> _handleExternalBrowserRequest(Uri uri) async {
+    final targetUrl = uri.queryParameters[_kNavigationRequestParamUrl];
+    if (targetUrl?.isEmpty ?? true) {
+      return NavigationDecision.prevent;
+    }
+
+    final targetUri = Uri.tryParse(targetUrl!);
+    if (targetUri == null) {
+      return NavigationDecision.prevent;
+    }
+
+    if (!await canLaunchUrlFn(targetUri)) {
+      return NavigationDecision.prevent;
+    }
+
+    if (!await launchUrlFn(targetUri, mode: LaunchMode.externalApplication)) {
+      return NavigationDecision.prevent;
+    }
+
+    return NavigationDecision.prevent;
   }
 }
