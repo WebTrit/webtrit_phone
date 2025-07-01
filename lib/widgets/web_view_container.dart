@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -221,6 +222,7 @@ class _WebViewContainerState extends State<WebViewContainer> with WidgetStateMix
       if (!_isPageLoading) {
         if (_latestError == null) {
           widget.onPageLoadedSuccess?.call();
+          _injectMediaQueryData();
         } else {
           _logger.warning('Skipped injection, page loading failed');
         }
@@ -245,6 +247,47 @@ class _WebViewContainerState extends State<WebViewContainer> with WidgetStateMix
       _latestError = error;
     });
   }
+
+    /// Injects media query-related data from Flutter into the WebView as JSON.
+    ///
+    /// This method gathers the current media query information such as:
+    /// - `brightness`: light or dark theme (`light` / `dark`)
+    /// - `devicePixelRatio`: screen density
+    /// - `statusBarHeight`: top padding (usually status bar height)
+    /// - `navigationBarHeight`: bottom padding (usually system gesture/nav bar)
+    ///
+    /// It serializes the data into JSON and calls a JavaScript function
+    /// `window.onMediaQueryReady(json)` inside the WebView, if it's defined.
+    ///
+    /// Example JS hook on the page:
+    /// ```js
+    /// window.onMediaQueryReady = function(payload) {
+    ///   const data = JSON.parse(payload); // or use directly if it's an object
+    ///   // apply UI adjustments here
+    /// };
+    /// ```
+    void _injectMediaQueryData() {
+      final mediaQuery = MediaQuery.of(context);
+      final theme = Theme.of(context);
+
+      final payload = {
+        'brightness': theme.brightness.name,
+        'devicePixelRatio': mediaQuery.devicePixelRatio,
+        'statusBarHeight': mediaQuery.padding.top.round(),
+        'navigationBarHeight': mediaQuery.padding.bottom.round(),
+      };
+
+      final jsonString = const JsonEncoder().convert(payload);
+
+      final script = '''
+      if (typeof window.onMediaQueryReady === 'function') {
+        window.onMediaQueryReady($jsonString);
+      }
+    ''';
+
+      _logger.finest('Injecting media query data: $jsonString');
+      _webViewController.runJavaScript(script);
+    }
 }
 
 class NavigationRequestHandler {
