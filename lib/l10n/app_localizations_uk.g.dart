@@ -1650,6 +1650,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get settings_ListViewTileTitle_mediaSettings => 'Параметри медіа';
 
   @override
+  String get settings_ListViewTileTitle_callerId => 'Ідентифікатор абонента';
+
+  @override
   String get settings_ListViewTileTitle_help => 'Допомога';
 
   @override
@@ -1727,8 +1730,31 @@ class AppLocalizationsUk extends AppLocalizations {
   String get settings_network_smsFallback_toggle => 'Резерв через SMS';
 
   @override
-  String get signalingResponseCode_ambiguousRequest =>
-      'Ваш запит не може бути виконаний. Будь ласка, спробуйте ще раз.';
+  String get settings_callerId_defaultTitle => 'Default Caller ID';
+
+  @override
+  String get settings_callerId_dialCodeMatching_title => 'Dial code matching';
+
+  @override
+  String get settings_callerId_dialcode => 'Dial code:';
+
+  @override
+  String get settings_callerId_number => 'Number:';
+
+  @override
+  String get settings_callerId_number_hint => 'Select a number';
+
+  @override
+  String get settings_callerId_duplicate_dialcode_error => 'Please choose a different dial code, this one is already in use.';
+
+  @override
+  String get settings_callerId_save_button => 'Save';
+
+  @override
+  String get settings_callerId_cancel_button => 'Cancel';
+
+  @override
+  String get signalingResponseCode_ambiguousRequest => 'Ваш запит не може бути виконаний. Будь ласка, спробуйте ще раз.';
 
   @override
   String get signalingResponseCode_busyEverywhere =>
@@ -2013,10 +2039,10 @@ class AppLocalizationsUk extends AppLocalizations {
   String get system_notifications_screen_list_empty => 'Немає сповіщень';
 
   @override
-  String get numberActions_audioCall => 'Зробити аудіо дзвінок';
+  String get numberActions_audioCall => 'Aудіо дзвінок';
 
   @override
-  String get numberActions_videoCall => 'Зробити відео дзвінок';
+  String get numberActions_videoCall => 'Відео дзвінок';
 
   @override
   String get numberActions_transfer => 'Переадресувати поточній дзвінок';
@@ -2038,4 +2064,9 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get numberActions_delete => 'Видалити';
+
+  @override
+  String numberActions_callFrom(String number) {
+    return 'Дзвінок від $number';
+  }
 }

@@ -284,4 +284,14 @@ class MockAppPreferencesService implements AppPreferences {
   Future<void> setPearConnectionSettings(PeerConnectionSettings settings) {
     return Future.value();
   }
+
+  @override
+  CallerIdSettings getCallerIdSettings() {
+    return const CallerIdSettings();
+  }
+
+  @override
+  Future<void> setCallerIdSettings(CallerIdSettings settings) {
+    return Future.value();
+  }
 }

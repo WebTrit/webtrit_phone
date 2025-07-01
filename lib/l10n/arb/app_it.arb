@@ -1026,6 +1026,8 @@
   "@settings_ListViewTileTitle_accountDelete": {},
   "settings_ListViewTileTitle_mediaSettings": "Impostazioni multimediali",
   "@settings_ListViewTileTitle_mediaSettings": {},
+  "settings_ListViewTileTitle_callerId": "ID chiamante",
+  "@settings_ListViewTileTitle_callerId": {},
   "settings_ListViewTileTitle_help": "Aiuto",
   "@settings_ListViewTileTitle_help": {},
   "settings_ListViewTileTitle_language": "Linguaggio",
@@ -1234,11 +1236,11 @@
   "@system_notifications_screen_title": {},
   "system_notifications_screen_list_empty": "Non ci sono notifiche",
   "@system_notifications_screen_list_empty": {},
-  "numberActions_audioCall": "Chiamata audio",
+  "numberActions_audioCall": "Audiochiamata",
   "@numberActions_audioCall": {},
   "numberActions_videoCall": "Videochiamata",
   "@numberActions_videoCall": {},
-  "numberActions_transfer": "Trasferisci la chiamata corrente",
+  "numberActions_transfer": "Trasferisci la chiamata",
   "@numberActions_transfer": {},
   "numberActions_chat": "Invia messaggio di chat",
   "@numberActions_chat": {},
@@ -1251,5 +1253,13 @@
   "numberActions_copyNumber": "Numero di copie",
   "@numberActions_copyNumber": {},
   "numberActions_delete": "Elimina",
-  "@numberActions_delete": {}
+  "@numberActions_delete": {},
+  "numberActions_callFrom": "Chiama da {number}",
+  "@numberActions_callFrom": {
+    "placeholders": {
+      "number": {
+        "type": "String"
+      }
+    }
+  }
 }

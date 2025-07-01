@@ -60,6 +60,7 @@ void main() {
       null,
       null,
     ],
+    guestLine: null,
   );
 
   test('$StateHandshake fromJson', () {
