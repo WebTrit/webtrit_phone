@@ -2,16 +2,19 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/theme/theme.dart';
+import 'package:webtrit_phone/features/features.dart';
+import 'package:webtrit_phone/app/notifications/notifications.dart';
 
 class KeypadView extends StatefulWidget {
   const KeypadView({
     super.key,
-    required this.videoVisible,
+    required this.videoEnabled,
+    required this.transferEnabled,
   });
 
-  final bool videoVisible;
+  final bool videoEnabled;
+  final bool transferEnabled;
 
   @override
   KeypadViewState createState() => KeypadViewState();
@@ -78,29 +81,33 @@ class KeypadViewState extends State<KeypadView> {
             ),
           ),
         ),
-        Keypad(
-          onKeypadPressed: _onKeypadPressed,
-        ),
-        SizedBox(
-          height: scaledInset,
-        ),
+        Keypad(onKeypadPressed: _addChar),
+        SizedBox(height: scaledInset),
         ValueListenableBuilder(
           valueListenable: _controller,
           builder: (BuildContext context, TextEditingValue value, Widget? child) {
-            return BlocBuilder<KeypadCubit, KeypadState>(
-              builder: (context, state) {
-                return BlocBuilder<CallBloc, CallState>(
-                  buildWhen: (previous, current) =>
-                      previous.isBlingTransferInitiated != current.isBlingTransferInitiated,
-                  builder: (context, callState) {
+            return BlocBuilder<CallBloc, CallState>(
+              buildWhen: (previous, current) =>
+                  previous.isBlingTransferInitiated != current.isBlingTransferInitiated ||
+                  previous.activeCalls != current.activeCalls,
+              builder: (context, callState) {
+                final activeCalls = callState.activeCalls;
+                final transferInitiated = callState.isBlingTransferInitiated;
+
+                return BlocBuilder<CallRoutingCubit, CallRoutingState?>(
+                  builder: (context, callRoutingState) {
+                    bool canCall = value.text.isNotEmpty;
+
                     return Actionpad(
-                      transfer: callState.isBlingTransferInitiated,
-                      videoVisible: widget.videoVisible,
-                      onAudioCallPressed: value.text.isEmpty ? null : () => _onCallPressed(false),
-                      onVideoCallPressed: value.text.isEmpty ? null : () => _onCallPressed(true),
-                      onTransferPressed: _onTransferPressed,
-                      onBackspacePressed: value.text.isEmpty ? null : _onBackspacePressed,
-                      onBackspaceLongPress: value.text.isEmpty ? null : _onBackspaceLongPress,
+                      actionsEnabled: canCall,
+                      onBackspacePressed: _removeLastChar,
+                      onBackspaceLongPress: _cleanInput,
+                      onAudioCallPressed: () => _createCall(),
+                      onVideoCallPressed: widget.videoEnabled ? () => _createCall(video: true) : null,
+                      onTransferPressed: widget.transferEnabled && activeCalls.isNotEmpty ? _transferCall : null,
+                      onInitiatedTransferPressed: widget.transferEnabled && transferInitiated ? _transferCall : null,
+                      callNumbers: callRoutingState?.allNumbers ?? [],
+                      onCallFrom: (number) => _createCall(fromNumber: number),
                     );
                   },
                 );
@@ -121,20 +128,44 @@ class KeypadViewState extends State<KeypadView> {
     return number;
   }
 
-  void _onCallPressed(bool video) {
+  void _createCall({bool video = false, String? fromNumber}) {
     _focusNode.unfocus();
+    final destination = _popNumber();
 
-    final displayName = context.read<KeypadCubit>().state.contact?.maybeName;
+    final callRoutingCubit = context.read<CallRoutingCubit>();
+    final callRoutingState = callRoutingCubit.state;
+    if (callRoutingState == null) return;
+
+    /// For cases when user sets additional number for outgoing calls by default
+    /// and wants to call from main number explicitly using dropdown menu.
+    final shouldUseMainLine = fromNumber == callRoutingState.mainNumber;
+    if (shouldUseMainLine) {
+      fromNumber = null;
+    } else {
+      // Apply caller ID settings to determine the `from` number if not specified.
+      fromNumber ??= callRoutingCubit.getFromNumber(destination);
+    }
+
+    final hasIdleMainLine = callRoutingState.hasIdleMainLine;
+    final hasIdleGuestLine = callRoutingState.hasIdleGuestLine;
+    if ((fromNumber == null && !hasIdleMainLine) || (fromNumber != null && !hasIdleGuestLine)) {
+      final notificationsBloc = context.read<NotificationsBloc>();
+      const notification = CallUndefinedLineNotification();
+      notificationsBloc.add(const NotificationsSubmitted(notification));
+      return;
+    }
 
     final callBloc = context.read<CallBloc>();
+    final displayName = context.read<KeypadCubit>().state.contact?.maybeName;
     callBloc.add(CallControlEvent.started(
-      number: _popNumber(),
+      number: destination,
       video: video,
       displayName: displayName,
+      fromNumber: fromNumber,
     ));
   }
 
-  void _onTransferPressed() {
+  void _transferCall() {
     _focusNode.unfocus();
 
     final callBloc = context.read<CallBloc>();
@@ -143,7 +174,7 @@ class KeypadViewState extends State<KeypadView> {
     ));
   }
 
-  void _onKeypadPressed(keyText) {
+  void _addChar(keyText) {
     if (!_controller.selection.isValid) {
       _controller.selection = TextSelection.collapsed(offset: _controller.text.length);
     }
@@ -162,7 +193,7 @@ class KeypadViewState extends State<KeypadView> {
     _keypadTextFieldEditableTextState?.hideToolbar();
   }
 
-  void _onBackspacePressed() {
+  void _removeLastChar() {
     if (!_controller.selection.isValid) {
       _controller.selection = TextSelection.collapsed(offset: _controller.text.length);
     }
@@ -190,7 +221,7 @@ class KeypadViewState extends State<KeypadView> {
     _keypadTextFieldEditableTextState?.hideToolbar();
   }
 
-  void _onBackspaceLongPress() {
+  void _cleanInput() {
     if (!_controller.selection.isValid) {
       _controller.selection = TextSelection.collapsed(offset: _controller.text.length);
     }

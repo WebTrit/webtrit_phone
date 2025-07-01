@@ -67,7 +67,7 @@ class _HandshakeSignalingEvent with _$HandshakeSignalingEvent implements CallEve
 @Freezed(copyWith: false)
 class _CallSignalingEvent with _$CallSignalingEvent implements CallEvent {
   const factory _CallSignalingEvent.incoming({
-    required int line,
+    required int? line,
     required String callId,
     required String callee,
     required String caller,
@@ -79,33 +79,33 @@ class _CallSignalingEvent with _$CallSignalingEvent implements CallEvent {
   }) = _CallSignalingEventIncoming;
 
   const factory _CallSignalingEvent.ringing({
-    required int line,
+    required int? line,
     required String callId,
   }) = _CallSignalingEventRinging;
 
   const factory _CallSignalingEvent.progress({
-    required int line,
+    required int? line,
     required String callId,
     required String callee,
     JsepValue? jsep,
   }) = _CallSignalingEventProgress;
 
   const factory _CallSignalingEvent.accepted({
-    required int line,
+    required int? line,
     required String callId,
     String? callee,
     JsepValue? jsep,
   }) = _CallSignalingEventAccepted;
 
   const factory _CallSignalingEvent.hangup({
-    required int line,
+    required int? line,
     required String callId,
     required int code,
     required String reason,
   }) = _CallSignalingEventHangup;
 
   const factory _CallSignalingEvent.updating({
-    required int line,
+    required int? line,
     required String callId,
     required String callee,
     required String caller,
@@ -117,12 +117,12 @@ class _CallSignalingEvent with _$CallSignalingEvent implements CallEvent {
   }) = _CallSignalingEventUpdating;
 
   const factory _CallSignalingEvent.updated({
-    required int line,
+    required int? line,
     required String callId,
   }) = _CallSignalingEventUpdated;
 
   const factory _CallSignalingEvent.transfer({
-    required int line,
+    required int? line,
     required String referId,
     required String referTo,
     required String? referredBy,
@@ -130,12 +130,12 @@ class _CallSignalingEvent with _$CallSignalingEvent implements CallEvent {
   }) = _CallSignalingEventTransfer;
 
   const factory _CallSignalingEvent.transferring({
-    required int line,
+    required int? line,
     required String callId,
   }) = _CallSignalingEventTransferring;
 
   const factory _CallSignalingEvent.notify({
-    required int line,
+    required int? line,
     required String callId,
     required String? notify,
     required SubscriptionState? subscriptionState,
@@ -188,6 +188,7 @@ class CallControlEvent with _$CallControlEvent implements CallEvent {
     String? number,
     String? email,
     String? displayName,
+    String? fromNumber,
     required bool video,
   }) = _CallControlEventStarted;
 

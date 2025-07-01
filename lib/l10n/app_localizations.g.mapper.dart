@@ -875,6 +875,8 @@ class AppLocalizationsMapper {
           localizations.settings_ListViewTileTitle_accountDelete,
       'settings_ListViewTileTitle_mediaSettings':
           localizations.settings_ListViewTileTitle_mediaSettings,
+      'settings_ListViewTileTitle_callerId':
+          localizations.settings_ListViewTileTitle_callerId,
       'settings_ListViewTileTitle_help':
           localizations.settings_ListViewTileTitle_help,
       'settings_ListViewTileTitle_language':
@@ -1122,6 +1124,8 @@ class AppLocalizationsMapper {
           localizations.user_agreement_checkbox_text(url),
       'user_agreement_description': (appName) =>
           localizations.user_agreement_description(appName),
+      'numberActions_callFrom': (number) =>
+          localizations.numberActions_callFrom(number),
     };
   }
 }

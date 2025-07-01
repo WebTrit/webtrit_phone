@@ -11,6 +11,7 @@ class ContactPhoneTile extends StatelessWidget {
     required this.number,
     required this.label,
     required this.favorite,
+    required this.callNumbers,
     this.onTap,
     this.onFavoriteChanged,
     this.onAudioPressed,
@@ -20,11 +21,13 @@ class ContactPhoneTile extends StatelessWidget {
     this.onMessagePressed,
     this.onSendSmsPressed,
     this.onCallLogPressed,
+    this.onCallFrom,
   });
 
   final String number;
   final String label;
   final bool favorite;
+  final List<String> callNumbers;
   final GestureTapCallback? onTap;
   final ValueChanged<bool>? onFavoriteChanged;
   final VoidCallback? onAudioPressed;
@@ -34,10 +37,17 @@ class ContactPhoneTile extends StatelessWidget {
   final GestureTapCallback? onMessagePressed;
   final VoidCallback? onSendSmsPressed;
   final VoidCallback? onCallLogPressed;
+  final Function(String)? onCallFrom;
 
   @override
   Widget build(BuildContext context) {
     final List<PopupMenuEntry> actions = [
+      if (callNumbers.length > 1)
+        for (final number in callNumbers)
+          PopupMenuItem(
+            onTap: () => onCallFrom?.call(number),
+            child: Text(context.l10n.numberActions_callFrom(number)),
+          ),
       if (onTransferPressed != null)
         PopupMenuItem(
           onTap: onTransferPressed,
