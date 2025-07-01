@@ -162,6 +162,67 @@ To explicitly open a link **in the system browser**, use the following format:
 This link will be intercepted by the app and launched in the system's default browser, not in the
 embedded WebView.
 
+## MediaQuery Injection
+
+When an embedded page is fully loaded, the WebTrit app also injects **media query data** from the
+native app context.  
+This allows the web page to adjust its layout based on platform-specific UI insets and theming (
+e.g., status bar height, navigation bar height, dark mode).
+
+### JavaScript Entry Point
+
+If defined, the following global JavaScript function will be executed:
+
+```javascript
+if (typeof window.onMediaQuaryReady === 'function') {
+  window.onMediaQuaryReady(payload);
+}
+```
+
+The `payload` is a JSON object containing device-related layout information.  
+This enables your embedded page to apply dynamic layout adjustments without relying on hardcoded
+values or CSS environment variables.
+
+### Example Payload
+
+```json
+{
+  "brightness": "dark",
+  "devicePixelRatio": 2.75,
+  "statusBarHeight": 44,
+  "navigationBarHeight": 34
+}
+```
+
+- `brightness`: `"light"` or `"dark"` depending on the system theme
+- `devicePixelRatio`: the screen's pixel density
+- `statusBarHeight`: top inset (useful for padding under status bar)
+- `navigationBarHeight`: bottom inset (useful for avoiding native nav bar overlap)
+
+### Required Integration by Web Developers
+
+To handle these values in your page, implement the following hook:
+
+```javascript
+function onMediaQuaryReady(payload) {
+  // Apply padding to avoid native UI overlap
+  document.body.style.paddingTop = `${payload.statusBarHeight}px`;
+  document.body.style.paddingBottom = `${payload.navigationBarHeight}px`;
+
+  // Optional: adjust theme
+  if (payload.brightness === 'dark') {
+    document.body.style.backgroundColor = '#121212';
+    document.body.style.color = '#ffffff';
+  }
+
+  console.log('MediaQuery info received:', payload);
+}
+```
+
+This hook is especially useful for full-screen or minimal pages, where precise alignment with system
+UI is important  
+(e.g., avoiding overlap with gesture areas or notches).
+
 ## Summary
 
 By declaring embedded resources and referencing them in app config, clients can extend the WebTrit
