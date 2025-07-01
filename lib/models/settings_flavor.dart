@@ -9,4 +9,5 @@ enum SettingsFlavor {
   embedded,
   mediaSettings,
   selfConfig,
+  voicemail,
 }

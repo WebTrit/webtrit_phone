@@ -66,3 +66,12 @@ class UserMediaError implements Exception {
   @override
   String toString() => 'UserMediaError: $message';
 }
+
+class SDPConfigurationError implements Exception {
+  final String message;
+
+  SDPConfigurationError(this.message);
+
+  @override
+  String toString() => 'SDPConfigurationError: $message';
+}

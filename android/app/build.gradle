@@ -45,14 +45,65 @@ if (project.hasProperty('dart-defines')) {
     println("No dart defines proovided")
 }
 
-def dartDefine = [
-        WEBTRIT_APP_LINK_DOMAIN: projectPropertyDartDefines['WEBTRIT_APP_LINK_DOMAIN'] ?: 'app.webtrit.com',
-        WEBTRIT_APP_NAME       : projectPropertyDartDefines['WEBTRIT_APP_NAME'] ?: 'WebTrit',
-]
+def dartDefine = [WEBTRIT_APP_LINK_DOMAIN: projectPropertyDartDefines['WEBTRIT_APP_LINK_DOMAIN'] ?: 'app.webtrit.com',
+                  WEBTRIT_APP_NAME       : projectPropertyDartDefines['WEBTRIT_APP_NAME'] ?: 'WebTrit',]
 
-def envDefine = [
-        WEBTRIT_ANDROID_RELEASE_UPLOAD_KEYSTORE_PATH: projectPropertyDartDefines['WEBTRIT_ANDROID_RELEASE_UPLOAD_KEYSTORE_PATH'] ?: '',
-]
+def envDefine = [WEBTRIT_ANDROID_RELEASE_UPLOAD_KEYSTORE_PATH: projectPropertyDartDefines['WEBTRIT_ANDROID_RELEASE_UPLOAD_KEYSTORE_PATH'] ?: '',
+                 WEBTRIT_HTTP_ALLOWED_DOMAINS        : projectPropertyDartDefines['WEBTRIT_HTTP_ALLOWED_DOMAINS'] ?: '',]
+
+def generateNetworkSecurityConfig = tasks.register("generateNetworkSecurityConfig") {
+    doLast {
+        // Parse and validate domain definitions passed from dart-define; reject any malformed entries
+        def rawDomainDefs = (envDefine['WEBTRIT_HTTP_ALLOWED_DOMAINS'] ?: '').split(';')
+
+        def invalidDomains = []
+        // Transform raw semicolon-separated input into a list of [domain, includeSubdomains] entries,
+        // applying validation and using false as default for includeSubdomains
+        def domainEntries = rawDomainDefs
+                .collect { it.trim() }
+                .findAll { it }
+                .collect { entry ->
+                    def parts = entry.split(',')
+                    def domain = parts[0].trim()
+                    def includeSub = (parts.size() > 1) ? parts[1].trim().toLowerCase() == 'true' : false
+                    def isValid = !domain.contains('/') && !domain.contains(':') && !domain.startsWith('http')
+                    if (!isValid) {
+                        invalidDomains << entry
+                    }
+                    return [domain: domain, includeSubdomains: includeSub, isValid: isValid]
+                }
+                .findAll { it.isValid }
+
+        // Stop build if any invalid domains are detected
+        if (!invalidDomains.isEmpty()) {
+            throw new GradleException("❌ Invalid domain entries found in WEBTRIT_ANDROID_HTTP_ALLOWED_DOMAINS:\n${invalidDomains.join('\n')}")
+        }
+
+        // Exit early if no valid domains were provided
+        if (domainEntries.isEmpty()) {
+            println "⚠️  No valid HTTP domain entries defined, skipping network_security_config.xml generation."
+            return
+        }
+
+        // Generate the network_security_config.xml content
+        def xmlContent = new StringBuilder()
+        xmlContent << '<?xml version="1.0" encoding="utf-8"?>\n'
+        xmlContent << '<network-security-config>\n'
+        domainEntries.each { entry ->
+            xmlContent << '    <domain-config cleartextTrafficPermitted="true">\n'
+            xmlContent << "        <domain includeSubdomains=\"${entry.includeSubdomains}\">${entry.domain}</domain>\n"
+            xmlContent << '    </domain-config>\n'
+        }
+        xmlContent << '    <base-config cleartextTrafficPermitted="false" />\n'
+        xmlContent << '</network-security-config>\n'
+
+        def outputFile = file("$projectDir/src/main/res/xml/network_security_config.xml")
+        outputFile.parentFile.mkdirs()
+        outputFile.text = xmlContent.toString()
+
+        println "✅  Generated network_security_config.xml with entries: ${domainEntries}"
+    }
+}
 
 def keystoreMetadata
 def keystoreFile
@@ -92,6 +143,97 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
+    flavorDimensions "deeplinks", "smsReceiver"
+
+    productFlavors {
+        // Flavor with deep link support enabled
+        // This flavor defines the APP_LINK_DOMAIN string resource,
+        // which is used for configuring app links and intent filters.
+        // The value is injected from Dart's --dart-define at build time.
+        deeplinks {
+            dimension "deeplinks"
+            resValue "string", "APP_LINK_DOMAIN", dartDefine.WEBTRIT_APP_LINK_DOMAIN
+        }
+
+        // Flavor with deep link support disabled
+        // No APP_LINK_DOMAIN is defined here, so deep link functionality
+        // can be excluded from the AndroidManifest or handled differently.
+        deeplinksDisabled {
+            dimension "deeplinks"
+        }
+
+        // Flavor with SMS trigger for incoming calls enabled
+        // This flavor enables support for receiving special SMS messages
+        // that can trigger incoming calls via background services.
+        smsReceiver {
+            dimension "smsReceiver"
+        }
+
+        // Flavor with SMS trigger for incoming calls disabled
+        // No related permissions or receivers will be declared in this flavor,
+        // ensuring the feature is fully excluded from the build.
+        smsReceiverDisabled {
+            dimension "smsReceiver"
+        }
+    }
+
+    // Task to normalize APK and AAB output file paths and names for CI/CD
+    tasks.register("normalizeReleaseOutputs") {
+        doLast {
+            // Locate directory where Flutter outputs APKs
+            def flutterApk = layout.buildDirectory.dir("outputs/flutter-apk").get().asFile
+            // Define standard destination path for CI to pick up the APK
+            def fixedApkDest = layout.buildDirectory.dir("outputs/apk/release").get().asFile
+            def foundApk = false
+
+            if (flutterApk.exists()) {
+                flutterApk.eachFile { f ->
+                    if (f.name.endsWith(".apk")) {
+                        // Copy and rename to a standardized filename
+                        copy {
+                            from f
+                            into fixedApkDest
+                            rename { "app-release.apk" }
+                        }
+                        println "Copied APK → ${fixedApkDest}/app-release.apk"
+                        foundApk = true
+                    }
+                }
+            }
+
+            // Locate directory that contains flavor-specific AAB build outputs
+            def bundleDir = layout.buildDirectory.dir("outputs/bundle").get().asFile
+            // Define standard destination path for CI to pick up the AAB
+            def fixedBundleDest = layout.buildDirectory.dir("outputs/bundle/release").get().asFile
+            def foundAab = false
+
+            if (bundleDir.exists()) {
+                bundleDir.eachDir { flavorDir ->
+                    flavorDir.eachFile { f ->
+                        if (f.name.endsWith(".aab")) {
+                            copy {
+                                from f
+                                into fixedBundleDest
+                                rename { "app-release.aab" }
+                            }
+                            println "Copied AAB → ${fixedBundleDest}/app-release.aab"
+                            foundAab = true
+                        }
+                    }
+                }
+            }
+
+            if (!foundApk) println "No .apk found in flutter-apk/"
+            if (!foundAab) println "No .aab found in bundle/*/release/"
+        }
+    }
+
+    tasks.configureEach { task ->
+        if (task.name ==~ /bundle.*Release/ || task.name ==~ /assemble.*Release/) {
+            task.finalizedBy("normalizeReleaseOutputs")
+        }
+    }
+
     kotlinOptions {
         jvmTarget = '1.8'
     }
@@ -107,7 +249,6 @@ android {
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
 
-        resValue "string", "APP_LINK_DOMAIN", dartDefine.WEBTRIT_APP_LINK_DOMAIN
         resValue "string", "APP_NAME", dartDefine.WEBTRIT_APP_NAME
         testInstrumentationRunner "pl.leancode.patrol.PatrolJUnitRunner"
         testInstrumentationRunnerArguments clearPackageData: "true"
@@ -132,6 +273,7 @@ android {
     testOptions {
         execution = "ANDROIDX_TEST_ORCHESTRATOR"
     }
+    preBuild.dependsOn generateNetworkSecurityConfig
 }
 
 flutter {

@@ -19,6 +19,9 @@ class SecureStorage {
   static const _kTenantIdKey = 'tenant-id';
   static const _kTokenKey = 'token';
   static const _kUserIdKey = 'user-id';
+  static const _kExternalPageAccessTokenKey = 'external-page-access-token';
+  static const _kExternalPageRefreshTokenKey = 'external-page-refresh-token';
+  static const _kExternalPageTokenExpiresKey = 'external-page-token-expires';
 
   // Last FCM token that was pushed to the server
   static const _kFCMPushToken = 'fcm-push-token';
@@ -135,5 +138,43 @@ class SecureStorage {
 
   Future<void> writeFCMPushToken(String token) {
     return _write(_kFCMPushToken, token);
+  }
+
+  // EXTERNAL PAGE TOKEN
+
+  String? readExternalPageAccessToken() {
+    return _read(_kExternalPageAccessTokenKey);
+  }
+
+  Future<void> writeExternalPageAccessToken(String token) {
+    return _write(_kExternalPageAccessTokenKey, token);
+  }
+
+  Future<void> deleteExternalPageAccessToken() {
+    return _delete(_kExternalPageAccessTokenKey);
+  }
+
+  String? readExternalPageRefreshToken() {
+    return _read(_kExternalPageRefreshTokenKey);
+  }
+
+  Future<void> writeExternalPageRefreshToken(String token) {
+    return _write(_kExternalPageRefreshTokenKey, token);
+  }
+
+  Future<void> deleteExternalPageRefreshToken() {
+    return _delete(_kExternalPageRefreshTokenKey);
+  }
+
+  String? readExternalPageTokenExpires() {
+    return _read(_kExternalPageTokenExpiresKey);
+  }
+
+  Future<void> writeExternalPageTokenExpires(String expires) {
+    return _write(_kExternalPageTokenExpiresKey, expires);
+  }
+
+  Future<void> deleteExternalPageTokenExpires() {
+    return _delete(_kExternalPageTokenExpiresKey);
   }
 }

@@ -533,6 +533,8 @@ mixin _$AppConfigModeSelectAction {
   int? get embeddedId => throw _privateConstructorUsedError;
   String get type => throw _privateConstructorUsedError;
   String get titleL10n => throw _privateConstructorUsedError;
+  bool get isLaunchButtonVisible => throw _privateConstructorUsedError;
+  bool get isLaunchScreen => throw _privateConstructorUsedError;
 
   /// Serializes this AppConfigModeSelectAction to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -550,7 +552,13 @@ abstract class $AppConfigModeSelectActionCopyWith<$Res> {
           $Res Function(AppConfigModeSelectAction) then) =
       _$AppConfigModeSelectActionCopyWithImpl<$Res, AppConfigModeSelectAction>;
   @useResult
-  $Res call({bool enabled, int? embeddedId, String type, String titleL10n});
+  $Res call(
+      {bool enabled,
+      int? embeddedId,
+      String type,
+      String titleL10n,
+      bool isLaunchButtonVisible,
+      bool isLaunchScreen});
 }
 
 /// @nodoc
@@ -573,6 +581,8 @@ class _$AppConfigModeSelectActionCopyWithImpl<$Res,
     Object? embeddedId = freezed,
     Object? type = null,
     Object? titleL10n = null,
+    Object? isLaunchButtonVisible = null,
+    Object? isLaunchScreen = null,
   }) {
     return _then(_value.copyWith(
       enabled: null == enabled
@@ -591,6 +601,14 @@ class _$AppConfigModeSelectActionCopyWithImpl<$Res,
           ? _value.titleL10n
           : titleL10n // ignore: cast_nullable_to_non_nullable
               as String,
+      isLaunchButtonVisible: null == isLaunchButtonVisible
+          ? _value.isLaunchButtonVisible
+          : isLaunchButtonVisible // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isLaunchScreen: null == isLaunchScreen
+          ? _value.isLaunchScreen
+          : isLaunchScreen // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 }
@@ -604,7 +622,13 @@ abstract class _$$AppConfigModeSelectActionImplCopyWith<$Res>
       __$$AppConfigModeSelectActionImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({bool enabled, int? embeddedId, String type, String titleL10n});
+  $Res call(
+      {bool enabled,
+      int? embeddedId,
+      String type,
+      String titleL10n,
+      bool isLaunchButtonVisible,
+      bool isLaunchScreen});
 }
 
 /// @nodoc
@@ -626,6 +650,8 @@ class __$$AppConfigModeSelectActionImplCopyWithImpl<$Res>
     Object? embeddedId = freezed,
     Object? type = null,
     Object? titleL10n = null,
+    Object? isLaunchButtonVisible = null,
+    Object? isLaunchScreen = null,
   }) {
     return _then(_$AppConfigModeSelectActionImpl(
       enabled: null == enabled
@@ -644,6 +670,14 @@ class __$$AppConfigModeSelectActionImplCopyWithImpl<$Res>
           ? _value.titleL10n
           : titleL10n // ignore: cast_nullable_to_non_nullable
               as String,
+      isLaunchButtonVisible: null == isLaunchButtonVisible
+          ? _value.isLaunchButtonVisible
+          : isLaunchButtonVisible // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isLaunchScreen: null == isLaunchScreen
+          ? _value.isLaunchScreen
+          : isLaunchScreen // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -656,7 +690,9 @@ class _$AppConfigModeSelectActionImpl extends _AppConfigModeSelectAction {
       {required this.enabled,
       this.embeddedId,
       required this.type,
-      required this.titleL10n})
+      required this.titleL10n,
+      this.isLaunchButtonVisible = false,
+      this.isLaunchScreen = false})
       : super._();
 
   factory _$AppConfigModeSelectActionImpl.fromJson(Map<String, dynamic> json) =>
@@ -670,10 +706,16 @@ class _$AppConfigModeSelectActionImpl extends _AppConfigModeSelectAction {
   final String type;
   @override
   final String titleL10n;
+  @override
+  @JsonKey()
+  final bool isLaunchButtonVisible;
+  @override
+  @JsonKey()
+  final bool isLaunchScreen;
 
   @override
   String toString() {
-    return 'AppConfigModeSelectAction(enabled: $enabled, embeddedId: $embeddedId, type: $type, titleL10n: $titleL10n)';
+    return 'AppConfigModeSelectAction(enabled: $enabled, embeddedId: $embeddedId, type: $type, titleL10n: $titleL10n, isLaunchButtonVisible: $isLaunchButtonVisible, isLaunchScreen: $isLaunchScreen)';
   }
 
   @override
@@ -686,13 +728,17 @@ class _$AppConfigModeSelectActionImpl extends _AppConfigModeSelectAction {
                 other.embeddedId == embeddedId) &&
             (identical(other.type, type) || other.type == type) &&
             (identical(other.titleL10n, titleL10n) ||
-                other.titleL10n == titleL10n));
+                other.titleL10n == titleL10n) &&
+            (identical(other.isLaunchButtonVisible, isLaunchButtonVisible) ||
+                other.isLaunchButtonVisible == isLaunchButtonVisible) &&
+            (identical(other.isLaunchScreen, isLaunchScreen) ||
+                other.isLaunchScreen == isLaunchScreen));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, enabled, embeddedId, type, titleL10n);
+  int get hashCode => Object.hash(runtimeType, enabled, embeddedId, type,
+      titleL10n, isLaunchButtonVisible, isLaunchScreen);
 
   /// Create a copy of AppConfigModeSelectAction
   /// with the given fields replaced by the non-null parameter values.
@@ -716,7 +762,9 @@ abstract class _AppConfigModeSelectAction extends AppConfigModeSelectAction {
       {required final bool enabled,
       final int? embeddedId,
       required final String type,
-      required final String titleL10n}) = _$AppConfigModeSelectActionImpl;
+      required final String titleL10n,
+      final bool isLaunchButtonVisible,
+      final bool isLaunchScreen}) = _$AppConfigModeSelectActionImpl;
   const _AppConfigModeSelectAction._() : super._();
 
   factory _AppConfigModeSelectAction.fromJson(Map<String, dynamic> json) =
@@ -730,6 +778,10 @@ abstract class _AppConfigModeSelectAction extends AppConfigModeSelectAction {
   String get type;
   @override
   String get titleL10n;
+  @override
+  bool get isLaunchButtonVisible;
+  @override
+  bool get isLaunchScreen;
 
   /// Create a copy of AppConfigModeSelectAction
   /// with the given fields replaced by the non-null parameter values.
@@ -746,6 +798,7 @@ AppConfigMain _$AppConfigMainFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$AppConfigMain {
   AppConfigBottomMenu get bottomMenu => throw _privateConstructorUsedError;
+  bool get systemNotificationsEnabled => throw _privateConstructorUsedError;
 
   /// Serializes this AppConfigMain to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -763,7 +816,7 @@ abstract class $AppConfigMainCopyWith<$Res> {
           AppConfigMain value, $Res Function(AppConfigMain) then) =
       _$AppConfigMainCopyWithImpl<$Res, AppConfigMain>;
   @useResult
-  $Res call({AppConfigBottomMenu bottomMenu});
+  $Res call({AppConfigBottomMenu bottomMenu, bool systemNotificationsEnabled});
 
   $AppConfigBottomMenuCopyWith<$Res> get bottomMenu;
 }
@@ -784,12 +837,17 @@ class _$AppConfigMainCopyWithImpl<$Res, $Val extends AppConfigMain>
   @override
   $Res call({
     Object? bottomMenu = null,
+    Object? systemNotificationsEnabled = null,
   }) {
     return _then(_value.copyWith(
       bottomMenu: null == bottomMenu
           ? _value.bottomMenu
           : bottomMenu // ignore: cast_nullable_to_non_nullable
               as AppConfigBottomMenu,
+      systemNotificationsEnabled: null == systemNotificationsEnabled
+          ? _value.systemNotificationsEnabled
+          : systemNotificationsEnabled // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 
@@ -812,7 +870,7 @@ abstract class _$$AppConfigMainImplCopyWith<$Res>
       __$$AppConfigMainImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({AppConfigBottomMenu bottomMenu});
+  $Res call({AppConfigBottomMenu bottomMenu, bool systemNotificationsEnabled});
 
   @override
   $AppConfigBottomMenuCopyWith<$Res> get bottomMenu;
@@ -832,12 +890,17 @@ class __$$AppConfigMainImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? bottomMenu = null,
+    Object? systemNotificationsEnabled = null,
   }) {
     return _then(_$AppConfigMainImpl(
       bottomMenu: null == bottomMenu
           ? _value.bottomMenu
           : bottomMenu // ignore: cast_nullable_to_non_nullable
               as AppConfigBottomMenu,
+      systemNotificationsEnabled: null == systemNotificationsEnabled
+          ? _value.systemNotificationsEnabled
+          : systemNotificationsEnabled // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -880,7 +943,8 @@ class _$AppConfigMainImpl extends _AppConfigMain {
             type: BottomMenuTabType.messaging,
             titleL10n: 'main_BottomNavigationBarItemLabel_chats',
             icon: '0xe155')
-      ])})
+      ]),
+      this.systemNotificationsEnabled = true})
       : super._();
 
   factory _$AppConfigMainImpl.fromJson(Map<String, dynamic> json) =>
@@ -889,10 +953,13 @@ class _$AppConfigMainImpl extends _AppConfigMain {
   @override
   @JsonKey()
   final AppConfigBottomMenu bottomMenu;
+  @override
+  @JsonKey()
+  final bool systemNotificationsEnabled;
 
   @override
   String toString() {
-    return 'AppConfigMain(bottomMenu: $bottomMenu)';
+    return 'AppConfigMain(bottomMenu: $bottomMenu, systemNotificationsEnabled: $systemNotificationsEnabled)';
   }
 
   @override
@@ -901,12 +968,17 @@ class _$AppConfigMainImpl extends _AppConfigMain {
         (other.runtimeType == runtimeType &&
             other is _$AppConfigMainImpl &&
             (identical(other.bottomMenu, bottomMenu) ||
-                other.bottomMenu == bottomMenu));
+                other.bottomMenu == bottomMenu) &&
+            (identical(other.systemNotificationsEnabled,
+                    systemNotificationsEnabled) ||
+                other.systemNotificationsEnabled ==
+                    systemNotificationsEnabled));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, bottomMenu);
+  int get hashCode =>
+      Object.hash(runtimeType, bottomMenu, systemNotificationsEnabled);
 
   /// Create a copy of AppConfigMain
   /// with the given fields replaced by the non-null parameter values.
@@ -925,8 +997,9 @@ class _$AppConfigMainImpl extends _AppConfigMain {
 }
 
 abstract class _AppConfigMain extends AppConfigMain {
-  const factory _AppConfigMain({final AppConfigBottomMenu bottomMenu}) =
-      _$AppConfigMainImpl;
+  const factory _AppConfigMain(
+      {final AppConfigBottomMenu bottomMenu,
+      final bool systemNotificationsEnabled}) = _$AppConfigMainImpl;
   const _AppConfigMain._() : super._();
 
   factory _AppConfigMain.fromJson(Map<String, dynamic> json) =
@@ -934,6 +1007,8 @@ abstract class _AppConfigMain extends AppConfigMain {
 
   @override
   AppConfigBottomMenu get bottomMenu;
+  @override
+  bool get systemNotificationsEnabled;
 
   /// Create a copy of AppConfigMain
   /// with the given fields replaced by the non-null parameter values.
@@ -2139,7 +2214,8 @@ mixin _$EncodingDefaultPresetOverride {
   int? get videoBitrate => throw _privateConstructorUsedError;
   int? get ptime => throw _privateConstructorUsedError;
   int? get maxptime => throw _privateConstructorUsedError;
-  int? get opusBandwidthLimit => throw _privateConstructorUsedError;
+  int? get opusSamplingRate => throw _privateConstructorUsedError;
+  int? get opusBitrate => throw _privateConstructorUsedError;
   bool? get opusStereo => throw _privateConstructorUsedError;
   bool? get opusDtx => throw _privateConstructorUsedError;
 
@@ -2166,7 +2242,8 @@ abstract class $EncodingDefaultPresetOverrideCopyWith<$Res> {
       int? videoBitrate,
       int? ptime,
       int? maxptime,
-      int? opusBandwidthLimit,
+      int? opusSamplingRate,
+      int? opusBitrate,
       bool? opusStereo,
       bool? opusDtx});
 }
@@ -2191,7 +2268,8 @@ class _$EncodingDefaultPresetOverrideCopyWithImpl<$Res,
     Object? videoBitrate = freezed,
     Object? ptime = freezed,
     Object? maxptime = freezed,
-    Object? opusBandwidthLimit = freezed,
+    Object? opusSamplingRate = freezed,
+    Object? opusBitrate = freezed,
     Object? opusStereo = freezed,
     Object? opusDtx = freezed,
   }) {
@@ -2212,9 +2290,13 @@ class _$EncodingDefaultPresetOverrideCopyWithImpl<$Res,
           ? _value.maxptime
           : maxptime // ignore: cast_nullable_to_non_nullable
               as int?,
-      opusBandwidthLimit: freezed == opusBandwidthLimit
-          ? _value.opusBandwidthLimit
-          : opusBandwidthLimit // ignore: cast_nullable_to_non_nullable
+      opusSamplingRate: freezed == opusSamplingRate
+          ? _value.opusSamplingRate
+          : opusSamplingRate // ignore: cast_nullable_to_non_nullable
+              as int?,
+      opusBitrate: freezed == opusBitrate
+          ? _value.opusBitrate
+          : opusBitrate // ignore: cast_nullable_to_non_nullable
               as int?,
       opusStereo: freezed == opusStereo
           ? _value.opusStereo
@@ -2242,7 +2324,8 @@ abstract class _$$EncodingDefaultPresetOverrideImplCopyWith<$Res>
       int? videoBitrate,
       int? ptime,
       int? maxptime,
-      int? opusBandwidthLimit,
+      int? opusSamplingRate,
+      int? opusBitrate,
       bool? opusStereo,
       bool? opusDtx});
 }
@@ -2266,7 +2349,8 @@ class __$$EncodingDefaultPresetOverrideImplCopyWithImpl<$Res>
     Object? videoBitrate = freezed,
     Object? ptime = freezed,
     Object? maxptime = freezed,
-    Object? opusBandwidthLimit = freezed,
+    Object? opusSamplingRate = freezed,
+    Object? opusBitrate = freezed,
     Object? opusStereo = freezed,
     Object? opusDtx = freezed,
   }) {
@@ -2287,9 +2371,13 @@ class __$$EncodingDefaultPresetOverrideImplCopyWithImpl<$Res>
           ? _value.maxptime
           : maxptime // ignore: cast_nullable_to_non_nullable
               as int?,
-      opusBandwidthLimit: freezed == opusBandwidthLimit
-          ? _value.opusBandwidthLimit
-          : opusBandwidthLimit // ignore: cast_nullable_to_non_nullable
+      opusSamplingRate: freezed == opusSamplingRate
+          ? _value.opusSamplingRate
+          : opusSamplingRate // ignore: cast_nullable_to_non_nullable
+              as int?,
+      opusBitrate: freezed == opusBitrate
+          ? _value.opusBitrate
+          : opusBitrate // ignore: cast_nullable_to_non_nullable
               as int?,
       opusStereo: freezed == opusStereo
           ? _value.opusStereo
@@ -2313,7 +2401,8 @@ class _$EncodingDefaultPresetOverrideImpl
       this.videoBitrate,
       this.ptime,
       this.maxptime,
-      this.opusBandwidthLimit,
+      this.opusSamplingRate,
+      this.opusBitrate,
       this.opusStereo,
       this.opusDtx})
       : super._();
@@ -2331,7 +2420,9 @@ class _$EncodingDefaultPresetOverrideImpl
   @override
   final int? maxptime;
   @override
-  final int? opusBandwidthLimit;
+  final int? opusSamplingRate;
+  @override
+  final int? opusBitrate;
   @override
   final bool? opusStereo;
   @override
@@ -2339,7 +2430,7 @@ class _$EncodingDefaultPresetOverrideImpl
 
   @override
   String toString() {
-    return 'EncodingDefaultPresetOverride(audioBitrate: $audioBitrate, videoBitrate: $videoBitrate, ptime: $ptime, maxptime: $maxptime, opusBandwidthLimit: $opusBandwidthLimit, opusStereo: $opusStereo, opusDtx: $opusDtx)';
+    return 'EncodingDefaultPresetOverride(audioBitrate: $audioBitrate, videoBitrate: $videoBitrate, ptime: $ptime, maxptime: $maxptime, opusSamplingRate: $opusSamplingRate, opusBitrate: $opusBitrate, opusStereo: $opusStereo, opusDtx: $opusDtx)';
   }
 
   @override
@@ -2354,8 +2445,10 @@ class _$EncodingDefaultPresetOverrideImpl
             (identical(other.ptime, ptime) || other.ptime == ptime) &&
             (identical(other.maxptime, maxptime) ||
                 other.maxptime == maxptime) &&
-            (identical(other.opusBandwidthLimit, opusBandwidthLimit) ||
-                other.opusBandwidthLimit == opusBandwidthLimit) &&
+            (identical(other.opusSamplingRate, opusSamplingRate) ||
+                other.opusSamplingRate == opusSamplingRate) &&
+            (identical(other.opusBitrate, opusBitrate) ||
+                other.opusBitrate == opusBitrate) &&
             (identical(other.opusStereo, opusStereo) ||
                 other.opusStereo == opusStereo) &&
             (identical(other.opusDtx, opusDtx) || other.opusDtx == opusDtx));
@@ -2364,7 +2457,7 @@ class _$EncodingDefaultPresetOverrideImpl
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, audioBitrate, videoBitrate,
-      ptime, maxptime, opusBandwidthLimit, opusStereo, opusDtx);
+      ptime, maxptime, opusSamplingRate, opusBitrate, opusStereo, opusDtx);
 
   /// Create a copy of EncodingDefaultPresetOverride
   /// with the given fields replaced by the non-null parameter values.
@@ -2391,7 +2484,8 @@ abstract class _EncodingDefaultPresetOverride
       final int? videoBitrate,
       final int? ptime,
       final int? maxptime,
-      final int? opusBandwidthLimit,
+      final int? opusSamplingRate,
+      final int? opusBitrate,
       final bool? opusStereo,
       final bool? opusDtx}) = _$EncodingDefaultPresetOverrideImpl;
   const _EncodingDefaultPresetOverride._() : super._();
@@ -2408,7 +2502,9 @@ abstract class _EncodingDefaultPresetOverride
   @override
   int? get maxptime;
   @override
-  int? get opusBandwidthLimit;
+  int? get opusSamplingRate;
+  @override
+  int? get opusBitrate;
   @override
   bool? get opusStereo;
   @override

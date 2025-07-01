@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:logging/logging.dart';
 
 import 'package:webtrit_phone/data/app_preferences.dart';
+import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/models/models.dart';
@@ -45,41 +46,51 @@ final Logger _logger = Logger('FeatureAccess');
 ///
 /// 6. **TermsFeature**: Configures access to privacy policy and terms resources. It retrieves the privacy policy URL
 ///    from embedded resources and assigns it to the appropriate settings item when needed.
+
+// TODO(Serdun): Replace direct usage of AppConfig.embeddedResources with EmbeddedFeature.embeddedResources
 class FeatureAccess {
   static late FeatureAccess _instance;
 
   FeatureAccess._(
+    this.embeddedFeature,
     this.loginFeature,
     this.bottomMenuFeature,
     this.settingsFeature,
     this.callFeature,
     this.messagingFeature,
     this.termsFeature,
+    this.systemNotificationsFeature,
   );
 
+  final EmbeddedFeature embeddedFeature;
   final LoginFeature loginFeature;
   final BottomMenuFeature bottomMenuFeature;
   final SettingsFeature settingsFeature;
   final CallFeature callFeature;
   final MessagingFeature messagingFeature;
   final TermsFeature termsFeature;
+  final SystemNotificationsFeature systemNotificationsFeature;
 
   static FeatureAccess init(AppConfig appConfig, AppPreferences preferences) {
     try {
+      final embeddedFeature = _tryConfigureEmbeddedFeature(appConfig);
       final customLoginFeature = _tryEnableCustomLoginFeature(appConfig);
-      final bottomMenuManager = _tryConfigureBottomMenuFeature(appConfig, preferences);
+      final bottomMenuManager = _tryConfigureBottomMenuFeature(appConfig, preferences, embeddedFeature);
       final settingsFeature = _tryConfigureSettingsFeature(appConfig, preferences);
       final callFeature = _tryConfigureCallFeature(appConfig, preferences);
       final messagingFeature = _tryConfigureMessagingFeature(appConfig, preferences);
       final termsFeature = _tryConfigureTermsFeature(appConfig);
+      final systemNotificationsFeature = _tryConfigureSystemNotificationsFeature(preferences, appConfig);
 
       _instance = FeatureAccess._(
+        embeddedFeature,
         customLoginFeature,
         bottomMenuManager,
         settingsFeature,
         callFeature,
         messagingFeature,
         termsFeature,
+        systemNotificationsFeature,
       );
     } catch (e, stackTrace) {
       _logger.severe('Failed to initialize FeatureAccess', e, stackTrace);
@@ -93,6 +104,7 @@ class FeatureAccess {
   static BottomMenuFeature _tryConfigureBottomMenuFeature(
     AppConfig appConfig,
     AppPreferences preferences,
+    EmbeddedFeature embeddedFeature,
   ) {
     final bottomMenu = appConfig.mainConfig.bottomMenu;
 
@@ -102,7 +114,7 @@ class FeatureAccess {
 
     final bottomMenuTabs = bottomMenu.tabs
         .where((tab) => tab.enabled)
-        .map((tab) => _createBottomMenuTab(tab, appConfig.embeddedResources))
+        .map((tab) => _createBottomMenuTab(tab, embeddedFeature.embeddedResources))
         .toList();
 
     if (bottomMenuTabs.isEmpty) {
@@ -116,7 +128,7 @@ class FeatureAccess {
     );
   }
 
-  static BottomMenuTab _createBottomMenuTab(BottomMenuTabScheme tab, List<EmbeddedResource> embeddedResources) {
+  static BottomMenuTab _createBottomMenuTab(BottomMenuTabScheme tab, List<EmbeddedData> embeddedResources) {
     final flavor = MainFlavor.values.byName(tab.type.name);
 
     return tab.when(
@@ -144,7 +156,7 @@ class FeatureAccess {
           flavor: flavor,
           titleL10n: tab.titleL10n,
           icon: tab.icon.toIconData(),
-          data: EmbeddedData(uri: Uri.parse(embeddedResource?.uri ?? '')),
+          data: embeddedResource,
         );
       },
     );
@@ -163,6 +175,7 @@ class FeatureAccess {
         final flavor = SettingsFlavor.values.byName(item.type);
 
         if (!_isSupportedPlatform(flavor)) continue;
+        if (!_isSupportedCore(flavor, preferences)) continue;
 
         final settingItem = SettingItem(
           titleL10n: item.titleL10n,
@@ -174,15 +187,18 @@ class FeatureAccess {
         items.add(settingItem);
       }
 
-      settingSections.add(
-        SettingsSection(
-          titleL10n: section.titleL10n,
-          items: items,
-        ),
-      );
+      // Skip empty sections
+      if (items.isNotEmpty) {
+        settingSections.add(
+          SettingsSection(
+            titleL10n: section.titleL10n,
+            items: items,
+          ),
+        );
+      }
     }
 
-    return SettingsFeature(settingSections);
+    return SettingsFeature(settingSections, preferences);
   }
 
   // TODO (Serdun): Move platform-specific configuration to a separate config file.
@@ -192,23 +208,28 @@ class FeatureAccess {
     return !(flavor == SettingsFlavor.network && !kIsWeb && !Platform.isAndroid);
   }
 
+  static bool _isSupportedCore(SettingsFlavor flavor, AppPreferences preferences) {
+    if (flavor != SettingsFlavor.voicemail) return true;
+    return preferences.getSystemInfo()?.adapter?.supported?.contains(kVoicemailFeatureFlag) ?? false;
+  }
+
   static EmbeddedData? _getEmbeddedDataResource(
     AppConfig appConfig,
     AppConfigSettingsItem item,
     SettingsFlavor flavor,
   ) {
     // Retrieve the embedded resource URL by matching the provided item ID.
-    var embeddedDataResourceUrl =
-        appConfig.embeddedResources.firstWhereOrNull((resource) => resource.id == item.embeddedResourceId)?.uriOrNull;
+    var embeddedDataResource =
+        appConfig.embeddedResources.firstWhereOrNull((resource) => resource.id == item.embeddedResourceId);
 
     // If no direct match is found and the flavor is 'terms', attempt to fetch the privacy policy resource.
-    if (embeddedDataResourceUrl == null && flavor == SettingsFlavor.terms) {
+    if (embeddedDataResource?.uriOrNull == null && flavor == SettingsFlavor.terms) {
       return _tryConfigureTermsFeature(appConfig).configData;
     }
 
     // Return a ConfigData instance if a valid resource URL is found, otherwise return null.
-    return embeddedDataResourceUrl != null
-        ? EmbeddedData(uri: embeddedDataResourceUrl, titleL10n: item.titleL10n)
+    return embeddedDataResource?.uriOrNull != null
+        ? EmbeddedData(id: embeddedDataResource!.id, uri: embeddedDataResource.uriOrNull!, titleL10n: item.titleL10n)
         : null;
   }
 
@@ -223,16 +244,23 @@ class FeatureAccess {
       final flavor = LoginFlavor.values.byName(actions.type);
       final loginEmbeddedScreen = appConfig.embeddedResources.firstWhereOrNull((dto) => dto.id == actions.embeddedId);
 
-      if (flavor == LoginFlavor.embedded && loginEmbeddedScreen != null) {
+      var isLaunchButtonVisible = actions.isLaunchButtonVisible;
+      var isEmbeddedConfigurationValid = flavor == LoginFlavor.embedded && loginEmbeddedScreen != null;
+      var isLaunchScreen = isEmbeddedConfigurationValid && !isLaunchButtonVisible && actions.isLaunchScreen;
+
+      if (isEmbeddedConfigurationValid) {
         buttons.add(LoginEmbeddedModeButton(
           titleL10n: actions.titleL10n,
           flavor: flavor,
           customLoginFeature: _toLoginEmbeddedModel(loginEmbeddedScreen)!,
+          isLaunchButtonVisible: isLaunchButtonVisible,
+          isLaunchScreen: isLaunchScreen,
         ));
       } else if (flavor == LoginFlavor.login) {
         buttons.add(LoginModeAction(
           titleL10n: actions.titleL10n,
           flavor: flavor,
+          isLaunchButtonVisible: isLaunchButtonVisible,
         ));
       }
     }
@@ -270,10 +298,16 @@ class FeatureAccess {
     final peerConnectionConfig = appConfig.callConfig.peerConnection;
 
     return CallFeature(
-      videoEnable: callConfig.videoEnabled,
-      transfer: TransferConfig(
-        enableBlindTransfer: transferConfig.enableBlindTransfer,
-        enableAttendedTransfer: transferConfig.enableAttendedTransfer,
+      callConfig: CallConfig(
+        isVideoCallEnabled: callConfig.videoEnabled,
+        isBlindTransferEnabled: transferConfig.enableBlindTransfer,
+        isAttendedTransferEnabled: transferConfig.enableAttendedTransfer,
+      ),
+      callTriggerConfig: const CallTriggerConfig(
+        smsFallback: SmsFallbackTriggerConfig(
+          enabled: EnvironmentConfig.CALL_TRIGGER_MECHANISM_SMS,
+          available: EnvironmentConfig.CALL_TRIGGER_MECHANISM_SMS,
+        ),
       ),
       encoding: EncodingConfig(
           bypassConfig: encodingConfig.bypassConfig,
@@ -283,7 +317,8 @@ class FeatureAccess {
             videoBitrate: defaultPresetOverride.videoBitrate,
             ptime: defaultPresetOverride.ptime,
             maxptime: defaultPresetOverride.maxptime,
-            opusBandwidthLimit: defaultPresetOverride.opusBandwidthLimit,
+            opusSamplingRate: defaultPresetOverride.opusSamplingRate,
+            opusBitrate: defaultPresetOverride.opusBitrate,
             opusStereo: defaultPresetOverride.opusStereo,
             opusDtx: defaultPresetOverride.opusDtx,
           )),
@@ -320,9 +355,30 @@ class FeatureAccess {
     _logger.info('Privacy policy resource found: ${termsResource.uriOrNull}');
 
     return TermsFeature(EmbeddedData(
+      id: termsResource.id,
       uri: termsResource.uriOrNull!,
       titleL10n: termsResource.toolbar.titleL10n,
     ));
+  }
+
+  static EmbeddedFeature _tryConfigureEmbeddedFeature(AppConfig appConfig) {
+    final embeddedResources = appConfig.embeddedResources.map((resource) {
+      return EmbeddedData(
+        id: resource.id,
+        uri: Uri.parse(resource.uri),
+        payload: resource.payload.map((it) => EmbeddedPayloadData.values.byName(it)).toList(),
+      );
+    }).toList();
+
+    return EmbeddedFeature(embeddedResources);
+  }
+
+  static SystemNotificationsFeature _tryConfigureSystemNotificationsFeature(
+    AppPreferences preferences,
+    AppConfig appConfig,
+  ) {
+    final enabled = appConfig.mainConfig.systemNotificationsEnabled;
+    return SystemNotificationsFeature(preferences, enabled);
   }
 }
 
@@ -337,7 +393,14 @@ class LoginFeature {
     required this.launchLoginPage,
   });
 
-  bool get hasEmbeddedPage => actions.any((flavor) => flavor.flavor == LoginFlavor.embedded);
+  List<LoginEmbeddedModeButton> get embeddedConfigurations => actions.whereType<LoginEmbeddedModeButton>().toList();
+
+  LoginEmbeddedModeButton? get embeddedLaunchConfiguration =>
+      embeddedConfigurations.firstWhereOrNull((action) => action.isLaunchScreen);
+
+  bool get hasEmbeddedPage => embeddedConfigurations.isNotEmpty;
+
+  List<LoginModeAction> get launchButtons => actions.where((action) => action.isLaunchButtonVisible).toList();
 }
 
 class BottomMenuFeature {
@@ -381,31 +444,54 @@ class BottomMenuFeature {
 }
 
 class SettingsFeature {
-  final List<SettingsSection> _sections;
+  SettingsFeature(this._sections, this._appPreferences);
 
-  SettingsFeature(this._sections);
+  final List<SettingsSection> _sections;
+  final AppPreferences _appPreferences;
 
   List<SettingsSection> get sections => List.unmodifiable(_sections);
+
+  // TODO(Serdun): Remove duplicate code
+  List<String> get _coreSupportedFeatures {
+    final systemInfo = _appPreferences.getSystemInfo();
+    return systemInfo?.adapter?.supported ?? [];
+  }
+
+  bool get coreVoicemailSupport => _coreSupportedFeatures.contains(kVoicemailFeatureFlag);
 
   bool get isSelfConfigEnabled => _sections.any((section) {
         return section.items.any((item) {
           return item.flavor == SettingsFlavor.selfConfig;
         });
       });
+
+  bool get isVoicemailsEnabled => _sections.any((section) {
+        return section.items.any((item) {
+          return item.flavor == SettingsFlavor.voicemail && coreVoicemailSupport;
+        });
+      });
 }
 
 class CallFeature {
-  final bool videoEnable;
-  final TransferConfig transfer;
+  CallFeature({
+    required this.callConfig,
+    required this.encoding,
+    required this.peerConnection,
+    required this.callTriggerConfig,
+  });
+
+  final CallConfig callConfig;
   final EncodingConfig encoding;
   final PeerConnectionSettings peerConnection;
 
-  CallFeature({
-    required this.videoEnable,
-    required this.transfer,
-    required this.encoding,
-    required this.peerConnection,
-  });
+  /// Configuration for how incoming calls are triggered.
+  ///
+  /// This controls which triggering mechanisms are available and which one is currently active.
+  /// It also defines fallback behavior via SMS if supported.
+  ///
+  /// Note: This setting affects **UI-level visibility and selection** of triggering methods,
+  /// not the underlying signaling implementation.
+  final CallTriggerConfig callTriggerConfig;
 }
 
 class MessagingFeature {
@@ -453,4 +539,32 @@ class TermsFeature {
   final EmbeddedData configData;
 
   TermsFeature(this.configData);
+}
+
+class EmbeddedFeature {
+  final List<EmbeddedData> embeddedResources;
+
+  EmbeddedFeature(this.embeddedResources);
+}
+
+class SystemNotificationsFeature {
+  SystemNotificationsFeature(this._appPreferences, this.enabled);
+
+  final bool enabled;
+  final AppPreferences _appPreferences;
+
+  List<String> get _coreSupportedFeatures {
+    final systemInfo = _appPreferences.getSystemInfo();
+    return systemInfo?.adapter?.supported ?? [];
+  }
+
+  // Check if the core system supports system notifications and push sending.
+  bool get coreSystemSupport => _coreSupportedFeatures.contains(kSystemNotificationsFeatureFlag);
+  bool get coreSystemPushSupport => _coreSupportedFeatures.contains(kSystemNotificationsPushFeatureFlag);
+
+  /// Check if the system notifications feature is enabled and supported by the remote system.
+  bool get systemNotificationsSupport => enabled && coreSystemSupport;
+
+  /// Check if the system notifications push feature is enabled and supported by the remote system.
+  bool get systemNotificationsPushSupport => enabled && coreSystemPushSupport;
 }

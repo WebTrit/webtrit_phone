@@ -30,20 +30,18 @@ class SDPModBuilder {
   }
 
   /// Sets the target bitrate for audio and video media sections in the SDP (in kbps).
-  ///
-  /// Bitrate values are clamped using [getMinBitrate] and [getMaxBitrate],
-  /// and then applied via [_setBandwidth] to ensure proper SDP signaling.
-  ///
+  /// [audio] in range of `8-256` kbps.
+  /// [video] in range of `32-4000` kbps.
   /// Pass `null` to skip setting bitrate for either media kind.
   void setBitrate(int? audio, int? video) {
     if (audio != null) {
-      audio = audio.clamp(getMinBitrate(RTPCodecKind.audio), getMaxBitrate(RTPCodecKind.audio));
+      audio = audio.clamp(8, 256);
       final media = _getMedia(RTPCodecKind.audio);
       if (media != null) _setBandwidth(media, audio);
     }
 
     if (video != null) {
-      video = video.clamp(getMinBitrate(RTPCodecKind.video), getMaxBitrate(RTPCodecKind.video));
+      video = video.clamp(32, 4000);
       final media = _getMedia(RTPCodecKind.video);
       if (media != null) _setBandwidth(media, video);
     }
@@ -51,9 +49,10 @@ class SDPModBuilder {
 
   /// Set opus specific parameters
   /// [bandWidthLimit] limit maximum bandwidth in hz, range `8000-48000`.
+  /// [bitrateLimit] limit maximum bitrate in kbps, range `6-500`.
   /// [stereo] stereo support on/off.
   /// [dtx] DTX support on/off.
-  setOpusParams(int? bandWidthLimit, bool? stereo, bool? dtx) {
+  setOpusParams(int? bandWidthLimit, int? bitrateLimit, bool? stereo, bool? dtx) {
     final profileId = getProfileId(RTPCodecProfile.opus);
     if (profileId == null) return;
 
@@ -83,6 +82,11 @@ class SDPModBuilder {
           bandWidthLimit = bandWidthLimit.clamp(8000, 48000);
           configMap['maxplaybackrate'] = bandWidthLimit.toStringAsFixed(0);
           configMap['sprop-maxcapturerate'] = bandWidthLimit.toStringAsFixed(0);
+        }
+
+        if (bitrateLimit != null) {
+          bitrateLimit = bitrateLimit.clamp(6, 500);
+          configMap['maxaveragebitrate'] = (bitrateLimit * 1000).toStringAsFixed(0);
         }
 
         if (dtx != null) {
@@ -243,93 +247,6 @@ class SDPModBuilder {
 
   Map<String, dynamic>? _getMedia(RTPCodecKind kind) {
     return (data['media'] as List<dynamic>).firstWhereOrNull((m) => m['type'] == kind.name);
-  }
-
-  /// Applies default corrections to inbound SDP to ensure compatibility.
-  ///
-  /// Currently, this method ensures that the audio bitrate is not set below
-  /// the minimum threshold required by the active audio codecs (e.g., Opus, G722).
-  ///
-  /// This helps prevent WebRTC negotiation errors or crashes caused by
-  /// unsupported or invalid SDP parameters.
-  void clean() {
-    _fixInvalidAudioBitrate();
-  }
-
-  /// Validates and enforces a minimum audio bitrate to ensure inbound SDP  compatibility.
-  ///
-  /// This method checks whether the audio media section exists and applies a safe minimum bitrate
-  /// required for stable WebRTC negotiation based on available codecs:
-  ///
-  /// - If Opus is present, uses 8 kbps as the minimum.
-  /// - If Opus is not present, uses a fallback of 64 kbps.
-  /// - The G722 check has been removed for simplicity and consistency.
-  ///
-  /// The method delegates bandwidth value construction (`AS` and `TIAS`) to [_setBandwidth],
-  /// which ensures proper formatting and RTP overhead calculation.
-  ///
-  /// This correction helps prevent negotiation errors, poor audio quality, or client crashes
-  /// due to unsupported or underspecified bandwidth settings.
-  void _fixInvalidAudioBitrate() {
-    final media = _getMedia(RTPCodecKind.audio);
-    if (media == null) return;
-
-    // Extract the original 'b=AS' bandwidth value, if present
-    final originalBandwidth = media['bandwidth'] as List<dynamic>? ?? [];
-    final originalAsLimitRaw = originalBandwidth.firstWhereOrNull((bw) => bw['type'] == 'AS')?['limit'];
-    final originalAsLimit = parseBandwidthLimit(originalAsLimitRaw);
-
-    // If the bandwidth is explicitly set to 0, treat it as a disabled stream and do not override
-    if (originalAsLimit == 0) return;
-
-    // Convert AS value (which includes RTP overhead) to approximate clean media bitrate (TIAS-equivalent)
-    final originalBitrateKbps = (originalAsLimit / 1.2).round();
-
-    // Get the minimum required bitrate based on active codecs (e.g., 8 kbps if Opus is present, 64 kbps otherwise)
-    final minAudioBitrate = getMinBitrate(RTPCodecKind.audio);
-
-    // If the original bitrate is below the codec's minimum, increase it; otherwise, keep as is
-    final finalBitrateKbps = originalBitrateKbps >= minAudioBitrate ? originalBitrateKbps : minAudioBitrate;
-
-    _setBandwidth(media, finalBitrateKbps);
-  }
-
-  /// Returns the minimum allowed bitrate (in kbps) for the given media kind,
-  /// clamped to match the allowed codec ranges.
-  ///
-  /// - For audio:
-  ///   - If Opus is available: min 8 kbps
-  ///   - If Opus is not available: min 64 kbps (safe fallback)
-  /// - For video: min 32 kbps
-  int getMinBitrate(RTPCodecKind kind) {
-    switch (kind) {
-      case RTPCodecKind.audio:
-        final hasOpus = getProfileId(RTPCodecProfile.opus) != null;
-        final min = hasOpus ? 8 : 64;
-        final max = getMaxBitrate(RTPCodecKind.audio);
-        return min.clamp(min, max);
-
-      case RTPCodecKind.video:
-        const min = 32;
-        final max = getMaxBitrate(RTPCodecKind.video);
-        return min.clamp(min, max);
-    }
-  }
-
-  /// Returns the maximum allowed bitrate (in kbps) for the given media kind.
-  ///
-  /// - For audio: `256 kbps`
-  /// - For video: `4000 kbps`
-  ///
-  /// These limits are based on typical codec and transport layer constraints.
-  /// Use this to clamp bitrate values to reasonable upper bounds during SDP generation or cleanup.
-  int getMaxBitrate(RTPCodecKind kind) {
-    switch (kind) {
-      case RTPCodecKind.audio:
-        return 256;
-      case RTPCodecKind.video:
-        return 4000;
-    }
   }
 
   /// Sets the bandwidth information (`AS` and `TIAS`) for the given media section.

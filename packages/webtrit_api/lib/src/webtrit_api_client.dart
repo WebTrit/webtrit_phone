@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:math';
+import 'dart:typed_data';
 
 import 'package:http/http.dart' as http;
 import 'package:logging/logging.dart';
@@ -9,13 +9,16 @@ import 'package:meta/meta.dart';
 import 'package:_http_client/_http_client.dart';
 
 import 'exceptions.dart';
+import 'utils/request_utils.dart';
 import 'webtrit_api_request_options.dart';
+import 'webtrit_api_response_options.dart';
 import 'models/models.dart';
 
+// TODO(Serdun): Use correct naming for request and response options
 class WebtritApiClient {
-  static final _requestIdRandom = Random();
-
   final Logger _logger;
+
+  final _apiBasePathSegments = ['api', 'v1'];
 
   @visibleForTesting
   static Uri buildTenantUrl(Uri baseUrl, String tenantId) {
@@ -73,18 +76,20 @@ class WebtritApiClient {
     Object? requestDataJson, {
     String? requestId,
     Map<String, String>? headers,
+    Map<String, String>? queryParameters,
     RequestOptions options = const RequestOptions(),
+    ResponseOptions responseOptions = const ResponseOptions(),
   }) async {
     final url = tenantUrl.replace(
       pathSegments: [
         ...tenantUrl.pathSegments.where((segment) => segment.isNotEmpty),
-        'api',
-        'v1',
+        ..._apiBasePathSegments,
         ...pathSegments,
       ],
+      queryParameters: queryParameters,
     );
 
-    final xRequestId = requestId ?? _generateRequestId();
+    final xRequestId = requestId ?? RequestUtil.generate();
 
     final requestHeaders = {
       'content-type': 'application/json; charset=utf-8',
@@ -121,13 +126,34 @@ class WebtritApiClient {
             '${method.toUpperCase()} response with status code: ${httpResponse.statusCode} for requestId: $xRequestId, response body: ${httpResponse.body}');
 
         if (httpResponse.statusCode == 200 || httpResponse.statusCode == 204) {
-          return responseDataJson;
+          // Return response in the requested format depending on the response type:
+          // - JSON-decoded map for API data responses
+          // - Raw bytes for binary downloads (e.g., files)
+          // - Full http.Response object for advanced access (headers, status, etc.)
+          return switch (responseOptions.responseType) {
+            ResponseType.json => responseDataJson,
+            ResponseType.bytes => httpResponse.bodyBytes,
+            ResponseType.raw => httpResponse,
+          };
         } else {
           final error = switch (responseDataJson) {
             Map(isEmpty: true) => null,
             {'errors': {'detail': _}} => null,
             _ => ErrorResponse.fromJson(responseDataJson),
           };
+
+          // If the server responds with 404 or 501, it may indicate that a specific private endpoint
+          // is not implemented by the current adapter (e.g., tenant-specific or backend version mismatch).
+          // In such case, throw a dedicated exception to handle unsupported endpoint scenarios gracefully.
+          if (httpResponse.statusCode == 404 || httpResponse.statusCode == 501) {
+            throw EndpointNotSupportedException(
+              url: tenantUrl,
+              requestId: xRequestId,
+              statusCode: httpResponse.statusCode,
+              recognizedNotSupportedCodes: ['404', '501'],
+            );
+          }
+
           throw RequestFailure(
             url: tenantUrl,
             statusCode: httpResponse.statusCode,
@@ -148,22 +174,21 @@ class WebtritApiClient {
     }
   }
 
-  String _generateRequestId([int length = 32]) {
-    return String.fromCharCodes(List.generate(length, (index) => _requestIdRandom.nextInt(26) + 97));
-  }
-
   Future<dynamic> _httpClientExecuteGet(
     List<String> pathSegments,
     Map<String, String>? headers,
     String? token, {
-    RequestOptions options = const RequestOptions(),
+    Map<String, String>? queryParameters,
+    RequestOptions requestOptions = const RequestOptions(),
+    ResponseOptions responseOptions = const ResponseOptions(),
   }) {
     return _httpClientExecute(
       'get',
       pathSegments,
       token,
       null,
-      options: options,
+      options: requestOptions,
+      queryParameters: queryParameters,
     );
   }
 
@@ -172,6 +197,7 @@ class WebtritApiClient {
     Map<String, String>? headers,
     String? token,
     Object? requestDataJson, {
+    Map<String, String>? queryParameters,
     RequestOptions options = const RequestOptions(),
   }) {
     return _httpClientExecute(
@@ -181,6 +207,7 @@ class WebtritApiClient {
       requestDataJson,
       headers: headers,
       options: options,
+      queryParameters: queryParameters,
     );
   }
 
@@ -222,7 +249,7 @@ class WebtritApiClient {
       ['system-info'],
       null,
       null,
-      options: options,
+      requestOptions: options,
     );
 
     return SystemInfo.fromJson(responseJson);
@@ -336,14 +363,24 @@ class WebtritApiClient {
     String token, {
     RequestOptions options = const RequestOptions(),
   }) async {
-    final responseJson = await _httpClientExecuteGet(
-      ['user'],
-      null,
-      token,
-      options: options,
-    );
-
-    return UserInfo.fromJson(responseJson);
+    try {
+      final responseJson = await _httpClientExecuteGet(
+        ['user'],
+        null,
+        token,
+        requestOptions: options,
+      );
+      return UserInfo.fromJson(responseJson);
+    } on RequestFailure catch (e) {
+      if (e.statusCode == 404) {
+        throw UserNotFoundException(
+          url: e.url,
+          requestId: e.requestId,
+          statusCode: e.statusCode!,
+        );
+      }
+      rethrow;
+    }
   }
 
   Future<List<UserContact>> getUserContactList(
@@ -354,7 +391,7 @@ class WebtritApiClient {
       ['user', 'contacts'],
       null,
       token,
-      options: options,
+      requestOptions: options,
     );
 
     return (responseJson['items'] as List<dynamic>).map((e) {
@@ -382,7 +419,7 @@ class WebtritApiClient {
       ['app', 'status'],
       null,
       token,
-      options: options,
+      requestOptions: options,
     );
 
     return AppStatus.fromJson(responseJson);
@@ -428,7 +465,7 @@ class WebtritApiClient {
       ['app', 'contacts', 'smart'],
       null,
       token,
-      options: options,
+      requestOptions: options,
     );
 
     return (responseJson as List<dynamic>).map((e) => AppSmartContact.fromJson(e as Map<String, dynamic>)).toList();
@@ -482,5 +519,172 @@ class WebtritApiClient {
     );
 
     return SelfConfigResponse.fromJson(responseJson);
+  }
+
+  Future<ExternalPageAccessToken> getExternalPageAccessToken(
+    String token, {
+    RequestOptions options = const RequestOptions(),
+  }) async {
+    final responseJson = await _httpClientExecutePost(
+      ['custom', 'private', 'external-page-access-token'],
+      null,
+      token,
+      {},
+      options: options,
+    );
+
+    return ExternalPageAccessToken.fromJson(responseJson);
+  }
+
+  Future<UserVoicemailListResponse> getUserVoicemailList(
+    String token, {
+    String? locale,
+    RequestOptions options = const RequestOptions(),
+  }) async {
+    final responseJson = await _httpClientExecuteGet(
+      ['user', 'voicemails'],
+      locale != null ? {'Accept-Language': locale} : null,
+      token,
+      requestOptions: options,
+    );
+
+    return UserVoicemailListResponse.fromJson(responseJson);
+  }
+
+  Future<UserVoicemail> getUserVoicemail(
+    String token,
+    String messageId, {
+    String? locale,
+    RequestOptions options = const RequestOptions(),
+  }) async {
+    final responseJson = await _httpClientExecuteGet(
+      ['user', 'voicemails', messageId],
+      locale != null ? {'Accept-Language': locale} : null,
+      token,
+      requestOptions: options,
+    );
+
+    return UserVoicemail.fromJson(responseJson);
+  }
+
+  Future<void> deleteUserVoicemail(
+    String token,
+    String messageId, {
+    String? locale,
+    RequestOptions options = const RequestOptions(),
+  }) async {
+    await _httpClientExecuteDelete(
+      ['user', 'voicemails', messageId],
+      locale != null ? {'Accept-Language': locale} : null,
+      token,
+      options: options,
+    );
+  }
+
+  Future<void> updateUserVoicemail(
+    String token,
+    String messageId, {
+    required bool seen,
+    String? locale,
+    RequestOptions options = const RequestOptions(),
+  }) async {
+    final requestJson = {'seen': seen};
+
+    await _httpClientExecutePatch(
+      ['user', 'voicemails', messageId],
+      locale != null ? {'Accept-Language': locale} : null,
+      token,
+      requestJson,
+      options: options,
+    );
+  }
+
+  Future<Uint8List> getUserVoicemailAttachment(
+    String token,
+    String messageId, {
+    String? locale,
+    String? fileFormat,
+    RequestOptions options = const RequestOptions(),
+  }) async {
+    final responseJson = await _httpClientExecuteGet(
+      ['user', 'voicemails', messageId, 'attachment'],
+      locale != null ? {'Accept-Language': locale} : null,
+      token,
+      requestOptions: options,
+      responseOptions: ResponseOptions(responseType: ResponseType.bytes),
+    );
+
+    return responseJson;
+  }
+
+  String getVoicemailAttachmentUrl(String voicemailId, {String fileFormat = 'mp3'}) {
+    final url = tenantUrl.replace(
+      pathSegments: [
+        ...tenantUrl.pathSegments.where((segment) => segment.isNotEmpty),
+        ..._apiBasePathSegments,
+        ...['user', 'voicemails', voicemailId, 'attachment'],
+      ],
+      queryParameters: fileFormat.isNotEmpty ? {'file_format': fileFormat} : null,
+    );
+    return url.toString();
+  }
+
+  Future<SystemNotificationResponce> getSystemNotificationsHistory(
+    String token, {
+    DateTime? since,
+    int? limit,
+    String? locale,
+    RequestOptions options = const RequestOptions(),
+  }) async {
+    final responseJson = await _httpClientExecuteGet(
+      ['user', 'notifications'],
+      locale != null ? {'Accept-Language': locale} : null,
+      token,
+      requestOptions: options,
+      queryParameters: {
+        if (since != null) 'created_before': since.toUtc().toIso8601String(),
+        if (limit != null) 'limit': limit.toString(),
+      },
+    );
+
+    return SystemNotificationResponce.fromJson(responseJson as Map<String, dynamic>);
+  }
+
+  Future<SystemNotificationResponce> getSystemNotificationsUpdates(
+    String token, {
+    required DateTime since,
+    int? limit,
+    String? locale,
+    RequestOptions options = const RequestOptions(),
+  }) async {
+    final responseJson = await _httpClientExecuteGet(
+      ['user', 'notifications', 'updates'],
+      locale != null ? {'Accept-Language': locale} : null,
+      token,
+      requestOptions: options,
+      queryParameters: {
+        'updated_after': since.toUtc().toIso8601String(),
+        if (limit != null) 'limit': limit.toString(),
+      },
+    );
+    print('Response JSON: $responseJson');
+
+    return SystemNotificationResponce.fromJson(responseJson as Map<String, dynamic>);
+  }
+
+  Future<void> markSystemNotificationAsSeen(
+    String token,
+    int notificationId, {
+    RequestOptions options = const RequestOptions(),
+  }) async {
+    final requestJson = {'seen': true};
+
+    await _httpClientExecutePatch(
+      ['user', 'notifications', notificationId.toString()],
+      {},
+      token,
+      requestJson,
+      options: options,
+    );
   }
 }

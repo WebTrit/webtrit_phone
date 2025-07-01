@@ -43,7 +43,6 @@ class SettingsScreen extends StatelessWidget {
         ],
       ),
       body: BlocBuilder<SettingsBloc, SettingsState>(
-        buildWhen: (previous, current) => previous.progress != current.progress,
         builder: (context, state) {
           return Stack(
             children: [
@@ -203,6 +202,18 @@ class SettingsScreen extends StatelessWidget {
 
                                       return const SizedBox.shrink();
                                     },
+                                  )
+                                else if (item.flavor == SettingsFlavor.voicemail)
+                                  Column(
+                                    children: [
+                                      ListTile(
+                                        leading: Icon(item.icon),
+                                        trailing: UnreadBadge(count: state.unreadVoicemailCount),
+                                        title: Text(context.parseL10n(item.titleL10n)),
+                                        onTap: () => context.router.navigate(const VoicemailScreenPageRoute()),
+                                      ),
+                                      const ListTileSeparator(),
+                                    ],
                                   )
                             ],
                           ],

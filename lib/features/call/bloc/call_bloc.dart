@@ -14,6 +14,7 @@ import 'package:logging/logging.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
+
 import 'package:webtrit_signaling/webtrit_signaling.dart';
 import 'package:ssl_certificates/ssl_certificates.dart';
 
@@ -53,12 +54,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   final CallkeepConnections callkeepConnections;
 
   final SDPMunger? sdpMunger;
-  final SdpSanitizer? sdpSanitizer;
-
   final WebrtcOptionsBuilder? webRtcOptionsBuilder;
   final IceFilter? iceFilter;
   final UserMediaBuilder userMediaBuilder;
   final PeerConnectionPolicyApplier? peerConnectionPolicyApplier;
+  final ContactNameResolver contactNameResolver;
 
   StreamSubscription<List<ConnectivityResult>>? _connectivityChangedSubscription;
   StreamSubscription<PendingCall>? _pendingCallHandlerSubscription;
@@ -80,8 +80,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     required this.callkeep,
     required this.callkeepConnections,
     required this.userMediaBuilder,
+    required this.contactNameResolver,
     this.sdpMunger,
-    this.sdpSanitizer,
     this.webRtcOptionsBuilder,
     this.iceFilter,
     this.peerConnectionPolicyApplier,
@@ -223,6 +223,34 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         Set.from(change.nextState.activeCalls.map((e) => '${e.line}:${e.processingStatus.name}')).join(', ');
     if (currentProcessingStatuses != nextProcessingStatuses) {
       _logger.info(() => 'status transitions: $currentProcessingStatuses -> $nextProcessingStatuses');
+    }
+
+    final newRegistration = change.nextState.registration;
+    final previousRegistration = change.currentState.registration;
+    if (newRegistration != previousRegistration) {
+      _logger.fine('_onRegistrationChange: $newRegistration to $previousRegistration');
+      final newRegistrationStatus = newRegistration.status;
+      final previousRegistrationStatus = previousRegistration.status;
+
+      if (newRegistrationStatus.isRegistered && !previousRegistrationStatus.isRegistered) {
+        submitNotification(AppOnlineNotification());
+      }
+
+      if (!newRegistrationStatus.isRegistered && previousRegistrationStatus.isRegistered) {
+        submitNotification(AppOfflineNotification());
+      }
+
+      if (newRegistrationStatus.isFailed || newRegistrationStatus.isUnregistered) {
+        add(const _ResetStateEvent.completeCalls());
+      }
+
+      if (newRegistrationStatus.isFailed) {
+        submitNotification(SipRegistrationFailedNotification(
+          knownCode: SignalingRegistrationFailedCode.values.byCode(newRegistration.code),
+          systemCode: newRegistration.code,
+          systemReason: newRegistration.reason,
+        ));
+      }
     }
   }
 
@@ -429,40 +457,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _RegistrationChange event,
     Emitter<CallState> emit,
   ) async {
-    final newRegistrationStatus = event.registration.status;
-    final previousRegistrationStatus = state.registrationStatus;
-
-    if (newRegistrationStatus != previousRegistrationStatus) {
-      _logger.fine('_onRegistrationChange: $previousRegistrationStatus to $newRegistrationStatus');
-      emit(state.copyWith(registrationStatus: newRegistrationStatus));
-    } else {
-      _logger.fine('_onRegistrationChange: no change in status ($newRegistrationStatus)');
-      return;
-    }
-
-    if (newRegistrationStatus.isRegistered) {
-      submitNotification(AppOnlineNotification());
-      return;
-    }
-
-    if (newRegistrationStatus.isRegistering || newRegistrationStatus.isFailed || newRegistrationStatus.isUnregistered) {
-      add(const _ResetStateEvent.completeCalls());
-    }
-
-    if (newRegistrationStatus.isUnregistered) {
-      submitNotification(AppOfflineNotification());
-      return;
-    }
-
-    if (newRegistrationStatus.isFailed) {
-      _logger.severe(
-          '_onRegistrationChange: registration failed with code: ${event.registration.code}, reason: ${event.registration.reason}');
-      submitNotification(SipRegistrationFailedNotification(
-        knownCode: SignalingRegistrationFailedCode.values.byCode(event.registration.code),
-        systemCode: event.registration.code,
-        systemReason: event.registration.reason,
-      ));
-    }
+    emit(state.copyWith(registration: event.registration));
   }
 
   // processing the handling of the app state
@@ -609,6 +604,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
       emit(state.copyWith(
         signalingClientStatus: SignalingClientStatus.disconnect,
+        registration: const Registration(status: RegistrationStatus.registering),
         lastSignalingClientDisconnectError: null,
         lastSignalingDisconnectCode: null,
       ));
@@ -629,16 +625,16 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     final code = SignalingDisconnectCode.values.byCode(event.code ?? -1);
     final repeated = event.code == state.lastSignalingDisconnectCode;
 
-    emit(state.copyWith(
+    CallState newState = state.copyWith(
+      registration: const Registration(status: RegistrationStatus.registering),
       signalingClientStatus: SignalingClientStatus.disconnect,
       lastSignalingDisconnectCode: event.code,
-    ));
-    _signalingClient = null;
-
+    );
     Notification? notificationToShow;
+    bool shouldReconnect = true;
 
     if (code == SignalingDisconnectCode.appUnregisteredError) {
-      add(const _RegistrationChange(registration: Registration(status: RegistrationStatus.unregistered)));
+      newState = newState.copyWith(registration: const Registration(status: RegistrationStatus.unregistered));
     } else if (code == SignalingDisconnectCode.requestCallIdError) {
       state.activeCalls.where((e) => e.wasHungUp).forEach((e) => add(_ResetStateEvent.completeCall(e.callId)));
     } else if (code == SignalingDisconnectCode.controllerExitError) {
@@ -646,11 +642,21 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     } else if (code == SignalingDisconnectCode.sessionMissedError) {
       notificationToShow = const SignalingSessionMissedNotification();
     } else if (code.type == SignalingDisconnectCodeType.auxiliary) {
-      // Be sure to differenciate it from the network disconnect which is handled by the connectivity plugin
-      // This can happen on our server issue, or on fast switching from one network to another (wifi to mobile)
-      // So in this case it should try to reconnect with _reconnectInitiated
       _logger.info('__onSignalingClientEventDisconnected: socket goes down');
-      add(const _RegistrationChange(registration: Registration(status: RegistrationStatus.unregistered)));
+
+      /// Fun facts
+      /// - in case of network disconnection on android this section is evaluating faster than [_onConnectivityResultChanged].
+      /// - also in case of network disconnection error code is protocolError instead of normalClosure by unknown reason
+      /// so we need to handle it here as regular disconnection
+      if (code == SignalingDisconnectCode.protocolError) {
+        shouldReconnect = false;
+      } else {
+        notificationToShow = SignalingDisconnectNotification(
+          knownCode: code,
+          systemCode: event.code,
+          systemReason: event.reason,
+        );
+      }
     } else {
       notificationToShow = SignalingDisconnectNotification(
         knownCode: code,
@@ -658,9 +664,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         systemReason: event.reason,
       );
     }
-
+    emit(newState);
+    _signalingClient = null;
     if (notificationToShow != null && !repeated) submitNotification(notificationToShow);
-    _reconnectInitiated(kSignalingClientReconnectDelay);
+    if (shouldReconnect) _reconnectInitiated(kSignalingClientReconnectDelay);
   }
 
   // processing call push events
@@ -685,16 +692,28 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       return;
     }
 
+    final contactName = await contactNameResolver.resolveWithNumber(event.handle.value);
+    final displayName = contactName ?? event.displayName;
+
     emit(state.copyWithPushActiveCall(ActiveCall(
       direction: CallDirection.incoming,
       line: _kUndefinedLine,
       callId: event.callId,
       handle: event.handle,
-      displayName: event.displayName,
+      displayName: displayName,
       video: event.video,
       createdTime: clock.now(),
       processingStatus: CallProcessingStatus.incomingFromPush,
     )));
+
+    // Replace the display name in Callkeep if it differs from the one in the event
+    // mostly needed for ios, coz android can do it on background fcm isolate directly before push
+    // TODO:
+    // - do it on backend side same as for messaging
+    //   currently push notification contain display name from sip header
+    if (displayName != event.displayName) {
+      await callkeep.reportUpdateCall(event.callId, displayName: displayName);
+    }
 
     // Function to verify speaker availability for the upcoming event, ensuring the speaker button is correctly enabled or disabled
     add(const _NavigatorMediaDevicesChange());
@@ -763,13 +782,14 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     Emitter<CallState> emit,
   ) async {
     final video = event.jsep?.hasVideo ?? false;
-
     final handle = CallkeepHandle.number(event.caller);
+    final contactName = await contactNameResolver.resolveWithNumber(handle.value);
+    final displayName = contactName ?? event.callerDisplayName;
 
     final error = await callkeep.reportNewIncomingCall(
       event.callId,
       handle,
-      displayName: event.callerDisplayName,
+      displayName: displayName,
       hasVideo: video,
     );
 
@@ -803,7 +823,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       activeCall = activeCall.copyWith(
         line: event.line,
         handle: handle,
-        displayName: event.callerDisplayName,
+        displayName: displayName,
         video: video,
         transfer: transfer,
         incomingOffer: event.jsep,
@@ -815,7 +835,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         line: event.line,
         callId: event.callId,
         handle: handle,
-        displayName: event.callerDisplayName,
+        displayName: displayName,
         video: video,
         createdTime: clock.now(),
         transfer: transfer,
@@ -860,7 +880,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         _logger.warning('__onCallSignalingEventProgress: peerConnection is null - most likely some permissions issue');
       } else {
         final remoteDescription = jsep.toDescription();
-        sdpSanitizer?.apply(remoteDescription);
         await peerConnection.setRemoteDescription(remoteDescription);
       }
     } else {
@@ -897,7 +916,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     final pc = await _peerConnectionRetrieve(event.callId);
     if (jsep != null && pc != null) {
       final remoteDescription = jsep.toDescription();
-      sdpSanitizer?.apply(remoteDescription);
       await pc.setRemoteDescription(remoteDescription);
     }
   }
@@ -960,11 +978,13 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     Emitter<CallState> emit,
   ) async {
     final handle = CallkeepHandle.number(event.caller);
+    final contactName = await contactNameResolver.resolveWithNumber(handle.value);
+    final displayName = contactName ?? event.callerDisplayName;
 
     emit(state.copyWithMappedActiveCall(event.callId, (activeCall) {
       return activeCall.copyWith(
         handle: handle,
-        displayName: event.callerDisplayName ?? activeCall.displayName,
+        displayName: displayName ?? activeCall.displayName,
         video: event.jsep?.hasVideo ?? activeCall.video,
         updating: true,
       );
@@ -989,7 +1009,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
           if (peerConnection == null) {
             _logger.warning('__onCallSignalingEventUpdating: peerConnection is null - most likely some state issue');
           } else {
-            sdpSanitizer?.apply(remoteDescription);
             await peerConnectionPolicyApplier?.apply(peerConnection, hasRemoteVideo: jsep.hasVideo);
             await peerConnection.setRemoteDescription(remoteDescription);
             final localDescription = await peerConnection.createAnswer({});
@@ -1167,7 +1186,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _CallControlEventStarted event,
     Emitter<CallState> emit,
   ) async {
-    if (!state.registrationStatus.isRegistered) {
+    if (!state.registration.status.isRegistered) {
       _logger.info('__onCallControlEventStarted account is not registered');
       submitNotification(CallWhileUnregisteredNotification());
       return;
@@ -1188,13 +1207,15 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     });
 
     final callId = WebtritSignalingClient.generateCallId();
+    final contactName = await contactNameResolver.resolveWithNumber(event.handle.value);
+    final displayName = contactName ?? event.displayName;
 
     final newCall = ActiveCall(
       direction: CallDirection.outgoing,
       line: line,
       callId: callId,
       handle: event.handle,
-      displayName: event.displayName,
+      displayName: displayName,
       video: event.video,
       createdTime: clock.now(),
       processingStatus: CallProcessingStatus.outgoingCreated,
@@ -1205,7 +1226,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     final callkeepError = await callkeep.startCall(
       callId,
       event.handle,
-      displayNameOrContactIdentifier: event.displayName,
+      displayNameOrContactIdentifier: displayName,
       hasVideo: event.video,
       proximityEnabled: !event.video,
     );
@@ -1375,14 +1396,16 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         await audioSender.track?.stop();
         await audioSender.replaceTrack(newAudioTrack);
       } else if (newAudioTrack != null) {
-        await peerConnection.addTrack(newAudioTrack, newLocalStream);
+        final audioSenderResult = await peerConnection.safeAddTrack(newAudioTrack, newLocalStream);
+        _checkSenderResult(audioSenderResult, 'audio');
       }
 
       if (videoSender != null && newVideoTrack != null) {
         await videoSender.track?.stop();
         await videoSender.replaceTrack(newVideoTrack);
       } else if (newVideoTrack != null) {
-        await peerConnection.addTrack(newVideoTrack, newLocalStream);
+        final videoSenderResult = await peerConnection.safeAddTrack(newVideoTrack, newLocalStream);
+        _checkSenderResult(videoSenderResult, 'video');
       }
 
       emit(state.copyWithMappedActiveCall(
@@ -1459,7 +1482,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     Emitter<CallState> emit,
   ) async {
     final activeCallBlindTransferInitiated = state.activeCalls.blindTransferInitiated;
-    if (activeCallBlindTransferInitiated == null) return;
+    final currentCall = state.activeCalls.current;
+
+    final line = activeCallBlindTransferInitiated?.line ?? currentCall.line;
+    final callId = activeCallBlindTransferInitiated?.callId ?? currentCall.callId;
 
     // Check if the number is already in active calls
     final isNumberAlreadyConnected = state.activeCalls.any((call) => call.handle.value == event.number);
@@ -1471,15 +1497,15 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     try {
       final transferRequest = TransferRequest(
         transaction: WebtritSignalingClient.generateTransactionId(),
-        line: activeCallBlindTransferInitiated.line,
-        callId: activeCallBlindTransferInitiated.callId,
+        line: line,
+        callId: callId,
         number: event.number,
       );
 
       await _signalingClient?.execute(transferRequest);
 
       var newState = state.copyWith(minimized: false);
-      newState = newState.copyWithMappedActiveCall(activeCallBlindTransferInitiated.callId, (activeCall) {
+      newState = newState.copyWithMappedActiveCall(callId, (activeCall) {
         final transfer = Transfer.blindTransferTransferSubmitted(toNumber: event.number);
         return activeCall.copyWith(transfer: transfer);
       });
@@ -1623,7 +1649,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _CallPerformEventStarted event,
     Emitter<CallState> emit,
   ) async {
-    if (!state.registrationStatus.isRegistered) {
+    if (!state.registration.status.isRegistered) {
       _logger.info('__onCallPerformEventStarted account is not registered');
       submitNotification(CallWhileUnregisteredNotification());
 
@@ -1825,14 +1851,13 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       }));
 
       final remoteDescription = offer.toDescription();
-      sdpSanitizer?.apply(remoteDescription);
       await peerConnection.setRemoteDescription(remoteDescription);
       final localDescription = await peerConnection.createAnswer({});
       sdpMunger?.apply(localDescription);
 
       // According to RFC 8829 §5.6 (https://datatracker.ietf.org/doc/html/rfc8829#section-5.6),
       // localDescription should be set before sending the answer to transition into stable state.
-      await peerConnection.setLocalDescription(localDescription);
+      await peerConnection.setLocalDescription(localDescription).catchError((e) => throw SDPConfigurationError(e));
 
       await _signalingClient?.execute(AcceptRequest(
         transaction: WebtritSignalingClient.generateTransactionId(),
@@ -1857,6 +1882,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       switch (e) {
         case UserMediaError _:
           submitNotification(const CallUserMediaErrorNotification());
+          break;
+        case SDPConfigurationError _:
+          submitNotification(const CallSdpConfigurationErrorNotification());
           break;
         case TimeoutException _:
           submitNotification(const CallNegotiationTimeoutNotification());
@@ -2647,6 +2675,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       direction: activeCall.direction,
       number: activeCall.handle.value,
       video: activeCall.video,
+      username: activeCall.displayName,
       createdTime: activeCall.createdTime,
       acceptedTime: activeCall.acceptedTime,
       hungUpTime: activeCall.hungUpTime,
@@ -2684,5 +2713,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     await _signalingClient?.execute(hangupRequest).catchError((e) {
       _logger.warning('_signalingDeclineCall hangupRequest error: $e');
     });
+  }
+
+  void _checkSenderResult(RTCRtpSender? senderResult, String kind) {
+    if (senderResult == null) {
+      _logger.warning('safeAddTrack for $kind returned null: track not added, possibly due to closed connection');
+    }
   }
 }

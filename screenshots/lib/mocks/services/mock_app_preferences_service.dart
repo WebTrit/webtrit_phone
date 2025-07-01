@@ -227,7 +227,7 @@ class MockAppPreferencesService implements AppPreferences {
 
   @override
   EncodingSettings getEncodingSettings() {
-    return const EncodingSettings();
+    return EncodingSettings();
   }
 
   @override

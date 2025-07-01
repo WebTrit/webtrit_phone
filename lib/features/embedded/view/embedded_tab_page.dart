@@ -5,8 +5,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
+import 'package:webtrit_phone/repositories/repositories.dart';
+import 'package:webtrit_phone/widgets/widgets.dart';
 
+import '../utils/utils.dart';
 import '../bloc/embedded_cubit.dart';
+
 import 'embedded_screen.dart';
 
 @RoutePage()
@@ -23,14 +27,33 @@ class EmbeddedTabPage extends StatelessWidget {
     final bottomMenuManager = context.read<FeatureAccess>().bottomMenuFeature;
     final data = bottomMenuManager.getEmbeddedTabById(id);
 
+    final customPrivateGatewayRepository = context.read<CustomPrivateGatewayRepository>();
+    final secureStorage = context.read<SecureStorage>();
+
+    final embeddedPayloadBuilder = EmbeddedPayloadBuilder(secureStorage);
+
+    final tabsRouter = AutoTabsRouter.of(context);
+
     return BlocProvider(
-      create: (context) => EmbeddedCubit(),
-      child: EmbeddedScreen(
-        initialUri: data.data!.uri,
-        appBar: AppBar(
-          leading: const AutoLeadingButton(),
-          title: Text(context.parseL10n(data.titleL10n)),
-        ),
+      create: (context) => EmbeddedCubit(
+        payload: data.data!.payload,
+        customPrivateGatewayRepository: customPrivateGatewayRepository,
+        embeddedPayloadBuilder: embeddedPayloadBuilder,
+      ),
+      child: AnimatedBuilder(
+        animation: tabsRouter,
+        builder: (context, child) {
+          final tabActive = tabsRouter.isRouteDataActive(RouteData.of(context));
+
+          return EmbeddedScreen(
+            initialUri: data.data!.uri,
+            appBar: MainAppBar(
+              title: Text(context.parseL10n(data.titleL10n)),
+              context: context,
+            ),
+            shouldForwardPop: tabActive,
+          );
+        },
       ),
     );
   }

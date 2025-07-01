@@ -2,6 +2,7 @@ import 'package:clock/clock.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 // ignore: depend_on_referenced_packages
 import 'package:provider/provider.dart';
 
@@ -19,6 +20,9 @@ void main() async {
       WidgetsFlutterBinding.ensureInitialized();
 
       final appThemes = await AppThemes.init();
+      final packageInfo = await PackageInfoFactory.init();
+      final deviceInfo = await DeviceInfoFactory.init();
+
       final themeSettings = appThemes.values.first.settings;
 
       final appBloc = MockAppBloc.allScreen(
@@ -35,9 +39,13 @@ void main() async {
       runApp(MultiProvider(
           providers: [
             Provider<FeatureAccess>(
-              create: (context) {
-                return featureAccess;
-              },
+              create: (context) => featureAccess,
+            ),
+            Provider<PackageInfo>(
+              create: (context) => packageInfo,
+            ),
+            Provider<DeviceInfo>(
+              create: (context) => deviceInfo,
             ),
           ],
           child: ScreenshotsApp(
@@ -48,19 +56,15 @@ void main() async {
 }
 
 class ScreenshotsApp extends StatelessWidget {
-  ScreenshotsApp({super.key, required this.appBloc});
+  const ScreenshotsApp({super.key, required this.appBloc});
 
   final AppBloc appBloc;
-  final _appRouter = AppRouter();
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider.value(
       value: appBloc,
-      child: MaterialApp.router(
-        routerConfig: _appRouter.config(),
-        debugShowCheckedModeBanner: false,
-      ),
+      child: const AppPairingContent(),
     );
   }
 }

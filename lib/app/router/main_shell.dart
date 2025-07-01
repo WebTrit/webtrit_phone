@@ -14,6 +14,7 @@ import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/features/features.dart';
+import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
 @RoutePage()
@@ -127,11 +128,28 @@ class _MainShellState extends State<MainShell> {
             context.read<WebtritApiClient>(),
           ),
         ),
-        RepositoryProvider<SelfConfigRepository>(
-          create: (context) => SelfConfigRepository(
+        RepositoryProvider<CustomPrivateGatewayRepository>(
+          create: (context) => CustomPrivateGatewayRepository(
             context.read<WebtritApiClient>(),
+            context.read<SecureStorage>(),
             context.read<AppBloc>().state.token!,
           ),
+        ),
+        RepositoryProvider<VoicemailRepository>(
+          create: (context) {
+            final featureAccess = context.read<FeatureAccess>();
+
+            return VoicemailRepositoryImpl(
+              webtritApiClient: context.read<WebtritApiClient>(),
+              token: context.read<AppBloc>().state.token!,
+              appDatabase: context.read<AppDatabase>(),
+              repositoryOptions: RepositoryOptions(
+                shouldOperate: featureAccess.settingsFeature.isVoicemailsEnabled,
+                polling: EnvironmentConfig.PERIODIC_POLLING,
+                pollPeriod: const Duration(minutes: 5),
+              ),
+            );
+          },
         ),
         RepositoryProvider<AppRepository>(
           create: (context) => AppRepository(
@@ -160,19 +178,19 @@ class _MainShellState extends State<MainShell> {
           ),
         ),
         RepositoryProvider<MainScreenRouteStateRepository>(
-          create: (context) => MainScreenRouteStateRepositoryAutoRouteImpl(),
+          create: (context) => MainScreenRouteStateRepositoryDefaultImpl(),
         ),
         RepositoryProvider<MainShellRouteStateRepository>(
           create: (context) => MainShellRouteStateRepositoryAutoRouteImpl(),
         ),
-        RepositoryProvider<RemoteNotificationRepository>(
-          create: (context) => RemoteNotificationRepositoryBrokerImpl(),
+        RepositoryProvider<RemotePushRepository>(
+          create: (context) => RemotePushRepositoryBrokerImpl(),
         ),
-        RepositoryProvider<LocalNotificationRepository>(
-          create: (context) => LocalNotificationRepositoryFLNImpl(),
+        RepositoryProvider<LocalPushRepository>(
+          create: (context) => LocalPushRepositoryFLNImpl(),
         ),
-        RepositoryProvider<ActiveMessageNotificationsRepository>(
-          create: (context) => ActiveMessageNotificationsRepositoryDriftImpl(
+        RepositoryProvider<ActiveMessagePushsRepository>(
+          create: (context) => ActiveMessagePushsRepositoryDriftImpl(
             appDatabase: context.read<AppDatabase>(),
           ),
         ),
@@ -180,6 +198,17 @@ class _MainShellState extends State<MainShell> {
           create: (context) => CallToActionsRepositoryImpl(
             webtritApiClient: context.read<WebtritApiClient>(),
             token: context.read<AppBloc>().state.token!,
+          ),
+        ),
+        RepositoryProvider<SystemNotificationsLocalRepository>(
+          create: (context) => SystemNotificationsLocalRepositoryDriftImpl(
+            context.read<AppDatabase>(),
+          ),
+        ),
+        RepositoryProvider<SystemNotificationsRemoteRepository>(
+          create: (context) => SystemNotificationsRemoteRepositoryApiImpl(
+            context.read<WebtritApiClient>(),
+            context.read<AppBloc>().state.token!,
           ),
         ),
       ],
@@ -208,17 +237,34 @@ class _MainShellState extends State<MainShell> {
           BlocProvider<LocalContactsSyncBloc>(
             lazy: false,
             create: (context) {
+              final localContactsRepository = context.read<LocalContactsRepository>();
+              final appDatabase = context.read<AppDatabase>();
+              final appPreferences = context.read<AppPreferences>();
+              final featureAccess = context.read<FeatureAccess>();
+              final appPermissions = context.read<AppPermissions>();
+
+              Future<bool> isFutureEnabled() async {
+                final contactTab = featureAccess.bottomMenuFeature.getTabEnabled(MainFlavor.contacts)?.toContacts;
+                final contactSourceTypes = contactTab?.contactSourceTypes ?? [];
+                return contactSourceTypes.contains(ContactSourceType.local);
+              }
+
+              Future<bool> isAgreementAccepted() async {
+                final contactsAgreementStatus = appPreferences.getContactsAgreementStatus();
+                return contactsAgreementStatus.isAccepted;
+              }
+
               final bloc = LocalContactsSyncBloc(
-                localContactsRepository: context.read<LocalContactsRepository>(),
-                appDatabase: context.read<AppDatabase>(),
+                localContactsRepository: localContactsRepository,
+                appDatabase: appDatabase,
+                appPreferences: appPreferences,
+                isFeatureEnabled: isFutureEnabled,
+                isAgreementAccepted: isAgreementAccepted,
+                isContactsPermissionGranted: () => appPermissions.isContactPermissionGranted(),
+                requestContactPermission: () => appPermissions.requestContactPermission(),
               );
 
-              // TODO(Serdun): Consider moving this logic to the LocalContactBloc and decomposing the LocalContactsRepository.
-              // The repository currently has direct access to the Permissions plugin, which might violate separation of concerns.
-              // If contacts agreement is accepted, initiate the LocalContactsSyncStarted event.
-              if (context.read<AppPreferences>().getContactsAgreementStatus().isAccepted) {
-                bloc.add(const LocalContactsSyncStarted());
-              }
+              bloc.add(const LocalContactsSyncStarted());
               return bloc;
             },
           ),
@@ -256,6 +302,11 @@ class _MainShellState extends State<MainShell> {
                 peerConnectionConfig,
                 userMediaBuilder,
               );
+              // Initialize contact name resolver with app-specific contact repository
+              // Used to display contact name of caller
+              final contactNameResolver = DefaultContactNameResolver(
+                contactRepository: context.read<ContactsRepository>(),
+              );
 
               return CallBloc(
                 coreUrl: appBloc.state.coreUrl!,
@@ -267,9 +318,9 @@ class _MainShellState extends State<MainShell> {
                 callkeep: _callkeep,
                 callkeepConnections: _callkeepConnections,
                 sdpMunger: ModifyWithEncodingSettings(appPreferences, encodingConfig),
-                sdpSanitizer: RemoteSdpSanitizer(),
                 webRtcOptionsBuilder: WebrtcOptionsWithAppSettingsBuilder(appPreferences),
                 userMediaBuilder: userMediaBuilder,
+                contactNameResolver: contactNameResolver,
                 iceFilter: FilterWithAppSettings(appPreferences),
                 peerConnectionPolicyApplier: pearConnectionPolicyApplier,
               )..add(const CallStarted());
@@ -304,7 +355,7 @@ class _MainShellState extends State<MainShell> {
           ),
           BlocProvider(
             create: (_) => ChatsForwardingCubit(),
-          )
+          ),
         ],
         child: Builder(
           builder: (context) {
@@ -319,7 +370,7 @@ class _MainShellState extends State<MainShell> {
                 BlocProvider(
                   lazy: false,
                   create: (_) => SelfConfigCubit(
-                    context.read<SelfConfigRepository>(),
+                    context.read<CustomPrivateGatewayRepository>(),
                     context.read<FeatureAccess>().settingsFeature.isSelfConfigEnabled,
                   ),
                 ),
@@ -341,17 +392,27 @@ class _MainShellState extends State<MainShell> {
                     },
                   ),
                 ),
-              ],
-              child: Builder(
-                builder: (context) => CallShell(
-                  child: MessagingShell(
-                    child: AutoRouter(
-                      navigatorObservers: () => [
-                        MainShellNavigatorObserver(context.read<MainShellRouteStateRepository>()),
-                      ],
-                    ),
+                BlocProvider(
+                  lazy: false,
+                  create: (_) => SystemNotificationsCounterCubit(
+                    context.read<SystemNotificationsLocalRepository>(),
                   ),
                 ),
+              ],
+              child: Builder(
+                builder: (context) {
+                  return CallShell(
+                    child: MessagingShell(
+                      child: SystemNotificationsShell(
+                        child: AutoRouter(
+                          navigatorObservers: () => [
+                            MainShellNavigatorObserver(context.read<MainShellRouteStateRepository>()),
+                          ],
+                        ),
+                      ),
+                    ),
+                  );
+                },
               ),
             );
           },

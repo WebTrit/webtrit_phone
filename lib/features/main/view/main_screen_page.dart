@@ -14,6 +14,7 @@ import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
+import 'package:webtrit_phone/widgets/main_app_bar.dart';
 
 @RoutePage()
 class MainScreenPage extends StatelessWidget {
@@ -27,8 +28,12 @@ class MainScreenPage extends StatelessWidget {
     // TODO(Serdun): Move this to the environment configuration not to use the CORE_URL.
     const appDemoFlow = EnvironmentConfig.CORE_URL == null;
 
-    final bottomMenuManager = context.read<FeatureAccess>().bottomMenuFeature;
+    final featureAccess = context.read<FeatureAccess>();
+    final bottomMenuManager = featureAccess.bottomMenuFeature;
     final tabs = bottomMenuManager.tabs;
+
+    final systemNotificationsFeature = featureAccess.systemNotificationsFeature;
+    final systemNotificationsEnabled = systemNotificationsFeature.systemNotificationsSupport;
 
     final autoTabsRouter = AutoTabsRouter(
       routes: _buildRoutePages(tabs),
@@ -103,7 +108,10 @@ class MainScreenPage extends StatelessWidget {
       child: provider,
     );
 
-    return blocListener;
+    return AppBarParams(
+      systemNotificationsEnabled: systemNotificationsEnabled,
+      child: blocListener,
+    );
   }
 
   List<PageRouteInfo> _buildRoutePages(List<BottomMenuTab> tabs) {
@@ -122,7 +130,7 @@ class MainScreenPage extends StatelessWidget {
             ],
           );
         case MainFlavor.keypad:
-          return const KeypadScreenPageRoute();
+          return KeypadScreenPageRoute();
         case MainFlavor.messaging:
           return const ConversationsScreenPageRoute();
         default:

@@ -5,8 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
+import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/theme/theme.dart';
-import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../login.dart';
 
@@ -18,11 +18,13 @@ class LoginModeSelectScreen extends StatelessWidget {
     super.key,
     this.appGreetingL10n,
     this.style,
+    required this.launchButtons,
   });
 
   final String? appGreetingL10n;
 
   final LoginModeSelectScreenStyle? style;
+  final List<LoginModeAction> launchButtons;
 
   @override
   Widget build(BuildContext context) {
@@ -62,32 +64,40 @@ class LoginModeSelectScreen extends StatelessWidget {
             decoration: BoxDecoration(
               gradient: gradients?.tab,
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                const Spacer(),
-                OnboardingPictureLogo(
-                  text: appGreetingL10n != null ? context.parseL10n(appGreetingL10n!) : null,
-                ),
-                const Spacer(),
-                const Spacer(),
-                ElevatedButton(
-                  key: loginModeScreenSignUpButtonKey,
-                  onPressed: state.processing ? null : () => _onActionPressed(context, isDemoModeEnabled),
-                  style: elevatedButtonStyles?.getStyle(localStyle?.signUpTypeButton),
-                  child: !state.processing
-                      ? Text(
-                          isDemoModeEnabled
-                              ? context.l10n.login_Button_signUpToDemoInstance
-                              : context.l10n.login_Button_signIn,
-                        )
-                      : SizedCircularProgressIndicator(
-                          size: 16,
-                          strokeWidth: 2,
-                          color: elevatedButtonStyles?.primary?.foregroundColor?.resolve({}),
-                        ),
-                ),
-              ],
+            child: SafeArea(
+              top: false,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const Spacer(),
+                  OnboardingPictureLogo(
+                    text: appGreetingL10n != null ? context.parseL10n(appGreetingL10n!) : null,
+                  ),
+                  const Spacer(),
+                  const Spacer(),
+                  ...launchButtons.map<Widget>((button) {
+                    final isEmbedded = button.isEmbeddedModeButton;
+                    final shouldProcess = state.processing;
+
+                    // Determine if the button should show a loading state:
+                    // - If the app is processing:
+                    //   - For non-embedded buttons: show loading only when no embedded switch is active
+                    //   - For embedded buttons: show loading only if the active embedded config matches this button
+                    final processing = shouldProcess &&
+                        ((!isEmbedded && state.embedded == null) ||
+                            (isEmbedded && state.embedded == button.toEmbedded?.customLoginFeature));
+
+                    return LoginModeActionButton(
+                      key: loginModeScreenSignUpButtonKey,
+                      processing: processing,
+                      isDemoModeEnabled: isDemoModeEnabled,
+                      onPressed: shouldProcess ? null : () => _onActionPressed(context, button),
+                      style: elevatedButtonStyles?.getStyle(localStyle?.signUpTypeButton),
+                      title: context.parseL10n(button.titleL10n),
+                    );
+                  }),
+                ],
+              ),
             ),
           ),
         );
@@ -95,8 +105,15 @@ class LoginModeSelectScreen extends StatelessWidget {
     );
   }
 
-  void _onActionPressed(BuildContext context, bool demo) {
-    context.read<LoginCubit>().loginModeSelectSubmitted(demo ? LoginMode.demoCore : LoginMode.core);
+  void _onActionPressed(BuildContext context, LoginModeAction action) {
+    final cubit = context.read<LoginCubit>();
+    final mode = cubit.isDemoModeEnabled ? LoginMode.demoCore : LoginMode.core;
+
+    if (action.flavor == LoginFlavor.embedded) {
+      cubit.setEmbedded(action.toEmbedded!.customLoginFeature);
+    }
+
+    cubit.loginModeSelectSubmitted(mode);
   }
 
   void _onCustomCoreLogin(BuildContext context) {

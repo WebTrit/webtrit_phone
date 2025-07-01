@@ -4,22 +4,23 @@ import 'package:webtrit_phone/theme/theme.dart';
 
 import '../theme_style_factory.dart';
 
-class TabBarThemeDataFactory implements ThemeStyleFactory<TabBarTheme> {
+class TabBarThemeDataFactory implements ThemeStyleFactory<TabBarThemeData> {
   TabBarThemeDataFactory(this.colors, this.config);
 
   final ColorScheme colors;
   final ExtTabBarWidgetConfig? config;
 
   @override
-  TabBarTheme create() {
+  TabBarThemeData create() {
     final unselectedLabelColor = config?.unSelectedItemColor?.toColor() ?? colors.onSurface;
     const dividerColor = Colors.transparent;
     final labelColor = colors.onPrimary;
 
-    return TabBarTheme(
+    return TabBarThemeData(
       unselectedLabelColor: unselectedLabelColor,
       dividerColor: dividerColor,
       labelColor: labelColor,
+      indicatorColor: colors.primary,
     );
   }
 }

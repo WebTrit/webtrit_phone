@@ -29,18 +29,15 @@ class PermissionsScreen extends StatelessWidget {
     return Scaffold(
       body: BlocConsumer<PermissionsCubit, PermissionsState>(
         listener: (context, state) {
-          switch (state) {
-            // Shows additional screen for specific sub-platform if needed
-            case PermissionsManufacturerTipNeeded(:final manufacturer):
-              _showManufacturerTips(context, manufacturer);
-            // Shows additional screen for specific sub-platform if needed
-            case PermissionFullScreenIntentNeeded(:final permission):
-              _showSpecialPermissionTips(context, permission);
-            case PermissionsStateSuccess():
-              context.router.replaceAll([const MainShellRoute()]);
-            case PermissionsStateFailure(:final error):
-              context.showErrorSnackBar(error.toString());
-              context.read<PermissionsCubit>().dismissError();
+          if (state.isManufacturerTipNeeded) {
+            _showManufacturerTips(context, state.manufacturerTip!.manufacturer);
+          } else if (state.isSpecialPermissionNeeded) {
+            _showSpecialPermissionTips(context, state.pendingSpecialPermissions.first);
+          } else if (state.isFailure) {
+            context.showErrorSnackBar(state.failure.toString());
+            context.read<PermissionsCubit>().dismissError();
+          } else if (state.isSuccess) {
+            context.router.replaceAll([const MainShellRoute()]);
           }
         },
         builder: (context, state) {
@@ -62,23 +59,23 @@ class PermissionsScreen extends StatelessWidget {
                 ),
                 const Spacer(),
                 const SizedBox(height: kInset),
-                switch (state) {
-                  PermissionsStateInitial() => OutlinedButton(
-                      key: permissionsInitButtonKey,
-                      onPressed: () => context.read<PermissionsCubit>().requestPermissions(),
-                      style: elevatedButtonStyles?.primary,
-                      child: Text(context.l10n.permission_Button_request),
+                if (state.isInitial)
+                  OutlinedButton(
+                    key: permissionsInitButtonKey,
+                    onPressed: () => context.read<PermissionsCubit>().requestPermissions(),
+                    style: elevatedButtonStyles?.primary,
+                    child: Text(context.l10n.permission_Button_request),
+                  )
+                else
+                  OutlinedButton(
+                    onPressed: null,
+                    style: elevatedButtonStyles?.primary,
+                    child: SizedCircularProgressIndicator(
+                      size: 16,
+                      strokeWidth: 2,
+                      color: elevatedButtonStyles?.primary?.foregroundColor?.resolve({}),
                     ),
-                  _ => OutlinedButton(
-                      onPressed: null,
-                      style: elevatedButtonStyles?.primary,
-                      child: SizedCircularProgressIndicator(
-                        size: 16,
-                        strokeWidth: 2,
-                        color: elevatedButtonStyles?.primary?.foregroundColor?.resolve({}),
-                      ),
-                    ),
-                },
+                  ),
               ],
             ),
           );
@@ -103,22 +100,26 @@ class PermissionsScreen extends StatelessWidget {
 
   Future _showManufacturerTips(BuildContext context, Manufacturer manufacturer) async {
     final permissionCubit = context.read<PermissionsCubit>();
-
-    await context.router.pushWidget(ManufacturerPermission(
-      onGoToAppSettings: permissionCubit.openAppSettings,
+    final view = ManufacturerPermission(
       manufacturer: manufacturer,
-    ));
+      onGoToAppSettings: permissionCubit.openAppSettings,
+      onPop: () => context.maybePop(),
+    );
+    await context.router.pushWidget(view, transitionBuilder: TransitionsBuilders.slideLeftWithFade);
 
     permissionCubit.dismissTip();
+    permissionCubit.requestPermissions();
   }
 
   Future _showSpecialPermissionTips(BuildContext context, CallkeepSpecialPermissions permission) async {
     final permissionCubit = context.read<PermissionsCubit>();
-
-    await context.router.pushWidget(SpecialPermission(
-      onGoToAppSettings: () => permissionCubit.openAppSpecialPermissionSettings(permission),
+    final view = SpecialPermission(
       specialPermissions: permission,
-    ));
+      onGoToAppSettings: () => permissionCubit.openAppSpecialPermissionSettings(permission),
+      onPop: () => context.maybePop(),
+    );
+
+    await context.router.pushWidget(view, transitionBuilder: TransitionsBuilders.slideLeftWithFade);
 
     permissionCubit.dismissTip();
     permissionCubit.requestPermissions();

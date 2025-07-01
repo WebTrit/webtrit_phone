@@ -38,12 +38,15 @@ class MainScreenScreenshot extends StatelessWidget {
         // The data source should be moved to the BLoC for better architecture.
         Provider<ContactsRepository>(
           create: (c) => MockContactsRepository(),
-        )
+        ),
       ],
       child: MultiBlocProvider(
         providers: _createMockBlocProviders(),
         child: MainScreen(
-          body: _buildFlavorWidget(context, flavor, featureAccess!),
+          body: AppBarParams(
+            systemNotificationsEnabled: true,
+            child: _buildFlavorWidget(context, flavor, featureAccess!),
+          ),
           bottomNavigationBar: _buildBottomNavigationBar(context, tabs),
         ),
       ),
@@ -56,6 +59,7 @@ class MainScreenScreenshot extends StatelessWidget {
       BlocProvider<MainBloc>(create: (_) => MockMainBloc.mainScreen()),
       BlocProvider<SessionStatusCubit>(create: (_) => MockSessionStatusCubit.initial()),
       BlocProvider<UserInfoCubit>(create: (_) => MockUserInfoCubit.initial()),
+      BlocProvider<SystemNotificationsCounterCubit>(create: (_) => MockSystemNotificationCounterCubit.withDefaults()),
     ];
   }
 
@@ -123,7 +127,10 @@ class MainScreenScreenshot extends StatelessWidget {
           create: (_) => MockFavoritesBloc.mainScreen(),
           child: FavoritesScreen(
             title: title,
-            videoCallEnable: true,
+            transferEnabled: false,
+            videoEnabled: true,
+            chatsEnabled: false,
+            smssEnabled: false,
           ),
         );
       case MainFlavor.recents:
@@ -131,8 +138,10 @@ class MainScreenScreenshot extends StatelessWidget {
           create: (_) => MockRecentsBloc.mainScreen(),
           child: RecentsScreen(
             title: title,
-            videoCallEnable: true,
+            transferEnabled: false,
+            videoEnabled: true,
             chatsEnabled: false,
+            smssEnabled: false,
           ),
         );
       case MainFlavor.contacts:
@@ -162,6 +171,7 @@ class MainScreenScreenshot extends StatelessWidget {
             initialUri: Uri.parse('https://example.com'),
             appBar: MainAppBar(
               title: const Text('Embedded'),
+              context: context,
             ),
           ),
         );

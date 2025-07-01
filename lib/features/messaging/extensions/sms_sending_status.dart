@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:webtrit_phone/l10n/l10n.dart';
-import 'package:webtrit_phone/models/sms_message.dart';
+import 'package:webtrit_phone/models/messaging/sms_conversation/sms_message.dart';
 
 extension SmsSendingStatusL10n on SmsSendingStatus {
   String nameL10n(BuildContext context) {

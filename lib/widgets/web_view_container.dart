@@ -1,0 +1,336 @@
+import 'dart:async';
+
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+
+import 'package:url_launcher/url_launcher.dart';
+import 'package:webview_flutter/webview_flutter.dart';
+import 'package:logging/logging.dart';
+export 'package:webview_flutter/webview_flutter.dart' show JavaScriptMessage;
+
+import 'package:webtrit_phone/core/mixins/widget_state_mixin.dart';
+import 'package:webtrit_phone/widgets/web_view_content.dart';
+import 'package:webtrit_phone/widgets/web_view_toolbar.dart';
+
+import 'package:webtrit_phone/l10n/l10n.dart';
+
+final _logger = Logger('WebViewContainer');
+
+class WebViewContainer extends StatefulWidget {
+  const WebViewContainer({
+    super.key,
+    required this.initialUri,
+    required this.userAgent,
+    this.title,
+    this.addLocaleNameToQueryParameters = true,
+    this.javaScriptChannels = const {},
+    this.errorBuilder,
+    this.showToolbar = true,
+    this.builder,
+    this.webViewController,
+    this.onPageLoadedSuccess,
+    this.onPageLoadedFailed,
+    this.onUrlChange,
+  });
+
+  final Widget? title;
+  final Uri initialUri;
+  final bool addLocaleNameToQueryParameters;
+  final Map<String, void Function(JavaScriptMessage)> javaScriptChannels;
+  final bool showToolbar;
+  final Widget? Function(BuildContext context, WebResourceError error, WebViewController controller)? errorBuilder;
+  final TransitionBuilder? builder;
+  final String userAgent;
+  final WebViewController? webViewController;
+
+  final void Function()? onPageLoadedSuccess;
+  final void Function(WebResourceError error)? onPageLoadedFailed;
+  final void Function(String? url)? onUrlChange;
+
+  @override
+  State<WebViewContainer> createState() => _WebViewContainerState();
+}
+
+class _WebViewContainerState extends State<WebViewContainer> with WidgetStateMixin {
+  late final WebViewController _webViewController;
+  late final NavigationRequestHandler _navigationRequestHandler;
+  final _progressStreamController = StreamController<int>.broadcast();
+
+  Color? _backgroundColorCache;
+  Uri? _effectiveInitialUrlCache;
+
+  WebResourceError? _latestError;
+  WebResourceError? _currentError;
+
+  /// Indicates whether a page is currently in the process of loading.
+  ///
+  /// This flag is set to `true` when [onProgress] reports progress < 100,
+  /// and reset to `false` once the page is fully loaded ([onPageFinished] called).
+  ///
+  /// It is used to coordinate the timing of JavaScript injection or
+  /// signaling that the page has finished loading in a stable state.
+  bool _isPageLoading = false;
+
+  /// A debounce timer used to determine when the page has truly finished loading.
+  ///
+  /// This timer is started after [onPageFinished] is triggered, with a delay
+  /// (e.g., 500ms) to ensure no further progress updates follow. If no additional
+  /// loading activity occurs during this period, [onPageLoadedSuccess] is invoked.
+  ///
+  /// If [onProgress] reports further activity before the timer fires, the timer is cancelled.
+  /// This prevents race conditions where the DOM might not be ready for JavaScript injection.
+  Timer? _finalLoadTimer;
+
+  /// Debounce duration after page finishes loading.
+  /// Used to delay success callback to ensure loading is truly complete.
+  static const Duration _finalLoadDebounceDuration = Duration(milliseconds: 500);
+
+  Uri _composeEffectiveInitialUrl() {
+    if (!widget.addLocaleNameToQueryParameters) {
+      return widget.initialUri;
+    } else {
+      return widget.initialUri.replace(
+        queryParameters: {
+          ...widget.initialUri.queryParameters,
+          'localeName': context.l10n.localeName,
+        },
+      );
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeHandlers();
+    _initializeWebViewController();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final hasWebViewError = widget.errorBuilder != null && _latestError != null;
+
+    errorPlaceholderBuilder(BuildContext context) {
+      return widget.errorBuilder!(context, _latestError!, _webViewController) ?? const SizedBox.shrink();
+    }
+
+    successBuilder(BuildContext context) {
+      final webViewWidget = WebViewWidget(controller: _webViewController);
+      return widget.builder != null ? widget.builder!(context, webViewWidget) : webViewWidget;
+    }
+
+    final content = WebViewContent(
+      hasWebViewError: hasWebViewError,
+      errorBuilder: errorPlaceholderBuilder,
+      successBuilder: successBuilder,
+      progressStream: _progressStreamController.stream,
+    );
+
+    if (widget.showToolbar) {
+      return Column(
+        children: [
+          WebViewToolbar(
+            title: widget.title,
+            onReload: _webViewController.reload,
+          ),
+          Expanded(child: content),
+        ],
+      );
+    } else {
+      return content;
+    }
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    final themeData = Theme.of(context);
+    final backgroundColor = themeData.colorScheme.surface;
+    if (_backgroundColorCache != backgroundColor && !kIsWeb) {
+      _backgroundColorCache = backgroundColor;
+      _webViewController.setBackgroundColor(backgroundColor);
+    }
+
+    final effectiveInitialUrl = _composeEffectiveInitialUrl();
+    if (_effectiveInitialUrlCache != effectiveInitialUrl) {
+      _effectiveInitialUrlCache = effectiveInitialUrl;
+      _webViewController.loadRequest(effectiveInitialUrl);
+    }
+  }
+
+  @override
+  void didUpdateWidget(WebViewContainer oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (widget.initialUri != oldWidget.initialUri ||
+        widget.addLocaleNameToQueryParameters != oldWidget.addLocaleNameToQueryParameters) {
+      final effectiveInitialUrl = _composeEffectiveInitialUrl();
+      _effectiveInitialUrlCache = effectiveInitialUrl;
+      _webViewController.loadRequest(effectiveInitialUrl);
+    }
+  }
+
+  @override
+  void dispose() {
+    _finalLoadTimer?.cancel();
+    if (!_progressStreamController.isClosed) _progressStreamController.close();
+
+    super.dispose();
+  }
+
+  void _initializeHandlers() {
+    _navigationRequestHandler = NavigationRequestHandler(
+      canLaunchUrlFn: canLaunchUrl,
+      launchUrlFn: launchUrl,
+    );
+  }
+
+  void _initializeWebViewController() {
+    final navigationDelegate = NavigationDelegate(
+      onUrlChange: (url) => widget.onUrlChange?.call(url.url),
+      onPageFinished: _onPageFinished,
+      onProgress: _onProgress,
+      onNavigationRequest: _navigationRequestHandler.handle,
+      onWebResourceError: _onWebResourceError,
+    );
+
+    _webViewController = widget.webViewController ?? WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setUserAgent(widget.userAgent)
+      ..enableZoom(false)
+      ..setNavigationDelegate(navigationDelegate);
+
+    for (var MapEntry(key: name, value: onMessageReceived) in widget.javaScriptChannels.entries) {
+      _webViewController.addJavaScriptChannel(name, onMessageReceived: onMessageReceived);
+    }
+  }
+
+  void _onPageFinished(String url) {
+    if (_currentError == null) {
+      _latestError = null;
+    } else {
+      _logger.warning('Page finished with error: $_currentError');
+      widget.onPageLoadedFailed?.call(_currentError!);
+    }
+    safeSetState(() {
+      _currentError = null;
+    });
+    _isPageLoading = false;
+    _finalLoadTimer?.cancel();
+    _finalLoadTimer = Timer(_finalLoadDebounceDuration, () {
+      if (!_isPageLoading) {
+        if (_latestError == null) {
+          widget.onPageLoadedSuccess?.call();
+        } else {
+          _logger.warning('Skipped injection, page loading failed');
+        }
+      } else {
+        _logger.fine('Skipped injection, page loading resumed');
+      }
+    });
+  }
+
+  void _onProgress(int progress) {
+    _isPageLoading = progress < 100;
+    _progressStreamController.add(progress);
+    if (_isPageLoading) {
+      _finalLoadTimer?.cancel();
+    }
+  }
+
+  void _onWebResourceError(WebResourceError error) {
+    _logger.warning('WebView error: $error');
+    safeSetState(() {
+      _currentError = error;
+      _latestError = error;
+    });
+  }
+}
+
+class NavigationRequestHandler {
+  NavigationRequestHandler({
+    required this.canLaunchUrlFn,
+    required this.launchUrlFn,
+  });
+
+  final Future<bool> Function(Uri) canLaunchUrlFn;
+  final Future<bool> Function(Uri, {LaunchMode mode}) launchUrlFn;
+
+  static const _kNavigationRequestScheme = 'app';
+  static const _kNavigationRequestHostExternalBrowser = 'openinexternalbrowser';
+  static const _kNavigationRequestParamUrl = 'url';
+
+  /// Handles a navigation request and determines whether to allow it in the WebView.
+  ///
+  /// - HTTP/HTTPS requests are allowed.
+  /// - Requests to `app://openinexternalbrowser?url=...` are launched in an external browser.
+  /// - All other schemes are blocked.
+  ///
+  /// Returns [NavigationDecision.navigate] to allow loading in WebView,
+  /// or [NavigationDecision.prevent] to block the navigation.
+  Future<NavigationDecision> handle(NavigationRequest request) async {
+    _logger.fine('Handling navigation request: ${request.url}');
+
+    final uri = Uri.tryParse(request.url);
+    if (uri == null) {
+      return NavigationDecision.prevent;
+    }
+
+    final scheme = uri.scheme.toLowerCase();
+    final host = uri.host.toLowerCase();
+
+    if (_isExternalBrowserRequest(scheme, host)) {
+      return _handleExternalBrowserRequest(uri);
+    }
+
+    if (_isInternalHttpRequest(scheme)) {
+      return NavigationDecision.navigate;
+    }
+
+    return NavigationDecision.prevent;
+  }
+
+  /// Returns `true` if the given scheme represents an internal WebView-supported
+  /// HTTP or HTTPS request.
+  bool _isInternalHttpRequest(String scheme) {
+    return scheme == 'http' || scheme == 'https';
+  }
+
+  /// Returns `true` if the request is targeting the app-defined URL scheme for
+  /// opening links in an external browser.
+  ///
+  /// Specifically checks for:
+  /// `app://openinexternalbrowser?url=https://example.com`
+  bool _isExternalBrowserRequest(String scheme, String host) {
+    return scheme == _kNavigationRequestScheme && host == _kNavigationRequestHostExternalBrowser;
+  }
+
+  /// Handles a request to open an external browser via the custom app URL scheme.
+  ///
+  /// Validates that the `url` query parameter exists and is a valid URI,
+  /// and attempts to launch it using [launchUrlFn].
+  ///
+  /// Returns [NavigationDecision.prevent] in all cases to block WebView navigation.
+  /// If launch fails, navigation is still blocked.
+  Future<NavigationDecision> _handleExternalBrowserRequest(Uri uri) async {
+    final targetUrl = uri.queryParameters[_kNavigationRequestParamUrl];
+    if (targetUrl?.isEmpty ?? true) {
+      return NavigationDecision.prevent;
+    }
+
+    final targetUri = Uri.tryParse(targetUrl!);
+    if (targetUri == null) {
+      return NavigationDecision.prevent;
+    }
+
+    if (!await canLaunchUrlFn(targetUri)) {
+      return NavigationDecision.prevent;
+    }
+
+    if (!await launchUrlFn(targetUri, mode: LaunchMode.externalApplication)) {
+      return NavigationDecision.prevent;
+    }
+
+    return NavigationDecision.prevent;
+  }
+}

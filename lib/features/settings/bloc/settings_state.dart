@@ -1,18 +1,11 @@
 part of 'settings_bloc.dart';
 
-class SettingsState with EquatableMixin {
-  final bool progress;
-  SettingsState({
-    required this.progress,
-  });
+@freezed
+class SettingsState with _$SettingsState {
+  const SettingsState._();
 
-  @override
-  List<Object> get props => [progress];
-
-  @override
-  bool get stringify => true;
-
-  SettingsState copyWith({bool? progress}) {
-    return SettingsState(progress: progress ?? this.progress);
-  }
+  const factory SettingsState({
+    required bool progress,
+    @Default(0) int unreadVoicemailCount,
+  }) = _SettingsState;
 }

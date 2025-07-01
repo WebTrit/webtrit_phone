@@ -14,7 +14,7 @@ version: 0.0.0+000000000
 # Where:
 #   - <Major>, <Minor>, <Patch>: non-negative integers, decided by the developer
 # app_version represents tasks and fixed bugs, which is different from the build version that is specific to each client
-app_version: 1.6.3
+app_version: 0.0.0
 
 environment:
   sdk: '>=3.3.0 <4.0.0'
@@ -54,7 +54,7 @@ dependencies:
   google_fonts: ^6.2.1
   intl: any
   json_annotation: ^4.8.1
-  just_audio: ^0.9.37
+  just_audio: ^0.10.1
   linkify: ^5.0.0
   logging: ^1.2.0
   logging_appenders: ^1.2.0
@@ -74,7 +74,7 @@ dependencies:
   url_launcher: ^6.2.6
   uuid: ^4.2.2
   validators: ^3.0.0
-  webview_flutter: ^4.7.0
+  webview_flutter: ^4.13.0
   webview_flutter_web: ^0.2.2+4
   collection: ^1.18.0
   quiver: ^3.2.1
@@ -86,6 +86,12 @@ dependencies:
   device_region: ^1.4.0
   html: ^0.15.4
   http: ^1.2.2
+  audio_session: ^0.2.1
+  bloc_test: ^9.1.7
+  workmanager:
+    git:
+      url: https://github.com/aldisa546/flutter_workmanager.git
+      ref: upgrade/flutter-3.29
 
   webtrit_api:
     path: ./packages/webtrit_api
@@ -113,7 +119,6 @@ dev_dependencies:
     sdk: flutter
 
   auto_route_generator: ^10.0.1
-  bloc_test: ^9.1.7
   build_runner: ^2.4.15
   flutter_gen_runner: ^5.10.0
   flutter_launcher_icons: ^0.14.3
@@ -122,6 +127,7 @@ dev_dependencies:
   freezed: ^2.5.2
   json_serializable: ^6.7.1
   patrol: ^3.15.1
+  mocktail: ^1.0.4
 
 flutter:
   generate: true

@@ -13,14 +13,18 @@ part 'network_cubit.freezed.dart';
 
 class NetworkCubit extends Cubit<NetworkState> {
   NetworkCubit(
+    this._callTriggerConfig,
     this._appPreferences,
     this._callkeepBackgroundService,
-  ) : super(const NetworkState()) {
+  ) : super(NetworkState(smsFallbackEnabled: _callTriggerConfig.smsFallback.enabled)) {
     _initializeActiveIncomingType();
   }
 
+  final CallTriggerConfig _callTriggerConfig;
   final AppPreferences _appPreferences;
   final BackgroundSignalingBootstrapService _callkeepBackgroundService;
+
+  bool get smsFallbackAvailable => _callTriggerConfig.smsFallback.available;
 
   void _initializeActiveIncomingType() {
     final currentType = _appPreferences.getIncomingCallType();

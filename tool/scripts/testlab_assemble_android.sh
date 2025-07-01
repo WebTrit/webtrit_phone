@@ -3,10 +3,10 @@ flutter clean
 testfile=$1
 if [ -z "$testfile" ]; then
     echo "No test file provided, building all tests."
-    patrol build android --dart-define-from-file=../dart_define.json --dart-define-from-file=dart_define.integration_test.json
+    patrol build android --dart-define-from-file=../dart_define.json --dart-define-from-file=dart_define.integration_test.json --flavor=deeplinkssmsReceiver
 else
     echo "Building target test file: $testfile"
-    patrol build android -t integration_test/$testfile --dart-define-from-file=../dart_define.json --dart-define-from-file=dart_define.integration_test.json
+    patrol build android -t integration_test/$testfile --dart-define-from-file=../dart_define.json --dart-define-from-file=dart_define.integration_test.json --flavor=deeplinkssmsReceiver
 fi
 
 keystorePath=$(jq .WEBTRIT_ANDROID_RELEASE_UPLOAD_KEYSTORE_PATH android/../../dart_define.json | tr -d '"')

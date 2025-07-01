@@ -169,6 +169,10 @@ class AppLocalizationsMapper {
           localizations.contacts_LocalTabText_failure,
       'contacts_LocalTabText_permissionFailure':
           localizations.contacts_LocalTabText_permissionFailure,
+      'contacts_LocalTabText_contactsAgreementFailure':
+          localizations.contacts_LocalTabText_contactsAgreementFailure,
+      'contacts_LocalTabButton_contactsAgreement':
+          localizations.contacts_LocalTabButton_contactsAgreement,
       'contactsSourceExternal': localizations.contactsSourceExternal,
       'contactsSourceLocal': localizations.contactsSourceLocal,
       'contacts_Text_blingTransferInitiated':
@@ -585,8 +589,29 @@ class AppLocalizationsMapper {
       'messaging_StateBar_error': localizations.messaging_StateBar_error,
       'messaging_StateBar_initializing':
           localizations.messaging_StateBar_initializing,
+      'voicemail_Widget_screenTitle':
+          localizations.voicemail_Widget_screenTitle,
+      'voicemail_Label_deleteAll': localizations.voicemail_Label_deleteAll,
+      'voicemail_Label_deleteAllDescription':
+          localizations.voicemail_Label_deleteAllDescription,
+      'voicemail_Label_empty': localizations.voicemail_Label_empty,
+      'voicemail_Label_retry': localizations.voicemail_Label_retry,
+      'voicemail_Label_call': localizations.voicemail_Label_call,
+      'voicemail_Label_markAsHeard': localizations.voicemail_Label_markAsHeard,
+      'voicemail_Label_markAsNew': localizations.voicemail_Label_markAsNew,
+      'voicemail_Label_delete': localizations.voicemail_Label_delete,
+      'voicemail_Dialog_deleteSingleTitle':
+          localizations.voicemail_Dialog_deleteSingleTitle,
+      'voicemail_Dialog_deleteSingleContent':
+          localizations.voicemail_Dialog_deleteSingleContent,
+      'voicemail_Title_notSupported':
+          localizations.voicemail_Title_notSupported,
+      'voicemail_Description_notSupported':
+          localizations.voicemail_Description_notSupported,
       'notifications_errorSnackBarAction_callUserMedia':
           localizations.notifications_errorSnackBarAction_callUserMedia,
+      'notifications_errorSnackBarAction_callSdpConfiguration':
+          localizations.notifications_errorSnackBarAction_callSdpConfiguration,
       'notifications_errorSnackBar_activeLineBlindTransferWarning':
           localizations
               .notifications_errorSnackBar_activeLineBlindTransferWarning,
@@ -699,18 +724,6 @@ class AppLocalizationsMapper {
           localizations.settings_AccountDeleteConfirmDialog_title,
       'settings_AppBarTitle_myAccount':
           localizations.settings_AppBarTitle_myAccount,
-      'settings_call_codecs_preferred_audio_default':
-          localizations.settings_call_codecs_preferred_audio_default,
-      'settings_call_codecs_preferred_audio_tip':
-          localizations.settings_call_codecs_preferred_audio_tip,
-      'settings_call_codecs_preferred_audio_title':
-          localizations.settings_call_codecs_preferred_audio_title,
-      'settings_call_codecs_preferred_video_default':
-          localizations.settings_call_codecs_preferred_video_default,
-      'settings_call_codecs_preferred_video_tip':
-          localizations.settings_call_codecs_preferred_video_tip,
-      'settings_call_codecs_preferred_video_title':
-          localizations.settings_call_codecs_preferred_video_title,
       'settings_encoding_AppBar_reset_tooltip':
           localizations.settings_encoding_AppBar_reset_tooltip,
       'settings_encoding_Section_preset_title':
@@ -731,6 +744,8 @@ class AppLocalizationsMapper {
           localizations.settings_encoding_Section_preset_full_flex,
       'settings_encoding_Section_preset_custom':
           localizations.settings_encoding_Section_preset_custom,
+      'settings_encoding_Section_preset_bypass':
+          localizations.settings_encoding_Section_preset_bypass,
       'settings_encoding_Section_measure_kbps':
           localizations.settings_encoding_Section_measure_kbps,
       'settings_encoding_Section_measure_ms':
@@ -773,8 +788,10 @@ class AppLocalizationsMapper {
           localizations.settings_encoding_Section_audio_ptime,
       'settings_encoding_Section_audio_ptime_limit':
           localizations.settings_encoding_Section_audio_ptime_limit,
-      'settings_encoding_Section_opus_bandwidth':
-          localizations.settings_encoding_Section_opus_bandwidth,
+      'settings_encoding_Section_opus_samplingRate':
+          localizations.settings_encoding_Section_opus_samplingRate,
+      'settings_encoding_Section_opus_bitrate':
+          localizations.settings_encoding_Section_opus_bitrate,
       'settings_encoding_Section_opus_channels':
           localizations.settings_encoding_Section_opus_channels,
       'settings_encoding_Section_opus_dtx':
@@ -862,6 +879,8 @@ class AppLocalizationsMapper {
           localizations.settings_ListViewTileTitle_help,
       'settings_ListViewTileTitle_language':
           localizations.settings_ListViewTileTitle_language,
+      'settings_ListViewTileTitle_voicemail':
+          localizations.settings_ListViewTileTitle_voicemail,
       'settings_ListViewTileTitle_logout':
           localizations.settings_ListViewTileTitle_logout,
       'settings_ListViewTileTitle_logRecordsConsole':
@@ -874,6 +893,8 @@ class AppLocalizationsMapper {
           localizations.settings_ListViewTileTitle_self_config,
       'settings_ListViewTileTitle_settings':
           localizations.settings_ListViewTileTitle_settings,
+      'settings_ListViewTileTitle_features':
+          localizations.settings_ListViewTileTitle_features,
       'settings_ListViewTileTitle_termsConditions':
           localizations.settings_ListViewTileTitle_termsConditions,
       'settings_ListViewTileTitle_themeMode':
@@ -895,6 +916,12 @@ class AppLocalizationsMapper {
           localizations.settings_network_incomingCallType_socket_title,
       'settings_network_incomingCallType_title':
           localizations.settings_network_incomingCallType_title,
+      'settings_network_fallbackCalls_title':
+          localizations.settings_network_fallbackCalls_title,
+      'settings_network_fallbackCalls_description':
+          localizations.settings_network_fallbackCalls_description,
+      'settings_network_smsFallback_toggle':
+          localizations.settings_network_smsFallback_toggle,
       'signalingResponseCode_ambiguousRequest':
           localizations.signalingResponseCode_ambiguousRequest,
       'signalingResponseCode_busyEverywhere':
@@ -1028,6 +1055,19 @@ class AppLocalizationsMapper {
           localizations.webRegistration_ErrorAcknowledgeDialogActions_skip,
       'webRegistration_ErrorAcknowledgeDialog_title':
           localizations.webRegistration_ErrorAcknowledgeDialog_title,
+      'system_notifications_screen_title':
+          localizations.system_notifications_screen_title,
+      'system_notifications_screen_list_empty':
+          localizations.system_notifications_screen_list_empty,
+      'numberActions_audioCall': localizations.numberActions_audioCall,
+      'numberActions_videoCall': localizations.numberActions_videoCall,
+      'numberActions_transfer': localizations.numberActions_transfer,
+      'numberActions_chat': localizations.numberActions_chat,
+      'numberActions_sendSms': localizations.numberActions_sendSms,
+      'numberActions_viewContact': localizations.numberActions_viewContact,
+      'numberActions_callLog': localizations.numberActions_callLog,
+      'numberActions_copyNumber': localizations.numberActions_copyNumber,
+      'numberActions_delete': localizations.numberActions_delete,
       'default_UnknownExceptionError': (error) =>
           localizations.default_UnknownExceptionError(error),
       'favorites_SnackBar_deleted': (name) =>

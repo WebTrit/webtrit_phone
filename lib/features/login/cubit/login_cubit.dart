@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:linkify/linkify.dart';
+import 'package:logging/logging.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:webtrit_api/webtrit_api.dart';
@@ -20,9 +21,12 @@ part 'login_cubit.freezed.dart';
 
 part 'login_state.dart';
 
+final _logger = Logger('LoginCubit');
+
 class LoginCubit extends Cubit<LoginState> with SystemInfoApiMapper {
   LoginCubit({
     @visibleForTesting this.createWebtritApiClient = defaultCreateWebtritApiClient,
+    @visibleForTesting this.createHttpRequestExecutor = defaultCreateHttpRequestExecutor,
     required this.notificationsBloc,
     required this.packageInfo,
     required this.appInfo,
@@ -30,6 +34,7 @@ class LoginCubit extends Cubit<LoginState> with SystemInfoApiMapper {
   }) : super(const LoginState());
 
   final WebtritApiClientFactory createWebtritApiClient;
+  final HttpRequestExecutorFactory createHttpRequestExecutor;
   final NotificationsBloc notificationsBloc;
   final PlatformInfo platformInfo;
   final PackageInfo packageInfo;
@@ -63,24 +68,11 @@ class LoginCubit extends Cubit<LoginState> with SystemInfoApiMapper {
   }
 
   Future<void> _processSystemInfo(String coreUrl, String tenantId, [bool demo = false]) async {
-    emit(state.copyWith(
-      processing: true,
-    ));
+    emit(state.copyWith(processing: true));
 
     try {
-      final client = createWebtritApiClient(coreUrl, tenantId);
-      final systemInfo = await _retrieveSystemInfo(client);
-
-      final coreInfo = systemInfo.core;
-
-      final isCoreSupported = coreInfo.verifyVersionStr(coreVersionConstraint);
-      if (isCoreSupported == false) {
-        var coreUnsupportedNotification = CoreVersionUnsupportedErrorNotification(
-          coreInfo.version.toString(),
-          coreVersionConstraint,
-        );
-        notificationsBloc.add(NotificationsSubmitted(coreUnsupportedNotification));
-
+      final systemInfo = await _loadAndValidateSystemInfo(coreUrl, tenantId, demo);
+      if (systemInfo == null) {
         emit(state.copyWith(processing: false));
         return;
       }
@@ -112,6 +104,25 @@ class LoginCubit extends Cubit<LoginState> with SystemInfoApiMapper {
     }
   }
 
+  Future<WebtritSystemInfo?> _loadAndValidateSystemInfo(String coreUrl, String tenantId, bool demo) async {
+    final client = createWebtritApiClient(coreUrl, tenantId);
+    final systemInfo = await _retrieveSystemInfo(client);
+
+    final coreInfo = systemInfo.core;
+    final isCoreSupported = coreInfo.verifyVersionStr(coreVersionConstraint);
+
+    if (!isCoreSupported) {
+      final notification = CoreVersionUnsupportedErrorNotification(
+        coreInfo.version.toString(),
+        coreVersionConstraint,
+      );
+      notificationsBloc.add(NotificationsSubmitted(notification));
+      return null;
+    }
+
+    return systemInfo;
+  }
+
   // LoginModeSelect
 
   void loginModeSelectSubmitted(LoginMode mode) async {
@@ -125,9 +136,9 @@ class LoginCubit extends Cubit<LoginState> with SystemInfoApiMapper {
     if (coreUrl != null) await _processSystemInfo(coreUrl, defaultTenantId, demo);
   }
 
-  void setCustomLogin(LoginEmbedded login) {
+  void setEmbedded(LoginEmbedded embedded) {
     emit(state.copyWith(
-      embedded: login,
+      embedded: embedded,
       coreUrl: isDemoModeEnabled ? demoCoreUrlFromEnvironment : coreUrlFromEnvironment,
     ));
   }
@@ -180,6 +191,7 @@ class LoginCubit extends Cubit<LoginState> with SystemInfoApiMapper {
       coreUrl: null,
       tenantId: null,
       supportedLoginTypes: null,
+      embedded: null,
       otpSigninSessionOtpProvisionalWithDateTime: null,
       passwordSigninPasswordInputObscureText: true,
       signupSessionOtpProvisionalWithDateTime: null,
@@ -337,7 +349,10 @@ class LoginCubit extends Cubit<LoginState> with SystemInfoApiMapper {
     ));
   }
 
-  void loginCustomSignupRequest(Map<String, dynamic>? extras) async {
+  Future<void> loginCustomSignupRequest(
+    Map<String, dynamic>? extras,
+    Map<String, dynamic>? embeddedCallbackData,
+  ) async {
     emit(state.copyWith(
       processing: true,
     ));
@@ -347,7 +362,19 @@ class LoginCubit extends Cubit<LoginState> with SystemInfoApiMapper {
       final client = createWebtritApiClient(state.coreUrl!, tenantId);
       final result = await _createUserRequest(client: client, extraPayload: extras);
 
-      _handleLoginResult(result);
+      // In cases where the embedded page acts as the launch welcome screen,
+      // the systemInfo might not be loaded yet. Perform an additional check
+      // and attempt to load it if necessary.
+      if (state.systemInfo == null) {
+        emit(state.copyWith(processing: true));
+        final systemInfo = await _loadAndValidateSystemInfo(state.coreUrl!, tenantId, isDemoModeEnabled);
+        emit(state.copyWith(systemInfo: systemInfo, processing: false));
+      }
+
+      _handleLoginResult(
+        result,
+        embeddedCallbackData != null ? RawHttpRequest.fromJson(embeddedCallbackData) : null,
+      );
     } catch (e) {
       notificationsBloc.add(NotificationsSubmitted(LoginErrorNotification(e)));
 
@@ -376,7 +403,33 @@ class LoginCubit extends Cubit<LoginState> with SystemInfoApiMapper {
     }
   }
 
-  void _handleLoginResult(SessionResult result) {
+  void _handleLoginResult(SessionResult result, [RawHttpRequest? request]) {
+    _handleLoginSideEffects(result, request);
+    _applyLoginResult(result);
+  }
+
+  /// Triggers a follow-up request after session creation,
+  /// if callback data (e.g. from an embedded page or external configuration) is provided.
+  ///
+  /// Note: This logic is currently tied to the login flow,
+  /// but may be reused in other contexts. If that happens,
+  /// consider moving it to a separate feature/module and injecting it via the widget tree.
+  Future<void> _handleLoginSideEffects(SessionResult result, RawHttpRequest? request) async {
+    if (result is SessionToken && request != null) {
+      try {
+        await createHttpRequestExecutor().execute(
+          method: request.method,
+          url: request.url,
+          headers: request.headers,
+          data: request.data,
+        );
+      } catch (e) {
+        _logger.warning(e);
+      }
+    }
+  }
+
+  void _applyLoginResult(SessionResult result) {
     if (result is SessionOtpProvisional) {
       emit(state.copyWith(
         processing: false,
@@ -385,7 +438,7 @@ class LoginCubit extends Cubit<LoginState> with SystemInfoApiMapper {
     } else if (result is SessionToken) {
       // Maintain processing state during navigation
       emit(state.copyWith(
-        tenantId: result.tenantId ?? state.tenantId!,
+        tenantId: result.tenantId ?? state.tenantId ?? defaultTenantId,
         token: result.token,
         userId: result.userId ?? '', // Fallback for outdated core versions
       ));

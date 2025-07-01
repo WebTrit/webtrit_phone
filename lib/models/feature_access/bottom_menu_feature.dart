@@ -2,8 +2,7 @@ import 'package:flutter/widgets.dart';
 
 import '../contact_source_type.dart';
 import '../main_flavor.dart';
-
-import 'embedded_data.dart';
+import '../embedded/embedded.dart';
 
 @immutable
 class BottomMenuTab {

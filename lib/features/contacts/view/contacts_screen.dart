@@ -130,6 +130,7 @@ class _ContactsScreenState extends State<ContactsScreen> with SingleTickerProvid
               ],
             ),
           ),
+          context: context,
         ),
         body: TabBarView(
           controller: _tabController,

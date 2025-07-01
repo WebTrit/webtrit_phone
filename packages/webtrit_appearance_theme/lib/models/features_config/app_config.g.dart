@@ -68,6 +68,8 @@ _$AppConfigModeSelectActionImpl _$$AppConfigModeSelectActionImplFromJson(
       embeddedId: (json['embeddedId'] as num?)?.toInt(),
       type: json['type'] as String,
       titleL10n: json['titleL10n'] as String,
+      isLaunchButtonVisible: json['isLaunchButtonVisible'] as bool? ?? false,
+      isLaunchScreen: json['isLaunchScreen'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$$AppConfigModeSelectActionImplToJson(
@@ -77,6 +79,8 @@ Map<String, dynamic> _$$AppConfigModeSelectActionImplToJson(
       'embeddedId': instance.embeddedId,
       'type': instance.type,
       'titleL10n': instance.titleL10n,
+      'isLaunchButtonVisible': instance.isLaunchButtonVisible,
+      'isLaunchScreen': instance.isLaunchScreen,
     };
 
 _$AppConfigMainImpl _$$AppConfigMainImplFromJson(Map<String, dynamic> json) =>
@@ -117,11 +121,14 @@ _$AppConfigMainImpl _$$AppConfigMainImplFromJson(Map<String, dynamic> json) =>
             ])
           : AppConfigBottomMenu.fromJson(
               json['bottomMenu'] as Map<String, dynamic>),
+      systemNotificationsEnabled:
+          json['systemNotificationsEnabled'] as bool? ?? true,
     );
 
 Map<String, dynamic> _$$AppConfigMainImplToJson(_$AppConfigMainImpl instance) =>
     <String, dynamic>{
       'bottomMenu': instance.bottomMenu.toJson(),
+      'systemNotificationsEnabled': instance.systemNotificationsEnabled,
     };
 
 _$AppConfigBottomMenuImpl _$$AppConfigBottomMenuImplFromJson(
@@ -236,7 +243,8 @@ _$EncodingDefaultPresetOverrideImpl
           videoBitrate: (json['videoBitrate'] as num?)?.toInt(),
           ptime: (json['ptime'] as num?)?.toInt(),
           maxptime: (json['maxptime'] as num?)?.toInt(),
-          opusBandwidthLimit: (json['opusBandwidthLimit'] as num?)?.toInt(),
+          opusSamplingRate: (json['opusSamplingRate'] as num?)?.toInt(),
+          opusBitrate: (json['opusBitrate'] as num?)?.toInt(),
           opusStereo: json['opusStereo'] as bool?,
           opusDtx: json['opusDtx'] as bool?,
         );
@@ -248,7 +256,8 @@ Map<String, dynamic> _$$EncodingDefaultPresetOverrideImplToJson(
       'videoBitrate': instance.videoBitrate,
       'ptime': instance.ptime,
       'maxptime': instance.maxptime,
-      'opusBandwidthLimit': instance.opusBandwidthLimit,
+      'opusSamplingRate': instance.opusSamplingRate,
+      'opusBitrate': instance.opusBitrate,
       'opusStereo': instance.opusStereo,
       'opusDtx': instance.opusDtx,
     };

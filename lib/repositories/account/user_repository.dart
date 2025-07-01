@@ -48,12 +48,16 @@ class UserRepository {
     _pullTimer = null;
   }
 
-  Future<UserInfo> _gatherUserInfo() async {
+  Future<UserInfo?> _gatherUserInfo() async {
     try {
       final newInfo = await webtritApiClient.getUserInfo(token);
       if (newInfo != _lastInfo) _updatesController.add(newInfo);
       _lastInfo = newInfo;
       return newInfo;
+    } on UserNotFoundException catch (e, stackTrace) {
+      _logger.warning('_gatherUserInfo: user not found', e, stackTrace);
+      _updatesController.addError(e, stackTrace);
+      return null;
     } catch (e, stackTrace) {
       _logger.warning('_gatherUserInfo', e, stackTrace);
       _updatesController.addError(e, stackTrace);
@@ -61,7 +65,7 @@ class UserRepository {
     }
   }
 
-  Future<UserInfo> getInfo([bool force = false]) {
+  Future<UserInfo?> getInfo([bool force = false]) {
     if (force == false && _lastInfo != null) {
       return Future.value(_lastInfo);
     } else {

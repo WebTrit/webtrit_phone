@@ -16,6 +16,7 @@ class LoginState with _$LoginState {
     SessionOtpProvisionalWithDateTime? signupSessionOtpProvisionalWithDateTime,
     String? token,
     String? userId,
+    // Used to represent an embedded launch page or a login type within tabbed navigation
     LoginEmbedded? embedded,
     @Default(UrlInput.pure()) UrlInput coreUrlInput,
     @Default(UserRefInput.pure()) UserRefInput otpSigninUserRefInput,

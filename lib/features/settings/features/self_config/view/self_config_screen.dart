@@ -12,7 +12,7 @@ class SelfConfigScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: WebViewScaffold(
+      body: WebViewContainer(
         title: Text(context.l10n.settings_ListViewTileTitle_self_config),
         userAgent: UserAgent.of(context),
         initialUri: url,

@@ -34,6 +34,9 @@ part 'app_database.g.dart';
     SmsOutboxReadCursorsTable,
     UserSmsNumbersTable,
     ActiveMessageNotificationsTable,
+    VoicemailTable,
+    SystemNotificationsTable,
+    SystemNotificationsOutboxTable,
   ],
   daos: [
     ContactsDao,
@@ -45,6 +48,8 @@ part 'app_database.g.dart';
     ChatsDao,
     SmsDao,
     ActiveMessageNotificationsDao,
+    VoicemailDao,
+    SystemNotificationsDao,
   ],
 )
 class AppDatabase extends _$AppDatabase {

@@ -1,8 +1,4 @@
 import 'package:flutter/material.dart';
-
-// ignore_for_file: public_member_api_docs, sort_constructors_first
-// ignore: depend_on_referenced_packages
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/blocs/app/app_bloc.dart';
@@ -12,22 +8,30 @@ import 'package:webtrit_phone/models/models.dart';
 import 'package:screenshots/screenshots/screenshots.dart';
 import 'package:screenshots/widgets/widgets.dart';
 
-part 'router.gr.dart';
+class AppPairingContent extends StatelessWidget {
+  const AppPairingContent({super.key});
 
-@AutoRouterConfig(replaceInRouteName: 'Screen,Route')
-class AppRouter extends _$AppRouter {
   @override
-  List<AutoRoute> get routes => [
-        RedirectRoute(path: '/', redirectTo: '/0'),
-        AutoRoute(path: '/:$_kInitialIndexParameterName', page: IndexInputRoute.page),
-      ];
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'WebTrit App Pairing',
+      onGenerateRoute: (settings) {
+        final uri = Uri.parse(settings.name ?? '/0');
+        final indexStr = uri.pathSegments.isNotEmpty ? uri.pathSegments.first : '0';
+        final index = int.tryParse(indexStr) ?? 0;
+        return MaterialPageRoute(
+          builder: (_) => IndexInputScreen(index: index),
+          settings: settings,
+        );
+      },
+    );
+  }
 }
 
-@RoutePage()
 class IndexInputScreen extends StatefulWidget {
   final int index;
 
-  const IndexInputScreen({super.key, @PathParam(_kInitialIndexParameterName) required this.index});
+  const IndexInputScreen({super.key, required this.index});
 
   @override
   State<IndexInputScreen> createState() => _IndexInputScreenState();
@@ -38,7 +42,7 @@ class _IndexInputScreenState extends State<IndexInputScreen> {
   Widget build(BuildContext context) {
     final appBloc = context.read<AppBloc>();
 
-    late final screenshots = [
+    final screenshots = [
       ScreenshotApp(
         appBloc: appBloc,
         child: const LoginModeSelectScreenScreenshot(),
@@ -125,5 +129,3 @@ class _IndexInputScreenState extends State<IndexInputScreen> {
     );
   }
 }
-
-const _kInitialIndexParameterName = 'initialIndex';

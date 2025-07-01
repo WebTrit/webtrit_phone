@@ -15,7 +15,7 @@ class CallActiveScaffold extends StatefulWidget {
     required this.speaker,
     required this.callStatus,
     required this.activeCalls,
-    required this.transferConfig,
+    required this.callConfig,
     required this.localePlaceholderBuilder,
     required this.remotePlaceholderBuilder,
   });
@@ -23,7 +23,7 @@ class CallActiveScaffold extends StatefulWidget {
   final bool? speaker;
   final CallStatus callStatus;
   final List<ActiveCall> activeCalls;
-  final TransferConfig transferConfig;
+  final CallConfig callConfig;
   final WidgetBuilder? localePlaceholderBuilder;
   final WidgetBuilder? remotePlaceholderBuilder;
 
@@ -169,7 +169,8 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                                         inviteToAttendedTransfer: activeTransfer is InviteToAttendedTransfer,
                                         isIncoming: activeCall.isIncoming,
                                         held: activeCall.held,
-                                        username: activeCall.displayName ?? activeCall.handle.value,
+                                        number: activeCall.handle.value,
+                                        username: activeCall.displayName,
                                         acceptedTime: activeCall.acceptedTime,
                                         color: onTabGradient,
                                         processingStatus: activeCall.processingStatus,
@@ -182,7 +183,8 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                                         inviteToAttendedTransfer: false,
                                         isIncoming: false,
                                         held: false,
-                                        username: activeTransfer.referTo,
+                                        number: activeCall.handle.value,
+                                        username: activeCall.displayName,
                                         color: onTabGradient,
                                         callStatus: widget.callStatus,
                                       ),
@@ -194,12 +196,14 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                                       wasHungUp: activeCall.wasHungUp,
                                       cameraValue: activeCall.cameraEnabled,
                                       inviteToAttendedTransfer: activeTransfer is InviteToAttendedTransfer,
-                                      onCameraChanged: (bool value) {
-                                        context
-                                            .read<CallBloc>()
-                                            .add(CallControlEvent.cameraEnabled(activeCall.callId, value));
-                                        setState(() {});
-                                      },
+                                      onCameraChanged: widget.callConfig.isVideoCallEnabled
+                                          ? (bool value) {
+                                              context
+                                                  .read<CallBloc>()
+                                                  .add(CallControlEvent.cameraEnabled(activeCall.callId, value));
+                                              setState(() {});
+                                            }
+                                          : null,
                                       mutedValue: activeCall.muted,
                                       onMutedChanged: (bool value) {
                                         context
@@ -215,7 +219,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                                         setState(() {});
                                       },
                                       transferableCalls: heldCalls,
-                                      onBlindTransferInitiated: widget.transferConfig.enableBlindTransfer
+                                      onBlindTransferInitiated: widget.callConfig.isBlindTransferEnabled
                                           ? (!activeCall.wasAccepted || activeTransfer != null
                                               ? null
                                               : () {
@@ -225,7 +229,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                                                 })
                                           : null,
                                       // TODO (Serdun): Simplify complex condition in the widget tree.
-                                      onAttendedTransferInitiated: widget.transferConfig.enableAttendedTransfer
+                                      onAttendedTransferInitiated: widget.callConfig.isAttendedTransferEnabled
                                           ? (!activeCall.wasAccepted || activeTransfer != null
                                               ? null
                                               : () {
@@ -234,7 +238,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                                                 })
                                           : null,
                                       // TODO (Serdun): Simplify complex condition in the widget tree.
-                                      onAttendedTransferSubmitted: widget.transferConfig.enableAttendedTransfer
+                                      onAttendedTransferSubmitted: widget.callConfig.isAttendedTransferEnabled
                                           ? (!activeCall.wasAccepted || activeTransfer != null
                                               ? null
                                               : (ActiveCall referorCall) {

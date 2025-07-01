@@ -16,10 +16,17 @@ part 'local_contacts_sync_state.dart';
 
 final _logger = Logger('LocalContactsSyncBloc');
 
+typedef AsyncCallback = Future<bool> Function();
+
 class LocalContactsSyncBloc extends Bloc<LocalContactsSyncEvent, LocalContactsSyncState> with WidgetsBindingObserver {
   LocalContactsSyncBloc({
     required this.localContactsRepository,
     required this.appDatabase,
+    required this.appPreferences,
+    required this.isFeatureEnabled,
+    required this.isAgreementAccepted,
+    required this.isContactsPermissionGranted,
+    required this.requestContactPermission,
   }) : super(const LocalContactsSyncInitial()) {
     on<LocalContactsSyncStarted>(_onStarted, transformer: restartable());
     on<LocalContactsSyncRefreshed>(_onRefreshed, transformer: droppable());
@@ -30,6 +37,11 @@ class LocalContactsSyncBloc extends Bloc<LocalContactsSyncEvent, LocalContactsSy
 
   final LocalContactsRepository localContactsRepository;
   final AppDatabase appDatabase;
+  final AppPreferences appPreferences;
+  final AsyncCallback isFeatureEnabled;
+  final AsyncCallback isAgreementAccepted;
+  final AsyncCallback isContactsPermissionGranted;
+  final AsyncCallback requestContactPermission;
 
   @override
   Future<void> close() async {
@@ -53,24 +65,49 @@ class LocalContactsSyncBloc extends Bloc<LocalContactsSyncEvent, LocalContactsSy
   void _onStarted(LocalContactsSyncStarted event, Emitter<LocalContactsSyncState> emit) async {
     _logger.finer('_onStarted');
 
-    if (!await localContactsRepository.requestPermission()) {
-      _logger.warning('_onStarted permission failure');
-      emit(const LocalContactsSyncPermissionFailure());
-    } else {
-      final localContactsForEachFuture = emit.onEach<List<LocalContact>>(
-        localContactsRepository.contacts(),
-        onData: (contacts) => add(_LocalContactsSyncUpdated(contacts: contacts)),
-        onError: (error, stackTrace) => _logger.warning('_onStarted', error, stackTrace),
-      );
-
-      add(const LocalContactsSyncRefreshed());
-
-      await localContactsForEachFuture;
+    if (!(await isFeatureEnabled())) {
+      emit(const ContactsFeatureDisabledException());
+      return;
     }
+
+    if (!(await isAgreementAccepted())) {
+      emit(const ContactsAgreementMissingException());
+      return;
+    }
+
+    if (!await requestContactPermission()) {
+      emit(const LocalContactsSyncPermissionFailure());
+      return;
+    }
+
+    final localContactsForEachFuture = emit.onEach<List<LocalContact>>(
+      localContactsRepository.contacts(),
+      onData: (contacts) => add(_LocalContactsSyncUpdated(contacts: contacts)),
+      onError: (error, stackTrace) => _logger.warning('_onStarted', error, stackTrace),
+    );
+
+    add(const LocalContactsSyncRefreshed());
+
+    await localContactsForEachFuture;
   }
 
   void _onRefreshed(LocalContactsSyncRefreshed event, Emitter<LocalContactsSyncState> emit) async {
     _logger.finer('_onRefreshed');
+
+    if (!(await isFeatureEnabled())) {
+      emit(const ContactsFeatureDisabledException());
+      return;
+    }
+
+    if (!(await isAgreementAccepted())) {
+      emit(const ContactsAgreementMissingException());
+      return;
+    }
+
+    if (!await isContactsPermissionGranted()) {
+      emit(const LocalContactsSyncPermissionFailure());
+      return;
+    }
 
     emit(const LocalContactsSyncRefreshInProgress());
     try {

@@ -14,7 +14,7 @@ class HelpScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final widget = WebViewScaffold(
+    final widget = WebViewContainer(
       title: Text(context.l10n.settings_ListViewTileTitle_help),
       initialUri: initialUri,
       userAgent: UserAgent.of(context),

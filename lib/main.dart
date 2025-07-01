@@ -121,6 +121,16 @@ class RootApp extends StatelessWidget {
             return AppLogger();
           },
         ),
+        Provider<AppTime>(
+          create: (context) {
+            return AppTime();
+          },
+        ),
+        Provider<AppPath>(
+          create: (context) {
+            return AppPath();
+          },
+        ),
       ],
       child: MultiRepositoryProvider(
         providers: [

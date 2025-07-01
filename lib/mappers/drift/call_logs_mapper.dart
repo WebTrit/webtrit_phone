@@ -6,6 +6,7 @@ mixin CallLogsDriftMapper {
     return CallLogEntry(
       direction: CallDirection.values.byName(callLogData.direction.name),
       number: callLogData.number,
+      username: callLogData.username,
       video: callLogData.video,
       createdTime: callLogData.createdAt,
       acceptedTime: callLogData.acceptedAt,

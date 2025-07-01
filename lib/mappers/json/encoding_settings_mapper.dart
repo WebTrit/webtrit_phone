@@ -19,7 +19,8 @@ mixin EncodingSettingsJsonMapper {
       videoBitrate: map['videoBitrate'] as int?,
       ptime: map['ptime'] as int?,
       maxptime: map['maxptime'] as int?,
-      opusBandwidthLimit: map['opusBandwidthLimit'] as int?,
+      opusSamplingRate: map['opusSamplingRate'] as int?,
+      opusBitrate: map['opusBitrate'] as int?,
       opusStereo: map['opusStereo'] as bool?,
       opusDtx: map['opusDtx'] as bool?,
       audioProfiles: (map['audioProfiles'] as List<dynamic>?)?.map((p) => profileFromMap(p)).toList(),
@@ -33,7 +34,8 @@ mixin EncodingSettingsJsonMapper {
       'videoBitrate': settings.videoBitrate,
       'ptime': settings.ptime,
       'maxptime': settings.maxptime,
-      'opusBandwidthLimit': settings.opusBandwidthLimit,
+      'opusSamplingRate': settings.opusSamplingRate,
+      'opusBitrate': settings.opusBitrate,
       'opusStereo': settings.opusStereo,
       'opusDtx': settings.opusDtx,
       'audioProfiles': settings.audioProfiles?.map((e) => profileToMap(e)).toList(),
@@ -42,7 +44,17 @@ mixin EncodingSettingsJsonMapper {
   }
 
   Enableble<RTPCodecProfile> profileFromMap(Map<String, dynamic> map) {
-    return (option: RTPCodecProfile.values.byName(map['profile']), enabled: map['enabled']);
+    final profile = map['profile'];
+    final enabled = map['enabled'];
+
+    /// migration from 1.7.6
+    if (profile == 'cn') return (option: RTPCodecProfile.comfortNoise_8k, enabled: enabled);
+    if (profile == 'telephoneEvent8') return (option: RTPCodecProfile.telephoneEvent_8k, enabled: enabled);
+    if (profile == 'telephoneEvent48') return (option: RTPCodecProfile.telephoneEvent_48k, enabled: enabled);
+    if (profile == 'redAudio') return (option: RTPCodecProfile.redundancy_audio, enabled: enabled);
+    if (profile == 'redVideo') return (option: RTPCodecProfile.redundancy_video, enabled: enabled);
+
+    return (option: RTPCodecProfile.values.byName(profile), enabled: enabled);
   }
 
   Map<String, dynamic> profileToMap(Enableble<RTPCodecProfile> param) {

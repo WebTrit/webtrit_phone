@@ -10,7 +10,7 @@ class MockEmbeddedCubit extends MockCubit<EmbeddedState> implements EmbeddedCubi
     whenListen(
       mock,
       const Stream<EmbeddedState>.empty(),
-      initialState: const EmbeddedState.initial(),
+      initialState: const EmbeddedState(),
     );
     return mock;
   }
