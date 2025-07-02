@@ -13,10 +13,17 @@ import '../extensions/extensions.dart';
 import '../bloc/network_cubit.dart';
 import '../widgets/widgets.dart';
 
-class NetworkScreen extends StatelessWidget {
+class NetworkScreen extends StatefulWidget {
   const NetworkScreen({
     super.key,
   });
+
+  @override
+  State<NetworkScreen> createState() => _NetworkScreenState();
+}
+
+class _NetworkScreenState extends State<NetworkScreen> {
+  int? _cachedAndroidSdkVersion;
 
   @override
   Widget build(BuildContext context) {
@@ -92,12 +99,12 @@ class NetworkScreen extends StatelessWidget {
 
   Future<bool> _isAndroidVersionAtLeast(int targetVersion) async {
     if (!Platform.isAndroid) return false;
-
-    final deviceInfo = DeviceInfoPlugin();
-    final androidInfo = await deviceInfo.androidInfo;
-    final version = androidInfo.version.sdkInt;
-
-    return version >= targetVersion;
+    if (_cachedAndroidSdkVersion == null) {
+      final deviceInfo = DeviceInfoPlugin();
+      final androidInfo = await deviceInfo.androidInfo;
+      _cachedAndroidSdkVersion = androidInfo.version.sdkInt;
+    }
+    return _cachedAndroidSdkVersion! >= targetVersion;
   }
 
   Future<void> _showPersistentConnectionReminderIfNeeded(BuildContext context) async {
