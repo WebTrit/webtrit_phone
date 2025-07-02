@@ -60,6 +60,7 @@ void main() {
       null,
       null,
     ],
+    userActiveCalls: [],
   );
 
   test('$StateHandshake fromJson', () {

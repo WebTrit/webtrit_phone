@@ -134,13 +134,13 @@ class _CallSignalingEvent with _$CallSignalingEvent implements CallEvent {
     required String callId,
   }) = _CallSignalingEventTransferring;
 
-  const factory _CallSignalingEvent.notifyDialogs({
+  const factory _CallSignalingEvent.notifyDialog({
     required int line,
     required String callId,
     required String? notify,
     required SubscriptionState? subscriptionState,
-    required List<DialogInfo> dialogs,
-  }) = _CallSignalingEventNotifyDialogs;
+    required List<UserActiveCall> userActiveCalls,
+  }) = _CallSignalingEventNotifyDialog;
 
   const factory _CallSignalingEvent.notifyRefer({
     required int line,

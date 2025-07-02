@@ -19,4 +19,4 @@ export 'system_info/system_info_repository.dart';
 export 'system_notifications/system_notifications_local_repository.dart';
 export 'system_notifications/system_notifications_remote_repository.dart';
 export 'voicemail/voicemail.dart';
-export 'call_pull_dialog_repository.dart';
+export 'call_pull_repository.dart';

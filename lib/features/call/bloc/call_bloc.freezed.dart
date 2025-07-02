@@ -1036,9 +1036,13 @@ mixin _$CallSignalingEvent {
             String? referredBy, String? replaceCallId)
         transfer,
     required TResult Function(int line, String callId) transferring,
-    required TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)
-        notifyDialogs,
+    required TResult Function(
+            int line,
+            String callId,
+            String? notify,
+            SubscriptionState? subscriptionState,
+            List<UserActiveCall> userActiveCalls)
+        notifyDialog,
     required TResult Function(int line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)
         notifyRefer,
@@ -1092,9 +1096,13 @@ mixin _$CallSignalingEvent {
             String? referredBy, String? replaceCallId)?
         transfer,
     TResult? Function(int line, String callId)? transferring,
-    TResult? Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)?
-        notifyDialogs,
+    TResult? Function(
+            int line,
+            String callId,
+            String? notify,
+            SubscriptionState? subscriptionState,
+            List<UserActiveCall> userActiveCalls)?
+        notifyDialog,
     TResult? Function(int line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
@@ -1148,9 +1156,13 @@ mixin _$CallSignalingEvent {
             String? referredBy, String? replaceCallId)?
         transfer,
     TResult Function(int line, String callId)? transferring,
-    TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)?
-        notifyDialogs,
+    TResult Function(
+            int line,
+            String callId,
+            String? notify,
+            SubscriptionState? subscriptionState,
+            List<UserActiveCall> userActiveCalls)?
+        notifyDialog,
     TResult Function(int line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
@@ -1182,8 +1194,8 @@ mixin _$CallSignalingEvent {
     required TResult Function(_CallSignalingEventTransfer value) transfer,
     required TResult Function(_CallSignalingEventTransferring value)
         transferring,
-    required TResult Function(_CallSignalingEventNotifyDialogs value)
-        notifyDialogs,
+    required TResult Function(_CallSignalingEventNotifyDialog value)
+        notifyDialog,
     required TResult Function(_CallSignalingEventNotifyRefer value) notifyRefer,
     required TResult Function(_CallSignalingEventNotifyUnknown value)
         notifyUnknown,
@@ -1208,7 +1220,7 @@ mixin _$CallSignalingEvent {
     TResult? Function(_CallSignalingEventUpdated value)? updated,
     TResult? Function(_CallSignalingEventTransfer value)? transfer,
     TResult? Function(_CallSignalingEventTransferring value)? transferring,
-    TResult? Function(_CallSignalingEventNotifyDialogs value)? notifyDialogs,
+    TResult? Function(_CallSignalingEventNotifyDialog value)? notifyDialog,
     TResult? Function(_CallSignalingEventNotifyRefer value)? notifyRefer,
     TResult? Function(_CallSignalingEventNotifyUnknown value)? notifyUnknown,
     TResult? Function(_CallSignalingEventRegistering value)? registering,
@@ -1230,7 +1242,7 @@ mixin _$CallSignalingEvent {
     TResult Function(_CallSignalingEventUpdated value)? updated,
     TResult Function(_CallSignalingEventTransfer value)? transfer,
     TResult Function(_CallSignalingEventTransferring value)? transferring,
-    TResult Function(_CallSignalingEventNotifyDialogs value)? notifyDialogs,
+    TResult Function(_CallSignalingEventNotifyDialog value)? notifyDialog,
     TResult Function(_CallSignalingEventNotifyRefer value)? notifyRefer,
     TResult Function(_CallSignalingEventNotifyUnknown value)? notifyUnknown,
     TResult Function(_CallSignalingEventRegistering value)? registering,
@@ -1362,9 +1374,13 @@ class _$CallSignalingEventIncomingImpl
             String? referredBy, String? replaceCallId)
         transfer,
     required TResult Function(int line, String callId) transferring,
-    required TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)
-        notifyDialogs,
+    required TResult Function(
+            int line,
+            String callId,
+            String? notify,
+            SubscriptionState? subscriptionState,
+            List<UserActiveCall> userActiveCalls)
+        notifyDialog,
     required TResult Function(int line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)
         notifyRefer,
@@ -1422,9 +1438,13 @@ class _$CallSignalingEventIncomingImpl
             String? referredBy, String? replaceCallId)?
         transfer,
     TResult? Function(int line, String callId)? transferring,
-    TResult? Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)?
-        notifyDialogs,
+    TResult? Function(
+            int line,
+            String callId,
+            String? notify,
+            SubscriptionState? subscriptionState,
+            List<UserActiveCall> userActiveCalls)?
+        notifyDialog,
     TResult? Function(int line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
@@ -1482,9 +1502,13 @@ class _$CallSignalingEventIncomingImpl
             String? referredBy, String? replaceCallId)?
         transfer,
     TResult Function(int line, String callId)? transferring,
-    TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)?
-        notifyDialogs,
+    TResult Function(
+            int line,
+            String callId,
+            String? notify,
+            SubscriptionState? subscriptionState,
+            List<UserActiveCall> userActiveCalls)?
+        notifyDialog,
     TResult Function(int line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
@@ -1523,8 +1547,8 @@ class _$CallSignalingEventIncomingImpl
     required TResult Function(_CallSignalingEventTransfer value) transfer,
     required TResult Function(_CallSignalingEventTransferring value)
         transferring,
-    required TResult Function(_CallSignalingEventNotifyDialogs value)
-        notifyDialogs,
+    required TResult Function(_CallSignalingEventNotifyDialog value)
+        notifyDialog,
     required TResult Function(_CallSignalingEventNotifyRefer value) notifyRefer,
     required TResult Function(_CallSignalingEventNotifyUnknown value)
         notifyUnknown,
@@ -1552,7 +1576,7 @@ class _$CallSignalingEventIncomingImpl
     TResult? Function(_CallSignalingEventUpdated value)? updated,
     TResult? Function(_CallSignalingEventTransfer value)? transfer,
     TResult? Function(_CallSignalingEventTransferring value)? transferring,
-    TResult? Function(_CallSignalingEventNotifyDialogs value)? notifyDialogs,
+    TResult? Function(_CallSignalingEventNotifyDialog value)? notifyDialog,
     TResult? Function(_CallSignalingEventNotifyRefer value)? notifyRefer,
     TResult? Function(_CallSignalingEventNotifyUnknown value)? notifyUnknown,
     TResult? Function(_CallSignalingEventRegistering value)? registering,
@@ -1577,7 +1601,7 @@ class _$CallSignalingEventIncomingImpl
     TResult Function(_CallSignalingEventUpdated value)? updated,
     TResult Function(_CallSignalingEventTransfer value)? transfer,
     TResult Function(_CallSignalingEventTransferring value)? transferring,
-    TResult Function(_CallSignalingEventNotifyDialogs value)? notifyDialogs,
+    TResult Function(_CallSignalingEventNotifyDialog value)? notifyDialog,
     TResult Function(_CallSignalingEventNotifyRefer value)? notifyRefer,
     TResult Function(_CallSignalingEventNotifyUnknown value)? notifyUnknown,
     TResult Function(_CallSignalingEventRegistering value)? registering,
@@ -1696,9 +1720,13 @@ class _$CallSignalingEventRingingImpl
             String? referredBy, String? replaceCallId)
         transfer,
     required TResult Function(int line, String callId) transferring,
-    required TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)
-        notifyDialogs,
+    required TResult Function(
+            int line,
+            String callId,
+            String? notify,
+            SubscriptionState? subscriptionState,
+            List<UserActiveCall> userActiveCalls)
+        notifyDialog,
     required TResult Function(int line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)
         notifyRefer,
@@ -1755,9 +1783,13 @@ class _$CallSignalingEventRingingImpl
             String? referredBy, String? replaceCallId)?
         transfer,
     TResult? Function(int line, String callId)? transferring,
-    TResult? Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)?
-        notifyDialogs,
+    TResult? Function(
+            int line,
+            String callId,
+            String? notify,
+            SubscriptionState? subscriptionState,
+            List<UserActiveCall> userActiveCalls)?
+        notifyDialog,
     TResult? Function(int line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
@@ -1814,9 +1846,13 @@ class _$CallSignalingEventRingingImpl
             String? referredBy, String? replaceCallId)?
         transfer,
     TResult Function(int line, String callId)? transferring,
-    TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)?
-        notifyDialogs,
+    TResult Function(
+            int line,
+            String callId,
+            String? notify,
+            SubscriptionState? subscriptionState,
+            List<UserActiveCall> userActiveCalls)?
+        notifyDialog,
     TResult Function(int line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
@@ -1854,8 +1890,8 @@ class _$CallSignalingEventRingingImpl
     required TResult Function(_CallSignalingEventTransfer value) transfer,
     required TResult Function(_CallSignalingEventTransferring value)
         transferring,
-    required TResult Function(_CallSignalingEventNotifyDialogs value)
-        notifyDialogs,
+    required TResult Function(_CallSignalingEventNotifyDialog value)
+        notifyDialog,
     required TResult Function(_CallSignalingEventNotifyRefer value) notifyRefer,
     required TResult Function(_CallSignalingEventNotifyUnknown value)
         notifyUnknown,
@@ -1883,7 +1919,7 @@ class _$CallSignalingEventRingingImpl
     TResult? Function(_CallSignalingEventUpdated value)? updated,
     TResult? Function(_CallSignalingEventTransfer value)? transfer,
     TResult? Function(_CallSignalingEventTransferring value)? transferring,
-    TResult? Function(_CallSignalingEventNotifyDialogs value)? notifyDialogs,
+    TResult? Function(_CallSignalingEventNotifyDialog value)? notifyDialog,
     TResult? Function(_CallSignalingEventNotifyRefer value)? notifyRefer,
     TResult? Function(_CallSignalingEventNotifyUnknown value)? notifyUnknown,
     TResult? Function(_CallSignalingEventRegistering value)? registering,
@@ -1908,7 +1944,7 @@ class _$CallSignalingEventRingingImpl
     TResult Function(_CallSignalingEventUpdated value)? updated,
     TResult Function(_CallSignalingEventTransfer value)? transfer,
     TResult Function(_CallSignalingEventTransferring value)? transferring,
-    TResult Function(_CallSignalingEventNotifyDialogs value)? notifyDialogs,
+    TResult Function(_CallSignalingEventNotifyDialog value)? notifyDialog,
     TResult Function(_CallSignalingEventNotifyRefer value)? notifyRefer,
     TResult Function(_CallSignalingEventNotifyUnknown value)? notifyUnknown,
     TResult Function(_CallSignalingEventRegistering value)? registering,
@@ -2024,9 +2060,13 @@ class _$CallSignalingEventProgressImpl
             String? referredBy, String? replaceCallId)
         transfer,
     required TResult Function(int line, String callId) transferring,
-    required TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)
-        notifyDialogs,
+    required TResult Function(
+            int line,
+            String callId,
+            String? notify,
+            SubscriptionState? subscriptionState,
+            List<UserActiveCall> userActiveCalls)
+        notifyDialog,
     required TResult Function(int line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)
         notifyRefer,
@@ -2083,9 +2123,13 @@ class _$CallSignalingEventProgressImpl
             String? referredBy, String? replaceCallId)?
         transfer,
     TResult? Function(int line, String callId)? transferring,
-    TResult? Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)?
-        notifyDialogs,
+    TResult? Function(
+            int line,
+            String callId,
+            String? notify,
+            SubscriptionState? subscriptionState,
+            List<UserActiveCall> userActiveCalls)?
+        notifyDialog,
     TResult? Function(int line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
@@ -2142,9 +2186,13 @@ class _$CallSignalingEventProgressImpl
             String? referredBy, String? replaceCallId)?
         transfer,
     TResult Function(int line, String callId)? transferring,
-    TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)?
-        notifyDialogs,
+    TResult Function(
+            int line,
+            String callId,
+            String? notify,
+            SubscriptionState? subscriptionState,
+            List<UserActiveCall> userActiveCalls)?
+        notifyDialog,
     TResult Function(int line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
@@ -2182,8 +2230,8 @@ class _$CallSignalingEventProgressImpl
     required TResult Function(_CallSignalingEventTransfer value) transfer,
     required TResult Function(_CallSignalingEventTransferring value)
         transferring,
-    required TResult Function(_CallSignalingEventNotifyDialogs value)
-        notifyDialogs,
+    required TResult Function(_CallSignalingEventNotifyDialog value)
+        notifyDialog,
     required TResult Function(_CallSignalingEventNotifyRefer value) notifyRefer,
     required TResult Function(_CallSignalingEventNotifyUnknown value)
         notifyUnknown,
@@ -2211,7 +2259,7 @@ class _$CallSignalingEventProgressImpl
     TResult? Function(_CallSignalingEventUpdated value)? updated,
     TResult? Function(_CallSignalingEventTransfer value)? transfer,
     TResult? Function(_CallSignalingEventTransferring value)? transferring,
-    TResult? Function(_CallSignalingEventNotifyDialogs value)? notifyDialogs,
+    TResult? Function(_CallSignalingEventNotifyDialog value)? notifyDialog,
     TResult? Function(_CallSignalingEventNotifyRefer value)? notifyRefer,
     TResult? Function(_CallSignalingEventNotifyUnknown value)? notifyUnknown,
     TResult? Function(_CallSignalingEventRegistering value)? registering,
@@ -2236,7 +2284,7 @@ class _$CallSignalingEventProgressImpl
     TResult Function(_CallSignalingEventUpdated value)? updated,
     TResult Function(_CallSignalingEventTransfer value)? transfer,
     TResult Function(_CallSignalingEventTransferring value)? transferring,
-    TResult Function(_CallSignalingEventNotifyDialogs value)? notifyDialogs,
+    TResult Function(_CallSignalingEventNotifyDialog value)? notifyDialog,
     TResult Function(_CallSignalingEventNotifyRefer value)? notifyRefer,
     TResult Function(_CallSignalingEventNotifyUnknown value)? notifyUnknown,
     TResult Function(_CallSignalingEventRegistering value)? registering,
@@ -2353,9 +2401,13 @@ class _$CallSignalingEventAcceptedImpl
             String? referredBy, String? replaceCallId)
         transfer,
     required TResult Function(int line, String callId) transferring,
-    required TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)
-        notifyDialogs,
+    required TResult Function(
+            int line,
+            String callId,
+            String? notify,
+            SubscriptionState? subscriptionState,
+            List<UserActiveCall> userActiveCalls)
+        notifyDialog,
     required TResult Function(int line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)
         notifyRefer,
@@ -2412,9 +2464,13 @@ class _$CallSignalingEventAcceptedImpl
             String? referredBy, String? replaceCallId)?
         transfer,
     TResult? Function(int line, String callId)? transferring,
-    TResult? Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)?
-        notifyDialogs,
+    TResult? Function(
+            int line,
+            String callId,
+            String? notify,
+            SubscriptionState? subscriptionState,
+            List<UserActiveCall> userActiveCalls)?
+        notifyDialog,
     TResult? Function(int line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
@@ -2471,9 +2527,13 @@ class _$CallSignalingEventAcceptedImpl
             String? referredBy, String? replaceCallId)?
         transfer,
     TResult Function(int line, String callId)? transferring,
-    TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)?
-        notifyDialogs,
+    TResult Function(
+            int line,
+            String callId,
+            String? notify,
+            SubscriptionState? subscriptionState,
+            List<UserActiveCall> userActiveCalls)?
+        notifyDialog,
     TResult Function(int line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
@@ -2511,8 +2571,8 @@ class _$CallSignalingEventAcceptedImpl
     required TResult Function(_CallSignalingEventTransfer value) transfer,
     required TResult Function(_CallSignalingEventTransferring value)
         transferring,
-    required TResult Function(_CallSignalingEventNotifyDialogs value)
-        notifyDialogs,
+    required TResult Function(_CallSignalingEventNotifyDialog value)
+        notifyDialog,
     required TResult Function(_CallSignalingEventNotifyRefer value) notifyRefer,
     required TResult Function(_CallSignalingEventNotifyUnknown value)
         notifyUnknown,
@@ -2540,7 +2600,7 @@ class _$CallSignalingEventAcceptedImpl
     TResult? Function(_CallSignalingEventUpdated value)? updated,
     TResult? Function(_CallSignalingEventTransfer value)? transfer,
     TResult? Function(_CallSignalingEventTransferring value)? transferring,
-    TResult? Function(_CallSignalingEventNotifyDialogs value)? notifyDialogs,
+    TResult? Function(_CallSignalingEventNotifyDialog value)? notifyDialog,
     TResult? Function(_CallSignalingEventNotifyRefer value)? notifyRefer,
     TResult? Function(_CallSignalingEventNotifyUnknown value)? notifyUnknown,
     TResult? Function(_CallSignalingEventRegistering value)? registering,
@@ -2565,7 +2625,7 @@ class _$CallSignalingEventAcceptedImpl
     TResult Function(_CallSignalingEventUpdated value)? updated,
     TResult Function(_CallSignalingEventTransfer value)? transfer,
     TResult Function(_CallSignalingEventTransferring value)? transferring,
-    TResult Function(_CallSignalingEventNotifyDialogs value)? notifyDialogs,
+    TResult Function(_CallSignalingEventNotifyDialog value)? notifyDialog,
     TResult Function(_CallSignalingEventNotifyRefer value)? notifyRefer,
     TResult Function(_CallSignalingEventNotifyUnknown value)? notifyUnknown,
     TResult Function(_CallSignalingEventRegistering value)? registering,
@@ -2685,9 +2745,13 @@ class _$CallSignalingEventHangupImpl
             String? referredBy, String? replaceCallId)
         transfer,
     required TResult Function(int line, String callId) transferring,
-    required TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)
-        notifyDialogs,
+    required TResult Function(
+            int line,
+            String callId,
+            String? notify,
+            SubscriptionState? subscriptionState,
+            List<UserActiveCall> userActiveCalls)
+        notifyDialog,
     required TResult Function(int line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)
         notifyRefer,
@@ -2744,9 +2808,13 @@ class _$CallSignalingEventHangupImpl
             String? referredBy, String? replaceCallId)?
         transfer,
     TResult? Function(int line, String callId)? transferring,
-    TResult? Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)?
-        notifyDialogs,
+    TResult? Function(
+            int line,
+            String callId,
+            String? notify,
+            SubscriptionState? subscriptionState,
+            List<UserActiveCall> userActiveCalls)?
+        notifyDialog,
     TResult? Function(int line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
@@ -2803,9 +2871,13 @@ class _$CallSignalingEventHangupImpl
             String? referredBy, String? replaceCallId)?
         transfer,
     TResult Function(int line, String callId)? transferring,
-    TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)?
-        notifyDialogs,
+    TResult Function(
+            int line,
+            String callId,
+            String? notify,
+            SubscriptionState? subscriptionState,
+            List<UserActiveCall> userActiveCalls)?
+        notifyDialog,
     TResult Function(int line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
@@ -2843,8 +2915,8 @@ class _$CallSignalingEventHangupImpl
     required TResult Function(_CallSignalingEventTransfer value) transfer,
     required TResult Function(_CallSignalingEventTransferring value)
         transferring,
-    required TResult Function(_CallSignalingEventNotifyDialogs value)
-        notifyDialogs,
+    required TResult Function(_CallSignalingEventNotifyDialog value)
+        notifyDialog,
     required TResult Function(_CallSignalingEventNotifyRefer value) notifyRefer,
     required TResult Function(_CallSignalingEventNotifyUnknown value)
         notifyUnknown,
@@ -2872,7 +2944,7 @@ class _$CallSignalingEventHangupImpl
     TResult? Function(_CallSignalingEventUpdated value)? updated,
     TResult? Function(_CallSignalingEventTransfer value)? transfer,
     TResult? Function(_CallSignalingEventTransferring value)? transferring,
-    TResult? Function(_CallSignalingEventNotifyDialogs value)? notifyDialogs,
+    TResult? Function(_CallSignalingEventNotifyDialog value)? notifyDialog,
     TResult? Function(_CallSignalingEventNotifyRefer value)? notifyRefer,
     TResult? Function(_CallSignalingEventNotifyUnknown value)? notifyUnknown,
     TResult? Function(_CallSignalingEventRegistering value)? registering,
@@ -2897,7 +2969,7 @@ class _$CallSignalingEventHangupImpl
     TResult Function(_CallSignalingEventUpdated value)? updated,
     TResult Function(_CallSignalingEventTransfer value)? transfer,
     TResult Function(_CallSignalingEventTransferring value)? transferring,
-    TResult Function(_CallSignalingEventNotifyDialogs value)? notifyDialogs,
+    TResult Function(_CallSignalingEventNotifyDialog value)? notifyDialog,
     TResult Function(_CallSignalingEventNotifyRefer value)? notifyRefer,
     TResult Function(_CallSignalingEventNotifyUnknown value)? notifyUnknown,
     TResult Function(_CallSignalingEventRegistering value)? registering,
@@ -3046,9 +3118,13 @@ class _$CallSignalingEventUpdatingImpl
             String? referredBy, String? replaceCallId)
         transfer,
     required TResult Function(int line, String callId) transferring,
-    required TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)
-        notifyDialogs,
+    required TResult Function(
+            int line,
+            String callId,
+            String? notify,
+            SubscriptionState? subscriptionState,
+            List<UserActiveCall> userActiveCalls)
+        notifyDialog,
     required TResult Function(int line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)
         notifyRefer,
@@ -3106,9 +3182,13 @@ class _$CallSignalingEventUpdatingImpl
             String? referredBy, String? replaceCallId)?
         transfer,
     TResult? Function(int line, String callId)? transferring,
-    TResult? Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)?
-        notifyDialogs,
+    TResult? Function(
+            int line,
+            String callId,
+            String? notify,
+            SubscriptionState? subscriptionState,
+            List<UserActiveCall> userActiveCalls)?
+        notifyDialog,
     TResult? Function(int line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
@@ -3166,9 +3246,13 @@ class _$CallSignalingEventUpdatingImpl
             String? referredBy, String? replaceCallId)?
         transfer,
     TResult Function(int line, String callId)? transferring,
-    TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)?
-        notifyDialogs,
+    TResult Function(
+            int line,
+            String callId,
+            String? notify,
+            SubscriptionState? subscriptionState,
+            List<UserActiveCall> userActiveCalls)?
+        notifyDialog,
     TResult Function(int line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
@@ -3207,8 +3291,8 @@ class _$CallSignalingEventUpdatingImpl
     required TResult Function(_CallSignalingEventTransfer value) transfer,
     required TResult Function(_CallSignalingEventTransferring value)
         transferring,
-    required TResult Function(_CallSignalingEventNotifyDialogs value)
-        notifyDialogs,
+    required TResult Function(_CallSignalingEventNotifyDialog value)
+        notifyDialog,
     required TResult Function(_CallSignalingEventNotifyRefer value) notifyRefer,
     required TResult Function(_CallSignalingEventNotifyUnknown value)
         notifyUnknown,
@@ -3236,7 +3320,7 @@ class _$CallSignalingEventUpdatingImpl
     TResult? Function(_CallSignalingEventUpdated value)? updated,
     TResult? Function(_CallSignalingEventTransfer value)? transfer,
     TResult? Function(_CallSignalingEventTransferring value)? transferring,
-    TResult? Function(_CallSignalingEventNotifyDialogs value)? notifyDialogs,
+    TResult? Function(_CallSignalingEventNotifyDialog value)? notifyDialog,
     TResult? Function(_CallSignalingEventNotifyRefer value)? notifyRefer,
     TResult? Function(_CallSignalingEventNotifyUnknown value)? notifyUnknown,
     TResult? Function(_CallSignalingEventRegistering value)? registering,
@@ -3261,7 +3345,7 @@ class _$CallSignalingEventUpdatingImpl
     TResult Function(_CallSignalingEventUpdated value)? updated,
     TResult Function(_CallSignalingEventTransfer value)? transfer,
     TResult Function(_CallSignalingEventTransferring value)? transferring,
-    TResult Function(_CallSignalingEventNotifyDialogs value)? notifyDialogs,
+    TResult Function(_CallSignalingEventNotifyDialog value)? notifyDialog,
     TResult Function(_CallSignalingEventNotifyRefer value)? notifyRefer,
     TResult Function(_CallSignalingEventNotifyUnknown value)? notifyUnknown,
     TResult Function(_CallSignalingEventRegistering value)? registering,
@@ -3380,9 +3464,13 @@ class _$CallSignalingEventUpdatedImpl
             String? referredBy, String? replaceCallId)
         transfer,
     required TResult Function(int line, String callId) transferring,
-    required TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)
-        notifyDialogs,
+    required TResult Function(
+            int line,
+            String callId,
+            String? notify,
+            SubscriptionState? subscriptionState,
+            List<UserActiveCall> userActiveCalls)
+        notifyDialog,
     required TResult Function(int line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)
         notifyRefer,
@@ -3439,9 +3527,13 @@ class _$CallSignalingEventUpdatedImpl
             String? referredBy, String? replaceCallId)?
         transfer,
     TResult? Function(int line, String callId)? transferring,
-    TResult? Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)?
-        notifyDialogs,
+    TResult? Function(
+            int line,
+            String callId,
+            String? notify,
+            SubscriptionState? subscriptionState,
+            List<UserActiveCall> userActiveCalls)?
+        notifyDialog,
     TResult? Function(int line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
@@ -3498,9 +3590,13 @@ class _$CallSignalingEventUpdatedImpl
             String? referredBy, String? replaceCallId)?
         transfer,
     TResult Function(int line, String callId)? transferring,
-    TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)?
-        notifyDialogs,
+    TResult Function(
+            int line,
+            String callId,
+            String? notify,
+            SubscriptionState? subscriptionState,
+            List<UserActiveCall> userActiveCalls)?
+        notifyDialog,
     TResult Function(int line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
@@ -3538,8 +3634,8 @@ class _$CallSignalingEventUpdatedImpl
     required TResult Function(_CallSignalingEventTransfer value) transfer,
     required TResult Function(_CallSignalingEventTransferring value)
         transferring,
-    required TResult Function(_CallSignalingEventNotifyDialogs value)
-        notifyDialogs,
+    required TResult Function(_CallSignalingEventNotifyDialog value)
+        notifyDialog,
     required TResult Function(_CallSignalingEventNotifyRefer value) notifyRefer,
     required TResult Function(_CallSignalingEventNotifyUnknown value)
         notifyUnknown,
@@ -3567,7 +3663,7 @@ class _$CallSignalingEventUpdatedImpl
     TResult? Function(_CallSignalingEventUpdated value)? updated,
     TResult? Function(_CallSignalingEventTransfer value)? transfer,
     TResult? Function(_CallSignalingEventTransferring value)? transferring,
-    TResult? Function(_CallSignalingEventNotifyDialogs value)? notifyDialogs,
+    TResult? Function(_CallSignalingEventNotifyDialog value)? notifyDialog,
     TResult? Function(_CallSignalingEventNotifyRefer value)? notifyRefer,
     TResult? Function(_CallSignalingEventNotifyUnknown value)? notifyUnknown,
     TResult? Function(_CallSignalingEventRegistering value)? registering,
@@ -3592,7 +3688,7 @@ class _$CallSignalingEventUpdatedImpl
     TResult Function(_CallSignalingEventUpdated value)? updated,
     TResult Function(_CallSignalingEventTransfer value)? transfer,
     TResult Function(_CallSignalingEventTransferring value)? transferring,
-    TResult Function(_CallSignalingEventNotifyDialogs value)? notifyDialogs,
+    TResult Function(_CallSignalingEventNotifyDialog value)? notifyDialog,
     TResult Function(_CallSignalingEventNotifyRefer value)? notifyRefer,
     TResult Function(_CallSignalingEventNotifyUnknown value)? notifyUnknown,
     TResult Function(_CallSignalingEventRegistering value)? registering,
@@ -3716,9 +3812,13 @@ class _$CallSignalingEventTransferImpl
             String? referredBy, String? replaceCallId)
         transfer,
     required TResult Function(int line, String callId) transferring,
-    required TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)
-        notifyDialogs,
+    required TResult Function(
+            int line,
+            String callId,
+            String? notify,
+            SubscriptionState? subscriptionState,
+            List<UserActiveCall> userActiveCalls)
+        notifyDialog,
     required TResult Function(int line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)
         notifyRefer,
@@ -3775,9 +3875,13 @@ class _$CallSignalingEventTransferImpl
             String? referredBy, String? replaceCallId)?
         transfer,
     TResult? Function(int line, String callId)? transferring,
-    TResult? Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)?
-        notifyDialogs,
+    TResult? Function(
+            int line,
+            String callId,
+            String? notify,
+            SubscriptionState? subscriptionState,
+            List<UserActiveCall> userActiveCalls)?
+        notifyDialog,
     TResult? Function(int line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
@@ -3834,9 +3938,13 @@ class _$CallSignalingEventTransferImpl
             String? referredBy, String? replaceCallId)?
         transfer,
     TResult Function(int line, String callId)? transferring,
-    TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)?
-        notifyDialogs,
+    TResult Function(
+            int line,
+            String callId,
+            String? notify,
+            SubscriptionState? subscriptionState,
+            List<UserActiveCall> userActiveCalls)?
+        notifyDialog,
     TResult Function(int line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
@@ -3874,8 +3982,8 @@ class _$CallSignalingEventTransferImpl
     required TResult Function(_CallSignalingEventTransfer value) transfer,
     required TResult Function(_CallSignalingEventTransferring value)
         transferring,
-    required TResult Function(_CallSignalingEventNotifyDialogs value)
-        notifyDialogs,
+    required TResult Function(_CallSignalingEventNotifyDialog value)
+        notifyDialog,
     required TResult Function(_CallSignalingEventNotifyRefer value) notifyRefer,
     required TResult Function(_CallSignalingEventNotifyUnknown value)
         notifyUnknown,
@@ -3903,7 +4011,7 @@ class _$CallSignalingEventTransferImpl
     TResult? Function(_CallSignalingEventUpdated value)? updated,
     TResult? Function(_CallSignalingEventTransfer value)? transfer,
     TResult? Function(_CallSignalingEventTransferring value)? transferring,
-    TResult? Function(_CallSignalingEventNotifyDialogs value)? notifyDialogs,
+    TResult? Function(_CallSignalingEventNotifyDialog value)? notifyDialog,
     TResult? Function(_CallSignalingEventNotifyRefer value)? notifyRefer,
     TResult? Function(_CallSignalingEventNotifyUnknown value)? notifyUnknown,
     TResult? Function(_CallSignalingEventRegistering value)? registering,
@@ -3928,7 +4036,7 @@ class _$CallSignalingEventTransferImpl
     TResult Function(_CallSignalingEventUpdated value)? updated,
     TResult Function(_CallSignalingEventTransfer value)? transfer,
     TResult Function(_CallSignalingEventTransferring value)? transferring,
-    TResult Function(_CallSignalingEventNotifyDialogs value)? notifyDialogs,
+    TResult Function(_CallSignalingEventNotifyDialog value)? notifyDialog,
     TResult Function(_CallSignalingEventNotifyRefer value)? notifyRefer,
     TResult Function(_CallSignalingEventNotifyUnknown value)? notifyUnknown,
     TResult Function(_CallSignalingEventRegistering value)? registering,
@@ -4039,9 +4147,13 @@ class _$CallSignalingEventTransferringImpl
             String? referredBy, String? replaceCallId)
         transfer,
     required TResult Function(int line, String callId) transferring,
-    required TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)
-        notifyDialogs,
+    required TResult Function(
+            int line,
+            String callId,
+            String? notify,
+            SubscriptionState? subscriptionState,
+            List<UserActiveCall> userActiveCalls)
+        notifyDialog,
     required TResult Function(int line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)
         notifyRefer,
@@ -4098,9 +4210,13 @@ class _$CallSignalingEventTransferringImpl
             String? referredBy, String? replaceCallId)?
         transfer,
     TResult? Function(int line, String callId)? transferring,
-    TResult? Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)?
-        notifyDialogs,
+    TResult? Function(
+            int line,
+            String callId,
+            String? notify,
+            SubscriptionState? subscriptionState,
+            List<UserActiveCall> userActiveCalls)?
+        notifyDialog,
     TResult? Function(int line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
@@ -4157,9 +4273,13 @@ class _$CallSignalingEventTransferringImpl
             String? referredBy, String? replaceCallId)?
         transfer,
     TResult Function(int line, String callId)? transferring,
-    TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)?
-        notifyDialogs,
+    TResult Function(
+            int line,
+            String callId,
+            String? notify,
+            SubscriptionState? subscriptionState,
+            List<UserActiveCall> userActiveCalls)?
+        notifyDialog,
     TResult Function(int line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
@@ -4197,8 +4317,8 @@ class _$CallSignalingEventTransferringImpl
     required TResult Function(_CallSignalingEventTransfer value) transfer,
     required TResult Function(_CallSignalingEventTransferring value)
         transferring,
-    required TResult Function(_CallSignalingEventNotifyDialogs value)
-        notifyDialogs,
+    required TResult Function(_CallSignalingEventNotifyDialog value)
+        notifyDialog,
     required TResult Function(_CallSignalingEventNotifyRefer value) notifyRefer,
     required TResult Function(_CallSignalingEventNotifyUnknown value)
         notifyUnknown,
@@ -4226,7 +4346,7 @@ class _$CallSignalingEventTransferringImpl
     TResult? Function(_CallSignalingEventUpdated value)? updated,
     TResult? Function(_CallSignalingEventTransfer value)? transfer,
     TResult? Function(_CallSignalingEventTransferring value)? transferring,
-    TResult? Function(_CallSignalingEventNotifyDialogs value)? notifyDialogs,
+    TResult? Function(_CallSignalingEventNotifyDialog value)? notifyDialog,
     TResult? Function(_CallSignalingEventNotifyRefer value)? notifyRefer,
     TResult? Function(_CallSignalingEventNotifyUnknown value)? notifyUnknown,
     TResult? Function(_CallSignalingEventRegistering value)? registering,
@@ -4251,7 +4371,7 @@ class _$CallSignalingEventTransferringImpl
     TResult Function(_CallSignalingEventUpdated value)? updated,
     TResult Function(_CallSignalingEventTransfer value)? transfer,
     TResult Function(_CallSignalingEventTransferring value)? transferring,
-    TResult Function(_CallSignalingEventNotifyDialogs value)? notifyDialogs,
+    TResult Function(_CallSignalingEventNotifyDialog value)? notifyDialog,
     TResult Function(_CallSignalingEventNotifyRefer value)? notifyRefer,
     TResult Function(_CallSignalingEventNotifyUnknown value)? notifyUnknown,
     TResult Function(_CallSignalingEventRegistering value)? registering,
@@ -4280,16 +4400,16 @@ abstract class _CallSignalingEventTransferring implements _CallSignalingEvent {
 
 /// @nodoc
 
-class _$CallSignalingEventNotifyDialogsImpl
+class _$CallSignalingEventNotifyDialogImpl
     with DiagnosticableTreeMixin
-    implements _CallSignalingEventNotifyDialogs {
-  const _$CallSignalingEventNotifyDialogsImpl(
+    implements _CallSignalingEventNotifyDialog {
+  const _$CallSignalingEventNotifyDialogImpl(
       {required this.line,
       required this.callId,
       required this.notify,
       required this.subscriptionState,
-      required final List<DialogInfo> dialogs})
-      : _dialogs = dialogs;
+      required final List<UserActiveCall> userActiveCalls})
+      : _userActiveCalls = userActiveCalls;
 
   @override
   final int line;
@@ -4299,47 +4419,48 @@ class _$CallSignalingEventNotifyDialogsImpl
   final String? notify;
   @override
   final SubscriptionState? subscriptionState;
-  final List<DialogInfo> _dialogs;
+  final List<UserActiveCall> _userActiveCalls;
   @override
-  List<DialogInfo> get dialogs {
-    if (_dialogs is EqualUnmodifiableListView) return _dialogs;
+  List<UserActiveCall> get userActiveCalls {
+    if (_userActiveCalls is EqualUnmodifiableListView) return _userActiveCalls;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_dialogs);
+    return EqualUnmodifiableListView(_userActiveCalls);
   }
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return '_CallSignalingEvent.notifyDialogs(line: $line, callId: $callId, notify: $notify, subscriptionState: $subscriptionState, dialogs: $dialogs)';
+    return '_CallSignalingEvent.notifyDialog(line: $line, callId: $callId, notify: $notify, subscriptionState: $subscriptionState, userActiveCalls: $userActiveCalls)';
   }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties
-      ..add(DiagnosticsProperty('type', '_CallSignalingEvent.notifyDialogs'))
+      ..add(DiagnosticsProperty('type', '_CallSignalingEvent.notifyDialog'))
       ..add(DiagnosticsProperty('line', line))
       ..add(DiagnosticsProperty('callId', callId))
       ..add(DiagnosticsProperty('notify', notify))
       ..add(DiagnosticsProperty('subscriptionState', subscriptionState))
-      ..add(DiagnosticsProperty('dialogs', dialogs));
+      ..add(DiagnosticsProperty('userActiveCalls', userActiveCalls));
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$CallSignalingEventNotifyDialogsImpl &&
+            other is _$CallSignalingEventNotifyDialogImpl &&
             (identical(other.line, line) || other.line == line) &&
             (identical(other.callId, callId) || other.callId == callId) &&
             (identical(other.notify, notify) || other.notify == notify) &&
             (identical(other.subscriptionState, subscriptionState) ||
                 other.subscriptionState == subscriptionState) &&
-            const DeepCollectionEquality().equals(other._dialogs, _dialogs));
+            const DeepCollectionEquality()
+                .equals(other._userActiveCalls, _userActiveCalls));
   }
 
   @override
   int get hashCode => Object.hash(runtimeType, line, callId, notify,
-      subscriptionState, const DeepCollectionEquality().hash(_dialogs));
+      subscriptionState, const DeepCollectionEquality().hash(_userActiveCalls));
 
   @override
   @optionalTypeArgs
@@ -4380,9 +4501,13 @@ class _$CallSignalingEventNotifyDialogsImpl
             String? referredBy, String? replaceCallId)
         transfer,
     required TResult Function(int line, String callId) transferring,
-    required TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)
-        notifyDialogs,
+    required TResult Function(
+            int line,
+            String callId,
+            String? notify,
+            SubscriptionState? subscriptionState,
+            List<UserActiveCall> userActiveCalls)
+        notifyDialog,
     required TResult Function(int line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)
         notifyRefer,
@@ -4400,7 +4525,8 @@ class _$CallSignalingEventNotifyDialogsImpl
     required TResult Function() unregistering,
     required TResult Function() unregistered,
   }) {
-    return notifyDialogs(line, callId, notify, subscriptionState, dialogs);
+    return notifyDialog(
+        line, callId, notify, subscriptionState, userActiveCalls);
   }
 
   @override
@@ -4439,9 +4565,13 @@ class _$CallSignalingEventNotifyDialogsImpl
             String? referredBy, String? replaceCallId)?
         transfer,
     TResult? Function(int line, String callId)? transferring,
-    TResult? Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)?
-        notifyDialogs,
+    TResult? Function(
+            int line,
+            String callId,
+            String? notify,
+            SubscriptionState? subscriptionState,
+            List<UserActiveCall> userActiveCalls)?
+        notifyDialog,
     TResult? Function(int line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
@@ -4459,8 +4589,8 @@ class _$CallSignalingEventNotifyDialogsImpl
     TResult? Function()? unregistering,
     TResult? Function()? unregistered,
   }) {
-    return notifyDialogs?.call(
-        line, callId, notify, subscriptionState, dialogs);
+    return notifyDialog?.call(
+        line, callId, notify, subscriptionState, userActiveCalls);
   }
 
   @override
@@ -4499,9 +4629,13 @@ class _$CallSignalingEventNotifyDialogsImpl
             String? referredBy, String? replaceCallId)?
         transfer,
     TResult Function(int line, String callId)? transferring,
-    TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)?
-        notifyDialogs,
+    TResult Function(
+            int line,
+            String callId,
+            String? notify,
+            SubscriptionState? subscriptionState,
+            List<UserActiveCall> userActiveCalls)?
+        notifyDialog,
     TResult Function(int line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
@@ -4520,8 +4654,9 @@ class _$CallSignalingEventNotifyDialogsImpl
     TResult Function()? unregistered,
     required TResult orElse(),
   }) {
-    if (notifyDialogs != null) {
-      return notifyDialogs(line, callId, notify, subscriptionState, dialogs);
+    if (notifyDialog != null) {
+      return notifyDialog(
+          line, callId, notify, subscriptionState, userActiveCalls);
     }
     return orElse();
   }
@@ -4539,8 +4674,8 @@ class _$CallSignalingEventNotifyDialogsImpl
     required TResult Function(_CallSignalingEventTransfer value) transfer,
     required TResult Function(_CallSignalingEventTransferring value)
         transferring,
-    required TResult Function(_CallSignalingEventNotifyDialogs value)
-        notifyDialogs,
+    required TResult Function(_CallSignalingEventNotifyDialog value)
+        notifyDialog,
     required TResult Function(_CallSignalingEventNotifyRefer value) notifyRefer,
     required TResult Function(_CallSignalingEventNotifyUnknown value)
         notifyUnknown,
@@ -4553,7 +4688,7 @@ class _$CallSignalingEventNotifyDialogsImpl
     required TResult Function(_CallSignalingEventUnregistered value)
         unregistered,
   }) {
-    return notifyDialogs(this);
+    return notifyDialog(this);
   }
 
   @override
@@ -4568,7 +4703,7 @@ class _$CallSignalingEventNotifyDialogsImpl
     TResult? Function(_CallSignalingEventUpdated value)? updated,
     TResult? Function(_CallSignalingEventTransfer value)? transfer,
     TResult? Function(_CallSignalingEventTransferring value)? transferring,
-    TResult? Function(_CallSignalingEventNotifyDialogs value)? notifyDialogs,
+    TResult? Function(_CallSignalingEventNotifyDialog value)? notifyDialog,
     TResult? Function(_CallSignalingEventNotifyRefer value)? notifyRefer,
     TResult? Function(_CallSignalingEventNotifyUnknown value)? notifyUnknown,
     TResult? Function(_CallSignalingEventRegistering value)? registering,
@@ -4578,7 +4713,7 @@ class _$CallSignalingEventNotifyDialogsImpl
     TResult? Function(_CallSignalingEventUnregistering value)? unregistering,
     TResult? Function(_CallSignalingEventUnregistered value)? unregistered,
   }) {
-    return notifyDialogs?.call(this);
+    return notifyDialog?.call(this);
   }
 
   @override
@@ -4593,7 +4728,7 @@ class _$CallSignalingEventNotifyDialogsImpl
     TResult Function(_CallSignalingEventUpdated value)? updated,
     TResult Function(_CallSignalingEventTransfer value)? transfer,
     TResult Function(_CallSignalingEventTransferring value)? transferring,
-    TResult Function(_CallSignalingEventNotifyDialogs value)? notifyDialogs,
+    TResult Function(_CallSignalingEventNotifyDialog value)? notifyDialog,
     TResult Function(_CallSignalingEventNotifyRefer value)? notifyRefer,
     TResult Function(_CallSignalingEventNotifyUnknown value)? notifyUnknown,
     TResult Function(_CallSignalingEventRegistering value)? registering,
@@ -4604,27 +4739,27 @@ class _$CallSignalingEventNotifyDialogsImpl
     TResult Function(_CallSignalingEventUnregistered value)? unregistered,
     required TResult orElse(),
   }) {
-    if (notifyDialogs != null) {
-      return notifyDialogs(this);
+    if (notifyDialog != null) {
+      return notifyDialog(this);
     }
     return orElse();
   }
 }
 
-abstract class _CallSignalingEventNotifyDialogs implements _CallSignalingEvent {
-  const factory _CallSignalingEventNotifyDialogs(
+abstract class _CallSignalingEventNotifyDialog implements _CallSignalingEvent {
+  const factory _CallSignalingEventNotifyDialog(
           {required final int line,
           required final String callId,
           required final String? notify,
           required final SubscriptionState? subscriptionState,
-          required final List<DialogInfo> dialogs}) =
-      _$CallSignalingEventNotifyDialogsImpl;
+          required final List<UserActiveCall> userActiveCalls}) =
+      _$CallSignalingEventNotifyDialogImpl;
 
   int get line;
   String get callId;
   String? get notify;
   SubscriptionState? get subscriptionState;
-  List<DialogInfo> get dialogs;
+  List<UserActiveCall> get userActiveCalls;
 }
 
 /// @nodoc
@@ -4723,9 +4858,13 @@ class _$CallSignalingEventNotifyReferImpl
             String? referredBy, String? replaceCallId)
         transfer,
     required TResult Function(int line, String callId) transferring,
-    required TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)
-        notifyDialogs,
+    required TResult Function(
+            int line,
+            String callId,
+            String? notify,
+            SubscriptionState? subscriptionState,
+            List<UserActiveCall> userActiveCalls)
+        notifyDialog,
     required TResult Function(int line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)
         notifyRefer,
@@ -4782,9 +4921,13 @@ class _$CallSignalingEventNotifyReferImpl
             String? referredBy, String? replaceCallId)?
         transfer,
     TResult? Function(int line, String callId)? transferring,
-    TResult? Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)?
-        notifyDialogs,
+    TResult? Function(
+            int line,
+            String callId,
+            String? notify,
+            SubscriptionState? subscriptionState,
+            List<UserActiveCall> userActiveCalls)?
+        notifyDialog,
     TResult? Function(int line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
@@ -4841,9 +4984,13 @@ class _$CallSignalingEventNotifyReferImpl
             String? referredBy, String? replaceCallId)?
         transfer,
     TResult Function(int line, String callId)? transferring,
-    TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)?
-        notifyDialogs,
+    TResult Function(
+            int line,
+            String callId,
+            String? notify,
+            SubscriptionState? subscriptionState,
+            List<UserActiveCall> userActiveCalls)?
+        notifyDialog,
     TResult Function(int line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
@@ -4881,8 +5028,8 @@ class _$CallSignalingEventNotifyReferImpl
     required TResult Function(_CallSignalingEventTransfer value) transfer,
     required TResult Function(_CallSignalingEventTransferring value)
         transferring,
-    required TResult Function(_CallSignalingEventNotifyDialogs value)
-        notifyDialogs,
+    required TResult Function(_CallSignalingEventNotifyDialog value)
+        notifyDialog,
     required TResult Function(_CallSignalingEventNotifyRefer value) notifyRefer,
     required TResult Function(_CallSignalingEventNotifyUnknown value)
         notifyUnknown,
@@ -4910,7 +5057,7 @@ class _$CallSignalingEventNotifyReferImpl
     TResult? Function(_CallSignalingEventUpdated value)? updated,
     TResult? Function(_CallSignalingEventTransfer value)? transfer,
     TResult? Function(_CallSignalingEventTransferring value)? transferring,
-    TResult? Function(_CallSignalingEventNotifyDialogs value)? notifyDialogs,
+    TResult? Function(_CallSignalingEventNotifyDialog value)? notifyDialog,
     TResult? Function(_CallSignalingEventNotifyRefer value)? notifyRefer,
     TResult? Function(_CallSignalingEventNotifyUnknown value)? notifyUnknown,
     TResult? Function(_CallSignalingEventRegistering value)? registering,
@@ -4935,7 +5082,7 @@ class _$CallSignalingEventNotifyReferImpl
     TResult Function(_CallSignalingEventUpdated value)? updated,
     TResult Function(_CallSignalingEventTransfer value)? transfer,
     TResult Function(_CallSignalingEventTransferring value)? transferring,
-    TResult Function(_CallSignalingEventNotifyDialogs value)? notifyDialogs,
+    TResult Function(_CallSignalingEventNotifyDialog value)? notifyDialog,
     TResult Function(_CallSignalingEventNotifyRefer value)? notifyRefer,
     TResult Function(_CallSignalingEventNotifyUnknown value)? notifyUnknown,
     TResult Function(_CallSignalingEventRegistering value)? registering,
@@ -5071,9 +5218,13 @@ class _$CallSignalingEventNotifyUnknownImpl
             String? referredBy, String? replaceCallId)
         transfer,
     required TResult Function(int line, String callId) transferring,
-    required TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)
-        notifyDialogs,
+    required TResult Function(
+            int line,
+            String callId,
+            String? notify,
+            SubscriptionState? subscriptionState,
+            List<UserActiveCall> userActiveCalls)
+        notifyDialog,
     required TResult Function(int line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)
         notifyRefer,
@@ -5131,9 +5282,13 @@ class _$CallSignalingEventNotifyUnknownImpl
             String? referredBy, String? replaceCallId)?
         transfer,
     TResult? Function(int line, String callId)? transferring,
-    TResult? Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)?
-        notifyDialogs,
+    TResult? Function(
+            int line,
+            String callId,
+            String? notify,
+            SubscriptionState? subscriptionState,
+            List<UserActiveCall> userActiveCalls)?
+        notifyDialog,
     TResult? Function(int line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
@@ -5191,9 +5346,13 @@ class _$CallSignalingEventNotifyUnknownImpl
             String? referredBy, String? replaceCallId)?
         transfer,
     TResult Function(int line, String callId)? transferring,
-    TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)?
-        notifyDialogs,
+    TResult Function(
+            int line,
+            String callId,
+            String? notify,
+            SubscriptionState? subscriptionState,
+            List<UserActiveCall> userActiveCalls)?
+        notifyDialog,
     TResult Function(int line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
@@ -5232,8 +5391,8 @@ class _$CallSignalingEventNotifyUnknownImpl
     required TResult Function(_CallSignalingEventTransfer value) transfer,
     required TResult Function(_CallSignalingEventTransferring value)
         transferring,
-    required TResult Function(_CallSignalingEventNotifyDialogs value)
-        notifyDialogs,
+    required TResult Function(_CallSignalingEventNotifyDialog value)
+        notifyDialog,
     required TResult Function(_CallSignalingEventNotifyRefer value) notifyRefer,
     required TResult Function(_CallSignalingEventNotifyUnknown value)
         notifyUnknown,
@@ -5261,7 +5420,7 @@ class _$CallSignalingEventNotifyUnknownImpl
     TResult? Function(_CallSignalingEventUpdated value)? updated,
     TResult? Function(_CallSignalingEventTransfer value)? transfer,
     TResult? Function(_CallSignalingEventTransferring value)? transferring,
-    TResult? Function(_CallSignalingEventNotifyDialogs value)? notifyDialogs,
+    TResult? Function(_CallSignalingEventNotifyDialog value)? notifyDialog,
     TResult? Function(_CallSignalingEventNotifyRefer value)? notifyRefer,
     TResult? Function(_CallSignalingEventNotifyUnknown value)? notifyUnknown,
     TResult? Function(_CallSignalingEventRegistering value)? registering,
@@ -5286,7 +5445,7 @@ class _$CallSignalingEventNotifyUnknownImpl
     TResult Function(_CallSignalingEventUpdated value)? updated,
     TResult Function(_CallSignalingEventTransfer value)? transfer,
     TResult Function(_CallSignalingEventTransferring value)? transferring,
-    TResult Function(_CallSignalingEventNotifyDialogs value)? notifyDialogs,
+    TResult Function(_CallSignalingEventNotifyDialog value)? notifyDialog,
     TResult Function(_CallSignalingEventNotifyRefer value)? notifyRefer,
     TResult Function(_CallSignalingEventNotifyUnknown value)? notifyUnknown,
     TResult Function(_CallSignalingEventRegistering value)? registering,
@@ -5389,9 +5548,13 @@ class _$CallSignalingEventRegisteringImpl
             String? referredBy, String? replaceCallId)
         transfer,
     required TResult Function(int line, String callId) transferring,
-    required TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)
-        notifyDialogs,
+    required TResult Function(
+            int line,
+            String callId,
+            String? notify,
+            SubscriptionState? subscriptionState,
+            List<UserActiveCall> userActiveCalls)
+        notifyDialog,
     required TResult Function(int line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)
         notifyRefer,
@@ -5448,9 +5611,13 @@ class _$CallSignalingEventRegisteringImpl
             String? referredBy, String? replaceCallId)?
         transfer,
     TResult? Function(int line, String callId)? transferring,
-    TResult? Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)?
-        notifyDialogs,
+    TResult? Function(
+            int line,
+            String callId,
+            String? notify,
+            SubscriptionState? subscriptionState,
+            List<UserActiveCall> userActiveCalls)?
+        notifyDialog,
     TResult? Function(int line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
@@ -5507,9 +5674,13 @@ class _$CallSignalingEventRegisteringImpl
             String? referredBy, String? replaceCallId)?
         transfer,
     TResult Function(int line, String callId)? transferring,
-    TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)?
-        notifyDialogs,
+    TResult Function(
+            int line,
+            String callId,
+            String? notify,
+            SubscriptionState? subscriptionState,
+            List<UserActiveCall> userActiveCalls)?
+        notifyDialog,
     TResult Function(int line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
@@ -5547,8 +5718,8 @@ class _$CallSignalingEventRegisteringImpl
     required TResult Function(_CallSignalingEventTransfer value) transfer,
     required TResult Function(_CallSignalingEventTransferring value)
         transferring,
-    required TResult Function(_CallSignalingEventNotifyDialogs value)
-        notifyDialogs,
+    required TResult Function(_CallSignalingEventNotifyDialog value)
+        notifyDialog,
     required TResult Function(_CallSignalingEventNotifyRefer value) notifyRefer,
     required TResult Function(_CallSignalingEventNotifyUnknown value)
         notifyUnknown,
@@ -5576,7 +5747,7 @@ class _$CallSignalingEventRegisteringImpl
     TResult? Function(_CallSignalingEventUpdated value)? updated,
     TResult? Function(_CallSignalingEventTransfer value)? transfer,
     TResult? Function(_CallSignalingEventTransferring value)? transferring,
-    TResult? Function(_CallSignalingEventNotifyDialogs value)? notifyDialogs,
+    TResult? Function(_CallSignalingEventNotifyDialog value)? notifyDialog,
     TResult? Function(_CallSignalingEventNotifyRefer value)? notifyRefer,
     TResult? Function(_CallSignalingEventNotifyUnknown value)? notifyUnknown,
     TResult? Function(_CallSignalingEventRegistering value)? registering,
@@ -5601,7 +5772,7 @@ class _$CallSignalingEventRegisteringImpl
     TResult Function(_CallSignalingEventUpdated value)? updated,
     TResult Function(_CallSignalingEventTransfer value)? transfer,
     TResult Function(_CallSignalingEventTransferring value)? transferring,
-    TResult Function(_CallSignalingEventNotifyDialogs value)? notifyDialogs,
+    TResult Function(_CallSignalingEventNotifyDialog value)? notifyDialog,
     TResult Function(_CallSignalingEventNotifyRefer value)? notifyRefer,
     TResult Function(_CallSignalingEventNotifyUnknown value)? notifyUnknown,
     TResult Function(_CallSignalingEventRegistering value)? registering,
@@ -5692,9 +5863,13 @@ class _$CallSignalingEventRegisteredImpl
             String? referredBy, String? replaceCallId)
         transfer,
     required TResult Function(int line, String callId) transferring,
-    required TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)
-        notifyDialogs,
+    required TResult Function(
+            int line,
+            String callId,
+            String? notify,
+            SubscriptionState? subscriptionState,
+            List<UserActiveCall> userActiveCalls)
+        notifyDialog,
     required TResult Function(int line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)
         notifyRefer,
@@ -5751,9 +5926,13 @@ class _$CallSignalingEventRegisteredImpl
             String? referredBy, String? replaceCallId)?
         transfer,
     TResult? Function(int line, String callId)? transferring,
-    TResult? Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)?
-        notifyDialogs,
+    TResult? Function(
+            int line,
+            String callId,
+            String? notify,
+            SubscriptionState? subscriptionState,
+            List<UserActiveCall> userActiveCalls)?
+        notifyDialog,
     TResult? Function(int line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
@@ -5810,9 +5989,13 @@ class _$CallSignalingEventRegisteredImpl
             String? referredBy, String? replaceCallId)?
         transfer,
     TResult Function(int line, String callId)? transferring,
-    TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)?
-        notifyDialogs,
+    TResult Function(
+            int line,
+            String callId,
+            String? notify,
+            SubscriptionState? subscriptionState,
+            List<UserActiveCall> userActiveCalls)?
+        notifyDialog,
     TResult Function(int line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
@@ -5850,8 +6033,8 @@ class _$CallSignalingEventRegisteredImpl
     required TResult Function(_CallSignalingEventTransfer value) transfer,
     required TResult Function(_CallSignalingEventTransferring value)
         transferring,
-    required TResult Function(_CallSignalingEventNotifyDialogs value)
-        notifyDialogs,
+    required TResult Function(_CallSignalingEventNotifyDialog value)
+        notifyDialog,
     required TResult Function(_CallSignalingEventNotifyRefer value) notifyRefer,
     required TResult Function(_CallSignalingEventNotifyUnknown value)
         notifyUnknown,
@@ -5879,7 +6062,7 @@ class _$CallSignalingEventRegisteredImpl
     TResult? Function(_CallSignalingEventUpdated value)? updated,
     TResult? Function(_CallSignalingEventTransfer value)? transfer,
     TResult? Function(_CallSignalingEventTransferring value)? transferring,
-    TResult? Function(_CallSignalingEventNotifyDialogs value)? notifyDialogs,
+    TResult? Function(_CallSignalingEventNotifyDialog value)? notifyDialog,
     TResult? Function(_CallSignalingEventNotifyRefer value)? notifyRefer,
     TResult? Function(_CallSignalingEventNotifyUnknown value)? notifyUnknown,
     TResult? Function(_CallSignalingEventRegistering value)? registering,
@@ -5904,7 +6087,7 @@ class _$CallSignalingEventRegisteredImpl
     TResult Function(_CallSignalingEventUpdated value)? updated,
     TResult Function(_CallSignalingEventTransfer value)? transfer,
     TResult Function(_CallSignalingEventTransferring value)? transferring,
-    TResult Function(_CallSignalingEventNotifyDialogs value)? notifyDialogs,
+    TResult Function(_CallSignalingEventNotifyDialog value)? notifyDialog,
     TResult Function(_CallSignalingEventNotifyRefer value)? notifyRefer,
     TResult Function(_CallSignalingEventNotifyUnknown value)? notifyUnknown,
     TResult Function(_CallSignalingEventRegistering value)? registering,
@@ -6005,9 +6188,13 @@ class _$CallSignalingEventRegisterationFailedImpl
             String? referredBy, String? replaceCallId)
         transfer,
     required TResult Function(int line, String callId) transferring,
-    required TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)
-        notifyDialogs,
+    required TResult Function(
+            int line,
+            String callId,
+            String? notify,
+            SubscriptionState? subscriptionState,
+            List<UserActiveCall> userActiveCalls)
+        notifyDialog,
     required TResult Function(int line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)
         notifyRefer,
@@ -6064,9 +6251,13 @@ class _$CallSignalingEventRegisterationFailedImpl
             String? referredBy, String? replaceCallId)?
         transfer,
     TResult? Function(int line, String callId)? transferring,
-    TResult? Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)?
-        notifyDialogs,
+    TResult? Function(
+            int line,
+            String callId,
+            String? notify,
+            SubscriptionState? subscriptionState,
+            List<UserActiveCall> userActiveCalls)?
+        notifyDialog,
     TResult? Function(int line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
@@ -6123,9 +6314,13 @@ class _$CallSignalingEventRegisterationFailedImpl
             String? referredBy, String? replaceCallId)?
         transfer,
     TResult Function(int line, String callId)? transferring,
-    TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)?
-        notifyDialogs,
+    TResult Function(
+            int line,
+            String callId,
+            String? notify,
+            SubscriptionState? subscriptionState,
+            List<UserActiveCall> userActiveCalls)?
+        notifyDialog,
     TResult Function(int line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
@@ -6163,8 +6358,8 @@ class _$CallSignalingEventRegisterationFailedImpl
     required TResult Function(_CallSignalingEventTransfer value) transfer,
     required TResult Function(_CallSignalingEventTransferring value)
         transferring,
-    required TResult Function(_CallSignalingEventNotifyDialogs value)
-        notifyDialogs,
+    required TResult Function(_CallSignalingEventNotifyDialog value)
+        notifyDialog,
     required TResult Function(_CallSignalingEventNotifyRefer value) notifyRefer,
     required TResult Function(_CallSignalingEventNotifyUnknown value)
         notifyUnknown,
@@ -6192,7 +6387,7 @@ class _$CallSignalingEventRegisterationFailedImpl
     TResult? Function(_CallSignalingEventUpdated value)? updated,
     TResult? Function(_CallSignalingEventTransfer value)? transfer,
     TResult? Function(_CallSignalingEventTransferring value)? transferring,
-    TResult? Function(_CallSignalingEventNotifyDialogs value)? notifyDialogs,
+    TResult? Function(_CallSignalingEventNotifyDialog value)? notifyDialog,
     TResult? Function(_CallSignalingEventNotifyRefer value)? notifyRefer,
     TResult? Function(_CallSignalingEventNotifyUnknown value)? notifyUnknown,
     TResult? Function(_CallSignalingEventRegistering value)? registering,
@@ -6217,7 +6412,7 @@ class _$CallSignalingEventRegisterationFailedImpl
     TResult Function(_CallSignalingEventUpdated value)? updated,
     TResult Function(_CallSignalingEventTransfer value)? transfer,
     TResult Function(_CallSignalingEventTransferring value)? transferring,
-    TResult Function(_CallSignalingEventNotifyDialogs value)? notifyDialogs,
+    TResult Function(_CallSignalingEventNotifyDialog value)? notifyDialog,
     TResult Function(_CallSignalingEventNotifyRefer value)? notifyRefer,
     TResult Function(_CallSignalingEventNotifyUnknown value)? notifyUnknown,
     TResult Function(_CallSignalingEventRegistering value)? registering,
@@ -6313,9 +6508,13 @@ class _$CallSignalingEventUnregisteringImpl
             String? referredBy, String? replaceCallId)
         transfer,
     required TResult Function(int line, String callId) transferring,
-    required TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)
-        notifyDialogs,
+    required TResult Function(
+            int line,
+            String callId,
+            String? notify,
+            SubscriptionState? subscriptionState,
+            List<UserActiveCall> userActiveCalls)
+        notifyDialog,
     required TResult Function(int line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)
         notifyRefer,
@@ -6372,9 +6571,13 @@ class _$CallSignalingEventUnregisteringImpl
             String? referredBy, String? replaceCallId)?
         transfer,
     TResult? Function(int line, String callId)? transferring,
-    TResult? Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)?
-        notifyDialogs,
+    TResult? Function(
+            int line,
+            String callId,
+            String? notify,
+            SubscriptionState? subscriptionState,
+            List<UserActiveCall> userActiveCalls)?
+        notifyDialog,
     TResult? Function(int line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
@@ -6431,9 +6634,13 @@ class _$CallSignalingEventUnregisteringImpl
             String? referredBy, String? replaceCallId)?
         transfer,
     TResult Function(int line, String callId)? transferring,
-    TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)?
-        notifyDialogs,
+    TResult Function(
+            int line,
+            String callId,
+            String? notify,
+            SubscriptionState? subscriptionState,
+            List<UserActiveCall> userActiveCalls)?
+        notifyDialog,
     TResult Function(int line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
@@ -6471,8 +6678,8 @@ class _$CallSignalingEventUnregisteringImpl
     required TResult Function(_CallSignalingEventTransfer value) transfer,
     required TResult Function(_CallSignalingEventTransferring value)
         transferring,
-    required TResult Function(_CallSignalingEventNotifyDialogs value)
-        notifyDialogs,
+    required TResult Function(_CallSignalingEventNotifyDialog value)
+        notifyDialog,
     required TResult Function(_CallSignalingEventNotifyRefer value) notifyRefer,
     required TResult Function(_CallSignalingEventNotifyUnknown value)
         notifyUnknown,
@@ -6500,7 +6707,7 @@ class _$CallSignalingEventUnregisteringImpl
     TResult? Function(_CallSignalingEventUpdated value)? updated,
     TResult? Function(_CallSignalingEventTransfer value)? transfer,
     TResult? Function(_CallSignalingEventTransferring value)? transferring,
-    TResult? Function(_CallSignalingEventNotifyDialogs value)? notifyDialogs,
+    TResult? Function(_CallSignalingEventNotifyDialog value)? notifyDialog,
     TResult? Function(_CallSignalingEventNotifyRefer value)? notifyRefer,
     TResult? Function(_CallSignalingEventNotifyUnknown value)? notifyUnknown,
     TResult? Function(_CallSignalingEventRegistering value)? registering,
@@ -6525,7 +6732,7 @@ class _$CallSignalingEventUnregisteringImpl
     TResult Function(_CallSignalingEventUpdated value)? updated,
     TResult Function(_CallSignalingEventTransfer value)? transfer,
     TResult Function(_CallSignalingEventTransferring value)? transferring,
-    TResult Function(_CallSignalingEventNotifyDialogs value)? notifyDialogs,
+    TResult Function(_CallSignalingEventNotifyDialog value)? notifyDialog,
     TResult Function(_CallSignalingEventNotifyRefer value)? notifyRefer,
     TResult Function(_CallSignalingEventNotifyUnknown value)? notifyUnknown,
     TResult Function(_CallSignalingEventRegistering value)? registering,
@@ -6616,9 +6823,13 @@ class _$CallSignalingEventUnregisteredImpl
             String? referredBy, String? replaceCallId)
         transfer,
     required TResult Function(int line, String callId) transferring,
-    required TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)
-        notifyDialogs,
+    required TResult Function(
+            int line,
+            String callId,
+            String? notify,
+            SubscriptionState? subscriptionState,
+            List<UserActiveCall> userActiveCalls)
+        notifyDialog,
     required TResult Function(int line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)
         notifyRefer,
@@ -6675,9 +6886,13 @@ class _$CallSignalingEventUnregisteredImpl
             String? referredBy, String? replaceCallId)?
         transfer,
     TResult? Function(int line, String callId)? transferring,
-    TResult? Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)?
-        notifyDialogs,
+    TResult? Function(
+            int line,
+            String callId,
+            String? notify,
+            SubscriptionState? subscriptionState,
+            List<UserActiveCall> userActiveCalls)?
+        notifyDialog,
     TResult? Function(int line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
@@ -6734,9 +6949,13 @@ class _$CallSignalingEventUnregisteredImpl
             String? referredBy, String? replaceCallId)?
         transfer,
     TResult Function(int line, String callId)? transferring,
-    TResult Function(int line, String callId, String? notify,
-            SubscriptionState? subscriptionState, List<DialogInfo> dialogs)?
-        notifyDialogs,
+    TResult Function(
+            int line,
+            String callId,
+            String? notify,
+            SubscriptionState? subscriptionState,
+            List<UserActiveCall> userActiveCalls)?
+        notifyDialog,
     TResult Function(int line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
@@ -6774,8 +6993,8 @@ class _$CallSignalingEventUnregisteredImpl
     required TResult Function(_CallSignalingEventTransfer value) transfer,
     required TResult Function(_CallSignalingEventTransferring value)
         transferring,
-    required TResult Function(_CallSignalingEventNotifyDialogs value)
-        notifyDialogs,
+    required TResult Function(_CallSignalingEventNotifyDialog value)
+        notifyDialog,
     required TResult Function(_CallSignalingEventNotifyRefer value) notifyRefer,
     required TResult Function(_CallSignalingEventNotifyUnknown value)
         notifyUnknown,
@@ -6803,7 +7022,7 @@ class _$CallSignalingEventUnregisteredImpl
     TResult? Function(_CallSignalingEventUpdated value)? updated,
     TResult? Function(_CallSignalingEventTransfer value)? transfer,
     TResult? Function(_CallSignalingEventTransferring value)? transferring,
-    TResult? Function(_CallSignalingEventNotifyDialogs value)? notifyDialogs,
+    TResult? Function(_CallSignalingEventNotifyDialog value)? notifyDialog,
     TResult? Function(_CallSignalingEventNotifyRefer value)? notifyRefer,
     TResult? Function(_CallSignalingEventNotifyUnknown value)? notifyUnknown,
     TResult? Function(_CallSignalingEventRegistering value)? registering,
@@ -6828,7 +7047,7 @@ class _$CallSignalingEventUnregisteredImpl
     TResult Function(_CallSignalingEventUpdated value)? updated,
     TResult Function(_CallSignalingEventTransfer value)? transfer,
     TResult Function(_CallSignalingEventTransferring value)? transferring,
-    TResult Function(_CallSignalingEventNotifyDialogs value)? notifyDialogs,
+    TResult Function(_CallSignalingEventNotifyDialog value)? notifyDialog,
     TResult Function(_CallSignalingEventNotifyRefer value)? notifyRefer,
     TResult Function(_CallSignalingEventNotifyUnknown value)? notifyUnknown,
     TResult Function(_CallSignalingEventRegistering value)? registering,

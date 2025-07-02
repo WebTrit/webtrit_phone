@@ -45,7 +45,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   final TrustedCertificates trustedCertificates;
 
   final CallLogsRepository callLogsRepository;
-  final CallPullDialogRepository callPullDialogRepository;
+  final CallPullRepository callPullRepository;
   final Function(Notification) submitNotification;
 
   final Callkeep callkeep;
@@ -74,7 +74,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     required this.token,
     required this.trustedCertificates,
     required this.callLogsRepository,
-    required this.callPullDialogRepository,
+    required this.callPullRepository,
     required this.submitNotification,
     required this.callkeep,
     required this.callkeepConnections,
@@ -756,7 +756,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       updated: (event) => __onCallSignalingEventUpdated(event, emit),
       transfer: (value) => __onCallSignalingEventTransfer(value, emit),
       transferring: (value) => __onCallSignalingEventTransfering(value, emit),
-      notifyDialogs: (value) => __onCallSignalingEventNotifyDialogs(value, emit),
+      notifyDialog: (value) => __onCallSignalingEventNotifyDialog(value, emit),
       notifyRefer: (value) => __onCallSignalingEventNotifyRefer(value, emit),
       notifyUnknown: (value) => __onCallSignalingEventNotifyUnknown(value, emit),
       registering: (event) => __onCallSignalingEventRegistering(event, emit),
@@ -1089,12 +1089,12 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     emit(state.copyWithMappedActiveCall(event.callId, (_) => callUpdate));
   }
 
-  Future<void> __onCallSignalingEventNotifyDialogs(
-    _CallSignalingEventNotifyDialogs event,
+  Future<void> __onCallSignalingEventNotifyDialog(
+    _CallSignalingEventNotifyDialog event,
     Emitter<CallState> emit,
   ) async {
     _logger.fine('_CallSignalingEventNotifyDialogs: $event');
-    await _assingDialogs(event.dialogs);
+    await _assingUserActiveCalls(event.userActiveCalls);
   }
 
   Future<void> __onCallSignalingEventNotifyRefer(
@@ -2269,7 +2269,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       linesCount: stateHandshake.lines.length,
     ));
 
-    _assingDialogs(stateHandshake.dialogs);
+    _assingUserActiveCalls(stateHandshake.userActiveCalls);
 
     activeCallsLoop:
     for (final activeCall in state.activeCalls) {
@@ -2419,12 +2419,12 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       ));
     } else if (event is NotifyEvent) {
       add(switch (event) {
-        DialogNotifyEvent event => _CallSignalingEvent.notifyDialogs(
+        DialogNotifyEvent event => _CallSignalingEvent.notifyDialog(
             line: event.line,
             callId: event.callId,
             notify: event.notify,
             subscriptionState: event.subscriptionState,
-            dialogs: event.dialogs,
+            userActiveCalls: event.userActiveCalls,
           ),
         ReferNotifyEvent event => _CallSignalingEvent.notifyRefer(
             line: event.line,
@@ -2736,39 +2736,34 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     });
   }
 
-  Future<void> _assingDialogs(List<DialogInfo> dialogs) async {
-    final callPullDialogs = dialogs
+  Future<void> _assingUserActiveCalls(List<UserActiveCall> userActiveCalls) async {
+    final pullableCalls = userActiveCalls
         .map(
-          (dialog) => CallPullDialog(
-            id: dialog.id,
-            state: dialog.state,
-            callId: dialog.callId,
-            localTag: dialog.localTag,
-            remoteTag: dialog.remoteTag,
-            remoteNumber: dialog.remoteNumber,
-            remoteDisplayName: dialog.remoteDisplayName,
-            direction: CallPullDialogDirection.values.byName(dialog.direction.name),
+          (call) => PullableCall(
+            id: call.id,
+            state: call.state,
+            callId: call.callId,
+            localTag: call.localTag,
+            remoteTag: call.remoteTag,
+            remoteNumber: call.remoteNumber,
+            remoteDisplayName: call.remoteDisplayName,
+            direction: PullableCallDirection.values.byName(call.direction.name),
           ),
         )
         .toList();
 
-    List<CallPullDialog> dialogsToSet = [];
+    List<PullableCall> pullableCallsToSet = [];
 
-    for (final dialog in callPullDialogs) {
-      // Skip dialogs that are already active
-      if (state.activeCalls.any((call) => call.callId == dialog.callId)) continue;
+    for (final pullableCall in pullableCalls) {
+      // Skip calls that are already active
+      if (state.activeCalls.any((call) => call.callId == pullableCall.callId)) continue;
 
-      // Resolve contact name for the dialog's remote number
-      final contactName = await contactNameResolver.resolveWithNumber(dialog.remoteNumber);
-      if (contactName != null) {
-        final dialogWithName = dialog.copyWith(remoteDisplayName: contactName);
-        dialogsToSet.add(dialogWithName);
-      } else {
-        dialogsToSet.add(dialog);
-      }
+      // Resolve contact name for the call's remote number
+      final contactName = await contactNameResolver.resolveWithNumber(pullableCall.remoteNumber);
+      pullableCallsToSet.add(pullableCall.copyWith(remoteDisplayName: contactName));
     }
 
-    callPullDialogRepository.setDialogs(dialogsToSet);
+    callPullRepository.setPullableCalls(pullableCallsToSet);
   }
 
   void _checkSenderResult(RTCRtpSender? senderResult, String kind) {

@@ -41,11 +41,11 @@ class DialogNotifyEvent extends NotifyEvent with EquatableMixin {
     required super.callId,
     super.notify,
     super.subscriptionState,
-    required this.dialogs,
+    required this.userActiveCalls,
   });
 
   static const notifyValue = 'dialog';
-  final List<DialogInfo> dialogs;
+  final List<UserActiveCall> userActiveCalls;
 
   @override
   factory DialogNotifyEvent.fromJson(Map<String, dynamic> json) {
@@ -66,24 +66,25 @@ class DialogNotifyEvent extends NotifyEvent with EquatableMixin {
       notify: json['notify'],
       subscriptionState:
           json['subscription_state'] != null ? SubscriptionState.values.byName(json['subscription_state']) : null,
-      dialogs: (json['dialogs'] as List).map((e) => DialogInfo.fromJson(e as Map<String, dynamic>)).toList(),
+      userActiveCalls:
+          (json['user_active_calls'] as List).map((e) => UserActiveCall.fromJson(e as Map<String, dynamic>)).toList(),
     );
   }
 
   @override
-  List<Object?> get props => [transaction, line, callId, notify, subscriptionState, dialogs];
+  List<Object?> get props => [transaction, line, callId, notify, subscriptionState, userActiveCalls];
 
   @override
   String toString() {
     return 'DialogNotifyEvent{transaction: $transaction, line: $line, callId: $callId, notify: $notify, '
-        'subscriptionState: $subscriptionState, dialogs: ${dialogs.length}}';
+        'subscriptionState: $subscriptionState, userActiveCalls: ${userActiveCalls.length}}';
   }
 }
 
-enum DialogDirection { initiator, recipient }
+enum UserActiveCallDirection { initiator, recipient }
 
-class DialogInfo extends Equatable {
-  DialogInfo({
+class UserActiveCall extends Equatable {
+  UserActiveCall({
     required this.id,
     required this.state,
     required this.callId,
@@ -97,18 +98,18 @@ class DialogInfo extends Equatable {
   final String id;
   final String state;
   final String callId;
-  final DialogDirection direction;
+  final UserActiveCallDirection direction;
   final String localTag;
   final String remoteTag;
   final String remoteNumber;
   final String? remoteDisplayName;
 
-  factory DialogInfo.fromJson(Map<String, dynamic> json) {
-    return DialogInfo(
+  factory UserActiveCall.fromJson(Map<String, dynamic> json) {
+    return UserActiveCall(
       id: json['id'],
       state: json['state'],
       callId: json['call_id'],
-      direction: DialogDirection.values.byName(json['direction']),
+      direction: UserActiveCallDirection.values.byName(json['direction']),
       localTag: json['local_tag'],
       remoteTag: json['remote_tag'],
       remoteNumber: json['remote_number'],
@@ -121,7 +122,7 @@ class DialogInfo extends Equatable {
 
   @override
   String toString() {
-    return 'DialogInfo{id: $id, state: $state, callId: $callId, direction: $direction, localTag: $localTag, remoteTag: $remoteTag, remoteNumber: $remoteNumber, remoteDisplayName: $remoteDisplayName}';
+    return 'UserActiveCall{id: $id, state: $state, callId: $callId, direction: $direction, localTag: $localTag, remoteTag: $remoteTag, remoteNumber: $remoteNumber, remoteDisplayName: $remoteDisplayName}';
   }
 }
 

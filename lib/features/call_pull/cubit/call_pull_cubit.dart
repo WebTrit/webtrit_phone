@@ -3,18 +3,18 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 
 import 'package:webtrit_phone/models/models.dart';
-import 'package:webtrit_phone/repositories/call_pull_dialog_repository.dart';
+import 'package:webtrit_phone/repositories/repositories.dart';
 
-class CallPullCubit extends Cubit<List<CallPullDialog>> {
-  CallPullCubit(this._callPullDialogRepository) : super([]) {
-    _dialogsSub = _callPullDialogRepository.dialogsStreamWithValue.listen(handleDialogs);
+class CallPullCubit extends Cubit<List<PullableCall>> {
+  CallPullCubit(this._callPullRepository) : super([]) {
+    _dialogsSub = _callPullRepository.pullableCallsStreamWithValue.listen(handleDialogs);
   }
 
   void handleDialogs(dialogs) {
     emit(List.unmodifiable(dialogs));
   }
 
-  final CallPullDialogRepository _callPullDialogRepository;
+  final CallPullRepository _callPullRepository;
   late final StreamSubscription _dialogsSub;
 
   @override

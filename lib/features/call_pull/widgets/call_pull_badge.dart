@@ -5,12 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:webtrit_phone/features/call/bloc/call_bloc.dart';
-import 'package:webtrit_phone/models/call_pull_dialog.dart';
+import 'package:webtrit_phone/models/models.dart';
 
 class CallPullBadge extends StatefulWidget {
-  const CallPullBadge({required this.dialogs, super.key});
+  const CallPullBadge({required this.pullableCalls, super.key});
 
-  final List<CallPullDialog> dialogs;
+  final List<PullableCall> pullableCalls;
 
   @override
   State<CallPullBadge> createState() => _CallPullBadgeState();
@@ -37,14 +37,14 @@ class _CallPullBadgeState extends State<CallPullBadge> with TickerProviderStateM
   }
 
   void onCall() {
-    final dialog = widget.dialogs.first;
+    final pullableCall = widget.pullableCalls.first;
 
     final callBloc = context.read<CallBloc>();
     callBloc.add(CallControlEvent.started(
-      number: dialog.remoteNumber,
+      number: pullableCall.remoteNumber,
       video: false,
-      replaces: '${dialog.callId};from-tag=${dialog.localTag};to-tag=${dialog.remoteTag}',
-      displayName: dialog.remoteDisplayName,
+      replaces: '${pullableCall.callId};from-tag=${pullableCall.localTag};to-tag=${pullableCall.remoteTag}',
+      displayName: pullableCall.remoteDisplayName,
     ));
   }
 
@@ -54,8 +54,8 @@ class _CallPullBadgeState extends State<CallPullBadge> with TickerProviderStateM
       final theme = Theme.of(context);
       final colorScheme = theme.colorScheme;
 
-      final dialog = widget.dialogs.first;
-      final name = dialog.remoteDisplayName ?? dialog.remoteNumber;
+      final pullableCall = widget.pullableCalls.first;
+      final name = pullableCall.remoteDisplayName ?? pullableCall.remoteNumber;
       final contentColor = colorScheme.onPrimary;
 
       return Material(
@@ -79,9 +79,9 @@ class _CallPullBadgeState extends State<CallPullBadge> with TickerProviderStateM
                       Positioned(
                         right: 1,
                         top: 1,
-                        child: switch (dialog.direction) {
-                          CallPullDialogDirection.initiator => Icon(Icons.call_made, size: 8, color: contentColor),
-                          CallPullDialogDirection.recipient => Icon(Icons.call_received, size: 8, color: contentColor),
+                        child: switch (pullableCall.direction) {
+                          PullableCallDirection.initiator => Icon(Icons.call_made, size: 8, color: contentColor),
+                          PullableCallDirection.recipient => Icon(Icons.call_received, size: 8, color: contentColor),
                         },
                       ),
                     ],

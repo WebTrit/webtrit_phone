@@ -1,9 +1,9 @@
 import 'package:equatable/equatable.dart';
 
-enum CallPullDialogDirection { initiator, recipient }
+enum PullableCallDirection { initiator, recipient }
 
-class CallPullDialog extends Equatable {
-  const CallPullDialog({
+class PullableCall extends Equatable {
+  const PullableCall({
     required this.id,
     required this.state,
     required this.callId,
@@ -17,7 +17,7 @@ class CallPullDialog extends Equatable {
   final String id;
   final String state;
   final String callId;
-  final CallPullDialogDirection direction;
+  final PullableCallDirection direction;
   final String localTag;
   final String remoteTag;
   final String remoteNumber;
@@ -28,21 +28,21 @@ class CallPullDialog extends Equatable {
 
   @override
   String toString() {
-    return 'CallPullDialog{id: $id, state: $state, callId: $callId, direction: $direction, '
+    return 'PullableCall{id: $id, state: $state, callId: $callId, direction: $direction, '
         'localTag: $localTag, remoteTag: $remoteTag, remoteNumber: $remoteNumber, remoteDisplayName: $remoteDisplayName}';
   }
 
-  CallPullDialog copyWith({
+  PullableCall copyWith({
     String? id,
     String? state,
     String? callId,
-    CallPullDialogDirection? direction,
+    PullableCallDirection? direction,
     String? localTag,
     String? remoteTag,
     String? remoteNumber,
     String? remoteDisplayName,
   }) {
-    return CallPullDialog(
+    return PullableCall(
       id: id ?? this.id,
       state: state ?? this.state,
       callId: callId ?? this.callId,
