@@ -46,6 +46,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
   final CallLogsRepository callLogsRepository;
   final CallPullRepository callPullRepository;
+  final LinesStateRepository linesStateRepository;
   final Function(Notification) submitNotification;
 
   final Callkeep callkeep;
@@ -75,6 +76,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     required this.trustedCertificates,
     required this.callLogsRepository,
     required this.callPullRepository,
+    required this.linesStateRepository,
     required this.submitNotification,
     required this.callkeep,
     required this.callkeepConnections,
@@ -251,6 +253,18 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         ));
       }
     }
+
+    final linesCount = change.nextState.linesCount;
+    final activeCalls = change.nextState.activeCalls;
+    final List<LineState> mainLinesState = [];
+    for (var i = 0; i < linesCount; i++) {
+      final inUse = activeCalls.any((e) => e.line == i);
+      mainLinesState.add(inUse ? LineState.inUse : LineState.idle);
+    }
+    final guestLineInUse = activeCalls.any((e) => e.line == null);
+    final guestLineState = guestLineInUse ? LineState.inUse : LineState.idle;
+
+    linesStateRepository.setState(LinesState(mainLines: mainLinesState, guestLine: guestLineState));
   }
 
   //
@@ -1193,11 +1207,16 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       return;
     }
 
-    final line = state.retrieveIdleLine();
-    if (line == null) {
-      _logger.info('__onCallControlEventStarted no idle line');
-      submitNotification(const CallUndefinedLineNotification());
-      return;
+    int? line;
+    if (event.fromNumber != null) {
+      line = null;
+    } else {
+      line = state.retrieveIdleLine();
+      if (line == null) {
+        _logger.info('__onCallControlEventStarted no idle line');
+        submitNotification(const CallUndefinedLineNotification());
+        return;
+      }
     }
 
     /// If there is an active call, the call should be put on hold before making a new call.
@@ -1221,6 +1240,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       createdTime: clock.now(),
       processingStatus: CallProcessingStatus.outgoingCreated,
       fromReplaces: event.replaces,
+      fromNumber: event.fromNumber,
     );
 
     emit(state.copyWithPushActiveCall(newCall).copyWith(minimized: false));
@@ -1758,6 +1778,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       await _signalingClient?.execute(OutgoingCallRequest(
         transaction: WebtritSignalingClient.generateTransactionId(),
         line: activeCall.line,
+        from: activeCall.fromNumber,
         callId: activeCall.callId,
         number: activeCall.handle.normalizedValue(),
         jsep: localDescription.toMap(),
@@ -2271,27 +2292,30 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     _assingUserActiveCalls(stateHandshake.userActiveCalls);
 
+    // Hang up all active calls that are not associated with any line
+    // or guest line, indicating that they are no longer valid.
+    //
+    // This is needed to drop or retain calls after reconnecting to the signaling server
     activeCallsLoop:
     for (final activeCall in state.activeCalls) {
-      if (activeCall.line == _kUndefinedLine) {
-        for (final line in stateHandshake.lines) {
-          if (line != null && line.callId == activeCall.callId) {
-            continue activeCallsLoop;
-          }
-        }
-      } else if (activeCall.line < stateHandshake.lines.length) {
-        final line = stateHandshake.lines[activeCall.line];
+      // Ignore active calls that are already associated with a line or guest line
+      //
+      // If you have troubles with line position mismatch replace this with
+      // following code that deal with it: https://gist.github.com/digiboridev/f7f1020731e8f247b5891983433bd159
+      for (final line in [...stateHandshake.lines, stateHandshake.guestLine]) {
         if (line != null && line.callId == activeCall.callId) {
           continue activeCallsLoop;
         }
       }
+
+      // Handles an outgoing active call that has not yet started, typically initiated
+      // by the `continueStartCallIntent` callback of `CallkeepDelegate`.
+      //
+      // TODO: Implement a dedicated flag to confirm successful execution of
+      // OutgoingCallRequest, ensuring reliable outgoing active call state tracking.
       if (activeCall.direction == CallDirection.outgoing &&
           activeCall.acceptedTime == null &&
           activeCall.hungUpTime == null) {
-        // Handles an outgoing active call that has not yet started, typically initiated
-        // by the `continueStartCallIntent` callback of `CallkeepDelegate`.
-        // TODO: Implement a dedicated flag to confirm successful execution of
-        // OutgoingCallRequest, ensuring reliable outgoing active call state tracking.
         continue activeCallsLoop;
       }
 
@@ -2305,7 +2329,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       ));
     }
 
-    final lines = stateHandshake.lines.whereType<Line>();
+    final lines = [...stateHandshake.lines, stateHandshake.guestLine].whereType<Line>();
     final localConnections = await callkeepConnections.getConnections();
 
     for (final activeLine in lines) {
@@ -2591,7 +2615,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     return callPerformEvent.future;
   }
 
-  Future<RTCPeerConnection> _createPeerConnection(String callId, int lineId) async {
+  Future<RTCPeerConnection> _createPeerConnection(String callId, int? lineId) async {
     final peerConnection = await createPeerConnection(
       {
         'iceServers': [
@@ -2711,7 +2735,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   // Signaling base requests
 
   // TODO(Serdun): Replace other hangup request calls with this method for consistency.
-  Future<void> _signalingHungUpCall(int line, String callId) async {
+  Future<void> _signalingHungUpCall(int? line, String callId) async {
     final hangupRequest = HangupRequest(
       transaction: WebtritSignalingClient.generateTransactionId(),
       line: line,
@@ -2724,7 +2748,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   }
 
   // TODO(Serdun): Replace other decline request calls with this method for consistency.
-  Future<void> _signalingDeclineCall(int line, String callId) async {
+  Future<void> _signalingDeclineCall(int? line, String callId) async {
     final hangupRequest = DeclineRequest(
       transaction: WebtritSignalingClient.generateTransactionId(),
       line: line,

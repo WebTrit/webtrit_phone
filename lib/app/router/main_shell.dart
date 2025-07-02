@@ -214,6 +214,9 @@ class _MainShellState extends State<MainShell> {
         RepositoryProvider<CallPullRepository>(
           create: (context) => CallPullRepositoryMemoryImpl(),
         ),
+        RepositoryProvider<LinesStateRepository>(
+          create: (context) => LinesStateRepositoryInMemoryImpl(),
+        ),
       ],
       child: MultiBlocProvider(
         providers: [
@@ -318,6 +321,7 @@ class _MainShellState extends State<MainShell> {
                 trustedCertificates: appCertificates.trustedCertificates,
                 callLogsRepository: context.read<CallLogsRepository>(),
                 callPullRepository: context.read<CallPullRepository>(),
+                linesStateRepository: context.read<LinesStateRepository>(),
                 submitNotification: (n) => notificationsBloc.add(NotificationsSubmitted(n)),
                 callkeep: _callkeep,
                 callkeepConnections: _callkeepConnections,
@@ -406,6 +410,14 @@ class _MainShellState extends State<MainShell> {
                   lazy: false,
                   create: (_) => CallPullCubit(
                     context.read<CallPullRepository>(),
+                  ),
+                ),
+                BlocProvider<CallRoutingCubit>(
+                  lazy: false,
+                  create: (_) => CallRoutingCubit(
+                    context.read<UserRepository>(),
+                    context.read<LinesStateRepository>(),
+                    context.read<AppPreferences>(),
                   ),
                 ),
               ],

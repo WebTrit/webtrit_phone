@@ -1,17 +1,19 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+
+import 'package:url_launcher/url_launcher.dart';
+import 'package:webview_flutter/webview_flutter.dart';
+import 'package:logging/logging.dart';
+export 'package:webview_flutter/webview_flutter.dart' show JavaScriptMessage;
+
 import 'package:webtrit_phone/core/mixins/widget_state_mixin.dart';
 import 'package:webtrit_phone/widgets/web_view_content.dart';
 import 'package:webtrit_phone/widgets/web_view_toolbar.dart';
 
-import 'package:webview_flutter/webview_flutter.dart';
-import 'package:logging/logging.dart';
-
 import 'package:webtrit_phone/l10n/l10n.dart';
-
-export 'package:webview_flutter/webview_flutter.dart' show JavaScriptMessage;
 
 final _logger = Logger('WebViewContainer');
 
@@ -52,6 +54,7 @@ class WebViewContainer extends StatefulWidget {
 
 class _WebViewContainerState extends State<WebViewContainer> with WidgetStateMixin {
   late final WebViewController _webViewController;
+  late final NavigationRequestHandler _navigationRequestHandler;
   final _progressStreamController = StreamController<int>.broadcast();
 
   Color? _backgroundColorCache;
@@ -99,6 +102,7 @@ class _WebViewContainerState extends State<WebViewContainer> with WidgetStateMix
   @override
   void initState() {
     super.initState();
+    _initializeHandlers();
     _initializeWebViewController();
   }
 
@@ -175,13 +179,19 @@ class _WebViewContainerState extends State<WebViewContainer> with WidgetStateMix
     super.dispose();
   }
 
+  void _initializeHandlers() {
+    _navigationRequestHandler = NavigationRequestHandler(
+      canLaunchUrlFn: canLaunchUrl,
+      launchUrlFn: launchUrl,
+    );
+  }
+
   void _initializeWebViewController() {
     final navigationDelegate = NavigationDelegate(
-      onUrlChange: (url) {
-        widget.onUrlChange?.call(url.url);
-      },
+      onUrlChange: (url) => widget.onUrlChange?.call(url.url),
       onPageFinished: _onPageFinished,
       onProgress: _onProgress,
+      onNavigationRequest: _navigationRequestHandler.handle,
       onWebResourceError: _onWebResourceError,
     );
 
@@ -212,6 +222,7 @@ class _WebViewContainerState extends State<WebViewContainer> with WidgetStateMix
       if (!_isPageLoading) {
         if (_latestError == null) {
           widget.onPageLoadedSuccess?.call();
+          _injectMediaQueryData();
         } else {
           _logger.warning('Skipped injection, page loading failed');
         }
@@ -235,5 +246,134 @@ class _WebViewContainerState extends State<WebViewContainer> with WidgetStateMix
       _currentError = error;
       _latestError = error;
     });
+  }
+
+    /// Injects media query-related data from Flutter into the WebView as JSON.
+    ///
+    /// This method gathers the current media query information such as:
+    /// - `brightness`: light or dark theme (`light` / `dark`)
+    /// - `devicePixelRatio`: screen density
+    /// - `statusBarHeight`: top padding (usually status bar height)
+    /// - `navigationBarHeight`: bottom padding (usually system gesture/nav bar)
+    ///
+    /// It serializes the data into JSON and calls a JavaScript function
+    /// `window.onMediaQueryReady(json)` inside the WebView, if it's defined.
+    ///
+    /// Example JS hook on the page:
+    /// ```js
+    /// window.onMediaQueryReady = function(payload) {
+    ///   const data = JSON.parse(payload); // or use directly if it's an object
+    ///   // apply UI adjustments here
+    /// };
+    /// ```
+    void _injectMediaQueryData() {
+      final mediaQuery = MediaQuery.of(context);
+      final theme = Theme.of(context);
+
+      final payload = {
+        'brightness': theme.brightness.name,
+        'devicePixelRatio': mediaQuery.devicePixelRatio,
+        'statusBarHeight': mediaQuery.padding.top.round(),
+        'navigationBarHeight': mediaQuery.padding.bottom.round(),
+      };
+
+      final jsonString = const JsonEncoder().convert(payload);
+
+      final script = '''
+      if (typeof window.onMediaQueryReady === 'function') {
+        window.onMediaQueryReady($jsonString);
+      }
+    ''';
+
+      _logger.finest('Injecting media query data: $jsonString');
+      _webViewController.runJavaScript(script);
+    }
+}
+
+class NavigationRequestHandler {
+  NavigationRequestHandler({
+    required this.canLaunchUrlFn,
+    required this.launchUrlFn,
+  });
+
+  final Future<bool> Function(Uri) canLaunchUrlFn;
+  final Future<bool> Function(Uri, {LaunchMode mode}) launchUrlFn;
+
+  static const _kNavigationRequestScheme = 'app';
+  static const _kNavigationRequestHostExternalBrowser = 'openinexternalbrowser';
+  static const _kNavigationRequestParamUrl = 'url';
+
+  /// Handles a navigation request and determines whether to allow it in the WebView.
+  ///
+  /// - HTTP/HTTPS requests are allowed.
+  /// - Requests to `app://openinexternalbrowser?url=...` are launched in an external browser.
+  /// - All other schemes are blocked.
+  ///
+  /// Returns [NavigationDecision.navigate] to allow loading in WebView,
+  /// or [NavigationDecision.prevent] to block the navigation.
+  Future<NavigationDecision> handle(NavigationRequest request) async {
+    _logger.fine('Handling navigation request: ${request.url}');
+
+    final uri = Uri.tryParse(request.url);
+    if (uri == null) {
+      return NavigationDecision.prevent;
+    }
+
+    final scheme = uri.scheme.toLowerCase();
+    final host = uri.host.toLowerCase();
+
+    if (_isExternalBrowserRequest(scheme, host)) {
+      return _handleExternalBrowserRequest(uri);
+    }
+
+    if (_isInternalHttpRequest(scheme)) {
+      return NavigationDecision.navigate;
+    }
+
+    return NavigationDecision.prevent;
+  }
+
+  /// Returns `true` if the given scheme represents an internal WebView-supported
+  /// HTTP or HTTPS request.
+  bool _isInternalHttpRequest(String scheme) {
+    return scheme == 'http' || scheme == 'https';
+  }
+
+  /// Returns `true` if the request is targeting the app-defined URL scheme for
+  /// opening links in an external browser.
+  ///
+  /// Specifically checks for:
+  /// `app://openinexternalbrowser?url=https://example.com`
+  bool _isExternalBrowserRequest(String scheme, String host) {
+    return scheme == _kNavigationRequestScheme && host == _kNavigationRequestHostExternalBrowser;
+  }
+
+  /// Handles a request to open an external browser via the custom app URL scheme.
+  ///
+  /// Validates that the `url` query parameter exists and is a valid URI,
+  /// and attempts to launch it using [launchUrlFn].
+  ///
+  /// Returns [NavigationDecision.prevent] in all cases to block WebView navigation.
+  /// If launch fails, navigation is still blocked.
+  Future<NavigationDecision> _handleExternalBrowserRequest(Uri uri) async {
+    final targetUrl = uri.queryParameters[_kNavigationRequestParamUrl];
+    if (targetUrl?.isEmpty ?? true) {
+      return NavigationDecision.prevent;
+    }
+
+    final targetUri = Uri.tryParse(targetUrl!);
+    if (targetUri == null) {
+      return NavigationDecision.prevent;
+    }
+
+    if (!await canLaunchUrlFn(targetUri)) {
+      return NavigationDecision.prevent;
+    }
+
+    if (!await launchUrlFn(targetUri, mode: LaunchMode.externalApplication)) {
+      return NavigationDecision.prevent;
+    }
+
+    return NavigationDecision.prevent;
   }
 }

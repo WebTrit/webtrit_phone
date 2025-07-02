@@ -1620,6 +1620,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings_ListViewTileTitle_mediaSettings => 'Media settings';
 
   @override
+  String get settings_ListViewTileTitle_callerId => 'Caller ID';
+
+  @override
   String get settings_ListViewTileTitle_help => 'Help';
 
   @override
@@ -1695,6 +1698,31 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settings_network_smsFallback_toggle => 'SMS Fallback';
+
+  @override
+  String get settings_callerId_defaultTitle => 'Default Caller ID';
+
+  @override
+  String get settings_callerId_dialCodeMatching_title => 'Dial code matching';
+
+  @override
+  String get settings_callerId_dialcode => 'Dial code:';
+
+  @override
+  String get settings_callerId_number => 'Number:';
+
+  @override
+  String get settings_callerId_number_hint => 'Select a number';
+
+  @override
+  String get settings_callerId_duplicate_dialcode_error =>
+      'Please choose a different dial code, this one is already in use.';
+
+  @override
+  String get settings_callerId_save_button => 'Save';
+
+  @override
+  String get settings_callerId_cancel_button => 'Cancel';
 
   @override
   String get signalingResponseCode_ambiguousRequest =>
@@ -1984,10 +2012,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get system_notifications_screen_list_empty => 'No notifications yet';
 
   @override
-  String get numberActions_audioCall => 'Make audio call';
+  String get numberActions_audioCall => 'Audio call';
 
   @override
-  String get numberActions_videoCall => 'Make video call';
+  String get numberActions_videoCall => 'Video call';
 
   @override
   String get numberActions_transfer => 'Transfer current call';
@@ -2009,4 +2037,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get numberActions_delete => 'Delete';
+
+  @override
+  String numberActions_callFrom(String number) {
+    return 'Call from $number';
+  }
 }

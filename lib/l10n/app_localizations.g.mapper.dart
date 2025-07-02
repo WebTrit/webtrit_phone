@@ -875,6 +875,8 @@ class AppLocalizationsMapper {
           localizations.settings_ListViewTileTitle_accountDelete,
       'settings_ListViewTileTitle_mediaSettings':
           localizations.settings_ListViewTileTitle_mediaSettings,
+      'settings_ListViewTileTitle_callerId':
+          localizations.settings_ListViewTileTitle_callerId,
       'settings_ListViewTileTitle_help':
           localizations.settings_ListViewTileTitle_help,
       'settings_ListViewTileTitle_language':
@@ -922,6 +924,20 @@ class AppLocalizationsMapper {
           localizations.settings_network_fallbackCalls_description,
       'settings_network_smsFallback_toggle':
           localizations.settings_network_smsFallback_toggle,
+      'settings_callerId_defaultTitle':
+          localizations.settings_callerId_defaultTitle,
+      'settings_callerId_dialCodeMatching_title':
+          localizations.settings_callerId_dialCodeMatching_title,
+      'settings_callerId_dialcode': localizations.settings_callerId_dialcode,
+      'settings_callerId_number': localizations.settings_callerId_number,
+      'settings_callerId_number_hint':
+          localizations.settings_callerId_number_hint,
+      'settings_callerId_duplicate_dialcode_error':
+          localizations.settings_callerId_duplicate_dialcode_error,
+      'settings_callerId_save_button':
+          localizations.settings_callerId_save_button,
+      'settings_callerId_cancel_button':
+          localizations.settings_callerId_cancel_button,
       'signalingResponseCode_ambiguousRequest':
           localizations.signalingResponseCode_ambiguousRequest,
       'signalingResponseCode_busyEverywhere':
@@ -1122,6 +1138,8 @@ class AppLocalizationsMapper {
           localizations.user_agreement_checkbox_text(url),
       'user_agreement_description': (appName) =>
           localizations.user_agreement_description(appName),
+      'numberActions_callFrom': (number) =>
+          localizations.numberActions_callFrom(number),
     };
   }
 }

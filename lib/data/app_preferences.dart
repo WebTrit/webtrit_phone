@@ -78,6 +78,10 @@ abstract class AppPreferences {
   PeerConnectionSettings getPeerConnectionSettings({PeerConnectionSettings? defaultValue});
 
   Future<void> setPearConnectionSettings(PeerConnectionSettings settings);
+
+  CallerIdSettings getCallerIdSettings();
+
+  Future<void> setCallerIdSettings(CallerIdSettings settings);
 }
 
 class AppPreferencesFactory {
@@ -99,7 +103,8 @@ class AppPreferencesImpl
         AudioProcessingSettingsJsonMapper,
         VideoCapturingSettingsJsonMapper,
         IceSettingsJsonMapper,
-        NegotiationSettingsJsonMapper
+        NegotiationSettingsJsonMapper,
+        CallerIdSettingsJsonMapper
     implements AppPreferences {
   static const _kRegisterStatusKey = 'register-status';
   static const _kThemeModeKey = 'theme-mode';
@@ -117,6 +122,7 @@ class AppPreferencesImpl
   static const _kVideoCapturingSettingsKey = 'video-capturing-settings';
   static const _kIceSettingsKey = 'ice-settings';
   static const _kNegotiationSettings = 'negotiation-settings';
+  static const _kCallerIdSettingsKey = 'caller-id-settings';
 
   // Please add all new keys here for proper cleaning of preferences
   static const _kPreferencesList = [
@@ -135,6 +141,7 @@ class AppPreferencesImpl
     _kAudioProcessingSettingsKey,
     _kVideoCapturingSettingsKey,
     _kIceSettingsKey,
+    _kCallerIdSettingsKey,
   ];
 
   // List of preferences keys to exclude by default during clean operation
@@ -436,5 +443,17 @@ class AppPreferencesImpl
 
   Future<void> _setNegotiationSettings(NegotiationSettings settings) {
     return _sharedPreferences.setString(_kNegotiationSettings, negotiationSettingsToJson(settings));
+  }
+
+  @override
+  CallerIdSettings getCallerIdSettings() {
+    final callerIdSettingsString = _sharedPreferences.getString(_kCallerIdSettingsKey);
+    if (callerIdSettingsString == null) return const CallerIdSettings();
+    return callerIdSettingsFromJson(callerIdSettingsString);
+  }
+
+  @override
+  Future<void> setCallerIdSettings(CallerIdSettings settings) {
+    return _sharedPreferences.setString(_kCallerIdSettingsKey, callerIdSettingsToJson(settings));
   }
 }

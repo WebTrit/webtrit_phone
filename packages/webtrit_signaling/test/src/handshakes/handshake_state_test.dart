@@ -61,6 +61,7 @@ void main() {
       null,
     ],
     userActiveCalls: [],
+    guestLine: null,
   );
 
   test('$StateHandshake fromJson', () {

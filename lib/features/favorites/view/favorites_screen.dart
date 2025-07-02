@@ -3,17 +3,20 @@ import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:webtrit_phone/app/notifications/bloc/notifications_bloc.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/call/call.dart';
+import 'package:webtrit_phone/features/call_routing/cubit/call_routing_cubit.dart';
 import 'package:webtrit_phone/features/messaging/extensions/contact.dart';
 import 'package:webtrit_phone/features/user_info/cubit/user_info_cubit.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
+import 'package:webtrit_phone/models/favorite.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../favorites.dart';
 
-class FavoritesScreen extends StatelessWidget {
+class FavoritesScreen extends StatefulWidget {
   const FavoritesScreen({
     super.key,
     this.title,
@@ -30,10 +33,92 @@ class FavoritesScreen extends StatelessWidget {
   final bool smssEnabled;
 
   @override
+  State<FavoritesScreen> createState() => _FavoritesScreenState();
+}
+
+class _FavoritesScreenState extends State<FavoritesScreen> {
+  void createCall({
+    required String destination,
+    String? displayName,
+    bool video = false,
+    String? fromNumber,
+  }) {
+    final callRoutingCubit = context.read<CallRoutingCubit>();
+    final callRoutingState = callRoutingCubit.state;
+    if (callRoutingState == null) return;
+
+    /// For cases when user sets additional number for outgoing calls by default
+    /// and wants to call from main number explicitly using dropdown menu.
+    final shouldUseMainLine = fromNumber == callRoutingState.mainNumber;
+    if (shouldUseMainLine) {
+      fromNumber = null;
+    } else {
+      // Apply caller ID settings to determine the `from` number if not specified.
+      fromNumber ??= callRoutingCubit.getFromNumber(destination);
+    }
+
+    final hasIdleMainLine = callRoutingState.hasIdleMainLine;
+    final hasIdleGuestLine = callRoutingState.hasIdleGuestLine;
+    if ((fromNumber == null && !hasIdleMainLine) || (fromNumber != null && !hasIdleGuestLine)) {
+      final notificationsBloc = context.read<NotificationsBloc>();
+      const notification = CallUndefinedLineNotification();
+      notificationsBloc.add(const NotificationsSubmitted(notification));
+      return;
+    }
+
+    final callBloc = context.read<CallBloc>();
+    callBloc.add(CallControlEvent.started(
+      number: destination,
+      video: video,
+      displayName: displayName,
+      fromNumber: fromNumber,
+    ));
+  }
+
+  void submitTransfer({required String destination}) {
+    final callBloc = context.read<CallBloc>();
+    callBloc.add(CallControlEvent.blindTransferSubmitted(number: destination));
+    context.router.maybePop();
+  }
+
+  void openChat(String userId) {
+    final route = ChatConversationScreenPageRoute(
+      participantId: userId,
+    );
+    context.router.navigate(route);
+  }
+
+  void sendSms({
+    required List<String> userSmsNumbers,
+    required String contactPhoneNumber,
+    required String? contactSourceId,
+  }) {
+    final route = SmsConversationScreenPageRoute(
+      firstNumber: userSmsNumbers.first,
+      secondNumber: contactPhoneNumber,
+      recipientId: contactSourceId!,
+    );
+    context.router.navigate(route);
+  }
+
+  void openContact({required int contactId}) {
+    context.router.navigate(ContactScreenPageRoute(contactId: contactId));
+  }
+
+  void openCallLog({required String number}) {
+    context.router.navigate(CallLogScreenPageRoute(number: number));
+  }
+
+  void delete({required Favorite favorite}) {
+    context.showSnackBar(context.l10n.favorites_SnackBar_deleted(favorite.name));
+    context.read<FavoritesBloc>().add(FavoritesRemoved(favorite: favorite));
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MainAppBar(
-        title: title,
+        title: widget.title,
         context: context,
       ),
       body: BlocBuilder<FavoritesBloc, FavoritesState>(
@@ -61,85 +146,59 @@ class FavoritesScreen extends StatelessWidget {
                       final blingTransferInitiated = callState.isBlingTransferInitiated;
                       final hasActiveCall = callState.activeCalls.isNotEmpty;
 
-                      return ListView.builder(
-                        itemCount: favorites.length,
-                        itemBuilder: (context, index) {
-                          final favorite = favorites[index];
-                          final contact = favorite.contact;
-                          final contactSourceId = contact.sourceId;
-                          final contactSmsNumbers = contact.smsNumbers;
-                          final canSendSms = contactSmsNumbers.contains(favorite.number);
+                      return BlocBuilder<CallRoutingCubit, CallRoutingState?>(
+                        builder: (context, callRoutingState) {
+                          return ListView.builder(
+                            itemCount: favorites.length,
+                            itemBuilder: (context, index) {
+                              final favorite = favorites[index];
+                              final contact = favorite.contact;
+                              final contactSourceId = contact.sourceId;
+                              final contactSmsNumbers = contact.smsNumbers;
+                              final canSendSms = contactSmsNumbers.contains(favorite.number);
 
-                          return FavoriteTile(
-                            favorite: favorite,
-                            onTap: blingTransferInitiated
-                                ? () {
-                                    final callBloc = context.read<CallBloc>();
-                                    callBloc.add(CallControlEvent.blindTransferSubmitted(
-                                      number: favorite.number,
-                                    ));
-                                  }
-                                : () {
-                                    final callBloc = context.read<CallBloc>();
-                                    callBloc.add(CallControlEvent.started(
-                                      number: favorite.number,
-                                      displayName: favorite.name,
-                                      video: false,
-                                    ));
-                                  },
-                            onAudioCallPressed: () {
-                              final callBloc = context.read<CallBloc>();
-                              callBloc.add(CallControlEvent.started(
-                                number: favorite.number,
-                                displayName: favorite.name,
-                                video: false,
-                              ));
-                            },
-                            onVideoCallPressed: videoEnabled
-                                ? () {
-                                    final callBloc = context.read<CallBloc>();
-                                    callBloc.add(CallControlEvent.started(
-                                      number: favorite.number,
-                                      displayName: favorite.name,
-                                      video: true,
-                                    ));
-                                  }
-                                : null,
-                            onTransferPressed: transferEnabled && hasActiveCall
-                                ? () {
-                                    final callBloc = context.read<CallBloc>();
-                                    callBloc.add(CallControlEvent.blindTransferSubmitted(
-                                      number: favorite.number,
-                                    ));
-                                  }
-                                : null,
-                            onChatPressed: chatsEnabled && contact.canMessage
-                                ? () {
-                                    final route = ChatConversationScreenPageRoute(
-                                      participantId: contactSourceId!,
-                                    );
-                                    context.router.navigate(route);
-                                  }
-                                : null,
-                            onSendSmsPressed: smssEnabled && userSmsNumbers.isNotEmpty && canSendSms
-                                ? () {
-                                    final route = SmsConversationScreenPageRoute(
-                                      firstNumber: userSmsNumbers.first,
-                                      secondNumber: favorite.number,
-                                      recipientId: contactSourceId!,
-                                    );
-                                    context.router.navigate(route);
-                                  }
-                                : null,
-                            onViewContactPressed: () {
-                              context.router.navigate(ContactScreenPageRoute(contactId: contact.id));
-                            },
-                            onCallLogPressed: () {
-                              context.router.navigate(CallLogScreenPageRoute(number: favorite.number));
-                            },
-                            onDelete: () {
-                              context.showSnackBar(context.l10n.favorites_SnackBar_deleted(favorite.name));
-                              context.read<FavoritesBloc>().add(FavoritesRemoved(favorite: favorite));
+                              return FavoriteTile(
+                                favorite: favorite,
+                                callNumbers: callRoutingState?.allNumbers ?? [],
+                                onTap: blingTransferInitiated
+                                    ? () {
+                                        submitTransfer(destination: favorite.number);
+                                      }
+                                    : () {
+                                        createCall(destination: favorite.number, displayName: favorite.name);
+                                      },
+                                onAudioCallPressed: () {
+                                  createCall(destination: favorite.number, displayName: favorite.name, video: false);
+                                },
+                                onVideoCallPressed: widget.videoEnabled
+                                    ? () {
+                                        createCall(
+                                            destination: favorite.number, displayName: favorite.name, video: true);
+                                      }
+                                    : null,
+                                onTransferPressed: widget.transferEnabled && hasActiveCall
+                                    ? () {
+                                        submitTransfer(destination: favorite.number);
+                                      }
+                                    : null,
+                                onChatPressed: widget.chatsEnabled && contact.canMessage
+                                    ? () {
+                                        openChat(contactSourceId!);
+                                      }
+                                    : null,
+                                onSendSmsPressed: widget.smssEnabled && userSmsNumbers.isNotEmpty && canSendSms
+                                    ? () {
+                                        sendSms(
+                                          userSmsNumbers: userSmsNumbers,
+                                          contactPhoneNumber: favorite.number,
+                                          contactSourceId: contactSourceId,
+                                        );
+                                      }
+                                    : null,
+                                onViewContactPressed: () => openContact(contactId: contact.id),
+                                onCallLogPressed: () => openCallLog(number: favorite.number),
+                                onDelete: () => delete(favorite: favorite),
+                              );
                             },
                           );
                         },

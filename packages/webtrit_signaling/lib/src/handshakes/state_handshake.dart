@@ -114,6 +114,7 @@ class StateHandshake extends Handshake {
     required this.registration,
     required this.lines,
     required this.userActiveCalls,
+    required this.guestLine,
   }) : super();
 
   final Duration keepaliveInterval;
@@ -121,6 +122,7 @@ class StateHandshake extends Handshake {
   final Registration registration;
   final List<Line?> lines;
   final List<UserActiveCall> userActiveCalls;
+  final Line? guestLine;
 
   @override
   List<Object?> get props => [
@@ -129,6 +131,7 @@ class StateHandshake extends Handshake {
         registration,
         lines,
         userActiveCalls,
+        guestLine,
       ];
 
   static const typeValue = 'state';
@@ -192,12 +195,40 @@ class StateHandshake extends Handshake {
     final userActiveCallsJson = json['user_active_calls'] as List<dynamic>? ?? <dynamic>[];
     final userActiveCalls = userActiveCallsJson.map((e) => UserActiveCall.fromJson(e)).toList();
 
+    final guestLineJson = json['guest_line'];
+    Line? guestLine;
+    if (guestLineJson != null) {
+      final callId = guestLineJson['call_id'] as String?;
+      if (callId != null) {
+        final callLogs = (guestLineJson['call_logs'] as List<dynamic>).map<CallLog>((callLogJson) {
+          final timestamp = callLogJson[0] as int;
+          final requestOrResponseOrEventJson = callLogJson[1];
+          requestOrResponseOrEventJson['line'] = null; // inject line to apply universal fromJson methods
+          requestOrResponseOrEventJson['call_id'] = callId; // inject call_id to apply universal fromJson methods
+          if (requestOrResponseOrEventJson.containsKey(Request.typeKey)) {
+            return CallRequestLog(
+                timestamp: timestamp, callRequest: CallRequest.fromJson(requestOrResponseOrEventJson));
+          } else if (requestOrResponseOrEventJson.containsKey(Response.typeKey)) {
+            return ResponseLog(timestamp: timestamp, response: Response.fromJson(requestOrResponseOrEventJson));
+          } else if (requestOrResponseOrEventJson.containsKey(Event.typeKey)) {
+            return CallEventLog(timestamp: timestamp, callEvent: CallEvent.fromJson(requestOrResponseOrEventJson));
+          } else {
+            throw ArgumentError.value(
+                requestOrResponseOrEventJson, 'requestOrResponseOrEventJson', 'Guest line\'s logs incorrect');
+          }
+        }).toList(growable: false);
+
+        guestLine = Line(callId: callId, callLogs: callLogs);
+      }
+    }
+
     return StateHandshake(
       keepaliveInterval: keepaliveInterval,
       timestamp: timestamp,
       registration: registration,
       lines: lines,
       userActiveCalls: userActiveCalls,
+      guestLine: guestLine,
     );
   }
 }

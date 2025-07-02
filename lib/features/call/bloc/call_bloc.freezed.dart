@@ -1001,7 +1001,7 @@ mixin _$CallSignalingEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
-            int line,
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -1011,17 +1011,17 @@ mixin _$CallSignalingEvent {
             bool? isFocus,
             JsepValue? jsep)
         incoming,
-    required TResult Function(int line, String callId) ringing,
+    required TResult Function(int? line, String callId) ringing,
     required TResult Function(
-            int line, String callId, String callee, JsepValue? jsep)
+            int? line, String callId, String callee, JsepValue? jsep)
         progress,
     required TResult Function(
-            int line, String callId, String? callee, JsepValue? jsep)
+            int? line, String callId, String? callee, JsepValue? jsep)
         accepted,
-    required TResult Function(int line, String callId, int code, String reason)
+    required TResult Function(int? line, String callId, int code, String reason)
         hangup,
     required TResult Function(
-            int line,
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -1031,23 +1031,23 @@ mixin _$CallSignalingEvent {
             bool? isFocus,
             JsepValue? jsep)
         updating,
-    required TResult Function(int line, String callId) updated,
-    required TResult Function(int line, String referId, String referTo,
+    required TResult Function(int? line, String callId) updated,
+    required TResult Function(int? line, String referId, String referTo,
             String? referredBy, String? replaceCallId)
         transfer,
-    required TResult Function(int line, String callId) transferring,
+    required TResult Function(int? line, String callId) transferring,
     required TResult Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
             List<UserActiveCall> userActiveCalls)
         notifyDialog,
-    required TResult Function(int line, String callId, String? notify,
+    required TResult Function(int? line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)
         notifyRefer,
     required TResult Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
@@ -1064,7 +1064,7 @@ mixin _$CallSignalingEvent {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(
-            int line,
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -1074,14 +1074,16 @@ mixin _$CallSignalingEvent {
             bool? isFocus,
             JsepValue? jsep)?
         incoming,
-    TResult? Function(int line, String callId)? ringing,
-    TResult? Function(int line, String callId, String callee, JsepValue? jsep)?
+    TResult? Function(int? line, String callId)? ringing,
+    TResult? Function(int? line, String callId, String callee, JsepValue? jsep)?
         progress,
-    TResult? Function(int line, String callId, String? callee, JsepValue? jsep)?
-        accepted,
-    TResult? Function(int line, String callId, int code, String reason)? hangup,
     TResult? Function(
-            int line,
+            int? line, String callId, String? callee, JsepValue? jsep)?
+        accepted,
+    TResult? Function(int? line, String callId, int code, String reason)?
+        hangup,
+    TResult? Function(
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -1091,23 +1093,23 @@ mixin _$CallSignalingEvent {
             bool? isFocus,
             JsepValue? jsep)?
         updating,
-    TResult? Function(int line, String callId)? updated,
-    TResult? Function(int line, String referId, String referTo,
+    TResult? Function(int? line, String callId)? updated,
+    TResult? Function(int? line, String referId, String referTo,
             String? referredBy, String? replaceCallId)?
         transfer,
-    TResult? Function(int line, String callId)? transferring,
+    TResult? Function(int? line, String callId)? transferring,
     TResult? Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
             List<UserActiveCall> userActiveCalls)?
         notifyDialog,
-    TResult? Function(int line, String callId, String? notify,
+    TResult? Function(int? line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
     TResult? Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
@@ -1124,7 +1126,7 @@ mixin _$CallSignalingEvent {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(
-            int line,
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -1134,14 +1136,14 @@ mixin _$CallSignalingEvent {
             bool? isFocus,
             JsepValue? jsep)?
         incoming,
-    TResult Function(int line, String callId)? ringing,
-    TResult Function(int line, String callId, String callee, JsepValue? jsep)?
+    TResult Function(int? line, String callId)? ringing,
+    TResult Function(int? line, String callId, String callee, JsepValue? jsep)?
         progress,
-    TResult Function(int line, String callId, String? callee, JsepValue? jsep)?
+    TResult Function(int? line, String callId, String? callee, JsepValue? jsep)?
         accepted,
-    TResult Function(int line, String callId, int code, String reason)? hangup,
+    TResult Function(int? line, String callId, int code, String reason)? hangup,
     TResult Function(
-            int line,
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -1151,23 +1153,23 @@ mixin _$CallSignalingEvent {
             bool? isFocus,
             JsepValue? jsep)?
         updating,
-    TResult Function(int line, String callId)? updated,
-    TResult Function(int line, String referId, String referTo,
+    TResult Function(int? line, String callId)? updated,
+    TResult Function(int? line, String referId, String referTo,
             String? referredBy, String? replaceCallId)?
         transfer,
-    TResult Function(int line, String callId)? transferring,
+    TResult Function(int? line, String callId)? transferring,
     TResult Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
             List<UserActiveCall> userActiveCalls)?
         notifyDialog,
-    TResult Function(int line, String callId, String? notify,
+    TResult Function(int? line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
     TResult Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
@@ -1273,7 +1275,7 @@ class _$CallSignalingEventIncomingImpl
       this.jsep});
 
   @override
-  final int line;
+  final int? line;
   @override
   final String callId;
   @override
@@ -1339,7 +1341,7 @@ class _$CallSignalingEventIncomingImpl
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
-            int line,
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -1349,17 +1351,17 @@ class _$CallSignalingEventIncomingImpl
             bool? isFocus,
             JsepValue? jsep)
         incoming,
-    required TResult Function(int line, String callId) ringing,
+    required TResult Function(int? line, String callId) ringing,
     required TResult Function(
-            int line, String callId, String callee, JsepValue? jsep)
+            int? line, String callId, String callee, JsepValue? jsep)
         progress,
     required TResult Function(
-            int line, String callId, String? callee, JsepValue? jsep)
+            int? line, String callId, String? callee, JsepValue? jsep)
         accepted,
-    required TResult Function(int line, String callId, int code, String reason)
+    required TResult Function(int? line, String callId, int code, String reason)
         hangup,
     required TResult Function(
-            int line,
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -1369,23 +1371,23 @@ class _$CallSignalingEventIncomingImpl
             bool? isFocus,
             JsepValue? jsep)
         updating,
-    required TResult Function(int line, String callId) updated,
-    required TResult Function(int line, String referId, String referTo,
+    required TResult Function(int? line, String callId) updated,
+    required TResult Function(int? line, String referId, String referTo,
             String? referredBy, String? replaceCallId)
         transfer,
-    required TResult Function(int line, String callId) transferring,
+    required TResult Function(int? line, String callId) transferring,
     required TResult Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
             List<UserActiveCall> userActiveCalls)
         notifyDialog,
-    required TResult Function(int line, String callId, String? notify,
+    required TResult Function(int? line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)
         notifyRefer,
     required TResult Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
@@ -1406,7 +1408,7 @@ class _$CallSignalingEventIncomingImpl
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(
-            int line,
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -1416,14 +1418,16 @@ class _$CallSignalingEventIncomingImpl
             bool? isFocus,
             JsepValue? jsep)?
         incoming,
-    TResult? Function(int line, String callId)? ringing,
-    TResult? Function(int line, String callId, String callee, JsepValue? jsep)?
+    TResult? Function(int? line, String callId)? ringing,
+    TResult? Function(int? line, String callId, String callee, JsepValue? jsep)?
         progress,
-    TResult? Function(int line, String callId, String? callee, JsepValue? jsep)?
-        accepted,
-    TResult? Function(int line, String callId, int code, String reason)? hangup,
     TResult? Function(
-            int line,
+            int? line, String callId, String? callee, JsepValue? jsep)?
+        accepted,
+    TResult? Function(int? line, String callId, int code, String reason)?
+        hangup,
+    TResult? Function(
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -1433,23 +1437,23 @@ class _$CallSignalingEventIncomingImpl
             bool? isFocus,
             JsepValue? jsep)?
         updating,
-    TResult? Function(int line, String callId)? updated,
-    TResult? Function(int line, String referId, String referTo,
+    TResult? Function(int? line, String callId)? updated,
+    TResult? Function(int? line, String referId, String referTo,
             String? referredBy, String? replaceCallId)?
         transfer,
-    TResult? Function(int line, String callId)? transferring,
+    TResult? Function(int? line, String callId)? transferring,
     TResult? Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
             List<UserActiveCall> userActiveCalls)?
         notifyDialog,
-    TResult? Function(int line, String callId, String? notify,
+    TResult? Function(int? line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
     TResult? Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
@@ -1470,7 +1474,7 @@ class _$CallSignalingEventIncomingImpl
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(
-            int line,
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -1480,14 +1484,14 @@ class _$CallSignalingEventIncomingImpl
             bool? isFocus,
             JsepValue? jsep)?
         incoming,
-    TResult Function(int line, String callId)? ringing,
-    TResult Function(int line, String callId, String callee, JsepValue? jsep)?
+    TResult Function(int? line, String callId)? ringing,
+    TResult Function(int? line, String callId, String callee, JsepValue? jsep)?
         progress,
-    TResult Function(int line, String callId, String? callee, JsepValue? jsep)?
+    TResult Function(int? line, String callId, String? callee, JsepValue? jsep)?
         accepted,
-    TResult Function(int line, String callId, int code, String reason)? hangup,
+    TResult Function(int? line, String callId, int code, String reason)? hangup,
     TResult Function(
-            int line,
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -1497,23 +1501,23 @@ class _$CallSignalingEventIncomingImpl
             bool? isFocus,
             JsepValue? jsep)?
         updating,
-    TResult Function(int line, String callId)? updated,
-    TResult Function(int line, String referId, String referTo,
+    TResult Function(int? line, String callId)? updated,
+    TResult Function(int? line, String referId, String referTo,
             String? referredBy, String? replaceCallId)?
         transfer,
-    TResult Function(int line, String callId)? transferring,
+    TResult Function(int? line, String callId)? transferring,
     TResult Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
             List<UserActiveCall> userActiveCalls)?
         notifyDialog,
-    TResult Function(int line, String callId, String? notify,
+    TResult Function(int? line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
     TResult Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
@@ -1621,7 +1625,7 @@ class _$CallSignalingEventIncomingImpl
 
 abstract class _CallSignalingEventIncoming implements _CallSignalingEvent {
   const factory _CallSignalingEventIncoming(
-      {required final int line,
+      {required final int? line,
       required final String callId,
       required final String callee,
       required final String caller,
@@ -1631,7 +1635,7 @@ abstract class _CallSignalingEventIncoming implements _CallSignalingEvent {
       final bool? isFocus,
       final JsepValue? jsep}) = _$CallSignalingEventIncomingImpl;
 
-  int get line;
+  int? get line;
   String get callId;
   String get callee;
   String get caller;
@@ -1651,7 +1655,7 @@ class _$CallSignalingEventRingingImpl
       {required this.line, required this.callId});
 
   @override
-  final int line;
+  final int? line;
   @override
   final String callId;
 
@@ -1685,7 +1689,7 @@ class _$CallSignalingEventRingingImpl
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
-            int line,
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -1695,17 +1699,17 @@ class _$CallSignalingEventRingingImpl
             bool? isFocus,
             JsepValue? jsep)
         incoming,
-    required TResult Function(int line, String callId) ringing,
+    required TResult Function(int? line, String callId) ringing,
     required TResult Function(
-            int line, String callId, String callee, JsepValue? jsep)
+            int? line, String callId, String callee, JsepValue? jsep)
         progress,
     required TResult Function(
-            int line, String callId, String? callee, JsepValue? jsep)
+            int? line, String callId, String? callee, JsepValue? jsep)
         accepted,
-    required TResult Function(int line, String callId, int code, String reason)
+    required TResult Function(int? line, String callId, int code, String reason)
         hangup,
     required TResult Function(
-            int line,
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -1715,23 +1719,23 @@ class _$CallSignalingEventRingingImpl
             bool? isFocus,
             JsepValue? jsep)
         updating,
-    required TResult Function(int line, String callId) updated,
-    required TResult Function(int line, String referId, String referTo,
+    required TResult Function(int? line, String callId) updated,
+    required TResult Function(int? line, String referId, String referTo,
             String? referredBy, String? replaceCallId)
         transfer,
-    required TResult Function(int line, String callId) transferring,
+    required TResult Function(int? line, String callId) transferring,
     required TResult Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
             List<UserActiveCall> userActiveCalls)
         notifyDialog,
-    required TResult Function(int line, String callId, String? notify,
+    required TResult Function(int? line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)
         notifyRefer,
     required TResult Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
@@ -1751,7 +1755,7 @@ class _$CallSignalingEventRingingImpl
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(
-            int line,
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -1761,14 +1765,16 @@ class _$CallSignalingEventRingingImpl
             bool? isFocus,
             JsepValue? jsep)?
         incoming,
-    TResult? Function(int line, String callId)? ringing,
-    TResult? Function(int line, String callId, String callee, JsepValue? jsep)?
+    TResult? Function(int? line, String callId)? ringing,
+    TResult? Function(int? line, String callId, String callee, JsepValue? jsep)?
         progress,
-    TResult? Function(int line, String callId, String? callee, JsepValue? jsep)?
-        accepted,
-    TResult? Function(int line, String callId, int code, String reason)? hangup,
     TResult? Function(
-            int line,
+            int? line, String callId, String? callee, JsepValue? jsep)?
+        accepted,
+    TResult? Function(int? line, String callId, int code, String reason)?
+        hangup,
+    TResult? Function(
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -1778,23 +1784,23 @@ class _$CallSignalingEventRingingImpl
             bool? isFocus,
             JsepValue? jsep)?
         updating,
-    TResult? Function(int line, String callId)? updated,
-    TResult? Function(int line, String referId, String referTo,
+    TResult? Function(int? line, String callId)? updated,
+    TResult? Function(int? line, String referId, String referTo,
             String? referredBy, String? replaceCallId)?
         transfer,
-    TResult? Function(int line, String callId)? transferring,
+    TResult? Function(int? line, String callId)? transferring,
     TResult? Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
             List<UserActiveCall> userActiveCalls)?
         notifyDialog,
-    TResult? Function(int line, String callId, String? notify,
+    TResult? Function(int? line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
     TResult? Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
@@ -1814,7 +1820,7 @@ class _$CallSignalingEventRingingImpl
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(
-            int line,
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -1824,14 +1830,14 @@ class _$CallSignalingEventRingingImpl
             bool? isFocus,
             JsepValue? jsep)?
         incoming,
-    TResult Function(int line, String callId)? ringing,
-    TResult Function(int line, String callId, String callee, JsepValue? jsep)?
+    TResult Function(int? line, String callId)? ringing,
+    TResult Function(int? line, String callId, String callee, JsepValue? jsep)?
         progress,
-    TResult Function(int line, String callId, String? callee, JsepValue? jsep)?
+    TResult Function(int? line, String callId, String? callee, JsepValue? jsep)?
         accepted,
-    TResult Function(int line, String callId, int code, String reason)? hangup,
+    TResult Function(int? line, String callId, int code, String reason)? hangup,
     TResult Function(
-            int line,
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -1841,23 +1847,23 @@ class _$CallSignalingEventRingingImpl
             bool? isFocus,
             JsepValue? jsep)?
         updating,
-    TResult Function(int line, String callId)? updated,
-    TResult Function(int line, String referId, String referTo,
+    TResult Function(int? line, String callId)? updated,
+    TResult Function(int? line, String referId, String referTo,
             String? referredBy, String? replaceCallId)?
         transfer,
-    TResult Function(int line, String callId)? transferring,
+    TResult Function(int? line, String callId)? transferring,
     TResult Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
             List<UserActiveCall> userActiveCalls)?
         notifyDialog,
-    TResult Function(int line, String callId, String? notify,
+    TResult Function(int? line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
     TResult Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
@@ -1964,10 +1970,10 @@ class _$CallSignalingEventRingingImpl
 
 abstract class _CallSignalingEventRinging implements _CallSignalingEvent {
   const factory _CallSignalingEventRinging(
-      {required final int line,
+      {required final int? line,
       required final String callId}) = _$CallSignalingEventRingingImpl;
 
-  int get line;
+  int? get line;
   String get callId;
 }
 
@@ -1983,7 +1989,7 @@ class _$CallSignalingEventProgressImpl
       this.jsep});
 
   @override
-  final int line;
+  final int? line;
   @override
   final String callId;
   @override
@@ -2025,7 +2031,7 @@ class _$CallSignalingEventProgressImpl
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
-            int line,
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -2035,17 +2041,17 @@ class _$CallSignalingEventProgressImpl
             bool? isFocus,
             JsepValue? jsep)
         incoming,
-    required TResult Function(int line, String callId) ringing,
+    required TResult Function(int? line, String callId) ringing,
     required TResult Function(
-            int line, String callId, String callee, JsepValue? jsep)
+            int? line, String callId, String callee, JsepValue? jsep)
         progress,
     required TResult Function(
-            int line, String callId, String? callee, JsepValue? jsep)
+            int? line, String callId, String? callee, JsepValue? jsep)
         accepted,
-    required TResult Function(int line, String callId, int code, String reason)
+    required TResult Function(int? line, String callId, int code, String reason)
         hangup,
     required TResult Function(
-            int line,
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -2055,23 +2061,23 @@ class _$CallSignalingEventProgressImpl
             bool? isFocus,
             JsepValue? jsep)
         updating,
-    required TResult Function(int line, String callId) updated,
-    required TResult Function(int line, String referId, String referTo,
+    required TResult Function(int? line, String callId) updated,
+    required TResult Function(int? line, String referId, String referTo,
             String? referredBy, String? replaceCallId)
         transfer,
-    required TResult Function(int line, String callId) transferring,
+    required TResult Function(int? line, String callId) transferring,
     required TResult Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
             List<UserActiveCall> userActiveCalls)
         notifyDialog,
-    required TResult Function(int line, String callId, String? notify,
+    required TResult Function(int? line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)
         notifyRefer,
     required TResult Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
@@ -2091,7 +2097,7 @@ class _$CallSignalingEventProgressImpl
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(
-            int line,
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -2101,14 +2107,16 @@ class _$CallSignalingEventProgressImpl
             bool? isFocus,
             JsepValue? jsep)?
         incoming,
-    TResult? Function(int line, String callId)? ringing,
-    TResult? Function(int line, String callId, String callee, JsepValue? jsep)?
+    TResult? Function(int? line, String callId)? ringing,
+    TResult? Function(int? line, String callId, String callee, JsepValue? jsep)?
         progress,
-    TResult? Function(int line, String callId, String? callee, JsepValue? jsep)?
-        accepted,
-    TResult? Function(int line, String callId, int code, String reason)? hangup,
     TResult? Function(
-            int line,
+            int? line, String callId, String? callee, JsepValue? jsep)?
+        accepted,
+    TResult? Function(int? line, String callId, int code, String reason)?
+        hangup,
+    TResult? Function(
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -2118,23 +2126,23 @@ class _$CallSignalingEventProgressImpl
             bool? isFocus,
             JsepValue? jsep)?
         updating,
-    TResult? Function(int line, String callId)? updated,
-    TResult? Function(int line, String referId, String referTo,
+    TResult? Function(int? line, String callId)? updated,
+    TResult? Function(int? line, String referId, String referTo,
             String? referredBy, String? replaceCallId)?
         transfer,
-    TResult? Function(int line, String callId)? transferring,
+    TResult? Function(int? line, String callId)? transferring,
     TResult? Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
             List<UserActiveCall> userActiveCalls)?
         notifyDialog,
-    TResult? Function(int line, String callId, String? notify,
+    TResult? Function(int? line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
     TResult? Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
@@ -2154,7 +2162,7 @@ class _$CallSignalingEventProgressImpl
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(
-            int line,
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -2164,14 +2172,14 @@ class _$CallSignalingEventProgressImpl
             bool? isFocus,
             JsepValue? jsep)?
         incoming,
-    TResult Function(int line, String callId)? ringing,
-    TResult Function(int line, String callId, String callee, JsepValue? jsep)?
+    TResult Function(int? line, String callId)? ringing,
+    TResult Function(int? line, String callId, String callee, JsepValue? jsep)?
         progress,
-    TResult Function(int line, String callId, String? callee, JsepValue? jsep)?
+    TResult Function(int? line, String callId, String? callee, JsepValue? jsep)?
         accepted,
-    TResult Function(int line, String callId, int code, String reason)? hangup,
+    TResult Function(int? line, String callId, int code, String reason)? hangup,
     TResult Function(
-            int line,
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -2181,23 +2189,23 @@ class _$CallSignalingEventProgressImpl
             bool? isFocus,
             JsepValue? jsep)?
         updating,
-    TResult Function(int line, String callId)? updated,
-    TResult Function(int line, String referId, String referTo,
+    TResult Function(int? line, String callId)? updated,
+    TResult Function(int? line, String referId, String referTo,
             String? referredBy, String? replaceCallId)?
         transfer,
-    TResult Function(int line, String callId)? transferring,
+    TResult Function(int? line, String callId)? transferring,
     TResult Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
             List<UserActiveCall> userActiveCalls)?
         notifyDialog,
-    TResult Function(int line, String callId, String? notify,
+    TResult Function(int? line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
     TResult Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
@@ -2304,12 +2312,12 @@ class _$CallSignalingEventProgressImpl
 
 abstract class _CallSignalingEventProgress implements _CallSignalingEvent {
   const factory _CallSignalingEventProgress(
-      {required final int line,
+      {required final int? line,
       required final String callId,
       required final String callee,
       final JsepValue? jsep}) = _$CallSignalingEventProgressImpl;
 
-  int get line;
+  int? get line;
   String get callId;
   String get callee;
   JsepValue? get jsep;
@@ -2324,7 +2332,7 @@ class _$CallSignalingEventAcceptedImpl
       {required this.line, required this.callId, this.callee, this.jsep});
 
   @override
-  final int line;
+  final int? line;
   @override
   final String callId;
   @override
@@ -2366,7 +2374,7 @@ class _$CallSignalingEventAcceptedImpl
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
-            int line,
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -2376,17 +2384,17 @@ class _$CallSignalingEventAcceptedImpl
             bool? isFocus,
             JsepValue? jsep)
         incoming,
-    required TResult Function(int line, String callId) ringing,
+    required TResult Function(int? line, String callId) ringing,
     required TResult Function(
-            int line, String callId, String callee, JsepValue? jsep)
+            int? line, String callId, String callee, JsepValue? jsep)
         progress,
     required TResult Function(
-            int line, String callId, String? callee, JsepValue? jsep)
+            int? line, String callId, String? callee, JsepValue? jsep)
         accepted,
-    required TResult Function(int line, String callId, int code, String reason)
+    required TResult Function(int? line, String callId, int code, String reason)
         hangup,
     required TResult Function(
-            int line,
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -2396,23 +2404,23 @@ class _$CallSignalingEventAcceptedImpl
             bool? isFocus,
             JsepValue? jsep)
         updating,
-    required TResult Function(int line, String callId) updated,
-    required TResult Function(int line, String referId, String referTo,
+    required TResult Function(int? line, String callId) updated,
+    required TResult Function(int? line, String referId, String referTo,
             String? referredBy, String? replaceCallId)
         transfer,
-    required TResult Function(int line, String callId) transferring,
+    required TResult Function(int? line, String callId) transferring,
     required TResult Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
             List<UserActiveCall> userActiveCalls)
         notifyDialog,
-    required TResult Function(int line, String callId, String? notify,
+    required TResult Function(int? line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)
         notifyRefer,
     required TResult Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
@@ -2432,7 +2440,7 @@ class _$CallSignalingEventAcceptedImpl
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(
-            int line,
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -2442,14 +2450,16 @@ class _$CallSignalingEventAcceptedImpl
             bool? isFocus,
             JsepValue? jsep)?
         incoming,
-    TResult? Function(int line, String callId)? ringing,
-    TResult? Function(int line, String callId, String callee, JsepValue? jsep)?
+    TResult? Function(int? line, String callId)? ringing,
+    TResult? Function(int? line, String callId, String callee, JsepValue? jsep)?
         progress,
-    TResult? Function(int line, String callId, String? callee, JsepValue? jsep)?
-        accepted,
-    TResult? Function(int line, String callId, int code, String reason)? hangup,
     TResult? Function(
-            int line,
+            int? line, String callId, String? callee, JsepValue? jsep)?
+        accepted,
+    TResult? Function(int? line, String callId, int code, String reason)?
+        hangup,
+    TResult? Function(
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -2459,23 +2469,23 @@ class _$CallSignalingEventAcceptedImpl
             bool? isFocus,
             JsepValue? jsep)?
         updating,
-    TResult? Function(int line, String callId)? updated,
-    TResult? Function(int line, String referId, String referTo,
+    TResult? Function(int? line, String callId)? updated,
+    TResult? Function(int? line, String referId, String referTo,
             String? referredBy, String? replaceCallId)?
         transfer,
-    TResult? Function(int line, String callId)? transferring,
+    TResult? Function(int? line, String callId)? transferring,
     TResult? Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
             List<UserActiveCall> userActiveCalls)?
         notifyDialog,
-    TResult? Function(int line, String callId, String? notify,
+    TResult? Function(int? line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
     TResult? Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
@@ -2495,7 +2505,7 @@ class _$CallSignalingEventAcceptedImpl
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(
-            int line,
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -2505,14 +2515,14 @@ class _$CallSignalingEventAcceptedImpl
             bool? isFocus,
             JsepValue? jsep)?
         incoming,
-    TResult Function(int line, String callId)? ringing,
-    TResult Function(int line, String callId, String callee, JsepValue? jsep)?
+    TResult Function(int? line, String callId)? ringing,
+    TResult Function(int? line, String callId, String callee, JsepValue? jsep)?
         progress,
-    TResult Function(int line, String callId, String? callee, JsepValue? jsep)?
+    TResult Function(int? line, String callId, String? callee, JsepValue? jsep)?
         accepted,
-    TResult Function(int line, String callId, int code, String reason)? hangup,
+    TResult Function(int? line, String callId, int code, String reason)? hangup,
     TResult Function(
-            int line,
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -2522,23 +2532,23 @@ class _$CallSignalingEventAcceptedImpl
             bool? isFocus,
             JsepValue? jsep)?
         updating,
-    TResult Function(int line, String callId)? updated,
-    TResult Function(int line, String referId, String referTo,
+    TResult Function(int? line, String callId)? updated,
+    TResult Function(int? line, String referId, String referTo,
             String? referredBy, String? replaceCallId)?
         transfer,
-    TResult Function(int line, String callId)? transferring,
+    TResult Function(int? line, String callId)? transferring,
     TResult Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
             List<UserActiveCall> userActiveCalls)?
         notifyDialog,
-    TResult Function(int line, String callId, String? notify,
+    TResult Function(int? line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
     TResult Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
@@ -2645,12 +2655,12 @@ class _$CallSignalingEventAcceptedImpl
 
 abstract class _CallSignalingEventAccepted implements _CallSignalingEvent {
   const factory _CallSignalingEventAccepted(
-      {required final int line,
+      {required final int? line,
       required final String callId,
       final String? callee,
       final JsepValue? jsep}) = _$CallSignalingEventAcceptedImpl;
 
-  int get line;
+  int? get line;
   String get callId;
   String? get callee;
   JsepValue? get jsep;
@@ -2668,7 +2678,7 @@ class _$CallSignalingEventHangupImpl
       required this.reason});
 
   @override
-  final int line;
+  final int? line;
   @override
   final String callId;
   @override
@@ -2710,7 +2720,7 @@ class _$CallSignalingEventHangupImpl
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
-            int line,
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -2720,17 +2730,17 @@ class _$CallSignalingEventHangupImpl
             bool? isFocus,
             JsepValue? jsep)
         incoming,
-    required TResult Function(int line, String callId) ringing,
+    required TResult Function(int? line, String callId) ringing,
     required TResult Function(
-            int line, String callId, String callee, JsepValue? jsep)
+            int? line, String callId, String callee, JsepValue? jsep)
         progress,
     required TResult Function(
-            int line, String callId, String? callee, JsepValue? jsep)
+            int? line, String callId, String? callee, JsepValue? jsep)
         accepted,
-    required TResult Function(int line, String callId, int code, String reason)
+    required TResult Function(int? line, String callId, int code, String reason)
         hangup,
     required TResult Function(
-            int line,
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -2740,23 +2750,23 @@ class _$CallSignalingEventHangupImpl
             bool? isFocus,
             JsepValue? jsep)
         updating,
-    required TResult Function(int line, String callId) updated,
-    required TResult Function(int line, String referId, String referTo,
+    required TResult Function(int? line, String callId) updated,
+    required TResult Function(int? line, String referId, String referTo,
             String? referredBy, String? replaceCallId)
         transfer,
-    required TResult Function(int line, String callId) transferring,
+    required TResult Function(int? line, String callId) transferring,
     required TResult Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
             List<UserActiveCall> userActiveCalls)
         notifyDialog,
-    required TResult Function(int line, String callId, String? notify,
+    required TResult Function(int? line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)
         notifyRefer,
     required TResult Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
@@ -2776,7 +2786,7 @@ class _$CallSignalingEventHangupImpl
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(
-            int line,
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -2786,14 +2796,16 @@ class _$CallSignalingEventHangupImpl
             bool? isFocus,
             JsepValue? jsep)?
         incoming,
-    TResult? Function(int line, String callId)? ringing,
-    TResult? Function(int line, String callId, String callee, JsepValue? jsep)?
+    TResult? Function(int? line, String callId)? ringing,
+    TResult? Function(int? line, String callId, String callee, JsepValue? jsep)?
         progress,
-    TResult? Function(int line, String callId, String? callee, JsepValue? jsep)?
-        accepted,
-    TResult? Function(int line, String callId, int code, String reason)? hangup,
     TResult? Function(
-            int line,
+            int? line, String callId, String? callee, JsepValue? jsep)?
+        accepted,
+    TResult? Function(int? line, String callId, int code, String reason)?
+        hangup,
+    TResult? Function(
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -2803,23 +2815,23 @@ class _$CallSignalingEventHangupImpl
             bool? isFocus,
             JsepValue? jsep)?
         updating,
-    TResult? Function(int line, String callId)? updated,
-    TResult? Function(int line, String referId, String referTo,
+    TResult? Function(int? line, String callId)? updated,
+    TResult? Function(int? line, String referId, String referTo,
             String? referredBy, String? replaceCallId)?
         transfer,
-    TResult? Function(int line, String callId)? transferring,
+    TResult? Function(int? line, String callId)? transferring,
     TResult? Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
             List<UserActiveCall> userActiveCalls)?
         notifyDialog,
-    TResult? Function(int line, String callId, String? notify,
+    TResult? Function(int? line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
     TResult? Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
@@ -2839,7 +2851,7 @@ class _$CallSignalingEventHangupImpl
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(
-            int line,
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -2849,14 +2861,14 @@ class _$CallSignalingEventHangupImpl
             bool? isFocus,
             JsepValue? jsep)?
         incoming,
-    TResult Function(int line, String callId)? ringing,
-    TResult Function(int line, String callId, String callee, JsepValue? jsep)?
+    TResult Function(int? line, String callId)? ringing,
+    TResult Function(int? line, String callId, String callee, JsepValue? jsep)?
         progress,
-    TResult Function(int line, String callId, String? callee, JsepValue? jsep)?
+    TResult Function(int? line, String callId, String? callee, JsepValue? jsep)?
         accepted,
-    TResult Function(int line, String callId, int code, String reason)? hangup,
+    TResult Function(int? line, String callId, int code, String reason)? hangup,
     TResult Function(
-            int line,
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -2866,23 +2878,23 @@ class _$CallSignalingEventHangupImpl
             bool? isFocus,
             JsepValue? jsep)?
         updating,
-    TResult Function(int line, String callId)? updated,
-    TResult Function(int line, String referId, String referTo,
+    TResult Function(int? line, String callId)? updated,
+    TResult Function(int? line, String referId, String referTo,
             String? referredBy, String? replaceCallId)?
         transfer,
-    TResult Function(int line, String callId)? transferring,
+    TResult Function(int? line, String callId)? transferring,
     TResult Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
             List<UserActiveCall> userActiveCalls)?
         notifyDialog,
-    TResult Function(int line, String callId, String? notify,
+    TResult Function(int? line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
     TResult Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
@@ -2989,12 +3001,12 @@ class _$CallSignalingEventHangupImpl
 
 abstract class _CallSignalingEventHangup implements _CallSignalingEvent {
   const factory _CallSignalingEventHangup(
-      {required final int line,
+      {required final int? line,
       required final String callId,
       required final int code,
       required final String reason}) = _$CallSignalingEventHangupImpl;
 
-  int get line;
+  int? get line;
   String get callId;
   int get code;
   String get reason;
@@ -3017,7 +3029,7 @@ class _$CallSignalingEventUpdatingImpl
       this.jsep});
 
   @override
-  final int line;
+  final int? line;
   @override
   final String callId;
   @override
@@ -3083,7 +3095,7 @@ class _$CallSignalingEventUpdatingImpl
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
-            int line,
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -3093,17 +3105,17 @@ class _$CallSignalingEventUpdatingImpl
             bool? isFocus,
             JsepValue? jsep)
         incoming,
-    required TResult Function(int line, String callId) ringing,
+    required TResult Function(int? line, String callId) ringing,
     required TResult Function(
-            int line, String callId, String callee, JsepValue? jsep)
+            int? line, String callId, String callee, JsepValue? jsep)
         progress,
     required TResult Function(
-            int line, String callId, String? callee, JsepValue? jsep)
+            int? line, String callId, String? callee, JsepValue? jsep)
         accepted,
-    required TResult Function(int line, String callId, int code, String reason)
+    required TResult Function(int? line, String callId, int code, String reason)
         hangup,
     required TResult Function(
-            int line,
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -3113,23 +3125,23 @@ class _$CallSignalingEventUpdatingImpl
             bool? isFocus,
             JsepValue? jsep)
         updating,
-    required TResult Function(int line, String callId) updated,
-    required TResult Function(int line, String referId, String referTo,
+    required TResult Function(int? line, String callId) updated,
+    required TResult Function(int? line, String referId, String referTo,
             String? referredBy, String? replaceCallId)
         transfer,
-    required TResult Function(int line, String callId) transferring,
+    required TResult Function(int? line, String callId) transferring,
     required TResult Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
             List<UserActiveCall> userActiveCalls)
         notifyDialog,
-    required TResult Function(int line, String callId, String? notify,
+    required TResult Function(int? line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)
         notifyRefer,
     required TResult Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
@@ -3150,7 +3162,7 @@ class _$CallSignalingEventUpdatingImpl
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(
-            int line,
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -3160,14 +3172,16 @@ class _$CallSignalingEventUpdatingImpl
             bool? isFocus,
             JsepValue? jsep)?
         incoming,
-    TResult? Function(int line, String callId)? ringing,
-    TResult? Function(int line, String callId, String callee, JsepValue? jsep)?
+    TResult? Function(int? line, String callId)? ringing,
+    TResult? Function(int? line, String callId, String callee, JsepValue? jsep)?
         progress,
-    TResult? Function(int line, String callId, String? callee, JsepValue? jsep)?
-        accepted,
-    TResult? Function(int line, String callId, int code, String reason)? hangup,
     TResult? Function(
-            int line,
+            int? line, String callId, String? callee, JsepValue? jsep)?
+        accepted,
+    TResult? Function(int? line, String callId, int code, String reason)?
+        hangup,
+    TResult? Function(
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -3177,23 +3191,23 @@ class _$CallSignalingEventUpdatingImpl
             bool? isFocus,
             JsepValue? jsep)?
         updating,
-    TResult? Function(int line, String callId)? updated,
-    TResult? Function(int line, String referId, String referTo,
+    TResult? Function(int? line, String callId)? updated,
+    TResult? Function(int? line, String referId, String referTo,
             String? referredBy, String? replaceCallId)?
         transfer,
-    TResult? Function(int line, String callId)? transferring,
+    TResult? Function(int? line, String callId)? transferring,
     TResult? Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
             List<UserActiveCall> userActiveCalls)?
         notifyDialog,
-    TResult? Function(int line, String callId, String? notify,
+    TResult? Function(int? line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
     TResult? Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
@@ -3214,7 +3228,7 @@ class _$CallSignalingEventUpdatingImpl
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(
-            int line,
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -3224,14 +3238,14 @@ class _$CallSignalingEventUpdatingImpl
             bool? isFocus,
             JsepValue? jsep)?
         incoming,
-    TResult Function(int line, String callId)? ringing,
-    TResult Function(int line, String callId, String callee, JsepValue? jsep)?
+    TResult Function(int? line, String callId)? ringing,
+    TResult Function(int? line, String callId, String callee, JsepValue? jsep)?
         progress,
-    TResult Function(int line, String callId, String? callee, JsepValue? jsep)?
+    TResult Function(int? line, String callId, String? callee, JsepValue? jsep)?
         accepted,
-    TResult Function(int line, String callId, int code, String reason)? hangup,
+    TResult Function(int? line, String callId, int code, String reason)? hangup,
     TResult Function(
-            int line,
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -3241,23 +3255,23 @@ class _$CallSignalingEventUpdatingImpl
             bool? isFocus,
             JsepValue? jsep)?
         updating,
-    TResult Function(int line, String callId)? updated,
-    TResult Function(int line, String referId, String referTo,
+    TResult Function(int? line, String callId)? updated,
+    TResult Function(int? line, String referId, String referTo,
             String? referredBy, String? replaceCallId)?
         transfer,
-    TResult Function(int line, String callId)? transferring,
+    TResult Function(int? line, String callId)? transferring,
     TResult Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
             List<UserActiveCall> userActiveCalls)?
         notifyDialog,
-    TResult Function(int line, String callId, String? notify,
+    TResult Function(int? line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
     TResult Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
@@ -3365,7 +3379,7 @@ class _$CallSignalingEventUpdatingImpl
 
 abstract class _CallSignalingEventUpdating implements _CallSignalingEvent {
   const factory _CallSignalingEventUpdating(
-      {required final int line,
+      {required final int? line,
       required final String callId,
       required final String callee,
       required final String caller,
@@ -3375,7 +3389,7 @@ abstract class _CallSignalingEventUpdating implements _CallSignalingEvent {
       final bool? isFocus,
       final JsepValue? jsep}) = _$CallSignalingEventUpdatingImpl;
 
-  int get line;
+  int? get line;
   String get callId;
   String get callee;
   String get caller;
@@ -3395,7 +3409,7 @@ class _$CallSignalingEventUpdatedImpl
       {required this.line, required this.callId});
 
   @override
-  final int line;
+  final int? line;
   @override
   final String callId;
 
@@ -3429,7 +3443,7 @@ class _$CallSignalingEventUpdatedImpl
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
-            int line,
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -3439,17 +3453,17 @@ class _$CallSignalingEventUpdatedImpl
             bool? isFocus,
             JsepValue? jsep)
         incoming,
-    required TResult Function(int line, String callId) ringing,
+    required TResult Function(int? line, String callId) ringing,
     required TResult Function(
-            int line, String callId, String callee, JsepValue? jsep)
+            int? line, String callId, String callee, JsepValue? jsep)
         progress,
     required TResult Function(
-            int line, String callId, String? callee, JsepValue? jsep)
+            int? line, String callId, String? callee, JsepValue? jsep)
         accepted,
-    required TResult Function(int line, String callId, int code, String reason)
+    required TResult Function(int? line, String callId, int code, String reason)
         hangup,
     required TResult Function(
-            int line,
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -3459,23 +3473,23 @@ class _$CallSignalingEventUpdatedImpl
             bool? isFocus,
             JsepValue? jsep)
         updating,
-    required TResult Function(int line, String callId) updated,
-    required TResult Function(int line, String referId, String referTo,
+    required TResult Function(int? line, String callId) updated,
+    required TResult Function(int? line, String referId, String referTo,
             String? referredBy, String? replaceCallId)
         transfer,
-    required TResult Function(int line, String callId) transferring,
+    required TResult Function(int? line, String callId) transferring,
     required TResult Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
             List<UserActiveCall> userActiveCalls)
         notifyDialog,
-    required TResult Function(int line, String callId, String? notify,
+    required TResult Function(int? line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)
         notifyRefer,
     required TResult Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
@@ -3495,7 +3509,7 @@ class _$CallSignalingEventUpdatedImpl
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(
-            int line,
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -3505,14 +3519,16 @@ class _$CallSignalingEventUpdatedImpl
             bool? isFocus,
             JsepValue? jsep)?
         incoming,
-    TResult? Function(int line, String callId)? ringing,
-    TResult? Function(int line, String callId, String callee, JsepValue? jsep)?
+    TResult? Function(int? line, String callId)? ringing,
+    TResult? Function(int? line, String callId, String callee, JsepValue? jsep)?
         progress,
-    TResult? Function(int line, String callId, String? callee, JsepValue? jsep)?
-        accepted,
-    TResult? Function(int line, String callId, int code, String reason)? hangup,
     TResult? Function(
-            int line,
+            int? line, String callId, String? callee, JsepValue? jsep)?
+        accepted,
+    TResult? Function(int? line, String callId, int code, String reason)?
+        hangup,
+    TResult? Function(
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -3522,23 +3538,23 @@ class _$CallSignalingEventUpdatedImpl
             bool? isFocus,
             JsepValue? jsep)?
         updating,
-    TResult? Function(int line, String callId)? updated,
-    TResult? Function(int line, String referId, String referTo,
+    TResult? Function(int? line, String callId)? updated,
+    TResult? Function(int? line, String referId, String referTo,
             String? referredBy, String? replaceCallId)?
         transfer,
-    TResult? Function(int line, String callId)? transferring,
+    TResult? Function(int? line, String callId)? transferring,
     TResult? Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
             List<UserActiveCall> userActiveCalls)?
         notifyDialog,
-    TResult? Function(int line, String callId, String? notify,
+    TResult? Function(int? line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
     TResult? Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
@@ -3558,7 +3574,7 @@ class _$CallSignalingEventUpdatedImpl
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(
-            int line,
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -3568,14 +3584,14 @@ class _$CallSignalingEventUpdatedImpl
             bool? isFocus,
             JsepValue? jsep)?
         incoming,
-    TResult Function(int line, String callId)? ringing,
-    TResult Function(int line, String callId, String callee, JsepValue? jsep)?
+    TResult Function(int? line, String callId)? ringing,
+    TResult Function(int? line, String callId, String callee, JsepValue? jsep)?
         progress,
-    TResult Function(int line, String callId, String? callee, JsepValue? jsep)?
+    TResult Function(int? line, String callId, String? callee, JsepValue? jsep)?
         accepted,
-    TResult Function(int line, String callId, int code, String reason)? hangup,
+    TResult Function(int? line, String callId, int code, String reason)? hangup,
     TResult Function(
-            int line,
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -3585,23 +3601,23 @@ class _$CallSignalingEventUpdatedImpl
             bool? isFocus,
             JsepValue? jsep)?
         updating,
-    TResult Function(int line, String callId)? updated,
-    TResult Function(int line, String referId, String referTo,
+    TResult Function(int? line, String callId)? updated,
+    TResult Function(int? line, String referId, String referTo,
             String? referredBy, String? replaceCallId)?
         transfer,
-    TResult Function(int line, String callId)? transferring,
+    TResult Function(int? line, String callId)? transferring,
     TResult Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
             List<UserActiveCall> userActiveCalls)?
         notifyDialog,
-    TResult Function(int line, String callId, String? notify,
+    TResult Function(int? line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
     TResult Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
@@ -3708,10 +3724,10 @@ class _$CallSignalingEventUpdatedImpl
 
 abstract class _CallSignalingEventUpdated implements _CallSignalingEvent {
   const factory _CallSignalingEventUpdated(
-      {required final int line,
+      {required final int? line,
       required final String callId}) = _$CallSignalingEventUpdatedImpl;
 
-  int get line;
+  int? get line;
   String get callId;
 }
 
@@ -3728,7 +3744,7 @@ class _$CallSignalingEventTransferImpl
       required this.replaceCallId});
 
   @override
-  final int line;
+  final int? line;
   @override
   final String referId;
   @override
@@ -3777,7 +3793,7 @@ class _$CallSignalingEventTransferImpl
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
-            int line,
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -3787,17 +3803,17 @@ class _$CallSignalingEventTransferImpl
             bool? isFocus,
             JsepValue? jsep)
         incoming,
-    required TResult Function(int line, String callId) ringing,
+    required TResult Function(int? line, String callId) ringing,
     required TResult Function(
-            int line, String callId, String callee, JsepValue? jsep)
+            int? line, String callId, String callee, JsepValue? jsep)
         progress,
     required TResult Function(
-            int line, String callId, String? callee, JsepValue? jsep)
+            int? line, String callId, String? callee, JsepValue? jsep)
         accepted,
-    required TResult Function(int line, String callId, int code, String reason)
+    required TResult Function(int? line, String callId, int code, String reason)
         hangup,
     required TResult Function(
-            int line,
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -3807,23 +3823,23 @@ class _$CallSignalingEventTransferImpl
             bool? isFocus,
             JsepValue? jsep)
         updating,
-    required TResult Function(int line, String callId) updated,
-    required TResult Function(int line, String referId, String referTo,
+    required TResult Function(int? line, String callId) updated,
+    required TResult Function(int? line, String referId, String referTo,
             String? referredBy, String? replaceCallId)
         transfer,
-    required TResult Function(int line, String callId) transferring,
+    required TResult Function(int? line, String callId) transferring,
     required TResult Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
             List<UserActiveCall> userActiveCalls)
         notifyDialog,
-    required TResult Function(int line, String callId, String? notify,
+    required TResult Function(int? line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)
         notifyRefer,
     required TResult Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
@@ -3843,7 +3859,7 @@ class _$CallSignalingEventTransferImpl
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(
-            int line,
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -3853,14 +3869,16 @@ class _$CallSignalingEventTransferImpl
             bool? isFocus,
             JsepValue? jsep)?
         incoming,
-    TResult? Function(int line, String callId)? ringing,
-    TResult? Function(int line, String callId, String callee, JsepValue? jsep)?
+    TResult? Function(int? line, String callId)? ringing,
+    TResult? Function(int? line, String callId, String callee, JsepValue? jsep)?
         progress,
-    TResult? Function(int line, String callId, String? callee, JsepValue? jsep)?
-        accepted,
-    TResult? Function(int line, String callId, int code, String reason)? hangup,
     TResult? Function(
-            int line,
+            int? line, String callId, String? callee, JsepValue? jsep)?
+        accepted,
+    TResult? Function(int? line, String callId, int code, String reason)?
+        hangup,
+    TResult? Function(
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -3870,23 +3888,23 @@ class _$CallSignalingEventTransferImpl
             bool? isFocus,
             JsepValue? jsep)?
         updating,
-    TResult? Function(int line, String callId)? updated,
-    TResult? Function(int line, String referId, String referTo,
+    TResult? Function(int? line, String callId)? updated,
+    TResult? Function(int? line, String referId, String referTo,
             String? referredBy, String? replaceCallId)?
         transfer,
-    TResult? Function(int line, String callId)? transferring,
+    TResult? Function(int? line, String callId)? transferring,
     TResult? Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
             List<UserActiveCall> userActiveCalls)?
         notifyDialog,
-    TResult? Function(int line, String callId, String? notify,
+    TResult? Function(int? line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
     TResult? Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
@@ -3906,7 +3924,7 @@ class _$CallSignalingEventTransferImpl
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(
-            int line,
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -3916,14 +3934,14 @@ class _$CallSignalingEventTransferImpl
             bool? isFocus,
             JsepValue? jsep)?
         incoming,
-    TResult Function(int line, String callId)? ringing,
-    TResult Function(int line, String callId, String callee, JsepValue? jsep)?
+    TResult Function(int? line, String callId)? ringing,
+    TResult Function(int? line, String callId, String callee, JsepValue? jsep)?
         progress,
-    TResult Function(int line, String callId, String? callee, JsepValue? jsep)?
+    TResult Function(int? line, String callId, String? callee, JsepValue? jsep)?
         accepted,
-    TResult Function(int line, String callId, int code, String reason)? hangup,
+    TResult Function(int? line, String callId, int code, String reason)? hangup,
     TResult Function(
-            int line,
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -3933,23 +3951,23 @@ class _$CallSignalingEventTransferImpl
             bool? isFocus,
             JsepValue? jsep)?
         updating,
-    TResult Function(int line, String callId)? updated,
-    TResult Function(int line, String referId, String referTo,
+    TResult Function(int? line, String callId)? updated,
+    TResult Function(int? line, String referId, String referTo,
             String? referredBy, String? replaceCallId)?
         transfer,
-    TResult Function(int line, String callId)? transferring,
+    TResult Function(int? line, String callId)? transferring,
     TResult Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
             List<UserActiveCall> userActiveCalls)?
         notifyDialog,
-    TResult Function(int line, String callId, String? notify,
+    TResult Function(int? line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
     TResult Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
@@ -4056,13 +4074,13 @@ class _$CallSignalingEventTransferImpl
 
 abstract class _CallSignalingEventTransfer implements _CallSignalingEvent {
   const factory _CallSignalingEventTransfer(
-      {required final int line,
+      {required final int? line,
       required final String referId,
       required final String referTo,
       required final String? referredBy,
       required final String? replaceCallId}) = _$CallSignalingEventTransferImpl;
 
-  int get line;
+  int? get line;
   String get referId;
   String get referTo;
   String? get referredBy;
@@ -4078,7 +4096,7 @@ class _$CallSignalingEventTransferringImpl
       {required this.line, required this.callId});
 
   @override
-  final int line;
+  final int? line;
   @override
   final String callId;
 
@@ -4112,7 +4130,7 @@ class _$CallSignalingEventTransferringImpl
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
-            int line,
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -4122,17 +4140,17 @@ class _$CallSignalingEventTransferringImpl
             bool? isFocus,
             JsepValue? jsep)
         incoming,
-    required TResult Function(int line, String callId) ringing,
+    required TResult Function(int? line, String callId) ringing,
     required TResult Function(
-            int line, String callId, String callee, JsepValue? jsep)
+            int? line, String callId, String callee, JsepValue? jsep)
         progress,
     required TResult Function(
-            int line, String callId, String? callee, JsepValue? jsep)
+            int? line, String callId, String? callee, JsepValue? jsep)
         accepted,
-    required TResult Function(int line, String callId, int code, String reason)
+    required TResult Function(int? line, String callId, int code, String reason)
         hangup,
     required TResult Function(
-            int line,
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -4142,23 +4160,23 @@ class _$CallSignalingEventTransferringImpl
             bool? isFocus,
             JsepValue? jsep)
         updating,
-    required TResult Function(int line, String callId) updated,
-    required TResult Function(int line, String referId, String referTo,
+    required TResult Function(int? line, String callId) updated,
+    required TResult Function(int? line, String referId, String referTo,
             String? referredBy, String? replaceCallId)
         transfer,
-    required TResult Function(int line, String callId) transferring,
+    required TResult Function(int? line, String callId) transferring,
     required TResult Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
             List<UserActiveCall> userActiveCalls)
         notifyDialog,
-    required TResult Function(int line, String callId, String? notify,
+    required TResult Function(int? line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)
         notifyRefer,
     required TResult Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
@@ -4178,7 +4196,7 @@ class _$CallSignalingEventTransferringImpl
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(
-            int line,
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -4188,14 +4206,16 @@ class _$CallSignalingEventTransferringImpl
             bool? isFocus,
             JsepValue? jsep)?
         incoming,
-    TResult? Function(int line, String callId)? ringing,
-    TResult? Function(int line, String callId, String callee, JsepValue? jsep)?
+    TResult? Function(int? line, String callId)? ringing,
+    TResult? Function(int? line, String callId, String callee, JsepValue? jsep)?
         progress,
-    TResult? Function(int line, String callId, String? callee, JsepValue? jsep)?
-        accepted,
-    TResult? Function(int line, String callId, int code, String reason)? hangup,
     TResult? Function(
-            int line,
+            int? line, String callId, String? callee, JsepValue? jsep)?
+        accepted,
+    TResult? Function(int? line, String callId, int code, String reason)?
+        hangup,
+    TResult? Function(
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -4205,23 +4225,23 @@ class _$CallSignalingEventTransferringImpl
             bool? isFocus,
             JsepValue? jsep)?
         updating,
-    TResult? Function(int line, String callId)? updated,
-    TResult? Function(int line, String referId, String referTo,
+    TResult? Function(int? line, String callId)? updated,
+    TResult? Function(int? line, String referId, String referTo,
             String? referredBy, String? replaceCallId)?
         transfer,
-    TResult? Function(int line, String callId)? transferring,
+    TResult? Function(int? line, String callId)? transferring,
     TResult? Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
             List<UserActiveCall> userActiveCalls)?
         notifyDialog,
-    TResult? Function(int line, String callId, String? notify,
+    TResult? Function(int? line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
     TResult? Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
@@ -4241,7 +4261,7 @@ class _$CallSignalingEventTransferringImpl
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(
-            int line,
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -4251,14 +4271,14 @@ class _$CallSignalingEventTransferringImpl
             bool? isFocus,
             JsepValue? jsep)?
         incoming,
-    TResult Function(int line, String callId)? ringing,
-    TResult Function(int line, String callId, String callee, JsepValue? jsep)?
+    TResult Function(int? line, String callId)? ringing,
+    TResult Function(int? line, String callId, String callee, JsepValue? jsep)?
         progress,
-    TResult Function(int line, String callId, String? callee, JsepValue? jsep)?
+    TResult Function(int? line, String callId, String? callee, JsepValue? jsep)?
         accepted,
-    TResult Function(int line, String callId, int code, String reason)? hangup,
+    TResult Function(int? line, String callId, int code, String reason)? hangup,
     TResult Function(
-            int line,
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -4268,23 +4288,23 @@ class _$CallSignalingEventTransferringImpl
             bool? isFocus,
             JsepValue? jsep)?
         updating,
-    TResult Function(int line, String callId)? updated,
-    TResult Function(int line, String referId, String referTo,
+    TResult Function(int? line, String callId)? updated,
+    TResult Function(int? line, String referId, String referTo,
             String? referredBy, String? replaceCallId)?
         transfer,
-    TResult Function(int line, String callId)? transferring,
+    TResult Function(int? line, String callId)? transferring,
     TResult Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
             List<UserActiveCall> userActiveCalls)?
         notifyDialog,
-    TResult Function(int line, String callId, String? notify,
+    TResult Function(int? line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
     TResult Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
@@ -4391,10 +4411,10 @@ class _$CallSignalingEventTransferringImpl
 
 abstract class _CallSignalingEventTransferring implements _CallSignalingEvent {
   const factory _CallSignalingEventTransferring(
-      {required final int line,
+      {required final int? line,
       required final String callId}) = _$CallSignalingEventTransferringImpl;
 
-  int get line;
+  int? get line;
   String get callId;
 }
 
@@ -4412,7 +4432,7 @@ class _$CallSignalingEventNotifyDialogImpl
       : _userActiveCalls = userActiveCalls;
 
   @override
-  final int line;
+  final int? line;
   @override
   final String callId;
   @override
@@ -4466,7 +4486,7 @@ class _$CallSignalingEventNotifyDialogImpl
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
-            int line,
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -4476,17 +4496,17 @@ class _$CallSignalingEventNotifyDialogImpl
             bool? isFocus,
             JsepValue? jsep)
         incoming,
-    required TResult Function(int line, String callId) ringing,
+    required TResult Function(int? line, String callId) ringing,
     required TResult Function(
-            int line, String callId, String callee, JsepValue? jsep)
+            int? line, String callId, String callee, JsepValue? jsep)
         progress,
     required TResult Function(
-            int line, String callId, String? callee, JsepValue? jsep)
+            int? line, String callId, String? callee, JsepValue? jsep)
         accepted,
-    required TResult Function(int line, String callId, int code, String reason)
+    required TResult Function(int? line, String callId, int code, String reason)
         hangup,
     required TResult Function(
-            int line,
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -4496,23 +4516,23 @@ class _$CallSignalingEventNotifyDialogImpl
             bool? isFocus,
             JsepValue? jsep)
         updating,
-    required TResult Function(int line, String callId) updated,
-    required TResult Function(int line, String referId, String referTo,
+    required TResult Function(int? line, String callId) updated,
+    required TResult Function(int? line, String referId, String referTo,
             String? referredBy, String? replaceCallId)
         transfer,
-    required TResult Function(int line, String callId) transferring,
+    required TResult Function(int? line, String callId) transferring,
     required TResult Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
             List<UserActiveCall> userActiveCalls)
         notifyDialog,
-    required TResult Function(int line, String callId, String? notify,
+    required TResult Function(int? line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)
         notifyRefer,
     required TResult Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
@@ -4533,7 +4553,7 @@ class _$CallSignalingEventNotifyDialogImpl
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(
-            int line,
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -4543,14 +4563,16 @@ class _$CallSignalingEventNotifyDialogImpl
             bool? isFocus,
             JsepValue? jsep)?
         incoming,
-    TResult? Function(int line, String callId)? ringing,
-    TResult? Function(int line, String callId, String callee, JsepValue? jsep)?
+    TResult? Function(int? line, String callId)? ringing,
+    TResult? Function(int? line, String callId, String callee, JsepValue? jsep)?
         progress,
-    TResult? Function(int line, String callId, String? callee, JsepValue? jsep)?
-        accepted,
-    TResult? Function(int line, String callId, int code, String reason)? hangup,
     TResult? Function(
-            int line,
+            int? line, String callId, String? callee, JsepValue? jsep)?
+        accepted,
+    TResult? Function(int? line, String callId, int code, String reason)?
+        hangup,
+    TResult? Function(
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -4560,23 +4582,23 @@ class _$CallSignalingEventNotifyDialogImpl
             bool? isFocus,
             JsepValue? jsep)?
         updating,
-    TResult? Function(int line, String callId)? updated,
-    TResult? Function(int line, String referId, String referTo,
+    TResult? Function(int? line, String callId)? updated,
+    TResult? Function(int? line, String referId, String referTo,
             String? referredBy, String? replaceCallId)?
         transfer,
-    TResult? Function(int line, String callId)? transferring,
+    TResult? Function(int? line, String callId)? transferring,
     TResult? Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
             List<UserActiveCall> userActiveCalls)?
         notifyDialog,
-    TResult? Function(int line, String callId, String? notify,
+    TResult? Function(int? line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
     TResult? Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
@@ -4597,7 +4619,7 @@ class _$CallSignalingEventNotifyDialogImpl
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(
-            int line,
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -4607,14 +4629,14 @@ class _$CallSignalingEventNotifyDialogImpl
             bool? isFocus,
             JsepValue? jsep)?
         incoming,
-    TResult Function(int line, String callId)? ringing,
-    TResult Function(int line, String callId, String callee, JsepValue? jsep)?
+    TResult Function(int? line, String callId)? ringing,
+    TResult Function(int? line, String callId, String callee, JsepValue? jsep)?
         progress,
-    TResult Function(int line, String callId, String? callee, JsepValue? jsep)?
+    TResult Function(int? line, String callId, String? callee, JsepValue? jsep)?
         accepted,
-    TResult Function(int line, String callId, int code, String reason)? hangup,
+    TResult Function(int? line, String callId, int code, String reason)? hangup,
     TResult Function(
-            int line,
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -4624,23 +4646,23 @@ class _$CallSignalingEventNotifyDialogImpl
             bool? isFocus,
             JsepValue? jsep)?
         updating,
-    TResult Function(int line, String callId)? updated,
-    TResult Function(int line, String referId, String referTo,
+    TResult Function(int? line, String callId)? updated,
+    TResult Function(int? line, String referId, String referTo,
             String? referredBy, String? replaceCallId)?
         transfer,
-    TResult Function(int line, String callId)? transferring,
+    TResult Function(int? line, String callId)? transferring,
     TResult Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
             List<UserActiveCall> userActiveCalls)?
         notifyDialog,
-    TResult Function(int line, String callId, String? notify,
+    TResult Function(int? line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
     TResult Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
@@ -4748,14 +4770,14 @@ class _$CallSignalingEventNotifyDialogImpl
 
 abstract class _CallSignalingEventNotifyDialog implements _CallSignalingEvent {
   const factory _CallSignalingEventNotifyDialog(
-          {required final int line,
+          {required final int? line,
           required final String callId,
           required final String? notify,
           required final SubscriptionState? subscriptionState,
           required final List<UserActiveCall> userActiveCalls}) =
       _$CallSignalingEventNotifyDialogImpl;
 
-  int get line;
+  int? get line;
   String get callId;
   String? get notify;
   SubscriptionState? get subscriptionState;
@@ -4775,7 +4797,7 @@ class _$CallSignalingEventNotifyReferImpl
       required this.state});
 
   @override
-  final int line;
+  final int? line;
   @override
   final String callId;
   @override
@@ -4823,7 +4845,7 @@ class _$CallSignalingEventNotifyReferImpl
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
-            int line,
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -4833,17 +4855,17 @@ class _$CallSignalingEventNotifyReferImpl
             bool? isFocus,
             JsepValue? jsep)
         incoming,
-    required TResult Function(int line, String callId) ringing,
+    required TResult Function(int? line, String callId) ringing,
     required TResult Function(
-            int line, String callId, String callee, JsepValue? jsep)
+            int? line, String callId, String callee, JsepValue? jsep)
         progress,
     required TResult Function(
-            int line, String callId, String? callee, JsepValue? jsep)
+            int? line, String callId, String? callee, JsepValue? jsep)
         accepted,
-    required TResult Function(int line, String callId, int code, String reason)
+    required TResult Function(int? line, String callId, int code, String reason)
         hangup,
     required TResult Function(
-            int line,
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -4853,23 +4875,23 @@ class _$CallSignalingEventNotifyReferImpl
             bool? isFocus,
             JsepValue? jsep)
         updating,
-    required TResult Function(int line, String callId) updated,
-    required TResult Function(int line, String referId, String referTo,
+    required TResult Function(int? line, String callId) updated,
+    required TResult Function(int? line, String referId, String referTo,
             String? referredBy, String? replaceCallId)
         transfer,
-    required TResult Function(int line, String callId) transferring,
+    required TResult Function(int? line, String callId) transferring,
     required TResult Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
             List<UserActiveCall> userActiveCalls)
         notifyDialog,
-    required TResult Function(int line, String callId, String? notify,
+    required TResult Function(int? line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)
         notifyRefer,
     required TResult Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
@@ -4889,7 +4911,7 @@ class _$CallSignalingEventNotifyReferImpl
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(
-            int line,
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -4899,14 +4921,16 @@ class _$CallSignalingEventNotifyReferImpl
             bool? isFocus,
             JsepValue? jsep)?
         incoming,
-    TResult? Function(int line, String callId)? ringing,
-    TResult? Function(int line, String callId, String callee, JsepValue? jsep)?
+    TResult? Function(int? line, String callId)? ringing,
+    TResult? Function(int? line, String callId, String callee, JsepValue? jsep)?
         progress,
-    TResult? Function(int line, String callId, String? callee, JsepValue? jsep)?
-        accepted,
-    TResult? Function(int line, String callId, int code, String reason)? hangup,
     TResult? Function(
-            int line,
+            int? line, String callId, String? callee, JsepValue? jsep)?
+        accepted,
+    TResult? Function(int? line, String callId, int code, String reason)?
+        hangup,
+    TResult? Function(
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -4916,23 +4940,23 @@ class _$CallSignalingEventNotifyReferImpl
             bool? isFocus,
             JsepValue? jsep)?
         updating,
-    TResult? Function(int line, String callId)? updated,
-    TResult? Function(int line, String referId, String referTo,
+    TResult? Function(int? line, String callId)? updated,
+    TResult? Function(int? line, String referId, String referTo,
             String? referredBy, String? replaceCallId)?
         transfer,
-    TResult? Function(int line, String callId)? transferring,
+    TResult? Function(int? line, String callId)? transferring,
     TResult? Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
             List<UserActiveCall> userActiveCalls)?
         notifyDialog,
-    TResult? Function(int line, String callId, String? notify,
+    TResult? Function(int? line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
     TResult? Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
@@ -4952,7 +4976,7 @@ class _$CallSignalingEventNotifyReferImpl
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(
-            int line,
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -4962,14 +4986,14 @@ class _$CallSignalingEventNotifyReferImpl
             bool? isFocus,
             JsepValue? jsep)?
         incoming,
-    TResult Function(int line, String callId)? ringing,
-    TResult Function(int line, String callId, String callee, JsepValue? jsep)?
+    TResult Function(int? line, String callId)? ringing,
+    TResult Function(int? line, String callId, String callee, JsepValue? jsep)?
         progress,
-    TResult Function(int line, String callId, String? callee, JsepValue? jsep)?
+    TResult Function(int? line, String callId, String? callee, JsepValue? jsep)?
         accepted,
-    TResult Function(int line, String callId, int code, String reason)? hangup,
+    TResult Function(int? line, String callId, int code, String reason)? hangup,
     TResult Function(
-            int line,
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -4979,23 +5003,23 @@ class _$CallSignalingEventNotifyReferImpl
             bool? isFocus,
             JsepValue? jsep)?
         updating,
-    TResult Function(int line, String callId)? updated,
-    TResult Function(int line, String referId, String referTo,
+    TResult Function(int? line, String callId)? updated,
+    TResult Function(int? line, String referId, String referTo,
             String? referredBy, String? replaceCallId)?
         transfer,
-    TResult Function(int line, String callId)? transferring,
+    TResult Function(int? line, String callId)? transferring,
     TResult Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
             List<UserActiveCall> userActiveCalls)?
         notifyDialog,
-    TResult Function(int line, String callId, String? notify,
+    TResult Function(int? line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
     TResult Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
@@ -5102,14 +5126,14 @@ class _$CallSignalingEventNotifyReferImpl
 
 abstract class _CallSignalingEventNotifyRefer implements _CallSignalingEvent {
   const factory _CallSignalingEventNotifyRefer(
-          {required final int line,
+          {required final int? line,
           required final String callId,
           required final String? notify,
           required final SubscriptionState? subscriptionState,
           required final ReferNotifyState state}) =
       _$CallSignalingEventNotifyReferImpl;
 
-  int get line;
+  int? get line;
   String get callId;
   String? get notify;
   SubscriptionState? get subscriptionState;
@@ -5130,7 +5154,7 @@ class _$CallSignalingEventNotifyUnknownImpl
       required this.content});
 
   @override
-  final int line;
+  final int? line;
   @override
   final String callId;
   @override
@@ -5183,7 +5207,7 @@ class _$CallSignalingEventNotifyUnknownImpl
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
-            int line,
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -5193,17 +5217,17 @@ class _$CallSignalingEventNotifyUnknownImpl
             bool? isFocus,
             JsepValue? jsep)
         incoming,
-    required TResult Function(int line, String callId) ringing,
+    required TResult Function(int? line, String callId) ringing,
     required TResult Function(
-            int line, String callId, String callee, JsepValue? jsep)
+            int? line, String callId, String callee, JsepValue? jsep)
         progress,
     required TResult Function(
-            int line, String callId, String? callee, JsepValue? jsep)
+            int? line, String callId, String? callee, JsepValue? jsep)
         accepted,
-    required TResult Function(int line, String callId, int code, String reason)
+    required TResult Function(int? line, String callId, int code, String reason)
         hangup,
     required TResult Function(
-            int line,
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -5213,23 +5237,23 @@ class _$CallSignalingEventNotifyUnknownImpl
             bool? isFocus,
             JsepValue? jsep)
         updating,
-    required TResult Function(int line, String callId) updated,
-    required TResult Function(int line, String referId, String referTo,
+    required TResult Function(int? line, String callId) updated,
+    required TResult Function(int? line, String referId, String referTo,
             String? referredBy, String? replaceCallId)
         transfer,
-    required TResult Function(int line, String callId) transferring,
+    required TResult Function(int? line, String callId) transferring,
     required TResult Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
             List<UserActiveCall> userActiveCalls)
         notifyDialog,
-    required TResult Function(int line, String callId, String? notify,
+    required TResult Function(int? line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)
         notifyRefer,
     required TResult Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
@@ -5250,7 +5274,7 @@ class _$CallSignalingEventNotifyUnknownImpl
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(
-            int line,
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -5260,14 +5284,16 @@ class _$CallSignalingEventNotifyUnknownImpl
             bool? isFocus,
             JsepValue? jsep)?
         incoming,
-    TResult? Function(int line, String callId)? ringing,
-    TResult? Function(int line, String callId, String callee, JsepValue? jsep)?
+    TResult? Function(int? line, String callId)? ringing,
+    TResult? Function(int? line, String callId, String callee, JsepValue? jsep)?
         progress,
-    TResult? Function(int line, String callId, String? callee, JsepValue? jsep)?
-        accepted,
-    TResult? Function(int line, String callId, int code, String reason)? hangup,
     TResult? Function(
-            int line,
+            int? line, String callId, String? callee, JsepValue? jsep)?
+        accepted,
+    TResult? Function(int? line, String callId, int code, String reason)?
+        hangup,
+    TResult? Function(
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -5277,23 +5303,23 @@ class _$CallSignalingEventNotifyUnknownImpl
             bool? isFocus,
             JsepValue? jsep)?
         updating,
-    TResult? Function(int line, String callId)? updated,
-    TResult? Function(int line, String referId, String referTo,
+    TResult? Function(int? line, String callId)? updated,
+    TResult? Function(int? line, String referId, String referTo,
             String? referredBy, String? replaceCallId)?
         transfer,
-    TResult? Function(int line, String callId)? transferring,
+    TResult? Function(int? line, String callId)? transferring,
     TResult? Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
             List<UserActiveCall> userActiveCalls)?
         notifyDialog,
-    TResult? Function(int line, String callId, String? notify,
+    TResult? Function(int? line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
     TResult? Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
@@ -5314,7 +5340,7 @@ class _$CallSignalingEventNotifyUnknownImpl
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(
-            int line,
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -5324,14 +5350,14 @@ class _$CallSignalingEventNotifyUnknownImpl
             bool? isFocus,
             JsepValue? jsep)?
         incoming,
-    TResult Function(int line, String callId)? ringing,
-    TResult Function(int line, String callId, String callee, JsepValue? jsep)?
+    TResult Function(int? line, String callId)? ringing,
+    TResult Function(int? line, String callId, String callee, JsepValue? jsep)?
         progress,
-    TResult Function(int line, String callId, String? callee, JsepValue? jsep)?
+    TResult Function(int? line, String callId, String? callee, JsepValue? jsep)?
         accepted,
-    TResult Function(int line, String callId, int code, String reason)? hangup,
+    TResult Function(int? line, String callId, int code, String reason)? hangup,
     TResult Function(
-            int line,
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -5341,23 +5367,23 @@ class _$CallSignalingEventNotifyUnknownImpl
             bool? isFocus,
             JsepValue? jsep)?
         updating,
-    TResult Function(int line, String callId)? updated,
-    TResult Function(int line, String referId, String referTo,
+    TResult Function(int? line, String callId)? updated,
+    TResult Function(int? line, String referId, String referTo,
             String? referredBy, String? replaceCallId)?
         transfer,
-    TResult Function(int line, String callId)? transferring,
+    TResult Function(int? line, String callId)? transferring,
     TResult Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
             List<UserActiveCall> userActiveCalls)?
         notifyDialog,
-    TResult Function(int line, String callId, String? notify,
+    TResult Function(int? line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
     TResult Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
@@ -5465,14 +5491,14 @@ class _$CallSignalingEventNotifyUnknownImpl
 
 abstract class _CallSignalingEventNotifyUnknown implements _CallSignalingEvent {
   const factory _CallSignalingEventNotifyUnknown(
-      {required final int line,
+      {required final int? line,
       required final String callId,
       required final String? notify,
       required final SubscriptionState? subscriptionState,
       required final String? contentType,
       required final String content}) = _$CallSignalingEventNotifyUnknownImpl;
 
-  int get line;
+  int? get line;
   String get callId;
   String? get notify;
   SubscriptionState? get subscriptionState;
@@ -5513,7 +5539,7 @@ class _$CallSignalingEventRegisteringImpl
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
-            int line,
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -5523,17 +5549,17 @@ class _$CallSignalingEventRegisteringImpl
             bool? isFocus,
             JsepValue? jsep)
         incoming,
-    required TResult Function(int line, String callId) ringing,
+    required TResult Function(int? line, String callId) ringing,
     required TResult Function(
-            int line, String callId, String callee, JsepValue? jsep)
+            int? line, String callId, String callee, JsepValue? jsep)
         progress,
     required TResult Function(
-            int line, String callId, String? callee, JsepValue? jsep)
+            int? line, String callId, String? callee, JsepValue? jsep)
         accepted,
-    required TResult Function(int line, String callId, int code, String reason)
+    required TResult Function(int? line, String callId, int code, String reason)
         hangup,
     required TResult Function(
-            int line,
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -5543,23 +5569,23 @@ class _$CallSignalingEventRegisteringImpl
             bool? isFocus,
             JsepValue? jsep)
         updating,
-    required TResult Function(int line, String callId) updated,
-    required TResult Function(int line, String referId, String referTo,
+    required TResult Function(int? line, String callId) updated,
+    required TResult Function(int? line, String referId, String referTo,
             String? referredBy, String? replaceCallId)
         transfer,
-    required TResult Function(int line, String callId) transferring,
+    required TResult Function(int? line, String callId) transferring,
     required TResult Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
             List<UserActiveCall> userActiveCalls)
         notifyDialog,
-    required TResult Function(int line, String callId, String? notify,
+    required TResult Function(int? line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)
         notifyRefer,
     required TResult Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
@@ -5579,7 +5605,7 @@ class _$CallSignalingEventRegisteringImpl
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(
-            int line,
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -5589,14 +5615,16 @@ class _$CallSignalingEventRegisteringImpl
             bool? isFocus,
             JsepValue? jsep)?
         incoming,
-    TResult? Function(int line, String callId)? ringing,
-    TResult? Function(int line, String callId, String callee, JsepValue? jsep)?
+    TResult? Function(int? line, String callId)? ringing,
+    TResult? Function(int? line, String callId, String callee, JsepValue? jsep)?
         progress,
-    TResult? Function(int line, String callId, String? callee, JsepValue? jsep)?
-        accepted,
-    TResult? Function(int line, String callId, int code, String reason)? hangup,
     TResult? Function(
-            int line,
+            int? line, String callId, String? callee, JsepValue? jsep)?
+        accepted,
+    TResult? Function(int? line, String callId, int code, String reason)?
+        hangup,
+    TResult? Function(
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -5606,23 +5634,23 @@ class _$CallSignalingEventRegisteringImpl
             bool? isFocus,
             JsepValue? jsep)?
         updating,
-    TResult? Function(int line, String callId)? updated,
-    TResult? Function(int line, String referId, String referTo,
+    TResult? Function(int? line, String callId)? updated,
+    TResult? Function(int? line, String referId, String referTo,
             String? referredBy, String? replaceCallId)?
         transfer,
-    TResult? Function(int line, String callId)? transferring,
+    TResult? Function(int? line, String callId)? transferring,
     TResult? Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
             List<UserActiveCall> userActiveCalls)?
         notifyDialog,
-    TResult? Function(int line, String callId, String? notify,
+    TResult? Function(int? line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
     TResult? Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
@@ -5642,7 +5670,7 @@ class _$CallSignalingEventRegisteringImpl
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(
-            int line,
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -5652,14 +5680,14 @@ class _$CallSignalingEventRegisteringImpl
             bool? isFocus,
             JsepValue? jsep)?
         incoming,
-    TResult Function(int line, String callId)? ringing,
-    TResult Function(int line, String callId, String callee, JsepValue? jsep)?
+    TResult Function(int? line, String callId)? ringing,
+    TResult Function(int? line, String callId, String callee, JsepValue? jsep)?
         progress,
-    TResult Function(int line, String callId, String? callee, JsepValue? jsep)?
+    TResult Function(int? line, String callId, String? callee, JsepValue? jsep)?
         accepted,
-    TResult Function(int line, String callId, int code, String reason)? hangup,
+    TResult Function(int? line, String callId, int code, String reason)? hangup,
     TResult Function(
-            int line,
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -5669,23 +5697,23 @@ class _$CallSignalingEventRegisteringImpl
             bool? isFocus,
             JsepValue? jsep)?
         updating,
-    TResult Function(int line, String callId)? updated,
-    TResult Function(int line, String referId, String referTo,
+    TResult Function(int? line, String callId)? updated,
+    TResult Function(int? line, String referId, String referTo,
             String? referredBy, String? replaceCallId)?
         transfer,
-    TResult Function(int line, String callId)? transferring,
+    TResult Function(int? line, String callId)? transferring,
     TResult Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
             List<UserActiveCall> userActiveCalls)?
         notifyDialog,
-    TResult Function(int line, String callId, String? notify,
+    TResult Function(int? line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
     TResult Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
@@ -5828,7 +5856,7 @@ class _$CallSignalingEventRegisteredImpl
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
-            int line,
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -5838,17 +5866,17 @@ class _$CallSignalingEventRegisteredImpl
             bool? isFocus,
             JsepValue? jsep)
         incoming,
-    required TResult Function(int line, String callId) ringing,
+    required TResult Function(int? line, String callId) ringing,
     required TResult Function(
-            int line, String callId, String callee, JsepValue? jsep)
+            int? line, String callId, String callee, JsepValue? jsep)
         progress,
     required TResult Function(
-            int line, String callId, String? callee, JsepValue? jsep)
+            int? line, String callId, String? callee, JsepValue? jsep)
         accepted,
-    required TResult Function(int line, String callId, int code, String reason)
+    required TResult Function(int? line, String callId, int code, String reason)
         hangup,
     required TResult Function(
-            int line,
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -5858,23 +5886,23 @@ class _$CallSignalingEventRegisteredImpl
             bool? isFocus,
             JsepValue? jsep)
         updating,
-    required TResult Function(int line, String callId) updated,
-    required TResult Function(int line, String referId, String referTo,
+    required TResult Function(int? line, String callId) updated,
+    required TResult Function(int? line, String referId, String referTo,
             String? referredBy, String? replaceCallId)
         transfer,
-    required TResult Function(int line, String callId) transferring,
+    required TResult Function(int? line, String callId) transferring,
     required TResult Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
             List<UserActiveCall> userActiveCalls)
         notifyDialog,
-    required TResult Function(int line, String callId, String? notify,
+    required TResult Function(int? line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)
         notifyRefer,
     required TResult Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
@@ -5894,7 +5922,7 @@ class _$CallSignalingEventRegisteredImpl
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(
-            int line,
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -5904,14 +5932,16 @@ class _$CallSignalingEventRegisteredImpl
             bool? isFocus,
             JsepValue? jsep)?
         incoming,
-    TResult? Function(int line, String callId)? ringing,
-    TResult? Function(int line, String callId, String callee, JsepValue? jsep)?
+    TResult? Function(int? line, String callId)? ringing,
+    TResult? Function(int? line, String callId, String callee, JsepValue? jsep)?
         progress,
-    TResult? Function(int line, String callId, String? callee, JsepValue? jsep)?
-        accepted,
-    TResult? Function(int line, String callId, int code, String reason)? hangup,
     TResult? Function(
-            int line,
+            int? line, String callId, String? callee, JsepValue? jsep)?
+        accepted,
+    TResult? Function(int? line, String callId, int code, String reason)?
+        hangup,
+    TResult? Function(
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -5921,23 +5951,23 @@ class _$CallSignalingEventRegisteredImpl
             bool? isFocus,
             JsepValue? jsep)?
         updating,
-    TResult? Function(int line, String callId)? updated,
-    TResult? Function(int line, String referId, String referTo,
+    TResult? Function(int? line, String callId)? updated,
+    TResult? Function(int? line, String referId, String referTo,
             String? referredBy, String? replaceCallId)?
         transfer,
-    TResult? Function(int line, String callId)? transferring,
+    TResult? Function(int? line, String callId)? transferring,
     TResult? Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
             List<UserActiveCall> userActiveCalls)?
         notifyDialog,
-    TResult? Function(int line, String callId, String? notify,
+    TResult? Function(int? line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
     TResult? Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
@@ -5957,7 +5987,7 @@ class _$CallSignalingEventRegisteredImpl
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(
-            int line,
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -5967,14 +5997,14 @@ class _$CallSignalingEventRegisteredImpl
             bool? isFocus,
             JsepValue? jsep)?
         incoming,
-    TResult Function(int line, String callId)? ringing,
-    TResult Function(int line, String callId, String callee, JsepValue? jsep)?
+    TResult Function(int? line, String callId)? ringing,
+    TResult Function(int? line, String callId, String callee, JsepValue? jsep)?
         progress,
-    TResult Function(int line, String callId, String? callee, JsepValue? jsep)?
+    TResult Function(int? line, String callId, String? callee, JsepValue? jsep)?
         accepted,
-    TResult Function(int line, String callId, int code, String reason)? hangup,
+    TResult Function(int? line, String callId, int code, String reason)? hangup,
     TResult Function(
-            int line,
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -5984,23 +6014,23 @@ class _$CallSignalingEventRegisteredImpl
             bool? isFocus,
             JsepValue? jsep)?
         updating,
-    TResult Function(int line, String callId)? updated,
-    TResult Function(int line, String referId, String referTo,
+    TResult Function(int? line, String callId)? updated,
+    TResult Function(int? line, String referId, String referTo,
             String? referredBy, String? replaceCallId)?
         transfer,
-    TResult Function(int line, String callId)? transferring,
+    TResult Function(int? line, String callId)? transferring,
     TResult Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
             List<UserActiveCall> userActiveCalls)?
         notifyDialog,
-    TResult Function(int line, String callId, String? notify,
+    TResult Function(int? line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
     TResult Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
@@ -6153,7 +6183,7 @@ class _$CallSignalingEventRegisterationFailedImpl
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
-            int line,
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -6163,17 +6193,17 @@ class _$CallSignalingEventRegisterationFailedImpl
             bool? isFocus,
             JsepValue? jsep)
         incoming,
-    required TResult Function(int line, String callId) ringing,
+    required TResult Function(int? line, String callId) ringing,
     required TResult Function(
-            int line, String callId, String callee, JsepValue? jsep)
+            int? line, String callId, String callee, JsepValue? jsep)
         progress,
     required TResult Function(
-            int line, String callId, String? callee, JsepValue? jsep)
+            int? line, String callId, String? callee, JsepValue? jsep)
         accepted,
-    required TResult Function(int line, String callId, int code, String reason)
+    required TResult Function(int? line, String callId, int code, String reason)
         hangup,
     required TResult Function(
-            int line,
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -6183,23 +6213,23 @@ class _$CallSignalingEventRegisterationFailedImpl
             bool? isFocus,
             JsepValue? jsep)
         updating,
-    required TResult Function(int line, String callId) updated,
-    required TResult Function(int line, String referId, String referTo,
+    required TResult Function(int? line, String callId) updated,
+    required TResult Function(int? line, String referId, String referTo,
             String? referredBy, String? replaceCallId)
         transfer,
-    required TResult Function(int line, String callId) transferring,
+    required TResult Function(int? line, String callId) transferring,
     required TResult Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
             List<UserActiveCall> userActiveCalls)
         notifyDialog,
-    required TResult Function(int line, String callId, String? notify,
+    required TResult Function(int? line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)
         notifyRefer,
     required TResult Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
@@ -6219,7 +6249,7 @@ class _$CallSignalingEventRegisterationFailedImpl
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(
-            int line,
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -6229,14 +6259,16 @@ class _$CallSignalingEventRegisterationFailedImpl
             bool? isFocus,
             JsepValue? jsep)?
         incoming,
-    TResult? Function(int line, String callId)? ringing,
-    TResult? Function(int line, String callId, String callee, JsepValue? jsep)?
+    TResult? Function(int? line, String callId)? ringing,
+    TResult? Function(int? line, String callId, String callee, JsepValue? jsep)?
         progress,
-    TResult? Function(int line, String callId, String? callee, JsepValue? jsep)?
-        accepted,
-    TResult? Function(int line, String callId, int code, String reason)? hangup,
     TResult? Function(
-            int line,
+            int? line, String callId, String? callee, JsepValue? jsep)?
+        accepted,
+    TResult? Function(int? line, String callId, int code, String reason)?
+        hangup,
+    TResult? Function(
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -6246,23 +6278,23 @@ class _$CallSignalingEventRegisterationFailedImpl
             bool? isFocus,
             JsepValue? jsep)?
         updating,
-    TResult? Function(int line, String callId)? updated,
-    TResult? Function(int line, String referId, String referTo,
+    TResult? Function(int? line, String callId)? updated,
+    TResult? Function(int? line, String referId, String referTo,
             String? referredBy, String? replaceCallId)?
         transfer,
-    TResult? Function(int line, String callId)? transferring,
+    TResult? Function(int? line, String callId)? transferring,
     TResult? Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
             List<UserActiveCall> userActiveCalls)?
         notifyDialog,
-    TResult? Function(int line, String callId, String? notify,
+    TResult? Function(int? line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
     TResult? Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
@@ -6282,7 +6314,7 @@ class _$CallSignalingEventRegisterationFailedImpl
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(
-            int line,
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -6292,14 +6324,14 @@ class _$CallSignalingEventRegisterationFailedImpl
             bool? isFocus,
             JsepValue? jsep)?
         incoming,
-    TResult Function(int line, String callId)? ringing,
-    TResult Function(int line, String callId, String callee, JsepValue? jsep)?
+    TResult Function(int? line, String callId)? ringing,
+    TResult Function(int? line, String callId, String callee, JsepValue? jsep)?
         progress,
-    TResult Function(int line, String callId, String? callee, JsepValue? jsep)?
+    TResult Function(int? line, String callId, String? callee, JsepValue? jsep)?
         accepted,
-    TResult Function(int line, String callId, int code, String reason)? hangup,
+    TResult Function(int? line, String callId, int code, String reason)? hangup,
     TResult Function(
-            int line,
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -6309,23 +6341,23 @@ class _$CallSignalingEventRegisterationFailedImpl
             bool? isFocus,
             JsepValue? jsep)?
         updating,
-    TResult Function(int line, String callId)? updated,
-    TResult Function(int line, String referId, String referTo,
+    TResult Function(int? line, String callId)? updated,
+    TResult Function(int? line, String referId, String referTo,
             String? referredBy, String? replaceCallId)?
         transfer,
-    TResult Function(int line, String callId)? transferring,
+    TResult Function(int? line, String callId)? transferring,
     TResult Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
             List<UserActiveCall> userActiveCalls)?
         notifyDialog,
-    TResult Function(int line, String callId, String? notify,
+    TResult Function(int? line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
     TResult Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
@@ -6473,7 +6505,7 @@ class _$CallSignalingEventUnregisteringImpl
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
-            int line,
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -6483,17 +6515,17 @@ class _$CallSignalingEventUnregisteringImpl
             bool? isFocus,
             JsepValue? jsep)
         incoming,
-    required TResult Function(int line, String callId) ringing,
+    required TResult Function(int? line, String callId) ringing,
     required TResult Function(
-            int line, String callId, String callee, JsepValue? jsep)
+            int? line, String callId, String callee, JsepValue? jsep)
         progress,
     required TResult Function(
-            int line, String callId, String? callee, JsepValue? jsep)
+            int? line, String callId, String? callee, JsepValue? jsep)
         accepted,
-    required TResult Function(int line, String callId, int code, String reason)
+    required TResult Function(int? line, String callId, int code, String reason)
         hangup,
     required TResult Function(
-            int line,
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -6503,23 +6535,23 @@ class _$CallSignalingEventUnregisteringImpl
             bool? isFocus,
             JsepValue? jsep)
         updating,
-    required TResult Function(int line, String callId) updated,
-    required TResult Function(int line, String referId, String referTo,
+    required TResult Function(int? line, String callId) updated,
+    required TResult Function(int? line, String referId, String referTo,
             String? referredBy, String? replaceCallId)
         transfer,
-    required TResult Function(int line, String callId) transferring,
+    required TResult Function(int? line, String callId) transferring,
     required TResult Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
             List<UserActiveCall> userActiveCalls)
         notifyDialog,
-    required TResult Function(int line, String callId, String? notify,
+    required TResult Function(int? line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)
         notifyRefer,
     required TResult Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
@@ -6539,7 +6571,7 @@ class _$CallSignalingEventUnregisteringImpl
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(
-            int line,
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -6549,14 +6581,16 @@ class _$CallSignalingEventUnregisteringImpl
             bool? isFocus,
             JsepValue? jsep)?
         incoming,
-    TResult? Function(int line, String callId)? ringing,
-    TResult? Function(int line, String callId, String callee, JsepValue? jsep)?
+    TResult? Function(int? line, String callId)? ringing,
+    TResult? Function(int? line, String callId, String callee, JsepValue? jsep)?
         progress,
-    TResult? Function(int line, String callId, String? callee, JsepValue? jsep)?
-        accepted,
-    TResult? Function(int line, String callId, int code, String reason)? hangup,
     TResult? Function(
-            int line,
+            int? line, String callId, String? callee, JsepValue? jsep)?
+        accepted,
+    TResult? Function(int? line, String callId, int code, String reason)?
+        hangup,
+    TResult? Function(
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -6566,23 +6600,23 @@ class _$CallSignalingEventUnregisteringImpl
             bool? isFocus,
             JsepValue? jsep)?
         updating,
-    TResult? Function(int line, String callId)? updated,
-    TResult? Function(int line, String referId, String referTo,
+    TResult? Function(int? line, String callId)? updated,
+    TResult? Function(int? line, String referId, String referTo,
             String? referredBy, String? replaceCallId)?
         transfer,
-    TResult? Function(int line, String callId)? transferring,
+    TResult? Function(int? line, String callId)? transferring,
     TResult? Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
             List<UserActiveCall> userActiveCalls)?
         notifyDialog,
-    TResult? Function(int line, String callId, String? notify,
+    TResult? Function(int? line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
     TResult? Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
@@ -6602,7 +6636,7 @@ class _$CallSignalingEventUnregisteringImpl
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(
-            int line,
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -6612,14 +6646,14 @@ class _$CallSignalingEventUnregisteringImpl
             bool? isFocus,
             JsepValue? jsep)?
         incoming,
-    TResult Function(int line, String callId)? ringing,
-    TResult Function(int line, String callId, String callee, JsepValue? jsep)?
+    TResult Function(int? line, String callId)? ringing,
+    TResult Function(int? line, String callId, String callee, JsepValue? jsep)?
         progress,
-    TResult Function(int line, String callId, String? callee, JsepValue? jsep)?
+    TResult Function(int? line, String callId, String? callee, JsepValue? jsep)?
         accepted,
-    TResult Function(int line, String callId, int code, String reason)? hangup,
+    TResult Function(int? line, String callId, int code, String reason)? hangup,
     TResult Function(
-            int line,
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -6629,23 +6663,23 @@ class _$CallSignalingEventUnregisteringImpl
             bool? isFocus,
             JsepValue? jsep)?
         updating,
-    TResult Function(int line, String callId)? updated,
-    TResult Function(int line, String referId, String referTo,
+    TResult Function(int? line, String callId)? updated,
+    TResult Function(int? line, String referId, String referTo,
             String? referredBy, String? replaceCallId)?
         transfer,
-    TResult Function(int line, String callId)? transferring,
+    TResult Function(int? line, String callId)? transferring,
     TResult Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
             List<UserActiveCall> userActiveCalls)?
         notifyDialog,
-    TResult Function(int line, String callId, String? notify,
+    TResult Function(int? line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
     TResult Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
@@ -6788,7 +6822,7 @@ class _$CallSignalingEventUnregisteredImpl
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
-            int line,
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -6798,17 +6832,17 @@ class _$CallSignalingEventUnregisteredImpl
             bool? isFocus,
             JsepValue? jsep)
         incoming,
-    required TResult Function(int line, String callId) ringing,
+    required TResult Function(int? line, String callId) ringing,
     required TResult Function(
-            int line, String callId, String callee, JsepValue? jsep)
+            int? line, String callId, String callee, JsepValue? jsep)
         progress,
     required TResult Function(
-            int line, String callId, String? callee, JsepValue? jsep)
+            int? line, String callId, String? callee, JsepValue? jsep)
         accepted,
-    required TResult Function(int line, String callId, int code, String reason)
+    required TResult Function(int? line, String callId, int code, String reason)
         hangup,
     required TResult Function(
-            int line,
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -6818,23 +6852,23 @@ class _$CallSignalingEventUnregisteredImpl
             bool? isFocus,
             JsepValue? jsep)
         updating,
-    required TResult Function(int line, String callId) updated,
-    required TResult Function(int line, String referId, String referTo,
+    required TResult Function(int? line, String callId) updated,
+    required TResult Function(int? line, String referId, String referTo,
             String? referredBy, String? replaceCallId)
         transfer,
-    required TResult Function(int line, String callId) transferring,
+    required TResult Function(int? line, String callId) transferring,
     required TResult Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
             List<UserActiveCall> userActiveCalls)
         notifyDialog,
-    required TResult Function(int line, String callId, String? notify,
+    required TResult Function(int? line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)
         notifyRefer,
     required TResult Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
@@ -6854,7 +6888,7 @@ class _$CallSignalingEventUnregisteredImpl
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(
-            int line,
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -6864,14 +6898,16 @@ class _$CallSignalingEventUnregisteredImpl
             bool? isFocus,
             JsepValue? jsep)?
         incoming,
-    TResult? Function(int line, String callId)? ringing,
-    TResult? Function(int line, String callId, String callee, JsepValue? jsep)?
+    TResult? Function(int? line, String callId)? ringing,
+    TResult? Function(int? line, String callId, String callee, JsepValue? jsep)?
         progress,
-    TResult? Function(int line, String callId, String? callee, JsepValue? jsep)?
-        accepted,
-    TResult? Function(int line, String callId, int code, String reason)? hangup,
     TResult? Function(
-            int line,
+            int? line, String callId, String? callee, JsepValue? jsep)?
+        accepted,
+    TResult? Function(int? line, String callId, int code, String reason)?
+        hangup,
+    TResult? Function(
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -6881,23 +6917,23 @@ class _$CallSignalingEventUnregisteredImpl
             bool? isFocus,
             JsepValue? jsep)?
         updating,
-    TResult? Function(int line, String callId)? updated,
-    TResult? Function(int line, String referId, String referTo,
+    TResult? Function(int? line, String callId)? updated,
+    TResult? Function(int? line, String referId, String referTo,
             String? referredBy, String? replaceCallId)?
         transfer,
-    TResult? Function(int line, String callId)? transferring,
+    TResult? Function(int? line, String callId)? transferring,
     TResult? Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
             List<UserActiveCall> userActiveCalls)?
         notifyDialog,
-    TResult? Function(int line, String callId, String? notify,
+    TResult? Function(int? line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
     TResult? Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
@@ -6917,7 +6953,7 @@ class _$CallSignalingEventUnregisteredImpl
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(
-            int line,
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -6927,14 +6963,14 @@ class _$CallSignalingEventUnregisteredImpl
             bool? isFocus,
             JsepValue? jsep)?
         incoming,
-    TResult Function(int line, String callId)? ringing,
-    TResult Function(int line, String callId, String callee, JsepValue? jsep)?
+    TResult Function(int? line, String callId)? ringing,
+    TResult Function(int? line, String callId, String callee, JsepValue? jsep)?
         progress,
-    TResult Function(int line, String callId, String? callee, JsepValue? jsep)?
+    TResult Function(int? line, String callId, String? callee, JsepValue? jsep)?
         accepted,
-    TResult Function(int line, String callId, int code, String reason)? hangup,
+    TResult Function(int? line, String callId, int code, String reason)? hangup,
     TResult Function(
-            int line,
+            int? line,
             String callId,
             String callee,
             String caller,
@@ -6944,23 +6980,23 @@ class _$CallSignalingEventUnregisteredImpl
             bool? isFocus,
             JsepValue? jsep)?
         updating,
-    TResult Function(int line, String callId)? updated,
-    TResult Function(int line, String referId, String referTo,
+    TResult Function(int? line, String callId)? updated,
+    TResult Function(int? line, String referId, String referTo,
             String? referredBy, String? replaceCallId)?
         transfer,
-    TResult Function(int line, String callId)? transferring,
+    TResult Function(int? line, String callId)? transferring,
     TResult Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
             List<UserActiveCall> userActiveCalls)?
         notifyDialog,
-    TResult Function(int line, String callId, String? notify,
+    TResult Function(int? line, String callId, String? notify,
             SubscriptionState? subscriptionState, ReferNotifyState state)?
         notifyRefer,
     TResult Function(
-            int line,
+            int? line,
             String callId,
             String? notify,
             SubscriptionState? subscriptionState,
@@ -7261,8 +7297,15 @@ abstract class _CallPushEventIncoming implements _CallPushEvent {
 mixin _$CallControlEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(int? line, String? generic, String? number,
-            String? email, String? displayName, String? replaces, bool video)
+    required TResult Function(
+            int? line,
+            String? generic,
+            String? number,
+            String? email,
+            String? displayName,
+            String? replaces,
+            String? fromNumber,
+            bool video)
         started,
     required TResult Function(String callId) answered,
     required TResult Function(String callId) ended,
@@ -7286,8 +7329,15 @@ mixin _$CallControlEvent {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(int? line, String? generic, String? number, String? email,
-            String? displayName, String? replaces, bool video)?
+    TResult? Function(
+            int? line,
+            String? generic,
+            String? number,
+            String? email,
+            String? displayName,
+            String? replaces,
+            String? fromNumber,
+            bool video)?
         started,
     TResult? Function(String callId)? answered,
     TResult? Function(String callId)? ended,
@@ -7309,8 +7359,15 @@ mixin _$CallControlEvent {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(int? line, String? generic, String? number, String? email,
-            String? displayName, String? replaces, bool video)?
+    TResult Function(
+            int? line,
+            String? generic,
+            String? number,
+            String? email,
+            String? displayName,
+            String? replaces,
+            String? fromNumber,
+            bool video)?
         started,
     TResult Function(String callId)? answered,
     TResult Function(String callId)? ended,
@@ -7428,6 +7485,7 @@ class _$CallControlEventStartedImpl
       this.email,
       this.displayName,
       this.replaces,
+      this.fromNumber,
       required this.video})
       : assert(!(generic == null && number == null && email == null),
             'one of generic, number or email parameters must be assign'),
@@ -7450,11 +7508,13 @@ class _$CallControlEventStartedImpl
   @override
   final String? replaces;
   @override
+  final String? fromNumber;
+  @override
   final bool video;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'CallControlEvent.started(line: $line, generic: $generic, number: $number, email: $email, displayName: $displayName, replaces: $replaces, video: $video)';
+    return 'CallControlEvent.started(line: $line, generic: $generic, number: $number, email: $email, displayName: $displayName, replaces: $replaces, fromNumber: $fromNumber, video: $video)';
   }
 
   @override
@@ -7468,6 +7528,7 @@ class _$CallControlEventStartedImpl
       ..add(DiagnosticsProperty('email', email))
       ..add(DiagnosticsProperty('displayName', displayName))
       ..add(DiagnosticsProperty('replaces', replaces))
+      ..add(DiagnosticsProperty('fromNumber', fromNumber))
       ..add(DiagnosticsProperty('video', video));
   }
 
@@ -7484,18 +7545,27 @@ class _$CallControlEventStartedImpl
                 other.displayName == displayName) &&
             (identical(other.replaces, replaces) ||
                 other.replaces == replaces) &&
+            (identical(other.fromNumber, fromNumber) ||
+                other.fromNumber == fromNumber) &&
             (identical(other.video, video) || other.video == video));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType, line, generic, number, email, displayName, replaces, video);
+  int get hashCode => Object.hash(runtimeType, line, generic, number, email,
+      displayName, replaces, fromNumber, video);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(int? line, String? generic, String? number,
-            String? email, String? displayName, String? replaces, bool video)
+    required TResult Function(
+            int? line,
+            String? generic,
+            String? number,
+            String? email,
+            String? displayName,
+            String? replaces,
+            String? fromNumber,
+            bool video)
         started,
     required TResult Function(String callId) answered,
     required TResult Function(String callId) ended,
@@ -7516,14 +7586,22 @@ class _$CallControlEventStartedImpl
     required TResult Function(String referId, String referTo)
         attendedRequestApproved,
   }) {
-    return started(line, generic, number, email, displayName, replaces, video);
+    return started(
+        line, generic, number, email, displayName, replaces, fromNumber, video);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(int? line, String? generic, String? number, String? email,
-            String? displayName, String? replaces, bool video)?
+    TResult? Function(
+            int? line,
+            String? generic,
+            String? number,
+            String? email,
+            String? displayName,
+            String? replaces,
+            String? fromNumber,
+            bool video)?
         started,
     TResult? Function(String callId)? answered,
     TResult? Function(String callId)? ended,
@@ -7543,14 +7621,21 @@ class _$CallControlEventStartedImpl
     TResult? Function(String referId, String referTo)? attendedRequestApproved,
   }) {
     return started?.call(
-        line, generic, number, email, displayName, replaces, video);
+        line, generic, number, email, displayName, replaces, fromNumber, video);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(int? line, String? generic, String? number, String? email,
-            String? displayName, String? replaces, bool video)?
+    TResult Function(
+            int? line,
+            String? generic,
+            String? number,
+            String? email,
+            String? displayName,
+            String? replaces,
+            String? fromNumber,
+            bool video)?
         started,
     TResult Function(String callId)? answered,
     TResult Function(String callId)? ended,
@@ -7571,8 +7656,8 @@ class _$CallControlEventStartedImpl
     required TResult orElse(),
   }) {
     if (started != null) {
-      return started(
-          line, generic, number, email, displayName, replaces, video);
+      return started(line, generic, number, email, displayName, replaces,
+          fromNumber, video);
     }
     return orElse();
   }
@@ -7682,6 +7767,7 @@ abstract class _CallControlEventStarted
       final String? email,
       final String? displayName,
       final String? replaces,
+      final String? fromNumber,
       required final bool video}) = _$CallControlEventStartedImpl;
 
   int? get line;
@@ -7690,6 +7776,7 @@ abstract class _CallControlEventStarted
   String? get email;
   String? get displayName;
   String? get replaces;
+  String? get fromNumber;
   bool get video;
 }
 
@@ -7730,8 +7817,15 @@ class _$CallControlEventAnsweredImpl
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(int? line, String? generic, String? number,
-            String? email, String? displayName, String? replaces, bool video)
+    required TResult Function(
+            int? line,
+            String? generic,
+            String? number,
+            String? email,
+            String? displayName,
+            String? replaces,
+            String? fromNumber,
+            bool video)
         started,
     required TResult Function(String callId) answered,
     required TResult Function(String callId) ended,
@@ -7758,8 +7852,15 @@ class _$CallControlEventAnsweredImpl
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(int? line, String? generic, String? number, String? email,
-            String? displayName, String? replaces, bool video)?
+    TResult? Function(
+            int? line,
+            String? generic,
+            String? number,
+            String? email,
+            String? displayName,
+            String? replaces,
+            String? fromNumber,
+            bool video)?
         started,
     TResult? Function(String callId)? answered,
     TResult? Function(String callId)? ended,
@@ -7784,8 +7885,15 @@ class _$CallControlEventAnsweredImpl
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(int? line, String? generic, String? number, String? email,
-            String? displayName, String? replaces, bool video)?
+    TResult Function(
+            int? line,
+            String? generic,
+            String? number,
+            String? email,
+            String? displayName,
+            String? replaces,
+            String? fromNumber,
+            bool video)?
         started,
     TResult Function(String callId)? answered,
     TResult Function(String callId)? ended,
@@ -7951,8 +8059,15 @@ class _$CallControlEventEndedImpl
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(int? line, String? generic, String? number,
-            String? email, String? displayName, String? replaces, bool video)
+    required TResult Function(
+            int? line,
+            String? generic,
+            String? number,
+            String? email,
+            String? displayName,
+            String? replaces,
+            String? fromNumber,
+            bool video)
         started,
     required TResult Function(String callId) answered,
     required TResult Function(String callId) ended,
@@ -7979,8 +8094,15 @@ class _$CallControlEventEndedImpl
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(int? line, String? generic, String? number, String? email,
-            String? displayName, String? replaces, bool video)?
+    TResult? Function(
+            int? line,
+            String? generic,
+            String? number,
+            String? email,
+            String? displayName,
+            String? replaces,
+            String? fromNumber,
+            bool video)?
         started,
     TResult? Function(String callId)? answered,
     TResult? Function(String callId)? ended,
@@ -8005,8 +8127,15 @@ class _$CallControlEventEndedImpl
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(int? line, String? generic, String? number, String? email,
-            String? displayName, String? replaces, bool video)?
+    TResult Function(
+            int? line,
+            String? generic,
+            String? number,
+            String? email,
+            String? displayName,
+            String? replaces,
+            String? fromNumber,
+            bool video)?
         started,
     TResult Function(String callId)? answered,
     TResult Function(String callId)? ended,
@@ -8176,8 +8305,15 @@ class _$CallControlEventSetHeldImpl
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(int? line, String? generic, String? number,
-            String? email, String? displayName, String? replaces, bool video)
+    required TResult Function(
+            int? line,
+            String? generic,
+            String? number,
+            String? email,
+            String? displayName,
+            String? replaces,
+            String? fromNumber,
+            bool video)
         started,
     required TResult Function(String callId) answered,
     required TResult Function(String callId) ended,
@@ -8204,8 +8340,15 @@ class _$CallControlEventSetHeldImpl
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(int? line, String? generic, String? number, String? email,
-            String? displayName, String? replaces, bool video)?
+    TResult? Function(
+            int? line,
+            String? generic,
+            String? number,
+            String? email,
+            String? displayName,
+            String? replaces,
+            String? fromNumber,
+            bool video)?
         started,
     TResult? Function(String callId)? answered,
     TResult? Function(String callId)? ended,
@@ -8230,8 +8373,15 @@ class _$CallControlEventSetHeldImpl
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(int? line, String? generic, String? number, String? email,
-            String? displayName, String? replaces, bool video)?
+    TResult Function(
+            int? line,
+            String? generic,
+            String? number,
+            String? email,
+            String? displayName,
+            String? replaces,
+            String? fromNumber,
+            bool video)?
         started,
     TResult Function(String callId)? answered,
     TResult Function(String callId)? ended,
@@ -8402,8 +8552,15 @@ class _$CallControlEventSetMutedImpl
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(int? line, String? generic, String? number,
-            String? email, String? displayName, String? replaces, bool video)
+    required TResult Function(
+            int? line,
+            String? generic,
+            String? number,
+            String? email,
+            String? displayName,
+            String? replaces,
+            String? fromNumber,
+            bool video)
         started,
     required TResult Function(String callId) answered,
     required TResult Function(String callId) ended,
@@ -8430,8 +8587,15 @@ class _$CallControlEventSetMutedImpl
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(int? line, String? generic, String? number, String? email,
-            String? displayName, String? replaces, bool video)?
+    TResult? Function(
+            int? line,
+            String? generic,
+            String? number,
+            String? email,
+            String? displayName,
+            String? replaces,
+            String? fromNumber,
+            bool video)?
         started,
     TResult? Function(String callId)? answered,
     TResult? Function(String callId)? ended,
@@ -8456,8 +8620,15 @@ class _$CallControlEventSetMutedImpl
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(int? line, String? generic, String? number, String? email,
-            String? displayName, String? replaces, bool video)?
+    TResult Function(
+            int? line,
+            String? generic,
+            String? number,
+            String? email,
+            String? displayName,
+            String? replaces,
+            String? fromNumber,
+            bool video)?
         started,
     TResult Function(String callId)? answered,
     TResult Function(String callId)? ended,
@@ -8628,8 +8799,15 @@ class _$CallControlEventSentDTMFImpl
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(int? line, String? generic, String? number,
-            String? email, String? displayName, String? replaces, bool video)
+    required TResult Function(
+            int? line,
+            String? generic,
+            String? number,
+            String? email,
+            String? displayName,
+            String? replaces,
+            String? fromNumber,
+            bool video)
         started,
     required TResult Function(String callId) answered,
     required TResult Function(String callId) ended,
@@ -8656,8 +8834,15 @@ class _$CallControlEventSentDTMFImpl
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(int? line, String? generic, String? number, String? email,
-            String? displayName, String? replaces, bool video)?
+    TResult? Function(
+            int? line,
+            String? generic,
+            String? number,
+            String? email,
+            String? displayName,
+            String? replaces,
+            String? fromNumber,
+            bool video)?
         started,
     TResult? Function(String callId)? answered,
     TResult? Function(String callId)? ended,
@@ -8682,8 +8867,15 @@ class _$CallControlEventSentDTMFImpl
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(int? line, String? generic, String? number, String? email,
-            String? displayName, String? replaces, bool video)?
+    TResult Function(
+            int? line,
+            String? generic,
+            String? number,
+            String? email,
+            String? displayName,
+            String? replaces,
+            String? fromNumber,
+            bool video)?
         started,
     TResult Function(String callId)? answered,
     TResult Function(String callId)? ended,
@@ -8850,8 +9042,15 @@ class _$CallControlEventCameraSwitchedImpl
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(int? line, String? generic, String? number,
-            String? email, String? displayName, String? replaces, bool video)
+    required TResult Function(
+            int? line,
+            String? generic,
+            String? number,
+            String? email,
+            String? displayName,
+            String? replaces,
+            String? fromNumber,
+            bool video)
         started,
     required TResult Function(String callId) answered,
     required TResult Function(String callId) ended,
@@ -8878,8 +9077,15 @@ class _$CallControlEventCameraSwitchedImpl
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(int? line, String? generic, String? number, String? email,
-            String? displayName, String? replaces, bool video)?
+    TResult? Function(
+            int? line,
+            String? generic,
+            String? number,
+            String? email,
+            String? displayName,
+            String? replaces,
+            String? fromNumber,
+            bool video)?
         started,
     TResult? Function(String callId)? answered,
     TResult? Function(String callId)? ended,
@@ -8904,8 +9110,15 @@ class _$CallControlEventCameraSwitchedImpl
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(int? line, String? generic, String? number, String? email,
-            String? displayName, String? replaces, bool video)?
+    TResult Function(
+            int? line,
+            String? generic,
+            String? number,
+            String? email,
+            String? displayName,
+            String? replaces,
+            String? fromNumber,
+            bool video)?
         started,
     TResult Function(String callId)? answered,
     TResult Function(String callId)? ended,
@@ -9075,8 +9288,15 @@ class _$CallControlEventCameraEnabledImpl
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(int? line, String? generic, String? number,
-            String? email, String? displayName, String? replaces, bool video)
+    required TResult Function(
+            int? line,
+            String? generic,
+            String? number,
+            String? email,
+            String? displayName,
+            String? replaces,
+            String? fromNumber,
+            bool video)
         started,
     required TResult Function(String callId) answered,
     required TResult Function(String callId) ended,
@@ -9103,8 +9323,15 @@ class _$CallControlEventCameraEnabledImpl
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(int? line, String? generic, String? number, String? email,
-            String? displayName, String? replaces, bool video)?
+    TResult? Function(
+            int? line,
+            String? generic,
+            String? number,
+            String? email,
+            String? displayName,
+            String? replaces,
+            String? fromNumber,
+            bool video)?
         started,
     TResult? Function(String callId)? answered,
     TResult? Function(String callId)? ended,
@@ -9129,8 +9356,15 @@ class _$CallControlEventCameraEnabledImpl
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(int? line, String? generic, String? number, String? email,
-            String? displayName, String? replaces, bool video)?
+    TResult Function(
+            int? line,
+            String? generic,
+            String? number,
+            String? email,
+            String? displayName,
+            String? replaces,
+            String? fromNumber,
+            bool video)?
         started,
     TResult Function(String callId)? answered,
     TResult Function(String callId)? ended,
@@ -9302,8 +9536,15 @@ class _$CallControlEventSpeakerEnabledImpl
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(int? line, String? generic, String? number,
-            String? email, String? displayName, String? replaces, bool video)
+    required TResult Function(
+            int? line,
+            String? generic,
+            String? number,
+            String? email,
+            String? displayName,
+            String? replaces,
+            String? fromNumber,
+            bool video)
         started,
     required TResult Function(String callId) answered,
     required TResult Function(String callId) ended,
@@ -9330,8 +9571,15 @@ class _$CallControlEventSpeakerEnabledImpl
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(int? line, String? generic, String? number, String? email,
-            String? displayName, String? replaces, bool video)?
+    TResult? Function(
+            int? line,
+            String? generic,
+            String? number,
+            String? email,
+            String? displayName,
+            String? replaces,
+            String? fromNumber,
+            bool video)?
         started,
     TResult? Function(String callId)? answered,
     TResult? Function(String callId)? ended,
@@ -9356,8 +9604,15 @@ class _$CallControlEventSpeakerEnabledImpl
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(int? line, String? generic, String? number, String? email,
-            String? displayName, String? replaces, bool video)?
+    TResult Function(
+            int? line,
+            String? generic,
+            String? number,
+            String? email,
+            String? displayName,
+            String? replaces,
+            String? fromNumber,
+            bool video)?
         started,
     TResult Function(String callId)? answered,
     TResult Function(String callId)? ended,
@@ -9525,8 +9780,15 @@ class _$CallControlEventFailureApprovedImpl
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(int? line, String? generic, String? number,
-            String? email, String? displayName, String? replaces, bool video)
+    required TResult Function(
+            int? line,
+            String? generic,
+            String? number,
+            String? email,
+            String? displayName,
+            String? replaces,
+            String? fromNumber,
+            bool video)
         started,
     required TResult Function(String callId) answered,
     required TResult Function(String callId) ended,
@@ -9553,8 +9815,15 @@ class _$CallControlEventFailureApprovedImpl
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(int? line, String? generic, String? number, String? email,
-            String? displayName, String? replaces, bool video)?
+    TResult? Function(
+            int? line,
+            String? generic,
+            String? number,
+            String? email,
+            String? displayName,
+            String? replaces,
+            String? fromNumber,
+            bool video)?
         started,
     TResult? Function(String callId)? answered,
     TResult? Function(String callId)? ended,
@@ -9579,8 +9848,15 @@ class _$CallControlEventFailureApprovedImpl
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(int? line, String? generic, String? number, String? email,
-            String? displayName, String? replaces, bool video)?
+    TResult Function(
+            int? line,
+            String? generic,
+            String? number,
+            String? email,
+            String? displayName,
+            String? replaces,
+            String? fromNumber,
+            bool video)?
         started,
     TResult Function(String callId)? answered,
     TResult Function(String callId)? ended,
@@ -9747,8 +10023,15 @@ class _$CallControlEventBlindTransferInitiatedImpl
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(int? line, String? generic, String? number,
-            String? email, String? displayName, String? replaces, bool video)
+    required TResult Function(
+            int? line,
+            String? generic,
+            String? number,
+            String? email,
+            String? displayName,
+            String? replaces,
+            String? fromNumber,
+            bool video)
         started,
     required TResult Function(String callId) answered,
     required TResult Function(String callId) ended,
@@ -9775,8 +10058,15 @@ class _$CallControlEventBlindTransferInitiatedImpl
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(int? line, String? generic, String? number, String? email,
-            String? displayName, String? replaces, bool video)?
+    TResult? Function(
+            int? line,
+            String? generic,
+            String? number,
+            String? email,
+            String? displayName,
+            String? replaces,
+            String? fromNumber,
+            bool video)?
         started,
     TResult? Function(String callId)? answered,
     TResult? Function(String callId)? ended,
@@ -9801,8 +10091,15 @@ class _$CallControlEventBlindTransferInitiatedImpl
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(int? line, String? generic, String? number, String? email,
-            String? displayName, String? replaces, bool video)?
+    TResult Function(
+            int? line,
+            String? generic,
+            String? number,
+            String? email,
+            String? displayName,
+            String? replaces,
+            String? fromNumber,
+            bool video)?
         started,
     TResult Function(String callId)? answered,
     TResult Function(String callId)? ended,
@@ -9970,8 +10267,15 @@ class _$CallControlEventAttendedTransferInitiatedImpl
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(int? line, String? generic, String? number,
-            String? email, String? displayName, String? replaces, bool video)
+    required TResult Function(
+            int? line,
+            String? generic,
+            String? number,
+            String? email,
+            String? displayName,
+            String? replaces,
+            String? fromNumber,
+            bool video)
         started,
     required TResult Function(String callId) answered,
     required TResult Function(String callId) ended,
@@ -9998,8 +10302,15 @@ class _$CallControlEventAttendedTransferInitiatedImpl
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(int? line, String? generic, String? number, String? email,
-            String? displayName, String? replaces, bool video)?
+    TResult? Function(
+            int? line,
+            String? generic,
+            String? number,
+            String? email,
+            String? displayName,
+            String? replaces,
+            String? fromNumber,
+            bool video)?
         started,
     TResult? Function(String callId)? answered,
     TResult? Function(String callId)? ended,
@@ -10024,8 +10335,15 @@ class _$CallControlEventAttendedTransferInitiatedImpl
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(int? line, String? generic, String? number, String? email,
-            String? displayName, String? replaces, bool video)?
+    TResult Function(
+            int? line,
+            String? generic,
+            String? number,
+            String? email,
+            String? displayName,
+            String? replaces,
+            String? fromNumber,
+            bool video)?
         started,
     TResult Function(String callId)? answered,
     TResult Function(String callId)? ended,
@@ -10193,8 +10511,15 @@ class _$CallControlEventBlindTransferSubmittedImpl
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(int? line, String? generic, String? number,
-            String? email, String? displayName, String? replaces, bool video)
+    required TResult Function(
+            int? line,
+            String? generic,
+            String? number,
+            String? email,
+            String? displayName,
+            String? replaces,
+            String? fromNumber,
+            bool video)
         started,
     required TResult Function(String callId) answered,
     required TResult Function(String callId) ended,
@@ -10221,8 +10546,15 @@ class _$CallControlEventBlindTransferSubmittedImpl
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(int? line, String? generic, String? number, String? email,
-            String? displayName, String? replaces, bool video)?
+    TResult? Function(
+            int? line,
+            String? generic,
+            String? number,
+            String? email,
+            String? displayName,
+            String? replaces,
+            String? fromNumber,
+            bool video)?
         started,
     TResult? Function(String callId)? answered,
     TResult? Function(String callId)? ended,
@@ -10247,8 +10579,15 @@ class _$CallControlEventBlindTransferSubmittedImpl
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(int? line, String? generic, String? number, String? email,
-            String? displayName, String? replaces, bool video)?
+    TResult Function(
+            int? line,
+            String? generic,
+            String? number,
+            String? email,
+            String? displayName,
+            String? replaces,
+            String? fromNumber,
+            bool video)?
         started,
     TResult Function(String callId)? answered,
     TResult Function(String callId)? ended,
@@ -10424,8 +10763,15 @@ class _$CallControlEventAttendedTransferSubmittedImpl
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(int? line, String? generic, String? number,
-            String? email, String? displayName, String? replaces, bool video)
+    required TResult Function(
+            int? line,
+            String? generic,
+            String? number,
+            String? email,
+            String? displayName,
+            String? replaces,
+            String? fromNumber,
+            bool video)
         started,
     required TResult Function(String callId) answered,
     required TResult Function(String callId) ended,
@@ -10452,8 +10798,15 @@ class _$CallControlEventAttendedTransferSubmittedImpl
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(int? line, String? generic, String? number, String? email,
-            String? displayName, String? replaces, bool video)?
+    TResult? Function(
+            int? line,
+            String? generic,
+            String? number,
+            String? email,
+            String? displayName,
+            String? replaces,
+            String? fromNumber,
+            bool video)?
         started,
     TResult? Function(String callId)? answered,
     TResult? Function(String callId)? ended,
@@ -10478,8 +10831,15 @@ class _$CallControlEventAttendedTransferSubmittedImpl
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(int? line, String? generic, String? number, String? email,
-            String? displayName, String? replaces, bool video)?
+    TResult Function(
+            int? line,
+            String? generic,
+            String? number,
+            String? email,
+            String? displayName,
+            String? replaces,
+            String? fromNumber,
+            bool video)?
         started,
     TResult Function(String callId)? answered,
     TResult Function(String callId)? ended,
@@ -10655,8 +11015,15 @@ class _$CallControlEventAttendedRequestDeclinedImpl
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(int? line, String? generic, String? number,
-            String? email, String? displayName, String? replaces, bool video)
+    required TResult Function(
+            int? line,
+            String? generic,
+            String? number,
+            String? email,
+            String? displayName,
+            String? replaces,
+            String? fromNumber,
+            bool video)
         started,
     required TResult Function(String callId) answered,
     required TResult Function(String callId) ended,
@@ -10683,8 +11050,15 @@ class _$CallControlEventAttendedRequestDeclinedImpl
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(int? line, String? generic, String? number, String? email,
-            String? displayName, String? replaces, bool video)?
+    TResult? Function(
+            int? line,
+            String? generic,
+            String? number,
+            String? email,
+            String? displayName,
+            String? replaces,
+            String? fromNumber,
+            bool video)?
         started,
     TResult? Function(String callId)? answered,
     TResult? Function(String callId)? ended,
@@ -10709,8 +11083,15 @@ class _$CallControlEventAttendedRequestDeclinedImpl
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(int? line, String? generic, String? number, String? email,
-            String? displayName, String? replaces, bool video)?
+    TResult Function(
+            int? line,
+            String? generic,
+            String? number,
+            String? email,
+            String? displayName,
+            String? replaces,
+            String? fromNumber,
+            bool video)?
         started,
     TResult Function(String callId)? answered,
     TResult Function(String callId)? ended,
@@ -10885,8 +11266,15 @@ class _$CallControlEventAttendedRequestApprovedImpl
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(int? line, String? generic, String? number,
-            String? email, String? displayName, String? replaces, bool video)
+    required TResult Function(
+            int? line,
+            String? generic,
+            String? number,
+            String? email,
+            String? displayName,
+            String? replaces,
+            String? fromNumber,
+            bool video)
         started,
     required TResult Function(String callId) answered,
     required TResult Function(String callId) ended,
@@ -10913,8 +11301,15 @@ class _$CallControlEventAttendedRequestApprovedImpl
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(int? line, String? generic, String? number, String? email,
-            String? displayName, String? replaces, bool video)?
+    TResult? Function(
+            int? line,
+            String? generic,
+            String? number,
+            String? email,
+            String? displayName,
+            String? replaces,
+            String? fromNumber,
+            bool video)?
         started,
     TResult? Function(String callId)? answered,
     TResult? Function(String callId)? ended,
@@ -10939,8 +11334,15 @@ class _$CallControlEventAttendedRequestApprovedImpl
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(int? line, String? generic, String? number, String? email,
-            String? displayName, String? replaces, bool video)?
+    TResult Function(
+            int? line,
+            String? generic,
+            String? number,
+            String? email,
+            String? displayName,
+            String? replaces,
+            String? fromNumber,
+            bool video)?
         started,
     TResult Function(String callId)? answered,
     TResult Function(String callId)? ended,
@@ -14188,7 +14590,7 @@ abstract class _CallState extends CallState {
 /// @nodoc
 mixin _$ActiveCall {
   CallDirection get direction => throw _privateConstructorUsedError;
-  int get line => throw _privateConstructorUsedError;
+  int? get line => throw _privateConstructorUsedError;
   String get callId => throw _privateConstructorUsedError;
   CallkeepHandle get handle => throw _privateConstructorUsedError;
   DateTime get createdTime => throw _privateConstructorUsedError;
@@ -14203,6 +14605,7 @@ mixin _$ActiveCall {
   String? get displayName => throw _privateConstructorUsedError;
   String? get fromReferId => throw _privateConstructorUsedError;
   String? get fromReplaces => throw _privateConstructorUsedError;
+  String? get fromNumber => throw _privateConstructorUsedError;
   DateTime? get acceptedTime => throw _privateConstructorUsedError;
   DateTime? get hungUpTime => throw _privateConstructorUsedError;
   Transfer? get transfer => throw _privateConstructorUsedError;
@@ -14225,7 +14628,7 @@ abstract class $ActiveCallCopyWith<$Res> {
   @useResult
   $Res call(
       {CallDirection direction,
-      int line,
+      int? line,
       String callId,
       CallkeepHandle handle,
       DateTime createdTime,
@@ -14239,6 +14642,7 @@ abstract class $ActiveCallCopyWith<$Res> {
       String? displayName,
       String? fromReferId,
       String? fromReplaces,
+      String? fromNumber,
       DateTime? acceptedTime,
       DateTime? hungUpTime,
       Transfer? transfer,
@@ -14265,7 +14669,7 @@ class _$ActiveCallCopyWithImpl<$Res, $Val extends ActiveCall>
   @override
   $Res call({
     Object? direction = null,
-    Object? line = null,
+    Object? line = freezed,
     Object? callId = null,
     Object? handle = null,
     Object? createdTime = null,
@@ -14279,6 +14683,7 @@ class _$ActiveCallCopyWithImpl<$Res, $Val extends ActiveCall>
     Object? displayName = freezed,
     Object? fromReferId = freezed,
     Object? fromReplaces = freezed,
+    Object? fromNumber = freezed,
     Object? acceptedTime = freezed,
     Object? hungUpTime = freezed,
     Object? transfer = freezed,
@@ -14291,10 +14696,10 @@ class _$ActiveCallCopyWithImpl<$Res, $Val extends ActiveCall>
           ? _value.direction
           : direction // ignore: cast_nullable_to_non_nullable
               as CallDirection,
-      line: null == line
+      line: freezed == line
           ? _value.line
           : line // ignore: cast_nullable_to_non_nullable
-              as int,
+              as int?,
       callId: null == callId
           ? _value.callId
           : callId // ignore: cast_nullable_to_non_nullable
@@ -14346,6 +14751,10 @@ class _$ActiveCallCopyWithImpl<$Res, $Val extends ActiveCall>
       fromReplaces: freezed == fromReplaces
           ? _value.fromReplaces
           : fromReplaces // ignore: cast_nullable_to_non_nullable
+              as String?,
+      fromNumber: freezed == fromNumber
+          ? _value.fromNumber
+          : fromNumber // ignore: cast_nullable_to_non_nullable
               as String?,
       acceptedTime: freezed == acceptedTime
           ? _value.acceptedTime
@@ -14396,7 +14805,7 @@ abstract class _$$ActiveCallImplCopyWith<$Res>
   @useResult
   $Res call(
       {CallDirection direction,
-      int line,
+      int? line,
       String callId,
       CallkeepHandle handle,
       DateTime createdTime,
@@ -14410,6 +14819,7 @@ abstract class _$$ActiveCallImplCopyWith<$Res>
       String? displayName,
       String? fromReferId,
       String? fromReplaces,
+      String? fromNumber,
       DateTime? acceptedTime,
       DateTime? hungUpTime,
       Transfer? transfer,
@@ -14435,7 +14845,7 @@ class __$$ActiveCallImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? direction = null,
-    Object? line = null,
+    Object? line = freezed,
     Object? callId = null,
     Object? handle = null,
     Object? createdTime = null,
@@ -14449,6 +14859,7 @@ class __$$ActiveCallImplCopyWithImpl<$Res>
     Object? displayName = freezed,
     Object? fromReferId = freezed,
     Object? fromReplaces = freezed,
+    Object? fromNumber = freezed,
     Object? acceptedTime = freezed,
     Object? hungUpTime = freezed,
     Object? transfer = freezed,
@@ -14461,10 +14872,10 @@ class __$$ActiveCallImplCopyWithImpl<$Res>
           ? _value.direction
           : direction // ignore: cast_nullable_to_non_nullable
               as CallDirection,
-      line: null == line
+      line: freezed == line
           ? _value.line
           : line // ignore: cast_nullable_to_non_nullable
-              as int,
+              as int?,
       callId: null == callId
           ? _value.callId
           : callId // ignore: cast_nullable_to_non_nullable
@@ -14517,6 +14928,10 @@ class __$$ActiveCallImplCopyWithImpl<$Res>
           ? _value.fromReplaces
           : fromReplaces // ignore: cast_nullable_to_non_nullable
               as String?,
+      fromNumber: freezed == fromNumber
+          ? _value.fromNumber
+          : fromNumber // ignore: cast_nullable_to_non_nullable
+              as String?,
       acceptedTime: freezed == acceptedTime
           ? _value.acceptedTime
           : acceptedTime // ignore: cast_nullable_to_non_nullable
@@ -14561,6 +14976,7 @@ class _$ActiveCallImpl extends _ActiveCall with DiagnosticableTreeMixin {
       this.displayName,
       this.fromReferId,
       this.fromReplaces,
+      this.fromNumber,
       this.acceptedTime,
       this.hungUpTime,
       this.transfer,
@@ -14572,7 +14988,7 @@ class _$ActiveCallImpl extends _ActiveCall with DiagnosticableTreeMixin {
   @override
   final CallDirection direction;
   @override
-  final int line;
+  final int? line;
   @override
   final String callId;
   @override
@@ -14604,6 +15020,8 @@ class _$ActiveCallImpl extends _ActiveCall with DiagnosticableTreeMixin {
   @override
   final String? fromReplaces;
   @override
+  final String? fromNumber;
+  @override
   final DateTime? acceptedTime;
   @override
   final DateTime? hungUpTime;
@@ -14618,7 +15036,7 @@ class _$ActiveCallImpl extends _ActiveCall with DiagnosticableTreeMixin {
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'ActiveCall(direction: $direction, line: $line, callId: $callId, handle: $handle, createdTime: $createdTime, video: $video, processingStatus: $processingStatus, frontCamera: $frontCamera, held: $held, muted: $muted, updating: $updating, incomingOffer: $incomingOffer, displayName: $displayName, fromReferId: $fromReferId, fromReplaces: $fromReplaces, acceptedTime: $acceptedTime, hungUpTime: $hungUpTime, transfer: $transfer, failure: $failure, localStream: $localStream, remoteStream: $remoteStream)';
+    return 'ActiveCall(direction: $direction, line: $line, callId: $callId, handle: $handle, createdTime: $createdTime, video: $video, processingStatus: $processingStatus, frontCamera: $frontCamera, held: $held, muted: $muted, updating: $updating, incomingOffer: $incomingOffer, displayName: $displayName, fromReferId: $fromReferId, fromReplaces: $fromReplaces, fromNumber: $fromNumber, acceptedTime: $acceptedTime, hungUpTime: $hungUpTime, transfer: $transfer, failure: $failure, localStream: $localStream, remoteStream: $remoteStream)';
   }
 
   @override
@@ -14641,6 +15059,7 @@ class _$ActiveCallImpl extends _ActiveCall with DiagnosticableTreeMixin {
       ..add(DiagnosticsProperty('displayName', displayName))
       ..add(DiagnosticsProperty('fromReferId', fromReferId))
       ..add(DiagnosticsProperty('fromReplaces', fromReplaces))
+      ..add(DiagnosticsProperty('fromNumber', fromNumber))
       ..add(DiagnosticsProperty('acceptedTime', acceptedTime))
       ..add(DiagnosticsProperty('hungUpTime', hungUpTime))
       ..add(DiagnosticsProperty('transfer', transfer))
@@ -14678,6 +15097,8 @@ class _$ActiveCallImpl extends _ActiveCall with DiagnosticableTreeMixin {
                 other.fromReferId == fromReferId) &&
             (identical(other.fromReplaces, fromReplaces) ||
                 other.fromReplaces == fromReplaces) &&
+            (identical(other.fromNumber, fromNumber) ||
+                other.fromNumber == fromNumber) &&
             (identical(other.acceptedTime, acceptedTime) ||
                 other.acceptedTime == acceptedTime) &&
             (identical(other.hungUpTime, hungUpTime) ||
@@ -14709,6 +15130,7 @@ class _$ActiveCallImpl extends _ActiveCall with DiagnosticableTreeMixin {
         displayName,
         fromReferId,
         fromReplaces,
+        fromNumber,
         acceptedTime,
         hungUpTime,
         transfer,
@@ -14729,7 +15151,7 @@ class _$ActiveCallImpl extends _ActiveCall with DiagnosticableTreeMixin {
 abstract class _ActiveCall extends ActiveCall {
   factory _ActiveCall(
       {required final CallDirection direction,
-      required final int line,
+      required final int? line,
       required final String callId,
       required final CallkeepHandle handle,
       required final DateTime createdTime,
@@ -14743,6 +15165,7 @@ abstract class _ActiveCall extends ActiveCall {
       final String? displayName,
       final String? fromReferId,
       final String? fromReplaces,
+      final String? fromNumber,
       final DateTime? acceptedTime,
       final DateTime? hungUpTime,
       final Transfer? transfer,
@@ -14754,7 +15177,7 @@ abstract class _ActiveCall extends ActiveCall {
   @override
   CallDirection get direction;
   @override
-  int get line;
+  int? get line;
   @override
   String get callId;
   @override
@@ -14781,6 +15204,8 @@ abstract class _ActiveCall extends ActiveCall {
   String? get fromReferId;
   @override
   String? get fromReplaces;
+  @override
+  String? get fromNumber;
   @override
   DateTime? get acceptedTime;
   @override

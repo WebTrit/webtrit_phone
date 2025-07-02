@@ -124,7 +124,7 @@ class ActiveCall with _$ActiveCall {
 
   factory ActiveCall({
     required CallDirection direction,
-    required int line,
+    required int? line,
     required String callId,
     required CallkeepHandle handle,
     required DateTime createdTime,
@@ -138,6 +138,7 @@ class ActiveCall with _$ActiveCall {
     String? displayName,
     String? fromReferId,
     String? fromReplaces,
+    String? fromNumber,
     DateTime? acceptedTime,
     DateTime? hungUpTime,
     Transfer? transfer,
