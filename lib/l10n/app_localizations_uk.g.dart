@@ -1745,7 +1745,8 @@ class AppLocalizationsUk extends AppLocalizations {
   String get settings_callerId_number_hint => 'Select a number';
 
   @override
-  String get settings_callerId_duplicate_dialcode_error => 'Please choose a different dial code, this one is already in use.';
+  String get settings_callerId_duplicate_dialcode_error =>
+      'Please choose a different dial code, this one is already in use.';
 
   @override
   String get settings_callerId_save_button => 'Save';
@@ -1754,7 +1755,8 @@ class AppLocalizationsUk extends AppLocalizations {
   String get settings_callerId_cancel_button => 'Cancel';
 
   @override
-  String get signalingResponseCode_ambiguousRequest => 'Ваш запит не може бути виконаний. Будь ласка, спробуйте ще раз.';
+  String get signalingResponseCode_ambiguousRequest =>
+      'Ваш запит не може бути виконаний. Будь ласка, спробуйте ще раз.';
 
   @override
   String get signalingResponseCode_busyEverywhere =>
@@ -2069,4 +2071,11 @@ class AppLocalizationsUk extends AppLocalizations {
   String numberActions_callFrom(String number) {
     return 'Дзвінок від $number';
   }
+
+  @override
+  String get persistentConnectionReminderTitle => 'Important Reminder';
+
+  @override
+  String get persistentConnectionReminderContent =>
+      'You have to manually launch the app after your phone restarted at least once to re-establish the persistent connection and receive incoming calls.';
 }

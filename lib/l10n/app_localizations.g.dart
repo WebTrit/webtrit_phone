@@ -3573,6 +3573,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Call from {number}'**
   String numberActions_callFrom(String number);
+
+  /// Title of a dialog shown when the user selects persistent connection on Android 14+
+  ///
+  /// In en, this message translates to:
+  /// **'Important Reminder'**
+  String get persistentConnectionReminderTitle;
+
+  /// Content of a dialog explaining that the app must be manually opened after reboot to keep receiving calls using persistent connection.
+  ///
+  /// In en, this message translates to:
+  /// **'You have to manually launch the app after your phone restarted at least once to re-establish the persistent connection and receive incoming calls.'**
+  String get persistentConnectionReminderContent;
 }
 
 class _AppLocalizationsDelegate

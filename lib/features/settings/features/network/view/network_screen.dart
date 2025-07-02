@@ -1,8 +1,12 @@
+import 'dart:io';
+
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/l10n/l10n.dart';
+import 'package:webtrit_phone/models/incoming_call_type.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../extensions/extensions.dart';
@@ -50,7 +54,12 @@ class NetworkScreen extends StatelessWidget {
                         message: item.incomingCallType.descriptionL10n(context),
                       ),
                       leading: Check(selected: item.selected),
-                      onTap: () => context.read<NetworkCubit>().selectIncomingCallType(item),
+                      onTap: () async {
+                        context.read<NetworkCubit>().selectIncomingCallType(item);
+                        if (item.incomingCallType == IncomingCallType.socket) {
+                          await _showPersistentConnectionReminderIfNeeded(context);
+                        }
+                      },
                     );
                   },
                 ),
@@ -79,5 +88,32 @@ class NetworkScreen extends StatelessWidget {
         },
       ),
     );
+  }
+
+  Future<bool> _isAndroidVersionAtLeast(int targetVersion) async {
+    if (!Platform.isAndroid) return false;
+
+    final deviceInfo = DeviceInfoPlugin();
+    final androidInfo = await deviceInfo.androidInfo;
+    final version = androidInfo.version.sdkInt;
+
+    return version >= targetVersion;
+  }
+
+  Future<void> _showPersistentConnectionReminderIfNeeded(BuildContext context) async {
+    final title = context.l10n.persistentConnectionReminderTitle;
+    final content = context.l10n.persistentConnectionReminderContent;
+
+    final isAndroid14OrAbove = await _isAndroidVersionAtLeast(34);
+
+    if (isAndroid14OrAbove) {
+      if (context.mounted) {
+        AcknowledgeDialog.show(
+          context,
+          title: title,
+          content: content,
+        );
+      }
+    }
   }
 }
