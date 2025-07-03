@@ -1281,12 +1281,12 @@
   "persistentConnectionReminderTitle": "Important Reminder",
   "@persistentConnectionReminderTitle": {
     "description": "Title of a dialog shown when the user selects persistent connection on Android 14+",
-    "type": "String"
+    "type": "text"
   },
 
   "persistentConnectionReminderContent": "You have to manually launch the app after your phone restarted at least once to re-establish the persistent connection and receive incoming calls.",
   "@persistentConnectionReminderContent": {
     "description": "Content of a dialog explaining that the app must be manually opened after reboot to keep receiving calls using persistent connection.",
-    "type": "String"
+    "type": "text"
   }
 }

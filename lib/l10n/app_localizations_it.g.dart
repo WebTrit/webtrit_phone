@@ -2086,9 +2086,9 @@ class AppLocalizationsIt extends AppLocalizations {
   }
 
   @override
-  String get persistentConnectionReminderTitle => 'Important Reminder';
+  String get persistentConnectionReminderTitle => 'Promemoria importante';
 
   @override
   String get persistentConnectionReminderContent =>
-      'You have to manually launch the app after your phone restarted at least once to re-establish the persistent connection and receive incoming calls.';
+      'Devi avviare manualmente l\'app almeno una volta dopo il riavvio del telefono per ristabilire la connessione persistente e ricevere le chiamate in arrivo.';
 }

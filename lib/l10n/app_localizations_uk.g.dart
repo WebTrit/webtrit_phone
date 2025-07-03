@@ -2073,9 +2073,9 @@ class AppLocalizationsUk extends AppLocalizations {
   }
 
   @override
-  String get persistentConnectionReminderTitle => 'Important Reminder';
+  String get persistentConnectionReminderTitle => 'Важливе нагадування';
 
   @override
   String get persistentConnectionReminderContent =>
-      'You have to manually launch the app after your phone restarted at least once to re-establish the persistent connection and receive incoming calls.';
+      'Потрібно вручну запустити застосунок щонайменше один раз після перезавантаження телефону, щоб відновити постійне з\'єднання й отримувати вхідні дзвінки.';
 }

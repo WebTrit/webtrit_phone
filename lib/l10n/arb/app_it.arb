@@ -1261,5 +1261,15 @@
         "type": "String"
       }
     }
+  },
+  "persistentConnectionReminderTitle": "Promemoria importante",
+  "@persistentConnectionReminderTitle": {
+    "description": "Titolo della finestra di dialogo mostrata quando l'utente seleziona la connessione persistente su Android 14+",
+    "type": "text"
+  },
+  "persistentConnectionReminderContent": "Devi avviare manualmente l'app almeno una volta dopo il riavvio del telefono per ristabilire la connessione persistente e ricevere le chiamate in arrivo.",
+  "@persistentConnectionReminderContent": {
+    "description": "Contenuto della finestra di dialogo che spiega che l'app deve essere aperta manualmente dopo il riavvio per continuare a ricevere chiamate tramite connessione persistente.",
+    "type": "text"
   }
 }
