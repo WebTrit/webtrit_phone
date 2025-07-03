@@ -1,5 +1,4 @@
-import 'dart:io' show Platform;
-import 'package:flutter/foundation.dart';
+import 'package:webtrit_phone/data/platform_info.dart';
 
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
@@ -99,8 +98,8 @@ class _NetworkScreenState extends State<NetworkScreen> {
   }
 
   Future<bool> _isAndroidVersionAtLeast(int targetVersion) async {
-    if (kIsWeb) return false;
-    if (!Platform.isAndroid) return false;
+    if (PlatformInfo().isWeb) return false;
+    if (!PlatformInfo().isAndroid) return false;
     if (_cachedAndroidSdkVersion == null) {
       final deviceInfo = DeviceInfoPlugin();
       final androidInfo = await deviceInfo.androidInfo;
