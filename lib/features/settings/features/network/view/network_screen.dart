@@ -1,6 +1,4 @@
-import 'package:webtrit_phone/data/platform_info.dart';
-
-import 'package:device_info_plus/device_info_plus.dart';
+import 'package:webtrit_phone/data/device_info_service.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -23,7 +21,7 @@ class NetworkScreen extends StatefulWidget {
 }
 
 class _NetworkScreenState extends State<NetworkScreen> {
-  int? _cachedAndroidSdkVersion;
+  final DeviceInfoService _deviceInfoService = DeviceInfoService();
 
   @override
   Widget build(BuildContext context) {
@@ -98,14 +96,7 @@ class _NetworkScreenState extends State<NetworkScreen> {
   }
 
   Future<bool> _isAndroidVersionAtLeast(int targetVersion) async {
-    if (PlatformInfo().isWeb) return false;
-    if (!PlatformInfo().isAndroid) return false;
-    if (_cachedAndroidSdkVersion == null) {
-      final deviceInfo = DeviceInfoPlugin();
-      final androidInfo = await deviceInfo.androidInfo;
-      _cachedAndroidSdkVersion = androidInfo.version.sdkInt;
-    }
-    return _cachedAndroidSdkVersion! >= targetVersion;
+    return _deviceInfoService.isAndroidVersionAtLeast(targetVersion);
   }
 
   Future<void> _showPersistentConnectionReminderIfNeeded(BuildContext context) async {
