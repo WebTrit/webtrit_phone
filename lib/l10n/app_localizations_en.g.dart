@@ -2042,4 +2042,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String numberActions_callFrom(String number) {
     return 'Call from $number';
   }
+
+  @override
+  String get callPullBadge_dialogTitle => 'Pullable Calls';
+
+  @override
+  String get callPullBadge_pickupButtonTitle => 'Pick up';
 }

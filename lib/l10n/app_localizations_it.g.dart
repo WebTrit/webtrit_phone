@@ -2084,4 +2084,10 @@ class AppLocalizationsIt extends AppLocalizations {
   String numberActions_callFrom(String number) {
     return 'Chiama da $number';
   }
+
+  @override
+  String get callPullBadge_dialogTitle => 'Chiamate pullabili';
+
+  @override
+  String get callPullBadge_pickupButtonTitle => 'Raccolta';
 }

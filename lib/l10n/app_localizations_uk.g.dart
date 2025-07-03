@@ -2071,4 +2071,10 @@ class AppLocalizationsUk extends AppLocalizations {
   String numberActions_callFrom(String number) {
     return 'Дзвінок від $number';
   }
+
+  @override
+  String get callPullBadge_dialogTitle => 'Перехопляємі дзвінки';
+
+  @override
+  String get callPullBadge_pickupButtonTitle => 'Перехопити';
 }

@@ -2765,7 +2765,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         .map(
           (call) => PullableCall(
             id: call.id,
-            state: call.state,
+            state: PullableCallState.values.byName(call.state.name),
             callId: call.callId,
             localTag: call.localTag,
             remoteTag: call.remoteTag,

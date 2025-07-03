@@ -1084,6 +1084,9 @@ class AppLocalizationsMapper {
       'numberActions_callLog': localizations.numberActions_callLog,
       'numberActions_copyNumber': localizations.numberActions_copyNumber,
       'numberActions_delete': localizations.numberActions_delete,
+      'callPullBadge_dialogTitle': localizations.callPullBadge_dialogTitle,
+      'callPullBadge_pickupButtonTitle':
+          localizations.callPullBadge_pickupButtonTitle,
       'default_UnknownExceptionError': (error) =>
           localizations.default_UnknownExceptionError(error),
       'favorites_SnackBar_deleted': (name) =>

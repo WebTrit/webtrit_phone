@@ -2,6 +2,8 @@ import 'package:equatable/equatable.dart';
 
 enum PullableCallDirection { initiator, recipient }
 
+enum PullableCallState { proceeding, early, confirmed, terminated, unknown }
+
 class PullableCall extends Equatable {
   const PullableCall({
     required this.id,
@@ -15,13 +17,15 @@ class PullableCall extends Equatable {
   });
 
   final String id;
-  final String state;
+  final PullableCallState state;
   final String callId;
   final PullableCallDirection direction;
   final String localTag;
-  final String remoteTag;
+  final String? remoteTag;
   final String remoteNumber;
   final String? remoteDisplayName;
+
+  String get displayName => remoteDisplayName ?? remoteNumber;
 
   @override
   List<Object?> get props => [id, state, callId, direction, localTag, remoteTag, remoteNumber, remoteDisplayName];
@@ -34,7 +38,7 @@ class PullableCall extends Equatable {
 
   PullableCall copyWith({
     String? id,
-    String? state,
+    PullableCallState? state,
     String? callId,
     PullableCallDirection? direction,
     String? localTag,

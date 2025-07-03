@@ -83,6 +83,8 @@ class DialogNotifyEvent extends NotifyEvent with EquatableMixin {
 
 enum UserActiveCallDirection { initiator, recipient }
 
+enum UserActiveCallState { proceeding, early, confirmed, terminated, unknown }
+
 class UserActiveCall extends Equatable {
   UserActiveCall({
     required this.id,
@@ -96,18 +98,21 @@ class UserActiveCall extends Equatable {
   });
 
   final String id;
-  final String state;
+  final UserActiveCallState state;
   final String callId;
   final UserActiveCallDirection direction;
   final String localTag;
-  final String remoteTag;
+  final String? remoteTag;
   final String remoteNumber;
   final String? remoteDisplayName;
 
   factory UserActiveCall.fromJson(Map<String, dynamic> json) {
     return UserActiveCall(
       id: json['id'],
-      state: json['state'],
+      state: UserActiveCallState.values.firstWhere(
+        (e) => e.name == json['state'],
+        orElse: () => UserActiveCallState.unknown,
+      ),
       callId: json['call_id'],
       direction: UserActiveCallDirection.values.byName(json['direction']),
       localTag: json['local_tag'],

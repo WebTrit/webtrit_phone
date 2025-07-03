@@ -3573,6 +3573,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Call from {number}'**
   String numberActions_callFrom(String number);
+
+  /// No description provided for @callPullBadge_dialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Pullable Calls'**
+  String get callPullBadge_dialogTitle;
+
+  /// No description provided for @callPullBadge_pickupButtonTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick up'**
+  String get callPullBadge_pickupButtonTitle;
 }
 
 class _AppLocalizationsDelegate
