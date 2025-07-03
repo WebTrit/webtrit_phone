@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/l10n/l10n.dart';
-import 'package:webtrit_phone/models/incoming_call_type.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../extensions/extensions.dart';
@@ -32,7 +31,12 @@ class _NetworkScreenState extends State<NetworkScreen> {
         title: Text(context.l10n.settings_ListViewTileTitle_network),
         leading: const ExtBackButton(),
       ),
-      body: BlocBuilder<NetworkCubit, NetworkState>(
+      body: BlocConsumer<NetworkCubit, NetworkState>(
+        listener: (context, state) async {
+          if (state.isPersistentConnectionSelected) {
+            await _showPersistentConnectionReminderIfNeeded(context);
+          }
+        },
         builder: (context, state) {
           return SingleChildScrollView(
             child: Column(
@@ -59,12 +63,7 @@ class _NetworkScreenState extends State<NetworkScreen> {
                         message: item.incomingCallType.descriptionL10n(context),
                       ),
                       leading: Check(selected: item.selected),
-                      onTap: () async {
-                        context.read<NetworkCubit>().selectIncomingCallType(item);
-                        if (item.incomingCallType == IncomingCallType.socket) {
-                          await _showPersistentConnectionReminderIfNeeded(context);
-                        }
-                      },
+                      onTap: () => context.read<NetworkCubit>().selectIncomingCallType(item),
                     );
                   },
                 ),

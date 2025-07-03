@@ -7,3 +7,10 @@ class NetworkState with _$NetworkState {
     @Default(false) bool smsFallbackEnabled,
   }) = _NetworkState;
 }
+
+extension NetworkStateX on NetworkState {
+  IncomingCallTypeModel? get selectedIncomingCallTypeModel =>
+      incomingCallTypeModels.firstWhereOrNull((m) => m.selected);
+
+  bool get isPersistentConnectionSelected => selectedIncomingCallTypeModel?.incomingCallType.isSocket ?? false;
+}
