@@ -1,10 +1,11 @@
-import 'package:webtrit_phone/data/device_info_service.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
+
+import 'package:webtrit_phone/data/android_device_info_service.dart';
 
 import '../extensions/extensions.dart';
 import '../bloc/network_cubit.dart';
@@ -20,12 +21,19 @@ class NetworkScreen extends StatefulWidget {
 }
 
 class _NetworkScreenState extends State<NetworkScreen> {
-  final DeviceInfoService _deviceInfoService = DeviceInfoService();
+  late final NetworkCubit _cubit;
+  late final AndroidDeviceInfoService _deviceInfoService;
+
+  @override
+  void initState() {
+    super.initState();
+    super.initState();
+    _cubit = context.read<NetworkCubit>();
+    _deviceInfoService = context.read<AndroidDeviceInfoService>();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final block = context.read<NetworkCubit>();
-
     return Scaffold(
       appBar: AppBar(
         title: Text(context.l10n.settings_ListViewTileTitle_network),
@@ -63,7 +71,7 @@ class _NetworkScreenState extends State<NetworkScreen> {
                         message: item.incomingCallType.descriptionL10n(context),
                       ),
                       leading: Check(selected: item.selected),
-                      onTap: () => context.read<NetworkCubit>().selectIncomingCallType(item),
+                      onTap: () => _cubit.selectIncomingCallType(item),
                     );
                   },
                 ),
@@ -79,7 +87,7 @@ class _NetworkScreenState extends State<NetworkScreen> {
                 ListTile(
                   leading: Check(
                     selected: state.smsFallbackEnabled,
-                    enabled: block.smsFallbackAvailable,
+                    enabled: _cubit.smsFallbackAvailable,
                   ),
                   title: Text(
                     context.l10n.settings_network_smsFallback_toggle,
@@ -104,14 +112,12 @@ class _NetworkScreenState extends State<NetworkScreen> {
 
     final isAndroid14OrAbove = await _isAndroidVersionAtLeast(34);
 
-    if (isAndroid14OrAbove) {
-      if (context.mounted) {
-        AcknowledgeDialog.show(
-          context,
-          title: title,
-          content: content,
-        );
-      }
+    if (isAndroid14OrAbove && context.mounted) {
+      AcknowledgeDialog.show(
+        context,
+        title: title,
+        content: content,
+      );
     }
   }
 }

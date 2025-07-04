@@ -113,11 +113,12 @@ class __$$NetworkStateImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$NetworkStateImpl implements _NetworkState {
+class _$NetworkStateImpl extends _NetworkState {
   const _$NetworkStateImpl(
       {final List<IncomingCallTypeModel> incomingCallTypeModels = const [],
       this.smsFallbackEnabled = false})
-      : _incomingCallTypeModels = incomingCallTypeModels;
+      : _incomingCallTypeModels = incomingCallTypeModels,
+        super._();
 
   final List<IncomingCallTypeModel> _incomingCallTypeModels;
   @override
@@ -164,10 +165,11 @@ class _$NetworkStateImpl implements _NetworkState {
       __$$NetworkStateImplCopyWithImpl<_$NetworkStateImpl>(this, _$identity);
 }
 
-abstract class _NetworkState implements NetworkState {
+abstract class _NetworkState extends NetworkState {
   const factory _NetworkState(
       {final List<IncomingCallTypeModel> incomingCallTypeModels,
       final bool smsFallbackEnabled}) = _$NetworkStateImpl;
+  const _NetworkState._() : super._();
 
   @override
   List<IncomingCallTypeModel> get incomingCallTypeModels;
