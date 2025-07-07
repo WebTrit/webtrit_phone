@@ -158,6 +158,15 @@ class AppLocalizationsEn extends AppLocalizations {
       'Connecting to the remote server';
 
   @override
+  String get callPullBadge_dialogTitle => 'Pullable Calls';
+
+  @override
+  String get callPullBadge_pickupButtonTitle => 'Pick up';
+
+  @override
+  String get call_settings_additional_options => 'Additional options';
+
+  @override
   String get callStatus_appUnregistered => 'Unregistered';
 
   @override
@@ -221,11 +230,18 @@ class AppLocalizationsEn extends AppLocalizations {
       'Failed to get cloud PBX contacts';
 
   @override
+  String get contacts_LocalTabButton_contactsAgreement => 'Open Settings';
+
+  @override
   String get contacts_LocalTabButton_openAppSettings =>
       'Grant access to your phone contacts';
 
   @override
   String get contacts_LocalTabButton_refresh => 'Refresh';
+
+  @override
+  String get contacts_LocalTabText_contactsAgreementFailure =>
+      'To sync your local contacts, you must accept the agreement in Settings.';
 
   @override
   String get contacts_LocalTabText_empty => 'No contacts';
@@ -240,13 +256,6 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get contacts_LocalTabText_permissionFailure =>
       'There are no permissions to get your phone contacts';
-
-  @override
-  String get contacts_LocalTabText_contactsAgreementFailure =>
-      'To sync your local contacts, you must accept the agreement in Settings.';
-
-  @override
-  String get contacts_LocalTabButton_contactsAgreement => 'Open Settings';
 
   @override
   String get contactsSourceExternal => 'Cloud PBX';
@@ -1060,53 +1069,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get messaging_StateBar_initializing => 'INITIALIZING';
 
   @override
-  String get voicemail_Widget_screenTitle => 'Voicemail';
-
-  @override
-  String get voicemail_Label_deleteAll => 'Delete all voicemails?';
-
-  @override
-  String get voicemail_Label_deleteAllDescription =>
-      'This action will permanently delete all your voicemails. This cannot be undone.';
-
-  @override
-  String get voicemail_Label_empty => 'No voicemails';
-
-  @override
-  String get voicemail_Label_retry => 'Try again';
-
-  @override
-  String get voicemail_Label_call => 'Call';
-
-  @override
-  String get voicemail_Label_markAsHeard => 'Mark as heard';
-
-  @override
-  String get voicemail_Label_markAsNew => 'Mark as new';
-
-  @override
-  String get voicemail_Label_delete => 'Delete';
-
-  @override
-  String get voicemail_Dialog_deleteSingleTitle => 'Delete voicemail?';
-
-  @override
-  String get voicemail_Dialog_deleteSingleContent =>
-      'This voicemail will be permanently deleted. Do you want to continue?';
-
-  @override
-  String get voicemail_Title_notSupported => 'Feature not supported';
-
-  @override
-  String get voicemail_Description_notSupported =>
-      'Voicemail feature are not supported in your core. Please contact your administrator for more information.';
+  String get notifications_errorSnackBarAction_callSdpConfiguration =>
+      'Invalid SDP configuration';
 
   @override
   String get notifications_errorSnackBarAction_callUserMedia => 'Check';
-
-  @override
-  String get notifications_errorSnackBarAction_callSdpConfiguration =>
-      'Invalid SDP configuration';
 
   @override
   String get notifications_errorSnackBar_activeLineBlindTransferWarning =>
@@ -1127,6 +1094,10 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get notifications_errorSnackBar_callConnect =>
       'Connecting to the core failed, trying to reconnect';
+
+  @override
+  String get notifications_errorSnackBar_callNegotiationTimeout =>
+      'Cannot establish the call, please try again later';
 
   @override
   String get notifications_errorSnackBar_callSignalingClientNotConnect =>
@@ -1151,10 +1122,6 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get notifications_errorSnackBar_callWhileUnregistered =>
       'Sorry, your application is currently disconnected from the WebTrit core servers, so it can\'t call right now. Please go to the settings page and slide the online status toggle switch off and on again to reestablish the connection';
-
-  @override
-  String get notifications_errorSnackBar_callNegotiationTimeout =>
-      'Cannot establish the call, please try again later';
 
   @override
   String get notifications_errorSnackBar_SignalingConnectFailed =>
@@ -1201,6 +1168,38 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get notifications_successSnackBar_appOnline =>
       'Your application is online';
+
+  @override
+  String get numberActions_audioCall => 'Audio call';
+
+  @override
+  String numberActions_callFrom(String number) {
+    return 'Call from $number';
+  }
+
+  @override
+  String get numberActions_callLog => 'View call history';
+
+  @override
+  String get numberActions_chat => 'Send chat message';
+
+  @override
+  String get numberActions_copyNumber => 'Copy number';
+
+  @override
+  String get numberActions_delete => 'Delete';
+
+  @override
+  String get numberActions_sendSms => 'Send sms message';
+
+  @override
+  String get numberActions_transfer => 'Transfer current call';
+
+  @override
+  String get numberActions_videoCall => 'Video call';
+
+  @override
+  String get numberActions_viewContact => 'View Contact';
 
   @override
   String get permission_Button_request => 'Continue';
@@ -1360,77 +1359,100 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings_AppBarTitle_myAccount => 'My account';
 
   @override
+  String get settings_audioProcessing_Section_AGC_title => 'Auto gain control';
+
+  @override
+  String get settings_audioProcessing_Section_AM_title => 'Audio mirroring';
+
+  @override
+  String get settings_audioProcessing_Section_EC_title => 'Echo cancellation';
+
+  @override
+  String get settings_audioProcessing_Section_HPF_title => 'High pass filter';
+
+  @override
+  String get settings_audioProcessing_Section_NS_title => 'Noise suppression';
+
+  @override
+  String get settings_audioProcessing_Section_title => 'Audio pre-processing';
+
+  @override
+  String get settings_audioProcessing_Section_tooltip =>
+      'Can be used to tune audio quality for specific needs or environments. Like studio recording, or external microphone. \n\nBypass voice processing - tells system to not apply hardware voice processing (Requires app restart).';
+
+  @override
+  String get settings_audioProcessing_Section_VP_title =>
+      'Bypass voice processing';
+
+  @override
+  String get settings_call_codecs_preferred_audio_default => 'Auto';
+
+  @override
+  String get settings_call_codecs_preferred_audio_tip =>
+      'The preferred audio codec is used for audio calls. If the codec is not supported by the device, the call will be established using the next available codec.';
+
+  @override
+  String get settings_call_codecs_preferred_audio_title =>
+      'Preferred audio codec';
+
+  @override
+  String get settings_call_codecs_preferred_video_default => 'Auto';
+
+  @override
+  String get settings_call_codecs_preferred_video_tip =>
+      'The preferred video codec is used for video calls. If the codec is not supported by the device, the call will be established using the next available codec.';
+
+  @override
+  String get settings_call_codecs_preferred_video_title =>
+      'Preferred video codec';
+
+  @override
+  String get settings_callerId_cancel_button => 'Cancel';
+
+  @override
+  String get settings_callerId_defaultTitle => 'Default Caller ID';
+
+  @override
+  String get settings_callerId_dialcode => 'Dial code:';
+
+  @override
+  String get settings_callerId_dialCodeMatching_title => 'Dial code matching';
+
+  @override
+  String get settings_callerId_duplicate_dialcode_error =>
+      'Please choose a different dial code, this one is already in use.';
+
+  @override
+  String get settings_callerId_number => 'Number:';
+
+  @override
+  String get settings_callerId_number_hint => 'Select a number';
+
+  @override
+  String get settings_callerId_save_button => 'Save';
+
+  @override
+  String get settings_connectionSection_title => 'Connection and call behavior';
+
+  @override
+  String get settings_connectionSection_tooltip =>
+      'Configure how your device handles connection setup, media negotiation, and call updates during peer-to-peer communication.';
+
+  @override
   String get settings_encoding_AppBar_reset_tooltip => 'Reset to default';
 
   @override
-  String get settings_encoding_Section_preset_title => 'Media encoding configs';
+  String get settings_encoding_Section_audio_ptime => 'Audio target ptime: ';
 
   @override
-  String get settings_encoding_Section_preset_tooltip =>
-      'Adjustment presets for audio and video codecs, lower values will reduce the bandwidth usage but affect the quality, higher values will increase the quality but also the bandwidth usage. Default preset is recommended settings provided by your vendor according to it evnironment preferences.';
-
-  @override
-  String get settings_encoding_Section_preset => 'Preset';
-
-  @override
-  String get settings_encoding_Section_preset_default => 'Default';
-
-  @override
-  String get settings_encoding_Section_preset_eco => 'Eco';
-
-  @override
-  String get settings_encoding_Section_preset_balance => 'Balance';
-
-  @override
-  String get settings_encoding_Section_preset_quality => 'Quality';
-
-  @override
-  String get settings_encoding_Section_preset_full_flex => 'Full Flex';
-
-  @override
-  String get settings_encoding_Section_preset_custom => 'Custom';
-
-  @override
-  String get settings_encoding_Section_preset_bypass => 'Bypass';
-
-  @override
-  String get settings_encoding_Section_measure_kbps => 'Kbps';
-
-  @override
-  String get settings_encoding_Section_measure_ms => 'ms';
-
-  @override
-  String get settings_encoding_Section_measure_hz => 'Hz';
-
-  @override
-  String get settings_encoding_Section_value_auto => 'Auto';
-
-  @override
-  String get settings_encoding_Section_value_mono => 'Mono';
-
-  @override
-  String get settings_encoding_Section_value_stereo => 'Stereo';
-
-  @override
-  String get settings_encoding_Section_value_enable => 'Enable';
-
-  @override
-  String get settings_encoding_Section_value_disable => 'Disable';
-
-  @override
-  String get settings_encoding_Section_value_on => 'On';
-
-  @override
-  String get settings_encoding_Section_value_off => 'Off';
-
-  @override
-  String get settings_encoding_Section_bitrate_prefix => 'Bitrate: ';
-
-  @override
-  String get settings_encoding_Section_ptime_prefix => 'Ptime: ';
+  String get settings_encoding_Section_audio_ptime_limit =>
+      'Audio ptime limit: ';
 
   @override
   String get settings_encoding_Section_bandwidth_prefix => 'Sampling rate: ';
+
+  @override
+  String get settings_encoding_Section_bitrate_prefix => 'Bitrate: ';
 
   @override
   String get settings_encoding_Section_bitrate_title =>
@@ -1441,31 +1463,16 @@ class AppLocalizationsEn extends AppLocalizations {
       'Adjust the bitrate settings for audio and video codecs, lower values will reduce the bandwidth usage but affect the quality, higher values will increase the quality but also the bandwidth usage.';
 
   @override
-  String get settings_encoding_Section_target_audio_bitrate =>
-      'Audio target bitrate: ';
+  String get settings_encoding_Section_measure_hz => 'Hz';
 
   @override
-  String get settings_encoding_Section_target_video_bitrate =>
-      'Video target bitrate: ';
+  String get settings_encoding_Section_measure_kbps => 'Kbps';
 
   @override
-  String get settings_encoding_Section_packetization_title =>
-      'Audio packetization';
+  String get settings_encoding_Section_measure_ms => 'ms';
 
   @override
-  String get settings_encoding_Section_packetization_tooltip =>
-      'Adjust audio packetization-time in milliseconds, can be used to reduce audio latency or fix Network MTU size issues';
-
-  @override
-  String get settings_encoding_Section_audio_ptime => 'Audio target ptime: ';
-
-  @override
-  String get settings_encoding_Section_audio_ptime_limit =>
-      'Audio ptime limit: ';
-
-  @override
-  String get settings_encoding_Section_opus_samplingRate =>
-      'Sampling rate override: ';
+  String get settings_encoding_Section_opus_bandwidth => 'Bandwidth override: ';
 
   @override
   String get settings_encoding_Section_opus_bitrate => 'Bitrate override: ';
@@ -1478,11 +1485,57 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings_encoding_Section_opus_dtx => 'DTX mode override: ';
 
   @override
+  String get settings_encoding_Section_opus_samplingRate =>
+      'Sampling rate override: ';
+
+  @override
   String get settings_encoding_Section_opus_title => 'Opus codec tuning';
 
   @override
   String get settings_encoding_Section_opus_tooltip =>
       'Adjust the opus specific codec settings. Can be used to reduce bandwidth usage or improve audio quality';
+
+  @override
+  String get settings_encoding_Section_packetization_title =>
+      'Audio packetization';
+
+  @override
+  String get settings_encoding_Section_packetization_tooltip =>
+      'Adjust audio packetization-time in milliseconds, can be used to reduce audio latency or fix Network MTU size issues';
+
+  @override
+  String get settings_encoding_Section_preset => 'Preset';
+
+  @override
+  String get settings_encoding_Section_preset_balance => 'Balance';
+
+  @override
+  String get settings_encoding_Section_preset_bypass => 'Bypass';
+
+  @override
+  String get settings_encoding_Section_preset_custom => 'Custom';
+
+  @override
+  String get settings_encoding_Section_preset_default => 'Default';
+
+  @override
+  String get settings_encoding_Section_preset_eco => 'Eco';
+
+  @override
+  String get settings_encoding_Section_preset_full_flex => 'Full Flex';
+
+  @override
+  String get settings_encoding_Section_preset_quality => 'Quality';
+
+  @override
+  String get settings_encoding_Section_preset_title => 'Media encoding configs';
+
+  @override
+  String get settings_encoding_Section_preset_tooltip =>
+      'Adjustment presets for audio and video codecs, lower values will reduce the bandwidth usage but affect the quality, higher values will increase the quality but also the bandwidth usage. Default preset is recommended settings provided by your vendor according to it evnironment preferences.';
+
+  @override
+  String get settings_encoding_Section_ptime_prefix => 'Ptime: ';
 
   @override
   String get settings_encoding_Section_rtp_override_audio =>
@@ -1501,72 +1554,40 @@ class AppLocalizationsEn extends AppLocalizations {
       'Video profiles override';
 
   @override
-  String get settings_encoding_Section_rtp_override_warning_title => 'Warning:';
-
-  @override
   String get settings_encoding_Section_rtp_override_warning_message =>
       'Overriding may affect the compatibility with other devices or media systems and cause call errors, use only if you know what you are doing.';
 
   @override
-  String get settings_audioProcessing_Section_title => 'Audio pre-processing';
+  String get settings_encoding_Section_rtp_override_warning_title => 'Warning:';
 
   @override
-  String get settings_audioProcessing_Section_tooltip =>
-      'Can be used to tune audio quality for specific needs or environments. Like studio recording, or external microphone. \n\nBypass voice processing - tells system to not apply hardware voice processing (Requires app restart).';
+  String get settings_encoding_Section_target_audio_bitrate =>
+      'Audio target bitrate: ';
 
   @override
-  String get settings_audioProcessing_Section_VP_title =>
-      'Bypass voice processing';
+  String get settings_encoding_Section_target_video_bitrate =>
+      'Video target bitrate: ';
 
   @override
-  String get settings_audioProcessing_Section_EC_title => 'Echo cancellation';
+  String get settings_encoding_Section_value_auto => 'Auto';
 
   @override
-  String get settings_audioProcessing_Section_AGC_title => 'Auto gain control';
+  String get settings_encoding_Section_value_disable => 'Disable';
 
   @override
-  String get settings_audioProcessing_Section_NS_title => 'Noise suppression';
+  String get settings_encoding_Section_value_enable => 'Enable';
 
   @override
-  String get settings_audioProcessing_Section_HPF_title => 'High pass filter';
+  String get settings_encoding_Section_value_mono => 'Mono';
 
   @override
-  String get settings_audioProcessing_Section_AM_title => 'Audio mirroring';
+  String get settings_encoding_Section_value_off => 'Off';
 
   @override
-  String get settings_videoCapturing_Section_title => 'Video capturing';
+  String get settings_encoding_Section_value_on => 'On';
 
   @override
-  String get settings_videoCapturing_Section_tooltip =>
-      'Can be used to tune video quality for specific needs or environments.';
-
-  @override
-  String get settings_videoCapturing_Section_resolution_title =>
-      'Image resolution';
-
-  @override
-  String get settings_videoCapturing_Section_resolution_prefix =>
-      'vertical points: ';
-
-  @override
-  String get settings_videoCapturing_Section_framerate_title =>
-      'Image framerate';
-
-  @override
-  String get settings_videoCapturing_Section_framerate_prefix => 'frames: ';
-
-  @override
-  String get settings_iceSettings_Section_title => 'Ice candidates filtering';
-
-  @override
-  String get settings_iceSettings_Section_tooltip =>
-      'Filter ice candidates based on the network preferences may help to avoid network issues';
-
-  @override
-  String get settings_iceSettings_Section_netfilter_title => 'Network protocol';
-
-  @override
-  String get settings_iceSettings_Section_noskip => 'No filtering';
+  String get settings_encoding_Section_value_stereo => 'Stereo';
 
   @override
   String get settings_iceSettings_Section_netfilter_skipv4 =>
@@ -1577,38 +1598,29 @@ class AppLocalizationsEn extends AppLocalizations {
       'Skip IPv6 candidates';
 
   @override
-  String get settings_iceSettings_Section_trfilter_title =>
-      'Transport protocol';
+  String get settings_iceSettings_Section_netfilter_title => 'Network protocol';
 
   @override
-  String get settings_iceSettings_Section_trfilter_skipUdp =>
-      'Skip UDP candidates';
+  String get settings_iceSettings_Section_noskip => 'No filtering';
+
+  @override
+  String get settings_iceSettings_Section_title => 'Ice candidates filtering';
+
+  @override
+  String get settings_iceSettings_Section_tooltip =>
+      'Filter ice candidates based on the network preferences may help to avoid network issues';
 
   @override
   String get settings_iceSettings_Section_trfilter_skipTcp =>
       'Skip TCP candidates';
 
   @override
-  String get settings_connectionSection_title => 'Connection and call behavior';
+  String get settings_iceSettings_Section_trfilter_skipUdp =>
+      'Skip UDP candidates';
 
   @override
-  String get settings_connectionSection_tooltip =>
-      'Configure how your device handles connection setup, media negotiation, and call updates during peer-to-peer communication.';
-
-  @override
-  String get settings_videoOffer_title =>
-      'Determine how this device responds to an offer that includes video.';
-
-  @override
-  String get settings_videoOffer_option_includeInactive =>
-      'Include inactive video track\nEnsures compatibility with video offers for future activation.';
-
-  @override
-  String get settings_videoOffer_option_ignore =>
-      'Respond without video\nNo track will be added unless negotiated later.';
-
-  @override
-  String get call_settings_additional_options => 'Additional options';
+  String get settings_iceSettings_Section_trfilter_title =>
+      'Transport protocol';
 
   @override
   String get settings_ListViewTileTitle_about => 'About';
@@ -1617,10 +1629,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings_ListViewTileTitle_accountDelete => 'Delete account';
 
   @override
-  String get settings_ListViewTileTitle_mediaSettings => 'Media settings';
+  String get settings_ListViewTileTitle_call_codecs => 'Call codecs';
 
   @override
   String get settings_ListViewTileTitle_callerId => 'Caller ID';
+
+  @override
+  String get settings_ListViewTileTitle_encoding => 'Media encoding';
+
+  @override
+  String get settings_ListViewTileTitle_features => 'SERVICES';
 
   @override
   String get settings_ListViewTileTitle_help => 'Help';
@@ -1629,14 +1647,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings_ListViewTileTitle_language => 'Language';
 
   @override
-  String get settings_ListViewTileTitle_voicemail => 'Voicemail';
-
-  @override
   String get settings_ListViewTileTitle_logout => 'Logout';
 
   @override
   String get settings_ListViewTileTitle_logRecordsConsole =>
       'Log records console';
+
+  @override
+  String get settings_ListViewTileTitle_mediaSettings => 'Media settings';
 
   @override
   String get settings_ListViewTileTitle_network => 'Network settings';
@@ -1651,9 +1669,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings_ListViewTileTitle_settings => 'SETTINGS';
 
   @override
-  String get settings_ListViewTileTitle_features => 'SERVICES';
-
-  @override
   String get settings_ListViewTileTitle_termsConditions =>
       'Terms and conditions';
 
@@ -1664,11 +1679,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings_ListViewTileTitle_toolbox => 'TOOLBOX';
 
   @override
+  String get settings_ListViewTileTitle_voicemail => 'Voicemail';
+
+  @override
   String get settings_LogoutConfirmDialog_content =>
       'Are you sure you want to logout?';
 
   @override
   String get settings_LogoutConfirmDialog_title => 'Confirm logout';
+
+  @override
+  String get settings_network_fallbackCalls_description =>
+      'Enable fallback incoming call triggering via specially formatted SMS';
+
+  @override
+  String get settings_network_fallbackCalls_title => 'Fallback Incoming Calls';
 
   @override
   String get settings_network_incomingCallType_pushNotification_description =>
@@ -1690,39 +1715,41 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings_network_incomingCallType_title => 'Incoming Call Type';
 
   @override
-  String get settings_network_fallbackCalls_title => 'Fallback Incoming Calls';
-
-  @override
-  String get settings_network_fallbackCalls_description =>
-      'Enable fallback incoming call triggering via specially formatted SMS';
-
-  @override
   String get settings_network_smsFallback_toggle => 'SMS Fallback';
 
   @override
-  String get settings_callerId_defaultTitle => 'Default Caller ID';
+  String get settings_videoCapturing_Section_framerate_prefix => 'frames: ';
 
   @override
-  String get settings_callerId_dialCodeMatching_title => 'Dial code matching';
+  String get settings_videoCapturing_Section_framerate_title =>
+      'Image framerate';
 
   @override
-  String get settings_callerId_dialcode => 'Dial code:';
+  String get settings_videoCapturing_Section_resolution_prefix =>
+      'vertical points: ';
 
   @override
-  String get settings_callerId_number => 'Number:';
+  String get settings_videoCapturing_Section_resolution_title =>
+      'Image resolution';
 
   @override
-  String get settings_callerId_number_hint => 'Select a number';
+  String get settings_videoCapturing_Section_title => 'Video capturing';
 
   @override
-  String get settings_callerId_duplicate_dialcode_error =>
-      'Please choose a different dial code, this one is already in use.';
+  String get settings_videoCapturing_Section_tooltip =>
+      'Can be used to tune video quality for specific needs or environments.';
 
   @override
-  String get settings_callerId_save_button => 'Save';
+  String get settings_videoOffer_option_ignore =>
+      'Respond without video\nNo track will be added unless negotiated later.';
 
   @override
-  String get settings_callerId_cancel_button => 'Cancel';
+  String get settings_videoOffer_option_includeInactive =>
+      'Include inactive video track\nEnsures compatibility with video offers for future activation.';
+
+  @override
+  String get settings_videoOffer_title =>
+      'Determine how this device responds to an offer that includes video.';
 
   @override
   String get signalingResponseCode_ambiguousRequest =>
@@ -1967,6 +1994,12 @@ class AppLocalizationsEn extends AppLocalizations {
       'The server is unreachable. This could be due to no internet connection or server maintenance. Please check your internet connection and try again.';
 
   @override
+  String get system_notifications_screen_list_empty => 'No notifications yet';
+
+  @override
+  String get system_notifications_screen_title => 'Notifications';
+
+  @override
   String get themeMode_dark => 'Dark';
 
   @override
@@ -1996,6 +2029,48 @@ class AppLocalizationsEn extends AppLocalizations {
   String get validationBlankError => 'Please enter a value';
 
   @override
+  String get voicemail_Description_notSupported =>
+      'Voicemail feature are not supported in your core. Please contact your administrator for more information.';
+
+  @override
+  String get voicemail_Dialog_deleteSingleContent =>
+      'This voicemail will be permanently deleted. Do you want to continue?';
+
+  @override
+  String get voicemail_Dialog_deleteSingleTitle => 'Delete voicemail?';
+
+  @override
+  String get voicemail_Label_call => 'Call';
+
+  @override
+  String get voicemail_Label_delete => 'Delete';
+
+  @override
+  String get voicemail_Label_deleteAll => 'Delete all voicemails?';
+
+  @override
+  String get voicemail_Label_deleteAllDescription =>
+      'This action will permanently delete all your voicemails. This cannot be undone.';
+
+  @override
+  String get voicemail_Label_empty => 'No voicemails';
+
+  @override
+  String get voicemail_Label_markAsHeard => 'Mark as heard';
+
+  @override
+  String get voicemail_Label_markAsNew => 'Mark as new';
+
+  @override
+  String get voicemail_Label_retry => 'Try again';
+
+  @override
+  String get voicemail_Title_notSupported => 'Feature not supported';
+
+  @override
+  String get voicemail_Widget_screenTitle => 'Voicemail';
+
+  @override
   String get webRegistration_ErrorAcknowledgeDialogActions_retry => 'Retry';
 
   @override
@@ -2004,48 +2079,4 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get webRegistration_ErrorAcknowledgeDialog_title =>
       'Web resource error';
-
-  @override
-  String get system_notifications_screen_title => 'Notifications';
-
-  @override
-  String get system_notifications_screen_list_empty => 'No notifications yet';
-
-  @override
-  String get numberActions_audioCall => 'Audio call';
-
-  @override
-  String get numberActions_videoCall => 'Video call';
-
-  @override
-  String get numberActions_transfer => 'Transfer current call';
-
-  @override
-  String get numberActions_chat => 'Send chat message';
-
-  @override
-  String get numberActions_sendSms => 'Send sms message';
-
-  @override
-  String get numberActions_viewContact => 'View Contact';
-
-  @override
-  String get numberActions_callLog => 'View call history';
-
-  @override
-  String get numberActions_copyNumber => 'Copy number';
-
-  @override
-  String get numberActions_delete => 'Delete';
-
-  @override
-  String numberActions_callFrom(String number) {
-    return 'Call from $number';
-  }
-
-  @override
-  String get callPullBadge_dialogTitle => 'Pullable Calls';
-
-  @override
-  String get callPullBadge_pickupButtonTitle => 'Pick up';
 }

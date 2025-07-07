@@ -376,6 +376,24 @@ abstract class AppLocalizations {
   /// **'Connecting to the remote server'**
   String get callProcessingStatus_signaling_connecting;
 
+  /// No description provided for @callPullBadge_dialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Pullable Calls'**
+  String get callPullBadge_dialogTitle;
+
+  /// No description provided for @callPullBadge_pickupButtonTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick up'**
+  String get callPullBadge_pickupButtonTitle;
+
+  /// No description provided for @call_settings_additional_options.
+  ///
+  /// In en, this message translates to:
+  /// **'Additional options'**
+  String get call_settings_additional_options;
+
   /// No description provided for @callStatus_appUnregistered.
   ///
   /// In en, this message translates to:
@@ -490,6 +508,12 @@ abstract class AppLocalizations {
   /// **'Failed to get cloud PBX contacts'**
   String get contacts_ExternalTabText_failure;
 
+  /// No description provided for @contacts_LocalTabButton_contactsAgreement.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Settings'**
+  String get contacts_LocalTabButton_contactsAgreement;
+
   /// No description provided for @contacts_LocalTabButton_openAppSettings.
   ///
   /// In en, this message translates to:
@@ -501,6 +525,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Refresh'**
   String get contacts_LocalTabButton_refresh;
+
+  /// No description provided for @contacts_LocalTabText_contactsAgreementFailure.
+  ///
+  /// In en, this message translates to:
+  /// **'To sync your local contacts, you must accept the agreement in Settings.'**
+  String get contacts_LocalTabText_contactsAgreementFailure;
 
   /// No description provided for @contacts_LocalTabText_empty.
   ///
@@ -525,18 +555,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'There are no permissions to get your phone contacts'**
   String get contacts_LocalTabText_permissionFailure;
-
-  /// No description provided for @contacts_LocalTabText_contactsAgreementFailure.
-  ///
-  /// In en, this message translates to:
-  /// **'To sync your local contacts, you must accept the agreement in Settings.'**
-  String get contacts_LocalTabText_contactsAgreementFailure;
-
-  /// No description provided for @contacts_LocalTabButton_contactsAgreement.
-  ///
-  /// In en, this message translates to:
-  /// **'Open Settings'**
-  String get contacts_LocalTabButton_contactsAgreement;
 
   /// No description provided for @contactsSourceExternal.
   ///
@@ -1939,95 +1957,17 @@ abstract class AppLocalizations {
   /// **'INITIALIZING'**
   String get messaging_StateBar_initializing;
 
-  /// No description provided for @voicemail_Widget_screenTitle.
+  /// No description provided for @notifications_errorSnackBarAction_callSdpConfiguration.
   ///
   /// In en, this message translates to:
-  /// **'Voicemail'**
-  String get voicemail_Widget_screenTitle;
-
-  /// No description provided for @voicemail_Label_deleteAll.
-  ///
-  /// In en, this message translates to:
-  /// **'Delete all voicemails?'**
-  String get voicemail_Label_deleteAll;
-
-  /// No description provided for @voicemail_Label_deleteAllDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'This action will permanently delete all your voicemails. This cannot be undone.'**
-  String get voicemail_Label_deleteAllDescription;
-
-  /// No description provided for @voicemail_Label_empty.
-  ///
-  /// In en, this message translates to:
-  /// **'No voicemails'**
-  String get voicemail_Label_empty;
-
-  /// No description provided for @voicemail_Label_retry.
-  ///
-  /// In en, this message translates to:
-  /// **'Try again'**
-  String get voicemail_Label_retry;
-
-  /// No description provided for @voicemail_Label_call.
-  ///
-  /// In en, this message translates to:
-  /// **'Call'**
-  String get voicemail_Label_call;
-
-  /// No description provided for @voicemail_Label_markAsHeard.
-  ///
-  /// In en, this message translates to:
-  /// **'Mark as heard'**
-  String get voicemail_Label_markAsHeard;
-
-  /// No description provided for @voicemail_Label_markAsNew.
-  ///
-  /// In en, this message translates to:
-  /// **'Mark as new'**
-  String get voicemail_Label_markAsNew;
-
-  /// No description provided for @voicemail_Label_delete.
-  ///
-  /// In en, this message translates to:
-  /// **'Delete'**
-  String get voicemail_Label_delete;
-
-  /// No description provided for @voicemail_Dialog_deleteSingleTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Delete voicemail?'**
-  String get voicemail_Dialog_deleteSingleTitle;
-
-  /// No description provided for @voicemail_Dialog_deleteSingleContent.
-  ///
-  /// In en, this message translates to:
-  /// **'This voicemail will be permanently deleted. Do you want to continue?'**
-  String get voicemail_Dialog_deleteSingleContent;
-
-  /// No description provided for @voicemail_Title_notSupported.
-  ///
-  /// In en, this message translates to:
-  /// **'Feature not supported'**
-  String get voicemail_Title_notSupported;
-
-  /// No description provided for @voicemail_Description_notSupported.
-  ///
-  /// In en, this message translates to:
-  /// **'Voicemail feature are not supported in your core. Please contact your administrator for more information.'**
-  String get voicemail_Description_notSupported;
+  /// **'Invalid SDP configuration'**
+  String get notifications_errorSnackBarAction_callSdpConfiguration;
 
   /// No description provided for @notifications_errorSnackBarAction_callUserMedia.
   ///
   /// In en, this message translates to:
   /// **'Check'**
   String get notifications_errorSnackBarAction_callUserMedia;
-
-  /// No description provided for @notifications_errorSnackBarAction_callSdpConfiguration.
-  ///
-  /// In en, this message translates to:
-  /// **'Invalid SDP configuration'**
-  String get notifications_errorSnackBarAction_callSdpConfiguration;
 
   /// No description provided for @notifications_errorSnackBar_activeLineBlindTransferWarning.
   ///
@@ -2058,6 +1998,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Connecting to the core failed, trying to reconnect'**
   String get notifications_errorSnackBar_callConnect;
+
+  /// No description provided for @notifications_errorSnackBar_callNegotiationTimeout.
+  ///
+  /// In en, this message translates to:
+  /// **'Cannot establish the call, please try again later'**
+  String get notifications_errorSnackBar_callNegotiationTimeout;
 
   /// No description provided for @notifications_errorSnackBar_callSignalingClientNotConnect.
   ///
@@ -2094,12 +2040,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Sorry, your application is currently disconnected from the WebTrit core servers, so it can\'t call right now. Please go to the settings page and slide the online status toggle switch off and on again to reestablish the connection'**
   String get notifications_errorSnackBar_callWhileUnregistered;
-
-  /// No description provided for @notifications_errorSnackBar_callNegotiationTimeout.
-  ///
-  /// In en, this message translates to:
-  /// **'Cannot establish the call, please try again later'**
-  String get notifications_errorSnackBar_callNegotiationTimeout;
 
   /// No description provided for @notifications_errorSnackBar_SignalingConnectFailed.
   ///
@@ -2163,6 +2103,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Your application is online'**
   String get notifications_successSnackBar_appOnline;
+
+  /// No description provided for @numberActions_audioCall.
+  ///
+  /// In en, this message translates to:
+  /// **'Audio call'**
+  String get numberActions_audioCall;
+
+  /// No description provided for @numberActions_callFrom.
+  ///
+  /// In en, this message translates to:
+  /// **'Call from {number}'**
+  String numberActions_callFrom(String number);
+
+  /// No description provided for @numberActions_callLog.
+  ///
+  /// In en, this message translates to:
+  /// **'View call history'**
+  String get numberActions_callLog;
+
+  /// No description provided for @numberActions_chat.
+  ///
+  /// In en, this message translates to:
+  /// **'Send chat message'**
+  String get numberActions_chat;
+
+  /// No description provided for @numberActions_copyNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy number'**
+  String get numberActions_copyNumber;
+
+  /// No description provided for @numberActions_delete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get numberActions_delete;
+
+  /// No description provided for @numberActions_sendSms.
+  ///
+  /// In en, this message translates to:
+  /// **'Send sms message'**
+  String get numberActions_sendSms;
+
+  /// No description provided for @numberActions_transfer.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer current call'**
+  String get numberActions_transfer;
+
+  /// No description provided for @numberActions_videoCall.
+  ///
+  /// In en, this message translates to:
+  /// **'Video call'**
+  String get numberActions_videoCall;
+
+  /// No description provided for @numberActions_viewContact.
+  ///
+  /// In en, this message translates to:
+  /// **'View Contact'**
+  String get numberActions_viewContact;
 
   /// No description provided for @permission_Button_request.
   ///
@@ -2416,185 +2416,155 @@ abstract class AppLocalizations {
   /// **'My account'**
   String get settings_AppBarTitle_myAccount;
 
+  /// No description provided for @settings_audioProcessing_Section_AGC_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto gain control'**
+  String get settings_audioProcessing_Section_AGC_title;
+
+  /// No description provided for @settings_audioProcessing_Section_AM_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Audio mirroring'**
+  String get settings_audioProcessing_Section_AM_title;
+
+  /// No description provided for @settings_audioProcessing_Section_EC_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Echo cancellation'**
+  String get settings_audioProcessing_Section_EC_title;
+
+  /// No description provided for @settings_audioProcessing_Section_HPF_title.
+  ///
+  /// In en, this message translates to:
+  /// **'High pass filter'**
+  String get settings_audioProcessing_Section_HPF_title;
+
+  /// No description provided for @settings_audioProcessing_Section_NS_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Noise suppression'**
+  String get settings_audioProcessing_Section_NS_title;
+
+  /// No description provided for @settings_audioProcessing_Section_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Audio pre-processing'**
+  String get settings_audioProcessing_Section_title;
+
+  /// No description provided for @settings_audioProcessing_Section_tooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Can be used to tune audio quality for specific needs or environments. Like studio recording, or external microphone. \n\nBypass voice processing - tells system to not apply hardware voice processing (Requires app restart).'**
+  String get settings_audioProcessing_Section_tooltip;
+
+  /// No description provided for @settings_audioProcessing_Section_VP_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Bypass voice processing'**
+  String get settings_audioProcessing_Section_VP_title;
+
+  /// No description provided for @settings_call_codecs_preferred_audio_default.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto'**
+  String get settings_call_codecs_preferred_audio_default;
+
+  /// No description provided for @settings_call_codecs_preferred_audio_tip.
+  ///
+  /// In en, this message translates to:
+  /// **'The preferred audio codec is used for audio calls. If the codec is not supported by the device, the call will be established using the next available codec.'**
+  String get settings_call_codecs_preferred_audio_tip;
+
+  /// No description provided for @settings_call_codecs_preferred_audio_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Preferred audio codec'**
+  String get settings_call_codecs_preferred_audio_title;
+
+  /// No description provided for @settings_call_codecs_preferred_video_default.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto'**
+  String get settings_call_codecs_preferred_video_default;
+
+  /// No description provided for @settings_call_codecs_preferred_video_tip.
+  ///
+  /// In en, this message translates to:
+  /// **'The preferred video codec is used for video calls. If the codec is not supported by the device, the call will be established using the next available codec.'**
+  String get settings_call_codecs_preferred_video_tip;
+
+  /// No description provided for @settings_call_codecs_preferred_video_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Preferred video codec'**
+  String get settings_call_codecs_preferred_video_title;
+
+  /// No description provided for @settings_callerId_cancel_button.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get settings_callerId_cancel_button;
+
+  /// No description provided for @settings_callerId_defaultTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Default Caller ID'**
+  String get settings_callerId_defaultTitle;
+
+  /// No description provided for @settings_callerId_dialcode.
+  ///
+  /// In en, this message translates to:
+  /// **'Dial code:'**
+  String get settings_callerId_dialcode;
+
+  /// No description provided for @settings_callerId_dialCodeMatching_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Dial code matching'**
+  String get settings_callerId_dialCodeMatching_title;
+
+  /// No description provided for @settings_callerId_duplicate_dialcode_error.
+  ///
+  /// In en, this message translates to:
+  /// **'Please choose a different dial code, this one is already in use.'**
+  String get settings_callerId_duplicate_dialcode_error;
+
+  /// No description provided for @settings_callerId_number.
+  ///
+  /// In en, this message translates to:
+  /// **'Number:'**
+  String get settings_callerId_number;
+
+  /// No description provided for @settings_callerId_number_hint.
+  ///
+  /// In en, this message translates to:
+  /// **'Select a number'**
+  String get settings_callerId_number_hint;
+
+  /// No description provided for @settings_callerId_save_button.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get settings_callerId_save_button;
+
+  /// No description provided for @settings_connectionSection_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Connection and call behavior'**
+  String get settings_connectionSection_title;
+
+  /// No description provided for @settings_connectionSection_tooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Configure how your device handles connection setup, media negotiation, and call updates during peer-to-peer communication.'**
+  String get settings_connectionSection_tooltip;
+
   /// No description provided for @settings_encoding_AppBar_reset_tooltip.
   ///
   /// In en, this message translates to:
   /// **'Reset to default'**
   String get settings_encoding_AppBar_reset_tooltip;
-
-  /// No description provided for @settings_encoding_Section_preset_title.
-  ///
-  /// In en, this message translates to:
-  /// **'Media encoding configs'**
-  String get settings_encoding_Section_preset_title;
-
-  /// No description provided for @settings_encoding_Section_preset_tooltip.
-  ///
-  /// In en, this message translates to:
-  /// **'Adjustment presets for audio and video codecs, lower values will reduce the bandwidth usage but affect the quality, higher values will increase the quality but also the bandwidth usage. Default preset is recommended settings provided by your vendor according to it evnironment preferences.'**
-  String get settings_encoding_Section_preset_tooltip;
-
-  /// No description provided for @settings_encoding_Section_preset.
-  ///
-  /// In en, this message translates to:
-  /// **'Preset'**
-  String get settings_encoding_Section_preset;
-
-  /// No description provided for @settings_encoding_Section_preset_default.
-  ///
-  /// In en, this message translates to:
-  /// **'Default'**
-  String get settings_encoding_Section_preset_default;
-
-  /// No description provided for @settings_encoding_Section_preset_eco.
-  ///
-  /// In en, this message translates to:
-  /// **'Eco'**
-  String get settings_encoding_Section_preset_eco;
-
-  /// No description provided for @settings_encoding_Section_preset_balance.
-  ///
-  /// In en, this message translates to:
-  /// **'Balance'**
-  String get settings_encoding_Section_preset_balance;
-
-  /// No description provided for @settings_encoding_Section_preset_quality.
-  ///
-  /// In en, this message translates to:
-  /// **'Quality'**
-  String get settings_encoding_Section_preset_quality;
-
-  /// No description provided for @settings_encoding_Section_preset_full_flex.
-  ///
-  /// In en, this message translates to:
-  /// **'Full Flex'**
-  String get settings_encoding_Section_preset_full_flex;
-
-  /// No description provided for @settings_encoding_Section_preset_custom.
-  ///
-  /// In en, this message translates to:
-  /// **'Custom'**
-  String get settings_encoding_Section_preset_custom;
-
-  /// No description provided for @settings_encoding_Section_preset_bypass.
-  ///
-  /// In en, this message translates to:
-  /// **'Bypass'**
-  String get settings_encoding_Section_preset_bypass;
-
-  /// No description provided for @settings_encoding_Section_measure_kbps.
-  ///
-  /// In en, this message translates to:
-  /// **'Kbps'**
-  String get settings_encoding_Section_measure_kbps;
-
-  /// No description provided for @settings_encoding_Section_measure_ms.
-  ///
-  /// In en, this message translates to:
-  /// **'ms'**
-  String get settings_encoding_Section_measure_ms;
-
-  /// No description provided for @settings_encoding_Section_measure_hz.
-  ///
-  /// In en, this message translates to:
-  /// **'Hz'**
-  String get settings_encoding_Section_measure_hz;
-
-  /// No description provided for @settings_encoding_Section_value_auto.
-  ///
-  /// In en, this message translates to:
-  /// **'Auto'**
-  String get settings_encoding_Section_value_auto;
-
-  /// No description provided for @settings_encoding_Section_value_mono.
-  ///
-  /// In en, this message translates to:
-  /// **'Mono'**
-  String get settings_encoding_Section_value_mono;
-
-  /// No description provided for @settings_encoding_Section_value_stereo.
-  ///
-  /// In en, this message translates to:
-  /// **'Stereo'**
-  String get settings_encoding_Section_value_stereo;
-
-  /// No description provided for @settings_encoding_Section_value_enable.
-  ///
-  /// In en, this message translates to:
-  /// **'Enable'**
-  String get settings_encoding_Section_value_enable;
-
-  /// No description provided for @settings_encoding_Section_value_disable.
-  ///
-  /// In en, this message translates to:
-  /// **'Disable'**
-  String get settings_encoding_Section_value_disable;
-
-  /// No description provided for @settings_encoding_Section_value_on.
-  ///
-  /// In en, this message translates to:
-  /// **'On'**
-  String get settings_encoding_Section_value_on;
-
-  /// No description provided for @settings_encoding_Section_value_off.
-  ///
-  /// In en, this message translates to:
-  /// **'Off'**
-  String get settings_encoding_Section_value_off;
-
-  /// No description provided for @settings_encoding_Section_bitrate_prefix.
-  ///
-  /// In en, this message translates to:
-  /// **'Bitrate: '**
-  String get settings_encoding_Section_bitrate_prefix;
-
-  /// No description provided for @settings_encoding_Section_ptime_prefix.
-  ///
-  /// In en, this message translates to:
-  /// **'Ptime: '**
-  String get settings_encoding_Section_ptime_prefix;
-
-  /// No description provided for @settings_encoding_Section_bandwidth_prefix.
-  ///
-  /// In en, this message translates to:
-  /// **'Sampling rate: '**
-  String get settings_encoding_Section_bandwidth_prefix;
-
-  /// No description provided for @settings_encoding_Section_bitrate_title.
-  ///
-  /// In en, this message translates to:
-  /// **'Codec bitrate settings'**
-  String get settings_encoding_Section_bitrate_title;
-
-  /// No description provided for @settings_encoding_Section_bitrate_tooltip.
-  ///
-  /// In en, this message translates to:
-  /// **'Adjust the bitrate settings for audio and video codecs, lower values will reduce the bandwidth usage but affect the quality, higher values will increase the quality but also the bandwidth usage.'**
-  String get settings_encoding_Section_bitrate_tooltip;
-
-  /// No description provided for @settings_encoding_Section_target_audio_bitrate.
-  ///
-  /// In en, this message translates to:
-  /// **'Audio target bitrate: '**
-  String get settings_encoding_Section_target_audio_bitrate;
-
-  /// No description provided for @settings_encoding_Section_target_video_bitrate.
-  ///
-  /// In en, this message translates to:
-  /// **'Video target bitrate: '**
-  String get settings_encoding_Section_target_video_bitrate;
-
-  /// No description provided for @settings_encoding_Section_packetization_title.
-  ///
-  /// In en, this message translates to:
-  /// **'Audio packetization'**
-  String get settings_encoding_Section_packetization_title;
-
-  /// No description provided for @settings_encoding_Section_packetization_tooltip.
-  ///
-  /// In en, this message translates to:
-  /// **'Adjust audio packetization-time in milliseconds, can be used to reduce audio latency or fix Network MTU size issues'**
-  String get settings_encoding_Section_packetization_tooltip;
 
   /// No description provided for @settings_encoding_Section_audio_ptime.
   ///
@@ -2608,11 +2578,53 @@ abstract class AppLocalizations {
   /// **'Audio ptime limit: '**
   String get settings_encoding_Section_audio_ptime_limit;
 
-  /// No description provided for @settings_encoding_Section_opus_samplingRate.
+  /// No description provided for @settings_encoding_Section_bandwidth_prefix.
   ///
   /// In en, this message translates to:
-  /// **'Sampling rate override: '**
-  String get settings_encoding_Section_opus_samplingRate;
+  /// **'Sampling rate: '**
+  String get settings_encoding_Section_bandwidth_prefix;
+
+  /// No description provided for @settings_encoding_Section_bitrate_prefix.
+  ///
+  /// In en, this message translates to:
+  /// **'Bitrate: '**
+  String get settings_encoding_Section_bitrate_prefix;
+
+  /// No description provided for @settings_encoding_Section_bitrate_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Codec bitrate settings'**
+  String get settings_encoding_Section_bitrate_title;
+
+  /// No description provided for @settings_encoding_Section_bitrate_tooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Adjust the bitrate settings for audio and video codecs, lower values will reduce the bandwidth usage but affect the quality, higher values will increase the quality but also the bandwidth usage.'**
+  String get settings_encoding_Section_bitrate_tooltip;
+
+  /// No description provided for @settings_encoding_Section_measure_hz.
+  ///
+  /// In en, this message translates to:
+  /// **'Hz'**
+  String get settings_encoding_Section_measure_hz;
+
+  /// No description provided for @settings_encoding_Section_measure_kbps.
+  ///
+  /// In en, this message translates to:
+  /// **'Kbps'**
+  String get settings_encoding_Section_measure_kbps;
+
+  /// No description provided for @settings_encoding_Section_measure_ms.
+  ///
+  /// In en, this message translates to:
+  /// **'ms'**
+  String get settings_encoding_Section_measure_ms;
+
+  /// No description provided for @settings_encoding_Section_opus_bandwidth.
+  ///
+  /// In en, this message translates to:
+  /// **'Bandwidth override: '**
+  String get settings_encoding_Section_opus_bandwidth;
 
   /// No description provided for @settings_encoding_Section_opus_bitrate.
   ///
@@ -2632,6 +2644,12 @@ abstract class AppLocalizations {
   /// **'DTX mode override: '**
   String get settings_encoding_Section_opus_dtx;
 
+  /// No description provided for @settings_encoding_Section_opus_samplingRate.
+  ///
+  /// In en, this message translates to:
+  /// **'Sampling rate override: '**
+  String get settings_encoding_Section_opus_samplingRate;
+
   /// No description provided for @settings_encoding_Section_opus_title.
   ///
   /// In en, this message translates to:
@@ -2643,6 +2661,84 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Adjust the opus specific codec settings. Can be used to reduce bandwidth usage or improve audio quality'**
   String get settings_encoding_Section_opus_tooltip;
+
+  /// No description provided for @settings_encoding_Section_packetization_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Audio packetization'**
+  String get settings_encoding_Section_packetization_title;
+
+  /// No description provided for @settings_encoding_Section_packetization_tooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Adjust audio packetization-time in milliseconds, can be used to reduce audio latency or fix Network MTU size issues'**
+  String get settings_encoding_Section_packetization_tooltip;
+
+  /// No description provided for @settings_encoding_Section_preset.
+  ///
+  /// In en, this message translates to:
+  /// **'Preset'**
+  String get settings_encoding_Section_preset;
+
+  /// No description provided for @settings_encoding_Section_preset_balance.
+  ///
+  /// In en, this message translates to:
+  /// **'Balance'**
+  String get settings_encoding_Section_preset_balance;
+
+  /// No description provided for @settings_encoding_Section_preset_bypass.
+  ///
+  /// In en, this message translates to:
+  /// **'Bypass'**
+  String get settings_encoding_Section_preset_bypass;
+
+  /// No description provided for @settings_encoding_Section_preset_custom.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom'**
+  String get settings_encoding_Section_preset_custom;
+
+  /// No description provided for @settings_encoding_Section_preset_default.
+  ///
+  /// In en, this message translates to:
+  /// **'Default'**
+  String get settings_encoding_Section_preset_default;
+
+  /// No description provided for @settings_encoding_Section_preset_eco.
+  ///
+  /// In en, this message translates to:
+  /// **'Eco'**
+  String get settings_encoding_Section_preset_eco;
+
+  /// No description provided for @settings_encoding_Section_preset_full_flex.
+  ///
+  /// In en, this message translates to:
+  /// **'Full Flex'**
+  String get settings_encoding_Section_preset_full_flex;
+
+  /// No description provided for @settings_encoding_Section_preset_quality.
+  ///
+  /// In en, this message translates to:
+  /// **'Quality'**
+  String get settings_encoding_Section_preset_quality;
+
+  /// No description provided for @settings_encoding_Section_preset_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Media encoding configs'**
+  String get settings_encoding_Section_preset_title;
+
+  /// No description provided for @settings_encoding_Section_preset_tooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Adjustment presets for audio and video codecs, lower values will reduce the bandwidth usage but affect the quality, higher values will increase the quality but also the bandwidth usage. Default preset is recommended settings provided by your vendor according to it evnironment preferences.'**
+  String get settings_encoding_Section_preset_tooltip;
+
+  /// No description provided for @settings_encoding_Section_ptime_prefix.
+  ///
+  /// In en, this message translates to:
+  /// **'Ptime: '**
+  String get settings_encoding_Section_ptime_prefix;
 
   /// No description provided for @settings_encoding_Section_rtp_override_audio.
   ///
@@ -2668,125 +2764,71 @@ abstract class AppLocalizations {
   /// **'Video profiles override'**
   String get settings_encoding_Section_rtp_override_video;
 
-  /// No description provided for @settings_encoding_Section_rtp_override_warning_title.
-  ///
-  /// In en, this message translates to:
-  /// **'Warning:'**
-  String get settings_encoding_Section_rtp_override_warning_title;
-
   /// No description provided for @settings_encoding_Section_rtp_override_warning_message.
   ///
   /// In en, this message translates to:
   /// **'Overriding may affect the compatibility with other devices or media systems and cause call errors, use only if you know what you are doing.'**
   String get settings_encoding_Section_rtp_override_warning_message;
 
-  /// No description provided for @settings_audioProcessing_Section_title.
+  /// No description provided for @settings_encoding_Section_rtp_override_warning_title.
   ///
   /// In en, this message translates to:
-  /// **'Audio pre-processing'**
-  String get settings_audioProcessing_Section_title;
+  /// **'Warning:'**
+  String get settings_encoding_Section_rtp_override_warning_title;
 
-  /// No description provided for @settings_audioProcessing_Section_tooltip.
+  /// No description provided for @settings_encoding_Section_target_audio_bitrate.
   ///
   /// In en, this message translates to:
-  /// **'Can be used to tune audio quality for specific needs or environments. Like studio recording, or external microphone. \n\nBypass voice processing - tells system to not apply hardware voice processing (Requires app restart).'**
-  String get settings_audioProcessing_Section_tooltip;
+  /// **'Audio target bitrate: '**
+  String get settings_encoding_Section_target_audio_bitrate;
 
-  /// No description provided for @settings_audioProcessing_Section_VP_title.
+  /// No description provided for @settings_encoding_Section_target_video_bitrate.
   ///
   /// In en, this message translates to:
-  /// **'Bypass voice processing'**
-  String get settings_audioProcessing_Section_VP_title;
+  /// **'Video target bitrate: '**
+  String get settings_encoding_Section_target_video_bitrate;
 
-  /// No description provided for @settings_audioProcessing_Section_EC_title.
+  /// No description provided for @settings_encoding_Section_value_auto.
   ///
   /// In en, this message translates to:
-  /// **'Echo cancellation'**
-  String get settings_audioProcessing_Section_EC_title;
+  /// **'Auto'**
+  String get settings_encoding_Section_value_auto;
 
-  /// No description provided for @settings_audioProcessing_Section_AGC_title.
+  /// No description provided for @settings_encoding_Section_value_disable.
   ///
   /// In en, this message translates to:
-  /// **'Auto gain control'**
-  String get settings_audioProcessing_Section_AGC_title;
+  /// **'Disable'**
+  String get settings_encoding_Section_value_disable;
 
-  /// No description provided for @settings_audioProcessing_Section_NS_title.
+  /// No description provided for @settings_encoding_Section_value_enable.
   ///
   /// In en, this message translates to:
-  /// **'Noise suppression'**
-  String get settings_audioProcessing_Section_NS_title;
+  /// **'Enable'**
+  String get settings_encoding_Section_value_enable;
 
-  /// No description provided for @settings_audioProcessing_Section_HPF_title.
+  /// No description provided for @settings_encoding_Section_value_mono.
   ///
   /// In en, this message translates to:
-  /// **'High pass filter'**
-  String get settings_audioProcessing_Section_HPF_title;
+  /// **'Mono'**
+  String get settings_encoding_Section_value_mono;
 
-  /// No description provided for @settings_audioProcessing_Section_AM_title.
+  /// No description provided for @settings_encoding_Section_value_off.
   ///
   /// In en, this message translates to:
-  /// **'Audio mirroring'**
-  String get settings_audioProcessing_Section_AM_title;
+  /// **'Off'**
+  String get settings_encoding_Section_value_off;
 
-  /// No description provided for @settings_videoCapturing_Section_title.
+  /// No description provided for @settings_encoding_Section_value_on.
   ///
   /// In en, this message translates to:
-  /// **'Video capturing'**
-  String get settings_videoCapturing_Section_title;
+  /// **'On'**
+  String get settings_encoding_Section_value_on;
 
-  /// No description provided for @settings_videoCapturing_Section_tooltip.
+  /// No description provided for @settings_encoding_Section_value_stereo.
   ///
   /// In en, this message translates to:
-  /// **'Can be used to tune video quality for specific needs or environments.'**
-  String get settings_videoCapturing_Section_tooltip;
-
-  /// No description provided for @settings_videoCapturing_Section_resolution_title.
-  ///
-  /// In en, this message translates to:
-  /// **'Image resolution'**
-  String get settings_videoCapturing_Section_resolution_title;
-
-  /// No description provided for @settings_videoCapturing_Section_resolution_prefix.
-  ///
-  /// In en, this message translates to:
-  /// **'vertical points: '**
-  String get settings_videoCapturing_Section_resolution_prefix;
-
-  /// No description provided for @settings_videoCapturing_Section_framerate_title.
-  ///
-  /// In en, this message translates to:
-  /// **'Image framerate'**
-  String get settings_videoCapturing_Section_framerate_title;
-
-  /// No description provided for @settings_videoCapturing_Section_framerate_prefix.
-  ///
-  /// In en, this message translates to:
-  /// **'frames: '**
-  String get settings_videoCapturing_Section_framerate_prefix;
-
-  /// No description provided for @settings_iceSettings_Section_title.
-  ///
-  /// In en, this message translates to:
-  /// **'Ice candidates filtering'**
-  String get settings_iceSettings_Section_title;
-
-  /// No description provided for @settings_iceSettings_Section_tooltip.
-  ///
-  /// In en, this message translates to:
-  /// **'Filter ice candidates based on the network preferences may help to avoid network issues'**
-  String get settings_iceSettings_Section_tooltip;
-
-  /// No description provided for @settings_iceSettings_Section_netfilter_title.
-  ///
-  /// In en, this message translates to:
-  /// **'Network protocol'**
-  String get settings_iceSettings_Section_netfilter_title;
-
-  /// No description provided for @settings_iceSettings_Section_noskip.
-  ///
-  /// In en, this message translates to:
-  /// **'No filtering'**
-  String get settings_iceSettings_Section_noskip;
+  /// **'Stereo'**
+  String get settings_encoding_Section_value_stereo;
 
   /// No description provided for @settings_iceSettings_Section_netfilter_skipv4.
   ///
@@ -2800,17 +2842,29 @@ abstract class AppLocalizations {
   /// **'Skip IPv6 candidates'**
   String get settings_iceSettings_Section_netfilter_skipv6;
 
-  /// No description provided for @settings_iceSettings_Section_trfilter_title.
+  /// No description provided for @settings_iceSettings_Section_netfilter_title.
   ///
   /// In en, this message translates to:
-  /// **'Transport protocol'**
-  String get settings_iceSettings_Section_trfilter_title;
+  /// **'Network protocol'**
+  String get settings_iceSettings_Section_netfilter_title;
 
-  /// No description provided for @settings_iceSettings_Section_trfilter_skipUdp.
+  /// No description provided for @settings_iceSettings_Section_noskip.
   ///
   /// In en, this message translates to:
-  /// **'Skip UDP candidates'**
-  String get settings_iceSettings_Section_trfilter_skipUdp;
+  /// **'No filtering'**
+  String get settings_iceSettings_Section_noskip;
+
+  /// No description provided for @settings_iceSettings_Section_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Ice candidates filtering'**
+  String get settings_iceSettings_Section_title;
+
+  /// No description provided for @settings_iceSettings_Section_tooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Filter ice candidates based on the network preferences may help to avoid network issues'**
+  String get settings_iceSettings_Section_tooltip;
 
   /// No description provided for @settings_iceSettings_Section_trfilter_skipTcp.
   ///
@@ -2818,41 +2872,17 @@ abstract class AppLocalizations {
   /// **'Skip TCP candidates'**
   String get settings_iceSettings_Section_trfilter_skipTcp;
 
-  /// No description provided for @settings_connectionSection_title.
+  /// No description provided for @settings_iceSettings_Section_trfilter_skipUdp.
   ///
   /// In en, this message translates to:
-  /// **'Connection and call behavior'**
-  String get settings_connectionSection_title;
+  /// **'Skip UDP candidates'**
+  String get settings_iceSettings_Section_trfilter_skipUdp;
 
-  /// No description provided for @settings_connectionSection_tooltip.
+  /// No description provided for @settings_iceSettings_Section_trfilter_title.
   ///
   /// In en, this message translates to:
-  /// **'Configure how your device handles connection setup, media negotiation, and call updates during peer-to-peer communication.'**
-  String get settings_connectionSection_tooltip;
-
-  /// No description provided for @settings_videoOffer_title.
-  ///
-  /// In en, this message translates to:
-  /// **'Determine how this device responds to an offer that includes video.'**
-  String get settings_videoOffer_title;
-
-  /// No description provided for @settings_videoOffer_option_includeInactive.
-  ///
-  /// In en, this message translates to:
-  /// **'Include inactive video track\nEnsures compatibility with video offers for future activation.'**
-  String get settings_videoOffer_option_includeInactive;
-
-  /// No description provided for @settings_videoOffer_option_ignore.
-  ///
-  /// In en, this message translates to:
-  /// **'Respond without video\nNo track will be added unless negotiated later.'**
-  String get settings_videoOffer_option_ignore;
-
-  /// No description provided for @call_settings_additional_options.
-  ///
-  /// In en, this message translates to:
-  /// **'Additional options'**
-  String get call_settings_additional_options;
+  /// **'Transport protocol'**
+  String get settings_iceSettings_Section_trfilter_title;
 
   /// No description provided for @settings_ListViewTileTitle_about.
   ///
@@ -2866,17 +2896,29 @@ abstract class AppLocalizations {
   /// **'Delete account'**
   String get settings_ListViewTileTitle_accountDelete;
 
-  /// No description provided for @settings_ListViewTileTitle_mediaSettings.
+  /// No description provided for @settings_ListViewTileTitle_call_codecs.
   ///
   /// In en, this message translates to:
-  /// **'Media settings'**
-  String get settings_ListViewTileTitle_mediaSettings;
+  /// **'Call codecs'**
+  String get settings_ListViewTileTitle_call_codecs;
 
   /// No description provided for @settings_ListViewTileTitle_callerId.
   ///
   /// In en, this message translates to:
   /// **'Caller ID'**
   String get settings_ListViewTileTitle_callerId;
+
+  /// No description provided for @settings_ListViewTileTitle_encoding.
+  ///
+  /// In en, this message translates to:
+  /// **'Media encoding'**
+  String get settings_ListViewTileTitle_encoding;
+
+  /// No description provided for @settings_ListViewTileTitle_features.
+  ///
+  /// In en, this message translates to:
+  /// **'SERVICES'**
+  String get settings_ListViewTileTitle_features;
 
   /// No description provided for @settings_ListViewTileTitle_help.
   ///
@@ -2890,12 +2932,6 @@ abstract class AppLocalizations {
   /// **'Language'**
   String get settings_ListViewTileTitle_language;
 
-  /// No description provided for @settings_ListViewTileTitle_voicemail.
-  ///
-  /// In en, this message translates to:
-  /// **'Voicemail'**
-  String get settings_ListViewTileTitle_voicemail;
-
   /// No description provided for @settings_ListViewTileTitle_logout.
   ///
   /// In en, this message translates to:
@@ -2907,6 +2943,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Log records console'**
   String get settings_ListViewTileTitle_logRecordsConsole;
+
+  /// No description provided for @settings_ListViewTileTitle_mediaSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Media settings'**
+  String get settings_ListViewTileTitle_mediaSettings;
 
   /// No description provided for @settings_ListViewTileTitle_network.
   ///
@@ -2932,12 +2974,6 @@ abstract class AppLocalizations {
   /// **'SETTINGS'**
   String get settings_ListViewTileTitle_settings;
 
-  /// No description provided for @settings_ListViewTileTitle_features.
-  ///
-  /// In en, this message translates to:
-  /// **'SERVICES'**
-  String get settings_ListViewTileTitle_features;
-
   /// No description provided for @settings_ListViewTileTitle_termsConditions.
   ///
   /// In en, this message translates to:
@@ -2956,6 +2992,12 @@ abstract class AppLocalizations {
   /// **'TOOLBOX'**
   String get settings_ListViewTileTitle_toolbox;
 
+  /// No description provided for @settings_ListViewTileTitle_voicemail.
+  ///
+  /// In en, this message translates to:
+  /// **'Voicemail'**
+  String get settings_ListViewTileTitle_voicemail;
+
   /// No description provided for @settings_LogoutConfirmDialog_content.
   ///
   /// In en, this message translates to:
@@ -2967,6 +3009,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Confirm logout'**
   String get settings_LogoutConfirmDialog_title;
+
+  /// Tooltip description for fallback SMS-based call trigger
+  ///
+  /// In en, this message translates to:
+  /// **'Enable fallback incoming call triggering via specially formatted SMS'**
+  String get settings_network_fallbackCalls_description;
+
+  /// Title for fallback incoming calls section
+  ///
+  /// In en, this message translates to:
+  /// **'Fallback Incoming Calls'**
+  String get settings_network_fallbackCalls_title;
 
   /// No description provided for @settings_network_incomingCallType_pushNotification_description.
   ///
@@ -2998,71 +3052,65 @@ abstract class AppLocalizations {
   /// **'Incoming Call Type'**
   String get settings_network_incomingCallType_title;
 
-  /// Title for fallback incoming calls section
-  ///
-  /// In en, this message translates to:
-  /// **'Fallback Incoming Calls'**
-  String get settings_network_fallbackCalls_title;
-
-  /// Tooltip description for fallback SMS-based call trigger
-  ///
-  /// In en, this message translates to:
-  /// **'Enable fallback incoming call triggering via specially formatted SMS'**
-  String get settings_network_fallbackCalls_description;
-
   /// Toggle label for enabling SMS fallback
   ///
   /// In en, this message translates to:
   /// **'SMS Fallback'**
   String get settings_network_smsFallback_toggle;
 
-  /// No description provided for @settings_callerId_defaultTitle.
+  /// No description provided for @settings_videoCapturing_Section_framerate_prefix.
   ///
   /// In en, this message translates to:
-  /// **'Default Caller ID'**
-  String get settings_callerId_defaultTitle;
+  /// **'frames: '**
+  String get settings_videoCapturing_Section_framerate_prefix;
 
-  /// No description provided for @settings_callerId_dialCodeMatching_title.
+  /// No description provided for @settings_videoCapturing_Section_framerate_title.
   ///
   /// In en, this message translates to:
-  /// **'Dial code matching'**
-  String get settings_callerId_dialCodeMatching_title;
+  /// **'Image framerate'**
+  String get settings_videoCapturing_Section_framerate_title;
 
-  /// No description provided for @settings_callerId_dialcode.
+  /// No description provided for @settings_videoCapturing_Section_resolution_prefix.
   ///
   /// In en, this message translates to:
-  /// **'Dial code:'**
-  String get settings_callerId_dialcode;
+  /// **'vertical points: '**
+  String get settings_videoCapturing_Section_resolution_prefix;
 
-  /// No description provided for @settings_callerId_number.
+  /// No description provided for @settings_videoCapturing_Section_resolution_title.
   ///
   /// In en, this message translates to:
-  /// **'Number:'**
-  String get settings_callerId_number;
+  /// **'Image resolution'**
+  String get settings_videoCapturing_Section_resolution_title;
 
-  /// No description provided for @settings_callerId_number_hint.
+  /// No description provided for @settings_videoCapturing_Section_title.
   ///
   /// In en, this message translates to:
-  /// **'Select a number'**
-  String get settings_callerId_number_hint;
+  /// **'Video capturing'**
+  String get settings_videoCapturing_Section_title;
 
-  /// No description provided for @settings_callerId_duplicate_dialcode_error.
+  /// No description provided for @settings_videoCapturing_Section_tooltip.
   ///
   /// In en, this message translates to:
-  /// **'Please choose a different dial code, this one is already in use.'**
-  String get settings_callerId_duplicate_dialcode_error;
+  /// **'Can be used to tune video quality for specific needs or environments.'**
+  String get settings_videoCapturing_Section_tooltip;
 
-  /// No description provided for @settings_callerId_save_button.
+  /// No description provided for @settings_videoOffer_option_ignore.
   ///
   /// In en, this message translates to:
-  /// **'Save'**
-  String get settings_callerId_save_button;
+  /// **'Respond without video\nNo track will be added unless negotiated later.'**
+  String get settings_videoOffer_option_ignore;
 
-  /// No description provided for @settings_callerId_cancel_button.
+  /// No description provided for @settings_videoOffer_option_includeInactive.
   ///
   /// In en, this message translates to:
-  /// **'Cancel'**
-  String get settings_callerId_cancel_button;
+  /// **'Include inactive video track\nEnsures compatibility with video offers for future activation.'**
+  String get settings_videoOffer_option_includeInactive;
+
+  /// No description provided for @settings_videoOffer_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Determine how this device responds to an offer that includes video.'**
+  String get settings_videoOffer_title;
 
   /// No description provided for @signalingResponseCode_ambiguousRequest.
   ///
@@ -3436,6 +3484,18 @@ abstract class AppLocalizations {
   /// **'The server is unreachable. This could be due to no internet connection or server maintenance. Please check your internet connection and try again.'**
   String get socketError_serverUnreachableDescription;
 
+  /// No description provided for @system_notifications_screen_list_empty.
+  ///
+  /// In en, this message translates to:
+  /// **'No notifications yet'**
+  String get system_notifications_screen_list_empty;
+
+  /// No description provided for @system_notifications_screen_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications'**
+  String get system_notifications_screen_title;
+
   /// No description provided for @themeMode_dark.
   ///
   /// In en, this message translates to:
@@ -3454,7 +3514,7 @@ abstract class AppLocalizations {
   /// **'System'**
   String get themeMode_system;
 
-  /// No description provided for @user_agreement_agrement_link.
+  /// Using in agreement checkbox as a mask for the URL
   ///
   /// In en, this message translates to:
   /// **'The terms and conditions of the agreement'**
@@ -3484,6 +3544,84 @@ abstract class AppLocalizations {
   /// **'Please enter a value'**
   String get validationBlankError;
 
+  /// No description provided for @voicemail_Description_notSupported.
+  ///
+  /// In en, this message translates to:
+  /// **'Voicemail feature are not supported in your core. Please contact your administrator for more information.'**
+  String get voicemail_Description_notSupported;
+
+  /// No description provided for @voicemail_Dialog_deleteSingleContent.
+  ///
+  /// In en, this message translates to:
+  /// **'This voicemail will be permanently deleted. Do you want to continue?'**
+  String get voicemail_Dialog_deleteSingleContent;
+
+  /// No description provided for @voicemail_Dialog_deleteSingleTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete voicemail?'**
+  String get voicemail_Dialog_deleteSingleTitle;
+
+  /// No description provided for @voicemail_Label_call.
+  ///
+  /// In en, this message translates to:
+  /// **'Call'**
+  String get voicemail_Label_call;
+
+  /// No description provided for @voicemail_Label_delete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get voicemail_Label_delete;
+
+  /// No description provided for @voicemail_Label_deleteAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete all voicemails?'**
+  String get voicemail_Label_deleteAll;
+
+  /// No description provided for @voicemail_Label_deleteAllDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'This action will permanently delete all your voicemails. This cannot be undone.'**
+  String get voicemail_Label_deleteAllDescription;
+
+  /// No description provided for @voicemail_Label_empty.
+  ///
+  /// In en, this message translates to:
+  /// **'No voicemails'**
+  String get voicemail_Label_empty;
+
+  /// No description provided for @voicemail_Label_markAsHeard.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark as heard'**
+  String get voicemail_Label_markAsHeard;
+
+  /// No description provided for @voicemail_Label_markAsNew.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark as new'**
+  String get voicemail_Label_markAsNew;
+
+  /// No description provided for @voicemail_Label_retry.
+  ///
+  /// In en, this message translates to:
+  /// **'Try again'**
+  String get voicemail_Label_retry;
+
+  /// No description provided for @voicemail_Title_notSupported.
+  ///
+  /// In en, this message translates to:
+  /// **'Feature not supported'**
+  String get voicemail_Title_notSupported;
+
+  /// No description provided for @voicemail_Widget_screenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Voicemail'**
+  String get voicemail_Widget_screenTitle;
+
   /// No description provided for @webRegistration_ErrorAcknowledgeDialogActions_retry.
   ///
   /// In en, this message translates to:
@@ -3501,90 +3639,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Web resource error'**
   String get webRegistration_ErrorAcknowledgeDialog_title;
-
-  /// No description provided for @system_notifications_screen_title.
-  ///
-  /// In en, this message translates to:
-  /// **'Notifications'**
-  String get system_notifications_screen_title;
-
-  /// No description provided for @system_notifications_screen_list_empty.
-  ///
-  /// In en, this message translates to:
-  /// **'No notifications yet'**
-  String get system_notifications_screen_list_empty;
-
-  /// No description provided for @numberActions_audioCall.
-  ///
-  /// In en, this message translates to:
-  /// **'Audio call'**
-  String get numberActions_audioCall;
-
-  /// No description provided for @numberActions_videoCall.
-  ///
-  /// In en, this message translates to:
-  /// **'Video call'**
-  String get numberActions_videoCall;
-
-  /// No description provided for @numberActions_transfer.
-  ///
-  /// In en, this message translates to:
-  /// **'Transfer current call'**
-  String get numberActions_transfer;
-
-  /// No description provided for @numberActions_chat.
-  ///
-  /// In en, this message translates to:
-  /// **'Send chat message'**
-  String get numberActions_chat;
-
-  /// No description provided for @numberActions_sendSms.
-  ///
-  /// In en, this message translates to:
-  /// **'Send sms message'**
-  String get numberActions_sendSms;
-
-  /// No description provided for @numberActions_viewContact.
-  ///
-  /// In en, this message translates to:
-  /// **'View Contact'**
-  String get numberActions_viewContact;
-
-  /// No description provided for @numberActions_callLog.
-  ///
-  /// In en, this message translates to:
-  /// **'View call history'**
-  String get numberActions_callLog;
-
-  /// No description provided for @numberActions_copyNumber.
-  ///
-  /// In en, this message translates to:
-  /// **'Copy number'**
-  String get numberActions_copyNumber;
-
-  /// No description provided for @numberActions_delete.
-  ///
-  /// In en, this message translates to:
-  /// **'Delete'**
-  String get numberActions_delete;
-
-  /// No description provided for @numberActions_callFrom.
-  ///
-  /// In en, this message translates to:
-  /// **'Call from {number}'**
-  String numberActions_callFrom(String number);
-
-  /// No description provided for @callPullBadge_dialogTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Pullable Calls'**
-  String get callPullBadge_dialogTitle;
-
-  /// No description provided for @callPullBadge_pickupButtonTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Pick up'**
-  String get callPullBadge_pickupButtonTitle;
 }
 
 class _AppLocalizationsDelegate
