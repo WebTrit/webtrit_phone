@@ -127,6 +127,11 @@ class AppLocalizationsMapper {
           localizations.callProcessingStatus_routing,
       'callProcessingStatus_signaling_connecting':
           localizations.callProcessingStatus_signaling_connecting,
+      'callPullBadge_dialogTitle': localizations.callPullBadge_dialogTitle,
+      'callPullBadge_pickupButtonTitle':
+          localizations.callPullBadge_pickupButtonTitle,
+      'call_settings_additional_options':
+          localizations.call_settings_additional_options,
       'callStatus_appUnregistered': localizations.callStatus_appUnregistered,
       'callStatus_connectError': localizations.callStatus_connectError,
       'callStatus_connectIssue': localizations.callStatus_connectIssue,
@@ -158,10 +163,14 @@ class AppLocalizationsMapper {
           localizations.contacts_ExternalTabText_emptyOnSearching,
       'contacts_ExternalTabText_failure':
           localizations.contacts_ExternalTabText_failure,
+      'contacts_LocalTabButton_contactsAgreement':
+          localizations.contacts_LocalTabButton_contactsAgreement,
       'contacts_LocalTabButton_openAppSettings':
           localizations.contacts_LocalTabButton_openAppSettings,
       'contacts_LocalTabButton_refresh':
           localizations.contacts_LocalTabButton_refresh,
+      'contacts_LocalTabText_contactsAgreementFailure':
+          localizations.contacts_LocalTabText_contactsAgreementFailure,
       'contacts_LocalTabText_empty': localizations.contacts_LocalTabText_empty,
       'contacts_LocalTabText_emptyOnSearching':
           localizations.contacts_LocalTabText_emptyOnSearching,
@@ -169,10 +178,6 @@ class AppLocalizationsMapper {
           localizations.contacts_LocalTabText_failure,
       'contacts_LocalTabText_permissionFailure':
           localizations.contacts_LocalTabText_permissionFailure,
-      'contacts_LocalTabText_contactsAgreementFailure':
-          localizations.contacts_LocalTabText_contactsAgreementFailure,
-      'contacts_LocalTabButton_contactsAgreement':
-          localizations.contacts_LocalTabButton_contactsAgreement,
       'contactsSourceExternal': localizations.contactsSourceExternal,
       'contactsSourceLocal': localizations.contactsSourceLocal,
       'contacts_Text_blingTransferInitiated':
@@ -589,29 +594,10 @@ class AppLocalizationsMapper {
       'messaging_StateBar_error': localizations.messaging_StateBar_error,
       'messaging_StateBar_initializing':
           localizations.messaging_StateBar_initializing,
-      'voicemail_Widget_screenTitle':
-          localizations.voicemail_Widget_screenTitle,
-      'voicemail_Label_deleteAll': localizations.voicemail_Label_deleteAll,
-      'voicemail_Label_deleteAllDescription':
-          localizations.voicemail_Label_deleteAllDescription,
-      'voicemail_Label_empty': localizations.voicemail_Label_empty,
-      'voicemail_Label_retry': localizations.voicemail_Label_retry,
-      'voicemail_Label_call': localizations.voicemail_Label_call,
-      'voicemail_Label_markAsHeard': localizations.voicemail_Label_markAsHeard,
-      'voicemail_Label_markAsNew': localizations.voicemail_Label_markAsNew,
-      'voicemail_Label_delete': localizations.voicemail_Label_delete,
-      'voicemail_Dialog_deleteSingleTitle':
-          localizations.voicemail_Dialog_deleteSingleTitle,
-      'voicemail_Dialog_deleteSingleContent':
-          localizations.voicemail_Dialog_deleteSingleContent,
-      'voicemail_Title_notSupported':
-          localizations.voicemail_Title_notSupported,
-      'voicemail_Description_notSupported':
-          localizations.voicemail_Description_notSupported,
-      'notifications_errorSnackBarAction_callUserMedia':
-          localizations.notifications_errorSnackBarAction_callUserMedia,
       'notifications_errorSnackBarAction_callSdpConfiguration':
           localizations.notifications_errorSnackBarAction_callSdpConfiguration,
+      'notifications_errorSnackBarAction_callUserMedia':
+          localizations.notifications_errorSnackBarAction_callUserMedia,
       'notifications_errorSnackBar_activeLineBlindTransferWarning':
           localizations
               .notifications_errorSnackBar_activeLineBlindTransferWarning,
@@ -623,6 +609,8 @@ class AppLocalizationsMapper {
           localizations.notifications_errorSnackBar_appUnregistered,
       'notifications_errorSnackBar_callConnect':
           localizations.notifications_errorSnackBar_callConnect,
+      'notifications_errorSnackBar_callNegotiationTimeout':
+          localizations.notifications_errorSnackBar_callNegotiationTimeout,
       'notifications_errorSnackBar_callSignalingClientNotConnect': localizations
           .notifications_errorSnackBar_callSignalingClientNotConnect,
       'notifications_errorSnackBar_callSignalingClientSessionMissed':
@@ -636,8 +624,6 @@ class AppLocalizationsMapper {
           localizations.notifications_errorSnackBar_callWhileOffline,
       'notifications_errorSnackBar_callWhileUnregistered':
           localizations.notifications_errorSnackBar_callWhileUnregistered,
-      'notifications_errorSnackBar_callNegotiationTimeout':
-          localizations.notifications_errorSnackBar_callNegotiationTimeout,
       'notifications_errorSnackBar_SignalingConnectFailed':
           localizations.notifications_errorSnackBar_SignalingConnectFailed,
       'notifications_errorSnackBar_SignalingSessionMissed':
@@ -654,6 +640,15 @@ class AppLocalizationsMapper {
           localizations.notifications_messageSnackBar_appOffline,
       'notifications_successSnackBar_appOnline':
           localizations.notifications_successSnackBar_appOnline,
+      'numberActions_audioCall': localizations.numberActions_audioCall,
+      'numberActions_callLog': localizations.numberActions_callLog,
+      'numberActions_chat': localizations.numberActions_chat,
+      'numberActions_copyNumber': localizations.numberActions_copyNumber,
+      'numberActions_delete': localizations.numberActions_delete,
+      'numberActions_sendSms': localizations.numberActions_sendSms,
+      'numberActions_transfer': localizations.numberActions_transfer,
+      'numberActions_videoCall': localizations.numberActions_videoCall,
+      'numberActions_viewContact': localizations.numberActions_viewContact,
       'permission_Button_request': localizations.permission_Button_request,
       'permission_manageFullScreenNotificationInstructions_step1': localizations
           .permission_manageFullScreenNotificationInstructions_step1,
@@ -724,82 +719,112 @@ class AppLocalizationsMapper {
           localizations.settings_AccountDeleteConfirmDialog_title,
       'settings_AppBarTitle_myAccount':
           localizations.settings_AppBarTitle_myAccount,
+      'settings_audioProcessing_Section_AGC_title':
+          localizations.settings_audioProcessing_Section_AGC_title,
+      'settings_audioProcessing_Section_AM_title':
+          localizations.settings_audioProcessing_Section_AM_title,
+      'settings_audioProcessing_Section_EC_title':
+          localizations.settings_audioProcessing_Section_EC_title,
+      'settings_audioProcessing_Section_HPF_title':
+          localizations.settings_audioProcessing_Section_HPF_title,
+      'settings_audioProcessing_Section_NS_title':
+          localizations.settings_audioProcessing_Section_NS_title,
+      'settings_audioProcessing_Section_title':
+          localizations.settings_audioProcessing_Section_title,
+      'settings_audioProcessing_Section_tooltip':
+          localizations.settings_audioProcessing_Section_tooltip,
+      'settings_audioProcessing_Section_VP_title':
+          localizations.settings_audioProcessing_Section_VP_title,
+      'settings_call_codecs_preferred_audio_default':
+          localizations.settings_call_codecs_preferred_audio_default,
+      'settings_call_codecs_preferred_audio_tip':
+          localizations.settings_call_codecs_preferred_audio_tip,
+      'settings_call_codecs_preferred_audio_title':
+          localizations.settings_call_codecs_preferred_audio_title,
+      'settings_call_codecs_preferred_video_default':
+          localizations.settings_call_codecs_preferred_video_default,
+      'settings_call_codecs_preferred_video_tip':
+          localizations.settings_call_codecs_preferred_video_tip,
+      'settings_call_codecs_preferred_video_title':
+          localizations.settings_call_codecs_preferred_video_title,
+      'settings_callerId_cancel_button':
+          localizations.settings_callerId_cancel_button,
+      'settings_callerId_defaultTitle':
+          localizations.settings_callerId_defaultTitle,
+      'settings_callerId_dialcode': localizations.settings_callerId_dialcode,
+      'settings_callerId_dialCodeMatching_title':
+          localizations.settings_callerId_dialCodeMatching_title,
+      'settings_callerId_duplicate_dialcode_error':
+          localizations.settings_callerId_duplicate_dialcode_error,
+      'settings_callerId_number': localizations.settings_callerId_number,
+      'settings_callerId_number_hint':
+          localizations.settings_callerId_number_hint,
+      'settings_callerId_save_button':
+          localizations.settings_callerId_save_button,
+      'settings_connectionSection_title':
+          localizations.settings_connectionSection_title,
+      'settings_connectionSection_tooltip':
+          localizations.settings_connectionSection_tooltip,
       'settings_encoding_AppBar_reset_tooltip':
           localizations.settings_encoding_AppBar_reset_tooltip,
-      'settings_encoding_Section_preset_title':
-          localizations.settings_encoding_Section_preset_title,
-      'settings_encoding_Section_preset_tooltip':
-          localizations.settings_encoding_Section_preset_tooltip,
-      'settings_encoding_Section_preset':
-          localizations.settings_encoding_Section_preset,
-      'settings_encoding_Section_preset_default':
-          localizations.settings_encoding_Section_preset_default,
-      'settings_encoding_Section_preset_eco':
-          localizations.settings_encoding_Section_preset_eco,
-      'settings_encoding_Section_preset_balance':
-          localizations.settings_encoding_Section_preset_balance,
-      'settings_encoding_Section_preset_quality':
-          localizations.settings_encoding_Section_preset_quality,
-      'settings_encoding_Section_preset_full_flex':
-          localizations.settings_encoding_Section_preset_full_flex,
-      'settings_encoding_Section_preset_custom':
-          localizations.settings_encoding_Section_preset_custom,
-      'settings_encoding_Section_preset_bypass':
-          localizations.settings_encoding_Section_preset_bypass,
-      'settings_encoding_Section_measure_kbps':
-          localizations.settings_encoding_Section_measure_kbps,
-      'settings_encoding_Section_measure_ms':
-          localizations.settings_encoding_Section_measure_ms,
-      'settings_encoding_Section_measure_hz':
-          localizations.settings_encoding_Section_measure_hz,
-      'settings_encoding_Section_value_auto':
-          localizations.settings_encoding_Section_value_auto,
-      'settings_encoding_Section_value_mono':
-          localizations.settings_encoding_Section_value_mono,
-      'settings_encoding_Section_value_stereo':
-          localizations.settings_encoding_Section_value_stereo,
-      'settings_encoding_Section_value_enable':
-          localizations.settings_encoding_Section_value_enable,
-      'settings_encoding_Section_value_disable':
-          localizations.settings_encoding_Section_value_disable,
-      'settings_encoding_Section_value_on':
-          localizations.settings_encoding_Section_value_on,
-      'settings_encoding_Section_value_off':
-          localizations.settings_encoding_Section_value_off,
-      'settings_encoding_Section_bitrate_prefix':
-          localizations.settings_encoding_Section_bitrate_prefix,
-      'settings_encoding_Section_ptime_prefix':
-          localizations.settings_encoding_Section_ptime_prefix,
-      'settings_encoding_Section_bandwidth_prefix':
-          localizations.settings_encoding_Section_bandwidth_prefix,
-      'settings_encoding_Section_bitrate_title':
-          localizations.settings_encoding_Section_bitrate_title,
-      'settings_encoding_Section_bitrate_tooltip':
-          localizations.settings_encoding_Section_bitrate_tooltip,
-      'settings_encoding_Section_target_audio_bitrate':
-          localizations.settings_encoding_Section_target_audio_bitrate,
-      'settings_encoding_Section_target_video_bitrate':
-          localizations.settings_encoding_Section_target_video_bitrate,
-      'settings_encoding_Section_packetization_title':
-          localizations.settings_encoding_Section_packetization_title,
-      'settings_encoding_Section_packetization_tooltip':
-          localizations.settings_encoding_Section_packetization_tooltip,
       'settings_encoding_Section_audio_ptime':
           localizations.settings_encoding_Section_audio_ptime,
       'settings_encoding_Section_audio_ptime_limit':
           localizations.settings_encoding_Section_audio_ptime_limit,
-      'settings_encoding_Section_opus_samplingRate':
-          localizations.settings_encoding_Section_opus_samplingRate,
+      'settings_encoding_Section_bandwidth_prefix':
+          localizations.settings_encoding_Section_bandwidth_prefix,
+      'settings_encoding_Section_bitrate_prefix':
+          localizations.settings_encoding_Section_bitrate_prefix,
+      'settings_encoding_Section_bitrate_title':
+          localizations.settings_encoding_Section_bitrate_title,
+      'settings_encoding_Section_bitrate_tooltip':
+          localizations.settings_encoding_Section_bitrate_tooltip,
+      'settings_encoding_Section_measure_hz':
+          localizations.settings_encoding_Section_measure_hz,
+      'settings_encoding_Section_measure_kbps':
+          localizations.settings_encoding_Section_measure_kbps,
+      'settings_encoding_Section_measure_ms':
+          localizations.settings_encoding_Section_measure_ms,
+      'settings_encoding_Section_opus_bandwidth':
+          localizations.settings_encoding_Section_opus_bandwidth,
       'settings_encoding_Section_opus_bitrate':
           localizations.settings_encoding_Section_opus_bitrate,
       'settings_encoding_Section_opus_channels':
           localizations.settings_encoding_Section_opus_channels,
       'settings_encoding_Section_opus_dtx':
           localizations.settings_encoding_Section_opus_dtx,
+      'settings_encoding_Section_opus_samplingRate':
+          localizations.settings_encoding_Section_opus_samplingRate,
       'settings_encoding_Section_opus_title':
           localizations.settings_encoding_Section_opus_title,
       'settings_encoding_Section_opus_tooltip':
           localizations.settings_encoding_Section_opus_tooltip,
+      'settings_encoding_Section_packetization_title':
+          localizations.settings_encoding_Section_packetization_title,
+      'settings_encoding_Section_packetization_tooltip':
+          localizations.settings_encoding_Section_packetization_tooltip,
+      'settings_encoding_Section_preset':
+          localizations.settings_encoding_Section_preset,
+      'settings_encoding_Section_preset_balance':
+          localizations.settings_encoding_Section_preset_balance,
+      'settings_encoding_Section_preset_bypass':
+          localizations.settings_encoding_Section_preset_bypass,
+      'settings_encoding_Section_preset_custom':
+          localizations.settings_encoding_Section_preset_custom,
+      'settings_encoding_Section_preset_default':
+          localizations.settings_encoding_Section_preset_default,
+      'settings_encoding_Section_preset_eco':
+          localizations.settings_encoding_Section_preset_eco,
+      'settings_encoding_Section_preset_full_flex':
+          localizations.settings_encoding_Section_preset_full_flex,
+      'settings_encoding_Section_preset_quality':
+          localizations.settings_encoding_Section_preset_quality,
+      'settings_encoding_Section_preset_title':
+          localizations.settings_encoding_Section_preset_title,
+      'settings_encoding_Section_preset_tooltip':
+          localizations.settings_encoding_Section_preset_tooltip,
+      'settings_encoding_Section_ptime_prefix':
+          localizations.settings_encoding_Section_ptime_prefix,
       'settings_encoding_Section_rtp_override_audio':
           localizations.settings_encoding_Section_rtp_override_audio,
       'settings_encoding_Section_rtp_override_title':
@@ -808,85 +833,68 @@ class AppLocalizationsMapper {
           localizations.settings_encoding_Section_rtp_override_tooltip,
       'settings_encoding_Section_rtp_override_video':
           localizations.settings_encoding_Section_rtp_override_video,
-      'settings_encoding_Section_rtp_override_warning_title':
-          localizations.settings_encoding_Section_rtp_override_warning_title,
       'settings_encoding_Section_rtp_override_warning_message':
           localizations.settings_encoding_Section_rtp_override_warning_message,
-      'settings_audioProcessing_Section_title':
-          localizations.settings_audioProcessing_Section_title,
-      'settings_audioProcessing_Section_tooltip':
-          localizations.settings_audioProcessing_Section_tooltip,
-      'settings_audioProcessing_Section_VP_title':
-          localizations.settings_audioProcessing_Section_VP_title,
-      'settings_audioProcessing_Section_EC_title':
-          localizations.settings_audioProcessing_Section_EC_title,
-      'settings_audioProcessing_Section_AGC_title':
-          localizations.settings_audioProcessing_Section_AGC_title,
-      'settings_audioProcessing_Section_NS_title':
-          localizations.settings_audioProcessing_Section_NS_title,
-      'settings_audioProcessing_Section_HPF_title':
-          localizations.settings_audioProcessing_Section_HPF_title,
-      'settings_audioProcessing_Section_AM_title':
-          localizations.settings_audioProcessing_Section_AM_title,
-      'settings_videoCapturing_Section_title':
-          localizations.settings_videoCapturing_Section_title,
-      'settings_videoCapturing_Section_tooltip':
-          localizations.settings_videoCapturing_Section_tooltip,
-      'settings_videoCapturing_Section_resolution_title':
-          localizations.settings_videoCapturing_Section_resolution_title,
-      'settings_videoCapturing_Section_resolution_prefix':
-          localizations.settings_videoCapturing_Section_resolution_prefix,
-      'settings_videoCapturing_Section_framerate_title':
-          localizations.settings_videoCapturing_Section_framerate_title,
-      'settings_videoCapturing_Section_framerate_prefix':
-          localizations.settings_videoCapturing_Section_framerate_prefix,
-      'settings_iceSettings_Section_title':
-          localizations.settings_iceSettings_Section_title,
-      'settings_iceSettings_Section_tooltip':
-          localizations.settings_iceSettings_Section_tooltip,
-      'settings_iceSettings_Section_netfilter_title':
-          localizations.settings_iceSettings_Section_netfilter_title,
-      'settings_iceSettings_Section_noskip':
-          localizations.settings_iceSettings_Section_noskip,
+      'settings_encoding_Section_rtp_override_warning_title':
+          localizations.settings_encoding_Section_rtp_override_warning_title,
+      'settings_encoding_Section_target_audio_bitrate':
+          localizations.settings_encoding_Section_target_audio_bitrate,
+      'settings_encoding_Section_target_video_bitrate':
+          localizations.settings_encoding_Section_target_video_bitrate,
+      'settings_encoding_Section_value_auto':
+          localizations.settings_encoding_Section_value_auto,
+      'settings_encoding_Section_value_disable':
+          localizations.settings_encoding_Section_value_disable,
+      'settings_encoding_Section_value_enable':
+          localizations.settings_encoding_Section_value_enable,
+      'settings_encoding_Section_value_mono':
+          localizations.settings_encoding_Section_value_mono,
+      'settings_encoding_Section_value_off':
+          localizations.settings_encoding_Section_value_off,
+      'settings_encoding_Section_value_on':
+          localizations.settings_encoding_Section_value_on,
+      'settings_encoding_Section_value_stereo':
+          localizations.settings_encoding_Section_value_stereo,
       'settings_iceSettings_Section_netfilter_skipv4':
           localizations.settings_iceSettings_Section_netfilter_skipv4,
       'settings_iceSettings_Section_netfilter_skipv6':
           localizations.settings_iceSettings_Section_netfilter_skipv6,
-      'settings_iceSettings_Section_trfilter_title':
-          localizations.settings_iceSettings_Section_trfilter_title,
-      'settings_iceSettings_Section_trfilter_skipUdp':
-          localizations.settings_iceSettings_Section_trfilter_skipUdp,
+      'settings_iceSettings_Section_netfilter_title':
+          localizations.settings_iceSettings_Section_netfilter_title,
+      'settings_iceSettings_Section_noskip':
+          localizations.settings_iceSettings_Section_noskip,
+      'settings_iceSettings_Section_title':
+          localizations.settings_iceSettings_Section_title,
+      'settings_iceSettings_Section_tooltip':
+          localizations.settings_iceSettings_Section_tooltip,
       'settings_iceSettings_Section_trfilter_skipTcp':
           localizations.settings_iceSettings_Section_trfilter_skipTcp,
-      'settings_connectionSection_title':
-          localizations.settings_connectionSection_title,
-      'settings_connectionSection_tooltip':
-          localizations.settings_connectionSection_tooltip,
-      'settings_videoOffer_title': localizations.settings_videoOffer_title,
-      'settings_videoOffer_option_includeInactive':
-          localizations.settings_videoOffer_option_includeInactive,
-      'settings_videoOffer_option_ignore':
-          localizations.settings_videoOffer_option_ignore,
-      'call_settings_additional_options':
-          localizations.call_settings_additional_options,
+      'settings_iceSettings_Section_trfilter_skipUdp':
+          localizations.settings_iceSettings_Section_trfilter_skipUdp,
+      'settings_iceSettings_Section_trfilter_title':
+          localizations.settings_iceSettings_Section_trfilter_title,
       'settings_ListViewTileTitle_about':
           localizations.settings_ListViewTileTitle_about,
       'settings_ListViewTileTitle_accountDelete':
           localizations.settings_ListViewTileTitle_accountDelete,
-      'settings_ListViewTileTitle_mediaSettings':
-          localizations.settings_ListViewTileTitle_mediaSettings,
+      'settings_ListViewTileTitle_call_codecs':
+          localizations.settings_ListViewTileTitle_call_codecs,
       'settings_ListViewTileTitle_callerId':
           localizations.settings_ListViewTileTitle_callerId,
+      'settings_ListViewTileTitle_encoding':
+          localizations.settings_ListViewTileTitle_encoding,
+      'settings_ListViewTileTitle_features':
+          localizations.settings_ListViewTileTitle_features,
       'settings_ListViewTileTitle_help':
           localizations.settings_ListViewTileTitle_help,
       'settings_ListViewTileTitle_language':
           localizations.settings_ListViewTileTitle_language,
-      'settings_ListViewTileTitle_voicemail':
-          localizations.settings_ListViewTileTitle_voicemail,
       'settings_ListViewTileTitle_logout':
           localizations.settings_ListViewTileTitle_logout,
       'settings_ListViewTileTitle_logRecordsConsole':
           localizations.settings_ListViewTileTitle_logRecordsConsole,
+      'settings_ListViewTileTitle_mediaSettings':
+          localizations.settings_ListViewTileTitle_mediaSettings,
       'settings_ListViewTileTitle_network':
           localizations.settings_ListViewTileTitle_network,
       'settings_ListViewTileTitle_registered':
@@ -895,18 +903,22 @@ class AppLocalizationsMapper {
           localizations.settings_ListViewTileTitle_self_config,
       'settings_ListViewTileTitle_settings':
           localizations.settings_ListViewTileTitle_settings,
-      'settings_ListViewTileTitle_features':
-          localizations.settings_ListViewTileTitle_features,
       'settings_ListViewTileTitle_termsConditions':
           localizations.settings_ListViewTileTitle_termsConditions,
       'settings_ListViewTileTitle_themeMode':
           localizations.settings_ListViewTileTitle_themeMode,
       'settings_ListViewTileTitle_toolbox':
           localizations.settings_ListViewTileTitle_toolbox,
+      'settings_ListViewTileTitle_voicemail':
+          localizations.settings_ListViewTileTitle_voicemail,
       'settings_LogoutConfirmDialog_content':
           localizations.settings_LogoutConfirmDialog_content,
       'settings_LogoutConfirmDialog_title':
           localizations.settings_LogoutConfirmDialog_title,
+      'settings_network_fallbackCalls_description':
+          localizations.settings_network_fallbackCalls_description,
+      'settings_network_fallbackCalls_title':
+          localizations.settings_network_fallbackCalls_title,
       'settings_network_incomingCallType_pushNotification_description':
           localizations
               .settings_network_incomingCallType_pushNotification_description,
@@ -918,26 +930,25 @@ class AppLocalizationsMapper {
           localizations.settings_network_incomingCallType_socket_title,
       'settings_network_incomingCallType_title':
           localizations.settings_network_incomingCallType_title,
-      'settings_network_fallbackCalls_title':
-          localizations.settings_network_fallbackCalls_title,
-      'settings_network_fallbackCalls_description':
-          localizations.settings_network_fallbackCalls_description,
       'settings_network_smsFallback_toggle':
           localizations.settings_network_smsFallback_toggle,
-      'settings_callerId_defaultTitle':
-          localizations.settings_callerId_defaultTitle,
-      'settings_callerId_dialCodeMatching_title':
-          localizations.settings_callerId_dialCodeMatching_title,
-      'settings_callerId_dialcode': localizations.settings_callerId_dialcode,
-      'settings_callerId_number': localizations.settings_callerId_number,
-      'settings_callerId_number_hint':
-          localizations.settings_callerId_number_hint,
-      'settings_callerId_duplicate_dialcode_error':
-          localizations.settings_callerId_duplicate_dialcode_error,
-      'settings_callerId_save_button':
-          localizations.settings_callerId_save_button,
-      'settings_callerId_cancel_button':
-          localizations.settings_callerId_cancel_button,
+      'settings_videoCapturing_Section_framerate_prefix':
+          localizations.settings_videoCapturing_Section_framerate_prefix,
+      'settings_videoCapturing_Section_framerate_title':
+          localizations.settings_videoCapturing_Section_framerate_title,
+      'settings_videoCapturing_Section_resolution_prefix':
+          localizations.settings_videoCapturing_Section_resolution_prefix,
+      'settings_videoCapturing_Section_resolution_title':
+          localizations.settings_videoCapturing_Section_resolution_title,
+      'settings_videoCapturing_Section_title':
+          localizations.settings_videoCapturing_Section_title,
+      'settings_videoCapturing_Section_tooltip':
+          localizations.settings_videoCapturing_Section_tooltip,
+      'settings_videoOffer_option_ignore':
+          localizations.settings_videoOffer_option_ignore,
+      'settings_videoOffer_option_includeInactive':
+          localizations.settings_videoOffer_option_includeInactive,
+      'settings_videoOffer_title': localizations.settings_videoOffer_title,
       'signalingResponseCode_ambiguousRequest':
           localizations.signalingResponseCode_ambiguousRequest,
       'signalingResponseCode_busyEverywhere':
@@ -1058,6 +1069,10 @@ class AppLocalizationsMapper {
           localizations.socketError_serverUnreachable,
       'socketError_serverUnreachableDescription':
           localizations.socketError_serverUnreachableDescription,
+      'system_notifications_screen_list_empty':
+          localizations.system_notifications_screen_list_empty,
+      'system_notifications_screen_title':
+          localizations.system_notifications_screen_title,
       'themeMode_dark': localizations.themeMode_dark,
       'themeMode_light': localizations.themeMode_light,
       'themeMode_system': localizations.themeMode_system,
@@ -1065,28 +1080,31 @@ class AppLocalizationsMapper {
           localizations.user_agreement_agrement_link,
       'user_agreement_button_text': localizations.user_agreement_button_text,
       'validationBlankError': localizations.validationBlankError,
+      'voicemail_Description_notSupported':
+          localizations.voicemail_Description_notSupported,
+      'voicemail_Dialog_deleteSingleContent':
+          localizations.voicemail_Dialog_deleteSingleContent,
+      'voicemail_Dialog_deleteSingleTitle':
+          localizations.voicemail_Dialog_deleteSingleTitle,
+      'voicemail_Label_call': localizations.voicemail_Label_call,
+      'voicemail_Label_delete': localizations.voicemail_Label_delete,
+      'voicemail_Label_deleteAll': localizations.voicemail_Label_deleteAll,
+      'voicemail_Label_deleteAllDescription':
+          localizations.voicemail_Label_deleteAllDescription,
+      'voicemail_Label_empty': localizations.voicemail_Label_empty,
+      'voicemail_Label_markAsHeard': localizations.voicemail_Label_markAsHeard,
+      'voicemail_Label_markAsNew': localizations.voicemail_Label_markAsNew,
+      'voicemail_Label_retry': localizations.voicemail_Label_retry,
+      'voicemail_Title_notSupported':
+          localizations.voicemail_Title_notSupported,
+      'voicemail_Widget_screenTitle':
+          localizations.voicemail_Widget_screenTitle,
       'webRegistration_ErrorAcknowledgeDialogActions_retry':
           localizations.webRegistration_ErrorAcknowledgeDialogActions_retry,
       'webRegistration_ErrorAcknowledgeDialogActions_skip':
           localizations.webRegistration_ErrorAcknowledgeDialogActions_skip,
       'webRegistration_ErrorAcknowledgeDialog_title':
           localizations.webRegistration_ErrorAcknowledgeDialog_title,
-      'system_notifications_screen_title':
-          localizations.system_notifications_screen_title,
-      'system_notifications_screen_list_empty':
-          localizations.system_notifications_screen_list_empty,
-      'numberActions_audioCall': localizations.numberActions_audioCall,
-      'numberActions_videoCall': localizations.numberActions_videoCall,
-      'numberActions_transfer': localizations.numberActions_transfer,
-      'numberActions_chat': localizations.numberActions_chat,
-      'numberActions_sendSms': localizations.numberActions_sendSms,
-      'numberActions_viewContact': localizations.numberActions_viewContact,
-      'numberActions_callLog': localizations.numberActions_callLog,
-      'numberActions_copyNumber': localizations.numberActions_copyNumber,
-      'numberActions_delete': localizations.numberActions_delete,
-      'callPullBadge_dialogTitle': localizations.callPullBadge_dialogTitle,
-      'callPullBadge_pickupButtonTitle':
-          localizations.callPullBadge_pickupButtonTitle,
       'default_UnknownExceptionError': (error) =>
           localizations.default_UnknownExceptionError(error),
       'favorites_SnackBar_deleted': (name) =>
@@ -1127,6 +1145,8 @@ class AppLocalizationsMapper {
           (reason) => localizations
               .notifications_errorSnackBar_sipRegistrationFailed_WithSystemReason(
                   reason),
+      'numberActions_callFrom': (number) =>
+          localizations.numberActions_callFrom(number),
       'recents_BodyCenter_empty': (filter) =>
           localizations.recents_BodyCenter_empty(filter),
       'recents_snackBar_deleted': (name) =>
@@ -1141,8 +1161,6 @@ class AppLocalizationsMapper {
           localizations.user_agreement_checkbox_text(url),
       'user_agreement_description': (appName) =>
           localizations.user_agreement_description(appName),
-      'numberActions_callFrom': (number) =>
-          localizations.numberActions_callFrom(number),
     };
   }
 }
