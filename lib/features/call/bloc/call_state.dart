@@ -96,7 +96,7 @@ class CallState with _$CallState {
 }
 
 @freezed
-class ActiveCall with _$ActiveCall {
+class ActiveCall with _$ActiveCall implements CallEntry {
   ActiveCall._();
 
   factory ActiveCall({
@@ -124,12 +124,16 @@ class ActiveCall with _$ActiveCall {
     MediaStream? remoteStream,
   }) = _ActiveCall;
 
+  @override
   bool get isIncoming => direction == CallDirection.incoming;
 
+  @override
   bool get isOutgoing => direction == CallDirection.outgoing;
 
+  @override
   bool get wasAccepted => acceptedTime != null;
 
+  @override
   bool get wasHungUp => hungUpTime != null;
 
   bool get remoteVideo => remoteStream?.getVideoTracks().isNotEmpty ?? video;
