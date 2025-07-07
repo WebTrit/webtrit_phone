@@ -35,15 +35,13 @@ void main() {
       "content": "SIP/2.0 100 Trying\r\n"
     }
     ''') as Map<String, dynamic>,
-    NotifyEvent(
-      transaction: 'transaction 1',
-      line: 0,
-      callId: 'qwerty',
-      notify: 'refer',
-      subscriptionState: SubscriptionState.active,
-      contentType: 'message/sipfrag',
-      content: 'SIP/2.0 100 Trying\r\n',
-    ),
+    ReferNotifyEvent(
+        transaction: 'transaction 1',
+        line: 0,
+        callId: 'qwerty',
+        notify: 'refer',
+        subscriptionState: SubscriptionState.active,
+        state: ReferNotifyState.trying),
   );
 
   testFromJson(
@@ -59,14 +57,12 @@ void main() {
       "content": "SIP/2.0 100 Trying\r\n"
     }
     ''') as Map<String, dynamic>,
-    NotifyEvent(
-      line: 0,
-      callId: 'qwerty',
-      notify: 'refer',
-      subscriptionState: SubscriptionState.active,
-      contentType: 'message/sipfrag',
-      content: 'SIP/2.0 100 Trying\r\n',
-    ),
+    ReferNotifyEvent(
+        line: 0,
+        callId: 'qwerty',
+        notify: 'refer',
+        subscriptionState: SubscriptionState.active,
+        state: ReferNotifyState.trying),
   );
 
   test('$NotifyEvent fromJson error', () {

@@ -1715,7 +1715,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings_callerId_number_hint => 'Select a number';
 
   @override
-  String get settings_callerId_duplicate_dialcode_error => 'Please choose a different dial code, this one is already in use.';
+  String get settings_callerId_duplicate_dialcode_error =>
+      'Please choose a different dial code, this one is already in use.';
 
   @override
   String get settings_callerId_save_button => 'Save';
@@ -1724,7 +1725,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings_callerId_cancel_button => 'Cancel';
 
   @override
-  String get signalingResponseCode_ambiguousRequest => 'We couldn\'t understand your request.';
+  String get signalingResponseCode_ambiguousRequest =>
+      'We couldn\'t understand your request.';
 
   @override
   String get signalingResponseCode_busyEverywhere =>
@@ -2040,4 +2042,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String numberActions_callFrom(String number) {
     return 'Call from $number';
   }
+
+  @override
+  String get callPullBadge_dialogTitle => 'Pullable Calls';
+
+  @override
+  String get callPullBadge_pickupButtonTitle => 'Pick up';
 }

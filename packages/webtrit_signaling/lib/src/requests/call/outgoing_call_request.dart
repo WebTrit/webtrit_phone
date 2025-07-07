@@ -8,12 +8,14 @@ class OutgoingCallRequest extends CallRequest {
     required this.number,
     required this.jsep,
     this.referId,
+    this.replaces,
     this.from,
   });
 
   final String number;
   final Map<String, dynamic> jsep;
   final String? referId;
+  final String? replaces;
   final String? from;
 
   @override
@@ -22,6 +24,7 @@ class OutgoingCallRequest extends CallRequest {
         number,
         jsep,
         referId,
+        replaces,
         from,
       ];
 
@@ -39,6 +42,7 @@ class OutgoingCallRequest extends CallRequest {
       callId: json['call_id'],
       number: json['number'],
       referId: json['refer_id'],
+      replaces: json['replaces'],
       from: json['from'],
       jsep: json['jsep'],
     );
@@ -53,6 +57,7 @@ class OutgoingCallRequest extends CallRequest {
       'call_id': callId,
       'number': number,
       'refer_id': referId,
+      'replaces': replaces,
       'from': from,
       'jsep': jsep,
     };

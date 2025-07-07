@@ -134,14 +134,30 @@ class _CallSignalingEvent with _$CallSignalingEvent implements CallEvent {
     required String callId,
   }) = _CallSignalingEventTransferring;
 
-  const factory _CallSignalingEvent.notify({
+  const factory _CallSignalingEvent.notifyDialog({
+    required int? line,
+    required String callId,
+    required String? notify,
+    required SubscriptionState? subscriptionState,
+    required List<UserActiveCall> userActiveCalls,
+  }) = _CallSignalingEventNotifyDialog;
+
+  const factory _CallSignalingEvent.notifyRefer({
+    required int? line,
+    required String callId,
+    required String? notify,
+    required SubscriptionState? subscriptionState,
+    required ReferNotifyState state,
+  }) = _CallSignalingEventNotifyRefer;
+
+  const factory _CallSignalingEvent.notifyUnknown({
     required int? line,
     required String callId,
     required String? notify,
     required SubscriptionState? subscriptionState,
     required String? contentType,
     required String content,
-  }) = _CallSignalingEventNotify;
+  }) = _CallSignalingEventNotifyUnknown;
 
   const factory _CallSignalingEvent.registering() = _CallSignalingEventRegistering;
 
@@ -188,6 +204,7 @@ class CallControlEvent with _$CallControlEvent implements CallEvent {
     String? number,
     String? email,
     String? displayName,
+    String? replaces,
     String? fromNumber,
     required bool video,
   }) = _CallControlEventStarted;

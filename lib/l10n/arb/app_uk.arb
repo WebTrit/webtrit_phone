@@ -1261,5 +1261,9 @@
         "type": "String"
       }
     }
-  }
+  },
+  "callPullBadge_dialogTitle": "Перехопляємі дзвінки",
+  "@callPullBadge_dialogTitle": {},
+  "callPullBadge_pickupButtonTitle": "Перехопити",
+  "@callPullBadge_pickupButtonTitle": {}
 }

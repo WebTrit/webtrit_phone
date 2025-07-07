@@ -60,6 +60,7 @@ void main() {
       null,
       null,
     ],
+    userActiveCalls: [],
     guestLine: null,
   );
 

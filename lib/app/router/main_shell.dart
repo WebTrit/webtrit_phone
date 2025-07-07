@@ -211,6 +211,9 @@ class _MainShellState extends State<MainShell> {
             context.read<AppBloc>().state.token!,
           ),
         ),
+        RepositoryProvider<CallPullRepository>(
+          create: (context) => CallPullRepositoryMemoryImpl(),
+        ),
         RepositoryProvider<LinesStateRepository>(
           create: (context) => LinesStateRepositoryInMemoryImpl(),
         ),
@@ -317,6 +320,7 @@ class _MainShellState extends State<MainShell> {
                 token: appBloc.state.token!,
                 trustedCertificates: appCertificates.trustedCertificates,
                 callLogsRepository: context.read<CallLogsRepository>(),
+                callPullRepository: context.read<CallPullRepository>(),
                 linesStateRepository: context.read<LinesStateRepository>(),
                 submitNotification: (n) => notificationsBloc.add(NotificationsSubmitted(n)),
                 callkeep: _callkeep,
@@ -403,6 +407,12 @@ class _MainShellState extends State<MainShell> {
                   ),
                 ),
                 BlocProvider(
+                  lazy: false,
+                  create: (_) => CallPullCubit(
+                    context.read<CallPullRepository>(),
+                  ),
+                ),
+                BlocProvider<CallRoutingCubit>(
                   lazy: false,
                   create: (_) => CallRoutingCubit(
                     context.read<UserRepository>(),

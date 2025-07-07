@@ -113,6 +113,7 @@ class StateHandshake extends Handshake {
     required this.timestamp,
     required this.registration,
     required this.lines,
+    required this.userActiveCalls,
     required this.guestLine,
   }) : super();
 
@@ -120,6 +121,7 @@ class StateHandshake extends Handshake {
   final int timestamp;
   final Registration registration;
   final List<Line?> lines;
+  final List<UserActiveCall> userActiveCalls;
   final Line? guestLine;
 
   @override
@@ -128,6 +130,7 @@ class StateHandshake extends Handshake {
         timestamp,
         registration,
         lines,
+        userActiveCalls,
         guestLine,
       ];
 
@@ -189,6 +192,9 @@ class StateHandshake extends Handshake {
       );
     }).toList(growable: false);
 
+    final userActiveCallsJson = json['user_active_calls'] as List<dynamic>? ?? <dynamic>[];
+    final userActiveCalls = userActiveCallsJson.map((e) => UserActiveCall.fromJson(e)).toList();
+
     final guestLineJson = json['guest_line'];
     Line? guestLine;
     if (guestLineJson != null) {
@@ -221,6 +227,7 @@ class StateHandshake extends Handshake {
       timestamp: timestamp,
       registration: registration,
       lines: lines,
+      userActiveCalls: userActiveCalls,
       guestLine: guestLine,
     );
   }

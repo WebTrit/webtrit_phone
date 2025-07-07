@@ -1277,5 +1277,9 @@
         "type": "String"
       }
     }
-  }
+  },
+  "callPullBadge_dialogTitle": "Pullable Calls",
+  "@callPullBadge_dialogTitle": {},
+  "callPullBadge_pickupButtonTitle": "Pick up",
+  "@callPullBadge_pickupButtonTitle": {}
 }

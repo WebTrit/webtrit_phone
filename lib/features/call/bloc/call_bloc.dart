@@ -11,19 +11,18 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:logging/logging.dart';
+import 'package:ssl_certificates/ssl_certificates.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 
 import 'package:webtrit_signaling/webtrit_signaling.dart';
-import 'package:ssl_certificates/ssl_certificates.dart';
 
-import 'package:webtrit_phone/utils/utils.dart';
 import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/app/notifications/notifications.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
-import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/repositories/repositories.dart';
+import 'package:webtrit_phone/utils/utils.dart';
 
 import '../extensions/extensions.dart';
 import '../models/models.dart';
@@ -32,9 +31,7 @@ import '../utils/utils.dart';
 export 'package:webtrit_callkeep/webtrit_callkeep.dart' show CallkeepHandle, CallkeepHandleType;
 
 part 'call_bloc.freezed.dart';
-
 part 'call_event.dart';
-
 part 'call_state.dart';
 
 const int _kUndefinedLine = -1;
@@ -48,6 +45,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   final TrustedCertificates trustedCertificates;
 
   final CallLogsRepository callLogsRepository;
+  final CallPullRepository callPullRepository;
   final LinesStateRepository linesStateRepository;
   final Function(Notification) submitNotification;
 
@@ -77,6 +75,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     required this.token,
     required this.trustedCertificates,
     required this.callLogsRepository,
+    required this.callPullRepository,
     required this.linesStateRepository,
     required this.submitNotification,
     required this.callkeep,
@@ -771,7 +770,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       updated: (event) => __onCallSignalingEventUpdated(event, emit),
       transfer: (value) => __onCallSignalingEventTransfer(value, emit),
       transferring: (value) => __onCallSignalingEventTransfering(value, emit),
-      notify: (value) => __onCallSignalingEventNotify(value, emit),
+      notifyDialog: (value) => __onCallSignalingEventNotifyDialog(value, emit),
+      notifyRefer: (value) => __onCallSignalingEventNotifyRefer(value, emit),
+      notifyUnknown: (value) => __onCallSignalingEventNotifyUnknown(value, emit),
       registering: (event) => __onCallSignalingEventRegistering(event, emit),
       registered: (event) => __onCallSignalingEventRegistered(event, emit),
       registrationFailed: (event) => __onCallSignalingEventRegistrationFailed(event, emit),
@@ -1102,31 +1103,31 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     emit(state.copyWithMappedActiveCall(event.callId, (_) => callUpdate));
   }
 
-  Future<void> __onCallSignalingEventNotify(
-    _CallSignalingEventNotify event,
+  Future<void> __onCallSignalingEventNotifyDialog(
+    _CallSignalingEventNotifyDialog event,
     Emitter<CallState> emit,
   ) async {
-    _logger.fine('__onCallSignalingEventNotify: $event');
-
-    _handleSignalingEventCompleteTransferNotification(event);
+    _logger.fine('_CallSignalingEventNotifyDialogs: $event');
+    await _assingUserActiveCalls(event.userActiveCalls);
   }
 
-  // Handles NOTIFY events indicating the completion of a call transfer.
-  // Triggered when a 'refer' NOTIFY message with 'SIP/2.0 200 OK' content and
-  // 'terminated' subscription state is received, indicating a successful transfer.
-  // This was the original call (call A) that was transferred. Notify events indicate
-  // the transfer status ('100 Trying', '200 OK'), but the call may not close
-  // automatically as it could be transferred to another session or line.
-  void _handleSignalingEventCompleteTransferNotification(_CallSignalingEventNotify event) {
-    if (event.notify == NotifyType.refer &&
-        event.contentType == NotifyContentType.messageSipfrag &&
-        NotifyContent.match200OK(event.content) &&
-        event.subscriptionState == SubscriptionState.terminated) {
-      // Verifies if the original call line is currently active in the state
-      if (state.activeCalls.any((it) => it.callId == event.callId)) {
-        add(CallControlEvent.ended(event.callId));
-      }
-    }
+  Future<void> __onCallSignalingEventNotifyRefer(
+    _CallSignalingEventNotifyRefer event,
+    Emitter<CallState> emit,
+  ) async {
+    _logger.fine('_CallSignalingEventNotifyRefer: $event');
+    if (event.subscriptionState != SubscriptionState.terminated) return;
+    if (event.state != ReferNotifyState.ok) return;
+
+    // Verifies if the original call line is currently active in the state
+    if (state.activeCalls.any((it) => it.callId == event.callId)) add(CallControlEvent.ended(event.callId));
+  }
+
+  Future<void> __onCallSignalingEventNotifyUnknown(
+    _CallSignalingEventNotifyUnknown event,
+    Emitter<CallState> emit,
+  ) async {
+    _logger.fine('_CallSignalingEventNotifyUnknown: $event');
   }
 
   Future<void> __onCallSignalingEventRegistering(
@@ -1238,6 +1239,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       video: event.video,
       createdTime: clock.now(),
       processingStatus: CallProcessingStatus.outgoingCreated,
+      fromReplaces: event.replaces,
       fromNumber: event.fromNumber,
     );
 
@@ -1781,6 +1783,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         number: activeCall.handle.normalizedValue(),
         jsep: localDescription.toMap(),
         referId: activeCall.fromReferId,
+        replaces: activeCall.fromReplaces,
       ));
 
       // In other cases setLocalDescription is called first; here it's delayed to avoid ICE race
@@ -2287,6 +2290,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       linesCount: stateHandshake.lines.length,
     ));
 
+    _assingUserActiveCalls(stateHandshake.userActiveCalls);
+
     // Hang up all active calls that are not associated with any line
     // or guest line, indicating that they are no longer valid.
     //
@@ -2437,14 +2442,30 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         replaceCallId: event.replaceCallId,
       ));
     } else if (event is NotifyEvent) {
-      add(_CallSignalingEvent.notify(
-        line: event.line,
-        callId: event.callId,
-        notify: event.notify,
-        subscriptionState: event.subscriptionState,
-        contentType: event.contentType,
-        content: event.content,
-      ));
+      add(switch (event) {
+        DialogNotifyEvent event => _CallSignalingEvent.notifyDialog(
+            line: event.line,
+            callId: event.callId,
+            notify: event.notify,
+            subscriptionState: event.subscriptionState,
+            userActiveCalls: event.userActiveCalls,
+          ),
+        ReferNotifyEvent event => _CallSignalingEvent.notifyRefer(
+            line: event.line,
+            callId: event.callId,
+            notify: event.notify,
+            subscriptionState: event.subscriptionState,
+            state: event.state,
+          ),
+        UnknownNotifyEvent event => _CallSignalingEvent.notifyUnknown(
+            line: event.line,
+            callId: event.callId,
+            notify: event.notify,
+            subscriptionState: event.subscriptionState,
+            contentType: event.contentType,
+            content: event.content,
+          ),
+      });
     } else if (event is RegisteringEvent) {
       add(const _CallSignalingEvent.registering());
     } else if (event is RegisteredEvent) {
@@ -2737,6 +2758,36 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     await _signalingClient?.execute(hangupRequest).catchError((e) {
       _logger.warning('_signalingDeclineCall hangupRequest error: $e');
     });
+  }
+
+  Future<void> _assingUserActiveCalls(List<UserActiveCall> userActiveCalls) async {
+    final pullableCalls = userActiveCalls
+        .map(
+          (call) => PullableCall(
+            id: call.id,
+            state: PullableCallState.values.byName(call.state.name),
+            callId: call.callId,
+            localTag: call.localTag,
+            remoteTag: call.remoteTag,
+            remoteNumber: call.remoteNumber,
+            remoteDisplayName: call.remoteDisplayName,
+            direction: PullableCallDirection.values.byName(call.direction.name),
+          ),
+        )
+        .toList();
+
+    List<PullableCall> pullableCallsToSet = [];
+
+    for (final pullableCall in pullableCalls) {
+      // Skip calls that are already active
+      if (state.activeCalls.any((call) => call.callId == pullableCall.callId)) continue;
+
+      // Resolve contact name for the call's remote number
+      final contactName = await contactNameResolver.resolveWithNumber(pullableCall.remoteNumber);
+      pullableCallsToSet.add(pullableCall.copyWith(remoteDisplayName: contactName));
+    }
+
+    callPullRepository.setPullableCalls(pullableCallsToSet);
   }
 
   void _checkSenderResult(RTCRtpSender? senderResult, String kind) {
