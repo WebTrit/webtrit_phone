@@ -10,4 +10,5 @@ export 'text_matchers.dart';
 export 'user_agent.dart';
 export 'webtrit_api_client.dart';
 export 'webtrit_http_executor.dart';
+export 'webtrit_signaling_client.dart';
 export 'webtrit_signaling_utils.dart';

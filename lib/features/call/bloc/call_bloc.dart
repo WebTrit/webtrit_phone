@@ -31,7 +31,9 @@ import '../utils/utils.dart';
 export 'package:webtrit_callkeep/webtrit_callkeep.dart' show CallkeepHandle, CallkeepHandleType;
 
 part 'call_bloc.freezed.dart';
+
 part 'call_event.dart';
+
 part 'call_state.dart';
 
 const int _kUndefinedLine = -1;
@@ -62,6 +64,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   StreamSubscription<List<ConnectivityResult>>? _connectivityChangedSubscription;
   StreamSubscription<PendingCall>? _pendingCallHandlerSubscription;
 
+  late final SignalingClientFactory _signalingClientFactory;
   WebtritSignalingClient? _signalingClient;
   Timer? _signalingClientReconnectTimer;
 
@@ -86,7 +89,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     this.webRtcOptionsBuilder,
     this.iceFilter,
     this.peerConnectionPolicyApplier,
+    SignalingClientFactory signalingClientFactory = defaultSignalingClientFactory,
   }) : super(const CallState()) {
+    _signalingClientFactory = signalingClientFactory;
+
     on<CallStarted>(
       _onCallStarted,
       transformer: sequential(),
@@ -563,13 +569,14 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       if (emit.isDone) return;
 
       final signalingUrl = WebtritSignalingUtils.parseCoreUrlToSignalingUrl(coreUrl);
-      final signalingClient = await WebtritSignalingClient.connect(
-        signalingUrl,
-        tenantId,
-        token,
-        true,
+
+      final signalingClient = await _signalingClientFactory(
+        url: signalingUrl,
+        tenantId: tenantId,
+        token: token,
         connectionTimeout: kSignalingClientConnectionTimeout,
         certs: trustedCertificates,
+        force: true,
       );
 
       if (emit.isDone) {
