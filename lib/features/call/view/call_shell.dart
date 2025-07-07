@@ -10,6 +10,7 @@ import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/features/orientations/orientations.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
+import 'package:webtrit_phone/models/models.dart';
 
 import '../call.dart';
 import 'call_active_thumbnail.dart';
@@ -41,11 +42,11 @@ class _CallShellState extends State<CallShell> {
   Widget signalingListener(Widget child) {
     return BlocListener<CallBloc, CallState>(
       listenWhen: (previous, current) =>
-          previous.signalingClientStatus != current.signalingClientStatus ||
-          previous.lastSignalingDisconnectCode != current.lastSignalingDisconnectCode,
+          previous.callServiceState.signalingClientStatus != current.callServiceState.signalingClientStatus ||
+          previous.callServiceState.lastSignalingDisconnectCode != current.callServiceState.lastSignalingDisconnectCode,
       listener: (context, state) {
-        final signalingClientStatus = state.signalingClientStatus;
-        final signalingDisconnectCode = state.lastSignalingDisconnectCode;
+        final signalingClientStatus = state.callServiceState.signalingClientStatus;
+        final signalingDisconnectCode = state.callServiceState.lastSignalingDisconnectCode;
 
         // Listen to signaling session expired error
         if (signalingClientStatus == SignalingClientStatus.disconnect && signalingDisconnectCode is int) {

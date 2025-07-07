@@ -12,6 +12,7 @@ import 'package:webtrit_signaling/webtrit_signaling.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
+import 'package:webtrit_phone/models/models.dart';
 
 enum NotificationScope {
   login,

@@ -12468,18 +12468,9 @@ abstract class _CallScreenEventDidPop implements CallScreenEvent {
 
 /// @nodoc
 mixin _$CallState {
-  ConnectivityResult? get currentConnectivityResult =>
-      throw _privateConstructorUsedError;
+  CallServiceState get callServiceState => throw _privateConstructorUsedError;
   AppLifecycleState? get currentAppLifecycleState =>
       throw _privateConstructorUsedError;
-  Registration get registration => throw _privateConstructorUsedError;
-  SignalingClientStatus get signalingClientStatus =>
-      throw _privateConstructorUsedError;
-  Object? get lastSignalingClientConnectError =>
-      throw _privateConstructorUsedError;
-  Object? get lastSignalingClientDisconnectError =>
-      throw _privateConstructorUsedError;
-  int? get lastSignalingDisconnectCode => throw _privateConstructorUsedError;
   int get linesCount => throw _privateConstructorUsedError;
   List<ActiveCall> get activeCalls => throw _privateConstructorUsedError;
   bool? get minimized => throw _privateConstructorUsedError;
@@ -12499,18 +12490,15 @@ abstract class $CallStateCopyWith<$Res> {
       _$CallStateCopyWithImpl<$Res, CallState>;
   @useResult
   $Res call(
-      {ConnectivityResult? currentConnectivityResult,
+      {CallServiceState callServiceState,
       AppLifecycleState? currentAppLifecycleState,
-      Registration registration,
-      SignalingClientStatus signalingClientStatus,
-      Object? lastSignalingClientConnectError,
-      Object? lastSignalingClientDisconnectError,
-      int? lastSignalingDisconnectCode,
       int linesCount,
       List<ActiveCall> activeCalls,
       bool? minimized,
       bool? speakerOnBeforeMinimize,
       bool? speaker});
+
+  $CallServiceStateCopyWith<$Res> get callServiceState;
 }
 
 /// @nodoc
@@ -12528,13 +12516,8 @@ class _$CallStateCopyWithImpl<$Res, $Val extends CallState>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? currentConnectivityResult = freezed,
+    Object? callServiceState = null,
     Object? currentAppLifecycleState = freezed,
-    Object? registration = null,
-    Object? signalingClientStatus = null,
-    Object? lastSignalingClientConnectError = freezed,
-    Object? lastSignalingClientDisconnectError = freezed,
-    Object? lastSignalingDisconnectCode = freezed,
     Object? linesCount = null,
     Object? activeCalls = null,
     Object? minimized = freezed,
@@ -12542,34 +12525,14 @@ class _$CallStateCopyWithImpl<$Res, $Val extends CallState>
     Object? speaker = freezed,
   }) {
     return _then(_value.copyWith(
-      currentConnectivityResult: freezed == currentConnectivityResult
-          ? _value.currentConnectivityResult
-          : currentConnectivityResult // ignore: cast_nullable_to_non_nullable
-              as ConnectivityResult?,
+      callServiceState: null == callServiceState
+          ? _value.callServiceState
+          : callServiceState // ignore: cast_nullable_to_non_nullable
+              as CallServiceState,
       currentAppLifecycleState: freezed == currentAppLifecycleState
           ? _value.currentAppLifecycleState
           : currentAppLifecycleState // ignore: cast_nullable_to_non_nullable
               as AppLifecycleState?,
-      registration: null == registration
-          ? _value.registration
-          : registration // ignore: cast_nullable_to_non_nullable
-              as Registration,
-      signalingClientStatus: null == signalingClientStatus
-          ? _value.signalingClientStatus
-          : signalingClientStatus // ignore: cast_nullable_to_non_nullable
-              as SignalingClientStatus,
-      lastSignalingClientConnectError:
-          freezed == lastSignalingClientConnectError
-              ? _value.lastSignalingClientConnectError
-              : lastSignalingClientConnectError,
-      lastSignalingClientDisconnectError:
-          freezed == lastSignalingClientDisconnectError
-              ? _value.lastSignalingClientDisconnectError
-              : lastSignalingClientDisconnectError,
-      lastSignalingDisconnectCode: freezed == lastSignalingDisconnectCode
-          ? _value.lastSignalingDisconnectCode
-          : lastSignalingDisconnectCode // ignore: cast_nullable_to_non_nullable
-              as int?,
       linesCount: null == linesCount
           ? _value.linesCount
           : linesCount // ignore: cast_nullable_to_non_nullable
@@ -12592,6 +12555,16 @@ class _$CallStateCopyWithImpl<$Res, $Val extends CallState>
               as bool?,
     ) as $Val);
   }
+
+  /// Create a copy of CallState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $CallServiceStateCopyWith<$Res> get callServiceState {
+    return $CallServiceStateCopyWith<$Res>(_value.callServiceState, (value) {
+      return _then(_value.copyWith(callServiceState: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
@@ -12603,18 +12576,16 @@ abstract class _$$CallStateImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {ConnectivityResult? currentConnectivityResult,
+      {CallServiceState callServiceState,
       AppLifecycleState? currentAppLifecycleState,
-      Registration registration,
-      SignalingClientStatus signalingClientStatus,
-      Object? lastSignalingClientConnectError,
-      Object? lastSignalingClientDisconnectError,
-      int? lastSignalingDisconnectCode,
       int linesCount,
       List<ActiveCall> activeCalls,
       bool? minimized,
       bool? speakerOnBeforeMinimize,
       bool? speaker});
+
+  @override
+  $CallServiceStateCopyWith<$Res> get callServiceState;
 }
 
 /// @nodoc
@@ -12630,13 +12601,8 @@ class __$$CallStateImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? currentConnectivityResult = freezed,
+    Object? callServiceState = null,
     Object? currentAppLifecycleState = freezed,
-    Object? registration = null,
-    Object? signalingClientStatus = null,
-    Object? lastSignalingClientConnectError = freezed,
-    Object? lastSignalingClientDisconnectError = freezed,
-    Object? lastSignalingDisconnectCode = freezed,
     Object? linesCount = null,
     Object? activeCalls = null,
     Object? minimized = freezed,
@@ -12644,34 +12610,14 @@ class __$$CallStateImplCopyWithImpl<$Res>
     Object? speaker = freezed,
   }) {
     return _then(_$CallStateImpl(
-      currentConnectivityResult: freezed == currentConnectivityResult
-          ? _value.currentConnectivityResult
-          : currentConnectivityResult // ignore: cast_nullable_to_non_nullable
-              as ConnectivityResult?,
+      callServiceState: null == callServiceState
+          ? _value.callServiceState
+          : callServiceState // ignore: cast_nullable_to_non_nullable
+              as CallServiceState,
       currentAppLifecycleState: freezed == currentAppLifecycleState
           ? _value.currentAppLifecycleState
           : currentAppLifecycleState // ignore: cast_nullable_to_non_nullable
               as AppLifecycleState?,
-      registration: null == registration
-          ? _value.registration
-          : registration // ignore: cast_nullable_to_non_nullable
-              as Registration,
-      signalingClientStatus: null == signalingClientStatus
-          ? _value.signalingClientStatus
-          : signalingClientStatus // ignore: cast_nullable_to_non_nullable
-              as SignalingClientStatus,
-      lastSignalingClientConnectError:
-          freezed == lastSignalingClientConnectError
-              ? _value.lastSignalingClientConnectError
-              : lastSignalingClientConnectError,
-      lastSignalingClientDisconnectError:
-          freezed == lastSignalingClientDisconnectError
-              ? _value.lastSignalingClientDisconnectError
-              : lastSignalingClientDisconnectError,
-      lastSignalingDisconnectCode: freezed == lastSignalingDisconnectCode
-          ? _value.lastSignalingDisconnectCode
-          : lastSignalingDisconnectCode // ignore: cast_nullable_to_non_nullable
-              as int?,
       linesCount: null == linesCount
           ? _value.linesCount
           : linesCount // ignore: cast_nullable_to_non_nullable
@@ -12700,14 +12646,8 @@ class __$$CallStateImplCopyWithImpl<$Res>
 
 class _$CallStateImpl extends _CallState with DiagnosticableTreeMixin {
   const _$CallStateImpl(
-      {this.currentConnectivityResult,
+      {this.callServiceState = const CallServiceState(),
       this.currentAppLifecycleState,
-      this.registration =
-          const Registration(status: RegistrationStatus.registering),
-      this.signalingClientStatus = SignalingClientStatus.disconnect,
-      this.lastSignalingClientConnectError,
-      this.lastSignalingClientDisconnectError,
-      this.lastSignalingDisconnectCode,
       this.linesCount = 0,
       final List<ActiveCall> activeCalls = const [],
       this.minimized,
@@ -12717,21 +12657,10 @@ class _$CallStateImpl extends _CallState with DiagnosticableTreeMixin {
         super._();
 
   @override
-  final ConnectivityResult? currentConnectivityResult;
+  @JsonKey()
+  final CallServiceState callServiceState;
   @override
   final AppLifecycleState? currentAppLifecycleState;
-  @override
-  @JsonKey()
-  final Registration registration;
-  @override
-  @JsonKey()
-  final SignalingClientStatus signalingClientStatus;
-  @override
-  final Object? lastSignalingClientConnectError;
-  @override
-  final Object? lastSignalingClientDisconnectError;
-  @override
-  final int? lastSignalingDisconnectCode;
   @override
   @JsonKey()
   final int linesCount;
@@ -12753,7 +12682,7 @@ class _$CallStateImpl extends _CallState with DiagnosticableTreeMixin {
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'CallState(currentConnectivityResult: $currentConnectivityResult, currentAppLifecycleState: $currentAppLifecycleState, registration: $registration, signalingClientStatus: $signalingClientStatus, lastSignalingClientConnectError: $lastSignalingClientConnectError, lastSignalingClientDisconnectError: $lastSignalingClientDisconnectError, lastSignalingDisconnectCode: $lastSignalingDisconnectCode, linesCount: $linesCount, activeCalls: $activeCalls, minimized: $minimized, speakerOnBeforeMinimize: $speakerOnBeforeMinimize, speaker: $speaker)';
+    return 'CallState(callServiceState: $callServiceState, currentAppLifecycleState: $currentAppLifecycleState, linesCount: $linesCount, activeCalls: $activeCalls, minimized: $minimized, speakerOnBeforeMinimize: $speakerOnBeforeMinimize, speaker: $speaker)';
   }
 
   @override
@@ -12761,18 +12690,9 @@ class _$CallStateImpl extends _CallState with DiagnosticableTreeMixin {
     super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', 'CallState'))
-      ..add(DiagnosticsProperty(
-          'currentConnectivityResult', currentConnectivityResult))
+      ..add(DiagnosticsProperty('callServiceState', callServiceState))
       ..add(DiagnosticsProperty(
           'currentAppLifecycleState', currentAppLifecycleState))
-      ..add(DiagnosticsProperty('registration', registration))
-      ..add(DiagnosticsProperty('signalingClientStatus', signalingClientStatus))
-      ..add(DiagnosticsProperty(
-          'lastSignalingClientConnectError', lastSignalingClientConnectError))
-      ..add(DiagnosticsProperty('lastSignalingClientDisconnectError',
-          lastSignalingClientDisconnectError))
-      ..add(DiagnosticsProperty(
-          'lastSignalingDisconnectCode', lastSignalingDisconnectCode))
       ..add(DiagnosticsProperty('linesCount', linesCount))
       ..add(DiagnosticsProperty('activeCalls', activeCalls))
       ..add(DiagnosticsProperty('minimized', minimized))
@@ -12786,26 +12706,11 @@ class _$CallStateImpl extends _CallState with DiagnosticableTreeMixin {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$CallStateImpl &&
-            (identical(other.currentConnectivityResult,
-                    currentConnectivityResult) ||
-                other.currentConnectivityResult == currentConnectivityResult) &&
+            (identical(other.callServiceState, callServiceState) ||
+                other.callServiceState == callServiceState) &&
             (identical(
                     other.currentAppLifecycleState, currentAppLifecycleState) ||
                 other.currentAppLifecycleState == currentAppLifecycleState) &&
-            (identical(other.registration, registration) ||
-                other.registration == registration) &&
-            (identical(other.signalingClientStatus, signalingClientStatus) ||
-                other.signalingClientStatus == signalingClientStatus) &&
-            const DeepCollectionEquality().equals(
-                other.lastSignalingClientConnectError,
-                lastSignalingClientConnectError) &&
-            const DeepCollectionEquality().equals(
-                other.lastSignalingClientDisconnectError,
-                lastSignalingClientDisconnectError) &&
-            (identical(other.lastSignalingDisconnectCode,
-                    lastSignalingDisconnectCode) ||
-                other.lastSignalingDisconnectCode ==
-                    lastSignalingDisconnectCode) &&
             (identical(other.linesCount, linesCount) ||
                 other.linesCount == linesCount) &&
             const DeepCollectionEquality()
@@ -12821,13 +12726,8 @@ class _$CallStateImpl extends _CallState with DiagnosticableTreeMixin {
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      currentConnectivityResult,
+      callServiceState,
       currentAppLifecycleState,
-      registration,
-      signalingClientStatus,
-      const DeepCollectionEquality().hash(lastSignalingClientConnectError),
-      const DeepCollectionEquality().hash(lastSignalingClientDisconnectError),
-      lastSignalingDisconnectCode,
       linesCount,
       const DeepCollectionEquality().hash(_activeCalls),
       minimized,
@@ -12845,13 +12745,8 @@ class _$CallStateImpl extends _CallState with DiagnosticableTreeMixin {
 
 abstract class _CallState extends CallState {
   const factory _CallState(
-      {final ConnectivityResult? currentConnectivityResult,
+      {final CallServiceState callServiceState,
       final AppLifecycleState? currentAppLifecycleState,
-      final Registration registration,
-      final SignalingClientStatus signalingClientStatus,
-      final Object? lastSignalingClientConnectError,
-      final Object? lastSignalingClientDisconnectError,
-      final int? lastSignalingDisconnectCode,
       final int linesCount,
       final List<ActiveCall> activeCalls,
       final bool? minimized,
@@ -12860,19 +12755,9 @@ abstract class _CallState extends CallState {
   const _CallState._() : super._();
 
   @override
-  ConnectivityResult? get currentConnectivityResult;
+  CallServiceState get callServiceState;
   @override
   AppLifecycleState? get currentAppLifecycleState;
-  @override
-  Registration get registration;
-  @override
-  SignalingClientStatus get signalingClientStatus;
-  @override
-  Object? get lastSignalingClientConnectError;
-  @override
-  Object? get lastSignalingClientDisconnectError;
-  @override
-  int? get lastSignalingDisconnectCode;
   @override
   int get linesCount;
   @override
