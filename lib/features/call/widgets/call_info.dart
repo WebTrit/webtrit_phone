@@ -6,6 +6,7 @@ import 'package:clock/clock.dart';
 
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
+import 'package:webtrit_phone/models/models.dart';
 
 import '../extensions/extensions.dart';
 import '../models/models.dart';

@@ -5,13 +5,8 @@ class CallState with _$CallState {
   const CallState._();
 
   const factory CallState({
-    ConnectivityResult? currentConnectivityResult,
+    @Default(CallServiceState()) CallServiceState callServiceState,
     AppLifecycleState? currentAppLifecycleState,
-    @Default(Registration(status: RegistrationStatus.registering)) Registration registration,
-    @Default(SignalingClientStatus.disconnect) SignalingClientStatus signalingClientStatus,
-    Object? lastSignalingClientConnectError,
-    Object? lastSignalingClientDisconnectError,
-    int? lastSignalingDisconnectCode,
     @Default(0) int linesCount,
     @Default([]) List<ActiveCall> activeCalls,
     bool? minimized,
@@ -19,25 +14,7 @@ class CallState with _$CallState {
     bool? speaker,
   }) = _CallState;
 
-  CallStatus get status {
-    final lastSignalingDisconnectCode = this.lastSignalingDisconnectCode;
-
-    if (currentConnectivityResult == ConnectivityResult.none) {
-      return CallStatus.connectivityNone;
-    } else if (lastSignalingClientConnectError != null) {
-      return CallStatus.connectError;
-    } else if (registration.status.isUnregistered) {
-      return CallStatus.appUnregistered;
-    } else if (registration.status.isFailed) {
-      return CallStatus.connectIssue;
-    } else if (lastSignalingDisconnectCode != null) {
-      return CallStatus.connectIssue;
-    } else if (signalingClientStatus.isConnect && registration.status.isRegistered) {
-      return CallStatus.ready;
-    } else {
-      return CallStatus.inProgress;
-    }
-  }
+  CallStatus get status => callServiceState.status;
 
   int? retrieveIdleLine() {
     for (var line = 0; line < linesCount; line++) {

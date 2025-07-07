@@ -185,8 +185,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     super.onChange(change);
 
     // Update the signaling status in Callkeep to ensure proper call handling when the app is minimized or in the background
-    callkeepConnections
-        .updateActivitySignalingStatus(change.nextState.signalingClientStatus.toCallkeepSignalingStatus());
+    callkeepConnections.updateActivitySignalingStatus(
+        change.nextState.callServiceState.signalingClientStatus.toCallkeepSignalingStatus());
 
     // TODO: add detailed explanation of the following code and why it is necessary to initialize signaling client in background
     if (change.currentState.isActive != change.nextState.isActive) {
@@ -226,8 +226,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       _logger.info(() => 'status transitions: $currentProcessingStatuses -> $nextProcessingStatuses');
     }
 
-    final newRegistration = change.nextState.registration;
-    final previousRegistration = change.currentState.registration;
+    final newRegistration = change.nextState.callServiceState.registration;
+    final previousRegistration = change.currentState.callServiceState.registration;
     if (newRegistration != previousRegistration) {
       _logger.fine('_onRegistrationChange: $newRegistration to $previousRegistration');
       final newRegistrationStatus = newRegistration.status;
@@ -349,7 +349,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _signalingClientReconnectTimer?.cancel();
     _signalingClientReconnectTimer = Timer(delay, () {
       final appActive = state.currentAppLifecycleState == AppLifecycleState.resumed;
-      final connectionActive = state.currentConnectivityResult != ConnectivityResult.none;
+      final connectionActive = state.callServiceState.networkStatus != NetworkStatus.none;
       final signalingRemains = _signalingClient != null;
 
       _logger.info(
@@ -409,7 +409,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     // Initialize connectivity state
     final connectivityState = (await Connectivity().checkConnectivity()).first;
-    emit(state.copyWith(currentConnectivityResult: connectivityState));
+    emit(state.copyWith(
+      callServiceState: state.callServiceState.copyWith(networkStatus: connectivityState.toNetworkStatus()),
+    ));
     _logger.finer('_onCallStarted initial connectivity state: $connectivityState');
 
     // Subscribe to future connectivity changes
@@ -450,7 +452,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     } else {
       _reconnectInitiated();
     }
-    emit(state.copyWith(currentConnectivityResult: connectivityResult));
+    emit(state.copyWith(
+      callServiceState: state.callServiceState.copyWith(networkStatus: connectivityResult.toNetworkStatus()),
+    ));
   }
 
   Future<void> _onNavigatorMediaDevicesChange(
@@ -470,7 +474,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _RegistrationChange event,
     Emitter<CallState> emit,
   ) async {
-    emit(state.copyWith(registration: event.registration));
+    emit(state.copyWith(
+      callServiceState: state.callServiceState.copyWith(registration: event.registration),
+    ));
   }
 
   // processing the handling of the app state
@@ -539,8 +545,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     Emitter<CallState> emit,
   ) async {
     emit(state.copyWith(
-      signalingClientStatus: SignalingClientStatus.connecting,
-      lastSignalingClientDisconnectError: null,
+      callServiceState: state.callServiceState.copyWith(
+        signalingClientStatus: SignalingClientStatus.connecting,
+        lastSignalingClientDisconnectError: null,
+      ),
     ));
 
     try {
@@ -578,20 +586,24 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       _signalingClient = signalingClient;
 
       emit(state.copyWith(
-        signalingClientStatus: SignalingClientStatus.connect,
-        lastSignalingClientConnectError: null,
-        lastSignalingDisconnectCode: null,
+        callServiceState: state.callServiceState.copyWith(
+          signalingClientStatus: SignalingClientStatus.connect,
+          lastSignalingClientConnectError: null,
+          lastSignalingDisconnectCode: null,
+        ),
       ));
     } catch (e, s) {
       if (emit.isDone) return;
       _logger.warning('__onSignalingClientEventConnectInitiated: $e', s);
 
-      final repeated = state.lastSignalingClientConnectError == e;
+      final repeated = state.callServiceState.lastSignalingClientConnectError == e;
       if (repeated == false) submitNotification(const SignalingConnectFailedNotification());
 
       emit(state.copyWith(
-        signalingClientStatus: SignalingClientStatus.failure,
-        lastSignalingClientConnectError: e,
+        callServiceState: state.callServiceState.copyWith(
+          signalingClientStatus: SignalingClientStatus.failure,
+          lastSignalingClientConnectError: e,
+        ),
       ));
 
       _reconnectInitiated(kSignalingClientReconnectDelay);
@@ -603,9 +615,12 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     Emitter<CallState> emit,
   ) async {
     emit(state.copyWith(
-      signalingClientStatus: SignalingClientStatus.disconnecting,
-      lastSignalingClientConnectError: null,
+      callServiceState: state.callServiceState.copyWith(
+        signalingClientStatus: SignalingClientStatus.disconnecting,
+        lastSignalingClientConnectError: null,
+      ),
     ));
+
     try {
       final signalingClient = _signalingClient;
       if (signalingClient != null) {
@@ -616,17 +631,21 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       if (emit.isDone) return;
 
       emit(state.copyWith(
-        signalingClientStatus: SignalingClientStatus.disconnect,
-        registration: const Registration(status: RegistrationStatus.registering),
-        lastSignalingClientDisconnectError: null,
-        lastSignalingDisconnectCode: null,
+        callServiceState: state.callServiceState.copyWith(
+          signalingClientStatus: SignalingClientStatus.disconnect,
+          registration: const Registration(status: RegistrationStatus.registering),
+          lastSignalingClientDisconnectError: null,
+          lastSignalingDisconnectCode: null,
+        ),
       ));
     } catch (e) {
       if (emit.isDone) return;
 
       emit(state.copyWith(
-        signalingClientStatus: SignalingClientStatus.failure,
-        lastSignalingClientDisconnectError: e,
+        callServiceState: state.callServiceState.copyWith(
+          signalingClientStatus: SignalingClientStatus.failure,
+          lastSignalingClientDisconnectError: e,
+        ),
       ));
     }
   }
@@ -636,18 +655,26 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     Emitter<CallState> emit,
   ) async {
     final code = SignalingDisconnectCode.values.byCode(event.code ?? -1);
-    final repeated = event.code == state.lastSignalingDisconnectCode;
+    final repeated = event.code == state.callServiceState.lastSignalingDisconnectCode;
 
     CallState newState = state.copyWith(
-      registration: const Registration(status: RegistrationStatus.registering),
-      signalingClientStatus: SignalingClientStatus.disconnect,
-      lastSignalingDisconnectCode: event.code,
+      callServiceState: state.callServiceState.copyWith(
+        registration: const Registration(status: RegistrationStatus.registering),
+        signalingClientStatus: SignalingClientStatus.disconnect,
+        lastSignalingDisconnectCode: event.code,
+      ),
     );
     Notification? notificationToShow;
     bool shouldReconnect = true;
 
     if (code == SignalingDisconnectCode.appUnregisteredError) {
-      newState = newState.copyWith(registration: const Registration(status: RegistrationStatus.unregistered));
+      newState = state.copyWith(
+        callServiceState: state.callServiceState.copyWith(
+          registration: const Registration(status: RegistrationStatus.unregistered),
+          signalingClientStatus: SignalingClientStatus.disconnect,
+          lastSignalingDisconnectCode: event.code,
+        ),
+      );
     } else if (code == SignalingDisconnectCode.requestCallIdError) {
       state.activeCalls.where((e) => e.wasHungUp).forEach((e) => add(_ResetStateEvent.completeCall(e.callId)));
     } else if (code == SignalingDisconnectCode.controllerExitError) {
@@ -1201,7 +1228,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _CallControlEventStarted event,
     Emitter<CallState> emit,
   ) async {
-    if (!state.registration.status.isRegistered) {
+    if (!state.callServiceState.registration.status.isRegistered) {
       _logger.info('__onCallControlEventStarted account is not registered');
       submitNotification(CallWhileUnregisteredNotification());
       return;
@@ -1671,7 +1698,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _CallPerformEventStarted event,
     Emitter<CallState> emit,
   ) async {
-    if (!state.registration.status.isRegistered) {
+    if (!state.callServiceState.registration.status.isRegistered) {
       _logger.info('__onCallPerformEventStarted account is not registered');
       submitNotification(CallWhileUnregisteredNotification());
 
@@ -1692,7 +1719,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     /// Ensuring that the signaling client is connected before attempting to make an outgoing call
     ///
 
-    bool signalingConnected = state.signalingClientStatus.isConnect;
+    bool signalingConnected = state.callServiceState.signalingClientStatus.isConnect;
 
     // Attempt to wait for the desired signaling client status within the signaling client connection timeout period
     if (signalingConnected == false) {
@@ -1701,10 +1728,13 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       }));
 
       final nextStatus = await stream
-          .firstWhere((state) => state.signalingClientStatus.isConnect || state.signalingClientStatus.isFailure,
+          .firstWhere(
+              (state) =>
+                  state.callServiceState.signalingClientStatus.isConnect ||
+                  state.callServiceState.signalingClientStatus.isFailure,
               orElse: () => state)
           .timeout(kSignalingClientConnectionTimeout, onTimeout: () => state);
-      signalingConnected = nextStatus.signalingClientStatus.isConnect;
+      signalingConnected = nextStatus.callServiceState.signalingClientStatus.isConnect;
       if (isClosed) return;
     }
 

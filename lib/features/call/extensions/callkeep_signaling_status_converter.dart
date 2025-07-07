@@ -1,6 +1,6 @@
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 
-import '../models/signaling_client_status.dart';
+import 'package:webtrit_phone/models/models.dart';
 
 extension SignalingClientStatusConverter on SignalingClientStatus {
   CallkeepSignalingStatus toCallkeepSignalingStatus() {
