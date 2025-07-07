@@ -12,6 +12,8 @@ class KeypadKeyButton extends StatelessWidget {
     this.subtextFontSize,
   });
 
+  static const _subextPadding = EdgeInsets.symmetric(horizontal: 8);
+
   final String text;
   final String subtext;
 
@@ -51,12 +53,15 @@ class KeypadKeyButton extends StatelessWidget {
                 }
                 color = color.withValues(alpha: opacity);
               }
-              return Text(
-                subtext,
-                style: TextStyle(
-                  fontSize: themeData.textTheme.bodyMedium?.fontSize,
-                  color: color,
-                  height: 1.0,
+              return Padding(
+                padding: _subextPadding,
+                child: Text(
+                  subtext,
+                  style: TextStyle(
+                    fontSize: themeData.textTheme.bodyMedium?.fontSize,
+                    color: color,
+                    height: 1.0,
+                  ),
                 ),
               );
             },
