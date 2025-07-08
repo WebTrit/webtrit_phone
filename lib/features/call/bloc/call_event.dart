@@ -14,11 +14,6 @@ class _AppLifecycleStateChanged with _$AppLifecycleStateChanged implements CallE
 }
 
 @Freezed(copyWith: false)
-class _ConnectivityResultChanged with _$ConnectivityResultChanged implements CallEvent {
-  const factory _ConnectivityResultChanged(ConnectivityResult result) = __ConnectivityResultChanged;
-}
-
-@Freezed(copyWith: false)
 class _NavigatorMediaDevicesChange with _$NavigatorMediaDevicesChange implements CallEvent {
   const factory _NavigatorMediaDevicesChange() = __NavigatorMediaDevicesChange;
 }
@@ -41,15 +36,11 @@ class _ResetStateEvent with _$ResetStateEvent implements CallEvent {
   const factory _ResetStateEvent.completeCall(String callId) = _ResetStateEventCompleteCall;
 }
 
-// signaling client events
+// signaling service events
 
 @Freezed(copyWith: false)
-class _SignalingClientEvent with _$SignalingClientEvent implements CallEvent {
-  const factory _SignalingClientEvent.connectInitiated() = _SignalingClientEventConnectInitiated;
-
-  const factory _SignalingClientEvent.disconnectInitiated() = _SignalingClientEventDisconnectInitiated;
-
-  const factory _SignalingClientEvent.disconnected(int? code, String? reason) = _SignalingClientEventDisconnected;
+class _SignalingServiceEvent with _$SignalingServiceEvent implements CallEvent {
+  const factory _SignalingServiceEvent.stateUpdated(CallServiceState state) = _SignalingServiceEventStateUpdated;
 }
 
 // handshake signaling events

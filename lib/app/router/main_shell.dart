@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:logging/logging.dart';
 
 import 'package:webtrit_api/webtrit_api.dart';
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
@@ -16,6 +17,7 @@ import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
+import 'package:webtrit_phone/services/services.dart';
 
 @RoutePage()
 class MainShell extends StatefulWidget {
@@ -314,11 +316,17 @@ class _MainShellState extends State<MainShell> {
                 contactRepository: context.read<ContactsRepository>(),
               );
 
-              return CallBloc(
+              final signalingService = RegularSignalingService(
                 coreUrl: appBloc.state.coreUrl!,
                 tenantId: appBloc.state.tenantId!,
                 token: appBloc.state.token!,
+                force: true,
+                logger: Logger('SignalingService:Main:'),
                 trustedCertificates: appCertificates.trustedCertificates,
+              );
+
+              return CallBloc(
+                signalingService: signalingService,
                 callLogsRepository: context.read<CallLogsRepository>(),
                 callPullRepository: context.read<CallPullRepository>(),
                 linesStateRepository: context.read<LinesStateRepository>(),

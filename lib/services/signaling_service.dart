@@ -1,11 +1,10 @@
 import 'dart:async';
 
+import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 import 'package:webtrit_signaling/webtrit_signaling.dart';
 
 // TODO(Serdun): Maybe chane location
 import 'package:webtrit_phone/models/models.dart';
-
-import '../app/notifications/models/notification.dart';
 
 /// Abstract interface for managing signaling operations and state synchronization
 /// between the client and a Webtrit signaling server.
@@ -23,11 +22,17 @@ abstract class SignalingService {
   /// Emits current connection status: connecting, connected, disconnected, failure, etc.
   Stream<CallServiceState> get onStatus;
 
-  set submitNotification(Function(Notification) fn);
-
   set completeCall(Function(String) fn);
 
   set getLastConnectionStatus(CallServiceState Function() fn);
+
+  set setGetLocalConnections(Future<List<CallkeepConnection>> Function()? fn);
+
+  set setGetLocalConnectionByCallId(Future<CallkeepConnection?> Function(String callId)? fn);
+
+  set setForceEndLocalConnection(Future<void> Function(String callId)? fn);
+
+  set setGetCurrentUiActiveCalls(List<CallEntry> Function()? fn);
 
   /// Emits active calls currently managed by the signaling client.
   void reconnectInitiated([Duration delay = const Duration(seconds: 1), bool force = false]);

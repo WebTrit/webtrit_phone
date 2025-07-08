@@ -23,7 +23,6 @@ class RegularSignalingService implements SignalingService {
   final String tenantId;
   final String token;
   final bool force;
-  final bool ifnore;
   final Logger logger;
   final TrustedCertificates trustedCertificates;
 
@@ -37,9 +36,6 @@ class RegularSignalingService implements SignalingService {
   late CallServiceState Function() _getLastConnectionStatus;
 
   @override
-  set submitNotification(Function(Notification) fn) => _submitNotification = fn;
-
-  @override
   set completeCall(Function(String) fn) => _completeCall = fn;
 
   @override
@@ -50,11 +46,42 @@ class RegularSignalingService implements SignalingService {
   Timer? _signalingClientReconnectTimer;
   StreamSubscription<List<ConnectivityResult>>? _connectivitySubscription;
 
-  final Future<List<CallkeepConnection>> Function() getLocalConnections;
-  final Future<CallkeepConnection?> Function(String callId) getLocalConnectionByCallId;
-  final Future<void> Function(String callId) forceEndLocalConnection;
+  Future<List<CallkeepConnection>> Function()? getLocalConnections;
+  Future<CallkeepConnection?> Function(String callId)? getLocalConnectionByCallId;
+  Future<void> Function(String callId)? forceEndLocalConnection;
+  List<CallEntry> Function()? getCurrentUiActiveCalls;
 
-  final List<CallEntry> Function() getCurrentUiActiveCalls;
+  List<CallEntry> _callCurrentUiActiveCallsOrEmpty() {
+    if (getCurrentUiActiveCalls == null) {
+      logger.warning('[SignalingService] getCurrentUiActiveCalls not set, returning [].');
+      return [];
+    }
+    return getCurrentUiActiveCalls!();
+  }
+
+  Future<List<CallkeepConnection>> _callGetLocalConnectionsOrEmpty() {
+    if (getLocalConnections == null) {
+      logger.warning('[SignalingService] getLocalConnections not set, returning [].');
+      return Future.value([]);
+    }
+    return getLocalConnections!();
+  }
+
+  Future<CallkeepConnection?> _callGetLocalConnectionByCallIdOrNull(String callId) {
+    if (getLocalConnectionByCallId == null) {
+      logger.warning('[SignalingService] getLocalConnectionByCallId not set for callId=$callId, returning null.');
+      return Future.value(null);
+    }
+    return getLocalConnectionByCallId!(callId);
+  }
+
+  Future<void> _callForceEndLocalConnectionOrEmpty(String callId) {
+    if (forceEndLocalConnection == null) {
+      logger.warning('[SignalingService] forceEndLocalConnection not set for callId=$callId, skipping.');
+      return Future.value();
+    }
+    return forceEndLocalConnection!(callId);
+  }
 
   final StreamController<StateHandshake> _stateHandshakeController = StreamController.broadcast();
   final StreamController<Event> _eventController = StreamController.broadcast();
@@ -80,12 +107,7 @@ class RegularSignalingService implements SignalingService {
     required this.token,
     required this.force,
     required this.trustedCertificates,
-    required this.getCurrentUiActiveCalls,
-    required this.getLocalConnections,
-    required this.getLocalConnectionByCallId,
-    required this.forceEndLocalConnection,
     required this.logger,
-    this.ifnore = false,
     this.reconnectDelay = const Duration(seconds: 10),
     this.fastReconnectDelay = const Duration(seconds: 1),
     this.connectionTimeout = const Duration(seconds: 30),
@@ -103,6 +125,19 @@ class RegularSignalingService implements SignalingService {
       networkStatus: _hasConnectivity ? NetworkStatus.available : NetworkStatus.none,
     ));
   }
+
+  @override
+  set setGetLocalConnections(Future<List<CallkeepConnection>> Function()? fn) => getLocalConnections = fn;
+
+  @override
+  set setGetLocalConnectionByCallId(Future<CallkeepConnection?> Function(String callId)? fn) =>
+      getLocalConnectionByCallId = fn;
+
+  @override
+  set setForceEndLocalConnection(Future<void> Function(String callId)? fn) => forceEndLocalConnection = fn;
+
+  @override
+  set setGetCurrentUiActiveCalls(List<CallEntry> Function()? fn) => getCurrentUiActiveCalls = fn;
 
   @override
   Stream<StateHandshake> get onStateHandshake => _stateHandshakeController.stream;
@@ -255,7 +290,7 @@ class RegularSignalingService implements SignalingService {
       const registration = CallServiceState(registration: Registration(status: RegistrationStatus.unregistered));
       _statusController.add(registration);
     } else if (disconnectCode == SignalingDisconnectCode.requestCallIdError) {
-      getCurrentUiActiveCalls().where((e) => e.wasHungUp).forEach((e) => _completeCall(e.callId));
+      _callCurrentUiActiveCallsOrEmpty().where((e) => e.wasHungUp).forEach((e) => _completeCall(e.callId));
     } else if (disconnectCode == SignalingDisconnectCode.controllerExitError) {
       logger.info('__onSignalingClientEventDisconnected: skipping expected system unregistration notification');
     } else if (disconnectCode == SignalingDisconnectCode.sessionMissedError) {
@@ -378,7 +413,7 @@ class RegularSignalingService implements SignalingService {
     //
     // This is needed to drop or retain calls after reconnecting to the signaling server
     activeCallsLoop:
-    for (final activeCall in getCurrentUiActiveCalls()) {
+    for (final activeCall in _callCurrentUiActiveCallsOrEmpty()) {
       // Ignore active calls that are already associated with a line or guest line
       //
       // If you have troubles with line position mismatch replace this with
@@ -412,7 +447,7 @@ class RegularSignalingService implements SignalingService {
     }
 
     final lines = [...stateHandshake.lines, stateHandshake.guestLine].whereType<Line>();
-    final localConnections = await getLocalConnections();
+    final localConnections = await _callGetLocalConnectionsOrEmpty();
 
     for (final activeLine in lines) {
       // Get the first call event from the call logs, if any
@@ -421,7 +456,7 @@ class RegularSignalingService implements SignalingService {
       if (callEvent != null) {
         // Obtain the corresponding Callkeep connection for the line.
         // Callkeep maintains connection states even if the app's lifecycle has ended.
-        final connection = await getLocalConnectionByCallId(callEvent.callId);
+        final connection = await _callGetLocalConnectionByCallIdOrNull(callEvent.callId);
 
         logger.info(
           '::Handshake:: Connection for call: ${callEvent.callId}, s: ${connection?.state}',
@@ -460,7 +495,7 @@ class RegularSignalingService implements SignalingService {
     // If a local connection exists that is not present in the signaling state, end the call to ensure consistency between the local and signaling states.
     for (var connection in localConnections) {
       if (!lines.map((e) => e.callId).contains(connection.callId)) {
-        await forceEndLocalConnection(connection.callId);
+        await _callForceEndLocalConnectionOrEmpty(connection.callId);
       }
     }
   }
