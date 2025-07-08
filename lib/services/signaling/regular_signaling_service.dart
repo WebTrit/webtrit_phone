@@ -205,6 +205,8 @@ class RegularSignalingService implements SignalingService {
 
       _statusController.add(_getLastConnectionStatus().copyWith(
         signalingClientStatus: SignalingClientStatus.connect,
+        lastSignalingClientConnectError: null,
+        lastSignalingDisconnectCode: null,
       ));
       logger.info('Connected successfully.');
     } catch (e, s) {
