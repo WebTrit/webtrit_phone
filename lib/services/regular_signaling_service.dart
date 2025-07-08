@@ -284,6 +284,8 @@ class RegularSignalingService implements SignalingService {
       );
     }
 
+    _signalingClient = null;
+
     if (notificationToShow != null && !repeated) _submitNotification(notificationToShow);
     if (shouldReconnect) reconnectInitiated(kSignalingClientReconnectDelay);
   }
@@ -311,38 +313,31 @@ class RegularSignalingService implements SignalingService {
     _signalingClientReconnectTimer = Timer(delay, () {
       final signalingRemains = _signalingClient != null;
 
-      logger.info(
-        '_reconnectInitiated Timer callback after $delay, appActive: $_appActive, hasConnectivity: $_hasConnectivity, signalingRemains: $signalingRemains',
-      );
-
-      // Guard clause: service was disposed
-      if (_statusController.isClosed) {
-        logger.info('Reconnect skipped — service is disposed.');
+      // Guard clause to prevent reconnection when the app is in the background.
+      // Coz reconnect can be triggered by another action e.g conectivity change.
+      if (_appActive == false && force == false) {
+        logger.info('__onSignalingClientEventConnectInitiated: skipped due to appActive: $_appActive');
         return;
       }
 
-      if (isConnected && !force) {
-        logger.info('Reconnect skipped — no connectivity. Will auto-retry when connectivity restores.');
+      // Guard clause to prevent reconnection when there is no connectivity.
+      // Coz reconnect can be triggered by another action e.g app lifecycle change.
+      if (_hasConnectivity == false && force == false) {
+        logger.info('__onSignalingClientEventConnectInitiated: skipped due to connectionActive: $isConnected');
         return;
       }
 
-      // Guard clause: prevent reconnection when app is in background (unless forced)
-      if (!_appActive && !force) {
-        logger.info('Reconnect skipped — app is inactive.');
+      // Guard clause to prevent reconnection when the signaling client is already connected.
+      //
+      // Can be triggered by switching from wifi to mobile data.
+      // In this case, the connection is recovers automatically, and signaling wasnt disposed.
+      //
+      // Or if app resumes from background or native call screen durning active call,
+      // in this case signaling wasnt disposed
+      if (signalingRemains == true && force == false) {
+        logger.info('__onSignalingClientEventConnectInitiated: skipped due signalingRemains: $signalingRemains');
         return;
       }
-
-      // Guard clause: prevent reconnection when no connectivity (unless forced)
-      if (!_hasConnectivity && !force) {
-        logger.info('Reconnect skipped — no connectivity.');
-        return;
-      }
-
-      // // Guard clause: already connected (e.g. switching from Wi-Fi to mobile)
-      // if (signalingRemains && !force) {
-      //   _logger.info('Reconnect skipped — signaling already active.');
-      //   return;
-      // }
 
       logger.info('Reconnecting...');
       connect(force: force);
