@@ -6,10 +6,10 @@ import 'package:ssl_certificates/ssl_certificates.dart';
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 import 'package:webtrit_signaling/webtrit_signaling.dart';
 
-import 'package:webtrit_phone/common/common.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
+import 'package:webtrit_phone/services/services.dart';
 
 import '../models/models.dart';
 
@@ -23,35 +23,45 @@ class SignalingForegroundIsolateManager implements CallkeepBackgroundServiceDele
     required TrustedCertificates certificates,
   })  : _callLogsRepository = callLogsRepository,
         _callkeep = callkeep {
-    _initSignalingManager(storage, certificates);
+    _initSignalingService(storage, certificates);
     _callkeep.setBackgroundServiceDelegate(this);
+    _subscribeToSignaling();
   }
 
   final CallLogsRepository _callLogsRepository;
   final BackgroundSignalingService _callkeep;
+  late final RegularSignalingService _signalingService;
 
-  late final SignalingManager _signalingManager;
+  StreamSubscription<Event>? _eventSub;
+  StreamSubscription<CallServiceState>? _statusSub;
 
-  void _initSignalingManager(SecureStorage storage, TrustedCertificates certificates) {
-    _signalingManager = SignalingManager(
+  void _initSignalingService(SecureStorage storage, TrustedCertificates certificates) {
+    _signalingService = RegularSignalingService(
       coreUrl: storage.readCoreUrl() ?? '',
       tenantId: storage.readTenantId() ?? '',
       token: storage.readToken() ?? '',
-      enableReconnect: true,
-      certificates: certificates,
-      onDisconnect: _handleSignalingDisconnect,
-      onError: _handleSignalingError,
-      onHangupCall: _handleHangupCall,
-      onIncomingCall: _handleIncomingCall,
-      onUnregistered: _handleUnregisteredEvent,
-      onNoActiveLines: _handleAvoidLines,
+      trustedCertificates: certificates,
+      logger: Logger('SignalingService: SignalingServicePersistent'),
+      force: true,
     );
   }
 
-  // Handles the service startup. This can occur under several scenarios:
-  // - User enabling the socket type.
-  // - Service being restarted.
-  // - Automatic start during system boot.
+  void attachSignalingCallbacksAndListeners() {
+    _signalingService.provideLocalConnections = CallkeepConnections().getConnections;
+    _signalingService.provideLocalConnectionByCallId = CallkeepConnections().getConnection;
+  }
+
+  void _subscribeToSignaling() {
+    _eventSub = _signalingService.onEvent.listen(_handleEvent);
+    _statusSub = _signalingService.onStatus.listen(_handleStatus);
+  }
+
+  Future<void> close() async {
+    await _eventSub?.cancel();
+    await _statusSub?.cancel();
+    await _signalingService.dispose();
+  }
+
   Future<void> sync(CallkeepServiceStatus status) async {
     _logger.info('onStart: $status');
 
@@ -62,14 +72,29 @@ class SignalingForegroundIsolateManager implements CallkeepBackgroundServiceDele
         status.lifecycleEvent == CallkeepLifecycleEvent.onDestroy);
 
     if (isAppInBackground && !mainSignalingStatus) {
-      _signalingManager.launch();
+      await _signalingService.connect();
     } else {
-      _signalingManager.dispose();
+      await _signalingService.dispose();
     }
   }
 
-  void _handleAvoidLines() async {
-    await _callkeep.endCalls();
+  void _handleEvent(Event event) {
+    if (event is HangupEvent) {
+      _handleHangupCall(event);
+    } else if (event is UnregisteredEvent) {
+      _handleUnregisteredEvent(event);
+    } else if (event is IncomingCallEvent) {
+      _handleIncomingCall(event);
+    }
+  }
+
+  void _handleStatus(CallServiceState state) {
+    if (state.signalingClientStatus == SignalingClientStatus.failure) {
+      _handleSignalingError(state.lastSignalingClientConnectError ?? 'Unknown', null);
+    }
+    if (state.signalingClientStatus == SignalingClientStatus.disconnect) {
+      _handleSignalingDisconnect(state.lastSignalingDisconnectCode, null);
+    }
   }
 
   void _handleIncomingCall(IncomingCallEvent event) {
@@ -94,15 +119,11 @@ class SignalingForegroundIsolateManager implements CallkeepBackgroundServiceDele
   }
 
   void _handleSignalingError(error, [StackTrace? stackTrace]) async {
-    try {} catch (e) {
-      _handleExceptions(e);
-    }
+    _logger.warning('Signaling error: $error');
   }
 
   void _handleSignalingDisconnect(int? code, String? reason) async {
-    try {} catch (e) {
-      _handleExceptions(e);
-    }
+    _logger.warning('Signaling disconnected: $code $reason');
   }
 
   void _handleUnregisteredEvent(UnregisteredEvent event) async {
@@ -113,13 +134,23 @@ class SignalingForegroundIsolateManager implements CallkeepBackgroundServiceDele
     }
   }
 
+  void _handleExceptions(e) {
+    _logger.severe(e);
+  }
+
   @override
   void performAnswerCall(String callId) {}
 
   @override
   void performEndCall(String callId) async {
     try {
-      await _signalingManager.declineCall(callId);
+      await _signalingService.execute(
+        DeclineRequest(
+          transaction: WebtritSignalingClient.generateTransactionId(),
+          line: 0,
+          callId: callId,
+        ),
+      );
     } catch (e) {
       _handleExceptions(e);
     }
@@ -145,9 +176,5 @@ class SignalingForegroundIsolateManager implements CallkeepBackgroundServiceDele
       hungUpTime: hungUpTime,
     );
     await _callLogsRepository.add(call);
-  }
-
-  void _handleExceptions(e) {
-    _logger.severe(e);
   }
 }

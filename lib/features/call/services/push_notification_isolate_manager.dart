@@ -1,15 +1,14 @@
 import 'dart:async';
 
 import 'package:logging/logging.dart';
-
 import 'package:ssl_certificates/ssl_certificates.dart';
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 import 'package:webtrit_signaling/webtrit_signaling.dart';
 
-import 'package:webtrit_phone/common/common.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
+import 'package:webtrit_phone/services/services.dart';
 
 final _logger = Logger('PushNotificationIsolateManager');
 
@@ -21,85 +20,101 @@ class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegat
     required TrustedCertificates certificates,
   })  : _callLogsRepository = callLogsRepository,
         _callkeep = callkeep {
-    _initSignalingManager(storage, certificates);
+    _initSignalingService(storage, certificates);
     _callkeep.setBackgroundServiceDelegate(this);
+    _subscribeToSignaling();
   }
 
   final CallLogsRepository _callLogsRepository;
   final BackgroundPushNotificationService _callkeep;
+  late final SignalingService _signalingService;
 
-  late final SignalingManager _signalingManager;
+  StreamSubscription<Event>? _eventSub;
+  StreamSubscription<CallServiceState>? _statusSub;
 
-  void _initSignalingManager(SecureStorage storage, TrustedCertificates certificates) {
-    _signalingManager = SignalingManager(
+  void _initSignalingService(SecureStorage storage, TrustedCertificates certificates) {
+    _signalingService = RegularSignalingService(
       coreUrl: storage.readCoreUrl() ?? '',
       tenantId: storage.readTenantId() ?? '',
       token: storage.readToken() ?? '',
-      certificates: certificates,
-      onError: _handleSignalingError,
-      onHangupCall: _handleHangupCall,
-      onUnregistered: _handleUnregisteredEvent,
-      onNoActiveLines: _handleAvoidLines,
+      logger: Logger('SignalingService: SignalingServicePushNotification'),
+      trustedCertificates: certificates,
+      force: true,
     );
+    attachSignalingCallbacksAndListeners();
+  }
+
+  void attachSignalingCallbacksAndListeners() {
+    _signalingService.provideLocalConnections = CallkeepConnections().getConnections;
+    _signalingService.provideLocalConnectionByCallId = CallkeepConnections().getConnection;
+  }
+
+  void _subscribeToSignaling() {
+    _eventSub = _signalingService.onEvent.listen(_handleEvent);
+    _statusSub = _signalingService.onStatus.listen(_handleStatus);
   }
 
   Future<void> close() async {
-    return _signalingManager.dispose();
+    _logger.info('Closing PushNotificationIsolateManager');
+    await _eventSub?.cancel();
+    await _statusSub?.cancel();
+    await _signalingService.dispose();
   }
 
-  // Handles the service startup. This can occur under several scenarios:
-  // - Launching from an FCM isolate.
-  // - User enabling the socket type.
-  // - Service being restarted.
-  // - Automatic start during system boot.
   Future<void> sync() async {
     _logger.info('Starting background call event service');
-    return _signalingManager.launch();
+    await _signalingService.connect();
+  }
+
+  void _handleEvent(Event event) {
+    _logger.info('Received event: ${event.runtimeType}');
+    if (event is HangupEvent) {
+      _handleHangupCall(event);
+    } else if (event is UnregisteredEvent) {
+      _handleUnregisteredEvent(event);
+    }
+  }
+
+  void _handleStatus(CallServiceState state) {
+    _logger.info('Received signaling status: ${state.signalingClientStatus}');
+    if (state.signalingClientStatus == SignalingClientStatus.failure) {
+      _handleSignalingError(state.lastSignalingClientConnectError ?? 'Unknown', null);
+    }
   }
 
   void _handleHangupCall(HangupEvent event) async {
-    try {
-      _logger.info('Ending call: ${event.callId}');
-      await _callkeep.endCall(event.callId);
-    } catch (e) {
-      _handleExceptions(e);
-    }
+    _logger.info('Ending call: ${event.callId}');
+    await _callkeep.endCall(event.callId);
   }
 
   void _handleSignalingError(error, [StackTrace? stackTrace]) async {
-    try {
-      await _callkeep.endCalls();
-    } catch (e) {
-      _handleExceptions(e);
-    }
-  }
-
-  void _handleAvoidLines() async {
+    _logger.severe('Signaling error: $error', error, stackTrace);
     await _callkeep.endCalls();
   }
 
   void _handleUnregisteredEvent(UnregisteredEvent event) async {
-    try {
-      await _callkeep.endCalls();
-    } catch (e) {
-      _handleExceptions(e);
-    }
+    _logger.info('Handling unregistered event: $event');
+    await _callkeep.endCalls();
   }
 
+  /// Do not execute the request to answer the call in this isolate.
+  /// This isolate will open an activity that handles the handshake state for the incoming call,
+  /// retrieves the local connection, and sends the answer request there.
   @override
   void performAnswerCall(String callId) async {
-    // Check if the device is connected to the network only then proceed
-    if (!(await _signalingManager.hasNetworkConnection())) {
-      throw Exception('Not connected');
-    }
+    _logger.info('Performing answer call for callId: $callId');
   }
 
+  /// Execute the request to end the call in this isolate.
+  /// And close notification.
   @override
   void performEndCall(String callId) async {
-    return _signalingManager.declineCall(callId);
+    final transaction = WebtritSignalingClient.generateTransactionId();
+    final decline = DeclineRequest(transaction: transaction, line: 0, callId: callId);
+    _logger.info('Performing end call for callId: $callId with transaction: $transaction');
+    await _signalingService.execute(decline);
   }
 
-// TODO (Serdun): Rename this callback to align with naming conventions.
   @override
   Future<void> performReceivedCall(
     String callId,
@@ -126,9 +141,5 @@ class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegat
       _logger.severe('Failed to add call log', e);
     }
     return;
-  }
-
-  void _handleExceptions(e) {
-    _logger.severe(e);
   }
 }
