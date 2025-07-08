@@ -3,6 +3,7 @@ export 'audio_processing_settings.dart';
 export 'auth/auth.dart';
 export 'call/call.dart';
 export 'call_log_entry.dart';
+export 'pullable_call.dart';
 export 'call_to_action.dart';
 export 'caller_id_settings.dart';
 export 'contact.dart';

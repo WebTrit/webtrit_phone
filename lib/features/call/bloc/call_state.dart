@@ -5,13 +5,8 @@ class CallState with _$CallState {
   const CallState._();
 
   const factory CallState({
-    ConnectivityResult? currentConnectivityResult,
+    @Default(CallServiceState()) CallServiceState callServiceState,
     AppLifecycleState? currentAppLifecycleState,
-    @Default(Registration(status: RegistrationStatus.registering)) Registration registration,
-    @Default(SignalingClientStatus.disconnect) SignalingClientStatus signalingClientStatus,
-    Object? lastSignalingClientConnectError,
-    Object? lastSignalingClientDisconnectError,
-    int? lastSignalingDisconnectCode,
     @Default(0) int linesCount,
     @Default([]) List<ActiveCall> activeCalls,
     bool? minimized,
@@ -19,25 +14,7 @@ class CallState with _$CallState {
     bool? speaker,
   }) = _CallState;
 
-  CallStatus get status {
-    final lastSignalingDisconnectCode = this.lastSignalingDisconnectCode;
-
-    if (currentConnectivityResult == ConnectivityResult.none) {
-      return CallStatus.connectivityNone;
-    } else if (lastSignalingClientConnectError != null) {
-      return CallStatus.connectError;
-    } else if (registration.status.isUnregistered) {
-      return CallStatus.appUnregistered;
-    } else if (registration.status.isFailed) {
-      return CallStatus.connectIssue;
-    } else if (lastSignalingDisconnectCode != null) {
-      return CallStatus.connectIssue;
-    } else if (signalingClientStatus.isConnect && registration.status.isRegistered) {
-      return CallStatus.ready;
-    } else {
-      return CallStatus.inProgress;
-    }
-  }
+  CallStatus get status => callServiceState.status;
 
   int? retrieveIdleLine() {
     for (var line = 0; line < linesCount; line++) {
@@ -119,7 +96,7 @@ class CallState with _$CallState {
 }
 
 @freezed
-class ActiveCall with _$ActiveCall {
+class ActiveCall with _$ActiveCall implements CallEntry {
   ActiveCall._();
 
   factory ActiveCall({
@@ -137,6 +114,7 @@ class ActiveCall with _$ActiveCall {
     JsepValue? incomingOffer,
     String? displayName,
     String? fromReferId,
+    String? fromReplaces,
     String? fromNumber,
     DateTime? acceptedTime,
     DateTime? hungUpTime,
@@ -146,12 +124,16 @@ class ActiveCall with _$ActiveCall {
     MediaStream? remoteStream,
   }) = _ActiveCall;
 
+  @override
   bool get isIncoming => direction == CallDirection.incoming;
 
+  @override
   bool get isOutgoing => direction == CallDirection.outgoing;
 
+  @override
   bool get wasAccepted => acceptedTime != null;
 
+  @override
   bool get wasHungUp => hungUpTime != null;
 
   bool get remoteVideo => remoteStream?.getVideoTracks().isNotEmpty ?? video;

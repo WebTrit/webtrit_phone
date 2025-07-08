@@ -45,6 +45,7 @@ class MainScreenScreenshot extends StatelessWidget {
         child: MainScreen(
           body: AppBarParams(
             systemNotificationsEnabled: true,
+            pullableCalls: const [],
             child: _buildFlavorWidget(context, flavor, featureAccess!),
           ),
           bottomNavigationBar: _buildBottomNavigationBar(context, tabs),

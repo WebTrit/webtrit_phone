@@ -108,9 +108,14 @@ class MainScreenPage extends StatelessWidget {
       child: provider,
     );
 
-    return AppBarParams(
-      systemNotificationsEnabled: systemNotificationsEnabled,
-      child: blocListener,
+    return BlocBuilder<CallPullCubit, List<PullableCall>>(
+      builder: (context, state) {
+        return AppBarParams(
+          systemNotificationsEnabled: systemNotificationsEnabled,
+          pullableCalls: state,
+          child: blocListener,
+        );
+      },
     );
   }
 
