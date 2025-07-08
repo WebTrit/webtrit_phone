@@ -13,7 +13,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:logging/logging.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
-import 'package:webtrit_phone/services/signaling_service.dart';
+import 'package:webtrit_phone/services/signaling/signaling_service.dart';
 
 import 'package:webtrit_signaling/webtrit_signaling.dart';
 
