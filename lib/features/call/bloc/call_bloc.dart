@@ -383,6 +383,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     emit(state.copyWith(currentAppLifecycleState: appLifecycleState));
 
+    signalingService.updateAppLifecycle(appLifecycleState == AppLifecycleState.resumed);
+
     if (appLifecycleState == AppLifecycleState.paused || appLifecycleState == AppLifecycleState.detached) {
       if (state.isActive == false) signalingService.disconnect();
     } else if (appLifecycleState == AppLifecycleState.resumed) {
