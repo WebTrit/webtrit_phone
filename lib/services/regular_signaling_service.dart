@@ -19,6 +19,23 @@ import 'package:webtrit_phone/models/models.dart';
 import 'signaling_service.dart';
 
 class RegularSignalingService implements SignalingService {
+  RegularSignalingService({
+    required this.coreUrl,
+    required this.tenantId,
+    required this.token,
+    required this.force,
+    required this.trustedCertificates,
+    required this.logger,
+    this.reconnectDelay = const Duration(seconds: 10),
+    this.fastReconnectDelay = const Duration(seconds: 1),
+    this.connectionTimeout = const Duration(seconds: 30),
+    SignalingClientFactory signalingClientFactory = defaultSignalingClientFactory,
+  }) {
+    logger.info('SignalingService initialized with coreUrl: $coreUrl, tenantId: $tenantId');
+    _signalingClientFactory = signalingClientFactory;
+    _initialize();
+  }
+
   final String coreUrl;
   final String tenantId;
   final String token;
@@ -30,26 +47,75 @@ class RegularSignalingService implements SignalingService {
   final Duration fastReconnectDelay;
   final Duration connectionTimeout;
 
-  late Function(Notification) _submitNotification;
-  late Function(String) _completeCall;
+  bool _hasConnectivity = true;
+  bool _appActive = true;
 
-  late CallServiceState Function() _getLastConnectionStatus;
-
-  @override
-  set completeCall(Function(String) fn) => _completeCall = fn;
-
-  @override
-  set getLastConnectionStatus(CallServiceState Function() fn) => _getLastConnectionStatus = fn;
+  bool get _canAttemptConnection => _hasConnectivity && _appActive;
 
   WebtritSignalingClient? _signalingClient;
-
   Timer? _signalingClientReconnectTimer;
   StreamSubscription<List<ConnectivityResult>>? _connectivitySubscription;
+  late final SignalingClientFactory _signalingClientFactory;
+
+  final StreamController<StateHandshake> _stateHandshakeController = StreamController.broadcast();
+  final StreamController<Event> _eventController = StreamController.broadcast();
+  final StreamController<HandshakeSignalingState> _handshakeSignalingStateController = StreamController.broadcast();
+  final StreamController<SignalingInternalEvent> _staleCallCleanupController = StreamController.broadcast();
+  final StreamController<SignalingErrorEvent> _errorEventController = StreamController.broadcast();
+  final StreamController<CallServiceState> _statusController = StreamController.broadcast();
+
+  late Function(Notification) _submitNotification;
+  late Function(String) _completeCall;
+  late CallServiceState Function() _getLastConnectionStatus;
 
   Future<List<CallkeepConnection>> Function()? getLocalConnections;
   Future<CallkeepConnection?> Function(String callId)? getLocalConnectionByCallId;
   Future<void> Function(String callId)? forceEndLocalConnection;
   List<CallEntry> Function()? getCurrentUiActiveCalls;
+
+  @override
+  set onCompleteCall(void Function(String callId) callback) => _completeCall = callback;
+
+  @override
+  set getLastConnectionStatus(CallServiceState Function() callback) => _getLastConnectionStatus = callback;
+
+  @override
+  set provideLocalConnections(Future<List<CallkeepConnection>> Function()? provider) => getLocalConnections = provider;
+
+  @override
+  set provideLocalConnectionByCallId(Future<CallkeepConnection?> Function(String callId)? provider) =>
+      getLocalConnectionByCallId = provider;
+
+  @override
+  set provideForceEndLocalConnection(Future<void> Function(String callId)? provider) =>
+      forceEndLocalConnection = provider;
+
+  @override
+  set provideCurrentUiActiveCalls(List<CallEntry> Function()? provider) => getCurrentUiActiveCalls = provider;
+
+  @visibleForTesting
+  set testHasConnectivity(bool value) => _hasConnectivity = value;
+
+  @visibleForTesting
+  set testSignalingClient(WebtritSignalingClient? client) => _signalingClient = client;
+
+  @override
+  Stream<StateHandshake> get onStateHandshake => _stateHandshakeController.stream;
+
+  @override
+  Stream<Event> get onEvent => _eventController.stream;
+
+  @override
+  Stream<HandshakeSignalingState> get onHandshakeSignalingState => _handshakeSignalingStateController.stream;
+
+  @override
+  Stream<CallServiceState> get onStatus => _statusController.stream;
+
+  @override
+  Stream<SignalingInternalEvent> get onStaleCallCleanup => _staleCallCleanupController.stream;
+
+  @override
+  bool get isConnected => _signalingClient != null && _hasConnectivity;
 
   List<CallEntry> _callCurrentUiActiveCallsOrEmpty() {
     if (getCurrentUiActiveCalls == null) {
@@ -83,43 +149,8 @@ class RegularSignalingService implements SignalingService {
     return forceEndLocalConnection!(callId);
   }
 
-  final StreamController<StateHandshake> _stateHandshakeController = StreamController.broadcast();
-  final StreamController<Event> _eventController = StreamController.broadcast();
-  final StreamController<HandshakeSignalingState> _handshakeSignalingStateController = StreamController.broadcast();
-  final StreamController<SignalingInternalEvent> _staleCallCleanupController = StreamController.broadcast();
-  final StreamController<SignalingErrorEvent> _errorEventController = StreamController.broadcast();
-  final StreamController<CallServiceState> _statusController = StreamController.broadcast();
-
-  late final SignalingClientFactory _signalingClientFactory;
-
-  bool _hasConnectivity = true;
-  bool _appActive = true;
-
-  @visibleForTesting
-  set testHasConnectivity(bool value) => _hasConnectivity = value;
-
-  @visibleForTesting
-  set testSignalingClient(WebtritSignalingClient? client) => _signalingClient = client;
-
-  RegularSignalingService({
-    required this.coreUrl,
-    required this.tenantId,
-    required this.token,
-    required this.force,
-    required this.trustedCertificates,
-    required this.logger,
-    this.reconnectDelay = const Duration(seconds: 10),
-    this.fastReconnectDelay = const Duration(seconds: 1),
-    this.connectionTimeout = const Duration(seconds: 30),
-    SignalingClientFactory signalingClientFactory = defaultSignalingClientFactory,
-  }) {
-    logger.info('SignalingService initialized with coreUrl: $coreUrl, tenantId: $tenantId');
-    _signalingClientFactory = signalingClientFactory;
-    initialize();
-  }
-
-  // TODO: Store status to first subscription
-  void initialize() async {
+  // TODO(Serdun): Store status to first subscription
+  void _initialize() async {
     _hasConnectivity = (await Connectivity().checkConnectivity()).first != ConnectivityResult.none;
     _statusController.add(_getLastConnectionStatus().copyWith(
       networkStatus: _hasConnectivity ? NetworkStatus.available : NetworkStatus.none,
@@ -127,43 +158,10 @@ class RegularSignalingService implements SignalingService {
   }
 
   @override
-  set setGetLocalConnections(Future<List<CallkeepConnection>> Function()? fn) => getLocalConnections = fn;
-
-  @override
-  set setGetLocalConnectionByCallId(Future<CallkeepConnection?> Function(String callId)? fn) =>
-      getLocalConnectionByCallId = fn;
-
-  @override
-  set setForceEndLocalConnection(Future<void> Function(String callId)? fn) => forceEndLocalConnection = fn;
-
-  @override
-  set setGetCurrentUiActiveCalls(List<CallEntry> Function()? fn) => getCurrentUiActiveCalls = fn;
-
-  @override
-  Stream<StateHandshake> get onStateHandshake => _stateHandshakeController.stream;
-
-  @override
-  Stream<Event> get onEvent => _eventController.stream;
-
-  @override
-  Stream<HandshakeSignalingState> get onHandshakeSignalingState => _handshakeSignalingStateController.stream;
-
-  @override
-  Stream<CallServiceState> get onStatus => _statusController.stream;
-
-  @override
-  Stream<SignalingInternalEvent> get onStaleCallCleanup => _staleCallCleanupController.stream;
-
-  @override
-  bool get isConnected => _signalingClient != null && _hasConnectivity;
-
-  bool get _canAttemptConnection => _hasConnectivity && _appActive;
-
-  @override
   void updateAppLifecycle(bool active) {
     _appActive = active;
     if (active) {
-      reconnectInitiated(fastReconnectDelay);
+      reconnect(delay: fastReconnectDelay);
     } else if (!active && isConnected) {
       disconnect();
     }
@@ -218,7 +216,7 @@ class RegularSignalingService implements SignalingService {
         signalingClientStatus: SignalingClientStatus.failure,
         lastSignalingClientConnectError: e,
       ));
-      reconnectInitiated();
+      reconnect();
     }
 
     _connectivitySubscription ??= Connectivity().onConnectivityChanged.listen(_onConnectivityChanged);
@@ -322,7 +320,7 @@ class RegularSignalingService implements SignalingService {
     _signalingClient = null;
 
     if (notificationToShow != null && !repeated) _submitNotification(notificationToShow);
-    if (shouldReconnect) reconnectInitiated(kSignalingClientReconnectDelay);
+    if (shouldReconnect) reconnect(delay: kSignalingClientReconnectDelay);
   }
 
   void _onError(dynamic error, StackTrace? stackTrace) {
@@ -337,11 +335,11 @@ class RegularSignalingService implements SignalingService {
       lastSignalingClientConnectError: error,
     ));
 
-    reconnectInitiated();
+    reconnect();
   }
 
   @override
-  void reconnectInitiated([Duration delay = const Duration(seconds: 1), bool force = false]) {
+  void reconnect({Duration delay = const Duration(seconds: 1), bool force = false}) {
     logger.info('Reconnect initiated.');
 
     _signalingClientReconnectTimer?.cancel();
@@ -388,9 +386,9 @@ class RegularSignalingService implements SignalingService {
     ));
 
     if (_hasConnectivity) {
-      reconnectInitiated(fastReconnectDelay);
+      reconnect(delay: fastReconnectDelay);
     } else {
-      reconnectInitiated();
+      reconnect();
     }
   }
 

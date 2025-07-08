@@ -16,33 +16,22 @@ abstract class SignalingService {
   /// Emits real-time signaling events (incoming/outgoing calls, updates, etc.).
   Stream<Event> get onEvent;
 
-  /// Emits a simplified handshake state: number of lines and registration status.
+  /// Emits a simplified handshake state containing the number of lines and registration status.
   Stream<HandshakeSignalingState> get onHandshakeSignalingState;
 
   /// Emits current connection status: connecting, connected, disconnected, failure, etc.
   Stream<CallServiceState> get onStatus;
 
-  set completeCall(Function(String) fn);
-
-  set getLastConnectionStatus(CallServiceState Function() fn);
-
-  set setGetLocalConnections(Future<List<CallkeepConnection>> Function()? fn);
-
-  set setGetLocalConnectionByCallId(Future<CallkeepConnection?> Function(String callId)? fn);
-
-  set setForceEndLocalConnection(Future<void> Function(String callId)? fn);
-
-  set setGetCurrentUiActiveCalls(List<CallEntry> Function()? fn);
-
-  /// Emits active calls currently managed by the signaling client.
-  void reconnectInitiated([Duration delay = const Duration(seconds: 1), bool force = false]);
-
-  /// Emits internal cleanup events for stale or orphaned calls
+  /// Emits internal events to clean up stale or orphaned calls
   /// that exist locally but are no longer present in the signaling state.
   Stream<SignalingInternalEvent> get onStaleCallCleanup;
 
-  /// Indicates whether the signaling client is currently connected.
+  /// Indicates whether the signaling client is currently connected to the server.
   bool get isConnected;
+
+  /// Initiates a reconnect attempt after an optional [delay].
+  /// If [force] is true, reconnects even if already connected.
+  void reconnect({Duration delay = const Duration(seconds: 1), bool force = false});
 
   /// Establishes a connection to the signaling server.
   ///
@@ -68,53 +57,22 @@ abstract class SignalingService {
   ///
   /// Should be called when the service is no longer needed.
   Future<void> dispose();
-}
+  
+  /// Sets a callback to complete/end a local call by [callId].
+  set onCompleteCall(void Function(String callId) callback);
 
-class HandshakeSignalingState {
-  final Registration registration;
-  final int linesCount;
+  /// Sets a callback that returns the current signaling service state.
+  set getLastConnectionStatus(CallServiceState Function() callback);
 
-  HandshakeSignalingState({
-    required this.registration,
-    required this.linesCount,
-  });
-}
+  /// Sets a provider callback that returns the list of all current local callkeep connections.
+  set provideLocalConnections(Future<List<CallkeepConnection>> Function()? provider);
 
-class SignalingInternalEvent {
-  final String callId;
-  final int? line;
-  final int code;
-  final String reason;
+  /// Sets a provider callback that returns a local callkeep connection by [callId].
+  set provideLocalConnectionByCallId(Future<CallkeepConnection?> Function(String callId)? provider);
 
-  const SignalingInternalEvent({
-    required this.callId,
-    required this.line,
-    required this.code,
-    required this.reason,
-  });
-}
+  /// Sets a provider callback to force end a local callkeep connection by [callId].
+  set provideForceEndLocalConnection(Future<void> Function(String callId)? provider);
 
-enum SignalingControlEventType {
-  hangUp,
-  decline,
-}
-
-class SignalingErrorEvent {
-  final dynamic error;
-  final StackTrace? stackTrace;
-
-  const SignalingErrorEvent({
-    required this.error,
-    this.stackTrace,
-  });
-}
-
-class PeerConnectionErrorEvent {
-  final String callId;
-  final String reason;
-
-  const PeerConnectionErrorEvent({
-    required this.callId,
-    required this.reason,
-  });
+  /// Sets a provider callback that returns the current list of active UI calls.
+  set provideCurrentUiActiveCalls(List<CallEntry> Function()? provider);
 }

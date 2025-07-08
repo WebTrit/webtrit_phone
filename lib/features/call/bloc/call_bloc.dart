@@ -143,11 +143,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   }
 
   void attachSignalingCallbacksAndListeners() {
-    signalingService.setForceEndLocalConnection = callkeep.endCall;
-    signalingService.setGetLocalConnections = callkeepConnections.getConnections;
-    signalingService.setGetLocalConnectionByCallId = callkeepConnections.getConnection;
-    signalingService.setGetCurrentUiActiveCalls = () => state.activeCalls.toList();
-    signalingService.completeCall = (id) => add(_ResetStateEvent.completeCall(id));
+    signalingService.provideForceEndLocalConnection = callkeep.endCall;
+    signalingService.provideLocalConnections = callkeepConnections.getConnections;
+    signalingService.provideLocalConnectionByCallId = callkeepConnections.getConnection;
+    signalingService.provideCurrentUiActiveCalls = () => state.activeCalls.toList();
+    signalingService.onCompleteCall = (id) => add(_ResetStateEvent.completeCall(id));
     signalingService.getLastConnectionStatus = () => state.callServiceState;
 
     signalingService.onEvent.listen(_onSignalingEvent);
@@ -209,7 +209,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       final connected = signalingService.isConnected;
 
       if (appInactive) {
-        if (hasActiveCalls && !connected) signalingService.reconnectInitiated(kSignalingClientFastReconnectDelay, true);
+        if (hasActiveCalls && !connected) {
+          signalingService.reconnect(delay: kSignalingClientFastReconnectDelay, force: true);
+        }
         if (!hasActiveCalls && connected) signalingService.disconnect();
       }
     }
@@ -367,7 +369,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     emit(state.copyWith(currentAppLifecycleState: lifecycleState));
     _logger.fine('_onCallStarted initial lifecycle state: $lifecycleState');
 
-    signalingService.reconnectInitiated(Duration.zero);
+    signalingService.reconnect(delay: Duration.zero);
 
     WebRTC.initialize(options: webRtcOptionsBuilder?.build());
   }
@@ -384,7 +386,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     if (appLifecycleState == AppLifecycleState.paused || appLifecycleState == AppLifecycleState.detached) {
       if (state.isActive == false) signalingService.disconnect();
     } else if (appLifecycleState == AppLifecycleState.resumed) {
-      signalingService.reconnectInitiated();
+      signalingService.reconnect();
     }
   }
 
