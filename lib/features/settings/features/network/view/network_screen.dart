@@ -6,8 +6,6 @@ import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
-import 'package:webtrit_phone/data/android_device_info_service.dart';
-
 import '../extensions/extensions.dart';
 import '../bloc/network_cubit.dart';
 import '../widgets/widgets.dart';

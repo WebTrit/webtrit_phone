@@ -23,25 +23,35 @@ class NetworkCubit extends Cubit<NetworkState> {
   }
 
   final CallTriggerConfig _callTriggerConfig;
-  final AndroidDeviceInfoService _deviceInfoService;
+  final DeviceInfo _deviceInfoService;
   final AppPreferences _appPreferences;
   final BackgroundSignalingBootstrapService _callkeepBackgroundService;
 
   bool get smsFallbackAvailable => _callTriggerConfig.smsFallback.available;
 
-  Future<void> _initializeActiveIncomingType() async {
+  void _initializeActiveIncomingType() {
     final currentType = _appPreferences.getIncomingCallType();
 
-    final models = IncomingCallType.values.map((type) => IncomingCallTypeModel(type, type == currentType)).toList();
+    final models = _buildIncomingCallTypeModels(currentType);
 
-    final isAndroid14OrAbove = await _deviceInfoService.isAndroidVersionAtLeast(34);
-
-    final incomingCallTypesRemainder = isAndroid14OrAbove ? [IncomingCallType.socket] : <IncomingCallType>[];
+    final incomingCallTypesRemainder = _buildIncomingCallTypesRemainder();
 
     emit(state.copyWith(
       incomingCallTypeModels: models,
       incomingCallTypesRemainder: incomingCallTypesRemainder,
     ));
+  }
+
+  List<IncomingCallTypeModel> _buildIncomingCallTypeModels(IncomingCallType currentType) {
+    return IncomingCallType.values.map((type) => IncomingCallTypeModel(type, type == currentType)).toList();
+  }
+
+  List<IncomingCallType> _buildIncomingCallTypesRemainder() {
+    return _isAndroid14OrAbove() ? [IncomingCallType.socket] : <IncomingCallType>[];
+  }
+
+  bool _isAndroid14OrAbove() {
+    return (_deviceInfoService.sdkVersion ?? 0) >= 34;
   }
 
   Future<void> selectIncomingCallType(IncomingCallTypeModel selectedTypeModel) async {

@@ -20,13 +20,12 @@ class NetworkScreenPage extends StatelessWidget {
   Widget build(BuildContext context) {
     const widget = NetworkScreen();
     final featureAccess = context.read<FeatureAccess>();
-
     return MultiProvider(
       providers: [
         BlocProvider(
           create: (context) => NetworkCubit(
             featureAccess.callFeature.callTriggerConfig,
-            AndroidDeviceInfoServiceImpl(),
+            context.read<DeviceInfo>(),
             context.read<AppPreferences>(),
             BackgroundSignalingBootstrapService(),
           ),
