@@ -1,5 +1,6 @@
 export 'package:app_database/app_database.dart';
 
+export 'android_device_info_service.dart';
 export 'app_certificates.dart';
 export 'app_info.dart';
 export 'app_lifecycle.dart';
