@@ -6,11 +6,13 @@ class NetworkState with _$NetworkState {
 
   const factory NetworkState({
     @Default([]) List<IncomingCallTypeModel> incomingCallTypeModels,
+    @Default([]) List<IncomingCallType> incomingCallTypesRemainder,
     @Default(false) bool smsFallbackEnabled,
   }) = _NetworkState;
 
   IncomingCallTypeModel? get selectedIncomingCallTypeModel =>
       incomingCallTypeModels.firstWhereOrNull((m) => m.selected);
 
-  bool get isPersistentConnectionSelected => selectedIncomingCallTypeModel?.incomingCallType.isSocket ?? false;
+  IncomingCallType get incomingCallType =>
+      selectedIncomingCallTypeModel?.incomingCallType ?? IncomingCallType.pushNotification;
 }

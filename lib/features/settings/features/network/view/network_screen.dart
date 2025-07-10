@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/l10n/l10n.dart';
+import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 import 'package:webtrit_phone/data/android_device_info_service.dart';
@@ -22,14 +23,11 @@ class NetworkScreen extends StatefulWidget {
 
 class _NetworkScreenState extends State<NetworkScreen> {
   late final NetworkCubit _cubit;
-  late final AndroidDeviceInfoService _deviceInfoService;
 
   @override
   void initState() {
     super.initState();
-    super.initState();
     _cubit = context.read<NetworkCubit>();
-    _deviceInfoService = context.read<AndroidDeviceInfoService>();
   }
 
   @override
@@ -40,9 +38,12 @@ class _NetworkScreenState extends State<NetworkScreen> {
         leading: const ExtBackButton(),
       ),
       body: BlocConsumer<NetworkCubit, NetworkState>(
+        listenWhen: (previous, current) {
+          return previous.incomingCallTypeModels != current.incomingCallTypeModels;
+        },
         listener: (context, state) async {
-          if (state.isPersistentConnectionSelected) {
-            await _showPersistentConnectionReminderIfNeeded(context);
+          if (state.incomingCallTypesRemainder.contains(state.incomingCallType)) {
+            await _showTypeReminder(state.incomingCallType);
           }
         },
         builder: (context, state) {
@@ -102,21 +103,12 @@ class _NetworkScreenState extends State<NetworkScreen> {
     );
   }
 
-  Future<bool> _isAndroidVersionAtLeast(int targetVersion) async {
-    return _deviceInfoService.isAndroidVersionAtLeast(targetVersion);
-  }
-
-  Future<void> _showPersistentConnectionReminderIfNeeded(BuildContext context) async {
-    final title = context.l10n.persistentConnectionReminderTitle;
-    final content = context.l10n.persistentConnectionReminderContent;
-
-    final isAndroid14OrAbove = await _isAndroidVersionAtLeast(34);
-
-    if (isAndroid14OrAbove && context.mounted) {
+  Future<void> _showTypeReminder(IncomingCallType type) async {
+    if (context.mounted) {
       AcknowledgeDialog.show(
         context,
-        title: title,
-        content: content,
+        title: type.remainderTitleL10n(context)!,
+        content: type.remainderDescriptionL10n(context)!,
       );
     }
   }
