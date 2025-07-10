@@ -20,6 +20,7 @@ class NetworkScreenPage extends StatelessWidget {
   Widget build(BuildContext context) {
     const widget = NetworkScreen();
     final featureAccess = context.read<FeatureAccess>();
+
     return MultiProvider(
       providers: [
         BlocProvider(
