@@ -18,6 +18,8 @@ abstract class DeviceInfo {
   String get systemName;
 
   String get systemVersion;
+
+  int? get sdkVersion;
 }
 
 class DeviceInfoFactory {
@@ -74,6 +76,9 @@ class _DeviceInfoImpl implements DeviceInfo {
   @override
   String get systemVersion => data['systemVersion'] ?? 'unknown';
 
+  @override
+  int? get sdkVersion => data['sdkVersion'];
+
   static Map<String, dynamic> readWebBrowserInfo(WebBrowserInfo data) => {
         'browserName': data.browserName.name,
         'appCodeName': data.appCodeName,
@@ -97,6 +102,7 @@ class _DeviceInfoImpl implements DeviceInfo {
         'model': build.model,
         'systemName': 'Android',
         'systemVersion': build.version.release,
+        'sdkVersion': build.version.sdkInt,
       };
 
   static Map<String, dynamic> readIosDeviceInfo(IosDeviceInfo data) => {
@@ -104,6 +110,7 @@ class _DeviceInfoImpl implements DeviceInfo {
         'model': data.model,
         'systemName': data.systemName,
         'systemVersion': data.systemVersion,
+        'sdkVersion': data.systemVersion.split('.').first,
       };
 
   static Map<String, dynamic> readLinuxDeviceInfo(LinuxDeviceInfo data) => {
@@ -111,6 +118,7 @@ class _DeviceInfoImpl implements DeviceInfo {
         'model': data.variant ?? 'unknown',
         'systemName': data.name,
         'systemVersion': data.version,
+        'sdkVersion': data.versionId,
       };
 
   static Map<String, dynamic> readMacOsDeviceInfo(MacOsDeviceInfo data) => {
@@ -125,5 +133,6 @@ class _DeviceInfoImpl implements DeviceInfo {
         'model': data.productName,
         'systemName': 'Windows',
         'systemVersion': data.displayVersion,
+        'sdkVersion': data.buildNumber,
       };
 }
