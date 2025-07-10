@@ -15,7 +15,7 @@ part 'network_cubit.freezed.dart';
 class NetworkCubit extends Cubit<NetworkState> {
   NetworkCubit(
     this._callTriggerConfig,
-    this._deviceInfoService,
+    this._deviceInfo,
     this._appPreferences,
     this._callkeepBackgroundService,
   ) : super(NetworkState(smsFallbackEnabled: _callTriggerConfig.smsFallback.enabled)) {
@@ -23,7 +23,7 @@ class NetworkCubit extends Cubit<NetworkState> {
   }
 
   final CallTriggerConfig _callTriggerConfig;
-  final DeviceInfo _deviceInfoService;
+  final DeviceInfo _deviceInfo;
   final AppPreferences _appPreferences;
   final BackgroundSignalingBootstrapService _callkeepBackgroundService;
 
@@ -51,7 +51,7 @@ class NetworkCubit extends Cubit<NetworkState> {
   }
 
   bool _isAndroid14OrAbove() {
-    return (_deviceInfoService.sdkVersion ?? 0) >= 34;
+    return (_deviceInfo.sdkVersion ?? 0) >= 34;
   }
 
   Future<void> selectIncomingCallType(IncomingCallTypeModel selectedTypeModel) async {

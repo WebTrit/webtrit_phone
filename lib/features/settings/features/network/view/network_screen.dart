@@ -20,13 +20,7 @@ class NetworkScreen extends StatefulWidget {
 }
 
 class _NetworkScreenState extends State<NetworkScreen> {
-  late final NetworkCubit _cubit;
-
-  @override
-  void initState() {
-    super.initState();
-    _cubit = context.read<NetworkCubit>();
-  }
+  late final NetworkCubit _cubit = context.read<NetworkCubit>();
 
   @override
   Widget build(BuildContext context) {
