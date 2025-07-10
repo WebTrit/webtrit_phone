@@ -31,11 +31,11 @@ class _NetworkScreenState extends State<NetworkScreen> {
       ),
       body: BlocConsumer<NetworkCubit, NetworkState>(
         listenWhen: (previous, current) {
-          return previous.incomingCallTypeModels != current.incomingCallTypeModels;
+          return previous.incomingCallType != current.incomingCallType;
         },
-        listener: (context, state) async {
+        listener: (context, state) {
           if (state.incomingCallTypesRemainder.contains(state.incomingCallType)) {
-            await _showTypeReminder(state.incomingCallType);
+            _showTypeReminder(state.incomingCallType);
           }
         },
         builder: (context, state) {
@@ -95,13 +95,12 @@ class _NetworkScreenState extends State<NetworkScreen> {
     );
   }
 
-  Future<void> _showTypeReminder(IncomingCallType type) async {
-    if (context.mounted) {
-      AcknowledgeDialog.show(
-        context,
-        title: type.remainderTitleL10n(context)!,
-        content: type.remainderDescriptionL10n(context)!,
-      );
+  void _showTypeReminder(IncomingCallType type) {
+    final title = type.remainderTitleL10n(context);
+    final description = type.remainderDescriptionL10n(context);
+
+    if (context.mounted && title != null && description != null) {
+      AcknowledgeDialog.show(context, title: title, content: description);
     }
   }
 }
