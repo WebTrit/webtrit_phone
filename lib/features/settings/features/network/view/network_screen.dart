@@ -34,9 +34,7 @@ class _NetworkScreenState extends State<NetworkScreen> {
           return previous.incomingCallType != current.incomingCallType;
         },
         listener: (context, state) {
-          if (state.incomingCallTypesRemainder.contains(state.incomingCallType)) {
-            _showTypeReminder(state.incomingCallType);
-          }
+          if (state.isSelectedTypeInRemainder) _showTypeReminder(state.incomingCallType);
         },
         builder: (context, state) {
           return SingleChildScrollView(

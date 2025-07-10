@@ -15,4 +15,6 @@ class NetworkState with _$NetworkState {
 
   IncomingCallType get incomingCallType =>
       selectedIncomingCallTypeModel?.incomingCallType ?? IncomingCallType.pushNotification;
+
+  bool get isSelectedTypeInRemainder => incomingCallTypesRemainder.contains(incomingCallType);
 }
