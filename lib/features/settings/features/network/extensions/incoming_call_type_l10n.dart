@@ -18,4 +18,18 @@ extension IncomingCallTypeL10n on IncomingCallType {
       IncomingCallType.socket => context.l10n.settings_network_incomingCallType_socket_description,
     };
   }
+
+  String? remainderTitleL10n(BuildContext context) {
+    return switch (this) {
+      IncomingCallType.pushNotification => null,
+      IncomingCallType.socket => context.l10n.persistentConnectionReminderTitle,
+    };
+  }
+
+  String? remainderDescriptionL10n(BuildContext context) {
+    return switch (this) {
+      IncomingCallType.pushNotification => null,
+      IncomingCallType.socket => context.l10n.persistentConnectionReminderContent,
+    };
+  }
 }
