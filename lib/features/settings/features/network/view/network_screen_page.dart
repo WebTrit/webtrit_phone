@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 
@@ -20,12 +21,17 @@ class NetworkScreenPage extends StatelessWidget {
     const widget = NetworkScreen();
     final featureAccess = context.read<FeatureAccess>();
 
-    return BlocProvider(
-      create: (context) => NetworkCubit(
-        featureAccess.callFeature.callTriggerConfig,
-        context.read<AppPreferences>(),
-        BackgroundSignalingBootstrapService(),
-      ),
+    return MultiProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => NetworkCubit(
+            featureAccess.callFeature.callTriggerConfig,
+            context.read<DeviceInfo>(),
+            context.read<AppPreferences>(),
+            BackgroundSignalingBootstrapService(),
+          ),
+        ),
+      ],
       child: widget,
     );
   }

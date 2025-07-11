@@ -2107,4 +2107,11 @@ class AppLocalizationsUk extends AppLocalizations {
   @override
   String get webRegistration_ErrorAcknowledgeDialog_title =>
       'Web resource error';
+
+  @override
+  String get persistentConnectionReminderTitle => 'Важливе нагадування';
+
+  @override
+  String get persistentConnectionReminderContent =>
+      'Потрібно вручну запустити застосунок щонайменше один раз після перезавантаження телефону, щоб відновити постійне з\'єднання й отримувати вхідні дзвінки.';
 }

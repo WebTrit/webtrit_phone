@@ -2122,4 +2122,11 @@ class AppLocalizationsIt extends AppLocalizations {
   @override
   String get webRegistration_ErrorAcknowledgeDialog_title =>
       'Web resource error';
+
+  @override
+  String get persistentConnectionReminderTitle => 'Promemoria importante';
+
+  @override
+  String get persistentConnectionReminderContent =>
+      'Devi avviare manualmente l\'app almeno una volta dopo il riavvio del telefono per ristabilire la connessione persistente e ricevere le chiamate in arrivo.';
 }

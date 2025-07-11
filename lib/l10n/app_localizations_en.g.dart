@@ -2079,4 +2079,11 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get webRegistration_ErrorAcknowledgeDialog_title =>
       'Web resource error';
+
+  @override
+  String get persistentConnectionReminderTitle => 'Important Reminder';
+
+  @override
+  String get persistentConnectionReminderContent =>
+      'You have to manually launch the app after your phone restarted at least once to re-establish the persistent connection and receive incoming calls.';
 }

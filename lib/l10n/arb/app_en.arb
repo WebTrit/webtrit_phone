@@ -1303,5 +1303,47 @@
   "webRegistration_ErrorAcknowledgeDialogActions_skip": "Skip",
   "@webRegistration_ErrorAcknowledgeDialogActions_skip": {},
   "webRegistration_ErrorAcknowledgeDialog_title": "Web resource error",
+  "@webRegistration_ErrorAcknowledgeDialog_title": {},
+  "system_notifications_screen_title": "Notifications",
+  "@system_notifications_screen_title": {},
+  "system_notifications_screen_list_empty": "No notifications yet",
+  "@system_notifications_screen_list_empty": {},
+  "numberActions_audioCall": "Audio call",
+  "@numberActions_audioCall": {},
+  "numberActions_videoCall": "Video call",
+  "@numberActions_videoCall": {},
+  "numberActions_transfer": "Transfer current call",
+  "@numberActions_transfer": {},
+  "numberActions_chat": "Send chat message",
+  "@numberActions_chat": {},
+  "numberActions_sendSms": "Send sms message",
+  "@numberActions_sendSms": {},
+  "numberActions_viewContact": "View Contact",
+  "@numberActions_viewContact": {},
+  "numberActions_callLog": "View call history",
+  "@numberActions_callLog": {},
+  "numberActions_copyNumber": "Copy number",
+  "@numberActions_copyNumber": {},
+  "numberActions_delete": "Delete",
+  "@numberActions_delete": {},
+  "numberActions_callFrom": "Call from {number}",
+  "@numberActions_callFrom": {
+    "placeholders": {
+      "number": {
+        "type": "String"
+      }
+    }
+  },
+  "persistentConnectionReminderTitle": "Important Reminder",
+  "@persistentConnectionReminderTitle": {
+    "description": "Title of a dialog shown when the user selects persistent connection on Android 14+",
+    "type": "text"
+  },
+
+  "persistentConnectionReminderContent": "You have to manually launch the app after your phone restarted at least once to re-establish the persistent connection and receive incoming calls.",
+  "@persistentConnectionReminderContent": {
+    "description": "Content of a dialog explaining that the app must be manually opened after reboot to keep receiving calls using persistent connection.",
+    "type": "text"
+  },
   "@webRegistration_ErrorAcknowledgeDialog_title": {}
 }

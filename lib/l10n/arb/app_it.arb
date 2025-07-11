@@ -1303,5 +1303,46 @@
   "webRegistration_ErrorAcknowledgeDialogActions_skip": "Skip",
   "@webRegistration_ErrorAcknowledgeDialogActions_skip": {},
   "webRegistration_ErrorAcknowledgeDialog_title": "Web resource error",
+  "@webRegistration_ErrorAcknowledgeDialog_title": {},
+  "system_notifications_screen_title": "Notifiche",
+  "@system_notifications_screen_title": {},
+  "system_notifications_screen_list_empty": "Non ci sono notifiche",
+  "@system_notifications_screen_list_empty": {},
+  "numberActions_audioCall": "Audiochiamata",
+  "@numberActions_audioCall": {},
+  "numberActions_videoCall": "Videochiamata",
+  "@numberActions_videoCall": {},
+  "numberActions_transfer": "Trasferisci la chiamata",
+  "@numberActions_transfer": {},
+  "numberActions_chat": "Invia messaggio di chat",
+  "@numberActions_chat": {},
+  "numberActions_sendSms": "Invia messaggio SMS",
+  "@numberActions_sendSms": {},
+  "numberActions_viewContact": "Visualizza contatto",
+  "@numberActions_viewContact": {},
+  "numberActions_callLog": "Cronologia delle chiamate",
+  "@numberActions_callLog": {},
+  "numberActions_copyNumber": "Numero di copie",
+  "@numberActions_copyNumber": {},
+  "numberActions_delete": "Elimina",
+  "@numberActions_delete": {},
+  "numberActions_callFrom": "Chiama da {number}",
+  "@numberActions_callFrom": {
+    "placeholders": {
+      "number": {
+        "type": "String"
+      }
+    }
+  },
+  "persistentConnectionReminderTitle": "Promemoria importante",
+  "@persistentConnectionReminderTitle": {
+    "description": "Titolo della finestra di dialogo mostrata quando l'utente seleziona la connessione persistente su Android 14+",
+    "type": "text"
+  },
+  "persistentConnectionReminderContent": "Devi avviare manualmente l'app almeno una volta dopo il riavvio del telefono per ristabilire la connessione persistente e ricevere le chiamate in arrivo.",
+  "@persistentConnectionReminderContent": {
+    "description": "Contenuto della finestra di dialogo che spiega che l'app deve essere aperta manualmente dopo il riavvio per continuare a ricevere chiamate tramite connessione persistente.",
+    "type": "text"
+  },
   "@webRegistration_ErrorAcknowledgeDialog_title": {}
 }

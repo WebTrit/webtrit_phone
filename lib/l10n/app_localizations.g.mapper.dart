@@ -1105,6 +1105,10 @@ class AppLocalizationsMapper {
           localizations.webRegistration_ErrorAcknowledgeDialogActions_skip,
       'webRegistration_ErrorAcknowledgeDialog_title':
           localizations.webRegistration_ErrorAcknowledgeDialog_title,
+      'persistentConnectionReminderTitle':
+          localizations.persistentConnectionReminderTitle,
+      'persistentConnectionReminderContent':
+          localizations.persistentConnectionReminderContent,
       'default_UnknownExceptionError': (error) =>
           localizations.default_UnknownExceptionError(error),
       'favorites_SnackBar_deleted': (name) =>

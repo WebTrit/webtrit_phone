@@ -3,27 +3,39 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/l10n/l10n.dart';
+import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../extensions/extensions.dart';
 import '../bloc/network_cubit.dart';
 import '../widgets/widgets.dart';
 
-class NetworkScreen extends StatelessWidget {
+class NetworkScreen extends StatefulWidget {
   const NetworkScreen({
     super.key,
   });
 
   @override
-  Widget build(BuildContext context) {
-    final block = context.read<NetworkCubit>();
+  State<NetworkScreen> createState() => _NetworkScreenState();
+}
 
+class _NetworkScreenState extends State<NetworkScreen> {
+  late final NetworkCubit _cubit = context.read<NetworkCubit>();
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(context.l10n.settings_ListViewTileTitle_network),
         leading: const ExtBackButton(),
       ),
-      body: BlocBuilder<NetworkCubit, NetworkState>(
+      body: BlocConsumer<NetworkCubit, NetworkState>(
+        listenWhen: (previous, current) {
+          return previous.incomingCallType != current.incomingCallType;
+        },
+        listener: (context, state) {
+          if (state.isSelectedTypeInRemainder) _showTypeReminder(state.incomingCallType);
+        },
         builder: (context, state) {
           return SingleChildScrollView(
             child: Column(
@@ -50,7 +62,7 @@ class NetworkScreen extends StatelessWidget {
                         message: item.incomingCallType.descriptionL10n(context),
                       ),
                       leading: Check(selected: item.selected),
-                      onTap: () => context.read<NetworkCubit>().selectIncomingCallType(item),
+                      onTap: () => _cubit.selectIncomingCallType(item),
                     );
                   },
                 ),
@@ -66,7 +78,7 @@ class NetworkScreen extends StatelessWidget {
                 ListTile(
                   leading: Check(
                     selected: state.smsFallbackEnabled,
-                    enabled: block.smsFallbackAvailable,
+                    enabled: _cubit.smsFallbackAvailable,
                   ),
                   title: Text(
                     context.l10n.settings_network_smsFallback_toggle,
@@ -79,5 +91,14 @@ class NetworkScreen extends StatelessWidget {
         },
       ),
     );
+  }
+
+  void _showTypeReminder(IncomingCallType type) {
+    final title = type.remainderTitleL10n(context);
+    final description = type.remainderDescriptionL10n(context);
+
+    if (context.mounted && title != null && description != null) {
+      AcknowledgeDialog.show(context, title: title, content: description);
+    }
   }
 }
