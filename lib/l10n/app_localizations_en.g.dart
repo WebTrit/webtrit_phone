@@ -1348,6 +1348,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings_AboutText_StoreVersion => 'Build version in the Store';
 
   @override
+  String get settings_AboutText_ApplicationEmbeddedLinks =>
+      'Application embedded links';
+
+  @override
   String get settings_AccountDeleteConfirmDialog_content =>
       'Are you sure you want to delete account?';
 

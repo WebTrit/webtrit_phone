@@ -44,6 +44,7 @@ abstract class _AboutStarted implements AboutStarted {
 /// @nodoc
 mixin _$AboutState {
   bool get progress => throw _privateConstructorUsedError;
+  List<String> get embeddedLinks => throw _privateConstructorUsedError;
   String get appName => throw _privateConstructorUsedError;
   String get packageName => throw _privateConstructorUsedError;
   String get storeBuildVersion => throw _privateConstructorUsedError;
@@ -69,6 +70,7 @@ abstract class $AboutStateCopyWith<$Res> {
   @useResult
   $Res call(
       {bool progress,
+      List<String> embeddedLinks,
       String appName,
       String packageName,
       String storeBuildVersion,
@@ -96,6 +98,7 @@ class _$AboutStateCopyWithImpl<$Res, $Val extends AboutState>
   @override
   $Res call({
     Object? progress = null,
+    Object? embeddedLinks = null,
     Object? appName = null,
     Object? packageName = null,
     Object? storeBuildVersion = null,
@@ -111,6 +114,10 @@ class _$AboutStateCopyWithImpl<$Res, $Val extends AboutState>
           ? _value.progress
           : progress // ignore: cast_nullable_to_non_nullable
               as bool,
+      embeddedLinks: null == embeddedLinks
+          ? _value.embeddedLinks
+          : embeddedLinks // ignore: cast_nullable_to_non_nullable
+              as List<String>,
       appName: null == appName
           ? _value.appName
           : appName // ignore: cast_nullable_to_non_nullable
@@ -161,6 +168,7 @@ abstract class _$$AboutStateImplCopyWith<$Res>
   @useResult
   $Res call(
       {bool progress,
+      List<String> embeddedLinks,
       String appName,
       String packageName,
       String storeBuildVersion,
@@ -186,6 +194,7 @@ class __$$AboutStateImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? progress = null,
+    Object? embeddedLinks = null,
     Object? appName = null,
     Object? packageName = null,
     Object? storeBuildVersion = null,
@@ -201,6 +210,10 @@ class __$$AboutStateImplCopyWithImpl<$Res>
           ? _value.progress
           : progress // ignore: cast_nullable_to_non_nullable
               as bool,
+      embeddedLinks: null == embeddedLinks
+          ? _value._embeddedLinks
+          : embeddedLinks // ignore: cast_nullable_to_non_nullable
+              as List<String>,
       appName: null == appName
           ? _value.appName
           : appName // ignore: cast_nullable_to_non_nullable
@@ -246,6 +259,7 @@ class __$$AboutStateImplCopyWithImpl<$Res>
 class _$AboutStateImpl extends _AboutState {
   const _$AboutStateImpl(
       {this.progress = false,
+      final List<String> embeddedLinks = const [],
       required this.appName,
       required this.packageName,
       required this.storeBuildVersion,
@@ -255,11 +269,21 @@ class _$AboutStateImpl extends _AboutState {
       required this.coreUrl,
       this.fcmPushToken,
       this.coreVersion})
-      : super._();
+      : _embeddedLinks = embeddedLinks,
+        super._();
 
   @override
   @JsonKey()
   final bool progress;
+  final List<String> _embeddedLinks;
+  @override
+  @JsonKey()
+  List<String> get embeddedLinks {
+    if (_embeddedLinks is EqualUnmodifiableListView) return _embeddedLinks;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_embeddedLinks);
+  }
+
   @override
   final String appName;
   @override
@@ -281,7 +305,7 @@ class _$AboutStateImpl extends _AboutState {
 
   @override
   String toString() {
-    return 'AboutState(progress: $progress, appName: $appName, packageName: $packageName, storeBuildVersion: $storeBuildVersion, storeBuildNumber: $storeBuildNumber, appVersion: $appVersion, appIdentifier: $appIdentifier, coreUrl: $coreUrl, fcmPushToken: $fcmPushToken, coreVersion: $coreVersion)';
+    return 'AboutState(progress: $progress, embeddedLinks: $embeddedLinks, appName: $appName, packageName: $packageName, storeBuildVersion: $storeBuildVersion, storeBuildNumber: $storeBuildNumber, appVersion: $appVersion, appIdentifier: $appIdentifier, coreUrl: $coreUrl, fcmPushToken: $fcmPushToken, coreVersion: $coreVersion)';
   }
 
   @override
@@ -291,6 +315,8 @@ class _$AboutStateImpl extends _AboutState {
             other is _$AboutStateImpl &&
             (identical(other.progress, progress) ||
                 other.progress == progress) &&
+            const DeepCollectionEquality()
+                .equals(other._embeddedLinks, _embeddedLinks) &&
             (identical(other.appName, appName) || other.appName == appName) &&
             (identical(other.packageName, packageName) ||
                 other.packageName == packageName) &&
@@ -313,6 +339,7 @@ class _$AboutStateImpl extends _AboutState {
   int get hashCode => Object.hash(
       runtimeType,
       progress,
+      const DeepCollectionEquality().hash(_embeddedLinks),
       appName,
       packageName,
       storeBuildVersion,
@@ -335,6 +362,7 @@ class _$AboutStateImpl extends _AboutState {
 abstract class _AboutState extends AboutState {
   const factory _AboutState(
       {final bool progress,
+      final List<String> embeddedLinks,
       required final String appName,
       required final String packageName,
       required final String storeBuildVersion,
@@ -348,6 +376,8 @@ abstract class _AboutState extends AboutState {
 
   @override
   bool get progress;
+  @override
+  List<String> get embeddedLinks;
   @override
   String get appName;
   @override

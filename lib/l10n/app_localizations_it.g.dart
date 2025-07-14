@@ -1370,6 +1370,10 @@ class AppLocalizationsIt extends AppLocalizations {
       'La nuova versione è disponibile nello Store';
 
   @override
+  String get settings_AboutText_ApplicationEmbeddedLinks =>
+      'Collegamenti incorporati dell\'applicazione';
+
+  @override
   String get settings_AccountDeleteConfirmDialog_content =>
       'Sei sicuro di voler eliminare l\'account?';
 

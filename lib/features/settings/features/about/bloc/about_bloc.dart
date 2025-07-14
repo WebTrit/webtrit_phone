@@ -22,6 +22,7 @@ class AboutBloc extends Bloc<AboutEvent, AboutState> {
     required AppInfo appInfo,
     required PackageInfo packageInfo,
     required SecureStorage secureStorage,
+    required EmbeddedFeature embeddedFeature,
     required this.infoRepository,
   }) : super(AboutState(
           appName: packageInfo.appName,
@@ -31,6 +32,7 @@ class AboutBloc extends Bloc<AboutEvent, AboutState> {
           appVersion: appInfo.version,
           appIdentifier: appInfo.identifier,
           fcmPushToken: secureStorage.readFCMPushToken(),
+          embeddedLinks: embeddedFeature.embeddedResources.map((e) => e.uri.toString()).toList(),
           coreUrl: infoRepository.coreUrl,
         )) {
     on<AboutStarted>(_onStarted, transformer: restartable());

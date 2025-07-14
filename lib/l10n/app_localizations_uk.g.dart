@@ -1364,6 +1364,10 @@ class AppLocalizationsUk extends AppLocalizations {
   String get settings_AboutText_StoreVersion => 'Версія збірки в магазині';
 
   @override
+  String get settings_AboutText_ApplicationEmbeddedLinks =>
+      'Вбудовані посилання застосунку';
+
+  @override
   String get settings_AccountDeleteConfirmDialog_content =>
       'Ви впевнені, що хочете видалити обліковий запис?';
 

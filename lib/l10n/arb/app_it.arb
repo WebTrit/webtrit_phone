@@ -876,6 +876,8 @@
   "@settings_AboutText_FCMPushNotificationToken": {},
   "settings_AboutText_StoreVersion": "La nuova versione è disponibile nello Store",
   "@settings_AboutText_StoreVersion": {},
+  "settings_AboutText_ApplicationEmbeddedLinks": "Collegamenti incorporati dell'applicazione",
+  "@settings_AboutText_ApplicationEmbeddedLinks": {},
   "settings_AccountDeleteConfirmDialog_content": "Sei sicuro di voler eliminare l'account?",
   "@settings_AccountDeleteConfirmDialog_content": {},
   "settings_AccountDeleteConfirmDialog_title": "Conferma eliminazione account",
