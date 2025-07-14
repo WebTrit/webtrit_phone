@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:auto_route/auto_route.dart';
 
+import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
+import 'package:webtrit_phone/utils/utils.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../bloc/about_bloc.dart';
@@ -13,7 +16,7 @@ import 'about_screen_styles.dart';
 export 'about_screen_style.dart';
 export 'about_screen_styles.dart';
 
-class AboutScreen extends StatelessWidget {
+class AboutScreen extends StatefulWidget {
   const AboutScreen({
     super.key,
     this.style,
@@ -22,9 +25,25 @@ class AboutScreen extends StatelessWidget {
   final AboutScreenStyle? style;
 
   @override
+  State<AboutScreen> createState() => _AboutScreenState();
+}
+
+class _AboutScreenState extends State<AboutScreen> {
+  late final MultiTapTrigger _multiTapLoggingTrigger;
+
+  @override
+  void initState() {
+    super.initState();
+    // TODO(Serdun): Add environment config to the disable multi-tap logging trigger
+    _multiTapLoggingTrigger = MultiTapTrigger(
+      onTriggered: () => context.router.navigate(const LogRecordsConsoleScreenPageRoute()),
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
-    final localStyle = style ?? themeData.extension<AboutScreenStyles>()?.primary;
+    final localStyle = widget.style ?? themeData.extension<AboutScreenStyles>()?.primary;
     final logo = localStyle?.picture;
 
     return BlocBuilder<AboutBloc, AboutState>(
@@ -58,9 +77,12 @@ class AboutScreen extends StatelessWidget {
                   Text(
                     context.l10n.settings_AboutText_AppVersion,
                   ),
-                  Text(
-                    state.appVersion,
-                    style: themeData.textTheme.titleLarge,
+                  GestureDetector(
+                    onTap: _multiTapLoggingTrigger.tap,
+                    child: Text(
+                      state.appVersion,
+                      style: themeData.textTheme.titleLarge,
+                    ),
                   ),
                   SizedBox(
                     height: delimiterHeight,

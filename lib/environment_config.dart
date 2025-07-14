@@ -100,6 +100,14 @@ class EnvironmentConfig {
 
   // LOGZIO service-specific configuration.
   // If additional logging services are introduced, consider moving these to a separate logging configuration file.
+  static const REMOTE_LOGZIO_LOG_LEVEL__NAME = 'WEBTRIT_APP_REMOTE_LOGZIO_LOG_LEVEL';
+  static const REMOTE_LOGZIO_LOG_LEVEL = String.fromEnvironment(
+    REMOTE_LOGZIO_LOG_LEVEL__NAME,
+    defaultValue: 'INFO',
+  );
+
+  // LOGZIO service-specific configuration.
+  // If additional logging services are introduced, consider moving these to a separate logging configuration file.
   static const REMOTE_LOGZIO_LOGGING_TOKEN__NAME = 'WEBTRIT_APP_REMOTE_LOGZIO_LOGGING_TOKEN';
   static const REMOTE_LOGZIO_LOGGING_TOKEN = bool.hasEnvironment(REMOTE_LOGZIO_LOGGING_TOKEN__NAME)
       ? String.fromEnvironment(

@@ -12,11 +12,13 @@ class LogzioLoggingService implements RemoteLoggingService {
     required this.url,
     required this.token,
     required this.bufferSize,
+    required this.minLevel,
   });
 
   final String url;
   final String token;
   final int bufferSize;
+  final Level minLevel;
 
   FilteredLogzIoAppender? _filteredLogzIoAppender;
 
@@ -34,6 +36,7 @@ class LogzioLoggingService implements RemoteLoggingService {
       apiToken: token,
       bufferSize: bufferSize,
       labels: labels,
+      minLevel: minLevel,
     )..attachToLogger(Logger.root);
   }
 

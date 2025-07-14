@@ -13,9 +13,12 @@ class FilteredLogzIoAppender extends LogzIoApiAppender {
     required LogRecordFormatter super.formatter,
     required super.url,
     required super.apiToken,
+    required this.minLevel,
     super.bufferSize,
     super.labels = const {},
   });
+
+  final Level minLevel;
 
   @override
   Future<void> sendLogEventsWithDio(
@@ -36,7 +39,7 @@ class FilteredLogzIoAppender extends LogzIoApiAppender {
 
   @override
   void handle(LogRecord record) {
-    if (RemoteLogFilter.shouldLog(record)) {
+    if (RemoteLogFilter.shouldLog(record, minLevel: minLevel)) {
       super.handle(record);
     }
   }
@@ -47,11 +50,19 @@ class RemoteLogFilter {
     'listener.logz.io',
   ];
 
-  static bool shouldLog(LogRecord record) {
-    if (record.error == null || record.error is! DioException) return true;
+  static bool shouldLog(LogRecord record, {Level? minLevel}) {
+    // Check minimum level
+    if (minLevel != null && record.level < minLevel) {
+      return false;
+    }
 
+    // Allow all non-Dio errors
+    if (record.error == null || record.error is! DioException) {
+      return true;
+    }
+
+    // Filter specific Dio errors
     final dioError = record.error as DioException;
-
     return !_shouldIgnoreDioError(dioError);
   }
 

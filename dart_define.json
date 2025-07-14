@@ -12,6 +12,8 @@
   "WEBTRIT_APP_SALES_EMAIL": "sales@webtrit.com",
   "_WEBTRIT_APP_FCM_VAPID_KEY": "",
   "__WEBTRIT_APP_FCM_VAPID_KEY_DESCRIPTION": "Optional public VAPID key used for Web Push notifications with Firebase Cloud Messaging (FCM). Required only for web platform to authenticate push subscription with FCM. Not used on mobile platforms (Android/iOS).",
+  "WEBTRIT_APP_REMOTE_LOGZIO_LOG_LEVEL": "INFO",
+  "__WEBTRIT_APP_REMOTE_LOGZIO_LOG_LEVEL_DESCRIPTION": "Sets the minimum log level for remote logging to Logz.io. Acceptable values include: OFF, SHOUT, SEVERE, WARNING, INFO, CONFIG, FINE, FINER, FINEST, and ALL. Logs with a lower severity than the specified level will be ignored. Use 'FINE' or lower for detailed debugging, and 'INFO' or higher for production environments.",
   "_WEBTRIT_APP_REMOTE_LOGZIO_LOGGING_URL": "",
   "_WEBTRIT_APP_REMOTE_LOGZIO_LOGGING_TOKEN": "",
   "_WEBTRIT_APP_REMOTE_LOGZIO_LOGGING_BUFFER_SIZE": "",
