@@ -2,6 +2,7 @@ export 'backoff_retries.dart';
 export 'buffer_transformer.dart';
 export 'equatable_prop_to_string.dart';
 export 'gravatar.dart';
+export 'multi_tap_trigger.dart';
 export 'og_preview.dart';
 export 'orientations.dart';
 export 'path_provider/path_provider.dart';
