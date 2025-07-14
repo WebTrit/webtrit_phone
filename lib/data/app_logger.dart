@@ -7,6 +7,8 @@ import 'package:webtrit_phone/common/common.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';
 
+final _logger = Logger('AppLogger');
+
 class AppLogger {
   static late AppLogger _instance;
 
@@ -19,8 +21,11 @@ class AppLogger {
   }) async {
     hierarchicalLoggingEnabled = true;
 
+    final localLogLevel = Level.LEVELS.firstWhere((level) => level.name == EnvironmentConfig.DEBUG_LEVEL);
+    final logzioLogLevel = Level.LEVELS.firstWhere((level) => level.name == EnvironmentConfig.REMOTE_LOGZIO_LOG_LEVEL);
+
     Logger.root.clearListeners();
-    Logger.root.level = Level.LEVELS.firstWhere((level) => level.name == EnvironmentConfig.DEBUG_LEVEL);
+    Logger.root.level = localLogLevel;
 
     // Set up local logs printing with a color formatter
     PrintAppender(formatter: const ColorFormatter()).attachToLogger(Logger.root);
@@ -31,17 +36,19 @@ class AppLogger {
     // Configure remote logging for Logz.io with an anonymizing formatter.
     // If additional logging services are added in the future, consider extracting these settings
     // into a dedicated logging configuration module to improve maintainability and separation of concerns.
-    final remoteLoggingServices = _createRemoteLoggingServices(remoteConfigService);
+    final remoteLoggingServices = _createRemoteLoggingServices(remoteConfigService, logzioLogLevel);
 
     for (var it in remoteLoggingServices) {
       it.initialize(await _prepareRemoteLabels(packageInfo, deviceInfo, appInfo, secureStorage));
     }
 
+    _logger.info('Initializing AppLogger with local log level: $localLogLevel, remote log level: $logzioLogLevel');
+
     _instance = AppLogger._(remoteLoggingServices, packageInfo, deviceInfo, appInfo, secureStorage);
     return _instance;
   }
 
-  static List<RemoteLoggingService> _createRemoteLoggingServices(RemoteConfigService configService) {
+  static List<RemoteLoggingService> _createRemoteLoggingServices(RemoteConfigService configService, Level minLevel) {
     final isEnabled = configService.getBool('firebaseRemoteLogging') ?? false;
 
     const logzioUrl = EnvironmentConfig.REMOTE_LOGZIO_LOGGING_URL;
@@ -49,7 +56,14 @@ class AppLogger {
     final logzioBufferSize = EnvironmentConfig.REMOTE_LOGZIO_LOGGING_BUFFER_SIZE;
 
     if (logzioUrl != null && logzioToken != null && isEnabled) {
-      return [LogzioLoggingService(url: logzioUrl, token: logzioToken, bufferSize: logzioBufferSize)];
+      return [
+        LogzioLoggingService(
+          url: logzioUrl,
+          token: logzioToken,
+          bufferSize: logzioBufferSize,
+          minLevel: minLevel,
+        )
+      ];
     }
 
     return [];
