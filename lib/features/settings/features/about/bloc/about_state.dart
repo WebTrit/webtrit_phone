@@ -6,6 +6,7 @@ class AboutState with _$AboutState {
 
   const factory AboutState({
     @Default(false) bool progress,
+    @Default([]) List<String> embeddedLinks,
     required String appName,
     required String packageName,
     required String storeBuildVersion,

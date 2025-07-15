@@ -2398,6 +2398,12 @@ abstract class AppLocalizations {
   /// **'Build version in the Store'**
   String get settings_AboutText_StoreVersion;
 
+  /// No description provided for @settings_AboutText_ApplicationEmbeddedLinks.
+  ///
+  /// In en, this message translates to:
+  /// **'Application embedded links'**
+  String get settings_AboutText_ApplicationEmbeddedLinks;
+
   /// No description provided for @settings_AccountDeleteConfirmDialog_content.
   ///
   /// In en, this message translates to:

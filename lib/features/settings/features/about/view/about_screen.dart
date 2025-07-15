@@ -140,6 +140,14 @@ class _AboutScreenState extends State<AboutScreen> {
                       textAlign: TextAlign.center,
                     ),
                   ),
+                  TextButton.icon(
+                    onPressed: () => _showEmbeddedLinksDialog(context, state.embeddedLinks),
+                    icon: const Icon(Icons.link),
+                    label: Text(
+                      context.l10n.settings_AboutText_ApplicationEmbeddedLinks,
+                      style: themeData.textTheme.bodyMedium,
+                    ),
+                  ),
                   Stack(
                     alignment: AlignmentDirectional.center,
                     children: [
@@ -162,6 +170,37 @@ class _AboutScreenState extends State<AboutScreen> {
           ),
         );
       },
+    );
+  }
+
+  void _showEmbeddedLinksDialog(BuildContext context, List<String> links) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(context.l10n.settings_AboutText_ApplicationEmbeddedLinks),
+        content: SizedBox(
+          width: double.maxFinite,
+          child: ListView.builder(
+            shrinkWrap: true,
+            itemCount: links.length,
+            itemBuilder: (context, index) {
+              final url = links[index];
+              return CopyToClipboard(
+                data: url,
+                child: ListTile(
+                  title: Text(url, style: Theme.of(context).textTheme.bodySmall),
+                ),
+              );
+            },
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(),
+            child: Text(context.l10n.alertDialogActions_ok),
+          ),
+        ],
+      ),
     );
   }
 }

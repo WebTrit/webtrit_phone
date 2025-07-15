@@ -713,6 +713,8 @@ class AppLocalizationsMapper {
           localizations.settings_AboutText_FCMPushNotificationToken,
       'settings_AboutText_StoreVersion':
           localizations.settings_AboutText_StoreVersion,
+      'settings_AboutText_ApplicationEmbeddedLinks':
+          localizations.settings_AboutText_ApplicationEmbeddedLinks,
       'settings_AccountDeleteConfirmDialog_content':
           localizations.settings_AccountDeleteConfirmDialog_content,
       'settings_AccountDeleteConfirmDialog_title':

@@ -876,6 +876,8 @@
   "@settings_AboutText_FCMPushNotificationToken": {},
   "settings_AboutText_StoreVersion": "Версія збірки в магазині",
   "@settings_AboutText_StoreVersion": {},
+  "settings_AboutText_ApplicationEmbeddedLinks": "Вбудовані посилання застосунку",
+  "@settings_AboutText_ApplicationEmbeddedLinks": {},
   "settings_AccountDeleteConfirmDialog_content": "Ви впевнені, що хочете видалити обліковий запис?",
   "@settings_AccountDeleteConfirmDialog_content": {},
   "settings_AccountDeleteConfirmDialog_title": "Підтвердіть видалення облікового запису",
