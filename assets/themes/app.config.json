@@ -64,7 +64,7 @@
           "enabled": false,
           "initial": false,
           "type": "embedded",
-          "titleL10n": "embaded1TitleL10n",
+          "titleL10n": "main_BottomNavigationBarItemLabel_embedded",
           "icon": "0xe2ce",
           "embeddedResourceId": 2
         }
