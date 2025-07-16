@@ -7,15 +7,19 @@ import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 import 'package:webtrit_phone/app/constants.dart';
 
+enum SafeAreaSide { top, bottom, left, right }
+
 @RoutePage()
 class LoginSwitchScreenPage extends StatelessWidget {
   // ignore: use_key_in_widget_constructors
   const LoginSwitchScreenPage({
+    required this.bodySafeAreaSides,
     this.forceLoginTypes,
     this.isLogoVisible = true,
     this.isAppBarVisible = true,
   });
 
+  final Set<SafeAreaSide> bodySafeAreaSides;
   final List<LoginType>? forceLoginTypes;
   final bool isLogoVisible;
   final bool isAppBarVisible;
@@ -47,7 +51,13 @@ class LoginSwitchScreenPage extends StatelessWidget {
                       ],
                     )
                   : null,
-              body: child,
+              body: SafeArea(
+                top: bodySafeAreaSides.contains(SafeAreaSide.top),
+                bottom: bodySafeAreaSides.contains(SafeAreaSide.bottom),
+                left: bodySafeAreaSides.contains(SafeAreaSide.left),
+                right: bodySafeAreaSides.contains(SafeAreaSide.right),
+                child: child,
+              ),
               currentLoginType: supportedLoginTypes[tabsRouter.activeIndex],
               supportedLoginTypes: supportedLoginTypes,
               onLoginTypeChanged: (loginType) => tabsRouter.setActiveIndex(supportedLoginTypes.indexOf(loginType)),
