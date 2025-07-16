@@ -51,7 +51,7 @@ class LoginSwitchScreen extends StatelessWidget {
           Expanded(
             child: Ink(
               color: themeData.scaffoldBackgroundColor, // background color necessary for visually proper transition
-              child: SafeArea(top: false, child: body),
+              child: body,
             ),
           ),
         ],

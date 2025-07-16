@@ -74,13 +74,17 @@ class LoginRouterPage extends StatelessWidget {
 
               // After receiving server-provided login types (triggered from LoginModeSelectScreenPageRoute),
               // open the login switch screen.
-              if (_launchEmbedded == null && whenLoginSwitchScreenPageActive(state)) LoginSwitchScreenPageRoute(),
+              if (_launchEmbedded == null && whenLoginSwitchScreenPageActive(state))
+                LoginSwitchScreenPageRoute(bodySafeAreaSides: const {SafeAreaSide.bottom}),
 
               // Embedded page was provided, so use the embedded UI via LoginSwitchScreenPageRoute.
               // Force a single login type to disable rendering of other tabs.
               // Also hide the native logo if the server provides multiple login types.
               if (_launchEmbedded != null)
                 LoginSwitchScreenPageRoute(
+                  // For full-screen embedded pages, SafeArea handling is delegated to the embedded page itself.
+                  bodySafeAreaSides: const {},
+                  // Uses LoginSignupEmbeddedRequestScreenPage to render the embedded content when _launchEmbedded is provided.
                   forceLoginTypes: const [LoginType.signup],
                   isLogoVisible: false,
                   isAppBarVisible: false,

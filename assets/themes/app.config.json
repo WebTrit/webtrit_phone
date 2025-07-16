@@ -10,10 +10,19 @@
       },
       {
         "enabled": false,
-        "embeddedId": 1,
         "type": "embedded",
-        "titleL10n": "login_Button_signIn",
-        "isLaunchButtonVisible": false
+        "embeddedId": 1,
+        "titleL10n": "login_Button_signUpToDemoInstance",
+        "isLaunchButtonVisible": false,
+        "isLaunchScreen": false
+      },
+      {
+        "enabled": false,
+        "type": "embedded",
+        "embeddedId": 8,
+        "titleL10n": "login_Button_signInMediaQueryExample",
+        "isLaunchButtonVisible": false,
+        "isLaunchScreen": false
       }
     ]
   },
@@ -271,6 +280,10 @@
         "showToolbar": true,
         "titleL10n": "login_requestCredentials_title"
       }
+    },
+    {
+      "id": 8,
+      "uri": "https://webtrit-app.web.app/example/example_embedded_media_query.html"
     }
   ]
 }

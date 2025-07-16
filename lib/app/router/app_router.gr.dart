@@ -869,6 +869,7 @@ class LoginSignupVerifyScreenPageRoute extends PageRouteInfo<void> {
 class LoginSwitchScreenPageRoute
     extends PageRouteInfo<LoginSwitchScreenPageRouteArgs> {
   LoginSwitchScreenPageRoute({
+    required Set<SafeAreaSide> bodySafeAreaSides,
     List<LoginType>? forceLoginTypes,
     bool isLogoVisible = true,
     bool isAppBarVisible = true,
@@ -876,6 +877,7 @@ class LoginSwitchScreenPageRoute
   }) : super(
          LoginSwitchScreenPageRoute.name,
          args: LoginSwitchScreenPageRouteArgs(
+           bodySafeAreaSides: bodySafeAreaSides,
            forceLoginTypes: forceLoginTypes,
            isLogoVisible: isLogoVisible,
            isAppBarVisible: isAppBarVisible,
@@ -888,10 +890,9 @@ class LoginSwitchScreenPageRoute
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      final args = data.argsAs<LoginSwitchScreenPageRouteArgs>(
-        orElse: () => const LoginSwitchScreenPageRouteArgs(),
-      );
+      final args = data.argsAs<LoginSwitchScreenPageRouteArgs>();
       return LoginSwitchScreenPage(
+        bodySafeAreaSides: args.bodySafeAreaSides,
         forceLoginTypes: args.forceLoginTypes,
         isLogoVisible: args.isLogoVisible,
         isAppBarVisible: args.isAppBarVisible,
@@ -902,10 +903,13 @@ class LoginSwitchScreenPageRoute
 
 class LoginSwitchScreenPageRouteArgs {
   const LoginSwitchScreenPageRouteArgs({
+    required this.bodySafeAreaSides,
     this.forceLoginTypes,
     this.isLogoVisible = true,
     this.isAppBarVisible = true,
   });
+
+  final Set<SafeAreaSide> bodySafeAreaSides;
 
   final List<LoginType>? forceLoginTypes;
 
@@ -915,7 +919,7 @@ class LoginSwitchScreenPageRouteArgs {
 
   @override
   String toString() {
-    return 'LoginSwitchScreenPageRouteArgs{forceLoginTypes: $forceLoginTypes, isLogoVisible: $isLogoVisible, isAppBarVisible: $isAppBarVisible}';
+    return 'LoginSwitchScreenPageRouteArgs{bodySafeAreaSides: $bodySafeAreaSides, forceLoginTypes: $forceLoginTypes, isLogoVisible: $isLogoVisible, isAppBarVisible: $isAppBarVisible}';
   }
 }
 
