@@ -189,15 +189,15 @@ values or CSS environment variables.
 {
   "brightness": "dark",
   "devicePixelRatio": 2.75,
-  "statusBarHeight": 44,
-  "navigationBarHeight": 34
+  "topSafeInset": 44,
+  "bottomSafeInset": 34
 }
 ```
 
 - `brightness`: `"light"` or `"dark"` depending on the system theme
 - `devicePixelRatio`: the screen's pixel density
-- `statusBarHeight`: top inset (useful for padding under status bar)
-- `navigationBarHeight`: bottom inset (useful for avoiding native nav bar overlap)
+- `topSafeInset`: top system inset (e.g., status bar or notch)
+- `bottomSafeInset`: bottom system inset (e.g., gesture area or system-reserved space)
 
 ### Required Integration by Web Developers
 

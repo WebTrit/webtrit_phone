@@ -248,46 +248,46 @@ class _WebViewContainerState extends State<WebViewContainer> with WidgetStateMix
     });
   }
 
-    /// Injects media query-related data from Flutter into the WebView as JSON.
-    ///
-    /// This method gathers the current media query information such as:
-    /// - `brightness`: light or dark theme (`light` / `dark`)
-    /// - `devicePixelRatio`: screen density
-    /// - `statusBarHeight`: top padding (usually status bar height)
-    /// - `navigationBarHeight`: bottom padding (usually system gesture/nav bar)
-    ///
-    /// It serializes the data into JSON and calls a JavaScript function
-    /// `window.onMediaQueryReady(json)` inside the WebView, if it's defined.
-    ///
-    /// Example JS hook on the page:
-    /// ```js
-    /// window.onMediaQueryReady = function(payload) {
-    ///   const data = JSON.parse(payload); // or use directly if it's an object
-    ///   // apply UI adjustments here
-    /// };
-    /// ```
-    void _injectMediaQueryData() {
-      final mediaQuery = MediaQuery.of(context);
-      final theme = Theme.of(context);
+  /// Injects media query-related data from Flutter into the WebView as JSON.
+  ///
+  /// This method gathers the current media query information such as:
+  /// - `brightness`: light or dark theme (`light` / `dark`)
+  /// - `devicePixelRatio`: screen density
+  /// - `topSafeInset`: top padding (usually status bar height)
+  /// - `bottomSafeInset`: bottom padding (gesture area or system-reserved space)
+  ///
+  /// It serializes the data into JSON and calls a JavaScript function
+  /// `window.onMediaQueryReady(json)` inside the WebView, if it's defined.
+  ///
+  /// Example JS hook on the page:
+  /// ```js
+  /// window.onMediaQueryReady = function(payload) {
+  ///   const data = JSON.parse(payload); // or use directly if it's an object
+  ///   // apply UI adjustments here
+  /// };
+  /// ```
+  void _injectMediaQueryData() {
+    final mediaQuery = MediaQuery.of(context);
+    final theme = Theme.of(context);
 
-      final payload = {
-        'brightness': theme.brightness.name,
-        'devicePixelRatio': mediaQuery.devicePixelRatio,
-        'statusBarHeight': mediaQuery.padding.top.round(),
-        'navigationBarHeight': mediaQuery.padding.bottom.round(),
-      };
+    final payload = {
+      'brightness': theme.brightness.name,
+      'devicePixelRatio': mediaQuery.devicePixelRatio,
+      'topSafeInset': mediaQuery.viewPadding.top.round(),
+      'bottomSafeInset': mediaQuery.viewPadding.bottom.round(),
+    };
 
-      final jsonString = const JsonEncoder().convert(payload);
+    final jsonString = const JsonEncoder().convert(payload);
 
-      final script = '''
+    final script = '''
       if (typeof window.onMediaQueryReady === 'function') {
         window.onMediaQueryReady($jsonString);
       }
     ''';
 
-      _logger.finest('Injecting media query data: $jsonString');
-      _webViewController.runJavaScript(script);
-    }
+    _logger.finest('Injecting media query data: $jsonString');
+    _webViewController.runJavaScript(script);
+  }
 }
 
 class NavigationRequestHandler {
