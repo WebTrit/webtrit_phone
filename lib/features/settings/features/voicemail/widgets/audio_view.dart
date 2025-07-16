@@ -78,6 +78,13 @@ class _AudioViewState extends State<AudioView> with WidgetsBindingObserver {
     _playbackSub = _player.playbackEventStream.listen((_) {
       if (mounted) setState(() {});
     });
+
+    _player.playerStateStream.listen((state) {
+      if (state.processingState == ProcessingState.completed) {
+        _player.stop();
+        _player.seek(Duration.zero);
+      }
+    });
   }
 
   @override
