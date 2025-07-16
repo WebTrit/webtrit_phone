@@ -12,6 +12,8 @@ class LogRecordsConsoleScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
     return Scaffold(
       appBar: AppBar(
         title: Text(context.l10n.logRecordsConsole_AppBarTitle),
@@ -22,6 +24,7 @@ class LogRecordsConsoleScreen extends StatelessWidget {
                 icon: const Icon(
                   Icons.delete_outline,
                 ),
+                color: colorScheme.onSurface,
                 onPressed: switch (state) {
                   LogRecordsConsoleStateSuccess() => () {
                       context.read<LogRecordsConsoleCubit>().clear();
@@ -37,6 +40,7 @@ class LogRecordsConsoleScreen extends StatelessWidget {
                 icon: const Icon(
                   Icons.share,
                 ),
+                color: colorScheme.onSurface,
                 onPressed: switch (state) {
                   LogRecordsConsoleStateSuccess(:final logRecords) when logRecords.isNotEmpty => () {
                       context.read<LogRecordsConsoleCubit>().share();
