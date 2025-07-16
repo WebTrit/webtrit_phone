@@ -84,39 +84,35 @@ ANDROID_12_SPLASH_COLOR ?= "#123752"
 # Path to splash screen background image (if used)
 SPLASH_IMAGE ?= "tool/assets/native_splash/image.png"
 
-
 # ===========================
 #  Localizely Configuration
 # ===========================
 
 ENV_FILE ?= .env
 
-ifeq ($(token),)
-    ifeq ($(wildcard $(ENV_FILE)),)
-        $(error Token not provided and .env file not found: $(ENV_FILE))
-    else
-        token := $(shell grep '^LOCALIZELY_TOKEN=' $(ENV_FILE) | cut -d '=' -f2)
-        ifeq ($(strip $(token)),)
-            $(error LOCALIZELY_TOKEN is empty in $(ENV_FILE))
-        endif
-    endif
-endif
+define ensure_localizely_token
+	$(eval localizely_token := $(shell \
+		if [ -z "$(localizely_token)" ]; then \
+			if [ ! -f "$(ENV_FILE)" ]; then \
+				echo "__ERROR_ENV_NOT_FOUND__"; \
+			else \
+				val=$$(grep '^LOCALIZELY_TOKEN=' $(ENV_FILE) | cut -d '=' -f2); \
+				if [ -z "$$val" ]; then echo "__ERROR_TOKEN_EMPTY__"; else echo "$$val"; fi; \
+			fi; \
+		else echo "$(localizely_token)"; fi \
+	)) \
+	@if [ "$(localizely_token)" = "__ERROR_ENV_NOT_FOUND__" ]; then \
+		echo "Error: Token not provided and $(ENV_FILE) not found."; exit 1; \
+	elif [ "$(localizely_token)" = "__ERROR_TOKEN_EMPTY__" ]; then \
+		echo "Error: LOCALIZELY_TOKEN is empty in $(ENV_FILE)"; exit 1; \
+	fi
+endef
 
 # Rules
 .PHONY: run build configure configure-demo configure-classic build-ios build-apk build-appbundle clean-git generate-package-config rename-package generate-launcher-icons generate-native-splash generate-assets
 
 ## Configure application resources
 configure:
-	$(CONFIGURATOR) configurator-resources --applicationId=$(id) $(KEYSTORES_PATH) --token=$(token)
-	$(CONFIGURATOR) configurator-generate
-
-## Create demo configuration
-configure-demo:
-	$(CONFIGURATOR) configurator-resources --applicationId=$(id) $(KEYSTORES_PATH) --token=$(token)
-	$(CONFIGURATOR) configurator-generate
-
-## Create classic configuration
-configure-classic:
 	$(CONFIGURATOR) configurator-resources --applicationId=$(id) $(KEYSTORES_PATH) --token=$(token)
 	$(CONFIGURATOR) configurator-generate
 
@@ -178,11 +174,13 @@ generate-assets: generate-launcher-icons generate-native-splash
 
 ## Push localization keys to Localizely
 push-l10n:
-	localizely-cli --api-token=$(token) push
+	$(call ensure_localizely_token)
+	localizely-cli --api-token=$(localizely_token) push
 
 ## Pull localization keys from Localizely
 pull-l10n:
-	localizely-cli --api-token=$(token) pull
+	$(call ensure_localizely_token)
+	localizely-cli --api-token=$(localizely_token) pull
 
 ## Generate Flutter localization files
 gen-l10n:
