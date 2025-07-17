@@ -82,7 +82,6 @@ void main() {
       expect(logString, contains('404'));
       expect(logString, contains(code));
       expect(logString, contains(requestId));
-      expect(logString, contains(uri.toString()));
       expect(logString, isNot(contains('path')));
       expect(logString, isNot(contains('reason')));
     });

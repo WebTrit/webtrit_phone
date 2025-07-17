@@ -19,8 +19,7 @@ class RequestFailure implements Exception {
   String toString() {
     final buffer = StringBuffer()
       ..write('RequestFailure(statusCode: $statusCode')
-      ..write(', requestId: $requestId')
-      ..write(', url: $url');
+      ..write(', requestId: $requestId');
 
     if (error != null) {
       buffer.write(', code: ${error?.code}');
