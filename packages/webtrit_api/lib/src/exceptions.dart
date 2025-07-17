@@ -17,17 +17,18 @@ class RequestFailure implements Exception {
 
   @override
   String toString() {
-    final error = this.error;
+    final buffer = StringBuffer()
+      ..write('RequestFailure(statusCode: $statusCode')
+      ..write(', requestId: $requestId');
+
     if (error != null) {
-      final errorDetails = error.details;
-      if (errorDetails != null) {
-        return '$RequestFailure($statusCode, ${error.code},${error.details?.path}: ${error.details?.reason}';
-      } else {
-        return '$RequestFailure($statusCode, ${error.code})';
-      }
-    } else {
-      return '$RequestFailure($statusCode)';
+      buffer.write(', code: ${error?.code}');
+      final details = error?.details;
+      if (details != null) buffer.write(', path: ${details.path}, reason: ${details.reason}');
     }
+
+    buffer.write(')');
+    return buffer.toString();
   }
 }
 
