@@ -20,8 +20,6 @@ mixin _$EmbeddedState {
   String get currentUrl => throw _privateConstructorUsedError;
   bool get canGoBack => throw _privateConstructorUsedError;
   bool get payloadReady => throw _privateConstructorUsedError;
-  bool get webViewReady => throw _privateConstructorUsedError;
-  WebResourceError? get webResourceError => throw _privateConstructorUsedError;
   EmbeddedIntents? get intent => throw _privateConstructorUsedError;
 
   /// Create a copy of EmbeddedState
@@ -42,8 +40,6 @@ abstract class $EmbeddedStateCopyWith<$Res> {
       String currentUrl,
       bool canGoBack,
       bool payloadReady,
-      bool webViewReady,
-      WebResourceError? webResourceError,
       EmbeddedIntents? intent});
 }
 
@@ -66,8 +62,6 @@ class _$EmbeddedStateCopyWithImpl<$Res, $Val extends EmbeddedState>
     Object? currentUrl = null,
     Object? canGoBack = null,
     Object? payloadReady = null,
-    Object? webViewReady = null,
-    Object? webResourceError = freezed,
     Object? intent = freezed,
   }) {
     return _then(_value.copyWith(
@@ -87,14 +81,6 @@ class _$EmbeddedStateCopyWithImpl<$Res, $Val extends EmbeddedState>
           ? _value.payloadReady
           : payloadReady // ignore: cast_nullable_to_non_nullable
               as bool,
-      webViewReady: null == webViewReady
-          ? _value.webViewReady
-          : webViewReady // ignore: cast_nullable_to_non_nullable
-              as bool,
-      webResourceError: freezed == webResourceError
-          ? _value.webResourceError
-          : webResourceError // ignore: cast_nullable_to_non_nullable
-              as WebResourceError?,
       intent: freezed == intent
           ? _value.intent
           : intent // ignore: cast_nullable_to_non_nullable
@@ -116,8 +102,6 @@ abstract class _$$InitialImplCopyWith<$Res>
       String currentUrl,
       bool canGoBack,
       bool payloadReady,
-      bool webViewReady,
-      WebResourceError? webResourceError,
       EmbeddedIntents? intent});
 }
 
@@ -138,8 +122,6 @@ class __$$InitialImplCopyWithImpl<$Res>
     Object? currentUrl = null,
     Object? canGoBack = null,
     Object? payloadReady = null,
-    Object? webViewReady = null,
-    Object? webResourceError = freezed,
     Object? intent = freezed,
   }) {
     return _then(_$InitialImpl(
@@ -159,14 +141,6 @@ class __$$InitialImplCopyWithImpl<$Res>
           ? _value.payloadReady
           : payloadReady // ignore: cast_nullable_to_non_nullable
               as bool,
-      webViewReady: null == webViewReady
-          ? _value.webViewReady
-          : webViewReady // ignore: cast_nullable_to_non_nullable
-              as bool,
-      webResourceError: freezed == webResourceError
-          ? _value.webResourceError
-          : webResourceError // ignore: cast_nullable_to_non_nullable
-              as WebResourceError?,
       intent: freezed == intent
           ? _value.intent
           : intent // ignore: cast_nullable_to_non_nullable
@@ -183,8 +157,6 @@ class _$InitialImpl extends _Initial {
       this.currentUrl = '',
       this.canGoBack = false,
       this.payloadReady = false,
-      this.webViewReady = false,
-      this.webResourceError,
       this.intent})
       : _payload = payload,
         super._();
@@ -208,16 +180,11 @@ class _$InitialImpl extends _Initial {
   @JsonKey()
   final bool payloadReady;
   @override
-  @JsonKey()
-  final bool webViewReady;
-  @override
-  final WebResourceError? webResourceError;
-  @override
   final EmbeddedIntents? intent;
 
   @override
   String toString() {
-    return 'EmbeddedState(payload: $payload, currentUrl: $currentUrl, canGoBack: $canGoBack, payloadReady: $payloadReady, webViewReady: $webViewReady, webResourceError: $webResourceError, intent: $intent)';
+    return 'EmbeddedState(payload: $payload, currentUrl: $currentUrl, canGoBack: $canGoBack, payloadReady: $payloadReady, intent: $intent)';
   }
 
   @override
@@ -232,10 +199,6 @@ class _$InitialImpl extends _Initial {
                 other.canGoBack == canGoBack) &&
             (identical(other.payloadReady, payloadReady) ||
                 other.payloadReady == payloadReady) &&
-            (identical(other.webViewReady, webViewReady) ||
-                other.webViewReady == webViewReady) &&
-            (identical(other.webResourceError, webResourceError) ||
-                other.webResourceError == webResourceError) &&
             (identical(other.intent, intent) || other.intent == intent));
   }
 
@@ -246,8 +209,6 @@ class _$InitialImpl extends _Initial {
       currentUrl,
       canGoBack,
       payloadReady,
-      webViewReady,
-      webResourceError,
       intent);
 
   /// Create a copy of EmbeddedState
@@ -265,8 +226,6 @@ abstract class _Initial extends EmbeddedState {
       final String currentUrl,
       final bool canGoBack,
       final bool payloadReady,
-      final bool webViewReady,
-      final WebResourceError? webResourceError,
       final EmbeddedIntents? intent}) = _$InitialImpl;
   const _Initial._() : super._();
 
@@ -278,10 +237,6 @@ abstract class _Initial extends EmbeddedState {
   bool get canGoBack;
   @override
   bool get payloadReady;
-  @override
-  bool get webViewReady;
-  @override
-  WebResourceError? get webResourceError;
   @override
   EmbeddedIntents? get intent;
 
