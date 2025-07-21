@@ -99,12 +99,15 @@ class _CallInfoState extends State<CallInfo> {
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
     final textTheme = themeData.textTheme;
-    final color = themeData.colorScheme.surface;
 
-    final userInfoTextStyle = _resolveTextStyle(widget.style?.userInfo, textTheme.displaySmall, color);
-    final numberTextStyle = _resolveTextStyle(widget.style?.number, textTheme.bodyLarge, color);
-    final callStatusTextStyle = _resolveTextStyle(widget.style?.callStatus, textTheme.bodyMedium, color);
-    final processingStatusTextStyle = _resolveTextStyle(widget.style?.processingStatus, textTheme.labelLarge, color);
+    final fallbackColor = themeData.colorScheme.surface;
+    final fallbackFontFeatures = [const FontFeature.tabularFigures()];
+    final style = widget.style;
+
+    final userInfoTextStyle = _resolveStyle(style?.userInfo, textTheme.displaySmall, null, fallbackColor);
+    final numberTextStyle = _resolveStyle(style?.number, textTheme.bodyLarge, null, fallbackColor);
+    final statusTextStyle = _resolveStyle(style?.callStatus, textTheme.bodyMedium, fallbackFontFeatures, fallbackColor);
+    final processingStatusTextStyle = _resolveStyle(style?.processingStatus, textTheme.labelLarge, null, fallbackColor);
 
     final statusMessage = _buildStatusMessage(context);
 
@@ -137,7 +140,7 @@ class _CallInfoState extends State<CallInfo> {
         const SizedBox(height: 10),
         Text(
           statusMessage,
-          style: callStatusTextStyle,
+          style: statusTextStyle,
         ),
         const SizedBox(height: 10),
         if (widget.processingStatus != null)
@@ -177,7 +180,12 @@ class _CallInfoState extends State<CallInfo> {
     }
   }
 
-  TextStyle? _resolveTextStyle(TextStyle? customStyle, TextStyle? fallback, Color color) {
-    return customStyle ?? fallback?.copyWith(color: color);
+  TextStyle? _resolveStyle(
+    TextStyle? customStyle,
+    TextStyle? fallback,
+    List<FontFeature>? fallbackFontFeatures,
+    Color fallbackColor,
+  ) {
+    return customStyle ?? fallback?.copyWith(color: fallbackColor, fontFeatures: fallbackFontFeatures);
   }
 }
