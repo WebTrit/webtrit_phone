@@ -183,12 +183,30 @@ class _WebViewContainerState extends State<WebViewContainer> with WidgetStateMix
 
   @override
   void dispose() {
+    _disposeTimers();
+    _disposeStreams();
+    _disposeConnectivityStrategy();
+    _disposeInjectionStrategies();
+    super.dispose();
+  }
+
+  void _disposeTimers() {
     _finalLoadTimer?.cancel();
-    if (!_progressStreamController.isClosed) _progressStreamController.close();
+  }
+
+  void _disposeStreams() {
+    if (!_progressStreamController.isClosed) {
+      _progressStreamController.close();
+    }
+  }
+
+  void _disposeConnectivityStrategy() {
     widget.connectivityRecoveryStrategy?._dispose();
+  }
+
+  void _disposeInjectionStrategies() {
     for (final strategy in widget.pageInjectionStrategies) {
       strategy._dispose();
-      super.dispose();
     }
   }
 
