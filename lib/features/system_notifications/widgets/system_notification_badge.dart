@@ -57,6 +57,7 @@ class _SystemNotificationsBadgeState extends State<SystemNotificationsBadge> wit
                 color: Colors.transparent,
                 child: InkWell(
                   onTap: () {
+                    controller.reset();
                     context.router.navigate(const SystemNotificationsPageRoute());
                   },
                   child: SizedBox(
