@@ -1,8 +1,55 @@
 {
   "login": {
     "modeSelect": {
+      "systemUiOverlayStyle": {
+        "statusBarColor": "#0A0A0A",
+        "statusBarIconBrightness": "dark",
+        "systemNavigationBarColor": "#0A0A0A",
+        "systemNavigationBarIconBrightness": "dark"
+      },
       "buttonLoginStyleType": "neutralOnDark",
       "buttonSignupStyleType": "neutralOnDark"
+    }
+  },
+  "dialing": {
+    "systemUiOverlayStyle": {
+      "statusBarColor": "#0A0A0A",
+      "statusBarIconBrightness": "dark",
+      "systemNavigationBarColor": "#0A0A0A",
+      "systemNavigationBarIconBrightness": "dark"
+    },
+    "callInfo": {
+      "usernameTextStyle": {
+        "fontSize": 36,
+        "fontWeight": {
+          "weight": 400
+        },
+        "color": "#FFFFFF"
+      },
+      "numberTextStyle": {
+        "fontSize": 16,
+        "fontWeight": {
+          "weight": 400
+        },
+        "color": "#EEF3F6"
+      },
+      "callStatusTextStyle": {
+        "fontSize": 14,
+        "fontWeight": {
+          "weight": 400
+        },
+        "color": "#EEF3F6",
+        "fontFeatures": [
+          "tabularFigures"
+        ]
+      },
+      "processingStatusTextStyle": {
+        "fontSize": 14,
+        "fontWeight": {
+          "weight": 500
+        },
+        "color": "#EEF3F6"
+      }
     }
   }
 }
