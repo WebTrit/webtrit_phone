@@ -32,7 +32,7 @@ class EmbeddedScreen extends StatefulWidget {
 
 class _EmbeddedScreenState extends State<EmbeddedScreen> {
   late final _webViewController = WebViewController();
-  late final ConnectivityRecoveryStrategy _retryConnectivityStrategy;
+  late final ConnectivityRecoveryStrategy _connectivityRecoveryStrategy;
   late final PageInjectionStrategy _pageInjectionStrategy;
 
   EmbeddedCubit get _cubit => context.read<EmbeddedCubit>();
@@ -41,7 +41,7 @@ class _EmbeddedScreenState extends State<EmbeddedScreen> {
   void initState() {
     final connectivityStream = Connectivity().onConnectivityChanged;
 
-    _retryConnectivityStrategy = DefaultConnectivityRecoveryStrategy(connectivityStream: connectivityStream);
+    _connectivityRecoveryStrategy = DefaultConnectivityRecoveryStrategy(connectivityStream: connectivityStream);
     _pageInjectionStrategy = DefaultPayloadInjectionStrategy();
 
     super.initState();
@@ -61,7 +61,7 @@ class _EmbeddedScreenState extends State<EmbeddedScreen> {
             child: WebViewContainer(
               initialUri: widget.initialUri,
               webViewController: _webViewController,
-              connectivityRecoveryStrategy: _retryConnectivityStrategy,
+              connectivityRecoveryStrategy: _connectivityRecoveryStrategy,
               pageInjectionStrategies: [_pageInjectionStrategy],
               showToolbar: false,
               userAgent: UserAgent.of(context),
