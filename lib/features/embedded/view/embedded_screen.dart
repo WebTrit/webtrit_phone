@@ -1,9 +1,8 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logging/logging.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 
 import 'package:webtrit_phone/utils/utils.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
@@ -33,7 +32,20 @@ class EmbeddedScreen extends StatefulWidget {
 
 class _EmbeddedScreenState extends State<EmbeddedScreen> {
   late final _webViewController = WebViewController();
-  late final _bloc = context.read<EmbeddedCubit>();
+  late final ConnectivityRecoveryStrategy _connectivityRecoveryStrategy;
+  late final PageInjectionStrategy _pageInjectionStrategy;
+
+  EmbeddedCubit get _cubit => context.read<EmbeddedCubit>();
+
+  @override
+  void initState() {
+    final connectivityStream = Connectivity().onConnectivityChanged;
+
+    _connectivityRecoveryStrategy = DefaultConnectivityRecoveryStrategy(connectivityStream: connectivityStream);
+    _pageInjectionStrategy = DefaultPayloadInjectionStrategy();
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,17 +61,17 @@ class _EmbeddedScreenState extends State<EmbeddedScreen> {
             child: WebViewContainer(
               initialUri: widget.initialUri,
               webViewController: _webViewController,
+              connectivityRecoveryStrategy: _connectivityRecoveryStrategy,
+              pageInjectionStrategies: [_pageInjectionStrategy],
               showToolbar: false,
               userAgent: UserAgent.of(context),
-              onPageLoadedSuccess: _bloc.onPageLoadedSuccess,
-              onPageLoadedFailed: _bloc.onPageLoadedFailed,
               onUrlChange: (url) async {
-                _bloc.onUrlChange(url ?? '');
+                _cubit.onUrlChange(url ?? '');
                 final canGoBack = await _webViewController.canGoBack();
-                if (mounted) _bloc.onCanGoBackChange(canGoBack);
+                if (mounted) _cubit.onCanGoBackChange(canGoBack);
               },
               errorBuilder: (context, error, controller) {
-                return EmbeddedRequestError(error: error, onPressed: () => _bloc.reload());
+                return EmbeddedRequestError(error: error);
               },
             ),
           );
@@ -72,16 +84,7 @@ class _EmbeddedScreenState extends State<EmbeddedScreen> {
   void _onBlocStateChanged(BuildContext context, EmbeddedState state) {
     _logger.info('onBlocStateChanged: $state');
 
-    if (state.isReadyToInjectedScript) _webViewController.runJavaScript(_buildInjectedScript(state.payload));
+    if (state.isReadyToInjectedScript) _pageInjectionStrategy.setPayload(state.payload);
     if (state.isReloadWebView) _webViewController.reload();
-  }
-
-  String _buildInjectedScript(Map<String, dynamic> data) {
-    final jsonString = const JsonEncoder().convert(data);
-    return '''
-    if (typeof window.onPayloadDataReady === 'function') {
-      window.onPayloadDataReady($jsonString);
-    }
-  ''';
   }
 }

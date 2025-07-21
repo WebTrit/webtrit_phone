@@ -4,6 +4,8 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:stream_transform/stream_transform.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:logging/logging.dart';
@@ -32,6 +34,8 @@ class WebViewContainer extends StatefulWidget {
     this.onPageLoadedSuccess,
     this.onPageLoadedFailed,
     this.onUrlChange,
+    this.connectivityRecoveryStrategy,
+    this.pageInjectionStrategies = const [],
   });
 
   final Widget? title;
@@ -47,6 +51,12 @@ class WebViewContainer extends StatefulWidget {
   final void Function()? onPageLoadedSuccess;
   final void Function(WebResourceError error)? onPageLoadedFailed;
   final void Function(String? url)? onUrlChange;
+
+  /// Strategy for handling connectivity recovery and retrying page loads.
+  final ConnectivityRecoveryStrategy? connectivityRecoveryStrategy;
+
+  /// List of strategies for injecting data into the WebView when it is ready.
+  final List<PageInjectionStrategy> pageInjectionStrategies;
 
   @override
   State<WebViewContainer> createState() => _WebViewContainerState();
@@ -173,10 +183,31 @@ class _WebViewContainerState extends State<WebViewContainer> with WidgetStateMix
 
   @override
   void dispose() {
-    _finalLoadTimer?.cancel();
-    if (!_progressStreamController.isClosed) _progressStreamController.close();
-
+    _disposeTimers();
+    _disposeStreams();
+    _disposeConnectivityStrategy();
+    _disposeInjectionStrategies();
     super.dispose();
+  }
+
+  void _disposeTimers() {
+    _finalLoadTimer?.cancel();
+  }
+
+  void _disposeStreams() {
+    if (!_progressStreamController.isClosed) {
+      _progressStreamController.close();
+    }
+  }
+
+  void _disposeConnectivityStrategy() {
+    widget.connectivityRecoveryStrategy?._dispose();
+  }
+
+  void _disposeInjectionStrategies() {
+    for (final strategy in widget.pageInjectionStrategies) {
+      strategy._dispose();
+    }
   }
 
   void _initializeHandlers() {
@@ -204,6 +235,10 @@ class _WebViewContainerState extends State<WebViewContainer> with WidgetStateMix
     for (var MapEntry(key: name, value: onMessageReceived) in widget.javaScriptChannels.entries) {
       _webViewController.addJavaScriptChannel(name, onMessageReceived: onMessageReceived);
     }
+
+    widget.connectivityRecoveryStrategy?.startMonitoring(
+      tryReload: () => _webViewController.reload(),
+    );
   }
 
   void _onPageFinished(String url) {
@@ -222,8 +257,15 @@ class _WebViewContainerState extends State<WebViewContainer> with WidgetStateMix
       if (!_isPageLoading) {
         if (_latestError == null) {
           widget.onPageLoadedSuccess?.call();
+          widget.connectivityRecoveryStrategy?._onPageLoadSuccess();
+
+          for (final strategy in widget.pageInjectionStrategies) {
+            strategy._handlePageReady(_webViewController, context);
+          }
+
           _injectMediaQueryData();
         } else {
+          widget.connectivityRecoveryStrategy?._onPageLoadFailed();
           _logger.warning('Skipped injection, page loading failed');
         }
       } else {
@@ -375,5 +417,263 @@ class NavigationRequestHandler {
     }
 
     return NavigationDecision.prevent;
+  }
+}
+
+/// Defines a strategy interface for injecting payload data into a WebView.
+abstract class PageInjectionStrategy {
+  /// Updates the payload that may be injected into the WebView.
+  void setPayload(Map<String, dynamic> payload);
+
+  /// Called when the WebView is fully initialized and ready for interaction.
+  void _handlePageReady(WebViewController controller, BuildContext context);
+
+  /// Releases resources and stops any listeners.
+  void _dispose();
+}
+
+/// A default implementation of [PageInjectionStrategy] that injects
+/// JSON-encoded payloads into a WebView when it becomes ready.
+///
+/// The injection is performed by executing a JavaScript function
+/// on the `window` object. By default, it calls `window.onPayloadDataReady(...)`,
+/// but the function name can be customized via the [functionName] parameter.
+class DefaultPayloadInjectionStrategy implements PageInjectionStrategy {
+  DefaultPayloadInjectionStrategy({this.functionName = 'onPayloadDataReady'}) {
+    _payloadNotifier.addListener(_attemptPayloadInjection);
+  }
+
+  /// The name of the JavaScript function to call in the WebView.
+  final String functionName;
+
+  /// Stores the current payload to inject.
+  final ValueNotifier<Map<String, dynamic>> _payloadNotifier = ValueNotifier({});
+
+  WebViewController? _controller;
+  BuildContext? _context;
+
+  /// Testing-only helper to simulate page readiness.
+  @visibleForTesting
+  void onPageReadyForTesting(WebViewController controller, BuildContext context) =>
+      _handlePageReady(controller, context);
+
+  /// Marks the WebView as ready and attempts to inject the payload.
+  @override
+  void _handlePageReady(WebViewController controller, BuildContext context) {
+    _logger.finest('WebView is ready, will inject if payload is set');
+    _controller = controller;
+    _context = context;
+    _attemptPayloadInjection();
+  }
+
+  /// Updates the payload to be injected when the WebView is ready.
+  @override
+  void setPayload(Map<String, dynamic> payload) {
+    _logger.finest('setData called with: $payload');
+    _payloadNotifier.value = payload;
+  }
+
+  /// Attempts to inject the payload into the WebView using JavaScript.
+  ///
+  /// Skips injection if the WebView or payload is not ready.
+  void _attemptPayloadInjection() {
+    if (_controller == null || _context == null) {
+      _logger.fine('Cannot inject — WebView not ready');
+      return;
+    }
+
+    final payload = _payloadNotifier.value;
+    if (payload.isEmpty) {
+      _logger.warning('Payload is empty. Skipping injection.');
+      return;
+    }
+
+    final jsonString = const JsonEncoder().convert(payload);
+    final script = '''
+      if (typeof window.$functionName === 'function') {
+        window.$functionName($jsonString);
+      }
+    ''';
+
+    _logger.finest('Injecting payload data: $jsonString');
+    _controller!.runJavaScript(script);
+  }
+
+  /// Testing-only helper to dispose resources manually.
+  @visibleForTesting
+  void disposeForTesting() => _dispose();
+
+  /// Removes listeners and cleans up resources.
+  @override
+  void _dispose() {
+    _payloadNotifier.removeListener(_attemptPayloadInjection);
+  }
+}
+
+/// Strategy interface for recovering from connectivity loss by reattempting actions.
+abstract class ConnectivityRecoveryStrategy {
+  /// Starts monitoring connectivity and retries based on the strategy.
+  void startMonitoring({required VoidCallback tryReload});
+
+  /// Disposes the strategy and its resources.
+  void _dispose();
+
+  /// Called when a page load succeeds (resets state and stops retries).
+  void _onPageLoadSuccess();
+
+  /// Called when a page load fails (may trigger retry depending on state).
+  void _onPageLoadFailed();
+}
+
+/// Retry-based connectivity recovery strategy.
+/// Repeats [tryReload] on an interval while connectivity is restored,
+/// until a page successfully loads or max attempts are reached.
+class DefaultConnectivityRecoveryStrategy implements ConnectivityRecoveryStrategy {
+  DefaultConnectivityRecoveryStrategy({
+    required this.connectivityStream,
+    this.retryDelay = const Duration(seconds: 1),
+    this.maxAttempts = 100,
+  });
+
+  /// Stream of connectivity results to monitor.
+  final Stream<List<ConnectivityResult>> connectivityStream;
+
+  /// Delay between retry attempts.
+  final Duration retryDelay;
+
+  /// Maximum number of retry attempts before giving up.
+  final int maxAttempts;
+
+  StreamSubscription<List<ConnectivityResult>>? _subscription;
+  Timer? _retryTimer;
+  int _attempt = 0;
+  VoidCallback? _tryReload;
+  bool _isConnected = false;
+  bool _retryInProgress = false;
+
+  /// Begins monitoring connectivity and sets up retry attempts when online.
+  @override
+  void startMonitoring({required VoidCallback tryReload}) {
+    if (_subscription != null) {
+      _logger.warning('startMonitoring was called more than once. Ignoring.');
+      return;
+    }
+
+    _logger.info('Starting recovery strategy');
+    _tryReload = tryReload;
+    _subscription = connectivityStream.debounce(const Duration(milliseconds: 300)).listen(_handleConnectivityChange);
+  }
+
+  /// Handles connectivity changes and manages retry logic accordingly.
+  void _handleConnectivityChange(List<ConnectivityResult> results) {
+    _isConnected = results.any((r) => r != ConnectivityResult.none);
+    _logger.info('Connectivity status: ${_isConnected ? "online" : "offline"} ($results)');
+
+    if (!_isConnected) {
+      _logger.info('Connectivity lost, stopping retries');
+      _stopRetries();
+      return;
+    }
+
+    if (!_retryInProgress) {
+      _logger.info('Connectivity restored, starting retry attempts');
+      _startRetries();
+    }
+  }
+
+  /// Starts periodic retry attempts if conditions are met.
+  void _startRetries() {
+    _stopRetries();
+
+    if (!_shouldStartRetries()) {
+      _logger.info('Retry conditions not met, skipping start');
+      return;
+    }
+
+    _retryInProgress = true;
+    _retryTimer = Timer.periodic(retryDelay, (_) => _onRetryTick());
+  }
+
+  /// Checks whether retry attempts should be started.
+  ///
+  /// Returns `false` if disconnected or if the attempt limit has been reached.
+  bool _shouldStartRetries() {
+    if (!_isConnected) {
+      _logger.info('Device is offline');
+      return false;
+    }
+
+    if (_attempt >= maxAttempts) {
+      _logger.warning('Max retry attempts already reached ($_attempt/$maxAttempts)');
+      return false;
+    }
+
+    return true;
+  }
+
+  /// Handles a single retry timer tick.
+  ///
+  /// If still connected and attempts remain, it triggers [tryReload].
+  void _onRetryTick() {
+    if (!_isConnected) {
+      _logger.info('Still offline, skipping retry attempt');
+      return;
+    }
+
+    if (_attempt >= maxAttempts) {
+      _logger.warning('Max retry attempts reached, stopping retries');
+      _stopRetries();
+      return;
+    }
+
+    _attempt++;
+    _logger.info('Retry attempt $_attempt/$maxAttempts');
+    _tryReload?.call();
+  }
+
+  /// Stops the retry timer and resets flags.
+  void _stopRetries() {
+    _retryTimer?.cancel();
+    _retryTimer = null;
+    _retryInProgress = false;
+  }
+
+  /// Manually triggers success handling (used in tests).
+  @visibleForTesting
+  void onPageLoadSuccess() => _onPageLoadSuccess();
+
+  /// Handles successful page load and stops retrying.
+  @override
+  void _onPageLoadSuccess() {
+    _logger.info('Page load succeeded, stopping retries');
+    _attempt = 0;
+    _stopRetries();
+  }
+
+  /// Manually triggers failure handling (used in tests).
+  @visibleForTesting
+  void onPageLoadFailed() => _onPageLoadFailed();
+
+  /// Handles page load failure by restarting retries if applicable.
+  @override
+  void _onPageLoadFailed() {
+    _logger.warning('Page load failed, will continue retrying if connected');
+    if (_isConnected && !_retryInProgress) {
+      _startRetries();
+    }
+  }
+
+  /// Manually disposes the strategy (used in tests).
+  @visibleForTesting
+  void disposeForTesting() => _dispose();
+
+  /// Cancels connectivity subscription and cleans up resources.
+  @override
+  void _dispose() {
+    _logger.info('Stopping recovery strategy');
+    _subscription?.cancel();
+    _subscription = null;
+    _stopRetries();
+    _attempt = 0;
   }
 }
