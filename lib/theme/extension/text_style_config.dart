@@ -14,13 +14,28 @@ extension TextStyleConfigExtension on TextStyleConfig {
       letterSpacing: letterSpacing,
       wordSpacing: wordSpacing,
       height: height,
-      decoration: decoration?.types.contains('underline') == true
-          ? TextDecoration.underline
-          : decoration?.types.contains('lineThrough') == true
-              ? TextDecoration.lineThrough
-              : null,
+      decoration: _resolveTextDecoration(decoration),
       backgroundColor: backgroundColor?.toColor(),
     );
+  }
+
+  TextDecoration? _resolveTextDecoration(TextDecorationConfig? config) {
+    if (config?.types.isEmpty ?? true) return null;
+
+    final decorations = config!.types.map((type) {
+      switch (type) {
+        case 'underline':
+          return TextDecoration.underline;
+        case 'lineThrough':
+          return TextDecoration.lineThrough;
+        case 'overline':
+          return TextDecoration.overline;
+        default:
+          return TextDecoration.none;
+      }
+    }).toList();
+
+    return TextDecoration.combine(decorations);
   }
 }
 
