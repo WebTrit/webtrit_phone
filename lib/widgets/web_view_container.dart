@@ -256,7 +256,6 @@ class _WebViewContainerState extends State<WebViewContainer> with WidgetStateMix
     _finalLoadTimer = Timer(_finalLoadDebounceDuration, () {
       if (!_isPageLoading) {
         if (_latestError == null) {
-          _logger.info('Page loaded successfully: $url');
           widget.onPageLoadedSuccess?.call();
           widget.connectivityRecoveryStrategy?._onPageLoadSuccess();
 
