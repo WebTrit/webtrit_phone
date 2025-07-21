@@ -1,8 +1,10 @@
 export 'bloc/call_bloc.dart';
 export 'models/models.dart';
 export 'services/services.dart';
+export 'utils/utils.dart';
 export 'view/call_screen.dart';
 export 'view/call_screen_page.dart';
+export 'view/call_screen_style.dart';
+export 'view/call_screen_styles.dart';
 export 'view/call_shell.dart';
 export 'widgets/widgets.dart';
-export 'utils/utils.dart';

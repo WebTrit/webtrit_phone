@@ -48,6 +48,8 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
     final switchCameraIconSize = textTheme.titleMedium!.fontSize!;
     final MediaQueryData mediaQueryData = MediaQuery.of(context);
 
+    final style = themeData.extension<CallScreenStyles>()?.primary;
+
     return Scaffold(
       body: OrientationBuilder(
         builder: (context, orientation) {
@@ -170,7 +172,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                                         number: activeCall.handle.value,
                                         username: activeCall.displayName,
                                         acceptedTime: activeCall.acceptedTime,
-                                        color: onTabGradient,
+                                        style: style?.callInfo,
                                         processingStatus: activeCall.processingStatus,
                                         callStatus: widget.callStatus,
                                       ),
@@ -183,7 +185,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                                         held: false,
                                         number: activeCall.handle.value,
                                         username: activeCall.displayName,
-                                        color: onTabGradient,
+                                        style: style?.callInfo,
                                         callStatus: widget.callStatus,
                                       ),
                                     CallActions(

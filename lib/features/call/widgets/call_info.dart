@@ -10,6 +10,7 @@ import 'package:webtrit_phone/models/models.dart';
 
 import '../extensions/extensions.dart';
 import '../models/models.dart';
+import '../view/call_screen_style.dart';
 
 class CallInfo extends StatefulWidget {
   const CallInfo({
@@ -22,9 +23,9 @@ class CallInfo extends StatefulWidget {
     required this.number,
     this.username,
     this.acceptedTime,
-    this.color,
     this.processingStatus,
     required this.callStatus,
+    required this.style,
   });
 
   final bool transfering;
@@ -35,8 +36,8 @@ class CallInfo extends StatefulWidget {
   final String number;
   final String? username;
   final DateTime? acceptedTime;
-  final Color? color;
   final CallProcessingStatus? processingStatus;
+  final CallInfoStyle? style;
 
 // TODO(Serdun): Rename class to better represent the actual data it holds
   final CallStatus callStatus;
@@ -96,47 +97,30 @@ class _CallInfoState extends State<CallInfo> {
 
   @override
   Widget build(BuildContext context) {
-    final duration = this.duration;
-
     final themeData = Theme.of(context);
     final textTheme = themeData.textTheme;
+    final color = themeData.colorScheme.surface;
 
-    final statusStyle = textTheme.labelLarge!.copyWith(color: themeData.colorScheme.surface);
+    final userInfoTextStyle = _resolveTextStyle(widget.style?.userInfo, textTheme.displaySmall, color);
+    final numberTextStyle = _resolveTextStyle(widget.style?.number, textTheme.bodyLarge, color);
+    final callStatusTextStyle = _resolveTextStyle(widget.style?.callStatus, textTheme.bodyMedium, color);
+    final processingStatusTextStyle = _resolveTextStyle(widget.style?.processingStatus, textTheme.labelLarge, color);
 
-    final String statusMessage;
-    if (widget.callStatus != CallStatus.ready) {
-      statusMessage = widget.callStatus.l10n(context);
-    } else if (duration == null) {
-      if (widget.inviteToAttendedTransfer) {
-        statusMessage = context.l10n.call_description_inviteToAttendedTransfer;
-      } else if (widget.requestToAttendedTransfer) {
-        statusMessage = context.l10n.call_description_requestToAttendedTransfer;
-      } else if (widget.isIncoming) {
-        statusMessage = context.l10n.call_description_incoming;
-      } else {
-        statusMessage = context.l10n.call_description_outgoing;
-      }
-    } else if (widget.transfering) {
-      statusMessage = context.l10n.call_description_transferProcessing;
-    } else if (widget.held) {
-      statusMessage = context.l10n.call_description_held;
-    } else {
-      statusMessage = duration.format();
-    }
+    final statusMessage = _buildStatusMessage(context);
 
     return Column(
       children: [
         if (widget.username != null) ...[
           Text(
             widget.username!,
-            style: textTheme.displaySmall!.copyWith(color: widget.color),
+            style: userInfoTextStyle,
             textAlign: TextAlign.center,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
           ),
           Text(
             widget.number,
-            style: textTheme.bodyLarge!.copyWith(color: widget.color),
+            style: numberTextStyle,
             textAlign: TextAlign.center,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
@@ -145,7 +129,7 @@ class _CallInfoState extends State<CallInfo> {
         if (widget.username == null)
           Text(
             widget.number,
-            style: textTheme.displaySmall!.copyWith(color: widget.color),
+            style: userInfoTextStyle,
             textAlign: TextAlign.center,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
@@ -153,12 +137,7 @@ class _CallInfoState extends State<CallInfo> {
         const SizedBox(height: 10),
         Text(
           statusMessage,
-          style: textTheme.bodyMedium!.copyWith(
-            color: widget.color,
-            fontFeatures: [
-              const FontFeature.tabularFigures(),
-            ],
-          ),
+          style: callStatusTextStyle,
         ),
         const SizedBox(height: 10),
         if (widget.processingStatus != null)
@@ -166,11 +145,39 @@ class _CallInfoState extends State<CallInfo> {
             padding: const EdgeInsets.only(top: 8),
             child: Text(
               widget.processingStatus!.l10n(context),
-              style: statusStyle,
+              style: processingStatusTextStyle,
               textAlign: TextAlign.center,
             ),
           ),
       ],
     );
+  }
+
+  String _buildStatusMessage(BuildContext context) {
+    final duration = this.duration;
+
+    if (widget.callStatus != CallStatus.ready) {
+      return widget.callStatus.l10n(context);
+    } else if (duration == null) {
+      if (widget.inviteToAttendedTransfer) {
+        return context.l10n.call_description_inviteToAttendedTransfer;
+      } else if (widget.requestToAttendedTransfer) {
+        return context.l10n.call_description_requestToAttendedTransfer;
+      } else if (widget.isIncoming) {
+        return context.l10n.call_description_incoming;
+      } else {
+        return context.l10n.call_description_outgoing;
+      }
+    } else if (widget.transfering) {
+      return context.l10n.call_description_transferProcessing;
+    } else if (widget.held) {
+      return context.l10n.call_description_held;
+    } else {
+      return duration.format();
+    }
+  }
+
+  TextStyle? _resolveTextStyle(TextStyle? customStyle, TextStyle? fallback, Color color) {
+    return customStyle ?? fallback?.copyWith(color: color);
   }
 }

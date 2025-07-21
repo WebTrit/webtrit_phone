@@ -44,6 +44,7 @@ class LoginModeSelectScreen extends StatelessWidget {
           extendBodyBehindAppBar: true,
           appBar: AppBar(
             backgroundColor: Colors.transparent,
+            systemOverlayStyle: localStyle?.systemUiOverlayStyle,
             actions: isDemoModeEnabled
                 ? [
                     IconButton(

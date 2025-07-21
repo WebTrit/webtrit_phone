@@ -22,6 +22,7 @@ class ThemeStyleFactoryProvider {
   List<ThemeExtension> createThemeExtensions() {
     // Page schema
     final loginPageScheme = pageConfig.login;
+    final callPageScheme = pageConfig.dialing;
 
     // Widget images config
     final imageAssetsConfig = widgetConfig.imageAssets;
@@ -64,6 +65,7 @@ class ThemeStyleFactoryProvider {
     final onLogoStyleFactory = OnboardingLogoStyleFactory(colorScheme, secondaryOnboardingLogo, loginPageScheme);
     final gradientsStyleFactory = GradientsStyleFactory(primaryGradientColorsConfig);
     final aboutScreenStyleFactory = AboutScreenStyleFactory(loginPageScheme);
+    final callScreenStyleFactory = CallScreenStyleFactory(callPageScheme, colorScheme);
     final loginModeSelectStyleFactory = LoginModeSelectScreenStyleFactory(loginPageScheme.modeSelect);
 
     return <ThemeExtension?>[
@@ -86,6 +88,7 @@ class ThemeStyleFactoryProvider {
       onLogoStyleFactory.create(),
       gradientsStyleFactory.create(),
       aboutScreenStyleFactory.create(),
+      callScreenStyleFactory.create(),
       loginModeSelectStyleFactory.create(),
     ].nonNulls.toList();
   }
