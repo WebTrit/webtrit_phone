@@ -15,6 +15,9 @@ _$ThemePageConfigImpl _$$ThemePageConfigImplFromJson(
       about: json['about'] == null
           ? const AboutPageConfig()
           : AboutPageConfig.fromJson(json['about'] as Map<String, dynamic>),
+      dialing: json['dialing'] == null
+          ? const CallPageConfig()
+          : CallPageConfig.fromJson(json['dialing'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$$ThemePageConfigImplToJson(
@@ -22,6 +25,7 @@ Map<String, dynamic> _$$ThemePageConfigImplToJson(
     <String, dynamic>{
       'login': instance.login.toJson(),
       'about': instance.about.toJson(),
+      'dialing': instance.dialing.toJson(),
     };
 
 _$LoginPageConfigImpl _$$LoginPageConfigImplFromJson(
@@ -52,6 +56,10 @@ Map<String, dynamic> _$$LoginPageConfigImplToJson(
 _$LoginModeSelectPageConfigImpl _$$LoginModeSelectPageConfigImplFromJson(
         Map<String, dynamic> json) =>
     _$LoginModeSelectPageConfigImpl(
+      systemUiOverlayStyle: json['systemUiOverlayStyle'] == null
+          ? null
+          : OverlayStyleModel.fromJson(
+              json['systemUiOverlayStyle'] as Map<String, dynamic>),
       buttonLoginStyleType: $enumDecodeNullable(
               _$ElevatedButtonStyleTypeEnumMap, json['buttonLoginStyleType']) ??
           ElevatedButtonStyleType.primary,
@@ -64,6 +72,7 @@ _$LoginModeSelectPageConfigImpl _$$LoginModeSelectPageConfigImplFromJson(
 Map<String, dynamic> _$$LoginModeSelectPageConfigImplToJson(
         _$LoginModeSelectPageConfigImpl instance) =>
     <String, dynamic>{
+      'systemUiOverlayStyle': instance.systemUiOverlayStyle?.toJson(),
       'buttonLoginStyleType':
           _$ElevatedButtonStyleTypeEnumMap[instance.buttonLoginStyleType]!,
       'buttonSignupStyleType':
@@ -91,4 +100,53 @@ Map<String, dynamic> _$$AboutPageConfigImplToJson(
     <String, dynamic>{
       'picture': instance.picture,
       'metadata': instance.metadata.toJson(),
+    };
+
+_$CallPageConfigImpl _$$CallPageConfigImplFromJson(Map<String, dynamic> json) =>
+    _$CallPageConfigImpl(
+      systemUiOverlayStyle: json['systemUiOverlayStyle'] == null
+          ? null
+          : OverlayStyleModel.fromJson(
+              json['systemUiOverlayStyle'] as Map<String, dynamic>),
+      callInfo: json['callInfo'] == null
+          ? null
+          : CallPageInfoConfig.fromJson(
+              json['callInfo'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$$CallPageConfigImplToJson(
+        _$CallPageConfigImpl instance) =>
+    <String, dynamic>{
+      'systemUiOverlayStyle': instance.systemUiOverlayStyle?.toJson(),
+      'callInfo': instance.callInfo?.toJson(),
+    };
+
+_$CallPageInfoConfigImpl _$$CallPageInfoConfigImplFromJson(
+        Map<String, dynamic> json) =>
+    _$CallPageInfoConfigImpl(
+      usernameTextStyle: json['usernameTextStyle'] == null
+          ? null
+          : TextStyleConfig.fromJson(
+              json['usernameTextStyle'] as Map<String, dynamic>),
+      numberTextStyle: json['numberTextStyle'] == null
+          ? null
+          : TextStyleConfig.fromJson(
+              json['numberTextStyle'] as Map<String, dynamic>),
+      callStatusTextStyle: json['callStatusTextStyle'] == null
+          ? null
+          : TextStyleConfig.fromJson(
+              json['callStatusTextStyle'] as Map<String, dynamic>),
+      processingStatusTextStyle: json['processingStatusTextStyle'] == null
+          ? null
+          : TextStyleConfig.fromJson(
+              json['processingStatusTextStyle'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$$CallPageInfoConfigImplToJson(
+        _$CallPageInfoConfigImpl instance) =>
+    <String, dynamic>{
+      'usernameTextStyle': instance.usernameTextStyle?.toJson(),
+      'numberTextStyle': instance.numberTextStyle?.toJson(),
+      'callStatusTextStyle': instance.callStatusTextStyle?.toJson(),
+      'processingStatusTextStyle': instance.processingStatusTextStyle?.toJson(),
     };
