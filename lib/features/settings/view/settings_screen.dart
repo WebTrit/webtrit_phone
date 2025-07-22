@@ -28,6 +28,7 @@ class SettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
       appBar: AppBar(
         leading: const AutoLeadingButton(),
@@ -36,6 +37,9 @@ class SettingsScreen extends StatelessWidget {
           IconButton(
             icon: const Icon(
               Icons.refresh,
+            ),
+            style: IconButton.styleFrom(
+              foregroundColor: colorScheme.onSurface,
             ),
             onPressed: () {
               context.read<RegisterStatusCubit>().fetchStatus();
