@@ -12,6 +12,7 @@ class LoginModeSelectScreenStyleFactory implements ThemeStyleFactory<LoginModeSe
   LoginModeSelectScreenStyles create() {
     return LoginModeSelectScreenStyles(
       primary: LoginModeSelectScreenStyle(
+        systemUiOverlayStyle: config?.systemUiOverlayStyle?.toSystemUiOverlayStyle(),
         signInTypeButton: config?.buttonSignupStyleType,
         signUpTypeButton: config?.buttonLoginStyleType,
       ),

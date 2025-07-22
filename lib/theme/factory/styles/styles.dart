@@ -2,6 +2,7 @@ export 'about_screen_style_factory.dart';
 export 'action_pad_style_factory.dart';
 export 'app_icon_style_factory.dart';
 export 'call_actions_style_factory.dart';
+export 'call_screen_style_factory.dart';
 export 'call_status_style_factory.dart';
 export 'confirm__dialog_style_factory.dart';
 export 'elevated_button_style_factory.dart';

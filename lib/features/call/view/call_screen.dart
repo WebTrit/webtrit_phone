@@ -44,6 +44,8 @@ class _CallScreenState extends State<CallScreen> with AutoRouteAwareStateMixin {
   Widget build(BuildContext context) {
     final callBloc = context.read<CallBloc>();
 
+    final style = Theme.of(context).extension<CallScreenStyles>()?.primary?.systemUiOverlayStyle;
+
     final scaffold = BlocConsumer<CallBloc, CallState>(
       bloc: callBloc,
       listener: (context, state) async {
@@ -77,7 +79,7 @@ class _CallScreenState extends State<CallScreen> with AutoRouteAwareStateMixin {
     );
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: SystemUiOverlayStyle.light,
+      value: style ?? SystemUiOverlayStyle.light,
       child: scaffold,
     );
   }

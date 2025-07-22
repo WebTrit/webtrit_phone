@@ -1,4 +1,5 @@
 export 'color_scheme.config.dart';
+export 'common/common.dart';
 export 'custom_color.dart';
 export 'features_config/features_config.dart';
 export 'theme_page_config.dart';

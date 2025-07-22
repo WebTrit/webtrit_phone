@@ -22,6 +22,7 @@ ThemePageConfig _$ThemePageConfigFromJson(Map<String, dynamic> json) {
 mixin _$ThemePageConfig {
   LoginPageConfig get login => throw _privateConstructorUsedError;
   AboutPageConfig get about => throw _privateConstructorUsedError;
+  CallPageConfig get dialing => throw _privateConstructorUsedError;
 
   /// Serializes this ThemePageConfig to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -39,10 +40,12 @@ abstract class $ThemePageConfigCopyWith<$Res> {
           ThemePageConfig value, $Res Function(ThemePageConfig) then) =
       _$ThemePageConfigCopyWithImpl<$Res, ThemePageConfig>;
   @useResult
-  $Res call({LoginPageConfig login, AboutPageConfig about});
+  $Res call(
+      {LoginPageConfig login, AboutPageConfig about, CallPageConfig dialing});
 
   $LoginPageConfigCopyWith<$Res> get login;
   $AboutPageConfigCopyWith<$Res> get about;
+  $CallPageConfigCopyWith<$Res> get dialing;
 }
 
 /// @nodoc
@@ -62,6 +65,7 @@ class _$ThemePageConfigCopyWithImpl<$Res, $Val extends ThemePageConfig>
   $Res call({
     Object? login = null,
     Object? about = null,
+    Object? dialing = null,
   }) {
     return _then(_value.copyWith(
       login: null == login
@@ -72,6 +76,10 @@ class _$ThemePageConfigCopyWithImpl<$Res, $Val extends ThemePageConfig>
           ? _value.about
           : about // ignore: cast_nullable_to_non_nullable
               as AboutPageConfig,
+      dialing: null == dialing
+          ? _value.dialing
+          : dialing // ignore: cast_nullable_to_non_nullable
+              as CallPageConfig,
     ) as $Val);
   }
 
@@ -94,6 +102,16 @@ class _$ThemePageConfigCopyWithImpl<$Res, $Val extends ThemePageConfig>
       return _then(_value.copyWith(about: value) as $Val);
     });
   }
+
+  /// Create a copy of ThemePageConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $CallPageConfigCopyWith<$Res> get dialing {
+    return $CallPageConfigCopyWith<$Res>(_value.dialing, (value) {
+      return _then(_value.copyWith(dialing: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
@@ -104,12 +122,15 @@ abstract class _$$ThemePageConfigImplCopyWith<$Res>
       __$$ThemePageConfigImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({LoginPageConfig login, AboutPageConfig about});
+  $Res call(
+      {LoginPageConfig login, AboutPageConfig about, CallPageConfig dialing});
 
   @override
   $LoginPageConfigCopyWith<$Res> get login;
   @override
   $AboutPageConfigCopyWith<$Res> get about;
+  @override
+  $CallPageConfigCopyWith<$Res> get dialing;
 }
 
 /// @nodoc
@@ -127,6 +148,7 @@ class __$$ThemePageConfigImplCopyWithImpl<$Res>
   $Res call({
     Object? login = null,
     Object? about = null,
+    Object? dialing = null,
   }) {
     return _then(_$ThemePageConfigImpl(
       login: null == login
@@ -137,6 +159,10 @@ class __$$ThemePageConfigImplCopyWithImpl<$Res>
           ? _value.about
           : about // ignore: cast_nullable_to_non_nullable
               as AboutPageConfig,
+      dialing: null == dialing
+          ? _value.dialing
+          : dialing // ignore: cast_nullable_to_non_nullable
+              as CallPageConfig,
     ));
   }
 }
@@ -147,7 +173,8 @@ class __$$ThemePageConfigImplCopyWithImpl<$Res>
 class _$ThemePageConfigImpl implements _ThemePageConfig {
   const _$ThemePageConfigImpl(
       {this.login = const LoginPageConfig(),
-      this.about = const AboutPageConfig()});
+      this.about = const AboutPageConfig(),
+      this.dialing = const CallPageConfig()});
 
   factory _$ThemePageConfigImpl.fromJson(Map<String, dynamic> json) =>
       _$$ThemePageConfigImplFromJson(json);
@@ -158,10 +185,13 @@ class _$ThemePageConfigImpl implements _ThemePageConfig {
   @override
   @JsonKey()
   final AboutPageConfig about;
+  @override
+  @JsonKey()
+  final CallPageConfig dialing;
 
   @override
   String toString() {
-    return 'ThemePageConfig(login: $login, about: $about)';
+    return 'ThemePageConfig(login: $login, about: $about, dialing: $dialing)';
   }
 
   @override
@@ -170,12 +200,13 @@ class _$ThemePageConfigImpl implements _ThemePageConfig {
         (other.runtimeType == runtimeType &&
             other is _$ThemePageConfigImpl &&
             (identical(other.login, login) || other.login == login) &&
-            (identical(other.about, about) || other.about == about));
+            (identical(other.about, about) || other.about == about) &&
+            (identical(other.dialing, dialing) || other.dialing == dialing));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, login, about);
+  int get hashCode => Object.hash(runtimeType, login, about, dialing);
 
   /// Create a copy of ThemePageConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -197,7 +228,8 @@ class _$ThemePageConfigImpl implements _ThemePageConfig {
 abstract class _ThemePageConfig implements ThemePageConfig {
   const factory _ThemePageConfig(
       {final LoginPageConfig login,
-      final AboutPageConfig about}) = _$ThemePageConfigImpl;
+      final AboutPageConfig about,
+      final CallPageConfig dialing}) = _$ThemePageConfigImpl;
 
   factory _ThemePageConfig.fromJson(Map<String, dynamic> json) =
       _$ThemePageConfigImpl.fromJson;
@@ -206,6 +238,8 @@ abstract class _ThemePageConfig implements ThemePageConfig {
   LoginPageConfig get login;
   @override
   AboutPageConfig get about;
+  @override
+  CallPageConfig get dialing;
 
   /// Create a copy of ThemePageConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -492,6 +526,8 @@ LoginModeSelectPageConfig _$LoginModeSelectPageConfigFromJson(
 
 /// @nodoc
 mixin _$LoginModeSelectPageConfig {
+  OverlayStyleModel? get systemUiOverlayStyle =>
+      throw _privateConstructorUsedError;
   ElevatedButtonStyleType get buttonLoginStyleType =>
       throw _privateConstructorUsedError;
   ElevatedButtonStyleType get buttonSignupStyleType =>
@@ -514,8 +550,11 @@ abstract class $LoginModeSelectPageConfigCopyWith<$Res> {
       _$LoginModeSelectPageConfigCopyWithImpl<$Res, LoginModeSelectPageConfig>;
   @useResult
   $Res call(
-      {ElevatedButtonStyleType buttonLoginStyleType,
+      {OverlayStyleModel? systemUiOverlayStyle,
+      ElevatedButtonStyleType buttonLoginStyleType,
       ElevatedButtonStyleType buttonSignupStyleType});
+
+  $OverlayStyleModelCopyWith<$Res>? get systemUiOverlayStyle;
 }
 
 /// @nodoc
@@ -534,10 +573,15 @@ class _$LoginModeSelectPageConfigCopyWithImpl<$Res,
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? systemUiOverlayStyle = freezed,
     Object? buttonLoginStyleType = null,
     Object? buttonSignupStyleType = null,
   }) {
     return _then(_value.copyWith(
+      systemUiOverlayStyle: freezed == systemUiOverlayStyle
+          ? _value.systemUiOverlayStyle
+          : systemUiOverlayStyle // ignore: cast_nullable_to_non_nullable
+              as OverlayStyleModel?,
       buttonLoginStyleType: null == buttonLoginStyleType
           ? _value.buttonLoginStyleType
           : buttonLoginStyleType // ignore: cast_nullable_to_non_nullable
@@ -547,6 +591,21 @@ class _$LoginModeSelectPageConfigCopyWithImpl<$Res,
           : buttonSignupStyleType // ignore: cast_nullable_to_non_nullable
               as ElevatedButtonStyleType,
     ) as $Val);
+  }
+
+  /// Create a copy of LoginModeSelectPageConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $OverlayStyleModelCopyWith<$Res>? get systemUiOverlayStyle {
+    if (_value.systemUiOverlayStyle == null) {
+      return null;
+    }
+
+    return $OverlayStyleModelCopyWith<$Res>(_value.systemUiOverlayStyle!,
+        (value) {
+      return _then(_value.copyWith(systemUiOverlayStyle: value) as $Val);
+    });
   }
 }
 
@@ -560,8 +619,12 @@ abstract class _$$LoginModeSelectPageConfigImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {ElevatedButtonStyleType buttonLoginStyleType,
+      {OverlayStyleModel? systemUiOverlayStyle,
+      ElevatedButtonStyleType buttonLoginStyleType,
       ElevatedButtonStyleType buttonSignupStyleType});
+
+  @override
+  $OverlayStyleModelCopyWith<$Res>? get systemUiOverlayStyle;
 }
 
 /// @nodoc
@@ -579,10 +642,15 @@ class __$$LoginModeSelectPageConfigImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? systemUiOverlayStyle = freezed,
     Object? buttonLoginStyleType = null,
     Object? buttonSignupStyleType = null,
   }) {
     return _then(_$LoginModeSelectPageConfigImpl(
+      systemUiOverlayStyle: freezed == systemUiOverlayStyle
+          ? _value.systemUiOverlayStyle
+          : systemUiOverlayStyle // ignore: cast_nullable_to_non_nullable
+              as OverlayStyleModel?,
       buttonLoginStyleType: null == buttonLoginStyleType
           ? _value.buttonLoginStyleType
           : buttonLoginStyleType // ignore: cast_nullable_to_non_nullable
@@ -600,12 +668,15 @@ class __$$LoginModeSelectPageConfigImplCopyWithImpl<$Res>
 @JsonSerializable(explicitToJson: true)
 class _$LoginModeSelectPageConfigImpl implements _LoginModeSelectPageConfig {
   const _$LoginModeSelectPageConfigImpl(
-      {this.buttonLoginStyleType = ElevatedButtonStyleType.primary,
+      {this.systemUiOverlayStyle,
+      this.buttonLoginStyleType = ElevatedButtonStyleType.primary,
       this.buttonSignupStyleType = ElevatedButtonStyleType.primary});
 
   factory _$LoginModeSelectPageConfigImpl.fromJson(Map<String, dynamic> json) =>
       _$$LoginModeSelectPageConfigImplFromJson(json);
 
+  @override
+  final OverlayStyleModel? systemUiOverlayStyle;
   @override
   @JsonKey()
   final ElevatedButtonStyleType buttonLoginStyleType;
@@ -615,7 +686,7 @@ class _$LoginModeSelectPageConfigImpl implements _LoginModeSelectPageConfig {
 
   @override
   String toString() {
-    return 'LoginModeSelectPageConfig(buttonLoginStyleType: $buttonLoginStyleType, buttonSignupStyleType: $buttonSignupStyleType)';
+    return 'LoginModeSelectPageConfig(systemUiOverlayStyle: $systemUiOverlayStyle, buttonLoginStyleType: $buttonLoginStyleType, buttonSignupStyleType: $buttonSignupStyleType)';
   }
 
   @override
@@ -623,6 +694,8 @@ class _$LoginModeSelectPageConfigImpl implements _LoginModeSelectPageConfig {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$LoginModeSelectPageConfigImpl &&
+            (identical(other.systemUiOverlayStyle, systemUiOverlayStyle) ||
+                other.systemUiOverlayStyle == systemUiOverlayStyle) &&
             (identical(other.buttonLoginStyleType, buttonLoginStyleType) ||
                 other.buttonLoginStyleType == buttonLoginStyleType) &&
             (identical(other.buttonSignupStyleType, buttonSignupStyleType) ||
@@ -631,8 +704,8 @@ class _$LoginModeSelectPageConfigImpl implements _LoginModeSelectPageConfig {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, buttonLoginStyleType, buttonSignupStyleType);
+  int get hashCode => Object.hash(runtimeType, systemUiOverlayStyle,
+      buttonLoginStyleType, buttonSignupStyleType);
 
   /// Create a copy of LoginModeSelectPageConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -653,13 +726,16 @@ class _$LoginModeSelectPageConfigImpl implements _LoginModeSelectPageConfig {
 
 abstract class _LoginModeSelectPageConfig implements LoginModeSelectPageConfig {
   const factory _LoginModeSelectPageConfig(
-          {final ElevatedButtonStyleType buttonLoginStyleType,
+          {final OverlayStyleModel? systemUiOverlayStyle,
+          final ElevatedButtonStyleType buttonLoginStyleType,
           final ElevatedButtonStyleType buttonSignupStyleType}) =
       _$LoginModeSelectPageConfigImpl;
 
   factory _LoginModeSelectPageConfig.fromJson(Map<String, dynamic> json) =
       _$LoginModeSelectPageConfigImpl.fromJson;
 
+  @override
+  OverlayStyleModel? get systemUiOverlayStyle;
   @override
   ElevatedButtonStyleType get buttonLoginStyleType;
   @override
@@ -855,5 +931,532 @@ abstract class _AboutPageConfig implements AboutPageConfig {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$AboutPageConfigImplCopyWith<_$AboutPageConfigImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+CallPageConfig _$CallPageConfigFromJson(Map<String, dynamic> json) {
+  return _CallPageConfig.fromJson(json);
+}
+
+/// @nodoc
+mixin _$CallPageConfig {
+  OverlayStyleModel? get systemUiOverlayStyle =>
+      throw _privateConstructorUsedError;
+  CallPageInfoConfig? get callInfo => throw _privateConstructorUsedError;
+
+  /// Serializes this CallPageConfig to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of CallPageConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $CallPageConfigCopyWith<CallPageConfig> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $CallPageConfigCopyWith<$Res> {
+  factory $CallPageConfigCopyWith(
+          CallPageConfig value, $Res Function(CallPageConfig) then) =
+      _$CallPageConfigCopyWithImpl<$Res, CallPageConfig>;
+  @useResult
+  $Res call(
+      {OverlayStyleModel? systemUiOverlayStyle, CallPageInfoConfig? callInfo});
+
+  $OverlayStyleModelCopyWith<$Res>? get systemUiOverlayStyle;
+  $CallPageInfoConfigCopyWith<$Res>? get callInfo;
+}
+
+/// @nodoc
+class _$CallPageConfigCopyWithImpl<$Res, $Val extends CallPageConfig>
+    implements $CallPageConfigCopyWith<$Res> {
+  _$CallPageConfigCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of CallPageConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? systemUiOverlayStyle = freezed,
+    Object? callInfo = freezed,
+  }) {
+    return _then(_value.copyWith(
+      systemUiOverlayStyle: freezed == systemUiOverlayStyle
+          ? _value.systemUiOverlayStyle
+          : systemUiOverlayStyle // ignore: cast_nullable_to_non_nullable
+              as OverlayStyleModel?,
+      callInfo: freezed == callInfo
+          ? _value.callInfo
+          : callInfo // ignore: cast_nullable_to_non_nullable
+              as CallPageInfoConfig?,
+    ) as $Val);
+  }
+
+  /// Create a copy of CallPageConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $OverlayStyleModelCopyWith<$Res>? get systemUiOverlayStyle {
+    if (_value.systemUiOverlayStyle == null) {
+      return null;
+    }
+
+    return $OverlayStyleModelCopyWith<$Res>(_value.systemUiOverlayStyle!,
+        (value) {
+      return _then(_value.copyWith(systemUiOverlayStyle: value) as $Val);
+    });
+  }
+
+  /// Create a copy of CallPageConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $CallPageInfoConfigCopyWith<$Res>? get callInfo {
+    if (_value.callInfo == null) {
+      return null;
+    }
+
+    return $CallPageInfoConfigCopyWith<$Res>(_value.callInfo!, (value) {
+      return _then(_value.copyWith(callInfo: value) as $Val);
+    });
+  }
+}
+
+/// @nodoc
+abstract class _$$CallPageConfigImplCopyWith<$Res>
+    implements $CallPageConfigCopyWith<$Res> {
+  factory _$$CallPageConfigImplCopyWith(_$CallPageConfigImpl value,
+          $Res Function(_$CallPageConfigImpl) then) =
+      __$$CallPageConfigImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {OverlayStyleModel? systemUiOverlayStyle, CallPageInfoConfig? callInfo});
+
+  @override
+  $OverlayStyleModelCopyWith<$Res>? get systemUiOverlayStyle;
+  @override
+  $CallPageInfoConfigCopyWith<$Res>? get callInfo;
+}
+
+/// @nodoc
+class __$$CallPageConfigImplCopyWithImpl<$Res>
+    extends _$CallPageConfigCopyWithImpl<$Res, _$CallPageConfigImpl>
+    implements _$$CallPageConfigImplCopyWith<$Res> {
+  __$$CallPageConfigImplCopyWithImpl(
+      _$CallPageConfigImpl _value, $Res Function(_$CallPageConfigImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of CallPageConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? systemUiOverlayStyle = freezed,
+    Object? callInfo = freezed,
+  }) {
+    return _then(_$CallPageConfigImpl(
+      systemUiOverlayStyle: freezed == systemUiOverlayStyle
+          ? _value.systemUiOverlayStyle
+          : systemUiOverlayStyle // ignore: cast_nullable_to_non_nullable
+              as OverlayStyleModel?,
+      callInfo: freezed == callInfo
+          ? _value.callInfo
+          : callInfo // ignore: cast_nullable_to_non_nullable
+              as CallPageInfoConfig?,
+    ));
+  }
+}
+
+/// @nodoc
+
+@JsonSerializable(explicitToJson: true)
+class _$CallPageConfigImpl implements _CallPageConfig {
+  const _$CallPageConfigImpl({this.systemUiOverlayStyle, this.callInfo});
+
+  factory _$CallPageConfigImpl.fromJson(Map<String, dynamic> json) =>
+      _$$CallPageConfigImplFromJson(json);
+
+  @override
+  final OverlayStyleModel? systemUiOverlayStyle;
+  @override
+  final CallPageInfoConfig? callInfo;
+
+  @override
+  String toString() {
+    return 'CallPageConfig(systemUiOverlayStyle: $systemUiOverlayStyle, callInfo: $callInfo)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$CallPageConfigImpl &&
+            (identical(other.systemUiOverlayStyle, systemUiOverlayStyle) ||
+                other.systemUiOverlayStyle == systemUiOverlayStyle) &&
+            (identical(other.callInfo, callInfo) ||
+                other.callInfo == callInfo));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(runtimeType, systemUiOverlayStyle, callInfo);
+
+  /// Create a copy of CallPageConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$CallPageConfigImplCopyWith<_$CallPageConfigImpl> get copyWith =>
+      __$$CallPageConfigImplCopyWithImpl<_$CallPageConfigImpl>(
+          this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$CallPageConfigImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _CallPageConfig implements CallPageConfig {
+  const factory _CallPageConfig(
+      {final OverlayStyleModel? systemUiOverlayStyle,
+      final CallPageInfoConfig? callInfo}) = _$CallPageConfigImpl;
+
+  factory _CallPageConfig.fromJson(Map<String, dynamic> json) =
+      _$CallPageConfigImpl.fromJson;
+
+  @override
+  OverlayStyleModel? get systemUiOverlayStyle;
+  @override
+  CallPageInfoConfig? get callInfo;
+
+  /// Create a copy of CallPageConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$CallPageConfigImplCopyWith<_$CallPageConfigImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+CallPageInfoConfig _$CallPageInfoConfigFromJson(Map<String, dynamic> json) {
+  return _CallPageInfoConfig.fromJson(json);
+}
+
+/// @nodoc
+mixin _$CallPageInfoConfig {
+  /// Style for the main username (displayed with `displaySmall`)
+  TextStyleConfig? get usernameTextStyle => throw _privateConstructorUsedError;
+
+  /// Style for the phone number if username is present (bodyLarge or displaySmall)
+  TextStyleConfig? get numberTextStyle => throw _privateConstructorUsedError;
+
+  /// Style for the call status message (e.g. duration or “incoming”)
+  TextStyleConfig? get callStatusTextStyle =>
+      throw _privateConstructorUsedError;
+
+  /// Style for the processing status message (e.g. “Transfer in progress”)
+  TextStyleConfig? get processingStatusTextStyle =>
+      throw _privateConstructorUsedError;
+
+  /// Serializes this CallPageInfoConfig to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of CallPageInfoConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $CallPageInfoConfigCopyWith<CallPageInfoConfig> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $CallPageInfoConfigCopyWith<$Res> {
+  factory $CallPageInfoConfigCopyWith(
+          CallPageInfoConfig value, $Res Function(CallPageInfoConfig) then) =
+      _$CallPageInfoConfigCopyWithImpl<$Res, CallPageInfoConfig>;
+  @useResult
+  $Res call(
+      {TextStyleConfig? usernameTextStyle,
+      TextStyleConfig? numberTextStyle,
+      TextStyleConfig? callStatusTextStyle,
+      TextStyleConfig? processingStatusTextStyle});
+
+  $TextStyleConfigCopyWith<$Res>? get usernameTextStyle;
+  $TextStyleConfigCopyWith<$Res>? get numberTextStyle;
+  $TextStyleConfigCopyWith<$Res>? get callStatusTextStyle;
+  $TextStyleConfigCopyWith<$Res>? get processingStatusTextStyle;
+}
+
+/// @nodoc
+class _$CallPageInfoConfigCopyWithImpl<$Res, $Val extends CallPageInfoConfig>
+    implements $CallPageInfoConfigCopyWith<$Res> {
+  _$CallPageInfoConfigCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of CallPageInfoConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? usernameTextStyle = freezed,
+    Object? numberTextStyle = freezed,
+    Object? callStatusTextStyle = freezed,
+    Object? processingStatusTextStyle = freezed,
+  }) {
+    return _then(_value.copyWith(
+      usernameTextStyle: freezed == usernameTextStyle
+          ? _value.usernameTextStyle
+          : usernameTextStyle // ignore: cast_nullable_to_non_nullable
+              as TextStyleConfig?,
+      numberTextStyle: freezed == numberTextStyle
+          ? _value.numberTextStyle
+          : numberTextStyle // ignore: cast_nullable_to_non_nullable
+              as TextStyleConfig?,
+      callStatusTextStyle: freezed == callStatusTextStyle
+          ? _value.callStatusTextStyle
+          : callStatusTextStyle // ignore: cast_nullable_to_non_nullable
+              as TextStyleConfig?,
+      processingStatusTextStyle: freezed == processingStatusTextStyle
+          ? _value.processingStatusTextStyle
+          : processingStatusTextStyle // ignore: cast_nullable_to_non_nullable
+              as TextStyleConfig?,
+    ) as $Val);
+  }
+
+  /// Create a copy of CallPageInfoConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $TextStyleConfigCopyWith<$Res>? get usernameTextStyle {
+    if (_value.usernameTextStyle == null) {
+      return null;
+    }
+
+    return $TextStyleConfigCopyWith<$Res>(_value.usernameTextStyle!, (value) {
+      return _then(_value.copyWith(usernameTextStyle: value) as $Val);
+    });
+  }
+
+  /// Create a copy of CallPageInfoConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $TextStyleConfigCopyWith<$Res>? get numberTextStyle {
+    if (_value.numberTextStyle == null) {
+      return null;
+    }
+
+    return $TextStyleConfigCopyWith<$Res>(_value.numberTextStyle!, (value) {
+      return _then(_value.copyWith(numberTextStyle: value) as $Val);
+    });
+  }
+
+  /// Create a copy of CallPageInfoConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $TextStyleConfigCopyWith<$Res>? get callStatusTextStyle {
+    if (_value.callStatusTextStyle == null) {
+      return null;
+    }
+
+    return $TextStyleConfigCopyWith<$Res>(_value.callStatusTextStyle!, (value) {
+      return _then(_value.copyWith(callStatusTextStyle: value) as $Val);
+    });
+  }
+
+  /// Create a copy of CallPageInfoConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $TextStyleConfigCopyWith<$Res>? get processingStatusTextStyle {
+    if (_value.processingStatusTextStyle == null) {
+      return null;
+    }
+
+    return $TextStyleConfigCopyWith<$Res>(_value.processingStatusTextStyle!,
+        (value) {
+      return _then(_value.copyWith(processingStatusTextStyle: value) as $Val);
+    });
+  }
+}
+
+/// @nodoc
+abstract class _$$CallPageInfoConfigImplCopyWith<$Res>
+    implements $CallPageInfoConfigCopyWith<$Res> {
+  factory _$$CallPageInfoConfigImplCopyWith(_$CallPageInfoConfigImpl value,
+          $Res Function(_$CallPageInfoConfigImpl) then) =
+      __$$CallPageInfoConfigImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {TextStyleConfig? usernameTextStyle,
+      TextStyleConfig? numberTextStyle,
+      TextStyleConfig? callStatusTextStyle,
+      TextStyleConfig? processingStatusTextStyle});
+
+  @override
+  $TextStyleConfigCopyWith<$Res>? get usernameTextStyle;
+  @override
+  $TextStyleConfigCopyWith<$Res>? get numberTextStyle;
+  @override
+  $TextStyleConfigCopyWith<$Res>? get callStatusTextStyle;
+  @override
+  $TextStyleConfigCopyWith<$Res>? get processingStatusTextStyle;
+}
+
+/// @nodoc
+class __$$CallPageInfoConfigImplCopyWithImpl<$Res>
+    extends _$CallPageInfoConfigCopyWithImpl<$Res, _$CallPageInfoConfigImpl>
+    implements _$$CallPageInfoConfigImplCopyWith<$Res> {
+  __$$CallPageInfoConfigImplCopyWithImpl(_$CallPageInfoConfigImpl _value,
+      $Res Function(_$CallPageInfoConfigImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of CallPageInfoConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? usernameTextStyle = freezed,
+    Object? numberTextStyle = freezed,
+    Object? callStatusTextStyle = freezed,
+    Object? processingStatusTextStyle = freezed,
+  }) {
+    return _then(_$CallPageInfoConfigImpl(
+      usernameTextStyle: freezed == usernameTextStyle
+          ? _value.usernameTextStyle
+          : usernameTextStyle // ignore: cast_nullable_to_non_nullable
+              as TextStyleConfig?,
+      numberTextStyle: freezed == numberTextStyle
+          ? _value.numberTextStyle
+          : numberTextStyle // ignore: cast_nullable_to_non_nullable
+              as TextStyleConfig?,
+      callStatusTextStyle: freezed == callStatusTextStyle
+          ? _value.callStatusTextStyle
+          : callStatusTextStyle // ignore: cast_nullable_to_non_nullable
+              as TextStyleConfig?,
+      processingStatusTextStyle: freezed == processingStatusTextStyle
+          ? _value.processingStatusTextStyle
+          : processingStatusTextStyle // ignore: cast_nullable_to_non_nullable
+              as TextStyleConfig?,
+    ));
+  }
+}
+
+/// @nodoc
+
+@JsonSerializable(explicitToJson: true)
+class _$CallPageInfoConfigImpl implements _CallPageInfoConfig {
+  const _$CallPageInfoConfigImpl(
+      {this.usernameTextStyle,
+      this.numberTextStyle,
+      this.callStatusTextStyle,
+      this.processingStatusTextStyle});
+
+  factory _$CallPageInfoConfigImpl.fromJson(Map<String, dynamic> json) =>
+      _$$CallPageInfoConfigImplFromJson(json);
+
+  /// Style for the main username (displayed with `displaySmall`)
+  @override
+  final TextStyleConfig? usernameTextStyle;
+
+  /// Style for the phone number if username is present (bodyLarge or displaySmall)
+  @override
+  final TextStyleConfig? numberTextStyle;
+
+  /// Style for the call status message (e.g. duration or “incoming”)
+  @override
+  final TextStyleConfig? callStatusTextStyle;
+
+  /// Style for the processing status message (e.g. “Transfer in progress”)
+  @override
+  final TextStyleConfig? processingStatusTextStyle;
+
+  @override
+  String toString() {
+    return 'CallPageInfoConfig(usernameTextStyle: $usernameTextStyle, numberTextStyle: $numberTextStyle, callStatusTextStyle: $callStatusTextStyle, processingStatusTextStyle: $processingStatusTextStyle)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$CallPageInfoConfigImpl &&
+            (identical(other.usernameTextStyle, usernameTextStyle) ||
+                other.usernameTextStyle == usernameTextStyle) &&
+            (identical(other.numberTextStyle, numberTextStyle) ||
+                other.numberTextStyle == numberTextStyle) &&
+            (identical(other.callStatusTextStyle, callStatusTextStyle) ||
+                other.callStatusTextStyle == callStatusTextStyle) &&
+            (identical(other.processingStatusTextStyle,
+                    processingStatusTextStyle) ||
+                other.processingStatusTextStyle == processingStatusTextStyle));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(runtimeType, usernameTextStyle,
+      numberTextStyle, callStatusTextStyle, processingStatusTextStyle);
+
+  /// Create a copy of CallPageInfoConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$CallPageInfoConfigImplCopyWith<_$CallPageInfoConfigImpl> get copyWith =>
+      __$$CallPageInfoConfigImplCopyWithImpl<_$CallPageInfoConfigImpl>(
+          this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$CallPageInfoConfigImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _CallPageInfoConfig implements CallPageInfoConfig {
+  const factory _CallPageInfoConfig(
+          {final TextStyleConfig? usernameTextStyle,
+          final TextStyleConfig? numberTextStyle,
+          final TextStyleConfig? callStatusTextStyle,
+          final TextStyleConfig? processingStatusTextStyle}) =
+      _$CallPageInfoConfigImpl;
+
+  factory _CallPageInfoConfig.fromJson(Map<String, dynamic> json) =
+      _$CallPageInfoConfigImpl.fromJson;
+
+  /// Style for the main username (displayed with `displaySmall`)
+  @override
+  TextStyleConfig? get usernameTextStyle;
+
+  /// Style for the phone number if username is present (bodyLarge or displaySmall)
+  @override
+  TextStyleConfig? get numberTextStyle;
+
+  /// Style for the call status message (e.g. duration or “incoming”)
+  @override
+  TextStyleConfig? get callStatusTextStyle;
+
+  /// Style for the processing status message (e.g. “Transfer in progress”)
+  @override
+  TextStyleConfig? get processingStatusTextStyle;
+
+  /// Create a copy of CallPageInfoConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$CallPageInfoConfigImplCopyWith<_$CallPageInfoConfigImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
