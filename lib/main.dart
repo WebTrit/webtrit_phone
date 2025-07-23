@@ -15,6 +15,7 @@ import 'package:webtrit_phone/bootstrap.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
+import 'package:webtrit_phone/services/services.dart';
 
 void main() {
   final logger = Logger('run_app');
@@ -130,6 +131,13 @@ class RootApp extends StatelessWidget {
           create: (context) {
             return AppPath();
           },
+        ),
+        // Services
+        Provider<ConnectivityService>(
+          create: (context) {
+            return ConnectivityServiceImpl();
+          },
+          dispose: (context, value) => value.dispose(),
         ),
       ],
       child: MultiRepositoryProvider(
