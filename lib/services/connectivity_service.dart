@@ -15,6 +15,7 @@ abstract class ConnectivityService {
 class ConnectivityServiceImpl implements ConnectivityService {
   ConnectivityServiceImpl({
     HttpRequestExecutorFactory createHttpRequestExecutor = defaultCreateHttpRequestExecutor,
+    this.connectivityCheckUrl = 'https://www.google.com/generate_204',
   }) : _createHttpRequestExecutor = createHttpRequestExecutor {
     _connectivitySubscription = _connectivity.onConnectivityChanged.listen(_handleConnectivityChange);
   }
@@ -23,6 +24,7 @@ class ConnectivityServiceImpl implements ConnectivityService {
   final StreamController<bool> _controller = StreamController<bool>.broadcast();
   late final StreamSubscription<List<ConnectivityResult>> _connectivitySubscription;
   final HttpRequestExecutorFactory _createHttpRequestExecutor;
+  final String connectivityCheckUrl;
 
   @override
   Stream<bool> get connectionStream => _controller.stream;
@@ -36,7 +38,7 @@ class ConnectivityServiceImpl implements ConnectivityService {
 
     final executor = _createHttpRequestExecutor();
     try {
-      await executor.execute(method: 'GET', url: 'https://www.google.com/generate_204');
+      await executor.execute(method: 'GET', url: connectivityCheckUrl);
       return true;
     } catch (_) {
       return false;
