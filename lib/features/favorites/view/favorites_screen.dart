@@ -37,47 +37,15 @@ class FavoritesScreen extends StatefulWidget {
 }
 
 class _FavoritesScreenState extends State<FavoritesScreen> {
-  void createCall({
-    required String destination,
-    String? displayName,
-    bool video = false,
-    String? fromNumber,
-  }) {
-    final callRoutingCubit = context.read<CallRoutingCubit>();
-    final callRoutingState = callRoutingCubit.state;
-    if (callRoutingState == null) return;
-
-    /// For cases when user sets additional number for outgoing calls by default
-    /// and wants to call from main number explicitly using dropdown menu.
-    final shouldUseMainLine = fromNumber == callRoutingState.mainNumber;
-    if (shouldUseMainLine) {
-      fromNumber = null;
-    } else {
-      // Apply caller ID settings to determine the `from` number if not specified.
-      fromNumber ??= callRoutingCubit.getFromNumber(destination);
-    }
-
-    final hasIdleMainLine = callRoutingState.hasIdleMainLine;
-    final hasIdleGuestLine = callRoutingState.hasIdleGuestLine;
-    if ((fromNumber == null && !hasIdleMainLine) || (fromNumber != null && !hasIdleGuestLine)) {
-      final notificationsBloc = context.read<NotificationsBloc>();
-      const notification = CallUndefinedLineNotification();
-      notificationsBloc.add(const NotificationsSubmitted(notification));
-      return;
-    }
-
-    final callBloc = context.read<CallBloc>();
-    callBloc.add(CallControlEvent.started(
-      number: destination,
-      video: video,
-      displayName: displayName,
-      fromNumber: fromNumber,
-    ));
-  }
+  // TODO(Serdun): Think about moving this to a controller or bloc.
+  late final CallController _callController = CallController(
+    callBloc: context.read<CallBloc>(),
+    callRoutingCubit: context.read<CallRoutingCubit>(),
+    notificationsBloc: context.read<NotificationsBloc>(),
+  );
 
   void submitTransfer({required String destination}) {
-    final callBloc = context.read<CallBloc>();
-    callBloc.add(CallControlEvent.blindTransferSubmitted(number: destination));
+    _callController.submitTransfer(destination);
     context.router.maybePop();
   }
 
@@ -165,14 +133,16 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                                         submitTransfer(destination: favorite.number);
                                       }
                                     : () {
-                                        createCall(destination: favorite.number, displayName: favorite.name);
+                                        _callController.createCall(
+                                            destination: favorite.number, displayName: favorite.name);
                                       },
                                 onAudioCallPressed: () {
-                                  createCall(destination: favorite.number, displayName: favorite.name, video: false);
+                                  _callController.createCall(
+                                      destination: favorite.number, displayName: favorite.name, video: false);
                                 },
                                 onVideoCallPressed: widget.videoEnabled
                                     ? () {
-                                        createCall(
+                                        _callController.createCall(
                                             destination: favorite.number, displayName: favorite.name, video: true);
                                       }
                                     : null,

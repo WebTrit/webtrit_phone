@@ -23,11 +23,17 @@ class KeypadView extends StatefulWidget {
 class KeypadViewState extends State<KeypadView> {
   final _keypadTextFieldKey = GlobalKey();
 
-  EditableTextState? get _keypadTextFieldEditableTextState =>
-      (_keypadTextFieldKey.currentState as TextSelectionGestureDetectorBuilderDelegate).editableTextKey.currentState;
-
+  // TODO(Serdun): Think about moving this to a controller or bloc.
+  late final CallController _callController = CallController(
+    callBloc: context.read<CallBloc>(),
+    callRoutingCubit: context.read<CallRoutingCubit>(),
+    notificationsBloc: context.read<NotificationsBloc>(),
+  );
   late TextEditingController _controller;
   late FocusNode _focusNode;
+
+  EditableTextState? get _keypadTextFieldEditableTextState =>
+      (_keypadTextFieldKey.currentState as TextSelectionGestureDetectorBuilderDelegate).editableTextKey.currentState;
 
   @override
   void initState() {
@@ -102,12 +108,14 @@ class KeypadViewState extends State<KeypadView> {
                       actionsEnabled: canCall,
                       onBackspacePressed: _removeLastChar,
                       onBackspaceLongPress: _cleanInput,
-                      onAudioCallPressed: () => _createCall(),
-                      onVideoCallPressed: widget.videoEnabled ? () => _createCall(video: true) : null,
+                      onAudioCallPressed: () => _callController.createCall(destination: _popNumber()),
+                      onVideoCallPressed: widget.videoEnabled
+                          ? () => _callController.createCall(destination: _popNumber(), video: true)
+                          : null,
                       onTransferPressed: widget.transferEnabled && activeCalls.isNotEmpty ? _transferCall : null,
                       onInitiatedTransferPressed: widget.transferEnabled && transferInitiated ? _transferCall : null,
                       callNumbers: callRoutingState?.allNumbers ?? [],
-                      onCallFrom: (number) => _createCall(fromNumber: number),
+                      onCallFrom: (number) => _callController.createCall(destination: _popNumber(), fromNumber: number),
                     );
                   },
                 );
@@ -128,50 +136,9 @@ class KeypadViewState extends State<KeypadView> {
     return number;
   }
 
-  void _createCall({bool video = false, String? fromNumber}) {
-    _focusNode.unfocus();
-    final destination = _popNumber();
-
-    final callRoutingCubit = context.read<CallRoutingCubit>();
-    final callRoutingState = callRoutingCubit.state;
-    if (callRoutingState == null) return;
-
-    /// For cases when user sets additional number for outgoing calls by default
-    /// and wants to call from main number explicitly using dropdown menu.
-    final shouldUseMainLine = fromNumber == callRoutingState.mainNumber;
-    if (shouldUseMainLine) {
-      fromNumber = null;
-    } else {
-      // Apply caller ID settings to determine the `from` number if not specified.
-      fromNumber ??= callRoutingCubit.getFromNumber(destination);
-    }
-
-    final hasIdleMainLine = callRoutingState.hasIdleMainLine;
-    final hasIdleGuestLine = callRoutingState.hasIdleGuestLine;
-    if ((fromNumber == null && !hasIdleMainLine) || (fromNumber != null && !hasIdleGuestLine)) {
-      final notificationsBloc = context.read<NotificationsBloc>();
-      const notification = CallUndefinedLineNotification();
-      notificationsBloc.add(const NotificationsSubmitted(notification));
-      return;
-    }
-
-    final callBloc = context.read<CallBloc>();
-    final displayName = context.read<KeypadCubit>().state.contact?.maybeName;
-    callBloc.add(CallControlEvent.started(
-      number: destination,
-      video: video,
-      displayName: displayName,
-      fromNumber: fromNumber,
-    ));
-  }
-
   void _transferCall() {
     _focusNode.unfocus();
-
-    final callBloc = context.read<CallBloc>();
-    callBloc.add(CallControlEvent.blindTransferSubmitted(
-      number: _popNumber(),
-    ));
+    _callController.submitTransfer(_popNumber());
   }
 
   void _addChar(keyText) {

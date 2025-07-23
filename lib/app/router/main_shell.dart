@@ -16,6 +16,7 @@ import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
+import 'package:webtrit_phone/services/services.dart';
 
 @RoutePage()
 class MainShell extends StatefulWidget {
@@ -418,6 +419,7 @@ class _MainShellState extends State<MainShell> {
                     context.read<UserRepository>(),
                     context.read<LinesStateRepository>(),
                     context.read<AppPreferences>(),
+                    context.read<ConnectivityService>(),
                   ),
                 ),
               ],
