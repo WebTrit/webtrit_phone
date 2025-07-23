@@ -6,3 +6,4 @@ export 'notification.dart';
 export 'processing_status.dart';
 export 'transfer.dart';
 export 'uncompleted_peer_connection_exception.dart';
+export 'renegotiation_request.dart';

@@ -14,6 +14,7 @@ import 'package:logging/logging.dart';
 import 'package:ssl_certificates/ssl_certificates.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
+import 'package:webtrit_phone/features/call/services/services.dart';
 
 import 'package:webtrit_signaling/webtrit_signaling.dart';
 
@@ -69,6 +70,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   Timer? _signalingClientReconnectTimer;
 
   final _peerConnectionCompleters = <String, Completer<RTCPeerConnection>>{};
+  final _webrtcStateManager = WebRTCStateManager();
 
   final _callkeepSound = WebtritCallkeepSound();
 
@@ -176,6 +178,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     await _stopRingbackSound();
 
+    // Clean up WebRTC state manager
+    _webrtcStateManager.dispose();
+
     await super.close();
   }
 
@@ -215,6 +220,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       assert(_peerConnectionCompleters.containsKey(removeUuid) == true);
       _logger.finer(() => 'Remove peerConnection completer with uuid: $removeUuid');
       _peerConnectionCompleters.remove(removeUuid);
+
+      // Clean up WebRTC state manager data for removed calls
+      _webrtcStateManager.clearCall(removeUuid);
     }
     for (final addUuid in nextActiveCallUuids.difference(currentActiveCallUuids)) {
       assert(_peerConnectionCompleters.containsKey(addUuid) == false);
@@ -929,7 +937,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         _logger.warning('__onCallSignalingEventProgress: peerConnection is null - most likely some permissions issue');
       } else {
         final remoteDescription = jsep.toDescription();
+        _logger.warning('🔄 WEBRTC_DEBUG: Setting remote description (Progress) - callId: ${event.callId}');
         await peerConnection.setRemoteDescription(remoteDescription);
+        _logger.info('✅ WEBRTC_DEBUG: Remote description set successfully (Progress) - callId: ${event.callId}');
       }
     } else {
       _logger.warning('__onCallSignalingEventProgress: jsep must not be null');
@@ -965,7 +975,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     final pc = await _peerConnectionRetrieve(event.callId);
     if (jsep != null && pc != null) {
       final remoteDescription = jsep.toDescription();
+      _logger.warning('🔄 WEBRTC_DEBUG: Setting remote description (Accepted) - callId: ${event.callId}');
       await pc.setRemoteDescription(remoteDescription);
+      _logger.info('✅ WEBRTC_DEBUG: Remote description set successfully (Accepted) - callId: ${event.callId}');
     }
   }
 
@@ -1058,14 +1070,21 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
           if (peerConnection == null) {
             _logger.warning('__onCallSignalingEventUpdating: peerConnection is null - most likely some state issue');
           } else {
+            _logger.warning('🔄 WEBRTC_DEBUG: Setting remote description (Updating) - callId: ${event.callId}');
             await peerConnectionPolicyApplier?.apply(peerConnection, hasRemoteVideo: jsep.hasVideo);
             await peerConnection.setRemoteDescription(remoteDescription);
+            _logger.info('✅ WEBRTC_DEBUG: Remote description set successfully (Updating) - callId: ${event.callId}');
+
+            _logger.info('🔄 WEBRTC_DEBUG: Creating answer for update - callId: ${event.callId}');
             final localDescription = await peerConnection.createAnswer({});
             sdpMunger?.apply(localDescription);
 
             // According to RFC 8829 §5.6 (https://datatracker.ietf.org/doc/html/rfc8829#section-5.6),
             // localDescription should be set before sending the answer to transition into stable state.
+            _logger.info('🔄 WEBRTC_DEBUG: Setting local description (Updating answer) - callId: ${event.callId}');
             await peerConnection.setLocalDescription(localDescription);
+            _logger
+                .info('✅ WEBRTC_DEBUG: Local description set successfully (Updating answer) - callId: ${event.callId}');
 
             await _signalingClient?.execute(UpdateRequest(
               transaction: WebtritSignalingClient.generateTransactionId(),
@@ -1912,13 +1931,19 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       }));
 
       final remoteDescription = offer.toDescription();
+      _logger.warning('🔄 WEBRTC_DEBUG: Setting remote description (Answer) - callId: ${event.callId}');
       await peerConnection.setRemoteDescription(remoteDescription);
+      _logger.info('✅ WEBRTC_DEBUG: Remote description set successfully (Answer) - callId: ${event.callId}');
+
+      _logger.info('🔄 WEBRTC_DEBUG: Creating answer - callId: ${event.callId}');
       final localDescription = await peerConnection.createAnswer({});
       sdpMunger?.apply(localDescription);
 
       // According to RFC 8829 §5.6 (https://datatracker.ietf.org/doc/html/rfc8829#section-5.6),
       // localDescription should be set before sending the answer to transition into stable state.
+      _logger.info('🔄 WEBRTC_DEBUG: Setting local description (Answer) - callId: ${event.callId}');
       await peerConnection.setLocalDescription(localDescription).catchError((e) => throw SDPConfigurationError(e));
+      _logger.info('✅ WEBRTC_DEBUG: Local description set successfully (Answer) - callId: ${event.callId}');
 
       await _signalingClient?.execute(AcceptRequest(
         transaction: WebtritSignalingClient.generateTransactionId(),
@@ -2667,7 +2692,20 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     return peerConnection
       ..onSignalingState = (signalingState) {
-        logger.fine(() => 'onSignalingState state: ${signalingState.name}');
+        logger.warning('🔄 WEBRTC_DEBUG: SignalingState changed - callId: $callId, newState: ${signalingState.name}');
+
+        // Log critical state transitions that could lead to race conditions
+        if (signalingState == RTCSignalingState.RTCSignalingStateHaveRemoteOffer) {
+          logger.severe('🚨 WEBRTC_DEBUG: Entering have-remote-offer state - callId: $callId');
+        } else if (signalingState == RTCSignalingState.RTCSignalingStateStable) {
+          logger.info('✅ WEBRTC_DEBUG: Entering stable state - callId: $callId, renegotiation safe');
+
+          // Process any queued renegotiation requests when entering stable state
+          _webrtcStateManager.processQueue(callId, signalingState,
+              performRenegotiation: (callId, lineId) => _performRenegotiation(callId, lineId, peerConnection, logger));
+        } else if (signalingState == RTCSignalingState.RTCSignalingStateHaveLocalOffer) {
+          logger.info('📤 WEBRTC_DEBUG: Entering have-local-offer state - callId: $callId');
+        }
 
         add(_PeerConnectionEvent.signalingStateChanged(callId, signalingState));
       }
@@ -2711,45 +2749,88 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         logger.fine(() => 'onDataChannel channel: $channel');
       }
       ..onRenegotiationNeeded = () async {
-        // TODO(Serdun): Handle renegotiation needed
-        // This implementation does not handle all possible signaling states.
-        // Specifically, if the current state is `have-remote-offer`, calling
-        // setLocalDescription with an offer will throw:
-        //   WEBRTC_SET_LOCAL_DESCRIPTION_ERROR: Failed to set local offer sdp: Called in wrong state: have-remote-offer
-        //
-        // Known case: when CalleeVideoOfferPolicy.includeInactiveTrack is used,
-        // the callee may trigger onRenegotiationNeeded before the current remote offer is processed.
-        // This causes a race where the local peer is still in 'have-remote-offer' state,
-        // leading to the above error. Currently this does not severely affect behavior,
-        // since the offer includes only an inactive track, but it should still be handled correctly.
-        //
-        // Proper handling should include:
-        // - Waiting until the signaling state becomes 'stable' before creating and setting a new offer
-        // - Avoiding renegotiation if a remote offer is currently being processed
-        // - Ensuring renegotiation is coordinated and state-aware
-
         final pcState = peerConnection.signalingState;
-        logger.fine(() => 'onRenegotiationNeeded signalingState: $pcState');
-        if (pcState != null) {
-          final localDescription = await peerConnection.createOffer({});
-          sdpMunger?.apply(localDescription);
+        logger.warning('🔄 WEBRTC_DEBUG: onRenegotiationNeeded triggered - callId: $callId, signalingState: $pcState');
 
-          // According to RFC 8829 §5.6 (https://datatracker.ietf.org/doc/html/rfc8829#section-5.6),
-          // localDescription should be set before sending the offer to transition into have-local-offer state.
-          await peerConnection.setLocalDescription(localDescription);
+        // Use state manager to check if renegotiation is safe
+        if (!_webrtcStateManager.canPerformRenegotiation(callId, pcState)) {
+          logger.warning('🔄 WEBRTC_QUEUE: Queueing renegotiation - callId: $callId, unsafe state: $pcState');
 
-          final updateRequest = UpdateRequest(
-            transaction: WebtritSignalingClient.generateTransactionId(),
-            line: lineId,
-            callId: callId,
-            jsep: localDescription.toMap(),
-          );
-          await _signalingClient?.execute(updateRequest);
+          // Queue the renegotiation request for later processing
+          try {
+            await _webrtcStateManager.queueRenegotiation(callId, lineId);
+            logger.info('🔄 WEBRTC_QUEUE: Renegotiation queued successfully - callId: $callId');
+          } catch (e) {
+            logger.warning('🔄 WEBRTC_QUEUE: Failed to queue renegotiation - callId: $callId, error: $e');
+          }
+          return;
         }
+
+        // Perform immediate renegotiation if state is safe
+        await _performRenegotiation(callId, lineId, peerConnection, logger);
       }
       ..onTrack = (event) {
         logger.fine(() => 'onTrack ${event.str}');
       };
+  }
+
+  /// Performs WebRTC renegotiation with comprehensive error handling and retry logic
+  Future<void> _performRenegotiation(
+      String callId, int? lineId, RTCPeerConnection peerConnection, Logger logger) async {
+    try {
+      logger.info(
+          '🔄 WEBRTC_DEBUG: Creating offer for renegotiation - callId: $callId, signalingState: ${peerConnection.signalingState}');
+
+      final localDescription = await peerConnection.createOffer({});
+      sdpMunger?.apply(localDescription);
+
+      logger.info('🔄 WEBRTC_DEBUG: Setting local description for renegotiation - callId: $callId');
+      // According to RFC 8829 §5.6 (https://datatracker.ietf.org/doc/html/rfc8829#section-5.6),
+      // localDescription should be set before sending the offer to transition into have-local-offer state.
+      await peerConnection.setLocalDescription(localDescription);
+
+      logger.info('🔄 WEBRTC_DEBUG: Sending UpdateRequest for renegotiation - callId: $callId');
+      final updateRequest = UpdateRequest(
+        transaction: WebtritSignalingClient.generateTransactionId(),
+        line: lineId,
+        callId: callId,
+        jsep: localDescription.toMap(),
+      );
+      await _signalingClient?.execute(updateRequest);
+      logger.info('✅ WEBRTC_DEBUG: Renegotiation completed successfully - callId: $callId');
+    } catch (e, stackTrace) {
+      logger.severe('🚨 WEBRTC_DEBUG: Renegotiation failed - callId: $callId, error: $e');
+      logger.severe('🚨 WEBRTC_DEBUG: Stack trace: $stackTrace');
+
+      // Enhanced error analysis
+      if (e.toString().contains('Called in wrong state: have-remote-offer')) {
+        logger.severe('🚨 WEBRTC_DEBUG: CONFIRMED! WebRTC race condition - have-remote-offer state error');
+
+        // Queue for retry when state becomes safe
+        _webrtcStateManager.retryFailedRenegotiation(callId, lineId, e,
+            performRenegotiation: (callId, lineId) => _performRenegotiation(callId, lineId, peerConnection, logger));
+      } else if (e.toString().contains('setLocalDescription')) {
+        logger.severe('🚨 WEBRTC_DEBUG: setLocalDescription error - potential state machine issue');
+        _webrtcStateManager.retryFailedRenegotiation(callId, lineId, e,
+            performRenegotiation: (callId, lineId) => _performRenegotiation(callId, lineId, peerConnection, logger));
+      } else if (e.toString().contains('createOffer')) {
+        logger.severe('🚨 WEBRTC_DEBUG: createOffer error - connection may be closed');
+        // Don't retry createOffer errors as they usually indicate closed connections
+      } else {
+        logger.severe('🚨 WEBRTC_DEBUG: Unknown renegotiation error - retrying');
+        _webrtcStateManager.retryFailedRenegotiation(callId, lineId, e,
+            performRenegotiation: (callId, lineId) => _performRenegotiation(callId, lineId, peerConnection, logger));
+      }
+
+      // Optionally notify user about renegotiation issues
+      if (e.toString().contains('Called in wrong state')) {
+        // This is expected and handled, don't show error to user
+        logger.info('🔄 WEBRTC_DEBUG: Race condition handled gracefully - will retry when stable');
+      } else {
+        // Unexpected error, might need user notification
+        submitNotification(DefaultErrorNotification(e));
+      }
+    }
   }
 
   void _addToRecents(ActiveCall activeCall) {
