@@ -41,6 +41,12 @@ class RecentsScreen extends StatefulWidget {
 }
 
 class _RecentsScreenState extends State<RecentsScreen> with SingleTickerProviderStateMixin {
+  // TODO(Serdun): Think about moving this to a controller or bloc.
+  late final CallController _callController = CallController(
+    callBloc: context.read<CallBloc>(),
+    callRoutingCubit: context.read<CallRoutingCubit>(),
+    notificationsBloc: context.read<NotificationsBloc>(),
+  );
   late TabController _tabController;
 
   @override
@@ -70,44 +76,6 @@ class _RecentsScreenState extends State<RecentsScreen> with SingleTickerProvider
       final filter = widget.recentsFilters[_tabController.index];
       context.read<RecentsBloc>().add(RecentsFiltered(filter));
     }
-  }
-
-  void createCall({
-    required String destination,
-    String? displayName,
-    bool video = false,
-    String? fromNumber,
-  }) {
-    final callRoutingCubit = context.read<CallRoutingCubit>();
-    final callRoutingState = callRoutingCubit.state;
-    if (callRoutingState == null) return;
-
-    /// For cases when user sets additional number for outgoing calls by default
-    /// and wants to call from main number explicitly using dropdown menu.
-    final shouldUseMainLine = fromNumber == callRoutingState.mainNumber;
-    if (shouldUseMainLine) {
-      fromNumber = null;
-    } else {
-      // Apply caller ID settings to determine the `from` number if not specified.
-      fromNumber ??= callRoutingCubit.getFromNumber(destination);
-    }
-
-    final hasIdleMainLine = callRoutingState.hasIdleMainLine;
-    final hasIdleGuestLine = callRoutingState.hasIdleGuestLine;
-    if ((fromNumber == null && !hasIdleMainLine) || (fromNumber != null && !hasIdleGuestLine)) {
-      final notificationsBloc = context.read<NotificationsBloc>();
-      const notification = CallUndefinedLineNotification();
-      notificationsBloc.add(const NotificationsSubmitted(notification));
-      return;
-    }
-
-    final callBloc = context.read<CallBloc>();
-    callBloc.add(CallControlEvent.started(
-      number: destination,
-      video: video,
-      displayName: displayName,
-      fromNumber: fromNumber,
-    ));
   }
 
   void submitTransfer({required String destination}) {
@@ -227,19 +195,19 @@ class _RecentsScreenState extends State<RecentsScreen> with SingleTickerProvider
                                         submitTransfer(destination: callLogEntry.number);
                                       }
                                     : () {
-                                        createCall(
+                                        _callController.createCall(
                                           destination: callLogEntry.number,
                                           displayName: contact?.maybeName,
                                           video: callLogEntry.video && widget.videoEnabled,
                                         );
                                       },
-                                onAudioCallPressed: () => createCall(
+                                onAudioCallPressed: () => _callController.createCall(
                                   destination: callLogEntry.number,
                                   displayName: contact?.maybeName,
                                   video: false,
                                 ),
                                 onVideoCallPressed: widget.videoEnabled
-                                    ? () => createCall(
+                                    ? () => _callController.createCall(
                                           destination: callLogEntry.number,
                                           displayName: contact?.maybeName,
                                           video: true,
@@ -271,7 +239,7 @@ class _RecentsScreenState extends State<RecentsScreen> with SingleTickerProvider
                                     : null,
                                 onCallLogPressed: () => openCallLog(number: callLogEntry.number),
                                 onDelete: () => delete(recent: recent),
-                                onCallFrom: (fromNumber) => createCall(
+                                onCallFrom: (fromNumber) => _callController.createCall(
                                   destination: callLogEntry.number,
                                   displayName: contact?.maybeName,
                                   fromNumber: fromNumber,

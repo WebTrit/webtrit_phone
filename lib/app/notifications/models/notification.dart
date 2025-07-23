@@ -126,3 +126,12 @@ class DefaultErrorNotification extends ErrorNotification {
     }
   }
 }
+
+class NoInternetConnectionNotification extends ErrorNotification {
+  const NoInternetConnectionNotification();
+
+  @override
+  String l10n(BuildContext context) {
+    return context.l10n.common_noInternetConnection_message;
+  }
+}

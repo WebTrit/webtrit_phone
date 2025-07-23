@@ -37,6 +37,13 @@ class ContactScreen extends StatefulWidget {
 }
 
 class _ContactScreenState extends State<ContactScreen> {
+  // TODO(Serdun): Think about moving this to a controller or bloc.
+  late final CallController _callController = CallController(
+    callBloc: context.read<CallBloc>(),
+    callRoutingCubit: context.read<CallRoutingCubit>(),
+    notificationsBloc: context.read<NotificationsBloc>(),
+  );
+
   void toggleFavorite({
     required bool isFavorite,
     required ContactPhone contactPhone,
@@ -46,50 +53,6 @@ class _ContactScreenState extends State<ContactScreen> {
     } else {
       context.read<ContactBloc>().add(ContactRemovedFromFavorites(contactPhone));
     }
-  }
-
-  void createCall({
-    required String destination,
-    String? displayName,
-    bool video = false,
-    String? fromNumber,
-  }) {
-    final callRoutingCubit = context.read<CallRoutingCubit>();
-    final callRoutingState = callRoutingCubit.state;
-    if (callRoutingState == null) return;
-
-    /// For cases when user sets additional number for outgoing calls by default
-    /// and wants to call from main number explicitly using dropdown menu.
-    final shouldUseMainLine = fromNumber == callRoutingState.mainNumber;
-    if (shouldUseMainLine) {
-      fromNumber = null;
-    } else {
-      // Apply caller ID settings to determine the `from` number if not specified.
-      fromNumber ??= callRoutingCubit.getFromNumber(destination);
-    }
-
-    final hasIdleMainLine = callRoutingState.hasIdleMainLine;
-    final hasIdleGuestLine = callRoutingState.hasIdleGuestLine;
-    if ((fromNumber == null && !hasIdleMainLine) || (fromNumber != null && !hasIdleGuestLine)) {
-      final notificationsBloc = context.read<NotificationsBloc>();
-      const notification = CallUndefinedLineNotification();
-      notificationsBloc.add(const NotificationsSubmitted(notification));
-      return;
-    }
-
-    final callBloc = context.read<CallBloc>();
-    callBloc.add(CallControlEvent.started(
-      number: destination,
-      video: video,
-      displayName: displayName,
-      fromNumber: fromNumber,
-    ));
-  }
-
-  void submitTransfer({required String destination}) {
-    final callBloc = context.read<CallBloc>();
-    callBloc.add(CallControlEvent.blindTransferSubmitted(number: destination));
-    context.router.maybePop();
   }
 
   void sendSms({
@@ -186,27 +149,29 @@ class _ContactScreenState extends State<ContactScreen> {
                                       );
                                     }
                                   : null,
-                              onAudioPressed: () => createCall(
+                              onAudioPressed: () => _callController.createCall(
                                 destination: contactPhone.number,
                                 displayName: contact.maybeName,
                                 video: false,
                               ),
                               onVideoPressed: widget.videoEnabled
-                                  ? () => createCall(
+                                  ? () => _callController.createCall(
                                         destination: contactPhone.number,
                                         displayName: contact.maybeName,
                                         video: true,
                                       )
                                   : null,
                               onTransferPressed: widget.transferEnabled && hasActiveCall
-                                  ? () => submitTransfer(
-                                        destination: contactPhone.number,
-                                      )
+                                  ? () {
+                                      _callController.submitTransfer(contactPhone.number);
+                                      context.router.maybePop();
+                                    }
                                   : null,
                               onInitiatedTransferPressed: widget.transferEnabled && callState.isBlingTransferInitiated
-                                  ? () => submitTransfer(
-                                        destination: contactPhone.number,
-                                      )
+                                  ? () {
+                                      _callController.submitTransfer(contactPhone.number);
+                                      context.router.maybePop();
+                                    }
                                   : null,
                               onSendSmsPressed: widget.smsEnabled && contactSmsNumbers.contains(contactPhone.number)
                                   ? () => sendSms(
@@ -218,7 +183,7 @@ class _ContactScreenState extends State<ContactScreen> {
                               onCallLogPressed: () => openCallLog(
                                 number: contactPhone.number,
                               ),
-                              onCallFrom: (fromNumber) => createCall(
+                              onCallFrom: (fromNumber) => _callController.createCall(
                                 destination: contactPhone.number,
                                 displayName: contact.maybeName,
                                 fromNumber: fromNumber,
