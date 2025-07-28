@@ -202,14 +202,10 @@ class _LoginSignupEmbeddedRequestScreenState extends State<LoginSignupEmbeddedRe
 
       if (event == 'signup' && context.mounted) {
         _webViewController.runJavaScript('showProgress();');
-        _login(data, embeddedCallbackData);
+        _loginCubit.loginCustomSignupRequest(data, embeddedCallbackData);
       }
     } catch (e, st) {
       _logger.severe('Error decoding message', e, st);
     }
-  }
-
-  Future<void> _login(Map<String, dynamic>? data, Map<String, dynamic>? callback) async {
-    await _loginCubit.loginCustomSignupRequest(data, callback);
   }
 }
