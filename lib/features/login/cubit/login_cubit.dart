@@ -349,12 +349,15 @@ class LoginCubit extends Cubit<LoginState> with SystemInfoApiMapper {
     ));
   }
 
-  Future<void> loginCustomSignupRequest(
+  Future<bool> loginCustomSignupRequest(
     Map<String, dynamic>? extras,
     Map<String, dynamic>? embeddedCallbackData,
   ) async {
     emit(state.copyWith(
       processing: true,
+      embeddedExtras: extras,
+      embeddedCallbackData: embeddedCallbackData,
+      embeddedRequestError: null,
     ));
 
     try {
@@ -375,11 +378,17 @@ class LoginCubit extends Cubit<LoginState> with SystemInfoApiMapper {
         result,
         embeddedCallbackData != null ? RawHttpRequest.fromJson(embeddedCallbackData) : null,
       );
+      return true;
     } catch (e) {
       notificationsBloc.add(NotificationsSubmitted(LoginErrorNotification(e)));
 
-      emit(state.copyWith(processing: false));
+      emit(state.copyWith(processing: false, embeddedRequestError: e));
+      return false;
     }
+  }
+
+  void clearEmbeddedRequestError() {
+    emit(state.copyWith(embeddedRequestError: null));
   }
 
   void loginSignupRequestSubmitted() async {
@@ -550,6 +559,7 @@ class LoginCubit extends Cubit<LoginState> with SystemInfoApiMapper {
         email: email,
       ),
       extraPayload: extraPayload,
+      options: RequestOptions.withExtraRetries(),
     );
   }
 }

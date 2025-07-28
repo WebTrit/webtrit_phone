@@ -38,7 +38,13 @@ mixin _$LoginState {
   String? get token => throw _privateConstructorUsedError;
   String? get userId =>
       throw _privateConstructorUsedError; // Used to represent an embedded launch page or a login type within tabbed navigation
-  LoginEmbedded? get embedded => throw _privateConstructorUsedError;
+  LoginEmbedded? get embedded =>
+      throw _privateConstructorUsedError; // Extras and callback data that returned from the embedded page
+  Map<String, dynamic>? get embeddedExtras =>
+      throw _privateConstructorUsedError;
+  Map<String, dynamic>? get embeddedCallbackData =>
+      throw _privateConstructorUsedError;
+  Object? get embeddedRequestError => throw _privateConstructorUsedError;
   UrlInput get coreUrlInput => throw _privateConstructorUsedError;
   UserRefInput get otpSigninUserRefInput => throw _privateConstructorUsedError;
   CodeInput get otpSigninCodeInput => throw _privateConstructorUsedError;
@@ -81,6 +87,9 @@ abstract class $LoginStateCopyWith<$Res> {
       String? token,
       String? userId,
       LoginEmbedded? embedded,
+      Map<String, dynamic>? embeddedExtras,
+      Map<String, dynamic>? embeddedCallbackData,
+      Object? embeddedRequestError,
       UrlInput coreUrlInput,
       UserRefInput otpSigninUserRefInput,
       CodeInput otpSigninCodeInput,
@@ -117,6 +126,9 @@ class _$LoginStateCopyWithImpl<$Res, $Val extends LoginState>
     Object? token = freezed,
     Object? userId = freezed,
     Object? embedded = freezed,
+    Object? embeddedExtras = freezed,
+    Object? embeddedCallbackData = freezed,
+    Object? embeddedRequestError = freezed,
     Object? coreUrlInput = null,
     Object? otpSigninUserRefInput = null,
     Object? otpSigninCodeInput = null,
@@ -177,6 +189,17 @@ class _$LoginStateCopyWithImpl<$Res, $Val extends LoginState>
           ? _value.embedded
           : embedded // ignore: cast_nullable_to_non_nullable
               as LoginEmbedded?,
+      embeddedExtras: freezed == embeddedExtras
+          ? _value.embeddedExtras
+          : embeddedExtras // ignore: cast_nullable_to_non_nullable
+              as Map<String, dynamic>?,
+      embeddedCallbackData: freezed == embeddedCallbackData
+          ? _value.embeddedCallbackData
+          : embeddedCallbackData // ignore: cast_nullable_to_non_nullable
+              as Map<String, dynamic>?,
+      embeddedRequestError: freezed == embeddedRequestError
+          ? _value.embeddedRequestError
+          : embeddedRequestError,
       coreUrlInput: null == coreUrlInput
           ? _value.coreUrlInput
           : coreUrlInput // ignore: cast_nullable_to_non_nullable
@@ -236,6 +259,9 @@ abstract class _$$LoginStateImplCopyWith<$Res>
       String? token,
       String? userId,
       LoginEmbedded? embedded,
+      Map<String, dynamic>? embeddedExtras,
+      Map<String, dynamic>? embeddedCallbackData,
+      Object? embeddedRequestError,
       UrlInput coreUrlInput,
       UserRefInput otpSigninUserRefInput,
       CodeInput otpSigninCodeInput,
@@ -270,6 +296,9 @@ class __$$LoginStateImplCopyWithImpl<$Res>
     Object? token = freezed,
     Object? userId = freezed,
     Object? embedded = freezed,
+    Object? embeddedExtras = freezed,
+    Object? embeddedCallbackData = freezed,
+    Object? embeddedRequestError = freezed,
     Object? coreUrlInput = null,
     Object? otpSigninUserRefInput = null,
     Object? otpSigninCodeInput = null,
@@ -330,6 +359,17 @@ class __$$LoginStateImplCopyWithImpl<$Res>
           ? _value.embedded
           : embedded // ignore: cast_nullable_to_non_nullable
               as LoginEmbedded?,
+      embeddedExtras: freezed == embeddedExtras
+          ? _value._embeddedExtras
+          : embeddedExtras // ignore: cast_nullable_to_non_nullable
+              as Map<String, dynamic>?,
+      embeddedCallbackData: freezed == embeddedCallbackData
+          ? _value._embeddedCallbackData
+          : embeddedCallbackData // ignore: cast_nullable_to_non_nullable
+              as Map<String, dynamic>?,
+      embeddedRequestError: freezed == embeddedRequestError
+          ? _value.embeddedRequestError
+          : embeddedRequestError,
       coreUrlInput: null == coreUrlInput
           ? _value.coreUrlInput
           : coreUrlInput // ignore: cast_nullable_to_non_nullable
@@ -378,6 +418,9 @@ class _$LoginStateImpl implements _LoginState {
       this.token,
       this.userId,
       this.embedded,
+      final Map<String, dynamic>? embeddedExtras,
+      final Map<String, dynamic>? embeddedCallbackData,
+      this.embeddedRequestError,
       this.coreUrlInput = const UrlInput.pure(),
       this.otpSigninUserRefInput = const UserRefInput.pure(),
       this.otpSigninCodeInput = const CodeInput.pure(),
@@ -385,7 +428,9 @@ class _$LoginStateImpl implements _LoginState {
       this.passwordSigninPasswordInput = const PasswordInput.pure(),
       this.signupEmailInput = const EmailInput.pure(),
       this.signupCodeInput = const CodeInput.pure()})
-      : _supportedLoginTypes = supportedLoginTypes;
+      : _supportedLoginTypes = supportedLoginTypes,
+        _embeddedExtras = embeddedExtras,
+        _embeddedCallbackData = embeddedCallbackData;
 
   @override
   @JsonKey()
@@ -429,6 +474,31 @@ class _$LoginStateImpl implements _LoginState {
 // Used to represent an embedded launch page or a login type within tabbed navigation
   @override
   final LoginEmbedded? embedded;
+// Extras and callback data that returned from the embedded page
+  final Map<String, dynamic>? _embeddedExtras;
+// Extras and callback data that returned from the embedded page
+  @override
+  Map<String, dynamic>? get embeddedExtras {
+    final value = _embeddedExtras;
+    if (value == null) return null;
+    if (_embeddedExtras is EqualUnmodifiableMapView) return _embeddedExtras;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableMapView(value);
+  }
+
+  final Map<String, dynamic>? _embeddedCallbackData;
+  @override
+  Map<String, dynamic>? get embeddedCallbackData {
+    final value = _embeddedCallbackData;
+    if (value == null) return null;
+    if (_embeddedCallbackData is EqualUnmodifiableMapView)
+      return _embeddedCallbackData;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableMapView(value);
+  }
+
+  @override
+  final Object? embeddedRequestError;
   @override
   @JsonKey()
   final UrlInput coreUrlInput;
@@ -453,7 +523,7 @@ class _$LoginStateImpl implements _LoginState {
 
   @override
   String toString() {
-    return 'LoginState(processing: $processing, mode: $mode, coreUrl: $coreUrl, tenantId: $tenantId, systemInfo: $systemInfo, supportedLoginTypes: $supportedLoginTypes, otpSigninSessionOtpProvisionalWithDateTime: $otpSigninSessionOtpProvisionalWithDateTime, passwordSigninPasswordInputObscureText: $passwordSigninPasswordInputObscureText, signupSessionOtpProvisionalWithDateTime: $signupSessionOtpProvisionalWithDateTime, token: $token, userId: $userId, embedded: $embedded, coreUrlInput: $coreUrlInput, otpSigninUserRefInput: $otpSigninUserRefInput, otpSigninCodeInput: $otpSigninCodeInput, passwordSigninUserRefInput: $passwordSigninUserRefInput, passwordSigninPasswordInput: $passwordSigninPasswordInput, signupEmailInput: $signupEmailInput, signupCodeInput: $signupCodeInput)';
+    return 'LoginState(processing: $processing, mode: $mode, coreUrl: $coreUrl, tenantId: $tenantId, systemInfo: $systemInfo, supportedLoginTypes: $supportedLoginTypes, otpSigninSessionOtpProvisionalWithDateTime: $otpSigninSessionOtpProvisionalWithDateTime, passwordSigninPasswordInputObscureText: $passwordSigninPasswordInputObscureText, signupSessionOtpProvisionalWithDateTime: $signupSessionOtpProvisionalWithDateTime, token: $token, userId: $userId, embedded: $embedded, embeddedExtras: $embeddedExtras, embeddedCallbackData: $embeddedCallbackData, embeddedRequestError: $embeddedRequestError, coreUrlInput: $coreUrlInput, otpSigninUserRefInput: $otpSigninUserRefInput, otpSigninCodeInput: $otpSigninCodeInput, passwordSigninUserRefInput: $passwordSigninUserRefInput, passwordSigninPasswordInput: $passwordSigninPasswordInput, signupEmailInput: $signupEmailInput, signupCodeInput: $signupCodeInput)';
   }
 
   @override
@@ -478,14 +548,19 @@ class _$LoginStateImpl implements _LoginState {
             (identical(other.passwordSigninPasswordInputObscureText, passwordSigninPasswordInputObscureText) ||
                 other.passwordSigninPasswordInputObscureText ==
                     passwordSigninPasswordInputObscureText) &&
-            (identical(other.signupSessionOtpProvisionalWithDateTime,
-                    signupSessionOtpProvisionalWithDateTime) ||
+            (identical(other.signupSessionOtpProvisionalWithDateTime, signupSessionOtpProvisionalWithDateTime) ||
                 other.signupSessionOtpProvisionalWithDateTime ==
                     signupSessionOtpProvisionalWithDateTime) &&
             (identical(other.token, token) || other.token == token) &&
             (identical(other.userId, userId) || other.userId == userId) &&
             (identical(other.embedded, embedded) ||
                 other.embedded == embedded) &&
+            const DeepCollectionEquality()
+                .equals(other._embeddedExtras, _embeddedExtras) &&
+            const DeepCollectionEquality()
+                .equals(other._embeddedCallbackData, _embeddedCallbackData) &&
+            const DeepCollectionEquality()
+                .equals(other.embeddedRequestError, embeddedRequestError) &&
             (identical(other.coreUrlInput, coreUrlInput) ||
                 other.coreUrlInput == coreUrlInput) &&
             (identical(other.otpSigninUserRefInput, otpSigninUserRefInput) ||
@@ -519,6 +594,9 @@ class _$LoginStateImpl implements _LoginState {
         token,
         userId,
         embedded,
+        const DeepCollectionEquality().hash(_embeddedExtras),
+        const DeepCollectionEquality().hash(_embeddedCallbackData),
+        const DeepCollectionEquality().hash(embeddedRequestError),
         coreUrlInput,
         otpSigninUserRefInput,
         otpSigninCodeInput,
@@ -557,6 +635,9 @@ abstract class _LoginState implements LoginState {
       final String? token,
       final String? userId,
       final LoginEmbedded? embedded,
+      final Map<String, dynamic>? embeddedExtras,
+      final Map<String, dynamic>? embeddedCallbackData,
+      final Object? embeddedRequestError,
       final UrlInput coreUrlInput,
       final UserRefInput otpSigninUserRefInput,
       final CodeInput otpSigninCodeInput,
@@ -591,7 +672,14 @@ abstract class _LoginState implements LoginState {
   String?
       get userId; // Used to represent an embedded launch page or a login type within tabbed navigation
   @override
-  LoginEmbedded? get embedded;
+  LoginEmbedded?
+      get embedded; // Extras and callback data that returned from the embedded page
+  @override
+  Map<String, dynamic>? get embeddedExtras;
+  @override
+  Map<String, dynamic>? get embeddedCallbackData;
+  @override
+  Object? get embeddedRequestError;
   @override
   UrlInput get coreUrlInput;
   @override
