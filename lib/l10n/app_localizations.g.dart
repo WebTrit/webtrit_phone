@@ -64,7 +64,7 @@ import 'app_localizations_uk.g.dart';
 /// property.
 abstract class AppLocalizations {
   AppLocalizations(String locale)
-      : localeName = intl.Intl.canonicalizedLocale(locale.toString());
+    : localeName = intl.Intl.canonicalizedLocale(locale.toString());
 
   final String localeName;
 
@@ -87,17 +87,17 @@ abstract class AppLocalizations {
   /// of delegates is preferred or required.
   static const List<LocalizationsDelegate<dynamic>> localizationsDelegates =
       <LocalizationsDelegate<dynamic>>[
-    delegate,
-    GlobalMaterialLocalizations.delegate,
-    GlobalCupertinoLocalizations.delegate,
-    GlobalWidgetsLocalizations.delegate,
-  ];
+        delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ];
 
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
     Locale('en'),
     Locale('it'),
-    Locale('uk')
+    Locale('uk'),
   ];
 
   /// No description provided for @account_selfCarePasswordExpired_message.
@@ -1143,7 +1143,9 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'An incompatible instance version provided, please contact the administrator of your system (actual: {actual}, supported: {supportedConstraint})'**
   String login_CoreVersionUnsupportedExceptionError(
-      String actual, String supportedConstraint);
+    String actual,
+    String supportedConstraint,
+  );
 
   /// No description provided for @login_RequestFailureEmptyEmailError.
   ///
@@ -1456,8 +1458,10 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Incompatible WebTrit Cloud Backend version, please contact the administrator of your system.\n\nInstance version:\n{actual}\n\nSupported version:\n{supportedConstraint}'**
   String
-      main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError(
-          String actual, String supportedConstraint);
+  main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError(
+    String actual,
+    String supportedConstraint,
+  );
 
   /// No description provided for @main_CompatibilityIssueDialog_title.
   ///
@@ -2038,7 +2042,7 @@ abstract class AppLocalizations {
   /// No description provided for @notifications_errorSnackBar_callWhileUnregistered.
   ///
   /// In en, this message translates to:
-  /// **'Sorry, your application is currently disconnected from the WebTrit core servers, so it can\'t call right now. Please go to the settings page and slide the online status toggle switch off and on again to reestablish the connection'**
+  /// **'You\'re currently unable to place calls. Please check your account status or contact support.'**
   String get notifications_errorSnackBar_callWhileUnregistered;
 
   /// No description provided for @notifications_errorSnackBar_SignalingConnectFailed.
@@ -2052,14 +2056,16 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Disconnected from the core with the code: {codeName}'**
   String notifications_errorSnackBar_signalingDisconnectWithCodeName(
-      String codeName);
+    String codeName,
+  );
 
   /// No description provided for @notifications_errorSnackBar_signalingDisconnectWithSystemReason.
   ///
   /// In en, this message translates to:
   /// **'Disconnected from the core due to the following reason: {reason}'**
   String notifications_errorSnackBar_signalingDisconnectWithSystemReason(
-      String reason);
+    String reason,
+  );
 
   /// No description provided for @notifications_errorSnackBar_SignalingSessionMissed.
   ///
@@ -2084,7 +2090,8 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Registration with the remote VoIP system failed due to the following reason: {reason}'**
   String notifications_errorSnackBar_sipRegistrationFailed_WithSystemReason(
-      String reason);
+    String reason,
+  );
 
   /// No description provided for @notifications_errorSnackBar_sipServiceUnavailable.
   ///
@@ -3688,8 +3695,9 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
   }
 
   throw FlutterError(
-      'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
-      'an issue with the localizations generation tool. Please file an issue '
-      'on GitHub with a reproducible sample app and the gen-l10n configuration '
-      'that was used.');
+    'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
+    'an issue with the localizations generation tool. Please file an issue '
+    'on GitHub with a reproducible sample app and the gen-l10n configuration '
+    'that was used.',
+  );
 }

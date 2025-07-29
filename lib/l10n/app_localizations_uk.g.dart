@@ -609,7 +609,9 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String login_CoreVersionUnsupportedExceptionError(
-      String actual, String supportedConstraint) {
+    String actual,
+    String supportedConstraint,
+  ) {
     return 'Непідтримувана версія екземпляра, будь ласка, зверніться до адміністратора вашої системи (фактична: $actual, підтримувана: $supportedConstraint)';
   }
 
@@ -803,8 +805,10 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String
-      main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError(
-          String actual, String supportedConstraint) {
+  main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError(
+    String actual,
+    String supportedConstraint,
+  ) {
     return 'Несумісна версія WebTrit Cloud Backend, будь ласка, зв\'яжіться з адміністратором вашої системи.\n\nВерсія екземпляру:\n$actual\n\nПідтримувана версія:\n$supportedConstraint\n';
   }
 
@@ -1136,7 +1140,7 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get notifications_errorSnackBar_callWhileUnregistered =>
-      'Вибачте, ваш додаток наразі відключений від серверів WebTrit, тому не може здійснювати дзвінки. Будь ласка, перейдіть у налаштування та вимкніть/увімкніть онлайн-статус, щоб відновити підключення.';
+      'Зараз ви не можете здійснювати дзвінки. Перевірте статус свого облікового запису або зверніться до служби підтримки.';
 
   @override
   String get notifications_errorSnackBar_SignalingConnectFailed =>
@@ -1144,13 +1148,15 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String notifications_errorSnackBar_signalingDisconnectWithCodeName(
-      String codeName) {
+    String codeName,
+  ) {
     return 'Від’єднано від ядра за кодом: $codeName';
   }
 
   @override
   String notifications_errorSnackBar_signalingDisconnectWithSystemReason(
-      String reason) {
+    String reason,
+  ) {
     return 'Від’єднано від ядра з причини: $reason';
   }
 
@@ -1168,7 +1174,8 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String notifications_errorSnackBar_sipRegistrationFailed_WithSystemReason(
-      String reason) {
+    String reason,
+  ) {
     return 'Помилка реєстрації у віддаленій системі VoIP з причини: $reason';
   }
 
