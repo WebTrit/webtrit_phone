@@ -355,6 +355,9 @@ class LoginCubit extends Cubit<LoginState> with SystemInfoApiMapper {
   ) async {
     emit(state.copyWith(
       processing: true,
+      embeddedExtras: extras,
+      embeddedCallbackData: embeddedCallbackData,
+      embeddedRequestError: null,
     ));
 
     try {
@@ -378,8 +381,12 @@ class LoginCubit extends Cubit<LoginState> with SystemInfoApiMapper {
     } catch (e) {
       notificationsBloc.add(NotificationsSubmitted(LoginErrorNotification(e)));
 
-      emit(state.copyWith(processing: false));
+      emit(state.copyWith(processing: false, embeddedRequestError: e));
     }
+  }
+
+  void clearEmbeddedRequestError() {
+    emit(state.copyWith(embeddedRequestError: null));
   }
 
   void loginSignupRequestSubmitted() async {
@@ -550,6 +557,7 @@ class LoginCubit extends Cubit<LoginState> with SystemInfoApiMapper {
         email: email,
       ),
       extraPayload: extraPayload,
+      options: RequestOptions.withExtraRetries(),
     );
   }
 }

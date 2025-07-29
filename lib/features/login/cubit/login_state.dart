@@ -18,6 +18,10 @@ class LoginState with _$LoginState {
     String? userId,
     // Used to represent an embedded launch page or a login type within tabbed navigation
     LoginEmbedded? embedded,
+    // Extras and callback data that returned from the embedded page
+    Map<String, dynamic>? embeddedExtras,
+    Map<String, dynamic>? embeddedCallbackData,
+    Object? embeddedRequestError,
     @Default(UrlInput.pure()) UrlInput coreUrlInput,
     @Default(UserRefInput.pure()) UserRefInput otpSigninUserRefInput,
     @Default(CodeInput.pure()) CodeInput otpSigninCodeInput,
