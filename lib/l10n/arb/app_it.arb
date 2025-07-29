@@ -712,7 +712,7 @@
   "@notifications_errorSnackBar_callUserMedia": {},
   "notifications_errorSnackBar_callWhileOffline": "Impossibile eseguire la chiamata, verificare lo stato della connessione",
   "@notifications_errorSnackBar_callWhileOffline": {},
-  "notifications_errorSnackBar_callWhileUnregistered": "Siamo spiacenti, la tua applicazione è attualmente disconnessa dai server principali WebTrit e quindi non è possibile chiamare in questo momento. Vai alla pagina delle impostazioni e fai scorrere l'interruttore dello stato online ( a OFF e poi ancora ad ON) per ristabilire la connessione",
+  "notifications_errorSnackBar_callWhileUnregistered": "Al momento non puoi effettuare chiamate. Controlla lo stato del tuo account o contatta l'assistenza.",
   "@notifications_errorSnackBar_callWhileUnregistered": {},
   "notifications_errorSnackBar_SignalingConnectFailed": "Connessione al server non riuscita, tentativo di riconnessione in corso",
   "@notifications_errorSnackBar_SignalingConnectFailed": {},

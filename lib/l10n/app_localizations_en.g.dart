@@ -600,7 +600,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String login_CoreVersionUnsupportedExceptionError(
-      String actual, String supportedConstraint) {
+    String actual,
+    String supportedConstraint,
+  ) {
     return 'An incompatible instance version provided, please contact the administrator of your system (actual: $actual, supported: $supportedConstraint)';
   }
 
@@ -788,8 +790,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String
-      main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError(
-          String actual, String supportedConstraint) {
+  main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError(
+    String actual,
+    String supportedConstraint,
+  ) {
     return 'Incompatible WebTrit Cloud Backend version, please contact the administrator of your system.\n\nInstance version:\n$actual\n\nSupported version:\n$supportedConstraint';
   }
 
@@ -1121,7 +1125,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get notifications_errorSnackBar_callWhileUnregistered =>
-      'Sorry, your application is currently disconnected from the WebTrit core servers, so it can\'t call right now. Please go to the settings page and slide the online status toggle switch off and on again to reestablish the connection';
+      'You\'re currently unable to place calls. Please check your account status or contact support.';
 
   @override
   String get notifications_errorSnackBar_SignalingConnectFailed =>
@@ -1129,13 +1133,15 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String notifications_errorSnackBar_signalingDisconnectWithCodeName(
-      String codeName) {
+    String codeName,
+  ) {
     return 'Disconnected from the core with the code: $codeName';
   }
 
   @override
   String notifications_errorSnackBar_signalingDisconnectWithSystemReason(
-      String reason) {
+    String reason,
+  ) {
     return 'Disconnected from the core due to the following reason: $reason';
   }
 
@@ -1153,7 +1159,8 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String notifications_errorSnackBar_sipRegistrationFailed_WithSystemReason(
-      String reason) {
+    String reason,
+  ) {
     return 'Registration with the remote VoIP system failed due to the following reason: $reason';
   }
 
