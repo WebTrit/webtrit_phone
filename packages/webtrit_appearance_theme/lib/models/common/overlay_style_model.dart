@@ -7,11 +7,10 @@ part 'overlay_style_model.g.dart';
 @Freezed()
 class OverlayStyleModel with _$OverlayStyleModel {
   const factory OverlayStyleModel({
-    required String statusBarColor,
-    required String statusBarIconBrightness,
-    String? statusBarBrightness,
     String? systemNavigationBarColor,
     String? systemNavigationBarIconBrightness,
+    String? statusBarIconBrightness,
+    String? statusBarBrightness,
   }) = _OverlayStyleModel;
 
   factory OverlayStyleModel.fromJson(Map<String, dynamic> json) => _$OverlayStyleModelFromJson(json);

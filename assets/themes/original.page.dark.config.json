@@ -2,9 +2,9 @@
   "login": {
     "modeSelect": {
       "systemUiOverlayStyle": {
-        "statusBarColor": "#0A0A0A",
-        "statusBarIconBrightness": "light",
-        "systemNavigationBarColor": "#0A0A0A",
+        "statusBarIconBrightness": "dark",
+        "statusBarBrightness": "light",
+        "systemNavigationBarColor": "#000000",
         "systemNavigationBarIconBrightness": "light"
       },
       "buttonLoginStyleType": "neutralOnDark",
@@ -13,9 +13,9 @@
   },
   "dialing": {
     "systemUiOverlayStyle": {
-      "statusBarColor": "#0A0A0A",
-      "statusBarIconBrightness": "light",
-      "systemNavigationBarColor": "#0A0A0A",
+      "statusBarIconBrightness": "dark",
+      "statusBarBrightness": "light",
+      "systemNavigationBarColor": "#000000",
       "systemNavigationBarIconBrightness": "light"
     },
     "callInfo": {
