@@ -330,6 +330,7 @@ class _MainShellState extends State<MainShell> {
                 webRtcOptionsBuilder: WebrtcOptionsWithAppSettingsBuilder(appPreferences),
                 userMediaBuilder: userMediaBuilder,
                 contactNameResolver: contactNameResolver,
+                callErrorReporter: DefaultCallErrorReporter((n) => notificationsBloc.add(NotificationsSubmitted(n))),
                 iceFilter: FilterWithAppSettings(appPreferences),
                 peerConnectionPolicyApplier: pearConnectionPolicyApplier,
               )..add(const CallStarted());

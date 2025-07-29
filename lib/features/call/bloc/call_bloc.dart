@@ -60,6 +60,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   final UserMediaBuilder userMediaBuilder;
   final PeerConnectionPolicyApplier? peerConnectionPolicyApplier;
   final ContactNameResolver contactNameResolver;
+  final CallErrorReporter callErrorReporter;
 
   StreamSubscription<List<ConnectivityResult>>? _connectivityChangedSubscription;
   StreamSubscription<PendingCall>? _pendingCallHandlerSubscription;
@@ -85,6 +86,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     required this.callkeepConnections,
     required this.userMediaBuilder,
     required this.contactNameResolver,
+    required this.callErrorReporter,
     this.sdpMunger,
     this.webRtcOptionsBuilder,
     this.iceFilter,
@@ -1076,9 +1078,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
           }
         });
       }
-    } catch (e) {
-      _logger.warning('__onCallSignalingEventUpdating && jsep error: $e');
-      submitNotification(DefaultErrorNotification(e));
+    } catch (e, s) {
+      callErrorReporter.handle(e, s, '__onCallSignalingEventUpdating && jsep error:');
 
       _peerConnectionCompleteError(event.callId, e);
       add(_ResetStateEvent.completeCall(event.callId));
@@ -1579,9 +1580,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       // After request succesfully submitted, transfer flow will continue
       // by TransferringEvent event from anus and handled in [_CallSignalingEventTransferring]
       // that means that call transfering is now in progress
-    } catch (e) {
-      _logger.warning('_onCallControlEventBlindTransferSubmitted request error: $e');
-      submitNotification(DefaultErrorNotification(e));
+    } catch (e, s) {
+      callErrorReporter.handle(e, s, '_onCallControlEventBlindTransferSubmitted request error:');
     }
   }
 
@@ -1611,9 +1611,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       // After request succesfully submitted, transfer flow will continue
       // by TransferringEvent event from anus and handled in [_CallSignalingEventTransferring]
       // that means that call transfering is now in progress
-    } catch (e) {
-      _logger.warning('_onCallControlEventAttendedTransferSubmitted request error: $e');
-      submitNotification(DefaultErrorNotification(e));
+    } catch (e, s) {
+      callErrorReporter.handle(e, s, '_onCallControlEventAttendedTransferSubmitted request error:');
     }
   }
 
@@ -1678,9 +1677,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       emit(state.copyWithMappedActiveCall(callId, (activeCall) {
         return activeCall.copyWith(transfer: null);
       }));
-    } catch (e) {
-      _logger.warning('_onCallControlEventAttendedRequestDeclined request error: $e');
-      submitNotification(DefaultErrorNotification(e));
+    } catch (e, s) {
+      callErrorReporter.handle(e, s, '_onCallControlEventAttendedRequestDeclined request error:');
     }
   }
 
@@ -1833,11 +1831,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       emit(state.copyWithMappedActiveCall(event.callId, (activeCall) {
         return activeCall.copyWith(processingStatus: CallProcessingStatus.outgoingOfferSent);
       }));
-    } catch (e) {
+    } catch (e, s) {
       // Handles exceptions during the outgoing call perform event, sends a notification, stops the ringtone, and completes the peer connection with an error.
       // The specific error "Error setting ICE locally" indicates an issue with ICE (Interactive Connectivity Establishment) negotiation in the WebRTC signaling process.
-      _logger.warning('__onCallPerformEventStarted: $e');
-      submitNotification(DefaultErrorNotification(e));
+      callErrorReporter.handle(e, s, '__onCallPerformEventStarted error:');
 
       await _stopRingbackSound();
       _peerConnectionCompleteError(event.callId, e);
@@ -1929,8 +1926,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
       _peerConnectionComplete(event.callId, peerConnection);
     } catch (e, s) {
-      _logger.warning('__onCallPerformEventAnswered: $e', e, s);
-
       _peerConnectionCompleteError(event.callId, e);
       add(_ResetStateEvent.completeCall(event.callId));
 
@@ -1940,20 +1935,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       final declineRequest = DeclineRequest(transaction: declineId, line: call.line, callId: call.callId);
       _signalingClient?.execute(declineRequest).ignore();
 
-      switch (e) {
-        case UserMediaError _:
-          submitNotification(const CallUserMediaErrorNotification());
-          break;
-        case SDPConfigurationError _:
-          submitNotification(const CallSdpConfigurationErrorNotification());
-          break;
-        case TimeoutException _:
-          submitNotification(const CallNegotiationTimeoutNotification());
-          break;
-        default:
-          submitNotification(DefaultErrorNotification(e));
-          break;
-      }
+      callErrorReporter.handle(e, s, '__onCallPerformEventAnswered error:');
     }
   }
 
@@ -1993,8 +1975,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
           line: activeCall.line,
           callId: activeCall.callId,
         );
-        await _signalingClient?.execute(declineRequest).catchError((e) {
-          _logger.warning('__onCallPerformEventEnded declineRequest error: $e');
+        await _signalingClient?.execute(declineRequest).catchError((e, s) {
+          callErrorReporter.handle(e, s, '__onCallPerformEventEnded declineRequest error');
         });
       } else {
         final hangupRequest = HangupRequest(
@@ -2002,8 +1984,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
           line: activeCall.line,
           callId: activeCall.callId,
         );
-        await _signalingClient?.execute(hangupRequest).catchError((e) {
-          _logger.warning('__onCallPerformEventEnded hangupRequest error: $e');
+        await _signalingClient?.execute(hangupRequest).catchError((e, s) {
+          callErrorReporter.handle(e, s, '__onCallPerformEventEnded hangupRequest error');
         });
       }
 
@@ -2044,9 +2026,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       emit(state.copyWithMappedActiveCall(event.callId, (activeCall) {
         return activeCall.copyWith(held: event.onHold);
       }));
-    } catch (e) {
-      _logger.warning('__onCallPerformEventSetHeld: $e');
-      submitNotification(DefaultErrorNotification(e));
+    } catch (e, s) {
+      callErrorReporter.handle(e, s, '__onCallPerformEventSetHeld error');
 
       _peerConnectionCompleteError(event.callId, e);
       add(_ResetStateEvent.completeCall(event.callId));
@@ -2151,9 +2132,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
             return _signalingClient?.execute(iceTrickleRequest);
           }
         });
-      } catch (e) {
-        _logger.warning('__onPeerConnectionEventIceGatheringStateChanged: $e');
-        submitNotification(DefaultErrorNotification(e));
+      } catch (e, s) {
+        callErrorReporter.handle(e, s, '__onPeerConnectionEventIceGatheringStateChanged error');
 
         _peerConnectionCompleteError(event.callId, e);
         add(_ResetStateEvent.completeCall(event.callId));
@@ -2190,9 +2170,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
             await _signalingClient?.execute(updateRequest);
           }
         });
-      } catch (e) {
-        _logger.warning('__onPeerConnectionEventIceConnectionStateChanged: $e');
-        submitNotification(DefaultErrorNotification(e));
+      } catch (e, s) {
+        callErrorReporter.handle(e, s, '__onPeerConnectionEventIceConnectionStateChanged error');
 
         _peerConnectionCompleteError(event.callId, e);
         add(_ResetStateEvent.completeCall(event.callId));
@@ -2220,9 +2199,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
           return _signalingClient?.execute(iceTrickleRequest);
         }
       });
-    } catch (e) {
-      _logger.warning('__onPeerConnectionEventIceCandidateIdentified error: $e');
-      submitNotification(DefaultErrorNotification(e));
+    } catch (e, s) {
+      callErrorReporter.handle(e, s, '__onPeerConnectionEventIceCandidateIdentified error');
 
       _peerConnectionCompleteError(event.callId, e);
       add(_ResetStateEvent.completeCall(event.callId));
@@ -2387,11 +2365,26 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
           if (callEvent is AcceptedEvent || callEvent is ProceedingEvent) {
             // Handle outgoing or accepted calls. If the event is `AcceptedEvent` or `ProceedingEvent`,
             // initiate a hang-up request to align the signaling state.
-            await _signalingHungUpCall(callEvent.line, callEvent.callId);
+            final hangupRequest = HangupRequest(
+              transaction: WebtritSignalingClient.generateTransactionId(),
+              line: callEvent.line,
+              callId: callEvent.callId,
+            );
+            await _signalingClient?.execute(hangupRequest).catchError((e, s) {
+              callErrorReporter.handle(e, s, '__onCallPerformEventEnded hangupRequest error');
+            });
+
             return;
           } else if (callEvent is IncomingCallEvent) {
             // Handle incoming calls. If the event is `IncomingCallEvent`, send a decline request to update the signaling state accordingly.
-            await _signalingDeclineCall(callEvent.line, callEvent.callId);
+            final declineRequest = DeclineRequest(
+              transaction: WebtritSignalingClient.generateTransactionId(),
+              line: callEvent.line,
+              callId: callEvent.callId,
+            );
+            await _signalingClient?.execute(declineRequest).catchError((e, s) {
+              callErrorReporter.handle(e, s, '__onCallPerformEventEnded declineRequest error');
+            });
             return;
           }
         }
@@ -2530,7 +2523,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     add(_SignalingClientEvent.disconnected(code, reason));
   }
 
-  // WidgetsBindingObserver
+// WidgetsBindingObserver
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
@@ -2538,7 +2531,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     add(_AppLifecycleStateChanged(state));
   }
 
-  // CallkeepDelegate
+// CallkeepDelegate
 
   @override
   void continueStartCallIntent(
@@ -2645,7 +2638,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _logger.warning('didReset');
   }
 
-  // helpers
+// helpers
 
   Future<bool> _perform(_CallPerformEvent callPerformEvent) {
     add(callPerformEvent);
@@ -2738,13 +2731,17 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
           // localDescription should be set before sending the offer to transition into have-local-offer state.
           await peerConnection.setLocalDescription(localDescription);
 
-          final updateRequest = UpdateRequest(
-            transaction: WebtritSignalingClient.generateTransactionId(),
-            line: lineId,
-            callId: callId,
-            jsep: localDescription.toMap(),
-          );
-          await _signalingClient?.execute(updateRequest);
+          try {
+            final updateRequest = UpdateRequest(
+              transaction: WebtritSignalingClient.generateTransactionId(),
+              line: lineId,
+              callId: callId,
+              jsep: localDescription.toMap(),
+            );
+            await _signalingClient?.execute(updateRequest);
+          } catch (e, s) {
+            callErrorReporter.handle(e, s, '_createPeerConnection:onRenegotiationNeeded error');
+          }
         }
       }
       ..onTrack = (event) {
@@ -2768,34 +2765,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   Future<void> _playRingbackSound() => _callkeepSound.playRingbackSound();
 
   Future<void> _stopRingbackSound() => _callkeepSound.stopRingbackSound();
-
-  // Signaling base requests
-
-  // TODO(Serdun): Replace other hangup request calls with this method for consistency.
-  Future<void> _signalingHungUpCall(int? line, String callId) async {
-    final hangupRequest = HangupRequest(
-      transaction: WebtritSignalingClient.generateTransactionId(),
-      line: line,
-      callId: callId,
-    );
-    // Attempt to execute the hangup request to synchronize the signaling state.
-    await _signalingClient?.execute(hangupRequest).catchError((e) {
-      _logger.warning('_signalingHungUpCall hangupRequest error: $e');
-    });
-  }
-
-  // TODO(Serdun): Replace other decline request calls with this method for consistency.
-  Future<void> _signalingDeclineCall(int? line, String callId) async {
-    final hangupRequest = DeclineRequest(
-      transaction: WebtritSignalingClient.generateTransactionId(),
-      line: line,
-      callId: callId,
-    );
-    // Attempt to execute the hangup request to synchronize the signaling state.
-    await _signalingClient?.execute(hangupRequest).catchError((e) {
-      _logger.warning('_signalingDeclineCall hangupRequest error: $e');
-    });
-  }
 
   Future<void> _assingUserActiveCalls(List<UserActiveCall> userActiveCalls) async {
     final pullableCalls = userActiveCalls
