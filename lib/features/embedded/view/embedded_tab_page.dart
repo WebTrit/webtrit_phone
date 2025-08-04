@@ -47,6 +47,8 @@ class EmbeddedTabPage extends StatelessWidget {
 
           return EmbeddedScreen(
             initialUri: data.data!.uri,
+            reconnectStrategy: data.data?.reconnectStrategy,
+            enableConsoleLogCapture: data.data?.enableConsoleLogCapture,
             appBar: MainAppBar(
               title: Text(context.parseL10n(data.titleL10n)),
               context: context,

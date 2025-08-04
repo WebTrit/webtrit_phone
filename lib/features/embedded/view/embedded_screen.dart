@@ -3,10 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logging/logging.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
+import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 
 import '../bloc/embedded_cubit.dart';
 
@@ -17,11 +18,19 @@ class EmbeddedScreen extends StatefulWidget {
     required this.initialUri,
     required this.appBar,
     this.shouldForwardPop = true,
+    this.reconnectStrategy,
+    this.enableConsoleLogCapture,
     super.key,
   });
 
   final Uri initialUri;
   final PreferredSizeWidget appBar;
+
+  /// If true, the console log will be captured and forwarded to the logger.
+  final bool? enableConsoleLogCapture;
+
+  /// The strategy to apply when the network reconnects.
+  final ReconnectStrategy? reconnectStrategy;
 
   /// If true, the pop action will be forwarded to the WebView if backstack is available.
   final bool shouldForwardPop;
@@ -41,8 +50,11 @@ class _EmbeddedScreenState extends State<EmbeddedScreen> {
   void initState() {
     final connectivityStream = Connectivity().onConnectivityChanged;
 
-    _connectivityRecoveryStrategy = SoftReloadRecoveryStrategy(connectivityStream: connectivityStream);
     _pageInjectionStrategy = DefaultPayloadInjectionStrategy();
+    _connectivityRecoveryStrategy = ConnectivityRecoveryStrategy.create(
+      type: widget.reconnectStrategy ?? ReconnectStrategy.softReload,
+      connectivityStream: connectivityStream,
+    );
 
     super.initState();
   }
