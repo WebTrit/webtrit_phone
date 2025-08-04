@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:webtrit_phone/widgets/web_view_container.dart';
+import 'package:webtrit_phone/widgets/webview/web_view_container.dart';
 
 void main() {
   group('RetryUntilSuccessStrategy', () {
