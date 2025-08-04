@@ -79,8 +79,7 @@ class _EmbeddedScreenState extends State<EmbeddedScreen> {
               connectivityRecoveryStrategy: _connectivityRecoveryStrategy,
               pageInjectionStrategies: [_pageInjectionStrategy],
               showToolbar: false,
-              // TODO: Move to environment config
-              enableEmbeddedLogging: true,
+              enableEmbeddedLogging: widget.enableConsoleLogCapture ?? false,
               userAgent: UserAgent.of(context),
               errorBuilder: _buildErrorBuilder(),
               onUrlChange: (url) async {
