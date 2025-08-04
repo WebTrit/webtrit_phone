@@ -14,7 +14,7 @@ export 'package:webview_flutter/webview_flutter.dart' show JavaScriptMessage;
 import 'package:webtrit_phone/core/mixins/widget_state_mixin.dart';
 import 'package:webtrit_phone/widgets/webview/web_view_content.dart';
 import 'package:webtrit_phone/widgets/webview/web_view_toolbar.dart';
-import 'package:webtrit_phone/widgets/webview/extensions/extensions/extensions.dart';
+import 'package:webtrit_phone/widgets/webview/extensions/extensions.dart';
 
 import 'package:webtrit_phone/l10n/l10n.dart';
 
