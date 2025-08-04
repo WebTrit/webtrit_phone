@@ -773,8 +773,8 @@ class SoftReloadRecoveryStrategy implements ConnectivityRecoveryStrategy {
   }
 
   /// Attempts to reload the WebView.
-  void _onRetryAttempt() {
-    _controller.reload();
+  Future<void> _onRetryAttempt() {
+    return _controller.reload();
   }
 
   /// Stops the retry timer and resets flags.
@@ -845,7 +845,7 @@ class NotifyOnlyConnectivityRecoveryStrategy extends SoftReloadRecoveryStrategy 
   final String reconnectCallbackFunction;
 
   @override
-  void _onRetryAttempt() async {
+  Future<void> _onRetryAttempt() async {
     final hasInternet = await _connectivityChecker.checkConnection();
     if (hasInternet && hasSuccessfulLoad) {
       _logger.info('NotifyOnlyConnectivityRecoveryStrategy: Connectivity restored, notifying WebView');
@@ -874,7 +874,7 @@ class HardReloadRecoveryStrategy extends SoftReloadRecoveryStrategy {
   final Uri initialUri;
 
   @override
-  void _onRetryAttempt() {
-    _controller.loadRequest(initialUri);
+  Future<void> _onRetryAttempt() {
+    return _controller.loadRequest(initialUri);
   }
 }
