@@ -270,7 +270,7 @@ class _WebViewContainerState extends State<WebViewContainer> with WidgetStateMix
         } else if (raw.startsWith('LOG:')) {
           _logger.webViewLog(level: 'LOG', message: raw.substring(4).trim());
         } else {
-          _logger.webViewLog(level: 'LOG', message: raw);
+          _logger.webViewLog(level: 'INFO', message: raw);
         }
       },
     );
