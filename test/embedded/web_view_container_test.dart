@@ -3,7 +3,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import 'package:webtrit_phone/widgets/web_view_container.dart';
+import 'package:webtrit_phone/widgets/webview/web_view_container.dart';
 
 class MockCanLaunch extends Mock {
   Future<bool> call(Uri uri);

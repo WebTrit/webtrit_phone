@@ -9,7 +9,7 @@ import 'package:webview_flutter/webview_flutter.dart';
 // ignore: depend_on_referenced_packages
 import 'package:plugin_platform_interface/plugin_platform_interface.dart' show MockPlatformInterfaceMixin;
 
-import 'package:webtrit_phone/widgets/web_view_container.dart';
+import 'package:webtrit_phone/widgets/webview/web_view_container.dart';
 
 class FakeWebViewPlatform extends Fake with MockPlatformInterfaceMixin implements WebViewPlatform {}
 

@@ -64,6 +64,8 @@ class _EmbeddedScreenState extends State<EmbeddedScreen> {
               connectivityRecoveryStrategy: _connectivityRecoveryStrategy,
               pageInjectionStrategies: [_pageInjectionStrategy],
               showToolbar: false,
+              // TODO: Move to environment config
+              enableEmbeddedLogging: true,
               userAgent: UserAgent.of(context),
               onUrlChange: (url) async {
                 _cubit.onUrlChange(url ?? '');

@@ -12,8 +12,9 @@ import 'package:logging/logging.dart';
 export 'package:webview_flutter/webview_flutter.dart' show JavaScriptMessage;
 
 import 'package:webtrit_phone/core/mixins/widget_state_mixin.dart';
-import 'package:webtrit_phone/widgets/web_view_content.dart';
-import 'package:webtrit_phone/widgets/web_view_toolbar.dart';
+import 'package:webtrit_phone/widgets/webview/web_view_content.dart';
+import 'package:webtrit_phone/widgets/webview/web_view_toolbar.dart';
+import 'package:webtrit_phone/widgets/webview/extensions/extensions/extensions.dart';
 
 import 'package:webtrit_phone/l10n/l10n.dart';
 
@@ -36,6 +37,7 @@ class WebViewContainer extends StatefulWidget {
     this.onUrlChange,
     this.connectivityRecoveryStrategy,
     this.pageInjectionStrategies = const [],
+    this.enableEmbeddedLogging = false,
   });
 
   final Widget? title;
@@ -47,6 +49,7 @@ class WebViewContainer extends StatefulWidget {
   final TransitionBuilder? builder;
   final String userAgent;
   final WebViewController? webViewController;
+  final bool enableEmbeddedLogging;
 
   final void Function()? onPageLoadedSuccess;
   final void Function(WebResourceError error)? onPageLoadedFailed;
@@ -219,7 +222,7 @@ class _WebViewContainerState extends State<WebViewContainer> with WidgetStateMix
 
   void _initializeWebViewController() {
     final navigationDelegate = NavigationDelegate(
-      onUrlChange: (url) => widget.onUrlChange?.call(url.url),
+      onUrlChange: _onUrlChange,
       onPageFinished: _onPageFinished,
       onProgress: _onProgress,
       onNavigationRequest: _navigationRequestHandler.handle,
@@ -236,9 +239,46 @@ class _WebViewContainerState extends State<WebViewContainer> with WidgetStateMix
       _webViewController.addJavaScriptChannel(name, onMessageReceived: onMessageReceived);
     }
 
+    if (widget.enableEmbeddedLogging) {
+      _setupConsoleLoggerChannel();
+    }
+
     widget.connectivityRecoveryStrategy?.startMonitoring(
       tryReload: () => _webViewController.reload(),
     );
+  }
+
+  /// Registers the `ConsoleLog` JavaScript channel to receive log messages
+  /// from the WebView (injected via `_injectConsoleLogging()`).
+  ///
+  /// Parses log level prefixes (e.g. "ERROR:", "INFO:") and routes messages
+  /// to the appropriate Dart logger level (`_logger.severe`, `.info`, etc.).
+  void _setupConsoleLoggerChannel() {
+    _webViewController.addJavaScriptChannel(
+      'ConsoleLog',
+      onMessageReceived: (message) {
+        final raw = message.message.trim();
+
+        if (raw.startsWith('ERROR:')) {
+          _logger.webViewLog(level: 'ERROR', message: raw.substring(6).trim());
+        } else if (raw.startsWith('WARN:')) {
+          _logger.webViewLog(level: 'WARN', message: raw.substring(5).trim());
+        } else if (raw.startsWith('INFO:')) {
+          _logger.webViewLog(level: 'INFO', message: raw.substring(5).trim());
+        } else if (raw.startsWith('DEBUG:')) {
+          _logger.webViewLog(level: 'DEBUG', message: raw.substring(6).trim());
+        } else if (raw.startsWith('LOG:')) {
+          _logger.webViewLog(level: 'LOG', message: raw.substring(4).trim());
+        } else {
+          _logger.webViewLog(level: 'LOG', message: raw);
+        }
+      },
+    );
+  }
+
+  void _onUrlChange(UrlChange change) {
+    _logger.fine('URL changed: ${change.url}');
+    widget.onUrlChange?.call(change.url);
   }
 
   void _onPageFinished(String url) {
@@ -264,6 +304,9 @@ class _WebViewContainerState extends State<WebViewContainer> with WidgetStateMix
           }
 
           _injectMediaQueryData();
+          if (widget.enableEmbeddedLogging) {
+            _injectConsoleLogging();
+          }
         } else {
           widget.connectivityRecoveryStrategy?._onPageLoadFailed();
           _logger.warning('Skipped injection, page loading failed');
@@ -328,6 +371,41 @@ class _WebViewContainerState extends State<WebViewContainer> with WidgetStateMix
     ''';
 
     _logger.finest('Injecting media query data: $jsonString');
+    _webViewController.runJavaScript(script);
+  }
+
+  /// Injects JavaScript that overrides `console.*` methods to:
+  /// - Send logs to Flutter via the `ConsoleLog` channel (e.g. "ERROR: message")
+  /// - Preserve original browser console output
+  ///
+  /// Must be used with `addJavaScriptChannel('ConsoleLog', ...)`.
+  /// Call after page load (e.g. in `onPageFinished`).
+  void _injectConsoleLogging() {
+    const script = '''
+    (function() {
+      function wrapConsole(method, level) {
+        const original = console[method];
+        console[method] = function(...args) {
+          try {
+            const message = args.map(a =>
+              typeof a === 'object' ? JSON.stringify(a) : a
+            ).join(' ');
+            ConsoleLog.postMessage(level + ": " + message);
+          } catch (e) {
+            ConsoleLog.postMessage(level + ": [Unserializable console args]");
+          }
+          original.apply(console, args);
+        };
+      }
+
+      wrapConsole('log', 'LOG');
+      wrapConsole('info', 'INFO');
+      wrapConsole('warn', 'WARN');
+      wrapConsole('error', 'ERROR');
+      wrapConsole('debug', 'DEBUG');
+    })();
+  ''';
+
     _webViewController.runJavaScript(script);
   }
 }
