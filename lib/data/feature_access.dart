@@ -227,9 +227,20 @@ class FeatureAccess {
       return _tryConfigureTermsFeature(appConfig).configData;
     }
 
+    // If strategy is not provided, default to hard reload.
+    final reconnectStrategy = embeddedDataResource?.reconnectStrategy != null
+        ? ReconnectStrategy.values.byName(embeddedDataResource!.reconnectStrategy!)
+        : ReconnectStrategy.hardReload;
+
     // Return a ConfigData instance if a valid resource URL is found, otherwise return null.
     return embeddedDataResource?.uriOrNull != null
-        ? EmbeddedData(id: embeddedDataResource!.id, uri: embeddedDataResource.uriOrNull!, titleL10n: item.titleL10n)
+        ? EmbeddedData(
+            id: embeddedDataResource!.id,
+            uri: embeddedDataResource.uriOrNull!,
+            titleL10n: item.titleL10n,
+            enableConsoleLogCapture: embeddedDataResource.enableConsoleLogCapture,
+            reconnectStrategy: reconnectStrategy,
+          )
         : null;
   }
 
@@ -560,6 +571,7 @@ class SystemNotificationsFeature {
 
   // Check if the core system supports system notifications and push sending.
   bool get coreSystemSupport => _coreSupportedFeatures.contains(kSystemNotificationsFeatureFlag);
+
   bool get coreSystemPushSupport => _coreSupportedFeatures.contains(kSystemNotificationsPushFeatureFlag);
 
   /// Check if the system notifications feature is enabled and supported by the remote system.
