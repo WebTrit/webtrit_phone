@@ -5,10 +5,12 @@ import 'package:logging/logging.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
+import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
+import '../../login/features/login_signup/widgets/widgets.dart';
 import '../bloc/embedded_cubit.dart';
 
 final _logger = Logger('EmbeddedScreen');
@@ -80,13 +82,11 @@ class _EmbeddedScreenState extends State<EmbeddedScreen> {
               // TODO: Move to environment config
               enableEmbeddedLogging: true,
               userAgent: UserAgent.of(context),
+              errorBuilder: _buildErrorBuilder(),
               onUrlChange: (url) async {
                 _cubit.onUrlChange(url ?? '');
                 final canGoBack = await _webViewController.canGoBack();
                 if (mounted) _cubit.onCanGoBackChange(canGoBack);
-              },
-              errorBuilder: (context, error, controller) {
-                return EmbeddedRequestError(error: error);
               },
             ),
           );
@@ -94,6 +94,23 @@ class _EmbeddedScreenState extends State<EmbeddedScreen> {
         listener: _onBlocStateChanged,
       ),
     );
+  }
+
+  /// Returns a native error dialog builder unless:
+  /// - the page loaded successfully at least once, and
+  /// - the strategy is [ReconnectStrategy.notifyOnly].
+  ///
+  /// This ensures SPA apps can self-recover via JS after reconnect.
+  Widget Function(BuildContext, WebResourceError, WebViewController)? _buildErrorBuilder() {
+    if (_connectivityRecoveryStrategy.hasSuccessfulLoad && widget.reconnectStrategy == ReconnectStrategy.notifyOnly) {
+      return null;
+    }
+
+    return (context, error, controller) => EmbeddedRequestErrorDialog(
+          title: error.titleL10n(context),
+          error: error.messageL10n(context),
+          onRetry: () => _webViewController.reload(),
+        );
   }
 
   void _onBlocStateChanged(BuildContext context, EmbeddedState state) {

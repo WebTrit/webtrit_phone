@@ -7,11 +7,12 @@ import 'package:flutter/material.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:stream_transform/stream_transform.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:webtrit_phone/models/models.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:logging/logging.dart';
 export 'package:webview_flutter/webview_flutter.dart' show JavaScriptMessage;
 
+import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/utils/utils.dart';
 import 'package:webtrit_phone/core/mixins/widget_state_mixin.dart';
 import 'package:webtrit_phone/widgets/webview/web_view_content.dart';
 import 'package:webtrit_phone/widgets/webview/web_view_toolbar.dart';
@@ -617,6 +618,9 @@ abstract class ConnectivityRecoveryStrategy {
     }
   }
 
+  /// Returns true if the page has successfully loaded at least once.
+  bool get hasSuccessfulLoad;
+
   /// Starts monitoring connectivity and retries based on the strategy.
   void _startMonitoring(WebViewController controller);
 
@@ -634,6 +638,9 @@ abstract class ConnectivityRecoveryStrategy {
 /// No reloads, retries, or JS notifications are performed.
 /// Useful when the WebView handles reconnection internally.
 class NoneConnectivityRecoveryStrategy implements ConnectivityRecoveryStrategy {
+  @override
+  bool get hasSuccessfulLoad => true;
+
   @override
   void _startMonitoring(WebViewController controller) {}
 
@@ -674,6 +681,11 @@ class SoftReloadRecoveryStrategy implements ConnectivityRecoveryStrategy {
   int _attempt = 0;
   bool _isConnected = false;
   bool _retryInProgress = false;
+  bool _hasSuccessfulLoad = false;
+
+  /// Returns true if the page has successfully loaded at least once.
+  @override
+  bool get hasSuccessfulLoad => _hasSuccessfulLoad;
 
   @override
   void _startMonitoring(WebViewController controller) {
@@ -781,6 +793,7 @@ class SoftReloadRecoveryStrategy implements ConnectivityRecoveryStrategy {
   @override
   void _onPageLoadSuccess() {
     _logger.info('Page load succeeded, stopping retries');
+    _hasSuccessfulLoad = true;
     _attempt = 0;
     _stopRetries();
   }
@@ -806,6 +819,7 @@ class SoftReloadRecoveryStrategy implements ConnectivityRecoveryStrategy {
   @override
   void _dispose() {
     _logger.info('Stopping recovery strategy');
+    _hasSuccessfulLoad = false;
     _subscription?.cancel();
     _subscription = null;
     _stopRetries();
@@ -819,32 +833,23 @@ class SoftReloadRecoveryStrategy implements ConnectivityRecoveryStrategy {
 class NotifyOnlyConnectivityRecoveryStrategy extends SoftReloadRecoveryStrategy {
   NotifyOnlyConnectivityRecoveryStrategy({
     required super.connectivityStream,
+    ConnectivityChecker? connectivityChecker,
     super.retryDelay,
     super.maxAttempts,
-  });
+  }) : _connectivityChecker = connectivityChecker ?? const DefaultConnectivityChecker();
 
-  bool _canInject = false;
-
-  @override
-  void _onPageLoadSuccess() {
-    super._onPageLoadSuccess();
-    _canInject = true;
-  }
+  final ConnectivityChecker _connectivityChecker;
 
   @override
-  void _onRetryAttempt() {
-    if (_canInject) {
+  void _onRetryAttempt() async {
+    final hasInternet = await _connectivityChecker.checkConnection();
+    if (hasInternet && hasSuccessfulLoad) {
+      _logger.info('NotifyOnlyConnectivityRecoveryStrategy: Connectivity restored, notifying WebView');
       _controller.runJavaScript('window.onReconnect?.()');
       _stopRetries();
     } else {
       super._onRetryAttempt();
     }
-  }
-
-  @override
-  void _dispose() {
-    _canInject = false;
-    super._dispose();
   }
 }
 
