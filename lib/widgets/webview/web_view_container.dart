@@ -711,6 +711,11 @@ class SoftReloadRecoveryStrategy implements ConnectivityRecoveryStrategy {
 
     _attempt++;
     _logger.info('Retry attempt $_attempt/$maxAttempts');
+    _onRetryAttempt();
+  }
+
+  /// Attempts to reload the WebView.
+  void _onRetryAttempt() {
     _controller.reload();
   }
 
