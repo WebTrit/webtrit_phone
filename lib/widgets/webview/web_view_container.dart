@@ -243,9 +243,7 @@ class _WebViewContainerState extends State<WebViewContainer> with WidgetStateMix
       _setupConsoleLoggerChannel();
     }
 
-    widget.connectivityRecoveryStrategy?.startMonitoring(
-      tryReload: () => _webViewController.reload(),
-    );
+    widget.connectivityRecoveryStrategy?._startMonitoring(_webViewController);
   }
 
   /// Registers the `ConsoleLog` JavaScript channel to receive log messages
@@ -591,7 +589,7 @@ class DefaultPayloadInjectionStrategy implements PageInjectionStrategy {
 /// Strategy interface for recovering from connectivity loss by reattempting actions.
 abstract class ConnectivityRecoveryStrategy {
   /// Starts monitoring connectivity and retries based on the strategy.
-  void startMonitoring({required VoidCallback tryReload});
+  void _startMonitoring(WebViewController controller);
 
   /// Disposes the strategy and its resources.
   void _dispose();
@@ -606,8 +604,8 @@ abstract class ConnectivityRecoveryStrategy {
 /// Retry-based connectivity recovery strategy.
 /// Repeats [tryReload] on an interval while connectivity is restored,
 /// until a page successfully loads or max attempts are reached.
-class DefaultConnectivityRecoveryStrategy implements ConnectivityRecoveryStrategy {
-  DefaultConnectivityRecoveryStrategy({
+class SoftReloadRecoveryStrategy implements ConnectivityRecoveryStrategy {
+  SoftReloadRecoveryStrategy({
     required this.connectivityStream,
     this.retryDelay = const Duration(seconds: 1),
     this.maxAttempts = 100,
@@ -622,24 +620,31 @@ class DefaultConnectivityRecoveryStrategy implements ConnectivityRecoveryStrateg
   /// Maximum number of retry attempts before giving up.
   final int maxAttempts;
 
+  /// The WebView controller to control the WebView.
+  late final WebViewController _controller;
+
   StreamSubscription<List<ConnectivityResult>>? _subscription;
   Timer? _retryTimer;
   int _attempt = 0;
-  VoidCallback? _tryReload;
   bool _isConnected = false;
   bool _retryInProgress = false;
 
-  /// Begins monitoring connectivity and sets up retry attempts when online.
   @override
-  void startMonitoring({required VoidCallback tryReload}) {
+  void _startMonitoring(WebViewController controller) {
     if (_subscription != null) {
       _logger.warning('startMonitoring was called more than once. Ignoring.');
       return;
     }
 
     _logger.info('Starting recovery strategy');
-    _tryReload = tryReload;
+    _controller = controller;
+
     _subscription = connectivityStream.debounce(const Duration(milliseconds: 300)).listen(_handleConnectivityChange);
+  }
+
+  @visibleForTesting
+  void startMonitoringForTesting(WebViewController controller) {
+    _startMonitoring(controller);
   }
 
   /// Handles connectivity changes and manages retry logic accordingly.
@@ -706,7 +711,7 @@ class DefaultConnectivityRecoveryStrategy implements ConnectivityRecoveryStrateg
 
     _attempt++;
     _logger.info('Retry attempt $_attempt/$maxAttempts');
-    _tryReload?.call();
+    _controller.reload();
   }
 
   /// Stops the retry timer and resets flags.

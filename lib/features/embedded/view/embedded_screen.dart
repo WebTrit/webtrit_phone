@@ -41,7 +41,7 @@ class _EmbeddedScreenState extends State<EmbeddedScreen> {
   void initState() {
     final connectivityStream = Connectivity().onConnectivityChanged;
 
-    _connectivityRecoveryStrategy = DefaultConnectivityRecoveryStrategy(connectivityStream: connectivityStream);
+    _connectivityRecoveryStrategy = SoftReloadRecoveryStrategy(connectivityStream: connectivityStream);
     _pageInjectionStrategy = DefaultPayloadInjectionStrategy();
 
     super.initState();
