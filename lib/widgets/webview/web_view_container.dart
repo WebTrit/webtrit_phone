@@ -601,9 +601,45 @@ abstract class ConnectivityRecoveryStrategy {
   void _onPageLoadFailed();
 }
 
-/// Retry-based connectivity recovery strategy.
-/// Repeats [tryReload] on an interval while connectivity is restored,
-/// until a page successfully loads or max attempts are reached.
+/// Disables all connectivity recovery behavior.
+/// No reloads, retries, or JS notifications are performed.
+/// Useful when the WebView handles reconnection internally.
+class NoneConnectivityRecoveryStrategy implements ConnectivityRecoveryStrategy {
+  @override
+  void _startMonitoring(WebViewController controller) {}
+
+  @override
+  void _dispose() {}
+
+  @override
+  void _onPageLoadSuccess() {}
+
+  @override
+  void _onPageLoadFailed() {}
+}
+
+/// Notifies the WebView of connectivity restoration via JS callback.
+/// Calls `window.onReconnect?.()` once upon reconnect.
+/// Does not trigger reload or retry logic.
+class NotifyOnlyConnectivityRecoveryStrategy implements ConnectivityRecoveryStrategy {
+  @override
+  void _startMonitoring(WebViewController controller) {
+    controller.runJavaScript('window.onReconnect?.()');
+  }
+
+  @override
+  void _dispose() {}
+
+  @override
+  void _onPageLoadSuccess() {}
+
+  @override
+  void _onPageLoadFailed() {}
+}
+
+/// Retry strategy that calls WebView's reload() on each attempt.
+/// Continues retrying while connected until success or max attempts.
+/// Preserves in-page JS state (soft reload).
 class SoftReloadRecoveryStrategy implements ConnectivityRecoveryStrategy {
   SoftReloadRecoveryStrategy({
     required this.connectivityStream,
@@ -763,5 +799,24 @@ class SoftReloadRecoveryStrategy implements ConnectivityRecoveryStrategy {
     _subscription = null;
     _stopRetries();
     _attempt = 0;
+  }
+}
+
+/// Reloads the WebView from the original [initialUri] on each retry.
+/// Clears internal app state unlike soft reload.
+/// Suitable for apps that require a full refresh after reconnect.
+class HardReloadRecoveryStrategy extends SoftReloadRecoveryStrategy {
+  HardReloadRecoveryStrategy({
+    required super.connectivityStream,
+    required this.initialUri,
+    super.retryDelay,
+    super.maxAttempts,
+  });
+
+  final Uri initialUri;
+
+  @override
+  void _onRetryAttempt() {
+    _controller.loadRequest(initialUri);
   }
 }
