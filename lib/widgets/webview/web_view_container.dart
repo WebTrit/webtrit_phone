@@ -845,6 +845,9 @@ class NotifyOnlyConnectivityRecoveryStrategy extends SoftReloadRecoveryStrategy 
     final hasInternet = await _connectivityChecker.checkConnection();
     if (hasInternet && hasSuccessfulLoad) {
       _logger.info('NotifyOnlyConnectivityRecoveryStrategy: Connectivity restored, notifying WebView');
+
+      /// Wait for the next event loop to ensure the WebView is ready.
+      await Future.delayed(Duration.zero);
       _controller.runJavaScript('window.onReconnect?.()');
       _stopRetries();
     } else {
