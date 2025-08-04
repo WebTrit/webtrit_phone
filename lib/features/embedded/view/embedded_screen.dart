@@ -52,6 +52,7 @@ class _EmbeddedScreenState extends State<EmbeddedScreen> {
 
     _pageInjectionStrategy = DefaultPayloadInjectionStrategy();
     _connectivityRecoveryStrategy = ConnectivityRecoveryStrategy.create(
+      initialUri: widget.initialUri,
       type: widget.reconnectStrategy ?? ReconnectStrategy.softReload,
       connectivityStream: connectivityStream,
     );

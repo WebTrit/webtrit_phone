@@ -596,9 +596,9 @@ class DefaultPayloadInjectionStrategy implements PageInjectionStrategy {
 abstract class ConnectivityRecoveryStrategy {
   /// Creates a [ConnectivityRecoveryStrategy] based on the specified [ReconnectStrategy].
   static ConnectivityRecoveryStrategy create({
+    required Uri initialUri,
     required ReconnectStrategy type,
     required Stream<List<ConnectivityResult>> connectivityStream,
-    Uri? initialUri,
   }) {
     switch (type) {
       case ReconnectStrategy.none:
@@ -608,9 +608,6 @@ abstract class ConnectivityRecoveryStrategy {
       case ReconnectStrategy.softReload:
         return SoftReloadRecoveryStrategy(connectivityStream: connectivityStream);
       case ReconnectStrategy.hardReload:
-        if (initialUri == null) {
-          throw ArgumentError('initialUri is required for HardReloadRecoveryStrategy');
-        }
         return HardReloadRecoveryStrategy(
           connectivityStream: connectivityStream,
           initialUri: initialUri,
@@ -824,10 +821,28 @@ class NotifyOnlyConnectivityRecoveryStrategy extends SoftReloadRecoveryStrategy 
     super.maxAttempts,
   });
 
+  bool _canInject = false;
+
+  @override
+  void _onPageLoadSuccess() {
+    super._onPageLoadSuccess();
+    _canInject = true;
+  }
+
   @override
   void _onRetryAttempt() {
-    _controller.runJavaScript('window.onReconnect?.()');
-    _stopRetries();
+    if (_canInject) {
+      _controller.runJavaScript('window.onReconnect?.()');
+      _stopRetries();
+    } else {
+      super._onRetryAttempt();
+    }
+  }
+
+  @override
+  void _dispose() {
+    _canInject = false;
+    super._dispose();
   }
 }
 
