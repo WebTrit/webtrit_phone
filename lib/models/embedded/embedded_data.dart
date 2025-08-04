@@ -19,10 +19,10 @@ class EmbeddedData {
   EmbeddedData({
     required this.id,
     required this.uri,
+    required this.reconnectStrategy,
     this.titleL10n,
     this.payload = const [],
     this.enableConsoleLogCapture = false,
-    this.reconnectStrategy = ReconnectStrategy.hardReload,
   });
 
   /// The URI representing either a local asset file path or a remote URL.

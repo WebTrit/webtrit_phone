@@ -600,6 +600,8 @@ abstract class ConnectivityRecoveryStrategy {
     required ReconnectStrategy type,
     required Stream<List<ConnectivityResult>> connectivityStream,
   }) {
+    _logger.fine('Creating connectivity recovery strategy: $type for $initialUri');
+
     switch (type) {
       case ReconnectStrategy.none:
         return NoneConnectivityRecoveryStrategy();

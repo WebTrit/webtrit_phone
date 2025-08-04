@@ -76,6 +76,14 @@
           "titleL10n": "main_BottomNavigationBarItemLabel_embedded",
           "icon": "0xe2ce",
           "embeddedResourceId": 2
+        },
+        {
+          "enabled": false,
+          "initial": false,
+          "type": "embedded",
+          "titleL10n": "main_BottomNavigationBarItemLabel_embedded_spa_example",
+          "icon": "0xe2ce",
+          "embeddedResourceId": 9
         }
       ]
     },
@@ -284,6 +292,15 @@
     {
       "id": 8,
       "uri": "https://webtrit-app.web.app/example/example_embedded_media_query.html"
+    },
+    {
+      "id": 9,
+      "uri": "https://webtrit-app.web.app/example/example_embedded_spa.html",
+      "enableConsoleLogCapture": true,
+      "reconnectStrategy": "softReload",
+      "payload": [
+        "coreToken"
+      ]
     }
   ]
 }
