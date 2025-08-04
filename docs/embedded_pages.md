@@ -223,6 +223,100 @@ This hook is especially useful for full-screen or minimal pages, where precise a
 UI is important  
 (e.g., avoiding overlap with gesture areas or notches).
 
+## Connectivity Recovery Strategies
+
+The embedded WebView integration supports configurable **Reconnect Strategies** via the
+`ReconnectStrategy` enum:
+
+- `none` – no reconnection logic, shows fallback error screen.
+- `notifyOnly` – does not reload the page, but sends a JavaScript callback (`onWebTritReconnect()`)
+  when internet is restored.
+- `softReload` – retries full page reload up to `maxAttempts`.
+- `hardReload` – reloads original URI forcibly, useful for non-SPA pages.
+
+### JavaScript Reconnect Hook
+
+If the reconnect strategy is `notifyOnly` and the page was previously loaded successfully, the app *
+*does not reload the page**, but instead triggers a JavaScript function when connectivity is
+restored:
+
+```javascript
+if (typeof window.onWebTritReconnect === 'function') {
+  window.onWebTritReconnect();
+}
+```
+
+Use this hook in your embedded page to respond to restored network access.
+
+### When is Error Screen Shown?
+
+The app shows the native fallback error screen in the following cases:
+
+- The page has never loaded successfully, regardless of the strategy.
+- The reconnect strategy is not `notifyOnly`.
+
+If the page has loaded before and `notifyOnly` is set, the app does not show the error UI and leaves
+it up to the embedded page to handle reconnection.
+
+---
+
+## Configuration of Reconnect Strategy
+
+To configure which strategy the app should use for your embedded page, add the `reconnectStrategy`
+key to the embedded resource definition:
+
+```json
+{
+  "id": 2,
+  "uri": "https://example.com",
+  "payload": [
+    "coreToken"
+  ],
+  "toolbar": {
+    "showToolbar": false
+  },
+  "reconnectStrategy": "notifyOnly"
+}
+```
+
+Possible values:
+
+- `"none"`
+- `"notifyOnly"`
+- `"softReload"`
+- `"hardReload"`
+
+If not specified, the default is `"notifyOnly"`.
+
+---
+
+## Embedded Console Log Capture (Debugging)
+
+To assist with debugging, the WebTrit app allows capturing `console.*` output from embedded web
+pages and forwarding it to the native app logs.
+
+### Enabling Log Capture
+
+This feature is **optional** and can be activated per embedded page by setting the following flag in
+the configuration:
+
+```json
+{
+  "id": 2,
+  "uri": "https://example.com",
+  "enableConsoleLogCapture": true
+}
+```
+
+### Behavior
+
+- When enabled, the app intercepts and forwards browser console logs (e.g., `console.log`,
+  `console.warn`, `console.error`) to the native logging system.
+- Log messages are preserved in the browser console and also visible in the Flutter app logs.
+- Logs include level indicators (`INFO`, `ERROR`, etc.) for clarity.
+
+---
+
 ## Summary
 
 By declaring embedded resources and referencing them in app config, clients can extend the WebTrit
