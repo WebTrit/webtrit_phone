@@ -15,6 +15,9 @@ part 'embedded_resource.g.dart';
 /// - [attributes]: Optional attributes that can store additional information related to the resource, such as configuration or metadata.
 /// - [toolbar]: Optional toolbar configuration for the resource, including title and visibility. The default is an empty configuration.
 /// - [metadata]: Optional metadata associated with the resource, which can store custom data relevant to the resource's context.
+/// - [payload]: An optional list of strings that can be used to pass additional data to the embedded resource, such as parameters or identifiers.
+/// - [enableConsoleLogCapture]: A boolean flag that enables capturing `console.*` logs from inside the WebView, useful for debugging or logging purposes. The default is `false`.
+/// - [reconnectStrategy]: An optional string that defines the strategy to apply when the network
 @freezed
 class EmbeddedResource with _$EmbeddedResource {
   const EmbeddedResource._();
@@ -27,7 +30,15 @@ class EmbeddedResource with _$EmbeddedResource {
     @Default({}) Map<String, dynamic> attributes,
     @Default(ToolbarConfig()) ToolbarConfig toolbar,
     @Default(Metadata()) Metadata metadata,
+
+    /// Optional payload that can be used to pass additional data to the embedded resource.
     @Default([]) List<String> payload,
+
+    /// Enables capturing `console.*` logs from inside the WebView
+    @Default(false) bool enableConsoleLogCapture,
+
+    /// Strategy to apply when network reconnects
+    String? reconnectStrategy,
   }) = _EmbeddedResource;
 
   factory EmbeddedResource.fromJson(Map<String, dynamic> json) => _$EmbeddedResourceFromJson(json);

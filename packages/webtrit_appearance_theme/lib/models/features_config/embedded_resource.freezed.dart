@@ -26,7 +26,15 @@ mixin _$EmbeddedResource {
   Map<String, dynamic> get attributes => throw _privateConstructorUsedError;
   ToolbarConfig get toolbar => throw _privateConstructorUsedError;
   Metadata get metadata => throw _privateConstructorUsedError;
+
+  /// Optional payload that can be used to pass additional data to the embedded resource.
   List<String> get payload => throw _privateConstructorUsedError;
+
+  /// Enables capturing `console.*` logs from inside the WebView
+  bool get enableConsoleLogCapture => throw _privateConstructorUsedError;
+
+  /// Strategy to apply when network reconnects
+  String? get reconnectStrategy => throw _privateConstructorUsedError;
 
   /// Serializes this EmbeddedResource to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -51,7 +59,9 @@ abstract class $EmbeddedResourceCopyWith<$Res> {
       Map<String, dynamic> attributes,
       ToolbarConfig toolbar,
       Metadata metadata,
-      List<String> payload});
+      List<String> payload,
+      bool enableConsoleLogCapture,
+      String? reconnectStrategy});
 
   $ToolbarConfigCopyWith<$Res> get toolbar;
   $MetadataCopyWith<$Res> get metadata;
@@ -79,6 +89,8 @@ class _$EmbeddedResourceCopyWithImpl<$Res, $Val extends EmbeddedResource>
     Object? toolbar = null,
     Object? metadata = null,
     Object? payload = null,
+    Object? enableConsoleLogCapture = null,
+    Object? reconnectStrategy = freezed,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -109,6 +121,14 @@ class _$EmbeddedResourceCopyWithImpl<$Res, $Val extends EmbeddedResource>
           ? _value.payload
           : payload // ignore: cast_nullable_to_non_nullable
               as List<String>,
+      enableConsoleLogCapture: null == enableConsoleLogCapture
+          ? _value.enableConsoleLogCapture
+          : enableConsoleLogCapture // ignore: cast_nullable_to_non_nullable
+              as bool,
+      reconnectStrategy: freezed == reconnectStrategy
+          ? _value.reconnectStrategy
+          : reconnectStrategy // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 
@@ -148,7 +168,9 @@ abstract class _$$EmbeddedResourceImplCopyWith<$Res>
       Map<String, dynamic> attributes,
       ToolbarConfig toolbar,
       Metadata metadata,
-      List<String> payload});
+      List<String> payload,
+      bool enableConsoleLogCapture,
+      String? reconnectStrategy});
 
   @override
   $ToolbarConfigCopyWith<$Res> get toolbar;
@@ -176,6 +198,8 @@ class __$$EmbeddedResourceImplCopyWithImpl<$Res>
     Object? toolbar = null,
     Object? metadata = null,
     Object? payload = null,
+    Object? enableConsoleLogCapture = null,
+    Object? reconnectStrategy = freezed,
   }) {
     return _then(_$EmbeddedResourceImpl(
       id: null == id
@@ -206,6 +230,14 @@ class __$$EmbeddedResourceImplCopyWithImpl<$Res>
           ? _value._payload
           : payload // ignore: cast_nullable_to_non_nullable
               as List<String>,
+      enableConsoleLogCapture: null == enableConsoleLogCapture
+          ? _value.enableConsoleLogCapture
+          : enableConsoleLogCapture // ignore: cast_nullable_to_non_nullable
+              as bool,
+      reconnectStrategy: freezed == reconnectStrategy
+          ? _value.reconnectStrategy
+          : reconnectStrategy // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -221,7 +253,9 @@ class _$EmbeddedResourceImpl extends _EmbeddedResource {
       final Map<String, dynamic> attributes = const {},
       this.toolbar = const ToolbarConfig(),
       this.metadata = const Metadata(),
-      final List<String> payload = const []})
+      final List<String> payload = const [],
+      this.enableConsoleLogCapture = false,
+      this.reconnectStrategy})
       : _attributes = attributes,
         _payload = payload,
         super._();
@@ -251,7 +285,11 @@ class _$EmbeddedResourceImpl extends _EmbeddedResource {
   @override
   @JsonKey()
   final Metadata metadata;
+
+  /// Optional payload that can be used to pass additional data to the embedded resource.
   final List<String> _payload;
+
+  /// Optional payload that can be used to pass additional data to the embedded resource.
   @override
   @JsonKey()
   List<String> get payload {
@@ -260,9 +298,18 @@ class _$EmbeddedResourceImpl extends _EmbeddedResource {
     return EqualUnmodifiableListView(_payload);
   }
 
+  /// Enables capturing `console.*` logs from inside the WebView
+  @override
+  @JsonKey()
+  final bool enableConsoleLogCapture;
+
+  /// Strategy to apply when network reconnects
+  @override
+  final String? reconnectStrategy;
+
   @override
   String toString() {
-    return 'EmbeddedResource(id: $id, uri: $uri, type: $type, attributes: $attributes, toolbar: $toolbar, metadata: $metadata, payload: $payload)';
+    return 'EmbeddedResource(id: $id, uri: $uri, type: $type, attributes: $attributes, toolbar: $toolbar, metadata: $metadata, payload: $payload, enableConsoleLogCapture: $enableConsoleLogCapture, reconnectStrategy: $reconnectStrategy)';
   }
 
   @override
@@ -278,7 +325,12 @@ class _$EmbeddedResourceImpl extends _EmbeddedResource {
             (identical(other.toolbar, toolbar) || other.toolbar == toolbar) &&
             (identical(other.metadata, metadata) ||
                 other.metadata == metadata) &&
-            const DeepCollectionEquality().equals(other._payload, _payload));
+            const DeepCollectionEquality().equals(other._payload, _payload) &&
+            (identical(
+                    other.enableConsoleLogCapture, enableConsoleLogCapture) ||
+                other.enableConsoleLogCapture == enableConsoleLogCapture) &&
+            (identical(other.reconnectStrategy, reconnectStrategy) ||
+                other.reconnectStrategy == reconnectStrategy));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -291,7 +343,9 @@ class _$EmbeddedResourceImpl extends _EmbeddedResource {
       const DeepCollectionEquality().hash(_attributes),
       toolbar,
       metadata,
-      const DeepCollectionEquality().hash(_payload));
+      const DeepCollectionEquality().hash(_payload),
+      enableConsoleLogCapture,
+      reconnectStrategy);
 
   /// Create a copy of EmbeddedResource
   /// with the given fields replaced by the non-null parameter values.
@@ -318,7 +372,9 @@ abstract class _EmbeddedResource extends EmbeddedResource {
       final Map<String, dynamic> attributes,
       final ToolbarConfig toolbar,
       final Metadata metadata,
-      final List<String> payload}) = _$EmbeddedResourceImpl;
+      final List<String> payload,
+      final bool enableConsoleLogCapture,
+      final String? reconnectStrategy}) = _$EmbeddedResourceImpl;
   const _EmbeddedResource._() : super._();
 
   factory _EmbeddedResource.fromJson(Map<String, dynamic> json) =
@@ -336,8 +392,18 @@ abstract class _EmbeddedResource extends EmbeddedResource {
   ToolbarConfig get toolbar;
   @override
   Metadata get metadata;
+
+  /// Optional payload that can be used to pass additional data to the embedded resource.
   @override
   List<String> get payload;
+
+  /// Enables capturing `console.*` logs from inside the WebView
+  @override
+  bool get enableConsoleLogCapture;
+
+  /// Strategy to apply when network reconnects
+  @override
+  String? get reconnectStrategy;
 
   /// Create a copy of EmbeddedResource
   /// with the given fields replaced by the non-null parameter values.
