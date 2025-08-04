@@ -834,11 +834,15 @@ class NotifyOnlyConnectivityRecoveryStrategy extends SoftReloadRecoveryStrategy 
   NotifyOnlyConnectivityRecoveryStrategy({
     required super.connectivityStream,
     ConnectivityChecker? connectivityChecker,
+    this.reconnectCallbackFunction = 'onWebTritReconnect',
     super.retryDelay,
     super.maxAttempts,
   }) : _connectivityChecker = connectivityChecker ?? const DefaultConnectivityChecker();
 
   final ConnectivityChecker _connectivityChecker;
+
+  /// JS method to call when connectivity is restored.
+  final String reconnectCallbackFunction;
 
   @override
   void _onRetryAttempt() async {
@@ -846,9 +850,9 @@ class NotifyOnlyConnectivityRecoveryStrategy extends SoftReloadRecoveryStrategy 
     if (hasInternet && hasSuccessfulLoad) {
       _logger.info('NotifyOnlyConnectivityRecoveryStrategy: Connectivity restored, notifying WebView');
 
-      /// Wait for the next event loop to ensure the WebView is ready.
+      // Wait for the next event loop to ensure the WebView is ready.
       await Future.delayed(Duration.zero);
-      _controller.runJavaScript('window.onReconnect?.()');
+      _controller.runJavaScript('window.$reconnectCallbackFunction?.()');
       _stopRetries();
     } else {
       super._onRetryAttempt();

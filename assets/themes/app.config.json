@@ -297,7 +297,7 @@
       "id": 9,
       "uri": "https://webtrit-app.web.app/example/example_embedded_spa.html",
       "enableConsoleLogCapture": true,
-      "reconnectStrategy": "softReload",
+      "reconnectStrategy": "notifyOnly",
       "payload": [
         "coreToken"
       ]
