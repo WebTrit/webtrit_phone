@@ -146,4 +146,13 @@ class EnvironmentConfig {
     defaultValue:
         r'https://app\.webtrit\.com/call\?callId=([^&]+)&handle=([^&]+)&displayName=([^&]+)&hasVideo=(true|false)',
   );
+
+  static const CONNECTIVITY_CHECK_URL__NAME = 'WEBTRIT_APP_CONNECTIVITY_CHECK_URL';
+
+  // URL used to check internet connectivity. Defaults to Google (204).
+  // Should return a quick 200/204 response.
+  static const CONNECTIVITY_CHECK_URL = String.fromEnvironment(
+    CONNECTIVITY_CHECK_URL__NAME,
+    defaultValue: 'https://www.google.com/generate_204',
+  );
 }
