@@ -24,6 +24,9 @@ _$EmbeddedResourceImpl _$$EmbeddedResourceImplFromJson(
               ?.map((e) => e as String)
               .toList() ??
           const [],
+      enableConsoleLogCapture:
+          json['enableConsoleLogCapture'] as bool? ?? false,
+      reconnectStrategy: json['reconnectStrategy'] as String?,
     );
 
 Map<String, dynamic> _$$EmbeddedResourceImplToJson(
@@ -36,6 +39,8 @@ Map<String, dynamic> _$$EmbeddedResourceImplToJson(
       'toolbar': instance.toolbar.toJson(),
       'metadata': instance.metadata.toJson(),
       'payload': instance.payload,
+      'enableConsoleLogCapture': instance.enableConsoleLogCapture,
+      'reconnectStrategy': instance.reconnectStrategy,
     };
 
 const _$EmbeddedResourceTypeEnumMap = {

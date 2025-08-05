@@ -227,9 +227,20 @@ class FeatureAccess {
       return _tryConfigureTermsFeature(appConfig).configData;
     }
 
+    // If strategy is not provided, default to hard reload.
+    final reconnectStrategy = embeddedDataResource?.reconnectStrategy != null
+        ? ReconnectStrategy.values.byName(embeddedDataResource!.reconnectStrategy!)
+        : ReconnectStrategy.softReload;
+
     // Return a ConfigData instance if a valid resource URL is found, otherwise return null.
     return embeddedDataResource?.uriOrNull != null
-        ? EmbeddedData(id: embeddedDataResource!.id, uri: embeddedDataResource.uriOrNull!, titleL10n: item.titleL10n)
+        ? EmbeddedData(
+            id: embeddedDataResource!.id,
+            uri: embeddedDataResource.uriOrNull!,
+            reconnectStrategy: reconnectStrategy,
+            titleL10n: item.titleL10n,
+            enableConsoleLogCapture: embeddedDataResource.enableConsoleLogCapture,
+          )
         : null;
   }
 
@@ -357,15 +368,22 @@ class FeatureAccess {
     return TermsFeature(EmbeddedData(
       id: termsResource.id,
       uri: termsResource.uriOrNull!,
+      reconnectStrategy: ReconnectStrategy.softReload,
       titleL10n: termsResource.toolbar.titleL10n,
     ));
   }
 
   static EmbeddedFeature _tryConfigureEmbeddedFeature(AppConfig appConfig) {
     final embeddedResources = appConfig.embeddedResources.map((resource) {
+      // If strategy is not provided, default to hard reload.
+      final reconnectStrategy = resource.reconnectStrategy != null
+          ? ReconnectStrategy.values.byName(resource.reconnectStrategy!)
+          : ReconnectStrategy.softReload;
+
       return EmbeddedData(
         id: resource.id,
         uri: Uri.parse(resource.uri),
+        reconnectStrategy: reconnectStrategy,
         payload: resource.payload.map((it) => EmbeddedPayloadData.values.byName(it)).toList(),
       );
     }).toList();
@@ -560,6 +578,7 @@ class SystemNotificationsFeature {
 
   // Check if the core system supports system notifications and push sending.
   bool get coreSystemSupport => _coreSupportedFeatures.contains(kSystemNotificationsFeatureFlag);
+
   bool get coreSystemPushSupport => _coreSupportedFeatures.contains(kSystemNotificationsPushFeatureFlag);
 
   /// Check if the system notifications feature is enabled and supported by the remote system.

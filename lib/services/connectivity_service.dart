@@ -14,17 +14,15 @@ abstract class ConnectivityService {
 
 class ConnectivityServiceImpl implements ConnectivityService {
   ConnectivityServiceImpl({
-    HttpRequestExecutorFactory createHttpRequestExecutor = defaultCreateHttpRequestExecutor,
-    this.connectivityCheckUrl = 'https://www.google.com/generate_204',
-  }) : _createHttpRequestExecutor = createHttpRequestExecutor {
+    ConnectivityChecker connectivityChecker = const DefaultConnectivityChecker(),
+  }) : _connectivityChecker = connectivityChecker {
     _connectivitySubscription = _connectivity.onConnectivityChanged.listen(_handleConnectivityChange);
   }
 
   final Connectivity _connectivity = Connectivity();
   final StreamController<bool> _controller = StreamController<bool>.broadcast();
+  final ConnectivityChecker _connectivityChecker;
   late final StreamSubscription<List<ConnectivityResult>> _connectivitySubscription;
-  final HttpRequestExecutorFactory _createHttpRequestExecutor;
-  final String connectivityCheckUrl;
 
   @override
   Stream<bool> get connectionStream => _controller.stream;
@@ -36,15 +34,7 @@ class ConnectivityServiceImpl implements ConnectivityService {
       return false;
     }
 
-    final executor = _createHttpRequestExecutor();
-    try {
-      await executor.execute(method: 'GET', url: connectivityCheckUrl);
-      return true;
-    } catch (_) {
-      return false;
-    } finally {
-      executor.close();
-    }
+    return _connectivityChecker.checkConnection();
   }
 
   Future<void> _handleConnectivityChange(List<ConnectivityResult> result) async {

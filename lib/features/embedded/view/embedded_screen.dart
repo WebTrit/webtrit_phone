@@ -3,11 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logging/logging.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
-
-import 'package:webtrit_phone/utils/utils.dart';
-import 'package:webtrit_phone/widgets/widgets.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
+import 'package:webtrit_phone/extensions/extensions.dart';
+import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/utils/utils.dart';
+import 'package:webtrit_phone/widgets/widgets.dart';
+
+import '../../login/features/login_signup/widgets/widgets.dart';
 import '../bloc/embedded_cubit.dart';
 
 final _logger = Logger('EmbeddedScreen');
@@ -17,11 +20,19 @@ class EmbeddedScreen extends StatefulWidget {
     required this.initialUri,
     required this.appBar,
     this.shouldForwardPop = true,
+    this.reconnectStrategy,
+    this.enableConsoleLogCapture,
     super.key,
   });
 
   final Uri initialUri;
   final PreferredSizeWidget appBar;
+
+  /// If true, the console log will be captured and forwarded to the logger.
+  final bool? enableConsoleLogCapture;
+
+  /// The strategy to apply when the network reconnects.
+  final ReconnectStrategy? reconnectStrategy;
 
   /// If true, the pop action will be forwarded to the WebView if backstack is available.
   final bool shouldForwardPop;
@@ -41,8 +52,12 @@ class _EmbeddedScreenState extends State<EmbeddedScreen> {
   void initState() {
     final connectivityStream = Connectivity().onConnectivityChanged;
 
-    _connectivityRecoveryStrategy = DefaultConnectivityRecoveryStrategy(connectivityStream: connectivityStream);
     _pageInjectionStrategy = DefaultPayloadInjectionStrategy();
+    _connectivityRecoveryStrategy = ConnectivityRecoveryStrategy.create(
+      initialUri: widget.initialUri,
+      type: widget.reconnectStrategy ?? ReconnectStrategy.softReload,
+      connectivityStream: connectivityStream,
+    );
 
     super.initState();
   }
@@ -64,23 +79,48 @@ class _EmbeddedScreenState extends State<EmbeddedScreen> {
               connectivityRecoveryStrategy: _connectivityRecoveryStrategy,
               pageInjectionStrategies: [_pageInjectionStrategy],
               showToolbar: false,
-              // TODO: Move to environment config
-              enableEmbeddedLogging: true,
+              enableEmbeddedLogging: widget.enableConsoleLogCapture ?? false,
               userAgent: UserAgent.of(context),
-              onUrlChange: (url) async {
-                _cubit.onUrlChange(url ?? '');
-                final canGoBack = await _webViewController.canGoBack();
-                if (mounted) _cubit.onCanGoBackChange(canGoBack);
-              },
-              errorBuilder: (context, error, controller) {
-                return EmbeddedRequestError(error: error);
-              },
+              errorBuilder: _buildErrorBuilder(),
+              onUrlChange: _handleUrlChange,
             ),
           );
         },
         listener: _onBlocStateChanged,
       ),
     );
+  }
+
+  /// Handles WebView URL changes.
+  ///
+  /// - Used to support system back navigation via `PopScope`.
+  Future<void> _handleUrlChange(String? url) async {
+    final canGoBack = await _webViewController.canGoBack();
+
+    if (_cubit.isClosed || !mounted) {
+      _logger.finest('EmbeddedScreen is closed or not mounted, ignoring URL change: $url');
+      return;
+    }
+
+    _cubit.onUrlChange(url ?? '');
+    _cubit.onCanGoBackChange(canGoBack);
+  }
+
+  /// Returns a native error dialog builder unless:
+  /// - the page loaded successfully at least once, and
+  /// - the strategy is [ReconnectStrategy.notifyOnly].
+  ///
+  /// This ensures SPA apps can self-recover via JS after reconnect.
+  Widget Function(BuildContext, WebResourceError, WebViewController)? _buildErrorBuilder() {
+    if (_connectivityRecoveryStrategy.hasSuccessfulLoad && widget.reconnectStrategy == ReconnectStrategy.notifyOnly) {
+      return null;
+    }
+
+    return (context, error, controller) => EmbeddedRequestErrorDialog(
+          title: error.titleL10n(context),
+          error: error.messageL10n(context),
+          onRetry: () => _webViewController.reload(),
+        );
   }
 
   void _onBlocStateChanged(BuildContext context, EmbeddedState state) {

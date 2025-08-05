@@ -46,6 +46,8 @@ class EmbeddedScreenPage extends StatelessWidget {
       ),
       child: EmbeddedScreen(
         initialUri: data.uri,
+        reconnectStrategy: data.reconnectStrategy,
+        enableConsoleLogCapture: data.enableConsoleLogCapture,
         appBar: AppBar(
           leading: const AutoLeadingButton(),
           title: Text(context.parseL10n(data.titleL10n!)),

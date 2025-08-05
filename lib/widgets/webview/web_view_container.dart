@@ -11,6 +11,8 @@ import 'package:webview_flutter/webview_flutter.dart';
 import 'package:logging/logging.dart';
 export 'package:webview_flutter/webview_flutter.dart' show JavaScriptMessage;
 
+import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/utils/utils.dart';
 import 'package:webtrit_phone/core/mixins/widget_state_mixin.dart';
 import 'package:webtrit_phone/widgets/webview/web_view_content.dart';
 import 'package:webtrit_phone/widgets/webview/web_view_toolbar.dart';
@@ -243,9 +245,7 @@ class _WebViewContainerState extends State<WebViewContainer> with WidgetStateMix
       _setupConsoleLoggerChannel();
     }
 
-    widget.connectivityRecoveryStrategy?.startMonitoring(
-      tryReload: () => _webViewController.reload(),
-    );
+    widget.connectivityRecoveryStrategy?._startMonitoring(_webViewController);
   }
 
   /// Registers the `ConsoleLog` JavaScript channel to receive log messages
@@ -282,18 +282,30 @@ class _WebViewContainerState extends State<WebViewContainer> with WidgetStateMix
   }
 
   void _onPageFinished(String url) {
+    if (!mounted) {
+      _logger.finest('Skipped page finished handling because widget is unmounted');
+      return;
+    }
+
     if (_currentError == null) {
       _latestError = null;
     } else {
       _logger.warning('Page finished with error: $_currentError');
       widget.onPageLoadedFailed?.call(_currentError!);
     }
+
     safeSetState(() {
       _currentError = null;
     });
+
     _isPageLoading = false;
     _finalLoadTimer?.cancel();
     _finalLoadTimer = Timer(_finalLoadDebounceDuration, () {
+      if (!mounted) {
+        _logger.finest('Skipped final load handling because widget is unmounted');
+        return;
+      }
+
       if (!_isPageLoading) {
         if (_latestError == null) {
           widget.onPageLoadedSuccess?.call();
@@ -590,8 +602,34 @@ class DefaultPayloadInjectionStrategy implements PageInjectionStrategy {
 
 /// Strategy interface for recovering from connectivity loss by reattempting actions.
 abstract class ConnectivityRecoveryStrategy {
+  /// Creates a [ConnectivityRecoveryStrategy] based on the specified [ReconnectStrategy].
+  static ConnectivityRecoveryStrategy create({
+    required Uri initialUri,
+    required ReconnectStrategy type,
+    required Stream<List<ConnectivityResult>> connectivityStream,
+  }) {
+    _logger.fine('Creating connectivity recovery strategy: $type for $initialUri');
+
+    switch (type) {
+      case ReconnectStrategy.none:
+        return NoneConnectivityRecoveryStrategy();
+      case ReconnectStrategy.notifyOnly:
+        return NotifyOnlyConnectivityRecoveryStrategy(connectivityStream: connectivityStream);
+      case ReconnectStrategy.softReload:
+        return SoftReloadRecoveryStrategy(connectivityStream: connectivityStream);
+      case ReconnectStrategy.hardReload:
+        return HardReloadRecoveryStrategy(
+          connectivityStream: connectivityStream,
+          initialUri: initialUri,
+        );
+    }
+  }
+
+  /// Returns true if the page has successfully loaded at least once.
+  bool get hasSuccessfulLoad;
+
   /// Starts monitoring connectivity and retries based on the strategy.
-  void startMonitoring({required VoidCallback tryReload});
+  void _startMonitoring(WebViewController controller);
 
   /// Disposes the strategy and its resources.
   void _dispose();
@@ -603,11 +641,31 @@ abstract class ConnectivityRecoveryStrategy {
   void _onPageLoadFailed();
 }
 
-/// Retry-based connectivity recovery strategy.
-/// Repeats [tryReload] on an interval while connectivity is restored,
-/// until a page successfully loads or max attempts are reached.
-class DefaultConnectivityRecoveryStrategy implements ConnectivityRecoveryStrategy {
-  DefaultConnectivityRecoveryStrategy({
+/// Disables all connectivity recovery behavior.
+/// No reloads, retries, or JS notifications are performed.
+/// Useful when the WebView handles reconnection internally.
+class NoneConnectivityRecoveryStrategy implements ConnectivityRecoveryStrategy {
+  @override
+  bool get hasSuccessfulLoad => true;
+
+  @override
+  void _startMonitoring(WebViewController controller) {}
+
+  @override
+  void _dispose() {}
+
+  @override
+  void _onPageLoadSuccess() {}
+
+  @override
+  void _onPageLoadFailed() {}
+}
+
+/// Retry strategy that calls WebView's reload() on each attempt.
+/// Continues retrying while connected until success or max attempts.
+/// Preserves in-page JS state (soft reload).
+class SoftReloadRecoveryStrategy implements ConnectivityRecoveryStrategy {
+  SoftReloadRecoveryStrategy({
     required this.connectivityStream,
     this.retryDelay = const Duration(seconds: 1),
     this.maxAttempts = 100,
@@ -622,24 +680,36 @@ class DefaultConnectivityRecoveryStrategy implements ConnectivityRecoveryStrateg
   /// Maximum number of retry attempts before giving up.
   final int maxAttempts;
 
+  /// The WebView controller to control the WebView.
+  late final WebViewController _controller;
+
   StreamSubscription<List<ConnectivityResult>>? _subscription;
   Timer? _retryTimer;
   int _attempt = 0;
-  VoidCallback? _tryReload;
   bool _isConnected = false;
   bool _retryInProgress = false;
+  bool _hasSuccessfulLoad = false;
 
-  /// Begins monitoring connectivity and sets up retry attempts when online.
+  /// Returns true if the page has successfully loaded at least once.
   @override
-  void startMonitoring({required VoidCallback tryReload}) {
+  bool get hasSuccessfulLoad => _hasSuccessfulLoad;
+
+  @override
+  void _startMonitoring(WebViewController controller) {
     if (_subscription != null) {
       _logger.warning('startMonitoring was called more than once. Ignoring.');
       return;
     }
 
     _logger.info('Starting recovery strategy');
-    _tryReload = tryReload;
+    _controller = controller;
+
     _subscription = connectivityStream.debounce(const Duration(milliseconds: 300)).listen(_handleConnectivityChange);
+  }
+
+  @visibleForTesting
+  void startMonitoringForTesting(WebViewController controller) {
+    _startMonitoring(controller);
   }
 
   /// Handles connectivity changes and manages retry logic accordingly.
@@ -706,11 +776,17 @@ class DefaultConnectivityRecoveryStrategy implements ConnectivityRecoveryStrateg
 
     _attempt++;
     _logger.info('Retry attempt $_attempt/$maxAttempts');
-    _tryReload?.call();
+    _onRetryAttempt();
+  }
+
+  /// Attempts to reload the WebView.
+  Future<void> _onRetryAttempt() {
+    return _controller.reload();
   }
 
   /// Stops the retry timer and resets flags.
   void _stopRetries() {
+    _logger.finest('Stopping retries');
     _retryTimer?.cancel();
     _retryTimer = null;
     _retryInProgress = false;
@@ -724,6 +800,7 @@ class DefaultConnectivityRecoveryStrategy implements ConnectivityRecoveryStrateg
   @override
   void _onPageLoadSuccess() {
     _logger.info('Page load succeeded, stopping retries');
+    _hasSuccessfulLoad = true;
     _attempt = 0;
     _stopRetries();
   }
@@ -749,9 +826,62 @@ class DefaultConnectivityRecoveryStrategy implements ConnectivityRecoveryStrateg
   @override
   void _dispose() {
     _logger.info('Stopping recovery strategy');
+    _hasSuccessfulLoad = false;
     _subscription?.cancel();
     _subscription = null;
     _stopRetries();
     _attempt = 0;
+  }
+}
+
+/// Notifies the WebView of connectivity restoration via JS callback.
+/// Calls `window.onReconnect?.()` once upon reconnect.
+/// Does not trigger reload or retry logic.
+class NotifyOnlyConnectivityRecoveryStrategy extends SoftReloadRecoveryStrategy {
+  NotifyOnlyConnectivityRecoveryStrategy({
+    required super.connectivityStream,
+    ConnectivityChecker? connectivityChecker,
+    this.reconnectCallbackFunction = 'onWebTritReconnect',
+    super.retryDelay,
+    super.maxAttempts,
+  }) : _connectivityChecker = connectivityChecker ?? const DefaultConnectivityChecker();
+
+  final ConnectivityChecker _connectivityChecker;
+
+  /// JS method to call when connectivity is restored.
+  final String reconnectCallbackFunction;
+
+  @override
+  Future<void> _onRetryAttempt() async {
+    final hasInternet = await _connectivityChecker.checkConnection();
+    if (hasInternet && hasSuccessfulLoad) {
+      _logger.info('NotifyOnlyConnectivityRecoveryStrategy: Connectivity restored, notifying WebView');
+
+      // Wait for the next event loop to ensure the WebView is ready.
+      await Future.delayed(Duration.zero);
+      _controller.runJavaScript('window.$reconnectCallbackFunction?.()');
+      _stopRetries();
+    } else {
+      super._onRetryAttempt();
+    }
+  }
+}
+
+/// Reloads the WebView from the original [initialUri] on each retry.
+/// Clears internal app state unlike soft reload.
+/// Suitable for apps that require a full refresh after reconnect.
+class HardReloadRecoveryStrategy extends SoftReloadRecoveryStrategy {
+  HardReloadRecoveryStrategy({
+    required super.connectivityStream,
+    required this.initialUri,
+    super.retryDelay,
+    super.maxAttempts,
+  });
+
+  final Uri initialUri;
+
+  @override
+  Future<void> _onRetryAttempt() {
+    return _controller.loadRequest(initialUri);
   }
 }
