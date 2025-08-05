@@ -6,6 +6,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';
+import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/embedded/embedded_data.dart';
 import 'package:webtrit_phone/models/embedded/embedded_payload_data.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
@@ -70,9 +71,9 @@ class EmbeddedTabPage extends StatelessWidget {
     );
   }
 
-  PreferredSizeWidget _buildAppBar(BuildContext context, String title) {
+  PreferredSizeWidget _buildAppBar(BuildContext context, String titleL10n) {
     return MainAppBar(
-      title: Text(title),
+      title: Text(context.parseL10n(titleL10n)),
       context: context,
     );
   }

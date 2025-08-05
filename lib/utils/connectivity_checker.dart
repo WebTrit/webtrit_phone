@@ -15,7 +15,7 @@ class DefaultConnectivityChecker implements ConnectivityChecker {
     this.createHttpRequestExecutor = defaultCreateHttpRequestExecutor,
   });
 
-  /// Connectivity check URL  function.
+  /// Connectivity check URL.
   final String? connectivityCheckUrl;
 
   /// Factory to create an HTTP request executor.
