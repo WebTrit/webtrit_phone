@@ -137,8 +137,8 @@ class RootApp extends StatelessWidget {
         Provider<ConnectivityService>(
           create: (context) {
             return ConnectivityServiceImpl(
-              connectivityChecker: DefaultConnectivityChecker(
-                connectivityCheckUrlProvider: () => SecureStorage().readCoreUrl(),
+              connectivityChecker: const DefaultConnectivityChecker(
+                connectivityCheckUrl: EnvironmentConfig.CONNECTIVITY_CHECK_URL,
               ),
             );
           },

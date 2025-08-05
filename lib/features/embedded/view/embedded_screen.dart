@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logging/logging.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 import 'package:webtrit_phone/extensions/extensions.dart';
@@ -20,8 +19,9 @@ class EmbeddedScreen extends StatefulWidget {
     required this.initialUri,
     required this.appBar,
     this.shouldForwardPop = true,
-    this.reconnectStrategy,
     this.enableConsoleLogCapture,
+    required this.connectivityRecoveryStrategyBuilder,
+    required this.pageInjectionStrategyBuilder,
     super.key,
   });
 
@@ -31,11 +31,14 @@ class EmbeddedScreen extends StatefulWidget {
   /// If true, the console log will be captured and forwarded to the logger.
   final bool? enableConsoleLogCapture;
 
-  /// The strategy to apply when the network reconnects.
-  final ReconnectStrategy? reconnectStrategy;
-
   /// If true, the pop action will be forwarded to the WebView if backstack is available.
   final bool shouldForwardPop;
+
+  /// Builder for creating the page injection strategy.
+  final PageInjectionStrategyBuilder pageInjectionStrategyBuilder;
+
+  /// Builder for creating the connectivity recovery strategy.
+  final ConnectivityRecoveryStrategyBuilder connectivityRecoveryStrategyBuilder;
 
   @override
   State<EmbeddedScreen> createState() => _EmbeddedScreenState();
@@ -50,15 +53,8 @@ class _EmbeddedScreenState extends State<EmbeddedScreen> {
 
   @override
   void initState() {
-    final connectivityStream = Connectivity().onConnectivityChanged;
-
-    _pageInjectionStrategy = DefaultPayloadInjectionStrategy();
-    _connectivityRecoveryStrategy = ConnectivityRecoveryStrategy.create(
-      initialUri: widget.initialUri,
-      type: widget.reconnectStrategy ?? ReconnectStrategy.softReload,
-      connectivityStream: connectivityStream,
-    );
-
+    _pageInjectionStrategy = widget.pageInjectionStrategyBuilder();
+    _connectivityRecoveryStrategy = widget.connectivityRecoveryStrategyBuilder();
     super.initState();
   }
 
@@ -112,7 +108,8 @@ class _EmbeddedScreenState extends State<EmbeddedScreen> {
   ///
   /// This ensures SPA apps can self-recover via JS after reconnect.
   Widget Function(BuildContext, WebResourceError, WebViewController)? _buildErrorBuilder() {
-    if (_connectivityRecoveryStrategy.hasSuccessfulLoad && widget.reconnectStrategy == ReconnectStrategy.notifyOnly) {
+    if (_connectivityRecoveryStrategy.hasSuccessfulLoad &&
+        _connectivityRecoveryStrategy.strategy == ReconnectStrategy.notifyOnly) {
       return null;
     }
 

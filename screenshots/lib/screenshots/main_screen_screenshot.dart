@@ -175,6 +175,8 @@ class MainScreenScreenshot extends StatelessWidget {
               title: const Text('Embedded'),
               context: context,
             ),
+            connectivityRecoveryStrategyBuilder: () => NoneConnectivityRecoveryStrategy(),
+            pageInjectionStrategyBuilder: () => DefaultPayloadInjectionStrategy(),
           ),
         );
       case MainFlavor.messaging:

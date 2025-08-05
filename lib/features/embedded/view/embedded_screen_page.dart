@@ -3,12 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logging/logging.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 
 import 'package:webtrit_phone/data/data.dart';
+import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
+import 'package:webtrit_phone/utils/utils.dart';
+import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../bloc/embedded_cubit.dart';
 import '../utils/utils.dart';
@@ -36,22 +40,47 @@ class EmbeddedScreenPage extends StatelessWidget {
           'SelfConfigRepository not found in the widget tree; skipping all injections such as external page token');
     }
 
-    final embeddedPayloadBuilder = EmbeddedPayloadBuilder(secureStorage);
-
     return BlocProvider(
-      create: (context) => EmbeddedCubit(
-        customPrivateGatewayRepository: selfConfigRepository,
-        embeddedPayloadBuilder: embeddedPayloadBuilder,
-        payload: data.payload,
-      ),
+      create: (_) => _createCubit(selfConfigRepository, secureStorage),
       child: EmbeddedScreen(
         initialUri: data.uri,
-        reconnectStrategy: data.reconnectStrategy,
         enableConsoleLogCapture: data.enableConsoleLogCapture,
-        appBar: AppBar(
-          leading: const AutoLeadingButton(),
-          title: Text(context.parseL10n(data.titleL10n!)),
-        ),
+        appBar: _buildAppBar(context),
+        pageInjectionStrategyBuilder: _defaultPageInjectionStrategy,
+        connectivityRecoveryStrategyBuilder: () => _createConnectivityRecoveryStrategy(data),
+      ),
+    );
+  }
+
+  PreferredSizeWidget _buildAppBar(BuildContext context) {
+    return AppBar(
+      leading: const AutoLeadingButton(),
+      title: Text(context.parseL10n(data.titleL10n!)),
+    );
+  }
+
+  EmbeddedCubit _createCubit(
+    CustomPrivateGatewayRepository? selfConfigRepository,
+    SecureStorage secureStorage,
+  ) {
+    return EmbeddedCubit(
+      customPrivateGatewayRepository: selfConfigRepository,
+      embeddedPayloadBuilder: EmbeddedPayloadBuilder(secureStorage),
+      payload: data.payload,
+    );
+  }
+
+  PageInjectionStrategy _defaultPageInjectionStrategy() {
+    return DefaultPayloadInjectionStrategy();
+  }
+
+  ConnectivityRecoveryStrategy _createConnectivityRecoveryStrategy(EmbeddedData data) {
+    return ConnectivityRecoveryStrategy.create(
+      initialUri: data.uri,
+      type: data.reconnectStrategy,
+      connectivityStream: Connectivity().onConnectivityChanged,
+      connectivityCheckerBuilder: () => const DefaultConnectivityChecker(
+        connectivityCheckUrl: EnvironmentConfig.CONNECTIVITY_CHECK_URL,
       ),
     );
   }

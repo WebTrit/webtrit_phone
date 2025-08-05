@@ -1,6 +1,9 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:logging/logging.dart';
 
 import 'webtrit_http_executor.dart';
+
+final _logger = Logger('ConnectivityService');
 
 abstract class ConnectivityChecker {
   Future<bool> checkConnection();
@@ -8,13 +11,12 @@ abstract class ConnectivityChecker {
 
 class DefaultConnectivityChecker implements ConnectivityChecker {
   const DefaultConnectivityChecker({
-    required this.connectivityCheckUrlProvider,
+    required this.connectivityCheckUrl,
     this.createHttpRequestExecutor = defaultCreateHttpRequestExecutor,
   });
 
-  /// Callback to provide the connectivity check URL at runtime.
-  /// Allows dynamic config (e.g. from env or user settings).
-  final String? Function() connectivityCheckUrlProvider;
+  /// Connectivity check URL  function.
+  final String? connectivityCheckUrl;
 
   /// Factory to create an HTTP request executor.
   final HttpRequestExecutorFactory createHttpRequestExecutor;
@@ -24,18 +26,21 @@ class DefaultConnectivityChecker implements ConnectivityChecker {
 
   @override
   Future<bool> checkConnection() async {
+    _logger.finest('Checking connectivity with URL: $connectivityCheckUrl');
     final result = await Connectivity().checkConnectivity();
     if (result.contains(ConnectivityResult.none) || result.isEmpty) {
       return false;
     }
 
     final executor = createHttpRequestExecutor();
-    final url = connectivityCheckUrlProvider() ?? _defaultUrlProvider;
+    final url = connectivityCheckUrl ?? _defaultUrlProvider;
 
     try {
       await executor.execute(method: 'GET', url: url);
+      _logger.finest('Connectivity check successful with URL: $url');
       return true;
     } catch (_) {
+      _logger.finest('Connectivity check failed with URL: $url');
       return false;
     } finally {
       executor.close();
