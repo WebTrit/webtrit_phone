@@ -82,17 +82,28 @@ class _EmbeddedScreenState extends State<EmbeddedScreen> {
               enableEmbeddedLogging: widget.enableConsoleLogCapture ?? false,
               userAgent: UserAgent.of(context),
               errorBuilder: _buildErrorBuilder(),
-              onUrlChange: (url) async {
-                _cubit.onUrlChange(url ?? '');
-                final canGoBack = await _webViewController.canGoBack();
-                if (mounted) _cubit.onCanGoBackChange(canGoBack);
-              },
+              onUrlChange: _handleUrlChange,
             ),
           );
         },
         listener: _onBlocStateChanged,
       ),
     );
+  }
+
+  /// Handles WebView URL changes.
+  ///
+  /// - Used to support system back navigation via `PopScope`.
+  Future<void> _handleUrlChange(String? url) async {
+    final canGoBack = await _webViewController.canGoBack();
+
+    if (_cubit.isClosed || !mounted) {
+      _logger.finest('EmbeddedScreen is closed or not mounted, ignoring URL change: $url');
+      return;
+    }
+
+    _cubit.onUrlChange(url ?? '');
+    _cubit.onCanGoBackChange(canGoBack);
   }
 
   /// Returns a native error dialog builder unless:

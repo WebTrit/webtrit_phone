@@ -282,20 +282,27 @@ class _WebViewContainerState extends State<WebViewContainer> with WidgetStateMix
   }
 
   void _onPageFinished(String url) {
+    if (!mounted) {
+      _logger.finest('Skipped page finished handling because widget is unmounted');
+      return;
+    }
+
     if (_currentError == null) {
       _latestError = null;
     } else {
       _logger.warning('Page finished with error: $_currentError');
       widget.onPageLoadedFailed?.call(_currentError!);
     }
+
     safeSetState(() {
       _currentError = null;
     });
+
     _isPageLoading = false;
     _finalLoadTimer?.cancel();
     _finalLoadTimer = Timer(_finalLoadDebounceDuration, () {
       if (!mounted) {
-        _logger.fine('Skipped final load handling because widget is unmounted');
+        _logger.finest('Skipped final load handling because widget is unmounted');
         return;
       }
 
