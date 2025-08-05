@@ -8,12 +8,19 @@ abstract class ConnectivityChecker {
 
 class DefaultConnectivityChecker implements ConnectivityChecker {
   const DefaultConnectivityChecker({
-    this.connectivityCheckUrl = 'https://www.google.com/generate_204',
+    required this.connectivityCheckUrlProvider,
     this.createHttpRequestExecutor = defaultCreateHttpRequestExecutor,
   });
 
-  final String connectivityCheckUrl;
+  /// Callback to provide the connectivity check URL at runtime.
+  /// Allows dynamic config (e.g. from env or user settings).
+  final String? Function() connectivityCheckUrlProvider;
+
+  /// Factory to create an HTTP request executor.
   final HttpRequestExecutorFactory createHttpRequestExecutor;
+
+  /// Default URL used for connectivity checks if no custom URL is provided.
+  String get _defaultUrlProvider => 'https://www.google.com/generate_204';
 
   @override
   Future<bool> checkConnection() async {
@@ -23,8 +30,10 @@ class DefaultConnectivityChecker implements ConnectivityChecker {
     }
 
     final executor = createHttpRequestExecutor();
+    final url = connectivityCheckUrlProvider() ?? _defaultUrlProvider;
+
     try {
-      await executor.execute(method: 'GET', url: connectivityCheckUrl);
+      await executor.execute(method: 'GET', url: url);
       return true;
     } catch (_) {
       return false;

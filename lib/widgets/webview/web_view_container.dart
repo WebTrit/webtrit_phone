@@ -614,7 +614,12 @@ abstract class ConnectivityRecoveryStrategy {
       case ReconnectStrategy.none:
         return NoneConnectivityRecoveryStrategy();
       case ReconnectStrategy.notifyOnly:
-        return NotifyOnlyConnectivityRecoveryStrategy(connectivityStream: connectivityStream);
+        return NotifyOnlyConnectivityRecoveryStrategy(
+          connectivityStream: connectivityStream,
+          connectivityChecker: DefaultConnectivityChecker(
+            connectivityCheckUrlProvider: () => initialUri.toString(),
+          ),
+        );
       case ReconnectStrategy.softReload:
         return SoftReloadRecoveryStrategy(connectivityStream: connectivityStream);
       case ReconnectStrategy.hardReload:
@@ -840,11 +845,11 @@ class SoftReloadRecoveryStrategy implements ConnectivityRecoveryStrategy {
 class NotifyOnlyConnectivityRecoveryStrategy extends SoftReloadRecoveryStrategy {
   NotifyOnlyConnectivityRecoveryStrategy({
     required super.connectivityStream,
-    ConnectivityChecker? connectivityChecker,
+    required ConnectivityChecker connectivityChecker,
     this.reconnectCallbackFunction = 'onWebTritReconnect',
     super.retryDelay,
     super.maxAttempts,
-  }) : _connectivityChecker = connectivityChecker ?? const DefaultConnectivityChecker();
+  }) : _connectivityChecker = connectivityChecker;
 
   final ConnectivityChecker _connectivityChecker;
 
