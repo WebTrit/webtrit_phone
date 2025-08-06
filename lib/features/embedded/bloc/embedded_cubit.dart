@@ -81,7 +81,7 @@ class EmbeddedCubit extends Cubit<EmbeddedState> {
 
     if (isSupportExternalPageToken && _retryCount < _maxRetryAttempts) {
       _retryCount++;
-      _logger.warning('Retrying ($_retryCount/$_maxRetryAttempts)...');
+      _logger.warning('ExternalPageTokenUnavailableException, retrying ($_retryCount/$_maxRetryAttempts)...');
 
       _payloadReloadDebounceTimer?.cancel();
       _payloadReloadDebounceTimer = Timer(const Duration(seconds: 5), () {
