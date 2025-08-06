@@ -26,8 +26,9 @@ class EmbeddedCubit extends Cubit<EmbeddedState> {
     _init();
   }
 
-  /// Timer used to debounce connectivity handling logic.
-  /// Cancelled and restarted each time a new connectivity event is received before the debounce completes.
+  /// Timer used to debounce connectivity handling logic and to schedule payload reload retries.
+  /// Cancelled and restarted each time a new connectivity event is received before the debounce completes,
+  /// or when a payload reload retry is scheduled after a failure.
   Timer? _payloadReloadDebounceTimer;
 
   // May be null if the embedded page is launched outside the main app routes.
