@@ -6,10 +6,14 @@ final _logger = Logger('SecureStorageExtension');
 
 extension SecureStorageExtension on SecureStorage {
   Future<void> writeExternalPageToken(ExternalPageToken token) async {
-    await writeExternalPageAccessToken(token.accessToken);
-    await writeExternalPageRefreshToken(token.refreshToken);
-    await writeExternalPageTokenExpires(token.expiration.toIso8601String());
-    await writeExternalPageAccessTokenSessionAssociated(readToken() ?? '');
+    final associate = readUserId() ?? readToken() ?? '';
+
+    await writeExternalPageTokenData(
+      token.accessToken,
+      token.refreshToken,
+      token.expiration.toIso8601String(),
+      associate,
+    );
   }
 
   ExternalPageToken? readExternalPageToken() {
@@ -17,9 +21,9 @@ extension SecureStorageExtension on SecureStorage {
     final refreshToken = readExternalPageRefreshToken();
     final expires = readExternalPageTokenExpires();
     final accessTokenSessionAssociated = readExternalPageAccessTokenSessionAssociated();
-    final sessionToken = readToken();
+    final associate = readUserId() ?? readToken() ?? '';
 
-    if ([accessToken, refreshToken, expires, accessTokenSessionAssociated, sessionToken]
+    if ([accessToken, refreshToken, expires, accessTokenSessionAssociated, associate]
         .any((v) => v == null || v.isEmpty)) {
       _logger.info('External page token is not set or incomplete.');
       return null;
@@ -36,7 +40,7 @@ extension SecureStorageExtension on SecureStorage {
     // In this case, the external page token is no longer valid and must not be reused.
     // This helps prevent leaking tokens between sessions and ensures security consistency.
     // TODO: Also add possibility clear cache on logout correctly.
-    if (accessTokenSessionAssociated != sessionToken) {
+    if (accessTokenSessionAssociated != associate) {
       _logger.info('Session changed, external page token is not valid for current session.');
       return null;
     }

@@ -147,47 +147,34 @@ class SecureStorage {
     return _read(_kExternalPageAccessTokenKey);
   }
 
-  Future<void> writeExternalPageAccessToken(String token) {
-    return _write(_kExternalPageAccessTokenKey, token);
-  }
-
-  Future<void> deleteExternalPageAccessToken() {
-    return _delete(_kExternalPageAccessTokenKey);
-  }
-
   String? readExternalPageRefreshToken() {
     return _read(_kExternalPageRefreshTokenKey);
-  }
-
-  Future<void> writeExternalPageRefreshToken(String token) {
-    return _write(_kExternalPageRefreshTokenKey, token);
-  }
-
-  Future<void> deleteExternalPageRefreshToken() {
-    return _delete(_kExternalPageRefreshTokenKey);
   }
 
   String? readExternalPageTokenExpires() {
     return _read(_kExternalPageTokenExpiresKey);
   }
 
-  Future<void> writeExternalPageTokenExpires(String expires) {
-    return _write(_kExternalPageTokenExpiresKey, expires);
-  }
-
-  Future<void> deleteExternalPageTokenExpires() {
-    return _delete(_kExternalPageTokenExpiresKey);
-  }
-
   String? readExternalPageAccessTokenSessionAssociated() {
     return _read(_kExternalPageAccessTokenSessionAssociated);
   }
 
-  Future<void> writeExternalPageAccessTokenSessionAssociated(String value) {
-    return _write(_kExternalPageAccessTokenSessionAssociated, value);
+  Future<void> writeExternalPageTokenData(
+    String accessToken,
+    String refreshToken,
+    String expires,
+    String associate,
+  ) async {
+    await _write(_kExternalPageAccessTokenKey, accessToken);
+    await _write(_kExternalPageRefreshTokenKey, refreshToken);
+    await _write(_kExternalPageTokenExpiresKey, expires);
+    return _write(_kExternalPageAccessTokenSessionAssociated, associate);
   }
 
-  Future<void> deleteExternalPageAccessTokenSessionAssociated() {
-    return _delete(_kExternalPageAccessTokenSessionAssociated);
+  Future<void> deleteExternalPageTokenData() async {
+    await _delete(_kExternalPageAccessTokenKey);
+    await _delete(_kExternalPageRefreshTokenKey);
+    await _delete(_kExternalPageTokenExpiresKey);
+    await _delete(_kExternalPageAccessTokenSessionAssociated);
   }
 }

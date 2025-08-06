@@ -120,14 +120,14 @@ class CustomPrivateGatewayRepository with SelfConfigApiMapper {
   }
 
   Future<void> cleanCache() async {
-    _secureStorage.deleteExternalPageAccessToken();
-    _secureStorage.deleteExternalPageRefreshToken();
-    _secureStorage.deleteExternalPageTokenExpires();
-    _secureStorage.deleteExternalPageAccessTokenSessionAssociated();
+    _secureStorage.deleteExternalPageTokenData();
+    _lastSelfConfig = null;
+    _isUnsupportedExternalPageTokenEndpoint = false;
   }
 
   void dispose() {
     _refreshTimer?.cancel();
+    _isUnsupportedExternalPageTokenEndpoint = false;
     _isFetchingExternalPageToken = false;
   }
 }
