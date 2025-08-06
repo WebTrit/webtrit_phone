@@ -17,6 +17,8 @@ class LeadingAvatar extends StatefulWidget {
     this.registered,
     this.smart = false,
     this.radius = 20.0, // value of private _defaultRadius variable in CircleAvatar class
+    this.showLoading = false,
+    this.loadingPadding = const EdgeInsets.all(2),
   });
 
   final String? username;
@@ -26,6 +28,8 @@ class LeadingAvatar extends StatefulWidget {
   final bool? registered;
   final bool smart;
   final double radius;
+  final bool showLoading;
+  final EdgeInsets loadingPadding;
 
   @override
   State<LeadingAvatar> createState() => _LeadingAvatarState();
@@ -52,18 +56,65 @@ class _LeadingAvatarState extends State<LeadingAvatar> {
         alignment: Alignment.center,
         fit: StackFit.loose,
         children: [
-          if (widget.thumbnailUrl != null)
-            Positioned.fill(child: ClipOval(child: remoteImage()))
-          else if (widget.thumbnail != null)
-            Positioned.fill(child: ClipOval(child: localImage()))
-          else
-            Positioned.fill(child: placeholder()),
+          Positioned.fill(
+            child: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 500),
+              switchInCurve: Curves.easeInOut,
+              switchOutCurve: Curves.easeInOut,
+              transitionBuilder: (child, animation) => FadeTransition(opacity: animation, child: child),
+              child: _buildAvatarContent(),
+            ),
+          ),
           if (widget.smart)
             Positioned.fromRect(rect: smartPosition, child: smartIndicator())
           else if (widget.registered != null)
             Positioned.fromRect(rect: registeredPosition, child: registeredIndicator()),
+          if (widget.showLoading) _buildLoadingOverlay(context),
         ],
       ),
+    );
+  }
+
+  Widget _buildAvatarContent() {
+    if (widget.thumbnailUrl != null) {
+      return ClipOval(
+        key: ValueKey('remote:${widget.thumbnailUrl}'),
+        child: remoteImage(),
+      );
+    } else if (widget.thumbnail != null) {
+      return ClipOval(
+        key: const ValueKey('local'),
+        child: localImage(),
+      );
+    } else {
+      return ClipOval(
+        key: const ValueKey('placeholder'),
+        child: placeholder(),
+      );
+    }
+  }
+
+  Widget _buildLoadingOverlay(BuildContext context) {
+    return AnimatedSwitcher(
+      duration: const Duration(milliseconds: 500),
+      switchInCurve: Curves.easeInOut,
+      switchOutCurve: Curves.easeInOut,
+      transitionBuilder: (child, animation) {
+        return FadeTransition(opacity: animation, child: child);
+      },
+      child: widget.username != null || widget.thumbnail != null || widget.thumbnailUrl != null
+          ? const SizedBox.shrink()
+          : SizedBox(
+              key: const ValueKey('loading'),
+              width: kMinInteractiveDimension,
+              height: kMinInteractiveDimension,
+              child: Padding(
+                padding: widget.loadingPadding,
+                child: const CircularProgressIndicator(
+                  strokeWidth: 1,
+                ),
+              ),
+            ),
     );
   }
 

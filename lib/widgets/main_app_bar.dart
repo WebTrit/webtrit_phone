@@ -46,9 +46,10 @@ class MainAppBar extends AppBar {
                         ),
                         padding: const EdgeInsets.all(2),
                         icon: LeadingAvatar(
-                          username: info?.name ?? info?.numbers.main ?? 'N/A',
+                          username: info?.name ?? info?.numbers.main,
                           thumbnailUrl: gravatarThumbnailUrl(info?.email),
                           radius: kMinInteractiveDimension / 2,
+                          showLoading: true,
                         ),
                         onPressed: () {
                           context.router.navigate(const SettingsRouterPageRoute());
