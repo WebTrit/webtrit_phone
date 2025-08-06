@@ -95,7 +95,7 @@ class _LeadingAvatarState extends State<LeadingAvatar> {
   }
 
   Widget _buildLoadingOverlay(BuildContext context) {
-    final hasAvatarData = widget.username != null && (widget.thumbnail != null || widget.thumbnailUrl != null);
+    final hasAvatarData = widget.username != null || (widget.thumbnail != null || widget.thumbnailUrl != null);
 
     return AnimatedSwitcher(
       duration: const Duration(milliseconds: 500),
