@@ -16,6 +16,7 @@ import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/services/services.dart';
+import 'package:webtrit_phone/utils/utils.dart';
 
 void main() {
   final logger = Logger('run_app');
@@ -135,7 +136,11 @@ class RootApp extends StatelessWidget {
         // Services
         Provider<ConnectivityService>(
           create: (context) {
-            return ConnectivityServiceImpl();
+            return ConnectivityServiceImpl(
+              connectivityChecker: const DefaultConnectivityChecker(
+                connectivityCheckUrl: EnvironmentConfig.CONNECTIVITY_CHECK_URL,
+              ),
+            );
           },
           dispose: (context, value) => value.dispose(),
         ),

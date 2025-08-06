@@ -14,7 +14,7 @@ abstract class ConnectivityService {
 
 class ConnectivityServiceImpl implements ConnectivityService {
   ConnectivityServiceImpl({
-    ConnectivityChecker connectivityChecker = const DefaultConnectivityChecker(),
+    required ConnectivityChecker connectivityChecker,
   }) : _connectivityChecker = connectivityChecker {
     _connectivitySubscription = _connectivity.onConnectivityChanged.listen(_handleConnectivityChange);
   }

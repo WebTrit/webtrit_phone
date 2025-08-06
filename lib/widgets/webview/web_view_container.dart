@@ -510,6 +510,9 @@ class NavigationRequestHandler {
   }
 }
 
+/// A builder function that creates a [PageInjectionStrategy].
+typedef PageInjectionStrategyBuilder = PageInjectionStrategy Function();
+
 /// Defines a strategy interface for injecting payload data into a WebView.
 abstract class PageInjectionStrategy {
   /// Updates the payload that may be injected into the WebView.
@@ -600,6 +603,12 @@ class DefaultPayloadInjectionStrategy implements PageInjectionStrategy {
   }
 }
 
+/// Builder function for creating a [ConnectivityRecoveryStrategy].
+typedef ConnectivityRecoveryStrategyBuilder = ConnectivityRecoveryStrategy Function();
+
+/// Builder function for creating a [ConnectivityChecker].
+typedef ConnectivityCheckerBuilder = ConnectivityChecker Function();
+
 /// Strategy interface for recovering from connectivity loss by reattempting actions.
 abstract class ConnectivityRecoveryStrategy {
   /// Creates a [ConnectivityRecoveryStrategy] based on the specified [ReconnectStrategy].
@@ -607,6 +616,7 @@ abstract class ConnectivityRecoveryStrategy {
     required Uri initialUri,
     required ReconnectStrategy type,
     required Stream<List<ConnectivityResult>> connectivityStream,
+    required ConnectivityCheckerBuilder connectivityCheckerBuilder,
   }) {
     _logger.fine('Creating connectivity recovery strategy: $type for $initialUri');
 
@@ -614,9 +624,14 @@ abstract class ConnectivityRecoveryStrategy {
       case ReconnectStrategy.none:
         return NoneConnectivityRecoveryStrategy();
       case ReconnectStrategy.notifyOnly:
-        return NotifyOnlyConnectivityRecoveryStrategy(connectivityStream: connectivityStream);
+        return NotifyOnlyConnectivityRecoveryStrategy(
+          connectivityStream: connectivityStream,
+          connectivityChecker: connectivityCheckerBuilder(),
+        );
       case ReconnectStrategy.softReload:
-        return SoftReloadRecoveryStrategy(connectivityStream: connectivityStream);
+        return SoftReloadRecoveryStrategy(
+          connectivityStream: connectivityStream,
+        );
       case ReconnectStrategy.hardReload:
         return HardReloadRecoveryStrategy(
           connectivityStream: connectivityStream,
@@ -627,6 +642,9 @@ abstract class ConnectivityRecoveryStrategy {
 
   /// Returns true if the page has successfully loaded at least once.
   bool get hasSuccessfulLoad;
+
+  /// The strategy type for this recovery strategy.
+  ReconnectStrategy get strategy;
 
   /// Starts monitoring connectivity and retries based on the strategy.
   void _startMonitoring(WebViewController controller);
@@ -647,6 +665,10 @@ abstract class ConnectivityRecoveryStrategy {
 class NoneConnectivityRecoveryStrategy implements ConnectivityRecoveryStrategy {
   @override
   bool get hasSuccessfulLoad => true;
+
+  /// The strategy type for this recovery strategy.
+  @override
+  ReconnectStrategy get strategy => ReconnectStrategy.none;
 
   @override
   void _startMonitoring(WebViewController controller) {}
@@ -693,6 +715,10 @@ class SoftReloadRecoveryStrategy implements ConnectivityRecoveryStrategy {
   /// Returns true if the page has successfully loaded at least once.
   @override
   bool get hasSuccessfulLoad => _hasSuccessfulLoad;
+
+  /// The strategy type for this recovery strategy.
+  @override
+  ReconnectStrategy get strategy => ReconnectStrategy.softReload;
 
   @override
   void _startMonitoring(WebViewController controller) {
@@ -840,16 +866,20 @@ class SoftReloadRecoveryStrategy implements ConnectivityRecoveryStrategy {
 class NotifyOnlyConnectivityRecoveryStrategy extends SoftReloadRecoveryStrategy {
   NotifyOnlyConnectivityRecoveryStrategy({
     required super.connectivityStream,
-    ConnectivityChecker? connectivityChecker,
+    required ConnectivityChecker connectivityChecker,
     this.reconnectCallbackFunction = 'onWebTritReconnect',
     super.retryDelay,
     super.maxAttempts,
-  }) : _connectivityChecker = connectivityChecker ?? const DefaultConnectivityChecker();
+  }) : _connectivityChecker = connectivityChecker;
 
   final ConnectivityChecker _connectivityChecker;
 
   /// JS method to call when connectivity is restored.
   final String reconnectCallbackFunction;
+
+  /// The strategy type for this recovery strategy.
+  @override
+  ReconnectStrategy get strategy => ReconnectStrategy.notifyOnly;
 
   @override
   Future<void> _onRetryAttempt() async {
@@ -879,6 +909,10 @@ class HardReloadRecoveryStrategy extends SoftReloadRecoveryStrategy {
   });
 
   final Uri initialUri;
+
+  /// The strategy type for this recovery strategy.
+  @override
+  ReconnectStrategy get strategy => ReconnectStrategy.hardReload;
 
   @override
   Future<void> _onRetryAttempt() {
