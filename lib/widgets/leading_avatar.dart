@@ -78,7 +78,7 @@ class _LeadingAvatarState extends State<LeadingAvatar> {
   Widget _buildAvatarContent() {
     if (widget.thumbnailUrl != null) {
       return ClipOval(
-        key: ValueKey('remote:${widget.thumbnailUrl}'),
+        key: ValueKey('remote:${widget.thumbnailUrl?.hashCode}'),
         child: remoteImage(),
       );
     } else if (widget.thumbnail != null) {
