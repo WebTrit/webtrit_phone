@@ -37,6 +37,7 @@ class PushTokensBloc extends Bloc<PushTokensEvent, PushTokensState> implements P
     on<PushTokensStarted>(_onStarted);
     on<PushTokensInsertedOrUpdated>(_onInsertedOrUpdated);
     on<_PushTokensError>(_onError);
+    on<PushTokensFcmTokenDeletionRequested>(_onFcmTokenDeletionRequested);
   }
 
   final PushTokensRepository pushTokensRepository;
@@ -130,6 +131,19 @@ class PushTokensBloc extends Bloc<PushTokensEvent, PushTokensState> implements P
       _logger.fine('Push token inserted or updated: ${event.type} ${event.value}');
     } catch (e, stackTrace) {
       _logger.warning('_onInsertedOrUpdated', e, stackTrace);
+    }
+  }
+
+  Future<void> _onFcmTokenDeletionRequested(
+    PushTokensFcmTokenDeletionRequested event,
+    Emitter<PushTokensState> emit,
+  ) async {
+    try {
+      await firebaseMessaging.deleteToken();
+      _logger.fine('FCM token deleted successfully');
+    } catch (e, stackTrace) {
+      _logger.warning('Failed to delete FCM token', e, stackTrace);
+      add(PushTokensEvent.error('Failed to delete FCM token: $e'));
     }
   }
 

@@ -98,7 +98,7 @@ class MainScreenPage extends StatelessWidget {
           : autoTabsRouter,
     );
 
-    final blocListener = BlocListener<AppBloc, AppState>(
+    final accountErrorListener = BlocListener<AppBloc, AppState>(
       listenWhen: (previous, current) =>
           previous.accountErrorCode != current.accountErrorCode && current.accountErrorCode != null,
       listener: (BuildContext context, state) {
@@ -108,12 +108,21 @@ class MainScreenPage extends StatelessWidget {
       child: provider,
     );
 
+    final postLogoutListener = BlocListener<AppBloc, AppState>(
+      listenWhen: (previous, current) => previous.isLoggedIn && !current.isLoggedIn,
+      listener: (context, state) {
+        context.read<PushTokensBloc>().add(const PushTokensEvent.fcmTokenDeletionRequested());
+      },
+    );
+
+    final multiBlocListener = MultiBlocListener(listeners: [accountErrorListener, postLogoutListener], child: provider);
+
     return BlocBuilder<CallPullCubit, List<PullableCall>>(
       builder: (context, state) {
         return AppBarParams(
           systemNotificationsEnabled: systemNotificationsEnabled,
           pullableCalls: state,
-          child: blocListener,
+          child: multiBlocListener,
         );
       },
     );

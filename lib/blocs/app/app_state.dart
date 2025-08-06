@@ -22,4 +22,6 @@ class AppState with _$AppState {
   ThemeMode get effectiveThemeMode => isThemeModeSupported ? themeMode : ThemeMode.light;
 
   Locale? get effectiveLocale => locale == LocaleExtension.defaultNull ? null : locale;
+
+  bool get isLoggedIn => coreUrl != null && token != null;
 }
