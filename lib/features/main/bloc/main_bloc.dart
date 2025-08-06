@@ -25,6 +25,7 @@ final _logger = Logger('MainBloc');
 class MainBloc extends Bloc<MainBlocEvent, MainBlocState> {
   MainBloc(
     this.systemInfoRemoteRepository,
+    this.customPrivateGatewayRepository,
     this.appPreferences,
     this.coreVersionConstraint,
     this.packageInfo, {
@@ -36,6 +37,7 @@ class MainBloc extends Bloc<MainBlocEvent, MainBlocState> {
   }
 
   final SystemInfoRepository systemInfoRemoteRepository;
+  final CustomPrivateGatewayRepository customPrivateGatewayRepository;
   final AppPreferences appPreferences;
   final String coreVersionConstraint;
   final StoreInfoExtractor? storeInfoExtractor;
@@ -120,5 +122,9 @@ class MainBloc extends Bloc<MainBlocEvent, MainBlocState> {
     if (await canLaunchUrl(event.storeUrl)) {
       await launchUrl(event.storeUrl, mode: LaunchMode.externalApplication);
     }
+  }
+
+  Future<void> postLogout() async {
+    await customPrivateGatewayRepository.cleanCache();
   }
 }

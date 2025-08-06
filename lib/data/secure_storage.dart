@@ -186,4 +186,8 @@ class SecureStorage {
   Future<void> writeExternalPageAccessTokenSessionAssociated(String value) {
     return _write(_kExternalPageAccessTokenSessionAssociated, value);
   }
+
+  Future<void> deleteExternalPageAccessTokenSessionAssociated() {
+    return _delete(_kExternalPageAccessTokenSessionAssociated);
+  }
 }
