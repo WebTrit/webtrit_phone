@@ -93,7 +93,7 @@ class _EmbeddedScreenState extends State<EmbeddedScreen> {
   Future<void> _handleUrlChange(String? url) async {
     final canGoBack = await _webViewController.canGoBack();
 
-    if (_cubit.isClosed || !mounted) {
+    if (!mounted || _cubit.isClosed) {
       _logger.finest('EmbeddedScreen is closed or not mounted, ignoring URL change: $url');
       return;
     }
