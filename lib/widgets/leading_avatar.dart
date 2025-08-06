@@ -95,6 +95,8 @@ class _LeadingAvatarState extends State<LeadingAvatar> {
   }
 
   Widget _buildLoadingOverlay(BuildContext context) {
+    final hasAvatarData = widget.username != null && (widget.thumbnail != null || widget.thumbnailUrl != null);
+
     return AnimatedSwitcher(
       duration: const Duration(milliseconds: 500),
       switchInCurve: Curves.easeInOut,
@@ -102,8 +104,10 @@ class _LeadingAvatarState extends State<LeadingAvatar> {
       transitionBuilder: (child, animation) {
         return FadeTransition(opacity: animation, child: child);
       },
-      child: widget.username != null || widget.thumbnail != null || widget.thumbnailUrl != null
+      child: hasAvatarData
+          // Hide loading indicator if avatar data is available
           ? const SizedBox.shrink()
+          // Show loading indicator if avatar data is missing
           : SizedBox(
               key: const ValueKey('loading'),
               width: kMinInteractiveDimension,
