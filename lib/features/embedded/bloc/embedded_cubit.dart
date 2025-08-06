@@ -61,6 +61,8 @@ class EmbeddedCubit extends Cubit<EmbeddedState> {
 
     if (!isExternalPageTokenAvailable) {
       await customPrivateGatewayRepository.fetchExternalPageToken();
+    } else {
+      _logger.info('External page token is already available, skipping fetch.');
     }
   }
 

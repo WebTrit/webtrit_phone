@@ -19,6 +19,7 @@ class SecureStorage {
   static const _kTenantIdKey = 'tenant-id';
   static const _kTokenKey = 'token';
   static const _kUserIdKey = 'user-id';
+  static const _kExternalPageAccessTokenSessionAssociated = 'external-page-access-token-session-associated';
   static const _kExternalPageAccessTokenKey = 'external-page-access-token';
   static const _kExternalPageRefreshTokenKey = 'external-page-refresh-token';
   static const _kExternalPageTokenExpiresKey = 'external-page-token-expires';
@@ -176,5 +177,13 @@ class SecureStorage {
 
   Future<void> deleteExternalPageTokenExpires() {
     return _delete(_kExternalPageTokenExpiresKey);
+  }
+
+  String? readExternalPageAccessTokenSessionAssociated() {
+    return _read(_kExternalPageAccessTokenSessionAssociated);
+  }
+
+  Future<void> writeExternalPageAccessTokenSessionAssociated(String value) {
+    return _write(_kExternalPageAccessTokenSessionAssociated, value);
   }
 }
