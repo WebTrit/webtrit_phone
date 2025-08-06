@@ -28,7 +28,7 @@ class EmbeddedCubit extends Cubit<EmbeddedState> {
 
   /// Timer used to debounce connectivity handling logic.
   /// Cancelled and restarted each time a new connectivity event is received before the debounce completes.
-  Timer? _connectivityDebounceTimer;
+  Timer? _payloadReloadDebounceTimer;
 
   // May be null if the embedded page is launched outside the main app routes.
   final CustomPrivateGatewayRepository? _customPrivateGatewayRepository;
@@ -80,8 +80,10 @@ class EmbeddedCubit extends Cubit<EmbeddedState> {
 
     if (isSupportExternalPageToken && _retryCount < _maxRetryAttempts) {
       _retryCount++;
-      _logger.warning('ExternalPageTokenUnavailableException, retrying ($_retryCount/$_maxRetryAttempts)...');
-      Future.delayed(const Duration(seconds: 5), () {
+      _logger.warning('Retrying ($_retryCount/$_maxRetryAttempts)...');
+
+      _payloadReloadDebounceTimer?.cancel();
+      _payloadReloadDebounceTimer = Timer(const Duration(seconds: 5), () {
         _loadPayload();
       });
     } else {
@@ -103,7 +105,7 @@ class EmbeddedCubit extends Cubit<EmbeddedState> {
 
   @override
   Future<void> close() async {
-    _connectivityDebounceTimer?.cancel();
+    _payloadReloadDebounceTimer?.cancel();
     return super.close();
   }
 }
