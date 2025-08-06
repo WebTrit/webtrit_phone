@@ -42,9 +42,11 @@ class UserInfoListTile extends StatelessWidget {
         child: Row(
           children: [
             LeadingAvatar(
-              username: info?.name ?? info?.numbers.main ?? 'N/A',
+              username: info?.name ?? info?.numbers.main,
               thumbnailUrl: gravatarThumbnailUrl(info?.email),
               radius: radius,
+              showLoading: true,
+              loadingPadding: EdgeInsets.zero,
             ),
             const SizedBox(width: 8),
             Expanded(
