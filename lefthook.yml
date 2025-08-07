@@ -1,24 +1,5 @@
 pre-commit:
   parallel: true
-  scripts:
-    branch-name-check.sh:
-      runner: bash
-      script: |
-        #!/bin/bash
-        set -euo pipefail
-
-        BRANCH=$(git rev-parse --abbrev-ref HEAD)
-
-        echo "🔍 Current branch: $BRANCH"
-
-        if ! [[ "$BRANCH" =~ ^(feature|fix|chore|build|style|docs)/.+$ ]]; then
-          echo "❌ Invalid branch name: '$BRANCH'"
-          echo "💡 Use: feature/name, fix/bug-name, etc."
-          exit 1
-        fi
-
-        echo "✅ Branch name OK."
-
   commands:
     lint:
       run: flutter analyze
@@ -26,21 +7,14 @@ pre-commit:
 pre-push:
   parallel: true
   commands:
+    branch-name-check:
+      run: bash tool/scripts/branch-name-check.sh
     analyze:
       run: flutter analyze
     test:
       run: flutter test
 
 commit-msg:
-  scripts:
-    commit-msg-check.sh:
-      runner: bash
-      script: |
-        #!/bin/bash
-        MSG=$(head -n1 "$1")
-        if ! [[ "$MSG" =~ ^(feat|fix|chore|refactor|test|docs|style|ci|perf|build|revert)(\(.+\))?:\ .+ ]]; then
-          echo "❌ Invalid commit message: '$MSG'"
-          echo "💡 Use Conventional Commits (e.g., feat: add login form)"
-          exit 1
-        fi
-        echo "✅ Commit message OK."
+  commands:
+    commit-msg-check:
+      run: bash tool/scripts/commit-msg-check.sh
