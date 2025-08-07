@@ -1,4 +1,5 @@
-import 'package:ssl_certificates/ssl_certificates.dart';
+import 'package:_web_socket_channel/_web_socket_channel.dart';
+
 import 'package:webtrit_signaling/webtrit_signaling.dart';
 
 class FakeWebtritSignalingClient implements WebtritSignalingClient {
