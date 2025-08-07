@@ -82,7 +82,10 @@ class PermissionsScreen extends StatelessWidget {
                     minHeight: viewportConstraints.maxHeight,
                   ),
                   child: IntrinsicHeight(
-                    child: body,
+                    child: InertSafeArea(
+                      bottom: true,
+                      child: body,
+                    ),
                   ),
                 ),
               );

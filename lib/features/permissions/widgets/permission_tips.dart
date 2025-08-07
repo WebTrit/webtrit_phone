@@ -4,6 +4,7 @@ import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/theme/theme.dart';
+import 'package:webtrit_phone/widgets/widgets.dart';
 
 class PermissionTips extends StatelessWidget {
   const PermissionTips({
@@ -103,7 +104,10 @@ class PermissionTips extends StatelessWidget {
                 minHeight: viewportConstraints.maxHeight,
               ),
               child: IntrinsicHeight(
-                child: body,
+                child: InertSafeArea(
+                  bottom: true,
+                  child: body,
+                ),
               ),
             ),
           );

@@ -71,7 +71,7 @@ class _UserAgreementScreenState extends State<UserAgreementScreen> {
                       onPressed: agreementStatus.isAccepted ? _submitAgreement : null,
                       style: elevatedButtonStyles?.primary,
                       child: Text(context.l10n.user_agreement_button_text),
-                    )
+                    ),
                   ],
                 ),
               );
@@ -82,7 +82,10 @@ class _UserAgreementScreenState extends State<UserAgreementScreen> {
                     minHeight: viewportConstraints.maxHeight,
                   ),
                   child: IntrinsicHeight(
-                    child: body,
+                    child: InertSafeArea(
+                      bottom: true,
+                      child: body,
+                    ),
                   ),
                 ),
               );

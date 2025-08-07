@@ -8,6 +8,7 @@ export 'copy_to_clipboard.dart';
 export 'embedded_request_error.dart';
 export 'fade_id.dart';
 export 'history_fetch_indicator.dart';
+export 'inert_safe_area.dart';
 export 'keypad_key_button.dart';
 export 'leading_avatar.dart';
 export 'linkify.dart';

@@ -63,11 +63,14 @@ class _ContactsAgreementScreenState extends State<ContactsAgreementScreen> {
                             text: context.l10n.contacts_agreement_checkbox_text,
                           ),
                           const SizedBox(height: kInset / 2),
-                          OutlinedButton(
-                            key: contactsAgreementAcceptButtonKey,
-                            onPressed: _submitAgreement,
-                            style: elevatedButtonStyles?.primary,
-                            child: Text(context.l10n.contacts_agreement_button_text),
+                          InertSafeArea(
+                            bottom: true,
+                            child: OutlinedButton(
+                              key: contactsAgreementAcceptButtonKey,
+                              onPressed: _submitAgreement,
+                              style: elevatedButtonStyles?.primary,
+                              child: Text(context.l10n.contacts_agreement_button_text),
+                            ),
                           ),
                         ],
                       ),
