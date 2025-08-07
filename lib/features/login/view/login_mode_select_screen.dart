@@ -89,6 +89,7 @@ class LoginModeSelectScreen extends StatelessWidget {
                             (isEmbedded && state.embedded == button.toEmbedded?.customLoginFeature));
 
                     return LoginModeActionButton(
+                      key: loginModeScreenSignUpButtonKey,
                       processing: processing,
                       isDemoModeEnabled: isDemoModeEnabled,
                       onPressed: shouldProcess ? null : () => _onActionPressed(context, button),

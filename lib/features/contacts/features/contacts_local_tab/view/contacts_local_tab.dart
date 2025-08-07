@@ -4,6 +4,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/theme/extension/elevated_button_styles.dart';
@@ -60,6 +61,7 @@ class ContactsLocalTab extends StatelessWidget {
               itemBuilder: (context, index) {
                 final contact = state.contacts[index];
                 return ContactTile(
+                  key: contactsLocalContactTileKey,
                   displayName: contact.displayTitle,
                   thumbnail: contact.thumbnail,
                   thumbnailUrl: contact.thumbnailUrl,

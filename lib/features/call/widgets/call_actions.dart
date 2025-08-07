@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:webtrit_phone/app/keys.dart';
 
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
@@ -191,6 +192,7 @@ class _CallActionsState extends State<CallActions> {
                   ? context.l10n.call_CallActionsTooltip_decline_inviteToAttendedTransfer
                   : context.l10n.call_CallActionsTooltip_hangup,
               child: TextButton(
+                key: callActionsHangupKey,
                 onPressed: onHangupPressed,
                 style: style.hangup,
                 child: Icon(
@@ -242,6 +244,7 @@ class _CallActionsState extends State<CallActions> {
             Tooltip(
               message: context.l10n.call_CallActionsTooltip_hangup,
               child: TextButton(
+                key: callActionsHangupKey,
                 onPressed: onHangupPressed,
                 style: style.hangup,
                 child: Icon(
@@ -343,6 +346,7 @@ class _CallActionsState extends State<CallActions> {
                 ? context.l10n.call_CallActionsTooltip_unmute
                 : context.l10n.call_CallActionsTooltip_mute,
             child: TextButton(
+              key: callActionsMuteKey,
               onPressed: onMutedChanged == null ? null : () => onMutedChanged(!widget.mutedValue),
               style: widget.mutedValue ? style.mutedActive : style.muted,
               child: Icon(
@@ -352,6 +356,7 @@ class _CallActionsState extends State<CallActions> {
             ),
           ),
           Tooltip(
+            key: callActionsVideoCallKey,
             message: widget.cameraValue
                 ? context.l10n.call_CallActionsTooltip_disableCamera
                 : context.l10n.call_CallActionsTooltip_enableCamera,
@@ -365,6 +370,7 @@ class _CallActionsState extends State<CallActions> {
             ),
           ),
           Tooltip(
+            key: callActionsSpeakerKey,
             message: speakerValue == true
                 ? context.l10n.call_CallActionsTooltip_disableSpeaker
                 : context.l10n.call_CallActionsTooltip_enableSpeaker,
@@ -391,6 +397,7 @@ class _CallActionsState extends State<CallActions> {
                   for (final call in widget.transferableCalls)
                     if (onAttendedTransferSubmitted != null)
                       CallPopupMenuItem(
+                        key: callActionsTransferMenuNumberKey,
                         onTap: () => onAttendedTransferSubmitted.call(call),
                         text: call.displayName ?? call.handle.value,
                         icon: Icon(
@@ -428,10 +435,12 @@ class _CallActionsState extends State<CallActions> {
             Tooltip(
               message: context.l10n.call_CallActionsTooltip_transfer,
               child: CallPopupMenuButton(
+                key: callActionsTransferMenuKey,
                 offset: Offset(_dimension + 8, 0),
                 items: [
                   if (onBlindTransferInitiated != null)
                     CallPopupMenuItem(
+                      key: callActionsTransferMenuBlindInitKey,
                       onTap: onBlindTransferInitiated,
                       text: context.l10n.call_CallActionsTooltip_unattended_transfer,
                       icon: Icon(
@@ -467,6 +476,7 @@ class _CallActionsState extends State<CallActions> {
             ),
           if (onSwapPressed == null)
             Tooltip(
+              key: callActionsHoldKey,
               message: widget.heldValue
                   ? context.l10n.call_CallActionsTooltip_unhold
                   : context.l10n.call_CallActionsTooltip_hold,
@@ -481,6 +491,7 @@ class _CallActionsState extends State<CallActions> {
             ),
           if (onSwapPressed != null)
             Tooltip(
+              key: callActionsSwapKey,
               message: context.l10n.call_CallActionsTooltip_swap,
               child: TextButton(
                 onPressed: onSwapPressed,
@@ -492,6 +503,7 @@ class _CallActionsState extends State<CallActions> {
               ),
             ),
           Tooltip(
+            key: callActionsKeypadKey,
             message: context.l10n.call_CallActionsTooltip_showKeypad,
             child: TextButton(
               onPressed: onKeyPressed == null || !_isOrientationPortrait
@@ -526,6 +538,7 @@ class _CallActionsState extends State<CallActions> {
           Tooltip(
             message: context.l10n.call_CallActionsTooltip_hangup,
             child: TextButton(
+              key: callActionsHangupKey,
               onPressed: onHangupPressed,
               style: style.hangup,
               child: Icon(

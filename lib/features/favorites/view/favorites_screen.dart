@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/app/notifications/bloc/notifications_bloc.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
@@ -126,6 +127,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                               final canSendSms = contactSmsNumbers.contains(favorite.number);
 
                               return FavoriteTile(
+                                key: favoriteTileKey,
                                 favorite: favorite,
                                 callNumbers: callRoutingState?.allNumbers ?? [],
                                 onTap: blingTransferInitiated

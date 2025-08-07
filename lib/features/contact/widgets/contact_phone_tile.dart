@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 
 // Follow naming conventions as outlined in https://api.flutter.dev/flutter/widgets/Visibility-class.html
@@ -77,6 +78,7 @@ class ContactPhoneTile extends StatelessWidget {
         children: [
           if (onFavoriteChanged != null)
             IconButton(
+              key: contactPhoneTileFavIconKey,
               splashRadius: 24,
               icon: favorite ? const Icon(Icons.star) : const Icon(Icons.star_border),
               onPressed: () => onFavoriteChanged!(!favorite),

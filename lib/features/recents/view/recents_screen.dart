@@ -4,6 +4,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/app/constants.dart';
+import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/app/notifications/bloc/notifications_bloc.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
@@ -187,6 +188,7 @@ class _RecentsScreenState extends State<RecentsScreen> with SingleTickerProvider
                               final canSendSms = contactSmsNumbers.contains(callLogEntry.number);
 
                               return RecentTile(
+                                key: recentsTileKey,
                                 recent: recent,
                                 callNumbers: callRoutingState?.allNumbers ?? [],
                                 dateFormat: context.read<RecentsBloc>().dateFormat,

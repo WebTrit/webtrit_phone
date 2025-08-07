@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
+import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
@@ -92,6 +93,7 @@ class Actionpad extends StatelessWidget {
             child: Transform.scale(
               scale: .75,
               child: TextButton(
+                key: actionPadVideoCallKey,
                 onPressed: actionsEnabled ? onVideoCallPressed : null,
                 style: localStyle?.callStart,
                 child: Icon(Icons.videocam, size: iconSize),
@@ -106,11 +108,13 @@ class Actionpad extends StatelessWidget {
           )
         else
           TextButton(
+            key: actionPadStartKey,
             onPressed: actionsEnabled ? onAudioCallPressed : null,
             style: localStyle?.callStart,
             child: Icon(Icons.call, size: iconSize),
           ),
         TextButton(
+          key: actionPadBackspaceKey,
           onPressed: actionsEnabled ? onBackspacePressed : null,
           onLongPress: actionsEnabled ? onBackspaceLongPress : null,
           style: localStyle?.backspacePressed,

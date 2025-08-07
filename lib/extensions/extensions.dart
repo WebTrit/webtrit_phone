@@ -10,6 +10,7 @@ export 'duration.dart';
 export 'iterable.dart';
 export 'locale.dart';
 export 'messaging_socket_exception.dart';
+export 'main_flavor.dart';
 export 'platform_deep_link.dart';
 export 'registration_status.dart';
 export 'request_failure.dart';
