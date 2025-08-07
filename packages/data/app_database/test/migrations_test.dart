@@ -1,10 +1,11 @@
 import 'package:test/test.dart';
 
 import 'package:drift/drift.dart';
-import 'package:drift_dev/api/migrations.dart';
+import 'package:drift_dev/api/migrations_native.dart';
 
 import 'package:app_database/app_database.dart';
 import 'package:app_database/src/migrations/migrations.dart';
+
 // Import the generated schema helper to instantiate databases at old versions.
 import 'package:app_database/src/migrations/generated/schema.dart';
 
