@@ -36,6 +36,7 @@ The application offers extensive customization options:
  - **Build and run**: See the [Build and Run](docs/build.md) documentation for details on how to build and run the application.
  - **Flavors**: See the [Build Flavors](docs/flavors.md) documentation for details on how to configure and use build flavors.
  - **Make Commands**: See the  [Make Commands](docs/make_file.md) for available build and automation commands.
+ - **Development Workflow and Git Hooks**: See the [Development Guide](docs/development.md) for details on commit conventions, hook setup, and workflow tools.
 
 # Testing
 

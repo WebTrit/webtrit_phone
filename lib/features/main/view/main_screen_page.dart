@@ -146,7 +146,7 @@ class MainScreenPage extends StatelessWidget {
             ],
           );
         case MainFlavor.keypad:
-          return KeypadScreenPageRoute();
+          return const KeypadScreenPageRoute();
         case MainFlavor.messaging:
           return const ConversationsScreenPageRoute();
         default:
