@@ -2,7 +2,6 @@ import 'package:json_annotation/json_annotation.dart';
 
 import 'package:webtrit_appearance_theme/models/models.dart';
 
-
 class BottomMenuTabTypeConverter implements JsonConverter<BottomMenuTabType, String> {
   const BottomMenuTabTypeConverter();
 
