@@ -470,6 +470,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     Emitter<CallState> emit,
   ) async {
     if (Platform.isIOS) {
+      // Cleanup devices info if change happened after hangup
+      // to avoid presenting stale data on next call initialization
+      if (state.activeCalls.isEmpty) return emit(state.copyWith(availableAudioDevices: [], audioDevice: null));
+
       final devices = await navigator.mediaDevices.enumerateDevices();
       final output = devices.where((d) => d.kind == 'audiooutput').toList();
       final input = devices.where((d) => d.kind == 'audioinput').toList();
