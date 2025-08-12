@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-class CallPopupMenuButton extends PopupMenuButton {
+class CallPopupMenuButton<T> extends PopupMenuButton<T> {
   CallPopupMenuButton({
     super.key,
     super.onSelected,
     super.child,
     super.offset,
-    required List<PopupMenuItem> items,
+    required List<PopupMenuItem<T>> items,
   }) : super(
           itemBuilder: (context) => items,
           elevation: 4,
@@ -17,7 +17,7 @@ class CallPopupMenuButton extends PopupMenuButton {
         );
 }
 
-class CallPopupMenuItem extends PopupMenuItem {
+class CallPopupMenuItem<T> extends PopupMenuItem<T> {
   CallPopupMenuItem({
     super.key,
     super.value,

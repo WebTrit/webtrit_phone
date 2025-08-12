@@ -101,6 +101,20 @@ class AppLocalizationsMapper {
           localizations.call_CallActionsTooltip_unhold,
       'call_CallActionsTooltip_unmute':
           localizations.call_CallActionsTooltip_unmute,
+      'call_CallActionsTooltip_changeAudioDevice':
+          localizations.call_CallActionsTooltip_changeAudioDevice,
+      'call_CallActionsTooltip_device_speaker':
+          localizations.call_CallActionsTooltip_device_speaker,
+      'call_CallActionsTooltip_device_earpiece':
+          localizations.call_CallActionsTooltip_device_earpiece,
+      'call_CallActionsTooltip_device_wiredHeadset':
+          localizations.call_CallActionsTooltip_device_wiredHeadset,
+      'call_CallActionsTooltip_device_bluetooth':
+          localizations.call_CallActionsTooltip_device_bluetooth,
+      'call_CallActionsTooltip_device_streaming':
+          localizations.call_CallActionsTooltip_device_streaming,
+      'call_CallActionsTooltip_device_unknown':
+          localizations.call_CallActionsTooltip_device_unknown,
       'call_description_held': localizations.call_description_held,
       'call_description_incoming': localizations.call_description_incoming,
       'call_description_inviteToAttendedTransfer':

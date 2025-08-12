@@ -11,7 +11,8 @@ class CallState with _$CallState {
     @Default([]) List<ActiveCall> activeCalls,
     bool? minimized,
     bool? speakerOnBeforeMinimize,
-    bool? speaker,
+    CallAudioDevice? audioDevice,
+    @Default([]) List<CallAudioDevice> availableAudioDevices,
   }) = _CallState;
 
   CallStatus get status => callServiceState.status;
@@ -149,4 +150,71 @@ extension ActiveCallIterableExtension<T extends ActiveCall> on Iterable<T> {
   List<T> get nonCurrent => where((activeCall) => activeCall != current).toList();
 
   T? get blindTransferInitiated => firstWhereOrNull((activeCall) => activeCall.transfer is BlindTransferInitiated);
+}
+
+enum CallAudioDeviceType { earpiece, speaker, bluetooth, wiredHeadset, streaming, unknown }
+
+@freezed
+class CallAudioDevice with _$CallAudioDevice {
+  const CallAudioDevice._();
+
+  factory CallAudioDevice({
+    required CallAudioDeviceType type,
+    String? id,
+    String? name,
+  }) = _CallAudioDevice;
+
+  factory CallAudioDevice.fromMediaInput(MediaDeviceInfo device) {
+    return CallAudioDevice(
+      type: switch (device.groupId) {
+        'MicrophoneBuiltIn' => CallAudioDeviceType.earpiece,
+        'MicrophoneWired' || 'LineIn' || 'USBAudio' => CallAudioDeviceType.wiredHeadset,
+        'BluetoothHFP' => CallAudioDeviceType.bluetooth,
+        'CarAudio' => CallAudioDeviceType.streaming,
+        _ => CallAudioDeviceType.unknown,
+      },
+      name: device.label,
+      id: device.deviceId,
+    );
+  }
+
+  factory CallAudioDevice.fromMediaOutput(MediaDeviceInfo device) {
+    return CallAudioDevice(
+      type: switch (device.groupId) {
+        'Speaker' => CallAudioDeviceType.speaker,
+        'Receiver' => CallAudioDeviceType.earpiece,
+        'BluetoothA2DPOutput' || 'BluetoothHFP' || 'BluetoothLE' => CallAudioDeviceType.bluetooth,
+        'Headphones' || 'LineOut' || 'USBAudio' => CallAudioDeviceType.wiredHeadset,
+        'CarAudio' => CallAudioDeviceType.streaming,
+        _ => CallAudioDeviceType.unknown,
+      },
+      name: device.label,
+      id: device.deviceId,
+    );
+  }
+
+  factory CallAudioDevice.fromCallkeep(CallkeepAudioDevice device) {
+    return CallAudioDevice(
+      type: CallAudioDeviceType.values.byName(device.type.name),
+      id: device.id,
+      name: device.name,
+    );
+  }
+
+  CallkeepAudioDevice toCallkeep() {
+    return CallkeepAudioDevice(
+      type: CallkeepAudioDeviceType.values.byName(type.name),
+      id: id,
+      name: name,
+    );
+  }
+}
+
+extension CallAudioDeviceIterableExtension<T extends CallAudioDevice> on Iterable<T> {
+  bool get onlyBuiltIn => every(
+        (device) => device.type == CallAudioDeviceType.earpiece || device.type == CallAudioDeviceType.speaker,
+      );
+
+  T get getSpeaker => firstWhere((device) => device.type == CallAudioDeviceType.speaker);
+  T get getEarpiece => firstWhere((device) => device.type == CallAudioDeviceType.earpiece);
 }

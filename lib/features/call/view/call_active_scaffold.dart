@@ -11,17 +11,19 @@ import '../call.dart';
 class CallActiveScaffold extends StatefulWidget {
   const CallActiveScaffold({
     super.key,
-    required this.speaker,
     required this.callStatus,
     required this.activeCalls,
+    required this.audioDevice,
+    required this.availableAudioDevices,
     required this.callConfig,
     required this.localePlaceholderBuilder,
     required this.remotePlaceholderBuilder,
   });
 
-  final bool? speaker;
   final CallStatus callStatus;
   final List<ActiveCall> activeCalls;
+  final CallAudioDevice? audioDevice;
+  final List<CallAudioDevice> availableAudioDevices;
   final CallConfig callConfig;
   final WidgetBuilder? localePlaceholderBuilder;
   final WidgetBuilder? remotePlaceholderBuilder;
@@ -211,12 +213,12 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                                             .add(CallControlEvent.setMuted(activeCall.callId, value));
                                         setState(() {});
                                       },
-                                      speakerValue: widget.speaker,
-                                      onSpeakerChanged: (bool value) {
+                                      audioDevice: widget.audioDevice,
+                                      availableAudioDevices: widget.availableAudioDevices,
+                                      onAudioDeviceChanged: (CallAudioDevice device) {
                                         context
                                             .read<CallBloc>()
-                                            .add(CallControlEvent.speakerEnabled(activeCall.callId, value));
-                                        setState(() {});
+                                            .add(CallControlEvent.audioDeviceSet(activeCall.callId, device));
                                       },
                                       transferableCalls: heldCalls,
                                       onBlindTransferInitiated: widget.callConfig.isBlindTransferEnabled

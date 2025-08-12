@@ -24,8 +24,9 @@ class CallActions extends StatefulWidget {
     this.onCameraChanged,
     required this.mutedValue,
     this.onMutedChanged,
-    this.speakerValue,
-    this.onSpeakerChanged,
+    required this.audioDevice,
+    required this.availableAudioDevices,
+    required this.onAudioDeviceChanged,
     this.transferableCalls = const [],
     required this.onBlindTransferInitiated,
     required this.onAttendedTransferInitiated,
@@ -53,8 +54,9 @@ class CallActions extends StatefulWidget {
   final ValueChanged<bool>? onCameraChanged;
   final bool mutedValue;
   final ValueChanged<bool>? onMutedChanged;
-  final bool? speakerValue;
-  final ValueChanged<bool>? onSpeakerChanged;
+  final CallAudioDevice? audioDevice;
+  final List<CallAudioDevice> availableAudioDevices;
+  final Function(CallAudioDevice device) onAudioDeviceChanged;
   final List<ActiveCall> transferableCalls;
   final VoidCallback? onBlindTransferInitiated;
   final VoidCallback? onAttendedTransferInitiated;
@@ -157,8 +159,9 @@ class _CallActionsState extends State<CallActions> {
 
     final onCameraChanged = widget.enableInteractions ? widget.onCameraChanged : null;
     final onMutedChanged = widget.enableInteractions ? widget.onMutedChanged : null;
-    final speakerValue = widget.enableInteractions ? widget.speakerValue : null;
-    final onSpeakerChanged = widget.enableInteractions ? widget.onSpeakerChanged : null;
+    final audioDevice = widget.enableInteractions ? widget.audioDevice : null;
+    final onAudioDeviceChanged = widget.enableInteractions ? widget.onAudioDeviceChanged : null;
+    final speakerOn = widget.enableInteractions ? audioDevice?.type == CallAudioDeviceType.speaker : null;
     final onBlindTransferInitiated = widget.enableInteractions ? widget.onBlindTransferInitiated : null;
     final onAttendedTransferInitiated = widget.enableInteractions ? widget.onAttendedTransferInitiated : null;
     final onAttendedTransferSubmitted = widget.enableInteractions ? widget.onAttendedTransferSubmitted : null;
@@ -364,20 +367,76 @@ class _CallActionsState extends State<CallActions> {
               ),
             ),
           ),
-          Tooltip(
-            message: speakerValue == true
-                ? context.l10n.call_CallActionsTooltip_disableSpeaker
-                : context.l10n.call_CallActionsTooltip_enableSpeaker,
-            child: TextButton(
-              onPressed:
-                  speakerValue == null || onSpeakerChanged == null ? null : () => onSpeakerChanged(!speakerValue),
-              style: speakerValue == true ? style.speakerActive : style.speaker,
-              child: Icon(
-                speakerValue == true ? Icons.volume_up : Icons.volume_off,
-                size: actionPadIconSize,
+          if (widget.availableAudioDevices.onlyBuiltIn)
+            Tooltip(
+              message: speakerOn ?? false
+                  ? context.l10n.call_CallActionsTooltip_disableSpeaker
+                  : context.l10n.call_CallActionsTooltip_enableSpeaker,
+              child: TextButton(
+                onPressed: speakerOn ?? false
+                    ? () => onAudioDeviceChanged?.call(widget.availableAudioDevices.getEarpiece)
+                    : () => onAudioDeviceChanged?.call(widget.availableAudioDevices.getSpeaker),
+                style: speakerOn ?? false ? style.speakerActive : style.speaker,
+                child: Icon(
+                  speakerOn ?? false ? Icons.volume_up : Icons.phone_in_talk,
+                  size: actionPadIconSize,
+                ),
               ),
             ),
-          ),
+          if (!widget.availableAudioDevices.onlyBuiltIn)
+            Tooltip(
+              message: context.l10n.call_CallActionsTooltip_changeAudioDevice,
+              child: CallPopupMenuButton<CallAudioDevice>(
+                offset: Offset(_dimension + 8, 0),
+                items: widget.availableAudioDevices.map(
+                  (device) {
+                    final CallAudioDevice(:name, :type, :id) = device;
+                    return CallPopupMenuItem<CallAudioDevice>(
+                      value: device,
+                      text: switch (type) {
+                        CallAudioDeviceType.speaker => context.l10n.call_CallActionsTooltip_device_speaker,
+                        CallAudioDeviceType.earpiece => context.l10n.call_CallActionsTooltip_device_earpiece,
+                        CallAudioDeviceType.wiredHeadset => context.l10n.call_CallActionsTooltip_device_wiredHeadset,
+                        CallAudioDeviceType.bluetooth => name ?? context.l10n.call_CallActionsTooltip_device_bluetooth,
+                        CallAudioDeviceType.streaming => name ?? context.l10n.call_CallActionsTooltip_device_streaming,
+                        _ => name ?? context.l10n.call_CallActionsTooltip_device_unknown,
+                      },
+                      icon: Icon(
+                        switch (type) {
+                          CallAudioDeviceType.speaker => Icons.volume_up,
+                          CallAudioDeviceType.bluetooth => Icons.bluetooth_audio,
+                          CallAudioDeviceType.wiredHeadset => Icons.headset,
+                          CallAudioDeviceType.earpiece => Icons.phone_in_talk,
+                          CallAudioDeviceType.streaming => Icons.usb,
+                          _ => Icons.device_unknown,
+                        },
+                        size: 20,
+                        color: themeData.textTheme.bodyMedium!.color,
+                      ),
+                      textStyle: themeData.textTheme.bodyMedium,
+                    );
+                  },
+                ).toList(growable: false),
+                onSelected: onAudioDeviceChanged,
+                child: IgnorePointer(
+                  child: TextButton(
+                    onPressed: null,
+                    style: style.speaker,
+                    child: Icon(
+                      switch (audioDevice?.type) {
+                        CallAudioDeviceType.speaker => Icons.volume_up,
+                        CallAudioDeviceType.bluetooth => Icons.bluetooth_audio,
+                        CallAudioDeviceType.wiredHeadset => Icons.headset,
+                        CallAudioDeviceType.earpiece => Icons.phone_in_talk,
+                        CallAudioDeviceType.streaming => Icons.usb,
+                        _ => Icons.volume_off,
+                      },
+                      size: actionPadIconSize,
+                    ),
+                  ),
+                ),
+              ),
+            ),
           // delimiter
           const SizedBox(),
           SizedBox.square(dimension: _actionsDelimiterDimension),

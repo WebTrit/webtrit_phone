@@ -223,7 +223,8 @@ class CallControlEvent with _$CallControlEvent implements CallEvent {
 
   const factory CallControlEvent.cameraEnabled(String callId, bool enabled) = _CallControlEventCameraEnabled;
 
-  const factory CallControlEvent.speakerEnabled(String callId, bool enabled) = _CallControlEventSpeakerEnabled;
+  const factory CallControlEvent.audioDeviceSet(String callId, CallAudioDevice device) =
+      _CallControlEventAudioDeviceSet;
 
   const factory CallControlEvent.failureApproved(String callId) = _CallControlEventFailureApproved;
 
@@ -294,7 +295,10 @@ class _CallPerformEvent with _$CallPerformEvent implements CallEvent {
 
   factory _CallPerformEvent.sentDTMF(String callId, String key) = _CallPerformEventSentDTMF;
 
-  factory _CallPerformEvent.setSpeaker(String callId, bool enabled) = _CallPerformEventSetSpeaker;
+  factory _CallPerformEvent.audioDeviceSet(String callId, CallAudioDevice device) = _CallPerformEventAudioDeviceSet;
+
+  factory _CallPerformEvent.audioDevicesUpdate(String callId, List<CallAudioDevice> devices) =
+      _CallPerformEventAudioDevicesUpdate;
 
   final _performCompleter = Completer<bool>();
 
