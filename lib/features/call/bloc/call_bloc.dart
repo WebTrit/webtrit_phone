@@ -109,7 +109,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     );
     on<_NavigatorMediaDevicesChange>(
       _onNavigatorMediaDevicesChange,
-      transformer: droppable(),
+      transformer: debounce(),
     );
     on<_RegistrationChange>(
       _onRegistrationChange,
