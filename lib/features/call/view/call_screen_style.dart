@@ -2,14 +2,17 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'package:webtrit_phone/theme/styles/styles.dart';
+
 class CallScreenStyle with Diagnosticable {
   CallScreenStyle({
     this.systemUiOverlayStyle,
+    this.appBar,
     this.callInfo,
   });
 
   final SystemUiOverlayStyle? systemUiOverlayStyle;
-
+  final AppBarStyle? appBar;
   final CallInfoStyle? callInfo;
 
   static CallScreenStyle? lerp(CallScreenStyle? a, CallScreenStyle? b, double t) {
@@ -18,6 +21,7 @@ class CallScreenStyle with Diagnosticable {
     return CallScreenStyle(
       systemUiOverlayStyle: b?.systemUiOverlayStyle ?? a?.systemUiOverlayStyle,
       callInfo: CallInfoStyle.lerp(a?.callInfo, b?.callInfo, t),
+      appBar: AppBarStyle.lerp(a?.appBar, b?.appBar, t),
     );
   }
 
@@ -26,6 +30,7 @@ class CallScreenStyle with Diagnosticable {
     super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty<SystemUiOverlayStyle?>('systemUiOverlayStyle', systemUiOverlayStyle))
+      ..add(DiagnosticsProperty<AppBarStyle?>('appBar', appBar))
       ..add(DiagnosticsProperty<CallInfoStyle?>('callInfo', callInfo));
   }
 }

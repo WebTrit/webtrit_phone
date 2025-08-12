@@ -80,6 +80,10 @@ The call page configuration includes:
     - `statusBarIconBrightness`: Brightness of status bar icons (`dark` | `light`)
     - `systemNavigationBarColor`: Background color of navigation bar
     - `systemNavigationBarIconBrightness`: Brightness of nav bar icons (`dark` | `light`)
+- `appBarStyle`: Configures the appearance of the App Bar during a call
+    - `backgroundColor`: Background color of the App Bar (hex format)
+    - `foregroundColor`: Color for icons and text in the App Bar (hex format)
+    - `primary`: Whether the App Bar is primary (`true` | `false`)
 - `callInfo`: Styling for call information text
     - `usernameTextStyle`: Text style for username
     - `numberTextStyle`: Text style for phone number
@@ -95,6 +99,12 @@ The call page configuration includes:
     "statusBarIconBrightness": "dark",
     "systemNavigationBarColor": "#0A0A0A",
     "systemNavigationBarIconBrightness": "dark"
+  },
+  "appBarStyle": {
+    "backgroundColor": "#00000000",
+    "foregroundColor": "#EEF3F6",
+    "primary": false,
+    "showBackButton": true
   },
   "callInfo": {
     "usernameTextStyle": {

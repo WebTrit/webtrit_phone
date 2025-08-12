@@ -148,10 +148,10 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                     child: Column(
                       children: [
                         AppBar(
-                          leading: const ExtBackButton(),
-                          backgroundColor: Colors.transparent,
-                          foregroundColor: onTabGradient,
-                          primary: false,
+                          leading: style?.appBar?.showBackButton == false ? null : const ExtBackButton(),
+                          backgroundColor: style?.appBar?.backgroundColor,
+                          foregroundColor: style?.appBar?.foregroundColor,
+                          primary: style?.appBar?.primary ?? false,
                         ),
                         Expanded(
                           child: LayoutBuilder(builder: (context, constraints) {
