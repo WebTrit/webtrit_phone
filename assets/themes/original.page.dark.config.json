@@ -18,6 +18,11 @@
       "systemNavigationBarColor": "#000000",
       "systemNavigationBarIconBrightness": "light"
     },
+    "appBarStyle": {
+      "backgroundColor": null,
+      "foregroundColor": null,
+      "primary": false
+    },
     "callInfo": {
       "usernameTextStyle": {
         "fontSize": 24,

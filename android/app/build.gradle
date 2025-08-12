@@ -32,13 +32,17 @@ if (project.hasProperty('dart-defines')) {
     projectPropertyDartDefines += project.property('dart-defines')
             .split(',')
             .collectEntries { entry ->
-                def pair = new String(entry.decodeBase64(), 'UTF-8').split('=')
+                def decoded = new String(entry.decodeBase64(), 'UTF-8')
+                def pair = decoded.split('=')
+                println("Dart define pair: $pair")
                 if (pair.size() > 1) {
                     [(pair.first()): pair.last()]
                 } else {
                     [(pair.first()): '']
                 }
             }
+} else {
+    println("No dart defines proovided")
 }
 
 def dartDefine = [WEBTRIT_APP_LINK_DOMAIN: projectPropertyDartDefines['WEBTRIT_APP_LINK_DOMAIN'] ?: 'app.webtrit.com',
@@ -246,6 +250,8 @@ android {
         versionName flutterVersionName
 
         resValue "string", "APP_NAME", dartDefine.WEBTRIT_APP_NAME
+        testInstrumentationRunner "pl.leancode.patrol.PatrolJUnitRunner"
+        testInstrumentationRunnerArguments clearPackageData: "true"
     }
 
     signingConfigs {
@@ -261,6 +267,12 @@ android {
             signingConfig signingConfigs.release
         }
     }
+    buildFeatures {
+        buildConfig = true
+    }
+    testOptions {
+        execution = "ANDROIDX_TEST_ORCHESTRATOR"
+    }
     preBuild.dependsOn generateNetworkSecurityConfig
 }
 
@@ -269,5 +281,6 @@ flutter {
 }
 
 dependencies {
+    androidTestUtil "androidx.test:orchestrator:1.5.1"
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.2.2'
 }

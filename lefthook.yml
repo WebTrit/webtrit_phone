@@ -1,0 +1,20 @@
+pre-commit:
+  parallel: true
+  commands:
+    lint:
+      run: flutter analyze
+
+pre-push:
+  parallel: true
+  commands:
+    branch-name-check:
+      run: bash tool/scripts/branch-name-check.sh
+    analyze:
+      run: flutter analyze
+    test:
+      run: flutter test
+
+commit-msg:
+  commands:
+    commit-msg-check:
+      run: bash tool/scripts/commit-msg-check.sh

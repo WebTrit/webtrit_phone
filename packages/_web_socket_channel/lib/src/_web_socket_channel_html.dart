@@ -1,4 +1,7 @@
 import 'dart:async';
+
+// This import is only used for web builds; not used in production.
+// ignore: deprecated_member_use
 import 'dart:html' as html;
 
 import 'package:web_socket_channel/html.dart';

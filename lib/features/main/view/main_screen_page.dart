@@ -146,7 +146,7 @@ class MainScreenPage extends StatelessWidget {
             ],
           );
         case MainFlavor.keypad:
-          return KeypadScreenPageRoute();
+          return const KeypadScreenPageRoute();
         case MainFlavor.messaging:
           return const ConversationsScreenPageRoute();
         default:
@@ -161,7 +161,7 @@ class MainScreenPage extends StatelessWidget {
       Widget icon = Icon(tab.icon);
       String label = context.parseL10n(tab.titleL10n);
       if (flavor == MainFlavor.messaging) icon = MessagingFlavorOverlay(child: icon);
-      return BottomNavigationBarItem(icon: icon, label: label);
+      return BottomNavigationBarItem(key: flavor.toNavBarKey(), icon: icon, label: label);
     }).toList();
   }
 }

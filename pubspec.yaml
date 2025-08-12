@@ -127,6 +127,7 @@ dev_dependencies:
   flutter_native_splash: ^2.4.5
   freezed: ^2.5.2
   json_serializable: ^6.7.1
+  patrol: ^3.15.1
   mocktail: ^1.0.4
 
 flutter:
@@ -146,3 +147,10 @@ flutter_gen:
   output: lib/app/
   integrations:
     flutter_svg: true
+
+patrol:
+  app_name: Webtrit
+  android:
+    package_name: com.webtrit.app
+  ios:
+    bundle_id: com.webtrit.app

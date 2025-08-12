@@ -108,6 +108,10 @@ _$CallPageConfigImpl _$$CallPageConfigImplFromJson(Map<String, dynamic> json) =>
           ? null
           : OverlayStyleModel.fromJson(
               json['systemUiOverlayStyle'] as Map<String, dynamic>),
+      appBarStyle: json['appBarStyle'] == null
+          ? null
+          : AppBarStyleConfig.fromJson(
+              json['appBarStyle'] as Map<String, dynamic>),
       callInfo: json['callInfo'] == null
           ? null
           : CallPageInfoConfig.fromJson(
@@ -118,6 +122,7 @@ Map<String, dynamic> _$$CallPageConfigImplToJson(
         _$CallPageConfigImpl instance) =>
     <String, dynamic>{
       'systemUiOverlayStyle': instance.systemUiOverlayStyle?.toJson(),
+      'appBarStyle': instance.appBarStyle?.toJson(),
       'callInfo': instance.callInfo?.toJson(),
     };
 

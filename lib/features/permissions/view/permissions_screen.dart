@@ -59,18 +59,23 @@ class PermissionsScreen extends StatelessWidget {
                 ),
                 const Spacer(),
                 const SizedBox(height: kInset),
-                OutlinedButton(
-                  key: state.isInitial ? permissionsInitButtonKey : null,
-                  onPressed: state.isInitial ? () => context.read<PermissionsCubit>().requestPermissions() : null,
-                  style: elevatedButtonStyles?.primary,
-                  child: state.isInitial
-                      ? Text(context.l10n.permission_Button_request)
-                      : SizedCircularProgressIndicator(
-                          size: 16,
-                          strokeWidth: 2,
-                          color: elevatedButtonStyles?.primary?.foregroundColor?.resolve({}),
-                        ),
-                )
+                if (state.isInitial)
+                  OutlinedButton(
+                    key: permissionsInitButtonKey,
+                    onPressed: () => context.read<PermissionsCubit>().requestPermissions(),
+                    style: elevatedButtonStyles?.primary,
+                    child: Text(context.l10n.permission_Button_request),
+                  )
+                else
+                  OutlinedButton(
+                    onPressed: null,
+                    style: elevatedButtonStyles?.primary,
+                    child: SizedCircularProgressIndicator(
+                      size: 16,
+                      strokeWidth: 2,
+                      color: elevatedButtonStyles?.primary?.foregroundColor?.resolve({}),
+                    ),
+                  ),
               ],
             ),
           );

@@ -343,12 +343,9 @@ class _DraggableThumbnailState extends State<DraggableThumbnail> {
     final callCardRenderBox = _callCardKey.currentContext?.findRenderObject()! as RenderBox;
     final offset = callCardRenderBox.localToGlobal(Offset.zero) + delta;
     final size = callCardRenderBox.size;
-    return Rect.fromLTWH(
-      offset.dx,
-      offset.dy,
-      size.width,
-      size.height,
-    );
+    if (!callCardRenderBox.hasSize) return Rect.zero;
+
+    return Rect.fromLTWH(offset.dx, offset.dy, size.width, size.height);
   }
 
   double _stickTranslateX(Rect stickyRect, Rect translateRect) {

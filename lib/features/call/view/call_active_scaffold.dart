@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
@@ -112,6 +113,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                               child: activeCall.frontCamera == null
                                   ? null
                                   : RTCStreamView(
+                                      key: callFrontCameraPreviewKey,
                                       stream: activeCall.localStream,
                                       mirror: activeCall.frontCamera!,
                                       placeholderBuilder: widget.localePlaceholderBuilder,
@@ -148,10 +150,10 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                     child: Column(
                       children: [
                         AppBar(
-                          leading: const ExtBackButton(),
-                          backgroundColor: Colors.transparent,
-                          foregroundColor: onTabGradient,
-                          primary: false,
+                          leading: style?.appBar?.showBackButton == false ? null : const ExtBackButton(),
+                          backgroundColor: style?.appBar?.backgroundColor,
+                          foregroundColor: style?.appBar?.foregroundColor,
+                          primary: style?.appBar?.primary ?? false,
                         ),
                         Expanded(
                           child: LayoutBuilder(builder: (context, constraints) {

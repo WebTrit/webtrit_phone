@@ -71,6 +71,7 @@ class CallPageConfig with _$CallPageConfig {
   @JsonSerializable(explicitToJson: true)
   const factory CallPageConfig({
     OverlayStyleModel? systemUiOverlayStyle,
+    AppBarStyleConfig? appBarStyle,
     CallPageInfoConfig? callInfo,
   }) = _CallPageConfig;
 
