@@ -30,7 +30,10 @@
       "loading": {
         "showByDefault": false,
         "padding": {
-          "all": 2.0
+          "left": 2.0,
+          "top": 2.0,
+          "right": 2.0,
+          "bottom": 2.0
         },
         "strokeWidth": 1.0
       },

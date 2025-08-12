@@ -448,8 +448,8 @@ mixin _$LoadingOverlayStyleConfig {
   /// Whether the overlay should be shown by default (widget may still override).
   bool get showByDefault => throw _privateConstructorUsedError;
 
-  /// Uniform padding around the progress indicator. Defaults to 2.0 in widget.
-  double? get paddingAll => throw _privateConstructorUsedError;
+  /// Padding around the loading indicator.
+  PaddingConfig get padding => throw _privateConstructorUsedError;
 
   /// CircularProgressIndicator stroke width (defaults to 1.0 in widget).
   double? get strokeWidth => throw _privateConstructorUsedError;
@@ -470,7 +470,9 @@ abstract class $LoadingOverlayStyleConfigCopyWith<$Res> {
           $Res Function(LoadingOverlayStyleConfig) then) =
       _$LoadingOverlayStyleConfigCopyWithImpl<$Res, LoadingOverlayStyleConfig>;
   @useResult
-  $Res call({bool showByDefault, double? paddingAll, double? strokeWidth});
+  $Res call({bool showByDefault, PaddingConfig padding, double? strokeWidth});
+
+  $PaddingConfigCopyWith<$Res> get padding;
 }
 
 /// @nodoc
@@ -490,7 +492,7 @@ class _$LoadingOverlayStyleConfigCopyWithImpl<$Res,
   @override
   $Res call({
     Object? showByDefault = null,
-    Object? paddingAll = freezed,
+    Object? padding = null,
     Object? strokeWidth = freezed,
   }) {
     return _then(_value.copyWith(
@@ -498,15 +500,25 @@ class _$LoadingOverlayStyleConfigCopyWithImpl<$Res,
           ? _value.showByDefault
           : showByDefault // ignore: cast_nullable_to_non_nullable
               as bool,
-      paddingAll: freezed == paddingAll
-          ? _value.paddingAll
-          : paddingAll // ignore: cast_nullable_to_non_nullable
-              as double?,
+      padding: null == padding
+          ? _value.padding
+          : padding // ignore: cast_nullable_to_non_nullable
+              as PaddingConfig,
       strokeWidth: freezed == strokeWidth
           ? _value.strokeWidth
           : strokeWidth // ignore: cast_nullable_to_non_nullable
               as double?,
     ) as $Val);
+  }
+
+  /// Create a copy of LoadingOverlayStyleConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $PaddingConfigCopyWith<$Res> get padding {
+    return $PaddingConfigCopyWith<$Res>(_value.padding, (value) {
+      return _then(_value.copyWith(padding: value) as $Val);
+    });
   }
 }
 
@@ -519,7 +531,10 @@ abstract class _$$LoadingOverlayStyleConfigImplCopyWith<$Res>
       __$$LoadingOverlayStyleConfigImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({bool showByDefault, double? paddingAll, double? strokeWidth});
+  $Res call({bool showByDefault, PaddingConfig padding, double? strokeWidth});
+
+  @override
+  $PaddingConfigCopyWith<$Res> get padding;
 }
 
 /// @nodoc
@@ -538,7 +553,7 @@ class __$$LoadingOverlayStyleConfigImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? showByDefault = null,
-    Object? paddingAll = freezed,
+    Object? padding = null,
     Object? strokeWidth = freezed,
   }) {
     return _then(_$LoadingOverlayStyleConfigImpl(
@@ -546,10 +561,10 @@ class __$$LoadingOverlayStyleConfigImplCopyWithImpl<$Res>
           ? _value.showByDefault
           : showByDefault // ignore: cast_nullable_to_non_nullable
               as bool,
-      paddingAll: freezed == paddingAll
-          ? _value.paddingAll
-          : paddingAll // ignore: cast_nullable_to_non_nullable
-              as double?,
+      padding: null == padding
+          ? _value.padding
+          : padding // ignore: cast_nullable_to_non_nullable
+              as PaddingConfig,
       strokeWidth: freezed == strokeWidth
           ? _value.strokeWidth
           : strokeWidth // ignore: cast_nullable_to_non_nullable
@@ -562,7 +577,9 @@ class __$$LoadingOverlayStyleConfigImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$LoadingOverlayStyleConfigImpl implements _LoadingOverlayStyleConfig {
   const _$LoadingOverlayStyleConfigImpl(
-      {this.showByDefault = false, this.paddingAll, this.strokeWidth});
+      {this.showByDefault = false,
+      this.padding = PaddingConfig.default2,
+      this.strokeWidth});
 
   factory _$LoadingOverlayStyleConfigImpl.fromJson(Map<String, dynamic> json) =>
       _$$LoadingOverlayStyleConfigImplFromJson(json);
@@ -572,9 +589,10 @@ class _$LoadingOverlayStyleConfigImpl implements _LoadingOverlayStyleConfig {
   @JsonKey()
   final bool showByDefault;
 
-  /// Uniform padding around the progress indicator. Defaults to 2.0 in widget.
+  /// Padding around the loading indicator.
   @override
-  final double? paddingAll;
+  @JsonKey()
+  final PaddingConfig padding;
 
   /// CircularProgressIndicator stroke width (defaults to 1.0 in widget).
   @override
@@ -582,7 +600,7 @@ class _$LoadingOverlayStyleConfigImpl implements _LoadingOverlayStyleConfig {
 
   @override
   String toString() {
-    return 'LoadingOverlayStyleConfig(showByDefault: $showByDefault, paddingAll: $paddingAll, strokeWidth: $strokeWidth)';
+    return 'LoadingOverlayStyleConfig(showByDefault: $showByDefault, padding: $padding, strokeWidth: $strokeWidth)';
   }
 
   @override
@@ -592,8 +610,7 @@ class _$LoadingOverlayStyleConfigImpl implements _LoadingOverlayStyleConfig {
             other is _$LoadingOverlayStyleConfigImpl &&
             (identical(other.showByDefault, showByDefault) ||
                 other.showByDefault == showByDefault) &&
-            (identical(other.paddingAll, paddingAll) ||
-                other.paddingAll == paddingAll) &&
+            (identical(other.padding, padding) || other.padding == padding) &&
             (identical(other.strokeWidth, strokeWidth) ||
                 other.strokeWidth == strokeWidth));
   }
@@ -601,7 +618,7 @@ class _$LoadingOverlayStyleConfigImpl implements _LoadingOverlayStyleConfig {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode =>
-      Object.hash(runtimeType, showByDefault, paddingAll, strokeWidth);
+      Object.hash(runtimeType, showByDefault, padding, strokeWidth);
 
   /// Create a copy of LoadingOverlayStyleConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -623,7 +640,7 @@ class _$LoadingOverlayStyleConfigImpl implements _LoadingOverlayStyleConfig {
 abstract class _LoadingOverlayStyleConfig implements LoadingOverlayStyleConfig {
   const factory _LoadingOverlayStyleConfig(
       {final bool showByDefault,
-      final double? paddingAll,
+      final PaddingConfig padding,
       final double? strokeWidth}) = _$LoadingOverlayStyleConfigImpl;
 
   factory _LoadingOverlayStyleConfig.fromJson(Map<String, dynamic> json) =
@@ -633,9 +650,9 @@ abstract class _LoadingOverlayStyleConfig implements LoadingOverlayStyleConfig {
   @override
   bool get showByDefault;
 
-  /// Uniform padding around the progress indicator. Defaults to 2.0 in widget.
+  /// Padding around the loading indicator.
   @override
-  double? get paddingAll;
+  PaddingConfig get padding;
 
   /// CircularProgressIndicator stroke width (defaults to 1.0 in widget).
   @override

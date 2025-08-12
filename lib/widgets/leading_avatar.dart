@@ -19,7 +19,7 @@ class LeadingAvatar extends StatefulWidget {
     this.smart = false,
     this.radius = 20.0, // value of private _defaultRadius variable in CircleAvatar class
     this.showLoading = false,
-    this.loadingPadding = const EdgeInsets.all(2),
+    this.loadingPadding,
     this.style,
   });
 
@@ -31,7 +31,7 @@ class LeadingAvatar extends StatefulWidget {
   final bool smart;
   final double radius;
   final bool showLoading;
-  final EdgeInsets loadingPadding;
+  final EdgeInsets? loadingPadding;
   final LeadingAvatarStyle? style;
 
   @override
@@ -159,7 +159,7 @@ class _LeadingAvatarState extends State<LeadingAvatar> {
   Widget _buildLoadingOverlay(LeadingAvatarStyle style) {
     final hasAvatarData = widget.username != null || (widget.thumbnail != null || widget.thumbnailUrl != null);
 
-    final paddingAll = style.loadingOverlay?.padding ?? widget.loadingPadding;
+    final padding = widget.loadingPadding ?? style.loadingOverlay?.padding ?? EdgeInsets.zero;
     final strokeWidth = style.loadingOverlay?.strokeWidth ?? 1.0;
 
     return AnimatedSwitcher(
@@ -174,7 +174,7 @@ class _LeadingAvatarState extends State<LeadingAvatar> {
               width: kMinInteractiveDimension,
               height: kMinInteractiveDimension,
               child: Padding(
-                padding: paddingAll,
+                padding: padding,
                 child: CircularProgressIndicator(strokeWidth: strokeWidth),
               ),
             ),

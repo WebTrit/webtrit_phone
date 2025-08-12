@@ -35,7 +35,7 @@ class LeadingAvatarStyleFactory implements ThemeStyleFactory<LeadingAvatarStyles
     if (c == null) return null;
     return LoadingOverlayStyle(
       showByDefault: c.showByDefault,
-      padding: c.paddingAll != null ? EdgeInsets.all(c.paddingAll!) : null,
+      padding: c.padding.toEdgeInsets(),
       strokeWidth: c.strokeWidth,
     );
   }
