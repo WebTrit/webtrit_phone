@@ -49,7 +49,9 @@ _$LoadingOverlayStyleConfigImpl _$$LoadingOverlayStyleConfigImplFromJson(
         Map<String, dynamic> json) =>
     _$LoadingOverlayStyleConfigImpl(
       showByDefault: json['showByDefault'] as bool? ?? false,
-      paddingAll: (json['paddingAll'] as num?)?.toDouble(),
+      padding: json['padding'] == null
+          ? PaddingConfig.default2
+          : PaddingConfig.fromJson(json['padding'] as Map<String, dynamic>),
       strokeWidth: (json['strokeWidth'] as num?)?.toDouble(),
     );
 
@@ -57,7 +59,7 @@ Map<String, dynamic> _$$LoadingOverlayStyleConfigImplToJson(
         _$LoadingOverlayStyleConfigImpl instance) =>
     <String, dynamic>{
       'showByDefault': instance.showByDefault,
-      'paddingAll': instance.paddingAll,
+      'padding': instance.padding,
       'strokeWidth': instance.strokeWidth,
     };
 

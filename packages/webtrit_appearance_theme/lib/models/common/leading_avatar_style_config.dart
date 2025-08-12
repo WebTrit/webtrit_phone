@@ -1,6 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'icon_data_config.dart';
+import 'padding_config.dart';
 import 'text_style_config.dart';
 
 part 'leading_avatar_style_config.freezed.dart';
@@ -46,8 +47,8 @@ class LoadingOverlayStyleConfig with _$LoadingOverlayStyleConfig {
     /// Whether the overlay should be shown by default (widget may still override).
     @Default(false) bool showByDefault,
 
-    /// Uniform padding around the progress indicator. Defaults to 2.0 in widget.
-    double? paddingAll,
+    /// Padding around the loading indicator.
+    @Default(PaddingConfig.default2) PaddingConfig padding,
 
     /// CircularProgressIndicator stroke width (defaults to 1.0 in widget).
     double? strokeWidth,
