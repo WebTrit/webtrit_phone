@@ -1,5 +1,7 @@
 export 'backoff_retries.dart';
+export 'badge_layout.dart';
 export 'buffer_transformer.dart';
+export 'connectivity_checker.dart';
 export 'equatable_prop_to_string.dart';
 export 'gravatar.dart';
 export 'multi_tap_trigger.dart';
@@ -13,4 +15,3 @@ export 'webtrit_api_client.dart';
 export 'webtrit_http_executor.dart';
 export 'webtrit_signaling_client.dart';
 export 'webtrit_signaling_utils.dart';
-export 'connectivity_checker.dart';

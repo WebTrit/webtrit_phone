@@ -9,6 +9,7 @@ export 'elevated_button_style_factory.dart';
 export 'gradients_style_factory.dart';
 export 'group_title_list_styles.dart';
 export 'input_decoration_style_factory.dart';
+export 'leading_avatar_style_factory.dart';
 export 'linkify_style_factory.dart';
 export 'login_mode_select_screen_style_factory.dart';
 export 'logo_assets_factory.dart';
