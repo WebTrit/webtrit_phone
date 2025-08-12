@@ -149,8 +149,8 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                       children: [
                         AppBar(
                           leading: style?.appBar?.showBackButton == false ? null : const ExtBackButton(),
-                          backgroundColor: style?.appBar?.backgroundColor ?? Colors.transparent,
-                          foregroundColor: style?.appBar?.foregroundColor ?? onTabGradient,
+                          backgroundColor: style?.appBar?.backgroundColor,
+                          foregroundColor: style?.appBar?.foregroundColor,
                           primary: style?.appBar?.primary ?? false,
                         ),
                         Expanded(

@@ -37,7 +37,7 @@ class CallScreenStyleFactory implements ThemeStyleFactory<CallScreenStyles> {
 
     return AppBarStyle(
       backgroundColor: cfg.backgroundColor?.toColor() ?? Colors.transparent,
-      foregroundColor: cfg.foregroundColor?.toColor(),
+      foregroundColor: cfg.foregroundColor?.toColor() ?? colors.surface,
       primary: cfg.primary,
       showBackButton: cfg.showBackButton,
     );
