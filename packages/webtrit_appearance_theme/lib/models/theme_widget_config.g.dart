@@ -257,6 +257,10 @@ _$ImageAssetsConfigImpl _$$ImageAssetsConfigImplFromJson(
           ? const AppIconWidgetConfig()
           : AppIconWidgetConfig.fromJson(
               json['appIcon'] as Map<String, dynamic>),
+      leadingAvatarStyle: json['leadingAvatarStyle'] == null
+          ? const LeadingAvatarStyleConfig()
+          : LeadingAvatarStyleConfig.fromJson(
+              json['leadingAvatarStyle'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$$ImageAssetsConfigImplToJson(
@@ -265,6 +269,7 @@ Map<String, dynamic> _$$ImageAssetsConfigImplToJson(
       'primaryOnboardingLogo': instance.primaryOnboardingLogo.toJson(),
       'secondaryOnboardingLogo': instance.secondaryOnboardingLogo.toJson(),
       'appIcon': instance.appIcon.toJson(),
+      'leadingAvatarStyle': instance.leadingAvatarStyle.toJson(),
     };
 
 _$ImageAssetConfigImpl _$$ImageAssetConfigImplFromJson(

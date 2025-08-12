@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import 'common/leading_avatar_style_config.dart';
 import 'custom_color.dart';
 import 'features_config/metadata.dart';
 
@@ -153,6 +154,7 @@ class ImageAssetsConfig with _$ImageAssetsConfig {
     @Default(ImageAssetConfig(uri: 'asset://assets/secondary_onboardin_logo.svg'))
     ImageAssetConfig secondaryOnboardingLogo,
     @Default(AppIconWidgetConfig()) AppIconWidgetConfig appIcon,
+    @Default(LeadingAvatarStyleConfig()) LeadingAvatarStyleConfig leadingAvatarStyle,
   }) = _ImageAssetsConfig;
 
   factory ImageAssetsConfig.fromJson(Map<String, dynamic> json) => _$ImageAssetsConfigFromJson(json);
