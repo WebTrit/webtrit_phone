@@ -21,6 +21,7 @@ class CallScreenStyleFactory implements ThemeStyleFactory<CallScreenStyles> {
         systemUiOverlayStyle: config?.systemUiOverlayStyle?.toSystemUiOverlayStyle(),
         callInfo: CallInfoStyle(
           userInfo: infoConfig?.usernameTextStyle?.toTextStyle(fallbackColor: colors.surface),
+          number: infoConfig?.numberTextStyle?.toTextStyle(fallbackColor: colors.surface),
           callStatus: infoConfig?.callStatusTextStyle?.toTextStyle(fallbackColor: colors.surface),
           processingStatus: infoConfig?.processingStatusTextStyle?.toTextStyle(fallbackColor: colors.surface),
         ),
