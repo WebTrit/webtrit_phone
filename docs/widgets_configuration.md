@@ -7,6 +7,7 @@
 - [Group Configuration](#group-configuration)
 - [Bar Configuration](#bar-configuration)
 - [Picture Configuration](#picture-configuration)
+    - [Leading Avatar Style Configuration](#leading-avatar-style-configuration)
 - [Input Configuration](#input-configuration)
 - [Text Configuration](#text-configuration)
 - [Dialog Configuration](#dialog-configuration)
@@ -18,7 +19,8 @@
 
 ## Setup Widget Configuration
 
-The widget configuration defines various UI components used throughout the application. Below are the different
+The widget configuration defines various UI components used throughout the application. Below are
+the different
 configuration categories:
 
 ### Fonts Configuration
@@ -29,7 +31,8 @@ Defines the default font settings from [Google Fonts](https://fonts.google.com/)
 
 ### Button Configuration
 
-Override the default button styles (primary, neutral, primaryOnDark, neutralOnDark) with custom configurations. Defines
+Override the default button styles (primary, neutral, primaryOnDark, neutralOnDark) with custom
+configurations. Defines
 button styles, including:
 
 ```json
@@ -134,29 +137,149 @@ Defines navigation bars:
 }
 ```
 
-### Picture Configuration
+## Picture Configuration
 
-Defines image assets used across the application, including onboarding logos and icons.
+#### **Main structure:**
+
+```json
+{
+  "primaryOnboardingLogo": "asset://assets/primary_onboarding_logo.svg",
+  "secondaryOnboardingLogo": "asset://assets/secondary_onboarding_logo.svg",
+  "onboardingPictureLogo": {},
+  "onboardingLogo": {},
+  "appIcon": {},
+  "leadingAvatarStyle": {}
+}
+```
+
+---
+
+#### Primary / Secondary Onboarding Logo
+
+- **primaryOnboardingLogo** — Path to the primary onboarding logo.
+- **secondaryOnboardingLogo** — Path to the secondary onboarding logo.  
+  Supports local (`asset://`) or remote (`https://`) resources.
+
+---
+
+#### Onboarding Picture Logo
+
+Configurable properties:
+
+- **scale** — Scaling factor for the image.
+- **labelColor** — Label color (hex format).
 
 **Example:**
 
 ```json
 {
-  "primaryOnboardingLogo": "asset://assets/primary_onboardin_logo.svg",
-  "secondaryOnboardingLogo": "asset://assets/secondary_onboardin_logo.svg",
   "onboardingPictureLogo": {
     "scale": "#ffffff",
     "labelColor": "#ffffff"
-  },
+  }
+}
+```
+
+---
+
+#### Onboarding Logo
+
+Configurable properties:
+
+- **scale** — Scaling factor for the logo.
+- **labelColor** — Label color (hex format).
+
+**Example:**
+
+```json
+{
   "onboardingLogo": {
     "scale": "#ffffff",
     "labelColor": "#ffffff"
-  },
+  }
+}
+```
+
+---
+
+#### App Icon
+
+Configurable properties:
+
+- **color** — Color overlay for the application icon (hex format).
+
+**Example:**
+
+```json
+{
   "appIcon": {
     "color": "#ffffff"
-  },
-  "metadata": {
-    "attributes": {}
+  }
+}
+```
+
+#### Leading Avatar Style Configuration
+
+The **Leading Avatar** component is a circular profile/avatar element commonly used in lists, call
+screens, and contact details.  
+It can display a user’s photo, initials, or a placeholder icon, and supports additional visual
+indicators like loading states,  
+smart badges, and registration status markers.
+
+**You can configure:**
+
+- **Background color** — circle fill color (hex).
+- **Size** — radius in logical pixels.
+- **Initials text style** — font, size, weight, color, etc.
+- **Placeholder icon** — icon to show when no photo is available (by `codePoint` or `name`).
+- **Loading overlay** — loader visibility, padding, stroke width.
+- **Smart indicator** — top-left badge with background color, icon, and size factor.
+- **Registered badge** — bottom-right badge with colors for registered/unregistered and size factor.
+
+**Example:**
+
+```json
+{
+  "leadingAvatarStyle": {
+    "backgroundColor": "#EEF3F6",
+    "radius": 20.0,
+    "initialsTextStyle": {
+      "fontFamily": "Montserrat",
+      "fontSize": null,
+      "fontWeight": {
+        "weight": 700
+      },
+      "color": "#1F618F"
+    },
+    "placeholderIcon": {
+      "codePoint": "0xe497",
+      "fontFamily": "MaterialIcons",
+      "matchTextDirection": false
+    },
+    "loading": {
+      "showByDefault": false,
+      "padding": {
+        "left": 2.0,
+        "top": 2.0,
+        "right": 2.0,
+        "bottom": 2.0
+      },
+      "strokeWidth": 1.0
+    },
+    "smartIndicator": {
+      "backgroundColor": "#F8FBFD",
+      "icon": {
+        "codePoint": "0xe491",
+        "fontFamily": "MaterialIcons",
+        "matchTextDirection": false
+      },
+      "sizeFactor": 0.4
+    },
+    "registeredBadge": {
+      "registeredColor": null,
+      "unregisteredColor": null,
+      "sizeFactor": 0.2
+    }
   }
 }
 ```
@@ -165,7 +288,7 @@ Defines image assets used across the application, including onboarding logos and
 
 Defines input fields, including:
 
-**Example:**
+**Example: **
 
 ```json
 {
