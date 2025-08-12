@@ -12,7 +12,6 @@ export 'mock_main_bloc.dart';
 export 'mock_messaging_bloc.dart';
 export 'mock_recents_bloc.dart';
 export 'mock_register_status_cubit.dart';
-export 'mock_self_config_cubit.dart';
 export 'mock_session_status_cubit.dart';
 export 'mock_settings_bloc.dart';
 export 'mock_sms_conversations_cubit.dart';

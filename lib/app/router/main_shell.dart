@@ -379,13 +379,6 @@ class _MainShellState extends State<MainShell> {
                 ),
                 BlocProvider(
                   lazy: false,
-                  create: (_) => SelfConfigCubit(
-                    context.read<CustomPrivateGatewayRepository>(),
-                    context.read<FeatureAccess>().settingsFeature.isSelfConfigEnabled,
-                  ),
-                ),
-                BlocProvider(
-                  lazy: false,
                   create: (_) => SessionStatusCubit(
                     pushTokensBloc: context.read<PushTokensBloc>(),
                     callBloc: context.read<CallBloc>(),

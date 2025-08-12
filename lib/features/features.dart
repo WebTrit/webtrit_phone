@@ -18,7 +18,6 @@ export 'push_tokens/push_token.dart';
 export 'call_log/call_log.dart';
 export 'recents/recents.dart';
 export 'register_status/register_status.dart';
-export 'self_config/self_config.dart';
 export 'session_status/session_status.dart';
 export 'settings/settings.dart';
 export 'system_notifications/system_notifications.dart';
