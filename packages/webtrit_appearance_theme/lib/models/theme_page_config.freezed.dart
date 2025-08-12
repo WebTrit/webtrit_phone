@@ -942,6 +942,7 @@ CallPageConfig _$CallPageConfigFromJson(Map<String, dynamic> json) {
 mixin _$CallPageConfig {
   OverlayStyleModel? get systemUiOverlayStyle =>
       throw _privateConstructorUsedError;
+  AppBarStyleConfig? get appBarStyle => throw _privateConstructorUsedError;
   CallPageInfoConfig? get callInfo => throw _privateConstructorUsedError;
 
   /// Serializes this CallPageConfig to a JSON map.
@@ -961,9 +962,12 @@ abstract class $CallPageConfigCopyWith<$Res> {
       _$CallPageConfigCopyWithImpl<$Res, CallPageConfig>;
   @useResult
   $Res call(
-      {OverlayStyleModel? systemUiOverlayStyle, CallPageInfoConfig? callInfo});
+      {OverlayStyleModel? systemUiOverlayStyle,
+      AppBarStyleConfig? appBarStyle,
+      CallPageInfoConfig? callInfo});
 
   $OverlayStyleModelCopyWith<$Res>? get systemUiOverlayStyle;
+  $AppBarStyleConfigCopyWith<$Res>? get appBarStyle;
   $CallPageInfoConfigCopyWith<$Res>? get callInfo;
 }
 
@@ -983,6 +987,7 @@ class _$CallPageConfigCopyWithImpl<$Res, $Val extends CallPageConfig>
   @override
   $Res call({
     Object? systemUiOverlayStyle = freezed,
+    Object? appBarStyle = freezed,
     Object? callInfo = freezed,
   }) {
     return _then(_value.copyWith(
@@ -990,6 +995,10 @@ class _$CallPageConfigCopyWithImpl<$Res, $Val extends CallPageConfig>
           ? _value.systemUiOverlayStyle
           : systemUiOverlayStyle // ignore: cast_nullable_to_non_nullable
               as OverlayStyleModel?,
+      appBarStyle: freezed == appBarStyle
+          ? _value.appBarStyle
+          : appBarStyle // ignore: cast_nullable_to_non_nullable
+              as AppBarStyleConfig?,
       callInfo: freezed == callInfo
           ? _value.callInfo
           : callInfo // ignore: cast_nullable_to_non_nullable
@@ -1009,6 +1018,20 @@ class _$CallPageConfigCopyWithImpl<$Res, $Val extends CallPageConfig>
     return $OverlayStyleModelCopyWith<$Res>(_value.systemUiOverlayStyle!,
         (value) {
       return _then(_value.copyWith(systemUiOverlayStyle: value) as $Val);
+    });
+  }
+
+  /// Create a copy of CallPageConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $AppBarStyleConfigCopyWith<$Res>? get appBarStyle {
+    if (_value.appBarStyle == null) {
+      return null;
+    }
+
+    return $AppBarStyleConfigCopyWith<$Res>(_value.appBarStyle!, (value) {
+      return _then(_value.copyWith(appBarStyle: value) as $Val);
     });
   }
 
@@ -1036,10 +1059,14 @@ abstract class _$$CallPageConfigImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {OverlayStyleModel? systemUiOverlayStyle, CallPageInfoConfig? callInfo});
+      {OverlayStyleModel? systemUiOverlayStyle,
+      AppBarStyleConfig? appBarStyle,
+      CallPageInfoConfig? callInfo});
 
   @override
   $OverlayStyleModelCopyWith<$Res>? get systemUiOverlayStyle;
+  @override
+  $AppBarStyleConfigCopyWith<$Res>? get appBarStyle;
   @override
   $CallPageInfoConfigCopyWith<$Res>? get callInfo;
 }
@@ -1058,6 +1085,7 @@ class __$$CallPageConfigImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? systemUiOverlayStyle = freezed,
+    Object? appBarStyle = freezed,
     Object? callInfo = freezed,
   }) {
     return _then(_$CallPageConfigImpl(
@@ -1065,6 +1093,10 @@ class __$$CallPageConfigImplCopyWithImpl<$Res>
           ? _value.systemUiOverlayStyle
           : systemUiOverlayStyle // ignore: cast_nullable_to_non_nullable
               as OverlayStyleModel?,
+      appBarStyle: freezed == appBarStyle
+          ? _value.appBarStyle
+          : appBarStyle // ignore: cast_nullable_to_non_nullable
+              as AppBarStyleConfig?,
       callInfo: freezed == callInfo
           ? _value.callInfo
           : callInfo // ignore: cast_nullable_to_non_nullable
@@ -1077,7 +1109,8 @@ class __$$CallPageConfigImplCopyWithImpl<$Res>
 
 @JsonSerializable(explicitToJson: true)
 class _$CallPageConfigImpl implements _CallPageConfig {
-  const _$CallPageConfigImpl({this.systemUiOverlayStyle, this.callInfo});
+  const _$CallPageConfigImpl(
+      {this.systemUiOverlayStyle, this.appBarStyle, this.callInfo});
 
   factory _$CallPageConfigImpl.fromJson(Map<String, dynamic> json) =>
       _$$CallPageConfigImplFromJson(json);
@@ -1085,11 +1118,13 @@ class _$CallPageConfigImpl implements _CallPageConfig {
   @override
   final OverlayStyleModel? systemUiOverlayStyle;
   @override
+  final AppBarStyleConfig? appBarStyle;
+  @override
   final CallPageInfoConfig? callInfo;
 
   @override
   String toString() {
-    return 'CallPageConfig(systemUiOverlayStyle: $systemUiOverlayStyle, callInfo: $callInfo)';
+    return 'CallPageConfig(systemUiOverlayStyle: $systemUiOverlayStyle, appBarStyle: $appBarStyle, callInfo: $callInfo)';
   }
 
   @override
@@ -1099,13 +1134,16 @@ class _$CallPageConfigImpl implements _CallPageConfig {
             other is _$CallPageConfigImpl &&
             (identical(other.systemUiOverlayStyle, systemUiOverlayStyle) ||
                 other.systemUiOverlayStyle == systemUiOverlayStyle) &&
+            (identical(other.appBarStyle, appBarStyle) ||
+                other.appBarStyle == appBarStyle) &&
             (identical(other.callInfo, callInfo) ||
                 other.callInfo == callInfo));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, systemUiOverlayStyle, callInfo);
+  int get hashCode =>
+      Object.hash(runtimeType, systemUiOverlayStyle, appBarStyle, callInfo);
 
   /// Create a copy of CallPageConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -1127,6 +1165,7 @@ class _$CallPageConfigImpl implements _CallPageConfig {
 abstract class _CallPageConfig implements CallPageConfig {
   const factory _CallPageConfig(
       {final OverlayStyleModel? systemUiOverlayStyle,
+      final AppBarStyleConfig? appBarStyle,
       final CallPageInfoConfig? callInfo}) = _$CallPageConfigImpl;
 
   factory _CallPageConfig.fromJson(Map<String, dynamic> json) =
@@ -1134,6 +1173,8 @@ abstract class _CallPageConfig implements CallPageConfig {
 
   @override
   OverlayStyleModel? get systemUiOverlayStyle;
+  @override
+  AppBarStyleConfig? get appBarStyle;
   @override
   CallPageInfoConfig? get callInfo;
 
