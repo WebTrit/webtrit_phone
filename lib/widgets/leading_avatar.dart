@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/theme/styles/styles.dart';
 
+import '../utils/utils.dart';
 import 'safe_network_image.dart';
 
 class LeadingAvatar extends StatefulWidget {
@@ -18,7 +19,8 @@ class LeadingAvatar extends StatefulWidget {
     this.smart = false,
     this.radius = 20.0, // value of private _defaultRadius variable in CircleAvatar class
     this.showLoading = false,
-    this.loadingPadding = const EdgeInsets.all(2),
+    this.loadingPadding,
+    this.style,
   });
 
   final String? username;
@@ -29,28 +31,88 @@ class LeadingAvatar extends StatefulWidget {
   final bool smart;
   final double radius;
   final bool showLoading;
-  final EdgeInsets loadingPadding;
+  final EdgeInsets? loadingPadding;
+  final LeadingAvatarStyle? style;
 
   @override
   State<LeadingAvatar> createState() => _LeadingAvatarState();
 }
 
 class _LeadingAvatarState extends State<LeadingAvatar> {
-  late final diameter = widget.radius * 2;
-  late final registeredPosition = Rect.fromLTWH(diameter * 0.8, diameter * 0.8, diameter * 0.2, diameter * 0.2);
-  late final smartPosition = Rect.fromLTWH(diameter * -0.1, diameter * -0.1, diameter * 0.4, diameter * 0.4);
+  late LeadingAvatarStyle _style;
+  late double _radius;
+  late double _diameter;
+  late Rect _registeredRect;
+  late Rect _smartRect;
+
+  @override
+  void initState() {
+    super.initState();
+    _style = const LeadingAvatarStyle();
+    _radius = widget.radius;
+    _diameter = _radius * 2;
+    _updateBadgeRects();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _recompute();
+  }
+
+  @override
+  void didUpdateWidget(covariant LeadingAvatar oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.style != widget.style ||
+        oldWidget.radius != widget.radius ||
+        oldWidget.smart != widget.smart ||
+        oldWidget.registered != widget.registered ||
+        oldWidget.thumbnailUrl != widget.thumbnailUrl ||
+        oldWidget.thumbnail != widget.thumbnail ||
+        oldWidget.username != widget.username) {
+      _recompute();
+    }
+  }
+
+  void _recompute() {
+    final theme = Theme.of(context);
+    final themeStyle = theme.extension<LeadingAvatarStyles>()?.primary;
+
+    _style = LeadingAvatarStyle.merge(themeStyle, widget.style);
+
+    _radius = _style.radius ?? widget.radius;
+    _diameter = _radius * 2;
+
+    _updateBadgeRects();
+  }
+
+  void _updateBadgeRects() {
+    final registeredSizeFactor = _style.registeredBadge?.sizeFactor ?? 0.2;
+    final smartSizeFactor = _style.smartIndicator?.sizeFactor ?? 0.4;
+
+    _registeredRect = BadgeLayout.bottomRightSquare(
+      size: _diameter,
+      sizeFactor: registeredSizeFactor,
+    );
+
+    _smartRect = BadgeLayout.topLeftSquare(
+      size: _diameter,
+      sizeFactor: smartSizeFactor,
+      dxFactor: -0.1,
+      dyFactor: -0.1,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    final themeData = Theme.of(context);
-    final colorScheme = themeData.colorScheme;
+    final scheme = Theme.of(context).colorScheme;
 
     return Container(
-      width: diameter,
-      height: diameter,
+      width: _diameter,
+      height: _diameter,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: colorScheme.secondaryContainer,
+        color: _style.backgroundColor ?? scheme.secondaryContainer,
       ),
       child: Stack(
         alignment: Alignment.center,
@@ -62,126 +124,133 @@ class _LeadingAvatarState extends State<LeadingAvatar> {
               switchInCurve: Curves.easeInOut,
               switchOutCurve: Curves.easeInOut,
               transitionBuilder: (child, animation) => FadeTransition(opacity: animation, child: child),
-              child: _buildAvatarContent(),
+              child: _buildAvatarContent(_diameter, _style),
             ),
           ),
           if (widget.smart)
-            Positioned.fromRect(rect: smartPosition, child: smartIndicator())
+            Positioned.fromRect(rect: _smartRect, child: _smartIndicator(_diameter, _style, scheme))
           else if (widget.registered != null)
-            Positioned.fromRect(rect: registeredPosition, child: registeredIndicator()),
-          if (widget.showLoading) _buildLoadingOverlay(context),
+            Positioned.fromRect(rect: _registeredRect, child: _registeredIndicator(_style)),
+          if (widget.showLoading) _buildLoadingOverlay(_style),
         ],
       ),
     );
   }
 
-  Widget _buildAvatarContent() {
+  Widget _buildAvatarContent(double diameter, LeadingAvatarStyle style) {
     if (widget.thumbnailUrl != null) {
       return ClipOval(
         key: ValueKey('remote:${widget.thumbnailUrl?.hashCode}'),
-        child: remoteImage(),
+        child: _remoteImage(diameter, style),
       );
     } else if (widget.thumbnail != null) {
-      return ClipOval(
-        key: const ValueKey('local'),
-        child: localImage(),
+      return const ClipOval(
+        key: ValueKey('local'),
+        child: _LocalImage(),
       );
     } else {
       return ClipOval(
-        key: const ValueKey('placeholder'),
-        child: placeholder(),
+        key: ValueKey('placeholder:${widget.username ?? ""}'),
+        child: _placeholder(diameter, style),
       );
     }
   }
 
-  Widget _buildLoadingOverlay(BuildContext context) {
+  Widget _buildLoadingOverlay(LeadingAvatarStyle style) {
     final hasAvatarData = widget.username != null || (widget.thumbnail != null || widget.thumbnailUrl != null);
+
+    final padding = widget.loadingPadding ?? style.loadingOverlay?.padding ?? EdgeInsets.zero;
+    final strokeWidth = style.loadingOverlay?.strokeWidth ?? 1.0;
 
     return AnimatedSwitcher(
       duration: const Duration(milliseconds: 500),
       switchInCurve: Curves.easeInOut,
       switchOutCurve: Curves.easeInOut,
-      transitionBuilder: (child, animation) {
-        return FadeTransition(opacity: animation, child: child);
-      },
+      transitionBuilder: (child, animation) => FadeTransition(opacity: animation, child: child),
       child: hasAvatarData
-          // Hide loading indicator if avatar data is available
           ? const SizedBox.shrink()
-          // Show loading indicator if avatar data is missing
           : SizedBox(
               key: const ValueKey('loading'),
               width: kMinInteractiveDimension,
               height: kMinInteractiveDimension,
               child: Padding(
-                padding: widget.loadingPadding,
-                child: const CircularProgressIndicator(
-                  strokeWidth: 1,
-                ),
+                padding: padding,
+                child: CircularProgressIndicator(strokeWidth: strokeWidth),
               ),
             ),
     );
   }
 
-  Widget remoteImage() {
+  Widget _remoteImage(double diameter, LeadingAvatarStyle style) {
     return SafeNetworkImage(
       widget.thumbnailUrl.toString(),
       fit: BoxFit.cover,
-      placeholderBuilder: placeholder,
+      placeholderBuilder: () => _placeholder(diameter, style),
       errorBuilder: () {
-        if (widget.thumbnail != null) return localImage();
-        return placeholder();
+        if (widget.thumbnail != null) return const _LocalImage();
+        return _placeholder(diameter, style);
       },
     );
   }
 
-  Widget localImage() {
-    return Image.memory(
-      widget.thumbnail!,
-      fit: BoxFit.cover,
-      errorBuilder: (context, error, stackTrace) => placeholder(),
-    );
-  }
-
-  Widget placeholder() {
+  Widget _placeholder(double diameter, LeadingAvatarStyle style) {
     final username = widget.username;
-    final placeholderIcon = widget.placeholderIcon;
-    return username != null
-        ? Center(
-            child: Text(
-              username.initialism,
-              softWrap: false,
-              overflow: TextOverflow.fade,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: diameter * 0.35,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          )
-        : Icon(placeholderIcon, size: diameter * 0.5);
+    final icon = style.placeholderIcon ?? widget.placeholderIcon;
+
+    if (username != null) {
+      final defaultTs = TextStyle(
+        fontSize: diameter * 0.35,
+        fontWeight: FontWeight.bold,
+      );
+
+      return Center(
+        child: Text(
+          username.initialism,
+          softWrap: false,
+          overflow: TextOverflow.fade,
+          textAlign: TextAlign.center,
+          style: defaultTs.merge(style.initialsTextStyle),
+        ),
+      );
+    }
+
+    return Icon(icon, size: diameter * 0.5);
   }
 
-  Widget registeredIndicator() {
-    final themeData = Theme.of(context);
-    final registeredStatusStyle = themeData.extension<RegisteredStatusStyles>()!.primary;
-
+  Widget _registeredIndicator(LeadingAvatarStyle style) {
     final registered = widget.registered!;
+    final rs = Theme.of(context).extension<RegisteredStatusStyles>()?.primary;
 
-    return Container(
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: registered ? registeredStatusStyle.registered : registeredStatusStyle.unregistered,
-      ),
-    );
+    final color = registered
+        ? (style.registeredBadge?.registeredColor ?? rs?.registered)
+        : (style.registeredBadge?.unregisteredColor ?? rs?.unregistered);
+
+    return Container(decoration: BoxDecoration(shape: BoxShape.circle, color: color));
   }
 
-  Widget smartIndicator() {
-    final themeData = Theme.of(context);
-    final colorScheme = themeData.colorScheme;
+  Widget _smartIndicator(double diameter, LeadingAvatarStyle style, ColorScheme scheme) {
+    final bg = style.smartIndicator?.backgroundColor ?? scheme.surfaceContainerLowest;
+    final icon = style.smartIndicator?.icon ?? Icons.person;
+    final sizeFactor = style.smartIndicator?.sizeFactor ?? 0.4;
 
     return CircleAvatar(
-      backgroundColor: colorScheme.surfaceContainerLowest,
-      child: Icon(Icons.person, size: diameter * 0.4 * 0.9),
+      backgroundColor: bg,
+      child: Icon(icon, size: diameter * sizeFactor * 0.9),
+    );
+  }
+}
+
+class _LocalImage extends StatelessWidget {
+  const _LocalImage();
+
+  @override
+  Widget build(BuildContext context) {
+    final state = context.findAncestorStateOfType<_LeadingAvatarState>()!;
+    final thumbnail = state.widget.thumbnail!;
+    return Image.memory(
+      thumbnail,
+      fit: BoxFit.cover,
+      errorBuilder: (context, error, stackTrace) => state._placeholder(state._diameter, state._style),
     );
   }
 }

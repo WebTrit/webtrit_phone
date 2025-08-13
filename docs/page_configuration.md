@@ -83,7 +83,6 @@ The call page configuration includes:
 - `appBarStyle`: Configures the appearance of the App Bar during a call
     - `backgroundColor`: Background color of the App Bar (hex format)
     - `foregroundColor`: Color for icons and text in the App Bar (hex format)
-    - `primary`: Whether the App Bar is primary (`true` | `false`)
 - `callInfo`: Styling for call information text
     - `usernameTextStyle`: Text style for username
     - `numberTextStyle`: Text style for phone number
@@ -102,9 +101,7 @@ The call page configuration includes:
   },
   "appBarStyle": {
     "backgroundColor": "#00000000",
-    "foregroundColor": "#EEF3F6",
-    "primary": false,
-    "showBackButton": true
+    "foregroundColor": "#EEF3F6"
   },
   "callInfo": {
     "usernameTextStyle": {

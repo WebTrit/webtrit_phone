@@ -7,12 +7,10 @@ import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/features/call_routing/cubit/call_routing_cubit.dart';
 import 'package:webtrit_phone/features/register_status/register_status.dart';
-import 'package:webtrit_phone/features/self_config/self_config.dart';
 import 'package:webtrit_phone/features/user_info/user_info.dart';
 import 'package:webtrit_phone/features/session_status/session_status.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
-import 'package:webtrit_phone/models/self_config.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../settings.dart';
@@ -188,26 +186,6 @@ class SettingsScreen extends StatelessWidget {
                                     ),
                                     const ListTileSeparator(),
                                   ])
-                                else if (item.flavor == SettingsFlavor.selfConfig)
-                                  BlocBuilder<SelfConfigCubit, SelfConfigState>(
-                                    builder: (context, state) {
-                                      final selfConfig = state.selfConfig;
-                                      if (selfConfig is SelfConfigSupported) {
-                                        return Column(children: [
-                                          ListTile(
-                                            leading: Icon(item.icon),
-                                            title: Text(context.parseL10n(item.titleL10n)),
-                                            onTap: () => context.router.navigate(
-                                              SelfConfigScreenPageRoute(url: selfConfig.url),
-                                            ),
-                                          ),
-                                          const ListTileSeparator(),
-                                        ]);
-                                      }
-
-                                      return const SizedBox.shrink();
-                                    },
-                                  )
                                 else if (item.flavor == SettingsFlavor.voicemail)
                                   Column(
                                     children: [

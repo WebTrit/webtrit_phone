@@ -22,24 +22,42 @@ class CallScreenStyleFactory implements ThemeStyleFactory<CallScreenStyles> {
       primary: CallScreenStyle(
         appBar: _toAppBarStyle(appBarConfig),
         systemUiOverlayStyle: config?.systemUiOverlayStyle?.toSystemUiOverlayStyle(),
-        callInfo: CallInfoStyle(
-          userInfo: infoConfig?.usernameTextStyle?.toTextStyle(fallbackColor: colors.surface),
-          number: infoConfig?.numberTextStyle?.toTextStyle(fallbackColor: colors.surface),
-          callStatus: infoConfig?.callStatusTextStyle?.toTextStyle(fallbackColor: colors.surface),
-          processingStatus: infoConfig?.processingStatusTextStyle?.toTextStyle(fallbackColor: colors.surface),
-        ),
+        callInfo: _toCallScreenStyle(infoConfig),
+      ),
+    );
+  }
+
+  CallInfoStyle? _toCallScreenStyle(CallPageInfoConfig? cfg) {
+    return CallInfoStyle(
+      userInfo: cfg?.usernameTextStyle?.toTextStyle(
+        fallbackColor: colors.surface,
+        defaultFontSize: 24,
+        defaultFontWeight: FontWeight.w400,
+      ),
+      number: cfg?.numberTextStyle?.toTextStyle(
+        fallbackColor: colors.surface,
+        defaultFontSize: 20,
+        defaultFontWeight: FontWeight.w400,
+      ),
+      callStatus: cfg?.callStatusTextStyle?.toTextStyle(
+        fallbackColor: colors.surface,
+        defaultFontSize: 16,
+        defaultFontWeight: FontWeight.w400,
+      ),
+      processingStatus: cfg?.processingStatusTextStyle?.toTextStyle(
+        fallbackColor: colors.surface,
+        defaultFontSize: 14,
+        defaultFontWeight: FontWeight.w500,
       ),
     );
   }
 
   AppBarStyle? _toAppBarStyle(AppBarStyleConfig? cfg) {
-    if (cfg == null) return null;
-
     return AppBarStyle(
-      backgroundColor: cfg.backgroundColor?.toColor() ?? Colors.transparent,
-      foregroundColor: cfg.foregroundColor?.toColor() ?? colors.surface,
-      primary: cfg.primary,
-      showBackButton: cfg.showBackButton,
+      backgroundColor: cfg?.backgroundColor?.toColor() ?? Colors.transparent,
+      foregroundColor: cfg?.foregroundColor?.toColor() ?? colors.surface,
+      primary: false,
+      showBackButton: true,
     );
   }
 }

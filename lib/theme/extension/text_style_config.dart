@@ -4,18 +4,29 @@ import 'package:webtrit_appearance_theme/models/common/common.dart';
 import 'package:webtrit_phone/theme/extension/extension.dart';
 
 extension TextStyleConfigExtension on TextStyleConfig {
-  TextStyle toTextStyle({required Color fallbackColor}) {
+  TextStyle toTextStyle({
+    required Color fallbackColor,
+    String? defaultFontFamily,
+    double? defaultFontSize,
+    FontWeight? defaultFontWeight,
+    FontStyle defaultFontStyle = FontStyle.normal,
+    double? defaultLetterSpacing,
+    double? defaultWordSpacing,
+    double? defaultHeight,
+    TextDecoration? defaultDecoration,
+    Color? defaultBackgroundColor,
+  }) {
     return TextStyle(
-      fontFamily: fontFamily,
-      fontSize: fontSize,
-      fontWeight: fontWeight?.toFontWeight(),
-      fontStyle: fontStyle?.value == 'italic' ? FontStyle.italic : FontStyle.normal,
+      fontFamily: fontFamily ?? defaultFontFamily,
+      fontSize: fontSize ?? defaultFontSize,
+      fontWeight: fontWeight?.toFontWeight() ?? defaultFontWeight ?? FontWeight.normal,
+      fontStyle: fontStyle?.value == 'italic' ? FontStyle.italic : defaultFontStyle,
       color: color?.toColor() ?? fallbackColor,
-      letterSpacing: letterSpacing,
-      wordSpacing: wordSpacing,
-      height: height,
-      decoration: _resolveTextDecoration(decoration),
-      backgroundColor: backgroundColor?.toColor(),
+      letterSpacing: letterSpacing ?? defaultLetterSpacing,
+      wordSpacing: wordSpacing ?? defaultWordSpacing,
+      height: height ?? defaultHeight,
+      decoration: _resolveTextDecoration(decoration) ?? defaultDecoration,
+      backgroundColor: backgroundColor?.toColor() ?? defaultBackgroundColor,
     );
   }
 

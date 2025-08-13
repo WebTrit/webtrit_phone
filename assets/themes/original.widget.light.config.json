@@ -10,6 +10,47 @@
     "secondaryOnboardingLogo": {
       "uri": "asset://assets/secondary_onboardin_logo.svg",
       "widthFactor": 0.25
+    },
+    "leadingAvatarStyle": {
+      "backgroundColor": "#EEF3F6",
+      "radius": 20.0,
+      "initialsTextStyle": {
+        "fontFamily": "Montserrat",
+        "fontSize": 16,
+        "fontWeight": {
+          "weight": 700
+        },
+        "color": "#1F618F"
+      },
+      "placeholderIcon": {
+        "codePoint": "0xe497",
+        "fontFamily": "MaterialIcons",
+        "matchTextDirection": false
+      },
+      "loading": {
+        "showByDefault": false,
+        "padding": {
+          "left": 2.0,
+          "top": 2.0,
+          "right": 2.0,
+          "bottom": 2.0
+        },
+        "strokeWidth": 1.0
+      },
+      "smartIndicator": {
+        "backgroundColor": "#F8FBFD",
+        "icon": {
+          "codePoint": "0xe491",
+          "fontFamily": "MaterialIcons",
+          "matchTextDirection": false
+        },
+        "sizeFactor": 0.4
+      },
+      "registeredBadge": {
+        "registeredColor": null,
+        "unregisteredColor": null,
+        "sizeFactor": 0.2
+      }
     }
   },
   "dialog": {

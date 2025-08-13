@@ -1,5 +1,6 @@
 export 'backoff_retries.dart';
 export 'bloc_concurrency.dart';
+export 'badge_layout.dart';
 export 'buffer_transformer.dart';
 export 'connectivity_checker.dart';
 export 'equatable_prop_to_string.dart';

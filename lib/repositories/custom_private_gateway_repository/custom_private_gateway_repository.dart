@@ -7,7 +7,6 @@ import 'package:webtrit_api/webtrit_api.dart' as api;
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/mappers/api/self_config_mapper.dart';
-import 'package:webtrit_phone/models/self_config.dart';
 
 final _logger = Logger('SelfConfigRepository');
 
@@ -32,32 +31,12 @@ class CustomPrivateGatewayRepository with SelfConfigApiMapper {
   final SecureStorage _secureStorage;
   final String _token;
 
-  SelfConfig? _lastSelfConfig;
-
   Timer? _refreshTimer;
 
   bool _isFetchingExternalPageToken = false;
   bool _isUnsupportedExternalPageTokenEndpoint = false;
 
   bool get isSupportedExternalPageTokenEndpoint => !_isUnsupportedExternalPageTokenEndpoint;
-
-  Future<SelfConfig> _getSelfConfigRemote() async {
-    try {
-      final response = await _webtritApiClient.getSelfConfig(_token);
-      return selfConfigFromApi(response);
-    } on api.EndpointNotSupportedException catch (_) {
-      return SelfConfig.unsupported();
-    }
-  }
-
-  Future<SelfConfig> getSelfConfig() async {
-    final cached = _lastSelfConfig;
-
-    if (cached is SelfConfigUnsupported) return cached;
-    if (cached is SelfConfigSupported && !cached.isExpired) return cached;
-
-    return (_lastSelfConfig = await _getSelfConfigRemote());
-  }
 
   Future<void> fetchExternalPageToken() async {
     if (_isUnsupportedExternalPageTokenEndpoint) {
@@ -121,7 +100,6 @@ class CustomPrivateGatewayRepository with SelfConfigApiMapper {
 
   Future<void> cleanCache() async {
     _secureStorage.deleteExternalPageTokenData();
-    _lastSelfConfig = null;
     _isUnsupportedExternalPageTokenEndpoint = false;
   }
 
