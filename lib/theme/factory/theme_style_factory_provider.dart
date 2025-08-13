@@ -67,6 +67,8 @@ class ThemeStyleFactoryProvider {
     final aboutScreenStyleFactory = AboutScreenStyleFactory(loginPageScheme);
     final callScreenStyleFactory = CallScreenStyleFactory(callPageScheme, colorScheme);
     final loginModeSelectStyleFactory = LoginModeSelectScreenStyleFactory(loginPageScheme.modeSelect);
+    final leadingAvatarStyleFactory =
+        LeadingAvatarStyleFactory(colorScheme, widgetConfig.imageAssets.leadingAvatarStyle);
 
     return <ThemeExtension?>[
       textButtonStyle,
@@ -90,6 +92,7 @@ class ThemeStyleFactoryProvider {
       aboutScreenStyleFactory.create(),
       callScreenStyleFactory.create(),
       loginModeSelectStyleFactory.create(),
+      leadingAvatarStyleFactory.create()
     ].nonNulls.toList();
   }
 

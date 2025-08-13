@@ -2632,6 +2632,8 @@ mixin _$ImageAssetsConfig {
   ImageAssetConfig get secondaryOnboardingLogo =>
       throw _privateConstructorUsedError;
   AppIconWidgetConfig get appIcon => throw _privateConstructorUsedError;
+  LeadingAvatarStyleConfig get leadingAvatarStyle =>
+      throw _privateConstructorUsedError;
 
   /// Serializes this ImageAssetsConfig to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -2652,11 +2654,13 @@ abstract class $ImageAssetsConfigCopyWith<$Res> {
   $Res call(
       {ImageAssetConfig primaryOnboardingLogo,
       ImageAssetConfig secondaryOnboardingLogo,
-      AppIconWidgetConfig appIcon});
+      AppIconWidgetConfig appIcon,
+      LeadingAvatarStyleConfig leadingAvatarStyle});
 
   $ImageAssetConfigCopyWith<$Res> get primaryOnboardingLogo;
   $ImageAssetConfigCopyWith<$Res> get secondaryOnboardingLogo;
   $AppIconWidgetConfigCopyWith<$Res> get appIcon;
+  $LeadingAvatarStyleConfigCopyWith<$Res> get leadingAvatarStyle;
 }
 
 /// @nodoc
@@ -2677,6 +2681,7 @@ class _$ImageAssetsConfigCopyWithImpl<$Res, $Val extends ImageAssetsConfig>
     Object? primaryOnboardingLogo = null,
     Object? secondaryOnboardingLogo = null,
     Object? appIcon = null,
+    Object? leadingAvatarStyle = null,
   }) {
     return _then(_value.copyWith(
       primaryOnboardingLogo: null == primaryOnboardingLogo
@@ -2691,6 +2696,10 @@ class _$ImageAssetsConfigCopyWithImpl<$Res, $Val extends ImageAssetsConfig>
           ? _value.appIcon
           : appIcon // ignore: cast_nullable_to_non_nullable
               as AppIconWidgetConfig,
+      leadingAvatarStyle: null == leadingAvatarStyle
+          ? _value.leadingAvatarStyle
+          : leadingAvatarStyle // ignore: cast_nullable_to_non_nullable
+              as LeadingAvatarStyleConfig,
     ) as $Val);
   }
 
@@ -2725,6 +2734,17 @@ class _$ImageAssetsConfigCopyWithImpl<$Res, $Val extends ImageAssetsConfig>
       return _then(_value.copyWith(appIcon: value) as $Val);
     });
   }
+
+  /// Create a copy of ImageAssetsConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $LeadingAvatarStyleConfigCopyWith<$Res> get leadingAvatarStyle {
+    return $LeadingAvatarStyleConfigCopyWith<$Res>(_value.leadingAvatarStyle,
+        (value) {
+      return _then(_value.copyWith(leadingAvatarStyle: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
@@ -2738,7 +2758,8 @@ abstract class _$$ImageAssetsConfigImplCopyWith<$Res>
   $Res call(
       {ImageAssetConfig primaryOnboardingLogo,
       ImageAssetConfig secondaryOnboardingLogo,
-      AppIconWidgetConfig appIcon});
+      AppIconWidgetConfig appIcon,
+      LeadingAvatarStyleConfig leadingAvatarStyle});
 
   @override
   $ImageAssetConfigCopyWith<$Res> get primaryOnboardingLogo;
@@ -2746,6 +2767,8 @@ abstract class _$$ImageAssetsConfigImplCopyWith<$Res>
   $ImageAssetConfigCopyWith<$Res> get secondaryOnboardingLogo;
   @override
   $AppIconWidgetConfigCopyWith<$Res> get appIcon;
+  @override
+  $LeadingAvatarStyleConfigCopyWith<$Res> get leadingAvatarStyle;
 }
 
 /// @nodoc
@@ -2764,6 +2787,7 @@ class __$$ImageAssetsConfigImplCopyWithImpl<$Res>
     Object? primaryOnboardingLogo = null,
     Object? secondaryOnboardingLogo = null,
     Object? appIcon = null,
+    Object? leadingAvatarStyle = null,
   }) {
     return _then(_$ImageAssetsConfigImpl(
       primaryOnboardingLogo: null == primaryOnboardingLogo
@@ -2778,6 +2802,10 @@ class __$$ImageAssetsConfigImplCopyWithImpl<$Res>
           ? _value.appIcon
           : appIcon // ignore: cast_nullable_to_non_nullable
               as AppIconWidgetConfig,
+      leadingAvatarStyle: null == leadingAvatarStyle
+          ? _value.leadingAvatarStyle
+          : leadingAvatarStyle // ignore: cast_nullable_to_non_nullable
+              as LeadingAvatarStyleConfig,
     ));
   }
 }
@@ -2791,7 +2819,8 @@ class _$ImageAssetsConfigImpl implements _ImageAssetsConfig {
           uri: 'asset://assets/primary_onboardin_logo.svg'),
       this.secondaryOnboardingLogo = const ImageAssetConfig(
           uri: 'asset://assets/secondary_onboardin_logo.svg'),
-      this.appIcon = const AppIconWidgetConfig()});
+      this.appIcon = const AppIconWidgetConfig(),
+      this.leadingAvatarStyle = const LeadingAvatarStyleConfig()});
 
   factory _$ImageAssetsConfigImpl.fromJson(Map<String, dynamic> json) =>
       _$$ImageAssetsConfigImplFromJson(json);
@@ -2805,10 +2834,13 @@ class _$ImageAssetsConfigImpl implements _ImageAssetsConfig {
   @override
   @JsonKey()
   final AppIconWidgetConfig appIcon;
+  @override
+  @JsonKey()
+  final LeadingAvatarStyleConfig leadingAvatarStyle;
 
   @override
   String toString() {
-    return 'ImageAssetsConfig(primaryOnboardingLogo: $primaryOnboardingLogo, secondaryOnboardingLogo: $secondaryOnboardingLogo, appIcon: $appIcon)';
+    return 'ImageAssetsConfig(primaryOnboardingLogo: $primaryOnboardingLogo, secondaryOnboardingLogo: $secondaryOnboardingLogo, appIcon: $appIcon, leadingAvatarStyle: $leadingAvatarStyle)';
   }
 
   @override
@@ -2821,13 +2853,15 @@ class _$ImageAssetsConfigImpl implements _ImageAssetsConfig {
             (identical(
                     other.secondaryOnboardingLogo, secondaryOnboardingLogo) ||
                 other.secondaryOnboardingLogo == secondaryOnboardingLogo) &&
-            (identical(other.appIcon, appIcon) || other.appIcon == appIcon));
+            (identical(other.appIcon, appIcon) || other.appIcon == appIcon) &&
+            (identical(other.leadingAvatarStyle, leadingAvatarStyle) ||
+                other.leadingAvatarStyle == leadingAvatarStyle));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(
-      runtimeType, primaryOnboardingLogo, secondaryOnboardingLogo, appIcon);
+  int get hashCode => Object.hash(runtimeType, primaryOnboardingLogo,
+      secondaryOnboardingLogo, appIcon, leadingAvatarStyle);
 
   /// Create a copy of ImageAssetsConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -2848,9 +2882,11 @@ class _$ImageAssetsConfigImpl implements _ImageAssetsConfig {
 
 abstract class _ImageAssetsConfig implements ImageAssetsConfig {
   const factory _ImageAssetsConfig(
-      {final ImageAssetConfig primaryOnboardingLogo,
-      final ImageAssetConfig secondaryOnboardingLogo,
-      final AppIconWidgetConfig appIcon}) = _$ImageAssetsConfigImpl;
+          {final ImageAssetConfig primaryOnboardingLogo,
+          final ImageAssetConfig secondaryOnboardingLogo,
+          final AppIconWidgetConfig appIcon,
+          final LeadingAvatarStyleConfig leadingAvatarStyle}) =
+      _$ImageAssetsConfigImpl;
 
   factory _ImageAssetsConfig.fromJson(Map<String, dynamic> json) =
       _$ImageAssetsConfigImpl.fromJson;
@@ -2861,6 +2897,8 @@ abstract class _ImageAssetsConfig implements ImageAssetsConfig {
   ImageAssetConfig get secondaryOnboardingLogo;
   @override
   AppIconWidgetConfig get appIcon;
+  @override
+  LeadingAvatarStyleConfig get leadingAvatarStyle;
 
   /// Create a copy of ImageAssetsConfig
   /// with the given fields replaced by the non-null parameter values.
