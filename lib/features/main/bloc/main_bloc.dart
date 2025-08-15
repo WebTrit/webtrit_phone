@@ -37,7 +37,7 @@ class MainBloc extends Bloc<MainBlocEvent, MainBlocState> {
   }
 
   final SystemInfoRepository systemInfoRemoteRepository;
-  final CustomPrivateGatewayRepository customPrivateGatewayRepository;
+  final PrivateGatewayRepository customPrivateGatewayRepository;
   final AppPreferences appPreferences;
   final String coreVersionConstraint;
   final StoreInfoExtractor? storeInfoExtractor;

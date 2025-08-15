@@ -81,7 +81,7 @@ class MainScreenPage extends StatelessWidget {
       create: (context) {
         return MainBloc(
           context.read<SystemInfoRepository>(),
-          context.read<CustomPrivateGatewayRepository>(),
+          context.read<PrivateGatewayRepository>(),
           context.read<AppPreferences>(),
           EnvironmentConfig.CORE_VERSION_CONSTRAINT,
           context.read<PackageInfo>(),
