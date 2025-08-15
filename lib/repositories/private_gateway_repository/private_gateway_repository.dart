@@ -126,7 +126,10 @@ class CustomPrivateGatewayRepository with SelfConfigApiMapper implements Private
     // Remove external page token data if no user token is stored (Logout scenario).
     final storedToken = _secureStorage.readToken();
     if (storedToken == null) {
+      _logger.finest('No user token found. Clearing external page token data.');
       await _secureStorage.deleteExternalPageTokenData();
+    } else {
+      _logger.finest('User token exists. Keeping external page token data.');
     }
   }
 }
