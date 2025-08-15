@@ -14,8 +14,6 @@ void main() {
     apiClient = MockWebtritApiClient();
     secureStorage = MockSecureStorage();
 
-    when(() => secureStorage.readToken()).thenReturn('user_token');
-
     repo = CustomPrivateGatewayRepository(
       apiClient,
       secureStorage,
