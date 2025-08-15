@@ -36,14 +36,14 @@ abstract class Disposable {
 ///   dispose: disposeIfDisposable,
 /// )
 /// ```
-void disposeIfDisposable<T>(T value) {
+Future<void> disposeIfDisposable<T>(T value) async {
   assert(
     value is Disposable,
     'disposeIfDisposable() called on non-Disposable: ${value.runtimeType}',
   );
 
   if (value is Disposable) {
-    value.dispose();
+    await value.dispose();
   } else {
     throw StateError(
       'disposeIfDisposable() called on non-Disposable: ${value.runtimeType}',
