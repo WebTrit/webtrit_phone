@@ -8,6 +8,8 @@ import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/mappers/api/self_config_mapper.dart';
 
+import '../common/common.dart';
+
 final _logger = Logger('PrivateGatewayRepository');
 
 abstract class PrivateGatewayRepository {
@@ -19,12 +21,6 @@ abstract class PrivateGatewayRepository {
 
   /// Check if a valid external page token is currently available in storage.
   Future<bool> isExternalPageTokenAvailable();
-
-  /// Clear the cached token and reset state flags.
-  Future<void> cleanCache();
-
-  /// Release resources (timers, flags, etc.).
-  void dispose();
 }
 
 /// Repository for accessing self-configuration and external page access tokens.
@@ -37,7 +33,7 @@ abstract class PrivateGatewayRepository {
 /// Flutter is only responsible for the initial token validation and injection.
 /// All subsequent lifecycle management of the token is delegated to the embedded WebView.
 
-class CustomPrivateGatewayRepository with SelfConfigApiMapper implements PrivateGatewayRepository {
+class CustomPrivateGatewayRepository with SelfConfigApiMapper implements PrivateGatewayRepository, Disposable {
   CustomPrivateGatewayRepository(
     this._webtritApiClient,
     this._secureStorage,
@@ -119,15 +115,18 @@ class CustomPrivateGatewayRepository with SelfConfigApiMapper implements Private
   }
 
   @override
-  Future<void> cleanCache() async {
-    _secureStorage.deleteExternalPageTokenData();
-    _isUnsupportedExternalPageTokenEndpoint = false;
-  }
-
-  @override
-  void dispose() {
+  Future<void> dispose() async {
+    // Cancel any scheduled token refresh.
     _refreshTimer?.cancel();
+
+    // Reset internal state flags.
     _isUnsupportedExternalPageTokenEndpoint = false;
     _isFetchingExternalPageToken = false;
+
+    // Remove external page token data if no user token is stored (Logout scenario).
+    final storedToken = _secureStorage.readToken();
+    if (storedToken == null) {
+      await _secureStorage.deleteExternalPageTokenData();
+    }
   }
 }

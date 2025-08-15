@@ -15,6 +15,7 @@ import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/repositories/common/common.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/services/services.dart';
 
@@ -129,17 +130,17 @@ class _MainShellState extends State<MainShell> {
             context.read<WebtritApiClient>(),
           ),
         ),
-        RepositoryProvider<CustomPrivateGatewayRepository>(
+        RepositoryProvider<PrivateGatewayRepository>(
           create: (context) => CustomPrivateGatewayRepository(
             context.read<WebtritApiClient>(),
             context.read<SecureStorage>(),
             context.read<AppBloc>().state.token!,
           ),
+          dispose: disposeIfDisposable,
         ),
         RepositoryProvider<VoicemailRepository>(
           create: (context) {
             final featureAccess = context.read<FeatureAccess>();
-
             return VoicemailRepositoryImpl(
               webtritApiClient: context.read<WebtritApiClient>(),
               token: context.read<AppBloc>().state.token!,
