@@ -93,7 +93,6 @@ class PushTokensBloc extends Bloc<PushTokensEvent, PushTokensState> implements P
       _logger.fine('FCM token deleted successfully.');
     } catch (e, stackTrace) {
       _logger.warning('Failed to delete FCM token', e, stackTrace);
-      add(PushTokensEvent.error('Failed to delete FCM token: $e'));
     }
   }
 
