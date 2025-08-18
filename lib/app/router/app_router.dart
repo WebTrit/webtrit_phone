@@ -185,6 +185,10 @@ class AppRouter extends RootStackRouter {
                           path: '',
                         ),
                         AutoRoute(
+                          page: ContactScreenPageRoute.page,
+                          path: 'contact',
+                        ),
+                        AutoRoute(
                           page: CallLogScreenPageRoute.page,
                           path: 'call_log',
                         ),
