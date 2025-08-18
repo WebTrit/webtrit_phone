@@ -73,12 +73,11 @@ class AutoprovisionScreenPageRoute
     builder: (data) {
       final queryParams = data.queryParams;
       final args = data.argsAs<AutoprovisionScreenPageRouteArgs>(
-        orElse:
-            () => AutoprovisionScreenPageRouteArgs(
-              configToken: queryParams.optString('config_token'),
-              tenantId: queryParams.optString('tenant_id'),
-              coreUrl: queryParams.optString('core_url'),
-            ),
+        orElse: () => AutoprovisionScreenPageRouteArgs(
+          configToken: queryParams.optString('config_token'),
+          tenantId: queryParams.optString('tenant_id'),
+          coreUrl: queryParams.optString('core_url'),
+        ),
       );
       return AutoprovisionScreenPage(
         configToken: args.configToken,
@@ -128,10 +127,8 @@ class CallLogScreenPageRoute extends PageRouteInfo<CallLogScreenPageRouteArgs> {
     builder: (data) {
       final pathParams = data.inheritedPathParams;
       final args = data.argsAs<CallLogScreenPageRouteArgs>(
-        orElse:
-            () => CallLogScreenPageRouteArgs(
-              number: pathParams.getString('number'),
-            ),
+        orElse: () =>
+            CallLogScreenPageRouteArgs(number: pathParams.getString('number')),
       );
       return CallLogScreenPage(args.number);
     },
@@ -282,10 +279,9 @@ class ContactScreenPageRoute extends PageRouteInfo<ContactScreenPageRouteArgs> {
     builder: (data) {
       final pathParams = data.inheritedPathParams;
       final args = data.argsAs<ContactScreenPageRouteArgs>(
-        orElse:
-            () => ContactScreenPageRouteArgs(
-              contactId: pathParams.getInt('contactId'),
-            ),
+        orElse: () => ContactScreenPageRouteArgs(
+          contactId: pathParams.getInt('contactId'),
+        ),
       );
       return ContactScreenPage(args.contactId);
     },
@@ -568,10 +564,9 @@ class HelpScreenPageRoute extends PageRouteInfo<HelpScreenPageRouteArgs> {
     builder: (data) {
       final queryParams = data.queryParams;
       final args = data.argsAs<HelpScreenPageRouteArgs>(
-        orElse:
-            () => HelpScreenPageRouteArgs(
-              initialUriQueryParam: queryParams.optString('initialUrl'),
-            ),
+        orElse: () => HelpScreenPageRouteArgs(
+          initialUriQueryParam: queryParams.optString('initialUrl'),
+        ),
       );
       return HelpScreenPage(initialUriQueryParam: args.initialUriQueryParam);
     },
@@ -1192,10 +1187,9 @@ class TermsConditionsScreenPageRoute
     builder: (data) {
       final queryParams = data.queryParams;
       final args = data.argsAs<TermsConditionsScreenPageRouteArgs>(
-        orElse:
-            () => TermsConditionsScreenPageRouteArgs(
-              initialUriQueryParam: queryParams.optString('initialUrl'),
-            ),
+        orElse: () => TermsConditionsScreenPageRouteArgs(
+          initialUriQueryParam: queryParams.optString('initialUrl'),
+        ),
       );
       return TermsConditionsScreenPage(
         initialUriQueryParam: args.initialUriQueryParam,
