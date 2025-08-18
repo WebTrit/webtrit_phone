@@ -22,6 +22,7 @@ part 'push_tokens_state.dart';
 
 final _logger = Logger('PushTokensBloc');
 
+// TODO: Refactor PushTokensBloc by extracting push token logic into dedicated services and repositories for better separation of concerns and testability.
 class PushTokensBloc extends Bloc<PushTokensEvent, PushTokensState> implements PushRegistryDelegate {
   PushTokensBloc({
     required this.pushTokensRepository,
@@ -37,7 +38,6 @@ class PushTokensBloc extends Bloc<PushTokensEvent, PushTokensState> implements P
     on<PushTokensStarted>(_onStarted);
     on<PushTokensInsertedOrUpdated>(_onInsertedOrUpdated);
     on<_PushTokensError>(_onError);
-    on<PushTokensFcmTokenDeletionRequested>(_onFcmTokenDeletionRequested);
   }
 
   final PushTokensRepository pushTokensRepository;
@@ -47,17 +47,54 @@ class PushTokensBloc extends Bloc<PushTokensEvent, PushTokensState> implements P
 
   late StreamSubscription _onTokenRefreshSubscription;
 
+  // TODO: Move to repository when repository is ready
+  bool get _isSignedIn => secureStorage.readToken() != null;
+
   // Retry handler with exponential backoff to handle scenarios where Google or Apple services
   // throw exceptions, such as when there is no internet connection, or in cases where
   // services are disabled by the user (e.g., Google Play Services on Android).
   final _backoffRetries = BackoffRetries();
 
+  /// Closes the bloc and releases push/FCM resources in a safe order.
   @override
   Future<void> close() async {
-    callkeep.setPushRegistryDelegate(null);
-    _onTokenRefreshSubscription.cancel();
-    _backoffRetries.cancel();
-    await super.close();
+    try {
+      callkeep.setPushRegistryDelegate(null);
+
+      await _cancelInternalDisposables();
+      await _deleteFcmTokenIfSignedOut();
+    } finally {
+      await super.close();
+    }
+  }
+
+  Future<void> _cancelInternalDisposables() async {
+    try {
+      await _onTokenRefreshSubscription.cancel();
+    } catch (e, stackTrace) {
+      _logger.warning('Failed to cancel token refresh subscription', e, stackTrace);
+    }
+
+    try {
+      _backoffRetries.cancel();
+    } catch (e, stackTrace) {
+      _logger.warning('Failed to cancel backoff retries', e, stackTrace);
+    }
+  }
+
+  Future<void> _deleteFcmTokenIfSignedOut() async {
+    if (_isSignedIn) {
+      _logger.finest('Skipping FCM token deletion because a user token is still present.');
+      return;
+    }
+
+    try {
+      await firebaseMessaging.deleteToken();
+      _logger.fine('FCM token deleted successfully.');
+    } catch (e, stackTrace) {
+      _logger.warning('Failed to delete FCM token', e, stackTrace);
+      add(PushTokensEvent.error('Failed to delete FCM token: $e'));
+    }
   }
 
   void _onStarted(PushTokensEvent event, Emitter<PushTokensState> emit) async {
@@ -131,19 +168,6 @@ class PushTokensBloc extends Bloc<PushTokensEvent, PushTokensState> implements P
       _logger.fine('Push token inserted or updated: ${event.type} ${event.value}');
     } catch (e, stackTrace) {
       _logger.warning('_onInsertedOrUpdated', e, stackTrace);
-    }
-  }
-
-  Future<void> _onFcmTokenDeletionRequested(
-    PushTokensFcmTokenDeletionRequested event,
-    Emitter<PushTokensState> emit,
-  ) async {
-    try {
-      await firebaseMessaging.deleteToken();
-      _logger.fine('FCM token deleted successfully');
-    } catch (e, stackTrace) {
-      _logger.warning('Failed to delete FCM token', e, stackTrace);
-      add(PushTokensEvent.error('Failed to delete FCM token: $e'));
     }
   }
 
