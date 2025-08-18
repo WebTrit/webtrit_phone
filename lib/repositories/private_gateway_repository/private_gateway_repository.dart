@@ -8,7 +8,20 @@ import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/mappers/api/self_config_mapper.dart';
 
-final _logger = Logger('SelfConfigRepository');
+import '../common/common.dart';
+
+final _logger = Logger('PrivateGatewayRepository');
+
+abstract class PrivateGatewayRepository {
+  /// Whether the external page token endpoint is supported.
+  bool get isSupportedExternalPageTokenEndpoint;
+
+  /// Fetch and store the external page token from the backend.
+  Future<void> fetchExternalPageToken();
+
+  /// Check if a valid external page token is currently available in storage.
+  Future<bool> isExternalPageTokenAvailable();
+}
 
 /// Repository for accessing self-configuration and external page access tokens.
 ///
@@ -20,7 +33,7 @@ final _logger = Logger('SelfConfigRepository');
 /// Flutter is only responsible for the initial token validation and injection.
 /// All subsequent lifecycle management of the token is delegated to the embedded WebView.
 
-class CustomPrivateGatewayRepository with SelfConfigApiMapper {
+class CustomPrivateGatewayRepository with SelfConfigApiMapper implements PrivateGatewayRepository, Disposable {
   CustomPrivateGatewayRepository(
     this._webtritApiClient,
     this._secureStorage,
@@ -36,8 +49,10 @@ class CustomPrivateGatewayRepository with SelfConfigApiMapper {
   bool _isFetchingExternalPageToken = false;
   bool _isUnsupportedExternalPageTokenEndpoint = false;
 
+  @override
   bool get isSupportedExternalPageTokenEndpoint => !_isUnsupportedExternalPageTokenEndpoint;
 
+  @override
   Future<void> fetchExternalPageToken() async {
     if (_isUnsupportedExternalPageTokenEndpoint) {
       _logger.warning('External page token endpoint is not supported. Skipping token fetch.');
@@ -72,6 +87,7 @@ class CustomPrivateGatewayRepository with SelfConfigApiMapper {
     }
   }
 
+  @override
   Future<bool> isExternalPageTokenAvailable() async {
     final token = _secureStorage.readExternalPageToken();
     return token != null && token.isValid;
@@ -98,14 +114,22 @@ class CustomPrivateGatewayRepository with SelfConfigApiMapper {
     }
   }
 
-  Future<void> cleanCache() async {
-    _secureStorage.deleteExternalPageTokenData();
-    _isUnsupportedExternalPageTokenEndpoint = false;
-  }
-
-  void dispose() {
+  @override
+  Future<void> dispose() async {
+    // Cancel any scheduled token refresh.
     _refreshTimer?.cancel();
+
+    // Reset internal state flags.
     _isUnsupportedExternalPageTokenEndpoint = false;
     _isFetchingExternalPageToken = false;
+
+    // Remove external page token data if no user token is stored (Logout scenario).
+    final storedToken = _secureStorage.readToken();
+    if (storedToken == null) {
+      _logger.finest('No user token found. Clearing external page token data.');
+      await _secureStorage.deleteExternalPageTokenData();
+    } else {
+      _logger.finest('User token exists. Keeping external page token data.');
+    }
   }
 }

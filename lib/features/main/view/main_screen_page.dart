@@ -81,7 +81,7 @@ class MainScreenPage extends StatelessWidget {
       create: (context) {
         return MainBloc(
           context.read<SystemInfoRepository>(),
-          context.read<CustomPrivateGatewayRepository>(),
+          context.read<PrivateGatewayRepository>(),
           context.read<AppPreferences>(),
           EnvironmentConfig.CORE_VERSION_CONSTRAINT,
           context.read<PackageInfo>(),
@@ -113,7 +113,6 @@ class MainScreenPage extends StatelessWidget {
       listenWhen: (previous, current) => previous.isLoggedIn && !current.isLoggedIn,
       listener: (context, state) {
         context.read<PushTokensBloc>().add(const PushTokensEvent.fcmTokenDeletionRequested());
-        context.read<MainBloc>().postLogout();
       },
     );
 

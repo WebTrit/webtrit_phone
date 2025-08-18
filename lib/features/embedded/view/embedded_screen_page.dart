@@ -32,7 +32,7 @@ class EmbeddedScreenPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final selfConfigRepository = context.readOrNull<CustomPrivateGatewayRepository>();
+    final selfConfigRepository = context.readOrNull<PrivateGatewayRepository>();
     final secureStorage = context.read<SecureStorage>();
 
     if (selfConfigRepository == null) {
@@ -60,7 +60,7 @@ class EmbeddedScreenPage extends StatelessWidget {
   }
 
   EmbeddedCubit _createCubit(
-    CustomPrivateGatewayRepository? selfConfigRepository,
+    PrivateGatewayRepository? selfConfigRepository,
     SecureStorage secureStorage,
   ) {
     return EmbeddedCubit(

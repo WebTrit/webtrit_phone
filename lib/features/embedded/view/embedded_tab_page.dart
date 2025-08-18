@@ -32,7 +32,7 @@ class EmbeddedTabPage extends StatelessWidget {
     final bottomMenuManager = context.read<FeatureAccess>().bottomMenuFeature;
     final data = bottomMenuManager.getEmbeddedTabById(id);
 
-    final customPrivateGatewayRepository = context.read<CustomPrivateGatewayRepository>();
+    final customPrivateGatewayRepository = context.read<PrivateGatewayRepository>();
     final secureStorage = context.read<SecureStorage>();
 
     final tabsRouter = AutoTabsRouter.of(context);
@@ -59,7 +59,7 @@ class EmbeddedTabPage extends StatelessWidget {
 
   EmbeddedCubit _createCubit(
     List<EmbeddedPayloadData> payload,
-    CustomPrivateGatewayRepository customPrivateGatewayRepository,
+    PrivateGatewayRepository customPrivateGatewayRepository,
     SecureStorage secureStorage,
   ) {
     final embeddedPayloadBuilder = EmbeddedPayloadBuilder(secureStorage);

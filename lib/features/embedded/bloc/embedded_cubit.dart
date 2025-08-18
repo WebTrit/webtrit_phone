@@ -19,7 +19,7 @@ final _logger = Logger('EmbeddedCubit');
 class EmbeddedCubit extends Cubit<EmbeddedState> {
   EmbeddedCubit({
     required this.payload,
-    required CustomPrivateGatewayRepository? customPrivateGatewayRepository,
+    required PrivateGatewayRepository? customPrivateGatewayRepository,
     required this.embeddedPayloadBuilder,
   })  : _customPrivateGatewayRepository = customPrivateGatewayRepository,
         super(const EmbeddedState()) {
@@ -32,7 +32,7 @@ class EmbeddedCubit extends Cubit<EmbeddedState> {
   Timer? _payloadReloadDebounceTimer;
 
   // May be null if the embedded page is launched outside the main app routes.
-  final CustomPrivateGatewayRepository? _customPrivateGatewayRepository;
+  final PrivateGatewayRepository? _customPrivateGatewayRepository;
   final EmbeddedPayloadBuilder embeddedPayloadBuilder;
   final List<EmbeddedPayloadData> payload;
 
@@ -55,7 +55,7 @@ class EmbeddedCubit extends Cubit<EmbeddedState> {
     _updatePayload();
   }
 
-  Future<void> _tryFetchExternalPageToken(CustomPrivateGatewayRepository customPrivateGatewayRepository) async {
+  Future<void> _tryFetchExternalPageToken(PrivateGatewayRepository customPrivateGatewayRepository) async {
     // Check if the external page token is already stored in secure storage or still not expired.
     final isExternalPageTokenAvailable = await customPrivateGatewayRepository.isExternalPageTokenAvailable();
 
