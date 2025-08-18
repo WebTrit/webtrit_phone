@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:auto_route/auto_route.dart';
+import 'package:collection/collection.dart';
 import 'package:logging/logging.dart';
 
 import 'package:webtrit_phone/app/notifications/notifications.dart';

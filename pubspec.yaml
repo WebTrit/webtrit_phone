@@ -26,7 +26,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
 
-  auto_route: ^10.0.1
+  auto_route: ^10.1.2
   bloc: ^9.0.0
   bloc_concurrency: ^0.3.0
   characters: ^1.3.0
@@ -119,7 +119,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  auto_route_generator: ^10.0.1
+  auto_route_generator: ^10.1.0
   build_runner: ^2.4.15
   flutter_gen_runner: ^5.10.0
   flutter_launcher_icons: ^0.14.3
