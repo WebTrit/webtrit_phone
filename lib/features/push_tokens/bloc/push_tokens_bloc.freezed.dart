@@ -22,7 +22,6 @@ mixin _$PushTokensEvent {
     required TResult Function(AppPushTokenType type, String value)
         insertedOrUpdated,
     required TResult Function(String errorMessage) error,
-    required TResult Function() fcmTokenDeletionRequested,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -30,7 +29,6 @@ mixin _$PushTokensEvent {
     TResult? Function()? started,
     TResult? Function(AppPushTokenType type, String value)? insertedOrUpdated,
     TResult? Function(String errorMessage)? error,
-    TResult? Function()? fcmTokenDeletionRequested,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -38,7 +36,6 @@ mixin _$PushTokensEvent {
     TResult Function()? started,
     TResult Function(AppPushTokenType type, String value)? insertedOrUpdated,
     TResult Function(String errorMessage)? error,
-    TResult Function()? fcmTokenDeletionRequested,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -48,8 +45,6 @@ mixin _$PushTokensEvent {
     required TResult Function(PushTokensInsertedOrUpdated value)
         insertedOrUpdated,
     required TResult Function(_PushTokensError value) error,
-    required TResult Function(PushTokensFcmTokenDeletionRequested value)
-        fcmTokenDeletionRequested,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -57,8 +52,6 @@ mixin _$PushTokensEvent {
     TResult? Function(PushTokensStarted value)? started,
     TResult? Function(PushTokensInsertedOrUpdated value)? insertedOrUpdated,
     TResult? Function(_PushTokensError value)? error,
-    TResult? Function(PushTokensFcmTokenDeletionRequested value)?
-        fcmTokenDeletionRequested,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -66,8 +59,6 @@ mixin _$PushTokensEvent {
     TResult Function(PushTokensStarted value)? started,
     TResult Function(PushTokensInsertedOrUpdated value)? insertedOrUpdated,
     TResult Function(_PushTokensError value)? error,
-    TResult Function(PushTokensFcmTokenDeletionRequested value)?
-        fcmTokenDeletionRequested,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -139,7 +130,6 @@ class _$PushTokensStartedImpl implements PushTokensStarted {
     required TResult Function(AppPushTokenType type, String value)
         insertedOrUpdated,
     required TResult Function(String errorMessage) error,
-    required TResult Function() fcmTokenDeletionRequested,
   }) {
     return started();
   }
@@ -150,7 +140,6 @@ class _$PushTokensStartedImpl implements PushTokensStarted {
     TResult? Function()? started,
     TResult? Function(AppPushTokenType type, String value)? insertedOrUpdated,
     TResult? Function(String errorMessage)? error,
-    TResult? Function()? fcmTokenDeletionRequested,
   }) {
     return started?.call();
   }
@@ -161,7 +150,6 @@ class _$PushTokensStartedImpl implements PushTokensStarted {
     TResult Function()? started,
     TResult Function(AppPushTokenType type, String value)? insertedOrUpdated,
     TResult Function(String errorMessage)? error,
-    TResult Function()? fcmTokenDeletionRequested,
     required TResult orElse(),
   }) {
     if (started != null) {
@@ -177,8 +165,6 @@ class _$PushTokensStartedImpl implements PushTokensStarted {
     required TResult Function(PushTokensInsertedOrUpdated value)
         insertedOrUpdated,
     required TResult Function(_PushTokensError value) error,
-    required TResult Function(PushTokensFcmTokenDeletionRequested value)
-        fcmTokenDeletionRequested,
   }) {
     return started(this);
   }
@@ -189,8 +175,6 @@ class _$PushTokensStartedImpl implements PushTokensStarted {
     TResult? Function(PushTokensStarted value)? started,
     TResult? Function(PushTokensInsertedOrUpdated value)? insertedOrUpdated,
     TResult? Function(_PushTokensError value)? error,
-    TResult? Function(PushTokensFcmTokenDeletionRequested value)?
-        fcmTokenDeletionRequested,
   }) {
     return started?.call(this);
   }
@@ -201,8 +185,6 @@ class _$PushTokensStartedImpl implements PushTokensStarted {
     TResult Function(PushTokensStarted value)? started,
     TResult Function(PushTokensInsertedOrUpdated value)? insertedOrUpdated,
     TResult Function(_PushTokensError value)? error,
-    TResult Function(PushTokensFcmTokenDeletionRequested value)?
-        fcmTokenDeletionRequested,
     required TResult orElse(),
   }) {
     if (started != null) {
@@ -300,7 +282,6 @@ class _$PushTokensInsertedOrUpdatedImpl implements PushTokensInsertedOrUpdated {
     required TResult Function(AppPushTokenType type, String value)
         insertedOrUpdated,
     required TResult Function(String errorMessage) error,
-    required TResult Function() fcmTokenDeletionRequested,
   }) {
     return insertedOrUpdated(type, value);
   }
@@ -311,7 +292,6 @@ class _$PushTokensInsertedOrUpdatedImpl implements PushTokensInsertedOrUpdated {
     TResult? Function()? started,
     TResult? Function(AppPushTokenType type, String value)? insertedOrUpdated,
     TResult? Function(String errorMessage)? error,
-    TResult? Function()? fcmTokenDeletionRequested,
   }) {
     return insertedOrUpdated?.call(type, value);
   }
@@ -322,7 +302,6 @@ class _$PushTokensInsertedOrUpdatedImpl implements PushTokensInsertedOrUpdated {
     TResult Function()? started,
     TResult Function(AppPushTokenType type, String value)? insertedOrUpdated,
     TResult Function(String errorMessage)? error,
-    TResult Function()? fcmTokenDeletionRequested,
     required TResult orElse(),
   }) {
     if (insertedOrUpdated != null) {
@@ -338,8 +317,6 @@ class _$PushTokensInsertedOrUpdatedImpl implements PushTokensInsertedOrUpdated {
     required TResult Function(PushTokensInsertedOrUpdated value)
         insertedOrUpdated,
     required TResult Function(_PushTokensError value) error,
-    required TResult Function(PushTokensFcmTokenDeletionRequested value)
-        fcmTokenDeletionRequested,
   }) {
     return insertedOrUpdated(this);
   }
@@ -350,8 +327,6 @@ class _$PushTokensInsertedOrUpdatedImpl implements PushTokensInsertedOrUpdated {
     TResult? Function(PushTokensStarted value)? started,
     TResult? Function(PushTokensInsertedOrUpdated value)? insertedOrUpdated,
     TResult? Function(_PushTokensError value)? error,
-    TResult? Function(PushTokensFcmTokenDeletionRequested value)?
-        fcmTokenDeletionRequested,
   }) {
     return insertedOrUpdated?.call(this);
   }
@@ -362,8 +337,6 @@ class _$PushTokensInsertedOrUpdatedImpl implements PushTokensInsertedOrUpdated {
     TResult Function(PushTokensStarted value)? started,
     TResult Function(PushTokensInsertedOrUpdated value)? insertedOrUpdated,
     TResult Function(_PushTokensError value)? error,
-    TResult Function(PushTokensFcmTokenDeletionRequested value)?
-        fcmTokenDeletionRequested,
     required TResult orElse(),
   }) {
     if (insertedOrUpdated != null) {
@@ -462,7 +435,6 @@ class _$PushTokensErrorImpl implements _PushTokensError {
     required TResult Function(AppPushTokenType type, String value)
         insertedOrUpdated,
     required TResult Function(String errorMessage) error,
-    required TResult Function() fcmTokenDeletionRequested,
   }) {
     return error(errorMessage);
   }
@@ -473,7 +445,6 @@ class _$PushTokensErrorImpl implements _PushTokensError {
     TResult? Function()? started,
     TResult? Function(AppPushTokenType type, String value)? insertedOrUpdated,
     TResult? Function(String errorMessage)? error,
-    TResult? Function()? fcmTokenDeletionRequested,
   }) {
     return error?.call(errorMessage);
   }
@@ -484,7 +455,6 @@ class _$PushTokensErrorImpl implements _PushTokensError {
     TResult Function()? started,
     TResult Function(AppPushTokenType type, String value)? insertedOrUpdated,
     TResult Function(String errorMessage)? error,
-    TResult Function()? fcmTokenDeletionRequested,
     required TResult orElse(),
   }) {
     if (error != null) {
@@ -500,8 +470,6 @@ class _$PushTokensErrorImpl implements _PushTokensError {
     required TResult Function(PushTokensInsertedOrUpdated value)
         insertedOrUpdated,
     required TResult Function(_PushTokensError value) error,
-    required TResult Function(PushTokensFcmTokenDeletionRequested value)
-        fcmTokenDeletionRequested,
   }) {
     return error(this);
   }
@@ -512,8 +480,6 @@ class _$PushTokensErrorImpl implements _PushTokensError {
     TResult? Function(PushTokensStarted value)? started,
     TResult? Function(PushTokensInsertedOrUpdated value)? insertedOrUpdated,
     TResult? Function(_PushTokensError value)? error,
-    TResult? Function(PushTokensFcmTokenDeletionRequested value)?
-        fcmTokenDeletionRequested,
   }) {
     return error?.call(this);
   }
@@ -524,8 +490,6 @@ class _$PushTokensErrorImpl implements _PushTokensError {
     TResult Function(PushTokensStarted value)? started,
     TResult Function(PushTokensInsertedOrUpdated value)? insertedOrUpdated,
     TResult Function(_PushTokensError value)? error,
-    TResult Function(PushTokensFcmTokenDeletionRequested value)?
-        fcmTokenDeletionRequested,
     required TResult orElse(),
   }) {
     if (error != null) {
@@ -546,134 +510,6 @@ abstract class _PushTokensError implements PushTokensEvent {
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$PushTokensErrorImplCopyWith<_$PushTokensErrorImpl> get copyWith =>
       throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class _$$PushTokensFcmTokenDeletionRequestedImplCopyWith<$Res> {
-  factory _$$PushTokensFcmTokenDeletionRequestedImplCopyWith(
-          _$PushTokensFcmTokenDeletionRequestedImpl value,
-          $Res Function(_$PushTokensFcmTokenDeletionRequestedImpl) then) =
-      __$$PushTokensFcmTokenDeletionRequestedImplCopyWithImpl<$Res>;
-}
-
-/// @nodoc
-class __$$PushTokensFcmTokenDeletionRequestedImplCopyWithImpl<$Res>
-    extends _$PushTokensEventCopyWithImpl<$Res,
-        _$PushTokensFcmTokenDeletionRequestedImpl>
-    implements _$$PushTokensFcmTokenDeletionRequestedImplCopyWith<$Res> {
-  __$$PushTokensFcmTokenDeletionRequestedImplCopyWithImpl(
-      _$PushTokensFcmTokenDeletionRequestedImpl _value,
-      $Res Function(_$PushTokensFcmTokenDeletionRequestedImpl) _then)
-      : super(_value, _then);
-
-  /// Create a copy of PushTokensEvent
-  /// with the given fields replaced by the non-null parameter values.
-}
-
-/// @nodoc
-
-class _$PushTokensFcmTokenDeletionRequestedImpl
-    implements PushTokensFcmTokenDeletionRequested {
-  const _$PushTokensFcmTokenDeletionRequestedImpl();
-
-  @override
-  String toString() {
-    return 'PushTokensEvent.fcmTokenDeletionRequested()';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$PushTokensFcmTokenDeletionRequestedImpl);
-  }
-
-  @override
-  int get hashCode => runtimeType.hashCode;
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() started,
-    required TResult Function(AppPushTokenType type, String value)
-        insertedOrUpdated,
-    required TResult Function(String errorMessage) error,
-    required TResult Function() fcmTokenDeletionRequested,
-  }) {
-    return fcmTokenDeletionRequested();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? started,
-    TResult? Function(AppPushTokenType type, String value)? insertedOrUpdated,
-    TResult? Function(String errorMessage)? error,
-    TResult? Function()? fcmTokenDeletionRequested,
-  }) {
-    return fcmTokenDeletionRequested?.call();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? started,
-    TResult Function(AppPushTokenType type, String value)? insertedOrUpdated,
-    TResult Function(String errorMessage)? error,
-    TResult Function()? fcmTokenDeletionRequested,
-    required TResult orElse(),
-  }) {
-    if (fcmTokenDeletionRequested != null) {
-      return fcmTokenDeletionRequested();
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(PushTokensStarted value) started,
-    required TResult Function(PushTokensInsertedOrUpdated value)
-        insertedOrUpdated,
-    required TResult Function(_PushTokensError value) error,
-    required TResult Function(PushTokensFcmTokenDeletionRequested value)
-        fcmTokenDeletionRequested,
-  }) {
-    return fcmTokenDeletionRequested(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(PushTokensStarted value)? started,
-    TResult? Function(PushTokensInsertedOrUpdated value)? insertedOrUpdated,
-    TResult? Function(_PushTokensError value)? error,
-    TResult? Function(PushTokensFcmTokenDeletionRequested value)?
-        fcmTokenDeletionRequested,
-  }) {
-    return fcmTokenDeletionRequested?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(PushTokensStarted value)? started,
-    TResult Function(PushTokensInsertedOrUpdated value)? insertedOrUpdated,
-    TResult Function(_PushTokensError value)? error,
-    TResult Function(PushTokensFcmTokenDeletionRequested value)?
-        fcmTokenDeletionRequested,
-    required TResult orElse(),
-  }) {
-    if (fcmTokenDeletionRequested != null) {
-      return fcmTokenDeletionRequested(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class PushTokensFcmTokenDeletionRequested implements PushTokensEvent {
-  const factory PushTokensFcmTokenDeletionRequested() =
-      _$PushTokensFcmTokenDeletionRequestedImpl;
 }
 
 /// @nodoc
