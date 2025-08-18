@@ -7314,7 +7314,8 @@ mixin _$CallControlEvent {
     required TResult Function(String callId, String key) sentDTMF,
     required TResult Function(String callId) cameraSwitched,
     required TResult Function(String callId, bool enabled) cameraEnabled,
-    required TResult Function(String callId, bool enabled) speakerEnabled,
+    required TResult Function(String callId, CallAudioDevice device)
+        audioDeviceSet,
     required TResult Function(String callId) failureApproved,
     required TResult Function(String callId) blindTransferInitiated,
     required TResult Function(String callId) attendedTransferInitiated,
@@ -7346,7 +7347,7 @@ mixin _$CallControlEvent {
     TResult? Function(String callId, String key)? sentDTMF,
     TResult? Function(String callId)? cameraSwitched,
     TResult? Function(String callId, bool enabled)? cameraEnabled,
-    TResult? Function(String callId, bool enabled)? speakerEnabled,
+    TResult? Function(String callId, CallAudioDevice device)? audioDeviceSet,
     TResult? Function(String callId)? failureApproved,
     TResult? Function(String callId)? blindTransferInitiated,
     TResult? Function(String callId)? attendedTransferInitiated,
@@ -7376,7 +7377,7 @@ mixin _$CallControlEvent {
     TResult Function(String callId, String key)? sentDTMF,
     TResult Function(String callId)? cameraSwitched,
     TResult Function(String callId, bool enabled)? cameraEnabled,
-    TResult Function(String callId, bool enabled)? speakerEnabled,
+    TResult Function(String callId, CallAudioDevice device)? audioDeviceSet,
     TResult Function(String callId)? failureApproved,
     TResult Function(String callId)? blindTransferInitiated,
     TResult Function(String callId)? attendedTransferInitiated,
@@ -7400,8 +7401,8 @@ mixin _$CallControlEvent {
         cameraSwitched,
     required TResult Function(_CallControlEventCameraEnabled value)
         cameraEnabled,
-    required TResult Function(_CallControlEventSpeakerEnabled value)
-        speakerEnabled,
+    required TResult Function(_CallControlEventAudioDeviceSet value)
+        audioDeviceSet,
     required TResult Function(_CallControlEventFailureApproved value)
         failureApproved,
     required TResult Function(_CallControlEventBlindTransferInitiated value)
@@ -7428,7 +7429,7 @@ mixin _$CallControlEvent {
     TResult? Function(_CallControlEventSentDTMF value)? sentDTMF,
     TResult? Function(_CallControlEventCameraSwitched value)? cameraSwitched,
     TResult? Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult? Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
+    TResult? Function(_CallControlEventAudioDeviceSet value)? audioDeviceSet,
     TResult? Function(_CallControlEventFailureApproved value)? failureApproved,
     TResult? Function(_CallControlEventBlindTransferInitiated value)?
         blindTransferInitiated,
@@ -7454,7 +7455,7 @@ mixin _$CallControlEvent {
     TResult Function(_CallControlEventSentDTMF value)? sentDTMF,
     TResult Function(_CallControlEventCameraSwitched value)? cameraSwitched,
     TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
+    TResult Function(_CallControlEventAudioDeviceSet value)? audioDeviceSet,
     TResult Function(_CallControlEventFailureApproved value)? failureApproved,
     TResult Function(_CallControlEventBlindTransferInitiated value)?
         blindTransferInitiated,
@@ -7574,7 +7575,8 @@ class _$CallControlEventStartedImpl
     required TResult Function(String callId, String key) sentDTMF,
     required TResult Function(String callId) cameraSwitched,
     required TResult Function(String callId, bool enabled) cameraEnabled,
-    required TResult Function(String callId, bool enabled) speakerEnabled,
+    required TResult Function(String callId, CallAudioDevice device)
+        audioDeviceSet,
     required TResult Function(String callId) failureApproved,
     required TResult Function(String callId) blindTransferInitiated,
     required TResult Function(String callId) attendedTransferInitiated,
@@ -7610,7 +7612,7 @@ class _$CallControlEventStartedImpl
     TResult? Function(String callId, String key)? sentDTMF,
     TResult? Function(String callId)? cameraSwitched,
     TResult? Function(String callId, bool enabled)? cameraEnabled,
-    TResult? Function(String callId, bool enabled)? speakerEnabled,
+    TResult? Function(String callId, CallAudioDevice device)? audioDeviceSet,
     TResult? Function(String callId)? failureApproved,
     TResult? Function(String callId)? blindTransferInitiated,
     TResult? Function(String callId)? attendedTransferInitiated,
@@ -7644,7 +7646,7 @@ class _$CallControlEventStartedImpl
     TResult Function(String callId, String key)? sentDTMF,
     TResult Function(String callId)? cameraSwitched,
     TResult Function(String callId, bool enabled)? cameraEnabled,
-    TResult Function(String callId, bool enabled)? speakerEnabled,
+    TResult Function(String callId, CallAudioDevice device)? audioDeviceSet,
     TResult Function(String callId)? failureApproved,
     TResult Function(String callId)? blindTransferInitiated,
     TResult Function(String callId)? attendedTransferInitiated,
@@ -7675,8 +7677,8 @@ class _$CallControlEventStartedImpl
         cameraSwitched,
     required TResult Function(_CallControlEventCameraEnabled value)
         cameraEnabled,
-    required TResult Function(_CallControlEventSpeakerEnabled value)
-        speakerEnabled,
+    required TResult Function(_CallControlEventAudioDeviceSet value)
+        audioDeviceSet,
     required TResult Function(_CallControlEventFailureApproved value)
         failureApproved,
     required TResult Function(_CallControlEventBlindTransferInitiated value)
@@ -7706,7 +7708,7 @@ class _$CallControlEventStartedImpl
     TResult? Function(_CallControlEventSentDTMF value)? sentDTMF,
     TResult? Function(_CallControlEventCameraSwitched value)? cameraSwitched,
     TResult? Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult? Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
+    TResult? Function(_CallControlEventAudioDeviceSet value)? audioDeviceSet,
     TResult? Function(_CallControlEventFailureApproved value)? failureApproved,
     TResult? Function(_CallControlEventBlindTransferInitiated value)?
         blindTransferInitiated,
@@ -7735,7 +7737,7 @@ class _$CallControlEventStartedImpl
     TResult Function(_CallControlEventSentDTMF value)? sentDTMF,
     TResult Function(_CallControlEventCameraSwitched value)? cameraSwitched,
     TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
+    TResult Function(_CallControlEventAudioDeviceSet value)? audioDeviceSet,
     TResult Function(_CallControlEventFailureApproved value)? failureApproved,
     TResult Function(_CallControlEventBlindTransferInitiated value)?
         blindTransferInitiated,
@@ -7834,7 +7836,8 @@ class _$CallControlEventAnsweredImpl
     required TResult Function(String callId, String key) sentDTMF,
     required TResult Function(String callId) cameraSwitched,
     required TResult Function(String callId, bool enabled) cameraEnabled,
-    required TResult Function(String callId, bool enabled) speakerEnabled,
+    required TResult Function(String callId, CallAudioDevice device)
+        audioDeviceSet,
     required TResult Function(String callId) failureApproved,
     required TResult Function(String callId) blindTransferInitiated,
     required TResult Function(String callId) attendedTransferInitiated,
@@ -7869,7 +7872,7 @@ class _$CallControlEventAnsweredImpl
     TResult? Function(String callId, String key)? sentDTMF,
     TResult? Function(String callId)? cameraSwitched,
     TResult? Function(String callId, bool enabled)? cameraEnabled,
-    TResult? Function(String callId, bool enabled)? speakerEnabled,
+    TResult? Function(String callId, CallAudioDevice device)? audioDeviceSet,
     TResult? Function(String callId)? failureApproved,
     TResult? Function(String callId)? blindTransferInitiated,
     TResult? Function(String callId)? attendedTransferInitiated,
@@ -7902,7 +7905,7 @@ class _$CallControlEventAnsweredImpl
     TResult Function(String callId, String key)? sentDTMF,
     TResult Function(String callId)? cameraSwitched,
     TResult Function(String callId, bool enabled)? cameraEnabled,
-    TResult Function(String callId, bool enabled)? speakerEnabled,
+    TResult Function(String callId, CallAudioDevice device)? audioDeviceSet,
     TResult Function(String callId)? failureApproved,
     TResult Function(String callId)? blindTransferInitiated,
     TResult Function(String callId)? attendedTransferInitiated,
@@ -7932,8 +7935,8 @@ class _$CallControlEventAnsweredImpl
         cameraSwitched,
     required TResult Function(_CallControlEventCameraEnabled value)
         cameraEnabled,
-    required TResult Function(_CallControlEventSpeakerEnabled value)
-        speakerEnabled,
+    required TResult Function(_CallControlEventAudioDeviceSet value)
+        audioDeviceSet,
     required TResult Function(_CallControlEventFailureApproved value)
         failureApproved,
     required TResult Function(_CallControlEventBlindTransferInitiated value)
@@ -7963,7 +7966,7 @@ class _$CallControlEventAnsweredImpl
     TResult? Function(_CallControlEventSentDTMF value)? sentDTMF,
     TResult? Function(_CallControlEventCameraSwitched value)? cameraSwitched,
     TResult? Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult? Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
+    TResult? Function(_CallControlEventAudioDeviceSet value)? audioDeviceSet,
     TResult? Function(_CallControlEventFailureApproved value)? failureApproved,
     TResult? Function(_CallControlEventBlindTransferInitiated value)?
         blindTransferInitiated,
@@ -7992,7 +7995,7 @@ class _$CallControlEventAnsweredImpl
     TResult Function(_CallControlEventSentDTMF value)? sentDTMF,
     TResult Function(_CallControlEventCameraSwitched value)? cameraSwitched,
     TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
+    TResult Function(_CallControlEventAudioDeviceSet value)? audioDeviceSet,
     TResult Function(_CallControlEventFailureApproved value)? failureApproved,
     TResult Function(_CallControlEventBlindTransferInitiated value)?
         blindTransferInitiated,
@@ -8076,7 +8079,8 @@ class _$CallControlEventEndedImpl
     required TResult Function(String callId, String key) sentDTMF,
     required TResult Function(String callId) cameraSwitched,
     required TResult Function(String callId, bool enabled) cameraEnabled,
-    required TResult Function(String callId, bool enabled) speakerEnabled,
+    required TResult Function(String callId, CallAudioDevice device)
+        audioDeviceSet,
     required TResult Function(String callId) failureApproved,
     required TResult Function(String callId) blindTransferInitiated,
     required TResult Function(String callId) attendedTransferInitiated,
@@ -8111,7 +8115,7 @@ class _$CallControlEventEndedImpl
     TResult? Function(String callId, String key)? sentDTMF,
     TResult? Function(String callId)? cameraSwitched,
     TResult? Function(String callId, bool enabled)? cameraEnabled,
-    TResult? Function(String callId, bool enabled)? speakerEnabled,
+    TResult? Function(String callId, CallAudioDevice device)? audioDeviceSet,
     TResult? Function(String callId)? failureApproved,
     TResult? Function(String callId)? blindTransferInitiated,
     TResult? Function(String callId)? attendedTransferInitiated,
@@ -8144,7 +8148,7 @@ class _$CallControlEventEndedImpl
     TResult Function(String callId, String key)? sentDTMF,
     TResult Function(String callId)? cameraSwitched,
     TResult Function(String callId, bool enabled)? cameraEnabled,
-    TResult Function(String callId, bool enabled)? speakerEnabled,
+    TResult Function(String callId, CallAudioDevice device)? audioDeviceSet,
     TResult Function(String callId)? failureApproved,
     TResult Function(String callId)? blindTransferInitiated,
     TResult Function(String callId)? attendedTransferInitiated,
@@ -8174,8 +8178,8 @@ class _$CallControlEventEndedImpl
         cameraSwitched,
     required TResult Function(_CallControlEventCameraEnabled value)
         cameraEnabled,
-    required TResult Function(_CallControlEventSpeakerEnabled value)
-        speakerEnabled,
+    required TResult Function(_CallControlEventAudioDeviceSet value)
+        audioDeviceSet,
     required TResult Function(_CallControlEventFailureApproved value)
         failureApproved,
     required TResult Function(_CallControlEventBlindTransferInitiated value)
@@ -8205,7 +8209,7 @@ class _$CallControlEventEndedImpl
     TResult? Function(_CallControlEventSentDTMF value)? sentDTMF,
     TResult? Function(_CallControlEventCameraSwitched value)? cameraSwitched,
     TResult? Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult? Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
+    TResult? Function(_CallControlEventAudioDeviceSet value)? audioDeviceSet,
     TResult? Function(_CallControlEventFailureApproved value)? failureApproved,
     TResult? Function(_CallControlEventBlindTransferInitiated value)?
         blindTransferInitiated,
@@ -8234,7 +8238,7 @@ class _$CallControlEventEndedImpl
     TResult Function(_CallControlEventSentDTMF value)? sentDTMF,
     TResult Function(_CallControlEventCameraSwitched value)? cameraSwitched,
     TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
+    TResult Function(_CallControlEventAudioDeviceSet value)? audioDeviceSet,
     TResult Function(_CallControlEventFailureApproved value)? failureApproved,
     TResult Function(_CallControlEventBlindTransferInitiated value)?
         blindTransferInitiated,
@@ -8322,7 +8326,8 @@ class _$CallControlEventSetHeldImpl
     required TResult Function(String callId, String key) sentDTMF,
     required TResult Function(String callId) cameraSwitched,
     required TResult Function(String callId, bool enabled) cameraEnabled,
-    required TResult Function(String callId, bool enabled) speakerEnabled,
+    required TResult Function(String callId, CallAudioDevice device)
+        audioDeviceSet,
     required TResult Function(String callId) failureApproved,
     required TResult Function(String callId) blindTransferInitiated,
     required TResult Function(String callId) attendedTransferInitiated,
@@ -8357,7 +8362,7 @@ class _$CallControlEventSetHeldImpl
     TResult? Function(String callId, String key)? sentDTMF,
     TResult? Function(String callId)? cameraSwitched,
     TResult? Function(String callId, bool enabled)? cameraEnabled,
-    TResult? Function(String callId, bool enabled)? speakerEnabled,
+    TResult? Function(String callId, CallAudioDevice device)? audioDeviceSet,
     TResult? Function(String callId)? failureApproved,
     TResult? Function(String callId)? blindTransferInitiated,
     TResult? Function(String callId)? attendedTransferInitiated,
@@ -8390,7 +8395,7 @@ class _$CallControlEventSetHeldImpl
     TResult Function(String callId, String key)? sentDTMF,
     TResult Function(String callId)? cameraSwitched,
     TResult Function(String callId, bool enabled)? cameraEnabled,
-    TResult Function(String callId, bool enabled)? speakerEnabled,
+    TResult Function(String callId, CallAudioDevice device)? audioDeviceSet,
     TResult Function(String callId)? failureApproved,
     TResult Function(String callId)? blindTransferInitiated,
     TResult Function(String callId)? attendedTransferInitiated,
@@ -8420,8 +8425,8 @@ class _$CallControlEventSetHeldImpl
         cameraSwitched,
     required TResult Function(_CallControlEventCameraEnabled value)
         cameraEnabled,
-    required TResult Function(_CallControlEventSpeakerEnabled value)
-        speakerEnabled,
+    required TResult Function(_CallControlEventAudioDeviceSet value)
+        audioDeviceSet,
     required TResult Function(_CallControlEventFailureApproved value)
         failureApproved,
     required TResult Function(_CallControlEventBlindTransferInitiated value)
@@ -8451,7 +8456,7 @@ class _$CallControlEventSetHeldImpl
     TResult? Function(_CallControlEventSentDTMF value)? sentDTMF,
     TResult? Function(_CallControlEventCameraSwitched value)? cameraSwitched,
     TResult? Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult? Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
+    TResult? Function(_CallControlEventAudioDeviceSet value)? audioDeviceSet,
     TResult? Function(_CallControlEventFailureApproved value)? failureApproved,
     TResult? Function(_CallControlEventBlindTransferInitiated value)?
         blindTransferInitiated,
@@ -8480,7 +8485,7 @@ class _$CallControlEventSetHeldImpl
     TResult Function(_CallControlEventSentDTMF value)? sentDTMF,
     TResult Function(_CallControlEventCameraSwitched value)? cameraSwitched,
     TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
+    TResult Function(_CallControlEventAudioDeviceSet value)? audioDeviceSet,
     TResult Function(_CallControlEventFailureApproved value)? failureApproved,
     TResult Function(_CallControlEventBlindTransferInitiated value)?
         blindTransferInitiated,
@@ -8569,7 +8574,8 @@ class _$CallControlEventSetMutedImpl
     required TResult Function(String callId, String key) sentDTMF,
     required TResult Function(String callId) cameraSwitched,
     required TResult Function(String callId, bool enabled) cameraEnabled,
-    required TResult Function(String callId, bool enabled) speakerEnabled,
+    required TResult Function(String callId, CallAudioDevice device)
+        audioDeviceSet,
     required TResult Function(String callId) failureApproved,
     required TResult Function(String callId) blindTransferInitiated,
     required TResult Function(String callId) attendedTransferInitiated,
@@ -8604,7 +8610,7 @@ class _$CallControlEventSetMutedImpl
     TResult? Function(String callId, String key)? sentDTMF,
     TResult? Function(String callId)? cameraSwitched,
     TResult? Function(String callId, bool enabled)? cameraEnabled,
-    TResult? Function(String callId, bool enabled)? speakerEnabled,
+    TResult? Function(String callId, CallAudioDevice device)? audioDeviceSet,
     TResult? Function(String callId)? failureApproved,
     TResult? Function(String callId)? blindTransferInitiated,
     TResult? Function(String callId)? attendedTransferInitiated,
@@ -8637,7 +8643,7 @@ class _$CallControlEventSetMutedImpl
     TResult Function(String callId, String key)? sentDTMF,
     TResult Function(String callId)? cameraSwitched,
     TResult Function(String callId, bool enabled)? cameraEnabled,
-    TResult Function(String callId, bool enabled)? speakerEnabled,
+    TResult Function(String callId, CallAudioDevice device)? audioDeviceSet,
     TResult Function(String callId)? failureApproved,
     TResult Function(String callId)? blindTransferInitiated,
     TResult Function(String callId)? attendedTransferInitiated,
@@ -8667,8 +8673,8 @@ class _$CallControlEventSetMutedImpl
         cameraSwitched,
     required TResult Function(_CallControlEventCameraEnabled value)
         cameraEnabled,
-    required TResult Function(_CallControlEventSpeakerEnabled value)
-        speakerEnabled,
+    required TResult Function(_CallControlEventAudioDeviceSet value)
+        audioDeviceSet,
     required TResult Function(_CallControlEventFailureApproved value)
         failureApproved,
     required TResult Function(_CallControlEventBlindTransferInitiated value)
@@ -8698,7 +8704,7 @@ class _$CallControlEventSetMutedImpl
     TResult? Function(_CallControlEventSentDTMF value)? sentDTMF,
     TResult? Function(_CallControlEventCameraSwitched value)? cameraSwitched,
     TResult? Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult? Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
+    TResult? Function(_CallControlEventAudioDeviceSet value)? audioDeviceSet,
     TResult? Function(_CallControlEventFailureApproved value)? failureApproved,
     TResult? Function(_CallControlEventBlindTransferInitiated value)?
         blindTransferInitiated,
@@ -8727,7 +8733,7 @@ class _$CallControlEventSetMutedImpl
     TResult Function(_CallControlEventSentDTMF value)? sentDTMF,
     TResult Function(_CallControlEventCameraSwitched value)? cameraSwitched,
     TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
+    TResult Function(_CallControlEventAudioDeviceSet value)? audioDeviceSet,
     TResult Function(_CallControlEventFailureApproved value)? failureApproved,
     TResult Function(_CallControlEventBlindTransferInitiated value)?
         blindTransferInitiated,
@@ -8816,7 +8822,8 @@ class _$CallControlEventSentDTMFImpl
     required TResult Function(String callId, String key) sentDTMF,
     required TResult Function(String callId) cameraSwitched,
     required TResult Function(String callId, bool enabled) cameraEnabled,
-    required TResult Function(String callId, bool enabled) speakerEnabled,
+    required TResult Function(String callId, CallAudioDevice device)
+        audioDeviceSet,
     required TResult Function(String callId) failureApproved,
     required TResult Function(String callId) blindTransferInitiated,
     required TResult Function(String callId) attendedTransferInitiated,
@@ -8851,7 +8858,7 @@ class _$CallControlEventSentDTMFImpl
     TResult? Function(String callId, String key)? sentDTMF,
     TResult? Function(String callId)? cameraSwitched,
     TResult? Function(String callId, bool enabled)? cameraEnabled,
-    TResult? Function(String callId, bool enabled)? speakerEnabled,
+    TResult? Function(String callId, CallAudioDevice device)? audioDeviceSet,
     TResult? Function(String callId)? failureApproved,
     TResult? Function(String callId)? blindTransferInitiated,
     TResult? Function(String callId)? attendedTransferInitiated,
@@ -8884,7 +8891,7 @@ class _$CallControlEventSentDTMFImpl
     TResult Function(String callId, String key)? sentDTMF,
     TResult Function(String callId)? cameraSwitched,
     TResult Function(String callId, bool enabled)? cameraEnabled,
-    TResult Function(String callId, bool enabled)? speakerEnabled,
+    TResult Function(String callId, CallAudioDevice device)? audioDeviceSet,
     TResult Function(String callId)? failureApproved,
     TResult Function(String callId)? blindTransferInitiated,
     TResult Function(String callId)? attendedTransferInitiated,
@@ -8914,8 +8921,8 @@ class _$CallControlEventSentDTMFImpl
         cameraSwitched,
     required TResult Function(_CallControlEventCameraEnabled value)
         cameraEnabled,
-    required TResult Function(_CallControlEventSpeakerEnabled value)
-        speakerEnabled,
+    required TResult Function(_CallControlEventAudioDeviceSet value)
+        audioDeviceSet,
     required TResult Function(_CallControlEventFailureApproved value)
         failureApproved,
     required TResult Function(_CallControlEventBlindTransferInitiated value)
@@ -8945,7 +8952,7 @@ class _$CallControlEventSentDTMFImpl
     TResult? Function(_CallControlEventSentDTMF value)? sentDTMF,
     TResult? Function(_CallControlEventCameraSwitched value)? cameraSwitched,
     TResult? Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult? Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
+    TResult? Function(_CallControlEventAudioDeviceSet value)? audioDeviceSet,
     TResult? Function(_CallControlEventFailureApproved value)? failureApproved,
     TResult? Function(_CallControlEventBlindTransferInitiated value)?
         blindTransferInitiated,
@@ -8974,7 +8981,7 @@ class _$CallControlEventSentDTMFImpl
     TResult Function(_CallControlEventSentDTMF value)? sentDTMF,
     TResult Function(_CallControlEventCameraSwitched value)? cameraSwitched,
     TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
+    TResult Function(_CallControlEventAudioDeviceSet value)? audioDeviceSet,
     TResult Function(_CallControlEventFailureApproved value)? failureApproved,
     TResult Function(_CallControlEventBlindTransferInitiated value)?
         blindTransferInitiated,
@@ -9059,7 +9066,8 @@ class _$CallControlEventCameraSwitchedImpl
     required TResult Function(String callId, String key) sentDTMF,
     required TResult Function(String callId) cameraSwitched,
     required TResult Function(String callId, bool enabled) cameraEnabled,
-    required TResult Function(String callId, bool enabled) speakerEnabled,
+    required TResult Function(String callId, CallAudioDevice device)
+        audioDeviceSet,
     required TResult Function(String callId) failureApproved,
     required TResult Function(String callId) blindTransferInitiated,
     required TResult Function(String callId) attendedTransferInitiated,
@@ -9094,7 +9102,7 @@ class _$CallControlEventCameraSwitchedImpl
     TResult? Function(String callId, String key)? sentDTMF,
     TResult? Function(String callId)? cameraSwitched,
     TResult? Function(String callId, bool enabled)? cameraEnabled,
-    TResult? Function(String callId, bool enabled)? speakerEnabled,
+    TResult? Function(String callId, CallAudioDevice device)? audioDeviceSet,
     TResult? Function(String callId)? failureApproved,
     TResult? Function(String callId)? blindTransferInitiated,
     TResult? Function(String callId)? attendedTransferInitiated,
@@ -9127,7 +9135,7 @@ class _$CallControlEventCameraSwitchedImpl
     TResult Function(String callId, String key)? sentDTMF,
     TResult Function(String callId)? cameraSwitched,
     TResult Function(String callId, bool enabled)? cameraEnabled,
-    TResult Function(String callId, bool enabled)? speakerEnabled,
+    TResult Function(String callId, CallAudioDevice device)? audioDeviceSet,
     TResult Function(String callId)? failureApproved,
     TResult Function(String callId)? blindTransferInitiated,
     TResult Function(String callId)? attendedTransferInitiated,
@@ -9157,8 +9165,8 @@ class _$CallControlEventCameraSwitchedImpl
         cameraSwitched,
     required TResult Function(_CallControlEventCameraEnabled value)
         cameraEnabled,
-    required TResult Function(_CallControlEventSpeakerEnabled value)
-        speakerEnabled,
+    required TResult Function(_CallControlEventAudioDeviceSet value)
+        audioDeviceSet,
     required TResult Function(_CallControlEventFailureApproved value)
         failureApproved,
     required TResult Function(_CallControlEventBlindTransferInitiated value)
@@ -9188,7 +9196,7 @@ class _$CallControlEventCameraSwitchedImpl
     TResult? Function(_CallControlEventSentDTMF value)? sentDTMF,
     TResult? Function(_CallControlEventCameraSwitched value)? cameraSwitched,
     TResult? Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult? Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
+    TResult? Function(_CallControlEventAudioDeviceSet value)? audioDeviceSet,
     TResult? Function(_CallControlEventFailureApproved value)? failureApproved,
     TResult? Function(_CallControlEventBlindTransferInitiated value)?
         blindTransferInitiated,
@@ -9217,7 +9225,7 @@ class _$CallControlEventCameraSwitchedImpl
     TResult Function(_CallControlEventSentDTMF value)? sentDTMF,
     TResult Function(_CallControlEventCameraSwitched value)? cameraSwitched,
     TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
+    TResult Function(_CallControlEventAudioDeviceSet value)? audioDeviceSet,
     TResult Function(_CallControlEventFailureApproved value)? failureApproved,
     TResult Function(_CallControlEventBlindTransferInitiated value)?
         blindTransferInitiated,
@@ -9305,7 +9313,8 @@ class _$CallControlEventCameraEnabledImpl
     required TResult Function(String callId, String key) sentDTMF,
     required TResult Function(String callId) cameraSwitched,
     required TResult Function(String callId, bool enabled) cameraEnabled,
-    required TResult Function(String callId, bool enabled) speakerEnabled,
+    required TResult Function(String callId, CallAudioDevice device)
+        audioDeviceSet,
     required TResult Function(String callId) failureApproved,
     required TResult Function(String callId) blindTransferInitiated,
     required TResult Function(String callId) attendedTransferInitiated,
@@ -9340,7 +9349,7 @@ class _$CallControlEventCameraEnabledImpl
     TResult? Function(String callId, String key)? sentDTMF,
     TResult? Function(String callId)? cameraSwitched,
     TResult? Function(String callId, bool enabled)? cameraEnabled,
-    TResult? Function(String callId, bool enabled)? speakerEnabled,
+    TResult? Function(String callId, CallAudioDevice device)? audioDeviceSet,
     TResult? Function(String callId)? failureApproved,
     TResult? Function(String callId)? blindTransferInitiated,
     TResult? Function(String callId)? attendedTransferInitiated,
@@ -9373,7 +9382,7 @@ class _$CallControlEventCameraEnabledImpl
     TResult Function(String callId, String key)? sentDTMF,
     TResult Function(String callId)? cameraSwitched,
     TResult Function(String callId, bool enabled)? cameraEnabled,
-    TResult Function(String callId, bool enabled)? speakerEnabled,
+    TResult Function(String callId, CallAudioDevice device)? audioDeviceSet,
     TResult Function(String callId)? failureApproved,
     TResult Function(String callId)? blindTransferInitiated,
     TResult Function(String callId)? attendedTransferInitiated,
@@ -9403,8 +9412,8 @@ class _$CallControlEventCameraEnabledImpl
         cameraSwitched,
     required TResult Function(_CallControlEventCameraEnabled value)
         cameraEnabled,
-    required TResult Function(_CallControlEventSpeakerEnabled value)
-        speakerEnabled,
+    required TResult Function(_CallControlEventAudioDeviceSet value)
+        audioDeviceSet,
     required TResult Function(_CallControlEventFailureApproved value)
         failureApproved,
     required TResult Function(_CallControlEventBlindTransferInitiated value)
@@ -9434,7 +9443,7 @@ class _$CallControlEventCameraEnabledImpl
     TResult? Function(_CallControlEventSentDTMF value)? sentDTMF,
     TResult? Function(_CallControlEventCameraSwitched value)? cameraSwitched,
     TResult? Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult? Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
+    TResult? Function(_CallControlEventAudioDeviceSet value)? audioDeviceSet,
     TResult? Function(_CallControlEventFailureApproved value)? failureApproved,
     TResult? Function(_CallControlEventBlindTransferInitiated value)?
         blindTransferInitiated,
@@ -9463,7 +9472,7 @@ class _$CallControlEventCameraEnabledImpl
     TResult Function(_CallControlEventSentDTMF value)? sentDTMF,
     TResult Function(_CallControlEventCameraSwitched value)? cameraSwitched,
     TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
+    TResult Function(_CallControlEventAudioDeviceSet value)? audioDeviceSet,
     TResult Function(_CallControlEventFailureApproved value)? failureApproved,
     TResult Function(_CallControlEventBlindTransferInitiated value)?
         blindTransferInitiated,
@@ -9497,41 +9506,41 @@ abstract class _CallControlEventCameraEnabled implements CallControlEvent {
 
 /// @nodoc
 
-class _$CallControlEventSpeakerEnabledImpl
+class _$CallControlEventAudioDeviceSetImpl
     with DiagnosticableTreeMixin
-    implements _CallControlEventSpeakerEnabled {
-  const _$CallControlEventSpeakerEnabledImpl(this.callId, this.enabled);
+    implements _CallControlEventAudioDeviceSet {
+  const _$CallControlEventAudioDeviceSetImpl(this.callId, this.device);
 
   @override
   final String callId;
   @override
-  final bool enabled;
+  final CallAudioDevice device;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'CallControlEvent.speakerEnabled(callId: $callId, enabled: $enabled)';
+    return 'CallControlEvent.audioDeviceSet(callId: $callId, device: $device)';
   }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties
-      ..add(DiagnosticsProperty('type', 'CallControlEvent.speakerEnabled'))
+      ..add(DiagnosticsProperty('type', 'CallControlEvent.audioDeviceSet'))
       ..add(DiagnosticsProperty('callId', callId))
-      ..add(DiagnosticsProperty('enabled', enabled));
+      ..add(DiagnosticsProperty('device', device));
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$CallControlEventSpeakerEnabledImpl &&
+            other is _$CallControlEventAudioDeviceSetImpl &&
             (identical(other.callId, callId) || other.callId == callId) &&
-            (identical(other.enabled, enabled) || other.enabled == enabled));
+            (identical(other.device, device) || other.device == device));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, callId, enabled);
+  int get hashCode => Object.hash(runtimeType, callId, device);
 
   @override
   @optionalTypeArgs
@@ -9553,7 +9562,8 @@ class _$CallControlEventSpeakerEnabledImpl
     required TResult Function(String callId, String key) sentDTMF,
     required TResult Function(String callId) cameraSwitched,
     required TResult Function(String callId, bool enabled) cameraEnabled,
-    required TResult Function(String callId, bool enabled) speakerEnabled,
+    required TResult Function(String callId, CallAudioDevice device)
+        audioDeviceSet,
     required TResult Function(String callId) failureApproved,
     required TResult Function(String callId) blindTransferInitiated,
     required TResult Function(String callId) attendedTransferInitiated,
@@ -9565,7 +9575,7 @@ class _$CallControlEventSpeakerEnabledImpl
     required TResult Function(String referId, String referTo)
         attendedRequestApproved,
   }) {
-    return speakerEnabled(callId, enabled);
+    return audioDeviceSet(callId, device);
   }
 
   @override
@@ -9588,7 +9598,7 @@ class _$CallControlEventSpeakerEnabledImpl
     TResult? Function(String callId, String key)? sentDTMF,
     TResult? Function(String callId)? cameraSwitched,
     TResult? Function(String callId, bool enabled)? cameraEnabled,
-    TResult? Function(String callId, bool enabled)? speakerEnabled,
+    TResult? Function(String callId, CallAudioDevice device)? audioDeviceSet,
     TResult? Function(String callId)? failureApproved,
     TResult? Function(String callId)? blindTransferInitiated,
     TResult? Function(String callId)? attendedTransferInitiated,
@@ -9598,7 +9608,7 @@ class _$CallControlEventSpeakerEnabledImpl
     TResult? Function(String callId, String referId)? attendedRequestDeclined,
     TResult? Function(String referId, String referTo)? attendedRequestApproved,
   }) {
-    return speakerEnabled?.call(callId, enabled);
+    return audioDeviceSet?.call(callId, device);
   }
 
   @override
@@ -9621,7 +9631,7 @@ class _$CallControlEventSpeakerEnabledImpl
     TResult Function(String callId, String key)? sentDTMF,
     TResult Function(String callId)? cameraSwitched,
     TResult Function(String callId, bool enabled)? cameraEnabled,
-    TResult Function(String callId, bool enabled)? speakerEnabled,
+    TResult Function(String callId, CallAudioDevice device)? audioDeviceSet,
     TResult Function(String callId)? failureApproved,
     TResult Function(String callId)? blindTransferInitiated,
     TResult Function(String callId)? attendedTransferInitiated,
@@ -9632,8 +9642,8 @@ class _$CallControlEventSpeakerEnabledImpl
     TResult Function(String referId, String referTo)? attendedRequestApproved,
     required TResult orElse(),
   }) {
-    if (speakerEnabled != null) {
-      return speakerEnabled(callId, enabled);
+    if (audioDeviceSet != null) {
+      return audioDeviceSet(callId, device);
     }
     return orElse();
   }
@@ -9651,8 +9661,8 @@ class _$CallControlEventSpeakerEnabledImpl
         cameraSwitched,
     required TResult Function(_CallControlEventCameraEnabled value)
         cameraEnabled,
-    required TResult Function(_CallControlEventSpeakerEnabled value)
-        speakerEnabled,
+    required TResult Function(_CallControlEventAudioDeviceSet value)
+        audioDeviceSet,
     required TResult Function(_CallControlEventFailureApproved value)
         failureApproved,
     required TResult Function(_CallControlEventBlindTransferInitiated value)
@@ -9668,7 +9678,7 @@ class _$CallControlEventSpeakerEnabledImpl
     required TResult Function(_CallControlEventAttendedRequestApproved value)
         attendedRequestApproved,
   }) {
-    return speakerEnabled(this);
+    return audioDeviceSet(this);
   }
 
   @override
@@ -9682,7 +9692,7 @@ class _$CallControlEventSpeakerEnabledImpl
     TResult? Function(_CallControlEventSentDTMF value)? sentDTMF,
     TResult? Function(_CallControlEventCameraSwitched value)? cameraSwitched,
     TResult? Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult? Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
+    TResult? Function(_CallControlEventAudioDeviceSet value)? audioDeviceSet,
     TResult? Function(_CallControlEventFailureApproved value)? failureApproved,
     TResult? Function(_CallControlEventBlindTransferInitiated value)?
         blindTransferInitiated,
@@ -9697,7 +9707,7 @@ class _$CallControlEventSpeakerEnabledImpl
     TResult? Function(_CallControlEventAttendedRequestApproved value)?
         attendedRequestApproved,
   }) {
-    return speakerEnabled?.call(this);
+    return audioDeviceSet?.call(this);
   }
 
   @override
@@ -9711,7 +9721,7 @@ class _$CallControlEventSpeakerEnabledImpl
     TResult Function(_CallControlEventSentDTMF value)? sentDTMF,
     TResult Function(_CallControlEventCameraSwitched value)? cameraSwitched,
     TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
+    TResult Function(_CallControlEventAudioDeviceSet value)? audioDeviceSet,
     TResult Function(_CallControlEventFailureApproved value)? failureApproved,
     TResult Function(_CallControlEventBlindTransferInitiated value)?
         blindTransferInitiated,
@@ -9727,20 +9737,20 @@ class _$CallControlEventSpeakerEnabledImpl
         attendedRequestApproved,
     required TResult orElse(),
   }) {
-    if (speakerEnabled != null) {
-      return speakerEnabled(this);
+    if (audioDeviceSet != null) {
+      return audioDeviceSet(this);
     }
     return orElse();
   }
 }
 
-abstract class _CallControlEventSpeakerEnabled implements CallControlEvent {
-  const factory _CallControlEventSpeakerEnabled(
-          final String callId, final bool enabled) =
-      _$CallControlEventSpeakerEnabledImpl;
+abstract class _CallControlEventAudioDeviceSet implements CallControlEvent {
+  const factory _CallControlEventAudioDeviceSet(
+          final String callId, final CallAudioDevice device) =
+      _$CallControlEventAudioDeviceSetImpl;
 
   String get callId;
-  bool get enabled;
+  CallAudioDevice get device;
 }
 
 /// @nodoc
@@ -9797,7 +9807,8 @@ class _$CallControlEventFailureApprovedImpl
     required TResult Function(String callId, String key) sentDTMF,
     required TResult Function(String callId) cameraSwitched,
     required TResult Function(String callId, bool enabled) cameraEnabled,
-    required TResult Function(String callId, bool enabled) speakerEnabled,
+    required TResult Function(String callId, CallAudioDevice device)
+        audioDeviceSet,
     required TResult Function(String callId) failureApproved,
     required TResult Function(String callId) blindTransferInitiated,
     required TResult Function(String callId) attendedTransferInitiated,
@@ -9832,7 +9843,7 @@ class _$CallControlEventFailureApprovedImpl
     TResult? Function(String callId, String key)? sentDTMF,
     TResult? Function(String callId)? cameraSwitched,
     TResult? Function(String callId, bool enabled)? cameraEnabled,
-    TResult? Function(String callId, bool enabled)? speakerEnabled,
+    TResult? Function(String callId, CallAudioDevice device)? audioDeviceSet,
     TResult? Function(String callId)? failureApproved,
     TResult? Function(String callId)? blindTransferInitiated,
     TResult? Function(String callId)? attendedTransferInitiated,
@@ -9865,7 +9876,7 @@ class _$CallControlEventFailureApprovedImpl
     TResult Function(String callId, String key)? sentDTMF,
     TResult Function(String callId)? cameraSwitched,
     TResult Function(String callId, bool enabled)? cameraEnabled,
-    TResult Function(String callId, bool enabled)? speakerEnabled,
+    TResult Function(String callId, CallAudioDevice device)? audioDeviceSet,
     TResult Function(String callId)? failureApproved,
     TResult Function(String callId)? blindTransferInitiated,
     TResult Function(String callId)? attendedTransferInitiated,
@@ -9895,8 +9906,8 @@ class _$CallControlEventFailureApprovedImpl
         cameraSwitched,
     required TResult Function(_CallControlEventCameraEnabled value)
         cameraEnabled,
-    required TResult Function(_CallControlEventSpeakerEnabled value)
-        speakerEnabled,
+    required TResult Function(_CallControlEventAudioDeviceSet value)
+        audioDeviceSet,
     required TResult Function(_CallControlEventFailureApproved value)
         failureApproved,
     required TResult Function(_CallControlEventBlindTransferInitiated value)
@@ -9926,7 +9937,7 @@ class _$CallControlEventFailureApprovedImpl
     TResult? Function(_CallControlEventSentDTMF value)? sentDTMF,
     TResult? Function(_CallControlEventCameraSwitched value)? cameraSwitched,
     TResult? Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult? Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
+    TResult? Function(_CallControlEventAudioDeviceSet value)? audioDeviceSet,
     TResult? Function(_CallControlEventFailureApproved value)? failureApproved,
     TResult? Function(_CallControlEventBlindTransferInitiated value)?
         blindTransferInitiated,
@@ -9955,7 +9966,7 @@ class _$CallControlEventFailureApprovedImpl
     TResult Function(_CallControlEventSentDTMF value)? sentDTMF,
     TResult Function(_CallControlEventCameraSwitched value)? cameraSwitched,
     TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
+    TResult Function(_CallControlEventAudioDeviceSet value)? audioDeviceSet,
     TResult Function(_CallControlEventFailureApproved value)? failureApproved,
     TResult Function(_CallControlEventBlindTransferInitiated value)?
         blindTransferInitiated,
@@ -10040,7 +10051,8 @@ class _$CallControlEventBlindTransferInitiatedImpl
     required TResult Function(String callId, String key) sentDTMF,
     required TResult Function(String callId) cameraSwitched,
     required TResult Function(String callId, bool enabled) cameraEnabled,
-    required TResult Function(String callId, bool enabled) speakerEnabled,
+    required TResult Function(String callId, CallAudioDevice device)
+        audioDeviceSet,
     required TResult Function(String callId) failureApproved,
     required TResult Function(String callId) blindTransferInitiated,
     required TResult Function(String callId) attendedTransferInitiated,
@@ -10075,7 +10087,7 @@ class _$CallControlEventBlindTransferInitiatedImpl
     TResult? Function(String callId, String key)? sentDTMF,
     TResult? Function(String callId)? cameraSwitched,
     TResult? Function(String callId, bool enabled)? cameraEnabled,
-    TResult? Function(String callId, bool enabled)? speakerEnabled,
+    TResult? Function(String callId, CallAudioDevice device)? audioDeviceSet,
     TResult? Function(String callId)? failureApproved,
     TResult? Function(String callId)? blindTransferInitiated,
     TResult? Function(String callId)? attendedTransferInitiated,
@@ -10108,7 +10120,7 @@ class _$CallControlEventBlindTransferInitiatedImpl
     TResult Function(String callId, String key)? sentDTMF,
     TResult Function(String callId)? cameraSwitched,
     TResult Function(String callId, bool enabled)? cameraEnabled,
-    TResult Function(String callId, bool enabled)? speakerEnabled,
+    TResult Function(String callId, CallAudioDevice device)? audioDeviceSet,
     TResult Function(String callId)? failureApproved,
     TResult Function(String callId)? blindTransferInitiated,
     TResult Function(String callId)? attendedTransferInitiated,
@@ -10138,8 +10150,8 @@ class _$CallControlEventBlindTransferInitiatedImpl
         cameraSwitched,
     required TResult Function(_CallControlEventCameraEnabled value)
         cameraEnabled,
-    required TResult Function(_CallControlEventSpeakerEnabled value)
-        speakerEnabled,
+    required TResult Function(_CallControlEventAudioDeviceSet value)
+        audioDeviceSet,
     required TResult Function(_CallControlEventFailureApproved value)
         failureApproved,
     required TResult Function(_CallControlEventBlindTransferInitiated value)
@@ -10169,7 +10181,7 @@ class _$CallControlEventBlindTransferInitiatedImpl
     TResult? Function(_CallControlEventSentDTMF value)? sentDTMF,
     TResult? Function(_CallControlEventCameraSwitched value)? cameraSwitched,
     TResult? Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult? Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
+    TResult? Function(_CallControlEventAudioDeviceSet value)? audioDeviceSet,
     TResult? Function(_CallControlEventFailureApproved value)? failureApproved,
     TResult? Function(_CallControlEventBlindTransferInitiated value)?
         blindTransferInitiated,
@@ -10198,7 +10210,7 @@ class _$CallControlEventBlindTransferInitiatedImpl
     TResult Function(_CallControlEventSentDTMF value)? sentDTMF,
     TResult Function(_CallControlEventCameraSwitched value)? cameraSwitched,
     TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
+    TResult Function(_CallControlEventAudioDeviceSet value)? audioDeviceSet,
     TResult Function(_CallControlEventFailureApproved value)? failureApproved,
     TResult Function(_CallControlEventBlindTransferInitiated value)?
         blindTransferInitiated,
@@ -10284,7 +10296,8 @@ class _$CallControlEventAttendedTransferInitiatedImpl
     required TResult Function(String callId, String key) sentDTMF,
     required TResult Function(String callId) cameraSwitched,
     required TResult Function(String callId, bool enabled) cameraEnabled,
-    required TResult Function(String callId, bool enabled) speakerEnabled,
+    required TResult Function(String callId, CallAudioDevice device)
+        audioDeviceSet,
     required TResult Function(String callId) failureApproved,
     required TResult Function(String callId) blindTransferInitiated,
     required TResult Function(String callId) attendedTransferInitiated,
@@ -10319,7 +10332,7 @@ class _$CallControlEventAttendedTransferInitiatedImpl
     TResult? Function(String callId, String key)? sentDTMF,
     TResult? Function(String callId)? cameraSwitched,
     TResult? Function(String callId, bool enabled)? cameraEnabled,
-    TResult? Function(String callId, bool enabled)? speakerEnabled,
+    TResult? Function(String callId, CallAudioDevice device)? audioDeviceSet,
     TResult? Function(String callId)? failureApproved,
     TResult? Function(String callId)? blindTransferInitiated,
     TResult? Function(String callId)? attendedTransferInitiated,
@@ -10352,7 +10365,7 @@ class _$CallControlEventAttendedTransferInitiatedImpl
     TResult Function(String callId, String key)? sentDTMF,
     TResult Function(String callId)? cameraSwitched,
     TResult Function(String callId, bool enabled)? cameraEnabled,
-    TResult Function(String callId, bool enabled)? speakerEnabled,
+    TResult Function(String callId, CallAudioDevice device)? audioDeviceSet,
     TResult Function(String callId)? failureApproved,
     TResult Function(String callId)? blindTransferInitiated,
     TResult Function(String callId)? attendedTransferInitiated,
@@ -10382,8 +10395,8 @@ class _$CallControlEventAttendedTransferInitiatedImpl
         cameraSwitched,
     required TResult Function(_CallControlEventCameraEnabled value)
         cameraEnabled,
-    required TResult Function(_CallControlEventSpeakerEnabled value)
-        speakerEnabled,
+    required TResult Function(_CallControlEventAudioDeviceSet value)
+        audioDeviceSet,
     required TResult Function(_CallControlEventFailureApproved value)
         failureApproved,
     required TResult Function(_CallControlEventBlindTransferInitiated value)
@@ -10413,7 +10426,7 @@ class _$CallControlEventAttendedTransferInitiatedImpl
     TResult? Function(_CallControlEventSentDTMF value)? sentDTMF,
     TResult? Function(_CallControlEventCameraSwitched value)? cameraSwitched,
     TResult? Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult? Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
+    TResult? Function(_CallControlEventAudioDeviceSet value)? audioDeviceSet,
     TResult? Function(_CallControlEventFailureApproved value)? failureApproved,
     TResult? Function(_CallControlEventBlindTransferInitiated value)?
         blindTransferInitiated,
@@ -10442,7 +10455,7 @@ class _$CallControlEventAttendedTransferInitiatedImpl
     TResult Function(_CallControlEventSentDTMF value)? sentDTMF,
     TResult Function(_CallControlEventCameraSwitched value)? cameraSwitched,
     TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
+    TResult Function(_CallControlEventAudioDeviceSet value)? audioDeviceSet,
     TResult Function(_CallControlEventFailureApproved value)? failureApproved,
     TResult Function(_CallControlEventBlindTransferInitiated value)?
         blindTransferInitiated,
@@ -10528,7 +10541,8 @@ class _$CallControlEventBlindTransferSubmittedImpl
     required TResult Function(String callId, String key) sentDTMF,
     required TResult Function(String callId) cameraSwitched,
     required TResult Function(String callId, bool enabled) cameraEnabled,
-    required TResult Function(String callId, bool enabled) speakerEnabled,
+    required TResult Function(String callId, CallAudioDevice device)
+        audioDeviceSet,
     required TResult Function(String callId) failureApproved,
     required TResult Function(String callId) blindTransferInitiated,
     required TResult Function(String callId) attendedTransferInitiated,
@@ -10563,7 +10577,7 @@ class _$CallControlEventBlindTransferSubmittedImpl
     TResult? Function(String callId, String key)? sentDTMF,
     TResult? Function(String callId)? cameraSwitched,
     TResult? Function(String callId, bool enabled)? cameraEnabled,
-    TResult? Function(String callId, bool enabled)? speakerEnabled,
+    TResult? Function(String callId, CallAudioDevice device)? audioDeviceSet,
     TResult? Function(String callId)? failureApproved,
     TResult? Function(String callId)? blindTransferInitiated,
     TResult? Function(String callId)? attendedTransferInitiated,
@@ -10596,7 +10610,7 @@ class _$CallControlEventBlindTransferSubmittedImpl
     TResult Function(String callId, String key)? sentDTMF,
     TResult Function(String callId)? cameraSwitched,
     TResult Function(String callId, bool enabled)? cameraEnabled,
-    TResult Function(String callId, bool enabled)? speakerEnabled,
+    TResult Function(String callId, CallAudioDevice device)? audioDeviceSet,
     TResult Function(String callId)? failureApproved,
     TResult Function(String callId)? blindTransferInitiated,
     TResult Function(String callId)? attendedTransferInitiated,
@@ -10626,8 +10640,8 @@ class _$CallControlEventBlindTransferSubmittedImpl
         cameraSwitched,
     required TResult Function(_CallControlEventCameraEnabled value)
         cameraEnabled,
-    required TResult Function(_CallControlEventSpeakerEnabled value)
-        speakerEnabled,
+    required TResult Function(_CallControlEventAudioDeviceSet value)
+        audioDeviceSet,
     required TResult Function(_CallControlEventFailureApproved value)
         failureApproved,
     required TResult Function(_CallControlEventBlindTransferInitiated value)
@@ -10657,7 +10671,7 @@ class _$CallControlEventBlindTransferSubmittedImpl
     TResult? Function(_CallControlEventSentDTMF value)? sentDTMF,
     TResult? Function(_CallControlEventCameraSwitched value)? cameraSwitched,
     TResult? Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult? Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
+    TResult? Function(_CallControlEventAudioDeviceSet value)? audioDeviceSet,
     TResult? Function(_CallControlEventFailureApproved value)? failureApproved,
     TResult? Function(_CallControlEventBlindTransferInitiated value)?
         blindTransferInitiated,
@@ -10686,7 +10700,7 @@ class _$CallControlEventBlindTransferSubmittedImpl
     TResult Function(_CallControlEventSentDTMF value)? sentDTMF,
     TResult Function(_CallControlEventCameraSwitched value)? cameraSwitched,
     TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
+    TResult Function(_CallControlEventAudioDeviceSet value)? audioDeviceSet,
     TResult Function(_CallControlEventFailureApproved value)? failureApproved,
     TResult Function(_CallControlEventBlindTransferInitiated value)?
         blindTransferInitiated,
@@ -10780,7 +10794,8 @@ class _$CallControlEventAttendedTransferSubmittedImpl
     required TResult Function(String callId, String key) sentDTMF,
     required TResult Function(String callId) cameraSwitched,
     required TResult Function(String callId, bool enabled) cameraEnabled,
-    required TResult Function(String callId, bool enabled) speakerEnabled,
+    required TResult Function(String callId, CallAudioDevice device)
+        audioDeviceSet,
     required TResult Function(String callId) failureApproved,
     required TResult Function(String callId) blindTransferInitiated,
     required TResult Function(String callId) attendedTransferInitiated,
@@ -10815,7 +10830,7 @@ class _$CallControlEventAttendedTransferSubmittedImpl
     TResult? Function(String callId, String key)? sentDTMF,
     TResult? Function(String callId)? cameraSwitched,
     TResult? Function(String callId, bool enabled)? cameraEnabled,
-    TResult? Function(String callId, bool enabled)? speakerEnabled,
+    TResult? Function(String callId, CallAudioDevice device)? audioDeviceSet,
     TResult? Function(String callId)? failureApproved,
     TResult? Function(String callId)? blindTransferInitiated,
     TResult? Function(String callId)? attendedTransferInitiated,
@@ -10848,7 +10863,7 @@ class _$CallControlEventAttendedTransferSubmittedImpl
     TResult Function(String callId, String key)? sentDTMF,
     TResult Function(String callId)? cameraSwitched,
     TResult Function(String callId, bool enabled)? cameraEnabled,
-    TResult Function(String callId, bool enabled)? speakerEnabled,
+    TResult Function(String callId, CallAudioDevice device)? audioDeviceSet,
     TResult Function(String callId)? failureApproved,
     TResult Function(String callId)? blindTransferInitiated,
     TResult Function(String callId)? attendedTransferInitiated,
@@ -10878,8 +10893,8 @@ class _$CallControlEventAttendedTransferSubmittedImpl
         cameraSwitched,
     required TResult Function(_CallControlEventCameraEnabled value)
         cameraEnabled,
-    required TResult Function(_CallControlEventSpeakerEnabled value)
-        speakerEnabled,
+    required TResult Function(_CallControlEventAudioDeviceSet value)
+        audioDeviceSet,
     required TResult Function(_CallControlEventFailureApproved value)
         failureApproved,
     required TResult Function(_CallControlEventBlindTransferInitiated value)
@@ -10909,7 +10924,7 @@ class _$CallControlEventAttendedTransferSubmittedImpl
     TResult? Function(_CallControlEventSentDTMF value)? sentDTMF,
     TResult? Function(_CallControlEventCameraSwitched value)? cameraSwitched,
     TResult? Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult? Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
+    TResult? Function(_CallControlEventAudioDeviceSet value)? audioDeviceSet,
     TResult? Function(_CallControlEventFailureApproved value)? failureApproved,
     TResult? Function(_CallControlEventBlindTransferInitiated value)?
         blindTransferInitiated,
@@ -10938,7 +10953,7 @@ class _$CallControlEventAttendedTransferSubmittedImpl
     TResult Function(_CallControlEventSentDTMF value)? sentDTMF,
     TResult Function(_CallControlEventCameraSwitched value)? cameraSwitched,
     TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
+    TResult Function(_CallControlEventAudioDeviceSet value)? audioDeviceSet,
     TResult Function(_CallControlEventFailureApproved value)? failureApproved,
     TResult Function(_CallControlEventBlindTransferInitiated value)?
         blindTransferInitiated,
@@ -11032,7 +11047,8 @@ class _$CallControlEventAttendedRequestDeclinedImpl
     required TResult Function(String callId, String key) sentDTMF,
     required TResult Function(String callId) cameraSwitched,
     required TResult Function(String callId, bool enabled) cameraEnabled,
-    required TResult Function(String callId, bool enabled) speakerEnabled,
+    required TResult Function(String callId, CallAudioDevice device)
+        audioDeviceSet,
     required TResult Function(String callId) failureApproved,
     required TResult Function(String callId) blindTransferInitiated,
     required TResult Function(String callId) attendedTransferInitiated,
@@ -11067,7 +11083,7 @@ class _$CallControlEventAttendedRequestDeclinedImpl
     TResult? Function(String callId, String key)? sentDTMF,
     TResult? Function(String callId)? cameraSwitched,
     TResult? Function(String callId, bool enabled)? cameraEnabled,
-    TResult? Function(String callId, bool enabled)? speakerEnabled,
+    TResult? Function(String callId, CallAudioDevice device)? audioDeviceSet,
     TResult? Function(String callId)? failureApproved,
     TResult? Function(String callId)? blindTransferInitiated,
     TResult? Function(String callId)? attendedTransferInitiated,
@@ -11100,7 +11116,7 @@ class _$CallControlEventAttendedRequestDeclinedImpl
     TResult Function(String callId, String key)? sentDTMF,
     TResult Function(String callId)? cameraSwitched,
     TResult Function(String callId, bool enabled)? cameraEnabled,
-    TResult Function(String callId, bool enabled)? speakerEnabled,
+    TResult Function(String callId, CallAudioDevice device)? audioDeviceSet,
     TResult Function(String callId)? failureApproved,
     TResult Function(String callId)? blindTransferInitiated,
     TResult Function(String callId)? attendedTransferInitiated,
@@ -11130,8 +11146,8 @@ class _$CallControlEventAttendedRequestDeclinedImpl
         cameraSwitched,
     required TResult Function(_CallControlEventCameraEnabled value)
         cameraEnabled,
-    required TResult Function(_CallControlEventSpeakerEnabled value)
-        speakerEnabled,
+    required TResult Function(_CallControlEventAudioDeviceSet value)
+        audioDeviceSet,
     required TResult Function(_CallControlEventFailureApproved value)
         failureApproved,
     required TResult Function(_CallControlEventBlindTransferInitiated value)
@@ -11161,7 +11177,7 @@ class _$CallControlEventAttendedRequestDeclinedImpl
     TResult? Function(_CallControlEventSentDTMF value)? sentDTMF,
     TResult? Function(_CallControlEventCameraSwitched value)? cameraSwitched,
     TResult? Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult? Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
+    TResult? Function(_CallControlEventAudioDeviceSet value)? audioDeviceSet,
     TResult? Function(_CallControlEventFailureApproved value)? failureApproved,
     TResult? Function(_CallControlEventBlindTransferInitiated value)?
         blindTransferInitiated,
@@ -11190,7 +11206,7 @@ class _$CallControlEventAttendedRequestDeclinedImpl
     TResult Function(_CallControlEventSentDTMF value)? sentDTMF,
     TResult Function(_CallControlEventCameraSwitched value)? cameraSwitched,
     TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
+    TResult Function(_CallControlEventAudioDeviceSet value)? audioDeviceSet,
     TResult Function(_CallControlEventFailureApproved value)? failureApproved,
     TResult Function(_CallControlEventBlindTransferInitiated value)?
         blindTransferInitiated,
@@ -11283,7 +11299,8 @@ class _$CallControlEventAttendedRequestApprovedImpl
     required TResult Function(String callId, String key) sentDTMF,
     required TResult Function(String callId) cameraSwitched,
     required TResult Function(String callId, bool enabled) cameraEnabled,
-    required TResult Function(String callId, bool enabled) speakerEnabled,
+    required TResult Function(String callId, CallAudioDevice device)
+        audioDeviceSet,
     required TResult Function(String callId) failureApproved,
     required TResult Function(String callId) blindTransferInitiated,
     required TResult Function(String callId) attendedTransferInitiated,
@@ -11318,7 +11335,7 @@ class _$CallControlEventAttendedRequestApprovedImpl
     TResult? Function(String callId, String key)? sentDTMF,
     TResult? Function(String callId)? cameraSwitched,
     TResult? Function(String callId, bool enabled)? cameraEnabled,
-    TResult? Function(String callId, bool enabled)? speakerEnabled,
+    TResult? Function(String callId, CallAudioDevice device)? audioDeviceSet,
     TResult? Function(String callId)? failureApproved,
     TResult? Function(String callId)? blindTransferInitiated,
     TResult? Function(String callId)? attendedTransferInitiated,
@@ -11351,7 +11368,7 @@ class _$CallControlEventAttendedRequestApprovedImpl
     TResult Function(String callId, String key)? sentDTMF,
     TResult Function(String callId)? cameraSwitched,
     TResult Function(String callId, bool enabled)? cameraEnabled,
-    TResult Function(String callId, bool enabled)? speakerEnabled,
+    TResult Function(String callId, CallAudioDevice device)? audioDeviceSet,
     TResult Function(String callId)? failureApproved,
     TResult Function(String callId)? blindTransferInitiated,
     TResult Function(String callId)? attendedTransferInitiated,
@@ -11381,8 +11398,8 @@ class _$CallControlEventAttendedRequestApprovedImpl
         cameraSwitched,
     required TResult Function(_CallControlEventCameraEnabled value)
         cameraEnabled,
-    required TResult Function(_CallControlEventSpeakerEnabled value)
-        speakerEnabled,
+    required TResult Function(_CallControlEventAudioDeviceSet value)
+        audioDeviceSet,
     required TResult Function(_CallControlEventFailureApproved value)
         failureApproved,
     required TResult Function(_CallControlEventBlindTransferInitiated value)
@@ -11412,7 +11429,7 @@ class _$CallControlEventAttendedRequestApprovedImpl
     TResult? Function(_CallControlEventSentDTMF value)? sentDTMF,
     TResult? Function(_CallControlEventCameraSwitched value)? cameraSwitched,
     TResult? Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult? Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
+    TResult? Function(_CallControlEventAudioDeviceSet value)? audioDeviceSet,
     TResult? Function(_CallControlEventFailureApproved value)? failureApproved,
     TResult? Function(_CallControlEventBlindTransferInitiated value)?
         blindTransferInitiated,
@@ -11441,7 +11458,7 @@ class _$CallControlEventAttendedRequestApprovedImpl
     TResult Function(_CallControlEventSentDTMF value)? sentDTMF,
     TResult Function(_CallControlEventCameraSwitched value)? cameraSwitched,
     TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
+    TResult Function(_CallControlEventAudioDeviceSet value)? audioDeviceSet,
     TResult Function(_CallControlEventFailureApproved value)? failureApproved,
     TResult Function(_CallControlEventBlindTransferInitiated value)?
         blindTransferInitiated,
@@ -11487,7 +11504,10 @@ mixin _$CallPerformEvent {
     required TResult Function(String callId, bool onHold) setHeld,
     required TResult Function(String callId, bool muted) setMuted,
     required TResult Function(String callId, String key) sentDTMF,
-    required TResult Function(String callId, bool enabled) setSpeaker,
+    required TResult Function(String callId, CallAudioDevice device)
+        audioDeviceSet,
+    required TResult Function(String callId, List<CallAudioDevice> devices)
+        audioDevicesUpdate,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -11500,7 +11520,9 @@ mixin _$CallPerformEvent {
     TResult? Function(String callId, bool onHold)? setHeld,
     TResult? Function(String callId, bool muted)? setMuted,
     TResult? Function(String callId, String key)? sentDTMF,
-    TResult? Function(String callId, bool enabled)? setSpeaker,
+    TResult? Function(String callId, CallAudioDevice device)? audioDeviceSet,
+    TResult? Function(String callId, List<CallAudioDevice> devices)?
+        audioDevicesUpdate,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -11513,7 +11535,9 @@ mixin _$CallPerformEvent {
     TResult Function(String callId, bool onHold)? setHeld,
     TResult Function(String callId, bool muted)? setMuted,
     TResult Function(String callId, String key)? sentDTMF,
-    TResult Function(String callId, bool enabled)? setSpeaker,
+    TResult Function(String callId, CallAudioDevice device)? audioDeviceSet,
+    TResult Function(String callId, List<CallAudioDevice> devices)?
+        audioDevicesUpdate,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -11525,7 +11549,10 @@ mixin _$CallPerformEvent {
     required TResult Function(_CallPerformEventSetHeld value) setHeld,
     required TResult Function(_CallPerformEventSetMuted value) setMuted,
     required TResult Function(_CallPerformEventSentDTMF value) sentDTMF,
-    required TResult Function(_CallPerformEventSetSpeaker value) setSpeaker,
+    required TResult Function(_CallPerformEventAudioDeviceSet value)
+        audioDeviceSet,
+    required TResult Function(_CallPerformEventAudioDevicesUpdate value)
+        audioDevicesUpdate,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -11536,7 +11563,9 @@ mixin _$CallPerformEvent {
     TResult? Function(_CallPerformEventSetHeld value)? setHeld,
     TResult? Function(_CallPerformEventSetMuted value)? setMuted,
     TResult? Function(_CallPerformEventSentDTMF value)? sentDTMF,
-    TResult? Function(_CallPerformEventSetSpeaker value)? setSpeaker,
+    TResult? Function(_CallPerformEventAudioDeviceSet value)? audioDeviceSet,
+    TResult? Function(_CallPerformEventAudioDevicesUpdate value)?
+        audioDevicesUpdate,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -11547,7 +11576,9 @@ mixin _$CallPerformEvent {
     TResult Function(_CallPerformEventSetHeld value)? setHeld,
     TResult Function(_CallPerformEventSetMuted value)? setMuted,
     TResult Function(_CallPerformEventSentDTMF value)? sentDTMF,
-    TResult Function(_CallPerformEventSetSpeaker value)? setSpeaker,
+    TResult Function(_CallPerformEventAudioDeviceSet value)? audioDeviceSet,
+    TResult Function(_CallPerformEventAudioDevicesUpdate value)?
+        audioDevicesUpdate,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -11613,7 +11644,10 @@ class _$CallPerformEventStartedImpl extends _CallPerformEventStarted
     required TResult Function(String callId, bool onHold) setHeld,
     required TResult Function(String callId, bool muted) setMuted,
     required TResult Function(String callId, String key) sentDTMF,
-    required TResult Function(String callId, bool enabled) setSpeaker,
+    required TResult Function(String callId, CallAudioDevice device)
+        audioDeviceSet,
+    required TResult Function(String callId, List<CallAudioDevice> devices)
+        audioDevicesUpdate,
   }) {
     return started(callId, handle, displayName, video);
   }
@@ -11629,7 +11663,9 @@ class _$CallPerformEventStartedImpl extends _CallPerformEventStarted
     TResult? Function(String callId, bool onHold)? setHeld,
     TResult? Function(String callId, bool muted)? setMuted,
     TResult? Function(String callId, String key)? sentDTMF,
-    TResult? Function(String callId, bool enabled)? setSpeaker,
+    TResult? Function(String callId, CallAudioDevice device)? audioDeviceSet,
+    TResult? Function(String callId, List<CallAudioDevice> devices)?
+        audioDevicesUpdate,
   }) {
     return started?.call(callId, handle, displayName, video);
   }
@@ -11645,7 +11681,9 @@ class _$CallPerformEventStartedImpl extends _CallPerformEventStarted
     TResult Function(String callId, bool onHold)? setHeld,
     TResult Function(String callId, bool muted)? setMuted,
     TResult Function(String callId, String key)? sentDTMF,
-    TResult Function(String callId, bool enabled)? setSpeaker,
+    TResult Function(String callId, CallAudioDevice device)? audioDeviceSet,
+    TResult Function(String callId, List<CallAudioDevice> devices)?
+        audioDevicesUpdate,
     required TResult orElse(),
   }) {
     if (started != null) {
@@ -11663,7 +11701,10 @@ class _$CallPerformEventStartedImpl extends _CallPerformEventStarted
     required TResult Function(_CallPerformEventSetHeld value) setHeld,
     required TResult Function(_CallPerformEventSetMuted value) setMuted,
     required TResult Function(_CallPerformEventSentDTMF value) sentDTMF,
-    required TResult Function(_CallPerformEventSetSpeaker value) setSpeaker,
+    required TResult Function(_CallPerformEventAudioDeviceSet value)
+        audioDeviceSet,
+    required TResult Function(_CallPerformEventAudioDevicesUpdate value)
+        audioDevicesUpdate,
   }) {
     return started(this);
   }
@@ -11677,7 +11718,9 @@ class _$CallPerformEventStartedImpl extends _CallPerformEventStarted
     TResult? Function(_CallPerformEventSetHeld value)? setHeld,
     TResult? Function(_CallPerformEventSetMuted value)? setMuted,
     TResult? Function(_CallPerformEventSentDTMF value)? sentDTMF,
-    TResult? Function(_CallPerformEventSetSpeaker value)? setSpeaker,
+    TResult? Function(_CallPerformEventAudioDeviceSet value)? audioDeviceSet,
+    TResult? Function(_CallPerformEventAudioDevicesUpdate value)?
+        audioDevicesUpdate,
   }) {
     return started?.call(this);
   }
@@ -11691,7 +11734,9 @@ class _$CallPerformEventStartedImpl extends _CallPerformEventStarted
     TResult Function(_CallPerformEventSetHeld value)? setHeld,
     TResult Function(_CallPerformEventSetMuted value)? setMuted,
     TResult Function(_CallPerformEventSentDTMF value)? sentDTMF,
-    TResult Function(_CallPerformEventSetSpeaker value)? setSpeaker,
+    TResult Function(_CallPerformEventAudioDeviceSet value)? audioDeviceSet,
+    TResult Function(_CallPerformEventAudioDevicesUpdate value)?
+        audioDevicesUpdate,
     required TResult orElse(),
   }) {
     if (started != null) {
@@ -11759,7 +11804,10 @@ class _$CallPerformEventAnsweredImpl extends _CallPerformEventAnswered
     required TResult Function(String callId, bool onHold) setHeld,
     required TResult Function(String callId, bool muted) setMuted,
     required TResult Function(String callId, String key) sentDTMF,
-    required TResult Function(String callId, bool enabled) setSpeaker,
+    required TResult Function(String callId, CallAudioDevice device)
+        audioDeviceSet,
+    required TResult Function(String callId, List<CallAudioDevice> devices)
+        audioDevicesUpdate,
   }) {
     return answered(callId);
   }
@@ -11775,7 +11823,9 @@ class _$CallPerformEventAnsweredImpl extends _CallPerformEventAnswered
     TResult? Function(String callId, bool onHold)? setHeld,
     TResult? Function(String callId, bool muted)? setMuted,
     TResult? Function(String callId, String key)? sentDTMF,
-    TResult? Function(String callId, bool enabled)? setSpeaker,
+    TResult? Function(String callId, CallAudioDevice device)? audioDeviceSet,
+    TResult? Function(String callId, List<CallAudioDevice> devices)?
+        audioDevicesUpdate,
   }) {
     return answered?.call(callId);
   }
@@ -11791,7 +11841,9 @@ class _$CallPerformEventAnsweredImpl extends _CallPerformEventAnswered
     TResult Function(String callId, bool onHold)? setHeld,
     TResult Function(String callId, bool muted)? setMuted,
     TResult Function(String callId, String key)? sentDTMF,
-    TResult Function(String callId, bool enabled)? setSpeaker,
+    TResult Function(String callId, CallAudioDevice device)? audioDeviceSet,
+    TResult Function(String callId, List<CallAudioDevice> devices)?
+        audioDevicesUpdate,
     required TResult orElse(),
   }) {
     if (answered != null) {
@@ -11809,7 +11861,10 @@ class _$CallPerformEventAnsweredImpl extends _CallPerformEventAnswered
     required TResult Function(_CallPerformEventSetHeld value) setHeld,
     required TResult Function(_CallPerformEventSetMuted value) setMuted,
     required TResult Function(_CallPerformEventSentDTMF value) sentDTMF,
-    required TResult Function(_CallPerformEventSetSpeaker value) setSpeaker,
+    required TResult Function(_CallPerformEventAudioDeviceSet value)
+        audioDeviceSet,
+    required TResult Function(_CallPerformEventAudioDevicesUpdate value)
+        audioDevicesUpdate,
   }) {
     return answered(this);
   }
@@ -11823,7 +11878,9 @@ class _$CallPerformEventAnsweredImpl extends _CallPerformEventAnswered
     TResult? Function(_CallPerformEventSetHeld value)? setHeld,
     TResult? Function(_CallPerformEventSetMuted value)? setMuted,
     TResult? Function(_CallPerformEventSentDTMF value)? sentDTMF,
-    TResult? Function(_CallPerformEventSetSpeaker value)? setSpeaker,
+    TResult? Function(_CallPerformEventAudioDeviceSet value)? audioDeviceSet,
+    TResult? Function(_CallPerformEventAudioDevicesUpdate value)?
+        audioDevicesUpdate,
   }) {
     return answered?.call(this);
   }
@@ -11837,7 +11894,9 @@ class _$CallPerformEventAnsweredImpl extends _CallPerformEventAnswered
     TResult Function(_CallPerformEventSetHeld value)? setHeld,
     TResult Function(_CallPerformEventSetMuted value)? setMuted,
     TResult Function(_CallPerformEventSentDTMF value)? sentDTMF,
-    TResult Function(_CallPerformEventSetSpeaker value)? setSpeaker,
+    TResult Function(_CallPerformEventAudioDeviceSet value)? audioDeviceSet,
+    TResult Function(_CallPerformEventAudioDevicesUpdate value)?
+        audioDevicesUpdate,
     required TResult orElse(),
   }) {
     if (answered != null) {
@@ -11900,7 +11959,10 @@ class _$CallPerformEventEndedImpl extends _CallPerformEventEnded
     required TResult Function(String callId, bool onHold) setHeld,
     required TResult Function(String callId, bool muted) setMuted,
     required TResult Function(String callId, String key) sentDTMF,
-    required TResult Function(String callId, bool enabled) setSpeaker,
+    required TResult Function(String callId, CallAudioDevice device)
+        audioDeviceSet,
+    required TResult Function(String callId, List<CallAudioDevice> devices)
+        audioDevicesUpdate,
   }) {
     return ended(callId);
   }
@@ -11916,7 +11978,9 @@ class _$CallPerformEventEndedImpl extends _CallPerformEventEnded
     TResult? Function(String callId, bool onHold)? setHeld,
     TResult? Function(String callId, bool muted)? setMuted,
     TResult? Function(String callId, String key)? sentDTMF,
-    TResult? Function(String callId, bool enabled)? setSpeaker,
+    TResult? Function(String callId, CallAudioDevice device)? audioDeviceSet,
+    TResult? Function(String callId, List<CallAudioDevice> devices)?
+        audioDevicesUpdate,
   }) {
     return ended?.call(callId);
   }
@@ -11932,7 +11996,9 @@ class _$CallPerformEventEndedImpl extends _CallPerformEventEnded
     TResult Function(String callId, bool onHold)? setHeld,
     TResult Function(String callId, bool muted)? setMuted,
     TResult Function(String callId, String key)? sentDTMF,
-    TResult Function(String callId, bool enabled)? setSpeaker,
+    TResult Function(String callId, CallAudioDevice device)? audioDeviceSet,
+    TResult Function(String callId, List<CallAudioDevice> devices)?
+        audioDevicesUpdate,
     required TResult orElse(),
   }) {
     if (ended != null) {
@@ -11950,7 +12016,10 @@ class _$CallPerformEventEndedImpl extends _CallPerformEventEnded
     required TResult Function(_CallPerformEventSetHeld value) setHeld,
     required TResult Function(_CallPerformEventSetMuted value) setMuted,
     required TResult Function(_CallPerformEventSentDTMF value) sentDTMF,
-    required TResult Function(_CallPerformEventSetSpeaker value) setSpeaker,
+    required TResult Function(_CallPerformEventAudioDeviceSet value)
+        audioDeviceSet,
+    required TResult Function(_CallPerformEventAudioDevicesUpdate value)
+        audioDevicesUpdate,
   }) {
     return ended(this);
   }
@@ -11964,7 +12033,9 @@ class _$CallPerformEventEndedImpl extends _CallPerformEventEnded
     TResult? Function(_CallPerformEventSetHeld value)? setHeld,
     TResult? Function(_CallPerformEventSetMuted value)? setMuted,
     TResult? Function(_CallPerformEventSentDTMF value)? sentDTMF,
-    TResult? Function(_CallPerformEventSetSpeaker value)? setSpeaker,
+    TResult? Function(_CallPerformEventAudioDeviceSet value)? audioDeviceSet,
+    TResult? Function(_CallPerformEventAudioDevicesUpdate value)?
+        audioDevicesUpdate,
   }) {
     return ended?.call(this);
   }
@@ -11978,7 +12049,9 @@ class _$CallPerformEventEndedImpl extends _CallPerformEventEnded
     TResult Function(_CallPerformEventSetHeld value)? setHeld,
     TResult Function(_CallPerformEventSetMuted value)? setMuted,
     TResult Function(_CallPerformEventSentDTMF value)? sentDTMF,
-    TResult Function(_CallPerformEventSetSpeaker value)? setSpeaker,
+    TResult Function(_CallPerformEventAudioDeviceSet value)? audioDeviceSet,
+    TResult Function(_CallPerformEventAudioDevicesUpdate value)?
+        audioDevicesUpdate,
     required TResult orElse(),
   }) {
     if (ended != null) {
@@ -12045,7 +12118,10 @@ class _$CallPerformEventSetHeldImpl extends _CallPerformEventSetHeld
     required TResult Function(String callId, bool onHold) setHeld,
     required TResult Function(String callId, bool muted) setMuted,
     required TResult Function(String callId, String key) sentDTMF,
-    required TResult Function(String callId, bool enabled) setSpeaker,
+    required TResult Function(String callId, CallAudioDevice device)
+        audioDeviceSet,
+    required TResult Function(String callId, List<CallAudioDevice> devices)
+        audioDevicesUpdate,
   }) {
     return setHeld(callId, onHold);
   }
@@ -12061,7 +12137,9 @@ class _$CallPerformEventSetHeldImpl extends _CallPerformEventSetHeld
     TResult? Function(String callId, bool onHold)? setHeld,
     TResult? Function(String callId, bool muted)? setMuted,
     TResult? Function(String callId, String key)? sentDTMF,
-    TResult? Function(String callId, bool enabled)? setSpeaker,
+    TResult? Function(String callId, CallAudioDevice device)? audioDeviceSet,
+    TResult? Function(String callId, List<CallAudioDevice> devices)?
+        audioDevicesUpdate,
   }) {
     return setHeld?.call(callId, onHold);
   }
@@ -12077,7 +12155,9 @@ class _$CallPerformEventSetHeldImpl extends _CallPerformEventSetHeld
     TResult Function(String callId, bool onHold)? setHeld,
     TResult Function(String callId, bool muted)? setMuted,
     TResult Function(String callId, String key)? sentDTMF,
-    TResult Function(String callId, bool enabled)? setSpeaker,
+    TResult Function(String callId, CallAudioDevice device)? audioDeviceSet,
+    TResult Function(String callId, List<CallAudioDevice> devices)?
+        audioDevicesUpdate,
     required TResult orElse(),
   }) {
     if (setHeld != null) {
@@ -12095,7 +12175,10 @@ class _$CallPerformEventSetHeldImpl extends _CallPerformEventSetHeld
     required TResult Function(_CallPerformEventSetHeld value) setHeld,
     required TResult Function(_CallPerformEventSetMuted value) setMuted,
     required TResult Function(_CallPerformEventSentDTMF value) sentDTMF,
-    required TResult Function(_CallPerformEventSetSpeaker value) setSpeaker,
+    required TResult Function(_CallPerformEventAudioDeviceSet value)
+        audioDeviceSet,
+    required TResult Function(_CallPerformEventAudioDevicesUpdate value)
+        audioDevicesUpdate,
   }) {
     return setHeld(this);
   }
@@ -12109,7 +12192,9 @@ class _$CallPerformEventSetHeldImpl extends _CallPerformEventSetHeld
     TResult? Function(_CallPerformEventSetHeld value)? setHeld,
     TResult? Function(_CallPerformEventSetMuted value)? setMuted,
     TResult? Function(_CallPerformEventSentDTMF value)? sentDTMF,
-    TResult? Function(_CallPerformEventSetSpeaker value)? setSpeaker,
+    TResult? Function(_CallPerformEventAudioDeviceSet value)? audioDeviceSet,
+    TResult? Function(_CallPerformEventAudioDevicesUpdate value)?
+        audioDevicesUpdate,
   }) {
     return setHeld?.call(this);
   }
@@ -12123,7 +12208,9 @@ class _$CallPerformEventSetHeldImpl extends _CallPerformEventSetHeld
     TResult Function(_CallPerformEventSetHeld value)? setHeld,
     TResult Function(_CallPerformEventSetMuted value)? setMuted,
     TResult Function(_CallPerformEventSentDTMF value)? sentDTMF,
-    TResult Function(_CallPerformEventSetSpeaker value)? setSpeaker,
+    TResult Function(_CallPerformEventAudioDeviceSet value)? audioDeviceSet,
+    TResult Function(_CallPerformEventAudioDevicesUpdate value)?
+        audioDevicesUpdate,
     required TResult orElse(),
   }) {
     if (setHeld != null) {
@@ -12191,7 +12278,10 @@ class _$CallPerformEventSetMutedImpl extends _CallPerformEventSetMuted
     required TResult Function(String callId, bool onHold) setHeld,
     required TResult Function(String callId, bool muted) setMuted,
     required TResult Function(String callId, String key) sentDTMF,
-    required TResult Function(String callId, bool enabled) setSpeaker,
+    required TResult Function(String callId, CallAudioDevice device)
+        audioDeviceSet,
+    required TResult Function(String callId, List<CallAudioDevice> devices)
+        audioDevicesUpdate,
   }) {
     return setMuted(callId, muted);
   }
@@ -12207,7 +12297,9 @@ class _$CallPerformEventSetMutedImpl extends _CallPerformEventSetMuted
     TResult? Function(String callId, bool onHold)? setHeld,
     TResult? Function(String callId, bool muted)? setMuted,
     TResult? Function(String callId, String key)? sentDTMF,
-    TResult? Function(String callId, bool enabled)? setSpeaker,
+    TResult? Function(String callId, CallAudioDevice device)? audioDeviceSet,
+    TResult? Function(String callId, List<CallAudioDevice> devices)?
+        audioDevicesUpdate,
   }) {
     return setMuted?.call(callId, muted);
   }
@@ -12223,7 +12315,9 @@ class _$CallPerformEventSetMutedImpl extends _CallPerformEventSetMuted
     TResult Function(String callId, bool onHold)? setHeld,
     TResult Function(String callId, bool muted)? setMuted,
     TResult Function(String callId, String key)? sentDTMF,
-    TResult Function(String callId, bool enabled)? setSpeaker,
+    TResult Function(String callId, CallAudioDevice device)? audioDeviceSet,
+    TResult Function(String callId, List<CallAudioDevice> devices)?
+        audioDevicesUpdate,
     required TResult orElse(),
   }) {
     if (setMuted != null) {
@@ -12241,7 +12335,10 @@ class _$CallPerformEventSetMutedImpl extends _CallPerformEventSetMuted
     required TResult Function(_CallPerformEventSetHeld value) setHeld,
     required TResult Function(_CallPerformEventSetMuted value) setMuted,
     required TResult Function(_CallPerformEventSentDTMF value) sentDTMF,
-    required TResult Function(_CallPerformEventSetSpeaker value) setSpeaker,
+    required TResult Function(_CallPerformEventAudioDeviceSet value)
+        audioDeviceSet,
+    required TResult Function(_CallPerformEventAudioDevicesUpdate value)
+        audioDevicesUpdate,
   }) {
     return setMuted(this);
   }
@@ -12255,7 +12352,9 @@ class _$CallPerformEventSetMutedImpl extends _CallPerformEventSetMuted
     TResult? Function(_CallPerformEventSetHeld value)? setHeld,
     TResult? Function(_CallPerformEventSetMuted value)? setMuted,
     TResult? Function(_CallPerformEventSentDTMF value)? sentDTMF,
-    TResult? Function(_CallPerformEventSetSpeaker value)? setSpeaker,
+    TResult? Function(_CallPerformEventAudioDeviceSet value)? audioDeviceSet,
+    TResult? Function(_CallPerformEventAudioDevicesUpdate value)?
+        audioDevicesUpdate,
   }) {
     return setMuted?.call(this);
   }
@@ -12269,7 +12368,9 @@ class _$CallPerformEventSetMutedImpl extends _CallPerformEventSetMuted
     TResult Function(_CallPerformEventSetHeld value)? setHeld,
     TResult Function(_CallPerformEventSetMuted value)? setMuted,
     TResult Function(_CallPerformEventSentDTMF value)? sentDTMF,
-    TResult Function(_CallPerformEventSetSpeaker value)? setSpeaker,
+    TResult Function(_CallPerformEventAudioDeviceSet value)? audioDeviceSet,
+    TResult Function(_CallPerformEventAudioDevicesUpdate value)?
+        audioDevicesUpdate,
     required TResult orElse(),
   }) {
     if (setMuted != null) {
@@ -12337,7 +12438,10 @@ class _$CallPerformEventSentDTMFImpl extends _CallPerformEventSentDTMF
     required TResult Function(String callId, bool onHold) setHeld,
     required TResult Function(String callId, bool muted) setMuted,
     required TResult Function(String callId, String key) sentDTMF,
-    required TResult Function(String callId, bool enabled) setSpeaker,
+    required TResult Function(String callId, CallAudioDevice device)
+        audioDeviceSet,
+    required TResult Function(String callId, List<CallAudioDevice> devices)
+        audioDevicesUpdate,
   }) {
     return sentDTMF(callId, key);
   }
@@ -12353,7 +12457,9 @@ class _$CallPerformEventSentDTMFImpl extends _CallPerformEventSentDTMF
     TResult? Function(String callId, bool onHold)? setHeld,
     TResult? Function(String callId, bool muted)? setMuted,
     TResult? Function(String callId, String key)? sentDTMF,
-    TResult? Function(String callId, bool enabled)? setSpeaker,
+    TResult? Function(String callId, CallAudioDevice device)? audioDeviceSet,
+    TResult? Function(String callId, List<CallAudioDevice> devices)?
+        audioDevicesUpdate,
   }) {
     return sentDTMF?.call(callId, key);
   }
@@ -12369,7 +12475,9 @@ class _$CallPerformEventSentDTMFImpl extends _CallPerformEventSentDTMF
     TResult Function(String callId, bool onHold)? setHeld,
     TResult Function(String callId, bool muted)? setMuted,
     TResult Function(String callId, String key)? sentDTMF,
-    TResult Function(String callId, bool enabled)? setSpeaker,
+    TResult Function(String callId, CallAudioDevice device)? audioDeviceSet,
+    TResult Function(String callId, List<CallAudioDevice> devices)?
+        audioDevicesUpdate,
     required TResult orElse(),
   }) {
     if (sentDTMF != null) {
@@ -12387,7 +12495,10 @@ class _$CallPerformEventSentDTMFImpl extends _CallPerformEventSentDTMF
     required TResult Function(_CallPerformEventSetHeld value) setHeld,
     required TResult Function(_CallPerformEventSetMuted value) setMuted,
     required TResult Function(_CallPerformEventSentDTMF value) sentDTMF,
-    required TResult Function(_CallPerformEventSetSpeaker value) setSpeaker,
+    required TResult Function(_CallPerformEventAudioDeviceSet value)
+        audioDeviceSet,
+    required TResult Function(_CallPerformEventAudioDevicesUpdate value)
+        audioDevicesUpdate,
   }) {
     return sentDTMF(this);
   }
@@ -12401,7 +12512,9 @@ class _$CallPerformEventSentDTMFImpl extends _CallPerformEventSentDTMF
     TResult? Function(_CallPerformEventSetHeld value)? setHeld,
     TResult? Function(_CallPerformEventSetMuted value)? setMuted,
     TResult? Function(_CallPerformEventSentDTMF value)? sentDTMF,
-    TResult? Function(_CallPerformEventSetSpeaker value)? setSpeaker,
+    TResult? Function(_CallPerformEventAudioDeviceSet value)? audioDeviceSet,
+    TResult? Function(_CallPerformEventAudioDevicesUpdate value)?
+        audioDevicesUpdate,
   }) {
     return sentDTMF?.call(this);
   }
@@ -12415,7 +12528,9 @@ class _$CallPerformEventSentDTMFImpl extends _CallPerformEventSentDTMF
     TResult Function(_CallPerformEventSetHeld value)? setHeld,
     TResult Function(_CallPerformEventSetMuted value)? setMuted,
     TResult Function(_CallPerformEventSentDTMF value)? sentDTMF,
-    TResult Function(_CallPerformEventSetSpeaker value)? setSpeaker,
+    TResult Function(_CallPerformEventAudioDeviceSet value)? audioDeviceSet,
+    TResult Function(_CallPerformEventAudioDevicesUpdate value)?
+        audioDevicesUpdate,
     required TResult orElse(),
   }) {
     if (sentDTMF != null) {
@@ -12437,40 +12552,40 @@ abstract class _CallPerformEventSentDTMF extends _CallPerformEvent {
 
 /// @nodoc
 
-class _$CallPerformEventSetSpeakerImpl extends _CallPerformEventSetSpeaker
-    with DiagnosticableTreeMixin {
-  _$CallPerformEventSetSpeakerImpl(this.callId, this.enabled) : super._();
+class _$CallPerformEventAudioDeviceSetImpl
+    extends _CallPerformEventAudioDeviceSet with DiagnosticableTreeMixin {
+  _$CallPerformEventAudioDeviceSetImpl(this.callId, this.device) : super._();
 
   @override
   final String callId;
   @override
-  final bool enabled;
+  final CallAudioDevice device;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return '_CallPerformEvent.setSpeaker(callId: $callId, enabled: $enabled)';
+    return '_CallPerformEvent.audioDeviceSet(callId: $callId, device: $device)';
   }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties
-      ..add(DiagnosticsProperty('type', '_CallPerformEvent.setSpeaker'))
+      ..add(DiagnosticsProperty('type', '_CallPerformEvent.audioDeviceSet'))
       ..add(DiagnosticsProperty('callId', callId))
-      ..add(DiagnosticsProperty('enabled', enabled));
+      ..add(DiagnosticsProperty('device', device));
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$CallPerformEventSetSpeakerImpl &&
+            other is _$CallPerformEventAudioDeviceSetImpl &&
             (identical(other.callId, callId) || other.callId == callId) &&
-            (identical(other.enabled, enabled) || other.enabled == enabled));
+            (identical(other.device, device) || other.device == device));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, callId, enabled);
+  int get hashCode => Object.hash(runtimeType, callId, device);
 
   @override
   @optionalTypeArgs
@@ -12483,9 +12598,12 @@ class _$CallPerformEventSetSpeakerImpl extends _CallPerformEventSetSpeaker
     required TResult Function(String callId, bool onHold) setHeld,
     required TResult Function(String callId, bool muted) setMuted,
     required TResult Function(String callId, String key) sentDTMF,
-    required TResult Function(String callId, bool enabled) setSpeaker,
+    required TResult Function(String callId, CallAudioDevice device)
+        audioDeviceSet,
+    required TResult Function(String callId, List<CallAudioDevice> devices)
+        audioDevicesUpdate,
   }) {
-    return setSpeaker(callId, enabled);
+    return audioDeviceSet(callId, device);
   }
 
   @override
@@ -12499,9 +12617,11 @@ class _$CallPerformEventSetSpeakerImpl extends _CallPerformEventSetSpeaker
     TResult? Function(String callId, bool onHold)? setHeld,
     TResult? Function(String callId, bool muted)? setMuted,
     TResult? Function(String callId, String key)? sentDTMF,
-    TResult? Function(String callId, bool enabled)? setSpeaker,
+    TResult? Function(String callId, CallAudioDevice device)? audioDeviceSet,
+    TResult? Function(String callId, List<CallAudioDevice> devices)?
+        audioDevicesUpdate,
   }) {
-    return setSpeaker?.call(callId, enabled);
+    return audioDeviceSet?.call(callId, device);
   }
 
   @override
@@ -12515,11 +12635,13 @@ class _$CallPerformEventSetSpeakerImpl extends _CallPerformEventSetSpeaker
     TResult Function(String callId, bool onHold)? setHeld,
     TResult Function(String callId, bool muted)? setMuted,
     TResult Function(String callId, String key)? sentDTMF,
-    TResult Function(String callId, bool enabled)? setSpeaker,
+    TResult Function(String callId, CallAudioDevice device)? audioDeviceSet,
+    TResult Function(String callId, List<CallAudioDevice> devices)?
+        audioDevicesUpdate,
     required TResult orElse(),
   }) {
-    if (setSpeaker != null) {
-      return setSpeaker(callId, enabled);
+    if (audioDeviceSet != null) {
+      return audioDeviceSet(callId, device);
     }
     return orElse();
   }
@@ -12533,9 +12655,12 @@ class _$CallPerformEventSetSpeakerImpl extends _CallPerformEventSetSpeaker
     required TResult Function(_CallPerformEventSetHeld value) setHeld,
     required TResult Function(_CallPerformEventSetMuted value) setMuted,
     required TResult Function(_CallPerformEventSentDTMF value) sentDTMF,
-    required TResult Function(_CallPerformEventSetSpeaker value) setSpeaker,
+    required TResult Function(_CallPerformEventAudioDeviceSet value)
+        audioDeviceSet,
+    required TResult Function(_CallPerformEventAudioDevicesUpdate value)
+        audioDevicesUpdate,
   }) {
-    return setSpeaker(this);
+    return audioDeviceSet(this);
   }
 
   @override
@@ -12547,9 +12672,11 @@ class _$CallPerformEventSetSpeakerImpl extends _CallPerformEventSetSpeaker
     TResult? Function(_CallPerformEventSetHeld value)? setHeld,
     TResult? Function(_CallPerformEventSetMuted value)? setMuted,
     TResult? Function(_CallPerformEventSentDTMF value)? sentDTMF,
-    TResult? Function(_CallPerformEventSetSpeaker value)? setSpeaker,
+    TResult? Function(_CallPerformEventAudioDeviceSet value)? audioDeviceSet,
+    TResult? Function(_CallPerformEventAudioDevicesUpdate value)?
+        audioDevicesUpdate,
   }) {
-    return setSpeaker?.call(this);
+    return audioDeviceSet?.call(this);
   }
 
   @override
@@ -12561,24 +12688,197 @@ class _$CallPerformEventSetSpeakerImpl extends _CallPerformEventSetSpeaker
     TResult Function(_CallPerformEventSetHeld value)? setHeld,
     TResult Function(_CallPerformEventSetMuted value)? setMuted,
     TResult Function(_CallPerformEventSentDTMF value)? sentDTMF,
-    TResult Function(_CallPerformEventSetSpeaker value)? setSpeaker,
+    TResult Function(_CallPerformEventAudioDeviceSet value)? audioDeviceSet,
+    TResult Function(_CallPerformEventAudioDevicesUpdate value)?
+        audioDevicesUpdate,
     required TResult orElse(),
   }) {
-    if (setSpeaker != null) {
-      return setSpeaker(this);
+    if (audioDeviceSet != null) {
+      return audioDeviceSet(this);
     }
     return orElse();
   }
 }
 
-abstract class _CallPerformEventSetSpeaker extends _CallPerformEvent {
-  factory _CallPerformEventSetSpeaker(final String callId, final bool enabled) =
-      _$CallPerformEventSetSpeakerImpl;
-  _CallPerformEventSetSpeaker._() : super._();
+abstract class _CallPerformEventAudioDeviceSet extends _CallPerformEvent {
+  factory _CallPerformEventAudioDeviceSet(
+          final String callId, final CallAudioDevice device) =
+      _$CallPerformEventAudioDeviceSetImpl;
+  _CallPerformEventAudioDeviceSet._() : super._();
 
   @override
   String get callId;
-  bool get enabled;
+  CallAudioDevice get device;
+}
+
+/// @nodoc
+
+class _$CallPerformEventAudioDevicesUpdateImpl
+    extends _CallPerformEventAudioDevicesUpdate with DiagnosticableTreeMixin {
+  _$CallPerformEventAudioDevicesUpdateImpl(
+      this.callId, final List<CallAudioDevice> devices)
+      : _devices = devices,
+        super._();
+
+  @override
+  final String callId;
+  final List<CallAudioDevice> _devices;
+  @override
+  List<CallAudioDevice> get devices {
+    if (_devices is EqualUnmodifiableListView) return _devices;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_devices);
+  }
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return '_CallPerformEvent.audioDevicesUpdate(callId: $callId, devices: $devices)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('type', '_CallPerformEvent.audioDevicesUpdate'))
+      ..add(DiagnosticsProperty('callId', callId))
+      ..add(DiagnosticsProperty('devices', devices));
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$CallPerformEventAudioDevicesUpdateImpl &&
+            (identical(other.callId, callId) || other.callId == callId) &&
+            const DeepCollectionEquality().equals(other._devices, _devices));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType, callId, const DeepCollectionEquality().hash(_devices));
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(String callId, CallkeepHandle handle,
+            String? displayName, bool video)
+        started,
+    required TResult Function(String callId) answered,
+    required TResult Function(String callId) ended,
+    required TResult Function(String callId, bool onHold) setHeld,
+    required TResult Function(String callId, bool muted) setMuted,
+    required TResult Function(String callId, String key) sentDTMF,
+    required TResult Function(String callId, CallAudioDevice device)
+        audioDeviceSet,
+    required TResult Function(String callId, List<CallAudioDevice> devices)
+        audioDevicesUpdate,
+  }) {
+    return audioDevicesUpdate(callId, devices);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(String callId, CallkeepHandle handle, String? displayName,
+            bool video)?
+        started,
+    TResult? Function(String callId)? answered,
+    TResult? Function(String callId)? ended,
+    TResult? Function(String callId, bool onHold)? setHeld,
+    TResult? Function(String callId, bool muted)? setMuted,
+    TResult? Function(String callId, String key)? sentDTMF,
+    TResult? Function(String callId, CallAudioDevice device)? audioDeviceSet,
+    TResult? Function(String callId, List<CallAudioDevice> devices)?
+        audioDevicesUpdate,
+  }) {
+    return audioDevicesUpdate?.call(callId, devices);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(String callId, CallkeepHandle handle, String? displayName,
+            bool video)?
+        started,
+    TResult Function(String callId)? answered,
+    TResult Function(String callId)? ended,
+    TResult Function(String callId, bool onHold)? setHeld,
+    TResult Function(String callId, bool muted)? setMuted,
+    TResult Function(String callId, String key)? sentDTMF,
+    TResult Function(String callId, CallAudioDevice device)? audioDeviceSet,
+    TResult Function(String callId, List<CallAudioDevice> devices)?
+        audioDevicesUpdate,
+    required TResult orElse(),
+  }) {
+    if (audioDevicesUpdate != null) {
+      return audioDevicesUpdate(callId, devices);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_CallPerformEventStarted value) started,
+    required TResult Function(_CallPerformEventAnswered value) answered,
+    required TResult Function(_CallPerformEventEnded value) ended,
+    required TResult Function(_CallPerformEventSetHeld value) setHeld,
+    required TResult Function(_CallPerformEventSetMuted value) setMuted,
+    required TResult Function(_CallPerformEventSentDTMF value) sentDTMF,
+    required TResult Function(_CallPerformEventAudioDeviceSet value)
+        audioDeviceSet,
+    required TResult Function(_CallPerformEventAudioDevicesUpdate value)
+        audioDevicesUpdate,
+  }) {
+    return audioDevicesUpdate(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_CallPerformEventStarted value)? started,
+    TResult? Function(_CallPerformEventAnswered value)? answered,
+    TResult? Function(_CallPerformEventEnded value)? ended,
+    TResult? Function(_CallPerformEventSetHeld value)? setHeld,
+    TResult? Function(_CallPerformEventSetMuted value)? setMuted,
+    TResult? Function(_CallPerformEventSentDTMF value)? sentDTMF,
+    TResult? Function(_CallPerformEventAudioDeviceSet value)? audioDeviceSet,
+    TResult? Function(_CallPerformEventAudioDevicesUpdate value)?
+        audioDevicesUpdate,
+  }) {
+    return audioDevicesUpdate?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_CallPerformEventStarted value)? started,
+    TResult Function(_CallPerformEventAnswered value)? answered,
+    TResult Function(_CallPerformEventEnded value)? ended,
+    TResult Function(_CallPerformEventSetHeld value)? setHeld,
+    TResult Function(_CallPerformEventSetMuted value)? setMuted,
+    TResult Function(_CallPerformEventSentDTMF value)? sentDTMF,
+    TResult Function(_CallPerformEventAudioDeviceSet value)? audioDeviceSet,
+    TResult Function(_CallPerformEventAudioDevicesUpdate value)?
+        audioDevicesUpdate,
+    required TResult orElse(),
+  }) {
+    if (audioDevicesUpdate != null) {
+      return audioDevicesUpdate(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _CallPerformEventAudioDevicesUpdate extends _CallPerformEvent {
+  factory _CallPerformEventAudioDevicesUpdate(
+          final String callId, final List<CallAudioDevice> devices) =
+      _$CallPerformEventAudioDevicesUpdateImpl;
+  _CallPerformEventAudioDevicesUpdate._() : super._();
+
+  @override
+  String get callId;
+  List<CallAudioDevice> get devices;
 }
 
 /// @nodoc
@@ -14170,7 +14470,9 @@ mixin _$CallState {
   List<ActiveCall> get activeCalls => throw _privateConstructorUsedError;
   bool? get minimized => throw _privateConstructorUsedError;
   bool? get speakerOnBeforeMinimize => throw _privateConstructorUsedError;
-  bool? get speaker => throw _privateConstructorUsedError;
+  CallAudioDevice? get audioDevice => throw _privateConstructorUsedError;
+  List<CallAudioDevice> get availableAudioDevices =>
+      throw _privateConstructorUsedError;
 
   /// Create a copy of CallState
   /// with the given fields replaced by the non-null parameter values.
@@ -14191,9 +14493,11 @@ abstract class $CallStateCopyWith<$Res> {
       List<ActiveCall> activeCalls,
       bool? minimized,
       bool? speakerOnBeforeMinimize,
-      bool? speaker});
+      CallAudioDevice? audioDevice,
+      List<CallAudioDevice> availableAudioDevices});
 
   $CallServiceStateCopyWith<$Res> get callServiceState;
+  $CallAudioDeviceCopyWith<$Res>? get audioDevice;
 }
 
 /// @nodoc
@@ -14217,7 +14521,8 @@ class _$CallStateCopyWithImpl<$Res, $Val extends CallState>
     Object? activeCalls = null,
     Object? minimized = freezed,
     Object? speakerOnBeforeMinimize = freezed,
-    Object? speaker = freezed,
+    Object? audioDevice = freezed,
+    Object? availableAudioDevices = null,
   }) {
     return _then(_value.copyWith(
       callServiceState: null == callServiceState
@@ -14244,10 +14549,14 @@ class _$CallStateCopyWithImpl<$Res, $Val extends CallState>
           ? _value.speakerOnBeforeMinimize
           : speakerOnBeforeMinimize // ignore: cast_nullable_to_non_nullable
               as bool?,
-      speaker: freezed == speaker
-          ? _value.speaker
-          : speaker // ignore: cast_nullable_to_non_nullable
-              as bool?,
+      audioDevice: freezed == audioDevice
+          ? _value.audioDevice
+          : audioDevice // ignore: cast_nullable_to_non_nullable
+              as CallAudioDevice?,
+      availableAudioDevices: null == availableAudioDevices
+          ? _value.availableAudioDevices
+          : availableAudioDevices // ignore: cast_nullable_to_non_nullable
+              as List<CallAudioDevice>,
     ) as $Val);
   }
 
@@ -14258,6 +14567,20 @@ class _$CallStateCopyWithImpl<$Res, $Val extends CallState>
   $CallServiceStateCopyWith<$Res> get callServiceState {
     return $CallServiceStateCopyWith<$Res>(_value.callServiceState, (value) {
       return _then(_value.copyWith(callServiceState: value) as $Val);
+    });
+  }
+
+  /// Create a copy of CallState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $CallAudioDeviceCopyWith<$Res>? get audioDevice {
+    if (_value.audioDevice == null) {
+      return null;
+    }
+
+    return $CallAudioDeviceCopyWith<$Res>(_value.audioDevice!, (value) {
+      return _then(_value.copyWith(audioDevice: value) as $Val);
     });
   }
 }
@@ -14277,10 +14600,13 @@ abstract class _$$CallStateImplCopyWith<$Res>
       List<ActiveCall> activeCalls,
       bool? minimized,
       bool? speakerOnBeforeMinimize,
-      bool? speaker});
+      CallAudioDevice? audioDevice,
+      List<CallAudioDevice> availableAudioDevices});
 
   @override
   $CallServiceStateCopyWith<$Res> get callServiceState;
+  @override
+  $CallAudioDeviceCopyWith<$Res>? get audioDevice;
 }
 
 /// @nodoc
@@ -14302,7 +14628,8 @@ class __$$CallStateImplCopyWithImpl<$Res>
     Object? activeCalls = null,
     Object? minimized = freezed,
     Object? speakerOnBeforeMinimize = freezed,
-    Object? speaker = freezed,
+    Object? audioDevice = freezed,
+    Object? availableAudioDevices = null,
   }) {
     return _then(_$CallStateImpl(
       callServiceState: null == callServiceState
@@ -14329,10 +14656,14 @@ class __$$CallStateImplCopyWithImpl<$Res>
           ? _value.speakerOnBeforeMinimize
           : speakerOnBeforeMinimize // ignore: cast_nullable_to_non_nullable
               as bool?,
-      speaker: freezed == speaker
-          ? _value.speaker
-          : speaker // ignore: cast_nullable_to_non_nullable
-              as bool?,
+      audioDevice: freezed == audioDevice
+          ? _value.audioDevice
+          : audioDevice // ignore: cast_nullable_to_non_nullable
+              as CallAudioDevice?,
+      availableAudioDevices: null == availableAudioDevices
+          ? _value._availableAudioDevices
+          : availableAudioDevices // ignore: cast_nullable_to_non_nullable
+              as List<CallAudioDevice>,
     ));
   }
 }
@@ -14347,8 +14678,10 @@ class _$CallStateImpl extends _CallState with DiagnosticableTreeMixin {
       final List<ActiveCall> activeCalls = const [],
       this.minimized,
       this.speakerOnBeforeMinimize,
-      this.speaker})
+      this.audioDevice,
+      final List<CallAudioDevice> availableAudioDevices = const []})
       : _activeCalls = activeCalls,
+        _availableAudioDevices = availableAudioDevices,
         super._();
 
   @override
@@ -14373,11 +14706,20 @@ class _$CallStateImpl extends _CallState with DiagnosticableTreeMixin {
   @override
   final bool? speakerOnBeforeMinimize;
   @override
-  final bool? speaker;
+  final CallAudioDevice? audioDevice;
+  final List<CallAudioDevice> _availableAudioDevices;
+  @override
+  @JsonKey()
+  List<CallAudioDevice> get availableAudioDevices {
+    if (_availableAudioDevices is EqualUnmodifiableListView)
+      return _availableAudioDevices;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_availableAudioDevices);
+  }
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'CallState(callServiceState: $callServiceState, currentAppLifecycleState: $currentAppLifecycleState, linesCount: $linesCount, activeCalls: $activeCalls, minimized: $minimized, speakerOnBeforeMinimize: $speakerOnBeforeMinimize, speaker: $speaker)';
+    return 'CallState(callServiceState: $callServiceState, currentAppLifecycleState: $currentAppLifecycleState, linesCount: $linesCount, activeCalls: $activeCalls, minimized: $minimized, speakerOnBeforeMinimize: $speakerOnBeforeMinimize, audioDevice: $audioDevice, availableAudioDevices: $availableAudioDevices)';
   }
 
   @override
@@ -14393,7 +14735,9 @@ class _$CallStateImpl extends _CallState with DiagnosticableTreeMixin {
       ..add(DiagnosticsProperty('minimized', minimized))
       ..add(DiagnosticsProperty(
           'speakerOnBeforeMinimize', speakerOnBeforeMinimize))
-      ..add(DiagnosticsProperty('speaker', speaker));
+      ..add(DiagnosticsProperty('audioDevice', audioDevice))
+      ..add(
+          DiagnosticsProperty('availableAudioDevices', availableAudioDevices));
   }
 
   @override
@@ -14415,7 +14759,10 @@ class _$CallStateImpl extends _CallState with DiagnosticableTreeMixin {
             (identical(
                     other.speakerOnBeforeMinimize, speakerOnBeforeMinimize) ||
                 other.speakerOnBeforeMinimize == speakerOnBeforeMinimize) &&
-            (identical(other.speaker, speaker) || other.speaker == speaker));
+            (identical(other.audioDevice, audioDevice) ||
+                other.audioDevice == audioDevice) &&
+            const DeepCollectionEquality()
+                .equals(other._availableAudioDevices, _availableAudioDevices));
   }
 
   @override
@@ -14427,7 +14774,8 @@ class _$CallStateImpl extends _CallState with DiagnosticableTreeMixin {
       const DeepCollectionEquality().hash(_activeCalls),
       minimized,
       speakerOnBeforeMinimize,
-      speaker);
+      audioDevice,
+      const DeepCollectionEquality().hash(_availableAudioDevices));
 
   /// Create a copy of CallState
   /// with the given fields replaced by the non-null parameter values.
@@ -14446,7 +14794,8 @@ abstract class _CallState extends CallState {
       final List<ActiveCall> activeCalls,
       final bool? minimized,
       final bool? speakerOnBeforeMinimize,
-      final bool? speaker}) = _$CallStateImpl;
+      final CallAudioDevice? audioDevice,
+      final List<CallAudioDevice> availableAudioDevices}) = _$CallStateImpl;
   const _CallState._() : super._();
 
   @override
@@ -14462,7 +14811,9 @@ abstract class _CallState extends CallState {
   @override
   bool? get speakerOnBeforeMinimize;
   @override
-  bool? get speaker;
+  CallAudioDevice? get audioDevice;
+  @override
+  List<CallAudioDevice> get availableAudioDevices;
 
   /// Create a copy of CallState
   /// with the given fields replaced by the non-null parameter values.
@@ -15109,5 +15460,181 @@ abstract class _ActiveCall extends ActiveCall {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ActiveCallImplCopyWith<_$ActiveCallImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+mixin _$CallAudioDevice {
+  CallAudioDeviceType get type => throw _privateConstructorUsedError;
+  String? get id => throw _privateConstructorUsedError;
+  String? get name => throw _privateConstructorUsedError;
+
+  /// Create a copy of CallAudioDevice
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $CallAudioDeviceCopyWith<CallAudioDevice> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $CallAudioDeviceCopyWith<$Res> {
+  factory $CallAudioDeviceCopyWith(
+          CallAudioDevice value, $Res Function(CallAudioDevice) then) =
+      _$CallAudioDeviceCopyWithImpl<$Res, CallAudioDevice>;
+  @useResult
+  $Res call({CallAudioDeviceType type, String? id, String? name});
+}
+
+/// @nodoc
+class _$CallAudioDeviceCopyWithImpl<$Res, $Val extends CallAudioDevice>
+    implements $CallAudioDeviceCopyWith<$Res> {
+  _$CallAudioDeviceCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of CallAudioDevice
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? type = null,
+    Object? id = freezed,
+    Object? name = freezed,
+  }) {
+    return _then(_value.copyWith(
+      type: null == type
+          ? _value.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as CallAudioDeviceType,
+      id: freezed == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String?,
+      name: freezed == name
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
+              as String?,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$CallAudioDeviceImplCopyWith<$Res>
+    implements $CallAudioDeviceCopyWith<$Res> {
+  factory _$$CallAudioDeviceImplCopyWith(_$CallAudioDeviceImpl value,
+          $Res Function(_$CallAudioDeviceImpl) then) =
+      __$$CallAudioDeviceImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({CallAudioDeviceType type, String? id, String? name});
+}
+
+/// @nodoc
+class __$$CallAudioDeviceImplCopyWithImpl<$Res>
+    extends _$CallAudioDeviceCopyWithImpl<$Res, _$CallAudioDeviceImpl>
+    implements _$$CallAudioDeviceImplCopyWith<$Res> {
+  __$$CallAudioDeviceImplCopyWithImpl(
+      _$CallAudioDeviceImpl _value, $Res Function(_$CallAudioDeviceImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of CallAudioDevice
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? type = null,
+    Object? id = freezed,
+    Object? name = freezed,
+  }) {
+    return _then(_$CallAudioDeviceImpl(
+      type: null == type
+          ? _value.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as CallAudioDeviceType,
+      id: freezed == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String?,
+      name: freezed == name
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
+              as String?,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$CallAudioDeviceImpl extends _CallAudioDevice
+    with DiagnosticableTreeMixin {
+  _$CallAudioDeviceImpl({required this.type, this.id, this.name}) : super._();
+
+  @override
+  final CallAudioDeviceType type;
+  @override
+  final String? id;
+  @override
+  final String? name;
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'CallAudioDevice(type: $type, id: $id, name: $name)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('type', 'CallAudioDevice'))
+      ..add(DiagnosticsProperty('type', type))
+      ..add(DiagnosticsProperty('id', id))
+      ..add(DiagnosticsProperty('name', name));
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$CallAudioDeviceImpl &&
+            (identical(other.type, type) || other.type == type) &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.name, name) || other.name == name));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, type, id, name);
+
+  /// Create a copy of CallAudioDevice
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$CallAudioDeviceImplCopyWith<_$CallAudioDeviceImpl> get copyWith =>
+      __$$CallAudioDeviceImplCopyWithImpl<_$CallAudioDeviceImpl>(
+          this, _$identity);
+}
+
+abstract class _CallAudioDevice extends CallAudioDevice {
+  factory _CallAudioDevice(
+      {required final CallAudioDeviceType type,
+      final String? id,
+      final String? name}) = _$CallAudioDeviceImpl;
+  _CallAudioDevice._() : super._();
+
+  @override
+  CallAudioDeviceType get type;
+  @override
+  String? get id;
+  @override
+  String? get name;
+
+  /// Create a copy of CallAudioDevice
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$CallAudioDeviceImplCopyWith<_$CallAudioDeviceImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

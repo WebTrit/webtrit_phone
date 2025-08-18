@@ -109,7 +109,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     );
     on<_NavigatorMediaDevicesChange>(
       _onNavigatorMediaDevicesChange,
-      transformer: droppable(),
+      transformer: debounce(),
     );
     on<_RegistrationChange>(
       _onRegistrationChange,
@@ -469,10 +469,22 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _NavigatorMediaDevicesChange event,
     Emitter<CallState> emit,
   ) async {
-    final devices = await navigator.mediaDevices.enumerateDevices();
-    final audioOutputDevices = devices.where((d) => d.kind == 'audiooutput').toList();
-    if (audioOutputDevices.isNotEmpty) {
-      emit(state.copyWith(speaker: audioOutputDevices.first.groupId == 'Speaker'));
+    if (Platform.isIOS) {
+      // Cleanup devices info if change happened after hangup
+      // to avoid presenting stale data on next call initialization
+      if (state.activeCalls.isEmpty) return emit(state.copyWith(availableAudioDevices: [], audioDevice: null));
+
+      final devices = await navigator.mediaDevices.enumerateDevices();
+      final output = devices.where((d) => d.kind == 'audiooutput').toList();
+      final input = devices.where((d) => d.kind == 'audioinput').toList();
+      _logger.info('Devices change - out:${output.map((e) => e.str).toList()}, in:${input.map((e) => e.str).toList()}');
+
+      final current = CallAudioDevice.fromMediaOutput(output.first);
+      final available = [
+        CallAudioDevice(type: CallAudioDeviceType.speaker),
+        ...input.map(CallAudioDevice.fromMediaInput),
+      ];
+      emit(state.copyWith(availableAudioDevices: available, audioDevice: current));
     }
   }
 
@@ -1221,7 +1233,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       sentDTMF: (event) => __onCallControlEventSentDTMF(event, emit),
       cameraSwitched: (event) => _onCallControlEventCameraSwitched(event, emit),
       cameraEnabled: (event) => _onCallControlEventCameraEnabled(event, emit),
-      speakerEnabled: (event) => _onCallControlEventSpeakerEnabled(event, emit),
+      audioDeviceSet: (value) => _onCallControlEventAudioDeviceSet(value, emit),
       failureApproved: (event) => _onCallControlEventFailureApproved(event, emit),
       blindTransferInitiated: (event) => _onCallControlEventBlindTransferInitiated(event, emit),
       attendedTransferInitiated: (event) => _onCallControlEventAttendedTransferInitiated(event, emit),
@@ -1477,15 +1489,21 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     }
   }
 
-  Future<void> _onCallControlEventSpeakerEnabled(
-    _CallControlEventSpeakerEnabled event,
+  Future<void> _onCallControlEventAudioDeviceSet(
+    _CallControlEventAudioDeviceSet event,
     Emitter<CallState> emit,
   ) async {
     await state.performOnActiveCall(event.callId, (activeCall) async {
       if (Platform.isAndroid) {
-        callkeep.setSpeaker(event.callId, enabled: event.enabled);
+        callkeep.setAudioDevice(event.callId, event.device.toCallkeep());
       } else if (Platform.isIOS) {
-        await Helper.setSpeakerphoneOn(event.enabled);
+        if (event.device.type == CallAudioDeviceType.speaker) {
+          Helper.setSpeakerphoneOn(true);
+        } else {
+          Helper.setSpeakerphoneOn(false);
+          final deviceId = event.device.id;
+          if (deviceId != null) Helper.selectAudioInput(deviceId);
+        }
       }
     });
   }
@@ -1505,7 +1523,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   ) async {
     var newState = state.copyWith(
       minimized: true,
-      speakerOnBeforeMinimize: state.speaker == true,
+      speakerOnBeforeMinimize: state.audioDevice?.type == CallAudioDeviceType.speaker,
     );
     await __onCallControlEventSetHeld(_CallControlEventSetHeld(event.callId, true), emit);
 
@@ -1529,7 +1547,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   ) async {
     emit(state.copyWith(
       minimized: true,
-      speakerOnBeforeMinimize: state.speaker == true,
+      speakerOnBeforeMinimize: state.audioDevice?.type == CallAudioDeviceType.speaker,
     ));
     await __onCallControlEventSetHeld(_CallControlEventSetHeld(event.callId, true), emit);
   }
@@ -1574,7 +1592,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       );
 
       if (state.speakerOnBeforeMinimize == true) {
-        add(_CallControlEventSpeakerEnabled(state.activeCalls.current.callId, true));
+        add(CallControlEvent.audioDeviceSet(
+          state.activeCalls.current.callId,
+          state.availableAudioDevices.getSpeaker,
+        ));
       }
 
       // After request succesfully submitted, transfer flow will continue
@@ -1695,7 +1716,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       setHeld: (event) => __onCallPerformEventSetHeld(event, emit),
       setMuted: (event) => __onCallPerformEventSetMuted(event, emit),
       sentDTMF: (event) => __onCallPerformEventSentDTMF(event, emit),
-      setSpeaker: (event) => __onCallPerformEventSetSpeaker(event, emit),
+      audioDeviceSet: (value) => __onCallPerformEventAudioDeviceSet(value, emit),
+      audioDevicesUpdate: (event) => __onCallPerformEventAudioDevicesUpdate(event, emit),
     );
   }
 
@@ -2081,12 +2103,22 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     });
   }
 
-  Future<void> __onCallPerformEventSetSpeaker(
-    _CallPerformEventSetSpeaker event,
+  Future<void> __onCallPerformEventAudioDeviceSet(
+    _CallPerformEventAudioDeviceSet event,
     Emitter<CallState> emit,
   ) async {
+    _logger.info('CallPerformEventAudioDeviceSet: ${event.device}');
     event.fulfill();
-    emit(state.copyWith(speaker: event.enabled));
+    emit(state.copyWith(audioDevice: event.device));
+  }
+
+  Future<void> __onCallPerformEventAudioDevicesUpdate(
+    _CallPerformEventAudioDevicesUpdate event,
+    Emitter<CallState> emit,
+  ) async {
+    _logger.info('CallPerformEventAudioDevicesUpdate: ${event.devices}');
+    event.fulfill();
+    emit(state.copyWith(availableAudioDevices: event.devices));
   }
 
   // processing peer connection events
@@ -2271,7 +2303,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       );
 
       if (state.speakerOnBeforeMinimize == true) {
-        add(_CallControlEventSpeakerEnabled(state.activeCalls.current.callId, true));
+        add(CallControlEvent.audioDeviceSet(
+          state.activeCalls.current.callId,
+          state.availableAudioDevices.getSpeaker,
+        ));
       }
     } else {
       _logger.warning('__onCallScreenEventDidPush: activeCalls is empty');
@@ -2288,7 +2323,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     if (shouldMinimize) {
       emit(state.copyWith(
         minimized: true,
-        speakerOnBeforeMinimize: state.speaker == true,
+        speakerOnBeforeMinimize: state.audioDevice?.type == CallAudioDeviceType.speaker,
       ));
       await callkeep.reportUpdateCall(
         state.activeCalls.current.callId,
@@ -2611,8 +2646,21 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   }
 
   @override
+  @Deprecated('Used performAudioDeviceSet instead')
   Future<bool> performSetSpeaker(String callId, bool enabled) {
-    return _perform(_CallPerformEvent.setSpeaker(callId, enabled));
+    return Future.value(true);
+  }
+
+  @override
+  Future<bool> performAudioDeviceSet(String callId, CallkeepAudioDevice device) {
+    final callDevice = CallAudioDevice.fromCallkeep(device);
+    return _perform(_CallPerformEvent.audioDeviceSet(callId, callDevice));
+  }
+
+  @override
+  Future<bool> performAudioDevicesUpdate(String callId, List<CallkeepAudioDevice> devices) {
+    final callDevices = devices.map(CallAudioDevice.fromCallkeep).toList();
+    return _perform(_CallPerformEvent.audioDevicesUpdate(callId, callDevices));
   }
 
   @override
