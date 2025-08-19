@@ -51,3 +51,20 @@ class UserNotFoundException extends RequestFailure {
   @override
   String toString() => 'UserNotFoundException($statusCode, $url)';
 }
+
+class UnauthorizedException extends RequestFailure {
+  UnauthorizedException({
+    required super.url,
+    required super.requestId,
+    required super.statusCode,
+    super.token,
+    super.error,
+  });
+
+  @override
+  String toString() {
+    final code = error?.code;
+    return 'UnauthorizedException(statusCode: $statusCode, requestId: $requestId, url: $url'
+        '${code != null ? ', code: $code' : ''})';
+  }
+}

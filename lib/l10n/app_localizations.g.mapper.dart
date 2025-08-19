@@ -630,6 +630,8 @@ class AppLocalizationsMapper {
       'notifications_errorSnackBar_callSignalingClientSessionMissed':
           localizations
               .notifications_errorSnackBar_callSignalingClientSessionMissed,
+      'notifications_errorSnackBar_sessionExpired':
+          localizations.notifications_errorSnackBar_sessionExpired,
       'notifications_errorSnackBar_callUndefinedLine':
           localizations.notifications_errorSnackBar_callUndefinedLine,
       'notifications_errorSnackBar_callUserMedia':

@@ -8,6 +8,7 @@ import 'package:webtrit_api/webtrit_api.dart';
 
 import 'package:webtrit_phone/mappers/mappers.dart';
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/app/session/session.dart';
 
 abstract class VoicemailRepository {
   /// Fetches voicemails from the remote server and updates the local database.
@@ -56,8 +57,10 @@ class VoicemailRepositoryImpl with ContactsDriftMapper, VoicemailMapper implemen
     required WebtritApiClient webtritApiClient,
     required String token,
     required AppDatabase appDatabase,
+    SessionGuard? sessionGuard,
     this.repositoryOptions = const RepositoryOptions(),
-  })  : _webtritApiClient = webtritApiClient,
+  })  : _sessionGuard = sessionGuard ?? const EmptySessionGuard(),
+        _webtritApiClient = webtritApiClient,
         _token = token,
         _appDatabase = appDatabase {
     _initialize();
@@ -67,6 +70,7 @@ class VoicemailRepositoryImpl with ContactsDriftMapper, VoicemailMapper implemen
   final String _token;
   final AppDatabase _appDatabase;
   final RepositoryOptions repositoryOptions;
+  final SessionGuard _sessionGuard;
 
   // If the repository is disabled, the stream controller is not initialized.
   // In such cases, subscribers will receive an empty stream instead.
@@ -177,6 +181,9 @@ class VoicemailRepositoryImpl with ContactsDriftMapper, VoicemailMapper implemen
       }
 
       _fetchingCompleter?.complete();
+    } on UnauthorizedException catch (e) {
+      _sessionGuard.onUnauthorized(e);
+      rethrow;
     } catch (e, st) {
       _logger.warning('Failed to fetch voicemails', e, st);
       _fetchingCompleter?.completeError(e, st);
@@ -204,14 +211,19 @@ class VoicemailRepositoryImpl with ContactsDriftMapper, VoicemailMapper implemen
       await _fetchingCompleter!.future;
     }
 
-    await _webtritApiClient.deleteUserVoicemail(
-      _token,
-      messageId,
-      locale: localeCode,
-      options: RequestOptions.withNoRetries(),
-    );
+    try {
+      await _webtritApiClient.deleteUserVoicemail(
+        _token,
+        messageId,
+        locale: localeCode,
+        options: RequestOptions.withNoRetries(),
+      );
 
-    await _appDatabase.voicemailDao.deleteVoicemailById(messageId);
+      await _appDatabase.voicemailDao.deleteVoicemailById(messageId);
+    } on UnauthorizedException catch (e) {
+      _sessionGuard.onUnauthorized(e);
+      rethrow;
+    }
   }
 
   /// Removes all voicemails from both the remote server and the local database.
@@ -274,6 +286,9 @@ class VoicemailRepositoryImpl with ContactsDriftMapper, VoicemailMapper implemen
 
     try {
       await _webtritApiClient.updateUserVoicemail(_token, messageId, seen: seen, locale: localeCode);
+    } on UnauthorizedException catch (e) {
+      _sessionGuard.onUnauthorized(e);
+      rethrow;
     } catch (e) {
       await _appDatabase.voicemailDao.updateVoicemail(previousVoicemail);
       rethrow;

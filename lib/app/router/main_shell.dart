@@ -10,10 +10,12 @@ import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 import 'package:webtrit_phone/app/assets.gen.dart';
 import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/app/notifications/notifications.dart';
+import 'package:webtrit_phone/app/session/session.dart';
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/features/features.dart';
+import 'package:webtrit_phone/l10n/app_localizations.g.mapper.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/common/common.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
@@ -32,6 +34,7 @@ class MainShell extends StatefulWidget {
 class _MainShellState extends State<MainShell> {
   late final Callkeep _callkeep = Callkeep();
   late final CallkeepConnections _callkeepConnections = CallkeepConnections();
+  late final SessionGuard _sessionGuard;
 
   @override
   void initState() {
@@ -56,10 +59,19 @@ class _MainShellState extends State<MainShell> {
 
     // After authentication, regenerate the labels to include core URL and tenant ID in remote logging labels
     context.read<AppLogger>().regenerateRemoteLabels();
+
+    _sessionGuard = RouterLogoutSessionGuard(performLogout: () {
+      context.read<AppBloc>().add(const AppLogouted());
+    }, onPreLogout: () {
+      final notification = ErrorMessageNotification(context.l10n.notifications_errorSnackBar_sessionExpired);
+      final notificationsBloc = context.read<NotificationsBloc>();
+      notificationsBloc.add(NotificationsSubmitted(notification));
+    });
   }
 
   @override
   void dispose() {
+    _disposeSessionGuard();
     _callkeep.tearDown();
     super.dispose();
   }
@@ -123,6 +135,7 @@ class _MainShellState extends State<MainShell> {
             context.read<AppBloc>().state.token!,
             polling: EnvironmentConfig.PERIODIC_POLLING,
             sessionCleanupWorker: SessionCleanupWorker(),
+            sessionGuard: _sessionGuard,
           ),
         ),
         RepositoryProvider<SystemInfoRepository>(
@@ -135,6 +148,7 @@ class _MainShellState extends State<MainShell> {
             context.read<WebtritApiClient>(),
             context.read<SecureStorage>(),
             context.read<AppBloc>().state.token!,
+            _sessionGuard,
           ),
           dispose: disposeIfDisposable,
         ),
@@ -211,6 +225,7 @@ class _MainShellState extends State<MainShell> {
           create: (context) => SystemNotificationsRemoteRepositoryApiImpl(
             context.read<WebtritApiClient>(),
             context.read<AppBloc>().state.token!,
+            _sessionGuard,
           ),
         ),
         RepositoryProvider<CallPullRepository>(
@@ -438,5 +453,12 @@ class _MainShellState extends State<MainShell> {
         ),
       ),
     );
+  }
+
+  /// Disposes [sessionGuard] if it implements [Disposable].
+  /// This ensures any held resources are released before
+  /// the widget tree is torn down.
+  void _disposeSessionGuard() {
+    disposeIfDisposable(_sessionGuard);
   }
 }

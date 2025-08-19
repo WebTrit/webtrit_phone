@@ -720,6 +720,8 @@
   "@notifications_errorSnackBar_callSignalingClientNotConnect": {},
   "notifications_errorSnackBar_callSignalingClientSessionMissed": "Помилка автентифікації, будь ласка увійдіть знову",
   "@notifications_errorSnackBar_callSignalingClientSessionMissed": {},
+  "notifications_errorSnackBar_sessionExpired": "Термін дії вашої сесії закінчився. Будь ласка, увійдіть знову.",
+  "@notifications_errorSnackBar_sessionExpired": {},
   "notifications_errorSnackBar_callUndefinedLine": "Немає вільних ліній для ініціювання дзвінка",
   "@notifications_errorSnackBar_callUndefinedLine": {},
   "notifications_errorSnackBar_callUserMedia": "Немає доступу до медіа-входу, будь ласка, перевірте дозволи програми",
@@ -1355,7 +1357,6 @@
     "description": "Заголовок діалогу, який показується, коли користувач обирає постійне з'єднання на Android 14+",
     "type": "text"
   },
-
   "persistentConnectionReminderContent": "Потрібно вручну запустити застосунок щонайменше один раз після перезавантаження телефону, щоб відновити постійне з'єднання й отримувати вхідні дзвінки.",
   "@persistentConnectionReminderContent": {
     "description": "Текст діалогу, який пояснює, що застосунок потрібно вручну відкрити після перезавантаження, щоб продовжити отримувати дзвінки через постійне з'єднання.",

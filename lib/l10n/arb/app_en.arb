@@ -720,6 +720,8 @@
   "@notifications_errorSnackBar_callSignalingClientNotConnect": {},
   "notifications_errorSnackBar_callSignalingClientSessionMissed": "Authentication error, please re-login",
   "@notifications_errorSnackBar_callSignalingClientSessionMissed": {},
+  "notifications_errorSnackBar_sessionExpired": "Your session has expired. Please log in again.",
+  "@notifications_errorSnackBar_sessionExpired": {},
   "notifications_errorSnackBar_callUndefinedLine": "No idle lines to initiate the call",
   "@notifications_errorSnackBar_callUndefinedLine": {},
   "notifications_errorSnackBar_callUserMedia": "No access to media input, please check app permissions",
