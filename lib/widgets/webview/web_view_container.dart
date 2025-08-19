@@ -532,7 +532,10 @@ abstract class PageInjectionStrategy {
 /// on the `window` object. By default, it calls `window.onPayloadDataReady(...)`,
 /// but the function name can be customized via the [functionName] parameter.
 class DefaultPayloadInjectionStrategy implements PageInjectionStrategy {
-  DefaultPayloadInjectionStrategy({this.functionName = 'onPayloadDataReady'}) {
+  DefaultPayloadInjectionStrategy({
+    this.functionName = 'onPayloadDataReady',
+    Map<String, dynamic>? initialPayload,
+  }) : _payloadNotifier = ValueNotifier<Map<String, dynamic>>(initialPayload ?? {}) {
     _payloadNotifier.addListener(_attemptPayloadInjection);
   }
 
@@ -540,7 +543,7 @@ class DefaultPayloadInjectionStrategy implements PageInjectionStrategy {
   final String functionName;
 
   /// Stores the current payload to inject.
-  final ValueNotifier<Map<String, dynamic>> _payloadNotifier = ValueNotifier({});
+  final ValueNotifier<Map<String, dynamic>> _payloadNotifier;
 
   WebViewController? _controller;
   BuildContext? _context;

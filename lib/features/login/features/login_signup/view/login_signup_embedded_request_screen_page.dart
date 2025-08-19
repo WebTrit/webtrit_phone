@@ -6,6 +6,7 @@ import 'package:auto_route/auto_route.dart';
 
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/theme/models/models.dart';
+import 'package:webtrit_phone/widgets/webview/webview.dart';
 
 import 'login_signup_embedded_request_screen.dart';
 
@@ -23,6 +24,8 @@ class LoginSignupEmbeddedRequestScreenPage extends StatelessWidget {
       embeddedData.resource.toString(),
     );
 
+    final locale = Localizations.localeOf(context);
+
     return FutureBuilder<String>(
       future: resource.loadContent(),
       builder: (context, snapshot) {
@@ -37,13 +40,17 @@ class LoginSignupEmbeddedRequestScreenPage extends StatelessWidget {
         } else if (snapshot.hasData) {
           final content = snapshot.data!;
           return resource is NetworkResourceLoader
-              ? LoginSignupEmbeddedRequestScreen(initialUrl: Uri.parse(content))
+              ? LoginSignupEmbeddedRequestScreen(
+                  initialUrl: Uri.parse(content),
+                  pageInjectionStrategyBuilder: _createInjectionStrategy(locale),
+                )
               : LoginSignupEmbeddedRequestScreen(
                   initialUrl: Uri.dataFromString(
                     content,
                     mimeType: 'text/html',
                     encoding: Encoding.getByName('utf-8'),
                   ),
+                  pageInjectionStrategyBuilder: _createInjectionStrategy(locale),
                 );
         } else {
           return const Center(
@@ -52,5 +59,14 @@ class LoginSignupEmbeddedRequestScreenPage extends StatelessWidget {
         }
       },
     );
+  }
+
+  PageInjectionStrategyBuilder _createInjectionStrategy(Locale locale) {
+    return () => DefaultPayloadInjectionStrategy(
+          functionName: 'initializePage',
+          initialPayload: {
+            'locale': locale.languageCode,
+          },
+        );
   }
 }
