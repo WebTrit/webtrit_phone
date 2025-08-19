@@ -25,9 +25,13 @@ class LoginSignupEmbeddedRequestScreen extends StatefulWidget {
   const LoginSignupEmbeddedRequestScreen({
     super.key,
     required this.initialUrl,
+    required this.pageInjectionStrategyBuilder,
   });
 
   final Uri initialUrl;
+
+  /// Builder for creating the page injection strategy.
+  final PageInjectionStrategyBuilder pageInjectionStrategyBuilder;
 
   @override
   State<LoginSignupEmbeddedRequestScreen> createState() => _LoginSignupEmbeddedRequestScreenState();
@@ -35,6 +39,7 @@ class LoginSignupEmbeddedRequestScreen extends StatefulWidget {
 
 class _LoginSignupEmbeddedRequestScreenState extends State<LoginSignupEmbeddedRequestScreen> {
   final WebViewController _webViewController = WebViewController();
+  late final PageInjectionStrategy _pageInjectionStrategy;
 
   /// Indicates whether the WebView can navigate back in its history stack.
   /// Used to control PopScope behavior and decide whether to intercept back presses.
@@ -50,6 +55,12 @@ class _LoginSignupEmbeddedRequestScreenState extends State<LoginSignupEmbeddedRe
   bool _wasPageLoadedSuccessfully = false;
 
   LoginCubit get _loginCubit => context.read<LoginCubit>();
+
+  @override
+  void initState() {
+    _pageInjectionStrategy = widget.pageInjectionStrategyBuilder();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,8 +79,8 @@ class _LoginSignupEmbeddedRequestScreenState extends State<LoginSignupEmbeddedRe
           javaScriptChannels: {
             _jsChannelName: _onJavaScriptMessageReceived,
           },
+          pageInjectionStrategies: [_pageInjectionStrategy],
           onPageLoadedSuccess: _onPageLoadedSuccess,
-          onPageLoadedFailed: _onPageLoadedFailed,
           onUrlChange: (_) => _updateCanGoBack(),
           errorBuilder: _buildErrorBuilder(),
         ),
@@ -175,19 +186,6 @@ class _LoginSignupEmbeddedRequestScreenState extends State<LoginSignupEmbeddedRe
   void _onPageLoadedSuccess() {
     _logger.fine('Web page loaded successfully');
     _wasPageLoadedSuccessfully = true;
-    final locale = Localizations.localeOf(context).languageCode;
-
-    final script = '''
-      if (typeof window.setLocale === 'function') {
-        window.setLocale("$locale");
-      }
-    ''';
-
-    _webViewController.runJavaScript(script);
-  }
-
-  void _onPageLoadedFailed(WebResourceError error) {
-    _logger.warning('Failed to load page: $error');
   }
 
   void _onJavaScriptMessageReceived(JavaScriptMessage message) {
