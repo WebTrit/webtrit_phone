@@ -67,26 +67,6 @@ initiates authentication using the provided credentials or other required data.
 
 ## Functions to Implement in JavaScript
 
-### `showProgress()`
-
-- This function is used to indicate a loading state while a request is being processed.
-
-```javascript
-function showProgress() {
-  // add implementation
-}
-```
-
-### `hideProgress()`
-
-- This function is used to remove the loading state once the request is completed.
-
-```javascript
-function hideProgress() {
-  // add implementation
-}
-```
-
 ### `setLocale()`
 
 - This function is called after the initial rendering to apply the correct localization settings from the mobile app.
@@ -163,8 +143,6 @@ WebtritLoginChannel.postMessage(JSON.stringify(json));
   ```plaintext
   core-url/tenant/{tenant_id}/api/v1/user
   ```
-- When a request is started, the JavaScript functions `showProgress()` and `hideProgress()` will be called to manage the
-  loading state.
 - `setLocale()` should also be implemented to ensure proper localization.
 
 4. **Result Handling:**

@@ -201,7 +201,6 @@ class _LoginSignupEmbeddedRequestScreenState extends State<LoginSignupEmbeddedRe
       final embeddedCallbackData = decoded['callback'];
 
       if (event == 'signup' && context.mounted) {
-        _webViewController.runJavaScript('showProgress();');
         _loginCubit.loginCustomSignupRequest(data, embeddedCallbackData);
       }
     } catch (e, st) {
