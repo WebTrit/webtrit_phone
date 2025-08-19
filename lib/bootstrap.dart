@@ -22,6 +22,7 @@ import 'package:webtrit_phone/features/system_notifications/services/services.da
 
 import 'package:webtrit_phone/features/call/call.dart' show onPushNotificationSyncCallback, onSignalingSyncCallback;
 
+import 'app/session/session.dart';
 import 'firebase_options.dart';
 
 Future<void> bootstrap() async {
@@ -255,7 +256,7 @@ void workManagerDispatcher() {
       final (coreUrl, tenantId, token) = (storage.readCoreUrl(), storage.readTenantId(), storage.readToken());
       if (coreUrl == null || tenantId == null || token == null) return Future.value(true);
       final api = WebtritApiClient(Uri.parse(coreUrl), tenantId);
-      final remoteRepo = SystemNotificationsRemoteRepositoryApiImpl(api, token);
+      final remoteRepo = SystemNotificationsRemoteRepositoryApiImpl(api, token, const EmptySessionGuard());
 
       // Init local database and repository
       final appDatabase = await IsolateDatabase.create();

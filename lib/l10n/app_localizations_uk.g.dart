@@ -1127,6 +1127,10 @@ class AppLocalizationsUk extends AppLocalizations {
       'Помилка автентифікації, будь ласка увійдіть знову';
 
   @override
+  String get notifications_errorSnackBar_sessionExpired =>
+      'Термін дії вашої сесії закінчився. Будь ласка, увійдіть знову.';
+
+  @override
   String get notifications_errorSnackBar_callUndefinedLine =>
       'Немає вільних ліній для ініціювання дзвінка';
 

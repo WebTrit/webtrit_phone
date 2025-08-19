@@ -2021,6 +2021,12 @@ abstract class AppLocalizations {
   /// **'Authentication error, please re-login'**
   String get notifications_errorSnackBar_callSignalingClientSessionMissed;
 
+  /// No description provided for @notifications_errorSnackBar_sessionExpired.
+  ///
+  /// In en, this message translates to:
+  /// **'Your session has expired. Please log in again.'**
+  String get notifications_errorSnackBar_sessionExpired;
+
   /// No description provided for @notifications_errorSnackBar_callUndefinedLine.
   ///
   /// In en, this message translates to:

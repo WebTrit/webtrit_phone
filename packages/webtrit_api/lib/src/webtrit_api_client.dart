@@ -142,6 +142,19 @@ class WebtritApiClient {
             _ => ErrorResponse.fromJson(responseDataJson),
           };
 
+          // Map 422 with code="refresh_token_invalid" to UnauthorizedException.
+          // This ensures higher layers can handle expired/invalid sessions in a unified way
+          // (e.g., trigger global logout or token refresh).
+          if (httpResponse.statusCode == 422 && error?.code == 'refresh_token_invalid') {
+            throw UnauthorizedException(
+              url: tenantUrl,
+              requestId: xRequestId,
+              statusCode: httpResponse.statusCode,
+              token: token,
+              error: error,
+            );
+          }
+
           // If the server responds with 404 or 501, it may indicate that a specific private endpoint
           // is not implemented by the current adapter (e.g., tenant-specific or backend version mismatch).
           // In such case, throw a dedicated exception to handle unsupported endpoint scenarios gracefully.

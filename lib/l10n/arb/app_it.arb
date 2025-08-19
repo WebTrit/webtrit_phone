@@ -706,6 +706,8 @@
   "@notifications_errorSnackBar_callSignalingClientNotConnect": {},
   "notifications_errorSnackBar_callSignalingClientSessionMissed": "Errore di autenticazione, effettuare nuovamente l'accesso",
   "@notifications_errorSnackBar_callSignalingClientSessionMissed": {},
+  "notifications_errorSnackBar_sessionExpired": "La tua sessione è scaduta. Accedi di nuovo.",
+  "@notifications_errorSnackBar_sessionExpired": {},
   "notifications_errorSnackBar_callUndefinedLine": "Nessuna linea disponibile per avviare una chiamata",
   "@notifications_errorSnackBar_callUndefinedLine": {},
   "notifications_errorSnackBar_callUserMedia": "Nessun accesso al server multimediale, controlla le autorizzazioni dell'app",

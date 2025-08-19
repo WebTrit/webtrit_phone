@@ -1132,6 +1132,10 @@ class AppLocalizationsIt extends AppLocalizations {
       'Errore di autenticazione, effettuare nuovamente l\'accesso';
 
   @override
+  String get notifications_errorSnackBar_sessionExpired =>
+      'La tua sessione è scaduta. Accedi di nuovo.';
+
+  @override
   String get notifications_errorSnackBar_callUndefinedLine =>
       'Nessuna linea disponibile per avviare una chiamata';
 

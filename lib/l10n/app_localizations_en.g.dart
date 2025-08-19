@@ -1112,6 +1112,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'Authentication error, please re-login';
 
   @override
+  String get notifications_errorSnackBar_sessionExpired =>
+      'Your session has expired. Please log in again.';
+
+  @override
   String get notifications_errorSnackBar_callUndefinedLine =>
       'No idle lines to initiate the call';
 
