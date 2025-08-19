@@ -15,6 +15,7 @@ import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/features/features.dart';
+import 'package:webtrit_phone/l10n/app_localizations.g.mapper.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/common/common.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
@@ -59,9 +60,13 @@ class _MainShellState extends State<MainShell> {
     // After authentication, regenerate the labels to include core URL and tenant ID in remote logging labels
     context.read<AppLogger>().regenerateRemoteLabels();
 
-    _sessionGuard = RouterLogoutSessionGuard(
-      performLogout: () async => context.read<AppBloc>().add(const AppLogouted()),
-    );
+    _sessionGuard = RouterLogoutSessionGuard(performLogout: () {
+      context.read<AppBloc>().add(const AppLogouted());
+    }, onPreLogout: () {
+      final notification = ErrorMessageNotification(context.l10n.notifications_errorSnackBar_sessionExpired);
+      final notificationsBloc = context.read<NotificationsBloc>();
+      notificationsBloc.add(NotificationsSubmitted(notification));
+    });
   }
 
   @override
