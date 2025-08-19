@@ -8,6 +8,7 @@ import 'package:webtrit_api/webtrit_api.dart';
 
 import 'package:webtrit_phone/mappers/mappers.dart';
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/app/session/session.dart';
 
 final _logger = Logger('ExternalContactsRepository');
 
@@ -16,7 +17,9 @@ class ExternalContactsRepository with ExternalContactApiMapper {
     required WebtritApiClient webtritApiClient,
     required String token,
     bool periodicPolling = true,
-  })  : _webtritApiClient = webtritApiClient,
+    SessionGuard? sessionGuard,
+  })  : _sessionGuard = sessionGuard ?? const EmptySessionGuard(),
+        _webtritApiClient = webtritApiClient,
         _token = token,
         _periodicPolling = periodicPolling {
     _controller = StreamController<List<ExternalContact>>.broadcast(
@@ -29,6 +32,7 @@ class ExternalContactsRepository with ExternalContactApiMapper {
   final WebtritApiClient _webtritApiClient;
   final String _token;
   final bool _periodicPolling;
+  final SessionGuard _sessionGuard;
 
   late StreamController<List<ExternalContact>> _controller;
   // TODO: Remove useless variable _listenedCounter
@@ -68,6 +72,9 @@ class ExternalContactsRepository with ExternalContactApiMapper {
         _cacheContacts = contacts;
         _controller.add(contacts);
       }
+    } on UnauthorizedException catch (e) {
+      _sessionGuard.onUnauthorized(e);
+      rethrow;
     } catch (e, stackTrace) {
       _logger.warning('_gatherListContacts', e, stackTrace);
       _controller.addError(e, stackTrace);
