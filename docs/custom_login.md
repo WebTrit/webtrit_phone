@@ -67,34 +67,34 @@ initiates authentication using the provided credentials or other required data.
 
 ## Functions to Implement in JavaScript
 
-### `showProgress()`
+### `initializePage(initData)`
 
-- This function is used to indicate a loading state while a request is being processed.
+- This function is called after the initial rendering to apply initialization data from the mobile
+  app, such as the current locale or optional prefilled values.
+- The function expects an object with at least the `locale` key, but can also include other keys (
+  e.g., `prefillEmail`).
 
 ```javascript
-function showProgress() {
-  // add implementation
+function initializePage(initData) {
+  const { locale, prefillEmail } = initData || {};
+  if (locale) {
+    // apply translations based on locale
+  }
+  if (prefillEmail) {
+    document.getElementById("email").value = prefillEmail;
+  }
 }
 ```
 
-### `hideProgress()`
+**Example call from Flutter:**
 
-- This function is used to remove the loading state once the request is completed.
+```dart
 
-```javascript
-function hideProgress() {
-  // add implementation
-}
-```
-
-### `setLocale()`
-
-- This function is called after the initial rendering to apply the correct localization settings from the mobile app.
-
-```javascript
-function setLocale(locale) {
-  // add implementation
-}
+final script = '''
+  if (typeof window.initializePage === 'function') {
+    window.initializePage({ "locale": "$locale" });
+  }
+''';
 ```
 
 ## JSON Structure
@@ -163,9 +163,6 @@ WebtritLoginChannel.postMessage(JSON.stringify(json));
   ```plaintext
   core-url/tenant/{tenant_id}/api/v1/user
   ```
-- When a request is started, the JavaScript functions `showProgress()` and `hideProgress()` will be called to manage the
-  loading state.
-- `setLocale()` should also be implemented to ensure proper localization.
 
 4. **Result Handling:**
 
