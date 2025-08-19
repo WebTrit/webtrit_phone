@@ -64,7 +64,7 @@ import 'app_localizations_uk.g.dart';
 /// property.
 abstract class AppLocalizations {
   AppLocalizations(String locale)
-      : localeName = intl.Intl.canonicalizedLocale(locale.toString());
+    : localeName = intl.Intl.canonicalizedLocale(locale.toString());
 
   final String localeName;
 
@@ -87,17 +87,17 @@ abstract class AppLocalizations {
   /// of delegates is preferred or required.
   static const List<LocalizationsDelegate<dynamic>> localizationsDelegates =
       <LocalizationsDelegate<dynamic>>[
-    delegate,
-    GlobalMaterialLocalizations.delegate,
-    GlobalCupertinoLocalizations.delegate,
-    GlobalWidgetsLocalizations.delegate,
-  ];
+        delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ];
 
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
     Locale('en'),
     Locale('it'),
-    Locale('uk')
+    Locale('uk'),
   ];
 
   /// No description provided for @account_selfCarePasswordExpired_message.
@@ -178,11 +178,53 @@ abstract class AppLocalizations {
   /// **'Attended transfer'**
   String get call_CallActionsTooltip_attended_transfer;
 
+  /// No description provided for @call_CallActionsTooltip_changeAudioDevice.
+  ///
+  /// In en, this message translates to:
+  /// **'Change audio device'**
+  String get call_CallActionsTooltip_changeAudioDevice;
+
   /// No description provided for @call_CallActionsTooltip_decline_inviteToAttendedTransfer.
   ///
   /// In en, this message translates to:
   /// **'Decline transfer'**
   String get call_CallActionsTooltip_decline_inviteToAttendedTransfer;
+
+  /// No description provided for @call_CallActionsTooltip_device_bluetooth.
+  ///
+  /// In en, this message translates to:
+  /// **'Bluetooth'**
+  String get call_CallActionsTooltip_device_bluetooth;
+
+  /// No description provided for @call_CallActionsTooltip_device_earpiece.
+  ///
+  /// In en, this message translates to:
+  /// **'Earpiece'**
+  String get call_CallActionsTooltip_device_earpiece;
+
+  /// No description provided for @call_CallActionsTooltip_device_speaker.
+  ///
+  /// In en, this message translates to:
+  /// **'Speaker'**
+  String get call_CallActionsTooltip_device_speaker;
+
+  /// No description provided for @call_CallActionsTooltip_device_streaming.
+  ///
+  /// In en, this message translates to:
+  /// **'Streaming'**
+  String get call_CallActionsTooltip_device_streaming;
+
+  /// No description provided for @call_CallActionsTooltip_device_unknown.
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown device'**
+  String get call_CallActionsTooltip_device_unknown;
+
+  /// No description provided for @call_CallActionsTooltip_device_wiredHeadset.
+  ///
+  /// In en, this message translates to:
+  /// **'Wired Headset'**
+  String get call_CallActionsTooltip_device_wiredHeadset;
 
   /// No description provided for @call_CallActionsTooltip_disableCamera.
   ///
@@ -285,48 +327,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Unmute microphone'**
   String get call_CallActionsTooltip_unmute;
-
-  /// No description provided for @call_CallActionsTooltip_changeAudioDevice.
-  ///
-  /// In en, this message translates to:
-  /// **'Change audio device'**
-  String get call_CallActionsTooltip_changeAudioDevice;
-
-  /// No description provided for @call_CallActionsTooltip_device_speaker.
-  ///
-  /// In en, this message translates to:
-  /// **'Speaker'**
-  String get call_CallActionsTooltip_device_speaker;
-
-  /// No description provided for @call_CallActionsTooltip_device_earpiece.
-  ///
-  /// In en, this message translates to:
-  /// **'Earpiece'**
-  String get call_CallActionsTooltip_device_earpiece;
-
-  /// No description provided for @call_CallActionsTooltip_device_wiredHeadset.
-  ///
-  /// In en, this message translates to:
-  /// **'Wired Headset'**
-  String get call_CallActionsTooltip_device_wiredHeadset;
-
-  /// No description provided for @call_CallActionsTooltip_device_bluetooth.
-  ///
-  /// In en, this message translates to:
-  /// **'Bluetooth'**
-  String get call_CallActionsTooltip_device_bluetooth;
-
-  /// No description provided for @call_CallActionsTooltip_device_streaming.
-  ///
-  /// In en, this message translates to:
-  /// **'Streaming'**
-  String get call_CallActionsTooltip_device_streaming;
-
-  /// No description provided for @call_CallActionsTooltip_device_unknown.
-  ///
-  /// In en, this message translates to:
-  /// **'Unknown device'**
-  String get call_CallActionsTooltip_device_unknown;
 
   /// No description provided for @call_description_held.
   ///
@@ -1185,7 +1185,9 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'An incompatible instance version provided, please contact the administrator of your system (actual: {actual}, supported: {supportedConstraint})'**
   String login_CoreVersionUnsupportedExceptionError(
-      String actual, String supportedConstraint);
+    String actual,
+    String supportedConstraint,
+  );
 
   /// No description provided for @login_RequestFailureEmptyEmailError.
   ///
@@ -1498,8 +1500,10 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Incompatible WebTrit Cloud Backend version, please contact the administrator of your system.\n\nInstance version:\n{actual}\n\nSupported version:\n{supportedConstraint}'**
   String
-      main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError(
-          String actual, String supportedConstraint);
+  main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError(
+    String actual,
+    String supportedConstraint,
+  );
 
   /// No description provided for @main_CompatibilityIssueDialog_title.
   ///
@@ -2059,12 +2063,6 @@ abstract class AppLocalizations {
   /// **'Authentication error, please re-login'**
   String get notifications_errorSnackBar_callSignalingClientSessionMissed;
 
-  /// No description provided for @notifications_errorSnackBar_sessionExpired.
-  ///
-  /// In en, this message translates to:
-  /// **'Your session has expired. Please log in again.'**
-  String get notifications_errorSnackBar_sessionExpired;
-
   /// No description provided for @notifications_errorSnackBar_callUndefinedLine.
   ///
   /// In en, this message translates to:
@@ -2089,6 +2087,12 @@ abstract class AppLocalizations {
   /// **'You\'re currently unable to place calls. Please check your account status or contact support.'**
   String get notifications_errorSnackBar_callWhileUnregistered;
 
+  /// No description provided for @notifications_errorSnackBar_sessionExpired.
+  ///
+  /// In en, this message translates to:
+  /// **'Your session has expired. Please log in again.'**
+  String get notifications_errorSnackBar_sessionExpired;
+
   /// No description provided for @notifications_errorSnackBar_SignalingConnectFailed.
   ///
   /// In en, this message translates to:
@@ -2100,14 +2104,16 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Disconnected from the core with the code: {codeName}'**
   String notifications_errorSnackBar_signalingDisconnectWithCodeName(
-      String codeName);
+    String codeName,
+  );
 
   /// No description provided for @notifications_errorSnackBar_signalingDisconnectWithSystemReason.
   ///
   /// In en, this message translates to:
   /// **'Disconnected from the core due to the following reason: {reason}'**
   String notifications_errorSnackBar_signalingDisconnectWithSystemReason(
-      String reason);
+    String reason,
+  );
 
   /// No description provided for @notifications_errorSnackBar_SignalingSessionMissed.
   ///
@@ -2132,7 +2138,8 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Registration with the remote VoIP system failed due to the following reason: {reason}'**
   String notifications_errorSnackBar_sipRegistrationFailed_WithSystemReason(
-      String reason);
+    String reason,
+  );
 
   /// No description provided for @notifications_errorSnackBar_sipServiceUnavailable.
   ///
@@ -2296,6 +2303,18 @@ abstract class AppLocalizations {
   /// **'To ensure the best user experience, the app needs to be granted the following permissions: microphone for audio calls, camera for video calls, and contacts to simplify reaching them from the app.\n\nPermissions could be changed at any time in the future.'**
   String get permission_Text_description;
 
+  /// Content of a dialog explaining that the app must be manually opened after reboot to keep receiving calls using persistent connection.
+  ///
+  /// In en, this message translates to:
+  /// **'You have to manually launch the app after your phone restarted at least once to re-establish the persistent connection and receive incoming calls.'**
+  String get persistentConnectionReminderContent;
+
+  /// Title of a dialog shown when the user selects persistent connection on Android 14+
+  ///
+  /// In en, this message translates to:
+  /// **'Important Reminder'**
+  String get persistentConnectionReminderTitle;
+
   /// No description provided for @recents_BodyCenter_empty.
   ///
   /// In en, this message translates to:
@@ -2416,6 +2435,12 @@ abstract class AppLocalizations {
   /// **'Problem with configuration push notification service'**
   String get sessionStatus_pushNotificationServiceProblem;
 
+  /// No description provided for @settings_AboutText_ApplicationEmbeddedLinks.
+  ///
+  /// In en, this message translates to:
+  /// **'Application embedded links'**
+  String get settings_AboutText_ApplicationEmbeddedLinks;
+
   /// No description provided for @settings_AboutText_AppSessionIdentifier.
   ///
   /// In en, this message translates to:
@@ -2445,12 +2470,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Build version in the Store'**
   String get settings_AboutText_StoreVersion;
-
-  /// No description provided for @settings_AboutText_ApplicationEmbeddedLinks.
-  ///
-  /// In en, this message translates to:
-  /// **'Application embedded links'**
-  String get settings_AboutText_ApplicationEmbeddedLinks;
 
   /// No description provided for @settings_AccountDeleteConfirmDialog_content.
   ///
@@ -3693,18 +3712,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Web resource error'**
   String get webRegistration_ErrorAcknowledgeDialog_title;
-
-  /// Title of a dialog shown when the user selects persistent connection on Android 14+
-  ///
-  /// In en, this message translates to:
-  /// **'Important Reminder'**
-  String get persistentConnectionReminderTitle;
-
-  /// Content of a dialog explaining that the app must be manually opened after reboot to keep receiving calls using persistent connection.
-  ///
-  /// In en, this message translates to:
-  /// **'You have to manually launch the app after your phone restarted at least once to re-establish the persistent connection and receive incoming calls.'**
-  String get persistentConnectionReminderContent;
 }
 
 class _AppLocalizationsDelegate
@@ -3736,8 +3743,9 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
   }
 
   throw FlutterError(
-      'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
-      'an issue with the localizations generation tool. Please file an issue '
-      'on GitHub with a reproducible sample app and the gen-l10n configuration '
-      'that was used.');
+    'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
+    'an issue with the localizations generation tool. Please file an issue '
+    'on GitHub with a reproducible sample app and the gen-l10n configuration '
+    'that was used.',
+  );
 }

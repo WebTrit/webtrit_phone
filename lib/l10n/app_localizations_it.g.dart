@@ -54,8 +54,31 @@ class AppLocalizationsIt extends AppLocalizations {
       'Trasferimento assistito';
 
   @override
+  String get call_CallActionsTooltip_changeAudioDevice =>
+      'Cambia dispositivo audio';
+
+  @override
   String get call_CallActionsTooltip_decline_inviteToAttendedTransfer =>
       'Rifiuta trasferimento';
+
+  @override
+  String get call_CallActionsTooltip_device_bluetooth => 'Bluetooth';
+
+  @override
+  String get call_CallActionsTooltip_device_earpiece => 'Auricolare';
+
+  @override
+  String get call_CallActionsTooltip_device_speaker => 'Altoparlante';
+
+  @override
+  String get call_CallActionsTooltip_device_streaming => 'Streaming';
+
+  @override
+  String get call_CallActionsTooltip_device_unknown =>
+      'Dispositivo sconosciuto';
+
+  @override
+  String get call_CallActionsTooltip_device_wiredHeadset => 'Cuffie con filo';
 
   @override
   String get call_CallActionsTooltip_disableCamera => 'Disattiva video';
@@ -110,29 +133,6 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get call_CallActionsTooltip_unmute => 'Attiva il microfono';
-
-  @override
-  String get call_CallActionsTooltip_changeAudioDevice =>
-      'Cambia dispositivo audio';
-
-  @override
-  String get call_CallActionsTooltip_device_speaker => 'Altoparlante';
-
-  @override
-  String get call_CallActionsTooltip_device_earpiece => 'Auricolare';
-
-  @override
-  String get call_CallActionsTooltip_device_wiredHeadset => 'Cuffie con filo';
-
-  @override
-  String get call_CallActionsTooltip_device_bluetooth => 'Bluetooth';
-
-  @override
-  String get call_CallActionsTooltip_device_streaming => 'Streaming';
-
-  @override
-  String get call_CallActionsTooltip_device_unknown =>
-      'Dispositivo sconosciuto';
 
   @override
   String get call_description_held => 'In attesa';
@@ -638,7 +638,9 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String login_CoreVersionUnsupportedExceptionError(
-      String actual, String supportedConstraint) {
+    String actual,
+    String supportedConstraint,
+  ) {
     return 'È stata fornita una versione di richiesta incompatibile, contattare l\'amministratore del sistema (actual:$actual, supported:$supportedConstraint)';
   }
 
@@ -830,8 +832,10 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String
-      main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError(
-          String actual, String supportedConstraint) {
+  main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError(
+    String actual,
+    String supportedConstraint,
+  ) {
     return 'Versione di WebTrit Cloud Backend incompatibile, si prega di contattare l\'amministratore del sistema.\n\nVersione dell\'istanza:\n$actual\n\nVersione supportata:\n$supportedConstraint\n';
   }
 
@@ -1151,10 +1155,6 @@ class AppLocalizationsIt extends AppLocalizations {
       'Errore di autenticazione, effettuare nuovamente l\'accesso';
 
   @override
-  String get notifications_errorSnackBar_sessionExpired =>
-      'La tua sessione è scaduta. Accedi di nuovo.';
-
-  @override
   String get notifications_errorSnackBar_callUndefinedLine =>
       'Nessuna linea disponibile per avviare una chiamata';
 
@@ -1171,18 +1171,24 @@ class AppLocalizationsIt extends AppLocalizations {
       'Al momento non puoi effettuare chiamate. Controlla lo stato del tuo account o contatta l\'assistenza.';
 
   @override
+  String get notifications_errorSnackBar_sessionExpired =>
+      'La tua sessione è scaduta. Accedi di nuovo.';
+
+  @override
   String get notifications_errorSnackBar_SignalingConnectFailed =>
       'Connessione al server non riuscita, tentativo di riconnessione in corso';
 
   @override
   String notifications_errorSnackBar_signalingDisconnectWithCodeName(
-      String codeName) {
+    String codeName,
+  ) {
     return 'Disconnesso dal core con codice: $codeName';
   }
 
   @override
   String notifications_errorSnackBar_signalingDisconnectWithSystemReason(
-      String reason) {
+    String reason,
+  ) {
     return 'Disconnesso dal nucleo con ragione: $reason';
   }
 
@@ -1200,7 +1206,8 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String notifications_errorSnackBar_sipRegistrationFailed_WithSystemReason(
-      String reason) {
+    String reason,
+  ) {
     return 'La registrazione con il sistema VoIP remoto è fallita con il motivo: $reason';
   }
 
@@ -1302,6 +1309,13 @@ class AppLocalizationsIt extends AppLocalizations {
       'Per garantire la migliore esperienza utente, all\'app devono essere concesse le seguenti autorizzazioni: microfono per le chiamate audio, fotocamera per le videochiamate e contatti per semplificare il raggiungimento degli utenti dall\'app.\n\nLe autorizzazioni possono essere modificate in qualsiasi momento anche successivamente.';
 
   @override
+  String get persistentConnectionReminderContent =>
+      'Devi avviare manualmente l\'app almeno una volta dopo il riavvio del telefono per ristabilire la connessione persistente e ricevere le chiamate in arrivo.';
+
+  @override
+  String get persistentConnectionReminderTitle => 'Promemoria importante';
+
+  @override
   String recents_BodyCenter_empty(Object filter) {
     return 'Attualmente non hai chiamate recenti con $filter.';
   }
@@ -1379,6 +1393,10 @@ class AppLocalizationsIt extends AppLocalizations {
       'Problema con la configurazione del servizio di notifiche push';
 
   @override
+  String get settings_AboutText_ApplicationEmbeddedLinks =>
+      'Collegamenti incorporati dell\'applicazione';
+
+  @override
   String get settings_AboutText_AppSessionIdentifier =>
       'Identificatore della sessione dell\'applicazione';
 
@@ -1395,10 +1413,6 @@ class AppLocalizationsIt extends AppLocalizations {
   @override
   String get settings_AboutText_StoreVersion =>
       'La nuova versione è disponibile nello Store';
-
-  @override
-  String get settings_AboutText_ApplicationEmbeddedLinks =>
-      'Collegamenti incorporati dell\'applicazione';
 
   @override
   String get settings_AccountDeleteConfirmDialog_content =>
@@ -2153,11 +2167,4 @@ class AppLocalizationsIt extends AppLocalizations {
   @override
   String get webRegistration_ErrorAcknowledgeDialog_title =>
       'Web resource error';
-
-  @override
-  String get persistentConnectionReminderTitle => 'Promemoria importante';
-
-  @override
-  String get persistentConnectionReminderContent =>
-      'Devi avviare manualmente l\'app almeno una volta dopo il riavvio del telefono per ristabilire la connessione persistente e ricevere le chiamate in arrivo.';
 }
