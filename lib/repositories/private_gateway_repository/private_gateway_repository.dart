@@ -7,8 +7,7 @@ import 'package:webtrit_api/webtrit_api.dart' as api;
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/mappers/api/self_config_mapper.dart';
-
-import '../common/common.dart';
+import 'package:webtrit_phone/common/common.dart';
 
 final _logger = Logger('PrivateGatewayRepository');
 
