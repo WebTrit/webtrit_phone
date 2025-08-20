@@ -28,14 +28,14 @@ class AutoprovisionScreenPage extends StatelessWidget {
     // Explicitly cast to string,
     // coz value are verified by the router guard [onAutoprovisionScreenPageRouteGuardNavigation]
     final configToken = this.configToken!;
-    final oldToken = context.read<AppBloc>().state.token;
+    final oldToken = context.read<AppBloc>().state.session.token;
 
     final tenantId = this.tenantId ?? '';
-    final oldTenant = context.read<AppBloc>().state.tenantId ?? '';
+    final oldTenant = context.read<AppBloc>().state.session.tenantId;
 
     const defaultCoreUrl = EnvironmentConfig.CORE_URL ?? EnvironmentConfig.DEMO_CORE_URL;
     final coreUrl = this.coreUrl;
-    final oldCoreUrl = context.read<AppBloc>().state.coreUrl;
+    final oldCoreUrl = context.read<AppBloc>().state.session.coreUrl;
 
     const coreVersionConstraint = EnvironmentConfig.CORE_VERSION_CONSTRAINT;
     final config = AutoprovisionConfig(

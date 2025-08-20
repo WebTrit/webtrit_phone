@@ -61,7 +61,8 @@ class _MainShellState extends State<MainShell> {
     context.read<AppLogger>().regenerateRemoteLabels();
 
     _sessionGuard = RouterLogoutSessionGuard(performLogout: () {
-      context.read<AppBloc>().add(const AppLogouted());
+      // context.read<AppBloc>().add(const AppLogouted());
+      context.read<SessionRepository>().logout();
     }, onPreLogout: () {
       final notification = ErrorMessageNotification(context.l10n.notifications_errorSnackBar_sessionExpired);
       final notificationsBloc = context.read<NotificationsBloc>();
@@ -86,8 +87,8 @@ class _MainShellState extends State<MainShell> {
             final appCerts = AppCertificates();
 
             return WebtritApiClient(
-              Uri.parse(appBloc.state.coreUrl!),
-              appBloc.state.tenantId!,
+              Uri.parse(appBloc.state.session.coreUrl!),
+              appBloc.state.session.tenantId,
               connectionTimeout: kApiClientConnectionTimeout,
               certs: appCerts.trustedCertificates,
             );
@@ -119,22 +120,21 @@ class _MainShellState extends State<MainShell> {
         RepositoryProvider<PushTokensRepository>(
           create: (context) => PushTokensRepository(
             webtritApiClient: context.read<WebtritApiClient>(),
-            token: context.read<AppBloc>().state.token!,
+            token: context.read<AppBloc>().state.session.token!,
           ),
         ),
         RepositoryProvider<ExternalContactsRepository>(
           create: (context) => ExternalContactsRepository(
             webtritApiClient: context.read<WebtritApiClient>(),
-            token: context.read<AppBloc>().state.token!,
+            token: context.read<AppBloc>().state.session.token!,
             periodicPolling: EnvironmentConfig.PERIODIC_POLLING,
           ),
         ),
         RepositoryProvider<UserRepository>(
           create: (context) => UserRepository(
             context.read<WebtritApiClient>(),
-            context.read<AppBloc>().state.token!,
+            context.read<AppBloc>().state.session.token!,
             polling: EnvironmentConfig.PERIODIC_POLLING,
-            sessionCleanupWorker: SessionCleanupWorker(),
             sessionGuard: _sessionGuard,
           ),
         ),
@@ -147,7 +147,7 @@ class _MainShellState extends State<MainShell> {
           create: (context) => CustomPrivateGatewayRepository(
             context.read<WebtritApiClient>(),
             context.read<SecureStorage>(),
-            context.read<AppBloc>().state.token!,
+            context.read<AppBloc>().state.session.token!,
             _sessionGuard,
           ),
           dispose: disposeIfDisposable,
@@ -157,7 +157,7 @@ class _MainShellState extends State<MainShell> {
             final featureAccess = context.read<FeatureAccess>();
             return VoicemailRepositoryImpl(
               webtritApiClient: context.read<WebtritApiClient>(),
-              token: context.read<AppBloc>().state.token!,
+              token: context.read<AppBloc>().state.session.token!,
               appDatabase: context.read<AppDatabase>(),
               repositoryOptions: RepositoryOptions(
                 shouldOperate: featureAccess.settingsFeature.isVoicemailsEnabled,
@@ -170,7 +170,7 @@ class _MainShellState extends State<MainShell> {
         RepositoryProvider<AppRepository>(
           create: (context) => AppRepository(
             webtritApiClient: context.read<WebtritApiClient>(),
-            token: context.read<AppBloc>().state.token!,
+            token: context.read<AppBloc>().state.session.token!,
           ),
         ),
         RepositoryProvider<ChatsRepository>(
@@ -213,7 +213,7 @@ class _MainShellState extends State<MainShell> {
         RepositoryProvider<CallToActionsRepository>(
           create: (context) => CallToActionsRepositoryImpl(
             webtritApiClient: context.read<WebtritApiClient>(),
-            token: context.read<AppBloc>().state.token!,
+            token: context.read<AppBloc>().state.session.token!,
           ),
         ),
         RepositoryProvider<SystemNotificationsLocalRepository>(
@@ -224,7 +224,7 @@ class _MainShellState extends State<MainShell> {
         RepositoryProvider<SystemNotificationsRemoteRepository>(
           create: (context) => SystemNotificationsRemoteRepositoryApiImpl(
             context.read<WebtritApiClient>(),
-            context.read<AppBloc>().state.token!,
+            context.read<AppBloc>().state.session.token!,
             _sessionGuard,
           ),
         ),
@@ -332,13 +332,15 @@ class _MainShellState extends State<MainShell> {
               );
 
               return CallBloc(
-                coreUrl: appBloc.state.coreUrl!,
-                tenantId: appBloc.state.tenantId!,
-                token: appBloc.state.token!,
+                coreUrl: appBloc.state.session.coreUrl!,
+                tenantId: appBloc.state.session.tenantId,
+                token: appBloc.state.session.token!,
                 trustedCertificates: appCertificates.trustedCertificates,
                 callLogsRepository: context.read<CallLogsRepository>(),
                 callPullRepository: context.read<CallPullRepository>(),
                 linesStateRepository: context.read<LinesStateRepository>(),
+                sessionRepository: context.read<SessionRepository>(),
+                userRepository: context.read<UserRepository>(),
                 submitNotification: (n) => notificationsBloc.add(NotificationsSubmitted(n)),
                 callkeep: _callkeep,
                 callkeepConnections: _callkeepConnections,
@@ -355,12 +357,11 @@ class _MainShellState extends State<MainShell> {
           BlocProvider<MessagingBloc>(
             lazy: false,
             create: (context) {
-              final appState = context.read<AppBloc>().state;
-              final (token, tenantId, userId) = (appState.token!, appState.tenantId!, appState.userId!);
+              final session = context.read<AppBloc>().state.session;
 
               return MessagingBloc(
-                userId,
-                createMessagingSocket(appState.coreUrl!, token, tenantId),
+                session.userId,
+                createMessagingSocket(session.coreUrl!, session.token!, session.tenantId),
                 FeatureAccess().messagingFeature,
                 context.read<ChatsRepository>(),
                 context.read<ChatsOutboxRepository>(),
@@ -373,7 +374,7 @@ class _MainShellState extends State<MainShell> {
           BlocProvider<UnreadCountCubit>(
             create: (context) {
               return UnreadCountCubit(
-                userId: context.read<AppBloc>().state.userId!,
+                userId: context.read<AppBloc>().state.session.userId,
                 chatsRepository: context.read<ChatsRepository>(),
                 smsRepository: context.read<SmsRepository>(),
               )..init();

@@ -23,6 +23,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     required this.appBloc,
     required this.userRepository,
     required this.voicemailRepository,
+    required this.sessionRepository,
   }) : super(const SettingsState(progress: false)) {
     on<SettingsLogouted>(_onLogouted, transformer: droppable());
     on<SettingsAccountDeleted>(_onAccountDeleted, transformer: droppable());
@@ -35,6 +36,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   final AppBloc appBloc;
   final UserRepository userRepository;
   final VoicemailRepository voicemailRepository;
+  final SessionRepository sessionRepository;
 
   late final StreamSubscription<int> _unreadVoicemailsSub;
 
@@ -54,12 +56,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   }
 
   FutureOr<void> _onLogouted(SettingsLogouted event, Emitter<SettingsState> emit) async {
-    // No need to wait any results here to not stop user from logging out.
-    // Errors will handled by [SessionCleanupWorker] inside to avoid connection issues on session cleanup.
-    //
-    // Also, its needed to avoid race conditions with Signaling client, that happens if we wait for the result here.
-    userRepository.logout().ignore();
-    appBloc.add(const AppLogouted());
+    await sessionRepository.logout();
   }
 
   FutureOr<void> _onAccountDeleted(SettingsAccountDeleted event, Emitter<SettingsState> emit) async {
@@ -69,7 +66,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     try {
       await userRepository.delete();
 
-      appBloc.add(const AppLogouted());
+      await sessionRepository.logout();
 
       if (emit.isDone) return;
 

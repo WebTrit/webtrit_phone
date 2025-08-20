@@ -48,7 +48,7 @@ class _MessagingShellState extends State<MessagingShell> {
       if (connectionStatus == ConnectionStatus.initial) messagingBloc.add(const Connect());
 
       pushService ??= MessagingPushService(
-        context.read<AppBloc>().state.userId!,
+        context.read<AppBloc>().state.session.userId,
         context.read<ChatsRepository>(),
         context.read<SmsRepository>(),
         context.read<ContactsRepository>(),

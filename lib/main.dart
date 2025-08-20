@@ -58,11 +58,18 @@ class RootApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final sessionCleanupWorker = SessionCleanupWorker();
+
     return MultiProvider(
       providers: [
         Provider<AppInfo>(
           create: (context) {
             return AppInfo();
+          },
+        ),
+        Provider<AppThemes>(
+          create: (context) {
+            return AppThemes();
           },
         ),
         Provider<PlatformInfo>(
@@ -145,23 +152,23 @@ class RootApp extends StatelessWidget {
           dispose: (context, value) => value.dispose(),
         ),
       ],
-      child: MultiRepositoryProvider(
-        providers: [
-          RepositoryProvider.value(value: LogRecordsRepository()..attachToLogger(Logger.root)),
-          RepositoryProvider.value(value: AppAnalyticsRepository(instance: FirebaseAnalytics.instance)),
-        ],
-        child: Builder(
-          builder: (context) {
-            return App(
-              appPreferences: context.read<AppPreferences>(),
-              secureStorage: context.read<SecureStorage>(),
-              appDatabase: context.read<AppDatabase>(),
-              appPermissions: context.read<AppPermissions>(),
-              appThemes: AppThemes(),
-            );
-          },
-        ),
-      ),
+      child: Builder(builder: (context) {
+        return MultiRepositoryProvider(
+          providers: [
+            RepositoryProvider.value(value: LogRecordsRepository()..attachToLogger(Logger.root)),
+            RepositoryProvider.value(value: AppAnalyticsRepository(instance: FirebaseAnalytics.instance)),
+            RepositoryProvider<SessionRepository>.value(
+              value: SessionRepositoryImpl(
+                secureStorage: context.read<SecureStorage>(),
+                appPreferences: context.read<AppPreferences>(),
+                appDatabase: context.read<AppDatabase>(),
+                sessionCleanupWorker: sessionCleanupWorker,
+              ),
+            ),
+          ],
+          child: const App(),
+        );
+      }),
     );
   }
 }

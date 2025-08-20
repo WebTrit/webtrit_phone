@@ -5,11 +5,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/app/notifications/notifications.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
-import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/repositories/repositories.dart';
 
 bool whenLoginRouterPageChange(LoginState previous, LoginState current) {
   return (previous.mode != current.mode) ||
@@ -40,25 +40,7 @@ class LoginRouterPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final declarativeAutoRouter = BlocConsumer<LoginCubit, LoginState>(
-      listener: (context, state) {
-        final coreUrl = state.coreUrl;
-        final tenantId = state.tenantId;
-        final token = state.token;
-        final userId = state.userId;
-        final systemInfo = state.systemInfo;
-
-        if (coreUrl != null && tenantId != null && token != null && userId != null && systemInfo != null) {
-          final event = AppLogined(
-            coreUrl: coreUrl,
-            tenantId: tenantId,
-            token: token,
-            userId: userId,
-            systemInfo: systemInfo,
-          );
-          context.read<AppBloc>().add(event);
-        }
-      },
+    final declarativeAutoRouter = BlocBuilder<LoginCubit, LoginState>(
       buildWhen: whenLoginRouterPageChange,
       builder: (context, state) {
         return AutoRouter.declarative(
@@ -113,6 +95,7 @@ class LoginRouterPage extends StatelessWidget {
       packageInfo: context.read<PackageInfo>(),
       appInfo: context.read<AppInfo>(),
       platformInfo: context.read<PlatformInfo>(),
+      sessionRepository: context.read<SessionRepository>(),
     );
     if (_launchEmbedded != null) {
       login.setEmbedded(_launchEmbedded);

@@ -13,6 +13,7 @@ import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/mappers/mappers.dart';
+import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 
 import '../login.dart';
@@ -31,12 +32,16 @@ class LoginCubit extends Cubit<LoginState> with SystemInfoApiMapper {
     required this.packageInfo,
     required this.appInfo,
     required this.platformInfo,
+    required this.sessionRepository,
   }) : super(const LoginState());
 
   final WebtritApiClientFactory createWebtritApiClient;
   final HttpRequestExecutorFactory createHttpRequestExecutor;
   final NotificationsBloc notificationsBloc;
   final PlatformInfo platformInfo;
+
+  // TODO: Replace by AuthRepository in next iteration
+  final SessionRepository sessionRepository;
   final PackageInfo packageInfo;
   final AppInfo appInfo;
 
@@ -59,6 +64,24 @@ class LoginCubit extends Cubit<LoginState> with SystemInfoApiMapper {
   bool get isDemoModeEnabled => coreUrlFromEnvironment == null;
 
   bool get isCredentialsRequestUrlEnabled => credentialsRequestUrl != null;
+
+  @override
+  void onChange(Change<LoginState> change) {
+    if (change.nextState.coreUrl != null &&
+        change.nextState.tenantId != null &&
+        change.nextState.token != null &&
+        change.nextState.userId != null &&
+        change.nextState.systemInfo != null) {
+      sessionRepository.save(Session(
+        coreUrl: change.nextState.coreUrl!,
+        tenantId: change.nextState.tenantId!,
+        token: change.nextState.token!,
+        userId: change.nextState.userId!,
+      ));
+    }
+
+    super.onChange(change);
+  }
 
   void launchLinkableElement(LinkableElement link) async {
     final url = Uri.parse(link.url);

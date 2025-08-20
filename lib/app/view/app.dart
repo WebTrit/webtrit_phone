@@ -14,20 +14,7 @@ import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 
 class App extends StatefulWidget {
-  const App({
-    super.key,
-    required this.appPreferences,
-    required this.secureStorage,
-    required this.appDatabase,
-    required this.appPermissions,
-    required this.appThemes,
-  });
-
-  final AppPreferences appPreferences;
-  final SecureStorage secureStorage;
-  final AppDatabase appDatabase;
-  final AppPermissions appPermissions;
-  final AppThemes appThemes;
+  const App({super.key});
 
   @override
   State<App> createState() => _AppState();
@@ -44,14 +31,13 @@ class _AppState extends State<App> {
     final featureAccess = FeatureAccess();
 
     appBloc = AppBloc(
-      appPreferences: widget.appPreferences,
-      secureStorage: widget.secureStorage,
-      appDatabase: widget.appDatabase,
-      appThemes: widget.appThemes,
+      appPreferences: context.read<AppPreferences>(),
+      appThemes: context.read<AppThemes>(),
+      sessionRepository: context.read<SessionRepository>(),
     );
     _appRouter = AppRouter(
       appBloc,
-      widget.appPermissions,
+      context.read<AppPermissions>(),
       featureAccess.loginFeature.embeddedLaunchConfiguration?.customLoginFeature,
       featureAccess.bottomMenuFeature,
     );

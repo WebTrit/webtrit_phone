@@ -17,7 +17,7 @@ class ConversationsList extends StatefulWidget {
 }
 
 class _ConversationsListState extends State<ConversationsList> {
-  late final userId = context.read<AppBloc>().state.userId!;
+  late final userId = context.read<AppBloc>().state.session.userId;
 
   final chatsSearchController = TextEditingController();
   final smsSearchController = TextEditingController();
