@@ -6,7 +6,7 @@ import 'package:auto_route/auto_route.dart';
 
 import 'package:webtrit_api/webtrit_api.dart';
 
-import 'package:webtrit_phone/features/messaging/messaging.dart';
+import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/models/failures/failures.dart';
 import 'package:webtrit_signaling/webtrit_signaling.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
@@ -54,6 +54,16 @@ class ErrorMessageNotification extends ErrorNotification {
 
   @override
   String l10n(BuildContext context) => message;
+}
+
+/// Default notification for account-related errors
+class AccountErrorNotification extends ErrorNotification {
+  const AccountErrorNotification(this.accountErrorCode);
+
+  final AccountErrorCode accountErrorCode;
+
+  @override
+  String l10n(BuildContext context) => accountErrorCode.l10n(context);
 }
 
 /// Default notification for handled exceptions
