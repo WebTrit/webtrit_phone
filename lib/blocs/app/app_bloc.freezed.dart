@@ -15,144 +15,41 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
-mixin _$AppLogined {
-  String get coreUrl => throw _privateConstructorUsedError;
-  String get tenantId => throw _privateConstructorUsedError;
-  String get token => throw _privateConstructorUsedError;
-  String get userId => throw _privateConstructorUsedError;
-  WebtritSystemInfo get systemInfo => throw _privateConstructorUsedError;
+mixin _$SessionUpdated {
+  Session? get session => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 
-class _$AppLoginedImpl implements _AppLogined {
-  const _$AppLoginedImpl(
-      {required this.coreUrl,
-      required this.tenantId,
-      required this.token,
-      required this.userId,
-      required this.systemInfo});
+class _$_SessionUpdatedImpl implements __SessionUpdated {
+  const _$_SessionUpdatedImpl(this.session);
 
   @override
-  final String coreUrl;
-  @override
-  final String tenantId;
-  @override
-  final String token;
-  @override
-  final String userId;
-  @override
-  final WebtritSystemInfo systemInfo;
+  final Session? session;
 
   @override
   String toString() {
-    return 'AppLogined(coreUrl: $coreUrl, tenantId: $tenantId, token: $token, userId: $userId, systemInfo: $systemInfo)';
+    return '_SessionUpdated(session: $session)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$AppLoginedImpl &&
-            (identical(other.coreUrl, coreUrl) || other.coreUrl == coreUrl) &&
-            (identical(other.tenantId, tenantId) ||
-                other.tenantId == tenantId) &&
-            (identical(other.token, token) || other.token == token) &&
-            (identical(other.userId, userId) || other.userId == userId) &&
-            (identical(other.systemInfo, systemInfo) ||
-                other.systemInfo == systemInfo));
+            other is _$_SessionUpdatedImpl &&
+            (identical(other.session, session) || other.session == session));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, coreUrl, tenantId, token, userId, systemInfo);
+  int get hashCode => Object.hash(runtimeType, session);
 }
 
-abstract class _AppLogined implements AppLogined {
-  const factory _AppLogined(
-      {required final String coreUrl,
-      required final String tenantId,
-      required final String token,
-      required final String userId,
-      required final WebtritSystemInfo systemInfo}) = _$AppLoginedImpl;
+abstract class __SessionUpdated implements _SessionUpdated {
+  const factory __SessionUpdated(final Session? session) =
+      _$_SessionUpdatedImpl;
 
   @override
-  String get coreUrl;
-  @override
-  String get tenantId;
-  @override
-  String get token;
-  @override
-  String get userId;
-  @override
-  WebtritSystemInfo get systemInfo;
-}
-
-/// @nodoc
-mixin _$AppLogouted {
-  bool get checkTokenForError => throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-
-class _$AppLogoutedImpl implements _AppLogouted {
-  const _$AppLogoutedImpl({this.checkTokenForError = false});
-
-  @override
-  @JsonKey()
-  final bool checkTokenForError;
-
-  @override
-  String toString() {
-    return 'AppLogouted(checkTokenForError: $checkTokenForError)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$AppLogoutedImpl &&
-            (identical(other.checkTokenForError, checkTokenForError) ||
-                other.checkTokenForError == checkTokenForError));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, checkTokenForError);
-}
-
-abstract class _AppLogouted implements AppLogouted {
-  const factory _AppLogouted({final bool checkTokenForError}) =
-      _$AppLogoutedImpl;
-
-  @override
-  bool get checkTokenForError;
-}
-
-/// @nodoc
-mixin _$AppLogoutedTeardown {}
-
-/// @nodoc
-
-class _$AppLogoutTeardownImpl implements _AppLogoutTeardown {
-  const _$AppLogoutTeardownImpl();
-
-  @override
-  String toString() {
-    return 'AppLogoutedTeardown()';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$AppLogoutTeardownImpl);
-  }
-
-  @override
-  int get hashCode => runtimeType.hashCode;
-}
-
-abstract class _AppLogoutTeardown implements AppLogoutedTeardown {
-  const factory _AppLogoutTeardown() = _$AppLogoutTeardownImpl;
+  Session? get session;
 }
 
 /// @nodoc
@@ -515,11 +412,7 @@ abstract class _ContactsAppAgreementUpdate implements AppAgreementAccepted {
 
 /// @nodoc
 mixin _$AppState {
-  String? get coreUrl => throw _privateConstructorUsedError;
-  String? get tenantId => throw _privateConstructorUsedError;
-  String? get token => throw _privateConstructorUsedError;
-  String? get userId => throw _privateConstructorUsedError;
-  AccountErrorCode? get accountErrorCode => throw _privateConstructorUsedError;
+  Session get session => throw _privateConstructorUsedError;
   ThemeSettings get themeSettings => throw _privateConstructorUsedError;
   ThemeMode get themeMode => throw _privateConstructorUsedError;
   Locale get locale => throw _privateConstructorUsedError;
@@ -540,17 +433,14 @@ abstract class $AppStateCopyWith<$Res> {
       _$AppStateCopyWithImpl<$Res, AppState>;
   @useResult
   $Res call(
-      {String? coreUrl,
-      String? tenantId,
-      String? token,
-      String? userId,
-      AccountErrorCode? accountErrorCode,
+      {Session session,
       ThemeSettings themeSettings,
       ThemeMode themeMode,
       Locale locale,
       AgreementStatus userAgreementStatus,
       AgreementStatus contactsAgreementStatus});
 
+  $SessionCopyWith<$Res> get session;
   $ThemeSettingsCopyWith<$Res> get themeSettings;
 }
 
@@ -569,11 +459,7 @@ class _$AppStateCopyWithImpl<$Res, $Val extends AppState>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? coreUrl = freezed,
-    Object? tenantId = freezed,
-    Object? token = freezed,
-    Object? userId = freezed,
-    Object? accountErrorCode = freezed,
+    Object? session = null,
     Object? themeSettings = null,
     Object? themeMode = null,
     Object? locale = null,
@@ -581,26 +467,10 @@ class _$AppStateCopyWithImpl<$Res, $Val extends AppState>
     Object? contactsAgreementStatus = null,
   }) {
     return _then(_value.copyWith(
-      coreUrl: freezed == coreUrl
-          ? _value.coreUrl
-          : coreUrl // ignore: cast_nullable_to_non_nullable
-              as String?,
-      tenantId: freezed == tenantId
-          ? _value.tenantId
-          : tenantId // ignore: cast_nullable_to_non_nullable
-              as String?,
-      token: freezed == token
-          ? _value.token
-          : token // ignore: cast_nullable_to_non_nullable
-              as String?,
-      userId: freezed == userId
-          ? _value.userId
-          : userId // ignore: cast_nullable_to_non_nullable
-              as String?,
-      accountErrorCode: freezed == accountErrorCode
-          ? _value.accountErrorCode
-          : accountErrorCode // ignore: cast_nullable_to_non_nullable
-              as AccountErrorCode?,
+      session: null == session
+          ? _value.session
+          : session // ignore: cast_nullable_to_non_nullable
+              as Session,
       themeSettings: null == themeSettings
           ? _value.themeSettings
           : themeSettings // ignore: cast_nullable_to_non_nullable
@@ -628,6 +498,16 @@ class _$AppStateCopyWithImpl<$Res, $Val extends AppState>
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
+  $SessionCopyWith<$Res> get session {
+    return $SessionCopyWith<$Res>(_value.session, (value) {
+      return _then(_value.copyWith(session: value) as $Val);
+    });
+  }
+
+  /// Create a copy of AppState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
   $ThemeSettingsCopyWith<$Res> get themeSettings {
     return $ThemeSettingsCopyWith<$Res>(_value.themeSettings, (value) {
       return _then(_value.copyWith(themeSettings: value) as $Val);
@@ -644,17 +524,15 @@ abstract class _$$AppStateImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String? coreUrl,
-      String? tenantId,
-      String? token,
-      String? userId,
-      AccountErrorCode? accountErrorCode,
+      {Session session,
       ThemeSettings themeSettings,
       ThemeMode themeMode,
       Locale locale,
       AgreementStatus userAgreementStatus,
       AgreementStatus contactsAgreementStatus});
 
+  @override
+  $SessionCopyWith<$Res> get session;
   @override
   $ThemeSettingsCopyWith<$Res> get themeSettings;
 }
@@ -672,11 +550,7 @@ class __$$AppStateImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? coreUrl = freezed,
-    Object? tenantId = freezed,
-    Object? token = freezed,
-    Object? userId = freezed,
-    Object? accountErrorCode = freezed,
+    Object? session = null,
     Object? themeSettings = null,
     Object? themeMode = null,
     Object? locale = null,
@@ -684,26 +558,10 @@ class __$$AppStateImplCopyWithImpl<$Res>
     Object? contactsAgreementStatus = null,
   }) {
     return _then(_$AppStateImpl(
-      coreUrl: freezed == coreUrl
-          ? _value.coreUrl
-          : coreUrl // ignore: cast_nullable_to_non_nullable
-              as String?,
-      tenantId: freezed == tenantId
-          ? _value.tenantId
-          : tenantId // ignore: cast_nullable_to_non_nullable
-              as String?,
-      token: freezed == token
-          ? _value.token
-          : token // ignore: cast_nullable_to_non_nullable
-              as String?,
-      userId: freezed == userId
-          ? _value.userId
-          : userId // ignore: cast_nullable_to_non_nullable
-              as String?,
-      accountErrorCode: freezed == accountErrorCode
-          ? _value.accountErrorCode
-          : accountErrorCode // ignore: cast_nullable_to_non_nullable
-              as AccountErrorCode?,
+      session: null == session
+          ? _value.session
+          : session // ignore: cast_nullable_to_non_nullable
+              as Session,
       themeSettings: null == themeSettings
           ? _value.themeSettings
           : themeSettings // ignore: cast_nullable_to_non_nullable
@@ -732,11 +590,7 @@ class __$$AppStateImplCopyWithImpl<$Res>
 
 class _$AppStateImpl extends _AppState {
   const _$AppStateImpl(
-      {this.coreUrl,
-      this.tenantId,
-      this.token,
-      this.userId,
-      this.accountErrorCode,
+      {this.session = const Session(),
       required this.themeSettings,
       required this.themeMode,
       required this.locale,
@@ -745,15 +599,8 @@ class _$AppStateImpl extends _AppState {
       : super._();
 
   @override
-  final String? coreUrl;
-  @override
-  final String? tenantId;
-  @override
-  final String? token;
-  @override
-  final String? userId;
-  @override
-  final AccountErrorCode? accountErrorCode;
+  @JsonKey()
+  final Session session;
   @override
   final ThemeSettings themeSettings;
   @override
@@ -767,7 +614,7 @@ class _$AppStateImpl extends _AppState {
 
   @override
   String toString() {
-    return 'AppState(coreUrl: $coreUrl, tenantId: $tenantId, token: $token, userId: $userId, accountErrorCode: $accountErrorCode, themeSettings: $themeSettings, themeMode: $themeMode, locale: $locale, userAgreementStatus: $userAgreementStatus, contactsAgreementStatus: $contactsAgreementStatus)';
+    return 'AppState(session: $session, themeSettings: $themeSettings, themeMode: $themeMode, locale: $locale, userAgreementStatus: $userAgreementStatus, contactsAgreementStatus: $contactsAgreementStatus)';
   }
 
   @override
@@ -775,13 +622,7 @@ class _$AppStateImpl extends _AppState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$AppStateImpl &&
-            (identical(other.coreUrl, coreUrl) || other.coreUrl == coreUrl) &&
-            (identical(other.tenantId, tenantId) ||
-                other.tenantId == tenantId) &&
-            (identical(other.token, token) || other.token == token) &&
-            (identical(other.userId, userId) || other.userId == userId) &&
-            (identical(other.accountErrorCode, accountErrorCode) ||
-                other.accountErrorCode == accountErrorCode) &&
+            (identical(other.session, session) || other.session == session) &&
             (identical(other.themeSettings, themeSettings) ||
                 other.themeSettings == themeSettings) &&
             (identical(other.themeMode, themeMode) ||
@@ -795,18 +636,8 @@ class _$AppStateImpl extends _AppState {
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      coreUrl,
-      tenantId,
-      token,
-      userId,
-      accountErrorCode,
-      themeSettings,
-      themeMode,
-      locale,
-      userAgreementStatus,
-      contactsAgreementStatus);
+  int get hashCode => Object.hash(runtimeType, session, themeSettings,
+      themeMode, locale, userAgreementStatus, contactsAgreementStatus);
 
   /// Create a copy of AppState
   /// with the given fields replaced by the non-null parameter values.
@@ -819,11 +650,7 @@ class _$AppStateImpl extends _AppState {
 
 abstract class _AppState extends AppState {
   const factory _AppState(
-      {final String? coreUrl,
-      final String? tenantId,
-      final String? token,
-      final String? userId,
-      final AccountErrorCode? accountErrorCode,
+      {final Session session,
       required final ThemeSettings themeSettings,
       required final ThemeMode themeMode,
       required final Locale locale,
@@ -832,15 +659,7 @@ abstract class _AppState extends AppState {
   const _AppState._() : super._();
 
   @override
-  String? get coreUrl;
-  @override
-  String? get tenantId;
-  @override
-  String? get token;
-  @override
-  String? get userId;
-  @override
-  AccountErrorCode? get accountErrorCode;
+  Session get session;
   @override
   ThemeSettings get themeSettings;
   @override

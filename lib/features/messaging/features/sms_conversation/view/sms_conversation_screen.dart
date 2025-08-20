@@ -20,7 +20,7 @@ class SmsConversationScreen extends StatefulWidget {
 }
 
 class _SmsConversationScreenState extends State<SmsConversationScreen> {
-  late final userId = context.read<AppBloc>().state.userId!;
+  late final userId = context.read<AppBloc>().state.session.userId;
   late final messagingBloc = context.read<MessagingBloc>();
   late final conversationCubit = context.read<SmsConversationCubit>();
   late final contactsRepo = context.read<ContactsRepository>();

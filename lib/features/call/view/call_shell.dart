@@ -2,20 +2,13 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:auto_route/auto_route.dart';
-import 'package:logging/logging.dart';
-
-import 'package:webtrit_signaling/webtrit_signaling.dart';
 
 import 'package:webtrit_phone/app/router/app_router.dart';
-import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/features/orientations/orientations.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
-import 'package:webtrit_phone/models/models.dart';
 
 import '../call.dart';
 import 'call_active_thumbnail.dart';
-
-final _logger = Logger('CallShell');
 
 class CallShell extends StatefulWidget {
   const CallShell({
@@ -36,29 +29,7 @@ class _CallShellState extends State<CallShell> {
 
   @override
   Widget build(BuildContext context) {
-    return signalingListener(displayListener(widget.child));
-  }
-
-  Widget signalingListener(Widget child) {
-    return BlocListener<CallBloc, CallState>(
-      listenWhen: (previous, current) =>
-          previous.callServiceState.signalingClientStatus != current.callServiceState.signalingClientStatus ||
-          previous.callServiceState.lastSignalingDisconnectCode != current.callServiceState.lastSignalingDisconnectCode,
-      listener: (context, state) {
-        final signalingClientStatus = state.callServiceState.signalingClientStatus;
-        final signalingDisconnectCode = state.callServiceState.lastSignalingDisconnectCode;
-
-        // Listen to signaling session expired error
-        if (signalingClientStatus == SignalingClientStatus.disconnect && signalingDisconnectCode is int) {
-          final code = SignalingDisconnectCode.values.byCode(signalingDisconnectCode);
-          if (code == SignalingDisconnectCode.sessionMissedError) {
-            _logger.info('Signaling session listener: session is missing $signalingDisconnectCode');
-            context.read<AppBloc>().add(const AppLogouted(checkTokenForError: true));
-          }
-        }
-      },
-      child: child,
-    );
+    return displayListener(widget.child);
   }
 
   Widget displayListener(Widget child) {

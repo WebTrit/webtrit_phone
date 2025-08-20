@@ -5,26 +5,8 @@ abstract class AppEvent {
 }
 
 @Freezed(copyWith: false)
-class AppLogined with _$AppLogined implements AppEvent {
-  const factory AppLogined({
-    required String coreUrl,
-    required String tenantId,
-    required String token,
-    required String userId,
-    required WebtritSystemInfo systemInfo,
-  }) = _AppLogined;
-}
-
-@Freezed(copyWith: false)
-class AppLogouted with _$AppLogouted implements AppEvent {
-  const factory AppLogouted({
-    @Default(false) bool checkTokenForError,
-  }) = _AppLogouted;
-}
-
-@Freezed(copyWith: false)
-class AppLogoutedTeardown with _$AppLogoutedTeardown implements AppEvent {
-  const factory AppLogoutedTeardown() = _AppLogoutTeardown;
+class _SessionUpdated with _$SessionUpdated implements AppEvent {
+  const factory _SessionUpdated(Session? session) = __SessionUpdated;
 }
 
 @Freezed(copyWith: false)

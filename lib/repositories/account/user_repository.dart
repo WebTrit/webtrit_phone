@@ -5,7 +5,6 @@ import 'package:logging/logging.dart';
 import 'package:webtrit_api/webtrit_api.dart';
 
 import 'package:webtrit_phone/app/session/session.dart';
-import 'package:webtrit_phone/data/data.dart';
 
 export 'package:webtrit_api/webtrit_api.dart'
     show Balance, BalanceType, BillingModel, Numbers, UserInfo, $UserInfoCopyWith;
@@ -18,7 +17,6 @@ class UserRepository {
     this.token, {
     this.polling = true,
     this.pollPeriod = const Duration(seconds: 10),
-    this.sessionCleanupWorker,
     SessionGuard? sessionGuard,
   }) : _sessionGuard = sessionGuard ?? const EmptySessionGuard() {
     _updatesController = StreamController<UserInfo>.broadcast(
@@ -31,7 +29,6 @@ class UserRepository {
   final String token;
   final bool polling;
   final Duration pollPeriod;
-  final SessionCleanupWorker? sessionCleanupWorker;
   late final StreamController<UserInfo> _updatesController;
   final SessionGuard _sessionGuard;
 
@@ -87,15 +84,6 @@ class UserRepository {
     final info = _lastInfo ?? await _gatherUserInfo();
     if (info != null) yield info;
     yield* _updatesController.stream;
-  }
-
-  Future<void> logout() async {
-    try {
-      await webtritApiClient.deleteSession(token, options: RequestOptions.withExtraRetries());
-    } catch (e) {
-      if (e is RequestFailure && e.statusCode == null) sessionCleanupWorker?.saveFailedSession(e.url, token: token);
-      rethrow;
-    }
   }
 
   Future<void> delete() async {

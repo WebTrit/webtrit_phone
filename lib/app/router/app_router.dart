@@ -38,11 +38,7 @@ class AppRouter extends RootStackRouter {
   final LoginEmbedded? _launchLoginEmbedded;
   final BottomMenuFeature _bottomMenuFeature;
 
-  String? get coreUrl => _appBloc.state.coreUrl;
-
-  String? get token => _appBloc.state.token;
-
-  String? get userId => _appBloc.state.userId;
+  Session get session => _appBloc.state.session;
 
   bool get appPermissionsDenied => _appPermissions.isDenied;
 
@@ -58,8 +54,6 @@ class AppRouter extends RootStackRouter {
   /// If the user views the agreement and does not accept it, the status
   /// is updated to `declined`, ensuring the user does not see the screen again automatically.
   bool get appContactsAgreementUnaccepted => _appBloc.state.contactsAgreementStatus.isPending;
-
-  bool get appLoggedIn => coreUrl != null && token != null && userId != null;
 
   /// Retrieves the initial tab  for the main screen.
   ///
@@ -343,7 +337,7 @@ class AppRouter extends RootStackRouter {
   void onLoginScreenPageRouteGuardNavigation(NavigationResolver resolver, StackRouter router) {
     _logger.fine(_onNavigationLoggerMessage('onLoginScreenPageRouteGuardNavigation', resolver));
 
-    if (appLoggedIn) {
+    if (session.isLoggedIn) {
       resolver.next(false);
       router.replaceAll(
         [const MainShellRoute()],
@@ -395,7 +389,7 @@ class AppRouter extends RootStackRouter {
   void onMainShellRouteGuardNavigation(NavigationResolver resolver, StackRouter router) {
     _logger.fine(_onNavigationLoggerMessage('onMainShellRouteGuardNavigation', resolver));
 
-    if (appLoggedIn) {
+    if (session.isLoggedIn) {
       final contactsSourceTypes = _bottomMenuFeature.getTabEnabled(MainFlavor.contacts)?.toContacts?.contactSourceTypes;
       final localContactsSourceTypeEnabled = contactsSourceTypes?.contains(ContactSourceType.local) == true;
 

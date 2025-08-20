@@ -99,22 +99,12 @@ class MainScreenPage extends StatelessWidget {
           : autoTabsRouter,
     );
 
-    final accountErrorListener = BlocListener<AppBloc, AppState>(
-      listenWhen: (previous, current) =>
-          previous.accountErrorCode != current.accountErrorCode && current.accountErrorCode != null,
-      listener: (BuildContext context, state) {
-        context.showErrorSnackBar(state.accountErrorCode!.l10n(context));
-        context.read<AppBloc>().add(const AppLogoutedTeardown());
-      },
-      child: provider,
-    );
-
     return BlocBuilder<CallPullCubit, List<PullableCall>>(
       builder: (context, state) {
         return AppBarParams(
           systemNotificationsEnabled: systemNotificationsEnabled,
           pullableCalls: state,
-          child: accountErrorListener,
+          child: provider,
         );
       },
     );

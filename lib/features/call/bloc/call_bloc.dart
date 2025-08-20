@@ -13,8 +13,9 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:logging/logging.dart';
 import 'package:ssl_certificates/ssl_certificates.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 
+import 'package:webtrit_api/webtrit_api.dart';
+import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 import 'package:webtrit_signaling/webtrit_signaling.dart';
 
 import 'package:webtrit_phone/app/constants.dart';
@@ -48,6 +49,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
   final CallLogsRepository callLogsRepository;
   final CallPullRepository callPullRepository;
+  final UserRepository userRepository;
+  final SessionRepository sessionRepository;
   final LinesStateRepository linesStateRepository;
   final Function(Notification) submitNotification;
 
@@ -81,6 +84,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     required this.callLogsRepository,
     required this.callPullRepository,
     required this.linesStateRepository,
+    required this.sessionRepository,
+    required this.userRepository,
     required this.submitNotification,
     required this.callkeep,
     required this.callkeepConnections,
@@ -273,6 +278,52 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     final guestLineState = guestLineInUse ? LineState.inUse : LineState.idle;
 
     linesStateRepository.setState(LinesState(mainLines: mainLinesState, guestLine: guestLineState));
+    _handleSignalingSessionError(
+        previous: change.currentState.callServiceState, current: change.nextState.callServiceState);
+  }
+
+  void _handleSignalingSessionError({
+    required CallServiceState previous,
+    required CallServiceState current,
+  }) {
+    final signalingChanged = previous.signalingClientStatus != current.signalingClientStatus ||
+        previous.lastSignalingDisconnectCode != current.lastSignalingDisconnectCode;
+
+    if (!signalingChanged) return;
+
+    if (current.signalingClientStatus == SignalingClientStatus.disconnect &&
+        current.lastSignalingDisconnectCode is int) {
+      final code = SignalingDisconnectCode.values.byCode(
+        current.lastSignalingDisconnectCode as int,
+      );
+
+      if (code == SignalingDisconnectCode.sessionMissedError) {
+        _logger.info(
+          'Signaling session listener: session is missing ${current.lastSignalingDisconnectCode}',
+        );
+
+        unawaited(_notifyAccountErrorSafely());
+        sessionRepository.logout().catchError((e, st) {
+          _logger.warning('Logout failed after sessionMissedError', e, st);
+        });
+      }
+    }
+  }
+
+  // TODO: Consider moving this method to a separate repository
+  Future<void> _notifyAccountErrorSafely() async {
+    try {
+      await userRepository.getInfo(true);
+    } on RequestFailure catch (e, st) {
+      final errorCode = AccountErrorCode.values.firstWhereOrNull((it) => it.value == e.error?.code);
+      if (errorCode != null) {
+        submitNotification(AccountErrorNotification(errorCode));
+      } else {
+        _logger.fine('Account error code not mapped: ${e.error?.code}', e, st);
+      }
+    } catch (e, st) {
+      _logger.warning('Unexpected error during account info refresh', e, st);
+    }
   }
 
   //
