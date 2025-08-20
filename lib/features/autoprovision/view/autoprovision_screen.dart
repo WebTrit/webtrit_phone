@@ -82,7 +82,7 @@ class _AutoprovisionScreenState extends State<AutoprovisionScreen> {
       // Logout if the session exists
       if (appBloc.state.session.isLoggedIn) {
         await sessionRepository.logout();
-        await appBloc.stream.firstWhere((element) => element.session.isLoggedIn);
+        await appBloc.stream.firstWhere((element) => !element.session.isLoggedIn);
       }
 
       // Wait until Callkeep is uninitialized, if needed
