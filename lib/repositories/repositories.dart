@@ -1,6 +1,7 @@
 export 'account/user_repository.dart';
 export 'app/app_repository.dart';
 export 'app_analytics/app_analytics_repository.dart';
+export 'auth/auth.dart';
 export 'call_logs/call_logs_repository.dart';
 export 'call_to_actions/call_to_actions_repository.dart';
 export 'contacts/contacts_repository.dart';
