@@ -285,7 +285,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   void _handleSignalingSessionError({
     required CallServiceState previous,
     required CallServiceState current,
-  }) async {
+  }) {
     final signalingChanged = previous.signalingClientStatus != current.signalingClientStatus ||
         previous.lastSignalingDisconnectCode != current.lastSignalingDisconnectCode;
 
@@ -302,7 +302,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
           'Signaling session listener: session is missing ${current.lastSignalingDisconnectCode}',
         );
 
-        await _notifyAccountErrorSafely();
+        unawaited(_notifyAccountErrorSafely());
         sessionRepository.logout().catchError((e, st) {
           _logger.warning('Logout failed after sessionMissedError', e, st);
         });
