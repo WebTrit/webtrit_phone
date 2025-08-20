@@ -41,7 +41,6 @@ class AppBloc extends Bloc<AppEvent, AppState> {
           contactsAgreementStatus: appPreferences.getContactsAgreementStatus(),
         )) {
     on<_SessionUpdated>(_onSessionUpdated, transformer: sequential());
-    // on<AppLogoutedTeardown>(_onLogoutedTeardown, transformer: sequential());
     on<AppThemeSettingsChanged>(_onThemeSettingsChanged, transformer: droppable());
     on<AppThemeModeChanged>(_onThemeModeChanged, transformer: droppable());
     on<AppLocaleChanged>(_onLocaleChanged, transformer: droppable());

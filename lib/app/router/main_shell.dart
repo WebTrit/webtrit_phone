@@ -61,7 +61,6 @@ class _MainShellState extends State<MainShell> {
     context.read<AppLogger>().regenerateRemoteLabels();
 
     _sessionGuard = RouterLogoutSessionGuard(performLogout: () {
-      // context.read<AppBloc>().add(const AppLogouted());
       context.read<SessionRepository>().logout();
     }, onPreLogout: () {
       final notification = ErrorMessageNotification(context.l10n.notifications_errorSnackBar_sessionExpired);
