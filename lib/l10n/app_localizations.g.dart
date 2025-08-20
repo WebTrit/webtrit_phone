@@ -178,11 +178,53 @@ abstract class AppLocalizations {
   /// **'Attended transfer'**
   String get call_CallActionsTooltip_attended_transfer;
 
+  /// No description provided for @call_CallActionsTooltip_changeAudioDevice.
+  ///
+  /// In en, this message translates to:
+  /// **'Change audio device'**
+  String get call_CallActionsTooltip_changeAudioDevice;
+
   /// No description provided for @call_CallActionsTooltip_decline_inviteToAttendedTransfer.
   ///
   /// In en, this message translates to:
   /// **'Decline transfer'**
   String get call_CallActionsTooltip_decline_inviteToAttendedTransfer;
+
+  /// No description provided for @call_CallActionsTooltip_device_bluetooth.
+  ///
+  /// In en, this message translates to:
+  /// **'Bluetooth'**
+  String get call_CallActionsTooltip_device_bluetooth;
+
+  /// No description provided for @call_CallActionsTooltip_device_earpiece.
+  ///
+  /// In en, this message translates to:
+  /// **'Earpiece'**
+  String get call_CallActionsTooltip_device_earpiece;
+
+  /// No description provided for @call_CallActionsTooltip_device_speaker.
+  ///
+  /// In en, this message translates to:
+  /// **'Speaker'**
+  String get call_CallActionsTooltip_device_speaker;
+
+  /// No description provided for @call_CallActionsTooltip_device_streaming.
+  ///
+  /// In en, this message translates to:
+  /// **'Streaming'**
+  String get call_CallActionsTooltip_device_streaming;
+
+  /// No description provided for @call_CallActionsTooltip_device_unknown.
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown device'**
+  String get call_CallActionsTooltip_device_unknown;
+
+  /// No description provided for @call_CallActionsTooltip_device_wiredHeadset.
+  ///
+  /// In en, this message translates to:
+  /// **'Wired Headset'**
+  String get call_CallActionsTooltip_device_wiredHeadset;
 
   /// No description provided for @call_CallActionsTooltip_disableCamera.
   ///
@@ -2021,12 +2063,6 @@ abstract class AppLocalizations {
   /// **'Authentication error, please re-login'**
   String get notifications_errorSnackBar_callSignalingClientSessionMissed;
 
-  /// No description provided for @notifications_errorSnackBar_sessionExpired.
-  ///
-  /// In en, this message translates to:
-  /// **'Your session has expired. Please log in again.'**
-  String get notifications_errorSnackBar_sessionExpired;
-
   /// No description provided for @notifications_errorSnackBar_callUndefinedLine.
   ///
   /// In en, this message translates to:
@@ -2050,6 +2086,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'You\'re currently unable to place calls. Please check your account status or contact support.'**
   String get notifications_errorSnackBar_callWhileUnregistered;
+
+  /// No description provided for @notifications_errorSnackBar_sessionExpired.
+  ///
+  /// In en, this message translates to:
+  /// **'Your session has expired. Please log in again.'**
+  String get notifications_errorSnackBar_sessionExpired;
 
   /// No description provided for @notifications_errorSnackBar_SignalingConnectFailed.
   ///
@@ -2261,6 +2303,18 @@ abstract class AppLocalizations {
   /// **'To ensure the best user experience, the app needs to be granted the following permissions: microphone for audio calls, camera for video calls, and contacts to simplify reaching them from the app.\n\nPermissions could be changed at any time in the future.'**
   String get permission_Text_description;
 
+  /// Content of a dialog explaining that the app must be manually opened after reboot to keep receiving calls using persistent connection.
+  ///
+  /// In en, this message translates to:
+  /// **'You have to manually launch the app after your phone restarted at least once to re-establish the persistent connection and receive incoming calls.'**
+  String get persistentConnectionReminderContent;
+
+  /// Title of a dialog shown when the user selects persistent connection on Android 14+
+  ///
+  /// In en, this message translates to:
+  /// **'Important Reminder'**
+  String get persistentConnectionReminderTitle;
+
   /// No description provided for @recents_BodyCenter_empty.
   ///
   /// In en, this message translates to:
@@ -2381,6 +2435,12 @@ abstract class AppLocalizations {
   /// **'Problem with configuration push notification service'**
   String get sessionStatus_pushNotificationServiceProblem;
 
+  /// No description provided for @settings_AboutText_ApplicationEmbeddedLinks.
+  ///
+  /// In en, this message translates to:
+  /// **'Application embedded links'**
+  String get settings_AboutText_ApplicationEmbeddedLinks;
+
   /// No description provided for @settings_AboutText_AppSessionIdentifier.
   ///
   /// In en, this message translates to:
@@ -2410,12 +2470,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Build version in the Store'**
   String get settings_AboutText_StoreVersion;
-
-  /// No description provided for @settings_AboutText_ApplicationEmbeddedLinks.
-  ///
-  /// In en, this message translates to:
-  /// **'Application embedded links'**
-  String get settings_AboutText_ApplicationEmbeddedLinks;
 
   /// No description provided for @settings_AccountDeleteConfirmDialog_content.
   ///
@@ -3658,18 +3712,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Web resource error'**
   String get webRegistration_ErrorAcknowledgeDialog_title;
-
-  /// Title of a dialog shown when the user selects persistent connection on Android 14+
-  ///
-  /// In en, this message translates to:
-  /// **'Important Reminder'**
-  String get persistentConnectionReminderTitle;
-
-  /// Content of a dialog explaining that the app must be manually opened after reboot to keep receiving calls using persistent connection.
-  ///
-  /// In en, this message translates to:
-  /// **'You have to manually launch the app after your phone restarted at least once to re-establish the persistent connection and receive incoming calls.'**
-  String get persistentConnectionReminderContent;
 }
 
 class _AppLocalizationsDelegate

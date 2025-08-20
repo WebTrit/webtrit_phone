@@ -53,8 +53,29 @@ class AppLocalizationsEn extends AppLocalizations {
   String get call_CallActionsTooltip_attended_transfer => 'Attended transfer';
 
   @override
+  String get call_CallActionsTooltip_changeAudioDevice => 'Change audio device';
+
+  @override
   String get call_CallActionsTooltip_decline_inviteToAttendedTransfer =>
       'Decline transfer';
+
+  @override
+  String get call_CallActionsTooltip_device_bluetooth => 'Bluetooth';
+
+  @override
+  String get call_CallActionsTooltip_device_earpiece => 'Earpiece';
+
+  @override
+  String get call_CallActionsTooltip_device_speaker => 'Speaker';
+
+  @override
+  String get call_CallActionsTooltip_device_streaming => 'Streaming';
+
+  @override
+  String get call_CallActionsTooltip_device_unknown => 'Unknown device';
+
+  @override
+  String get call_CallActionsTooltip_device_wiredHeadset => 'Wired Headset';
 
   @override
   String get call_CallActionsTooltip_disableCamera => 'Disable camera';
@@ -1112,10 +1133,6 @@ class AppLocalizationsEn extends AppLocalizations {
       'Authentication error, please re-login';
 
   @override
-  String get notifications_errorSnackBar_sessionExpired =>
-      'Your session has expired. Please log in again.';
-
-  @override
   String get notifications_errorSnackBar_callUndefinedLine =>
       'No idle lines to initiate the call';
 
@@ -1130,6 +1147,10 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get notifications_errorSnackBar_callWhileUnregistered =>
       'You\'re currently unable to place calls. Please check your account status or contact support.';
+
+  @override
+  String get notifications_errorSnackBar_sessionExpired =>
+      'Your session has expired. Please log in again.';
 
   @override
   String get notifications_errorSnackBar_SignalingConnectFailed =>
@@ -1266,6 +1287,13 @@ class AppLocalizationsEn extends AppLocalizations {
       'To ensure the best user experience, the app needs to be granted the following permissions: microphone for audio calls, camera for video calls, and contacts to simplify reaching them from the app.\n\nPermissions could be changed at any time in the future.';
 
   @override
+  String get persistentConnectionReminderContent =>
+      'You have to manually launch the app after your phone restarted at least once to re-establish the persistent connection and receive incoming calls.';
+
+  @override
+  String get persistentConnectionReminderTitle => 'Important Reminder';
+
+  @override
   String recents_BodyCenter_empty(Object filter) {
     return 'Currently you have no ${filter}recent calls.';
   }
@@ -1342,6 +1370,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'Problem with configuration push notification service';
 
   @override
+  String get settings_AboutText_ApplicationEmbeddedLinks =>
+      'Application embedded links';
+
+  @override
   String get settings_AboutText_AppSessionIdentifier =>
       'Application session identifier';
 
@@ -1357,10 +1389,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settings_AboutText_StoreVersion => 'Build version in the Store';
-
-  @override
-  String get settings_AboutText_ApplicationEmbeddedLinks =>
-      'Application embedded links';
 
   @override
   String get settings_AccountDeleteConfirmDialog_content =>
@@ -2094,11 +2122,4 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get webRegistration_ErrorAcknowledgeDialog_title =>
       'Web resource error';
-
-  @override
-  String get persistentConnectionReminderTitle => 'Important Reminder';
-
-  @override
-  String get persistentConnectionReminderContent =>
-      'You have to manually launch the app after your phone restarted at least once to re-establish the persistent connection and receive incoming calls.';
 }

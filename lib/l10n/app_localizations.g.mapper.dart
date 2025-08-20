@@ -65,8 +65,22 @@ class AppLocalizationsMapper {
           localizations.call_CallActionsTooltip_accept_inviteToAttendedTransfer,
       'call_CallActionsTooltip_attended_transfer':
           localizations.call_CallActionsTooltip_attended_transfer,
+      'call_CallActionsTooltip_changeAudioDevice':
+          localizations.call_CallActionsTooltip_changeAudioDevice,
       'call_CallActionsTooltip_decline_inviteToAttendedTransfer': localizations
           .call_CallActionsTooltip_decline_inviteToAttendedTransfer,
+      'call_CallActionsTooltip_device_bluetooth':
+          localizations.call_CallActionsTooltip_device_bluetooth,
+      'call_CallActionsTooltip_device_earpiece':
+          localizations.call_CallActionsTooltip_device_earpiece,
+      'call_CallActionsTooltip_device_speaker':
+          localizations.call_CallActionsTooltip_device_speaker,
+      'call_CallActionsTooltip_device_streaming':
+          localizations.call_CallActionsTooltip_device_streaming,
+      'call_CallActionsTooltip_device_unknown':
+          localizations.call_CallActionsTooltip_device_unknown,
+      'call_CallActionsTooltip_device_wiredHeadset':
+          localizations.call_CallActionsTooltip_device_wiredHeadset,
       'call_CallActionsTooltip_disableCamera':
           localizations.call_CallActionsTooltip_disableCamera,
       'call_CallActionsTooltip_disableSpeaker':
@@ -616,8 +630,6 @@ class AppLocalizationsMapper {
       'notifications_errorSnackBar_callSignalingClientSessionMissed':
           localizations
               .notifications_errorSnackBar_callSignalingClientSessionMissed,
-      'notifications_errorSnackBar_sessionExpired':
-          localizations.notifications_errorSnackBar_sessionExpired,
       'notifications_errorSnackBar_callUndefinedLine':
           localizations.notifications_errorSnackBar_callUndefinedLine,
       'notifications_errorSnackBar_callUserMedia':
@@ -626,6 +638,8 @@ class AppLocalizationsMapper {
           localizations.notifications_errorSnackBar_callWhileOffline,
       'notifications_errorSnackBar_callWhileUnregistered':
           localizations.notifications_errorSnackBar_callWhileUnregistered,
+      'notifications_errorSnackBar_sessionExpired':
+          localizations.notifications_errorSnackBar_sessionExpired,
       'notifications_errorSnackBar_SignalingConnectFailed':
           localizations.notifications_errorSnackBar_SignalingConnectFailed,
       'notifications_errorSnackBar_SignalingSessionMissed':
@@ -677,6 +691,10 @@ class AppLocalizationsMapper {
       'permission_manufacturer_Text_xiaomi_tip2':
           localizations.permission_manufacturer_Text_xiaomi_tip2,
       'permission_Text_description': localizations.permission_Text_description,
+      'persistentConnectionReminderContent':
+          localizations.persistentConnectionReminderContent,
+      'persistentConnectionReminderTitle':
+          localizations.persistentConnectionReminderTitle,
       'recents_DeleteConfirmDialog_content':
           localizations.recents_DeleteConfirmDialog_content,
       'recents_DeleteConfirmDialog_title':
@@ -705,6 +723,8 @@ class AppLocalizationsMapper {
       'request_StatusName': localizations.request_StatusName,
       'sessionStatus_pushNotificationServiceProblem':
           localizations.sessionStatus_pushNotificationServiceProblem,
+      'settings_AboutText_ApplicationEmbeddedLinks':
+          localizations.settings_AboutText_ApplicationEmbeddedLinks,
       'settings_AboutText_AppSessionIdentifier':
           localizations.settings_AboutText_AppSessionIdentifier,
       'settings_AboutText_AppVersion':
@@ -715,8 +735,6 @@ class AppLocalizationsMapper {
           localizations.settings_AboutText_FCMPushNotificationToken,
       'settings_AboutText_StoreVersion':
           localizations.settings_AboutText_StoreVersion,
-      'settings_AboutText_ApplicationEmbeddedLinks':
-          localizations.settings_AboutText_ApplicationEmbeddedLinks,
       'settings_AccountDeleteConfirmDialog_content':
           localizations.settings_AccountDeleteConfirmDialog_content,
       'settings_AccountDeleteConfirmDialog_title':
@@ -1109,10 +1127,6 @@ class AppLocalizationsMapper {
           localizations.webRegistration_ErrorAcknowledgeDialogActions_skip,
       'webRegistration_ErrorAcknowledgeDialog_title':
           localizations.webRegistration_ErrorAcknowledgeDialog_title,
-      'persistentConnectionReminderTitle':
-          localizations.persistentConnectionReminderTitle,
-      'persistentConnectionReminderContent':
-          localizations.persistentConnectionReminderContent,
       'default_UnknownExceptionError': (error) =>
           localizations.default_UnknownExceptionError(error),
       'favorites_SnackBar_deleted': (name) =>

@@ -55,8 +55,30 @@ class AppLocalizationsUk extends AppLocalizations {
       'Керована переадресація';
 
   @override
+  String get call_CallActionsTooltip_changeAudioDevice =>
+      'Змінити аудіопристрій';
+
+  @override
   String get call_CallActionsTooltip_decline_inviteToAttendedTransfer =>
       'Відхилити переадресацію';
+
+  @override
+  String get call_CallActionsTooltip_device_bluetooth => 'Бездротова гарнітура';
+
+  @override
+  String get call_CallActionsTooltip_device_earpiece => 'Розмовний динамік';
+
+  @override
+  String get call_CallActionsTooltip_device_speaker => 'Гучновомець';
+
+  @override
+  String get call_CallActionsTooltip_device_streaming => 'Потокове відтворення';
+
+  @override
+  String get call_CallActionsTooltip_device_unknown => 'Невідомий пристрій';
+
+  @override
+  String get call_CallActionsTooltip_device_wiredHeadset => 'Дротова гарнітура';
 
   @override
   String get call_CallActionsTooltip_disableCamera => 'Вимкнути камеру';
@@ -1127,10 +1149,6 @@ class AppLocalizationsUk extends AppLocalizations {
       'Помилка автентифікації, будь ласка увійдіть знову';
 
   @override
-  String get notifications_errorSnackBar_sessionExpired =>
-      'Термін дії вашої сесії закінчився. Будь ласка, увійдіть знову.';
-
-  @override
   String get notifications_errorSnackBar_callUndefinedLine =>
       'Немає вільних ліній для ініціювання дзвінка';
 
@@ -1145,6 +1163,10 @@ class AppLocalizationsUk extends AppLocalizations {
   @override
   String get notifications_errorSnackBar_callWhileUnregistered =>
       'Зараз ви не можете здійснювати дзвінки. Перевірте статус свого облікового запису або зверніться до служби підтримки.';
+
+  @override
+  String get notifications_errorSnackBar_sessionExpired =>
+      'Термін дії вашої сесії закінчився. Будь ласка, увійдіть знову.';
 
   @override
   String get notifications_errorSnackBar_SignalingConnectFailed =>
@@ -1281,6 +1303,13 @@ class AppLocalizationsUk extends AppLocalizations {
       'Для забезпечення найкращого досвіду користувача програма потребує наступні дозволи: мікрофон для аудіодзвінків, камера для відеодзвінків та доступ до контактів для спрощення їх використання в програмі.\n\nДозволи можуть бути змінені у майбутньому.';
 
   @override
+  String get persistentConnectionReminderContent =>
+      'Потрібно вручну запустити застосунок щонайменше один раз після перезавантаження телефону, щоб відновити постійне з\'єднання й отримувати вхідні дзвінки.';
+
+  @override
+  String get persistentConnectionReminderTitle => 'Важливе нагадування';
+
+  @override
   String recents_BodyCenter_empty(Object filter) {
     return 'Зараз у вас немає жодних $filter останніх дзвінків.';
   }
@@ -1358,6 +1387,10 @@ class AppLocalizationsUk extends AppLocalizations {
       'Проблема з налаштуванням служби пуш-сповіщень';
 
   @override
+  String get settings_AboutText_ApplicationEmbeddedLinks =>
+      'Вбудовані посилання застосунку';
+
+  @override
   String get settings_AboutText_AppSessionIdentifier =>
       'Ідентифікатор сесії застосунку';
 
@@ -1373,10 +1406,6 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get settings_AboutText_StoreVersion => 'Версія збірки в магазині';
-
-  @override
-  String get settings_AboutText_ApplicationEmbeddedLinks =>
-      'Вбудовані посилання застосунку';
 
   @override
   String get settings_AccountDeleteConfirmDialog_content =>
@@ -2122,11 +2151,4 @@ class AppLocalizationsUk extends AppLocalizations {
   @override
   String get webRegistration_ErrorAcknowledgeDialog_title =>
       'Web resource error';
-
-  @override
-  String get persistentConnectionReminderTitle => 'Важливе нагадування';
-
-  @override
-  String get persistentConnectionReminderContent =>
-      'Потрібно вручну запустити застосунок щонайменше один раз після перезавантаження телефону, щоб відновити постійне з\'єднання й отримувати вхідні дзвінки.';
 }
