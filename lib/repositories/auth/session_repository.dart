@@ -40,7 +40,8 @@ class SessionRepositoryImpl implements SessionRepository {
     this.sessionCleanupWorker,
     this.createApiClient = defaultCreateWebtritApiClient,
   }) {
-    _sessionController.add(getCurrent());
+    _currentSession = _loadFromStorage();
+    _sessionController.add(_currentSession);
   }
 
   final SecureStorage secureStorage;
@@ -50,18 +51,17 @@ class SessionRepositoryImpl implements SessionRepository {
   final SessionCleanupWorker? sessionCleanupWorker;
 
   final _sessionController = StreamController<Session?>.broadcast();
+  Session? _currentSession;
 
   @override
   Stream<Session?> watch() => _sessionController.stream;
 
   @override
-  bool get isSignedIn => getCurrent().isLoggedIn;
+  bool get isSignedIn => _currentSession?.isLoggedIn ?? false;
 
   @override
   Future<void> save(Session session) async {
-    final currentSession = getCurrent();
-
-    final isReLogin = currentSession.isLoggedIn;
+    final isReLogin = _currentSession?.isLoggedIn ?? false;
     if (isReLogin) await logout();
 
     await secureStorage.writeUserId(session.userId);
@@ -79,22 +79,24 @@ class SessionRepositoryImpl implements SessionRepository {
       await secureStorage.deleteToken();
     }
 
-    _sessionController.add(getCurrent());
+    _updateCurrent(_loadFromStorage());
   }
 
   @override
-  Session getCurrent() {
-    final coreUrl = secureStorage.readCoreUrl();
-    final tenantId = secureStorage.readTenantId() ?? '';
-    final token = secureStorage.readToken();
-    final userId = secureStorage.readUserId() ?? '';
+  Session? getCurrent() => _currentSession;
 
+  Session _loadFromStorage() {
     return Session(
-      coreUrl: coreUrl,
-      token: token,
-      tenantId: tenantId,
-      userId: userId,
+      coreUrl: secureStorage.readCoreUrl(),
+      token: secureStorage.readToken(),
+      tenantId: secureStorage.readTenantId() ?? '',
+      userId: secureStorage.readUserId() ?? '',
     );
+  }
+
+  void _updateCurrent(Session newSession) {
+    _currentSession = newSession;
+    _sessionController.add(_currentSession);
   }
 
   @override
@@ -106,19 +108,25 @@ class SessionRepositoryImpl implements SessionRepository {
     await secureStorage.deleteUserId();
     await appDatabase.deleteEverything();
 
-    _sessionController.add(getCurrent());
+    _updateCurrent(_loadFromStorage());
   }
 
   @override
   Future<void> logout() async {
-    final session = getCurrent();
-    if (!session.isLoggedIn) return;
+    final session = _currentSession;
+    if (session == null || !session.isLoggedIn) return;
 
-    // Clear local state first to immediately notify routing/UI about logout.
     await clean();
 
-    // Revoke remote session in background (do not block UX).
-    unawaited(_revokeRemote(session));
+    unawaited(_revokeRemoteWithLogging(session));
+  }
+
+  Future<void> _revokeRemoteWithLogging(Session session) async {
+    try {
+      await _revokeRemote(session);
+    } catch (e, st) {
+      _logger.severe('Uncaught error during remote revoke', e, st);
+    }
   }
 
   Future<void> _revokeRemote(Session s) async {
@@ -131,10 +139,8 @@ class SessionRepositoryImpl implements SessionRepository {
       await client.deleteSession(token, options: RequestOptions.withExtraRetries());
     } on UserNotFoundException catch (e, st) {
       _logger.fine('Remote session already revoked or never existed', e, st);
-      return;
     } on UnauthorizedException catch (e, st) {
       _logger.fine('Remote session already revoked or never existed', e, st);
-      return;
     } on RequestFailure catch (e, st) {
       sessionCleanupWorker?.saveFailedSession(e.url, token: token);
       _logger.warning('Queued token revoke retry', e, st);
@@ -146,7 +152,7 @@ class SessionRepositoryImpl implements SessionRepository {
 
   @override
   Future<void> reload() async {
-    _sessionController.add(getCurrent());
+    _updateCurrent(_loadFromStorage());
   }
 
   Future<void> dispose() async {
