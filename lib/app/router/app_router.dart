@@ -305,7 +305,7 @@ class AppRouter extends RootStackRouter {
                       path: 'voicemail',
                       guards: [
                         FeatureGuard(
-                          isAllowed: _featureChecker.isEnabled(AppFeature.voicemail),
+                          isAllowed: _featureChecker.isEnabled(FeatureFlag.voicemail),
                           onDenied: UndefinedScreenPageRoute(undefinedType: UndefinedType.stackScreenNotSupported),
                         ),
                       ],
