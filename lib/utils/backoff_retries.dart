@@ -56,10 +56,43 @@ class BackoffRetries {
       case RetryDelayStrategy.exponential:
         final exponentialDelay = currentDelay * 2;
         return exponentialDelay <= maxDelay ? exponentialDelay : maxDelay;
-      }
+    }
   }
 
   void cancel() {
     _canceled = true;
+  }
+}
+
+/// Policy for calculating retry delays after consecutive errors.
+abstract class BackoffPolicy {
+  /// Computes next delay.
+  ///
+  /// [consecutiveErrors] – number of errors in a row (0 = success),
+  /// [base] – base interval,
+  /// [max] – optional cap for maximum delay.
+  Duration next(int consecutiveErrors, Duration base, {Duration? max});
+}
+
+/// Exponential backoff: delay doubles with each error until capped.
+///
+/// Examples (base=5s):
+/// - 0 errors → 5s
+/// - 1 error  → 10s
+/// - 2 errors → 20s
+/// - 3 errors → 40s
+class ExponentialBackoff implements BackoffPolicy {
+  const ExponentialBackoff({this.max = const Duration(minutes: 5)});
+
+  final Duration max;
+
+  @override
+  Duration next(int consecutiveErrors, Duration base, {Duration? max}) {
+    if (consecutiveErrors <= 0) return base;
+    final cap = max ?? this.max;
+    final factor = 1 << consecutiveErrors; // 2^n
+    final ms = base.inMilliseconds * factor;
+    final d = Duration(milliseconds: ms);
+    return d <= cap ? d : cap;
   }
 }

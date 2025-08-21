@@ -16,3 +16,6 @@ export 'webtrit_api_client.dart';
 export 'webtrit_http_executor.dart';
 export 'webtrit_signaling_client.dart';
 export 'webtrit_signaling_utils.dart';
+export 'jitter.dart';
+export 'ttl_cache.dart';
+export 'fixed_delay_scheduler.dart';

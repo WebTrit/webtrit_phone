@@ -32,14 +32,20 @@ class MainShell extends StatefulWidget {
   State<MainShell> createState() => _MainShellState();
 }
 
-class _MainShellState extends State<MainShell> {
+class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
   late final Callkeep _callkeep = Callkeep();
   late final CallkeepConnections _callkeepConnections = CallkeepConnections();
+
+  /// The [SessionGuard] instance that handles session expiration and logout.
   late final SessionGuard _sessionGuard;
+
+  /// The [PollingService] instance that handles periodic polling of repositories.
+  late PollingService? _polling;
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _callkeep.setUp(
       CallkeepOptions(
         ios: CallkeepIOSOptions(
@@ -74,7 +80,13 @@ class _MainShellState extends State<MainShell> {
   void dispose() {
     _disposeSessionGuard();
     _callkeep.tearDown();
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    _polling?.didChangeAppLifecycleState(state);
   }
 
   @override
@@ -243,7 +255,7 @@ class _MainShellState extends State<MainShell> {
                     lazy: false,
                   ),
                   Provider<PollingService>(
-                    create: (context) => PollingService(
+                    create: (context) => _polling = PollingService(
                       connectivityService: context.read<ConnectivityService>(),
                       registrations: _pollingRegistrations(context),
                     ),
