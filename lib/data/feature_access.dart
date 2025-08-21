@@ -581,3 +581,26 @@ class SystemNotificationsFeature {
   /// Check if the system notifications push feature is enabled and supported by the remote system.
   bool get systemNotificationsPushSupport => enabled && coreSystemPushSupport;
 }
+
+/// Provides a centralized way to check whether specific [FeatureFlag]s are enabled.
+///
+/// The [FeatureChecker] itself does not contain the logic for determining
+/// if a feature is enabled or disabled. Instead, it relies on the injected
+/// [FeatureResolver] function to evaluate the state of a given [FeatureFlag].
+///
+/// This allows feature availability logic to be configured and maintained
+/// in one place (e.g., [FeatureAccess]), while consumers of [FeatureChecker]
+/// only need to call [isEnabled] to check if a feature should be accessible.
+class FeatureChecker {
+  /// Creates a new [FeatureChecker] with the given [_resolver].
+  ///
+  /// The [_resolver] is a function that maps a [FeatureFlag] to `true`
+  /// (enabled) or `false` (disabled).
+  FeatureChecker(this._resolver);
+
+  /// A resolver function that determines whether a [FeatureFlag] is enabled.
+  final FeatureResolver _resolver;
+
+  /// Returns `true` if the given [feature] is enabled, otherwise `false`.
+  bool isEnabled(FeatureFlag feature) => _resolver(feature);
+}

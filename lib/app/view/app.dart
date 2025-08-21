@@ -8,6 +8,7 @@ import 'package:webtrit_phone/app/router/app_router_observer.dart';
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';
+import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
@@ -40,6 +41,7 @@ class _AppState extends State<App> {
       context.read<AppPermissions>(),
       featureAccess.loginFeature.embeddedLaunchConfiguration?.customLoginFeature,
       featureAccess.bottomMenuFeature,
+      featureAccess.toChecker(),
     );
   }
 

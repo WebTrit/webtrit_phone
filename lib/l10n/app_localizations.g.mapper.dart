@@ -1127,6 +1127,14 @@ class AppLocalizationsMapper {
           localizations.webRegistration_ErrorAcknowledgeDialogActions_skip,
       'webRegistration_ErrorAcknowledgeDialog_title':
           localizations.webRegistration_ErrorAcknowledgeDialog_title,
+      'undefined_autoprovision_invalidToken':
+          localizations.undefined_autoprovision_invalidToken,
+      'undefined_autoprovision_invalidToken_title':
+          localizations.undefined_autoprovision_invalidToken_title,
+      'undefined_stackScreenNotSupported':
+          localizations.undefined_stackScreenNotSupported,
+      'undefined_stackScreenNotSupported_title':
+          localizations.undefined_stackScreenNotSupported_title,
       'default_UnknownExceptionError': (error) =>
           localizations.default_UnknownExceptionError(error),
       'favorites_SnackBar_deleted': (name) =>

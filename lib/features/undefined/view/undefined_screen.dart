@@ -22,6 +22,16 @@ class UndefinedScreen extends StatelessWidget {
     final themeData = Theme.of(context);
     final ElevatedButtonStyles? elevatedButtonStyles = themeData.extension<ElevatedButtonStyles>();
     return Scaffold(
+      appBar: undefinedType == UndefinedType.stackScreenNotSupported
+          ? AppBar(
+              title: Text(undefinedType.titleL10n(context)),
+              centerTitle: true,
+              leading: IconButton(
+                icon: const Icon(Icons.arrow_back),
+                onPressed: () => context.router.maybePop(),
+              ),
+            )
+          : null,
       body: LayoutBuilder(
         builder: (context, viewportConstraints) {
           return SingleChildScrollView(
@@ -43,7 +53,7 @@ class UndefinedScreen extends StatelessWidget {
                       ),
                       const SizedBox(height: kInset * 2),
                       Text(
-                        undefinedType.l10n(context),
+                        undefinedType.descriptionL10n(context),
                         textAlign: TextAlign.center,
                         style: Theme.of(context).textTheme.bodyLarge,
                       ),

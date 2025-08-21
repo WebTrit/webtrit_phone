@@ -1331,5 +1331,13 @@
   "webRegistration_ErrorAcknowledgeDialogActions_skip": "Skip",
   "@webRegistration_ErrorAcknowledgeDialogActions_skip": {},
   "webRegistration_ErrorAcknowledgeDialog_title": "Web resource error",
-  "@webRegistration_ErrorAcknowledgeDialog_title": {}
+  "@webRegistration_ErrorAcknowledgeDialog_title": {},
+  "undefined_autoprovision_invalidToken": "Облікові дані для автоконфігурації були відхилені сервером. Будь ласка, запросіть нове посилання для конфігурації",
+  "@undefined_autoprovision_invalidToken": {},
+  "undefined_autoprovision_invalidToken_title": "Недійсна конфігурація",
+  "@undefined_autoprovision_invalidToken_title": {},
+  "undefined_stackScreenNotSupported": "Функція не підтримується. Зверніться до адміністратора.",
+  "@undefined_stackScreenNotSupported": {},
+  "undefined_stackScreenNotSupported_title": "Функція не підтримується",
+  "@undefined_stackScreenNotSupported_title": {}
 }
