@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 
 import 'package:webtrit_api/webtrit_api.dart';
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
@@ -133,7 +134,6 @@ class _MainShellState extends State<MainShell> {
           create: (context) => UserRepository(
             context.read<WebtritApiClient>(),
             context.read<AppBloc>().state.session.token!,
-            polling: EnvironmentConfig.PERIODIC_POLLING,
             sessionGuard: _sessionGuard,
           ),
         ),
@@ -153,16 +153,10 @@ class _MainShellState extends State<MainShell> {
         ),
         RepositoryProvider<VoicemailRepository>(
           create: (context) {
-            final featureAccess = context.read<FeatureAccess>();
             return VoicemailRepositoryImpl(
               webtritApiClient: context.read<WebtritApiClient>(),
               token: context.read<AppBloc>().state.session.token!,
               appDatabase: context.read<AppDatabase>(),
-              repositoryOptions: RepositoryOptions(
-                shouldOperate: featureAccess.settingsFeature.isVoicemailsEnabled,
-                polling: EnvironmentConfig.PERIODIC_POLLING,
-                pollPeriod: const Duration(minutes: 5),
-              ),
             );
           },
         ),
@@ -234,225 +228,333 @@ class _MainShellState extends State<MainShell> {
           create: (context) => LinesStateRepositoryInMemoryImpl(),
         ),
       ],
-      child: MultiBlocProvider(
-        providers: [
-          BlocProvider<PushTokensBloc>(
-            lazy: false,
-            create: (context) {
-              return PushTokensBloc(
-                pushTokensRepository: context.read<PushTokensRepository>(),
-                secureStorage: context.read<SecureStorage>(),
-                firebaseMessaging: FirebaseMessaging.instance,
-                callkeep: _callkeep,
-              )..add(const PushTokensStarted());
-            },
-          ),
-          BlocProvider<RecentsBloc>(
-            create: (context) {
-              return RecentsBloc(
-                recentsRepository: context.read<RecentsRepository>(),
-                appPreferences: context.read<AppPreferences>(),
-                dateFormat: AppTime().formatDateTime(),
-              )..add(const RecentsStarted());
-            },
-          ),
-          BlocProvider<LocalContactsSyncBloc>(
-            lazy: false,
-            create: (context) {
-              final localContactsRepository = context.read<LocalContactsRepository>();
-              final appDatabase = context.read<AppDatabase>();
-              final appPreferences = context.read<AppPreferences>();
-              final featureAccess = context.read<FeatureAccess>();
-              final appPermissions = context.read<AppPermissions>();
 
-              Future<bool> isFutureEnabled() async {
-                final contactTab = featureAccess.bottomMenuFeature.getTabEnabled(MainFlavor.contacts)?.toContacts;
-                final contactSourceTypes = contactTab?.contactSourceTypes ?? [];
-                return contactSourceTypes.contains(ContactSourceType.local);
-              }
-
-              Future<bool> isAgreementAccepted() async {
-                final contactsAgreementStatus = appPreferences.getContactsAgreementStatus();
-                return contactsAgreementStatus.isAccepted;
-              }
-
-              final bloc = LocalContactsSyncBloc(
-                localContactsRepository: localContactsRepository,
-                appDatabase: appDatabase,
-                appPreferences: appPreferences,
-                isFeatureEnabled: isFutureEnabled,
-                isAgreementAccepted: isAgreementAccepted,
-                isContactsPermissionGranted: () => appPermissions.isContactPermissionGranted(),
-                requestContactPermission: () => appPermissions.requestContactPermission(),
-              );
-
-              bloc.add(const LocalContactsSyncStarted());
-              return bloc;
-            },
-          ),
-          BlocProvider<ExternalContactsSyncBloc>(
-            lazy: false,
-            create: (context) {
-              return ExternalContactsSyncBloc(
-                userRepository: context.read<UserRepository>(),
-                externalContactsRepository: context.read<ExternalContactsRepository>(),
-                appDatabase: context.read<AppDatabase>(),
-              )..add(const ExternalContactsSyncStarted());
-            },
-          ),
-          BlocProvider<CallBloc>(
-            create: (context) {
-              final appBloc = context.read<AppBloc>();
-              final appPreferences = context.read<AppPreferences>();
-              final notificationsBloc = context.read<NotificationsBloc>();
-              // TODO(Serdun): Refactor into an inherited widget for better code consistency and reusability
-              final appCertificates = AppCertificates();
-              final featureAccess = context.read<FeatureAccess>();
-
-              final encodingConfig = featureAccess.callFeature.encoding;
-              final peerConnectionConfig = featureAccess.callFeature.peerConnection;
-
-              // Initialize media builder with app-configured audio/video constraints
-              // Used to capture synchronized MediaStream (audio+video) for WebRTC track addition.
-              final userMediaBuilder = DefaultUserMediaBuilder(
-                audioConstraintsBuilder: AudioConstraintsWithAppSettingsBuilder(appPreferences),
-                videoConstraintsBuilder: VideoConstraintsWithAppSettingsBuilder(appPreferences),
-              );
-              // Initialize peer connection policy applier with app-specific negotiation rules
-              final pearConnectionPolicyApplier = ModifyWithSettingsPeerConnectionPolicyApplier(
-                appPreferences,
-                peerConnectionConfig,
-                userMediaBuilder,
-              );
-              // Initialize contact name resolver with app-specific contact repository
-              // Used to display contact name of caller
-              final contactNameResolver = DefaultContactNameResolver(
-                contactRepository: context.read<ContactsRepository>(),
-              );
-
-              return CallBloc(
-                coreUrl: appBloc.state.session.coreUrl!,
-                tenantId: appBloc.state.session.tenantId,
-                token: appBloc.state.session.token!,
-                trustedCertificates: appCertificates.trustedCertificates,
-                callLogsRepository: context.read<CallLogsRepository>(),
-                callPullRepository: context.read<CallPullRepository>(),
-                linesStateRepository: context.read<LinesStateRepository>(),
-                sessionRepository: context.read<SessionRepository>(),
-                userRepository: context.read<UserRepository>(),
-                submitNotification: (n) => notificationsBloc.add(NotificationsSubmitted(n)),
-                callkeep: _callkeep,
-                callkeepConnections: _callkeepConnections,
-                sdpMunger: ModifyWithEncodingSettings(appPreferences, encodingConfig),
-                webRtcOptionsBuilder: WebrtcOptionsWithAppSettingsBuilder(appPreferences),
-                userMediaBuilder: userMediaBuilder,
-                contactNameResolver: contactNameResolver,
-                callErrorReporter: DefaultCallErrorReporter((n) => notificationsBloc.add(NotificationsSubmitted(n))),
-                iceFilter: FilterWithAppSettings(appPreferences),
-                peerConnectionPolicyApplier: pearConnectionPolicyApplier,
-              )..add(const CallStarted());
-            },
-          ),
-          BlocProvider<MessagingBloc>(
-            lazy: false,
-            create: (context) {
-              final session = context.read<AppBloc>().state.session;
-
-              return MessagingBloc(
-                session.userId,
-                createMessagingSocket(session.coreUrl!, session.token!, session.tenantId),
-                FeatureAccess().messagingFeature,
-                context.read<ChatsRepository>(),
-                context.read<ChatsOutboxRepository>(),
-                context.read<SmsRepository>(),
-                context.read<SmsOutboxRepository>(),
-                (n) => context.read<NotificationsBloc>().add(NotificationsSubmitted(n)),
-              );
-            },
-          ),
-          BlocProvider<UnreadCountCubit>(
-            create: (context) {
-              return UnreadCountCubit(
-                userId: context.read<AppBloc>().state.session.userId,
-                chatsRepository: context.read<ChatsRepository>(),
-                smsRepository: context.read<SmsRepository>(),
-              )..init();
-            },
-          ),
-          BlocProvider(
-            create: (_) => ChatsForwardingCubit(),
-          ),
-        ],
-        child: Builder(
-          builder: (context) {
-            return MultiBlocProvider(
-              providers: [
-                BlocProvider(
-                  lazy: false,
-                  create: (_) => UserInfoCubit(
-                    context.read<UserRepository>(),
+      /// Bridge layers for background/periodic tasks between repositories and Blocs
+      /// (connectivity recovery, scheduled polling, auto-refresh on network restore).
+      child: Builder(
+          builder: (context) => MultiProvider(
+                providers: [
+                  Provider(
+                    create: (context) => ConnectivityRecoveryService(
+                      connectivity: context.read<ConnectivityService>(),
+                      registrations: _connectivityRecoveryRegistrations(context),
+                    ),
+                    dispose: (context, service) => service.dispose(),
+                    lazy: false,
                   ),
-                ),
-                BlocProvider(
-                  lazy: false,
-                  create: (_) => SessionStatusCubit(
-                    pushTokensBloc: context.read<PushTokensBloc>(),
-                    callBloc: context.read<CallBloc>(),
+                  Provider<PollingService>(
+                    create: (context) => PollingService(
+                      connectivityService: context.read<ConnectivityService>(),
+                      registrations: _pollingRegistrations(context),
+                    ),
+                    dispose: (context, service) => service.dispose(),
+                    lazy: false,
                   ),
-                ),
-                BlocProvider(
-                  lazy: false,
-                  create: (_) => RegisterStatusCubit(
-                    context.read<AppRepository>(),
-                    context.read<AppPreferences>(),
-                    handleError: (error, stackTrace) {
-                      context.read<NotificationsBloc>().add(NotificationsSubmitted(DefaultErrorNotification(error)));
-                      context.read<AppBloc>().maybeHandleError(error);
-                    },
-                  ),
-                ),
-                BlocProvider(
-                  lazy: false,
-                  create: (_) => SystemNotificationsCounterCubit(
-                    context.read<SystemNotificationsLocalRepository>(),
-                  ),
-                ),
-                BlocProvider(
-                  lazy: false,
-                  create: (_) => CallPullCubit(
-                    context.read<CallPullRepository>(),
-                  ),
-                ),
-                BlocProvider<CallRoutingCubit>(
-                  lazy: false,
-                  create: (_) => CallRoutingCubit(
-                    context.read<UserRepository>(),
-                    context.read<LinesStateRepository>(),
-                    context.read<AppPreferences>(),
-                    context.read<ConnectivityService>(),
-                  ),
-                ),
-              ],
-              child: Builder(
-                builder: (context) {
-                  return CallShell(
-                    child: MessagingShell(
-                      child: SystemNotificationsShell(
-                        child: AutoRouter(
-                          navigatorObservers: () => [
-                            MainShellNavigatorObserver(context.read<MainShellRouteStateRepository>()),
-                          ],
-                        ),
+                ],
+
+                /// Builds and wires up all feature-level BLoCs together with the main shell widgets.
+                ///
+                /// This section is responsible for application-wide state orchestration:
+                /// - Initializes domain-specific blocs (push tokens, recents, contacts sync, calls, messaging, unread counters, etc.)
+                ///   with their required repositories and dependencies.
+                /// - Dispatches initial events (`Started`/`Init`) right after bloc creation to bootstrap feature flows.
+                /// - Provides higher-level status cubits (e.g. `SessionStatusCubit`, `RegisterStatusCubit`) that depend on lower-level blocs.
+                /// - Ensures feature blocs are eagerly created (`lazy: false`) where necessary to guarantee immediate availability
+                ///   (e.g. push tokens, contacts sync, session status).
+                ///
+                /// The returned widget tree is wrapped into multiple shell layers:
+                /// - [CallShell] for handling call-related UI and logic.
+                /// - [MessagingShell] for in-app messaging flows.
+                /// - [SystemNotificationsShell] for displaying system notifications.
+                /// - [AutoRouter] for navigation, with a [MainShellNavigatorObserver] attached.
+                ///
+                /// Centralizing bloc creation and shell composition here makes the
+                /// feature setup explicit, maintainable, and ensures all cross-cutting
+                /// concerns (calls, messaging, notifications, routing) are consistently
+                /// available throughout the app.
+                child: Builder(builder: (context) {
+                  return MultiBlocProvider(
+                    providers: [
+                      BlocProvider<PushTokensBloc>(
+                        lazy: false,
+                        create: (context) {
+                          return PushTokensBloc(
+                            pushTokensRepository: context.read<PushTokensRepository>(),
+                            secureStorage: context.read<SecureStorage>(),
+                            firebaseMessaging: FirebaseMessaging.instance,
+                            callkeep: _callkeep,
+                          )..add(const PushTokensStarted());
+                        },
                       ),
+                      BlocProvider<RecentsBloc>(
+                        create: (context) {
+                          return RecentsBloc(
+                            recentsRepository: context.read<RecentsRepository>(),
+                            appPreferences: context.read<AppPreferences>(),
+                            dateFormat: AppTime().formatDateTime(),
+                          )..add(const RecentsStarted());
+                        },
+                      ),
+                      BlocProvider<LocalContactsSyncBloc>(
+                        lazy: false,
+                        create: (context) {
+                          final localContactsRepository = context.read<LocalContactsRepository>();
+                          final appDatabase = context.read<AppDatabase>();
+                          final appPreferences = context.read<AppPreferences>();
+                          final featureAccess = context.read<FeatureAccess>();
+                          final appPermissions = context.read<AppPermissions>();
+
+                          Future<bool> isFutureEnabled() async {
+                            final contactTab =
+                                featureAccess.bottomMenuFeature.getTabEnabled(MainFlavor.contacts)?.toContacts;
+                            final contactSourceTypes = contactTab?.contactSourceTypes ?? [];
+                            return contactSourceTypes.contains(ContactSourceType.local);
+                          }
+
+                          Future<bool> isAgreementAccepted() async {
+                            final contactsAgreementStatus = appPreferences.getContactsAgreementStatus();
+                            return contactsAgreementStatus.isAccepted;
+                          }
+
+                          final bloc = LocalContactsSyncBloc(
+                            localContactsRepository: localContactsRepository,
+                            appDatabase: appDatabase,
+                            appPreferences: appPreferences,
+                            isFeatureEnabled: isFutureEnabled,
+                            isAgreementAccepted: isAgreementAccepted,
+                            isContactsPermissionGranted: () => appPermissions.isContactPermissionGranted(),
+                            requestContactPermission: () => appPermissions.requestContactPermission(),
+                          );
+
+                          bloc.add(const LocalContactsSyncStarted());
+                          return bloc;
+                        },
+                      ),
+                      BlocProvider<ExternalContactsSyncBloc>(
+                        lazy: false,
+                        create: (context) {
+                          return ExternalContactsSyncBloc(
+                            userRepository: context.read<UserRepository>(),
+                            externalContactsRepository: context.read<ExternalContactsRepository>(),
+                            appDatabase: context.read<AppDatabase>(),
+                          )..add(const ExternalContactsSyncStarted());
+                        },
+                      ),
+                      BlocProvider<CallBloc>(
+                        create: (context) {
+                          final appBloc = context.read<AppBloc>();
+                          final appPreferences = context.read<AppPreferences>();
+                          final notificationsBloc = context.read<NotificationsBloc>();
+                          // TODO(Serdun): Refactor into an inherited widget for better code consistency and reusability
+                          final appCertificates = AppCertificates();
+                          final featureAccess = context.read<FeatureAccess>();
+
+                          final encodingConfig = featureAccess.callFeature.encoding;
+                          final peerConnectionConfig = featureAccess.callFeature.peerConnection;
+
+                          // Initialize media builder with app-configured audio/video constraints
+                          // Used to capture synchronized MediaStream (audio+video) for WebRTC track addition.
+                          final userMediaBuilder = DefaultUserMediaBuilder(
+                            audioConstraintsBuilder: AudioConstraintsWithAppSettingsBuilder(appPreferences),
+                            videoConstraintsBuilder: VideoConstraintsWithAppSettingsBuilder(appPreferences),
+                          );
+                          // Initialize peer connection policy applier with app-specific negotiation rules
+                          final pearConnectionPolicyApplier = ModifyWithSettingsPeerConnectionPolicyApplier(
+                            appPreferences,
+                            peerConnectionConfig,
+                            userMediaBuilder,
+                          );
+                          // Initialize contact name resolver with app-specific contact repository
+                          // Used to display contact name of caller
+                          final contactNameResolver = DefaultContactNameResolver(
+                            contactRepository: context.read<ContactsRepository>(),
+                          );
+
+                          return CallBloc(
+                            coreUrl: appBloc.state.session.coreUrl!,
+                            tenantId: appBloc.state.session.tenantId,
+                            token: appBloc.state.session.token!,
+                            trustedCertificates: appCertificates.trustedCertificates,
+                            callLogsRepository: context.read<CallLogsRepository>(),
+                            callPullRepository: context.read<CallPullRepository>(),
+                            linesStateRepository: context.read<LinesStateRepository>(),
+                            sessionRepository: context.read<SessionRepository>(),
+                            userRepository: context.read<UserRepository>(),
+                            submitNotification: (n) => notificationsBloc.add(NotificationsSubmitted(n)),
+                            callkeep: _callkeep,
+                            callkeepConnections: _callkeepConnections,
+                            sdpMunger: ModifyWithEncodingSettings(appPreferences, encodingConfig),
+                            webRtcOptionsBuilder: WebrtcOptionsWithAppSettingsBuilder(appPreferences),
+                            userMediaBuilder: userMediaBuilder,
+                            contactNameResolver: contactNameResolver,
+                            callErrorReporter:
+                                DefaultCallErrorReporter((n) => notificationsBloc.add(NotificationsSubmitted(n))),
+                            iceFilter: FilterWithAppSettings(appPreferences),
+                            peerConnectionPolicyApplier: pearConnectionPolicyApplier,
+                          )..add(const CallStarted());
+                        },
+                      ),
+                      BlocProvider<MessagingBloc>(
+                        lazy: false,
+                        create: (context) {
+                          final session = context.read<AppBloc>().state.session;
+
+                          return MessagingBloc(
+                            session.userId,
+                            createMessagingSocket(session.coreUrl!, session.token!, session.tenantId),
+                            FeatureAccess().messagingFeature,
+                            context.read<ChatsRepository>(),
+                            context.read<ChatsOutboxRepository>(),
+                            context.read<SmsRepository>(),
+                            context.read<SmsOutboxRepository>(),
+                            (n) => context.read<NotificationsBloc>().add(NotificationsSubmitted(n)),
+                          );
+                        },
+                      ),
+                      BlocProvider<UnreadCountCubit>(
+                        create: (context) {
+                          return UnreadCountCubit(
+                            userId: context.read<AppBloc>().state.session.userId,
+                            chatsRepository: context.read<ChatsRepository>(),
+                            smsRepository: context.read<SmsRepository>(),
+                          )..init();
+                        },
+                      ),
+                      BlocProvider(
+                        create: (_) => ChatsForwardingCubit(),
+                      ),
+                    ],
+                    child: Builder(
+                      builder: (context) {
+                        return MultiBlocProvider(
+                          providers: [
+                            BlocProvider(
+                              lazy: false,
+                              create: (_) => UserInfoCubit(
+                                context.read<UserRepository>(),
+                              ),
+                            ),
+                            BlocProvider(
+                              lazy: false,
+                              create: (_) => SessionStatusCubit(
+                                pushTokensBloc: context.read<PushTokensBloc>(),
+                                callBloc: context.read<CallBloc>(),
+                              ),
+                            ),
+                            BlocProvider(
+                              lazy: false,
+                              create: (_) => RegisterStatusCubit(
+                                context.read<AppRepository>(),
+                                context.read<AppPreferences>(),
+                                handleError: (error, stackTrace) {
+                                  context
+                                      .read<NotificationsBloc>()
+                                      .add(NotificationsSubmitted(DefaultErrorNotification(error)));
+                                  context.read<AppBloc>().maybeHandleError(error);
+                                },
+                              ),
+                            ),
+                            BlocProvider(
+                              lazy: false,
+                              create: (_) => SystemNotificationsCounterCubit(
+                                context.read<SystemNotificationsLocalRepository>(),
+                              ),
+                            ),
+                            BlocProvider(
+                              lazy: false,
+                              create: (_) => CallPullCubit(
+                                context.read<CallPullRepository>(),
+                              ),
+                            ),
+                            BlocProvider<CallRoutingCubit>(
+                              lazy: false,
+                              create: (_) => CallRoutingCubit(
+                                context.read<UserRepository>(),
+                                context.read<LinesStateRepository>(),
+                                context.read<AppPreferences>(),
+                                context.read<ConnectivityService>(),
+                              ),
+                            ),
+                          ],
+                          child: Builder(
+                            builder: (context) {
+                              return CallShell(
+                                child: MessagingShell(
+                                  child: SystemNotificationsShell(
+                                    child: AutoRouter(
+                                      navigatorObservers: () => [
+                                        MainShellNavigatorObserver(context.read<MainShellRouteStateRepository>()),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        );
+                      },
                     ),
                   );
-                },
-              ),
-            );
-          },
-        ),
-      ),
+                }),
+              )),
     );
+  }
+
+  /// Builds a list of repositories that should be periodically polled by [PollingService].
+  ///
+  /// Each [PollingRegistration] defines:
+  /// - the repository (listener) that needs to be refreshed,
+  /// - the polling interval at which it should be triggered.
+  ///
+  /// Current registrations:
+  /// - [UserRepository]: polled every 10 seconds to keep user data up to date.
+  /// - [SystemInfoRepository]: polled every 5 minutes to refresh system information.
+  /// - [VoicemailRepository]: polled every 5 minutes, but only if the voicemail feature is enabled
+  ///   in [FeatureAccess.settingsFeature].
+  ///
+  /// This method centralizes the polling configuration, so changes in polling logic or intervals
+  /// can be made here without touching the [Provider] or [PollingService] setup.
+  List<PollingRegistration> _pollingRegistrations(BuildContext context) {
+    final isVoicemailsEnabled = context.read<FeatureAccess>().settingsFeature.isVoicemailsEnabled;
+
+    return [
+      PollingRegistration(
+        listener: context.read<UserRepository>(),
+        interval: const Duration(seconds: 10),
+      ),
+      PollingRegistration(
+        listener: context.read<SystemInfoRepository>(),
+        interval: const Duration(minutes: 5),
+      ),
+      if (isVoicemailsEnabled)
+        PollingRegistration(
+          listener: context.read<VoicemailRepository>(),
+          interval: const Duration(minutes: 5),
+        ),
+    ];
+  }
+
+  /// Builds a list of listeners that should be registered in [ConnectivityRecoveryService].
+  ///
+  /// Each [ConnectivityRecoveryRegistration] defines:
+  /// - a [Refreshable] listener to be refreshed automatically when connectivity is restored,
+  /// - a [Suspendable] listener to be suspended automatically when connectivity is lost.
+  ///
+  /// Current registrations:
+  /// - [VoicemailRepository]: refreshed when going online, but only if the voicemail feature
+  ///   is enabled in [FeatureAccess.settingsFeature].
+  ///
+  /// This method centralizes the connectivity recovery configuration, so changes in
+  /// registration logic can be made here without touching the [Provider] or service setup.
+  List<ConnectivityRecoveryRegistration> _connectivityRecoveryRegistrations(BuildContext context) {
+    final isVoicemailsEnabled = context.read<FeatureAccess>().settingsFeature.isVoicemailsEnabled;
+
+    return [
+      if (isVoicemailsEnabled)
+        ConnectivityRecoveryRegistration.refreshable(
+          context.read<VoicemailRepository>(),
+        ),
+    ];
   }
 
   /// Disposes [sessionGuard] if it implements [Disposable].
