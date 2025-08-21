@@ -30,10 +30,12 @@ class AppRouter extends RootStackRouter {
     this._appPermissions,
     this._launchLoginEmbedded,
     this._bottomMenuFeature,
+    this._featureChecker,
   );
 
   final AppBloc _appBloc;
   final AppPermissions _appPermissions;
+  final FeatureChecker _featureChecker;
 
   final LoginEmbedded? _launchLoginEmbedded;
   final BottomMenuFeature _bottomMenuFeature;
@@ -301,6 +303,12 @@ class AppRouter extends RootStackRouter {
                     AutoRoute(
                       page: VoicemailScreenPageRoute.page,
                       path: 'voicemail',
+                      guards: [
+                        FeatureGuard(
+                          isAllowed: _featureChecker.isEnabled(AppFeature.voicemail),
+                          onDenied: UndefinedScreenPageRoute(undefinedType: UndefinedType.stackScreenNotSupported),
+                        ),
+                      ],
                     ),
                     AutoRoute(
                       page: CallerIdSettingsScreenPageRoute.page,
@@ -475,4 +483,26 @@ class AppRouter extends RootStackRouter {
 Object _onNavigationLoggerMessage(String callbackName, NavigationResolver resolver) {
   return () =>
       '$callbackName: ${resolver.route.name} (${resolver.route.fullPath}) isReevaluating=${resolver.isReevaluating}';
+}
+
+class FeatureGuard implements AutoRouteGuard {
+  FeatureGuard({
+    required this.isAllowed,
+    this.onDenied,
+  });
+
+  final bool isAllowed;
+  final PageRouteInfo? onDenied;
+
+  @override
+  void onNavigation(NavigationResolver resolver, StackRouter router) {
+    if (isAllowed) {
+      resolver.next(true);
+    } else {
+      resolver.next(false);
+      if (onDenied != null) {
+        resolver.redirectUntil(onDenied!);
+      }
+    }
+  }
 }

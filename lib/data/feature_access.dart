@@ -581,3 +581,17 @@ class SystemNotificationsFeature {
   /// Check if the system notifications push feature is enabled and supported by the remote system.
   bool get systemNotificationsPushSupport => enabled && coreSystemPushSupport;
 }
+
+typedef FeatureResolver = bool Function(AppFeature);
+
+class FeatureChecker {
+  FeatureChecker(this._resolver);
+
+  final FeatureResolver _resolver;
+
+  bool isEnabled(AppFeature feature) => _resolver(feature);
+}
+
+enum AppFeature {
+  voicemail,
+}
