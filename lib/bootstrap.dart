@@ -88,8 +88,8 @@ Future<void> _initFirebase() async {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
-  } catch (e) {
-    Logger('Firebase').severe('Error in _initFirebase', e);
+  } catch (e, s) {
+    Logger('Firebase').severe('Error in _initFirebase', e, s);
   }
 }
 

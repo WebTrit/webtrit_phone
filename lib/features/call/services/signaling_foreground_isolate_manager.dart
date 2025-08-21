@@ -80,36 +80,36 @@ class SignalingForegroundIsolateManager implements CallkeepBackgroundServiceDele
         displayName: event.callerDisplayName,
         hasVideo: JsepValue.fromOptional(event.jsep)?.hasVideo ?? false,
       );
-    } catch (e) {
-      _handleExceptions(e);
+    } catch (e, s) {
+      _handleExceptions(e, s);
     }
   }
 
   void _handleHangupCall(HangupEvent event) async {
     try {
       await _callkeep.endCall(event.callId);
-    } catch (e) {
-      _handleExceptions(e);
+    } catch (e, s) {
+      _handleExceptions(e, s);
     }
   }
 
   void _handleSignalingError(error, [StackTrace? stackTrace]) async {
-    try {} catch (e) {
-      _handleExceptions(e);
+    try {} catch (e, s) {
+      _handleExceptions(e, s);
     }
   }
 
   void _handleSignalingDisconnect(int? code, String? reason) async {
-    try {} catch (e) {
-      _handleExceptions(e);
+    try {} catch (e, s) {
+      _handleExceptions(e, s);
     }
   }
 
   void _handleUnregisteredEvent(UnregisteredEvent event) async {
     try {
       await _callkeep.endCalls();
-    } catch (e) {
-      _handleExceptions(e);
+    } catch (e, s) {
+      _handleExceptions(e, s);
     }
   }
 
@@ -120,8 +120,8 @@ class SignalingForegroundIsolateManager implements CallkeepBackgroundServiceDele
   void performEndCall(String callId) async {
     try {
       await _signalingManager.declineCall(callId);
-    } catch (e) {
-      _handleExceptions(e);
+    } catch (e, s) {
+      _handleExceptions(e, s);
     }
   }
 
@@ -147,7 +147,7 @@ class SignalingForegroundIsolateManager implements CallkeepBackgroundServiceDele
     await _callLogsRepository.add(call);
   }
 
-  void _handleExceptions(e) {
-    _logger.severe(e);
+  void _handleExceptions(Object? e, StackTrace? s) {
+    _logger.severe(e.toString(), e, s);
   }
 }

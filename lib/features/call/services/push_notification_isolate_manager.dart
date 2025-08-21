@@ -61,16 +61,16 @@ class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegat
     try {
       _logger.info('Ending call: ${event.callId}');
       await _callkeep.endCall(event.callId);
-    } catch (e) {
-      _handleExceptions(e);
+    } catch (e, s) {
+      _handleExceptions(e, s);
     }
   }
 
   void _handleSignalingError(error, [StackTrace? stackTrace]) async {
     try {
       await _callkeep.endCalls();
-    } catch (e) {
-      _handleExceptions(e);
+    } catch (e, s) {
+      _handleExceptions(e, s);
     }
   }
 
@@ -81,8 +81,8 @@ class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegat
   void _handleUnregisteredEvent(UnregisteredEvent event) async {
     try {
       await _callkeep.endCalls();
-    } catch (e) {
-      _handleExceptions(e);
+    } catch (e, s) {
+      _handleExceptions(e, s);
     }
   }
 
@@ -122,13 +122,13 @@ class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegat
     try {
       _logger.info('Adding call log: $callId');
       await _callLogsRepository.add(call);
-    } catch (e) {
-      _logger.severe('Failed to add call log', e);
+    } catch (e, s) {
+      _logger.severe('Failed to add call log', e, s);
     }
     return;
   }
 
-  void _handleExceptions(e) {
-    _logger.severe(e);
+  void _handleExceptions(Object? e, StackTrace? s) {
+    _logger.severe(e.toString(), e, s);
   }
 }
