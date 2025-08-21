@@ -72,7 +72,7 @@ class ConnectivityLifecycleService implements Disposable {
     final snapshot = List<Refreshable>.unmodifiable(_refreshables);
     for (final listener in snapshot) {
       try {
-        unawaited(listener.refresh());
+        await listener.refresh();
       } catch (e, st) {
         _logger.warning('ConnectivityRecoveryService.refreshAll', e, st);
       }
@@ -86,7 +86,7 @@ class ConnectivityLifecycleService implements Disposable {
     final snapshot = List<Suspendable>.unmodifiable(_suspendables);
     for (final listener in snapshot) {
       try {
-        unawaited(listener.suspend());
+        await listener.suspend();
       } catch (e, st) {
         _logger.warning('ConnectivityRecoveryService.suspendAll', e, st);
       }

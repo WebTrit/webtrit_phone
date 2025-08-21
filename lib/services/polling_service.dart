@@ -105,7 +105,7 @@ class PollingService implements Disposable {
 
       config.isRefreshing = true;
       try {
-        unawaited(listener.refresh());
+        await listener.refresh();
       } catch (e, stack) {
         _logger.warning('PollingService: Error during refresh for $listener', e, stack);
       } finally {
@@ -122,7 +122,7 @@ class PollingService implements Disposable {
     scheduleMicrotask(() async {
       try {
         if (_isConnected && await _connectivityService.checkConnection()) {
-          unawaited(listener.refresh());
+          await listener.refresh();
         }
       } catch (e, stack) {
         _logger.warning('PollingService: Error during initial refresh for $listener', e, stack);
