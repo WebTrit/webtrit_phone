@@ -631,9 +631,7 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String login_CoreVersionUnsupportedExceptionError(
-    String actual,
-    String supportedConstraint,
-  ) {
+      String actual, String supportedConstraint) {
     return 'Непідтримувана версія екземпляра, будь ласка, зверніться до адміністратора вашої системи (фактична: $actual, підтримувана: $supportedConstraint)';
   }
 
@@ -827,10 +825,8 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String
-  main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError(
-    String actual,
-    String supportedConstraint,
-  ) {
+      main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError(
+          String actual, String supportedConstraint) {
     return 'Несумісна версія WebTrit Cloud Backend, будь ласка, зв\'яжіться з адміністратором вашої системи.\n\nВерсія екземпляру:\n$actual\n\nПідтримувана версія:\n$supportedConstraint\n';
   }
 
@@ -1174,15 +1170,13 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String notifications_errorSnackBar_signalingDisconnectWithCodeName(
-    String codeName,
-  ) {
+      String codeName) {
     return 'Від’єднано від ядра за кодом: $codeName';
   }
 
   @override
   String notifications_errorSnackBar_signalingDisconnectWithSystemReason(
-    String reason,
-  ) {
+      String reason) {
     return 'Від’єднано від ядра з причини: $reason';
   }
 
@@ -1200,8 +1194,7 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String notifications_errorSnackBar_sipRegistrationFailed_WithSystemReason(
-    String reason,
-  ) {
+      String reason) {
     return 'Помилка реєстрації у віддаленій системі VoIP з причини: $reason';
   }
 
@@ -2151,4 +2144,20 @@ class AppLocalizationsUk extends AppLocalizations {
   @override
   String get webRegistration_ErrorAcknowledgeDialog_title =>
       'Web resource error';
+
+  @override
+  String get undefined_autoprovision_invalidToken =>
+      'Облікові дані для автоконфігурації були відхилені сервером. Будь ласка, запросіть нове посилання для конфігурації';
+
+  @override
+  String get undefined_autoprovision_invalidToken_title =>
+      'Недійсна конфігурація';
+
+  @override
+  String get undefined_stackScreenNotSupported =>
+      'Функція не підтримується. Зверніться до адміністратора.';
+
+  @override
+  String get undefined_stackScreenNotSupported_title =>
+      'Функція не підтримується';
 }

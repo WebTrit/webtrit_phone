@@ -64,7 +64,7 @@ import 'app_localizations_uk.g.dart';
 /// property.
 abstract class AppLocalizations {
   AppLocalizations(String locale)
-    : localeName = intl.Intl.canonicalizedLocale(locale.toString());
+      : localeName = intl.Intl.canonicalizedLocale(locale.toString());
 
   final String localeName;
 
@@ -87,17 +87,17 @@ abstract class AppLocalizations {
   /// of delegates is preferred or required.
   static const List<LocalizationsDelegate<dynamic>> localizationsDelegates =
       <LocalizationsDelegate<dynamic>>[
-        delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-      ];
+    delegate,
+    GlobalMaterialLocalizations.delegate,
+    GlobalCupertinoLocalizations.delegate,
+    GlobalWidgetsLocalizations.delegate,
+  ];
 
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
     Locale('en'),
     Locale('it'),
-    Locale('uk'),
+    Locale('uk')
   ];
 
   /// No description provided for @account_selfCarePasswordExpired_message.
@@ -1185,9 +1185,7 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'An incompatible instance version provided, please contact the administrator of your system (actual: {actual}, supported: {supportedConstraint})'**
   String login_CoreVersionUnsupportedExceptionError(
-    String actual,
-    String supportedConstraint,
-  );
+      String actual, String supportedConstraint);
 
   /// No description provided for @login_RequestFailureEmptyEmailError.
   ///
@@ -1500,10 +1498,8 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Incompatible WebTrit Cloud Backend version, please contact the administrator of your system.\n\nInstance version:\n{actual}\n\nSupported version:\n{supportedConstraint}'**
   String
-  main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError(
-    String actual,
-    String supportedConstraint,
-  );
+      main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError(
+          String actual, String supportedConstraint);
 
   /// No description provided for @main_CompatibilityIssueDialog_title.
   ///
@@ -2104,16 +2100,14 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Disconnected from the core with the code: {codeName}'**
   String notifications_errorSnackBar_signalingDisconnectWithCodeName(
-    String codeName,
-  );
+      String codeName);
 
   /// No description provided for @notifications_errorSnackBar_signalingDisconnectWithSystemReason.
   ///
   /// In en, this message translates to:
   /// **'Disconnected from the core due to the following reason: {reason}'**
   String notifications_errorSnackBar_signalingDisconnectWithSystemReason(
-    String reason,
-  );
+      String reason);
 
   /// No description provided for @notifications_errorSnackBar_SignalingSessionMissed.
   ///
@@ -2138,8 +2132,7 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Registration with the remote VoIP system failed due to the following reason: {reason}'**
   String notifications_errorSnackBar_sipRegistrationFailed_WithSystemReason(
-    String reason,
-  );
+      String reason);
 
   /// No description provided for @notifications_errorSnackBar_sipServiceUnavailable.
   ///
@@ -3712,6 +3705,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Web resource error'**
   String get webRegistration_ErrorAcknowledgeDialog_title;
+
+  /// No description provided for @undefined_autoprovision_invalidToken.
+  ///
+  /// In en, this message translates to:
+  /// **'The autoconfiguration credentials were rejected by the server. Please request a new configuration link'**
+  String get undefined_autoprovision_invalidToken;
+
+  /// No description provided for @undefined_autoprovision_invalidToken_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid configuration'**
+  String get undefined_autoprovision_invalidToken_title;
+
+  /// No description provided for @undefined_stackScreenNotSupported.
+  ///
+  /// In en, this message translates to:
+  /// **'Feature not supported. Please contact the administrator.'**
+  String get undefined_stackScreenNotSupported;
+
+  /// No description provided for @undefined_stackScreenNotSupported_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Feature not supported'**
+  String get undefined_stackScreenNotSupported_title;
 }
 
 class _AppLocalizationsDelegate
@@ -3743,9 +3760,8 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
   }
 
   throw FlutterError(
-    'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
-    'an issue with the localizations generation tool. Please file an issue '
-    'on GitHub with a reproducible sample app and the gen-l10n configuration '
-    'that was used.',
-  );
+      'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
+      'an issue with the localizations generation tool. Please file an issue '
+      'on GitHub with a reproducible sample app and the gen-l10n configuration '
+      'that was used.');
 }
