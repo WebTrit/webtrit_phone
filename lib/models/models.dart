@@ -33,7 +33,6 @@ export 'negotiation_settings.dart';
 export 'peer_connection_settings.dart';
 export 'recent.dart';
 export 'recents_visibility_filter.dart';
-export 'repository/repository.dart';
 export 'rtp_codec_profile.dart';
 export 'session_status.dart';
 export 'settings_flavor.dart';
