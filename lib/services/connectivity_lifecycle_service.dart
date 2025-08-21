@@ -5,13 +5,13 @@ import 'package:logging/logging.dart';
 import 'package:webtrit_phone/common/common.dart';
 import 'package:webtrit_phone/services/connectivity_service.dart';
 
-final _logger = Logger('PollingService');
+final _logger = Logger('ConnectivityLifecycleService');
 
 /// Reacts to connectivity changes:
 /// - when goes online -> calls `refresh()` on registered [Refreshable]s
 /// - when goes offline -> calls `suspend()` on registered [Suspendable]s
-class ConnectivityRecoveryService implements Disposable {
-  ConnectivityRecoveryService({
+class ConnectivityLifecycleService implements Disposable {
+  ConnectivityLifecycleService({
     required ConnectivityService connectivity,
     Iterable<ConnectivityRecoveryRegistration> registrations = const [],
   }) : _connectivityService = connectivity {

@@ -235,7 +235,7 @@ class _MainShellState extends State<MainShell> {
           builder: (context) => MultiProvider(
                 providers: [
                   Provider(
-                    create: (context) => ConnectivityRecoveryService(
+                    create: (context) => ConnectivityLifecycleService(
                       connectivity: context.read<ConnectivityService>(),
                       registrations: _connectivityRecoveryRegistrations(context),
                     ),
@@ -534,7 +534,7 @@ class _MainShellState extends State<MainShell> {
     ];
   }
 
-  /// Builds a list of listeners that should be registered in [ConnectivityRecoveryService].
+  /// Builds a list of listeners that should be registered in [ConnectivityLifecycleService].
   ///
   /// Each [ConnectivityRecoveryRegistration] defines:
   /// - a [Refreshable] listener to be refreshed automatically when connectivity is restored,
