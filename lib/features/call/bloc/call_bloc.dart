@@ -849,6 +849,27 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     final contactName = await contactNameResolver.resolveWithNumber(handle.value);
     final displayName = contactName ?? event.callerDisplayName;
 
+    // Try to check for CallKeep to be set up
+    // For rare cases where app launches from push notifications and callkeep sometimes initialized'nt properly
+    // And crashed with "Unable to establish connection on channel: "dev.flutter.pigeon.webtrit_callkeep_android.PHostApi.reportNewIncomingCall"., null, null)"
+    // when invoking "callkeep.reportNewIncomingCall"
+    int retryCount = 0;
+    await Future.doWhile(() async {
+      try {
+        final isSetup = await callkeep.isSetUp();
+        if (!isSetup) await Future.delayed(const Duration(milliseconds: 100));
+        return !isSetup;
+      } on Exception catch (e, s) {
+        _logger.warning('Failed to check CallKeep setup, count: $retryCount', e, s);
+        if (retryCount < 5) {
+          retryCount++;
+          return await Future.delayed(const Duration(milliseconds: 100), () => true);
+        } else {
+          rethrow;
+        }
+      }
+    });
+
     final error = await callkeep.reportNewIncomingCall(
       event.callId,
       handle,
