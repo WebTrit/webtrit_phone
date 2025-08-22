@@ -181,6 +181,22 @@ class _CallActionsState extends State<CallActions> {
 
     final style = CallActionsStyle.merge(widget.style, Theme.of(context).extension<CallActionsStyles>()?.primary);
 
+    // Keypad
+    final foregroundColor =
+        style.key?.foregroundColor?.resolve(const <WidgetState>{}) ?? Theme.of(context).colorScheme.surface;
+
+    final keypadTextStyle = DefaultTextStyle.of(context).style.copyWith(
+          fontSize: Theme.of(context).textTheme.headlineLarge?.fontSize,
+          height: 1.0,
+          color: foregroundColor,
+        );
+
+    final subKeypadTextStyle = DefaultTextStyle.of(context).style.copyWith(
+          fontSize: Theme.of(context).textTheme.bodyMedium?.fontSize,
+          height: 1.0,
+          color: foregroundColor.withValues(alpha: 0.6),
+        );
+
     final TextButtonsTable buttonsTable;
     if (widget.isIncoming && !widget.wasAccepted) {
       if (widget.onHangupAndAcceptPressed == null && widget.onHoldAndAcceptPressed == null) {
@@ -323,11 +339,17 @@ class _CallActionsState extends State<CallActions> {
                       selection: newSelection,
                     );
                     _keypadTextFieldEditableTextState?.userUpdateTextEditingValue(
-                        value, SelectionChangedCause.keyboard);
+                      value,
+                      SelectionChangedCause.keyboard,
+                    );
 
                     onKeyPressed!(key);
                   },
-                  style: style.key,
+                  style: KeypadKeyStyle(
+                    buttonStyle: style.key,
+                    textStyle: keypadTextStyle,
+                    subtextStyle: subKeypadTextStyle,
+                  ),
                 ),
                 if ((i + 1) % 3 == 0) ...[
                   const SizedBox(),
