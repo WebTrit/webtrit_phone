@@ -22,14 +22,18 @@ class KeypadKeyButton extends StatelessWidget {
 
   static const _subextPadding = EdgeInsets.symmetric(horizontal: 8);
 
+  /// Minimum alpha value applied when deriving subtext color.
+  static const double _minAlphaValue = 0.2;
+
+  /// Amount to reduce alpha from main text color for subtext.
+  static const double _subtextAlphaReduction = 0.3;
+
   final String text;
   final String subtext;
   final void Function(String) onKeyPressed;
 
-  /// New consolidated style (preferred).
   final KeypadKeyStyle? style;
 
-  //  Legacy overrides (kept for compatibility) ====
   @Deprecated('Use style.textStyle.fontSize instead')
   final double? textFontSize;
 
@@ -44,10 +48,8 @@ class KeypadKeyButton extends StatelessWidget {
     final theme = Theme.of(context);
     final themed = theme.extension<KeypadKeyStyles>()?.primary;
 
-    // Merge: widget.style overrides theme.extension
     final merged = KeypadKeyStyle.merge(themed, style);
 
-    // Legacy fallbacks applied on top (if provided).
     final textStyle = (merged.textStyle ?? theme.textTheme.headlineLarge)?.copyWith(
       fontSize: textFontSize ?? merged.textStyle?.fontSize,
       color: textColor ?? merged.textStyle?.color,
@@ -57,8 +59,8 @@ class KeypadKeyButton extends StatelessWidget {
     // Derive subtext color from text color with reduced opacity if not set.
     Color? derivedSubColor = textStyle?.color;
     if (derivedSubColor != null) {
-      var a = derivedSubColor.a - 0.3;
-      if (a < 0.2) a = 0.2;
+      var a = derivedSubColor.a - _subtextAlphaReduction;
+      if (a < _minAlphaValue) a = _minAlphaValue;
       derivedSubColor = derivedSubColor.withValues(alpha: a);
     }
 
