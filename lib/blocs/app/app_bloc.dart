@@ -28,6 +28,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   AppBloc({
     required this.appPreferences,
     required this.sessionRepository,
+    required this.appInfo,
     @visibleForTesting this.createWebtritApiClient = defaultCreateWebtritApiClient,
     required AppThemes appThemes,
   }) : super(AppState(
@@ -51,6 +52,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   final AppPreferences appPreferences;
   final WebtritApiClientFactory createWebtritApiClient;
   final SessionRepository sessionRepository;
+  final AppInfo appInfo;
 
   late final StreamSubscription<Session?> _sessionSub;
 
@@ -73,6 +75,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       userId: session.userId,
       tenantId: session.tenantId,
       coreUrl: session.coreUrl!,
+      sessionId: appInfo.identifier,
     ));
   }
 

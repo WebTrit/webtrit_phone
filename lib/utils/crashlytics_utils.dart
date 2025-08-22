@@ -36,11 +36,13 @@ class CrashlyticsUtils {
     required String userId,
     required String tenantId,
     required String coreUrl,
+    required String sessionId,
   }) async {
     final crashlytics = FirebaseCrashlytics.instance;
     unawaited(crashlytics.setUserIdentifier(userId));
     unawaited(crashlytics.setCustomKey('tenantId', tenantId));
     unawaited(crashlytics.setCustomKey('coreUrl', coreUrl));
+    unawaited(crashlytics.setCustomKey('sessionId', sessionId));
     await logIsolateInfo();
   }
 
