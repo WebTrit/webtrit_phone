@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:logging/logging.dart';
 
@@ -29,6 +28,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   AppBloc({
     required this.appPreferences,
     required this.sessionRepository,
+    required this.appInfo,
     @visibleForTesting this.createWebtritApiClient = defaultCreateWebtritApiClient,
     required AppThemes appThemes,
   }) : super(AppState(
@@ -52,6 +52,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   final AppPreferences appPreferences;
   final WebtritApiClientFactory createWebtritApiClient;
   final SessionRepository sessionRepository;
+  final AppInfo appInfo;
 
   late final StreamSubscription<Session?> _sessionSub;
 
@@ -70,9 +71,12 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   }
 
   void _onSessionLoggedIn(Session session) {
-    FirebaseCrashlytics.instance.setUserIdentifier(session.userId).ignore();
-    FirebaseCrashlytics.instance.setCustomKey('tenantId', session.tenantId).ignore();
-    FirebaseCrashlytics.instance.setCustomKey('coreUrl', session.coreUrl!).ignore();
+    unawaited(CrashlyticsUtils.logSession(
+      userId: session.userId,
+      tenantId: session.tenantId,
+      coreUrl: session.coreUrl!,
+      sessionId: appInfo.identifier,
+    ));
   }
 
   void _onSessionLoggedOut(Session session) {

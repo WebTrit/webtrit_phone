@@ -35,6 +35,7 @@ class _AppState extends State<App> {
       appPreferences: context.read<AppPreferences>(),
       appThemes: context.read<AppThemes>(),
       sessionRepository: context.read<SessionRepository>(),
+      appInfo: context.read<AppInfo>(),
     );
     _appRouter = AppRouter(
       appBloc,
