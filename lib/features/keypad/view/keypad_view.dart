@@ -11,10 +11,12 @@ class KeypadView extends StatefulWidget {
     super.key,
     required this.videoEnabled,
     required this.transferEnabled,
+    required this.style,
   });
 
   final bool videoEnabled;
   final bool transferEnabled;
+  final KeypadScreenStyle? style;
 
   @override
   KeypadViewState createState() => KeypadViewState();
@@ -56,7 +58,13 @@ class KeypadViewState extends State<KeypadView> {
   Widget build(BuildContext context) {
     final scaledInset = MediaQuery.of(context).size.height > 800 ? 16.0 : 8.0;
     final themeData = Theme.of(context);
-    final InputDecorations? inputDecorations = themeData.extension<InputDecorations>();
+
+    final InputDecorations? baseInputDecorations = themeData.extension<InputDecorations>();
+
+    final inputField = widget.style?.inputField;
+    final contactField = widget.style?.contactNameField;
+    final actionpadStyle = widget.style?.actionpadStyle;
+
     return Column(
       children: [
         Expanded(
@@ -70,24 +78,26 @@ class KeypadViewState extends State<KeypadView> {
                     key: _keypadTextFieldKey,
                     controller: _controller,
                     focusNode: _focusNode,
-                    decoration: inputDecorations?.keypad,
-                    keyboardType: TextInputType.none,
-                    style: themeData.textTheme.headlineLarge,
-                    textAlign: TextAlign.center,
-                    showCursor: true,
+                    decoration: inputField?.decoration ?? baseInputDecorations?.keypad,
+                    style: inputField?.textStyle ?? themeData.textTheme.headlineLarge,
+                    textAlign: inputField?.textAlign ?? TextAlign.center,
+                    showCursor: inputField?.showCursor ?? true,
+                    keyboardType: inputField?.keyboardType ?? TextInputType.none,
+                    cursorColor: inputField?.cursorColor,
                   ),
                   BlocBuilder<KeypadCubit, KeypadState>(
                     builder: (context, state) => Text(
                       state.contact?.maybeName ?? '',
-                      style: themeData.textTheme.bodyMedium,
+                      style: contactField?.textStyle ?? themeData.textTheme.bodyMedium,
+                      textAlign: contactField?.textAlign ?? TextAlign.center,
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
           ),
         ),
-        Keypad(onKeypadPressed: _addChar),
+        Keypad(onKeypadPressed: _addChar, style: widget.style?.keypadStyle),
         SizedBox(height: scaledInset),
         ValueListenableBuilder(
           valueListenable: _controller,
@@ -116,6 +126,7 @@ class KeypadViewState extends State<KeypadView> {
                       onInitiatedTransferPressed: widget.transferEnabled && transferInitiated ? _transferCall : null,
                       callNumbers: callRoutingState?.allNumbers ?? [],
                       onCallFrom: (number) => _callController.createCall(destination: _popNumber(), fromNumber: number),
+                      style: actionpadStyle,
                     );
                   },
                 );

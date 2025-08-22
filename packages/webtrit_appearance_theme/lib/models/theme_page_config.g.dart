@@ -18,6 +18,9 @@ _$ThemePageConfigImpl _$$ThemePageConfigImplFromJson(
       dialing: json['dialing'] == null
           ? const CallPageConfig()
           : CallPageConfig.fromJson(json['dialing'] as Map<String, dynamic>),
+      keypad: json['keypad'] == null
+          ? const KeypadPageConfig()
+          : KeypadPageConfig.fromJson(json['keypad'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$$ThemePageConfigImplToJson(
@@ -26,6 +29,7 @@ Map<String, dynamic> _$$ThemePageConfigImplToJson(
       'login': instance.login.toJson(),
       'about': instance.about.toJson(),
       'dialing': instance.dialing.toJson(),
+      'keypad': instance.keypad.toJson(),
     };
 
 _$LoginPageConfigImpl _$$LoginPageConfigImplFromJson(
@@ -154,4 +158,37 @@ Map<String, dynamic> _$$CallPageInfoConfigImplToJson(
       'numberTextStyle': instance.numberTextStyle?.toJson(),
       'callStatusTextStyle': instance.callStatusTextStyle?.toJson(),
       'processingStatusTextStyle': instance.processingStatusTextStyle?.toJson(),
+    };
+
+_$KeypadPageConfigImpl _$$KeypadPageConfigImplFromJson(
+        Map<String, dynamic> json) =>
+    _$KeypadPageConfigImpl(
+      systemUiOverlayStyle: json['systemUiOverlayStyle'] == null
+          ? null
+          : OverlayStyleModel.fromJson(
+              json['systemUiOverlayStyle'] as Map<String, dynamic>),
+      textField: json['textField'] == null
+          ? null
+          : TextFieldConfig.fromJson(json['textField'] as Map<String, dynamic>),
+      contactName: json['contactName'] == null
+          ? null
+          : TextFieldConfig.fromJson(
+              json['contactName'] as Map<String, dynamic>),
+      keypad: json['keypad'] == null
+          ? null
+          : KeypadStyleConfig.fromJson(json['keypad'] as Map<String, dynamic>),
+      actionpad: json['actionpad'] == null
+          ? null
+          : ActionPadWidgetConfig.fromJson(
+              json['actionpad'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$$KeypadPageConfigImplToJson(
+        _$KeypadPageConfigImpl instance) =>
+    <String, dynamic>{
+      'systemUiOverlayStyle': instance.systemUiOverlayStyle?.toJson(),
+      'textField': instance.textField?.toJson(),
+      'contactName': instance.contactName?.toJson(),
+      'keypad': instance.keypad?.toJson(),
+      'actionpad': instance.actionpad?.toJson(),
     };

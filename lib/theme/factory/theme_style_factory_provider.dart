@@ -64,11 +64,17 @@ class ThemeStyleFactoryProvider {
         OnboardingPictureLogoStyleFactory(colorScheme, primaryOnboardingLogo, loginPageScheme);
     final onLogoStyleFactory = OnboardingLogoStyleFactory(colorScheme, secondaryOnboardingLogo, loginPageScheme);
     final gradientsStyleFactory = GradientsStyleFactory(primaryGradientColorsConfig);
-    final aboutScreenStyleFactory = AboutScreenStyleFactory(loginPageScheme);
-    final callScreenStyleFactory = CallScreenStyleFactory(callPageScheme, colorScheme);
+
     final loginModeSelectStyleFactory = LoginModeSelectScreenStyleFactory(loginPageScheme.modeSelect);
     final leadingAvatarStyleFactory =
         LeadingAvatarStyleFactory(colorScheme, widgetConfig.imageAssets.leadingAvatarStyle);
+    final keypadStyleFactory = KeypadStyleFactory(colorScheme, config: null, textTheme: createTextTheme());
+
+    // Screen-specific styles
+    final aboutScreenStyleFactory = AboutScreenStyleFactory(loginPageScheme);
+    final callScreenStyleFactory = CallScreenStyleFactory(callPageScheme, colorScheme);
+    final keypadScreenStyleFactory =
+        KeypadScreenStyleFactory(colorScheme, config: pageConfig.keypad, textTheme: createTextTheme());
 
     return <ThemeExtension?>[
       textButtonStyle,
@@ -89,10 +95,15 @@ class ThemeStyleFactoryProvider {
       onPictureLogoStyleFactory.create(),
       onLogoStyleFactory.create(),
       gradientsStyleFactory.create(),
+
+      loginModeSelectStyleFactory.create(),
+      leadingAvatarStyleFactory.create(),
+      keypadStyleFactory.create(),
+
+      /// Screen-specific styles
+      keypadScreenStyleFactory.create(),
       aboutScreenStyleFactory.create(),
       callScreenStyleFactory.create(),
-      loginModeSelectStyleFactory.create(),
-      leadingAvatarStyleFactory.create()
     ].nonNulls.toList();
   }
 
