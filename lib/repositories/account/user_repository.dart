@@ -5,48 +5,28 @@ import 'package:logging/logging.dart';
 import 'package:webtrit_api/webtrit_api.dart';
 
 import 'package:webtrit_phone/app/session/session.dart';
+import 'package:webtrit_phone/common/common.dart';
 
 export 'package:webtrit_api/webtrit_api.dart'
     show Balance, BalanceType, BillingModel, Numbers, UserInfo, $UserInfoCopyWith;
 
 final _logger = Logger('UserRepository');
 
-class UserRepository {
+class UserRepository implements Refreshable {
   UserRepository(
     this.webtritApiClient,
     this.token, {
-    this.polling = true,
-    this.pollPeriod = const Duration(seconds: 10),
     SessionGuard? sessionGuard,
   }) : _sessionGuard = sessionGuard ?? const EmptySessionGuard() {
-    _updatesController = StreamController<UserInfo>.broadcast(
-      onListen: _onListen,
-      onCancel: _onCancel,
-    );
+    _updatesController = StreamController<UserInfo>.broadcast();
   }
 
   final WebtritApiClient webtritApiClient;
   final String token;
-  final bool polling;
-  final Duration pollPeriod;
   late final StreamController<UserInfo> _updatesController;
   final SessionGuard _sessionGuard;
 
-  Timer? _pullTimer;
   UserInfo? _lastInfo;
-
-  /// Pay attention, this callback calling only on first listener
-  /// read [StreamController.broadcast]
-  void _onListen() async {
-    if (polling) {
-      _pullTimer = Timer.periodic(pollPeriod, (_) => _gatherUserInfo().ignore());
-    }
-  }
-
-  void _onCancel() {
-    _pullTimer?.cancel();
-    _pullTimer = null;
-  }
 
   Future<UserInfo?> _gatherUserInfo() async {
     try {
@@ -88,5 +68,10 @@ class UserRepository {
 
   Future<void> delete() async {
     await webtritApiClient.deleteUserInfo(token);
+  }
+
+  @override
+  Future<void> refresh() {
+    return _gatherUserInfo();
   }
 }
