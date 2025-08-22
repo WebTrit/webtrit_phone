@@ -23,6 +23,7 @@ mixin _$ThemePageConfig {
   LoginPageConfig get login => throw _privateConstructorUsedError;
   AboutPageConfig get about => throw _privateConstructorUsedError;
   CallPageConfig get dialing => throw _privateConstructorUsedError;
+  KeypadPageConfig get keypad => throw _privateConstructorUsedError;
 
   /// Serializes this ThemePageConfig to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -41,11 +42,15 @@ abstract class $ThemePageConfigCopyWith<$Res> {
       _$ThemePageConfigCopyWithImpl<$Res, ThemePageConfig>;
   @useResult
   $Res call(
-      {LoginPageConfig login, AboutPageConfig about, CallPageConfig dialing});
+      {LoginPageConfig login,
+      AboutPageConfig about,
+      CallPageConfig dialing,
+      KeypadPageConfig keypad});
 
   $LoginPageConfigCopyWith<$Res> get login;
   $AboutPageConfigCopyWith<$Res> get about;
   $CallPageConfigCopyWith<$Res> get dialing;
+  $KeypadPageConfigCopyWith<$Res> get keypad;
 }
 
 /// @nodoc
@@ -66,6 +71,7 @@ class _$ThemePageConfigCopyWithImpl<$Res, $Val extends ThemePageConfig>
     Object? login = null,
     Object? about = null,
     Object? dialing = null,
+    Object? keypad = null,
   }) {
     return _then(_value.copyWith(
       login: null == login
@@ -80,6 +86,10 @@ class _$ThemePageConfigCopyWithImpl<$Res, $Val extends ThemePageConfig>
           ? _value.dialing
           : dialing // ignore: cast_nullable_to_non_nullable
               as CallPageConfig,
+      keypad: null == keypad
+          ? _value.keypad
+          : keypad // ignore: cast_nullable_to_non_nullable
+              as KeypadPageConfig,
     ) as $Val);
   }
 
@@ -112,6 +122,16 @@ class _$ThemePageConfigCopyWithImpl<$Res, $Val extends ThemePageConfig>
       return _then(_value.copyWith(dialing: value) as $Val);
     });
   }
+
+  /// Create a copy of ThemePageConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $KeypadPageConfigCopyWith<$Res> get keypad {
+    return $KeypadPageConfigCopyWith<$Res>(_value.keypad, (value) {
+      return _then(_value.copyWith(keypad: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
@@ -123,7 +143,10 @@ abstract class _$$ThemePageConfigImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {LoginPageConfig login, AboutPageConfig about, CallPageConfig dialing});
+      {LoginPageConfig login,
+      AboutPageConfig about,
+      CallPageConfig dialing,
+      KeypadPageConfig keypad});
 
   @override
   $LoginPageConfigCopyWith<$Res> get login;
@@ -131,6 +154,8 @@ abstract class _$$ThemePageConfigImplCopyWith<$Res>
   $AboutPageConfigCopyWith<$Res> get about;
   @override
   $CallPageConfigCopyWith<$Res> get dialing;
+  @override
+  $KeypadPageConfigCopyWith<$Res> get keypad;
 }
 
 /// @nodoc
@@ -149,6 +174,7 @@ class __$$ThemePageConfigImplCopyWithImpl<$Res>
     Object? login = null,
     Object? about = null,
     Object? dialing = null,
+    Object? keypad = null,
   }) {
     return _then(_$ThemePageConfigImpl(
       login: null == login
@@ -163,6 +189,10 @@ class __$$ThemePageConfigImplCopyWithImpl<$Res>
           ? _value.dialing
           : dialing // ignore: cast_nullable_to_non_nullable
               as CallPageConfig,
+      keypad: null == keypad
+          ? _value.keypad
+          : keypad // ignore: cast_nullable_to_non_nullable
+              as KeypadPageConfig,
     ));
   }
 }
@@ -174,7 +204,8 @@ class _$ThemePageConfigImpl implements _ThemePageConfig {
   const _$ThemePageConfigImpl(
       {this.login = const LoginPageConfig(),
       this.about = const AboutPageConfig(),
-      this.dialing = const CallPageConfig()});
+      this.dialing = const CallPageConfig(),
+      this.keypad = const KeypadPageConfig()});
 
   factory _$ThemePageConfigImpl.fromJson(Map<String, dynamic> json) =>
       _$$ThemePageConfigImplFromJson(json);
@@ -188,10 +219,13 @@ class _$ThemePageConfigImpl implements _ThemePageConfig {
   @override
   @JsonKey()
   final CallPageConfig dialing;
+  @override
+  @JsonKey()
+  final KeypadPageConfig keypad;
 
   @override
   String toString() {
-    return 'ThemePageConfig(login: $login, about: $about, dialing: $dialing)';
+    return 'ThemePageConfig(login: $login, about: $about, dialing: $dialing, keypad: $keypad)';
   }
 
   @override
@@ -201,12 +235,13 @@ class _$ThemePageConfigImpl implements _ThemePageConfig {
             other is _$ThemePageConfigImpl &&
             (identical(other.login, login) || other.login == login) &&
             (identical(other.about, about) || other.about == about) &&
-            (identical(other.dialing, dialing) || other.dialing == dialing));
+            (identical(other.dialing, dialing) || other.dialing == dialing) &&
+            (identical(other.keypad, keypad) || other.keypad == keypad));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, login, about, dialing);
+  int get hashCode => Object.hash(runtimeType, login, about, dialing, keypad);
 
   /// Create a copy of ThemePageConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -229,7 +264,8 @@ abstract class _ThemePageConfig implements ThemePageConfig {
   const factory _ThemePageConfig(
       {final LoginPageConfig login,
       final AboutPageConfig about,
-      final CallPageConfig dialing}) = _$ThemePageConfigImpl;
+      final CallPageConfig dialing,
+      final KeypadPageConfig keypad}) = _$ThemePageConfigImpl;
 
   factory _ThemePageConfig.fromJson(Map<String, dynamic> json) =
       _$ThemePageConfigImpl.fromJson;
@@ -240,6 +276,8 @@ abstract class _ThemePageConfig implements ThemePageConfig {
   AboutPageConfig get about;
   @override
   CallPageConfig get dialing;
+  @override
+  KeypadPageConfig get keypad;
 
   /// Create a copy of ThemePageConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -255,11 +293,20 @@ LoginPageConfig _$LoginPageConfigFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$LoginPageConfig {
+  /// Path or URL to the picture/logo displayed on the login page.
   String? get picture => throw _privateConstructorUsedError;
+
+  /// Scaling factor for the displayed picture/logo.
   double? get scale => throw _privateConstructorUsedError;
+
+  /// Color value for labels, defined as a HEX string (e.g. `#FF0000`).
   String? get labelColor => throw _privateConstructorUsedError;
+
+  /// Configuration for the **mode selection** screen.
   LoginModeSelectPageConfig get modeSelect =>
       throw _privateConstructorUsedError;
+
+  /// Metadata section with additional information such as links, version, etc.
   Metadata get metadata => throw _privateConstructorUsedError;
 
   /// Serializes this LoginPageConfig to a JSON map.
@@ -434,15 +481,24 @@ class _$LoginPageConfigImpl implements _LoginPageConfig {
   factory _$LoginPageConfigImpl.fromJson(Map<String, dynamic> json) =>
       _$$LoginPageConfigImplFromJson(json);
 
+  /// Path or URL to the picture/logo displayed on the login page.
   @override
   final String? picture;
+
+  /// Scaling factor for the displayed picture/logo.
   @override
   final double? scale;
+
+  /// Color value for labels, defined as a HEX string (e.g. `#FF0000`).
   @override
   final String? labelColor;
+
+  /// Configuration for the **mode selection** screen.
   @override
   @JsonKey()
   final LoginModeSelectPageConfig modeSelect;
+
+  /// Metadata section with additional information such as links, version, etc.
   @override
   @JsonKey()
   final Metadata metadata;
@@ -500,14 +556,23 @@ abstract class _LoginPageConfig implements LoginPageConfig {
   factory _LoginPageConfig.fromJson(Map<String, dynamic> json) =
       _$LoginPageConfigImpl.fromJson;
 
+  /// Path or URL to the picture/logo displayed on the login page.
   @override
   String? get picture;
+
+  /// Scaling factor for the displayed picture/logo.
   @override
   double? get scale;
+
+  /// Color value for labels, defined as a HEX string (e.g. `#FF0000`).
   @override
   String? get labelColor;
+
+  /// Configuration for the **mode selection** screen.
   @override
   LoginModeSelectPageConfig get modeSelect;
+
+  /// Metadata section with additional information such as links, version, etc.
   @override
   Metadata get metadata;
 
@@ -755,7 +820,10 @@ AboutPageConfig _$AboutPageConfigFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$AboutPageConfig {
+  /// Path or URL to the picture/logo displayed on the About page.
   String? get picture => throw _privateConstructorUsedError;
+
+  /// Metadata section with additional information such as version, build number, etc.
   Metadata get metadata => throw _privateConstructorUsedError;
 
   /// Serializes this AboutPageConfig to a JSON map.
@@ -872,8 +940,11 @@ class _$AboutPageConfigImpl implements _AboutPageConfig {
   factory _$AboutPageConfigImpl.fromJson(Map<String, dynamic> json) =>
       _$$AboutPageConfigImplFromJson(json);
 
+  /// Path or URL to the picture/logo displayed on the About page.
   @override
   final String? picture;
+
+  /// Metadata section with additional information such as version, build number, etc.
   @override
   @JsonKey()
   final Metadata metadata;
@@ -921,8 +992,11 @@ abstract class _AboutPageConfig implements AboutPageConfig {
   factory _AboutPageConfig.fromJson(Map<String, dynamic> json) =
       _$AboutPageConfigImpl.fromJson;
 
+  /// Path or URL to the picture/logo displayed on the About page.
   @override
   String? get picture;
+
+  /// Metadata section with additional information such as version, build number, etc.
   @override
   Metadata get metadata;
 
@@ -940,9 +1014,14 @@ CallPageConfig _$CallPageConfigFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$CallPageConfig {
+  /// System UI overlay style (status bar, navigation bar).
   OverlayStyleModel? get systemUiOverlayStyle =>
       throw _privateConstructorUsedError;
+
+  /// Style configuration for the app bar (title, icons, background).
   AppBarStyleConfig? get appBarStyle => throw _privateConstructorUsedError;
+
+  /// Style configuration for the call information area (username, number, status).
   CallPageInfoConfig? get callInfo => throw _privateConstructorUsedError;
 
   /// Serializes this CallPageConfig to a JSON map.
@@ -1115,10 +1194,15 @@ class _$CallPageConfigImpl implements _CallPageConfig {
   factory _$CallPageConfigImpl.fromJson(Map<String, dynamic> json) =>
       _$$CallPageConfigImplFromJson(json);
 
+  /// System UI overlay style (status bar, navigation bar).
   @override
   final OverlayStyleModel? systemUiOverlayStyle;
+
+  /// Style configuration for the app bar (title, icons, background).
   @override
   final AppBarStyleConfig? appBarStyle;
+
+  /// Style configuration for the call information area (username, number, status).
   @override
   final CallPageInfoConfig? callInfo;
 
@@ -1171,10 +1255,15 @@ abstract class _CallPageConfig implements CallPageConfig {
   factory _CallPageConfig.fromJson(Map<String, dynamic> json) =
       _$CallPageConfigImpl.fromJson;
 
+  /// System UI overlay style (status bar, navigation bar).
   @override
   OverlayStyleModel? get systemUiOverlayStyle;
+
+  /// Style configuration for the app bar (title, icons, background).
   @override
   AppBarStyleConfig? get appBarStyle;
+
+  /// Style configuration for the call information area (username, number, status).
   @override
   CallPageInfoConfig? get callInfo;
 
@@ -1192,17 +1281,17 @@ CallPageInfoConfig _$CallPageInfoConfigFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$CallPageInfoConfig {
-  /// Style for the main username (displayed with `displaySmall`)
+  /// Style for the main username (displayed with `displaySmall`).
   TextStyleConfig? get usernameTextStyle => throw _privateConstructorUsedError;
 
-  /// Style for the phone number if username is present (bodyLarge or displaySmall)
+  /// Style for the phone number if username is present (bodyLarge or displaySmall).
   TextStyleConfig? get numberTextStyle => throw _privateConstructorUsedError;
 
-  /// Style for the call status message (e.g. duration or “incoming”)
+  /// Style for the call status message (e.g. duration or “incoming”).
   TextStyleConfig? get callStatusTextStyle =>
       throw _privateConstructorUsedError;
 
-  /// Style for the processing status message (e.g. “Transfer in progress”)
+  /// Style for the processing status message (e.g. “Transfer in progress”).
   TextStyleConfig? get processingStatusTextStyle =>
       throw _privateConstructorUsedError;
 
@@ -1408,19 +1497,19 @@ class _$CallPageInfoConfigImpl implements _CallPageInfoConfig {
   factory _$CallPageInfoConfigImpl.fromJson(Map<String, dynamic> json) =>
       _$$CallPageInfoConfigImplFromJson(json);
 
-  /// Style for the main username (displayed with `displaySmall`)
+  /// Style for the main username (displayed with `displaySmall`).
   @override
   final TextStyleConfig? usernameTextStyle;
 
-  /// Style for the phone number if username is present (bodyLarge or displaySmall)
+  /// Style for the phone number if username is present (bodyLarge or displaySmall).
   @override
   final TextStyleConfig? numberTextStyle;
 
-  /// Style for the call status message (e.g. duration or “incoming”)
+  /// Style for the call status message (e.g. duration or “incoming”).
   @override
   final TextStyleConfig? callStatusTextStyle;
 
-  /// Style for the processing status message (e.g. “Transfer in progress”)
+  /// Style for the processing status message (e.g. “Transfer in progress”).
   @override
   final TextStyleConfig? processingStatusTextStyle;
 
@@ -1478,19 +1567,19 @@ abstract class _CallPageInfoConfig implements CallPageInfoConfig {
   factory _CallPageInfoConfig.fromJson(Map<String, dynamic> json) =
       _$CallPageInfoConfigImpl.fromJson;
 
-  /// Style for the main username (displayed with `displaySmall`)
+  /// Style for the main username (displayed with `displaySmall`).
   @override
   TextStyleConfig? get usernameTextStyle;
 
-  /// Style for the phone number if username is present (bodyLarge or displaySmall)
+  /// Style for the phone number if username is present (bodyLarge or displaySmall).
   @override
   TextStyleConfig? get numberTextStyle;
 
-  /// Style for the call status message (e.g. duration or “incoming”)
+  /// Style for the call status message (e.g. duration or “incoming”).
   @override
   TextStyleConfig? get callStatusTextStyle;
 
-  /// Style for the processing status message (e.g. “Transfer in progress”)
+  /// Style for the processing status message (e.g. “Transfer in progress”).
   @override
   TextStyleConfig? get processingStatusTextStyle;
 
@@ -1499,5 +1588,361 @@ abstract class _CallPageInfoConfig implements CallPageInfoConfig {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$CallPageInfoConfigImplCopyWith<_$CallPageInfoConfigImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+KeypadPageConfig _$KeypadPageConfigFromJson(Map<String, dynamic> json) {
+  return _KeypadPageConfig.fromJson(json);
+}
+
+/// @nodoc
+mixin _$KeypadPageConfig {
+  /// System UI overlay configuration (status bar, navigation bar).
+  OverlayStyleModel? get systemUiOverlayStyle =>
+      throw _privateConstructorUsedError;
+
+  /// Style for the number input field at the top of the keypad screen.
+  TextFieldConfig? get textField => throw _privateConstructorUsedError;
+
+  /// Style for the contact name displayed under the number input.
+  TextFieldConfig? get contactName => throw _privateConstructorUsedError;
+
+  /// Style configuration for the numeric keypad widget.
+  KeypadStyleConfig? get keypad => throw _privateConstructorUsedError;
+
+  /// Style configuration for the action pad (call buttons, backspace, etc).
+  ActionPadWidgetConfig? get actionpad => throw _privateConstructorUsedError;
+
+  /// Serializes this KeypadPageConfig to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of KeypadPageConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $KeypadPageConfigCopyWith<KeypadPageConfig> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $KeypadPageConfigCopyWith<$Res> {
+  factory $KeypadPageConfigCopyWith(
+          KeypadPageConfig value, $Res Function(KeypadPageConfig) then) =
+      _$KeypadPageConfigCopyWithImpl<$Res, KeypadPageConfig>;
+  @useResult
+  $Res call(
+      {OverlayStyleModel? systemUiOverlayStyle,
+      TextFieldConfig? textField,
+      TextFieldConfig? contactName,
+      KeypadStyleConfig? keypad,
+      ActionPadWidgetConfig? actionpad});
+
+  $OverlayStyleModelCopyWith<$Res>? get systemUiOverlayStyle;
+  $TextFieldConfigCopyWith<$Res>? get textField;
+  $TextFieldConfigCopyWith<$Res>? get contactName;
+  $KeypadStyleConfigCopyWith<$Res>? get keypad;
+  $ActionPadWidgetConfigCopyWith<$Res>? get actionpad;
+}
+
+/// @nodoc
+class _$KeypadPageConfigCopyWithImpl<$Res, $Val extends KeypadPageConfig>
+    implements $KeypadPageConfigCopyWith<$Res> {
+  _$KeypadPageConfigCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of KeypadPageConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? systemUiOverlayStyle = freezed,
+    Object? textField = freezed,
+    Object? contactName = freezed,
+    Object? keypad = freezed,
+    Object? actionpad = freezed,
+  }) {
+    return _then(_value.copyWith(
+      systemUiOverlayStyle: freezed == systemUiOverlayStyle
+          ? _value.systemUiOverlayStyle
+          : systemUiOverlayStyle // ignore: cast_nullable_to_non_nullable
+              as OverlayStyleModel?,
+      textField: freezed == textField
+          ? _value.textField
+          : textField // ignore: cast_nullable_to_non_nullable
+              as TextFieldConfig?,
+      contactName: freezed == contactName
+          ? _value.contactName
+          : contactName // ignore: cast_nullable_to_non_nullable
+              as TextFieldConfig?,
+      keypad: freezed == keypad
+          ? _value.keypad
+          : keypad // ignore: cast_nullable_to_non_nullable
+              as KeypadStyleConfig?,
+      actionpad: freezed == actionpad
+          ? _value.actionpad
+          : actionpad // ignore: cast_nullable_to_non_nullable
+              as ActionPadWidgetConfig?,
+    ) as $Val);
+  }
+
+  /// Create a copy of KeypadPageConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $OverlayStyleModelCopyWith<$Res>? get systemUiOverlayStyle {
+    if (_value.systemUiOverlayStyle == null) {
+      return null;
+    }
+
+    return $OverlayStyleModelCopyWith<$Res>(_value.systemUiOverlayStyle!,
+        (value) {
+      return _then(_value.copyWith(systemUiOverlayStyle: value) as $Val);
+    });
+  }
+
+  /// Create a copy of KeypadPageConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $TextFieldConfigCopyWith<$Res>? get textField {
+    if (_value.textField == null) {
+      return null;
+    }
+
+    return $TextFieldConfigCopyWith<$Res>(_value.textField!, (value) {
+      return _then(_value.copyWith(textField: value) as $Val);
+    });
+  }
+
+  /// Create a copy of KeypadPageConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $TextFieldConfigCopyWith<$Res>? get contactName {
+    if (_value.contactName == null) {
+      return null;
+    }
+
+    return $TextFieldConfigCopyWith<$Res>(_value.contactName!, (value) {
+      return _then(_value.copyWith(contactName: value) as $Val);
+    });
+  }
+
+  /// Create a copy of KeypadPageConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $KeypadStyleConfigCopyWith<$Res>? get keypad {
+    if (_value.keypad == null) {
+      return null;
+    }
+
+    return $KeypadStyleConfigCopyWith<$Res>(_value.keypad!, (value) {
+      return _then(_value.copyWith(keypad: value) as $Val);
+    });
+  }
+
+  /// Create a copy of KeypadPageConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $ActionPadWidgetConfigCopyWith<$Res>? get actionpad {
+    if (_value.actionpad == null) {
+      return null;
+    }
+
+    return $ActionPadWidgetConfigCopyWith<$Res>(_value.actionpad!, (value) {
+      return _then(_value.copyWith(actionpad: value) as $Val);
+    });
+  }
+}
+
+/// @nodoc
+abstract class _$$KeypadPageConfigImplCopyWith<$Res>
+    implements $KeypadPageConfigCopyWith<$Res> {
+  factory _$$KeypadPageConfigImplCopyWith(_$KeypadPageConfigImpl value,
+          $Res Function(_$KeypadPageConfigImpl) then) =
+      __$$KeypadPageConfigImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {OverlayStyleModel? systemUiOverlayStyle,
+      TextFieldConfig? textField,
+      TextFieldConfig? contactName,
+      KeypadStyleConfig? keypad,
+      ActionPadWidgetConfig? actionpad});
+
+  @override
+  $OverlayStyleModelCopyWith<$Res>? get systemUiOverlayStyle;
+  @override
+  $TextFieldConfigCopyWith<$Res>? get textField;
+  @override
+  $TextFieldConfigCopyWith<$Res>? get contactName;
+  @override
+  $KeypadStyleConfigCopyWith<$Res>? get keypad;
+  @override
+  $ActionPadWidgetConfigCopyWith<$Res>? get actionpad;
+}
+
+/// @nodoc
+class __$$KeypadPageConfigImplCopyWithImpl<$Res>
+    extends _$KeypadPageConfigCopyWithImpl<$Res, _$KeypadPageConfigImpl>
+    implements _$$KeypadPageConfigImplCopyWith<$Res> {
+  __$$KeypadPageConfigImplCopyWithImpl(_$KeypadPageConfigImpl _value,
+      $Res Function(_$KeypadPageConfigImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of KeypadPageConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? systemUiOverlayStyle = freezed,
+    Object? textField = freezed,
+    Object? contactName = freezed,
+    Object? keypad = freezed,
+    Object? actionpad = freezed,
+  }) {
+    return _then(_$KeypadPageConfigImpl(
+      systemUiOverlayStyle: freezed == systemUiOverlayStyle
+          ? _value.systemUiOverlayStyle
+          : systemUiOverlayStyle // ignore: cast_nullable_to_non_nullable
+              as OverlayStyleModel?,
+      textField: freezed == textField
+          ? _value.textField
+          : textField // ignore: cast_nullable_to_non_nullable
+              as TextFieldConfig?,
+      contactName: freezed == contactName
+          ? _value.contactName
+          : contactName // ignore: cast_nullable_to_non_nullable
+              as TextFieldConfig?,
+      keypad: freezed == keypad
+          ? _value.keypad
+          : keypad // ignore: cast_nullable_to_non_nullable
+              as KeypadStyleConfig?,
+      actionpad: freezed == actionpad
+          ? _value.actionpad
+          : actionpad // ignore: cast_nullable_to_non_nullable
+              as ActionPadWidgetConfig?,
+    ));
+  }
+}
+
+/// @nodoc
+
+@JsonSerializable(explicitToJson: true)
+class _$KeypadPageConfigImpl implements _KeypadPageConfig {
+  const _$KeypadPageConfigImpl(
+      {this.systemUiOverlayStyle,
+      this.textField,
+      this.contactName,
+      this.keypad,
+      this.actionpad});
+
+  factory _$KeypadPageConfigImpl.fromJson(Map<String, dynamic> json) =>
+      _$$KeypadPageConfigImplFromJson(json);
+
+  /// System UI overlay configuration (status bar, navigation bar).
+  @override
+  final OverlayStyleModel? systemUiOverlayStyle;
+
+  /// Style for the number input field at the top of the keypad screen.
+  @override
+  final TextFieldConfig? textField;
+
+  /// Style for the contact name displayed under the number input.
+  @override
+  final TextFieldConfig? contactName;
+
+  /// Style configuration for the numeric keypad widget.
+  @override
+  final KeypadStyleConfig? keypad;
+
+  /// Style configuration for the action pad (call buttons, backspace, etc).
+  @override
+  final ActionPadWidgetConfig? actionpad;
+
+  @override
+  String toString() {
+    return 'KeypadPageConfig(systemUiOverlayStyle: $systemUiOverlayStyle, textField: $textField, contactName: $contactName, keypad: $keypad, actionpad: $actionpad)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$KeypadPageConfigImpl &&
+            (identical(other.systemUiOverlayStyle, systemUiOverlayStyle) ||
+                other.systemUiOverlayStyle == systemUiOverlayStyle) &&
+            (identical(other.textField, textField) ||
+                other.textField == textField) &&
+            (identical(other.contactName, contactName) ||
+                other.contactName == contactName) &&
+            (identical(other.keypad, keypad) || other.keypad == keypad) &&
+            (identical(other.actionpad, actionpad) ||
+                other.actionpad == actionpad));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(runtimeType, systemUiOverlayStyle, textField,
+      contactName, keypad, actionpad);
+
+  /// Create a copy of KeypadPageConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$KeypadPageConfigImplCopyWith<_$KeypadPageConfigImpl> get copyWith =>
+      __$$KeypadPageConfigImplCopyWithImpl<_$KeypadPageConfigImpl>(
+          this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$KeypadPageConfigImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _KeypadPageConfig implements KeypadPageConfig {
+  const factory _KeypadPageConfig(
+      {final OverlayStyleModel? systemUiOverlayStyle,
+      final TextFieldConfig? textField,
+      final TextFieldConfig? contactName,
+      final KeypadStyleConfig? keypad,
+      final ActionPadWidgetConfig? actionpad}) = _$KeypadPageConfigImpl;
+
+  factory _KeypadPageConfig.fromJson(Map<String, dynamic> json) =
+      _$KeypadPageConfigImpl.fromJson;
+
+  /// System UI overlay configuration (status bar, navigation bar).
+  @override
+  OverlayStyleModel? get systemUiOverlayStyle;
+
+  /// Style for the number input field at the top of the keypad screen.
+  @override
+  TextFieldConfig? get textField;
+
+  /// Style for the contact name displayed under the number input.
+  @override
+  TextFieldConfig? get contactName;
+
+  /// Style configuration for the numeric keypad widget.
+  @override
+  KeypadStyleConfig? get keypad;
+
+  /// Style configuration for the action pad (call buttons, backspace, etc).
+  @override
+  ActionPadWidgetConfig? get actionpad;
+
+  /// Create a copy of KeypadPageConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$KeypadPageConfigImplCopyWith<_$KeypadPageConfigImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
