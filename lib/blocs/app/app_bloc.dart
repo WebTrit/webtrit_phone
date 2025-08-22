@@ -69,7 +69,11 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   }
 
   void _onSessionLoggedIn(Session session) {
-    CrashlyticsUtils.logSession(userId: session.userId, tenantId: session.tenantId, coreUrl: session.coreUrl!);
+    unawaited(CrashlyticsUtils.logSession(
+      userId: session.userId,
+      tenantId: session.tenantId,
+      coreUrl: session.coreUrl!,
+    ));
   }
 
   void _onSessionLoggedOut(Session session) {

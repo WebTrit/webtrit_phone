@@ -25,9 +25,7 @@ class CrashlyticsUtils {
     final hash = kIsWeb ? null : Isolate.current.hashCode;
 
     final crashlytics = FirebaseCrashlytics.instance;
-
     unawaited(crashlytics.setCustomKey('isolate_label', label));
-
     if (dbg != null) unawaited(crashlytics.setCustomKey('isolate_debugName', dbg));
     if (hash != null) unawaited(crashlytics.setCustomKey('isolate_hash', hash));
   }
