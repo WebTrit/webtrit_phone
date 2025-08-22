@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:logging/logging.dart';
 
@@ -70,9 +69,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   }
 
   void _onSessionLoggedIn(Session session) {
-    FirebaseCrashlytics.instance.setUserIdentifier(session.userId).ignore();
-    FirebaseCrashlytics.instance.setCustomKey('tenantId', session.tenantId).ignore();
-    FirebaseCrashlytics.instance.setCustomKey('coreUrl', session.coreUrl!).ignore();
+    CrashlyticsUtils.logSession(userId: session.userId, tenantId: session.tenantId, coreUrl: session.coreUrl!);
   }
 
   void _onSessionLoggedOut(Session session) {
