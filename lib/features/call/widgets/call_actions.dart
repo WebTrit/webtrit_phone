@@ -330,7 +330,7 @@ class _CallActionsState extends State<CallActions> {
 
                     onKeyPressed!(key);
                   },
-                  style: style.key,
+                  style: style.key == null ? null : KeypadKeyStyle(buttonStyle: style.key),
                 ),
                 if ((i + 1) % 3 == 0) ...[
                   const SizedBox(),
