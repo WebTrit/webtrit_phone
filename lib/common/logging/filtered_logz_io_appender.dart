@@ -29,11 +29,13 @@ class FilteredLogzIoAppender extends LogzIoApiAppender {
     try {
       await super.sendLogEventsWithDio(entries, userProperties, cancelToken);
     } on DioException catch (e) {
-      if (RemoteLogFilter._shouldIgnoreDioError(e)) {
-        _logger.info('Ignoring LogzIO DioException: $e');
+      if (RemoteLogFilter._shouldIgnoreDioConnectionError(e)) {
+        // Ignore logging this error to prevent log spam
       } else {
         _logger.warning('LogzIO DioException (not ignored): $e');
       }
+    } catch (e) {
+      _logger.warning('LogzIO Exception: $e');
     }
   }
 
@@ -63,10 +65,10 @@ class RemoteLogFilter {
 
     // Filter specific Dio errors
     final dioError = record.error as DioException;
-    return !_shouldIgnoreDioError(dioError);
+    return !_shouldIgnoreDioConnectionError(dioError);
   }
 
-  static bool _shouldIgnoreDioError(DioException dioError) {
+  static bool _shouldIgnoreDioConnectionError(DioException dioError) {
     // Skip adding spam logs to the buffer if there is no internet connection for the specified hosts
     return (dioError.type == DioExceptionType.connectionTimeout || dioError.type == DioExceptionType.connectionError) &&
         ignoredHosts.any((host) => dioError.toString().contains(host));
