@@ -246,6 +246,7 @@ class PollingService implements Disposable {
         config.isRefreshing = true;
         try {
           await listener.refresh();
+          _logger.finest('PollingService: refresh() succeeded for $listener');
           config.consecutiveErrors = 0;
           config.lastSuccessAt = clock.now();
         } catch (e, st) {
@@ -283,6 +284,7 @@ class PollingService implements Disposable {
       try {
         if (_shouldRunTimers && reachable) {
           await listener.refresh();
+          _logger.finest('PollingService: leading refresh succeeded for $listener');
           config.consecutiveErrors = 0;
           config.lastSuccessAt = clock.now();
         }
