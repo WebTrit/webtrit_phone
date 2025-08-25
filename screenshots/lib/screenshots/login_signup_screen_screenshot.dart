@@ -53,7 +53,7 @@ class LoginSignUpScreenshot extends StatelessWidget {
           ],
         ),
         body: LoginSignupEmbeddedRequestScreen(
-          initialUrl: embedded.customLoginFeature.resource,
+          initialUrl: embedded.customLoginFeature.uri,
           pageInjectionStrategyBuilder: () {
             return DefaultPayloadInjectionStrategy();
           },

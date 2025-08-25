@@ -844,13 +844,12 @@ class LoginPasswordSigninScreenPageRoute extends PageRouteInfo<void> {
 /// [LoginRouterPage]
 class LoginRouterPageRoute extends PageRouteInfo<LoginRouterPageRouteArgs> {
   LoginRouterPageRoute({
-    LoginEmbedded? launchLoginEmbedded,
+    EmbeddedData? launchEmbeddedData,
     List<PageRouteInfo>? children,
   }) : super(
           LoginRouterPageRoute.name,
-          args: LoginRouterPageRouteArgs(
-            launchLoginEmbedded: launchLoginEmbedded,
-          ),
+          args:
+              LoginRouterPageRouteArgs(launchEmbeddedData: launchEmbeddedData),
           initialChildren: children,
         );
 
@@ -862,30 +861,30 @@ class LoginRouterPageRoute extends PageRouteInfo<LoginRouterPageRouteArgs> {
       final args = data.argsAs<LoginRouterPageRouteArgs>(
         orElse: () => const LoginRouterPageRouteArgs(),
       );
-      return LoginRouterPage(launchLoginEmbedded: args.launchLoginEmbedded);
+      return LoginRouterPage(launchEmbeddedData: args.launchEmbeddedData);
     },
   );
 }
 
 class LoginRouterPageRouteArgs {
-  const LoginRouterPageRouteArgs({this.launchLoginEmbedded});
+  const LoginRouterPageRouteArgs({this.launchEmbeddedData});
 
-  final LoginEmbedded? launchLoginEmbedded;
+  final EmbeddedData? launchEmbeddedData;
 
   @override
   String toString() {
-    return 'LoginRouterPageRouteArgs{launchLoginEmbedded: $launchLoginEmbedded}';
+    return 'LoginRouterPageRouteArgs{launchEmbeddedData: $launchEmbeddedData}';
   }
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     if (other is! LoginRouterPageRouteArgs) return false;
-    return launchLoginEmbedded == other.launchLoginEmbedded;
+    return launchEmbeddedData == other.launchEmbeddedData;
   }
 
   @override
-  int get hashCode => launchLoginEmbedded.hashCode;
+  int get hashCode => launchEmbeddedData.hashCode;
 }
 
 /// generated route for
@@ -893,7 +892,7 @@ class LoginRouterPageRouteArgs {
 class LoginSignupEmbeddedRequestScreenPageRoute
     extends PageRouteInfo<LoginSignupEmbeddedRequestScreenPageRouteArgs> {
   LoginSignupEmbeddedRequestScreenPageRoute({
-    required LoginEmbedded embeddedData,
+    required EmbeddedData embeddedData,
     List<PageRouteInfo>? children,
   }) : super(
           LoginSignupEmbeddedRequestScreenPageRoute.name,
@@ -919,7 +918,7 @@ class LoginSignupEmbeddedRequestScreenPageRouteArgs {
     required this.embeddedData,
   });
 
-  final LoginEmbedded embeddedData;
+  final EmbeddedData embeddedData;
 
   @override
   String toString() {

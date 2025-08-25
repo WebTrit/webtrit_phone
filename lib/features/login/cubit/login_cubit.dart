@@ -159,7 +159,7 @@ class LoginCubit extends Cubit<LoginState> with SystemInfoApiMapper {
     if (coreUrl != null) await _processSystemInfo(coreUrl, defaultTenantId, demo);
   }
 
-  void setEmbedded(LoginEmbedded embedded) {
+  void setEmbedded(EmbeddedData embedded) {
     emit(state.copyWith(
       embedded: embedded,
       coreUrl: isDemoModeEnabled ? demoCoreUrlFromEnvironment : coreUrlFromEnvironment,

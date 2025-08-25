@@ -1,5 +1,4 @@
-import 'login_embedded.dart';
-
+import '../embedded/embedded.dart';
 import '../login_flavor.dart';
 
 class LoginModeAction {
@@ -23,7 +22,7 @@ class LoginEmbeddedModeButton extends LoginModeAction {
     required this.isLaunchScreen,
   });
 
-  final LoginEmbedded customLoginFeature;
+  final EmbeddedData customLoginFeature;
   final bool isLaunchScreen;
 }
 

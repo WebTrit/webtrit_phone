@@ -17,7 +17,7 @@ class LoginState with _$LoginState {
     String? token,
     String? userId,
     // Used to represent an embedded launch page or a login type within tabbed navigation
-    LoginEmbedded? embedded,
+    EmbeddedData? embedded,
     // Extras and callback data that returned from the embedded page
     Map<String, dynamic>? embeddedExtras,
     Map<String, dynamic>? embeddedCallbackData,

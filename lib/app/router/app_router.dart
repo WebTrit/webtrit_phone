@@ -28,7 +28,7 @@ class AppRouter extends RootStackRouter {
   AppRouter(
     this._appBloc,
     this._appPermissions,
-    this._launchLoginEmbedded,
+    this._launchEmbeddedData,
     this._bottomMenuFeature,
     this._featureChecker,
   );
@@ -37,7 +37,7 @@ class AppRouter extends RootStackRouter {
   final AppPermissions _appPermissions;
   final FeatureChecker _featureChecker;
 
-  final LoginEmbedded? _launchLoginEmbedded;
+  final EmbeddedData? _launchEmbeddedData;
   final BottomMenuFeature _bottomMenuFeature;
 
   Session get session => _appBloc.state.session;
@@ -435,7 +435,7 @@ class AppRouter extends RootStackRouter {
       router.replaceAll(
         [
           LoginRouterPageRoute(
-            launchLoginEmbedded: _launchLoginEmbedded,
+            launchEmbeddedData: _launchEmbeddedData,
           )
         ],
       );

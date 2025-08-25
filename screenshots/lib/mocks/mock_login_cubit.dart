@@ -33,7 +33,7 @@ class MockLoginCubit extends MockCubit<LoginState> implements LoginCubit {
     return mock;
   }
 
-  factory MockLoginCubit.loginSwitchScreen({LoginEmbedded? embedded}) {
+  factory MockLoginCubit.loginSwitchScreen({EmbeddedData? embedded}) {
     final mock = MockLoginCubit();
     whenListen(
       mock,
