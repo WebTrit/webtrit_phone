@@ -6,39 +6,29 @@ import 'package:logging/logging.dart';
 
 import 'package:webtrit_api/webtrit_api.dart';
 
+import 'package:webtrit_phone/common/common.dart';
 import 'package:webtrit_phone/mappers/mappers.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/app/session/session.dart';
 
 final _logger = Logger('ExternalContactsRepository');
 
-class ExternalContactsRepository with ExternalContactApiMapper {
+class ExternalContactsRepository with ExternalContactApiMapper implements Refreshable {
   ExternalContactsRepository({
     required WebtritApiClient webtritApiClient,
     required String token,
-    bool periodicPolling = true,
     SessionGuard? sessionGuard,
   })  : _sessionGuard = sessionGuard ?? const EmptySessionGuard(),
         _webtritApiClient = webtritApiClient,
-        _token = token,
-        _periodicPolling = periodicPolling {
-    _controller = StreamController<List<ExternalContact>>.broadcast(
-      onListen: _onListenCallback,
-      onCancel: _onCancelCallback,
-    );
-    _listenedCounter = 0;
+        _token = token {
+    _controller = StreamController<List<ExternalContact>>.broadcast();
   }
 
   final WebtritApiClient _webtritApiClient;
   final String _token;
-  final bool _periodicPolling;
   final SessionGuard _sessionGuard;
 
   late StreamController<List<ExternalContact>> _controller;
-  // TODO: Remove useless variable _listenedCounter
-  // *The [onListen] callback is called when the first listener is subscribed, and the [onCancel] is called when there are no longer any active listeners. If a listener is added again later, after the [onCancel] was called, the [onListen] will be called again.*
-  late int _listenedCounter;
-  Timer? _periodicTimer;
 
   List<ExternalContact>? _cacheContacts;
 
@@ -52,20 +42,7 @@ class ExternalContactsRepository with ExternalContactApiMapper {
     _controller.add(contacts);
   }
 
-  void _onListenCallback() {
-    if (_periodicPolling && _listenedCounter++ == 0) {
-      _periodicTimer = Timer.periodic(const Duration(seconds: 60), (timer) => _gatherListContacts());
-    }
-  }
-
-  void _onCancelCallback() {
-    if (_periodicPolling && --_listenedCounter == 0) {
-      _periodicTimer?.cancel();
-      _periodicTimer = null;
-    }
-  }
-
-  void _gatherListContacts() async {
+  Future<void> _gatherListContacts() async {
     try {
       final contacts = await _listContacts();
       if (!listEquals(contacts, _cacheContacts)) {
@@ -84,5 +61,10 @@ class ExternalContactsRepository with ExternalContactApiMapper {
   Future<List<ExternalContact>> _listContacts() async {
     final contacts = await _webtritApiClient.getUserContactList(_token);
     return contacts.map(externalContactFromApi).toList();
+  }
+
+  @override
+  Future<void> refresh() async {
+    return _gatherListContacts();
   }
 }

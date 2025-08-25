@@ -14,7 +14,6 @@ import 'package:webtrit_phone/app/notifications/notifications.dart';
 import 'package:webtrit_phone/app/session/session.dart';
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/data/data.dart';
-import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/l10n/app_localizations.g.mapper.dart';
 import 'package:webtrit_phone/models/models.dart';
@@ -139,7 +138,6 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
           create: (context) => ExternalContactsRepository(
             webtritApiClient: context.read<WebtritApiClient>(),
             token: context.read<AppBloc>().state.session.token!,
-            periodicPolling: EnvironmentConfig.PERIODIC_POLLING,
           ),
         ),
         RepositoryProvider<UserRepository>(
@@ -537,6 +535,10 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
       PollingRegistration(
         listener: context.read<SystemInfoRepository>(),
         interval: const Duration(minutes: 5),
+      ),
+      PollingRegistration(
+        listener: context.read<ExternalContactsRepository>(),
+        interval: const Duration(minutes: 1),
       ),
       if (isVoicemailsEnabled)
         PollingRegistration(
