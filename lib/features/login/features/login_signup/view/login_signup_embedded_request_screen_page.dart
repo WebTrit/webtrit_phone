@@ -15,13 +15,13 @@ class LoginSignupEmbeddedRequestScreenPage extends StatelessWidget {
   // ignore: use_key_in_widget_constructors
   const LoginSignupEmbeddedRequestScreenPage(this.embeddedData);
 
-  final LoginEmbedded embeddedData;
+  final EmbeddedData embeddedData;
 
   @override
   Widget build(BuildContext context) {
     // TODO(Serdun): Implement directly in LoginEmbedded
     final resource = ResourceLoader.fromUri(
-      embeddedData.resource.toString(),
+      embeddedData.uri.toString(),
     );
 
     final locale = Localizations.localeOf(context);

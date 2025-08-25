@@ -74,7 +74,7 @@ class FeatureAccess {
   static FeatureAccess init(AppConfig appConfig, AppPreferences preferences) {
     try {
       final embeddedFeature = _tryConfigureEmbeddedFeature(appConfig);
-      final customLoginFeature = _tryEnableCustomLoginFeature(appConfig);
+      final customLoginFeature = _tryEnableCustomLoginFeature(appConfig, embeddedFeature.embeddedResources);
       final bottomMenuManager = _tryConfigureBottomMenuFeature(appConfig, preferences, embeddedFeature);
       final settingsFeature = _tryConfigureSettingsFeature(appConfig, preferences);
       final callFeature = _tryConfigureCallFeature(appConfig, preferences);
@@ -244,34 +244,30 @@ class FeatureAccess {
         : null;
   }
 
-  static LoginFeature _tryEnableCustomLoginFeature(AppConfig appConfig) {
+  // TODO(Serdun): Refactor login configuration to separate concerns more cleanly.
+  // Currently, modeSelectActions control both the launch screen and the buttons on the login_mode_select_screen,
+  // which leads to unclear and tightly coupled logic.
+  static LoginFeature _tryEnableCustomLoginFeature(AppConfig appConfig, List<EmbeddedData> embeddedData) {
+    final rawButtons = appConfig.loginConfig.modeSelectActions.where((button) => button.enabled);
     final buttons = <LoginModeAction>[];
 
-    final launchEmbeddedScreen = _toLoginEmbeddedModel(
-      appConfig.embeddedResources.firstWhereOrNull((embeddedScreen) => embeddedScreen.attributes['launch'] == true),
-    );
+    for (var actions in rawButtons) {
+      final loginFlavor = LoginFlavor.values.byName(actions.type);
+      final loginEmbeddedData = embeddedData.firstWhereOrNull((dto) => dto.id == actions.embeddedId);
 
-    for (var actions in appConfig.loginConfig.modeSelectActions.where((button) => button.enabled)) {
-      final flavor = LoginFlavor.values.byName(actions.type);
-      final loginEmbeddedScreen = appConfig.embeddedResources.firstWhereOrNull((dto) => dto.id == actions.embeddedId);
-
-      var isLaunchButtonVisible = actions.isLaunchButtonVisible;
-      var isEmbeddedConfigurationValid = flavor == LoginFlavor.embedded && loginEmbeddedScreen != null;
-      var isLaunchScreen = isEmbeddedConfigurationValid && !isLaunchButtonVisible && actions.isLaunchScreen;
-
-      if (isEmbeddedConfigurationValid) {
+      if (loginEmbeddedData != null && loginFlavor == LoginFlavor.embedded) {
         buttons.add(LoginEmbeddedModeButton(
           titleL10n: actions.titleL10n,
-          flavor: flavor,
-          customLoginFeature: _toLoginEmbeddedModel(loginEmbeddedScreen)!,
-          isLaunchButtonVisible: isLaunchButtonVisible,
-          isLaunchScreen: isLaunchScreen,
+          flavor: loginFlavor,
+          customLoginFeature: loginEmbeddedData,
+          isLaunchButtonVisible: actions.isLaunchButtonVisible,
+          isLaunchScreen: actions.isLaunchScreen,
         ));
-      } else if (flavor == LoginFlavor.login) {
+      } else if (loginFlavor == LoginFlavor.login) {
         buttons.add(LoginModeAction(
           titleL10n: actions.titleL10n,
-          flavor: flavor,
-          isLaunchButtonVisible: isLaunchButtonVisible,
+          flavor: loginFlavor,
+          isLaunchButtonVisible: actions.isLaunchButtonVisible,
         ));
       }
     }
@@ -279,18 +275,8 @@ class FeatureAccess {
     return LoginFeature(
       titleL10n: appConfig.loginConfig.greetingL10n,
       actions: buttons,
-      launchLoginPage: launchEmbeddedScreen,
+      launchLoginPage: embeddedData.firstWhereOrNull((embeddedScreen) => embeddedScreen.attributes['launch'] == true),
     );
-  }
-
-  static LoginEmbedded? _toLoginEmbeddedModel(EmbeddedResource? resource) {
-    return resource?.uri != null
-        ? LoginEmbedded(
-            titleL10n: resource!.toolbar.titleL10n,
-            showToolbar: resource.toolbar.showToolbar,
-            resource: resource.uriOrNull!,
-          )
-        : null;
   }
 
   static CallFeature _tryConfigureCallFeature(AppConfig appConfig, AppPreferences preferences) {
@@ -403,7 +389,7 @@ class FeatureAccess {
 class LoginFeature {
   final String? titleL10n;
   final List<LoginModeAction> actions;
-  final LoginEmbedded? launchLoginPage;
+  final EmbeddedData? launchLoginPage;
 
   LoginFeature({
     required this.titleL10n,

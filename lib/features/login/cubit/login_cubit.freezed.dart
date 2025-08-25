@@ -38,7 +38,7 @@ mixin _$LoginState {
   String? get token => throw _privateConstructorUsedError;
   String? get userId =>
       throw _privateConstructorUsedError; // Used to represent an embedded launch page or a login type within tabbed navigation
-  LoginEmbedded? get embedded =>
+  EmbeddedData? get embedded =>
       throw _privateConstructorUsedError; // Extras and callback data that returned from the embedded page
   Map<String, dynamic>? get embeddedExtras =>
       throw _privateConstructorUsedError;
@@ -86,7 +86,7 @@ abstract class $LoginStateCopyWith<$Res> {
       )? signupSessionOtpProvisionalWithDateTime,
       String? token,
       String? userId,
-      LoginEmbedded? embedded,
+      EmbeddedData? embedded,
       Map<String, dynamic>? embeddedExtras,
       Map<String, dynamic>? embeddedCallbackData,
       Object? embeddedRequestError,
@@ -188,7 +188,7 @@ class _$LoginStateCopyWithImpl<$Res, $Val extends LoginState>
       embedded: freezed == embedded
           ? _value.embedded
           : embedded // ignore: cast_nullable_to_non_nullable
-              as LoginEmbedded?,
+              as EmbeddedData?,
       embeddedExtras: freezed == embeddedExtras
           ? _value.embeddedExtras
           : embeddedExtras // ignore: cast_nullable_to_non_nullable
@@ -258,7 +258,7 @@ abstract class _$$LoginStateImplCopyWith<$Res>
       )? signupSessionOtpProvisionalWithDateTime,
       String? token,
       String? userId,
-      LoginEmbedded? embedded,
+      EmbeddedData? embedded,
       Map<String, dynamic>? embeddedExtras,
       Map<String, dynamic>? embeddedCallbackData,
       Object? embeddedRequestError,
@@ -358,7 +358,7 @@ class __$$LoginStateImplCopyWithImpl<$Res>
       embedded: freezed == embedded
           ? _value.embedded
           : embedded // ignore: cast_nullable_to_non_nullable
-              as LoginEmbedded?,
+              as EmbeddedData?,
       embeddedExtras: freezed == embeddedExtras
           ? _value._embeddedExtras
           : embeddedExtras // ignore: cast_nullable_to_non_nullable
@@ -473,7 +473,7 @@ class _$LoginStateImpl implements _LoginState {
   final String? userId;
 // Used to represent an embedded launch page or a login type within tabbed navigation
   @override
-  final LoginEmbedded? embedded;
+  final EmbeddedData? embedded;
 // Extras and callback data that returned from the embedded page
   final Map<String, dynamic>? _embeddedExtras;
 // Extras and callback data that returned from the embedded page
@@ -634,7 +634,7 @@ abstract class _LoginState implements LoginState {
       )? signupSessionOtpProvisionalWithDateTime,
       final String? token,
       final String? userId,
-      final LoginEmbedded? embedded,
+      final EmbeddedData? embedded,
       final Map<String, dynamic>? embeddedExtras,
       final Map<String, dynamic>? embeddedCallbackData,
       final Object? embeddedRequestError,
@@ -672,7 +672,7 @@ abstract class _LoginState implements LoginState {
   String?
       get userId; // Used to represent an embedded launch page or a login type within tabbed navigation
   @override
-  LoginEmbedded?
+  EmbeddedData?
       get embedded; // Extras and callback data that returned from the embedded page
   @override
   Map<String, dynamic>? get embeddedExtras;

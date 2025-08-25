@@ -23,6 +23,7 @@ class EmbeddedData {
     this.titleL10n,
     this.payload = const [],
     this.enableConsoleLogCapture = false,
+    this.attributes = const {},
   });
 
   /// The URI representing either a local asset file path or a remote URL.
@@ -42,4 +43,7 @@ class EmbeddedData {
 
   /// The key to use to look up the localized title.
   final String? titleL10n;
+
+  /// Attributes
+  final Map<String, dynamic> attributes;
 }
