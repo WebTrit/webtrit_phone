@@ -3,33 +3,42 @@ import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 import 'package:webtrit_phone/widgets/webview/web_view_container.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 
 class MockWebViewController extends Mock implements WebViewController {}
 
 void main() {
-  group('RetryUntilSuccessStrategy', () {
+  group('SoftReloadRecoveryStrategy', () {
     late SoftReloadRecoveryStrategy strategy;
     late List<String> log;
     late StreamController<List<ConnectivityResult>> connectivityStream;
     late WebViewController controller;
 
+    setUpAll(() {
+      // WebViewController methods don’t take complex args here, but register anyway
+      registerFallbackValue(const <String, Object?>{});
+    });
+
     setUp(() {
       log = [];
       connectivityStream = StreamController<List<ConnectivityResult>>();
       controller = MockWebViewController();
+
       when(() => controller.runJavaScript(any())).thenAnswer((_) async {});
-      when(() => controller.reload()).thenAnswer((_) => Future.value());
+      when(() => controller.reload()).thenAnswer((_) async {});
     });
 
     tearDown(() async {
       await connectivityStream.close();
+      // Dispose via testing helper to avoid touching private members
       strategy.disposeForTesting();
     });
 
-    test('Case 1: WiFi available, WebView loads successfully immediately', () async {
+    // Simulates a situation where internet is available immediately
+    // and the first reload results in a successful page load.
+    test('Case 1: WiFi available, loads successfully immediately (single reload)', () async {
       final completer = Completer<void>();
 
       strategy = SoftReloadRecoveryStrategy(
@@ -41,7 +50,7 @@ void main() {
       when(() => controller.reload()).thenAnswer((_) async {
         log.add('reload');
         strategy.onPageLoadSuccess();
-        completer.complete();
+        if (!completer.isCompleted) completer.complete();
       });
 
       strategy.startMonitoringForTesting(controller);
@@ -53,7 +62,8 @@ void main() {
       expect(log, equals(['reload']));
     });
 
-    test('Case 2: WiFi, but WebView fails 2 times before success', () async {
+    // Simulates unstable page: two reload failures, then a success.
+    test('Case 2: WiFi, fails twice before success (3 reloads total)', () async {
       final completer = Completer<void>();
       int failures = 2;
 
@@ -65,13 +75,12 @@ void main() {
 
       when(() => controller.reload()).thenAnswer((_) async {
         log.add('reload');
-
         if (failures > 0) {
           failures--;
           strategy.onPageLoadFailed();
         } else {
           strategy.onPageLoadSuccess();
-          completer.complete();
+          if (!completer.isCompleted) completer.complete();
         }
       });
 
@@ -79,14 +88,15 @@ void main() {
 
       connectivityStream.add([ConnectivityResult.wifi]);
 
-      await completer.future.timeout(const Duration(seconds: 1));
+      await completer.future.timeout(const Duration(seconds: 2));
 
-      expect(log.length, equals(3)); // 2 failures + 1 success
+      expect(log.length, equals(3));
     });
 
-    test('Case 3: No WiFi — should not retry', () async {
+    // Simulates device staying offline: no retries should happen.
+    test('Case 3: No WiFi — should not retry at all', () async {
       strategy = SoftReloadRecoveryStrategy(
-        retryDelay: const Duration(milliseconds: 100),
+        retryDelay: const Duration(milliseconds: 80),
         maxAttempts: 5,
         connectivityStream: connectivityStream.stream,
       );
@@ -95,14 +105,17 @@ void main() {
 
       connectivityStream.add([ConnectivityResult.none]);
 
-      await Future.delayed(const Duration(milliseconds: 300));
+      await Future.delayed(const Duration(milliseconds: 350));
 
+      verifyNever(() => controller.reload());
       expect(log, isEmpty);
     });
 
-    test('Case 4: WiFi -> success -> drop -> reconnect -> retry again', () async {
-      final completer = Completer<void>();
-      int attemptCount = 0;
+    // Simulates successful load once. After disconnect + reconnect,
+    // strategy should not trigger additional reloads.
+    test('Case 4: WiFi -> first success -> drop -> reconnect -> should NOT retry again', () async {
+      int reloads = 0;
+      final firstSuccess = Completer<void>();
 
       strategy = SoftReloadRecoveryStrategy(
         retryDelay: const Duration(milliseconds: 100),
@@ -111,43 +124,31 @@ void main() {
       );
 
       when(() => controller.reload()).thenAnswer((_) async {
-        final entry = 'reload:$attemptCount';
-        log.add(entry);
-        attemptCount++;
-
-        if (entry == 'reload:1' || entry == 'reload:5') {
+        reloads++;
+        log.add('reload');
+        if (!firstSuccess.isCompleted) {
           strategy.onPageLoadSuccess();
-          if (entry == 'reload:5') completer.complete();
-        } else {
-          strategy.onPageLoadFailed();
+          firstSuccess.complete();
         }
       });
 
       strategy.startMonitoringForTesting(controller);
 
+      // Go online -> one reload -> success
       connectivityStream.add([ConnectivityResult.wifi]);
-      await Future.delayed(const Duration(milliseconds: 300));
+      await firstSuccess.future.timeout(const Duration(seconds: 1));
 
+      // Go offline then online again — should not trigger more reloads
       connectivityStream.add([ConnectivityResult.none]);
-      await Future.delayed(const Duration(milliseconds: 150));
-
+      await Future.delayed(const Duration(milliseconds: 200));
       connectivityStream.add([ConnectivityResult.wifi]);
+      await Future.delayed(const Duration(milliseconds: 400));
 
-      await completer.future.timeout(const Duration(seconds: 2));
-
-      expect(
-        log,
-        equals([
-          'reload:0',
-          'reload:1',
-          'reload:2',
-          'reload:3',
-          'reload:4',
-          'reload:5',
-        ]),
-      );
+      expect(reloads, equals(1));
+      expect(log, equals(['reload']));
     });
 
+    // Simulates permanent failure: reload attempts reach maxAttempts and stop.
     test('Case 5: Max attempts reached — retries stop', () async {
       strategy = SoftReloadRecoveryStrategy(
         retryDelay: const Duration(milliseconds: 100),
@@ -167,13 +168,15 @@ void main() {
 
       connectivityStream.add([ConnectivityResult.wifi]);
 
+      // ~ debounce (300ms) + 3 attempts * 100ms + buffer
       await Future.delayed(const Duration(milliseconds: 800));
 
       expect(reloads, equals(3));
       expect(log.length, equals(3));
     });
 
-    test('Case 6: Multiple calls to startMonitoring should be ignored', () async {
+    // Simulates calling startMonitoring twice: only the first controller should be used.
+    test('Case 6: Multiple startMonitoring calls are ignored after the first', () async {
       final completer = Completer<void>();
       int reloadCount = 0;
 
@@ -187,7 +190,7 @@ void main() {
       when(() => firstController.reload()).thenAnswer((_) async {
         reloadCount++;
         strategy.onPageLoadSuccess();
-        completer.complete();
+        if (!completer.isCompleted) completer.complete();
       });
 
       final secondController = MockWebViewController();
@@ -197,6 +200,7 @@ void main() {
 
       strategy.startMonitoringForTesting(firstController);
 
+      // This should be ignored
       strategy.startMonitoringForTesting(secondController);
 
       connectivityStream.add([ConnectivityResult.wifi]);
@@ -205,6 +209,47 @@ void main() {
 
       expect(reloadCount, equals(1));
       expect(log, isNot(contains('should-not-be-called')));
+    });
+
+    // Simulates first success, then later an explicit page failure.
+    // After failure, retries should resume and eventually succeed again.
+    test('Case 7: After initial success, explicit failure re-enables retries', () async {
+      final firstSuccess = Completer<void>();
+      final secondSuccess = Completer<void>();
+      int reloads = 0;
+
+      strategy = SoftReloadRecoveryStrategy(
+        retryDelay: const Duration(milliseconds: 80),
+        maxAttempts: 5,
+        connectivityStream: connectivityStream.stream,
+      );
+
+      when(() => controller.reload()).thenAnswer((_) async {
+        reloads++;
+        log.add('reload:$reloads');
+
+        if (reloads == 1) {
+          strategy.onPageLoadSuccess();
+          if (!firstSuccess.isCompleted) firstSuccess.complete();
+        } else if (reloads == 2) {
+          strategy.onPageLoadSuccess();
+          if (!secondSuccess.isCompleted) secondSuccess.complete();
+        } else {
+          strategy.onPageLoadFailed();
+        }
+      });
+
+      strategy.startMonitoringForTesting(controller);
+
+      connectivityStream.add([ConnectivityResult.wifi]);
+      await firstSuccess.future.timeout(const Duration(seconds: 2));
+
+      strategy.onPageLoadFailed();
+
+      await secondSuccess.future.timeout(const Duration(seconds: 2));
+
+      expect(reloads, greaterThanOrEqualTo(2));
+      expect(log, containsAllInOrder(['reload:1', 'reload:2']));
     });
   });
 }

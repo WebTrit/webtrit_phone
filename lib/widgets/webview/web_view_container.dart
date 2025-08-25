@@ -752,6 +752,12 @@ class SoftReloadRecoveryStrategy implements ConnectivityRecoveryStrategy {
       return;
     }
 
+    // If we already had a successful load at least once, do NOT auto-retry on reconnect.
+    if (_hasSuccessfulLoad) {
+      _logger.info('Page had a successful load earlier; skipping retries on reconnect');
+      return;
+    }
+
     if (!_retryInProgress) {
       _logger.info('Connectivity restored, starting retry attempts');
       _startRetries();
@@ -773,10 +779,16 @@ class SoftReloadRecoveryStrategy implements ConnectivityRecoveryStrategy {
 
   /// Checks whether retry attempts should be started.
   ///
-  /// Returns `false` if disconnected or if the attempt limit has been reached.
+  /// Returns `false` if disconnected, if attempts exceeded, or if a successful
+  /// load already happened.
   bool _shouldStartRetries() {
     if (!_isConnected) {
       _logger.info('Device is offline');
+      return false;
+    }
+
+    if (_hasSuccessfulLoad) {
+      _logger.info('Already had a successful load; no need to start retries');
       return false;
     }
 
@@ -790,7 +802,7 @@ class SoftReloadRecoveryStrategy implements ConnectivityRecoveryStrategy {
 
   /// Handles a single retry timer tick.
   ///
-  /// If still connected and attempts remain, it triggers [tryReload].
+  /// If still connected and attempts remain, it triggers [_onRetryAttempt].
   void _onRetryTick() {
     if (!_isConnected) {
       _logger.info('Still offline, skipping retry attempt');
@@ -808,7 +820,7 @@ class SoftReloadRecoveryStrategy implements ConnectivityRecoveryStrategy {
     _onRetryAttempt();
   }
 
-  /// Attempts to reload the WebView.
+  /// Attempts to reload the WebView. Subclasses may override.
   Future<void> _onRetryAttempt() {
     return _controller.reload();
   }
@@ -838,10 +850,13 @@ class SoftReloadRecoveryStrategy implements ConnectivityRecoveryStrategy {
   @visibleForTesting
   void onPageLoadFailed() => _onPageLoadFailed();
 
-  /// Handles page load failure by restarting retries if applicable.
+  /// Handles page load failure by (re)enabling retries if applicable.
   @override
   void _onPageLoadFailed() {
     _logger.warning('Page load failed, will continue retrying if connected');
+    // After any explicit failure, allow retries again even if we had a prior success.
+    _hasSuccessfulLoad = false;
+
     if (_isConnected && !_retryInProgress) {
       _startRetries();
     }
