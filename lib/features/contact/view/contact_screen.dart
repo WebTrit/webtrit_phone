@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:logging/logging.dart';
 
 import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/app/keys.dart';
@@ -16,6 +17,8 @@ import 'package:webtrit_phone/features/messaging/extensions/contact.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../contact.dart';
+
+final _logger = Logger('ContactScreen');
 
 class ContactScreen extends StatefulWidget {
   const ContactScreen({
@@ -82,7 +85,7 @@ class _ContactScreenState extends State<ContactScreen> {
       builder: (context, userInfoState) {
         final userSmsNumbers = userInfoState.userInfo?.numbers.sms ?? [];
 
-        return BlocBuilder<ContactBloc, ContactState>(
+        return BlocConsumer<ContactBloc, ContactState>(
           builder: (context, state) {
             final contact = state.contact;
             if (contact == null) return const Scaffold(body: Center(child: CircularProgressIndicator()));
@@ -210,8 +213,19 @@ class _ContactScreenState extends State<ContactScreen> {
               },
             );
           },
+          listener: (BuildContext context, ContactState state) {
+            if (state.deleted) _onContactDeleted();
+          },
         );
       },
     );
+  }
+
+  /// Called when the contact is deleted outside of the app.
+  ///
+  /// Logs the event and safely attempts to close the screen.
+  void _onContactDeleted() {
+    _logger.info('Contact was deleted, popping screen');
+    context.router.maybePop();
   }
 }

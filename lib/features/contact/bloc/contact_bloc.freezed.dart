@@ -136,6 +136,7 @@ abstract class _ContactEmailSend implements ContactEmailSend {
 /// @nodoc
 mixin _$ContactState {
   Contact? get contact => throw _privateConstructorUsedError;
+  bool get deleted => throw _privateConstructorUsedError;
 
   /// Create a copy of ContactState
   /// with the given fields replaced by the non-null parameter values.
@@ -150,7 +151,7 @@ abstract class $ContactStateCopyWith<$Res> {
           ContactState value, $Res Function(ContactState) then) =
       _$ContactStateCopyWithImpl<$Res, ContactState>;
   @useResult
-  $Res call({Contact? contact});
+  $Res call({Contact? contact, bool deleted});
 }
 
 /// @nodoc
@@ -169,12 +170,17 @@ class _$ContactStateCopyWithImpl<$Res, $Val extends ContactState>
   @override
   $Res call({
     Object? contact = freezed,
+    Object? deleted = null,
   }) {
     return _then(_value.copyWith(
       contact: freezed == contact
           ? _value.contact
           : contact // ignore: cast_nullable_to_non_nullable
               as Contact?,
+      deleted: null == deleted
+          ? _value.deleted
+          : deleted // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 }
@@ -187,7 +193,7 @@ abstract class _$$ContactStateImplCopyWith<$Res>
       __$$ContactStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({Contact? contact});
+  $Res call({Contact? contact, bool deleted});
 }
 
 /// @nodoc
@@ -204,12 +210,17 @@ class __$$ContactStateImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? contact = freezed,
+    Object? deleted = null,
   }) {
     return _then(_$ContactStateImpl(
       contact: freezed == contact
           ? _value.contact
           : contact // ignore: cast_nullable_to_non_nullable
               as Contact?,
+      deleted: null == deleted
+          ? _value.deleted
+          : deleted // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -217,14 +228,17 @@ class __$$ContactStateImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$ContactStateImpl implements _ContactState {
-  const _$ContactStateImpl({this.contact});
+  const _$ContactStateImpl({this.contact, this.deleted = false});
 
   @override
   final Contact? contact;
+  @override
+  @JsonKey()
+  final bool deleted;
 
   @override
   String toString() {
-    return 'ContactState(contact: $contact)';
+    return 'ContactState(contact: $contact, deleted: $deleted)';
   }
 
   @override
@@ -232,11 +246,12 @@ class _$ContactStateImpl implements _ContactState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$ContactStateImpl &&
-            (identical(other.contact, contact) || other.contact == contact));
+            (identical(other.contact, contact) || other.contact == contact) &&
+            (identical(other.deleted, deleted) || other.deleted == deleted));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, contact);
+  int get hashCode => Object.hash(runtimeType, contact, deleted);
 
   /// Create a copy of ContactState
   /// with the given fields replaced by the non-null parameter values.
@@ -248,10 +263,13 @@ class _$ContactStateImpl implements _ContactState {
 }
 
 abstract class _ContactState implements ContactState {
-  const factory _ContactState({final Contact? contact}) = _$ContactStateImpl;
+  const factory _ContactState({final Contact? contact, final bool deleted}) =
+      _$ContactStateImpl;
 
   @override
   Contact? get contact;
+  @override
+  bool get deleted;
 
   /// Create a copy of ContactState
   /// with the given fields replaced by the non-null parameter values.
