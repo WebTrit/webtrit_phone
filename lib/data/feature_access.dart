@@ -255,11 +255,11 @@ class FeatureAccess {
       final loginFlavor = LoginFlavor.values.byName(actions.type);
       final loginEmbeddedData = embeddedData.firstWhereOrNull((dto) => dto.id == actions.embeddedId);
 
-      if (loginFlavor == LoginFlavor.embedded) {
+      if (loginEmbeddedData != null && loginFlavor == LoginFlavor.embedded) {
         buttons.add(LoginEmbeddedModeButton(
           titleL10n: actions.titleL10n,
           flavor: loginFlavor,
-          customLoginFeature: loginEmbeddedData!,
+          customLoginFeature: loginEmbeddedData,
           isLaunchButtonVisible: actions.isLaunchButtonVisible,
           isLaunchScreen: actions.isLaunchScreen,
         ));
