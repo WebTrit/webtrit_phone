@@ -28,10 +28,20 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
   final ContactId contactId;
   final ContactsRepository contactsRepository;
 
+  /// Handles the [ContactStarted] event by subscribing to the contact stream
+  /// from the [ContactsRepository] for the given [contactId].
+  ///
+  /// Each time the repository emits:
+  /// - A non-null [Contact], the state is updated with the latest contact data.
+  /// - `null`, it signals that the contact has been deleted externally, so the
+  ///   state is updated with `deleted: true`.
+  ///
+  /// This ensures the UI stays in sync with live updates and can react properly
+  /// to contact removal.
   FutureOr<void> _onStarted(ContactStarted event, Emitter<ContactState> emit) async {
     await emit.forEach(
       contactsRepository.watchContact(contactId),
-      onData: (contact) => state.copyWith(contact: contact),
+      onData: (contact) => state.copyWith(contact: contact, deleted: contact == null),
     );
   }
 
