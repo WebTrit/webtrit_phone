@@ -3,10 +3,13 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 
 import 'package:auto_route/auto_route.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 
+import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/theme/models/models.dart';
-import 'package:webtrit_phone/widgets/webview/webview.dart';
+import 'package:webtrit_phone/utils/utils.dart';
+import 'package:webtrit_phone/widgets/widgets.dart';
 
 import 'login_signup_embedded_request_screen.dart';
 
@@ -43,6 +46,7 @@ class LoginSignupEmbeddedRequestScreenPage extends StatelessWidget {
               ? LoginSignupEmbeddedRequestScreen(
                   initialUrl: Uri.parse(content),
                   pageInjectionStrategyBuilder: _createInjectionStrategy(locale),
+                  connectivityRecoveryStrategyBuilder: () => _createConnectivityRecoveryStrategy(embeddedData),
                 )
               : LoginSignupEmbeddedRequestScreen(
                   initialUrl: Uri.dataFromString(
@@ -51,6 +55,7 @@ class LoginSignupEmbeddedRequestScreenPage extends StatelessWidget {
                     encoding: Encoding.getByName('utf-8'),
                   ),
                   pageInjectionStrategyBuilder: _createInjectionStrategy(locale),
+                  connectivityRecoveryStrategyBuilder: () => _createConnectivityRecoveryStrategy(embeddedData),
                 );
         } else {
           return const Center(
@@ -68,5 +73,16 @@ class LoginSignupEmbeddedRequestScreenPage extends StatelessWidget {
             'locale': locale.languageCode,
           },
         );
+  }
+
+  ConnectivityRecoveryStrategy _createConnectivityRecoveryStrategy(EmbeddedData data) {
+    return ConnectivityRecoveryStrategy.create(
+      initialUri: data.uri,
+      type: data.reconnectStrategy,
+      connectivityStream: Connectivity().onConnectivityChanged,
+      connectivityCheckerBuilder: () => const DefaultConnectivityChecker(
+        connectivityCheckUrl: EnvironmentConfig.CONNECTIVITY_CHECK_URL,
+      ),
+    );
   }
 }

@@ -57,6 +57,9 @@ class LoginSignUpScreenshot extends StatelessWidget {
           pageInjectionStrategyBuilder: () {
             return DefaultPayloadInjectionStrategy();
           },
+          connectivityRecoveryStrategyBuilder: () {
+            return NoneConnectivityRecoveryStrategy();
+          },
         ),
         currentLoginType: LoginType.signup,
         supportedLoginTypes: supportedLoginTypes,
