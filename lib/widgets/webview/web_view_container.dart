@@ -337,8 +337,44 @@ class _WebViewContainerState extends State<WebViewContainer> with WidgetStateMix
     }
   }
 
+  // TODO: Cover with tests
+  /// Handles errors reported by the WebView engine during resource loading.
+  ///
+  /// This callback may be triggered in several situations:
+  /// - **Main frame navigation failures** – e.g. no internet connection,
+  ///   DNS lookup failure, SSL handshake errors, or the server not responding.
+  ///   These usually mean the page cannot be displayed at all.
+  /// - **Subresource load errors** – e.g. missing images, blocked fonts,
+  ///   CORS issues, or network hiccups while loading scripts/styles.
+  ///   In such cases, the main page may still load and work.
+  ///
+  /// Since subresource errors are common and often non-fatal,
+  /// we ignore them and only surface main-frame errors to the UI.
+  ///
+  /// To avoid UI thrashing, duplicate errors (same code and URL) are also suppressed.
   void _onWebResourceError(WebResourceError error) {
-    _logger.warning('WebView error: $error');
+    final code = error.errorCode;
+    final type = error.errorType;
+    final url = error.url;
+    final isMain = error.isForMainFrame ?? true;
+
+    _logger.warning(
+      'WebView error',
+      {'code': code, 'type': type, 'url': url, 'isMainFrame': isMain, 'desc': error.description},
+    );
+
+    // Ignore subresource errors (images, fonts, trackers, etc.)
+    if (!isMain) {
+      _logger.fine('Ignoring non-main-frame error for $url ($type/$code)');
+      return;
+    }
+
+    // De-dupe: don’t re-set the same main-frame error over and over.
+    if (_latestError != null && _latestError!.errorCode == code && _latestError!.url == url) {
+      _logger.fine('Duplicate main-frame error suppressed for $url ($code)');
+      return;
+    }
+
     safeSetState(() {
       _currentError = error;
       _latestError = error;
