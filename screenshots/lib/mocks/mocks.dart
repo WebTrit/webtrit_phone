@@ -1,5 +1,6 @@
 export 'mock_app_bloc.dart';
 export 'mock_call_bloc.dart';
+export 'mock_call_routing_cubit.dart';
 export 'mock_chat_conversations_cubit.dart';
 export 'mock_contacts_external_tab_bloc.dart';
 export 'mock_contacts_local_tab_bloc.dart';

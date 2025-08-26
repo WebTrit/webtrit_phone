@@ -57,6 +57,7 @@ class MainScreenScreenshot extends StatelessWidget {
   List<BlocProvider> _createMockBlocProviders() {
     return [
       BlocProvider<CallBloc>(create: (_) => MockCallBloc.mainScreen()),
+      BlocProvider<CallRoutingCubit>(create: (_) => MockCallRoutingCubit.initial()),
       BlocProvider<MainBloc>(create: (_) => MockMainBloc.mainScreen()),
       BlocProvider<SessionStatusCubit>(create: (_) => MockSessionStatusCubit.initial()),
       BlocProvider<UserInfoCubit>(create: (_) => MockUserInfoCubit.initial()),
