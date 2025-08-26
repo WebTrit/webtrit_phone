@@ -42,6 +42,7 @@ class _SettingScreenScreenshotState extends State<SettingScreenScreenshot> {
                   BlocProvider<CallBloc>(
                     create: (context) => MockCallBloc.settingsScreen(),
                   ),
+                  BlocProvider<CallRoutingCubit>(create: (_) => MockCallRoutingCubit.initial()),
                   BlocProvider<SettingsBloc>(
                     create: (context) => MockSettingsBloc.settingsScreen(),
                   ),
