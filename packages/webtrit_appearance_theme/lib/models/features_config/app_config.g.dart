@@ -380,17 +380,7 @@ _$AppConfigSettingsImpl _$$AppConfigSettingsImplFromJson(
                       enabled: true,
                       type: 'log',
                       titleL10n: 'settings_ListViewTileTitle_logRecordsConsole',
-                      icon: '0xee79'),
-                  AppConfigSettingsItem(
-                      enabled: true,
-                      type: 'selfConfig',
-                      titleL10n: 'settings_ListViewTileTitle_self_config',
-                      icon: '0xef7a'),
-                  AppConfigSettingsItem(
-                      enabled: true,
-                      type: 'deleteAccount',
-                      titleL10n: 'settings_ListViewTileTitle_accountDelete',
-                      icon: '0xe1bb')
+                      icon: '0xee79')
                 ])
           ],
     );
