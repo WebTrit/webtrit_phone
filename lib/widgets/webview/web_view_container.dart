@@ -223,19 +223,25 @@ class _WebViewContainerState extends State<WebViewContainer> with WidgetStateMix
   }
 
   void _initializeWebViewController() {
-    final navigationDelegate = NavigationDelegate(
-      onUrlChange: _onUrlChange,
-      onPageFinished: _onPageFinished,
-      onProgress: _onProgress,
-      onNavigationRequest: _navigationRequestHandler.handle,
-      onWebResourceError: _onWebResourceError,
-    );
+    _webViewController = widget.webViewController ?? WebViewController();
 
-    _webViewController = widget.webViewController ?? WebViewController()
-      ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..setUserAgent(widget.userAgent)
-      ..enableZoom(false)
-      ..setNavigationDelegate(navigationDelegate);
+    if (!kIsWeb) {
+      final navigationDelegate = NavigationDelegate(
+        onUrlChange: _onUrlChange,
+        onPageFinished: _onPageFinished,
+        onProgress: _onProgress,
+        onNavigationRequest: _navigationRequestHandler.handle,
+        onWebResourceError: _onWebResourceError,
+      );
+
+      // Set up WebViewController with navigation delegate and unrestricted JS mode.
+      // These configurations are applied only on non-web platforms to avoid unsupported operations.
+      _webViewController
+        ..enableZoom(false)
+        ..setUserAgent(widget.userAgent)
+        ..setNavigationDelegate(navigationDelegate)
+        ..setJavaScriptMode(JavaScriptMode.unrestricted);
+    }
 
     for (var MapEntry(key: name, value: onMessageReceived) in widget.javaScriptChannels.entries) {
       _webViewController.addJavaScriptChannel(name, onMessageReceived: onMessageReceived);
@@ -538,7 +544,8 @@ class NavigationRequestHandler {
       return NavigationDecision.prevent;
     }
 
-    if (!await launchUrlFn(targetUri, mode: LaunchMode.externalApplication)) {
+    const mode = kIsWeb ? LaunchMode.platformDefault : LaunchMode.externalApplication;
+    if (!await launchUrlFn(targetUri, mode: mode)) {
       return NavigationDecision.prevent;
     }
 

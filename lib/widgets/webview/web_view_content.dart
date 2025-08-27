@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:webtrit_phone/widgets/webview/webview_progress_indicator.dart';
 
 class WebViewContent extends StatelessWidget {
