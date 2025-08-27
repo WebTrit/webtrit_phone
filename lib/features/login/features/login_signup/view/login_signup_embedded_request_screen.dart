@@ -14,6 +14,7 @@ import 'package:webtrit_phone/l10n/app_localizations.g.mapper.dart';
 import 'package:webtrit_phone/features/login/login.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 import 'package:webtrit_phone/utils/utils.dart';
+import 'package:webtrit_phone/models/models.dart';
 
 import '../widgets/widgets.dart';
 
@@ -25,6 +26,7 @@ class LoginSignupEmbeddedRequestScreen extends StatefulWidget {
   const LoginSignupEmbeddedRequestScreen({
     super.key,
     required this.initialUrl,
+    required this.connectivityRecoveryStrategyBuilder,
     required this.pageInjectionStrategyBuilder,
   });
 
@@ -33,6 +35,9 @@ class LoginSignupEmbeddedRequestScreen extends StatefulWidget {
   /// Builder for creating the page injection strategy.
   final PageInjectionStrategyBuilder pageInjectionStrategyBuilder;
 
+  /// Builder for creating the connectivity recovery strategy.
+  final ConnectivityRecoveryStrategyBuilder connectivityRecoveryStrategyBuilder;
+
   @override
   State<LoginSignupEmbeddedRequestScreen> createState() => _LoginSignupEmbeddedRequestScreenState();
 }
@@ -40,6 +45,7 @@ class LoginSignupEmbeddedRequestScreen extends StatefulWidget {
 class _LoginSignupEmbeddedRequestScreenState extends State<LoginSignupEmbeddedRequestScreen> {
   final WebViewController _webViewController = WebViewController();
   late final PageInjectionStrategy _pageInjectionStrategy;
+  late final ConnectivityRecoveryStrategy _connectivityRecoveryStrategy;
 
   /// Indicates whether the WebView can navigate back in its history stack.
   /// Used to control PopScope behavior and decide whether to intercept back presses.
@@ -49,16 +55,12 @@ class _LoginSignupEmbeddedRequestScreenState extends State<LoginSignupEmbeddedRe
   /// Acts as a guard during error state transitions or repeated error emissions from the same source.
   bool _errorDialogShown = false;
 
-  /// Indicates whether the initial page load was successful (likely from cache).
-  /// If true, suppresses Flutter-level error UI and delegates error handling to the embedded WebView app itself,
-  /// which is typically expected in single-page application scenarios.
-  bool _wasPageLoadedSuccessfully = false;
-
   LoginCubit get _loginCubit => context.read<LoginCubit>();
 
   @override
   void initState() {
     _pageInjectionStrategy = widget.pageInjectionStrategyBuilder();
+    _connectivityRecoveryStrategy = widget.connectivityRecoveryStrategyBuilder();
     super.initState();
   }
 
@@ -74,13 +76,13 @@ class _LoginSignupEmbeddedRequestScreenState extends State<LoginSignupEmbeddedRe
         child: WebViewContainer(
           initialUri: widget.initialUrl,
           webViewController: _webViewController,
+          connectivityRecoveryStrategy: _connectivityRecoveryStrategy,
           showToolbar: false,
           userAgent: UserAgent.of(context),
           javaScriptChannels: {
             _jsChannelName: _onJavaScriptMessageReceived,
           },
           pageInjectionStrategies: [_pageInjectionStrategy],
-          onPageLoadedSuccess: _onPageLoadedSuccess,
           onUrlChange: (_) => _updateCanGoBack(),
           errorBuilder: _buildErrorBuilder(),
         ),
@@ -91,7 +93,10 @@ class _LoginSignupEmbeddedRequestScreenState extends State<LoginSignupEmbeddedRe
   /// Returns a WebView error builder that shows a native error dialog,
   /// unless the page was previously loaded successfully (e.g., cached SPA).
   Widget Function(BuildContext, WebResourceError, WebViewController)? _buildErrorBuilder() {
-    if (_wasPageLoadedSuccessfully) return null;
+    if (_connectivityRecoveryStrategy.hasSuccessfulLoad &&
+        _connectivityRecoveryStrategy.strategy == ReconnectStrategy.notifyOnly) {
+      return null;
+    }
 
     return (context, error, controller) => EmbeddedRequestErrorDialog(
           title: error.titleL10n(context),
@@ -181,11 +186,6 @@ class _LoginSignupEmbeddedRequestScreenState extends State<LoginSignupEmbeddedRe
     } else {
       _webViewController.reload();
     }
-  }
-
-  void _onPageLoadedSuccess() {
-    _logger.fine('Web page loaded successfully');
-    _wasPageLoadedSuccessfully = true;
   }
 
   void _onJavaScriptMessageReceived(JavaScriptMessage message) {
