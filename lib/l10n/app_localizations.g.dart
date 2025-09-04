@@ -64,7 +64,7 @@ import 'app_localizations_uk.g.dart';
 /// property.
 abstract class AppLocalizations {
   AppLocalizations(String locale)
-      : localeName = intl.Intl.canonicalizedLocale(locale.toString());
+    : localeName = intl.Intl.canonicalizedLocale(locale.toString());
 
   final String localeName;
 
@@ -87,20 +87,20 @@ abstract class AppLocalizations {
   /// of delegates is preferred or required.
   static const List<LocalizationsDelegate<dynamic>> localizationsDelegates =
       <LocalizationsDelegate<dynamic>>[
-    delegate,
-    GlobalMaterialLocalizations.delegate,
-    GlobalCupertinoLocalizations.delegate,
-    GlobalWidgetsLocalizations.delegate,
-  ];
+        delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ];
 
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
     Locale('en'),
     Locale('it'),
-    Locale('uk')
+    Locale('uk'),
   ];
 
-  /// No description provided for @account_selfCarePasswordExpired_message.
+  /// Shown when a web self-care password is expired. By default, such passwords may be created in an expired state or set to expire after a period of time. The user must log in to the self-care portal and set a new password. Until refreshed, access to related services is restricted.
   ///
   /// In en, this message translates to:
   /// **'Your self-care password has expired. Please update it using your self-care.\nUntil the password is changed, access to the service will be limited.'**
@@ -124,7 +124,7 @@ abstract class AppLocalizations {
   /// **'Yes'**
   String get alertDialogActions_yes;
 
-  /// No description provided for @autoprovision_errorSnackBar_invalidToken.
+  /// Shown when a user opens an autoprovisioning link that contains an invalid or expired token. The server rejects the credentials and the user must request a new configuration link.
   ///
   /// In en, this message translates to:
   /// **'The autoconfiguration credentials were rejected by the server. Please request a new configuration link'**
@@ -436,25 +436,25 @@ abstract class AppLocalizations {
   /// **'Additional options'**
   String get call_settings_additional_options;
 
-  /// No description provided for @callStatus_appUnregistered.
+  /// Shown when the application is not registered with the signaling/core servers (for example due to network connectivity problems, session/authentication issues, or server-side unavailability). Suggest the user check their internet connection, retry the action, toggle the app's online status in settings, restart the app, and contact their administrator or support if the problem persists.
   ///
   /// In en, this message translates to:
   /// **'Unregistered'**
   String get callStatus_appUnregistered;
 
-  /// No description provided for @callStatus_connectError.
+  /// Shown when the app cannot establish or maintain a connection to the signaling/core servers (for example network connectivity problems, server downtime, or transient transport errors). Suggest the user check their internet connection, retry the action, toggle the app's online status in settings, restart the app, and contact their administrator or support if the problem persists.
   ///
   /// In en, this message translates to:
   /// **'Connection error'**
   String get callStatus_connectError;
 
-  /// No description provided for @callStatus_connectIssue.
+  /// Shown when the app detects an intermittent or degraded connection to the signaling/core servers (for example transient network issues, high latency, or packet loss). Suggest the user check their internet connection, retry the action, toggle the app's online status in settings, restart the app, and contact their administrator or support if the problem persists.
   ///
   /// In en, this message translates to:
   /// **'Connection issue'**
   String get callStatus_connectIssue;
 
-  /// No description provided for @callStatus_connectivityNone.
+  /// Shown when the device has no internet connectivity. Suggest the user check Wi‑Fi or mobile data, try switching networks or toggling airplane mode, restart the app or device, and contact their administrator or support if the problem persists.
   ///
   /// In en, this message translates to:
   /// **'No internet connection'**
@@ -544,7 +544,7 @@ abstract class AppLocalizations {
   /// **'No contacts found'**
   String get contacts_ExternalTabText_emptyOnSearching;
 
-  /// No description provided for @contacts_ExternalTabText_failure.
+  /// Shown when loading cloud PBX contacts fails (e.g. invalid/expired token, no network connection, or other API errors).
   ///
   /// In en, this message translates to:
   /// **'Failed to get cloud PBX contacts'**
@@ -586,13 +586,13 @@ abstract class AppLocalizations {
   /// **'No contacts found'**
   String get contacts_LocalTabText_emptyOnSearching;
 
-  /// No description provided for @contacts_LocalTabText_failure.
+  /// Shown when the app cannot load contacts from the device. Common reasons: user denied contacts permission, the feature is disabled or required agreement not accepted, no network (if a refresh requires it), or a general sync/read error from the OS or storage.
   ///
   /// In en, this message translates to:
   /// **'Failed to get your phone contacts'**
   String get contacts_LocalTabText_failure;
 
-  /// No description provided for @contacts_LocalTabText_permissionFailure.
+  /// Shown when the app cannot access local phone contacts because the user has not granted the required permission (e.g. Contacts permission denied in system settings).
   ///
   /// In en, this message translates to:
   /// **'There are no permissions to get your phone contacts'**
@@ -628,157 +628,157 @@ abstract class AppLocalizations {
   /// **'Copy to clipboard'**
   String get copyToClipboard_popupMenuItem;
 
-  /// No description provided for @default_CannotRemoveOwnerMessagingSocketException.
+  /// Shown when a user tries to remove the owner from a chat or group. The system does not allow removing the owner.
   ///
   /// In en, this message translates to:
   /// **'Cannot remove owner'**
   String get default_CannotRemoveOwnerMessagingSocketException;
 
-  /// No description provided for @default_ChatMemberNotFoundMessagingSocketException.
+  /// Shown when an action is attempted on a chat member who does not exist in the current chat or group.
   ///
   /// In en, this message translates to:
   /// **'Chat member not found'**
   String get default_ChatMemberNotFoundMessagingSocketException;
 
-  /// No description provided for @default_ChatNotFoundMessagingSocketException.
+  /// Shown when an action is attempted on a chat that does not exist or has been deleted.
   ///
   /// In en, this message translates to:
   /// **'Chat not found'**
   String get default_ChatNotFoundMessagingSocketException;
 
-  /// No description provided for @default_ClientExceptionError.
+  /// Shown when an HTTP client error occurs during a network request, such as connection failure, timeout, or unexpected server response.
   ///
   /// In en, this message translates to:
   /// **'A HTTP client issue occurred'**
   String get default_ClientExceptionError;
 
-  /// No description provided for @default_ErrorDetails.
+  /// Label for a section or field displaying detailed error information in error dialogs or screens.
   ///
   /// In en, this message translates to:
   /// **'Details'**
   String get default_ErrorDetails;
 
-  /// No description provided for @default_ErrorMessage.
+  /// Label or heading for displaying a generic error message in dialogs, alerts, or error screens.
   ///
   /// In en, this message translates to:
   /// **'Error message'**
   String get default_ErrorMessage;
 
-  /// No description provided for @default_ErrorPath.
+  /// Label for displaying the path associated with an error in error dialogs or screens.
   ///
   /// In en, this message translates to:
   /// **'Error path'**
   String get default_ErrorPath;
 
-  /// No description provided for @default_ErrorTransactionId.
+  /// Label for displaying the transaction ID associated with an error in error dialogs or screens.
   ///
   /// In en, this message translates to:
   /// **'Transaction ID'**
   String get default_ErrorTransactionId;
 
-  /// No description provided for @default_ForbiddenMessagingSocketException.
+  /// Label for displaying a forbidden request error when a messaging socket operation is not permitted due to access restrictions or insufficient permissions.
   ///
   /// In en, this message translates to:
   /// **'Forbidden request'**
   String get default_ForbiddenMessagingSocketException;
 
-  /// No description provided for @default_FormatExceptionError.
+  /// Label for displaying an error when a response format issue occurs, such as invalid or unexpected data format in network responses.
   ///
   /// In en, this message translates to:
   /// **'A response format issue occurred'**
   String get default_FormatExceptionError;
 
-  /// No description provided for @default_InternalErrorMessagingSocketException.
+  /// Label for displaying an internal server error when a messaging socket operation fails due to a server-side issue.
   ///
   /// In en, this message translates to:
   /// **'Internal server error'**
   String get default_InternalErrorMessagingSocketException;
 
-  /// No description provided for @default_InvalidChatTypeMessagingSocketException.
+  /// Label for displaying an error when an invalid chat type is encountered during a messaging socket operation.
   ///
   /// In en, this message translates to:
   /// **'Invalid chat type'**
   String get default_InvalidChatTypeMessagingSocketException;
 
-  /// No description provided for @default_JoinCrashedMessagingSocketException.
+  /// Label for displaying an error when a messaging socket operation fails while joining a conversation.
   ///
   /// In en, this message translates to:
   /// **'Error occurred while joining the conversation'**
   String get default_JoinCrashedMessagingSocketException;
 
-  /// No description provided for @default_MessagingSocketException.
+  /// Label for displaying a generic error when a messaging socket operation fails for an unspecified reason.
   ///
   /// In en, this message translates to:
   /// **'An error occurred while processing the request'**
   String get default_MessagingSocketException;
 
-  /// No description provided for @default_RequestFailureError.
+  /// Label for displaying an error when a server failure occurs during a network request.
   ///
   /// In en, this message translates to:
   /// **'A server failure occurred'**
   String get default_RequestFailureError;
 
-  /// No description provided for @default_SelfAuthorityAssignmentForbiddenMessagingSocketException.
+  /// Label for displaying an error when a user attempts to assign authority to themselves in a chat or group, which is not permitted.
   ///
   /// In en, this message translates to:
   /// **'Self authority assignment is forbidden'**
   String get default_SelfAuthorityAssignmentForbiddenMessagingSocketException;
 
-  /// No description provided for @default_SelfRemovalForbiddenMessagingSocketException.
+  /// Label for displaying an error when a user attempts to remove themselves from a chat or group, which is not permitted.
   ///
   /// In en, this message translates to:
   /// **'Self removal is forbidden'**
   String get default_SelfRemovalForbiddenMessagingSocketException;
 
-  /// No description provided for @default_SmsConversationNotFoundMessagingSocketException.
+  /// Label for displaying an error when an SMS conversation cannot be found, such as when the requested conversation does not exist or has been deleted.
   ///
   /// In en, this message translates to:
   /// **'SMS conversation not found'**
   String get default_SmsConversationNotFoundMessagingSocketException;
 
-  /// No description provided for @default_TimeoutExceptionError.
+  /// Label for displaying an error when a server timeout occurs during a network request.
   ///
   /// In en, this message translates to:
   /// **'A server timeout occurred'**
   String get default_TimeoutExceptionError;
 
-  /// No description provided for @default_TimeoutMessagingSocketException.
+  /// Label for displaying an error when a messaging socket request times out, indicating that the operation did not complete within the expected time frame.
   ///
   /// In en, this message translates to:
   /// **'The request has timed out'**
   String get default_TimeoutMessagingSocketException;
 
-  /// No description provided for @default_TlsExceptionError.
+  /// Label for displaying an error when a secure network protocol (TLS/SSL) issue occurs during a network request.
   ///
   /// In en, this message translates to:
   /// **'A secure network protocol (TLS/SSL) issue occurred'**
   String get default_TlsExceptionError;
 
-  /// No description provided for @default_TypeErrorError.
+  /// Label for displaying an error when a type issue occurs in a response, such as receiving unexpected or mismatched data types during a network request.
   ///
   /// In en, this message translates to:
   /// **'A response issue occurred'**
   String get default_TypeErrorError;
 
-  /// No description provided for @default_UnauthorizedMessagingSocketException.
+  /// Label for displaying an error when a messaging socket operation fails due to unauthorized access or insufficient permissions.
   ///
   /// In en, this message translates to:
   /// **'Unauthorized request'**
   String get default_UnauthorizedMessagingSocketException;
 
-  /// No description provided for @default_UnauthorizedRequestFailureError.
+  /// Displayed to users when a network request fails due to unauthorized access (e.g., missing/invalid credentials, insufficient permissions). Typically shown after login attempts or when accessing restricted features.
   ///
   /// In en, this message translates to:
   /// **'An unauthorized request failure occurred'**
   String get default_UnauthorizedRequestFailureError;
 
-  /// No description provided for @default_UnknownExceptionError.
+  /// Displayed to users when an unexpected error occurs that does not fit into predefined categories. The placeholder {error} can be used to provide additional context or details about the unknown issue.
   ///
   /// In en, this message translates to:
   /// **'An unknown issue occurred: {error}'**
   String default_UnknownExceptionError(String error);
 
-  /// No description provided for @default_UserAlreadyInChatMessagingSocketException.
+  /// Shown in messaging screens when a user tries to join a chat but is already a member. Condition: join request for a chat where the user is already present.
   ///
   /// In en, this message translates to:
   /// **'User is already in chat'**
@@ -820,7 +820,7 @@ abstract class AppLocalizations {
   /// **'Restricted'**
   String get diagnostic_batteryMode_restricted_title;
 
-  /// No description provided for @diagnostic_batteryMode_unknown_description.
+  /// Shown in the Diagnostics > Battery section when the app cannot determine the current battery mode. Condition: system does not provide battery mode info, which may lead to unpredictable app behavior.
   ///
   /// In en, this message translates to:
   /// **'The battery mode status is unknown. The app might have unpredictable behavior.'**
@@ -1180,74 +1180,76 @@ abstract class AppLocalizations {
   /// **'Sign in to your WebTrit Cloud Backend'**
   String get login_ButtonTooltip_signInToYourInstance;
 
-  /// No description provided for @login_CoreVersionUnsupportedExceptionError.
+  /// Shown during login when the app detects that the backend instance version is incompatible. Context: user tries to sign in. Condition: provided backend version does not match the supported version range (actual: {actual}, supported: {supportedConstraint}).
   ///
   /// In en, this message translates to:
   /// **'An incompatible instance version provided, please contact the administrator of your system (actual: {actual}, supported: {supportedConstraint})'**
   String login_CoreVersionUnsupportedExceptionError(
-      String actual, String supportedConstraint);
+    String actual,
+    String supportedConstraint,
+  );
 
-  /// No description provided for @login_RequestFailureEmptyEmailError.
+  /// Shown during login or signup when the user tries to request a verification code but has not entered an email address. Condition: email field is empty.
   ///
   /// In en, this message translates to:
   /// **'Cannot send the verification code'**
   String get login_RequestFailureEmptyEmailError;
 
-  /// No description provided for @login_RequestFailureIdentifierIsNotValid.
+  /// Shown during login or signup when the user provides an identifier (such as email or phone number) that is invalid or does not exist in the system. Condition: identifier is not recognized or fails validation.
   ///
   /// In en, this message translates to:
   /// **'The identifier is invalid or does not exist'**
   String get login_RequestFailureIdentifierIsNotValid;
 
-  /// No description provided for @login_RequestFailureIncorrectOtpCodeError.
+  /// Shown during login or signup when the user enters an incorrect one-time password (OTP) verification code. Condition: the provided OTP does not match the expected value.
   ///
   /// In en, this message translates to:
   /// **'Incorrect verification code'**
   String get login_RequestFailureIncorrectOtpCodeError;
 
-  /// No description provided for @login_RequestFailureOtpAlreadyVerifiedError.
+  /// Shown during login or signup when the user tries to verify an OTP code that has already been successfully verified. Condition: the OTP verification process was already completed for this code.
   ///
   /// In en, this message translates to:
   /// **'Verification already verified'**
   String get login_RequestFailureOtpAlreadyVerifiedError;
 
-  /// No description provided for @login_RequestFailureOtpExpiredError.
+  /// Shown during login or signup when the user tries to verify an OTP code that has expired. Condition: the OTP verification code is no longer valid due to time expiration.
   ///
   /// In en, this message translates to:
   /// **'Verification expired'**
   String get login_RequestFailureOtpExpiredError;
 
-  /// No description provided for @login_RequestFailureOtpNotFoundError.
+  /// Shown during login or signup when the user tries to verify an OTP code that cannot be found. Condition: the provided OTP does not exist or is not recognized by the system.
   ///
   /// In en, this message translates to:
   /// **'Verification not found'**
   String get login_RequestFailureOtpNotFoundError;
 
-  /// No description provided for @login_RequestFailureOtpVerificationAttemptsExceededError.
+  /// Shown during login or signup when the user has exceeded the maximum number of allowed OTP verification attempts. Condition: too many incorrect OTP entries, further attempts are blocked for security reasons.
   ///
   /// In en, this message translates to:
   /// **'Verification attempts exceeded'**
   String get login_RequestFailureOtpVerificationAttemptsExceededError;
 
-  /// No description provided for @login_RequestFailureParametersApplyIssueError.
+  /// Shown during login or signup when the provided data cannot be processed by the server. Condition: input parameters are invalid, incomplete, or do not meet the required format for the operation.
   ///
   /// In en, this message translates to:
   /// **'Provided data can\'t be processed'**
   String get login_RequestFailureParametersApplyIssueError;
 
-  /// No description provided for @login_RequestFailurePhoneNotFoundError.
+  /// Shown during login or signup when the user provides a phone number that cannot be found in the system. Condition: the entered phone number does not exist or is not recognized by the backend.
   ///
   /// In en, this message translates to:
   /// **'Phone number not found'**
   String get login_RequestFailurePhoneNotFoundError;
 
-  /// No description provided for @login_RequestFailureUnconfiguredBundleIdError.
+  /// Shown during login or signup when the app's bundle identifier is not configured or supported by the WebTrit Cloud Backend. Condition: the backend does not recognize the app, typically due to missing or incorrect bundle ID setup.
   ///
   /// In en, this message translates to:
   /// **'The app is not supported by your WebTrit Cloud Backend'**
   String get login_RequestFailureUnconfiguredBundleIdError;
 
-  /// No description provided for @login_SupportedLoginTypeMissedExceptionError.
+  /// Shown during login or signup when the WebTrit Cloud Backend does not support any login types compatible with the app. Condition: the backend instance is missing required configuration for supported authentication methods.
   ///
   /// In en, this message translates to:
   /// **'The current WebTrit Cloud Backend does not support any login types compatible with this app'**
@@ -1409,25 +1411,25 @@ abstract class AppLocalizations {
   /// **'Sign up'**
   String get loginType_signup;
 
-  /// No description provided for @login_validationCoreUrlError.
+  /// Shown when the user enters an invalid URL in the WebTrit Cloud Backend URL field during login or setup. Condition: the input does not match the required URL format.
   ///
   /// In en, this message translates to:
   /// **'Please enter a valid URL'**
   String get login_validationCoreUrlError;
 
-  /// No description provided for @login_validationEmailError.
+  /// Shown when the user enters an invalid email address in the email field during login or signup. Condition: the input does not match the required email format.
   ///
   /// In en, this message translates to:
   /// **'Please enter a valid email'**
   String get login_validationEmailError;
 
-  /// No description provided for @login_validationPhoneError.
+  /// Shown when the user enters an invalid phone number in the phone number field during login or signup. Condition: the input does not match the required phone number format.
   ///
   /// In en, this message translates to:
   /// **'Please enter a valid phone number'**
   String get login_validationPhoneError;
 
-  /// No description provided for @login_validationUserRefError.
+  /// Shown when the user enters an invalid value in the phone number or email field during login or signup. Condition: the input does not match the required format for either phone number or email.
   ///
   /// In en, this message translates to:
   /// **'Please enter a valid phone number or email'**
@@ -1445,7 +1447,7 @@ abstract class AppLocalizations {
   /// **'Refresh'**
   String get logRecordsConsole_Button_failureRefresh;
 
-  /// No description provided for @logRecordsConsole_Text_failure.
+  /// Shown in the Log Console screen when an unexpected error occurs while loading or displaying log records.
   ///
   /// In en, this message translates to:
   /// **'An unexpected error occurred'**
@@ -1493,13 +1495,15 @@ abstract class AppLocalizations {
   /// **'Update'**
   String get main_CompatibilityIssueDialogActions_update;
 
-  /// No description provided for @main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError.
+  /// Shown in the compatibility issue dialog when the app detects that the WebTrit Cloud Backend version is incompatible. Condition: the actual backend version does not match the supported version range. Placeholders: {actual} for the current instance version, {supportedConstraint} for the supported version range.
   ///
   /// In en, this message translates to:
   /// **'Incompatible WebTrit Cloud Backend version, please contact the administrator of your system.\n\nInstance version:\n{actual}\n\nSupported version:\n{supportedConstraint}'**
   String
-      main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError(
-          String actual, String supportedConstraint);
+  main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError(
+    String actual,
+    String supportedConstraint,
+  );
 
   /// No description provided for @main_CompatibilityIssueDialog_title.
   ///
@@ -1609,13 +1613,13 @@ abstract class AppLocalizations {
   /// **'Close'**
   String get messaging_ConversationBuilders_invalidNumber_ok;
 
-  /// No description provided for @messaging_ConversationBuilders_invalidNumber_title.
+  /// Shown as the title of a dialog or message when a contact has an invalid phone number. Condition: the phone number does not match the required format during contact selection or group creation.
   ///
   /// In en, this message translates to:
   /// **'Invalid phone number'**
   String get messaging_ConversationBuilders_invalidNumber_title;
 
-  /// No description provided for @messaging_ConversationBuilders_invite_heading.
+  /// Shown as the heading for the section where users can invite other participants to a conversation or group during the creation or editing process.
   ///
   /// In en, this message translates to:
   /// **'Invite users:'**
@@ -1633,7 +1637,7 @@ abstract class AppLocalizations {
   /// **'Members'**
   String get messaging_ConversationBuilders_membersHeadline;
 
-  /// No description provided for @messaging_ConversationBuilders_nameFieldEmpty.
+  /// Shown when the user tries to create a group but leaves the group name field empty. Condition: group name input is required but not provided.
   ///
   /// In en, this message translates to:
   /// **'Please enter a group name'**
@@ -1657,7 +1661,7 @@ abstract class AppLocalizations {
   /// **'Next'**
   String get messaging_ConversationBuilders_next_action;
 
-  /// No description provided for @messaging_ConversationBuilders_noContacts.
+  /// Shown when the user searches for contacts in the conversation builder and no contacts match the search result. Condition: the search query returns an empty list.
   ///
   /// In en, this message translates to:
   /// **'There are no contacts matching the search result'**
@@ -1669,7 +1673,7 @@ abstract class AppLocalizations {
   /// **'+ [country code] [area/operator code] [subscriber number]'**
   String get messaging_ConversationBuilders_numberFormatExample;
 
-  /// No description provided for @messaging_ConversationBuilders_numberSearch_errorError.
+  /// Shown when the user enters an invalid phone number in the conversation builder's number search field. Condition: the input does not match the required phone number format.
   ///
   /// In en, this message translates to:
   /// **'The entered phone number is invalid. It should be entered in the format: '**
@@ -1693,7 +1697,7 @@ abstract class AppLocalizations {
   /// **'New chat'**
   String get messaging_ConversationBuilders_title_new;
 
-  /// No description provided for @messaging_Conversation_failure.
+  /// Shown when a conversation fails to load in the messaging screen. Condition: an error occurs while retrieving or displaying conversation data.
   ///
   /// In en, this message translates to:
   /// **'Conversation load error'**
@@ -1885,7 +1889,7 @@ abstract class AppLocalizations {
   /// **'Group:'**
   String get messaging_GroupInfo_titlePrefix;
 
-  /// No description provided for @messaging_GroupInfo_unmakeModeratorBtnText.
+  /// Button text shown when removing moderator status from a user in a group chat. Condition: user is currently a moderator and can be demoted to a regular member.
   ///
   /// In en, this message translates to:
   /// **'Unmake moderator'**
@@ -1945,7 +1949,7 @@ abstract class AppLocalizations {
   /// **'Copy to clipboard'**
   String get messaging_MessageView_textcopy;
 
-  /// No description provided for @messaging_ParticipantName_unknown.
+  /// Shown when a participant in a conversation does not have a known or available name. Condition: the user's name is missing or cannot be retrieved.
   ///
   /// In en, this message translates to:
   /// **'Unknown user'**
@@ -1963,7 +1967,7 @@ abstract class AppLocalizations {
   /// **'delivered'**
   String get messaging_SmsSendingStatus_delivered;
 
-  /// No description provided for @messaging_SmsSendingStatus_failed.
+  /// Shown as the status for an SMS message that failed to send or deliver. Condition: the message could not be transmitted due to network, server, or recipient issues.
   ///
   /// In en, this message translates to:
   /// **'failed'**
@@ -1987,7 +1991,7 @@ abstract class AppLocalizations {
   /// **'CONNECTING'**
   String get messaging_StateBar_connecting;
 
-  /// No description provided for @messaging_StateBar_error.
+  /// Shown in the messaging state bar when the app is disconnected from the messaging server. Condition: connection lost or unable to establish a connection.
   ///
   /// In en, this message translates to:
   /// **'DISCONNECTED'**
@@ -1999,7 +2003,7 @@ abstract class AppLocalizations {
   /// **'INITIALIZING'**
   String get messaging_StateBar_initializing;
 
-  /// No description provided for @notifications_errorSnackBarAction_callSdpConfiguration.
+  /// Shown in a notification or snackbar when a call fails due to an invalid SDP (Session Description Protocol) configuration. Condition: the app encounters an SDP error during call setup or media negotiation.
   ///
   /// In en, this message translates to:
   /// **'Invalid SDP configuration'**
@@ -2011,117 +2015,119 @@ abstract class AppLocalizations {
   /// **'Check'**
   String get notifications_errorSnackBarAction_callUserMedia;
 
-  /// No description provided for @notifications_errorSnackBar_activeLineBlindTransferWarning.
+  /// Shown in a notification or snackbar when a user tries to perform a blind transfer to a recipient they are already on the line with. Condition: the active call is with the same recipient as the blind transfer target.
   ///
   /// In en, this message translates to:
   /// **'You are already on the line with the recipient you are trying to blind transfer to'**
   String get notifications_errorSnackBar_activeLineBlindTransferWarning;
 
-  /// No description provided for @notifications_errorSnackBar_appOffline.
+  /// Shown in a notification or snackbar when the application is offline. Condition: the app loses connection to the server or network and cannot perform online actions.
   ///
   /// In en, this message translates to:
   /// **'Your application is currently offline'**
   String get notifications_errorSnackBar_appOffline;
 
-  /// No description provided for @notifications_errorSnackBar_appOnline.
+  /// Shown in a notification or snackbar when the application successfully reconnects and is online. Condition: the app transitions from offline/disconnected to an online state.
   ///
   /// In en, this message translates to:
   /// **'Your application is online'**
   String get notifications_errorSnackBar_appOnline;
 
-  /// No description provided for @notifications_errorSnackBar_appUnregistered.
+  /// Shown in a notification or snackbar (call screen or global) when the app is disconnected from the WebTrit core servers and cannot place calls. Condition: registration with the core is lost due to network/connectivity issues, authentication failure (e.g. SIP 401 Unauthorized), signaling timeout (e.g. SIP 408 Request Timeout) or server-side errors (e.g. SIP 503 Service Unavailable); user may need to reauthenticate or toggle the online status in settings.
   ///
   /// In en, this message translates to:
   /// **'Sorry, your application is currently disconnected from the WebTrit core servers and hence can\'t call right now. Please go to the settings page, and slide the online status toggle switch off and on again to reestablish the connection'**
   String get notifications_errorSnackBar_appUnregistered;
 
-  /// No description provided for @notifications_errorSnackBar_callConnect.
+  /// Shown in a notification or snackbar (call screen or global) when the app fails to connect to the WebTrit core and is attempting automatic reconnection. Condition: signaling connection to the core could not be established due to network issues, server unreachability, or transient backend problems; user may need to check network or backend availability.
   ///
   /// In en, this message translates to:
   /// **'Connecting to the core failed, trying to reconnect'**
   String get notifications_errorSnackBar_callConnect;
 
-  /// No description provided for @notifications_errorSnackBar_callNegotiationTimeout.
+  /// Shown in a notification or snackbar when call setup fails because media/signaling negotiation timed out. Context: occurs during SDP/ICE or signaling exchange when negotiation does not complete in time; typical causes include network connectivity problems, ICE or DTLS failures, incompatible SDP codecs, or an unresponsive remote endpoint or signaling server.
   ///
   /// In en, this message translates to:
   /// **'Cannot establish the call, please try again later'**
   String get notifications_errorSnackBar_callNegotiationTimeout;
 
-  /// No description provided for @notifications_errorSnackBar_callSignalingClientNotConnect.
+  /// Shown in a notification or snackbar when the app cannot initiate a call because the signaling client is not connected to the WebTrit core. Context: occurs at call start when the signaling/WebSocket connection is absent or closed; typical causes include network connectivity issues, connection refused/timeouts, TLS/socket handshake failures, authentication/token errors (e.g. 401), or core server unavailability.
   ///
   /// In en, this message translates to:
   /// **'Cannot initiate the call, please check the connection status'**
   String get notifications_errorSnackBar_callSignalingClientNotConnect;
 
-  /// No description provided for @notifications_errorSnackBar_callSignalingClientSessionMissed.
+  /// Shown in a notification or snackbar when the app's signaling session for the signed-in user is lost or rejected and re-authentication is required. Typical causes: expired or revoked access/refresh tokens, failed token refresh, authentication rejected by the core (e.g. SIP/WebTrit 401 Unauthorized), or the signaling server closed the session.
   ///
   /// In en, this message translates to:
   /// **'Authentication error, please re-login'**
   String get notifications_errorSnackBar_callSignalingClientSessionMissed;
 
-  /// No description provided for @notifications_errorSnackBar_callUndefinedLine.
+  /// Shown in a snackbar when the user attempts to start a call but there is no outbound line available. Context: occurs at call initiation when no SIP/VoIP line is assigned or registered, all lines are disabled or busy, or the line was removed/disabled by an administrator; typical causes: unassigned or unregistered SIP line, account/line disabled, or concurrent channel limits.
   ///
   /// In en, this message translates to:
   /// **'No idle lines to initiate the call'**
   String get notifications_errorSnackBar_callUndefinedLine;
 
-  /// No description provided for @notifications_errorSnackBar_callUserMedia.
+  /// Shown in a notification or snackbar when the app cannot access camera or microphone required for a call. Context: occurs when getUserMedia or platform permission check fails; typical causes include the user denying camera/microphone permission, OS-level restriction or revoked permission, missing runtime permission (Android), or the device hardware being busy or unavailable.
   ///
   /// In en, this message translates to:
   /// **'No access to media input, please check app permissions'**
   String get notifications_errorSnackBar_callUserMedia;
 
-  /// No description provided for @notifications_errorSnackBar_callWhileOffline.
+  /// Shown in a notification or snackbar when the user attempts to start a call while the app or device is offline. Context: occurs at call initiation when there is no network connectivity (airplane mode, Wi‑Fi or cellular disabled, weak signal, or captive portal) or when network restrictions/firewall/VPN prevent reaching the signaling/core server. Typical causes: no internet, temporary carrier/Wi‑Fi outage, or network policies blocking signaling; suggest the user check their connection and retry.
   ///
   /// In en, this message translates to:
   /// **'Cannot initiate the call, please check the connection status'**
   String get notifications_errorSnackBar_callWhileOffline;
 
-  /// No description provided for @notifications_errorSnackBar_callWhileUnregistered.
+  /// Shown in a notification or snackbar when the user attempts to place a call but their account is not registered or allowed to make outbound calls. Context: appears at call initiation or dialing when the backend reports the account is unregistered, suspended, or lacks outbound permissions. Typical causes: account disabled or suspended by an administrator, missing/expired subscription or license, provisioning or routing issues on the backend, or temporary account-related server errors; advise the user to check account status in settings or contact support.
   ///
   /// In en, this message translates to:
   /// **'You\'re currently unable to place calls. Please check your account status or contact support.'**
   String get notifications_errorSnackBar_callWhileUnregistered;
 
-  /// No description provided for @notifications_errorSnackBar_sessionExpired.
+  /// Shown in a notification or snackbar when the user's authentication session has expired and re-authentication is required. Typical causes: access or refresh token expiration/revocation, failed token refresh, or the backend invalidating the session. Advise the user to sign in again to restore full functionality.
   ///
   /// In en, this message translates to:
   /// **'Your session has expired. Please log in again.'**
   String get notifications_errorSnackBar_sessionExpired;
 
-  /// No description provided for @notifications_errorSnackBar_SignalingConnectFailed.
+  /// Shown in a notification or snackbar when the app fails to connect to the WebTrit core and is attempting automatic reconnection. Context: occurs when the signaling/WebSocket connection cannot be established due to network outages, server unreachability, TLS/handshake failures, authentication errors (expired/invalid tokens), or firewall/VPN restrictions. Suggest the user check their network, retry, or reauthenticate if the problem persists.
   ///
   /// In en, this message translates to:
   /// **'Connecting to the core failed, trying to reconnect'**
   String get notifications_errorSnackBar_SignalingConnectFailed;
 
-  /// No description provided for @notifications_errorSnackBar_signalingDisconnectWithCodeName.
+  /// Shown in a notification or snackbar when the app is disconnected from the WebTrit core and a disconnect code is available. Context: occurs when the signaling/WebSocket connection is closed with a known reason (e.g. protocol error, auth failure, server-initiated disconnect). Suggest the user check their network or reauthenticate if the issue persists.
   ///
   /// In en, this message translates to:
   /// **'Disconnected from the core with the code: {codeName}'**
   String notifications_errorSnackBar_signalingDisconnectWithCodeName(
-      String codeName);
+    String codeName,
+  );
 
-  /// No description provided for @notifications_errorSnackBar_signalingDisconnectWithSystemReason.
+  /// Shown in a notification or snackbar when the app is disconnected from the WebTrit core and a system-provided reason string is available. Context: occurs when the signaling/WebSocket connection is closed with a system-level reason (e.g. network error, TLS/handshake failure, server-initiated disconnect). Advise the user to check their network, retry, or reauthenticate if the problem persists.
   ///
   /// In en, this message translates to:
   /// **'Disconnected from the core due to the following reason: {reason}'**
   String notifications_errorSnackBar_signalingDisconnectWithSystemReason(
-      String reason);
+    String reason,
+  );
 
-  /// No description provided for @notifications_errorSnackBar_SignalingSessionMissed.
+  /// Shown in a notification or snackbar when the app's signaling session for the signed-in user is lost or rejected and re-authentication is required. Typical causes: expired or revoked access/refresh tokens, failed token refresh, authentication rejected by the core (e.g. SIP/WebTrit 401 Unauthorized), or the signaling server closing the session. Advise the user to sign in again to restore full functionality.
   ///
   /// In en, this message translates to:
   /// **'Authentication error, please re-login'**
   String get notifications_errorSnackBar_SignalingSessionMissed;
 
-  /// No description provided for @notifications_errorSnackBar_sipRegistrationFailed_Unavailable.
+  /// Shown in a notification or snackbar when registration with the remote VoIP/SIP system fails because the service is unavailable (e.g. SIP 503, maintenance, or backend outage). Typical causes: remote service maintenance, server-side outage, or transient network issues. Suggest the user retry later or contact their administrator if the problem persists.
   ///
   /// In en, this message translates to:
   /// **'Registration with the remote VoIP system failed, the service is unavailable'**
   String get notifications_errorSnackBar_sipRegistrationFailed_Unavailable;
 
-  /// No description provided for @notifications_errorSnackBar_sipRegistrationFailed_Unexpected.
+  /// Shown in a notification or snackbar when registration with the remote VoIP/SIP system fails due to an unexpected error. Context: occurs during SIP/VoIP registration when the server returns an unexpected response, a protocol error occurs, or a transient backend/network failure happens. Suggest the user retry, check network connectivity, and contact their administrator or support if the problem persists.
   ///
   /// In en, this message translates to:
   /// **'Registration with the remote VoIP system failed due to an unexpected error'**
@@ -2132,15 +2138,16 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Registration with the remote VoIP system failed due to the following reason: {reason}'**
   String notifications_errorSnackBar_sipRegistrationFailed_WithSystemReason(
-      String reason);
+    String reason,
+  );
 
-  /// No description provided for @notifications_errorSnackBar_sipServiceUnavailable.
+  /// Shown in a notification or snackbar when authentication with the remote VoIP/SIP system fails or the service is unavailable. Typical causes: authentication rejection (invalid/expired credentials), remote service maintenance or outage, or transient network/TLS issues. Advise the user to verify account credentials, retry later, and contact their administrator or support if the problem persists.
   ///
   /// In en, this message translates to:
   /// **'Authentication error with the remote VoIP system'**
   String get notifications_errorSnackBar_sipServiceUnavailable;
 
-  /// No description provided for @notifications_messageSnackBar_appOffline.
+  /// Shown in a non-error informational snackbar when the app transitions to offline. Typical causes: loss of network connectivity (airplane mode, Wi‑Fi or cellular drop), captive portal, or temporary carrier/Wi‑Fi outage. Suggest the user check their connection and retry.
   ///
   /// In en, this message translates to:
   /// **'Your application is currently offline'**
@@ -3178,373 +3185,373 @@ abstract class AppLocalizations {
   /// **'Determine how this device responds to an offer that includes video.'**
   String get settings_videoOffer_title;
 
-  /// No description provided for @signalingResponseCode_ambiguousRequest.
+  /// Shown when the signaling/core server cannot understand the client's request (e.g. malformed or ambiguous signaling payload, missing required fields, or protocol mismatch). Suggest the user retry the action, ensure the app is up to date, check network connectivity, and contact their administrator or support with details if the problem persists.
   ///
   /// In en, this message translates to:
   /// **'We couldn\'t understand your request.'**
   String get signalingResponseCode_ambiguousRequest;
 
-  /// No description provided for @signalingResponseCode_busyEverywhere.
+  /// Shown when the remote user is busy on all devices (busy everywhere). Suggest the user try again later, call from a different line or device, leave a voicemail if available, and contact their administrator or the recipient if the problem persists.
   ///
   /// In en, this message translates to:
   /// **'The user you\'re trying to reach is busy. Please try again later.'**
   String get signalingResponseCode_busyEverywhere;
 
-  /// No description provided for @signalingResponseCode_callNotExist.
+  /// Shown when the signaling/core server receives a request referring to a call or transaction that does not exist (e.g. stale dialog ID, already finished call, or invalid reference). Suggest the user refresh the call list, retry the action, and contact their administrator or the recipient with details if the problem persists.
   ///
   /// In en, this message translates to:
   /// **'The request that does not match any dialog or transaction.\n'**
   String get signalingResponseCode_callNotExist;
 
-  /// No description provided for @signalingResponseCode_declineCall.
+  /// Shown when the remote party explicitly declined the call. Suggest the user try calling again later, use a different line or contact the recipient by other means; if the problem persists, contact the administrator.
   ///
   /// In en, this message translates to:
   /// **'The call was declined.'**
   String get signalingResponseCode_declineCall;
 
-  /// No description provided for @signalingResponseCode_errorAttachingPlugin.
+  /// Shown when Janus or the signaling server cannot attach a plugin (e.g. missing plugin, resource allocation failure, or protocol mismatch). Typical cause: misconfigured plugin, server error, or unsupported request.
   ///
   /// In en, this message translates to:
   /// **'We had trouble connecting a feature. Please try again later.'**
   String get signalingResponseCode_errorAttachingPlugin;
 
-  /// No description provided for @signalingResponseCode_errorDetachingPlugin.
+  /// Shown when Janus or the signaling server fails to detach a plugin. Typical causes: plugin not found, session already closed, or internal server error.
   ///
   /// In en, this message translates to:
   /// **'We had trouble disconnecting a feature. Please try again later.'**
   String get signalingResponseCode_errorDetachingPlugin;
 
-  /// No description provided for @signalingResponseCode_errorSendingMessage.
+  /// Shown when the app cannot send a signaling or media message via WebRTC/Janus. Conditions: network interruption, invalid session handle, or transport layer failure.
   ///
   /// In en, this message translates to:
   /// **'We couldn\'t send your message. Check your network and try again.'**
   String get signalingResponseCode_errorSendingMessage;
 
-  /// No description provided for @signalingResponseCode_exchangeRoutingError.
+  /// Shown when the signaling backend cannot determine a valid routing path for the call or message. Typical cause: no available trunk/route, misconfigured PBX, or backend reply without routes.
   ///
   /// In en, this message translates to:
   /// **'We couldn\'t find a route to complete your request. Please try again later.'**
   String get signalingResponseCode_exchangeRoutingError;
 
-  /// No description provided for @signalingResponseCode_handleNotFound.
+  /// Shown when the referenced Janus handle or session does not exist (e.g. invalid handle ID, already destroyed session).
   ///
   /// In en, this message translates to:
   /// **'We couldn\'t find what you were looking for. Please try again.'**
   String get signalingResponseCode_handleNotFound;
 
-  /// No description provided for @signalingResponseCode_incompatibleDestination.
+  /// Shown when the remote endpoint cannot accept the session due to incompatible codecs, media types, or unsupported feature. SIP equivalent: 488 Not Acceptable Here.
   ///
   /// In en, this message translates to:
   /// **'The destination you\'re trying to reach is incompatible.'**
   String get signalingResponseCode_incompatibleDestination;
 
-  /// No description provided for @signalingResponseCode_invalidElementType.
+  /// Shown when a request contains an unsupported or invalid element type in signaling payload. Typical cause: malformed API request.
   ///
   /// In en, this message translates to:
   /// **'Something isn\'t quite right. Please try again.'**
   String get signalingResponseCode_invalidElementType;
 
-  /// No description provided for @signalingResponseCode_invalidJson.
+  /// Shown when the signaling server cannot parse the JSON payload. Cause: malformed JSON or protocol violation.
   ///
   /// In en, this message translates to:
   /// **'There was an error processing your data. Please try again.'**
   String get signalingResponseCode_invalidJson;
 
-  /// No description provided for @signalingResponseCode_invalidJsonObject.
+  /// Shown when a JSON object in the request is syntactically valid but contains invalid fields or values (e.g. wrong types or missing mandatory keys).
   ///
   /// In en, this message translates to:
   /// **'Some of the information provided was not valid. Please double-check and try again.'**
   String get signalingResponseCode_invalidJsonObject;
 
-  /// No description provided for @signalingResponseCode_invalidNumberFormat.
+  /// Shown when a dialed phone number is not in a valid format. Typical cause: non-numeric input, missing country code, or format not supported by SIP/PBX.
   ///
   /// In en, this message translates to:
   /// **'The number you entered is invalid.'**
   String get signalingResponseCode_invalidNumberFormat;
 
-  /// No description provided for @signalingResponseCode_invalidPath.
+  /// Shown when the signaling request points to an invalid or unsupported path/endpoint in the server.
   ///
   /// In en, this message translates to:
   /// **'The requested action isn\'t available. Please try a different option.'**
   String get signalingResponseCode_invalidPath;
 
-  /// No description provided for @signalingResponseCode_invalidSdp.
+  /// Shown when the Session Description Protocol (SDP) in an offer/answer is invalid or not supported. Common in WebRTC/SIP interop failures.
   ///
   /// In en, this message translates to:
   /// **'We encountered a technical error. Please try again later.'**
   String get signalingResponseCode_invalidSdp;
 
-  /// No description provided for @signalingResponseCode_invalidStream.
+  /// Shown when the specified media stream cannot be found or is not available (e.g. stream ID mismatch or closed track).
   ///
   /// In en, this message translates to:
   /// **'The requested stream isn\'t available. Please try again.'**
   String get signalingResponseCode_invalidStream;
 
-  /// No description provided for @signalingResponseCode_loopDetected.
+  /// Shown when the signaling server detects a routing loop (call requests bouncing back). SIP equivalent: 482 Loop Detected.
   ///
   /// In en, this message translates to:
   /// **'We detected a loop in the call. Please try again.'**
   String get signalingResponseCode_loopDetected;
 
-  /// No description provided for @signalingResponseCode_missingMandatoryElement.
+  /// Shown when a signaling request lacks a mandatory parameter or field. Typical cause: client bug or malformed request.
   ///
   /// In en, this message translates to:
   /// **'Required information is missing. Please fill in all required fields.'**
   String get signalingResponseCode_missingMandatoryElement;
 
-  /// No description provided for @signalingResponseCode_missingRequest.
+  /// Shown when the server expects a request object but none is provided. Cause: client-side error or protocol violation.
   ///
   /// In en, this message translates to:
   /// **'Something went wrong with your request. Please try again.'**
   String get signalingResponseCode_missingRequest;
 
-  /// No description provided for @signalingResponseCode_normalUnspecified.
+  /// Generic error when no specific cause is indicated by signaling or hangup. FreeSWITCH cause: NORMAL_UNSPECIFIED.
   ///
   /// In en, this message translates to:
   /// **'An error occurred. Please try again later.'**
   String get signalingResponseCode_normalUnspecified;
 
-  /// No description provided for @signalingResponseCode_notAcceptable.
+  /// Shown when the remote endpoint or server refuses the session due to unsupported media or policy. SIP 488 Not Acceptable Here.
   ///
   /// In en, this message translates to:
   /// **'The call was marked as not acceptable. Please check your outbound routes!'**
   String get signalingResponseCode_notAcceptable;
 
-  /// No description provided for @signalingResponseCode_notAcceptingNewSessions.
+  /// Shown when the signaling server temporarily rejects new sessions. Cause: server overload, maintenance, or resource limits.
   ///
   /// In en, this message translates to:
   /// **'We\'re not able to start new sessions at the moment. Please try later.'**
   String get signalingResponseCode_notAcceptingNewSessions;
 
-  /// No description provided for @signalingResponseCode_notFoundRoutesInReplyFromBE.
+  /// Shown when the backend does not return any routing information for the request. Condition: misconfigured routing tables or no available trunks.
   ///
   /// In en, this message translates to:
   /// **'We couldn\'t find a route to complete your request. Please try again later.'**
   String get signalingResponseCode_notFoundRoutesInReplyFromBE;
 
-  /// No description provided for @signalingResponseCode_pluginNotFound.
+  /// Shown when the requested Janus plugin is not found or unavailable. Cause: wrong plugin name, not loaded on server, or removed.
   ///
   /// In en, this message translates to:
   /// **'A required component is missing. Please try restarting the app.'**
   String get signalingResponseCode_pluginNotFound;
 
-  /// No description provided for @signalingResponseCode_rejected.
+  /// Shown when the call request is rejected by an intermediary (e.g. proxy, SBC, or policy server) before reaching the recipient. SIP 603 Decline or similar.
   ///
   /// In en, this message translates to:
   /// **'The call was rejected by a machine or process on the way, without reaching the destination... '**
   String get signalingResponseCode_rejected;
 
-  /// No description provided for @signalingResponseCode_requestTerminated.
+  /// Shown when a signaling request was terminated prematurely. SIP 487 Request Terminated, often due to caller cancelling before answer.
   ///
   /// In en, this message translates to:
   /// **'Your request was terminated. Please try again.'**
   String get signalingResponseCode_requestTerminated;
 
-  /// No description provided for @signalingResponseCode_sessionIdInUse.
+  /// Shown when trying to create or reuse a session ID that is already active. Condition: duplicate session identifiers.
   ///
   /// In en, this message translates to:
   /// **'This session is already active. Try using a different session.'**
   String get signalingResponseCode_sessionIdInUse;
 
-  /// No description provided for @signalingResponseCode_sessionNotFound.
+  /// Shown when the server cannot locate the referenced session. Cause: expired session, invalid ID, or user logged out.
   ///
   /// In en, this message translates to:
   /// **'Your session could not be found. Please sign in and try again.'**
   String get signalingResponseCode_sessionNotFound;
 
-  /// No description provided for @signalingResponseCode_tokenNotFound.
+  /// Shown when the request is missing a valid authentication token. Cause: expired or invalid token.
   ///
   /// In en, this message translates to:
   /// **'Your access token is missing or invalid. Please sign in again.'**
   String get signalingResponseCode_tokenNotFound;
 
-  /// No description provided for @signalingResponseCode_transportSpecificError.
+  /// Shown when a transport-level error occurs (e.g. WebSocket disconnect, DTLS failure, or ICE transport issue).
   ///
   /// In en, this message translates to:
   /// **'A connection issue occurred. Please check your network and try again.'**
   String get signalingResponseCode_transportSpecificError;
 
-  /// No description provided for @signalingResponseCodeType_callHangup.
+  /// Category for errors where the call is terminated. Causes include normal hangup, busy, declined, or signaling errors.
   ///
   /// In en, this message translates to:
   /// **'The call was ended.'**
   String get signalingResponseCodeType_callHangup;
 
-  /// No description provided for @signalingResponseCodeType_plugin.
+  /// Category for errors related to Janus plugins (attach, detach, plugin not found).
   ///
   /// In en, this message translates to:
   /// **'A required feature isn\'t working properly. Try restarting the app.'**
   String get signalingResponseCodeType_plugin;
 
-  /// No description provided for @signalingResponseCodeType_request.
+  /// Category for errors caused by malformed or unsupported requests in signaling.
   ///
   /// In en, this message translates to:
   /// **'There\'s an issue with your request. Please try again.'**
   String get signalingResponseCodeType_request;
 
-  /// No description provided for @signalingResponseCodeType_session.
+  /// Category for errors related to sessions (session not found, session ID in use).
   ///
   /// In en, this message translates to:
   /// **'There\'s an issue with your session. Please sign in again or restart the app.'**
   String get signalingResponseCodeType_session;
 
-  /// No description provided for @signalingResponseCodeType_token.
+  /// Category for authentication token errors (missing, expired, or invalid).
   ///
   /// In en, this message translates to:
   /// **'Your access token isn\'t valid. Please sign in again.'**
   String get signalingResponseCodeType_token;
 
-  /// No description provided for @signalingResponseCodeType_transport.
+  /// Category for transport-level errors (network, WebSocket, ICE, DTLS).
   ///
   /// In en, this message translates to:
   /// **'We\'re having trouble communicating with the server. Please check your connection and try again.'**
   String get signalingResponseCodeType_transport;
 
-  /// No description provided for @signalingResponseCodeType_unauthorized.
+  /// Category for unauthorized requests. Cause: missing/invalid credentials or insufficient permissions.
   ///
   /// In en, this message translates to:
   /// **'You do not have the proper authorization. Please sign in or contact support.'**
   String get signalingResponseCodeType_unauthorized;
 
-  /// No description provided for @signalingResponseCodeType_unknown.
+  /// Category for unknown or unspecified signaling errors.
   ///
   /// In en, this message translates to:
   /// **'An unexpected issue occurred. Please try again later.'**
   String get signalingResponseCodeType_unknown;
 
-  /// No description provided for @signalingResponseCodeType_webrtc.
+  /// Category for WebRTC-specific errors (SDP, ICE, DTLS, media negotiation).
   ///
   /// In en, this message translates to:
   /// **'There\'s an issue with the call connection. Please hang up and try again.'**
   String get signalingResponseCodeType_webrtc;
 
-  /// No description provided for @signalingResponseCode_unauthorizedAccess.
+  /// Shown when user lacks permission for a specific feature or action. Equivalent to SIP 403 Forbidden.
   ///
   /// In en, this message translates to:
   /// **'You do not have permission to access this feature. Please contact support if you believe this is an error.'**
   String get signalingResponseCode_unauthorizedAccess;
 
-  /// No description provided for @signalingResponseCode_unauthorizedRequest.
+  /// Shown when a request fails authorization. Cause: invalid token, expired session, or insufficient rights.
   ///
   /// In en, this message translates to:
   /// **'Your request could not be authorized. Please try signing in again.'**
   String get signalingResponseCode_unauthorizedRequest;
 
-  /// No description provided for @signalingResponseCode_unexpectedAnswer.
+  /// Shown when the server receives a response it did not expect (e.g. wrong transaction state).
   ///
   /// In en, this message translates to:
   /// **'We got an unexpected response. Please try again.'**
   String get signalingResponseCode_unexpectedAnswer;
 
-  /// No description provided for @signalingResponseCode_unknownError.
+  /// Generic catch-all error for unexpected signaling issues with no specific classification.
   ///
   /// In en, this message translates to:
   /// **'An unexpected error occurred. Please try again later.'**
   String get signalingResponseCode_unknownError;
 
-  /// No description provided for @signalingResponseCode_unknownRequest.
+  /// Shown when the signaling server cannot recognize the request type. Cause: unsupported or unknown request.
   ///
   /// In en, this message translates to:
   /// **'We didn\'t recognize that request. Please try again or contact support.'**
   String get signalingResponseCode_unknownRequest;
 
-  /// No description provided for @signalingResponseCode_unsupportedJsepType.
+  /// Shown when a JSEP (SDP offer/answer) type is not supported by the signaling/WebRTC stack. Cause: unsupported media action.
   ///
   /// In en, this message translates to:
   /// **'This action isn\'t supported by your current setup.'**
   String get signalingResponseCode_unsupportedJsepType;
 
-  /// No description provided for @signalingResponseCode_unwanted.
+  /// Shown when the call is flagged as unwanted by the recipient or network. SIP 607 Unwanted.
   ///
   /// In en, this message translates to:
   /// **'The recipient marked the call as unwanted.'**
   String get signalingResponseCode_unwanted;
 
-  /// No description provided for @signalingResponseCode_userBusy.
+  /// Shown when the callee is busy (SIP 486 Busy Here).
   ///
   /// In en, this message translates to:
   /// **'The user you\'re trying to reach is busy. Please try again later.'**
   String get signalingResponseCode_userBusy;
 
-  /// No description provided for @signalingResponseCode_userNotExist.
+  /// Shown when the dialed user is not registered or does not exist in the PBX. SIP 404 Not Found.
   ///
   /// In en, this message translates to:
   /// **'The user you\'re trying to reach doesn\'t exist.'**
   String get signalingResponseCode_userNotExist;
 
-  /// No description provided for @signalingResponseCode_wrongWebrtcState.
+  /// Shown when a WebRTC operation is attempted in an invalid state (e.g. sending media before offer/answer exchange).
   ///
   /// In en, this message translates to:
   /// **'A call-related error occurred. Please hang up and try again.'**
   String get signalingResponseCode_wrongWebrtcState;
 
-  /// No description provided for @socketError_connectionRefused.
+  /// Shown when a socket connection attempt is explicitly refused by the server. Context: initial connection setup. Typical causes: server not running, port closed, or firewall rejecting the request.
   ///
   /// In en, this message translates to:
   /// **'Connection Refused'**
   String get socketError_connectionRefused;
 
-  /// No description provided for @socketError_connectionRefusedDescription.
+  /// Extended explanation for Connection Refused. Helps user understand that the issue is likely on the server side (down, rejecting, or blocked).
   ///
   /// In en, this message translates to:
   /// **'The server refused the connection. The server may be down or rejecting requests. Please try again later.'**
   String get socketError_connectionRefusedDescription;
 
-  /// No description provided for @socketError_connectionReset.
+  /// Shown when an established connection is forcibly closed by the remote server. Typical causes: server restart, protocol mismatch, or network interruption.
   ///
   /// In en, this message translates to:
   /// **'Connection Reset'**
   String get socketError_connectionReset;
 
-  /// No description provided for @socketError_connectionResetDescription.
+  /// Extended explanation for Connection Reset. Informs user that the session was dropped by the server or network mid-communication.
   ///
   /// In en, this message translates to:
   /// **'The connection was reset by the server. Please try again.'**
   String get socketError_connectionResetDescription;
 
-  /// No description provided for @socketError_connectionTimedOut.
+  /// Shown when a connection attempt takes too long without response. Typical causes: unstable internet, blocked ports, or server overload.
   ///
   /// In en, this message translates to:
   /// **'Connection Timed Out'**
   String get socketError_connectionTimedOut;
 
-  /// No description provided for @socketError_connectionTimedOutDescription.
+  /// Extended explanation for Connection Timed Out. User-facing guidance to check internet connection and retry.
   ///
   /// In en, this message translates to:
   /// **'The connection has timed out. This might happen due to a slow or unstable internet connection. Please check your connection and try again.'**
   String get socketError_connectionTimedOutDescription;
 
-  /// No description provided for @socketError_default.
+  /// Generic socket/network error message shown when no specific error mapping is available.
   ///
   /// In en, this message translates to:
   /// **'Network Error'**
   String get socketError_default;
 
-  /// No description provided for @socketError_defaultDescription.
+  /// Extended explanation for generic network error with an error code placeholder. Helps support/debugging.
   ///
   /// In en, this message translates to:
   /// **'An unexpected network error occurred (Error code: {errorCode}). This might be caused by network issues or server problems. Please try again later.'**
   String socketError_defaultDescription(int? errorCode);
 
-  /// No description provided for @socketError_networkUnreachable.
+  /// Shown when the device cannot reach any network. Typical causes: no active internet connection, airplane mode, firewall, or DNS misconfiguration.
   ///
   /// In en, this message translates to:
   /// **'Network Unreachable'**
   String get socketError_networkUnreachable;
 
-  /// No description provided for @socketError_networkUnreachableDescription.
+  /// Extended explanation for Network Unreachable. User guidance for common scenarios (weak Wi-Fi, firewall, DNS issues).
   ///
   /// In en, this message translates to:
   /// **'The network is unreachable. This could be due to a weak internet connection, network restrictions such as firewalls, or incorrect DNS settings. If you\'re on a work or restricted network, please contact your network administrator or try using a different network.'**
   String get socketError_networkUnreachableDescription;
 
-  /// No description provided for @socketError_serverUnreachable.
+  /// Shown when the client can reach the internet but not the specific server. Typical causes: server downtime, incorrect server address, or blocked route.
   ///
   /// In en, this message translates to:
   /// **'The server is unreachable due to network issues'**
   String get socketError_serverUnreachable;
 
-  /// No description provided for @socketError_serverUnreachableDescription.
+  /// Extended explanation for Server Unreachable. Suggests user verify internet connectivity and server status.
   ///
   /// In en, this message translates to:
   /// **'The server is unreachable. This could be due to no internet connection or server maintenance. Please check your internet connection and try again.'**
@@ -3688,43 +3695,43 @@ abstract class AppLocalizations {
   /// **'Voicemail'**
   String get voicemail_Widget_screenTitle;
 
-  /// No description provided for @webRegistration_ErrorAcknowledgeDialogActions_retry.
+  /// Button label shown in the Web Registration error dialog to let the user attempt the registration or loading process again after a failure.
   ///
   /// In en, this message translates to:
   /// **'Retry'**
   String get webRegistration_ErrorAcknowledgeDialogActions_retry;
 
-  /// No description provided for @webRegistration_ErrorAcknowledgeDialogActions_skip.
+  /// Button label shown in the Web Registration error dialog to let the user skip the failed step and continue without retrying.
   ///
   /// In en, this message translates to:
   /// **'Skip'**
   String get webRegistration_ErrorAcknowledgeDialogActions_skip;
 
-  /// No description provided for @webRegistration_ErrorAcknowledgeDialog_title.
+  /// Title of the dialog shown when an error occurs while loading or registering with a required web resource (e.g. invalid link, unreachable server, or failed provisioning).
   ///
   /// In en, this message translates to:
   /// **'Web resource error'**
   String get webRegistration_ErrorAcknowledgeDialog_title;
 
-  /// No description provided for @undefined_autoprovision_invalidToken.
+  /// Shown during autoprovisioning when the provided configuration token is invalid or expired. The server rejects the request, and the user must obtain a new configuration link.
   ///
   /// In en, this message translates to:
   /// **'The autoconfiguration credentials were rejected by the server. Please request a new configuration link'**
   String get undefined_autoprovision_invalidToken;
 
-  /// No description provided for @undefined_autoprovision_invalidToken_title.
+  /// Dialog title displayed when autoprovisioning fails due to an invalid or expired configuration token.
   ///
   /// In en, this message translates to:
   /// **'Invalid configuration'**
   String get undefined_autoprovision_invalidToken_title;
 
-  /// No description provided for @undefined_stackScreenNotSupported.
+  /// Shown when the app attempts to open a stack screen or feature that is not supported in the current build or environment. Suggests contacting the administrator for clarification.
   ///
   /// In en, this message translates to:
   /// **'Feature not supported. Please contact the administrator.'**
   String get undefined_stackScreenNotSupported;
 
-  /// No description provided for @undefined_stackScreenNotSupported_title.
+  /// Dialog title displayed when a requested feature or stack screen is not supported in the current app configuration.
   ///
   /// In en, this message translates to:
   /// **'Feature not supported'**
@@ -3760,8 +3767,9 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
   }
 
   throw FlutterError(
-      'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
-      'an issue with the localizations generation tool. Please file an issue '
-      'on GitHub with a reproducible sample app and the gen-l10n configuration '
-      'that was used.');
+    'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
+    'an issue with the localizations generation tool. Please file an issue '
+    'on GitHub with a reproducible sample app and the gen-l10n configuration '
+    'that was used.',
+  );
 }
