@@ -1579,6 +1579,22 @@
   "@themeMode_light": {},
   "themeMode_system": "System",
   "@themeMode_system": {},
+  "undefined_autoprovision_invalidToken": "The autoconfiguration credentials were rejected by the server. Please request a new configuration link",
+  "@undefined_autoprovision_invalidToken": {
+    "description": "Shown during autoprovisioning when the provided configuration token is invalid or expired. The server rejects the request, and the user must obtain a new configuration link."
+  },
+  "undefined_autoprovision_invalidToken_title": "Invalid configuration",
+  "@undefined_autoprovision_invalidToken_title": {
+    "description": "Dialog title displayed when autoprovisioning fails due to an invalid or expired configuration token."
+  },
+  "undefined_stackScreenNotSupported": "Feature not supported. Please contact the administrator.",
+  "@undefined_stackScreenNotSupported": {
+    "description": "Shown when the app attempts to open a stack screen or feature that is not supported in the current build or environment. Suggests contacting the administrator for clarification."
+  },
+  "undefined_stackScreenNotSupported_title": "Feature not supported",
+  "@undefined_stackScreenNotSupported_title": {
+    "description": "Dialog title displayed when a requested feature or stack screen is not supported in the current app configuration."
+  },
   "user_agreement_agrement_link": "The terms and conditions of the agreement",
   "@user_agreement_agrement_link": {
     "description": "Using in agreement checkbox as a mask for the URL"
@@ -1628,21 +1644,5 @@
   "webRegistration_ErrorAcknowledgeDialog_title": "Web resource error",
   "@webRegistration_ErrorAcknowledgeDialog_title": {
     "description": "Title of the dialog shown when an error occurs while loading or registering with a required web resource (e.g. invalid link, unreachable server, or failed provisioning)."
-  },
-  "undefined_autoprovision_invalidToken": "The autoconfiguration credentials were rejected by the server. Please request a new configuration link",
-  "@undefined_autoprovision_invalidToken": {
-    "description": "Shown during autoprovisioning when the provided configuration token is invalid or expired. The server rejects the request, and the user must obtain a new configuration link."
-  },
-  "undefined_autoprovision_invalidToken_title": "Invalid configuration",
-  "@undefined_autoprovision_invalidToken_title": {
-    "description": "Dialog title displayed when autoprovisioning fails due to an invalid or expired configuration token."
-  },
-  "undefined_stackScreenNotSupported": "Feature not supported. Please contact the administrator.",
-  "@undefined_stackScreenNotSupported": {
-    "description": "Shown when the app attempts to open a stack screen or feature that is not supported in the current build or environment. Suggests contacting the administrator for clarification."
-  },
-  "undefined_stackScreenNotSupported_title": "Feature not supported",
-  "@undefined_stackScreenNotSupported_title": {
-    "description": "Dialog title displayed when a requested feature or stack screen is not supported in the current app configuration."
   }
 }

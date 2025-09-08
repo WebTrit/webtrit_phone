@@ -2081,6 +2081,22 @@ class AppLocalizationsUk extends AppLocalizations {
   String get themeMode_system => 'Системний';
 
   @override
+  String get undefined_autoprovision_invalidToken =>
+      'Облікові дані для автоконфігурації були відхилені сервером. Будь ласка, запросіть нове посилання для конфігурації';
+
+  @override
+  String get undefined_autoprovision_invalidToken_title =>
+      'Недійсна конфігурація';
+
+  @override
+  String get undefined_stackScreenNotSupported =>
+      'Функція не підтримується. Зверніться до адміністратора.';
+
+  @override
+  String get undefined_stackScreenNotSupported_title =>
+      'Функція не підтримується';
+
+  @override
   String get user_agreement_agrement_link => 'Умови договору';
 
   @override
@@ -2151,20 +2167,4 @@ class AppLocalizationsUk extends AppLocalizations {
   @override
   String get webRegistration_ErrorAcknowledgeDialog_title =>
       'Web resource error';
-
-  @override
-  String get undefined_autoprovision_invalidToken =>
-      'Облікові дані для автоконфігурації були відхилені сервером. Будь ласка, запросіть нове посилання для конфігурації';
-
-  @override
-  String get undefined_autoprovision_invalidToken_title =>
-      'Недійсна конфігурація';
-
-  @override
-  String get undefined_stackScreenNotSupported =>
-      'Функція не підтримується. Зверніться до адміністратора.';
-
-  @override
-  String get undefined_stackScreenNotSupported_title =>
-      'Функція не підтримується';
 }
