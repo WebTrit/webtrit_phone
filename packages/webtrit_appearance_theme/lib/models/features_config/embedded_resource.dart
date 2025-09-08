@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '../../converters/converters.dart';
 import 'embedded_resource_type.dart';
 import 'metadata.dart';
 
@@ -24,7 +25,9 @@ class EmbeddedResource with _$EmbeddedResource {
 
   @JsonSerializable(explicitToJson: true)
   const factory EmbeddedResource({
-    required int id,
+    /// TODO: Migration workaround — accepts both int and string IDs.
+    /// Remove [IntToStringConverter] once all JSONs use string IDs only.
+    @IntToStringConverter() required String id,
     required String uri,
     @Default(EmbeddedResourceType.unknown) EmbeddedResourceType type,
     @Default({}) Map<String, dynamic> attributes,

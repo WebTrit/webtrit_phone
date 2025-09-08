@@ -53,9 +53,12 @@ class AppConfigModeSelectAction with _$AppConfigModeSelectAction {
   @JsonSerializable(explicitToJson: true)
   const factory AppConfigModeSelectAction({
     required bool enabled,
-    int? embeddedId,
     required String type,
     required String titleL10n,
+
+    /// TODO: Migration workaround — accepts both int and string IDs.
+    /// Remove [IntToStringConverter] once all JSONs use string IDs only.
+    @IntToStringOptionalConverter() String? embeddedId,
     @Default(false) bool isLaunchButtonVisible,
     @Default(false) bool isLaunchScreen,
   }) = _AppConfigModeSelectAction;
@@ -252,7 +255,10 @@ class BottomMenuTabScheme with _$BottomMenuTabScheme {
     @BottomMenuTabTypeConverter() required BottomMenuTabType type,
     required String titleL10n,
     required String icon,
-    required int embeddedResourceId,
+
+    /// TODO: Migration workaround — accepts both int and string IDs.
+    /// Remove [IntToStringConverter] once all JSONs use string IDs only.
+    @IntToStringConverter() required String embeddedResourceId,
   }) = EmbededTabScheme;
 
   factory BottomMenuTabScheme.fromJson(Map<String, dynamic> json) => BottomMenuTabSchemeParser.fromJson(json);
@@ -295,7 +301,7 @@ class AppConfigSettings with _$AppConfigSettings {
             type: 'terms',
             titleL10n: 'settings_ListViewTileTitle_termsConditions',
             icon: '0xeedf',
-            embeddedResourceId: 0,
+            embeddedResourceId: '0',
           ),
           AppConfigSettingsItem(
             enabled: true,
@@ -348,7 +354,10 @@ class AppConfigSettingsItem with _$AppConfigSettingsItem {
     required String titleL10n,
     required String type,
     required String icon,
-    int? embeddedResourceId,
+
+    /// TODO: Migration workaround — accepts both int and string IDs.
+    /// Remove [IntToStringConverter] once all JSONs use string IDs only.
+    @IntToStringOptionalConverter() String? embeddedResourceId,
   }) = _AppConfigSettingsItem;
 
   factory AppConfigSettingsItem.fromJson(Map<String, dynamic> json) => _$AppConfigSettingsItemFromJson(json);

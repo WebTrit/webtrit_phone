@@ -25,7 +25,7 @@ class EmbeddedTabPage extends StatelessWidget {
     @PathParam('id') required this.id,
   });
 
-  final int id;
+  final String id;
 
   @override
   Widget build(BuildContext context) {

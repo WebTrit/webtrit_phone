@@ -433,7 +433,7 @@ class BottomMenuFeature {
 
   BottomMenuTab? getTabEnabled(MainFlavor flavor) => _tabs.firstWhereOrNull((tab) => tab.flavor == flavor);
 
-  EmbeddedBottomMenuTab getEmbeddedTabById(int id) => embeddedTabs.firstWhere((tab) => tab.id == id);
+  EmbeddedBottomMenuTab getEmbeddedTabById(String id) => embeddedTabs.firstWhere((tab) => tab.id == id);
 
   set activeFlavor(BottomMenuTab newTab) {
     _activeTab = newTab;

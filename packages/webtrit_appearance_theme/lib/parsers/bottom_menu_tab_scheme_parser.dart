@@ -22,7 +22,10 @@ class BottomMenuTabSchemeParser {
           type: type,
           titleL10n: json['titleL10n'] as String,
           icon: json['icon'] as String,
-          embeddedResourceId: json['embeddedResourceId'] as int,
+
+          /// TODO: Migration workaround — accepts both int and string IDs.
+          /// Remove [toString] once all JSONs use string IDs only.
+          embeddedResourceId: json['embeddedResourceId'].toString(),
         );
       default:
         return BaseTabScheme(
