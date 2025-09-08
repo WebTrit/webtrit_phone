@@ -2097,6 +2097,22 @@ class AppLocalizationsIt extends AppLocalizations {
   String get themeMode_system => 'Sistema';
 
   @override
+  String get undefined_autoprovision_invalidToken =>
+      'Le credenziali di autoconfigurazione sono state rifiutate dal server. Richiedi un nuovo link di configurazione';
+
+  @override
+  String get undefined_autoprovision_invalidToken_title =>
+      'Configurazione non valida';
+
+  @override
+  String get undefined_stackScreenNotSupported =>
+      'Funzionalità non supportata. Contatta l\'amministratore.';
+
+  @override
+  String get undefined_stackScreenNotSupported_title =>
+      'Funzionalità non supportata';
+
+  @override
   String get user_agreement_agrement_link => 'Termini e condizion';
 
   @override
@@ -2167,20 +2183,4 @@ class AppLocalizationsIt extends AppLocalizations {
   @override
   String get webRegistration_ErrorAcknowledgeDialog_title =>
       'Web resource error';
-
-  @override
-  String get undefined_autoprovision_invalidToken =>
-      'Le credenziali di autoconfigurazione sono state rifiutate dal server. Richiedi un nuovo link di configurazione';
-
-  @override
-  String get undefined_autoprovision_invalidToken_title =>
-      'Configurazione non valida';
-
-  @override
-  String get undefined_stackScreenNotSupported =>
-      'Funzionalità non supportata. Contatta l\'amministratore.';
-
-  @override
-  String get undefined_stackScreenNotSupported_title =>
-      'Funzionalità non supportata';
 }

@@ -1098,6 +1098,14 @@ class AppLocalizationsMapper {
       'themeMode_dark': localizations.themeMode_dark,
       'themeMode_light': localizations.themeMode_light,
       'themeMode_system': localizations.themeMode_system,
+      'undefined_autoprovision_invalidToken':
+          localizations.undefined_autoprovision_invalidToken,
+      'undefined_autoprovision_invalidToken_title':
+          localizations.undefined_autoprovision_invalidToken_title,
+      'undefined_stackScreenNotSupported':
+          localizations.undefined_stackScreenNotSupported,
+      'undefined_stackScreenNotSupported_title':
+          localizations.undefined_stackScreenNotSupported_title,
       'user_agreement_agrement_link':
           localizations.user_agreement_agrement_link,
       'user_agreement_button_text': localizations.user_agreement_button_text,
@@ -1127,14 +1135,6 @@ class AppLocalizationsMapper {
           localizations.webRegistration_ErrorAcknowledgeDialogActions_skip,
       'webRegistration_ErrorAcknowledgeDialog_title':
           localizations.webRegistration_ErrorAcknowledgeDialog_title,
-      'undefined_autoprovision_invalidToken':
-          localizations.undefined_autoprovision_invalidToken,
-      'undefined_autoprovision_invalidToken_title':
-          localizations.undefined_autoprovision_invalidToken_title,
-      'undefined_stackScreenNotSupported':
-          localizations.undefined_stackScreenNotSupported,
-      'undefined_stackScreenNotSupported_title':
-          localizations.undefined_stackScreenNotSupported_title,
       'default_UnknownExceptionError': (error) =>
           localizations.default_UnknownExceptionError(error),
       'favorites_SnackBar_deleted': (name) =>

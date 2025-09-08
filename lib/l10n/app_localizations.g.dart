@@ -3587,6 +3587,30 @@ abstract class AppLocalizations {
   /// **'System'**
   String get themeMode_system;
 
+  /// Shown during autoprovisioning when the provided configuration token is invalid or expired. The server rejects the request, and the user must obtain a new configuration link.
+  ///
+  /// In en, this message translates to:
+  /// **'The autoconfiguration credentials were rejected by the server. Please request a new configuration link'**
+  String get undefined_autoprovision_invalidToken;
+
+  /// Dialog title displayed when autoprovisioning fails due to an invalid or expired configuration token.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid configuration'**
+  String get undefined_autoprovision_invalidToken_title;
+
+  /// Shown when the app attempts to open a stack screen or feature that is not supported in the current build or environment. Suggests contacting the administrator for clarification.
+  ///
+  /// In en, this message translates to:
+  /// **'Feature not supported. Please contact the administrator.'**
+  String get undefined_stackScreenNotSupported;
+
+  /// Dialog title displayed when a requested feature or stack screen is not supported in the current app configuration.
+  ///
+  /// In en, this message translates to:
+  /// **'Feature not supported'**
+  String get undefined_stackScreenNotSupported_title;
+
   /// Using in agreement checkbox as a mask for the URL
   ///
   /// In en, this message translates to:
@@ -3712,30 +3736,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Web resource error'**
   String get webRegistration_ErrorAcknowledgeDialog_title;
-
-  /// Shown during autoprovisioning when the provided configuration token is invalid or expired. The server rejects the request, and the user must obtain a new configuration link.
-  ///
-  /// In en, this message translates to:
-  /// **'The autoconfiguration credentials were rejected by the server. Please request a new configuration link'**
-  String get undefined_autoprovision_invalidToken;
-
-  /// Dialog title displayed when autoprovisioning fails due to an invalid or expired configuration token.
-  ///
-  /// In en, this message translates to:
-  /// **'Invalid configuration'**
-  String get undefined_autoprovision_invalidToken_title;
-
-  /// Shown when the app attempts to open a stack screen or feature that is not supported in the current build or environment. Suggests contacting the administrator for clarification.
-  ///
-  /// In en, this message translates to:
-  /// **'Feature not supported. Please contact the administrator.'**
-  String get undefined_stackScreenNotSupported;
-
-  /// Dialog title displayed when a requested feature or stack screen is not supported in the current app configuration.
-  ///
-  /// In en, this message translates to:
-  /// **'Feature not supported'**
-  String get undefined_stackScreenNotSupported_title;
 }
 
 class _AppLocalizationsDelegate
