@@ -22,8 +22,8 @@ class LogoAssetsFactory implements ThemeStyleFactory<LogoAssets> {
         secondaryOnboardingLogo.imageSource?.uri ?? secondaryOnboardingLogo.uri;
 
     return LogoAssets(
-      primaryOnboarding: primaryOnboardingLogoUri!.toThemeSvgAsset()!,
-      secondaryOnboarding: secondaryOnboardingLogoUri!.toThemeSvgAsset()!,
+      primaryOnboarding: primaryOnboardingLogoUri?.toThemeSvgAsset(),
+      secondaryOnboarding: secondaryOnboardingLogoUri?.toThemeSvgAsset(),
     );
   }
 }
