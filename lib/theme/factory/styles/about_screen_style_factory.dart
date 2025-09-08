@@ -12,8 +12,11 @@ class AboutScreenStyleFactory implements ThemeStyleFactory<AboutScreenStyles> {
 
   @override
   AboutScreenStyles create() {
-    final picturePath = config?.picture;
-    final picture = picturePath?.toThemeSvgAsset();
+    final imageSource = config?.imageSource?.uri ??
+        // TODO: Remove after migrating all themes to use imageSource
+        // ignore: deprecated_member_use
+        config?.picture;
+    final picture = imageSource?.toThemeSvgAsset();
 
     return AboutScreenStyles(
       primary: AboutScreenStyle(

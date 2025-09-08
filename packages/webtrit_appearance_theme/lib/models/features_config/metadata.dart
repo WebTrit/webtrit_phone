@@ -27,6 +27,9 @@ class Metadata with _$Metadata {
   /// Returns `null` if the key does not exist or the value is not a string.
   String? getString(String key) => attributes[key] as String?;
 
+  /// Retrieves an integer value associated with the given [key].
+  bool? getBool(String key) => attributes[key] as bool?;
+
   /// Creates a new `Metadata` instance with an updated key-value pair in `attributes`.
   ///
   /// This method does not mutate the existing object but instead returns a modified copy.

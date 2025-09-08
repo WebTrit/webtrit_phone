@@ -16,7 +16,16 @@ class OnboardingLogoStyleFactory implements ThemeStyleFactory<OnboardingLogoStyl
   OnboardingLogoStyles create() {
     final textStyleColor = imageAssetConfig?.labelColor.toColor() ?? colors.onPrimary;
 
-    final onboardingLogoLoginConfig = loginPageConfig?.picture ?? imageAssetConfig?.uri;
+    final loginPageConfigUri = imageAssetConfig?.imageSource?.uri ??
+        // TODO: Remove after migrating all themes to use imageSource
+        // ignore: deprecated_member_use
+        imageAssetConfig?.uri;
+    final imageAssetConfigUri = loginPageConfig?.imageSource?.uri ??
+        // TODO: Remove after migrating all themes to use imageSource
+        // ignore: deprecated_member_use
+        loginPageConfig?.picture;
+
+    final onboardingLogoLoginConfig = loginPageConfigUri ?? imageAssetConfigUri;
     final widthFactor = loginPageConfig?.scale ?? imageAssetConfig?.widthFactor;
     final textStyle = TextStyle(color: textStyleColor, fontWeight: FontWeight.w600);
 

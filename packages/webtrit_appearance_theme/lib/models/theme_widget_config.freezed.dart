@@ -2816,9 +2816,11 @@ class __$$ImageAssetsConfigImplCopyWithImpl<$Res>
 class _$ImageAssetsConfigImpl implements _ImageAssetsConfig {
   const _$ImageAssetsConfigImpl(
       {this.primaryOnboardingLogo = const ImageAssetConfig(
-          uri: 'asset://assets/primary_onboardin_logo.svg'),
+          imageSource:
+              ImageSource(uri: 'asset://assets/primary_onboardin_logo.svg')),
       this.secondaryOnboardingLogo = const ImageAssetConfig(
-          uri: 'asset://assets/secondary_onboardin_logo.svg'),
+          imageSource:
+              ImageSource(uri: 'asset://assets/secondary_onboardin_logo.svg')),
       this.appIcon = const AppIconWidgetConfig(),
       this.leadingAvatarStyle = const LeadingAvatarStyleConfig()});
 
@@ -2914,10 +2916,12 @@ ImageAssetConfig _$ImageAssetConfigFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$ImageAssetConfig {
-  String get uri => throw _privateConstructorUsedError;
+  ImageSource? get imageSource => throw _privateConstructorUsedError;
   double get widthFactor => throw _privateConstructorUsedError;
   String get labelColor => throw _privateConstructorUsedError;
   Metadata get metadata => throw _privateConstructorUsedError;
+  @Deprecated('Use source.uri instead')
+  String? get uri => throw _privateConstructorUsedError;
 
   /// Serializes this ImageAssetConfig to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -2936,8 +2940,13 @@ abstract class $ImageAssetConfigCopyWith<$Res> {
       _$ImageAssetConfigCopyWithImpl<$Res, ImageAssetConfig>;
   @useResult
   $Res call(
-      {String uri, double widthFactor, String labelColor, Metadata metadata});
+      {ImageSource? imageSource,
+      double widthFactor,
+      String labelColor,
+      Metadata metadata,
+      @Deprecated('Use source.uri instead') String? uri});
 
+  $ImageSourceCopyWith<$Res>? get imageSource;
   $MetadataCopyWith<$Res> get metadata;
 }
 
@@ -2956,16 +2965,17 @@ class _$ImageAssetConfigCopyWithImpl<$Res, $Val extends ImageAssetConfig>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? uri = null,
+    Object? imageSource = freezed,
     Object? widthFactor = null,
     Object? labelColor = null,
     Object? metadata = null,
+    Object? uri = freezed,
   }) {
     return _then(_value.copyWith(
-      uri: null == uri
-          ? _value.uri
-          : uri // ignore: cast_nullable_to_non_nullable
-              as String,
+      imageSource: freezed == imageSource
+          ? _value.imageSource
+          : imageSource // ignore: cast_nullable_to_non_nullable
+              as ImageSource?,
       widthFactor: null == widthFactor
           ? _value.widthFactor
           : widthFactor // ignore: cast_nullable_to_non_nullable
@@ -2978,7 +2988,25 @@ class _$ImageAssetConfigCopyWithImpl<$Res, $Val extends ImageAssetConfig>
           ? _value.metadata
           : metadata // ignore: cast_nullable_to_non_nullable
               as Metadata,
+      uri: freezed == uri
+          ? _value.uri
+          : uri // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
+  }
+
+  /// Create a copy of ImageAssetConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $ImageSourceCopyWith<$Res>? get imageSource {
+    if (_value.imageSource == null) {
+      return null;
+    }
+
+    return $ImageSourceCopyWith<$Res>(_value.imageSource!, (value) {
+      return _then(_value.copyWith(imageSource: value) as $Val);
+    });
   }
 
   /// Create a copy of ImageAssetConfig
@@ -3001,8 +3029,14 @@ abstract class _$$ImageAssetConfigImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String uri, double widthFactor, String labelColor, Metadata metadata});
+      {ImageSource? imageSource,
+      double widthFactor,
+      String labelColor,
+      Metadata metadata,
+      @Deprecated('Use source.uri instead') String? uri});
 
+  @override
+  $ImageSourceCopyWith<$Res>? get imageSource;
   @override
   $MetadataCopyWith<$Res> get metadata;
 }
@@ -3020,16 +3054,17 @@ class __$$ImageAssetConfigImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? uri = null,
+    Object? imageSource = freezed,
     Object? widthFactor = null,
     Object? labelColor = null,
     Object? metadata = null,
+    Object? uri = freezed,
   }) {
     return _then(_$ImageAssetConfigImpl(
-      uri: null == uri
-          ? _value.uri
-          : uri // ignore: cast_nullable_to_non_nullable
-              as String,
+      imageSource: freezed == imageSource
+          ? _value.imageSource
+          : imageSource // ignore: cast_nullable_to_non_nullable
+              as ImageSource?,
       widthFactor: null == widthFactor
           ? _value.widthFactor
           : widthFactor // ignore: cast_nullable_to_non_nullable
@@ -3042,6 +3077,10 @@ class __$$ImageAssetConfigImplCopyWithImpl<$Res>
           ? _value.metadata
           : metadata // ignore: cast_nullable_to_non_nullable
               as Metadata,
+      uri: freezed == uri
+          ? _value.uri
+          : uri // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -3051,16 +3090,17 @@ class __$$ImageAssetConfigImplCopyWithImpl<$Res>
 @JsonSerializable(explicitToJson: true)
 class _$ImageAssetConfigImpl implements _ImageAssetConfig {
   const _$ImageAssetConfigImpl(
-      {required this.uri,
+      {this.imageSource,
       this.widthFactor = 1.0,
       this.labelColor = '#FFFFFF',
-      this.metadata = const Metadata()});
+      this.metadata = const Metadata(),
+      @Deprecated('Use source.uri instead') this.uri});
 
   factory _$ImageAssetConfigImpl.fromJson(Map<String, dynamic> json) =>
       _$$ImageAssetConfigImplFromJson(json);
 
   @override
-  final String uri;
+  final ImageSource? imageSource;
   @override
   @JsonKey()
   final double widthFactor;
@@ -3070,10 +3110,13 @@ class _$ImageAssetConfigImpl implements _ImageAssetConfig {
   @override
   @JsonKey()
   final Metadata metadata;
+  @override
+  @Deprecated('Use source.uri instead')
+  final String? uri;
 
   @override
   String toString() {
-    return 'ImageAssetConfig(uri: $uri, widthFactor: $widthFactor, labelColor: $labelColor, metadata: $metadata)';
+    return 'ImageAssetConfig(imageSource: $imageSource, widthFactor: $widthFactor, labelColor: $labelColor, metadata: $metadata, uri: $uri)';
   }
 
   @override
@@ -3081,19 +3124,21 @@ class _$ImageAssetConfigImpl implements _ImageAssetConfig {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$ImageAssetConfigImpl &&
-            (identical(other.uri, uri) || other.uri == uri) &&
+            (identical(other.imageSource, imageSource) ||
+                other.imageSource == imageSource) &&
             (identical(other.widthFactor, widthFactor) ||
                 other.widthFactor == widthFactor) &&
             (identical(other.labelColor, labelColor) ||
                 other.labelColor == labelColor) &&
             (identical(other.metadata, metadata) ||
-                other.metadata == metadata));
+                other.metadata == metadata) &&
+            (identical(other.uri, uri) || other.uri == uri));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, uri, widthFactor, labelColor, metadata);
+  int get hashCode => Object.hash(
+      runtimeType, imageSource, widthFactor, labelColor, metadata, uri);
 
   /// Create a copy of ImageAssetConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -3114,22 +3159,27 @@ class _$ImageAssetConfigImpl implements _ImageAssetConfig {
 
 abstract class _ImageAssetConfig implements ImageAssetConfig {
   const factory _ImageAssetConfig(
-      {required final String uri,
-      final double widthFactor,
-      final String labelColor,
-      final Metadata metadata}) = _$ImageAssetConfigImpl;
+          {final ImageSource? imageSource,
+          final double widthFactor,
+          final String labelColor,
+          final Metadata metadata,
+          @Deprecated('Use source.uri instead') final String? uri}) =
+      _$ImageAssetConfigImpl;
 
   factory _ImageAssetConfig.fromJson(Map<String, dynamic> json) =
       _$ImageAssetConfigImpl.fromJson;
 
   @override
-  String get uri;
+  ImageSource? get imageSource;
   @override
   double get widthFactor;
   @override
   String get labelColor;
   @override
   Metadata get metadata;
+  @override
+  @Deprecated('Use source.uri instead')
+  String? get uri;
 
   /// Create a copy of ImageAssetConfig
   /// with the given fields replaced by the non-null parameter values.
