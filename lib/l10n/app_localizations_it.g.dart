@@ -638,7 +638,9 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String login_CoreVersionUnsupportedExceptionError(
-      String actual, String supportedConstraint) {
+    String actual,
+    String supportedConstraint,
+  ) {
     return 'È stata fornita una versione di richiesta incompatibile, contattare l\'amministratore del sistema (actual:$actual, supported:$supportedConstraint)';
   }
 
@@ -830,8 +832,10 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String
-      main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError(
-          String actual, String supportedConstraint) {
+  main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError(
+    String actual,
+    String supportedConstraint,
+  ) {
     return 'Versione di WebTrit Cloud Backend incompatibile, si prega di contattare l\'amministratore del sistema.\n\nVersione dell\'istanza:\n$actual\n\nVersione supportata:\n$supportedConstraint\n';
   }
 
@@ -1176,13 +1180,15 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String notifications_errorSnackBar_signalingDisconnectWithCodeName(
-      String codeName) {
+    String codeName,
+  ) {
     return 'Disconnesso dal core con codice: $codeName';
   }
 
   @override
   String notifications_errorSnackBar_signalingDisconnectWithSystemReason(
-      String reason) {
+    String reason,
+  ) {
     return 'Disconnesso dal nucleo con ragione: $reason';
   }
 
@@ -1200,7 +1206,8 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String notifications_errorSnackBar_sipRegistrationFailed_WithSystemReason(
-      String reason) {
+    String reason,
+  ) {
     return 'La registrazione con il sistema VoIP remoto è fallita con il motivo: $reason';
   }
 
