@@ -1,8 +1,9 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import 'common/common.dart';
 import 'features_config/elevated_button_style_type.dart';
 import 'features_config/metadata.dart';
+import 'common/common.dart';
+import 'resources/image_source.dart';
 import 'theme_widget_config.dart';
 
 part 'theme_page_config.freezed.dart';
@@ -44,8 +45,11 @@ class ThemePageConfig with _$ThemePageConfig {
 class LoginPageConfig with _$LoginPageConfig {
   @JsonSerializable(explicitToJson: true)
   const factory LoginPageConfig({
+    /// Structured image source for the picture/logo.
+    ImageSource? imageSource,
+
     /// Path or URL to the picture/logo displayed on the login page.
-    String? picture,
+    @Deprecated('Use structured ImageSource instead') String? picture,
 
     /// Scaling factor for the displayed picture/logo.
     double? scale,
@@ -95,8 +99,11 @@ class LoginModeSelectPageConfig with _$LoginModeSelectPageConfig {
 class AboutPageConfig with _$AboutPageConfig {
   @JsonSerializable(explicitToJson: true)
   const factory AboutPageConfig({
+    /// Structured image source for the picture/logo.
+    ImageSource? imageSource,
+
     /// Path or URL to the picture/logo displayed on the About page.
-    String? picture,
+    @Deprecated('Use structured ImageSource instead') String? picture,
 
     /// Metadata section with additional information such as version, build number, etc.
     @Default(Metadata()) Metadata metadata,

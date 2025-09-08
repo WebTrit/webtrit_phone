@@ -35,6 +35,9 @@ Map<String, dynamic> _$$ThemePageConfigImplToJson(
 _$LoginPageConfigImpl _$$LoginPageConfigImplFromJson(
         Map<String, dynamic> json) =>
     _$LoginPageConfigImpl(
+      imageSource: json['imageSource'] == null
+          ? null
+          : ImageSource.fromJson(json['imageSource'] as Map<String, dynamic>),
       picture: json['picture'] as String?,
       scale: (json['scale'] as num?)?.toDouble(),
       labelColor: json['labelColor'] as String?,
@@ -50,6 +53,7 @@ _$LoginPageConfigImpl _$$LoginPageConfigImplFromJson(
 Map<String, dynamic> _$$LoginPageConfigImplToJson(
         _$LoginPageConfigImpl instance) =>
     <String, dynamic>{
+      'imageSource': instance.imageSource?.toJson(),
       'picture': instance.picture,
       'scale': instance.scale,
       'labelColor': instance.labelColor,
@@ -93,6 +97,9 @@ const _$ElevatedButtonStyleTypeEnumMap = {
 _$AboutPageConfigImpl _$$AboutPageConfigImplFromJson(
         Map<String, dynamic> json) =>
     _$AboutPageConfigImpl(
+      imageSource: json['imageSource'] == null
+          ? null
+          : ImageSource.fromJson(json['imageSource'] as Map<String, dynamic>),
       picture: json['picture'] as String?,
       metadata: json['metadata'] == null
           ? const Metadata()
@@ -102,6 +109,7 @@ _$AboutPageConfigImpl _$$AboutPageConfigImplFromJson(
 Map<String, dynamic> _$$AboutPageConfigImplToJson(
         _$AboutPageConfigImpl instance) =>
     <String, dynamic>{
+      'imageSource': instance.imageSource?.toJson(),
       'picture': instance.picture,
       'metadata': instance.metadata.toJson(),
     };

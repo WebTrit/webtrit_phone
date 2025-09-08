@@ -9,12 +9,21 @@ class LogoAssetsFactory implements ThemeStyleFactory<LogoAssets> {
 
   @override
   LogoAssets create() {
-    final primaryOnboardingLogoPath = config.primaryOnboardingLogo;
-    final secondaryOnboardingLogoPath = config.secondaryOnboardingLogo;
+    final primaryOnboardingLogo = config.primaryOnboardingLogo;
+    final secondaryOnboardingLogo = config.secondaryOnboardingLogo;
+
+    final primaryOnboardingLogoUri =
+        // TODO: Remove after migrating all themes to use imageSource
+        // ignore: deprecated_member_use
+        primaryOnboardingLogo.imageSource?.uri ?? primaryOnboardingLogo.uri;
+    final secondaryOnboardingLogoUri =
+        // TODO: Remove after migrating all themes to use imageSource
+        // ignore: deprecated_member_use
+        secondaryOnboardingLogo.imageSource?.uri ?? secondaryOnboardingLogo.uri;
 
     return LogoAssets(
-      primaryOnboarding: primaryOnboardingLogoPath.uri.toThemeSvgAsset()!,
-      secondaryOnboarding: secondaryOnboardingLogoPath.uri.toThemeSvgAsset()!,
+      primaryOnboarding: primaryOnboardingLogoUri!.toThemeSvgAsset()!,
+      secondaryOnboarding: secondaryOnboardingLogoUri!.toThemeSvgAsset()!,
     );
   }
 }

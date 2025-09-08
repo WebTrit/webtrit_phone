@@ -3,6 +3,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'common/leading_avatar_style_config.dart';
 import 'custom_color.dart';
 import 'features_config/metadata.dart';
+import 'resources/image_source.dart';
 
 part 'theme_widget_config.freezed.dart';
 
@@ -150,8 +151,9 @@ class CallActionsWidgetConfig with _$CallActionsWidgetConfig {
 class ImageAssetsConfig with _$ImageAssetsConfig {
   @JsonSerializable(explicitToJson: true)
   const factory ImageAssetsConfig({
-    @Default(ImageAssetConfig(uri: 'asset://assets/primary_onboardin_logo.svg')) ImageAssetConfig primaryOnboardingLogo,
-    @Default(ImageAssetConfig(uri: 'asset://assets/secondary_onboardin_logo.svg'))
+    @Default(ImageAssetConfig(imageSource: ImageSource(uri: 'asset://assets/primary_onboardin_logo.svg')))
+    ImageAssetConfig primaryOnboardingLogo,
+    @Default(ImageAssetConfig(imageSource: ImageSource(uri: 'asset://assets/secondary_onboardin_logo.svg')))
     ImageAssetConfig secondaryOnboardingLogo,
     @Default(AppIconWidgetConfig()) AppIconWidgetConfig appIcon,
     @Default(LeadingAvatarStyleConfig()) LeadingAvatarStyleConfig leadingAvatarStyle,
@@ -170,10 +172,11 @@ class ImageAssetsConfig with _$ImageAssetsConfig {
 class ImageAssetConfig with _$ImageAssetConfig {
   @JsonSerializable(explicitToJson: true)
   const factory ImageAssetConfig({
-    required String uri,
+    ImageSource? imageSource,
     @Default(1.0) double widthFactor,
     @Default('#FFFFFF') String labelColor,
     @Default(Metadata()) Metadata metadata,
+    @Deprecated('Use source.uri instead') String? uri,
   }) = _ImageAssetConfig;
 
   factory ImageAssetConfig.fromJson(Map<String, dynamic> json) => _$ImageAssetConfigFromJson(json);
