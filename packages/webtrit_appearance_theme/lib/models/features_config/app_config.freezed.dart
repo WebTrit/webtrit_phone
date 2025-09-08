@@ -530,9 +530,13 @@ AppConfigModeSelectAction _$AppConfigModeSelectActionFromJson(
 /// @nodoc
 mixin _$AppConfigModeSelectAction {
   bool get enabled => throw _privateConstructorUsedError;
-  int? get embeddedId => throw _privateConstructorUsedError;
   String get type => throw _privateConstructorUsedError;
   String get titleL10n => throw _privateConstructorUsedError;
+
+  /// TODO: Migration workaround — accepts both int and string IDs.
+  /// Remove [IntToStringConverter] once all JSONs use string IDs only.
+  @IntToStringOptionalConverter()
+  String? get embeddedId => throw _privateConstructorUsedError;
   bool get isLaunchButtonVisible => throw _privateConstructorUsedError;
   bool get isLaunchScreen => throw _privateConstructorUsedError;
 
@@ -554,9 +558,9 @@ abstract class $AppConfigModeSelectActionCopyWith<$Res> {
   @useResult
   $Res call(
       {bool enabled,
-      int? embeddedId,
       String type,
       String titleL10n,
+      @IntToStringOptionalConverter() String? embeddedId,
       bool isLaunchButtonVisible,
       bool isLaunchScreen});
 }
@@ -578,9 +582,9 @@ class _$AppConfigModeSelectActionCopyWithImpl<$Res,
   @override
   $Res call({
     Object? enabled = null,
-    Object? embeddedId = freezed,
     Object? type = null,
     Object? titleL10n = null,
+    Object? embeddedId = freezed,
     Object? isLaunchButtonVisible = null,
     Object? isLaunchScreen = null,
   }) {
@@ -589,10 +593,6 @@ class _$AppConfigModeSelectActionCopyWithImpl<$Res,
           ? _value.enabled
           : enabled // ignore: cast_nullable_to_non_nullable
               as bool,
-      embeddedId: freezed == embeddedId
-          ? _value.embeddedId
-          : embeddedId // ignore: cast_nullable_to_non_nullable
-              as int?,
       type: null == type
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
@@ -601,6 +601,10 @@ class _$AppConfigModeSelectActionCopyWithImpl<$Res,
           ? _value.titleL10n
           : titleL10n // ignore: cast_nullable_to_non_nullable
               as String,
+      embeddedId: freezed == embeddedId
+          ? _value.embeddedId
+          : embeddedId // ignore: cast_nullable_to_non_nullable
+              as String?,
       isLaunchButtonVisible: null == isLaunchButtonVisible
           ? _value.isLaunchButtonVisible
           : isLaunchButtonVisible // ignore: cast_nullable_to_non_nullable
@@ -624,9 +628,9 @@ abstract class _$$AppConfigModeSelectActionImplCopyWith<$Res>
   @useResult
   $Res call(
       {bool enabled,
-      int? embeddedId,
       String type,
       String titleL10n,
+      @IntToStringOptionalConverter() String? embeddedId,
       bool isLaunchButtonVisible,
       bool isLaunchScreen});
 }
@@ -647,9 +651,9 @@ class __$$AppConfigModeSelectActionImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? enabled = null,
-    Object? embeddedId = freezed,
     Object? type = null,
     Object? titleL10n = null,
+    Object? embeddedId = freezed,
     Object? isLaunchButtonVisible = null,
     Object? isLaunchScreen = null,
   }) {
@@ -658,10 +662,6 @@ class __$$AppConfigModeSelectActionImplCopyWithImpl<$Res>
           ? _value.enabled
           : enabled // ignore: cast_nullable_to_non_nullable
               as bool,
-      embeddedId: freezed == embeddedId
-          ? _value.embeddedId
-          : embeddedId // ignore: cast_nullable_to_non_nullable
-              as int?,
       type: null == type
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
@@ -670,6 +670,10 @@ class __$$AppConfigModeSelectActionImplCopyWithImpl<$Res>
           ? _value.titleL10n
           : titleL10n // ignore: cast_nullable_to_non_nullable
               as String,
+      embeddedId: freezed == embeddedId
+          ? _value.embeddedId
+          : embeddedId // ignore: cast_nullable_to_non_nullable
+              as String?,
       isLaunchButtonVisible: null == isLaunchButtonVisible
           ? _value.isLaunchButtonVisible
           : isLaunchButtonVisible // ignore: cast_nullable_to_non_nullable
@@ -688,9 +692,9 @@ class __$$AppConfigModeSelectActionImplCopyWithImpl<$Res>
 class _$AppConfigModeSelectActionImpl extends _AppConfigModeSelectAction {
   const _$AppConfigModeSelectActionImpl(
       {required this.enabled,
-      this.embeddedId,
       required this.type,
       required this.titleL10n,
+      @IntToStringOptionalConverter() this.embeddedId,
       this.isLaunchButtonVisible = false,
       this.isLaunchScreen = false})
       : super._();
@@ -701,11 +705,15 @@ class _$AppConfigModeSelectActionImpl extends _AppConfigModeSelectAction {
   @override
   final bool enabled;
   @override
-  final int? embeddedId;
-  @override
   final String type;
   @override
   final String titleL10n;
+
+  /// TODO: Migration workaround — accepts both int and string IDs.
+  /// Remove [IntToStringConverter] once all JSONs use string IDs only.
+  @override
+  @IntToStringOptionalConverter()
+  final String? embeddedId;
   @override
   @JsonKey()
   final bool isLaunchButtonVisible;
@@ -715,7 +723,7 @@ class _$AppConfigModeSelectActionImpl extends _AppConfigModeSelectAction {
 
   @override
   String toString() {
-    return 'AppConfigModeSelectAction(enabled: $enabled, embeddedId: $embeddedId, type: $type, titleL10n: $titleL10n, isLaunchButtonVisible: $isLaunchButtonVisible, isLaunchScreen: $isLaunchScreen)';
+    return 'AppConfigModeSelectAction(enabled: $enabled, type: $type, titleL10n: $titleL10n, embeddedId: $embeddedId, isLaunchButtonVisible: $isLaunchButtonVisible, isLaunchScreen: $isLaunchScreen)';
   }
 
   @override
@@ -724,11 +732,11 @@ class _$AppConfigModeSelectActionImpl extends _AppConfigModeSelectAction {
         (other.runtimeType == runtimeType &&
             other is _$AppConfigModeSelectActionImpl &&
             (identical(other.enabled, enabled) || other.enabled == enabled) &&
-            (identical(other.embeddedId, embeddedId) ||
-                other.embeddedId == embeddedId) &&
             (identical(other.type, type) || other.type == type) &&
             (identical(other.titleL10n, titleL10n) ||
                 other.titleL10n == titleL10n) &&
+            (identical(other.embeddedId, embeddedId) ||
+                other.embeddedId == embeddedId) &&
             (identical(other.isLaunchButtonVisible, isLaunchButtonVisible) ||
                 other.isLaunchButtonVisible == isLaunchButtonVisible) &&
             (identical(other.isLaunchScreen, isLaunchScreen) ||
@@ -737,8 +745,8 @@ class _$AppConfigModeSelectActionImpl extends _AppConfigModeSelectAction {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, enabled, embeddedId, type,
-      titleL10n, isLaunchButtonVisible, isLaunchScreen);
+  int get hashCode => Object.hash(runtimeType, enabled, type, titleL10n,
+      embeddedId, isLaunchButtonVisible, isLaunchScreen);
 
   /// Create a copy of AppConfigModeSelectAction
   /// with the given fields replaced by the non-null parameter values.
@@ -760,9 +768,9 @@ class _$AppConfigModeSelectActionImpl extends _AppConfigModeSelectAction {
 abstract class _AppConfigModeSelectAction extends AppConfigModeSelectAction {
   const factory _AppConfigModeSelectAction(
       {required final bool enabled,
-      final int? embeddedId,
       required final String type,
       required final String titleL10n,
+      @IntToStringOptionalConverter() final String? embeddedId,
       final bool isLaunchButtonVisible,
       final bool isLaunchScreen}) = _$AppConfigModeSelectActionImpl;
   const _AppConfigModeSelectAction._() : super._();
@@ -773,11 +781,15 @@ abstract class _AppConfigModeSelectAction extends AppConfigModeSelectAction {
   @override
   bool get enabled;
   @override
-  int? get embeddedId;
-  @override
   String get type;
   @override
   String get titleL10n;
+
+  /// TODO: Migration workaround — accepts both int and string IDs.
+  /// Remove [IntToStringConverter] once all JSONs use string IDs only.
+  @override
+  @IntToStringOptionalConverter()
+  String? get embeddedId;
   @override
   bool get isLaunchButtonVisible;
   @override
@@ -2565,7 +2577,7 @@ mixin _$BottomMenuTabScheme {
             @BottomMenuTabTypeConverter() BottomMenuTabType type,
             String titleL10n,
             String icon,
-            int embeddedResourceId)
+            @IntToStringConverter() String embeddedResourceId)
         embedded,
   }) =>
       throw _privateConstructorUsedError;
@@ -2592,7 +2604,7 @@ mixin _$BottomMenuTabScheme {
             @BottomMenuTabTypeConverter() BottomMenuTabType type,
             String titleL10n,
             String icon,
-            int embeddedResourceId)?
+            @IntToStringConverter() String embeddedResourceId)?
         embedded,
   }) =>
       throw _privateConstructorUsedError;
@@ -2619,7 +2631,7 @@ mixin _$BottomMenuTabScheme {
             @BottomMenuTabTypeConverter() BottomMenuTabType type,
             String titleL10n,
             String icon,
-            int embeddedResourceId)?
+            @IntToStringConverter() String embeddedResourceId)?
         embedded,
     required TResult orElse(),
   }) =>
@@ -2866,7 +2878,7 @@ class _$BaseTabSchemeImpl extends BaseTabScheme {
             @BottomMenuTabTypeConverter() BottomMenuTabType type,
             String titleL10n,
             String icon,
-            int embeddedResourceId)
+            @IntToStringConverter() String embeddedResourceId)
         embedded,
   }) {
     return base(enabled, initial, type, titleL10n, icon);
@@ -2896,7 +2908,7 @@ class _$BaseTabSchemeImpl extends BaseTabScheme {
             @BottomMenuTabTypeConverter() BottomMenuTabType type,
             String titleL10n,
             String icon,
-            int embeddedResourceId)?
+            @IntToStringConverter() String embeddedResourceId)?
         embedded,
   }) {
     return base?.call(enabled, initial, type, titleL10n, icon);
@@ -2926,7 +2938,7 @@ class _$BaseTabSchemeImpl extends BaseTabScheme {
             @BottomMenuTabTypeConverter() BottomMenuTabType type,
             String titleL10n,
             String icon,
-            int embeddedResourceId)?
+            @IntToStringConverter() String embeddedResourceId)?
         embedded,
     required TResult orElse(),
   }) {
@@ -3185,7 +3197,7 @@ class _$ContactsTabSchemeImpl extends ContactsTabScheme {
             @BottomMenuTabTypeConverter() BottomMenuTabType type,
             String titleL10n,
             String icon,
-            int embeddedResourceId)
+            @IntToStringConverter() String embeddedResourceId)
         embedded,
   }) {
     return contacts(
@@ -3216,7 +3228,7 @@ class _$ContactsTabSchemeImpl extends ContactsTabScheme {
             @BottomMenuTabTypeConverter() BottomMenuTabType type,
             String titleL10n,
             String icon,
-            int embeddedResourceId)?
+            @IntToStringConverter() String embeddedResourceId)?
         embedded,
   }) {
     return contacts?.call(
@@ -3247,7 +3259,7 @@ class _$ContactsTabSchemeImpl extends ContactsTabScheme {
             @BottomMenuTabTypeConverter() BottomMenuTabType type,
             String titleL10n,
             String icon,
-            int embeddedResourceId)?
+            @IntToStringConverter() String embeddedResourceId)?
         embedded,
     required TResult orElse(),
   }) {
@@ -3348,7 +3360,7 @@ abstract class _$$EmbededTabSchemeImplCopyWith<$Res>
       @BottomMenuTabTypeConverter() BottomMenuTabType type,
       String titleL10n,
       String icon,
-      int embeddedResourceId});
+      @IntToStringConverter() String embeddedResourceId});
 }
 
 /// @nodoc
@@ -3395,7 +3407,7 @@ class __$$EmbededTabSchemeImplCopyWithImpl<$Res>
       embeddedResourceId: null == embeddedResourceId
           ? _value.embeddedResourceId
           : embeddedResourceId // ignore: cast_nullable_to_non_nullable
-              as int,
+              as String,
     ));
   }
 }
@@ -3410,7 +3422,7 @@ class _$EmbededTabSchemeImpl extends EmbededTabScheme {
       @BottomMenuTabTypeConverter() required this.type,
       required this.titleL10n,
       required this.icon,
-      required this.embeddedResourceId,
+      @IntToStringConverter() required this.embeddedResourceId,
       final String? $type})
       : $type = $type ?? 'embedded',
         super._();
@@ -3431,8 +3443,12 @@ class _$EmbededTabSchemeImpl extends EmbededTabScheme {
   final String titleL10n;
   @override
   final String icon;
+
+  /// TODO: Migration workaround — accepts both int and string IDs.
+  /// Remove [IntToStringConverter] once all JSONs use string IDs only.
   @override
-  final int embeddedResourceId;
+  @IntToStringConverter()
+  final String embeddedResourceId;
 
   @JsonKey(name: 'runtimeType')
   final String $type;
@@ -3495,7 +3511,7 @@ class _$EmbededTabSchemeImpl extends EmbededTabScheme {
             @BottomMenuTabTypeConverter() BottomMenuTabType type,
             String titleL10n,
             String icon,
-            int embeddedResourceId)
+            @IntToStringConverter() String embeddedResourceId)
         embedded,
   }) {
     return embedded(
@@ -3526,7 +3542,7 @@ class _$EmbededTabSchemeImpl extends EmbededTabScheme {
             @BottomMenuTabTypeConverter() BottomMenuTabType type,
             String titleL10n,
             String icon,
-            int embeddedResourceId)?
+            @IntToStringConverter() String embeddedResourceId)?
         embedded,
   }) {
     return embedded?.call(
@@ -3557,7 +3573,7 @@ class _$EmbededTabSchemeImpl extends EmbededTabScheme {
             @BottomMenuTabTypeConverter() BottomMenuTabType type,
             String titleL10n,
             String icon,
-            int embeddedResourceId)?
+            @IntToStringConverter() String embeddedResourceId)?
         embedded,
     required TResult orElse(),
   }) {
@@ -3612,12 +3628,13 @@ class _$EmbededTabSchemeImpl extends EmbededTabScheme {
 
 abstract class EmbededTabScheme extends BottomMenuTabScheme {
   const factory EmbededTabScheme(
-      {final bool enabled,
-      final bool initial,
-      @BottomMenuTabTypeConverter() required final BottomMenuTabType type,
-      required final String titleL10n,
-      required final String icon,
-      required final int embeddedResourceId}) = _$EmbededTabSchemeImpl;
+          {final bool enabled,
+          final bool initial,
+          @BottomMenuTabTypeConverter() required final BottomMenuTabType type,
+          required final String titleL10n,
+          required final String icon,
+          @IntToStringConverter() required final String embeddedResourceId}) =
+      _$EmbededTabSchemeImpl;
   const EmbededTabScheme._() : super._();
 
   factory EmbededTabScheme.fromJson(Map<String, dynamic> json) =
@@ -3634,7 +3651,11 @@ abstract class EmbededTabScheme extends BottomMenuTabScheme {
   String get titleL10n;
   @override
   String get icon;
-  int get embeddedResourceId;
+
+  /// TODO: Migration workaround — accepts both int and string IDs.
+  /// Remove [IntToStringConverter] once all JSONs use string IDs only.
+  @IntToStringConverter()
+  String get embeddedResourceId;
 
   /// Create a copy of BottomMenuTabScheme
   /// with the given fields replaced by the non-null parameter values.
@@ -3763,7 +3784,7 @@ class _$AppConfigSettingsImpl extends _AppConfigSettings {
                   type: 'terms',
                   titleL10n: 'settings_ListViewTileTitle_termsConditions',
                   icon: '0xeedf',
-                  embeddedResourceId: 0),
+                  embeddedResourceId: '0'),
               AppConfigSettingsItem(
                   enabled: true,
                   type: 'about',
@@ -4071,7 +4092,11 @@ mixin _$AppConfigSettingsItem {
   String get titleL10n => throw _privateConstructorUsedError;
   String get type => throw _privateConstructorUsedError;
   String get icon => throw _privateConstructorUsedError;
-  int? get embeddedResourceId => throw _privateConstructorUsedError;
+
+  /// TODO: Migration workaround — accepts both int and string IDs.
+  /// Remove [IntToStringConverter] once all JSONs use string IDs only.
+  @IntToStringOptionalConverter()
+  String? get embeddedResourceId => throw _privateConstructorUsedError;
 
   /// Serializes this AppConfigSettingsItem to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -4094,7 +4119,7 @@ abstract class $AppConfigSettingsItemCopyWith<$Res> {
       String titleL10n,
       String type,
       String icon,
-      int? embeddedResourceId});
+      @IntToStringOptionalConverter() String? embeddedResourceId});
 }
 
 /// @nodoc
@@ -4139,7 +4164,7 @@ class _$AppConfigSettingsItemCopyWithImpl<$Res,
       embeddedResourceId: freezed == embeddedResourceId
           ? _value.embeddedResourceId
           : embeddedResourceId // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as String?,
     ) as $Val);
   }
 }
@@ -4158,7 +4183,7 @@ abstract class _$$AppConfigSettingsItemImplCopyWith<$Res>
       String titleL10n,
       String type,
       String icon,
-      int? embeddedResourceId});
+      @IntToStringOptionalConverter() String? embeddedResourceId});
 }
 
 /// @nodoc
@@ -4201,7 +4226,7 @@ class __$$AppConfigSettingsItemImplCopyWithImpl<$Res>
       embeddedResourceId: freezed == embeddedResourceId
           ? _value.embeddedResourceId
           : embeddedResourceId // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as String?,
     ));
   }
 }
@@ -4215,7 +4240,7 @@ class _$AppConfigSettingsItemImpl extends _AppConfigSettingsItem {
       required this.titleL10n,
       required this.type,
       required this.icon,
-      this.embeddedResourceId})
+      @IntToStringOptionalConverter() this.embeddedResourceId})
       : super._();
 
   factory _$AppConfigSettingsItemImpl.fromJson(Map<String, dynamic> json) =>
@@ -4230,8 +4255,12 @@ class _$AppConfigSettingsItemImpl extends _AppConfigSettingsItem {
   final String type;
   @override
   final String icon;
+
+  /// TODO: Migration workaround — accepts both int and string IDs.
+  /// Remove [IntToStringConverter] once all JSONs use string IDs only.
   @override
-  final int? embeddedResourceId;
+  @IntToStringOptionalConverter()
+  final String? embeddedResourceId;
 
   @override
   String toString() {
@@ -4276,11 +4305,12 @@ class _$AppConfigSettingsItemImpl extends _AppConfigSettingsItem {
 
 abstract class _AppConfigSettingsItem extends AppConfigSettingsItem {
   const factory _AppConfigSettingsItem(
-      {final bool enabled,
-      required final String titleL10n,
-      required final String type,
-      required final String icon,
-      final int? embeddedResourceId}) = _$AppConfigSettingsItemImpl;
+          {final bool enabled,
+          required final String titleL10n,
+          required final String type,
+          required final String icon,
+          @IntToStringOptionalConverter() final String? embeddedResourceId}) =
+      _$AppConfigSettingsItemImpl;
   const _AppConfigSettingsItem._() : super._();
 
   factory _AppConfigSettingsItem.fromJson(Map<String, dynamic> json) =
@@ -4294,8 +4324,12 @@ abstract class _AppConfigSettingsItem extends AppConfigSettingsItem {
   String get type;
   @override
   String get icon;
+
+  /// TODO: Migration workaround — accepts both int and string IDs.
+  /// Remove [IntToStringConverter] once all JSONs use string IDs only.
   @override
-  int? get embeddedResourceId;
+  @IntToStringOptionalConverter()
+  String? get embeddedResourceId;
 
   /// Create a copy of AppConfigSettingsItem
   /// with the given fields replaced by the non-null parameter values.

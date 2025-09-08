@@ -75,7 +75,7 @@
           "type": "embedded",
           "titleL10n": "main_BottomNavigationBarItemLabel_embedded",
           "icon": "0xe2ce",
-          "embeddedResourceId": 2
+          "embeddedResourceId": "example_embedded_payload_data"
         },
         {
           "enabled": false,
@@ -83,7 +83,7 @@
           "type": "embedded",
           "titleL10n": "main_BottomNavigationBarItemLabel_embedded_spa_example",
           "icon": "0xe2ce",
-          "embeddedResourceId": 9
+          "embeddedResourceId": "example_embedded_spa"
         }
       ]
     },
@@ -142,7 +142,7 @@
             "type": "terms",
             "titleL10n": "settings_ListViewTileTitle_termsConditions",
             "icon": "0xeedf",
-            "embeddedResourceId": 4
+            "embeddedResourceId": "privacy-policy-for-webtrit-app"
           },
           {
             "enabled": true,
@@ -173,14 +173,14 @@
             "titleL10n": "settings_ListViewTileTitle_embedded1",
             "icon": "0xe3a2",
             "type": "embedded",
-            "embeddedResourceId": 5
+            "embeddedResourceId": "example_embedded_registration"
           },
           {
             "enabled": false,
             "titleL10n": "settings_ListViewTileTitle_embedded2",
             "icon": "0xe3a2",
             "type": "embedded",
-            "embeddedResourceId": 6
+            "embeddedResourceId": "example_embedded_statistics"
           }
         ]
       },
@@ -193,7 +193,7 @@
             "titleL10n": "settings_ListViewTileTitle_embedded3",
             "icon": "0xe3a2",
             "type": "embedded",
-            "embeddedResourceId": 7
+            "embeddedResourceId": "example_embedded_rating"
           }
         ]
       }
@@ -226,7 +226,7 @@
   },
   "embeddedResources": [
     {
-      "id": 1,
+      "id": "example_embedded_login",
       "uri": "https://webtrit-app.web.app/example/example_embedded_login.html",
       "toolbar": {
         "showToolbar": true,
@@ -234,7 +234,7 @@
       }
     },
     {
-      "id": 2,
+      "id": "example_embedded_payload_data",
       "uri": "https://webtrit-app.web.app/example/example_embedded_payload_data.html",
       "payload": [
         "coreToken"
@@ -244,14 +244,14 @@
       }
     },
     {
-      "id": 3,
+      "id": "example_embedded_call",
       "uri": "https://webtrit-app.web.app/example/example_embedded_call.html",
       "toolbar": {
         "showToolbar": false
       }
     },
     {
-      "id": 4,
+      "id": "privacy-policy-for-webtrit-app",
       "uri": "https://webtrit.com/legal/privacy-policy-for-webtrit-app/",
       "type": "terms",
       "toolbar": {
@@ -260,7 +260,7 @@
       }
     },
     {
-      "id": 5,
+      "id": "example_embedded_registration",
       "uri": "https://webtrit-app.web.app/example/example_embedded_registration.html",
       "toolbar": {
         "showToolbar": true,
@@ -268,7 +268,7 @@
       }
     },
     {
-      "id": 6,
+      "id": "example_embedded_statistics",
       "uri": "https://webtrit-app.web.app/example/example_embedded_statistics.html",
       "toolbar": {
         "showToolbar": true,
@@ -276,7 +276,7 @@
       }
     },
     {
-      "id": 7,
+      "id": "example_embedded_rating",
       "uri": "https://webtrit-app.web.app/example/example_embedded_rating.html",
       "toolbar": {
         "showToolbar": true,
@@ -284,11 +284,11 @@
       }
     },
     {
-      "id": 8,
+      "id": "example_embedded_media_query",
       "uri": "https://webtrit-app.web.app/example/example_embedded_media_query.html"
     },
     {
-      "id": 9,
+      "id": "example_embedded_spa",
       "uri": "https://webtrit-app.web.app/example/example_embedded_spa.html",
       "enableConsoleLogCapture": true,
       "reconnectStrategy": "notifyOnly",

@@ -50,7 +50,7 @@ class EmbeddedBottomMenuTab extends BottomMenuTab {
     super.data,
   });
 
-  final int id;
+  final String id;
 
   @override
   String path() => '${MainFlavor.embedded.name}/$id';

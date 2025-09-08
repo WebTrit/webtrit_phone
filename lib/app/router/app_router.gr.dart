@@ -509,7 +509,7 @@ class EmbeddedScreenPageRouteArgs {
 /// generated route for
 /// [EmbeddedTabPage]
 class EmbeddedTabPageRoute extends PageRouteInfo<EmbeddedTabPageRouteArgs> {
-  EmbeddedTabPageRoute({required int id, List<PageRouteInfo>? children})
+  EmbeddedTabPageRoute({required String id, List<PageRouteInfo>? children})
       : super(
           EmbeddedTabPageRoute.name,
           args: EmbeddedTabPageRouteArgs(id: id),
@@ -524,7 +524,7 @@ class EmbeddedTabPageRoute extends PageRouteInfo<EmbeddedTabPageRouteArgs> {
     builder: (data) {
       final pathParams = data.inheritedPathParams;
       final args = data.argsAs<EmbeddedTabPageRouteArgs>(
-        orElse: () => EmbeddedTabPageRouteArgs(id: pathParams.getInt('id')),
+        orElse: () => EmbeddedTabPageRouteArgs(id: pathParams.getString('id')),
       );
       return EmbeddedTabPage(id: args.id);
     },
@@ -534,7 +534,7 @@ class EmbeddedTabPageRoute extends PageRouteInfo<EmbeddedTabPageRouteArgs> {
 class EmbeddedTabPageRouteArgs {
   const EmbeddedTabPageRouteArgs({required this.id});
 
-  final int id;
+  final String id;
 
   @override
   String toString() {

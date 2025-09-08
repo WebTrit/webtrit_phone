@@ -65,9 +65,10 @@ _$AppConfigModeSelectActionImpl _$$AppConfigModeSelectActionImplFromJson(
         Map<String, dynamic> json) =>
     _$AppConfigModeSelectActionImpl(
       enabled: json['enabled'] as bool,
-      embeddedId: (json['embeddedId'] as num?)?.toInt(),
       type: json['type'] as String,
       titleL10n: json['titleL10n'] as String,
+      embeddedId:
+          const IntToStringOptionalConverter().fromJson(json['embeddedId']),
       isLaunchButtonVisible: json['isLaunchButtonVisible'] as bool? ?? false,
       isLaunchScreen: json['isLaunchScreen'] as bool? ?? false,
     );
@@ -76,9 +77,10 @@ Map<String, dynamic> _$$AppConfigModeSelectActionImplToJson(
         _$AppConfigModeSelectActionImpl instance) =>
     <String, dynamic>{
       'enabled': instance.enabled,
-      'embeddedId': instance.embeddedId,
       'type': instance.type,
       'titleL10n': instance.titleL10n,
+      'embeddedId':
+          const IntToStringOptionalConverter().toJson(instance.embeddedId),
       'isLaunchButtonVisible': instance.isLaunchButtonVisible,
       'isLaunchScreen': instance.isLaunchScreen,
     };
@@ -317,7 +319,8 @@ _$EmbededTabSchemeImpl _$$EmbededTabSchemeImplFromJson(
       type: const BottomMenuTabTypeConverter().fromJson(json['type'] as String),
       titleL10n: json['titleL10n'] as String,
       icon: json['icon'] as String,
-      embeddedResourceId: (json['embeddedResourceId'] as num).toInt(),
+      embeddedResourceId:
+          const IntToStringConverter().fromJson(json['embeddedResourceId']),
       $type: json['runtimeType'] as String?,
     );
 
@@ -329,7 +332,8 @@ Map<String, dynamic> _$$EmbededTabSchemeImplToJson(
       'type': const BottomMenuTabTypeConverter().toJson(instance.type),
       'titleL10n': instance.titleL10n,
       'icon': instance.icon,
-      'embeddedResourceId': instance.embeddedResourceId,
+      'embeddedResourceId':
+          const IntToStringConverter().toJson(instance.embeddedResourceId),
       'runtimeType': instance.$type,
     };
 
@@ -365,7 +369,7 @@ _$AppConfigSettingsImpl _$$AppConfigSettingsImplFromJson(
                       type: 'terms',
                       titleL10n: 'settings_ListViewTileTitle_termsConditions',
                       icon: '0xeedf',
-                      embeddedResourceId: 0),
+                      embeddedResourceId: '0'),
                   AppConfigSettingsItem(
                       enabled: true,
                       type: 'about',
@@ -418,7 +422,8 @@ _$AppConfigSettingsItemImpl _$$AppConfigSettingsItemImplFromJson(
       titleL10n: json['titleL10n'] as String,
       type: json['type'] as String,
       icon: json['icon'] as String,
-      embeddedResourceId: (json['embeddedResourceId'] as num?)?.toInt(),
+      embeddedResourceId: const IntToStringOptionalConverter()
+          .fromJson(json['embeddedResourceId']),
     );
 
 Map<String, dynamic> _$$AppConfigSettingsItemImplToJson(
@@ -428,5 +433,6 @@ Map<String, dynamic> _$$AppConfigSettingsItemImplToJson(
       'titleL10n': instance.titleL10n,
       'type': instance.type,
       'icon': instance.icon,
-      'embeddedResourceId': instance.embeddedResourceId,
+      'embeddedResourceId': const IntToStringOptionalConverter()
+          .toJson(instance.embeddedResourceId),
     };
