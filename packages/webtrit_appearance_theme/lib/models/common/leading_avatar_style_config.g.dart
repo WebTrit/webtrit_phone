@@ -31,6 +31,10 @@ _$LeadingAvatarStyleConfigImpl _$$LeadingAvatarStyleConfigImplFromJson(
           ? null
           : RegisteredBadgeStyleConfig.fromJson(
               json['registeredBadge'] as Map<String, dynamic>),
+      presenceBadge: json['presenceBadge'] == null
+          ? null
+          : PresenceBadgeStyleConfig.fromJson(
+              json['presenceBadge'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$$LeadingAvatarStyleConfigImplToJson(
@@ -43,6 +47,7 @@ Map<String, dynamic> _$$LeadingAvatarStyleConfigImplToJson(
       'loading': instance.loading?.toJson(),
       'smartIndicator': instance.smartIndicator?.toJson(),
       'registeredBadge': instance.registeredBadge?.toJson(),
+      'presenceBadge': instance.presenceBadge?.toJson(),
     };
 
 _$LoadingOverlayStyleConfigImpl _$$LoadingOverlayStyleConfigImplFromJson(
@@ -94,5 +99,21 @@ Map<String, dynamic> _$$RegisteredBadgeStyleConfigImplToJson(
     <String, dynamic>{
       'registeredColor': instance.registeredColor,
       'unregisteredColor': instance.unregisteredColor,
+      'sizeFactor': instance.sizeFactor,
+    };
+
+_$PresenceBadgeStyleConfigImpl _$$PresenceBadgeStyleConfigImplFromJson(
+        Map<String, dynamic> json) =>
+    _$PresenceBadgeStyleConfigImpl(
+      availableColor: json['availableColor'] as String?,
+      unavailableColor: json['unavailableColor'] as String?,
+      sizeFactor: (json['sizeFactor'] as num?)?.toDouble(),
+    );
+
+Map<String, dynamic> _$$PresenceBadgeStyleConfigImplToJson(
+        _$PresenceBadgeStyleConfigImpl instance) =>
+    <String, dynamic>{
+      'availableColor': instance.availableColor,
+      'unavailableColor': instance.unavailableColor,
       'sizeFactor': instance.sizeFactor,
     };

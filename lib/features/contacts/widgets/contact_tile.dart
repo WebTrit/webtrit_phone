@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 
+import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 class ContactTile extends StatelessWidget {
@@ -15,6 +16,8 @@ class ContactTile extends StatelessWidget {
     this.onTap,
     this.onLongPress,
     this.onMessagePressed,
+    this.presenceInfo,
+    this.statusIcon = '',
   });
 
   final String displayName;
@@ -25,6 +28,8 @@ class ContactTile extends StatelessWidget {
   final GestureTapCallback? onTap;
   final GestureLongPressCallback? onLongPress;
   final GestureTapCallback? onMessagePressed;
+  final List<PresenceInfo>? presenceInfo;
+  final String statusIcon;
 
   @override
   Widget build(BuildContext context) {
@@ -36,8 +41,17 @@ class ContactTile extends StatelessWidget {
         thumbnailUrl: thumbnailUrl,
         registered: registered,
         smart: smart,
+        presenceInfo: presenceInfo,
       ),
-      title: Text(displayName),
+      title: Text('$displayName ${presenceInfo?.primaryStatusIcon ?? ''}'),
+      subtitle: presenceInfo?.primaryNote != null && presenceInfo!.primaryNote!.isNotEmpty
+          ? Text(
+              presenceInfo!.primaryNote!,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(fontSize: 12),
+            )
+          : null,
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: [

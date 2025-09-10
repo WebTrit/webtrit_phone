@@ -50,6 +50,11 @@
         "registeredColor": null,
         "unregisteredColor": null,
         "sizeFactor": 0.2
+      },
+      "presenceBadge": {
+        "availableColor": null,
+        "unavailableColor": null,
+        "sizeFactor": 0.325 
       }
     }
   },

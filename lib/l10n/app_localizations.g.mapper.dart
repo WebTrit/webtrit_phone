@@ -901,6 +901,8 @@ class AppLocalizationsMapper {
           localizations.settings_ListViewTileTitle_accountDelete,
       'settings_ListViewTileTitle_call_codecs':
           localizations.settings_ListViewTileTitle_call_codecs,
+      'settings_ListViewTileTitle_presence':
+          localizations.settings_ListViewTileTitle_presence,
       'settings_ListViewTileTitle_callerId':
           localizations.settings_ListViewTileTitle_callerId,
       'settings_ListViewTileTitle_encoding':

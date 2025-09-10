@@ -13,6 +13,7 @@ export 'locale.dart';
 export 'main_flavor.dart';
 export 'messaging_socket_exception.dart';
 export 'platform_deep_link.dart';
+export 'presence_activity.dart';
 export 'registration_status.dart';
 export 'request_failure.dart';
 export 'route_match.dart';

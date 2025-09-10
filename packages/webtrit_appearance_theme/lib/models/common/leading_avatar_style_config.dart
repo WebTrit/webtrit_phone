@@ -35,6 +35,9 @@ class LeadingAvatarStyleConfig with _$LeadingAvatarStyleConfig {
 
     /// Registered/unregistered badge appearance.
     RegisteredBadgeStyleConfig? registeredBadge,
+
+    /// Presence badge appearance.
+    PresenceBadgeStyleConfig? presenceBadge,
   }) = _LeadingAvatarStyleConfig;
 
   factory LeadingAvatarStyleConfig.fromJson(Map<String, dynamic> json) => _$LeadingAvatarStyleConfigFromJson(json);
@@ -89,4 +92,21 @@ class RegisteredBadgeStyleConfig with _$RegisteredBadgeStyleConfig {
   }) = _RegisteredBadgeStyleConfig;
 
   factory RegisteredBadgeStyleConfig.fromJson(Map<String, dynamic> json) => _$RegisteredBadgeStyleConfigFromJson(json);
+}
+
+/// Appearance of the presence status badge (bottom-right).
+@freezed
+class PresenceBadgeStyleConfig with _$PresenceBadgeStyleConfig {
+  const factory PresenceBadgeStyleConfig({
+    /// Color used when presence is "available" (e.g., online, idle).
+    String? availableColor,
+
+    /// Color used when presence is "unavailable" (e.g., offline, busy).
+    String? unavailableColor,
+
+    /// Size factor relative to avatar diameter (widget uses ~0.325 by default).
+    double? sizeFactor,
+  }) = _PresenceBadgeStyleConfig;
+
+  factory PresenceBadgeStyleConfig.fromJson(Map<String, dynamic> json) => _$PresenceBadgeStyleConfigFromJson(json);
 }

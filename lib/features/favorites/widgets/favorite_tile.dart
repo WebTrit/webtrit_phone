@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
-import 'package:webtrit_phone/models/favorite.dart';
+import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 class FavoriteTile extends StatefulWidget {
@@ -141,20 +141,25 @@ class _FavoriteTileState extends State<FavoriteTile> {
       ),
       onDismissed: widget.onDelete == null ? null : (direction) => widget.onDelete!(),
       direction: DismissDirection.endToStart,
-      child: ListTile(
-        key: tileKey,
-        contentPadding: const EdgeInsets.only(left: 16.0),
-        leading: LeadingAvatar(
-          username: widget.favorite.name,
-          thumbnail: widget.favorite.contact.thumbnail,
-          thumbnailUrl: widget.favorite.contact.thumbnailUrl,
-          registered: widget.favorite.contact.registered,
-        ),
-        title: Text(widget.favorite.name),
-        subtitle: Text('${widget.favorite.label.capitalize}: ${widget.favorite.number}'),
-        onTap: widget.onTap,
-        onLongPress: onLongPress,
-      ),
+      child: PresenceInfoBuilder(
+          contact: widget.favorite.contact,
+          builder: (context, presenceInfo) {
+            return ListTile(
+              key: tileKey,
+              contentPadding: const EdgeInsets.only(left: 16.0),
+              leading: LeadingAvatar(
+                username: widget.favorite.name,
+                thumbnail: widget.favorite.contact.thumbnail,
+                thumbnailUrl: widget.favorite.contact.thumbnailUrl,
+                registered: widget.favorite.contact.registered,
+                presenceInfo: presenceInfo,
+              ),
+              title: Text('${widget.favorite.name} ${presenceInfo?.primaryStatusIcon ?? ''}'),
+              subtitle: Text('${widget.favorite.label.capitalize}: ${widget.favorite.number}'),
+              onTap: widget.onTap,
+              onLongPress: onLongPress,
+            );
+          }),
     );
   }
 }

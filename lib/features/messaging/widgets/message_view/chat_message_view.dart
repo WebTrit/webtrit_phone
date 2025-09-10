@@ -197,12 +197,18 @@ class _ChatMessageViewState extends State<ChatMessageView> {
                 sourceType: ContactSourceType.external,
                 sourceId: senderId,
                 builder: (context, contact, {required bool loading}) {
-                  return LeadingAvatar(
-                    username: contact?.displayTitle,
-                    thumbnail: contact?.thumbnail,
-                    thumbnailUrl: contact?.thumbnailUrl,
-                    registered: contact?.registered,
-                    radius: 20,
+                  return PresenceInfoBuilder(
+                    contact: contact,
+                    builder: (context, presenceInfo) {
+                      return LeadingAvatar(
+                        username: contact?.displayTitle,
+                        thumbnail: contact?.thumbnail,
+                        thumbnailUrl: contact?.thumbnailUrl,
+                        registered: contact?.registered,
+                        radius: 20,
+                        presenceInfo: presenceInfo,
+                      );
+                    },
                   );
                 },
               ),

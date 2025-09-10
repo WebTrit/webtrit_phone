@@ -27,6 +27,7 @@ class RecentTile extends StatefulWidget {
     this.onCallLogPressed,
     this.onDelete,
     this.onCallFrom,
+    this.presenceInfo,
   });
 
   final Recent recent;
@@ -42,6 +43,7 @@ class RecentTile extends StatefulWidget {
   final Function()? onCallLogPressed;
   final Function()? onDelete;
   final Function(String)? onCallFrom;
+  final List<PresenceInfo>? presenceInfo;
 
   @override
   State<RecentTile> createState() => _RecentTileState();
@@ -157,13 +159,14 @@ class _RecentTileState extends State<RecentTile> {
           thumbnail: contact?.thumbnail,
           thumbnailUrl: contact?.thumbnailUrl,
           registered: contact?.registered,
+          presenceInfo: widget.presenceInfo,
         ),
         trailing: Text(
           dateFormat.format(callLogEntry.createdTime),
           style: themeData.textTheme.bodySmall,
         ),
         title: Text(
-          widget.recent.name,
+          '${widget.recent.name} ${widget.presenceInfo?.primaryStatusIcon ?? ''}',
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
         ),

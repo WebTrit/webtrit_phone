@@ -1668,6 +1668,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings_ListViewTileTitle_call_codecs => 'Call codecs';
 
   @override
+  String get settings_ListViewTileTitle_presence => 'SIP Presence';
+
+  @override
   String get settings_ListViewTileTitle_callerId => 'Caller ID';
 
   @override
@@ -2130,4 +2133,185 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get undefined_stackScreenNotSupported_title => 'Feature not supported';
+
+  @override
+  String get presence_preset_available_name => 'Available';
+
+  @override
+  String get presence_preset_unavailable_name => 'Unavailable';
+
+  @override
+  String get presence_preset_away_name => 'Away';
+
+  @override
+  String get presence_preset_away_note => 'Away';
+
+  @override
+  String get presence_preset_dnd_name => 'Do not disturb';
+
+  @override
+  String get presence_preset_dnd_note => 'Do not disturb';
+
+  @override
+  String get presence_preset_sleeping_name => 'Sleeping';
+
+  @override
+  String get presence_preset_sleeping_note => 'Sleeping';
+
+  @override
+  String get presence_preset_absent_name => 'Absent';
+
+  @override
+  String get presence_preset_absent_note => 'Absent';
+
+  @override
+  String get presence_preset_meal_name => 'Meal';
+
+  @override
+  String get presence_preset_meal_note => 'At meal';
+
+  @override
+  String get presence_preset_inTransit_name => 'Transit';
+
+  @override
+  String get presence_preset_inTransit_note => 'In transit';
+
+  @override
+  String get presence_preset_meeting_name => 'Meeting';
+
+  @override
+  String get presence_preset_meeting_note => 'In a meeting';
+
+  @override
+  String get presence_preset_vacation_name => 'Vacation';
+
+  @override
+  String get presence_preset_vacation_note => 'On vacation';
+
+  @override
+  String get presence_preset_travel_name => 'Traveling';
+
+  @override
+  String get presence_preset_travel_note => 'Traveling';
+
+  @override
+  String get presence_preset_appointment_name => 'Appointment';
+
+  @override
+  String get presence_preset_appointment_note => 'On appointment';
+
+  @override
+  String get presence_activity_none_name => 'None';
+
+  @override
+  String get presence_activity_away_name => 'Away';
+
+  @override
+  String get presence_activity_busy_name => 'Busy';
+
+  @override
+  String get presence_activity_doNotDisturb_name => 'Do not disturb';
+
+  @override
+  String get presence_activity_sleeping_name => 'Sleeping';
+
+  @override
+  String get presence_activity_permanentAbsence_name => 'Permanent absence';
+
+  @override
+  String get presence_activity_onThePhone_name => 'On the phone';
+
+  @override
+  String get presence_activity_meal_name => 'At meal';
+
+  @override
+  String get presence_activity_meeting_name => 'In a meeting';
+
+  @override
+  String get presence_activity_appointment_name => 'At an appointment';
+
+  @override
+  String get presence_activity_vacation_name => 'On vacation';
+
+  @override
+  String get presence_activity_travel_name => 'Traveling';
+
+  @override
+  String get presence_activity_inTransit_name => 'In transit';
+
+  @override
+  String get presence_settings_presets_title => 'Presets:';
+
+  @override
+  String get presence_settings_presets_label => 'Choose preset';
+
+  @override
+  String get presence_settings_config_title => 'Configuration:';
+
+  @override
+  String get presence_settings_availability_title => 'Availability:';
+
+  @override
+  String get presence_settings_availability_tooltip =>
+      'Represents general availability for communications within SIP service. Uses  SIP \"Status\" element in pidf content with \"open/closed\" values (see RFC 3863)';
+
+  @override
+  String get presence_settings_note_label => 'Note';
+
+  @override
+  String get presence_settings_note_tooltip =>
+      'A short text note describing current status in details. Uses SIP \"note\" element in pidf content (see RFC 3863)';
+
+  @override
+  String get presence_settings_activity_label => 'Activity';
+
+  @override
+  String get presence_settings_activity_tooltip =>
+      'Describes current activity in more details. Uses SIP \"RPID\" extension \"activities\" element in pidf content (see RFC 4480)';
+
+  @override
+  String get presence_settings_dnd_title => 'Reject calls (DND)';
+
+  @override
+  String get presence_settings_dnd_tooltip =>
+      'When enabled, all incoming calls will be automatically rejected by the server with \"603 Declined\" response.';
+
+  @override
+  String get presence_settings_statusIcon_title => 'Status Icon:';
+
+  @override
+  String get presence_settings_statusIcon_none => 'None';
+
+  @override
+  String get presence_infoView_title => 'Presence Information:';
+
+  @override
+  String get presence_infoView_device => 'Device:';
+
+  @override
+  String get presence_infoView_available => 'Available:';
+
+  @override
+  String get presence_infoView_available_true => 'Yes';
+
+  @override
+  String get presence_infoView_available_false => 'No';
+
+  @override
+  String get presence_infoView_note => 'Note:';
+
+  @override
+  String get presence_infoView_activity => 'Activity:';
+
+  @override
+  String get presence_infoView_statusIcon => 'Status Icon:';
+
+  @override
+  String get presence_infoView_timeZone => 'Time Zone:';
+
+  @override
+  String get presence_infoView_updated => 'Updated:';
+
+  @override
+  String get presence_infoView_client => 'Client:';
 }

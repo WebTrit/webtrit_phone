@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+import 'presence_badge_style.dart';
 import 'registered_badge_style.dart';
 import 'smart_indicator_style.dart';
 
@@ -15,6 +16,7 @@ class LeadingAvatarStyle with Diagnosticable {
     this.loadingOverlay,
     this.smartIndicator,
     this.registeredBadge,
+    this.presenceBadge,
   });
 
   /// Circle background; falls back to ColorScheme.secondaryContainer when null.
@@ -38,6 +40,9 @@ class LeadingAvatarStyle with Diagnosticable {
   /// Registered/unregistered badge (bottom-right).
   final RegisteredBadgeStyle? registeredBadge;
 
+  /// Presence badge (bottom-right).
+  final PresenceBadgeStyle? presenceBadge;
+
   static LeadingAvatarStyle merge(LeadingAvatarStyle? base, LeadingAvatarStyle? override) {
     if (base == null && override == null) return const LeadingAvatarStyle();
     base ??= const LeadingAvatarStyle();
@@ -53,6 +58,7 @@ class LeadingAvatarStyle with Diagnosticable {
       loadingOverlay: LoadingOverlayStyle.merge(base.loadingOverlay, override.loadingOverlay),
       smartIndicator: SmartIndicatorStyle.merge(base.smartIndicator, override.smartIndicator),
       registeredBadge: RegisteredBadgeStyle.merge(base.registeredBadge, override.registeredBadge),
+      presenceBadge: PresenceBadgeStyle.merge(base.presenceBadge, override.presenceBadge),
     );
   }
 
@@ -72,6 +78,7 @@ class LeadingAvatarStyle with Diagnosticable {
       loadingOverlay: LoadingOverlayStyle.lerp(a?.loadingOverlay, b?.loadingOverlay, t),
       smartIndicator: SmartIndicatorStyle.lerp(a?.smartIndicator, b?.smartIndicator, t),
       registeredBadge: RegisteredBadgeStyle.lerp(a?.registeredBadge, b?.registeredBadge, t),
+      presenceBadge: PresenceBadgeStyle.lerp(a?.presenceBadge, b?.presenceBadge, t),
     );
   }
 
@@ -85,7 +92,8 @@ class LeadingAvatarStyle with Diagnosticable {
       ..add(DiagnosticsProperty<IconData?>('placeholderIcon', placeholderIcon))
       ..add(DiagnosticsProperty<LoadingOverlayStyle?>('loadingOverlay', loadingOverlay))
       ..add(DiagnosticsProperty<SmartIndicatorStyle?>('smartIndicator', smartIndicator))
-      ..add(DiagnosticsProperty<RegisteredBadgeStyle?>('registeredBadge', registeredBadge));
+      ..add(DiagnosticsProperty<RegisteredBadgeStyle?>('registeredBadge', registeredBadge))
+      ..add(DiagnosticsProperty<PresenceBadgeStyle?>('presenceBadge', presenceBadge));
   }
 }
 

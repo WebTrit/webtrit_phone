@@ -144,28 +144,21 @@ class _ChatConversationScreenState extends State<ChatConversationScreen> {
       sourceId: participant,
       builder: (context, contact, {required bool loading}) {
         if (loading) return const SizedBox();
-        if (contact != null) {
-          final online = contact.registered == true;
 
-          return Column(
-            children: [
-              Text(
-                contact.displayTitle,
+        return PresenceInfoBuilder(
+            contact: contact,
+            builder: (context, presenceInfo) {
+              final text = switch (contact) {
+                null => context.l10n.messaging_ParticipantName_unknown,
+                _ => '${contact.displayTitle} ${presenceInfo?.primaryStatusIcon ?? ''}',
+              };
+              return Text(
+                text,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: const TextStyle(fontSize: 20),
-              ),
-              if (online) const Text('online', style: TextStyle(fontSize: 12)),
-            ],
-          );
-        } else {
-          return Text(
-            '${context.l10n.messaging_ConversationScreen_titlePrefix} $participant',
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: const TextStyle(fontSize: 20),
-          );
-        }
+              );
+            });
       },
     );
   }

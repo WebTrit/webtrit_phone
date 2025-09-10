@@ -109,6 +109,12 @@
         "items": [
           {
             "enabled": true,
+            "type": "presence",
+            "titleL10n": "settings_ListViewTileTitle_presence",
+            "icon": "0xf4c8"
+          },
+          {
+            "enabled": true,
             "type": "network",
             "titleL10n": "settings_ListViewTileTitle_network",
             "icon": "0xe424"

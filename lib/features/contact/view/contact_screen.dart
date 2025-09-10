@@ -11,7 +11,7 @@ import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/features/call/call.dart';
 import 'package:webtrit_phone/features/call_routing/cubit/call_routing_cubit.dart';
 import 'package:webtrit_phone/features/user_info/cubit/user_info_cubit.dart';
-import 'package:webtrit_phone/models/contact_phone.dart';
+import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 import 'package:webtrit_phone/features/messaging/extensions/contact.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
@@ -204,7 +204,18 @@ class _ContactScreenState extends State<ContactScreen> {
                               onEmailPressed: () {
                                 context.read<ContactBloc>().add(ContactEmailSend(contactEmail));
                               },
-                            )
+                            ),
+                          if (contact.sourceType == ContactSourceType.external)
+                            PresenceInfoBuilder(
+                              contact: contact,
+                              builder: (context, presenceInfo) {
+                                if (presenceInfo == null || presenceInfo.isEmpty) return const SizedBox();
+                                return Column(children: [
+                                  const Divider(),
+                                  PresenceInfoView(presenceInfo: presenceInfo),
+                                ]);
+                              },
+                            ),
                         ],
                       ),
                     );

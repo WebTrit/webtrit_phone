@@ -44,6 +44,10 @@ mixin _$LeadingAvatarStyleConfig {
   RegisteredBadgeStyleConfig? get registeredBadge =>
       throw _privateConstructorUsedError;
 
+  /// Presence badge appearance.
+  PresenceBadgeStyleConfig? get presenceBadge =>
+      throw _privateConstructorUsedError;
+
   /// Serializes this LeadingAvatarStyleConfig to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
 
@@ -67,13 +71,15 @@ abstract class $LeadingAvatarStyleConfigCopyWith<$Res> {
       IconDataConfig? placeholderIcon,
       LoadingOverlayStyleConfig? loading,
       SmartIndicatorStyleConfig? smartIndicator,
-      RegisteredBadgeStyleConfig? registeredBadge});
+      RegisteredBadgeStyleConfig? registeredBadge,
+      PresenceBadgeStyleConfig? presenceBadge});
 
   $TextStyleConfigCopyWith<$Res>? get initialsTextStyle;
   $IconDataConfigCopyWith<$Res>? get placeholderIcon;
   $LoadingOverlayStyleConfigCopyWith<$Res>? get loading;
   $SmartIndicatorStyleConfigCopyWith<$Res>? get smartIndicator;
   $RegisteredBadgeStyleConfigCopyWith<$Res>? get registeredBadge;
+  $PresenceBadgeStyleConfigCopyWith<$Res>? get presenceBadge;
 }
 
 /// @nodoc
@@ -99,6 +105,7 @@ class _$LeadingAvatarStyleConfigCopyWithImpl<$Res,
     Object? loading = freezed,
     Object? smartIndicator = freezed,
     Object? registeredBadge = freezed,
+    Object? presenceBadge = freezed,
   }) {
     return _then(_value.copyWith(
       backgroundColor: freezed == backgroundColor
@@ -129,6 +136,10 @@ class _$LeadingAvatarStyleConfigCopyWithImpl<$Res,
           ? _value.registeredBadge
           : registeredBadge // ignore: cast_nullable_to_non_nullable
               as RegisteredBadgeStyleConfig?,
+      presenceBadge: freezed == presenceBadge
+          ? _value.presenceBadge
+          : presenceBadge // ignore: cast_nullable_to_non_nullable
+              as PresenceBadgeStyleConfig?,
     ) as $Val);
   }
 
@@ -203,6 +214,21 @@ class _$LeadingAvatarStyleConfigCopyWithImpl<$Res,
       return _then(_value.copyWith(registeredBadge: value) as $Val);
     });
   }
+
+  /// Create a copy of LeadingAvatarStyleConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $PresenceBadgeStyleConfigCopyWith<$Res>? get presenceBadge {
+    if (_value.presenceBadge == null) {
+      return null;
+    }
+
+    return $PresenceBadgeStyleConfigCopyWith<$Res>(_value.presenceBadge!,
+        (value) {
+      return _then(_value.copyWith(presenceBadge: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
@@ -221,7 +247,8 @@ abstract class _$$LeadingAvatarStyleConfigImplCopyWith<$Res>
       IconDataConfig? placeholderIcon,
       LoadingOverlayStyleConfig? loading,
       SmartIndicatorStyleConfig? smartIndicator,
-      RegisteredBadgeStyleConfig? registeredBadge});
+      RegisteredBadgeStyleConfig? registeredBadge,
+      PresenceBadgeStyleConfig? presenceBadge});
 
   @override
   $TextStyleConfigCopyWith<$Res>? get initialsTextStyle;
@@ -233,6 +260,8 @@ abstract class _$$LeadingAvatarStyleConfigImplCopyWith<$Res>
   $SmartIndicatorStyleConfigCopyWith<$Res>? get smartIndicator;
   @override
   $RegisteredBadgeStyleConfigCopyWith<$Res>? get registeredBadge;
+  @override
+  $PresenceBadgeStyleConfigCopyWith<$Res>? get presenceBadge;
 }
 
 /// @nodoc
@@ -257,6 +286,7 @@ class __$$LeadingAvatarStyleConfigImplCopyWithImpl<$Res>
     Object? loading = freezed,
     Object? smartIndicator = freezed,
     Object? registeredBadge = freezed,
+    Object? presenceBadge = freezed,
   }) {
     return _then(_$LeadingAvatarStyleConfigImpl(
       backgroundColor: freezed == backgroundColor
@@ -287,6 +317,10 @@ class __$$LeadingAvatarStyleConfigImplCopyWithImpl<$Res>
           ? _value.registeredBadge
           : registeredBadge // ignore: cast_nullable_to_non_nullable
               as RegisteredBadgeStyleConfig?,
+      presenceBadge: freezed == presenceBadge
+          ? _value.presenceBadge
+          : presenceBadge // ignore: cast_nullable_to_non_nullable
+              as PresenceBadgeStyleConfig?,
     ));
   }
 }
@@ -302,7 +336,8 @@ class _$LeadingAvatarStyleConfigImpl implements _LeadingAvatarStyleConfig {
       this.placeholderIcon,
       this.loading,
       this.smartIndicator,
-      this.registeredBadge});
+      this.registeredBadge,
+      this.presenceBadge});
 
   factory _$LeadingAvatarStyleConfigImpl.fromJson(Map<String, dynamic> json) =>
       _$$LeadingAvatarStyleConfigImplFromJson(json);
@@ -335,9 +370,13 @@ class _$LeadingAvatarStyleConfigImpl implements _LeadingAvatarStyleConfig {
   @override
   final RegisteredBadgeStyleConfig? registeredBadge;
 
+  /// Presence badge appearance.
+  @override
+  final PresenceBadgeStyleConfig? presenceBadge;
+
   @override
   String toString() {
-    return 'LeadingAvatarStyleConfig(backgroundColor: $backgroundColor, radius: $radius, initialsTextStyle: $initialsTextStyle, placeholderIcon: $placeholderIcon, loading: $loading, smartIndicator: $smartIndicator, registeredBadge: $registeredBadge)';
+    return 'LeadingAvatarStyleConfig(backgroundColor: $backgroundColor, radius: $radius, initialsTextStyle: $initialsTextStyle, placeholderIcon: $placeholderIcon, loading: $loading, smartIndicator: $smartIndicator, registeredBadge: $registeredBadge, presenceBadge: $presenceBadge)';
   }
 
   @override
@@ -356,7 +395,9 @@ class _$LeadingAvatarStyleConfigImpl implements _LeadingAvatarStyleConfig {
             (identical(other.smartIndicator, smartIndicator) ||
                 other.smartIndicator == smartIndicator) &&
             (identical(other.registeredBadge, registeredBadge) ||
-                other.registeredBadge == registeredBadge));
+                other.registeredBadge == registeredBadge) &&
+            (identical(other.presenceBadge, presenceBadge) ||
+                other.presenceBadge == presenceBadge));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -369,7 +410,8 @@ class _$LeadingAvatarStyleConfigImpl implements _LeadingAvatarStyleConfig {
       placeholderIcon,
       loading,
       smartIndicator,
-      registeredBadge);
+      registeredBadge,
+      presenceBadge);
 
   /// Create a copy of LeadingAvatarStyleConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -396,7 +438,8 @@ abstract class _LeadingAvatarStyleConfig implements LeadingAvatarStyleConfig {
           final IconDataConfig? placeholderIcon,
           final LoadingOverlayStyleConfig? loading,
           final SmartIndicatorStyleConfig? smartIndicator,
-          final RegisteredBadgeStyleConfig? registeredBadge}) =
+          final RegisteredBadgeStyleConfig? registeredBadge,
+          final PresenceBadgeStyleConfig? presenceBadge}) =
       _$LeadingAvatarStyleConfigImpl;
 
   factory _LeadingAvatarStyleConfig.fromJson(Map<String, dynamic> json) =
@@ -429,6 +472,10 @@ abstract class _LeadingAvatarStyleConfig implements LeadingAvatarStyleConfig {
   /// Registered/unregistered badge appearance.
   @override
   RegisteredBadgeStyleConfig? get registeredBadge;
+
+  /// Presence badge appearance.
+  @override
+  PresenceBadgeStyleConfig? get presenceBadge;
 
   /// Create a copy of LeadingAvatarStyleConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -1108,5 +1155,217 @@ abstract class _RegisteredBadgeStyleConfig
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$RegisteredBadgeStyleConfigImplCopyWith<_$RegisteredBadgeStyleConfigImpl>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+PresenceBadgeStyleConfig _$PresenceBadgeStyleConfigFromJson(
+    Map<String, dynamic> json) {
+  return _PresenceBadgeStyleConfig.fromJson(json);
+}
+
+/// @nodoc
+mixin _$PresenceBadgeStyleConfig {
+  /// Color used when presence is "available" (e.g., online, idle).
+  String? get availableColor => throw _privateConstructorUsedError;
+
+  /// Color used when presence is "unavailable" (e.g., offline, busy).
+  String? get unavailableColor => throw _privateConstructorUsedError;
+
+  /// Size factor relative to avatar diameter (widget uses ~0.325 by default).
+  double? get sizeFactor => throw _privateConstructorUsedError;
+
+  /// Serializes this PresenceBadgeStyleConfig to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of PresenceBadgeStyleConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $PresenceBadgeStyleConfigCopyWith<PresenceBadgeStyleConfig> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $PresenceBadgeStyleConfigCopyWith<$Res> {
+  factory $PresenceBadgeStyleConfigCopyWith(PresenceBadgeStyleConfig value,
+          $Res Function(PresenceBadgeStyleConfig) then) =
+      _$PresenceBadgeStyleConfigCopyWithImpl<$Res, PresenceBadgeStyleConfig>;
+  @useResult
+  $Res call(
+      {String? availableColor, String? unavailableColor, double? sizeFactor});
+}
+
+/// @nodoc
+class _$PresenceBadgeStyleConfigCopyWithImpl<$Res,
+        $Val extends PresenceBadgeStyleConfig>
+    implements $PresenceBadgeStyleConfigCopyWith<$Res> {
+  _$PresenceBadgeStyleConfigCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of PresenceBadgeStyleConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? availableColor = freezed,
+    Object? unavailableColor = freezed,
+    Object? sizeFactor = freezed,
+  }) {
+    return _then(_value.copyWith(
+      availableColor: freezed == availableColor
+          ? _value.availableColor
+          : availableColor // ignore: cast_nullable_to_non_nullable
+              as String?,
+      unavailableColor: freezed == unavailableColor
+          ? _value.unavailableColor
+          : unavailableColor // ignore: cast_nullable_to_non_nullable
+              as String?,
+      sizeFactor: freezed == sizeFactor
+          ? _value.sizeFactor
+          : sizeFactor // ignore: cast_nullable_to_non_nullable
+              as double?,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$PresenceBadgeStyleConfigImplCopyWith<$Res>
+    implements $PresenceBadgeStyleConfigCopyWith<$Res> {
+  factory _$$PresenceBadgeStyleConfigImplCopyWith(
+          _$PresenceBadgeStyleConfigImpl value,
+          $Res Function(_$PresenceBadgeStyleConfigImpl) then) =
+      __$$PresenceBadgeStyleConfigImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {String? availableColor, String? unavailableColor, double? sizeFactor});
+}
+
+/// @nodoc
+class __$$PresenceBadgeStyleConfigImplCopyWithImpl<$Res>
+    extends _$PresenceBadgeStyleConfigCopyWithImpl<$Res,
+        _$PresenceBadgeStyleConfigImpl>
+    implements _$$PresenceBadgeStyleConfigImplCopyWith<$Res> {
+  __$$PresenceBadgeStyleConfigImplCopyWithImpl(
+      _$PresenceBadgeStyleConfigImpl _value,
+      $Res Function(_$PresenceBadgeStyleConfigImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of PresenceBadgeStyleConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? availableColor = freezed,
+    Object? unavailableColor = freezed,
+    Object? sizeFactor = freezed,
+  }) {
+    return _then(_$PresenceBadgeStyleConfigImpl(
+      availableColor: freezed == availableColor
+          ? _value.availableColor
+          : availableColor // ignore: cast_nullable_to_non_nullable
+              as String?,
+      unavailableColor: freezed == unavailableColor
+          ? _value.unavailableColor
+          : unavailableColor // ignore: cast_nullable_to_non_nullable
+              as String?,
+      sizeFactor: freezed == sizeFactor
+          ? _value.sizeFactor
+          : sizeFactor // ignore: cast_nullable_to_non_nullable
+              as double?,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$PresenceBadgeStyleConfigImpl implements _PresenceBadgeStyleConfig {
+  const _$PresenceBadgeStyleConfigImpl(
+      {this.availableColor, this.unavailableColor, this.sizeFactor});
+
+  factory _$PresenceBadgeStyleConfigImpl.fromJson(Map<String, dynamic> json) =>
+      _$$PresenceBadgeStyleConfigImplFromJson(json);
+
+  /// Color used when presence is "available" (e.g., online, idle).
+  @override
+  final String? availableColor;
+
+  /// Color used when presence is "unavailable" (e.g., offline, busy).
+  @override
+  final String? unavailableColor;
+
+  /// Size factor relative to avatar diameter (widget uses ~0.325 by default).
+  @override
+  final double? sizeFactor;
+
+  @override
+  String toString() {
+    return 'PresenceBadgeStyleConfig(availableColor: $availableColor, unavailableColor: $unavailableColor, sizeFactor: $sizeFactor)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$PresenceBadgeStyleConfigImpl &&
+            (identical(other.availableColor, availableColor) ||
+                other.availableColor == availableColor) &&
+            (identical(other.unavailableColor, unavailableColor) ||
+                other.unavailableColor == unavailableColor) &&
+            (identical(other.sizeFactor, sizeFactor) ||
+                other.sizeFactor == sizeFactor));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, availableColor, unavailableColor, sizeFactor);
+
+  /// Create a copy of PresenceBadgeStyleConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$PresenceBadgeStyleConfigImplCopyWith<_$PresenceBadgeStyleConfigImpl>
+      get copyWith => __$$PresenceBadgeStyleConfigImplCopyWithImpl<
+          _$PresenceBadgeStyleConfigImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$PresenceBadgeStyleConfigImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _PresenceBadgeStyleConfig implements PresenceBadgeStyleConfig {
+  const factory _PresenceBadgeStyleConfig(
+      {final String? availableColor,
+      final String? unavailableColor,
+      final double? sizeFactor}) = _$PresenceBadgeStyleConfigImpl;
+
+  factory _PresenceBadgeStyleConfig.fromJson(Map<String, dynamic> json) =
+      _$PresenceBadgeStyleConfigImpl.fromJson;
+
+  /// Color used when presence is "available" (e.g., online, idle).
+  @override
+  String? get availableColor;
+
+  /// Color used when presence is "unavailable" (e.g., offline, busy).
+  @override
+  String? get unavailableColor;
+
+  /// Size factor relative to avatar diameter (widget uses ~0.325 by default).
+  @override
+  double? get sizeFactor;
+
+  /// Create a copy of PresenceBadgeStyleConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$PresenceBadgeStyleConfigImplCopyWith<_$PresenceBadgeStyleConfigImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
