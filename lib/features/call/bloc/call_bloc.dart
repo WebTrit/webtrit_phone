@@ -16,6 +16,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import 'package:webtrit_api/webtrit_api.dart';
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
+import 'package:webtrit_phone/mappers/signaling/signaling.dart';
 import 'package:webtrit_signaling/webtrit_signaling.dart';
 
 import 'package:webtrit_phone/app/constants.dart';
@@ -52,6 +53,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   final UserRepository userRepository;
   final SessionRepository sessionRepository;
   final LinesStateRepository linesStateRepository;
+  final PresenceInfoRepository presenceInfoRepository;
   final Function(Notification) submitNotification;
 
   final Callkeep callkeep;
@@ -71,6 +73,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   late final SignalingClientFactory _signalingClientFactory;
   WebtritSignalingClient? _signalingClient;
   Timer? _signalingClientReconnectTimer;
+  Timer? _presenceInfoSyncTimer;
 
   final _peerConnectionCompleters = <String, Completer<RTCPeerConnection>>{};
 
@@ -84,6 +87,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     required this.callLogsRepository,
     required this.callPullRepository,
     required this.linesStateRepository,
+    required this.presenceInfoRepository,
     required this.sessionRepository,
     required this.userRepository,
     required this.submitNotification,
@@ -164,6 +168,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     WidgetsBinding.instance.addObserver(this);
 
     callkeep.setDelegate(this);
+
+    _presenceInfoSyncTimer = Timer.periodic(const Duration(seconds: 5), (_) => syncPresenceSettings());
   }
 
   @override
@@ -179,6 +185,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     await _pendingCallHandlerSubscription?.cancel();
 
     _signalingClientReconnectTimer?.cancel();
+
+    _presenceInfoSyncTimer?.cancel();
+
     await _signalingClient?.disconnect();
 
     await _stopRingbackSound();
@@ -247,6 +256,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       final previousRegistrationStatus = previousRegistration.status;
 
       if (newRegistrationStatus.isRegistered && !previousRegistrationStatus.isRegistered) {
+        presenceInfoRepository.resetLastSettingsSync();
         submitNotification(AppOnlineNotification());
       }
 
@@ -870,6 +880,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       transfer: (value) => __onCallSignalingEventTransfer(value, emit),
       transferring: (value) => __onCallSignalingEventTransfering(value, emit),
       notifyDialog: (value) => __onCallSignalingEventNotifyDialog(value, emit),
+      notifyPresence: (value) => __onCallSignalingEventNotifyPresence(value, emit),
       notifyRefer: (value) => __onCallSignalingEventNotifyRefer(value, emit),
       notifyUnknown: (value) => __onCallSignalingEventNotifyUnknown(value, emit),
       registering: (event) => __onCallSignalingEventRegistering(event, emit),
@@ -1207,6 +1218,14 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   ) async {
     _logger.fine('_CallSignalingEventNotifyDialogs: $event');
     await _assingUserActiveCalls(event.userActiveCalls);
+  }
+
+  Future<void> __onCallSignalingEventNotifyPresence(
+    _CallSignalingEventNotifyPresence event,
+    Emitter<CallState> emit,
+  ) async {
+    _logger.fine('_CallSignalingEventNotifyPresence: $event');
+    await _assingNumberPresence(event.number, event.presenceInfo);
   }
 
   Future<void> __onCallSignalingEventNotifyRefer(
@@ -2392,6 +2411,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     ));
 
     _assingUserActiveCalls(stateHandshake.userActiveCalls);
+    stateHandshake.contactsPresenceInfo.forEach(_assingNumberPresence);
 
     // Hang up all active calls that are not associated with any line
     // or guest line, indicating that they are no longer valid.
@@ -2572,6 +2592,14 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
             notify: event.notify,
             subscriptionState: event.subscriptionState,
             state: event.state,
+          ),
+        PresenceNotifyEvent event => _CallSignalingEvent.notifyPresence(
+            line: event.line,
+            callId: event.callId,
+            notify: event.notify,
+            subscriptionState: event.subscriptionState,
+            number: event.number,
+            presenceInfo: event.presenceInfo,
           ),
         UnknownNotifyEvent event => _CallSignalingEvent.notifyUnknown(
             line: event.line,
@@ -2865,6 +2893,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
   Future<void> _stopRingbackSound() => _callkeepSound.stopRingbackSound();
 
+  // TODO(Vlad): extract mapper,find better naming
   Future<void> _assingUserActiveCalls(List<UserActiveCall> userActiveCalls) async {
     final pullableCalls = userActiveCalls
         .map(
@@ -2893,6 +2922,41 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     }
 
     callPullRepository.setPullableCalls(pullableCallsToSet);
+  }
+
+  Future<void> _assingNumberPresence(String number, List<SignalingPresenceInfo> data) async {
+    final presenceInfo = data.map(SignalingPresenceInfoMapper.fromSignaling).toList();
+    presenceInfoRepository.setNumberPresence(number, presenceInfo);
+  }
+
+  Future<void> syncPresenceSettings() async {
+    final now = DateTime.now();
+    final lastSync = presenceInfoRepository.lastSettingsSync;
+    final presenceSettings = presenceInfoRepository.presenceSettings;
+
+    final canUpdate = state.callServiceState.status == CallStatus.ready;
+    bool shouldUpdate = false;
+    if (lastSync == null) {
+      shouldUpdate = true;
+    } else if (presenceSettings.timestamp.difference(lastSync).inSeconds > 0) {
+      shouldUpdate = true;
+    } else if (now.difference(lastSync).inMinutes >= 5) {
+      shouldUpdate = true;
+    }
+
+    if (shouldUpdate && canUpdate) {
+      _logger.fine('_presenceInfoSyncTimer: updating presence settings');
+      try {
+        await _signalingClient?.execute(PresenceSettingsUpdateRequest(
+          transaction: clock.now().millisecondsSinceEpoch.toString(),
+          settings: SignalingPresenceSettingsMapper.toSignaling(presenceSettings),
+        ));
+        presenceInfoRepository.updateLastSettingsSync(now);
+        _logger.fine('Presence settings updated at $now');
+      } on Exception catch (e, s) {
+        _logger.warning('Failed to update presence settings', e, s);
+      }
+    }
   }
 
   void _checkSenderResult(RTCRtpSender? senderResult, String kind) {

@@ -150,13 +150,22 @@ class _CallSignalingEvent with _$CallSignalingEvent implements CallEvent {
     required ReferNotifyState state,
   }) = _CallSignalingEventNotifyRefer;
 
+  const factory _CallSignalingEvent.notifyPresence({
+    required int? line,
+    required String callId,
+    required String? notify,
+    required SubscriptionState? subscriptionState,
+    required String number,
+    required List<SignalingPresenceInfo> presenceInfo,
+  }) = _CallSignalingEventNotifyPresence;
+
   const factory _CallSignalingEvent.notifyUnknown({
     required int? line,
     required String callId,
     required String? notify,
     required SubscriptionState? subscriptionState,
     required String? contentType,
-    required String content,
+    required String? content,
   }) = _CallSignalingEventNotifyUnknown;
 
   const factory _CallSignalingEvent.registering() = _CallSignalingEventRegistering;
