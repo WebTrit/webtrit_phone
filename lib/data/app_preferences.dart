@@ -9,6 +9,10 @@ import 'package:webtrit_phone/mappers/mappers.dart';
 abstract class AppPreferences {
   Future<bool> clear({List<String> exclusion});
 
+  String? getString(String key);
+
+  Future<bool> setString(String key, String value);
+
   bool getRegisterStatus();
 
   Future<bool> setRegisterStatus(bool value);
@@ -163,6 +167,16 @@ class AppPreferencesImpl
     ).then(
       (results) => results.every((result) => result),
     );
+  }
+
+  @override
+  String? getString(String key) {
+    return _sharedPreferences.getString(key);
+  }
+
+  @override
+  Future<bool> setString(String key, String value) async {
+    return _sharedPreferences.setString(key, value);
   }
 
   @override
