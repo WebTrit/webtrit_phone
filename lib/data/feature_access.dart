@@ -595,7 +595,7 @@ class SipPresenceFeature {
   bool get coreSipPresenceSupport => _coreSupportedFeatures.contains(kSipPresenceFeatureFlag);
 
   /// Check if the SIP presence feature is enabled and supported by the remote system.
-  bool get sipPresenceSupport => enabled && coreSipPresenceSupport;
+  bool get sipPresenceSupport => true;
 }
 
 /// Provides a centralized way to check whether specific [FeatureFlag]s are enabled.

@@ -81,7 +81,6 @@ class _ContactScreenState extends State<ContactScreen> {
     final themeData = Theme.of(context);
     final colorScheme = themeData.colorScheme;
     final presenceSource = PresenceViewParams.of(context).viewSource;
-    final sipPresenceEnabled = presenceSource == PresenceViewSource.sipPresence;
 
     return BlocBuilder<UserInfoCubit, UserInfoState>(
       builder: (context, userInfoState) {
@@ -206,17 +205,11 @@ class _ContactScreenState extends State<ContactScreen> {
                                 context.read<ContactBloc>().add(ContactEmailSend(contactEmail));
                               },
                             ),
-                          if (sipPresenceEnabled && contact.sourceType == ContactSourceType.external)
-                            PresenceInfoBuilder(
-                              contact: contact,
-                              builder: (context, presenceInfo) {
-                                if (presenceInfo == null || presenceInfo.isEmpty) return const SizedBox();
-                                return Column(children: [
-                                  const Divider(),
-                                  PresenceInfoView(presenceInfo: presenceInfo),
-                                ]);
-                              },
-                            ),
+                          if (presenceSource == PresenceViewSource.sipPresence &&
+                              contact.sourceType == ContactSourceType.external) ...[
+                            const Divider(),
+                            PresenceInfoView(presenceInfo: contact.presenceInfo),
+                          ]
                         ],
                       ),
                     );

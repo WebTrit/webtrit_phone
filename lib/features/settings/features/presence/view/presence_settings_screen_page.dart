@@ -16,7 +16,7 @@ class PresenceSettingsScreenPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => PresenceSettingsCubit(context.read<PresenceInfoRepository>()),
+      create: (context) => PresenceSettingsCubit(context.read<PresenceRepository>()),
       child: const PresenceSettingsScreen(),
     );
   }

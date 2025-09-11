@@ -238,9 +238,10 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
         RepositoryProvider<LinesStateRepository>(
           create: (context) => LinesStateRepositoryInMemoryImpl(),
         ),
-        RepositoryProvider<PresenceInfoRepository>(
-          create: (context) => PresenceInfoRepositoryDefaultImpl(
+        RepositoryProvider<PresenceRepository>(
+          create: (context) => PresenceRepositoryPrefsAndDriftImpl(
             context.read<AppPreferences>(),
+            context.read<AppDatabase>(),
           ),
         ),
       ],
@@ -394,7 +395,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                             callLogsRepository: context.read<CallLogsRepository>(),
                             callPullRepository: context.read<CallPullRepository>(),
                             linesStateRepository: context.read<LinesStateRepository>(),
-                            presenceInfoRepository: context.read<PresenceInfoRepository>(),
+                            presenceRepository: context.read<PresenceRepository>(),
                             sessionRepository: context.read<SessionRepository>(),
                             userRepository: context.read<UserRepository>(),
                             submitNotification: (n) => notificationsBloc.add(NotificationsSubmitted(n)),

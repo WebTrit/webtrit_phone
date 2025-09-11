@@ -18,8 +18,6 @@ class $ContactsTableTable extends ContactsTable
       requiredDuringInsert: false,
       defaultConstraints:
           GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
-  static const VerificationMeta _sourceTypeMeta =
-      const VerificationMeta('sourceType');
   @override
   late final GeneratedColumnWithTypeConverter<ContactSourceTypeEnum, int>
       sourceType = GeneratedColumn<int>('source_type', aliasedName, false,
@@ -123,7 +121,6 @@ class $ContactsTableTable extends ContactsTable
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
-    context.handle(_sourceTypeMeta, const VerificationResult.success());
     if (data.containsKey('source_id')) {
       context.handle(_sourceIdMeta,
           sourceId.isAcceptableOrUnknown(data['source_id']!, _sourceIdMeta));
@@ -1331,8 +1328,6 @@ class $CallLogsTableTable extends CallLogsTable
       requiredDuringInsert: false,
       defaultConstraints:
           GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
-  static const VerificationMeta _directionMeta =
-      const VerificationMeta('direction');
   @override
   late final GeneratedColumnWithTypeConverter<CallLogDirectionEnum, int>
       direction = GeneratedColumn<int>('direction', aliasedName, false,
@@ -1395,7 +1390,6 @@ class $CallLogsTableTable extends CallLogsTable
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
-    context.handle(_directionMeta, const VerificationResult.success());
     if (data.containsKey('number')) {
       context.handle(_numberMeta,
           number.isAcceptableOrUnknown(data['number']!, _numberMeta));
@@ -1980,7 +1974,6 @@ class $ChatsTableTable extends ChatsTable
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
       'id', aliasedName, false,
       type: DriftSqlType.int, requiredDuringInsert: false);
-  static const VerificationMeta _typeMeta = const VerificationMeta('type');
   @override
   late final GeneratedColumnWithTypeConverter<ChatTypeEnum, String> type =
       GeneratedColumn<String>('type', aliasedName, false,
@@ -2019,7 +2012,6 @@ class $ChatsTableTable extends ChatsTable
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
-    context.handle(_typeMeta, const VerificationResult.success());
     if (data.containsKey('name')) {
       context.handle(
           _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
@@ -2299,8 +2291,6 @@ class $ChatMembersTableTable extends ChatMembersTable
   late final GeneratedColumn<String> userId = GeneratedColumn<String>(
       'user_id', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _groupAuthoritiesMeta =
-      const VerificationMeta('groupAuthorities');
   @override
   late final GeneratedColumnWithTypeConverter<GroupAuthoritiesEnum?, String>
       groupAuthorities = GeneratedColumn<String>(
@@ -2335,7 +2325,6 @@ class $ChatMembersTableTable extends ChatMembersTable
     } else if (isInserting) {
       context.missing(_userIdMeta);
     }
-    context.handle(_groupAuthoritiesMeta, const VerificationResult.success());
     return context;
   }
 
@@ -3188,8 +3177,6 @@ class $ChatMessageSyncCursorTableTable extends ChatMessageSyncCursorTable
       requiredDuringInsert: true,
       defaultConstraints: GeneratedColumn.constraintIsAlways(
           'REFERENCES chats (id) ON DELETE CASCADE'));
-  static const VerificationMeta _cursorTypeMeta =
-      const VerificationMeta('cursorType');
   @override
   late final GeneratedColumnWithTypeConverter<MessageSyncCursorTypeEnum, String>
       cursorType = GeneratedColumn<String>('cursor_type', aliasedName, false,
@@ -3221,7 +3208,6 @@ class $ChatMessageSyncCursorTableTable extends ChatMessageSyncCursorTable
     } else if (isInserting) {
       context.missing(_chatIdMeta);
     }
-    context.handle(_cursorTypeMeta, const VerificationResult.success());
     if (data.containsKey('timestamp_usec')) {
       context.handle(
           _timestampUsecMeta,
@@ -5302,8 +5288,6 @@ class $SmsMessagesTableTable extends SmsMessagesTable
   late final GeneratedColumn<String> toPhoneNumber = GeneratedColumn<String>(
       'to_phone_number', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _sendingStatusMeta =
-      const VerificationMeta('sendingStatus');
   @override
   late final GeneratedColumnWithTypeConverter<SmsSendingStatusEnum, String>
       sendingStatus = GeneratedColumn<String>(
@@ -5398,7 +5382,6 @@ class $SmsMessagesTableTable extends SmsMessagesTable
     } else if (isInserting) {
       context.missing(_toPhoneNumberMeta);
     }
-    context.handle(_sendingStatusMeta, const VerificationResult.success());
     if (data.containsKey('content')) {
       context.handle(_contentMeta,
           content.isAcceptableOrUnknown(data['content']!, _contentMeta));
@@ -5864,8 +5847,6 @@ class $SmsMessageSyncCursorTableTable extends SmsMessageSyncCursorTable
       requiredDuringInsert: true,
       defaultConstraints: GeneratedColumn.constraintIsAlways(
           'REFERENCES sms_conversations (id) ON DELETE CASCADE'));
-  static const VerificationMeta _cursorTypeMeta =
-      const VerificationMeta('cursorType');
   @override
   late final GeneratedColumnWithTypeConverter<SmsSyncCursorTypeEnum, String>
       cursorType = GeneratedColumn<String>('cursor_type', aliasedName, false,
@@ -5900,7 +5881,6 @@ class $SmsMessageSyncCursorTableTable extends SmsMessageSyncCursorTable
     } else if (isInserting) {
       context.missing(_conversationIdMeta);
     }
-    context.handle(_cursorTypeMeta, const VerificationResult.success());
     if (data.containsKey('timestamp_usec')) {
       context.handle(
           _timestampUsecMeta,
@@ -8298,7 +8278,6 @@ class $SystemNotificationsTableTable extends SystemNotificationsTable
   late final GeneratedColumn<String> content = GeneratedColumn<String>(
       'content', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _typeMeta = const VerificationMeta('type');
   @override
   late final GeneratedColumnWithTypeConverter<SystemNotificationType, String>
       type = GeneratedColumn<String>('type', aliasedName, false,
@@ -8361,7 +8340,6 @@ class $SystemNotificationsTableTable extends SystemNotificationsTable
     } else if (isInserting) {
       context.missing(_contentMeta);
     }
-    context.handle(_typeMeta, const VerificationResult.success());
     if (data.containsKey('seen')) {
       context.handle(
           _seenMeta, seen.isAcceptableOrUnknown(data['seen']!, _seenMeta));
@@ -8695,15 +8673,12 @@ class $SystemNotificationsOutboxTableTable
       requiredDuringInsert: true,
       defaultConstraints: GeneratedColumn.constraintIsAlways(
           'REFERENCES system_notifications (id) ON DELETE CASCADE'));
-  static const VerificationMeta _actionTypeMeta =
-      const VerificationMeta('actionType');
   @override
   late final GeneratedColumnWithTypeConverter<SnOutboxDataActionType, String>
       actionType = GeneratedColumn<String>('action_type', aliasedName, false,
               type: DriftSqlType.string, requiredDuringInsert: true)
           .withConverter<SnOutboxDataActionType>(
               $SystemNotificationsOutboxTableTable.$converteractionType);
-  static const VerificationMeta _stateMeta = const VerificationMeta('state');
   @override
   late final GeneratedColumnWithTypeConverter<SnOutboxDataState, String> state =
       GeneratedColumn<String>('state', aliasedName, false,
@@ -8740,8 +8715,6 @@ class $SystemNotificationsOutboxTableTable
     } else if (isInserting) {
       context.missing(_notificationIdMeta);
     }
-    context.handle(_actionTypeMeta, const VerificationResult.success());
-    context.handle(_stateMeta, const VerificationResult.success());
     if (data.containsKey('send_attempts')) {
       context.handle(
           _sendAttemptsMeta,
@@ -8988,6 +8961,495 @@ class SystemNotificationOutboxEntryDataCompanion
   }
 }
 
+class $PresenceInfoTableTable extends PresenceInfoTable
+    with TableInfo<$PresenceInfoTableTable, PresenceInfoData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $PresenceInfoTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idKeyMeta = const VerificationMeta('idKey');
+  @override
+  late final GeneratedColumn<String> idKey = GeneratedColumn<String>(
+      'id_key', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _numberMeta = const VerificationMeta('number');
+  @override
+  late final GeneratedColumn<String> number = GeneratedColumn<String>(
+      'number', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _availableMeta =
+      const VerificationMeta('available');
+  @override
+  late final GeneratedColumn<bool> available = GeneratedColumn<bool>(
+      'available', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: true,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("available" IN (0, 1))'));
+  static const VerificationMeta _noteMeta = const VerificationMeta('note');
+  @override
+  late final GeneratedColumn<String> note = GeneratedColumn<String>(
+      'note', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _statusIconMeta =
+      const VerificationMeta('statusIcon');
+  @override
+  late final GeneratedColumn<String> statusIcon = GeneratedColumn<String>(
+      'status_icon', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _deviceMeta = const VerificationMeta('device');
+  @override
+  late final GeneratedColumn<String> device = GeneratedColumn<String>(
+      'device', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _timeOffsetMinMeta =
+      const VerificationMeta('timeOffsetMin');
+  @override
+  late final GeneratedColumn<int> timeOffsetMin = GeneratedColumn<int>(
+      'time_offset_min', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
+  static const VerificationMeta _timestampUsecMeta =
+      const VerificationMeta('timestampUsec');
+  @override
+  late final GeneratedColumn<int> timestampUsec = GeneratedColumn<int>(
+      'timestamp_usec', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
+  static const VerificationMeta _activitiesJsonMeta =
+      const VerificationMeta('activitiesJson');
+  @override
+  late final GeneratedColumn<String> activitiesJson = GeneratedColumn<String>(
+      'activities_json', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns => [
+        idKey,
+        number,
+        available,
+        note,
+        statusIcon,
+        device,
+        timeOffsetMin,
+        timestampUsec,
+        activitiesJson
+      ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'presence_info';
+  @override
+  VerificationContext validateIntegrity(Insertable<PresenceInfoData> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id_key')) {
+      context.handle(
+          _idKeyMeta, idKey.isAcceptableOrUnknown(data['id_key']!, _idKeyMeta));
+    } else if (isInserting) {
+      context.missing(_idKeyMeta);
+    }
+    if (data.containsKey('number')) {
+      context.handle(_numberMeta,
+          number.isAcceptableOrUnknown(data['number']!, _numberMeta));
+    } else if (isInserting) {
+      context.missing(_numberMeta);
+    }
+    if (data.containsKey('available')) {
+      context.handle(_availableMeta,
+          available.isAcceptableOrUnknown(data['available']!, _availableMeta));
+    } else if (isInserting) {
+      context.missing(_availableMeta);
+    }
+    if (data.containsKey('note')) {
+      context.handle(
+          _noteMeta, note.isAcceptableOrUnknown(data['note']!, _noteMeta));
+    } else if (isInserting) {
+      context.missing(_noteMeta);
+    }
+    if (data.containsKey('status_icon')) {
+      context.handle(
+          _statusIconMeta,
+          statusIcon.isAcceptableOrUnknown(
+              data['status_icon']!, _statusIconMeta));
+    }
+    if (data.containsKey('device')) {
+      context.handle(_deviceMeta,
+          device.isAcceptableOrUnknown(data['device']!, _deviceMeta));
+    }
+    if (data.containsKey('time_offset_min')) {
+      context.handle(
+          _timeOffsetMinMeta,
+          timeOffsetMin.isAcceptableOrUnknown(
+              data['time_offset_min']!, _timeOffsetMinMeta));
+    }
+    if (data.containsKey('timestamp_usec')) {
+      context.handle(
+          _timestampUsecMeta,
+          timestampUsec.isAcceptableOrUnknown(
+              data['timestamp_usec']!, _timestampUsecMeta));
+    }
+    if (data.containsKey('activities_json')) {
+      context.handle(
+          _activitiesJsonMeta,
+          activitiesJson.isAcceptableOrUnknown(
+              data['activities_json']!, _activitiesJsonMeta));
+    } else if (isInserting) {
+      context.missing(_activitiesJsonMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {idKey};
+  @override
+  PresenceInfoData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return PresenceInfoData(
+      idKey: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}id_key'])!,
+      number: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}number'])!,
+      available: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}available'])!,
+      note: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}note'])!,
+      statusIcon: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}status_icon']),
+      device: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}device']),
+      timeOffsetMin: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}time_offset_min']),
+      timestampUsec: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}timestamp_usec']),
+      activitiesJson: attachedDatabase.typeMapping.read(
+          DriftSqlType.string, data['${effectivePrefix}activities_json'])!,
+    );
+  }
+
+  @override
+  $PresenceInfoTableTable createAlias(String alias) {
+    return $PresenceInfoTableTable(attachedDatabase, alias);
+  }
+}
+
+class PresenceInfoData extends DataClass
+    implements Insertable<PresenceInfoData> {
+  final String idKey;
+  final String number;
+  final bool available;
+  final String note;
+  final String? statusIcon;
+  final String? device;
+  final int? timeOffsetMin;
+  final int? timestampUsec;
+  final String activitiesJson;
+  const PresenceInfoData(
+      {required this.idKey,
+      required this.number,
+      required this.available,
+      required this.note,
+      this.statusIcon,
+      this.device,
+      this.timeOffsetMin,
+      this.timestampUsec,
+      required this.activitiesJson});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id_key'] = Variable<String>(idKey);
+    map['number'] = Variable<String>(number);
+    map['available'] = Variable<bool>(available);
+    map['note'] = Variable<String>(note);
+    if (!nullToAbsent || statusIcon != null) {
+      map['status_icon'] = Variable<String>(statusIcon);
+    }
+    if (!nullToAbsent || device != null) {
+      map['device'] = Variable<String>(device);
+    }
+    if (!nullToAbsent || timeOffsetMin != null) {
+      map['time_offset_min'] = Variable<int>(timeOffsetMin);
+    }
+    if (!nullToAbsent || timestampUsec != null) {
+      map['timestamp_usec'] = Variable<int>(timestampUsec);
+    }
+    map['activities_json'] = Variable<String>(activitiesJson);
+    return map;
+  }
+
+  PresenceInfoDataCompanion toCompanion(bool nullToAbsent) {
+    return PresenceInfoDataCompanion(
+      idKey: Value(idKey),
+      number: Value(number),
+      available: Value(available),
+      note: Value(note),
+      statusIcon: statusIcon == null && nullToAbsent
+          ? const Value.absent()
+          : Value(statusIcon),
+      device:
+          device == null && nullToAbsent ? const Value.absent() : Value(device),
+      timeOffsetMin: timeOffsetMin == null && nullToAbsent
+          ? const Value.absent()
+          : Value(timeOffsetMin),
+      timestampUsec: timestampUsec == null && nullToAbsent
+          ? const Value.absent()
+          : Value(timestampUsec),
+      activitiesJson: Value(activitiesJson),
+    );
+  }
+
+  factory PresenceInfoData.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return PresenceInfoData(
+      idKey: serializer.fromJson<String>(json['idKey']),
+      number: serializer.fromJson<String>(json['number']),
+      available: serializer.fromJson<bool>(json['available']),
+      note: serializer.fromJson<String>(json['note']),
+      statusIcon: serializer.fromJson<String?>(json['statusIcon']),
+      device: serializer.fromJson<String?>(json['device']),
+      timeOffsetMin: serializer.fromJson<int?>(json['timeOffsetMin']),
+      timestampUsec: serializer.fromJson<int?>(json['timestampUsec']),
+      activitiesJson: serializer.fromJson<String>(json['activitiesJson']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'idKey': serializer.toJson<String>(idKey),
+      'number': serializer.toJson<String>(number),
+      'available': serializer.toJson<bool>(available),
+      'note': serializer.toJson<String>(note),
+      'statusIcon': serializer.toJson<String?>(statusIcon),
+      'device': serializer.toJson<String?>(device),
+      'timeOffsetMin': serializer.toJson<int?>(timeOffsetMin),
+      'timestampUsec': serializer.toJson<int?>(timestampUsec),
+      'activitiesJson': serializer.toJson<String>(activitiesJson),
+    };
+  }
+
+  PresenceInfoData copyWith(
+          {String? idKey,
+          String? number,
+          bool? available,
+          String? note,
+          Value<String?> statusIcon = const Value.absent(),
+          Value<String?> device = const Value.absent(),
+          Value<int?> timeOffsetMin = const Value.absent(),
+          Value<int?> timestampUsec = const Value.absent(),
+          String? activitiesJson}) =>
+      PresenceInfoData(
+        idKey: idKey ?? this.idKey,
+        number: number ?? this.number,
+        available: available ?? this.available,
+        note: note ?? this.note,
+        statusIcon: statusIcon.present ? statusIcon.value : this.statusIcon,
+        device: device.present ? device.value : this.device,
+        timeOffsetMin:
+            timeOffsetMin.present ? timeOffsetMin.value : this.timeOffsetMin,
+        timestampUsec:
+            timestampUsec.present ? timestampUsec.value : this.timestampUsec,
+        activitiesJson: activitiesJson ?? this.activitiesJson,
+      );
+  PresenceInfoData copyWithCompanion(PresenceInfoDataCompanion data) {
+    return PresenceInfoData(
+      idKey: data.idKey.present ? data.idKey.value : this.idKey,
+      number: data.number.present ? data.number.value : this.number,
+      available: data.available.present ? data.available.value : this.available,
+      note: data.note.present ? data.note.value : this.note,
+      statusIcon:
+          data.statusIcon.present ? data.statusIcon.value : this.statusIcon,
+      device: data.device.present ? data.device.value : this.device,
+      timeOffsetMin: data.timeOffsetMin.present
+          ? data.timeOffsetMin.value
+          : this.timeOffsetMin,
+      timestampUsec: data.timestampUsec.present
+          ? data.timestampUsec.value
+          : this.timestampUsec,
+      activitiesJson: data.activitiesJson.present
+          ? data.activitiesJson.value
+          : this.activitiesJson,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('PresenceInfoData(')
+          ..write('idKey: $idKey, ')
+          ..write('number: $number, ')
+          ..write('available: $available, ')
+          ..write('note: $note, ')
+          ..write('statusIcon: $statusIcon, ')
+          ..write('device: $device, ')
+          ..write('timeOffsetMin: $timeOffsetMin, ')
+          ..write('timestampUsec: $timestampUsec, ')
+          ..write('activitiesJson: $activitiesJson')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(idKey, number, available, note, statusIcon,
+      device, timeOffsetMin, timestampUsec, activitiesJson);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is PresenceInfoData &&
+          other.idKey == this.idKey &&
+          other.number == this.number &&
+          other.available == this.available &&
+          other.note == this.note &&
+          other.statusIcon == this.statusIcon &&
+          other.device == this.device &&
+          other.timeOffsetMin == this.timeOffsetMin &&
+          other.timestampUsec == this.timestampUsec &&
+          other.activitiesJson == this.activitiesJson);
+}
+
+class PresenceInfoDataCompanion extends UpdateCompanion<PresenceInfoData> {
+  final Value<String> idKey;
+  final Value<String> number;
+  final Value<bool> available;
+  final Value<String> note;
+  final Value<String?> statusIcon;
+  final Value<String?> device;
+  final Value<int?> timeOffsetMin;
+  final Value<int?> timestampUsec;
+  final Value<String> activitiesJson;
+  final Value<int> rowid;
+  const PresenceInfoDataCompanion({
+    this.idKey = const Value.absent(),
+    this.number = const Value.absent(),
+    this.available = const Value.absent(),
+    this.note = const Value.absent(),
+    this.statusIcon = const Value.absent(),
+    this.device = const Value.absent(),
+    this.timeOffsetMin = const Value.absent(),
+    this.timestampUsec = const Value.absent(),
+    this.activitiesJson = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  PresenceInfoDataCompanion.insert({
+    required String idKey,
+    required String number,
+    required bool available,
+    required String note,
+    this.statusIcon = const Value.absent(),
+    this.device = const Value.absent(),
+    this.timeOffsetMin = const Value.absent(),
+    this.timestampUsec = const Value.absent(),
+    required String activitiesJson,
+    this.rowid = const Value.absent(),
+  })  : idKey = Value(idKey),
+        number = Value(number),
+        available = Value(available),
+        note = Value(note),
+        activitiesJson = Value(activitiesJson);
+  static Insertable<PresenceInfoData> custom({
+    Expression<String>? idKey,
+    Expression<String>? number,
+    Expression<bool>? available,
+    Expression<String>? note,
+    Expression<String>? statusIcon,
+    Expression<String>? device,
+    Expression<int>? timeOffsetMin,
+    Expression<int>? timestampUsec,
+    Expression<String>? activitiesJson,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (idKey != null) 'id_key': idKey,
+      if (number != null) 'number': number,
+      if (available != null) 'available': available,
+      if (note != null) 'note': note,
+      if (statusIcon != null) 'status_icon': statusIcon,
+      if (device != null) 'device': device,
+      if (timeOffsetMin != null) 'time_offset_min': timeOffsetMin,
+      if (timestampUsec != null) 'timestamp_usec': timestampUsec,
+      if (activitiesJson != null) 'activities_json': activitiesJson,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  PresenceInfoDataCompanion copyWith(
+      {Value<String>? idKey,
+      Value<String>? number,
+      Value<bool>? available,
+      Value<String>? note,
+      Value<String?>? statusIcon,
+      Value<String?>? device,
+      Value<int?>? timeOffsetMin,
+      Value<int?>? timestampUsec,
+      Value<String>? activitiesJson,
+      Value<int>? rowid}) {
+    return PresenceInfoDataCompanion(
+      idKey: idKey ?? this.idKey,
+      number: number ?? this.number,
+      available: available ?? this.available,
+      note: note ?? this.note,
+      statusIcon: statusIcon ?? this.statusIcon,
+      device: device ?? this.device,
+      timeOffsetMin: timeOffsetMin ?? this.timeOffsetMin,
+      timestampUsec: timestampUsec ?? this.timestampUsec,
+      activitiesJson: activitiesJson ?? this.activitiesJson,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (idKey.present) {
+      map['id_key'] = Variable<String>(idKey.value);
+    }
+    if (number.present) {
+      map['number'] = Variable<String>(number.value);
+    }
+    if (available.present) {
+      map['available'] = Variable<bool>(available.value);
+    }
+    if (note.present) {
+      map['note'] = Variable<String>(note.value);
+    }
+    if (statusIcon.present) {
+      map['status_icon'] = Variable<String>(statusIcon.value);
+    }
+    if (device.present) {
+      map['device'] = Variable<String>(device.value);
+    }
+    if (timeOffsetMin.present) {
+      map['time_offset_min'] = Variable<int>(timeOffsetMin.value);
+    }
+    if (timestampUsec.present) {
+      map['timestamp_usec'] = Variable<int>(timestampUsec.value);
+    }
+    if (activitiesJson.present) {
+      map['activities_json'] = Variable<String>(activitiesJson.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('PresenceInfoDataCompanion(')
+          ..write('idKey: $idKey, ')
+          ..write('number: $number, ')
+          ..write('available: $available, ')
+          ..write('note: $note, ')
+          ..write('statusIcon: $statusIcon, ')
+          ..write('device: $device, ')
+          ..write('timeOffsetMin: $timeOffsetMin, ')
+          ..write('timestampUsec: $timestampUsec, ')
+          ..write('activitiesJson: $activitiesJson, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -9040,6 +9502,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $SystemNotificationsOutboxTableTable
       systemNotificationsOutboxTable =
       $SystemNotificationsOutboxTableTable(this);
+  late final $PresenceInfoTableTable presenceInfoTable =
+      $PresenceInfoTableTable(this);
   late final ContactsDao contactsDao = ContactsDao(this as AppDatabase);
   late final ContactPhonesDao contactPhonesDao =
       ContactPhonesDao(this as AppDatabase);
@@ -9055,6 +9519,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final VoicemailDao voicemailDao = VoicemailDao(this as AppDatabase);
   late final SystemNotificationsDao systemNotificationsDao =
       SystemNotificationsDao(this as AppDatabase);
+  late final PresenceInfoDao presenceInfoDao =
+      PresenceInfoDao(this as AppDatabase);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -9085,7 +9551,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
         activeMessageNotificationsTable,
         voicemailTable,
         systemNotificationsTable,
-        systemNotificationsOutboxTable
+        systemNotificationsOutboxTable,
+        presenceInfoTable
       ];
   @override
   StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules(
@@ -10232,7 +10699,7 @@ final class $$ChatsTableTableReferences
   $$ChatMembersTableTableProcessedTableManager get chatMembersTableRefs {
     final manager =
         $$ChatMembersTableTableTableManager($_db, $_db.chatMembersTable)
-            .filter((f) => f.chatId.id($_item.id));
+            .filter((f) => f.chatId.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache =
         $_typedResult.readTableOrNull(_chatMembersTableRefsTable($_db));
@@ -10249,7 +10716,7 @@ final class $$ChatsTableTableReferences
   $$ChatMessagesTableTableProcessedTableManager get chatMessagesTableRefs {
     final manager =
         $$ChatMessagesTableTableTableManager($_db, $_db.chatMessagesTable)
-            .filter((f) => f.chatId.id($_item.id));
+            .filter((f) => f.chatId.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache =
         $_typedResult.readTableOrNull(_chatMessagesTableRefsTable($_db));
@@ -10268,7 +10735,7 @@ final class $$ChatsTableTableReferences
       get chatMessageSyncCursorTableRefs {
     final manager = $$ChatMessageSyncCursorTableTableTableManager(
             $_db, $_db.chatMessageSyncCursorTable)
-        .filter((f) => f.chatId.id($_item.id));
+        .filter((f) => f.chatId.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache = $_typedResult
         .readTableOrNull(_chatMessageSyncCursorTableRefsTable($_db));
@@ -10287,7 +10754,7 @@ final class $$ChatsTableTableReferences
       get chatMessageReadCursorTableRefs {
     final manager = $$ChatMessageReadCursorTableTableTableManager(
             $_db, $_db.chatMessageReadCursorTable)
-        .filter((f) => f.chatId.id($_item.id));
+        .filter((f) => f.chatId.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache = $_typedResult
         .readTableOrNull(_chatMessageReadCursorTableRefsTable($_db));
@@ -10306,7 +10773,7 @@ final class $$ChatsTableTableReferences
       get chatOutboxMessageTableRefs {
     final manager = $$ChatOutboxMessageTableTableTableManager(
             $_db, $_db.chatOutboxMessageTable)
-        .filter((f) => f.chatId.id($_item.id));
+        .filter((f) => f.chatId.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache =
         $_typedResult.readTableOrNull(_chatOutboxMessageTableRefsTable($_db));
@@ -10325,7 +10792,7 @@ final class $$ChatsTableTableReferences
       get chatOutboxMessageEditTableRefs {
     final manager = $$ChatOutboxMessageEditTableTableTableManager(
             $_db, $_db.chatOutboxMessageEditTable)
-        .filter((f) => f.chatId.id($_item.id));
+        .filter((f) => f.chatId.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache = $_typedResult
         .readTableOrNull(_chatOutboxMessageEditTableRefsTable($_db));
@@ -10344,7 +10811,7 @@ final class $$ChatsTableTableReferences
       get chatOutboxMessageDeleteTableRefs {
     final manager = $$ChatOutboxMessageDeleteTableTableTableManager(
             $_db, $_db.chatOutboxMessageDeleteTable)
-        .filter((f) => f.chatId.id($_item.id));
+        .filter((f) => f.chatId.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache = $_typedResult
         .readTableOrNull(_chatOutboxMessageDeleteTableRefsTable($_db));
@@ -10363,7 +10830,7 @@ final class $$ChatsTableTableReferences
       get chatOutboxReadCursorsTableRefs {
     final manager = $$ChatOutboxReadCursorsTableTableTableManager(
             $_db, $_db.chatOutboxReadCursorsTable)
-        .filter((f) => f.chatId.id($_item.id));
+        .filter((f) => f.chatId.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache = $_typedResult
         .readTableOrNull(_chatOutboxReadCursorsTableRefsTable($_db));
@@ -10918,7 +11385,8 @@ class $$ChatsTableTableTableManager extends RootTableManager<
               getPrefetchedDataCallback: (items) async {
                 return [
                   if (chatMembersTableRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<ChatData, $ChatsTableTable,
+                            ChatMemberData>(
                         currentTable: table,
                         referencedTable: $$ChatsTableTableReferences
                             ._chatMembersTableRefsTable(db),
@@ -10930,7 +11398,8 @@ class $$ChatsTableTableTableManager extends RootTableManager<
                             referencedItems.where((e) => e.chatId == item.id),
                         typedResults: items),
                   if (chatMessagesTableRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<ChatData, $ChatsTableTable,
+                            ChatMessageData>(
                         currentTable: table,
                         referencedTable: $$ChatsTableTableReferences
                             ._chatMessagesTableRefsTable(db),
@@ -10942,7 +11411,8 @@ class $$ChatsTableTableTableManager extends RootTableManager<
                             referencedItems.where((e) => e.chatId == item.id),
                         typedResults: items),
                   if (chatMessageSyncCursorTableRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<ChatData, $ChatsTableTable,
+                            ChatMessageSyncCursorData>(
                         currentTable: table,
                         referencedTable: $$ChatsTableTableReferences
                             ._chatMessageSyncCursorTableRefsTable(db),
@@ -10954,7 +11424,8 @@ class $$ChatsTableTableTableManager extends RootTableManager<
                             referencedItems.where((e) => e.chatId == item.id),
                         typedResults: items),
                   if (chatMessageReadCursorTableRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<ChatData, $ChatsTableTable,
+                            ChatMessageReadCursorData>(
                         currentTable: table,
                         referencedTable: $$ChatsTableTableReferences
                             ._chatMessageReadCursorTableRefsTable(db),
@@ -10966,7 +11437,7 @@ class $$ChatsTableTableTableManager extends RootTableManager<
                             referencedItems.where((e) => e.chatId == item.id),
                         typedResults: items),
                   if (chatOutboxMessageTableRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<ChatData, $ChatsTableTable, ChatOutboxMessageData>(
                         currentTable: table,
                         referencedTable: $$ChatsTableTableReferences
                             ._chatOutboxMessageTableRefsTable(db),
@@ -10978,7 +11449,8 @@ class $$ChatsTableTableTableManager extends RootTableManager<
                             referencedItems.where((e) => e.chatId == item.id),
                         typedResults: items),
                   if (chatOutboxMessageEditTableRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<ChatData, $ChatsTableTable,
+                            ChatOutboxMessageEditData>(
                         currentTable: table,
                         referencedTable: $$ChatsTableTableReferences
                             ._chatOutboxMessageEditTableRefsTable(db),
@@ -10990,7 +11462,8 @@ class $$ChatsTableTableTableManager extends RootTableManager<
                             referencedItems.where((e) => e.chatId == item.id),
                         typedResults: items),
                   if (chatOutboxMessageDeleteTableRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<ChatData, $ChatsTableTable,
+                            ChatOutboxMessageDeleteData>(
                         currentTable: table,
                         referencedTable: $$ChatsTableTableReferences
                             ._chatOutboxMessageDeleteTableRefsTable(db),
@@ -11002,7 +11475,8 @@ class $$ChatsTableTableTableManager extends RootTableManager<
                             referencedItems.where((e) => e.chatId == item.id),
                         typedResults: items),
                   if (chatOutboxReadCursorsTableRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<ChatData, $ChatsTableTable,
+                            ChatOutboxReadCursorData>(
                         currentTable: table,
                         referencedTable: $$ChatsTableTableReferences
                             ._chatOutboxReadCursorsTableRefsTable(db),
@@ -11064,10 +11538,11 @@ final class $$ChatMembersTableTableReferences extends BaseReferences<
       db.chatsTable.createAlias(
           $_aliasNameGenerator(db.chatMembersTable.chatId, db.chatsTable.id));
 
-  $$ChatsTableTableProcessedTableManager? get chatId {
-    if ($_item.chatId == null) return null;
+  $$ChatsTableTableProcessedTableManager get chatId {
+    final $_column = $_itemColumn<int>('chat_id')!;
+
     final manager = $$ChatsTableTableTableManager($_db, $_db.chatsTable)
-        .filter((f) => f.id($_item.chatId!));
+        .filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_chatIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -11342,10 +11817,11 @@ final class $$ChatMessagesTableTableReferences extends BaseReferences<
       db.chatsTable.createAlias(
           $_aliasNameGenerator(db.chatMessagesTable.chatId, db.chatsTable.id));
 
-  $$ChatsTableTableProcessedTableManager? get chatId {
-    if ($_item.chatId == null) return null;
+  $$ChatsTableTableProcessedTableManager get chatId {
+    final $_column = $_itemColumn<int>('chat_id')!;
+
     final manager = $$ChatsTableTableTableManager($_db, $_db.chatsTable)
-        .filter((f) => f.id($_item.chatId!));
+        .filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_chatIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -11713,10 +12189,11 @@ final class $$ChatMessageSyncCursorTableTableReferences extends BaseReferences<
       db.chatsTable.createAlias($_aliasNameGenerator(
           db.chatMessageSyncCursorTable.chatId, db.chatsTable.id));
 
-  $$ChatsTableTableProcessedTableManager? get chatId {
-    if ($_item.chatId == null) return null;
+  $$ChatsTableTableProcessedTableManager get chatId {
+    final $_column = $_itemColumn<int>('chat_id')!;
+
     final manager = $$ChatsTableTableTableManager($_db, $_db.chatsTable)
-        .filter((f) => f.id($_item.chatId!));
+        .filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_chatIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -11975,10 +12452,11 @@ final class $$ChatMessageReadCursorTableTableReferences extends BaseReferences<
       db.chatsTable.createAlias($_aliasNameGenerator(
           db.chatMessageReadCursorTable.chatId, db.chatsTable.id));
 
-  $$ChatsTableTableProcessedTableManager? get chatId {
-    if ($_item.chatId == null) return null;
+  $$ChatsTableTableProcessedTableManager get chatId {
+    final $_column = $_itemColumn<int>('chat_id')!;
+
     final manager = $$ChatsTableTableTableManager($_db, $_db.chatsTable)
-        .filter((f) => f.id($_item.chatId!));
+        .filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_chatIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -12242,9 +12720,10 @@ final class $$ChatOutboxMessageTableTableReferences extends BaseReferences<
           db.chatOutboxMessageTable.chatId, db.chatsTable.id));
 
   $$ChatsTableTableProcessedTableManager? get chatId {
-    if ($_item.chatId == null) return null;
+    final $_column = $_itemColumn<int>('chat_id');
+    if ($_column == null) return null;
     final manager = $$ChatsTableTableTableManager($_db, $_db.chatsTable)
-        .filter((f) => f.id($_item.chatId!));
+        .filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_chatIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -12564,10 +13043,11 @@ final class $$ChatOutboxMessageEditTableTableReferences extends BaseReferences<
       db.chatsTable.createAlias($_aliasNameGenerator(
           db.chatOutboxMessageEditTable.chatId, db.chatsTable.id));
 
-  $$ChatsTableTableProcessedTableManager? get chatId {
-    if ($_item.chatId == null) return null;
+  $$ChatsTableTableProcessedTableManager get chatId {
+    final $_column = $_itemColumn<int>('chat_id')!;
+
     final manager = $$ChatsTableTableTableManager($_db, $_db.chatsTable)
-        .filter((f) => f.id($_item.chatId!));
+        .filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_chatIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -12843,10 +13323,11 @@ final class $$ChatOutboxMessageDeleteTableTableReferences
       db.chatsTable.createAlias($_aliasNameGenerator(
           db.chatOutboxMessageDeleteTable.chatId, db.chatsTable.id));
 
-  $$ChatsTableTableProcessedTableManager? get chatId {
-    if ($_item.chatId == null) return null;
+  $$ChatsTableTableProcessedTableManager get chatId {
+    final $_column = $_itemColumn<int>('chat_id')!;
+
     final manager = $$ChatsTableTableTableManager($_db, $_db.chatsTable)
-        .filter((f) => f.id($_item.chatId!));
+        .filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_chatIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -13110,10 +13591,11 @@ final class $$ChatOutboxReadCursorsTableTableReferences extends BaseReferences<
       db.chatsTable.createAlias($_aliasNameGenerator(
           db.chatOutboxReadCursorsTable.chatId, db.chatsTable.id));
 
-  $$ChatsTableTableProcessedTableManager? get chatId {
-    if ($_item.chatId == null) return null;
+  $$ChatsTableTableProcessedTableManager get chatId {
+    final $_column = $_itemColumn<int>('chat_id')!;
+
     final manager = $$ChatsTableTableTableManager($_db, $_db.chatsTable)
-        .filter((f) => f.id($_item.chatId!));
+        .filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_chatIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -13365,9 +13847,9 @@ final class $$SmsConversationsTableTableReferences extends BaseReferences<
                   db.smsMessagesTable.conversationId));
 
   $$SmsMessagesTableTableProcessedTableManager get smsMessagesTableRefs {
-    final manager =
-        $$SmsMessagesTableTableTableManager($_db, $_db.smsMessagesTable)
-            .filter((f) => f.conversationId.id($_item.id));
+    final manager = $$SmsMessagesTableTableTableManager(
+            $_db, $_db.smsMessagesTable)
+        .filter((f) => f.conversationId.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache =
         $_typedResult.readTableOrNull(_smsMessagesTableRefsTable($_db));
@@ -13386,7 +13868,7 @@ final class $$SmsConversationsTableTableReferences extends BaseReferences<
       get smsMessageSyncCursorTableRefs {
     final manager = $$SmsMessageSyncCursorTableTableTableManager(
             $_db, $_db.smsMessageSyncCursorTable)
-        .filter((f) => f.conversationId.id($_item.id));
+        .filter((f) => f.conversationId.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache = $_typedResult
         .readTableOrNull(_smsMessageSyncCursorTableRefsTable($_db));
@@ -13405,7 +13887,7 @@ final class $$SmsConversationsTableTableReferences extends BaseReferences<
       get smsMessageReadCursorTableRefs {
     final manager = $$SmsMessageReadCursorTableTableTableManager(
             $_db, $_db.smsMessageReadCursorTable)
-        .filter((f) => f.conversationId.id($_item.id));
+        .filter((f) => f.conversationId.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache = $_typedResult
         .readTableOrNull(_smsMessageReadCursorTableRefsTable($_db));
@@ -13424,7 +13906,7 @@ final class $$SmsConversationsTableTableReferences extends BaseReferences<
       get smsOutboxMessagesTableRefs {
     final manager = $$SmsOutboxMessagesTableTableTableManager(
             $_db, $_db.smsOutboxMessagesTable)
-        .filter((f) => f.conversationId.id($_item.id));
+        .filter((f) => f.conversationId.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache =
         $_typedResult.readTableOrNull(_smsOutboxMessagesTableRefsTable($_db));
@@ -13443,7 +13925,7 @@ final class $$SmsConversationsTableTableReferences extends BaseReferences<
       get smsOutboxMessageDeleteTableRefs {
     final manager = $$SmsOutboxMessageDeleteTableTableTableManager(
             $_db, $_db.smsOutboxMessageDeleteTable)
-        .filter((f) => f.conversationId.id($_item.id));
+        .filter((f) => f.conversationId.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache = $_typedResult
         .readTableOrNull(_smsOutboxMessageDeleteTableRefsTable($_db));
@@ -13462,7 +13944,7 @@ final class $$SmsConversationsTableTableReferences extends BaseReferences<
       get smsOutboxReadCursorsTableRefs {
     final manager = $$SmsOutboxReadCursorsTableTableTableManager(
             $_db, $_db.smsOutboxReadCursorsTable)
-        .filter((f) => f.conversationId.id($_item.id));
+        .filter((f) => f.conversationId.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache = $_typedResult
         .readTableOrNull(_smsOutboxReadCursorsTableRefsTable($_db));
@@ -13922,7 +14404,8 @@ class $$SmsConversationsTableTableTableManager extends RootTableManager<
               getPrefetchedDataCallback: (items) async {
                 return [
                   if (smsMessagesTableRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<SmsConversationData,
+                            $SmsConversationsTableTable, SmsMessageData>(
                         currentTable: table,
                         referencedTable: $$SmsConversationsTableTableReferences
                             ._smsMessagesTableRefsTable(db),
@@ -13935,7 +14418,10 @@ class $$SmsConversationsTableTableTableManager extends RootTableManager<
                                 .where((e) => e.conversationId == item.id),
                         typedResults: items),
                   if (smsMessageSyncCursorTableRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<
+                            SmsConversationData,
+                            $SmsConversationsTableTable,
+                            SmsMessageSyncCursorData>(
                         currentTable: table,
                         referencedTable: $$SmsConversationsTableTableReferences
                             ._smsMessageSyncCursorTableRefsTable(db),
@@ -13948,7 +14434,10 @@ class $$SmsConversationsTableTableTableManager extends RootTableManager<
                                 .where((e) => e.conversationId == item.id),
                         typedResults: items),
                   if (smsMessageReadCursorTableRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<
+                            SmsConversationData,
+                            $SmsConversationsTableTable,
+                            SmsMessageReadCursorData>(
                         currentTable: table,
                         referencedTable: $$SmsConversationsTableTableReferences
                             ._smsMessageReadCursorTableRefsTable(db),
@@ -13961,7 +14450,8 @@ class $$SmsConversationsTableTableTableManager extends RootTableManager<
                                 .where((e) => e.conversationId == item.id),
                         typedResults: items),
                   if (smsOutboxMessagesTableRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<SmsConversationData,
+                            $SmsConversationsTableTable, SmsOutboxMessageData>(
                         currentTable: table,
                         referencedTable: $$SmsConversationsTableTableReferences
                             ._smsOutboxMessagesTableRefsTable(db),
@@ -13974,7 +14464,10 @@ class $$SmsConversationsTableTableTableManager extends RootTableManager<
                                 .where((e) => e.conversationId == item.id),
                         typedResults: items),
                   if (smsOutboxMessageDeleteTableRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<
+                            SmsConversationData,
+                            $SmsConversationsTableTable,
+                            SmsOutboxMessageDeleteData>(
                         currentTable: table,
                         referencedTable: $$SmsConversationsTableTableReferences
                             ._smsOutboxMessageDeleteTableRefsTable(db),
@@ -13987,7 +14480,10 @@ class $$SmsConversationsTableTableTableManager extends RootTableManager<
                                 .where((e) => e.conversationId == item.id),
                         typedResults: items),
                   if (smsOutboxReadCursorsTableRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<
+                            SmsConversationData,
+                            $SmsConversationsTableTable,
+                            SmsOutboxReadCursorData>(
                         currentTable: table,
                         referencedTable: $$SmsConversationsTableTableReferences
                             ._smsOutboxReadCursorsTableRefsTable(db),
@@ -14063,11 +14559,12 @@ final class $$SmsMessagesTableTableReferences extends BaseReferences<
       db.smsConversationsTable.createAlias($_aliasNameGenerator(
           db.smsMessagesTable.conversationId, db.smsConversationsTable.id));
 
-  $$SmsConversationsTableTableProcessedTableManager? get conversationId {
-    if ($_item.conversationId == null) return null;
+  $$SmsConversationsTableTableProcessedTableManager get conversationId {
+    final $_column = $_itemColumn<int>('conversation_id')!;
+
     final manager = $$SmsConversationsTableTableTableManager(
             $_db, $_db.smsConversationsTable)
-        .filter((f) => f.id($_item.conversationId!));
+        .filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_conversationIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -14429,11 +14926,12 @@ final class $$SmsMessageSyncCursorTableTableReferences extends BaseReferences<
           db.smsMessageSyncCursorTable.conversationId,
           db.smsConversationsTable.id));
 
-  $$SmsConversationsTableTableProcessedTableManager? get conversationId {
-    if ($_item.conversationId == null) return null;
+  $$SmsConversationsTableTableProcessedTableManager get conversationId {
+    final $_column = $_itemColumn<int>('conversation_id')!;
+
     final manager = $$SmsConversationsTableTableTableManager(
             $_db, $_db.smsConversationsTable)
-        .filter((f) => f.id($_item.conversationId!));
+        .filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_conversationIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -14690,11 +15188,12 @@ final class $$SmsMessageReadCursorTableTableReferences extends BaseReferences<
           db.smsMessageReadCursorTable.conversationId,
           db.smsConversationsTable.id));
 
-  $$SmsConversationsTableTableProcessedTableManager? get conversationId {
-    if ($_item.conversationId == null) return null;
+  $$SmsConversationsTableTableProcessedTableManager get conversationId {
+    final $_column = $_itemColumn<int>('conversation_id')!;
+
     final manager = $$SmsConversationsTableTableTableManager(
             $_db, $_db.smsConversationsTable)
-        .filter((f) => f.id($_item.conversationId!));
+        .filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_conversationIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -14956,10 +15455,11 @@ final class $$SmsOutboxMessagesTableTableReferences extends BaseReferences<
           db.smsConversationsTable.id));
 
   $$SmsConversationsTableTableProcessedTableManager? get conversationId {
-    if ($_item.conversationId == null) return null;
+    final $_column = $_itemColumn<int>('conversation_id');
+    if ($_column == null) return null;
     final manager = $$SmsConversationsTableTableTableManager(
             $_db, $_db.smsConversationsTable)
-        .filter((f) => f.id($_item.conversationId!));
+        .filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_conversationIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -15269,11 +15769,12 @@ final class $$SmsOutboxMessageDeleteTableTableReferences extends BaseReferences<
           db.smsOutboxMessageDeleteTable.conversationId,
           db.smsConversationsTable.id));
 
-  $$SmsConversationsTableTableProcessedTableManager? get conversationId {
-    if ($_item.conversationId == null) return null;
+  $$SmsConversationsTableTableProcessedTableManager get conversationId {
+    final $_column = $_itemColumn<int>('conversation_id')!;
+
     final manager = $$SmsConversationsTableTableTableManager(
             $_db, $_db.smsConversationsTable)
-        .filter((f) => f.id($_item.conversationId!));
+        .filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_conversationIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -15538,11 +16039,12 @@ final class $$SmsOutboxReadCursorsTableTableReferences extends BaseReferences<
           db.smsOutboxReadCursorsTable.conversationId,
           db.smsConversationsTable.id));
 
-  $$SmsConversationsTableTableProcessedTableManager? get conversationId {
-    if ($_item.conversationId == null) return null;
+  $$SmsConversationsTableTableProcessedTableManager get conversationId {
+    final $_column = $_itemColumn<int>('conversation_id')!;
+
     final manager = $$SmsConversationsTableTableTableManager(
             $_db, $_db.smsConversationsTable)
-        .filter((f) => f.id($_item.conversationId!));
+        .filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_conversationIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -16358,7 +16860,7 @@ final class $$SystemNotificationsTableTableReferences extends BaseReferences<
       get systemNotificationsOutboxTableRefs {
     final manager = $$SystemNotificationsOutboxTableTableTableManager(
             $_db, $_db.systemNotificationsOutboxTable)
-        .filter((f) => f.notificationId.id($_item.id));
+        .filter((f) => f.notificationId.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache = $_typedResult
         .readTableOrNull(_systemNotificationsOutboxTableRefsTable($_db));
@@ -16595,7 +17097,10 @@ class $$SystemNotificationsTableTableTableManager extends RootTableManager<
               getPrefetchedDataCallback: (items) async {
                 return [
                   if (systemNotificationsOutboxTableRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<
+                            SystemNotificationData,
+                            $SystemNotificationsTableTable,
+                            SystemNotificationOutboxEntryData>(
                         currentTable: table,
                         referencedTable:
                             $$SystemNotificationsTableTableReferences
@@ -16657,11 +17162,12 @@ final class $$SystemNotificationsOutboxTableTableReferences
           db.systemNotificationsOutboxTable.notificationId,
           db.systemNotificationsTable.id));
 
-  $$SystemNotificationsTableTableProcessedTableManager? get notificationId {
-    if ($_item.notificationId == null) return null;
+  $$SystemNotificationsTableTableProcessedTableManager get notificationId {
+    final $_column = $_itemColumn<int>('notification_id')!;
+
     final manager = $$SystemNotificationsTableTableTableManager(
             $_db, $_db.systemNotificationsTable)
-        .filter((f) => f.id($_item.notificationId!));
+        .filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_notificationIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -16918,6 +17424,245 @@ typedef $$SystemNotificationsOutboxTableTableProcessedTableManager
         ),
         SystemNotificationOutboxEntryData,
         PrefetchHooks Function({bool notificationId})>;
+typedef $$PresenceInfoTableTableCreateCompanionBuilder
+    = PresenceInfoDataCompanion Function({
+  required String idKey,
+  required String number,
+  required bool available,
+  required String note,
+  Value<String?> statusIcon,
+  Value<String?> device,
+  Value<int?> timeOffsetMin,
+  Value<int?> timestampUsec,
+  required String activitiesJson,
+  Value<int> rowid,
+});
+typedef $$PresenceInfoTableTableUpdateCompanionBuilder
+    = PresenceInfoDataCompanion Function({
+  Value<String> idKey,
+  Value<String> number,
+  Value<bool> available,
+  Value<String> note,
+  Value<String?> statusIcon,
+  Value<String?> device,
+  Value<int?> timeOffsetMin,
+  Value<int?> timestampUsec,
+  Value<String> activitiesJson,
+  Value<int> rowid,
+});
+
+class $$PresenceInfoTableTableFilterComposer
+    extends Composer<_$AppDatabase, $PresenceInfoTableTable> {
+  $$PresenceInfoTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get idKey => $composableBuilder(
+      column: $table.idKey, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get number => $composableBuilder(
+      column: $table.number, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get available => $composableBuilder(
+      column: $table.available, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get note => $composableBuilder(
+      column: $table.note, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get statusIcon => $composableBuilder(
+      column: $table.statusIcon, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get device => $composableBuilder(
+      column: $table.device, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get timeOffsetMin => $composableBuilder(
+      column: $table.timeOffsetMin, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get timestampUsec => $composableBuilder(
+      column: $table.timestampUsec, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get activitiesJson => $composableBuilder(
+      column: $table.activitiesJson,
+      builder: (column) => ColumnFilters(column));
+}
+
+class $$PresenceInfoTableTableOrderingComposer
+    extends Composer<_$AppDatabase, $PresenceInfoTableTable> {
+  $$PresenceInfoTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get idKey => $composableBuilder(
+      column: $table.idKey, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get number => $composableBuilder(
+      column: $table.number, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get available => $composableBuilder(
+      column: $table.available, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get note => $composableBuilder(
+      column: $table.note, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get statusIcon => $composableBuilder(
+      column: $table.statusIcon, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get device => $composableBuilder(
+      column: $table.device, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get timeOffsetMin => $composableBuilder(
+      column: $table.timeOffsetMin,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get timestampUsec => $composableBuilder(
+      column: $table.timestampUsec,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get activitiesJson => $composableBuilder(
+      column: $table.activitiesJson,
+      builder: (column) => ColumnOrderings(column));
+}
+
+class $$PresenceInfoTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $PresenceInfoTableTable> {
+  $$PresenceInfoTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get idKey =>
+      $composableBuilder(column: $table.idKey, builder: (column) => column);
+
+  GeneratedColumn<String> get number =>
+      $composableBuilder(column: $table.number, builder: (column) => column);
+
+  GeneratedColumn<bool> get available =>
+      $composableBuilder(column: $table.available, builder: (column) => column);
+
+  GeneratedColumn<String> get note =>
+      $composableBuilder(column: $table.note, builder: (column) => column);
+
+  GeneratedColumn<String> get statusIcon => $composableBuilder(
+      column: $table.statusIcon, builder: (column) => column);
+
+  GeneratedColumn<String> get device =>
+      $composableBuilder(column: $table.device, builder: (column) => column);
+
+  GeneratedColumn<int> get timeOffsetMin => $composableBuilder(
+      column: $table.timeOffsetMin, builder: (column) => column);
+
+  GeneratedColumn<int> get timestampUsec => $composableBuilder(
+      column: $table.timestampUsec, builder: (column) => column);
+
+  GeneratedColumn<String> get activitiesJson => $composableBuilder(
+      column: $table.activitiesJson, builder: (column) => column);
+}
+
+class $$PresenceInfoTableTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $PresenceInfoTableTable,
+    PresenceInfoData,
+    $$PresenceInfoTableTableFilterComposer,
+    $$PresenceInfoTableTableOrderingComposer,
+    $$PresenceInfoTableTableAnnotationComposer,
+    $$PresenceInfoTableTableCreateCompanionBuilder,
+    $$PresenceInfoTableTableUpdateCompanionBuilder,
+    (
+      PresenceInfoData,
+      BaseReferences<_$AppDatabase, $PresenceInfoTableTable, PresenceInfoData>
+    ),
+    PresenceInfoData,
+    PrefetchHooks Function()> {
+  $$PresenceInfoTableTableTableManager(
+      _$AppDatabase db, $PresenceInfoTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$PresenceInfoTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$PresenceInfoTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$PresenceInfoTableTableAnnotationComposer(
+                  $db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<String> idKey = const Value.absent(),
+            Value<String> number = const Value.absent(),
+            Value<bool> available = const Value.absent(),
+            Value<String> note = const Value.absent(),
+            Value<String?> statusIcon = const Value.absent(),
+            Value<String?> device = const Value.absent(),
+            Value<int?> timeOffsetMin = const Value.absent(),
+            Value<int?> timestampUsec = const Value.absent(),
+            Value<String> activitiesJson = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              PresenceInfoDataCompanion(
+            idKey: idKey,
+            number: number,
+            available: available,
+            note: note,
+            statusIcon: statusIcon,
+            device: device,
+            timeOffsetMin: timeOffsetMin,
+            timestampUsec: timestampUsec,
+            activitiesJson: activitiesJson,
+            rowid: rowid,
+          ),
+          createCompanionCallback: ({
+            required String idKey,
+            required String number,
+            required bool available,
+            required String note,
+            Value<String?> statusIcon = const Value.absent(),
+            Value<String?> device = const Value.absent(),
+            Value<int?> timeOffsetMin = const Value.absent(),
+            Value<int?> timestampUsec = const Value.absent(),
+            required String activitiesJson,
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              PresenceInfoDataCompanion.insert(
+            idKey: idKey,
+            number: number,
+            available: available,
+            note: note,
+            statusIcon: statusIcon,
+            device: device,
+            timeOffsetMin: timeOffsetMin,
+            timestampUsec: timestampUsec,
+            activitiesJson: activitiesJson,
+            rowid: rowid,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$PresenceInfoTableTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $PresenceInfoTableTable,
+    PresenceInfoData,
+    $$PresenceInfoTableTableFilterComposer,
+    $$PresenceInfoTableTableOrderingComposer,
+    $$PresenceInfoTableTableAnnotationComposer,
+    $$PresenceInfoTableTableCreateCompanionBuilder,
+    $$PresenceInfoTableTableUpdateCompanionBuilder,
+    (
+      PresenceInfoData,
+      BaseReferences<_$AppDatabase, $PresenceInfoTableTable, PresenceInfoData>
+    ),
+    PresenceInfoData,
+    PrefetchHooks Function()>;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -16996,4 +17741,6 @@ class $AppDatabaseManager {
       get systemNotificationsOutboxTable =>
           $$SystemNotificationsOutboxTableTableTableManager(
               _db, _db.systemNotificationsOutboxTable);
+  $$PresenceInfoTableTableTableManager get presenceInfoTable =>
+      $$PresenceInfoTableTableTableManager(_db, _db.presenceInfoTable);
 }

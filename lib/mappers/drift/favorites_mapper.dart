@@ -13,6 +13,7 @@ mixin FavoritesDriftMapper on ContactsDriftMapper {
         data.contactData,
         phones: data.contactPhones.toList(),
         emails: data.contactEmails.toList(),
+        presenceInfo: data.contactPresenceInfo.toList(),
       ),
     );
   }

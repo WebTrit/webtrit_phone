@@ -3,15 +3,19 @@ import 'package:app_database/app_database.dart';
 import 'package:webtrit_phone/models/contact.dart';
 import 'package:webtrit_phone/models/contact_email.dart';
 import 'package:webtrit_phone/models/contact_phone.dart';
+import 'package:webtrit_phone/models/presence/presence_info.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 
-mixin ContactsDriftMapper {
+import 'presence_info_drift_mapper.dart';
+
+mixin ContactsDriftMapper on PresenceInfoDriftMapper {
   Contact contactFromDrift(
     ContactData contactData, {
     List<ContactPhoneData> phones = const [],
     List<ContactEmailData> emails = const [],
     List<FavoriteData> favorites = const [],
+    List<PresenceInfoData> presenceInfo = const [],
   }) {
     final email = emails.firstOrNull?.address;
     final gravatarUrl = gravatarThumbnailUrl(email);
@@ -30,6 +34,7 @@ mixin ContactsDriftMapper {
       thumbnailUrl: gravatarUrl,
       phones: contactPhonesFromDrift(phones, favorites).toList(),
       emails: contactEmailsFromDrift(emails).toList(),
+      presenceInfo: contactPresenceInfosFromDrift(presenceInfo).toList(),
     );
   }
 
@@ -44,6 +49,10 @@ mixin ContactsDriftMapper {
 
   Iterable<ContactEmail> contactEmailsFromDrift(List<ContactEmailData> emails) {
     return emails.map(contactEmailFromDrift);
+  }
+
+  Iterable<PresenceInfo> contactPresenceInfosFromDrift(List<PresenceInfoData> presenceInfo) {
+    return presenceInfo.map(presenceInfoFromDrift);
   }
 
   ContactPhone contactPhoneFromDrift(ContactPhoneData data, {bool favorite = false}) {

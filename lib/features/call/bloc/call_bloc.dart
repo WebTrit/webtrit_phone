@@ -53,7 +53,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   final UserRepository userRepository;
   final SessionRepository sessionRepository;
   final LinesStateRepository linesStateRepository;
-  final PresenceInfoRepository presenceInfoRepository;
+  final PresenceRepository presenceRepository;
   final Function(Notification) submitNotification;
 
   final Callkeep callkeep;
@@ -88,7 +88,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     required this.callLogsRepository,
     required this.callPullRepository,
     required this.linesStateRepository,
-    required this.presenceInfoRepository,
+    required this.presenceRepository,
     required this.sessionRepository,
     required this.userRepository,
     required this.submitNotification,
@@ -260,7 +260,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       final previousRegistrationStatus = previousRegistration.status;
 
       if (newRegistrationStatus.isRegistered && !previousRegistrationStatus.isRegistered) {
-        presenceInfoRepository.resetLastSettingsSync();
+        presenceRepository.resetLastSettingsSync();
         submitNotification(AppOnlineNotification());
       }
 
@@ -2930,13 +2930,13 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
   Future<void> _assingNumberPresence(String number, List<SignalingPresenceInfo> data) async {
     final presenceInfo = data.map(SignalingPresenceInfoMapper.fromSignaling).toList();
-    presenceInfoRepository.setNumberPresence(number, presenceInfo);
+    presenceRepository.setNumberPresence(number, presenceInfo);
   }
 
   Future<void> syncPresenceSettings() async {
     final now = DateTime.now();
-    final lastSync = presenceInfoRepository.lastSettingsSync;
-    final presenceSettings = presenceInfoRepository.presenceSettings;
+    final lastSync = presenceRepository.lastSettingsSync;
+    final presenceSettings = presenceRepository.presenceSettings;
 
     final canUpdate = state.callServiceState.status == CallStatus.ready;
     bool shouldUpdate = false;
@@ -2955,7 +2955,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
           transaction: clock.now().millisecondsSinceEpoch.toString(),
           settings: SignalingPresenceSettingsMapper.toSignaling(presenceSettings),
         ));
-        presenceInfoRepository.updateLastSettingsSync(now);
+        presenceRepository.updateLastSettingsSync(now);
         _logger.fine('Presence settings updated at $now');
       } on Exception catch (e, s) {
         _logger.warning('Failed to update presence settings', e, s);

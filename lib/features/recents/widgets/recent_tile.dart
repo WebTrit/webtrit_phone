@@ -151,105 +151,56 @@ class _RecentTileState extends State<RecentTile> {
       ),
       onDismissed: widget.onDelete == null ? null : (direction) => widget.onDelete!(),
       direction: DismissDirection.endToStart,
-      child: switch (presenceSource) {
-        PresenceViewSource.sipPresence => PresenceInfoBuilder(
-            contact: contact,
-            builder: (context, presenceInfo) {
-              return ListTile(
-                key: tileKey,
-                contentPadding: const EdgeInsets.only(left: 16, right: 16),
-                leading: LeadingAvatar(
-                  username: widget.recent.name,
-                  thumbnail: contact?.thumbnail,
-                  thumbnailUrl: contact?.thumbnailUrl,
-                  presenceInfo: presenceInfo,
-                ),
-                trailing: Text(
-                  dateFormat.format(callLogEntry.createdTime),
-                  style: themeData.textTheme.bodySmall,
-                ),
-                title: Text(
-                  '${widget.recent.name} ${presenceInfo?.primaryStatusIcon ?? ''}',
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                subtitle: Row(
-                  children: [
-                    Icon(
-                      callLogEntry.direction.icon(callLogEntry.isComplete),
-                      size: 16,
-                      color: callLogEntry.isComplete
-                          ? (callLogEntry.direction == CallDirection.incoming ? Colors.blue : Colors.green)
-                          : Colors.red,
-                    ),
-                    const Text(' '),
-                    Icon(
-                      callLogEntry.video ? Icons.videocam : Icons.call,
-                      size: 16,
-                      color: Colors.grey,
-                    ),
-                    const Text(' '),
-                    Flexible(
-                      child: Text(
-                        callNumber,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                  ],
-                ),
-                onTap: widget.onTap,
-                onLongPress: onLongPress,
-              );
-            },
-          ),
-        PresenceViewSource.contactInfo => ListTile(
-            key: tileKey,
-            contentPadding: const EdgeInsets.only(left: 16, right: 16),
-            leading: LeadingAvatar(
-              username: widget.recent.name,
-              thumbnail: contact?.thumbnail,
-              thumbnailUrl: contact?.thumbnailUrl,
-              registered: contact?.registered,
+      child: ListTile(
+        key: tileKey,
+        contentPadding: const EdgeInsets.only(left: 16, right: 16),
+        leading: LeadingAvatar(
+          username: widget.recent.name,
+          thumbnail: contact?.thumbnail,
+          thumbnailUrl: contact?.thumbnailUrl,
+          registered: contact?.registered,
+          presenceInfo: contact?.presenceInfo,
+        ),
+        trailing: Text(
+          dateFormat.format(callLogEntry.createdTime),
+          style: themeData.textTheme.bodySmall,
+        ),
+        title: Text(
+          switch (presenceSource) {
+            PresenceViewSource.sipPresence => '${widget.recent.name} ${contact?.presenceInfo.primaryStatusIcon ?? ''}',
+            PresenceViewSource.contactInfo => widget.recent.name,
+          },
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        ),
+        subtitle: Row(
+          children: [
+            Icon(
+              callLogEntry.direction.icon(callLogEntry.isComplete),
+              size: 16,
+              color: callLogEntry.isComplete
+                  ? (callLogEntry.direction == CallDirection.incoming ? Colors.blue : Colors.green)
+                  : Colors.red,
             ),
-            trailing: Text(
-              dateFormat.format(callLogEntry.createdTime),
-              style: themeData.textTheme.bodySmall,
+            const Text(' '),
+            Icon(
+              callLogEntry.video ? Icons.videocam : Icons.call,
+              size: 16,
+              color: Colors.grey,
             ),
-            title: Text(
-              widget.recent.name,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
+            const Text(' '),
+            Flexible(
+              child: Text(
+                callNumber,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
             ),
-            subtitle: Row(
-              children: [
-                Icon(
-                  callLogEntry.direction.icon(callLogEntry.isComplete),
-                  size: 16,
-                  color: callLogEntry.isComplete
-                      ? (callLogEntry.direction == CallDirection.incoming ? Colors.blue : Colors.green)
-                      : Colors.red,
-                ),
-                const Text(' '),
-                Icon(
-                  callLogEntry.video ? Icons.videocam : Icons.call,
-                  size: 16,
-                  color: Colors.grey,
-                ),
-                const Text(' '),
-                Flexible(
-                  child: Text(
-                    callNumber,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-              ],
-            ),
-            onTap: widget.onTap,
-            onLongPress: onLongPress,
-          )
-      },
+          ],
+        ),
+        onTap: widget.onTap,
+        onLongPress: onLongPress,
+      ),
     );
   }
 }

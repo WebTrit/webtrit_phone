@@ -18,7 +18,7 @@ class PresenceInfoBuilder extends StatefulWidget {
 }
 
 class _PresenceInfoBuilderState extends State<PresenceInfoBuilder> {
-  late final repository = context.read<PresenceInfoRepository>();
+  late final repository = context.read<PresenceRepository>();
   StreamSubscription<List<PresenceInfo>>? _subscription;
   List<PresenceInfo>? presenceInfo;
 

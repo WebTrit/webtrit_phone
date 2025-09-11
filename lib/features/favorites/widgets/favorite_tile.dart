@@ -124,6 +124,9 @@ class _FavoriteTileState extends State<FavoriteTile> {
     final themeData = Theme.of(context);
     final presenceSource = PresenceViewParams.of(context).viewSource;
 
+    final contact = widget.favorite.contact;
+    final name = widget.favorite.name;
+
     return Dismissible(
       key: ObjectKey(widget.favorite),
       background: Container(
@@ -143,42 +146,24 @@ class _FavoriteTileState extends State<FavoriteTile> {
       ),
       onDismissed: widget.onDelete == null ? null : (direction) => widget.onDelete!(),
       direction: DismissDirection.endToStart,
-      child: switch (presenceSource) {
-        PresenceViewSource.sipPresence => PresenceInfoBuilder(
-            contact: widget.favorite.contact,
-            builder: (context, presenceInfo) {
-              return ListTile(
-                key: tileKey,
-                contentPadding: const EdgeInsets.only(left: 16.0),
-                leading: LeadingAvatar(
-                  username: widget.favorite.name,
-                  thumbnail: widget.favorite.contact.thumbnail,
-                  thumbnailUrl: widget.favorite.contact.thumbnailUrl,
-                  registered: widget.favorite.contact.registered,
-                  presenceInfo: presenceInfo,
-                ),
-                title: Text('${widget.favorite.name} ${presenceInfo?.primaryStatusIcon ?? ''}'),
-                subtitle: Text('${widget.favorite.label.capitalize}: ${widget.favorite.number}'),
-                onTap: widget.onTap,
-                onLongPress: onLongPress,
-              );
-            },
-          ),
-        PresenceViewSource.contactInfo => ListTile(
-            key: tileKey,
-            contentPadding: const EdgeInsets.only(left: 16.0),
-            leading: LeadingAvatar(
-              username: widget.favorite.name,
-              thumbnail: widget.favorite.contact.thumbnail,
-              thumbnailUrl: widget.favorite.contact.thumbnailUrl,
-              registered: widget.favorite.contact.registered,
-            ),
-            title: Text(widget.favorite.name),
-            subtitle: Text('${widget.favorite.label.capitalize}: ${widget.favorite.number}'),
-            onTap: widget.onTap,
-            onLongPress: onLongPress,
-          )
-      },
+      child: ListTile(
+        key: tileKey,
+        contentPadding: const EdgeInsets.only(left: 16.0),
+        leading: LeadingAvatar(
+          username: name,
+          thumbnail: contact.thumbnail,
+          thumbnailUrl: contact.thumbnailUrl,
+          registered: contact.registered,
+          presenceInfo: contact.presenceInfo,
+        ),
+        title: switch (presenceSource) {
+          PresenceViewSource.sipPresence => Text('$name ${contact.presenceInfo.primaryStatusIcon ?? ''}'),
+          PresenceViewSource.contactInfo => Text(name),
+        },
+        subtitle: Text('${widget.favorite.label.capitalize}: ${widget.favorite.number}'),
+        onTap: widget.onTap,
+        onLongPress: onLongPress,
+      ),
     );
   }
 }

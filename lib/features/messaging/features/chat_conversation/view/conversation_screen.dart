@@ -8,6 +8,7 @@ import 'package:webtrit_phone/blocs/app/app_bloc.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
+import 'package:webtrit_phone/utils/utils.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 class ChatConversationScreen extends StatefulWidget {
@@ -145,20 +146,22 @@ class _ChatConversationScreenState extends State<ChatConversationScreen> {
       builder: (context, contact, {required bool loading}) {
         if (loading) return const SizedBox();
 
-        return PresenceInfoBuilder(
-            contact: contact,
-            builder: (context, presenceInfo) {
-              final text = switch (contact) {
-                null => context.l10n.messaging_ParticipantName_unknown,
-                _ => '${contact.displayTitle} ${presenceInfo?.primaryStatusIcon ?? ''}',
-              };
-              return Text(
-                text,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(fontSize: 20),
-              );
-            });
+        final presenceSource = PresenceViewParams.of(context).viewSource;
+        final text = switch (contact) {
+          null => context.l10n.messaging_ParticipantName_unknown,
+          _ => switch (presenceSource) {
+              PresenceViewSource.contactInfo => contact.displayTitle,
+              PresenceViewSource.sipPresence =>
+                '${contact.displayTitle} ${contact.presenceInfo.primaryStatusIcon ?? ''}',
+            }
+        };
+
+        return Text(
+          text,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: const TextStyle(fontSize: 20),
+        );
       },
     );
   }

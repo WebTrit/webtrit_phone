@@ -10,15 +10,24 @@ class RecentData {
     required this.contactData,
     required this.contactPhones,
     required this.contactEmails,
+    required this.presenceInfo,
   });
 
   final CallLogData callLogEntry;
   final ContactData? contactData;
   final Set<ContactPhoneData> contactPhones;
   final Set<ContactEmailData> contactEmails;
+  final Set<PresenceInfoData> presenceInfo;
 }
 
-@DriftAccessor(tables: [CallLogsTable, ContactPhonesTable, ContactsTable, ContactPhonesTable, ContactEmailsTable])
+@DriftAccessor(tables: [
+  CallLogsTable,
+  ContactPhonesTable,
+  ContactsTable,
+  ContactPhonesTable,
+  ContactEmailsTable,
+  PresenceInfoTable,
+])
 class RecentsDao extends DatabaseAccessor<AppDatabase> with _$RecentsDaoMixin {
   RecentsDao(super.db);
 
@@ -35,6 +44,7 @@ class RecentsDao extends DatabaseAccessor<AppDatabase> with _$RecentsDaoMixin {
       leftOuterJoin(contactsTable, contactsTable.id.equalsExp(sourcePhone.contactId)),
       leftOuterJoin(contactEmailsTable, contactEmailsTable.contactId.equalsExp(contactsTable.id)),
       leftOuterJoin(contactPhones, contactPhones.contactId.equalsExp(contactsTable.id)),
+      leftOuterJoin(presenceInfoTable, presenceInfoTable.number.equalsExp(contactPhonesTable.number)),
     ]);
 
     return recentsQuery.watch().map(_rowsToRecent);
@@ -45,6 +55,7 @@ class RecentsDao extends DatabaseAccessor<AppDatabase> with _$RecentsDaoMixin {
       leftOuterJoin(contactPhonesTable, contactPhonesTable.number.equalsExp(callLogsTable.number)),
       leftOuterJoin(contactsTable, contactsTable.id.equalsExp(contactPhonesTable.contactId)),
       leftOuterJoin(contactEmailsTable, contactEmailsTable.contactId.equalsExp(contactsTable.id)),
+      leftOuterJoin(presenceInfoTable, presenceInfoTable.number.equalsExp(contactPhonesTable.number)),
     ]);
     return q.get().then((rows) => _rowsToRecent(rows).first);
   }
@@ -61,14 +72,21 @@ class RecentsDao extends DatabaseAccessor<AppDatabase> with _$RecentsDaoMixin {
       final contactData = row.readTableOrNull(contactsTable);
       final contactPhone = row.readTableOrNull(contactPhonesTable);
       final contactEmail = row.readTableOrNull(contactEmailsTable);
+      final presenceInfo = row.readTableOrNull(presenceInfoTable);
 
       recents.putIfAbsent(
         callLogEntry.id,
-        () => RecentData(callLogEntry: callLogEntry, contactData: contactData, contactPhones: {}, contactEmails: {}),
+        () => RecentData(
+            callLogEntry: callLogEntry,
+            contactData: contactData,
+            contactPhones: {},
+            contactEmails: {},
+            presenceInfo: {}),
       );
 
       if (contactPhone != null) recents[callLogEntry.id]!.contactPhones.add(contactPhone);
       if (contactEmail != null) recents[callLogEntry.id]!.contactEmails.add(contactEmail);
+      if (presenceInfo != null) recents[callLogEntry.id]!.presenceInfo.add(presenceInfo);
     }
 
     return recents.values.toList();

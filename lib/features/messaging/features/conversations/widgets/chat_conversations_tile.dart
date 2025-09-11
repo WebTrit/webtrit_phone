@@ -10,7 +10,6 @@ import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 import 'package:webtrit_phone/widgets/leading_avatar.dart';
-import 'package:webtrit_phone/widgets/presence_info_builder.dart';
 
 class ChatConversationsTile extends StatefulWidget {
   const ChatConversationsTile({required this.conversation, required this.lastMessage, required this.userId, super.key});
@@ -89,73 +88,33 @@ class _ChatConversationsTileState extends State<ChatConversationsTile> {
       sourceId: participant.userId,
       builder: (context, contact, {required bool loading}) {
         final presenceSource = PresenceViewParams.of(context).viewSource;
-
-        return switch (presenceSource) {
-          PresenceViewSource.sipPresence => PresenceInfoBuilder(
-              contact: contact,
-              key: ValueKey(contact),
-              builder: (context, presenceInfo) {
-                final text = switch (contact) {
-                  null => context.l10n.messaging_ParticipantName_unknown,
-                  _ => '${contact.displayTitle} ${presenceInfo?.primaryStatusIcon ?? ''}',
-                };
-                return ListTile(
-                  leading: LeadingAvatar(
-                    username: contact?.displayTitle,
-                    thumbnail: contact?.thumbnail,
-                    thumbnailUrl: contact?.thumbnailUrl,
-                    radius: 24,
-                    presenceInfo: presenceInfo,
-                  ),
-                  title: Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          text,
-                          style: const TextStyle(overflow: TextOverflow.ellipsis),
-                        ),
-                      ),
-                      const SizedBox(width: 4),
-                      if (lastMessage != null)
-                        Text(lastMessage.createdAt.timeOrDate, style: const TextStyle(fontSize: 12)),
-                    ],
-                  ),
-                  subtitle: subtitle(),
-                  onTap: onTap,
-                );
-              },
-            ),
-          PresenceViewSource.contactInfo => Builder(builder: (context) {
-              final text = switch (contact) {
-                null => context.l10n.messaging_ParticipantName_unknown,
-                _ => contact.displayTitle,
-              };
-              return ListTile(
-                leading: LeadingAvatar(
-                  username: contact?.displayTitle,
-                  thumbnail: contact?.thumbnail,
-                  thumbnailUrl: contact?.thumbnailUrl,
-                  registered: contact?.registered,
-                  radius: 24,
-                ),
-                title: Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        text,
-                        style: const TextStyle(overflow: TextOverflow.ellipsis),
-                      ),
-                    ),
-                    const SizedBox(width: 4),
-                    if (lastMessage != null)
-                      Text(lastMessage.createdAt.timeOrDate, style: const TextStyle(fontSize: 12)),
-                  ],
-                ),
-                subtitle: subtitle(),
-                onTap: onTap,
-              );
-            })
+        final text = switch (contact) {
+          null => context.l10n.messaging_ParticipantName_unknown,
+          _ => switch (presenceSource) {
+              PresenceViewSource.contactInfo => contact.displayTitle,
+              PresenceViewSource.sipPresence =>
+                '${contact.displayTitle} ${contact.presenceInfo.primaryStatusIcon ?? ''}',
+            }
         };
+        return ListTile(
+          leading: LeadingAvatar(
+            username: contact?.displayTitle,
+            thumbnail: contact?.thumbnail,
+            thumbnailUrl: contact?.thumbnailUrl,
+            radius: 24,
+            registered: contact?.registered,
+            presenceInfo: contact?.presenceInfo,
+          ),
+          title: Row(
+            children: [
+              Expanded(child: Text(text, style: const TextStyle(overflow: TextOverflow.ellipsis))),
+              const SizedBox(width: 4),
+              if (lastMessage != null) Text(lastMessage.createdAt.timeOrDate, style: const TextStyle(fontSize: 12)),
+            ],
+          ),
+          subtitle: subtitle(),
+          onTap: onTap,
+        );
       },
     );
   }
@@ -170,8 +129,10 @@ class _ChatConversationsTileState extends State<ChatConversationsTile> {
             child: Row(
               children: [
                 Flexible(
-                  child: Text(widget.conversation.name ?? 'Chat ${widget.conversation.id}',
-                      style: const TextStyle(overflow: TextOverflow.ellipsis)),
+                  child: Text(
+                    widget.conversation.name ?? 'Chat ${widget.conversation.id}',
+                    style: const TextStyle(overflow: TextOverflow.ellipsis),
+                  ),
                 ),
                 const SizedBox(width: 4),
                 usersCount(),
@@ -217,17 +178,9 @@ class _ChatConversationsTileState extends State<ChatConversationsTile> {
                   textMap: (name) => '$name:',
                 ),
                 if (lastMessage.deletedAt != null)
-                  Text(
-                    context.l10n.messaging_MessageView_deleted,
-                    style: textStyle,
-                    overflow: TextOverflow.ellipsis,
-                  )
+                  Text(context.l10n.messaging_MessageView_deleted, style: textStyle, overflow: TextOverflow.ellipsis)
                 else
-                  Text(
-                    lastMessage.content,
-                    style: textStyle,
-                    overflow: TextOverflow.ellipsis,
-                  ),
+                  Text(lastMessage.content, style: textStyle, overflow: TextOverflow.ellipsis),
               ],
             ),
           )

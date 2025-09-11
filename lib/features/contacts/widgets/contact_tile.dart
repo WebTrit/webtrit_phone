@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/utils/utils.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 class ContactTile extends StatelessWidget {
@@ -17,7 +18,6 @@ class ContactTile extends StatelessWidget {
     this.onLongPress,
     this.onMessagePressed,
     this.presenceInfo,
-    this.statusIcon = '',
   });
 
   final String displayName;
@@ -29,10 +29,21 @@ class ContactTile extends StatelessWidget {
   final GestureLongPressCallback? onLongPress;
   final GestureTapCallback? onMessagePressed;
   final List<PresenceInfo>? presenceInfo;
-  final String statusIcon;
 
   @override
   Widget build(BuildContext context) {
+    final presenceSource = PresenceViewParams.of(context).viewSource;
+
+    final title = switch (presenceSource) {
+      PresenceViewSource.sipPresence => '$displayName ${presenceInfo?.primaryStatusIcon ?? ''}',
+      PresenceViewSource.contactInfo => displayName,
+    };
+
+    final subtitle = switch (presenceSource) {
+      PresenceViewSource.sipPresence => presenceInfo?.primaryNote,
+      PresenceViewSource.contactInfo => null,
+    };
+
     return ListTile(
       contentPadding: const EdgeInsets.only(left: 16.0),
       leading: LeadingAvatar(
@@ -43,10 +54,10 @@ class ContactTile extends StatelessWidget {
         smart: smart,
         presenceInfo: presenceInfo,
       ),
-      title: Text('$displayName ${presenceInfo?.primaryStatusIcon ?? ''}'),
-      subtitle: presenceInfo?.primaryNote != null && presenceInfo!.primaryNote!.isNotEmpty
+      title: Text(title),
+      subtitle: subtitle?.isNotEmpty == true
           ? Text(
-              presenceInfo!.primaryNote!,
+              subtitle!,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: const TextStyle(fontSize: 12),

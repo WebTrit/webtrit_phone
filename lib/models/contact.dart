@@ -5,6 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:webtrit_phone/extensions/iterable.dart';
 import 'package:webtrit_phone/models/contact_email.dart';
 import 'package:webtrit_phone/models/contact_phone.dart';
+import 'package:webtrit_phone/models/presence/presence_info.dart';
 
 import 'contact_source_type.dart';
 
@@ -27,6 +28,7 @@ class Contact extends Equatable {
     this.thumbnailUrl,
     this.phones = const [],
     this.emails = const [],
+    this.presenceInfo = const [],
   });
 
   final ContactId id;
@@ -50,6 +52,7 @@ class Contact extends Equatable {
 
   final List<ContactPhone> phones;
   final List<ContactEmail> emails;
+  final List<PresenceInfo> presenceInfo;
 
   /// Computed getter for contact's PBX network `extension`.
   late final String? extension = phones.firstWhereOrNull((element) => element.label == 'ext')?.number;
@@ -103,6 +106,7 @@ class Contact extends Equatable {
         thumbnailUrl,
         phones,
         emails,
+        presenceInfo,
       ];
 
   @override

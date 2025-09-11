@@ -6,7 +6,7 @@ import 'package:webtrit_phone/repositories/repositories.dart';
 class PresenceSettingsCubit extends Cubit<PresenceSettings> {
   PresenceSettingsCubit(this._repository) : super(_repository.presenceSettings);
 
-  final PresenceInfoRepository _repository;
+  final PresenceRepository _repository;
 
   void setPresenceSettings(PresenceSettings settings) {
     emit(settings);
