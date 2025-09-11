@@ -48,18 +48,12 @@ class PageInjectionBuilders {
   static PageInjectionStrategy deviceInfo(
     BuildContext context, {
     String functionName = 'onDeviceInfoReady',
-    Map<String, String> urls = const {},
   }) {
     final labels = context.read<AppLabelsProvider>().build();
 
-    final payload = <String, dynamic>{
-      ...labels,
-      if (urls.isNotEmpty) 'urls': urls,
-    };
-
     return DefaultPayloadInjectionStrategy(
       functionName: functionName,
-      initialPayload: payload,
+      initialPayload: labels,
     );
   }
 
@@ -68,23 +62,11 @@ class PageInjectionBuilders {
   ///
   /// - [includeMediaQuery]: inject MediaQuery/theme data
   /// - [includeDeviceInfo]: inject device/app info + optional URLs
-  ///
-  /// Example:
-  /// ```dart
-  /// pageInjectionStrategies: PageInjectionBuilders.factory(
-  ///   context,
-  ///   custom: [_pageInjectionStrategy],
-  ///   includeMediaQuery: true,
-  ///   includeDeviceInfo: true,
-  ///   urls: {'help': 'https://docs.example.com'},
-  /// ),
-  /// ```
   static List<PageInjectionStrategy> resolve(
     BuildContext context, {
     List<PageInjectionStrategy> custom = const [],
-    bool includeMediaQuery = false,
-    bool includeDeviceInfo = false,
-    Map<String, String> urls = const {},
+    bool includeMediaQuery = true,
+    bool includeDeviceInfo = true,
   }) {
     final strategies = <PageInjectionStrategy>[];
 
@@ -95,7 +77,7 @@ class PageInjectionBuilders {
     }
 
     if (includeDeviceInfo) {
-      strategies.add(deviceInfo(context, urls: urls));
+      strategies.add(deviceInfo(context));
     }
 
     return strategies;

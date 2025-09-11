@@ -44,14 +44,14 @@ Future<void> bootstrap() async {
   final deviceInfo = await DeviceInfoFactory.init();
   final packageInfo = await PackageInfoFactory.init();
   final secureStorage = await SecureStorage.init();
-  final appLabelsProvider = await DefaultAppLabelsProvider.init(packageInfo, deviceInfo, appInfo, secureStorage);
+  final appLabels = await DefaultAppLabelsProvider.init(packageInfo, deviceInfo, appInfo, secureStorage, featureAccess);
 
   await AppPath.init();
   await AppPermissions.init(featureAccess);
   await AppCertificates.init();
   await AppTime.init();
   await SessionCleanupWorker.init();
-  await AppLogger.init(remoteFirebaseConfigService, appLabelsProvider);
+  await AppLogger.init(remoteFirebaseConfigService, appLabels);
   await AppLifecycle.initMaster();
 
   await _initCallkeep(appPreferences, featureAccess);

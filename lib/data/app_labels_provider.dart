@@ -11,14 +11,10 @@ class DefaultAppLabelsProvider implements AppLabelsProvider {
     PackageInfo packageInfo,
     DeviceInfo deviceInfo,
     AppInfo appInfo,
-    SecureStorage secureStorage,
-  ) async {
-    _instance = DefaultAppLabelsProvider._(
-      packageInfo,
-      deviceInfo,
-      appInfo,
-      secureStorage,
-    );
+    SecureStorage secureStorage, [
+    FeatureAccess? featureAccess,
+  ]) async {
+    _instance = DefaultAppLabelsProvider._(packageInfo, deviceInfo, appInfo, secureStorage, featureAccess);
     return _instance;
   }
 
@@ -31,12 +27,14 @@ class DefaultAppLabelsProvider implements AppLabelsProvider {
     this._deviceInfo,
     this._appInfo,
     this._secureStorage,
+    this._featureAccess,
   );
 
   final PackageInfo _packageInfo;
   final DeviceInfo _deviceInfo;
   final AppInfo _appInfo;
   final SecureStorage _secureStorage;
+  final FeatureAccess? _featureAccess;
 
   @override
   Map<String, String> build() {
@@ -47,6 +45,7 @@ class DefaultAppLabelsProvider implements AppLabelsProvider {
     final token = _secureStorage.readToken();
     final coreUrl = _secureStorage.readCoreUrl();
     final tenantId = _secureStorage.readTenantId();
+    final urls = _featureAccess?.embeddedFeature.embeddedResources.map((e) => e.uri.toString()).toList();
 
     return <String, String>{
       'app': _packageInfo.appName,
@@ -60,6 +59,7 @@ class DefaultAppLabelsProvider implements AppLabelsProvider {
       'os': _deviceInfo.systemName,
       'osVersion': _deviceInfo.systemVersion,
       'authorization': token != null ? 'authorized' : 'unauthorized',
+      if (urls != null && urls.isNotEmpty) 'embeddedUrls': urls.join(', '),
       if (coreUrl != null) 'coreUrl': coreUrl,
       if (tenantId != null) 'tenantId': tenantId,
     };

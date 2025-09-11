@@ -321,7 +321,6 @@ class _WebViewContainerState extends State<WebViewContainer> with WidgetStateMix
             strategy._handlePageReady(_webViewController, context);
           }
 
-          _injectMediaQueryData();
           if (widget.enableEmbeddedLogging) {
             _injectConsoleLogging();
           }
@@ -347,10 +346,10 @@ class _WebViewContainerState extends State<WebViewContainer> with WidgetStateMix
   /// Handles errors reported by the WebView engine during resource loading.
   ///
   /// This callback may be triggered in several situations:
-  /// - **Main frame navigation failures** – e.g. no internet connection,
+  /// - **Main frame navigation failures** - e.g. no internet connection,
   ///   DNS lookup failure, SSL handshake errors, or the server not responding.
   ///   These usually mean the page cannot be displayed at all.
-  /// - **Subresource load errors** – e.g. missing images, blocked fonts,
+  /// - **Subresource load errors** - e.g. missing images, blocked fonts,
   ///   CORS issues, or network hiccups while loading scripts/styles.
   ///   In such cases, the main page may still load and work.
   ///
@@ -375,7 +374,7 @@ class _WebViewContainerState extends State<WebViewContainer> with WidgetStateMix
       return;
     }
 
-    // De-dupe: don’t re-set the same main-frame error over and over.
+    // De-dupe: don't re-set the same main-frame error over and over.
     if (_latestError != null && _latestError!.errorCode == code && _latestError!.url == url) {
       _logger.fine('Duplicate main-frame error suppressed for $url ($code)');
       return;
@@ -385,47 +384,6 @@ class _WebViewContainerState extends State<WebViewContainer> with WidgetStateMix
       _currentError = error;
       _latestError = error;
     });
-  }
-
-  /// Injects media query-related data from Flutter into the WebView as JSON.
-  ///
-  /// This method gathers the current media query information such as:
-  /// - `brightness`: light or dark theme (`light` / `dark`)
-  /// - `devicePixelRatio`: screen density
-  /// - `topSafeInset`: top padding (usually status bar height)
-  /// - `bottomSafeInset`: bottom padding (gesture area or system-reserved space)
-  ///
-  /// It serializes the data into JSON and calls a JavaScript function
-  /// `window.onMediaQueryReady(json)` inside the WebView, if it's defined.
-  ///
-  /// Example JS hook on the page:
-  /// ```js
-  /// window.onMediaQueryReady = function(payload) {
-  ///   const data = JSON.parse(payload); // or use directly if it's an object
-  ///   // apply UI adjustments here
-  /// };
-  /// ```
-  void _injectMediaQueryData() {
-    final mediaQuery = MediaQuery.of(context);
-    final theme = Theme.of(context);
-
-    final payload = {
-      'brightness': theme.brightness.name,
-      'devicePixelRatio': mediaQuery.devicePixelRatio,
-      'topSafeInset': mediaQuery.viewPadding.top.round(),
-      'bottomSafeInset': mediaQuery.viewPadding.bottom.round(),
-    };
-
-    final jsonString = const JsonEncoder().convert(payload);
-
-    final script = '''
-      if (typeof window.onMediaQueryReady === 'function') {
-        window.onMediaQueryReady($jsonString);
-      }
-    ''';
-
-    _logger.finest('Injecting media query data: $jsonString');
-    _webViewController.runJavaScript(script);
   }
 
   /// Injects JavaScript that overrides `console.*` methods to:
@@ -617,7 +575,7 @@ class DefaultPayloadInjectionStrategy implements PageInjectionStrategy {
   /// Skips injection if the WebView or payload is not ready.
   void _attemptPayloadInjection() {
     if (_controller == null || _context == null) {
-      _logger.fine('Cannot inject — WebView not ready');
+      _logger.fine('Cannot inject - WebView not ready');
       return;
     }
 
