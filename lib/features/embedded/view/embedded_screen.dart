@@ -73,7 +73,8 @@ class _EmbeddedScreenState extends State<EmbeddedScreen> {
               initialUri: widget.initialUri,
               webViewController: _webViewController,
               connectivityRecoveryStrategy: _connectivityRecoveryStrategy,
-              pageInjectionStrategies: [_pageInjectionStrategy],
+              // TODO: Add to embedded configuration possibly disable media query injection and/or device info injection.
+              pageInjectionStrategies: PageInjectionBuilders.resolve(context, custom: [_pageInjectionStrategy]),
               showToolbar: false,
               enableEmbeddedLogging: widget.enableConsoleLogCapture ?? false,
               userAgent: UserAgent.of(context),
