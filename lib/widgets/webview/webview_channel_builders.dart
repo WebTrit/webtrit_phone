@@ -122,6 +122,7 @@ class JSChannelBuilders {
   /// - If version differs from cached one, triggers a hard reload.
   static JSChannelStrategy pageVersion() {
     return JSChannelStrategy.route(
+      name: 'WebtritPageVersionChannel',
       routes: {
         'pageVersion': (controller, it) async {
           final newVersion = it.data?['pageVersion']?.toString();

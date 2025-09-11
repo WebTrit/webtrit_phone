@@ -906,16 +906,13 @@ class HardReloadRecoveryStrategy extends SoftReloadRecoveryStrategy {
 ///
 /// The default channel name is [defaultJSChannelName].
 class JSChannelStrategy {
-  /// Default channel name used for login/signup flow.
-  static const defaultJSChannelName = 'WebtritLoginChannel';
-
   /// Creates a [JSChannelStrategy].
   ///
   /// - [name]: The JavaScript channel name to listen for (must match the name used in the web page).
   /// - [onEvent]: Callback invoked with the [WebViewController] and parsed [JsonJsEvent] when a valid message is received.
   /// - [onMalformed]: Optional callback when the incoming message is not valid JSON or cannot be parsed.
   const JSChannelStrategy({
-    this.name = defaultJSChannelName,
+    required this.name,
     required this.onEvent,
     this.onMalformed,
   });
@@ -965,7 +962,7 @@ class JSChannelStrategy {
   /// );
   /// ```
   factory JSChannelStrategy.route({
-    String name = defaultJSChannelName,
+    required String name,
     required Map<String, JsonEventHandler> routes,
     void Function(String raw)? onMalformed,
     void Function(JsonJsEvent e)? onUnknown,

@@ -56,7 +56,7 @@ class _LoginSignupEmbeddedRequestScreenState extends State<LoginSignupEmbeddedRe
   void initState() {
     _pageInjectionStrategy = widget.pageInjectionStrategyBuilder();
     _connectivityRecoveryStrategy = widget.connectivityRecoveryStrategyBuilder();
-    _jsChannelStrategy = JSChannelStrategy.route(routes: {'signup': _onJSMessageReceived});
+    _jsChannelStrategy = JSChannelStrategy.route(name: 'WebtritLoginChannel', routes: {'signup': _onJSMessageReceived});
     super.initState();
   }
 
