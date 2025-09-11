@@ -20,6 +20,7 @@ import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/common/common.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/services/services.dart';
+import 'package:webtrit_phone/utils/utils.dart';
 
 @RoutePage()
 class MainShell extends StatefulWidget {
@@ -407,6 +408,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                                 DefaultCallErrorReporter((n) => notificationsBloc.add(NotificationsSubmitted(n))),
                             iceFilter: FilterWithAppSettings(appPreferences),
                             peerConnectionPolicyApplier: pearConnectionPolicyApplier,
+                            sipPresenceEnabled: featureAccess.sipPresenceFeature.sipPresenceSupport,
                           )..add(const CallStarted());
                         },
                       ),
@@ -494,13 +496,21 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                           ],
                           child: Builder(
                             builder: (context) {
-                              return CallShell(
-                                child: MessagingShell(
-                                  child: SystemNotificationsShell(
-                                    child: AutoRouter(
-                                      navigatorObservers: () => [
-                                        MainShellNavigatorObserver(context.read<MainShellRouteStateRepository>()),
-                                      ],
+                              final sipPresenceFeature = FeatureAccess().sipPresenceFeature;
+
+                              return PresenceViewParams(
+                                viewSource: switch (sipPresenceFeature.sipPresenceSupport) {
+                                  true => PresenceViewSource.sipPresence,
+                                  false => PresenceViewSource.contactInfo,
+                                },
+                                child: CallShell(
+                                  child: MessagingShell(
+                                    child: SystemNotificationsShell(
+                                      child: AutoRouter(
+                                        navigatorObservers: () => [
+                                          MainShellNavigatorObserver(context.read<MainShellRouteStateRepository>()),
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ),

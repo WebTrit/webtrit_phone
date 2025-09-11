@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/utils/utils.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../recents.dart';
@@ -27,7 +28,6 @@ class RecentTile extends StatefulWidget {
     this.onCallLogPressed,
     this.onDelete,
     this.onCallFrom,
-    this.presenceInfo,
   });
 
   final Recent recent;
@@ -43,7 +43,6 @@ class RecentTile extends StatefulWidget {
   final Function()? onCallLogPressed;
   final Function()? onDelete;
   final Function(String)? onCallFrom;
-  final List<PresenceInfo>? presenceInfo;
 
   @override
   State<RecentTile> createState() => _RecentTileState();
@@ -133,6 +132,7 @@ class _RecentTileState extends State<RecentTile> {
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
+    final presenceSource = PresenceViewParams.of(context).viewSource;
 
     return Dismissible(
       key: ObjectKey(widget.recent),
@@ -151,53 +151,105 @@ class _RecentTileState extends State<RecentTile> {
       ),
       onDismissed: widget.onDelete == null ? null : (direction) => widget.onDelete!(),
       direction: DismissDirection.endToStart,
-      child: ListTile(
-        key: tileKey,
-        contentPadding: const EdgeInsets.only(left: 16, right: 16),
-        leading: LeadingAvatar(
-          username: widget.recent.name,
-          thumbnail: contact?.thumbnail,
-          thumbnailUrl: contact?.thumbnailUrl,
-          registered: contact?.registered,
-          presenceInfo: widget.presenceInfo,
-        ),
-        trailing: Text(
-          dateFormat.format(callLogEntry.createdTime),
-          style: themeData.textTheme.bodySmall,
-        ),
-        title: Text(
-          '${widget.recent.name} ${widget.presenceInfo?.primaryStatusIcon ?? ''}',
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-        ),
-        subtitle: Row(
-          children: [
-            Icon(
-              callLogEntry.direction.icon(callLogEntry.isComplete),
-              size: 16,
-              color: callLogEntry.isComplete
-                  ? (callLogEntry.direction == CallDirection.incoming ? Colors.blue : Colors.green)
-                  : Colors.red,
+      child: switch (presenceSource) {
+        PresenceViewSource.sipPresence => PresenceInfoBuilder(
+            contact: contact,
+            builder: (context, presenceInfo) {
+              return ListTile(
+                key: tileKey,
+                contentPadding: const EdgeInsets.only(left: 16, right: 16),
+                leading: LeadingAvatar(
+                  username: widget.recent.name,
+                  thumbnail: contact?.thumbnail,
+                  thumbnailUrl: contact?.thumbnailUrl,
+                  presenceInfo: presenceInfo,
+                ),
+                trailing: Text(
+                  dateFormat.format(callLogEntry.createdTime),
+                  style: themeData.textTheme.bodySmall,
+                ),
+                title: Text(
+                  '${widget.recent.name} ${presenceInfo?.primaryStatusIcon ?? ''}',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                subtitle: Row(
+                  children: [
+                    Icon(
+                      callLogEntry.direction.icon(callLogEntry.isComplete),
+                      size: 16,
+                      color: callLogEntry.isComplete
+                          ? (callLogEntry.direction == CallDirection.incoming ? Colors.blue : Colors.green)
+                          : Colors.red,
+                    ),
+                    const Text(' '),
+                    Icon(
+                      callLogEntry.video ? Icons.videocam : Icons.call,
+                      size: 16,
+                      color: Colors.grey,
+                    ),
+                    const Text(' '),
+                    Flexible(
+                      child: Text(
+                        callNumber,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
+                ),
+                onTap: widget.onTap,
+                onLongPress: onLongPress,
+              );
+            },
+          ),
+        PresenceViewSource.contactInfo => ListTile(
+            key: tileKey,
+            contentPadding: const EdgeInsets.only(left: 16, right: 16),
+            leading: LeadingAvatar(
+              username: widget.recent.name,
+              thumbnail: contact?.thumbnail,
+              thumbnailUrl: contact?.thumbnailUrl,
+              registered: contact?.registered,
             ),
-            const Text(' '),
-            Icon(
-              callLogEntry.video ? Icons.videocam : Icons.call,
-              size: 16,
-              color: Colors.grey,
+            trailing: Text(
+              dateFormat.format(callLogEntry.createdTime),
+              style: themeData.textTheme.bodySmall,
             ),
-            const Text(' '),
-            Flexible(
-              child: Text(
-                callNumber,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
+            title: Text(
+              widget.recent.name,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
             ),
-          ],
-        ),
-        onTap: widget.onTap,
-        onLongPress: onLongPress,
-      ),
+            subtitle: Row(
+              children: [
+                Icon(
+                  callLogEntry.direction.icon(callLogEntry.isComplete),
+                  size: 16,
+                  color: callLogEntry.isComplete
+                      ? (callLogEntry.direction == CallDirection.incoming ? Colors.blue : Colors.green)
+                      : Colors.red,
+                ),
+                const Text(' '),
+                Icon(
+                  callLogEntry.video ? Icons.videocam : Icons.call,
+                  size: 16,
+                  color: Colors.grey,
+                ),
+                const Text(' '),
+                Flexible(
+                  child: Text(
+                    callNumber,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
+            ),
+            onTap: widget.onTap,
+            onLongPress: onLongPress,
+          )
+      },
     );
   }
 }

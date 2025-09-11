@@ -24,7 +24,7 @@ class App extends StatefulWidget {
 class _AppState extends State<App> {
   late final AppBloc appBloc;
 
-  late final AppRouter _appRouter;
+  late final _appRouter;
 
   @override
   void initState() {

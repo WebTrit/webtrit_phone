@@ -8,6 +8,7 @@ import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
+import 'package:webtrit_phone/utils/utils.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 import 'message_body.dart';
@@ -197,19 +198,29 @@ class _ChatMessageViewState extends State<ChatMessageView> {
                 sourceType: ContactSourceType.external,
                 sourceId: senderId,
                 builder: (context, contact, {required bool loading}) {
-                  return PresenceInfoBuilder(
-                    contact: contact,
-                    builder: (context, presenceInfo) {
-                      return LeadingAvatar(
+                  final presenceSource = PresenceViewParams.of(context).viewSource;
+
+                  return switch (presenceSource) {
+                    PresenceViewSource.sipPresence => PresenceInfoBuilder(
+                        contact: contact,
+                        builder: (context, presenceInfo) {
+                          return LeadingAvatar(
+                            username: contact?.displayTitle,
+                            thumbnail: contact?.thumbnail,
+                            thumbnailUrl: contact?.thumbnailUrl,
+                            radius: 20,
+                            presenceInfo: presenceInfo,
+                          );
+                        },
+                      ),
+                    PresenceViewSource.contactInfo => LeadingAvatar(
                         username: contact?.displayTitle,
                         thumbnail: contact?.thumbnail,
                         thumbnailUrl: contact?.thumbnailUrl,
                         registered: contact?.registered,
                         radius: 20,
-                        presenceInfo: presenceInfo,
-                      );
-                    },
-                  );
+                      )
+                  };
                 },
               ),
               const SizedBox(width: 8),

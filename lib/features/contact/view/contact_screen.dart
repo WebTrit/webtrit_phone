@@ -80,6 +80,8 @@ class _ContactScreenState extends State<ContactScreen> {
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
     final colorScheme = themeData.colorScheme;
+    final presenceSource = PresenceViewParams.of(context).viewSource;
+    final sipPresenceEnabled = presenceSource == PresenceViewSource.sipPresence;
 
     return BlocBuilder<UserInfoCubit, UserInfoState>(
       builder: (context, userInfoState) {
@@ -127,7 +129,6 @@ class _ContactScreenState extends State<ContactScreen> {
                               username: contact.displayTitle,
                               thumbnail: contact.thumbnail,
                               thumbnailUrl: contact.thumbnailUrl ?? gravatarThumbnailUrl(email),
-                              registered: contact.registered,
                               radius: 50,
                             ),
                           ),
@@ -205,7 +206,7 @@ class _ContactScreenState extends State<ContactScreen> {
                                 context.read<ContactBloc>().add(ContactEmailSend(contactEmail));
                               },
                             ),
-                          if (contact.sourceType == ContactSourceType.external)
+                          if (sipPresenceEnabled && contact.sourceType == ContactSourceType.external)
                             PresenceInfoBuilder(
                               contact: contact,
                               builder: (context, presenceInfo) {

@@ -37,3 +37,5 @@ const kSystemNotificationsTaskId = 'systemNotificationsTask-id';
 
 const kLocalPushSourceSystemNotification = 'system-notification';
 const kLocalPushSourceMessaging = 'messaging';
+
+const kSipPresenceFeatureFlag = 'sipPresence';

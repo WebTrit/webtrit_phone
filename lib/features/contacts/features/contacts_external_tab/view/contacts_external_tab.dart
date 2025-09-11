@@ -7,6 +7,7 @@ import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/presence/presence_info.dart';
+import 'package:webtrit_phone/utils/utils.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../../../contacts.dart';
@@ -39,22 +40,33 @@ class ContactsExternalTab extends StatelessWidget {
               itemCount: state.contacts.length,
               itemBuilder: (context, index) {
                 final contact = state.contacts[index];
+                final presenceSource = PresenceViewParams.of(context).viewSource;
 
-                return PresenceInfoBuilder(
-                  contact: contact,
-                  builder: (context, presenceInfo) {
-                    return ContactTile(
+                return switch (presenceSource) {
+                  PresenceViewSource.sipPresence => PresenceInfoBuilder(
+                      contact: contact,
+                      builder: (context, presenceInfo) {
+                        return ContactTile(
+                          key: contactsExtContactTileKey,
+                          displayName: contact.displayTitle,
+                          thumbnail: contact.thumbnail,
+                          thumbnailUrl: contact.thumbnailUrl,
+                          registered: contact.registered,
+                          onTap: () => routeToContactScreen(contact.id),
+                          presenceInfo: presenceInfo,
+                          statusIcon: presenceInfo?.primaryStatusIcon ?? '',
+                        );
+                      },
+                    ),
+                  PresenceViewSource.contactInfo => ContactTile(
                       key: contactsExtContactTileKey,
                       displayName: contact.displayTitle,
                       thumbnail: contact.thumbnail,
                       thumbnailUrl: contact.thumbnailUrl,
                       registered: contact.registered,
                       onTap: () => routeToContactScreen(contact.id),
-                      presenceInfo: presenceInfo,
-                      statusIcon: presenceInfo?.primaryStatusIcon ?? '',
-                    );
-                  },
-                );
+                    )
+                };
               },
             ),
           );

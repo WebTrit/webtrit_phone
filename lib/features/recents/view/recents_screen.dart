@@ -187,72 +187,66 @@ class _RecentsScreenState extends State<RecentsScreen> with SingleTickerProvider
                               final contactSmsNumbers = contact?.smsNumbers ?? [];
                               final canSendSms = contactSmsNumbers.contains(callLogEntry.number);
 
-                              return PresenceInfoBuilder(
-                                contact: contact,
-                                builder: (context, presenceInfo) {
-                                  return RecentTile(
-                                    key: recentsTileKey,
-                                    recent: recent,
-                                    callNumbers: callRoutingState?.allNumbers ?? [],
-                                    dateFormat: context.read<RecentsBloc>().dateFormat,
-                                    onTap: transfer
-                                        ? () {
-                                            submitTransfer(destination: callLogEntry.number);
-                                          }
-                                        : () {
-                                            _callController.createCall(
-                                              destination: callLogEntry.number,
-                                              displayName: contact?.maybeName,
-                                              video: callLogEntry.video && widget.videoEnabled,
-                                            );
-                                          },
-                                    onAudioCallPressed: () => _callController.createCall(
-                                      destination: callLogEntry.number,
-                                      displayName: contact?.maybeName,
-                                      video: false,
-                                    ),
-                                    onVideoCallPressed: widget.videoEnabled
-                                        ? () => _callController.createCall(
-                                              destination: callLogEntry.number,
-                                              displayName: contact?.maybeName,
-                                              video: true,
-                                            )
-                                        : null,
-                                    onTransferPressed: widget.transferEnabled && hasActiveCall
-                                        ? () {
-                                            submitTransfer(destination: callLogEntry.number);
-                                          }
-                                        : null,
-                                    onChatPressed: widget.chatsEnabled && (contact?.canMessage == true)
-                                        ? () {
-                                            openChat(contactSourceId!);
-                                          }
-                                        : null,
-                                    onSendSmsPressed: widget.smssEnabled && userSmsNumbers.isNotEmpty && canSendSms
-                                        ? () {
-                                            sendSms(
-                                              userSmsNumbers: userSmsNumbers,
-                                              contactPhoneNumber: callLogEntry.number,
-                                              contactSourceId: contactSourceId,
-                                            );
-                                          }
-                                        : null,
-                                    onViewContactPressed: contact != null
-                                        ? () {
-                                            openContact(contactId: contact.id);
-                                          }
-                                        : null,
-                                    onCallLogPressed: () => openCallLog(number: callLogEntry.number),
-                                    onDelete: () => delete(recent: recent),
-                                    onCallFrom: (fromNumber) => _callController.createCall(
-                                      destination: callLogEntry.number,
-                                      displayName: contact?.maybeName,
-                                      fromNumber: fromNumber,
-                                      video: false,
-                                    ),
-                                    presenceInfo: presenceInfo,
-                                  );
-                                },
+                              return RecentTile(
+                                key: recentsTileKey,
+                                recent: recent,
+                                callNumbers: callRoutingState?.allNumbers ?? [],
+                                dateFormat: context.read<RecentsBloc>().dateFormat,
+                                onTap: transfer
+                                    ? () {
+                                        submitTransfer(destination: callLogEntry.number);
+                                      }
+                                    : () {
+                                        _callController.createCall(
+                                          destination: callLogEntry.number,
+                                          displayName: contact?.maybeName,
+                                          video: callLogEntry.video && widget.videoEnabled,
+                                        );
+                                      },
+                                onAudioCallPressed: () => _callController.createCall(
+                                  destination: callLogEntry.number,
+                                  displayName: contact?.maybeName,
+                                  video: false,
+                                ),
+                                onVideoCallPressed: widget.videoEnabled
+                                    ? () => _callController.createCall(
+                                          destination: callLogEntry.number,
+                                          displayName: contact?.maybeName,
+                                          video: true,
+                                        )
+                                    : null,
+                                onTransferPressed: widget.transferEnabled && hasActiveCall
+                                    ? () {
+                                        submitTransfer(destination: callLogEntry.number);
+                                      }
+                                    : null,
+                                onChatPressed: widget.chatsEnabled && (contact?.canMessage == true)
+                                    ? () {
+                                        openChat(contactSourceId!);
+                                      }
+                                    : null,
+                                onSendSmsPressed: widget.smssEnabled && userSmsNumbers.isNotEmpty && canSendSms
+                                    ? () {
+                                        sendSms(
+                                          userSmsNumbers: userSmsNumbers,
+                                          contactPhoneNumber: callLogEntry.number,
+                                          contactSourceId: contactSourceId,
+                                        );
+                                      }
+                                    : null,
+                                onViewContactPressed: contact != null
+                                    ? () {
+                                        openContact(contactId: contact.id);
+                                      }
+                                    : null,
+                                onCallLogPressed: () => openCallLog(number: callLogEntry.number),
+                                onDelete: () => delete(recent: recent),
+                                onCallFrom: (fromNumber) => _callController.createCall(
+                                  destination: callLogEntry.number,
+                                  displayName: contact?.maybeName,
+                                  fromNumber: fromNumber,
+                                  video: false,
+                                ),
                               );
                             },
                           );

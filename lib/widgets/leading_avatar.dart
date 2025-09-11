@@ -46,7 +46,7 @@ class _LeadingAvatarState extends State<LeadingAvatar> {
   late LeadingAvatarStyle _style;
   late double _radius;
   late double _diameter;
-  // late Rect _registeredRect;
+  late Rect _registeredRect;
   late Rect _presenceRect;
   late Rect _smartRect;
 
@@ -74,6 +74,7 @@ class _LeadingAvatarState extends State<LeadingAvatar> {
         oldWidget.registered != widget.registered ||
         oldWidget.thumbnailUrl != widget.thumbnailUrl ||
         oldWidget.thumbnail != widget.thumbnail ||
+        oldWidget.presenceInfo != widget.presenceInfo ||
         oldWidget.username != widget.username) {
       _recompute();
     }
@@ -92,14 +93,14 @@ class _LeadingAvatarState extends State<LeadingAvatar> {
   }
 
   void _updateBadgeRects() {
-    // final registeredSizeFactor = _style.registeredBadge?.sizeFactor ?? 0.2;
+    final registeredSizeFactor = _style.registeredBadge?.sizeFactor ?? 0.2;
     final smartSizeFactor = _style.smartIndicator?.sizeFactor ?? 0.4;
     final presenceSizeFactor = _style.presenceBadge?.sizeFactor ?? 0.325;
 
-    // _registeredRect = BadgeLayout.bottomRightSquare(
-    //   size: _diameter,
-    //   sizeFactor: registeredSizeFactor,
-    // );
+    _registeredRect = BadgeLayout.bottomRightSquare(
+      size: _diameter,
+      sizeFactor: registeredSizeFactor,
+    );
 
     _presenceRect = BadgeLayout.bottomRightSquare(
       size: _diameter,
@@ -117,6 +118,7 @@ class _LeadingAvatarState extends State<LeadingAvatar> {
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
+    final presenceSource = PresenceViewParams.of(context).viewSource;
 
     return Container(
       width: _diameter,
@@ -139,13 +141,17 @@ class _LeadingAvatarState extends State<LeadingAvatar> {
               child: _buildAvatarContent(_diameter, _style),
             ),
           ),
+          if (presenceSource == PresenceViewSource.contactInfo && widget.registered != null)
+            Positioned.fromRect(
+              rect: _registeredRect,
+              child: _registeredIndicator(_style),
+            ),
+          if (presenceSource == PresenceViewSource.sipPresence && widget.presenceInfo != null)
+            Positioned.fromRect(
+              rect: _presenceRect,
+              child: _buildPresenceIndicator(_style),
+            ),
           if (widget.smart) Positioned.fromRect(rect: _smartRect, child: _smartIndicator(_diameter, _style, scheme)),
-          // else if (widget.registered != null)
-          //   Positioned.fromRect(
-          //     rect: _registeredRect,
-          //     child: _registeredIndicator(_style),
-          //   ),
-          if (widget.presenceInfo != null) _buildPresenceIndicator(_style),
           if (widget.showLoading) _buildLoadingOverlay(_style),
         ],
       ),
@@ -161,51 +167,48 @@ class _LeadingAvatarState extends State<LeadingAvatar> {
 
     final primaryActivity = widget.presenceInfo?.primaryActivity;
 
-    return Positioned.fromRect(
-      rect: _presenceRect,
-      child: Stack(
-        clipBehavior: Clip.none,
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: color,
-              border: Border.all(
-                color: Theme.of(context).scaffoldBackgroundColor,
-                width: 2,
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        Container(
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: color,
+            border: Border.all(
+              color: Theme.of(context).scaffoldBackgroundColor,
+              width: 2,
+            ),
+          ),
+        ),
+        if (primaryActivity != null)
+          Positioned(
+            top: -_presenceRect.width * 0.2,
+            right: 0,
+            child: DecoratedIcon(
+              decoration: IconDecoration(
+                border: IconBorder(color: Theme.of(context).scaffoldBackgroundColor, width: 2.5),
+              ),
+              icon: Icon(
+                switch (primaryActivity) {
+                  PresenceActivity.busy => Icons.event_busy,
+                  PresenceActivity.doNotDisturb => Icons.phone_disabled_rounded,
+                  PresenceActivity.sleeping => Icons.nights_stay_rounded,
+                  PresenceActivity.permanentAbsence => Icons.person_off_rounded,
+                  PresenceActivity.onThePhone => Icons.phone_in_talk_rounded,
+                  PresenceActivity.meal => Icons.restaurant,
+                  PresenceActivity.meeting => Icons.calendar_month,
+                  PresenceActivity.appointment => Icons.diversity_3_sharp,
+                  PresenceActivity.vacation => Icons.beach_access,
+                  PresenceActivity.travel => Icons.flight,
+                  PresenceActivity.inTransit => Icons.drive_eta,
+                  PresenceActivity.away => Icons.directions_walk,
+                },
+                color: color,
+                size: _presenceRect.width * 0.6,
               ),
             ),
           ),
-          if (primaryActivity != null)
-            Positioned(
-              top: -_presenceRect.width * 0.2,
-              right: 0,
-              child: DecoratedIcon(
-                decoration: IconDecoration(
-                  border: IconBorder(color: Theme.of(context).scaffoldBackgroundColor, width: 2.5),
-                ),
-                icon: Icon(
-                  switch (primaryActivity) {
-                    PresenceActivity.busy => Icons.event_busy,
-                    PresenceActivity.doNotDisturb => Icons.phone_disabled_rounded,
-                    PresenceActivity.sleeping => Icons.nights_stay_rounded,
-                    PresenceActivity.permanentAbsence => Icons.person_off_rounded,
-                    PresenceActivity.onThePhone => Icons.phone_in_talk_rounded,
-                    PresenceActivity.meal => Icons.restaurant,
-                    PresenceActivity.meeting => Icons.calendar_month,
-                    PresenceActivity.appointment => Icons.diversity_3_sharp,
-                    PresenceActivity.vacation => Icons.beach_access,
-                    PresenceActivity.travel => Icons.flight,
-                    PresenceActivity.inTransit => Icons.drive_eta,
-                    PresenceActivity.away => Icons.directions_walk,
-                  },
-                  color: color,
-                  size: _presenceRect.width * 0.6,
-                ),
-              ),
-            ),
-        ],
-      ),
+      ],
     );
   }
 
@@ -289,16 +292,16 @@ class _LeadingAvatarState extends State<LeadingAvatar> {
     return Icon(icon, size: diameter * 0.5);
   }
 
-  // Widget _registeredIndicator(LeadingAvatarStyle style) {
-  //   final registered = widget.registered!;
-  //   final rs = Theme.of(context).extension<RegisteredStatusStyles>()?.primary;
+  Widget _registeredIndicator(LeadingAvatarStyle style) {
+    final registered = widget.registered!;
+    final rs = Theme.of(context).extension<RegisteredStatusStyles>()?.primary;
 
-  //   final color = registered
-  //       ? (style.registeredBadge?.registeredColor ?? rs?.registered)
-  //       : (style.registeredBadge?.unregisteredColor ?? rs?.unregistered);
+    final color = registered
+        ? (style.registeredBadge?.registeredColor ?? rs?.registered)
+        : (style.registeredBadge?.unregisteredColor ?? rs?.unregistered);
 
-  //   return Container(decoration: BoxDecoration(shape: BoxShape.circle, color: color));
-  // }
+    return Container(decoration: BoxDecoration(shape: BoxShape.circle, color: color));
+  }
 
   Widget _smartIndicator(double diameter, LeadingAvatarStyle style, ColorScheme scheme) {
     final bg = style.smartIndicator?.backgroundColor ?? scheme.surfaceContainerLowest;

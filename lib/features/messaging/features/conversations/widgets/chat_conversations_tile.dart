@@ -8,6 +8,7 @@ import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/messaging/messaging.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/utils/utils.dart';
 import 'package:webtrit_phone/widgets/leading_avatar.dart';
 import 'package:webtrit_phone/widgets/presence_info_builder.dart';
 
@@ -87,40 +88,74 @@ class _ChatConversationsTileState extends State<ChatConversationsTile> {
       sourceType: ContactSourceType.external,
       sourceId: participant.userId,
       builder: (context, contact, {required bool loading}) {
-        return PresenceInfoBuilder(
-          contact: contact,
-          key: ValueKey(contact),
-          builder: (context, presenceInfo) {
-            final text = switch (contact) {
-              null => context.l10n.messaging_ParticipantName_unknown,
-              _ => '${contact.displayTitle} ${presenceInfo?.primaryStatusIcon ?? ''}',
-            };
-            return ListTile(
-              leading: LeadingAvatar(
-                username: contact?.displayTitle,
-                thumbnail: contact?.thumbnail,
-                thumbnailUrl: contact?.thumbnailUrl,
-                registered: contact?.registered,
-                radius: 24,
-                presenceInfo: presenceInfo,
-              ),
-              title: Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      text,
-                      style: const TextStyle(overflow: TextOverflow.ellipsis),
-                    ),
+        final presenceSource = PresenceViewParams.of(context).viewSource;
+
+        return switch (presenceSource) {
+          PresenceViewSource.sipPresence => PresenceInfoBuilder(
+              contact: contact,
+              key: ValueKey(contact),
+              builder: (context, presenceInfo) {
+                final text = switch (contact) {
+                  null => context.l10n.messaging_ParticipantName_unknown,
+                  _ => '${contact.displayTitle} ${presenceInfo?.primaryStatusIcon ?? ''}',
+                };
+                return ListTile(
+                  leading: LeadingAvatar(
+                    username: contact?.displayTitle,
+                    thumbnail: contact?.thumbnail,
+                    thumbnailUrl: contact?.thumbnailUrl,
+                    radius: 24,
+                    presenceInfo: presenceInfo,
                   ),
-                  const SizedBox(width: 4),
-                  if (lastMessage != null) Text(lastMessage.createdAt.timeOrDate, style: const TextStyle(fontSize: 12)),
-                ],
-              ),
-              subtitle: subtitle(),
-              onTap: onTap,
-            );
-          },
-        );
+                  title: Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          text,
+                          style: const TextStyle(overflow: TextOverflow.ellipsis),
+                        ),
+                      ),
+                      const SizedBox(width: 4),
+                      if (lastMessage != null)
+                        Text(lastMessage.createdAt.timeOrDate, style: const TextStyle(fontSize: 12)),
+                    ],
+                  ),
+                  subtitle: subtitle(),
+                  onTap: onTap,
+                );
+              },
+            ),
+          PresenceViewSource.contactInfo => Builder(builder: (context) {
+              final text = switch (contact) {
+                null => context.l10n.messaging_ParticipantName_unknown,
+                _ => contact.displayTitle,
+              };
+              return ListTile(
+                leading: LeadingAvatar(
+                  username: contact?.displayTitle,
+                  thumbnail: contact?.thumbnail,
+                  thumbnailUrl: contact?.thumbnailUrl,
+                  registered: contact?.registered,
+                  radius: 24,
+                ),
+                title: Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        text,
+                        style: const TextStyle(overflow: TextOverflow.ellipsis),
+                      ),
+                    ),
+                    const SizedBox(width: 4),
+                    if (lastMessage != null)
+                      Text(lastMessage.createdAt.timeOrDate, style: const TextStyle(fontSize: 12)),
+                  ],
+                ),
+                subtitle: subtitle(),
+                onTap: onTap,
+              );
+            })
+        };
       },
     );
   }

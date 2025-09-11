@@ -11,6 +11,7 @@ import 'package:webtrit_phone/features/user_info/user_info.dart';
 import 'package:webtrit_phone/features/session_status/session_status.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/utils/utils.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../settings.dart';
@@ -216,7 +217,8 @@ class SettingsScreen extends StatelessWidget {
                                       );
                                     },
                                   )
-                                else if (item.flavor == SettingsFlavor.presence)
+                                else if (item.flavor == SettingsFlavor.presence &&
+                                    PresenceViewParams.of(context).viewSource == PresenceViewSource.sipPresence)
                                   Column(children: [
                                     ListTile(
                                       leading: Icon(item.icon),
