@@ -3,11 +3,10 @@ import 'dart:convert';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:logging/logging.dart';
 
-import '../web_view_container.dart';
-
 final _jsLogger = Logger('JSChannel');
 
-typedef JsonEventHandler = void Function(JsonJsEvent e);
+/// Handler that receives the active [WebViewController] and the parsed event.
+typedef JsonEventHandler = void Function(WebViewController controller, JsonJsEvent e);
 
 class JsonJsEvent {
   JsonJsEvent({

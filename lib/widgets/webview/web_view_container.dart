@@ -965,9 +965,9 @@ class HardReloadRecoveryStrategy extends SoftReloadRecoveryStrategy {
 /// // Single handler
 /// final strategy = JSChannelStrategy(
 ///   name: 'MyChannel',
-///   onEvent: (event) {
+///   onEvent: (controller, event) {
 ///     if (event.event == 'signup') {
-///       // Handle signup event
+///       // You can use controller here (e.g. reload)
 ///     }
 ///   },
 ///   onMalformed: (raw) => print('Malformed message: $raw'),
@@ -977,10 +977,10 @@ class HardReloadRecoveryStrategy extends SoftReloadRecoveryStrategy {
 /// final routed = JSChannelStrategy.route(
 ///   name: 'MyChannel',
 ///   routes: {
-///     'signup': (event) => handleSignup(event),
-///     'logout': (event) => handleLogout(event),
+///     'signup': (c, e) => handleSignup(c, e),
+///     'logout': (c, e) => handleLogout(c, e),
 ///   },
-///   onUnknown: (event) => print('Unknown event: ${event.event}'),
+///   onUnknown: (e) => print('Unknown event: ${e.event}'),
 /// );
 /// ```
 ///
@@ -992,7 +992,7 @@ class JSChannelStrategy {
   /// Creates a [JSChannelStrategy].
   ///
   /// - [name]: The JavaScript channel name to listen for (must match the name used in the web page).
-  /// - [onEvent]: Callback invoked with a parsed [JsonJsEvent] when a valid message is received.
+  /// - [onEvent]: Callback invoked with the [WebViewController] and parsed [JsonJsEvent] when a valid message is received.
   /// - [onMalformed]: Optional callback when the incoming message is not valid JSON or cannot be parsed.
   const JSChannelStrategy({
     this.name = defaultJSChannelName,
@@ -1003,7 +1003,7 @@ class JSChannelStrategy {
   /// The JavaScript channel name.
   final String name;
 
-  /// Handler for successfully decoded [JsonJsEvent].
+  /// Handler for successfully decoded events (with controller).
   final JsonEventHandler onEvent;
 
   /// Handler for raw, malformed messages that failed to decode.
@@ -1021,7 +1021,7 @@ class JSChannelStrategy {
           onMalformed?.call(m.message);
           return;
         }
-        onEvent(e);
+        onEvent(controller, e);
       },
     );
   }
@@ -1038,8 +1038,8 @@ class JSChannelStrategy {
   /// ```dart
   /// final channel = JSChannelStrategy.route(
   ///   routes: {
-  ///     'signup': (e) => handleSignup(e),
-  ///     'logout': (e) => handleLogout(e),
+  ///     'signup': (c, e) => handleSignup(c, e),
+  ///     'logout': (c, e) => handleLogout(c, e),
   ///   },
   ///   onUnknown: (e) => print('Unknown event: ${e.event}'),
   /// );
@@ -1053,10 +1053,10 @@ class JSChannelStrategy {
     return JSChannelStrategy(
       name: name,
       onMalformed: onMalformed,
-      onEvent: (e) {
+      onEvent: (controller, e) {
         final handler = routes[e.event];
         if (handler != null) {
-          handler(e);
+          handler(controller, e);
         } else {
           onUnknown?.call(e);
         }

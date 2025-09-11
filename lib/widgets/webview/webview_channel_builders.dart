@@ -1,4 +1,5 @@
 import 'package:logging/logging.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:webtrit_phone/widgets/webview/extensions/extensions.dart';
 
@@ -105,12 +106,44 @@ class JavaScriptChannelBuilders {
 
     return JSChannelStrategy(
       name: name,
-      onEvent: (e) {
-        final level = pickLevel(e.event);
-        final msg = e.data?['message']?.toString() ?? e.raw.toString();
+      onEvent: (_, it) {
+        final level = pickLevel(it.event);
+        final msg = it.data?['message']?.toString() ?? it.raw.toString();
         log(level, msg);
       },
       onMalformed: handleLegacyRaw,
+    );
+  }
+
+  static const _pageVersionKey = 'cached_page_version';
+
+  /// Default handler for the `pageVersion` event.
+  /// - Saves latest page version to local storage.
+  /// - If version differs from cached one, triggers a hard reload.
+  static JSChannelStrategy pageVersion() {
+    return JSChannelStrategy.route(
+      routes: {
+        'pageVersion': (controller, it) async {
+          final newVersion = it.data?['pageVersion']?.toString();
+          if (newVersion == null) {
+            _logger.warning('pageVersion event without version');
+            return;
+          }
+
+          final prefs = await SharedPreferences.getInstance();
+          final oldVersion = prefs.getString(_pageVersionKey);
+
+          _logger.info('Received page version: $newVersion (cached: $oldVersion)');
+          if (oldVersion != newVersion) {
+            _logger.info('Page version changed: $oldVersion -> $newVersion, reloading...');
+            await prefs.setString(_pageVersionKey, newVersion);
+            await controller.reload();
+          } else {
+            _logger.fine('Page version unchanged: $newVersion');
+          }
+        },
+      },
+      onUnknown: (e) => _logger.fine('Unknown event : ${e.event}'),
     );
   }
 
@@ -118,14 +151,25 @@ class JavaScriptChannelBuilders {
   ///
   /// - [custom]: Any feature-specific strategies to include.
   /// - [includeConsoleLogger]: Whether to add the [consoleLogger] channel.
+  /// - [includePageVersionHandler]: Whether to add the default [pageVersion] handler.
   ///
   /// Returns the final list of strategies to be attached to the WebView.
   static List<JSChannelStrategy> resolve({
     List<JSChannelStrategy> custom = const [],
     bool includeConsoleLogger = true,
+    bool includePageVersionHandler = true,
+    Future<void> Function()? onHardReload,
   }) {
     final list = <JSChannelStrategy>[...custom];
-    if (includeConsoleLogger) list.add(consoleLogger());
+
+    if (includeConsoleLogger) {
+      list.add(consoleLogger());
+    }
+
+    if (includePageVersionHandler) {
+      list.add(pageVersion());
+    }
+
     return list;
   }
 }

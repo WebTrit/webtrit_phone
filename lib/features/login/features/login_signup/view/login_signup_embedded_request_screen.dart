@@ -183,7 +183,7 @@ class _LoginSignupEmbeddedRequestScreenState extends State<LoginSignupEmbeddedRe
     }
   }
 
-  void _onJSMessageReceived(JsonJsEvent e) {
+  void _onJSMessageReceived(WebViewController _, JsonJsEvent e) {
     if (context.mounted) _loginCubit.loginCustomSignupRequest(e.data, e.callback);
   }
 }
