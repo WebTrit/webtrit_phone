@@ -115,12 +115,12 @@ class JSChannelBuilders {
     );
   }
 
-  static const _pageVersionKey = 'cached_page_version';
-
   /// Default handler for the `pageVersion` event.
   /// - Saves latest page version to local storage.
   /// - If version differs from cached one, triggers a hard reload.
   static JSChannelStrategy pageVersion() {
+    const pageVersionKey = 'cached_page_version';
+
     return JSChannelStrategy.route(
       name: 'WebtritPageVersionChannel',
       routes: {
@@ -132,12 +132,12 @@ class JSChannelBuilders {
           }
 
           final prefs = await SharedPreferences.getInstance();
-          final oldVersion = prefs.getString(_pageVersionKey);
+          final oldVersion = prefs.getString(pageVersionKey);
 
           _logger.info('Received page version: $newVersion (cached: $oldVersion)');
           if (oldVersion != newVersion) {
             _logger.info('Page version changed: $oldVersion -> $newVersion, reloading...');
-            await prefs.setString(_pageVersionKey, newVersion);
+            await prefs.setString(pageVersionKey, newVersion);
             await controller.reload();
           } else {
             _logger.fine('Page version unchanged: $newVersion');
