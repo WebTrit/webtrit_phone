@@ -82,7 +82,7 @@ class _LoginSignupEmbeddedRequestScreenState extends State<LoginSignupEmbeddedRe
           javaScriptChannels: {
             _jsChannelName: _onJavaScriptMessageReceived,
           },
-          pageInjectionStrategies: [_pageInjectionStrategy],
+          pageInjectionStrategies: PageInjectionBuilders.resolve(context, custom: [_pageInjectionStrategy]),
           onUrlChange: (_) => _updateCanGoBack(),
           errorBuilder: _buildErrorBuilder(),
         ),
