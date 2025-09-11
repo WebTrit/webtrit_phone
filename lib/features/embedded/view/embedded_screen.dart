@@ -19,7 +19,7 @@ class EmbeddedScreen extends StatefulWidget {
     required this.initialUri,
     required this.appBar,
     this.shouldForwardPop = true,
-    this.enableConsoleLogCapture,
+    this.enableLogCapture = false,
     required this.connectivityRecoveryStrategyBuilder,
     required this.pageInjectionStrategyBuilder,
     super.key,
@@ -29,7 +29,7 @@ class EmbeddedScreen extends StatefulWidget {
   final PreferredSizeWidget appBar;
 
   /// If true, the console log will be captured and forwarded to the logger.
-  final bool? enableConsoleLogCapture;
+  final bool enableLogCapture;
 
   /// If true, the pop action will be forwarded to the WebView if backstack is available.
   final bool shouldForwardPop;
@@ -75,8 +75,8 @@ class _EmbeddedScreenState extends State<EmbeddedScreen> {
               connectivityRecoveryStrategy: _connectivityRecoveryStrategy,
               // TODO: Add to embedded configuration possibly disable media query injection and/or device info injection.
               pageInjectionStrategies: PageInjectionBuilders.resolve(context, custom: [_pageInjectionStrategy]),
+              jSChannelStrategies: JSChannelBuilders.resolve(enableLogCapture: widget.enableLogCapture),
               showToolbar: false,
-              enableEmbeddedLogging: widget.enableConsoleLogCapture ?? false,
               userAgent: UserAgent.of(context),
               errorBuilder: _buildErrorBuilder(),
               onUrlChange: _handleUrlChange,

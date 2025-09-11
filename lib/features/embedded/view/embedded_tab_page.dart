@@ -46,7 +46,7 @@ class EmbeddedTabPage extends StatelessWidget {
 
           return EmbeddedScreen(
             initialUri: data.data!.uri,
-            enableConsoleLogCapture: data.data?.enableConsoleLogCapture,
+            enableLogCapture: data.data?.enableConsoleLogCapture ?? false,
             appBar: _buildAppBar(context, data.titleL10n),
             pageInjectionStrategyBuilder: _defaultPageInjectionStrategy,
             connectivityRecoveryStrategyBuilder: () => _createConnectivityRecoveryStrategy(data.data!),

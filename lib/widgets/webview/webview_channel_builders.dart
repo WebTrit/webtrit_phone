@@ -16,7 +16,7 @@ final _logger = Logger('WebViewContainer');
 /// - Creating a console logger channel to capture and forward
 ///   `console.*` messages from the WebView.
 /// - Resolving a combined list of strategies including custom ones.
-class JavaScriptChannelBuilders {
+class JSChannelBuilders {
   /// Creates a [JSChannelStrategy] with a single event handler.
   ///
   /// - [name]: The channel name, must match the name used in the web page.
@@ -150,23 +150,23 @@ class JavaScriptChannelBuilders {
   /// Combines multiple [JSChannelStrategy] instances into a list.
   ///
   /// - [custom]: Any feature-specific strategies to include.
-  /// - [includeConsoleLogger]: Whether to add the [consoleLogger] channel.
-  /// - [includePageVersionHandler]: Whether to add the default [pageVersion] handler.
+  /// - [enableLogCapture]: Whether to add the [consoleLogger] channel.
+  /// - [enablePageVersionHandler]: Whether to add the default [pageVersion] handler.
   ///
   /// Returns the final list of strategies to be attached to the WebView.
   static List<JSChannelStrategy> resolve({
     List<JSChannelStrategy> custom = const [],
-    bool includeConsoleLogger = true,
-    bool includePageVersionHandler = true,
+    bool enableLogCapture = true,
+    bool enablePageVersionHandler = true,
     Future<void> Function()? onHardReload,
   }) {
     final list = <JSChannelStrategy>[...custom];
 
-    if (includeConsoleLogger) {
+    if (enableLogCapture) {
       list.add(consoleLogger());
     }
 
-    if (includePageVersionHandler) {
+    if (enablePageVersionHandler) {
       list.add(pageVersion());
     }
 

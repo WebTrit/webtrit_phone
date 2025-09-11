@@ -77,7 +77,7 @@ class _LoginSignupEmbeddedRequestScreenState extends State<LoginSignupEmbeddedRe
           userAgent: UserAgent.of(context),
           // TODO: Add to embedded configuration possibly disable media query injection and/or device info injection.
           pageInjectionStrategies: PageInjectionBuilders.resolve(context, custom: [_pageInjectionStrategy]),
-          javaScriptChannelStrategies: JavaScriptChannelBuilders.resolve(custom: [_jsChannelStrategy]),
+          jSChannelStrategies: JSChannelBuilders.resolve(custom: [_jsChannelStrategy]),
           onUrlChange: (_) => _updateCanGoBack(),
           errorBuilder: _buildErrorBuilder(),
         ),

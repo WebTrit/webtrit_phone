@@ -44,7 +44,7 @@ class EmbeddedScreenPage extends StatelessWidget {
       create: (_) => _createCubit(selfConfigRepository, secureStorage),
       child: EmbeddedScreen(
         initialUri: data.uri,
-        enableConsoleLogCapture: data.enableConsoleLogCapture,
+        enableLogCapture: data.enableConsoleLogCapture,
         appBar: _buildAppBar(context),
         pageInjectionStrategyBuilder: _defaultPageInjectionStrategy,
         connectivityRecoveryStrategyBuilder: () => _createConnectivityRecoveryStrategy(data),
