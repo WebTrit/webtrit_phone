@@ -159,7 +159,6 @@ class JSChannelBuilders {
     List<JSChannelStrategy> custom = const [],
     bool enableLogCapture = true,
     bool enablePageVersionHandler = true,
-    Future<void> Function()? onHardReload,
   }) {
     final list = <JSChannelStrategy>[...custom];
 
