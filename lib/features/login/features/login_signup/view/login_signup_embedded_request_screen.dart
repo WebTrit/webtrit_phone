@@ -1,9 +1,6 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:logging/logging.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -17,10 +14,6 @@ import 'package:webtrit_phone/utils/utils.dart';
 import 'package:webtrit_phone/models/models.dart';
 
 import '../widgets/widgets.dart';
-
-final _logger = Logger('LoginSignupEmbeddedRequestScreen');
-
-const _jsChannelName = 'WebtritLoginChannel';
 
 class LoginSignupEmbeddedRequestScreen extends StatefulWidget {
   const LoginSignupEmbeddedRequestScreen({
@@ -44,8 +37,10 @@ class LoginSignupEmbeddedRequestScreen extends StatefulWidget {
 
 class _LoginSignupEmbeddedRequestScreenState extends State<LoginSignupEmbeddedRequestScreen> {
   final WebViewController _webViewController = WebViewController();
+
   late final PageInjectionStrategy _pageInjectionStrategy;
   late final ConnectivityRecoveryStrategy _connectivityRecoveryStrategy;
+  late final JSChannelStrategy _jsChannelStrategy;
 
   /// Indicates whether the WebView can navigate back in its history stack.
   /// Used to control PopScope behavior and decide whether to intercept back presses.
@@ -61,6 +56,7 @@ class _LoginSignupEmbeddedRequestScreenState extends State<LoginSignupEmbeddedRe
   void initState() {
     _pageInjectionStrategy = widget.pageInjectionStrategyBuilder();
     _connectivityRecoveryStrategy = widget.connectivityRecoveryStrategyBuilder();
+    _jsChannelStrategy = JSChannelStrategy.route(routes: {'signup': _onJSMessageReceived});
     super.initState();
   }
 
@@ -79,11 +75,9 @@ class _LoginSignupEmbeddedRequestScreenState extends State<LoginSignupEmbeddedRe
           connectivityRecoveryStrategy: _connectivityRecoveryStrategy,
           showToolbar: false,
           userAgent: UserAgent.of(context),
-          javaScriptChannels: {
-            _jsChannelName: _onJavaScriptMessageReceived,
-          },
           // TODO: Add to embedded configuration possibly disable media query injection and/or device info injection.
           pageInjectionStrategies: PageInjectionBuilders.resolve(context, custom: [_pageInjectionStrategy]),
+          javaScriptChannelStrategies: JavaScriptChannelBuilders.resolve(custom: [_jsChannelStrategy]),
           onUrlChange: (_) => _updateCanGoBack(),
           errorBuilder: _buildErrorBuilder(),
         ),
@@ -189,21 +183,7 @@ class _LoginSignupEmbeddedRequestScreenState extends State<LoginSignupEmbeddedRe
     }
   }
 
-  void _onJavaScriptMessageReceived(JavaScriptMessage message) {
-    try {
-      final decoded = jsonDecode(message.message);
-      // Type of event sent from the embedded page (e.g. 'signup').
-      final event = decoded['event'];
-      // Payload associated with the event, typically containing user or signup data.
-      final data = decoded['data'];
-      // Optional callback data that may contain instructions for an additional HTTP request.
-      final embeddedCallbackData = decoded['callback'];
-
-      if (event == 'signup' && context.mounted) {
-        _loginCubit.loginCustomSignupRequest(data, embeddedCallbackData);
-      }
-    } catch (e, st) {
-      _logger.severe('Error decoding message', e, st);
-    }
+  void _onJSMessageReceived(JsonJsEvent e) {
+    if (context.mounted) _loginCubit.loginCustomSignupRequest(e.data, e.callback);
   }
 }

@@ -20,6 +20,8 @@ import 'package:webtrit_phone/widgets/webview/extensions/extensions.dart';
 
 import 'package:webtrit_phone/l10n/l10n.dart';
 
+import 'models/models.dart';
+
 final _logger = Logger('WebViewContainer');
 
 class WebViewContainer extends StatefulWidget {
@@ -39,6 +41,7 @@ class WebViewContainer extends StatefulWidget {
     this.onUrlChange,
     this.connectivityRecoveryStrategy,
     this.pageInjectionStrategies = const [],
+    this.javaScriptChannelStrategies = const [],
     this.enableEmbeddedLogging = false,
   });
 
@@ -46,6 +49,7 @@ class WebViewContainer extends StatefulWidget {
   final Uri initialUri;
   final bool addLocaleNameToQueryParameters;
   final Map<String, void Function(JavaScriptMessage)> javaScriptChannels;
+
   final bool showToolbar;
   final Widget? Function(BuildContext context, WebResourceError error, WebViewController controller)? errorBuilder;
   final TransitionBuilder? builder;
@@ -62,6 +66,8 @@ class WebViewContainer extends StatefulWidget {
 
   /// List of strategies for injecting data into the WebView when it is ready.
   final List<PageInjectionStrategy> pageInjectionStrategies;
+
+  final List<JSChannelStrategy> javaScriptChannelStrategies;
 
   @override
   State<WebViewContainer> createState() => _WebViewContainerState();
@@ -241,6 +247,12 @@ class _WebViewContainerState extends State<WebViewContainer> with WidgetStateMix
         ..setUserAgent(widget.userAgent)
         ..setNavigationDelegate(navigationDelegate)
         ..setJavaScriptMode(JavaScriptMode.unrestricted);
+    }
+
+    if (widget.javaScriptChannelStrategies.isNotEmpty) {
+      for (final s in widget.javaScriptChannelStrategies) {
+        s._attach(_webViewController);
+      }
     }
 
     for (var MapEntry(key: name, value: onMessageReceived) in widget.javaScriptChannels.entries) {
@@ -936,5 +948,119 @@ class HardReloadRecoveryStrategy extends SoftReloadRecoveryStrategy {
   @override
   Future<void> _onRetryAttempt() {
     return _controller.loadRequest(initialUri);
+  }
+}
+
+/// A strategy wrapper for handling JavaScript channels in [WebViewController].
+///
+/// This class provides a convenient way to:
+/// - Register a named JavaScript channel.
+/// - Automatically decode messages into [JsonJsEvent].
+/// - Route events to the correct handler based on the event name.
+/// - Handle malformed or unknown messages gracefully.
+///
+/// Typical usage:
+///
+/// ```dart
+/// // Single handler
+/// final strategy = JSChannelStrategy(
+///   name: 'MyChannel',
+///   onEvent: (event) {
+///     if (event.event == 'signup') {
+///       // Handle signup event
+///     }
+///   },
+///   onMalformed: (raw) => print('Malformed message: $raw'),
+/// );
+///
+/// // Router-based handler
+/// final routed = JSChannelStrategy.route(
+///   name: 'MyChannel',
+///   routes: {
+///     'signup': (event) => handleSignup(event),
+///     'logout': (event) => handleLogout(event),
+///   },
+///   onUnknown: (event) => print('Unknown event: ${event.event}'),
+/// );
+/// ```
+///
+/// The default channel name is [defaultJSChannelName].
+class JSChannelStrategy {
+  /// Default channel name used for login/signup flow.
+  static const defaultJSChannelName = 'WebtritLoginChannel';
+
+  /// Creates a [JSChannelStrategy].
+  ///
+  /// - [name]: The JavaScript channel name to listen for (must match the name used in the web page).
+  /// - [onEvent]: Callback invoked with a parsed [JsonJsEvent] when a valid message is received.
+  /// - [onMalformed]: Optional callback when the incoming message is not valid JSON or cannot be parsed.
+  const JSChannelStrategy({
+    this.name = defaultJSChannelName,
+    required this.onEvent,
+    this.onMalformed,
+  });
+
+  /// The JavaScript channel name.
+  final String name;
+
+  /// Handler for successfully decoded [JsonJsEvent].
+  final JsonEventHandler onEvent;
+
+  /// Handler for raw, malformed messages that failed to decode.
+  final void Function(String raw)? onMalformed;
+
+  /// Attaches this strategy to a [WebViewController].
+  ///
+  /// Called internally by [WebViewContainer] to register the channel.
+  void _attach(WebViewController controller) {
+    controller.addJavaScriptChannel(
+      name,
+      onMessageReceived: (m) {
+        final e = JsonJsEvent.fromMessage(m);
+        if (e == null) {
+          onMalformed?.call(m.message);
+          return;
+        }
+        onEvent(e);
+      },
+    );
+  }
+
+  /// Creates a router-based [JSChannelStrategy] that dispatches events
+  /// to different handlers based on the [JsonJsEvent.event] field.
+  ///
+  /// - [routes]: A map of event name -> handler.
+  /// - [onUnknown]: Optional handler called if the event name
+  ///   does not match any entry in [routes].
+  /// - [onMalformed]: Optional handler for malformed raw messages.
+  ///
+  /// Example:
+  /// ```dart
+  /// final channel = JSChannelStrategy.route(
+  ///   routes: {
+  ///     'signup': (e) => handleSignup(e),
+  ///     'logout': (e) => handleLogout(e),
+  ///   },
+  ///   onUnknown: (e) => print('Unknown event: ${e.event}'),
+  /// );
+  /// ```
+  factory JSChannelStrategy.route({
+    String name = defaultJSChannelName,
+    required Map<String, JsonEventHandler> routes,
+    void Function(String raw)? onMalformed,
+    void Function(JsonJsEvent e)? onUnknown,
+  }) {
+    return JSChannelStrategy(
+      name: name,
+      onMalformed: onMalformed,
+      onEvent: (e) {
+        final handler = routes[e.event];
+        if (handler != null) {
+          handler(e);
+        } else {
+          onUnknown?.call(e);
+        }
+      },
+    );
   }
 }
