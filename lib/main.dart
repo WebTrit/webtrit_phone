@@ -151,6 +151,11 @@ class RootApp extends StatelessWidget {
           },
           dispose: (context, value) => value.dispose(),
         ),
+        Provider<AppLabelsProvider>(
+          create: (context) {
+            return DefaultAppLabelsProvider();
+          },
+        ),
       ],
       child: Builder(builder: (context) {
         return MultiRepositoryProvider(
