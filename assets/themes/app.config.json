@@ -11,7 +11,7 @@
       {
         "enabled": false,
         "type": "embedded",
-        "embeddedId": 1,
+        "embeddedId": "example_embedded_login",
         "titleL10n": "login_Button_signUpToDemoInstance",
         "isLaunchButtonVisible": false,
         "isLaunchScreen": false
@@ -19,7 +19,7 @@
       {
         "enabled": false,
         "type": "embedded",
-        "embeddedId": 8,
+        "embeddedId": "example_embedded_media_query",
         "titleL10n": "login_Button_signInMediaQueryExample",
         "isLaunchButtonVisible": false,
         "isLaunchScreen": false
