@@ -193,6 +193,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                                         callStatus: widget.callStatus,
                                       ),
                                     CallActions(
+                                      style: style?.actions,
                                       enableInteractions: widget.callStatus == CallStatus.ready,
                                       isIncoming: activeCall.isIncoming,
                                       remoteVideo: activeCall.remoteVideo,

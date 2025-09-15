@@ -5,6 +5,7 @@ import 'package:webtrit_phone/theme/theme.dart';
 
 import '../theme_style_factory.dart';
 
+@Deprecated('Use CallScreenStyleFactory instead')
 class CallActionsStyleFactory implements ThemeStyleFactory<CallActionsStyles> {
   CallActionsStyleFactory(this.colors, this.config);
 
