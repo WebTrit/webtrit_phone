@@ -142,9 +142,30 @@ class CallPageConfig with _$CallPageConfig {
 
     /// Style configuration for the call information area (username, number, status).
     CallPageInfoConfig? callInfo,
+
+    /// Style configuration for the action buttons area (call, hangup, mute, etc).
+    CallPageActionsConfig? actions,
   }) = _CallPageConfig;
 
   factory CallPageConfig.fromJson(Map<String, dynamic> json) => _$CallPageConfigFromJson(json);
+}
+
+@Freezed()
+class CallPageActionsConfig with _$CallPageActionsConfig {
+  @JsonSerializable(explicitToJson: true)
+  const factory CallPageActionsConfig({
+    @Default(ElevatedButtonWidgetConfig()) ElevatedButtonWidgetConfig callStart,
+    @Default(ElevatedButtonWidgetConfig()) ElevatedButtonWidgetConfig hangup,
+    @Default(ElevatedButtonWidgetConfig()) ElevatedButtonWidgetConfig transfer,
+    @Default(ElevatedButtonWidgetConfig()) ElevatedButtonWidgetConfig camera,
+    @Default(ElevatedButtonWidgetConfig()) ElevatedButtonWidgetConfig muted,
+    @Default(ElevatedButtonWidgetConfig()) ElevatedButtonWidgetConfig speaker,
+    @Default(ElevatedButtonWidgetConfig()) ElevatedButtonWidgetConfig held,
+    @Default(ElevatedButtonWidgetConfig()) ElevatedButtonWidgetConfig swap,
+    @Default(ElevatedButtonWidgetConfig()) ElevatedButtonWidgetConfig key,
+  }) = _CallPageActionsConfig;
+
+  factory CallPageActionsConfig.fromJson(Map<String, dynamic> json) => _$CallPageActionsConfigFromJson(json);
 }
 
 /// Declarative configuration for the **Call Info section** on the call screen.

@@ -53,6 +53,8 @@ class ThemeStyleFactoryProvider {
     final callStatusStyleFactory = CallStatusStyleFactory(colorScheme, callStatuses);
     final elevatedButtonStyleFactory = ElevatedButtonStyleFactory(colorScheme, elevatedButton);
     final textButtonStyleFactory = TextButtonStyleFactory(colorScheme);
+    // TODO(Serdun): Remove in future major release after migrating to CallPageActionsConfig
+    // ignore: deprecated_member_use_from_same_package
     final callActionsStyleFactory = CallActionsStyleFactory(colorScheme, callActions);
     final linkifyStyleFactory = LinkifyStyleFactory(colorScheme, linkify);
     final logoAssetStyleFactory = LogoAssetsFactory(imageAssetsConfig);
@@ -72,7 +74,7 @@ class ThemeStyleFactoryProvider {
 
     // Screen-specific styles
     final aboutScreenStyleFactory = AboutScreenStyleFactory(loginPageScheme);
-    final callScreenStyleFactory = CallScreenStyleFactory(callPageScheme, colorScheme);
+    final callScreenStyleFactory = CallScreenStyleFactory(colorScheme, callPageScheme, callActions);
     final keypadScreenStyleFactory =
         KeypadScreenStyleFactory(colorScheme, config: pageConfig.keypad, textTheme: createTextTheme());
 

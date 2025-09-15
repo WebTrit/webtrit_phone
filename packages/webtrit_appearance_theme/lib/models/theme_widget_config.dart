@@ -58,6 +58,8 @@ class ElevatedButtonWidgetConfig with _$ElevatedButtonWidgetConfig {
     String? textColor,
     String? iconColor,
     String? disabledIconColor,
+    String? disabledBackgroundColor,
+    String? disabledForegroundColor,
   }) = _ElevatedButtonWidgetConfig;
 
   factory ElevatedButtonWidgetConfig.fromJson(Map<String, dynamic> json) => _$ElevatedButtonWidgetConfigFromJson(json);
@@ -68,6 +70,8 @@ class GroupWidgetConfig with _$GroupWidgetConfig {
   @JsonSerializable(explicitToJson: true)
   const factory GroupWidgetConfig({
     @Default(GroupTitleListTileWidgetConfig()) GroupTitleListTileWidgetConfig groupTitleListTile,
+    // TODO(Serdun): Remove in future major release after migrating to CallPageActionsConfig
+    // ignore: deprecated_member_use_from_same_package
     @Default(CallActionsWidgetConfig()) CallActionsWidgetConfig callActions,
   }) = _GroupWidgetConfig;
 
@@ -123,6 +127,7 @@ class GroupTitleListTileWidgetConfig with _$GroupTitleListTileWidgetConfig {
       _$GroupTitleListTileWidgetConfigFromJson(json);
 }
 
+@Deprecated('Use CallPageActionsConfig instead')
 @Freezed()
 class CallActionsWidgetConfig with _$CallActionsWidgetConfig {
   @JsonSerializable(explicitToJson: true)

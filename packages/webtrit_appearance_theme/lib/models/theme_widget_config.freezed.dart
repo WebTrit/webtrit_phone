@@ -870,6 +870,8 @@ mixin _$ElevatedButtonWidgetConfig {
   String? get textColor => throw _privateConstructorUsedError;
   String? get iconColor => throw _privateConstructorUsedError;
   String? get disabledIconColor => throw _privateConstructorUsedError;
+  String? get disabledBackgroundColor => throw _privateConstructorUsedError;
+  String? get disabledForegroundColor => throw _privateConstructorUsedError;
 
   /// Serializes this ElevatedButtonWidgetConfig to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -893,7 +895,9 @@ abstract class $ElevatedButtonWidgetConfigCopyWith<$Res> {
       String? foregroundColor,
       String? textColor,
       String? iconColor,
-      String? disabledIconColor});
+      String? disabledIconColor,
+      String? disabledBackgroundColor,
+      String? disabledForegroundColor});
 }
 
 /// @nodoc
@@ -917,6 +921,8 @@ class _$ElevatedButtonWidgetConfigCopyWithImpl<$Res,
     Object? textColor = freezed,
     Object? iconColor = freezed,
     Object? disabledIconColor = freezed,
+    Object? disabledBackgroundColor = freezed,
+    Object? disabledForegroundColor = freezed,
   }) {
     return _then(_value.copyWith(
       backgroundColor: freezed == backgroundColor
@@ -939,6 +945,14 @@ class _$ElevatedButtonWidgetConfigCopyWithImpl<$Res,
           ? _value.disabledIconColor
           : disabledIconColor // ignore: cast_nullable_to_non_nullable
               as String?,
+      disabledBackgroundColor: freezed == disabledBackgroundColor
+          ? _value.disabledBackgroundColor
+          : disabledBackgroundColor // ignore: cast_nullable_to_non_nullable
+              as String?,
+      disabledForegroundColor: freezed == disabledForegroundColor
+          ? _value.disabledForegroundColor
+          : disabledForegroundColor // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -957,7 +971,9 @@ abstract class _$$ElevatedButtonWidgetConfigImplCopyWith<$Res>
       String? foregroundColor,
       String? textColor,
       String? iconColor,
-      String? disabledIconColor});
+      String? disabledIconColor,
+      String? disabledBackgroundColor,
+      String? disabledForegroundColor});
 }
 
 /// @nodoc
@@ -980,6 +996,8 @@ class __$$ElevatedButtonWidgetConfigImplCopyWithImpl<$Res>
     Object? textColor = freezed,
     Object? iconColor = freezed,
     Object? disabledIconColor = freezed,
+    Object? disabledBackgroundColor = freezed,
+    Object? disabledForegroundColor = freezed,
   }) {
     return _then(_$ElevatedButtonWidgetConfigImpl(
       backgroundColor: freezed == backgroundColor
@@ -1002,6 +1020,14 @@ class __$$ElevatedButtonWidgetConfigImplCopyWithImpl<$Res>
           ? _value.disabledIconColor
           : disabledIconColor // ignore: cast_nullable_to_non_nullable
               as String?,
+      disabledBackgroundColor: freezed == disabledBackgroundColor
+          ? _value.disabledBackgroundColor
+          : disabledBackgroundColor // ignore: cast_nullable_to_non_nullable
+              as String?,
+      disabledForegroundColor: freezed == disabledForegroundColor
+          ? _value.disabledForegroundColor
+          : disabledForegroundColor // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -1015,7 +1041,9 @@ class _$ElevatedButtonWidgetConfigImpl implements _ElevatedButtonWidgetConfig {
       this.foregroundColor,
       this.textColor,
       this.iconColor,
-      this.disabledIconColor});
+      this.disabledIconColor,
+      this.disabledBackgroundColor,
+      this.disabledForegroundColor});
 
   factory _$ElevatedButtonWidgetConfigImpl.fromJson(
           Map<String, dynamic> json) =>
@@ -1031,10 +1059,14 @@ class _$ElevatedButtonWidgetConfigImpl implements _ElevatedButtonWidgetConfig {
   final String? iconColor;
   @override
   final String? disabledIconColor;
+  @override
+  final String? disabledBackgroundColor;
+  @override
+  final String? disabledForegroundColor;
 
   @override
   String toString() {
-    return 'ElevatedButtonWidgetConfig(backgroundColor: $backgroundColor, foregroundColor: $foregroundColor, textColor: $textColor, iconColor: $iconColor, disabledIconColor: $disabledIconColor)';
+    return 'ElevatedButtonWidgetConfig(backgroundColor: $backgroundColor, foregroundColor: $foregroundColor, textColor: $textColor, iconColor: $iconColor, disabledIconColor: $disabledIconColor, disabledBackgroundColor: $disabledBackgroundColor, disabledForegroundColor: $disabledForegroundColor)';
   }
 
   @override
@@ -1051,13 +1083,26 @@ class _$ElevatedButtonWidgetConfigImpl implements _ElevatedButtonWidgetConfig {
             (identical(other.iconColor, iconColor) ||
                 other.iconColor == iconColor) &&
             (identical(other.disabledIconColor, disabledIconColor) ||
-                other.disabledIconColor == disabledIconColor));
+                other.disabledIconColor == disabledIconColor) &&
+            (identical(
+                    other.disabledBackgroundColor, disabledBackgroundColor) ||
+                other.disabledBackgroundColor == disabledBackgroundColor) &&
+            (identical(
+                    other.disabledForegroundColor, disabledForegroundColor) ||
+                other.disabledForegroundColor == disabledForegroundColor));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, backgroundColor, foregroundColor,
-      textColor, iconColor, disabledIconColor);
+  int get hashCode => Object.hash(
+      runtimeType,
+      backgroundColor,
+      foregroundColor,
+      textColor,
+      iconColor,
+      disabledIconColor,
+      disabledBackgroundColor,
+      disabledForegroundColor);
 
   /// Create a copy of ElevatedButtonWidgetConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -1079,11 +1124,14 @@ class _$ElevatedButtonWidgetConfigImpl implements _ElevatedButtonWidgetConfig {
 abstract class _ElevatedButtonWidgetConfig
     implements ElevatedButtonWidgetConfig {
   const factory _ElevatedButtonWidgetConfig(
-      {final String? backgroundColor,
-      final String? foregroundColor,
-      final String? textColor,
-      final String? iconColor,
-      final String? disabledIconColor}) = _$ElevatedButtonWidgetConfigImpl;
+          {final String? backgroundColor,
+          final String? foregroundColor,
+          final String? textColor,
+          final String? iconColor,
+          final String? disabledIconColor,
+          final String? disabledBackgroundColor,
+          final String? disabledForegroundColor}) =
+      _$ElevatedButtonWidgetConfigImpl;
 
   factory _ElevatedButtonWidgetConfig.fromJson(Map<String, dynamic> json) =
       _$ElevatedButtonWidgetConfigImpl.fromJson;
@@ -1098,6 +1146,10 @@ abstract class _ElevatedButtonWidgetConfig
   String? get iconColor;
   @override
   String? get disabledIconColor;
+  @override
+  String? get disabledBackgroundColor;
+  @override
+  String? get disabledForegroundColor;
 
   /// Create a copy of ElevatedButtonWidgetConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -1114,7 +1166,8 @@ GroupWidgetConfig _$GroupWidgetConfigFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$GroupWidgetConfig {
   GroupTitleListTileWidgetConfig get groupTitleListTile =>
-      throw _privateConstructorUsedError;
+      throw _privateConstructorUsedError; // TODO(Serdun): Remove in future major release after migrating to CallPageActionsConfig
+// ignore: deprecated_member_use_from_same_package
   CallActionsWidgetConfig get callActions => throw _privateConstructorUsedError;
 
   /// Serializes this GroupWidgetConfig to a JSON map.
@@ -1254,6 +1307,8 @@ class _$GroupWidgetConfigImpl implements _GroupWidgetConfig {
   @override
   @JsonKey()
   final GroupTitleListTileWidgetConfig groupTitleListTile;
+// TODO(Serdun): Remove in future major release after migrating to CallPageActionsConfig
+// ignore: deprecated_member_use_from_same_package
   @override
   @JsonKey()
   final CallActionsWidgetConfig callActions;
@@ -1304,7 +1359,9 @@ abstract class _GroupWidgetConfig implements GroupWidgetConfig {
       _$GroupWidgetConfigImpl.fromJson;
 
   @override
-  GroupTitleListTileWidgetConfig get groupTitleListTile;
+  GroupTitleListTileWidgetConfig
+      get groupTitleListTile; // TODO(Serdun): Remove in future major release after migrating to CallPageActionsConfig
+// ignore: deprecated_member_use_from_same_package
   @override
   CallActionsWidgetConfig get callActions;
 
