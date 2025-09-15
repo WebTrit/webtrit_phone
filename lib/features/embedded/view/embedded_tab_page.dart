@@ -6,6 +6,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';
+import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/embedded/embedded_data.dart';
 import 'package:webtrit_phone/models/embedded/embedded_payload_data.dart';
@@ -46,6 +47,8 @@ class EmbeddedTabPage extends StatelessWidget {
 
           return EmbeddedScreen(
             initialUri: data.data!.uri,
+            mediaQueryMetricsData: context.mediaQueryMetrics,
+            deviceInfoData: context.read<AppLabelsProvider>().build(),
             enableLogCapture: data.data?.enableConsoleLogCapture ?? false,
             appBar: _buildAppBar(context, data.titleL10n),
             pageInjectionStrategyBuilder: _defaultPageInjectionStrategy,
