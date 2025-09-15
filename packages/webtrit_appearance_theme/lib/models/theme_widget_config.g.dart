@@ -97,6 +97,8 @@ _$ElevatedButtonWidgetConfigImpl _$$ElevatedButtonWidgetConfigImplFromJson(
       textColor: json['textColor'] as String?,
       iconColor: json['iconColor'] as String?,
       disabledIconColor: json['disabledIconColor'] as String?,
+      disabledBackgroundColor: json['disabledBackgroundColor'] as String?,
+      disabledForegroundColor: json['disabledForegroundColor'] as String?,
     );
 
 Map<String, dynamic> _$$ElevatedButtonWidgetConfigImplToJson(
@@ -107,6 +109,8 @@ Map<String, dynamic> _$$ElevatedButtonWidgetConfigImplToJson(
       'textColor': instance.textColor,
       'iconColor': instance.iconColor,
       'disabledIconColor': instance.disabledIconColor,
+      'disabledBackgroundColor': instance.disabledBackgroundColor,
+      'disabledForegroundColor': instance.disabledForegroundColor,
     };
 
 _$GroupWidgetConfigImpl _$$GroupWidgetConfigImplFromJson(

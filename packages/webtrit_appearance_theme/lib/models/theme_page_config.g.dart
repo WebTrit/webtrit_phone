@@ -128,6 +128,10 @@ _$CallPageConfigImpl _$$CallPageConfigImplFromJson(Map<String, dynamic> json) =>
           ? null
           : CallPageInfoConfig.fromJson(
               json['callInfo'] as Map<String, dynamic>),
+      actions: json['actions'] == null
+          ? null
+          : CallPageActionsConfig.fromJson(
+              json['actions'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$$CallPageConfigImplToJson(
@@ -136,6 +140,62 @@ Map<String, dynamic> _$$CallPageConfigImplToJson(
       'systemUiOverlayStyle': instance.systemUiOverlayStyle?.toJson(),
       'appBarStyle': instance.appBarStyle?.toJson(),
       'callInfo': instance.callInfo?.toJson(),
+      'actions': instance.actions?.toJson(),
+    };
+
+_$CallPageActionsConfigImpl _$$CallPageActionsConfigImplFromJson(
+        Map<String, dynamic> json) =>
+    _$CallPageActionsConfigImpl(
+      callStart: json['callStart'] == null
+          ? const ElevatedButtonWidgetConfig()
+          : ElevatedButtonWidgetConfig.fromJson(
+              json['callStart'] as Map<String, dynamic>),
+      hangup: json['hangup'] == null
+          ? const ElevatedButtonWidgetConfig()
+          : ElevatedButtonWidgetConfig.fromJson(
+              json['hangup'] as Map<String, dynamic>),
+      transfer: json['transfer'] == null
+          ? const ElevatedButtonWidgetConfig()
+          : ElevatedButtonWidgetConfig.fromJson(
+              json['transfer'] as Map<String, dynamic>),
+      camera: json['camera'] == null
+          ? const ElevatedButtonWidgetConfig()
+          : ElevatedButtonWidgetConfig.fromJson(
+              json['camera'] as Map<String, dynamic>),
+      muted: json['muted'] == null
+          ? const ElevatedButtonWidgetConfig()
+          : ElevatedButtonWidgetConfig.fromJson(
+              json['muted'] as Map<String, dynamic>),
+      speaker: json['speaker'] == null
+          ? const ElevatedButtonWidgetConfig()
+          : ElevatedButtonWidgetConfig.fromJson(
+              json['speaker'] as Map<String, dynamic>),
+      held: json['held'] == null
+          ? const ElevatedButtonWidgetConfig()
+          : ElevatedButtonWidgetConfig.fromJson(
+              json['held'] as Map<String, dynamic>),
+      swap: json['swap'] == null
+          ? const ElevatedButtonWidgetConfig()
+          : ElevatedButtonWidgetConfig.fromJson(
+              json['swap'] as Map<String, dynamic>),
+      key: json['key'] == null
+          ? const ElevatedButtonWidgetConfig()
+          : ElevatedButtonWidgetConfig.fromJson(
+              json['key'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$$CallPageActionsConfigImplToJson(
+        _$CallPageActionsConfigImpl instance) =>
+    <String, dynamic>{
+      'callStart': instance.callStart.toJson(),
+      'hangup': instance.hangup.toJson(),
+      'transfer': instance.transfer.toJson(),
+      'camera': instance.camera.toJson(),
+      'muted': instance.muted.toJson(),
+      'speaker': instance.speaker.toJson(),
+      'held': instance.held.toJson(),
+      'swap': instance.swap.toJson(),
+      'key': instance.key.toJson(),
     };
 
 _$CallPageInfoConfigImpl _$$CallPageInfoConfigImplFromJson(

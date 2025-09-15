@@ -1125,6 +1125,9 @@ mixin _$CallPageConfig {
   /// Style configuration for the call information area (username, number, status).
   CallPageInfoConfig? get callInfo => throw _privateConstructorUsedError;
 
+  /// Style configuration for the action buttons area (call, hangup, mute, etc).
+  CallPageActionsConfig? get actions => throw _privateConstructorUsedError;
+
   /// Serializes this CallPageConfig to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
 
@@ -1144,11 +1147,13 @@ abstract class $CallPageConfigCopyWith<$Res> {
   $Res call(
       {OverlayStyleModel? systemUiOverlayStyle,
       AppBarStyleConfig? appBarStyle,
-      CallPageInfoConfig? callInfo});
+      CallPageInfoConfig? callInfo,
+      CallPageActionsConfig? actions});
 
   $OverlayStyleModelCopyWith<$Res>? get systemUiOverlayStyle;
   $AppBarStyleConfigCopyWith<$Res>? get appBarStyle;
   $CallPageInfoConfigCopyWith<$Res>? get callInfo;
+  $CallPageActionsConfigCopyWith<$Res>? get actions;
 }
 
 /// @nodoc
@@ -1169,6 +1174,7 @@ class _$CallPageConfigCopyWithImpl<$Res, $Val extends CallPageConfig>
     Object? systemUiOverlayStyle = freezed,
     Object? appBarStyle = freezed,
     Object? callInfo = freezed,
+    Object? actions = freezed,
   }) {
     return _then(_value.copyWith(
       systemUiOverlayStyle: freezed == systemUiOverlayStyle
@@ -1183,6 +1189,10 @@ class _$CallPageConfigCopyWithImpl<$Res, $Val extends CallPageConfig>
           ? _value.callInfo
           : callInfo // ignore: cast_nullable_to_non_nullable
               as CallPageInfoConfig?,
+      actions: freezed == actions
+          ? _value.actions
+          : actions // ignore: cast_nullable_to_non_nullable
+              as CallPageActionsConfig?,
     ) as $Val);
   }
 
@@ -1228,6 +1238,20 @@ class _$CallPageConfigCopyWithImpl<$Res, $Val extends CallPageConfig>
       return _then(_value.copyWith(callInfo: value) as $Val);
     });
   }
+
+  /// Create a copy of CallPageConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $CallPageActionsConfigCopyWith<$Res>? get actions {
+    if (_value.actions == null) {
+      return null;
+    }
+
+    return $CallPageActionsConfigCopyWith<$Res>(_value.actions!, (value) {
+      return _then(_value.copyWith(actions: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
@@ -1241,7 +1265,8 @@ abstract class _$$CallPageConfigImplCopyWith<$Res>
   $Res call(
       {OverlayStyleModel? systemUiOverlayStyle,
       AppBarStyleConfig? appBarStyle,
-      CallPageInfoConfig? callInfo});
+      CallPageInfoConfig? callInfo,
+      CallPageActionsConfig? actions});
 
   @override
   $OverlayStyleModelCopyWith<$Res>? get systemUiOverlayStyle;
@@ -1249,6 +1274,8 @@ abstract class _$$CallPageConfigImplCopyWith<$Res>
   $AppBarStyleConfigCopyWith<$Res>? get appBarStyle;
   @override
   $CallPageInfoConfigCopyWith<$Res>? get callInfo;
+  @override
+  $CallPageActionsConfigCopyWith<$Res>? get actions;
 }
 
 /// @nodoc
@@ -1267,6 +1294,7 @@ class __$$CallPageConfigImplCopyWithImpl<$Res>
     Object? systemUiOverlayStyle = freezed,
     Object? appBarStyle = freezed,
     Object? callInfo = freezed,
+    Object? actions = freezed,
   }) {
     return _then(_$CallPageConfigImpl(
       systemUiOverlayStyle: freezed == systemUiOverlayStyle
@@ -1281,6 +1309,10 @@ class __$$CallPageConfigImplCopyWithImpl<$Res>
           ? _value.callInfo
           : callInfo // ignore: cast_nullable_to_non_nullable
               as CallPageInfoConfig?,
+      actions: freezed == actions
+          ? _value.actions
+          : actions // ignore: cast_nullable_to_non_nullable
+              as CallPageActionsConfig?,
     ));
   }
 }
@@ -1290,7 +1322,10 @@ class __$$CallPageConfigImplCopyWithImpl<$Res>
 @JsonSerializable(explicitToJson: true)
 class _$CallPageConfigImpl implements _CallPageConfig {
   const _$CallPageConfigImpl(
-      {this.systemUiOverlayStyle, this.appBarStyle, this.callInfo});
+      {this.systemUiOverlayStyle,
+      this.appBarStyle,
+      this.callInfo,
+      this.actions});
 
   factory _$CallPageConfigImpl.fromJson(Map<String, dynamic> json) =>
       _$$CallPageConfigImplFromJson(json);
@@ -1307,9 +1342,13 @@ class _$CallPageConfigImpl implements _CallPageConfig {
   @override
   final CallPageInfoConfig? callInfo;
 
+  /// Style configuration for the action buttons area (call, hangup, mute, etc).
+  @override
+  final CallPageActionsConfig? actions;
+
   @override
   String toString() {
-    return 'CallPageConfig(systemUiOverlayStyle: $systemUiOverlayStyle, appBarStyle: $appBarStyle, callInfo: $callInfo)';
+    return 'CallPageConfig(systemUiOverlayStyle: $systemUiOverlayStyle, appBarStyle: $appBarStyle, callInfo: $callInfo, actions: $actions)';
   }
 
   @override
@@ -1322,13 +1361,14 @@ class _$CallPageConfigImpl implements _CallPageConfig {
             (identical(other.appBarStyle, appBarStyle) ||
                 other.appBarStyle == appBarStyle) &&
             (identical(other.callInfo, callInfo) ||
-                other.callInfo == callInfo));
+                other.callInfo == callInfo) &&
+            (identical(other.actions, actions) || other.actions == actions));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, systemUiOverlayStyle, appBarStyle, callInfo);
+  int get hashCode => Object.hash(
+      runtimeType, systemUiOverlayStyle, appBarStyle, callInfo, actions);
 
   /// Create a copy of CallPageConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -1351,7 +1391,8 @@ abstract class _CallPageConfig implements CallPageConfig {
   const factory _CallPageConfig(
       {final OverlayStyleModel? systemUiOverlayStyle,
       final AppBarStyleConfig? appBarStyle,
-      final CallPageInfoConfig? callInfo}) = _$CallPageConfigImpl;
+      final CallPageInfoConfig? callInfo,
+      final CallPageActionsConfig? actions}) = _$CallPageConfigImpl;
 
   factory _CallPageConfig.fromJson(Map<String, dynamic> json) =
       _$CallPageConfigImpl.fromJson;
@@ -1368,12 +1409,467 @@ abstract class _CallPageConfig implements CallPageConfig {
   @override
   CallPageInfoConfig? get callInfo;
 
+  /// Style configuration for the action buttons area (call, hangup, mute, etc).
+  @override
+  CallPageActionsConfig? get actions;
+
   /// Create a copy of CallPageConfig
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$CallPageConfigImplCopyWith<_$CallPageConfigImpl> get copyWith =>
       throw _privateConstructorUsedError;
+}
+
+CallPageActionsConfig _$CallPageActionsConfigFromJson(
+    Map<String, dynamic> json) {
+  return _CallPageActionsConfig.fromJson(json);
+}
+
+/// @nodoc
+mixin _$CallPageActionsConfig {
+  ElevatedButtonWidgetConfig get callStart =>
+      throw _privateConstructorUsedError;
+  ElevatedButtonWidgetConfig get hangup => throw _privateConstructorUsedError;
+  ElevatedButtonWidgetConfig get transfer => throw _privateConstructorUsedError;
+  ElevatedButtonWidgetConfig get camera => throw _privateConstructorUsedError;
+  ElevatedButtonWidgetConfig get muted => throw _privateConstructorUsedError;
+  ElevatedButtonWidgetConfig get speaker => throw _privateConstructorUsedError;
+  ElevatedButtonWidgetConfig get held => throw _privateConstructorUsedError;
+  ElevatedButtonWidgetConfig get swap => throw _privateConstructorUsedError;
+  ElevatedButtonWidgetConfig get key => throw _privateConstructorUsedError;
+
+  /// Serializes this CallPageActionsConfig to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of CallPageActionsConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $CallPageActionsConfigCopyWith<CallPageActionsConfig> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $CallPageActionsConfigCopyWith<$Res> {
+  factory $CallPageActionsConfigCopyWith(CallPageActionsConfig value,
+          $Res Function(CallPageActionsConfig) then) =
+      _$CallPageActionsConfigCopyWithImpl<$Res, CallPageActionsConfig>;
+  @useResult
+  $Res call(
+      {ElevatedButtonWidgetConfig callStart,
+      ElevatedButtonWidgetConfig hangup,
+      ElevatedButtonWidgetConfig transfer,
+      ElevatedButtonWidgetConfig camera,
+      ElevatedButtonWidgetConfig muted,
+      ElevatedButtonWidgetConfig speaker,
+      ElevatedButtonWidgetConfig held,
+      ElevatedButtonWidgetConfig swap,
+      ElevatedButtonWidgetConfig key});
+
+  $ElevatedButtonWidgetConfigCopyWith<$Res> get callStart;
+  $ElevatedButtonWidgetConfigCopyWith<$Res> get hangup;
+  $ElevatedButtonWidgetConfigCopyWith<$Res> get transfer;
+  $ElevatedButtonWidgetConfigCopyWith<$Res> get camera;
+  $ElevatedButtonWidgetConfigCopyWith<$Res> get muted;
+  $ElevatedButtonWidgetConfigCopyWith<$Res> get speaker;
+  $ElevatedButtonWidgetConfigCopyWith<$Res> get held;
+  $ElevatedButtonWidgetConfigCopyWith<$Res> get swap;
+  $ElevatedButtonWidgetConfigCopyWith<$Res> get key;
+}
+
+/// @nodoc
+class _$CallPageActionsConfigCopyWithImpl<$Res,
+        $Val extends CallPageActionsConfig>
+    implements $CallPageActionsConfigCopyWith<$Res> {
+  _$CallPageActionsConfigCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of CallPageActionsConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? callStart = null,
+    Object? hangup = null,
+    Object? transfer = null,
+    Object? camera = null,
+    Object? muted = null,
+    Object? speaker = null,
+    Object? held = null,
+    Object? swap = null,
+    Object? key = null,
+  }) {
+    return _then(_value.copyWith(
+      callStart: null == callStart
+          ? _value.callStart
+          : callStart // ignore: cast_nullable_to_non_nullable
+              as ElevatedButtonWidgetConfig,
+      hangup: null == hangup
+          ? _value.hangup
+          : hangup // ignore: cast_nullable_to_non_nullable
+              as ElevatedButtonWidgetConfig,
+      transfer: null == transfer
+          ? _value.transfer
+          : transfer // ignore: cast_nullable_to_non_nullable
+              as ElevatedButtonWidgetConfig,
+      camera: null == camera
+          ? _value.camera
+          : camera // ignore: cast_nullable_to_non_nullable
+              as ElevatedButtonWidgetConfig,
+      muted: null == muted
+          ? _value.muted
+          : muted // ignore: cast_nullable_to_non_nullable
+              as ElevatedButtonWidgetConfig,
+      speaker: null == speaker
+          ? _value.speaker
+          : speaker // ignore: cast_nullable_to_non_nullable
+              as ElevatedButtonWidgetConfig,
+      held: null == held
+          ? _value.held
+          : held // ignore: cast_nullable_to_non_nullable
+              as ElevatedButtonWidgetConfig,
+      swap: null == swap
+          ? _value.swap
+          : swap // ignore: cast_nullable_to_non_nullable
+              as ElevatedButtonWidgetConfig,
+      key: null == key
+          ? _value.key
+          : key // ignore: cast_nullable_to_non_nullable
+              as ElevatedButtonWidgetConfig,
+    ) as $Val);
+  }
+
+  /// Create a copy of CallPageActionsConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $ElevatedButtonWidgetConfigCopyWith<$Res> get callStart {
+    return $ElevatedButtonWidgetConfigCopyWith<$Res>(_value.callStart, (value) {
+      return _then(_value.copyWith(callStart: value) as $Val);
+    });
+  }
+
+  /// Create a copy of CallPageActionsConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $ElevatedButtonWidgetConfigCopyWith<$Res> get hangup {
+    return $ElevatedButtonWidgetConfigCopyWith<$Res>(_value.hangup, (value) {
+      return _then(_value.copyWith(hangup: value) as $Val);
+    });
+  }
+
+  /// Create a copy of CallPageActionsConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $ElevatedButtonWidgetConfigCopyWith<$Res> get transfer {
+    return $ElevatedButtonWidgetConfigCopyWith<$Res>(_value.transfer, (value) {
+      return _then(_value.copyWith(transfer: value) as $Val);
+    });
+  }
+
+  /// Create a copy of CallPageActionsConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $ElevatedButtonWidgetConfigCopyWith<$Res> get camera {
+    return $ElevatedButtonWidgetConfigCopyWith<$Res>(_value.camera, (value) {
+      return _then(_value.copyWith(camera: value) as $Val);
+    });
+  }
+
+  /// Create a copy of CallPageActionsConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $ElevatedButtonWidgetConfigCopyWith<$Res> get muted {
+    return $ElevatedButtonWidgetConfigCopyWith<$Res>(_value.muted, (value) {
+      return _then(_value.copyWith(muted: value) as $Val);
+    });
+  }
+
+  /// Create a copy of CallPageActionsConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $ElevatedButtonWidgetConfigCopyWith<$Res> get speaker {
+    return $ElevatedButtonWidgetConfigCopyWith<$Res>(_value.speaker, (value) {
+      return _then(_value.copyWith(speaker: value) as $Val);
+    });
+  }
+
+  /// Create a copy of CallPageActionsConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $ElevatedButtonWidgetConfigCopyWith<$Res> get held {
+    return $ElevatedButtonWidgetConfigCopyWith<$Res>(_value.held, (value) {
+      return _then(_value.copyWith(held: value) as $Val);
+    });
+  }
+
+  /// Create a copy of CallPageActionsConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $ElevatedButtonWidgetConfigCopyWith<$Res> get swap {
+    return $ElevatedButtonWidgetConfigCopyWith<$Res>(_value.swap, (value) {
+      return _then(_value.copyWith(swap: value) as $Val);
+    });
+  }
+
+  /// Create a copy of CallPageActionsConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $ElevatedButtonWidgetConfigCopyWith<$Res> get key {
+    return $ElevatedButtonWidgetConfigCopyWith<$Res>(_value.key, (value) {
+      return _then(_value.copyWith(key: value) as $Val);
+    });
+  }
+}
+
+/// @nodoc
+abstract class _$$CallPageActionsConfigImplCopyWith<$Res>
+    implements $CallPageActionsConfigCopyWith<$Res> {
+  factory _$$CallPageActionsConfigImplCopyWith(
+          _$CallPageActionsConfigImpl value,
+          $Res Function(_$CallPageActionsConfigImpl) then) =
+      __$$CallPageActionsConfigImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {ElevatedButtonWidgetConfig callStart,
+      ElevatedButtonWidgetConfig hangup,
+      ElevatedButtonWidgetConfig transfer,
+      ElevatedButtonWidgetConfig camera,
+      ElevatedButtonWidgetConfig muted,
+      ElevatedButtonWidgetConfig speaker,
+      ElevatedButtonWidgetConfig held,
+      ElevatedButtonWidgetConfig swap,
+      ElevatedButtonWidgetConfig key});
+
+  @override
+  $ElevatedButtonWidgetConfigCopyWith<$Res> get callStart;
+  @override
+  $ElevatedButtonWidgetConfigCopyWith<$Res> get hangup;
+  @override
+  $ElevatedButtonWidgetConfigCopyWith<$Res> get transfer;
+  @override
+  $ElevatedButtonWidgetConfigCopyWith<$Res> get camera;
+  @override
+  $ElevatedButtonWidgetConfigCopyWith<$Res> get muted;
+  @override
+  $ElevatedButtonWidgetConfigCopyWith<$Res> get speaker;
+  @override
+  $ElevatedButtonWidgetConfigCopyWith<$Res> get held;
+  @override
+  $ElevatedButtonWidgetConfigCopyWith<$Res> get swap;
+  @override
+  $ElevatedButtonWidgetConfigCopyWith<$Res> get key;
+}
+
+/// @nodoc
+class __$$CallPageActionsConfigImplCopyWithImpl<$Res>
+    extends _$CallPageActionsConfigCopyWithImpl<$Res,
+        _$CallPageActionsConfigImpl>
+    implements _$$CallPageActionsConfigImplCopyWith<$Res> {
+  __$$CallPageActionsConfigImplCopyWithImpl(_$CallPageActionsConfigImpl _value,
+      $Res Function(_$CallPageActionsConfigImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of CallPageActionsConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? callStart = null,
+    Object? hangup = null,
+    Object? transfer = null,
+    Object? camera = null,
+    Object? muted = null,
+    Object? speaker = null,
+    Object? held = null,
+    Object? swap = null,
+    Object? key = null,
+  }) {
+    return _then(_$CallPageActionsConfigImpl(
+      callStart: null == callStart
+          ? _value.callStart
+          : callStart // ignore: cast_nullable_to_non_nullable
+              as ElevatedButtonWidgetConfig,
+      hangup: null == hangup
+          ? _value.hangup
+          : hangup // ignore: cast_nullable_to_non_nullable
+              as ElevatedButtonWidgetConfig,
+      transfer: null == transfer
+          ? _value.transfer
+          : transfer // ignore: cast_nullable_to_non_nullable
+              as ElevatedButtonWidgetConfig,
+      camera: null == camera
+          ? _value.camera
+          : camera // ignore: cast_nullable_to_non_nullable
+              as ElevatedButtonWidgetConfig,
+      muted: null == muted
+          ? _value.muted
+          : muted // ignore: cast_nullable_to_non_nullable
+              as ElevatedButtonWidgetConfig,
+      speaker: null == speaker
+          ? _value.speaker
+          : speaker // ignore: cast_nullable_to_non_nullable
+              as ElevatedButtonWidgetConfig,
+      held: null == held
+          ? _value.held
+          : held // ignore: cast_nullable_to_non_nullable
+              as ElevatedButtonWidgetConfig,
+      swap: null == swap
+          ? _value.swap
+          : swap // ignore: cast_nullable_to_non_nullable
+              as ElevatedButtonWidgetConfig,
+      key: null == key
+          ? _value.key
+          : key // ignore: cast_nullable_to_non_nullable
+              as ElevatedButtonWidgetConfig,
+    ));
+  }
+}
+
+/// @nodoc
+
+@JsonSerializable(explicitToJson: true)
+class _$CallPageActionsConfigImpl implements _CallPageActionsConfig {
+  const _$CallPageActionsConfigImpl(
+      {this.callStart = const ElevatedButtonWidgetConfig(),
+      this.hangup = const ElevatedButtonWidgetConfig(),
+      this.transfer = const ElevatedButtonWidgetConfig(),
+      this.camera = const ElevatedButtonWidgetConfig(),
+      this.muted = const ElevatedButtonWidgetConfig(),
+      this.speaker = const ElevatedButtonWidgetConfig(),
+      this.held = const ElevatedButtonWidgetConfig(),
+      this.swap = const ElevatedButtonWidgetConfig(),
+      this.key = const ElevatedButtonWidgetConfig()});
+
+  factory _$CallPageActionsConfigImpl.fromJson(Map<String, dynamic> json) =>
+      _$$CallPageActionsConfigImplFromJson(json);
+
+  @override
+  @JsonKey()
+  final ElevatedButtonWidgetConfig callStart;
+  @override
+  @JsonKey()
+  final ElevatedButtonWidgetConfig hangup;
+  @override
+  @JsonKey()
+  final ElevatedButtonWidgetConfig transfer;
+  @override
+  @JsonKey()
+  final ElevatedButtonWidgetConfig camera;
+  @override
+  @JsonKey()
+  final ElevatedButtonWidgetConfig muted;
+  @override
+  @JsonKey()
+  final ElevatedButtonWidgetConfig speaker;
+  @override
+  @JsonKey()
+  final ElevatedButtonWidgetConfig held;
+  @override
+  @JsonKey()
+  final ElevatedButtonWidgetConfig swap;
+  @override
+  @JsonKey()
+  final ElevatedButtonWidgetConfig key;
+
+  @override
+  String toString() {
+    return 'CallPageActionsConfig(callStart: $callStart, hangup: $hangup, transfer: $transfer, camera: $camera, muted: $muted, speaker: $speaker, held: $held, swap: $swap, key: $key)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$CallPageActionsConfigImpl &&
+            (identical(other.callStart, callStart) ||
+                other.callStart == callStart) &&
+            (identical(other.hangup, hangup) || other.hangup == hangup) &&
+            (identical(other.transfer, transfer) ||
+                other.transfer == transfer) &&
+            (identical(other.camera, camera) || other.camera == camera) &&
+            (identical(other.muted, muted) || other.muted == muted) &&
+            (identical(other.speaker, speaker) || other.speaker == speaker) &&
+            (identical(other.held, held) || other.held == held) &&
+            (identical(other.swap, swap) || other.swap == swap) &&
+            (identical(other.key, key) || other.key == key));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(runtimeType, callStart, hangup, transfer,
+      camera, muted, speaker, held, swap, key);
+
+  /// Create a copy of CallPageActionsConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$CallPageActionsConfigImplCopyWith<_$CallPageActionsConfigImpl>
+      get copyWith => __$$CallPageActionsConfigImplCopyWithImpl<
+          _$CallPageActionsConfigImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$CallPageActionsConfigImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _CallPageActionsConfig implements CallPageActionsConfig {
+  const factory _CallPageActionsConfig(
+      {final ElevatedButtonWidgetConfig callStart,
+      final ElevatedButtonWidgetConfig hangup,
+      final ElevatedButtonWidgetConfig transfer,
+      final ElevatedButtonWidgetConfig camera,
+      final ElevatedButtonWidgetConfig muted,
+      final ElevatedButtonWidgetConfig speaker,
+      final ElevatedButtonWidgetConfig held,
+      final ElevatedButtonWidgetConfig swap,
+      final ElevatedButtonWidgetConfig key}) = _$CallPageActionsConfigImpl;
+
+  factory _CallPageActionsConfig.fromJson(Map<String, dynamic> json) =
+      _$CallPageActionsConfigImpl.fromJson;
+
+  @override
+  ElevatedButtonWidgetConfig get callStart;
+  @override
+  ElevatedButtonWidgetConfig get hangup;
+  @override
+  ElevatedButtonWidgetConfig get transfer;
+  @override
+  ElevatedButtonWidgetConfig get camera;
+  @override
+  ElevatedButtonWidgetConfig get muted;
+  @override
+  ElevatedButtonWidgetConfig get speaker;
+  @override
+  ElevatedButtonWidgetConfig get held;
+  @override
+  ElevatedButtonWidgetConfig get swap;
+  @override
+  ElevatedButtonWidgetConfig get key;
+
+  /// Create a copy of CallPageActionsConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$CallPageActionsConfigImplCopyWith<_$CallPageActionsConfigImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }
 
 CallPageInfoConfig _$CallPageInfoConfigFromJson(Map<String, dynamic> json) {
