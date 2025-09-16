@@ -19,6 +19,7 @@ import 'package:webtrit_phone/widgets/webview/web_view_toolbar.dart';
 
 import 'package:webtrit_phone/l10n/l10n.dart';
 
+import '_widgets/_widgets.dart';
 import 'models/models.dart';
 
 final _logger = Logger('WebViewContainer');
@@ -79,6 +80,9 @@ class _WebViewContainerState extends State<WebViewContainer> with WidgetStateMix
   WebResourceError? _latestError;
   WebResourceError? _currentError;
 
+  SslAuthError? _sslAuthError;
+  String? _sslFailingUrl;
+
   /// Indicates whether a page is currently in the process of loading.
   ///
   /// This flag is set to `true` when [onProgress] reports progress < 100,
@@ -124,10 +128,26 @@ class _WebViewContainerState extends State<WebViewContainer> with WidgetStateMix
 
   @override
   Widget build(BuildContext context) {
-    final hasWebViewError = widget.errorBuilder != null && _latestError != null;
+    final hasWebViewError = _sslAuthError != null || _latestError != null;
 
     errorPlaceholderBuilder(BuildContext context) {
-      return widget.errorBuilder!(context, _latestError!, _webViewController) ?? const SizedBox.shrink();
+      if (_sslAuthError != null) {
+        return SslAuthErrorView(
+          error: _sslAuthError!,
+          onReload: _reloadPage,
+          failingUrl: _sslFailingUrl,
+        );
+      }
+
+      if (widget.errorBuilder != null) {
+        return widget.errorBuilder!(context, _latestError!, _webViewController) ?? const SizedBox.shrink();
+      }
+
+      // fallback to default
+      return DefaultWebViewErrorView(
+        error: _latestError!,
+        onReload: _reloadPage,
+      );
     }
 
     successBuilder(BuildContext context) {
@@ -231,6 +251,7 @@ class _WebViewContainerState extends State<WebViewContainer> with WidgetStateMix
         onUrlChange: _onUrlChange,
         onPageFinished: _onPageFinished,
         onProgress: _onProgress,
+        onSslAuthError: _onSslAuthError,
         onNavigationRequest: _navigationRequestHandler.handle,
         onWebResourceError: _onWebResourceError,
       );
@@ -351,6 +372,22 @@ class _WebViewContainerState extends State<WebViewContainer> with WidgetStateMix
       _currentError = error;
       _latestError = error;
     });
+  }
+
+  void _onSslAuthError(SslAuthError error) {
+    _logger.severe('SSL Auth Error: $error');
+    safeSetState(() {
+      _sslAuthError = error;
+    });
+
+    widget.connectivityRecoveryStrategy?._onPageLoadFailed();
+  }
+
+  void _reloadPage() {
+    _sslAuthError = null;
+    _latestError = null;
+    _currentError = null;
+    _webViewController.reload();
   }
 }
 

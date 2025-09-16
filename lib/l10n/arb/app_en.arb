@@ -1644,5 +1644,51 @@
   "webRegistration_ErrorAcknowledgeDialog_title": "Web resource error",
   "@webRegistration_ErrorAcknowledgeDialog_title": {
     "description": "Title of the dialog shown when an error occurs while loading or registering with a required web resource (e.g. invalid link, unreachable server, or failed provisioning)."
+  },
+  "webview_defaultError_title": "Something went wrong",
+  "@webview_defaultError_title": {
+    "description": "Title shown on the generic WebView error screen."
+  },
+  "webview_defaultError_details": "{description} (code: {code})",
+  "@webview_defaultError_details": {
+    "description": "Error description with numeric code for the generic WebView error screen.",
+    "placeholders": {
+      "description": {
+        "type": "String",
+        "example": "net::ERR_CONNECTION_TIMED_OUT"
+      },
+      "code": {
+        "type": "int",
+        "example": "-2"
+      }
+    }
+  },
+  "webview_defaultError_reload": "Reload",
+  "@webview_defaultError_reload": {
+    "description": "Button label to reload the WebView after a generic error."
+  },
+  "webview_sslError_title": "Your connection is not private",
+  "@webview_sslError_title": {
+    "description": "Title for SSL authentication error screen."
+  },
+  "webview_sslError_message": "The certificate for this site isn't trusted. The page can't be shown.",
+  "@webview_sslError_message": {
+    "description": "Body message for SSL authentication error."
+  },
+  "webview_sslError_tryAgain": "Try again",
+  "@webview_sslError_tryAgain": {
+    "description": "Primary action button label on SSL error screen."
+  },
+  "webview_sslError_details": "Details",
+  "@webview_sslError_details": {
+    "description": "Secondary action button label to open SSL details bottom sheet."
+  },
+  "webview_sslError_details_type": "Type",
+  "@webview_sslError_details_type": {
+    "description": "Label for SSL error type in the details sheet."
+  },
+  "webview_sslError_details_url": "URL",
+  "@webview_sslError_details_url": {
+    "description": "Label for failing URL in the details sheet."
   }
 }

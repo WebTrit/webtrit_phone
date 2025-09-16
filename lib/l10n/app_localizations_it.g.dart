@@ -638,9 +638,7 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String login_CoreVersionUnsupportedExceptionError(
-    String actual,
-    String supportedConstraint,
-  ) {
+      String actual, String supportedConstraint) {
     return 'È stata fornita una versione di richiesta incompatibile, contattare l\'amministratore del sistema (actual:$actual, supported:$supportedConstraint)';
   }
 
@@ -832,10 +830,8 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String
-  main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError(
-    String actual,
-    String supportedConstraint,
-  ) {
+      main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError(
+          String actual, String supportedConstraint) {
     return 'Versione di WebTrit Cloud Backend incompatibile, si prega di contattare l\'amministratore del sistema.\n\nVersione dell\'istanza:\n$actual\n\nVersione supportata:\n$supportedConstraint\n';
   }
 
@@ -1180,15 +1176,13 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String notifications_errorSnackBar_signalingDisconnectWithCodeName(
-    String codeName,
-  ) {
+      String codeName) {
     return 'Disconnesso dal core con codice: $codeName';
   }
 
   @override
   String notifications_errorSnackBar_signalingDisconnectWithSystemReason(
-    String reason,
-  ) {
+      String reason) {
     return 'Disconnesso dal nucleo con ragione: $reason';
   }
 
@@ -1206,8 +1200,7 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String notifications_errorSnackBar_sipRegistrationFailed_WithSystemReason(
-    String reason,
-  ) {
+      String reason) {
     return 'La registrazione con il sistema VoIP remoto è fallita con il motivo: $reason';
   }
 
@@ -2183,4 +2176,34 @@ class AppLocalizationsIt extends AppLocalizations {
   @override
   String get webRegistration_ErrorAcknowledgeDialog_title =>
       'Web resource error';
+
+  @override
+  String get webview_defaultError_title => 'Qualcosa è andato storto';
+
+  @override
+  String webview_defaultError_details(String description, int code) {
+    return '$description (codice: $code)';
+  }
+
+  @override
+  String get webview_defaultError_reload => 'Ricarica';
+
+  @override
+  String get webview_sslError_title => 'La tua connessione non è privata';
+
+  @override
+  String get webview_sslError_message =>
+      'Il certificato di questo sito non è considerato attendibile. La pagina non può essere visualizzata.';
+
+  @override
+  String get webview_sslError_tryAgain => 'Riprova';
+
+  @override
+  String get webview_sslError_details => 'Dettagli';
+
+  @override
+  String get webview_sslError_details_type => 'Tipo';
+
+  @override
+  String get webview_sslError_details_url => 'URL';
 }
