@@ -3,10 +3,12 @@ import 'web_view_container.dart';
 
 /// Injects a console wrapper that forwards console.* messages through a JS channel.
 class ConsoleLoggingInjectionStrategy extends JavaScriptInjectionStrategy {
-  ConsoleLoggingInjectionStrategy({String channelName = 'WebtritConsoleLogChannel'})
+  static const consoleLoggingChannelName = 'WebtritConsoleLogChannel';
+
+  ConsoleLoggingInjectionStrategy({String channelName = consoleLoggingChannelName})
       : super.raw(
           _buildScript(channelName),
-          label: '[WebtritConsoleLogChannel]',
+          label: '[$consoleLoggingChannelName]',
           returnResult: true,
         );
 

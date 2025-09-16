@@ -7,6 +7,7 @@ import 'package:webview_flutter/webview_flutter.dart';
 
 import 'models/models.dart';
 import 'web_view_container.dart';
+import 'webview_injection_console_logging.dart';
 
 final _logger = Logger('WebViewContainer');
 
@@ -100,9 +101,7 @@ class JSChannelBuilders {
   /// Supports two formats:
   /// 1. **JSON format**: `{ "event": "info", "data": { "message": "..." } }`
   /// 2. **Legacy raw string format**: `"INFO: some message"`
-  ///
-  /// - [name]: The channel name to use, defaults to `"WebtritConsoleLogChannel"`.
-  static JSChannelStrategy consoleLogger({String name = 'WebtritConsoleLogChannel'}) {
+  static JSChannelStrategy consoleLogger({String name = ConsoleLoggingInjectionStrategy.consoleLoggingChannelName}) {
     String pickLevel(String s) => s.toUpperCase();
 
     void log(String level, String message) {
