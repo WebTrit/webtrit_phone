@@ -101,8 +101,8 @@ class JSChannelBuilders {
   /// 1. **JSON format**: `{ "event": "info", "data": { "message": "..." } }`
   /// 2. **Legacy raw string format**: `"INFO: some message"`
   ///
-  /// - [name]: The channel name to use, defaults to `"ConsoleLog"`.
-  static JSChannelStrategy consoleLogger({String name = 'ConsoleLog'}) {
+  /// - [name]: The channel name to use, defaults to `"WebtritConsoleLogChannel"`.
+  static JSChannelStrategy consoleLogger({String name = 'WebtritConsoleLogChannel'}) {
     String pickLevel(String s) => s.toUpperCase();
 
     void log(String level, String message) {

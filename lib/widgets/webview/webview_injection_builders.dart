@@ -46,8 +46,8 @@ class PageInjectionBuilders {
 
   /// Creates a [PageInjectionStrategy] that injects the console logger wrapper.
   /// Forwards console.* to a JS channel (default: 'ConsoleLog').
-  static PageInjectionStrategy consoleLogging({String channelName = 'ConsoleLog'}) {
-    return ConsoleLoggingInjectionStrategy(channelName: channelName);
+  static PageInjectionStrategy consoleLogging() {
+    return ConsoleLoggingInjectionStrategy();
   }
 
   /// Factory that returns a list of [PageInjectionStrategy] including
