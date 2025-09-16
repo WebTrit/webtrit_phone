@@ -216,6 +216,9 @@ class EncodingDefaultPresetOverride with _$EncodingDefaultPresetOverride {
     int? opusBitrate,
     bool? opusStereo,
     bool? opusDtx,
+    bool? removeExtmaps,
+    bool? removeStaticAudioRtpMaps,
+    bool? remapTE8payloadTo101,
   }) = _EncodingDefaultPresetOverride;
 
   factory EncodingDefaultPresetOverride.fromJson(Map<String, dynamic> json) =>

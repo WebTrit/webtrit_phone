@@ -318,6 +318,9 @@ class FeatureAccess {
             opusBitrate: defaultPresetOverride.opusBitrate,
             opusStereo: defaultPresetOverride.opusStereo,
             opusDtx: defaultPresetOverride.opusDtx,
+            removeExtmaps: defaultPresetOverride.removeExtmaps,
+            removeStaticAudioRtpMaps: defaultPresetOverride.removeStaticAudioRtpMaps,
+            remapTE8payloadTo101: defaultPresetOverride.remapTE8payloadTo101,
           )),
       peerConnection: PeerConnectionSettings(
         negotiationSettings: NegotiationSettings(

@@ -20,6 +20,9 @@ class DefaultPresetOverride {
     required this.opusBitrate,
     required this.opusStereo,
     required this.opusDtx,
+    required this.removeExtmaps,
+    required this.removeStaticAudioRtpMaps,
+    required this.remapTE8payloadTo101,
   });
 
   final int? audioBitrate;
@@ -30,4 +33,7 @@ class DefaultPresetOverride {
   final int? opusBitrate;
   final bool? opusStereo;
   final bool? opusDtx;
+  final bool? removeExtmaps;
+  final bool? removeStaticAudioRtpMaps;
+  final bool? remapTE8payloadTo101;
 }

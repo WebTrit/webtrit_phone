@@ -24,6 +24,9 @@ class EncodingSettings extends Equatable {
     this.opusDtx,
     this.audioProfiles,
     this.videoProfiles,
+    this.removeExtmaps = false,
+    this.removeStaticAudioRtpMaps = false,
+    this.remapTE8payloadTo101 = false,
   });
 
   factory EncodingSettings.blank() => EncodingSettings();
@@ -150,6 +153,18 @@ class EncodingSettings extends Equatable {
   /// `null` means not set and use automatic mode.
   final bool? opusDtx;
 
+  /// Removes all extmaps from the SDP.
+  /// Used to reduce the SDP size and avoid MTU issues with some endpoints.
+  final bool removeExtmaps;
+
+  /// Removes static audio RTP maps from the SDP.
+  /// Used to reduce the SDP size and avoid MTU issues with some endpoints.
+  final bool removeStaticAudioRtpMaps;
+
+  /// Remaps telephone-event 8k payload code to 101.
+  /// Used to avoid issues with some endpoints that expect telephone-event to be on payload type 101.
+  final bool remapTE8payloadTo101;
+
   /// Ordered list of audio codec profiles to be used.
   /// Used to prioritize the codec profiles based on the order or enable/disable them.
   /// `null` means not set and use automatic mode.
@@ -199,6 +214,9 @@ class EncodingSettings extends Equatable {
       opusDtx: opusDtx,
       audioProfiles: audioProfiles,
       videoProfiles: videoProfiles,
+      removeExtmaps: removeExtmaps,
+      removeStaticAudioRtpMaps: removeStaticAudioRtpMaps,
+      remapTE8payloadTo101: remapTE8payloadTo101,
     );
   }
 
@@ -214,6 +232,9 @@ class EncodingSettings extends Equatable {
       opusDtx: opusDtx,
       audioProfiles: audioProfiles,
       videoProfiles: videoProfiles,
+      removeExtmaps: removeExtmaps,
+      removeStaticAudioRtpMaps: removeStaticAudioRtpMaps,
+      remapTE8payloadTo101: remapTE8payloadTo101,
     );
   }
 
@@ -229,6 +250,9 @@ class EncodingSettings extends Equatable {
       opusDtx: opusDtx,
       audioProfiles: audioProfiles,
       videoProfiles: videoProfiles,
+      removeExtmaps: removeExtmaps,
+      removeStaticAudioRtpMaps: removeStaticAudioRtpMaps,
+      remapTE8payloadTo101: remapTE8payloadTo101,
     );
   }
 
@@ -243,6 +267,9 @@ class EncodingSettings extends Equatable {
       opusDtx: opusDtx,
       audioProfiles: audioProfiles,
       videoProfiles: videoProfiles,
+      removeExtmaps: removeExtmaps,
+      removeStaticAudioRtpMaps: removeStaticAudioRtpMaps,
+      remapTE8payloadTo101: remapTE8payloadTo101,
     );
   }
 
@@ -258,6 +285,9 @@ class EncodingSettings extends Equatable {
       opusDtx: opusDtx,
       audioProfiles: audioProfiles,
       videoProfiles: videoProfiles,
+      removeExtmaps: removeExtmaps,
+      removeStaticAudioRtpMaps: removeStaticAudioRtpMaps,
+      remapTE8payloadTo101: remapTE8payloadTo101,
     );
   }
 
@@ -273,6 +303,9 @@ class EncodingSettings extends Equatable {
       opusDtx: opusDtx,
       audioProfiles: audioProfiles,
       videoProfiles: videoProfiles,
+      removeExtmaps: removeExtmaps,
+      removeStaticAudioRtpMaps: removeStaticAudioRtpMaps,
+      remapTE8payloadTo101: remapTE8payloadTo101,
     );
   }
 
@@ -288,6 +321,9 @@ class EncodingSettings extends Equatable {
       opusDtx: opusDtx,
       audioProfiles: audioProfiles,
       videoProfiles: videoProfiles,
+      removeExtmaps: removeExtmaps,
+      removeStaticAudioRtpMaps: removeStaticAudioRtpMaps,
+      remapTE8payloadTo101: remapTE8payloadTo101,
     );
   }
 
@@ -303,6 +339,9 @@ class EncodingSettings extends Equatable {
       opusDtx: opusDtx,
       audioProfiles: audioProfiles,
       videoProfiles: videoProfiles,
+      removeExtmaps: removeExtmaps,
+      removeStaticAudioRtpMaps: removeStaticAudioRtpMaps,
+      remapTE8payloadTo101: remapTE8payloadTo101,
     );
   }
 
@@ -318,6 +357,9 @@ class EncodingSettings extends Equatable {
       opusDtx: opusDtx,
       audioProfiles: audioProfiles,
       videoProfiles: videoProfiles,
+      removeExtmaps: removeExtmaps,
+      removeStaticAudioRtpMaps: removeStaticAudioRtpMaps,
+      remapTE8payloadTo101: remapTE8payloadTo101,
     );
   }
 
@@ -333,6 +375,63 @@ class EncodingSettings extends Equatable {
       opusDtx: opusDtx,
       audioProfiles: audioProfiles,
       videoProfiles: videoProfiles,
+      removeExtmaps: removeExtmaps,
+      removeStaticAudioRtpMaps: removeStaticAudioRtpMaps,
+      remapTE8payloadTo101: remapTE8payloadTo101,
+    );
+  }
+
+  EncodingSettings copyWithRemoveExtmaps(bool removeExtmaps) {
+    return EncodingSettings(
+      audioBitrate: audioBitrate,
+      videoBitrate: videoBitrate,
+      ptime: ptime,
+      maxptime: maxptime,
+      opusSamplingRate: opusSamplingRate,
+      opusBitrate: opusBitrate,
+      opusStereo: opusStereo,
+      opusDtx: opusDtx,
+      audioProfiles: audioProfiles,
+      videoProfiles: videoProfiles,
+      removeExtmaps: removeExtmaps,
+      removeStaticAudioRtpMaps: removeStaticAudioRtpMaps,
+      remapTE8payloadTo101: remapTE8payloadTo101,
+    );
+  }
+
+  EncodingSettings copyWithRemoveStaticAudioRtpMaps(bool removeStaticAudioRtpMaps) {
+    return EncodingSettings(
+      audioBitrate: audioBitrate,
+      videoBitrate: videoBitrate,
+      ptime: ptime,
+      maxptime: maxptime,
+      opusSamplingRate: opusSamplingRate,
+      opusBitrate: opusBitrate,
+      opusStereo: opusStereo,
+      opusDtx: opusDtx,
+      audioProfiles: audioProfiles,
+      videoProfiles: videoProfiles,
+      removeExtmaps: removeExtmaps,
+      removeStaticAudioRtpMaps: removeStaticAudioRtpMaps,
+      remapTE8payloadTo101: remapTE8payloadTo101,
+    );
+  }
+
+  EncodingSettings copyWithRemapTE8payloadTo101(bool remapTE8payloadTo101) {
+    return EncodingSettings(
+      audioBitrate: audioBitrate,
+      videoBitrate: videoBitrate,
+      ptime: ptime,
+      maxptime: maxptime,
+      opusSamplingRate: opusSamplingRate,
+      opusBitrate: opusBitrate,
+      opusStereo: opusStereo,
+      opusDtx: opusDtx,
+      audioProfiles: audioProfiles,
+      videoProfiles: videoProfiles,
+      removeExtmaps: removeExtmaps,
+      removeStaticAudioRtpMaps: removeStaticAudioRtpMaps,
+      remapTE8payloadTo101: remapTE8payloadTo101,
     );
   }
 
@@ -347,6 +446,9 @@ class EncodingSettings extends Equatable {
     opusDtx,
     audioProfiles,
     videoProfiles,
+    removeExtmaps,
+    removeStaticAudioRtpMaps,
+    remapTE8payloadTo101,
   );
 
   @override
@@ -361,10 +463,13 @@ class EncodingSettings extends Equatable {
         opusDtx,
         audioProfiles,
         videoProfiles,
+        removeExtmaps,
+        removeStaticAudioRtpMaps,
+        remapTE8payloadTo101,
       ];
 
   @override
   String toString() {
-    return 'EncodingSettings{audioBitrate: $audioBitrate, videoBitrate: $videoBitrate, ptime: $ptime, maxptime: $maxptime, opusSamplingRate: $opusSamplingRate, opusBitrate: $opusBitrate, opusStereo: $opusStereo, opusDtx: $opusDtx, audioProfiles: $audioProfiles, videoProfiles: $videoProfiles}';
+    return 'EncodingSettings{audioBitrate: $audioBitrate, videoBitrate: $videoBitrate, ptime: $ptime, maxptime: $maxptime, opusSamplingRate: $opusSamplingRate, opusBitrate: $opusBitrate, opusStereo: $opusStereo, opusDtx: $opusDtx, audioProfiles: $audioProfiles, videoProfiles: $videoProfiles, removeExtmaps: $removeExtmaps, removeStaticAudioRtpMaps: $removeStaticAudioRtpMaps, remapTE8payloadTo101: $remapTE8payloadTo101}';
   }
 }
