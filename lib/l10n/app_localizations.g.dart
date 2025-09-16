@@ -64,7 +64,7 @@ import 'app_localizations_uk.g.dart';
 /// property.
 abstract class AppLocalizations {
   AppLocalizations(String locale)
-    : localeName = intl.Intl.canonicalizedLocale(locale.toString());
+      : localeName = intl.Intl.canonicalizedLocale(locale.toString());
 
   final String localeName;
 
@@ -87,17 +87,17 @@ abstract class AppLocalizations {
   /// of delegates is preferred or required.
   static const List<LocalizationsDelegate<dynamic>> localizationsDelegates =
       <LocalizationsDelegate<dynamic>>[
-        delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-      ];
+    delegate,
+    GlobalMaterialLocalizations.delegate,
+    GlobalCupertinoLocalizations.delegate,
+    GlobalWidgetsLocalizations.delegate,
+  ];
 
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
     Locale('en'),
     Locale('it'),
-    Locale('uk'),
+    Locale('uk')
   ];
 
   /// Shown when a web self-care password is expired. By default, such passwords may be created in an expired state or set to expire after a period of time. The user must log in to the self-care portal and set a new password. Until refreshed, access to related services is restricted.
@@ -1185,9 +1185,7 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'An incompatible instance version provided, please contact the administrator of your system (actual: {actual}, supported: {supportedConstraint})'**
   String login_CoreVersionUnsupportedExceptionError(
-    String actual,
-    String supportedConstraint,
-  );
+      String actual, String supportedConstraint);
 
   /// Shown during login or signup when the user tries to request a verification code but has not entered an email address. Condition: email field is empty.
   ///
@@ -1500,10 +1498,8 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Incompatible WebTrit Cloud Backend version, please contact the administrator of your system.\n\nInstance version:\n{actual}\n\nSupported version:\n{supportedConstraint}'**
   String
-  main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError(
-    String actual,
-    String supportedConstraint,
-  );
+      main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError(
+          String actual, String supportedConstraint);
 
   /// No description provided for @main_CompatibilityIssueDialog_title.
   ///
@@ -2104,16 +2100,14 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Disconnected from the core with the code: {codeName}'**
   String notifications_errorSnackBar_signalingDisconnectWithCodeName(
-    String codeName,
-  );
+      String codeName);
 
   /// Shown in a notification or snackbar when the app is disconnected from the WebTrit core and a system-provided reason string is available. Context: occurs when the signaling/WebSocket connection is closed with a system-level reason (e.g. network error, TLS/handshake failure, server-initiated disconnect). Advise the user to check their network, retry, or reauthenticate if the problem persists.
   ///
   /// In en, this message translates to:
   /// **'Disconnected from the core due to the following reason: {reason}'**
   String notifications_errorSnackBar_signalingDisconnectWithSystemReason(
-    String reason,
-  );
+      String reason);
 
   /// Shown in a notification or snackbar when the app's signaling session for the signed-in user is lost or rejected and re-authentication is required. Typical causes: expired or revoked access/refresh tokens, failed token refresh, authentication rejected by the core (e.g. SIP/WebTrit 401 Unauthorized), or the signaling server closing the session. Advise the user to sign in again to restore full functionality.
   ///
@@ -2138,8 +2132,7 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Registration with the remote VoIP system failed due to the following reason: {reason}'**
   String notifications_errorSnackBar_sipRegistrationFailed_WithSystemReason(
-    String reason,
-  );
+      String reason);
 
   /// Shown in a notification or snackbar when authentication with the remote VoIP/SIP system fails or the service is unavailable. Typical causes: authentication rejection (invalid/expired credentials), remote service maintenance or outage, or transient network/TLS issues. Advise the user to verify account credentials, retry later, and contact their administrator or support if the problem persists.
   ///
@@ -3736,6 +3729,60 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Web resource error'**
   String get webRegistration_ErrorAcknowledgeDialog_title;
+
+  /// Title shown on the generic WebView error screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong'**
+  String get webview_defaultError_title;
+
+  /// Error description with numeric code for the generic WebView error screen.
+  ///
+  /// In en, this message translates to:
+  /// **'{description} (code: {code})'**
+  String webview_defaultError_details(String description, int code);
+
+  /// Button label to reload the WebView after a generic error.
+  ///
+  /// In en, this message translates to:
+  /// **'Reload'**
+  String get webview_defaultError_reload;
+
+  /// Title for SSL authentication error screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Your connection is not private'**
+  String get webview_sslError_title;
+
+  /// Body message for SSL authentication error.
+  ///
+  /// In en, this message translates to:
+  /// **'The certificate for this site isn\'t trusted. The page can\'t be shown.'**
+  String get webview_sslError_message;
+
+  /// Primary action button label on SSL error screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Try again'**
+  String get webview_sslError_tryAgain;
+
+  /// Secondary action button label to open SSL details bottom sheet.
+  ///
+  /// In en, this message translates to:
+  /// **'Details'**
+  String get webview_sslError_details;
+
+  /// Label for SSL error type in the details sheet.
+  ///
+  /// In en, this message translates to:
+  /// **'Type'**
+  String get webview_sslError_details_type;
+
+  /// Label for failing URL in the details sheet.
+  ///
+  /// In en, this message translates to:
+  /// **'URL'**
+  String get webview_sslError_details_url;
 }
 
 class _AppLocalizationsDelegate
@@ -3767,9 +3814,8 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
   }
 
   throw FlutterError(
-    'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
-    'an issue with the localizations generation tool. Please file an issue '
-    'on GitHub with a reproducible sample app and the gen-l10n configuration '
-    'that was used.',
-  );
+      'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
+      'an issue with the localizations generation tool. Please file an issue '
+      'on GitHub with a reproducible sample app and the gen-l10n configuration '
+      'that was used.');
 }

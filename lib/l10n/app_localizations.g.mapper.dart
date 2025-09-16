@@ -1135,6 +1135,16 @@ class AppLocalizationsMapper {
           localizations.webRegistration_ErrorAcknowledgeDialogActions_skip,
       'webRegistration_ErrorAcknowledgeDialog_title':
           localizations.webRegistration_ErrorAcknowledgeDialog_title,
+      'webview_defaultError_title': localizations.webview_defaultError_title,
+      'webview_defaultError_reload': localizations.webview_defaultError_reload,
+      'webview_sslError_title': localizations.webview_sslError_title,
+      'webview_sslError_message': localizations.webview_sslError_message,
+      'webview_sslError_tryAgain': localizations.webview_sslError_tryAgain,
+      'webview_sslError_details': localizations.webview_sslError_details,
+      'webview_sslError_details_type':
+          localizations.webview_sslError_details_type,
+      'webview_sslError_details_url':
+          localizations.webview_sslError_details_url,
       'default_UnknownExceptionError': (error) =>
           localizations.default_UnknownExceptionError(error),
       'favorites_SnackBar_deleted': (name) =>
@@ -1191,6 +1201,8 @@ class AppLocalizationsMapper {
           localizations.user_agreement_checkbox_text(url),
       'user_agreement_description': (appName) =>
           localizations.user_agreement_description(appName),
+      'webview_defaultError_details': (description, code) =>
+          localizations.webview_defaultError_details(description, code),
     };
   }
 }

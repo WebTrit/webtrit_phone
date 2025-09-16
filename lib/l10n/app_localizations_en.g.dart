@@ -621,9 +621,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String login_CoreVersionUnsupportedExceptionError(
-    String actual,
-    String supportedConstraint,
-  ) {
+      String actual, String supportedConstraint) {
     return 'An incompatible instance version provided, please contact the administrator of your system (actual: $actual, supported: $supportedConstraint)';
   }
 
@@ -811,10 +809,8 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String
-  main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError(
-    String actual,
-    String supportedConstraint,
-  ) {
+      main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError(
+          String actual, String supportedConstraint) {
     return 'Incompatible WebTrit Cloud Backend version, please contact the administrator of your system.\n\nInstance version:\n$actual\n\nSupported version:\n$supportedConstraint';
   }
 
@@ -1158,15 +1154,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String notifications_errorSnackBar_signalingDisconnectWithCodeName(
-    String codeName,
-  ) {
+      String codeName) {
     return 'Disconnected from the core with the code: $codeName';
   }
 
   @override
   String notifications_errorSnackBar_signalingDisconnectWithSystemReason(
-    String reason,
-  ) {
+      String reason) {
     return 'Disconnected from the core due to the following reason: $reason';
   }
 
@@ -1184,8 +1178,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String notifications_errorSnackBar_sipRegistrationFailed_WithSystemReason(
-    String reason,
-  ) {
+      String reason) {
     return 'Registration with the remote VoIP system failed due to the following reason: $reason';
   }
 
@@ -2137,4 +2130,34 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get webRegistration_ErrorAcknowledgeDialog_title =>
       'Web resource error';
+
+  @override
+  String get webview_defaultError_title => 'Something went wrong';
+
+  @override
+  String webview_defaultError_details(String description, int code) {
+    return '$description (code: $code)';
+  }
+
+  @override
+  String get webview_defaultError_reload => 'Reload';
+
+  @override
+  String get webview_sslError_title => 'Your connection is not private';
+
+  @override
+  String get webview_sslError_message =>
+      'The certificate for this site isn\'t trusted. The page can\'t be shown.';
+
+  @override
+  String get webview_sslError_tryAgain => 'Try again';
+
+  @override
+  String get webview_sslError_details => 'Details';
+
+  @override
+  String get webview_sslError_details_type => 'Type';
+
+  @override
+  String get webview_sslError_details_url => 'URL';
 }
