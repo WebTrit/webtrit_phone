@@ -539,6 +539,66 @@ class DefaultPayloadInjectionStrategy implements PageInjectionStrategy {
   }
 }
 
+/// Strategy for injecting arbitrary JavaScript when the page is ready.
+class JavaScriptInjectionStrategy implements PageInjectionStrategy {
+  JavaScriptInjectionStrategy.raw(
+    this.script, {
+    this.label,
+    this.returnResult = false,
+    this.onError,
+    this.onSuccess,
+  });
+
+  /// Optional label to simplify logging.
+  final String? label;
+
+  /// The JS source to execute.
+  final String script;
+
+  /// If true - uses runJavaScriptReturningResult, otherwise runJavaScript.
+  final bool returnResult;
+
+  /// Optional callbacks.
+  final void Function(Object error, StackTrace st)? onError;
+  final void Function(Object? result)? onSuccess;
+
+  WebViewController? _controller;
+
+  @override
+  void _handlePageReady(WebViewController controller, BuildContext context) {
+    _controller = controller;
+    _inject();
+  }
+
+  @override
+  void setPayload(Map<String, dynamic> payload) {
+    // no-op for pure script injection; kept to satisfy interface
+  }
+
+  Future<void> _inject() async {
+    final c = _controller;
+    if (c == null) return;
+
+    try {
+      if (returnResult) {
+        final res = await c.runJavaScriptReturningResult(script);
+        _logger.finest('${label ?? "JS"} inject result: $res');
+        onSuccess?.call(res);
+      } else {
+        await c.runJavaScript(script);
+        _logger.finest('${label ?? "JS"} injected');
+        onSuccess?.call(null);
+      }
+    } catch (e, st) {
+      _logger.severe('${label ?? "JS"} inject failed', e, st);
+      onError?.call(e, st);
+    }
+  }
+
+  @override
+  void _dispose() {}
+}
+
 /// Builder function for creating a [ConnectivityRecoveryStrategy].
 typedef ConnectivityRecoveryStrategyBuilder = ConnectivityRecoveryStrategy Function();
 

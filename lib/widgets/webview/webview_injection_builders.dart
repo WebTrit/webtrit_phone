@@ -2,6 +2,7 @@ import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/models/models.dart';
 
 import 'web_view_container.dart';
+import 'webview_injection_console_logging.dart';
 
 /// A collection of static builder methods for creating common
 /// [PageInjectionStrategy] instances used with [WebViewContainer].
@@ -43,15 +44,24 @@ class PageInjectionBuilders {
     );
   }
 
+  /// Creates a [PageInjectionStrategy] that injects the console logger wrapper.
+  /// Forwards console.* to a JS channel (default: 'ConsoleLog').
+  static PageInjectionStrategy consoleLogging({String channelName = 'ConsoleLog'}) {
+    return ConsoleLoggingInjectionStrategy(channelName: channelName);
+  }
+
   /// Factory that returns a list of [PageInjectionStrategy] including
   /// optional defaults based on flags.
   ///
-  /// - [includeMediaQuery]: inject MediaQuery/theme data
-  /// - [includeDeviceInfo]: inject device/app info + optional URLs
+  /// - [mediaQueryMetricsData]: inject MediaQuery/theme data
+  /// - [deviceInfoData]: inject device/app info
+  /// - [includeConsoleLogging]: wrap console.* and forward via JS channel
+  /// - [consoleChannelName]: JS channel name (defaults to 'ConsoleLog')
   static List<PageInjectionStrategy> resolve({
     List<PageInjectionStrategy> custom = const [],
     MediaQueryMetrics? mediaQueryMetricsData,
     Map<String, String>? deviceInfoData,
+    bool includeConsoleLogging = true,
   }) {
     final strategies = <PageInjectionStrategy>[];
 
@@ -63,6 +73,10 @@ class PageInjectionBuilders {
 
     if (deviceInfoData != null) {
       strategies.add(deviceInfo(deviceInfoData));
+    }
+
+    if (includeConsoleLogging) {
+      strategies.add(consoleLogging());
     }
 
     return strategies;
