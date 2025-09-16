@@ -17,6 +17,8 @@ final _logger = Logger('EmbeddedScreen');
 class EmbeddedScreen extends StatefulWidget {
   const EmbeddedScreen({
     required this.initialUri,
+    required this.mediaQueryMetricsData,
+    required this.deviceInfoData,
     required this.appBar,
     this.shouldForwardPop = true,
     this.enableLogCapture = false,
@@ -26,6 +28,8 @@ class EmbeddedScreen extends StatefulWidget {
   });
 
   final Uri initialUri;
+  final MediaQueryMetrics? mediaQueryMetricsData;
+  final Map<String, String>? deviceInfoData;
   final PreferredSizeWidget appBar;
 
   /// If true, the console log will be captured and forwarded to the logger.
@@ -49,12 +53,23 @@ class _EmbeddedScreenState extends State<EmbeddedScreen> {
   late final ConnectivityRecoveryStrategy _connectivityRecoveryStrategy;
   late final PageInjectionStrategy _pageInjectionStrategy;
 
+  late final List<JSChannelStrategy> _jSChannelStrategies;
+  late final List<PageInjectionStrategy> _pageInjectionStrategies;
+
   EmbeddedCubit get _cubit => context.read<EmbeddedCubit>();
 
   @override
   void initState() {
     _pageInjectionStrategy = widget.pageInjectionStrategyBuilder();
     _connectivityRecoveryStrategy = widget.connectivityRecoveryStrategyBuilder();
+
+    // TODO: Add to embedded configuration possibly disable media query injection and/or device info injection.
+    _pageInjectionStrategies = PageInjectionBuilders.resolve(
+        mediaQueryMetricsData: widget.mediaQueryMetricsData,
+        deviceInfoData: widget.deviceInfoData,
+        custom: [_pageInjectionStrategy]);
+
+    _jSChannelStrategies = JSChannelBuilders.resolve(enableLogCapture: widget.enableLogCapture);
     super.initState();
   }
 
@@ -73,9 +88,8 @@ class _EmbeddedScreenState extends State<EmbeddedScreen> {
               initialUri: widget.initialUri,
               webViewController: _webViewController,
               connectivityRecoveryStrategy: _connectivityRecoveryStrategy,
-              // TODO: Add to embedded configuration possibly disable media query injection and/or device info injection.
-              pageInjectionStrategies: PageInjectionBuilders.resolve(context, custom: [_pageInjectionStrategy]),
-              jSChannelStrategies: JSChannelBuilders.resolve(enableLogCapture: widget.enableLogCapture),
+              pageInjectionStrategies: _pageInjectionStrategies,
+              jSChannelStrategies: _jSChannelStrategies,
               showToolbar: false,
               userAgent: UserAgent.of(context),
               errorBuilder: _buildErrorBuilder(),

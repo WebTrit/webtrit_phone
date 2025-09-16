@@ -1,20 +1,57 @@
+import 'dart:async';
+
 import 'package:logging/logging.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:webtrit_phone/widgets/webview/extensions/extensions.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 import 'models/models.dart';
 import 'web_view_container.dart';
+import 'webview_injection_console_logging.dart';
 
 final _logger = Logger('WebViewContainer');
+
+/// Options for configuring the reload channel behavior.
+class ReloadChannelOptions {
+  /// Channel name (must match the name used in the web page).
+  final String name;
+
+  /// Debounce delay between consecutive reload requests.
+  final Duration debounce;
+
+  /// Max number of reloads allowed within [window].
+  final int maxReloads;
+
+  /// Rate-limit window.
+  final Duration window;
+
+  /// Callback invoked right before performing the actual reload.
+  final void Function(JsonJsEvent e)? onReloadEvent;
+
+  /// Callback invoked when a reload request is rejected due to rate limiting.
+  final void Function(JsonJsEvent e)? onRateLimited;
+
+  /// Callback invoked when an unknown event name is received.
+  final void Function(JsonJsEvent e)? onUnknown;
+
+  const ReloadChannelOptions({
+    this.name = 'WebtritPageReloadChannel',
+    this.debounce = const Duration(seconds: 5),
+    this.maxReloads = 10,
+    this.window = const Duration(minutes: 1),
+    this.onReloadEvent,
+    this.onRateLimited,
+    this.onUnknown,
+  });
+}
 
 /// A utility class for constructing common [JSChannelStrategy] instances.
 ///
 /// Provides factory methods for:
 /// - Creating a simple channel with a single event handler.
 /// - Creating a router-based channel that dispatches by event name.
-/// - Creating a console logger channel to capture and forward
-///   `console.*` messages from the WebView.
+/// - Creating a console logger channel to capture and forward `console.*`.
+/// - Creating a reload channel with debounce and rate limiting.
 /// - Resolving a combined list of strategies including custom ones.
 class JSChannelBuilders {
   /// Creates a [JSChannelStrategy] with a single event handler.
@@ -64,9 +101,7 @@ class JSChannelBuilders {
   /// Supports two formats:
   /// 1. **JSON format**: `{ "event": "info", "data": { "message": "..." } }`
   /// 2. **Legacy raw string format**: `"INFO: some message"`
-  ///
-  /// - [name]: The channel name to use, defaults to `"ConsoleLog"`.
-  static JSChannelStrategy consoleLogger({String name = 'ConsoleLog'}) {
+  static JSChannelStrategy consoleLogger({String name = ConsoleLoggingInjectionStrategy.consoleLoggingChannelName}) {
     String pickLevel(String s) => s.toUpperCase();
 
     void log(String level, String message) {
@@ -91,60 +126,65 @@ class JSChannelBuilders {
       }
     }
 
-    // Fallback for legacy raw string messages like "WARN: something".
-    void handleLegacyRaw(String raw) {
-      final t = raw.trim();
-      final idx = t.indexOf(':');
-      if (idx > 0) {
-        final lvl = pickLevel(t.substring(0, idx).trim());
-        final msg = t.substring(idx + 1).trim();
-        log(lvl, msg);
-      } else {
-        log('INFO', t);
-      }
-    }
-
     return JSChannelStrategy(
       name: name,
       onEvent: (_, it) {
         final level = pickLevel(it.event);
-        final msg = it.data?['message']?.toString() ?? it.raw.toString();
-        log(level, msg);
+        final message = it.data?['message']?.toString() ?? it.raw?['message']?.toString() ?? it.raw?.toString() ?? '';
+        log(level, message);
       },
-      onMalformed: handleLegacyRaw,
     );
   }
 
-  /// Default handler for the `pageVersion` event.
-  /// - Saves latest page version to local storage.
-  /// - If version differs from cached one, triggers a hard reload.
-  static JSChannelStrategy pageVersion() {
-    const pageVersionKey = 'cached_page_version';
+  static JSChannelStrategy reloadPageChannel({
+    ReloadChannelOptions options = const ReloadChannelOptions(),
+  }) {
+    final List<DateTime> hits = <DateTime>[];
+    Timer? debounceTimer;
+    JsonJsEvent? pendingEvent;
+
+    void pruneOldHits(DateTime now) {
+      final cutoff = now.subtract(options.window);
+      while (hits.isNotEmpty && hits.first.isBefore(cutoff)) {
+        hits.removeAt(0);
+      }
+    }
+
+    Future<void> handle(WebViewController controller, JsonJsEvent e) async {
+      pendingEvent = e;
+      debounceTimer?.cancel();
+      debounceTimer = Timer(options.debounce, () async {
+        final now = DateTime.now();
+        pruneOldHits(now);
+
+        if (hits.length >= options.maxReloads) {
+          _logger.warning(
+            '[reload] rate-limited: ${hits.length}/${options.maxReloads} in last ${options.window.inSeconds}s',
+          );
+          options.onRateLimited?.call(pendingEvent!);
+          return;
+        }
+
+        options.onReloadEvent?.call(pendingEvent!);
+
+        try {
+          hits.add(DateTime.now());
+          await controller.reload();
+          _logger.info('[reload] WebView reloaded');
+        } catch (err, st) {
+          _logger.severe('[reload] failed', err, st);
+        } finally {
+          pendingEvent = null;
+        }
+      });
+    }
 
     return JSChannelStrategy.route(
-      name: 'WebtritPageVersionChannel',
+      name: options.name,
       routes: {
-        'pageVersion': (controller, it) async {
-          final newVersion = it.data?['pageVersion']?.toString();
-          if (newVersion == null) {
-            _logger.warning('pageVersion event without version');
-            return;
-          }
-
-          final prefs = await SharedPreferences.getInstance();
-          final oldVersion = prefs.getString(pageVersionKey);
-
-          _logger.info('Received page version: $newVersion (cached: $oldVersion)');
-          if (oldVersion != newVersion) {
-            _logger.info('Page version changed: $oldVersion -> $newVersion, reloading...');
-            await prefs.setString(pageVersionKey, newVersion);
-            await controller.reload();
-          } else {
-            _logger.fine('Page version unchanged: $newVersion');
-          }
-        },
+        'reload': (controller, it) => handle(controller, it),
       },
-      onUnknown: (e) => _logger.fine('Unknown event : ${e.event}'),
+      onUnknown: options.onUnknown ?? (e) => _logger.fine('[reload] Unknown event: ${e.event}'),
     );
   }
 
@@ -167,7 +207,7 @@ class JSChannelBuilders {
     }
 
     if (enablePageVersionHandler) {
-      list.add(pageVersion());
+      list.add(reloadPageChannel());
     }
 
     return list;

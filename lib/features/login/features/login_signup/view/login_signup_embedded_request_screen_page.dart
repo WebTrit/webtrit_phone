@@ -4,7 +4,10 @@ import 'package:flutter/material.dart';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:webtrit_phone/data/data.dart';
 
+import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/theme/models/models.dart';
@@ -45,6 +48,8 @@ class LoginSignupEmbeddedRequestScreenPage extends StatelessWidget {
           return resource is NetworkResourceLoader
               ? LoginSignupEmbeddedRequestScreen(
                   initialUrl: Uri.parse(content),
+                  mediaQueryMetricsData: context.mediaQueryMetrics,
+                  deviceInfoData: context.read<AppLabelsProvider>().build(),
                   pageInjectionStrategyBuilder: _createInjectionStrategy(locale),
                   connectivityRecoveryStrategyBuilder: () => _createConnectivityRecoveryStrategy(embeddedData),
                 )
@@ -54,6 +59,8 @@ class LoginSignupEmbeddedRequestScreenPage extends StatelessWidget {
                     mimeType: 'text/html',
                     encoding: Encoding.getByName('utf-8'),
                   ),
+                  mediaQueryMetricsData: context.mediaQueryMetrics,
+                  deviceInfoData: context.read<AppLabelsProvider>().build(),
                   pageInjectionStrategyBuilder: _createInjectionStrategy(locale),
                   connectivityRecoveryStrategyBuilder: () => _createConnectivityRecoveryStrategy(embeddedData),
                 );

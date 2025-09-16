@@ -11,6 +11,7 @@ export 'feature_access.dart';
 export 'iterable.dart';
 export 'locale.dart';
 export 'main_flavor.dart';
+export 'media_query_metrics_extensions.dart';
 export 'messaging_socket_exception.dart';
 export 'platform_deep_link.dart';
 export 'registration_status.dart';

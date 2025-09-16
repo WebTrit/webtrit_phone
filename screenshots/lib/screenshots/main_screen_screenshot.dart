@@ -172,6 +172,8 @@ class MainScreenScreenshot extends StatelessWidget {
           create: (_) => MockEmbeddedCubit.mainScreen(),
           child: EmbeddedScreen(
             initialUri: Uri.parse('https://example.com'),
+            mediaQueryMetricsData: null,
+            deviceInfoData: null,
             appBar: MainAppBar(
               title: const Text('Embedded'),
               context: context,

@@ -19,11 +19,15 @@ class LoginSignupEmbeddedRequestScreen extends StatefulWidget {
   const LoginSignupEmbeddedRequestScreen({
     super.key,
     required this.initialUrl,
+    required this.mediaQueryMetricsData,
+    required this.deviceInfoData,
     required this.connectivityRecoveryStrategyBuilder,
     required this.pageInjectionStrategyBuilder,
   });
 
   final Uri initialUrl;
+  final MediaQueryMetrics? mediaQueryMetricsData;
+  final Map<String, String>? deviceInfoData;
 
   /// Builder for creating the page injection strategy.
   final PageInjectionStrategyBuilder pageInjectionStrategyBuilder;
@@ -38,9 +42,10 @@ class LoginSignupEmbeddedRequestScreen extends StatefulWidget {
 class _LoginSignupEmbeddedRequestScreenState extends State<LoginSignupEmbeddedRequestScreen> {
   final WebViewController _webViewController = WebViewController();
 
-  late final PageInjectionStrategy _pageInjectionStrategy;
   late final ConnectivityRecoveryStrategy _connectivityRecoveryStrategy;
-  late final JSChannelStrategy _jsChannelStrategy;
+
+  late final List<JSChannelStrategy> _jSChannelStrategies;
+  late final List<PageInjectionStrategy> _pageInjectionStrategies;
 
   /// Indicates whether the WebView can navigate back in its history stack.
   /// Used to control PopScope behavior and decide whether to intercept back presses.
@@ -54,9 +59,18 @@ class _LoginSignupEmbeddedRequestScreenState extends State<LoginSignupEmbeddedRe
 
   @override
   void initState() {
-    _pageInjectionStrategy = widget.pageInjectionStrategyBuilder();
     _connectivityRecoveryStrategy = widget.connectivityRecoveryStrategyBuilder();
-    _jsChannelStrategy = JSChannelStrategy.route(name: 'WebtritLoginChannel', routes: {'signup': _onJSMessageReceived});
+
+    // TODO: Add to embedded configuration possibly disable media query injection and/or device info injection.
+    _pageInjectionStrategies = PageInjectionBuilders.resolve(
+        mediaQueryMetricsData: widget.mediaQueryMetricsData,
+        deviceInfoData: widget.deviceInfoData,
+        custom: [widget.pageInjectionStrategyBuilder()]);
+
+    _jSChannelStrategies = JSChannelBuilders.resolve(custom: [
+      JSChannelStrategy.route(name: 'WebtritLoginChannel', routes: {'signup': _onJSMessageReceived})
+    ]);
+
     super.initState();
   }
 
@@ -75,9 +89,8 @@ class _LoginSignupEmbeddedRequestScreenState extends State<LoginSignupEmbeddedRe
           connectivityRecoveryStrategy: _connectivityRecoveryStrategy,
           showToolbar: false,
           userAgent: UserAgent.of(context),
-          // TODO: Add to embedded configuration possibly disable media query injection and/or device info injection.
-          pageInjectionStrategies: PageInjectionBuilders.resolve(context, custom: [_pageInjectionStrategy]),
-          jSChannelStrategies: JSChannelBuilders.resolve(custom: [_jsChannelStrategy]),
+          pageInjectionStrategies: _pageInjectionStrategies,
+          jSChannelStrategies: _jSChannelStrategies,
           onUrlChange: (_) => _updateCanGoBack(),
           errorBuilder: _buildErrorBuilder(),
         ),

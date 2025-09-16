@@ -1,9 +1,8 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'package:webtrit_phone/data/data.dart';
+import 'package:webtrit_phone/models/models.dart';
 
 import 'web_view_container.dart';
+import 'webview_injection_console_logging.dart';
 
 /// A collection of static builder methods for creating common
 /// [PageInjectionStrategy] instances used with [WebViewContainer].
@@ -21,22 +20,12 @@ class PageInjectionBuilders {
   /// - `topSafeInset`: top safe area (status bar height)
   /// - `bottomSafeInset`: bottom safe area (system gesture area)
   static PageInjectionStrategy mediaQuery(
-    BuildContext context, {
+    MediaQueryMetrics mediaQueryMetrics, {
     String functionName = 'onMediaQueryReady',
   }) {
-    final mq = MediaQuery.of(context);
-    final theme = Theme.of(context);
-
-    final payload = <String, dynamic>{
-      'brightness': theme.brightness.name,
-      'devicePixelRatio': mq.devicePixelRatio,
-      'topSafeInset': mq.viewPadding.top.round(),
-      'bottomSafeInset': mq.viewPadding.bottom.round(),
-    };
-
     return DefaultPayloadInjectionStrategy(
       functionName: functionName,
-      initialPayload: payload,
+      initialPayload: mediaQueryMetrics.toJson(),
     );
   }
 
@@ -46,38 +35,48 @@ class PageInjectionBuilders {
   /// This strategy is asynchronous because it may query storage
   /// or system services to build the labels.
   static PageInjectionStrategy deviceInfo(
-    BuildContext context, {
+    Map<String, String> deviceInfo, {
     String functionName = 'onDeviceInfoReady',
   }) {
-    final labels = context.read<AppLabelsProvider>().build();
-
     return DefaultPayloadInjectionStrategy(
       functionName: functionName,
-      initialPayload: labels,
+      initialPayload: deviceInfo,
     );
+  }
+
+  /// Creates a [PageInjectionStrategy] that injects the console logger wrapper.
+  /// Forwards console.* to a JS channel (default: 'ConsoleLog').
+  static PageInjectionStrategy consoleLogging() {
+    return ConsoleLoggingInjectionStrategy();
   }
 
   /// Factory that returns a list of [PageInjectionStrategy] including
   /// optional defaults based on flags.
   ///
-  /// - [includeMediaQuery]: inject MediaQuery/theme data
-  /// - [includeDeviceInfo]: inject device/app info + optional URLs
-  static List<PageInjectionStrategy> resolve(
-    BuildContext context, {
+  /// - [mediaQueryMetricsData]: inject MediaQuery/theme data
+  /// - [deviceInfoData]: inject device/app info
+  /// - [includeConsoleLogging]: wrap console.* and forward via JS channel
+  /// - [consoleChannelName]: JS channel name (defaults to 'ConsoleLog')
+  static List<PageInjectionStrategy> resolve({
     List<PageInjectionStrategy> custom = const [],
-    bool includeMediaQuery = true,
-    bool includeDeviceInfo = true,
+    MediaQueryMetrics? mediaQueryMetricsData,
+    Map<String, String>? deviceInfoData,
+    bool includeConsoleLogging = true,
   }) {
     final strategies = <PageInjectionStrategy>[];
 
     strategies.addAll(custom);
 
-    if (includeMediaQuery) {
-      strategies.add(mediaQuery(context));
+    if (mediaQueryMetricsData != null) {
+      strategies.add(mediaQuery(mediaQueryMetricsData));
     }
 
-    if (includeDeviceInfo) {
-      strategies.add(deviceInfo(context));
+    if (deviceInfoData != null) {
+      strategies.add(deviceInfo(deviceInfoData));
+    }
+
+    if (includeConsoleLogging) {
+      strategies.add(consoleLogging());
     }
 
     return strategies;
