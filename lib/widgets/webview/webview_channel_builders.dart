@@ -168,8 +168,8 @@ class JSChannelBuilders {
         options.onReloadEvent?.call(pendingEvent!);
 
         try {
-          await controller.reload();
           hits.add(DateTime.now());
+          await controller.reload();
           _logger.info('[reload] WebView reloaded');
         } catch (err, st) {
           _logger.severe('[reload] failed', err, st);
