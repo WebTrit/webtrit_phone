@@ -1605,6 +1605,34 @@ class AppLocalizationsEn extends AppLocalizations {
       'Video target bitrate: ';
 
   @override
+  String get settings_encoding_Section_extra_sdp_mod_title =>
+      'Extra SDP modifications';
+
+  @override
+  String get settings_encoding_Section_extra_sdp_mod_extmapsRemove =>
+      'Remove extmaps';
+
+  @override
+  String get settings_encoding_Section_extra_sdp_mod_extmapsRemove_tooltip =>
+      'Remove all extmap lines from SDP, to reduce SDP size. May help with MTU fragmentation issues on some SIP endpoints.';
+
+  @override
+  String get settings_encoding_Section_extra_sdp_mod_removeStaticRtpmaps =>
+      'Remove static rtpmap lines';
+
+  @override
+  String get settings_encoding_Section_extra_sdp_mod_removeStaticRtpmaps_tooltip =>
+      'Remove static RTP map lines for audio codecs (e.g., PCMU, PCMA) from SDP, to reduce SDP size. May help with MTU fragmentation issues on some SIP endpoints.';
+
+  @override
+  String get settings_encoding_Section_extra_sdp_mod_remapTE8 =>
+      'Remap TE_8k code to 101';
+
+  @override
+  String get settings_encoding_Section_extra_sdp_mod_remapTE8_tooltip =>
+      'Change TE8 payload type to 101 in SDP for better compatibility with some SIP endpoints.';
+
+  @override
   String get settings_encoding_Section_value_auto => 'Auto';
 
   @override

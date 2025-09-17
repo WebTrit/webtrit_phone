@@ -1632,6 +1632,34 @@ class AppLocalizationsUk extends AppLocalizations {
       'Цільовий бітрейт відео: ';
 
   @override
+  String get settings_encoding_Section_extra_sdp_mod_title =>
+      'Додаткові модифікації SDP';
+
+  @override
+  String get settings_encoding_Section_extra_sdp_mod_extmapsRemove =>
+      'Видалити extmaps';
+
+  @override
+  String get settings_encoding_Section_extra_sdp_mod_extmapsRemove_tooltip =>
+      'Видалити усі рядки extmap з SDP для зменшення розміру SDP. Може допомогти з проблемами фрагментації MTU на деяких SIP клієнтах.';
+
+  @override
+  String get settings_encoding_Section_extra_sdp_mod_removeStaticRtpmaps =>
+      'Видалити статичні rtpmap рядки';
+
+  @override
+  String get settings_encoding_Section_extra_sdp_mod_removeStaticRtpmaps_tooltip =>
+      'Видалити статичні RTP map рядки для аудіо кодеків (наприклад, PCMU, PCMA) з SDP для зменшення розміру SDP. Може допомогти з проблемами фрагментації MTU на деяких SIP клієнтах.';
+
+  @override
+  String get settings_encoding_Section_extra_sdp_mod_remapTE8 =>
+      'Перепризначити код TE_8k на 101';
+
+  @override
+  String get settings_encoding_Section_extra_sdp_mod_remapTE8_tooltip =>
+      'Змінити тип навантаження TE8 на 101 в SDP для кращої сумісності з деякими SIP клієнтами.';
+
+  @override
   String get settings_encoding_Section_value_auto => 'Авто';
 
   @override

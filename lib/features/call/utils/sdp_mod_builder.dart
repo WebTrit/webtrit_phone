@@ -211,6 +211,93 @@ class SDPModBuilder {
     }
   }
 
+  /// Removes all audio extmaps from the SDP.
+  /// Used to reduce the SDP size and avoid issues with some endpoints.
+  removeAudioExtmaps() {
+    final media = _getMedia(RTPCodecKind.audio);
+    if (media == null) return;
+    media.remove('ext');
+  }
+
+  /// Removes static audio RTP maps from the SDP.
+  /// Used to reduce the SDP size and avoid issues with some endpoints.
+  removeStaticAudioRtpMaps() {
+    final media = _getMedia(RTPCodecKind.audio);
+    if (media == null) return;
+
+    final originalPayloads = [];
+    final originalRtpMaps = [];
+    final originalFmtps = [];
+    final originalRtcpFbs = [];
+
+    if (media['payloads'] is String) originalPayloads.addAll((media['payloads'] as String).split(' '));
+    if (media['rtp'] is List<dynamic>) originalRtpMaps.addAll(media['rtp'] as List<dynamic>);
+    if (media['fmtp'] is List<dynamic>) originalFmtps.addAll(media['fmtp'] as List<dynamic>);
+    if (media['rtcpFb'] is List<dynamic>) originalRtcpFbs.addAll(media['rtcpFb'] as List<dynamic>);
+
+    // PCMU(0), PCMA(8), G722(9), CN(13) are static payload types that supports by our WebRTC stack.
+    final staticPayloads = ['0', '8', '9', '13'];
+
+    final modedRtpMaps = originalRtpMaps.where((r) => !staticPayloads.contains(r['payload'].toString()));
+    final modedFmtps = originalFmtps.where((f) => !staticPayloads.contains(f['payload'].toString()));
+    final modedRtcpFbs = originalRtcpFbs.where((f) => !staticPayloads.contains(f['payload'].toString()));
+
+    media['rtp'] = modedRtpMaps.toList();
+    media['fmtp'] = modedFmtps.toList();
+    media['rtcpFb'] = modedRtcpFbs.toList();
+  }
+
+  /// Remap the Telephone event 8k payload to 101 for compatibility with some endpoints.
+  remapTE8payloadTo101() {
+    final media = _getMedia(RTPCodecKind.audio);
+    if (media == null) return;
+
+    final originalPayloads = [];
+    final originalRtpMaps = [];
+    final originalFmtps = [];
+    final originalRtcpFbs = [];
+
+    if (media['payloads'] is String) originalPayloads.addAll((media['payloads'] as String).split(' '));
+    if (media['rtp'] is List<dynamic>) originalRtpMaps.addAll(media['rtp'] as List<dynamic>);
+    if (media['fmtp'] is List<dynamic>) originalFmtps.addAll(media['fmtp'] as List<dynamic>);
+    if (media['rtcpFb'] is List<dynamic>) originalRtcpFbs.addAll(media['rtcpFb'] as List<dynamic>);
+
+    final te8Rtp = originalRtpMaps.firstWhereOrNull((r) => r['codec'] == 'telephone-event' && r['rate'] == 8000);
+    if (te8Rtp == null) return;
+
+    final te8Payload = te8Rtp['payload'];
+    if (te8Payload == 101) return; // already remapped
+
+    // Check if payload 101 is already used
+    final payload101Used = originalRtpMaps.any((r) => r['payload'] == 101);
+    if (payload101Used) return; // cannot remap
+
+    // Remap payload
+    te8Rtp['payload'] = 101;
+
+    for (var fmtp in originalFmtps) {
+      if (fmtp['payload'] == te8Payload) {
+        fmtp['payload'] = 101;
+      }
+    }
+
+    for (var rtcpFb in originalRtcpFbs) {
+      if (rtcpFb['payload'] == te8Payload) {
+        rtcpFb['payload'] = 101;
+      }
+    }
+
+    final modedPayloads = originalPayloads.map((p) {
+      if (p == te8Payload.toString()) return '101';
+      return p;
+    });
+
+    media['payloads'] = modedPayloads.join(' ');
+    media['rtp'] = originalRtpMaps;
+    media['fmtp'] = originalFmtps;
+    media['rtcpFb'] = originalRtcpFbs;
+  }
+
   /// Get the codec profile payload id.
   /// Return codec by specific profile using fmtp records for multiprofile codecs
   /// e.g. H264 with profile 42e01f, 42e034, 640c34 etc.

@@ -215,7 +215,10 @@
         "opusSamplingRate": 24000,
         "opusBitrate": 16,
         "opusStereo": false,
-        "opusDtx": true
+        "opusDtx": true,
+        "removeExtmaps": false,
+        "removeStaticAudioRtpMaps": false,
+        "remapTE8payloadTo101": false
       }
     },
     "peerConnection": {

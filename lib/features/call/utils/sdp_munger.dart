@@ -74,6 +74,9 @@ class ModifyWithEncodingSettings implements SDPMunger {
       opusDtx,
       audioProfiles,
       videoProfiles,
+      removeExtmaps,
+      removeStaticAudioRtpMaps,
+      remapTE8payloadTo101,
     ) = settings.asRecord;
 
     final sdp = description.sdp;
@@ -114,6 +117,21 @@ class ModifyWithEncodingSettings implements SDPMunger {
 
     if (opusSamplingRate != null || opusBitrate != null || opusStereo != null || opusDtx != null) {
       builder.setOpusParams(opusSamplingRate, opusBitrate, opusStereo, opusDtx);
+      modified = true;
+    }
+
+    if (removeExtmaps) {
+      builder.removeAudioExtmaps();
+      modified = true;
+    }
+
+    if (removeStaticAudioRtpMaps) {
+      builder.removeStaticAudioRtpMaps();
+      modified = true;
+    }
+
+    if (remapTE8payloadTo101) {
+      builder.remapTE8payloadTo101();
       modified = true;
     }
 

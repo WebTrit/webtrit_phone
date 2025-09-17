@@ -2854,6 +2854,49 @@ abstract class AppLocalizations {
   /// **'Video target bitrate: '**
   String get settings_encoding_Section_target_video_bitrate;
 
+  /// No description provided for @settings_encoding_Section_extra_sdp_mod_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Extra SDP modifications'**
+  String get settings_encoding_Section_extra_sdp_mod_title;
+
+  /// No description provided for @settings_encoding_Section_extra_sdp_mod_extmapsRemove.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove extmaps'**
+  String get settings_encoding_Section_extra_sdp_mod_extmapsRemove;
+
+  /// No description provided for @settings_encoding_Section_extra_sdp_mod_extmapsRemove_tooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove all extmap lines from SDP, to reduce SDP size. May help with MTU fragmentation issues on some SIP endpoints.'**
+  String get settings_encoding_Section_extra_sdp_mod_extmapsRemove_tooltip;
+
+  /// No description provided for @settings_encoding_Section_extra_sdp_mod_removeStaticRtpmaps.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove static rtpmap lines'**
+  String get settings_encoding_Section_extra_sdp_mod_removeStaticRtpmaps;
+
+  /// No description provided for @settings_encoding_Section_extra_sdp_mod_removeStaticRtpmaps_tooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove static RTP map lines for audio codecs (e.g., PCMU, PCMA) from SDP, to reduce SDP size. May help with MTU fragmentation issues on some SIP endpoints.'**
+  String
+      get settings_encoding_Section_extra_sdp_mod_removeStaticRtpmaps_tooltip;
+
+  /// No description provided for @settings_encoding_Section_extra_sdp_mod_remapTE8.
+  ///
+  /// In en, this message translates to:
+  /// **'Remap TE_8k code to 101'**
+  String get settings_encoding_Section_extra_sdp_mod_remapTE8;
+
+  /// No description provided for @settings_encoding_Section_extra_sdp_mod_remapTE8_tooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Change TE8 payload type to 101 in SDP for better compatibility with some SIP endpoints.'**
+  String get settings_encoding_Section_extra_sdp_mod_remapTE8_tooltip;
+
   /// No description provided for @settings_encoding_Section_value_auto.
   ///
   /// In en, this message translates to:

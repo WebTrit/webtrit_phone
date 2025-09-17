@@ -863,6 +863,23 @@ class AppLocalizationsMapper {
           localizations.settings_encoding_Section_target_audio_bitrate,
       'settings_encoding_Section_target_video_bitrate':
           localizations.settings_encoding_Section_target_video_bitrate,
+      'settings_encoding_Section_extra_sdp_mod_title':
+          localizations.settings_encoding_Section_extra_sdp_mod_title,
+      'settings_encoding_Section_extra_sdp_mod_extmapsRemove':
+          localizations.settings_encoding_Section_extra_sdp_mod_extmapsRemove,
+      'settings_encoding_Section_extra_sdp_mod_extmapsRemove_tooltip':
+          localizations
+              .settings_encoding_Section_extra_sdp_mod_extmapsRemove_tooltip,
+      'settings_encoding_Section_extra_sdp_mod_removeStaticRtpmaps':
+          localizations
+              .settings_encoding_Section_extra_sdp_mod_removeStaticRtpmaps,
+      'settings_encoding_Section_extra_sdp_mod_removeStaticRtpmaps_tooltip':
+          localizations
+              .settings_encoding_Section_extra_sdp_mod_removeStaticRtpmaps_tooltip,
+      'settings_encoding_Section_extra_sdp_mod_remapTE8':
+          localizations.settings_encoding_Section_extra_sdp_mod_remapTE8,
+      'settings_encoding_Section_extra_sdp_mod_remapTE8_tooltip': localizations
+          .settings_encoding_Section_extra_sdp_mod_remapTE8_tooltip,
       'settings_encoding_Section_value_auto':
           localizations.settings_encoding_Section_value_auto,
       'settings_encoding_Section_value_disable':

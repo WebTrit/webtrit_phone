@@ -2230,6 +2230,9 @@ mixin _$EncodingDefaultPresetOverride {
   int? get opusBitrate => throw _privateConstructorUsedError;
   bool? get opusStereo => throw _privateConstructorUsedError;
   bool? get opusDtx => throw _privateConstructorUsedError;
+  bool? get removeExtmaps => throw _privateConstructorUsedError;
+  bool? get removeStaticAudioRtpMaps => throw _privateConstructorUsedError;
+  bool? get remapTE8payloadTo101 => throw _privateConstructorUsedError;
 
   /// Serializes this EncodingDefaultPresetOverride to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -2257,7 +2260,10 @@ abstract class $EncodingDefaultPresetOverrideCopyWith<$Res> {
       int? opusSamplingRate,
       int? opusBitrate,
       bool? opusStereo,
-      bool? opusDtx});
+      bool? opusDtx,
+      bool? removeExtmaps,
+      bool? removeStaticAudioRtpMaps,
+      bool? remapTE8payloadTo101});
 }
 
 /// @nodoc
@@ -2284,6 +2290,9 @@ class _$EncodingDefaultPresetOverrideCopyWithImpl<$Res,
     Object? opusBitrate = freezed,
     Object? opusStereo = freezed,
     Object? opusDtx = freezed,
+    Object? removeExtmaps = freezed,
+    Object? removeStaticAudioRtpMaps = freezed,
+    Object? remapTE8payloadTo101 = freezed,
   }) {
     return _then(_value.copyWith(
       audioBitrate: freezed == audioBitrate
@@ -2318,6 +2327,18 @@ class _$EncodingDefaultPresetOverrideCopyWithImpl<$Res,
           ? _value.opusDtx
           : opusDtx // ignore: cast_nullable_to_non_nullable
               as bool?,
+      removeExtmaps: freezed == removeExtmaps
+          ? _value.removeExtmaps
+          : removeExtmaps // ignore: cast_nullable_to_non_nullable
+              as bool?,
+      removeStaticAudioRtpMaps: freezed == removeStaticAudioRtpMaps
+          ? _value.removeStaticAudioRtpMaps
+          : removeStaticAudioRtpMaps // ignore: cast_nullable_to_non_nullable
+              as bool?,
+      remapTE8payloadTo101: freezed == remapTE8payloadTo101
+          ? _value.remapTE8payloadTo101
+          : remapTE8payloadTo101 // ignore: cast_nullable_to_non_nullable
+              as bool?,
     ) as $Val);
   }
 }
@@ -2339,7 +2360,10 @@ abstract class _$$EncodingDefaultPresetOverrideImplCopyWith<$Res>
       int? opusSamplingRate,
       int? opusBitrate,
       bool? opusStereo,
-      bool? opusDtx});
+      bool? opusDtx,
+      bool? removeExtmaps,
+      bool? removeStaticAudioRtpMaps,
+      bool? remapTE8payloadTo101});
 }
 
 /// @nodoc
@@ -2365,6 +2389,9 @@ class __$$EncodingDefaultPresetOverrideImplCopyWithImpl<$Res>
     Object? opusBitrate = freezed,
     Object? opusStereo = freezed,
     Object? opusDtx = freezed,
+    Object? removeExtmaps = freezed,
+    Object? removeStaticAudioRtpMaps = freezed,
+    Object? remapTE8payloadTo101 = freezed,
   }) {
     return _then(_$EncodingDefaultPresetOverrideImpl(
       audioBitrate: freezed == audioBitrate
@@ -2399,6 +2426,18 @@ class __$$EncodingDefaultPresetOverrideImplCopyWithImpl<$Res>
           ? _value.opusDtx
           : opusDtx // ignore: cast_nullable_to_non_nullable
               as bool?,
+      removeExtmaps: freezed == removeExtmaps
+          ? _value.removeExtmaps
+          : removeExtmaps // ignore: cast_nullable_to_non_nullable
+              as bool?,
+      removeStaticAudioRtpMaps: freezed == removeStaticAudioRtpMaps
+          ? _value.removeStaticAudioRtpMaps
+          : removeStaticAudioRtpMaps // ignore: cast_nullable_to_non_nullable
+              as bool?,
+      remapTE8payloadTo101: freezed == remapTE8payloadTo101
+          ? _value.remapTE8payloadTo101
+          : remapTE8payloadTo101 // ignore: cast_nullable_to_non_nullable
+              as bool?,
     ));
   }
 }
@@ -2416,7 +2455,10 @@ class _$EncodingDefaultPresetOverrideImpl
       this.opusSamplingRate,
       this.opusBitrate,
       this.opusStereo,
-      this.opusDtx})
+      this.opusDtx,
+      this.removeExtmaps,
+      this.removeStaticAudioRtpMaps,
+      this.remapTE8payloadTo101})
       : super._();
 
   factory _$EncodingDefaultPresetOverrideImpl.fromJson(
@@ -2439,10 +2481,16 @@ class _$EncodingDefaultPresetOverrideImpl
   final bool? opusStereo;
   @override
   final bool? opusDtx;
+  @override
+  final bool? removeExtmaps;
+  @override
+  final bool? removeStaticAudioRtpMaps;
+  @override
+  final bool? remapTE8payloadTo101;
 
   @override
   String toString() {
-    return 'EncodingDefaultPresetOverride(audioBitrate: $audioBitrate, videoBitrate: $videoBitrate, ptime: $ptime, maxptime: $maxptime, opusSamplingRate: $opusSamplingRate, opusBitrate: $opusBitrate, opusStereo: $opusStereo, opusDtx: $opusDtx)';
+    return 'EncodingDefaultPresetOverride(audioBitrate: $audioBitrate, videoBitrate: $videoBitrate, ptime: $ptime, maxptime: $maxptime, opusSamplingRate: $opusSamplingRate, opusBitrate: $opusBitrate, opusStereo: $opusStereo, opusDtx: $opusDtx, removeExtmaps: $removeExtmaps, removeStaticAudioRtpMaps: $removeStaticAudioRtpMaps, remapTE8payloadTo101: $remapTE8payloadTo101)';
   }
 
   @override
@@ -2463,13 +2511,31 @@ class _$EncodingDefaultPresetOverrideImpl
                 other.opusBitrate == opusBitrate) &&
             (identical(other.opusStereo, opusStereo) ||
                 other.opusStereo == opusStereo) &&
-            (identical(other.opusDtx, opusDtx) || other.opusDtx == opusDtx));
+            (identical(other.opusDtx, opusDtx) || other.opusDtx == opusDtx) &&
+            (identical(other.removeExtmaps, removeExtmaps) ||
+                other.removeExtmaps == removeExtmaps) &&
+            (identical(
+                    other.removeStaticAudioRtpMaps, removeStaticAudioRtpMaps) ||
+                other.removeStaticAudioRtpMaps == removeStaticAudioRtpMaps) &&
+            (identical(other.remapTE8payloadTo101, remapTE8payloadTo101) ||
+                other.remapTE8payloadTo101 == remapTE8payloadTo101));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, audioBitrate, videoBitrate,
-      ptime, maxptime, opusSamplingRate, opusBitrate, opusStereo, opusDtx);
+  int get hashCode => Object.hash(
+      runtimeType,
+      audioBitrate,
+      videoBitrate,
+      ptime,
+      maxptime,
+      opusSamplingRate,
+      opusBitrate,
+      opusStereo,
+      opusDtx,
+      removeExtmaps,
+      removeStaticAudioRtpMaps,
+      remapTE8payloadTo101);
 
   /// Create a copy of EncodingDefaultPresetOverride
   /// with the given fields replaced by the non-null parameter values.
@@ -2499,7 +2565,10 @@ abstract class _EncodingDefaultPresetOverride
       final int? opusSamplingRate,
       final int? opusBitrate,
       final bool? opusStereo,
-      final bool? opusDtx}) = _$EncodingDefaultPresetOverrideImpl;
+      final bool? opusDtx,
+      final bool? removeExtmaps,
+      final bool? removeStaticAudioRtpMaps,
+      final bool? remapTE8payloadTo101}) = _$EncodingDefaultPresetOverrideImpl;
   const _EncodingDefaultPresetOverride._() : super._();
 
   factory _EncodingDefaultPresetOverride.fromJson(Map<String, dynamic> json) =
@@ -2521,6 +2590,12 @@ abstract class _EncodingDefaultPresetOverride
   bool? get opusStereo;
   @override
   bool? get opusDtx;
+  @override
+  bool? get removeExtmaps;
+  @override
+  bool? get removeStaticAudioRtpMaps;
+  @override
+  bool? get remapTE8payloadTo101;
 
   /// Create a copy of EncodingDefaultPresetOverride
   /// with the given fields replaced by the non-null parameter values.

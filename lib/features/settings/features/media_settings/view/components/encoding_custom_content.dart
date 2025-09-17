@@ -39,7 +39,6 @@ class EncodingCustomContent extends StatelessWidget {
               selected: encodingSettings.audioBitrate,
               onSelect: (option) => cubit.setEncodingSettings(encodingSettings.copyWithAudioBitrate(option)),
             ),
-
             SlidableSection<int>(
               title: context.l10n.settings_encoding_Section_target_video_bitrate,
               optionPrefix: context.l10n.settings_encoding_Section_bitrate_prefix,
@@ -191,7 +190,42 @@ class EncodingCustomContent extends StatelessWidget {
               items: encodingSettings.videoProfiles ?? [],
               onChange: (items) => cubit.setEncodingSettings(encodingSettings.copyWithVideoProfiles(items)),
             ),
-            // const SizedBox(height: 16.0),
+            const Divider(height: 24),
+            HeadingSection(
+              title: context.l10n.settings_encoding_Section_extra_sdp_mod_title,
+              icon: const Icon(Icons.edit_note_sharp),
+            ),
+            InlineSelectableSection<bool>(
+              title: context.l10n.settings_encoding_Section_extra_sdp_mod_extmapsRemove,
+              tooltip: context.l10n.settings_encoding_Section_extra_sdp_mod_extmapsRemove_tooltip,
+              buildOptionTitle: (option) {
+                if (option == true) return Text(context.l10n.settings_encoding_Section_value_on);
+                return Text(context.l10n.settings_encoding_Section_value_off);
+              },
+              selected: encodingSettings.removeExtmaps,
+              onSelect: (option) => cubit.setEncodingSettings(encodingSettings.copyWithRemoveExtmaps(option)),
+            ),
+            InlineSelectableSection<bool>(
+              title: context.l10n.settings_encoding_Section_extra_sdp_mod_removeStaticRtpmaps,
+              tooltip: context.l10n.settings_encoding_Section_extra_sdp_mod_removeStaticRtpmaps_tooltip,
+              buildOptionTitle: (option) {
+                if (option == true) return Text(context.l10n.settings_encoding_Section_value_on);
+                return Text(context.l10n.settings_encoding_Section_value_off);
+              },
+              selected: encodingSettings.removeStaticAudioRtpMaps,
+              onSelect: (option) =>
+                  cubit.setEncodingSettings(encodingSettings.copyWithRemoveStaticAudioRtpMaps(option)),
+            ),
+            InlineSelectableSection<bool>(
+              title: context.l10n.settings_encoding_Section_extra_sdp_mod_remapTE8,
+              tooltip: context.l10n.settings_encoding_Section_extra_sdp_mod_remapTE8_tooltip,
+              buildOptionTitle: (option) {
+                if (option == true) return Text(context.l10n.settings_encoding_Section_value_on);
+                return Text(context.l10n.settings_encoding_Section_value_off);
+              },
+              selected: encodingSettings.remapTE8payloadTo101,
+              onSelect: (option) => cubit.setEncodingSettings(encodingSettings.copyWithRemapTE8payloadTo101(option)),
+            ),
           ],
         );
       },

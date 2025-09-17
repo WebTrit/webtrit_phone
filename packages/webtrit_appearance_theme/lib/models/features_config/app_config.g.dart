@@ -249,6 +249,9 @@ _$EncodingDefaultPresetOverrideImpl
           opusBitrate: (json['opusBitrate'] as num?)?.toInt(),
           opusStereo: json['opusStereo'] as bool?,
           opusDtx: json['opusDtx'] as bool?,
+          removeExtmaps: json['removeExtmaps'] as bool?,
+          removeStaticAudioRtpMaps: json['removeStaticAudioRtpMaps'] as bool?,
+          remapTE8payloadTo101: json['remapTE8payloadTo101'] as bool?,
         );
 
 Map<String, dynamic> _$$EncodingDefaultPresetOverrideImplToJson(
@@ -262,6 +265,9 @@ Map<String, dynamic> _$$EncodingDefaultPresetOverrideImplToJson(
       'opusBitrate': instance.opusBitrate,
       'opusStereo': instance.opusStereo,
       'opusDtx': instance.opusDtx,
+      'removeExtmaps': instance.removeExtmaps,
+      'removeStaticAudioRtpMaps': instance.removeStaticAudioRtpMaps,
+      'remapTE8payloadTo101': instance.remapTE8payloadTo101,
     };
 
 _$BaseTabSchemeImpl _$$BaseTabSchemeImplFromJson(Map<String, dynamic> json) =>
