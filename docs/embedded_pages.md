@@ -2,18 +2,20 @@
 
 ## Overview
 
-This documentation describes how to integrate embedded web pages into the WebTrit Call App using a
-WebView. These pages can extend the app with client-specific features. Embedded pages are configured
-via `app.config.json`, and can appear as a bottom menu tab or a settings item.
+This documentation describes how to integrate embedded web pages into the **WebTrit Call App** using
+a WebView. These pages can extend the app with client-specific features. Embedded pages are
+configured via `app.config.json`, and can appear as a bottom menu tab or a settings item.
+
+---
 
 ## App Configuration
 
-Embedded pages are declared in the app configuration. A typical setup includes two parts:
+Embedded pages are declared in the app configuration. A typical setup includes two parts.
 
-1. **Reference in `mainConfig.bottomMenu.tabs` or settings section:**
+### 1) Reference in `mainConfig.bottomMenu.tabs` (or settings section)
 
 ```json
-    {
+{
   "bottomMenu": {
     "cacheSelectedTab": true,
     "tabs": [
@@ -37,7 +39,7 @@ Embedded pages are declared in the app configuration. A typical setup includes t
 }
 ```
 
-2. **Definition of the embedded page resource:**
+### 2) Definition of the embedded page resource
 
 ```json
 {
@@ -52,30 +54,33 @@ Embedded pages are declared in the app configuration. A typical setup includes t
 }
 ```
 
+---
+
 ## Payload Injection
 
 The `payload` field defines which dynamic data will be injected into the embedded web page.
-Supported values:
 
-* `userId`
-* `coreToken`
-* `externalPageToken`
+**Supported values**:
+
+- `userId`
+- `coreToken`
+- `externalPageToken`
 
 If any of the requested payload values are unavailable (e.g., `externalPageToken`), they are fetched
 automatically from the server before the page is loaded.
 
 ### JavaScript Entry Point
 
-Once the page is fully loaded and ready, the Flutter app executes JavaScript to deliver the payload.
-This is the single point of integration for web developers:
+Once the page is fully loaded and ready, the app executes JavaScript to deliver the payload. This is
+the single point of integration for web developers:
 
 ```javascript
 if (typeof window.onPayloadDataReady === 'function') {
-  window.onPayloadDataReady(payload);
+	window.onPayloadDataReady(payload);
 }
 ```
 
-The `payload` is a key-value map, passed as the first and only argument to
+The `payload` is a key-value object, passed as the first and only argument to
 `window.onPayloadDataReady`.
 
 ### Example Payload
@@ -83,6 +88,7 @@ The `payload` is a key-value map, passed as the first and only argument to
 ```json
 {
   "userId": "123",
+  "coreToken": "xxxxx",
   "externalPageToken": {
     "accessToken": "xxxxx",
     "refreshToken": "xxxxx",
@@ -97,91 +103,29 @@ Implement the following function in your embedded page:
 
 ```javascript
 function onPayloadDataReady(payload) {
-  // Handle injected data from the app
-  console.log(payload);
+	// Handle injected data from the app
+	console.log(payload);
 }
 ```
 
-## Lifecycle Handling
-
-The app manages network connectivity and retries for payload loading automatically:
-
-* If `externalPageToken` is unavailable, it retries up to 3 times.
-* On network reconnection, the page and payload are reloaded.
-* If payload or page load fails, an error screen is shown with a retry option.
-
-## WebView Behavior
-
-* JavaScript is injected only after confirming that the WebView has successfully loaded.
-* The WebView hides the native toolbar if configured via `toolbar.showToolbar: false`.
-* Errors during load trigger the fallback UI with reload option.
-
-## Use Cases
-
-This integration is ideal for:
-
-* Custom dashboards per client
-* Authorization flows
-* Embedded help pages or forms
-
-## External Navigation Protocol
-
-To open links **outside of the embedded WebView** (e.g., in the user's default browser), the WebTrit
-app supports a custom URI scheme.
-
-### Default Behavior
-
-Links opened **inside the app WebView** can be written as usual:
-
-```html
-
-<li><a href="https://webtrit.com">Home</a></li>
-```
-
-This will load the page inside the WebView context.
-
-### External Browser Navigation
-
-To explicitly open a link **in the system browser**, use the following format:
-
-```html
-
-<li><a href="app://openInExternalBrowser?url=https://webtrit.com">Home</a></li>
-```
-
-- `app://` — indicates an internal instruction to the WebTrit app.
-- `openInExternalBrowser` — command that triggers external navigation.
-- `url` — target URL to be opened in the browser, provided as a query parameter.
-
-### Use Case Example
-
-```html
-<a href="app://openInExternalBrowser?url=https://www.webtrit.com">Visit Webtrit Website</a>
-```
-
-This link will be intercepted by the app and launched in the system's default browser, not in the
-embedded WebView.
+---
 
 ## MediaQuery Injection
 
-When an embedded page is fully loaded, the WebTrit app also injects **media query data** from the
-native app context.  
-This allows the web page to adjust its layout based on platform-specific UI insets and theming (
-e.g., status bar height, navigation bar height, dark mode).
+When an embedded page is fully loaded, the app also injects **media query data** from the native
+context. This allows the web page to adjust its layout based on platform-specific UI insets and
+theming (e.g., status bar height, gesture area, dark mode).
 
 ### JavaScript Entry Point
 
-If defined, the following global JavaScript function will be executed:
-
 ```javascript
-if (typeof window.onMediaQuaryReady === 'function') {
-  window.onMediaQuaryReady(payload);
+if (typeof window.onMediaQueryReady === 'function') {
+	window.onMediaQueryReady(payload);
 }
 ```
 
-The `payload` is a JSON object containing device-related layout information.  
-This enables your embedded page to apply dynamic layout adjustments without relying on hardcoded
-values or CSS environment variables.
+> **Note:** Earlier docs sometimes referenced the misspelled hook `onMediaQuaryReady`. The correct
+> name is **`onMediaQueryReady`**.
 
 ### Example Payload
 
@@ -197,31 +141,126 @@ values or CSS environment variables.
 - `brightness`: `"light"` or `"dark"` depending on the system theme
 - `devicePixelRatio`: the screen's pixel density
 - `topSafeInset`: top system inset (e.g., status bar or notch)
-- `bottomSafeInset`: bottom system inset (e.g., gesture area or system-reserved space)
+- `bottomSafeInset`: bottom system inset (e.g., system gesture area)
 
 ### Required Integration by Web Developers
 
-To handle these values in your page, implement the following hook:
-
 ```javascript
-function onMediaQuaryReady(payload) {
-  // Apply padding to avoid native UI overlap
-  document.body.style.paddingTop = `${payload.statusBarHeight}px`;
-  document.body.style.paddingBottom = `${payload.navigationBarHeight}px`;
+function onMediaQueryReady(payload) {
+	// Apply padding to avoid native UI overlap
+	document.body.style.paddingTop = `${payload.topSafeInset}px`;
+	document.body.style.paddingBottom = `${payload.bottomSafeInset}px`;
 
-  // Optional: adjust theme
-  if (payload.brightness === 'dark') {
-    document.body.style.backgroundColor = '#121212';
-    document.body.style.color = '#ffffff';
-  }
+	// Optional: adjust theme
+	if (payload.brightness === 'dark') {
+		document.body.style.backgroundColor = '#121212';
+		document.body.style.color = '#ffffff';
+	}
 
-  console.log('MediaQuery info received:', payload);
+	console.log('MediaQuery info received:', payload);
 }
 ```
 
-This hook is especially useful for full-screen or minimal pages, where precise alignment with system
-UI is important  
-(e.g., avoiding overlap with gesture areas or notches).
+---
+
+## Device / App Info Injection (Optional)
+
+If enabled, the app can inject high-level device/app labels (e.g., app name/version, OS, model,
+store version, tenant/core URL).
+
+### JavaScript Entry Point
+
+```javascript
+if (typeof window.onDeviceInfoReady === 'function') {
+	window.onDeviceInfoReady(payload);
+}
+```
+
+### Example (shape may vary per build)
+
+```json
+{
+  "app": "WebTrit Phone",
+  "appVersion": "1.8.0",
+  "appSessionIdentifier": "a1b2c3...",
+  "storeVersion": "1.8.0",
+  "packageName": "com.example.webtrit",
+  "buildNumber": "123",
+  "manufacturer": "Google",
+  "model": "Pixel 7",
+  "os": "Android",
+  "osVersion": "14",
+  "authorization": "authorized",
+  "embeddedUrls": "https://example.com, https://help.example.com",
+  "coreUrl": "https://core.example.com",
+  "tenantId": "tenant-42"
+}
+```
+
+---
+
+## Injection Order & Timing
+
+- The app waits for **successful page load** and a short debounce (~**500 ms**) to avoid racing with
+  late subresource loads.
+- If load ends with error — **no injection** occurs.
+- **Order of injections** (when enabled):
+    1. Console log wrapper (to capture logs from subsequent injections)
+    2. MediaQuery
+    3. Device/App Info
+    4. Business Payload(s) / Custom payloads
+
+---
+
+## JavaScript Channels
+
+JS channels allow the page to **send events to the native app** via
+`window.<ChannelName>.postMessage(...)`. Messages must be JSON strings with fields `event` and (
+optional) `data`:
+
+```json
+{
+  "event": "<EVENT_NAME>",
+  "data": {
+  }
+}
+```
+
+### Console Log Capture Channel
+
+- **Channel name:** `WebtritConsoleLogChannel`
+- **What it does:** When enabled, the app injects a console wrapper that forwards
+  `console.log/info/warn/error/debug` into the native logs, while preserving them in the browser
+  console.
+- **Event values:** `LOG`, `INFO`, `WARN`, `ERROR`, `DEBUG`
+- **Message format:**
+  ```json
+  { "event": "INFO", "data": { "message": "...", "args": [ ] } }
+  ```
+
+> **How to enable:** per embedded resource set `"enableConsoleLogCapture": true` in the app config.
+
+> **Web page changes required:** **none** — you just keep using `console.*`.
+
+### Reload Channel
+
+- **Channel name:** `WebtritPageReloadChannel`
+- **Supported event:** `reload`
+- **Behavior in the app:** incoming reload requests are debounced (default ~5 s) and rate-limited (
+  default up to 10 reloads per minute).
+
+**Web page example:**
+
+```javascript
+function requestNativeReload() {
+	const ch = window.WebtritPageReloadChannel || globalThis.WebtritPageReloadChannel;
+	if (ch && typeof ch.postMessage === 'function') {
+		ch.postMessage(JSON.stringify({event: 'reload'}));
+	}
+}
+```
+
+---
 
 ## Connectivity Recovery Strategies
 
@@ -229,34 +268,81 @@ The embedded WebView integration supports configurable **Reconnect Strategies** 
 `ReconnectStrategy` enum:
 
 - `none` – no reconnection logic, shows fallback error screen.
-- `notifyOnly` – does not reload the page, but sends a JavaScript callback (`onWebTritReconnect()`)
-  when internet is restored.
-- `softReload` – retries full page reload up to `maxAttempts`.
-- `hardReload` – reloads original URI forcibly, useful for non-SPA pages.
-
-### JavaScript Reconnect Hook
-
-If the reconnect strategy is `notifyOnly` and the page was previously loaded successfully, the app *
-*does not reload the page**, but instead triggers a JavaScript function when connectivity is
-restored:
-
-```javascript
-if (typeof window.onWebTritReconnect === 'function') {
-  window.onWebTritReconnect();
-}
-```
-
-Use this hook in your embedded page to respond to restored network access.
+- `notifyOnly` – does not reload the page, but calls `window.onWebTritReconnect?.()` when internet
+  is restored (if the page had loaded successfully at least once).
+- `softReload` – retries `WebView.reload()` until success or max attempts.
+- `hardReload` – reloads the original URI forcibly (`loadRequest(initialUri)`), useful for non-SPA
+  pages.
 
 ### When is Error Screen Shown?
 
-The app shows the native fallback error screen in the following cases:
+- The page has **never** loaded successfully (for any strategy).
+- The strategy is **not** `notifyOnly` and a load fails.
 
-- The page has never loaded successfully, regardless of the strategy.
-- The reconnect strategy is not `notifyOnly`.
+### JavaScript Reconnect Hook (notifyOnly)
 
-If the page has loaded before and `notifyOnly` is set, the app does not show the error UI and leaves
-it up to the embedded page to handle reconnection.
+```javascript
+if (typeof window.onWebTritReconnect === 'function') {
+	window.onWebTritReconnect();
+}
+```
+
+---
+
+## External Navigation Protocol
+
+To open links **outside of the embedded WebView** (e.g., in the system browser), use an internal
+scheme handled by the app.
+
+### Default Behavior (in-WebView)
+
+```html
+
+<li><a href="https://webtrit.com">Home</a></li>
+```
+
+### External Browser Navigation
+
+```html
+
+<li><a href="app://openInExternalBrowser?url=https://webtrit.com">Home</a></li>
+```
+
+- `app://` — internal instruction to the WebTrit app
+- `openInExternalBrowser` — command that triggers external navigation
+- `url` — target URL to be opened in the browser (must be a valid absolute URL)
+
+**Use Case Example**
+
+```html
+<a href="app://openInExternalBrowser?url=https://www.webtrit.com">Visit Webtrit Website</a>
+```
+
+---
+
+## WebView Behavior
+
+- JavaScript is injected **only after** confirming that the WebView has successfully loaded (plus
+  debounce).
+- The WebView hides the native toolbar if configured via `toolbar.showToolbar: false`.
+- Errors during load trigger the fallback UI with a reload option.
+
+---
+
+## Use Cases
+
+- Custom client dashboards
+- Authorization flows
+- Embedded help pages or forms
+
+---
+
+## Security & Robustness Recommendations
+
+- Send only **JSON strings** via JS-channels: `{ "event": "...", "data": { ... } }`.
+- Avoid spamming the `WebtritPageReloadChannel` — excessive requests will be **rate-limited**.
+- Prefer `notifyOnly` for SPA pages to manage your own reconnection logic.
+- Keep to the **correct hook names** (`onMediaQueryReady`, not `onMediaQuaryReady`).
 
 ---
 
@@ -275,45 +361,13 @@ key to the embedded resource definition:
   "toolbar": {
     "showToolbar": false
   },
-  "reconnectStrategy": "notifyOnly"
-}
-```
-
-Possible values:
-
-- `"none"`
-- `"notifyOnly"`
-- `"softReload"`
-- `"hardReload"`
-
-If not specified, the default is `"notifyOnly"`.
-
----
-
-## Embedded Console Log Capture (Debugging)
-
-To assist with debugging, the WebTrit app allows capturing `console.*` output from embedded web
-pages and forwarding it to the native app logs.
-
-### Enabling Log Capture
-
-This feature is **optional** and can be activated per embedded page by setting the following flag in
-the configuration:
-
-```json
-{
-  "id": 2,
-  "uri": "https://example.com",
+  "reconnectStrategy": "notifyOnly",
   "enableConsoleLogCapture": true
 }
 ```
 
-### Behavior
-
-- When enabled, the app intercepts and forwards browser console logs (e.g., `console.log`,
-  `console.warn`, `console.error`) to the native logging system.
-- Log messages are preserved in the browser console and also visible in the Flutter app logs.
-- Logs include level indicators (`INFO`, `ERROR`, etc.) for clarity.
+**Possible values:** `"none" | "notifyOnly" | "softReload" | "hardReload"`  
+**Default:** `"notifyOnly"`
 
 ---
 
@@ -321,5 +375,5 @@ the configuration:
 
 By declaring embedded resources and referencing them in app config, clients can extend the WebTrit
 app with dynamic web content that securely receives contextual data like tokens or user IDs. The app
-ensures robust error handling, retry logic, and clear communication via the `onPayloadDataReady`
-JavaScript function.
+ensures robust error handling, retry logic, structured two-way communication via JavaScript hooks
+and channels, and optional console log capture for diagnostics.
