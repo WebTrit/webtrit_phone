@@ -13,6 +13,8 @@ abstract class AppPreferences {
 
   Future<bool> setString(String key, String value);
 
+  Future<bool> removeKey(String key);
+
   bool getRegisterStatus();
 
   Future<bool> setRegisterStatus(bool value);
@@ -177,6 +179,11 @@ class AppPreferencesImpl
   @override
   Future<bool> setString(String key, String value) async {
     return _sharedPreferences.setString(key, value);
+  }
+
+  @override
+  Future<bool> removeKey(String key) async {
+    return _sharedPreferences.remove(key);
   }
 
   @override

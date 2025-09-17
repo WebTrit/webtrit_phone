@@ -31,20 +31,23 @@ abstract class PresenceRepository {
 
   /// Watches the presence information for a specific number.
   Stream<List<PresenceInfo>> watchNumberPresence(String number);
+
+  /// Clears all presence settings.
+  Future<void> clearSettings();
 }
 
 class PresenceRepositoryPrefsAndMemoryImpl with PresenceSettingJsonMapperMixin implements PresenceRepository {
   PresenceRepositoryPrefsAndMemoryImpl(this.appPreferences);
   AppPreferences appPreferences;
 
-  static const kPresenceSettingsKey = 'presence_settings1';
+  static const presenceSettingsKey = 'presence_settings';
   final Map<String, List<PresenceInfo>> _numbersPresence = {};
   final _controller = StreamController<(String, List<PresenceInfo>)>.broadcast();
   DateTime? _lastSettingsSync;
 
   @override
   PresenceSettings get presenceSettings {
-    final prefsResult = appPreferences.getString(kPresenceSettingsKey);
+    final prefsResult = appPreferences.getString(presenceSettingsKey);
     if (prefsResult != null) {
       return presenceSettingsFromJson(prefsResult);
     } else {
@@ -54,7 +57,7 @@ class PresenceRepositoryPrefsAndMemoryImpl with PresenceSettingJsonMapperMixin i
 
   @override
   void updatePresenceSettings(PresenceSettings settings) {
-    appPreferences.setString(kPresenceSettingsKey, presenceSettingsToJson(settings));
+    appPreferences.setString(presenceSettingsKey, presenceSettingsToJson(settings));
   }
 
   @override
@@ -80,6 +83,12 @@ class PresenceRepositoryPrefsAndMemoryImpl with PresenceSettingJsonMapperMixin i
     yield await getNumberPresence(number);
     yield* _controller.stream.where((e) => e.$1 == number).map((e) => e.$2);
   }
+
+  @override
+  Future<void> clearSettings() async {
+    _lastSettingsSync = null;
+    appPreferences.removeKey(presenceSettingsKey);
+  }
 }
 
 class PresenceRepositoryPrefsAndDriftImpl
@@ -90,12 +99,12 @@ class PresenceRepositoryPrefsAndDriftImpl
   final AppDatabase _appDatabase;
   late final _dao = _appDatabase.presenceInfoDao;
 
-  static const kPresenceSettingsKey = 'presence_settings1';
+  static const presenceSettingsKey = 'presence_settings';
   DateTime? _lastSettingsSync;
 
   @override
   PresenceSettings get presenceSettings {
-    final prefsResult = appPreferences.getString(kPresenceSettingsKey);
+    final prefsResult = appPreferences.getString(presenceSettingsKey);
     if (prefsResult != null) {
       return presenceSettingsFromJson(prefsResult);
     } else {
@@ -105,7 +114,7 @@ class PresenceRepositoryPrefsAndDriftImpl
 
   @override
   void updatePresenceSettings(PresenceSettings settings) {
-    appPreferences.setString(kPresenceSettingsKey, presenceSettingsToJson(settings));
+    appPreferences.setString(presenceSettingsKey, presenceSettingsToJson(settings));
   }
 
   @override
@@ -139,5 +148,11 @@ class PresenceRepositoryPrefsAndDriftImpl
     return _dao
         .watchPresenceInfoByNumber(number)
         .map((presenceData) => presenceData.map((data) => presenceInfoFromDrift(data)).toList());
+  }
+
+  @override
+  Future<void> clearSettings() async {
+    _lastSettingsSync = null;
+    await appPreferences.removeKey(presenceSettingsKey);
   }
 }

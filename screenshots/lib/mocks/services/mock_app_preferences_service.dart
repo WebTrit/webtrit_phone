@@ -49,6 +49,12 @@ class MockAppPreferencesService implements AppPreferences {
   }
 
   @override
+  Future<bool> removeKey(String key) async {
+    _mockData.remove(key);
+    return true;
+  }
+
+  @override
   bool getRegisterStatus() => true;
 
   @override

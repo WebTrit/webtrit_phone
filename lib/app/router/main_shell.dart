@@ -243,6 +243,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
             context.read<AppPreferences>(),
             context.read<AppDatabase>(),
           ),
+          dispose: (value) => value.clearSettings(),
         ),
       ],
 

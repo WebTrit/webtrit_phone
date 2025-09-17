@@ -2944,7 +2944,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       shouldUpdate = true;
     } else if (presenceSettings.timestamp.difference(lastSync).inSeconds > 0) {
       shouldUpdate = true;
-    } else if (now.difference(lastSync).inMinutes >= 5) {
+    } else if (now.difference(lastSync).inMinutes >= 30) {
       shouldUpdate = true;
     }
 
