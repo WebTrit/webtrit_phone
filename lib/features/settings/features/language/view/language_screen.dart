@@ -20,6 +20,7 @@ class LanguageScreen extends StatelessWidget {
       LocaleExtension.defaultNull,
       ...AppLocalizations.supportedLocales,
     ];
+
     return Scaffold(
       appBar: AppBar(
         title: Text(context.l10n.settings_ListViewTileTitle_language),
@@ -27,18 +28,22 @@ class LanguageScreen extends StatelessWidget {
       ),
       body: BlocBuilder<AppBloc, AppState>(
         builder: (context, state) {
-          return ListView.separated(
-            itemBuilder: (context, index) {
-              final locale = locales[index];
-              return RadioListTile<Locale>(
-                value: locale,
-                groupValue: state.locale,
-                onChanged: (value) => context.read<AppBloc>().add(AppLocaleChanged(value!)),
-                title: Text(locale.l10n(context)),
-              );
+          return RadioGroup<Locale?>(
+            groupValue: state.locale,
+            onChanged: (value) {
+              context.read<AppBloc>().add(AppLocaleChanged(value ?? LocaleExtension.defaultNull));
             },
-            separatorBuilder: (context, index) => const ListTileSeparator(),
-            itemCount: locales.length,
+            child: ListView.separated(
+              itemCount: locales.length,
+              separatorBuilder: (context, index) => const ListTileSeparator(),
+              itemBuilder: (context, index) {
+                final locale = locales[index];
+                return RadioListTile<Locale?>(
+                  value: locale,
+                  title: Text(locale.l10n(context)),
+                );
+              },
+            ),
           );
         },
       ),
