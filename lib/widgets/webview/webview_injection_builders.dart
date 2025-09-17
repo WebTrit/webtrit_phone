@@ -65,7 +65,10 @@ class PageInjectionBuilders {
   }) {
     final strategies = <PageInjectionStrategy>[];
 
-    strategies.addAll(custom);
+    // Should be included first to capture logs from other injections.
+    if (includeConsoleLogging) {
+      strategies.add(consoleLogging());
+    }
 
     if (mediaQueryMetricsData != null) {
       strategies.add(mediaQuery(mediaQueryMetricsData));
@@ -75,9 +78,7 @@ class PageInjectionBuilders {
       strategies.add(deviceInfo(deviceInfoData));
     }
 
-    if (includeConsoleLogging) {
-      strategies.add(consoleLogging());
-    }
+    strategies.addAll(custom);
 
     return strategies;
   }

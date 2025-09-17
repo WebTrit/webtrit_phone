@@ -20,10 +20,10 @@ class EmbeddedScreen extends StatefulWidget {
     required this.mediaQueryMetricsData,
     required this.deviceInfoData,
     required this.appBar,
-    this.shouldForwardPop = true,
-    this.enableLogCapture = false,
     required this.connectivityRecoveryStrategyBuilder,
     required this.pageInjectionStrategyBuilder,
+    this.shouldForwardPop = true,
+    this.enableLogCapture = true,
     super.key,
   });
 
@@ -32,17 +32,17 @@ class EmbeddedScreen extends StatefulWidget {
   final Map<String, String>? deviceInfoData;
   final PreferredSizeWidget appBar;
 
-  /// If true, the console log will be captured and forwarded to the logger.
-  final bool enableLogCapture;
-
-  /// If true, the pop action will be forwarded to the WebView if backstack is available.
-  final bool shouldForwardPop;
-
   /// Builder for creating the page injection strategy.
   final PageInjectionStrategyBuilder pageInjectionStrategyBuilder;
 
   /// Builder for creating the connectivity recovery strategy.
   final ConnectivityRecoveryStrategyBuilder connectivityRecoveryStrategyBuilder;
+
+  /// If true, the console log will be captured and forwarded to the logger.
+  final bool enableLogCapture;
+
+  /// If true, the pop action will be forwarded to the WebView if backstack is available.
+  final bool shouldForwardPop;
 
   @override
   State<EmbeddedScreen> createState() => _EmbeddedScreenState();

@@ -46,10 +46,11 @@ class EmbeddedScreenPage extends StatelessWidget {
         initialUri: data.uri,
         mediaQueryMetricsData: context.mediaQueryMetrics,
         deviceInfoData: context.read<AppLabelsProvider>().build(),
-        enableLogCapture: data.enableConsoleLogCapture,
         appBar: _buildAppBar(context),
         pageInjectionStrategyBuilder: _defaultPageInjectionStrategy,
         connectivityRecoveryStrategyBuilder: () => _createConnectivityRecoveryStrategy(data),
+        // TODO: Use embedded configuration option to enable/disable log capture.
+        enableLogCapture: true,
       ),
     );
   }

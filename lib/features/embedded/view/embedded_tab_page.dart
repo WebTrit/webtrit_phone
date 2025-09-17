@@ -49,11 +49,12 @@ class EmbeddedTabPage extends StatelessWidget {
             initialUri: data.data!.uri,
             mediaQueryMetricsData: context.mediaQueryMetrics,
             deviceInfoData: context.read<AppLabelsProvider>().build(),
-            enableLogCapture: data.data?.enableConsoleLogCapture ?? false,
             appBar: _buildAppBar(context, data.titleL10n),
             pageInjectionStrategyBuilder: _defaultPageInjectionStrategy,
             connectivityRecoveryStrategyBuilder: () => _createConnectivityRecoveryStrategy(data.data!),
             shouldForwardPop: tabActive,
+            // TODO: Use embedded configuration option to enable/disable log capture.
+            enableLogCapture: true,
           );
         },
       ),
