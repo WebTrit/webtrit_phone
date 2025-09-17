@@ -9,6 +9,12 @@
       },
       "buttonLoginStyleType": "neutralOnDark",
       "buttonSignupStyleType": "neutralOnDark"
+    },
+    "otpSigninVerify": {
+      "countdownRepeatIntervalSeconds": 30
+    },
+    "signupVerify": {
+      "countdownRepeatIntervalSeconds": 30
     }
   },
   "dialing": {

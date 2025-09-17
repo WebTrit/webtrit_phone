@@ -63,20 +63,24 @@ class ThemeStyleFactoryProvider {
     final snackBarStyleFactory = SnackBarStyleFactory(colorScheme, snackBar);
     final groupTitleListStyleFactory = GroupTitleListStyleFactory(groupTitleListTile);
     final onPictureLogoStyleFactory =
-        OnboardingPictureLogoStyleFactory(colorScheme, primaryOnboardingLogo, loginPageScheme);
+    OnboardingPictureLogoStyleFactory(colorScheme, primaryOnboardingLogo, loginPageScheme);
     final onLogoStyleFactory = OnboardingLogoStyleFactory(colorScheme, secondaryOnboardingLogo, loginPageScheme);
     final gradientsStyleFactory = GradientsStyleFactory(primaryGradientColorsConfig);
 
     final loginModeSelectStyleFactory = LoginModeSelectScreenStyleFactory(loginPageScheme.modeSelect);
     final leadingAvatarStyleFactory =
-        LeadingAvatarStyleFactory(colorScheme, widgetConfig.imageAssets.leadingAvatarStyle);
+    LeadingAvatarStyleFactory(colorScheme, widgetConfig.imageAssets.leadingAvatarStyle);
     final keypadStyleFactory = KeypadStyleFactory(colorScheme, config: null, textTheme: createTextTheme());
 
     // Screen-specific styles
     final aboutScreenStyleFactory = AboutScreenStyleFactory(loginPageScheme);
     final callScreenStyleFactory = CallScreenStyleFactory(colorScheme, callPageScheme, callActions);
     final keypadScreenStyleFactory =
-        KeypadScreenStyleFactory(colorScheme, config: pageConfig.keypad, textTheme: createTextTheme());
+    KeypadScreenStyleFactory(colorScheme, config: pageConfig.keypad, textTheme: createTextTheme());
+    final loginOtpSigninVerifyScreenStyleFactory =
+    LoginOtpSigninVerifyScreenStyleFactory(colorScheme, loginPageScheme.otpSigninVerify);
+    final loginSignupVerifyScreenStyleFactory =
+    LoginSignupVerifyScreenStyleFactory(colorScheme, loginPageScheme.signupVerify);
 
     return <ThemeExtension?>[
       textButtonStyle,
@@ -106,6 +110,8 @@ class ThemeStyleFactoryProvider {
       keypadScreenStyleFactory.create(),
       aboutScreenStyleFactory.create(),
       callScreenStyleFactory.create(),
+      loginOtpSigninVerifyScreenStyleFactory.create(),
+      loginSignupVerifyScreenStyleFactory.create(),
     ].nonNulls.toList();
   }
 

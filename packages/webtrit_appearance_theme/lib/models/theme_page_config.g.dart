@@ -48,6 +48,14 @@ _$LoginPageConfigImpl _$$LoginPageConfigImplFromJson(
       metadata: json['metadata'] == null
           ? const Metadata()
           : Metadata.fromJson(json['metadata'] as Map<String, dynamic>),
+      otpSigninVerify: json['otpSigninVerify'] == null
+          ? const LoginOtpSigninVerifyScreenPageConfig()
+          : LoginOtpSigninVerifyScreenPageConfig.fromJson(
+              json['otpSigninVerify'] as Map<String, dynamic>),
+      signupVerify: json['signupVerify'] == null
+          ? const LoginSignupVerifyScreenPageConfig()
+          : LoginSignupVerifyScreenPageConfig.fromJson(
+              json['signupVerify'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$$LoginPageConfigImplToJson(
@@ -59,6 +67,36 @@ Map<String, dynamic> _$$LoginPageConfigImplToJson(
       'labelColor': instance.labelColor,
       'modeSelect': instance.modeSelect.toJson(),
       'metadata': instance.metadata.toJson(),
+      'otpSigninVerify': instance.otpSigninVerify.toJson(),
+      'signupVerify': instance.signupVerify.toJson(),
+    };
+
+_$LoginOtpSigninVerifyScreenPageConfigImpl
+    _$$LoginOtpSigninVerifyScreenPageConfigImplFromJson(
+            Map<String, dynamic> json) =>
+        _$LoginOtpSigninVerifyScreenPageConfigImpl(
+          countdownRepeatIntervalSeconds:
+              (json['countdownRepeatIntervalSeconds'] as num?)?.toInt() ?? 30,
+        );
+
+Map<String, dynamic> _$$LoginOtpSigninVerifyScreenPageConfigImplToJson(
+        _$LoginOtpSigninVerifyScreenPageConfigImpl instance) =>
+    <String, dynamic>{
+      'countdownRepeatIntervalSeconds': instance.countdownRepeatIntervalSeconds,
+    };
+
+_$LoginSignupVerifyScreenPageConfigImpl
+    _$$LoginSignupVerifyScreenPageConfigImplFromJson(
+            Map<String, dynamic> json) =>
+        _$LoginSignupVerifyScreenPageConfigImpl(
+          countdownRepeatIntervalSeconds:
+              (json['countdownRepeatIntervalSeconds'] as num?)?.toInt() ?? 30,
+        );
+
+Map<String, dynamic> _$$LoginSignupVerifyScreenPageConfigImplToJson(
+        _$LoginSignupVerifyScreenPageConfigImpl instance) =>
+    <String, dynamic>{
+      'countdownRepeatIntervalSeconds': instance.countdownRepeatIntervalSeconds,
     };
 
 _$LoginModeSelectPageConfigImpl _$$LoginModeSelectPageConfigImplFromJson(

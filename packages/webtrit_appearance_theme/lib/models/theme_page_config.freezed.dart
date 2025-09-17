@@ -313,6 +313,14 @@ mixin _$LoginPageConfig {
   /// Metadata section with additional information such as links, version, etc.
   Metadata get metadata => throw _privateConstructorUsedError;
 
+  /// Configuration for the OTP sign-in verification screen.
+  LoginOtpSigninVerifyScreenPageConfig get otpSigninVerify =>
+      throw _privateConstructorUsedError;
+
+  /// Configuration for the Sign-Up verification screen.
+  LoginSignupVerifyScreenPageConfig get signupVerify =>
+      throw _privateConstructorUsedError;
+
   /// Serializes this LoginPageConfig to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
 
@@ -335,11 +343,15 @@ abstract class $LoginPageConfigCopyWith<$Res> {
       double? scale,
       String? labelColor,
       LoginModeSelectPageConfig modeSelect,
-      Metadata metadata});
+      Metadata metadata,
+      LoginOtpSigninVerifyScreenPageConfig otpSigninVerify,
+      LoginSignupVerifyScreenPageConfig signupVerify});
 
   $ImageSourceCopyWith<$Res>? get imageSource;
   $LoginModeSelectPageConfigCopyWith<$Res> get modeSelect;
   $MetadataCopyWith<$Res> get metadata;
+  $LoginOtpSigninVerifyScreenPageConfigCopyWith<$Res> get otpSigninVerify;
+  $LoginSignupVerifyScreenPageConfigCopyWith<$Res> get signupVerify;
 }
 
 /// @nodoc
@@ -363,6 +375,8 @@ class _$LoginPageConfigCopyWithImpl<$Res, $Val extends LoginPageConfig>
     Object? labelColor = freezed,
     Object? modeSelect = null,
     Object? metadata = null,
+    Object? otpSigninVerify = null,
+    Object? signupVerify = null,
   }) {
     return _then(_value.copyWith(
       imageSource: freezed == imageSource
@@ -389,6 +403,14 @@ class _$LoginPageConfigCopyWithImpl<$Res, $Val extends LoginPageConfig>
           ? _value.metadata
           : metadata // ignore: cast_nullable_to_non_nullable
               as Metadata,
+      otpSigninVerify: null == otpSigninVerify
+          ? _value.otpSigninVerify
+          : otpSigninVerify // ignore: cast_nullable_to_non_nullable
+              as LoginOtpSigninVerifyScreenPageConfig,
+      signupVerify: null == signupVerify
+          ? _value.signupVerify
+          : signupVerify // ignore: cast_nullable_to_non_nullable
+              as LoginSignupVerifyScreenPageConfig,
     ) as $Val);
   }
 
@@ -425,6 +447,28 @@ class _$LoginPageConfigCopyWithImpl<$Res, $Val extends LoginPageConfig>
       return _then(_value.copyWith(metadata: value) as $Val);
     });
   }
+
+  /// Create a copy of LoginPageConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $LoginOtpSigninVerifyScreenPageConfigCopyWith<$Res> get otpSigninVerify {
+    return $LoginOtpSigninVerifyScreenPageConfigCopyWith<$Res>(
+        _value.otpSigninVerify, (value) {
+      return _then(_value.copyWith(otpSigninVerify: value) as $Val);
+    });
+  }
+
+  /// Create a copy of LoginPageConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $LoginSignupVerifyScreenPageConfigCopyWith<$Res> get signupVerify {
+    return $LoginSignupVerifyScreenPageConfigCopyWith<$Res>(_value.signupVerify,
+        (value) {
+      return _then(_value.copyWith(signupVerify: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
@@ -441,7 +485,9 @@ abstract class _$$LoginPageConfigImplCopyWith<$Res>
       double? scale,
       String? labelColor,
       LoginModeSelectPageConfig modeSelect,
-      Metadata metadata});
+      Metadata metadata,
+      LoginOtpSigninVerifyScreenPageConfig otpSigninVerify,
+      LoginSignupVerifyScreenPageConfig signupVerify});
 
   @override
   $ImageSourceCopyWith<$Res>? get imageSource;
@@ -449,6 +495,10 @@ abstract class _$$LoginPageConfigImplCopyWith<$Res>
   $LoginModeSelectPageConfigCopyWith<$Res> get modeSelect;
   @override
   $MetadataCopyWith<$Res> get metadata;
+  @override
+  $LoginOtpSigninVerifyScreenPageConfigCopyWith<$Res> get otpSigninVerify;
+  @override
+  $LoginSignupVerifyScreenPageConfigCopyWith<$Res> get signupVerify;
 }
 
 /// @nodoc
@@ -470,6 +520,8 @@ class __$$LoginPageConfigImplCopyWithImpl<$Res>
     Object? labelColor = freezed,
     Object? modeSelect = null,
     Object? metadata = null,
+    Object? otpSigninVerify = null,
+    Object? signupVerify = null,
   }) {
     return _then(_$LoginPageConfigImpl(
       imageSource: freezed == imageSource
@@ -496,6 +548,14 @@ class __$$LoginPageConfigImplCopyWithImpl<$Res>
           ? _value.metadata
           : metadata // ignore: cast_nullable_to_non_nullable
               as Metadata,
+      otpSigninVerify: null == otpSigninVerify
+          ? _value.otpSigninVerify
+          : otpSigninVerify // ignore: cast_nullable_to_non_nullable
+              as LoginOtpSigninVerifyScreenPageConfig,
+      signupVerify: null == signupVerify
+          ? _value.signupVerify
+          : signupVerify // ignore: cast_nullable_to_non_nullable
+              as LoginSignupVerifyScreenPageConfig,
     ));
   }
 }
@@ -510,7 +570,9 @@ class _$LoginPageConfigImpl implements _LoginPageConfig {
       this.scale,
       this.labelColor,
       this.modeSelect = const LoginModeSelectPageConfig(),
-      this.metadata = const Metadata()});
+      this.metadata = const Metadata(),
+      this.otpSigninVerify = const LoginOtpSigninVerifyScreenPageConfig(),
+      this.signupVerify = const LoginSignupVerifyScreenPageConfig()});
 
   factory _$LoginPageConfigImpl.fromJson(Map<String, dynamic> json) =>
       _$$LoginPageConfigImplFromJson(json);
@@ -542,9 +604,19 @@ class _$LoginPageConfigImpl implements _LoginPageConfig {
   @JsonKey()
   final Metadata metadata;
 
+  /// Configuration for the OTP sign-in verification screen.
+  @override
+  @JsonKey()
+  final LoginOtpSigninVerifyScreenPageConfig otpSigninVerify;
+
+  /// Configuration for the Sign-Up verification screen.
+  @override
+  @JsonKey()
+  final LoginSignupVerifyScreenPageConfig signupVerify;
+
   @override
   String toString() {
-    return 'LoginPageConfig(imageSource: $imageSource, picture: $picture, scale: $scale, labelColor: $labelColor, modeSelect: $modeSelect, metadata: $metadata)';
+    return 'LoginPageConfig(imageSource: $imageSource, picture: $picture, scale: $scale, labelColor: $labelColor, modeSelect: $modeSelect, metadata: $metadata, otpSigninVerify: $otpSigninVerify, signupVerify: $signupVerify)';
   }
 
   @override
@@ -561,13 +633,17 @@ class _$LoginPageConfigImpl implements _LoginPageConfig {
             (identical(other.modeSelect, modeSelect) ||
                 other.modeSelect == modeSelect) &&
             (identical(other.metadata, metadata) ||
-                other.metadata == metadata));
+                other.metadata == metadata) &&
+            (identical(other.otpSigninVerify, otpSigninVerify) ||
+                other.otpSigninVerify == otpSigninVerify) &&
+            (identical(other.signupVerify, signupVerify) ||
+                other.signupVerify == signupVerify));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, imageSource, picture, scale,
-      labelColor, modeSelect, metadata);
+      labelColor, modeSelect, metadata, otpSigninVerify, signupVerify);
 
   /// Create a copy of LoginPageConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -593,7 +669,10 @@ abstract class _LoginPageConfig implements LoginPageConfig {
       final double? scale,
       final String? labelColor,
       final LoginModeSelectPageConfig modeSelect,
-      final Metadata metadata}) = _$LoginPageConfigImpl;
+      final Metadata metadata,
+      final LoginOtpSigninVerifyScreenPageConfig otpSigninVerify,
+      final LoginSignupVerifyScreenPageConfig
+          signupVerify}) = _$LoginPageConfigImpl;
 
   factory _LoginPageConfig.fromJson(Map<String, dynamic> json) =
       _$LoginPageConfigImpl.fromJson;
@@ -623,12 +702,375 @@ abstract class _LoginPageConfig implements LoginPageConfig {
   @override
   Metadata get metadata;
 
+  /// Configuration for the OTP sign-in verification screen.
+  @override
+  LoginOtpSigninVerifyScreenPageConfig get otpSigninVerify;
+
+  /// Configuration for the Sign-Up verification screen.
+  @override
+  LoginSignupVerifyScreenPageConfig get signupVerify;
+
   /// Create a copy of LoginPageConfig
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$LoginPageConfigImplCopyWith<_$LoginPageConfigImpl> get copyWith =>
       throw _privateConstructorUsedError;
+}
+
+LoginOtpSigninVerifyScreenPageConfig
+    _$LoginOtpSigninVerifyScreenPageConfigFromJson(Map<String, dynamic> json) {
+  return _LoginOtpSigninVerifyScreenPageConfig.fromJson(json);
+}
+
+/// @nodoc
+mixin _$LoginOtpSigninVerifyScreenPageConfig {
+  /// Countdown interval in seconds before the "Repeat" button
+  /// becomes active again. If 0 → countdown disabled, button active immediately.
+  int get countdownRepeatIntervalSeconds => throw _privateConstructorUsedError;
+
+  /// Serializes this LoginOtpSigninVerifyScreenPageConfig to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of LoginOtpSigninVerifyScreenPageConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $LoginOtpSigninVerifyScreenPageConfigCopyWith<
+          LoginOtpSigninVerifyScreenPageConfig>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $LoginOtpSigninVerifyScreenPageConfigCopyWith<$Res> {
+  factory $LoginOtpSigninVerifyScreenPageConfigCopyWith(
+          LoginOtpSigninVerifyScreenPageConfig value,
+          $Res Function(LoginOtpSigninVerifyScreenPageConfig) then) =
+      _$LoginOtpSigninVerifyScreenPageConfigCopyWithImpl<$Res,
+          LoginOtpSigninVerifyScreenPageConfig>;
+  @useResult
+  $Res call({int countdownRepeatIntervalSeconds});
+}
+
+/// @nodoc
+class _$LoginOtpSigninVerifyScreenPageConfigCopyWithImpl<$Res,
+        $Val extends LoginOtpSigninVerifyScreenPageConfig>
+    implements $LoginOtpSigninVerifyScreenPageConfigCopyWith<$Res> {
+  _$LoginOtpSigninVerifyScreenPageConfigCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of LoginOtpSigninVerifyScreenPageConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? countdownRepeatIntervalSeconds = null,
+  }) {
+    return _then(_value.copyWith(
+      countdownRepeatIntervalSeconds: null == countdownRepeatIntervalSeconds
+          ? _value.countdownRepeatIntervalSeconds
+          : countdownRepeatIntervalSeconds // ignore: cast_nullable_to_non_nullable
+              as int,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$LoginOtpSigninVerifyScreenPageConfigImplCopyWith<$Res>
+    implements $LoginOtpSigninVerifyScreenPageConfigCopyWith<$Res> {
+  factory _$$LoginOtpSigninVerifyScreenPageConfigImplCopyWith(
+          _$LoginOtpSigninVerifyScreenPageConfigImpl value,
+          $Res Function(_$LoginOtpSigninVerifyScreenPageConfigImpl) then) =
+      __$$LoginOtpSigninVerifyScreenPageConfigImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({int countdownRepeatIntervalSeconds});
+}
+
+/// @nodoc
+class __$$LoginOtpSigninVerifyScreenPageConfigImplCopyWithImpl<$Res>
+    extends _$LoginOtpSigninVerifyScreenPageConfigCopyWithImpl<$Res,
+        _$LoginOtpSigninVerifyScreenPageConfigImpl>
+    implements _$$LoginOtpSigninVerifyScreenPageConfigImplCopyWith<$Res> {
+  __$$LoginOtpSigninVerifyScreenPageConfigImplCopyWithImpl(
+      _$LoginOtpSigninVerifyScreenPageConfigImpl _value,
+      $Res Function(_$LoginOtpSigninVerifyScreenPageConfigImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of LoginOtpSigninVerifyScreenPageConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? countdownRepeatIntervalSeconds = null,
+  }) {
+    return _then(_$LoginOtpSigninVerifyScreenPageConfigImpl(
+      countdownRepeatIntervalSeconds: null == countdownRepeatIntervalSeconds
+          ? _value.countdownRepeatIntervalSeconds
+          : countdownRepeatIntervalSeconds // ignore: cast_nullable_to_non_nullable
+              as int,
+    ));
+  }
+}
+
+/// @nodoc
+
+@JsonSerializable(explicitToJson: true)
+class _$LoginOtpSigninVerifyScreenPageConfigImpl
+    implements _LoginOtpSigninVerifyScreenPageConfig {
+  const _$LoginOtpSigninVerifyScreenPageConfigImpl(
+      {this.countdownRepeatIntervalSeconds = 30});
+
+  factory _$LoginOtpSigninVerifyScreenPageConfigImpl.fromJson(
+          Map<String, dynamic> json) =>
+      _$$LoginOtpSigninVerifyScreenPageConfigImplFromJson(json);
+
+  /// Countdown interval in seconds before the "Repeat" button
+  /// becomes active again. If 0 → countdown disabled, button active immediately.
+  @override
+  @JsonKey()
+  final int countdownRepeatIntervalSeconds;
+
+  @override
+  String toString() {
+    return 'LoginOtpSigninVerifyScreenPageConfig(countdownRepeatIntervalSeconds: $countdownRepeatIntervalSeconds)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$LoginOtpSigninVerifyScreenPageConfigImpl &&
+            (identical(other.countdownRepeatIntervalSeconds,
+                    countdownRepeatIntervalSeconds) ||
+                other.countdownRepeatIntervalSeconds ==
+                    countdownRepeatIntervalSeconds));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(runtimeType, countdownRepeatIntervalSeconds);
+
+  /// Create a copy of LoginOtpSigninVerifyScreenPageConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$LoginOtpSigninVerifyScreenPageConfigImplCopyWith<
+          _$LoginOtpSigninVerifyScreenPageConfigImpl>
+      get copyWith => __$$LoginOtpSigninVerifyScreenPageConfigImplCopyWithImpl<
+          _$LoginOtpSigninVerifyScreenPageConfigImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$LoginOtpSigninVerifyScreenPageConfigImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _LoginOtpSigninVerifyScreenPageConfig
+    implements LoginOtpSigninVerifyScreenPageConfig {
+  const factory _LoginOtpSigninVerifyScreenPageConfig(
+          {final int countdownRepeatIntervalSeconds}) =
+      _$LoginOtpSigninVerifyScreenPageConfigImpl;
+
+  factory _LoginOtpSigninVerifyScreenPageConfig.fromJson(
+          Map<String, dynamic> json) =
+      _$LoginOtpSigninVerifyScreenPageConfigImpl.fromJson;
+
+  /// Countdown interval in seconds before the "Repeat" button
+  /// becomes active again. If 0 → countdown disabled, button active immediately.
+  @override
+  int get countdownRepeatIntervalSeconds;
+
+  /// Create a copy of LoginOtpSigninVerifyScreenPageConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$LoginOtpSigninVerifyScreenPageConfigImplCopyWith<
+          _$LoginOtpSigninVerifyScreenPageConfigImpl>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+LoginSignupVerifyScreenPageConfig _$LoginSignupVerifyScreenPageConfigFromJson(
+    Map<String, dynamic> json) {
+  return _LoginSignupVerifyScreenPageConfig.fromJson(json);
+}
+
+/// @nodoc
+mixin _$LoginSignupVerifyScreenPageConfig {
+  /// Countdown interval in seconds before the "Repeat" button
+  /// becomes active again. If 0 → countdown disabled, button active immediately.
+  int get countdownRepeatIntervalSeconds => throw _privateConstructorUsedError;
+
+  /// Serializes this LoginSignupVerifyScreenPageConfig to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of LoginSignupVerifyScreenPageConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $LoginSignupVerifyScreenPageConfigCopyWith<LoginSignupVerifyScreenPageConfig>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $LoginSignupVerifyScreenPageConfigCopyWith<$Res> {
+  factory $LoginSignupVerifyScreenPageConfigCopyWith(
+          LoginSignupVerifyScreenPageConfig value,
+          $Res Function(LoginSignupVerifyScreenPageConfig) then) =
+      _$LoginSignupVerifyScreenPageConfigCopyWithImpl<$Res,
+          LoginSignupVerifyScreenPageConfig>;
+  @useResult
+  $Res call({int countdownRepeatIntervalSeconds});
+}
+
+/// @nodoc
+class _$LoginSignupVerifyScreenPageConfigCopyWithImpl<$Res,
+        $Val extends LoginSignupVerifyScreenPageConfig>
+    implements $LoginSignupVerifyScreenPageConfigCopyWith<$Res> {
+  _$LoginSignupVerifyScreenPageConfigCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of LoginSignupVerifyScreenPageConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? countdownRepeatIntervalSeconds = null,
+  }) {
+    return _then(_value.copyWith(
+      countdownRepeatIntervalSeconds: null == countdownRepeatIntervalSeconds
+          ? _value.countdownRepeatIntervalSeconds
+          : countdownRepeatIntervalSeconds // ignore: cast_nullable_to_non_nullable
+              as int,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$LoginSignupVerifyScreenPageConfigImplCopyWith<$Res>
+    implements $LoginSignupVerifyScreenPageConfigCopyWith<$Res> {
+  factory _$$LoginSignupVerifyScreenPageConfigImplCopyWith(
+          _$LoginSignupVerifyScreenPageConfigImpl value,
+          $Res Function(_$LoginSignupVerifyScreenPageConfigImpl) then) =
+      __$$LoginSignupVerifyScreenPageConfigImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({int countdownRepeatIntervalSeconds});
+}
+
+/// @nodoc
+class __$$LoginSignupVerifyScreenPageConfigImplCopyWithImpl<$Res>
+    extends _$LoginSignupVerifyScreenPageConfigCopyWithImpl<$Res,
+        _$LoginSignupVerifyScreenPageConfigImpl>
+    implements _$$LoginSignupVerifyScreenPageConfigImplCopyWith<$Res> {
+  __$$LoginSignupVerifyScreenPageConfigImplCopyWithImpl(
+      _$LoginSignupVerifyScreenPageConfigImpl _value,
+      $Res Function(_$LoginSignupVerifyScreenPageConfigImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of LoginSignupVerifyScreenPageConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? countdownRepeatIntervalSeconds = null,
+  }) {
+    return _then(_$LoginSignupVerifyScreenPageConfigImpl(
+      countdownRepeatIntervalSeconds: null == countdownRepeatIntervalSeconds
+          ? _value.countdownRepeatIntervalSeconds
+          : countdownRepeatIntervalSeconds // ignore: cast_nullable_to_non_nullable
+              as int,
+    ));
+  }
+}
+
+/// @nodoc
+
+@JsonSerializable(explicitToJson: true)
+class _$LoginSignupVerifyScreenPageConfigImpl
+    implements _LoginSignupVerifyScreenPageConfig {
+  const _$LoginSignupVerifyScreenPageConfigImpl(
+      {this.countdownRepeatIntervalSeconds = 30});
+
+  factory _$LoginSignupVerifyScreenPageConfigImpl.fromJson(
+          Map<String, dynamic> json) =>
+      _$$LoginSignupVerifyScreenPageConfigImplFromJson(json);
+
+  /// Countdown interval in seconds before the "Repeat" button
+  /// becomes active again. If 0 → countdown disabled, button active immediately.
+  @override
+  @JsonKey()
+  final int countdownRepeatIntervalSeconds;
+
+  @override
+  String toString() {
+    return 'LoginSignupVerifyScreenPageConfig(countdownRepeatIntervalSeconds: $countdownRepeatIntervalSeconds)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$LoginSignupVerifyScreenPageConfigImpl &&
+            (identical(other.countdownRepeatIntervalSeconds,
+                    countdownRepeatIntervalSeconds) ||
+                other.countdownRepeatIntervalSeconds ==
+                    countdownRepeatIntervalSeconds));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(runtimeType, countdownRepeatIntervalSeconds);
+
+  /// Create a copy of LoginSignupVerifyScreenPageConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$LoginSignupVerifyScreenPageConfigImplCopyWith<
+          _$LoginSignupVerifyScreenPageConfigImpl>
+      get copyWith => __$$LoginSignupVerifyScreenPageConfigImplCopyWithImpl<
+          _$LoginSignupVerifyScreenPageConfigImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$LoginSignupVerifyScreenPageConfigImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _LoginSignupVerifyScreenPageConfig
+    implements LoginSignupVerifyScreenPageConfig {
+  const factory _LoginSignupVerifyScreenPageConfig(
+          {final int countdownRepeatIntervalSeconds}) =
+      _$LoginSignupVerifyScreenPageConfigImpl;
+
+  factory _LoginSignupVerifyScreenPageConfig.fromJson(
+          Map<String, dynamic> json) =
+      _$LoginSignupVerifyScreenPageConfigImpl.fromJson;
+
+  /// Countdown interval in seconds before the "Repeat" button
+  /// becomes active again. If 0 → countdown disabled, button active immediately.
+  @override
+  int get countdownRepeatIntervalSeconds;
+
+  /// Create a copy of LoginSignupVerifyScreenPageConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$LoginSignupVerifyScreenPageConfigImplCopyWith<
+          _$LoginSignupVerifyScreenPageConfigImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }
 
 LoginModeSelectPageConfig _$LoginModeSelectPageConfigFromJson(
