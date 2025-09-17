@@ -9,6 +9,9 @@ import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
+export 'login_signup_verify_screen_style.dart';
+export 'login_signup_verify_screen_styles.dart';
+
 class LoginSignupVerifyScreen extends StatelessWidget {
   const LoginSignupVerifyScreen({super.key});
 
@@ -17,6 +20,10 @@ class LoginSignupVerifyScreen extends StatelessWidget {
     final themeData = Theme.of(context);
     final ElevatedButtonStyles? elevatedButtonStyles = themeData.extension<ElevatedButtonStyles>();
     final OutlinedButtonStyles? outlinedButtonStyles = themeData.extension<OutlinedButtonStyles>();
+
+    final LoginSignupVerifyScreenStyles? style = themeData.extension<LoginSignupVerifyScreenStyles>();
+    final countdownRepeatIntervalSeconds =
+        style?.primary?.countdownRepeatInterval ?? kDefaultCountdownRepeatIntervalSeconds;
 
     return BlocBuilder<LoginCubit, LoginState>(
       buildWhen: (previous, current) => whenLoginSignupVerifyScreenPageActive(current),
@@ -76,7 +83,7 @@ class LoginSignupVerifyScreen extends StatelessWidget {
                 children: [
                   CountDownBuilder(
                     start: state.signupSessionOtpProvisionalWithDateTime!.$2,
-                    interval: const Duration(seconds: 30),
+                    interval: countdownRepeatIntervalSeconds,
                     builder: (context, seconds) {
                       if (seconds == 0) {
                         return OutlinedButton(

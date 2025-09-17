@@ -62,6 +62,12 @@ class LoginPageConfig with _$LoginPageConfig {
 
     /// Metadata section with additional information such as links, version, etc.
     @Default(Metadata()) Metadata metadata,
+
+    /// Configuration for the OTP sign-in verification screen.
+    @Default(LoginOtpSigninVerifyScreenPageConfig()) LoginOtpSigninVerifyScreenPageConfig otpSigninVerify,
+
+    /// Configuration for the Sign-Up verification screen.
+    @Default(LoginSignupVerifyScreenPageConfig()) LoginSignupVerifyScreenPageConfig signupVerify,
   }) = _LoginPageConfig;
 
   factory LoginPageConfig.fromJson(Map<String, dynamic> json) => _$LoginPageConfigFromJson(json);
@@ -69,6 +75,32 @@ class LoginPageConfig with _$LoginPageConfig {
   /// A globally consistent metadata key used to associate additional resources,
   /// specifically for the login page picture.
   static const String metadataPictureUrl = 'pictureUrl';
+}
+
+@Freezed()
+class LoginOtpSigninVerifyScreenPageConfig with _$LoginOtpSigninVerifyScreenPageConfig {
+  @JsonSerializable(explicitToJson: true)
+  const factory LoginOtpSigninVerifyScreenPageConfig({
+    /// Countdown interval in seconds before the "Repeat" button
+    /// becomes active again. If 0 → countdown disabled, button active immediately.
+    @Default(30) int countdownRepeatIntervalSeconds,
+  }) = _LoginOtpSigninVerifyScreenPageConfig;
+
+  factory LoginOtpSigninVerifyScreenPageConfig.fromJson(Map<String, dynamic> json) =>
+      _$LoginOtpSigninVerifyScreenPageConfigFromJson(json);
+}
+
+@Freezed()
+class LoginSignupVerifyScreenPageConfig with _$LoginSignupVerifyScreenPageConfig {
+  @JsonSerializable(explicitToJson: true)
+  const factory LoginSignupVerifyScreenPageConfig({
+    /// Countdown interval in seconds before the "Repeat" button
+    /// becomes active again. If 0 → countdown disabled, button active immediately.
+    @Default(30) int countdownRepeatIntervalSeconds,
+  }) = _LoginSignupVerifyScreenPageConfig;
+
+  factory LoginSignupVerifyScreenPageConfig.fromJson(Map<String, dynamic> json) =>
+      _$LoginSignupVerifyScreenPageConfigFromJson(json);
 }
 
 @Freezed()
