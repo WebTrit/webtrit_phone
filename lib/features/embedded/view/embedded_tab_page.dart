@@ -53,7 +53,7 @@ class EmbeddedTabPage extends StatelessWidget {
             pageInjectionStrategyBuilder: _defaultPageInjectionStrategy,
             connectivityRecoveryStrategyBuilder: () => _createConnectivityRecoveryStrategy(data.data!),
             shouldForwardPop: tabActive,
-            // TODO: Use to embedded configuration option to enable/disable log capture.
+            // TODO: Use embedded configuration option to enable/disable log capture.
             enableLogCapture: true,
           );
         },
