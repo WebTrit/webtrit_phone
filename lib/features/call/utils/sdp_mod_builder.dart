@@ -53,7 +53,7 @@ class SDPModBuilder {
   /// [stereo] stereo support on/off.
   /// [dtx] DTX support on/off.
   setOpusParams(int? bandWidthLimit, int? bitrateLimit, bool? stereo, bool? dtx) {
-    final profileId = getProfileId(RTPCodecProfile.opus);
+    final profileId = _getProfileId(RTPCodecProfile.opus);
     if (profileId == null) return;
 
     final media = _getMedia(RTPCodecKind.audio);
@@ -107,7 +107,7 @@ class SDPModBuilder {
 
   /// Removes the codec profile and all associated records e.g. fmtp, rtcp-fb, rtx etc.
   removeProfile(RTPCodecProfile profile) {
-    final profileId = getProfileId(profile);
+    final profileId = _getProfileId(profile);
 
     final media = _getMedia(profile.kind);
     if (media == null) return null;
@@ -159,7 +159,7 @@ class SDPModBuilder {
       final reorderedRtcpFbs = [];
 
       for (var profile in profiles) {
-        final profileId = getProfileId(profile);
+        final profileId = _getProfileId(profile);
 
         final rtpMap = originalRtpMaps.firstWhereOrNull((r) => r['payload'] == profileId);
         final fmtp = originalFmtps.firstWhereOrNull((f) => f['payload'] == profileId);
@@ -298,11 +298,58 @@ class SDPModBuilder {
     media['rtcpFb'] = originalRtcpFbs;
   }
 
+  /// Removes incompatible declaration of G729a codec from the SDP.
+  /// that causes Webrtc crash when setting it as remote description.
+  ///
+  /// example sdp from Linksys942 that causes crash on Webrtc 0.12.11:
+  /// v=0
+  /// o=- 74097 74097 IN IP4 194.9.14.108
+  /// s=-
+  /// c=IN IP4 194.9.14.108
+  /// t=0 0
+  /// m=audio 16442 RTP/AVP 0 8 18 101
+  /// a=rtpmap:0 PCMU/8000
+  /// a=rtpmap:8 PCMA/8000
+  /// a=rtpmap:18 G729a/8000
+  /// a=rtpmap:101 telephone-event/8000
+  /// a=fmtp:101 0-15
+  /// a=ptime:20
+  /// a=sendrecv
+  void removeG729a() {
+    final media = _getMedia(RTPCodecKind.audio);
+    if (media == null) return;
+
+    final originalPayloads = [];
+    final originalRtpMaps = [];
+    final originalFmtps = [];
+    final originalRtcpFbs = [];
+
+    if (media['payloads'] is String) originalPayloads.addAll((media['payloads'] as String).split(' '));
+    if (media['rtp'] is List<dynamic>) originalRtpMaps.addAll(media['rtp'] as List<dynamic>);
+    if (media['fmtp'] is List<dynamic>) originalFmtps.addAll(media['fmtp'] as List<dynamic>);
+    if (media['rtcpFb'] is List<dynamic>) originalRtcpFbs.addAll(media['rtcpFb'] as List<dynamic>);
+
+    final g729aRtp = originalRtpMaps.firstWhereOrNull((r) => r['codec'].toString().toUpperCase() == 'G729A');
+    if (g729aRtp == null) return;
+
+    final g729aPayload = g729aRtp['payload'];
+
+    final modedPayloads = originalPayloads.where((p) => p != g729aPayload.toString());
+    final modedRtpMaps = originalRtpMaps.where((r) => r['payload'] != g729aPayload);
+    final modedFmtps = originalFmtps.where((f) => f['payload'] != g729aPayload);
+    final modedRtcpFbs = originalRtcpFbs.where((f) => f['payload'] != g729aPayload);
+
+    media['payloads'] = modedPayloads.join(' ');
+    media['rtp'] = modedRtpMaps.toList();
+    media['fmtp'] = modedFmtps.toList();
+    media['rtcpFb'] = modedRtcpFbs.toList();
+  }
+
   /// Get the codec profile payload id.
   /// Return codec by specific profile using fmtp records for multiprofile codecs
   /// e.g. H264 with profile 42e01f, 42e034, 640c34 etc.
   /// Elsewhere return codec finded by rtp records.
-  getProfileId(RTPCodecProfile profile) {
+  _getProfileId(RTPCodecProfile profile) {
     final media = _getMedia(profile.kind);
     if (media == null) return null;
 

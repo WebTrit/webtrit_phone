@@ -394,6 +394,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                             callkeep: _callkeep,
                             callkeepConnections: _callkeepConnections,
                             sdpMunger: ModifyWithEncodingSettings(appPreferences, encodingConfig),
+                            sdpSanitizer: RemoteSdpSanitizer(),
                             webRtcOptionsBuilder: WebrtcOptionsWithAppSettingsBuilder(appPreferences),
                             userMediaBuilder: userMediaBuilder,
                             contactNameResolver: contactNameResolver,
