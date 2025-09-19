@@ -56,9 +56,10 @@ class EmbeddedScreenPage extends StatelessWidget {
   }
 
   PreferredSizeWidget _buildAppBar(BuildContext context) {
+    final title = data.titleL10n;
     return AppBar(
       leading: const AutoLeadingButton(),
-      title: Text(context.parseL10n(data.titleL10n!)),
+      title: title != null ? Text(context.parseL10n(title)) : null,
     );
   }
 
