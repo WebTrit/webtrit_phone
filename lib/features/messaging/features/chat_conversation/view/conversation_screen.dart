@@ -140,10 +140,8 @@ class _ChatConversationScreenState extends State<ChatConversationScreen> {
 
   Widget dialogTitle(String participant) {
     return ContactInfoBuilder(
-      sourceType: ContactSourceType.external,
-      sourceId: participant,
-      builder: (context, contact, {required bool loading}) {
-        if (loading) return const SizedBox();
+      source: ContactSourceId(ContactSourceType.external, participant),
+      builder: (context, contact) {
         if (contact != null) {
           final online = contact.registered == true;
 

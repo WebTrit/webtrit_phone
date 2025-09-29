@@ -65,6 +65,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   final PeerConnectionPolicyApplier? peerConnectionPolicyApplier;
   final ContactNameResolver contactNameResolver;
   final CallErrorReporter callErrorReporter;
+  final VoidCallback? onCallEnded;
 
   StreamSubscription<List<ConnectivityResult>>? _connectivityChangedSubscription;
   StreamSubscription<PendingCall>? _pendingCallHandlerSubscription;
@@ -99,6 +100,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     this.iceFilter,
     this.peerConnectionPolicyApplier,
     SignalingClientFactory signalingClientFactory = defaultSignalingClientFactory,
+    this.onCallEnded,
   }) : super(const CallState()) {
     _signalingClientFactory = signalingClientFactory;
 
@@ -282,6 +284,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     linesStateRepository.setState(LinesState(mainLines: mainLinesState, guestLine: guestLineState));
     _handleSignalingSessionError(
         previous: change.currentState.callServiceState, current: change.nextState.callServiceState);
+
+    if (change.nextState.activeCalls.length < change.currentState.activeCalls.length) {
+      onCallEnded?.call();
+    }
   }
 
   void _handleSignalingSessionError({

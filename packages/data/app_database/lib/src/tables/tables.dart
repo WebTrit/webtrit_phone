@@ -1,5 +1,6 @@
 export 'active_message_notifications_table.dart';
 export 'call_logs_table.dart';
+export 'cdr_table.dart';
 export 'chat_members_table.dart';
 export 'chat_message_read_cursor_table.dart';
 export 'chat_message_sync_cursor_table.dart';
@@ -20,7 +21,7 @@ export 'sms_messages_table.dart';
 export 'sms_outbox_message_delete_table.dart';
 export 'sms_outbox_messages_table.dart';
 export 'sms_outbox_read_cursors_table.dart';
+export 'system_notifications_outbox_table.dart';
+export 'system_notifications_table.dart';
 export 'user_sms_numbers_table.dart';
 export 'voicemail_table.dart';
-export 'system_notifications_table.dart';
-export 'system_notifications_outbox_table.dart';

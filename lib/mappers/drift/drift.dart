@@ -1,5 +1,6 @@
 export 'active_message_push_drift_mapper.dart';
 export 'call_logs_mapper.dart';
+export 'cdr_mapper.dart';
 export 'chats_drift_mapper.dart';
 export 'chats_outbox_drift_mapper.dart';
 export 'contacts_mapper.dart';

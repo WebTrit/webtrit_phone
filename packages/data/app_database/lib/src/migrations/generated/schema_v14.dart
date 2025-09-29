@@ -1,6 +1,7 @@
+// dart format width=80
+import 'dart:typed_data' as i2;
 // GENERATED CODE, DO NOT EDIT BY HAND.
 // ignore_for_file: type=lint
-//@dart=2.12
 import 'package:drift/drift.dart';
 
 class Contacts extends Table with TableInfo {
@@ -39,11 +40,11 @@ class Contacts extends Table with TableInfo {
       type: DriftSqlType.string,
       requiredDuringInsert: false,
       $customConstraints: 'NULL');
-  late final GeneratedColumn<Uint8List> thumbnail = GeneratedColumn<Uint8List>(
-      'thumbnail', aliasedName, true,
-      type: DriftSqlType.blob,
-      requiredDuringInsert: false,
-      $customConstraints: 'NULL');
+  late final GeneratedColumn<i2.Uint8List> thumbnail =
+      GeneratedColumn<i2.Uint8List>('thumbnail', aliasedName, true,
+          type: DriftSqlType.blob,
+          requiredDuringInsert: false,
+          $customConstraints: 'NULL');
   late final GeneratedColumn<int> registered = GeneratedColumn<int>(
       'registered', aliasedName, true,
       type: DriftSqlType.int,

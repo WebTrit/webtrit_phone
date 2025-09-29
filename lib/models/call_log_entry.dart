@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-enum CallDirection { incoming, outgoing }
+import 'package:webtrit_phone/models/call_direction.dart';
 
 class CallLogEntry extends Equatable {
   final int id;

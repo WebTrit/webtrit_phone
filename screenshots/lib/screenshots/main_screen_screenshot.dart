@@ -133,12 +133,24 @@ class MainScreenScreenshot extends StatelessWidget {
             videoEnabled: true,
             chatsEnabled: false,
             smssEnabled: false,
+            cdrsEnabled: false,
           ),
         );
       case MainFlavor.recents:
         return BlocProvider<RecentsBloc>(
           create: (_) => MockRecentsBloc.mainScreen(),
           child: RecentsScreen(
+            title: title,
+            transferEnabled: false,
+            videoEnabled: true,
+            chatsEnabled: false,
+            smssEnabled: false,
+          ),
+        );
+      case MainFlavor.recentCdrs:
+        return BlocProvider<FullRecentCdrsCubit>(
+          create: (_) => MockFullRecentCdrsCubit.mainScreen(),
+          child: RecentCdrsScreen(
             title: title,
             transferEnabled: false,
             videoEnabled: true,

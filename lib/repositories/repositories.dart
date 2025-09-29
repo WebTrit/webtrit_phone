@@ -4,6 +4,8 @@ export 'app_analytics/app_analytics_repository.dart';
 export 'auth/auth.dart';
 export 'call_logs/call_logs_repository.dart';
 export 'call_to_actions/call_to_actions_repository.dart';
+export 'cdrs/cdrs_local_repository.dart';
+export 'cdrs/cdrs_remote_repository.dart';
 export 'contacts/contacts_repository.dart';
 export 'dialing/dialing.dart';
 export 'external_contacts/external_contacts_repository.dart';

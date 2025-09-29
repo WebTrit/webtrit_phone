@@ -66,11 +66,8 @@ class _DialogInfoState extends State<DialogInfo> {
                   ],
                 ),
                 body: ContactInfoBuilder(
-                    sourceId: participant,
-                    sourceType: ContactSourceType.external,
-                    builder: (context, contact, {required loading}) {
-                      if (loading) return const SizedBox();
-
+                    source: ContactSourceId(ContactSourceType.external, participant),
+                    builder: (context, contact) {
                       return Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16),
                         child: Column(

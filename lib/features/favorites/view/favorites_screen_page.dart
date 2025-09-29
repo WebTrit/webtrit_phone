@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/features/features.dart';
+import 'package:webtrit_phone/models/main_flavor.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
 @RoutePage()
@@ -23,6 +24,7 @@ class FavoritesScreenPage extends StatelessWidget {
       videoEnabled: featureAccess.callFeature.callConfig.isVideoCallEnabled,
       chatsEnabled: featureAccess.messagingFeature.chatsPresent,
       smssEnabled: featureAccess.messagingFeature.smsPresent,
+      cdrsEnabled: featureAccess.bottomMenuFeature.isTabEnabled(MainFlavor.recentCdrs),
     );
     final provider = BlocProvider(
       create: (context) => FavoritesBloc(

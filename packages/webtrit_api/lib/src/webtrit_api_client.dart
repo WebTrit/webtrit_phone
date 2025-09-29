@@ -700,4 +700,27 @@ class WebtritApiClient {
       options: options,
     );
   }
+
+  Future<CdrHistoryResponse> getCdrHistory(
+    String token, {
+    DateTime? from,
+    DateTime? to,
+    int? limit,
+    String? locale,
+    RequestOptions options = const RequestOptions(),
+  }) async {
+    final responseJson = await _httpClientExecuteGet(
+      ['user', 'history'],
+      locale != null ? {'Accept-Language': locale} : null,
+      token,
+      requestOptions: options,
+      queryParameters: {
+        if (from != null) 'time_from': from.toUtc().toIso8601String(),
+        if (to != null) 'time_to': to.toUtc().toIso8601String(),
+        if (limit != null) 'items_per_page': limit.toString(),
+      },
+    );
+
+    return CdrHistoryResponse.fromJson(responseJson as Map<String, dynamic>);
+  }
 }

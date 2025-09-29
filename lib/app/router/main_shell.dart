@@ -237,6 +237,18 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
         RepositoryProvider<LinesStateRepository>(
           create: (context) => LinesStateRepositoryInMemoryImpl(),
         ),
+        RepositoryProvider<CdrsLocalRepository>(
+          create: (context) => CdrsLocalRepositoryDriftImpl(
+            context.read<AppDatabase>(),
+          ),
+        ),
+        RepositoryProvider<CdrsRemoteRepository>(
+          create: (context) => CdrsRemoteRepositoryApiImpl(
+            context.read<WebtritApiClient>(),
+            context.read<AppBloc>().state.session.token!,
+            _sessionGuard,
+          ),
+        ),
       ],
 
       /// Bridge layers for background/periodic tasks between repositories and Blocs
@@ -258,6 +270,14 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                       registrations: _pollingRegistrations(context),
                     ),
                     dispose: (context, service) => service.dispose(),
+                    lazy: false,
+                  ),
+                  Provider<CdrsSyncWorker>(
+                    create: (context) => CdrsSyncWorker(
+                      context.read<CdrsLocalRepository>(),
+                      context.read<CdrsRemoteRepository>(),
+                    )..init(),
+                    dispose: (context, worker) => worker.dispose(),
                     lazy: false,
                   ),
                 ],
@@ -402,6 +422,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                                 DefaultCallErrorReporter((n) => notificationsBloc.add(NotificationsSubmitted(n))),
                             iceFilter: FilterWithAppSettings(appPreferences),
                             peerConnectionPolicyApplier: pearConnectionPolicyApplier,
+                            onCallEnded: () => context.read<CdrsSyncWorker>().forceSync(const Duration(seconds: 1)),
                           )..add(const CallStarted());
                         },
                       ),

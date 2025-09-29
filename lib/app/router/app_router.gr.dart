@@ -1129,6 +1129,57 @@ class NetworkScreenPageRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [NumberCdrsScreenPage]
+class NumberCdrsScreenPageRoute
+    extends PageRouteInfo<NumberCdrsScreenPageRouteArgs> {
+  NumberCdrsScreenPageRoute({
+    required String number,
+    List<PageRouteInfo>? children,
+  }) : super(
+          NumberCdrsScreenPageRoute.name,
+          args: NumberCdrsScreenPageRouteArgs(number: number),
+          rawPathParams: {'number': number},
+          initialChildren: children,
+        );
+
+  static const String name = 'NumberCdrsScreenPageRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final pathParams = data.inheritedPathParams;
+      final args = data.argsAs<NumberCdrsScreenPageRouteArgs>(
+        orElse: () => NumberCdrsScreenPageRouteArgs(
+          number: pathParams.getString('number'),
+        ),
+      );
+      return NumberCdrsScreenPage(args.number);
+    },
+  );
+}
+
+class NumberCdrsScreenPageRouteArgs {
+  const NumberCdrsScreenPageRouteArgs({required this.number});
+
+  final String number;
+
+  @override
+  String toString() {
+    return 'NumberCdrsScreenPageRouteArgs{number: $number}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! NumberCdrsScreenPageRouteArgs) return false;
+    return number == other.number;
+  }
+
+  @override
+  int get hashCode => number.hashCode;
+}
+
+/// generated route for
 /// [PermissionsScreenPage]
 class PermissionsScreenPageRoute extends PageRouteInfo<void> {
   const PermissionsScreenPageRoute({List<PageRouteInfo>? children})
@@ -1140,6 +1191,38 @@ class PermissionsScreenPageRoute extends PageRouteInfo<void> {
     name,
     builder: (data) {
       return PermissionsScreenPage();
+    },
+  );
+}
+
+/// generated route for
+/// [RecentCdrsRouterPage]
+class RecentCdrsRouterPageRoute extends PageRouteInfo<void> {
+  const RecentCdrsRouterPageRoute({List<PageRouteInfo>? children})
+      : super(RecentCdrsRouterPageRoute.name, initialChildren: children);
+
+  static const String name = 'RecentCdrsRouterPageRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const RecentCdrsRouterPage();
+    },
+  );
+}
+
+/// generated route for
+/// [RecentCdrsScreenPage]
+class RecentCdrsScreenPageRoute extends PageRouteInfo<void> {
+  const RecentCdrsScreenPageRoute({List<PageRouteInfo>? children})
+      : super(RecentCdrsScreenPageRoute.name, initialChildren: children);
+
+  static const String name = 'RecentCdrsScreenPageRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const RecentCdrsScreenPage();
     },
   );
 }

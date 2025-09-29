@@ -8,6 +8,7 @@ export 'mock_contacts_local_tab_bloc.dart';
 export 'mock_contacts_search_bloc.dart';
 export 'mock_embedded_cubit.dart';
 export 'mock_favorites_bloc.dart';
+export 'mock_full_recent_cdrs_cubit.dart';
 export 'mock_keypad_cubit.dart';
 export 'mock_login_cubit.dart';
 export 'mock_main_bloc.dart';

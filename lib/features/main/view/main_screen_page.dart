@@ -117,6 +117,8 @@ class MainScreenPage extends StatelessWidget {
           return const FavoritesRouterPageRoute();
         case MainFlavor.recents:
           return const RecentsRouterPageRoute();
+        case MainFlavor.recentCdrs:
+          return const RecentCdrsScreenPageRoute();
         case MainFlavor.contacts:
           return ContactsRouterPageRoute(
             children: [
