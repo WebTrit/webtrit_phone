@@ -31,38 +31,48 @@ class ScrollToBottomButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedSwitcher(
-      duration: const Duration(milliseconds: 500),
-      transitionBuilder: (child, animation) {
-        return FadeTransition(
-          opacity: animation.drive(CurveTween(curve: Curves.linear)),
-          child: SizeTransition(sizeFactor: animation, child: child),
-        );
-      },
-      switchInCurve: Curves.bounceOut,
-      switchOutCurve: Curves.easeInExpo,
-      child: scrolledAway
-          ? Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(24),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.1),
-                    blurRadius: 4,
-                    offset: const Offset(0, 4),
-                  ),
-                ],
-              ),
-              margin: const EdgeInsets.all(8),
-              child: IconButton(
-                key: const Key('scrollToBottomButton'),
-                onPressed: onTap,
-                icon: const Icon(Icons.expand_circle_down_outlined),
-                padding: const EdgeInsets.all(0),
-              ),
-            )
-          : const SizedBox(),
+    return SizedBox(
+      width: 64,
+      height: 64,
+      child: AnimatedSwitcher(
+        duration: const Duration(milliseconds: 500),
+        transitionBuilder: (child, animation) {
+          return FadeTransition(
+            opacity: animation.drive(CurveTween(curve: Curves.linear)),
+            child: SlideTransition(
+              position: Tween<Offset>(
+                begin: const Offset(0, 1),
+                end: const Offset(0, 0),
+              ).animate(animation),
+              child: ScaleTransition(scale: animation, child: child),
+            ),
+          );
+        },
+        switchInCurve: Curves.bounceOut,
+        switchOutCurve: Curves.easeInExpo,
+        child: scrolledAway
+            ? Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(24),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.1),
+                      blurRadius: 4,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ),
+                margin: const EdgeInsets.all(8),
+                child: IconButton(
+                  key: const Key('scrollToBottomButton'),
+                  onPressed: onTap,
+                  icon: const Icon(Icons.expand_circle_down_outlined),
+                  padding: const EdgeInsets.all(0),
+                ),
+              )
+            : const SizedBox(),
+      ),
     );
   }
 }

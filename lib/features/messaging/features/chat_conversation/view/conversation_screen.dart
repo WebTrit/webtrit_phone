@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 
 import 'package:auto_route/auto_route.dart';
@@ -60,6 +62,8 @@ class _ChatConversationScreenState extends State<ChatConversationScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return BlocProvider(
       create: (context) => ChatTypingCubit(messagingBloc.state.client),
       child: BlocConsumer<ConversationCubit, ConversationState>(
@@ -73,7 +77,15 @@ class _ChatConversationScreenState extends State<ChatConversationScreen> {
         },
         builder: (context, state) {
           return Scaffold(
+            extendBodyBehindAppBar: true,
             appBar: AppBar(
+              backgroundColor: theme.canvasColor.withAlpha(150),
+              flexibleSpace: ClipRect(
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                  child: Container(color: theme.canvasColor.withAlpha(150)),
+                ),
+              ),
               title: FadeIn(
                 child: Builder(
                   builder: (context) {
