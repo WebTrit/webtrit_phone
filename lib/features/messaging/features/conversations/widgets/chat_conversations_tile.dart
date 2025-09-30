@@ -92,13 +92,13 @@ class _ChatConversationsTileState extends State<ChatConversationsTile> {
             thumbnail: contact?.thumbnail,
             thumbnailUrl: contact?.thumbnailUrl,
             registered: contact?.registered,
-            radius: 24,
+            radius: 20,
           );
         },
       );
     } else {
       var text = widget.conversation.name ?? widget.conversation.id.toString();
-      return GroupAvatar(name: text);
+      return GroupAvatar(name: text, size: 20);
     }
   }
 

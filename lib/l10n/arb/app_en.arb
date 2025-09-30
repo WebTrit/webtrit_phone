@@ -719,6 +719,8 @@
   },
   "messaging_ConversationScreen_titlePrefix": "Dialog:",
   "@messaging_ConversationScreen_titlePrefix": {},
+  "messaging_ConversationScreen_titleAvailable": "available",
+  "@messaging_ConversationScreen_titleAvailable": {},
   "messaging_ConversationsScreen_chatsSearch_hint": "Enter chat or user name",
   "@messaging_ConversationsScreen_chatsSearch_hint": {},
   "messaging_ConversationsScreen_empty": "No conversations started yet",

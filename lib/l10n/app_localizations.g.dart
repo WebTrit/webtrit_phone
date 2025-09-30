@@ -1705,6 +1705,12 @@ abstract class AppLocalizations {
   /// **'Dialog:'**
   String get messaging_ConversationScreen_titlePrefix;
 
+  /// No description provided for @messaging_ConversationScreen_titleAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'available'**
+  String get messaging_ConversationScreen_titleAvailable;
+
   /// No description provided for @messaging_ConversationsScreen_chatsSearch_hint.
   ///
   /// In en, this message translates to:

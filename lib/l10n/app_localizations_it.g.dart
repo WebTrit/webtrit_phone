@@ -952,6 +952,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get messaging_ConversationScreen_titlePrefix => 'Dialogo:';
 
   @override
+  String get messaging_ConversationScreen_titleAvailable => 'disponibile';
+
+  @override
   String get messaging_ConversationsScreen_chatsSearch_hint =>
       'Inserisci il nome della chat o dell\'utente';
 
