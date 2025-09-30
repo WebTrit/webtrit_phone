@@ -947,6 +947,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get messaging_ConversationScreen_titlePrefix => 'Діалог:';
 
   @override
+  String get messaging_ConversationScreen_titleAvailable => 'доступний';
+
+  @override
   String get messaging_ConversationsScreen_chatsSearch_hint =>
       'Введіть ім\'я чату або користувача';
 

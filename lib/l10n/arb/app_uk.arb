@@ -719,6 +719,8 @@
   },
   "messaging_ConversationScreen_titlePrefix": "Діалог:",
   "@messaging_ConversationScreen_titlePrefix": {},
+  "messaging_ConversationScreen_titleAvailable": "доступний",
+  "@messaging_ConversationScreen_titleAvailable": {},
   "messaging_ConversationsScreen_chatsSearch_hint": "Введіть ім'я чату або користувача",
   "@messaging_ConversationsScreen_chatsSearch_hint": {},
   "messaging_ConversationsScreen_empty": "Немає переписок",

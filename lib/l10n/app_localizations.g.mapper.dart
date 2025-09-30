@@ -516,6 +516,8 @@ class AppLocalizationsMapper {
           localizations.messaging_Conversation_failure,
       'messaging_ConversationScreen_titlePrefix':
           localizations.messaging_ConversationScreen_titlePrefix,
+      'messaging_ConversationScreen_titleAvailable':
+          localizations.messaging_ConversationScreen_titleAvailable,
       'messaging_ConversationsScreen_chatsSearch_hint':
           localizations.messaging_ConversationsScreen_chatsSearch_hint,
       'messaging_ConversationsScreen_empty':

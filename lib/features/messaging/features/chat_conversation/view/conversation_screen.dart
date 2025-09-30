@@ -155,7 +155,11 @@ class _ChatConversationScreenState extends State<ChatConversationScreen> {
                 overflow: TextOverflow.ellipsis,
                 style: const TextStyle(fontSize: 20),
               ),
-              if (online) const Text('online', style: TextStyle(fontSize: 12)),
+              if (online)
+                Text(
+                  context.l10n.messaging_ConversationScreen_titleAvailable,
+                  style: const TextStyle(fontSize: 12),
+                ),
             ],
           );
         } else {
