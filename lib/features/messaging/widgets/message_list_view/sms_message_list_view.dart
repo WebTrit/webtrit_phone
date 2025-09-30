@@ -152,65 +152,116 @@ class _SmsMessageListViewState extends State<SmsMessageListView> {
         onScrollToBottom: scrollToBottom,
         child: GestureDetector(
           onTap: () => FocusScope.of(context).unfocus(),
-          child: ListView.builder(
+          child: ListView(
             controller: scrollController,
             reverse: true,
             cacheExtent: 500,
             padding: const EdgeInsets.symmetric(vertical: 16),
-            itemCount: viewEntries.length + 2,
-            itemBuilder: (context, index) {
-              if (index == 0) {
-                return BlocBuilder<SmsTypingCubit, TypingNumbers>(
-                  builder: (_, numbers) => TypingIndicator(userId: widget.userId, typingNumbers: numbers),
-                );
-              }
-              if (index == viewEntries.length + 1) {
-                return HistoryFetchIndicator(widget.fetchingHistory);
-              }
+            children: [
+              TypingIndicator(userId: widget.userId, typingNumbers: context.watch<SmsTypingCubit>().state),
+              ...viewEntries.map((entry) {
+                if (entry is _MessageViewEntry) {
+                  return FadeIn(
+                    child: SmsMessageView(
+                      key: Key(entry.message?.idKey ?? entry.outboxEntry!.idKey),
+                      userNumber: widget.userNumber,
+                      message: entry.message,
+                      outboxMessage: entry.outboxEntry,
+                      outboxDeleteEntry: entry.outboxDeleteEntry,
+                      userReadedUntil: entry.userReadedUntil,
+                      membersReadedUntil: entry.membersReadedUntil,
+                      handleDelete: handleDelete,
+                      onRendered: () {
+                        final message = entry.message;
+                        if (message == null) return;
 
-              final entry = viewEntries[index - 1];
+                        final mine = message.fromPhoneNumber == widget.userNumber;
+                        if (mine) return;
 
-              if (entry is _MessageViewEntry) {
-                return FadeIn(
-                  child: SmsMessageView(
-                    key: Key(entry.message?.idKey ?? entry.outboxEntry!.idKey),
-                    userNumber: widget.userNumber,
-                    message: entry.message,
-                    outboxMessage: entry.outboxEntry,
-                    outboxDeleteEntry: entry.outboxDeleteEntry,
-                    userReadedUntil: entry.userReadedUntil,
-                    membersReadedUntil: entry.membersReadedUntil,
-                    handleDelete: handleDelete,
-                    onRendered: () {
-                      final message = entry.message;
-                      if (message == null) return;
-
-                      final mine = message.fromPhoneNumber == widget.userNumber;
-                      if (mine) return;
-
-                      final userReadedUntil = widget.readCursors.userReadedUntil(widget.userId);
-                      final reachedUnreaded = userReadedUntil == null || message.createdAt.isAfter(userReadedUntil);
-                      if (reachedUnreaded) widget.userReadedUntilUpdate(message.createdAt);
-                    },
-                  ),
-                );
-              }
-
-              if (entry is _DateViewEntry) {
-                return Padding(
-                  padding: const EdgeInsets.only(top: 8),
-                  child: Center(
-                    child: Text(
-                      entry.date.toDayOfMonth,
-                      style: const TextStyle(fontSize: 12, color: Colors.grey),
+                        final userReadedUntil = widget.readCursors.userReadedUntil(widget.userId);
+                        final reachedUnreaded = userReadedUntil == null || message.createdAt.isAfter(userReadedUntil);
+                        if (reachedUnreaded) widget.userReadedUntilUpdate(message.createdAt);
+                      },
                     ),
-                  ),
-                );
-              }
+                  );
+                }
 
-              return const SizedBox();
-            },
+                if (entry is _DateViewEntry) {
+                  return Padding(
+                    padding: const EdgeInsets.only(top: 8),
+                    child: Center(
+                      child: Text(
+                        entry.date.toDayOfMonth,
+                        style: const TextStyle(fontSize: 12, color: Colors.grey),
+                      ),
+                    ),
+                  );
+                }
+
+                return const SizedBox();
+              }),
+              HistoryFetchIndicator(widget.fetchingHistory),
+            ],
           ),
+          // child: ListView.builder(
+          //   controller: scrollController,
+          //   reverse: true,
+          //   cacheExtent: 500,
+          //   padding: const EdgeInsets.symmetric(vertical: 16),
+          //   itemCount: viewEntries.length + 2,
+          //   itemBuilder: (context, index) {
+          //     if (index == 0) {
+          //       return BlocBuilder<SmsTypingCubit, TypingNumbers>(
+          //         builder: (_, numbers) => TypingIndicator(userId: widget.userId, typingNumbers: numbers),
+          //       );
+          //     }
+          //     if (index == viewEntries.length + 1) {
+          //       return HistoryFetchIndicator(widget.fetchingHistory);
+          //     }
+
+          //     final entry = viewEntries[index - 1];
+
+          //     if (entry is _MessageViewEntry) {
+          //       return FadeIn(
+          //         child: SmsMessageView(
+          //           key: Key(entry.message?.idKey ?? entry.outboxEntry!.idKey),
+          //           userNumber: widget.userNumber,
+          //           message: entry.message,
+          //           outboxMessage: entry.outboxEntry,
+          //           outboxDeleteEntry: entry.outboxDeleteEntry,
+          //           userReadedUntil: entry.userReadedUntil,
+          //           membersReadedUntil: entry.membersReadedUntil,
+          //           handleDelete: handleDelete,
+          //           onRendered: () {
+          //             final message = entry.message;
+          //             if (message == null) return;
+
+          //             final mine = message.fromPhoneNumber == widget.userNumber;
+          //             if (mine) return;
+
+          //             final userReadedUntil = widget.readCursors.userReadedUntil(widget.userId);
+          //             final reachedUnreaded = userReadedUntil == null || message.createdAt.isAfter(userReadedUntil);
+          //             if (reachedUnreaded) widget.userReadedUntilUpdate(message.createdAt);
+          //           },
+          //         ),
+          //       );
+          //     }
+
+          //     if (entry is _DateViewEntry) {
+          //       return Padding(
+          //         padding: const EdgeInsets.only(top: 8),
+          //         child: Center(
+          //           child: Text(
+          //             entry.date.toDayOfMonth,
+          //             style: const TextStyle(fontSize: 12, color: Colors.grey),
+          //           ),
+          //         ),
+          //       );
+          //     }
+
+          //     return const SizedBox();
+          //   },
+          // ),
         ),
       ),
     );
