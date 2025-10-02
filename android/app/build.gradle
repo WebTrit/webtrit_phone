@@ -255,16 +255,23 @@ android {
     }
 
     signingConfigs {
-        release {
-            keyAlias keystoreMetadata.keyAlias
-            keyPassword keystoreMetadata.keyPassword
-            storeFile keystoreFile
-            storePassword keystoreMetadata.storePassword
+        if (keystoreMetadata != null && keystoreFile.exists()) {
+            println("Configuring release signing with keystore: $keystoreFile")
+            release {
+                keyAlias keystoreMetadata.keyAlias
+                keyPassword keystoreMetadata.keyPassword
+                storeFile keystoreFile
+                storePassword keystoreMetadata.storePassword
+            }
+        } else {
+            println("⚠️  Release signing NOT configured")
         }
     }
     buildTypes {
-        release {
-            signingConfig signingConfigs.release
+        if (keystoreMetadata != null && keystoreFile.exists()) {
+            release {
+                signingConfig signingConfigs.release
+            }
         }
     }
     buildFeatures {
