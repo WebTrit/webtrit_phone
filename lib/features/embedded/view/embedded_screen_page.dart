@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 
 import 'package:auto_route/auto_route.dart';
@@ -11,6 +13,7 @@ import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
+import 'package:webtrit_phone/theme/models/resource_loader.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
@@ -40,18 +43,58 @@ class EmbeddedScreenPage extends StatelessWidget {
           'SelfConfigRepository not found in the widget tree; skipping all injections such as external page token');
     }
 
-    return BlocProvider(
-      create: (_) => _createCubit(selfConfigRepository, secureStorage),
-      child: EmbeddedScreen(
-        initialUri: data.uri,
-        mediaQueryMetricsData: context.mediaQueryMetrics,
-        deviceInfoData: context.read<AppLabelsProvider>().build(),
-        appBar: _buildAppBar(context),
-        pageInjectionStrategyBuilder: _defaultPageInjectionStrategy,
-        connectivityRecoveryStrategyBuilder: () => _createConnectivityRecoveryStrategy(data),
-        // TODO: Use embedded configuration option to enable/disable log capture.
-        enableLogCapture: true,
-      ),
+    final resource = ResourceLoader.fromUri(data.uri.toString());
+
+    return FutureBuilder<String>(
+      future: resource.loadContent(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        } else if (snapshot.hasError) {
+          return Center(
+            child: Text('Failed to load content: ${snapshot.error}'),
+          );
+        } else if (snapshot.hasData) {
+          final content = snapshot.data!;
+          return resource is NetworkResourceLoader
+              ? BlocProvider(
+                  create: (_) => _createCubit(selfConfigRepository, secureStorage),
+                  child: EmbeddedScreen(
+                    initialUri: data.uri,
+                    mediaQueryMetricsData: context.mediaQueryMetrics,
+                    deviceInfoData: context.read<AppLabelsProvider>().build(),
+                    appBar: _buildAppBar(context),
+                    pageInjectionStrategyBuilder: _defaultPageInjectionStrategy,
+                    connectivityRecoveryStrategyBuilder: () => _createConnectivityRecoveryStrategy(data),
+                    // TODO: Use embedded configuration option to enable/disable log capture.
+                    enableLogCapture: true,
+                  ),
+                )
+              : BlocProvider(
+                  create: (_) => _createCubit(selfConfigRepository, secureStorage),
+                  child: EmbeddedScreen(
+                    initialUri: Uri.dataFromString(
+                      content,
+                      mimeType: 'text/html',
+                      encoding: Encoding.getByName('utf-8'),
+                    ),
+                    mediaQueryMetricsData: context.mediaQueryMetrics,
+                    deviceInfoData: context.read<AppLabelsProvider>().build(),
+                    appBar: _buildAppBar(context),
+                    pageInjectionStrategyBuilder: _defaultPageInjectionStrategy,
+                    connectivityRecoveryStrategyBuilder: () => _createConnectivityRecoveryStrategy(data),
+                    // TODO: Use embedded configuration option to enable/disable log capture.
+                    enableLogCapture: true,
+                  ),
+                );
+        } else {
+          return const Center(
+            child: Text('Unexpected error occurred.'),
+          );
+        }
+      },
     );
   }
 
