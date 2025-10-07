@@ -936,6 +936,12 @@ class _$AppConfigMainImpl extends _AppConfigMain {
             type: BottomMenuTabType.recents,
             titleL10n: 'main_BottomNavigationBarItemLabel_recents',
             icon: '0xe03a'),
+        BaseTabScheme(
+            enabled: false,
+            initial: false,
+            type: BottomMenuTabType.recentCdrs,
+            titleL10n: 'main_BottomNavigationBarItemLabel_recents',
+            icon: '0xe03a'),
         ContactsTabScheme(
             enabled: true,
             initial: false,
