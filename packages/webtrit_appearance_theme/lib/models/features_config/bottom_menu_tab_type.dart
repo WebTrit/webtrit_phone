@@ -1,6 +1,7 @@
 enum BottomMenuTabType {
   favorites,
   recents,
+  recentCdrs,
   contacts,
   keypad,
   messaging,

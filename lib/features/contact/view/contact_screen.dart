@@ -28,6 +28,7 @@ class ContactScreen extends StatefulWidget {
     required this.videoEnabled,
     required this.chatsEnabled,
     required this.smsEnabled,
+    required this.cdrsEnabled,
   });
 
   final bool favoriteEnabled;
@@ -35,6 +36,7 @@ class ContactScreen extends StatefulWidget {
   final bool videoEnabled;
   final bool chatsEnabled;
   final bool smsEnabled;
+  final bool cdrsEnabled;
 
   @override
   State<ContactScreen> createState() => _ContactScreenState();
@@ -73,7 +75,11 @@ class _ContactScreenState extends State<ContactScreen> {
   }
 
   void openCallLog({required String number}) {
-    context.router.navigate(CallLogScreenPageRoute(number: number));
+    if (widget.cdrsEnabled) {
+      context.router.navigate(NumberCdrsScreenPageRoute(number: number));
+    } else {
+      context.router.navigate(CallLogScreenPageRoute(number: number));
+    }
   }
 
   @override

@@ -276,11 +276,8 @@ class _GroupInfoState extends State<GroupInfo> {
       final canRemoveModerator = amIOwner && isModerator;
 
       return ContactInfoBuilder(
-          sourceType: ContactSourceType.external,
-          sourceId: member.userId,
-          builder: (context, contact, {required bool loading}) {
-            if (loading) return const SizedBox();
-
+          source: ContactSourceId(ContactSourceType.external, member.userId),
+          builder: (context, contact) {
             return ListTile(
               key: ValueKey(member),
               minTileHeight: 0,

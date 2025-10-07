@@ -38,9 +38,16 @@
           "icon": "0xe5fd"
         },
         {
-          "enabled": true,
+          "enabled": false,
           "initial": false,
           "type": "recents",
+          "titleL10n": "main_BottomNavigationBarItemLabel_recents",
+          "icon": "0xe03a"
+        },
+        {
+          "enabled": true,
+          "initial": false,
+          "type": "recentCdrs",
           "titleL10n": "main_BottomNavigationBarItemLabel_recents",
           "icon": "0xe03a"
         },
@@ -63,7 +70,7 @@
           "icon": "0xe1ce"
         },
         {
-          "enabled": true,
+          "enabled": false,
           "initial": false,
           "type": "messaging",
           "titleL10n": "main_BottomNavigationBarItemLabel_chats",

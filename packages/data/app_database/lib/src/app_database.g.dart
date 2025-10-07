@@ -18,8 +18,6 @@ class $ContactsTableTable extends ContactsTable
       requiredDuringInsert: false,
       defaultConstraints:
           GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
-  static const VerificationMeta _sourceTypeMeta =
-      const VerificationMeta('sourceType');
   @override
   late final GeneratedColumnWithTypeConverter<ContactSourceTypeEnum, int>
       sourceType = GeneratedColumn<int>('source_type', aliasedName, false,
@@ -123,7 +121,6 @@ class $ContactsTableTable extends ContactsTable
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
-    context.handle(_sourceTypeMeta, const VerificationResult.success());
     if (data.containsKey('source_id')) {
       context.handle(_sourceIdMeta,
           sourceId.isAcceptableOrUnknown(data['source_id']!, _sourceIdMeta));
@@ -1331,8 +1328,6 @@ class $CallLogsTableTable extends CallLogsTable
       requiredDuringInsert: false,
       defaultConstraints:
           GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
-  static const VerificationMeta _directionMeta =
-      const VerificationMeta('direction');
   @override
   late final GeneratedColumnWithTypeConverter<CallLogDirectionEnum, int>
       direction = GeneratedColumn<int>('direction', aliasedName, false,
@@ -1395,7 +1390,6 @@ class $CallLogsTableTable extends CallLogsTable
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
-    context.handle(_directionMeta, const VerificationResult.success());
     if (data.containsKey('number')) {
       context.handle(_numberMeta,
           number.isAcceptableOrUnknown(data['number']!, _numberMeta));
@@ -1980,7 +1974,6 @@ class $ChatsTableTable extends ChatsTable
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
       'id', aliasedName, false,
       type: DriftSqlType.int, requiredDuringInsert: false);
-  static const VerificationMeta _typeMeta = const VerificationMeta('type');
   @override
   late final GeneratedColumnWithTypeConverter<ChatTypeEnum, String> type =
       GeneratedColumn<String>('type', aliasedName, false,
@@ -2019,7 +2012,6 @@ class $ChatsTableTable extends ChatsTable
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
-    context.handle(_typeMeta, const VerificationResult.success());
     if (data.containsKey('name')) {
       context.handle(
           _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
@@ -2299,8 +2291,6 @@ class $ChatMembersTableTable extends ChatMembersTable
   late final GeneratedColumn<String> userId = GeneratedColumn<String>(
       'user_id', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _groupAuthoritiesMeta =
-      const VerificationMeta('groupAuthorities');
   @override
   late final GeneratedColumnWithTypeConverter<GroupAuthoritiesEnum?, String>
       groupAuthorities = GeneratedColumn<String>(
@@ -2335,7 +2325,6 @@ class $ChatMembersTableTable extends ChatMembersTable
     } else if (isInserting) {
       context.missing(_userIdMeta);
     }
-    context.handle(_groupAuthoritiesMeta, const VerificationResult.success());
     return context;
   }
 
@@ -3188,8 +3177,6 @@ class $ChatMessageSyncCursorTableTable extends ChatMessageSyncCursorTable
       requiredDuringInsert: true,
       defaultConstraints: GeneratedColumn.constraintIsAlways(
           'REFERENCES chats (id) ON DELETE CASCADE'));
-  static const VerificationMeta _cursorTypeMeta =
-      const VerificationMeta('cursorType');
   @override
   late final GeneratedColumnWithTypeConverter<MessageSyncCursorTypeEnum, String>
       cursorType = GeneratedColumn<String>('cursor_type', aliasedName, false,
@@ -3221,7 +3208,6 @@ class $ChatMessageSyncCursorTableTable extends ChatMessageSyncCursorTable
     } else if (isInserting) {
       context.missing(_chatIdMeta);
     }
-    context.handle(_cursorTypeMeta, const VerificationResult.success());
     if (data.containsKey('timestamp_usec')) {
       context.handle(
           _timestampUsecMeta,
@@ -5302,8 +5288,6 @@ class $SmsMessagesTableTable extends SmsMessagesTable
   late final GeneratedColumn<String> toPhoneNumber = GeneratedColumn<String>(
       'to_phone_number', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _sendingStatusMeta =
-      const VerificationMeta('sendingStatus');
   @override
   late final GeneratedColumnWithTypeConverter<SmsSendingStatusEnum, String>
       sendingStatus = GeneratedColumn<String>(
@@ -5398,7 +5382,6 @@ class $SmsMessagesTableTable extends SmsMessagesTable
     } else if (isInserting) {
       context.missing(_toPhoneNumberMeta);
     }
-    context.handle(_sendingStatusMeta, const VerificationResult.success());
     if (data.containsKey('content')) {
       context.handle(_contentMeta,
           content.isAcceptableOrUnknown(data['content']!, _contentMeta));
@@ -5864,8 +5847,6 @@ class $SmsMessageSyncCursorTableTable extends SmsMessageSyncCursorTable
       requiredDuringInsert: true,
       defaultConstraints: GeneratedColumn.constraintIsAlways(
           'REFERENCES sms_conversations (id) ON DELETE CASCADE'));
-  static const VerificationMeta _cursorTypeMeta =
-      const VerificationMeta('cursorType');
   @override
   late final GeneratedColumnWithTypeConverter<SmsSyncCursorTypeEnum, String>
       cursorType = GeneratedColumn<String>('cursor_type', aliasedName, false,
@@ -5900,7 +5881,6 @@ class $SmsMessageSyncCursorTableTable extends SmsMessageSyncCursorTable
     } else if (isInserting) {
       context.missing(_conversationIdMeta);
     }
-    context.handle(_cursorTypeMeta, const VerificationResult.success());
     if (data.containsKey('timestamp_usec')) {
       context.handle(
           _timestampUsecMeta,
@@ -8298,7 +8278,6 @@ class $SystemNotificationsTableTable extends SystemNotificationsTable
   late final GeneratedColumn<String> content = GeneratedColumn<String>(
       'content', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _typeMeta = const VerificationMeta('type');
   @override
   late final GeneratedColumnWithTypeConverter<SystemNotificationType, String>
       type = GeneratedColumn<String>('type', aliasedName, false,
@@ -8361,7 +8340,6 @@ class $SystemNotificationsTableTable extends SystemNotificationsTable
     } else if (isInserting) {
       context.missing(_contentMeta);
     }
-    context.handle(_typeMeta, const VerificationResult.success());
     if (data.containsKey('seen')) {
       context.handle(
           _seenMeta, seen.isAcceptableOrUnknown(data['seen']!, _seenMeta));
@@ -8695,15 +8673,12 @@ class $SystemNotificationsOutboxTableTable
       requiredDuringInsert: true,
       defaultConstraints: GeneratedColumn.constraintIsAlways(
           'REFERENCES system_notifications (id) ON DELETE CASCADE'));
-  static const VerificationMeta _actionTypeMeta =
-      const VerificationMeta('actionType');
   @override
   late final GeneratedColumnWithTypeConverter<SnOutboxDataActionType, String>
       actionType = GeneratedColumn<String>('action_type', aliasedName, false,
               type: DriftSqlType.string, requiredDuringInsert: true)
           .withConverter<SnOutboxDataActionType>(
               $SystemNotificationsOutboxTableTable.$converteractionType);
-  static const VerificationMeta _stateMeta = const VerificationMeta('state');
   @override
   late final GeneratedColumnWithTypeConverter<SnOutboxDataState, String> state =
       GeneratedColumn<String>('state', aliasedName, false,
@@ -8740,8 +8715,6 @@ class $SystemNotificationsOutboxTableTable
     } else if (isInserting) {
       context.missing(_notificationIdMeta);
     }
-    context.handle(_actionTypeMeta, const VerificationResult.success());
-    context.handle(_stateMeta, const VerificationResult.success());
     if (data.containsKey('send_attempts')) {
       context.handle(
           _sendAttemptsMeta,
@@ -8988,6 +8961,548 @@ class SystemNotificationOutboxEntryDataCompanion
   }
 }
 
+class $CdrTableTable extends CdrTable
+    with TableInfo<$CdrTableTable, CdrRecordData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $CdrTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _callIdMeta = const VerificationMeta('callId');
+  @override
+  late final GeneratedColumn<String> callId = GeneratedColumn<String>(
+      'call_id', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: true,
+      defaultConstraints: GeneratedColumn.constraintIsAlways('UNIQUE'));
+  @override
+  late final GeneratedColumnWithTypeConverter<CallDirectionData, String>
+      direction = GeneratedColumn<String>('direction', aliasedName, false,
+              type: DriftSqlType.string, requiredDuringInsert: true)
+          .withConverter<CallDirectionData>($CdrTableTable.$converterdirection);
+  @override
+  late final GeneratedColumnWithTypeConverter<CdrStatusData, String> status =
+      GeneratedColumn<String>('status', aliasedName, false,
+              type: DriftSqlType.string, requiredDuringInsert: true)
+          .withConverter<CdrStatusData>($CdrTableTable.$converterstatus);
+  static const VerificationMeta _calleeMeta = const VerificationMeta('callee');
+  @override
+  late final GeneratedColumn<String> callee = GeneratedColumn<String>(
+      'callee', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _callerMeta = const VerificationMeta('caller');
+  @override
+  late final GeneratedColumn<String> caller = GeneratedColumn<String>(
+      'caller', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _connectTimeUsecMeta =
+      const VerificationMeta('connectTimeUsec');
+  @override
+  late final GeneratedColumn<int> connectTimeUsec = GeneratedColumn<int>(
+      'connect_time_usec', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _disconnectTimeUsecMeta =
+      const VerificationMeta('disconnectTimeUsec');
+  @override
+  late final GeneratedColumn<int> disconnectTimeUsec = GeneratedColumn<int>(
+      'disconnect_time_usec', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _disconnectReasonMeta =
+      const VerificationMeta('disconnectReason');
+  @override
+  late final GeneratedColumn<String> disconnectReason = GeneratedColumn<String>(
+      'disconnect_reason', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _durationSecondsMeta =
+      const VerificationMeta('durationSeconds');
+  @override
+  late final GeneratedColumn<int> durationSeconds = GeneratedColumn<int>(
+      'duration_seconds', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _recordingIdMeta =
+      const VerificationMeta('recordingId');
+  @override
+  late final GeneratedColumn<String> recordingId = GeneratedColumn<String>(
+      'recording_id', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  @override
+  List<GeneratedColumn> get $columns => [
+        callId,
+        direction,
+        status,
+        callee,
+        caller,
+        connectTimeUsec,
+        disconnectTimeUsec,
+        disconnectReason,
+        durationSeconds,
+        recordingId
+      ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'cdrs';
+  @override
+  VerificationContext validateIntegrity(Insertable<CdrRecordData> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('call_id')) {
+      context.handle(_callIdMeta,
+          callId.isAcceptableOrUnknown(data['call_id']!, _callIdMeta));
+    } else if (isInserting) {
+      context.missing(_callIdMeta);
+    }
+    if (data.containsKey('callee')) {
+      context.handle(_calleeMeta,
+          callee.isAcceptableOrUnknown(data['callee']!, _calleeMeta));
+    } else if (isInserting) {
+      context.missing(_calleeMeta);
+    }
+    if (data.containsKey('caller')) {
+      context.handle(_callerMeta,
+          caller.isAcceptableOrUnknown(data['caller']!, _callerMeta));
+    } else if (isInserting) {
+      context.missing(_callerMeta);
+    }
+    if (data.containsKey('connect_time_usec')) {
+      context.handle(
+          _connectTimeUsecMeta,
+          connectTimeUsec.isAcceptableOrUnknown(
+              data['connect_time_usec']!, _connectTimeUsecMeta));
+    } else if (isInserting) {
+      context.missing(_connectTimeUsecMeta);
+    }
+    if (data.containsKey('disconnect_time_usec')) {
+      context.handle(
+          _disconnectTimeUsecMeta,
+          disconnectTimeUsec.isAcceptableOrUnknown(
+              data['disconnect_time_usec']!, _disconnectTimeUsecMeta));
+    } else if (isInserting) {
+      context.missing(_disconnectTimeUsecMeta);
+    }
+    if (data.containsKey('disconnect_reason')) {
+      context.handle(
+          _disconnectReasonMeta,
+          disconnectReason.isAcceptableOrUnknown(
+              data['disconnect_reason']!, _disconnectReasonMeta));
+    } else if (isInserting) {
+      context.missing(_disconnectReasonMeta);
+    }
+    if (data.containsKey('duration_seconds')) {
+      context.handle(
+          _durationSecondsMeta,
+          durationSeconds.isAcceptableOrUnknown(
+              data['duration_seconds']!, _durationSecondsMeta));
+    } else if (isInserting) {
+      context.missing(_durationSecondsMeta);
+    }
+    if (data.containsKey('recording_id')) {
+      context.handle(
+          _recordingIdMeta,
+          recordingId.isAcceptableOrUnknown(
+              data['recording_id']!, _recordingIdMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {callId};
+  @override
+  CdrRecordData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return CdrRecordData(
+      callId: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}call_id'])!,
+      direction: $CdrTableTable.$converterdirection.fromSql(attachedDatabase
+          .typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}direction'])!),
+      status: $CdrTableTable.$converterstatus.fromSql(attachedDatabase
+          .typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}status'])!),
+      callee: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}callee'])!,
+      caller: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}caller'])!,
+      connectTimeUsec: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}connect_time_usec'])!,
+      disconnectTimeUsec: attachedDatabase.typeMapping.read(
+          DriftSqlType.int, data['${effectivePrefix}disconnect_time_usec'])!,
+      disconnectReason: attachedDatabase.typeMapping.read(
+          DriftSqlType.string, data['${effectivePrefix}disconnect_reason'])!,
+      durationSeconds: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}duration_seconds'])!,
+      recordingId: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}recording_id']),
+    );
+  }
+
+  @override
+  $CdrTableTable createAlias(String alias) {
+    return $CdrTableTable(attachedDatabase, alias);
+  }
+
+  static JsonTypeConverter2<CallDirectionData, String, String>
+      $converterdirection =
+      const EnumNameConverter<CallDirectionData>(CallDirectionData.values);
+  static JsonTypeConverter2<CdrStatusData, String, String> $converterstatus =
+      const EnumNameConverter<CdrStatusData>(CdrStatusData.values);
+}
+
+class CdrRecordData extends DataClass implements Insertable<CdrRecordData> {
+  final String callId;
+  final CallDirectionData direction;
+  final CdrStatusData status;
+  final String callee;
+  final String caller;
+  final int connectTimeUsec;
+  final int disconnectTimeUsec;
+  final String disconnectReason;
+  final int durationSeconds;
+  final String? recordingId;
+  const CdrRecordData(
+      {required this.callId,
+      required this.direction,
+      required this.status,
+      required this.callee,
+      required this.caller,
+      required this.connectTimeUsec,
+      required this.disconnectTimeUsec,
+      required this.disconnectReason,
+      required this.durationSeconds,
+      this.recordingId});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['call_id'] = Variable<String>(callId);
+    {
+      map['direction'] =
+          Variable<String>($CdrTableTable.$converterdirection.toSql(direction));
+    }
+    {
+      map['status'] =
+          Variable<String>($CdrTableTable.$converterstatus.toSql(status));
+    }
+    map['callee'] = Variable<String>(callee);
+    map['caller'] = Variable<String>(caller);
+    map['connect_time_usec'] = Variable<int>(connectTimeUsec);
+    map['disconnect_time_usec'] = Variable<int>(disconnectTimeUsec);
+    map['disconnect_reason'] = Variable<String>(disconnectReason);
+    map['duration_seconds'] = Variable<int>(durationSeconds);
+    if (!nullToAbsent || recordingId != null) {
+      map['recording_id'] = Variable<String>(recordingId);
+    }
+    return map;
+  }
+
+  CdrRecordDataCompanion toCompanion(bool nullToAbsent) {
+    return CdrRecordDataCompanion(
+      callId: Value(callId),
+      direction: Value(direction),
+      status: Value(status),
+      callee: Value(callee),
+      caller: Value(caller),
+      connectTimeUsec: Value(connectTimeUsec),
+      disconnectTimeUsec: Value(disconnectTimeUsec),
+      disconnectReason: Value(disconnectReason),
+      durationSeconds: Value(durationSeconds),
+      recordingId: recordingId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(recordingId),
+    );
+  }
+
+  factory CdrRecordData.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return CdrRecordData(
+      callId: serializer.fromJson<String>(json['callId']),
+      direction: $CdrTableTable.$converterdirection
+          .fromJson(serializer.fromJson<String>(json['direction'])),
+      status: $CdrTableTable.$converterstatus
+          .fromJson(serializer.fromJson<String>(json['status'])),
+      callee: serializer.fromJson<String>(json['callee']),
+      caller: serializer.fromJson<String>(json['caller']),
+      connectTimeUsec: serializer.fromJson<int>(json['connectTimeUsec']),
+      disconnectTimeUsec: serializer.fromJson<int>(json['disconnectTimeUsec']),
+      disconnectReason: serializer.fromJson<String>(json['disconnectReason']),
+      durationSeconds: serializer.fromJson<int>(json['durationSeconds']),
+      recordingId: serializer.fromJson<String?>(json['recordingId']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'callId': serializer.toJson<String>(callId),
+      'direction': serializer
+          .toJson<String>($CdrTableTable.$converterdirection.toJson(direction)),
+      'status': serializer
+          .toJson<String>($CdrTableTable.$converterstatus.toJson(status)),
+      'callee': serializer.toJson<String>(callee),
+      'caller': serializer.toJson<String>(caller),
+      'connectTimeUsec': serializer.toJson<int>(connectTimeUsec),
+      'disconnectTimeUsec': serializer.toJson<int>(disconnectTimeUsec),
+      'disconnectReason': serializer.toJson<String>(disconnectReason),
+      'durationSeconds': serializer.toJson<int>(durationSeconds),
+      'recordingId': serializer.toJson<String?>(recordingId),
+    };
+  }
+
+  CdrRecordData copyWith(
+          {String? callId,
+          CallDirectionData? direction,
+          CdrStatusData? status,
+          String? callee,
+          String? caller,
+          int? connectTimeUsec,
+          int? disconnectTimeUsec,
+          String? disconnectReason,
+          int? durationSeconds,
+          Value<String?> recordingId = const Value.absent()}) =>
+      CdrRecordData(
+        callId: callId ?? this.callId,
+        direction: direction ?? this.direction,
+        status: status ?? this.status,
+        callee: callee ?? this.callee,
+        caller: caller ?? this.caller,
+        connectTimeUsec: connectTimeUsec ?? this.connectTimeUsec,
+        disconnectTimeUsec: disconnectTimeUsec ?? this.disconnectTimeUsec,
+        disconnectReason: disconnectReason ?? this.disconnectReason,
+        durationSeconds: durationSeconds ?? this.durationSeconds,
+        recordingId: recordingId.present ? recordingId.value : this.recordingId,
+      );
+  CdrRecordData copyWithCompanion(CdrRecordDataCompanion data) {
+    return CdrRecordData(
+      callId: data.callId.present ? data.callId.value : this.callId,
+      direction: data.direction.present ? data.direction.value : this.direction,
+      status: data.status.present ? data.status.value : this.status,
+      callee: data.callee.present ? data.callee.value : this.callee,
+      caller: data.caller.present ? data.caller.value : this.caller,
+      connectTimeUsec: data.connectTimeUsec.present
+          ? data.connectTimeUsec.value
+          : this.connectTimeUsec,
+      disconnectTimeUsec: data.disconnectTimeUsec.present
+          ? data.disconnectTimeUsec.value
+          : this.disconnectTimeUsec,
+      disconnectReason: data.disconnectReason.present
+          ? data.disconnectReason.value
+          : this.disconnectReason,
+      durationSeconds: data.durationSeconds.present
+          ? data.durationSeconds.value
+          : this.durationSeconds,
+      recordingId:
+          data.recordingId.present ? data.recordingId.value : this.recordingId,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('CdrRecordData(')
+          ..write('callId: $callId, ')
+          ..write('direction: $direction, ')
+          ..write('status: $status, ')
+          ..write('callee: $callee, ')
+          ..write('caller: $caller, ')
+          ..write('connectTimeUsec: $connectTimeUsec, ')
+          ..write('disconnectTimeUsec: $disconnectTimeUsec, ')
+          ..write('disconnectReason: $disconnectReason, ')
+          ..write('durationSeconds: $durationSeconds, ')
+          ..write('recordingId: $recordingId')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      callId,
+      direction,
+      status,
+      callee,
+      caller,
+      connectTimeUsec,
+      disconnectTimeUsec,
+      disconnectReason,
+      durationSeconds,
+      recordingId);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is CdrRecordData &&
+          other.callId == this.callId &&
+          other.direction == this.direction &&
+          other.status == this.status &&
+          other.callee == this.callee &&
+          other.caller == this.caller &&
+          other.connectTimeUsec == this.connectTimeUsec &&
+          other.disconnectTimeUsec == this.disconnectTimeUsec &&
+          other.disconnectReason == this.disconnectReason &&
+          other.durationSeconds == this.durationSeconds &&
+          other.recordingId == this.recordingId);
+}
+
+class CdrRecordDataCompanion extends UpdateCompanion<CdrRecordData> {
+  final Value<String> callId;
+  final Value<CallDirectionData> direction;
+  final Value<CdrStatusData> status;
+  final Value<String> callee;
+  final Value<String> caller;
+  final Value<int> connectTimeUsec;
+  final Value<int> disconnectTimeUsec;
+  final Value<String> disconnectReason;
+  final Value<int> durationSeconds;
+  final Value<String?> recordingId;
+  final Value<int> rowid;
+  const CdrRecordDataCompanion({
+    this.callId = const Value.absent(),
+    this.direction = const Value.absent(),
+    this.status = const Value.absent(),
+    this.callee = const Value.absent(),
+    this.caller = const Value.absent(),
+    this.connectTimeUsec = const Value.absent(),
+    this.disconnectTimeUsec = const Value.absent(),
+    this.disconnectReason = const Value.absent(),
+    this.durationSeconds = const Value.absent(),
+    this.recordingId = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  CdrRecordDataCompanion.insert({
+    required String callId,
+    required CallDirectionData direction,
+    required CdrStatusData status,
+    required String callee,
+    required String caller,
+    required int connectTimeUsec,
+    required int disconnectTimeUsec,
+    required String disconnectReason,
+    required int durationSeconds,
+    this.recordingId = const Value.absent(),
+    this.rowid = const Value.absent(),
+  })  : callId = Value(callId),
+        direction = Value(direction),
+        status = Value(status),
+        callee = Value(callee),
+        caller = Value(caller),
+        connectTimeUsec = Value(connectTimeUsec),
+        disconnectTimeUsec = Value(disconnectTimeUsec),
+        disconnectReason = Value(disconnectReason),
+        durationSeconds = Value(durationSeconds);
+  static Insertable<CdrRecordData> custom({
+    Expression<String>? callId,
+    Expression<String>? direction,
+    Expression<String>? status,
+    Expression<String>? callee,
+    Expression<String>? caller,
+    Expression<int>? connectTimeUsec,
+    Expression<int>? disconnectTimeUsec,
+    Expression<String>? disconnectReason,
+    Expression<int>? durationSeconds,
+    Expression<String>? recordingId,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (callId != null) 'call_id': callId,
+      if (direction != null) 'direction': direction,
+      if (status != null) 'status': status,
+      if (callee != null) 'callee': callee,
+      if (caller != null) 'caller': caller,
+      if (connectTimeUsec != null) 'connect_time_usec': connectTimeUsec,
+      if (disconnectTimeUsec != null)
+        'disconnect_time_usec': disconnectTimeUsec,
+      if (disconnectReason != null) 'disconnect_reason': disconnectReason,
+      if (durationSeconds != null) 'duration_seconds': durationSeconds,
+      if (recordingId != null) 'recording_id': recordingId,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  CdrRecordDataCompanion copyWith(
+      {Value<String>? callId,
+      Value<CallDirectionData>? direction,
+      Value<CdrStatusData>? status,
+      Value<String>? callee,
+      Value<String>? caller,
+      Value<int>? connectTimeUsec,
+      Value<int>? disconnectTimeUsec,
+      Value<String>? disconnectReason,
+      Value<int>? durationSeconds,
+      Value<String?>? recordingId,
+      Value<int>? rowid}) {
+    return CdrRecordDataCompanion(
+      callId: callId ?? this.callId,
+      direction: direction ?? this.direction,
+      status: status ?? this.status,
+      callee: callee ?? this.callee,
+      caller: caller ?? this.caller,
+      connectTimeUsec: connectTimeUsec ?? this.connectTimeUsec,
+      disconnectTimeUsec: disconnectTimeUsec ?? this.disconnectTimeUsec,
+      disconnectReason: disconnectReason ?? this.disconnectReason,
+      durationSeconds: durationSeconds ?? this.durationSeconds,
+      recordingId: recordingId ?? this.recordingId,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (callId.present) {
+      map['call_id'] = Variable<String>(callId.value);
+    }
+    if (direction.present) {
+      map['direction'] = Variable<String>(
+          $CdrTableTable.$converterdirection.toSql(direction.value));
+    }
+    if (status.present) {
+      map['status'] =
+          Variable<String>($CdrTableTable.$converterstatus.toSql(status.value));
+    }
+    if (callee.present) {
+      map['callee'] = Variable<String>(callee.value);
+    }
+    if (caller.present) {
+      map['caller'] = Variable<String>(caller.value);
+    }
+    if (connectTimeUsec.present) {
+      map['connect_time_usec'] = Variable<int>(connectTimeUsec.value);
+    }
+    if (disconnectTimeUsec.present) {
+      map['disconnect_time_usec'] = Variable<int>(disconnectTimeUsec.value);
+    }
+    if (disconnectReason.present) {
+      map['disconnect_reason'] = Variable<String>(disconnectReason.value);
+    }
+    if (durationSeconds.present) {
+      map['duration_seconds'] = Variable<int>(durationSeconds.value);
+    }
+    if (recordingId.present) {
+      map['recording_id'] = Variable<String>(recordingId.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('CdrRecordDataCompanion(')
+          ..write('callId: $callId, ')
+          ..write('direction: $direction, ')
+          ..write('status: $status, ')
+          ..write('callee: $callee, ')
+          ..write('caller: $caller, ')
+          ..write('connectTimeUsec: $connectTimeUsec, ')
+          ..write('disconnectTimeUsec: $disconnectTimeUsec, ')
+          ..write('disconnectReason: $disconnectReason, ')
+          ..write('durationSeconds: $durationSeconds, ')
+          ..write('recordingId: $recordingId, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -9040,6 +9555,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $SystemNotificationsOutboxTableTable
       systemNotificationsOutboxTable =
       $SystemNotificationsOutboxTableTable(this);
+  late final $CdrTableTable cdrTable = $CdrTableTable(this);
   late final ContactsDao contactsDao = ContactsDao(this as AppDatabase);
   late final ContactPhonesDao contactPhonesDao =
       ContactPhonesDao(this as AppDatabase);
@@ -9055,6 +9571,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final VoicemailDao voicemailDao = VoicemailDao(this as AppDatabase);
   late final SystemNotificationsDao systemNotificationsDao =
       SystemNotificationsDao(this as AppDatabase);
+  late final CdrsDao cdrsDao = CdrsDao(this as AppDatabase);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -9085,7 +9602,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
         activeMessageNotificationsTable,
         voicemailTable,
         systemNotificationsTable,
-        systemNotificationsOutboxTable
+        systemNotificationsOutboxTable,
+        cdrTable
       ];
   @override
   StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules(
@@ -10232,7 +10750,7 @@ final class $$ChatsTableTableReferences
   $$ChatMembersTableTableProcessedTableManager get chatMembersTableRefs {
     final manager =
         $$ChatMembersTableTableTableManager($_db, $_db.chatMembersTable)
-            .filter((f) => f.chatId.id($_item.id));
+            .filter((f) => f.chatId.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache =
         $_typedResult.readTableOrNull(_chatMembersTableRefsTable($_db));
@@ -10249,7 +10767,7 @@ final class $$ChatsTableTableReferences
   $$ChatMessagesTableTableProcessedTableManager get chatMessagesTableRefs {
     final manager =
         $$ChatMessagesTableTableTableManager($_db, $_db.chatMessagesTable)
-            .filter((f) => f.chatId.id($_item.id));
+            .filter((f) => f.chatId.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache =
         $_typedResult.readTableOrNull(_chatMessagesTableRefsTable($_db));
@@ -10268,7 +10786,7 @@ final class $$ChatsTableTableReferences
       get chatMessageSyncCursorTableRefs {
     final manager = $$ChatMessageSyncCursorTableTableTableManager(
             $_db, $_db.chatMessageSyncCursorTable)
-        .filter((f) => f.chatId.id($_item.id));
+        .filter((f) => f.chatId.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache = $_typedResult
         .readTableOrNull(_chatMessageSyncCursorTableRefsTable($_db));
@@ -10287,7 +10805,7 @@ final class $$ChatsTableTableReferences
       get chatMessageReadCursorTableRefs {
     final manager = $$ChatMessageReadCursorTableTableTableManager(
             $_db, $_db.chatMessageReadCursorTable)
-        .filter((f) => f.chatId.id($_item.id));
+        .filter((f) => f.chatId.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache = $_typedResult
         .readTableOrNull(_chatMessageReadCursorTableRefsTable($_db));
@@ -10306,7 +10824,7 @@ final class $$ChatsTableTableReferences
       get chatOutboxMessageTableRefs {
     final manager = $$ChatOutboxMessageTableTableTableManager(
             $_db, $_db.chatOutboxMessageTable)
-        .filter((f) => f.chatId.id($_item.id));
+        .filter((f) => f.chatId.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache =
         $_typedResult.readTableOrNull(_chatOutboxMessageTableRefsTable($_db));
@@ -10325,7 +10843,7 @@ final class $$ChatsTableTableReferences
       get chatOutboxMessageEditTableRefs {
     final manager = $$ChatOutboxMessageEditTableTableTableManager(
             $_db, $_db.chatOutboxMessageEditTable)
-        .filter((f) => f.chatId.id($_item.id));
+        .filter((f) => f.chatId.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache = $_typedResult
         .readTableOrNull(_chatOutboxMessageEditTableRefsTable($_db));
@@ -10344,7 +10862,7 @@ final class $$ChatsTableTableReferences
       get chatOutboxMessageDeleteTableRefs {
     final manager = $$ChatOutboxMessageDeleteTableTableTableManager(
             $_db, $_db.chatOutboxMessageDeleteTable)
-        .filter((f) => f.chatId.id($_item.id));
+        .filter((f) => f.chatId.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache = $_typedResult
         .readTableOrNull(_chatOutboxMessageDeleteTableRefsTable($_db));
@@ -10363,7 +10881,7 @@ final class $$ChatsTableTableReferences
       get chatOutboxReadCursorsTableRefs {
     final manager = $$ChatOutboxReadCursorsTableTableTableManager(
             $_db, $_db.chatOutboxReadCursorsTable)
-        .filter((f) => f.chatId.id($_item.id));
+        .filter((f) => f.chatId.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache = $_typedResult
         .readTableOrNull(_chatOutboxReadCursorsTableRefsTable($_db));
@@ -10918,7 +11436,8 @@ class $$ChatsTableTableTableManager extends RootTableManager<
               getPrefetchedDataCallback: (items) async {
                 return [
                   if (chatMembersTableRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<ChatData, $ChatsTableTable,
+                            ChatMemberData>(
                         currentTable: table,
                         referencedTable: $$ChatsTableTableReferences
                             ._chatMembersTableRefsTable(db),
@@ -10930,7 +11449,8 @@ class $$ChatsTableTableTableManager extends RootTableManager<
                             referencedItems.where((e) => e.chatId == item.id),
                         typedResults: items),
                   if (chatMessagesTableRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<ChatData, $ChatsTableTable,
+                            ChatMessageData>(
                         currentTable: table,
                         referencedTable: $$ChatsTableTableReferences
                             ._chatMessagesTableRefsTable(db),
@@ -10942,7 +11462,8 @@ class $$ChatsTableTableTableManager extends RootTableManager<
                             referencedItems.where((e) => e.chatId == item.id),
                         typedResults: items),
                   if (chatMessageSyncCursorTableRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<ChatData, $ChatsTableTable,
+                            ChatMessageSyncCursorData>(
                         currentTable: table,
                         referencedTable: $$ChatsTableTableReferences
                             ._chatMessageSyncCursorTableRefsTable(db),
@@ -10954,7 +11475,8 @@ class $$ChatsTableTableTableManager extends RootTableManager<
                             referencedItems.where((e) => e.chatId == item.id),
                         typedResults: items),
                   if (chatMessageReadCursorTableRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<ChatData, $ChatsTableTable,
+                            ChatMessageReadCursorData>(
                         currentTable: table,
                         referencedTable: $$ChatsTableTableReferences
                             ._chatMessageReadCursorTableRefsTable(db),
@@ -10966,7 +11488,7 @@ class $$ChatsTableTableTableManager extends RootTableManager<
                             referencedItems.where((e) => e.chatId == item.id),
                         typedResults: items),
                   if (chatOutboxMessageTableRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<ChatData, $ChatsTableTable, ChatOutboxMessageData>(
                         currentTable: table,
                         referencedTable: $$ChatsTableTableReferences
                             ._chatOutboxMessageTableRefsTable(db),
@@ -10978,7 +11500,8 @@ class $$ChatsTableTableTableManager extends RootTableManager<
                             referencedItems.where((e) => e.chatId == item.id),
                         typedResults: items),
                   if (chatOutboxMessageEditTableRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<ChatData, $ChatsTableTable,
+                            ChatOutboxMessageEditData>(
                         currentTable: table,
                         referencedTable: $$ChatsTableTableReferences
                             ._chatOutboxMessageEditTableRefsTable(db),
@@ -10990,7 +11513,8 @@ class $$ChatsTableTableTableManager extends RootTableManager<
                             referencedItems.where((e) => e.chatId == item.id),
                         typedResults: items),
                   if (chatOutboxMessageDeleteTableRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<ChatData, $ChatsTableTable,
+                            ChatOutboxMessageDeleteData>(
                         currentTable: table,
                         referencedTable: $$ChatsTableTableReferences
                             ._chatOutboxMessageDeleteTableRefsTable(db),
@@ -11002,7 +11526,8 @@ class $$ChatsTableTableTableManager extends RootTableManager<
                             referencedItems.where((e) => e.chatId == item.id),
                         typedResults: items),
                   if (chatOutboxReadCursorsTableRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<ChatData, $ChatsTableTable,
+                            ChatOutboxReadCursorData>(
                         currentTable: table,
                         referencedTable: $$ChatsTableTableReferences
                             ._chatOutboxReadCursorsTableRefsTable(db),
@@ -11064,10 +11589,11 @@ final class $$ChatMembersTableTableReferences extends BaseReferences<
       db.chatsTable.createAlias(
           $_aliasNameGenerator(db.chatMembersTable.chatId, db.chatsTable.id));
 
-  $$ChatsTableTableProcessedTableManager? get chatId {
-    if ($_item.chatId == null) return null;
+  $$ChatsTableTableProcessedTableManager get chatId {
+    final $_column = $_itemColumn<int>('chat_id')!;
+
     final manager = $$ChatsTableTableTableManager($_db, $_db.chatsTable)
-        .filter((f) => f.id($_item.chatId!));
+        .filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_chatIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -11342,10 +11868,11 @@ final class $$ChatMessagesTableTableReferences extends BaseReferences<
       db.chatsTable.createAlias(
           $_aliasNameGenerator(db.chatMessagesTable.chatId, db.chatsTable.id));
 
-  $$ChatsTableTableProcessedTableManager? get chatId {
-    if ($_item.chatId == null) return null;
+  $$ChatsTableTableProcessedTableManager get chatId {
+    final $_column = $_itemColumn<int>('chat_id')!;
+
     final manager = $$ChatsTableTableTableManager($_db, $_db.chatsTable)
-        .filter((f) => f.id($_item.chatId!));
+        .filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_chatIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -11713,10 +12240,11 @@ final class $$ChatMessageSyncCursorTableTableReferences extends BaseReferences<
       db.chatsTable.createAlias($_aliasNameGenerator(
           db.chatMessageSyncCursorTable.chatId, db.chatsTable.id));
 
-  $$ChatsTableTableProcessedTableManager? get chatId {
-    if ($_item.chatId == null) return null;
+  $$ChatsTableTableProcessedTableManager get chatId {
+    final $_column = $_itemColumn<int>('chat_id')!;
+
     final manager = $$ChatsTableTableTableManager($_db, $_db.chatsTable)
-        .filter((f) => f.id($_item.chatId!));
+        .filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_chatIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -11975,10 +12503,11 @@ final class $$ChatMessageReadCursorTableTableReferences extends BaseReferences<
       db.chatsTable.createAlias($_aliasNameGenerator(
           db.chatMessageReadCursorTable.chatId, db.chatsTable.id));
 
-  $$ChatsTableTableProcessedTableManager? get chatId {
-    if ($_item.chatId == null) return null;
+  $$ChatsTableTableProcessedTableManager get chatId {
+    final $_column = $_itemColumn<int>('chat_id')!;
+
     final manager = $$ChatsTableTableTableManager($_db, $_db.chatsTable)
-        .filter((f) => f.id($_item.chatId!));
+        .filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_chatIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -12242,9 +12771,10 @@ final class $$ChatOutboxMessageTableTableReferences extends BaseReferences<
           db.chatOutboxMessageTable.chatId, db.chatsTable.id));
 
   $$ChatsTableTableProcessedTableManager? get chatId {
-    if ($_item.chatId == null) return null;
+    final $_column = $_itemColumn<int>('chat_id');
+    if ($_column == null) return null;
     final manager = $$ChatsTableTableTableManager($_db, $_db.chatsTable)
-        .filter((f) => f.id($_item.chatId!));
+        .filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_chatIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -12564,10 +13094,11 @@ final class $$ChatOutboxMessageEditTableTableReferences extends BaseReferences<
       db.chatsTable.createAlias($_aliasNameGenerator(
           db.chatOutboxMessageEditTable.chatId, db.chatsTable.id));
 
-  $$ChatsTableTableProcessedTableManager? get chatId {
-    if ($_item.chatId == null) return null;
+  $$ChatsTableTableProcessedTableManager get chatId {
+    final $_column = $_itemColumn<int>('chat_id')!;
+
     final manager = $$ChatsTableTableTableManager($_db, $_db.chatsTable)
-        .filter((f) => f.id($_item.chatId!));
+        .filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_chatIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -12843,10 +13374,11 @@ final class $$ChatOutboxMessageDeleteTableTableReferences
       db.chatsTable.createAlias($_aliasNameGenerator(
           db.chatOutboxMessageDeleteTable.chatId, db.chatsTable.id));
 
-  $$ChatsTableTableProcessedTableManager? get chatId {
-    if ($_item.chatId == null) return null;
+  $$ChatsTableTableProcessedTableManager get chatId {
+    final $_column = $_itemColumn<int>('chat_id')!;
+
     final manager = $$ChatsTableTableTableManager($_db, $_db.chatsTable)
-        .filter((f) => f.id($_item.chatId!));
+        .filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_chatIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -13110,10 +13642,11 @@ final class $$ChatOutboxReadCursorsTableTableReferences extends BaseReferences<
       db.chatsTable.createAlias($_aliasNameGenerator(
           db.chatOutboxReadCursorsTable.chatId, db.chatsTable.id));
 
-  $$ChatsTableTableProcessedTableManager? get chatId {
-    if ($_item.chatId == null) return null;
+  $$ChatsTableTableProcessedTableManager get chatId {
+    final $_column = $_itemColumn<int>('chat_id')!;
+
     final manager = $$ChatsTableTableTableManager($_db, $_db.chatsTable)
-        .filter((f) => f.id($_item.chatId!));
+        .filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_chatIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -13365,9 +13898,9 @@ final class $$SmsConversationsTableTableReferences extends BaseReferences<
                   db.smsMessagesTable.conversationId));
 
   $$SmsMessagesTableTableProcessedTableManager get smsMessagesTableRefs {
-    final manager =
-        $$SmsMessagesTableTableTableManager($_db, $_db.smsMessagesTable)
-            .filter((f) => f.conversationId.id($_item.id));
+    final manager = $$SmsMessagesTableTableTableManager(
+            $_db, $_db.smsMessagesTable)
+        .filter((f) => f.conversationId.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache =
         $_typedResult.readTableOrNull(_smsMessagesTableRefsTable($_db));
@@ -13386,7 +13919,7 @@ final class $$SmsConversationsTableTableReferences extends BaseReferences<
       get smsMessageSyncCursorTableRefs {
     final manager = $$SmsMessageSyncCursorTableTableTableManager(
             $_db, $_db.smsMessageSyncCursorTable)
-        .filter((f) => f.conversationId.id($_item.id));
+        .filter((f) => f.conversationId.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache = $_typedResult
         .readTableOrNull(_smsMessageSyncCursorTableRefsTable($_db));
@@ -13405,7 +13938,7 @@ final class $$SmsConversationsTableTableReferences extends BaseReferences<
       get smsMessageReadCursorTableRefs {
     final manager = $$SmsMessageReadCursorTableTableTableManager(
             $_db, $_db.smsMessageReadCursorTable)
-        .filter((f) => f.conversationId.id($_item.id));
+        .filter((f) => f.conversationId.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache = $_typedResult
         .readTableOrNull(_smsMessageReadCursorTableRefsTable($_db));
@@ -13424,7 +13957,7 @@ final class $$SmsConversationsTableTableReferences extends BaseReferences<
       get smsOutboxMessagesTableRefs {
     final manager = $$SmsOutboxMessagesTableTableTableManager(
             $_db, $_db.smsOutboxMessagesTable)
-        .filter((f) => f.conversationId.id($_item.id));
+        .filter((f) => f.conversationId.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache =
         $_typedResult.readTableOrNull(_smsOutboxMessagesTableRefsTable($_db));
@@ -13443,7 +13976,7 @@ final class $$SmsConversationsTableTableReferences extends BaseReferences<
       get smsOutboxMessageDeleteTableRefs {
     final manager = $$SmsOutboxMessageDeleteTableTableTableManager(
             $_db, $_db.smsOutboxMessageDeleteTable)
-        .filter((f) => f.conversationId.id($_item.id));
+        .filter((f) => f.conversationId.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache = $_typedResult
         .readTableOrNull(_smsOutboxMessageDeleteTableRefsTable($_db));
@@ -13462,7 +13995,7 @@ final class $$SmsConversationsTableTableReferences extends BaseReferences<
       get smsOutboxReadCursorsTableRefs {
     final manager = $$SmsOutboxReadCursorsTableTableTableManager(
             $_db, $_db.smsOutboxReadCursorsTable)
-        .filter((f) => f.conversationId.id($_item.id));
+        .filter((f) => f.conversationId.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache = $_typedResult
         .readTableOrNull(_smsOutboxReadCursorsTableRefsTable($_db));
@@ -13922,7 +14455,8 @@ class $$SmsConversationsTableTableTableManager extends RootTableManager<
               getPrefetchedDataCallback: (items) async {
                 return [
                   if (smsMessagesTableRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<SmsConversationData,
+                            $SmsConversationsTableTable, SmsMessageData>(
                         currentTable: table,
                         referencedTable: $$SmsConversationsTableTableReferences
                             ._smsMessagesTableRefsTable(db),
@@ -13935,7 +14469,10 @@ class $$SmsConversationsTableTableTableManager extends RootTableManager<
                                 .where((e) => e.conversationId == item.id),
                         typedResults: items),
                   if (smsMessageSyncCursorTableRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<
+                            SmsConversationData,
+                            $SmsConversationsTableTable,
+                            SmsMessageSyncCursorData>(
                         currentTable: table,
                         referencedTable: $$SmsConversationsTableTableReferences
                             ._smsMessageSyncCursorTableRefsTable(db),
@@ -13948,7 +14485,10 @@ class $$SmsConversationsTableTableTableManager extends RootTableManager<
                                 .where((e) => e.conversationId == item.id),
                         typedResults: items),
                   if (smsMessageReadCursorTableRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<
+                            SmsConversationData,
+                            $SmsConversationsTableTable,
+                            SmsMessageReadCursorData>(
                         currentTable: table,
                         referencedTable: $$SmsConversationsTableTableReferences
                             ._smsMessageReadCursorTableRefsTable(db),
@@ -13961,7 +14501,8 @@ class $$SmsConversationsTableTableTableManager extends RootTableManager<
                                 .where((e) => e.conversationId == item.id),
                         typedResults: items),
                   if (smsOutboxMessagesTableRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<SmsConversationData,
+                            $SmsConversationsTableTable, SmsOutboxMessageData>(
                         currentTable: table,
                         referencedTable: $$SmsConversationsTableTableReferences
                             ._smsOutboxMessagesTableRefsTable(db),
@@ -13974,7 +14515,10 @@ class $$SmsConversationsTableTableTableManager extends RootTableManager<
                                 .where((e) => e.conversationId == item.id),
                         typedResults: items),
                   if (smsOutboxMessageDeleteTableRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<
+                            SmsConversationData,
+                            $SmsConversationsTableTable,
+                            SmsOutboxMessageDeleteData>(
                         currentTable: table,
                         referencedTable: $$SmsConversationsTableTableReferences
                             ._smsOutboxMessageDeleteTableRefsTable(db),
@@ -13987,7 +14531,10 @@ class $$SmsConversationsTableTableTableManager extends RootTableManager<
                                 .where((e) => e.conversationId == item.id),
                         typedResults: items),
                   if (smsOutboxReadCursorsTableRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<
+                            SmsConversationData,
+                            $SmsConversationsTableTable,
+                            SmsOutboxReadCursorData>(
                         currentTable: table,
                         referencedTable: $$SmsConversationsTableTableReferences
                             ._smsOutboxReadCursorsTableRefsTable(db),
@@ -14063,11 +14610,12 @@ final class $$SmsMessagesTableTableReferences extends BaseReferences<
       db.smsConversationsTable.createAlias($_aliasNameGenerator(
           db.smsMessagesTable.conversationId, db.smsConversationsTable.id));
 
-  $$SmsConversationsTableTableProcessedTableManager? get conversationId {
-    if ($_item.conversationId == null) return null;
+  $$SmsConversationsTableTableProcessedTableManager get conversationId {
+    final $_column = $_itemColumn<int>('conversation_id')!;
+
     final manager = $$SmsConversationsTableTableTableManager(
             $_db, $_db.smsConversationsTable)
-        .filter((f) => f.id($_item.conversationId!));
+        .filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_conversationIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -14429,11 +14977,12 @@ final class $$SmsMessageSyncCursorTableTableReferences extends BaseReferences<
           db.smsMessageSyncCursorTable.conversationId,
           db.smsConversationsTable.id));
 
-  $$SmsConversationsTableTableProcessedTableManager? get conversationId {
-    if ($_item.conversationId == null) return null;
+  $$SmsConversationsTableTableProcessedTableManager get conversationId {
+    final $_column = $_itemColumn<int>('conversation_id')!;
+
     final manager = $$SmsConversationsTableTableTableManager(
             $_db, $_db.smsConversationsTable)
-        .filter((f) => f.id($_item.conversationId!));
+        .filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_conversationIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -14690,11 +15239,12 @@ final class $$SmsMessageReadCursorTableTableReferences extends BaseReferences<
           db.smsMessageReadCursorTable.conversationId,
           db.smsConversationsTable.id));
 
-  $$SmsConversationsTableTableProcessedTableManager? get conversationId {
-    if ($_item.conversationId == null) return null;
+  $$SmsConversationsTableTableProcessedTableManager get conversationId {
+    final $_column = $_itemColumn<int>('conversation_id')!;
+
     final manager = $$SmsConversationsTableTableTableManager(
             $_db, $_db.smsConversationsTable)
-        .filter((f) => f.id($_item.conversationId!));
+        .filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_conversationIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -14956,10 +15506,11 @@ final class $$SmsOutboxMessagesTableTableReferences extends BaseReferences<
           db.smsConversationsTable.id));
 
   $$SmsConversationsTableTableProcessedTableManager? get conversationId {
-    if ($_item.conversationId == null) return null;
+    final $_column = $_itemColumn<int>('conversation_id');
+    if ($_column == null) return null;
     final manager = $$SmsConversationsTableTableTableManager(
             $_db, $_db.smsConversationsTable)
-        .filter((f) => f.id($_item.conversationId!));
+        .filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_conversationIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -15269,11 +15820,12 @@ final class $$SmsOutboxMessageDeleteTableTableReferences extends BaseReferences<
           db.smsOutboxMessageDeleteTable.conversationId,
           db.smsConversationsTable.id));
 
-  $$SmsConversationsTableTableProcessedTableManager? get conversationId {
-    if ($_item.conversationId == null) return null;
+  $$SmsConversationsTableTableProcessedTableManager get conversationId {
+    final $_column = $_itemColumn<int>('conversation_id')!;
+
     final manager = $$SmsConversationsTableTableTableManager(
             $_db, $_db.smsConversationsTable)
-        .filter((f) => f.id($_item.conversationId!));
+        .filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_conversationIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -15538,11 +16090,12 @@ final class $$SmsOutboxReadCursorsTableTableReferences extends BaseReferences<
           db.smsOutboxReadCursorsTable.conversationId,
           db.smsConversationsTable.id));
 
-  $$SmsConversationsTableTableProcessedTableManager? get conversationId {
-    if ($_item.conversationId == null) return null;
+  $$SmsConversationsTableTableProcessedTableManager get conversationId {
+    final $_column = $_itemColumn<int>('conversation_id')!;
+
     final manager = $$SmsConversationsTableTableTableManager(
             $_db, $_db.smsConversationsTable)
-        .filter((f) => f.id($_item.conversationId!));
+        .filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_conversationIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -16358,7 +16911,7 @@ final class $$SystemNotificationsTableTableReferences extends BaseReferences<
       get systemNotificationsOutboxTableRefs {
     final manager = $$SystemNotificationsOutboxTableTableTableManager(
             $_db, $_db.systemNotificationsOutboxTable)
-        .filter((f) => f.notificationId.id($_item.id));
+        .filter((f) => f.notificationId.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache = $_typedResult
         .readTableOrNull(_systemNotificationsOutboxTableRefsTable($_db));
@@ -16595,7 +17148,10 @@ class $$SystemNotificationsTableTableTableManager extends RootTableManager<
               getPrefetchedDataCallback: (items) async {
                 return [
                   if (systemNotificationsOutboxTableRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<
+                            SystemNotificationData,
+                            $SystemNotificationsTableTable,
+                            SystemNotificationOutboxEntryData>(
                         currentTable: table,
                         referencedTable:
                             $$SystemNotificationsTableTableReferences
@@ -16657,11 +17213,12 @@ final class $$SystemNotificationsOutboxTableTableReferences
           db.systemNotificationsOutboxTable.notificationId,
           db.systemNotificationsTable.id));
 
-  $$SystemNotificationsTableTableProcessedTableManager? get notificationId {
-    if ($_item.notificationId == null) return null;
+  $$SystemNotificationsTableTableProcessedTableManager get notificationId {
+    final $_column = $_itemColumn<int>('notification_id')!;
+
     final manager = $$SystemNotificationsTableTableTableManager(
             $_db, $_db.systemNotificationsTable)
-        .filter((f) => f.id($_item.notificationId!));
+        .filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_notificationIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -16918,6 +17475,266 @@ typedef $$SystemNotificationsOutboxTableTableProcessedTableManager
         ),
         SystemNotificationOutboxEntryData,
         PrefetchHooks Function({bool notificationId})>;
+typedef $$CdrTableTableCreateCompanionBuilder = CdrRecordDataCompanion
+    Function({
+  required String callId,
+  required CallDirectionData direction,
+  required CdrStatusData status,
+  required String callee,
+  required String caller,
+  required int connectTimeUsec,
+  required int disconnectTimeUsec,
+  required String disconnectReason,
+  required int durationSeconds,
+  Value<String?> recordingId,
+  Value<int> rowid,
+});
+typedef $$CdrTableTableUpdateCompanionBuilder = CdrRecordDataCompanion
+    Function({
+  Value<String> callId,
+  Value<CallDirectionData> direction,
+  Value<CdrStatusData> status,
+  Value<String> callee,
+  Value<String> caller,
+  Value<int> connectTimeUsec,
+  Value<int> disconnectTimeUsec,
+  Value<String> disconnectReason,
+  Value<int> durationSeconds,
+  Value<String?> recordingId,
+  Value<int> rowid,
+});
+
+class $$CdrTableTableFilterComposer
+    extends Composer<_$AppDatabase, $CdrTableTable> {
+  $$CdrTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get callId => $composableBuilder(
+      column: $table.callId, builder: (column) => ColumnFilters(column));
+
+  ColumnWithTypeConverterFilters<CallDirectionData, CallDirectionData, String>
+      get direction => $composableBuilder(
+          column: $table.direction,
+          builder: (column) => ColumnWithTypeConverterFilters(column));
+
+  ColumnWithTypeConverterFilters<CdrStatusData, CdrStatusData, String>
+      get status => $composableBuilder(
+          column: $table.status,
+          builder: (column) => ColumnWithTypeConverterFilters(column));
+
+  ColumnFilters<String> get callee => $composableBuilder(
+      column: $table.callee, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get caller => $composableBuilder(
+      column: $table.caller, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get connectTimeUsec => $composableBuilder(
+      column: $table.connectTimeUsec,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get disconnectTimeUsec => $composableBuilder(
+      column: $table.disconnectTimeUsec,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get disconnectReason => $composableBuilder(
+      column: $table.disconnectReason,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get durationSeconds => $composableBuilder(
+      column: $table.durationSeconds,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get recordingId => $composableBuilder(
+      column: $table.recordingId, builder: (column) => ColumnFilters(column));
+}
+
+class $$CdrTableTableOrderingComposer
+    extends Composer<_$AppDatabase, $CdrTableTable> {
+  $$CdrTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get callId => $composableBuilder(
+      column: $table.callId, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get direction => $composableBuilder(
+      column: $table.direction, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get status => $composableBuilder(
+      column: $table.status, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get callee => $composableBuilder(
+      column: $table.callee, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get caller => $composableBuilder(
+      column: $table.caller, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get connectTimeUsec => $composableBuilder(
+      column: $table.connectTimeUsec,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get disconnectTimeUsec => $composableBuilder(
+      column: $table.disconnectTimeUsec,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get disconnectReason => $composableBuilder(
+      column: $table.disconnectReason,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get durationSeconds => $composableBuilder(
+      column: $table.durationSeconds,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get recordingId => $composableBuilder(
+      column: $table.recordingId, builder: (column) => ColumnOrderings(column));
+}
+
+class $$CdrTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $CdrTableTable> {
+  $$CdrTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get callId =>
+      $composableBuilder(column: $table.callId, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<CallDirectionData, String> get direction =>
+      $composableBuilder(column: $table.direction, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<CdrStatusData, String> get status =>
+      $composableBuilder(column: $table.status, builder: (column) => column);
+
+  GeneratedColumn<String> get callee =>
+      $composableBuilder(column: $table.callee, builder: (column) => column);
+
+  GeneratedColumn<String> get caller =>
+      $composableBuilder(column: $table.caller, builder: (column) => column);
+
+  GeneratedColumn<int> get connectTimeUsec => $composableBuilder(
+      column: $table.connectTimeUsec, builder: (column) => column);
+
+  GeneratedColumn<int> get disconnectTimeUsec => $composableBuilder(
+      column: $table.disconnectTimeUsec, builder: (column) => column);
+
+  GeneratedColumn<String> get disconnectReason => $composableBuilder(
+      column: $table.disconnectReason, builder: (column) => column);
+
+  GeneratedColumn<int> get durationSeconds => $composableBuilder(
+      column: $table.durationSeconds, builder: (column) => column);
+
+  GeneratedColumn<String> get recordingId => $composableBuilder(
+      column: $table.recordingId, builder: (column) => column);
+}
+
+class $$CdrTableTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $CdrTableTable,
+    CdrRecordData,
+    $$CdrTableTableFilterComposer,
+    $$CdrTableTableOrderingComposer,
+    $$CdrTableTableAnnotationComposer,
+    $$CdrTableTableCreateCompanionBuilder,
+    $$CdrTableTableUpdateCompanionBuilder,
+    (
+      CdrRecordData,
+      BaseReferences<_$AppDatabase, $CdrTableTable, CdrRecordData>
+    ),
+    CdrRecordData,
+    PrefetchHooks Function()> {
+  $$CdrTableTableTableManager(_$AppDatabase db, $CdrTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$CdrTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$CdrTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$CdrTableTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<String> callId = const Value.absent(),
+            Value<CallDirectionData> direction = const Value.absent(),
+            Value<CdrStatusData> status = const Value.absent(),
+            Value<String> callee = const Value.absent(),
+            Value<String> caller = const Value.absent(),
+            Value<int> connectTimeUsec = const Value.absent(),
+            Value<int> disconnectTimeUsec = const Value.absent(),
+            Value<String> disconnectReason = const Value.absent(),
+            Value<int> durationSeconds = const Value.absent(),
+            Value<String?> recordingId = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              CdrRecordDataCompanion(
+            callId: callId,
+            direction: direction,
+            status: status,
+            callee: callee,
+            caller: caller,
+            connectTimeUsec: connectTimeUsec,
+            disconnectTimeUsec: disconnectTimeUsec,
+            disconnectReason: disconnectReason,
+            durationSeconds: durationSeconds,
+            recordingId: recordingId,
+            rowid: rowid,
+          ),
+          createCompanionCallback: ({
+            required String callId,
+            required CallDirectionData direction,
+            required CdrStatusData status,
+            required String callee,
+            required String caller,
+            required int connectTimeUsec,
+            required int disconnectTimeUsec,
+            required String disconnectReason,
+            required int durationSeconds,
+            Value<String?> recordingId = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              CdrRecordDataCompanion.insert(
+            callId: callId,
+            direction: direction,
+            status: status,
+            callee: callee,
+            caller: caller,
+            connectTimeUsec: connectTimeUsec,
+            disconnectTimeUsec: disconnectTimeUsec,
+            disconnectReason: disconnectReason,
+            durationSeconds: durationSeconds,
+            recordingId: recordingId,
+            rowid: rowid,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$CdrTableTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $CdrTableTable,
+    CdrRecordData,
+    $$CdrTableTableFilterComposer,
+    $$CdrTableTableOrderingComposer,
+    $$CdrTableTableAnnotationComposer,
+    $$CdrTableTableCreateCompanionBuilder,
+    $$CdrTableTableUpdateCompanionBuilder,
+    (
+      CdrRecordData,
+      BaseReferences<_$AppDatabase, $CdrTableTable, CdrRecordData>
+    ),
+    CdrRecordData,
+    PrefetchHooks Function()>;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -16996,4 +17813,6 @@ class $AppDatabaseManager {
       get systemNotificationsOutboxTable =>
           $$SystemNotificationsOutboxTableTableTableManager(
               _db, _db.systemNotificationsOutboxTable);
+  $$CdrTableTableTableManager get cdrTable =>
+      $$CdrTableTableTableManager(_db, _db.cdrTable);
 }

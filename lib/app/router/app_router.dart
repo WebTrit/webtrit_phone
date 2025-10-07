@@ -171,6 +171,10 @@ class AppRouter extends RootStackRouter {
                           page: CallLogScreenPageRoute.page,
                           path: 'call_log',
                         ),
+                        AutoRoute(
+                          page: NumberCdrsScreenPageRoute.page,
+                          path: 'number_cdrs',
+                        ),
                       ],
                     ),
                     AutoRoute(
@@ -189,8 +193,35 @@ class AppRouter extends RootStackRouter {
                           page: CallLogScreenPageRoute.page,
                           path: 'call_log',
                         ),
+                        AutoRoute(
+                          page: NumberCdrsScreenPageRoute.page,
+                          path: 'number_cdrs',
+                        ),
                       ],
                     ),
+                    AutoRoute(
+                      page: RecentCdrsRouterPageRoute.page,
+                      path: MainFlavor.recentCdrs.name,
+                      children: [
+                        AutoRoute(
+                          page: RecentCdrsScreenPageRoute.page,
+                          path: '',
+                        ),
+                        AutoRoute(
+                          page: ContactScreenPageRoute.page,
+                          path: 'contact',
+                        ),
+                        AutoRoute(
+                          page: CallLogScreenPageRoute.page,
+                          path: 'call_log',
+                        ),
+                        AutoRoute(
+                          page: NumberCdrsScreenPageRoute.page,
+                          path: 'number_cdrs',
+                        ),
+                      ],
+                    ),
+
                     AutoRoute(
                       page: ContactsRouterPageRoute.page,
                       path: MainFlavor.contacts.name,
@@ -216,6 +247,10 @@ class AppRouter extends RootStackRouter {
                         AutoRoute(
                           page: CallLogScreenPageRoute.page,
                           path: 'call_log',
+                        ),
+                        AutoRoute(
+                          page: NumberCdrsScreenPageRoute.page,
+                          path: 'number_cdrs',
                         ),
                       ],
                     ),
@@ -422,6 +457,7 @@ class AppRouter extends RootStackRouter {
             switch (_mainInitialTab.flavor) {
               MainFlavor.favorites => const FavoritesRouterPageRoute(),
               MainFlavor.recents => const RecentsRouterPageRoute(),
+              MainFlavor.recentCdrs => const RecentCdrsRouterPageRoute(),
               MainFlavor.contacts => const ContactsRouterPageRoute(),
               MainFlavor.keypad => const KeypadScreenPageRoute(),
               MainFlavor.embedded => EmbeddedTabPageRoute(id: _mainInitialTab.toEmbedded!.id),

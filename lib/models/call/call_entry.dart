@@ -1,4 +1,4 @@
-import 'package:webtrit_phone/models/call_log_entry.dart';
+import 'package:webtrit_phone/models/call_direction.dart';
 
 abstract class CallEntry {
   String get callId;

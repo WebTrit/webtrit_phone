@@ -25,6 +25,7 @@ class ContactScreenPage extends StatelessWidget {
       videoEnabled: featureAccess.callFeature.callConfig.isVideoCallEnabled,
       chatsEnabled: featureAccess.messagingFeature.chatsPresent,
       smsEnabled: featureAccess.messagingFeature.smsPresent,
+      cdrsEnabled: featureAccess.bottomMenuFeature.isTabEnabled(MainFlavor.recentCdrs),
     );
     final provider = BlocProvider(
       create: (context) {
