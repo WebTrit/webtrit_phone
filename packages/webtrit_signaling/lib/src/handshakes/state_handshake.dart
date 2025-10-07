@@ -198,7 +198,7 @@ class StateHandshake extends Handshake {
     final userActiveCallsJson = json['user_active_calls'] as List<dynamic>? ?? <dynamic>[];
     final userActiveCalls = userActiveCallsJson.map((e) => UserActiveCall.fromJson(e)).toList();
 
-    final contactsPresenceInfoJson = json['contacts_presence_info'] as Map<String, dynamic>?;
+    final contactsPresenceInfoJson = json['presence_contacts_info'] as Map<String, dynamic>?;
     final contactsPresenceInfo = contactsPresenceInfoJson?.map((key, value) {
           final presenceInfoList = (value as List<dynamic>).map((e) => SignalingPresenceInfo.fromJson(e)).toList();
           return MapEntry(key, presenceInfoList);
