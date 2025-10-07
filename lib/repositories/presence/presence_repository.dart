@@ -108,7 +108,9 @@ class PresenceRepositoryPrefsAndDriftImpl
     if (prefsResult != null) {
       return presenceSettingsFromJson(prefsResult);
     } else {
-      return PresenceSettings.blank();
+      final blank = PresenceSettings.blank();
+      updatePresenceSettings(blank);
+      return blank;
     }
   }
 

@@ -6,6 +6,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/features/orientations/orientations.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
+import 'package:webtrit_phone/utils/view_params/presence_view_params.dart';
 
 import '../call.dart';
 import 'call_active_thumbnail.dart';
@@ -149,16 +150,19 @@ class ThumbnailAvatar {
     final activeCall = state.activeCalls.current;
 
     final entry = OverlayEntry(
-      builder: (context) {
-        return DraggableThumbnail(
-          stickyPadding: stickyPadding,
-          initialOffset: _offset,
-          onOffsetUpdate: (offset) {
-            _offset = offset;
-          },
-          onTap: onTap,
-          child: CallActiveThumbnail(
-            activeCall: activeCall,
+      builder: (_) {
+        return PresenceViewParams(
+          viewSource: PresenceViewParams.of(context).viewSource,
+          child: DraggableThumbnail(
+            stickyPadding: stickyPadding,
+            initialOffset: _offset,
+            onOffsetUpdate: (offset) {
+              _offset = offset;
+            },
+            onTap: onTap,
+            child: CallActiveThumbnail(
+              activeCall: activeCall,
+            ),
           ),
         );
       },
