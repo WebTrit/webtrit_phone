@@ -32,6 +32,7 @@ class _NumberCdrsScreenState extends State<NumberCdrsScreen> {
   late final scrollController = ScrollController();
 
   bool scrolledAway = false;
+  GlobalKey headerKey = GlobalKey();
 
   @override
   void initState() {
@@ -50,6 +51,8 @@ class _NumberCdrsScreenState extends State<NumberCdrsScreen> {
       final scrolledAway = position > scrolledThreshold;
       if (this.scrolledAway != scrolledAway) setState(() => this.scrolledAway = scrolledAway);
     });
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   void scrollToTop() {
@@ -67,6 +70,9 @@ class _NumberCdrsScreenState extends State<NumberCdrsScreen> {
     final theme = Theme.of(context);
     final outlinedButtonStyles = theme.extension<OutlinedButtonStyles>();
     final topPadding = MediaQuery.paddingOf(context).top;
+
+    final RenderBox? headerBox = headerKey.currentContext?.findRenderObject() as RenderBox?;
+    final headerHeight = headerBox?.size.height ?? 260;
 
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -90,7 +96,7 @@ class _NumberCdrsScreenState extends State<NumberCdrsScreen> {
                   cacheExtent: 500,
                   shrinkWrap: true,
                   itemCount: state.records.length + 1,
-                  padding: EdgeInsets.only(top: 200 + topPadding),
+                  padding: EdgeInsets.only(top: headerHeight + topPadding),
                   itemBuilder: (context, index) {
                     final historyIndicatorPosition = state.records.length;
                     if (index == historyIndicatorPosition) return HistoryFetchIndicator(state.fetchingHistory);
@@ -113,6 +119,7 @@ class _NumberCdrsScreenState extends State<NumberCdrsScreen> {
               child: Padding(
                 padding: EdgeInsets.only(top: topPadding),
                 child: ContactInfoBuilder(
+                    key: headerKey,
                     source: ContactSourcePhone(cubit.number),
                     builder: (context, contact) {
                       final number = cubit.number;
