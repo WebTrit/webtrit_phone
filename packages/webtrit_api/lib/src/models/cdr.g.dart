@@ -16,7 +16,7 @@ _$CdrRecordImpl _$$CdrRecordImplFromJson(Map<String, dynamic> json) =>
       disconnectReason: json['disconnect_reason'] as String,
       disconnectTime: DateTime.parse(json['disconnect_time'] as String),
       duration: (json['duration'] as num).toInt(),
-      recordingId: json['recording_id'] as String?,
+      recordingId: json['recording_id'],
       status: json['status'] as String,
     );
 

@@ -13,7 +13,7 @@ class CdrRecord extends Equatable {
   final DateTime disconnectTime;
   final String disconnectReason;
   final Duration duration;
-  final String? recordingId;
+  final dynamic recordingId;
 
   CdrRecord({
     required this.callId,

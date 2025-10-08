@@ -17,7 +17,8 @@ class CdrRecord with _$CdrRecord {
     required String disconnectReason,
     required DateTime disconnectTime,
     required int duration,
-    String? recordingId,
+    // TODO: fix once backend side, sometimes it's int, sometimes it's string
+    dynamic recordingId,
     required String status,
   }) = _CdrRecord;
 

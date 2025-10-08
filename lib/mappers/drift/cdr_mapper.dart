@@ -28,7 +28,7 @@ mixin CdrDriftMapper {
       disconnectTimeUsec: model.disconnectTime.microsecondsSinceEpoch,
       disconnectReason: model.disconnectReason,
       durationSeconds: model.duration.inSeconds,
-      recordingId: model.recordingId,
+      recordingId: model.recordingId?.toString(),
     );
   }
 }

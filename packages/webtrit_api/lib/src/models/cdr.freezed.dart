@@ -27,8 +27,9 @@ mixin _$CdrRecord {
   String get direction => throw _privateConstructorUsedError;
   String get disconnectReason => throw _privateConstructorUsedError;
   DateTime get disconnectTime => throw _privateConstructorUsedError;
-  int get duration => throw _privateConstructorUsedError;
-  String? get recordingId => throw _privateConstructorUsedError;
+  int get duration =>
+      throw _privateConstructorUsedError; // TODO: fix once backend side, sometimes it's int, sometimes it's string
+  dynamic get recordingId => throw _privateConstructorUsedError;
   String get status => throw _privateConstructorUsedError;
 
   /// Serializes this CdrRecord to a JSON map.
@@ -55,7 +56,7 @@ abstract class $CdrRecordCopyWith<$Res> {
       String disconnectReason,
       DateTime disconnectTime,
       int duration,
-      String? recordingId,
+      dynamic recordingId,
       String status});
 }
 
@@ -121,7 +122,7 @@ class _$CdrRecordCopyWithImpl<$Res, $Val extends CdrRecord>
       recordingId: freezed == recordingId
           ? _value.recordingId
           : recordingId // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as dynamic,
       status: null == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
@@ -147,7 +148,7 @@ abstract class _$$CdrRecordImplCopyWith<$Res>
       String disconnectReason,
       DateTime disconnectTime,
       int duration,
-      String? recordingId,
+      dynamic recordingId,
       String status});
 }
 
@@ -211,7 +212,7 @@ class __$$CdrRecordImplCopyWithImpl<$Res>
       recordingId: freezed == recordingId
           ? _value.recordingId
           : recordingId // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as dynamic,
       status: null == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
@@ -255,8 +256,9 @@ class _$CdrRecordImpl implements _CdrRecord {
   final DateTime disconnectTime;
   @override
   final int duration;
+// TODO: fix once backend side, sometimes it's int, sometimes it's string
   @override
-  final String? recordingId;
+  final dynamic recordingId;
   @override
   final String status;
 
@@ -283,8 +285,8 @@ class _$CdrRecordImpl implements _CdrRecord {
                 other.disconnectTime == disconnectTime) &&
             (identical(other.duration, duration) ||
                 other.duration == duration) &&
-            (identical(other.recordingId, recordingId) ||
-                other.recordingId == recordingId) &&
+            const DeepCollectionEquality()
+                .equals(other.recordingId, recordingId) &&
             (identical(other.status, status) || other.status == status));
   }
 
@@ -300,7 +302,7 @@ class _$CdrRecordImpl implements _CdrRecord {
       disconnectReason,
       disconnectTime,
       duration,
-      recordingId,
+      const DeepCollectionEquality().hash(recordingId),
       status);
 
   /// Create a copy of CdrRecord
@@ -329,7 +331,7 @@ abstract class _CdrRecord implements CdrRecord {
       required final String disconnectReason,
       required final DateTime disconnectTime,
       required final int duration,
-      final String? recordingId,
+      final dynamic recordingId,
       required final String status}) = _$CdrRecordImpl;
 
   factory _CdrRecord.fromJson(Map<String, dynamic> json) =
@@ -350,9 +352,9 @@ abstract class _CdrRecord implements CdrRecord {
   @override
   DateTime get disconnectTime;
   @override
-  int get duration;
+  int get duration; // TODO: fix once backend side, sometimes it's int, sometimes it's string
   @override
-  String? get recordingId;
+  dynamic get recordingId;
   @override
   String get status;
 
