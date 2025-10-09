@@ -272,14 +272,15 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                     dispose: (context, service) => service.dispose(),
                     lazy: false,
                   ),
-                  Provider<CdrsSyncWorker>(
-                    create: (context) => CdrsSyncWorker(
-                      context.read<CdrsLocalRepository>(),
-                      context.read<CdrsRemoteRepository>(),
-                    )..init(),
-                    dispose: (context, worker) => worker.dispose(),
-                    lazy: false,
-                  ),
+                  if (FeatureAccess().bottomMenuFeature.isTabEnabled(MainFlavor.recentCdrs))
+                    Provider<CdrsSyncWorker>(
+                      create: (context) => CdrsSyncWorker(
+                        context.read<CdrsLocalRepository>(),
+                        context.read<CdrsRemoteRepository>(),
+                      )..init(),
+                      dispose: (context, worker) => worker.dispose(),
+                      lazy: false,
+                    ),
                 ],
 
                 /// Builds and wires up all feature-level BLoCs together with the main shell widgets.
