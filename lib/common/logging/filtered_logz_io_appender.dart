@@ -3,6 +3,7 @@ import 'dart:io';
 
 // ignore: depend_on_referenced_packages
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:logging/logging.dart';
 import 'package:logging_appenders/base_remote_appender.dart';
 import 'package:logging_appenders/logging_appenders.dart';
@@ -32,6 +33,7 @@ class FilteredLogzIoAppender extends LogzIoApiAppender {
     } on DioException catch (e) {
       if (RemoteLogFilter._shouldIgnoreDioConnectionError(e, url)) {
         // Ignore logging this error to prevent log spam
+        debugPrint('LogzIO DioException (ignored): $e');
       } else {
         _logger.warning('LogzIO DioException (not ignored): $e');
       }
@@ -72,7 +74,12 @@ class RemoteLogFilter {
     if (uri != null) ignoredHosts.add(uri.host);
 
     // Skip adding spam logs to the buffer if there is no internet connection for the specified hosts
-    final error = dioError.error;
-    return error is SocketException && ignoredHosts.contains(error.address?.host);
+    final errorHost = switch (dioError.error) {
+      SocketException se => se.address?.host,
+      HttpException he => he.uri?.host,
+      _ => null,
+    };
+
+    return ignoredHosts.contains(errorHost);
   }
 }
