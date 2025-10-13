@@ -26,10 +26,10 @@ final Logger _logger = Logger('FeatureAccess');
 ///    setting the initial tab, and caching the active tab preference. The tab configuration is sourced
 ///    from `AppConfig.mainConfig.bottomMenu`.
 ///
-/// 3. **SettingsFeature**: Configures the app`s settings screen by defining sections and items
+/// 3. **SettingsFeature**: Configures the app's settings screen by defining sections and items
 ///    based on the platform and the app configuration. It also handles embedded resources for settings items.
 ///    - **Embedded Resources**: Each setting item can either have an embedded resource linked via an `embeddedResourceId`
-///      or by matching the resource`s type. Resources are first searched by ID, and if not found, the class searches
+///      or by matching the resource's type. Resources are first searched by ID, and if not found, the class searches
 ///      by type (e.g., `terms` for privacy policy).
 ///    - **Resource Assignment Priority**:
 ///      - **First**, the `embeddedResourceId` within the setting item is checked.
