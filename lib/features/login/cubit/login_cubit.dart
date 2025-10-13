@@ -467,6 +467,7 @@ class LoginCubit extends Cubit<LoginState> with SystemInfoApiMapper {
       emit(state.copyWith(
         processing: false,
         signupSessionOtpProvisionalWithDateTime: (result, DateTime.now()),
+        tenantId: result.tenantId ?? state.tenantId ?? defaultTenantId,
       ));
     } else if (result is SessionToken) {
       // Maintain processing state during navigation
