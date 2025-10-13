@@ -14,6 +14,7 @@ import 'package:webtrit_phone/app/notifications/notifications.dart';
 import 'package:webtrit_phone/app/session/session.dart';
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/data/data.dart';
+import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/l10n/app_localizations.g.mapper.dart';
 import 'package:webtrit_phone/models/models.dart';
@@ -401,6 +402,10 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                             contactRepository: context.read<ContactsRepository>(),
                           );
 
+                          // Try to get CDRs sync worker to trigger immediate sync after call ends
+                          // If CDRs feature is disabled, the worker will be null and no sync will be performed
+                          final cdrsSyncWorker = context.readOrNull<CdrsSyncWorker>();
+
                           return CallBloc(
                             coreUrl: appBloc.state.session.coreUrl!,
                             tenantId: appBloc.state.session.tenantId,
@@ -423,7 +428,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                                 DefaultCallErrorReporter((n) => notificationsBloc.add(NotificationsSubmitted(n))),
                             iceFilter: FilterWithAppSettings(appPreferences),
                             peerConnectionPolicyApplier: pearConnectionPolicyApplier,
-                            onCallEnded: () => context.read<CdrsSyncWorker>().forceSync(const Duration(seconds: 1)),
+                            onCallEnded: () => cdrsSyncWorker?.forceSync(const Duration(seconds: 1)),
                           )..add(const CallStarted());
                         },
                       ),
