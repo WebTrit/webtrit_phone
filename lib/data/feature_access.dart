@@ -453,18 +453,24 @@ class BottomMenuFeature {
 
   int get activeIndex => _tabs.indexOf(_activeTab);
 
+  /// Returns the first enabled tab of the specified type [T], or `null` if no such tab exists.
   T? getTabEnabled<T extends BottomMenuTab>() {
     final tab = _tabs.firstWhereOrNull((tab) => tab is T && tab.enabled);
     return tab is T ? tab : null;
   }
 
-  EmbeddedBottomMenuTab getEmbeddedTabById(String id) => embeddedTabs.firstWhere((tab) => tab.id == id);
+  /// Returns the embedded tab with the specified [id].
+  EmbeddedBottomMenuTab getEmbeddedTabById(String id) {
+    return embeddedTabs.firstWhere((tab) => tab.id == id);
+  }
 
+  /// Sets the active tab to [newTab] and persists the selection in preferences.
   set activeFlavor(BottomMenuTab newTab) {
     _activeTab = newTab;
     _appPreferences.setActiveMainFlavor(newTab.flavor);
   }
 
+  /// Finds the initial tab to be selected based on the saved flavor or the initial flag.
   BottomMenuTab _findInitialTab(MainFlavor? savedFlavor) {
     return _tabs.firstWhereOrNull((tab) => tab.flavor == savedFlavor) ??
         _tabs.firstWhereOrNull((tab) => tab.initial) ??

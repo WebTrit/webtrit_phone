@@ -137,13 +137,3 @@ final class EmbeddedBottomMenuTab extends BottomMenuTab {
   @override
   ({String flavor, String? embeddedId}) get pathParts => (flavor: MainFlavor.embedded.name, embeddedId: id);
 }
-
-extension BottomMenuTabX on BottomMenuTab {
-  T? asOrNull<T extends BottomMenuTab>() => this is T ? this as T : null;
-
-  bool get isRecents => switch (this) { RecentsBottomMenuTab() => true, _ => false };
-
-  bool get isContacts => switch (this) { ContactsBottomMenuTab() => true, _ => false };
-
-  bool get isEmbedded => switch (this) { EmbeddedBottomMenuTab() => true, _ => false };
-}
