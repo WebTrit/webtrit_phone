@@ -91,6 +91,8 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
+    final bottomMenuFeature = context.watch<FeatureAccess>().bottomMenuFeature;
+
     return MultiRepositoryProvider(
       providers: [
         RepositoryProvider<WebtritApiClient>(
@@ -273,7 +275,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                     dispose: (context, service) => service.dispose(),
                     lazy: false,
                   ),
-                  if (FeatureAccess().bottomMenuFeature.isTabEnabled(MainFlavor.recentCdrs))
+                  if (bottomMenuFeature.getTabEnabled<RecentsBottomMenuTab>()?.useCdrs == true)
                     Provider<CdrsSyncWorker>(
                       create: (context) => CdrsSyncWorker(
                         context.read<CdrsLocalRepository>(),
@@ -333,12 +335,10 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                           final localContactsRepository = context.read<LocalContactsRepository>();
                           final appDatabase = context.read<AppDatabase>();
                           final appPreferences = context.read<AppPreferences>();
-                          final featureAccess = context.read<FeatureAccess>();
                           final appPermissions = context.read<AppPermissions>();
 
                           Future<bool> isFutureEnabled() async {
-                            final contactTab =
-                                featureAccess.bottomMenuFeature.getTabEnabled(MainFlavor.contacts)?.toContacts;
+                            final contactTab = bottomMenuFeature.getTabEnabled<ContactsBottomMenuTab>();
                             final contactSourceTypes = contactTab?.contactSourceTypes ?? [];
                             return contactSourceTypes.contains(ContactSourceType.local);
                           }

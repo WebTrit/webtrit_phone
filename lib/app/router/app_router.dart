@@ -177,50 +177,53 @@ class AppRouter extends RootStackRouter {
                         ),
                       ],
                     ),
-                    AutoRoute(
-                      page: RecentsRouterPageRoute.page,
-                      path: MainFlavor.recents.name,
-                      children: [
-                        AutoRoute(
-                          page: RecentsScreenPageRoute.page,
-                          path: '',
-                        ),
-                        AutoRoute(
-                          page: ContactScreenPageRoute.page,
-                          path: 'contact',
-                        ),
-                        AutoRoute(
-                          page: CallLogScreenPageRoute.page,
-                          path: 'call_log',
-                        ),
-                        AutoRoute(
-                          page: NumberCdrsScreenPageRoute.page,
-                          path: 'number_cdrs',
-                        ),
-                      ],
-                    ),
-                    AutoRoute(
-                      page: RecentCdrsRouterPageRoute.page,
-                      path: MainFlavor.recentCdrs.name,
-                      children: [
-                        AutoRoute(
-                          page: RecentCdrsScreenPageRoute.page,
-                          path: '',
-                        ),
-                        AutoRoute(
-                          page: ContactScreenPageRoute.page,
-                          path: 'contact',
-                        ),
-                        AutoRoute(
-                          page: CallLogScreenPageRoute.page,
-                          path: 'call_log',
-                        ),
-                        AutoRoute(
-                          page: NumberCdrsScreenPageRoute.page,
-                          path: 'number_cdrs',
-                        ),
-                      ],
-                    ),
+
+                    if (_bottomMenuFeature.getTabEnabled<RecentsBottomMenuTab>()?.useCdrs == false)
+                      AutoRoute(
+                        page: RecentsRouterPageRoute.page,
+                        path: MainFlavor.recents.name,
+                        children: [
+                          AutoRoute(
+                            page: RecentsScreenPageRoute.page,
+                            path: '',
+                          ),
+                          AutoRoute(
+                            page: ContactScreenPageRoute.page,
+                            path: 'contact',
+                          ),
+                          AutoRoute(
+                            page: CallLogScreenPageRoute.page,
+                            path: 'call_log',
+                          ),
+                          AutoRoute(
+                            page: NumberCdrsScreenPageRoute.page,
+                            path: 'number_cdrs',
+                          ),
+                        ],
+                      ),
+                    if (_bottomMenuFeature.getTabEnabled<RecentsBottomMenuTab>()?.useCdrs == true)
+                      AutoRoute(
+                        page: RecentCdrsRouterPageRoute.page,
+                        path: MainFlavor.recents.name,
+                        children: [
+                          AutoRoute(
+                            page: RecentCdrsScreenPageRoute.page,
+                            path: '',
+                          ),
+                          AutoRoute(
+                            page: ContactScreenPageRoute.page,
+                            path: 'contact',
+                          ),
+                          AutoRoute(
+                            page: CallLogScreenPageRoute.page,
+                            path: 'call_log',
+                          ),
+                          AutoRoute(
+                            page: NumberCdrsScreenPageRoute.page,
+                            path: 'number_cdrs',
+                          ),
+                        ],
+                      ),
 
                     AutoRoute(
                       page: ContactsRouterPageRoute.page,
@@ -234,7 +237,8 @@ class AppRouter extends RootStackRouter {
                             AutoRouteGuard.redirect(
                               (resolver) => ContactsScreenPage.getPageRouteInfo(
                                 resolver.route,
-                                () => _bottomMenuFeature.activeTab.toContacts?.contactSourceTypes ?? [],
+                                () =>
+                                    _bottomMenuFeature.getTabEnabled<ContactsBottomMenuTab>()?.contactSourceTypes ?? [],
                               ),
                             ),
                           ],
@@ -433,7 +437,7 @@ class AppRouter extends RootStackRouter {
     _logger.fine(_onNavigationLoggerMessage('onMainShellRouteGuardNavigation', resolver));
 
     if (session.isLoggedIn) {
-      final contactsSourceTypes = _bottomMenuFeature.getTabEnabled(MainFlavor.contacts)?.toContacts?.contactSourceTypes;
+      final contactsSourceTypes = _bottomMenuFeature.getTabEnabled<ContactsBottomMenuTab>()?.contactSourceTypes;
       final localContactsSourceTypeEnabled = contactsSourceTypes?.contains(ContactSourceType.local) == true;
 
       if (appUserAgreementUnaccepted) {
@@ -454,14 +458,18 @@ class AppRouter extends RootStackRouter {
       } else {
         resolver.overrideNext(children: [
           MainScreenPageRoute(children: [
-            switch (_mainInitialTab.flavor) {
-              MainFlavor.favorites => const FavoritesRouterPageRoute(),
-              MainFlavor.recents => const RecentsRouterPageRoute(),
-              MainFlavor.recentCdrs => const RecentCdrsRouterPageRoute(),
-              MainFlavor.contacts => const ContactsRouterPageRoute(),
-              MainFlavor.keypad => const KeypadScreenPageRoute(),
-              MainFlavor.embedded => EmbeddedTabPageRoute(id: _mainInitialTab.toEmbedded!.id),
-              MainFlavor.messaging => const ConversationsScreenPageRoute(),
+            switch (_mainInitialTab) {
+              // Recents tab can be either with CDRs or standard
+              RecentsBottomMenuTab(useCdrs: true) => const RecentCdrsRouterPageRoute(),
+              RecentsBottomMenuTab() => const RecentsRouterPageRoute(),
+              // Contacts tab
+              ContactsBottomMenuTab() => const ContactsRouterPageRoute(),
+              // Embedded tab
+              EmbeddedBottomMenuTab(id: final id) => EmbeddedTabPageRoute(id: id),
+              // Other standard tabs
+              FavoritesBottomMenuTab() => const FavoritesRouterPageRoute(),
+              KeypadBottomMenuTab() => const KeypadScreenPageRoute(),
+              MessagingBottomMenuTab() => const ConversationsScreenPageRoute(),
             },
           ])
         ]);
