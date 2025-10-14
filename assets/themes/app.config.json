@@ -38,7 +38,7 @@
           "icon": "0xe5fd"
         },
         {
-          "enabled": false,
+          "enabled": true,
           "initial": false,
           "type": "recents",
           "titleL10n": "main_BottomNavigationBarItemLabel_recents",
