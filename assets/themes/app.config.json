@@ -38,18 +38,12 @@
           "icon": "0xe5fd"
         },
         {
-          "enabled": false,
+          "enabled": true,
           "initial": false,
           "type": "recents",
           "titleL10n": "main_BottomNavigationBarItemLabel_recents",
-          "icon": "0xe03a"
-        },
-        {
-          "enabled": true,
-          "initial": false,
-          "type": "recentCdrs",
-          "titleL10n": "main_BottomNavigationBarItemLabel_recents",
-          "icon": "0xe03a"
+          "icon": "0xe03a",
+          "useCdrs": false
         },
         {
           "enabled": true,

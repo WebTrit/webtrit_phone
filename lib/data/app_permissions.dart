@@ -19,7 +19,7 @@ class AppPermissions {
 
   static Future<AppPermissions> init(FeatureAccess featureAccess) async {
     final bottomMenuFeature = featureAccess.bottomMenuFeature;
-    final contactsSourceTypes = bottomMenuFeature.getTabEnabled(MainFlavor.contacts)?.toContacts?.contactSourceTypes;
+    final contactsSourceTypes = bottomMenuFeature.getTabEnabled<ContactsBottomMenuTab>()?.contactSourceTypes;
 
     final isRequestContactsPermissions = contactsSourceTypes?.contains(ContactSourceType.local) == true;
     final isRequestSmsPermissions = featureAccess.callFeature.callTriggerConfig.smsFallback.enabled;

@@ -26,10 +26,10 @@ final Logger _logger = Logger('FeatureAccess');
 ///    setting the initial tab, and caching the active tab preference. The tab configuration is sourced
 ///    from `AppConfig.mainConfig.bottomMenu`.
 ///
-/// 3. **SettingsFeature**: Configures the app’s settings screen by defining sections and items
+/// 3. **SettingsFeature**: Configures the app's settings screen by defining sections and items
 ///    based on the platform and the app configuration. It also handles embedded resources for settings items.
 ///    - **Embedded Resources**: Each setting item can either have an embedded resource linked via an `embeddedResourceId`
-///      or by matching the resource’s type. Resources are first searched by ID, and if not found, the class searches
+///      or by matching the resource's type. Resources are first searched by ID, and if not found, the class searches
 ///      by type (e.g., `terms` for privacy policy).
 ///    - **Resource Assignment Priority**:
 ///      - **First**, the `embeddedResourceId` within the setting item is checked.
@@ -129,31 +129,45 @@ class FeatureAccess {
   }
 
   static BottomMenuTab _createBottomMenuTab(BottomMenuTabScheme tab, List<EmbeddedData> embeddedResources) {
-    final flavor = MainFlavor.values.byName(tab.type.name);
-
     return tab.when(
-      base: (enabled, initial, type, titleL10n, icon) => BottomMenuTab(
+      favorites: (bool enabled, bool initial, String titleL10n, String icon) => FavoritesBottomMenuTab(
         enabled: tab.enabled,
         initial: tab.initial,
-        flavor: flavor,
         titleL10n: tab.titleL10n,
         icon: tab.icon.toIconData(),
       ),
-      contacts: (enabled, initial, type, titleL10n, icon, contactSourceTypes) => ContactsBottomMenuTab(
+      recents: (bool enabled, bool initial, String titleL10n, String icon, bool useCdrs) => RecentsBottomMenuTab(
+        useCdrs: useCdrs,
         enabled: tab.enabled,
         initial: tab.initial,
-        flavor: flavor,
+        titleL10n: tab.titleL10n,
+        icon: tab.icon.toIconData(),
+      ),
+      contacts: (enabled, initial, titleL10n, icon, contactSourceTypes) => ContactsBottomMenuTab(
+        enabled: tab.enabled,
+        initial: tab.initial,
         titleL10n: tab.titleL10n,
         icon: tab.icon.toIconData(),
         contactSourceTypes: contactSourceTypes.map((type) => ContactSourceType.values.byName(type)).toList(),
       ),
-      embedded: (enabled, initial, type, titleL10n, icon, embeddedId) {
+      keypad: (bool enabled, bool initial, String titleL10n, String icon) => KeypadBottomMenuTab(
+        enabled: tab.enabled,
+        initial: tab.initial,
+        titleL10n: tab.titleL10n,
+        icon: tab.icon.toIconData(),
+      ),
+      messaging: (bool enabled, bool initial, String titleL10n, String icon) => MessagingBottomMenuTab(
+        enabled: tab.enabled,
+        initial: tab.initial,
+        titleL10n: tab.titleL10n,
+        icon: tab.icon.toIconData(),
+      ),
+      embedded: (enabled, initial, titleL10n, icon, embeddedId) {
         final embeddedResource = embeddedResources.firstWhereOrNull((resource) => resource.id == embeddedId);
         return EmbeddedBottomMenuTab(
           id: embeddedId,
           enabled: tab.enabled,
           initial: tab.initial,
-          flavor: flavor,
           titleL10n: tab.titleL10n,
           icon: tab.icon.toIconData(),
           data: embeddedResource,
@@ -330,11 +344,18 @@ class FeatureAccess {
     );
   }
 
-  static MessagingFeature _tryConfigureMessagingFeature(AppConfig appConfig, AppPreferences preferences) {
-    final tabEnabled = appConfig.mainConfig.bottomMenu.tabs.any((tab) {
-      return tab.type.name == MainFlavor.messaging.name && tab.enabled;
-    });
-    return MessagingFeature(preferences, tabEnabled: tabEnabled);
+  static MessagingFeature _tryConfigureMessagingFeature(
+    AppConfig appConfig,
+    AppPreferences preferences,
+  ) {
+    final tabEnabled = appConfig.mainConfig.bottomMenu.tabs.any(
+      (tab) => tab.maybeWhen(messaging: (enabled, _, __, ___) => enabled, orElse: () => false),
+    );
+
+    return MessagingFeature(
+      preferences,
+      tabEnabled: tabEnabled,
+    );
   }
 
   static TermsFeature _tryConfigureTermsFeature(AppConfig appConfig) {
@@ -432,17 +453,24 @@ class BottomMenuFeature {
 
   int get activeIndex => _tabs.indexOf(_activeTab);
 
-  bool isTabEnabled(MainFlavor flavor) => _tabs.any((tab) => tab.flavor == flavor && tab.enabled);
+  /// Returns the first enabled tab of the specified type [T], or `null` if no such tab exists.
+  T? getTabEnabled<T extends BottomMenuTab>() {
+    final tab = _tabs.firstWhereOrNull((tab) => tab is T && tab.enabled);
+    return tab is T ? tab : null;
+  }
 
-  BottomMenuTab? getTabEnabled(MainFlavor flavor) => _tabs.firstWhereOrNull((tab) => tab.flavor == flavor);
+  /// Returns the embedded tab with the specified [id].
+  EmbeddedBottomMenuTab getEmbeddedTabById(String id) {
+    return embeddedTabs.firstWhere((tab) => tab.id == id);
+  }
 
-  EmbeddedBottomMenuTab getEmbeddedTabById(String id) => embeddedTabs.firstWhere((tab) => tab.id == id);
-
+  /// Sets the active tab to [newTab] and persists the selection in preferences.
   set activeFlavor(BottomMenuTab newTab) {
     _activeTab = newTab;
     _appPreferences.setActiveMainFlavor(newTab.flavor);
   }
 
+  /// Finds the initial tab to be selected based on the saved flavor or the initial flag.
   BottomMenuTab _findInitialTab(MainFlavor? savedFlavor) {
     return _tabs.firstWhereOrNull((tab) => tab.flavor == savedFlavor) ??
         _tabs.firstWhereOrNull((tab) => tab.initial) ??

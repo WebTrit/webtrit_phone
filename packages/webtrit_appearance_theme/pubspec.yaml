@@ -16,3 +16,4 @@ dev_dependencies:
   json_serializable: ^6.9.3
   webtrit_analysis:
     git: https://github.com/WebTrit/webtrit_analysis.git
+  test: ^1.26.3

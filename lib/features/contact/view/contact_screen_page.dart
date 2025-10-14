@@ -19,13 +19,16 @@ class ContactScreenPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final featureAccess = context.read<FeatureAccess>();
 
+    final favoriteEnabled = featureAccess.bottomMenuFeature.getTabEnabled<FavoritesBottomMenuTab>();
+    final cdrsEnabled = featureAccess.bottomMenuFeature.getTabEnabled<RecentsBottomMenuTab>()?.useCdrs;
+
     final widget = ContactScreen(
-      favoriteEnabled: featureAccess.bottomMenuFeature.isTabEnabled(MainFlavor.favorites),
+      favoriteEnabled: favoriteEnabled != null,
       transferEnabled: featureAccess.callFeature.callConfig.isBlindTransferEnabled,
       videoEnabled: featureAccess.callFeature.callConfig.isVideoCallEnabled,
       chatsEnabled: featureAccess.messagingFeature.chatsPresent,
       smsEnabled: featureAccess.messagingFeature.smsPresent,
-      cdrsEnabled: featureAccess.bottomMenuFeature.isTabEnabled(MainFlavor.recentCdrs),
+      cdrsEnabled: cdrsEnabled ?? false,
     );
     final provider = BlocProvider(
       create: (context) {
