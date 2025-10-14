@@ -37,7 +37,12 @@ class LoginSignupRouterPage extends StatelessWidget {
             return [
               if (embedded == null) const LoginSignupRequestScreenPageRoute(),
               if (embedded != null) LoginSignupEmbeddedRequestScreenPageRoute(embeddedData: embedded),
-              if (whenLoginSignupVerifyScreenPageActive(state)) const LoginSignupVerifyScreenPageRoute(),
+
+              // In embedded flow, the webview occupies the full screen, including tabs and logo.
+              // For the next native screen (e.g., OTP verification), a safe area is required to avoid UI overlap.
+              if (whenLoginSignupVerifyScreenPageActive(state))
+                LoginSignupVerifyScreenPageRoute(
+                    bodySafeAreaSides: embedded != null ? SafeAreaSide.values.toSet() : {}),
             ];
           },
           onPopRoute: (route, results) {

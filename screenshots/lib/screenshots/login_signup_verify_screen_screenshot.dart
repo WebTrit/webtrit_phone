@@ -26,7 +26,7 @@ class LoginSignUpVerifyScreenshot extends StatelessWidget {
             SizedBox(height: kInset),
           ],
         ),
-        body: LoginSignupVerifyScreen(),
+        body: LoginSignupVerifyScreen(bodySafeAreaSides: SafeAreaSide.values.toSet()),
         currentLoginType: LoginType.signup,
         supportedLoginTypes: [
           LoginType.otpSignin,

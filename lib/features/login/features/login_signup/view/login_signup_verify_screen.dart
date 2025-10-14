@@ -13,7 +13,12 @@ export 'login_signup_verify_screen_style.dart';
 export 'login_signup_verify_screen_styles.dart';
 
 class LoginSignupVerifyScreen extends StatelessWidget {
-  const LoginSignupVerifyScreen({super.key});
+  const LoginSignupVerifyScreen({
+    super.key,
+    required this.bodySafeAreaSides,
+  });
+
+  final Set<SafeAreaSide> bodySafeAreaSides;
 
   @override
   Widget build(BuildContext context) {
@@ -44,6 +49,10 @@ class LoginSignupVerifyScreen extends StatelessWidget {
           padding: const EdgeInsets.fromLTRB(kInset, kInset / 2, kInset, kInset),
           color: themeData.scaffoldBackgroundColor,
           child: SafeArea(
+            top: bodySafeAreaSides.contains(SafeAreaSide.top),
+            bottom: bodySafeAreaSides.contains(SafeAreaSide.bottom),
+            left: bodySafeAreaSides.contains(SafeAreaSide.left),
+            right: bodySafeAreaSides.contains(SafeAreaSide.right),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
